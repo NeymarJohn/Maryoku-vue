@@ -3,8 +3,24 @@
     <template v-if="item.type == Boolean">
       <div class="main">
         <div class="check-cont flex" @click="updateCheck()">
-          <img :src="`${iconUrl}Group 6258.svg`" v-if="checked"/>
-          <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
+          <div 
+            class="img" 
+            :style="`
+              background-image: url('${iconUrl}Group 6258.svg');
+              background-repeat: no-repeat;
+              background-size: contain;
+            `" 
+            v-if="checked">
+          </div>
+          <div 
+            class="img" 
+            :style="`
+              background-image: url('${iconUrl}Rectangle 1245.svg');
+              background-repeat: no-repeat;
+              background-size: contain;
+            `" 
+            v-else>
+          </div>
           <div class="text">{{label}}</div>
         </div>
         <div class="included-cont" v-if="checked && !item.xIncluded">
@@ -52,9 +68,25 @@
     <template v-if="item.type==Number">
       <div class="main">
         <div class="check-cont">
-          <div class="check-cont" @click="updateCheck()">
-            <img :src="`${iconUrl}Group 6258.svg`" v-if="checked"/>
-            <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
+          <div class="check-cont flex" @click="updateCheck()">
+            <div 
+              class="img" 
+              :style="`
+                background-image: url('${iconUrl}Group 6258.svg');
+                background-repeat: no-repeat;
+                background-size: contain;
+              `" 
+              v-if="checked">
+            </div>
+            <div 
+              class="img" 
+              :style="`
+                background-image: url('${iconUrl}Rectangle 1245.svg');
+                background-repeat: no-repeat;
+                background-size: contain;
+              `" 
+              v-else>
+            </div>
             {{label}}
           </div>
           <div class="how-many" v-if="checked">
@@ -83,9 +115,25 @@
     <template v-if="item.type==Array">
       <div class="main">
         <div class="check-cont">
-          <div class="check-cont" @click="updateCheck()">
-            <img :src="`${iconUrl}Group 6258.svg`" v-if="checked"/>
-            <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
+          <div class="check-cont flex" @click="updateCheck()">
+            <div 
+              class="img" 
+              :style="`
+                background-image: url('${iconUrl}Group 6258.svg');
+                background-repeat: no-repeat;
+                background-size: contain;
+              `" 
+              v-if="checked">
+            </div>
+            <div 
+              class="img" 
+              :style="`
+                background-image: url('${iconUrl}Rectangle 1245.svg');
+                background-repeat: no-repeat;
+                background-size: contain;
+              `" 
+              v-else>
+            </div>
             {{label}}
           </div>
           <div class="dropdown-list" v-if="checked" @click="expanded=!expanded">
@@ -229,9 +277,14 @@ export default {
         margin-right: 1rem;
         align-items: flex-start;
         flex: 2;
-        img {
+        .img {
           width: 27px;
+          height: 27px;
           margin-right: 24px;
+        }
+        .text {
+          position: relative;
+          top: 2px;
         }
         &.checked {
           background-color: #f7f7f7;

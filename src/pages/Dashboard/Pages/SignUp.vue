@@ -7,8 +7,14 @@
         <div class="md-layout-item md-size-50 md-medium-size-50 md-small-size-100 ml-auto" slot="content-left">
           <div class="info info-horizontal">
             <div>
+              <div class="image">
+                <img :src="`${$iconURL}Onboarding/champagin-red.svg`">
+              </div>
               <div class="signup-title">TIMT TO PUT YOURSELF <br/>A DRINK & RELAX!</div>
               <div class="signup-description">You can start thinkg about what you'll ware to <br/>the event, cause everything else is covered.</div>
+            </div>
+            <div class="logo">
+              <img :src="`${$iconURL}Onboarding/maryoku-logo-dark%402x%403x.png`">
             </div>
           </div>
         </div>
@@ -321,5 +327,26 @@ export default {
     .term-and-condition {
       font-family: "Manrope-Bold";
       text-decoration: underline;
+    }
+    .info-horizontal {
+      position: relative;
+      height: 100%;
+      .image {
+        margin: 0px auto 40px;
+        text-align: center;
+        img {
+           margin: 0px auto;
+          width: 150px;
+        }
+      }
+      .logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 50px;
+        img {
+          width: 200px;
+        }
+      }
     }
 </style>
