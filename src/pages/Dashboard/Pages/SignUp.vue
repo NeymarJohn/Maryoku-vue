@@ -2,18 +2,13 @@
   <div class="md-layout">
     <vue-element-loading :active="loading" spinner="ring" color="#FF547C" isFullScreen/>
     <div class="md-layout-item">
-      <h2 class="title text-center" slot="title" style="text-align: center;">Sign In</h2>
-      <signup-card>
+      <!-- <h2 class="title text-center" slot="title" style="text-align: center;">Sign In</h2> -->
+      <signup-card class="signup-card">
         <div class="md-layout-item md-size-50 md-medium-size-50 md-small-size-100 ml-auto" slot="content-left">
-          <div class="info info-horizontal" v-for="item in contentLeft" :key="item.title">
-            <div :class="`icon ${item.colorIcon}`">
-              <md-icon>{{ item.icon }}</md-icon>
-            </div>
-            <div class="description">
-              <h4 class="info-title">{{ item.title }}</h4>
-              <p class="description">
-                {{ item.description }}
-              </p>
+          <div class="info info-horizontal">
+            <div>
+              <div class="signup-title">TIMT TO PUT YOURSELF <br/>A DRINK & RELAX!</div>
+              <div class="signup-description">You can start thinkg about what you'll ware to <br/>the event, cause everything else is covered.</div>
             </div>
           </div>
         </div>
@@ -22,105 +17,37 @@
             <md-button class="md-just-icon-social md-google" @click="authenticate('google')">
               <i class="fab fa-google-plus-g" style="font-size: 42px !important;width: 80px;height: 42px;"></i>
             </md-button>
-            <h4 class="mt-3">or sign up with your work email address</h4>
+            <h4 class="mt-3">Or</h4>
           </div>
-          <md-field :class="[{'md-valid': !errors.has('email') && touched.email},{'md-error': errors.has('email')}]">
-            <label>Email Address</label>
-            <md-input v-model="email" type="email" data-vv-name="email" required v-validate="modelValidations.email" v-focus @keypress.enter="signup"></md-input>
-          </md-field>
-          <md-field :class="[{'md-valid': !errors.has('password') && touched.password},{'md-error': errors.has('password')}]">
-            <label>Password</label>
-            <md-input v-model="password" type="password" data-vv-name="password" required v-validate="modelValidations.password" @keypress.enter="signup"></md-input>
-            <div class="md-error" style="text-align: center; width: 100%;">{{error}}</div>
-          </md-field>
+          <maryoku-input class="form-input" inputStyle="name" v-model="name" placeholder="Type your name here..."></maryoku-input>
+          <maryoku-input class="form-input" v-validate="modelValidations.email"  inputStyle="email" v-model="email" placeholder="Type email address here..."></maryoku-input>
+          <maryoku-input class="form-input"  inputStyle="company" v-model="company" placeholder="Type name of company here..."></maryoku-input>
+          <maryoku-input class="form-input" v-validate="modelValidations.password" type="password" inputStyle="password" v-model="password" placeholder="Type password here..."></maryoku-input>
+          <div class="md-error">
+            {{this.error}}
+          </div>
           <div class="title">
-            By signing up you agree to our <br/> <a href="https://www.maryoku.com/terms" target="_blank" style="background-color: #f2f2f2;">Terms of Use</a> and <a href="https://www.maryoku.com/privacy" target="_blank" style="background-color: #f2f2f2;">Privacy Policy</a>
+            <md-checkbox v-model="terms">
+              <div>
+                I agree <a href="https://www.maryoku.com/terms" target="_blank" class="term-and-condition">Terms & Conditions</a>
+              </div>
+            </md-checkbox>
           </div>
-          <div class="button-container">
-            <md-button @click="signup" class="md-success md-round mt-4" slot="footer">Continue</md-button>
+          <div class="text-center" >
+              <div><md-button @click="signup" class="md-default md-red md-maryoku mt-4">Sign Up</md-button></div>
+              <div><md-button @click="toSignin" class="md-black md-maryoku mt-4  md-simple mt-4">Already Singed?</md-button></div>
           </div>
         </div>
       </signup-card>
-      <!-- <modal class="sorry-modal" container-class="modal-container sign-in border-radius-28">
-        <template slot="header">
-          <div class="sorry-modal__header">
-            <h3 v-if="isForgot">Forgot Password</h3>
-            <h3 v-else>Sign in</h3>
-          </div>
-          <button class="close">
-            <md-icon>clear</md-icon>
-          </button>
-        </template>
-        <template slot="body">
-          <div class="sorry-modal__body" v-if="!isForgot">
-            <md-field :class="[{'md-valid': !errors.has('email') && touched.email},{'md-error': errors.has('email')}]" class="border">
-              <label>Email Address</label>
-              <md-input 
-                v-model="email" 
-                type="email" 
-                data-vv-name="email" 
-                required v-validate="modelValidations.email" 
-                v-focus 
-                @keypress.enter="signup"
-              ></md-input>
-            </md-field>
-            <md-field :class="[{'md-valid': !errors.has('password') && touched.password},{'md-error': errors.has('password')}]">
-              <label>Password</label>
-              <md-input 
-                v-model="password" 
-                type="password" 
-                data-vv-name="password" 
-                required v-validate="modelValidations.password" 
-                @keypress.enter="signup"
-              ></md-input>
-            </md-field>
-            <a class="forgot" @click="isForgot=true">Forgot your password?</a>
-          </div>
-          <div class="sorry-modal__body" v-else>
-            <md-field :class="[{'md-valid': !errors.has('email') && touched.email},{'md-error': errors.has('email')}]" class="border">
-              <label>Email Address</label>
-              <md-input 
-                v-model="email" 
-                type="email" 
-                data-vv-name="email" 
-                required v-validate="forgotPasswordValidations.email" 
-                v-focus 
-                @keypress.enter="forgotPassword()"
-              ></md-input>
-            </md-field>
-            <div class="md-error" v-if="errors.items.length > 0" style="width: 100%;">{{errors.items[0].msg}}</div>
-          </div>
-        </template>
-        <template slot="footer">
-          <div class="sorry-modal__footer" v-if="!isForgot">
-            <div class="or-divider-wrapper">
-              <div class="divider-item">
-              </div>
-              <div class="or">
-                Or
-              </div>
-              <div class="divider-item">
-              </div>
-            </div>
-            <md-button class="cancel" @click="authenticate('google')">
-              <i class="fab fa-google-plus-g" style="font-size: 42px !important;width: 80px;height: 42px;"></i>
-              Sign in with Google
-            </md-button>
-            <md-button class="send warning" :class="[{'disabled': false}]" @click="signup">Sign in</md-button>
-          </div>
-          <div class="sorry-modal__footer" v-else>
-            <md-button class="send warning" :class="[{'disabled': false}]" @click="forgotPassword()">Reset Password</md-button>
-          </div>
-        </template>
-      </modal> -->
     </div>
   </div>
 </template>
 
 <script>
-import { SignupCard } from '@/components'
+import { SignupCard, MaryokuInput} from '@/components'
 import { Modal } from '@/components'
 import InputText from '@/components/Inputs/InputText.vue'
+
 // import auth from '@/auth';
 import VueElementLoading from 'vue-element-loading'
 import Tenant from '@/models/Tenant'
@@ -130,7 +57,8 @@ export default {
     SignupCard,
     Modal,
     InputText,
-    VueElementLoading
+    VueElementLoading,
+    MaryokuInput
   },
   methods: {
     authenticate (provider) {
@@ -140,62 +68,67 @@ export default {
       document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`
     },
     signup () {
-      this.loading = true
-      let that = this
+      this.isLoading = true
       this.$validator.validateAll().then(isValid => {
         if (isValid) {
-          // that.$auth.signupOrSignin(that, this.email.toString().toLowerCase(), that.password, 'administrator', (data) => {
-          //   that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
-          //     that.$router.push({ path: '/signedin', query: {token: success.access_token} })
-          //   }, (failure) => {
-          //     that.loading = false
-          //     if (failure.response.status === 401) {
-          //       that.error = 'Sorry, wrong password, try again.'
-          //     } else {
-          //       that.error = 'Temporary failure, try again later'
-          //       console.log(JSON.stringify(failure.response))
-          //     }
-          //   })
-          // })
-          that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
-            that.$router.push({ path: '/signedin', query: {token: success.access_token} })
-          }, (failure) => {
-            that.loading = false
-            if (failure.response.status === 401) {
-              that.error = 'Sorry, wrong password, try again.'
-            } else {
-              that.error = 'Temporary failure, try again later'
-              console.log(JSON.stringify(failure.response))
-            }
-          })
+          const userData = {
+            email: this.email,
+            name: this.name,
+            password: this.password,
+            role: 'administrator',
+            company: this.company
+          }
+          this.$auth.signupOrSignin(this, userData,  
+            (data) => {
+              this.$auth.login(this, {email: this.email, password: this.password}, 
+                (success) => {
+                  console.log("singup", data);
+                  this.isLoading = false
+                  this.$router.push({ path: '/signedin', query: {token: success.access_token} })
+                  // if (data.status === "create-workspace") {
+                  //   this.$router.push({ path: '/create-workspace' })
+                  // }
+                  
+                }, 
+                (failure) => {
+                  this.isLoading = false
+                  if (failure.response.status === 401) {
+                    this.error = 'Sorry, wrong password, try again.'
+                  } else  if (failure.response.status === 400) {
+                    this.error = 'Please fill all values'
+                    console.log(JSON.stringify(failure.response))
+                  } else  if (failure.response.status === 500) {
+                    this.error = 'Temporary failure, try again later'
+                    console.log(JSON.stringify(failure.response))
+                  }
+                })
+            },
+            (failure) => {
+              this.isLoading = false
+              if (failure.response.status === 401) {
+                this.error = 'Sorry, wrong password, try again.'
+              } else  if (failure.response.status === 400) {
+                this.error = 'Please fill all values'
+                console.log(JSON.stringify(failure.response))
+              } else  if (failure.response.status === 500) {
+                this.error = 'Temporary failure, try again later'
+                console.log(JSON.stringify(failure.response))
+              }
+            })
         } else {
-          that.loading = false
+          this.error = 'Please check all values and try again.'
+          this.loading = false
         }
       })
     },
-    forgotPassword () {
-      let that = this
-      console.log(this.errors.items.length)
-      if (this.errors.items.length == 0) {
-        this.isForgot = false
-      }
-      that.$auth.forgotPassword(that, that.email.toString().toLowerCase(), (success) => {
-        this.isForgot = false
-      }, (failure) => {
-        that.loading = false
-        if (failure.response.status === 401) {
-          that.error = 'Sorry, No such user name or email address.'
-        } else {
-          that.error = 'Temporary failure, try again later'
-          console.log(JSON.stringify(failure.response))
-        }
-      })
+    toSignin() {
+      this.$router.push({ path: '/signin' })
     }
   },
   created () {
     const givenToken = this.$route.query.token
-    this.$auth.setToken(givenToken)
-    this.$auth.currentUser(this, true)
+    // this.$auth.setToken(givenToken)
+    // this.$auth.currentTenantUser(this, true)
     /* let tenantId = document.location.hostname.replace(".maryoku.com","");
     new Tenant().find(tenantId).then(res =>{
       if (!res.status){
@@ -217,8 +150,10 @@ export default {
       loading: false,
       firstname: null,
       terms: false,
-      email: null,
-      password: null,
+      name: "",
+      company: "",
+      email: "",
+      password: "",
       isForgot: false,
       serverURL: process.env.SERVER_URL,
       // auth: auth,
@@ -234,6 +169,12 @@ export default {
         password: {
           required: true,
           min: 8
+        },
+        name: {
+          required: true,
+        },
+        company: {
+          required: true,
         }
       },
       forgotPasswordValidations: {
@@ -242,33 +183,14 @@ export default {
           email: true
         },
       },
-      contentLeft: [
-        {
-          colorIcon: 'icon-success',
-          icon: 'color_lens',
-          title: 'Get Inspired',
-          description: "Why struggle to find good ideas for your company's next event, when you can simply browse through other companies' events, see what worked for them and adjust those ideas to your needs."
-        },
-
-        {
-          colorIcon: 'icon-danger',
-          icon: 'calendar_today',
-          title: 'Plan Ahead',
-          description: 'Making the best of your annual budget is so much easier when you have visibility over all year occasions combined with insights on industry benchmark.'
-        },
-
-        {
-          colorIcon: 'icon-info',
-          icon: 'developer_board',
-          title: 'Work Less',
-          description: 'Stop spending hours on phone calls, emails, quotes and invoices. Locate ranked suppliers and have them work for you.'
-        }
-      ]
     }
   }
 }
 </script>
 <style lang="scss" scoped>
+    .signup-card .md-card-content {
+      padding: 0;
+    }
     p.description {
       font-size: 16px;
     }
@@ -370,5 +292,34 @@ export default {
     }
     .md-error {
       color: red;
+    }
+    .ml-auto {
+      background: #FFF0F4;
+      padding: 60px 60px 20px;
+    }
+    .mr-auto {
+      padding: 60px 60px 20px;
+    }
+    .form-input{
+      margin:30px 0px;
+      min-width: 300px;
+    }
+    .signup-title {
+      text-align: center;
+      font-size: 28px;
+      font-family: "Manrope-Bold";
+      line-height: 1.5em;
+    }
+    .signup-description {
+      margin-top: 20px;
+      font-size: 16px;
+      font-family: "Manrope-Regular";
+      line-height: 1.5em;
+      white-space: nowrap;
+      text-align: center;
+    }
+    .term-and-condition {
+      font-family: "Manrope-Bold";
+      text-decoration: underline;
     }
 </style>

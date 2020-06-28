@@ -364,23 +364,24 @@ export default {
       })
     },
     routeToNewEvent () {
-      window.currentPanel = this.$showPanel({
-        component: EventSidePanel,
-        cssClass: 'md-layout-item md-size-40 transition36 ',
-        openOn: 'right',
-        disableBgClick: false,
-        props: {
-          modalSubmitTitle: 'Save',
-          editMode: false,
-          sourceEventData: {
-            eventStartMillis: new Date().getTime(),
-            numberOfParticipants: this.$auth.user.customer.numberOfEmployees
-          },
-          refreshEvents: null,
-          occasionsOptions: null,
-          openInPlannerOption: false
-        }
-      })
+      this.$router.push(`/event/create`)
+      // window.currentPanel = this.$showPanel({
+      //   component: EventSidePanel,
+      //   cssClass: 'md-layout-item md-size-40 transition36 ',
+      //   openOn: 'right',
+      //   disableBgClick: false,
+      //   props: {
+      //     modalSubmitTitle: 'Save',
+      //     editMode: false,
+      //     sourceEventData: {
+      //       eventStartMillis: new Date().getTime(),
+      //       numberOfParticipants: this.$auth.user.customer.numberOfEmployees
+      //     },
+      //     refreshEvents: null,
+      //     occasionsOptions: null,
+      //     openInPlannerOption: false
+      //   }
+      // })
     },
     getExtraFields (allEvents) {
       allEvents.forEach(item => {

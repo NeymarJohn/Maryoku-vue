@@ -4,7 +4,7 @@ import EventNote from '@/models/EventNote'
 import Currency from '@/models/Currency'
 import EventTheme from '@/models/EventTheme'
 import EventComponent from '@/models/EventComponent'
-
+import { postReq, getReq } from '@/utils/token'
 
 const state = {
   currentUser: {
@@ -127,8 +127,8 @@ const actions = {
   },
   async getEventTypes({ commit, state }, { data, ctx }) {
     let _calendar = new Calendar({ id: data })
-    _calendar.eventTypes().fetch(ctx, false).then(res => {
-      commit('setEventTypes', res)
+    getReq('/1/eventTypes').then(res => {
+      commit('setEventTypes', res.data)
     })
       .catch(e => {
         commit('setEventTypes', [])

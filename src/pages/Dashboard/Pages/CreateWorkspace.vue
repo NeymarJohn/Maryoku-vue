@@ -49,7 +49,7 @@
           </md-field>
 
           <div class="button-container">
-            <md-button @click="signup" class="md-success md-round mt-4" slot="footer" :disabled="!workspaceValid">Continue</md-button>
+            <md-button @click="createWorkSpace" class="md-default md-red md-maryoku mt-4" slot="footer" :disabled="!workspaceValid">Continue</md-button>
           </div>
         </div>
       </signup-card>
@@ -75,13 +75,10 @@ export default {
       const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`)
       document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`
     },
-    signup () {
+    createWorkSpace () {
       this.loading = true
-
       this.$validator.validateAll().then(isValid => {
         if (isValid) {
-          /* let tenantId = document.location.hostname.replace(".maryoku.com","");
-          tenantId = tenantId.length > 0 && tenantId === 'dev' ? "_"+tenantId : ''; */
           let tenantIdExt = document.location.hostname === 'dev.maryoku.com' ? '.dev' : ''
           new Tenant({id: this.workspace}).save().then(res => {
             if (res.status) {
@@ -91,20 +88,6 @@ export default {
               this.error = 'Failed'
             }
           })
-
-          /* this.$auth.signupOrSignin(this, this.email, this.password, (data) => {
-            this.$auth.login(this, {username: this.email, password: this.password}, (success) => {
-              this.$router.push({ path: '/signedin', query: {token: success.access_token} });
-            }, (failure) => {
-              this.loading = false;
-              if (failure.response.status === 401){
-                this.error = 'Sorry, wrong password, try again.';
-              } else {
-                this.error = 'Temporary failure, try again later';
-                console.log(JSON.stringify(failure.response));
-              }
-            } );
-          }) */
         } else {
           this.loading = false
         }
@@ -120,12 +103,7 @@ export default {
           clearTimeout(this.t)
           this.t = null
         }
-
         this.t = setTimeout(function () {
-          // this.loading = true;
-          /* let tenantId = document.location.hostname.replace(".maryoku.com","");
-          tenantId = tenantId.length > 0 && tenantId === 'dev' ? "_"+tenantId : '';
-*/
           new Tenant().find(this.workspace).then(res => {
             if (res.status) {
               this.workspaceValid = false
@@ -138,12 +116,25 @@ export default {
           })
         }.bind(this), 1000)
       }
-    }
+    },
+    generateWorkspaceName (company) {
+      if (!company) {
+        return ""
+      }
+      return company.replace(/ /g, "-").toLowerCase()
+    } 
   },
   created () {
+    this.$auth.currentTenantUser(this, true, (userData)=>{
+      console.log(userData)
+      this.tenantUser = userData
+      this.workspace = this.generateWorkspaceName(userData.company)
+    })
+    // this.$auth.currentUser(this, true)
     // const givenToken = this.$route.query.token;
     // this.$auth.setToken(givenToken);
     // this.$auth.currentUser(this, true);
+    // console.log("auth",this.$auth)
     /* let tenantId = document.location.hostname.replace(".maryoku.com","");
     new Tenant().find(tenantId).then(res =>{
       if (!res.status){
@@ -165,7 +156,6 @@ export default {
       workspace: '',
       loading: false,
       t: null,
-      terms: false,
       workspaceValid: true,
       serverURL: process.env.SERVER_URL,
       // auth: auth,
@@ -179,31 +169,7 @@ export default {
           max: 12
         }
       },
-      contentLeft: [
-        {
-          colorIcon: 'icon-success',
-          icon: 'color_lens',
-          title: 'Get Inspired',
-          description:
-            "Why struggle to find good ideas for your company's next event, when you can simply browse through other companies' events, see what worked for them and adjust those ideas to your needs."
-        },
-
-        {
-          colorIcon: 'icon-danger',
-          icon: 'calendar_today',
-          title: 'Plan Ahead',
-          description:
-            'Making the best of your annual budget is so much easier when you have visibility over all year occasions combined with insights on industry benchmark.'
-        },
-
-        {
-          colorIcon: 'icon-info',
-          icon: 'developer_board',
-          title: 'Work Less',
-          description:
-            'Stop spending hours on phone calls, emails, quotes and invoices. Locate ranked suppliers and have them work for you.'
-        }
-      ]
+      tenantUser: {}
     }
   }
 }

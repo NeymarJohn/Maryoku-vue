@@ -30,7 +30,7 @@ export default {
     const that = this
 
     let tenantId = document.location.hostname.replace('.maryoku.com', '')
-    let isPrimeTenant = tenantId === 'dev' || tenantId === 'app'
+    let isPrimeTenant = tenantId === 'dev' || tenantId === 'app' || tenantId === 'preprod'
     if (isPrimeTenant) {
       this.$cookies.set('at', givenToken, '1m', '', 'maryoku.com', true)
 

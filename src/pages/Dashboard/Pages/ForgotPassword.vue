@@ -2,24 +2,17 @@
   <div class="md-layout">
     <vue-element-loading :active="loading" spinner="ring" color="#FF547C" isFullScreen/>
     <div class="md-layout-item">
-      <h2 class="title text-center" slot="title" style="text-align: center;">Sign In</h2>
       <signup-card>
         <div class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain" slot="content-right">
           <div class="social-line text-center">
-            <md-button class="md-just-icon-social md-google" @click="authenticate('google')">
-              <i class="fab fa-google-plus-g" style="font-size: 42px !important;width: 80px;height: 42px;"></i>
-            </md-button>
-            <h4 class="mt-3">Or</h4>
+            <h4 class="mt-3">Forgot Password</h4>
           </div>
           <maryoku-input class="form-input" v-validate="modelValidations.email" inputStyle="email" v-model="email" placeholder="Type email address here..."></maryoku-input>
-          <maryoku-input class="form-input" v-validate="modelValidations.password" type="password" inputStyle="password" v-model="password" placeholder="Type password here..."></maryoku-input>
           <div class="md-error">{{error}}</div>
           <div class="form-buttons">
-            <div>
-              <md-button @click="signIn" class="md-default md-red md-maryoku mt-4" slot="footer">Sign In</md-button>
-              <md-button @click="toSingUp" class="md-black md-maryoku mt-4  md-simple mt-4" slot="footer">Sign Up</md-button>
-            </div>
-            <md-button @click="toForgotPassword" class="md-black md-maryoku mt-4  md-simple mt-4" slot="footer">Forgot my password?</md-button>
+            <md-button @click="forgotPassword" class="md-default md-red md-maryoku mt-4" slot="footer">ResetPassword</md-button>
+            <!-- <br/>
+            <md-button @click="isForgot=true" class="md-black md-maryoku mt-4  md-simple mt-4" slot="footer">Forgot my password?</md-button> -->
           </div>
         </div>
       </signup-card>
@@ -29,73 +22,45 @@
 
 <script>
 import { SignupCard, MaryokuInput } from '@/components'
-import { Modal } from '@/components'
 import InputText from '@/components/Inputs/InputText.vue'
-// import auth from '@/auth';
 import VueElementLoading from 'vue-element-loading'
 import Tenant from '@/models/Tenant'
 
 export default {
   components: {
     SignupCard,
-    Modal,
     InputText,
     VueElementLoading,
     MaryokuInput
   },
   methods: {
-    authenticate (provider) {
-      this.loading = true
-      let tenantId = document.location.hostname.replace('.maryoku.com', '').replace('.', '_')
-      const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`)
-      document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`
-    },
-    signIn () {
-      this.loading = true
+    forgotPassword () {
       let that = this
-      this.$validator.validateAll().then(isValid => {
-        if (isValid) {
-          that.$auth.login(that, {email: that.email.toString().toLowerCase(), password: that.password}, (success) => {
-            that.$router.push({ path: '/signedin', query: {token: success.access_token} })
-          }, (failure) => {
-            that.loading = false
-            if (failure.response.status === 401) {
-              that.error = 'Sorry, invalid email or wrong password, check and try again.'
-            } else {
-              that.error = 'Temporary failure, try again later'
-              console.log(JSON.stringify(failure.response))
-            }
-          })
-        } else {
-          that.error = 'Sorry, invalid email or wrong password, try again.'
+      console.log(this.errors.items.length)
+      that.$auth.forgotPassword(
+        that, 
+        that.email.toString().toLowerCase(), 
+        (success) => {
+          that.isForgot = false
+        }, 
+        (failure) => {
+          console.log(failure)
           that.loading = false
-        }
-      })
+          if (failure.response.status === 401) {
+            that.error = 'Sorry, No such user name or email address.'
+          } else {
+            that.error = 'Temporary failure, try again later'
+            console.log(JSON.stringify(failure.response))
+          }
+        })
     },
     toSingUp() {
       this.$router.push({ path: '/signup' })
-    },
-    toForgotPassword() {
-      this.$router.push({ path: '/forgot-password' })
     }
-  },
-  created () {
-    const givenToken = this.$route.query.token
-    this.$auth.setToken(givenToken)
-    this.$auth.currentUser(this, true)
-    /* let tenantId = document.location.hostname.replace(".maryoku.com","");
-    new Tenant().find(tenantId).then(res =>{
-      if (!res.status){
-        this.$router.push({name:"CreateWorkspace"});
-      }
-    }); */
   },
   watch: {
     email () {
       this.touched.email = true
-    },
-    password () {
-      this.touched.password = true
     }
   },
   data () {
@@ -106,6 +71,7 @@ export default {
       terms: false,
       email: null,
       password: null,
+      isForgot: false,
       serverURL: process.env.SERVER_URL,
       // auth: auth,
       touched: {
@@ -116,10 +82,6 @@ export default {
         email: {
           required: true,
           email: true
-        },
-        password: {
-          required: true,
-          min: 8
         }
       },
       forgotPasswordValidations: {

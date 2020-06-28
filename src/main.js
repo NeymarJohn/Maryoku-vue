@@ -100,7 +100,6 @@ router.beforeEach((to, from, next) => {
   let isPrimeTenant = tenantId === 'dev' || tenantId === 'app'
   const unAuthenticatedLinks = ['/signout', '/signin', '/signup', '/signedin', '/create-workspace', '/choose-workspace' ]
   if ((isPrimeTenant && unAuthenticatedLinks.indexOf(to.path) < 0 ) || (to.meta.auth && !auth.user.authenticated)) {
-    alert()
     next('signin')
   } else {
     if (to.name !== 'ShowEvent' && to.path !== '/signout' && auth.user.role === 'guest' && to.path !== '/my-events') {

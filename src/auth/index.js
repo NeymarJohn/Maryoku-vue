@@ -12,6 +12,7 @@ const REGISTRATION_RSVP_URL = `${API_URL}/1/register-rsvp`
 const SESSION_URL = `${API_URL}/api/login`
 const FORGOT_PASSWORD_URL = `${API_URL}/1/forgot-password`
 const CURRENT_USER_URL = `${API_URL}/1/me`
+const CURRENT_TENANT_USER = `${API_URL}/1/userInfo`
 const LOGOUT_USER_URL = `${API_URL}/1/logout`
 
 const TOKEN_KEY = 'manage_id_token'
@@ -40,14 +41,12 @@ export default {
       })
   },
 
-  signupOrSignin (context, email, password, role, callback) {
-    context.$http.post(`${REGISTRATION_URL}`, { username: email, password: password, role: role }, { 'ContentType': 'application/json' })
+  signupOrSignin (context, userData, successCallback, failedCallback) {
+    context.$http.post(`${REGISTRATION_URL}`, userData, { 'ContentType': 'application/json' })
       .then((resp) => {
-        if (callback) {
-          callback(resp.data)
-        }
+        successCallback(resp.data)
       }, (resp) => {
-        context.error = resp.body
+        failedCallback(resp)
       })
   },
 
@@ -76,13 +75,13 @@ export default {
       })
   },
 
-  forgotPassword (context, email, callback) {
-    context.$http.post(`${FORGOT_PASSWORD_URL}`, { username: email }, { 'ContentType': 'application/json' }).then((resp) => {
+  forgotPassword (context, email, successCallback, errorCallback) {
+    context.$http.post(`${FORGOT_PASSWORD_URL}`, { email }, { 'ContentType': 'application/json' }).then((resp) => {
       if (callback) {
-        callback(resp.data)
+        successCallback(resp.data)
       }
     }, (resp) => {
-      context.error = resp.body
+      errorCallback(resp)
     })
   },
 
@@ -109,7 +108,58 @@ export default {
       authenticated: false
     }
   },
+  currentTenantUser(context, required, cb) {
+    this.user.loading = true
+    this.setTenantHeaders(context)
+    let user = context.$ls.get('tenantUser')
+    if (user) {
+      this.user = user
+      this.user.loading = false
+    } else {
+      this.user.authenticated = false
+      this.user.loading = false
+    }
+    if (!this.user.authenticated || this.user.id === undefined) {
+      context.$http.get(CURRENT_TENANT_USER, { maxRedirects: 0, headers: this.getAuthHeader() })
+        .then((resp) => {
+          console.log(resp.data)
+          // store.dispatch('user/getTenantUserFromApi', resp.data)
+          // this.tenantUser.id = resp.data.id
+          // this.tenantUser.username = resp.data.username
+          // this.tenantUser.email = resp.data.email
+          // this.tenantUser.name = resp.data.name
+          // this.tenantUser.company = resp.data.company
+          // this.tenantUser.tenants = resp.data.tenants
+          // this.setHeaders(context)
+          // context.$ls.set('tenantUser', this.user, 1000 * 60 * 10)
+          if (cb !== undefined) {
+            cb(resp.data)
+          }
+          // this.user.loading = false
+        })
+        .catch(
+          (e) => {
+            console.error(e)
+            this.unsetToken()
+            if (required) {
+              context.$router.push({ path: '/signin' })
+            }
+            if (cb) {
+              cb()
+            }
 
+            this.user.loading = false
+          })
+    } else {
+      this.setHeaders(context)
+
+      if (cb !== undefined) {
+        cb()
+      }
+      this.user.loading = false
+    }
+
+  },
   currentUser (context, required, cb) {
     if (this.user.loading) {
       setTimeout(() => {
@@ -232,7 +282,6 @@ export default {
   resolveTenantId () {
     let tenantId = document.location.hostname.replace('.dev.maryoku.com', '')
     tenantId = tenantId.replace('.maryoku.com', '')
-
     if (document.location.hostname.startsWith('app') || document.location.hostname.startsWith('dev')) {
       tenantId = 'DEFAULT'
     }

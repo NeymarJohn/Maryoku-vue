@@ -90,6 +90,8 @@ const SignInSignUp = () =>
   import('@/pages/Dashboard/Pages/SignInSignUp.vue')
 const SignUp = () =>
   import('@/pages/Dashboard/Pages/SignUp.vue')
+const ForgotPassword = () =>
+  import('@/pages/Dashboard/Pages/ForgotPassword.vue')
 const SignOut = () =>
   import('@/pages/Dashboard/Pages/SignOut.vue')
 const SignedIn = () =>
@@ -115,6 +117,15 @@ let authPages = {
     meta: {
       auth: false,
       gtm: 'SignUp'
+    }
+  },
+  {
+    path: '/forgot-password',
+    name: 'ForgotPassword',
+    component: ForgotPassword,
+    meta: {
+      auth: false,
+      gtm: 'ForgotPassword'
     }
   },
   {

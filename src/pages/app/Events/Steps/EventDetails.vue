@@ -342,7 +342,9 @@ export default {
           // this.$parent.isLoading = false
           // vm.$emit('goToNextPage', response)
           // vm.newEvent = response
-          vm.$router.push({ path: `/events/` + response.item.id + '/edit/details' })
+          // vm.$router.push({ path: `/events/` + response.item.id + '/edit/details' })
+          vm.$router.push({ path: `/events/${response.item.id}/booking/concept`})
+          // vm.$router.push({ path: `/events/${response.item.id}/edit/concept`})
         })
           .catch((error) => {
             console.log(error)

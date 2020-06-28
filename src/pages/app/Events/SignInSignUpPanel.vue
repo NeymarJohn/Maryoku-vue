@@ -109,7 +109,7 @@ export default {
               this.working = false
             } else if (statusCode === 200) {
               this.$auth.login(this, {
-                username: this.email,
+                email: this.email,
                 password: this.password
               }, (success) => {
                 // this.$router.push({ path: '/signedin', query: {token: success.access_token} });

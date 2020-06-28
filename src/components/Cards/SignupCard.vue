@@ -2,7 +2,7 @@
   <md-card class="md-card-signup">
     <slot name="title"></slot>
 
-    <md-card-content>
+    <md-card-content class="signup-card">
       <div class="md-layout">
         <slot name="content-left"></slot>
         <slot name="content-middle"></slot>
@@ -23,4 +23,8 @@ export default {
 </script>
 
 <style lang="css">
+  .signup-card {
+    padding: 0px !important;
+    overflow: hidden;
+  }
 </style>
