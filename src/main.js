@@ -98,7 +98,7 @@ router.beforeEach((to, from, next) => {
 
   let tenantId = document.location.hostname.replace('.maryoku.com', '')
   let isPrimeTenant = tenantId === 'dev' || tenantId === 'app'
-  const unAuthenticatedLinks = ['/signout', '/signin', '/signup', '/signedin', '/create-workspace', '/choose-workspace' ]
+  const unAuthenticatedLinks = ['/signout', '/signin', '/signup', '/signedin', '/create-workspace', '/choose-workspace', '/forgot-password' ]
   if ((isPrimeTenant && unAuthenticatedLinks.indexOf(to.path) < 0 ) || (to.meta.auth && !auth.user.authenticated)) {
     next('signin')
   } else {

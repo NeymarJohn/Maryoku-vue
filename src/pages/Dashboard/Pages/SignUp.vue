@@ -2,16 +2,16 @@
   <div class="md-layout">
     <vue-element-loading :active="loading" spinner="ring" color="#FF547C" isFullScreen/>
     <div class="md-layout-item">
-      <!-- <h2 class="title text-center" slot="title" style="text-align: center;">Sign In</h2> -->
+      <!-- <h2 class="title text-center" slot="title" style="text-align: center;">Sign Up</h2> -->
       <signup-card class="signup-card">
         <div class="md-layout-item md-size-50 md-medium-size-50 md-small-size-100 ml-auto" slot="content-left">
           <div class="info info-horizontal">
             <div>
               <div class="image">
-                <img :src="`${$iconURL}Onboarding/champagin-red.svg`">
+                <img :src="`${$iconURL}Signup/champain-red.svg`">
               </div>
-              <div class="signup-title">TIMT TO PUT YOURSELF <br/>A DRINK & RELAX!</div>
-              <div class="signup-description">You can start thinkg about what you'll ware to <br/>the event, cause everything else is covered.</div>
+              <div class="signup-title">TIME TO PUT YOURSELF <br/>A DRINK & RELAX!</div>
+              <div class="signup-description">You can start thinkg about what you'll wear to <br/>the event, cause everything else is covered.</div>
             </div>
             <div class="logo">
               <img :src="`${$iconURL}Onboarding/maryoku-logo-dark%402x%403x.png`">
@@ -20,24 +20,25 @@
         </div>
         <div class="md-layout-item md-size-50 md-medium-size-50 md-small-size-100 mr-auto " slot="content-right">
           <div class="social-line text-center">
-            <md-button class="md-just-icon-social md-google" @click="authenticate('google')">
-              <i class="fab fa-google-plus-g" style="font-size: 42px !important;width: 80px;height: 42px;"></i>
+            <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
+              <img :src="`${$iconURL}Signup/google-icon.jpg`">
+              <span>Sign in with Google</span>
             </md-button>
-            <h4 class="mt-3">Or</h4>
+            <h4 class="mt-1">Or</h4>
           </div>
-          <maryoku-input class="form-input" inputStyle="name" v-model="name" placeholder="Type your name here..."></maryoku-input>
+          <maryoku-input class="form-input" inputStyle="username" v-model="name" placeholder="Type your name here..."></maryoku-input>
           <maryoku-input class="form-input" v-validate="modelValidations.email"  inputStyle="email" v-model="email" placeholder="Type email address here..."></maryoku-input>
-          <maryoku-input class="form-input"  inputStyle="company" v-model="company" placeholder="Type name of company here..."></maryoku-input>
+          <maryoku-input class="form-input" inputStyle="company" v-model="company" placeholder="Type name of company here..."></maryoku-input>
           <maryoku-input class="form-input" v-validate="modelValidations.password" type="password" inputStyle="password" v-model="password" placeholder="Type password here..."></maryoku-input>
           <div class="md-error">
             {{this.error}}
           </div>
-          <div class="title">
+          <div class="terms-and-conditions">
             <md-checkbox v-model="terms">
-              <div>
-                I agree <a href="https://www.maryoku.com/terms" target="_blank" class="term-and-condition">Terms & Conditions</a>
-              </div>
             </md-checkbox>
+            <div >
+              I agree <a href="https://www.maryoku.com/terms" target="_blank" class="term-and-condition">Terms & Conditions</a>
+            </div>
           </div>
           <div class="text-center" >
               <div><md-button @click="signup" class="md-default md-red md-maryoku mt-4">Sign Up</md-button></div>
@@ -304,10 +305,10 @@ export default {
       padding: 60px 60px 20px;
     }
     .mr-auto {
-      padding: 60px 60px 20px;
+      padding: 20px 60px 20px;
     }
     .form-input{
-      margin:30px 0px;
+      margin:20px 0px;
       min-width: 300px;
     }
     .signup-title {
@@ -324,9 +325,16 @@ export default {
       white-space: nowrap;
       text-align: center;
     }
-    .term-and-condition {
-      font-family: "Manrope-Bold";
-      text-decoration: underline;
+    .terms-and-conditions {
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      a {
+        color: #050505;
+        font-family: "Manrope-Bold";
+        text-decoration: underline;
+      }
+      
     }
     .info-horizontal {
       position: relative;
@@ -347,6 +355,11 @@ export default {
         img {
           width: 200px;
         }
+      }
+    }
+    .md-google {
+      span {
+        padding-left: 20px;
       }
     }
 </style>

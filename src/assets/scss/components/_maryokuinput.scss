@@ -72,6 +72,27 @@
       @include background-icon(url('http://static.maryoku.com/storage/icons/Share/link-dark.svg'));
       padding-right: 60px;
     }
+    &.password {
+      &.active {
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Signup/password-dark.svg'))
+      }
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Signup/password-gray.svg'));
+      padding-right: 60px;
+    }
+    &.username {
+      &.active {
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Signup/user-dark.svg'))
+      }
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Signup/user-gray.svg'));
+      padding-right: 60px;
+    }
+    &.company {
+      &.active {
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Signup/company-dark.svg'))
+      }
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Signup/company-gray.svg'));
+      padding-right: 60px;
+    }
     &:focus{
       border: solid 0.5px #050505;
     }

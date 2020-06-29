@@ -2,18 +2,27 @@
   <div class="md-layout">
     <vue-element-loading :active="loading" spinner="ring" color="#FF547C" isFullScreen/>
     <div class="md-layout-item">
-      <h2 class="title text-center" slot="title" style="text-align: center;">Sign In</h2>
+      <!-- <h2 class="title text-center" slot="title" style="text-align: center;">Sign In</h2> -->
       <signup-card>
         <div class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain" slot="content-right">
           <div class="social-line text-center">
-            <md-button class="md-just-icon-social md-google" @click="authenticate('google')">
+            <!-- <md-button class="md-just-icon-social md-google" @click="authenticate('google')">
               <i class="fab fa-google-plus-g" style="font-size: 42px !important;width: 80px;height: 42px;"></i>
+            </md-button> -->
+            <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
+              <img :src="`${$iconURL}Signup/google-icon.jpg`">
+              <span>Sign in with Google</span>
             </md-button>
-            <h4 class="mt-3">Or</h4>
+            <h4 class="mt-1">Or</h4>
           </div>
           <maryoku-input class="form-input" v-validate="modelValidations.email" inputStyle="email" v-model="email" placeholder="Type email address here..."></maryoku-input>
           <maryoku-input class="form-input" v-validate="modelValidations.password" type="password" inputStyle="password" v-model="password" placeholder="Type password here..."></maryoku-input>
           <div class="md-error">{{error}}</div>
+          <div class="terms-and-conditions">
+            <md-checkbox v-model="terms">
+              Keep me signed in
+            </md-checkbox>
+          </div>
           <div class="form-buttons">
             <div>
               <md-button @click="signIn" class="md-default md-red md-maryoku mt-4" slot="footer">Sign In</md-button>
@@ -128,6 +137,28 @@ export default {
           email: true
         },
       },
+      contentLeft: [
+        {
+          colorIcon: 'icon-success',
+          icon: 'color_lens',
+          title: 'Get Inspired',
+          description: "Why struggle to find good ideas for your company's next event, when you can simply browse through other companies' events, see what worked for them and adjust those ideas to your needs."
+        },
+
+        {
+          colorIcon: 'icon-danger',
+          icon: 'calendar_today',
+          title: 'Plan Ahead',
+          description: 'Making the best of your annual budget is so much easier when you have visibility over all year occasions combined with insights on industry benchmark.'
+        },
+
+        {
+          colorIcon: 'icon-info',
+          icon: 'developer_board',
+          title: 'Work Less',
+          description: 'Stop spending hours on phone calls, emails, quotes and invoices. Locate ranked suppliers and have them work for you.'
+        }
+      ]
     }
   }
 }
@@ -232,6 +263,9 @@ export default {
         }
       }
     }
+    .signin-page .md-card-signup {
+      box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.13);
+    }
     .md-error {
       color: red;
     }
@@ -244,5 +278,14 @@ export default {
     }
     .signin-contain {
       padding: 20px 60px;
+    }
+    .md-google {
+      span {
+        padding-left: 20px;
+      }
+    }
+    .ml-auto {
+      background: #FFF0F4;
+      padding: 20px 30px 20px;
     }
 </style>

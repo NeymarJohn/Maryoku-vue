@@ -2,11 +2,12 @@
   <div class="md-layout">
     <vue-element-loading :active="loading" spinner="ring" color="#FF547C" isFullScreen/>
     <div class="md-layout-item">
+      <h2 class="title text-center" slot="title" style="text-align: center;">Reset Password</h2>
       <signup-card>
         <div class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain" slot="content-right">
-          <div class="social-line text-center">
+          <!-- <div class="social-line text-center">
             <h4 class="mt-3">Forgot Password</h4>
-          </div>
+          </div> -->
           <maryoku-input class="form-input" v-validate="modelValidations.email" inputStyle="email" v-model="email" placeholder="Type email address here..."></maryoku-input>
           <div class="md-error">{{error}}</div>
           <div class="form-buttons">

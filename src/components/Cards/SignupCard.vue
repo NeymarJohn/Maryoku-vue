@@ -26,5 +26,6 @@ export default {
   .signup-card {
     padding: 0px !important;
     overflow: hidden;
+    box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.13);
   }
 </style>

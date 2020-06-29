@@ -4,7 +4,7 @@
       <div class="md-toolbar-row md-offset">
         <div class="md-toolbar-section-start">
           <!--<h3 class="md-title">{{$route.name}}</h3>-->
-          <h3 class="md-title"><a href="https://www.maryoku.com"><img src="https://www.maryoku.com/img/maryoku-logo.png"/></a> </h3>
+          <!-- <h3 class="md-title"><a href="https://www.maryoku.com"><img src="https://www.maryoku.com/img/maryoku-logo.png"/></a> </h3> -->
         </div>
         <div class="md-toolbar-section-end">
           <md-button class="md-just-icon md-simple md-round md-toolbar-toggle" :class="{toggled: $sidebar.showSidebar}" @click="toggleSidebar">
@@ -95,11 +95,18 @@ export default {
         Login: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
         Register: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
         CreateWorkspace: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
-        // SignIn: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
+        ForgotPassword: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
+        SignIn1: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
+        SignUp1: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
         // SignOut: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
         // GetStarted: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
         // SignedIn: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
         Lock: 'http://static.maryoku.com/storage/img/lock.jpg'
+      }
+      if (!images[this.$route.name]) {
+        return {
+          backgroundColor: `#f3f7fd`
+        }
       }
       return {
         backgroundImage: `url(${images[this.$route.name]})`
@@ -198,5 +205,15 @@ export default {
     border-radius: 0 0 50% 50%;
     padding: 0 0 1em;
     height: 100px;
+  }
+  .page-header > .container {
+      color: #FFFFFF;
+      padding-top: 0px;
+      padding-bottom: 0px;
+      /* padding-top: 70px; */
+      /* padding-bottom: 160px; */
+  }
+  .page-header::before{
+    background: transparent;
   }
 </style>
