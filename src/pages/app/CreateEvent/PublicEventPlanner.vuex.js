@@ -30,6 +30,8 @@ export default {
         expectedAttendacePercent: null,
         eventMovieId: null,
         eventNeededServices: null,
+        guestTypes:null,
+        guestGroupName: ""
       },
       eventDecisionFactors: {
         eventDecisionFactor1: 50,

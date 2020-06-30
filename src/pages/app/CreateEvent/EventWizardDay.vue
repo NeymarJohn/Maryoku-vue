@@ -109,7 +109,22 @@ export default {
   },
   data () {
     return {
-      dateData: {},
+      dateData: {
+        currentDate: new Date(),
+        dateRange: { 
+          start: {date: false, dateTime:false, hour: "00", mintue: "00"},
+          end: {date: false, dateTime:false, hour: "00", mintue: "00"}},
+        selectedDate: new Date(),
+        selectedDatesItem: "",
+        selectedHour: "00",
+        selectedMinute: "00",
+        selectedDates: []
+      },
+    }
+  },
+  created () {
+    if (this.publicEventData.eventStartMillis) {
+      this.dateData.selectedDate =  new Date(this.publicEventData.eventStartMillis)
     }
   },
   computed: {
@@ -121,7 +136,12 @@ export default {
       if (!this.dateData.selectedDate) return ""
       return moment(new Date(this.dateData.selectedDate)).format("dddd, MMM DD, YYYY")
     }
-  }
+  },
+  watch: {
+    dateData(newValue, oldValue) {
+      console.log(newValue)
+    }
+  },
 
 }
 </script>

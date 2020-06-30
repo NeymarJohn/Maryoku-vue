@@ -36,6 +36,9 @@ export default {
     LocationInput
   },
   created () {
+    if (this.publicEventData.location) {
+      this.location = this.publicEventData.location
+    }
   },
   methods: {
     ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setCurrentStep']),

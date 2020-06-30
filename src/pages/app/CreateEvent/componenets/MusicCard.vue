@@ -14,9 +14,6 @@
           <span @click="playMusic"><md-icon >stop</md-icon></span>
         </radial-progress-bar>
       </div>
-      <audio  width="320" height="176" controls ref="player">
-        <source :src="`${$storageURL}${data.src}`" type="audio/mpeg">
-      </audio>
     </div>
     <div class="music-infor">
       <md-checkbox class="md-checkbox-circle">
@@ -47,14 +44,18 @@ export default {
       isPlaying: false,
       totalSteps: 100,
       completedSteps: 40,
-      audioInterval:null
+      audioInterval:null,
+      player:null,
     }
+  },
+  created () {
+    this.player = new Audio(`http://static.maryoku.com/storage/${this.data.src}`); 
   },
   methods: {
     playMusic() {
       const context = this
       this.isPlaying = !this.isPlaying
-       const player = this.$refs.player;
+      const player = this.player;
       if (this.isPlaying) {
           player.currentTime = 0
           player.play();
@@ -68,7 +69,7 @@ export default {
             }
           }, 1000)
       } else {
-         player.pause();
+        player.pause();
         clearInterval(this.audioInterval);
       }
     }

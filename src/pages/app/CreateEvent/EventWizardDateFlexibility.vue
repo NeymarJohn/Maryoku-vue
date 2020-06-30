@@ -15,7 +15,7 @@
                 <img :src="`${$iconURL}Onboarding/block-red.svg`">
                 <range-slider
                   class="slider"
-                  min="1"
+                  min="0"
                   max="10"
                   step="1"
                   v-model="flexibility">
@@ -101,6 +101,11 @@ export default {
   data () {
     return {
       flexibility: 5
+    }
+  },
+  created () {
+    if (this.publicEventData.flexibleWithDates) {
+      this.flexibility = this.publicEventData.flexibleWithDates
     }
   },
   computed: {

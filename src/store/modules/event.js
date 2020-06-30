@@ -127,6 +127,9 @@ const actions = {
   },
   async getEventTypes({ commit, state }, { data, ctx }) {
     let _calendar = new Calendar({ id: data })
+    if (state.eventTypes && state.eventTypes.length > 0) {
+      return
+    }
     getReq('/1/eventTypes').then(res => {
       commit('setEventTypes', res.data)
     })

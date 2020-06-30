@@ -48,6 +48,9 @@ export default {
       data: this.$auth.user.defaultCalendarId,
       ctx: this
     });
+    if (this.publicEventData.eventType) {
+      this.selectedType = this.eventTypes.find(it=> it.key == this.publicEventData.eventType.key)
+    }
   },
   methods: {
     ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setCurrentStep']),

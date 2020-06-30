@@ -12,7 +12,7 @@
               </div>
               <div class="text-center mt-2 select-wrapper">
                 <multiselect
-                  v-model="nationality"
+                  v-model="religion"
                   :options="countries"
                   :close-on-select="true"
                   :clear-on-select="true"
@@ -48,6 +48,9 @@ export default {
     Multiselect
   },
   created () {
+    if(this.publicEventData.religion) {
+      this.religion = this.publicEventData.religion
+    }
   },
   methods: {
     ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setCurrentStep']),
@@ -90,6 +93,7 @@ export default {
       })
     },
     goToNext() {
+      this.setEventProperty({ key: "religion", actualValue: this.religion})
       this.$router.push({path: `/event-wizard-vibes`})
     },
     skip() {
@@ -121,7 +125,7 @@ export default {
         'Buddhism',
         'Other'
       ],
-      nationality: ""
+      religion: ""
     }
   },
   computed: {

@@ -87,7 +87,12 @@ export default {
   },
   data () {
     return {
-      numberOfGuests: 0
+      numberOfGuests: null
+    }
+  },
+  created () {
+    if (this.publicEventData.numberOfParticipants) {
+      this.numberOfGuests = this.publicEventData.numberOfParticipants
     }
   },
   computed: {

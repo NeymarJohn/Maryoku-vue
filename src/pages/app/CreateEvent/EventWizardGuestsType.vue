@@ -11,7 +11,7 @@
                 so, who’s coming?
               </div>
               <div class="mt-3 types">
-                <div class="type-card" :class="{selected:type.selected}" v-for="(type) in guestsTypes" :key="type.value">
+                <div class="type-card" @click="type.selected=!type.selected" :class="{selected:type.selected}" v-for="(type) in guestsTypes" :key="type.value">
                   <div>
                     <img :src="`${$iconURL}Onboarding/${type.value}-dark.svg`">
                   </div>
@@ -24,7 +24,7 @@
                 </div>
               </div>
               <div class="mt-3 input-name">
-                <maryoku-input class="form-input" inputStyle="name" v-model="name" placeholder="Type type name here…"></maryoku-input>
+                <maryoku-input class="form-input" inputStyle="name" v-model="groupName" placeholder="Type type name here…"></maryoku-input>
                 <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator indicator-reverse">
               </div>
             </div>
@@ -49,6 +49,12 @@ export default {
     MaryokuInput
   },
   created () {
+    if (this.publicEventData.guestTypes) {
+      this.guestsTypes = this.publicEventData.guestTypes
+    }
+    if (this.publicEventData.guestGroupName) {
+      this.groupName = this.publicEventData.guestGroupName
+    }
   },
   methods: {
     ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setCurrentStep']),
@@ -93,6 +99,8 @@ export default {
       })
     },
     goToNext() {
+      this.setEventProperty({key:"guestTypes", actualValue: this.guestsTypes})
+      this.setEventProperty({key:"guestGroupName", actualValue: this.groupName})
       this.$router.push({path: `/event-wizard-location`})
     },
     skip() {
@@ -104,7 +112,7 @@ export default {
   },
   data () {
     return {
-      name:"",
+      groupName:"",
       guestsTypes: [
         {
           value: "employees", name: "Employees", selected:false

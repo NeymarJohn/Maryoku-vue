@@ -1175,7 +1175,7 @@ export default {
         padding: 20px 25px;
         width: 200px;
         height: 200px;
-        border: solid 1px #818080;
+        border: solid 1px #cccccc;
         border-radius: 3px;
         margin: 10px;
         background: white;

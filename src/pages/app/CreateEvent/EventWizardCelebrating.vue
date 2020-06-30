@@ -45,6 +45,9 @@ export default {
     MaryokuInput
   },
   created () {
+    if (this.publicEventData.occasion) {
+      this.selected = this.guestsTypes.find(it=> it.value == this.publicEventData.occasion.value)
+    }
   },
   methods: {
     ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setCurrentStep']),
