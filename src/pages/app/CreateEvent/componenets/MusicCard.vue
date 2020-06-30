@@ -14,7 +14,10 @@
         <span @click="playMusic"><md-icon >stop</md-icon></span>
       </radial-progress-bar>
     </div>
-    
+    <audio  width="320" height="176" controls ref="player">
+      <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
   </div>
 </template>
 <script>
@@ -40,6 +43,16 @@ export default {
   methods: {
     playMusic() {
       this.isPlaying = !this.isPlaying
+      if (this.isPlaying) {
+          this.totalSteps = this.$refs.player.duration;
+          this.completedSteps = 0;
+          const context = this;
+          setInterval(()=>{
+            context.completedSteps = context.completedSteps + 1;
+          }, 1000)
+      } else {
+        clearInterval();
+      }
     }
   },
 }
@@ -53,6 +66,7 @@ export default {
     overflow: hidden;
     position: relative;
     cursor: pointer;
+    margin: 10px;
     .mask {
       opacity: 0;
       position: absolute;
