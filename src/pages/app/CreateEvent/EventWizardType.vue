@@ -9,7 +9,7 @@
                 What type of event are you planning on?
               </div>
               <div class="mt-3 types">
-                <div class="type-card" :class="{selected:type.selected}" v-for="(type) in eventTypes" :key="type.value">
+                <div class="type-card" @click="selectedType=type" :class="{selected:selectedType.key==type.key}" v-for="(type) in eventTypes" :key="type.value">
                   <div>
                     <img :src="`${$iconURL}Onboarding/${type.key}.svg`">
                   </div>
@@ -17,7 +17,7 @@
                     {{type.name}}
                   </div>
                   <div>
-                    <md-checkbox class="md-checkbox-circle md-red" v-model="type.selected"></md-checkbox>
+                    <md-checkbox class="md-checkbox-circle md-red" v-model="selectedType" :value="type"></md-checkbox>
                   </div>
                 </div>
               </div>
@@ -55,44 +55,15 @@ export default {
       return this.$refs.datePicker.$el.classList.contains('md-has-value')
     },
     validateAndSubmit () {
-      // this.$emit('goToNextPage');
-      //  return;
-      let vm = this
+      if (!this.selectedType) {
 
-      this.cerrors = {}
-      this.validating = true
-
-      this.$validator.validateAll().then(isValid => {
-        if (isValid) {
-          // this.$parent.isLoading = true;
-
-          if (this.eventId) {
-            vm.updateEvent()
-          } else {
-            vm.createEvent()
-          }
-        } else {
-          this.showNotify()
-        }
-      })
-
-      if (!this.eventType) {
-
-      } else {
-        // this.$emit('goToNextPage');
-      }
-    },
-    showNotify () {
-      this.$notify({
-        message: 'Please, check all required fields',
-        icon: 'warning',
-        horizontalAlign: 'center',
-        verticalAlign: 'top',
-        type: 'danger'
-      })
+      } 
     },
     goToNext() {
-      this.$router.push({path: `/event-wizard-celebrating`})
+      if (this.selectedType) {
+        this.setEventProperty({key: 'eventType', actualValue: this.selectedType })
+        this.$router.push({path: `/event-wizard-celebrating`})
+      } 
     },
     skip() {
       this.$router.push({path: `/event-wizard-celebrating`})
@@ -102,6 +73,9 @@ export default {
     }
   },
   data () {
+    return {
+      selectedType: {}
+    }
   },
   computed: {
     ...mapState('PublicEventPlannerVuex', [

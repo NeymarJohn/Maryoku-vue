@@ -29,7 +29,7 @@ export default {
         internalEvent: false,
         expectedAttendacePercent: null,
         eventMovieId: null,
-        eventNeededServices: null
+        eventNeededServices: null,
       },
       eventDecisionFactors: {
         eventDecisionFactor1: 50,

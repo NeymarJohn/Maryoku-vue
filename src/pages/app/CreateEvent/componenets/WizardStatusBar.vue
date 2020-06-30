@@ -33,12 +33,24 @@
       </div>
     </div>
     <div>
-      <md-button @click="skip" class="md-black md-maryoku md-simple">
+      <md-button @click="skip" class="md-black md-maryoku md-simple" @mouseover="skipToolTip=true" @mouseleave="skipToolTip=false">
         Skip
         <md-icon>keyboard_arrow_right</md-icon>
-     </md-button>
+      </md-button>
       <md-button @click="next" class="md-default md-red md-maryoku">Next</md-button>
     </div>
+    <transition name="fade">
+      <div class="tool-tip" v-if="skipToolTip">
+        <div class="flex-1">
+          <img :src="`${$iconURL}Onboarding/tip-gray.svg`">
+        </div>
+        <div>
+          We encourage you to answer this question!
+          <br/>
+          This will help us create the perfect event for you!
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 <script>
@@ -67,6 +79,11 @@ export default {
       this.$emit("skip")
     }
   },
+  data() {
+   return {
+     skipToolTip: false
+   }
+ },
 }
 </script>
 <style lang="scss" scoped>
@@ -91,5 +108,16 @@ export default {
   }
   .status-description {
     font-family: "Manrope-Bold";
+  }
+  .tool-tip {
+    position: absolute;
+    right: 150px;
+    width: 410px;
+    background: #ffedb7;
+    top: -50px;
+    padding: 15px 20px;
+    display: flex;
+    box-shadow: 0 2px 21px 0 rgba(0, 0, 0, 0.21);
+    border-radius: 5px;
   }
 </style>

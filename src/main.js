@@ -100,7 +100,7 @@ router.beforeEach((to, from, next) => {
   let isPrimeTenant = tenantId === 'dev' || tenantId === 'app'
   const unAuthenticatedLinks = [
     '/signout', '/signin', '/signup', '/signedin', '/create-workspace', '/choose-workspace', '/forgot-password',
-    '/event-wizard-start', '/event-wizard-day', '/event-wizard-flexibility', '/event-wizard-guests', 
+    '/create-event-wizard', '/event-wizard-day', '/event-wizard-flexibility', '/event-wizard-guests', 
     '/event-wizard-guests-type', '/event-wizard-location', '/event-wizard-building', '/event-wizard-type', 
     '/event-wizard-celebrating', '/event-wizard-religion', '/event-wizard-vibes']
   if ((isPrimeTenant && unAuthenticatedLinks.indexOf(to.path) < 0 ) || (to.meta.auth && !auth.user.authenticated)) {

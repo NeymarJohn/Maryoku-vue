@@ -812,7 +812,7 @@ let PublicCreateEvent = {
   },
   children: [
     {
-      path: '/event-wizard-start',
+      path: '/create-event-wizard',
       name: 'EventWizardStart',
       component: EventWizardStart,
       meta: {

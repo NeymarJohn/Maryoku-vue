@@ -12,7 +12,7 @@
             </div>
             <div class="event-basic-info">
               <div class="mt-4rem">
-                <maryoku-input class="form-input" inputStyle="location" v-model="numberOfGuests" placeholder="Type city / region or specific address here…"></maryoku-input>
+                <location-input v-model="location" placeholder="Type city / region or specific address here…"></location-input>
               </div>
             </div>
         </div>
@@ -25,13 +25,15 @@
 import GoBack from './componenets/GoBack'
 import SelectedValue from './componenets/SelectedValue'
 import WizardStatusBar from './componenets/WizardStatusBar'
-import { MaryokuInput} from '@/components'
+import { MaryokuInput, LocationInput} from '@/components'
+
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
   components: {
     GoBack,
     WizardStatusBar,
-    MaryokuInput
+    MaryokuInput,
+    LocationInput
   },
   created () {
   },
@@ -78,6 +80,7 @@ export default {
       })
     },
     goToNext() {
+      this.setEventProperty({key: 'location', actualValue: this.location})
       this.$router.push({path: `/event-wizard-building`})
     },
     skip() {
@@ -89,7 +92,7 @@ export default {
   },
   data () {
     return {
-      sliderValue: 50
+      location: ""
     }
   },
   computed: {

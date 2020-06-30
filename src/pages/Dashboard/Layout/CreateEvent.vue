@@ -122,7 +122,6 @@ export default {
   },
   created () {
     this.$store.registerModule('PublicEventPlannerVuex', PublicEventPlannerVuexModule)
-
     console.log(this.$auth.user)
   },
   methods: {

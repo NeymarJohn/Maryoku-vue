@@ -9,7 +9,7 @@
             <selected-value value="23.04.21" property="calendar"></selected-value>
             <div class="event-guests event-basic-info">
               <div class="mt-5">
-                <maryoku-input class="form-input" inputStyle="name" v-model="numberOfGuests" type="number" placeholder="Type number…..."></maryoku-input>
+                <maryoku-input class="form-input" inputStyle="users" v-model="numberOfGuests" type="number" placeholder="Type number…..."></maryoku-input>
               </div>
             </div>
         </div>
@@ -75,6 +75,7 @@ export default {
       })
     },
     goToNext() {
+      this.setEventProperty({key: 'numberOfParticipants', actualValue: this.numberOfGuests})
       this.$router.push({path: `/event-wizard-guests-type`})
     },
     skip() {
@@ -86,7 +87,7 @@ export default {
   },
   data () {
     return {
-      sliderValue: 50
+      numberOfGuests: 0
     }
   },
   computed: {

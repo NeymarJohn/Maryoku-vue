@@ -4,7 +4,7 @@
             <div class="title">
               1/5
             </div>
-            <selected-value value="23.04.21" property="calendar"></selected-value>
+            <selected-value :value="formattedDate" property="calendar"></selected-value>
             <div class="event-flexibility event-basic-info">
               <div class="mt-5">Between a camel yoga pose and plywood</div>
               <div class="setting-title mt-1">
@@ -15,10 +15,10 @@
                 <img :src="`${$iconURL}Onboarding/block-red.svg`">
                 <range-slider
                   class="slider"
-                  min="10"
-                  max="1000"
-                  step="10"
-                  v-model="sliderValue">
+                  min="1"
+                  max="10"
+                  step="1"
+                  v-model="flexibility">
                 </range-slider>
                 <img :src="`${$iconURL}Onboarding/excersie-red.svg`">
               </div>
@@ -30,21 +30,15 @@
 
 <script>
 
-import GoBack from './componenets/GoBack'
 import SelectedValue from './componenets/SelectedValue'
 import WizardStatusBar from './componenets/WizardStatusBar'
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-
-import Vue from 'vue'
-import vSelect from 'vue-select'
 import RangeSlider from 'vue-range-slider'
 import 'vue-range-slider/dist/vue-range-slider.css'
-
-Vue.component('v-select', vSelect)
+import moment from 'moment'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
   components: {
-    GoBack,
     SelectedValue,
     WizardStatusBar,
     RangeSlider
@@ -94,6 +88,7 @@ export default {
       })
     },
     goToNext() {
+      this.setEventProperty({key: 'flexibleWithDates', actualValue: this.flexibility})
       this.$router.push({path: `/event-wizard-guests`})
     },
     skip() {
@@ -105,14 +100,22 @@ export default {
   },
   data () {
     return {
-      sliderValue: 50
+      flexibility: 5
     }
   },
   computed: {
     ...mapState('PublicEventPlannerVuex', [
       'publicEventData'
-    ])
-  }
+    ]),
+    formattedDate() {
+      return moment(new Date(this.publicEventData.eventStartMillis)).format("DD.MM.YY")
+    }
+  },
+  // filters: {
+  //   formattedDate: function(eventStartMillis) {
+  //    return moment(new Date(this.publicEventData.eventStartMillis)).format("DD.MM.YY")
+  //   }
+  // }
 
 }
 </script>
@@ -135,6 +138,7 @@ export default {
           height: 34px;
           background: #f51355;
           border: none;
+          z-index: 2;
           &::before {
             content: " ";
             display: block;

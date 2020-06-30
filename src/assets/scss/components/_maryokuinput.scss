@@ -86,6 +86,13 @@
       @include background-icon(url('http://static.maryoku.com/storage/icons/Signup/user-gray.svg'));
       padding-right: 60px;
     }
+    &.users {
+      &.active {
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Event%20Page/users-dark.svg'))
+      }
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Event%20Page/users-gray.svg'));
+      padding-right: 60px;
+    }
     &.company {
       &.active {
         @include background-icon(url('http://static.maryoku.com/storage/icons/Signup/company-dark.svg'))

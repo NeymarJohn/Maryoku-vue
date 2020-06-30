@@ -4,14 +4,14 @@
             <div class="title">
               4/5
             </div>
-            <selected-value value="Reception" property="users"></selected-value>
+            <selected-value :value="publicEventData.eventType.name" :property="publicEventData.eventType.key"></selected-value>
             <div class="event-basic-info">
               <div class="setting-title mt-5">
                 <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator">
                 What are we celebrating?
               </div>
               <div class="mt-3 types">
-                <div class="type-card" @click="type.selected=!type.selected" :class="{selected:type.selected}" v-for="(type) in guestsTypes" :key="type.value">
+                <div class="type-card" @click="selected=type" :class="{selected:type.value==selected.value}" v-for="(type) in guestsTypes" :key="type.value">
                   <div>
                     <img :src="`${$iconURL}Onboarding/${type.icon}`">
                   </div>
@@ -19,7 +19,7 @@
                     {{type.name}}
                   </div>
                   <div>
-                    <md-checkbox class="md-checkbox-circle md-red" v-model="type.selected"></md-checkbox>
+                    <md-checkbox class="md-checkbox-circle md-red" v-model="selected" :value="type"></md-checkbox>
                   </div>
                 </div>
               </div>
@@ -89,6 +89,7 @@ export default {
       })
     },
     goToNext() {
+      this.setEventProperty({ key: "occasion", actualValue:this.selected})
       this.$router.push({path: `/event-wizard-religion`})
     },
     skip() {
@@ -100,6 +101,7 @@ export default {
   },
   data () {
     return {
+      selected: {},
       guestsTypes: [
         {
           value: "nationalday", name: "National Day", selected:false, icon: "ballons-dark.svg"

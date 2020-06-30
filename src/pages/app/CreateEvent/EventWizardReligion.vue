@@ -4,7 +4,7 @@
             <div class="title">
               4/5
             </div>
-            <selected-value value="San Francisco" property="location"></selected-value>
+            <selected-value :value="publicEventData.occasion.name" :property="publicEventData.occasion.value"></selected-value>
             <div class="event-basic-info">
               <div class="setting-title mt-5">
                 <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator">
@@ -115,14 +115,11 @@ export default {
         { value: "Nabi", name: "Milad un Nabi (Shia)", selected:false }
       ],
       countries: [
-        'Algeria',
-        'Argentina',
-        'Brazil',
-        'Canada',
-        'Italy',
-        'Japan',
-        'United Kingdom',
-        'United States'
+        'Christianity',
+        'Islam',
+        'Hinduism',
+        'Buddhism',
+        'Other'
       ],
       nationality: ""
     }

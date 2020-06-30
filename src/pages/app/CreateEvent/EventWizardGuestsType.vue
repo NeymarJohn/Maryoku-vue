@@ -4,7 +4,7 @@
             <div class="title">
               2/5
             </div>
-            <selected-value value="12,345" property="users"></selected-value>
+            <selected-value :value="publicEventData.numberOfParticipants | withComma" property="users"></selected-value>
             <div class="event-guests-type event-basic-info">
               <div class="setting-title mt-5">
                 <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator">
@@ -24,7 +24,7 @@
                 </div>
               </div>
               <div class="mt-3 input-name">
-                <maryoku-input class="form-input" inputStyle="name" v-model="numberOfGuests" type="number" placeholder="Type type name here…"></maryoku-input>
+                <maryoku-input class="form-input" inputStyle="name" v-model="name" placeholder="Type type name here…"></maryoku-input>
                 <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator indicator-reverse">
               </div>
             </div>
@@ -104,6 +104,7 @@ export default {
   },
   data () {
     return {
+      name:"",
       guestsTypes: [
         {
           value: "employees", name: "Employees", selected:false

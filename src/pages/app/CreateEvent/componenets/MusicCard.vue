@@ -54,8 +54,9 @@ export default {
     playMusic() {
       const context = this
       this.isPlaying = !this.isPlaying
+       const player = this.$refs.player;
       if (this.isPlaying) {
-          const player = this.$refs.player;
+          player.currentTime = 0
           player.play();
           this.totalSteps = player.duration;
           this.completedSteps = 0;
@@ -67,6 +68,7 @@ export default {
             }
           }, 1000)
       } else {
+         player.pause();
         clearInterval(this.audioInterval);
       }
     }
