@@ -190,7 +190,7 @@ export default {
   watch: {
     content: function(newValue) {
       this.inputClass = `${this.inputStyle} ${this.value ? "active" : "" } ${this.size}`;
-      if (this.inputStyle === "budget") {
+      if (this.inputStyle === "budget" || this.inputStyle==='users') {
         const result = newValue
           .replace(/\D/g, "")
           .replace(/\B(?=(\d{3})+(?!\d))/g, ",");

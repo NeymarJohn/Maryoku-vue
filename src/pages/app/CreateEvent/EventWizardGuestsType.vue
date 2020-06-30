@@ -4,7 +4,7 @@
             <div class="title">
               2/5
             </div>
-            <selected-value :value="publicEventData.numberOfParticipants | withComma" property="users"></selected-value>
+            <selected-value :value="formattedString" property="users"></selected-value>
             <div class="event-guests-type event-basic-info">
               <div class="setting-title mt-5">
                 <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator">
@@ -141,7 +141,12 @@ export default {
   computed: {
     ...mapState('PublicEventPlannerVuex', [
       'publicEventData'
-    ])
+    ]),
+    formattedString() {
+      return this.publicEventData.numberOfParticipants
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
   }
 
 }
