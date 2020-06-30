@@ -1,13 +1,12 @@
 <template>
     <div class="create-event">
-
         <div class="top-header">
-
             <div class="header-content md-layout">
                 <div class="logo md-layout-item md-size-50 md-small-size-40">
-                    <a href="https://www.maryoku.com"><img src="http://static.maryoku.com/storage/img/homepage/maryoku-logo-white@2x.png" width="118"></a>
+                    <a href="https://www.maryoku.com">
+                        <img :src="`${$iconURL}Onboarding/maryoku-logo-dark%402x%403x.png`" width="200"></a>
                 </div>
-                <div class="header-actions md-layout-item md-size-50 md-small-size-60">
+                <!-- <div class="header-actions md-layout-item md-size-50 md-small-size-60">
                     <ul class="actions-list unstyled">
                         <template v-if="$auth.user.authenticated === false">
                             <li class="action-item" >
@@ -27,7 +26,7 @@
                         </template>
 
                     </ul>
-                </div>
+                </div> -->
             </div>
 
         </div>
@@ -203,6 +202,9 @@ export default {
         z-index: 9 !important;
 
     }
+    .container {
+        display: block !important;
+    }
 
     .md-datepicker-dialog.md-theme-default {
 
@@ -292,8 +294,8 @@ export default {
     }
     .create-event {
         .top-header {
-            background: #5c2153;
-            height : 60px;
+            // background: #5c2153;
+            height : 120px;
             //border-radius: 0 0 50% 50%;
 
             .header-content {
@@ -451,83 +453,6 @@ export default {
                 }
             }
         }
-
-        .md-checkbox.md-theme-default {
-
-            label {
-                color : #606060;
-            }
-
-            .md-checkbox-container {
-                border-radius: 7px;
-                width: 26px;
-                height: 26px;
-                max-width: none;
-                min-width: auto;
-
-                &:after {
-                    top: 4px;
-                    left: 9px;
-                }
-            }
-
-            &:hover {
-                .md-checkbox-container {
-                    background : none !important;
-                    border: 1px solid $baseColor;
-
-                    &:before {
-                        width: 20px;
-                        height: 20px;
-                        background: rgba(93, 33, 84, 0.81);
-                        border-radius: 5px;
-                        left: 12px;
-                        top: 12px;
-                    }
-
-                    &:after {
-                        opacity: 1;
-                        transform: rotate(45deg) scale3D(1,1,1);
-                        transition: .4s cubic-bezier(.25,.8,.25,1);
-                        top: 4px;
-                        left: 9px;
-                        border-color: #fff !important;
-
-                    }
-                }
-                label {
-                    color : $baseColor !important;
-                }
-            }
-            &.md-checked {
-                .md-checkbox-container {
-                    background : none !important;
-                    border: 1px solid $baseColor;
-
-                    &:before {
-                        width: 20px;
-                        height: 20px;
-                        background: #5d2154;
-                        border-radius: 5px;
-                        left: 12px;
-                        top: 12px;
-                    }
-
-                    &:after {
-                        top: 4px;
-                        left: 9px;
-                    }
-                }
-            }
-        }
-
-        .md-checkbox.md-checked .md-checkbox-container:after {
-            border-color : #fff !important;
-        }
-        .md-checkbox.md-checked .md-checkbox-label {
-            color : $baseColor;
-        }
-
         .md-radio.md-checked .md-radio-container {
             border: 1px solid $baseColor !important;
             &:after {
@@ -562,7 +487,7 @@ export default {
         }
 
         .section-header {
-            background: #5c2153;
+            // background: #5c2153;
             padding : 0.5em 0 1em;
             border-radius: 0 0 50% 50%;
             text-align: center;
@@ -605,6 +530,8 @@ export default {
 
         .form-section {
             position: relative;
+            box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.13);
+            background-color: #ffffff;
             .form-actions {
                 position: absolute;
                 left: 0;
@@ -1040,6 +967,7 @@ export default {
 
             .container {
                 padding: 0 8px;
+                display: block;
             }
 
             .md-button.custom-btn {
@@ -1220,5 +1148,48 @@ export default {
             }
         }
     }
-
+    .setting-title{
+      font-family: "Manrope-bold";
+      font-size: 30px;
+      text-transform: uppercase;
+    }
+    .event-basic-info {
+        text-align: center;
+    }
+    .indicator {
+        margin-right: 20px;
+        margin-top: -20px;
+    }
+    .title {
+      font-family: "Manrope-Bold";
+      font-size: 40px;
+      text-align: center;
+      line-height: 1.2em;
+      margin: 20px;
+      text-transform: uppercase;
+    }
+    .types{
+      display: flex;
+      justify-content: center;
+      .type-card {
+        cursor: pointer;
+        padding: 20px 25px;
+        width: 200px;
+        height: 200px;
+        border: solid 1px #818080;
+        border-radius: 3px;
+        margin: 10px;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        &.selected {
+          color: #f51355;
+          box-shadow: 0 3px 10px 0 rgba(245, 19, 85, 0.43);
+          border: solid 0.5px #f51355;
+          font-family: "Manrope-Bold";
+        }
+      }
+    }
 </style>

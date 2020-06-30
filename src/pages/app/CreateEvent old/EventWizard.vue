@@ -1,5 +1,13 @@
 <template>
     <div class="">
+        <div class="section-header">
+            <h2 class="section-title">Few steps to complete the background we need</h2>
+            <div class="steps-wizard">
+                <ul class="steps-wizard-items">
+                    <li v-for="index in step" :key="index"></li>
+                </ul>
+            </div>
+        </div>
         <div class="container">
             <div class="form-section event-basic-info">
                 <div class="form-group">

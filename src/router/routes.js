@@ -86,6 +86,19 @@ import ForVendors from "@/pages/app/Vendors/ForVendors.vue"
 import ForProposals from "@/pages/app/Vendors/ForProposals.vue"
 import VendorSignup from "@/pages/app/Vendors/VendorSignup.vue"
 
+
+// OnBoardingPages
+import EventWizardStart from '@/pages/app/CreateEvent/EventWizardStart.vue'
+import EventWizardDay from '@/pages/app/CreateEvent/EventWizardDay.vue'
+import EventWizardDateFlexibility from '@/pages/app/CreateEvent/EventWizardDateFlexibility.vue'
+import EventWizardGuests from '@/pages/app/CreateEvent/EventWizardGuests.vue'
+import EventWizardGuestsType from '@/pages/app/CreateEvent/EventWizardGuestsType.vue'
+import EventWizardLocation from '@/pages/app/CreateEvent/EventWizardLocation.vue'
+import EventWizardBuilding from '@/pages/app/CreateEvent/EventWizardBuilding.vue'
+import EventWizardType from '@/pages/app/CreateEvent/EventWizardType.vue'
+import EventWizardCelebrating from '@/pages/app/CreateEvent/EventWizardCelebrating.vue'
+import EventWizardVibes from '@/pages/app/CreateEvent/EventWizardVibes.vue'
+import EventWizardReligion from '@/pages/app/CreateEvent/EventWizardReligion.vue'
 const SignInSignUp = () =>
   import('@/pages/Dashboard/Pages/SignInSignUp.vue')
 const SignUp = () =>
@@ -799,12 +812,112 @@ let PublicCreateEvent = {
   },
   children: [
     {
-      path: '/create-event-wizard',
-      name: 'EventWizard',
-      component: EventWizard,
+      path: '/event-wizard-start',
+      name: 'EventWizardStart',
+      component: EventWizardStart,
       meta: {
         title: 'Event Wizard',
         gtm: 'Event Wizard',
+        auth: false
+      }
+    },
+    {
+      path: '/event-wizard-day',
+      name: 'EventWizardDay',
+      component: EventWizardDay,
+      meta: {
+        title: 'Event Day',
+        gtm: 'Event Day',
+        auth: false
+      }
+    },
+    {
+      path: '/event-wizard-flexibility',
+      name: 'EventWizardDateFlexibility',
+      component: EventWizardDateFlexibility,
+      meta: {
+        title: 'Event Day Flexibility',
+        gtm: 'Event Day Flexibility',
+        auth: false
+      }
+    },
+    {
+      path: '/event-wizard-guests',
+      name: 'EventWizardGuests',
+      component: EventWizardGuests,
+      meta: {
+        title: 'Event Guests',
+        gtm: 'Event Guests',
+        auth: false
+      }
+    },
+    {
+      path: '/event-wizard-guests-type',
+      name: 'EventWizardGuestsType',
+      component: EventWizardGuestsType,
+      meta: {
+        title: 'Event Guests Type',
+        gtm: 'Event Guests',
+        auth: false
+      }
+    },
+    {
+      path: '/event-wizard-location',
+      name: 'EventWizardLocation',
+      component: EventWizardLocation,
+      meta: {
+        title: 'Event  Location',
+        gtm: 'Event Location',
+        auth: false
+      }
+    },
+    {
+      path: '/event-wizard-building',
+      name: 'EventWizardBuilding',
+      component: EventWizardBuilding,
+      meta: {
+        title: 'Event Building',
+        gtm: 'Event Building',
+        auth: false
+      }
+    },
+    {
+      path: '/event-wizard-type',
+      name: 'EventWizardType',
+      component: EventWizardType,
+      meta: {
+        title: 'Event  Type',
+        gtm: 'Event Type',
+        auth: false
+      }
+    },
+    {
+      path: '/event-wizard-celebrating',
+      name: 'EventWizardCelebrating',
+      component: EventWizardCelebrating,
+      meta: {
+        title: 'Event celebrating',
+        gtm: 'Event celebrating',
+        auth: false
+      }
+    },
+    {
+      path: '/event-wizard-religion',
+      name: 'EventWizardReligion',
+      component: EventWizardReligion,
+      meta: {
+        title: 'Event Guests Religion',
+        gtm: 'Event Religion',
+        auth: false
+      }
+    },
+    {
+      path: '/event-wizard-vibes',
+      name: 'EventWizardVibes',
+      component: EventWizardVibes,
+      meta: {
+        title: 'Event Guests Religion',
+        gtm: 'Event Religion',
         auth: false
       }
     },

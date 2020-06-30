@@ -9,11 +9,14 @@ export const getToken = () => localStorage.getItem(TOKEN)
 export const deleteToken = () => localStorage.removeItem(TOKEN)
 
 export const getReq = (endpoint) => {
-  return axios({
+  const getRequest = {
     method: 'get',
-    url: `${process.env.SERVER_URL}${endpoint}`,
-    headers: { 'Authorization': `Bearer ${window.localStorage.getItem('manage_id_token')}` }
-  })
+    url: `${process.env.SERVER_URL}${endpoint}`
+  };
+  if (window.localStorage.getItem('manage_id_token')) {
+    getRequest["headers"] = { 'Authorization': `Bearer ${window.localStorage.getItem('manage_id_token')}` }
+  }
+  return axios(getRequest)
 }
 export const postReq = (endpoint, data) => {
   console.log(`${process.env.SERVER_URL}${endpoint}`)
