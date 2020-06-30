@@ -2,7 +2,7 @@
     <div class="">
         <div class="container">
             <div class="title">
-              2/5
+              3/5
               <div class="mt-1">
                 Location Location Location
               </div>
@@ -16,7 +16,7 @@
               </div>
             </div>
         </div>
-        <wizard-status-bar :currentStep="2" ></wizard-status-bar>
+        <wizard-status-bar :currentStep="3" @next="goToNext" @skip="skip" @back="back"></wizard-status-bar>
     </div>
 </template>
 
@@ -76,6 +76,15 @@ export default {
         verticalAlign: 'top',
         type: 'danger'
       })
+    },
+    goToNext() {
+      this.$router.push({path: `/event-wizard-building`})
+    },
+    skip() {
+      this.$router.push({path: `/event-wizard-building`})
+    },
+    back() {
+      this.$router.push({path: `/event-wizard-guests-type`})
     }
   },
   data () {

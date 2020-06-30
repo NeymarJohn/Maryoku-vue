@@ -6,6 +6,32 @@
         Back
       </md-button>
     </div>
+    <div class="status-bar">
+      <div>
+        {{this.currentStep}} Step of 5
+      </div>
+      <md-progress-bar  class="md-red progress-bar" md-mode="determinate" :md-value="this.currentStep / 5 * 100"></md-progress-bar>
+      <div v-if="this.currentStep == 1" class="status-description">
+        <img :src="`${$iconURL}Onboarding/clover.svg`">
+        Only 5 simple steps & you're signed!
+      </div>
+      <div v-if="this.currentStep == 2" class="status-description">
+        <img :src="`${$iconURL}Onboarding/strength.svg`">
+        You are fantastic! !
+      </div>
+      <div v-if="this.currentStep == 3" class="status-description">
+        <img :src="`${$iconURL}Onboarding/promise.svg`">
+        We promise it will pay off in the end!
+      </div>
+      <div v-if="this.currentStep == 4" class="status-description">
+        <img :src="`${$iconURL}Onboarding/heart.svg`">
+        Sharing is caring!      
+      </div>
+      <div v-if="this.currentStep == 5" class="status-description">
+        <img :src="`${$iconURL}Onboarding/quality.svg`">
+        Last one!     
+      </div>
+    </div>
     <div>
       <md-button @click="skip" class="md-black md-maryoku md-simple">
         Skip
@@ -32,13 +58,13 @@ export default {
   },
   methods: {
     back() {
-
+      this.$emit("back")
     },
     next() {
-
+      this.$emit("next")
     },
     skip() {
-      
+      this.$emit("skip")
     }
   },
 }
@@ -54,5 +80,16 @@ export default {
     position: absolute;
     bottom: 0;
     width: 100%;
+  }
+  .progress-bar {
+    min-width: 400px;
+    margin: 0px 20px;
+  }
+  .status-bar {
+    display: flex;
+    align-items: center;
+  }
+  .status-description {
+    font-family: "Manrope-Bold";
   }
 </style>

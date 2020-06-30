@@ -18,15 +18,11 @@
               </div>
             </div>
         </div>
-
-        <go-back navigation="https://www.maryoku.com/home.html" :home="true"></go-back>
-        <wizard-status-bar :currentStep="1" ></wizard-status-bar>
+        <wizard-status-bar :currentStep="1" @next="goToNext" @skip="skip" @back="back"></wizard-status-bar>
     </div>
 </template>
 
 <script>
-
-import GoBack from './componenets/GoBack'
 import WizardStatusBar from './componenets/WizardStatusBar'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
@@ -34,11 +30,9 @@ import Vue from 'vue'
 import vSelect from 'vue-select'
 import { FunctionalCalendar } from 'vue-functional-calendar'
 import moment from 'moment'
-Vue.component('v-select', vSelect)
 
 export default {
   components: {
-    GoBack,
     WizardStatusBar,
     FunctionalCalendar
   },
@@ -53,11 +47,7 @@ export default {
   methods: {
     ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setCurrentStep']),
     goToNext () {
-      let vm = this
-
-      this.cerrors = {}
-      this.validating = true
-
+      this.$router.push({path: `/event-wizard-flexibility`})
       this.$validator.validateAll().then(isValid => {
         if (isValid) {
           this.setEventProperty({key: 'location', actualValue: this.eventData.location})
@@ -72,6 +62,12 @@ export default {
           this.showNotify()
         }
       })
+    },
+    skip () {
+      this.$router.push({path: `/event-wizard-flexibility`})
+    },
+    back () {
+      this.$router.push({path: `/event-wizard-start`})
     },
     validateDate () {
       return this.$refs.datePicker.$el.classList.contains('md-has-value')

@@ -12,12 +12,12 @@
                 Try describing your guest’s vibes using a song
               </div>
               <div class="mt-3 types">
-                <music-card :class="{selected:type.selected}" v-for="(type) in guestsTypes" :key="type.value">
+                <music-card :class="{selected:song.selected}" v-for="(song) in songs" :key="song.title" :data="song">
                 </music-card >
               </div>
             </div>
         </div>
-        <wizard-status-bar :currentStep="2" ></wizard-status-bar>
+        <wizard-status-bar :currentStep="5" @next="goToNext" @skip="skip" @back="back"></wizard-status-bar>
     </div>
 </template>
 
@@ -85,27 +85,24 @@ export default {
   },
   data () {
     return {
-      guestsTypes: [
+      songs: [
         {
-          value: "employees", name: "Employees", selected:false
+          singer: "Sisters sledge", title: "We are family", selected:false, src: "ringtones/we_are_family_v2_53802.mp3", thumb: "Singers/Sister+Sledge.jpg"
         },
         {
-          value: "employees-spouses", name: "Employees & Spouses", selected:false
+          singer: "Sheryl Crow", title: "A change would do you good", selected:false, src: "ringtones/sheryl_crow_a_change_would_do_you_good_b_w_music_video.mp3", thumb: "Singers/Sheryl Crow.jpg"
         },
         {
-          value: "families", name: "Familes", selected:false
+          singer: "bobby mcferrin", title: "Don't worry be happy", selected:false, src: "ringtones/bobby_mcferrin_dont_worry_be_happy.mp3", thumb: "Singers/Bobby Mcferrin.jpg"
         },
         {
-          value: "business-associates", name: "Business Associates", selected:false
+          singer: "freddie mercury", title: "We are the champions", selected:false, src: "ringtones/queen_we_are_the_champions_ringtone.mp3", thumb: "Singers/freddie mercury.jpg"
         },
         {
-          value: "customers", name: "Customers", selected:false
+          singer: "Dolly Parton", title: "Working 9 to 5", selected:false, src: "ringtones/9_to_5_1605.mp3", thumb: "Singers/Dolly Parton.jpg"
         },
         {
-          value: "board-members", name: "Board Members", selected:false
-        },
-        {
-          value: "other", name: "Other", selected:false
+          singer: "Abba", title: "Money Money Money", selected:false, src: "ringtones/abba_money_money_money_ringtone.mp3", thumb: "Singers/Abba.jpg"
         }
       ]
     }

@@ -72,3 +72,15 @@
     }
   }
 }
+
+.md-progress-bar {
+  height: 12px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  .md-progress-bar-fill {
+    border-radius: 10px;
+  }
+  &.md-theme-default.md-determinate.md-red .md-progress-bar-fill{
+    background-color: #f51355;
+  }
+}

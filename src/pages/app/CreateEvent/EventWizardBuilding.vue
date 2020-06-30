@@ -28,7 +28,7 @@
               </div>
             </div>
         </div>
-        <wizard-status-bar :currentStep="3" ></wizard-status-bar>
+        <wizard-status-bar :currentStep="3" @next="goToNext" @skip="skip" @back="back"></wizard-status-bar>
     </div>
 </template>
 
@@ -90,6 +90,15 @@ export default {
         verticalAlign: 'top',
         type: 'danger'
       })
+    },
+    goToNext() {
+      this.$router.push({path: `/event-wizard-type`})
+    },
+    skip() {
+      this.$router.push({path: `/event-wizard-type`})
+    },
+    back() {
+      this.$router.push({path: `/event-wizard-locatoin`})
     }
   },
   data () {

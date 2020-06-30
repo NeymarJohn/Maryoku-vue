@@ -5,13 +5,14 @@
                 <div>
                   <img :src="`${$iconURL}Onboarding/balloon-calendar.svg`">
                 </div>
-                <h2>
+                <div class="title">
                   HELLO THERE!
-                </h2>
+                </div>
                 <div>
                   Please answer a few questions to complete the background we need!
                 </div>
                 <div class="font-bold mt-4rem">
+                  <img :src="`${$iconURL}Onboarding/clover.svg`">
                   Only 5 simple steps & you're signed!
                 </div>
                 <div class="font-bold mt-4rem">
@@ -20,26 +21,13 @@
 
             </div>
         </div>
-
-        <go-back navigation="https://www.maryoku.com/home.html" :home="true"></go-back>
-
     </div>
 </template>
 
 <script>
 
-import GoBack from './componenets/GoBack'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-
-import Vue from 'vue'
-import vSelect from 'vue-select'
-
-Vue.component('v-select', vSelect)
-
 export default {
-  components: {
-    GoBack
-  },
   created () {
     this.$set(this.eventData, 'location', this.publicEventData.location)
     this.$set(this.eventData, 'eventType', this.publicEventData.eventType)
