@@ -7,7 +7,7 @@
               How many lucky guests are you expecting?
             </div>
             <selected-value value="23.04.21" property="calendar"></selected-value>
-            <div class="event-basic-info">
+            <div class="event-guests event-basic-info">
               <div class="mt-5">
                 <maryoku-input class="form-input" inputStyle="name" v-model="numberOfGuests" type="number" placeholder="Type number…..."></maryoku-input>
               </div>
@@ -99,7 +99,7 @@ export default {
 </script>
 <style lang="scss">
 
-    .event-basic-info {
+    .event-guests.event-basic-info {
         width: 450px;
         margin: 0 auto;
         padding: 0;

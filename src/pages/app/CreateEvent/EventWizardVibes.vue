@@ -81,6 +81,15 @@ export default {
         verticalAlign: 'top',
         type: 'danger'
       })
+    },
+    goToNext() {
+      this.$router.push({path: `/signup`})
+    },
+    skip() {
+      this.$router.push({path: `/signup`})
+    },
+    back() {
+      this.$router.push({path: `/event-wizard-religion`})
     }
   },
   data () {

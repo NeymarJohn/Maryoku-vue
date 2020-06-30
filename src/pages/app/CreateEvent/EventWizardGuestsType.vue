@@ -5,7 +5,7 @@
               2/5
             </div>
             <selected-value value="12,345" property="users"></selected-value>
-            <div class="event-basic-info">
+            <div class="event-guests-type event-basic-info">
               <div class="setting-title mt-5">
                 <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator">
                 so, who’s coming?
@@ -139,7 +139,7 @@ export default {
 </script>
 <style lang="scss">
 
-    .event-basic-info {
+    .event-guests-type.event-basic-info {
         width: 100%;
         margin: 0 auto;
         padding: 0;
@@ -161,5 +161,10 @@ export default {
     .indicator-reverse {
       transform: scaleX(-1);
       margin-left: 20px;
+    }
+    .event-guests-type {
+      .types {
+        width: 100%;
+      }
     }
 </style>

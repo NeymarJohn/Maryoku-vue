@@ -5,7 +5,7 @@
               1/5
             </div>
             <selected-value value="23.04.21" property="calendar"></selected-value>
-            <div class="event-basic-info">
+            <div class="event-flexibility event-basic-info">
               <div class="mt-5">Between a camel yoga pose and plywood</div>
               <div class="setting-title mt-1">
                 <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator">
@@ -118,7 +118,7 @@ export default {
 </script>
 <style lang="scss">
 
-    .event-basic-info {
+    .event-flexibility.event-basic-info {
         width: 100%;
         margin: 0 auto;
         padding: 0;

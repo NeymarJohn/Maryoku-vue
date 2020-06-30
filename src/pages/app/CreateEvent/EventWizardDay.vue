@@ -6,7 +6,7 @@
               <br/>
               WHEN IS THE BIG DAY?
             </div>
-            <div class="event-basic-info">
+            <div class="event-date event-basic-info">
               <div class="date-picker picker-panel">
                 <div class="d-flex pl-10">
                   <img :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px"/>
@@ -124,7 +124,7 @@ export default {
 }
 </script>
 <style lang="scss">
-    .event-basic-info{
+    .event-date.event-basic-info{
         width: 450px;
         margin: 0 auto;
         padding: 0;

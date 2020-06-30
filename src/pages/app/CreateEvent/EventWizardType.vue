@@ -4,14 +4,14 @@
             <div class="title">
               4/5
             </div>
-            <div class="event-basic-info">
+            <div class="event-type event-basic-info">
               <div class="setting-title mt-3">
                 What type of event are you planning on?
               </div>
               <div class="mt-3 types">
                 <div class="type-card" :class="{selected:type.selected}" v-for="(type) in eventTypes" :key="type.value">
                   <div>
-                    <img :src="`${$iconURL}Onboarding/${type.value}-dark.svg`">
+                    <img :src="`${$iconURL}Onboarding/${type.key}.svg`">
                   </div>
                   <div>
                     {{type.name}}
@@ -98,7 +98,7 @@ export default {
       this.$router.push({path: `/event-wizard-celebrating`})
     },
     back() {
-      this.$router.push({path: `/event-wizard-type`})
+      this.$router.push({path: `/event-wizard-building`})
     }
   },
   data () {
@@ -116,7 +116,7 @@ export default {
 </script>
 <style lang="scss">
 
-    .event-basic-info {
+    .event-type.event-basic-info {
         width: 100%;
         margin: 0 auto;
         padding: 0;
@@ -135,9 +135,11 @@ export default {
         display: inline-block;
       }
     }
-    .types {
-      flex-wrap: wrap;
-      width: 80%;
-      margin: 30px auto;
+    .event-type {
+      .types {
+        flex-wrap: wrap;
+        width: 80%;
+        margin: 30px auto;
+      }
     }
 </style>

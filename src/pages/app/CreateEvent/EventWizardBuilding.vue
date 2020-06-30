@@ -5,7 +5,7 @@
               3/5
             </div>
             <selected-value value="San Francisco" property="location"></selected-value>
-            <div class="event-basic-info">
+            <div class="event-building event-basic-info">
               <div class="setting-title mt-5">
                 <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator">
                 Staying in or in need of some fresh air? 
@@ -98,7 +98,7 @@ export default {
       this.$router.push({path: `/event-wizard-type`})
     },
     back() {
-      this.$router.push({path: `/event-wizard-locatoin`})
+      this.$router.push({path: `/event-wizard-location`})
     }
   },
   data () {
@@ -123,7 +123,7 @@ export default {
 </script>
 <style lang="scss">
 
-    .event-basic-info {
+    .event-building.event-basic-info {
         width: 100%;
         margin: 0 auto;
         padding: 0;
