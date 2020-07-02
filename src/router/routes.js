@@ -1,13 +1,13 @@
 import DashboardLayout from '@/pages/Dashboard/Layout/DashboardLayout.vue'
-const EventLayout = () => import('@/pages/Dashboard/Layout/EventLayout.vue')
-const AuthLayout = () => import('@/pages/Dashboard/Pages/AuthLayout.vue')
-const PublicLayout = () => import('@/pages/Dashboard/Pages/PublicLayout.vue')
-const CreateEvent = () => import('@/pages/Dashboard/Layout/CreateEvent.vue')
-const HomeLayout = () => import('@/pages/Dashboard/Layout/HomeLayout.vue')
-const SigninSignupLayout = () => import('@/pages/Dashboard/Layout/SigninSignupLayout.vue')
-const NewEventLayout = () => import('@/pages/Dashboard/Layout/NewEventLayout.vue')
-const EmptyLayout = () => import('@/pages/Dashboard/Pages/EmptyLayout')
-const MarketPlaceLayout = () => import('@/pages/Dashboard/Pages/MarketPlaceLayout')
+import EventLayout from '@/pages/Dashboard/Layout/EventLayout.vue'
+import AuthLayout from '@/pages/Dashboard/Pages/AuthLayout.vue'
+import PublicLayout from '@/pages/Dashboard/Pages/PublicLayout.vue'
+import CreateEvent from '@/pages/Dashboard/Layout/CreateEvent.vue'
+import HomeLayout from '@/pages/Dashboard/Layout/HomeLayout.vue'
+import SigninSignupLayout from '@/pages/Dashboard/Layout/SigninSignupLayout.vue'
+import NewEventLayout from '@/pages/Dashboard/Layout/NewEventLayout.vue'
+import EmptyLayout from '@/pages/Dashboard/Pages/EmptyLayout'
+import MarketPlaceLayout from '@/pages/Dashboard/Pages/MarketPlaceLayout'
 
 const Me = () => import('@/pages/app/Me.vue')
 const Profile = () => import('@/pages/app/Profile/index.vue')

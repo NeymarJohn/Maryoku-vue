@@ -98,10 +98,10 @@ export default {
                 (success) => {
                   console.log("singup", data);
                   this.isLoading = false
-                  this.$router.push({ path: '/signedin', query: {token: success.access_token} })
-                  // if (data.status === "create-workspace") {
-                  //   this.$router.push({ path: '/create-workspace' })
-                  // }
+                  // this.$router.push({ path: '/signedin', query: {token: success.access_token} })
+                  if (data.status === "create-workspace") {
+                    this.$router.push({ path: '/create-workspace' })
+                  }
                   
                 }, 
                 (failure) => {

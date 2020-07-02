@@ -1031,7 +1031,7 @@ export default {
         buttonsStyling: false
       }).then(result => {
         if (result.value) {
-          alert(result.value);
+          // alert(result.value);
         }
       });
     },
