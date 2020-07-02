@@ -53,7 +53,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setCurrentStep']),
+    ...mapMutations('PublicEventPlanner', ['setEventProperty', 'setCurrentStep']),
     validateDate () {
       return this.$refs.datePicker.$el.classList.contains('md-has-value')
     },
@@ -129,7 +129,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('PublicEventPlannerVuex', [
+    ...mapState('PublicEventPlanner', [
       'publicEventData'
     ])
   }

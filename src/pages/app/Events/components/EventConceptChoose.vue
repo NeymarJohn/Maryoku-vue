@@ -5,7 +5,7 @@
         <div class="concept-content" v-if="showConceptList && !isLoading">
             <div class="event-page-header md-layout-item md-size-100">
                 <div class="header-name">
-                    <h3>Hi Rachel</h3>
+                    <h3>Hi {{userName}}</h3>
                     <p>
                         Here are 3 awesome concepts for you to choose from! 
                         <br/>
@@ -247,6 +247,11 @@ export default {
   },
   props: {
 
+  },
+  computed: {
+      userName() {
+          return this.$auth.user?this.$auth.user.displayName:""
+      }
   },
   data: () => ({
     // auth: auth,

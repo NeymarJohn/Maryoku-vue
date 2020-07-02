@@ -40,7 +40,7 @@
 import GoBack from './componenets/GoBack'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
-import PublicEventPlannerVuexModule from './PublicEventPlanner.vuex'
+
 
 import VTooltip from 'v-tooltip'
 import _ from 'underscore'
@@ -129,7 +129,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setSingupModal', 'setCurrentStep']),
+    ...mapMutations('PublicEventPlanner', ['setEventProperty', 'setSingupModal', 'setCurrentStep']),
 
     goToNext () {
       let vm = this
@@ -165,7 +165,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('PublicEventPlannerVuex', [
+    ...mapState('PublicEventPlanner', [
       'publicEventData',
       'shoWSignupModal'
     ])

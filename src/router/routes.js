@@ -1,104 +1,107 @@
 import DashboardLayout from '@/pages/Dashboard/Layout/DashboardLayout.vue'
-import EventLayout from '@/pages/Dashboard/Layout/EventLayout.vue'
-import AuthLayout from '@/pages/Dashboard/Pages/AuthLayout.vue'
-import PublicLayout from '@/pages/Dashboard/Pages/PublicLayout.vue'
-import Me from '@/pages/app/Me.vue'
-import Profile from '@/pages/app/Profile/index.vue'
-import MyCompany from '@/pages/app/MyCompany/MyCompany.vue'
-import MyCompanyNew from '@/pages/app/MyCompany/MyCompanyNew.vue'
-import CompanyDashboard from '@/pages/app/CompanyDashboard/CompanyDashboard.vue'
-import CreateEvent from '@/pages/Dashboard/Layout/CreateEvent.vue'
-import HomeLayout from '@/pages/Dashboard/Layout/HomeLayout.vue'
-import SigninSignupLayout from '@/pages/Dashboard/Layout/SigninSignupLayout.vue'
-import NewEventLayout from '@/pages/Dashboard/Layout/NewEventLayout.vue'
+const EventLayout = () => import('@/pages/Dashboard/Layout/EventLayout.vue')
+const AuthLayout = () => import('@/pages/Dashboard/Pages/AuthLayout.vue')
+const PublicLayout = () => import('@/pages/Dashboard/Pages/PublicLayout.vue')
+const CreateEvent = () => import('@/pages/Dashboard/Layout/CreateEvent.vue')
+const HomeLayout = () => import('@/pages/Dashboard/Layout/HomeLayout.vue')
+const SigninSignupLayout = () => import('@/pages/Dashboard/Layout/SigninSignupLayout.vue')
+const NewEventLayout = () => import('@/pages/Dashboard/Layout/NewEventLayout.vue')
+const EmptyLayout = () => import('@/pages/Dashboard/Pages/EmptyLayout')
+const MarketPlaceLayout = () => import('@/pages/Dashboard/Pages/MarketPlaceLayout')
 
-import Team from '@/pages/app/Team/Team.vue'
-import Members from '@/pages/app/Members/Members.vue'
+const Me = () => import('@/pages/app/Me.vue')
+const Profile = () => import('@/pages/app/Profile/index.vue')
+const MyCompany = () => import('@/pages/app/MyCompany/MyCompany.vue')
+const MyCompanyNew = () => import('@/pages/app/MyCompany/MyCompanyNew.vue')
+const CompanyDashboard = () => import('@/pages/app/CompanyDashboard/CompanyDashboard.vue')
 
-import Events from '@/pages/app/Events/Events.vue'
-import CurrentEvents from '@/pages/app/Events/CurrentEvents.vue'
-import EventGroups from '@/pages/app/Events/components/EventInvitees.vue'
-import NewEvent from '@/pages/app/Events/NewEvent.vue'
-import EditEvent from '@/pages/app/Events/EditEvent.vue'
-import EventDetails from '@/pages/app/Events/EventDetails.vue'
-import EventDetailsOverView from '@/pages/app/Events/EventDetailsOverview.vue'
-import ShowEvent from '@/pages/app/Events/ShowEvent.vue'
-import VendorProposals from '@/pages/app/Events/VendorProposals.vue'
-import EventProposal from '@/pages/app/Events/EventProposal.vue'
-import EventSteps from '@/pages/app/Events/Steps'
-import Notes from '@/pages/app/Notes.vue'
-import Proposals from '@/pages/app/Proposals.vue'
-import Vendors from '@/pages/app/Vendors/Vendors.vue'
-import CurrentVendors from '@/pages/app/Vendors/CurrentVendors.vue'
-import AddEditVendor from '@/pages/app/Vendors/AddEditVendor.vue'
-import EditVendor from '@/pages/app/Vendors/EditVendor.vue'
-import VendorsPool from '@/pages/app/Vendors/VendorsPool.vue'
-import VendorsPoolNew from '@/pages/app/Vendors/VendorsPoolNew.vue'
-import ImportVendors from '@/pages/app/Vendors/ImportVendors.vue'
-import YearlyPlan from '@/pages/app/YearlyPlan/index.vue'
-import AnnualPlanner from '@/pages/app/AnnualPlanner/index.vue'
-import EventWizard from '@/pages/app/CreateEvent/EventWizard.vue'
-import EventInfo from '@/pages/app/CreateEvent/EventInfo.vue'
-import EventBudget from '@/pages/app/CreateEvent/EventBudget.vue'
-import EventVibe from '@/pages/app/CreateEvent/EventVibe.vue'
-import EventMovies from '@/pages/app/CreateEvent/EventMovies.vue'
-import EventScales from '@/pages/app/CreateEvent/EventScales.vue'
-import EventStartWorking from '@/pages/app/CreateEvent/EventStartWorking.vue'
-import EventCreated from '@/pages/app/CreateEvent/EventCreated.vue'
-import EventSummery from '@/pages/app/CreateEvent/EventSummery.vue'
-import HomePage from '@/pages/app/HomePage/Home.vue'
-import publicRegister from '@/pages/app/SinginSingup/publicRegister.vue'
+const Team = () => import('@/pages/app/Team/Team.vue')
+const Members = () => import('@/pages/app/Members/Members.vue')
 
-// New Event Pages
-import EventDetailsBudget from "@/pages/app/Events/EventDetailsBudget.vue"
-import EventDetailsTimeline from "@/pages/app/Events/EventDetailsTimeline.vue"
-import BookingEvent from "@/pages/app/Events/components/BookingEvent.vue"
-import EventPlan from "@/pages/app/Events/EventPlan.vue"
+const Events = () => import('@/pages/app/Events/Events.vue')
+const CurrentEvents = () => import('@/pages/app/Events/CurrentEvents.vue')
+const EventGroups = () => import('@/pages/app/Events/components/EventInvitees.vue')
+const NewEvent = () => import('@/pages/app/Events/NewEvent.vue')
+const EditEvent = () => import('@/pages/app/Events/EditEvent.vue')
+const EventDetails = () => import('@/pages/app/Events/EventDetails.vue')
 
-import EventConceptChoose from "@/pages/app/Events/components/EventConceptChoose.vue"
-import EventProposalDetails from "@/pages/app/Events/components/EventProposalDetails.vue"
-import ExportTimeLine from "@/pages/app/Events/components/ExportTimeLine.vue"
+const EventDetailsOverView = () => import('@/pages/app/Events/EventDetailsOverview.vue')
+const ShowEvent = () => import('@/pages/app/Events/ShowEvent.vue')
+const VendorProposals = () => import('@/pages/app/Events/VendorProposals.vue')
+const EventProposal = () => import('@/pages/app/Events/EventProposal.vue')
+const EventSteps = () => import('@/pages/app/Events/Steps')
+const Notes = () => import('@/pages/app/Notes.vue')
+const Proposals = () => import('@/pages/app/Proposals.vue')
+const Vendors = () => import('@/pages/app/Vendors/Vendors.vue')
+const CurrentVendors = () => import('@/pages/app/Vendors/CurrentVendors.vue')
+const AddEditVendor = () => import('@/pages/app/Vendors/AddEditVendor.vue')
+const EditVendor = () => import('@/pages/app/Vendors/EditVendor.vue')
+const VendorsPool = () => import('@/pages/app/Vendors/VendorsPool.vue')
+const VendorsPoolNew = () => import('@/pages/app/Vendors/VendorsPoolNew.vue')
+const ImportVendors = () => import('@/pages/app/Vendors/ImportVendors.vue')
+const YearlyPlan = () => import('@/pages/app/YearlyPlan/index.vue')
+const AnnualPlanner = () => import('@/pages/app/AnnualPlanner/index.vue')
+const EventWizard = () => import('@/pages/app/CreateEvent/EventWizard.vue')
+const EventInfo = () => import('@/pages/app/CreateEvent/EventInfo.vue')
+const EventBudget = () => import('@/pages/app/CreateEvent/EventBudget.vue')
+const EventVibe = () => import('@/pages/app/CreateEvent/EventVibe.vue')
+const EventMovies = () => import('@/pages/app/CreateEvent/EventMovies.vue')
+const EventScales = () => import('@/pages/app/CreateEvent/EventScales.vue')
+const EventStartWorking = () => import('@/pages/app/CreateEvent/EventStartWorking.vue')
+const EventCreated = () => import('@/pages/app/CreateEvent/EventCreated.vue')
+const EventSummery = () => import('@/pages/app/CreateEvent/EventSummery.vue')
+const HomePage = () => import('@/pages/app/HomePage/Home.vue')
+const publicRegister = () => import('@/pages/app/SinginSingup/publicRegister.vue')
+
+// Event Pages
+const EventDetailsBudget = () => import('@/pages/app/Events/EventDetailsBudget.vue')
+const EventDetailsTimeline = () => import('@/pages/app/Events/EventDetailsTimeline.vue')
+const BookingEvent = () => import('@/pages/app/Events/components/BookingEvent.vue')
+const EventPlan = () => import('@/pages/app/Events/EventPlan.vue')
+const EventConceptChoose = () => import('@/pages/app/Events/components/EventConceptChoose.vue')
+const EventProposalDetails = () => import('@/pages/app/Events/components/EventProposalDetails.vue')
+const ExportTimeLine = () => import('@/pages/app/Events/components/ExportTimeLine.vue')
 
 // Dashboard pages
-import EmployeeMain from '@/pages/Dashboard/Pages/CommonInfoProfile/Employee.vue'
-import OfficeMenageMain from '@/pages/Dashboard/Pages/CommonInfoProfile/OfficeMenage.vue'
-import CommonInfoProfile from '@/pages/Dashboard/Pages/CommonInfoProfile/index.vue'
-import EventForm from '@/pages/Dashboard/Pages/CommonInfoProfile/EventForm.vue'
-import Dietary from '@/pages/Dashboard/Pages/CommonInfoProfile/Dietary.vue'
-import Company from '@/pages/Dashboard/Pages/CommonInfoProfile/Company.vue'
-import Step2 from '@/pages/Dashboard/Pages/CommonInfoProfile/Step2.vue'
-import Invite from '@/pages/Dashboard/Pages/CommonInfoProfile/Invite.vue'
-import CreateWorkspace from '@/pages/Dashboard/Pages/CreateWorkspace'
-import ChooseWorkspace from '@/pages/Dashboard/Pages/ChooseWorkspace'
+const EmployeeMain = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/Employee.vue')
+const OfficeMenageMain = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/OfficeMenage.vue')
+const CommonInfoProfile = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/index.vue')
+const EventForm = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/EventForm.vue')
+const Dietary = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/Dietary.vue')
+const Step2 = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/Step2.vue')
+const Company = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/Company.vue')
+const Invite = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/Invite.vue')
 
-import GetStarted from '@/pages/app/GetStarted'
-import EmptyLayout from '../pages/Dashboard/Pages/EmptyLayout'
-import MarketPlaceLayout from '../pages/Dashboard/Pages/MarketPlaceLayout'
+const CreateWorkspace = () => import('@/pages/Dashboard/Pages/CreateWorkspace')
+const ChooseWorkspace = () => import('@/pages/Dashboard/Pages/ChooseWorkspace')
 
-import MyEvents from '@/pages/app/Guest/MyEvents.vue'
-import MarketPlace from '@/pages/app/MarketPlace/MarketPlace.vue'
+
+const GetStarted = () => import('@/pages/app/GetStarted')
+const MyEvents = () => import('@/pages/app/Guest/MyEvents.vue')
+const MarketPlace = () => import('@/pages/app/MarketPlace/MarketPlace.vue')
 
 // New Vendor Pages
-import ForVendorLayout from '@/pages/Dashboard/Layout/ForVendorLayout.vue'
-import ForProposalsLayout from '@/pages/Dashboard/Layout/ForProposalsLayout.vue'
-import VendorSignupLayout from '@/pages/Dashboard/Layout/VendorSignupLayout.vue'
-import ForVendors from "@/pages/app/Vendors/ForVendors.vue"
-import ForProposals from "@/pages/app/Vendors/ForProposals.vue"
-import VendorSignup from "@/pages/app/Vendors/VendorSignup.vue"
-
+const ForVendorLayout = () => import('@/pages/Dashboard/Layout/ForVendorLayout.vue')
+const ForProposalsLayout = () => import('@/pages/Dashboard/Layout/ForProposalsLayout.vue')
+const VendorSignupLayout = () => import('@/pages/Dashboard/Layout/VendorSignupLayout.vue')
+const ForVendors = () => import('@/pages/app/Vendors/ForVendors.vue')
+const ForProposals = () => import('@/pages/app/Vendors/ForProposals.vue')
+const VendorSignup = () => import('@/pages/app/Vendors/VendorSignup.vue')
 
 // OnBoardingPages
-import EventWizardStart from '@/pages/app/CreateEvent/EventWizardStart.vue'
-import EventWizardDay from '@/pages/app/CreateEvent/EventWizardDay.vue'
-import EventWizardDateFlexibility from '@/pages/app/CreateEvent/EventWizardDateFlexibility.vue'
-import EventWizardGuests from '@/pages/app/CreateEvent/EventWizardGuests.vue'
-import EventWizardGuestsType from '@/pages/app/CreateEvent/EventWizardGuestsType.vue'
-import EventWizardLocation from '@/pages/app/CreateEvent/EventWizardLocation.vue'
-import EventWizardBuilding from '@/pages/app/CreateEvent/EventWizardBuilding.vue'
-import EventWizardType from '@/pages/app/CreateEvent/EventWizardType.vue'
-import EventWizardCelebrating from '@/pages/app/CreateEvent/EventWizardCelebrating.vue'
-import EventWizardVibes from '@/pages/app/CreateEvent/EventWizardVibes.vue'
-import EventWizardReligion from '@/pages/app/CreateEvent/EventWizardReligion.vue'
+const EventWizardStart = () => import('@/pages/app/CreateEvent/EventWizardStart.vue')
+const EventWizardDay = () => import('@/pages/app/CreateEvent/EventWizardDay.vue')
+const EventWizardDateFlexibility = () => import('@/pages/app/CreateEvent/EventWizardDateFlexibility.vue')
+const EventWizardGuests = () => import('@/pages/app/CreateEvent/EventWizardGuests.vue')
+const EventWizardGuestsType = () => import('@/pages/app/CreateEvent/EventWizardGuestsType.vue')
+const EventWizardLocation = () => import('@/pages/app/CreateEvent/EventWizardLocation.vue')
+const EventWizardBuilding = () => import('@/pages/app/CreateEvent/EventWizardBuilding.vue')
+const EventWizardType = () => import('@/pages/app/CreateEvent/EventWizardType.vue')
+const EventWizardCelebrating = () => import('@/pages/app/CreateEvent/EventWizardCelebrating.vue')
+const EventWizardVibes = () => import('@/pages/app/CreateEvent/EventWizardVibes.vue')
+const EventWizardReligion = () => import('@/pages/app/CreateEvent/EventWizardReligion.vue')
+
+// User authentication pages
 const SignInSignUp = () =>
   import('@/pages/Dashboard/Pages/SignInSignUp.vue')
 const SignUp = () =>
@@ -239,8 +242,7 @@ let publicPages = {
   //   name: "GetStarted",
   //   component: Onboarding,
   //   meta: {auth: false, title: 'Get Started', gtm: "GetStarted"}
-  // }, 
-  // ]
+  // }, // ]
 }
 
 // let forVendors = {

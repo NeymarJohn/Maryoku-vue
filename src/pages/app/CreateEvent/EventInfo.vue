@@ -51,7 +51,7 @@
 
 import GoBack from './componenets/GoBack'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import PublicEventPlannerVuexModule from './PublicEventPlanner.vuex'
+
 
 export default {
   components: {
@@ -100,7 +100,7 @@ export default {
     this.$set(this.eventData, 'internalEvent', this.publicEventData.internalEvent)
   },
   methods: {
-    ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setCurrentStep']),
+    ...mapMutations('PublicEventPlanner', ['setEventProperty', 'setCurrentStep']),
 
     goToNext () {
       let vm = this
@@ -122,7 +122,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('PublicEventPlannerVuex', [
+    ...mapState('PublicEventPlanner', [
       'publicEventData'
     ])
   }

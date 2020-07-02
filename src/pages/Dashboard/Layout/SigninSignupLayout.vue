@@ -21,7 +21,6 @@
 <script>
 import { FadeTransition } from 'vue2-transitions'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import PublicEventPlannerVuexModule from '../../../pages/app/CreateEvent/PublicEventPlanner.vuex'
 
 export default {
   data () {

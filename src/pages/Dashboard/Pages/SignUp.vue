@@ -30,15 +30,15 @@
           <maryoku-input class="form-input" v-validate="modelValidations.email"  inputStyle="email" v-model="email" placeholder="Type email address here..."></maryoku-input>
           <maryoku-input class="form-input" inputStyle="company" v-model="company" placeholder="Type name of company here..."></maryoku-input>
           <maryoku-input class="form-input" v-validate="modelValidations.password" type="password" inputStyle="password" v-model="password" placeholder="Type password here..."></maryoku-input>
-          <div class="md-error">
-            {{this.error}}
-          </div>
           <div class="terms-and-conditions">
             <md-checkbox v-model="terms">
             </md-checkbox>
             <div >
               I agree <a href="https://www.maryoku.com/terms" target="_blank" class="term-and-condition">Terms & Conditions</a>
             </div>
+          </div>
+          <div class="md-error text-center">
+            {{this.error}}
           </div>
           <div class="text-center" >
               <div><md-button @click="signup" class="md-default md-red md-maryoku mt-4">Sign Up</md-button></div>
@@ -75,9 +75,13 @@ export default {
       document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`
     },
     signup () {
-      this.isLoading = true
       this.$validator.validateAll().then(isValid => {
         if (isValid) {
+          if (!this.terms) {
+            this.error = "Please confirm terms and conditions"
+            return;
+          }
+          this.isLoading = true
           const userData = {
             email: this.email,
             name: this.name,
@@ -87,7 +91,10 @@ export default {
           }
           this.$auth.signupOrSignin(this, userData,  
             (data) => {
-              this.$auth.login(this, {email: this.email, password: this.password}, 
+              if (data.status == "exists" ) {
+                this.error = "This email already registered. Please sign in or use another email."
+              } else {
+                this.$auth.login(this, {email: this.email, password: this.password}, 
                 (success) => {
                   console.log("singup", data);
                   this.isLoading = false
@@ -109,6 +116,8 @@ export default {
                     console.log(JSON.stringify(failure.response))
                   }
                 })
+              }
+
             },
             (failure) => {
               this.isLoading = false
@@ -124,7 +133,6 @@ export default {
             })
         } else {
           this.error = 'Please check all values and try again.'
-          this.loading = false
         }
       })
     },

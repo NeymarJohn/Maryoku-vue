@@ -7,7 +7,6 @@
 <script>
 
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import PublicEventPlannerVuexModule from '../PublicEventPlanner.vuex'
 
 export default {
   props: {
@@ -28,7 +27,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setCurrentStep']),
+    ...mapMutations('PublicEventPlanner', ['setEventProperty', 'setCurrentStep']),
 
     goTo () {
       console.log(this.navigation)

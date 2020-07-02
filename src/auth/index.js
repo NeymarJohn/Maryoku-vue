@@ -96,8 +96,13 @@ export default {
   },
 
   setTenantHeaders (context) {
-    context.$http.defaults.headers.common['gorm-tenantid'] = this.resolveTenantId()
-    context.$http.defaults.headers.common.gorm_tenantid = this.resolveTenantId()
+    if (context.tenantId)  {
+      context.$http.defaults.headers.common['gorm-tenantid'] = context.tenantId
+      context.$http.defaults.headers.common.gorm_tenantid = context.tenantId
+    } else {
+      context.$http.defaults.headers.common['gorm-tenantid'] = this.resolveTenantId()
+      context.$http.defaults.headers.common.gorm_tenantid = this.resolveTenantId()
+    }
     // Model.$http.defaults.headers.common['gorm-tenantid'] = this.resolveTenantId();
     // Model.$http.defaults.headers.common.gorm_tenantid = this.resolveTenantId();
   },

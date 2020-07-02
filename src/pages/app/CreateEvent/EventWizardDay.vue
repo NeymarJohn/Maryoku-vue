@@ -39,7 +39,7 @@ export default {
   created () {
   },
   methods: {
-    ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setCurrentStep']),
+    ...mapMutations('PublicEventPlanner', ['setEventProperty', 'setCurrentStep']),
     goToNext () {
       if (this.dateData.selectedDate) {
         this.setEventProperty({key: 'eventStartMillis', actualValue: new Date(this.dateData.selectedDate).getTime()})
@@ -128,7 +128,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('PublicEventPlannerVuex', [
+    ...mapState('PublicEventPlanner', [
       'publicEventData'
     ]),
     getFormattedDate() {

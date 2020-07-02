@@ -10,7 +10,7 @@
             <div class="text-center">
               Where is the event scheduled to take place? (City or region would be enough)
             </div>
-            <div class="event-basic-info">
+            <div class="location event-basic-info">
               <div class="mt-4rem">
                 <location-input v-model="location" placeholder="Type city / region or specific address here…"></location-input>
               </div>
@@ -41,7 +41,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setCurrentStep']),
+    ...mapMutations('PublicEventPlanner', ['setEventProperty', 'setCurrentStep']),
     validateDate () {
       return this.$refs.datePicker.$el.classList.contains('md-has-value')
     },
@@ -99,7 +99,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('PublicEventPlannerVuex', [
+    ...mapState('PublicEventPlanner', [
       'publicEventData'
     ])
   }
@@ -108,7 +108,7 @@ export default {
 </script>
 <style lang="scss">
 
-    .event-basic-info {
+    .location.event-basic-info {
         width: 450px;
         margin: 0 auto;
         padding: 0;

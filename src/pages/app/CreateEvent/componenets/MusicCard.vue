@@ -16,8 +16,7 @@
       </div>
     </div>
     <div class="music-infor">
-      <md-checkbox class="md-checkbox-circle">
-        
+      <md-checkbox class="md-checkbox-circle md-red" v-model="checked">
       </md-checkbox>
       <div> 
           <div class="music-title">{{this.data.title}}</div>
@@ -34,6 +33,10 @@ export default {
     RadialProgressBar,
   },
   props: {
+    selected: {
+      type: Boolean,
+      default: false
+    },
     data: {
       type: Object,
       default: {}
@@ -41,6 +44,7 @@ export default {
   },
   data() {
     return {
+      checked:false,
       isPlaying: false,
       totalSteps: 100,
       completedSteps: 40,
@@ -50,6 +54,14 @@ export default {
   },
   created () {
     this.player = new Audio(`http://static.maryoku.com/storage/${this.data.src}`); 
+    this.checked = this.selected
+  },
+  watch: {
+    checked(newValue, oldValue) {
+      if (newValue) {
+        this.$emit("select", this.data )
+      }
+    }
   },
   methods: {
     playMusic() {

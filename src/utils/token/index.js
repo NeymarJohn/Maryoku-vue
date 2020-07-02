@@ -13,7 +13,7 @@ export const getReq = (endpoint) => {
     method: 'get',
     url: `${process.env.SERVER_URL}${endpoint}`
   };
-  if (window.localStorage.getItem('manage_id_token')) {
+  if (window.localStorage.getItem('manage_id_token') && window.localStorage.getItem('manage_id_token') !== "undefined") {
     getRequest["headers"] = { 'Authorization': `Bearer ${window.localStorage.getItem('manage_id_token')}` }
   }
   return axios(getRequest)

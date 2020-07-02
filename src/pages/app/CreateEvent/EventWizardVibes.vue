@@ -12,7 +12,7 @@
                 Try describing your guest’s vibes using a song
               </div>
               <div class="mt-3 types">
-                <music-card :class="{selected:song.selected}" v-for="(song) in songs" :key="song.title" :data="song">
+                <music-card :class="{selected:song.selected}" v-for="(song) in songs" :key="song.title" :data="song" :isSelected="song.title == selectedSong.title" @select="selectSong"> 
                 </music-card >
               </div>
             </div>
@@ -41,7 +41,7 @@ export default {
   created () {
   },
   methods: {
-    ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setCurrentStep']),
+    ...mapMutations('PublicEventPlanner', ['setEventProperty', 'setCurrentStep']),
     validateDate () {
       return this.$refs.datePicker.$el.classList.contains('md-has-value')
     },
@@ -90,10 +90,14 @@ export default {
     },
     back() {
       this.$router.push({path: `/event-wizard-religion`})
+    },
+    selectSong(song) {
+      this.selectedSong = song
     }
   },
   data () {
     return {
+      selectedSong: {},
       songs: [
         {
           singer: "Sisters sledge", title: "We are family", selected:false, src: "ringtones/we_are_family_v2_53802.mp3", thumb: "Singers/Sister+Sledge.jpg"
@@ -117,7 +121,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('PublicEventPlannerVuex', [
+    ...mapState('PublicEventPlanner', [
       'publicEventData'
     ])
   }

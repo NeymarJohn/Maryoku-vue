@@ -75,7 +75,7 @@
 
 import GoBack from './componenets/GoBack'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import PublicEventPlannerVuexModule from './PublicEventPlanner.vuex'
+
 import numeral from 'numeral'
 import EventComponent from '@/models/EventComponent'
 import CalendarEvent from '@/models/CalendarEvent'
@@ -105,7 +105,7 @@ export default {
 
   },
   computed: {
-    ...mapState('PublicEventPlannerVuex', [
+    ...mapState('PublicEventPlanner', [
       'publicEventData'
     ])
   }

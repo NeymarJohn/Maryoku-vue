@@ -92,7 +92,7 @@ export default {
     this.$set(this.eventData, 'flexibleWithDates', this.publicEventData.flexibleWithDates)
   },
   methods: {
-    ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setCurrentStep']),
+    ...mapMutations('PublicEventPlanner', ['setEventProperty', 'setCurrentStep']),
     goToNext () {
       let vm = this
 
@@ -207,7 +207,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('PublicEventPlannerVuex', [
+    ...mapState('PublicEventPlanner', [
       'publicEventData'
     ])
   }

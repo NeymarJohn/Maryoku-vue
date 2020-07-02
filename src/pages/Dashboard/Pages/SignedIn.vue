@@ -115,7 +115,13 @@ export default {
                     } else {
                         that.$router.push({ path: '/' });
                     } */
-        that.$router.push({ path: '/' })
+
+        const firstEvent = that.$route.query.firstEvent
+        if (firstEvent) {
+          that.$router.push({ path: `/events/${firstEvent}/booking/concept` })
+        } else {
+          that.$router.push({ path: '/' })
+        }
       })
     }
   },

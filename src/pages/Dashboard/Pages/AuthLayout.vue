@@ -94,7 +94,7 @@ export default {
         Pricing: 'http://static.maryoku.com/storage/img/bg-pricing.jpg',
         Login: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
         Register: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
-        CreateWorkspace: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
+        CreateWorkspace1: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
         ForgotPassword: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
         SignIn1: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
         SignUp1: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
