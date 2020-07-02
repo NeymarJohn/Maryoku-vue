@@ -26,24 +26,6 @@
         >
           <vue-element-loading :active="loading" spinner="ring" color="#FF547C" />
           <div>&nbsp;</div>
-          <!--<div class="social-line text-center">
-            <md-button class="md-just-icon-social md-google" @click="authenticate('google')">
-              <i class="fab fa-google-plus-g" style="font-size: 42px !important;width: 80px;height: 42px;"></i>
-            </md-button>
-            <md-button class="md-just-icon-social md-circle md-linkedin" @click="authenticate('linkedin')">
-              <i class="fab fa-linkedin" style="font-size: 42px !important;width: 80px;height: 42px;"></i>
-            </md-button>
-            &lt;!&ndash;<md-button class="md-just-icon md-round md-facebook">
-              <i class="fab fa-facebook-f"></i>
-            </md-button>&ndash;&gt;
-            <h4 class="mt-3">or sign up with your work email address</h4>
-          </div>-->
-          <!--<md-field :class="[
-          {'md-valid': !errors.has('email') && touched.email},
-          {'md-error': errors.has('email')}]">
-            <label>Your <strong>Work</strong> Email Address</label>
-            <md-input v-model="email" type="email" data-vv-name="email" required v-validate="modelValidations.email"></md-input>
-          </md-field>-->
           <md-field
             :class="[
           {'md-valid': !errors.has('workspace') && touched.workspace},
@@ -97,28 +79,22 @@ export default {
     VueElementLoading
   },
   methods: {
-    authenticate(provider) {
-      this.loading = true;
-      let tenantId = document.location.hostname.replace(".maryoku.com", "");
-      const callback = btoa(
-        `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`
-      );
-      document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
-    },
     createWorkSpace() {
       this.loading = true;
       this.$validator.validateAll().then(isValid => {
         if (isValid) {
-          let tenantIdExt =
-            document.location.hostname === "dev.maryoku.com" ? ".dev" : "";
-            //calendar: { id: "5efcfbe646a1c413babb41ab" },
+          let tenantIdExt = document.location.hostname === "dev.maryoku.com" ? ".dev" : "";
           new Tenant({ id: this.workspace}).save().then(res => {
+            alert(res.status)
             if (res.status === true) {
+              alert()
               this.loading = true;
               this.createEvent().then(event=>{
+                alert("failed")
                 document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&firstEvent=${event.id}`;
               })
               .catch(error=>{
+                alert("succesed")
                 this.loading = false
               })
             } else {
@@ -136,7 +112,6 @@ export default {
       return new Promise((resolve, reject) => {
         this.tenantId = this.workspace
         this.$auth.currentUser(this, true, () => {
-          // Code  here
           let calendarId = this.$auth.user.defaultCalendarId;
           let _calendar = new Calendar({
             id: calendarId
@@ -154,19 +129,6 @@ export default {
             calendar: {
               id: calendarId
             },
-            // title: "test",
-            // occasion: "123",
-            // eventStartMillis: 1595397600000,
-            // eventEndMillis: 1595401200000,
-            // numberOfParticipants: "123",
-            // budgetPerPerson: "1001.00",
-            // totalBudget: "123123",
-            // status: "draft",
-            // currency: "USD",
-            // eventType: "5e9dc16846a1c47a3b6b66c8",
-            // category: "CompanyDays",
-            // editable: true,
-            // location: "123123"
             title: this.publicEventData.title,
             occasion: this.publicEventData.occasion.name,
             eventStartMillis: this.publicEventData.eventStartMillis,

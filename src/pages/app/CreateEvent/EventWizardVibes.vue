@@ -12,7 +12,7 @@
                 Try describing your guest’s vibes using a song
               </div>
               <div class="mt-3 types">
-                <music-card :class="{selected:song.selected}" v-for="(song) in songs" :key="song.title" :data="song" :isSelected="song.title == selectedSong.title" @select="selectSong"> 
+                <music-card :class="{selected:song.selected}" v-for="(song) in songs" :key="song.title" :data="song" :selected="song.title == selectedSong.title" @select="selectSong"> 
                 </music-card >
               </div>
             </div>
@@ -89,7 +89,13 @@ export default {
       this.$router.push({path: `/signup`})
     },
     back() {
-      this.$router.push({path: `/event-wizard-religion`})
+      if (this.publicEventData.religion) {
+        this.$router.push({path: `/event-wizard-religion`})
+      } else if (this.publicEventData.occasion) {
+        this.$router.push({path: `/event-wizard-celebrating`})
+      } else {
+        this.$router.push({path: `/event-wizard-type`})
+      }
     },
     selectSong(song) {
       this.selectedSong = song

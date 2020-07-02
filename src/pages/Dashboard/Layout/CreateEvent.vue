@@ -9,7 +9,7 @@
         </div>
         <div class="header-actions md-layout-item md-size-50 md-small-size-60">
             <ul class="actions-list unstyled">
-                <md-button class="md-simple md-black md-maryoku" @click="goToSignin"> Already A User?</md-button>
+                <md-button class="md-simple md-black md-maryoku" @click="showSingupDialog"> Already A User?</md-button>
                 <md-button class="md-simple md-just-icon question" @click="showSingupDialog"> 
                     <img :src="`${$iconURL}Onboarding/question-dark.svg`">
                 </md-button>
@@ -230,6 +230,7 @@ $baseColor: #5c2153;
 }
 .container {
   display: block !important;
+  min-height: calc(100vh - 268px) !important;
 }
 
 .md-datepicker-dialog.md-theme-default {

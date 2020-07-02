@@ -94,7 +94,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     padding: 0 40px;
-    position: absolute;
+    // position: absolute;
     bottom: 0;
     width: 100%;
   }

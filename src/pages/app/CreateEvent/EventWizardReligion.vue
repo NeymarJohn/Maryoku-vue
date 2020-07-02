@@ -51,6 +51,9 @@ export default {
     if(this.publicEventData.religion) {
       this.religion = this.publicEventData.religion
     }
+    if (this.publicEventData.holidays) {
+      this.types = this.publicEventData.holidays
+    }
   },
   methods: {
     ...mapMutations('PublicEventPlanner', ['setEventProperty', 'setCurrentStep']),
@@ -94,6 +97,7 @@ export default {
     },
     goToNext() {
       this.setEventProperty({ key: "religion", actualValue: this.religion})
+      this.setEventProperty({ key: "holidays", actualValue: this.types})
       this.$router.push({path: `/event-wizard-vibes`})
     },
     skip() {
@@ -105,6 +109,7 @@ export default {
   },
   data () {
     return {
+      religion: "",
       types: [
         { value: "all", name: "All Islamic holidays", selected:false },
         { value: "Eid-al-Fitr", name: "Eid-al-Fitr (End of Ramadan)", selected:false },
@@ -142,7 +147,6 @@ export default {
         width: 100%;
         margin: 0 auto;
         padding: 0;
-        min-height: 440px;
     }
     
     .md-checkbox-circle {

@@ -108,7 +108,7 @@ export default {
         width: 450px;
         margin: 0 auto;
         padding: 0;
-        min-height: 440px;
+        min-height: 200px;
     }
     .form-input {
       background: white;

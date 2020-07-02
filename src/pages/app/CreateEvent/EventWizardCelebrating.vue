@@ -93,10 +93,13 @@ export default {
     },
     goToNext() {
       this.setEventProperty({ key: "occasion", actualValue:this.selected})
-      this.$router.push({path: `/event-wizard-religion`})
+      if (this.selected.value === 'holiday')
+        this.$router.push({path: `/event-wizard-religion`})
+      else 
+        this.$router.push({path: `/event-wizard-vibes`})
     },
     skip() {
-      this.$router.push({path: `/event-wizard-religion`})
+      this.$router.push({path: `/event-wizard-vibes`})
     },
     back() {
       this.$router.push({path: `/event-wizard-type`})
@@ -138,7 +141,6 @@ export default {
         width: 100%;
         margin: 0 auto;
         padding: 0;
-        min-height: 440px;
     }
     
     .md-checkbox-circle {

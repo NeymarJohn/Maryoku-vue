@@ -48,6 +48,9 @@ export default {
     MaryokuInput
   },
   created () {
+    if (this.publicEventData.buildings) {
+      this.types = this.publicEventData.buildings
+    }
   },
   methods: {
     ...mapMutations('PublicEventPlanner', ['setEventProperty', 'setCurrentStep']),
@@ -92,6 +95,7 @@ export default {
       })
     },
     goToNext() {
+      this.setEventProperty({key: 'buildings', actualValue: this.types})
       this.$router.push({path: `/event-wizard-type`})
     },
     skip() {
@@ -103,6 +107,7 @@ export default {
   },
   data () {
     return {
+      buildings:[],
       types: [
         {
           value: "indoor", name: "Indoor Event", selected:false
@@ -127,7 +132,6 @@ export default {
         width: 100%;
         margin: 0 auto;
         padding: 0;
-        min-height: 440px;
     }
     
     .md-checkbox-circle {

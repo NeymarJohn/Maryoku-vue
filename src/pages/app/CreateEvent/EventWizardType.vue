@@ -65,11 +65,14 @@ export default {
     goToNext() {
       if (this.selectedType) {
         this.setEventProperty({key: 'eventType', actualValue: this.selectedType })
-        this.$router.push({path: `/event-wizard-celebrating`})
+        if (this.selectedType.key === "reception" || this.selectedType.key === "establishment-activity-day")
+          this.$router.push({path: `/event-wizard-celebrating`})
+        else 
+          this.$router.push({path: `/event-wizard-vibes`})
       } 
     },
     skip() {
-      this.$router.push({path: `/event-wizard-celebrating`})
+      this.$router.push({path: `/event-wizard-vibes`})
     },
     back() {
       this.$router.push({path: `/event-wizard-building`})

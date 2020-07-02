@@ -20,14 +20,14 @@ const Members = () => import('@/pages/app/Members/Members.vue')
 
 const Events = () => import('@/pages/app/Events/Events.vue')
 const CurrentEvents = () => import('@/pages/app/Events/CurrentEvents.vue')
-const EventGroups = () => import('@/pages/app/Events/components/EventInvitees.vue')
+// const EventGroups = () => import('@/pages/app/Events/components/EventInvitees.vue')
 const NewEvent = () => import('@/pages/app/Events/NewEvent.vue')
-const EditEvent = () => import('@/pages/app/Events/EditEvent.vue')
+// const EditEvent = () => import('@/pages/app/Events/EditEvent.vue')
 const EventDetails = () => import('@/pages/app/Events/EventDetails.vue')
 
 const EventDetailsOverView = () => import('@/pages/app/Events/EventDetailsOverview.vue')
-const ShowEvent = () => import('@/pages/app/Events/ShowEvent.vue')
-const VendorProposals = () => import('@/pages/app/Events/VendorProposals.vue')
+// const ShowEvent = () => import('@/pages/app/Events/ShowEvent.vue')
+// const VendorProposals = () => import('@/pages/app/Events/VendorProposals.vue')
 const EventProposal = () => import('@/pages/app/Events/EventProposal.vue')
 const EventSteps = () => import('@/pages/app/Events/Steps')
 const Notes = () => import('@/pages/app/Notes.vue')
@@ -35,13 +35,13 @@ const Proposals = () => import('@/pages/app/Proposals.vue')
 const Vendors = () => import('@/pages/app/Vendors/Vendors.vue')
 const CurrentVendors = () => import('@/pages/app/Vendors/CurrentVendors.vue')
 const AddEditVendor = () => import('@/pages/app/Vendors/AddEditVendor.vue')
-const EditVendor = () => import('@/pages/app/Vendors/EditVendor.vue')
+// const EditVendor = () => import('@/pages/app/Vendors/EditVendor.vue')
 const VendorsPool = () => import('@/pages/app/Vendors/VendorsPool.vue')
 const VendorsPoolNew = () => import('@/pages/app/Vendors/VendorsPoolNew.vue')
 const ImportVendors = () => import('@/pages/app/Vendors/ImportVendors.vue')
 const YearlyPlan = () => import('@/pages/app/YearlyPlan/index.vue')
 const AnnualPlanner = () => import('@/pages/app/AnnualPlanner/index.vue')
-const EventWizard = () => import('@/pages/app/CreateEvent/EventWizard.vue')
+// const EventWizard = () => import('@/pages/app/CreateEvent/EventWizard.vue')
 const EventInfo = () => import('@/pages/app/CreateEvent/EventInfo.vue')
 const EventBudget = () => import('@/pages/app/CreateEvent/EventBudget.vue')
 const EventVibe = () => import('@/pages/app/CreateEvent/EventVibe.vue')
@@ -56,7 +56,7 @@ const publicRegister = () => import('@/pages/app/SinginSingup/publicRegister.vue
 // Event Pages
 const EventDetailsBudget = () => import('@/pages/app/Events/EventDetailsBudget.vue')
 const EventDetailsTimeline = () => import('@/pages/app/Events/EventDetailsTimeline.vue')
-const BookingEvent = () => import('@/pages/app/Events/components/BookingEvent.vue')
+// const BookingEvent = () => import('@/pages/app/Events/components/BookingEvent.vue')
 const EventPlan = () => import('@/pages/app/Events/EventPlan.vue')
 const EventConceptChoose = () => import('@/pages/app/Events/components/EventConceptChoose.vue')
 const EventProposalDetails = () => import('@/pages/app/Events/components/EventProposalDetails.vue')
@@ -77,7 +77,7 @@ const ChooseWorkspace = () => import('@/pages/Dashboard/Pages/ChooseWorkspace')
 
 
 const GetStarted = () => import('@/pages/app/GetStarted')
-const MyEvents = () => import('@/pages/app/Guest/MyEvents.vue')
+// const MyEvents = () => import('@/pages/app/Guest/MyEvents.vue')
 const MarketPlace = () => import('@/pages/app/MarketPlace/MarketPlace.vue')
 
 // New Vendor Pages
@@ -328,16 +328,6 @@ let emptyLayoutPages = {
       auth: true,
       title: 'Get Started',
       gtm: 'GetStarted'
-    }
-  },
-  {
-    path: '/my-events',
-    name: 'MyEvents',
-    component: MyEvents,
-    meta: {
-      auth: true,
-      title: 'My Events',
-      gtm: 'MyEvents'
     }
   }
   ]

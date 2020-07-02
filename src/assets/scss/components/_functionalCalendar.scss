@@ -10,3 +10,24 @@
   margin: 20px 30px !important;
   border-color: #f51355 !important;
 }
+.vfc-week .vfc-day span.vfc-span-day {
+  font-family: "Manrope-Regular";
+  font-size: 14px;
+}
+.vfc-week .vfc-day span.vfc-span-day.vfc-today {
+  background-color: #ffd9e4 !important;
+  color: #f51355 !important;
+}
+.vfc-top-date a.vfc-underline {
+  font-family: "Manrope-Bold";
+  font-size: 16px;
+  text-decoration: none !important;
+}
+.vfc-dayNames {
+  padding-bottom: 5px;
+  border-bottom: solid #DDDDDD 1px;
+  span {
+  font-family: "Manrope-Bold";
+  font-size: 14px;
+  color: #a0a0a0 !important;
+}}

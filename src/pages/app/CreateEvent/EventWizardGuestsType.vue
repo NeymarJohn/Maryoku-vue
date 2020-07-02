@@ -11,7 +11,7 @@
                 so, who’s coming?
               </div>
               <div class="mt-3 types">
-                <div class="type-card" @click="type.selected=!type.selected" :class="{selected:type.selected}" v-for="(type) in guestsTypes" :key="type.value">
+                <div class="type-card" @click="selectedType=type" :class="{selected:type.value == selectedType.value}" v-for="(type) in guestsTypes" :key="type.value">
                   <div>
                     <img :src="`${$iconURL}Onboarding/${type.value}-dark.svg`">
                   </div>
@@ -19,7 +19,7 @@
                     {{type.name}}
                   </div>
                   <div>
-                    <md-checkbox class="md-checkbox-circle md-red" v-model="type.selected"></md-checkbox>
+                    <md-checkbox class="md-checkbox-circle md-red" v-model="selectedType" :value="type"></md-checkbox>
                   </div>
                 </div>
               </div>
@@ -49,8 +49,8 @@ export default {
     MaryokuInput
   },
   created () {
-    if (this.publicEventData.guestTypes) {
-      this.guestsTypes = this.publicEventData.guestTypes
+    if (this.publicEventData.guestType) {
+      this.selectedType = this.guestsTypes.find(item=>item.value === this.publicEventData.guestType.value)
     }
     if (this.publicEventData.guestGroupName) {
       this.groupName = this.publicEventData.guestGroupName
@@ -99,7 +99,7 @@ export default {
       })
     },
     goToNext() {
-      this.setEventProperty({key:"guestTypes", actualValue: this.guestsTypes})
+      this.setEventProperty({key:"guestType", actualValue: this.selectedType})
       this.setEventProperty({key:"guestGroupName", actualValue: this.groupName})
       this.$router.push({path: `/event-wizard-location`})
     },
@@ -112,6 +112,7 @@ export default {
   },
   data () {
     return {
+      selectedType: "",
       groupName:"",
       guestsTypes: [
         {
@@ -157,7 +158,7 @@ export default {
         width: 100%;
         margin: 0 auto;
         padding: 0;
-        min-height: 440px;
+        min-height: 400px;
     }
     
     .md-checkbox-circle {

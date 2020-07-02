@@ -1,6 +1,6 @@
 <template>
   <div class="music-card-root">
-    <div class="music-card">
+    <div class="music-card" :class="{selected: checked}">
       <img :src="`${$storageURL}${data.thumb}`">
       <div class="mask" :class="{playing:isPlaying}">
         <span class="player-icon" @click="playMusic" v-if="!isPlaying"><md-icon>play_arrow</md-icon></span>
@@ -61,6 +61,9 @@ export default {
       if (newValue) {
         this.$emit("select", this.data )
       }
+    },
+    selected(newValue, oldValue) {
+      this.checked = newValue
     }
   },
   methods: {
@@ -98,6 +101,9 @@ export default {
     position: relative;
     cursor: pointer;
     margin: 10px;
+    &.selected {
+      box-shadow: 0 3px 30px 0 rgba(245, 19, 85, 0.68);
+    }
     .mask {
       opacity: 0;
       position: absolute;
@@ -148,6 +154,7 @@ export default {
       margin-top: -10px;
       margin-bottom: 5px;
       margin-left: 10px;
+      max-width: 150px;
     }
     .music-singer {
       font-size: 14px;

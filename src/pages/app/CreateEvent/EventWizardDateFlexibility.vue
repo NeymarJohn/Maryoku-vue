@@ -6,7 +6,7 @@
             </div>
             <selected-value :value="formattedDate" property="calendar"></selected-value>
             <div class="event-flexibility event-basic-info">
-              <div class="mt-5">Between a camel yoga pose and plywood</div>
+              <div class="mt-4rem">Between a camel yoga pose and plywood</div>
               <div class="setting-title mt-1">
                 <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator">
                 how flexible is this date?
@@ -130,7 +130,7 @@ export default {
         width: 100%;
         margin: 0 auto;
         padding: 0;
-        min-height: 440px;
+        min-height: 300px;
     }
     .range-slider {
       width: 500px;

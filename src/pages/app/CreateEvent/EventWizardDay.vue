@@ -45,20 +45,6 @@ export default {
         this.setEventProperty({key: 'eventStartMillis', actualValue: new Date(this.dateData.selectedDate).getTime()})
         this.$router.push({path: `/event-wizard-flexibility`})
       }
-      // this.$validator.validateAll().then(isValid => {
-      //   if (isValid) {
-      //     this.set
-      //     this.setEventProperty({key: 'location', actualValue: this.eventData.location})
-      //     this.setEventProperty({key: 'eventType', actualValue: this.eventData.eventType})
-      //     this.setEventProperty({key: 'eventDayPart', actualValue: this.eventData.eventDayPart})
-      //     this.setEventProperty({key: 'eventPlaceNeeded', actualValue: this.eventData.eventPlaceNeeded})
-      //     this.setEventProperty({key: 'flexibleWithDates', actualValue: this.eventData.flexibleWithDates})
-      //     this.setCurrentStep({currentPage: '/about-invited'})
-      //     this.$router.push({path: `/about-invited`})
-      //   } else {
-      //     this.showNotify()
-      //   }
-      // })
     },
     skip () {
       this.$router.push({path: `/event-wizard-flexibility`})
@@ -156,6 +142,7 @@ export default {
     .picker-panel {
       display: block;
       position: relative;
+      padding: 30px 10px 0px;
     }
     .title {
       font-family: "Manrope-Bold";
