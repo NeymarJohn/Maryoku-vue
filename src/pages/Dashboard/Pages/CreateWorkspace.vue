@@ -113,13 +113,17 @@ export default {
             document.location.hostname === "dev.maryoku.com" ? ".dev" : "";
             //calendar: { id: "5efcfbe646a1c413babb41ab" },
           new Tenant({ id: this.workspace}).save().then(res => {
-            if (res.status) {
+            if (res.status === true) {
               this.loading = true;
               this.createEvent().then(event=>{
                 document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&firstEvent=${event.id}`;
               })
+              .catch(error=>{
+                this.loading = false
+              })
             } else {
               this.error = "Failed";
+              this.loading = false
             }
           });
         } else {
@@ -129,7 +133,6 @@ export default {
     },
     createEvent() {
       let vm = this;
-
       return new Promise((resolve, reject) => {
         this.tenantId = this.workspace
         this.$auth.currentUser(this, true, () => {
