@@ -194,7 +194,7 @@ let publicPages = {
   children: [
     {
       path: '/vendors/:vendorId/proposal-request/:id',
-      name: 'ForVendors',
+      name: 'VendorProposal',
       component: ForVendors,
       meta: {
         auth: false,
@@ -266,7 +266,7 @@ let publicPages = {
 let forProposals = {
   path: "/",
   component: ForProposalsLayout,
-  name: "ForProposals",
+  name: "ForProposalsLayout",
   children: [
     {
       path: '/vendors/:vendorId/proposal-request/:id/form',
@@ -284,7 +284,7 @@ let forProposals = {
 let vendorSignup = {
   path: "/",
   component: VendorSignupLayout,
-  name: "VendorSignup",
+  name: "VendorSignupLayout",
   children: [
     {
       path: "/vendor-signup",
@@ -578,7 +578,7 @@ let EventPages = {
   },
   {
     path: '/event/create',
-    name: 'EventSteps',
+    name: 'EventCreate',
     component: EventSteps,
     meta: {
       title: 'Event Wizard',
@@ -587,7 +587,7 @@ let EventPages = {
   },
   {
     path: '/event/:id/edit',
-    name: 'EventSteps',
+    name: 'EventEdit',
     component: EventSteps,
     meta: {
       title: 'Event Wizard',
@@ -668,7 +668,7 @@ let NewEventPages = {
   },
   {
     path: '/events/:id/edit/timeline/export',
-    name: 'EditTimeLine',
+    name: 'EditTimeLineExport',
     component: ExportTimeLine,
     meta: {
       title: 'Timeline',
@@ -679,9 +679,9 @@ let NewEventPages = {
   {
     path: '/events/:id/booking',
     redirect: '/events/:id/booking/timeline',
-    name: 'Root',
+    name: 'Timeline',
     meta: {
-      gtm: 'Root'
+      gtm: 'Timeline'
     }
   },
   {
@@ -747,7 +747,7 @@ let NewEventPages = {
   },
   {
     path: '/event/create',
-    name: 'EventSteps',
+    name: 'EventCreate',
     component: EventSteps,
     meta: {
       title: 'Event Wizard',
@@ -756,7 +756,7 @@ let NewEventPages = {
   },
   {
     path: '/event/:id/edit',
-    name: 'EventSteps',
+    name: 'EventEdit',
     component: EventSteps,
     meta: {
       title: 'Event Wizard',
@@ -1000,7 +1000,7 @@ let PublicCreateEvent = {
 let HomePages = {
   path: '/app2',
   component: HomeLayout,
-  name: 'HomePage',
+  name: 'HomePageLayout',
   children: [
     {
       path: '/home',

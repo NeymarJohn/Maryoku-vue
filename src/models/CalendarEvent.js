@@ -45,6 +45,7 @@ export default class CalendarEvent extends Model {
         this.get().then(res => {
           ctx.$ls.set(key, res, Model.DEFAULT_EXPIRATION_MILLIS)
           resolve(res)
+        }).catch(e=>{
         })
       } else {
         ctx.$ls.set(key, resource, Model.DEFAULT_EXPIRATION_MILLIS)

@@ -38,6 +38,8 @@ import store from './store'
 
 import { IconURL, StorageURL, ResourceURL } from './globalVariables';
 
+import authHeader from '@/services/auth-header';
+
 require('vue-tour/dist/vue-tour.css')
 
 const VueScrollTo = require('vue-scrollto')
@@ -201,6 +203,7 @@ Vue.prototype.$resourceURL = ResourceURL;
 Vue.prototype.$storageURL = StorageURL;
 Vue.prototype.$iconURL = IconURL;
 
+axios.defaults.headers.common.Authorization = authHeader().Authorization
 Model.$http = axios
 
 Number.prototype.padStart = function (size, theChar) {
@@ -218,8 +221,29 @@ String.prototype.padStart = function (size, theChar) {
 Object.defineProperty(Vue.prototype, '$auth', {
   get () { return auth }
 })
+Object.defineProperty(Vue.prototype, '$authHeader', {
+  get () { return authHeader().Authorization }
+})
 
-/* eslint-disable no-new */
+const myMixin = {
+  created(){
+    console.log("test")
+    Model.$http.defaults.headers.common.Authorization = authHeader().Authorization
+  },
+  updated () {
+    console.log("test")
+    Model.$http.defaults.headers.common.Authorization = authHeader().Authorization
+  },
+  computed: {
+    loggedIn() {
+      return this.$store.state.auth.status.loggedIn;
+    },
+    currentUser() {
+      return this.$store.state.auth.user
+    }
+  },
+}
+
 new Vue({
   el: '#app',
   render: h => h(App),

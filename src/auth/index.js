@@ -165,7 +165,7 @@ export default {
     }
 
   },
-  currentUser (context, required, cb) {
+  currentUser1 (context, required, cb) {
     if (this.user.loading) {
       setTimeout(() => {
         this.currentUser(context, required, cb)

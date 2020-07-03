@@ -1,19 +1,12 @@
 <template>
   <div class="md-layout events-list">
-    <!--<div class="md-layout-item md-size-100 text-right">
-      <md-button class="button-event-creatig" @click="openEventModal()">Create New Event</md-button>
-    </div>-->
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen>
-      <!-- <img src="/static/img/maryoku-loader.gif" /> -->
-      <!-- <img :src="`/static/img/load_${imageIndex}.jpg`"> -->
       <div :style="`background-image:url(/static/img/load_${imageIndex}.jpg)`" class="loading-background" >
         <div :class="`quote quote_${imageIndex}`">
           <span>{{quote.description}}</span>
           <span class="author">{{quote.author}}</span>
         </div>
       </div>
-      
-      <!-- {{this.imageIndex}} -->
     </vue-element-loading>
     <div class="md-layout-item md-size-100">
       <md-card v-if="upcomingEvents.length">
@@ -176,44 +169,23 @@ export default {
     EventModal
   },
   created () {
-    this.$store.registerModule('EventPlannerVuex', EventPlannerVuexModule)
-  },
-  computed: {},
-  mounted () {
-    this.$auth.currentUser(this, true, () => {
-      this.$store.dispatch('user/getUserFromApi')
-      let that = this
-      setTimeout(() => {
-        that.$store.dispatch(
-          'event/getCategories',
-          this.$auth.user.defaultCalendarId,
-          that
-        )
-        that.$store.dispatch(
-          'event/getEventTypes',
-          this.$auth.user.defaultCalendarId,
-          that
-        )
-        that.$store.dispatch('event/getCurrencies', that)
-        that.$store.dispatch('event/getEventThemes', that)
-      }, 100)
-
-      let _calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
-
-      let m = new CalendarEvent().for(_calendar).fetch(this, true)
-      m.then(allEvents => {
-        this.upcomingEvents = this.getExtraFields(allEvents).reverse()
-
-        // this.upcomingEvents = _.sortBy(this.upcomingEvents, function(num){  return new Date(num.eventStartMillis); });
-        this.isLoading = false
-      })
-    })
-
-    if (this.$route.params.mode && this.$route.params.mode === 'create-event') {
-      this.openEventModal()
+    console.log(this.$http)
+    const currentUser = this.$store.getters['auth/currentUser'];
+    if (!this.$store.getters['auth/isLoggedIn']) {
+      this.$router.push("/signin")
+      return
     }
+    console.log("currentUser", currentUser)
+    
+    let _calendar = new Calendar({ id: currentUser.profile.defaultCalendarId })
+    let m = new CalendarEvent().for(_calendar).fetch(this, true)
+    m.then(allEvents => {
+      this.upcomingEvents = this.getExtraFields(allEvents).reverse()
+      this.isLoading = false
+    }).catch(e=>{
+      console.log(e)
+    })
   },
-  updated () {},
   data () {
     return {
       // auth: auth,
@@ -375,7 +347,7 @@ export default {
       //     editMode: false,
       //     sourceEventData: {
       //       eventStartMillis: new Date().getTime(),
-      //       numberOfParticipants: this.$auth.user.customer.numberOfEmployees
+      //       numberOfParticipants: currentUser.customer.numberOfEmployees
       //     },
       //     refreshEvents: null,
       //     occasionsOptions: null,

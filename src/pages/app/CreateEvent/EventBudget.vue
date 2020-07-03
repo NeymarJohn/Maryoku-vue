@@ -94,6 +94,7 @@ export default {
     }
   },
   created () {
+    this.$http.defaults.headers.common.Authorization = this.$authHeader
     this.$set(this.eventData, 'totalBudget', this.publicEventData.totalBudget)
     this.$set(this.eventData, 'budgetPerPerson', this.publicEventData.budgetPerPerson)
   },

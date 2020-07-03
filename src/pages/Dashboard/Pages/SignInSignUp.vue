@@ -2,24 +2,20 @@
   <div class="md-layout">
     <vue-element-loading :active="loading" spinner="ring" color="#FF547C" isFullScreen/>
     <div class="md-layout-item">
-      <!-- <h2 class="title text-center" slot="title" style="text-align: center;">Sign In</h2> -->
       <signup-card>
         <div class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain" slot="content-right">
           <div class="social-line text-center">
-            <!-- <md-button class="md-just-icon-social md-google" @click="authenticate('google')">
-              <i class="fab fa-google-plus-g" style="font-size: 42px !important;width: 80px;height: 42px;"></i>
-            </md-button> -->
             <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
               <img :src="`${$iconURL}Signup/google-icon.jpg`">
               <span>Sign in with Google</span>
             </md-button>
             <h4 class="mt-1">Or</h4>
           </div>
-          <maryoku-input class="form-input" v-validate="modelValidations.email" inputStyle="email" v-model="email" placeholder="Type email address here..."></maryoku-input>
-          <maryoku-input class="form-input" v-validate="modelValidations.password" type="password" inputStyle="password" v-model="password" placeholder="Type password here..."></maryoku-input>
+          <maryoku-input class="form-input" v-validate="modelValidations.email" inputStyle="email" v-model="user.email" placeholder="Type email address here..."></maryoku-input>
+          <maryoku-input class="form-input" v-validate="modelValidations.password" type="password" inputStyle="password" v-model="user.password" placeholder="Type password here..."></maryoku-input>
           <div class="md-error">{{error}}</div>
           <div class="terms-and-conditions">
-            <md-checkbox v-model="terms">
+            <md-checkbox v-model="keepMe">
               Keep me signed in
             </md-checkbox>
           </div>
@@ -37,14 +33,13 @@
 </template>
 
 <script>
-import { SignupCard, MaryokuInput } from '@/components'
-import { Modal } from '@/components'
+import { SignupCard, MaryokuInput, Modal } from '@/components'
 import InputText from '@/components/Inputs/InputText.vue'
-// import auth from '@/auth';
 import VueElementLoading from 'vue-element-loading'
 import Tenant from '@/models/Tenant'
-
+import TenantUser from '@/models/TenantUser'
 export default {
+  name: "SignIn",
   components: {
     SignupCard,
     Modal,
@@ -63,18 +58,33 @@ export default {
       this.loading = true
       let that = this
       this.$validator.validateAll().then(isValid => {
+        console.log(this.$validator)
         if (isValid) {
-          that.$auth.login(that, {email: that.email.toString().toLowerCase(), password: that.password}, (success) => {
-            that.$router.push({ path: '/signedin', query: {token: success.access_token} })
-          }, (failure) => {
-            that.loading = false
-            if (failure.response.status === 401) {
-              that.error = 'Sorry, invalid email or wrong password, check and try again.'
-            } else {
-              that.error = 'Temporary failure, try again later'
-              console.log(JSON.stringify(failure.response))
-            }
-          })
+          if (this.user.email && this.user.password) {
+            this.$store.dispatch('auth/login', this.user).then(
+              () => {
+                this.redirectPage()
+              },
+              error => {
+                this.loading = false;
+                this.message =
+                  (error.response && error.response.data) ||
+                  error.message ||
+                  error.toString();
+              }
+            );
+          }
+          // that.$auth.login(that, {email: that.email.toString().toLowerCase(), password: that.password}, (success) => {
+          //   that.$router.push({ path: '/signedin', query: {token: success.access_token} })
+          // }, (failure) => {
+          //   that.loading = false
+          //   if (failure.response.status === 401) {
+          //     that.error = 'Sorry, invalid email or wrong password, check and try again.'
+          //   } else {
+          //     that.error = 'Temporary failure, try again later'
+          //     console.log(JSON.stringify(failure.response))
+          //   }
+          // })
         } else {
           that.error = 'Sorry, invalid email or wrong password, try again.'
           that.loading = false
@@ -86,41 +96,42 @@ export default {
     },
     toForgotPassword() {
       this.$router.push({ path: '/forgot-password' })
+    },
+    redirectPage() {
+      if (this.currentUser) {
+        if (this.currentUser.currentTenant) {
+          this.$router.push({ path: '/events'})
+        } else if (this.currentUser.tenants.length === 0) {
+          this.$router.push({ path: '/create-workspace'})
+        } else if (this.currentUser.tenants.length > 0) {
+          this.$router.push({ path: '/choose-workspace'})
+        } else {
+          this.$router.push({ paht: '/error'})
+        }
+      }
     }
   },
   created () {
-    const givenToken = this.$route.query.token
-    this.$auth.setToken(givenToken)
-    this.$auth.currentUser(this, true)
-    /* let tenantId = document.location.hostname.replace(".maryoku.com","");
-    new Tenant().find(tenantId).then(res =>{
-      if (!res.status){
-        this.$router.push({name:"CreateWorkspace"});
-      }
-    }); */
-  },
-  watch: {
-    email () {
-      this.touched.email = true
-    },
-    password () {
-      this.touched.password = true
+    if (this.loggedIn) {
+      this.redirectPage()
     }
+    // const givenToken = this.$route.query.token
+    // this.$auth.setToken(givenToken)
+    // this.$auth.currentUser(this, true)
+    // /* let tenantId = document.location.hostname.replace(".maryoku.com","");
+    // new Tenant().find(tenantId).then(res =>{
+    //   if (!res.status){
+    //     this.$router.push({name:"CreateWorkspace"});
+    //   }
+    // }); */
   },
   data () {
     return {
       error: '',
       loading: false,
-      firstname: null,
-      terms: false,
-      email: null,
-      password: null,
+      user: new TenantUser('',''),
+      keepMe: false,
       serverURL: process.env.SERVER_URL,
-      // auth: auth,
-      touched: {
-        email: false,
-        password: false
-      },
       modelValidations: {
         email: {
           required: true,
@@ -137,30 +148,16 @@ export default {
           email: true
         },
       },
-      contentLeft: [
-        {
-          colorIcon: 'icon-success',
-          icon: 'color_lens',
-          title: 'Get Inspired',
-          description: "Why struggle to find good ideas for your company's next event, when you can simply browse through other companies' events, see what worked for them and adjust those ideas to your needs."
-        },
-
-        {
-          colorIcon: 'icon-danger',
-          icon: 'calendar_today',
-          title: 'Plan Ahead',
-          description: 'Making the best of your annual budget is so much easier when you have visibility over all year occasions combined with insights on industry benchmark.'
-        },
-
-        {
-          colorIcon: 'icon-info',
-          icon: 'developer_board',
-          title: 'Work Less',
-          description: 'Stop spending hours on phone calls, emails, quotes and invoices. Locate ranked suppliers and have them work for you.'
-        }
-      ]
     }
-  }
+  },
+  computed: {
+    loggedIn() {
+      return this.$store.state.auth.status.loggedIn;
+    },
+    currentUser() {
+      return this.$store.state.auth.user
+    }
+  },
 }
 </script>
 <style lang="scss" scoped>

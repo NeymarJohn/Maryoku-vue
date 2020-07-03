@@ -199,7 +199,7 @@ import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
 
 export default {
-  name: "event-time-line",
+  name: "event-booking",
   components: {
     VueElementLoading,
     EventBlocks,
@@ -218,6 +218,7 @@ export default {
   props: {},
   data: () => ({
     // auth: auth,
+    calender: null,
     isLoading: true,
     timelineItems: [],
     hoursArray: [],
@@ -268,11 +269,8 @@ export default {
       reader.readAsDataURL(file);
     },
     getSelectedBlock() {
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
-      let event = new CalendarEvent({ id: this.event.id });
-
       new EventComponent()
-        .for(calendar, event)
+        .for(this.calendar, event)
         .get()
         .then(resp => {
           this.selectedBlock = _.findWhere(resp, {
@@ -282,14 +280,13 @@ export default {
     },
     getBlockVendors() {
       if (true) {
-        let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
         let event = new CalendarEvent({ id: this.event.id });
         let selected_block = new EventComponent({
           id: this.blockId
         });
 
         new EventComponentVendor()
-          .for(calendar, event, selected_block)
+          .for(this.calendar, event, selected_block)
           .get()
           .then(resp => {
             this.isLoading = false;
@@ -359,31 +356,24 @@ export default {
     },
     fetchData() {
       this.blockId = this.$route.params.blockId
-      this.$auth.currentUser(
-        this,
-        true,
-        function() {
-          let _calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
-          _calendar
-            .calendarEvents()
-            .find(this.$route.params.id)
-            .then(event => {
-              this.event = event;
-              this.setEventData(event);
-              console.log("this.blockId",this.blockId)
-              this.getCommentComponents(this.blockId);
-              this.getBlockVendors();
-              this.getSelectedBlock();
+      this.calendar
+        .calendarEvents()
+        .find(this.$route.params.id)
+        .then(event => {
+          this.event = event;
+          this.setEventData(event);
+          console.log("this.blockId",this.blockId)
+          this.getCommentComponents(this.blockId);
+          this.getBlockVendors();
+          this.getSelectedBlock();
 
-              // new EventComponent().for(_calendar, event).get().then(components => {
-              //     this.event.components = components
-              //     this.selectedComponents = components
-              // })
+          // new EventComponent().for(_calendar, event).get().then(components => {
+          //     this.event.components = components
+          //     this.selectedComponents = components
+          // })
 
-              console.log(event);
-            });
-        }.bind(this)
-      );
+          console.log(event);
+        });
     },
     setRequirements(vendors) {
       this.selectedBlock.vendors = vendors
@@ -404,14 +394,12 @@ export default {
         ? this.hoursArray.push(`12:00 AM`)
         : this.hoursArray.push(`${x}:00 AM`)
     );
-
     this.hoursArray.push();
-
     console.log("i am created");
   },
   mounted() {
     this.isLoading = true;
-   
+    this.calendar = new Calendar({id: this.$store.state.auth.user.profile.defaultCalendarId})
     this.fetchData()
   },
   watch: {

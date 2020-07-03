@@ -1,11 +1,11 @@
 <template>
   <div class="md-layout">
     <div class="md-layout-item" style="text-align: center;">
-      <!-- <img src="/static/img/maryoku-loader.gif" /> -->
-      <!-- <img src="http://static.maryoku.com/storage/img/calendar-loader-3.gif" class="text-center" style="width: 64px;"/>
+      <img src="/static/img/maryoku-loader.gif" />
+      <img src="http://static.maryoku.com/storage/img/calendar-loader-3.gif" class="text-center" style="width: 64px;"/>
       <h2 class="title text-center" slot="title" style="text-align: center;">
         Hi there, one moment please ...
-      </h2> -->
+      </h2> 
     </div>
   </div>
 </template>
@@ -91,7 +91,7 @@ export default {
                   }); */
 
         let me = that.$auth.user.me
-
+        alert(me.emailAddress)
         if (process.env.NODE_ENV === 'production') {
           try {
             window.heap.identify(that.$auth.user.email)
@@ -107,19 +107,11 @@ export default {
             console.error(e)
           }
         }
-
-        /* if (!me.customer.onboarded) {
-                        that.$router.push({ path: '/company-form' });
-                    } else if (!me.onboarded) {
-                        that.$router.push({ path: '/me-form' });
-                    } else {
-                        that.$router.push({ path: '/' });
-                    } */
-
         const firstEvent = that.$route.query.firstEvent
         if (firstEvent) {
           that.$router.push({ path: `/events/${firstEvent}/booking/concept` })
         } else {
+          // alert("123");
           that.$router.push({ path: '/' })
         }
       })

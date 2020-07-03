@@ -1,4 +1,5 @@
 import { Model as BaseModel } from 'vue-api-query'
+import authHeader from '@/services/auth-header'
 
 export default class Model extends BaseModel {
   Constructor () {

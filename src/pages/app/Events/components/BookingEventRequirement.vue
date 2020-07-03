@@ -251,6 +251,7 @@ export default {
   props: {},
   data: () => ({
     // auth: auth,
+    calendar: null,
     isLoading: true,
     timelineItems: [],
     hoursArray: [],
@@ -293,11 +294,10 @@ export default {
       reader.readAsDataURL(file);
     },
     getSelectedBlock() {
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
       let event = new CalendarEvent({ id: this.event.id });
 
       new EventComponent()
-        .for(calendar, event)
+        .for(this.calendar, event)
         .get()
         .then(resp => {
           this.selectedBlock = _.findWhere(resp, {
@@ -322,14 +322,13 @@ export default {
     },
     getBlockVendors() {
       if (true) {
-        let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
         let event = new CalendarEvent({ id: this.event.id });
         let selected_block = new EventComponent({
           id: this.blockId
         });
 
         new EventComponentVendor()
-          .for(calendar, event, selected_block)
+          .for(this.calendar, event, selected_block)
           .get()
           .then(resp => {
             this.isLoading = false;
@@ -397,12 +396,7 @@ export default {
     },
     fetchData() {
       this.blockId = this.$route.params.blockId
-      this.$auth.currentUser(
-        this,
-        true,
-        function() {
-          let _calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
-          _calendar
+      this.calendar
             .calendarEvents()
             .find(this.$route.params.id)
             .then(event => {
@@ -416,8 +410,6 @@ export default {
               //     this.selectedComponents = components
               // })
             });
-        }.bind(this)
-      );
     },
     findVendors() {
       
@@ -443,7 +435,7 @@ export default {
         ? this.hoursArray.push(`12:00 AM`)
         : this.hoursArray.push(`${x}:00 AM`)
     );
-
+    this.calendar = new Calendar({id: this.$store.state.auth.user.profile.defaultCalendarId})
     this.hoursArray.push();
   },
   mounted() {

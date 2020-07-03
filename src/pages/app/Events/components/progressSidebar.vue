@@ -106,7 +106,8 @@ export default {
     isLoading: true,
     isOpenNote: false,
     eventElements: [],
-    currentUrl:""
+    currentUrl:"",
+    calendar: null
   }),
   computed: {
     ...mapState('event',{
@@ -154,10 +155,9 @@ export default {
       elements.push(budget);
       elements.push(timeline);
 
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
       const vm = this;
       new EventComponent()
-        .for(calendar, event)
+        .for(this.calendar, event)
         .get()
         .then(resp => {
           resp.sort((a,b)=>a.order - b.order)
@@ -186,16 +186,11 @@ export default {
   },
   created () {
     this.fetchUrl()
-    this.$auth.currentUser(
-      this,
-      true,
-      function () {
-        let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
-        this.getEventAction({eventId: this.$route.params.id, calendar}).then(event => {
-            this.generatedItems(event)
-        })
-      }.bind(this)
-    )
+    const currentUser = this.$store.state.auth.user;
+    this.calendar = new Calendar({id: currentUser.profile.defaultCalendarId})
+    this.getEventAction({eventId: this.$route.params.id, calendar: this.calendar}).then(event => {
+        this.generatedItems(event)
+    })
   },
   mounted () {},
   watch: {

@@ -459,6 +459,7 @@ export default {
   },
   data: () => ({
     // auth: auth,
+    calendar: new Calendar(),
     isLoading: true,
     selectedDate: "",
     blocksList: [
@@ -653,14 +654,10 @@ export default {
         .then(result => {
           if (result.value === true) {
             this.setItemLoading(item, true, false);
-
-            let calendar = new Calendar({
-              id: this.$auth.user.defaultCalendarId
-            });
             let event = new CalendarEvent({ id: this.event.id });
 
             let timelineItem = new EventTimelineItem({ id: item.id }).for(
-              calendar,
+              this.calendar,
               event
             );
 
@@ -692,11 +689,9 @@ export default {
       });
     },
     getTimelineItems() {
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
       let event = new CalendarEvent({ id: this.event.id });
-
       new EventTimelineItem()
-        .for(calendar, event)
+        .for(this.calendar, event)
         .get()
         .then(res => {
           this.timelineItems = _.sortBy(res, function(item) {
@@ -775,7 +770,6 @@ export default {
         return;
       }
 
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
       let event = new CalendarEvent({ id: this.event.id });
       let order = ++index;
 
@@ -803,7 +797,7 @@ export default {
           newTimeline.attachments = newTimeline.attachments.concat(results);
           newTimeline.attachmentName = "";
           new EventTimelineItem(newTimeline)
-            .for(calendar, event)
+            .for(this.calendar, event)
             .save()
             .then(res => {
               this.getTimelineItems();
@@ -856,11 +850,10 @@ export default {
         return;
       }
 
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
       let event = new CalendarEvent({ id: this.event.id });
 
       let timelineItem = new EventTimelineItem({ id: item.id }).for(
-        calendar,
+        this.calendar,
         event
       );
 
@@ -936,7 +929,6 @@ export default {
     },
     updateTimelineITemsOrder() {
       this.isLoading = true;
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
       let event = new CalendarEvent({ id: this.event.id });
 
       let new_order = 1;
@@ -950,7 +942,7 @@ export default {
       let timelineItem = new EventTimelineItem({
         id: "updateMultiple",
         timelineItems: timelineItemsForUpdate
-      }).for(calendar, event);
+      }).for(this.calendar, event);
 
       timelineItem.order = new_order;
 
@@ -1196,37 +1188,36 @@ export default {
         ? this.hoursArray.push(`12:00 AM`)
         : this.hoursArray.push(`${x}:00 AM`)
     );
+    this.calendar = new Calendar({id: this.currentUser.profile.defaultCalendarId})
 
     this.hoursArray.push();
 
-    this.$auth.currentUser(
-      this,
-      true,
-      function() {
-        let _calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
-        _calendar
-          .calendarEvents()
-          .find(this.$route.params.id)
-          .then(event => {
-            this.event = event;
-            this.setEventData(event);
-            this.timeline[0].date = this.formatDate(
-              this.event.eventStartMillis
-            );
-            this.timeline[0].itemDay = this.event.eventStartMillis;
-
-            this.getTimelineItems();
-
-            new EventComponent()
-              .for(_calendar, event)
-              .get()
-              .then(components => {
-                this.event.components = components;
-                this.selectedComponents = components;
-              });
+    this.calendar
+      .calendarEvents()
+      .find(this.$route.params.id)
+      .then(event => {
+        this.event = event;
+        this.setEventData(event);
+        this.timeline[0].date = this.formatDate(
+          this.event.eventStartMillis
+        );
+        this.timeline[0].itemDay = this.event.eventStartMillis;
+        this.getTimelineItems();
+        new EventComponent()
+          .for(this.calendar, event)
+          .get()
+          .then(components => {
+            this.event.components = components;
+            this.selectedComponents = components;
           });
-      }.bind(this)
-    );
+      });
+    // this.$auth.currentUser(
+    //   this,
+    //   true,
+    //   function() {
+        
+    //   }.bind(this)
+    // );
 
     // this.dateFormat="DD/MM/YYYY"
   },
@@ -1242,6 +1233,9 @@ export default {
     // }
   },
   computed: {
+    currentUser() {
+      return this.$store.state.auth.user
+    },
     dateFormat: {
       get() {
         return this.$material.locale.dateFormat;

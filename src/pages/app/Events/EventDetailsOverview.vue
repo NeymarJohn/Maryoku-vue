@@ -660,6 +660,7 @@ export default {
   },
   data: () => ({
     // auth: auth,
+    calendar: null,
     event: null,
     editEvent: null,
     eventId: null,
@@ -879,8 +880,9 @@ export default {
     }
   },
   created() {
+    this.calendar = new Calendar({ id: this.$store.state.auth.user.profile.defaultCalendarId})
     this.$store.dispatch("event/getEventTypes", {
-      data: this.$auth.user.defaultCalendarId,
+      data: this.$store.state.auth.user.profile.defaultCalendarId,
       ctx: this
     });
 
@@ -897,40 +899,30 @@ export default {
         ? this.hoursArray.push(`12:00 AM`)
         : this.hoursArray.push(`${x}:00 AM`)
     );
-
     this.hoursArray.push();
-
-    this.$auth.currentUser(
-      this,
-      true,
-      function() {
-        let _calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
-
-        _calendar
-          .calendarEvents()
-          .find(this.$route.params.id)
-          .then(event => {
-            this.event = event;
-            if (event.concept) {
-              if (event.concept.images && event.concept.images.length > 0) {
-                this.logger = "http://static.maryoku.com/" + this.event.concept.images[0].url
-              }
-              if (event.concept.name) {
-                this.conceptName = event.concept.name
-              }
-            }
-            this.getCalendarEventStatistics(event);
-            this.getTimelineItems();
-            new EventComponent()
-              .for(_calendar, event)
-              .get()
-              .then(components => {
-                this.event.components = components;
-                this.selectedComponents = components;
-              });
+    this.calendar
+      .calendarEvents()
+      .find(this.$route.params.id)
+      .then(event => {
+        this.event = event;
+        if (event.concept) {
+          if (event.concept.images && event.concept.images.length > 0) {
+            this.logger = "http://static.maryoku.com/" + this.event.concept.images[0].url
+          }
+          if (event.concept.name) {
+            this.conceptName = event.concept.name
+          }
+        }
+        this.getCalendarEventStatistics(event);
+        this.getTimelineItems();
+        new EventComponent()
+          .for(_calendar, event)
+          .get()
+          .then(components => {
+            this.event.components = components;
+            this.selectedComponents = components;
           });
-      }.bind(this)
-    );
+      });
   },
   mounted() {
     this.isLoading = true;

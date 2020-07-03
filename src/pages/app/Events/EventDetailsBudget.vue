@@ -286,7 +286,6 @@ export default {
   },
   mounted () {
     this.isLoading = true
-
     this.getEvent()
     const tab = this.$route.query.t || 0
     if (this.$refs.eventPlannerTabs) {
@@ -296,11 +295,11 @@ export default {
     if (this.components.length === 0) {
       this.$store.dispatch('event/getComponents', this)
       this.$store.dispatch('event/getCategories', {
-        data: this.$auth.user.defaultCalendarId,
+        data: this.currentUser.profile.defaultCalendarId,
         ctx: this
       })
       this.$store.dispatch('event/getEventTypes', {
-        data: this.$auth.user.defaultCalendarId,
+        data: this.currentUser.profile.defaultCalendarId,
         ctx: this
       })
       this.$store.dispatch('event/getCurrencies', this)
@@ -321,31 +320,25 @@ export default {
       'setEventData'
     ]),
     getEvent () {
-      this.$auth.currentUser(this, true, function () {
-        let _calendar = new Calendar({
-          id: this.$auth.user.defaultCalendarId
-        })
-
-        _calendar.calendarEvents().find(this.$route.params.id).then(event => {
-          this.event = event
-          this.eventId = event.id
-          this.calendarEvent = event
-          if (event.totalBudget)
-            this.newBudget = (event.totalBudget + "").replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      let _calendar = new Calendar({ id: this.currentUser.profile.defaultCalendarId })
+      _calendar.calendarEvents().find(this.$route.params.id).then(event => {
+        this.event = event
+        this.eventId = event.id
+        this.calendarEvent = event
+        if (event.totalBudget)
+          this.newBudget = (event.totalBudget + "").replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           new EventComponent().for(_calendar, event).get().then(components => {
             components.sort((a,b)=>a.order - b.order)
-            
             console.log(components);
             this.event.components = components
             this.selectedComponents = components
             this.seriesData = components
           })
-          this.getCalendarEventStatistics(event)
+        this.getCalendarEventStatistics(event)
 
-          this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement' || this.routeName === 'EventInvitees')
-          this.isLoading = false
-        })
-      }.bind(this))
+        this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement' || this.routeName === 'EventInvitees')
+        this.isLoading = false
+      })
     },
     selectServices () {
       this.$refs.eventPlannerTabs.$emit('event-planner-nav-switch-panel', 1)
@@ -389,7 +382,7 @@ export default {
     },
     getCalendarEventStatistics (evt) {
       let calendar = new Calendar({
-        id: this.$auth.user.defaultCalendarId
+        id: this.currentUser.profile.defaultCalendarId
       })
       let event = new CalendarEvent({
         id: this.event.id
@@ -419,7 +412,7 @@ export default {
       this.$refs.uploadModal.toggleModal(true)
     },
     updateBudget () {
-      let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+      let _calendar = new Calendar({id: this.currentUser.profile.defaultCalendarId})
       let editedEvent = new CalendarEvent({id: this.event.id}).for(_calendar)
       const newBudget = Number(this.newBudget.replace(/,/g, ""))
       if (newBudget < this.calendarEvent.totalBudget) {
@@ -487,7 +480,8 @@ export default {
       'editMode'
     ]),
     ...mapGetters({
-      components: 'event/getComponentsList'
+      components: 'event/getComponentsList',
+      currentUser: 'auth/currentUser'
     }),
     pieChart () {
       return {
