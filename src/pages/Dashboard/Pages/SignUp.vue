@@ -27,9 +27,9 @@
             <h4 class="mt-1">Or</h4>
           </div>
           <maryoku-input class="form-input" inputStyle="username" v-model="name" placeholder="Type your name here..."></maryoku-input>
-          <maryoku-input class="form-input" v-validate="modelValidations.email"  inputStyle="email" v-model="email" placeholder="Type email address here..."></maryoku-input>
+          <maryoku-input class="form-input" data-vv-name="email" v-validate="modelValidations.email"  inputStyle="email" v-model="email" placeholder="Type email address here..."></maryoku-input>
           <maryoku-input class="form-input" inputStyle="company" v-model="company" placeholder="Type name of company here..."></maryoku-input>
-          <maryoku-input class="form-input" v-validate="modelValidations.password" type="password" inputStyle="password" v-model="password" placeholder="Type password here..."></maryoku-input>
+          <maryoku-input class="form-input" data-vv-name="password" v-validate="modelValidations.password" type="password" inputStyle="password" v-model="password" placeholder="Type password here..."></maryoku-input>
           <div class="terms-and-conditions">
             <md-checkbox v-model="terms">
             </md-checkbox>
@@ -69,13 +69,16 @@ export default {
   },
   methods: {
     authenticate (provider) {
-      this.loading = true
+      // this.loading = true
       let tenantId = document.location.hostname.replace('.maryoku.com', '').replace('.', '_')
+      alert(tenantId)
       const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`)
-      document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`
+      console.log(`${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`)
+      // document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`
     },
     signup () {
       this.$validator.validateAll().then(isValid => {
+        
         if (isValid) {
           if (!this.terms) {
             this.error = "Please confirm terms and conditions"
@@ -92,6 +95,7 @@ export default {
           this.$auth.signupOrSignin(this, userData,  
             (data) => {
               if (data.status == "exists" ) {
+                this.loading = false;
                 this.error = "This email already registered. Please sign in or use another email."
               } else {
                 this.$auth.login(this, {email: this.email, password: this.password}, 
@@ -131,7 +135,8 @@ export default {
               }
             })
         } else {
-          this.error = 'Please check all values and try again.'
+          console.log(this.$validator.errors)
+          this.error = this.$validator.errors.items[0].msg
         }
       })
     },
