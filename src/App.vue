@@ -26,11 +26,11 @@ export default {
     }
     window.focusEventListener = window.addEventListener('focus', function () {
       const now = new Date()
-      if (now.getTime() - before.getTime() >= 300000) {
-        that.$auth.currentUser(that, true)
-      } else {
-        before = new Date()
-      }
+      // if (now.getTime() - before.getTime() >= 300000) {
+      //   that.$auth.currentUser(that, true)
+      // } else {
+      //   before = new Date()
+      // }
     })
 
     let initialMessage = document.getElementById('initial-message')

@@ -28,11 +28,6 @@ export default {
   },
   created () {
     const that = this
-    /* setTimeout(() => {
-      const givenToken = that.$route.query.token;
-      that.$auth.setToken(givenToken);
-      that.$auth.currentUser(that, true);
-    },2500) */
   },
   data () {
     return {

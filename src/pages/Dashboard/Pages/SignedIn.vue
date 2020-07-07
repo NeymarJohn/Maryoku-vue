@@ -33,7 +33,6 @@ export default {
     let isPrimeTenant = tenantId === 'dev' || tenantId === 'app' || tenantId === 'preprod'
     if (isPrimeTenant) {
       this.$cookies.set('at', givenToken, '1m', '', 'maryoku.com', true)
-
       new TenantUser().find(givenToken).then(res => {
         if (res.status) {
           if (res.tenantIds.length === 1) {
@@ -65,56 +64,44 @@ export default {
 
       that.$http.defaults.headers.common['gorm-tenantid'] = tenantId
       that.$http.defaults.headers.common.gorm_tenantid = tenantId
-      // Model.$http.defaults.headers.common['gorm-tenantid'] = tenantId;
-      // Model.$http.defaults.headers.common.gorm_tenantid = tenantId;
-
-      that.$auth.currentUser(that, true, function () {
-        that.$gtm.trackEvent({
-          event: 'user_signed_in', // Event type [default = 'interaction'] (Optional)
-          category: 'Users',
-          action: 'signin',
-          label: 'User Signed In',
-          value: that.$auth.user.emailAddress,
-          noninteraction: false // Optional
-        })
-
-        /* const socket = new SockJS(`${process.env.SERVER_URL}/stomp`);
-                  const client = Stomp.over(socket);
-
-                  client.connect({}, () => {
-                    client.subscribe(`/topic/${that.$auth.user.id}`, () => {
-                      alert('Your session timed out.');
-                      that.$auth.logout(that);
-                    });
-                  }, (error) => {
-                    console.error('unable to connect : ' + error);
-                  }); */
-
-        let me = that.$auth.user.me
-        alert(me.emailAddress)
-        if (process.env.NODE_ENV === 'production') {
-          try {
-            window.heap.identify(that.$auth.user.email)
-          } catch (e) {
-            console.error(e)
+      
+      this.$store.dispatch('auth/checkToken').then(
+        () => {
+          that.$gtm.trackEvent({
+            event: 'user_signed_in', // Event type [default = 'interaction'] (Optional)
+            category: 'Users',
+            action: 'signin',
+            label: 'User Signed In',
+            value: that.$auth.user.emailAddress,
+            noninteraction: false // Optional
+          })
+          if (process.env.NODE_ENV === 'production') {
+            try {
+              window.heap.identify(that.$auth.user.email)
+            } catch (e) {
+              console.error(e)
+            }
+            try {
+              that.$Tawk.$updateChatUser({
+                name: that.$store.state.auth.user.displayName,
+                email: that.$store.state.auth.user.email
+              })
+            } catch (e) {
+              console.error(e)
+            }
           }
-          try {
-            that.$Tawk.$updateChatUser({
-              name: that.$auth.user.displayName,
-              email: that.$auth.user.email
-            })
-          } catch (e) {
-            console.error(e)
+          const firstEvent = that.$route.query.firstEvent
+          if (firstEvent) {
+            that.$router.push({ path: `/events/${firstEvent}/booking/concept` })
+          } else {
+            that.$router.push({ path: '/' })
           }
+        },
+        error => {
+          this.loading = false;
+          this.error = "Invalid email or wrong password, try again."
         }
-        const firstEvent = that.$route.query.firstEvent
-        if (firstEvent) {
-          that.$router.push({ path: `/events/${firstEvent}/booking/concept` })
-        } else {
-          // alert("123");
-          that.$router.push({ path: '/' })
-        }
-      })
+      );
     }
   },
   data () {

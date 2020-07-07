@@ -320,6 +320,7 @@ export default {
       'setEventData'
     ]),
     getEvent () {
+      console.log("current User --- ", this.currentUser)
       let _calendar = new Calendar({ id: this.currentUser.profile.defaultCalendarId })
       _calendar.calendarEvents().find(this.$route.params.id).then(event => {
         this.event = event

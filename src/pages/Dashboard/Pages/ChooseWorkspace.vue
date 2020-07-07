@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout" style="text-align: center;">
-    <h2 class="title text-center" style="text-align: center;width: 100%;">Hi, choose your workspace</h2>
+    <h2 class="title text-center" style="text-align: center;width: 100%; color:#050505">Hi, choose your workspace</h2>
     <div class="md-layout-item md-size-50 mx-auto">
       <signup-card>
         <div class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 mr-auto " slot="content-right" style="padding: 24px;">
@@ -8,7 +8,7 @@
           <div>&nbsp;</div>
           <md-list>
             <md-list-item v-for="tenant in tenantIds" :key="tenant">
-              <md-list-item><a :href="tenantUrl(tenant)">{{tenant}}</a></md-list-item>
+              <md-list-item><a class="tenant_link" :href="tenantUrl(tenant)">{{tenant}}</a></md-list-item>
             </md-list-item>
           </md-list>
         </div>
@@ -19,7 +19,6 @@
 </template>
 <script>
 import { SignupCard } from '@/components'
-// import auth from '@/auth';
 import VueElementLoading from 'vue-element-loading'
 import Tenant from '@/models/Tenant'
 import TenantUser from '@/models/TenantUser'
@@ -103,12 +102,7 @@ export default {
       }
     },
     tenantUrl (tenant) {
-      // ${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=
-      let hostname = document.location.hostname
-      if (hostname.startsWith('app.maryoku.com')) {
-        hostname = 'maryoku.com'
-      }
-      return `${document.location.protocol}//${tenant}.${hostname}:${document.location.port}/#/signedin?token=${this.$auth.getToken()}`
+      return `${this.$authService.getAppUrl(tenant)}/#/signedin?token=${this.$auth.getToken()}`
     }
   },
   created () {
@@ -124,14 +118,31 @@ export default {
   },
   mounted () {
     this.loading = true
-    new TenantUser().find(this.$auth.getToken()).then(res => {
-      if (res.status) {
-        this.tenantIds = res.tenantIds
-      } else {
-        that.$router.push({name: 'CreateWorkspace'})
-      }
-      this.loading = false
-    })
+    if (!this.$store.state.auth.status.loggedIn) {
+      this.$router.push({name: 'SignIn'})
+    }
+    this.tenantIds = this.$store.state.auth.user.tenants
+    this.loading = false
+    // new TenantUser().find(this.$store.state.auth.user.access_token)
+    // .then(res => {
+    //   console.log("response", res)
+    //   if (res.tenantIds) {
+    //     this.tenantIds = res.tenantIds
+    //   } else {
+    //     this.$router.push({name: 'CreateWorkspace'})
+    //   }
+    //   this.loading = false
+    // })
+    // .catch(error=>{
+    //   // this.$store.dispatch('auth/logout', this.user).then(
+    //   //   () => {
+    //   //     this.$router.push({name: 'SignIn'})
+    //   //   },
+    //   //   error => {
+    //   //     this.$router.push({name: 'SignIn'})
+    //   //   }
+    //   // );
+    // })
   },
   watch: {
     email () {
@@ -203,5 +214,9 @@ export default {
 
   .extra-margin {
     margin-bottom: 64px !important;
+  }
+  .tenant_link {
+    font-family: "Manrope-ExtraBold";
+    font-size: 20px;
   }
 </style>

@@ -115,24 +115,15 @@ export default {
     this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
   },
   mounted() {
-    const calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
-    // console.log("calender", calendar)
+    if (!this.$store.state.auth.status.loggedIn) {
+      this.$router.push({ path: `/signin`})
+      return
+    } else if (!this.$store.state.auth.user.profile.defaultCalendarId) {
+      this.$store.dispatch('auth/login', this.$store.state.auth.user)
+    }
+    const calendar = new Calendar({ id: this.$store.state.auth.user.profile.defaultCalendarId });
     const eventId = this.$route.params.id
     this.getEventAction({eventId, calendar});
-    /*  NEET CODE REVIEW !!!!!!!!!!!!!!!!!!!! */
-    // this.$auth.currentUser(this, true, function(){
-    //   let docClasses = document.body.classList;
-    //   let isWindows = navigator.platform.startsWith("Win");
-    //   if (isWindows) {
-    //     // if we are on windows OS we activate the perfectScrollbar function
-    //     initScrollbar("sidebar");
-    //     initScrollbar("sidebar-wrapper");
-    //     initScrollbar("main-panel");
-    //     docClasses.add("perfect-scrollbar-on");
-    //   } else {
-    //     docClasses.add("perfect-scrollbar-off");
-    //   }
-    // });
   },
   computed: {
     ...mapState('event', [

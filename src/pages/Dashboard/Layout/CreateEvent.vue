@@ -43,46 +43,36 @@
         <img src="/static/img/maryoku-loader.gif" />
       </vue-element-loading>
       <md-dialog-title class="text-center">
-        Sign up
+        Sign in
         <button class="close-btn" @click="closeSingupModal">
           <md-icon>close</md-icon>
         </button>
       </md-dialog-title>
       <md-dialog-content>
-        <md-field class="purple-field">
+        <!-- <md-field class="purple-field">
           <label>Name of the company</label>
           <md-input type="text" v-model="department"></md-input>
-        </md-field>
-        <md-field
-          class="purple-field"
-          :class="[{'md-valid': !errors.has('email') && touched.email},{'md-error': errors.has('email')}]"
-        >
-          <label>Email address</label>
-          <md-input
-            type="email"
-            v-model="email"
-            data-vv-name="email"
-            required
-            v-validate="modelValidations.email"
-          ></md-input>
-        </md-field>
-        <md-field
-          class="purple-field"
-          :class="[{'md-valid': !errors.has('password') && touched.password},{'md-error': errors.has('password')}]"
-        >
-          <label>Password</label>
-          <md-input
-            type="password"
-            v-model="password"
-            data-vv-name="password"
-            required
-            v-validate="modelValidations.password"
-          ></md-input>
-        </md-field>
-        <div class="text-center">
-          <a href class="forget-password">Forgot your password ?</a>
+        </md-field> -->
+        <div class="social-line text-center">
+          <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
+            <img :src="`${$iconURL}Signup/google-icon.jpg`">
+            <span>Sign in with Google</span>
+          </md-button>
+          <div>Or</div>
         </div>
-        <md-button class="md-rose md-sm md-square custom-btn" @click="singup">Sign Up</md-button>
+        <maryoku-input class="form-input" data-vv-name="email" v-validate="modelValidations.email"  inputStyle="email" v-model="email" placeholder="Type email address here..."></maryoku-input>
+        <maryoku-input class="form-input" data-vv-name="password" v-validate="modelValidations.password" type="password" inputStyle="password" v-model="password" placeholder="Type password here..."></maryoku-input>
+        <div class="terms-and-conditions">
+          <md-checkbox v-model="keepMe">
+            Keep me signed in
+          </md-checkbox>
+        </div>
+       
+        <md-button class="md-default md-red md-maryoku md-sm md-square custom-btn" @click="singup">Sign In</md-button>
+        <div class="text-center">
+          <!-- <a href class="forget-password">Forgot your password ?</a> -->
+          <md-button  class="md-black md-maryoku mt-4  md-simple mt-4" >Forgot my password?</md-button>
+        </div>
      </md-dialog-content>
     </md-dialog>
   </div>
@@ -90,6 +80,7 @@
 <script>
 import { FadeTransition } from "vue2-transitions";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { MaryokuInput} from '@/components'
 
 export default {
   data() {
@@ -117,11 +108,13 @@ export default {
           required: true
         }
       },
-      serverURL: process.env.SERVER_URL
+      serverURL: process.env.SERVER_URL,
+      keepMe:false
     };
   },
   components: {
-    FadeTransition
+    FadeTransition,
+    MaryokuInput,
   },
   created() {
     // this.$store.registerModule('PublicEventPlanner', PublicEventPlannerVuexModule)
@@ -226,7 +219,7 @@ $baseColor: #5c2153;
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700|Rubik:400,500,700&display=swap");
 
 .md-overlay {
-  z-index: 9 !important;
+  z-index: 21 !important;
 }
 .container {
   display: block !important;
@@ -261,7 +254,7 @@ $baseColor: #5c2153;
 }
 
 .md-dialog.singin-form {
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 2em 40px;
   width: 428px;
   z-index: 9999999;
@@ -279,6 +272,14 @@ $baseColor: #5c2153;
       position: absolute;
       right: 0;
     }
+  }
+  .social-line {
+    img {
+      margin-right: 10px;
+    }
+  }
+  .form-input {
+    margin: 20px 0;
   }
 
   .md-dialog-content {
@@ -914,7 +915,7 @@ $baseColor: #5c2153;
 .md-button.custom-btn {
   width: 256px;
   height: 56px;
-  border-radius: 12px;
+  border-radius: 6px;
   min-width: 256px;
 
   .md-ripple {
@@ -922,17 +923,6 @@ $baseColor: #5c2153;
     text-transform: initial;
     font-weight: bold;
   }
-
-  &.md-rose {
-    background-color: #ff0066 !important;
-    box-shadow: 0px 12px 24px #ff006633;
-
-    &:hover {
-      margin-top: 5px;
-      background-color: #de0e43 !important;
-    }
-  }
-
   &.md-default {
     margin-right: 1em;
   }

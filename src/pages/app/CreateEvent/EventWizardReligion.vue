@@ -13,7 +13,7 @@
               <div class="text-center mt-2 select-wrapper">
                 <multiselect
                   v-model="religion"
-                  :options="countries"
+                  :options="religions"
                   :close-on-select="true"
                   :clear-on-select="true"
                   tag-placeholder="Add this as new tag"
@@ -21,7 +21,7 @@
                 ></multiselect>
               </div>
               <div class="mt-3 holiday-types">
-                <div class="text-left type" @click="type.selected=!type.selected" :class="{selected:type.selected}" v-for="(type) in types" :key="type.value">
+                <div class="text-left type" @click="type.selected=!type.selected" :class="{selected:type.selected}" v-for="(type) in holidays" :key="type.value">
                     <md-checkbox class="md-checkbox-circle md-red" v-model="type.selected"><span :class="{selected: type.selected}">{{type.name}}</span></md-checkbox>
                 </div>
               </div>
@@ -109,26 +109,49 @@ export default {
   },
   data () {
     return {
-      religion: "",
       types: [
-        { value: "all", name: "All Islamic holidays", selected:false },
-        { value: "Eid-al-Fitr", name: "Eid-al-Fitr (End of Ramadan)", selected:false },
-        { value: "Ramadan", name: "Ramadan (start)", selected:false },
-        { value: "Eid", name: "Eid Al-Adha", selected:false },
-        { value: "Waqf", name: "Waqf al Arafa - Hajj", selected:false },
-        { value: "Laylat", name: "Laylat al Qadr", selected:false },
-        { value: "Hijra", name: "Hijra - Islamic New Year", selected:false },
-        { value: "Milad", name: "Milad un Nabi", selected:false },
-        { value: "Lailat", name: "Lailat al Miraj", selected:false },
-        { value: "Ashura", name: "Day of Ashura / Muharram", selected:false },
-        { value: "Nabi", name: "Milad un Nabi (Shia)", selected:false }
+        { value: "all", name: "All Islamic holidays", selected:false, religion:'islam' },
+        { value: "Eid-al-Fitr", name: "Eid-al-Fitr (End of Ramadan)", selected:false, religion:'islam' },
+        { value: "Ramadan", name: "Ramadan (start)", selected:false, religion:'islam' },
+        { value: "Eid", name: "Eid Al-Adha", selected:false, religion:'islam' },
+        { value: "Waqf", name: "Waqf al Arafa - Hajj", selected:false, religion:'islam' },
+        { value: "Laylat", name: "Laylat al Qadr", selected:false, religion:'islam' },
+        { value: "Hijra", name: "Hijra - Islamic New Year", selected:false, religion:'islam' },
+        { value: "Milad", name: "Milad un Nabi", selected:false, religion:'islam' },
+        { value: "Lailat", name: "Lailat al Miraj", selected:false, religion:'islam' },
+        { value: "Ashura", name: "Day of Ashura / Muharram", selected:false, religion:'islam' },
+        { value: "Nabi", name: "Milad un Nabi (Shia)", selected:false, religion:'islam' },
+        
+        { value: "rosh-hashana", name: "Rosh Hashana", selected:false, religion: 'judaism' },
+        { value: "sukkot", name: "Sukkot", selected:false, religion: 'judaism' },
+        { value: "simchat-torah", name: "Simchart Torah", selected:false, religion: 'judaism' },
+        { value: "chanukah", name: "Chanukah", selected:false, religion: 'judaism' },
+        { value: "purim", name: "Purim", selected:false, religion: 'judaism' },
+        { value: "pesach", name: "Pesach", selected:false, religion: 'judaism' },
+        { value: "shavout", name: "Judaism", selected:false, religion: 'judaism' },
+
+        { value: "good-friday", name: "Good Friday", selected:false, religion: 'christianity' },
+        { value: "easter", name: "Easter", selected:false, religion: 'christianity' },
+        { value: "christmass", name: "Christmass", selected:false, religion: 'christianity' },
+        { value: "tThanksgiving", name: "Thanksgiving", selected:false, religion: 'christianity' },
+        { value: "new-year", name: "New Year", selected:false, religion: 'christianity' },
+
+        { value: "diwali", name: "Diwali - Festival of light", selected:false, religion: 'hindu' },
+        { value: "sussera", name: "Dussera", selected:false, religion: 'hindu' },
+        { value: "ganesha", name: "Ganesha Chaturthi", selected:false, religion: 'hindu' },
+        { value: "holi", name: "Holi", selected:false, religion: 'hindu' },
+        { value: "krishna", name: "Krishna Jenmashtami", selected:false, religion: 'hindu' },
+        { value: "maha", name: "Maha Shivaratri", selected:false, religion: 'hindu' },
+        { value: "raksha", name: "Raksha Bandhan", selected:false, religion: 'hindu' },
+        { value: "navratri", name: "Navratri", selected:false, religion: 'hindu' },
       ],
-      countries: [
+      religions: [
         'Christianity',
         'Islam',
-        'Hinduism',
-        'Buddhism',
-        'Other'
+        'Hindu',
+        'Judaism'
+        // 'Buddhism',
+        // 'Other'
       ],
       religion: ""
     }
@@ -136,7 +159,11 @@ export default {
   computed: {
     ...mapState('PublicEventPlanner', [
       'publicEventData'
-    ])
+    ]),
+    holidays() {
+      if (!this.religion)  return []
+      return this.types.filter(item=>item.religion === this.religion.toLowerCase())
+    }
   }
 
 }

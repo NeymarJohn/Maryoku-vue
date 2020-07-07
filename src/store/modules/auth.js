@@ -36,6 +36,18 @@ export default {
           return Promise.reject(error);
         }
       );
+    },
+    checkToken({ commit }) {
+      return AuthService.checkToken().then(
+        user => {
+          commit('loginSuccess', user);
+          return Promise.resolve(user);
+        },
+        error => {
+          commit('validateFailure');
+          return Promise.reject(error);
+        }
+      );
     }
   },
   mutations: {

@@ -149,12 +149,13 @@ export default {
     text-align: left;
     margin: auto;
     display: flex;
+    justify-content: center;
     .music-title {
       font-family: "Manrope-Bold";
       margin-top: -10px;
       margin-bottom: 5px;
       margin-left: 10px;
-      max-width: 150px;
+      max-width: 130px;
     }
     .music-singer {
       font-size: 14px;

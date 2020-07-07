@@ -7,6 +7,7 @@ module.exports = merge(devEnv, {
     NODE_ENV: '"testing"',
     SERVER_URL: '"https://api-dev.maryoku.com"',
     //SERVER_URL: '"https://api-dev.maryoku.com"',
+    HOST_URL:'"dev.maryoku.com"',
     GOOGLE_API_KEY: '"AIzaSyD6JvMsiEN9jz3lfVbKlnUQhjZB6fgcCu8"',
 
     plugins: [

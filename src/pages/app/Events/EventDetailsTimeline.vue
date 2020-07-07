@@ -815,7 +815,7 @@ export default {
         });
       } else {
         new EventTimelineItem(newTimeline)
-          .for(calendar, event)
+          .for(this.calendar, event)
           .save()
           .then(res => {
             this.getTimelineItems();

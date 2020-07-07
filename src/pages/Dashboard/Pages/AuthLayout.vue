@@ -154,6 +154,20 @@ export default {
     this.onResponsiveInverted()
     window.addEventListener('resize', this.onResponsiveInverted)
   },
+  beforeMount(){
+    console.log(this.$store.state.auth.status.loggedIn) 
+    if (this.$store.state.auth.status.loggedIn) {
+      this.$store.dispatch("auth/checkToken")
+        .then(res=>{
+
+        })
+        .catch(error=>{
+          this.$store.dispatch("auth/logout").then(res=>{
+            this.$router.push({path: '/signin'})
+          })
+        })
+    }
+  },
   beforeDestroy () {
     this.closeMenu()
     window.removeEventListener('resize', this.onResponsiveInverted)

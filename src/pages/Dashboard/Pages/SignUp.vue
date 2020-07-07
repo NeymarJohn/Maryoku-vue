@@ -10,7 +10,7 @@
               <div class="image">
                 <img :src="`${$iconURL}Signup/champain-red.svg`">
               </div>
-              <div class="signup-title">TIME TO PUT YOURSELF <br/>A DRINK & RELAX!</div>
+              <div class="signup-title">TIME TO POUR YOURSELF <br/>A DRINK & RELAX!</div>
               <div class="signup-description">You can start thinkg about what you'll wear to <br/>the event, cause everything else is covered.</div>
             </div>
             <div class="logo">
@@ -26,10 +26,10 @@
             </md-button>
             <h4 class="mt-1">Or</h4>
           </div>
-          <maryoku-input class="form-input" inputStyle="username" v-model="name" placeholder="Type your name here..."></maryoku-input>
-          <maryoku-input class="form-input" data-vv-name="email" v-validate="modelValidations.email"  inputStyle="email" v-model="email" placeholder="Type email address here..."></maryoku-input>
-          <maryoku-input class="form-input" inputStyle="company" v-model="company" placeholder="Type name of company here..."></maryoku-input>
-          <maryoku-input class="form-input" data-vv-name="password" v-validate="modelValidations.password" type="password" inputStyle="password" v-model="password" placeholder="Type password here..."></maryoku-input>
+          <maryoku-input class="form-input" inputStyle="username" v-model="user.name" placeholder="Type your name here..."></maryoku-input>
+          <maryoku-input class="form-input" data-vv-name="email" v-model="user.email" v-validate="modelValidations.email"  inputStyle="email" placeholder="Type email address here..."></maryoku-input>
+          <maryoku-input class="form-input" inputStyle="company" v-model="user.company" placeholder="Type name of company here..."></maryoku-input>
+          <maryoku-input class="form-input" data-vv-name="password" v-model="user.password" v-validate="modelValidations.password" type="password" inputStyle="password"  placeholder="Type password here..."></maryoku-input>
           <div class="terms-and-conditions">
             <md-checkbox v-model="terms">
             </md-checkbox>
@@ -58,6 +58,7 @@ import InputText from '@/components/Inputs/InputText.vue'
 // import auth from '@/auth';
 import VueElementLoading from 'vue-element-loading'
 import Tenant from '@/models/Tenant'
+import TenantUser from '@/models/TenantUser'
 
 export default {
   components: {
@@ -69,71 +70,85 @@ export default {
   },
   methods: {
     authenticate (provider) {
-      // this.loading = true
       let tenantId = document.location.hostname.replace('.maryoku.com', '').replace('.', '_')
-      alert(tenantId)
       const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`)
       console.log(`${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`)
-      // document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`
     },
     signup () {
       this.$validator.validateAll().then(isValid => {
-        
         if (isValid) {
           if (!this.terms) {
             this.error = "Please confirm terms and conditions"
             return;
           }
           this.isLoading = true
-          const userData = {
-            email: this.email,
-            name: this.name,
-            password: this.password,
-            role: 'administrator',
-            company: this.company
-          }
-          this.$auth.signupOrSignin(this, userData,  
-            (data) => {
-              if (data.status == "exists" ) {
-                this.loading = false;
-                this.error = "This email already registered. Please sign in or use another email."
-              } else {
-                this.$auth.login(this, {email: this.email, password: this.password}, 
-                (success) => {
-                  console.log("singup", data);
-                  this.isLoading = false
-                  if (data.status === "create-workspace") {
+          this.user.role = 'administrator'
+          this.$store.dispatch('auth/register', this.user).then(
+            (res) => {
+              if ( res.status !== 'exists' ) {
+                this.$store.dispatch('auth/login', this.user).then(
+                  () => {
                     this.$router.push({ path: '/create-workspace' })
+                  },
+                  error => {
+                    this.loading = false;
+                    this.error = "Invalid email or wrong password, try again."
                   }
-                  
-                }, 
-                (failure) => {
-                  this.isLoading = false
-                  if (failure.response.status === 401) {
-                    this.error = 'Sorry, wrong password, try again.'
-                  } else  if (failure.response.status === 400) {
-                    this.error = 'Please fill all values'
-                    console.log(JSON.stringify(failure.response))
-                  } else  if (failure.response.status === 500) {
-                    this.error = 'Temporary failure, try again later'
-                    console.log(JSON.stringify(failure.response))
-                  }
-                })
+                );
+              } else {
+                this.error = `This ${res.field} is already regitered.`
               }
-
             },
-            (failure) => {
-              this.isLoading = false
-              if (failure.response.status === 401) {
-                this.error = 'Sorry, wrong password, try again.'
-              } else  if (failure.response.status === 400) {
-                this.error = 'Please fill all values'
-                console.log(JSON.stringify(failure.response))
-              } else  if (failure.response.status === 500) {
-                this.error = 'Temporary failure, try again later'
-                console.log(JSON.stringify(failure.response))
-              }
-            })
+            error => {
+              this.loading = false;
+              this.error = "Sign up is failed"
+            }
+          );
+          // this.$auth.signupOrSignin(this, userData,  
+          //   (data) => {
+          //     if (data.status == "exists" ) {
+          //       this.loading = false;
+          //       this.error = "This email already registered. Please sign in or use another email."
+          //     } else {
+          //       this.$auth.login(this, {email: this.email, password: this.password}, 
+          //         (success) => {
+          //           console.log("singup", data);
+          //           this.isLoading = false
+          //           if (data.status === "create-workspace") {
+          //             this.$router.push({ path: '/create-workspace' })
+          //           }
+                    
+          //         }, 
+          //         (failure) => {
+          //           this.isLoading = false
+          //           if (failure.response.status === 401) {
+          //             this.error = 'Sorry, wrong password, try again.'
+          //           } else  if (failure.response.status === 400) {
+          //             this.error = 'Please fill all values'
+          //             console.log(JSON.stringify(failure.response))
+          //           } else  if (failure.response.status === 500) {
+          //             this.error = 'Temporary failure, try again later'
+          //             console.log(JSON.stringify(failure.response))
+          //           }
+          //         })
+          //     }
+
+          //   },
+          //   (failure) => {
+          //     this.isLoading = false
+          //     if (failure.response.status === 401) {
+          //       this.error = 'Sorry, wrong password, try again.'
+          //     } else  if (failure.response.status === 400) {
+          //       this.error = 'Please fill all values'
+          //       console.log(JSON.stringify(failure.response))
+          //     } else  if (failure.response.status === 500) {
+          //       this.error = 'Temporary failure, try again later'
+          //       console.log(JSON.stringify(failure.response))
+          //     }
+          //   })
+        
+        
+        
         } else {
           console.log(this.$validator.errors)
           this.error = this.$validator.errors.items[0].msg
@@ -166,6 +181,7 @@ export default {
   data () {
     return {
       error: '',
+      user: new TenantUser(),
       loading: false,
       firstname: null,
       terms: false,

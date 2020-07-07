@@ -37,7 +37,7 @@
         Skip
         <md-icon>keyboard_arrow_right</md-icon>
       </md-button>
-      <md-button @click="next" class="md-default md-red md-maryoku">Next</md-button>
+      <md-button @click="next" class="md-default md-red md-maryoku next-btn">Next</md-button>
     </div>
     <transition name="fade">
       <div class="tool-tip" v-if="skipToolTip">
@@ -101,6 +101,7 @@ export default {
   .progress-bar {
     min-width: 400px;
     margin: 0px 20px;
+    background-color: #D8D8D8 !important;
   }
   .status-bar {
     display: flex;
@@ -119,5 +120,8 @@ export default {
     display: flex;
     box-shadow: 0 2px 21px 0 rgba(0, 0, 0, 0.21);
     border-radius: 5px;
+  }
+  .next-btn {
+    width: 150px;
   }
 </style>

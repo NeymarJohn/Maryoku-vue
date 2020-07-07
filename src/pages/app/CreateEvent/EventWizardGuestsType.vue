@@ -23,10 +23,10 @@
                   </div>
                 </div>
               </div>
-              <div class="mt-3 input-name">
+              <!-- <div class="mt-3 input-name">
                 <maryoku-input class="form-input" inputStyle="name" v-model="groupName" placeholder="Type type name here…"></maryoku-input>
                 <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator indicator-reverse">
-              </div>
+              </div> -->
             </div>
         </div>
         <wizard-status-bar :currentStep="2" @next="goToNext" @skip="skip" @back="back"></wizard-status-bar>
@@ -133,9 +133,9 @@ export default {
         {
           value: "board-members", name: "Board Members", selected:false
         },
-        {
-          value: "other", name: "Other", selected:false
-        }
+        // {
+        //   value: "other", name: "Other", selected:false
+        // }
       ]
     }
   },
@@ -144,6 +144,7 @@ export default {
       'publicEventData'
     ]),
     formattedString() {
+      if (this.publicEventData.numberOfParticipants===null)  return "Not Sure"
       return this.publicEventData.numberOfParticipants
           .replace(/\D/g, "")
           .replace(/\B(?=(\d{3})+(?!\d))/g, ",");

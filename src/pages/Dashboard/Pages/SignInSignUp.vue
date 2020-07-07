@@ -14,7 +14,7 @@
           <maryoku-input class="form-input" v-validate="modelValidations.email" inputStyle="email" v-model="user.email" placeholder="Type email address here..."></maryoku-input>
           <maryoku-input class="form-input" v-validate="modelValidations.password" type="password" inputStyle="password" v-model="user.password" placeholder="Type password here..."></maryoku-input>
           <div class="md-error">{{error}}</div>
-          <div class="terms-and-conditions">
+          <div class="terms-and-conditions mt-2">
             <md-checkbox v-model="keepMe">
               Keep me signed in
             </md-checkbox>
@@ -67,10 +67,7 @@ export default {
               },
               error => {
                 this.loading = false;
-                this.message =
-                  (error.response && error.response.data) ||
-                  error.message ||
-                  error.toString();
+                this.error = "Invalid email or wrong password, try again."
               }
             );
           }
@@ -111,19 +108,16 @@ export default {
       }
     }
   },
-  created () {
+  beforeCreate () {
     if (this.loggedIn) {
-      this.redirectPage()
+      this.$store.dispatch('auth/checkToken')
+      .then(res=>{
+        this.redirectPage()
+      })
+      .catch(err=>{
+        this.$router.push({path:'signin'})
+      })
     }
-    // const givenToken = this.$route.query.token
-    // this.$auth.setToken(givenToken)
-    // this.$auth.currentUser(this, true)
-    // /* let tenantId = document.location.hostname.replace(".maryoku.com","");
-    // new Tenant().find(tenantId).then(res =>{
-    //   if (!res.status){
-    //     this.$router.push({name:"CreateWorkspace"});
-    //   }
-    // }); */
   },
   data () {
     return {

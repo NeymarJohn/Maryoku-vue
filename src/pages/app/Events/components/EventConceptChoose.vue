@@ -201,7 +201,7 @@
     </div>
 </template>
 <script>
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+import { mapMutations } from 'vuex'
 import Calendar from '@/models/Calendar'
 import CalendarEvent from '@/models/CalendarEvent'
 import EventComponent from '@/models/EventComponent'
@@ -249,9 +249,12 @@ export default {
 
   },
   computed: {
-      userName() {
-          return this.$auth.user?this.$auth.user.displayName:""
-      }
+    currentUser() {
+        return this.$store.state.auth.user
+    },
+    userName() {
+        return this.currentUser?this.currentUser.name : ""
+    }
   },
   data: () => ({
     // auth: auth,
@@ -446,7 +449,7 @@ export default {
         this.showConceptList = false
     },
     onSaveConcept(eventConcept, imageData) {
-        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+        let calendar = new Calendar({id: this.currentUser.defaultCalendarId})
         let event = new CalendarEvent({id: this.event.id}).for(calendar)
         event.concept = eventConcept
         event.conceptProgress = 100
@@ -475,21 +478,11 @@ export default {
     this.hoursArray.push()
   },
   mounted () {
-    // this.isLoading = true
-    // if (this.event && this.event.id){
-    //     this.$root.$emit("set-name",this.event, this.routeName === 'EditBuildingBlocks',true);
-    //     this.getTimelineItems();
-    // }
-
-    this.$auth.currentUser(this, true, function () {
-      let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-
-      _calendar.calendarEvents().find(this.$route.params.id).then(event => {
+    let _calendar = new Calendar({id: this.currentUser.profile.defaultCalendarId})
+    _calendar.calendarEvents().find(this.$route.params.id).then(event => {
         this.event = event
         if (event.concept) {
-            console.log(event.concept)
             this.selectedConcept = event.concept
-            console.log("concept", this.selectedConcept)
             this.selectedConcept.images.forEach((item, i)=>{
                 item.url = item.url
             }) 
@@ -497,14 +490,9 @@ export default {
         } else {
             this.showConceptList = true
         }
-        // new EventComponent().for(_calendar, event).get().then(components => {
-        //     this.event.components = components
-        //     this.selectedComponents = components
-        // })
         this.isLoading = false
         console.log(event)
-      })
-    }.bind(this))
+    })
   },
   watch: {
 

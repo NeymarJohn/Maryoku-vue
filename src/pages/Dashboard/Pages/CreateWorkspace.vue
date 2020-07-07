@@ -72,11 +72,38 @@ import CalendarEvent from '@/models/CalendarEvent'
 import Calendar from '@/models/Calendar'
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import _ from 'underscore'
+import AuthService from '@/services/auth.service';
 
 export default {
   components: {
     SignupCard,
     VueElementLoading
+  },
+  data() {
+    return {
+      error: "",
+      workspace: "",
+      loading: false,
+      t: null,
+      workspaceValid: true,
+      serverURL: process.env.SERVER_URL,
+      // auth: auth,
+      touched: {
+        workspace: false
+      },
+      modelValidations: {
+        workspace: {
+          required: true,
+          min: 4,
+          max: 12
+        }
+      },
+      tenantUser: {},
+      defaultCalendar: null
+    };
+  },
+  computed: {
+    ...mapState("PublicEventPlanner", ["publicEventData"])
   },
   methods: {
     createWorkSpace() {
@@ -84,24 +111,26 @@ export default {
       this.$validator.validateAll().then(isValid => {
         if (isValid) {
           let tenantIdExt = document.location.hostname === "dev.maryoku.com" ? ".dev" : "";
-          new Tenant({ id: this.workspace}).save().then(res => {
-            alert(res.status)
-            if (res.status === true) {
-              alert()
-              this.loading = true;
-              this.createEvent().then(event=>{
-                alert("failed")
-                document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&firstEvent=${event.id}`;
-              })
-              .catch(error=>{
-                alert("succesed")
+          new Tenant({ id: this.workspace}).save()
+            .then(res => {
+              if (res.status === true) {
+                this.loading = true;
+                this.defaultCalendar =  new Calendar({id: res.defaultCalendar})
+                AuthService.setTenant(this.workspace)
+                this.createEvent().then(event=>{
+                  document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&firstEvent=${event.id}`;
+                })
+                .catch(error=>{
+                  this.loading = false
+                })
+              } else {
+                this.error = "Failed";
                 this.loading = false
-              })
-            } else {
-              this.error = "Failed";
+              }
+            })
+            .catch(e => {
               this.loading = false
-            }
-          });
+            });
         } else {
           this.loading = false;
         }
@@ -111,50 +140,55 @@ export default {
       let vm = this;
       return new Promise((resolve, reject) => {
         this.tenantId = this.workspace
-        this.$auth.currentUser(this, true, () => {
-          let calendarId = this.$auth.user.defaultCalendarId;
-          let _calendar = new Calendar({
-            id: calendarId
-          });
-
-          let catObject = _.find(
-            this.occasionsForCategory,
-            el => el.value === this.eventData.occasion
-          ) || {
-            category: "CompanyDays"
-          };
-          this.category = catObject.category;
-
-          let newEvent = new CalendarEvent({
-            calendar: {
-              id: calendarId
-            },
-            title: this.publicEventData.title,
-            occasion: this.publicEventData.occasion.name,
-            eventStartMillis: this.publicEventData.eventStartMillis,
-            eventEndMillis: this.publicEventData.eventEndMillis,
-            numberOfParticipants: this.publicEventData.numberOfParticipants,
-            budgetPerPerson: 0,
-            totalBudget: 0,
-            status: "draft",
-            currency: "USD",
-            eventType: this.publicEventData.eventType.id,
-            category: catObject.category, //! this.publicEventData.editable ? 'Holidays' : 'CompanyDays',
-            editable: true,
-            location: this.publicEventData.location
+        let catObject = _.find(
+          this.occasionsForCategory,
+          el => el.value === this.eventData.occasion
+        ) || {
+          category: "CompanyDays"
+        };
+        this.category = catObject.category;
+        console.log(this.defaultCalendar)
+        let newEvent = new CalendarEvent({
+          // calendar: this.defaultCalendar,
+          // title: "Test",
+          // occasion: "teset",
+          // eventStartMillis: new Date().getTime(),
+          // eventEndMillis: new Date().getTime(),
+          // numberOfParticipants: 100,
+          // budgetPerPerson: 0,
+          // totalBudget: 0,
+          // status: "draft",
+          // currency: "USD",
+          // eventType: "5e9dc16846a1c47a3b6b66c6",
+          // category: "Holidays", //! this.publicEventData.editable ? 'Holidays' : 'CompanyDays',
+          // editable: true,
+          // location: "New York"
+          calendar: this.defaultCalendar,
+          title: this.publicEventData.title,
+          occasion: this.publicEventData.occasion.name,
+          eventStartMillis: this.publicEventData.eventStartMillis,
+          eventEndMillis: this.publicEventData.eventEndMillis,
+          numberOfParticipants: this.publicEventData.numberOfParticipants,
+          budgetPerPerson: 0,
+          totalBudget: 0,
+          status: "draft",
+          currency: "USD",
+          eventType: this.publicEventData.eventType.id,
+          category: catObject.category, //! this.publicEventData.editable ? 'Holidays' : 'CompanyDays',
+          editable: true,
+          location: this.publicEventData.location
+        })
+          .for(this.defaultCalendar)
+          .save()
+          .then(response => {
+            resolve(response.item)
           })
-            .for(_calendar)
-            .save()
-            .then(response => {
-              resolve(response.item)
-            })
-            .catch(error => {
-              console.log(error);
-              this.working = false;
-              reject(error)
-              // this.$parent.isLoading = false
-            });
-        });
+          .catch(error => {
+            console.log(error);
+            this.working = false;
+            reject(error)
+            // this.$parent.isLoading = false
+          });
       });
     },
     checkWorkspace() {
@@ -202,22 +236,11 @@ export default {
     }
   },
   created() {
-    this.$auth.currentTenantUser(this, true, userData => {
-      console.log(userData);
-      this.tenantUser = userData;
-      this.workspace = this.generateWorkspaceName(userData.company);
-    });
-    // this.$auth.currentUser(this, true)
-    // const givenToken = this.$route.query.token;
-    // this.$auth.setToken(givenToken);
-    // this.$auth.currentUser(this, true);
-    // console.log("auth",this.$auth)
-    /* let tenantId = document.location.hostname.replace(".maryoku.com","");
-    new Tenant().find(tenantId).then(res =>{
-      if (!res.status){
-        this.$router.push({name:"CreateWorkspace"});
-      }
-    }); */
+    if (!this.$store.state.auth.status.loggedIn) {
+      this.$router.push({path:'/signin'})
+      return 
+    }
+    this.workspace = this.generateWorkspaceName(this.$store.state.auth.user.companyName);
   },
   watch: {
     email() {
@@ -226,31 +249,6 @@ export default {
     password() {
       this.touched.password = true;
     }
-  },
-  data() {
-    return {
-      error: "",
-      workspace: "",
-      loading: false,
-      t: null,
-      workspaceValid: true,
-      serverURL: process.env.SERVER_URL,
-      // auth: auth,
-      touched: {
-        workspace: false
-      },
-      modelValidations: {
-        workspace: {
-          required: true,
-          min: 4,
-          max: 12
-        }
-      },
-      tenantUser: {}
-    };
-  },
-  computed: {
-    ...mapState("PublicEventPlanner", ["publicEventData"])
   }
 };
 </script>

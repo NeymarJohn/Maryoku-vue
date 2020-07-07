@@ -39,7 +39,7 @@ import store from './store'
 import { IconURL, StorageURL, ResourceURL } from './globalVariables';
 
 import authHeader from '@/services/auth-header';
-
+import authService from '@/services/auth.service';
 require('vue-tour/dist/vue-tour.css')
 
 const VueScrollTo = require('vue-scrollto')
@@ -130,6 +130,13 @@ Object.defineProperty(Vue.prototype, '$Chartist', {
   }
 })
 
+// global library setup
+Object.defineProperty(Vue.prototype, '$authService', {
+  get () {
+    return authService
+  }
+})
+
 /* axios.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
@@ -204,6 +211,8 @@ Vue.prototype.$storageURL = StorageURL;
 Vue.prototype.$iconURL = IconURL;
 
 axios.defaults.headers.common.Authorization = authHeader().Authorization
+axios.defaults.headers.common['gorm-tenantid'] = authService.resolveTenantId()
+axios.defaults.headers.common.gorm_tenantid = authService.resolveTenantId()
 Model.$http = axios
 
 Number.prototype.padStart = function (size, theChar) {
