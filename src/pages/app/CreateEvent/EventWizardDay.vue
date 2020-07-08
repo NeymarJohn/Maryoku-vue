@@ -2,14 +2,14 @@
     <div class="">
         <div class="container">
             <div class="title">
-              1/5
+              <span class="step">1/5</span>
               <br/>
               WHEN IS THE BIG DAY?
             </div>
             <div class="event-date event-basic-info">
               <div class="date-picker picker-panel">
                 <div class="d-flex pl-10 justify-content-center" >
-                  <img :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px"/>
+                  <img :src="`${$iconURL}Event Page/calendar-dark.svg`" width="21px"/>
                   <span class="date-string">{{getFormattedDate}}</span>
                 </div>
                 <div>
@@ -36,13 +36,13 @@ export default {
     WizardStatusBar,
     FunctionalCalendar
   },
-  created () {
-  },
   methods: {
     ...mapMutations('PublicEventPlanner', ['setEventProperty', 'setCurrentStep']),
     goToNext () {
       if (this.dateData.selectedDate) {
         this.setEventProperty({key: 'eventStartMillis', actualValue: new Date(this.dateData.selectedDate).getTime()})
+        this.setEventProperty({key: 'eventEndMillis', actualValue: new Date(this.dateData.selectedDate).getTime()})
+        this.setEventProperty({key: 'dateData', actualValue: this.dateData})
         this.$router.push({path: `/event-wizard-flexibility`})
       }
     },
@@ -109,9 +109,12 @@ export default {
     }
   },
   created () {
-    if (this.publicEventData.eventStartMillis) {
-      this.dateData.selectedDate =  new Date(this.publicEventData.eventStartMillis)
+    if (this.publicEventData.dateData) {
+      this.dateData =  this.publicEventData.dateData
     }
+    // if (this.publicEventData.eventStartMillis) {
+    //   this.dateData.selectedDate =  new Date(this.publicEventData.eventStartMillis)
+    // }
   },
   computed: {
     ...mapState('PublicEventPlanner', [
@@ -131,18 +134,60 @@ export default {
 
 }
 </script>
-<style lang="scss">
+<style lang="scss"> 
+  .vfc-calendar .vfc-content {
+    width: 330px;
+    margin: auto;
+  }
+  .vfc-space-between {
+    margin-top: 10px !important;
+  }
+  .vfc-separately-navigation-buttons div {
+    margin: 20px 50px !important;
+  }
+  .vfc-navigation-buttons div .vfc-arrow-left, .vfc-separately-navigation-buttons div .vfc-arrow-left {
+    width: 11px !important;
+    height: 11px !important;
+    border-top: 3px solid !important;
+    border-left: 3px solid !important;
+    border-radius: 1px;
+  }
+  .vfc-navigation-buttons div .vfc-arrow-right, .vfc-separately-navigation-buttons div .vfc-arrow-right {
+    width: 11px !important;
+    height: 11px !important;
+    border-top: 3px solid !important;
+    border-right: 3px solid !important;
+    border-radius: 1px;
+  }
+  span.vfc-span-day {
+    color: #43425d !important;
+    width: 36px !important;
+    line-height: 36px !important;
+    &.vfc-today {
+      color: #f51355 !important;
+    }
+  }
+  span.vfc-span-day.vfc-marked, .vfc-today.vfc-marked {
+    color: white !important;
+  }
+  span.vfc-span-day.vfc-hide {
+    color: white !important;
+  }
+
     .event-date.event-basic-info{
         width: 450px;
-        margin: 0 auto;
+        margin: 20px auto 0;
         padding: 0;
-        min-height: 440px;
+        min-height: 500px;
         position: relative;
+        padding-top: 30px;
     }
     .picker-panel {
       display: block;
       position: relative;
-      padding: 30px 10px 0px;
+      padding: 40px 10px 0px;
+      border: solid 1px #BEC0C2;
+      border-radius: 3px;
     }
     .title {
       font-family: "Manrope-Bold";
@@ -152,7 +197,7 @@ export default {
       margin: 20px;
     }
     .date-string {
-      width: 180px;
+      padding-left: 10px;
     }
 
 </style>

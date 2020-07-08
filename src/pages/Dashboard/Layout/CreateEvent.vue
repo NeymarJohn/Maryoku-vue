@@ -318,7 +318,7 @@ $baseColor: #5c2153;
 .create-event {
   .top-header {
     // background: #5c2153;
-    height: 120px;
+    height: 100px;
     //border-radius: 0 0 50% 50%;
 
     .header-content {
@@ -1170,6 +1170,10 @@ $baseColor: #5c2153;
   line-height: 1.2em;
   margin: 20px;
   text-transform: uppercase;
+  .step {
+    padding: 20px;
+    display: inline-block;
+  }
 }
 .types {
   display: flex;

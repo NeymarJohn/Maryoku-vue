@@ -89,17 +89,17 @@ const ForProposals = () => import('@/pages/app/Vendors/ForProposals.vue')
 const VendorSignup = () => import('@/pages/app/Vendors/VendorSignup.vue')
 
 // OnBoardingPages
-const EventWizardStart = () => import('@/pages/app/CreateEvent/EventWizardStart.vue')
-const EventWizardDay = () => import('@/pages/app/CreateEvent/EventWizardDay.vue')
-const EventWizardDateFlexibility = () => import('@/pages/app/CreateEvent/EventWizardDateFlexibility.vue')
-const EventWizardGuests = () => import('@/pages/app/CreateEvent/EventWizardGuests.vue')
-const EventWizardGuestsType = () => import('@/pages/app/CreateEvent/EventWizardGuestsType.vue')
-const EventWizardLocation = () => import('@/pages/app/CreateEvent/EventWizardLocation.vue')
-const EventWizardBuilding = () => import('@/pages/app/CreateEvent/EventWizardBuilding.vue')
-const EventWizardType = () => import('@/pages/app/CreateEvent/EventWizardType.vue')
-const EventWizardCelebrating = () => import('@/pages/app/CreateEvent/EventWizardCelebrating.vue')
-const EventWizardVibes = () => import('@/pages/app/CreateEvent/EventWizardVibes.vue')
-const EventWizardReligion = () => import('@/pages/app/CreateEvent/EventWizardReligion.vue')
+import EventWizardStart from '@/pages/app/CreateEvent/EventWizardStart.vue'
+import EventWizardDay from '@/pages/app/CreateEvent/EventWizardDay.vue'
+import EventWizardDateFlexibility from '@/pages/app/CreateEvent/EventWizardDateFlexibility.vue'
+import EventWizardGuests from '@/pages/app/CreateEvent/EventWizardGuests.vue'
+import EventWizardGuestsType from '@/pages/app/CreateEvent/EventWizardGuestsType.vue'
+import EventWizardLocation from '@/pages/app/CreateEvent/EventWizardLocation.vue'
+import EventWizardBuilding from '@/pages/app/CreateEvent/EventWizardBuilding.vue'
+import EventWizardType from '@/pages/app/CreateEvent/EventWizardType.vue'
+import EventWizardCelebrating from '@/pages/app/CreateEvent/EventWizardCelebrating.vue'
+import EventWizardVibes from '@/pages/app/CreateEvent/EventWizardVibes.vue'
+import EventWizardReligion from '@/pages/app/CreateEvent/EventWizardReligion.vue'
 
 // User authentication pages
 const SignInSignUp = () =>

@@ -16,7 +16,12 @@
 }
 .vfc-week .vfc-day span.vfc-span-day.vfc-today {
   background-color: #ffd9e4 !important;
-  color: #f51355 !important;
+  color: #f51355;
+  // font-family: "Manrope-Bold";
+  font-weight: bold;
+}
+.vfc-week .vfc-day span.vfc-span-day.vfc-today.vfc-maked {
+  color: white !important;
 }
 .vfc-top-date a.vfc-underline {
   font-family: "Manrope-Bold";

@@ -74,7 +74,7 @@ export default {
       })
     },
     goToNext() {
-      this.setEventProperty({key: 'numberOfParticipants', actualValue: this.numberOfGuests})
+      this.setEventProperty({key: 'numberOfParticipants', actualValue: this.numberOfGuests?this.numberOfGuests:0})
       this.$router.push({path: `/event-wizard-guests-type`})
     },
     skip() {

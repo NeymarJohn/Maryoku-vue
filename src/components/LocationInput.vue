@@ -49,6 +49,7 @@ export default {
       this.$emit('input', this.content)
     },
     addressSuggestions(predictions, status) {
+      console.log(predictions)
       if (status != google.maps.places.PlacesServiceStatus.OK) {
         console.log(status);
         return;
@@ -67,7 +68,9 @@ export default {
   },
   mounted () {
     this.locationService = new google.maps.places.AutocompleteService();
+    console.log(this.locationService)
     this.geocoder = new google.maps.Geocoder();
+    console.log(this.geocoder)
   },
   watch: {
     content: function(newValue) {
