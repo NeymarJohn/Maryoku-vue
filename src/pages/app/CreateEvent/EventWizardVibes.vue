@@ -29,6 +29,8 @@ import WizardStatusBar from './componenets/WizardStatusBar'
 import MusicCard from './componenets/MusicCard'
 import { MaryokuInput} from '@/components'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import CalendarEvent from '@/models/CalendarEvent'
+import Calendar from '@/models/Calendar'
 
 export default {
   components: {
@@ -83,7 +85,49 @@ export default {
       })
     },
     goToNext() {
-      this.$router.push({path: `/signup`})
+      if (!this.isLoggedIn) {
+        localStorage.setItem('event', JSON.stringify(this.getEventData()));
+        this.$router.push({path: `/signup`})
+      } else {
+        this.createEvent();
+      }
+    },
+    getEventData() {
+      return  new CalendarEvent({
+          calendar: this.defaultCalendar,
+          title: this.publicEventData.title,
+          occasion: this.publicEventData.occasion.name,
+          eventStartMillis: this.publicEventData.eventStartMillis,
+          eventEndMillis: this.publicEventData.eventEndMillis,
+          numberOfParticipants: this.publicEventData.numberOfParticipants,
+          budgetPerPerson: 0,
+          totalBudget: 0,
+          status: "draft",
+          currency: "USD",
+          eventType: this.publicEventData.eventType.id,
+          category: 'Holidays', //! this.publicEventData.editable ? 'Holidays' : 'CompanyDays',
+          editable: true,
+          location: this.publicEventData.location
+        })
+    },
+    createEvent() {  // in case that user is signed
+      const tenantId = this.$authService.resolveTenantId();
+      if (tenantId.toLowerCase()==='default') {
+        localStorage.setItem('event', JSON.stringify(this.getEventData()));
+        this.$router.push({path: `/create-workspace`})
+      } else {
+        const eventData = this.getEventData();
+        eventData.calendar = new Calendar({id: this.$store.state.auth.user.profile.defaultCalendarId})
+        this.$store.dispatch('event/saveEventAction', eventData)
+          .then(event=>{
+            console.log(event)
+            //this.$router.push({path: `/events/${event.item.id}/booking/concept`})
+          })
+          .catch(error=>{
+            console.log(error)
+          })
+        
+      }
     },
     skip() {
       this.$router.push({path: `/signup`})
@@ -129,7 +173,13 @@ export default {
   computed: {
     ...mapState('PublicEventPlanner', [
       'publicEventData'
-    ])
+    ]),
+    isLoggedIn() {
+      return this.$store.state.auth.status.loggedIn;
+    },
+    tenantUser() {
+      return this.$store.state.auth.user
+    }
   }
 
 }

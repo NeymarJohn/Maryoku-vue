@@ -50,8 +50,9 @@ export default {
   methods: {
     authenticate (provider) {
       this.loading = true
-      let tenantId = document.location.hostname.replace('.maryoku.com', '').replace('.', '_')
+      let tenantId = this.$authService.resolveTenantId()
       const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`)
+      console.log(`${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`)
       document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`
     },
     signIn () {
@@ -108,7 +109,7 @@ export default {
       }
     }
   },
-  beforeCreate () {
+  beforeMount () {
     if (this.loggedIn) {
       this.$store.dispatch('auth/checkToken')
       .then(res=>{

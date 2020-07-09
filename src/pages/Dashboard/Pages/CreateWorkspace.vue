@@ -122,6 +122,7 @@ export default {
                 })
                 .catch(error=>{
                   this.loading = false
+                  document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}`;
                 })
               } else {
                 this.error = "Failed";
@@ -148,35 +149,23 @@ export default {
         };
         this.category = catObject.category;
         console.log(this.defaultCalendar)
+        const editingEvent = JSON.parse(localStorage.getItem("event"))
+        console.log("currentEvent", editingEvent)
         let newEvent = new CalendarEvent({
-          // calendar: this.defaultCalendar,
-          // title: "Test",
-          // occasion: "teset",
-          // eventStartMillis: new Date().getTime(),
-          // eventEndMillis: new Date().getTime(),
-          // numberOfParticipants: 100,
-          // budgetPerPerson: 0,
-          // totalBudget: 0,
-          // status: "draft",
-          // currency: "USD",
-          // eventType: "5e9dc16846a1c47a3b6b66c6",
-          // category: "Holidays", //! this.publicEventData.editable ? 'Holidays' : 'CompanyDays',
-          // editable: true,
-          // location: "New York"
           calendar: this.defaultCalendar,
-          title: this.publicEventData.title,
-          occasion: this.publicEventData.occasion.name,
-          eventStartMillis: this.publicEventData.eventStartMillis,
-          eventEndMillis: this.publicEventData.eventEndMillis,
-          numberOfParticipants: this.publicEventData.numberOfParticipants,
+          title: editingEvent.title,
+          occasion: editingEvent.occasion.name,
+          eventStartMillis: editingEvent.eventStartMillis,
+          eventEndMillis: editingEvent.eventEndMillis,
+          numberOfParticipants: editingEvent.numberOfParticipants,
           budgetPerPerson: 0,
           totalBudget: 0,
           status: "draft",
           currency: "USD",
-          eventType: this.publicEventData.eventType.id,
-          category: catObject.category, //! this.publicEventData.editable ? 'Holidays' : 'CompanyDays',
+          eventType: editingEvent.eventType,
+          category: catObject.category, //! editingEvent.editable ? 'Holidays' : 'CompanyDays',
           editable: true,
-          location: this.publicEventData.location
+          location: editingEvent.location
         })
           .for(this.defaultCalendar)
           .save()

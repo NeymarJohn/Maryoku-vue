@@ -37,8 +37,8 @@ export default {
         }
       );
     },
-    checkToken({ commit }) {
-      return AuthService.checkToken().then(
+    checkToken({ commit }, token) {
+      return AuthService.checkToken(token).then(
         user => {
           commit('loginSuccess', user);
           return Promise.resolve(user);

@@ -24,7 +24,7 @@ class AuthService {
     localStorage.removeItem('manage_id_token');
     return axios
       .post(LOGIN_URL, {
-        email: user.email,
+        email: user.email.toLowerCase(),
         password: user.password
       })
       .then(response => {
@@ -46,8 +46,8 @@ class AuthService {
 
   register(user) {
     return axios.post(REGISTRATION_URL, {
-      username: user.username,
-      email: user.email,
+      username: user.email.toLowerCase(),
+      email: user.email.toLowerCase(),
       password: user.password,
       company: user.company,
       name: user.name,
@@ -69,7 +69,10 @@ class AuthService {
     return tenantId
   }
 
-  checkToken() {
+  checkToken(token) {
+    if (token) {
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`
+    }
     return axios.post(VALIDATE_URL).then(response=>{
       if (response.data.access_token) {
         localStorage.setItem('manage_id_token', response.data.access_token)

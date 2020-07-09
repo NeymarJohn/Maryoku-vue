@@ -9,7 +9,8 @@
         </div>
         <div class="header-actions md-layout-item md-size-50 md-small-size-60">
             <ul class="actions-list unstyled">
-                <md-button class="md-simple md-black md-maryoku" @click="showSingupDialog"> Already A User?</md-button>
+                <md-button v-if="!isLoggedIn" class="md-simple md-black md-maryoku" @click="showSingupDialog"> Already A User?</md-button>
+                <md-button v-else class="md-simple md-black md-maryoku"> {{tenantUser.name}}</md-button>
                 <md-button class="md-simple md-just-icon question" @click="showSingupDialog"> 
                     <img :src="`${$iconURL}Onboarding/question-dark.svg`">
                 </md-button>
@@ -67,7 +68,7 @@
             Keep me signed in
           </md-checkbox>
         </div>
-       
+        <div class="md-error">{{error}}</div>
         <md-button class="md-default md-red md-maryoku md-sm md-square custom-btn" @click="singup">Sign In</md-button>
         <div class="text-center">
           <!-- <a href class="forget-password">Forgot your password ?</a> -->
@@ -117,8 +118,6 @@ export default {
     MaryokuInput,
   },
   created() {
-    // this.$store.registerModule('PublicEventPlanner', PublicEventPlannerVuexModule)
-    console.log(this.$auth.user);
   },
   methods: {
     ...mapMutations("PublicEventPlanner", [
@@ -135,45 +134,28 @@ export default {
         this.$router.push("/signin");
     },
     singup() {
-      let that = this;
+      this.loading = true
+      let that = this
       this.$validator.validateAll().then(isValid => {
         if (isValid) {
-          that.signUpLoading = true;
-          that.$auth.clientSignupOrSignin(
-            that,
-            this.email.toString().toLowerCase(),
-            that.password,
-            that.department,
-            data => {
-              that.$auth.login(
-                that,
-                {
-                  username: that.email.toString().toLowerCase(),
-                  password: that.password
-                },
-                success => {
-                  this.closeSingupModal();
-                  that.$router.push({
-                    path: that.currentStep,
-                    query: { token: success.access_token }
-                  });
-                  that.signUpLoading = false;
-                },
-                failure => {
-                  that.signUpLoading = false;
-                  if (failure.response.status === 401) {
-                    that.error = "Sorry, wrong password, try again.";
-                  } else {
-                    that.error = "Temporary failure, try again later";
-                    console.log(JSON.stringify(failure.response));
-                  }
-                }
-              );
-            }
-          );
+          if (this.email && this.password) {
+            this.$store.dispatch('auth/login', { email:this.email, password: this.password}).then(
+              () => {
+                this.setSingupModal({ showModal: false });
+                this.redirectPage()
+              },
+              error => {
+                this.loading = false;
+                this.error = "Invalid email or wrong password, try again."
+                this.setSingupModal({ showModal: false });
+              }
+            );
+          }
         } else {
+          that.error = 'Sorry, invalid email or wrong password, try again.'
+          that.loading = false
         }
-      });
+      })
     },
     authenticate(provider) {
       this.loading = true;
@@ -195,7 +177,13 @@ export default {
       "publicEventData",
       "shoWSignupModal",
       "currentStep"
-    ])
+    ]),
+    isLoggedIn() {
+      return this.$store.state.auth.status.loggedIn;
+    },
+    tenantUser() {
+      return this.$store.state.auth.user
+    }
   },
   watch: {
     email() {

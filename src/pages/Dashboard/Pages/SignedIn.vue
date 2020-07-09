@@ -2,7 +2,7 @@
   <div class="md-layout">
     <div class="md-layout-item" style="text-align: center;">
       <img src="/static/img/maryoku-loader.gif" />
-      <img src="http://static.maryoku.com/storage/img/calendar-loader-3.gif" class="text-center" style="width: 64px;"/>
+      <!-- <img src="http://static.maryoku.com/storage/img/calendar-loader-3.gif" class="text-center" style="width: 64px;"/> -->
       <h2 class="title text-center" slot="title" style="text-align: center;">
         Hi there, one moment please ...
       </h2> 
@@ -24,85 +24,54 @@ export default {
   },
   created () {
     const givenToken = this.$route.query.token
-    this.$auth.setToken(givenToken)
-    this.$auth.setHeaders(this)
-
-    const that = this
-
-    let tenantId = document.location.hostname.replace('.maryoku.com', '')
-    let isPrimeTenant = tenantId === 'dev' || tenantId === 'app' || tenantId === 'preprod'
-    if (isPrimeTenant) {
-      this.$cookies.set('at', givenToken, '1m', '', 'maryoku.com', true)
-      new TenantUser().find(givenToken).then(res => {
-        if (res.status) {
-          if (res.tenantIds.length === 1) {
-            that.$http.defaults.headers.common['gorm-tenantid'] = res.tenantIds[0]
-            that.$http.defaults.headers.common.gorm_tenantid = res.tenantIds[0]
-            // Model.$http.defaults.headers.common['gorm-tenantid'] = res.tenantIds[0];
-            // Model.$http.defaults.headers.common.gorm_tenantid = res.tenantIds[0];
-            let hostname = document.location.hostname
-            hostname = hostname.replace('app.', '')
-            document.location.href = `${document.location.protocol}//${res.tenantIds[0]}.${hostname}:${document.location.port}/#/signedin?token=${givenToken}`
-          } else {
-            that.$router.push({name: 'ChooseWorkspace'})
+    this.$store.dispatch('auth/checkToken', givenToken).then(
+      (tenantUser) => {
+        const tenantId = this.$authService.resolveTenantId()
+        this.$authService.setTenant(tenantId)
+        if (tenantId.toLowerCase() === 'default') {
+          if  (tenantUser.tenants && tenantUser.tenants.length > 0) {
+            this.$router.push({name: 'ChooseWorkspace'})
+          } else  {
+            this.$router.push({name: 'CreateWorkspace'})
           }
         } else {
           this.$gtm.trackEvent({
-            event: 'new_registration', // Event type [default = 'interaction'] (Optional)
-            category: 'User',
-            action: 'register',
-            label: 'New User Registered',
-            value: this.$auth.user.emailAddress,
-            noninteraction: false // Optional
-          })
-          that.$router.push({name: 'CreateWorkspace'})
-        }
-      })
-    } else {
-      let tenantId = document.location.hostname.replace('.dev.maryoku.com', '')
-      tenantId = tenantId.replace('.maryoku.com', '')
-
-      that.$http.defaults.headers.common['gorm-tenantid'] = tenantId
-      that.$http.defaults.headers.common.gorm_tenantid = tenantId
-      
-      this.$store.dispatch('auth/checkToken').then(
-        () => {
-          that.$gtm.trackEvent({
             event: 'user_signed_in', // Event type [default = 'interaction'] (Optional)
             category: 'Users',
             action: 'signin',
             label: 'User Signed In',
-            value: that.$auth.user.emailAddress,
+            value: this.$store.state.auth.user.email,
             noninteraction: false // Optional
           })
           if (process.env.NODE_ENV === 'production') {
             try {
-              window.heap.identify(that.$auth.user.email)
+              window.heap.identify(this.$auth.user.email)
             } catch (e) {
               console.error(e)
             }
             try {
-              that.$Tawk.$updateChatUser({
-                name: that.$store.state.auth.user.displayName,
-                email: that.$store.state.auth.user.email
+              this.$Tawk.$updateChatUser({
+                name: this.$store.state.auth.user.displayName,
+                email: this.$store.state.auth.user.email
               })
             } catch (e) {
               console.error(e)
             }
           }
-          const firstEvent = that.$route.query.firstEvent
+          const firstEvent = this.$route.query.firstEvent
           if (firstEvent) {
-            that.$router.push({ path: `/events/${firstEvent}/booking/concept` })
+            this.$router.push({ path: `/events/${firstEvent}/booking/concept` })
           } else {
-            that.$router.push({ path: '/' })
+            this.$router.push({ path: '/create-event-wizard' })
           }
-        },
-        error => {
-          this.loading = false;
-          this.error = "Invalid email or wrong password, try again."
         }
-      );
-    }
+        
+      },
+      error => {
+        this.loading = false;
+        this.error = "Invalid email or wrong password, try again."
+      }
+    );
   },
   data () {
     return {

@@ -6,7 +6,9 @@
                   <img :src="`${$iconURL}Onboarding/balloon-calendar.svg`">
                 </div>
                 <div class="title">
-                  HELLO THERE!
+                  HELLO 
+                  <span v-if="isLoggedIn">{{tenantUser.name}}!</span>
+                  <span v-else>THERE!</span>
                 </div>
                 <div>
                   Please answer a few questions to complete the background we need!
@@ -111,7 +113,13 @@ export default {
   computed: {
     ...mapState('PublicEventPlanner', [
       'publicEventData'
-    ])
+    ]),
+    isLoggedIn() {
+      return this.$store.state.auth.status.loggedIn;
+    },
+    tenantUser() {
+      return this.$store.state.auth.user
+    }
   }
 
 }

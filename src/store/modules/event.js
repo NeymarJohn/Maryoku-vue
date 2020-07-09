@@ -61,10 +61,14 @@ const getters = {
 const actions = {
   saveEventAction({commit, state}, event) {
     return new Promise((resolve, reject)=> {
-      event.save().then(res=>{
-        commit('setEventData', res)
-        resolve(event);
-      })
+      event.save()
+        .then(res=>{
+          commit('setEventData', res)
+          resolve(event);
+        })
+        .catch(error=>{
+          reject(error)
+        })
     })
   },
   getEventAction( {commit, state}, {eventId, calendar}) {

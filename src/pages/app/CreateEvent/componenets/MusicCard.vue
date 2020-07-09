@@ -145,6 +145,7 @@ export default {
     }
   }
   .music-infor {
+    padding-top: 20px;
     width: 200px;
     text-align: left;
     margin: auto;
