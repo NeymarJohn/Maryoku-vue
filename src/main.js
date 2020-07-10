@@ -253,6 +253,26 @@ const myMixin = {
   },
 }
 
+Vue.mixin({
+  data: {
+    windowWidth: 0,
+    windowHeight: 0
+  },
+  created() {
+      window.addEventListener('resize', this.handleResize);
+      this.handleResize();
+  },
+  destroyed() {
+      window.removeEventListener('resize', this.handleResize);
+  },
+  methods: {
+      handleResize() {
+          this.windowWidth = window.innerWidth;
+          this.windowHeight = window.innerHeight;
+      }
+  }
+})
+
 new Vue({
   el: '#app',
   render: h => h(App),

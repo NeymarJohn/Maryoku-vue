@@ -263,7 +263,7 @@ export default {
     }
     .form-input{
       margin:30px 0px;
-      min-width: 300px;
+      min-width: 250px;
     }
     .form-buttons {
       text-align: center;
@@ -280,4 +280,9 @@ export default {
       background: #FFF0F4;
       padding: 20px 30px 20px;
     }
+  @media screen and (max-width: 500px) {
+    .signin-contain {
+      padding: 20px 20px;
+    }
+  }
 </style>

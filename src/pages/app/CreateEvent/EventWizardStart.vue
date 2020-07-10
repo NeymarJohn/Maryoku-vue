@@ -132,4 +132,7 @@ export default {
         min-height: 600px;
         text-align: center;
     }
+    @media screen and (max-width: 500px) {
+      
+    }
 </style>

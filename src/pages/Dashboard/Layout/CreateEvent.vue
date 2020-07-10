@@ -924,6 +924,7 @@ $baseColor: #5c2153;
 @media screen and (max-width: 500px) {
   .create-event {
     .top-header {
+      height: 60px;
       .logo {
         img {
           width: 80px;
@@ -951,12 +952,13 @@ $baseColor: #5c2153;
       }
 
       .header-content {
-        padding-top: 0.5em;
+        padding: 0.5em;
+        align-items: center;
       }
     }
 
     .container {
-      padding: 0 8px;
+      padding: 10px 10px;
       display: block;
     }
 
@@ -1009,7 +1011,7 @@ $baseColor: #5c2153;
 
     .form-section {
       width: 100% !important;
-      padding: 0 !important;
+      padding: 15px !important;
       padding-bottom: 60px !important;
     }
 
@@ -1024,6 +1026,7 @@ $baseColor: #5c2153;
           width: 100%;
         }
       }
+
     }
     .start-working-item .md-checkbox label {
       padding-left: 54px !important;
@@ -1097,6 +1100,21 @@ $baseColor: #5c2153;
     .no-padding-mobile {
       padding: 0px;
     }
+    .title {
+      font-size: 30px;
+      margin: 15px;
+      .step {
+        padding:10px;
+      }
+    }
+    .setting-title {
+      font-size: 20px;
+    }
+    .indicator {
+      width: 20px;
+      margin-right: 10px;
+      margin-top: -10px;
+    }
   }
 }
 
@@ -1166,6 +1184,7 @@ $baseColor: #5c2153;
 .types {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   .type-card {
     cursor: pointer;
     padding: 20px 25px;

@@ -4,7 +4,7 @@
     <div class="md-layout-item">
       <!-- <h2 class="title text-center" slot="title" style="text-align: center;">Sign Up</h2> -->
       <signup-card class="signup-card">
-        <div class="md-layout-item md-size-50 md-medium-size-50 md-small-size-100 ml-auto" slot="content-left">
+        <div class="md-layout-item md-size-50 md-medium-size-50 md-small-size-100 ml-auto signup-container" slot="content-left">
           <div class="info info-horizontal">
             <div>
               <div class="image">
@@ -329,7 +329,7 @@ export default {
     .md-error {
       color: red;
     }
-    .ml-auto {
+    .signup-container {
       background: #FFF0F4;
       padding: 60px 60px 20px;
     }
@@ -368,6 +368,12 @@ export default {
     .info-horizontal {
       position: relative;
       height: 100%;
+      position: relative;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
       .image {
         margin: 0px auto 40px;
         text-align: center;
@@ -377,11 +383,8 @@ export default {
         }
       }
       .logo {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: 50px;
         img {
+          margin-top: 20px;
           width: 200px;
         }
       }
@@ -391,4 +394,21 @@ export default {
         padding-left: 20px;
       }
     }
+  @media screen and (max-width: 500px) {
+    .signup-container {
+      padding: 20px 20px;
+    }
+    .mr-auto {
+      padding: 20px 20px;
+    }
+    .info-horizontal{
+      padding-top: 30px;
+      .image img {
+        width: 100px;
+      }
+      .signup-title{
+        font-size: 20px;
+      }
+    }
+  }
 </style>

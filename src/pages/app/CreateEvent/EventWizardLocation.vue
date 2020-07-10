@@ -111,8 +111,9 @@ export default {
     .location.event-basic-info {
         width: 450px;
         margin: 0 auto;
-        padding: 0;
+        padding: 0px;
         min-height: 300px;
+        max-width: 100%;
     }
     .form-input {
       background: white;

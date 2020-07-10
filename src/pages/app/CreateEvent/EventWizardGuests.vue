@@ -107,8 +107,9 @@ export default {
     .event-guests.event-basic-info {
         width: 450px;
         margin: 0 auto;
-        padding: 0;
+        padding: 10px;
         min-height: 200px;
+        max-width: 100%;
     }
     .form-input {
       background: white;

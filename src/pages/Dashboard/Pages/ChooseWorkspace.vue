@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout" style="text-align: center;">
     <h2 class="title text-center" style="text-align: center;width: 100%; color:#050505">Hi, choose your workspace</h2>
-    <div class="md-layout-item md-size-50 mx-auto">
+    <div class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 md-size-50 mx-auto">
       <signup-card>
         <div class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 mr-auto " slot="content-right" style="padding: 24px;">
           <vue-element-loading :active="loading" spinner="ring" color="#FF547C"/>

@@ -11,7 +11,7 @@
                 <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator">
                 how flexible is this date?
               </div>
-              <div class="mt-4rem">
+              <div class="mt-4rem slider-wrapper">
                 <img :src="`${$iconURL}Onboarding/block-red.svg`">
                 <range-slider
                   class="slider"
@@ -134,6 +134,12 @@ export default {
     }
     .range-slider {
       width: 500px;
+      max-width: 100%;
+    }
+    .slider-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .slider {
       background: transparent;
@@ -185,6 +191,20 @@ export default {
           }
       }
     }
-
+    @media screen and (max-width: 500px) {
+       .slider-wrapper {
+         padding: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          .range-slider {
+            order:3;
+          }
+          img {
+            width: 50px;
+          }
+        }
+    }
 
 </style>

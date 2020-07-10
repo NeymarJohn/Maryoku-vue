@@ -143,7 +143,7 @@ export default {
     margin-top: 10px !important;
   }
   .vfc-separately-navigation-buttons div {
-    margin: 20px 50px !important;
+    // margin: 20px 50px !important;
   }
   .vfc-navigation-buttons div .vfc-arrow-left, .vfc-separately-navigation-buttons div .vfc-arrow-left {
     width: 11px !important;
@@ -176,6 +176,7 @@ export default {
 
     .event-date.event-basic-info{
         width: 450px;
+        max-width: 100%;
         margin: 20px auto 0;
         padding: 0;
         min-height: 500px;
