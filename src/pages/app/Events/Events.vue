@@ -177,13 +177,20 @@ export default {
     }
     console.log("currentUser", currentUser)
     
-    let _calendar = new Calendar({ id: currentUser.profile.defaultCalendarId })
-    let m = new CalendarEvent().for(_calendar).fetch(this, true)
-    m.then(allEvents => {
-      this.upcomingEvents = this.getExtraFields(allEvents).reverse()
-      this.isLoading = false
-    }).catch(e=>{
-      console.log(e)
+    this.$store.dispatch('auth/checkToken').then(()=>{
+      let _calendar = new Calendar({ id: currentUser.profile.defaultCalendarId })
+      let m = new CalendarEvent().for(_calendar).fetch(this, true)
+      m.then(allEvents => {
+        this.upcomingEvents = this.getExtraFields(allEvents).reverse()
+        this.isLoading = false
+      }).catch(e=>{
+        console.log(e)
+      })
+    }).catch(()=>{
+      this.$store.dispatch('auth/logout')
+      this.$router.push("/signin")
+      return
+      
     })
   },
   data () {

@@ -43,7 +43,7 @@ const YearlyPlan = () => import('@/pages/app/YearlyPlan/index.vue')
 const AnnualPlanner = () => import('@/pages/app/AnnualPlanner/index.vue')
 
 const HomePage = () => import('@/pages/app/HomePage/Home.vue')
-const publicRegister = () => import('@/pages/app/SinginSingup/publicRegister.vue')
+// const publicRegister = () => import('@/pages/app/SinginSingup/publicRegister.vue')
 
 // Event Pages
 const EventDetailsBudget = () => import('@/pages/app/Events/EventDetailsBudget.vue')
@@ -778,26 +778,26 @@ let NewEventPages = {
 }
 
 
-let SigninSignupPage = {
-  path: '/register',
-  component: SigninSignupLayout,
-  name: 'SigninSignupLayout',
-  meta: {
-    auth: false
-  },
-  children: [
-    {
-      path: '/register',
-      name: 'publicRegister',
-      component: publicRegister,
-      meta: {
-        title: 'Public Register',
-        gtm: 'Public Register',
-        auth: false
-      }
-    }
-  ]
-}
+// let SigninSignupPage = {
+//   path: '/register',
+//   component: SigninSignupLayout,
+//   name: 'SigninSignupLayout',
+//   meta: {
+//     auth: false
+//   },
+//   children: [
+//     {
+//       path: '/register',
+//       name: 'publicRegister',
+//       component: publicRegister,
+//       meta: {
+//         title: 'Public Register',
+//         gtm: 'Public Register',
+//         auth: false
+//       }
+//     }
+//   ]
+// }
 let PublicCreateEvent = {
   path: '/app-public',
   component: CreateEvent,
