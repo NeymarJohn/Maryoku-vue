@@ -125,15 +125,13 @@ export default {
 }
 </script>
 <style lang="scss">
-
-    .event-flexibility.event-basic-info {
-        width: 100%;
-        margin: 0 auto;
-        padding: 0;
-        min-height: 300px;
-    }
+  .event-flexibility.event-basic-info {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    min-height: 300px;
     .range-slider {
-      width: 500px;
+      width: 500px !important;
       max-width: 100%;
     }
     .slider-wrapper {
@@ -191,6 +189,8 @@ export default {
           }
       }
     }
+  }
+    
     @media screen and (max-width: 500px) {
        .slider-wrapper {
          padding: 10px;
