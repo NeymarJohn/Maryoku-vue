@@ -1077,7 +1077,7 @@ const routes = [
   marketPlacePages,
   PublicCreateEvent,
   HomePages,
-  SigninSignupPage,
+  // SigninSignupPage,
   // forVendors,
   forProposals,
   vendorSignup,
