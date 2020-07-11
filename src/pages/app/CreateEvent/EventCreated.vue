@@ -32,13 +32,13 @@ export default {
   created () {
     // create new event
 
-    this.$auth.currentUser(this, false, () => {
-      let publicEventData = this.publicEventData
-      delete publicEventData['id']
-      new CalendarEvent(this.publicEventData).save().then(resp => {
-        console.log(resp)
-      })
-    })
+    // this.$auth.currentUser(this, false, () => {
+    //   let publicEventData = this.publicEventData
+    //   delete publicEventData['id']
+    //   new CalendarEvent(this.publicEventData).save().then(resp => {
+    //     console.log(resp)
+    //   })
+    // })
   },
   methods: {
 

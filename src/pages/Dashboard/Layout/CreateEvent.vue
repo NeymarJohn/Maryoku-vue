@@ -110,7 +110,8 @@ export default {
         }
       },
       serverURL: process.env.SERVER_URL,
-      keepMe:false
+      keepMe:false,
+      error: ""
     };
   },
   components: {
@@ -152,8 +153,8 @@ export default {
             );
           }
         } else {
-          that.error = 'Sorry, invalid email or wrong password, try again.'
-          that.loading = false
+          this.error = 'Sorry, invalid email or wrong password, try again.'
+          this.loading = false
         }
       })
     },

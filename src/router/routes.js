@@ -41,15 +41,7 @@ const VendorsPoolNew = () => import('@/pages/app/Vendors/VendorsPoolNew.vue')
 const ImportVendors = () => import('@/pages/app/Vendors/ImportVendors.vue')
 const YearlyPlan = () => import('@/pages/app/YearlyPlan/index.vue')
 const AnnualPlanner = () => import('@/pages/app/AnnualPlanner/index.vue')
-// const EventWizard = () => import('@/pages/app/CreateEvent/EventWizard.vue')
-const EventInfo = () => import('@/pages/app/CreateEvent/EventInfo.vue')
-const EventBudget = () => import('@/pages/app/CreateEvent/EventBudget.vue')
-const EventVibe = () => import('@/pages/app/CreateEvent/EventVibe.vue')
-const EventMovies = () => import('@/pages/app/CreateEvent/EventMovies.vue')
-const EventScales = () => import('@/pages/app/CreateEvent/EventScales.vue')
-const EventStartWorking = () => import('@/pages/app/CreateEvent/EventStartWorking.vue')
-const EventCreated = () => import('@/pages/app/CreateEvent/EventCreated.vue')
-const EventSummery = () => import('@/pages/app/CreateEvent/EventSummery.vue')
+
 const HomePage = () => import('@/pages/app/HomePage/Home.vue')
 const publicRegister = () => import('@/pages/app/SinginSingup/publicRegister.vue')
 
@@ -100,6 +92,17 @@ import EventWizardType from '@/pages/app/CreateEvent/EventWizardType.vue'
 import EventWizardCelebrating from '@/pages/app/CreateEvent/EventWizardCelebrating.vue'
 import EventWizardVibes from '@/pages/app/CreateEvent/EventWizardVibes.vue'
 import EventWizardReligion from '@/pages/app/CreateEvent/EventWizardReligion.vue'
+
+// const EventWizard = () => import('@/pages/app/CreateEvent/EventWizard.vue')
+// const EventInfo = () => import('@/pages/app/CreateEvent/EventInfo.vue')
+// const EventBudget = () => import('@/pages/app/CreateEvent/EventBudget.vue')
+// const EventVibe = () => import('@/pages/app/CreateEvent/EventVibe.vue')
+// const EventMovies = () => import('@/pages/app/CreateEvent/EventMovies.vue')
+// const EventScales = () => import('@/pages/app/CreateEvent/EventScales.vue')
+// const EventStartWorking = () => import('@/pages/app/CreateEvent/EventStartWorking.vue')
+// const EventCreated = () => import('@/pages/app/CreateEvent/EventCreated.vue')
+// const EventSummery = () => import('@/pages/app/CreateEvent/EventSummery.vue')
+
 
 // User authentication pages
 const SignInSignUp = () =>
@@ -913,87 +916,87 @@ let PublicCreateEvent = {
         auth: false
       }
     },
-    {
-      path: '/about-invited',
-      name: 'About',
-      component: EventInfo,
-      meta: {
-        title: 'Event Info',
-        gtm: 'Event Info',
-        auth: false
-      }
-    },
-    {
-      path: '/event-budget',
-      name: 'Event Budget',
-      component: EventBudget,
-      meta: {
-        title: 'Event Budget',
-        gmt: 'Event Budget',
-        auth: false
-      }
-    },
-    {
-      path: '/event-vibe',
-      name: 'Event Vibe',
-      component: EventVibe,
-      meta: {
-        title: 'Event Vibe',
-        gmt: 'Event Vibe',
-        auth: false
-      }
+    // {
+    //   path: '/about-invited',
+    //   name: 'About',
+    //   component: EventInfo,
+    //   meta: {
+    //     title: 'Event Info',
+    //     gtm: 'Event Info',
+    //     auth: false
+    //   }
+    // },
+    // {
+    //   path: '/event-budget',
+    //   name: 'Event Budget',
+    //   component: EventBudget,
+    //   meta: {
+    //     title: 'Event Budget',
+    //     gmt: 'Event Budget',
+    //     auth: false
+    //   }
+    // },
+    // {
+    //   path: '/event-vibe',
+    //   name: 'Event Vibe',
+    //   component: EventVibe,
+    //   meta: {
+    //     title: 'Event Vibe',
+    //     gmt: 'Event Vibe',
+    //     auth: false
+    //   }
 
-    },
-    {
-      path: '/event-movies',
-      name: 'Event Movies',
-      component: EventMovies,
-      meta: {
-        title: 'Event Movies',
-        gmt: 'Event Movies',
-        auth: false
-      }
-    },
-    {
-      path: '/event-scales',
-      name: 'Event Scales',
-      component: EventScales,
-      meta: {
-        title: 'Event Scales',
-        gmt: 'Event Scales',
-        auth: false
-      }
-    }, // EventStartWorking.vue
-    {
-      path: '/event-start-working',
-      name: 'Event Start Working',
-      component: EventStartWorking,
-      meta: {
-        title: 'Event Start Working',
-        gmt: 'Event Start Working',
-        auth: false
-      }
-    }, // EventCreated
-    {
-      path: '/event-created',
-      name: 'Event Created',
-      component: EventCreated,
-      meta: {
-        title: 'Event Created',
-        gmt: 'Event Created',
-        auth: false
-      }
-    },
-    {
-      path: '/event-summery',
-      name: 'Event Summery',
-      component: EventSummery,
-      meta: {
-        title: 'Event Summery',
-        gmt: 'Event Summery',
-        auth: false
-      }
-    }
+    // },
+    // {
+    //   path: '/event-movies',
+    //   name: 'Event Movies',
+    //   component: EventMovies,
+    //   meta: {
+    //     title: 'Event Movies',
+    //     gmt: 'Event Movies',
+    //     auth: false
+    //   }
+    // },
+    // {
+    //   path: '/event-scales',
+    //   name: 'Event Scales',
+    //   component: EventScales,
+    //   meta: {
+    //     title: 'Event Scales',
+    //     gmt: 'Event Scales',
+    //     auth: false
+    //   }
+    // }, // EventStartWorking.vue
+    // {
+    //   path: '/event-start-working',
+    //   name: 'Event Start Working',
+    //   component: EventStartWorking,
+    //   meta: {
+    //     title: 'Event Start Working',
+    //     gmt: 'Event Start Working',
+    //     auth: false
+    //   }
+    // }, // EventCreated
+    // {
+    //   path: '/event-created',
+    //   name: 'Event Created',
+    //   component: EventCreated,
+    //   meta: {
+    //     title: 'Event Created',
+    //     gmt: 'Event Created',
+    //     auth: false
+    //   }
+    // },
+    // {
+    //   path: '/event-summery',
+    //   name: 'Event Summery',
+    //   component: EventSummery,
+    //   meta: {
+    //     title: 'Event Summery',
+    //     gmt: 'Event Summery',
+    //     auth: false
+    //   }
+    // }
   ]
 }
 

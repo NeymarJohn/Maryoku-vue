@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout-item md-size-50 wizard-pos">
+  <div class="md-layout-item md-size-50 wizard-pos import-vendors">
     <modal
       v-if="uploadModalOpen"
       @close="noticeModalHide"
@@ -453,126 +453,129 @@ export default {
 }
 </script>
 <style lang="scss">
-.step1 {
-  p {
+.import-vendors {
+  .step1 {
+    p {
+      text-align: center;
+    }
+  }
+  .step3 {
     text-align: center;
-  }
-}
-.step3 {
-  text-align: center;
-  span {
-    display: block;
-  }
-}
-.main-upload-box {
-  padding: 10px;
-  text-align: center;
-  border: 2px dashed #f2f2f2 !important;
-  .upload-option {
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-  .upload-box {
-    & span {
-      display: inline-block;
-    }
-    &_btn {
-      padding: 5px 20px;
-      background: linear-gradient(60deg, #ffa726, #fb8c00);
-      width: 88px;
-      cursor: pointer;
-      height: 35px;
-      border-radius: 2px;
-      color: #fff;
-      display: inline-block;
+    span {
+      display: block;
     }
   }
-}
-.border-table {
-  border-collapse: collapse;
-}
+  .main-upload-box {
+    padding: 10px;
+    text-align: center;
+    border: 2px dashed #f2f2f2 !important;
+    .upload-option {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    .upload-box {
+      & span {
+        display: inline-block;
+      }
+      &_btn {
+        padding: 5px 20px;
+        background: linear-gradient(60deg, #ffa726, #fb8c00);
+        width: 88px;
+        cursor: pointer;
+        height: 35px;
+        border-radius: 2px;
+        color: #fff;
+        display: inline-block;
+      }
+    }
+  }
+  .border-table {
+    border-collapse: collapse;
+  }
 
-.border-table tr {
-  border-top: 1px solid #a9afbb;
-}
-.border-table tr td {
-  padding: 15px;
-  white-space: nowrap;
-}
-.table-section {
-  width: 100%;
-  max-height: 370px;
-  // overflow: auto;
-}
-.wizard-pos {
-  position: relative;
-}
-.finish-btn {
-  position: absolute;
-  background-color: #ff547c !important;
-  bottom: -61px;
-  right: 15px;
-  z-index: 9999999;
-
-  &:hover {
+  .border-table tr {
+    border-top: 1px solid #a9afbb;
+  }
+  .border-table tr td {
+    padding: 15px;
+    white-space: nowrap;
+  }
+  .table-section {
+    width: 100%;
+    max-height: 370px;
+    // overflow: auto;
+  }
+  .wizard-pos {
+    position: relative;
+  }
+  .finish-btn {
+    position: absolute;
     background-color: #ff547c !important;
-  }
-}
-#\32 > section > table > thead > tr > th > div > div {
-  z-index: 9999;
-  border: 1px solid white !important;
-  padding: 0px 15px;
-}
-.btn-position {
-  position: absolute;
-  right: 15px;
-  font-weight: bold;
-  top: 20px;
-  font-size: 17px;
-  background-color: transparent !important;
-  box-shadow: none !important;
-  color: gray !important;
-  border-color: transparent;
-  cursor: pointer;
+    bottom: -61px;
+    right: 15px;
+    z-index: 9999999;
 
-  &:hover,
-  &:visited,
-  &:focus,
-  &:active {
+    &:hover {
+      background-color: #ff547c !important;
+    }
+  }
+  #\32 > section > table > thead > tr > th > div > div {
+    z-index: 9999;
+    border: 1px solid white !important;
+    padding: 0px 15px;
+  }
+  .btn-position {
+    position: absolute;
+    right: 15px;
+    font-weight: bold;
+    top: 20px;
+    font-size: 17px;
     background-color: transparent !important;
     box-shadow: none !important;
     color: gray !important;
-  }
-}
-.header-position {
-  position: relative;
-}
-.no-border {
-  border: 0 !important;
-}
-.state-area {
-  .md-theme-default {
-    &.active {
-      background: #00bcd4;
-      color: #fff;
-    }
-    cursor: default;
-    text-align: center;
-    box-shadow: none;
-    background: transparent;
-    padding: 20px;
-    width: 75%;
-    color: #959595;
-    span {
-      padding: 0 0 15px 0;
+    border-color: transparent;
+    cursor: pointer;
+
+    &:hover,
+    &:visited,
+    &:focus,
+    &:active {
+      background-color: transparent !important;
+      box-shadow: none !important;
+      color: gray !important;
     }
   }
+  .header-position {
+    position: relative;
+  }
+  .no-border {
+    border: 0 !important;
+  }
+  .state-area {
+    .md-theme-default {
+      &.active {
+        background: #00bcd4;
+        color: #fff;
+      }
+      cursor: default;
+      text-align: center;
+      box-shadow: none;
+      background: transparent;
+      padding: 20px;
+      width: 75%;
+      color: #959595;
+      span {
+        padding: 0 0 15px 0;
+      }
+    }
+  }
+  .next-btn {
+    background: #0caf50 !important;
+    font-size: 10px;
+    float: right;
+    padding: 10px;
+    right: 15px;
+  }
 }
-.next-btn {
-  background: #0caf50 !important;
-  font-size: 10px;
-  float: right;
-  padding: 10px;
-  right: 15px;
-}
+
 </style>
