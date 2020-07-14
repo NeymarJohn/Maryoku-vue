@@ -303,7 +303,7 @@ export default {
           this.selectedBlock = _.findWhere(resp, {
             id: this.blockId
           });
-          console.log(this.selectedBlock.category.key)
+          // console.log(this.selectedBlock.category.key)
           this.fetchAllProperties(this.selectedBlock.category.key).then(properties=>{
             const propertiesByGroup = {};
             properties.forEach(item=>{
@@ -396,20 +396,25 @@ export default {
     },
     fetchData() {
       this.blockId = this.$route.params.blockId
-      this.calendar
-            .calendarEvents()
-            .find(this.$route.params.id)
-            .then(event => {
-              this.event = event;
-              this.setEventData(event);
-              this.getCommentComponents(this.blockId);
-              this.getBlockVendors();
-              this.getSelectedBlock();
-              // new EventComponent().for(_calendar, event).get().then(components => {
-              //     this.event.components = components
-              //     this.selectedComponents = components
-              // })
-            });
+      this.event = this.$store.state.event.eventData;
+      console.log(this.event)
+      this.getCommentComponents(this.blockId);
+      this.getBlockVendors();
+      this.getSelectedBlock();
+      // this.calendar
+      //       .calendarEvents()
+      //       .find(this.$route.params.id)
+      //       .then(event => {
+      //         this.event = event;
+      //         this.setEventData(event);
+      //         this.getCommentComponents(this.blockId);
+      //         this.getBlockVendors();
+      //         this.getSelectedBlock();
+      //         // new EventComponent().for(_calendar, event).get().then(components => {
+      //         //     this.event.components = components
+      //         //     this.selectedComponents = components
+      //         // })
+      //       });
     },
     findVendors() {
       
