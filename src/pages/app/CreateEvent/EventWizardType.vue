@@ -120,6 +120,7 @@ export default {
         flex-wrap: wrap;
         width: 80%;
         margin: 30px auto;
+        max-width: 1200px;
       }
     }
 </style>

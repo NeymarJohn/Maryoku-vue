@@ -103,7 +103,6 @@ export default {
 }
 </script>
 <style lang="scss">
-
     .event-guests.event-basic-info {
         width: 450px;
         margin: 0 auto;

@@ -10,7 +10,13 @@
         <div class="header-actions md-layout-item md-size-50 md-small-size-60">
             <ul class="actions-list unstyled">
                 <md-button v-if="!isLoggedIn" class="md-simple md-black md-maryoku" @click="showSingupDialog"> Already A User?</md-button>
-                <md-button v-else class="md-simple md-black md-maryoku"> {{tenantUser.name}}</md-button>
+                <md-menu v-else  md-size="large" md-align-trigger>
+                  <md-button class="md-simple md-black md-maryoku  normal-btn" md-menu-trigger>{{tenantUser.name}}</md-button>
+                  <md-menu-content class="user-menu-content">
+                    <md-menu-item @click="logout">Logout</md-menu-item>
+                  </md-menu-content>
+                </md-menu>
+                <!-- <md-button v-else class="md-simple md-black md-maryoku"> {{tenantUser.name}}</md-button> -->
                 <md-button class="md-simple md-just-icon question" @click="showSingupDialog"> 
                     <img :src="`${$iconURL}Onboarding/question-dark.svg`">
                 </md-button>
@@ -169,8 +175,9 @@ export default {
       document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
     },
     logout() {
-      this.$auth.logout(this);
-      this.$ls.remove("user");
+      this.$store.dispatch('auth/logout');
+      // this.$auth.logout(this);
+      // this.$ls.remove("user");
     }
   },
   computed: {
@@ -241,7 +248,12 @@ $baseColor: #5c2153;
     }
   }
 }
-
+.user-menu-content{
+  min-width: 150px;
+  .md-list-item-content{
+    font-size: 16px !important;
+  }
+}
 .md-dialog.singin-form {
   border-radius: 10px;
   padding: 2em 40px;

@@ -5,7 +5,7 @@
               4/5
             </div>
             <selected-value :value="publicEventData.occasion.name" :property="publicEventData.occasion.value"></selected-value>
-            <div class="event-basic-info">
+            <div class="event-basic-info wizard-religion">
               <div class="setting-title mt-5">
                 <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator">
                 Choose religion, &  the holiday 
@@ -21,8 +21,8 @@
                 ></multiselect>
               </div>
               <div class="mt-3 holiday-types">
-                <div class="text-left type" @click="type.selected=!type.selected" :class="{selected:type.selected}" v-for="(type) in holidays" :key="type.value">
-                    <md-checkbox class="md-checkbox-circle md-red" v-model="type.selected"><span :class="{selected: type.selected}">{{type.name}}</span></md-checkbox>
+                <div class="text-left type" @click="selectedHoldiay=type" :class="{selected:type.selected}" v-for="(type) in holidays" :key="type.value">
+                    <md-checkbox class="md-checkbox-circle md-red" v-model="selectedHoldiay" :value="type"><span :class="{selected: selectedHoldiay.value == type.value}">{{type.name}}</span></md-checkbox>
                 </div>
               </div>
             </div>
@@ -153,7 +153,8 @@ export default {
         // 'Buddhism',
         // 'Other'
       ],
-      religion: ""
+      religion: "",
+      selectedHoldiay : {}
     }
   },
   computed: {
@@ -164,16 +165,37 @@ export default {
       if (!this.religion)  return []
       return this.types.filter(item=>item.religion === this.religion.toLowerCase())
     }
-  }
+  },
+  watch: {
+    religion(newValue, oldValue) {
+      
+    }
+  },
 
 }
 </script>
 <style lang="scss">
 
-    .event-basic-info {
+    .event-basic-info.wizard-religion {
         width: 100%;
         margin: 0 auto;
         padding: 0;
+        .select-wrapper {
+          width: 400px;
+          margin: 30px auto;
+          max-width: 100%;
+        }
+        .holiday-types {
+          width: 900px;
+          margin: 30px auto;
+          columns: 200px 3;
+          .type {
+            padding: 10px;
+            &.selected {
+              font-family: "Manrope-Bold";
+            }
+          }
+        }
     }
     
     .md-checkbox-circle {
@@ -192,19 +214,18 @@ export default {
       transform: scaleX(-1);
       margin-left: 20px;
     }
-    .select-wrapper {
-      width: 400px;
-      margin: 30px auto;
-    }
-    .holiday-types {
-      width: 900px;
-      margin: 30px auto;
-      columns: 200px 3;
-      .type {
-        padding: 10px;
-        &.selected {
-          font-family: "Manrope-Bold";
+    @media screen and (max-width: 500px) {
+      .event-basic-info.wizard-religion {
+        .holiday-types {
+          columns: 200px 1;
+          .type {
+            padding: 10px;
+            &.selected {
+              font-family: "Manrope-Bold";
+            }
+          }
         }
       }
     }
+    
 </style>
