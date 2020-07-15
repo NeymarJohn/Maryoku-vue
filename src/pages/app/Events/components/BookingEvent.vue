@@ -270,7 +270,7 @@ export default {
     },
     getSelectedBlock() {
       new EventComponent()
-        .for(this.calendar, event)
+        .for(this.calendar, this.event)
         .get()
         .then(resp => {
           this.selectedBlock = _.findWhere(resp, {
@@ -279,7 +279,7 @@ export default {
         });
     },
     getBlockVendors() {
-      if (true) {
+      if (this.blockId !='timeline' && this.blockId != 'concept' ) {
         let event = new CalendarEvent({ id: this.event.id });
         let selected_block = new EventComponent({
           id: this.blockId

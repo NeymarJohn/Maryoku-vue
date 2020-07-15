@@ -538,7 +538,7 @@
             <div class="form-group maryoku-field" v-if="editEvent.eventType">
               <!-- <v-select v-model="editEvent.type" :options="eventTypes" item-text="name"></v-select> -->
               <v-select
-                :options="eventTypes.map(item=>{return item.name})"
+                :options="eventTypes.map(item => {return item.name})"
                 name="category"
                 v-model="editEvent.eventType.name"
                 v-validate="'required'"
@@ -583,12 +583,11 @@
           </div>
           <div class="md-layout-item md-size-100 margin-bottom text-left">
             <label class="evnet-detail-label">Location</label>
-            <div class="form-group with-icon">
-              <div class="input-icon">
+              <!-- <div class="input-icon">
                 <img :src="`${iconsURL}location-dark.svg`" width="20" />
-              </div>
-              <input type="text" class="form-control" v-model="editEvent.location" />
-            </div>
+              </div> -->
+              <!-- <input type="text" class="form-control" v-model="editEvent.location" /> -->
+              <location-input v-model="editEvent.location" placeholder="Type city / region or specific address here…"></location-input>
           </div>
         </div>
       </template>
@@ -622,7 +621,8 @@ import {
   AnimatedNumber,
   StatsCard,
   ChartCard,
-  Modal
+  Modal,
+  LocationInput
 } from "@/components";
 import ChartComponent from "@/components/Cards/ChartComponent";
 import EditEventDetailModal from "@/components/Modals/EditEventDetailModal";
@@ -632,6 +632,7 @@ import TimeCounter from "./components/TimeCounter";
 import Popup from "../../../components/Popup"
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./components/CommentEditorPanel";
+import vSelect from 'vue-select'
 
 export default {
   name: "event-overview",
@@ -652,7 +653,9 @@ export default {
     TimeCounter,
     Popup,
     HeaderActions,
-    CommentEditorPanel
+    CommentEditorPanel,
+    LocationInput,
+    vSelect
   },
   props: {
     // event: Object,
@@ -697,11 +700,10 @@ export default {
   }),
   methods: {
     getTimelineItems() {
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
       let event = new CalendarEvent({ id: this.event.id });
 
       new EventTimelineItem()
-        .for(calendar, event)
+        .for(this.calendar, event)
         .get()
         .then(res => {
           this.timelineItems = _.sortBy(res, function(item) {
@@ -744,7 +746,6 @@ export default {
         });
     },
     getCalendarEventStatistics(evt) {
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
       let event = new CalendarEvent({ id: evt.id });
 
       if (!evt.id) {
@@ -752,7 +753,7 @@ export default {
       }
 
       new CalendarEventStatistics()
-        .for(calendar, event)
+        .for(this.calendar, event)
         .get()
         .then(resp => {
           if (!resp[0].totalBookedBudget) resp[0].totalBookedBudget = 0;
@@ -823,11 +824,7 @@ export default {
       this.showEditDetailModal = true;
     },
     updateEvent() {
-      //
-      let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-      let updateEvent = new CalendarEvent({id: this.event.id}).for(_calendar)
-
-      // const updateEvent = { ...this.editEvent };
+      let updateEvent = new CalendarEvent({id: this.event.id}).for(this.calendar)
       updateEvent.eventDayPart = this.editEvent.eventDayPart;
       updateEvent.eventStartMillis = this.editEvent.eventStartMillis;
       updateEvent.numberOfParticipants = this.editEvent.numberOfParticipants;
@@ -837,7 +834,6 @@ export default {
         it => it.name === this.editEvent.eventType.name
       );
       updateEvent.eventType = eventType;
-      // let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
       if (updateEvent.eventDayPart === "evening") {
         updateEvent.eventStartMillis.setHours(19);
       } else {
@@ -900,28 +896,23 @@ export default {
         : this.hoursArray.push(`${x}:00 AM`)
     );
     this.hoursArray.push();
-    this.calendar
-      .calendarEvents()
-      .find(this.$route.params.id)
-      .then(event => {
-        this.event = event;
-        if (event.concept) {
-          if (event.concept.images && event.concept.images.length > 0) {
-            this.logger = "http://static.maryoku.com/" + this.event.concept.images[0].url
-          }
-          if (event.concept.name) {
-            this.conceptName = event.concept.name
-          }
-        }
-        this.getCalendarEventStatistics(event);
-        this.getTimelineItems();
-        new EventComponent()
-          .for(_calendar, event)
-          .get()
-          .then(components => {
-            this.event.components = components;
-            this.selectedComponents = components;
-          });
+    this.event = this.$store.state.event.eventData;  // Fetch event from store
+    if (this.event.concept) {
+      if (this.event.concept.images && this.event.concept.images.length > 0) {
+        this.logger = "http://static.maryoku.com/" + this.event.concept.images[0].url
+      }
+      if (this.event.concept.name) {
+        this.conceptName = this.event.concept.name
+      }
+    }
+    this.getCalendarEventStatistics(this.event);
+    this.getTimelineItems();
+    new EventComponent()
+      .for(this.calendar, this.event)
+      .get()
+      .then(components => {
+        this.event.components = components;
+        this.selectedComponents = components;
       });
   },
   mounted() {
@@ -961,11 +952,10 @@ export default {
       eventTypes: "event/getEventTypesList"
     }),
     getPaidAmount() {
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
       let event = new CalendarEvent({ id: this.event.id });
       let eventComponents = this.event.components;
       let paidAmount = 0;
-      this.getAcceptedAndPaidProposals(calendar, event, eventComponents);
+      this.getAcceptedAndPaidProposals(this.calendar, event, eventComponents);
 
       if (this.paidProposals.length > 0) {
         return this.paidProposals.reduce((p, item) => p + item.proposalCost, 0);
@@ -974,11 +964,10 @@ export default {
       }
     },
     getToBePaidAmount() {
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
       let event = new CalendarEvent({ id: this.event.id });
       let eventComponents = this.event.components;
       let toBePaidAmount = 0;
-      this.getAcceptedAndPaidProposals(calendar, event, eventComponents);
+      this.getAcceptedAndPaidProposals(this.calendar, event, eventComponents);
 
       if (this.acceptedProposals.length > 0) {
         return this.acceptedProposals.reduce(

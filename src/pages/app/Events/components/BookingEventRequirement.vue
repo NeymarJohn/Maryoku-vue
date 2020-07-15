@@ -295,7 +295,7 @@ export default {
     },
     getSelectedBlock() {
       let event = new CalendarEvent({ id: this.event.id });
-
+      if (this.blockId === 'concept' || this.blockId === 'timeline') return;
       new EventComponent()
         .for(this.calendar, event)
         .get()
@@ -321,12 +321,11 @@ export default {
         });
     },
     getBlockVendors() {
-      if (true) {
-        let event = new CalendarEvent({ id: this.event.id });
+      if (this.blockId != 'timeline' && this.blockId != 'concept') {
+        let event = new CalendarEvent({ id: this.eventData.id });
         let selected_block = new EventComponent({
           id: this.blockId
         });
-
         new EventComponentVendor()
           .for(this.calendar, event, selected_block)
           .get()
@@ -397,10 +396,10 @@ export default {
     fetchData() {
       this.blockId = this.$route.params.blockId
       this.event = this.$store.state.event.eventData;
-      console.log(this.event)
       this.getCommentComponents(this.blockId);
       this.getBlockVendors();
       this.getSelectedBlock();
+      
       // this.calendar
       //       .calendarEvents()
       //       .find(this.$route.params.id)
@@ -445,16 +444,23 @@ export default {
   },
   mounted() {
     this.isLoading = true;
-    this.fetchData()
+    if (this.eventData.id) {
+      this.fetchData()
+    }
   },
   watch: {
-    event(newVal, oldVal) {
-      this.$root.$emit(
-        "set-title",
-        this.event,
-        this.routeName === "EditBuildingBlocks",
-        true
-      );
+    // event(newVal, oldVal) {
+    //   this.$root.$emit(
+    //     "set-title",
+    //     this.event,
+    //     this.routeName === "EditBuildingBlocks",
+    //     true
+    //   );
+    // },
+    eventData(newVal, oldVal) {
+      if (newVal.id) {
+        this.fetchData()
+      }
     },
     '$route': 'fetchData'
   },
@@ -471,7 +477,10 @@ export default {
     withComma(amount) {
       return amount ? amount.toLocaleString() : 0;
     }
-  }
+  },
+  computed: {
+    ...mapState('event',['eventData'])
+  },
 };
 </script>
 <style lang="scss">

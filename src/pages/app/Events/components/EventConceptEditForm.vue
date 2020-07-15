@@ -270,7 +270,7 @@ export default {
       }
     },
     async saveConcept() {
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
+      let calendar = new Calendar({ id: this.$store.state.auth.user.profile.defaultCalendarId });
       let imageKeys = Object.keys(this.uploadImages);
       this.isLoading = true;
 

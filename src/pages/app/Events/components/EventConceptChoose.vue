@@ -201,7 +201,7 @@
     </div>
 </template>
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import Calendar from '@/models/Calendar'
 import CalendarEvent from '@/models/CalendarEvent'
 import EventComponent from '@/models/EventComponent'
@@ -249,6 +249,7 @@ export default {
 
   },
   computed: {
+    ... mapState('event', ['eventData']),
     currentUser() {
         return this.$store.state.auth.user
     },
@@ -276,7 +277,6 @@ export default {
     conceptIconsURL: 'http://static.maryoku.com/storage/icons/Concept/',
     showSomethingModal: false,
     showShareVendorModal: false,
-    blockVendors: null,
     selectedBlock: {},
     selectedConcept:{},
     showCommentEditorPanel: false,
@@ -449,12 +449,11 @@ export default {
         this.showConceptList = false
     },
     onSaveConcept(eventConcept, imageData) {
-        let calendar = new Calendar({id: this.currentUser.defaultCalendarId})
-        let event = new CalendarEvent({id: this.event.id}).for(calendar)
+        let calendar = new Calendar({id: this.currentUser.profile.defaultCalendarId})
+        let event = this.$store.state.event.eventData
         event.concept = eventConcept
         event.conceptProgress = 100
-        event.save().then(result=>{
-            this.event = result
+        event.for(calendar).save().then(result=>{
             this.selectedConcept = eventConcept
             this.base64Images = imageData
             this.showConceptList = false
@@ -468,7 +467,7 @@ export default {
     },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
-    }
+    },
   },
   created () {
     [...Array(12).keys()].map(x => x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined);
@@ -478,11 +477,9 @@ export default {
     this.hoursArray.push()
   },
   mounted () {
-    let _calendar = new Calendar({id: this.currentUser.profile.defaultCalendarId})
-    _calendar.calendarEvents().find(this.$route.params.id).then(event => {
-        this.event = event
-        if (event.concept) {
-            this.selectedConcept = event.concept
+      if (this.eventData.id) {
+        if (this.eventData.concept) {
+            this.selectedConcept = this.eventData.concept
             this.selectedConcept.images.forEach((item, i)=>{
                 item.url = item.url
             }) 
@@ -491,11 +488,24 @@ export default {
             this.showConceptList = true
         }
         this.isLoading = false
-        console.log(event)
-    })
+        console.log(this.event.id)
+      }
   },
   watch: {
-
+      eventData(newValue, oldValue) {
+        console.log(newValue);
+        if (newValue.concept) {
+            this.selectedConcept = newValue.concept
+            this.selectedConcept.images.forEach((item, i)=>{
+                item.url = item.url
+            }) 
+            this.showConceptList = false
+        } else {
+            this.showConceptList = true
+        }
+        this.isLoading = false
+        console.log(newValue.id)
+      }
   },
   filters: {
     formatDate: function (date) {

@@ -190,19 +190,19 @@ Vue.directive('select-all', {
   }
 })
 
-Vue.directive('click-outside', {
-  bind () {
-      this.event = event => this.vm.$emit(this.expression, event)
-      this.el.addEventListener('click', this.stopProp)
-      document.body.addEventListener('click', this.event)
-  },   
-  unbind() {
-    this.el.removeEventListener('click', this.stopProp)
-    document.body.removeEventListener('click', this.event)
-  },
+// Vue.directive('click-outside', {
+//   bind () {
+//       this.event = event => this.vm.$emit(this.expression, event)
+//       this.el.addEventListener('click', this.stopProp)
+//       document.body.addEventListener('click', this.event)
+//   },   
+//   unbind() {
+//     this.el.removeEventListener('click', this.stopProp)
+//     document.body.removeEventListener('click', this.event)
+//   },
 
-  stopProp(event) { event.stopPropagation() }
-})
+//   stopProp(event) { event.stopPropagation() }
+// })
 
 Vue.filter('withComma', function (value) { return value ? value.toLocaleString() : 0 })
 
@@ -254,10 +254,10 @@ const myMixin = {
 }
 
 Vue.mixin({
-  data: {
+  data: () => ({
     windowWidth: 0,
     windowHeight: 0
-  },
+  }),
   created() {
       window.addEventListener('resize', this.handleResize);
       this.handleResize();
@@ -278,7 +278,7 @@ new Vue({
   render: h => h(App),
   router,
   store,
-  data: {
+  data: () => ({
     Chartist: Chartist
-  }
+  })
 })

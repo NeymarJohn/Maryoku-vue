@@ -97,6 +97,7 @@ export default {
                   document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&firstEvent=${event.id}`;
                 })
                 .catch(error=>{
+                  console.error(error)
                   this.loading = false
                   document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}`;
                 })
@@ -124,13 +125,11 @@ export default {
           category: "CompanyDays"
         };
         this.category = catObject.category;
-        console.log(this.defaultCalendar)
         const editingEvent = JSON.parse(localStorage.getItem("event"))
-        console.log("currentEvent", editingEvent)
         let newEvent = new CalendarEvent({
           calendar: this.defaultCalendar,
           title: editingEvent.title,
-          occasion: editingEvent.occasion.name,
+          occasion: editingEvent.occasion?editingEvent.occasion.name:"",
           eventStartMillis: editingEvent.eventStartMillis,
           eventEndMillis: editingEvent.eventEndMillis,
           numberOfParticipants: editingEvent.numberOfParticipants,

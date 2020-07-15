@@ -340,7 +340,6 @@
           <div class="md-layout-item md-size-70">
             <div class="form-group maryoku-field" v-if="filteredEventBlocks">
               <label class="font-size-16 font-bold-extra color-black">Category</label>
-              <!-- <v-select v-model="newBuildingBlock.category" :options="filteredEventBlocks"></v-select> -->
               <multiselect
                 v-model="newBuildingBlock.category"
                 :options="filteredEventBlocks"
@@ -365,8 +364,7 @@
               <input type="text" class="form-control" v-model="newBuildingBlock.name" />
             </div>
           </div>
-          <div class="md-layout-item md-size-50">
-            <div class="form-group with-icon">
+          <div class="md-layout-item md-size-50 form-group maryoku-field ">
               <label class="font-size-16 font-bold-extra color-black">
                 Budget
                 <br />
@@ -374,11 +372,7 @@
               <div class="mb-10">
                 <small class="font-size-14">You have ${{remainingBudget | withComma}} to use</small>
               </div>
-              <div class="input-icon">
-                <img :src="`${iconsURL}budget-dark.svg`" width="20" />
-              </div>
-              <input type="number" class="form-control mb-10" v-model="newBuildingBlock.budget" />
-            </div>
+              <maryoku-input inputStyle="budget" v-model="newBuildingBlock.budget" />
           </div>
           <div
             class="md-error d-flex align-center"
@@ -517,7 +511,8 @@ export default {
     selectedComponent: null,
     showTips: false,
     editTips: false,
-    newAllocatedTips: 0
+    newAllocatedTips: 0,
+    calendar: null
   }),
   computed: {
     ...mapGetters({
@@ -571,9 +566,6 @@ export default {
       }, 100);
     },
     deleteBlock(block) {
-      let calendar = new Calendar({
-        id: this.$auth.user.defaultCalendarId
-      });
       let event = new CalendarEvent({ id: this.event.id });
       let selectedBlock = new EventComponent({ id: block.id });
 
@@ -591,7 +583,7 @@ export default {
         if (result.value) {
           this.isLoading = true;
           selectedBlock
-            .for(calendar, event)
+            .for(this.calendar, event)
             .delete()
             .then(resp => {
               this.isLoading = false;
@@ -725,7 +717,6 @@ export default {
         cancelButtonText: "No, take me back",
         buttonsStyling: false
       }).then(result => {
-        let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
         let event = new CalendarEvent({ id: this.event.id });
         let selected_block = new EventComponent({ id: block.id });
 
@@ -758,7 +749,7 @@ export default {
         }
         if (result.dismiss != "cancel") {
           selected_block
-            .for(calendar, event)
+            .for(this.calendar, event)
             .save()
             .then(resp => {
               this.isLoading = false;
@@ -799,7 +790,6 @@ export default {
         return item.componentId === index;
       });
 
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
       let event = new CalendarEvent({ id: this.event.id });
       let selectedBlock = new EventComponent({ id: block.id });
 
@@ -838,7 +828,7 @@ export default {
       }
 
       selectedBlock
-        .for(calendar, event)
+        .for(this.calendar, event)
         .save()
         .then(resp => {
           this.isLoading = false;
@@ -917,10 +907,9 @@ export default {
         }
       });
       window.currentPanel.promise.then(res => {
-        let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
         let event = new CalendarEvent({ id: this.event.id });
         new EventComponent()
-          .for(calendar, event)
+          .for(this.calendar, event)
           .find(item.id)
           .then(component => {
             this.event.components.splice(
@@ -964,9 +953,6 @@ export default {
     },
 
     async addBuildingBlock() {
-      let event = new CalendarEvent({ id: this.event.id });
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
-
       if (this.remainingBudget < this.newBuildingBlock.budget) {
         return;
       }
@@ -989,7 +975,7 @@ export default {
       let newBlock = {
         componentId: newComponent ? newComponent.key : "other",
         componentCategoryId: newComponent ? newComponent.key : "other",
-        calendarEvent: { id: event.id },
+        calendarEvent: { id: this.event.id },
         allocatedBudget: this.newBuildingBlock.budget,
         order: this.event.components.length,
         icon: newComponent.icon,
@@ -997,7 +983,7 @@ export default {
       };
 
       new EventComponent(newBlock)
-        .for(calendar, event)
+        .for(this.calendar, this.event)
         .save()
         .then(res => {
           this.showCategoryModal = false;
@@ -1078,10 +1064,6 @@ export default {
       this.showMinusHandleModal = false;
     },
     async updateVendor(myVendor) {
-      console.log(myVendor);
-      let calendar = new Calendar({
-        id: this.$auth.user.defaultCalendarId
-      });
       let event = new CalendarEvent({ id: this.event.id });
       let selectedBlock = new EventComponent({ id: this.selectedComponent.id });
 
@@ -1125,7 +1107,7 @@ export default {
             attachments: myVendor.attachments
           };
           new EventComponentVendor(eventComponentVendor)
-            .for(calendar, event, selectedBlock)
+            .for(this.calendar, event, selectedBlock)
             .save()
             .then(result => {
               this.showAddMyVendor = false;
@@ -1138,15 +1120,12 @@ export default {
         });
     },
     updateTips() {
-      let calendar = new Calendar({
-        id: this.$auth.user.defaultCalendarId
-      });
       let event = new CalendarEvent({
         id: this.event.id,
         allocatedTips: this.newAllocatedTips
       });
       event
-        .for(calendar)
+        .for(this.calendar)
         .save()
         .then(res => {
           this.editTips = false;
@@ -1161,6 +1140,7 @@ export default {
     }
   },
   mounted() {
+    this.calendar = new Calendar({id: this.$store.state.auth.user.profile.defaultCalendarId})
     this.getEventBuildingBlocks();
     this.getRemainingBudget();
     this.getCategoryBlocks();

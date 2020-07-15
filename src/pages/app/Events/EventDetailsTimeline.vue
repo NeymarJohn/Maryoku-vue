@@ -585,7 +585,7 @@ export default {
     ...mapMutations('event', ['setEventData']),
     download() {
       this.$router.push({
-        path: `/events/` + this.event.id + `/edit/timeline/export`
+        path: `/events/` + this.eventData.id + `/edit/timeline/export`
       });
     },
     /**
@@ -603,7 +603,7 @@ export default {
         let endDate = new Date(this.timeline[index].itemDay);
         const timelineItemsCount = this.timeline[index].items.length;
         if (timelineItemsCount == 0) {
-          if (this.event.eventDayPart == "evening") {
+          if (this.eventData.eventDayPart == "evening") {
             startDate.setHours(19);
             endDate.setHours(20);
           } else {
@@ -654,7 +654,7 @@ export default {
         .then(result => {
           if (result.value === true) {
             this.setItemLoading(item, true, false);
-            let event = new CalendarEvent({ id: this.event.id });
+            let event = new CalendarEvent({ id: this.eventData.id });
 
             let timelineItem = new EventTimelineItem({ id: item.id }).for(
               this.calendar,
@@ -685,11 +685,11 @@ export default {
     previewEvent() {
       this.$router.push({
         name: "EventDetails",
-        params: { id: this.event.id }
+        params: { id: this.eventData.id }
       });
     },
     getTimelineItems() {
-      let event = new CalendarEvent({ id: this.event.id });
+      let event = new CalendarEvent({ id: this.eventData.id });
       new EventTimelineItem()
         .for(this.calendar, event)
         .get()
@@ -728,7 +728,7 @@ export default {
           // this.timeline[0].items.forEach((item) => {
           //     item.isItemLoading = false
           // })
-          this.event.timelineItems = this.timelineItems;
+          this.eventData.timelineItems = this.timelineItems;
           this.$root.$emit("timeline-updated", this.timelineItems);
         });
     },
@@ -770,7 +770,7 @@ export default {
         return;
       }
 
-      let event = new CalendarEvent({ id: this.event.id });
+      let event = new CalendarEvent({ id: this.eventData.id });
       let order = ++index;
 
       const newTimeline = {
@@ -850,7 +850,7 @@ export default {
         return;
       }
 
-      let event = new CalendarEvent({ id: this.event.id });
+      let event = new CalendarEvent({ id: this.eventData.id });
 
       let timelineItem = new EventTimelineItem({ id: item.id }).for(
         this.calendar,
@@ -929,7 +929,7 @@ export default {
     },
     updateTimelineITemsOrder() {
       this.isLoading = true;
-      let event = new CalendarEvent({ id: this.event.id });
+      let event = new CalendarEvent({ id: this.eventData.id });
 
       let new_order = 1;
       const timelineItemsForUpdate = [];
@@ -956,7 +956,7 @@ export default {
                         verticalAlign: 'top',
                         type: 'success'
                       }); */
-          this.event.timelineItems = this.timelineItems;
+          this.eventData.timelineItems = this.timelineItems;
           this.isLoading = false;
           this.$root.$emit("timeline-updated", this.timelineItems);
         })
@@ -1172,6 +1172,20 @@ export default {
     },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
+    },
+    initData(event) {
+      // this.setEventData(event);
+      this.timeline[0].date = this.formatDate(
+        event.eventStartMillis
+      );
+      this.timeline[0].itemDay = event.eventStartMillis;
+      this.getTimelineItems();
+      new EventComponent()
+        .for(this.calendar, event)
+        .get()
+        .then(components => {
+          this.selectedComponents = components;
+        });
     }
   },
   created() {
@@ -1192,47 +1206,16 @@ export default {
 
     this.hoursArray.push();
 
-    this.calendar
-      .calendarEvents()
-      .find(this.$route.params.id)
-      .then(event => {
-        this.event = event;
-        this.setEventData(event);
-        this.timeline[0].date = this.formatDate(
-          this.event.eventStartMillis
-        );
-        this.timeline[0].itemDay = this.event.eventStartMillis;
-        this.getTimelineItems();
-        new EventComponent()
-          .for(this.calendar, event)
-          .get()
-          .then(components => {
-            this.event.components = components;
-            this.selectedComponents = components;
-          });
-      });
-    // this.$auth.currentUser(
-    //   this,
-    //   true,
-    //   function() {
-        
-    //   }.bind(this)
-    // );
-
-    // this.dateFormat="DD/MM/YYYY"
+    if (this.eventData) {
+      this.initData(this.eventData)
+      this.isLoading = false;
+    }
   },
   mounted() {
     this.isLoading = true;
-    // if (this.$material.locale.dateFormat !== "DD/MM/YY"){
-    //   this.$material.locale.dateFormat = "DD/MM/YY"
-    // }
-    // console.log("mounted");
-    // if (this.event && this.event.id){
-    //     this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks',true);
-    //     this.getTimelineItems();
-    // }
   },
   computed: {
+    ...mapState('event', ['eventData']),
     currentUser() {
       return this.$store.state.auth.user
     },
@@ -1246,13 +1229,14 @@ export default {
     }
   },
   watch: {
-    event(newVal, oldVal) {
+    eventData(newVal, oldVal) {
       this.$root.$emit(
         "set-title",
-        this.event,
+        this.eventData,
         this.routeName === "EditBuildingBlocks",
         true
       );
+      this.initData(newVal)
       this.getTimelineItems();
     }
   }

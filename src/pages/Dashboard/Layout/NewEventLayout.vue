@@ -6,12 +6,16 @@
         :class="{content: !$route.meta.hideContent}"
         @click="toggleSidebar"
         style="padding-right : 0;"
+        v-if="renderChild"
       >
         <!-- your content here -->
         <side-bar :event="eventData"></side-bar>
         <zoom-center-transition :duration="200" mode="out-in">
           <router-view></router-view>
         </zoom-center-transition>
+      </div>
+      <div class="error-page" v-else>
+        <span v-if="showError">We cannot get your event. Please check your link or try again later.</span>
       </div>
       <!--<content-footer v-if="!$route.meta.hideFooter"></content-footer>-->
     </div>
@@ -63,7 +67,9 @@ export default {
     return {
       // auth: auth,
       event: null,
-      createEventModalOpen: false
+      createEventModalOpen: false,
+      renderChild: false,
+      showError: false
     };
   },
   methods: {
@@ -123,7 +129,12 @@ export default {
     }
     const calendar = new Calendar({ id: this.$store.state.auth.user.profile.defaultCalendarId });
     const eventId = this.$route.params.id
-    this.getEventAction({eventId, calendar});
+    this.getEventAction({eventId, calendar}).then(event=>{
+      this.renderChild = true;
+    }).catch(error=>{
+      this.showError = true
+      console.error(error)
+    });
   },
   computed: {
     ...mapState('event', [
@@ -166,5 +177,11 @@ $scaleSize: 0.95;
 
 .main-panel .zoomOut {
   animation-name: zoomOut95;
+}
+.error-page {
+  font-size: 30px;
+  margin: auto;
+  padding: 200px;
+  text-align: center;
 }
 </style>
