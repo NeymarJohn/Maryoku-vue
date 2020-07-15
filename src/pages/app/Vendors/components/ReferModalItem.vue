@@ -126,5 +126,8 @@
         }
       }
     }
+    &:last-child {
+      border-bottom: 1px solid #a0a0a0;
+    }
   }
 </style>

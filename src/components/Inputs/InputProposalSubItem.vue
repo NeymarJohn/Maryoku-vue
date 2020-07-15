@@ -7,7 +7,7 @@
       class="input-proposal"
       :disabled="disabled"
       :placeholder="placeholder"
-      :style="`padding-left: ${icon || img ? '60px' : '26px'}`"
+      :style="`padding-left: ${icon || img ? '3rem' : '1.2rem'}`"
       v-if="!items"
     >
     <input 
@@ -22,16 +22,13 @@
       v-else
     >
     <md-icon v-if="icon">{{icon}}</md-icon>
-    <img 
-      v-if="img!='' && !items"
-      :src="img" 
-      :style="`left: ${isLeft ? 'calc(3rem + 50px);' : 'calc(3rem + 12px);'}`"
-    />
+    <img v-if="img!='' && !items" :src="img" />
     <img 
       v-else
       :src="img"  
       :style="`
-        left: calc(100% - 7em);
+        right: .5rem;
+        left: unset;
         transform: rotate(90deg);
         width: 12px;
       `"
@@ -79,6 +76,7 @@
     font-family: 'Manrope-Regular', sans-serif;
     color: #050505;
     text-align: left;
+    position: relative;
 
     .title {
       color: #050505;
@@ -111,7 +109,8 @@
     img {
       position: absolute;
       // left: calc(3rem + 12px);
-      margin-top: 14px;
+      top: 46px;
+      left: 1rem;
       width: 20px;
       margin-right: 12px;
     }
@@ -123,7 +122,7 @@
       position: absolute;
       background: #ffffff;
       z-index: 99;
-      width: calc(100% - 10em);
+      width: 100%;
 
       li {
         font: normal 16px Manrope-Regular, sans-serif;
