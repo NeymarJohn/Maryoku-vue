@@ -16,9 +16,9 @@
           <label class="font-size-16 font-bold-extra color-black">Price of the serivce</label>
           <maryoku-input inputStyle="budget" v-model="editingVendor.cost"></maryoku-input>
         </div>
-        <div class="md-layout-item md-size-100 form-group maryoku-field mb-30">
+        <div class="md-layout-item md-size-100 mb-30">
           <label class="font-size-16 font-bold-extra color-black">Location</label>
-          <maryoku-input inputStyle="location" v-model="editingVendor.vendorAddressLine1"></maryoku-input>
+          <location-input v-model="editingVendor.vendorAddressLine1"></location-input>
         </div>
         <div class="md-layout-item md-size-50 form-group maryoku-field mb-30">
           <label class="font-size-16 font-bold-extra color-black">Phone</label>
@@ -86,13 +86,14 @@
 </template>
 
 <script>
-import { Modal, MaryokuInput } from "@/components";
+import { Modal, MaryokuInput, LocationInput } from "@/components";
 
 export default {
   name: "add-vendor-modal",
   components: {
     Modal,
-    MaryokuInput
+    MaryokuInput,
+    LocationInput
   },
   props: {
     show: [Boolean],

@@ -277,7 +277,6 @@ export default {
       const index = this.requirementProperties[category].findIndex(it=>it.name == item.name )
       this.requirementProperties[category][index].isHide = false;
       this.requirementProperties = { ...this.requirementProperties }
-      console.log(this.requirementProperties)
       this.$forceUpdate();
     },
     createImage(file, type) {
@@ -303,8 +302,7 @@ export default {
           this.selectedBlock = _.findWhere(resp, {
             id: this.blockId
           });
-          // console.log(this.selectedBlock.category.key)
-          this.fetchAllProperties(this.selectedBlock.category.key).then(properties=>{
+          this.fetchAllProperties(this.selectedBlock.componentId).then(properties=>{
             const propertiesByGroup = {};
             properties.forEach(item=>{
               if (!propertiesByGroup[item.categoryTitle])   propertiesByGroup[item.categoryTitle] = []
@@ -315,8 +313,7 @@ export default {
               }
               propertiesByGroup[item.categoryTitle].push(item)
             })
-            this.requirementProperties = propertiesByGroup
-            console.log(propertiesByGroup)
+            this.requirementProperties = {...propertiesByGroup}
           })
         });
     },
@@ -421,7 +418,6 @@ export default {
         vendorCategory: "foodandbeverage"
       }).then(res=>{
         this.$emit("setRequirements", res);
-        console.log("vendors", res)
       })
     }
   },

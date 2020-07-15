@@ -19,7 +19,6 @@ export const getReq = (endpoint) => {
   return axios(getRequest)
 }
 export const postReq = (endpoint, data) => {
-  console.log(`${process.env.SERVER_URL}${endpoint}`)
   return axios({
     method: 'post',
     url: `${process.env.SERVER_URL}${endpoint}`,

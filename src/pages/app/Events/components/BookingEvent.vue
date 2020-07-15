@@ -313,7 +313,6 @@ export default {
 
             // this.vendors = _.union( vendorsWithSentStatus,vendorsWithNoStatus);
             this.proposals = vendorsWithProposals;
-            console.log(this.proposals);
           })
           .catch(error => {
             this.isLoading = false;
@@ -322,7 +321,6 @@ export default {
       } else {
         this.blockVendors = this.selectedBlock.vendors;
 
-        // console.log('blockVendors => ',this.blockVendors);
         let vendorsWithProposals = _.filter(this.blockVendors, function(item) {
           return item.proposals && item.proposals.length;
         });
@@ -362,17 +360,9 @@ export default {
         .then(event => {
           this.event = event;
           this.setEventData(event);
-          console.log("this.blockId",this.blockId)
           this.getCommentComponents(this.blockId);
           this.getBlockVendors();
           this.getSelectedBlock();
-
-          // new EventComponent().for(_calendar, event).get().then(components => {
-          //     this.event.components = components
-          //     this.selectedComponents = components
-          // })
-
-          console.log(event);
         });
     },
     setRequirements(vendors) {
@@ -395,7 +385,6 @@ export default {
         : this.hoursArray.push(`${x}:00 AM`)
     );
     this.hoursArray.push();
-    console.log("i am created");
   },
   mounted() {
     this.isLoading = true;

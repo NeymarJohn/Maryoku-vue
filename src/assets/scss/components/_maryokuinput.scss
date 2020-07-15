@@ -111,11 +111,13 @@
       display: none;
     }
     &.location {
-      input {
-        &.active {
+      &.active {
+        input {
           @include background-icon(url('http://static.maryoku.com/storage/icons/Event%20Page/location-dark.svg'))
         }
-        @include background-icon(url('http://static.maryoku.com/storage/icons/Event%20Page/location-dark.svg'))
+      }
+      input {
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Event%20Page/location-gray.svg'))
       }
       
     }

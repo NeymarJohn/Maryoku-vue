@@ -454,11 +454,11 @@ export default {
         event.concept = eventConcept
         event.conceptProgress = 100
         event.for(calendar).save().then(result=>{
-            this.selectedConcept = eventConcept
-            this.base64Images = imageData
             this.showConceptList = false
             this.showEditForm = false
             this.setEventData(result)
+            this.selectedConcept = eventConcept
+            this.base64Images = imageData
         })
         
     },

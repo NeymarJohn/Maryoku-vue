@@ -1,6 +1,6 @@
 <template>
   <div class="maryoku_input">
-    <md-autocomplete v-model="selectedLocation" :md-options="locations" class="location">
+    <md-autocomplete v-model="selectedLocation" :md-options="locations" class="location" :class="{active: selectedLocation}">
     </md-autocomplete>
   </div>
 </template>
