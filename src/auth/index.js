@@ -285,6 +285,7 @@ export default {
   },
   resolveTenantId () {
     let tenantId = document.location.hostname.replace('.dev.maryoku.com', '')
+    tenantId = tenantId.replace('.local.maryoku.com', '')
     tenantId = tenantId.replace('.maryoku.com', '')
     if (document.location.hostname.startsWith('app') || document.location.hostname.startsWith('dev')) {
       tenantId = 'DEFAULT'

@@ -62,11 +62,21 @@ class AuthService {
 
   resolveTenantId () {
     let tenantId = document.location.hostname.replace('.dev.maryoku.com', '')
+    tenantId = tenantId.replace('.local.maryoku.com', '')
     tenantId = tenantId.replace('.maryoku.com', '')
-    if (document.location.hostname.startsWith('app') || document.location.hostname.startsWith('dev')) {
+    if (document.location.hostname.startsWith('app') || document.location.hostname.startsWith('dev') || document.location.hostname.startsWith('local')) {
       tenantId = 'DEFAULT'
     }
     return tenantId
+  }
+
+  resolveStaging() {
+    if (document.location.hostname.indexOf('dev.maryoku.com') >= 0) {
+      return 'dev'
+    } else if (document.location.hostname.indexOf('local.maryoku.com') >= 0) {
+      return 'local'
+    } else 
+      return ''
   }
 
   checkToken(token) {
@@ -87,7 +97,10 @@ class AuthService {
     if (hostname.startsWith('app.maryoku.com')) {
       hostname = 'maryoku.com'
     }
-    return `${document.location.protocol}//${tenantId}.${hostname}:${document.location.port}`
+    return `${document.location.protocol}//${document.location.hostname}:${document.location.port}`
+  }
+  setInvitationEvent(tenantId, event) {
+    window.localStorage.setItem("invitaion", { tenantId, event });
   }
 }
 

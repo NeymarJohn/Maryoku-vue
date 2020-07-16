@@ -93,17 +93,6 @@ import EventWizardCelebrating from '@/pages/app/CreateEvent/EventWizardCelebrati
 import EventWizardVibes from '@/pages/app/CreateEvent/EventWizardVibes.vue'
 import EventWizardReligion from '@/pages/app/CreateEvent/EventWizardReligion.vue'
 
-// const EventWizard = () => import('@/pages/app/CreateEvent/EventWizard.vue')
-// const EventInfo = () => import('@/pages/app/CreateEvent/EventInfo.vue')
-// const EventBudget = () => import('@/pages/app/CreateEvent/EventBudget.vue')
-// const EventVibe = () => import('@/pages/app/CreateEvent/EventVibe.vue')
-// const EventMovies = () => import('@/pages/app/CreateEvent/EventMovies.vue')
-// const EventScales = () => import('@/pages/app/CreateEvent/EventScales.vue')
-// const EventStartWorking = () => import('@/pages/app/CreateEvent/EventStartWorking.vue')
-// const EventCreated = () => import('@/pages/app/CreateEvent/EventCreated.vue')
-// const EventSummery = () => import('@/pages/app/CreateEvent/EventSummery.vue')
-
-
 // User authentication pages
 const SignInSignUp = () =>
   import('@/pages/Dashboard/Pages/SignInSignUp.vue')
@@ -115,6 +104,8 @@ const SignOut = () =>
   import('@/pages/Dashboard/Pages/SignOut.vue')
 const SignedIn = () =>
   import('@/pages/Dashboard/Pages/SignedIn.vue')
+const Invited = () =>
+  import('@/pages/Dashboard/Pages/Invited.vue')
 
 let authPages = {
   path: '/',
@@ -165,6 +156,16 @@ let authPages = {
       auth: false,
       title: 'Signed In',
       gtm: 'SignedIn'
+    }
+  },
+  {
+    path: '/invited',
+    name: 'Invited',
+    component: Invited,
+    meta: {
+      auth: false,
+      title: 'Invited',
+      gtm: 'Invited'
     }
   },
   {

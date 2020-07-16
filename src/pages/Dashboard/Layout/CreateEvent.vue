@@ -11,7 +11,7 @@
             <ul class="actions-list unstyled">
                 <md-button v-if="!isLoggedIn" class="md-simple md-black md-maryoku" @click="showSingupDialog"> Already A User?</md-button>
                 <md-menu v-else  md-size="large" md-align-trigger>
-                  <md-button class="md-simple md-black md-maryoku  normal-btn" md-menu-trigger>{{tenantUser.name}}</md-button>
+                  <md-button class="md-simple md-black md-maryoku  normal-btn" md-menu-trigger>{{tenantUser.name?tenantUser.name:tenantUser.username}}</md-button>
                   <md-menu-content class="user-menu-content">
                     <md-menu-item @click="logout">Logout</md-menu-item>
                   </md-menu-content>

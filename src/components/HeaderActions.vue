@@ -5,8 +5,8 @@
         <md-button class="md-simple md-just-icon"><img :src="`${$iconURL}common/download-dark.svg`" /></md-button>
       </li>
       <li>
-        <md-button class="md-simple md-just-icon">
-          <img :src="`${$iconURL}common/share-dark.svg`" @click="toggleSharingMode" />
+        <md-button class="md-simple md-just-icon" @click="toggleSharingMode" >
+          <img :src="`${$iconURL}common/share-dark.svg`" />
         </md-button>
       </li>
       <li>
@@ -15,7 +15,7 @@
         </md-button>
       </li>
     </ul>
-    <sharing-Modal v-if="isSharing" sharingLink="http://dev.maryoku.com/#/sharing?url=/#/events/5ee15a2f46a1c41f26e32adc/booking/timeline" @cancel="isSharing=false"></sharing-Modal>
+    <sharing-Modal v-if="isSharing" @cancel="isSharing=false"></sharing-Modal>
   </div>
 </template>
 <script>
@@ -34,8 +34,13 @@ export default {
   data() {
     return {
       isCommentMode: false,
-      isSharing:false
+      isSharing:false,
+      shareLink:""
     }
+  },
+  created () {
+    const tenantId = this.$authService.resolveTenantId();
+    console.log(this.$route.path)
   },
   methods: {
     toggleCommentMode() {
@@ -44,6 +49,10 @@ export default {
     },
     toggleSharingMode() {
       this.isSharing = !this.isSharing
+    },
+    genearteShareLink() {
+      this.shareLink = `${this.$authService.getAppUrl(tenantId)}/#/signup?invite=true&role=${this.role}&url=${this.$route.path}`;
+      return this.shareLink
     }
   },
 }

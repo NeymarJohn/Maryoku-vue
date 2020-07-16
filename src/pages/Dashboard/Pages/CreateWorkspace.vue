@@ -86,7 +86,8 @@ export default {
       this.loading = true;
       this.$validator.validateAll().then(isValid => {
         if (isValid) {
-          let tenantIdExt = document.location.hostname === "dev.maryoku.com" ? ".dev" : "";
+          let tenantIdExt = this.$authService.resolveStaging()
+          tenantIdExt = tenantIdExt?`.${tenantIdExt}`:""
           new Tenant({ id: this.workspace}).save()
             .then(res => {
               if (res.status === true) {

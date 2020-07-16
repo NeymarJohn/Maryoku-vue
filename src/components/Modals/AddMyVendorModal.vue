@@ -7,6 +7,7 @@
       </div>
     </template>
     <template slot="body">
+      <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
       <div class="md-layout maryoku-modal-body">
         <div class="md-layout-item md-size-100 form-group maryoku-field mb-30">
           <label class="font-size-16 font-bold-extra color-black mt-40">Name</label>
@@ -87,13 +88,15 @@
 
 <script>
 import { Modal, MaryokuInput, LocationInput } from "@/components";
+import VueElementLoading from "vue-element-loading";
 
 export default {
   name: "add-vendor-modal",
   components: {
     Modal,
     MaryokuInput,
-    LocationInput
+    LocationInput,
+    VueElementLoading
   },
   props: {
     show: [Boolean],
@@ -129,6 +132,7 @@ export default {
       this.editingVendor.attachment = files[0];
     },
     updateMyVendor() {
+      this.isLoading = true
       this.$emit("updateVendor", this.editingVendor);
     }
   }

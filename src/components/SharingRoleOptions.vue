@@ -25,10 +25,14 @@ export default {
       type: String,
       default: "left"
     },
+    value: {
+      type: String,
+      default: "view"
+    },
   },
   data() {
     return {
-      role: "edit"
+      role: this.value
     }
   },
   watch: {

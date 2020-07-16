@@ -10,17 +10,17 @@
         <div class="md-layout-item md-size-100 form-group maryoku-field mb-30">
           <label class="font-size-16 font-bold-extra color-black mt-40">Link sharing on</label>
           <div class="d-flex align-center mt-10 mb-10">
-            <span style="padding-bottom: 10px">Anyone with this link </span>
+            <span style="padding-bottom: 5px">Anyone with this link </span>
             <div class="sharing-role">
               <md-button class="md-simple md-red edit-btn" @click="showLinkRoleEditor = !showLinkRoleEditor">
-                Can view
+                Can {{role}}
                 <md-icon v-if="showLinkRoleEditor">keyboard_arrow_down</md-icon>
                 <md-icon v-else>keyboard_arrow_right</md-icon>
               </md-button>
-              <sharing-role-options v-if="showLinkRoleEditor"></sharing-role-options>
+              <sharing-role-options v-if="showLinkRoleEditor" @change="setRole" :value="role"></sharing-role-options>
             </div>
           </div>
-          <maryoku-input inputStyle="sharing" v-model="sharingLink" readonly></maryoku-input>
+          <maryoku-input inputStyle="sharing" v-model="shareLink" readonly class="sharelink"></maryoku-input>
         </div>
         <div class="spacer"></div>
         <div class="md-layout-item md-size-100 form-group maryoku-field mb-30">
@@ -86,7 +86,6 @@ export default {
   props: {
     show: [Boolean],
     value: [Number],
-    sharingLink: [String]
   },
   data: () => {
     return {
@@ -99,6 +98,8 @@ export default {
       showLinkRoleEditor: false,
       showEmailRoleEditor: false,
       isSendingMessage: false,
+      shareLink : "",
+      role:"view",
       editingVendor: {
         vendorDisplayName: "",
         cost: "",
@@ -107,10 +108,18 @@ export default {
         vendorMainEmail: "",
         attachedProposal: "",
         attachment: null
-      }
+      },
     };
   },
+  created () {
+    this.generateShareLink();
+  },
   methods: {
+    generateShareLink() {
+      const tenantId = this.$authService.resolveTenantId()
+      this.shareLink = `${this.$authService.getAppUrl(tenantId)}/#/invited?invite=true&role=${this.role}&event=${this.$route.params.id}`;
+      return this.shareLink
+    },
     selectOption() {
       this.$emit("select", this.selectedOption, this.value);
     },
@@ -130,6 +139,11 @@ export default {
    
     onCancel: function(e) {
       this.$emit("cancel")
+    },
+    setRole(role) {
+      this.role = role
+      this.showLinkRoleEditor = false
+      this.generateShareLink()
     }
   }
 };
@@ -168,5 +182,13 @@ textarea {
 .checkbox-wrapper {
   min-width: 165px;
   margin-left: 10px;
+}
+.sharing-model {
+  .sharelink {
+    input.sharing {
+      padding-right: 60px !important;
+      height: 60px;
+    }
+  }
 }
 </style>
