@@ -2,10 +2,13 @@
   <div class="pie-chart-wrapper">
     <svg id="pie_chart" ref="pie_chart" width="100%" height="100%" v-if="sortedData">
       <g
-        v-for="(item, index) in sortedData"
+        v-for="(item, index) in reorderingData"
         :key="index"
         :ref="`tooltip_${index}`"
-        @mousemove="setTooltipPos"
+        @mousemove="setTooltipPos($event, item)"
+        @mouseleave="hideToolTip"
+        :id="`g_${index}`"
+        :style="{transform: `rotate(${item.rotate}deg)`, transformOrigin:'center'}"
       >
         <circle
           class="pie-chart-value"
@@ -13,60 +16,35 @@
           cy="50%"
           r="100"
           :style="`
-            stroke-dasharray: ${dashArray[index]};
+            stroke-dasharray: ${item.strikeDash};
             stroke: ${item.color};
-            display: ${item.budget===0 && totalValue != 0 ? 'none' : 'inherit'}
+            display: ${item.budget===0 && totalValue != 0 ? 'none' : 'inherit'};
           `"
         />
-        <g
-          :transform="`translate(${x},${y})`"
-          class="tooltip"
-          visibility="hidden"
-          ref="tooltip"
-          :id="`gt_${index}`"
-        >
-          <path id="svgMask" d="M3,72 L162,74 162,43 171,38 162,33 162,3 3,3 z" fill="#e6e5e5" />
-          <text
-            id="tooltip"
-            x="20"
-            y="25"
-            style="fill: #050505; font-family: 'Manrope'; font-size: 16px; font-weight: 800;"
-          >
-            {{sortedData[index].category}}
-            <tspan x="20" dy="1.2em" style="font-size: 13px;font-weight: 300;">Planned budget</tspan>
-            <tspan
-              x="20"
-              dy="1.3em"
-              style="font-size: 13px;font-weight: 300;"
-            >${{sortedData[index].budget}}</tspan>
-          </text>
-        </g>
-        <use id="use" :xlink:href="`gt_${index}`" />
       </g>
-      <g v-if="!(totalValue===0 || dashArray.length===1)" @mousemove="setTooltipPos">
+      <!-- <g v-if="!(totalValue===0 || dashArray.length===1)" @mousemove="setTooltipPos($event, endTooltip)">
         <circle
           class="pie-chart-value"
           cx="50%"
           cy="50%"
           r="100"
           :style="`
-            stroke-dasharray: 0 ${circleLength};
+            stroke-dasharray: 2 ${circleLength-6} ${circleLength-6};
             stroke: ${fillColor};
           `"
         >
-          <!-- <title>
-            {{endTooltip.category + '\r\n Planned budget \r\n $' + endTooltip.budget}}
-          </title>-->
         </circle>
         <g :transform="`translate(${x},${y})`" class="tooltip" visibility="hidden" ref="tooltip">
+          <path id="svgMask" d="M3,72 L162,74 162,43 171,38 162,33 162,3 3,3 z" fill="#e6e5e5" />
           <path id="svgMask" d="M3,72 L162,74 162,43 171,38 162,33 162,3 3,3 z" fill="#e6e5e5" />
           <text
             id="tooltip"
             x="20"
             y="25"
             style="fill: #050505; font-family: 'Manrope'; font-size: 16px; font-weight: 800;"
+             v-if="endTooltip.category"
           >
-            {{endTooltip.category}}
+            {{endTooltip.category.substr(0,15)}}{{endTooltip.category.length>15?"...":""}}
             <tspan x="20" dy="1.2em" style="font-size: 13px;font-weight: 300;">Planned budget</tspan>
             <tspan
               x="20"
@@ -75,7 +53,32 @@
             >${{endTooltip.budget}}</tspan>
           </text>
         </g>
-      </g>
+      </g> -->
+
+      <g
+          :transform="`translate(${x},${y})`"
+          class="tooltip"
+          :visibility="`${toolTipStatus}`"
+          ref="tooltip"
+        >
+          <path id="svgMask" d="M3,72 L162,74 162,43 171,38 162,33 162,3 3,3 z" fill="#e6e5e5" v-if="toolTipPosition=='left'" />
+          <path id="svgMask" d="M12,72 L171,74 171,3 12,3 12,43 3,38 12,33 z" fill="#e6e5e5" v-if="toolTipPosition=='right'"/>
+          <text
+            id="tooltip"
+            x="20"
+            y="25"
+            style="fill: #050505; font-family: 'Manrope'; font-size: 16px; font-weight: 800;"
+            v-if="toolTip.category"
+          >
+            {{toolTip.category.substr(0,15)}}{{toolTip.category.length>15?"...":""}}
+            <tspan x="20" dy="1.2em" style="font-size: 13px;font-weight: 300;">Planned budget</tspan>
+            <tspan
+              x="20"
+              dy="1.3em"
+              style="font-size: 13px;font-weight: 300;"
+            >${{toolTip.budget}}</tspan>
+          </text>
+        </g>
     </svg>
     <div class="items-cont">
       <ul class="items-list">
@@ -119,6 +122,10 @@ export default {
       categories: [],
       fillColor: null,
       endTooltip: null,
+      toolTipStatus:'hidden',
+      toolTip:{},
+      toolTipPosition:"left",
+      maxValue:0,
       x: 0,
       y: 0,
       colors: [
@@ -139,7 +146,7 @@ export default {
     }
   },
   methods: {
-    setTooltipPos: function (event) {
+    setTooltipPos: function (event, item) {
       let CTM = this.$refs.pie_chart.getScreenCTM()
 
       let mouseX = (event.clientX - CTM.e) / CTM.a
@@ -147,6 +154,14 @@ export default {
       let mouseY = (event.clientY - CTM.f) / CTM.d
       this.x = mouseX - 173 / CTM.a
       this.y = mouseY - 40 / CTM.d
+      if (this.x < 0) {
+        this.x = mouseX + 3 / CTM.a
+        this.toolTipPosition = "right"
+      } else {
+        this.toolTipPosition = "left"
+      }
+      this.toolTipStatus = "visible";
+      this.toolTip = item
     },
     drawChart () {
       if (!this.event.id) return
@@ -179,27 +194,35 @@ export default {
       // remove duplicated categories
       this.categories = [...new Set(this.categories)]
       // sort data with updated categories
+      var startValue = 0;
       this.categories.forEach((category, cIndex) => {
-        this.sortedData.push({
-          category: category,
-          // filter by category title and gather budget values, then get the sum of them
-          budget: this.eventBuildingBlocks
+        const budget = this.eventBuildingBlocks
             .filter(ebb => ebb.title === category)
             .map(eb => (eb.allocatedBudget === null ? 0 : eb.allocatedBudget))
             .reduce(function (total, val) {
               return parseFloat(total) + parseFloat(val)
-            }, 0),
-          color: this.getElementColor(category)
+            }, 0);
+        const budgetValue = (budget / this.totalValue) * this.circleLength;
+        this.sortedData.push({
+          category: category,
+          // filter by category title and gather budget values, then get the sum of them
+          budget: budget,
+          color: this.getElementColor(category),
+          // strikeDash: '0 ' + (this.circleLength - spaceLeft) + ' ' + this.circleLength
+          strikeDash: budgetValue + ' ' + (this.circleLength - budgetValue) + ' ' + this.circleLength,
+          rotate: (startValue / this.circleLength) * 360
         })
+        startValue += budgetValue
+        spaceLeft -= budgetValue
       })
 
       // Set dash on circle
       this.sortedData.forEach((item, index) => {
         if (item.budget) {
-          this.dashArray.push(spaceLeft + ' ' + this.circleLength)
+          this.dashArray.push('0 ' + (this.circleLength - spaceLeft) + ' ' + this.circleLength)
           // Subtract current value from spaceLeft
           spaceLeft -= (item.budget / this.totalValue) * this.circleLength
-
+          if (this.maxValue < item.budget) this.maxValue = item.budget;
           if (item === this.sortedData.filter(sd => sd.budget !== 0)[0]) {
             this.fillColor = this.sortedData[index].color
             this.endTooltip = this.sortedData[index]
@@ -216,12 +239,30 @@ export default {
         return this.defaultColor
       }
       return element.color
+    },
+    hideToolTip(){
+      this.toolTipStatus = 'hidden'
     }
   },
   computed: {
     ...mapGetters({
       components: 'event/getComponentsList'
-    })
+    }),
+    reorderingData() {
+      let maxIndex = this.sortedData.findIndex(item=>item.budget == this.maxValue)
+      const endData = {...this.sortedData[maxIndex]}
+      endData.strikeDash =  2 + ' ' + (this.circleLength - 2) + ' ' + this.circleLength
+      if (maxIndex == 0) maxIndex = this.sortedData.length - 1 
+      else maxIndex -= 1;
+      const newData = [...this.sortedData.slice(maxIndex), ...this.sortedData.slice(0, maxIndex)]
+      console.log(newData)
+      newData.push(this.sortedData[maxIndex])
+      newData.push(endData)
+      if (maxIndex >= 0) {
+        return newData
+      }
+      return this.sortedData
+    }
   },
   mounted () {
     this.drawChart()
@@ -247,6 +288,11 @@ export default {
 
 #pie_chart {
   height: 300px;
+  &:hover {
+    g::last-child {
+      visibility: visible;
+    }
+  }
 }
 .pie-chart-value {
   fill: none;
