@@ -35,7 +35,7 @@
         >
         </circle>
         <g :transform="`translate(${x},${y})`" class="tooltip" visibility="hidden" ref="tooltip">
-          <path id="svgMask" d="M3,72 L162,74 162,43 171,38 162,33 162,3 3,3 z" fill="#e6e5e5" />
+          <path id="svgMask" d="M3,72 L162,102 162,43 171,38 162,33 162,3 3,3 z" fill="#e6e5e5" />
           <path id="svgMask" d="M3,72 L162,74 162,43 171,38 162,33 162,3 3,3 z" fill="#e6e5e5" />
           <text
             id="tooltip"
@@ -61,22 +61,32 @@
           :visibility="`${toolTipStatus}`"
           ref="tooltip"
         >
-          <path id="svgMask" d="M3,72 L162,74 162,43 171,38 162,33 162,3 3,3 z" fill="#e6e5e5" v-if="toolTipPosition=='left'" />
-          <path id="svgMask" d="M12,72 L171,74 171,3 12,3 12,43 3,38 12,33 z" fill="#e6e5e5" v-if="toolTipPosition=='right'"/>
+          <path id="svgMask" d="M3,92 L182,92 182,43 190,38 182,33 182,3 3,3 z" fill="#e6e5e5" v-if="toolTipPosition=='left'" />
+          <path id="svgMask" d="M12,92 L190,92 190,3 12,3 12,43 3,38 12,33 z" fill="#e6e5e5" v-if="toolTipPosition=='right'"/>
+          <circle
+              class="pie-chart-value"
+              cx="30"
+              cy="25"
+              r="5"
+              :style="`
+                fill: ${toolTip.color};
+              `"
+            />
           <text
             id="tooltip"
-            x="20"
-            y="25"
-            style="fill: #050505; font-family: 'Manrope'; font-size: 16px; font-weight: 800;"
+            x="40"
+            y="30"
+            style="fill: #050505; font-family: 'Manrope-Regular'; font-size: 16px; font-weight: 800;"
             v-if="toolTip.category"
           >
+            
             {{toolTip.category.substr(0,15)}}{{toolTip.category.length>15?"...":""}}
-            <tspan x="20" dy="1.2em" style="font-size: 13px;font-weight: 300;">Planned budget</tspan>
+            <tspan x="25" dy="1.6em" style="font-size: 16px;font-weight: 300;">Planned budget</tspan>
             <tspan
-              x="20"
+              x="25"
               dy="1.3em"
-              style="font-size: 13px;font-weight: 300;"
-            >${{toolTip.budget}}</tspan>
+              style="font-size: 16px;font-weight: 300;"
+            >${{toolTip.budget | withComma}}</tspan>
           </text>
         </g>
     </svg>
@@ -152,7 +162,7 @@ export default {
       let mouseX = (event.clientX - CTM.e) / CTM.a
 
       let mouseY = (event.clientY - CTM.f) / CTM.d
-      this.x = mouseX - 173 / CTM.a
+      this.x = mouseX - 193 / CTM.a
       this.y = mouseY - 40 / CTM.d
       if (this.x < 0) {
         this.x = mouseX + 3 / CTM.a
@@ -270,7 +280,11 @@ export default {
       this.drawChart()
     })
   },
-  filters: {},
+  filters: {
+      withComma (amount) {
+        return amount ? amount.toLocaleString() : 0
+      }
+    },
   watch: {
     event (newVal, oldVal) {
       this.drawChart()
