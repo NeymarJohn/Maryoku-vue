@@ -175,7 +175,6 @@ export default {
     },
     drawChart () {
       if (!this.event.id) return
-
       let vm = this
       this.isLoading = true
       let res = this.event.components
@@ -252,6 +251,10 @@ export default {
     },
     hideToolTip(){
       this.toolTipStatus = 'hidden'
+    },
+    onResize() {
+      this.$refs.pie_chart.style.display = this.$refs.pie_chart.style.display === 'inline'?'inline-block':'inline'
+      this.drawChart()
     }
   },
   computed: {
@@ -279,6 +282,11 @@ export default {
     this.$root.$on('event-building-block-budget-changed', eventComponents => {
       this.drawChart()
     })
+    window.addEventListener('resize', this.onResize)
+  },
+  beforeDestroy() {
+    // Unregister the event listener before destroying this Vue instance
+    window.removeEventListener('resize', this.onResize)
   },
   filters: {
       withComma (amount) {
@@ -302,6 +310,8 @@ export default {
 
 #pie_chart {
   height: 300px;
+  width: 100%;
+  display: block;
   &:hover {
     g::last-child {
       visibility: visible;
