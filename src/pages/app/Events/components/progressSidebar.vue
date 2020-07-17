@@ -54,7 +54,7 @@
                 :src="`${$iconURL}budget+screen/SVG/Asset%2032.svg`"
                 width="25"
               />
-              <img :src="item.icon" v-if="isActiveRoute(item)" width="25"/>
+              <img :src="item.icon" v-if="isActiveRoute(item)" width="25" style="max-width:25px;max-height:25px"/>
               {{item.title}}
             </div>
           </div>
@@ -137,7 +137,7 @@ export default {
       const budget = {
         title: 'Approve Budget',
         status: 'not-complete',
-        route: 'edit/budget',
+        route: 'booking/budget',
         icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
         progress: 0
       };

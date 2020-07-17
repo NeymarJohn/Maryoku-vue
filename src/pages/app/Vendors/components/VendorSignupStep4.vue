@@ -239,6 +239,7 @@ import LightBox from 'vue-image-lightbox'
 import carousel from 'vue-owl-carousel'
 import VendorStartingFeeItem from './VendorStartingFeeItem.vue'
 import VendorExtraPayItem from './VendorExtraPayItem.vue'
+import _ from 'underscore'
 
 export default {
   name: 'vendor-signup-step4',

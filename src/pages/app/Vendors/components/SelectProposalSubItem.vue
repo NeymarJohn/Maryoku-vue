@@ -41,11 +41,11 @@
 </script>
 <style lang="scss" scoped>
   .select-proposal-sub-item-wrapper {
-    margin-right: 30px;
+    margin-right: 1rem;
     display: inline-block;
 
     div {
-      padding: 16px 28px 15px 28px;
+      padding: .5rem 1rem;
       border-radius: 100px;
       background-color: #ffffff;
       font-size: 16px;

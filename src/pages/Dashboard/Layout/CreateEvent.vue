@@ -125,6 +125,7 @@ export default {
     MaryokuInput,
   },
   created() {
+    this.$store.dispatch('auth/checkToken');
   },
   methods: {
     ...mapMutations("PublicEventPlanner", [
@@ -1194,29 +1195,5 @@ $baseColor: #5c2153;
     display: inline-block;
   }
 }
-.types {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  .type-card {
-    cursor: pointer;
-    padding: 20px 25px;
-    width: 200px;
-    height: 200px;
-    border: solid 1px #cccccc;
-    border-radius: 3px;
-    margin: 10px;
-    background: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    &.selected {
-      color: #f51355;
-      box-shadow: 0 3px 10px 0 rgba(245, 19, 85, 0.43);
-      border: solid 0.5px #f51355;
-      font-family: "Manrope-Bold";
-    }
-  }
-}
+
 </style>
