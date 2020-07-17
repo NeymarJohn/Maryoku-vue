@@ -200,7 +200,7 @@
     .refer-vendor-modal {
       &__header {
         width: 100%;
-        padding: 1rem;
+        padding: 36px 36px 0;
         .title-cont {
           display: flex;
           align-items: center;
@@ -243,14 +243,15 @@
         }
       }
       &__body {
-        padding: 0 1rem;
+        padding: 0;
       }
       &__footer {
+        border-top: 1px solid #a0a0a0;
         width: 100%;
         text-align: right;
-        margin: 0 1.5rem;
-        margin-top: -2rem;
-        padding: 2rem 0 1rem 0;
+        margin: 0 36px;
+        margin-top: -16px;
+        padding: 63px 0px 40px 40px;
         .cancel {
           font-size: 16px;
           font-weight: bold;
@@ -266,7 +267,7 @@
       &__header {
         width: 100%;
         display: flex;
-        padding: 1rem;
+        padding: 36px 53px 0;
 
         .title-cont {
           img {
@@ -309,8 +310,7 @@
         padding-left: 53px;
       }
       &__footer {
-        margin-top: -6rem;
-        padding: 1rem 2rem;
+        padding: 10px 40px 40px 40px;
       }
     }
     .cool {

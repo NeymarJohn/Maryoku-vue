@@ -260,7 +260,6 @@
       },
       saveProposal() {
         this.$root.$emit('next-step-vendor-proposal')
-        this.$root.$emit('clear-slide-pos')
 
         if (this.step == 3) {
           this.savedItModal = true
@@ -276,7 +275,6 @@
       },
       back() {
         this.$root.$emit('prev-step-vendor-proposal')
-        this.$root.$emit('clear-slide-pos')
 
         if (this.step == 2) {
           this.step = 0
@@ -643,14 +641,13 @@
         }
       }
       &__footer {
-        padding: 1rem;
-        margin-top: -2rem;
+        padding: 10px 40px 40px 40px;
       }
     }
     .saved-it-modal {
       &__header {
         width: 100%;
-        padding: 1rem;
+        padding: 55px 31px 24px 31px;
         text-align: center;
         h3 {
           font-size: 30px;
@@ -694,8 +691,7 @@
         }
       }
       &__footer {
-        padding: 1rem;
-        margin-top: -2rem;
+        padding: 10px 40px 40px 40px;
       }
     }
     .see-full {

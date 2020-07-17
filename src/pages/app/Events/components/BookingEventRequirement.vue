@@ -224,6 +224,7 @@ import { Modal } from "@/components";
 import EventComponentVendor from "@/models/EventComponentVendor";
 import EventComponentProperty from "@/models/EventComponentProperty";
 
+import ProgressSidebar from "./progressSidebar";
 import EventChangeProposalModal from "@/components/Modals/EventChangeProposalModal";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
@@ -240,6 +241,7 @@ export default {
     Drop,
     SlideYDownTransition,
     InputMask,
+    ProgressSidebar,
     Modal,
     EventChangeProposalModal,
     HeaderActions,
@@ -292,7 +294,7 @@ export default {
     },
     getSelectedBlock() {
       let event = new CalendarEvent({ id: this.event.id });
-      if (this.blockId === 'concept' || this.blockId === 'timeline' || this.blockId === 'budget') return;
+      if (this.blockId === 'concept' || this.blockId === 'timeline') return;
       new EventComponent()
         .for(this.calendar, event)
         .get()

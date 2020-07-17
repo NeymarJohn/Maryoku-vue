@@ -18,19 +18,13 @@
         Which element would you like to involve in your <strong>{{category}}</strong> proposal?
       </p>
       <div class="sub-items-cont" v-if="!isVCollapsed">
-        <span class="prev" @click="prev()" v-if="serviceSlidePos < 0">
-          <md-icon>keyboard_arrow_left</md-icon>
-        </span>
-        <div class="sub-items" :style="{'left': `${serviceSlidePos}px`}" ref="servicesCont">
+        <div class="sub-items">
           <select-proposal-sub-item
             :item="s"
             v-for="(s, sIndex) in services"
             :key="sIndex"
           />
         </div>
-        <span class="next" @click="next()" v-if="serviceSlidePos >= 0 || (this.servicesWidth + this.serviceSlidePos - 200) > 0">
-          <md-icon>keyboard_arrow_right</md-icon>
-        </span>
       </div>
       <div class="add-item-cont" v-if="step == 0 && clickedItem && !isVCollapsed">
         <div class="fields-cont">
@@ -83,21 +77,13 @@
     </div>
     <div class="sub-items-cont" v-if="step == 2 && isChecked">
       <h3>Which elements would you like to involve in your proposal?</h3>
-      <div class="sub-items-cont" v-if="step == 2 && isChecked">
-        <span class="prev" @click="prev()" v-if="serviceSlidePos < 0">
-          <md-icon>keyboard_arrow_left</md-icon>
-        </span>
-        <div class="sub-items" :style="{'left': `${serviceSlidePos}px`}" ref="servicesCont">
-          <select-proposal-sub-item
-            :active="true"
-            :item="s"
-            v-for="(s, sIndex) in services"
-            :key="sIndex"
-          />
-        </div>
-        <span class="next" @click="next()" v-if="serviceSlidePos >= 0 || (this.servicesWidth + this.serviceSlidePos - 200) > 0">
-          <md-icon>keyboard_arrow_right</md-icon>
-        </span>
+      <div class="sub-items">
+        <select-proposal-sub-item
+          :active="true"
+          :item="s"
+          v-for="(s, sIndex) in services"
+          :key="sIndex"
+        />
       </div>
     </div>
     <div class="add-item-cont" v-if="step == 2 && clickedItem && isChecked">
@@ -330,8 +316,6 @@
         newProposalRequest: {},
         files: [],
         docTag: null,
-        serviceSlidePos: 0,
-        servicesWidth: 0,
       }
     },
     methods: {
@@ -497,19 +481,7 @@
         total += total * this.tax / 100
 
         return total
-      },
-      prev() {
-        this.servicesWidth = this.$refs.servicesCont.clientWidth
-        if (this.servicesWidth - this.serviceSlidePos > 0) {
-          this.serviceSlidePos += 200
-        }
-      },
-      next () {
-        this.servicesWidth = this.$refs.servicesCont.clientWidth
-        if (this.servicesWidth + this.serviceSlidePos - 200 > 0) {
-          this.serviceSlidePos -= 200
-        }
-      },
+      }
     },
     created() {
     },
@@ -527,12 +499,6 @@
         this.serviceItem = item
         this.qty = this.unit = this.subTotal = 0
       })
-
-      this.$root.$on('clear-slide-pos', (item) => {
-        this.serviceSlidePos = 0
-      })
-
-      this.servicesWidth = this.$refs.servicesCont.clientWidth
     },
     filters: {
       withComma (amount) {
@@ -705,47 +671,19 @@
     }
 
     .sub-items-cont {
-      padding: 1rem 0;
-      overflow: hidden;
-      position: relative;
+      padding: 30px 0;
 
       h3 {
         font-size: 30px;
         font-weight: 800;
-        padding-bottom: 2rem;
+        padding-bottom: 47px;
         margin: 0;
       }
       .sub-items {
         // display: flex;
         display: block;
-        position: relative;
         white-space: nowrap;
-        width: calc(100% - 2rem);
-        // overflow-x: auto;
-      }
-      .prev {
-        position: absolute;
-        cursor: pointer;
-        z-index: 99;
-        left: 0;
-        background: #fff;
-        padding: 1.5rem 0;
-        top: 0;
-        i {
-          color: #f51355!important;
-        }
-      }
-      .next {
-        z-index: 99;
-        position: absolute;
-        cursor: pointer;
-        right: 0;
-        background: #fff;
-        padding: 1.5rem 0;
-        top: 0;
-        i {
-          color: #f51355!important;
-        }
+        overflow-x: auto;
       }
     }
 
@@ -782,7 +720,7 @@
     }
 
     .editable-sub-items-cont {
-      margin-top: 2rem;
+      margin-top: 65px;
 
       .editable-sub-items-header {
         border-top: 1px solid #707070;
