@@ -192,7 +192,14 @@
               </md-checkbox>
             </li>
           </ul>
-          <textarea rows="4" type="text" class="form-control" placeholder="Type your reason here..."></textarea>
+          <textarea 
+            v-if="reasonIsOther" 
+            rows="4" 
+            maxlength="500" 
+            type="text" 
+            class="form-control" 
+            placeholder="Type your reason here..."
+          />
         </div>
       </template>
       <template slot="footer">
@@ -256,21 +263,32 @@
           <div class="left-side">
           </div>
           <div class="right-side">
-            <img :src="`${iconsUrl}Group 6085.svg`">
-            <md-datepicker
-              v-if="suggest"
-              v-model="proposalRequest.suggestedDates"
-              :md-disabled-dates="isDateDisabled"
-            >
-              <label>Alternative date</label>
-            </md-datepicker>
-            <div class="time" value="08:00">
-              <span>08</span>
-              <span>:</span>
-              <span>00</span>
-            </div>
-            <div class="pm" >
-              <span>AM</span>
+            <template>
+              <functional-calendar 
+                :key="componentKey"
+                :change-month-function="true" 
+                :change-year-function="true"
+                :is-multiple-date-picker="true"
+                :minSelDays="1"
+                :limits="limitDateRange"
+                :sundayStart="true"
+                v-model="date"
+                ref="calendar"
+              />
+            </template>
+            <div class="select-time-cont">
+              <img :src="`${iconsUrl}Group 6085.svg`"/>
+              <vue-timepicker 
+                manual-input
+                input-class="time-class"
+                hide-dropdown
+                format="hh:mm" 
+                v-model="startTime" 
+                hide-clear-button
+              />
+              <div class="am-field" @click="updateStartA()">
+                <input type="text" v-model="amPack.start" readonly/>
+              </div>
             </div>
           </div>
         </div>
@@ -298,6 +316,8 @@ import CalendarEvent from '@/models/CalendarEvent'
 import Icon from '@/components/Icon/Icon.vue'
 import InputProposalSubItem from '@/components/Inputs/InputProposalSubItem.vue'
 import VendorBudgetList from './components/VendorBudgetList.vue'
+import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
+import { FunctionalCalendar } from 'vue-functional-calendar'
 import { Modal } from '@/components'
 
 export default {
@@ -305,7 +325,9 @@ export default {
     Modal,
     VueElementLoading,
     InputProposalSubItem,
-    VendorBudgetList
+    VendorBudgetList,
+    FunctionalCalendar,
+    VueTimepicker
   },
   data() {
     return {
@@ -330,13 +352,32 @@ export default {
       firstTime: false,
       suggest: false,
       categories: [
-        'Equipment',
-        'Staffing',
-        'Services',
-        'Amenities',
-        'Accessibility',
-        'Inclusions',
-      ]
+        'Venue Rental',
+        'Food & Beverage',
+        'Design and Decor',
+        'Guest Services & Staffing',
+        'Signage / Printing',
+        'AV / Staging',
+        'Swags',
+        'Transportation & Tour operator',
+        'Entertainment',
+        'Security',
+        'Videography and Photography',
+        'Equipment Rentals'
+      ],
+      amPack: {
+        start: 'AM', 
+        end: 'AM',
+      },
+      startTime: {
+        hh: '12',
+        mm: '00'
+      },
+      limitDateRange: {
+        min: null, 
+        max: null
+      },
+      today: null
     }
   },
   created() {
@@ -355,6 +396,12 @@ export default {
       this.upcomingEvents = allEvents
       this.isLoading = false
     })
+
+    this.today = moment(new Date())
+    this.limitDateRange = {
+      min: this.today.add(-3, 'days').format('DD/MM/YYYY'), 
+      max: this.today.add(6, 'days').format('DD/MM/YYYY'), 
+    }
   },
   methods: {
     goToForm() {
@@ -447,6 +494,13 @@ export default {
         )
       }
       this.hideModal()
+    },
+    updateStartA () {
+      if (this.amPack.start == 'AM') {
+        this.amPack.start = 'PM'
+      } else {
+        this.amPack.start = 'AM'
+      }
     }
   },
   computed: {
@@ -731,7 +785,7 @@ export default {
     .refer-vendor-modal {
       &__header {
         width: 100%;
-        padding: 36px 36px 0;
+        padding: 20px 20px 0;
         h3 {
           color: #050505;
           font-size: 30px;
@@ -761,9 +815,10 @@ export default {
         }
       }
       &__body {
-        padding: 16px 40px 0 40px;
+        padding: .5rem 1rem;
 
         .input-proposal-sub-item-wrapper {
+          position: relative;
           margin-bottom: 40px;
 
           &:last-child {
@@ -774,9 +829,9 @@ export default {
       &__footer {
         width: 100%;
         text-align: right;
-        margin: 0 36px;
+        margin: 0 1rem;
         margin-top: -16px;
-        padding: 63px 0px 40px 40px;
+        padding: 1.5rem 0 1rem 0;
         .cancel {
           font-size: 16px;
           font-weight: bold;
@@ -793,7 +848,7 @@ export default {
       font-family: Manrope-Regular,sans-serif;
       &__header {
         width: 100%;
-        padding: 40px 40px 0;
+        padding: 20px 20px 0;
         h3 {
           font-size: 30px;
           color: #050505;
@@ -822,7 +877,7 @@ export default {
         }
       }
       &__body {
-        padding: 10px 40px;
+        padding: .5rem 1rem;
         ul {
           padding: 0;
           margin: 0;
@@ -856,9 +911,9 @@ export default {
         }
         textarea {
           font-family: Manrope-Regular,sans-serif;
-          margin-left: 28px;
+          margin-left: 3rem;
           margin-top: 1em;
-          width: calc(100% - 28px);
+          width: calc(100% - 3rem);
           min-height: 8em;
           border-radius: 3px;
           border: solid 1px #707070;
@@ -914,7 +969,7 @@ export default {
     .sorry-modal {
       &__header {
         width: 100%;
-        padding: 40px 40px 0;
+        padding: 20px 20px 0;
         display: flex;
 
         .left-side {
@@ -934,6 +989,7 @@ export default {
           }
           .header-description {
             margin-top: 20px;
+            margin-bottom: -1rem;
             font-size: 20px;
             line-height: 1.29;
           }
@@ -953,10 +1009,10 @@ export default {
         }
       }
       &__body {
-        padding: 10px 40px;
+        padding: 0;
       }
       &__footer {
-        padding: 10px 40px 40px 40px;
+        padding: 1rem;
         .cancel {
           font-size: 16px;
           font-weight: bold;
@@ -982,7 +1038,7 @@ export default {
     .choose-date-modal {
       &__header {
         width: 100%;
-        padding: 40px 40px 0;
+        padding: 20px 20px 0;
         h3 {
           font-size: 30px;
           font-weight: 800;
@@ -1025,9 +1081,10 @@ export default {
           margin-right: 60px;
         }
         .right-side {
-          display: flex;
-          justify-content: center;
-          align-items: center;
+          display: grid;
+          grid-template-columns: 50% 50%;
+          grid-gap: 3rem;
+
           img {
             width: 23px;
             margin-right: 24px;
@@ -1045,6 +1102,45 @@ export default {
             font-size: 30px;
             border-radius: 3px;
             border: solid 0.5px #707070;
+          }
+          .select-time-cont {
+            display: flex;
+            align-items: center;
+
+            .am-field {
+              position: relative;
+              cursor: pointer;
+              input {
+                width: 56px;
+                height: 45px;
+                cursor: pointer;
+                border-radius: 3px;
+                font: normal 18px Manrope-Regular, sans-serif;
+                margin-left: .5rem;
+                border: 1px solid #707070;
+                text-align: center;
+              }
+              &:before {
+                position: absolute;
+                content: '>';
+                transform: translateX(50%) translateY(calc(100% + 1.2rem)) rotate(90deg);
+                left: 40%;
+                font-size: 20px;
+                font-weight: 800;
+              }
+            }
+            /deep/ .time-picker {
+              width: unset;
+              input {
+                text-align: center;
+                width: 110px;
+                height: 45px;
+                border-radius: 3px;
+                font: normal 18px Manrope-Regular, sans-serif;
+                border: 1px solid #707070;
+                text-align: center;
+              }
+            }
           }
         }
       }
