@@ -339,22 +339,9 @@ export default {
       ]
     }
   },
-  created() {
-    this.$auth.currentUser(this, true, function () {
-    }.bind(this));
-  },
   mounted() {
     this.getVendor()
     this.getProposal(this.$route.params.id)
-
-    let _calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
-
-    let m = new CalendarEvent().for(_calendar).fetch(this, true)
-    m.then(allEvents => {
-      console.log(allEvents)
-      this.upcomingEvents = allEvents
-      this.isLoading = false
-    })
   },
   methods: {
     goToForm() {

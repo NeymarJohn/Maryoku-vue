@@ -110,15 +110,13 @@ export default {
     }
   },
   beforeMount () {
-    if (this.loggedIn) {
-      this.$store.dispatch('auth/checkToken')
-      .then(res=>{
-        this.redirectPage()
-      })
-      .catch(err=>{
-        this.$router.push({path:'signin'})
-      })
-    }
+    this.$store.dispatch('auth/checkToken')
+    .then(res=>{
+      this.redirectPage()
+    })
+    .catch(err=>{
+      this.$router.push({path:'signin'})
+    })
   },
   data () {
     return {

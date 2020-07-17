@@ -31,6 +31,7 @@ class AuthService {
         if (response.data.access_token) {
           localStorage.setItem('manage_id_token', response.data.access_token)
           localStorage.setItem('user', JSON.stringify(response.data));
+          this.setTokenToCookie(response.data.access_token)
           axios.defaults.headers.common.Authorization = authHeader().Authorization
           this.setTenant(response.data.currentTenant)
         }
@@ -41,6 +42,7 @@ class AuthService {
   logout() {
     localStorage.removeItem('user');
     localStorage.removeItem('manage_id_token')
+    document.cookie='';
     axios.defaults.headers.common.Authorization = null
   }
 
@@ -82,6 +84,9 @@ class AuthService {
   checkToken(token) {
     if (token) {
       axios.defaults.headers.common.Authorization = `Bearer ${token}`
+    } else {
+      const cookieToken = this.getCookie("authToken")
+      axios.defaults.headers.common.Authorization = `Bearer ${cookieToken}`
     }
     return axios.post(VALIDATE_URL).then(response=>{
       if (response.data.access_token) {
@@ -92,6 +97,22 @@ class AuthService {
       return response.data;
     });
   }
+
+  getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
   getAppUrl(tenantId) {
     let hostname = HOSTNAME
     if (hostname.startsWith('app.maryoku.com')) {
@@ -101,6 +122,13 @@ class AuthService {
   }
   setInvitationEvent(tenantId, event) {
     window.localStorage.setItem("invitaion", { tenantId, event });
+  }
+  setTokenToCookie(token) {
+    const days = 1;
+    const expiredDate = new Date();
+    expiredDate.setTime(expiredDate.getTime() + ( days * 24 * 60 * 60 * 1000 ))
+    const domain = ".maryoku.com"
+    document.cookie = `authToken=${token}; expires=${expiredDate.toGMTString()}; path=/; domain=${domain}`
   }
 }
 

@@ -115,26 +115,32 @@ export default {
       window.currentPanel.promise.then(res => {
         this.createEventModalOpen = false;
       });
+    },
+    initData() {
+      const calendar = new Calendar({ id: this.$store.state.auth.user.profile.defaultCalendarId });
+      const eventId = this.$route.params.id
+      if (!eventId) {
+        this.renderChild = true
+        return
+      }
+      this.getEventAction({eventId, calendar}).then(event=>{
+        this.renderChild = true;
+      }).catch(error=>{
+        this.showError = true
+        console.error(error)
+      });
     }
   },
   created() {
     this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
   },
   mounted() {
-    if (!this.$store.state.auth.status.loggedIn) {
+    this.$store.dispatch('auth/checkToken').then(()=>{
+      this.initData();
+    }).catch(()=>{
       this.$router.push({ path: `/signin`})
       return
-    } else if (!this.$store.state.auth.user.profile.defaultCalendarId) {
-      this.$store.dispatch('auth/login', this.$store.state.auth.user)
-    }
-    const calendar = new Calendar({ id: this.$store.state.auth.user.profile.defaultCalendarId });
-    const eventId = this.$route.params.id
-    this.getEventAction({eventId, calendar}).then(event=>{
-      this.renderChild = true;
-    }).catch(error=>{
-      this.showError = true
-      console.error(error)
-    });
+    }) 
   },
   computed: {
     ...mapState('event', [

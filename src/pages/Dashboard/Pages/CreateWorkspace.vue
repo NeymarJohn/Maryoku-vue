@@ -201,10 +201,6 @@ export default {
     }
   },
   created() {
-    if (!this.$store.state.auth.status.loggedIn) {
-      this.$router.push({path:'/signin'})
-      return 
-    }
     this.workspace = this.generateWorkspaceName(this.$store.state.auth.user.companyName);
   },
   watch: {

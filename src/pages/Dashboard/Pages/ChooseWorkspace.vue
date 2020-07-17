@@ -117,32 +117,7 @@ export default {
       }); */
   },
   mounted () {
-    this.loading = true
-    if (!this.$store.state.auth.status.loggedIn) {
-      this.$router.push({name: 'SignIn'})
-    }
     this.tenantIds = this.$store.state.auth.user.tenants
-    this.loading = false
-    // new TenantUser().find(this.$store.state.auth.user.access_token)
-    // .then(res => {
-    //   console.log("response", res)
-    //   if (res.tenantIds) {
-    //     this.tenantIds = res.tenantIds
-    //   } else {
-    //     this.$router.push({name: 'CreateWorkspace'})
-    //   }
-    //   this.loading = false
-    // })
-    // .catch(error=>{
-    //   // this.$store.dispatch('auth/logout', this.user).then(
-    //   //   () => {
-    //   //     this.$router.push({name: 'SignIn'})
-    //   //   },
-    //   //   error => {
-    //   //     this.$router.push({name: 'SignIn'})
-    //   //   }
-    //   // );
-    // })
   },
   watch: {
     email () {

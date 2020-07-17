@@ -52,7 +52,7 @@
         </div>
           <div class="sidebar-menu__item"  >
 
-              <div class="item-route" @click="goTo('/vendors-pool-new')">
+              <div class="item-route" @click="goTo('/vendors-pool')">
                   <img :src="`${menuIconsURL}Asset 117.svg`" /> Vendors Pool
               </div>
           </div>

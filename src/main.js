@@ -234,24 +234,6 @@ Object.defineProperty(Vue.prototype, '$authHeader', {
   get () { return authHeader().Authorization }
 })
 
-const myMixin = {
-  created(){
-    console.log("test")
-    Model.$http.defaults.headers.common.Authorization = authHeader().Authorization
-  },
-  updated () {
-    console.log("test")
-    Model.$http.defaults.headers.common.Authorization = authHeader().Authorization
-  },
-  computed: {
-    loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
-    },
-    currentUser() {
-      return this.$store.state.auth.user
-    }
-  },
-}
 
 Vue.mixin({
   data: () => ({

@@ -169,15 +169,7 @@ export default {
     EventModal
   },
   created () {
-    console.log(this.$http)
-    const currentUser = this.$store.getters['auth/currentUser'];
-    if (!this.$store.getters['auth/isLoggedIn']) {
-      this.$router.push("/signin")
-      return
-    }
-    console.log("currentUser", currentUser)
-    
-    this.$store.dispatch('auth/checkToken').then(()=>{
+    this.$store.dispatch('auth/checkToken').then((currentUser)=>{
       let _calendar = new Calendar({ id: currentUser.profile.defaultCalendarId })
       let m = new CalendarEvent().for(_calendar).fetch(this, true)
       m.then(allEvents => {
@@ -186,11 +178,11 @@ export default {
       }).catch(e=>{
         console.log(e)
       })
-    }).catch(()=>{
+    }).catch((error)=>{
+      console.log(error)
       this.$store.dispatch('auth/logout')
       this.$router.push("/signin")
       return
-      
     })
   },
   data () {
