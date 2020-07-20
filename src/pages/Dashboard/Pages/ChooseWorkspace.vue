@@ -102,7 +102,8 @@ export default {
       }
     },
     tenantUrl (tenant) {
-      return `${this.$authService.getAppUrl(tenant)}/#/signedin?token=${this.$auth.getToken()}`
+      // return `${this.$authService.getAppUrl(tenant)}/#/signedin?token=${this.$auth.getToken()}`
+      return `${this.$authService.getAppUrl(tenant)}/#/events`
     }
   },
   created () {

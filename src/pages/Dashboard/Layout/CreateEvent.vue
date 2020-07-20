@@ -125,6 +125,7 @@ export default {
     MaryokuInput,
   },
   created() {
+    this.$store.dispatch('auth/checkToken');
   },
   methods: {
     ...mapMutations("PublicEventPlanner", [

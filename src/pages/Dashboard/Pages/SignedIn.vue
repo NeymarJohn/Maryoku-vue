@@ -60,7 +60,7 @@ export default {
           }
           const firstEvent = this.$route.query.firstEvent
           if (firstEvent) {
-            this.$router.push({ path: `/events/${firstEvent}/booking/concept` })
+            this.$router.push({ path: `/events/${firstEvent}/booking/budget` })
           } else {
             this.$router.push({ path: '/create-event-wizard' })
           }

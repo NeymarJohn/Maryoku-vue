@@ -6,16 +6,9 @@ import NewEventLayout from '@/pages/Dashboard/Layout/NewEventLayout.vue'
 import WorkspaceLayout from '@/pages/Dashboard/Layout/WorkspaceLayout.vue'
 
 const Events = () => import('@/pages/app/Events/Events.vue')
-const CurrentEvents = () => import('@/pages/app/Events/CurrentEvents.vue')
-const NewEvent = () => import('@/pages/app/Events/NewEvent.vue')
-
-
-const EventDetails = () => import('@/pages/app/Events/EventDetails.vue')
-
 const EventDetailsOverView = () => import('@/pages/app/Events/EventDetailsOverview.vue')
 
 const EventProposal = () => import('@/pages/app/Events/EventProposal.vue')
-const EventSteps = () => import('@/pages/app/Events/Steps')
 const Notes = () => import('@/pages/app/Notes.vue')
 const Proposals = () => import('@/pages/app/Proposals.vue')
 const CurrentVendors = () => import('@/pages/app/Vendors/CurrentVendors.vue')
@@ -23,12 +16,15 @@ const AddEditVendor = () => import('@/pages/app/Vendors/AddEditVendor.vue')
 const VendorsPoolNew = () => import('@/pages/app/Vendors/VendorsPoolNew.vue')
 const ImportVendors = () => import('@/pages/app/Vendors/ImportVendors.vue')
 
+// const EventSteps = () => import('@/pages/app/Events/Steps')
+// const EventDetails = () => import('@/pages/app/Events/EventDetails.vue')
 // import EmptyLayout from '@/pages/Dashboard/Pages/EmptyLayout'
 // import MarketPlaceLayout from '@/pages/Dashboard/Pages/MarketPlaceLayout'
 // import EventLayout from '@/pages/Dashboard/Layout/EventLayout.vue'
 // import PublicLayout from '@/pages/Dashboard/Pages/PublicLayout.vue'
 // import SigninSignupLayout from '@/pages/Dashboard/Layout/SigninSignupLayout.vue'
-
+// const CurrentEvents = () => import('@/pages/app/Events/CurrentEvents.vue')
+// const NewEvent = () => import('@/pages/app/Events/NewEvent.vue')
 // const YearlyPlan = () => import('@/pages/app/YearlyPlan/index.vue')
 // const AnnualPlanner = () => import('@/pages/app/AnnualPlanner/index.vue')
 // const EditEvent = () => import('@/pages/app/Events/EditEvent.vue')
@@ -113,7 +109,7 @@ const Invited = () =>
   import('@/pages/Dashboard/Pages/Invited.vue')
 
 
-  
+
 
 let authPages = {
   path: '/',
@@ -493,16 +489,16 @@ let appPages = {
     name: 'Notes',
     component: Notes
   },
-  {
-    path: '/events/:id/edit',
-    name: 'EventDetails',
-    component: EventDetails,
-    meta: {
-      title: 'Event Page',
-      gtm: 'Event Details',
-      opaque: false
-    }
-  }
+  // {
+  //   path: '/events/:id/edit',
+  //   name: 'EventDetails',
+  //   component: EventDetails,
+  //   meta: {
+  //     title: 'Event Page',
+  //     gtm: 'Event Details',
+  //     opaque: false
+  //   }
+  // }
   ]
 }
 // let EventPages = {
@@ -629,14 +625,14 @@ let NewEventPages = {
       title: 'Event Proposal'
     }
   },
-  {
-    path: '/events/new',
-    name: 'NewEvent',
-    component: NewEvent,
-    meta: {
-      title: 'Create New Event'
-    }
-  },
+  // {
+  //   path: '/events/new',
+  //   name: 'NewEvent',
+  //   component: NewEvent,
+  //   meta: {
+  //     title: 'Create New Event'
+  //   }
+  // },
   {
     path: '/events/:id/edit/budget',
     name: 'EditEventNew',
@@ -657,16 +653,16 @@ let NewEventPages = {
       opaque: false
     }
   },
-  {
-    path: '/events/:id/edit/building-blocks',
-    name: 'EditBuildingBlocks',
-    component: CurrentEvents,
-    meta: {
-      title: 'Building Blocks',
-      gtm: 'Building Blocks',
-      opaque: false
-    }
-  },
+  // {
+  //   path: '/events/:id/edit/building-blocks',
+  //   name: 'EditBuildingBlocks',
+  //   component: CurrentEvents,
+  //   meta: {
+  //     title: 'Building Blocks',
+  //     gtm: 'Building Blocks',
+  //     opaque: false
+  //   }
+  // },
   {
     path: '/events/:id/edit/timeline',
     name: 'EditTimeLine',
@@ -725,55 +721,55 @@ let NewEventPages = {
       opaque: false
     },
   },
-  {
-    path: '/events/:id/edit/invitees-management',
-    name: 'InviteesManagement',
-    component: CurrentEvents,
-    meta: {
-      title: 'Automated Interactions',
-      gtm: 'Event Edit',
-      opaque: false
-    }
-  },
-  {
-    path: '/events/:id/edit/event-invitees',
-    name: 'EventInvitees',
-    component: CurrentEvents,
-    meta: {
-      title: 'Event Invitees',
-      gtm: 'Event Invitees',
-      opaque: false
-    }
-  },
+  // {
+  //   path: '/events/:id/edit/invitees-management',
+  //   name: 'InviteesManagement',
+  //   component: CurrentEvents,
+  //   meta: {
+  //     title: 'Automated Interactions',
+  //     gtm: 'Event Edit',
+  //     opaque: false
+  //   }
+  // },
+  // {
+  //   path: '/events/:id/edit/event-invitees',
+  //   name: 'EventInvitees',
+  //   component: CurrentEvents,
+  //   meta: {
+  //     title: 'Event Invitees',
+  //     gtm: 'Event Invitees',
+  //     opaque: false
+  //   }
+  // },
 
   // Event Wizard
-  {
-    path: '/event-steps/:id',
-    name: 'EventSteps',
-    component: EventSteps,
-    meta: {
-      title: 'Event Wizard',
-      gtm: 'Event Wizard'
-    }
-  },
-  {
-    path: '/event/create',
-    name: 'EventCreate',
-    component: EventSteps,
-    meta: {
-      title: 'Event Wizard',
-      gtm: 'Event Wizard'
-    }
-  },
-  {
-    path: '/event/:id/edit',
-    name: 'EventEdit',
-    component: EventSteps,
-    meta: {
-      title: 'Event Wizard',
-      gtm: 'Event Wizard'
-    }
-  },
+  // {
+  //   path: '/event-steps/:id',
+  //   name: 'EventSteps',
+  //   component: EventSteps,
+  //   meta: {
+  //     title: 'Event Wizard',
+  //     gtm: 'Event Wizard'
+  //   }
+  // },
+  // {
+  //   path: '/event/create',
+  //   name: 'EventCreate',
+  //   component: EventSteps,
+  //   meta: {
+  //     title: 'Event Wizard',
+  //     gtm: 'Event Wizard'
+  //   }
+  // },
+  // {
+  //   path: '/event/:id/edit',
+  //   name: 'EventEdit',
+  //   component: EventSteps,
+  //   meta: {
+  //     title: 'Event Wizard',
+  //     gtm: 'Event Wizard'
+  //   }
+  // },
   {
     path: '/vendors-pool',
     name: 'VendorsPoolNew',
