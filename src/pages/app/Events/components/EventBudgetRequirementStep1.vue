@@ -21,7 +21,11 @@
             Between a Teflon pan and a super glue How obligated are you to stick to the budget?  
           </div>
           <div class="mt-4rem slider-wrapper">
-            <img :src="`${$iconURL}Onboarding/block-red.svg`">
+            <div>
+              <img :src="`${$iconURL}Budget Requirements/group-8347.svg`">
+              <div class="font-bold">Super Glue</div>
+              <div>Within Budget</div>
+            </div>
             <range-slider
               class="slider"
               min="0"
@@ -29,7 +33,11 @@
               step="1"
               v-model="flexibility">
             </range-slider>
-            <img :src="`${$iconURL}Onboarding/excersie-red.svg`">
+            <div>
+              <img :src="`${$iconURL}Budget Requirements/group-8348.svg`">
+              <div class="font-bold">Telflon Pan</div>
+              <div>Value For Money</div>
+            </div>
           </div>
         </template>
         <template v-else>
