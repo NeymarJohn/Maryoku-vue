@@ -93,6 +93,7 @@ class AuthService {
         localStorage.setItem('manage_id_token', response.data.access_token)
         localStorage.setItem('user', JSON.stringify(response.data));
         axios.defaults.headers.common.Authorization = authHeader().Authorization
+        this.setTokenToCookie(response.data.access_token)
       }
       return response.data;
     });

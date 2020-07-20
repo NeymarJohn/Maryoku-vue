@@ -32,7 +32,8 @@ export default {
           if  (tenantUser.tenants && tenantUser.tenants.length > 0) {
             this.$router.push({name: 'ChooseWorkspace'})
           } else  {
-            this.$router.push({name: 'CreateWorkspace'})
+            // this.$router.push({name: 'CreateWorkspace'})
+            this.$router.push({ path: '/create-event-wizard' })
           }
         } else {
           this.$gtm.trackEvent({

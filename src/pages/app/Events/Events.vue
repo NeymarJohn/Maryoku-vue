@@ -169,7 +169,8 @@ export default {
     EventModal
   },
   created () {
-    this.$store.dispatch('auth/checkToken').then((currentUser)=>{
+    const currentUser = this.$store.state.auth.user;
+    if (currentUser.currentTenant) {
       let _calendar = new Calendar({ id: currentUser.profile.defaultCalendarId })
       let m = new CalendarEvent().for(_calendar).fetch(this, true)
       m.then(allEvents => {
@@ -178,12 +179,9 @@ export default {
       }).catch(e=>{
         console.log(e)
       })
-    }).catch((error)=>{
-      console.log(error)
-      this.$store.dispatch('auth/logout')
-      this.$router.push("/signin")
-      return
-    })
+    } else {
+      this.$router.push({path:'/signin'})
+    }
   },
   data () {
     return {

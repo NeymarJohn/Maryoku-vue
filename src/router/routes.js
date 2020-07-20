@@ -1074,8 +1074,9 @@ let HomePages = {
 const routes = [
   {
     path: '/',
-    redirect: '/events',
+    redirect: '/signin',
     name: 'Root',
+    component: HomePage,
     meta: {
       gtm: 'Root'
     }

@@ -83,40 +83,56 @@ router.beforeEach((to, from, next) => {
     window.currentPanel.hide()
     window.currentPanel = null
   }
-
-  /* let tenantId = document.location.hostname.replace(".maryoku.com","");
-    router.app.$http.defaults.headers.common.gorm_tenantid = tenantId;
-    Model.$http.defaults.headers.common.gorm_tenantid = tenantId;
-
-    if ((tenantId.startsWith("dev") || tenantId.startsWith("app") || tenantId.startsWith("localhost")) && to.name !== "CreateWorkspace"){
-      next('create-workspace');
-    } else {
-      if (to.meta.auth===null && !auth.user.authenticated) {
-        next('signin');
-      } else {
-        next();
-      }
-    } */
-
   let tenantId = document.location.hostname.replace('.maryoku.com', '')
-  let isPrimeTenant = tenantId === 'dev' || tenantId === 'app'
+  let isPrimeTenant = tenantId === 'dev' || tenantId === 'app' || tenantId === 'local'
   const unAuthenticatedLinks = [
     '/signout', '/signin', '/signup', '/signedin', '/create-workspace', '/choose-workspace', '/forgot-password',
     '/create-event-wizard', '/event-wizard-day', '/event-wizard-flexibility', '/event-wizard-guests', 
     '/event-wizard-guests-type', '/event-wizard-location', '/event-wizard-building', '/event-wizard-type', 
     '/event-wizard-celebrating', '/event-wizard-religion', '/event-wizard-vibes']
-  if ((isPrimeTenant && unAuthenticatedLinks.indexOf(to.path) < 0 ) || (to.meta.auth && !auth.user.authenticated)) {
-    next('signin')
-  } else {
-    if (to.name !== 'ShowEvent' && to.path !== '/signout' && auth.user.role === 'guest' && to.path !== '/my-events') {
-      next('my-events')
-      return
-    }
 
-    next()
+  const authenticatedLinks = ['/events', '/choose-workspace']
+  const isAuthenticatedLink = authenticatedLinks.findIndex( link => to.path.indexOf(link) >=0 ) >= 0;
+  if (to.path === '/signedin' || to.path.indexOf('/event-wizard')>=0) {
+    next();
+    return
   }
-  // router.app.$root.$emit("set-title",null);
-  router.app.$root.$emit('set-title', null, false, false)
+  store.dispatch('auth/checkToken').then(res=>{
+    console.log(res)
+    if (to.path == '/signin') {
+      if (res.currentTenant) {
+        next('/events')
+      } else if (res.tenants.length === 0) {
+        next('/create-workspace')
+      } else if (res.tenants.length > 0) {
+        next('/choose-workspace')
+      } else {
+        next('/error')
+      }
+    } else {
+      next()
+    }
+  }).catch(error=>{
+    if (isAuthenticatedLink) {
+      next('signin')
+    } else {
+      next()
+    }
+  })
+
+  // // if ((isPrimeTenant && unAuthenticatedLinks.indexOf(to.path) < 0 ) || (to.meta.auth && !auth.user.authenticated)) {
+  // //   next('signin')
+  // // } else {
+  // //   if (to.name !== 'ShowEvent' && to.path !== '/signout' && auth.user.role === 'guest' && to.path !== '/my-events') {
+  // //     next('my-events')
+  // //     return
+  // //   }
+
+  // //   next()
+  // // }
+  // next()
+  // // router.app.$root.$emit("set-title",null);
+  // router.app.$root.$emit('set-title', null, false, false)
 })
 
 router.afterEach((to, from) => {
