@@ -85,6 +85,25 @@
   }
 }
 
+.card-section {
+  border-radius: 3px;
+  -webkit-box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
+  margin-bottom: 1em;
+  .section-header {
+    padding: 20px 25px;
+    font-family: 'Manrope-Bold',sans-serif;
+    font-size: 22px;
+    color: #050505;
+    background: #fff !important;
+    text-align: left;
+    border-radius: 0;
+    &.with-border {
+      border-bottom: solid 2px #DBDBDB !important;
+    }
+  }
+}
 
 // Styles for wizard and pre-budget page
 .event-budget-flexibility, .event-flexibility {

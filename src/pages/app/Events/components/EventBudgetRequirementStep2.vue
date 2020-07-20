@@ -9,24 +9,32 @@
           Who’s calling the shots? 
         </div>
         <div class="mt-1">What character would you say he or she resembles?</div>
-          <div class="mt-1 types">
+          <div class="mt-1 movies">
             <div 
-              v-for="(level) in levels" :key="level.value"
-              class="type-card"
-              :class="{selected:level.value == selectedLevel.value}" 
-              @click="selectedLevel=level" 
+              v-for="(movie) in movies" :key="movie.label"
+              class="movie-card"
+              :class="{selected:movie.label == selectedMovie.label}" 
+              @click="selectedMovie=movie" 
               >
-              <div>
-                {{level.label}}
+              <div class="movie-tip">
+                <img :src="`${$iconURL}Event%20Page/light.svg`" width="18" >
+                <transition name="fade">
+                  <div class="tool-tip">
+                      <b class="font-weight-bold">{{movie.label}}</b> is a queen bee. She likes things 
+                      the way she likes them. At times she can seem 
+                      bossy or hard to please - her standards are 
+                      extremely high and your budget better be 
+                      impeccable for her to approve it
+                  </div>
+                </transition>
               </div>
-              <div>
-                <div class="mb-1">
-                  <span v-if="level.value===1">$</span>
-                  <span v-if="level.value===2">$$</span>
-                  <span v-if="level.value===3">$$$</span>
-                </div>
-                <md-checkbox class="md-checkbox-circle md-red" v-model="selectedLevel" :value="level"></md-checkbox>
+              <div class="movie-thumb">
+                <img :src="`${$storageURL}${movie.icon}`"/>
               </div>
+              <div >
+                <md-checkbox class="md-checkbox-circle md-red " v-model="selectedMovie" :value="movie"><span class="movie-label">{{movie.label}}</span></md-checkbox>
+              </div>
+              
             </div>
           </div>
       </div>
@@ -51,32 +59,32 @@ export default {
       flexibility: 5,
       noBudget: false,
       budget:"",
-      selectedLevel:{},
+      selectedMovie:{},
       movies: [
         {
           icon: "movies/amy-santiago.png",
           label: "Amy Santiago"
         },{
           icon: "movies/amybrookheimer.jpg",
-          label: "Amu Santiago"
+          label: "Amybrookheimer"
         },{
           icon: "movies/captain-kirk2.png",
-          label: "Amu Santiago"
+          label: "Captain kirk"
         },{
           icon: "movies/dirty-harry2.png",
-          label: "Amu Santiago"
+          label: "Dirty Harry"
         },{
           icon: "movies/jerry-seinfeld.png",
-          label: "Amu Santiago"
+          label: "Jerry Seinfeld"
         },{
-          icon: "movies/joan-harris.png",
-          label: "Amu Santiago"
+          icon: "movies/joan-harris.jpg",
+          label: "Joan Harris"
         },{
-          icon: "movies/mirandapreistly.png",
-          label: "Amu Santiago"
+          icon: "movies/mirandapreistly.jpg",
+          label: "Mirandapreistly"
         },{
-          icon: "movies/sprano.png",
-          label: "Amu Santiago"
+          icon: "movies/soprano.png",
+          label: "Soprano"
         },
       ]
     }
@@ -84,5 +92,76 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  
+  .movies {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: space-around;
+    .movie-card {
+      display: inline-block;
+      margin: 10px;
+      text-align: left;
+      position: relative;
+      &.selected {
+        .movie-thumb {
+          box-shadow: 0 3px 10px 0 rgba(245, 19, 85, 0.43);
+        }
+        .movie-label {
+          color: #f51355;
+          font-weight: bold;
+        }
+      }
+      .movie-thumb {
+        border-radius: 3px;
+        img {
+          border-radius: 3px;
+          width: 280px;
+          height: 200px;
+          object-fit: cover;
+        }
+        &:hover {
+           box-shadow: 0 3px 10px 0 rgba(245, 19, 85, 0.43);
+        }
+      }
+      .movie-tip {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+
+        img {
+          background-color: white;
+          border-radius: 50%;
+          cursor: pointer;
+        }
+        &:hover{
+          .tool-tip {
+            display: block;
+          }
+        }
+      }
+      .tool-tip {
+        width: 300px;
+        // height: 192.5px;
+        right:-30px;
+        bottom: 40px;
+        padding: 20px;
+        box-shadow: 0 3px 21px 0 rgba(0, 0, 0, 0.21);
+        background-color: #ffedb7;
+        position: absolute;
+        display: none;
+        z-index: 20;
+        &::after{
+          width: 0;
+          height: 0;
+          border-left: 10px solid transparent;
+          border-right: 10px solid transparent;
+          border-top: 15px solid #ffedb7;
+          // box-shadow: 0 3px 21px 0 rgba(0, 0, 0, 0.21);
+          content: "";
+          bottom: -15px;
+          position: absolute;
+          right: 30px;
+        }
+      }
+    }
+  }
 </style>

@@ -42,7 +42,7 @@ class AuthService {
   logout() {
     localStorage.removeItem('user');
     localStorage.removeItem('manage_id_token')
-    this.removeCookie()
+    document.cookie='';
     axios.defaults.headers.common.Authorization = null
   }
 
@@ -118,7 +118,7 @@ class AuthService {
     if (hostname.startsWith('app.maryoku.com')) {
       hostname = 'maryoku.com'
     }
-    return `${document.location.protocol}//${tenantId}.${document.location.hostname}:${document.location.port}`
+    return `${document.location.protocol}//${document.location.hostname}:${document.location.port}`
   }
   setInvitationEvent(tenantId, event) {
     window.localStorage.setItem("invitaion", { tenantId, event });
@@ -129,10 +129,6 @@ class AuthService {
     expiredDate.setTime(expiredDate.getTime() + ( days * 24 * 60 * 60 * 1000 ))
     const domain = ".maryoku.com"
     document.cookie = `authToken=${token}; expires=${expiredDate.toGMTString()}; path=/; domain=${domain}`
-  }
-  removeCookie(token) {
-    const domain = ".maryoku.com"
-    document.cookie = `authToken=${token}; expires=${new Date().toGMTString()}; path=/; domain=${domain}`
   }
 }
 
