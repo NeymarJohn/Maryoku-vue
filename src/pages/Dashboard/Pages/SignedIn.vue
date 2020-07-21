@@ -94,7 +94,7 @@ export default {
   data () {
     return {
       serverURL: process.env.SERVER_URL,
-      messageIndex: 0,
+      messageIndex: -1,
       messages: [
         `Workspace does not exist, create your workspace.`
       ]
