@@ -19,8 +19,9 @@ export default {
   created () {
     const that = this
     setTimeout(() => {
-      this.$authService.logout()
-      this.$router.push({ path: '/signin'})
+      this.$auth.logout(this)
+      this.$ls.remove('user')
+
       if (process.env.NODE_ENV === 'production') {
         try {
           window.heap.resetIdentity()
@@ -41,7 +42,7 @@ export default {
           noninteraction: false // Optional
         })
       }
-    }, 500)
+    }, 1500)
   },
   data () {
     return {

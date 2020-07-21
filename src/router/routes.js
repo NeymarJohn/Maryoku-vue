@@ -1,77 +1,76 @@
 import DashboardLayout from '@/pages/Dashboard/Layout/DashboardLayout.vue'
+import EventLayout from '@/pages/Dashboard/Layout/EventLayout.vue'
 import AuthLayout from '@/pages/Dashboard/Pages/AuthLayout.vue'
+import PublicLayout from '@/pages/Dashboard/Pages/PublicLayout.vue'
 import CreateEvent from '@/pages/Dashboard/Layout/CreateEvent.vue'
 import HomeLayout from '@/pages/Dashboard/Layout/HomeLayout.vue'
+import SigninSignupLayout from '@/pages/Dashboard/Layout/SigninSignupLayout.vue'
 import NewEventLayout from '@/pages/Dashboard/Layout/NewEventLayout.vue'
-import WorkspaceLayout from '@/pages/Dashboard/Layout/WorkspaceLayout.vue'
+import EmptyLayout from '@/pages/Dashboard/Pages/EmptyLayout'
+import MarketPlaceLayout from '@/pages/Dashboard/Pages/MarketPlaceLayout'
+
+const Me = () => import('@/pages/app/Me.vue')
+const Profile = () => import('@/pages/app/Profile/index.vue')
+const MyCompany = () => import('@/pages/app/MyCompany/MyCompany.vue')
+const MyCompanyNew = () => import('@/pages/app/MyCompany/MyCompanyNew.vue')
+const CompanyDashboard = () => import('@/pages/app/CompanyDashboard/CompanyDashboard.vue')
+
+const Team = () => import('@/pages/app/Team/Team.vue')
+const Members = () => import('@/pages/app/Members/Members.vue')
 
 const Events = () => import('@/pages/app/Events/Events.vue')
-const EventDetailsOverView = () => import('@/pages/app/Events/EventDetailsOverview.vue')
-
-const EventProposal = () => import('@/pages/app/Events/EventProposal.vue')
-const Notes = () => import('@/pages/app/Notes.vue')
-const Proposals = () => import('@/pages/app/Proposals.vue')
-const CurrentVendors = () => import('@/pages/app/Vendors/CurrentVendors.vue')
-const AddEditVendor = () => import('@/pages/app/Vendors/AddEditVendor.vue')
-const VendorsPoolNew = () => import('@/pages/app/Vendors/VendorsPoolNew.vue')
-const ImportVendors = () => import('@/pages/app/Vendors/ImportVendors.vue')
-
-// const EventSteps = () => import('@/pages/app/Events/Steps')
-// const EventDetails = () => import('@/pages/app/Events/EventDetails.vue')
-// import EmptyLayout from '@/pages/Dashboard/Pages/EmptyLayout'
-// import MarketPlaceLayout from '@/pages/Dashboard/Pages/MarketPlaceLayout'
-// import EventLayout from '@/pages/Dashboard/Layout/EventLayout.vue'
-// import PublicLayout from '@/pages/Dashboard/Pages/PublicLayout.vue'
-// import SigninSignupLayout from '@/pages/Dashboard/Layout/SigninSignupLayout.vue'
-// const CurrentEvents = () => import('@/pages/app/Events/CurrentEvents.vue')
-// const NewEvent = () => import('@/pages/app/Events/NewEvent.vue')
-// const YearlyPlan = () => import('@/pages/app/YearlyPlan/index.vue')
-// const AnnualPlanner = () => import('@/pages/app/AnnualPlanner/index.vue')
-// const EditEvent = () => import('@/pages/app/Events/EditEvent.vue')
+const CurrentEvents = () => import('@/pages/app/Events/CurrentEvents.vue')
 // const EventGroups = () => import('@/pages/app/Events/components/EventInvitees.vue')
-// const Vendors = () => import('@/pages/app/Vendors/Vendors.vue')
+const NewEvent = () => import('@/pages/app/Events/NewEvent.vue')
+// const EditEvent = () => import('@/pages/app/Events/EditEvent.vue')
+const EventDetails = () => import('@/pages/app/Events/EventDetails.vue')
+
+const EventDetailsOverView = () => import('@/pages/app/Events/EventDetailsOverview.vue')
 // const ShowEvent = () => import('@/pages/app/Events/ShowEvent.vue')
 // const VendorProposals = () => import('@/pages/app/Events/VendorProposals.vue')
+const EventProposal = () => import('@/pages/app/Events/EventProposal.vue')
+const EventSteps = () => import('@/pages/app/Events/Steps')
+const Notes = () => import('@/pages/app/Notes.vue')
+const Proposals = () => import('@/pages/app/Proposals.vue')
+const Vendors = () => import('@/pages/app/Vendors/Vendors.vue')
+const CurrentVendors = () => import('@/pages/app/Vendors/CurrentVendors.vue')
+const AddEditVendor = () => import('@/pages/app/Vendors/AddEditVendor.vue')
 // const EditVendor = () => import('@/pages/app/Vendors/EditVendor.vue')
-// const VendorsPool = () => import('@/pages/app/Vendors/VendorsPool.vue')
-
-// const Me = () => import('@/pages/app/Me.vue')
-// const Profile = () => import('@/pages/app/Profile/index.vue')
-// const MyCompany = () => import('@/pages/app/MyCompany/MyCompany.vue')
-// const MyCompanyNew = () => import('@/pages/app/MyCompany/MyCompanyNew.vue')
-// const CompanyDashboard = () => import('@/pages/app/CompanyDashboard/CompanyDashboard.vue')
-
-// const Team = () => import('@/pages/app/Team/Team.vue')
-// const Members = () => import('@/pages/app/Members/Members.vue')
-// const publicRegister = () => import('@/pages/app/SinginSingup/publicRegister.vue')
-
-// import EventConceptChoose from '@/pages/app/Events/components/EventConceptChoose.vue'
-// import BookingEvent from '@/pages/app/Events/components/BookingEvent.vue'
-
-// Dashboard pages
-// const EmployeeMain = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/Employee.vue')
-// const OfficeMenageMain = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/OfficeMenage.vue')
-// const CommonInfoProfile = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/index.vue')
-// const EventForm = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/EventForm.vue')
-// const Dietary = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/Dietary.vue')
-// const Step2 = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/Step2.vue')
-// const Company = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/Company.vue')
-// const Invite = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/Invite.vue')
-// const GetStarted = () => import('@/pages/app/GetStarted')
-// const MyEvents = () => import('@/pages/app/Guest/MyEvents.vue')
-// const MarketPlace = () => import('@/pages/app/MarketPlace/MarketPlace.vue')
+const VendorsPool = () => import('@/pages/app/Vendors/VendorsPool.vue')
+const VendorsPoolNew = () => import('@/pages/app/Vendors/VendorsPoolNew.vue')
+const ImportVendors = () => import('@/pages/app/Vendors/ImportVendors.vue')
+const YearlyPlan = () => import('@/pages/app/YearlyPlan/index.vue')
+const AnnualPlanner = () => import('@/pages/app/AnnualPlanner/index.vue')
 
 const HomePage = () => import('@/pages/app/HomePage/Home.vue')
+// const publicRegister = () => import('@/pages/app/SinginSingup/publicRegister.vue')
 
 // Event Pages
-import EventDetailsBudget from '@/pages/app/Events/EventDetailsBudget.vue'
-import EventDetailsTimeline from '@/pages/app/Events/EventDetailsTimeline.vue'
-import EventPlan from '@/pages/app/Events/EventPlan.vue'
-import EventProposalDetails from '@/pages/app/Events/components/EventProposalDetails.vue'
-import ExportTimeLine from '@/pages/app/Events/components/ExportTimeLine.vue'
+const EventDetailsBudget = () => import('@/pages/app/Events/EventDetailsBudget.vue')
+const EventDetailsTimeline = () => import('@/pages/app/Events/EventDetailsTimeline.vue')
+// const BookingEvent = () => import('@/pages/app/Events/components/BookingEvent.vue')
+const EventPlan = () => import('@/pages/app/Events/EventPlan.vue')
+const EventConceptChoose = () => import('@/pages/app/Events/components/EventConceptChoose.vue')
+const EventProposalDetails = () => import('@/pages/app/Events/components/EventProposalDetails.vue')
+const ExportTimeLine = () => import('@/pages/app/Events/components/ExportTimeLine.vue')
+
+// Dashboard pages
+const EmployeeMain = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/Employee.vue')
+const OfficeMenageMain = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/OfficeMenage.vue')
+const CommonInfoProfile = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/index.vue')
+const EventForm = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/EventForm.vue')
+const Dietary = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/Dietary.vue')
+const Step2 = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/Step2.vue')
+const Company = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/Company.vue')
+const Invite = () => import('@/pages/Dashboard/Pages/CommonInfoProfile/Invite.vue')
 
 const CreateWorkspace = () => import('@/pages/Dashboard/Pages/CreateWorkspace')
 const ChooseWorkspace = () => import('@/pages/Dashboard/Pages/ChooseWorkspace')
+
+
+const GetStarted = () => import('@/pages/app/GetStarted')
+// const MyEvents = () => import('@/pages/app/Guest/MyEvents.vue')
+const MarketPlace = () => import('@/pages/app/MarketPlace/MarketPlace.vue')
 
 // New Vendor Pages
 const ForVendorLayout = () => import('@/pages/Dashboard/Layout/ForVendorLayout.vue')
@@ -107,9 +106,6 @@ const SignedIn = () =>
   import('@/pages/Dashboard/Pages/SignedIn.vue')
 const Invited = () =>
   import('@/pages/Dashboard/Pages/Invited.vue')
-
-
-
 
 let authPages = {
   path: '/',
@@ -172,35 +168,29 @@ let authPages = {
       gtm: 'Invited'
     }
   },
-  
+  {
+    path: '/create-workspace',
+    name: 'CreateWorkspace',
+    component: CreateWorkspace,
+    meta: {
+      auth: false,
+      title: 'Create Workspace',
+      gtm: 'CreateWorkspace'
+    }
+  },
+  {
+    path: '/choose-workspace',
+    name: 'ChooseWorkspace',
+    component: ChooseWorkspace,
+    meta: {
+      auth: false,
+      title: 'Choose Workspace',
+      gtm: 'ChooseWorkspace'
+    }
+  }
   ]
 }
 
-let workspacePages = {
-  path: '/',
-  component: WorkspaceLayout,
-  name: 'Authentication',
-  children: [{
-      path: '/create-workspace',
-      name: 'CreateWorkspace',
-      component: CreateWorkspace,
-      meta: {
-        auth: false,
-        title: 'Create Workspace',
-        gtm: 'CreateWorkspace'
-      }
-    },{
-      path: '/choose-workspace',
-      name: 'ChooseWorkspace',
-      component: ChooseWorkspace,
-      meta: {
-        auth: false,
-        title: 'Choose Workspace',
-        gtm: 'ChooseWorkspace'
-      }
-    }
-  ]
-}
 let publicPages = {
   path: "/",
   component: ForVendorLayout,
@@ -314,130 +304,129 @@ let vendorSignup = {
 }
 
 
-// let marketPlacePages = {
-//   path: '/',
-//   component: MarketPlaceLayout,
-//   name: 'Market',
-//   children: [{
-//     path: '/market-place',
-//     name: 'MarketPlace',
-//     component: MarketPlace,
-//     meta: {
-//       auth: false,
-//       title: 'Choose Workspace',
-//       gtm: 'MarketPlace'
-//     }
-//   }]
-// }
+let marketPlacePages = {
+  path: '/',
+  component: MarketPlaceLayout,
+  name: 'Market',
+  children: [{
+    path: '/market-place',
+    name: 'MarketPlace',
+    component: MarketPlace,
+    meta: {
+      auth: false,
+      title: 'Choose Workspace',
+      gtm: 'MarketPlace'
+    }
+  }]
+}
 
-// let emptyLayoutPages = {
-//   path: '/',
-//   component: EmptyLayout,
-//   name: 'Empty',
-//   children: [{
-//     path: '/get-started',
-//     name: 'GetStarted',
-//     component: GetStarted,
-//     meta: {
-//       auth: true,
-//       title: 'Get Started',
-//       gtm: 'GetStarted'
-//     }
-//   }
-//   ]
-// }
+let emptyLayoutPages = {
+  path: '/',
+  component: EmptyLayout,
+  name: 'Empty',
+  children: [{
+    path: '/get-started',
+    name: 'GetStarted',
+    component: GetStarted,
+    meta: {
+      auth: true,
+      title: 'Get Started',
+      gtm: 'GetStarted'
+    }
+  }
+  ]
+}
 
 let appPages = {
   path: '/app',
   component: DashboardLayout,
   name: 'App',
-  children: [
-  // {
-  //   path: '/me',
-  //   name: 'Me',
-  //   component: Me,
-  //   meta: {
-  //     gtm: 'Me'
-  //   }
-  // },
-  // {
-  //   path: '/settings',
-  //   name: 'Settings',
-  //   component: Profile,
-  //   meta: {
-  //     gtm: 'Settings'
-  //   }
-  // },
+  children: [{
+    path: '/me',
+    name: 'Me',
+    component: Me,
+    meta: {
+      gtm: 'Me'
+    }
+  },
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: Profile,
+    meta: {
+      gtm: 'Settings'
+    }
+  },
 
-  // {
-  //   path: '/company',
-  //   name: 'CompanyDashboard',
-  //   component: CompanyDashboard,
-  //   meta: {
-  //     title: 'Company Dashboard',
-  //     gtm: 'CompanyDashboard'
-  //   }
-  // },
-  // {
-  //   path: '/old-company',
-  //   name: 'MyCompany',
-  //   component: MyCompanyNew,
-  //   meta: {
-  //     title: 'My Company',
-  //     gtm: 'MyCompany'
-  //   }
-  // },
-  // {
-  //   path: '/team',
-  //   name: 'Team',
-  //   component: Members,
-  //   meta: {
-  //     gtm: 'Team'
-  //   }
-  // },
-  // {
-  //   path: '/yearly-plan',
-  //   name: 'YearlyPlan',
-  //   component: YearlyPlan,
-  //   meta: {
-  //     title: 'Yearly Plan'
-  //   }
-  // },
-  // {
-  //   path: '/planner/:year/:month',
-  //   name: 'AnnualPlannerYearMonth',
-  //   component: AnnualPlanner,
-  //   meta: {
-  //     title: 'Planner',
-  //     gtm: 'Planner'
-  //   }
-  // },
-  // {
-  //   path: '/planner/:year',
-  //   name: 'AnnualPlannerYear',
-  //   component: AnnualPlanner,
-  //   meta: {
-  //     title: 'Planner',
-  //     gtm: 'Planner'
-  //   }
-  // },
-  // {
-  //   path: '/planner',
-  //   name: 'AnnualPlanner',
-  //   component: AnnualPlanner,
-  //   meta: {
-  //     title: 'Planner',
-  //     gtm: 'Planner'
-  //   }
-  // },
-  // {
-  //   path: '/vendors',
-  //   name: 'Vendors',
-  //   component: Vendors,
-  //   meta: {
-  //     gtm: 'Vendors'
-  //   }
-  // },
+  {
+    path: '/company',
+    name: 'CompanyDashboard',
+    component: CompanyDashboard,
+    meta: {
+      title: 'Company Dashboard',
+      gtm: 'CompanyDashboard'
+    }
+  },
+  {
+    path: '/old-company',
+    name: 'MyCompany',
+    component: MyCompanyNew,
+    meta: {
+      title: 'My Company',
+      gtm: 'MyCompany'
+    }
+  },
+  {
+    path: '/team',
+    name: 'Team',
+    component: Members,
+    meta: {
+      gtm: 'Team'
+    }
+  },
+  {
+    path: '/yearly-plan',
+    name: 'YearlyPlan',
+    component: YearlyPlan,
+    meta: {
+      title: 'Yearly Plan'
+    }
+  },
+  {
+    path: '/planner/:year/:month',
+    name: 'AnnualPlannerYearMonth',
+    component: AnnualPlanner,
+    meta: {
+      title: 'Planner',
+      gtm: 'Planner'
+    }
+  },
+  {
+    path: '/planner/:year',
+    name: 'AnnualPlannerYear',
+    component: AnnualPlanner,
+    meta: {
+      title: 'Planner',
+      gtm: 'Planner'
+    }
+  },
+  {
+    path: '/planner',
+    name: 'AnnualPlanner',
+    component: AnnualPlanner,
+    meta: {
+      title: 'Planner',
+      gtm: 'Planner'
+    }
+  },
+  {
+    path: '/vendors',
+    name: 'Vendors',
+    component: Vendors,
+    meta: {
+      gtm: 'Vendors'
+    }
+  },
   {
     path: '/vendors/:id/detail',
     name: 'VendorDetails',
@@ -466,14 +455,14 @@ let appPages = {
       gtm: 'Edit Vendor Details'
     }
   },
-  // {
-  //   path: '/vendors-pool',
-  //   name: 'VendorsPool',
-  //   component: VendorsPool,
-  //   meta: {
-  //     gtm: 'VendorsPool'
-  //   }
-  // },
+  {
+    path: '/vendors-pool',
+    name: 'VendorsPool',
+    component: VendorsPool,
+    meta: {
+      gtm: 'VendorsPool'
+    }
+  },
   {
     path: '/import-vendors',
     name: 'ImportVendors',
@@ -489,134 +478,31 @@ let appPages = {
     name: 'Notes',
     component: Notes
   },
-  // {
-  //   path: '/events/:id/edit',
-  //   name: 'EventDetails',
-  //   component: EventDetails,
-  //   meta: {
-  //     title: 'Event Page',
-  //     gtm: 'Event Details',
-  //     opaque: false
-  //   }
-  // }
+  {
+    path: '/events/:id/edit',
+    name: 'EventDetails',
+    component: EventDetails,
+    meta: {
+      title: 'Event Page',
+      gtm: 'Event Details',
+      opaque: false
+    }
+  }
   ]
 }
-// let EventPages = {
-//   path: '/app2',
-//   component: EventLayout,
-//   name: 'App2',
-//   children: [{
-//     path: '/events',
-//     name: 'Events',
-//     component: Events,
-//     meta: {
-//       title: 'Our Events',
-//       gtm: 'Events'
-//     }
-//   },
-//   {
-//     path: '/events/proposal',
-//     name: 'EventProposal',
-//     component: EventProposal,
-//     meta: {
-//       title: 'Event Proposal'
-//     }
-//   },
-//   {
-//     path: '/events/new',
-//     name: 'NewEvent',
-//     component: NewEvent,
-//     meta: {
-//       title: 'Create New Event'
-//     }
-//   },
-//   {
-//     path: '/events/:id/edit/details',
-//     name: 'EditEvent',
-//     component: CurrentEvents,
-//     meta: {
-//       title: 'Event Details',
-//       gtm: 'Event Edit',
-//       opaque: false
-//     }
-//   },
-//   {
-//     path: '/events/:id/edit/building-blocks',
-//     name: 'EditBuildingBlocks',
-//     component: CurrentEvents,
-//     meta: {
-//       title: 'Building Blocks',
-//       gtm: 'Building Blocks',
-//       opaque: false
-//     }
-//   },
-//   {
-//     path: '/events/:id/edit/timeline/current',
-//     name: 'EditTimeLine',
-//     component: CurrentEvents,
-//     meta: {
-//       title: 'Timeline',
-//       gtm: 'Event Timeline',
-//       opaque: false
-//     }
-//   },
-//   {
-//     path: '/events/:id/edit/invitees-management',
-//     name: 'InviteesManagement',
-//     component: CurrentEvents,
-//     meta: {
-//       title: 'Automated Interactions',
-//       gtm: 'Event Edit',
-//       opaque: false
-//     }
-//   },
-//   {
-//     path: '/events/:id/edit/event-invitees',
-//     name: 'EventInvitees',
-//     component: CurrentEvents,
-//     meta: {
-//       title: 'Event Invitees',
-//       gtm: 'Event Invitees',
-//       opaque: false
-//     }
-//   },
-
-//   // Event Wizard
-//   {
-//     path: '/event-steps/:id',
-//     name: 'EventSteps',
-//     component: EventSteps,
-//     meta: {
-//       title: 'Event Wizard',
-//       gtm: 'Event Wizard'
-//     }
-//   },
-//   {
-//     path: '/event/create',
-//     name: 'EventCreate',
-//     component: EventSteps,
-//     meta: {
-//       title: 'Event Wizard',
-//       gtm: 'Event Wizard'
-//     }
-//   },
-//   {
-//     path: '/event/:id/edit',
-//     name: 'EventEdit',
-//     component: EventSteps,
-//     meta: {
-//       title: 'Event Wizard',
-//       gtm: 'Event Wizard'
-//     }
-//   }
-//   ]
-// }
-
-let NewEventPages = {
+let EventPages = {
   path: '/app2',
-  component: NewEventLayout,
+  component: EventLayout,
   name: 'App2',
-  children: [
+  children: [{
+    path: '/events',
+    name: 'Events',
+    component: Events,
+    meta: {
+      title: 'Our Events',
+      gtm: 'Events'
+    }
+  },
   {
     path: '/events/proposal',
     name: 'EventProposal',
@@ -625,14 +511,125 @@ let NewEventPages = {
       title: 'Event Proposal'
     }
   },
-  // {
-  //   path: '/events/new',
-  //   name: 'NewEvent',
-  //   component: NewEvent,
-  //   meta: {
-  //     title: 'Create New Event'
-  //   }
-  // },
+  {
+    path: '/events/new',
+    name: 'NewEvent',
+    component: NewEvent,
+    meta: {
+      title: 'Create New Event'
+    }
+  },
+  {
+    path: '/events/:id/edit/details',
+    name: 'EditEvent',
+    component: CurrentEvents,
+    meta: {
+      title: 'Event Details',
+      gtm: 'Event Edit',
+      opaque: false
+    }
+  },
+  {
+    path: '/events/:id/edit/building-blocks',
+    name: 'EditBuildingBlocks',
+    component: CurrentEvents,
+    meta: {
+      title: 'Building Blocks',
+      gtm: 'Building Blocks',
+      opaque: false
+    }
+  },
+  {
+    path: '/events/:id/edit/timeline/current',
+    name: 'EditTimeLine',
+    component: CurrentEvents,
+    meta: {
+      title: 'Timeline',
+      gtm: 'Event Timeline',
+      opaque: false
+    }
+  },
+  {
+    path: '/events/:id/edit/invitees-management',
+    name: 'InviteesManagement',
+    component: CurrentEvents,
+    meta: {
+      title: 'Automated Interactions',
+      gtm: 'Event Edit',
+      opaque: false
+    }
+  },
+  {
+    path: '/events/:id/edit/event-invitees',
+    name: 'EventInvitees',
+    component: CurrentEvents,
+    meta: {
+      title: 'Event Invitees',
+      gtm: 'Event Invitees',
+      opaque: false
+    }
+  },
+
+  // Event Wizard
+  {
+    path: '/event-steps/:id',
+    name: 'EventSteps',
+    component: EventSteps,
+    meta: {
+      title: 'Event Wizard',
+      gtm: 'Event Wizard'
+    }
+  },
+  {
+    path: '/event/create',
+    name: 'EventCreate',
+    component: EventSteps,
+    meta: {
+      title: 'Event Wizard',
+      gtm: 'Event Wizard'
+    }
+  },
+  {
+    path: '/event/:id/edit',
+    name: 'EventEdit',
+    component: EventSteps,
+    meta: {
+      title: 'Event Wizard',
+      gtm: 'Event Wizard'
+    }
+  }
+  ]
+}
+
+let NewEventPages = {
+  path: '/app2',
+  component: NewEventLayout,
+  name: 'App2',
+  children: [{
+    path: '/events',
+    name: 'Events',
+    component: Events,
+    meta: {
+      title: 'Our Events',
+      gtm: 'Events'
+    }
+  },
+  {
+    path: '/events/proposal',
+    name: 'EventProposal',
+    component: EventProposal,
+    meta: {
+      title: 'Event Proposal'
+    }
+  },
+  {
+    path: '/events/new',
+    name: 'NewEvent',
+    component: NewEvent,
+    meta: {
+      title: 'Create New Event'
+    }
+  },
   {
     path: '/events/:id/edit/budget',
     name: 'EditEventNew',
@@ -653,16 +650,16 @@ let NewEventPages = {
       opaque: false
     }
   },
-  // {
-  //   path: '/events/:id/edit/building-blocks',
-  //   name: 'EditBuildingBlocks',
-  //   component: CurrentEvents,
-  //   meta: {
-  //     title: 'Building Blocks',
-  //     gtm: 'Building Blocks',
-  //     opaque: false
-  //   }
-  // },
+  {
+    path: '/events/:id/edit/building-blocks',
+    name: 'EditBuildingBlocks',
+    component: CurrentEvents,
+    meta: {
+      title: 'Building Blocks',
+      gtm: 'Building Blocks',
+      opaque: false
+    }
+  },
   {
     path: '/events/:id/edit/timeline',
     name: 'EditTimeLine',
@@ -693,24 +690,24 @@ let NewEventPages = {
   },
   {
     path: '/events/:id/booking/:blockId',
-    name: 'EventPlan',
+    name: 'BookingEvent',
     component: EventPlan,
     meta: {
-      title: 'Plan Event',
-      gtm: 'Plan Event',
+      title: 'BookingEvent',
+      gtm: 'Booking Event',
       opaque: false
     }
   },
-  // {
-  //   path: '/events/:id/choose-concept',
-  //   name: 'EventConceptChoose',
-  //   component: EventConceptChoose,
-  //   meta: {
-  //     title: 'Choose Concept',
-  //     gtm: 'Choose Concept',
-  //     opaque: false
-  //   }
-  // },
+  {
+    path: '/events/:id/choose-concept',
+    name: 'EventConceptChoose',
+    component: EventConceptChoose,
+    meta: {
+      title: 'Choose Concept',
+      gtm: 'Choose Concept',
+      opaque: false
+    }
+  },
   {
     path: '/events/:id/proposal-details/:vendorId/:proposalId',
     name: 'EventProposalDetails',
@@ -721,57 +718,57 @@ let NewEventPages = {
       opaque: false
     },
   },
-  // {
-  //   path: '/events/:id/edit/invitees-management',
-  //   name: 'InviteesManagement',
-  //   component: CurrentEvents,
-  //   meta: {
-  //     title: 'Automated Interactions',
-  //     gtm: 'Event Edit',
-  //     opaque: false
-  //   }
-  // },
-  // {
-  //   path: '/events/:id/edit/event-invitees',
-  //   name: 'EventInvitees',
-  //   component: CurrentEvents,
-  //   meta: {
-  //     title: 'Event Invitees',
-  //     gtm: 'Event Invitees',
-  //     opaque: false
-  //   }
-  // },
+  {
+    path: '/events/:id/edit/invitees-management',
+    name: 'InviteesManagement',
+    component: CurrentEvents,
+    meta: {
+      title: 'Automated Interactions',
+      gtm: 'Event Edit',
+      opaque: false
+    }
+  },
+  {
+    path: '/events/:id/edit/event-invitees',
+    name: 'EventInvitees',
+    component: CurrentEvents,
+    meta: {
+      title: 'Event Invitees',
+      gtm: 'Event Invitees',
+      opaque: false
+    }
+  },
 
   // Event Wizard
-  // {
-  //   path: '/event-steps/:id',
-  //   name: 'EventSteps',
-  //   component: EventSteps,
-  //   meta: {
-  //     title: 'Event Wizard',
-  //     gtm: 'Event Wizard'
-  //   }
-  // },
-  // {
-  //   path: '/event/create',
-  //   name: 'EventCreate',
-  //   component: EventSteps,
-  //   meta: {
-  //     title: 'Event Wizard',
-  //     gtm: 'Event Wizard'
-  //   }
-  // },
-  // {
-  //   path: '/event/:id/edit',
-  //   name: 'EventEdit',
-  //   component: EventSteps,
-  //   meta: {
-  //     title: 'Event Wizard',
-  //     gtm: 'Event Wizard'
-  //   }
-  // },
   {
-    path: '/vendors-pool',
+    path: '/event-steps/:id',
+    name: 'EventSteps',
+    component: EventSteps,
+    meta: {
+      title: 'Event Wizard',
+      gtm: 'Event Wizard'
+    }
+  },
+  {
+    path: '/event/create',
+    name: 'EventCreate',
+    component: EventSteps,
+    meta: {
+      title: 'Event Wizard',
+      gtm: 'Event Wizard'
+    }
+  },
+  {
+    path: '/event/:id/edit',
+    name: 'EventEdit',
+    component: EventSteps,
+    meta: {
+      title: 'Event Wizard',
+      gtm: 'Event Wizard'
+    }
+  },
+  {
+    path: '/vendors-pool-new',
     name: 'VendorsPoolNew',
     component: VendorsPoolNew,
     meta: {
@@ -1017,87 +1014,75 @@ let HomePages = {
         title: 'HomePage',
         gtm: 'HomePage'
       }
-    },{
-      path: '/events',
-      name: 'Events',
-      component: Events,
-      meta: {
-        title: 'Our Events',
-        gtm: 'Events'
-      }
-    },
+    }
   ]
 }
 
-// const appCurrentInfo = {
-//   path: '/additional-form',
-//   name: 'CommonInfoProfile',
-//   component: CommonInfoProfile,
-//   children: [{
-//     path: '/employee-form',
-//     name: 'EmployeeMain',
-//     component: EmployeeMain
-//   },
-//   {
-//     path: '/officeManager-form',
-//     name: 'OfficeMenageMain',
-//     component: OfficeMenageMain
-//   },
-//   {
-//     path: '/events-data',
-//     name: 'EventForm',
-//     component: EventForm
-//   },
-//   {
-//     path: '/dietary',
-//     name: 'Dietary',
-//     component: Dietary
-//   },
-//   {
-//     path: '/company-form',
-//     name: 'Company',
-//     component: Company
-//   },
-//   {
-//     path: '/me-form',
-//     name: 'MeForm',
-//     component: Step2
-//   },
-//   {
-//     path: '/invite',
-//     name: 'InviteEmployee',
-//     component: Invite
-//   }
-//   ]
-// }
+const appCurrentInfo = {
+  path: '/additional-form',
+  name: 'CommonInfoProfile',
+  component: CommonInfoProfile,
+  children: [{
+    path: '/employee-form',
+    name: 'EmployeeMain',
+    component: EmployeeMain
+  },
+  {
+    path: '/officeManager-form',
+    name: 'OfficeMenageMain',
+    component: OfficeMenageMain
+  },
+  {
+    path: '/events-data',
+    name: 'EventForm',
+    component: EventForm
+  },
+  {
+    path: '/dietary',
+    name: 'Dietary',
+    component: Dietary
+  },
+  {
+    path: '/company-form',
+    name: 'Company',
+    component: Company
+  },
+  {
+    path: '/me-form',
+    name: 'MeForm',
+    component: Step2
+  },
+  {
+    path: '/invite',
+    name: 'InviteEmployee',
+    component: Invite
+  }
+  ]
+}
 
 const routes = [
   {
     path: '/',
-    redirect: '/signin',
+    redirect: '/events',
     name: 'Root',
-    component: HomePage,
     meta: {
       gtm: 'Root'
     }
   },
+  appCurrentInfo,
   authPages,
-  workspacePages,
   appPages,
   publicPages,
+  emptyLayoutPages,
+  EventPages,
+  marketPlacePages,
   PublicCreateEvent,
   HomePages,
+  // SigninSignupPage,
+  // forVendors,
   forProposals,
   vendorSignup,
   NewEventPages
-
-  // appCurrentInfo,
-  // SigninSignupPage,
-  // marketPlacePages,
-  // forVendors,
-  // emptyLayoutPages,
-  // EventPages,
-
 ]
 
 export default routes

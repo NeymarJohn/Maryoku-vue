@@ -736,4 +736,171 @@
       }
     }
   }
+  .proposals-management {
+
+    width : 100%;
+
+    .proposals-management_items {
+        align-content : flex-start;
+        justify-content: flex-start;
+    }
+
+    .proposals-management_item {
+        margin-bottom : 0;
+        padding-top : 0;
+
+    }
+
+    .info-card {
+        margin : 0 0 25px;
+
+        .category {
+            color : $orange-500;
+            font-weight: bold;
+        }
+    }
+
+
+    .md-card {
+
+        .card-content {
+            text-align: center;
+            padding: 1em;
+            p.category {
+                margin : 0;
+            }
+            h3 {
+                font-weight: bold;
+                margin:0;
+            }
+        }
+    }
+
+    .item-content {
+        padding: 0 0.8em;
+        color: rgba(149, 149, 149, 0.8);
+
+        .personals-number {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top : 0.5em;
+        }
+        .item-info {
+            list-style: none;
+            padding : 0;
+            margin  :0.5em 0;
+            li {
+                display: flex;
+                flex : 1;
+                justify-content: space-between;
+                font-weight: bold;
+                font-size: 12px;
+
+                .budget-field {
+                    flex : 1;
+                    display: flex;
+                    justify-content: flex-end;
+
+                    .vlabeledit-input {
+                        width : auto !important;
+                        max-width: 40px !important;
+                    }
+
+
+                    &:hover {
+
+                    }
+                }
+            }
+        }
+    }
+
+    .item-info-form {
+        .md-field {
+            margin-top : 0;
+            padding-left:0;
+        }
+    }
+
+    .md-card-actions {
+        border-top : none;
+        padding: 0;
+    }
+
+    &_add-block {
+        text-align: center;
+        border: 1px dashed #c6c6c6;
+        box-shadow: none;
+        height: 193px;
+        background: none !important;
+        cursor: pointer;
+
+        .md-card-content {
+            height: 100%;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            flex-direction:column;
+            color: rgba(149, 149, 149, 0.8);
+
+            i {
+                margin: 0 auto .2em;
+            }
+        }
+    }
+
+    &_keys {
+        .keys_list{
+            flex : 1;
+            display: flex;
+            justify-content: space-around;
+            list-style: none;
+            flex-direction: row;
+            li.list-item {
+                font-size: 11px;
+                color: #797979;
+                position: relative;
+                &:after {
+                    content : ' ';
+                    width: 11px;
+                    height: 11px;
+                    position: absolute;
+                    left: -1.5em;
+                    top: -2px;
+                    bottom:0;
+                    margin:auto;
+                    background: $gray-light;
+                }
+                &.item {
+                    &-success {
+                        &:after {
+                            background: $brand-success;
+                        }
+                    }
+                    &-warning {
+                        &:after {
+                            background: $brand-warning;
+                        }
+                    }
+
+                    &-info {
+                        &:after {
+                            background: $brand-info;
+                        }
+                    }
+                    &-rose {
+                        &:after {
+                            background: $brand-rose;
+                        }
+                    }
+
+                }
+
+            }
+        }
+    }
+  }
+
 </style>

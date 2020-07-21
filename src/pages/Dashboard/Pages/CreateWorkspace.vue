@@ -1,65 +1,41 @@
 <template>
-  <div class="md-layout" style="text-align: center;">
-    <h2
-      class="title text-center"
-      style="text-align: center;width: 100%;"
-    >Welcome, lets create your workspace</h2>
-    <div class="md-layout-item md-size-50 mx-auto">
-      <signup-card>
-        <!--<div class="md-layout-item md-size-50 md-medium-size-50 md-small-size-100 ml-auto" slot="content-left">
-          <div class="info info-horizontal" v-for="item in contentLeft" :key="item.title">
-              <div :class="`icon ${item.colorIcon}`">
-                <md-icon>{{ item.icon }}</md-icon>
-              </div>
-              <div class="description">
-                <h4 class="info-title">{{ item.title }}</h4>
-                <p class="description">
-                  {{ item.description }}
-                </p>
-              </div>
-          </div>
-        </div>-->
+  <div class="workspace-container" style="text-align: center;">
+    <h2 class="title text-center" style="text-align: center; width: 100%;">Welcome, lets create your workspace</h2>
+    <div class="wrapper">
+      <vue-element-loading :active="loading" spinner="ring" color="#FF547C" />
+      <div>&nbsp;</div>
+      <md-field
+        :class="[
+      {'md-valid': !errors.has('workspace') && touched.workspace},
+      {'md-error': errors.has('workspace')},
+      {'extra-margin' : error}]"
+      >
+        <label>Workspace Name</label>
+        <span class="md-prefix">https://</span>
+        <md-input
+          v-focus
+          v-model="workspace"
+          type="text"
+          data-vv-name="workspace"
+          required
+          @keyup="checkWorkspace"
+        ></md-input>
+        <span class="md-suffix">.maryoku.com</span>
         <div
-          class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 mr-auto"
-          slot="content-right"
-          style="padding: 24px;"
-        >
-          <vue-element-loading :active="loading" spinner="ring" color="#FF547C" />
-          <div>&nbsp;</div>
-          <md-field
-            :class="[
-          {'md-valid': !errors.has('workspace') && touched.workspace},
-          {'md-error': errors.has('workspace')},
-          {'extra-margin' : error}]"
-          >
-            <label>Workspace Name</label>
-            <span class="md-prefix">https://</span>
-            <md-input
-              v-focus
-              v-model="workspace"
-              type="text"
-              data-vv-name="workspace"
-              required
-              @keyup="checkWorkspace"
-            ></md-input>
-            <span class="md-suffix">.maryoku.com</span>
-            <div
-              class="md-error"
-              v-if="!workspaceValid"
-              style="text-align: center; width: 100%;font-size: 0.9rem; padding-top: 18px;"
-            >{{error}}</div>
-          </md-field>
+          class="md-error"
+          v-if="!workspaceValid"
+          style="text-align: center; width: 100%;font-size: 0.9rem; padding-top: 18px;"
+        >{{error}}</div>
+      </md-field>
 
-          <div class="button-container">
-            <md-button
-              @click="createWorkSpace"
-              class="md-default md-red md-maryoku mt-4"
-              slot="footer"
-              :disabled="!workspaceValid"
-            >Continue</md-button>
-          </div>
-        </div>
-      </signup-card>
+      <div class="button-container">
+        <md-button
+          @click="createWorkSpace"
+          class="md-default md-red md-maryoku mt-4"
+          slot="footer"
+          :disabled="!workspaceValid"
+        >Continue</md-button>
+      </div>
     </div>
   </div>
 </template>
@@ -225,6 +201,10 @@ export default {
     }
   },
   created() {
+    if (!this.$store.state.auth.status.loggedIn) {
+      this.$router.push({path:'/signin'})
+      return 
+    }
     this.workspace = this.generateWorkspaceName(this.$store.state.auth.user.companyName);
   },
   watch: {

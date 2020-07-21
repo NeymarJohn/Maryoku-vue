@@ -148,5 +148,77 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+  .wizard-footer {
+    display: flex;
+    min-height: 128px;
+    background: white;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    // position: absolute;
+    bottom: 0;
+    width: 100%;
+    .footer-actions {
+      white-space: nowrap;
+    }
+    .progress-bar {
+      min-width: 400px;
+      margin: 0px 20px;
+      background-color: #D8D8D8 !important;
+    }
+    @media screen and (max-width: 1400px) {
+      .progress-bar {
+        min-width: 80%;
+      }
+      .status-bar {
+        flex-grow: 1;
+        flex-direction: column;
+        .status-step, .status-description {
+          padding: 5px;
+        }
+      }
+    }
+    .status-bar {
+      display: flex;
+      align-items: center;
+    }
+    .status-description {
+      font-family: "Manrope-Bold";
+      white-space: nowrap;
+    }
+    .tool-tip {
+      position: absolute;
+      right: 150px;
+      width: 410px;
+      background: #ffedb7;
+      top: -50px;
+      padding: 15px 20px;
+      display: flex;
+      box-shadow: 0 2px 21px 0 rgba(0, 0, 0, 0.21);
+      border-radius: 5px;
+    }
+    .next-btn {
+      width: 150px;
+    }
+    @media screen and (max-width: 500px) {
+      .wizard-footer {
+        padding: 0 0px;
+      }
+    }
+  }
 
+ @media screen and (max-width: 800px) {
+   .wizard-footer {
+     display: block;
+   }
+ }
+  @media screen and (max-width: 500px) {
+   .wizard-footer {
+     display: block;
+     padding: 10px 10px;
+     .md-maryoku {
+       width: 90px;
+     }
+   }
+ }
 </style>
