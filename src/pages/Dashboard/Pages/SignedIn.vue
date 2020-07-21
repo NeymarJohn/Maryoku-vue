@@ -9,9 +9,9 @@
     </div>
     <div v-else class="md-layout-item font-size-30" style="text-align: center; color:#050505;">
       {{messages[messageIndex]}}
-      <div>
-        <md-button class="md-simple md-red normal-btn"> Create Worspace</md-button>
-        <md-button class="md-simple md-red normal-btn"> Choose Workspace</md-button>
+      <div class="mt-4rem">
+        <md-button class="md-simple md-red normal-btn" @click="toCreateWorkspace"> Create Worspace</md-button>
+        <md-button class="md-simple md-red normal-btn" @click="toChooseWorkspace"> Choose Workspace</md-button>
       </div>
     </div>
   </div>
@@ -27,6 +27,12 @@ export default {
 
   },
   methods: {
+    toCreateWorkspace() {
+      this.$router.push({path: '/create-event-wizard'})
+    },
+    toChooseWorkspace() {
+      this.$router.push({path: '/choose-workspace'})
+    }
   },
   created () {
     const givenToken = this.$route.query.token
@@ -71,10 +77,10 @@ export default {
             this.$router.push({ path: '/events' })
           } else {
             this.messageIndex = 0;
-            setTimeout(() => {
-              this.$router.push({ path: '/choose-workspace' })
+            // setTimeout(() => {
+            //   this.$router.push({ path: '/choose-workspace' })
               
-            }, 5000);
+            // }, 5000);
           }
         }
         
