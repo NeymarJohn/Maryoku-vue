@@ -93,7 +93,7 @@ router.beforeEach((to, from, next) => {
 
   const authenticatedLinks = ['/events', '/choose-workspace']
   const isAuthenticatedLink = authenticatedLinks.findIndex( link => to.path.indexOf(link) >=0 ) >= 0;
-  if (to.path === '/signedin' || to.path.indexOf('/event-wizard')>=0 || to.path === '/signout') {
+  if (to.path === '/signedin' || to.path.indexOf('/event-wizard')>=0) {
     next();
     return
   }
