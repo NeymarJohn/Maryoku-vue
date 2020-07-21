@@ -8,19 +8,26 @@
           </a>
         </div>
         <div class="header-actions md-layout-item md-size-50 md-small-size-60">
-            <ul class="actions-list unstyled">
-                <md-button v-if="!isLoggedIn" class="md-simple md-black md-maryoku" @click="showSingupDialog"> Already A User?</md-button>
-                <md-menu v-else  md-size="large" md-align-trigger>
-                  <md-button class="md-simple md-black md-maryoku  normal-btn" md-menu-trigger>{{tenantUser.name?tenantUser.name:tenantUser.username}}</md-button>
-                  <md-menu-content class="user-menu-content">
-                    <md-menu-item @click="logout">Logout</md-menu-item>
-                  </md-menu-content>
-                </md-menu>
-                <!-- <md-button v-else class="md-simple md-black md-maryoku"> {{tenantUser.name}}</md-button> -->
-                <md-button class="md-simple md-just-icon question" @click="showSingupDialog"> 
-                    <img :src="`${$iconURL}Onboarding/question-dark.svg`">
-                </md-button>
-                <!-- <template v-if="$auth.user.a
+          <ul class="actions-list unstyled">
+            <md-button
+              v-if="!isLoggedIn"
+              class="md-simple md-black md-maryoku"
+              @click="showSingupDialog"
+            >Already A User?</md-button>
+            <md-menu v-else md-size="large" md-align-trigger>
+              <md-button
+                class="md-simple md-black md-maryoku normal-btn"
+                md-menu-trigger
+              >{{tenantUser.name?tenantUser.name:tenantUser.username}}</md-button>
+              <md-menu-content class="user-menu-content">
+                <md-menu-item @click="logout">Logout</md-menu-item>
+              </md-menu-content>
+            </md-menu>
+            <!-- <md-button v-else class="md-simple md-black md-maryoku"> {{tenantUser.name}}</md-button> -->
+            <md-button class="md-simple md-just-icon question" @click="showSingupDialog">
+              <img :src="`${$iconURL}Onboarding/question-dark.svg`" />
+            </md-button>
+            <!-- <template v-if="$auth.user.a
                 uthenticated === false">
                     
                 </template>
@@ -34,8 +41,8 @@
                     <li class="action-item" >
                         <md-button @click="logout">Sing out</md-button>
                     </li>
-                </template> -->
-            </ul>
+            </template>-->
+          </ul>
         </div>
       </div>
     </div>
@@ -59,35 +66,54 @@
         <!-- <md-field class="purple-field">
           <label>Name of the company</label>
           <md-input type="text" v-model="department"></md-input>
-        </md-field> -->
+        </md-field>-->
         <div class="social-line text-center">
-          <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
-            <img :src="`${$iconURL}Signup/google-icon.jpg`">
+          <md-button
+            class="md-black md-maryoku md-simple md-google"
+            @click="authenticate('google')"
+          >
+            <img :src="`${$iconURL}Signup/google-icon.jpg`" />
             <span>Sign in with Google</span>
           </md-button>
           <div>Or</div>
         </div>
-        <maryoku-input class="form-input" data-vv-name="email" v-validate="modelValidations.email"  inputStyle="email" v-model="email" placeholder="Type email address here..."></maryoku-input>
-        <maryoku-input class="form-input" data-vv-name="password" v-validate="modelValidations.password" type="password" inputStyle="password" v-model="password" placeholder="Type password here..."></maryoku-input>
+        <maryoku-input
+          class="form-input"
+          data-vv-name="email"
+          v-validate="modelValidations.email"
+          inputStyle="email"
+          v-model="email"
+          placeholder="Type email address here..."
+        ></maryoku-input>
+        <maryoku-input
+          class="form-input"
+          data-vv-name="password"
+          v-validate="modelValidations.password"
+          type="password"
+          inputStyle="password"
+          v-model="password"
+          placeholder="Type password here..."
+        ></maryoku-input>
         <div class="terms-and-conditions">
-          <md-checkbox v-model="keepMe">
-            Keep me signed in
-          </md-checkbox>
+          <md-checkbox v-model="keepMe">Keep me signed in</md-checkbox>
         </div>
         <div class="md-error">{{error}}</div>
-        <md-button class="md-default md-red md-maryoku md-sm md-square custom-btn" @click="singup">Sign In</md-button>
+        <md-button
+          class="md-default md-red md-maryoku md-sm md-square custom-btn"
+          @click="singup"
+        >Sign In</md-button>
         <div class="text-center">
           <!-- <a href class="forget-password">Forgot your password ?</a> -->
-          <md-button  class="md-black md-maryoku mt-4  md-simple mt-4" >Forgot my password?</md-button>
+          <md-button class="md-black md-maryoku mt-4 md-simple mt-4">Forgot my password?</md-button>
         </div>
-     </md-dialog-content>
+      </md-dialog-content>
     </md-dialog>
   </div>
 </template>
 <script>
 import { FadeTransition } from "vue2-transitions";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import { MaryokuInput} from '@/components'
+import { MaryokuInput } from "@/components";
 
 export default {
   data() {
@@ -116,15 +142,16 @@ export default {
         }
       },
       serverURL: process.env.SERVER_URL,
-      keepMe:false,
+      keepMe: false,
       error: ""
     };
   },
   components: {
     FadeTransition,
-    MaryokuInput,
+    MaryokuInput
   },
   created() {
+    this.$store.dispatch("auth/checkToken");
   },
   methods: {
     ...mapMutations("PublicEventPlanner", [
@@ -138,31 +165,36 @@ export default {
       this.setSingupModal({ showModal: true });
     },
     goToSignin() {
-        this.$router.push("/signin");
+      this.$router.push("/signin");
     },
     singup() {
-      this.loading = true
-      let that = this
+      this.loading = true;
+      let that = this;
       this.$validator.validateAll().then(isValid => {
         if (isValid) {
           if (this.email && this.password) {
-            this.$store.dispatch('auth/login', { email:this.email, password: this.password}).then(
-              () => {
-                this.setSingupModal({ showModal: false });
-                this.redirectPage()
-              },
-              error => {
-                this.loading = false;
-                this.error = "Invalid email or wrong password, try again."
-                this.setSingupModal({ showModal: false });
-              }
-            );
+            this.$store
+              .dispatch("auth/login", {
+                email: this.email,
+                password: this.password
+              })
+              .then(
+                () => {
+                  this.setSingupModal({ showModal: false });
+                  this.redirectPage();
+                },
+                error => {
+                  this.loading = false;
+                  this.error = "Invalid email or wrong password, try again.";
+                  this.setSingupModal({ showModal: false });
+                }
+              );
           }
         } else {
-          this.error = 'Sorry, invalid email or wrong password, try again.'
-          this.loading = false
+          this.error = "Sorry, invalid email or wrong password, try again.";
+          this.loading = false;
         }
-      })
+      });
     },
     authenticate(provider) {
       this.loading = true;
@@ -175,7 +207,7 @@ export default {
       document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
     },
     logout() {
-      this.$store.dispatch('auth/logout');
+      this.$store.dispatch("auth/logout");
       // this.$auth.logout(this);
       // this.$ls.remove("user");
     }
@@ -190,7 +222,7 @@ export default {
       return this.$store.state.auth.status.loggedIn;
     },
     tenantUser() {
-      return this.$store.state.auth.user
+      return this.$store.state.auth.user;
     }
   },
   watch: {
@@ -213,110 +245,109 @@ export default {
 $baseColor: #5c2153;
 
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700|Rubik:400,500,700&display=swap");
-
-.md-overlay {
-  z-index: 21 !important;
-}
-.container {
-  display: block !important;
-  min-height: calc(100vh - 268px) !important;
-}
-
-.md-datepicker-dialog.md-theme-default {
-  box-shadow: none;
-  border: 1px solid #606060;
-  border-radius: 14px;
-  z-index: 999999999999999;
-  height: auto;
-
-  .md-datepicker-header {
-    display: none;
-  }
-  .md-datepicker-body-footer {
-    display: none;
-  }
-
-  .md-datepicker-days .md-datepicker-day-button {
-    border-radius: 10px;
-    width: 35px;
-    min-width: 35px;
-    height: 35px;
-    line-height: 35px;
-    &.md-datepicker-selected {
-      background-color: $baseColor !important;
-      box-shadow: none;
-    }
-  }
-}
-.user-menu-content{
-  min-width: 150px;
-  .md-list-item-content{
-    font-size: 16px !important;
-  }
-}
-.md-dialog.singin-form {
-  border-radius: 10px;
-  padding: 2em 40px;
-  width: 428px;
-  z-index: 9999999;
-  height: auto;
-
-  .md-dialog-container {
-  }
-
-  .md-dialog-title {
-    color: $baseColor;
-    position: relative;
-    padding: 0;
-
-    button {
-      position: absolute;
-      right: 0;
-    }
-  }
-  .social-line {
-    img {
-      margin-right: 10px;
-    }
-  }
-  .form-input {
-    margin: 20px 0;
-  }
-
-  .md-dialog-content {
-    padding: 0;
-    overflow-x: hidden;
-  }
-
-  .custom-btn {
-    width: 100%;
-  }
-
-  .close-btn {
-    background: none !important;
-    border: none !important;
-    padding: 0;
-
-    .md-icon {
-      color: $baseColor !important;
-    }
-  }
-
-  .md-dialog-actions {
-    padding: 8px 0;
-    margin-top: 3em;
-  }
-}
-
-.forget-password {
-  text-align: center;
-  margin: 0.7em auto;
-  color: $baseColor !important;
-  font-size: 14px;
-  font-weight: 500;
-  display: block;
-}
 .create-event {
+  .md-overlay {
+    z-index: 21 !important;
+  }
+  .container {
+    display: block !important;
+    min-height: calc(100vh - 268px) !important;
+  }
+
+  .md-datepicker-dialog.md-theme-default {
+    box-shadow: none;
+    border: 1px solid #606060;
+    border-radius: 14px;
+    z-index: 999999999999999;
+    height: auto;
+
+    .md-datepicker-header {
+      display: none;
+    }
+    .md-datepicker-body-footer {
+      display: none;
+    }
+
+    .md-datepicker-days .md-datepicker-day-button {
+      border-radius: 10px;
+      width: 35px;
+      min-width: 35px;
+      height: 35px;
+      line-height: 35px;
+      &.md-datepicker-selected {
+        background-color: $baseColor !important;
+        box-shadow: none;
+      }
+    }
+  }
+  .user-menu-content {
+    min-width: 150px;
+    .md-list-item-content {
+      font-size: 16px !important;
+    }
+  }
+  .md-dialog.singin-form {
+    border-radius: 10px;
+    padding: 2em 40px;
+    width: 428px;
+    z-index: 9999999;
+    height: auto;
+
+    .md-dialog-container {
+    }
+
+    .md-dialog-title {
+      color: $baseColor;
+      position: relative;
+      padding: 0;
+
+      button {
+        position: absolute;
+        right: 0;
+      }
+    }
+    .social-line {
+      img {
+        margin-right: 10px;
+      }
+    }
+    .form-input {
+      margin: 20px 0;
+    }
+
+    .md-dialog-content {
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .custom-btn {
+      width: 100%;
+    }
+
+    .close-btn {
+      background: none !important;
+      border: none !important;
+      padding: 0;
+
+      .md-icon {
+        color: $baseColor !important;
+      }
+    }
+
+    .md-dialog-actions {
+      padding: 8px 0;
+      margin-top: 3em;
+    }
+  }
+
+  .forget-password {
+    text-align: center;
+    margin: 0.7em auto;
+    color: $baseColor !important;
+    font-size: 14px;
+    font-weight: 500;
+    display: block;
+  }
   .top-header {
     // background: #5c2153;
     height: 100px;
@@ -911,26 +942,50 @@ $baseColor: #5c2153;
       }
     }
   }
-}
 
-.md-button.custom-btn {
-  width: 256px;
-  height: 56px;
-  border-radius: 6px;
-  min-width: 256px;
-
-  .md-ripple {
-    font-size: 15px;
-    text-transform: initial;
-    font-weight: bold;
+  .setting-title {
+    font-family: "Manrope-bold";
+    font-size: 30px;
+    text-transform: uppercase;
   }
-  &.md-default {
-    margin-right: 1em;
+  .event-basic-info {
+    text-align: center;
   }
+  .indicator {
+    margin-right: 20px;
+    margin-top: -20px;
+  }
+  .title {
+    font-family: "Manrope-Bold";
+    font-size: 40px;
+    text-align: center;
+    line-height: 1.2em;
+    margin: 20px;
+    text-transform: uppercase;
+    .step {
+      padding: 20px;
+      display: inline-block;
+    }
+  }
+  .md-button.custom-btn {
+    width: 256px;
+    height: 56px;
+    border-radius: 6px;
+    min-width: 256px;
 
-  &.disabled,
-  &.opacity-btn {
-    opacity: 0.3;
+    .md-ripple {
+      font-size: 15px;
+      text-transform: initial;
+      font-weight: bold;
+    }
+    &.md-default {
+      margin-right: 1em;
+    }
+
+    &.disabled,
+    &.opacity-btn {
+      opacity: 0.3;
+    }
   }
 }
 
@@ -1039,7 +1094,6 @@ $baseColor: #5c2153;
           width: 100%;
         }
       }
-
     }
     .start-working-item .md-checkbox label {
       padding-left: 54px !important;
@@ -1117,7 +1171,7 @@ $baseColor: #5c2153;
       font-size: 30px;
       margin: 15px;
       .step {
-        padding:10px;
+        padding: 10px;
       }
     }
     .setting-title {
@@ -1169,54 +1223,7 @@ $baseColor: #5c2153;
       width: 100%;
     }
   }
+  
 }
-.setting-title {
-  font-family: "Manrope-bold";
-  font-size: 30px;
-  text-transform: uppercase;
-}
-.event-basic-info {
-  text-align: center;
-}
-.indicator {
-  margin-right: 20px;
-  margin-top: -20px;
-}
-.title {
-  font-family: "Manrope-Bold";
-  font-size: 40px;
-  text-align: center;
-  line-height: 1.2em;
-  margin: 20px;
-  text-transform: uppercase;
-  .step {
-    padding: 20px;
-    display: inline-block;
-  }
-}
-.types {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  .type-card {
-    cursor: pointer;
-    padding: 20px 25px;
-    width: 200px;
-    height: 200px;
-    border: solid 1px #cccccc;
-    border-radius: 3px;
-    margin: 10px;
-    background: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    &.selected {
-      color: #f51355;
-      box-shadow: 0 3px 10px 0 rgba(245, 19, 85, 0.43);
-      border: solid 0.5px #f51355;
-      font-family: "Manrope-Bold";
-    }
-  }
-}
+
 </style>

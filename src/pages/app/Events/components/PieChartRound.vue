@@ -92,7 +92,7 @@
     </svg>
     <div class="items-cont">
       <ul class="items-list">
-        <li v-for="(item, index) in sortedData" :key="index">
+        <li v-for="(item, index) in sortedData" :key="index" :class="`columns-${columns}`">
           <div class="d-flex">
             <span :style="`background-color: ${item.color};`" class="icon"></span>
             <span class="text">{{item.category}}</span>
@@ -119,6 +119,10 @@ export default {
     type: {
       type: String,
       default: 'total'
+    },
+    columns: {
+      type: Number,
+      default: 2
     }
   },
   data () {
@@ -177,7 +181,9 @@ export default {
       if (!this.event.id) return
       let vm = this
       this.isLoading = true
-      let res = this.event.components
+      // let res = this.event.components
+      let res = this.items
+      console.log(this.items)
       this.circleLength = Math.PI * (this.radius * 2)
       let spaceLeft = this.circleLength
 
@@ -204,19 +210,19 @@ export default {
       this.categories = [...new Set(this.categories)]
       // sort data with updated categories
       var startValue = 0;
-      this.categories.forEach((category, cIndex) => {
+      this.items.forEach((item, cIndex) => {
         const budget = this.eventBuildingBlocks
-            .filter(ebb => ebb.title === category)
+            .filter(ebb => ebb.title === item.title)
             .map(eb => (eb.allocatedBudget === null ? 0 : eb.allocatedBudget))
             .reduce(function (total, val) {
               return parseFloat(total) + parseFloat(val)
             }, 0);
         const budgetValue = (budget / this.totalValue) * this.circleLength;
         this.sortedData.push({
-          category: category,
+          category: item.title,
           // filter by category title and gather budget values, then get the sum of them
           budget: budget,
-          color: this.getElementColor(category),
+          color: item.color,
           // strikeDash: '0 ' + (this.circleLength - spaceLeft) + ' ' + this.circleLength
           strikeDash: budgetValue + ' ' + (this.circleLength - budgetValue) + ' ' + this.circleLength,
           rotate: (startValue / this.circleLength) * 360
@@ -262,16 +268,17 @@ export default {
       components: 'event/getComponentsList'
     }),
     reorderingData() {
+      console.log(this.sortedData)
       let maxIndex = this.sortedData.findIndex(item=>item.budget == this.maxValue)
       const endData = {...this.sortedData[maxIndex]}
       endData.strikeDash =  2 + ' ' + (this.circleLength - 2) + ' ' + this.circleLength
       if (maxIndex == 0) maxIndex = this.sortedData.length - 1 
       else maxIndex -= 1;
       const newData = [...this.sortedData.slice(maxIndex), ...this.sortedData.slice(0, maxIndex)]
-      console.log(newData)
       newData.push(this.sortedData[maxIndex])
       newData.push(endData)
       if (maxIndex >= 0) {
+        console.log(newData)
         return newData
       }
       return this.sortedData
@@ -320,7 +327,7 @@ export default {
 }
 .pie-chart-value {
   fill: none;
-  stroke-width: 50;
+  stroke-width: 60;
   stroke-linecap: round;
   opacity: 1;
 
@@ -335,7 +342,15 @@ export default {
   list-style: none;
   padding: 0px 1rem;
   li {
-    width: calc(50% - 5px);
+    font-size: 16px;
+    &.columns-1{
+      width: calc(100% - 5px);
+      font-size: 20px;
+      padding: 10px 1rem;
+    }
+    &.columns-2{
+      width: calc(50% - 5px);
+    }
     display: inline-block;
     padding: 5px 15px;
 
@@ -350,7 +365,6 @@ export default {
     }
     .text {
       display: inline-block;
-      font-size: 16px;
     }
   }
 }

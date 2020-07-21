@@ -260,9 +260,16 @@
               </template>
               <template v-if="editTips">
                 <td colspan="3" align="right" style="white-space: nowrap">
-                  <input class="inline-input" v-model="newAllocatedTips" />
-                  <md-button class="md-simple md-black normal-btn" @click="editTips=false">cancel</md-button>
-                  <md-button class="md-red normal-btn" @click="updateTips()">save</md-button>
+                  <!-- <input class="inline-input" v-model="newAllocatedTips" /> -->
+                  <maryoku-input
+                    v-model="newAllocatedTips"
+                    inputStyle="budget"
+                    size="small"
+                    style="width:150px;display: inline-block;"
+                    @focus="$event.target.select()"
+                  ></maryoku-input>
+                  <md-button class="md-simple md-black normal-btn" @click="editTips=false" style="height:50px">cancel</md-button>
+                  <md-button class="md-red normal-btn" @click="updateTips()" style="height:50px">save</md-button>
                 </td>
               </template>
             </tr>

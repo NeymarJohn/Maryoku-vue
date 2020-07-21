@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <div class="event-plan">
     <progress-sidebar></progress-sidebar>
     <event-details-timeline v-if="pageId=='timeline'"></event-details-timeline>
-    <event-concept-choose v-if="pageId=='concept'"></event-concept-choose>
-    <booking-event v-if="pageId!='timeline' && pageId!='concept'"></booking-event>
+    <event-concept-choose v-else-if="pageId=='concept'"></event-concept-choose>
+    <event-budget-requirement v-else-if="pageId=='budget'"></event-budget-requirement>
+    <booking-event v-else></booking-event>
   </div>
 </template>
 <script>
@@ -11,7 +12,7 @@ import EventDetailsTimeline from './EventDetailsTimeline'
 import EventConceptChoose from './components/EventConceptChoose'
 import BookingEvent from './components/BookingEvent'
 import BookingEventRequirement from './components/BookingEventRequirement.vue'
-
+import EventBudgetRequirement from './components/EventBudgetRequirement.vue'
 import ProgressSidebar from "./components/progressSidebar";
 
 export default {
@@ -20,11 +21,13 @@ export default {
     EventConceptChoose, 
     BookingEvent,
     BookingEventRequirement,
-    ProgressSidebar
+    ProgressSidebar,
+    EventBudgetRequirement
   },
   data() {
     return {
-      pageId: ""
+      pageId: "",
+      resevedPages: []
     }
   },
   mounted () {
@@ -40,6 +43,6 @@ export default {
   },
 }
 </script>
-<style lang="scss" scoped>
-
+<style lang="scss">
+   @import "../../styles/EventPlan.scss";
 </style>

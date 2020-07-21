@@ -182,7 +182,10 @@ export default {
     }
   },
   created () {
-    
+    if (this.value) {
+       this.content = `${this.value}`.replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    } 
   },
   destroyed () {
     window.removeEventListener('scroll', this.handleScroll);

@@ -72,17 +72,6 @@ export default {
               }
             );
           }
-          // that.$auth.login(that, {email: that.email.toString().toLowerCase(), password: that.password}, (success) => {
-          //   that.$router.push({ path: '/signedin', query: {token: success.access_token} })
-          // }, (failure) => {
-          //   that.loading = false
-          //   if (failure.response.status === 401) {
-          //     that.error = 'Sorry, invalid email or wrong password, check and try again.'
-          //   } else {
-          //     that.error = 'Temporary failure, try again later'
-          //     console.log(JSON.stringify(failure.response))
-          //   }
-          // })
         } else {
           that.error = 'Sorry, invalid email or wrong password, try again.'
           that.loading = false
@@ -107,17 +96,6 @@ export default {
           this.$router.push({ paht: '/error'})
         }
       }
-    }
-  },
-  beforeMount () {
-    if (this.loggedIn) {
-      this.$store.dispatch('auth/checkToken')
-      .then(res=>{
-        this.redirectPage()
-      })
-      .catch(err=>{
-        this.$router.push({path:'signin'})
-      })
     }
   },
   data () {
