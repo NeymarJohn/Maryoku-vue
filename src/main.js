@@ -100,17 +100,15 @@ router.beforeEach((to, from, next) => {
   store.dispatch('auth/checkToken').then(res=>{
     console.log(res)
     if (to.path == '/signin') {
-      if (res.currentTenant && res.tenants.indexOf(res.currentTenant)>=0) {
+      if (res.currentTenant) {
         next('/events')
       } else if (res.tenants.length === 0) {
-        next('/create-event-wizard')
+        next('/create-workspace')
       } else if (res.tenants.length > 0) {
         next('/choose-workspace')
       } else {
         next('/error')
       }
-    } else if (to.path.startsWith('/events') && res.tenants.indexOf(res.currentTenant) < 0){
-      next('/choose-workspace')
     } else {
       next()
     }

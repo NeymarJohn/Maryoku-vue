@@ -96,7 +96,6 @@
             </template>
             <template slot="body">
                 <div class="md-layout justify-content-center">
-
                     <div class="md-layout-item md-size-60 margin-bottom justify-content-center">
                         <div class="form-group with-icon budget-field">
                             <div class="input-icon">
@@ -104,7 +103,6 @@
                             </div>
                             <input type="text" class="form-control"  v-model="newBudget" placeholder="">
                         </div>
-
                         <div class="label-item label-success text-center" v-if="newBudget && newBudget > calendarEvent.totalBudget">
                             <h4>
                                 Fantastic!
@@ -120,7 +118,6 @@
                         </div>
                     </div>
                 </div>
-
             </template>
             <template slot="footer">
                 <md-button class="md-default md-simple cancel-btn" @click="showBudgetModal = false">
