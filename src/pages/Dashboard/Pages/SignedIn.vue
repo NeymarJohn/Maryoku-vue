@@ -1,11 +1,18 @@
 <template>
   <div class="md-layout">
-    <div class="md-layout-item" style="text-align: center;">
+    <div class="md-layout-item" style="text-align: center;" v-if="this.messageIndex < 0">
       <img src="/static/img/maryoku-loader.gif" />
       <!-- <img src="http://static.maryoku.com/storage/img/calendar-loader-3.gif" class="text-center" style="width: 64px;"/> -->
       <h2 class="title text-center" slot="title" style="text-align: center;">
         Hi there, one moment please ...
       </h2> 
+    </div>
+    <div v-else class="md-layout-item font-size-30" style="text-align: center; color:#050505;">
+      {{messages[messageIndex]}}
+      <div class="mt-4rem">
+        <md-button class="md-simple md-red normal-btn" @click="toCreateWorkspace"> Create Worspace</md-button>
+        <md-button class="md-simple md-red normal-btn" @click="toChooseWorkspace"> Choose Workspace</md-button>
+      </div>
     </div>
   </div>
 </template>
@@ -15,12 +22,17 @@ import SockJS from 'sockjs-client' // NEW: SockJS & Stomp instead of socket.io
 import Stomp from 'stompjs'
 import TenantUser from '@/models/TenantUser'
 import Model from '@/models/Model'
-
 export default {
   components: {
 
   },
   methods: {
+    toCreateWorkspace() {
+      this.$router.push({path: '/create-event-wizard'})
+    },
+    toChooseWorkspace() {
+      this.$router.push({path: '/choose-workspace'})
+    }
   },
   created () {
     const givenToken = this.$route.query.token
@@ -32,7 +44,6 @@ export default {
           if  (tenantUser.tenants && tenantUser.tenants.length > 0) {
             this.$router.push({name: 'ChooseWorkspace'})
           } else  {
-            // this.$router.push({name: 'CreateWorkspace'})
             this.$router.push({ path: '/create-event-wizard' })
           }
         } else {
@@ -62,8 +73,14 @@ export default {
           const firstEvent = this.$route.query.firstEvent
           if (firstEvent) {
             this.$router.push({ path: `/events/${firstEvent}/booking/budget` })
+          } else if( tenantUser.profile.id ) {
+            this.$router.push({ path: '/events' })
           } else {
-            this.$router.push({ path: '/create-event-wizard' })
+            this.messageIndex = 0;
+            // setTimeout(() => {
+            //   this.$router.push({ path: '/choose-workspace' })
+              
+            // }, 5000);
           }
         }
         
@@ -76,7 +93,11 @@ export default {
   },
   data () {
     return {
-      serverURL: process.env.SERVER_URL
+      serverURL: process.env.SERVER_URL,
+      messageIndex: -1,
+      messages: [
+        `Workspace does not exist, create your workspace.`
+      ]
     }
   }
 }

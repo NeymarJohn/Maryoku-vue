@@ -1,5 +1,5 @@
 <template>
-  <div class="event-budget-vendors">
+  <div class>
     <table class="event-blocks__table">
       <thead>
         <tr>
@@ -1179,109 +1179,106 @@ export default {
 </script>
 <style lang="scss">
 @import "@/assets/scss/md/_colors.scss";
-.event-budget-vendors {
-  .add-category-model {
-    .modal-container {
-      max-width: 900px;
-      .modal-header {
-        padding: 60px 60px 0px;
-      }
-      .modal-body {
-        padding: 0px 60px 0px;
-      }
+.add-category-model {
+  .modal-container {
+    max-width: 900px;
+    .modal-header {
+      padding: 60px 60px 0px;
+    }
+    .modal-body {
+      padding: 0px 60px 0px;
     }
   }
-  .requirements-cell-button {
+}
+.requirements-cell-button {
+  width: 48px;
+  min-width: 48px;
+
+  .md-ripple {
     width: 48px;
     min-width: 48px;
-
-    .md-ripple {
-      width: 48px;
-      min-width: 48px;
-    }
-
-    &.md-icon:hover {
-      visibility: hidden;
-    }
-
-    &.md-icon:hover {
-      visibility: visible;
-    }
   }
 
-  .btn-add {
-    border-radius: 3px;
-    width: 48px;
-    min-width: 48px;
-
-    .md-ripple {
-      width: 48px;
-      min-width: 48px;
-    }
+  &.md-icon:hover {
+    visibility: hidden;
   }
 
-  .add-new-block-btn {
-    .md-ripple {
-      padding: 10px 0 !important;
-      text-align: left;
-      color: #ff4470 !important;
-      font-weight: 500 !important;
-      font-size: 12px !important;
-
-      .md-button-content {
-        i {
-          color: #ff4470 !important;
-        }
-      }
-
-      &:hover {
-        color: #999999 !important;
-      }
-    }
-  }
-
-  .select-elements-budget {
-    & > input[type="text"] {
-      font-size: 14px !important;
-    }
-  }
-
-  .no-border {
-    &:before {
-      border: 2px solid white;
-    }
-  }
-
-  .span-element {
-    font-weight: 400;
-  }
-
-  .span-users-count {
-    color: #999999;
-    font-size: 14px;
-  }
-
-  .w-100 {
-    width: 100% !important;
-  }
-
-  .cursor-pointer {
-    cursor: pointer !important;
-  }
-  .expand {
-    img {
-      transform: rotate(-90deg);
-    }
-  }
-  .multiselect__tags {
-    border: solid 0.5px #bcbcbc;
-  }
-  input.budget {
-    font-size: 20px !important;
-  }
-  .booked {
-    background-color: rgba(56, 256, 126, 0.19) !important;
+  &.md-icon:hover {
+    visibility: visible;
   }
 }
 
+.btn-add {
+  border-radius: 3px;
+  width: 48px;
+  min-width: 48px;
+
+  .md-ripple {
+    width: 48px;
+    min-width: 48px;
+  }
+}
+
+.add-new-block-btn {
+  .md-ripple {
+    padding: 10px 0 !important;
+    text-align: left;
+    color: #ff4470 !important;
+    font-weight: 500 !important;
+    font-size: 12px !important;
+
+    .md-button-content {
+      i {
+        color: #ff4470 !important;
+      }
+    }
+
+    &:hover {
+      color: #999999 !important;
+    }
+  }
+}
+
+.select-elements-budget {
+  & > input[type="text"] {
+    font-size: 14px !important;
+  }
+}
+
+.no-border {
+  &:before {
+    border: 2px solid white;
+  }
+}
+
+.span-element {
+  font-weight: 400;
+}
+
+.span-users-count {
+  color: #999999;
+  font-size: 14px;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
+}
+.expand {
+  img {
+    transform: rotate(-90deg);
+  }
+}
+.multiselect__tags {
+  border: solid 0.5px #bcbcbc;
+}
+input.budget {
+  font-size: 20px !important;
+}
+.booked {
+  background-color: rgba(56, 256, 126, 0.19) !important;
+}
 </style>

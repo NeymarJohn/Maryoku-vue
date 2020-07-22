@@ -18,8 +18,8 @@ export default {
   },
   created () {
     const that = this
+    this.$store.dispatch('auth/logout')
     setTimeout(() => {
-      this.$authService.logout()
       this.$router.push({ path: '/signin'})
       if (process.env.NODE_ENV === 'production') {
         try {

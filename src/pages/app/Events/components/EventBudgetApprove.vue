@@ -28,37 +28,21 @@
                   :tab-name="['<img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+26.png\'> Total', ' <img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest']"
               >
                   <template slot="tab-pane-1">
-                    <event-budget-component v-for="(component,  index) in selectedComponents" 
-                      :component="component" 
-                      :key="index" 
-                      @delete="deleteCategory"
-                      @updateCategory="updateCategory"></event-budget-component>
-                    <event-budget-component :component="{title:'Total', allocatedBudget:event.totalBudget}" ></event-budget-component>
+                    <event-budget-component v-for="(component,  index) in selectedComponents" :component="component" :key="index"></event-budget-component>
+                    <event-budget-component :component="{title:'Total', allocatedBudget:event.totalBudget}" :key="index"></event-budget-component>
                     <div class="add-category-row">
-                      <md-button class="md-simple add-category-btn md-red add-category-button" @click="showAddNewCategory = true">
+                      <md-button class="md-simple add-category-btn md-red add-category-button" @click="showCategoryModal = true">
                         <img :src="`${$iconURL}budget+screen/SVG/Asset%2019.svg`"/> 
                         <span class="font-size-20 font-bold text-transform-capitalize">Add new category</span>
                       </md-button>
                     </div>
                   </template>
                   <template slot="tab-pane-2">
-                    <event-budget-component type="perguest" :participants="event.numberOfParticipants" v-for="(component,  index) in selectedComponents" :component="component" :key="index" ></event-budget-component>
-                    <event-budget-component :component="{title:'Total', allocatedBudget:event.totalBudget}" type="perguest" :participants="event.numberOfParticipants" ></event-budget-component>
-                    <div class="add-category-row">
-                      <md-button class="md-simple add-category-btn md-red add-category-button" @click="showAddNewCategory = true">
-                        <img :src="`${$iconURL}budget+screen/SVG/Asset%2019.svg`"/> 
-                        <span class="font-size-20 font-bold text-transform-capitalize">Add new category</span>
-                      </md-button>
-                    </div>
                   </template>
-                  
               </tabs>
           </div>
       </div>
     </div>
-
-    <budget-edit-modal v-if="showBudgetModal" :event="event" @cancel="showBudgetModal=false" @save="updateBudget"></budget-edit-modal>
-    <add-new-category-modal v-if="showAddNewCategory" :event="event" :components="selectedComponents" @cancel="showAddNewCategory=false" @save="addNewCategory"></add-new-category-modal>
   </div>
 </template>
 <script>
@@ -68,25 +52,19 @@ import EventComponent from '@/models/EventComponent'
 import Calendar from '@/models/Calendar'
 import CalendarEvent from '@/models/CalendarEvent'
 import EventBudgetComponent from './EventBudgetComponent'
-import BudgetEditModal from '@/components/Modals/BudgetEditModal'
-import AddNewCategoryModal from '@/components/Modals/AddNewCategoryModal'
 export default {
   components: {
     Tabs, 
     Modal,
     PieChartRound,
-    EventBudgetComponent,
-    BudgetEditModal,
-    AddNewCategoryModal
+    EventBudgetComponent
   },
   data() {
     return {
       showBudgetModal: false,
       selectedComponents: [],
       seriesData: [],
-      isRendered : false,
-      showEditModal: false,
-      showAddNewCategory: false
+      isRendered : false
     }
   },
   created () {
@@ -104,96 +82,23 @@ export default {
       return this.$store.state.event.eventData; 
     }
   },
-  methods: {
-    updateBudget(eventBudget) {
-      const event = new CalendarEvent({
-        id: this.event.id,
-        totalBudget: eventBudget.totalBudget,
-        calendar: new Calendar({id: this.event.calendar.id})
-      })
-      this.$store.dispatch('event/saveEventAction', event).then(res=>{
-        this.showBudgetModal = false
-      })
+  filters: {
+    formatDate: function (date) {
+      return moment(date).format('MMM Do YYYY ')
     },
-    async addNewCategory(newCategory) {
-      console.log(newCategory)
-      let newComponent = newCategory.category;
-      if (newComponent.id === "other") {
-        const newCategory = {
-          title: `Other-${newCategory.name}`,
-          key: `other-${newCategory.name.toLowerCase()}`,
-          color: `rgb(${parseInt(Math.random() * 255)}, ${parseInt(
-            Math.random() * 255
-          )}, ${parseInt(Math.random() * 255)})`,
-          icon: `other.svg`,
-          type: "customized",
-          categoryId: "other"
-        };
-        newComponent = await new EventCategory(newCategory).save();
-      }
-      let newBlock = {
-        componentId: newComponent ? newComponent.key : "other",
-        componentCategoryId: newComponent ? newComponent.key : "other",
-        calendarEvent: { id: this.event.id },
-        allocatedBudget: newCategory.budget,
-        order: this.selectedComponents.length,
-        icon: newComponent.icon,
-        category: newComponent
-      };
-
-      console.log(newBlock)
-      new EventComponent(newBlock)
-        .for(new Calendar({id: this.event.calendar.id}), this.event)
-        .save()
-        .then(res => {
-          this.showAddNewCategory = false;
-          this.selectedComponents = [... this.selectedComponents, res.item].sort((a, b)=>a.order > b.order)
-        })
-        .catch(error => {
-          console.log("Error while saving ", error);
-        });
-      
+    formatTime: function (date) {
+      return moment(date).format('h:00 A')
     },
-    deleteCategory(category) {
-      const deletingCategory = new EventComponent({id: category.id})
-      deletingCategory
-        .for(new Calendar({id: this.event.calendar.id}), this.event)
-        .delete()
-        .then(resp => {
-          this.isLoading = false;
-          this.selectedComponents.splice(
-            this.selectedComponents.findIndex(b => {
-              return b.id === deletingCategory.id;
-            }),
-            1
-          );
-          this.$forceUpdate();
-
-          let allocatedBudget = 0;
-          this.selectedComponents.forEach(item => {
-            allocatedBudget += Number(item.allocatedBudget);
-          });
-          this.allocatedBudget = allocatedBudget;
-          this.$emit("change");
-        })
-        .catch(error => {
-          console.log(error);
-        });
+    formatDuration: function (startDate, endDate) {
+      return moment(endDate).diff(startDate, 'hours')
     },
-    updateCategory(category) {
-      const eventComponent = new EventComponent(category)
-      eventComponent.for(new Calendar({id: this.event.calendar.id}), this.event).save().then(res=>{
-        this.selectedComponents.splice(
-          this.selectedComponents.findIndex(b => {
-            return b.id === eventComponent.id;
-          }),
-          1,
-          res.item
-        );
-        this.$forceUpdate();
-      })
+    withComma (amount) {
+      return amount ? amount.toLocaleString() : 0
+    },
+    roundNumber(amount) {
+      return Math.round(amount / 10) * 10;
     }
-  }
+  },
 }
 </script>
 <style lang="scss" scoped>

@@ -283,6 +283,73 @@
           />
         </div>
       </div>
+      <div class="md-layout-item md-size-30 md-small-size-100" v-if="false">
+        <md-card class="bid-section pos-fixed">
+          <md-card-content>
+            <div class="text-center">
+              <h5 class="clear-margins">Client's budget is</h5>
+              <span
+                class="text-gray"
+              />
+            </div>
+            <div class="cost-average">
+              <div class="text-center small">Current bids range between</div>
+              <div class="cost-average_item">
+                <h5 class>Lowest</h5>
+                <div class="cost"></div>
+              </div>
+              <div class="cost-average_item arrow-item">
+                <md-icon>arrow_right_alt</md-icon>
+              </div>
+              <div class="cost-average_item">
+                <h5 class>Highest</h5>
+                <div class="cost"></div>
+              </div>
+            </div>
+            <div class="update-checkbox">
+              <md-checkbox
+                class="md-success"
+              >Update me if someone outbids my offer</md-checkbox>
+            </div>
+            <div class="offer-value">
+              <div class="value-section upgrades-section">
+                <div class="title">{{getServiceCategory}}</div>
+                <div
+                  class="cost text-right"
+                ></div>
+              </div>
+              <div class="value-section upgrades-section extra-section">
+                <div class="title">Extra</div>
+                <div class="cost text-right">${{extraTotal | withComma}}</div>
+              </div>
+              <div class="extra-items-wrapper">
+                <div
+                  class="extra-items"
+                >
+                  <span></span>
+                </div>
+              </div>
+              <div class="value-section user-offer-section">
+                <div class="title">Your Offer</div>
+                <div class="cost text-right">${{totalOffer | withComma}}</div>
+              </div>
+            </div>
+            <div class="bid-button">
+              <md-button
+                class="md-success"
+              >Submit Proposal</md-button>
+              <h6
+                class="text-primary text-center"
+              ></h6>
+            </div>
+            <div class="payment-policy text-center">
+              By submitting a proposal you agree to our
+              <a href="https://www.maryoku.com/terms" target="_blank">Terms of Service</a> and
+              <a href="https://www.maryoku.com/privacy" target="_blank">Privacy Policy</a>.
+            </div>
+          </md-card-content>
+        </md-card>
+      </div>
     </div>
   </div>
 </template>

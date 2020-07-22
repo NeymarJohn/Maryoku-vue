@@ -10,12 +10,12 @@
           What’s your budget?
         </div>
         <div style="max-width:600px; margin: 3rem auto 2rem">
-          <maryoku-input inputStyle="budget" placeholder="Type number here" v-model="eventInfo.budget" style="text-align:center"></maryoku-input>
+          <maryoku-input inputStyle="budget" placeholder="Type number here" v-model="budget" style="text-align:center"></maryoku-input>
         </div>
         <div class="font-size-16 font-bold">
-          <md-checkbox v-model="eventInfo.noBudget" > I don't have a budget</md-checkbox>
+          <md-checkbox v-model="noBudget" > I don't have a budget</md-checkbox>
         </div>
-        <template v-if="!eventInfo.noBudget">
+        <template v-if="!noBudget">
           <div class="font-size-20 font-bold text-transform-capitalize mt-3">
             <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator">
             Between a Teflon pan and a super glue How obligated are you to stick to the budget?  
@@ -31,7 +31,7 @@
               min="0"
               max="10"
               step="1"
-              v-model="eventInfo.flexibility">
+              v-model="flexibility">
             </range-slider>
             <div>
               <img :src="`${$iconURL}Budget Requirements/group-8348.svg`">
@@ -49,8 +49,8 @@
               <div 
                 v-for="(level) in levels" :key="level.value"
                 class="type-card"
-                :class="{selected:level.value == eventInfo.selectedLevel.value}" 
-                @click="eventInfo.selectedLevel=level" 
+                :class="{selected:level.value == selectedLevel.value}" 
+                @click="selectedLevel=level" 
                 >
                 <div>
                   {{level.label}}
@@ -61,7 +61,7 @@
                     <span v-if="level.value===2">$$</span>
                     <span v-if="level.value===3">$$$</span>
                   </div>
-                  <md-checkbox class="md-checkbox-circle md-red" v-model="eventInfo.selectedLevel" :value="level"></md-checkbox>
+                  <md-checkbox class="md-checkbox-circle md-red" v-model="selectedLevel" :value="level"></md-checkbox>
                 </div>
               </div>
             </div>
@@ -85,12 +85,10 @@ export default {
   },
   data() {
     return {
-      eventInfo: {
-        flexibility: 5,
-        noBudget: false,
-        budget:"",
-        selectedLevel:{},
-      },
+      flexibility: 5,
+      noBudget: false,
+      budget:"",
+      selectedLevel:{},
       levels: [
         {
           value: 1,
@@ -107,23 +105,8 @@ export default {
       ]
     }
   },
-  watch: {
-    eventInfo: {
-      handler(val){
-        this.$emit("change", val)
-      },
-      deep: true
-    }
-  }
 }
 </script>
 <style lang="scss" scoped>
-  .event-budget-requirement{
-    .maryoku_input{
-      input {
-        text-align: center !important;
-      }
-    }
-    
-  }
+  
 </style>

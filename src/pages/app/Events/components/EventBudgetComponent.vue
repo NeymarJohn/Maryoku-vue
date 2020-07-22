@@ -4,50 +4,29 @@
       <img class="icon" :src="`${$iconURL}Budget Elements/${component.icon}`">
       {{component.title}}
     </div>
-    <template v-if="!isEditing">
-      <div class="text-right font-size-20 flex-1 budget" v-if="type=='perguest'">${{component.allocatedBudget / participants | withComma}}</div>
-      <div class="text-right font-size-20 flex-1 budget" v-else>${{component.allocatedBudget | withComma}}</div>
-      <div class="actions">
-        <md-button class="edit-btn md-simple" @click="editBudget">
-            <img :src="`${$iconURL}Event%20Page/edit-dark.svg`" />
-        </md-button>
-        <md-button class="edit-btn md-simple" @click="deleteComponent">
-          <img class="trash" :src="`${$iconURL}Timeline-New/Trash.svg`" />
-        </md-button>
-      </div>
-    </template>
-    <template v-if="isEditing">
-      <div class="text-right font-size-20 flex-1 budget d-flex">
-        <maryoku-input inputStyle="budget" v-model="newBudget"></maryoku-input>
-        <md-button class="normal-btn md-simple md-red" @click="isEditing = false">
-            Cancel
-        </md-button>
-        <md-button class="normal-btn md-red" @click="updateComponent">
-          Save
-        </md-button>
-      </div>
-    </template>
+    <div class="text-right font-size-20 flex-1 budget">${{component.allocatedBudget | withComma}}</div>
+    <div class="actions">
+      <md-button class="edit-btn md-simple" @click="editBudget">
+          <img :src="`${$iconURL}Event%20Page/edit-dark.svg`" />
+      </md-button>
+      <md-button class="edit-btn md-simple" @click="deleteComponent">
+        <img class="trash" :src="`${$iconURL}Timeline-New/Trash.svg`" />
+      </md-button>
+    </div>
   </div>
   <div v-else class="event-budget-component d-flex total" >
     <div class="font-size-20 font-bold name">
-      {{component.title}} 
+      {{component.title}}
     </div>
-    <div class="text-right font-size-20 flex-1" v-if="type=='perguest'">${{component.allocatedBudget / participants | withComma}}</div>
-    <div class="text-right font-size-20 flex-1" v-else>${{component.allocatedBudget | withComma}}</div>
+    <div class="text-right font-size-20 flex-1">${{component.allocatedBudget | withComma}}</div>
     <div class="actions"> </div>
   </div>
 </template>
 <script>
-  import swal from "sweetalert2";
-  import MaryokuInput from "@/components/Inputs/MaryokuInput.vue"; 
   export default {
-    components: {
-      MaryokuInput,
-    },
     data() {
       return {
-        isEditing: false,
-        newBudget: ""
+        isEditing: false
       }
     },
     props: {
@@ -55,45 +34,16 @@
         type: Object,
         default: {}
       },
-      type: {
-        type: String,
-        default: 'total'
-      },
-      participants : {
-        type: Number,
-        default: 1
-      }
     },
     created () {
-      // console.log(this.component);
-      this.newBudget = `${this.component.allocatedBudget}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
-      
+      console.log(this.component);
     },
     methods: {
       editBudget() {
-        this.isEditing = true
+        
       },
       deleteComponent() {
-        swal({
-          title: `<div class="text-left"><div class="font-size-30 cross-line"><img src="${this.$iconURL}Budget Elements/${this.component.componentId}.svg" width="40"/>${this.component.title}</div>
-          <div >Are You Sure You Want To <br/>Delete This Category?
-                  </div></div>`,
-          showCancelButton: true,
-          confirmButtonClass: "md-button md-success",
-          cancelButtonClass: "md-button md-danger",
-          confirmButtonText: "Yes I'm sure",
-          cancelButtonText: "No, take me back",
-          buttonsStyling: false
-        }).then(result => {
-          if (result.value) {
-            this.$emit("delete", this.component)
-          }
-        });
-      },
-      updateComponent() {
-        this.component.allocatedBudget = Number(this.newBudget.replace(/,/g, ""));
-        this.isEditing = false;
-        this.$emit("updateCategory", this.component)
+
       }
     },
   }

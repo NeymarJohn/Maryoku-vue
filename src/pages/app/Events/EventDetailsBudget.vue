@@ -71,9 +71,67 @@
                     </tabs>
                 </div>
             </div>
+            <!-- <div class="md-layout-item  md-size-45 card-actvity">
+               <div class="card-section card-activity">
+                <div class="section-header">
+                    Activity
+                </div>
+                <div class="budget-list d-flex justify-content-between">
+                  <event-budget-activity-panel></event-budget-activity-panel>
+                </div>
+              </div>
+            </div> -->
         </div>
         <upload-vendors-modal ref="uploadModal"></upload-vendors-modal>
-        <budget-edit-modal v-if="showBudgetModal" :event="event" @cancel="showBudgetModal=false" @save="updateBudget"></budget-edit-modal>
+
+        <modal v-if="showBudgetModal"  class="add-category-model">
+            <template slot="header">
+                <div class="add-category-model__header">
+                    <h2 class="black">What is your new budget?</h2>
+                    <div class="header-description">  <img :src="`${this.$iconURL}Event Page/light.svg`" width="20"> Increasing your budget to $ {{calendarEvent.totalBudget | withComma}} or more will allow you to get a videographer</div>
+                </div>
+                <md-button class="md-simple md-just-icon md-round modal-default-button" @click="showBudgetModal = false">
+                    <md-icon>clear</md-icon>
+                </md-button>
+            </template>
+            <template slot="body">
+                <div class="md-layout justify-content-center">
+
+                    <div class="md-layout-item md-size-60 margin-bottom justify-content-center">
+                        <div class="form-group with-icon budget-field">
+                            <div class="input-icon">
+                                <img :src="`${iconsURL}budget-dark.svg`" width="20">
+                            </div>
+                            <input type="text" class="form-control"  v-model="newBudget" placeholder="">
+                        </div>
+
+                        <div class="label-item label-success text-center" v-if="newBudget && newBudget > calendarEvent.totalBudget">
+                            <h4>
+                                Fantastic!
+                            </h4>
+                            <p>
+                                This budget is {{ 100 - parseInt( calendarEvent.totalBudget * 100 / newBudget)  }}% higher than average, your event is going to be wild!
+                            </p>
+                        </div>
+                        <div class="label-item label-warning text-center" v-if="newBudget && newBudget < calendarEvent.totalBudget">
+                            <p>
+                                <img :src="`${iconsURL}warning-circle-gray.svg`" width="20"> This budget is {{ 100 - parseInt( newBudget * 100 / calendarEvent.totalBudget)  }}% lower than average for this type of event
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </template>
+            <template slot="footer">
+                <md-button class="md-default md-simple cancel-btn" @click="showBudgetModal = false">
+                    Cancel
+                </md-button>
+                <md-button class="md-rose add-category-btn " :class="{ 'disabled' : !newBudget }" @click="updateBudget">
+                    Save
+                </md-button>
+            </template>
+        </modal>
+
         <modal v-if="budgetConfirmationModal"  class="add-category-model">
             <template slot="header">
                 <div class="add-category-model__header">
@@ -172,9 +230,6 @@ import BudgetHandleMinusModal from '../../../components/Modals/BudgetHandleMinus
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./components/CommentEditorPanel";
 
-import BudgetEditModal from '@/components/Modals/BudgetEditModal'
-import AddNewCategoryModal from '@/components/Modals/AddNewCategoryModal'
-
 export default {
   components: {
     Tabs,
@@ -187,9 +242,7 @@ export default {
     EventBudgetActivityPanel,
     HeaderActions,
     CommentEditorPanel,
-    EventStateMessage,
-    BudgetEditModal,
-    AddNewCategoryModal
+    EventStateMessage
   },
 
   data () {
@@ -359,10 +412,10 @@ export default {
     openUploadModal () {
       this.$refs.uploadModal.toggleModal(true)
     },
-    updateBudget (eventBudget) {
+    updateBudget () {
       let _calendar = new Calendar({id: this.currentUser.profile.defaultCalendarId})
       let editedEvent = new CalendarEvent({id: this.event.id}).for(_calendar)
-      const newBudget = eventBudget.totalBudget;//Number(eventBudget.totalBudget.replace(/,/g, ""))
+      const newBudget = Number(this.newBudget.replace(/,/g, ""))
       if (newBudget < this.calendarEvent.totalBudget) {
         this.showBudgetModal = false;
         const arrow =`<i data-v-a76b6a56="" style="color:#050505" class="md-icon md-icon-font md-theme-default">arrow_back</i>`;
