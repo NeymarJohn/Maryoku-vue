@@ -121,7 +121,7 @@ export default {
       default: 'total'
     },
     columns: {
-      type: Number,
+      type: [String, Number],
       default: 2
     }
   },
@@ -183,7 +183,6 @@ export default {
       this.isLoading = true
       // let res = this.event.components
       let res = this.items
-      console.log(this.items)
       this.circleLength = Math.PI * (this.radius * 2)
       let spaceLeft = this.circleLength
 
@@ -268,7 +267,6 @@ export default {
       components: 'event/getComponentsList'
     }),
     reorderingData() {
-      console.log(this.sortedData)
       let maxIndex = this.sortedData.findIndex(item=>item.budget == this.maxValue)
       const endData = {...this.sortedData[maxIndex]}
       endData.strikeDash =  2 + ' ' + (this.circleLength - 2) + ' ' + this.circleLength
@@ -278,7 +276,6 @@ export default {
       newData.push(this.sortedData[maxIndex])
       newData.push(endData)
       if (maxIndex >= 0) {
-        console.log(newData)
         return newData
       }
       return this.sortedData

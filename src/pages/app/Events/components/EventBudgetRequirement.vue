@@ -15,21 +15,23 @@
     <div v-else class="md-layout event-budget-section booking-section">
       <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
       <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
-      <div class="event-book-requirement-header md-layout-item md-size-100" v-if="currentStep<=2">
-        <div class="header-title" >
-          <img :src="`${$iconURL}Budget+Requirements/Image+186.png`"/>
-        </div>
-        <header-actions @toggleCommentMode="toggleCommentMode" hideDownload></header-actions>
-      </div>
-      <div class="event-page-header" v-else>
+      <div class="event-page-header">
         <div class="md-layout-item md-size-100 event-header d-flex justify-content-between">
           <div class="header-name" style="width:max-content">
+            <template v-if="currentStep!==3">
+              <h3 class="font-size-30 font-bold">
+                <img :src="`${$iconURL}Concept/Asset 491.svg`" style="width:30px; margin-right:0.5em"/>
+                PLAN YOUR BUDGET
+              </h3>
+            </template>
+            <template v-else>
               <h3 class="text-transform-uppercase">
                 <img :src="`${this.$iconURL}budget+screen/SVG/Asset%2010.svg`" width="15">
                 APPROVE Budget breakdown</h3>
               <div class="text-transform-capitalize">
                 We Created a budget division based on smart bla bla...
               </div>
+            </template>
           </div>
           <header-actions @toggleCommentMode="toggleCommentMode" hideDownload></header-actions>
         </div>
@@ -39,12 +41,8 @@
         <event-budget-approve></event-budget-approve>
       </div>
       <div class="booking-header md-layout-item md-size-100" v-else>
-        <h3 class="font-size-30 font-bold">
-          <img :src="`${$iconURL}Concept/Asset 491.svg`" style="width:30px; margin-right:0.5em"/>
-          PLAN YOUR BUDGET
-        </h3>
-        <event-budget-requirement-step1 v-if="currentStep===1"></event-budget-requirement-step1>
-        <event-budget-requirement-step2 v-if="currentStep===2"></event-budget-requirement-step2>
+        <event-budget-requirement-step1 v-if="currentStep===1" @change="setEventStep1"></event-budget-requirement-step1>
+        <event-budget-requirement-step2 v-if="currentStep===2" @change="setEventValue"></event-budget-requirement-step2>
       </div>
       <div class="wizard-footer d-flex">
         <div>
@@ -86,6 +84,11 @@ import HeaderActions from "@/components/HeaderActions";
 import EventBudgetRequirementStep1 from './EventBudgetRequirementStep1'
 import EventBudgetRequirementStep2 from './EventBudgetRequirementStep2'
 import EventBudgetApprove from './EventBudgetApprove.vue'
+
+import EventComponent from '@/models/EventComponent'
+import Calendar from '@/models/Calendar'
+import CalendarEvent from '@/models/CalendarEvent'
+
 export default {
   components: {
     CommentEditorPanel,
@@ -97,12 +100,16 @@ export default {
   },
   data() {
     return {
+      editingEvent: {},
       isLoading: false,
       showCommentEditorPanel: false,
       currentStep: 1,
       loadingBudget: false,
       approveBudget: false
     }
+  },
+  created () {
+    this.currentStep = this.event.budgetProgress > 50 ? 3:1;
   },
   methods: {
     toggleCommentMode(mode) {
@@ -114,12 +121,28 @@ export default {
       }
     },
     next() {
-      if (this.currentStep === 2) {
+      if (this.currentStep === 3) {
+        const event = new CalendarEvent({
+          id: this.event.id, 
+          calendar: new Calendar({id:this.event.calendar.id}),
+          budgetProgress: 100,
+        })
+        this.$store.dispatch('event/saveEventAction', event).then(res=>{
+          this.$router.push({ path: `/events/${this.event.id}/edit/budget`})
+        })
+      } else if (this.currentStep === 2) {
+        const event = new CalendarEvent({
+          id: this.event.id, 
+          calendar: new Calendar({id:this.event.calendar.id}),
+          budgetProgress: 75,
+          totalBudget: this.editingEvent.totalBudget,
+          reCalculate: true
+        })
         this.loadingBudget = true
-        setTimeout(() => {
+        this.$store.dispatch('event/saveEventAction', event).then(res=>{
           this.loadingBudget = false
           this.currentStep += 1;  
-        }, 2000);
+        })
       } else {
         this.currentStep += 1;
       }
@@ -130,6 +153,18 @@ export default {
     scrollToTop() {
       window.scrollTo(0, 0);
     },
+    setEventStep1(eventInfo) {
+      console.log(eventInfo)
+      this.editingEvent.totalBudget = eventInfo.budget;
+    },
+    setEventValue(eventBudget) {
+
+    }
+  },
+  computed: {
+    event() {
+      return this.$store.state.event.eventData; 
+    }
   },
 }
 </script>

@@ -84,16 +84,18 @@
       </md-card>
       <md-card class="md-card-plain" v-if="!upcomingEvents.length && !isLoading">
         <md-card-content>
-          <div class="text-center">
-            <img src="http://static.maryoku.com/storage/img/calendar.png" style="width: 120px;" />
-            <h4>You do not have any events planned yet</h4>
-            <md-button class="md-info" @click="routeToNewEvent">
-              <md-icon>event</md-icon>Create New Event
-            </md-button>
-            <md-button class="md-rose" @click="routeToPlanner">
-              Browse Year Planner
-              <md-icon>arrow_right</md-icon>
-            </md-button>
+          <div class="text-center mt-5">
+            <!-- <img src="http://static.maryoku.com/storage/img/calendar.png" style="width: 120px;" /> -->
+            <h3>You do not have any events planned yet</h3>
+            <div class="mt-4rem">
+              <md-button class="md-info md-red normal-btn" @click="routeToNewEvent">
+                Create New Event
+              </md-button>
+              <md-button class="md-red md-simple normal-btn " @click="chooseWorkspace">
+                Choose Workspace
+              </md-button>
+            </div>
+           
           </div>
         </md-card-content>
       </md-card>
@@ -295,8 +297,8 @@ export default {
     routeToEvent (eventId) {
       this.$router.push({ name: 'EditEventNew', params: { id: eventId } })
     },
-    routeToPlanner () {
-      this.$router.push({ name: 'AnnualPlanner' })
+    chooseWorkspace () {
+      this.$router.push({ path: '/choose-workspace' })
     },
     refreshEvents () {
       this.getCalendarEvents()
@@ -333,7 +335,7 @@ export default {
       })
     },
     routeToNewEvent () {
-      this.$router.push(`/event/create`)
+      this.$router.push(`/create-event-wizard`)
       // window.currentPanel = this.$showPanel({
       //   component: EventSidePanel,
       //   cssClass: 'md-layout-item md-size-40 transition36 ',
