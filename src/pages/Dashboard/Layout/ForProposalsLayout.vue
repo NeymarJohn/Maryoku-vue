@@ -22,7 +22,9 @@
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         </p>
         <div class="a-right">
-          <a class="see-full" @click="fullDetailsModal=true">See Full Details<md-icon>keyboard_arrow_right</md-icon></a>
+          <a class="see-full" @click="fullDetailsModal=true">
+            See Full Details <md-icon>keyboard_arrow_right</md-icon>
+          </a>
         </div>
         <div class="pull-bottom-right">
           <vendor-bid-time-counter
@@ -285,8 +287,9 @@
         } else if (this.step > 0 && this.step != 2) {
           this.step--
         } else {
-          
         }
+
+        this.scrollToTop()
         console.log('layoutStep', this.step)
       },
       scrollToTop() {
@@ -489,7 +492,7 @@
         }
         .a-right {
           text-align: right;
-          max-width: 990px;
+          max-width: 60%;
 
           i {
             position: relative;
