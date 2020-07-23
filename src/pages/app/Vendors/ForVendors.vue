@@ -389,22 +389,6 @@ export default {
       min: this.today.add(-3, 'days').format('DD/MM/YYYY'), 
       max: this.today.add(6, 'days').format('DD/MM/YYYY'), 
     }
-
-    this.$root.$on('go-to-proposal-form', () => {
-      if (this.isAgree) {
-        if (this.proposalRequest) {
-          this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`)
-        } else {
-          this.proposalRequest = new ProposalRequest({id: this.$route.params.id})
-          this.$router.push({
-            path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
-            props: {
-              proposalRequest: this.proposalRequest
-            }
-          })
-        }
-      }
-    })
   },
   methods: {
     goToForm() {

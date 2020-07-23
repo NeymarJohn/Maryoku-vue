@@ -2076,96 +2076,9 @@ const companyServices = [
   }
 ]
 
-const categoryNameWithIcons = [
-  {
-    name: 'Venue Rental',
-    value: 'venuerental',
-    icon: 'venuerental.svg'
-  },
-  {
-    name: 'Food & Beverage',
-    value: 'foodandbeverage',
-    icon: 'foodandbeverage.svg'
-  },
-  {
-    name: 'Design and Decor',
-    value: 'decor',
-    icon: 'decor.svg'
-  },
-  {
-    name: 'Guest Services & Staffing',
-    value: 'corporatesocialresponsibility',
-    icon: 'corporatesocialresponsibility.svg'
-  },
-  {
-    name: 'Signage / Printing',
-    value: 'signageprinting',
-    icon: 'signageprinting.svg'
-  },
-  // {
-  //   name: 'Advertising and Promotion',
-  //   value: 'advertising-promotion',
-  //   icon: 'advertising-promotion.svg'
-  // },
-  {
-    name: 'AV / Staging',
-    value: 'audiovisualstagingservices',
-    icon: 'audiovisualstagingservices.svg'
-  },
-  {
-    name: 'Swags',
-    value: 'swags',
-    icon: 'swags.svg'
-  },
-  // {
-  //   name: 'Shipping',
-  //   value: 'shipping',
-  //   icon: 'shipping.svg'
-  // },
-  {
-    name: 'Transportation & Tour operator',
-    value: 'transportation',
-    icon: 'transportation.svg'
-  },
-  {
-    name: 'Entertainment',
-    value: 'entertainment',
-    icon: 'entertainment.svg'
-  },
-  // {
-  //   name: 'Administration',
-  //   value: 'administration',
-  //   icon: 'administration.svg'
-  // },
-  {
-    name: 'Security',
-    value: 'securityservices',
-    icon: 'securityservices.svg'
-  },
-  // {
-  //   name: 'Technology',
-  //   value: 'technologyservices',
-  //   icon: 'technologyservices.svg'
-  // },
-  {
-    name: 'Videography and Photography',
-    value: 'videographyandphotography',
-    icon: 'videographyandphotography.svg'
-  },
-  {
-    name: 'Equipment Rentals',
-    value: 'equipmentrentals',
-    icon: 'equipmentrentals.svg'
-  },
-]
-
 class VendorService {
   businessCategories() {
     return businessCategories
-  }
-
-  categoryNameWithIcons() {
-    return categoryNameWithIcons
   }
 
   generalInfos() {

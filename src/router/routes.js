@@ -6,16 +6,15 @@ import NewEventLayout from '@/pages/Dashboard/Layout/NewEventLayout.vue'
 import WorkspaceLayout from '@/pages/Dashboard/Layout/WorkspaceLayout.vue'
 
 const Events = () => import('@/pages/app/Events/Events.vue')
-const EventDetailsOverView = () => import('@/pages/app/Events/EventDetailsOverview.vue')
-
 const EventProposal = () => import('@/pages/app/Events/EventProposal.vue')
-const Notes = () => import('@/pages/app/Notes.vue')
-const Proposals = () => import('@/pages/app/Proposals.vue')
+
 const CurrentVendors = () => import('@/pages/app/Vendors/CurrentVendors.vue')
 const AddEditVendor = () => import('@/pages/app/Vendors/AddEditVendor.vue')
 const VendorsPoolNew = () => import('@/pages/app/Vendors/VendorsPoolNew.vue')
-const ImportVendors = () => import('@/pages/app/Vendors/ImportVendors.vue')
 
+// const ImportVendors = () => import('@/pages/app/Vendors/ImportVendors.vue')
+// const Notes = () => import('@/pages/app/Notes.vue')
+// const Proposals = () => import('@/pages/app/Proposals.vue')
 // const EventSteps = () => import('@/pages/app/Events/Steps')
 // const EventDetails = () => import('@/pages/app/Events/EventDetails.vue')
 // import EmptyLayout from '@/pages/Dashboard/Pages/EmptyLayout'
@@ -60,15 +59,15 @@ const ImportVendors = () => import('@/pages/app/Vendors/ImportVendors.vue')
 // const GetStarted = () => import('@/pages/app/GetStarted')
 // const MyEvents = () => import('@/pages/app/Guest/MyEvents.vue')
 // const MarketPlace = () => import('@/pages/app/MarketPlace/MarketPlace.vue')
-
-const HomePage = () => import('@/pages/app/HomePage/Home.vue')
+// const HomePage = () => import('@/pages/app/HomePage/Home.vue')
 
 // Event Pages
+import EventDetailsOverView from '@/pages/app/Events/EventDetailsOverview.vue'
 import EventDetailsBudget from '@/pages/app/Events/EventDetailsBudget.vue'
-import EventDetailsTimeline from '@/pages/app/Events/EventDetailsTimeline.vue'
 import EventPlan from '@/pages/app/Events/EventPlan.vue'
 import EventProposalDetails from '@/pages/app/Events/components/EventProposalDetails.vue'
-import ExportTimeLine from '@/pages/app/Events/components/ExportTimeLine.vue'
+// import EventDetailsTimeline from '@/pages/app/Events/EventDetailsTimeline.vue'
+// import ExportTimeLine from '@/pages/app/Events/components/ExportTimeLine.vue'
 
 const CreateWorkspace = () => import('@/pages/Dashboard/Pages/CreateWorkspace')
 const ChooseWorkspace = () => import('@/pages/Dashboard/Pages/ChooseWorkspace')
@@ -448,15 +447,15 @@ let appPages = {
       opaque: false
     }
   },
-  {
-    path: '/vendors/create',
-    name: 'CreateVendor',
-    component: AddEditVendor,
-    meta: {
-      title: 'Add New Vendor',
-      gtm: 'Add New Vendor'
-    }
-  },
+  // {
+  //   path: '/vendors/create',
+  //   name: 'CreateVendor',
+  //   component: AddEditVendor,
+  //   meta: {
+  //     title: 'Add New Vendor',
+  //     gtm: 'Add New Vendor'
+  //   }
+  // },
   {
     path: '/vendors/:id/edit',
     name: 'EditVendor',
@@ -474,21 +473,21 @@ let appPages = {
   //     gtm: 'VendorsPool'
   //   }
   // },
-  {
-    path: '/import-vendors',
-    name: 'ImportVendors',
-    component: ImportVendors
-  },
-  {
-    path: '/proposals',
-    name: 'Proposals',
-    component: Proposals
-  },
-  {
-    path: '/notes',
-    name: 'Notes',
-    component: Notes
-  },
+  // {
+  //   path: '/import-vendors',
+  //   name: 'ImportVendors',
+  //   component: ImportVendors
+  // },
+  // {
+  //   path: '/proposals',
+  //   name: 'Proposals',
+  //   component: Proposals
+  // },
+  // {
+  //   path: '/notes',
+  //   name: 'Notes',
+  //   component: Notes
+  // },
   // {
   //   path: '/events/:id/edit',
   //   name: 'EventDetails',
@@ -663,26 +662,26 @@ let NewEventPages = {
   //     opaque: false
   //   }
   // },
-  {
-    path: '/events/:id/edit/timeline',
-    name: 'EditTimeLine',
-    component: EventDetailsTimeline,
-    meta: {
-      title: 'Timeline',
-      gtm: 'Event Timeline',
-      opaque: false
-    }
-  },
-  {
-    path: '/events/:id/edit/timeline/export',
-    name: 'EditTimeLineExport',
-    component: ExportTimeLine,
-    meta: {
-      title: 'Timeline',
-      gtm: 'Event Timeline',
-      opaque: false
-    }
-  },
+  // {
+  //   path: '/events/:id/edit/timeline',
+  //   name: 'EditTimeLine',
+  //   component: EventDetailsTimeline,
+  //   meta: {
+  //     title: 'Timeline',
+  //     gtm: 'Event Timeline',
+  //     opaque: false
+  //   }
+  // },
+  // {
+  //   path: '/events/:id/edit/timeline/export',
+  //   name: 'EditTimeLineExport',
+  //   component: ExportTimeLine,
+  //   meta: {
+  //     title: 'Timeline',
+  //     gtm: 'Event Timeline',
+  //     opaque: false
+  //   }
+  // },
   {
     path: '/events/:id/booking',
     redirect: '/events/:id/booking/timeline',
@@ -1009,15 +1008,16 @@ let HomePages = {
   component: HomeLayout,
   name: 'HomePageLayout',
   children: [
+    // {
+    //   path: '/home',
+    //   name: 'HomePage',
+    //   component: HomePage,
+    //   meta: {
+    //     title: 'HomePage',
+    //     gtm: 'HomePage'
+    //   }
+    // },
     {
-      path: '/home',
-      name: 'HomePage',
-      component: HomePage,
-      meta: {
-        title: 'HomePage',
-        gtm: 'HomePage'
-      }
-    },{
       path: '/events',
       name: 'Events',
       component: Events,
@@ -1076,7 +1076,6 @@ const routes = [
     path: '/',
     redirect: '/signin',
     name: 'Root',
-    component: HomePage,
     meta: {
       gtm: 'Root'
     }

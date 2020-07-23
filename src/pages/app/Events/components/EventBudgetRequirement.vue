@@ -27,7 +27,8 @@
             <template v-else>
               <h3 class="text-transform-uppercase">
                 <img :src="`${this.$iconURL}budget+screen/SVG/Asset%2010.svg`" width="15">
-                APPROVE Budget breakdown</h3>
+                APPROVE Budget breakdown
+              </h3>
               <div class="text-transform-capitalize">
                 We Created a budget division based on smart bla bla...
               </div>

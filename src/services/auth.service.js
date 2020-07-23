@@ -53,7 +53,9 @@ class AuthService {
       password: user.password,
       company: user.company,
       name: user.name,
-      role: user.role
+      role: user.role,
+      invited: user.invited,
+      permittedEvent: user.permittedEvent
     });
   }
 
