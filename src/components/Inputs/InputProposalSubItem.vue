@@ -97,7 +97,7 @@
       border: solid 0.5px #707070;
 
       &.category {
-        font: bold 20px Manrope-Regular, sans-serif;
+        font: normal 16px Manrope-Regular, sans-serif;
         cursor: pointer;
       }
     }

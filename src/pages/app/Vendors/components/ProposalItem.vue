@@ -40,15 +40,45 @@
           </div>
           <div class="field">
             <span>QTY</span>
-            <input v-model="qty" type="number" min="0" placeholder="" class="qty" @keyup="calculateSubTotal()" />
+            <input 
+              v-model="qty" 
+              type="number" 
+              min="0" 
+              placeholder="" 
+              class="qty" 
+              @keyup="calculateSubTotal();onBlurNumber()" 
+            />
           </div>
           <div class="field">
             <span>Price per unit</span>
-            <input v-model="unit" type="number" min="0" placeholder="" class="priceperunit" @keyup="calculateSubTotal()" />
+            <input 
+              v-model="unit" 
+              type="number" 
+              min="0" 
+              placeholder="" 
+              class="priceperunit" 
+              @keyup="calculateSubTotal();onBlurNumber()" 
+            />
           </div>
           <div class="field">
             <span>Total</span>
-            <input v-model="subTotal" type="number" min="0" placeholder="" class="total"/>
+            <input 
+              type="number"
+              v-model="subTotal" 
+              v-if="isNumberVisible"
+              min="0" 
+              placeholder="" 
+              @blur="onBlurNumber"
+              class="total"
+            />
+            <input 
+              type="text"
+              v-model="subTotal" 
+              v-else
+              placeholder="" 
+              @blur="onFocusText"
+              class="total"
+            />
           </div>
         </div>
         <div class="action-cont">
@@ -327,6 +357,9 @@
         qty: 0,
         unit: 0,
         subTotal: 0,
+        inputType: 'text',
+        temp: null,
+        isNumberVisible: true,
         newProposalRequest: {},
         files: [],
         docTag: null,
@@ -508,6 +541,22 @@
         this.servicesWidth = this.$refs.servicesCont.clientWidth
         if (this.servicesWidth + this.serviceSlidePos - 200 > 0) {
           this.serviceSlidePos -= 200
+        }
+      },
+      onBlurNumber(e) {
+        this.isNumberVisible = false
+        this.temp = this.subTotal
+        this.subTotal = this.thousandSeprator(this.subTotal)
+      },
+      onFocusText() {
+        this.isNumberVisible = true
+        this.subTotal = this.temp
+      },
+      thousandSeprator(amount) {
+        if (amount !== '' || amount !== undefined || amount !== 0 || amount !== '0' || amount !== null) {
+          return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        } else {
+          return amount
         }
       },
     },

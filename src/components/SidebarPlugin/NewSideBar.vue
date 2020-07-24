@@ -73,14 +73,13 @@
         <sidebar-item
           name="left-menu-yearly-plan"
           class="left-menu-yearly-plan"
-          :disabled="event.budgetProgress!==100"
           :link="{name: 'Event Budget',  icon: 'attach_money', path: '/events/'+ event.id +'/edit/budget'}"
         ></sidebar-item>
-        <!-- <sidebar-item
-          name="left-menu-yearly-plan"
-          class="left-menu-yearly-plan disabled"
-          v-else
-        ></sidebar-item> -->
+<!--        <sidebar-item-->
+<!--          name="left-menu-vendors-list"-->
+<!--          class="left-menu-vendors-list"-->
+<!--          :link="{name: 'Vendors Pool', icon: 'chat_bubble_outline', path: '/events'}"-->
+<!--        ></sidebar-item>-->
       </md-list>
     </div>
     <div class="logo">

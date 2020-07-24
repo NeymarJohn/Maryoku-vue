@@ -27,7 +27,8 @@
             <template v-else>
               <h3 class="text-transform-uppercase">
                 <img :src="`${this.$iconURL}budget+screen/SVG/Asset%2010.svg`" width="15">
-                APPROVE Budget breakdown</h3>
+                APPROVE Budget breakdown
+              </h3>
               <div class="text-transform-capitalize">
                 We Created a budget division based on smart bla bla...
               </div>
@@ -41,8 +42,8 @@
         <event-budget-approve></event-budget-approve>
       </div>
       <div class="booking-header md-layout-item md-size-100" v-else>
-        <event-budget-requirement-step1 v-if="currentStep===1" @change="setEventStep1" :defaultData="budgetInfo1"></event-budget-requirement-step1>
-        <event-budget-requirement-step2 v-if="currentStep===2" @change="setEventStep2" :defaultData="budgetInfo2"></event-budget-requirement-step2>
+        <event-budget-requirement-step1 v-if="currentStep===1" @change="setEventStep1"></event-budget-requirement-step1>
+        <event-budget-requirement-step2 v-if="currentStep===2" @change="setEventValue"></event-budget-requirement-step2>
       </div>
       <div class="wizard-footer d-flex">
         <div>
@@ -105,9 +106,7 @@ export default {
       showCommentEditorPanel: false,
       currentStep: 1,
       loadingBudget: false,
-      approveBudget: false,
-      budgetInfo1: {},
-      budgetInfo2: {}
+      approveBudget: false
     }
   },
   created () {
@@ -158,11 +157,9 @@ export default {
     setEventStep1(eventInfo) {
       console.log(eventInfo)
       this.editingEvent.totalBudget = eventInfo.budget;
-      this.budgetInfo1 = eventInfo
     },
-    setEventStep2(eventInfo) {
-      console.log(eventInfo)
-      this.budgetInfo2 = eventInfo
+    setEventValue(eventBudget) {
+
     }
   },
   computed: {
