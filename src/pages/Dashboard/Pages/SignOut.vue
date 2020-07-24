@@ -18,7 +18,8 @@ export default {
   },
   created () {
     const that = this
-    this.$store.dispatch('auth/logout').then( ()=>{
+    this.$store.dispatch('auth/logout')
+    setTimeout(() => {
       this.$router.push({ path: '/signin'})
       if (process.env.NODE_ENV === 'production') {
         try {
@@ -40,10 +41,7 @@ export default {
           noninteraction: false // Optional
         })
       }
-    }
-     
-    )
-    
+    }, 500)
   },
   data () {
     return {

@@ -227,6 +227,7 @@
       this.newProposalRequest = this.proposalRequest
 
       this.$root.$on('update-proposal-budget-summary', (newProposalRequest, discountBlock) => {
+        console.log(newProposalRequest)
         this.newProposalRequest = newProposalRequest
         this.discountBlock = discountBlock
       })

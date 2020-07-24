@@ -30,7 +30,12 @@
       <p>
         We found you could fit perfectly for our event with your <strong>Venue & Catering</strong> services.
       </p>
-      <button type="submit" class="submit" @click="goTo(`/vendors/${$route.params.vendorId}/proposal-request/${$route.params.id}/form`)">Submit Now</button>
+      <button 
+        type="submit" 
+        class="submit" 
+        @click="goToForm()">
+        Submit Now
+      </button>
     </div>
     <router-view></router-view>
     <section class="footer-wrapper">
@@ -78,8 +83,8 @@
       }
     },
     methods: {
-      goTo (router) {
-        this.$router.push(router)
+      goToForm() {
+        this.$root.$emit('go-to-proposal-form')
       }
     },
     created(){
