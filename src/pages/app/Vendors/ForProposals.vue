@@ -20,7 +20,7 @@
           </div>
           <proposal-item
             :category="`Venue`"
-            :services="servicesByCategory('venuerental')"
+            :services="servicesByCategory('Venue')"
             :subTitle="`For Whole Event`"
             :img="`${iconUrl}Asset 614.svg`"
             :proposalRequest="proposalRequest"
@@ -35,36 +35,36 @@
             <img :src="`${iconUrl}Group 5280 (5).svg`"/>Did you know? Adding vendors gets your fair commission if they get picked!
           </p>
           <proposal-item
-            :category="`Food & Beverage`"
-            :services="servicesByCategory('foodandbeverage')"
+            :category="`Photographer`"
+            :services="servicesByCategory('Photographer')"
             :isCollapsed="true"
             :isDropdown="true"
             :proposalRange="true"
-            :img="getIconUrlByCategory('foodandbeverage')"
+            :img="`${iconUrl}Asset 607.svg`"
             :proposalRequest="proposalRequest"
             :step="step"
           />
           <proposal-item
-            :category="`Design and Decor`"
-            :services="servicesByCategory('decor')"
+            :category="`Bar`"
+            :services="servicesByCategory('Bar')"
             :isCollapsed="true"
             :isDropdown="true"
             :proposalRange="true"
-            :img="getIconUrlByCategory('decor')"
+            :img="`${iconUrl}Asset 606.svg`"
             :proposalRequest="proposalRequest"
             :step="step"
           />
           <proposal-item
-            :category="`Guest Services & Staffing`"
-            :services="servicesByCategory('corporatesocialresponsibility')"
+            :category="`Dj`"
+            :services="servicesByCategory('Dj')"
             :isCollapsed="true"
             :isDropdown="true"
             :proposalRange="true"
-            :img="getIconUrlByCategory('corporatesocialresponsibility')"
+            :img="`${iconUrl}Asset 605.svg`"
             :proposalRequest="proposalRequest"
             :step="step"
           />
-          <refer-new-vendor/>
+          <refer-new-vendor></refer-new-vendor>
         </div>
         <div class="step-wrapper" v-if="step == 3">
           <proposal-event-summary
@@ -93,7 +93,6 @@
 
 <script>
 import moment from 'moment'
-import VendorService from '@/services/vendor.service'
 import Vendors from '@/models/Vendors'
 import ProposalRequest from '@/models/ProposalRequest'
 
@@ -122,17 +121,59 @@ export default {
       step: 0,
       proposalRequest: null,
       iconUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
-      services: null,
-      iconsWithCategory: null,
+      services: [
+        {
+          category: 'Venue',
+          items: [
+            'Chairs',
+            'Outdoor chairs',
+            'high chairs',
+            'tables',
+            'outdoor tables',
+            'high tables',
+            'power supply',
+            'generator',
+          ]
+        },
+        {
+          category: 'Photographer',
+          items: [
+            'Journalistic',
+            'Studio',
+            'Traditional',
+            'Candid',
+            'Video',
+            'Audio',
+            'Photo',
+          ]
+        },
+        {
+          category: 'Bar',
+          items: [
+            'specialty liquor stations',
+            'specialty bar services',
+            'non alcoholic specials',
+          ]
+        },
+        {
+          category: 'Dj',
+          items: [
+            'Servers',
+            'Busboys',
+            'Cleanup Crew',
+            'Waitstaff',
+            'Attire of Waitstaff',
+            'Vegetarian',
+            'Vegan',
+          ]
+        }
+      ]
     }
   },
   created() {
     
   },
   mounted () {
-    this.services = VendorService.businessCategories()
-    this.iconsWithCategory = VendorService.categoryNameWithIcons()
-
     this.step = 0
     this.event = {
       name: "March Madness event",
@@ -157,8 +198,6 @@ export default {
         this.step = 0
       } else if (this.step > 0) {
         this.step--
-      } else {
-        this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}`)
       }
       console.log('wrapperStep', this.step)
     })
@@ -202,27 +241,14 @@ export default {
         }
       }
     },
-    flatDeep(arr, d = 1) {
-      return d > 0 ? arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? this.flatDeep(val, d - 1) : val), [])
-                    : arr.slice();
-    },
     servicesByCategory(category) {
-      const services = this.services.filter( s => s.name == category)
+      const services = this.services.filter( s => s.category == category)
 
       if (services.length > 0) {
-        return this.flatDeep(
-          services[0].categories.map(
-            s => s.subCategories.map(
-              sc => sc.items.map(dd => dd.name
-            )
-          )), Infinity
-        )
+        return services[0].items
       } else {
         return []
       }
-    },
-    getIconUrlByCategory(category) {
-      return `http://static.maryoku.com/storage/icons/Budget Elements/${this.iconsWithCategory.filter( c => c.value == category)[0].icon}`
     },
     updateProposalRequest (submitted = null) {
       console.log(this.proposalRequest)

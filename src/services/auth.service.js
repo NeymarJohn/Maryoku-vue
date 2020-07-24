@@ -135,7 +135,7 @@ class AuthService {
   }
   removeCookie(token) {
     const domain = ".maryoku.com"
-    document.cookie = `authToken=; expires=; path=/; domain=${domain}`
+    document.cookie = `authToken=${token}; expires=${new Date().toGMTString()}; path=/; domain=${domain}`
   }
 }
 

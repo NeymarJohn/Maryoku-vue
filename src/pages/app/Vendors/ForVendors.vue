@@ -45,25 +45,13 @@
       <h3>
         Would you like to submit your bid?
       </h3>
-      <div class="check-cont">
-        <md-checkbox class="check-condition" v-model="isAgree">
-          <span 
-            class="regular" 
-            @mouseover="conditionTooltip=true" 
-            @mouseleave="conditionTooltip=false"
-          >
-            I accept 
-          </span>
-        </md-checkbox>
-        <a 
-          class="condition" 
-          target="_blank" 
-          href="https://www.maryoku.com/terms">
-          Maryoku's Terms & Conditions
-        </a>
-      </div>
+      <md-checkbox class="check-condition" v-model="isAgree">
+        <span class="regular" @mouseover="conditionTooltip=true" @mouseleave="conditionTooltip=false">
+          I accept <span class="condition">Maryoku's Terms & Conditions</span>
+        </span>
+      </md-checkbox>
       <div class="condition-tooltip" v-if="conditionTooltip">
-        <img :src="`${iconsUrl}Group 1175 (10).svg`"> Let us know that you are on board with our teams & conditions
+        <img :src="`${iconsUrl}Group 1175 (10).svg`"> Please indicate that you accept the Terms & Conditions
       </div>
     </div>
     <div class="action-cont">
@@ -401,43 +389,19 @@ export default {
       min: this.today.add(-3, 'days').format('DD/MM/YYYY'), 
       max: this.today.add(6, 'days').format('DD/MM/YYYY'), 
     }
-
-    this.$root.$on('go-to-proposal-form', () => {
-      if (this.isAgree) {
-        if (this.proposalRequest) {
-          this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`)
-        } else {
-          this.proposalRequest = new ProposalRequest({id: this.$route.params.id})
-          this.$router.push({
-            path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
-            props: {
-              proposalRequest: this.proposalRequest
-            }
-          })
-        }
-      } else {
-        window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight)
-        this.conditionTooltip = true
-      }
-    })
   },
   methods: {
     goToForm() {
-      if (this.isAgree) {
-        if (this.proposalRequest) {
-          this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`)
-        } else {
-          this.proposalRequest = new ProposalRequest({id: this.$route.params.id})
-          this.$router.push({
-            path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
-            props: {
-              proposalRequest: this.proposalRequest
-            }
-          })
-        }
+      if (this.proposalRequest) {
+        this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`)
       } else {
-        window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight)
-        this.conditionTooltip = true
+        this.proposalRequest = new ProposalRequest({id: this.$route.params.id})
+        this.$router.push({
+          path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
+          props: {
+            proposalRequest: this.proposalRequest
+          }
+        })
       }
     },
     hideModal() {
@@ -678,28 +642,23 @@ export default {
         margin: 0;
         margin-bottom: 30px;
       }
-      .check-cont {
-        display: flex;
-        align-items: center;
-        .check-condition {
-          font-size: 20px;
+      .check-condition {
+        font-size: 20px;
 
-          span.regular {
-            padding-left: 14px;
-            color: #050505;
-          }
-        }
-        a.condition {
-          text-decoration: underline;
-          font: bold 20px Manrope-Regular, sans-serif;
+        span.regular {
+          padding-left: 14px;
           color: #050505;
-          margin-top: 1px;
-          margin-left: -.5rem;
+        }
+
+        span.condition {
+          text-decoration: underline;
+          font-weight: bold;
+          color: #050505;
         }
       }
       .condition-tooltip {
         position: absolute;
-        background-color: #ffe5ec;
+        background-color: #ffedb7;
         padding: 18px 29px 18px 29px;
         color: #050505;
         font-size: 14px;

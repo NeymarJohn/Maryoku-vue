@@ -635,7 +635,7 @@ let NewEventPages = {
   // },
   {
     path: '/events/:id/edit/budget',
-    name: 'EditEventNew',
+    name: 'EventDetailsBudget',
     component: EventDetailsBudget,
     meta: {
       title: 'Event Details',

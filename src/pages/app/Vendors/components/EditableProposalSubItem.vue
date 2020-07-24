@@ -14,11 +14,7 @@
       </div>
       <div class="price-cont">
         <template v-if="!isEdit">
-          $ 
-          {{
-            item.priceUnit != 'total' ? parseFloat(String(item.price).replace(/,/g, '')) / item.requirementValue : 
-                                        item.price | withComma
-          }}
+          $ {{item.priceUnit != 'total' ? item.price / item.requirementValue : item.price | withComma}}
         </template>
         <template v-else>
           <input class="input-value" v-model="item.price" type="number" style="max-width: 6rem"/>
@@ -33,7 +29,6 @@
         </template>
       </div>
       <div class="action-cont">
-        {{item.id}}
         <template v-if="!isEdit">
           <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEdit=true"/>
           <img class="trash" :src="`${iconUrl}Asset 586.svg`" @click="removeRequirement(item.id)"/>
@@ -104,27 +99,31 @@
 </script>
 <style lang="scss" scoped>
   .editable-proposal-sub-item-wrapper {
+    display: flex;
     padding: 46px 40px;
     border: 2px solid #d5d5d5;
     border-bottom: none;
     font-family: 'Manrope-Regular', sans-serif;
     font-size: 16px;
     font-weight: 600;
-    display: grid;
-    grid-template-columns: 40% 15% 15% 15% 15%;
 
     div {
       &.item-cont {
         text-transform: capitalize;
+        width: calc(40% + 9px);
       }
       &.qty-cont {
+        width: calc(10% + 2px);
       }
       &.price-cont {
+        width: calc(15% + 1px);
       }
       &.total-cont {
+        width: calc(15% + 1px);
       }
       &.action-cont {
         text-align: right;
+        width: 20%;
         .edit {
           width: 21px;
           margin-right: 31px;

@@ -10,7 +10,7 @@
           What’s your budget?
         </div>
         <div style="max-width:600px; margin: 3rem auto 2rem">
-          <maryoku-input inputStyle="budget" placeholder="Type number here" v-model="eventInfo.budget" style="text-align:center"></maryoku-input>
+          <maryoku-input inputStyle="budget" placeholder="Type number here" v-model="eventInfo.budget" style="text-align:center" class="budget-input"></maryoku-input>
         </div>
         <div class="font-size-16 font-bold">
           <md-checkbox v-model="eventInfo.noBudget" > I don't have a budget</md-checkbox>
@@ -49,11 +49,11 @@
               <div 
                 v-for="(level) in levels" :key="level.value"
                 class="type-card"
-                :class="{selected:level.value == eventInfo.selectedLevel.value}" 
-                @click="eventInfo.selectedLevel=level" 
+                :class="{selected:level.value == eventInfo.selectedLevel}" 
+                @click="eventInfo.selectedLevel=level.value" 
                 >
-                <div>
-                  {{level.label}}
+                <div class="brand">
+                  <img :src="`${$iconURL}${level.icon}`"/>
                 </div>
                 <div>
                   <div class="mb-1">
@@ -61,7 +61,7 @@
                     <span v-if="level.value===2">$$</span>
                     <span v-if="level.value===3">$$$</span>
                   </div>
-                  <md-checkbox class="md-checkbox-circle md-red" v-model="eventInfo.selectedLevel" :value="level"></md-checkbox>
+                  <md-checkbox class="md-checkbox-circle md-red" v-model="eventInfo.selectedLevel" :value="level.value"></md-checkbox>
                 </div>
               </div>
             </div>
@@ -83,28 +83,42 @@ export default {
     RangeSlider,
     MaryokuInput
   },
+  props: {
+    defaultData: {
+      type: Object,
+      default: {}
+    },
+  },
   data() {
     return {
       eventInfo: {
         flexibility: 5,
         noBudget: false,
         budget:"",
-        selectedLevel:{},
+        selectedLevel:"",
       },
       levels: [
         {
           value: 1,
-          label: "FOREVER 21"
+          label: "FOREVER 21",
+          icon: "Budget Requirements/forever21.svg"
         },
         {
           value: 2,
-          label: "URBAN OUTFITTERS"
+          label: "URBAN OUTFITTERS",
+          icon: "Budget Requirements/urban.svg"
         },
         {
           value: 3,
-          label: "PRADA"
+          label: "PRADA",
+          icon: "Budget Requirements/prada.svg"
         }
       ]
+    }
+  },
+  created () {
+    if (this.defaultData.budget) {
+      this.eventInfo = this.defaultData;
     }
   },
   watch: {
@@ -118,12 +132,26 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+   .maryoku_input input.budget {
+     text-align: center;
+   }
   .event-budget-requirement{
+    input.budget {
+      height:100px;
+      
+    }
     .maryoku_input{
       input {
         text-align: center !important;
       }
     }
-    
+    .types {
+      .brand {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
   }
 </style>
