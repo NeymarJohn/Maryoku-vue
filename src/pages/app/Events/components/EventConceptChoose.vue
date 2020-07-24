@@ -454,13 +454,21 @@ export default {
         let event = this.$store.state.event.eventData
         event.concept = eventConcept
         event.conceptProgress = 100
-        event.for(calendar).save().then(result=>{
-            this.showConceptList = false
-            this.showEditForm = false
-            this.setEventData(result)
-            this.selectedConcept = eventConcept
-            this.base64Images = imageData
-        })
+        // const newEvent = new CalendarEvent({id: event.id, concept: eventConcept, conceptProgress: 100})
+        this.$store.dispatch('event/saveEventAction', new CalendarEvent({id: event.id, concept: eventConcept, conceptProgress: 100, calendar: calendar }))
+            .then(result=>{
+                this.showConceptList = false
+                this.showEditForm = false
+                this.selectedConcept = eventConcept
+                this.base64Images = imageData
+            })
+        // new CalendarEvent({id: event.id, concept: eventConcept, conceptProgress: 100}).for(calendar).save().then(result=>{
+            // this.showConceptList = false
+            // this.showEditForm = false
+            // this.setEventData(result)
+            // this.selectedConcept = eventConcept
+            // this.base64Images = imageData
+        // })
         
     },
     openConceptContest() {

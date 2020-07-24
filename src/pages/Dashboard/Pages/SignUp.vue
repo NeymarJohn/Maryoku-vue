@@ -28,7 +28,7 @@
           </div>
           <maryoku-input class="form-input" inputStyle="username" v-model="user.name" placeholder="Type your name here..."></maryoku-input>
           <maryoku-input class="form-input" data-vv-name="email" v-model="user.email" v-validate="modelValidations.email"  inputStyle="email" placeholder="Type email address here..."></maryoku-input>
-          <maryoku-input class="form-input" inputStyle="company" v-model="user.company" placeholder="Type name of company here..."></maryoku-input>
+          <maryoku-input class="form-input" inputStyle="company" v-model="user.company" v-if="!$route.query.invite" placeholder="Type name of company here..."></maryoku-input>
           <maryoku-input class="form-input" data-vv-name="password" v-model="user.password" v-validate="modelValidations.password" type="password" inputStyle="password"  placeholder="Type password here..."></maryoku-input>
           <div class="terms-and-conditions">
             <md-checkbox v-model="terms">
@@ -84,13 +84,28 @@ export default {
             return;
           }
           this.isLoading = true
-          this.user.role = 'administrator'
+
+          const invite = this.$route.query.invite
+          const permit = this.$route.query.role
+          const event = this.$route.query.event
+          if (invite) {
+            this.user.role = 'guest'
+            this.user.invited = true
+            this.user.permittedEvent = { eventId: event, permit: permit }
+          } else  {
+            this.user.role = 'administrator'
+          }
+          console.log(this.user)
           this.$store.dispatch('auth/register', this.user).then(
             (res) => {
               if ( res.status !== 'exists' ) {
                 this.$store.dispatch('auth/login', this.user).then(
                   () => {
-                    this.$router.push({ path: '/create-workspace' })
+                    if (invite) {
+                      this.$router.push({ path: '/events' })
+                    } else {
+                      this.$router.push({ path: '/create-workspace' })
+                    }
                   },
                   error => {
                     this.loading = false;
@@ -106,51 +121,6 @@ export default {
               this.error = "Sign up is failed"
             }
           );
-          // this.$auth.signupOrSignin(this, userData,  
-          //   (data) => {
-          //     if (data.status == "exists" ) {
-          //       this.loading = false;
-          //       this.error = "This email already registered. Please sign in or use another email."
-          //     } else {
-          //       this.$auth.login(this, {email: this.email, password: this.password}, 
-          //         (success) => {
-          //           console.log("singup", data);
-          //           this.isLoading = false
-          //           if (data.status === "create-workspace") {
-          //             this.$router.push({ path: '/create-workspace' })
-          //           }
-                    
-          //         }, 
-          //         (failure) => {
-          //           this.isLoading = false
-          //           if (failure.response.status === 401) {
-          //             this.error = 'Sorry, wrong password, try again.'
-          //           } else  if (failure.response.status === 400) {
-          //             this.error = 'Please fill all values'
-          //             console.log(JSON.stringify(failure.response))
-          //           } else  if (failure.response.status === 500) {
-          //             this.error = 'Temporary failure, try again later'
-          //             console.log(JSON.stringify(failure.response))
-          //           }
-          //         })
-          //     }
-
-          //   },
-          //   (failure) => {
-          //     this.isLoading = false
-          //     if (failure.response.status === 401) {
-          //       this.error = 'Sorry, wrong password, try again.'
-          //     } else  if (failure.response.status === 400) {
-          //       this.error = 'Please fill all values'
-          //       console.log(JSON.stringify(failure.response))
-          //     } else  if (failure.response.status === 500) {
-          //       this.error = 'Temporary failure, try again later'
-          //       console.log(JSON.stringify(failure.response))
-          //     }
-          //   })
-        
-        
-        
         } else {
           console.log(this.$validator.errors)
           this.error = this.$validator.errors.items[0].msg
@@ -163,14 +133,10 @@ export default {
   },
   created () {
     const givenToken = this.$route.query.token
-    // this.$auth.setToken(givenToken)
-    // this.$auth.currentTenantUser(this, true)
-    /* let tenantId = document.location.hostname.replace(".maryoku.com","");
-    new Tenant().find(tenantId).then(res =>{
-      if (!res.status){
-        this.$router.push({name:"CreateWorkspace"});
-      }
-    }); */
+    const invite = this.$route.query.invite
+    const role = this.$route.query.role
+    const event = this.$route.query.event
+
   },
   watch: {
     email () {

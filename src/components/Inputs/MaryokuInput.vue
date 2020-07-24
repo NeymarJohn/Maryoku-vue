@@ -182,7 +182,7 @@ export default {
     }
   },
   created () {
-    if (this.value) {
+    if (this.value && this.inputStyle==='budget') {
        this.content = `${this.value}`.replace(/\D/g, "")
           .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     } 

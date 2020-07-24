@@ -121,7 +121,8 @@ export default {
         this.$store.dispatch('event/saveEventAction', eventData)
           .then(event=>{
             console.log(event)
-            this.$router.push({path: `/events/${event.item.id}/booking/budget`})
+            // this.$router.push({path: `/events/${event.item.id}/booking/budget`})
+            this.$router.push({path: `/events`})
           })
           .catch(error=>{
             console.log(error)

@@ -92,13 +92,13 @@
       padding: 22px 26px;
       font-size: 16px;
       width: 100%;
-
       border-radius: 3px;
       border: solid 0.5px #707070;
 
       &.category {
-        font: bold 20px Manrope-Regular, sans-serif;
+        font: normal 16px 'Manrope-Regular', sans-serif;
         cursor: pointer;
+        color: #050505;
       }
     }
     i {

@@ -22,7 +22,9 @@
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         </p>
         <div class="a-right">
-          <a class="see-full" @click="fullDetailsModal=true">See Full Details<md-icon>keyboard_arrow_right</md-icon></a>
+          <a class="see-full" @click="fullDetailsModal=true">
+            See Full Details <md-icon>keyboard_arrow_right</md-icon>
+          </a>
         </div>
         <div class="pull-bottom-right">
           <vendor-bid-time-counter
@@ -77,7 +79,7 @@
           @click="saveProposal()" 
           v-if="step==2"
         >
-          No Thanks
+          Next
           <md-icon>keyboard_arrow_right</md-icon>
         </a>
         <a 
@@ -272,6 +274,8 @@
           this.step++
         }
 
+        this.scrollToTop()
+
         console.log('layoutStep', this.step)
       },
       back() {
@@ -282,7 +286,10 @@
           this.step = 0
         } else if (this.step > 0 && this.step != 2) {
           this.step--
+        } else {
         }
+
+        this.scrollToTop()
         console.log('layoutStep', this.step)
       },
       scrollToTop() {
@@ -344,6 +351,8 @@
   };
 </script>
 <style lang="scss" scoped>
+  @import "@/assets/scss/md/_variables.scss";
+  @import "@/assets/scss/md/_colors.scss";
   .for-proposals-layout-wrapper {
     font-family: 'Manrope-Regular',sans-serif;
     overflow: hidden;
@@ -478,13 +487,12 @@
           font-size: 16px;
           font-weight: normal;
           color: #050505;
-          max-width: 990px;
-          margin-top: 21px;
-          margin-bottom: 26px;
+          max-width: 60%;
+          margin: 2rem 0;
         }
         .a-right {
           text-align: right;
-          max-width: 990px;
+          max-width: 60%;
 
           i {
             position: relative;
@@ -736,4 +744,5 @@
       }
     }
   }
+
 </style>

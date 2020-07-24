@@ -73,15 +73,15 @@ export default {
       selectedMovie:{},
       movies: [
         {
-          icon: "movies/captain-kirk2.jpg",
+          icon: "movies/captain-kirk2.png",
           label: "Captain kirk",
           description: `When <b>Kirk</b> walks into a room, all eyes are on him. He is charismatic, charming, and confident. Though he is comfortable delegating responsibilities, Kirk typically lead by example and is never afraid to get into the trenches to fight alongside his crew. He is super inclusive and will likely care more about RSVP and participants feedback than about cost`
         },{
-          icon: "movies/dirty-harry2.jpg",
+          icon: "movies/dirty-harry2.png",
           label: "Dirty Harry",
           description: `<b>Harry</b> is not a "company man" and not a real team player (his partners got killed or wounded at an alarming rate). But, what he did have was laser focus on achieving his goals. His moto is do what you have to do, and we bet he'll track RSVP like a hawk and deal personally with non comers`
         },{
-          icon: "movies/jerry-seinfeld.jpg",
+          icon: "movies/jerry-seinfeld.png",
           label: "Jerry Seinfeld",
           description: "<b>Seinfeld</b> is very meticulous about the cleanliness and organization of his apartment. He is stubborn and holds on tightly to his opinions. He isn't easy to convince so every vendor you select must be dead on for him to approve the plan"
         },{

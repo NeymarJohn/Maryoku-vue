@@ -29,7 +29,7 @@
           </li>
           <li>
             <span>Your proposal</span>
-            <span>${{calculatedTotal(getRequirementsByCategory('Venue'))}}</span>
+            <span>${{calculatedTotal(getRequirementsByCategory('Venue')) | withComma}}</span>
           </li>
           <li :style="`margin: ${discountBlock.category == 'Venue' ? '' : '0' }`">
             <template v-if="discountBlock.category == 'Venue'">
@@ -44,7 +44,9 @@
           </li>
           <li v-if="calculatedTotal(getRequirementsByCategory('Venue')) - newProposalRequest.eventData.allocatedBudget > 0">
             <md-icon>error</md-icon>
-            <span>Your proposal is ${{calculatedTotal(getRequirementsByCategory('Venue')) - newProposalRequest.eventData.allocatedBudget}} more than the budget</span>
+            <span>
+              Your proposal is ${{calculatedTotal(getRequirementsByCategory('Venue')) - newProposalRequest.eventData.allocatedBudget | withComma}} more than the budget
+            </span>
           </li>
         </ul>
       </div>
@@ -83,15 +85,15 @@
           </li>
           <li>
             <span>Your proposal</span>
-            <span>${{calculatedTotal(getRequirementsByCategory(a.title))}}</span>
+            <span>${{calculatedTotal(getRequirementsByCategory(a.title)) | withComma}}</span>
           </li>
           <li>
             <span>Budget for {{a.title}}</span>
-            <span>${{calculatedTotal(getRequirementsByCategory(a.title))}}</span>
+            <span>${{calculatedTotal(getRequirementsByCategory(a.title)) | withComma}}</span>
           </li>
           <li v-if="calculatedTotal(getRequirementsByCategory(a.title)) - newProposalRequest.eventData.allocatedBudget > 0">
             <md-icon>error</md-icon>
-            <span>Your proposal is ${{calculatedTotal(getRequirementsByCategory(a.title)) - newProposalRequest.eventData.allocatedBudget}} more than the budget</span>
+            <span>Your proposal is ${{calculatedTotal(getRequirementsByCategory(a.title)) - newProposalRequest.eventData.allocatedBudget | withComma}} more than the budget</span>
           </li>
         </ul>
       </div>
@@ -142,7 +144,7 @@
         <span v-if="discountBlock.value">Before discount</span>
       </div>
       <div class="price">
-        <strong>${{calculatedTotal(getRequirementsBySelectedCategory())}}</strong>
+        <strong>${{calculatedTotal(getRequirementsBySelectedCategory()) | withComma}}</strong>
         <br/>
         <span v-if="discountBlock.value">{{`(${discountBlock.value}% off)`}}</span>
         <span v-if="discountBlock.value">${{total(getRequirementsBySelectedCategory()) | withComma}}</span>
@@ -225,6 +227,7 @@
       this.newProposalRequest = this.proposalRequest
 
       this.$root.$on('update-proposal-budget-summary', (newProposalRequest, discountBlock) => {
+        console.log(newProposalRequest)
         this.newProposalRequest = newProposalRequest
         this.discountBlock = discountBlock
       })

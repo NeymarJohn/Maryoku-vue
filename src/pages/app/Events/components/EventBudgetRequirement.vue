@@ -1,20 +1,9 @@
 <template>
     <div v-if="loadingBudget" class="md-layout event-budget-section booking-section">
-      <div class="text-center md-layout-item md-size-100" style="margin-top:30vh">
-        <radial-progress-bar 
-                        innerStrokeColor="#A0A0A0"
-                        startColor="#f51355"
-                        stopColor="#f51355"
-                        :strokeWidth="3"
-                        :diameter="212"
-                        :completed-steps="completedProgressValue"
-                        :total-steps="100"
-                        :animateSpeed="5000"
-                        :isClockwise="false">
-          <div class="loading-budget-image">
-            <img :src="`${$iconURL}Budget+Requirements/group-8494.svg`">
-          </div>
-        </radial-progress-bar>
+      <div class="text-center  md-layout-item md-size-100" style="margin-top:30vh">
+        <div class="loading-budget-image">
+          <img :src="`${$iconURL}Budget+Requirements/group-8494.svg`">
+        </div>
         <div class="text-transform-uppercase font-size-30 font-bold mt-4rem">
           Loading your budget breakdown
         </div>
@@ -38,7 +27,8 @@
             <template v-else>
               <h3 class="text-transform-uppercase">
                 <img :src="`${this.$iconURL}budget+screen/SVG/Asset%2010.svg`" width="15">
-                APPROVE Budget breakdown</h3>
+                APPROVE Budget breakdown
+              </h3>
               <div class="text-transform-capitalize">
                 We Created a budget division based on smart bla bla...
               </div>
@@ -89,7 +79,6 @@
     </div>
 </template>
 <script>
-import RadialProgressBar from 'vue-radial-progress'
 import CommentEditorPanel from "./CommentEditorPanel";
 import VueElementLoading from 'vue-element-loading'
 import HeaderActions from "@/components/HeaderActions";
@@ -108,8 +97,7 @@ export default {
     HeaderActions,
     EventBudgetRequirementStep1,
     EventBudgetRequirementStep2,
-    EventBudgetApprove,
-    RadialProgressBar
+    EventBudgetApprove
   },
   data() {
     return {
@@ -120,8 +108,7 @@ export default {
       loadingBudget: false,
       approveBudget: false,
       budgetInfo1: {},
-      budgetInfo2: {},
-      completedProgressValue: 0
+      budgetInfo2: {}
     }
   },
   created () {
@@ -151,16 +138,13 @@ export default {
           id: this.event.id, 
           calendar: new Calendar({id:this.event.calendar.id}),
           budgetProgress: 75,
-          totalBudget: this.editingEvent.totalBudget?this.editingEvent.totalBudget:0,
+          totalBudget: this.editingEvent.totalBudget,
           reCalculate: true
         })
         this.loadingBudget = true
         this.$store.dispatch('event/saveEventAction', event).then(res=>{
-          this.completedProgressValue = 100
-          setTimeout(()=>{
-            this.loadingBudget = false
-            this.currentStep += 1;  
-          }, 5000)
+          this.loadingBudget = false
+          this.currentStep += 1;  
         })
       } else {
         this.currentStep += 1;
@@ -204,16 +188,13 @@ export default {
       box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.18);
     }
   }
-  .radial-progress-container {
-    margin: auto;
-  }
 }
     .loading-budget-image{
       width: 200px;
       height: 200px;
       margin: auto;
       border-radius: 50%;
-      // border: solid 3px #f51355;
+      border: solid 3px #f51355;
       background-color: #ffffff;
       img {
         margin-top: 50%;
