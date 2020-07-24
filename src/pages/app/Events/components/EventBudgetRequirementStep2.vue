@@ -55,11 +55,21 @@ export default {
     RangeSlider,
     MaryokuInput
   },
+  props: {
+    defaultData: {
+      type: Object,
+      default: {}
+    },
+  },
+  created () {
+    console.log(this.defaultData)
+    if (this.defaultData && this.defaultData.label) {
+      this.selectedMovie = this.movies.find(item => item.label == this.defaultData.label)
+      console.log(this.selectedMovie)
+    }
+  },
   data() {
     return {
-      flexibility: 5,
-      noBudget: false,
-      budget:"",
       selectedMovie:{},
       movies: [
         {
@@ -90,6 +100,15 @@ export default {
       ]
     }
   },
+  watch: {
+    selectedMovie: {
+      handler(val){
+        console.log(val)
+        this.$emit("change", val)
+      },
+      deep: true
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -119,6 +138,7 @@ export default {
           width: 280px;
           height: 200px;
           object-fit: cover;
+          object-position: top;
         }
         &:hover {
            box-shadow: 0 3px 10px 0 rgba(245, 19, 85, 0.43);

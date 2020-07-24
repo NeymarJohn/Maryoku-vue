@@ -49,8 +49,8 @@
               <div 
                 v-for="(level) in levels" :key="level.value"
                 class="type-card"
-                :class="{selected:level.value == eventInfo.selectedLevel.value}" 
-                @click="eventInfo.selectedLevel=level" 
+                :class="{selected:level.value == eventInfo.selectedLevel}" 
+                @click="eventInfo.selectedLevel=level.value" 
                 >
                 <div>
                   {{level.label}}
@@ -61,7 +61,7 @@
                     <span v-if="level.value===2">$$</span>
                     <span v-if="level.value===3">$$$</span>
                   </div>
-                  <md-checkbox class="md-checkbox-circle md-red" v-model="eventInfo.selectedLevel" :value="level"></md-checkbox>
+                  <md-checkbox class="md-checkbox-circle md-red" v-model="eventInfo.selectedLevel" :value="level.value"></md-checkbox>
                 </div>
               </div>
             </div>
@@ -83,13 +83,19 @@ export default {
     RangeSlider,
     MaryokuInput
   },
+  props: {
+    defaultData: {
+      type: Object,
+      default: {}
+    },
+  },
   data() {
     return {
       eventInfo: {
         flexibility: 5,
         noBudget: false,
         budget:"",
-        selectedLevel:{},
+        selectedLevel:"",
       },
       levels: [
         {
@@ -105,6 +111,11 @@ export default {
           label: "PRADA"
         }
       ]
+    }
+  },
+  created () {
+    if (this.defaultData.budget) {
+      this.eventInfo = this.defaultData;
     }
   },
   watch: {

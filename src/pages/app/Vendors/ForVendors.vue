@@ -392,18 +392,16 @@ export default {
   },
   methods: {
     goToForm() {
-      if (this.isAgree) {
-        if (this.proposalRequest) {
-          this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`)
-        } else {
-          this.proposalRequest = new ProposalRequest({id: this.$route.params.id})
-          this.$router.push({
-            path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
-            props: {
-              proposalRequest: this.proposalRequest
-            }
-          })
-        }
+      if (this.proposalRequest) {
+        this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`)
+      } else {
+        this.proposalRequest = new ProposalRequest({id: this.$route.params.id})
+        this.$router.push({
+          path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
+          props: {
+            proposalRequest: this.proposalRequest
+          }
+        })
       }
     },
     hideModal() {

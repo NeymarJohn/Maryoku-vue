@@ -53,9 +53,7 @@ class AuthService {
       password: user.password,
       company: user.company,
       name: user.name,
-      role: user.role,
-      invited: user.invited,
-      permittedEvent: user.permittedEvent
+      role: user.role
     });
   }
 
@@ -137,7 +135,7 @@ class AuthService {
   }
   removeCookie(token) {
     const domain = ".maryoku.com"
-    document.cookie = `authToken=; expires=; path=/; domain=${domain}`
+    document.cookie = `authToken=${token}; expires=${new Date().toGMTString()}; path=/; domain=${domain}`
   }
 }
 

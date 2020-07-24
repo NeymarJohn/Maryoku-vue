@@ -93,24 +93,22 @@ router.beforeEach((to, from, next) => {
 
   const authenticatedLinks = ['/events', '/choose-workspace']
   const isAuthenticatedLink = authenticatedLinks.findIndex( link => to.path.indexOf(link) >=0 ) >= 0;
-  if (to.path === '/signedin' || to.path.indexOf('/event-wizard')>=0 || to.path === '/signout') {
+  if (to.path === '/signedin' || to.path.indexOf('/event-wizard')>=0) {
     next();
     return
   }
   store.dispatch('auth/checkToken').then(res=>{
     console.log(res)
     if (to.path == '/signin') {
-      if (res.currentTenant && res.tenants.indexOf(res.currentTenant)>=0) {
+      if (res.currentTenant) {
         next('/events')
       } else if (res.tenants.length === 0) {
-        next('/create-event-wizard')
+        next('/create-workspace')
       } else if (res.tenants.length > 0) {
         next('/choose-workspace')
       } else {
         next('/error')
       }
-    } else if (to.path.startsWith('/events') && res.tenants.indexOf(res.currentTenant) < 0){
-      next('/choose-workspace')
     } else {
       next()
     }

@@ -9,7 +9,8 @@
                     <p>
                         Here are 3 awesome concepts for you to choose from! 
                         <br/>
-                        If you feel like we haven’t nailed it, let us know and we’ll send 3 more.
+                        If you feel like we haven’t nailed it, visit our wall of inspiration to get more ideas. 
+                        Got some cool ideas of your own? Scroll down to create a brand new concept.
                     </p>
                 </div>
                 <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>

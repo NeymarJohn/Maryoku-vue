@@ -272,8 +272,6 @@
           this.step++
         }
 
-        this.scrollToTop()
-
         console.log('layoutStep', this.step)
       },
       back() {
@@ -284,8 +282,6 @@
           this.step = 0
         } else if (this.step > 0 && this.step != 2) {
           this.step--
-        } else {
-          
         }
         console.log('layoutStep', this.step)
       },
@@ -348,8 +344,6 @@
   };
 </script>
 <style lang="scss" scoped>
-  @import "@/assets/scss/md/_variables.scss";
-  @import "@/assets/scss/md/_colors.scss";
   .for-proposals-layout-wrapper {
     font-family: 'Manrope-Regular',sans-serif;
     overflow: hidden;
@@ -484,8 +478,9 @@
           font-size: 16px;
           font-weight: normal;
           color: #050505;
-          max-width: 60%;
-          margin: 2rem 0;
+          max-width: 990px;
+          margin-top: 21px;
+          margin-bottom: 26px;
         }
         .a-right {
           text-align: right;
@@ -741,5 +736,4 @@
       }
     }
   }
-
 </style>
