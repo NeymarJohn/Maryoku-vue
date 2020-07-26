@@ -10,7 +10,7 @@
           What’s your budget?
         </div>
         <div style="max-width:600px; margin: 3rem auto 2rem">
-          <maryoku-input inputStyle="budget" placeholder="Type number here" v-model="eventInfo.budget" style="text-align:center"></maryoku-input>
+          <maryoku-input inputStyle="budget" placeholder="Type number here" v-model="eventInfo.budget" style="text-align:center" class="budget-input"></maryoku-input>
         </div>
         <div class="font-size-16 font-bold">
           <md-checkbox v-model="eventInfo.noBudget" > I don't have a budget</md-checkbox>
@@ -52,8 +52,8 @@
                 :class="{selected:level.value == eventInfo.selectedLevel}" 
                 @click="eventInfo.selectedLevel=level.value" 
                 >
-                <div>
-                  {{level.label}}
+                <div class="brand">
+                  <img :src="`${$iconURL}${level.icon}`"/>
                 </div>
                 <div>
                   <div class="mb-1">
@@ -100,15 +100,18 @@ export default {
       levels: [
         {
           value: 1,
-          label: "FOREVER 21"
+          label: "FOREVER 21",
+          icon: "Budget Requirements/forever21.svg"
         },
         {
           value: 2,
-          label: "URBAN OUTFITTERS"
+          label: "URBAN OUTFITTERS",
+          icon: "Budget Requirements/urban.svg"
         },
         {
           value: 3,
-          label: "PRADA"
+          label: "PRADA",
+          icon: "Budget Requirements/prada.svg"
         }
       ]
     }
@@ -129,12 +132,26 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+   .maryoku_input input.budget {
+     text-align: center;
+   }
   .event-budget-requirement{
+    input.budget {
+      height:100px;
+      
+    }
     .maryoku_input{
       input {
         text-align: center !important;
       }
     }
-    
+    .types {
+      .brand {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
   }
 </style>
