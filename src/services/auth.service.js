@@ -22,7 +22,6 @@ class AuthService {
   login(user) {
     localStorage.removeItem('user');
     localStorage.removeItem('manage_id_token');
-    axios.defaults.headers.common.Authorization = ''
     return axios
       .post(LOGIN_URL, {
         email: user.email.toLowerCase(),
@@ -37,9 +36,6 @@ class AuthService {
           this.setTenant(response.data.currentTenant)
         }
         return response.data;
-      })
-      .catch(err => {
-        throw err
       });
   }
 
@@ -51,8 +47,6 @@ class AuthService {
         axios.defaults.headers.common.Authorization = null
         this.removeCookie()
       }
-    }).catch(err => {
-      throw err
     });
   }
 
@@ -108,12 +102,6 @@ class AuthService {
         this.setTokenToCookie(response.data.access_token)
       }
       return response.data;
-    }).catch(err=>{
-      localStorage.removeItem('user');
-      localStorage.removeItem('manage_id_token')
-      axios.defaults.headers.common.Authorization = null
-      this.removeCookie()
-      throw err
     });
   }
 
@@ -154,6 +142,7 @@ class AuthService {
   removeCookie(token) {
     const domain = ".maryoku.com"
     // document.cookie = `authToken=; expires=; path=/; domain=${domain}`
+    alert()
     document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
   }

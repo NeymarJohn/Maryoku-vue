@@ -106,6 +106,12 @@
     }
 
   }
+  input:disabled{
+    color: #a0a0a0;
+    &.budget {
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Event%20Page/budget-gray.svg'))
+    }
+  }
   .md-field {
     margin-top: 0px;
     &::after, &::before{

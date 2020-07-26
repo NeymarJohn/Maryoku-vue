@@ -31,7 +31,6 @@ import { MaryokuInput} from '@/components'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import CalendarEvent from '@/models/CalendarEvent'
 import Calendar from '@/models/Calendar'
-import swal from "sweetalert2";
 
 export default {
   components: {
@@ -126,12 +125,6 @@ export default {
             this.$router.push({path: `/events`})
           })
           .catch(error=>{
-            swal({
-              title: `<div style="text-align:center; width:100%;">Sorry, Some informations are invalid. <br/> Please check your information. </div>`,
-              buttonsStyling: false,
-              type: "warn",
-              confirmButtonClass: "md-button md-success"
-            });
             console.log(error)
           })
         

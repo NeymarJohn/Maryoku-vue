@@ -10,7 +10,7 @@
           What’s your budget?
         </div>
         <div style="max-width:600px; margin: 3rem auto 2rem">
-          <maryoku-input inputStyle="budget" placeholder="Type number here" v-model="eventInfo.budget" style="text-align:center" class="budget-input"></maryoku-input>
+          <maryoku-input inputStyle="budget" placeholder="Type number here" v-model="eventInfo.budget" :disabled="eventInfo.noBudget" :readonly="eventInfo.noBudget" style="text-align:center" class="budget-input"></maryoku-input>
         </div>
         <div class="font-size-16 font-bold">
           <md-checkbox v-model="eventInfo.noBudget" > I don't have a budget</md-checkbox>
@@ -47,7 +47,7 @@
           </div>
            <div class="mt-1 types">
               <div 
-                v-for="(level) in levels" :key="level.value"
+                v-for="(level, index) in levels" :key="level.value"
                 class="type-card"
                 :class="{selected:level.value == eventInfo.selectedLevel}" 
                 @click="eventInfo.selectedLevel=level.value" 
@@ -57,9 +57,9 @@
                 </div>
                 <div>
                   <div class="mb-1">
-                    <span v-if="level.value===1">$</span>
-                    <span v-if="level.value===2">$$</span>
-                    <span v-if="level.value===3">$$$</span>
+                    <span v-if="index===0">$</span>
+                    <span v-if="index===1">$$</span>
+                    <span v-if="index===2">$$$</span>
                   </div>
                   <md-checkbox class="md-checkbox-circle md-red" v-model="eventInfo.selectedLevel" :value="level.value"></md-checkbox>
                 </div>
@@ -95,21 +95,22 @@ export default {
         flexibility: 5,
         noBudget: false,
         budget:"",
-        selectedLevel:"",
+        selectedLevel: 50 ,
+        eventDecisionFactor3:0
       },
       levels: [
         {
-          value: 1,
+          value: 30,    //should be between 1 and 35
           label: "FOREVER 21",
           icon: "Budget Requirements/forever21.svg"
         },
         {
-          value: 2,
+          value: 50,    //should be between 35 and 70
           label: "URBAN OUTFITTERS",
           icon: "Budget Requirements/urban.svg"
         },
         {
-          value: 3,
+          value: 80,  //should be more than 70
           label: "PRADA",
           icon: "Budget Requirements/prada.svg"
         }
@@ -117,8 +118,10 @@ export default {
     }
   },
   created () {
-    if (this.defaultData.budget) {
+    if (Object.keys(this.defaultData).length > 0){
+      console.log(this.defaultData)
       this.eventInfo = this.defaultData;
+
     }
   },
   watch: {

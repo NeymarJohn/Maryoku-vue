@@ -153,13 +153,15 @@ export default {
           calendar: new Calendar({id:this.event.calendar.id}),
           budgetProgress: 75,
           totalBudget: this.editingEvent.totalBudget?this.editingEvent.totalBudget:0,
-          reCalculate: true
+          reCalculate: true,
+          eventDecisionFactor3: this.editingEvent.eventDecisionFactor3
         })
         this.loadingBudget = true
         this.$store.dispatch('event/saveEventAction', event).then(res=>{
           this.completedProgressValue = 100
           setTimeout(()=>{
             this.loadingBudget = false
+            this.completedProgressValue = 0
             this.currentStep += 1;  
           }, 5000)
         })
@@ -175,7 +177,8 @@ export default {
     },
     setEventStep1(eventInfo) {
       console.log(eventInfo)
-      this.editingEvent.totalBudget = eventInfo.budget;
+      this.editingEvent.totalBudget = eventInfo.noBudget? 0 : eventInfo.budget;
+      this.editingEvent.eventDecisionFactor3 = eventInfo.selectedLevel
       this.budgetInfo1 = eventInfo
     },
     setEventStep2(eventInfo) {

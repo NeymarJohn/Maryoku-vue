@@ -10,6 +10,7 @@
                         Here are 3 awesome concepts for you to choose from! 
                         <br/>
                         If you feel like we haven’t nailed it, visit our wall of inspiration to get more ideas. 
+                        <br/>
                         Got some cool ideas of your own? Scroll down to create a brand new concept.
                     </p>
                 </div>

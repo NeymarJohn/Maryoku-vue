@@ -22,12 +22,8 @@ export default {
       );
     },
     logout({ commit }) {
-      AuthService.logout().then(()=>{
-        commit('logout');
-      })
-      .catch(err=>{
-        commit('logout');
-      });
+      AuthService.logout();
+      commit('logout');
     },
     register({ commit }, user) {
       return AuthService.register(user).then(
@@ -44,12 +40,11 @@ export default {
     checkToken({ commit }, token) {
       return AuthService.checkToken(token).then(
         user => {
-          console.log(user)
           commit('loginSuccess', user);
           return Promise.resolve(user);
         },
         error => {
-          commit('loginFailure');
+          commit('validateFailure');
           return Promise.reject(error);
         }
       );

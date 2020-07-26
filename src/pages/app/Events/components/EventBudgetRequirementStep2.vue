@@ -32,7 +32,7 @@
               <div class="movie-thumb">
                 <img :src="`${$storageURL}${movie.icon}`"/>
               </div>
-              <div >
+              <div class="movie-title" >
                 <md-checkbox class="md-checkbox-circle md-red " v-model="selectedMovie" :value="movie"><span class="movie-label">{{movie.label}}</span></md-checkbox>
               </div>
               
@@ -130,6 +130,7 @@ export default {
           color: #f51355;
           font-weight: bold;
         }
+        
       }
       .movie-thumb {
         border-radius: 3px;
@@ -144,6 +145,12 @@ export default {
            box-shadow: 0 3px 10px 0 rgba(245, 19, 85, 0.43);
         }
       }
+      .movie-title {
+          .md-theme-default {
+            margin-top: 16px;
+          }
+          margin-top: 10px;
+        }
       .movie-tip {
         position: absolute;
         right: 20px;

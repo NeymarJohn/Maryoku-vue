@@ -146,6 +146,9 @@ export default {
     FadeTransition,
     MaryokuInput
   },
+  created() {
+    this.$store.dispatch("auth/checkToken");
+  },
   methods: {
     ...mapMutations("PublicEventPlanner", [
       "setEventProperty",
