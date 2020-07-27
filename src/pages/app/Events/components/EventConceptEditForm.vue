@@ -38,28 +38,49 @@
         ></multiselect>
         <div class="add-tags-actions text-right">
           <md-button class="md-red md-maryoku" @click="addTag">add Tag</md-button>
-        </div> -->
-
+        </div>-->
       </div>
 
-      <div class="tags-list" >
+      <div class="tags-list">
         <div class="tags-list-wrapper d-flex justify-content-start" :class="{expanded:tagExpanded}">
-          <template v-for="(tag, index) in taggingOptions" >
-            <div v-if="tag.selected"  class="tags-list__item" :class="{selected:tag.selected}" :key="index" @click="removeTag(tag, index)" >
+          <template v-for="(tag, index) in taggingOptions">
+            <div
+              v-if="tag.selected"
+              class="tags-list__item"
+              :class="{selected:tag.selected}"
+              :key="index"
+              @click="removeTag(tag, index)"
+            >
               {{tag.name}}
-              <img  :src="`${$iconURL}Concept/Asset 489.svg`"  />
+              <img :src="`${$iconURL}Concept/Asset 489.svg`" />
             </div>
-            <div v-else  class="tags-list__item" :class="{selected:tag.selected}" :key="index" @click="addTag(tag, index)" >
+            <div
+              v-else
+              class="tags-list__item"
+              :class="{selected:tag.selected}"
+              :key="index"
+              @click="addTag(tag, index)"
+            >
               {{tag.name}}
-              <img  :src="`${$iconURL}Concept/plus-red.svg`" @click="addTag(tag,index)" />
+              <img :src="`${$iconURL}Concept/plus-red.svg`" @click="addTag(tag,index)" />
             </div>
           </template>
-          
+
           <div style="flex-grow:1"></div>
         </div>
-        <md-button @click="tagExpanded = !tagExpanded" class="md-button md-red md-sm md-simple edit-btn md-theme-default" style="margin-top:20px !important">
-          <span v-if="!tagExpanded">Show More <md-icon class="font-size-30">keyboard_arrow_right</md-icon></span>
-          <span v-if="tagExpanded">Show Less <md-icon class="font-size-30">keyboard_arrow_up</md-icon></span>
+        <md-button
+          @click="tagExpanded = !tagExpanded"
+          class="md-button md-red md-sm md-simple edit-btn md-theme-default"
+          style="margin-top:20px !important"
+        >
+          <span v-if="!tagExpanded">
+            Show More
+            <md-icon class="font-size-30">keyboard_arrow_right</md-icon>
+          </span>
+          <span v-if="tagExpanded">
+            Show Less
+            <md-icon class="font-size-30">keyboard_arrow_up</md-icon>
+          </span>
         </md-button>
       </div>
       <div class="form-group" style="margin-top:50px">
@@ -115,7 +136,7 @@
               :for="`file-${indx}`"
             >
               <label class="image-selector" :for="`file-${indx}`" style="cursor:pointer">
-                <div  v-if="!uploadImageData[indx-1]">
+                <div v-if="!uploadImageData[indx-1]">
                   <img :src="`${$iconURL}Concept/Asset 488.svg`" style="width:24px" />
                   <br />
                   <div style="margin-top:5px">
@@ -151,36 +172,36 @@ import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
 import EventConcept from "@/models/EventConcept";
 import ColorButton from "@/components/ColorButton";
-import swal from 'sweetalert2'
+import swal from "sweetalert2";
 
 const tags = [
-  { name: "adventurous", selected:false},
-  { name: "artistic", selected:false},
-  { name: "festive", selected:false},
-  { name: "formal", selected:false},
-  { name: "competitive", selected:false},
-  { name: "conservative", selected:false},
-  { name: "challenging", selected:false},
-  { name: "classy", selected:false},
-  { name: "casual", selected:false},
-  { name: "educational", selected:false},
-  { name: "fun", selected:false},
-  { name: "social/green", selected:false},
-  { name: "styled", selected:false},
-  { name: "trendy", selected:false},
-  { name: "authentic", selected:false},
-  { name: "elegant", selected:false},
-  { name: "innovative", selected:false},
-  { name: "indoors", selected:false},
-  { name: "mysterious", selected:false},
-  { name: "global", selected:false},
-  { name: "laid back", selected:false},
-  { name: "luxurious", selected:false},
-  { name: "productive", selected:false},
-  { name: "relaxed", selected:false},
-  { name: "cultural", selected:false},
-  { name: "inclusive", selected:false },
-  { name: "outdoors", selected:false }
+  { name: "adventurous", selected: false },
+  { name: "artistic", selected: false },
+  { name: "festive", selected: false },
+  { name: "formal", selected: false },
+  { name: "competitive", selected: false },
+  { name: "conservative", selected: false },
+  { name: "challenging", selected: false },
+  { name: "classy", selected: false },
+  { name: "casual", selected: false },
+  { name: "educational", selected: false },
+  { name: "fun", selected: false },
+  { name: "social/green", selected: false },
+  { name: "styled", selected: false },
+  { name: "trendy", selected: false },
+  { name: "authentic", selected: false },
+  { name: "elegant", selected: false },
+  { name: "innovative", selected: false },
+  { name: "indoors", selected: false },
+  { name: "mysterious", selected: false },
+  { name: "global", selected: false },
+  { name: "laid back", selected: false },
+  { name: "luxurious", selected: false },
+  { name: "productive", selected: false },
+  { name: "relaxed", selected: false },
+  { name: "cultural", selected: false },
+  { name: "inclusive", selected: false },
+  { name: "outdoors", selected: false },
 ];
 
 const initialConcept = {
@@ -191,36 +212,36 @@ const initialConcept = {
     { value: "#ff48b2", opacity: 1 },
     { value: "#71ecf8", opacity: 1 },
     { value: "" },
-    { value: "" }
+    { value: "" },
   ],
-  images: []
+  images: [],
 };
 export default {
   name: "event-concept-edit-form",
   components: {
     ColorButton,
-    Multiselect
+    Multiselect,
   },
   props: {
-    defaultConcept: [Object]
+    defaultConcept: [Object],
   },
   data: () => ({
     isLoading: false,
-    tagExpanded:false,
+    tagExpanded: false,
     editConcept: this.defaultStatus ? this.defaultConcept : initialConcept,
     newTag: "",
     uploadImages: {},
     selectedTag: {},
     addedTags: [],
-    taggingOptions: tags.sort((a,b)=> a.name >b.name?1:-1),
+    taggingOptions: tags.sort((a, b) => (a.name > b.name ? 1 : -1)),
     uploadImageData: {
       0: "",
       1: "",
       2: "",
       3: "",
       4: "",
-      5: ""
-    }
+      5: "",
+    },
   }),
   methods: {
     // addTag() {
@@ -231,13 +252,13 @@ export default {
     // },
     addTag(newTag, tagIndex) {
       this.editConcept.tags.push(newTag);
-      this.taggingOptions[tagIndex].selected = true
+      this.taggingOptions[tagIndex].selected = true;
     },
     removeTag(tag, index) {
       const selectedIndex = this.editConcept.tags.findIndex(
-        item => item.name === tag.name
+        (item) => item.name === tag.name
       );
-      this.taggingOptions[index].selected = false
+      this.taggingOptions[index].selected = false;
       this.editConcept.tags.splice(selectedIndex, 1);
     },
     onFileChange(event) {
@@ -245,18 +266,16 @@ export default {
       if (!files.length) return;
       if (files[0].size > 1024 * 1024 * 5) {
         swal({
-          title: 'File is too big',
+          title: "File is too big",
           text: `Sorry, this miximum file size is 5M`,
           showCancelButton: false,
-          type: 'warning',
+          type: "warning",
           showCancelButton: true,
-          confirmButtonClass: 'md-button md-success confirm-btn-bg ',
-          cancelButtonClass: 'md-button md-danger cancel-btn-bg',
-          confirmButtonText: 'Yes, delete it!',
-          buttonsStyling: false
-        }).then(result => {
-          
-        })
+          confirmButtonClass: "md-button md-success confirm-btn-bg ",
+          cancelButtonClass: "md-button md-danger cancel-btn-bg",
+          confirmButtonText: "Yes, delete it!",
+          buttonsStyling: false,
+        }).then((result) => {});
         return;
       }
       let reader = new FileReader();
@@ -270,7 +289,9 @@ export default {
       }
     },
     async saveConcept() {
-      let calendar = new Calendar({ id: this.$store.state.auth.user.profile.defaultCalendarId });
+      let calendar = new Calendar({
+        id: this.$store.state.auth.user.profile.defaultCalendarId,
+      });
       let imageKeys = Object.keys(this.uploadImages);
       this.isLoading = true;
 
@@ -281,7 +302,7 @@ export default {
         formData.append("files[]", fileItem);
         fileNames.push({
           name: fileItem.name,
-        })
+        });
       }
 
       // Create Concept
@@ -289,9 +310,9 @@ export default {
         this.editConcept.images = fileNames;
       }
       const evenConcept = await new EventConcept(this.editConcept).save();
-      fileNames.forEach((item, index)=>{
-        fileNames[index].url = `concept/${evenConcept.id}/${item.name}`
-      })
+      fileNames.forEach((item, index) => {
+        fileNames[index].url = `concept/${evenConcept.id}/${item.name}`;
+      });
       this.isLoading = false;
       this.$emit("saved", evenConcept, this.uploadImages);
 
@@ -303,41 +324,44 @@ export default {
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data"
-          }
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
       console.log("response", evenConcept);
-    }
+    },
   },
   created() {
     if (this.defaultConcept) {
       this.editConcept = this.defaultConcept;
       this.editConcept.images.forEach((image, i) => {
-        this.uploadImageData[i] = `${this.$storageURL}concept/${this.editConcept.id}/${image.name}`;
+        this.uploadImageData[
+          i
+        ] = `${this.$storageURL}concept/${this.editConcept.id}/${image.name}`;
       });
     }
   },
   mounted() {
     this.taggingOptions.forEach((item, index) => {
-      if (this.editConcept.tags.findIndex(tag=>tag.name === item.name) >=0 ) {
-        this.taggingOptions[index].selected = true
+      if (
+        this.editConcept.tags.findIndex((tag) => tag.name === item.name) >= 0
+      ) {
+        this.taggingOptions[index].selected = true;
       }
-    })
+    });
     // if (this.defaultConcept) {
     //   this.editConcept = this.defaultConcept;
     //   this.editConcept.images.forEach((image, i) => {
     //     this.uploadImageData[i] = this.$resourceURL + image.url;
-        
+
     //   });
     //   console.log(this.uploadImageData);
     // }
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-
 // .image-section {
 //   &:hover {
 //     opacity: 0.5 !important;
