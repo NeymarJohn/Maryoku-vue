@@ -33,6 +33,7 @@
                       :key="index" 
                       @delete="deleteCategory"
                       @updateCategory="updateCategory"></event-budget-component>
+                    <event-budget-component :component="{ title: 'Extra', color:'#818080', fontColor:'#818080', icon: 'extra.svg', allocatedBudget: event.allocatedFees + event.allocatedTips }" ></event-budget-component>
                     <event-budget-component :component="{ title: 'Unused', color:'#0047cc', fontColor:'#0047cc', icon: 'unused.svg', allocatedBudget: unusedBudget }" ></event-budget-component>
                     <event-budget-component :component="{ title: 'Total',  allocatedBudget: event.totalBudget }" ></event-budget-component>
                     <div class="add-category-row">
@@ -44,6 +45,7 @@
                   </template>
                   <template slot="tab-pane-2">
                     <event-budget-component type="perguest" :participants="event.numberOfParticipants" v-for="(component,  index) in selectedComponents" :component="component" :key="index" ></event-budget-component>
+                    <event-budget-component :component="{ title: 'Extra', color:'#818080', fontColor:'#818080', icon: 'extra.svg', allocatedBudget: event.allocatedFees + event.allocatedTips }" type="perguest" :participants="event.numberOfParticipants"></event-budget-component>
                     <event-budget-component :component="{ title: 'Unused', color:'#0047cc', fontColor:'#0047cc', icon: 'unused.svg', allocatedBudget: unusedBudget }" type="perguest" :participants="event.numberOfParticipants"></event-budget-component>
                     <event-budget-component :component="{title:'Total', allocatedBudget:event.totalBudget}" type="perguest" :participants="event.numberOfParticipants" ></event-budget-component>
                     <div class="add-category-row">
