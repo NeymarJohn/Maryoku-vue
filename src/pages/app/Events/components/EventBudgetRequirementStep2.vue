@@ -119,7 +119,7 @@ export default {
     margin: auto;
     .movie-card {
       display: inline-block;
-      margin: 20px 30px;
+      margin: 20px 40px;
       text-align: left;
       position: relative;
       &.selected {
@@ -136,11 +136,11 @@ export default {
         border-radius: 3px;
         img {
           border-radius: 3px;
-          width: 280px;
+          width: 260px;
           height: 200px;
           object-fit: cover;
           // object-position: top;
-          object-position: 90% 10%;
+          object-position: 90% 20%;
         }
         &:hover {
            box-shadow: 0 3px 10px 0 rgba(245, 19, 85, 0.43);

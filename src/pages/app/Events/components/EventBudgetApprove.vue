@@ -16,7 +16,7 @@
             <div style="margin:40px 30px">
                 <pie-chart-round 
                     :event.sync="event"
-                    :items="selectedComponents"
+                    :items="pieChartData"
                     columns="1">
                 </pie-chart-round>
             </div>
@@ -114,7 +114,10 @@ export default {
     },
     unusedBudget() {
       return this.event.totalBudget - this.allocatedTotal
-    }
+    },
+    pieChartData () {
+      return  this.selectedComponents.filter(item=>item.componentId !== 'unexpected')
+    },
   },
   methods: {
     updateBudget(eventBudget) {

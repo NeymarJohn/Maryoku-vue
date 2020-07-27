@@ -66,7 +66,7 @@
             <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17"/>
           </md-button>
         </div>
-        <div class="status-bar" v-if="currentStep<3" >
+        <div class="status" v-if="currentStep<3" >
           <div class="status-step">
             {{this.currentStep}} Step of 2
           </div>
@@ -126,7 +126,7 @@ export default {
     }
   },
   created () {
-    this.currentStep = this.event.budgetProgress > 50 ? 3:1;
+    this.currentStep = this.event.budgetProgress >= 50 ? 3:1;
   },
   methods: {
     toggleCommentMode(mode) {
@@ -151,7 +151,7 @@ export default {
         const event = new CalendarEvent({
           id: this.event.id, 
           calendar: new Calendar({id:this.event.calendar.id}),
-          budgetProgress: 75,
+          budgetProgress: 50,
           totalBudget: this.editingEvent.totalBudget?this.editingEvent.totalBudget:0,
           reCalculate: true,
           eventDecisionFactor3: this.editingEvent.eventDecisionFactor3
@@ -206,6 +206,13 @@ export default {
     .scroll-top-button {
       border-radius: 50%;
       box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.18);
+    }
+    .status {
+      text-align: center;
+      transform: translateY(-35%);
+      .status-step{
+        margin-bottom: 10px;
+      }
     }
   }
   .radial-progress-container {
