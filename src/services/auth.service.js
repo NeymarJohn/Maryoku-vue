@@ -10,10 +10,10 @@ const REGISTRATION_URL = `${API_URL}/1/register`
 const REGISTRATION_RSVP_URL = `${API_URL}/1/register-rsvp`
 const LOGIN_URL = `${API_URL}/api/login`
 const VALIDATE_URL = `${API_URL}/api/validate`
-const LOGOUT_URL = `${API_URL}/api/logout`
 const FORGOT_PASSWORD_URL = `${API_URL}/1/forgot-password`
 const CURRENT_USER_URL = `${API_URL}/1/me`
 const CURRENT_TENANT_USER = `${API_URL}/1/userInfo`
+const LOGOUT_USER_URL = `${API_URL}/1/logout`
 import Vue from 'vue'
 import authHeader from './auth-header';
 import { Model } from 'vue-api-query'
@@ -22,7 +22,6 @@ class AuthService {
   login(user) {
     localStorage.removeItem('user');
     localStorage.removeItem('manage_id_token');
-    axios.defaults.headers.common.Authorization = ''
     return axios
       .post(LOGIN_URL, {
         email: user.email.toLowerCase(),
@@ -37,23 +36,14 @@ class AuthService {
           this.setTenant(response.data.currentTenant)
         }
         return response.data;
-      })
-      .catch(err => {
-        throw err
       });
   }
 
   logout() {
-    return axios.post(LOGOUT_URL).then(response=>{
-      if (response.data.access_token) {
-        localStorage.removeItem('user');
-        localStorage.removeItem('manage_id_token')
-        axios.defaults.headers.common.Authorization = null
-        this.removeCookie()
-      }
-    }).catch(err => {
-      throw err
-    });
+    localStorage.removeItem('user');
+    localStorage.removeItem('manage_id_token')
+    this.removeCookie()
+    axios.defaults.headers.common.Authorization = null
   }
 
   register(user) {
@@ -63,9 +53,7 @@ class AuthService {
       password: user.password,
       company: user.company,
       name: user.name,
-      role: user.role,
-      invited: user.invited,
-      permittedEvent: user.permittedEvent
+      role: user.role
     });
   }
 
@@ -108,12 +96,6 @@ class AuthService {
         this.setTokenToCookie(response.data.access_token)
       }
       return response.data;
-    }).catch(err=>{
-      localStorage.removeItem('user');
-      localStorage.removeItem('manage_id_token')
-      axios.defaults.headers.common.Authorization = null
-      this.removeCookie()
-      throw err
     });
   }
 
@@ -153,9 +135,7 @@ class AuthService {
   }
   removeCookie(token) {
     const domain = ".maryoku.com"
-    // document.cookie = `authToken=; expires=; path=/; domain=${domain}`
-    document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
+    document.cookie = `authToken=; expires=; path=/; domain=${domain}`
   }
 }
 

@@ -72,8 +72,7 @@ export default {
           }
           const firstEvent = this.$route.query.firstEvent
           if (firstEvent) {
-            // this.$router.push({ path: `/events/${firstEvent}/booking/budget` })
-            this.$router.push({ path: '/events' })
+            this.$router.push({ path: `/events/${firstEvent}/booking/budget` })
           } else if( tenantUser.profile.id ) {
             this.$router.push({ path: '/events' })
           } else {

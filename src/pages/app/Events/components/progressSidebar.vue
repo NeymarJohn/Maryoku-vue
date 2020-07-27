@@ -143,7 +143,8 @@ export default {
         status: "not-complete",
         route: this.event.budgetProgress==100?"edit/budget":"booking/budget",
         icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
-        progress: this.event.budgetProgress
+        progress:
+          this.event.budgetProgress == 0 ? 50 : this.event.budgetProgress
       };
       const timeline = {
         title: "Generate timeline",

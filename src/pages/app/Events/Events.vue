@@ -28,7 +28,7 @@
               slot="md-table-row"
               slot-scope="{ item }"
               class="hover-row"
-              @click="routeToEvent(item, $event)"
+              @click="routeToEvent(item.id, $event)"
             >
               <md-table-cell md-label="Event Name">{{ item.title }}</md-table-cell>
               <!--<md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>-->
@@ -60,9 +60,9 @@
                 <!--<md-button @click="viewEvent(item)" class="md-raised md-info md-icon-button">
                   <md-icon>visibility</md-icon>
                 </md-button>-->
-                <!-- <md-button @click="editEvent($event, item)" class="md-info md-just-icon md-round">
+                <md-button @click="editEvent($event, item)" class="md-info md-just-icon md-round">
                   <md-icon>edit</md-icon>
-                </md-button> -->
+                </md-button>
                 <md-button
                   @click="showDeleteAlert($event, item)"
                   class="md-danger md-just-icon md-round"
@@ -84,18 +84,16 @@
       </md-card>
       <md-card class="md-card-plain" v-if="!upcomingEvents.length && !isLoading">
         <md-card-content>
-          <div class="text-center mt-5">
-            <!-- <img src="http://static.maryoku.com/storage/img/calendar.png" style="width: 120px;" /> -->
-            <h3>You do not have any events planned yet</h3>
-            <div class="mt-4rem">
-              <md-button class="md-info md-red normal-btn" @click="routeToNewEvent">
-                Create New Event
-              </md-button>
-              <md-button class="md-red md-simple normal-btn " @click="chooseWorkspace">
-                Choose Workspace
-              </md-button>
-            </div>
-           
+          <div class="text-center">
+            <img src="http://static.maryoku.com/storage/img/calendar.png" style="width: 120px;" />
+            <h4>You do not have any events planned yet</h4>
+            <md-button class="md-info" @click="routeToNewEvent">
+              <md-icon>event</md-icon>Create New Event
+            </md-button>
+            <md-button class="md-rose" @click="routeToPlanner">
+              Browse Year Planner
+              <md-icon>arrow_right</md-icon>
+            </md-button>
           </div>
         </md-card-content>
       </md-card>
@@ -114,13 +112,13 @@
       class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33 card-link"
       v-for="event in recentEvents"
       :key="event.id"
-      @click="routeToEvent(event)"
+      @click="routeToEvent(event.id)"
     >
       <product-card header-animation="true">
         <img class="img" slot="imageHeader" :src="imageHref(event.coverImage)" />
 
         <h4 slot="title" class="title">
-          <a @click="routeToEvent(event)">{{ event.title }}</a>
+          <a @click="routeToEvent(event.id)">{{ event.title }}</a>
         </h4>
         <div slot="description" class="card-description">{{ event.eventStartMillis | moment }}</div>
         <template slot="footer">
@@ -158,7 +156,6 @@ import swal from 'sweetalert2'
 import TeamMember from '@/models/TeamMember'
 import _ from 'underscore'
 import {backgroundImages, quotes} from '@/constants/loadingBackgrounds'
-import eventService from '@/services/event.service';
 
 const imageIndex = new Date().getTime() % backgroundImages.length
 const quoteIndex = new Date().getTime() % quotes.length
@@ -295,12 +292,11 @@ export default {
     duration (event) {
       return (event.eventEndMillis - event.eventStartMillis) / 3600000
     },
-    routeToEvent (event) {
-      const gotoLink = eventService.getFirstTaskLink(event)
-      this.$router.push({ path: gotoLink })
+    routeToEvent (eventId) {
+      this.$router.push({ name: 'EditEventNew', params: { id: eventId } })
     },
-    chooseWorkspace () {
-      this.$router.push({ path: '/choose-workspace' })
+    routeToPlanner () {
+      this.$router.push({ name: 'AnnualPlanner' })
     },
     refreshEvents () {
       this.getCalendarEvents()
@@ -337,7 +333,7 @@ export default {
       })
     },
     routeToNewEvent () {
-      this.$router.push(`/create-event-wizard`)
+      this.$router.push(`/event/create`)
       // window.currentPanel = this.$showPanel({
       //   component: EventSidePanel,
       //   cssClass: 'md-layout-item md-size-40 transition36 ',

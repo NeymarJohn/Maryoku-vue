@@ -49,7 +49,7 @@
                     <div>
                         <pie-chart-round
                             :event.sync="event"
-                            :items="pieChartData">
+                            :items="selectedComponents">
                         </pie-chart-round>
                     </div>
                 </div>
@@ -431,8 +431,28 @@ export default {
       components: 'event/getComponentsList',
       currentUser: 'auth/currentUser'
     }),
-    pieChartData () {
-      return  this.selectedComponents.filter(item=>item.componentId !== 'unexpected')
+    pieChart () {
+      return {
+        data: {
+          labels: [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], // should be empty to remove text from chart
+          series: this.seriesData,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ]
+        },
+        options: {
+          padding: 0,
+          height: 220,
+          donut: true,
+          donutWidth: 45,
+          animation: true
+        }
+      }
     },
     categoryItems () {
       return {

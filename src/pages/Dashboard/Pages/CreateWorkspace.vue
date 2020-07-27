@@ -119,7 +119,6 @@ export default {
                 this.defaultCalendar =  new Calendar({id: res.defaultCalendar})
                 AuthService.setTenant(this.workspace)
                 this.createEvent().then(event=>{
-                  console.log(event)
                   document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&firstEvent=${event.id}`;
                 })
                 .catch(error=>{

@@ -32,7 +32,7 @@
               <div class="movie-thumb">
                 <img :src="`${$storageURL}${movie.icon}`"/>
               </div>
-              <div class="movie-title" >
+              <div >
                 <md-checkbox class="md-checkbox-circle md-red " v-model="selectedMovie" :value="movie"><span class="movie-label">{{movie.label}}</span></md-checkbox>
               </div>
               
@@ -55,33 +55,23 @@ export default {
     RangeSlider,
     MaryokuInput
   },
-  props: {
-    defaultData: {
-      type: Object,
-      default: {}
-    },
-  },
-  created () {
-    console.log(this.defaultData)
-    if (this.defaultData && this.defaultData.label) {
-      this.selectedMovie = this.movies.find(item => item.label == this.defaultData.label)
-      console.log(this.selectedMovie)
-    }
-  },
   data() {
     return {
+      flexibility: 5,
+      noBudget: false,
+      budget:"",
       selectedMovie:{},
       movies: [
         {
-          icon: "movies/captain-kirk2.jpg",
+          icon: "movies/captain-kirk2.png",
           label: "Captain kirk",
           description: `When <b>Kirk</b> walks into a room, all eyes are on him. He is charismatic, charming, and confident. Though he is comfortable delegating responsibilities, Kirk typically lead by example and is never afraid to get into the trenches to fight alongside his crew. He is super inclusive and will likely care more about RSVP and participants feedback than about cost`
         },{
-          icon: "movies/dirty-harry2.jpg",
+          icon: "movies/dirty-harry2.png",
           label: "Dirty Harry",
           description: `<b>Harry</b> is not a "company man" and not a real team player (his partners got killed or wounded at an alarming rate). But, what he did have was laser focus on achieving his goals. His moto is do what you have to do, and we bet he'll track RSVP like a hawk and deal personally with non comers`
         },{
-          icon: "movies/jerry-seinfeld.jpg",
+          icon: "movies/jerry-seinfeld.png",
           label: "Jerry Seinfeld",
           description: "<b>Seinfeld</b> is very meticulous about the cleanliness and organization of his apartment. He is stubborn and holds on tightly to his opinions. He isn't easy to convince so every vendor you select must be dead on for him to approve the plan"
         },{
@@ -93,22 +83,13 @@ export default {
           label: "Miranda Preistly",
           description: "<b>Miranda Priestly</b> personifies qualities of a classic A type boss: controlling, demanding and impossible to please. Her favorite words to utter after all are “do it correctly”, you may try to, but we all know how this will end"
         },{
-          icon: "movies/soprano.jpeg",
+          icon: "movies/soprano.png",
           label: "Tony Soprano",
           description: "<b>Tony Soprano</b> doesn't like to wait, Impatience is a key characteristic for him. With visibility over how the plan is advancing, you will gain his trust and ensure a smooth approval"
         },
       ]
     }
   },
-  watch: {
-    selectedMovie: {
-      handler(val){
-        console.log(val)
-        this.$emit("change", val)
-      },
-      deep: true
-    }
-  }
 }
 </script>
 <style lang="scss" scoped>
@@ -119,7 +100,7 @@ export default {
     margin: auto;
     .movie-card {
       display: inline-block;
-      margin: 20px 40px;
+      margin: 20px 30px;
       text-align: left;
       position: relative;
       &.selected {
@@ -130,28 +111,19 @@ export default {
           color: #f51355;
           font-weight: bold;
         }
-        
       }
       .movie-thumb {
         border-radius: 3px;
         img {
           border-radius: 3px;
-          width: 260px;
+          width: 280px;
           height: 200px;
           object-fit: cover;
-          // object-position: top;
-          object-position: 90% 20%;
         }
         &:hover {
            box-shadow: 0 3px 10px 0 rgba(245, 19, 85, 0.43);
         }
       }
-      .movie-title {
-          .md-theme-default {
-            margin-top: 16px;
-          }
-          margin-top: 10px;
-        }
       .movie-tip {
         position: absolute;
         right: 20px;

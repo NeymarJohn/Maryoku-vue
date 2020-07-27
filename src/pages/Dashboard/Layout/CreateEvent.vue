@@ -63,6 +63,10 @@
         </button>
       </md-dialog-title>
       <md-dialog-content>
+        <!-- <md-field class="purple-field">
+          <label>Name of the company</label>
+          <md-input type="text" v-model="department"></md-input>
+        </md-field>-->
         <div class="social-line text-center">
           <md-button
             class="md-black md-maryoku md-simple md-google"
@@ -145,6 +149,9 @@ export default {
   components: {
     FadeTransition,
     MaryokuInput
+  },
+  created() {
+    this.$store.dispatch("auth/checkToken");
   },
   methods: {
     ...mapMutations("PublicEventPlanner", [
@@ -238,6 +245,47 @@ export default {
 $baseColor: #5c2153;
 
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700|Rubik:400,500,700&display=swap");
+.create-event {
+  .md-overlay {
+    z-index: 21 !important;
+  }
+  .container {
+    display: block !important;
+    min-height: calc(100vh - 268px) !important;
+  }
+
+  .md-datepicker-dialog.md-theme-default {
+    box-shadow: none;
+    border: 1px solid #606060;
+    border-radius: 14px;
+    z-index: 999999999999999;
+    height: auto;
+
+    .md-datepicker-header {
+      display: none;
+    }
+    .md-datepicker-body-footer {
+      display: none;
+    }
+
+    .md-datepicker-days .md-datepicker-day-button {
+      border-radius: 10px;
+      width: 35px;
+      min-width: 35px;
+      height: 35px;
+      line-height: 35px;
+      &.md-datepicker-selected {
+        background-color: $baseColor !important;
+        box-shadow: none;
+      }
+    }
+  }
+  .user-menu-content {
+    min-width: 150px;
+    .md-list-item-content {
+      font-size: 16px !important;
+    }
+  }
   .md-dialog.singin-form {
     border-radius: 10px;
     padding: 2em 40px;
@@ -291,48 +339,6 @@ $baseColor: #5c2153;
       margin-top: 3em;
     }
   }
-.create-event {
-  .md-overlay {
-    z-index: 21 !important;
-  }
-  .container {
-    display: block !important;
-    min-height: calc(100vh - 268px) !important;
-  }
-
-  .md-datepicker-dialog.md-theme-default {
-    box-shadow: none;
-    border: 1px solid #606060;
-    border-radius: 14px;
-    z-index: 999999999999999;
-    height: auto;
-
-    .md-datepicker-header {
-      display: none;
-    }
-    .md-datepicker-body-footer {
-      display: none;
-    }
-
-    .md-datepicker-days .md-datepicker-day-button {
-      border-radius: 10px;
-      width: 35px;
-      min-width: 35px;
-      height: 35px;
-      line-height: 35px;
-      &.md-datepicker-selected {
-        background-color: $baseColor !important;
-        box-shadow: none;
-      }
-    }
-  }
-  .user-menu-content {
-    min-width: 150px;
-    .md-list-item-content {
-      font-size: 16px !important;
-    }
-  }
-
 
   .forget-password {
     text-align: center;

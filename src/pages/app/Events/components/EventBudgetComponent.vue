@@ -1,5 +1,5 @@
 <template>
-  <div v-if="component.title !== 'Total'" class="event-budget-component d-flex" :style="`border-left: 10px solid ${component.color}; color: ${fontColor}`">
+  <div v-if="component.title !== 'Total'" class="event-budget-component d-flex" :style="`border-left: 10px solid ${component.color}`">
     <div class="font-size-20 font-bold name">
       <img class="icon" :src="`${$iconURL}Budget Elements/${component.icon}`">
       {{component.title}}
@@ -76,7 +76,7 @@
       deleteComponent() {
         swal({
           title: `<div class="text-left"><div class="font-size-30 cross-line"><img src="${this.$iconURL}Budget Elements/${this.component.componentId}.svg" width="40"/>${this.component.title}</div>
-                  <div >Are You Sure You Want To <br/>Delete This Category?
+          <div >Are You Sure You Want To <br/>Delete This Category?
                   </div></div>`,
           showCancelButton: true,
           confirmButtonClass: "md-button md-success",
@@ -94,13 +94,6 @@
         this.component.allocatedBudget = Number(this.newBudget.replace(/,/g, ""));
         this.isEditing = false;
         this.$emit("updateCategory", this.component)
-      }
-    },
-    computed: {
-      fontColor() {
-        if (this.component.fontColor) return this.component.fontColor
-        if (this.component.componentId == 'unexpected') return this.component.color
-        return "" 
       }
     },
   }

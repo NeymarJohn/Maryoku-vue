@@ -8,7 +8,6 @@
       :placeholder="placeholder"
       :class="inputClass"
       :readonly="readonly"
-      :disabled="disabled"
       @click="onClickEvent"
       ref="input"
     />
@@ -85,11 +84,7 @@ export default {
     imgStyle: String,
     inputStyle: String,
     readonly: Boolean,
-    size:String,
-    disabled: {
-      type: Boolean,
-      default: false
-    }
+    size:String
   },
   beforeDestroy() {
     if (this.$refs.timePickerPanel)
@@ -187,11 +182,10 @@ export default {
     }
   },
   created () {
-    if (this.value && this.inputStyle==='budget') {
+    if (this.value) {
        this.content = `${this.value}`.replace(/\D/g, "")
           .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     } 
-    console.log(this.readonly)
   },
   destroyed () {
     window.removeEventListener('scroll', this.handleScroll);
