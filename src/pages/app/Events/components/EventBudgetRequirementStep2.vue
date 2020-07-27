@@ -93,7 +93,7 @@ export default {
           label: "Miranda Preistly",
           description: "<b>Miranda Priestly</b> personifies qualities of a classic A type boss: controlling, demanding and impossible to please. Her favorite words to utter after all are “do it correctly”, you may try to, but we all know how this will end"
         },{
-          icon: "movies/soprano.png",
+          icon: "movies/soprano.jpeg",
           label: "Tony Soprano",
           description: "<b>Tony Soprano</b> doesn't like to wait, Impatience is a key characteristic for him. With visibility over how the plan is advancing, you will gain his trust and ensure a smooth approval"
         },
@@ -139,7 +139,8 @@ export default {
           width: 280px;
           height: 200px;
           object-fit: cover;
-          object-position: top;
+          // object-position: top;
+          object-position: 90% 10%;
         }
         &:hover {
            box-shadow: 0 3px 10px 0 rgba(245, 19, 85, 0.43);
