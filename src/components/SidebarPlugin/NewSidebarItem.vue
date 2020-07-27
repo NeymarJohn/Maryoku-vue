@@ -1,7 +1,7 @@
 <template>
   <component :is="baseComponent"
              :to="link.path ? link.path : '/'"
-             :class="{active : isActive}"
+             :class="{active : isActive, disable: disabled}"
              tag="li">
     <a v-if="isMenu"
        href="#"
@@ -27,20 +27,19 @@
 
     <slot name="title" v-if="children.length === 0 && !$slots.default && link.path">
       <component
-        :to="link.path"
+        :to="disabled?'':link.path"
         @click.native="linkClick"
         :is="elementType(link, false)"
         :class="{active: link.active}"
         class="nav-link"
         :target="link.target"
-        :href="link.path">
+        :href="disabled?'':link.path">
         <template v-if="addLink">
-
           <md-icon class="font-size-30" v-if="link.icon">{{link.icon}}</md-icon>
           <span class="sidebar-mini" v-else>{{linkPrefix}}</span>
         </template>
         <template v-else>
-          <md-icon class="font-size-30" >{{link.icon}}</md-icon>
+          <md-icon class="font-size-30" :style="{color: disabled?'#a0a0a0 !important':'#000'}" >{{link.icon}}</md-icon>
         </template>
       </component>
     </slot>
@@ -68,6 +67,10 @@ export default {
           children: []
         }
       }
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   provide () {
@@ -103,14 +106,14 @@ export default {
       return this.children.length > 0 || this.menu === true
     },
     isActive () {
-      if (this.$route.path.startsWith(this.link.path)) {
+      if (this.$route.path.startsWith(this.link.startLink)) {
         this.link.active = true
         return true
       }
 
       if (this.$route && this.$route.path) {
         let matchingRoute = this.children.find(c =>
-          this.$route.path.startsWith(c.link.path)
+          this.$route.path.startsWith(c.link.startLink)
         )
         if (matchingRoute !== undefined) {
           return true

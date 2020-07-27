@@ -117,7 +117,7 @@ export default {
   methods: {
     generateShareLink() {
       const tenantId = this.$authService.resolveTenantId()
-      this.shareLink = `${this.$authService.getAppUrl(tenantId)}/#/invited?invite=true&role=${this.role}&event=${this.$route.params.id}`;
+      this.shareLink = `${this.$authService.getAppUrl(tenantId)}/#/signup?invite=true&role=${this.role}&event=${this.$route.params.id}`;
       return this.shareLink
     },
     selectOption() {

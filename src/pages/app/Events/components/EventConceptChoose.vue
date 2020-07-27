@@ -9,7 +9,9 @@
                     <p>
                         Here are 3 awesome concepts for you to choose from! 
                         <br/>
-                        If you feel like we haven’t nailed it, let us know and we’ll send 3 more.
+                        If you feel like we haven’t nailed it, visit our wall of inspiration to get more ideas. 
+                        <br/>
+                        Got some cool ideas of your own? Scroll down to create a brand new concept.
                     </p>
                 </div>
                 <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
@@ -453,13 +455,21 @@ export default {
         let event = this.$store.state.event.eventData
         event.concept = eventConcept
         event.conceptProgress = 100
-        event.for(calendar).save().then(result=>{
-            this.showConceptList = false
-            this.showEditForm = false
-            this.setEventData(result)
-            this.selectedConcept = eventConcept
-            this.base64Images = imageData
-        })
+        // const newEvent = new CalendarEvent({id: event.id, concept: eventConcept, conceptProgress: 100})
+        this.$store.dispatch('event/saveEventAction', new CalendarEvent({id: event.id, concept: eventConcept, conceptProgress: 100, calendar: calendar }))
+            .then(result=>{
+                this.showConceptList = false
+                this.showEditForm = false
+                this.selectedConcept = eventConcept
+                this.base64Images = imageData
+            })
+        // new CalendarEvent({id: event.id, concept: eventConcept, conceptProgress: 100}).for(calendar).save().then(result=>{
+            // this.showConceptList = false
+            // this.showEditForm = false
+            // this.setEventData(result)
+            // this.selectedConcept = eventConcept
+            // this.base64Images = imageData
+        // })
         
     },
     openConceptContest() {

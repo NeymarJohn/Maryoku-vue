@@ -16,7 +16,7 @@
             <div style="margin:40px 30px">
                 <pie-chart-round 
                     :event.sync="event"
-                    :items="selectedComponents"
+                    :items="pieChartData"
                     columns="1">
                 </pie-chart-round>
             </div>
@@ -33,7 +33,8 @@
                       :key="index" 
                       @delete="deleteCategory"
                       @updateCategory="updateCategory"></event-budget-component>
-                    <event-budget-component :component="{title:'Total', allocatedBudget:event.totalBudget}" ></event-budget-component>
+                    <event-budget-component :component="{ title: 'Unused', color:'#0047cc', fontColor:'#0047cc', icon: 'unused.svg', allocatedBudget: unusedBudget }" ></event-budget-component>
+                    <event-budget-component :component="{ title: 'Total',  allocatedBudget: event.totalBudget }" ></event-budget-component>
                     <div class="add-category-row">
                       <md-button class="md-simple add-category-btn md-red add-category-button" @click="showAddNewCategory = true">
                         <img :src="`${$iconURL}budget+screen/SVG/Asset%2019.svg`"/> 
@@ -43,6 +44,7 @@
                   </template>
                   <template slot="tab-pane-2">
                     <event-budget-component type="perguest" :participants="event.numberOfParticipants" v-for="(component,  index) in selectedComponents" :component="component" :key="index" ></event-budget-component>
+                    <event-budget-component :component="{ title: 'Unused', color:'#0047cc', fontColor:'#0047cc', icon: 'unused.svg', allocatedBudget: unusedBudget }" type="perguest" :participants="event.numberOfParticipants"></event-budget-component>
                     <event-budget-component :component="{title:'Total', allocatedBudget:event.totalBudget}" type="perguest" :participants="event.numberOfParticipants" ></event-budget-component>
                     <div class="add-category-row">
                       <md-button class="md-simple add-category-btn md-red add-category-button" @click="showAddNewCategory = true">
@@ -102,7 +104,20 @@ export default {
   computed: {
     event() {
       return this.$store.state.event.eventData; 
-    }
+    },
+    allocatedTotal() {
+      const addedBudget =  this.selectedComponents.reduce((sum, item)=>{
+        console.log(sum)
+        return sum + item.allocatedBudget
+      }, 0)
+      return addedBudget
+    },
+    unusedBudget() {
+      return this.event.totalBudget - this.allocatedTotal
+    },
+    pieChartData () {
+      return  this.selectedComponents.filter(item=>item.componentId !== 'unexpected')
+    },
   },
   methods: {
     updateBudget(eventBudget) {

@@ -63,23 +63,24 @@
         <sidebar-item
           name="left-menu-events-list"
           class="left-menu-events-list"
-          :link="{name: 'Event Details',  icon: 'outlined_flag', path: '/events/' + event.id +'/overview'}"
+          :link="{name: 'Event Details',  icon: 'outlined_flag', path: `/events/${event.id}/overview`, startLink: `/events/${event.id}/overview`}"
         ></sidebar-item>
         <sidebar-item
           name="left-menu-events-list"
           class="left-menu-events-list"
-          :link="{name: 'Events Lists',  icon: 'check_circle_outline', path: '/events/'+ event.id +'/booking'}"
+          :link="{name: 'Events Lists',  icon: 'check_circle_outline', path: taskUrl, startLink: `/events/${event.id}/booking`}"
         ></sidebar-item>
         <sidebar-item
           name="left-menu-yearly-plan"
           class="left-menu-yearly-plan"
-          :link="{name: 'Event Budget',  icon: 'attach_money', path: '/events/'+ event.id +'/edit/budget'}"
+          :disabled="event.budgetProgress!==100"
+          :link="{name: 'Event Budget',  icon: 'attach_money', path: `/events/${event.id}/edit/budget`, startLink: `/events/${event.id}/edit/budget`}"
         ></sidebar-item>
-<!--        <sidebar-item-->
-<!--          name="left-menu-vendors-list"-->
-<!--          class="left-menu-vendors-list"-->
-<!--          :link="{name: 'Vendors Pool', icon: 'chat_bubble_outline', path: '/events'}"-->
-<!--        ></sidebar-item>-->
+        <!-- <sidebar-item
+          name="left-menu-yearly-plan"
+          class="left-menu-yearly-plan disabled"
+          v-else
+        ></sidebar-item> -->
       </md-list>
     </div>
     <div class="logo">
@@ -94,6 +95,7 @@
 </template>
 <script>
 import SidebarItem from './NewSidebarItem'
+import eventService from '@/services/event.service';
 
 export default {
   name: 'sidebar',
@@ -208,9 +210,16 @@ export default {
   },
   created () {
     this.fetchUrl()
+    this.taskUrl = eventService.getFirstTaskLink(this.event)
   },
   watch: {
-    '$route': 'fetchUrl'
+    '$route': 'fetchUrl',
+    event: {
+      handler(newEvent) {
+        this.taskUrl = eventService.getFirstTaskLink(newEvent)
+      },
+      deep: true
+    }
   }
 }
 </script>

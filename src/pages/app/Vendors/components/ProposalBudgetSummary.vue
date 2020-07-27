@@ -227,6 +227,7 @@
       this.newProposalRequest = this.proposalRequest
 
       this.$root.$on('update-proposal-budget-summary', (newProposalRequest, discountBlock) => {
+        console.log(newProposalRequest)
         this.newProposalRequest = newProposalRequest
         this.discountBlock = discountBlock
       })
@@ -249,12 +250,12 @@
             subTitle: 'Awesome DJ', 
           }
         ]
-        // const selectedBlock = additionalServicesBlock.filter(a => a.title == category)[0]
-        // if (this.additionalServices.filter( a => a.title == category).length > 0) {
-        //   this.additionalServices = this.additionalServices.filter( a => a.title != category )
-        // } else {
-        //   this.additionalServices.push(selectedBlock)
-        // }
+        const selectedBlock = additionalServicesBlock.filter(a => a.title == category)[0]
+        if (this.additionalServices.filter( a => a.title == category).length > 0) {
+          this.additionalServices = this.additionalServices.filter( a => a.title != category )
+        } else {
+          this.additionalServices.push(selectedBlock)
+        }
       })
     },
     computed: {

@@ -135,7 +135,8 @@ export default {
         status: event.conceptProgress === 100 ? "completed" : "not-complete",
         route: "booking/concept",
         icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-        progress: event.conceptProgress
+        progress: event.conceptProgress,
+        componentId: 'concept'
       };
       const budget = {
         title:
@@ -143,15 +144,16 @@ export default {
         status: "not-complete",
         route: this.event.budgetProgress==100?"edit/budget":"booking/budget",
         icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
-        progress:
-          this.event.budgetProgress == 0 ? 50 : this.event.budgetProgress
+        progress: this.event.budgetProgress,
+        componentId: 'budget'
       };
       const timeline = {
         title: "Generate timeline",
         status: "current",
         route: "booking/timeline",
         icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-        progress: 0
+        progress: 0,
+        componentId: 'timeline'
       };
       const elements = [];
       if (this.event.eventType.hasConcept) {
@@ -180,11 +182,20 @@ export default {
         });
     },
     setConstantStates(event) {
-      if (this.eventElements[0]) {
-        this.eventElements[0].progress = event.conceptProgress;
-        this.eventElements[0].status =
-          event.conceptProgress == 100 ? "completed" : "not-complete";
+      const conceptIndex = this.eventElements.findIndex(item => item.componentId === 'concept')
+      const budgetIndex = this.eventElements.findIndex(item => item.componentId === 'budget')
+      const timelineIndex = this.eventElements.findIndex(item => item.componentId === 'timeline')
+
+      if (conceptIndex >= 0) {
+        this.eventElements[conceptIndex].progress = event.conceptProgress;
+        this.eventElements[conceptIndex].status = event.conceptProgress == 100 ? "completed" : "not-complete";
       }
+
+      this.eventElements[budgetIndex].progress = event.budgetProgress;
+      this.eventElements[budgetIndex].status = event.budgetProgress == 100 ? "completed" : "not-complete";
+      this.eventElements[timelineIndex].progress = event.timelineProgress;
+      this.eventElements[timelineIndex].status = event.timelineProgress == 100 ? "completed" : "not-complete";
+      
     },
     fetchUrl() {
       this.currentUrl = this.$router.history.current.path;

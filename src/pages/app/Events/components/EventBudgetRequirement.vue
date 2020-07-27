@@ -1,9 +1,20 @@
 <template>
     <div v-if="loadingBudget" class="md-layout event-budget-section booking-section">
-      <div class="text-center  md-layout-item md-size-100" style="margin-top:30vh">
-        <div class="loading-budget-image">
-          <img :src="`${$iconURL}Budget+Requirements/group-8494.svg`">
-        </div>
+      <div class="text-center md-layout-item md-size-100" style="margin-top:30vh">
+        <radial-progress-bar 
+                        innerStrokeColor="#A0A0A0"
+                        startColor="#f51355"
+                        stopColor="#f51355"
+                        :strokeWidth="3"
+                        :diameter="212"
+                        :completed-steps="completedProgressValue"
+                        :total-steps="100"
+                        :animateSpeed="5000"
+                        :isClockwise="false">
+          <div class="loading-budget-image">
+            <img :src="`${$iconURL}Budget+Requirements/group-8494.svg`">
+          </div>
+        </radial-progress-bar>
         <div class="text-transform-uppercase font-size-30 font-bold mt-4rem">
           Loading your budget breakdown
         </div>
@@ -27,7 +38,8 @@
             <template v-else>
               <h3 class="text-transform-uppercase">
                 <img :src="`${this.$iconURL}budget+screen/SVG/Asset%2010.svg`" width="15">
-                APPROVE Budget breakdown</h3>
+                APPROVE Budget breakdown
+              </h3>
               <div class="text-transform-capitalize">
                 We Created a budget division based on smart bla bla...
               </div>
@@ -41,8 +53,8 @@
         <event-budget-approve></event-budget-approve>
       </div>
       <div class="booking-header md-layout-item md-size-100" v-else>
-        <event-budget-requirement-step1 v-if="currentStep===1" @change="setEventStep1"></event-budget-requirement-step1>
-        <event-budget-requirement-step2 v-if="currentStep===2" @change="setEventValue"></event-budget-requirement-step2>
+        <event-budget-requirement-step1 v-if="currentStep===1" @change="setEventStep1" :defaultData="budgetInfo1"></event-budget-requirement-step1>
+        <event-budget-requirement-step2 v-if="currentStep===2" @change="setEventStep2" :defaultData="budgetInfo2"></event-budget-requirement-step2>
       </div>
       <div class="wizard-footer d-flex">
         <div>
@@ -54,7 +66,7 @@
             <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17"/>
           </md-button>
         </div>
-        <div class="status-bar" v-if="currentStep<3" >
+        <div class="status" v-if="currentStep<3" >
           <div class="status-step">
             {{this.currentStep}} Step of 2
           </div>
@@ -78,6 +90,7 @@
     </div>
 </template>
 <script>
+import RadialProgressBar from 'vue-radial-progress'
 import CommentEditorPanel from "./CommentEditorPanel";
 import VueElementLoading from 'vue-element-loading'
 import HeaderActions from "@/components/HeaderActions";
@@ -96,7 +109,8 @@ export default {
     HeaderActions,
     EventBudgetRequirementStep1,
     EventBudgetRequirementStep2,
-    EventBudgetApprove
+    EventBudgetApprove,
+    RadialProgressBar
   },
   data() {
     return {
@@ -105,11 +119,14 @@ export default {
       showCommentEditorPanel: false,
       currentStep: 1,
       loadingBudget: false,
-      approveBudget: false
+      approveBudget: false,
+      budgetInfo1: {},
+      budgetInfo2: {},
+      completedProgressValue: 0
     }
   },
   created () {
-    this.currentStep = this.event.budgetProgress > 50 ? 3:1;
+    this.currentStep = this.event.budgetProgress >= 50 ? 3:1;
   },
   methods: {
     toggleCommentMode(mode) {
@@ -134,14 +151,19 @@ export default {
         const event = new CalendarEvent({
           id: this.event.id, 
           calendar: new Calendar({id:this.event.calendar.id}),
-          budgetProgress: 75,
-          totalBudget: this.editingEvent.totalBudget,
-          reCalculate: true
+          budgetProgress: 50,
+          totalBudget: this.editingEvent.totalBudget?this.editingEvent.totalBudget:0,
+          reCalculate: true,
+          eventDecisionFactor3: this.editingEvent.eventDecisionFactor3
         })
         this.loadingBudget = true
         this.$store.dispatch('event/saveEventAction', event).then(res=>{
-          this.loadingBudget = false
-          this.currentStep += 1;  
+          this.completedProgressValue = 100
+          setTimeout(()=>{
+            this.loadingBudget = false
+            this.completedProgressValue = 0
+            this.currentStep += 1;  
+          }, 5000)
         })
       } else {
         this.currentStep += 1;
@@ -155,10 +177,13 @@ export default {
     },
     setEventStep1(eventInfo) {
       console.log(eventInfo)
-      this.editingEvent.totalBudget = eventInfo.budget;
+      this.editingEvent.totalBudget = eventInfo.noBudget? 0 : eventInfo.budget;
+      this.editingEvent.eventDecisionFactor3 = eventInfo.selectedLevel
+      this.budgetInfo1 = eventInfo
     },
-    setEventValue(eventBudget) {
-
+    setEventStep2(eventInfo) {
+      console.log(eventInfo)
+      this.budgetInfo2 = eventInfo
     }
   },
   computed: {
@@ -182,6 +207,16 @@ export default {
       border-radius: 50%;
       box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.18);
     }
+    .status {
+      text-align: center;
+      transform: translateY(-35%);
+      .status-step{
+        margin-bottom: 10px;
+      }
+    }
+  }
+  .radial-progress-container {
+    margin: auto;
   }
 }
     .loading-budget-image{
@@ -189,7 +224,7 @@ export default {
       height: 200px;
       margin: auto;
       border-radius: 50%;
-      border: solid 3px #f51355;
+      // border: solid 3px #f51355;
       background-color: #ffffff;
       img {
         margin-top: 50%;
