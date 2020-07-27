@@ -110,13 +110,13 @@
         <!-- ./Create Concept Section -->
       </div>
 
-      <div class="booking-section__actions"></div>
-      <div class="text-center" style="margin: 30px; width:100%">
-        <md-button class="md-red md-simple back-to-top" @click="scrollToTop">
+      <!-- <div class="booking-section__actions"></div> -->
+      <div class="text-center" style="height: 100px">
+        <!-- <md-button class="md-red md-simple back-to-top" @click="scrollToTop">
           <md-icon>expand_less</md-icon>Back to top
-        </md-button>
+        </md-button> -->
       </div>
-      <div class="concept-actions">
+      <div class="concept-actions" v-if="!expandCreateConcept">
         <div>
           <md-button class="md-simple md-black normal-btn">
             <md-icon>arrow_back</md-icon>Back
