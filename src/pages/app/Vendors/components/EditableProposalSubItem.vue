@@ -9,7 +9,7 @@
           {{item.priceUnit==='total' ? 1 : item.requirementValue}}
         </template>
         <template v-else>
-          <input class="input-value" type="number"/>
+          <input class="input-value" type="number" style="max-width: 3rem"/>
         </template>
       </div>
       <div class="price-cont">
@@ -21,7 +21,7 @@
           }}
         </template>
         <template v-else>
-          <input class="input-value" v-model="item.price" type="number"/>
+          <input class="input-value" v-model="item.price" type="number" style="max-width: 6rem"/>
         </template>
       </div>
       <div class="total-cont">
@@ -29,13 +29,14 @@
           $ {{item.price | withComma}}
         </template>
         <template v-else>
-          <input class="input-value" v-model="item.price" type="number"/>
+          <input class="input-value" v-model="item.price" type="number" style="max-width: 6rem"/>
         </template>
       </div>
       <div class="action-cont">
+        {{item.id}}
         <template v-if="!isEdit">
           <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEdit=true"/>
-          <img class="trash" :src="`${iconUrl}Asset 586.svg`" @click="removeRequirement(item)"/>
+          <img class="trash" :src="`${iconUrl}Asset 586.svg`" @click="removeRequirement(item.id)"/>
         </template>
         <template v-else>
           <a class="cancel" @click="cancel()">Cancel</a>
@@ -75,8 +76,8 @@
       }
     },
     methods: {
-      removeRequirement(item) {
-        this.$root.$emit('remove-proposal-requirement', item)
+      removeRequirement(id) {
+        this.$root.$emit('remove-proposal-requirement', id)
       },
       save() {
         this.isEdit = false
@@ -110,27 +111,17 @@
     font-size: 16px;
     font-weight: 600;
     display: grid;
-    grid-template-columns: 30% 10% 17.5% 17.5% 25%;
-    align-items: center;
+    grid-template-columns: 40% 15% 15% 15% 15%;
 
     div {
       &.item-cont {
         text-transform: capitalize;
       }
       &.qty-cont {
-        input {
-          width: 80%;
-        }
       }
       &.price-cont {
-        input {
-          width: 80%;
-        }
       }
       &.total-cont {
-        input {
-          width: 80%;
-        }
       }
       &.action-cont {
         text-align: right;
