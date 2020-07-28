@@ -314,6 +314,9 @@ export default {
 
       // Create Concept
       if (fileNames.length > 0) {
+        for (let i = 0; i < fileNames.length; i ++) {
+          if (!fileNames[i]) fileNames[i] = {}
+        }
         this.editConcept.images = fileNames;
       }
       const evenConcept = await new EventConcept(this.editConcept).save();
