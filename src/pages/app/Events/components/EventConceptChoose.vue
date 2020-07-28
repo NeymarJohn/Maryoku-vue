@@ -114,7 +114,7 @@
       <div class="text-center" style="height: 100px">
         <!-- <md-button class="md-red md-simple back-to-top" @click="scrollToTop">
           <md-icon>expand_less</md-icon>Back to top
-        </md-button> -->
+        </md-button>-->
       </div>
       <div class="concept-actions" v-if="!expandCreateConcept">
         <div>
@@ -555,7 +555,7 @@ export default {
           this.showConceptList = false;
           this.showEditForm = false;
           this.selectedConcept = eventConcept;
-        //   this.base64Images = imageData;
+          //   this.base64Images = imageData;
           this.isLoading = false;
         });
       // new CalendarEvent({id: event.id, concept: eventConcept, conceptProgress: 100}).for(calendar).save().then(result=>{
