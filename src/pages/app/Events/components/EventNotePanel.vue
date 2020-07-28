@@ -1,7 +1,7 @@
 <template>
   <div class="note-panel">
     <div class="note-panel-header  d-flex justify-content-between">Notes
-      <event-notes-filter></event-notes-filter>
+      <event-notes-filter @filter="filterNotes" :filterUsers="getFilterUsers"></event-notes-filter>
     </div>
     <div class="note-panel-content" v-if="notes.length === 0">
       <div>
@@ -109,6 +109,11 @@ export default {
       }
       console.log(this.editingNote)
       this.showEditor = true;
+    },
+    filterNotes(filters) {
+      const calendarId = this.$auth.user.defaultCalendarId
+      const eventId = this.event.id
+      this.getEventNotes({ calendarId, eventId, filters})
     }
   },
   created () {
@@ -120,7 +125,15 @@ export default {
     ...mapState('event', {
       event: state => state.eventData,
       notes: state => state.notes
-    })
+    }),
+    getFilterUsers() {
+      const users = []
+      this.notes.forEach(item=> {
+        if (item.givingEmail && users.indexOf(item.givingEmail) < 0 )
+          users.push(item.givingEmail)
+      })
+      return users
+    }
   },
   watch: {
     editingNote: {
