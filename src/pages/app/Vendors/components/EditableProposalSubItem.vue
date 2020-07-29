@@ -33,9 +33,10 @@
         </template>
       </div>
       <div class="action-cont">
+        {{item.id}}
         <template v-if="!isEdit">
           <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEdit=true"/>
-          <img class="trash" :src="`${iconUrl}Asset 586.svg`" @click="removeRequirement(item)"/>
+          <img class="trash" :src="`${iconUrl}Asset 586.svg`" @click="removeRequirement(item.id)"/>
         </template>
         <template v-else>
           <a class="cancel" @click="cancel()">Cancel</a>
@@ -75,8 +76,8 @@
       }
     },
     methods: {
-      removeRequirement(item) {
-        this.$root.$emit('remove-proposal-requirement', item)
+      removeRequirement(id) {
+        this.$root.$emit('remove-proposal-requirement', id)
       },
       save() {
         this.isEdit = false

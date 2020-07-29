@@ -173,6 +173,7 @@ import EventComponent from "@/models/EventComponent";
 import EventConcept from "@/models/EventConcept";
 import ColorButton from "@/components/ColorButton";
 import swal from "sweetalert2";
+import S3Service from "@/services/s3.service";
 
 const tags = [
   { name: "adventurous", selected: false },
@@ -296,48 +297,55 @@ export default {
       this.isLoading = true;
 
       let formData = new FormData();
-      const fileNames = [];
+      const fileNames = this.editConcept.images;
       for (let i = 0; i < imageKeys.length; i++) {
         const fileItem = this.uploadImages[imageKeys[i]];
         formData.append("files[]", fileItem);
-        fileNames.push({
-          name: fileItem.name,
-        });
+        const newFileName = new Date().getTime() + "";
+        const extension = fileItem.type.split("/")[1];
+        const fileName = {
+          originName: fileItem.name,
+          name: newFileName,
+          url: `${process.env.S3_URL}storage/concept/${newFileName}.${extension}`,
+        };
+        fileNames[imageKeys[i]] = fileName;
+        await S3Service.fileUpload(fileItem, fileName.name, "storage/concept");
       }
 
       // Create Concept
       if (fileNames.length > 0) {
+        for (let i = 0; i < fileNames.length; i ++) {
+          if (!fileNames[i]) fileNames[i] = {}
+        }
         this.editConcept.images = fileNames;
       }
       const evenConcept = await new EventConcept(this.editConcept).save();
-      fileNames.forEach((item, index) => {
-        fileNames[index].url = `concept/${evenConcept.id}/${item.name}`;
-      });
+      // fileNames.forEach((item, index) => {
+      //   fileNames[index].url = `concept/${item.name}`;
+      // });
       this.isLoading = false;
       this.$emit("saved", evenConcept, this.uploadImages);
 
       // formData.append("file", fileItem);
-      formData.append("from", "concept");
-      formData.append("folder", evenConcept.id);
-      const result = await this.$http.post(
-        `${process.env.SERVER_URL}/uploadMultipleFiles`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      console.log("response", evenConcept);
+      // formData.append("from", "concept");
+      // formData.append("folder", evenConcept.id);
+      // const result = await this.$http.post(
+      //   `${process.env.SERVER_URL}/uploadMultipleFiles`,
+      //   formData,
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //   }
+      // );
+      // console.log("response", evenConcept);
     },
   },
   created() {
     if (this.defaultConcept) {
       this.editConcept = this.defaultConcept;
       this.editConcept.images.forEach((image, i) => {
-        this.uploadImageData[
-          i
-        ] = `${this.$storageURL}concept/${this.editConcept.id}/${image.name}`;
+        this.uploadImageData[i] = `${image.url}`;
       });
     }
   },

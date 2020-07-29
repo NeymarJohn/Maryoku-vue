@@ -89,7 +89,6 @@
           <a class="cancel" @click="cancel()">Clear</a>
           <a 
             class="save" 
-            :class="{'isDisabled': isDisabledAdd}" 
             @click="saveItem(serviceItem, qty, subTotal)">
             Add This
           </a>
@@ -198,7 +197,6 @@
         <a class="cancel" @click="cancel()">Clear</a>
         <a 
           class="save" 
-          :class="{'isDisabled': isDisabledAdd}"
           @click="saveItem(serviceItem, qty, subTotal)">
           Add This
         </a>
@@ -442,7 +440,7 @@
         this.subTotal = null
         this.serviceItem = null
       },
-      saveItem(serviceItem, qty, price) {
+      saveItem(title, qty, price) {
         this.newProposalRequest.requirements.push({
           comments: [],
           dateCreated: '',
@@ -455,10 +453,9 @@
           requirementId: '',
           requirementMandatory: false,
           requirementPriority: null,
-          requirementTitle: serviceItem,
+          requirementTitle: title,
           requirementValue: `${qty}`,
         })
-        this.$forceUpdate()
         this.$root.$emit('update-proposal-budget-summary', this.newProposalRequest, {})
       },
       calculateSubTotal() {
@@ -617,11 +614,10 @@
       this.isVCollapsed = this.isCollapsed
       this.newProposalRequest = this.proposalRequest
 
-      this.$root.$on('remove-proposal-requirement', (item) => {
-        this.newProposalRequest.requirements = this.newProposalRequest.requirements.filter(req => req.requirementTitle != item.requirementTitle)
+      this.$root.$on('remove-proposal-requirement', (reqId) => {
+        console.log(reqId)
+        this.newProposalRequest.requirements = this.newProposalRequest.requirements.filter(req => req.id != reqId)
         this.$root.$emit('update-proposal-budget-summary',  this.newProposalRequest, {})
-        this.$forceUpdate()
-        this.cancel()
       })
 
       this.$root.$on('add-service-item', (item) => {
@@ -642,13 +638,7 @@
       }
     },
     computed: {
-      isDisabledAdd() {
-        return  !this.qty || 
-                !this.unit || 
-                !this.subTotal || 
-                this.subTotal == 0 || 
-                !this.serviceItem
-      }
+      
     },
     watch: {
     }
@@ -811,7 +801,7 @@
               position: absolute;
               content: '$';
               left: 1rem;
-              top: 15px;
+              top: 14px;
               font: normal 16px 'Manrope-Regular', sans-serif;
             }
             input {
@@ -1180,12 +1170,6 @@
         color: white;
         background: #f51355;
         border-radius: 3px;
-
-        &.isDisabled {
-          pointer-events: none;
-          cursor: not-allowed;
-          background: #d5d5d5;
-        }
       }
       &:hover {
         color: #dddddd!important;
