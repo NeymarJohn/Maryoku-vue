@@ -8,7 +8,7 @@ class S3Service {
       region: process.env.AWS_REGION,
       accessKeyId: process.env.AWS_ACCESSKEY,
       secretAccessKey: process.env.AWS_SECRETKEY,
-      s3Url: 'http://static.maryoku.com/', /* optional */
+      s3Url: process.env.S3_URL, /* optional */
     }
     const S3Client = new S3(config);
     const newFileName = 'my-awesome-file';

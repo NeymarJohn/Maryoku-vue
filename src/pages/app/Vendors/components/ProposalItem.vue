@@ -41,34 +41,49 @@
           </div>
           <div class="field">
             <span>QTY</span>
-            <money 
+            <input 
               v-model="qty" 
-              v-bind="qtyFormat"
-              @keyup.native="calculateSubTotal();"
+              type="number" 
+              min="0" 
+              placeholder="0" 
+              class="qty" 
+              @keyup="calculateSubTotal();onBlurNumber()" 
             />
           </div>
           <div class="field">
             <span>Price per unit</span>
-            <money 
-              v-model="unit" 
-              v-bind="currencyFormat"
-              @keyup.native="calculateSubTotal();"
-            />
+            <div class="prefix-dollar">
+              <input 
+                v-model="unit" 
+                type="number" 
+                min="0" 
+                placeholder="00.00" 
+                class="priceperunit" 
+                @keyup="calculateSubTotal();onBlurNumber()" 
+              />
+            </div>
           </div>
           <div class="field">
             <span>Total</span>
-            <money 
-              v-model="subTotal" 
-              v-bind="currencyFormat"
-              v-if="isNumberVisible"
-              class="total"
-            />
-            <money 
-              v-model="unit" 
-              v-bind="currencyFormat" 
-              v-else
-              class="total"
-            />
+            <div class="prefix-dollar">
+              <input 
+                type="number"
+                v-model="subTotal" 
+                v-if="isNumberVisible"
+                min="0" 
+                placeholder="00.00" 
+                @blur="onBlurNumber"
+                class="total"
+              />
+              <input 
+                type="text"
+                v-model="subTotal" 
+                v-else
+                placeholder="00.00" 
+                @blur="onFocusText"
+                class="total"
+              />
+            </div>
           </div>
         </div>
         <div class="action-cont">
@@ -138,32 +153,44 @@
         </div>
         <div class="field">
           <span>QTY</span>
-          <money 
+          <input 
             v-model="qty" 
-            v-bind="qtyFormat"
-            @keyup.native="calculateSubTotal();"
+            type="number" 
+            min="0" 
+            placeholder="0" 
+            class="qty" 
+            @keyup="calculateSubTotal();onBlurNumber()" 
           />
         </div>
         <div class="field">
           <span>Price per unit</span>
-          <money 
+          <input 
             v-model="unit" 
-            v-bind="currencyFormat"
-            @keyup.native="calculateSubTotal();"
+            type="number" 
+            min="0" 
+            placeholder="0" 
+            class="priceperunit" 
+            @keyup="calculateSubTotal();onBlurNumber()" 
           />
         </div>
         <div class="field">
           <span>Total</span>
-          <money 
+          <!-- <input v-model="subTotal" type="number" min="0" placeholder="" class="total"/> -->
+          <input 
+            type="number"
             v-model="subTotal" 
-            v-bind="currencyFormat"
             v-if="isNumberVisible"
+            min="0" 
+            placeholder="" 
+            @blur="onBlurNumber"
             class="total"
           />
-          <money 
-            v-model="unit" 
-            v-bind="currencyFormat" 
+          <input 
+            type="text"
+            v-model="subTotal" 
             v-else
+            placeholder="" 
+            @blur="onFocusText"
             class="total"
           />
         </div>
@@ -210,16 +237,15 @@
             <div class="ptitle" v-if="isEditDiscount">
               % Percentage
               <br/>
-              <money 
-                v-model="discount" 
-                v-bind="percentageFormat"
-                :class="[
-                  {'active-discount': isDiscountPercentage},
-                  {'inactive-discount': !isDiscountPercentage},
-                ]" 
-                @keyup.native="setRange(discount, 'discount')"
-                @click.native="isDiscountPercentage=true;switchDiscountMethod()"
-              />
+              <div class="percent-value">
+                <input 
+                  v-model="discount" 
+                  type="number" 
+                  min="0" 
+                  max="100" 
+                  @keyup="setRange(discount, 'discount')"
+                />
+              </div>
             </div>
           </div>
           <div class="percent-cont" :class="{'text-right': isEditDiscount}">
@@ -228,28 +254,19 @@
           </div>
           <div class="price-cont">
             <template v-if="isEditDiscount">
-              <span class="pl-2">
-                Amount
-              </span>
+              Amount
               <br/>
-              <money 
-                v-model="discount_by_amount"
-                v-bind="currencyFormat" 
-                :class="[
-                  {'active-discount': !isDiscountPercentage},
-                  {'inactive-discount': isDiscountPercentage},
-                ]" 
-                @keyup.native="setRange(discount_by_amount, 'discount_by_amount')"
-                @click.native="isDiscountPercentage=false;switchDiscountMethod()"
-              />
+              <div class="discounted-value">
+                <input 
+                  placeholder="$00.00"
+                  type="number" 
+                  readonly
+                  disabled="disabled"
+                />
+              </div>
             </template>
             <template v-else>
-              <span v-if="discount_by_amount==0">
-                ${{totalOffer() * discount / 100 | withComma }}
-              </span>
-              <span v-else>
-                ${{discount_by_amount}}
-              </span>
+              <span>${{totalOffer() * discount / 100 | withComma }}</span>
             </template>
           </div>
           <div class="edit-cont">
@@ -267,21 +284,22 @@
             <div class="ptitle" v-if="isEditTax">
               % Percentage
               <br/>
-              <money 
-                v-model="tax" 
-                v-bind="percentageFormat" 
-                class="active-discount" 
-                @keyup.native="setRange(tax, 'tax')"
-              />
+              <div class="percent-value">
+                <input 
+                  v-model="tax" 
+                  type="number" 
+                  min="0" 
+                  max="100" 
+                  @keyup="setRange(tax, 'tax')"
+                />
+              </div>
             </div>
           </div>
           <div class="percent-cont">
             <!-- <span>{{tax}}%</span> -->
           </div>
           <div class="price-cont">
-            <span>
-              ${{totalOffer() * tax / 100 | withComma}}
-            </span>
+            <span>${{totalOffer() * tax / 100 | withComma}}</span>
           </div>
           <div class="edit-cont">
             <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditTax=true" v-if="!isEditTax"/>
@@ -386,15 +404,13 @@
   import InputProposalSubItem from '@/components/Inputs/InputProposalSubItem.vue'
   import SelectProposalSubItem from './SelectProposalSubItem.vue'
   import EditableProposalSubItem from './EditableProposalSubItem.vue'
-  import { Money } from 'v-money'
 
   export default {
     name: 'proposal-item',
     components: {
       InputProposalSubItem,
       SelectProposalSubItem,
-      EditableProposalSubItem,
-      Money
+      EditableProposalSubItem
     },
     props: {
       category: String,
@@ -417,8 +433,6 @@
         isEditTax: false,
         clickedItem: false,
         discount: 0,
-        discount_by_amount: 0,
-        isDiscountPercentage: true,
         tax: 0,
         serviceItem: null,
         qty: null,
@@ -432,30 +446,6 @@
         docTag: null,
         serviceSlidePos: 0,
         servicesWidth: 0,
-        currencyFormat: {
-          decimal: '.',
-          thousands: ',',
-          prefix: '$',
-          suffix: '',
-          precision: 2,
-          masked: false
-        },
-        qtyFormat: {
-          decimal: '.',
-          thousands: ',',
-          prefix: '',
-          suffix: '',
-          precision: 0,
-          masked: false
-        },
-        percentageFormat: {
-          decimal: '.',
-          thousands: ',',
-          prefix: '',
-          suffix: '  %',
-          precision: 0,
-          masked: false
-        }
       }
     },
     methods: {
@@ -466,18 +456,14 @@
       setRange(value, type) {
         let val = value
 
+        if (value > 100) {
+          val = 100
+        } 
+        if (value < 0) {
+          val = 0
+        }
         if (type=='tax') {
-          if (value > 100) {
-            val = 100
-          } 
-          if (value < 0) {
-            val = 0
-          }
           this.tax = val
-          this.discount_by_amount = 0
-        } else if (type=='discount_by_amount') {
-          this.discount_by_amount = val
-          this.tax = 0
         } else {
           this.discount = val
         }
@@ -487,7 +473,6 @@
         this.unit = null
         this.subTotal = null
         this.serviceItem = null
-        this.discount_by_amount = null
       },
       saveItem(serviceItem, qty, price) {
         this.newProposalRequest.requirements.push({
@@ -511,7 +496,6 @@
       },
       calculateSubTotal() {
         this.subTotal = this.qty * this.unit
-        this.discount_by_amount = this.unit
       },
       saveDiscount() {
         this.isEditDiscount=false
@@ -622,9 +606,6 @@
         let total = this.totalOffer()
 
         total = total - ( total * this.discount / 100)
-        if (total > 0) {
-          total = total - this.discount_by_amount
-        }
         total += total * this.tax / 100
 
         return total
@@ -645,9 +626,21 @@
           }
         }
       },
-      switchDiscountMethod () {
-        this.discount = 0
-        this.discount_by_amount = 0
+      onBlurNumber(e) {
+        this.isNumberVisible = false
+        this.temp = this.subTotal
+        this.subTotal = this.thousandSeprator(this.subTotal)
+      },
+      onFocusText() {
+        this.isNumberVisible = true
+        this.subTotal = this.temp
+      },
+      thousandSeprator(amount) {
+        if (amount !== '' || amount !== undefined || amount !== 0 || amount !== '0' || amount !== null) {
+          return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        } else {
+          return amount
+        }
       },
     },
     created() {
@@ -846,6 +839,19 @@
             font: normal 16px 'Manrope-Regular', sans-serif;
             color: #050505;
           }
+          .prefix-dollar {
+            position: relative;
+            &:before {
+              position: absolute;
+              content: '$';
+              left: 1rem;
+              top: 15px;
+              font: normal 16px 'Manrope-Regular', sans-serif;
+            }
+            input {
+              padding-left: 2rem;
+            }
+          }
           &:last-child {
             margin-right: 0;
           }
@@ -955,7 +961,7 @@
           border: 2px solid #d5d5d5;
           border-bottom: none;
           display: grid;
-          grid-template-columns: 40% 17.5% 12.5% 30%;
+          grid-template-columns: 40% 15% 15% 30%;
           align-items: center;
 
           .item-cont {
@@ -967,27 +973,44 @@
             }
             .ptitle {
               font: normal 14px 'Manrope-Regular', sans-serif;
-              text-align: left;
-            }
-          }
-          .percent-cont {
-            font: normal 14px 'Manrope-Regular', sans-serif;
-            color: #050505;
-            &.text-right {
-              padding-right: 1rem;
-              span {
-                font-weight: 400!important;
+              text-align: center;
+
+              .percent-value {
+                position: relative;
+                &:before {
+                  content: '%';
+                  position: absolute;
+                  bottom: 11px;
+                  right: 30%;
+                }
+                input {
+                  min-width: 8rem;
+                  margin-top: .5rem;
+                  border: 1px solid #050505;
+                  text-align: center;
+                }
               }
             }
           }
+          .percent-cont {
+            &.text-right {
+              padding-right: 1rem;
+
+            }
+          }
           .price-cont {
-            font: normal 14px 'Manrope-Regular', sans-serif;
-            text-align: left;
-            span {
-              &.pl-2 {
-                font: normal 14px 'Manrope-Regular', sans-serif;
-                color: #050505;
-                padding-left: 20px;
+            text-align: center;
+            .discounted-value {
+              position: relative;
+              // &:before {
+              //   content: '$';
+              //   position: absolute;
+              // }
+              input {
+                max-width: 8rem;
+                text-align: center;
+                margin-top: .5rem;
+                background: #ddd;
               }
             }
           }
@@ -1023,7 +1046,7 @@
         border: 2px solid #d5d5d5;
         border-bottom: none;
         display: grid;
-        grid-template-columns: 57.5% 42.5%;
+        grid-template-columns: 60% 40%;
 
         span {
           font-size: 20px;
@@ -1031,23 +1054,6 @@
           display: inline-block;
         }
       }
-    }
-
-    .active-discount {
-      width: 100px;
-      margin-top: 5px;
-      border: 1px solid #050505;
-      text-align: center;
-      font: normal 16px 'Manrope-Regular', sans-serif;
-    }
-    .inactive-discount {
-      opacity: .6;
-      width: 100px;
-      text-align: center;
-      margin-top: 5px;
-      background: #d5d5d5;
-      border: 1px solid #707070;
-      font: normal 16px 'Manrope-Regular', sans-serif;
     }
 
     .upload-files-wrapper {

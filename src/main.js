@@ -27,7 +27,6 @@ import VueTimeago from 'vue-timeago'
 import VueClipboard from 'vue-clipboard2'
 import VueTimepicker from 'vue2-timepicker'
 import vueSignature from "vue-signature"
-import money from 'v-money'
 
 import App from './App.vue'
 import DashboardPlugin from './material-dashboard'
@@ -69,7 +68,6 @@ Vue.use(VueTimeago, {
 })
 Vue.use(VueTimepicker)
 Vue.use(vueSignature)
-Vue.use(money, {precision: 4})
 
 // configure router
 const router = new VueRouter({

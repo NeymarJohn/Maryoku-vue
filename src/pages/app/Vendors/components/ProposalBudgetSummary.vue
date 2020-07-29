@@ -1,5 +1,5 @@
 <template>
-  <div class="proposal-budget-summary-wrapper" :style="{'top': `${panelTopPos}px`}">
+  <div class="proposal-budget-summary-wrapper">
     <div class="summary-cont">
       <h3>
         You're the {{newProposalRequest.bidderRank | numeral('Oo')}} catering & venue bidder
@@ -157,7 +157,6 @@
         discountBlock: {},
         additionalServices: [],
         iconsWithCategory: null,
-        panelTopPos: 0,
       }
     },
     methods: {
@@ -229,20 +228,10 @@
           total = total - ( total * this.discountBlock.value / 100)
         }
         return total
-      },
-      handleScroll(event)  {
-        if (window.scrollY - 327 >= 0) {
-          this.panelTopPos = window.scrollY - 327
-        } else {
-          this.panelTopPos = 0
-        }
-      },
+      }
     },
     created() {
-      window.addEventListener('scroll', this.handleScroll)
-    },
-    destoryed() {
-      window.removeEventListener('scroll', this.handleScroll)
+
     },
     mounted() {
       this.newProposalRequest = this.proposalRequest
@@ -280,8 +269,6 @@
     padding: 43px 25px 0;
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     background: #ffffff;
-    position: absolute;
-    width: calc(100% - 2rem);
 
     .summary-cont {
       h3 {

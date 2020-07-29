@@ -129,10 +129,12 @@ export default {
     removeSelectedAttachment(index) {},
     sendEmail() {
       this.$emit("sendEmail", this.editingVendor);
-      this.$http.post(`${process.env.SERVER_URL}/1/sharingviaemail`, 
+      this.$http.post(`${process.env.SERVER_URL}/1/eventShare`, 
         { 
           emails: this.emails,
-          message: this.message
+          message: this.message,
+          link: this.generateShareLink(),
+          eventId: this.$route.params.id
         }
       , { headers: this.$auth.getAuthHeader() })
     },

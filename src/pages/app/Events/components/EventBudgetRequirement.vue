@@ -153,6 +153,7 @@ export default {
           calendar: new Calendar({id:this.event.calendar.id}),
           budgetProgress: 50,
           totalBudget: this.editingEvent.totalBudget?this.editingEvent.totalBudget:0,
+          noBudget: this.editingEvent.noBudget,
           reCalculate: true,
           eventDecisionFactor3: this.editingEvent.eventDecisionFactor3
         })
@@ -179,6 +180,7 @@ export default {
       console.log(eventInfo)
       this.editingEvent.totalBudget = eventInfo.noBudget? 0 : eventInfo.budget;
       this.editingEvent.eventDecisionFactor3 = eventInfo.selectedLevel
+      this.editingEvent.noBudget = eventInfo.noBudget
       this.budgetInfo1 = eventInfo
     },
     setEventStep2(eventInfo) {
