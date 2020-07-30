@@ -12,5 +12,5 @@ module.exports = merge(prodEnv, {
     AWS_REGION: '"us-east-1"',
     AWS_ACCESSKEY: '"AKIAT5QXLXDJDLKXRNU7"',
     AWS_SECRETKEY: '"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"',
-    S3_URL: '"http://static.maryoku.com/"'
+    S3_URL: '"http://static.maryoku.com.s3.amazonaws.com/"'
 })
