@@ -345,7 +345,7 @@ export default {
     if (this.defaultConcept) {
       this.editConcept = this.defaultConcept;
       this.editConcept.images.forEach((image, i) => {
-        this.uploadImageData[i] = `${image.url}`;
+        this.uploadImageData[i] = `${image.url?image.url:""}`;
       });
     }
   },
