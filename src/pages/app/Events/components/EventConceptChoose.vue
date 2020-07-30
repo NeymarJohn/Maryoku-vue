@@ -118,7 +118,7 @@
       </div>
       <div class="concept-actions" v-if="!expandCreateConcept">
         <div>
-          <md-button class="md-simple md-black normal-btn">
+          <md-button class="md-simple md-black normal-btn" v-if="!showConceptList" @click="showConceptList=true">
             <md-icon>arrow_back</md-icon>Back
           </md-button>
           <md-button class="md-red md-simple md-icon-button" @click="scrollToTop">
@@ -243,7 +243,7 @@
         </div>
       </div>
       <div class="selected-concept-footer d-flex justify-content-between">
-        <md-button class="md-black md-simple md-maryoku">
+        <md-button class="md-black md-simple md-maryoku" @click="showConceptList=true">
           <md-icon>keyboard_arrow_left</md-icon>Back
         </md-button>
 
