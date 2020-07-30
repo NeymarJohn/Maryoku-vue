@@ -298,7 +298,6 @@ export default {
 
       let formData = new FormData();
       const fileNames = this.editConcept.images;
-      const dirName = "concepts";
       for (let i = 0; i < imageKeys.length; i++) {
         const fileItem = this.uploadImages[imageKeys[i]];
         formData.append("files[]", fileItem);
@@ -307,10 +306,10 @@ export default {
         const fileName = {
           originName: fileItem.name,
           name: newFileName,
-          url: `${process.env.S3_URL}${dirName}/${newFileName}.${extension}`,
+          url: `${process.env.S3_URL}storage/concept/${newFileName}.${extension}`,
         };
         fileNames[imageKeys[i]] = fileName;
-        await S3Service.fileUpload(fileItem, fileName.name, dirName);
+        await S3Service.fileUpload(fileItem, fileName.name, "storage/concept");
       }
 
       // Create Concept

@@ -43,7 +43,7 @@
           <!-- {{dateData && dateData.selectedDate}} -->
           {{getFormattedDate}}
         </div>
-        <div class="color-gray" style="margin-top: 40px; margin-bottom: 10px;"> Date Range Picker</div>
+        <!-- <div class="color-gray" style="margin-top: 40px; margin-bottom: 10px;"> Date Range Picker</div> -->
         <div>
           <functional-calendar :is-date-picker='true' :change-month-function='true' :change-year-function='true' dateFormat='yyyy-mm-dd' v-model="dateData"></functional-calendar>
         </div>

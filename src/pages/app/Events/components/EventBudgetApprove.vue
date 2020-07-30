@@ -112,7 +112,7 @@ export default {
         console.log(sum)
         return sum + item.allocatedBudget
       }, 0)
-      return addedBudget
+      return addedBudget + this.event.allocatedTips + this.event.allocatedFees
     },
     unusedBudget() {
       return this.event.totalBudget - this.allocatedTotal

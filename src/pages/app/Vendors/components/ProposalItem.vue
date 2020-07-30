@@ -23,6 +23,7 @@
         </span>
         <div class="sub-items" :style="{'left': `${serviceSlidePos}px`}" ref="servicesCont">
           <select-proposal-sub-item
+            :active="true"
             :item="s"
             v-for="(s, sIndex) in services"
             :key="sIndex"
@@ -36,59 +37,45 @@
         <div class="fields-cont">
           <div class="field">
             <span>Description</span>
-            <input v-model="serviceItem" readonly class="description"/>
+            <input v-model="serviceItem" class="description"/>
           </div>
           <div class="field">
             <span>QTY</span>
-            <input 
+            <money 
               v-model="qty" 
-              type="number" 
-              min="0" 
-              placeholder="0" 
-              class="qty" 
-              @keyup="calculateSubTotal();onBlurNumber()" 
+              v-bind="qtyFormat"
+              @keyup.native="calculateSubTotal();"
             />
           </div>
           <div class="field">
             <span>Price per unit</span>
-            <div class="prefix-dollar">
-              <input 
-                v-model="unit" 
-                type="number" 
-                min="0" 
-                placeholder="00.00" 
-                class="priceperunit" 
-                @keyup="calculateSubTotal();onBlurNumber()" 
-              />
-            </div>
+            <money 
+              v-model="unit" 
+              v-bind="currencyFormat"
+              @keyup.native="calculateSubTotal();"
+            />
           </div>
           <div class="field">
             <span>Total</span>
-            <div class="prefix-dollar">
-              <input 
-                type="number"
-                v-model="subTotal" 
-                v-if="isNumberVisible"
-                min="0" 
-                placeholder="00.00" 
-                @blur="onBlurNumber"
-                class="total"
-              />
-              <input 
-                type="text"
-                v-model="subTotal" 
-                v-else
-                placeholder="00.00" 
-                @blur="onFocusText"
-                class="total"
-              />
-            </div>
+            <money 
+              v-model="subTotal" 
+              v-bind="currencyFormat"
+              v-if="isNumberVisible"
+              class="total"
+            />
+            <money 
+              v-model="unit" 
+              v-bind="currencyFormat" 
+              v-else
+              class="total"
+            />
           </div>
         </div>
         <div class="action-cont">
           <a class="cancel" @click="cancel()">Clear</a>
           <a 
             class="save" 
+            :class="{'isDisabled': isDisabledAdd}" 
             @click="saveItem(serviceItem, qty, subTotal)">
             Add This
           </a>
@@ -111,7 +98,7 @@
       <div class="right-side">
         <div class="budget-cont">
           <span>Budget</span>
-          <span>{{`$${totalOffer()}`}}</span>
+          <span>${{totalOffer() | withComma}}</span>
         </div>
         <div class="proposal-range-cont">
           <p>You're the First bidder</p>
@@ -151,44 +138,32 @@
         </div>
         <div class="field">
           <span>QTY</span>
-          <input 
+          <money 
             v-model="qty" 
-            type="number" 
-            min="0" 
-            placeholder="0" 
-            class="qty" 
-            @keyup="calculateSubTotal();onBlurNumber()" 
+            v-bind="qtyFormat"
+            @keyup.native="calculateSubTotal();"
           />
         </div>
         <div class="field">
           <span>Price per unit</span>
-          <input 
+          <money 
             v-model="unit" 
-            type="number" 
-            min="0" 
-            placeholder="0" 
-            class="priceperunit" 
-            @keyup="calculateSubTotal();onBlurNumber()" 
+            v-bind="currencyFormat"
+            @keyup.native="calculateSubTotal();"
           />
         </div>
         <div class="field">
           <span>Total</span>
-          <!-- <input v-model="subTotal" type="number" min="0" placeholder="" class="total"/> -->
-          <input 
-            type="number"
+          <money 
             v-model="subTotal" 
+            v-bind="currencyFormat"
             v-if="isNumberVisible"
-            min="0" 
-            placeholder="" 
-            @blur="onBlurNumber"
             class="total"
           />
-          <input 
-            type="text"
-            v-model="subTotal" 
+          <money 
+            v-model="unit" 
+            v-bind="currencyFormat" 
             v-else
-            placeholder="" 
-            @blur="onFocusText"
             class="total"
           />
         </div>
@@ -197,6 +172,7 @@
         <a class="cancel" @click="cancel()">Clear</a>
         <a 
           class="save" 
+          :class="{'isDisabled': isDisabledAdd}"
           @click="saveItem(serviceItem, qty, subTotal)">
           Add This
         </a>
@@ -218,7 +194,7 @@
         </span>
       </div>
       <editable-proposal-sub-item
-        v-for="(req, rIndex) in newProposalRequest.requirements.filter( r => services.includes(r.requirementTitle))" 
+        v-for="(req, rIndex) in newProposalRequest.requirements.filter( r => services.includes(r.requirementTitle))"
         :key="rIndex"
         :item="req"
         :active="true"
@@ -234,14 +210,47 @@
             <div class="ptitle" v-if="isEditDiscount">
               % Percentage
               <br/>
-              <input class="percent-value" v-model="discount" type="number" min="0" max="100" @keyup="setRange(discount, 'discount')"/>
+              <money 
+                v-model="discount" 
+                v-bind="percentageFormat"
+                :class="[
+                  {'active-discount': isDiscountPercentage},
+                  {'inactive-discount': !isDiscountPercentage},
+                ]" 
+                @keyup.native="setRange(discount, 'discount')"
+                @click.native="isDiscountPercentage=true;switchDiscountMethod()"
+              />
             </div>
           </div>
-          <div class="percent-cont">
-            <span v-if="!isEditDiscount">{{discount}}%</span>
+          <div class="percent-cont" :class="{'text-right': isEditDiscount}">
+            <span v-if="isEditDiscount">Or</span>
+            <span v-else>{{discount}}%</span>
           </div>
           <div class="price-cont">
-            <span>${{totalOffer * discount / 100 | withComma }}</span>
+            <template v-if="isEditDiscount">
+              <span class="pl-2">
+                Amount
+              </span>
+              <br/>
+              <money 
+                v-model="discount_by_amount"
+                v-bind="currencyFormat" 
+                :class="[
+                  {'active-discount': !isDiscountPercentage},
+                  {'inactive-discount': isDiscountPercentage},
+                ]" 
+                @keyup.native="setRange(discount_by_amount, 'discount_by_amount')"
+                @click.native="isDiscountPercentage=false;switchDiscountMethod()"
+              />
+            </template>
+            <template v-else>
+              <span v-if="discount_by_amount==0">
+                ${{totalOffer() * discount / 100 | withComma }}
+              </span>
+              <span v-else>
+                ${{discount_by_amount}}
+              </span>
+            </template>
           </div>
           <div class="edit-cont">
             <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditDiscount=true" v-if="!isEditDiscount"/>
@@ -258,14 +267,21 @@
             <div class="ptitle" v-if="isEditTax">
               % Percentage
               <br/>
-              <input class="percent-value" v-model="tax" type="number" min="0" max="100" @keyup="setRange(tax, 'tax')"/>
+              <money 
+                v-model="tax" 
+                v-bind="percentageFormat" 
+                class="active-discount" 
+                @keyup.native="setRange(tax, 'tax')"
+              />
             </div>
           </div>
           <div class="percent-cont">
-            <span>{{tax}}%</span>
+            <!-- <span>{{tax}}%</span> -->
           </div>
           <div class="price-cont">
-            <span>${{totalOffer() * tax / 100 | withComma}}</span>
+            <span>
+              ${{totalOffer() * tax / 100 | withComma}}
+            </span>
           </div>
           <div class="edit-cont">
             <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditTax=true" v-if="!isEditTax"/>
@@ -370,13 +386,15 @@
   import InputProposalSubItem from '@/components/Inputs/InputProposalSubItem.vue'
   import SelectProposalSubItem from './SelectProposalSubItem.vue'
   import EditableProposalSubItem from './EditableProposalSubItem.vue'
+  import { Money } from 'v-money'
 
   export default {
     name: 'proposal-item',
     components: {
       InputProposalSubItem,
       SelectProposalSubItem,
-      EditableProposalSubItem
+      EditableProposalSubItem,
+      Money
     },
     props: {
       category: String,
@@ -399,6 +417,8 @@
         isEditTax: false,
         clickedItem: false,
         discount: 0,
+        discount_by_amount: 0,
+        isDiscountPercentage: true,
         tax: 0,
         serviceItem: null,
         qty: null,
@@ -412,6 +432,30 @@
         docTag: null,
         serviceSlidePos: 0,
         servicesWidth: 0,
+        currencyFormat: {
+          decimal: '.',
+          thousands: ',',
+          prefix: '$',
+          suffix: '',
+          precision: 0,
+          masked: false
+        },
+        qtyFormat: {
+          decimal: '.',
+          thousands: ',',
+          prefix: '',
+          suffix: '',
+          precision: 0,
+          masked: false
+        },
+        percentageFormat: {
+          decimal: '.',
+          thousands: ',',
+          prefix: '',
+          suffix: '  %',
+          precision: 0,
+          masked: false
+        }
       }
     },
     methods: {
@@ -422,14 +466,21 @@
       setRange(value, type) {
         let val = value
 
-        if (value > 100) {
-          val = 100
-        } 
-        if (value < 0) {
-          val = 0
+        if (type != 'discount_by_amount') {
+          if (value > 100) {
+            val = 100
+          } 
+          if (value < 0) {
+            val = 0
+          }
         }
+
         if (type=='tax') {
           this.tax = val
+          this.discount_by_amount = 0
+        } else if (type=='discount_by_amount') {
+          this.discount_by_amount = val
+          this.tax = 0
         } else {
           this.discount = val
         }
@@ -439,8 +490,9 @@
         this.unit = null
         this.subTotal = null
         this.serviceItem = null
+        this.discount_by_amount = null
       },
-      saveItem(title, qty, price) {
+      saveItem(serviceItem, qty, price) {
         this.newProposalRequest.requirements.push({
           comments: [],
           dateCreated: '',
@@ -453,13 +505,16 @@
           requirementId: '',
           requirementMandatory: false,
           requirementPriority: null,
-          requirementTitle: title,
+          requirementTitle: serviceItem,
           requirementValue: `${qty}`,
         })
+        this.$forceUpdate()
         this.$root.$emit('update-proposal-budget-summary', this.newProposalRequest, {})
+        this.cancel()
       },
       calculateSubTotal() {
         this.subTotal = this.qty * this.unit
+        this.discount_by_amount = this.unit
       },
       saveDiscount() {
         this.isEditDiscount=false
@@ -526,15 +581,6 @@
               timer: 3000
             })
           }
-
-          // return new ProposalRequestFile({
-          //   vendorProposalFile: e.target.result,
-          // }).for(proposalRequest).save().then(result => {
-          //   this.isLoading = false
-          // }).catch(error => {
-          //   this.isLoading = false
-          //   console.log(error)
-          // })
         }
         reader.readAsDataURL(file)
       },
@@ -553,9 +599,13 @@
         // let total = parseFloat(this.proposalRequest.requirementsCategoryCost)
         let total = 0
         let vm = this
-        const requirements = this.newProposalRequest.requirements.filter( 
-          r => this.services.includes(r.requirementTitle)
-        )
+        let requirements = []
+        
+        if (this.newProposalRequest.requirements) {
+          requirements = this.newProposalRequest.requirements.filter( 
+            r => this.services.includes(r.requirementTitle)
+          )
+        }
         
         requirements.map(function (item) {
           if (item.price) {
@@ -575,37 +625,32 @@
         let total = this.totalOffer()
 
         total = total - ( total * this.discount / 100)
+        if (total > 0) {
+          total = total - this.discount_by_amount
+        }
         total += total * this.tax / 100
 
         return total
       },
       prev() {
-        this.servicesWidth = this.$refs.servicesCont.clientWidth
-        if (this.servicesWidth - this.serviceSlidePos > 0) {
-          this.serviceSlidePos += 200
+        if (this.$refs.servicesCont) {
+          this.servicesWidth = this.$refs.servicesCont.clientWidth
+          if (this.servicesWidth - this.serviceSlidePos > 0) {
+            this.serviceSlidePos += 200
+          }
         }
       },
       next () {
-        this.servicesWidth = this.$refs.servicesCont.clientWidth
-        if (this.servicesWidth + this.serviceSlidePos - 200 > 0) {
-          this.serviceSlidePos -= 200
+        if (this.$refs.servicesCont) {
+          this.servicesWidth = this.$refs.servicesCont.clientWidth
+          if (this.servicesWidth + this.serviceSlidePos - 200 > 0) {
+            this.serviceSlidePos -= 200
+          }
         }
       },
-      onBlurNumber(e) {
-        this.isNumberVisible = false
-        this.temp = this.subTotal
-        this.subTotal = this.thousandSeprator(this.subTotal)
-      },
-      onFocusText() {
-        this.isNumberVisible = true
-        this.subTotal = this.temp
-      },
-      thousandSeprator(amount) {
-        if (amount !== '' || amount !== undefined || amount !== 0 || amount !== '0' || amount !== null) {
-          return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-        } else {
-          return amount
-        }
+      switchDiscountMethod () {
+        this.discount = 0
+        this.discount_by_amount = 0
       },
     },
     created() {
@@ -614,10 +659,11 @@
       this.isVCollapsed = this.isCollapsed
       this.newProposalRequest = this.proposalRequest
 
-      this.$root.$on('remove-proposal-requirement', (reqId) => {
-        console.log(reqId)
-        this.newProposalRequest.requirements = this.newProposalRequest.requirements.filter(req => req.id != reqId)
+      this.$root.$on('remove-proposal-requirement', (item) => {
+        this.newProposalRequest.requirements = this.newProposalRequest.requirements.filter(req => req.requirementTitle != item.requirementTitle)
         this.$root.$emit('update-proposal-budget-summary',  this.newProposalRequest, {})
+        this.$forceUpdate()
+        this.cancel()
       })
 
       this.$root.$on('add-service-item', (item) => {
@@ -630,7 +676,9 @@
         this.serviceSlidePos = 0
       })
 
-      this.servicesWidth = this.$refs.servicesCont.clientWidth
+      if (this.$refs.servicesCont) {
+        this.servicesWidth = this.$refs.servicesCont.clientWidth
+      }
     },
     filters: {
       withComma (amount) {
@@ -638,7 +686,13 @@
       }
     },
     computed: {
-      
+      isDisabledAdd() {
+        return  !this.qty || 
+                !this.unit || 
+                !this.subTotal || 
+                this.subTotal == 0 || 
+                !this.serviceItem
+      }
     },
     watch: {
     }
@@ -795,19 +849,6 @@
             font: normal 16px 'Manrope-Regular', sans-serif;
             color: #050505;
           }
-          .prefix-dollar {
-            position: relative;
-            &:before {
-              position: absolute;
-              content: '$';
-              left: 1rem;
-              top: 14px;
-              font: normal 16px 'Manrope-Regular', sans-serif;
-            }
-            input {
-              padding-left: 2rem;
-            }
-          }
           &:last-child {
             margin-right: 0;
           }
@@ -899,7 +940,7 @@
         border-top: 1px solid #707070;
         padding: 40px 40px 30px 40px;
         display: grid;
-        grid-template-columns: 40% 15% 15% 30%;
+        grid-template-columns: 30% 10% 17.5% 47.5%;
         
         span {
           display: inline-block;
@@ -917,32 +958,42 @@
           border: 2px solid #d5d5d5;
           border-bottom: none;
           display: grid;
-          grid-template-columns: 55% 15% 15% 15%;
+          grid-template-columns: 40% 17.5% 12.5% 30%;
           align-items: center;
 
           .item-cont {
-            width: calc(50% + 26px);
-            display: flex;
+            display: grid;
+            grid-template-columns: 40% 60%;
             align-items: center;
 
             .plabel {
             }
             .ptitle {
+              padding-left: 1rem;
               font: normal 14px 'Manrope-Regular', sans-serif;
-              text-align: center;
-
-              .percent-value {
-                min-width: 10rem;
-                border: 1px solid #dddddd;
-                margin-top: 1rem;
-                text-align: center;
-                margin-left: 2em;
-              }
+              text-align: left;
             }
           }
           .percent-cont {
+            font: normal 14px 'Manrope-Regular', sans-serif;
+            color: #050505;
+            &.text-right {
+              padding-right: 1rem;
+              span {
+                font-weight: 400!important;
+              }
+            }
           }
           .price-cont {
+            font: normal 14px 'Manrope-Regular', sans-serif;
+            text-align: left;
+            span {
+              &.pl-2 {
+                font: normal 14px 'Manrope-Regular', sans-serif;
+                color: #050505;
+                padding-left: 20px;
+              }
+            }
           }
           .edit-cont {
             text-align: right;
@@ -976,7 +1027,7 @@
         border: 2px solid #d5d5d5;
         border-bottom: none;
         display: grid;
-        grid-template-columns: 70% 30%;
+        grid-template-columns: 57.5% 42.5%;
 
         span {
           font-size: 20px;
@@ -984,6 +1035,23 @@
           display: inline-block;
         }
       }
+    }
+
+    .active-discount {
+      width: 100px;
+      margin-top: 5px;
+      border: 1px solid #050505;
+      text-align: center;
+      font: normal 16px 'Manrope-Regular', sans-serif;
+    }
+    .inactive-discount {
+      opacity: .6;
+      width: 100px;
+      text-align: center;
+      margin-top: 5px;
+      background: #d5d5d5;
+      border: 1px solid #707070;
+      font: normal 16px 'Manrope-Regular', sans-serif;
     }
 
     .upload-files-wrapper {
@@ -1170,6 +1238,12 @@
         color: white;
         background: #f51355;
         border-radius: 3px;
+
+        &.isDisabled {
+          pointer-events: none;
+          cursor: not-allowed;
+          background: #d5d5d5;
+        }
       }
       &:hover {
         color: #dddddd!important;

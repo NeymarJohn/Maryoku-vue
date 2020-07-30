@@ -62,7 +62,8 @@
           Maryoku's Terms & Conditions
         </a>
       </div>
-      <div class="condition-tooltip" v-if="conditionTooltip">
+      <!-- <div class="condition-tooltip" v-if="conditionTooltip"> -->
+      <div class="condition-tooltip" v-if="true">
         <img :src="`${iconsUrl}Group 1175 (10).svg`"> Let us know that you are on board with our teams & conditions
       </div>
     </div>
@@ -719,7 +720,7 @@ export default {
           box-sizing: border-box;
           
           border: 12px solid black;
-          border-color: transparent transparent #ffedb7 #ffedb7;
+          border-color: transparent transparent #ffe5ec #ffe5ec;
           
           transform-origin: 0 0;
           transform: rotate(135deg);
