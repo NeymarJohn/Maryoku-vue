@@ -32,7 +32,8 @@
         >
           <div class="d-flex justify-content-between align-center" v-if="item.expand">
             <label>24 have tried this!</label>
-            <md-button class="md-red md-bold" @click="selectConcept(index)">Select</md-button>
+            <md-button v-if="item.name != selectedConcept.name" class="md-red md-bold" @click="selectConcept(index)">Select</md-button>
+            <span v-else class="font-size-16">You already selected this concept</span>
           </div>
           <div :class="`images-list option-${index+1}`">
             <div class="image-backgrounds">
@@ -121,8 +122,8 @@
           <md-button class="md-simple md-black normal-btn" v-if="!showConceptList" @click="showConceptList=true">
             <md-icon>arrow_back</md-icon>Back
           </md-button>
-          <md-button class="md-red md-simple md-icon-button" @click="scrollToTop">
-            <md-icon>expand_less</md-icon>
+          <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
+            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17"/>
           </md-button>
         </div>
         <md-button
@@ -243,7 +244,7 @@
         </div>
       </div>
       <div class="selected-concept-footer d-flex justify-content-between">
-        <md-button class="md-black md-simple md-maryoku" @click="showConceptList=true">
+        <md-button class="md-black md-simple md-maryoku " @click="showConceptList=true">
           <md-icon>keyboard_arrow_left</md-icon>Back
         </md-button>
 
@@ -598,6 +599,7 @@ export default {
           item.url = item.url;
         });
         this.showConceptList = false;
+        this.conceptOptions.push(this.selectedConcept)
       } else {
         EventConcept.get().then((concepts) => {
           this.conceptOptions = concepts.slice(0, 3);
