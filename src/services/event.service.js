@@ -13,9 +13,13 @@ const LOGOUT_URL = `${API_URL}/api/logout`
 const FORGOT_PASSWORD_URL = `${API_URL}/1/forgot-password`
 const CURRENT_USER_URL = `${API_URL}/1/me`
 const CURRENT_TENANT_USER = `${API_URL}/1/userInfo`
+
 import Vue from 'vue'
 import authHeader from './auth-header';
 import { Model } from 'vue-api-query'
+import Tenant from "@/models/Tenant";
+import CalendarEvent from '@/models/CalendarEvent'
+import Calendar from '@/models/Calendar'
 
 class EventService {
   getFirstTaskLink(event) {
@@ -35,6 +39,38 @@ class EventService {
       }
       return `/events/${event.id}/booking/timeline`
     }
+  }
+  saveEventFromStorage(calendarId) {
+    const editingEvent = JSON.parse(localStorage.getItem("event"))
+    const calendar = new Calendar({id: calendarId})
+    return new Promise((resolve, reject) => {
+      let newEvent = new CalendarEvent({
+        calendar: calendar,
+        title: editingEvent.title,
+        occasion: editingEvent.occasion?editingEvent.occasion.name:"",
+        eventStartMillis: editingEvent.eventStartMillis,
+        eventEndMillis: editingEvent.eventEndMillis,
+        numberOfParticipants: editingEvent.numberOfParticipants,
+        budgetPerPerson: 0,
+        totalBudget: 0,
+        status: "draft",
+        currency: "USD",
+        eventType: editingEvent.eventType,
+        category: editingEvent.occasion?editingEvent.occasion.name:"",
+        editable: true,
+        location: editingEvent.location
+      })
+        .for(calendar)
+        .save()
+        .then(response => {
+          localStorage.removeItem("event")
+          resolve(response)
+        })
+        .catch(error => {
+          reject(error)
+        });
+    })
+
   }
 }
 

@@ -79,22 +79,39 @@ export default {
       })
     },
     toSingUp() {
-      this.$router.push({ path: '/signup' })
+      let action = this.$route.query.action
+      if (action) {
+        this.$router.push({ path: `/signup?action=${action}` })
+      } else {
+        this.$router.push({ path: `/signup` })
+      }
     },
     toForgotPassword() {
       this.$router.push({ path: '/forgot-password' })
     },
     redirectPage() {
+      let action = this.$route.query.action
       if (this.currentUser) {
-        if (this.currentUser.currentTenant) {
-          this.$router.push({ path: '/events'})
-        } else if (this.currentUser.tenants.length === 0) {
-          this.$router.push({ path: '/create-workspace'})
-        } else if (this.currentUser.tenants.length > 0) {
-          this.$router.push({ path: '/choose-workspace'})
-        } else {
-          this.$router.push({ paht: '/error'})
+        if (action === this.$queryEventActions.create) {
+            if (this.currentUser.currentTenant) {
+              this.$router.push({ path: '/event-wizard-create'})
+            } else {
+              const callback = btoa('/events')
+              this.$router.push({ path: `/create-workspace?action=${action}&callback=${callback}`})
+            }
+        } else  {
+          if (this.currentUser.currentTenant) {
+            this.$router.push({ path: '/events'})
+          } else if (this.currentUser.tenants.length === 0) {
+            const callback = btoa('/create-event-wizard')
+            this.$router.push({ path: `/create-workspace?callback=${callback}`})
+          } else if (this.currentUser.tenants.length > 0) {
+            this.$router.push({ path: '/choose-workspace'})
+          } else {
+            this.$router.push({ paht: '/error'})
+          }
         }
+        
       }
     }
   },

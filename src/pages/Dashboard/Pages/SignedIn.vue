@@ -71,18 +71,26 @@ export default {
             }
           }
           const firstEvent = this.$route.query.firstEvent
-          if (firstEvent) {
-            // this.$router.push({ path: `/events/${firstEvent}/booking/budget` })
-            this.$router.push({ path: '/events' })
-          } else if( tenantUser.profile.id ) {
-            this.$router.push({ path: '/events' })
+          let redirectURL = this.$route.query.redirectURL
+          if (redirectURL) {
+            redirectURL = atob(redirectURL)
+            this.$router.push({ path: `${redirectURL}` })
           } else {
-            this.messageIndex = 0;
-            // setTimeout(() => {
-            //   this.$router.push({ path: '/choose-workspace' })
-              
-            // }, 5000);
+            this.$router.push({ path: '/events'})
           }
+          // if (firstEvent) {
+          //   // this.$router.push({ path: `/events/${firstEvent}/booking/budget` })
+          //   this.$router.push({ path: '/events' })
+          // } else if( redirectURL ) {
+          //   redirectURL = atob(redirectURL)
+          //   this.$router.push({ path: `${redirectURL}` })
+          // } else {
+          //   this.messageIndex = 0;
+          //   // setTimeout(() => {
+          //   //   this.$router.push({ path: '/choose-workspace' })
+              
+          //   // }, 5000);
+          // }
         }
         
       },
