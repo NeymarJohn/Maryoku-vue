@@ -4,6 +4,7 @@ import CreateEvent from '@/pages/Dashboard/Layout/CreateEvent.vue'
 import HomeLayout from '@/pages/Dashboard/Layout/HomeLayout.vue'
 import NewEventLayout from '@/pages/Dashboard/Layout/NewEventLayout.vue'
 import WorkspaceLayout from '@/pages/Dashboard/Layout/WorkspaceLayout.vue'
+import RSVPLayout from '@/pages/Dashboard/Layout/RSVPLayout.vue'
 
 const Events = () => import('@/pages/app/Events/Events.vue')
 const EventProposal = () => import('@/pages/app/Events/EventProposal.vue')
@@ -92,6 +93,10 @@ import EventWizardType from '@/pages/app/CreateEvent/EventWizardType.vue'
 import EventWizardCelebrating from '@/pages/app/CreateEvent/EventWizardCelebrating.vue'
 import EventWizardVibes from '@/pages/app/CreateEvent/EventWizardVibes.vue'
 import EventWizardReligion from '@/pages/app/CreateEvent/EventWizardReligion.vue'
+
+// RSVP
+
+import RSVPEvent from '@/pages/app/RSVP/RSVPEvent.vue'
 
 // User authentication pages
 const SignInSignUp = () =>
@@ -1029,6 +1034,23 @@ let HomePages = {
   ]
 }
 
+let RSVPPages = {
+  path: '/app2',
+  component: RSVPLayout,
+  name: 'RSVPLayout',
+  children: [
+    {
+      path: '/rsvp',
+      name: 'RSVP',
+      component: RSVPEvent,
+      meta: {
+        title: 'Our Events',
+        gtm: 'Events'
+      }
+    },
+  ]
+}
+
 // const appCurrentInfo = {
 //   path: '/additional-form',
 //   name: 'CommonInfoProfile',
@@ -1088,7 +1110,8 @@ const routes = [
   HomePages,
   forProposals,
   vendorSignup,
-  NewEventPages
+  NewEventPages,
+  RSVPPages
 
   // appCurrentInfo,
   // SigninSignupPage,

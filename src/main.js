@@ -40,6 +40,9 @@ import { IconURL, StorageURL, ResourceURL } from './globalVariables';
 
 import authHeader from '@/services/auth-header';
 import authService from '@/services/auth.service';
+
+import './assets/scss/main.scss'
+
 require('vue-tour/dist/vue-tour.css')
 
 const VueScrollTo = require('vue-scrollto')
