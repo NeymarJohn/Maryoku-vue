@@ -153,9 +153,9 @@ export default {
           calendar: new Calendar({id:this.event.calendar.id}),
           budgetProgress: 50,
           totalBudget: this.editingEvent.totalBudget?this.editingEvent.totalBudget:0,
-          noBudget: this.editingEvent.noBudget,
           reCalculate: true,
-          eventDecisionFactor3: this.editingEvent.eventDecisionFactor3
+          eventDecisionFactor3: this.editingEvent.eventDecisionFactor3,
+          eventMovieId: this.editingEvent.eventMovieId
         })
         this.loadingBudget = true
         this.$store.dispatch('event/saveEventAction', event).then(res=>{
@@ -180,12 +180,12 @@ export default {
       console.log(eventInfo)
       this.editingEvent.totalBudget = eventInfo.noBudget? 0 : eventInfo.budget;
       this.editingEvent.eventDecisionFactor3 = eventInfo.selectedLevel
-      this.editingEvent.noBudget = eventInfo.noBudget
       this.budgetInfo1 = eventInfo
     },
     setEventStep2(eventInfo) {
       console.log(eventInfo)
       this.budgetInfo2 = eventInfo
+      this.editingEvent.eventMovieId = eventInfo.label;
     }
   },
   computed: {
@@ -205,10 +205,7 @@ export default {
   }
   .wizard-footer {
     padding: 10px 40px;
-    .scroll-top-button {
-      border-radius: 50%;
-      box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.18);
-    }
+
     .status {
       text-align: center;
       transform: translateY(-35%);

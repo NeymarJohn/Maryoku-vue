@@ -1,20 +1,15 @@
 <template>
   <div class="notes-filter" ref="noteFilterComponent">
-    <md-button class="md-icon-button md-simple" @click="showPanel">
-      <img :src="`${$iconURL}Notes/filter-gray.svg`" width="30">
-    </md-button>
+    <img :src="`${$iconURL}Notes/filter-gray.svg`" @click="showPanel">
     <div ref="notesFilterElements"  v-if="isOpenPanel"> 
       <div class="notes-filter-panel" ref="noteFilterPanel">
         <div class="notes-filter-close"> <md-button class="md-simple edit-btn md-black font-size-30" @click="isOpenPanel=false"><md-icon>close</md-icon></md-button></div>
-        <div><md-checkbox v-model="selectedAll" @change="selectAll">Select All</md-checkbox></div>
-        <div><md-checkbox v-model="selectedFilters" @change="select" value="done">Done</md-checkbox></div>
-        <div><md-checkbox v-model="selectedFilters" @change="select" value="todo">Need to do</md-checkbox></div>
-        <div><md-checkbox v-model="selectedFilters" @change="select" value="me">Need for me</md-checkbox></div>
-        <div v-for="(user, index) in filterUsers" :key="index">
-          <md-checkbox v-model="selectedFilters" @change="select" :value="user">Need for {{user}}</md-checkbox>
-        </div>
-        <!-- <div><md-checkbox v-model="selectedFilters" value="4">Need for xxx</md-checkbox></div>
-        <div><md-checkbox v-model="selectedFilters" value="5">Need for yyy</md-checkbox></div> -->
+        <div><md-checkbox v-model="selectedFilters" value="0">Select All</md-checkbox></div>
+        <div><md-checkbox v-model="selectedFilters" value="1">Done</md-checkbox></div>
+        <div><md-checkbox v-model="selectedFilters" value="2">Select All</md-checkbox></div>
+        <div><md-checkbox v-model="selectedFilters" value="3">Select All</md-checkbox></div>
+        <div><md-checkbox v-model="selectedFilters" value="4">Select All</md-checkbox></div>
+        <div><md-checkbox v-model="selectedFilters" value="5">Select All</md-checkbox></div>
       </div>
       <div class="filter-panel-mask" @click="isOpenPanel=false" ref="filterPanelMask"></div> 
     </div>
@@ -25,16 +20,8 @@ export default {
   data() {
     return {
       isOpenPanel: false,
-      filters:["done","todo","me"],
-      selectedFilters: ["done","todo","me"],
-      selectedAll:true
+      selectedFilters: []
     }
-  },
-  props: {
-    filterUsers: {
-      type: Array,
-      default: [] 
-    },
   },
   methods: {
     cumulativeOffset(element) {
@@ -52,53 +39,20 @@ export default {
         };
     },
     showPanel() {
-      this.isOpenPanel = !this.isOpenPanel
-      if ( this.isOpenPanel ) {
-        setTimeout(() => {
-          const pos = this.cumulativeOffset(this.$refs.noteFilterComponent)
-          this.$refs.noteFilterPanel.style.left = `${pos.left + 30}px`;
-          this.$refs.noteFilterPanel.style.top = `${pos.top}px`;
-          this.$refs.noteFilterPanel.style.display = "block";
-          document.getElementsByTagName("body")[0].appendChild(this.$refs.notesFilterElements)
-          window.addEventListener('scroll', this.handleScroll);
-        }, 100);
-      }
-     
-    },
-    handleScroll(event) {
-      this.$refs.noteFilterPanel.style.top = `${window.scrollY + this.cumulativeOffset(this.$refs.noteFilterComponent).top}px`;
-    },
-    selectAll() {
-      console.log(this.selectedAll)
-      this.selectedFilters = []
-      if (this.selectedAll) {
-        this.selectedFilters = this.filters
-        this.$emit("filter", "all")
-      }
-    },
-    select: function() {
-      this.$emit("filter", this.selectedFilters)
-      this.selectedAll = false;
+      this.isOpenPanel = true
+      setTimeout(() => {
+        const pos = this.cumulativeOffset(this.$refs.noteFilterComponent)
+        this.$refs.noteFilterPanel.style.left = `${pos.left + 30}px`;
+        this.$refs.noteFilterPanel.style.top = `${pos.top}px`;
+        this.$refs.noteFilterPanel.style.display = "block";
+        document.getElementsByTagName("body")[0].appendChild(this.$refs.notesFilterElements)
+        window.addEventListener('scroll', this.handleScroll);
+      }, 100);
     }
   },
-  // watch: {
-  //   selectedFilters(newValue, oldValue) {
-  //     console.log(newValue)
-  //     if (newValue.length === this.filters.length) {
-  //       console.log("filters", this.filters)
-  //       this.selectedAll = true;
-  //     } else {
-  //       this.selectedAll = false;
-  //     }
-  //   },
-  //   selectedAll(newValue) {
-  //     if(newValue) {
-  //       console.log("new",)
-  //       this.selectedFilters = this.filters
-  //     }
-  //   }
-  // },
-
+  handleScroll(event) {
+    this.$refs.noteFilterPanel.style.top = `${window.scrollY + this.cumulativeOffset(this.$refs.noteFilterComponent).top}px`;
+  }
 }
 </script>
 <style lang="scss" scoped>

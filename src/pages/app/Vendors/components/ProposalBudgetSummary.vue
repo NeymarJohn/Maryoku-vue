@@ -1,22 +1,13 @@
 <template>
-  <div class="proposal-budget-summary-wrapper" :style="{'top': `${panelTopPos}px`}">
+  <div class="proposal-budget-summary-wrapper">
     <div class="summary-cont">
       <h3>
         You're the {{newProposalRequest.bidderRank | numeral('Oo')}} catering & venue bidder
       </h3>
       <p>
-        Proposals range: 
-        <strong>
-          ${{newProposalRequest.bidRange.low | withComma}} 
-          - 
-          ${{newProposalRequest.bidRange.high | withComma}}
-        </strong>
+        Proposals range: <strong>${{newProposalRequest.bidRange.low | withComma}} - ${{newProposalRequest.bidRange.high | withComma}}</strong>
       </p>
-      <div 
-        class="bundle-discount" 
-        @click="isBundleDiscount=!isBundleDiscount"
-        v-if="additionalServices.length > 0"
-      >
+      <div class="bundle-discount" @click="isBundleDiscount=!isBundleDiscount">
         <img :src="`${iconUrl}Asset 579.svg`"/>
         <span>
           Add Bundle Discount 
@@ -38,48 +29,71 @@
           </li>
           <li>
             <span>Your proposal</span>
-            <span>${{calculatedTotal(getRequirementsByCategory('venuerental')) | withComma}}</span>
+            <span>${{calculatedTotal(getRequirementsByCategory('Venue')) | withComma}}</span>
           </li>
-          <li :style="`margin: ${discountBlock.category == 'venuerental' ? '' : '0' }`">
-            <template v-if="discountBlock.category == 'venuerental'">
+          <li :style="`margin: ${discountBlock.category == 'Venue' ? '' : '0' }`">
+            <template v-if="discountBlock.category == 'Venue'">
               <div class="left">
                 <span>Before discount</span>
               </div>
               <div class="right">
                 <span>{{`(${discountBlock.value}% off)`}}</span>
-                <span>${{total(getRequirementsByCategory('venuerental')) | withComma}}</span>
+                <span>${{total(getRequirementsByCategory('Venue')) | withComma}}</span>
               </div>
             </template>
           </li>
-          <li v-if="calculatedTotal(getRequirementsByCategory('venuerental')) - newProposalRequest.eventData.allocatedBudget > 0">
+          <li v-if="calculatedTotal(getRequirementsByCategory('Venue')) - newProposalRequest.eventData.allocatedBudget > 0">
             <md-icon>error</md-icon>
             <span>
-              Your proposal is ${{calculatedTotal(getRequirementsByCategory('venuerental')) - newProposalRequest.eventData.allocatedBudget | withComma}} more than the budget
+              Your proposal is ${{calculatedTotal(getRequirementsByCategory('Venue')) - newProposalRequest.eventData.allocatedBudget | withComma}} more than the budget
             </span>
           </li>
         </ul>
       </div>
-      <div class="item additional" v-if="step>1 && additionalServices.length > 0">
+      <!-- <div class="item">
+        <ul>
+          <li>
+            <md-icon>home</md-icon>
+            Catering
+          </li>
+          <li>
+            <span>Relish caterers & venues</span>
+          </li>
+          <li>
+            <span>Your proposal</span>
+            <span>$800</span>
+          </li>
+          <li>
+            <span>Budget for venue</span>
+            <span>$1100</span>
+          </li>
+          <li v-if="warning">
+            <md-icon>error</md-icon>
+            <span>Your proposal is $400 more than the budget</span>
+          </li>
+        </ul>
+      </div> -->
+      <div class="item additional" v-if="step==2 && additionalServices.length > 0">
         <h3>Additional Services</h3>
         <ul v-for="(a, aIndex) in additionalServices" :key="aIndex">
           <li>
-            <img :src="getIconUrlByCategory(a.value)"/>
-            {{a.name}}
+            <img :src="`${a.image}`"/>
+            {{a.title}}
           </li>
           <li>
             <span>{{a.subTitle}}</span>
           </li>
           <li>
             <span>Your proposal</span>
-            <span>${{calculatedTotal(getRequirementsByCategory(a.value)) | withComma}}</span>
+            <span>${{calculatedTotal(getRequirementsByCategory(a.title)) | withComma}}</span>
           </li>
           <li>
-            <span>Budget for {{a.name}}</span>
-            <span>${{calculatedTotal(getRequirementsByCategory(a.value)) | withComma}}</span>
+            <span>Budget for {{a.title}}</span>
+            <span>${{calculatedTotal(getRequirementsByCategory(a.title)) | withComma}}</span>
           </li>
-          <li v-if="calculatedTotal(getRequirementsByCategory(a.value)) - newProposalRequest.eventData.allocatedBudget > 0">
+          <li v-if="calculatedTotal(getRequirementsByCategory(a.title)) - newProposalRequest.eventData.allocatedBudget > 0">
             <md-icon>error</md-icon>
-            <span>Your proposal is ${{calculatedTotal(getRequirementsByCategory(a.value)) - newProposalRequest.eventData.allocatedBudget | withComma}} more than the budget</span>
+            <span>Your proposal is ${{calculatedTotal(getRequirementsByCategory(a.title)) - newProposalRequest.eventData.allocatedBudget | withComma}} more than the budget</span>
           </li>
         </ul>
       </div>
@@ -89,14 +103,16 @@
             :title="`Add bundle new total`"
             :placeholder="``"
             :style="`width: 100%`"
-          />
+          >
+          </input-proposal-sub-item>
         </div>
         <div class="element">
           <input-proposal-sub-item
             :title="`Or by percentage`"
             :placeholder="``"
             :style="`width: 100%`"
-          />
+          >
+          </input-proposal-sub-item>
         </div>
         <div class="element dis-value">
           $100.00 Discount
@@ -137,7 +153,6 @@
   </div>
 </template>
 <script>
-  import VendorService from '@/services/vendor.service'
   import InputProposalSubItem from '@/components/Inputs/InputProposalSubItem.vue'
 
   export default {
@@ -162,55 +177,22 @@
         iconUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
         newProposalRequest: {},
         discountBlock: {},
-        additionalServices: [],
-        iconsWithCategory: null,
-        panelTopPos: 0,
+        additionalServices: []
       }
     },
     methods: {
-      flatDeep(arr, d = 1) {
-        return d > 0 ? arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? this.flatDeep(val, d - 1) : val), [])
-                      : arr.slice();
-      },
-      servicesByCategory(category) {
-        const services = this.services.filter( s => s.name == category)
-
-        if (services.length > 0) {
-          return this.flatDeep(
-            services[0].categories.map(
-              s => s.subCategories.map(
-                sc => sc.items.map(dd => dd.name
-              )
-            )), Infinity
-          )
-        } else {
-          return []
-        }
-      },
-      getIconUrlByCategory(category) {
-        return `http://static.maryoku.com/storage/icons/Budget Elements/${this.iconsWithCategory.filter( c => c.value == category)[0].icon}`
-      },
       getRequirementsByCategory(category) {
-        const services = this.servicesByCategory(category) || []
+        const services = this.services.filter( s => s.category == category)[0].items || []
         return this.newProposalRequest.requirements.filter( r => services.includes(r.requirementTitle) )
       },
       getRequirementsBySelectedCategory() {
-        let selectedCategories = []
+        let selectedCategories = this.additionalServices.map( as => as.title ) + ['Venue']
         let selectedServices = []
-        
-        selectedCategories = this.additionalServices.map( as => as.value )
-        selectedCategories.push('venuerental')
-
-        this.services.filter( s => selectedCategories.includes(s.name) ).map( function (cs) {
-          cs.categories.map( function (scs) {
-            scs.subCategories.map( function (sscs) {
-              sscs.items.map( function (ssscs) {
-                selectedServices.push(ssscs.name)
-              })
-            })
+        this.services.filter( s => selectedCategories.includes(s.category)).map( function (cs) {
+          cs.items.map( function (c) {
+            selectedServices.push(c)
           })
         })
-
         return this.newProposalRequest.requirements.filter( r => selectedServices.includes(r.requirementTitle) )
       },
       total(requirements, category = null) {
@@ -220,10 +202,10 @@
         requirements.map(function (item) {
           if (item.price) {
             if (item.priceUnit === 'total') {
-              total += parseFloat(String(item.price).replace(/,/g, ''))
+              total += parseFloat(item.price)
             } else {
               if (vm.newProposalRequest !=  undefined) {
-                total += parseFloat(String(item.price).replace(/,/g, ''))
+                total += parseFloat(item.price)
               } 
             }
           }
@@ -236,41 +218,45 @@
           total = total - ( total * this.discountBlock.value / 100)
         }
         return total
-      },
-      handleScroll(event)  {
-        if (window.scrollY - 327 >= 0) {
-          this.panelTopPos = window.scrollY - 327
-        } else {
-          this.panelTopPos = 0
-        }
-      },
+      }
     },
     created() {
-      window.addEventListener('scroll', this.handleScroll)
-    },
-    destoryed() {
-      window.removeEventListener('scroll', this.handleScroll)
+
     },
     mounted() {
       this.newProposalRequest = this.proposalRequest
-      this.iconsWithCategory = VendorService.categoryNameWithIcons()
 
       this.$root.$on('update-proposal-budget-summary', (newProposalRequest, discountBlock) => {
+        console.log(newProposalRequest)
         this.newProposalRequest = newProposalRequest
         this.discountBlock = discountBlock
       })
 
       this.$root.$on('update-additional-services', (category) => {
-        const additionalServicesBlock = VendorService.categoryNameWithIcons()
-        const selectedBlock = additionalServicesBlock.filter(a => a.name == category)[0]
-
-        if (this.additionalServices.filter( a => a.name == category).length > 0) {
-          this.additionalServices = this.additionalServices.filter( a => a.name != category )
+        const additionalServicesBlock = [
+          {
+            image: `http://static.maryoku.com/storage/icons/NewSubmitPorposal/Asset 607.svg`,
+            title: 'Photographer', 
+            subTitle: 'Awesome Photographer', 
+          },
+          {
+            image: `http://static.maryoku.com/storage/icons/NewSubmitPorposal/Asset 606.svg`,
+            title: 'Bar', 
+            subTitle: 'Awesome Bar', 
+          },
+          {
+            image: `http://static.maryoku.com/storage/icons/NewSubmitPorposal/Asset 605.svg`,
+            title: 'Dj', 
+            subTitle: 'Awesome DJ', 
+          }
+        ]
+        const selectedBlock = additionalServicesBlock.filter(a => a.title == category)[0]
+        if (this.additionalServices.filter( a => a.title == category).length > 0) {
+          this.additionalServices = this.additionalServices.filter( a => a.title != category )
         } else {
           this.additionalServices.push(selectedBlock)
         }
       })
-      this.$forceUpdate()
     },
     computed: {
     },
@@ -287,8 +273,6 @@
     padding: 43px 25px 0;
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     background: #ffffff;
-    position: absolute;
-    width: calc(100% - 2rem);
 
     .summary-cont {
       h3 {
@@ -360,7 +344,6 @@
               font: 800 16px 'Manrope-Regular', sans-serif;
               img {
                 width: 28px;
-                height: 28px;
                 margin-right: 1em;
               }
             }

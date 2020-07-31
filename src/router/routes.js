@@ -92,7 +92,7 @@ import EventWizardType from '@/pages/app/CreateEvent/EventWizardType.vue'
 import EventWizardCelebrating from '@/pages/app/CreateEvent/EventWizardCelebrating.vue'
 import EventWizardVibes from '@/pages/app/CreateEvent/EventWizardVibes.vue'
 import EventWizardReligion from '@/pages/app/CreateEvent/EventWizardReligion.vue'
-import EventCreatePage from '@/pages/app/CreateEvent/EventWizardCreate.vue'
+
 // User authentication pages
 const SignInSignUp = () =>
   import('@/pages/Dashboard/Pages/SignInSignUp.vue')
@@ -769,7 +769,6 @@ let NewEventPages = {
   //     gtm: 'Event Wizard'
   //   }
   // },
-  
   {
     path: '/vendors-pool',
     name: 'VendorsPoolNew',
@@ -919,16 +918,6 @@ let PublicCreateEvent = {
         gtm: 'Event Religion',
         auth: false
       }
-    },
-    {
-      path: '/event-wizard-create',
-      name: 'EventCreatePage',
-      component: EventCreatePage,
-      meta: {
-        title: 'EventCreatePage',
-        gtm: 'Event Create',
-        opaque: false
-      },
     },
     // {
     //   path: '/about-invited',

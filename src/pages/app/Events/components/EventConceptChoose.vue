@@ -7,8 +7,8 @@
         <div class="header-name">
           <h3>Hi {{userName}}</h3>
           <p>
-            Here are 3 awesome concepts for you to choose from!
-            <br />If you feel like we haven’t nailed it, visit our wall of inspiration to get more ideas.
+            Here are 3 awesome concepts for you to choose from! 
+            <br />If you feel like we haven’t nailed it, let us know and we’ll send 3 more.
             <br />Got some cool ideas of your own? Scroll down to create a brand new concept.
           </p>
         </div>
@@ -243,17 +243,18 @@
           <event-concept-edit-form :defaultConcept="selectedConcept" @saved="onSaveConcept"></event-concept-edit-form>
         </div>
       </div>
-      <div class="selected-concept-footer d-flex justify-content-between">
-        <md-button class="md-black md-simple md-maryoku " @click="showConceptList=true">
+      <div class="selected-concept-footer d-flex justify-content-end">
+        <!-- <md-button class="md-black md-simple md-maryoku " @click="showConceptList=true">
           <md-icon>keyboard_arrow_left</md-icon>Back
-        </md-button>
-
+        </md-button> -->
+        <div></div>
         <div>
           <span class="concept-saved">
             <img :src="`${$iconURL}common/check-circle-green.svg`" width="32" /> Concept is Saved
           </span>
           <span class="separate"></span>
-          <md-button class="md-black md-simple md-maryoku" @click="showEditForm=true">Edit Concept</md-button>
+          <md-button class="md-black md-simple md-maryoku" v-if="!showEditForm" @click="showEditForm=true">Edit Concept</md-button>
+          <md-button class="md-black md-simple md-maryoku" v-else @click="showEditForm=false">Cancel</md-button>
         </div>
       </div>
     </div>
@@ -601,10 +602,37 @@ export default {
         this.showConceptList = false;
         this.conceptOptions.push(this.selectedConcept)
       } else {
-        EventConcept.get().then((concepts) => {
-          this.conceptOptions = concepts.slice(0, 3);
+        // this.$http.get(`https:// api-dev.maryoku.com/1/concepts?indoor=&eventSong=&occasion=&month=&budget=`)
+        const filters = {
+          indoor: this.eventData.inOutDoor,
+          eventSong: this.eventData.eventSongId,
+          occasion: this.eventData.occasion?this.eventData.occasion:"",
+          month: new Date(this.eventData.eventStartMillis).getMonth() + 1,
+          budget:''
+        }
+        
+        this.$http.get(`${process.env.SERVER_URL}/1/concepts`, filters).then(res => {
+          this.conceptOptions = res.data.concepts;
           this.showConceptList = true;
-        });
+        }).catch(err=>{
+          this.selectedConcept = this.eventData.concept;
+          this.selectedConcept.images.forEach((item, i) => {
+            item.url = item.url;
+          });
+          this.showConceptList = false;
+          this.conceptOptions.push(this.selectedConcept)
+        })
+        // EventConcept.get().then((concepts) => {
+          // this.conceptOptions = concepts.slice(0, 3);
+          // this.showConceptList = true;
+        // }).catch(err => {
+          // this.selectedConcept = this.eventData.concept;
+          // this.selectedConcept.images.forEach((item, i) => {
+          //   item.url = item.url;
+          // });
+          // this.showConceptList = false;
+          // this.conceptOptions.push(this.selectedConcept)
+        // });
       }
       this.isLoading = false;
       console.log(this.event.id);

@@ -104,14 +104,7 @@ export default {
                     if (invite) {
                       this.$router.push({ path: '/events' })
                     } else {
-                      let action = this.$route.query.action
-                      if (action) {
-                        const callback = btoa('/events')
-                        this.$router.push({ path: `/create-workspace?action=${action}&callback=${callback}`})
-                      } else {
-                        const callback = btoa('/create-event-wizard')
-                        this.$router.push({ path: `/create-workspace?action=register&callback=${callback}`})
-                      }
+                      this.$router.push({ path: '/create-workspace' })
                     }
                   },
                   error => {
