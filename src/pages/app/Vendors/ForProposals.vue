@@ -77,7 +77,7 @@
           />
         </div>
       </div>
-      <div class="md-layout-item md-size-30">
+      <div class="md-layout-item md-size-30 pos-relative">
         <proposal-budget-summary
           :bundleDiscount="true"
           :warning="true"
@@ -355,6 +355,9 @@ export default {
           margin-right: 15px;
         }
       }
+    }
+    .pos-relative {
+      position: relative;
     }
   }
 </style>

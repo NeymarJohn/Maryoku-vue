@@ -62,7 +62,8 @@
           Maryoku's Terms & Conditions
         </a>
       </div>
-      <div class="condition-tooltip" v-if="conditionTooltip">
+      <!-- <div class="condition-tooltip" v-if="conditionTooltip"> -->
+      <div class="condition-tooltip" v-if="true">
         <img :src="`${iconsUrl}Group 1175 (10).svg`"> Let us know that you are on board with our teams & conditions
       </div>
     </div>
@@ -276,6 +277,9 @@
           </div>
           <div class="right-side">
             <template>
+              <div class="calendar-title">
+                Date Range Picker
+              </div>
               <functional-calendar 
                 :key="componentKey"
                 :change-month-function="true" 
@@ -284,6 +288,7 @@
                 :minSelDays="1"
                 :limits="limitDateRange"
                 :sundayStart="true"
+                :arrow-position="`space-between`"
                 v-model="date"
                 ref="calendar"
               />
@@ -719,7 +724,7 @@ export default {
           box-sizing: border-box;
           
           border: 12px solid black;
-          border-color: transparent transparent #ffedb7 #ffedb7;
+          border-color: transparent transparent #ffe5ec #ffe5ec;
           
           transform-origin: 0 0;
           transform: rotate(135deg);
@@ -1112,10 +1117,55 @@ export default {
           display: grid;
           grid-template-columns: 50% 50%;
           grid-gap: 3rem;
+          position: relative;
+          width: 100%;
+
+          .calendar-title {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            z-index: 999;
+            font: normal 16px Manrope-Regular, sans-serif;
+            color: #818080;
+          }
 
           img {
             width: 23px;
+            height: 23px;
             margin-right: 24px;
+          }
+          /deep/ .vfc-main-container {
+            max-width: 370px;
+            padding-top: 4rem;
+          }
+          /deep/ .vfc-top-date {
+            margin-top: 2rem;
+            a {
+              text-decoration: none!important;
+              font: 600 16px Manrope-Regular, sans-serif;
+              color: #050505;
+            }
+          }
+          /deep/ .vfc-separately-navigation-buttons div {
+            margin: 1rem .8rem!important;
+          }
+          /deep/ .vfc-arrow-left, /deep/ .vfc-arrow-right {
+            width: 10px;
+            height: 10px;
+            color: #f51355;
+            border-color: #f51355;
+            border-top: 2px solid;
+          }
+          /deep/ .vfc-arrow-left {
+            border-left: 2px solid;
+          }
+          /deep/ .vfc-arrow-right {
+            border-right: 2px solid;
+          }
+          /deep/ .vfc-disabled, /deep/ .vfc-cursor-not-allowed {
+            opacity: .48;
+            color: #43425d;
+            background: #d5d5d5;
           }
           .time {
             padding: 15px 32px;
@@ -1139,11 +1189,11 @@ export default {
               position: relative;
               cursor: pointer;
               input {
-                width: 56px;
-                height: 45px;
+                width: 85px;
+                height: 65px;
                 cursor: pointer;
                 border-radius: 3px;
-                font: normal 18px Manrope-Regular, sans-serif;
+                font: normal 30px Manrope-Regular, sans-serif;
                 margin-left: .5rem;
                 border: 1px solid #707070;
                 text-align: center;
@@ -1152,19 +1202,21 @@ export default {
                 position: absolute;
                 content: '>';
                 transform: translateX(50%) translateY(calc(100% + 1.2rem)) rotate(90deg);
+                top: 1.5rem;
                 left: 40%;
                 font-size: 20px;
                 font-weight: 800;
+                color: #a0a0a0
               }
             }
             /deep/ .time-picker {
               width: unset;
               input {
                 text-align: center;
-                width: 110px;
-                height: 45px;
                 border-radius: 3px;
-                font: normal 18px Manrope-Regular, sans-serif;
+                width: 160px;
+                height: 65px;
+                font: normal 30px Manrope-Regular, sans-serif;
                 border: 1px solid #707070;
                 text-align: center;
               }

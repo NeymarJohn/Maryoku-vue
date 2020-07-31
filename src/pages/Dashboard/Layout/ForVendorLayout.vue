@@ -7,12 +7,12 @@
             <a href="https://www.maryoku.com"><img src="https://www.maryoku.com/img/maryoku-logo.png"/></a>
           </li>
           <li>
-            <a href="https://www.maryoku.com" target="_blank">ABOUT US</a>
+            <a href="https://www.maryoku.com">ABOUT US</a>
           </li>
         </ul>
       </div>
       <p>
-        Get your the best jobs
+        <a href="https://www.maryoku.com/for-vendors" target="_blank">Get your the best jobs</a>
       </p>
       <div class="pull-top-right">
         <vendor-bid-time-counter
@@ -50,7 +50,7 @@
             </p>
           </li>
           <li>
-            <a href="https://www.maryoku.com/for-vendors.html"><img :src="`${iconsUrl}Asset 273.svg`"></a>
+            <a href="https://www.maryoku.com" target="_blank"><img :src="`${iconsUrl}Asset 273.svg`"></a>
           </li>
         </ul>
       </div>
@@ -133,7 +133,13 @@
         }
       }
       p {
-        font-size: 20px;
+        font-size: 20px; 
+        a {
+          color: #ffffff;
+          &:hover {
+            color: #707070;
+          }
+        }
       }
       .pull-top-right {
         position: absolute;
