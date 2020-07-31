@@ -13,6 +13,7 @@
               rows="8" 
               placeholder="Type your message here" 
               v-model="proposalRequest.personalMessage"
+              v-if="proposalRequest"
               @blur="updateProposalRequest()"
             />
             <span>Sincerely,</span>

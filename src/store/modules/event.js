@@ -153,17 +153,24 @@ const actions = {
   },
 
   /** Notes */
-  async getEventNotes({ commit, state }) {
+  async getEventNotes({ commit, state }, data) {
     const calendarId = state.eventData.calendar.id;
     const eventId = state.eventData.id;
     const calendar = new Calendar({ id: calendarId })
     const event = new CalendarEvent({ id: eventId })
-    new EventNote()
-      .for(calendar, event)
-      .get()
-      .then(notes => {
-        commit('setEventNotes', notes)
-      });
+    const filters = data.filters || []
+    console.log(filters)
+    const res = await postReq(`/1/calendars/${calendarId}/events/${eventId}/notes/search`, { "filters" : filters })
+    console.log(res.data)
+    commit('setEventNotes', res.data)
+
+    // new EventNote()
+    //   .where("test","test")
+    //   .for(calendar, event)
+    //   .get()
+    //   .then(notes => {
+    //     commit('setEventNotes', notes)
+    //   });
   },
   async addEventNote({ commit, state }, note) {
     const calendarId = state.eventData.calendar.id;

@@ -40,9 +40,6 @@ import { IconURL, StorageURL, ResourceURL } from './globalVariables';
 
 import authHeader from '@/services/auth-header';
 import authService from '@/services/auth.service';
-
-import './assets/scss/main.scss'
-
 require('vue-tour/dist/vue-tour.css')
 
 const VueScrollTo = require('vue-scrollto')
@@ -230,7 +227,7 @@ Vue.filter('withComma', function (value) { return value ? value.toLocaleString()
 Vue.prototype.$resourceURL = ResourceURL;
 Vue.prototype.$storageURL = StorageURL;
 Vue.prototype.$iconURL = IconURL;
-
+Vue.prototype.$queryEventActions = { create: "createEvent" };
 axios.defaults.headers.common.Authorization = authHeader().Authorization
 axios.defaults.headers.common['gorm-tenantid'] = authService.resolveTenantId()
 axios.defaults.headers.common.gorm_tenantid = authService.resolveTenantId()

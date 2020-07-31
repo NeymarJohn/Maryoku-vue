@@ -190,14 +190,12 @@ export default {
         this.eventElements[conceptIndex].progress = event.conceptProgress;
         this.eventElements[conceptIndex].status = event.conceptProgress == 100 ? "completed" : "not-complete";
       }
-      if (budgetIndex >= 0) {
-        this.eventElements[budgetIndex].progress = event.budgetProgress;
-        this.eventElements[budgetIndex].status = event.budgetProgress == 100 ? "completed" : "not-complete";
-      }
-      if (timelineIndex >=0 ) {
-        this.eventElements[timelineIndex].progress = event.timelineProgress;
-        this.eventElements[timelineIndex].status = event.timelineProgress == 100 ? "completed" : "not-complete";
-      }
+
+      this.eventElements[budgetIndex].progress = event.budgetProgress;
+      this.eventElements[budgetIndex].status = event.budgetProgress == 100 ? "completed" : "not-complete";
+      this.eventElements[timelineIndex].progress = event.timelineProgress;
+      this.eventElements[timelineIndex].status = event.timelineProgress == 100 ? "completed" : "not-complete";
+      
     },
     fetchUrl() {
       this.currentUrl = this.$router.history.current.path;

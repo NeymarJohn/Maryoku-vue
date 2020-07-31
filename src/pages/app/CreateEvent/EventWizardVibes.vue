@@ -32,7 +32,7 @@ import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import CalendarEvent from '@/models/CalendarEvent'
 import Calendar from '@/models/Calendar'
 import swal from "sweetalert2";
-
+import eventService from '@/services/event.service'
 export default {
   components: {
     GoBack,
@@ -86,11 +86,11 @@ export default {
       })
     },
     goToNext() {
+      localStorage.setItem('event', JSON.stringify(this.getEventData()));
       if (!this.isLoggedIn) {
-        localStorage.setItem('event', JSON.stringify(this.getEventData()));
-        this.$router.push({path: `/signup`})
+        this.$router.push({path: `/signin?action=${this.$queryEventActions.create}`})
       } else {
-        this.createEvent();
+        this.createEvent()
       }
     },
     getEventData() {
@@ -119,26 +119,21 @@ export default {
       } else {
         const eventData = this.getEventData();
         eventData.calendar = new Calendar({id: this.$store.state.auth.user.profile.defaultCalendarId})
-        this.$store.dispatch('event/saveEventAction', eventData)
-          .then(event=>{
-            console.log(event)
-            // this.$router.push({path: `/events/${event.item.id}/booking/budget`})
-            this.$router.push({path: `/events`})
-          })
-          .catch(error=>{
-            swal({
-              title: `<div style="text-align:center; width:100%;">Sorry, Some informations are invalid. <br/> Please check your information. </div>`,
-              buttonsStyling: false,
-              type: "warn",
-              confirmButtonClass: "md-button md-success"
-            });
-            console.log(error)
-          })
-        
+        eventService.saveEventFromStorage(this.$store.state.auth.user.profile.defaultCalendarId).then(()=>{
+          this.$router.push({path: `/events`})
+        }).catch(err=>{
+          swal({
+            title: `<div style="text-align:center; width:100%;">Sorry, Some informations are invalid. <br/> Please check your information. </div>`,
+            buttonsStyling: false,
+            type: "warn",
+            confirmButtonClass: "md-button md-success"
+          });
+          console.log(error)
+        })
       }
     },
     skip() {
-      this.$router.push({path: `/signup`})
+      this.$router.push({path: `/signin?referer=eventcreation`})
     },
     back() {
       if (this.publicEventData.religion) {

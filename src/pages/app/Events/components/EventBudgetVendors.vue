@@ -125,7 +125,9 @@
                     class="text-right"
                     v-if="!block.fixed && block.componentId!='unexpected'"
                   >
-                    <img :src="`${$iconURL}budget+screen/SVG/Asset+23.svg`" :class="{expanded:block.expanded}"/>
+                    <img
+                      src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png"
+                    />
                   </div>
                 </td>
               </template>
@@ -206,14 +208,14 @@
             <td width="15%" class="status"></td>
             <td class="expand">
               <div @click="showTips=!showTips" class="text-right">
-                <img :src="`${$iconURL}budget+screen/SVG/Asset+23.svg`" :class="{expanded:showTips}"/>
+                <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png" />
               </div>
             </td>
           </tr>
           <template v-if="showTips">
             <tr class="extra" >
               <td width="40%" class="event-block-element extra">
-                <!-- <popup ref="popup"  v-if="event.allocatedTips>0">
+                <popup ref="popup"  v-if="event.allocatedTips>0">
                   <template slot="content">
                     <img
                       src="http://static.maryoku.com/storage/icons/budget screen/SVG/tips-gray.svg"
@@ -226,18 +228,17 @@
                       Are you sure you want to delete tips?
                     </div>
                     <div class="popup-footer">
+                      <!-- <md-button class="md-black md-simple normal-btn" >Cancel</md-button> -->
                       <md-button class="md-red normal-btn" @click="deleteTips">Yes I'm sure</md-button>
                     </div>
                   </template>
-                </popup> -->
-                <img src="http://static.maryoku.com/storage/icons/budget screen/SVG/tips-gray.svg"/>
-                Tips 12%
-                <!-- <span v-else>
+                </popup>
+                <span v-else>
                   <img
                       src="http://static.maryoku.com/storage/icons/budget screen/SVG/tips-gray.svg"
                     />
                     Tips 12%
-                </span> -->
+                </span>
               </td>
               <td width="20%" class="planned">
                 $ {{event.allocatedTips | withComma}}
@@ -1270,10 +1271,6 @@ export default {
   .expand {
     img {
       transform: rotate(-90deg);
-      transition: transform 0.1s;
-      &.expanded{
-        transform: rotate(0deg);
-      }
     }
   }
   .multiselect__tags {

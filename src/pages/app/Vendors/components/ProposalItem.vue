@@ -23,6 +23,7 @@
         </span>
         <div class="sub-items" :style="{'left': `${serviceSlidePos}px`}" ref="servicesCont">
           <select-proposal-sub-item
+            :active="true"
             :item="s"
             v-for="(s, sIndex) in services"
             :key="sIndex"
@@ -36,7 +37,7 @@
         <div class="fields-cont">
           <div class="field">
             <span>Description</span>
-            <input v-model="serviceItem" readonly class="description"/>
+            <input v-model="serviceItem" class="description"/>
           </div>
           <div class="field">
             <span>QTY</span>
@@ -89,6 +90,7 @@
           <a class="cancel" @click="cancel()">Clear</a>
           <a 
             class="save" 
+            :class="{'isDisabled': isDisabledAdd}" 
             @click="saveItem(serviceItem, qty, subTotal)">
             Add This
           </a>
@@ -111,7 +113,7 @@
       <div class="right-side">
         <div class="budget-cont">
           <span>Budget</span>
-          <span>{{`$${totalOffer()}`}}</span>
+          <span>${{totalOffer() | withComma}}</span>
         </div>
         <div class="proposal-range-cont">
           <p>You're the First bidder</p>
@@ -197,6 +199,7 @@
         <a class="cancel" @click="cancel()">Clear</a>
         <a 
           class="save" 
+          :class="{'isDisabled': isDisabledAdd}"
           @click="saveItem(serviceItem, qty, subTotal)">
           Add This
         </a>
@@ -218,7 +221,7 @@
         </span>
       </div>
       <editable-proposal-sub-item
-        v-for="(req, rIndex) in newProposalRequest.requirements.filter( r => services.includes(r.requirementTitle))" 
+        v-for="(req, rIndex) in newProposalRequest.requirements.filter( r => services.includes(r.requirementTitle))"
         :key="rIndex"
         :item="req"
         :active="true"
@@ -234,14 +237,37 @@
             <div class="ptitle" v-if="isEditDiscount">
               % Percentage
               <br/>
-              <input class="percent-value" v-model="discount" type="number" min="0" max="100" @keyup="setRange(discount, 'discount')"/>
+              <div class="percent-value">
+                <input 
+                  v-model="discount" 
+                  type="number" 
+                  min="0" 
+                  max="100" 
+                  @keyup="setRange(discount, 'discount')"
+                />
+              </div>
             </div>
           </div>
-          <div class="percent-cont">
-            <span v-if="!isEditDiscount">{{discount}}%</span>
+          <div class="percent-cont" :class="{'text-right': isEditDiscount}">
+            <span v-if="isEditDiscount">Or</span>
+            <span v-else>{{discount}}%</span>
           </div>
           <div class="price-cont">
-            <span>${{totalOffer * discount / 100 | withComma }}</span>
+            <template v-if="isEditDiscount">
+              Amount
+              <br/>
+              <div class="discounted-value">
+                <input 
+                  placeholder="$00.00"
+                  type="number" 
+                  readonly
+                  disabled="disabled"
+                />
+              </div>
+            </template>
+            <template v-else>
+              <span>${{totalOffer() * discount / 100 | withComma }}</span>
+            </template>
           </div>
           <div class="edit-cont">
             <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditDiscount=true" v-if="!isEditDiscount"/>
@@ -258,11 +284,19 @@
             <div class="ptitle" v-if="isEditTax">
               % Percentage
               <br/>
-              <input class="percent-value" v-model="tax" type="number" min="0" max="100" @keyup="setRange(tax, 'tax')"/>
+              <div class="percent-value">
+                <input 
+                  v-model="tax" 
+                  type="number" 
+                  min="0" 
+                  max="100" 
+                  @keyup="setRange(tax, 'tax')"
+                />
+              </div>
             </div>
           </div>
           <div class="percent-cont">
-            <span>{{tax}}%</span>
+            <!-- <span>{{tax}}%</span> -->
           </div>
           <div class="price-cont">
             <span>${{totalOffer() * tax / 100 | withComma}}</span>
@@ -440,7 +474,7 @@
         this.subTotal = null
         this.serviceItem = null
       },
-      saveItem(title, qty, price) {
+      saveItem(serviceItem, qty, price) {
         this.newProposalRequest.requirements.push({
           comments: [],
           dateCreated: '',
@@ -453,10 +487,12 @@
           requirementId: '',
           requirementMandatory: false,
           requirementPriority: null,
-          requirementTitle: title,
+          requirementTitle: serviceItem,
           requirementValue: `${qty}`,
         })
+        this.$forceUpdate()
         this.$root.$emit('update-proposal-budget-summary', this.newProposalRequest, {})
+        this.cancel()
       },
       calculateSubTotal() {
         this.subTotal = this.qty * this.unit
@@ -526,15 +562,6 @@
               timer: 3000
             })
           }
-
-          // return new ProposalRequestFile({
-          //   vendorProposalFile: e.target.result,
-          // }).for(proposalRequest).save().then(result => {
-          //   this.isLoading = false
-          // }).catch(error => {
-          //   this.isLoading = false
-          //   console.log(error)
-          // })
         }
         reader.readAsDataURL(file)
       },
@@ -553,9 +580,13 @@
         // let total = parseFloat(this.proposalRequest.requirementsCategoryCost)
         let total = 0
         let vm = this
-        const requirements = this.newProposalRequest.requirements.filter( 
-          r => this.services.includes(r.requirementTitle)
-        )
+        let requirements = []
+        
+        if (this.newProposalRequest.requirements) {
+          requirements = this.newProposalRequest.requirements.filter( 
+            r => this.services.includes(r.requirementTitle)
+          )
+        }
         
         requirements.map(function (item) {
           if (item.price) {
@@ -580,15 +611,19 @@
         return total
       },
       prev() {
-        this.servicesWidth = this.$refs.servicesCont.clientWidth
-        if (this.servicesWidth - this.serviceSlidePos > 0) {
-          this.serviceSlidePos += 200
+        if (this.$refs.servicesCont) {
+          this.servicesWidth = this.$refs.servicesCont.clientWidth
+          if (this.servicesWidth - this.serviceSlidePos > 0) {
+            this.serviceSlidePos += 200
+          }
         }
       },
       next () {
-        this.servicesWidth = this.$refs.servicesCont.clientWidth
-        if (this.servicesWidth + this.serviceSlidePos - 200 > 0) {
-          this.serviceSlidePos -= 200
+        if (this.$refs.servicesCont) {
+          this.servicesWidth = this.$refs.servicesCont.clientWidth
+          if (this.servicesWidth + this.serviceSlidePos - 200 > 0) {
+            this.serviceSlidePos -= 200
+          }
         }
       },
       onBlurNumber(e) {
@@ -614,10 +649,11 @@
       this.isVCollapsed = this.isCollapsed
       this.newProposalRequest = this.proposalRequest
 
-      this.$root.$on('remove-proposal-requirement', (reqId) => {
-        console.log(reqId)
-        this.newProposalRequest.requirements = this.newProposalRequest.requirements.filter(req => req.id != reqId)
+      this.$root.$on('remove-proposal-requirement', (item) => {
+        this.newProposalRequest.requirements = this.newProposalRequest.requirements.filter(req => req.requirementTitle != item.requirementTitle)
         this.$root.$emit('update-proposal-budget-summary',  this.newProposalRequest, {})
+        this.$forceUpdate()
+        this.cancel()
       })
 
       this.$root.$on('add-service-item', (item) => {
@@ -630,7 +666,9 @@
         this.serviceSlidePos = 0
       })
 
-      this.servicesWidth = this.$refs.servicesCont.clientWidth
+      if (this.$refs.servicesCont) {
+        this.servicesWidth = this.$refs.servicesCont.clientWidth
+      }
     },
     filters: {
       withComma (amount) {
@@ -638,7 +676,13 @@
       }
     },
     computed: {
-      
+      isDisabledAdd() {
+        return  !this.qty || 
+                !this.unit || 
+                !this.subTotal || 
+                this.subTotal == 0 || 
+                !this.serviceItem
+      }
     },
     watch: {
     }
@@ -801,7 +845,7 @@
               position: absolute;
               content: '$';
               left: 1rem;
-              top: 14px;
+              top: 15px;
               font: normal 16px 'Manrope-Regular', sans-serif;
             }
             input {
@@ -899,7 +943,7 @@
         border-top: 1px solid #707070;
         padding: 40px 40px 30px 40px;
         display: grid;
-        grid-template-columns: 40% 15% 15% 30%;
+        grid-template-columns: 30% 10% 17.5% 47.5%;
         
         span {
           display: inline-block;
@@ -917,12 +961,12 @@
           border: 2px solid #d5d5d5;
           border-bottom: none;
           display: grid;
-          grid-template-columns: 55% 15% 15% 15%;
+          grid-template-columns: 40% 15% 15% 30%;
           align-items: center;
 
           .item-cont {
-            width: calc(50% + 26px);
-            display: flex;
+            display: grid;
+            grid-template-columns: 40% 60%;
             align-items: center;
 
             .plabel {
@@ -932,17 +976,43 @@
               text-align: center;
 
               .percent-value {
-                min-width: 10rem;
-                border: 1px solid #dddddd;
-                margin-top: 1rem;
-                text-align: center;
-                margin-left: 2em;
+                position: relative;
+                &:before {
+                  content: '%';
+                  position: absolute;
+                  bottom: 11px;
+                  right: 30%;
+                }
+                input {
+                  min-width: 8rem;
+                  margin-top: .5rem;
+                  border: 1px solid #050505;
+                  text-align: center;
+                }
               }
             }
           }
           .percent-cont {
+            &.text-right {
+              padding-right: 1rem;
+
+            }
           }
           .price-cont {
+            text-align: center;
+            .discounted-value {
+              position: relative;
+              // &:before {
+              //   content: '$';
+              //   position: absolute;
+              // }
+              input {
+                max-width: 8rem;
+                text-align: center;
+                margin-top: .5rem;
+                background: #ddd;
+              }
+            }
           }
           .edit-cont {
             text-align: right;
@@ -976,7 +1046,7 @@
         border: 2px solid #d5d5d5;
         border-bottom: none;
         display: grid;
-        grid-template-columns: 70% 30%;
+        grid-template-columns: 60% 40%;
 
         span {
           font-size: 20px;
@@ -1170,6 +1240,12 @@
         color: white;
         background: #f51355;
         border-radius: 3px;
+
+        &.isDisabled {
+          pointer-events: none;
+          cursor: not-allowed;
+          background: #d5d5d5;
+        }
       }
       &:hover {
         color: #dddddd!important;

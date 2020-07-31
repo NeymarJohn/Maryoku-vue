@@ -70,6 +70,7 @@ import VueElementLoading from "vue-element-loading";
 import Tenant from "@/models/Tenant";
 import CalendarEvent from '@/models/CalendarEvent'
 import Calendar from '@/models/Calendar'
+import eventService from '@/services/event.service'
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import _ from 'underscore'
 import AuthService from '@/services/auth.service';
@@ -118,15 +119,40 @@ export default {
                 this.loading = true;
                 this.defaultCalendar =  new Calendar({id: res.defaultCalendar})
                 AuthService.setTenant(this.workspace)
-                this.createEvent().then(event=>{
-                  console.log(event)
-                  document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&firstEvent=${event.id}`;
-                })
-                .catch(error=>{
-                  console.error(error)
-                  this.loading = false
-                  document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}`;
-                })
+
+                const callback = this.$route.query.callback
+                const action = this.$route.query.action
+                if (action === this.$queryEventActions.create) {
+                  eventService.saveEventFromStorage(res.defaultCalendar).then(event=>{
+                    document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
+                  })
+                  .catch(err => {
+                    console.log(err)
+                  })
+                } else if (action === 'register'){
+                  document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
+                } else {
+
+                }
+                
+                // const signedInLink = btoa(`${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}`);
+                // this.$router.push({path: `${redirectionURL}?callback=${signedInLink}`})
+
+                //document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
+                // if (refer === 'signup') {
+                //   const redirectionURL = btoa('/create-event-wizard')
+                //   document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${redirectionURL}`;
+                // } else {
+                //   this.createEvent().then(event=>{
+                //     console.log(event)
+                //     document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&firstEvent=${event.id}`;
+                //   })
+                //   .catch(error=>{
+                //     console.error(error)
+                //     this.loading = false
+                //     document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}`;
+                //   })
+                // }
               } else {
                 this.error = "Failed";
                 this.loading = false

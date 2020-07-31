@@ -14,7 +14,7 @@
         <md-progress-bar  class="md-red progress-bar" md-mode="determinate" :md-value="this.currentStep / 5 * 100"></md-progress-bar>
         <div v-if="this.currentStep == 1" class="status-description">
           <img :src="`${$iconURL}Onboarding/clover.svg`">
-          Only 5 simple steps & you're signed!
+           Only 5 simple steps to your perfect event
         </div>
         <div v-if="this.currentStep == 2" class="status-description">
           <img :src="`${$iconURL}Onboarding/strength.svg`">

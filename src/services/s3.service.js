@@ -15,14 +15,9 @@ class S3Service {
     
     return new Promise((resolve, reject)=> {
       S3Client
-        .uploadFile(file, fileName).finally(res=>{
-          console.log(res)
+        .uploadFile(file, fileName).finally(()=>{
           resolve()
         })
-
-        // finally(()=>{
-        //   resolve()
-        // })
     })
   }
 }

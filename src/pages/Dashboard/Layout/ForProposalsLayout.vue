@@ -8,7 +8,9 @@
       <div class="summary-cont">
         <ul>
           <li :class="[{'with-help': dateTooltip}]" @mouseover="dateTooltip=true" @mouseleave="dateTooltip=false">
-            <img :src="`${proposalIconsUrl}Path 251 (2).svg`"/> {{eventDate}} <img v-if="dateTooltip" class="question" :src="`${landingIconsUrl}Group 1175 (10).svg`">
+            <img :src="`${proposalIconsUrl}Path 251 (2).svg`"/> 
+            {{eventDate}} 
+            <img v-if="dateTooltip" class="question" :src="`${proposalIconsUrl}Asset 582.svg`"/>
             <div class="date-tooltip" v-if="dateTooltip">
               <h3>Your Time Suggestion</h3>
               <p>Client will get this proposal with <br/> your new suggested date</p>
@@ -230,15 +232,12 @@
           .then(proposals => {
             this.proposals = proposals.vendorProposals
             this.firstTime = proposals.firstTime
-            console.log('vendorProposals', this.proposals)
           })
       },
       getProposal (id) {
         ProposalRequest.find(id)
           .then(resp => {
-            console.log('ProposalRequest:', resp)
             this.$set(this, 'proposalRequest', resp)
-            console.log(this.proposalRequest.eventData)
 
             this.proposalRequestRequirements = _.chain(resp.requirements)
               .groupBy('requirementPriority')
@@ -250,10 +249,8 @@
               })
               .value()
             
-            console.log('proposalRequestRequirements', this.proposalRequestRequirements)
           })
           .catch(error => {
-            console.log(' error ', error)
           })
       },
       hideModal() {
@@ -276,7 +273,6 @@
 
         this.scrollToTop()
 
-        console.log('layoutStep', this.step)
       },
       back() {
         this.$root.$emit('prev-step-vendor-proposal')
@@ -290,7 +286,6 @@
         }
 
         this.scrollToTop()
-        console.log('layoutStep', this.step)
       },
       scrollToTop() {
         window.scrollTo(0,0);
@@ -299,7 +294,6 @@
     created(){
       this.$root.$on('send-event-data', (evtData) => {
         this.evtData = evtData
-        console.log(this.evtData)
       })
     },
     mounted() {
@@ -431,6 +425,7 @@
             &.with-help {
               background: #ffedb7;
               cursor: pointer;
+              position: relative;
 
               img {
                 &.question {
@@ -441,12 +436,14 @@
 
               .date-tooltip {
                 position: absolute;
+                display: inline-block;
+                width: 300px;
                 background-color: #ffedb7;
                 padding: 24px 32px;
                 color: #050505;
                 font-size: 14px;
-                margin-left: 140px;
-                margin-top: 50px;
+                left: 2rem;
+                top: 3.5rem;
                 text-align: center;
 
                 h3 {
@@ -457,6 +454,7 @@
                 }
                 p {
                   font-size: 16px;
+                  max-width: 100%!important;
                   margin: 0;
                 }
                 
@@ -709,11 +707,14 @@
     .see-full {
       font-size: 16px;
       font-weight: 800;
-      color: #f51355;
+      color: #f51355!important;
       cursor: pointer;
 
       i {
-        color: #f51355;
+        color: #f51355!important;
+      }
+      &:visited {
+        color: #f51355!important;
       }
     }
     .active {

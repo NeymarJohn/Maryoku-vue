@@ -3305,63 +3305,6 @@
                     }
                 }
             }
-            &.option-4 {
-
-                .image-background {
-                    position: absolute;
-                    top:0;
-                    z-index:999;
-
-                    &:first-child {
-                        top: 56px;
-                        left: 74px;
-                        width: 131px;
-                        height: 111px;
-                    }
-                    &:nth-child(2) {
-                        top: 40px;
-                        left: 359px;
-                        width: 163px;
-                        height: 99px;
-                    }
-                }
-                .images-list__item {
-                    &:first-child {
-                        top: 36px;
-                        left: 50px;
-                        .image-section {
-                            width: 96.5px;
-                            height: 120.4px;
-                        }
-                    }
-                    &:nth-child(2) {
-                        top: 25px;
-                        left: 170px;
-                        z-index:999999;
-                        .image-section {
-                            width: 175px;
-                            height: 117px;
-                        }
-                    }
-                    &:nth-child(3) {
-                        top: 82px;
-                        left: 241px;
-                        z-index:99999;
-                        .image-section {
-                            width: 173px;
-                            height: 85px;
-                        }
-                    }
-                    &:nth-child(4) {
-                        top: 25px;
-                        left: 387px;
-                        .image-section {
-                            width: 143px;
-                            height: 96px;
-                        }
-                    }
-                }
-            }
             &.create-concept {
                 .image-background {
                     position: absolute;
@@ -3678,58 +3621,6 @@
                     }
                 }
                 &.option-3 {
-
-                    .image-background {
-
-                        &:first-child {
-                            top: 98px;
-                            left: 74px;
-                            width: calc(308px - 50px);
-                            height: calc(261px - 50px);
-                        }
-                        &:nth-child(2) {
-                            top: 50px;
-                            left: 563px;
-                            width: calc(366px - 50px);
-                            height: calc(232px - 50px);
-                        }
-                    }
-                    .images-list__item {
-                        &:first-child {
-                            top: 46px;
-                            left: 0;
-                            .image-section {
-                                width: calc(226.3px - 50px);
-                                height: calc(282.5px - 50px);
-                            }
-                        }
-                        &:nth-child(2) {
-                            top: 25px;
-                            left: 213px;
-                            .image-section {
-                                width: calc(373px - 50px);
-                                height: calc(275px - 50px);
-                            }
-                        }
-                        &:nth-child(3) {
-                            top: 157px;
-                            left: 401px;
-                            .image-section {
-                                width: calc(403px - 50px);
-                                height: calc(201px - 50px);
-                            }
-                        }
-                        &:nth-child(4) {
-                            top: 25px;
-                            left: 607px;
-                            .image-section {
-                                width: calc(336px - 50px);
-                                height: calc(224px - 50px);
-                            }
-                        }
-                    }
-                }
-                &.option-4 {
 
                     .image-background {
 
@@ -4399,7 +4290,7 @@
         font-size: 18px;
     }
 }
-.scroll-top-button {
-    border-radius: 50%;
-    box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.18) !important;
-}
+
+.swal2-container {
+    z-index: 100000 !important;
+}   

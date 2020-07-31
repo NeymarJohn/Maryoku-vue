@@ -829,7 +829,7 @@ export default {
       updateEvent.eventStartMillis = this.editEvent.eventStartMillis;
       updateEvent.numberOfParticipants = this.editEvent.numberOfParticipants;
       updateEvent.location = this.editEvent.location;
-
+      
       const eventType = this.eventTypes.find(
         it => it.name === this.editEvent.eventType.name
       );
@@ -841,14 +841,45 @@ export default {
       }
       updateEvent.eventStartMillis = updateEvent.eventStartMillis.getTime();
       updateEvent.eventEndMillis = updateEvent.eventStartMillis + 3600 * 1000;
-      updateEvent.save()
-        .then(res => {
-          this.event = res;
-        })
-        .catch(err => {
-          console.log(err);
-        });
-      this.showEditDetailModal = false;
+
+      if (this.event.noBudget && (
+            this.editEvent.eventData !== this.event.eventData || 
+            this.editEvent.location != this.event.location || 
+            this.editEvent.eventStartMillis != this.event.eventStartMillis)) {
+          
+
+          swal({
+            title: 'Do you want to update the budget accordingly?',
+            text: ``,
+            showCancelButton: true,
+            confirmButtonClass: 'md-button md-success',
+            cancelButtonClass: 'md-button md-danger',
+            confirmButtonText: 'Yes, Recalcuate it!',
+            buttonsStyling: false
+          }).then(result => {
+            if (result.value) {
+              updateEvent.reCalculate = true
+            }
+            updateEvent.save()
+              .then(res => {
+                this.event = res;
+              })
+              .catch(err => {
+                console.log(err);
+              });
+            this.showEditDetailModal = false;
+          })
+      } else  {
+        updateEvent.save()
+          .then(res => {
+            this.event = res;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        this.showEditDetailModal = false;
+      }
+      
     },
     formatHour(date) {
       return moment(new Date(date)).format("hh:mm A");
