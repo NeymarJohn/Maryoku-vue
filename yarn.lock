@@ -12806,6 +12806,11 @@ v-dropdown@1.0.5:
   dependencies:
     vue "^2.5.11"
 
+v-money@^0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/v-money/-/v-money-0.8.1.tgz#dc28cf3be915c5a6c52bfe1085075e1fe7ae9db5"
+  integrity sha512-raz87AP5F2YEpv1GAocI3SC/y9af1+TQeZQIhAK5UNovho6dnh6RQBa5UG8ZNC+BPLpUh5VECi7EWTjr4+4s1g==
+
 v-selectmenu@^1.0.7:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/v-selectmenu/-/v-selectmenu-1.0.8.tgz#c048a86453d45c114f6fc2ab61f7e7d1fef73bd2"

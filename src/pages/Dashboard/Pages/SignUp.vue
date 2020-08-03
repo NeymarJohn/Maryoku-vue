@@ -89,7 +89,7 @@ export default {
           const permit = this.$route.query.role
           const event = this.$route.query.event
           if (invite) {
-            this.user.role = 'collaborator'
+            this.user.role = 'guest'
             this.user.invited = true
             this.user.permittedEvent = { eventId: event, permit: permit }
           } else  {

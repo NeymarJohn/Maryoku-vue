@@ -13,14 +13,7 @@
           </div>
           <maryoku-input class="form-input" v-validate="modelValidations.email" inputStyle="email" v-model="user.email" placeholder="Type email address here..."></maryoku-input>
           <maryoku-input class="form-input" v-validate="modelValidations.password" type="password" inputStyle="password" v-model="user.password" placeholder="Type password here..."></maryoku-input>
-          <div class="md-error">
-            <div v-if="notFoundUser" class="font-size-16"> 
-              Sorry, we couldn’t find you. 
-              <br/>
-              If you are not a user please sign up <span class="signupLink" @click="toSingUp">here</span>.
-            </div>
-            <div>{{error}}</div>
-          </div>
+          <div class="md-error">{{error}}</div>
           <div class="terms-and-conditions mt-2">
             <md-checkbox v-model="keepMe">
               Keep me signed in
@@ -75,14 +68,12 @@ export default {
               },
               error => {
                 this.loading = false;
-                this.notFoundUser = true;
-                this.error = ""
+                this.error = "Invalid email or wrong password, try again."
               }
             );
           }
         } else {
-          that.notFoundUser = false
-          that.error = 'Sorry, invalid email or password, please check and try again'
+          that.error = 'Sorry, invalid email or wrong password, try again.'
           that.loading = false
         }
       })
@@ -147,7 +138,6 @@ export default {
           email: true
         },
       },
-      notFoundUser: false
     }
   },
   computed: {
@@ -274,12 +264,7 @@ export default {
       text-align: center;
     }
     .signin-contain {
-      padding: 20px 50px;
-      max-width: 400px;
-      .signupLink {
-        cursor: pointer;
-        text-decoration: underline;
-      }
+      padding: 20px 60px;
     }
     .md-google {
       span {
