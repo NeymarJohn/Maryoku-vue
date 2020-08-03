@@ -88,7 +88,7 @@ export default {
     goToNext() {
       localStorage.setItem('event', JSON.stringify(this.getEventData()));
       if (!this.isLoggedIn) {
-        this.$router.push({path: `/signin?action=${this.$queryEventActions.create}`})
+        this.$router.push({path: `/signup?action=${this.$queryEventActions.create}`})
       } else {
         this.createEvent()
       }
@@ -108,7 +108,8 @@ export default {
           eventType: this.publicEventData.eventType.id,
           category: 'Holidays', //! this.publicEventData.editable ? 'Holidays' : 'CompanyDays',
           editable: true,
-          location: this.publicEventData.location
+          location: this.publicEventData.location,
+          inOutDoor: this.publicEventData.inOutDoor
         })
     },
     createEvent() {  // in case that user is signed
@@ -128,12 +129,12 @@ export default {
             type: "warn",
             confirmButtonClass: "md-button md-success"
           });
-          console.log(error)
+          console.log(err)
         })
       }
     },
     skip() {
-      this.$router.push({path: `/signin?referer=eventcreation`})
+      this.$router.push({path: `/signup?action=${this.$queryEventActions.create}`})
     },
     back() {
       if (this.publicEventData.religion) {

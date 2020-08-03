@@ -5,10 +5,6 @@
         <router-view></router-view>
       </div>
     </zoom-center-transition>
-    <div class="text-center mb-50">
-      Provided by 
-      <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`">
-    </div>
     <div class="rsvp-footer">
         <div class="rsvp-footer-content">
           <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">

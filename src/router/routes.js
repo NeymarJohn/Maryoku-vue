@@ -1051,7 +1051,7 @@ let RSVPPages = {
   name: 'RSVPLayout',
   children: [
     {
-      path: '/rsvp/:eventId',
+      path: '/rsvp',
       name: 'RSVP',
       component: RSVPEvent,
       meta: {

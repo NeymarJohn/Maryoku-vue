@@ -14,7 +14,7 @@
                 Is it an indoor or outdoor event?
               </div>
               <div class="mt-3 types">
-                <div class="type-card" @click="type.selected=!type.selected" :class="{selected:type.selected}" v-for="(type) in types" :key="type.value">
+                <div class="type-card" @click="selectedType=type.value" :class="{selected:type.value==selectedType}" v-for="(type) in types" :key="type.value">
                   <div>
                     <img :src="`${$iconURL}Onboarding/${type.value}-dark.svg`">
                   </div>
@@ -22,7 +22,7 @@
                     {{type.name}}
                   </div>
                   <div>
-                    <md-checkbox class="md-checkbox-circle md-red" v-model="type.selected"></md-checkbox>
+                    <md-checkbox class="md-checkbox-circle md-red" v-model="selectedType" :value="type.value"></md-checkbox>
                   </div>
                 </div>
               </div>
@@ -48,8 +48,8 @@ export default {
     MaryokuInput
   },
   created () {
-    if (this.publicEventData.buildings) {
-      this.types = this.publicEventData.buildings
+    if (this.publicEventData.inOutDoor) {
+      this.selectedType = this.publicEventData.inOutDoor
     }
   },
   methods: {
@@ -95,7 +95,7 @@ export default {
       })
     },
     goToNext() {
-      this.setEventProperty({key: 'buildings', actualValue: this.types})
+      this.setEventProperty({key: 'inOutDoor', actualValue: this.selectedType})
       this.$router.push({path: `/event-wizard-type`})
     },
     skip() {
@@ -108,6 +108,7 @@ export default {
   data () {
     return {
       buildings:[],
+      selectedType:"",
       types: [
         {
           value: "indoor", name: "Indoor Event", selected:false

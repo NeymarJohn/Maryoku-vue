@@ -38,7 +38,19 @@
             </div>
           </div>
           <div class="md-error text-center">
-            {{this.error}}
+            <div v-if="error==='email'" class="font-size-16"> 
+              This email is already existed.
+              <br/>
+              Please signin <span class="signInLink" @click="toSignin">here</span>.
+            </div>
+            <div v-if="error==='company'" class="font-size-16"> 
+              This workspace already exists, and you need to be invited to it. 
+              Either create new workspace or ask admin for invitation.
+            </div>
+            <div v-if="error==='failed'" class="font-size-16"> 
+              The signup is failed. Please try again later. 
+            </div>
+            <div v-if="errorMsg">{{errorMsg}}</div>
           </div>
           <div class="text-center" >
               <div><md-button @click="signup" class="md-default md-red md-maryoku mt-4">Sign Up</md-button></div>
@@ -77,10 +89,12 @@ export default {
       document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`
     },
     signup () {
+      this.errorMsg = "";
+      this.error = ""
       this.$validator.validateAll().then(isValid => {
         if (isValid) {
           if (!this.terms) {
-            this.error = "Please confirm terms and conditions"
+            this.errorMsg = "Please confirm terms and conditions"
             return;
           }
           this.isLoading = true
@@ -89,7 +103,7 @@ export default {
           const permit = this.$route.query.role
           const event = this.$route.query.event
           if (invite) {
-            this.user.role = 'guest'
+            this.user.role = 'collaborator'
             this.user.invited = true
             this.user.permittedEvent = { eventId: event, permit: permit }
           } else  {
@@ -116,21 +130,21 @@ export default {
                   },
                   error => {
                     this.loading = false;
-                    this.error = "Invalid email or wrong password, try again."
+                    this.error = "failed"
                   }
                 );
               } else {
-                this.error = `This ${res.field} is already regitered.`
+                this.error = res.field
               }
             },
             error => {
               this.loading = false;
-              this.error = "Sign up is failed"
+              this.error = "failed"
             }
           );
         } else {
           console.log(this.$validator.errors)
-          this.error = this.$validator.errors.items[0].msg
+          this.errorMsg = this.$validator.errors.items[0].msg
         }
       })
     },
@@ -193,6 +207,8 @@ export default {
           email: true
         },
       },
+      error:"",
+      errorMsg: ""
     }
   }
 }
@@ -210,6 +226,10 @@ export default {
       font-weight: 400;
     }
 
+    .signInLink {
+        cursor: pointer;
+        text-decoration: underline;
+    }
     .sorry-modal {
       font-family: 'Rubik', sans-serif;
 

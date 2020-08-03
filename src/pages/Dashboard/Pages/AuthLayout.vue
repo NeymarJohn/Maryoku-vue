@@ -95,7 +95,7 @@ export default {
         Login: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
         Register: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
         CreateWorkspace1: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
-        ForgotPassword: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
+        ForgotPassword1: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
         SignIn1: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
         SignUp1: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
         // SignOut: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
@@ -227,6 +227,7 @@ export default {
       max-width: 100%;
       /* padding-top: 70px; */
       /* padding-bottom: 160px; */
+      max-width: 1100px;
   }
   .page-header::before{
     background: transparent;
