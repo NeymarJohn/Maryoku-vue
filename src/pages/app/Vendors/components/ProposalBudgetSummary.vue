@@ -1,13 +1,22 @@
 <template>
-  <div class="proposal-budget-summary-wrapper">
+  <div class="proposal-budget-summary-wrapper" :style="{'top': `${panelTopPos}px`}">
     <div class="summary-cont">
       <h3>
         You're the {{newProposalRequest.bidderRank | numeral('Oo')}} catering & venue bidder
       </h3>
       <p>
-        Proposals range: <strong>${{newProposalRequest.bidRange.low | withComma}} - ${{newProposalRequest.bidRange.high | withComma}}</strong>
+        Proposals range: 
+        <strong>
+          ${{newProposalRequest.bidRange.low | withComma}} 
+          - 
+          ${{newProposalRequest.bidRange.high | withComma}}
+        </strong>
       </p>
-      <div class="bundle-discount" @click="isBundleDiscount=!isBundleDiscount">
+      <div 
+        class="bundle-discount" 
+        @click="isBundleDiscount=!isBundleDiscount"
+        v-if="additionalServices.length > 0"
+      >
         <img :src="`${iconUrl}Asset 579.svg`"/>
         <span>
           Add Bundle Discount 
@@ -50,7 +59,7 @@
           </li>
         </ul>
       </div>
-      <div class="item additional" v-if="step==2 && additionalServices.length > 0">
+      <div class="item additional" v-if="step>1 && additionalServices.length > 0">
         <h3>Additional Services</h3>
         <ul v-for="(a, aIndex) in additionalServices" :key="aIndex">
           <li>
@@ -80,16 +89,14 @@
             :title="`Add bundle new total`"
             :placeholder="``"
             :style="`width: 100%`"
-          >
-          </input-proposal-sub-item>
+          />
         </div>
         <div class="element">
           <input-proposal-sub-item
             :title="`Or by percentage`"
             :placeholder="``"
             :style="`width: 100%`"
-          >
-          </input-proposal-sub-item>
+          />
         </div>
         <div class="element dis-value">
           $100.00 Discount
@@ -157,6 +164,7 @@
         discountBlock: {},
         additionalServices: [],
         iconsWithCategory: null,
+        panelTopPos: 0,
       }
     },
     methods: {
@@ -228,10 +236,20 @@
           total = total - ( total * this.discountBlock.value / 100)
         }
         return total
-      }
+      },
+      handleScroll(event)  {
+        if (window.scrollY - 327 >= 0) {
+          this.panelTopPos = window.scrollY - 327
+        } else {
+          this.panelTopPos = 0
+        }
+      },
     },
     created() {
-
+      window.addEventListener('scroll', this.handleScroll)
+    },
+    destoryed() {
+      window.removeEventListener('scroll', this.handleScroll)
     },
     mounted() {
       this.newProposalRequest = this.proposalRequest
@@ -269,6 +287,8 @@
     padding: 43px 25px 0;
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     background: #ffffff;
+    position: absolute;
+    width: calc(100% - 2rem);
 
     .summary-cont {
       h3 {

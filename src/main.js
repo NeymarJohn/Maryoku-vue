@@ -27,6 +27,7 @@ import VueTimeago from 'vue-timeago'
 import VueClipboard from 'vue-clipboard2'
 import VueTimepicker from 'vue2-timepicker'
 import vueSignature from "vue-signature"
+import money from 'v-money'
 
 import App from './App.vue'
 import DashboardPlugin from './material-dashboard'
@@ -40,6 +41,9 @@ import { IconURL, StorageURL, ResourceURL } from './globalVariables';
 
 import authHeader from '@/services/auth-header';
 import authService from '@/services/auth.service';
+
+import './assets/scss/main.scss'
+
 require('vue-tour/dist/vue-tour.css')
 
 const VueScrollTo = require('vue-scrollto')
@@ -68,6 +72,7 @@ Vue.use(VueTimeago, {
 })
 Vue.use(VueTimepicker)
 Vue.use(vueSignature)
+Vue.use(money, {precision: 4})
 
 // configure router
 const router = new VueRouter({

@@ -1,0 +1,3 @@
+@mixin gradientBackgroundRSVP($color1, $color2, $color3, $color4) {
+  background-image: linear-gradient($color1 25%, $color2 25%, $color2 50%, $color3 50%, $color3 75%, $color4 75%, $color4 100%);
+}

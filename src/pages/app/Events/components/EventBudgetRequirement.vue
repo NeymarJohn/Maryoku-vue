@@ -155,7 +155,8 @@ export default {
           totalBudget: this.editingEvent.totalBudget?this.editingEvent.totalBudget:0,
           noBudget: this.editingEvent.noBudget,
           reCalculate: true,
-          eventDecisionFactor3: this.editingEvent.eventDecisionFactor3
+          eventDecisionFactor3: this.editingEvent.eventDecisionFactor3,
+          eventMovieId: this.editingEvent.eventMovieId
         })
         this.loadingBudget = true
         this.$store.dispatch('event/saveEventAction', event).then(res=>{
@@ -186,6 +187,7 @@ export default {
     setEventStep2(eventInfo) {
       console.log(eventInfo)
       this.budgetInfo2 = eventInfo
+      this.editingEvent.eventMovieId = eventInfo.label;
     }
   },
   computed: {
@@ -205,10 +207,7 @@ export default {
   }
   .wizard-footer {
     padding: 10px 40px;
-    .scroll-top-button {
-      border-radius: 50%;
-      box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.18);
-    }
+
     .status {
       text-align: center;
       transform: translateY(-35%);
