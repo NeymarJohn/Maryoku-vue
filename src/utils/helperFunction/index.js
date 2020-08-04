@@ -29,3 +29,4 @@ export const numberToWord = num => {
   str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (vm.a[Number(n[5])] || vm.b[n[5][0]] + ' ' + vm.a[n[5][1]]) : '';
   return str;
 }
+

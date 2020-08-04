@@ -130,22 +130,16 @@ const actions = {
       })
   },
   async getEventTypes({ commit, state }, { data, ctx }) {
-    
-    return new Promise((resolve, reject)=>{
-      let _calendar = new Calendar({ id: data })
-      if (state.eventTypes && state.eventTypes.length > 0) {
-        resolve(state.eventTypes)
-      }
-      getReq('/1/eventTypes')
-        .then(res => {
-          commit('setEventTypes', res.data)
-          resolve(res.data)
-        })
-        .catch(e => {
-          commit('setEventTypes', [])
-        })
+    let _calendar = new Calendar({ id: data })
+    if (state.eventTypes && state.eventTypes.length > 0) {
+      return
+    }
+    getReq('/1/eventTypes').then(res => {
+      commit('setEventTypes', res.data)
     })
-    
+      .catch(e => {
+        commit('setEventTypes', [])
+      })
   },
   async getComponents({ commit, state }, ctx) {
     new EventComponent()

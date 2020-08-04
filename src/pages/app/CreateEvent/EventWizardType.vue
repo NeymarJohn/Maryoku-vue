@@ -9,7 +9,6 @@
                 What type of event are you planning on?
               </div>
               <div class="mt-3 types">
-                <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
                 <div class="type-card" @click="selectedType=type" :class="{selected:selectedType.key==type.key}" v-for="(type) in eventTypes" :key="type.value">
                   <div>
                     <img :src="`${$iconURL}Onboarding/${type.key}.svg`">
@@ -48,8 +47,6 @@ export default {
     this.$store.dispatch('event/getEventTypes', {
       data: this.$auth.user.defaultCalendarId,
       ctx: this
-    }).then(res=>{
-      this.isLoading = false
     });
     if (this.publicEventData.eventType) {
       this.selectedType = this.eventTypes.find(it=> it.key == this.publicEventData.eventType.key)
@@ -83,8 +80,7 @@ export default {
   },
   data () {
     return {
-      selectedType: {},
-      isLoading: true,
+      selectedType: {}
     }
   },
   computed: {
