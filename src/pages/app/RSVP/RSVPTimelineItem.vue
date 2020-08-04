@@ -1,11 +1,10 @@
 <template>
   <div class="rsvp-timeline">
-    <img  class="item-icon" 
-    :src="`${$iconURL}Timeline-New/${timeline.icon.toLowerCase()}-circle.svg`">
-    <div class="rsvp-timeline-content" :style="`border-color:${timeline.color}`">
+    <img  class="item-icon" :src="`${$iconURL}Timeline-New/setup-circle.svg`">
+    <div class="rsvp-timeline-content">
       <div>
-        <span class="item-time">{{$dateUtil.formatScheduleTime(timeline.startTime)}} - {{$dateUtil.formatScheduleTime(timeline.endTime)}}</span>
-        <span class="item-title">{{timeline.title}}</span>
+        <span class="item-time">8:00 AM - 8:30 AM</span>
+        <span class="item-title">Gathering</span>
       </div>
     </div>
   </div>
@@ -15,8 +14,8 @@
 export default {
   props: {
     timeline: {
-      type: [Object, Array],
-      default: ()=>{} 
+      type: Object,
+      default: {} 
     },
   },
 }

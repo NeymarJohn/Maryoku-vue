@@ -58,7 +58,8 @@ class EventService {
         eventType: editingEvent.eventType,
         category: editingEvent.occasion?editingEvent.occasion.name:"",
         editable: true,
-        location: editingEvent.location
+        location: editingEvent.location,
+        inOutDoor: editingEvent.inOutDoor
       })
         .for(calendar)
         .save()

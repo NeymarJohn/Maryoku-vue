@@ -155,7 +155,6 @@ class AuthService {
     const domain = ".maryoku.com"
     // document.cookie = `authToken=; expires=; path=/; domain=${domain}`
     document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
   }
 }
 

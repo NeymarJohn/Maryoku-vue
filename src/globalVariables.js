@@ -1,3 +1,3 @@
-export const ResourceURL='https://static.maryoku.com/';
-export const StorageURL='https://static.maryoku.com/storage/';
-export const IconURL='https://static.maryoku.com/storage/icons/';
+export const ResourceURL='http://static.maryoku.com/';
+export const StorageURL='http://static.maryoku.com/storage/';
+export const IconURL='http://static.maryoku.com/storage/icons/';

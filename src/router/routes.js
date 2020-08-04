@@ -5,7 +5,7 @@ import HomeLayout from '@/pages/Dashboard/Layout/HomeLayout.vue'
 import NewEventLayout from '@/pages/Dashboard/Layout/NewEventLayout.vue'
 import WorkspaceLayout from '@/pages/Dashboard/Layout/WorkspaceLayout.vue'
 import RSVPLayout from '@/pages/Dashboard/Layout/RSVPLayout.vue'
-
+import authService from '@/services/auth.service'
 const Events = () => import('@/pages/app/Events/Events.vue')
 const EventProposal = () => import('@/pages/app/Events/EventProposal.vue')
 
@@ -105,6 +105,8 @@ const SignUp = () =>
   import('@/pages/Dashboard/Pages/SignUp.vue')
 const ForgotPassword = () =>
   import('@/pages/Dashboard/Pages/ForgotPassword.vue')
+const ResetPassword = () =>
+  import('@/pages/Dashboard/Pages/ResetPassword.vue')
 const SignOut = () =>
   import('@/pages/Dashboard/Pages/SignOut.vue')
 const SignedIn = () =>
@@ -144,6 +146,15 @@ let authPages = {
     meta: {
       auth: false,
       gtm: 'ForgotPassword'
+    }
+  },
+  {
+    path: '/reset-password',
+    name: 'ResetPassword',
+    component: ResetPassword,
+    meta: {
+      auth: false,
+      gtm: 'ResetPassword'
     }
   },
   {
@@ -1051,7 +1062,7 @@ let RSVPPages = {
   name: 'RSVPLayout',
   children: [
     {
-      path: '/rsvp/:eventId',
+      path: '/rsvp',
       name: 'RSVP',
       component: RSVPEvent,
       meta: {
@@ -1104,6 +1115,8 @@ let RSVPPages = {
 //   ]
 // }
 
+const rememberMe = authService.getCookie("rememberMe")
+const homeLink = rememberMe==="true"?"/events":"/signin"
 const routes = [
   {
     path: '/',

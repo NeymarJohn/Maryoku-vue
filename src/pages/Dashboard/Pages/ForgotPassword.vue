@@ -2,9 +2,9 @@
   <div class="md-layout">
     <vue-element-loading :active="loading" spinner="ring" color="#FF547C" isFullScreen/>
     <div class="md-layout-item">
-      <h2 class="title text-center" slot="title" style="text-align: center;">Reset Password</h2>
+      <div class="text-center font-size-40" style="text-align: center;color:#050505;">Reset Password</div>
       <signup-card>
-        <div class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain" slot="content-right">
+        <div v-if="!submitted" class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain" slot="content-right">
           <!-- <div class="social-line text-center">
             <h4 class="mt-3">Forgot Password</h4>
           </div> -->
@@ -15,6 +15,9 @@
             <!-- <br/>
             <md-button @click="isForgot=true" class="md-black md-maryoku mt-4  md-simple mt-4" slot="footer">Forgot my password?</md-button> -->
           </div>
+        </div>
+        <div v-else class="font-size-20 md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain" slot="content-right">
+          You will get an email, and follow instructions in order reset your password.
         </div>
       </signup-card>
     </div>
@@ -36,22 +39,23 @@ export default {
   },
   methods: {
     forgotPassword () {
-      let that = this
-      console.log(this.errors.items.length)
-      that.$auth.forgotPassword(
-        that, 
-        that.email.toString().toLowerCase(), 
-        (success) => {
-          that.isForgot = false
-        }, 
-        (failure) => {
-          console.log(failure)
-          that.loading = false
-          if (failure.response.status === 401) {
-            that.error = 'Sorry, No such user name or email address.'
+      this.$http.post(`${process.env.SERVER_URL}/1/forgot-password`, { email:this.email }, { 'ContentType': 'application/json' })
+        .then((resp) => {
+          console.log(resp)
+          this.loading = false
+          if (resp.data.status) {
+            this.submitted = true
           } else {
-            that.error = 'Temporary failure, try again later'
-            console.log(JSON.stringify(failure.response))
+            this.error = resp.data.message
+          }
+        })
+        .catch((error) => {
+          console.error(error)
+          this.loading = false
+          if (error.response.status === 401) {
+            this.error = 'Sorry, No such user name or email address.'
+          } else {
+            this.error = 'Temporary failure, try again later'
           }
         })
     },
@@ -91,6 +95,7 @@ export default {
           email: true
         },
       },
+      submitted:false
     }
   }
 }
@@ -98,102 +103,6 @@ export default {
 <style lang="scss" scoped>
     p.description {
       font-size: 16px;
-    }
-
-    h4.info-title {
-      font-size: 18px;
-      font-weight: 400;
-    }
-
-    .sorry-modal {
-      font-family: 'Rubik', sans-serif;
-
-      &__header {
-        width: 100%;
-        padding: 8px 8px 0;
-        display: flex;
-        justify-content: center;
-
-        h3 {
-          text-align: center;
-          margin: 0;
-          color: #641956;
-          font-size: 32px;
-          font-weight: 400;
-        }
-
-        & + .close {
-          background: transparent;
-          border: none;
-          position: absolute;
-          top: 48px;
-          right: 54px;
-          color: #641956;
-          cursor: pointer;
-
-          i {
-            color: #641956;
-          }
-        }
-      }
-      &__body {
-        padding: 10px 40px;
-
-        .forgot {
-          display: block;
-          color: #641956;
-          font-size: 16px;
-          font-weight: bold;
-          cursor: pointer;
-          margin-top: 10px;
-        }
-      }
-      &__footer {
-        width: 100%;
-        padding: 10px 20px 20px 20px;
-        .or-divider-wrapper {
-          padding-bottom: 20px;
-          color: #aaaaaa;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-
-          .divider-item {
-            height: 2px;
-            background-color: #aaaaaa;
-            width: 100%;
-          }
-          .or {
-            padding: 0 22px;
-            font-weight: bold;
-          }
-        }
-        .cancel {
-          width: 100%;
-          height: 56px;
-          font-size: 18px;
-          font-weight: bold;
-          color: #ffffff;
-          background-color: transparent;
-          border-radius: 12px;
-          cursor: pointer;
-          border: none;
-          margin-bottom: 56px;
-        }
-        .send {
-          width: 100%;
-          height: 56px;
-          font-size: 18px;
-          font-weight: 800;
-          color: #ffffff;
-          background: #FF0066 0% 0% no-repeat padding-box!important;
-          border-radius: 12px;
-          padding: 8px 36px;
-          cursor: pointer;
-          border: none;
-          box-shadow: 0px 12px 24px #ff006633;
-        }
-      }
     }
     .md-error {
       color: red;
