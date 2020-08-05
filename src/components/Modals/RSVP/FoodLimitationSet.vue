@@ -14,20 +14,8 @@
     <template v-if="foodLimitaion">
       <div class="limitation-type" >
         <img :src="`${$iconURL}RSVP/Group 9278.svg`"/>
-        <div  @click="limitationType='vegetarian'" class="limiation-type-card" :class="{selected: limitationType=='vegetarian'}" >
-          <img :src="`${$iconURL}RSVP/milk.svg`">
-          <div>
-            I’m vegetarian
-          </div>
-          <div class="check-mark" v-if="limitationType=='vegetarian'"></div>
-        </div>
-        <div class="limiation-type-card" @click="limitationType='vegan'" :class="{selected: limitationType=='vegan'}" >
-          <img :src="`${$iconURL}RSVP/food+(4).svg`">
-          <div>
-            I’m Vegan
-          </div>
-          <div class="check-mark" v-if="limitationType=='vegan'"></div>
-        </div>
+        <option-card icon="milk.svg" label="I’m Vegetarian" :selected="limitationType=='vegetarian'" @select="limitationType='vegetarian'"></option-card>
+        <option-card icon="food+(4).svg" label="I’m Vegan" :selected="limitationType=='vegan'" @select="limitationType='vegan'"></option-card>
       </div>
       <md-checkbox v-model="otherLimitation"> <span>Other food limitations:</span></md-checkbox>
       <div v-if="otherLimitation" class="limition-select">
@@ -70,9 +58,11 @@
 </template>
 <script>
 import { MaryokuInput } from "@/components";
+import OptionCard from './OptionCard'
 export default {
   components: {
-    MaryokuInput
+    MaryokuInput,
+    OptionCard
   },
   props: {
     type: {
@@ -108,48 +98,7 @@ export default {
   .limitation-type {
     display: flex;
   }
-  .limiation-type-card{
-    width: 165px;
-    height: 165px;
-    border-radius: 3px;
-    border: solid 0.5px #818080;
-    background-color: #ffffff;
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 30px;
-    &.selected {
-      box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.17);
-      border: solid 0.5px #050505;
-      .check-mark {
-        position: absolute;
-        width: 30px;
-        height: 30px;
-        background-color: #f51355;
-        border-radius: 50%;
-        right: -15px;
-        top: -15px;
-        &:after {
-          content: '';
-          position: absolute;
-          z-index: 7;
-          border: 3px solid white;
-          border-top: 0;
-          border-left: 0;
-          top: 6px;
-          left: 10px;
-          width: 9px;
-          height: 14px;
-          opacity: 1;
-          transform: rotate(45deg) scale3D(1, 1, 1);
-          transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-      }
-    }
-
-  }
+  
   .selectedLimitationList {
     border-radius: 3px;
     border: solid 0.5px #050505;

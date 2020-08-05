@@ -40,15 +40,15 @@
       </div>
       <div class="information-section" v-for="(guest, index) in joinedGuests" :key="index">
         <div class="width-50">
-          <label class="font-bold">Name of Guest 0{{index + 1}}</label>
-          <maryoku-input v-model="guest.name" ></maryoku-input>
+          <label class="font-bold mb-10" style="display:inline-block">Name of Guest 0{{index + 1}}</label>
+          <maryoku-input v-model="guest.name" class="mb-20"></maryoku-input>
         </div>
         <food-limitation-set :type="2"></food-limitation-set>
       </div>
     </template>
     <template slot="footer" v-if="step==1">
       <div class="text-center w-100">
-        <md-button class="md-red md-bold" @click="close">RSVP Now</md-button>
+        <md-button class="md-red md-bold" @click="setRsvp">RSVP Now</md-button>
       </div>
     </template>
   </modal>
@@ -100,6 +100,9 @@ export default {
         this.guestNumber = Number(this.guestNumber) - 1;
         this.joinedGuests.pop()
       }
+    },
+    setRsvp() {
+      this.$emit("setRsvp")
     }
   },
 };
@@ -128,7 +131,7 @@ export default {
         text-align: center;
         border-radius: 3px;
         border: solid 1px #707070;
-        font-size: 30px;
+        font-size: 20px;
         font-family: "Manrope-Regular";
         max-width: 180px;
       }

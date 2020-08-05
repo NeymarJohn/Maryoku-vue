@@ -186,7 +186,7 @@
         </div>
       </div>
     </div>
-    <rsvp-information-modal v-if="showRsvpModal" @close="showRsvpModal=false"></rsvp-information-modal>
+    <rsvp-information-modal v-if="showRsvpModal" @close="showRsvpModal=false" @setRsvp="setRsvp"></rsvp-information-modal>
     <setting-reminder-modal v-if="showReminderModal" @close="showReminderModal=false"></setting-reminder-modal>
   </div>
 </template>
@@ -294,6 +294,10 @@ export default {
     scrollToTop() {
       window.scrollTo(0, 0);
     },
+    setRsvp() {
+      this.showRsvpModal=false;
+      this.showReminderModal = true
+    }
   },
 };
 </script>
@@ -393,4 +397,6 @@ export default {
     }
   }
 }
+
+
 </style>
