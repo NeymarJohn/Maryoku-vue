@@ -121,9 +121,6 @@ textarea {
 .mt-20 {
   margin-bottom: 20px;
 }
-.mt-30 {
-  margin-bottom: 30px;
-}
 .mb-20 {
   margin-bottom: 20px;
 }
@@ -156,19 +153,6 @@ textarea {
 }
 .mb-2 {
   margin-bottom: 2rem;
-}
-.mr-10 {
-  margin-right: 10px;
-}
-.mr-30 {
-  margin-right: 30px;
-}
-.mr-60 {
-  margin-right: 60px;
-}
-
-.width-50 {
-  width: 50%;
 }
 .md-radio {
   .md-radio-container {
@@ -213,16 +197,7 @@ textarea {
       }
   }
 }
-.mayroku-btn {
-  min-width: auto;
-  .md-ripple{
-      text-transform: none;
-      .md-button-content {
-          font-family: 'Manrope-ExtraBold',sans-serif;
-          font-size: 16px;
-      }
-  }
-}
+
 .normal-btn {
   min-width: auto;
   margin-top: 0px;

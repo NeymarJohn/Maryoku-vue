@@ -106,7 +106,7 @@
                 <img :src="`${iconsURL}sun.svg`" width="20" />
                 <span>{{event.eventDayPart}} Time event</span>
               </li>
-              <li class="event-details-item">
+              <li class="event-details-item" v-if="canEdit">
                 <md-button class="md-rose md-simple edit-btn" @click="openEditDetail">
                   Edit Details
                   <md-icon>keyboard_arrow_right</md-icon>
@@ -661,44 +661,43 @@ export default {
     // event: Object,
     // eventComponents: [Array, Function]
   },
-  data() {
-    return {
-      // auth: auth,
-      calendar: null,
-      event: null,
-      editEvent: null,
-      eventId: null,
-      percentage: 0,
-      totalRemainingBudget: 0,
-      remainingBudgetPerEmployee: 0,
-      seriesData: [],
-      routeName: null,
-      budgetPerEmployee: 0,
-      acceptedProposals: [],
-      paidProposals: [],
-      eventInfoCardExpanded: false,
-      isLoading: true,
-      pieChart: {},
-      timelineItems: [],
-      hoursArray: [],
-      disabledDragging: false,
-      timelineAttachment: null,
-      iconsURL: `${this.$iconURL}Event%20Page/`,
-      timlineIconsURL: `${this.$iconURL}Timeline-New/`,
-      menuIconsURL: `${this.$iconURL}menu%20_%20checklist/SVG/`,
-      notes: {
-        newNote: ""
-      },
-      radio: false,
-      showEditDetailModal: false,
-      timeline: [],
-      a : ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ','eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '],
-      b : ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety'],
-      logger : "./static/img/logo.jpg",
-      conceptName : "",
-      showCommentEditorPanel:false
-    }
-  },
+  data: () => ({
+    // auth: auth,
+    calendar: null,
+    event: null,
+    editEvent: null,
+    eventId: null,
+    percentage: 0,
+    totalRemainingBudget: 0,
+    remainingBudgetPerEmployee: 0,
+    seriesData: [],
+    routeName: null,
+    budgetPerEmployee: 0,
+    acceptedProposals: [],
+    paidProposals: [],
+    eventInfoCardExpanded: false,
+    isLoading: true,
+    pieChart: {},
+    timelineItems: [],
+    hoursArray: [],
+    disabledDragging: false,
+    timelineAttachment: null,
+    iconsURL: "http://static.maryoku.com/storage/icons/Event%20Page/",
+    timlineIconsURL: "http://static.maryoku.com/storage/icons/Timeline-New/",
+    menuIconsURL:
+      "http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/",
+    notes: {
+      newNote: ""
+    },
+    radio: false,
+    showEditDetailModal: false,
+    timeline: [],
+    a : ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ','eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '],
+    b : ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety'],
+    logger : "./static/img/logo.jpg",
+    conceptName : "",
+    showCommentEditorPanel:false
+  }),
   methods: {
     getTimelineItems() {
       let event = new CalendarEvent({ id: this.event.id });
@@ -1043,6 +1042,21 @@ export default {
           (this.getTotalRemainingBudget / this.getTotalAmountByGuestType) * 100
         );
       }
+    },
+
+    // check permission
+    permission() {
+      try {
+        return this.$store.state.event.eventData.permit 
+      } catch(e) {
+        return "edit"
+      }
+    },
+    canComment() {
+      return this.permission === 'edit' || this.permission === 'comment'
+    },
+    canEdit() {
+      return this.permission === 'edit'
     }
   }
 };

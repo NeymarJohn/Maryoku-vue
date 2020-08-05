@@ -43,7 +43,6 @@ import authHeader from '@/services/auth-header';
 import authService from '@/services/auth.service';
 
 import './assets/scss/main.scss'
-import dateUtil from './utils/date.util'
 
 require('vue-tour/dist/vue-tour.css')
 
@@ -104,7 +103,6 @@ router.beforeEach((to, from, next) => {
     return
   }
   store.dispatch('auth/checkToken').then(res=>{
-    console.log(res)
     if (to.path == '/signin') {
       if (res.currentTenant && res.tenants.indexOf(res.currentTenant)>=0) {
         next('/events')
@@ -253,9 +251,6 @@ String.prototype.padStart = function (size, theChar) {
 
 Object.defineProperty(Vue.prototype, '$auth', {
   get () { return auth }
-})
-Object.defineProperty(Vue.prototype, '$dateUtil', {
-  get () { return dateUtil }
 })
 Object.defineProperty(Vue.prototype, '$authHeader', {
   get () { return authHeader().Authorization }
