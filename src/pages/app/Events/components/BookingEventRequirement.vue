@@ -198,7 +198,7 @@
       </div>
       <div>
         <md-button class="md-bold add-category-btn md-black md-simple">Revert To Original</md-button>
-        <md-button class="md-red md-bold add-category-btn" @click="findVendors">Find Me Venues</md-button>
+        <md-button class="md-red md-bold add-category-btn" @click="findVendors">Find my perfect venue</md-button>
       </div>
     </div>
   </div>
@@ -413,7 +413,10 @@ export default {
     findVendors() {
       
       postReq('/1/vendors/setting-requirements', {
-        vendorCategory: "foodandbeverage"
+        vendorCategory: "foodandbeverage",
+        expiredBusinessTime: moment(new Date()).add(5, 'days').valueOf(),
+        settingsJsonData: JSON.stringify(this.requirementProperties),
+        eventComponentInstance: new EventComponent({id: this.blockId})
       }).then(res=>{
         this.$emit("setRequirements", res);
       })

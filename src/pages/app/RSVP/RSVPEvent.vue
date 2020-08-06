@@ -181,15 +181,13 @@
           <md-button class="md-simple md-button md-black mayroku-btn"><span class="font-size-20">I Can't make it</span></md-button>
           <span class="seperator"></span>
           <md-button class="md-simple md-button md-black mayroku-btn"><span class="font-size-20">I Need To Think About It</span></md-button>
-          <md-button @click="showZoomModal=true" class="md-simple md-button md-black mayroku-btn virtual-btn" ><span class="font-size-20">Virtual Participation</span></md-button>
+          <md-button class="md-simple md-button md-black mayroku-btn virtual-btn"><span class="font-size-20">Virtual Participation</span></md-button>
           <md-button @click="showRsvpModal=true" class="md-button md-red mayroku-btn rsvp-btn"><span class="font-size-20">RSVP Now</span></md-button>
         </div>
       </div>
     </div>
     <rsvp-information-modal v-if="showRsvpModal" @close="showRsvpModal=false" @setRsvp="setRsvp"></rsvp-information-modal>
     <setting-reminder-modal v-if="showReminderModal" @close="showReminderModal=false"></setting-reminder-modal>
-    <join-zoom-modal v-if="showZoomModal"  @close="showZoomModal=false"  @setRsvp="setZoomRsvp"></join-zoom-modal>
-    <sync-calendar-modal v-if="showSyncCalendarForZoom" @close="showSyncCalendarForZoom=false"></sync-calendar-modal>
   </div>
 </template>
 <script>
@@ -200,16 +198,13 @@ import CalendarEvent from "@/models/CalendarEvent";
 import _ from "underscore";
 import RsvpInformationModal from "@/components/Modals/RSVP/InformationModal"
 import SettingReminderModal from "@/components/Modals/RSVP/SettingReminderModal"
-import JoinZoomModal from "@/components/Modals/RSVP/JoinZoomModal"
-import SyncCalendarModal from "@/components/Modals/RSVP/SyncCalendarModal"
+
 export default {
   components: {
     RsvpTimelineItem,
     carousel,
     RsvpInformationModal,
-    SettingReminderModal,
-    JoinZoomModal,
-    SyncCalendarModal
+    SettingReminderModal
   },
   data() {
     return {
@@ -232,8 +227,6 @@ export default {
       isLoading: true,
       showRsvpModal: false,
       showReminderModal: false,
-      showZoomModal: false,
-      showSyncCalendarForZoom: false
     };
   },
   created() {
@@ -304,10 +297,6 @@ export default {
     setRsvp() {
       this.showRsvpModal=false;
       this.showReminderModal = true
-    },
-    setZoomRsvp() {
-      this.showZoomModal = false;
-      this.showSyncCalendarForZoom = true
     }
   },
 };
