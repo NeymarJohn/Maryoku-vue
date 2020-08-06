@@ -20,9 +20,7 @@
         v-clipboard:error="onCopyError"
         @mouseover="mouseOver($event)"
         >Copy</button>
-      <transition name="fade" mode="out-in">
-        <div class="copied-tooltip" v-if="tooltipActive">Link Copied!</div>
-      </transition>
+      <md-tooltip :md-active="tooltipActive"  >Link Copied</md-tooltip>
     </div>
     <div ref="timePickerElements" v-if="showTimePicker">
       <div class="time-picker picker-panel"  ref="timePickerPanel" >
@@ -230,29 +228,5 @@ export default {
 }
 .required-logo {
   color: red;
-}
-.copied-tooltip {
-  width: 140px;
-  height: 40px;
-  background-color: #f51355;
-  text-align: center;
-  line-height: 40px;
-  position: absolute;
-  right: -4px;
-  top: 55px;
-  color: white;
-  font-weight: bold;
-  border-radius: 2px;
-  &:after {
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 15px solid #f51355;
-    content: "";
-    top: -14px;
-    position: absolute;
-    right: 30px;
-  }
 }
 </style>

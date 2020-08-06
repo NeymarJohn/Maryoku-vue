@@ -148,6 +148,9 @@
       }
     }
     section.footer-wrapper {
+      z-index: 9999;
+      position: absolute;
+      width: 100%;
       background-color: #404040;
       min-height: 110px;
 

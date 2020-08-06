@@ -173,7 +173,7 @@ export default {
   },
   created () {
     const currentUser = this.$store.state.auth.user;
-    if (currentUser.currentTenant && currentUser.profile.defaultCalendarId) {
+    if (currentUser.currentTenant) {
       let _calendar = new Calendar({ id: currentUser.profile.defaultCalendarId })
       let m = new CalendarEvent().for(_calendar).fetch(this, true)
       m.then(allEvents => {
@@ -182,8 +182,6 @@ export default {
       }).catch(e=>{
         console.log(e)
       })
-    } else if (!currentUser.profile.defaultCalendarId) {
-      this.$router.push({path:'/choose-workspace'})
     } else {
       this.$router.push({path:'/signin'})
     }

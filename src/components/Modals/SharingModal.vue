@@ -52,9 +52,6 @@
               <div class="checkbox-wrapper"><md-checkbox v-model="isSendingMessage">Send message</md-checkbox></div>
             </div>
           </div>
-          <div>
-            {{statusMessage}}
-          </div>
         </div>
       </div>
     </template>
@@ -112,7 +109,6 @@ export default {
         attachedProposal: "",
         attachment: null
       },
-      statusMessage: ""
     };
   },
   created () {
@@ -141,13 +137,6 @@ export default {
           eventId: this.$route.params.id
         }
       , { headers: this.$auth.getAuthHeader() })
-      .then(res=>{
-        if (res.data.status) {
-          this.statusMessage = "We have sent an email to the invited users."
-        } else {
-          this.statusMessage = "Something is wrong. Please try again later."
-        }
-      })
     },
    
     onCancel: function(e) {

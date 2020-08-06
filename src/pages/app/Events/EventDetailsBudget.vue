@@ -23,7 +23,7 @@
                         <div class="budget-list__item">
                             <div class="label-title">Budget</div>
                             <div class="budget-value">${{statistics.total | withComma}}</div>
-                            <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="showBudgetModal = true">Edit</md-button>
+                            <md-button class="md-rose md-simple md-sm edit-budget" @click="showBudgetModal = true">Edit</md-button>
                         </div>
                         <div class="budget-list__item">
                             <div class="label-title">Allocated</div>
@@ -439,20 +439,6 @@ export default {
         data: this.seriesData
       }
     },
-    // check permission
-    permission() {
-      try {
-        return this.$store.state.event.eventData.permit 
-      } catch(e) {
-        return "edit"
-      }
-    },
-    canComment() {
-      return this.permission === 'edit' || this.permission === 'comment'
-    },
-    canEdit() {
-      return this.permission === 'edit'
-    }
    
   },
   filters: {

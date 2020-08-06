@@ -4,12 +4,12 @@
       <li v-if="!hideDownload">
         <md-button class="md-simple md-just-icon"><img :src="`${$iconURL}common/download-dark.svg`" /></md-button>
       </li>
-      <li v-if="canEdit">
+      <li>
         <md-button class="md-simple md-just-icon" @click="toggleSharingMode" >
           <img :src="`${$iconURL}common/share-dark.svg`" />
         </md-button>
       </li>
-      <li v-if="canComment">
+      <li>
         <md-button class="md-simple md-just-icon" :class="{active:isCommentMode}" @click="toggleCommentMode">
           <img :src="`${$iconURL}common/message-dark.svg`" />
         </md-button>
@@ -40,6 +40,7 @@ export default {
   },
   created () {
     const tenantId = this.$authService.resolveTenantId();
+    console.log(this.$route.path)
   },
   methods: {
     toggleCommentMode() {
@@ -52,21 +53,6 @@ export default {
     genearteShareLink() {
       this.shareLink = `${this.$authService.getAppUrl(tenantId)}/#/signup?invite=true&role=${this.role}&url=${this.$route.path}`;
       return this.shareLink
-    }
-  },
-  computed: {
-    permission() {
-      try {
-        return this.$store.state.event.eventData.permit 
-      } catch(e) {
-        return "edit"
-      }
-    },
-    canComment() {
-      return this.permission === 'edit' || this.permission === 'comment'
-    },
-    canEdit() {
-      return this.permission === 'edit'
     }
   },
 }

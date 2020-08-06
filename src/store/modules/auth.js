@@ -44,6 +44,7 @@ export default {
     checkToken({ commit }, token) {
       return AuthService.checkToken(token).then(
         user => {
+          console.log(user)
           commit('loginSuccess', user);
           return Promise.resolve(user);
         },
@@ -79,6 +80,7 @@ export default {
       return state.status.loggedIn;
     },
     currentUser: (state, gettters) => {
+      console.log(state.user)
       return state.user
     }
   }

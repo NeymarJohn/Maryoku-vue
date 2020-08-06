@@ -32,8 +32,8 @@
         >
           <div class="d-flex justify-content-between align-center" v-if="item.expand">
             <label>24 have tried this!</label>
-            <md-button v-if="item.name != selectedConcept.name && canEdit" class="md-red md-bold" @click="selectConcept(index)">Select</md-button>
-            <span v-if="item.name == selectedConcept.name" class="font-size-16">You already selected this concept</span>
+            <md-button v-if="item.name != selectedConcept.name" class="md-red md-bold" @click="selectConcept(index)">Select</md-button>
+            <span v-else class="font-size-16">You already selected this concept</span>
           </div>
           <div :class="`images-list option-${index+1}`">
             <div class="image-backgrounds">
@@ -83,7 +83,6 @@
         <div
           class="concepts-list__item d-flex justify-content-start"
           :class="{expanded : expandCreateConcept}"
-          v-if="canEdit"
         >
           <div class="images-list create-concept" v-if="!expandCreateConcept">
             <div class="image-backgrounds">
@@ -315,19 +314,6 @@ export default {
     userName() {
       return this.currentUser ? this.currentUser.name : "";
     },
-    permission() {
-      try {
-        return this.$store.state.event.eventData.permit 
-      } catch(e) {
-        return "edit"
-      }
-    },
-    canComment() {
-      return this.permission === 'edit' || this.permission === 'comment'
-    },
-    canEdit() {
-      return this.permission === 'edit'
-    }
   },
   data: () => ({
     // auth: auth,

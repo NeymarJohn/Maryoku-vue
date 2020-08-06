@@ -44,7 +44,7 @@
 
                 <md-button
                   class="md-rose md-sm md-simple edit-btn"
-                  v-if="!block.editBudget && !block.bookedBudget && canEdit"
+                  v-if="!block.editBudget && !block.bookedBudget"
                   @click="showEditElementBudget(block)"
                 >Edit</md-button>
                 <img
@@ -317,7 +317,7 @@
           <td width="15%" class="total-value">${{event.statistics.booked | withComma}}</td>
           <td colspan="2"></td>
         </tr>
-        <tr class="add-category" v-if="canEdit">
+        <tr class="add-category">
           <td colspan="5">
             <md-button class="md-simple add-category-btn" @click="showCategoryModal = true">
               <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2019.svg" /> Add new category
@@ -523,20 +523,7 @@ export default {
   computed: {
     ...mapGetters({
       components: "event/getComponentsList"
-    }),
-    permission() {
-      try {
-        return this.$store.state.event.eventData.permit 
-      } catch(e) {
-        return "edit"
-      }
-    },
-    canComment() {
-      return this.permission === 'edit' || this.permission === 'comment'
-    },
-    canEdit() {
-      return this.permission === 'edit'
-    }
+    })
   },
   methods: {
     ...mapMutations("EventPlannerVuex", ["setBuildingBlockModal"]),

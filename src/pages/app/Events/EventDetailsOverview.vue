@@ -106,7 +106,7 @@
                 <img :src="`${iconsURL}sun.svg`" width="20" />
                 <span>{{event.eventDayPart}} Time event</span>
               </li>
-              <li class="event-details-item" v-if="canEdit">
+              <li class="event-details-item">
                 <md-button class="md-rose md-simple edit-btn" @click="openEditDetail">
                   Edit Details
                   <md-icon>keyboard_arrow_right</md-icon>
@@ -1042,21 +1042,6 @@ export default {
           (this.getTotalRemainingBudget / this.getTotalAmountByGuestType) * 100
         );
       }
-    },
-
-    // check permission
-    permission() {
-      try {
-        return this.$store.state.event.eventData.permit 
-      } catch(e) {
-        return "edit"
-      }
-    },
-    canComment() {
-      return this.permission === 'edit' || this.permission === 'comment'
-    },
-    canEdit() {
-      return this.permission === 'edit'
     }
   }
 };

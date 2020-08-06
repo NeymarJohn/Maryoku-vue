@@ -1,5 +1,5 @@
 <template>
-  <div v-if="component.title !== 'Total'" class="event-budget-component d-flex" :class="{editable: editable}" :style="`border-left: 10px solid ${component.color}; color: ${fontColor}`">
+  <div v-if="component.title !== 'Total'" class="event-budget-component d-flex" :style="`border-left: 10px solid ${component.color}; color: ${fontColor}`">
     <div class="font-size-20 font-bold name">
       <img class="icon" :src="`${$iconURL}Budget Elements/${component.icon}`">
       {{component.title}}
@@ -62,10 +62,6 @@
       participants : {
         type: Number,
         default: 1
-      },
-      editable: {
-        type: Boolean,
-        default: true
       }
     },
     created () {
@@ -142,7 +138,7 @@
       margin: 10px;
     }
   }
-  &.editable:hover{
+  &:hover{
     .actions {
       opacity: 1;
     }

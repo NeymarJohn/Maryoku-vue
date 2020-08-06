@@ -6,7 +6,7 @@
           <div class="budget-card">
               <div class="font-size-22">Budget</div>
               <div class="font-size-50 font-bold value" >${{event.totalBudget | withComma}}</div>
-              <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-btn" @click="showBudgetModal = true">Edit</md-button>
+              <md-button class="md-rose md-simple md-sm edit-btn" @click="showBudgetModal = true">Edit</md-button>
           </div>
         </div>
         <div class="card-section card-expense mt-3">
@@ -31,13 +31,12 @@
                     <event-budget-component v-for="(component,  index) in selectedComponents" 
                       :component="component" 
                       :key="index" 
-                      :editable="canEdit"
                       @delete="deleteCategory"
                       @updateCategory="updateCategory"></event-budget-component>
-                    <event-budget-component :editable="canEdit" :component="{ title: 'Extra', color:'#818080', fontColor:'#818080', icon: 'extra.svg', allocatedBudget: event.allocatedFees + event.allocatedTips }" ></event-budget-component>
-                    <event-budget-component :editable="canEdit" :component="{ title: 'Unused', color:'#0047cc', fontColor:'#0047cc', icon: 'unused.svg', allocatedBudget: unusedBudget }" ></event-budget-component>
-                    <event-budget-component :editable="canEdit" :component="{ title: 'Total',  allocatedBudget: event.totalBudget }" ></event-budget-component>
-                    <div class="add-category-row" v-if="canEdit">
+                    <event-budget-component :component="{ title: 'Extra', color:'#818080', fontColor:'#818080', icon: 'extra.svg', allocatedBudget: event.allocatedFees + event.allocatedTips }" ></event-budget-component>
+                    <event-budget-component :component="{ title: 'Unused', color:'#0047cc', fontColor:'#0047cc', icon: 'unused.svg', allocatedBudget: unusedBudget }" ></event-budget-component>
+                    <event-budget-component :component="{ title: 'Total',  allocatedBudget: event.totalBudget }" ></event-budget-component>
+                    <div class="add-category-row">
                       <md-button class="md-simple add-category-btn md-red add-category-button" @click="showAddNewCategory = true">
                         <img :src="`${$iconURL}budget+screen/SVG/Asset%2019.svg`"/> 
                         <span class="font-size-20 font-bold text-transform-capitalize">Add new category</span>
@@ -45,11 +44,11 @@
                     </div>
                   </template>
                   <template slot="tab-pane-2">
-                    <event-budget-component :editable="canEdit" type="perguest" :participants="event.numberOfParticipants" v-for="(component,  index) in selectedComponents" :component="component" :key="index" ></event-budget-component>
-                    <event-budget-component :editable="canEdit" :component="{ title: 'Extra', color:'#818080', fontColor:'#818080', icon: 'extra.svg', allocatedBudget: event.allocatedFees + event.allocatedTips }" type="perguest" :participants="event.numberOfParticipants"></event-budget-component>
-                    <event-budget-component :editable="canEdit" :component="{ title: 'Unused', color:'#0047cc', fontColor:'#0047cc', icon: 'unused.svg', allocatedBudget: unusedBudget }" type="perguest" :participants="event.numberOfParticipants"></event-budget-component>
-                    <event-budget-component :editable="canEdit" :component="{title:'Total', allocatedBudget:event.totalBudget}" type="perguest" :participants="event.numberOfParticipants" ></event-budget-component>
-                    <div class="add-category-row"  v-if="canEdit">
+                    <event-budget-component type="perguest" :participants="event.numberOfParticipants" v-for="(component,  index) in selectedComponents" :component="component" :key="index" ></event-budget-component>
+                    <event-budget-component :component="{ title: 'Extra', color:'#818080', fontColor:'#818080', icon: 'extra.svg', allocatedBudget: event.allocatedFees + event.allocatedTips }" type="perguest" :participants="event.numberOfParticipants"></event-budget-component>
+                    <event-budget-component :component="{ title: 'Unused', color:'#0047cc', fontColor:'#0047cc', icon: 'unused.svg', allocatedBudget: unusedBudget }" type="perguest" :participants="event.numberOfParticipants"></event-budget-component>
+                    <event-budget-component :component="{title:'Total', allocatedBudget:event.totalBudget}" type="perguest" :participants="event.numberOfParticipants" ></event-budget-component>
+                    <div class="add-category-row">
                       <md-button class="md-simple add-category-btn md-red add-category-button" @click="showAddNewCategory = true">
                         <img :src="`${$iconURL}budget+screen/SVG/Asset%2019.svg`"/> 
                         <span class="font-size-20 font-bold text-transform-capitalize">Add new category</span>
@@ -110,6 +109,7 @@ export default {
     },
     allocatedTotal() {
       const addedBudget =  this.selectedComponents.reduce((sum, item)=>{
+        console.log(sum)
         return sum + item.allocatedBudget
       }, 0)
       return addedBudget + this.event.allocatedTips + this.event.allocatedFees
@@ -120,20 +120,6 @@ export default {
     pieChartData () {
       return  this.selectedComponents.filter(item=>item.componentId !== 'unexpected')
     },
-    permission() {
-      console.log(this.$store.state.event.eventData)
-      try {
-        return this.$store.state.event.eventData.permit 
-      } catch(e) {
-        return "edit"
-      }
-    },
-    canComment() {
-      return this.permission === 'edit' || this.permission === 'comment'
-    },
-    canEdit() {
-      return this.permission === 'edit'
-    }
   },
   methods: {
     updateBudget(eventBudget) {
@@ -147,6 +133,7 @@ export default {
       })
     },
     async addNewCategory(newCategory) {
+      console.log(newCategory)
       let newComponent = newCategory.category;
       if (newComponent.id === "other") {
         const newCategory = {
@@ -171,6 +158,7 @@ export default {
         category: newComponent
       };
 
+      console.log(newBlock)
       new EventComponent(newBlock)
         .for(new Calendar({id: this.event.calendar.id}), this.event)
         .save()

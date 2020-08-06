@@ -103,6 +103,7 @@ router.beforeEach((to, from, next) => {
     return
   }
   store.dispatch('auth/checkToken').then(res=>{
+    console.log(res)
     if (to.path == '/signin') {
       if (res.currentTenant && res.tenants.indexOf(res.currentTenant)>=0) {
         next('/events')
