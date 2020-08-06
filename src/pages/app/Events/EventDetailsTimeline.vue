@@ -594,6 +594,24 @@ export default {
      * @param event
      */
     handleDrop(index, data) {
+      if (!this.canEdit) {
+        swal({
+        title: "Sorry, you can't edit timeline. ",
+        showCancelButton: false,
+        confirmButtonClass: "md-button md-success",
+        confirmButtonText: "Ok, I got it",
+        buttonsStyling: false
+      })
+        .then(result => {
+          if (result.value === true) {
+            return 
+          }
+        })
+        .catch(err => {
+         
+        });
+        return 
+      }
       if (data) {
         let block = Object.assign({}, data.block);
         block.id = new Date().getTime(); //add temp id
@@ -1226,6 +1244,19 @@ export default {
       set(val) {
         this.$material.locale.dateFormat = val;
       }
+    },
+    permission() {
+      try {
+        return this.$store.state.event.eventData.permit 
+      } catch(e) {
+        return "edit"
+      }
+    },
+    canComment() {
+      return this.permission === 'edit' || this.permission === 'comment'
+    },
+    canEdit() {
+      return this.permission === 'edit'
     }
   },
   watch: {

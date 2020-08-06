@@ -1,6 +1,7 @@
 <template>
   <modal class="sharing-model">
     <template slot="header">
+      
       <div class="maryoku-modal-header">
         <h2>Share 'Venue Proposals' With Your Colleague</h2>
       </div>
@@ -51,6 +52,9 @@
               <div> <strong>Shared with: </strong> <span v-for="email in emails" :key="email">{{email}}, </span></div>
               <div class="checkbox-wrapper"><md-checkbox v-model="isSendingMessage">Send message</md-checkbox></div>
             </div>
+          </div>
+          <div>
+            {{statusMessage}}
           </div>
         </div>
       </div>
@@ -109,6 +113,7 @@ export default {
         attachedProposal: "",
         attachment: null
       },
+      statusMessage: ""
     };
   },
   created () {
@@ -137,6 +142,13 @@ export default {
           eventId: this.$route.params.id
         }
       , { headers: this.$auth.getAuthHeader() })
+      .then(res=>{
+        if (res.data.status) {
+          this.statusMessage = "We have sent an email to the invited users."
+        } else {
+          this.statusMessage = "Something is wrong. Please try again later."
+        }
+      })
     },
    
     onCancel: function(e) {
