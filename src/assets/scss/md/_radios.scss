@@ -43,11 +43,6 @@
       background-color: $brand-primary !important;
     }
   }
-  &.md-checked {
-    .md-radio-label{
-      font-weight: bold;
-    }
-  }
 
   &.md-disabled .md-radio-label,
   &.md-disabled .md-radio-container{
