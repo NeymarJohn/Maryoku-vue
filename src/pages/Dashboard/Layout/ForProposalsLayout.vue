@@ -7,11 +7,7 @@
       </div>
       <div class="summary-cont">
         <ul>
-          <li 
-            :class="[{'with-help': dateTooltip}]" 
-            @mouseover="dateTooltip=true" 
-            @mouseleave="dateTooltip=false"
-          >
+          <li :class="[{'with-help': dateTooltip}]" @mouseover="dateTooltip=true" @mouseleave="dateTooltip=false">
             <img :src="`${proposalIconsUrl}Path 251 (2).svg`"/> 
             {{eventDate}} 
             <img v-if="dateTooltip" class="question" :src="`${proposalIconsUrl}Asset 582.svg`"/>
@@ -20,18 +16,9 @@
               <p>Client will get this proposal with <br/> your new suggested date</p>
             </div>
           </li>
-          <li>
-            <img :src="`${proposalIconsUrl}Group 6085 (2).svg`"/> 
-            {{eventTime}}
-          </li>
-          <li>
-            <img :src="`${proposalIconsUrl}Asset 573.svg`"/> 
-            {{getLocation}}
-          </li>
-          <li>
-            <img :src="`${proposalIconsUrl}Asset 572.svg`"/> 
-            {{proposalRequest ? proposalRequest.eventData.numberOfParticipants : '-' | withComma }} 
-          </li>
+          <li><img :src="`${proposalIconsUrl}Group 6085 (2).svg`"/> {{eventTime}}</li>
+          <li><img :src="`${proposalIconsUrl}Asset 573.svg`"/> {{getLocation}}</li>
+          <li><img :src="`${proposalIconsUrl}Asset 572.svg`"/> {{proposalRequest ? proposalRequest.eventData.numberOfParticipants : '-' | withComma }} </li>
         </ul>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
@@ -554,10 +541,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: absolute;
-      width: 100%;
-      z-index: 9999;
-      overflow: hidden;
 
       .prev-cont {
         font-size: 16px;

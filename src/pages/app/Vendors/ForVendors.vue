@@ -46,7 +46,7 @@
         Would you like to submit your bid?
       </h3>
       <div class="check-cont">
-        <md-checkbox class="check-condition" v-model="isAgreed">
+        <md-checkbox class="check-condition" v-model="isAgree">
           <span 
             class="regular" 
             @mouseover="conditionTooltip=true" 
@@ -360,7 +360,7 @@ export default {
       reasonIsInfo: false,
       reasonIsOther: false,
       iconsUrl: 'http://static.maryoku.com/storage/icons/NewLandingPage/',
-      isAgreed: null,
+      isAgree: false,
       referTooltip: false,
       conditionTooltip: false,
       proposalRequestRequirements: [],
@@ -408,7 +408,7 @@ export default {
     }
 
     this.$root.$on('go-to-proposal-form', () => {
-      if (this.isAgreed) {
+      if (this.isAgree) {
         if (this.proposalRequest) {
           this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`)
         } else {
@@ -424,17 +424,11 @@ export default {
         window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight)
         this.conditionTooltip = true
       }
-    }),
-
-    this.$root.$on('back-proposal-landing-page', () => {
-      this.$set(this, 'isAgreed', true)
-      console.log(22, this.isAgreed)
-      this.$forceUpdate()
     })
   },
   methods: {
     goToForm() {
-      if (this.isAgreed) {
+      if (this.isAgree) {
         if (this.proposalRequest) {
           this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`)
         } else {
