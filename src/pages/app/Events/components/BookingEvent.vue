@@ -2,19 +2,19 @@
   <div class="md-layout booking-section" v-if="selectedBlock">
     <template v-if="showProposals">
       <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
-      <div class="event-page-header md-layout-item md-size-100">
-        <div class="header-title">
-          <h3>
-            <img
-              :src="`${budgetElementsIConsURL}${selectedBlock.componentId}.svg`"
-              style="width:30px; margin-right:0.5em"
-            />
-            {{selectedBlock.bookTitle}}
-          </h3>
+        <div class="event-page-header md-layout-item md-size-100">
+          <div class="header-title">
+            <h3>
+              <img
+                :src="`${budgetElementsIConsURL}${selectedBlock.componentId}.svg`"
+                style="width:30px; margin-right:0.5em"
+              />
+              {{selectedBlock.bookTitle}}
+            </h3>
+          </div>
+          <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
         </div>
-        <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
-      </div>
-      <template v-if="!showCounterPage">
+
         <div class="booking-header md-layout-item md-size-100">
           <div class="header-title w-100">
             <h4>Hi Rachel</h4>
@@ -164,22 +164,10 @@
             >Update Vendor</md-button>
           </template>
         </modal>
-      </template>
-      <template v-if="showCounterPage">
-        <div class="text-center font-size-20 md-layout-item md-size-100 mt-50" style="line-height: 2em"> 
-          Our process is seeking vendors from our pool that are aligned with your requirements. 
-          <br/>
-          Those vendors will receive an email with a link to create a proposal.
-          <br/>
-          This process will take 
-          in 4days.
-        </div>
-      </template>
     </template>
-    <template v-if="!showProposals ">
+    <template v-if="!showProposals">
       <booking-event-requirement @setRequirements="setRequirements"></booking-event-requirement>
     </template>
-    
   </div>
   
 </template>
@@ -377,7 +365,6 @@ export default {
     },
     setRequirements(vendors) {
       this.selectedBlock.vendors = vendors
-      this.showCounterPage = true
       this.showProposals = true
     }
   },

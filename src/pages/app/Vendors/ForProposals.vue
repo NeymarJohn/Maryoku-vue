@@ -160,6 +160,7 @@ export default {
         this.step--
       } else {
         this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}`)
+        this.$root.$emit('back-proposal-landing-page')
       }
       console.log('wrapperStep', this.step)
     })
