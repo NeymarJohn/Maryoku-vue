@@ -2,19 +2,19 @@
   <div class="md-layout booking-section" v-if="selectedBlock">
     <template v-if="showProposals">
       <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
-      <div class="event-page-header md-layout-item md-size-100">
-        <div class="header-title">
-          <h3>
-            <img
-              :src="`${$iconURL}Budget+Elements/${selectedBlock.componentId}.svg`"
-              style="width:30px; margin-right:0.5em"
-            />
-            {{selectedBlock.bookTitle}}
-          </h3>
+        <div class="event-page-header md-layout-item md-size-100">
+          <div class="header-title">
+            <h3>
+              <img
+                :src="`${budgetElementsIConsURL}${selectedBlock.componentId}.svg`"
+                style="width:30px; margin-right:0.5em"
+              />
+              {{selectedBlock.bookTitle}}
+            </h3>
+          </div>
+          <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
         </div>
-        <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
-      </div>
-      <template v-if="!showCounterPage">
+
         <div class="booking-header md-layout-item md-size-100">
           <div class="header-title w-100">
             <h4>Hi Rachel</h4>
@@ -164,22 +164,10 @@
             >Update Vendor</md-button>
           </template>
         </modal>
-      </template>
-      <template v-if="showCounterPage">
-        <div class="text-center font-size-20 md-layout-item md-size-100 mt-50" style="line-height: 2em"> 
-          Our process is seeking vendors from our pool that are aligned with your requirements. 
-          <br/>
-          Those vendors will receive an email with a link to create a proposal.
-          <br/>
-          This process will take 
-          in 4days.
-        </div>
-      </template>
     </template>
-    <template v-if="!showProposals ">
-      <booking-event-requirement @setRequirements="setRequirements" :component="selectedBlock"></booking-event-requirement>
+    <template v-if="!showProposals">
+      <booking-event-requirement @setRequirements="setRequirements"></booking-event-requirement>
     </template>
-    
   </div>
   
 </template>
@@ -191,12 +179,15 @@ import EventComponent from "@/models/EventComponent";
 import EventTimelineItem from "@/models/EventTimelineItem";
 import moment from "moment";
 import swal from "sweetalert2";
+import { SlideYDownTransition } from "vue2-transitions";
 import InputMask from "vue-input-mask";
 import BookingEventRequirement from './BookingEventRequirement.vue'
 
 import VueElementLoading from "vue-element-loading";
 // import auth from '@/auth';
 import EventBlocks from "../components/NewEventBlocks";
+import draggable from "vuedraggable";
+import { Drag, Drop } from "vue-drag-drop";
 import _ from "underscore";
 import { Modal } from "@/components";
 import EventComponentVendor from "@/models/EventComponentVendor";
@@ -211,6 +202,10 @@ export default {
   components: {
     VueElementLoading,
     EventBlocks,
+    draggable,
+    Drag,
+    Drop,
+    SlideYDownTransition,
     InputMask,
     Modal,
     EventChangeProposalModal,
@@ -223,9 +218,20 @@ export default {
     // auth: auth,
     calender: null,
     isLoading: true,
+    timelineItems: [],
+    hoursArray: [],
+    disabledDragging: false,
     somethingMessage: null,
+    timelineAttachment: null,
     event: {},
+    timelineIconsURL: "http://static.maryoku.com/storage/icons/timeline/svg/",
+    menuIconsURL:
+      "http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/",
     iconsURL: "http://static.maryoku.com/storage/icons/Event%20Page/",
+    newTimeLineIconsURL:
+      "http://static.maryoku.com/storage/icons/Timeline-New/",
+    budgetElementsIConsURL:
+      "http://static.maryoku.com/storage/icons/Budget+Elements/",
     showSomethingModal: false,
     showShareVendorModal: false,
     blockVendors: null,
@@ -238,6 +244,28 @@ export default {
   methods: {
     ...mapMutations("event", ["setEventData"]),
     ...mapActions("comment", ["getCommentComponents"]),
+    onFileChange(e) {
+      let files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+      if (e.target.name) {
+        this.createImage(files[0], "attachment");
+      } else {
+        this.createImage(files[0]);
+      }
+    },
+    createImage(file, type) {
+      let reader = new FileReader();
+      let vm = this;
+
+      reader.onload = e => {
+        if (type === "attachment") {
+          vm.timelineAttachment = e.target.result;
+        } else {
+          // vm.imageRegular = e.target.result;
+        }
+      };
+      reader.readAsDataURL(file);
+    },
     getSelectedBlock() {
       new EventComponent()
         .for(this.calendar, this.event)
@@ -246,76 +274,79 @@ export default {
           this.selectedBlock = _.findWhere(resp, {
             id: this.blockId
           });
-          if (this.selectedBlock.vendorRequirements && this.selectedBlock.vendorRequirements[0]) {
-            this.showCounterPage = true
-            this.showProposals = true
-          } else {
-            this.showCounterPage = false
-            this.showProposals = false
-          }
         });
     },
-    // getBlockVendors() {
-    //   if (this.blockId !='timeline' && this.blockId != 'concept' ) {
-    //     let event = new CalendarEvent({ id: this.event.id });
-    //     let selected_block = new EventComponent({
-    //       id: this.blockId
-    //     });
+    getBlockVendors() {
+      if (this.blockId !='timeline' && this.blockId != 'concept' ) {
+        let event = new CalendarEvent({ id: this.event.id });
+        let selected_block = new EventComponent({
+          id: this.blockId
+        });
 
-    //     new EventComponentVendor()
-    //       .for(this.calendar, event, selected_block)
-    //       .get()
-    //       .then(resp => {
-    //         this.isLoading = false;
-    //         this.selectedBlock.vendors = resp;
-    //         this.selectedBlock.vendorsCount = resp.length;
-    //         this.blockVendors = resp;
+        new EventComponentVendor()
+          .for(this.calendar, event, selected_block)
+          .get()
+          .then(resp => {
+            this.isLoading = false;
+            this.selectedBlock.vendors = resp;
+            this.selectedBlock.vendorsCount = resp.length;
+            this.blockVendors = resp;
 
-    //         let vendorsWithProposals = _.filter(this.blockVendors, function(
-    //           item
-    //         ) {
-    //           return item.proposals && item.proposals.length;
-    //         });
-    //         // let vendorsWithSentStatus = _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
-    //         // let vendorsWithNoStatus   = _.filter(this.blockVendors, function(item){ return !item.proposals });
+            let vendorsWithProposals = _.filter(this.blockVendors, function(
+              item
+            ) {
+              return item.proposals && item.proposals.length;
+            });
+            // let vendorsWithSentStatus = _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
+            // let vendorsWithNoStatus   = _.filter(this.blockVendors, function(item){ return !item.proposals });
 
-    //         // this.filteredBlockVendors = _.union( vendorsWithSentStatus,vendorsWithNoStatus);
+            // this.filteredBlockVendors = _.union( vendorsWithSentStatus,vendorsWithNoStatus);
 
-    //         let proposals = [];
-    //         _.each(vendorsWithProposals, v => {
-    //           proposals.push(v.proposals[0]);
-    //         });
-    //         this.selectedBlock.proposals = proposals;
-    //         this.selectedBlock.proposalsCount = proposals.length;
+            let proposals = [];
+            _.each(vendorsWithProposals, v => {
+              proposals.push(v.proposals[0]);
+            });
+            this.selectedBlock.proposals = proposals;
+            this.selectedBlock.proposalsCount = proposals.length;
 
-    //         // this.vendors = _.union( vendorsWithSentStatus,vendorsWithNoStatus);
-    //         this.proposals = vendorsWithProposals;
-    //       })
-    //       .catch(error => {
-    //         this.isLoading = false;
-    //         console.log("EventComponentVendor error =>", error);
-    //       });
-    //   } else {
-    //     this.blockVendors = this.selectedBlock.vendors;
+            // this.vendors = _.union( vendorsWithSentStatus,vendorsWithNoStatus);
+            this.proposals = vendorsWithProposals;
+          })
+          .catch(error => {
+            this.isLoading = false;
+            console.log("EventComponentVendor error =>", error);
+          });
+      } else {
+        this.blockVendors = this.selectedBlock.vendors;
 
-    //     let vendorsWithProposals = _.filter(this.blockVendors, function(item) {
-    //       return item.proposals && item.proposals.length;
-    //     });
-    //     let vendorsWithSentStatus = _.filter(this.blockVendors, function(item) {
-    //       return item.proposals && !item.proposals.length;
-    //     });
-    //     let vendorsWithNoStatus = _.filter(this.blockVendors, function(item) {
-    //       return !item.proposals;
-    //     });
+        let vendorsWithProposals = _.filter(this.blockVendors, function(item) {
+          return item.proposals && item.proposals.length;
+        });
+        let vendorsWithSentStatus = _.filter(this.blockVendors, function(item) {
+          return item.proposals && !item.proposals.length;
+        });
+        let vendorsWithNoStatus = _.filter(this.blockVendors, function(item) {
+          return !item.proposals;
+        });
 
-    //     this.filteredBlockVendors = _.union(
-    //       vendorsWithProposals,
-    //       vendorsWithSentStatus,
-    //       vendorsWithNoStatus
-    //     );
-    //     this.isLoading = false;
-    //   }
-    // },
+        this.filteredBlockVendors = _.union(
+          vendorsWithProposals,
+          vendorsWithSentStatus,
+          vendorsWithNoStatus
+        );
+        this.isLoading = false;
+      }
+    },
+    proposalDetails(proposal) {
+      this.$router.push(
+        "/events/" +
+          this.event.id +
+          "/proposal-details/" +
+          this.blockId +
+          "/" +
+          proposal.proposals[0].id
+      );
+    },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
     },
@@ -328,17 +359,32 @@ export default {
           this.event = event;
           this.setEventData(event);
           this.getCommentComponents(this.blockId);
-          // this.getBlockVendors();
+          this.getBlockVendors();
           this.getSelectedBlock();
         });
     },
     setRequirements(vendors) {
       this.selectedBlock.vendors = vendors
-      this.showCounterPage = true
       this.showProposals = true
     }
   },
   created() {
+    [...Array(12).keys()].map(x =>
+      x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined
+    );
+    [...Array(12).keys()].map(x =>
+      x === 0
+        ? this.hoursArray.push(`12:00 PM`)
+        : this.hoursArray.push(`${x}:00 PM`)
+    );
+    [...Array(8).keys()].map(x =>
+      x === 0
+        ? this.hoursArray.push(`12:00 AM`)
+        : this.hoursArray.push(`${x}:00 AM`)
+    );
+    this.hoursArray.push();
+  },
+  mounted() {
     this.isLoading = true;
     this.calendar = new Calendar({id: this.$store.state.auth.user.profile.defaultCalendarId})
     this.fetchData()

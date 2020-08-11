@@ -19,7 +19,7 @@
               style="width:30px; margin-right:0.5em"
               v-if="selectedBlock.componentId"
             />
-            Plan {{selectedBlock.title}}
+            PLAN {{selectedBlock.title}}
           </h3>
           We are here to find you the most accurate offers for your event<br />
           Before submitting a proposal to our suppliers, we want to make sure we know exactly what you are looking for
@@ -198,33 +198,47 @@
       </div>
       <div>
         <md-button class="md-bold add-category-btn md-black md-simple">Revert To Original</md-button>
-        <md-button class="md-red md-bold add-category-btn" @click="findVendors">Find my perfect venue</md-button>
+        <md-button class="md-red md-bold add-category-btn" @click="findVendors">Find Me Venues</md-button>
       </div>
     </div>
   </div>
 </template>
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import moment from "moment";
-import InputMask from "vue-input-mask";
-import VueElementLoading from "vue-element-loading";
-import _ from "underscore";
-import Multiselect from "vue-multiselect";
-
-import { postReq, getReq } from '@/utils/token'
-import { Modal } from "@/components";
-import EventChangeProposalModal from "@/components/Modals/EventChangeProposalModal";
-import HeaderActions from "@/components/HeaderActions";
-import CommentEditorPanel from "./CommentEditorPanel";
-
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
+import EventTimelineItem from "@/models/EventTimelineItem";
+import moment from "moment";
+import swal from "sweetalert2";
+import { SlideYDownTransition } from "vue2-transitions";
+import InputMask from "vue-input-mask";
+
+import VueElementLoading from "vue-element-loading";
+// import auth from '@/auth';
+import EventBlocks from "../components/NewEventBlocks";
+import draggable from "vuedraggable";
+import { Drag, Drop } from "vue-drag-drop";
+import _ from "underscore";
+import { Modal } from "@/components";
+import EventComponentVendor from "@/models/EventComponentVendor";
+import EventComponentProperty from "@/models/EventComponentProperty";
+
+import EventChangeProposalModal from "@/components/Modals/EventChangeProposalModal";
+import HeaderActions from "@/components/HeaderActions";
+import CommentEditorPanel from "./CommentEditorPanel";
+import Multiselect from "vue-multiselect";
+import { postReq, getReq } from '@/utils/token'
 
 export default {
   name: "booking-event-requirement",
   components: {
     VueElementLoading,
+    EventBlocks,
+    draggable,
+    Drag,
+    Drop,
+    SlideYDownTransition,
     InputMask,
     Modal,
     EventChangeProposalModal,
@@ -232,17 +246,19 @@ export default {
     CommentEditorPanel,
     Multiselect
   },
-  props: {
-    component: {
-      type: Object,
-      default: {}
-    }
-  },
+  props: {},
   data: () => ({
     // auth: auth,
     calendar: null,
     isLoading: true,
+    timelineItems: [],
+    hoursArray: [],
+    disabledDragging: false,
+    somethingMessage: null,
+    timelineAttachment: null,
     event: {},
+    showSomethingModal: false,
+    showShareVendorModal: false,
     blockVendors: null,
     selectedBlock: {},
     proposals: [],
@@ -261,21 +277,113 @@ export default {
       this.requirementProperties = { ...this.requirementProperties }
       this.$forceUpdate();
     },
-    setProperties() {
-      this.selectedBlock = this.component
-      this.fetchAllProperties(this.selectedBlock.componentId).then(properties=>{
-        const propertiesByGroup = {};
-        properties.forEach(item=>{
-          if (!propertiesByGroup[item.categoryTitle])   propertiesByGroup[item.categoryTitle] = []
-          if (propertiesByGroup[item.categoryTitle].length >= 5) {
-            item.isHide = true
-          } else {
-            item.isHide = false
-          }
-          propertiesByGroup[item.categoryTitle].push(item)
-        })
-        this.requirementProperties = {...propertiesByGroup}
-      })
+    createImage(file, type) {
+      let reader = new FileReader();
+      let vm = this;
+
+      reader.onload = e => {
+        if (type === "attachment") {
+          vm.timelineAttachment = e.target.result;
+        } else {
+          // vm.imageRegular = e.target.result;
+        }
+      };
+      reader.readAsDataURL(file);
+    },
+    getSelectedBlock() {
+      let event = new CalendarEvent({ id: this.event.id });
+      if (this.blockId === 'concept' || this.blockId === 'timeline' || this.blockId === 'budget') return;
+      new EventComponent()
+        .for(this.calendar, event)
+        .get()
+        .then(resp => {
+          this.selectedBlock = _.findWhere(resp, {
+            id: this.blockId
+          });
+          this.fetchAllProperties(this.selectedBlock.componentId).then(properties=>{
+            const propertiesByGroup = {};
+            properties.forEach(item=>{
+              if (!propertiesByGroup[item.categoryTitle])   propertiesByGroup[item.categoryTitle] = []
+              if (propertiesByGroup[item.categoryTitle].length >= 5) {
+                item.isHide = true
+              } else {
+                item.isHide = false
+              }
+              propertiesByGroup[item.categoryTitle].push(item)
+            })
+            this.requirementProperties = {...propertiesByGroup}
+          })
+        });
+    },
+    getBlockVendors() {
+      if (this.blockId != 'timeline' && this.blockId != 'concept') {
+        let event = new CalendarEvent({ id: this.eventData.id });
+        let selected_block = new EventComponent({
+          id: this.blockId
+        });
+        new EventComponentVendor()
+          .for(this.calendar, event, selected_block)
+          .get()
+          .then(resp => {
+            this.isLoading = false;
+            this.selectedBlock.vendors = resp;
+            this.selectedBlock.vendorsCount = resp.length;
+            this.blockVendors = resp;
+
+            let vendorsWithProposals = _.filter(this.blockVendors, function(
+              item
+            ) {
+              return item.proposals && item.proposals.length;
+            });
+            // let vendorsWithSentStatus = _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
+            // let vendorsWithNoStatus   = _.filter(this.blockVendors, function(item){ return !item.proposals });
+
+            // this.filteredBlockVendors = _.union( vendorsWithSentStatus,vendorsWithNoStatus);
+
+            let proposals = [];
+            _.each(vendorsWithProposals, v => {
+              proposals.push(v.proposals[0]);
+            });
+            this.selectedBlock.proposals = proposals;
+            this.selectedBlock.proposalsCount = proposals.length;
+
+            // this.vendors = _.union( vendorsWithSentStatus,vendorsWithNoStatus);
+            this.proposals = vendorsWithProposals;
+          })
+          .catch(error => {
+            this.isLoading = false;
+            console.error(error)
+          });
+      } else {
+        this.blockVendors = this.selectedBlock.vendors;
+
+        let vendorsWithProposals = _.filter(this.blockVendors, function(item) {
+          return item.proposals && item.proposals.length;
+        });
+        let vendorsWithSentStatus = _.filter(this.blockVendors, function(item) {
+          return item.proposals && !item.proposals.length;
+        });
+        let vendorsWithNoStatus = _.filter(this.blockVendors, function(item) {
+          return !item.proposals;
+        });
+
+        this.filteredBlockVendors = _.union(
+          vendorsWithProposals,
+          vendorsWithSentStatus,
+          vendorsWithNoStatus
+        );
+        this.isLoading = false;
+      }
+    },
+    proposalDetails(proposal) {
+      this.$router.push(
+        "/events/" +
+          this.event.id +
+          "/proposal-details/" +
+          this.blockId +
+          "/" +
+          proposal.proposals[0].id
+      );
     },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
@@ -284,21 +392,49 @@ export default {
       this.blockId = this.$route.params.blockId
       this.event = this.$store.state.event.eventData;
       this.getCommentComponents(this.blockId);
-      this.setProperties();
+      this.getBlockVendors();
+      this.getSelectedBlock();
+      
+      // this.calendar
+      //       .calendarEvents()
+      //       .find(this.$route.params.id)
+      //       .then(event => {
+      //         this.event = event;
+      //         this.setEventData(event);
+      //         this.getCommentComponents(this.blockId);
+      //         this.getBlockVendors();
+      //         this.getSelectedBlock();
+      //         // new EventComponent().for(_calendar, event).get().then(components => {
+      //         //     this.event.components = components
+      //         //     this.selectedComponents = components
+      //         // })
+      //       });
     },
     findVendors() {
+      
       postReq('/1/vendors/setting-requirements', {
-        vendorCategory: "foodandbeverage",
-        expiredBusinessTime: moment(new Date()).add(5, 'days').valueOf(),
-        settingsJsonData: JSON.stringify(this.requirementProperties),
-        eventComponentInstance: new EventComponent({id: this.blockId})
+        vendorCategory: "foodandbeverage"
       }).then(res=>{
         this.$emit("setRequirements", res);
       })
     }
   },
   created() {
+    [...Array(12).keys()].map(x =>
+      x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined
+    );
+    [...Array(12).keys()].map(x =>
+      x === 0
+        ? this.hoursArray.push(`12:00 PM`)
+        : this.hoursArray.push(`${x}:00 PM`)
+    );
+    [...Array(8).keys()].map(x =>
+      x === 0
+        ? this.hoursArray.push(`12:00 AM`)
+        : this.hoursArray.push(`${x}:00 AM`)
+    );
     this.calendar = new Calendar({id: this.$store.state.auth.user.profile.defaultCalendarId})
+    this.hoursArray.push();
   },
   mounted() {
     this.isLoading = true;

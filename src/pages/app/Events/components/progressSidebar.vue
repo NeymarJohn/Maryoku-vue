@@ -155,13 +155,22 @@ export default {
         progress: 0,
         componentId: 'timeline'
       };
+       const campaign = {
+        title: "Create Campaigns",
+        status: "current",
+        route: "booking/campaign",
+        icon: `${this.$iconURL}Campaign/Group 8857.svg`,
+        progress: 0,
+        componentId: 'campaign'
+      };
       const elements = [];
       if (this.event.eventType.hasConcept) {
         elements.push(concept);
       }
       elements.push(budget);
       elements.push(timeline);
-
+      elements.push(campaign);
+      
       const vm = this;
       new EventComponent()
         .for(this.calendar, event)
