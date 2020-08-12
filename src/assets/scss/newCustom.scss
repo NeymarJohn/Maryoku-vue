@@ -3095,7 +3095,7 @@
 
         .images-list {
             position: relative;
-            width: 572px;
+            min-width: 572px;
 
             &__item {
                 position: absolute;

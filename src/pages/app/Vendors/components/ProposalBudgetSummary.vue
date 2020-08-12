@@ -27,7 +27,8 @@
       </div>
     </div>
     <div class="items-cont">
-      <div class="item">
+      <div class="item" :class="{'with-check': step == 3}">
+        <md-checkbox v-if="step == 3" class="no-margin" v-model="selectedBlock"/>
         <ul>
           <li>
             <img :src="`${iconUrl}Asset 614.svg`"/>
@@ -59,29 +60,35 @@
           </li>
         </ul>
       </div>
-      <div class="item additional" v-if="step>1 && additionalServices.length > 0">
+      <div 
+        class="item additional" 
+        v-if="step>1 && additionalServices.length > 0"
+      >
         <h3>Additional Services</h3>
-        <ul v-for="(a, aIndex) in additionalServices" :key="aIndex">
-          <li>
-            <img :src="getIconUrlByCategory(a.value)"/>
-            {{a.name}}
-          </li>
-          <li>
-            <span>{{a.subTitle}}</span>
-          </li>
-          <li>
-            <span>Your proposal</span>
-            <span>${{calculatedTotal(getRequirementsByCategory(a.value)) | withComma}}</span>
-          </li>
-          <li>
-            <span>Budget for {{a.name}}</span>
-            <span>${{calculatedTotal(getRequirementsByCategory(a.value)) | withComma}}</span>
-          </li>
-          <li v-if="calculatedTotal(getRequirementsByCategory(a.value)) - newProposalRequest.eventData.allocatedBudget > 0">
-            <md-icon>error</md-icon>
-            <span>Your proposal is ${{calculatedTotal(getRequirementsByCategory(a.value)) - newProposalRequest.eventData.allocatedBudget | withComma}} more than the budget</span>
-          </li>
-        </ul>
+        <div :class="{'with-check': step == 3}" v-for="(a, aIndex) in additionalServices" :key="aIndex"> 
+          <md-checkbox v-if="step == 3" class="no-margin"/>
+          <ul>
+            <li>
+              <img :src="getIconUrlByCategory(a.value)"/>
+              {{a.name}}
+            </li>
+            <li>
+              <span>{{a.subTitle}}</span>
+            </li>
+            <li>
+              <span>Your proposal</span>
+              <span>${{calculatedTotal(getRequirementsByCategory(a.value)) | withComma}}</span>
+            </li>
+            <li>
+              <span>Budget for {{a.name}}</span>
+              <span>${{calculatedTotal(getRequirementsByCategory(a.value)) | withComma}}</span>
+            </li>
+            <li v-if="calculatedTotal(getRequirementsByCategory(a.value)) - newProposalRequest.eventData.allocatedBudget > 0">
+              <md-icon>error</md-icon>
+              <span>Your proposal is ${{calculatedTotal(getRequirementsByCategory(a.value)) - newProposalRequest.eventData.allocatedBudget | withComma}} more than the budget</span>
+            </li>
+          </ul>
+        </div>
       </div>
       <div class="item bundle" v-if="isEdit">
         <div class="element">
@@ -465,6 +472,14 @@
               }
             }
           }
+        }
+      }
+      .with-check {
+        display: grid;
+        grid-template-columns: 10% 90%;
+
+        .no-margin {
+          margin: 0!important;
         }
       }
     }

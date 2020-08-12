@@ -28,35 +28,6 @@
       <feedback v-if="selectedTab == 4"></feedback>
       <delivery-settings></delivery-settings>
     </div>
-    <div class="campaign-footer">
-      <div class="campaign-footer-content d-flex">
-        <div>
-          <md-button
-            @click="scrollToTop"
-            class="md-button md-simple md-just-icon md-theme-default scroll-top-button"
-          >
-            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
-          </md-button>
-        </div>
-        <div>
-          <md-button class="md-simple md-button md-black mayroku-btn">
-            <span class="font-size-16 text-transform-capitalize">
-              <img class="mr-20" :src="`${$iconURL}Campaign/Group 1855.svg`"/>
-              Send Me A Preview</span>
-          </md-button>
-          <span class="seperator"></span>
-          <md-button class="md-simple md-button md-black mayroku-btn">
-            <span class="font-size-16 text-transform-capitalize">
-              <img class="mr-20" :src="`${$iconURL}Campaign/Group 8871.svg`"/>Revert to original</span></md-button>
-          <md-button class="md-button md-red mayroku-btn schedule-campaign-btn">
-            <span class="font-size-16 text-transform-capitalize">
-              <img class="mr-20" :src="`${$iconURL}Campaign/Path 4377.svg`"/>
-              Schedule Campaign</span>
-            <span class="expand"></span>
-          </md-button>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -92,10 +63,7 @@
       },
       selectTab(tabIndex) {
         this.selectedTab = tabIndex
-      },
-      scrollToTop() {
-        window.scrollTo(0, 0);
-      },
+      }
     },
   }
 </script>
@@ -120,52 +88,5 @@
       }
     }
   }
-
 }
-
-.event-campaign-section {
-  .campaign-footer {
-    height: 128px;
-    background-color: white;
-    width: 100%;
-    margin-top: 100px;
-    padding: 10px 50px;
-    &-content {
-      max-width: 1520px;
-      margin: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      height: 100%;
-    }
-    .seperator {
-      display: inline-block;
-      border-left: solid 1px #050505;
-      height: 2rem;
-      margin-top: 1rem;
-    }
-    .schedule-campaign-btn {
-      &::after {
-        content: '';
-        height: 50px;
-        width: 54px;
-        background: #FF4F7E;
-      }
-    }
-
-    .virtual-btn {
-      border: solid 1px #f51355;
-      margin-left: 30px;
-    }
-  }
-  .expanding-icon {
-    width: 6px;
-    height: 6px;
-    border: solid 2px #818080;
-    &.expanded {
-      transform: rotate(-45deg)
-    }
-  }
-}
-  
 </style>
