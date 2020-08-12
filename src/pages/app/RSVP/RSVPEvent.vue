@@ -144,18 +144,6 @@
             ></rsvp-timeline-item>
           </div>
         </div>
-        <!-- <div class="md-layout-item md-size-50 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra">
-        <div class="rsvp-event-timeline-day">
-          <span class="font-size-22 font-bold-extra">Day 01</span>
-          <span class="font-size-16">20/04/20</span>
-        </div>
-        <div>
-          <rsvp-timeline-item></rsvp-timeline-item>
-          <rsvp-timeline-item></rsvp-timeline-item>
-          <rsvp-timeline-item></rsvp-timeline-item>
-          <rsvp-timeline-item></rsvp-timeline-item>
-        </div>
-        </div>-->
       </div>
     </div>
     <div class="text-center mb-50">
@@ -178,11 +166,11 @@
           </md-button>
         </div>
         <div>
-          <md-button class="md-simple md-button md-black mayroku-btn"><span class="font-size-20">I Can't make it</span></md-button>
+          <md-button class="md-simple md-button md-black maryoku-btn"><span class="font-size-20">I Can't make it</span></md-button>
           <span class="seperator"></span>
-          <md-button class="md-simple md-button md-black mayroku-btn"><span class="font-size-20">I Need To Think About It</span></md-button>
-          <md-button @click="showZoomModal=true" class="md-simple md-button md-black mayroku-btn virtual-btn" ><span class="font-size-20">Virtual Participation</span></md-button>
-          <md-button @click="showRsvpModal=true" class="md-button md-red mayroku-btn rsvp-btn"><span class="font-size-20">RSVP Now</span></md-button>
+          <md-button class="md-simple md-button md-black maryoku-btn"><span class="font-size-20">I Need To Think About It</span></md-button>
+          <md-button @click="showZoomModal=true" class="md-simple md-button md-black maryoku-btn virtual-btn" ><span class="font-size-20">Virtual Participation</span></md-button>
+          <md-button @click="showRsvpModal=true" class="md-button md-red maryoku-btn rsvp-btn"><span class="font-size-20">RSVP Now</span></md-button>
         </div>
       </div>
     </div>
