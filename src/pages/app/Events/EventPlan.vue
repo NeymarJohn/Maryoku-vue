@@ -4,7 +4,7 @@
     <event-details-timeline v-if="pageId=='timeline'"></event-details-timeline>
     <event-concept-choose v-else-if="pageId=='concept'"></event-concept-choose>
     <event-budget-requirement v-else-if="pageId=='budget'"></event-budget-requirement>
-    <event-campaign v-else-if="pageId=='campaign'"></event-campaign>
+    <event-campaign v-else-if="pageId='campaign'"></event-campaign>
     <booking-event v-else></booking-event>
   </div>
 </template>
