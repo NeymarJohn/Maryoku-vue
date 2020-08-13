@@ -24,6 +24,7 @@
       </div>
 
       <div class="concepts-list md-layout-item md-size-100">
+         <vue-element-loading :active="loadingConceptOptions" spinner="ring" color="#FF547C" />
         <div
           class="concepts-list__item d-flex justify-content-start"
           :class="{expanded : item.expand}"
@@ -336,7 +337,6 @@ export default {
     showEditForm: false,
     isLoading: true,
     timelineItems: [],
-    hoursArray: [],
     disabledDragging: false,
     somethingMessage: null,
     timelineAttachment: null,
@@ -356,6 +356,7 @@ export default {
     selectedConcept: {},
     showCommentEditorPanel: false,
     base64Images: [],
+    loadingConceptOptions: false,
     conceptOptions: [
       {
         option: 1,
@@ -562,7 +563,7 @@ export default {
           "event/saveEventAction",
           new CalendarEvent({
             id: event.id,
-            concept: eventConcept,
+            concept: {id: eventConcept.id},
             conceptProgress: 100,
             calendar: calendar,
           })
@@ -590,23 +591,6 @@ export default {
     },
   },
   created() {
-    [...Array(12).keys()].map((x) =>
-      x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined
-    );
-    [...Array(12).keys()].map((x) =>
-      x === 0
-        ? this.hoursArray.push(`12:00 PM`)
-        : this.hoursArray.push(`${x}:00 PM`)
-    );
-    [...Array(8).keys()].map((x) =>
-      x === 0
-        ? this.hoursArray.push(`12:00 AM`)
-        : this.hoursArray.push(`${x}:00 AM`)
-    );
-
-    this.hoursArray.push();
-  },
-  mounted() {
     if (this.eventData.id) {
       if (this.eventData.concept) {
         this.selectedConcept = this.eventData.concept;
@@ -616,37 +600,14 @@ export default {
         this.showConceptList = false;
         this.conceptOptions.push(this.selectedConcept)
       } else {
-        // this.$http.get(`https:// api-dev.maryoku.com/1/concepts?indoor=&eventSong=&occasion=&month=&budget=`)
-        const filters = {
-          indoor: this.eventData.inOutDoor,
-          eventSong: this.eventData.eventSongId,
-          occasion: this.eventData.occasion?this.eventData.occasion:"",
-          month: new Date(this.eventData.eventStartMillis).getMonth() + 1,
-          budget:''
-        }
-        
-        this.$http.get(`${process.env.SERVER_URL}/1/concepts`, filters).then(res => {
-          this.conceptOptions = res.data.concepts;
+        this.loadingConceptOptions = true
+        this.$http.get(`${process.env.SERVER_URL}/1/concepts/${this.eventData.id}/suggestions`).then(res => {
+          this.conceptOptions = res.data;
           this.showConceptList = true;
+          this.loadingConceptOptions = false
         }).catch(err=>{
-          this.selectedConcept = this.eventData.concept;
-          this.selectedConcept.images.forEach((item, i) => {
-            item.url = item.url;
-          });
-          this.showConceptList = false;
-          this.conceptOptions.push(this.selectedConcept)
+          this.loadingConceptOptions = false
         })
-        // EventConcept.get().then((concepts) => {
-          // this.conceptOptions = concepts.slice(0, 3);
-          // this.showConceptList = true;
-        // }).catch(err => {
-          // this.selectedConcept = this.eventData.concept;
-          // this.selectedConcept.images.forEach((item, i) => {
-          //   item.url = item.url;
-          // });
-          // this.showConceptList = false;
-          // this.conceptOptions.push(this.selectedConcept)
-        // });
       }
       this.isLoading = false;
       console.log(this.event.id);

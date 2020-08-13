@@ -85,9 +85,7 @@
             </li>
             <li v-if="calculatedTotal(getRequirementsByCategory(a.value)) - newProposalRequest.eventData.allocatedBudget > 0">
               <md-icon>error</md-icon>
-              <span>
-                Your proposal is ${{calculatedTotal(getRequirementsByCategory(a.value)) - newProposalRequest.eventData.allocatedBudget | withComma}} more than the budget
-              </span>
+              <span>Your proposal is ${{calculatedTotal(getRequirementsByCategory(a.value)) - newProposalRequest.eventData.allocatedBudget | withComma}} more than the budget</span>
             </li>
           </ul>
         </div>
