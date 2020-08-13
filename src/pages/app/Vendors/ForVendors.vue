@@ -17,12 +17,30 @@
         <div class="right-side">
           <div class="summary-cont">
             <ul>
-              <li><img :src="`${iconsUrl}Path 251.svg`"> <strong>Date:</strong>{{ eventDate }}</li>
-              <li><img :src="`${iconsUrl}Group 6085.svg`"> <strong>Time:</strong>{{ eventTime }}</li>
-              <li><img :src="`${iconsUrl}Asset 506.svg`"> <strong>Address:</strong><span>{{ getLocation }}</span></li>
-              <li><img :src="`${iconsUrl}Asset 505.svg`"> <strong>Guests:</strong>{{ proposalRequest ? proposalRequest.eventData.numberOfParticipants : '-' | withComma }}</li>
-              <li><img :src="`${iconsUrl}Path 1942.svg`"> <strong>Type:</strong>{{ proposalRequest ? proposalRequest.eventData.occasion : '-'}}</li>
-              <li><img :src="`${iconsUrl}Path 1383.svg`"> <strong>Invited:</strong>{{ proposalRequest ? proposalRequest.eventData.participantsType : '-'}}</li>
+              <li>
+                <img :src="`${iconsUrl}Path 251.svg`">
+                <strong>Date:</strong>{{ eventDate }}
+              </li>
+              <li>
+                <img :src="`${iconsUrl}Group 6085.svg`">
+                <strong>Time:</strong>{{ eventTime }}
+              </li>
+              <li>
+                <img :src="`${iconsUrl}Asset 506.svg`">
+                <strong>Address:</strong><span>{{ getLocation }}</span>
+              </li>
+              <li>
+                <img :src="`${iconsUrl}Asset 505.svg`">
+                <strong>Guests:</strong>{{ proposalRequest ? proposalRequest.eventData.numberOfParticipants : '-' | withComma }}
+              </li>
+              <li>
+                <img :src="`${iconsUrl}Path 1942.svg`">
+                <strong>Type:</strong>{{ proposalRequest ? proposalRequest.eventData.occasion : '-'}}
+              </li>
+              <li>
+                <img :src="`${iconsUrl}Path 1383.svg`">
+                <strong>Invited:</strong>{{ proposalRequest ? proposalRequest.eventData.participantsType : '-'}}
+              </li>
               <li>
                 <div class="new-time">
                   Already Booked? <a @click="showChooseDateModal()">Suggest New time</a>
@@ -64,7 +82,8 @@
       </div>
       <!-- <div class="condition-tooltip" v-if="conditionTooltip"> -->
       <div class="condition-tooltip" v-if="true">
-        <img :src="`${iconsUrl}Group 1175 (10).svg`"> Let us know that you are on board with our teams & conditions
+        <img :src="`${iconsUrl}Group 1175 (10).svg`"> 
+        Let us know that you are on board with our teams & conditions
       </div>
     </div>
     <div class="action-cont">
@@ -167,10 +186,16 @@
                 v-model="reasonIsDate" 
                 :style="`border-color: ${reasonIsDate ? '#fc1355!important;' : 'inherit'}`"
               >
-                <span class="colored" :class="[{'bold': reasonIsDate}]">I'm fully booked around the date of the event</span>
+                <span class="colored" :class="[{'bold': reasonIsDate}]">
+                  I'm fully booked around the date of the event
+                </span>
               </md-checkbox>
-              <a class="another-date" @click="showChooseDateModal()" v-if="vendor.category == 'venue'">Suggest Another Date</a>
-              <a class="another-date" @click="showChooseDateModal()" v-else>Suggest Another Time</a>
+              <a class="another-date" @click="showChooseDateModal()" v-if="vendor.category == 'venue'">
+                Suggest Another Date
+              </a>
+              <a class="another-date" @click="showChooseDateModal()" v-else>
+                Suggest Another Time
+              </a>
             </li>
             <li>
               <md-checkbox 
@@ -185,7 +210,9 @@
                 v-model="reasonIsService"
                 :style="`border-color: ${reasonIsService ? '#fc1355!important;' : 'inherit'}`"
               >
-                <span class="colored" :class="[{'bold': reasonIsService}]">I don't think my services are compatible to your requirements</span>
+                <span class="colored" :class="[{'bold': reasonIsService}]">
+                  I don't think my services are compatible to your requirements
+                </span>
               </md-checkbox>
             </li>
             <li>
@@ -193,7 +220,9 @@
                 v-model="reasonIsInfo"
                 :style="`border-color: ${reasonIsInfo ? '#fc1355!important;' : 'inherit'}`"
               >
-                <span class="colored" :class="[{'bold': reasonIsInfo}]">I don't enough information about the event</span>
+                <span class="colored" :class="[{'bold': reasonIsInfo}]">
+                  I don't enough information about the event
+                </span>
               </md-checkbox>
             </li>
             <li>
@@ -201,7 +230,9 @@
                 v-model="reasonIsOther"
                 :style="`border-color: ${reasonIsOther ? '#fc1355!important;' : 'inherit'}`"
               >
-                <span class="colored" :class="[{'bold': reasonIsOther}]">Other</span>
+                <span class="colored" :class="[{'bold': reasonIsOther}]">
+                  Other
+                </span>
               </md-checkbox>
             </li>
           </ul>
@@ -235,7 +266,8 @@
           </div>
           <div class="right-side">
             <h3>
-              We are sorry, but someone else got there <br/>before you and already won this bid
+              We are sorry, but someone else got there 
+              <br/>before you and already won this bid
             </h3>
             <div class="header-description">
               But no worries! We will be with you soon with the next one

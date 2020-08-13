@@ -108,7 +108,7 @@
   </div>
 </template>
 <script>
-import MaryokuTextarea from '@/components/inputs/MaryokuTextarea'
+import MaryokuTextarea from '@/components/Inputs/MaryokuTextarea'
 import { MaryokuInput } from "@/components";
 
 export default {
