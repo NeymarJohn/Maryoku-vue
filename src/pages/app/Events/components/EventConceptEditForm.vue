@@ -203,6 +203,8 @@ const tags = [
   { name: "cultural", selected: false },
   { name: "inclusive", selected: false },
   { name: "outdoors", selected: false },
+  { name: "gleeful", selected: false },
+  { name: "cheerful", selected: false },
 ];
 
 const initialConcept = {

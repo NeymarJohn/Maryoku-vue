@@ -602,7 +602,7 @@ export default {
       } else {
         this.loadingConceptOptions = true
         this.$http.get(`${process.env.SERVER_URL}/1/concepts/${this.eventData.id}/suggestions`).then(res => {
-          this.conceptOptions = res.data;
+          this.conceptOptions = res.data.slice(0,3);
           this.showConceptList = true;
           this.loadingConceptOptions = false
         }).catch(err=>{
