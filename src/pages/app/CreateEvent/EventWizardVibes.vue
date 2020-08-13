@@ -86,10 +86,7 @@ export default {
       })
     },
     goToNext() {
-      this.setEventProperty({key: 'eventSongId', actualValue: this.selectedSong.title})
       localStorage.setItem('event', JSON.stringify(this.getEventData()));
-      location.href="https://www.maryoku.com/signup-beta"  //tempary code
-      return;
       if (!this.isLoggedIn) {
         this.$router.push({path: `/signup?action=${this.$queryEventActions.create}`})
       } else {
@@ -112,8 +109,7 @@ export default {
           category: 'Holidays', //! this.publicEventData.editable ? 'Holidays' : 'CompanyDays',
           editable: true,
           location: this.publicEventData.location,
-          inOutDoor: this.publicEventData.inOutDoor,
-          eventSongId: this.publicEventData.eventSongId
+          inOutDoor: this.publicEventData.inOutDoor
         })
     },
     createEvent() {  // in case that user is signed

@@ -1,7 +1,6 @@
 <template>
   <modal class="sharing-model">
     <template slot="header">
-      
       <div class="maryoku-modal-header">
         <h2>Share 'Venue Proposals' With Your Colleague</h2>
       </div>

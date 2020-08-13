@@ -111,10 +111,10 @@ export default {
       selectedType:"",
       types: [
         {
-          value: "indoors", name: "Indoor Event", selected:false
+          value: "indoor", name: "Indoor Event", selected:false
         },
         {
-          value: "outdoors", name: "Outdoor Event", selected:false
+          value: "outdoor", name: "Outdoor Event", selected:false
         }
       ]
     }

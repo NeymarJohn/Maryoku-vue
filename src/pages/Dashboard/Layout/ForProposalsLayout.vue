@@ -121,22 +121,28 @@
         <div class="full-details-modal__body">
           <ul>
             <li>
-              <img :src="`${landingIconsUrl}Path 251.svg`"> <span><strong>Date:</strong> {{eventDate}}</span>
+              <img :src="`${landingIconsUrl}Path 251.svg`">
+              <span><strong>Date:</strong> {{eventDate}}</span>
             </li>
             <li>
-              <img :src="`${landingIconsUrl}Group 6085.svg`"> <span><strong>Time:</strong> {{eventTime}}</span>
+              <img :src="`${landingIconsUrl}Group 6085.svg`">
+              <span><strong>Time:</strong> {{eventTime}}</span>
             </li>
             <li>
-              <img :src="`${landingIconsUrl}Asset 506.svg`"> <span><strong>Address:</strong> {{getLocation}}</span>
+              <img :src="`${landingIconsUrl}Asset 506.svg`">
+              <span><strong>Address:</strong> {{getLocation}}</span>
             </li>
             <li>
-              <img :src="`${landingIconsUrl}Asset 505.svg`"> <span><strong>Guests:</strong> {{proposalRequest ? proposalRequest.eventData.numberOfParticipants : '-' | withComma }}</span>
+              <img :src="`${landingIconsUrl}Asset 505.svg`">
+              <span><strong>Guests:</strong> {{proposalRequest ? proposalRequest.eventData.numberOfParticipants : '-' | withComma }}</span>
             </li>
             <li>
-              <img :src="`${landingIconsUrl}Path 1942.svg`"> <span><strong>Type:</strong> {{proposalRequest ? proposalRequest.eventData.occasion : '-'}}</span>
+              <img :src="`${landingIconsUrl}Path 1942.svg`">
+              <span><strong>Type:</strong> {{proposalRequest ? proposalRequest.eventData.occasion : '-'}}</span>
             </li>
             <li>
-              <img :src="`${landingIconsUrl}Path 1383.svg`"> <span><strong>Invited:</strong> {{proposalRequest ? proposalRequest.eventData.participantsType : '-'}}</span>
+              <img :src="`${landingIconsUrl}Path 1383.svg`">
+              <span><strong>Invited:</strong> {{proposalRequest ? proposalRequest.eventData.participantsType : '-'}}</span>
             </li>
           </ul>
         </div>
@@ -338,7 +344,10 @@
         return `${moment(startDate).format('hh:mmA')} - ${moment(endDate).format('hh:mmA')}`
       },
       getEventDuration () {
-        return moment.duration(this.proposalRequest.eventData.eventEndMillis - this.proposalRequest.eventData.eventStartMillis).humanize()
+        return moment.duration(
+          this.proposalRequest.eventData.eventEndMillis - 
+          this.proposalRequest.eventData.eventStartMillis
+        ).humanize()
       },
       getLocation () {
         if (this.proposalRequest) {
