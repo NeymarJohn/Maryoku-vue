@@ -18,7 +18,6 @@
           <div class="setting-item">
             <md-checkbox v-model="usePhone" class="md-checkbox-narrow"></md-checkbox>
             <div>
-              <img :src="`${$iconURL}Campaign/group-9439.svg`" class="mr-10 ml-10"/>
               <span class="font-size-22 font-bold-extra mr-30">By text message</span>
               <span>WhatsApp or sms</span>
             </div>
@@ -46,7 +45,6 @@
           <div class="setting-item">
             <md-checkbox v-model="useEmail" class="md-checkbox-narrow"></md-checkbox>
             <div>
-              <img :src="`${$iconURL}Campaign/group-9437.svg`" class="mr-10 ml-10"/>
               <span class="font-size-22 font-bold-extra mr-30">By email</span>
               <span >Enter recipients emails or upload Microsoft excel or Google sheets with guests list</span>
             </div>

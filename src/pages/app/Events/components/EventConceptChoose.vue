@@ -61,7 +61,7 @@
           <div class="concept-details">
             <small>Option 0{{index+1}}</small>
             <div class="concept-name">
-              <h3 :style="`font-family:${item.fontFamily}`">{{item.name}}</h3>
+              <h3 :style="`font-family:${item.fontFamily}`" v-html="item.name"></h3>
               <ul class="features-list" v-if="item.tags">
                 <li
                   class="features-list__item"
@@ -140,20 +140,7 @@
           <h3>Great Choice!</h3>
           <p>This concept will be our guiding for the upcoming steps of creating the event</p>
         </div>
-        <div class="header-actions">
-          <ul>
-            <li>
-              <a href>
-                <img :src="`${menuIconsURL}Asset 9.svg`" />
-              </a>
-            </li>
-            <li>
-              <a href>
-                <img :src="`${menuIconsURL}Asset 8.svg`" />
-              </a>
-            </li>
-          </ul>
-        </div>
+        <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
       </div>
 
       <div class="booking-header d-flex justify-content-between md-layout-item md-size-100">
@@ -192,11 +179,6 @@
           </div>
           <div :class="`images-list selected-concept`">
             <div class="image-backgrounds">
-              <!-- <div :class="`images-background`"
-                                v-for="indx in 4"
-                                :key="indx"
-                                :style="`background:${selectedConcept.colors[indx].value}`"
-              ></div>-->
               <div
                 class="image-background"
                 v-for="(bg,bgIndex) in selectedConcept.colors"
@@ -226,8 +208,8 @@
           <div class="concept-details">
             <div class="concept-name d-flex align-center text-transform-capitalize">
               <h3
-                :style="`font-family:${selectedConcept.selectedConcept?selectedConcept.selectedConcept:'Manrope-Regular'}`"
-              >{{selectedConcept.name}}</h3>
+                :style="`font-family:${selectedConcept.selectedConcept?selectedConcept.selectedConcept:'Manrope-Regular'}`" v-html="selectedConcept.name"
+              ></h3>
               <ul class="features-list" v-if="selectedConcept.tags">
                 <li
                   class="features-list__item"
@@ -528,22 +510,6 @@ export default {
       const colors = ["#ff48b2", "#71ecf8", "#ededed"];
       this.newConcept.colors[index].value = "#ff48b2";
     },
-    onFileChange(event) {
-      let files = event.target.files || event.dataTransfer.files;
-      if (!files.length) return;
-      let reader = new FileReader();
-      let vm = this;
-      if (event.target.name) {
-        const itemIndex = event.target.getAttribute("data-fileIndex");
-        console.log("fileIndex", itemIndex);
-        let isLargeFile = false;
-        console.log(files);
-        this.uploadImages[itemIndex] = files[0];
-        this.uploadImageData[itemIndex] = URL.createObjectURL(files[0]);
-        this.uploadImage = URL.createObjectURL(files[0]);
-        console.log(URL.createObjectURL(files[0]));
-      }
-    },
     selectConcept(index) {
       this.onSaveConcept(this.conceptOptions[index]);
       // this.selectedConcept = this.conceptOptions[index]
@@ -556,7 +522,6 @@ export default {
       let event = this.$store.state.event.eventData;
       event.concept = eventConcept;
       event.conceptProgress = 100;
-      // const newEvent = new CalendarEvent({id: event.id, concept: eventConcept, conceptProgress: 100})
       this.isLoading = true;
       this.$store
         .dispatch(
@@ -575,13 +540,6 @@ export default {
           //   this.base64Images = imageData;
           this.isLoading = false;
         });
-      // new CalendarEvent({id: event.id, concept: eventConcept, conceptProgress: 100}).for(calendar).save().then(result=>{
-      // this.showConceptList = false
-      // this.showEditForm = false
-      // this.setEventData(result)
-      // this.selectedConcept = eventConcept
-      // this.base64Images = imageData
-      // })
     },
     openConceptContest() {
       window.open(`https://www.maryoku.com/concept-contest`, "_blank");

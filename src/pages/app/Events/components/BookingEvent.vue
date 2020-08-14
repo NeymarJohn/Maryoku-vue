@@ -321,16 +321,9 @@ export default {
     },
     fetchData() {
       this.blockId = this.$route.params.blockId
-      this.calendar
-        .calendarEvents()
-        .find(this.$route.params.id)
-        .then(event => {
-          this.event = event;
-          this.setEventData(event);
-          this.getCommentComponents(this.blockId);
-          // this.getBlockVendors();
-          this.getSelectedBlock();
-        });
+      this.event = this.$store.state.event.eventData
+      this.getCommentComponents(this.blockId);
+      this.getSelectedBlock();
     },
     setRequirements(vendors) {
       this.selectedBlock.vendors = vendors

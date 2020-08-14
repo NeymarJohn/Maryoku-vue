@@ -19,10 +19,11 @@
               style="width:30px; margin-right:0.5em"
               v-if="selectedBlock.componentId"
             />
-            Plan {{selectedBlock.title}}
+            Let us know what you are looking for in a {{selectedBlock.title}}
           </h3>
-          We are here to find you the most accurate offers for your event<br />
-          Before submitting a proposal to our suppliers, we want to make sure we know exactly what you are looking for
+          Our job is to bring you the most accurate offers for your event. 
+          <br/>
+          This is what we know about your event so far, let us know if there is anything we missed.
         </div>
       </div>
     </div>
@@ -34,7 +35,7 @@
           <table class="requirement-section-table">
             <thead>
               <tr>
-                <th><span class="section-title">{{category}}</span></th>
+                <th><span class="section-title"><img :src="`${$iconURL}Requirements/${category}.svg`" class="mr-20"/>{{category}}</span></th>
                 <th>How Many?</th>
                 <th></th>
                 <th></th>
@@ -107,71 +108,42 @@
               <md-icon class="icon color-red">add_circle</md-icon>
             </div>
           </div>
-          <hr/>
-          <div class="special-request-section">
-            <div>
+          <div class="md-layout mt-50">
+            <div class="md-layout-item md-size-40 mx-auto pl-0">
+              <label>Name of item</label>
+              <maryoku-input class="mt-20" v-model="editingSpecialRequest.name"></maryoku-input>
+            </div>
+            <div class="md-layout-item md-size-20 mx-auto">
+              <label>Is this</label>
               <div>
-                <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">
-                  <span class="special-request-section-subtitle">Accessibility</span></md-checkbox>
-              </div>
-              <div class="special-request-section-description">What kind of special attention do we need to know about?</div>
-              <div class="special-request-section-options">
-                <md-checkbox class="md-simple md-red" v-model="value" value="obj1">
-                  <div class="checkbox-label-wrapper">
-                    <img :src="`${$iconURL}Requirements/pregnant-women-dark.svg`"/>
-                    Pregnant women
-                  </div>
-                </md-checkbox>
-                <md-checkbox class="md-simple md-red" v-model="value" value="obj1">
-                  <div class="checkbox-label-wrapper">
-                    <img :src="`${$iconURL}Requirements/disabled-person-dark.svg`"/>
-                    Disabled people
-                  </div>
-                </md-checkbox>
-                <md-checkbox class="md-simple md-red" v-model="value" value="obj1">
-                   <div class="checkbox-label-wrapper">
-                    <img :src="`${$iconURL}Requirements/elderly-people-dark.svg`"/>
-                    Elderly People
-                   </div>
-                </md-checkbox>
+                <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="editingSpecialRequest.isMandatory" :value="true">
+                    <span class="font-size-16">Mandatory</span></md-checkbox>
+                <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="editingSpecialRequest.isMandatory" :value="false">
+                    <span class="font-size-16">Nice To Have</span></md-checkbox>
               </div>
             </div>
+            <div class="md-layout-item md-size-40 mx-auto pr-0">
+              <label>Notes</label>
+              <maryoku-textarea class="mt-20" v-model="editingSpecialRequest.notes"></maryoku-textarea>
+            </div>
+            <div class="md-layout-item md-size-100 mx-auto pr-0 text-right mt-30 mb-30">
+              <md-button class="md-simple md-red  maryoku-btn">Clear</md-button>
+              <md-button class="md-red maryoku-btn" @click="addNewRequirement">Add</md-button>
+            </div>
           </div>
-          <hr/>
-          <div class="special-request-section">
-              <div>
-                <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">
-                  <span class="special-request-section-subtitle">Around the venue</span></md-checkbox>
+          <div class="special-request-section d-flex" v-for="item in specialRequests" :key="item.name">
+              <div class="flex-1 font-size-16 font-bold">{{item.name}}</div>
+              <div class="flex-1">
+                <span v-if="item.isMandatory"><img :src="`${$iconURL}Requirements/check-red.svg`" class="mr-10"/>Mandatory</span>
               </div>
-              <span class="special-request-section-description">Which elements are important for you to have around the venue?</span>
-              <div class="special-request-section-options">
-                <md-checkbox class="md-simple md-red" v-model="value" value="obj1">
-                  <div class="checkbox-label-wrapper">
-                    <img :src="`${$iconURL}Requirements/park-dark.svg`"/>
-                    Parking
-                  </div>
-                </md-checkbox>
-                <md-checkbox class="md-simple md-red" v-model="value" value="obj1">
-                  <div class="checkbox-label-wrapper">
-                    <img :src="`${$iconURL}Requirements/restaurant-dark.svg`"/>
-                    Restaurant
-                  </div>
-                </md-checkbox>
-                <md-checkbox class="md-simple md-red" v-model="value" value="obj1">
-                  <div class="checkbox-label-wrapper">
-                    <img :src="`${$iconURL}Requirements/shopping-center-dark.svg`"/>
-                    Shopping center
-                  </div>
-                </md-checkbox>
-                <md-checkbox class="md-simple md-red" v-model="value" value="obj1">
-                  <div class="checkbox-label-wrapper">
-                    <img :src="`${$iconURL}Requirements/hotel-dark.svg`"/>
-                    Hotel
-                  </div>
-                </md-checkbox>
+              <div class="flex-1">
+                {{item.notes}}
+              </div>
+              <div class="flex-1 text-right">
+                <md-button class="md-icon-button md-simple"><img :src="`${$iconURL}Requirements/edit-dark.svg`"/></md-button>
+                <md-button class="md-icon-button md-simple"><img :src="`${$iconURL}Requirements/delete-dark.svg`"/></md-button>
               </div>
           </div>
-          <hr/>
           <div class="special-request-section">
             <div class="font-bold">Anything Else?</div>
 
@@ -210,6 +182,8 @@ import InputMask from "vue-input-mask";
 import VueElementLoading from "vue-element-loading";
 import _ from "underscore";
 import Multiselect from "vue-multiselect";
+import MaryokuInput  from "@/components/Inputs/MaryokuInput.vue"
+import MaryokuTextarea  from "@/components/Inputs/MaryokuTextarea.vue"
 
 import { postReq, getReq } from '@/utils/token'
 import { Modal } from "@/components";
@@ -230,7 +204,9 @@ export default {
     EventChangeProposalModal,
     HeaderActions,
     CommentEditorPanel,
-    Multiselect
+    Multiselect,
+    MaryokuInput,
+    MaryokuTextarea
   },
   props: {
     component: {
@@ -249,7 +225,13 @@ export default {
     showCommentEditorPanel: false,
     blockId:"",
     value: "",
-    requirementProperties: {}
+    requirementProperties: {},
+    editingSpecialRequest: {
+      name: "",
+      isMandatory: false,
+      notes: ""
+    },
+    specialRequests: []
   }),
   methods: {
     ...mapMutations("event", ["setEventData"]),
@@ -295,6 +277,9 @@ export default {
       }).then(res=>{
         this.$emit("setRequirements", res);
       })
+    },
+    addNewRequirement() {
+      this.specialRequests = [...this.addNewRequirement, this.editingSpecialRequest]
     }
   },
   created() {
@@ -443,17 +428,7 @@ export default {
 }
 .special-request-section {
   padding: 30px 0;
-  &-subtitle {
-    font-size: 22px;
-    font-family: 'Manrope-ExtraBold';
-  }
-  &-description {
-    font-size: 16px;
-    font-family: 'Manrope-ExtraBold';
-  }
-  &-options {
-    margin-top: 30px;
-  }
+  border-top: solid 1px #B7B7B7;
 }
 .checkbox-label-wrapper{
   margin-top: -9px;

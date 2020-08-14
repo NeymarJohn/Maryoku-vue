@@ -17,7 +17,7 @@
             </router-link>
             <popup v-if="event.concept">
               <template slot="content">
-                <h3>{{conceptName}}</h3>
+                <h3 v-html="conceptName"></h3>
               </template>
               <template slot="popup">
                 <div class="popup-header"> 
@@ -931,7 +931,7 @@ export default {
     this.event = this.$store.state.event.eventData;  // Fetch event from store
     if (this.event.concept) {
       if (this.event.concept.images && this.event.concept.images.length > 0) {
-        this.logger = "http://static.maryoku.com/" + this.event.concept.images[0].url
+        this.logger = this.event.concept.images[0].url
       }
       if (this.event.concept.name) {
         this.conceptName = this.event.concept.name

@@ -110,7 +110,8 @@ export default {
     isOpenNote: false,
     eventElements: [],
     currentUrl: "",
-    calendar: null
+    calendar: null,
+    event: {}
   }),
   computed: {
     ...mapState("event", {
@@ -194,6 +195,7 @@ export default {
       const conceptIndex = this.eventElements.findIndex(item => item.componentId === 'concept')
       const budgetIndex = this.eventElements.findIndex(item => item.componentId === 'budget')
       const timelineIndex = this.eventElements.findIndex(item => item.componentId === 'timeline')
+      const campaignIndex = this.eventElements.findIndex(item => item.componentId === 'campaign')
 
       if (conceptIndex >= 0) {
         this.eventElements[conceptIndex].progress = event.conceptProgress;
@@ -207,6 +209,10 @@ export default {
         this.eventElements[timelineIndex].progress = event.timelineProgress;
         this.eventElements[timelineIndex].status = event.timelineProgress == 100 ? "completed" : "not-complete";
       }
+      // if (campaignIndex >=0 ) {
+      //   this.eventElements[campaignIndex].progress = event.timelineProgress;
+      //   this.eventElements[campaignIndex].status = event.timelineProgress == 100 ? "completed" : "not-complete";
+      // }
     },
     fetchUrl() {
       this.currentUrl = this.$router.history.current.path;
@@ -216,12 +222,8 @@ export default {
     this.fetchUrl();
     const currentUser = this.$store.state.auth.user;
     this.calendar = new Calendar({ id: currentUser.profile.defaultCalendarId });
-    this.getEventAction({
-      eventId: this.$route.params.id,
-      calendar: this.calendar
-    }).then(event => {
-      this.generatedItems(event);
-    });
+    this.event = this.$store.state.event.eventData;
+    this.generatedItems(this.event);
   },
   mounted() {},
   watch: {

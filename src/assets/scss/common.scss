@@ -109,9 +109,6 @@ textarea {
 .color-black {
   color: #050505;
 }
-.color-white {
-  color: #ffffff;
-}
 .whitspace-nowrap {
   white-space: nowrap;
 }
@@ -181,9 +178,6 @@ textarea {
 .mr-60 {
   margin-right: 60px;
 }
-.ml-10 {
-  margin-left: 20px;
-}
 .ml-20 {
   margin-left: 20px;
 }
@@ -196,7 +190,12 @@ textarea {
 .p-50 {
   padding: 50px;
 }
-.p-20 { padding: 20px }
+.pl-0 {
+  padding-left: 0;
+}
+.pr-0 {
+  padding-right: 0;
+}
 .pr-20 {
   padding-right: 20px;
 }
@@ -216,10 +215,6 @@ textarea {
 }
 .width-100 {
   width: 100%;
-}
-
-.f-left {
-  float: left;
 }
 .md-radio {
   .md-radio-container {
