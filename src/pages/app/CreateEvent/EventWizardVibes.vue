@@ -12,7 +12,7 @@
                 Try describing your guest’s vibes using a song
               </div>
               <div class="mt-3 types">
-                <music-card :class="{selected:song.id == selectedSong.id}" v-for="(song) in songs" :key="song.id" :data="song" :selected="song.id == selectedSong.id" @select="selectSong"> 
+                <music-card :class="{selected:song.selected}" v-for="(song) in songs" :key="song.title" :data="song" :selected="song.title == selectedSong.title" @select="selectSong"> 
                 </music-card >
               </div>
             </div>
@@ -42,10 +42,6 @@ export default {
     MusicCard
   },
   created () {
-    this.$http.get(`${process.env.SERVER_URL}/1/eventSongs`)
-    .then( res => {
-      this.songs = res.data
-    })
   },
   methods: {
     ...mapMutations('PublicEventPlanner', ['setEventProperty', 'setCurrentStep']),
@@ -90,10 +86,7 @@ export default {
       })
     },
     goToNext() {
-      this.setEventProperty({key: 'eventSongId', actualValue: this.selectedSong.id})
       localStorage.setItem('event', JSON.stringify(this.getEventData()));
-      // location.href="https://www.maryoku.com/signup-beta"  //tempary code
-      // return;
       if (!this.isLoggedIn) {
         this.$router.push({path: `/signup?action=${this.$queryEventActions.create}`})
       } else {
@@ -104,7 +97,7 @@ export default {
       return  new CalendarEvent({
           calendar: this.defaultCalendar,
           title: this.publicEventData.title,
-          occasion: this.publicEventData.occasion,
+          occasion: this.publicEventData.occasion.name,
           eventStartMillis: this.publicEventData.eventStartMillis,
           eventEndMillis: this.publicEventData.eventEndMillis,
           numberOfParticipants: this.publicEventData.numberOfParticipants,
@@ -116,8 +109,7 @@ export default {
           category: 'Holidays', //! this.publicEventData.editable ? 'Holidays' : 'CompanyDays',
           editable: true,
           location: this.publicEventData.location,
-          inOutDoor: this.publicEventData.inOutDoor,
-          eventSongId: this.publicEventData.eventSongId
+          inOutDoor: this.publicEventData.inOutDoor
         })
     },
     createEvent() {  // in case that user is signed
@@ -160,7 +152,26 @@ export default {
   data () {
     return {
       selectedSong: {},
-      songs: []
+      songs: [
+        {
+          singer: "Sisters sledge", title: "We are family", selected:false, src: "ringtones/we_are_family_v2_53802.mp3", thumb: "Singers/Sister+Sledge.jpg"
+        },
+        {
+          singer: "Sheryl Crow", title: "A change would do you good", selected:false, src: "ringtones/sheryl_crow_a_change_would_do_you_good_b_w_music_video.mp3", thumb: "Singers/Sheryl Crow.jpg"
+        },
+        {
+          singer: "bobby mcferrin", title: "Don't worry be happy", selected:false, src: "ringtones/bobby_mcferrin_dont_worry_be_happy.mp3", thumb: "Singers/Bobby Mcferrin.jpg"
+        },
+        {
+          singer: "freddie mercury", title: "We are the champions", selected:false, src: "ringtones/queen_we_are_the_champions_ringtone.mp3", thumb: "Singers/freddie mercury.jpg"
+        },
+        {
+          singer: "Dolly Parton", title: "Working 9 to 5", selected:false, src: "ringtones/9_to_5_1605.mp3", thumb: "Singers/Dolly Parton.jpg"
+        },
+        {
+          singer: "Abba", title: "Money Money Money", selected:false, src: "ringtones/abba_money_money_money_ringtone.mp3", thumb: "Singers/Abba.jpg"
+        }
+      ]
     }
   },
   computed: {

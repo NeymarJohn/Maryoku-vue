@@ -47,7 +47,7 @@ class EventService {
       let newEvent = new CalendarEvent({
         calendar: calendar,
         title: editingEvent.title,
-        occasion: editingEvent.occasion?editingEvent.occasion.value:"",
+        occasion: editingEvent.occasion?editingEvent.occasion.name:"",
         eventStartMillis: editingEvent.eventStartMillis,
         eventEndMillis: editingEvent.eventEndMillis,
         numberOfParticipants: editingEvent.numberOfParticipants,
@@ -59,8 +59,7 @@ class EventService {
         category: editingEvent.occasion?editingEvent.occasion.name:"",
         editable: true,
         location: editingEvent.location,
-        inOutDoor: editingEvent.inOutDoor,
-        eventSongId: editingEvent.eventSongId
+        inOutDoor: editingEvent.inOutDoor
       })
         .for(calendar)
         .save()

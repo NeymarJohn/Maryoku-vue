@@ -205,6 +205,7 @@ const tags = [
   { name: "outdoors", selected: false },
   { name: "gleeful", selected: false },
   { name: "cheerful", selected: false },
+  { name: "different", selected: false },
 ];
 
 const initialConcept = {

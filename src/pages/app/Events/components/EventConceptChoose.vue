@@ -140,7 +140,20 @@
           <h3>Great Choice!</h3>
           <p>This concept will be our guiding for the upcoming steps of creating the event</p>
         </div>
-        <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
+        <div class="header-actions">
+          <ul>
+            <li>
+              <a href>
+                <img :src="`${menuIconsURL}Asset 9.svg`" />
+              </a>
+            </li>
+            <li>
+              <a href>
+                <img :src="`${menuIconsURL}Asset 8.svg`" />
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
 
       <div class="booking-header d-flex justify-content-between md-layout-item md-size-100">
