@@ -11,7 +11,7 @@
                 What are we celebrating?
               </div>
               <div class="mt-3 types">
-                <div class="type-card" @click="selected=type" :class="{selected:type.value==selected.value}" v-for="(type) in guestsTypes" :key="type.value">
+                <div class="type-card" @click="selected=type" :class="{selected:type.value==selected.value}" v-for="(type) in occasions" :key="type.value">
                   <div>
                     <img :src="`${$iconURL}Onboarding/${type.icon}`">
                   </div>
@@ -46,7 +46,7 @@ export default {
   },
   created () {
     if (this.publicEventData.occasion) {
-      this.selected = this.guestsTypes.find(it=> it.value == this.publicEventData.occasion.value)
+      this.selected = this.occasions.find(it=> it.value == this.publicEventData.occasion.value)
     }
   },
   methods: {
@@ -108,21 +108,21 @@ export default {
   data () {
     return {
       selected: {},
-      guestsTypes: [
+      occasions: [
         {
-          value: "nationalday", name: "National Day", selected:false, icon: "ballons-dark.svg"
+          value: "National Day", name: "National Day", selected:false, icon: "ballons-dark.svg"
         },
         {
-          value: "holiday", name: "Holiday", selected:false, icon: "gift-dark.svg"
+          value: "Holiday", name: "Holiday", selected:false, icon: "gift-dark.svg"
         },
         {
-          value: "milestone", name: "Milestone", selected:false, icon: "flag-dark.svg"
+          value: "Milestone", name: "Milestone", selected:false, icon: "flag-dark.svg"
         },
         {
-          value: "company-day", name: "Company Day", selected:false, icon: "champaign-dark.svg"
+          value: "Company Day", name: "Company Day", selected:false, icon: "champaign-dark.svg"
         },
         {
-          value: "season", name: "Season", selected:false, icon: "beach.svg"
+          value: "Season", name: "Season", selected:false, icon: "beach.svg"
         }
       ]
     }
