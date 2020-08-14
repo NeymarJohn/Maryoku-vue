@@ -140,20 +140,7 @@
           <h3>Great Choice!</h3>
           <p>This concept will be our guiding for the upcoming steps of creating the event</p>
         </div>
-        <div class="header-actions">
-          <ul>
-            <li>
-              <a href>
-                <img :src="`${menuIconsURL}Asset 9.svg`" />
-              </a>
-            </li>
-            <li>
-              <a href>
-                <img :src="`${menuIconsURL}Asset 8.svg`" />
-              </a>
-            </li>
-          </ul>
-        </div>
+        <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
       </div>
 
       <div class="booking-header d-flex justify-content-between md-layout-item md-size-100">
@@ -602,7 +589,7 @@ export default {
       } else {
         this.loadingConceptOptions = true
         this.$http.get(`${process.env.SERVER_URL}/1/concepts/${this.eventData.id}/suggestions`).then(res => {
-          this.conceptOptions = res.data;
+          this.conceptOptions = res.data.slice(0,3);
           this.showConceptList = true;
           this.loadingConceptOptions = false
         }).catch(err=>{
