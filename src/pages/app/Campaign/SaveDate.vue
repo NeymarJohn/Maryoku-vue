@@ -104,8 +104,7 @@ export default {
     margin: auto;
   }
   .image-logo {
-    margin-left: 200px;
-    width: 200px;
+    margin-left: 200px
   }
   .display-logo {
     width: 150px;

@@ -1,6 +1,6 @@
 <template>
   <div class="white-card">
-    Feedback
+    Coming Soon
   </div>
 </template>
 <script>

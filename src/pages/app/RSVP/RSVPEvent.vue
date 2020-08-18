@@ -82,7 +82,18 @@
           </div>
           <div>
             <div class="font-size-22 font-bold mb-10">Check out the venue</div>
-            <rsvp-venue-carousel></rsvp-venue-carousel>
+            <div>
+              <carousel
+                :items="3"
+                :margin="25"
+                :dots="false"
+                :nav="true"
+                class="proposal-images"
+                :number="2"
+              >
+                <img v-for="(item,index) in images" :key="index" :src="item.src" />
+              </carousel>
+            </div>
           </div>
         </div>
       </div>
@@ -171,6 +182,7 @@
 </template>
 <script>
 import RsvpTimelineItem from "./RSVPTimelineItem";
+import carousel from "vue-owl-carousel";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import _ from "underscore";
@@ -178,15 +190,14 @@ import RsvpInformationModal from "@/components/Modals/RSVP/InformationModal"
 import SettingReminderModal from "@/components/Modals/RSVP/SettingReminderModal"
 import JoinZoomModal from "@/components/Modals/RSVP/JoinZoomModal"
 import SyncCalendarModal from "@/components/Modals/RSVP/SyncCalendarModal"
-import RsvpVenueCarousel from "./RSVPVenueCarousel"
 export default {
   components: {
     RsvpTimelineItem,
+    carousel,
     RsvpInformationModal,
     SettingReminderModal,
     JoinZoomModal,
-    SyncCalendarModal,
-    RsvpVenueCarousel
+    SyncCalendarModal
   },
   data() {
     return {

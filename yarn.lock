@@ -13167,11 +13167,6 @@ vue-signature@^2.4.6:
     signature_pad "^3.0.0-beta.3"
     vue "^2.5.9"
 
-vue-star-rating@^1.6.1:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/vue-star-rating/-/vue-star-rating-1.6.1.tgz#160cf66e6af4597180fd2552df5d03d590ec40d4"
-  integrity sha512-JSmVx16rcxyw4Ma6YQ5DnIExyjF4IFf/ypxh3zfmtFZzE/hjswDT0fLn1vF4ERxDbAp0nHA3u51BYFbA8gyYyQ==
-
 vue-stars@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/vue-stars/-/vue-stars-1.2.1.tgz#83fc4a64e13a96685019bd7656829ee91b7744df"
