@@ -18,13 +18,13 @@
         <div class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center" :class="{selected: selectedTab === 2}" @click="selectTab(2)">
           RSVP<img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`"></div>
         <div class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center" :class="{selected: selectedTab === 3}" @click="selectTab(3)">
-          Coming Soon<img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`"></div>
+          Countdown<img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`"></div>
         <div class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center" :class="{selected: selectedTab === 4}" @click="selectTab(4)">
           Feedback<img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`"></div>
       </div>
       <save-date v-if="selectedTab == 1"></save-date>
       <rsvp v-if="selectedTab == 2"></rsvp>
-      <coming-soon v-if="selectedTab == 3"></coming-soon>
+      <countdown v-if="selectedTab == 3"></countdown>
       <feedback v-if="selectedTab == 4"></feedback>
       <delivery-settings></delivery-settings>
     </div>
@@ -66,7 +66,7 @@
   import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
   import SaveDate from "./SaveDate";
   import Rsvp from "./Rsvp";
-  import ComingSoon from "./ComingSoon";
+  import Countdown from "./Countdown";
   import Feedback from "./Feedback";
   import DeliverySettings from "./DeliverySettings";
   export default {
@@ -76,7 +76,7 @@
       CommentEditorPanel,
       SaveDate,
       Rsvp,
-      ComingSoon,
+      Countdown,
       Feedback,
       DeliverySettings
     },
