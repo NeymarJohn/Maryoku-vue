@@ -6,6 +6,22 @@
 .md-switch {
   display: flex;
   margin: 10px;
+  &.below-label {
+    display: block;
+    .md-switch-label {
+      color: rgba(0,0,0,1);
+      font-size: 14px;
+      line-height: 1.42857;
+      font-weight: 400;
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 5px 0px;
+    }
+    .md-switch-container{
+     margin: auto;
+    }
+  }
   .md-switch-label {
     color: rgba(0,0,0,.26);
     font-size: 14px;
