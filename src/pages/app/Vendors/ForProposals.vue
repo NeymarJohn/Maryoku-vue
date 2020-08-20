@@ -2,7 +2,10 @@
   <div class="for-proposal-wrapper">
     <div class="md-layout justify-content-between">
       <div class="md-layout-item md-size-70">
-        <proposal-steps :step="step"></proposal-steps>
+        <proposal-steps 
+          :categoryTitle="vendor.vendorCategory"
+          :step="step"
+        />
         <div class="step-wrapper" v-if="step < 2">
           <div class="proposal-add-personal-message-wrapper">
             <h3><img :src="`${iconUrl}Asset 611.svg`"/>Let's begin with a personal message</h3>
@@ -127,6 +130,7 @@ export default {
       iconUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
       services: null,
       iconsWithCategory: null,
+      vendor: null,
     }
   },
   created() {

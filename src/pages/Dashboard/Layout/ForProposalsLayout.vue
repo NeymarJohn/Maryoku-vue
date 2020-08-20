@@ -236,6 +236,7 @@
         proposalRequestRequirements: [],
         proposals: [],
         proposalRequest: null,
+        vendorCategory: null,
       }
     },
     methods: {
@@ -243,6 +244,17 @@
         Vendors.find(this.$route.params.vendorId).then(vendor => {
           this.vendor = vendor
         })
+      },
+      getVendorCategory () {
+        this.$auth.currentUser(
+          this,
+          true,
+          function () {
+            Vendors.find(this.$route.params.vendorId).then(vendor => {
+              this.vendorCategory = vendor.vendorCategory
+            })
+          }.bind(this)
+        )
       },
       getProposals (id) {
         new Vendors({ id })

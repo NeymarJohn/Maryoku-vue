@@ -6,10 +6,15 @@
     <div class="main-cont">
       <div class="one-row">
         <div class="left-side">
-          <h3>march madness</h3>
-          <h4>a microsoft marketing event</h4>
-          <p>
+          <h3>{{proposalRequest ? proposalRequest.eventData.title : 'No Event Data'}}</h3>
+          <h4>{{proposalRequest ? proposalRequest.eventData.eventType : 'No Event Data'}}</h4>
+          <p v-if="proposalRequest">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            <br/>
+            <br/>
+          </p>
+          <p v-else>
+            There is no proposal request for this id. So, we can't show any event data now. But, we can just show how you would make a proposal here when you would get an email from us.
             <br/>
             <br/>
           </p>
@@ -460,7 +465,6 @@ export default {
 
     this.$root.$on('back-proposal-landing-page', () => {
       this.$set(this, 'isAgreed', true)
-      console.log(22, this.isAgreed)
       this.$forceUpdate()
     })
   },

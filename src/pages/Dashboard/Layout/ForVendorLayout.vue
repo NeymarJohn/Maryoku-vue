@@ -28,7 +28,7 @@
         Congratulations!
       </h3>
       <p>
-        We found you could fit perfectly for our event with your <strong>Venue & Catering</strong> services.
+        We found you could fit perfectly for our event with your <strong>{{vendor.vendorCategory}}</strong> services.
       </p>
       <button 
         type="submit" 
@@ -58,14 +58,15 @@
   </div>
 </template>
 <script>
-  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
-  import Calendar from '@/models/Calendar';
-  import CalendarEvent from '@/models/CalendarEvent';
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+  import Calendar from '@/models/Calendar'
+  import CalendarEvent from '@/models/CalendarEvent'
+  import Vendors from '@/models/Vendors'
 
-  import TopNavbar from "./TopNavbar.vue";
-  import ContentFooter from "./ContentFooter.vue";
-  import MobileMenu from "./Extra/MobileMenu.vue";
-  import UserMenu from "./Extra/UserMenu.vue";
+  import TopNavbar from "./TopNavbar.vue"
+  import ContentFooter from "./ContentFooter.vue"
+  import MobileMenu from "./Extra/MobileMenu.vue"
+  import UserMenu from "./Extra/UserMenu.vue"
   import ForVendors from "@/pages/app/Vendors/ForVendors.vue"
   import VendorBidTimeCounter from "@/pages/app/Vendors/components/VendorBidTimeCounter.vue"
 
@@ -79,17 +80,24 @@
     },
     data() {
       return {
-        iconsUrl: 'http://static.maryoku.com/storage/icons/Vendor%20Landing%20Page/'
+        iconsUrl: 'http://static.maryoku.com/storage/icons/Vendor%20Landing%20Page/',
+        vendor: null,
       }
     },
     methods: {
       goToForm() {
         this.$root.$emit('go-to-proposal-form')
-      }
+      },
+      getVendor () {
+        Vendors.find(this.$route.params.vendorId).then(vendor => {
+          this.vendor = vendor
+        })
+      },
     },
     created(){
     },
     mounted() {
+      this.getVendor() 
     },
     computed:{
     }
@@ -214,6 +222,7 @@
         margin: 0 auto;
 
         strong {
+          text-transform: capitalize;
           font-size: 26px;
           font-weight: 800;
         }
