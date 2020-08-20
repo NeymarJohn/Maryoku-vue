@@ -6,9 +6,9 @@
     <concept-image-block class="ml-50" :images="concept.images" :colors="concept.colors"></concept-image-block>
     <div class="concept  p-50"> 
       <span class="font-size-30 font-bold">Save The Date</span>
-      <span class="font-size-22 ml-10"> {{$dateUtil.formatScheduleDay(event.eventStartMillis, "MMMM D, YYYY")}}</span>
+      <span class="font-size-22"> December 25, 2019 </span>
       <div class="font-size-60 font-bold-extra mt-40">
-       {{event.title}}
+        80’s Disco Party
       </div>
     </div>
     <div class="p-50 comment">

@@ -119,7 +119,6 @@ export default {
                 this.loading = true;
                 this.defaultCalendar =  new Calendar({id: res.defaultCalendar})
                 AuthService.setTenant(this.workspace)
-
                 const callback = this.$route.query.callback
                 const action = this.$route.query.action
                 if (action === this.$queryEventActions.create) {
@@ -132,7 +131,12 @@ export default {
                 } else if (action === 'register'){
                   document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
                 } else {
-
+                  eventService.saveEventFromStorage(res.defaultCalendar).then(event=>{
+                    document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}`;
+                  })
+                  .catch(err => {
+                    console.log(err)
+                  })
                 }
                 
                 // const signedInLink = btoa(`${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}`);

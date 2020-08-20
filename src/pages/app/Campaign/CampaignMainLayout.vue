@@ -14,37 +14,13 @@
     <div class="campaign-content md-layout-item md-size-100 mt-30">
       <div class="campaign-content-tab d-flex mb-40">
         <div class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center" :class="{selected: selectedTab === 1}" @click="selectTab(1)">
-          Save The Date
-          <span>
-            <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
-            <md-tooltip >Save the Date</md-tooltip>
-          </span>
-          
-        </div>
+          Save The Date<img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`"></div>
         <div class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center" :class="{selected: selectedTab === 2}" @click="selectTab(2)">
-          RSVP
-          <span>
-            <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
-            <md-tooltip >
-              <span class="font-size-14">Try sending your RSVP's a month in advance,<br/> so you'll get the most accurate results</span>
-            </md-tooltip>
-          </span>
-          </div>
+          RSVP<img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`"></div>
         <div class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center" :class="{selected: selectedTab === 3}" @click="selectTab(3)">
-          Countdown
-          <span>
-            <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
-            <md-tooltip >CountDown</md-tooltip>
-          </span>
-        </div>
+          Countdown<img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`"></div>
         <div class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center" :class="{selected: selectedTab === 4}" @click="selectTab(4)">
-          Feedback
-          <span>
-            <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
-            <md-tooltip >Save the Date</md-tooltip>
-          </span>
-          
-        </div>
+          Feedback<img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`"></div>
       </div>
       <save-date v-if="selectedTab == 1"></save-date>
       <rsvp v-if="selectedTab == 2"></rsvp>
@@ -62,7 +38,7 @@
             <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
           </md-button>
         </div>
-        <div class="d-flex align-center">
+        <div>
           <md-button class="md-simple md-button md-black maryoku-btn">
             <span class="font-size-16 text-transform-capitalize">
               <img class="mr-20" :src="`${$iconURL}Campaign/Group 1855.svg`"/>
@@ -72,25 +48,15 @@
           <md-button class="md-simple md-button md-black maryoku-btn">
             <span class="font-size-16 text-transform-capitalize">
               <img class="mr-20" :src="`${$iconURL}Campaign/Group 8871.svg`"/>Revert to original</span></md-button>
-          <md-button class="md-button md-red maryoku-btn schedule-campaign-btn" @click="showScheduleModal=true">
+          <md-button class="md-button md-red maryoku-btn schedule-campaign-btn">
             <span class="font-size-16 text-transform-capitalize">
               <img class="mr-20" :src="`${$iconURL}Campaign/Path 4377.svg`"/>
               Schedule Campaign</span>
-              
+            <span class="expand"></span>
           </md-button>
-          <md-menu md-size="medium" md-align-trigger md-direction="top-end" class="schedule-menu">
-                <md-button md-menu-trigger class="md-icon-button schedule-menu-btn">
-                  <md-icon class="schedule-menu-btn-icon">keyboard_arrow_down</md-icon>
-                </md-button>
-                <md-menu-content>
-                  <md-menu-item class="text-center font-size-16 font-bold-extra"><img :src="`${$iconURL}Campaign/Group 1908.svg`">Save Draft</md-menu-item>
-                  <md-menu-item class="text-center font-size-16 font-bold-extra"><img :src="`${$iconURL}Campaign/Group 1908.svg`">Send Now</md-menu-item>
-                </md-menu-content>
-              </md-menu>
         </div>
       </div>
     </div>
-    <campaign-schedule-modal v-if="showScheduleModal" @cancel="showScheduleModal=false"></campaign-schedule-modal>
   </div>
 </template>
 
@@ -103,7 +69,6 @@
   import Countdown from "./Countdown";
   import Feedback from "./Feedback";
   import DeliverySettings from "./DeliverySettings";
-  import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal"
   export default {
     components: {
       Tabs,
@@ -113,14 +78,12 @@
       Rsvp,
       Countdown,
       Feedback,
-      DeliverySettings,
-      CampaignScheduleModal
+      DeliverySettings
     },
     data() {
       return {
         showCommentEditorPanel: false,
-        selectedTab: 1,
-        showScheduleModal: false
+        selectedTab: 1
       }
     },
     methods: {
@@ -187,19 +150,6 @@
         height: 50px;
         width: 54px;
         background: #FF4F7E;
-      }
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-      margin: 0;
-    }
-    .schedule-menu-btn {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-      background-color: #F74374 !important;
-      border-left:solid #F97D9F 1px;
-      &-icon {
-        height: 49px;
-        font-size: 2em;
       }
     }
 

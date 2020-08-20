@@ -4,7 +4,7 @@
       <div class="p-50">
         <div class="font-size-30 font-bold-extra">Get everyone to RSVP</div>
         <div class="cover-preview mt-50">
-          <img :src="`${$iconURL}RSVP/Image+111.jpg`" class="mr-10">
+          <img :src="`${$iconURL}RSVP/Image+111.jpg`">
           <md-button class="md-red maryoku-btn md-theme-default change-cover-btn">
             <img :src="`${$iconURL}Campaign/Group 2344.svg`"/>Change Cover
           </md-button>
@@ -169,20 +169,10 @@ export default {
     position: relative;
     overflow: hidden;
     border-radius: 30px;
-    &:hover {
-      .cover-preview::before {
-        content: "";
-        width: 100%;
-        height: 100%;
-        opacity: 0.52;
-        background: #050505;
-      }
-    }
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      
     }
     .change-cover-btn {
       position: absolute;

@@ -245,6 +245,7 @@ export default {
     },
     setProperties() {
       this.selectedBlock = this.component
+      if (!this.selectedBlock.componentId) return
       this.fetchAllProperties(this.selectedBlock.componentId).then(properties=>{
         const propertiesByGroup = {};
         properties.forEach(item=>{
@@ -263,7 +264,7 @@ export default {
       this.showCommentEditorPanel = mode;
     },
     fetchData() {
-      this.blockId = this.$route.params.blockId
+      this.blockId = this.component.componentId;//this.$route.params.blockId
       this.event = this.$store.state.event.eventData;
       this.getCommentComponents(this.blockId);
       this.setProperties();
@@ -292,20 +293,16 @@ export default {
     }
   },
   watch: {
-    // event(newVal, oldVal) {
-    //   this.$root.$emit(
-    //     "set-title",
-    //     this.event,
-    //     this.routeName === "EditBuildingBlocks",
-    //     true
-    //   );
-    // },
     eventData(newVal, oldVal) {
       if (newVal.id) {
         this.fetchData()
       }
     },
-    '$route': 'fetchData'
+    component(newVal, oldVal) {
+      if (newVal.componentId) {
+        this.fetchData()
+      }
+    }
   },
   filters: {
     formatDate: function(date) {

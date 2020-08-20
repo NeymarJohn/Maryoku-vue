@@ -4,8 +4,8 @@
       <div class="font-size-30 font-bold-extra mb-50">Create ‘Save The Date’ Campaign</div>
       <hr/>
       <div class="d-flex mt-70 mb-40">
-        <img :src="`${$iconURL}Campaign/group-9380.svg`" class="mr-20"/>
-        <div class="ml-20">
+        <img :src="`${$iconURL}`"/>
+        <div>
           <div class="font-size-40 font-bold line-height-1 mb-20">It was great seeing you!</div>
           <div  class="font-size-22 line-height-1">80's DISCO PARTY</div>
         </div>
@@ -17,11 +17,11 @@
       <div class="d-flex align-center font-bold">Allow guests to upload photos form the event <md-switch v-model="allowUploadPhoto"></md-switch></div>
       <div class="font-size-22 font-bold line-height-2">Download files related to the event</div>
       <div class="mb-20">Like presentation</div>
-      <md-button class="md-simple edit-btn md-red"> <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10"/>Upload File</md-button>
+      <md-button class="md-simple edit-btn md-red"> <img :src="`${$iconURL}Campaign/Group 9241.svg`"/>Upload File</md-button>
       <hr class="mt-50 mb-70" />
       <div class="share-panel">
         <div class="d-flex mb-60 align-center">
-          <img :src="`${$iconURL}Campaign/group-9386.svg`" class="mr-20"/>
+          <img :src="`${$iconURL}R`"/>
           <div>
             <div class="font-size-30 font-bold line-height-2">share event participation</div>
             <div>(Include photos & details of the event)</div>
@@ -33,7 +33,6 @@
       <hr/>
       <div>
         <div class="font-size-30 font-bold line-height-1 d-flex align-center">
-          <img :src="`${$iconURL}Campaign/group-9386.svg`" class="mr-20"/>
           We'd love to get your feedback 
           <md-switch class="below-label ml-50">Hide feedback section</md-switch>
         </div> 

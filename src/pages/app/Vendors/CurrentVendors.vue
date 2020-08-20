@@ -478,6 +478,7 @@ export default {
       this.$router.push(router)
     },
     goToProposal() {
+      console.log(this.proposals.length)
       if (this.proposals.length > 0) {
         this.goTo(`/vendors/${this.vendor.id}/proposal-request/${this.proposals[0].id}`)
       } else {

@@ -28,7 +28,7 @@
     </div>
     <div class="items-cont">
       <div class="item" :class="{'with-check': step == 3}">
-        <md-checkbox v-if="step == 3" class="no-margin" v-model="selectedBlock"/>
+        <md-checkbox v-if="step == 3" class="no-margin"/>
         <ul>
           <li>
             <img :src="`${iconUrl}Asset 614.svg`"/>
@@ -370,7 +370,7 @@
               img {
                 width: 28px;
                 height: 28px;
-                margin-right: 1em;
+                margin-right: .5rem;
               }
             }
             &:nth-child(2) {
