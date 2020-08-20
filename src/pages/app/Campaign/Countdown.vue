@@ -12,20 +12,36 @@
           <md-switch v-model="showGuests" class="below-label">Hide Coming</md-switch>
         </div>
         <countdown-time class="countdown-time-panel"></countdown-time>
+        
+      </div>
+      <div class="font-size-50 font-bold-extra text-center line-height-1 mb-60">To 80’s Disco Party</div>
+      <hr/>
+      <div class="d-flex mt-60">
+        <maryoku-textarea placeholder="Text" class="mr-60 flex-1"></maryoku-textarea>
+        <rsvp-event-info-panel class="flex-1"></rsvp-event-info-panel>
+      </div>
+      <div class="logo-section d-flex align-center justify-content-center">
+        <img :src="`${$iconURL}RSVP/ms-icon.png`" width="100"/>
+        <md-switch class="below-label" v-model="showLogo">Hide Logo</md-switch>
       </div>
     </div>
   </div>
 </template>
 <script>
+import MaryokuTextarea from '@/components/Inputs/MaryokuTextarea'
 import CountdownTime from './components/CountdownTime';
+import RsvpEventInfoPanel from '@/pages/app/RSVP/RSVPEventInfoPanel'
 export default {
   components: {
     CountdownTime,
+    RsvpEventInfoPanel,
+    MaryokuTextarea
   },
   data() {
     return {
       showGuests: true,
-      showTimer: true
+      showTimer: true,
+      showLogo: true
     }
   },
 }
@@ -52,6 +68,12 @@ export default {
     top: 50px;
     background-color: #FFF;
     border-radius: 3px;
+  }
+  .logo-section {
+    margin: auto;
+    img {
+      max-width: 200px;
+    }
   }
 }
 </style>

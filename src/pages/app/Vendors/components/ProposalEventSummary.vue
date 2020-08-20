@@ -78,19 +78,26 @@
           :iconUrl="iconUrl"
           :categoryIcon="`${iconUrl}Asset 614.svg`"
           :itemType="`price`"
-          :requirements="proposalRequest.requirements"
-          :category="c"
-          v-for="(c, cIndex) in categories"
-          :key="cIndex"
         />
         <proposal-pricing-item
           :iconUrl="iconUrl"
+          :categoryIcon="`${iconUrl}Asset 615.svg`"
+          :itemType="`price`"
+        />
+        <proposal-pricing-item
+          :iconUrl="iconUrl"
+          :categoryIcon="`${iconUrl}Asset 605.svg`"
+          :itemType="`price`"
+        />
+        <proposal-pricing-item
+          :iconUrl="iconUrl"
+          :categoryIcon="`${iconUrl}Asset 615.svg`"
           :itemType="`bundle`"
         />
         <proposal-pricing-item
           :iconUrl="iconUrl"
+          :categoryIcon="`${iconUrl}Asset 615.svg`"
           :itemType="`total`"
-          :requirements="proposalRequest.requirements"
         />
       </div>
       <div class="policy-cont">
@@ -169,8 +176,6 @@
       iconUrl: String,
       itemType: String,
       personalMessage: String,
-      proposalRequest: Object, 
-      services: Array
     },
     data () {
       return {
@@ -180,7 +185,6 @@
         hover: false,
         considerUpdate: false,
         warning: false,
-        categories: [],
       }
     },
     methods: {
@@ -199,12 +203,6 @@
     mounted() {
       this.savedItModal = false
       this.isTimeUp = true
-
-      this.proposalRequest.requirements.forEach(item => {
-        if (!this.categories.includes(item.requirementsCategory)) {
-          this.categories.push(item.requirementsCategory)
-        }
-      });
     },
     computed: {
     },

@@ -1,8 +1,5 @@
 <template>
-  <div 
-    class="check-list-item-wrapper" 
-    :class="[{'extra': extra}]" 
-    @click="isExpanded=!isExpanded">
+  <div class="check-list-item-wrapper" :class="[{'extra': extra}]" @click="isExpanded=!isExpanded">
     <template v-if="!extra">
       <div class="check-item">
         <div class="left">
@@ -24,7 +21,7 @@
           <span class="name">{{name}}</span>
           <span v-if="qty">{{qty}}</span>
           <span class="placeholder" v-else>QTY</span>
-          <span class="price" v-if="price">{{price}}</span>
+          <span class="price" v-if="price">{{price}}</span>          
         </div>
         <div class="right">
           <img v-if="!isExpanded" :src="`${iconUrl}Group 4770 (2).svg`"/>
@@ -84,15 +81,13 @@
         span {
           font-size: 16px;
           font-weight: 800;
-          text-transform: capitalize;
         }
       }
       .right {
-        text-align: right;
         img {
           width: 22px;
-          position: relative;
           margin-left: 55px;
+          position: relative;
           top: -2px;
         }
         span {
@@ -103,21 +98,20 @@
       }
     }
     .extra-item {
-      display: grid;
-      grid-template-columns: 90% 10%;
+      display: flex;
+      justify-content: space-between;
 
       .left {
         width: 80%;
-        display: grid;
-        grid-template-columns: 60% 20% 20%;
         span {
           display: inline-block;
           font-size: 16px;
           font-weight: 800;
           &.name {
-            text-transform: capitalize;
+            width: 50%;
           }
           &.placeholder {
+            width: 25%;
             font-weight: normal;
             color: #a0a0a0;
           }
@@ -129,6 +123,7 @@
       .right {
         img {
           width: 22px;
+          margin-left: 55px;
           position: relative;
           top: -2px;
         }

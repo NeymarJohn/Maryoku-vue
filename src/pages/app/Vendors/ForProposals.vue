@@ -20,7 +20,7 @@
             <p>Relish caterers & venues</p>
           </div>
           <proposal-item
-            :category="`Venue Rental`"
+            :category="`Venue`"
             :services="servicesByCategory('venuerental')"
             :subTitle="`For Whole Event`"
             :img="`${iconUrl}Asset 614.svg`"
@@ -74,8 +74,6 @@
             :isEdit="false" 
             :iconUrl="iconUrl"
             :personalMessage="proposalRequest.personalMessage"
-            :proposalRequest="proposalRequest"
-            :services="services"
           />
         </div>
       </div>

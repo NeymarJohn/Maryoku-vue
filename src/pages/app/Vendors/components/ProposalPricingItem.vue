@@ -1,24 +1,17 @@
 <template>
   <div class="proposal-pricing-items-wrapper">
-    <div 
-      class="pricing-item" 
-      :class="[
-        {'total-wrapper': itemType=='total'}, 
-        {'bundle-wrapper': itemType=='bundle'}
-      ]">
+    <div class="pricing-item" :class="[{'total-wrapper': itemType=='total'}, {'bundle-wrapper': itemType=='bundle'}]">
       <div class="summary" @click="expand()">
         <div class="left">
-          <img v-if="itemType=='price'" :src="getCategoryIcon()"/>
+          <img v-if="itemType=='price'" :src="categoryIcon"/>
           <img v-if="itemType=='bundle'" :src="`${iconUrl}Asset 577.svg`"/>
-          <h3 v-if="itemType=='price'">{{category}}</h3>
+          <h3 v-if="itemType=='price'">Venue</h3>
           <h3 v-if="itemType=='bundle'">Bundle offer</h3>
           <div v-if="itemType=='total'" class="total-cont">
             <h4>Total</h4>
             <span>before discount</span>
           </div>
-          <span v-if="itemType=='price'">
-            For Whole Event
-          </span>
+          <span v-if="itemType=='price'">For Whole Event</span>
           <div class="bundle-desc" v-if="itemType=='bundle'">
             <h4>15%</h4>
             <span>Venue + Catering</span>
@@ -26,15 +19,8 @@
         </div>
         <div class="right">
           <div class="price-cont" v-if="!isExpanded">
-            <span class="org-price">
-              ${{ getOrgPrice() | withComma}}
-            </span>
-            <div class="off-cont">
-              (0% off)
-              <span>
-                ${{ getOrgPrice() | withComma}}
-              </span>
-            </div>
+            <span class="org-price">$400.00</span>
+            <div class="off-cont">(10% off) <span>$1,100.00</span></div>
           </div>
           <img 
             v-if="itemType=='price'"
@@ -59,13 +45,55 @@
           </span>
         </div>
         <editable-proposal-sub-item
-          v-for="(s, sIndex) in servicesByCategory()"
-          :key="sIndex"
-          :item="s"
+          :item="`Description`"
+          :qty="1"
+          :pricePerUnit="400"
+          :subtotal="400"
           :active="true"
           :isEdit="false"
           :step="3"
-        />
+        >
+        </editable-proposal-sub-item>
+        <editable-proposal-sub-item
+          :item="`Sound Equipment`"
+          :qty="1"
+          :pricePerUnit="400"
+          :subtotal="400"
+          :active="true"
+          :isEdit="false"
+          :step="3"
+        >
+        </editable-proposal-sub-item>
+        <editable-proposal-sub-item
+          :item="`Description`"
+          :qty="1"
+          :pricePerUnit="400"
+          :subtotal="400"
+          :active="true"
+          :isEdit="false"
+          :step="3"
+        >
+        </editable-proposal-sub-item>
+        <editable-proposal-sub-item
+          :item="`Description`"
+          :qty="1"
+          :pricePerUnit="400"
+          :subtotal="400"
+          :active="true"
+          :isEdit="false"
+          :step="3"
+        >
+        </editable-proposal-sub-item>
+        <editable-proposal-sub-item
+          :item="`Description`"
+          :qty="1"
+          :pricePerUnit="400"
+          :subtotal="400"
+          :active="true"
+          :isEdit="false"
+          :step="3"
+        >
+        </editable-proposal-sub-item>
         <div class="discount-tax-wrapper">
           <div class="item">
             <div class="left">
@@ -73,12 +101,12 @@
                 Discount 
               </span>
               <span>
-                0%
+                10%
               </span>
             </div>
             <div class="right">
               <span>
-                -$0
+                -$160.00
               </span>
             </div>
           </div>
@@ -88,12 +116,12 @@
                 Taxes
               </span>
               <span>
-                0%
+                18%
               </span>
             </div>
             <div class="right">
               <span>
-                $0
+                $200.00
               </span>
             </div>
           </div>
@@ -103,7 +131,7 @@
             Total
           </span>
           <span>
-            ${{getOrgPrice() | withComma}}
+            $800.00
           </span>
         </div>
         <div class="services-check-list-wrapper">
@@ -112,13 +140,25 @@
             <ul>
               <li>
                 <check-list-item
-                  v-for="(s, sIndex) in servicesByCategory()"
-                  :key="sIndex"
-                  :name="s.requirementTitle"
+                  :name="`Set up`"
                   :iconUrl="iconUrl"
-                  :qty="s.requirementValue"
                   :desc="`Lorem`"
-                />
+                ></check-list-item>
+              </li>
+              <li>
+                <check-list-item
+                  :name="`In-house bar services`"
+                  :qty="2"
+                  :iconUrl="iconUrl"
+                  :desc="`Lorem`"
+                ></check-list-item>
+              </li>
+              <li>
+                <check-list-item
+                  :name="`Linens`"
+                  :iconUrl="iconUrl"
+                  :desc="`Lorem`"
+                ></check-list-item>
               </li>
               <!-- <li>
                 <a class="add-service"><img :src="`${iconUrl}Asset 567.svg`"/>Add Another</a>
@@ -131,15 +171,26 @@
           <p>We suggest these features to the client with this proposal</p>
           <div class="extra-items">
             <check-list-item
-              v-for="(s, sIndex) in servicesByCategory()"
-              :key="sIndex"
-              :name="s.requirementTitle"
+              :name="`Lorem`"
               :iconUrl="iconUrl"
               :desc="`Lorem`"
               :extra="true"
-              :qty="s.requirementValue"
-              :price="`$${s.price}`"
-            />
+              :price="`$100.00`"
+            ></check-list-item>
+            <check-list-item
+              :name="`Lorem`"
+              :iconUrl="iconUrl"
+              :desc="`Lorem`"
+              :extra="true"
+              :price="`$100.00`"
+            ></check-list-item>
+            <check-list-item
+              :name="`Lorem`"
+              :iconUrl="iconUrl"
+              :desc="`Lorem`"
+              :extra="true"
+              :price="`$100.00`"
+            ></check-list-item>
           </div>
         </div>
         <div class="attachments-cont">
@@ -163,7 +214,6 @@
 <script>
   import EditableProposalSubItem from './EditableProposalSubItem.vue'
   import CheckListItem from './CheckListItem.vue'
-  import VendorService from '@/services/vendor.service'
 
   export default {
     name: 'proposal-pricing-item',
@@ -177,13 +227,12 @@
       isDropdown: Boolean,
       proposalRange: Boolean,
       iconUrl: String,
+      categoryIcon: String,
       itemType: String,
-      requirements: Array
     },
     data () {
       return {
-        isExpanded: false,
-        iconsWithCategory: null,
+        isExpanded: false
       }
     },
     methods: {
@@ -191,44 +240,14 @@
         if (this.itemType == 'price') {
           this.isExpanded=!this.isExpanded
         }
-      },
-      getCategoryIcon() {
-        console.log(`http://static.maryoku.com/storage/icons/Budget Elements/${this.iconsWithCategory.filter( c => c.name == this.category)[0].icon}`)
-        return `http://static.maryoku.com/storage/icons/Budget Elements/${this.iconsWithCategory.filter( c => c.name == this.category)[0].icon}`
-      },
-      servicesByCategory() {
-        return this.requirements.filter( r => r.requirementsCategory == this.category )
-      },
-      getOrgPrice() {
-        let total = 0
-
-        if (this.itemType == 'price') {
-          this.servicesByCategory().forEach( s => {
-            total += s.price 
-          })
-        } else if (this.itemType == 'total') {
-          this.requirements.forEach( r => {
-            total += r.price
-          })
-        } else {
-          total = 0
-        }
-
-        return total
-      },
+      }
     },
     created() {
 
     },
     mounted() {
-      this.iconsWithCategory = VendorService.categoryNameWithIcons()
     },
     computed: {
-    },
-    filters: {
-      withComma (amount) {
-        return amount ? amount.toLocaleString() : 0
-      }
     },
     watch: {
     }
@@ -292,7 +311,6 @@
               margin: 0;
               font-size: 14px;
               margin-top: 7px;
-              text-transform: capitalize;
             }
           }
         }
@@ -363,13 +381,24 @@
 
         .editable-sub-items-header {
           padding: 40px 34px 26px 34px;
-          display: grid;
-          grid-template-columns: 40% 15% 15% 15% 15%;
 
           span {
             display: inline-block;
             font-size: 16px;
             font-weight: 800;
+
+            &:first-child {
+              width: calc(100% - 375px - 155px - 150px);
+            }
+            &:nth-child(2) {
+              margin-right: 170px;
+            }
+            &:nth-child(3) {
+              margin-right: 150px;
+            }
+            &:last-child {
+              margin-right: 155px;
+            }
           }
         }
         .discount-tax-wrapper {
@@ -378,17 +407,23 @@
           border-top: 1.5px solid #818080;
 
           .item {
-            display: grid;
-            grid-template-columns: 70% 30%;
+            display: flex;
+            justify-content: space-between;
             font-size: 16px;
             font-weight: 800;
             color: #818080;
             padding: 24px 0;
             .left {
-              display: grid;
-              grid-template-columns: 15% 0%;
+              span {
+                &:first-child {
+                  margin-right: 48px;
+                }
+              }
             }
             .right {
+              span {
+                margin-right: 155px;
+              }
             }
             &:first-child {
               border-bottom: 1px solid #707070;
@@ -399,8 +434,8 @@
           background: #424242;
           color: white;
           padding: 20px 40px;      
-          display: grid;
-          grid-template-columns: 70% 30%;
+          display: flex;
+          justify-content: space-between;
 
           span {
             font-size: 20px;
@@ -440,8 +475,8 @@
                   display: inline-block;
                   padding: 15px 40px;
                   img {
-                    width: 0px;
-                    margin-right: 0px;
+                    width: 10px;
+                    margin-right: 10px;
                   }
                   font-size: 14px;
                   border: 1px dashed #f51355;
@@ -520,7 +555,7 @@
 
             img {
               width: 12px;
-              margin-right: 0px;
+              margin-right: 10px;
               transform: rotate(45deg);
             }
 
