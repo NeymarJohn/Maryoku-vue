@@ -2,10 +2,7 @@
   <div class="for-proposal-wrapper">
     <div class="md-layout justify-content-between">
       <div class="md-layout-item md-size-70">
-        <proposal-steps 
-          :categoryTitle="vendor.vendorCategory"
-          :step="step"
-        />
+        <proposal-steps :step="step"></proposal-steps>
         <div class="step-wrapper" v-if="step < 2">
           <div class="proposal-add-personal-message-wrapper">
             <h3><img :src="`${iconUrl}Asset 611.svg`"/>Let's begin with a personal message</h3>
@@ -23,7 +20,7 @@
             <p>Relish caterers & venues</p>
           </div>
           <proposal-item
-            :category="`Venue Rental`"
+            :category="`Venue`"
             :services="servicesByCategory('venuerental')"
             :subTitle="`For Whole Event`"
             :img="`${iconUrl}Asset 614.svg`"
@@ -77,8 +74,6 @@
             :isEdit="false" 
             :iconUrl="iconUrl"
             :personalMessage="proposalRequest.personalMessage"
-            :proposalRequest="proposalRequest"
-            :services="services"
           />
         </div>
       </div>
@@ -130,7 +125,6 @@ export default {
       iconUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
       services: null,
       iconsWithCategory: null,
-      vendor: null,
     }
   },
   created() {
@@ -166,15 +160,13 @@ export default {
         this.step--
       } else {
         this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}`)
-        VendorService.setProposalRequest(this.proposalRequest)
+        this.$root.$emit('back-proposal-landing-page')
       }
       console.log('wrapperStep', this.step)
     })
 
     this.getVendor()
     this.getProposal(this.$route.params.id)
-
-    this.proposalRequest.requirements = VendorService.getProposalRequest().requirements
   },
   methods: {
     getVendor () {
@@ -210,7 +202,6 @@ export default {
         this.proposalRequest.eventData = {
           allocatedBudget: 0,
         }
-        this.proposalRequest.isAgreed = true
       }
     },
     flatDeep(arr, d = 1) {
@@ -236,6 +227,7 @@ export default {
       return `http://static.maryoku.com/storage/icons/Budget Elements/${this.iconsWithCategory.filter( c => c.value == category)[0].icon}`
     },
     updateProposalRequest (submitted = null) {
+      console.log(this.proposalRequest)
       if (this.proposalRequest.submitted) return
 
       // let proposalRequest = new ProposalRequest({ id: this.$route.params.id })

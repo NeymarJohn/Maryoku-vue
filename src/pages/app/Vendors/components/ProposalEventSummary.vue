@@ -30,14 +30,14 @@
         </div>
         <div class="cover-letter">
           <h4>
-            Dear {{vendor.vendorPropertyValues["5e19fb4b64841710513a4c83"]}},
+            Dear Rachel,
           </h4>
           <p @mouseover="mouseOver()" @mouseleave="mouseLeave()">
             {{personalMessage}}
             <!-- Relish caters & venus is pleased to provide you with the attached catering proposal for you, which is currently scheduled to be held on at. -->
             <br/><br/>
             Sincerely,<br/>
-            <strong>{{vendor.vendorCategory}}</strong>
+            <strong>Relish cateres & venues</strong>
           </p>
           <span @click="savedItModal=true">
             More about us <md-icon>navigate_next</md-icon>
@@ -78,19 +78,26 @@
           :iconUrl="iconUrl"
           :categoryIcon="`${iconUrl}Asset 614.svg`"
           :itemType="`price`"
-          :requirements="proposalRequest.requirements"
-          :category="c"
-          v-for="(c, cIndex) in categories"
-          :key="cIndex"
         />
         <proposal-pricing-item
           :iconUrl="iconUrl"
+          :categoryIcon="`${iconUrl}Asset 615.svg`"
+          :itemType="`price`"
+        />
+        <proposal-pricing-item
+          :iconUrl="iconUrl"
+          :categoryIcon="`${iconUrl}Asset 605.svg`"
+          :itemType="`price`"
+        />
+        <proposal-pricing-item
+          :iconUrl="iconUrl"
+          :categoryIcon="`${iconUrl}Asset 615.svg`"
           :itemType="`bundle`"
         />
         <proposal-pricing-item
           :iconUrl="iconUrl"
+          :categoryIcon="`${iconUrl}Asset 615.svg`"
           :itemType="`total`"
-          :requirements="proposalRequest.requirements"
         />
       </div>
       <div class="policy-cont">
@@ -136,7 +143,7 @@
             </div>
             <div class="signature-wrapper">
               <div class="half-side">
-                <h6>{{vendor.vendorCategory}}</h6>
+                <h6>Relish caterers & venues</h6>
                 <div class="signature-client signature-bidder">
                   
                 </div>
@@ -144,48 +151,7 @@
               <div class="half-side">
                 <h6>Client</h6>
                 <div class="signature-client">
-                  <template v-if="vendor.signature == null">
-                    <div class="card red-border">
-                      <div class="upload-cont">
-                        <a class="" @click="uploadVendorSignature">
-                          <img :src="`http://static.maryoku.com/storage/icons/Vendor Signup/Asset 559.svg`"/> Choose File
-                        </a>
-                        <div class="or">Or</div>
-                        <div class="sign-here">
-                          <vueSignature 
-                            ref="signature" 
-                            :sigOption="option" 
-                            :w="'100%'" 
-                            :h="'100%'"
-                          />
-                          <button class="save" @click="save">Save</button>
-                          <button class="clear" @click="clear">Clear</button>
-                        </div>
-                        <input
-                          type="file"
-                          class="hide"
-                          ref="signatureFile"
-                          name="vendorSignature"
-                          accept="image/gif, image/jpg, image/png"
-                          @change="onVendorImageFilePicked"
-                        />
-                      </div>
-                    </div>
-                  </template>
-                  <template v-else>
-                    <div 
-                      class="" 
-                      :style="`
-                        background-image: url(${vendor.signature});width: 100%;
-                        background-position: center;
-                        background-repeat: no-repeat;
-                        height: 162px;
-                        background-size: contain;
-                      `"
-                    />
-                    <!-- <img :src="vendor.signature"/> -->
-                    <img class="remove" :src="`${iconUrl}Asset 529.svg`" v-if="vendor.signature" @click="removeSignature(vendor.signature)"/>
-                  </template>
+
                 </div>
               </div>
             </div>
@@ -197,14 +163,11 @@
 </template>
 <script>
   import ProposalPricingItem from './ProposalPricingItem.vue'
-  import Vendors from '@/models/Vendors'
-  import vueSignature from "vue-signature"
 
   export default {
     name: 'proposal-event-summary',
     components: {
       ProposalPricingItem,
-      vueSignature
     },
     props: {
       title: String, 
@@ -213,8 +176,6 @@
       iconUrl: String,
       itemType: String,
       personalMessage: String,
-      proposalRequest: Object, 
-      services: Array
     },
     data () {
       return {
@@ -224,16 +185,9 @@
         hover: false,
         considerUpdate: false,
         warning: false,
-        categories: [],
-        vendor: null,
       }
     },
     methods: {
-      getVendor () {
-        Vendors.find(this.$route.params.vendorId).then(vendor => {
-          this.vendor = vendor
-        })
-      },
       hideModal() {
         this.savedItModal = false
       },
@@ -242,58 +196,6 @@
       },
       mouseLeave() {
         this.hover= false
-      },
-      uploadVendorSignature (imageId = null, attachmentType = null) {
-        this.$refs.signatureFile.click()
-      },
-      onVendorImageFilePicked (event) {
-        let file = event.target.files || event.dataTransfer.files
-
-        if (!file.length) {
-          return
-        }
-
-        if (file[0].size <= 5000000) {
-          // 5mb
-          if (event.target.name == 'vendorSignature') {
-            this.createImage(file[0], 'vendorSignature')
-          } else {
-            this.createImage(file[0])
-          }
-        } else {
-          this.$notify({
-            message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
-            horizontalAlign: 'center',
-            verticalAlign: 'top',
-            type: 'warning'
-          })
-        }
-      },
-      createImage (file, type) {
-        let reader = new FileReader()
-        let vm = this
-
-        this.isLoading = true
-
-        reader.onload = e => {
-          if (type == 'vendorSignature') {
-            this.$root.$emit('update-proposal-value', 'signature', e.target.result)
-          }
-        }
-        reader.readAsDataURL(file)
-      },
-      save(){
-        let _this = this
-        let jpeg = _this.$refs.signature.save('image/jpeg')
-        this.$root.$emit('update-proposal-value', 'signature', jpeg)
-        console.log(this.vendor)
-      },
-      clear(){
-        let _this = this
-        _this.$refs.signature.clear()
-      },
-      removeSignature() {
-        
       }
     },
     created() {
@@ -301,14 +203,6 @@
     mounted() {
       this.savedItModal = false
       this.isTimeUp = true
-
-      this.proposalRequest.requirements.forEach(item => {
-        if (!this.categories.includes(item.requirementsCategory)) {
-          this.categories.push(item.requirementsCategory)
-        }
-      });
-
-      this.getVendor()
     },
     computed: {
     },
@@ -439,7 +333,6 @@
           font-size: 14px;
 
           strong {
-            text-transform: capitalize;
             font-weight: 800;
           }
         }
@@ -593,7 +486,6 @@
         display: flex;
         align-items: center;
         padding-bottom: 30px;
-        position: relative;
 
         h4 {
           margin: 0;
@@ -618,8 +510,8 @@
           padding: 0px 15px 15px 15px;
           color: #050505;
           font-size: 14px;
-          left: 180px;
-          top: 70px;
+          margin-left: 180px;
+          margin-top: 120px;
           max-width: 350px;
           text-align: center;
 
@@ -714,15 +606,14 @@
             }
           }
           .signature-wrapper {
-            display: grid;
-            grid-gap: 20%;
-            grid-template-columns: 40% 40%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
             padding-top: 60px;
 
             .half-side {
               text-align: center;
               h6 {
-                text-transform: capitalize;
                 text-decoration: underline;
                 font-size: 16px;
                 font-weight: 800;
@@ -732,8 +623,8 @@
               .signature-client {
                 margin-top: 23px;
                 min-width: 350px;
-                min-height: 270px;
-                border: 1px dashed #f51355!important;
+                min-height: 120px;
+                border: dashed 1px #050505;
                 border-radius: 3px;
               }
 
@@ -742,52 +633,10 @@
                   text-align: left;
                 }
               }
-
-              .upload-cont {
-                a {
-                  margin: .5rem auto;
-                  display: inline-block;
-                  font: 800 14px Manrope-Regular, sans-serif;
-                  border: 1px solid #f51355;
-                  padding: .5rem;
-                  color: #f51355;
-                  cursor: pointer;
-                  img {
-                    width: 10px;
-                  }
-                }
-                .sign-here {
-                  .save, .clear {
-                    background-color: #ffffff;
-                    font: 800 14px Manrope-Regular, sans-serif;
-                    border: 1px solid #f51355;
-                    padding: .5rem;
-                    color: #f51355;
-                    cursor: pointer;
-                    margin-bottom: .5rem;
-                  }
-                }
-              }
-
-              img {
-                width: 100%;
-                max-height: 162px;
-
-                &.remove {
-                  width: 18px;
-                  cursor: pointer;
-                  position: absolute;
-                  right: 1rem;
-                  bottom: 3rem;
-                }
-              }
             }
           }
         }
       }
-    }
-    .hide {
-      display: none!important;
     }
   }  
 </style>

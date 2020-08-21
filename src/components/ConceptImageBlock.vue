@@ -7,7 +7,7 @@
       :style="`background-color: ${colors[idx-1].value}; opacity:${colors[idx-1].opacity}`"
     ></div>
     <div>
-      <div :class="`images-list__item`" v-for="indx in 5" :key="indx">
+      <div :class="`images-list__item ${border}`" v-for="indx in 5" :key="indx">
         <div
           class="image-section d-flex justify-content-center align-center text-center"
           :style="`background-image:url(${images[indx-1].url})`"
@@ -26,6 +26,10 @@ export default {
     colors: {
       type: Array,
       default: []
+    },
+    border: {
+      type: String,
+      default: ''
     }
   },
   created () {
@@ -71,6 +75,12 @@ export default {
     background-color: #fff;
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
     position: absolute;
+    &.no-border {
+      border: none;
+      border-radius: 3px;
+      box-shadow: none;
+      overflow: hidden;
+    }
     .image-section {
       background-size: cover !important;
       background-position: center top;
