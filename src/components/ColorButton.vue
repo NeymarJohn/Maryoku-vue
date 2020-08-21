@@ -68,7 +68,7 @@ export default {
   data: () => ({
     showColorPane: false,
     selectedColour:  {
-      hex: this.value?this.value.value:"",
+      hex: this.value?this.value.color:"",
       a: this.value?this.value.opacity:1
     }
   }),
@@ -90,7 +90,7 @@ export default {
     },
     updateValue: function(value) {
       this.selectedColour = value;
-      this.$emit("input",{value: this.selectedColour.hex, opacity: this.selectedColour.a})
+      this.$emit("input",{color: this.selectedColour.hex, opacity: this.selectedColour.a})
     },
     toggleColorPane: function() {
       document.getElementsByClassName("vc-chrome");
@@ -98,12 +98,12 @@ export default {
     }
   },
   created() {
-    this.selectedColour.hex = this.value.value;
+    this.selectedColour.hex = this.value.color;
     this.selectedColour.a = this.value.alpha
   },
   watch: {
     value: function() {
-      this.selectedColour.hex = this.value.value;
+      this.selectedColour.hex = this.value.color;
       this.selectedColour.a = this.value.opacity
     }
   }

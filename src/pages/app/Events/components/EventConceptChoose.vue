@@ -513,7 +513,13 @@ export default {
       this.newConcept.colors[index].value = "#ff48b2";
     },
     selectConcept(index) {
-      this.onSaveConcept(this.conceptOptions[index]);
+      let event = this.$store.state.event.eventData;
+      this.$http.get(`${process.env.SERVER_URL}/1/concepts/${event.id}/select/${this.conceptOptions[index].id}`).then(res=>{
+        console.log(res.data)
+        this.onSaveConcept(res.data);
+      })
+
+      // this.onSaveConcept(this.conceptOptions[index]);
       // this.selectedConcept = this.conceptOptions[index]
       // this.showConceptList = false
     },
