@@ -59,10 +59,8 @@
       <vendor-budget-list
         :title="`Budget`"
         :description="`Usually budget is flexible and could chane accordig to needs`"
-        :category="proposalRequest ? proposalRequest.requirementsCategory : 'No Proposal Data'"
-        :categoryCost="proposalRequest ? proposalRequest.requirementsCategoryCost : 0"
-        :total="proposalRequest ? proposalRequest.depositCost : 0"
-      ></vendor-budget-list>
+        :proposalRequest="proposalRequest"
+      />
     </div>
     <div class="rank-cont">
       <h3>
@@ -359,6 +357,7 @@
 
 <script>
 import moment from 'moment'
+import VendorService from '@/services/vendor.service'
 import VueElementLoading from 'vue-element-loading'
 import Vendors from '@/models/Vendors'
 import ProposalRequest from '@/models/ProposalRequest'
@@ -436,7 +435,6 @@ export default {
   },
   mounted() {
     this.getVendor()
-    this.getProposal(this.$route.params.id)
 
     this.today = moment(new Date())
     this.limitDateRange = {
@@ -461,12 +459,13 @@ export default {
         window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight)
         this.conditionTooltip = true
       }
-    }),
-
-    this.$root.$on('back-proposal-landing-page', () => {
-      this.$set(this, 'isAgreed', true)
-      this.$forceUpdate()
     })
+
+    this.$set(this, 'proposalRequest', VendorService.getProposalRequest())
+    
+    if (this.proposalRequest) {
+      this.isAgreed = this.proposalRequest.isAgreed
+    }
   },
   methods: {
     goToForm() {
@@ -513,39 +512,6 @@ export default {
       Vendors.find(this.$route.params.vendorId).then(vendor => {
         this.vendor = vendor
       })
-    },
-    getProposals (id) {
-      new Vendors({ id })
-        .proposalRequests()
-        .first()
-        .then(proposals => {
-          this.proposals = proposals.vendorProposals
-          this.firstTime = proposals.firstTime
-          console.log('vendorProposals', this.proposals)
-        })
-    },
-    getProposal (id) {
-      ProposalRequest.find(id)
-        .then(resp => {
-          console.log('ProposalRequest:', resp)
-          this.$set(this, 'proposalRequest', resp)
-          console.log(this.proposalRequest.eventData)
-
-          this.proposalRequestRequirements = _.chain(resp.requirements)
-            .groupBy('requirementPriority')
-            .map(function (value, key) {
-              return {
-                title: key,
-                requirements: value
-              }
-            })
-            .value()
-          
-          console.log('proposalRequestRequirements', this.proposalRequestRequirements)
-        })
-        .catch(error => {
-          console.log(' error ', error)
-        })
     },
     isDateDisabled (date) {
       let startDate = new Date(this.proposalRequest.eventData.eventStartMillis)

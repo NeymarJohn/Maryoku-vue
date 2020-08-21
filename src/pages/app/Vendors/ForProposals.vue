@@ -166,13 +166,15 @@ export default {
         this.step--
       } else {
         this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}`)
-        this.$root.$emit('back-proposal-landing-page')
+        VendorService.setProposalRequest(this.proposalRequest)
       }
       console.log('wrapperStep', this.step)
     })
 
     this.getVendor()
     this.getProposal(this.$route.params.id)
+
+    this.proposalRequest.requirements = VendorService.getProposalRequest().requirements
   },
   methods: {
     getVendor () {
@@ -208,6 +210,7 @@ export default {
         this.proposalRequest.eventData = {
           allocatedBudget: 0,
         }
+        this.proposalRequest.isAgreed = true
       }
     },
     flatDeep(arr, d = 1) {
@@ -233,7 +236,6 @@ export default {
       return `http://static.maryoku.com/storage/icons/Budget Elements/${this.iconsWithCategory.filter( c => c.value == category)[0].icon}`
     },
     updateProposalRequest (submitted = null) {
-      console.log(this.proposalRequest)
       if (this.proposalRequest.submitted) return
 
       // let proposalRequest = new ProposalRequest({ id: this.$route.params.id })

@@ -223,6 +223,9 @@
       UserMenu,
       Modal
     },
+    props: {
+      newProposalRequest: Object
+    },
     data() {
       return {
         fullDetailsModal: false,
@@ -237,6 +240,7 @@
         proposals: [],
         proposalRequest: null,
         vendorCategory: null,
+        newProposalRequest: {},
       }
     },
     methods: {
@@ -269,6 +273,7 @@
         ProposalRequest.find(id)
           .then(resp => {
             this.$set(this, 'proposalRequest', resp)
+            this.$set(this, 'newProposalRequest', resp)
 
             this.proposalRequestRequirements = _.chain(resp.requirements)
               .groupBy('requirementPriority')
