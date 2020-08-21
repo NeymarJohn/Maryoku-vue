@@ -2160,6 +2160,8 @@ const categoryNameWithIcons = [
 ]
 
 class VendorService {
+  proposalRequest = null
+
   businessCategories() {
     return businessCategories
   }
@@ -2174,6 +2176,14 @@ class VendorService {
 
   companyServices() {
     return companyServices
+  }
+
+  setProposalRequest(pr) {
+    this.proposalRequest = pr
+  }
+
+  getProposalRequest() {
+    return this.proposalRequest
   }
 }
 

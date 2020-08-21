@@ -31,7 +31,7 @@
       </ul>
     </div>
     <div class="title-cont">
-      <h3>Venue & Catering Proposal</h3>
+      <h3>{{categoryTitle}} Proposal</h3>
       <p>Relish Catering & Venues</p>
     </div>
   </div>
@@ -42,7 +42,8 @@
     components: {
     },
     props: {
-      step: Number
+      step: Number,
+      categoryTitle: String
     },
     data () {
       return {
@@ -172,6 +173,7 @@
         color: #050505;
         padding-top: 70px;
         margin-bottom: 10px;
+        text-transform: capitalize;
       }
       p {
         color: #f11355;

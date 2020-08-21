@@ -42,7 +42,7 @@
                 class="image-background"
                 v-for="(bg,bgIndex) in item.colors"
                 :key="bgIndex"
-                :style="`background:${bg.value}; opacity:${bg.opacity}`"
+                :style="`background:${bg.color}; opacity:${bg.opacity}`"
               ></div>
             </div>
             <div>
@@ -183,7 +183,7 @@
                 class="image-background"
                 v-for="(bg,bgIndex) in selectedConcept.colors"
                 :key="bgIndex"
-                :style="`background:${bg.value}; opacity:${bg.opacity}`"
+                :style="`background:${bg.color}; opacity:${bg.opacity}`"
               ></div>
             </div>
             <div>
@@ -272,6 +272,7 @@ import ColorButton from "../../../../components/ColorButton";
 import EventConceptEditForm from "./EventConceptEditForm";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
+import ConceptImageBlock from '@/components/ConceptImageBlock'
 
 export default {
   name: "event-time-line",
@@ -288,6 +289,7 @@ export default {
     EventConceptEditForm,
     HeaderActions,
     CommentEditorPanel,
+    ConceptImageBlock
   },
   props: {},
   computed: {

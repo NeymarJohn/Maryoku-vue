@@ -160,7 +160,6 @@
             <md-button
               class="md-rose add-category-btn"
               :class="{'disabled' : !somethingMessage}"
-              @click
             >Update Vendor</md-button>
           </template>
         </modal>
@@ -229,7 +228,7 @@ export default {
     showSomethingModal: false,
     showShareVendorModal: false,
     blockVendors: null,
-    selectedBlock: {},
+    selectedBlock: null,
     proposals: [],
     showCommentEditorPanel: false,
     blockId:"",
@@ -243,9 +242,10 @@ export default {
         .for(this.calendar, this.event)
         .get()
         .then(resp => {
-          this.selectedBlock = _.findWhere(resp, {
+          const selectedComponent = _.findWhere(resp, {
             id: this.blockId
           });
+          this.selectedBlock = new EventComponent(selectedComponent)
           if (this.selectedBlock.vendorRequirements && this.selectedBlock.vendorRequirements[0]) {
             this.showCounterPage = true
             this.showProposals = true
@@ -255,67 +255,6 @@ export default {
           }
         });
     },
-    // getBlockVendors() {
-    //   if (this.blockId !='timeline' && this.blockId != 'concept' ) {
-    //     let event = new CalendarEvent({ id: this.event.id });
-    //     let selected_block = new EventComponent({
-    //       id: this.blockId
-    //     });
-
-    //     new EventComponentVendor()
-    //       .for(this.calendar, event, selected_block)
-    //       .get()
-    //       .then(resp => {
-    //         this.isLoading = false;
-    //         this.selectedBlock.vendors = resp;
-    //         this.selectedBlock.vendorsCount = resp.length;
-    //         this.blockVendors = resp;
-
-    //         let vendorsWithProposals = _.filter(this.blockVendors, function(
-    //           item
-    //         ) {
-    //           return item.proposals && item.proposals.length;
-    //         });
-    //         // let vendorsWithSentStatus = _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
-    //         // let vendorsWithNoStatus   = _.filter(this.blockVendors, function(item){ return !item.proposals });
-
-    //         // this.filteredBlockVendors = _.union( vendorsWithSentStatus,vendorsWithNoStatus);
-
-    //         let proposals = [];
-    //         _.each(vendorsWithProposals, v => {
-    //           proposals.push(v.proposals[0]);
-    //         });
-    //         this.selectedBlock.proposals = proposals;
-    //         this.selectedBlock.proposalsCount = proposals.length;
-
-    //         // this.vendors = _.union( vendorsWithSentStatus,vendorsWithNoStatus);
-    //         this.proposals = vendorsWithProposals;
-    //       })
-    //       .catch(error => {
-    //         this.isLoading = false;
-    //         console.log("EventComponentVendor error =>", error);
-    //       });
-    //   } else {
-    //     this.blockVendors = this.selectedBlock.vendors;
-
-    //     let vendorsWithProposals = _.filter(this.blockVendors, function(item) {
-    //       return item.proposals && item.proposals.length;
-    //     });
-    //     let vendorsWithSentStatus = _.filter(this.blockVendors, function(item) {
-    //       return item.proposals && !item.proposals.length;
-    //     });
-    //     let vendorsWithNoStatus = _.filter(this.blockVendors, function(item) {
-    //       return !item.proposals;
-    //     });
-
-    //     this.filteredBlockVendors = _.union(
-    //       vendorsWithProposals,
-    //       vendorsWithSentStatus,
-    //       vendorsWithNoStatus
-    //     );
-    //     this.isLoading = false;
-    //   }
-    // },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
     },

@@ -117,10 +117,13 @@ export default {
           } else if (this.currentUser.tenants.length === 0) {
             const callback = btoa('/create-event-wizard')
             this.$router.push({ path: `/create-workspace?callback=${callback}`})
-          } else if (this.currentUser.tenants.length > 0) {
+          } else if (this.currentUser.tenants.length > 1) {
             this.$router.push({ path: '/choose-workspace'})
+          } else if (this.currentUser.tenants.length == 1) {
+            const firstWorksapce = `${this.$authService.getAppUrl(this.currentUser.tenants[0])}/#/events`
+            location.href=firstWorksapce
           } else {
-            this.$router.push({ paht: '/error'})
+            this.$router.push({ path: '/error'})
           }
         }
         
