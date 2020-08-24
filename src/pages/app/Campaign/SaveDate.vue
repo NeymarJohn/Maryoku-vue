@@ -1,37 +1,40 @@
 <template>
-  <div class="campaign-save-date white-card">
-    <div class="font-size-30 font-bold-extra text-transform-capitalize  p-50">
-      let's start with a "save the date campaign"
-    </div>
-    <concept-image-block class="ml-50" :images="concept.images" :colors="concept.colors"></concept-image-block>
-    <div class="concept  p-50"> 
-      <span class="font-size-30 font-bold">Save The Date</span>
-      <span class="font-size-22 ml-10"> {{$dateUtil.formatScheduleDay(event.eventStartMillis, "MMMM D, YYYY")}}</span>
-      <div class="font-size-60 font-bold-extra mt-40">
-       {{event.title}}
+  <div class="campaign-save-date">
+    <savedate-analytics v-if="info.completed"></savedate-analytics>
+    <div class="white-card">
+      <div class="font-size-30 font-bold-extra text-transform-capitalize  p-50">
+        let's start with a "save the date campaign"
       </div>
-    </div>
-    <div class="p-50 comment">
-      <textarea class="width-100 p-40" placeholder="Clear your schedule and get ready to mingle! the greatest event of the year is coming up! more details are yet to come, but we can already promise you it's going to be an event to remember. be sure to mark the date on your calendar. you can do it using this link: (google calendar link). see ya soon"></textarea>
-    </div>
-    <div class="p-50 text-center">
-      <div class="font-size-22 mb-50">MORE DETAILS COMING SOON</div>
-      <vue-dropzone v-if="!logo" ref="myVueDropzone" id="dropzone" :options="dropzoneOptions" :useCustomSlot="true" @vdropzone-file-added="logoSelected">
-        <span class="color-red font-bold "><img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10">Upload company logo</span>
-        <br/>
-        Or
-        <br/>
-        <span class="color-dark-gray">Drag your file here</span>
-      </vue-dropzone>
-      <div v-else class="d-flex align-center justify-content-center">
-        <img :src="logoImageData" class="image-logo">
-        <div class="display-logo ml-50">
-          <md-switch v-model="showLogo" class="showlogo-switch"></md-switch>
-          <div v-if="showLogo">Hide Logo</div>
-          <div v-if="!showLogo">Show Logo</div>
+      <concept-image-block class="ml-50" :images="concept.images" :colors="concept.colors" border="no-border"></concept-image-block>
+      <div class="concept  p-50"> 
+        <span class="font-size-30 font-bold">Save The Date</span>
+        <span class="font-size-22 ml-10"> {{$dateUtil.formatScheduleDay(event.eventStartMillis, "MMMM D, YYYY")}}</span>
+        <div class="font-size-60 font-bold-extra mt-40">
+        {{event.title}}
         </div>
       </div>
-      
+      <div class="p-50 comment">
+        <maryoku-textarea class="width-100" :placeholder="placeHolder" v-model="description"></maryoku-textarea>
+      </div>
+      <div class="p-50 text-center">
+        <div class="font-size-22 mb-50">MORE DETAILS COMING SOON</div>
+        <vue-dropzone v-if="!logo" ref="myVueDropzone" id="dropzone" :options="dropzoneOptions" :useCustomSlot="true" @vdropzone-file-added="logoSelected">
+          <span class="color-red font-bold "><img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10">Upload company logo</span>
+          <br/>
+          Or
+          <br/>
+          <span class="color-dark-gray">Drag your file here</span>
+        </vue-dropzone>
+        <div v-else class="d-flex align-center justify-content-center">
+          <img :src="logoImageData" class="image-logo">
+          <div class="display-logo ml-50">
+            <md-switch v-model="showLogo" class="showlogo-switch"></md-switch>
+            <div v-if="showLogo">Hide Logo</div>
+            <div v-if="!showLogo">Show Logo</div>
+          </div>
+        </div>
+        
+      </div>
     </div>
   </div>
 </template>
@@ -39,10 +42,22 @@
 import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import ConceptImageBlock from '@/components/ConceptImageBlock'
+import MaryokuTextarea from '@/components/Inputs/MaryokuTextarea'
+import SavedateAnalytics from './components/SavedateAnalytics'
+
+const placeHolder = "Clear your schedule and get ready to mingle! the greatest event of the year is coming up! more details are yet to come, but we can already promise you it's going to be an event to remember. be sure to mark the date on your calendar. you can do it using this link: (google calendar link). see ya soon";
 export default {
   components: {
     vueDropzone: vue2Dropzone,
-    ConceptImageBlock
+    ConceptImageBlock,
+    MaryokuTextarea,
+    SavedateAnalytics,
+  },
+  props: {
+    info: {
+      type: Object,
+      default: {}
+    },
   },
   data: function () {
     return {
@@ -54,11 +69,13 @@ export default {
       },
       logo: null,
       logoImageData: '',
-      showLogo: true
+      showLogo: true,
+      placeHolder: placeHolder,
+      description: ''
     }
   },
   created () {
-    console.log(this.$store.state.event.eventData);
+    console.log(this.info);
   },
   computed: {
     event() {

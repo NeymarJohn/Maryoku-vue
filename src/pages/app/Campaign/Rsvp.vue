@@ -1,5 +1,6 @@
 <template>
   <div>
+    <rsvp-analytics v-if="info.completed"></rsvp-analytics>
     <div class="white-card rsvp-campaign">
       <div class="p-50">
         <div class="font-size-30 font-bold-extra">Get everyone to RSVP</div>
@@ -94,13 +95,20 @@ import MaryokuTextarea from '@/components/Inputs/MaryokuTextarea'
 import { MaryokuInput } from "@/components";
 import RsvpVenueCarousel from "@/pages/app/RSVP/RSVPVenueCarousel.vue"
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue"
-
+import RsvpAnalytics from './components/RSVPAnalytics'
 export default {
   components: {
     MaryokuTextarea,
     MaryokuInput,
     RsvpVenueCarousel,
-    RsvpEventInfoPanel
+    RsvpEventInfoPanel,
+    RsvpAnalytics
+  },
+  props: {
+    info: {
+      type: Object,
+      default: {} 
+    },
   },
   data() {
     return {

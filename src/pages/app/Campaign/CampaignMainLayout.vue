@@ -14,15 +14,16 @@
     <div class="campaign-content md-layout-item md-size-100 mt-30">
       <div class="campaign-content-tab d-flex mb-40">
         <div class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center" :class="{selected: selectedTab === 1}" @click="selectTab(1)">
-          Save The Date
+          <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaigns.dateInfo.completed"/>
+          <span :class="{completedCampaign: campaigns.dateInfo.completed}">Save The Date</span>
           <span>
             <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
             <md-tooltip >Save the Date</md-tooltip>
           </span>
-          
         </div>
         <div class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center" :class="{selected: selectedTab === 2}" @click="selectTab(2)">
-          RSVP
+          <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaigns.rsvp.completed"/>
+          <span :class="{completedCampaign: campaigns.rsvp.completed}">RSVP</span>
           <span>
             <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
             <md-tooltip >
@@ -31,14 +32,16 @@
           </span>
           </div>
         <div class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center" :class="{selected: selectedTab === 3}" @click="selectTab(3)">
-          Countdown
+          <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaigns.countdown.completed"/>
+          <span :class="{completedCampaign: campaigns.countdown.completed}">Countdown</span>
           <span>
             <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
             <md-tooltip >CountDown</md-tooltip>
           </span>
         </div>
         <div class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center" :class="{selected: selectedTab === 4}" @click="selectTab(4)">
-          Feedback
+          <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaigns.feedback.completed"/>
+          <span :class="{completedCampaign: campaigns.feedback.completed}">Feedback</span>
           <span>
             <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
             <md-tooltip >Save the Date</md-tooltip>
@@ -46,10 +49,10 @@
           
         </div>
       </div>
-      <save-date v-if="selectedTab == 1"></save-date>
-      <rsvp v-if="selectedTab == 2"></rsvp>
-      <countdown v-if="selectedTab == 3"></countdown>
-      <feedback v-if="selectedTab == 4"></feedback>
+      <save-date v-if="selectedTab == 1" :info="campaigns.dateInfo"></save-date>
+      <rsvp v-if="selectedTab == 2" :info="campaigns.rsvp"></rsvp>
+      <countdown v-if="selectedTab == 3" :info="campaigns.countdown"></countdown>
+      <feedback v-if="selectedTab == 4" :info="campaigns.feedback"></feedback>
       <delivery-settings></delivery-settings>
     </div>
     <div class="campaign-footer">
@@ -83,8 +86,8 @@
                   <md-icon class="schedule-menu-btn-icon">keyboard_arrow_down</md-icon>
                 </md-button>
                 <md-menu-content>
-                  <md-menu-item class="text-center font-size-16 font-bold-extra"><img :src="`${$iconURL}Campaign/Group 1908.svg`">Save Draft</md-menu-item>
-                  <md-menu-item class="text-center font-size-16 font-bold-extra"><img :src="`${$iconURL}Campaign/Group 1908.svg`">Send Now</md-menu-item>
+                  <md-menu-item class="text-center" @click="startCampaign"><span class="font-size-16 font-bold-extra"><img :src="`${$iconURL}Campaign/Group 1908.svg`" class="mr-10" style="width:20px; height:20px;"/>Save Draft</span></md-menu-item>
+                  <md-menu-item class="text-center" @click="startCampaign"><span class="font-size-16 font-bold-extra"><img :src="`${$iconURL}Campaign/Group 1908.svg`" class="mr-10" style="width:20px; height:20px;"/>Send Now</span></md-menu-item>
                 </md-menu-content>
               </md-menu>
         </div>
@@ -120,7 +123,13 @@
       return {
         showCommentEditorPanel: false,
         selectedTab: 1,
-        showScheduleModal: false
+        showScheduleModal: false,
+        campaigns: {
+          dateInfo: { completed: false},
+          rsvp: { completed: false},
+          countdown: { completed: false},
+          feedback: { completed: false}
+        }
       }
     },
     methods: {
@@ -133,6 +142,17 @@
       scrollToTop() {
         window.scrollTo(0, 0);
       },
+      startCampaign() {
+        if (this.selectedTab === 1 ) {
+          this.campaigns.dateInfo = { ...this.campaigns.dateInfo, completed: true }
+        } else if (this.selectedTab === 2) {
+          this.campaigns.rsvp.completed = true
+        } else if (this.selectedTab === 3) {
+          this.campaigns.countdown.completed = true
+        } else if (this.selectedTab === 4) {
+          this.campaigns.feedback.completed = true
+        }
+      }
     },
   }
 </script>
@@ -155,6 +175,10 @@
         color: #f52355;
         border-bottom: solid 3px #f51355;
       }
+    }
+    .completedCampaign {
+      text-decoration: line-through;
+      font-family: 'Manrope-Regular';
     }
   }
 

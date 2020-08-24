@@ -36,11 +36,16 @@
                 <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10">
                 <span class="color-red">Upload Excel list file</span>
               </md-button>
+              <span class="ml-20"><img :src="`${$iconURL}Campaign/Group+1175.svg`"></span>
             </div>
             <div class="mt-50 font-bold">How would you like to send your text?</div>
             <div class="mt-10">
-              <md-checkbox v-model="smsOrWhatsapp" class="md-checkbox-circle md-red" value="sms"><span :class="{'font-bold': smsOrWhatsapp === 'sms'}">By SMS</span></md-checkbox>
-              <md-checkbox v-model="smsOrWhatsapp" class="md-checkbox-circle md-red" value="whatsapp"><span :class="{'font-bold': smsOrWhatsapp === 'whatsapp'}">By WhatsApp</span></md-checkbox>
+              <md-checkbox v-model="smsOrWhatsapp" class="md-checkbox-circle md-red  mr-50"  value="sms">
+                <span :class="{'font-bold': smsOrWhatsapp === 'sms'}" class="p-5">By SMS</span></md-checkbox>
+              <md-checkbox v-model="smsOrWhatsapp" class="md-checkbox-circle md-red ml-50" value="whatsapp">
+                <img :src="`${$iconURL}Campaign/Image+74.png`"/>
+                <span :class="{'font-bold': smsOrWhatsapp === 'whatsapp'}">By WhatsApp</span>
+              </md-checkbox>
             </div>
           </div>
           <div class="setting-item">

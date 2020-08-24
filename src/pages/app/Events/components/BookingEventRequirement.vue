@@ -1,5 +1,5 @@
 <template>
-  <div v-if="selectedBlock">
+  <div v-if="selectedBlock" class="booking-event-requirement">
     <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <div class="event-book-requirement-header md-layout-item md-size-100">
       <div class="header-title">
@@ -324,139 +324,142 @@ export default {
 };
 </script>
 <style lang="scss">
-.event-book-requirement-header{
-  height: 256px;
-  padding:0;
-  display: flex;
-  .header-title {
+.booking-event-requirement {
+  .event-book-requirement-header{
+    height: 256px;
+    padding:0;
     display: flex;
-    img {
-      width: 25%;
-    }
-  }
-  .header-actions {
-    position: absolute;
-    right: 50px;
-    top: 30px;
-    z-index: 99;
-  }
-}
-.section-title {
-  font-size: 22px;
-  font-family: "Manrope-ExtraBold";
-}
-.requirement-section {
-  border-radius: 3px;
-  box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-  background-color: #ffffff;
-  padding: 60px;
-  margin: 20px 0px;
-  &-table {
-    border-spacing: 0px;
-    th {
-      text-align: left;
-    }
-    width: 100%;
-    td,th {
-      padding: 24px 0;
-    }
-    tbody {
-      td {
-        border-top: solid 2px #DBDBDB !important; 
-        // border: 1px solid black;
-        border-collapse: collapse;
+    .header-title {
+      display: flex;
+      img {
+        width: 25%;
       }
     }
-    .quantity-input {
-      height: 47px;
-      box-shadow: none;
-      border: solid 0.5px #818080;
-      font-family: "Manrope-regular";
-      font-size: 16px;
+    .header-actions {
+      position: absolute;
+      right: 50px;
+      top: 30px;
+      z-index: 99;
     }
   }
-}
-.booking-section__actions {
-  width: 100%;
-  text-align: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 20px 1.9em;
-  background: white;
-}
-.additional-request {
-  display: flex;
-  align-items: flex-start;
-  &-description {
-    min-width: 350px;
+  .section-title {
+    font-size: 22px;
+    font-family: "Manrope-ExtraBold";
   }
-  h4 {
-    margin-top: 5px;
-    margin-bottom: 10px;
-    font-family: "Manrope-Bold";
+  .requirement-section {
+    border-radius: 3px;
+    box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+    background-color: #ffffff;
+    padding: 60px;
+    margin: 20px 0px;
+    &-table {
+      border-spacing: 0px;
+      th {
+        text-align: left;
+      }
+      width: 100%;
+      td,th {
+        padding: 24px 0;
+      }
+      tbody {
+        td {
+          border-top: solid 2px #DBDBDB !important; 
+          // border: 1px solid black;
+          border-collapse: collapse;
+        }
+      }
+      .quantity-input {
+        height: 47px;
+        box-shadow: none;
+        border: solid 0.5px #818080;
+        font-family: "Manrope-regular";
+        font-size: 16px;
+      }
+    }
   }
-}
-.additional-request-tag {
-  margin-left: 20px;
-  margin-bottom: 10px;
-  border: solid 1px #f51355;
-  height: 50px;
-  border-radius: 25px;
-  display: inline-block;
-  padding: 10px 20px;
-  font-size: 16px;
-  font-family: "Manrope-Bold";
-  color: #f51355 !important;
-  cursor: pointer;
-  .icon {
-    margin-left:10px;
-    color: #f51355 !important;
-    font-size: 30px !important;
+  .booking-section__actions {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px 1.9em;
+    background: white;
   }
-}
-.special-request-header {
-  display: flex;
-  align-items: center;
-  .title {
+  .additional-request {
+    display: flex;
+    align-items: flex-start;
+    &-description {
+      min-width: 350px;
+    }
+    h4 {
+      margin-top: 5px;
+      margin-bottom: 10px;
+      font-family: "Manrope-Bold";
+    }
+  }
+  .additional-request-tag {
     margin-left: 20px;
-    margin-right: 40px;
-  }
-}
-.special-request-section {
-  padding: 30px 0;
-  border-top: solid 1px #B7B7B7;
-}
-.checkbox-label-wrapper{
-  margin-top: -9px;
-  margin-left: 20px;
-  margin-right: 50px;
-}
-textarea {
-  width: 100%;
-  resize: none;
-  padding: 20px;
-  border: solid 1px #a0a0a0;
-  border-radius: 3px;
-}
-.multiple-selection {
-  width: 300px;
-  display: inline-block;
-  height: 50px;
-  .multiselect__select {
-    top:15px
-  }
-  .multiselect__tags {
+    margin-bottom: 10px;
+    border: solid 1px #f51355;
     height: 50px;
-    .multiselect__single {
-      line-height: 30px;
+    border-radius: 25px;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-family: "Manrope-Bold";
+    color: #f51355 !important;
+    cursor: pointer;
+    .icon {
+      margin-left:10px;
+      color: #f51355 !important;
+      font-size: 30px !important;
     }
   }
-  .multiselect__input{
-    height: 30px;
+  .special-request-header {
+    display: flex;
+    align-items: center;
+    .title {
+      margin-left: 20px;
+      margin-right: 40px;
+    }
   }
-  .multiselect__placeholder {
-    line-height: 20px;
+  .special-request-section {
+    padding: 30px 0;
+    border-top: solid 1px #B7B7B7;
+  }
+  .checkbox-label-wrapper{
+    margin-top: -9px;
+    margin-left: 20px;
+    margin-right: 50px;
+  }
+  textarea {
+    width: 100%;
+    resize: none;
+    padding: 20px;
+    border: solid 1px #a0a0a0;
+    border-radius: 3px;
+  }
+  .multiple-selection {
+    width: 300px;
+    display: inline-block;
+    height: 50px;
+    .multiselect__select {
+      top:15px
+    }
+    .multiselect__tags {
+      height: 50px;
+      .multiselect__single {
+        line-height: 30px;
+      }
+    }
+    .multiselect__input{
+      height: 30px;
+    }
+    .multiselect__placeholder {
+      line-height: 20px;
+    }
   }
 }
+
 </style>
