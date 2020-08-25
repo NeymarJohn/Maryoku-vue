@@ -29,14 +29,23 @@
           </div>
           <div class="mb-50 mt-50" v-if="usePhone">
             <div class="font-bold">To</div>
-            <div class="d-flex align-center width-100">
-              <maryoku-input placeholder="Paste your phone number list…" inputStyle="phone" class="flex-1"></maryoku-input>
+            <div class="d-flex align-start width-100">
+              <div class="flex-1">
+                <maryoku-textarea 
+                  type="phones" 
+                  placeholder="Paste all phone numbers here…" 
+                  inputStyle="phone" 
+                  ></maryoku-textarea>
+
+                <invalid-address-panel class="mt-30" v-if="invalidPastedPhones" :content="invalidPastedPhones"></invalid-address-panel>
+              </div>
               <span class="font-size-16" style="padding: 20px 40px">Or</span>
+              
               <md-button class="md-outlined md-simple maryoku-btn">
                 <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10">
                 <span class="color-red">Upload Excel list file</span>
               </md-button>
-              <span class="ml-20"><img :src="`${$iconURL}Campaign/Group+1175.svg`"></span>
+              <span class="ml-20 mt-10"><img :src="`${$iconURL}Campaign/Group+1175.svg`"></span>
             </div>
             <div class="mt-50 font-bold">How would you like to send your text?</div>
             <div class="mt-10">
@@ -62,17 +71,25 @@
           </div>
           <div v-if="useEmail">
             <div class="mt-50" >
-              <label class="font-bold">Subject</label>
-              <maryoku-input placeholder="Type your email subject here…" class="width-66"></maryoku-input>
+              <label class="font-bold mb-10 line-height-2">Subject</label>
+              <maryoku-input placeholder="Type your email subject here…" class="width-60"></maryoku-input>
             </div>
             <div class="mt-50" >
-              <label class="font-bold">From</label>
-              <maryoku-input placeholder="Your email address…" class="width-66"></maryoku-input>
+              <label class="font-bold mb-10 line-height-2" >From</label>
+              <maryoku-input placeholder="Your email address…" class="width-60"></maryoku-input>
             </div>
-            <div class="mt-50">
-              <label><span class="font-bold mr-10">To</span>Make sure to put space / comma between each address</label>
-              <div class="d-flex align-center width-100">
-                <maryoku-input placeholder="Paste list of guests emails here…" inputStyle="mail" class="flex-1 width-66"></maryoku-input>
+            <div class="mt-50 font-size-14 ">
+              <label class="mb-10 line-height-2"><span class="font-bold mr-10 font-size-16">To</span>Make sure to put space / comma between each address</label>
+              <div class="d-flex align-start width-100 ">
+                <div class="width-60">
+                  <maryoku-textarea 
+                    placeholder="Paste all emails here…" 
+                    type="input" 
+                    inputStyle="emails" 
+                    @change="handleInputEmails">
+                  </maryoku-textarea>
+                  <invalid-address-panel class="mt-30" v-if="invalidPastedEmails" :content="invalidPastedEmails"></invalid-address-panel>
+                </div>
                 <span class="font-size-16" style="padding: 20px 40px">Or</span>
                 <md-button class="md-outlined md-simple maryoku-btn">
                   <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10">
@@ -89,19 +106,50 @@
   </div>
 </template>
 <script>
-import { Modal, MaryokuInput, LocationInput } from "@/components";
+import { Modal, MaryokuInput, LocationInput, MaryokuTextarea } from "@/components";
 import CollapsePanel from './CollapsePanel'
+import InvalidAddressPanel from './components/InvalidAddressPanel'
+import {validateEmail, validPhoneNumber} from '@/utils/validation.util'
 export default {
   components: {
     MaryokuInput,
-    CollapsePanel
+    CollapsePanel,
+    MaryokuTextarea,
+    InvalidAddressPanel
   },
   data() {
     return {
       usePhone: false,
       useEmail: false,
-      smsOrWhatsapp:''
+      smsOrWhatsapp:'',
+      invalidPastedEmails: null,
+      invalidPastedPhones: null
     }
+  },
+  methods: {
+    handleInputEmails({value, type}) {
+      const addresses = value.split(/[\s,]+/)
+      let invalidEmails = ""
+      if (type=='emails') {
+        addresses.forEach(address=>{
+          if (address && address.trim() && !validateEmail(address)) {
+            if (!invalidEmails) invalidEmails = address
+            else invalidEmails = `${invalidEmails},${address}`
+          }
+        })
+        this.invalidPastedEmails = invalidEmails;
+      } else if(type=='phones') {
+        addresses.forEach(address=>{
+          if (address && address.trim() && !validPhoneNumber(address)) {
+            if (!invalidEmails) invalidEmails = address
+            else invalidEmails = `${invalidEmails},${address}`
+          }
+        })
+        this.invalidPastedPhones = invalidEmails;
+      }
+      
+    }
+    
   },
 };
 </script>
