@@ -28,7 +28,7 @@
         <div v-else class="d-flex align-center justify-content-center">
           <img :src="logoImageData" class="image-logo">
           <div class="display-logo ml-50">
-            <md-switch v-model="showLogo" class="showlogo-switch"></md-switch>
+            <md-switch v-model="showLogo" class="showlogo-switch large-switch"></md-switch>
             <div v-if="showLogo">Hide Logo</div>
             <div v-if="!showLogo">Show Logo</div>
           </div>
@@ -44,7 +44,7 @@ import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import ConceptImageBlock from '@/components/ConceptImageBlock'
 import MaryokuTextarea from '@/components/Inputs/MaryokuTextarea'
 import SavedateAnalytics from './components/SavedateAnalytics'
-
+import { getBase64 } from '@/utils/file.util'
 const placeHolder = "Clear your schedule and get ready to mingle! the greatest event of the year is coming up! more details are yet to come, but we can already promise you it's going to be an event to remember. be sure to mark the date on your calendar. you can do it using this link: (google calendar link). see ya soon";
 export default {
   components: {
@@ -90,16 +90,8 @@ export default {
   methods: {
     async logoSelected(file) {
       this.logo = file
-      this.logoImageData = await this.getBase64(file)
+      this.logoImageData = await getBase64(file)
     },
-    getBase64(file) {
-      return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = error => reject(error);
-      });
-    }
   },
 }
 </script>
