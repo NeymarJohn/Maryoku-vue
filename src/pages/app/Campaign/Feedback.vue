@@ -14,8 +14,7 @@
     </div>
     <rsvp-venue-carousel></rsvp-venue-carousel>
     <div class="p-50">
-      <div class="d-flex align-center font-bold">Allow guests to upload photos form the event 
-        <md-switch class="large-switch" v-model="allowUploadPhoto"></md-switch></div>
+      <div class="d-flex align-center font-bold">Allow guests to upload photos form the event <md-switch v-model="allowUploadPhoto"></md-switch></div>
       <div class="font-size-22 font-bold line-height-2">Download files related to the event</div>
       <div class="mb-20">Like presentation</div>
       <md-button class="md-simple edit-btn md-red"> <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10"/>Upload File</md-button>
@@ -27,16 +26,16 @@
             <div class="font-size-30 font-bold line-height-2">share event participation</div>
             <div>(Include photos & details of the event)</div>
           </div>
-          <md-switch class="below-label large-switch">Hide sharing option</md-switch>
+          <md-switch class="below-label">Hide sharing option</md-switch>
         </div>
         <sharing-button-group class="mb-50"></sharing-button-group>
       </div>
       <hr/>
       <div>
         <div class="font-size-30 font-bold line-height-1 d-flex align-center">
-          <img :src="`${$iconURL}Campaign/group-7321.svg`" class="mr-20"/>
+          <img :src="`${$iconURL}Campaign/group-9386.svg`" class="mr-20"/>
           We'd love to get your feedback 
-          <md-switch class="below-label large-switch ml-50">Hide feedback section</md-switch>
+          <md-switch class="below-label ml-50">Hide feedback section</md-switch>
         </div> 
         <div>
           <feedback-question question="In general, how was the event?"></feedback-question>

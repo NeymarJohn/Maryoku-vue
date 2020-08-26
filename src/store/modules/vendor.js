@@ -1,8 +1,10 @@
 import { postReq, getReq } from '@/utils/token'
+import { cat } from 'shelljs'
 
 const state = {
   vendors: [],
   allProperties:[],
+  properties: {}
 }
 
 const getters = {
@@ -44,6 +46,11 @@ const actions = {
         return
       })
     })
+  },
+  getProperties: ({commit, state}, categoryName) => {
+    if ( !state[categoryName] ) {
+      
+    }
   }
 }
 
