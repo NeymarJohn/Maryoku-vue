@@ -111,7 +111,7 @@ export default {
     eventElements: [],
     currentUrl: "",
     calendar: null,
-    // event: {}
+    event: {}
   }),
   computed: {
     ...mapState("event", {

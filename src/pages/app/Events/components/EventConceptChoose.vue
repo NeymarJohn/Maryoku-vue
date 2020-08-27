@@ -42,7 +42,7 @@
                 class="image-background"
                 v-for="(bg,bgIndex) in item.colors"
                 :key="bgIndex"
-                :style="`background:${bg.color}; opacity:${bg.opacity}`"
+                :style="`background:${bg.value}; opacity:${bg.opacity}`"
               ></div>
             </div>
             <div>
@@ -183,7 +183,7 @@
                 class="image-background"
                 v-for="(bg,bgIndex) in selectedConcept.colors"
                 :key="bgIndex"
-                :style="`background:${bg.color}; opacity:${bg.opacity}`"
+                :style="`background:${bg.value}; opacity:${bg.opacity}`"
               ></div>
             </div>
             <div>
@@ -272,7 +272,6 @@ import ColorButton from "../../../../components/ColorButton";
 import EventConceptEditForm from "./EventConceptEditForm";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
-import ConceptImageBlock from '@/components/ConceptImageBlock'
 
 export default {
   name: "event-time-line",
@@ -289,7 +288,6 @@ export default {
     EventConceptEditForm,
     HeaderActions,
     CommentEditorPanel,
-    ConceptImageBlock
   },
   props: {},
   computed: {
@@ -513,13 +511,7 @@ export default {
       this.newConcept.colors[index].value = "#ff48b2";
     },
     selectConcept(index) {
-      let event = this.$store.state.event.eventData;
-      this.$http.get(`${process.env.SERVER_URL}/1/concepts/${event.id}/select/${this.conceptOptions[index].id}`).then(res=>{
-        console.log(res.data)
-        this.onSaveConcept(res.data);
-      })
-
-      // this.onSaveConcept(this.conceptOptions[index]);
+      this.onSaveConcept(this.conceptOptions[index]);
       // this.selectedConcept = this.conceptOptions[index]
       // this.showConceptList = false
     },

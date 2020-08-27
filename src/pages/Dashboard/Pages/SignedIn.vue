@@ -5,7 +5,7 @@
       <!-- <img src="http://static.maryoku.com/storage/img/calendar-loader-3.gif" class="text-center" style="width: 64px;"/> -->
       <h2 class="title text-center" slot="title" style="text-align: center;">
         Hi there, one moment please ...
-      </h2> 
+      </h2>
     </div>
     <div v-else class="md-layout-item font-size-30" style="text-align: center; color:#050505;">
       {{messages[messageIndex]}}
@@ -35,6 +35,7 @@ export default {
     }
   },
   created () {
+    console.log("signedIn", this.$route.query.token);
     const givenToken = this.$route.query.token
     this.$store.dispatch('auth/checkToken', givenToken).then(
       (tenantUser) => {
@@ -88,11 +89,11 @@ export default {
           //   this.messageIndex = 0;
           //   // setTimeout(() => {
           //   //   this.$router.push({ path: '/choose-workspace' })
-              
+
           //   // }, 5000);
           // }
         }
-        
+
       },
       error => {
         this.loading = false;

@@ -1,9 +1,8 @@
 <template>
   <div class="rsvp-event-info">
     <div class="event-info-item">
-      <div class="event-info-item-icon" >
-        <div class="event-info-item-icon-background" :style="`background-color:${concept.colors[0].color}`"></div>
-        <img :src="`${$iconURL}RSVP/Path+251.svg`"  />
+      <div class="event-info-item-icon">
+        <img :src="`${$iconURL}RSVP/Path+251.svg`" />
       </div>
       <div class="event-info-item-title font-size-22 font-bold-extra">WHEN?</div>
       <div class="event-info-item-content font-size-20">
@@ -15,8 +14,7 @@
     </div>
     <div class="event-info-item">
       <div
-        class="event-info-item-icon"  >
-        <div class="event-info-item-icon-background" :style="`background-color:${concept.colors[0].color}`"></div>
+        class="event-info-item-icon">
         <img :src="`${$iconURL}Event%20Page/location-dark.svg`" />
       </div>
       <div class="event-info-item-title font-size-22 font-bold-extra">WHERE?</div>
@@ -25,7 +23,6 @@
     <div class="event-info-item">
       <div
         class="event-info-item-icon">
-        <div class="event-info-item-icon-background" :style="`background-color:${concept.colors[0].color}`"></div>
         <img :src="`${$iconURL}RSVP/Path+1383.svg`" />
       </div>
       <div class="event-info-item-title font-size-22 font-bold-extra">SOLO OR PLUS 1?</div>
@@ -36,7 +33,6 @@
     <div class="event-info-item">
       <div
         class="event-info-item-icon">
-        <div class="event-info-item-icon-background" :style="`background-color:${concept.colors[0].color}`"></div>
         <img :src="`${$iconURL}RSVP/Group+1279.svg`" />
       </div>
       <div class="event-info-item-title font-size-22 font-bold-extra">Arrival?</div>
@@ -52,11 +48,6 @@ export default {
       default: {} 
     },
   },
-  computed: {
-    concept() {
-      return this.event.concept?this.event.concept:{}
-    }
-  },
 }
 </script>
 <style lang="scss" scoped>
@@ -68,18 +59,9 @@ export default {
     &-icon {
       width: 42px;
       height: 42px;
+      background-color: #d9fcf2;
       border-radius: 21px;
       padding: 8px;
-      position: relative;
-      overflow: hidden;
-      &-background{
-        width: 42px;
-        height: 42px;
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        opacity: 0.23;
-      }
     }
     &-title {
       width: 250px;

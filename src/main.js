@@ -27,8 +27,6 @@ import VueTimeago from 'vue-timeago'
 import VueClipboard from 'vue-clipboard2'
 import VueTimepicker from 'vue2-timepicker'
 import vueSignature from "vue-signature"
-import VueInputAutowidth from 'vue-input-autowidth'
-
 import money from 'v-money'
 
 import App from './App.vue'
@@ -76,7 +74,7 @@ Vue.use(VueTimeago, {
 Vue.use(VueTimepicker)
 Vue.use(vueSignature)
 Vue.use(money, {precision: 4})
-Vue.use(VueInputAutowidth)
+
 // configure router
 const router = new VueRouter({
   routes, // short for routes: routes

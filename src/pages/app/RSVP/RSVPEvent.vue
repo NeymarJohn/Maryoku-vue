@@ -26,7 +26,55 @@
               </div>
             </div>
             <div class="md-layout-item md-size-50 md-small-size-50">
-              <rsvp-event-info-panel :event="event"></rsvp-event-info-panel>
+              <div class="event-info">
+                <div class="event-info-item">
+                  <div
+                    class="event-info-item-icon"
+                    :style="`background-color:${event.concept.colors[0].value}`"
+                  >
+                    <img :src="`${$iconURL}RSVP/Path+251.svg`" />
+                  </div>
+                  <div class="event-info-item-title font-size-22 font-bold-extra">WHEN?</div>
+                  <div class="event-info-item-content font-size-20">
+                    {{$dateUtil.formatScheduleDay(event.eventStartMillis, "MMM Do YYYY")}}
+                    <span
+                      style="line-height:2em;border-left:solid 1px #B7B7B7; padding-left:10px; margin-left:10px;display: inline-block;"
+                    >{{$dateUtil.formatScheduleTime(event.eventStartMillis)}}</span>
+                  </div>
+                </div>
+                <div class="event-info-item">
+                  <div
+                    class="event-info-item-icon"
+                    :style="`background-color:${event.concept.colors[1].value}`"
+                  >
+                    <img :src="`${$iconURL}Event%20Page/location-dark.svg`" />
+                  </div>
+                  <div class="event-info-item-title font-size-22 font-bold-extra">WHERE?</div>
+                  <div class="event-info-item-content font-size-20">{{event.location}}</div>
+                </div>
+                <div class="event-info-item">
+                  <div
+                    class="event-info-item-icon"
+                    :style="`background-color:${event.concept.colors[2].value}`"
+                  >
+                    <img :src="`${$iconURL}RSVP/Path+1383.svg`" />
+                  </div>
+                  <div class="event-info-item-title font-size-22 font-bold-extra">WITH +1?</div>
+                  <div
+                    class="event-info-item-content font-size-20"
+                  >{{event.numberOfParticipants > 1 ? "Yes!" : "No!"}}</div>
+                </div>
+                <div class="event-info-item">
+                  <div
+                    class="event-info-item-icon"
+                    :style="`background-color:${event.concept.colors[3].value}`"
+                  >
+                    <img :src="`${$iconURL}RSVP/Group+1279.svg`" />
+                  </div>
+                  <div class="event-info-item-title font-size-22 font-bold-extra">Arrival?</div>
+                  <div class="event-info-item-content font-size-20">December 25, 2019 8:00 AM</div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="mb-50">
@@ -131,8 +179,6 @@ import SettingReminderModal from "@/components/Modals/RSVP/SettingReminderModal"
 import JoinZoomModal from "@/components/Modals/RSVP/JoinZoomModal"
 import SyncCalendarModal from "@/components/Modals/RSVP/SyncCalendarModal"
 import RsvpVenueCarousel from "./RSVPVenueCarousel"
-import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue"
-
 export default {
   components: {
     RsvpTimelineItem,
@@ -140,8 +186,7 @@ export default {
     SettingReminderModal,
     JoinZoomModal,
     SyncCalendarModal,
-    RsvpVenueCarousel,
-    RsvpEventInfoPanel
+    RsvpVenueCarousel
   },
   data() {
     return {
@@ -210,10 +255,10 @@ export default {
   computed: {
     backgroundImage() {
       if (this.event.concept) {
-        const color1 = this.event.concept.colors[0].color;
-        const color2 = this.event.concept.colors[1].color;
-        const color3 = this.event.concept.colors[2].color;
-        const color4 = this.event.concept.colors[3].color;
+        const color1 = this.event.concept.colors[0].value;
+        const color2 = this.event.concept.colors[1].value;
+        const color3 = this.event.concept.colors[2].value;
+        const color4 = this.event.concept.colors[3].value;
         console.log(
           `linear-gradient(${color1} 25%, ${color2} 25%, ${color2} 50%, ${color3} 50%, ${color3} 75%, ${color4} 75%, ${color4} 100%);`
         );

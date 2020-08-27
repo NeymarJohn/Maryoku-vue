@@ -2,7 +2,6 @@ import IconCheckbox from "./Inputs/IconCheckbox.vue";
 import InputText from "./Inputs/input-text.vue";
 import InputWithIcon from "./Inputs/InputWithIcon.vue";
 import MaryokuInput  from "./Inputs/MaryokuInput.vue"
-import MaryokuTextarea  from "./Inputs/MaryokuTextarea.vue"
 import Badge from "./Badge";
 
 import DropDown from "./Dropdown.vue";
@@ -79,7 +78,6 @@ export {
     VueSlideoutPanel,
     InputWithIcon,
     MaryokuInput,
-    MaryokuTextarea,
     LocationInput,
     SidebarItem,
     SideBar,

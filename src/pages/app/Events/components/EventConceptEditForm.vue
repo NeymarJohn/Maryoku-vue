@@ -125,7 +125,7 @@
             class="image-background"
             v-for="idx in 4"
             :key="idx"
-            :style="`background-color: ${editConcept.colors[idx-1].color}; opacity:${editConcept.colors[idx-1].opacity}`"
+            :style="`background-color: ${editConcept.colors[idx-1].value}; opacity:${editConcept.colors[idx-1].opacity}`"
           ></div>
         </div>
         <div>

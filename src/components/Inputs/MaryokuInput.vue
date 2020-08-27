@@ -111,7 +111,6 @@ export default {
   methods: {
     handleInput(e) {
       this.$emit("input", this.content);
-      this.$emit("change", this.content);
     },
     cumulativeOffset(element) {
         var top = 0, left = 0;

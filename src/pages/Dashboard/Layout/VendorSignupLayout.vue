@@ -27,10 +27,10 @@
         Approve & Begin
       </a>
     </section>
-    <modal v-if="savedItModal" class="saved-it-modal" container-class="modal-container sm">
+    <modal v-if="status" class="saved-it-modal" container-class="modal-container sm">
       <template slot="header">
         <div class="saved-it-modal__header">
-          <h3><img :src="`${proposalIconsUrl}Asset 588.svg`"/>Saved It!</h3>
+          <h3><img :src="`${proposalIconsUrl}Asset 588.svg`"/>{{status.title}}</h3>
         </div>
         <button class="close" @click="hideModal()">
           <img :src="`${proposalIconsUrl}Group 3671 (2).svg`"/>
@@ -39,7 +39,7 @@
       <template slot="body">
         <div class="saved-it-modal__body">
           <p>
-            Your vendor info was saved!
+            {{status.message}}
           </p>
         </div>
       </template>
@@ -77,11 +77,11 @@
         this.$router.push(router)
       },
       validateBasicFields() {
-        return this.vendor.email && 
+        return this.vendor.email &&
           this.reg.test(this.vendor.email) &&
-          this.vendor.companyName && 
-          this.vendor.vendorCategory && 
-          this.vendor.address 
+          this.vendor.companyName &&
+          this.vendor.vendorCategory &&
+          this.vendor.address
       },
       approve() {
         if (this.validateBasicFields()) {
@@ -131,7 +131,7 @@
         this.savedItModal = true
       },
       hideModal() {
-        this.savedItModal = false
+        this.$store.dispatch('vendor/resetStatus');
       },
       camelize(str) {
         let temp = str.replace(/\W+(.)/g, function(match, chr) {
@@ -161,7 +161,11 @@
           return 'Next'
         }
       },
-    }
+      status(){
+        console.log()
+        return this.$store.getters['vendor/getStatus'];
+      }
+    },
   };
 </script>
 <style lang="scss" scoped>

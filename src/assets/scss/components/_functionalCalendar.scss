@@ -1,7 +1,3 @@
-.vfc-main-container {
-  width: max-content;
-  box-shadow: none !important;
-}
 .vfc-week .vfc-day span.vfc-span-day.vfc-marked {
   margin: auto;
   background-color: $red !important;
@@ -9,14 +5,11 @@
   opacity: 1;
   z-index: 1;
 }
-.vfc-calendars-container {
-  & > .vfc-navigation-buttons div, .vfc-separately-navigation-buttons div {
-    color: #f51355 !important;
-    margin: 20px 30px !important;
-    border-color: #f51355 !important;
-  }
+.vfc-navigation-buttons div, .vfc-separately-navigation-buttons div {
+  color: #f51355 !important;
+  margin: 20px 30px !important;
+  border-color: #f51355 !important;
 }
-
 .vfc-week .vfc-day span.vfc-span-day {
   font-family: "Manrope-Regular";
   font-size: 14px;
@@ -48,64 +41,4 @@
   .vfc-content {
     max-width: 100%;
   }
-  .vfc-arrow-left, .vfc-arrow-right {
-    border-color: #fff;
-  }
-}
-
-.vfc-months-container .vfc-content {
-  width: 330px;
-  margin: auto;
-}
-
-.vfc-space-between {
-  margin-top: 10px !important;
-}
-.vfc-separately-navigation-buttons div {
-  // margin: 20px 50px !important;
-}
-.vfc-navigation-buttons div .vfc-arrow-left,
-.vfc-separately-navigation-buttons div .vfc-arrow-left {
-  width: 11px !important;
-  height: 11px !important;
-  border-top: 3px solid !important;
-  border-left: 3px solid !important;
-  border-radius: 1px;
-}
-.vfc-navigation-buttons div .vfc-arrow-right,
-.vfc-separately-navigation-buttons div .vfc-arrow-right {
-  width: 11px !important;
-  height: 11px !important;
-  border-top: 3px solid !important;
-  border-right: 3px solid !important;
-  border-radius: 1px;
-}
-span.vfc-span-day {
-  color: #43425d !important;
-  width: 40px !important;
-  line-height: 40px !important;
-  &.vfc-today {
-    color: #f51355 !important;
-  }
-}
-span.vfc-span-day.vfc-marked,
-.vfc-today.vfc-marked {
-  color: white !important;
-}
-span.vfc-span-day.vfc-hide {
-  color: white !important;
-}
-.picker-panel {
-  display: block;
-  position: relative;
-  padding: 40px 10px 0px;
-  border: solid 1px #bec0c2;
-  border-radius: 3px;
-}
-.vfc-top-date a.vfc-underline {
-  color: #050505 !important;
-}
-
-.vfc-week .vfc-day span.vfc-span-day.vfc-disabled {
-  color: rgba(0, 0, 0, 0.2) !important;
 }

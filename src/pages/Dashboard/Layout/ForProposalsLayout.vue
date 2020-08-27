@@ -223,9 +223,6 @@
       UserMenu,
       Modal
     },
-    props: {
-      newProposalRequest: Object
-    },
     data() {
       return {
         fullDetailsModal: false,
@@ -239,8 +236,6 @@
         proposalRequestRequirements: [],
         proposals: [],
         proposalRequest: null,
-        vendorCategory: null,
-        newProposalRequest: {},
       }
     },
     methods: {
@@ -248,17 +243,6 @@
         Vendors.find(this.$route.params.vendorId).then(vendor => {
           this.vendor = vendor
         })
-      },
-      getVendorCategory () {
-        this.$auth.currentUser(
-          this,
-          true,
-          function () {
-            Vendors.find(this.$route.params.vendorId).then(vendor => {
-              this.vendorCategory = vendor.vendorCategory
-            })
-          }.bind(this)
-        )
       },
       getProposals (id) {
         new Vendors({ id })
@@ -273,7 +257,6 @@
         ProposalRequest.find(id)
           .then(resp => {
             this.$set(this, 'proposalRequest', resp)
-            this.$set(this, 'newProposalRequest', resp)
 
             this.proposalRequestRequirements = _.chain(resp.requirements)
               .groupBy('requirementPriority')

@@ -1,8 +1,5 @@
 <template>
-  <div 
-    class="editable-proposal-sub-item-wrapper" 
-    :class="[{'step-3': step == 3}]" 
-    v-if="item.requirementTitle != null">
+  <div class="editable-proposal-sub-item-wrapper" :class="[{'step-3': step == 3}]" v-if="item.requirementTitle != null">
     <template v-if="step < 3">
       <div class="item-cont">
         {{item.requirementTitle}}
@@ -47,10 +44,12 @@
       </div>
     </template>
     <template v-else>
-      <span class="grid-cell">{{item.requirementTitle}}</span>
-      <span class="grid-cell">{{item.requirementValue}}</span>
-      <span class="grid-cell">$ {{item.price / item.requirementValue | withComma}}</span>
-      <span class="grid-cell">$ {{item.price | withComma}}</span>
+      <div class="whole-cont">
+        <span>{{item}}</span>
+        <span>{{qty}}</span>
+        <span>$ {{pricePerUnit | withComma}}</span>
+        <span>$ {{subtotal | withComma}}</span>
+      </div>
       <div class="action-cont" v-if="isHover">
         <img class="edit" :src="`${iconUrl}Asset 585.svg`"/>
         <img class="trash" :src="`${iconUrl}Asset 586.svg`" @click="removeRequirement(item.id)"/>
@@ -118,6 +117,21 @@
       &.item-cont {
         text-transform: capitalize;
       }
+      &.qty-cont {
+        input {
+          width: 80%;
+        }
+      }
+      &.price-cont {
+        input {
+          width: 80%;
+        }
+      }
+      &.total-cont {
+        input {
+          width: 80%;
+        }
+      }
       &.action-cont {
         text-align: right;
         .edit {
@@ -131,12 +145,32 @@
         }
       }
     }
+    .whole-cont {
+      width: 100%;
+      span {
+        display: inline-block;
+        font-size: 16px;
+        font-weight: 800;
+
+        &:first-child {
+          width: calc(100% - 364px - 155px - 150px);
+        }
+        &:nth-child(2) {
+          margin-right: 190px;
+        }
+        &:nth-child(3) {
+          margin-right: 205px;
+        }
+        &:last-child {
+          margin-right: 155px;
+        }
+      }
+    }
     &.step-3 {
       border: none;
       border-top: 1px solid #818080;
       margin: 0 38px;
-      padding: 50px 0;
-      grid-template-columns: 40% 15% 15% 15% 15%;
+      padding: 50px 0;      
 
       .whole-cont { 
         span {
@@ -165,16 +199,6 @@
       }
       &:hover {
         color: #dddddd!important;
-      }
-    }
-    span {
-      &.grid-cell {
-        font-size: 16px;
-        font-weight: normal;
-
-        &:first-child {
-          text-transform: capitalize;
-        }
       }
     }
   }
