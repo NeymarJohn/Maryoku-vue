@@ -6,10 +6,20 @@
       :
       <input type="text" v-model="timeObject.mm" :maxlength="2">
     </div>
-    <select class="ampm" v-model="ampm">
+    <!-- <select class="ampm" v-model="ampm">
       <option value="am">AM</option>
       <option value="pm">PM</option>
-    </select>
+    </select> -->
+    <drop-down class="ampm" @change="chnaeg">
+      <md-button slot="title" class="md-button edit-btn md-simple" data-toggle="dropdown">
+        <span class="font-bold font-size-30">{{ampm}}</span>
+      </md-button>
+      <ul class="dropdown-menu dropdown-menu-left">
+        <li @click="ampam=='am'"><a class="font-size-22" @click="ampam=='am'">AM</a></li>
+        <li @click="ampam=='pm'"><a class="font-size-22" @click="ampam=='pm'">PM</a></li>
+      </ul>
+      <span class="arrow-button"  data-toggle="dropdown"></span>
+    </drop-down>
   </div>
 </template>
 <script>
@@ -69,7 +79,7 @@ export default {
   align-items: center;
   width: max-content;
   position: relative;
-  &::after {
+  .arrow-button {
     content: "";
     border-top: solid 3px #969696;
     border-left: solid 3px #969696;
@@ -113,8 +123,14 @@ export default {
     -o-appearance: none;
     -ms-appearance: none;
     appearance: none;
-    padding: 16px 20px;
-    
+    padding: 11px 20px;
+    margin-left: 5px;
+    .dropdown-menu{
+      li {
+        width: 100%;
+      }
+      
+    }
   }
   input,
   select {
@@ -134,10 +150,12 @@ export default {
   }
   span {
     display: inline-block;
-    margin: 0 0.5em;
     font-size: 18px;
-    font-family: "Manrope-ExtraBold", sans-serif;
+    text-transform: uppercase;
     color: #050505;
+  }
+  .dropdown-menu {
+    min-width: 100%;
   }
 }
 </style>

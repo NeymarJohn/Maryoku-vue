@@ -105,3 +105,7 @@ span.vfc-span-day.vfc-hide {
 .vfc-top-date a.vfc-underline {
   color: #050505 !important;
 }
+
+.vfc-week .vfc-day span.vfc-span-day.vfc-disabled {
+  color: rgba(0, 0, 0, 0.2) !important;
+}

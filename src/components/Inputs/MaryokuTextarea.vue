@@ -8,8 +8,8 @@
   <div v-else class='maryoku-textarea input'  :class="inputClass">
     <textarea v-model="content" @input="handleInput" :rows="1" class="textarea js-autoresize"></textarea>
     <div class="place-holder color-dark-gray font-size-16" >
-      <img v-if="type=='emails'" :src="`${$iconURL}Campaign/emails-gray.svg`"> 
-      <img v-if="type=='phones'" :src="`${$iconURL}Choose+vendor+and+Proposal/phone-gray.svg`" style="width:20px"/>
+      <img v-if="type=='emails'" :src="`${$iconURL}Campaign/emails-gray.svg`" style="width:20px; margin:0 7px;"> 
+      <img v-if="type=='phones'" :src="`${$iconURL}Choose+vendor+and+Proposal/phone-gray.svg`" style="width:20px; margin:0 7px;"/>
       {{placeholder}}
     </div>
   </div>

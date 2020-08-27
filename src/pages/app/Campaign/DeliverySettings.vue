@@ -41,11 +41,22 @@
               </div>
               <span class="font-size-16" style="padding: 20px 40px">Or</span>
               
-              <md-button class="md-outlined md-simple maryoku-btn">
+              <md-button class="md-outlined md-simple maryoku-btn" @click="choosePhoneExcel" v-if="!uploadedExcels.phone">
                 <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10">
                 <span class="color-red">Upload Excel list file</span>
               </md-button>
-              <span class="ml-20 mt-10"><img :src="`${$iconURL}Campaign/Group+1175.svg`"></span>
+              <div v-else class="uploadedFile border-gray-1">
+                <div class="font-bold text-underline mb-10">{{uploadedExcels.phone}}</div>
+                <md-button class="md-simple edit-btn" @click="choosePhoneExcel" >
+                  <span class="color-red">change</span>
+                </md-button>
+              </div>
+              <span class="ml-20 mt-10">
+                <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
+                <md-tooltip >
+                  <div class="font-size-14 input-tooltip ">{{tooltips.phoneExcel}}</div>
+                </md-tooltip>
+              </span>
             </div>
             <div class="mt-50 font-bold">How would you like to send your text?</div>
             <div class="mt-10">
@@ -72,11 +83,27 @@
           <div v-if="useEmail">
             <div class="mt-50" >
               <label class="font-bold mb-10 line-height-2">Subject</label>
-              <maryoku-input placeholder="Type your email subject here…" class="width-60"></maryoku-input>
+              <div class="width-60 position-relative">
+                <maryoku-input placeholder="Type your email subject here…"></maryoku-input>
+                <span class="ml-20 mt-10 input-tooltip-wrapper position-relative" >
+                  <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
+                  <md-tooltip >
+                    <div class="font-size-14 input-tooltip ">Email Subject</div>
+                  </md-tooltip>
+                </span>
+              </div>
             </div>
             <div class="mt-50" >
               <label class="font-bold mb-10 line-height-2" >From</label>
-              <maryoku-input placeholder="Your email address…" class="width-60"></maryoku-input>
+              <div class="width-60 position-relative">
+                <maryoku-input placeholder="Your email address…"></maryoku-input>
+                <span class="ml-20 mt-10 input-tooltip-wrapper position-relative" >
+                  <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
+                  <md-tooltip >
+                    <div class="font-size-14 input-tooltip ">Your email</div>
+                  </md-tooltip>
+                </span>
+              </div>
             </div>
             <div class="mt-50 font-size-14 ">
               <label class="mb-10 line-height-2"><span class="font-bold mr-10 font-size-16">To</span>Make sure to put space / comma between each address</label>
@@ -91,13 +118,36 @@
                   <invalid-address-panel class="mt-30" v-if="invalidPastedEmails" :content="invalidPastedEmails"></invalid-address-panel>
                 </div>
                 <span class="font-size-16" style="padding: 20px 40px">Or</span>
-                <md-button class="md-outlined md-simple maryoku-btn">
+
+                <!-- Emails Excel File Upload  -->
+                <md-button v-if="!uploadedExcels.email" class="md-outlined md-simple maryoku-btn"  @click="chooseEmailExcel">
                   <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10">
                   <span class="color-red">Upload Excel list file</span>
                 </md-button>
+                <div v-else class="uploadedFile border-gray-1">
+                  <div class="font-bold text-underline mb-10">{{uploadedExcels.email}}</div>
+                  <md-button class="md-simple edit-btn" @click="chooseEmailExcel" >
+                    <span class="color-red">change</span>
+                  </md-button>
+                </div>
+                <span class="ml-20 mt-10">
+                  <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
+                  <md-tooltip >
+                    <div class="font-size-14 input-tooltip ">{{tooltips.emailExcel}}</div>
+                  </md-tooltip>
+                </span>
               </div>
             </div>
           </div>
+          <input
+              style="display: none"
+              id="execelFileInput"
+              name="attachment"
+              type="file"
+              multiple="multiple"
+              @change="onFileChange"
+              accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" 
+            />
         </div>
       </template>
     </collapse-panel>
@@ -123,7 +173,16 @@ export default {
       useEmail: false,
       smsOrWhatsapp:'',
       invalidPastedEmails: null,
-      invalidPastedPhones: null
+      invalidPastedPhones: null,
+      tooltips: {
+        phoneExcel: "Please upload a csv file containing only phone numbers in a valid format.",
+        emailExcel: "Please upload a csv file containing only email addresses in a valid format."
+      },
+      fileInputType: "",
+      uploadedExcels: {
+        phone: "",
+        email: ""
+      }
     }
   },
   methods: {
@@ -148,8 +207,20 @@ export default {
         this.invalidPastedPhones = invalidEmails;
       }
       
+    },
+    chooseEmailExcel() {
+      document.getElementById("execelFileInput").click()
+      this.fileInputType = "email"
+    },
+    choosePhoneExcel() {
+      document.getElementById("execelFileInput").click()
+      this.fileInputType = "phone"
+    },
+    onFileChange(event) {
+      this.uploadedExcels[this.fileInputType] = event.target.files[0].name
+      //handle validation excel files.
+      // this.coverImage = await getBase64(event.target.files[0])
     }
-    
   },
 };
 </script>
@@ -174,5 +245,21 @@ export default {
       font-size: 35px !important;
     }
   }
+  .uploadedFile{
+    padding: 10px 20px;
+    text-align: center;
+    border-radius: 3px;
+    min-width: 200px;
+  }
 }
+  .input-tooltip {
+    max-width: 250px !important;
+    white-space: break-spaces;
+    text-align: left;
+  }
+  .input-tooltip-wrapper {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+  }
 </style>

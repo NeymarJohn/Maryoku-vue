@@ -214,8 +214,5 @@ export default {
   .date-string {
     padding-left: 10px;
   }
-  .vfc-main-container {
-    margin: auto;
-  }
 }
 </style>

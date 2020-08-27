@@ -11,7 +11,7 @@
           <span class="font-size-16 color-dark-gray">USA daylight time</span>
         </div>
       </div>
-      <div v-if="showCalendar"  class="add-category-model__header p-15">
+      <div v-if="showCalendar"  class="p-15" style="padding-bottom: 0">
         <img :src="`${$iconURL}Campaign/arrow-left-dark.svg`" @click="showCalendar=false"/>
       </div>
       <md-button
@@ -26,21 +26,21 @@
         <div class="md-layout justify-content-center width-100 ">
           <div class="md-layout-item md-size-100 margin-bottom d-flex justify-content-between font-size-22 align-center mt-10">
             <div class="d-flex align-center">
-              <md-checkbox class="md-checkbox-circle"></md-checkbox>
+              <md-checkbox class="md-checkbox-circle" v-model="scheduleTime" value="tomrrow"></md-checkbox>
               <span class="font-size-22">Tomorrow morning</span>
             </div>
             <div> Jul 1, 8:00 AM <img :src="`${$iconURL}Campaign/Group 9087.svg`"  class="ml-20"/></div>
           </div>
           <div class="md-layout-item md-size-100 margin-bottom d-flex justify-content-between font-size-22 align-center mt-30">
             <div class="d-flex align-center">
-              <md-checkbox class="md-checkbox-circle"></md-checkbox>
+              <md-checkbox class="md-checkbox-circle" v-model="scheduleTime" value="previousCampaign"></md-checkbox>
               <input v-model="weeks" class="text-center mr-20" style="width: 128px"/>Weeks after the previous campaign
             </div>
             <div> Jul 1, 8:00 AM <img :src="`${$iconURL}Campaign/Group 9087.svg`" class="ml-20"/></div>
           </div>
           <div class="md-layout-item md-size-100 margin-bottom d-flex justify-content-between font-size-22 align-center mt-30 mb-40">
             <div class="d-flex align-center">
-              <md-checkbox class="md-checkbox-circle"></md-checkbox>
+              <md-checkbox class="md-checkbox-circle" v-model="scheduleTime" value="daysBeforeEvent"></md-checkbox>
               <input v-model="weeks" class="text-center mr-20"  style="width: 128px"/>Days before the event
             </div>
             <div class="color-dark-gray"> m, d, h <img :src="`${$iconURL}Campaign/Group 9087.svg`" class="ml-20"/></div>
@@ -60,7 +60,9 @@
         <div class="font-size-16 color-dark-gray p-15">USA daylight time</div>
         <div class="d-flex"> 
           <div class="flex-1">
-            <functional-calendar :is-date-picker='true' :change-month-function='true' :change-year-function='true' dateFormat='yyyy-mm-dd' v-model="dateData"></functional-calendar>
+            <functional-calendar 
+              :limits="{min: $dateUtil.formatScheduleDay(new Date(), 'YYYY-MM-DD'), max: $dateUtil.formatScheduleDay(new Date().getTime() + 24 * 3600 * 60 * 1000, 'YYYY-MM-DD')}" 
+              :is-date-picker='true' :change-month-function='true' :change-year-function='true' dateFormat='yyyy-mm-dd' v-model="dateData"></functional-calendar>
           </div>
           <div class="flex-1" style="padding-left:80px; border-left: solid 1px #AEAEAE">
             <time-input v-model="startTime" :h24="false" displayFormat="hh:mm" class="mt-100"></time-input>
@@ -71,7 +73,7 @@
     <template slot="footer">
       <div v-if="showCalendar" class="font-size-16 schedule-date ml-15">
         <img :src="`${$iconURL}Campaign/clock-dark.svg`" style="width: 25px"/>
-        {{$dateUtil.formatScheduleDay(scheduledTime, "dddd, MMMM D, YYYY")}}
+        {{$dateUtil.formatScheduleDay(dateData.selectedDate, "dddd, MMMM D, YYYY")}}
       </div>
       <div class="spacer flex-1"></div>
       <md-button class="md-default md-simple md-black" @click="close"><span class="color-black">Cancel</span></md-button>
@@ -97,7 +99,11 @@ export default {
     return {
       newBudget: 0,
       showCalendar: false, 
-      scheduledTime : new Date().getTime()
+      scheduledTime : new Date().getTime(),
+      dateData: {},
+      weeks: 0,
+      startTime:"",
+      scheduleTime: ""
     }
   },
   created () {

@@ -32,16 +32,6 @@ export default {
       locationService: null,
       geocoder: null,
       results: [],
-      countries: [
-        'Algeria',
-        'Argentina',
-        'Brazil',
-        'Canada',
-        'Italy',
-        'Japan',
-        'United Kingdom',
-        'United States'
-      ],
     }
   },
   methods: {

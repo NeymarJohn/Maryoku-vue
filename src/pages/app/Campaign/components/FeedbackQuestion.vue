@@ -13,7 +13,7 @@
       <star-rating :border-width="0" :star-size="30" :show-rating="false" @rating-selected="setRating" ></star-rating>
       <div class="font-size-12 mt-10">Very good</div>
     </div>
-    <md-switch class="below-label">Hide this question</md-switch>
+    <md-switch class="below-label large-switch">Hide this question</md-switch>
   </div>
 </template>
 <script>
