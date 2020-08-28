@@ -59,6 +59,7 @@ class EventService {
         category: editingEvent.occasion?editingEvent.occasion.name:"",
         editable: true,
         location: editingEvent.location,
+        locationId: editingEvent.locationId,
         inOutDoor: editingEvent.inOutDoor,
         eventSongId: editingEvent.eventSongId
       })

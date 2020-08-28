@@ -116,6 +116,7 @@ export default {
           category: 'Holidays', //! this.publicEventData.editable ? 'Holidays' : 'CompanyDays',
           editable: true,
           location: this.publicEventData.location,
+          locationId: this.publicEventData.locationId,
           inOutDoor: this.publicEventData.inOutDoor,
           eventSongId: this.publicEventData.eventSongId
         })

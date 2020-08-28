@@ -12,7 +12,7 @@
             </div>
             <div class="location event-basic-info">
               <div class="mt-4rem">
-                <location-input v-model="location" placeholder="Type city / region or specific address here…"></location-input>
+                <location-input v-model="location" placeholder="Type city / region or specific address here…" @change="changeLocation"></location-input>
               </div>
             </div>
         </div>
@@ -73,6 +73,9 @@ export default {
         // this.$emit('goToNextPage');
       }
     },
+    changeLocation(loc) {
+      this.locationData = loc;
+    },
     showNotify () {
       this.$notify({
         message: 'Please, check all required fields',
@@ -83,7 +86,8 @@ export default {
       })
     },
     goToNext() {
-      this.setEventProperty({key: 'location', actualValue: this.location})
+      this.setEventProperty({ key: 'location', actualValue: this.location})
+      this.setEventProperty({ key: 'locationId', actualValue: this.locationData.id})
       this.$router.push({path: `/event-wizard-building`})
     },
     skip() {
@@ -95,7 +99,8 @@ export default {
   },
   data () {
     return {
-      location: ""
+      location: "",
+      locationData: {}
     }
   },
   computed: {

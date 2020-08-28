@@ -76,7 +76,7 @@
           <a 
             class="save" 
             :class="{'isDisabled': isDisabledAdd}" 
-            @click="saveItem(serviceItem, qty, subTotal)">
+            @click="saveItem(serviceItem, qty, subTotal, category)">
             Add This
           </a>
         </div>
@@ -173,7 +173,7 @@
         <a 
           class="save" 
           :class="{'isDisabled': isDisabledAdd}"
-          @click="saveItem(serviceItem, qty, subTotal)">
+          @click="saveItem(serviceItem, qty, subTotal, category)">
           Add This
         </a>
       </div>
@@ -492,7 +492,7 @@
         this.serviceItem = null
         this.discount_by_amount = null
       },
-      saveItem(serviceItem, qty, price) {
+      saveItem(serviceItem, qty, price, category) {
         this.newProposalRequest.requirements.push({
           comments: [],
           dateCreated: '',
@@ -506,6 +506,7 @@
           requirementMandatory: false,
           requirementPriority: null,
           requirementTitle: serviceItem,
+          requirementsCategory: category, 
           requirementValue: `${qty}`,
         })
         this.$forceUpdate()

@@ -1247,7 +1247,7 @@ export default {
     },
     permission() {
       try {
-        return this.$store.state.event.eventData.permit 
+        return this.$store.state.event.eventData.permit? this.$store.state.event.eventData.permit : 'edit' 
       } catch(e) {
         return "edit"
       }

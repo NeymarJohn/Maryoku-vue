@@ -1,22 +1,36 @@
 <template>
   <div>
+    <rsvp-analytics v-if="info.completed"></rsvp-analytics>
     <div class="white-card rsvp-campaign">
       <div class="p-50">
         <div class="font-size-30 font-bold-extra">Get everyone to RSVP</div>
         <div class="cover-preview mt-50">
-          <img :src="`${$iconURL}RSVP/Image+111.jpg`">
-          <md-button class="md-red maryoku-btn md-theme-default change-cover-btn">
-            <img :src="`${$iconURL}Campaign/Group 2344.svg`"/>Change Cover
+          <img :src="coverImage" class="mr-10">
+          <label for="cover">
+          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="chooseFiles" >
+            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width:20px"/>Change Cover
           </md-button>
+          </label>
+          <input
+              style="display: none"
+              id="coverImage"
+              name="attachment"
+              type="file"
+              multiple="multiple"
+              @change="onFileChange"
+            />
         </div>
-        <div class="preview-logo p-40 d-flex align-center">
-          <img :src="logoImage">
-          <md-switch v-model="showLogo"></md-switch>
+        <div class="preview-logo p-40 d-flex align-center" v-if="info.logo">
+          <img :src="info.logo" style="max-width:200px">
+          <md-switch class="large-switch below-label" v-model="showLogo"> Hide logo</md-switch>
         </div>
         <div class="font-size-30 font-bold mt-20">Hello Microsoft special employee!</div>
         <div class="font-size-20 mt-50">YOU ARE INVITED TO A</div>
-        <div class="font-size-60 font-bold-extra mt-50 mb-30">80’s Disco Party</div>
-        <maryoku-textarea v-model="content"></maryoku-textarea>
+        <div class="font-size-60 font-bold-extra mt-50 mb-30">{{info.conceptName}}</div>
+        <maryoku-textarea 
+          v-model="content" 
+          :placeholder="`Hey, you've been invited to ${event.title} on ${$dateUtil.formatScheduleDay(event.eventStartMillis, 'dddd, MMMM D, YYYY')} at ${event.location}. I can hardly wait to see you, please RSVP  by ${$dateUtil.formatScheduleDay(event.eventStartMillis, 'dddd, MMMM D, YYYY')}, so I'll know you feel the same way :)`">
+        </maryoku-textarea>
         <rsvp-event-info-panel class="mt-60" :event="event"></rsvp-event-info-panel>
         <div>
             <div>
@@ -24,13 +38,14 @@
             </div>
           </div>
       </div>
-      <div class="p-40" style="background-color:#57f2c3">
+      <div class="p-40 position-relative" >
+        <div class="rsvp-event-guid-background" :style="`background-color:${event.concept.colors[0].color}`"></div>
         <div class="rsvp-event-guid md-layout">
           <div class="md-layout-item md-size-50 md-small-size-50">
             <div class="font-size-30 font-bold-extra mb-30 d-flex">
               <img :src="`${$iconURL}RSVP/Path 3728.svg`" style="height:43px"/>
               <span style="padding-top: 10px; margin-left:20px;">WHAT SHOULD I WEAR?</span>
-              <md-switch v-model="showWhatWear" class="ml-10 md-switch below-label"><span class="color-black font-regular">Hide</span></md-switch>
+              <md-switch v-model="showWhatWear" class="ml-10 md-switch below-label large-switch"><span class="color-black font-regular">Hide</span></md-switch>
               
             </div>
             <maryoku-textarea placeholder="Give your guests details about the expected dress code"></maryoku-textarea>
@@ -39,7 +54,7 @@
             <div class="font-size-30 font-bold-extra mb-30 d-flex">
               <img :src="`${$iconURL}RSVP/Path 2369.svg`"  style="height:43px"/>
               <span style="padding-top: 10px; margin-left:20px;">What should I Know?</span>
-              <md-switch v-model="showWhatKnow" class="ml-10 md-switch below-label"><span class="color-black font-regular">Hide</span></md-switch>
+              <md-switch v-model="showWhatKnow" class="ml-10 md-switch below-label large-switch "><span class="color-black font-regular">Hide</span></md-switch>
             </div>
             <maryoku-textarea placeholder="Give your guests any information you find relevant"></maryoku-textarea>
           </div>
@@ -49,7 +64,7 @@
         <div
           class="md-layout-item md-size-100 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra mb-50 d-flex align-center"
         >sneaky peak to the agenda
-          <md-switch v-model="showTimeline" class="ml-10 md-switch below-label"><span class="color-black font-regular">Hide</span></md-switch>
+          <md-switch v-model="showTimeline" class="ml-10 md-switch below-label large-switch"><span class="color-black font-regular">Hide</span></md-switch>
         </div>
         
         <div
@@ -94,17 +109,27 @@ import MaryokuTextarea from '@/components/Inputs/MaryokuTextarea'
 import { MaryokuInput } from "@/components";
 import RsvpVenueCarousel from "@/pages/app/RSVP/RSVPVenueCarousel.vue"
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue"
+import RsvpAnalytics from './components/RSVPAnalytics'
+import { getBase64 } from '@/utils/file.util'
 
 export default {
   components: {
     MaryokuTextarea,
     MaryokuInput,
     RsvpVenueCarousel,
-    RsvpEventInfoPanel
+    RsvpEventInfoPanel,
+    RsvpAnalytics
+  },
+  props: {
+    info: {
+      type: Object,
+      default: {} 
+    },
   },
   data() {
     return {
-      logoImage: "",
+      coverImage: '',
+      logoImage: "http://static.maryoku.com/storage/icons/RSVP/ms-icon.png",
       showLogo: true,
       content: "",
       zoomlink: "",
@@ -128,8 +153,12 @@ export default {
       ],
     }
   },
+  created () {
+    this.coverImage = this.event.concept.images[1].url;
+  },
   computed: {
     event() {
+      console.log(this.$store.state.event.eventData )
       return this.$store.state.event.eventData 
     },
     scheduledDays() {
@@ -157,8 +186,16 @@ export default {
             });
           }
         }
+    },
+  },
+  methods: {
+    chooseFiles() {
+       document.getElementById("coverImage").click()
+    },
+    async onFileChange(event) {
+      this.coverImage = await getBase64(event.target.files[0])
     }
-  }
+  },
 }
 </script>
 <style lang="scss" scoped>
@@ -169,10 +206,20 @@ export default {
     position: relative;
     overflow: hidden;
     border-radius: 30px;
+    &:hover {
+      .cover-preview::before {
+        content: "";
+        width: 100%;
+        height: 100%;
+        opacity: 0.52;
+        background: #050505;
+      }
+    }
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      
     }
     .change-cover-btn {
       position: absolute;
@@ -187,6 +234,14 @@ export default {
       display: block;
       padding: 0;
     }
+  }
+  .rsvp-event-guid-background {
+    position: absolute;
+    opacity: 0.24;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0
   }
 }
 </style>

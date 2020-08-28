@@ -29,19 +29,10 @@ export default {
       selectedLocation:this.value,
       addressSearch: null,
       locations: [],
+      places: [],
       locationService: null,
       geocoder: null,
       results: [],
-      countries: [
-        'Algeria',
-        'Argentina',
-        'Brazil',
-        'Canada',
-        'Italy',
-        'Japan',
-        'United Kingdom',
-        'United States'
-      ],
     }
   },
   methods: {
@@ -57,6 +48,7 @@ export default {
       this.locations = [];
       predictions.forEach(item => {
         this.locations.push(item.description);
+        this.places.push({id: item.place_id, name: item.description});
       });
       console.log("locations", this.locations)
     },
@@ -78,6 +70,8 @@ export default {
     },
     selectedLocation: function(newValue) {
       this.$emit('input', newValue)
+      const locationObject = this.places.find(item=>item.name === newValue)
+      this.$emit('change', locationObject)
       if (newValue.length < 3) {
         // this.locations = [];
         return;

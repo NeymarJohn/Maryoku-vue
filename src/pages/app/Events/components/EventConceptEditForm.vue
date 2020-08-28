@@ -125,7 +125,7 @@
             class="image-background"
             v-for="idx in 4"
             :key="idx"
-            :style="`background-color: ${editConcept.colors[idx-1].value}; opacity:${editConcept.colors[idx-1].opacity}`"
+            :style="`background-color: ${editConcept.colors[idx-1].color}; opacity:${editConcept.colors[idx-1].opacity}`"
           ></div>
         </div>
         <div>
@@ -323,6 +323,7 @@ export default {
         }
         this.editConcept.images = fileNames;
       }
+      this.editConcept.event = new CalendarEvent({id: this.$store.state.event.eventData.id}) 
       const evenConcept = await new EventConcept(this.editConcept).save();
       // fileNames.forEach((item, index) => {
       //   fileNames[index].url = `concept/${item.name}`;

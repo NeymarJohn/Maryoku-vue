@@ -2,7 +2,7 @@
   <div class="vendor-budget-list-wrapper">
     <h4><img :src="`${iconsUrl}Asset 500.svg`"> {{title}}</h4>
     <div class="total">
-      <strong>Total Event Budget:</strong>${{ total | withComma }}
+      <strong>Total Event Budget:</strong>$0
     </div>
     <p>
       <img :src="`${iconsUrl}Group 5180.svg`">{{description}}
@@ -24,13 +24,14 @@
       </div>
       <div class="total">
         <span>Total</span>
-        <span>${{ total | withComma }}</span>
+        <span>$0</span>
       </div>
     </div>
   </div>
 </template>
 <script>
   import VueElementLoading from 'vue-element-loading'
+  import VendorService from '@/services/vendor.service'
 
   export default {
     name: 'vendor-budget-list',
@@ -40,27 +41,25 @@
     props: {
       title: String, 
       description: String,
-      total: Number,
-      category: String,
-      categoryCost: Number,
+      proposalRequest: Object,
     },
     data: () => ({
       isLoading:true,
       requirements: [],
+      rawRequirements: [],
       iconsUrl: 'http://static.maryoku.com/storage/icons/NewLandingPage/'
     }),
     created() {
 
     },
     mounted() {
-      this.isLoading = false;
       this.getRequirements()
-      console.log(this.requirements)
+      // this.rawRequirements = VendorService.getProposalRequest()
     },
     methods: {
       getRequirements() {
         this.requirements = [{
-          category: this.category,
+          category: 'No requirement',
           price: this.categoryCost
         }]
       }

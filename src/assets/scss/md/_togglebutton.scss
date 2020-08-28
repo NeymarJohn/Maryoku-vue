@@ -6,6 +6,21 @@
 .md-switch {
   display: flex;
   margin: 10px;
+  &.large-switch {
+    .md-switch-container {
+      width: 60px;
+      height: 32px;
+      border-radius: 20px;
+    }
+    .md-switch-thumb {
+      width: 22px;
+      height: 22px;
+      left:6px;
+    }
+    &.md-checked .md-switch-thumb {
+      transform: translate3d(27px,0,0);
+    }
+  }
   &.below-label {
     display: block;
     .md-switch-label {
@@ -29,7 +44,8 @@
     font-weight: 400;
   }
 
-  .md-switch-container{
+  
+  .md-switch-container {
     background-color: rgba(80,80,80,.7) !important;
     height: 21px;
     width: 36px;

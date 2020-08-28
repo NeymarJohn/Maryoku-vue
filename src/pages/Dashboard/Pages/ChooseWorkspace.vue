@@ -35,43 +35,6 @@ export default {
       const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`)
       document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`
     },
-    signup () {
-      this.loading = true
-
-      this.$validator.validateAll().then(isValid => {
-        if (isValid) {
-          let tenantId = document.location.hostname.replace('.maryoku.com', '')
-          tenantId = tenantId.length > 0 && tenantId === 'dev' ? '_' + tenantId : ''
-
-          new Tenant({id: this.workspace + tenantId}).save().then(res => {
-            if (res.status) {
-              this.loading = true
-              document.location.href = `${document.location.protocol}//${this.workspace}${tenantId}.maryoku.com:${document.location.port}`
-            } else {
-              this.$router.push({name: 'SignIn'})
-            }
-          }).catch(() => {
-            this.$router.push({name: 'SignIn'})
-          })
-
-          /* this.$auth.signupOrSignin(this, this.email, this.password, (data) => {
-              this.$auth.login(this, {username: this.email, password: this.password}, (success) => {
-                this.$router.push({ path: '/signedin', query: {token: success.access_token} });
-              }, (failure) => {
-                this.loading = false;
-                if (failure.response.status === 401){
-                  this.error = 'Sorry, wrong password, try again.';
-                } else {
-                  this.error = 'Temporary failure, try again later';
-                  console.log(JSON.stringify(failure.response));
-                }
-              } );
-            }) */
-        } else {
-          this.loading = false
-        }
-      })
-    },
     checkWorkspace () {
       this.workspace = this.workspace.toLowerCase()
       if (this.workspace.length < 4 || this.workspace.length > 18 || this.workspace.replace(/[A-Za-z0-9_-]/g, '').length > 0 || this.workspace.startsWith('-') || this.workspace.startsWith('_') || this.workspace.endsWith('-') || this.workspace.endsWith('_')) {
@@ -102,13 +65,11 @@ export default {
       }
     },
     tenantUrl (tenant) {
-      console.log('tenantUrl', `${this.$authService.getAppUrl(tenant)}/#/events`)
       // return `${this.$authService.getAppUrl(tenant)}/#/signedin?token=${this.$auth.getToken()}`
       return `${this.$authService.getAppUrl(tenant)}/#/events`
     }
   },
   created () {
-    console.log("choose.workspace");
     // const givenToken = this.$route.query.token;
     // this.$auth.setToken(givenToken);
     // this.$auth.currentUser(this, true);
@@ -120,6 +81,9 @@ export default {
       }); */
   },
   mounted () {
+    if (this.$store.state.auth.user.tenants.length === 1) {
+      location.href = this.tenantUrl(this.$store.state.auth.user.tenants[0])
+    }
     this.tenantIds = this.$store.state.auth.user.tenants
   },
   watch: {
