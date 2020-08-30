@@ -1,15 +1,6 @@
 <template>
   <div v-if="selectedBlock" class="booking-event-requirement">
     <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
-    <div class="event-book-requirement-header md-layout-item md-size-100">
-      <div class="header-title">
-        <img src="http://static.maryoku.com/storage/icons/Requirements/image-130.png"/>
-        <img src="http://static.maryoku.com/storage/icons/Requirements/image-132.png"/>
-        <img src="http://static.maryoku.com/storage/icons/Requirements/image-133.png"/>
-        <img src="http://static.maryoku.com/storage/icons/Requirements/image-134.png"/>
-      </div>
-      <header-actions @toggleCommentMode="toggleCommentMode" hideDownload></header-actions>
-    </div>
     <div class="booking-header md-layout-item md-size-100">
       <div class="d-flex justify-content-between">
         <div>
@@ -25,135 +16,153 @@
           <br/>
           This is what we know about your event so far, let us know if there is anything we missed.
         </div>
+        <header-actions @toggleCommentMode="toggleCommentMode" hideDownload></header-actions>
       </div>
     </div>
 
     <!-- Event Booking Items -->
     <div class="md-layout events-booking-items">
       <div class="md-layout-item md-size-100">
-        <div class="requirement-section" v-for="(category, index) in Object.keys(requirementProperties)" :key="index">
-          <table class="requirement-section-table">
-            <thead>
-              <tr>
-                <th><span class="section-title"><img :src="`${$iconURL}Requirements/${category}.svg`" class="mr-20"/>{{category}}</span></th>
-                <th>How Many?</th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(item, index) in requirementProperties[category].filter(item=>!item.isHide)" :key="index">
-                <td>
-                  <div style="padding: 10px 0px">{{item.name}}</div>
-                  <template v-if="item.type==='multiple-selection'">
-                    <multiselect
-                      v-model="item.selectedValue"
-                      :options="item.selectionOptions"
-                      :close-on-select="true"
-                      :clear-on-select="true"
-                      tag-placeholder="Add this as new tag"
-                      placeholder="Type to search category"
-                      label="title"
-                      track-by="id"
-                      class="multiple-selection small-selector"
-                    ></multiselect>
-                  </template>
-                </td>
-                <td >
-                  <template v-if="item.type==='integer'">
-                    <input class="quantity-input" type="number">
-                    <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
-                    <md-tooltip md-direction="bottom">*People who did an event similar to yours used 400</md-tooltip>
-                  </template>
-                  
-                </td>
-                <td>
-                  <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="item.isMandatory" value="true">Must Have</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="item.isMandatory" value="false">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div  class="additional-request">
-            <div class="additional-request-description">
-              <h4>Additional Requests</h4>
-              <div>Would you like to add one of those items?</div>
-            </div>
-            <div>
-              <div 
-                class="additional-request-tag" 
-                v-for="(item, index) in requirementProperties[category].filter(item=>item.isHide)" :key="index"
-                @click="addRequirement(category, item)">
-                {{item.name}}
-                <md-icon class="icon color-red">add_circle</md-icon>
+        <div v-for="(category, index) in Object.keys(requirementProperties)" :key="index">
+          <template v-if="category=='multi-selection'">
+            <vendor-requirement-multiselect-panel  v-for="(data, id) in requirementProperties[category]" :key="id" :data="data"></vendor-requirement-multiselect-panel>
+          </template>
+          <div class="requirement-section" v-else-if="category=='special'">
+            <div class="d-flex align-start" >
+              <div class="d-flex align-center"  style="min-width: 400px;">
+                <img :src="`${$iconURL}Requirements/special-request-red.svg`" class="mr-20">
+                <div class="title">
+                  <div class="font-size-22 font-bold">Spacial Requests</div>
+                  Tell us what you need, and we'll find vendors that can deliver!
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-        <div class="requirement-section">
-          <div class="special-request-header">
-            <img :src="`${$iconURL}Requirements/special-request-red.svg`">
-            <div class="title">
-              <h3>Spacial Requests</h3>
-              Would you like to add one of those items?
-            </div>
-            <div class="additional-request-tag">
-              Loream lpsum 
-              <md-icon class="icon color-red">add_circle</md-icon>
-            </div>
-            <div class="additional-request-tag">
-              Loream lpsum 
-              <md-icon class="icon color-red">add_circle</md-icon>
-            </div>
-          </div>
-          <div class="md-layout mt-50">
-            <div class="md-layout-item md-size-40 mx-auto pl-0">
-              <label>Name of item</label>
-              <maryoku-input class="mt-20" v-model="editingSpecialRequest.name"></maryoku-input>
-            </div>
-            <div class="md-layout-item md-size-20 mx-auto">
-              <label>Is this</label>
+              
               <div>
-                <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="editingSpecialRequest.isMandatory" :value="true">
-                    <span class="font-size-16">Mandatory</span></md-checkbox>
-                <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="editingSpecialRequest.isMandatory" :value="false">
-                    <span class="font-size-16">Nice To Have</span></md-checkbox>
+                <div 
+                  class="additional-request-tag" 
+                  v-for="(property, index) in requirementProperties[category].filter(item=>!item.isSelected)" :key="index"
+                  @click="addRequirement(category, property)">
+                  {{property.item}}
+                  <md-icon class="icon color-red">add_circle</md-icon>
+                </div>
               </div>
             </div>
-            <div class="md-layout-item md-size-40 mx-auto pr-0">
-              <label>Notes</label>
-              <maryoku-textarea class="mt-20" v-model="editingSpecialRequest.notes"></maryoku-textarea>
+            <div class="md-layout mt-50" v-for="(property, index) in requirementProperties[category].filter(item=>item.isSelected)" :key="index">
+              <div class="md-layout-item md-size-40 mx-auto pl-0">
+                <label>Name of item</label>
+                <maryoku-input class="mt-20" v-model="property.item"></maryoku-input>
+              </div>
+              <div class="md-layout-item md-size-20 mx-auto">
+                <label>Is this</label>
+                <div>
+                  <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="property.mustHave" :value="true">
+                      <span class="font-size-16">Mandatory</span></md-checkbox>
+                  <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="property.mustHave" :value="false">
+                      <span class="font-size-16">Nice To Have</span></md-checkbox>
+                </div>
+              </div>
+              <div class="md-layout-item md-size-40 mx-auto pr-0">
+                <label>Notes</label>
+                <maryoku-textarea class="mt-20" v-model="editingSpecialRequest.notes"></maryoku-textarea>
+              </div>
+              <div class="md-layout-item md-size-100 mx-auto pr-0 text-right mt-30 mb-30">
+                <md-button class="md-simple md-red  maryoku-btn" @click="removeRequirement(category, property)">Clear</md-button>
+                <md-button class="md-red maryoku-btn" @click="addNewRequirement">Add</md-button>
+              </div>
             </div>
-            <div class="md-layout-item md-size-100 mx-auto pr-0 text-right mt-30 mb-30">
-              <md-button class="md-simple md-red  maryoku-btn">Clear</md-button>
-              <md-button class="md-red maryoku-btn" @click="addNewRequirement">Add</md-button>
+            <div class="special-request-section d-flex" v-for="item in specialRequests" :key="item.name">
+                <div class="flex-1 font-size-16 font-bold">{{item.name}}</div>
+                <div class="flex-1">
+                  <span v-if="item.isMandatory"><img :src="`${$iconURL}Requirements/check-red.svg`" class="mr-10"/>Mandatory</span>
+                </div>
+                <div class="flex-1">
+                  {{item.notes}}
+                </div>
+                <div class="flex-1 text-right">
+                  <md-button class="md-icon-button md-simple"><img :src="`${$iconURL}Requirements/edit-dark.svg`"/></md-button>
+                  <md-button class="md-icon-button md-simple"><img :src="`${$iconURL}Requirements/delete-dark.svg`"/></md-button>
+                </div>
             </div>
-          </div>
-          <div class="special-request-section d-flex" v-for="item in specialRequests" :key="item.name">
-              <div class="flex-1 font-size-16 font-bold">{{item.name}}</div>
-              <div class="flex-1">
-                <span v-if="item.isMandatory"><img :src="`${$iconURL}Requirements/check-red.svg`" class="mr-10"/>Mandatory</span>
-              </div>
-              <div class="flex-1">
-                {{item.notes}}
-              </div>
-              <div class="flex-1 text-right">
-                <md-button class="md-icon-button md-simple"><img :src="`${$iconURL}Requirements/edit-dark.svg`"/></md-button>
-                <md-button class="md-icon-button md-simple"><img :src="`${$iconURL}Requirements/delete-dark.svg`"/></md-button>
-              </div>
-          </div>
-          <div class="special-request-section">
-            <div class="font-bold">Anything Else?</div>
+            <div class="special-request-section">
+              <div class="font-bold">Anything Else?</div>
 
-            <div>Tell us what else you would love to receive in the proposals we'll send you</div>
-            <div class="special-request-section-options">
-              <textarea placeholder="Type name of element here..." >
-              </textarea>
+              <div>Tell us what else you would love to receive in the proposals we'll send you</div>
+              <div class="special-request-section-options">
+                <textarea placeholder="Type name of element here..." >
+                </textarea>
+              </div>
+            </div>
+          </div>
+          <div class="requirement-section"  v-else>
+            <table class="requirement-section-table">
+              <thead>
+                <tr>
+                  <th><span class="section-title"><img :src="`${$iconURL}Requirements/${category}.svg`" class="mr-20"/>{{category}}</span></th>
+                  <th>How Many?</th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr 
+                  class="requirement-item"
+                  v-for="(property, index) in requirementProperties[category].filter(item=>item.isSelected)" :key="index">
+                  <td>
+                    <div style="padding: 10px 0px">{{property.item}}</div>
+                    <template v-if="property.type==='single-selection'">
+                      <multiselect
+                        v-model="property.selectedValue"
+                        :options="property.options"
+                        :close-on-select="true"
+                        :clear-on-select="true"
+                        tag-placeholder="Add this as new tag"
+                        placeholder="Type to search category"
+                        class="multiple-selection small-selector"
+                      ></multiselect>
+                    </template>
+                  </td>
+                  <td >
+                    <template v-if="property.qtyEnabled">
+                      <input class="quantity-input" type="number" v-model="property.defaultQty">
+                      <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
+                      <md-tooltip md-direction="bottom">*People who did an event similar to yours used 400</md-tooltip>
+                    </template>
+                  </td>
+                  <td>
+                    <md-button class="md-icon-button md-simple requirement-action" v-if="property.qtyEnabled">
+                      <img :src="`${$iconURL}Requirements/edit-dark.svg`" width="20"/></md-button>
+                    <md-button class="md-icon-button md-simple requirement-action" @click="removeRequirement(category, property)">
+                      <img :src="`${$iconURL}Requirements/delete-dark.svg`" width="20"/></md-button>
+                  </td>
+                  <td>
+                    <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="property.mustHave" :value="true">Must Have</md-checkbox>
+                  </td>
+                  <td>
+                    <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="property.mustHave" :value="false">Nice To Have</md-checkbox>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div  class="additional-request">
+              <div class="additional-request-description">
+                <h4>Additional Requests</h4>
+                <div>Would you like to add one of those items?</div>
+              </div>
+              <div>
+                <div 
+                  class="additional-request-tag" 
+                  v-for="(property, index) in requirementProperties[category].filter(item=>!item.isSelected)" :key="index"
+                  @click="addRequirement(category, property)">
+                  {{property.item}}
+                  <md-icon class="icon color-red">add_circle</md-icon>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+        
+        
       </div>
     </div>
     <!-- ./Event Booking Items -->
@@ -194,7 +203,7 @@ import CommentEditorPanel from "./CommentEditorPanel";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
-
+import VendorRequirementMultiselectPanel from "./VendorRequirementMultiselectPanel";
 export default {
   name: "booking-event-requirement",
   components: {
@@ -206,7 +215,8 @@ export default {
     CommentEditorPanel,
     Multiselect,
     MaryokuInput,
-    MaryokuTextarea
+    MaryokuTextarea,
+    VendorRequirementMultiselectPanel
   },
   props: {
     component: {
@@ -237,28 +247,28 @@ export default {
     ...mapMutations("event", ["setEventData"]),
     ...mapActions("comment", ["getCommentComponents"]),
     ...mapActions("vendor", ["fetchAllProperties"]),
-    addRequirement(category, item) {
-      const index = this.requirementProperties[category].findIndex(it=>it.name == item.name )
-      this.requirementProperties[category][index].isHide = false;
+    addRequirement(category, property) {
+      const index = this.requirementProperties[category].findIndex(it=>it.item == property.item )
+      this.requirementProperties[category][index].isSelected = true;
+      console.log(this.requirementProperties[category][index])
       this.requirementProperties = { ...this.requirementProperties }
-      this.$forceUpdate();
+      // this.$forceUpdate();
+    },
+    removeRequirement(category, property) {
+      const index = this.requirementProperties[category].findIndex(it=>it.item == property.item )
+      this.requirementProperties[category][index].isSelected = false;
+      console.log(this.requirementProperties[category][index])
+      this.requirementProperties = { ...this.requirementProperties }
+      // this.$forceUpdate();
     },
     setProperties() {
       this.selectedBlock = this.component
       if (!this.selectedBlock.componentId) return
-      this.fetchAllProperties(this.selectedBlock.componentId).then(properties=>{
-        const propertiesByGroup = {};
-        properties.forEach(item=>{
-          if (!propertiesByGroup[item.categoryTitle])   propertiesByGroup[item.categoryTitle] = []
-          if (propertiesByGroup[item.categoryTitle].length >= 5) {
-            item.isHide = true
-          } else {
-            item.isHide = false
-          }
-          propertiesByGroup[item.categoryTitle].push(item)
-        })
-        this.requirementProperties = {...propertiesByGroup}
-      })
+      this.$http.get(`${process.env.SERVER_URL}/1/vendor/property/${this.selectedBlock.componentId}/${this.event.id}`).then(res=>{
+        console.log("res.data", res.data)
+        this.requirementProperties = res.data
+      }) 
+
     },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
@@ -302,7 +312,8 @@ export default {
       if (newVal.componentId) {
         this.fetchData()
       }
-    }
+    },
+    // '$route': 'fetchData'
   },
   filters: {
     formatDate: function(date) {
@@ -325,26 +336,37 @@ export default {
 </script>
 <style lang="scss">
 .booking-event-requirement {
-  .event-book-requirement-header{
-    height: 256px;
-    padding:0;
-    display: flex;
-    .header-title {
-      display: flex;
-      img {
-        width: 25%;
-      }
-    }
-    .header-actions {
-      position: absolute;
-      right: 50px;
-      top: 30px;
-      z-index: 99;
-    }
-  }
+  width: 100%;
+  // .event-book-requirement-header{
+  //   height: 256px;
+  //   padding:0;
+  //   display: flex;
+  //   .header-title {
+  //     display: flex;
+  //     img {
+  //       width: 25%;
+  //     }
+  //   }
+  //   .header-actions {
+  //     position: absolute;
+  //     right: 50px;
+  //     top: 30px;
+  //     z-index: 99;
+  //   }
+  // }
   .section-title {
     font-size: 22px;
     font-family: "Manrope-ExtraBold";
+  }
+  .requirement-item{
+    .requirement-action {
+      opacity: 0;
+    }
+    &:hover{
+      .requirement-action {
+        opacity: 1;
+      }
+    }
   }
   .requirement-section {
     border-radius: 3px;

@@ -92,8 +92,8 @@ export default {
     goToNext() {
       this.setEventProperty({key: 'eventSongId', actualValue: this.selectedSong.id})
       localStorage.setItem('event', JSON.stringify(this.getEventData()));
-      location.href="https://www.maryoku.com/signup-beta"  //tempary code
-      return;
+      // location.href="https://www.maryoku.com/signup-beta"  //tempary code
+      // return;
       if (!this.isLoggedIn) {
         this.$router.push({path: `/signup?action=${this.$queryEventActions.create}`})
       } else {
