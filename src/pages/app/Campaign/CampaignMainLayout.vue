@@ -156,7 +156,7 @@
           2: { completed: false, name: "RSVP",
             tooltip: "Try sending your RSVP's a month in advance,  so you'll get the most accurate results" },
           3: { completed: false, name: "COMING_SOON",
-            tooltip: "Try sending your RSVP's a month in advance, so you'll get the most accurate results" },
+            tooltip: "A friendly reminder helps prepare attendees for your upcoming event. Aside from reminding them of the date and time, we also use this email to answer last-minute questions" },
           4: { completed: false, name: "FEEDBACK",
             tooltip: "This touchpoint provides a valuable opportunity to promote other upcoming events, collect attendee feedback, and guide attendees towards the next step you want them to take."}
         }
