@@ -152,13 +152,13 @@
           1: { 
             completed: false, 
             name: "SAVING_DATE",
-            tooltip: "Give guests enough time to clear theire schedules, make travel arrangements and generally increase the changes of them atteding"},
+            tooltip: "Give guests enough time to clear their schedules, make travel arrangements and generally increase the chances of them atteding"},
           2: { completed: false, name: "RSVP",
             tooltip: "Try sending your RSVP's a month in advance,  so you'll get the most accurate results" },
           3: { completed: false, name: "COMING_SOON",
             tooltip: "Try sending your RSVP's a month in advance, so you'll get the most accurate results" },
           4: { completed: false, name: "FEEDBACK",
-            tooltip: "Try sending your RSVP's a month in advance, so you'll get the most accurate results"}
+            tooltip: "This touchpoint provides a valuable opportunity to promote other upcoming events, collect attendee feedback, and guide attendees towards the next step you want them to take."}
         }
       }
     },
