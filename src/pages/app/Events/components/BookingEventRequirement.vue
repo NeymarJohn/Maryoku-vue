@@ -32,7 +32,7 @@
               <div class="d-flex align-center"  style="min-width: 400px;">
                 <img :src="`${$iconURL}Requirements/special-request-red.svg`" class="mr-20">
                 <div class="title">
-                  <div class="font-size-22 font-bold">Spacial Requests</div>
+                  <div class="font-size-22 font-bold">Special Requests</div>
                   Tell us what you need, and we'll find vendors that can deliver!
                 </div>
               </div>
@@ -101,7 +101,6 @@
                   <th>How Many?</th>
                   <th></th>
                   <th></th>
-                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -112,13 +111,14 @@
                     <div style="padding: 10px 0px">{{property.item}}</div>
                     <template v-if="property.type==='single-selection'">
                       <multiselect
-                        v-model="property.selectedValue"
+                        v-model="property.selectedOption"
                         :options="property.options"
                         :close-on-select="true"
                         :clear-on-select="true"
                         tag-placeholder="Add this as new tag"
                         placeholder="Type to search category"
                         class="multiple-selection small-selector"
+                        @select="checkAffectedItems(property)"
                       ></multiselect>
                     </template>
                   </td>
@@ -136,10 +136,10 @@
                       <img :src="`${$iconURL}Requirements/delete-dark.svg`" width="20"/></md-button>
                   </td>
                   <td>
-                    <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="property.mustHave" :value="true">Must Have</md-checkbox>
-                  </td>
-                  <td>
-                    <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="property.mustHave" :value="false">Nice To Have</md-checkbox>
+                    <div class="condition">
+                      <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="property.mustHave" :value="true">Must Have</md-checkbox>
+                      <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="property.mustHave" :value="false">Nice To Have</md-checkbox>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -179,7 +179,7 @@
       </div>
       <div>
         <md-button class="md-bold add-category-btn md-black md-simple">Revert To Original</md-button>
-        <md-button class="md-red md-bold add-category-btn" @click="findVendors">Find my perfect venue</md-button>
+        <md-button class="md-red md-bold add-category-btn" @click="findVendors">Find my perfect vendor</md-button>
       </div>
     </div>
   </div>
@@ -263,10 +263,19 @@ export default {
     },
     setProperties() {
       this.selectedBlock = this.component
+      const event = this.event
       if (!this.selectedBlock.componentId) return
       this.$http.get(`${process.env.SERVER_URL}/1/vendor/property/${this.selectedBlock.componentId}/${this.event.id}`).then(res=>{
         console.log("res.data", res.data)
-        this.requirementProperties = res.data
+        const requirements = res.data;
+        for (let category in requirements) {
+          for (let itemIndex in requirements[category]) {
+            if (requirements[category][itemIndex].defaultQtyScript)
+              requirements[category][itemIndex].defaultQty = eval(requirements[category][itemIndex].defaultQtyScript)
+          }
+        }
+
+        this.requirementProperties = requirements
       }) 
 
     },
@@ -291,7 +300,23 @@ export default {
     },
     addNewRequirement() {
       this.specialRequests = [...this.addNewRequirement, this.editingSpecialRequest]
+    },
+    checkAffectedItems(property) {
+      if (property.affectedKeys) {
+        for (var i in property.affectedKeys) {
+          const cateogry = property.affectedKeys[i].category
+          const key = property.affectedKeys[i].key
+          const index = this.requirementProperties[cateogry].findIndex(item => item.key === key)
+          if (index >= 0 ) {
+            alert(index)
+            const requirements  = this.requirementProperties
+            const event = this.event
+            this.requirementProperties[cateogry][index].defaultQty = eval(this.requirementProperties[cateogry][index].defaultQtyScript)
+          }
+        } 
+      }
     }
+    
   },
   created() {
     this.calendar = new Calendar({id: this.$store.state.auth.user.profile.defaultCalendarId})
@@ -365,6 +390,9 @@ export default {
     &:hover{
       .requirement-action {
         opacity: 1;
+      }
+      .condition {
+        opacity: 0.4;
       }
     }
   }

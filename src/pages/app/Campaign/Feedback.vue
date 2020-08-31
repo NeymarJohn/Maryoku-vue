@@ -7,11 +7,10 @@
         <img :src="`${$iconURL}Campaign/group-9380.svg`" class="mr-20"/>
         <div class="ml-20">
           <div class="font-size-40 font-bold line-height-1 mb-20">It was great seeing you!</div>
-          <div  class="font-size-22 line-height-1">{{info.conceptName}}</div>
-          <!-- <title-editor :value="info.conceptName" @change="changeTitle" class="mt-40"></title-editor> -->
+          <div  class="font-size-22 line-height-1">80's DISCO PARTY</div>
         </div>
       </div>
-      <maryoku-textarea :placeholder="placeHolder"></maryoku-textarea>
+      <maryoku-textarea></maryoku-textarea>
     </div>
     <rsvp-venue-carousel></rsvp-venue-carousel>
     <div class="p-50">
@@ -59,44 +58,16 @@ import MaryokuTextarea from '@/components/Inputs/MaryokuTextarea';
 import RsvpVenueCarousel from "@/pages/app/RSVP/RSVPVenueCarousel.vue"
 import SharingButtonGroup from "./components/SharingButtonGroup"
 import FeedbackQuestion from './components/FeedbackQuestion'
-import TitleEditor from './components/TitleEditor'
-
 export default {
   components: {
     MaryokuTextarea,
     RsvpVenueCarousel,
     SharingButtonGroup,
-    FeedbackQuestion,
-    TitleEditor
+    FeedbackQuestion
   },  
-  props: {
-    info: {
-      type: Object,
-      default: {}
-    },
-  },
   data() {
     return {
-      allowUploadPhoto: true,
-      placeHolder : ''
-    }
-  },
-  created(){
-    const placeHolder = `
-      Thank you so much for attending! We are so glad you could join us.
-      Please take a moment to help us improve future events by taking a brief survey. 
-      Your feedback is extremely valuable to our ongoing effort to offer great ${event.guestType || 'employee'} experience.
-
-      If you have photos, documents or other event materials that you want to share, you can upload them here.
-      All materials is also available for download from this page.
-
-      We look forward to seeing you again soon!
-    `
-    this.placeHolder = placeHolder
-  },
-  computed: {
-    event() {
-      return this.$store.state.event.eventData
+      allowUploadPhoto: true
     }
   },
 }

@@ -16,9 +16,7 @@
           <md-switch v-model="showGuests" class="below-label large-switch ml-20">Hide Coming</md-switch>
         </div>
       </div>
-      <!-- <div class="font-size-50 font-bold-extra text-center line-height-1 mb-60">{{info.conceptName}}</div> -->
-      <title-editor :value="info.conceptName" @change="changeTitle" class="font-size-50 font-bold-extra text-center line-height-1 mb-60"></title-editor>
-
+      <div class="font-size-50 font-bold-extra text-center line-height-1 mb-60">{{info.conceptName}}</div>
       <hr/>
       <div class="d-flex mt-60">
         <maryoku-textarea :placeholder="placeholder" class="mr-60 flex-1" style="padding:40px 60px 40px 40px"></maryoku-textarea>
@@ -35,14 +33,11 @@
 import MaryokuTextarea from '@/components/Inputs/MaryokuTextarea'
 import CountdownTime from './components/CountdownTime';
 import RsvpEventInfoPanel from '@/pages/app/RSVP/RSVPEventInfoPanel'
-import TitleEditor from './components/TitleEditor'
-
 export default {
   components: {
     CountdownTime,
     RsvpEventInfoPanel,
-    MaryokuTextarea,
-    TitleEditor
+    MaryokuTextarea
   },
   props: {
     info: {
@@ -68,11 +63,6 @@ export default {
       console.log(this.$store.state.event.eventData);
       return this.$store.state.event.eventData;
     },
-  },
-  methods: {
-    changeTitle(newTitle) {
-      this.$emit("changeInfo", {field: "conceptName", value: newTitle})
-    } 
   },
   
 }
