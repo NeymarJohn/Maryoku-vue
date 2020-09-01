@@ -7,13 +7,13 @@
       <div class="countdown-cover-image mt-50">
         <img :src="`${$iconURL}Campaign/Mask Group 129.png`">
         <div class="countdown-guests d-flex align-center p-20">
-          <span class="font-size-30 font-bold-extra mr-10">156</span>
+          <span class="font-size-30 font-bold-extra mr-10">{{event.numberOfParticipants}}</span>
           <span class="font-size-22 font-bold color-dark-gray">Guests are Attending</span>
           <md-switch v-model="showGuests" class="below-label large-switch">Hide Coming</md-switch>
         </div>
         <div class="d-flex countdown-time-panel align-end justify-content-center">
-          <countdown-time></countdown-time>
-          <md-switch v-model="showGuests" class="below-label large-switch ml-20">Hide Coming</md-switch>
+          <countdown-time :event="event"></countdown-time>
+          <md-switch v-model="showCountdown" class="below-label large-switch ml-20">Hide Countdown</md-switch>
         </div>
       </div>
       <!-- <div class="font-size-50 font-bold-extra text-center line-height-1 mb-60">{{info.conceptName}}</div> -->
@@ -53,7 +53,7 @@ export default {
   data() {
     return {
       showGuests: true,
-      showTimer: true,
+      showCountdown: true,
       showLogo: true,
       placeholder: `It's now time to get super exited! The event of the year is almost here( and it even rhymes). What to expect?
         out of this world live shows
@@ -68,6 +68,7 @@ export default {
       console.log(this.$store.state.event.eventData);
       return this.$store.state.event.eventData;
     },
+   
   },
   methods: {
     changeTitle(newTitle) {
