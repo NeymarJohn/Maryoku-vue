@@ -16,18 +16,18 @@
       <template slot="content">
         <div class="delivery-setting-content">
           <div class="setting-item">
-            <md-checkbox v-model="usePhone" class="md-checkbox-narrow"></md-checkbox>
+            <md-checkbox v-model="settingData.phone.selected" class="md-checkbox-narrow"></md-checkbox>
             <div>
               <img :src="`${$iconURL}Campaign/group-9439.svg`" class="mr-10 ml-10"/>
               <span class="font-size-22 font-bold-extra mr-30">By text message</span>
               <span>WhatsApp or sms</span>
             </div>
             <md-button class="md-icon-button md-simple collapse-button">
-              <md-icon class="icon" v-if="usePhone">keyboard_arrow_down</md-icon>
-              <md-icon class="icon"  v-if="!usePhone">keyboard_arrow_right</md-icon>
+              <md-icon class="icon" v-if="settingData.phone.selected">keyboard_arrow_down</md-icon>
+              <md-icon class="icon"  v-if="!settingData.phone.selected">keyboard_arrow_right</md-icon>
             </md-button>
           </div>
-          <div class="mb-50 mt-50" v-if="usePhone">
+          <div class="mb-50 mt-50" v-if="settingData.phone.selected">
             <div class="font-bold">To</div>
             <div class="d-flex align-start width-100">
               <div class="flex-1">
@@ -35,18 +35,19 @@
                   type="phones" 
                   placeholder="Paste all phone numbers here…" 
                   inputStyle="phone" 
+                  v-model="settingData.phone.numberString"
+                  @change="handleInputEmails"
                   ></maryoku-textarea>
-
                 <invalid-address-panel class="mt-30" v-if="invalidPastedPhones" :content="invalidPastedPhones"></invalid-address-panel>
               </div>
               <span class="font-size-16" style="padding: 20px 40px">Or</span>
               
-              <md-button class="md-outlined md-simple maryoku-btn" @click="choosePhoneExcel" v-if="!uploadedExcels.phone">
+              <md-button class="md-outlined md-simple maryoku-btn" @click="choosePhoneExcel" v-if="!settingData.phone.excelFileName">
                 <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10">
                 <span class="color-red">Upload Excel list file</span>
               </md-button>
               <div v-else class="uploadedFile border-gray-1">
-                <div class="font-bold text-underline mb-10">{{uploadedExcels.phone}}</div>
+                <div class="font-bold text-underline mb-10">{{settingData.phone.excelFileName}}</div>
                 <md-button class="md-simple edit-btn" @click="choosePhoneExcel" >
                   <span class="color-red">change</span>
                 </md-button>
@@ -60,31 +61,31 @@
             </div>
             <div class="mt-50 font-bold">How would you like to send your text?</div>
             <div class="mt-10">
-              <md-checkbox v-model="smsOrWhatsapp" class="md-checkbox-circle md-red  mr-50"  value="sms">
-                <span :class="{'font-bold': smsOrWhatsapp === 'sms'}" class="p-5">By SMS</span></md-checkbox>
-              <md-checkbox v-model="smsOrWhatsapp" class="md-checkbox-circle md-red ml-50" value="whatsapp">
+              <md-checkbox v-model="settingData.phone.smsOrWhatsapp" class="md-checkbox-circle md-red  mr-50"  value="sms">
+                <span :class="{'font-bold': settingData.phone.smsOrWhatsapp === 'sms'}" class="p-5">By SMS</span></md-checkbox>
+              <md-checkbox v-model="settingData.phone.smsOrWhatsapp" class="md-checkbox-circle md-red ml-50" value="whatsapp">
                 <img :src="`${$iconURL}Campaign/Image+74.png`"/>
-                <span :class="{'font-bold': smsOrWhatsapp === 'whatsapp'}">By WhatsApp</span>
+                <span :class="{'font-bold': settingData.phone.smsOrWhatsapp === 'whatsapp'}">By WhatsApp</span>
               </md-checkbox>
             </div>
           </div>
           <div class="setting-item">
-            <md-checkbox v-model="useEmail" class="md-checkbox-narrow"></md-checkbox>
+            <md-checkbox v-model="settingData.email.selected" class="md-checkbox-narrow"></md-checkbox>
             <div>
               <img :src="`${$iconURL}Campaign/group-9437.svg`" class="mr-10 ml-10"/>
               <span class="font-size-22 font-bold-extra mr-30">By email</span>
               <span >Enter recipients emails or upload Microsoft excel or Google sheets with guests list</span>
             </div>
             <md-button class="md-icon-button md-simple collapse-button">
-              <md-icon class="icon" v-if="useEmail">keyboard_arrow_down</md-icon>
-              <md-icon class="icon"  v-if="!useEmail">keyboard_arrow_right</md-icon>
+              <md-icon class="icon" v-if="settingData.email.selected">keyboard_arrow_down</md-icon>
+              <md-icon class="icon"  v-if="!settingData.email.selected">keyboard_arrow_right</md-icon>
             </md-button>
           </div>
-          <div v-if="useEmail">
+          <div v-if="settingData.email.selected">
             <div class="mt-50" >
               <label class="font-bold mb-10 line-height-2">Subject</label>
               <div class="width-60 position-relative">
-                <maryoku-input placeholder="Type your email subject here…"></maryoku-input>
+                <maryoku-input placeholder="Type your email subject here…" v-model="settingData.email.subject"></maryoku-input>
                 <span class="ml-20 mt-10 input-tooltip-wrapper position-relative" >
                   <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
                   <md-tooltip >
@@ -96,7 +97,7 @@
             <div class="mt-50" >
               <label class="font-bold mb-10 line-height-2" >From</label>
               <div class="width-60 position-relative">
-                <maryoku-input placeholder="Your email address…"></maryoku-input>
+                <maryoku-input placeholder="Your email address…" v-model="settingData.email.from"></maryoku-input>
                 <span class="ml-20 mt-10 input-tooltip-wrapper position-relative" >
                   <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`">
                   <md-tooltip >
@@ -106,13 +107,15 @@
               </div>
             </div>
             <div class="mt-50 font-size-14 ">
-              <label class="mb-10 line-height-2"><span class="font-bold mr-10 font-size-16">To</span>Make sure to put space / comma between each address</label>
+              <label class="mb-10 line-height-2">
+                <span class="font-bold mr-10 font-size-16">To</span>Make sure to put space / comma between each address</label>
               <div class="d-flex align-start width-100 ">
                 <div class="width-60">
                   <maryoku-textarea 
                     placeholder="Paste all emails here…" 
                     type="input" 
                     inputStyle="emails" 
+                    v-model="settingData.email.addressString"
                     @change="handleInputEmails">
                   </maryoku-textarea>
                   <invalid-address-panel class="mt-30" v-if="invalidPastedEmails" :content="invalidPastedEmails"></invalid-address-panel>
@@ -120,12 +123,12 @@
                 <span class="font-size-16" style="padding: 20px 40px">Or</span>
 
                 <!-- Emails Excel File Upload  -->
-                <md-button v-if="!uploadedExcels.email" class="md-outlined md-simple maryoku-btn"  @click="chooseEmailExcel">
+                <md-button v-if="!settingData.email.excelFileName" class="md-outlined md-simple maryoku-btn"  @click="chooseEmailExcel">
                   <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10">
                   <span class="color-red">Upload Excel list file</span>
                 </md-button>
                 <div v-else class="uploadedFile border-gray-1">
-                  <div class="font-bold text-underline mb-10">{{uploadedExcels.email}}</div>
+                  <div class="font-bold text-underline mb-10">{{settingData.email.excelFileName}}</div>
                   <md-button class="md-simple edit-btn" @click="chooseEmailExcel" >
                     <span class="color-red">change</span>
                   </md-button>
@@ -167,11 +170,33 @@ export default {
     MaryokuTextarea,
     InvalidAddressPanel
   },
+  props: {
+    defaultSettings: {
+      type: Object,
+      default: ()=>({
+        phone : {
+          selected: false,
+          numberString: "",
+          numberArray: [],
+          excelFileName: "",
+          excelFilePath: "",
+          smsOrWhatsapp: ""
+        },
+        email: {
+          selected: false,
+          subject: "",
+          from: "",
+          addressString: "",
+          addressArray: [],
+          excelFileName: "",
+          excelFilePath: ""
+        }
+      })
+    }
+  },
   data() {
     return {
-      usePhone: false,
-      useEmail: false,
-      smsOrWhatsapp:'',
+      settingData: {},
       invalidPastedEmails: null,
       invalidPastedPhones: null,
       tooltips: {
@@ -179,14 +204,15 @@ export default {
         emailExcel: "Please upload a csv file containing only email addresses in a valid format."
       },
       fileInputType: "",
-      uploadedExcels: {
-        phone: "",
-        email: ""
-      }
     }
+  },
+  created () {
+    this.settingData = this.defaultSettings;
   },
   methods: {
     handleInputEmails({value, type}) {
+      console.log(value)
+      console.log(type)
       const addresses = value.split(/[\s,]+/)
       let invalidEmails = ""
       if (type=='emails') {
@@ -197,7 +223,7 @@ export default {
           }
         })
         this.invalidPastedEmails = invalidEmails;
-      } else if(type=='phones') {
+      } else if(type=='phone') {
         addresses.forEach(address=>{
           if (address && address.trim() && !validPhoneNumber(address)) {
             if (!invalidEmails) invalidEmails = address
@@ -217,9 +243,17 @@ export default {
       this.fileInputType = "phone"
     },
     onFileChange(event) {
-      this.uploadedExcels[this.fileInputType] = event.target.files[0].name
+      this.settingData[this.fileInputType].excelFileName = event.target.files[0].name
       //handle validation excel files.
       // this.coverImage = await getBase64(event.target.files[0])
+    }
+  },
+  watch: {
+    settingData: {
+      handler(newValue) {
+        this.$emit("change", newValue)
+      },
+      deep: true
     }
   },
 };

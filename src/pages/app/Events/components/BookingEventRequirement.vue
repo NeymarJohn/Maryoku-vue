@@ -22,7 +22,6 @@
 
     <!-- Event Booking Items -->
     <div class="md-layout events-booking-items">
-      <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
       <div class="md-layout-item md-size-100">
         <div v-for="(category, index) in Object.keys(requirementProperties)" :key="index">
           <template v-if="category=='multi-selection'">
@@ -33,7 +32,7 @@
               <div class="d-flex align-center"  style="min-width: 400px;">
                 <img :src="`${$iconURL}Requirements/special-request-red.svg`" class="mr-20">
                 <div class="title">
-                  <div class="font-size-22 font-bold">Special Requests</div>
+                  <div class="font-size-22 font-bold">Spacial Requests</div>
                   Tell us what you need, and we'll find vendors that can deliver!
                 </div>
               </div>
@@ -64,7 +63,7 @@
               </div>
               <div class="md-layout-item md-size-40 mx-auto pr-0">
                 <label>Notes</label>
-                <maryoku-textarea class="mt-20" v-model="editingSpecialRequest.notes" size="narrow"></maryoku-textarea>
+                <maryoku-textarea class="mt-20" v-model="editingSpecialRequest.notes"></maryoku-textarea>
               </div>
               <div class="md-layout-item md-size-100 mx-auto pr-0 text-right mt-30 mb-30">
                 <md-button class="md-simple md-red  maryoku-btn" @click="removeRequirement(category, property)">Clear</md-button>
@@ -98,9 +97,9 @@
             <table class="requirement-section-table">
               <thead>
                 <tr>
-                  <th><span class="section-title">
-                    <img :src="`${$iconURL}Requirements/${category}.svg`" class="mr-20" style="width:60px"/>{{category}}</span></th>
+                  <th><span class="section-title"><img :src="`${$iconURL}Requirements/${category}.svg`" class="mr-20"/>{{category}}</span></th>
                   <th>How Many?</th>
+                  <th></th>
                   <th></th>
                   <th></th>
                 </tr>
@@ -113,14 +112,13 @@
                     <div style="padding: 10px 0px">{{property.item}}</div>
                     <template v-if="property.type==='single-selection'">
                       <multiselect
-                        v-model="property.selectedOption"
+                        v-model="property.selectedValue"
                         :options="property.options"
                         :close-on-select="true"
                         :clear-on-select="true"
                         tag-placeholder="Add this as new tag"
                         placeholder="Type to search category"
                         class="multiple-selection small-selector"
-                        @select="checkAffectedItems(property)"
                       ></multiselect>
                     </template>
                   </td>
@@ -138,10 +136,10 @@
                       <img :src="`${$iconURL}Requirements/delete-dark.svg`" width="20"/></md-button>
                   </td>
                   <td>
-                    <div class="condition">
-                      <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="property.mustHave" :value="true">Must Have</md-checkbox>
-                      <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="property.mustHave" :value="false">Nice To Have</md-checkbox>
-                    </div>
+                    <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="property.mustHave" :value="true">Must Have</md-checkbox>
+                  </td>
+                  <td>
+                    <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="property.mustHave" :value="false">Nice To Have</md-checkbox>
                   </td>
                 </tr>
               </tbody>
@@ -181,7 +179,7 @@
       </div>
       <div>
         <md-button class="md-bold add-category-btn md-black md-simple">Revert To Original</md-button>
-        <md-button class="md-red md-bold add-category-btn" @click="findVendors">Find my perfect vendor</md-button>
+        <md-button class="md-red md-bold add-category-btn" @click="findVendors">Find my perfect venue</md-button>
       </div>
     </div>
   </div>
@@ -252,34 +250,23 @@ export default {
     addRequirement(category, property) {
       const index = this.requirementProperties[category].findIndex(it=>it.item == property.item )
       this.requirementProperties[category][index].isSelected = true;
+      console.log(this.requirementProperties[category][index])
       this.requirementProperties = { ...this.requirementProperties }
       // this.$forceUpdate();
     },
     removeRequirement(category, property) {
       const index = this.requirementProperties[category].findIndex(it=>it.item == property.item )
       this.requirementProperties[category][index].isSelected = false;
+      console.log(this.requirementProperties[category][index])
       this.requirementProperties = { ...this.requirementProperties }
       // this.$forceUpdate();
     },
     setProperties() {
       this.selectedBlock = this.component
-      const event = this.event
       if (!this.selectedBlock.componentId) return
       this.$http.get(`${process.env.SERVER_URL}/1/vendor/property/${this.selectedBlock.componentId}/${this.event.id}`).then(res=>{
-        this.isLoading = false;
-        const requirements = res.data;
-        for (let category in requirements) {
-          for (let itemIndex in requirements[category]) {
-            if (requirements[category][itemIndex].defaultQtyScript)
-              requirements[category][itemIndex].defaultQty = eval(requirements[category][itemIndex].defaultQtyScript)
-              // requirements[category][itemIndex].isSelected = eval(requirements[category][itemIndex].isSelected)
-          }
-        }
-
-        this.requirementProperties = requirements
-      })
-      .catch(e => {
-        this.isLoading = false;
+        console.log("res.data", res.data)
+        this.requirementProperties = res.data
       }) 
 
     },
@@ -304,26 +291,7 @@ export default {
     },
     addNewRequirement() {
       this.specialRequests = [...this.addNewRequirement, this.editingSpecialRequest]
-    },
-    checkAffectedItems(property) {
-      // waitign for updating model
-      setTimeout(()=>{
-        if (property.affectedKeys) {
-          for (var i in property.affectedKeys) {
-            const cateogry = property.affectedKeys[i].category
-            const key = property.affectedKeys[i].key
-            const index = this.requirementProperties[cateogry].findIndex(item => item.key === key)
-            if (index >= 0 ) {
-              const requirements  = this.requirementProperties
-              const event = this.event
-              const defaultValue = eval(this.requirementProperties[cateogry][index].defaultQtyScript)
-              this.requirementProperties[cateogry][index].defaultQty = defaultValue
-            }
-          } 
-        }
-      }, 500)
     }
-    
   },
   created() {
     this.calendar = new Calendar({id: this.$store.state.auth.user.profile.defaultCalendarId})
@@ -369,6 +337,23 @@ export default {
 <style lang="scss">
 .booking-event-requirement {
   width: 100%;
+  // .event-book-requirement-header{
+  //   height: 256px;
+  //   padding:0;
+  //   display: flex;
+  //   .header-title {
+  //     display: flex;
+  //     img {
+  //       width: 25%;
+  //     }
+  //   }
+  //   .header-actions {
+  //     position: absolute;
+  //     right: 50px;
+  //     top: 30px;
+  //     z-index: 99;
+  //   }
+  // }
   .section-title {
     font-size: 22px;
     font-family: "Manrope-ExtraBold";
@@ -380,9 +365,6 @@ export default {
     &:hover{
       .requirement-action {
         opacity: 1;
-      }
-      .condition {
-        opacity: 0.4;
       }
     }
   }
@@ -495,7 +477,6 @@ export default {
     }
     .multiselect__input{
       height: 30px;
-      text-transform: capitalize;
     }
     .multiselect__placeholder {
       line-height: 20px;

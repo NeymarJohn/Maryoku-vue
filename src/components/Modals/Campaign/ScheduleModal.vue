@@ -8,7 +8,7 @@
         </div>
         <div class="font-size-22 mt-20">
           EventDate {{$dateUtil.formatScheduleDay(event.eventStartMillis, "MM.DD.YY")}} 
-          <span class="font-size-16 color-dark-gray">USA daylight time</span>
+          <span class="font-size-16 color-dark-gray ml-10">{{timezone.timeZoneName}}</span>
         </div>
       </div>
       <div v-if="showCalendar"  class="p-15" style="padding-bottom: 0">
@@ -34,36 +34,48 @@
           <div v-if="data.name!='SAVE_DATE'" class="md-layout-item md-size-100 margin-bottom d-flex justify-content-between font-size-22 align-center mt-30">
             <div class="d-flex align-center">
               <md-checkbox class="md-checkbox-circle" v-model="scheduleDate" value="previousCampaign"></md-checkbox>
-              <input v-model="scheduleSettings.previousCampaign.weeks" class="text-center mr-20" style="width: 128px"/>Weeks after the previous campaign
+              <input v-model="scheduleSettings.previousCampaign.weeks" type="number" min="0" class="text-center mr-20" style="width: 128px"/>Weeks after the previous campaign
             </div>
             <div v-if="scheduleSettings.previousCampaign.calcTime"> {{$dateUtil.formatScheduleDay(scheduleSettings.previousCampaign.calcTime, "MMM D, h:mm A")}} <img :src="`${$iconURL}Campaign/Group 9087.svg`" class="ml-20"/></div>
           </div>
           <div class="md-layout-item md-size-100 margin-bottom d-flex justify-content-between font-size-22 align-center mt-30 mb-40">
             <div class="d-flex align-center">
               <md-checkbox class="md-checkbox-circle" v-model="scheduleDate" value="beforeEvent"></md-checkbox>
-              <input v-model="scheduleSettings.beforeEvent.days" class="text-center mr-20" type="number" style="width: 128px"/>Days before the event
+              <input v-model="scheduleSettings.beforeEvent.days" min="0" class="text-center mr-20" type="number" style="width: 128px"/>Days before the event
             </div>
             <div class="color-dark-gray" > 
-              <span class="color-red" v-if="scheduleSettings.beforeEvent.calcTime<new Date().getTime()">Invalid time</span>
+              <span class="color-red" v-if="scheduleSettings.beforeEvent.calcTime<new Date().getTime()">
+                {{$dateUtil.formatScheduleDay(scheduleSettings.beforeEvent.calcTime, "MMM D, h:mm A")}}
+              </span>
               <span v-else >{{$dateUtil.formatScheduleDay(scheduleSettings.beforeEvent.calcTime, "MMM D, h:mm A")}} </span>
-              <img :src="`${$iconURL}Campaign/Group 9087.svg`" class="ml-20"/>
+              <span class="ml-20 mt-10">
+                <img :src="`${$iconURL}Campaign/Group 9087.svg`" class="ml-20"/>
+                <md-tooltip >
+                  <div class="font-size-14 input-tooltip ">Unless we're counting backwards, there are only {{remainingDate}} days between now and the event...</div>
+                </md-tooltip>
+              </span>
             </div>
           </div>
 
 
         </div>
         <hr class="mr-15 ml-15"/>
-        <div class="text-left p-15">
-          <md-button class="md-simple md-dark edit-btn" @click="showCalendar = true">
-            <img :src="`${$iconURL}Campaign/calendar-gray.svg`" style="width: 22px" class="mr-20 normal-btn">
-            <span class="color-black">Pick Date & Time</span>
-            <md-icon style="color: #050505 !important;">keyboard_arrow_right</md-icon>
-          </md-button>
+        <div class="md-layout-item md-size-100 margin-bottom d-flex justify-content-between font-size-22 align-center mt-30 mb-40">
+          <div class="d-flex align-center">
+            <md-button class="md-simple md-dark edit-btn" @click="showCalendar = true">
+              <img :src="`${$iconURL}Campaign/calendar-gray.svg`" style="width: 22px" class="mr-20 normal-btn">
+              <span class="color-black">Pick Date & Time</span>
+              <md-icon style="color: #050505 !important;">keyboard_arrow_right</md-icon>
+            </md-button>
+          </div>
+          <div class="color-dark-gray" v-if="dateData.selectedDate"> 
+            {{$dateUtil.formatScheduleDay(this.calendarTime, 'MMMM DD, YYYY hh:mm A')}}
+          </div>
         </div>
       </div>
       <div v-else class="text-left">
         <div class="font-size-30 font-bold-extra p-15">Pick Date & Time</div>
-        <div class="font-size-16 color-dark-gray p-15">USA daylight time</div>
+        <div class="font-size-16 color-dark-gray p-15">{{timezone.timeZoneName}}</div>
         <div class="d-flex"> 
           <div class="flex-1">
             <functional-calendar 
@@ -110,13 +122,14 @@ export default {
   data() {
     return {
       showCalendar: false, 
-      scheduledTime : new Date().getTime(),
+      scheduleTime: new Date().getTime(),
       dateData: {},
+      startTime:"",
       weeksAfterPrevCampaign: 1,
       daysBeforeEvent: 1,
-      startTime:"",
-      scheduleTime: new Date().getTime(),
       scheduleDate: "",
+      calendarTime: "",
+      timezone: {},
       scheduleSettings: {
         tomorrow: { calcTime: moment(new Date()).add(1, 'days').hours(9).minutes(0).valueOf()},
         previousCampaign: { weeks:1, calcTime:"" },
@@ -125,8 +138,10 @@ export default {
     }
   },
   created () {
-    console.log(this.data)
     this.scheduleSettings.beforeEvent.calcTime = moment(this.event.eventStartMillis).add(this.scheduleSettings.beforeEvent, 'days').hours(9).minutes(0).valueOf()
+    this.$dateUtil.getTimeZoneNameFromPlaceId(this.event.locationId).then((timezone) => {
+      this.timezone = timezone
+    })
   },
 
   methods: {
@@ -134,10 +149,16 @@ export default {
       this.$emit('cancel')
     },
     saveSchedule() {
+      if (this.showCalendar) {
+        this.calendarTime = moment(`${this.dateData.selectedDate} ${this.startTime}`).valueOf()
+        this.showCalendar = false;
+      } else {
+        this.$emit("changeTime", this.scheduleTime)
+        this.close()
+      }
     },
     calculateTomorrowMorning() {
       this.scheduleTime = moment(new Date()).add(1, 'days').hours(9).minutes(0).valueOf()
-      console.log( this.scheduleTime)
     }
   },
   watch: {
@@ -151,6 +172,9 @@ export default {
   computed: {
     event() {
       return this.$store.state.event.eventData 
+    },
+    remainingDate() {
+      return Math.round((this.event.eventStartMillis-new Date().getTime())/1000/24/3600)
     }
   },
 }

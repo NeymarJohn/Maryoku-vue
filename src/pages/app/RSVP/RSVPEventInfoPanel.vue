@@ -78,7 +78,13 @@ export default {
         position: absolute;
         left: 0px;
         top: 0px;
-        opacity: 0.23;
+      }
+      img {
+        width: 26px;
+        height: 42px;
+        position: absolute;
+        left: 8px;
+        top: 0px;
       }
     }
     &-title {
