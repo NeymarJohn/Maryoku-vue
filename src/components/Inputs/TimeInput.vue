@@ -6,13 +6,17 @@
       :
       <input type="text" v-model="timeObject.mm" :maxlength="2">
     </div>
-    <drop-down class="ampm" >
+    <!-- <select class="ampm" v-model="ampm">
+      <option value="am">AM</option>
+      <option value="pm">PM</option>
+    </select> -->
+    <drop-down class="ampm" @change="chnaeg">
       <md-button slot="title" class="md-button edit-btn md-simple" data-toggle="dropdown">
-        <span class="font-bold font-size-30">{{timeObject.ampm}}</span>
+        <span class="font-bold font-size-30">{{ampm}}</span>
       </md-button>
       <ul class="dropdown-menu dropdown-menu-left">
-        <li @click="timeObject.ampm='AM'"><a class="font-size-22">AM</a></li>
-        <li @click="timeObject.ampm='PM'"><a class="font-size-22">PM</a></li>
+        <li @click="ampam=='am'"><a class="font-size-22" @click="ampam=='am'">AM</a></li>
+        <li @click="ampam=='pm'"><a class="font-size-22" @click="ampam=='pm'">PM</a></li>
       </ul>
       <span class="arrow-button"  data-toggle="dropdown"></span>
     </drop-down>
@@ -28,15 +32,14 @@ export default {
      * @model
      */
     value: {
-      type: [String, Date, Number],
-      default: "00:00 AM"
+      type: [String, Date, Number]
     }
   },
   created() {
-    this.timeObject.ampm = this.value.split(" ")[1]?this.value.split(" ")[1].trim():"AM"
-    const time = this.value.split(" ")[0]
-    this.timeObject.hh = time.split(":")[0]?time.split(":")[0].trim():"00"
-    this.timeObject.mm = time.split(":")[1]?time.split(":")[1].trim():"00"
+    if (typeof(this.value)==="string") {
+      this.ampm = new Date(this.value).getHours()>=12?"pm":"am"
+      this.time = moment(new Date(this.value)).format("HH:mm")
+    }
   },
   methods:{
     updateTime(e) {
@@ -52,19 +55,18 @@ export default {
   },
   data() {
     return {
+      ampm: new Date(this.value).getHours()>=12?"pm":"am",
+      time: moment(new Date(this.value)).format("HH:mm"),
       timeObject: {
         hh: "00",
-        mm: "00",
-        ampm: new Date(this.value).getHours()>=12?"pm":"am",
+        mm: "00"
       }
     };
   },
   watch: {
-    timeObject: {
-      handler(newValue) {
-        this.$emit("input",`${newValue.hh}:${newValue.mm} ${newValue.ampm}`)
-      },
-      deep: true
+    value: function () {
+      this.ampm = new Date(this.value).getHours()>=12?"pm":"am"
+      this.time = moment(new Date(this.value)).format("HH:mm")
     }
   },
 };

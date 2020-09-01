@@ -1,5 +1,5 @@
 <template>
-  <div v-if="type=='textarea'" class='maryoku-textarea'  :style="size=='normal'?'padding:40px 140px 40px 40px':'padding:30px 40px 30px 30px'" >
+  <div v-if="type=='textarea'" class='maryoku-textarea'  style="padding:40px 140px 40px 40px" >
     <textarea v-model="content" @input="handleInput" :placeholder="placeholder" :rows="rows" class="textarea js-autoresize"></textarea>
     <span  class="close-button" @click="clearContent">
       <img :src="`${$iconURL}Campaign/Group+3602.svg`"/>
@@ -36,10 +36,7 @@ export default {
       type: String,
       default: ""
     },
-    size: {
-      type: String,
-      default: "normal"
-    },
+    size:String,
   },
   data() {
     return {
