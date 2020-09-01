@@ -9,11 +9,11 @@
         <div class="countdown-guests d-flex align-center p-20">
           <span class="font-size-30 font-bold-extra mr-10">{{event.numberOfParticipants}}</span>
           <span class="font-size-22 font-bold color-dark-gray">Guests are Attending</span>
-          <md-switch v-model="showGuests" class="below-label large-switch">Hide Coming</md-switch>
+          <hide-switch class="ml-20" v-model="showLogo" label="coming"></hide-switch>
         </div>
         <div class="d-flex countdown-time-panel align-end justify-content-center">
           <countdown-time :event="event"></countdown-time>
-          <md-switch v-model="showCountdown" class="below-label large-switch ml-20">Hide Countdown</md-switch>
+          <hide-switch class="ml-20" v-model="showLogo" label="countdown"></hide-switch>
         </div>
       </div>
       <!-- <div class="font-size-50 font-bold-extra text-center line-height-1 mb-60">{{info.conceptName}}</div> -->
@@ -26,7 +26,7 @@
       </div>
       <div class=" mt-60 logo-section d-flex align-center justify-content-center">
         <img :src="info.logo" width="180"/>
-        <md-switch class="below-label large-switch ml-20" v-model="showLogo">Hide Logo</md-switch>
+        <hide-switch class="ml-20" v-model="showLogo" label="logo"></hide-switch>
       </div>
     </div>
   </div>
@@ -36,13 +36,15 @@ import MaryokuTextarea from '@/components/Inputs/MaryokuTextarea'
 import CountdownTime from './components/CountdownTime';
 import RsvpEventInfoPanel from '@/pages/app/RSVP/RSVPEventInfoPanel'
 import TitleEditor from './components/TitleEditor'
+import HideSwitch from '@/components/HideSwitch'
 
 export default {
   components: {
     CountdownTime,
     RsvpEventInfoPanel,
     MaryokuTextarea,
-    TitleEditor
+    TitleEditor,
+    HideSwitch
   },
   props: {
     info: {

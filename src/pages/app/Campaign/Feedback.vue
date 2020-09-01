@@ -28,7 +28,7 @@
             <div class="font-size-30 font-bold line-height-2">share event participation</div>
             <div>(Include photos & details of the event)</div>
           </div>
-          <md-switch class="below-label large-switch">Hide sharing option</md-switch>
+          <hide-switch v-model="showSharingOption" label="sharing option"></hide-switch>
         </div>
         <sharing-button-group class="mb-50"></sharing-button-group>
       </div>
@@ -37,13 +37,10 @@
         <div class="font-size-30 font-bold line-height-1 d-flex align-center">
           <img :src="`${$iconURL}Campaign/group-7321.svg`" class="mr-20"/>
           We'd love to get your feedback 
-          <md-switch class="below-label large-switch ml-50">Hide feedback section</md-switch>
+          <hide-switch v-model="showFeedback" label="feedback section"></hide-switch>
         </div> 
         <div>
-          <feedback-question question="In general, how was the event?"></feedback-question>
-          <feedback-question question="How was the Venue?" icon="venuerental"></feedback-question>
-          <feedback-question question="How was the catering?" icon="foodandbeverage"></feedback-question>
-          <feedback-question question="How was the activity?" icon="decor"></feedback-question>
+          <feedback-question v-for="(question, index) in feedBack" :key="index" :feedbackData="question"></feedback-question>
         </div>
       </div>
       <div class="mt-60">
@@ -60,14 +57,15 @@ import RsvpVenueCarousel from "@/pages/app/RSVP/RSVPVenueCarousel.vue"
 import SharingButtonGroup from "./components/SharingButtonGroup"
 import FeedbackQuestion from './components/FeedbackQuestion'
 import TitleEditor from './components/TitleEditor'
-
+import HideSwitch from '@/components/HideSwitch'
 export default {
   components: {
     MaryokuTextarea,
     RsvpVenueCarousel,
     SharingButtonGroup,
     FeedbackQuestion,
-    TitleEditor
+    TitleEditor,
+    HideSwitch
   },  
   props: {
     info: {
@@ -78,7 +76,32 @@ export default {
   data() {
     return {
       allowUploadPhoto: true,
-      placeHolder : ''
+      placeHolder : '',
+      showFeedback: true,
+      showSharingOption: true,
+      feedBack: [
+        {
+          question: "What did you like or dislike about this event?",
+          showQuestion: true,
+          rank: 0,
+          icon: ""
+        },{
+          question: "What did you think of the venue?",
+          showQuestion: true,
+          rank: 0,
+          icon: "venuerental"
+        },{
+          question: "How did you like the catering service?",
+          showQuestion: true,
+          rank: 0,
+          icon: "foodandbeverage"
+        },{
+          question: "Did you enjoy the activity?",
+          showQuestion: true,
+          rank: 0,
+          icon: "decor"
+        }
+      ]
     }
   },
   created(){
