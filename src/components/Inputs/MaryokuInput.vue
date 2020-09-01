@@ -11,7 +11,11 @@
       :disabled="disabled"
       @click="onClickEvent"
       ref="input"
+      v-validate="getValidateObject"
+      :data-vv-name="validation"
     />
+    <span class="md-error color-red" v-if="errors.has(validation)">{{ errors.first(validation) }}</span>
+
     <div class="copy_clip"  v-if="inputStyle==='sharing'">
       <button 
         type="button"
@@ -91,6 +95,11 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    validation: String,
+    fieldName: {
+      type: String,
+      default: ""
     }
   },
   beforeDestroy() {
@@ -187,6 +196,16 @@ export default {
     getFormattedDate() {
       if (!this.dateData.selectedDate) return ""
       return moment(new Date(this.dateData.selectedDate)).format("dddd, MMM DD, YYYY")
+    },
+    getValidateObject() {
+      if (this.validation === 'url') {
+        return {url: {require_porotocal: true}}
+      } else {
+        return ""
+      }
+    },
+    getErrorMessage() {
+      return this.errors.first()
     }
   },
   created () {

@@ -53,7 +53,7 @@
       <rsvp v-if="selectedTab == 2" :info="{...campaigns[2], ...campaignInfo}"></rsvp>
       <countdown v-if="selectedTab == 3" :info="{...campaigns[3], ...campaignInfo}"></countdown>
       <feedback v-if="selectedTab == 4" :info="{...campaigns[4], ...campaignInfo}"></feedback>
-      <delivery-settings></delivery-settings>
+      <delivery-settings :defaultSettings="deliverySettings" @change="changeSettings"></delivery-settings>
     </div>
     <div class="campaign-footer">
       <div class="campaign-footer-content d-flex">
@@ -127,6 +127,26 @@
   import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal"
   import Campaign from '@/models/Campaign'
   import CalendarEvent from '@/models/CalendarEvent'
+
+  const defaultSettings = {
+    phone : {
+      selected: false,
+      numberString: "",
+      numberArray: [],
+      excelFileName: "",
+      excelFilePath: "",
+      smsOrWhatsapp: ""
+    },
+    email: {
+      selected: false,
+      subject: "",
+      from: "",
+      addressString: "",
+      addressArray: [],
+      excelFileName: "",
+      excelFilePath: ""
+    }
+  }
   export default {
     components: {
       Tabs,
@@ -145,6 +165,7 @@
           conceptName: '',
           logo: ''
         },
+        deliverySettings: defaultSettings,
         showCommentEditorPanel: false,
         selectedTab: 1,
         showScheduleModal: false,
@@ -152,13 +173,13 @@
           1: { 
             completed: false, 
             name: "SAVING_DATE",
-            tooltip: "Give guests enough time to clear theire schedules, make travel arrangements and generally increase the changes of them atteding"},
+            tooltip: "Give guests enough time to clear their schedules, make travel arrangements and generally increase the chances of them atteding"},
           2: { completed: false, name: "RSVP",
             tooltip: "Try sending your RSVP's a month in advance,  so you'll get the most accurate results" },
           3: { completed: false, name: "COMING_SOON",
-            tooltip: "Try sending your RSVP's a month in advance, so you'll get the most accurate results" },
+            tooltip: "A friendly reminder helps prepare attendees for your upcoming event. Aside from reminding them of the date and time, we also use this email to answer last-minute questions" },
           4: { completed: false, name: "FEEDBACK",
-            tooltip: "Try sending your RSVP's a month in advance, so you'll get the most accurate results"}
+            tooltip: "This touchpoint provides a valuable opportunity to promote other upcoming events, collect attendee feedback, and guide attendees towards the next step you want them to take."}
         }
       }
     },
@@ -177,8 +198,10 @@
         this.saveCampaign(this.campaigns[this.selectedTab].name)
       },
       changeInfo(data) {
-        console.log(data)
         this.campaignInfo[data.field] = data.value
+      },
+      changeSettings(data) {
+        this.deliverySettings = data
       },
       saveCampaign(campaignType){
         new Campaign({

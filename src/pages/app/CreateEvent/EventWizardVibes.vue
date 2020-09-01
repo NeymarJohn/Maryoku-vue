@@ -118,7 +118,8 @@ export default {
           location: this.publicEventData.location,
           locationId: this.publicEventData.locationId,
           inOutDoor: this.publicEventData.inOutDoor,
-          eventSongId: this.publicEventData.eventSongId
+          eventSongId: this.publicEventData.eventSongId,
+          guestType: this.publicEventData.guestType
         })
     },
     createEvent() {  // in case that user is signed
