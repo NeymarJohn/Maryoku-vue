@@ -31,7 +31,7 @@ export default {
           src: `${this.$iconURL}RSVP/Image+81.jpg`,
         },
         {
-          src: `${this.$iconURL}RSVP/Image+82.jpg`,
+          src: `${this.$iconURL}RSVP/shutterstock_444402799_thumb.jpg`,
         },
         {
           src: `${this.$iconURL}RSVP/Image+83.jpg`,

@@ -31,7 +31,7 @@
       <div class="event-info-item-title font-size-22 font-bold-extra">SOLO OR PLUS 1?</div>
       <div
         class="event-info-item-content font-size-20"
-      >{{event.numberOfParticipants > 1 ? "Yes!" : "No!"}}</div>
+      >{{event.guestType}}</div>
     </div>
     <div class="event-info-item">
       <div
@@ -40,7 +40,7 @@
         <img :src="`${$iconURL}RSVP/Group+1279.svg`" />
       </div>
       <div class="event-info-item-title font-size-22 font-bold-extra">Arrival?</div>
-      <div class="event-info-item-content font-size-20">December 25, 2019 8:00 AM</div>
+      <div class="event-info-item-content font-size-20">{{event.timelines && event.timelines[0]?$dateUtil.formatScheduleDay(event.timelines[0].startTime,"MMMM dd, YYYY hh:mm A"):""}}</div>
     </div>
   </div>
 </template>

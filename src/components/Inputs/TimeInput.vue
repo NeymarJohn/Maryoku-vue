@@ -2,9 +2,9 @@
   <div class="time-select-fields">
     <!-- <input type="time" v-model="time" class="without_ampm" @change="updateTime" /> -->
     <div class="time-wrapper">
-      <input type="text" v-model="timeObject.hh" :maxlength="2">
+      <input type="number" v-model="timeObject.hh" :maxlength="2">
       :
-      <input type="text" v-model="timeObject.mm" :maxlength="2">
+      <input type="number" v-model="timeObject.mm" :maxlength="2">
     </div>
     <drop-down class="ampm" >
       <md-button slot="title" class="md-button edit-btn md-simple" data-toggle="dropdown">

@@ -199,7 +199,7 @@ export default {
   }
   .rsvp-event-guid-background {
     position: absolute;
-    opacity: 0.24;
+    opacity: 0.2;
     width: 100%;
     height: 100%;
     left: 0;

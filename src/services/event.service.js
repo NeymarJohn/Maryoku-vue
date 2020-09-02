@@ -62,7 +62,7 @@ class EventService {
         locationId: editingEvent.locationId,
         inOutDoor: editingEvent.inOutDoor,
         eventSongId: editingEvent.eventSongId,
-        guestType: editingEvent.guestType
+        guestType: editingEvent.guestType.name
       })
         .for(calendar)
         .save()

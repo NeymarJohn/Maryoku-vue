@@ -55,10 +55,10 @@ export default {
     getCountDuration() {
       const timeDuration = duration(this.period, 'milliseconds')
       return {
-        days: timeDuration.days(),
-        hours: timeDuration.hours(),
-        mins: timeDuration.minutes(),
-        seconds: timeDuration.seconds()
+        days: ("0" + timeDuration.days()).slice(-2),
+        hours: ("0" + timeDuration.hours()).slice(-2),
+        mins: ("0" + timeDuration.minutes()).slice(-2),
+        seconds: ("0" + timeDuration.seconds()).slice(-2)
       }
     },
   },
