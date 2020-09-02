@@ -8,7 +8,7 @@
       </div>
     </div>
     <div>
-      <md-checkbox v-for="(option, index) in data.options" :key="index" v-model="option.selected" class="option">{{option.name}}</md-checkbox>
+      <md-checkbox v-for="(option, index) in data.options" :key="index" v-model="option.selected" @change="changeState" class="option">{{option.name}}</md-checkbox>
     </div>
   </div> 
 </template>
@@ -20,7 +20,10 @@ export default {
       default: {} 
     },
   },
-  
+  methods: {
+    changeState() {
+    }
+  },
 }
 </script>
 <style lang="scss" scoped>

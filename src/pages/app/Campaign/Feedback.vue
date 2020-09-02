@@ -11,7 +11,7 @@
           <!-- <title-editor :value="info.conceptName" @change="changeTitle" class="mt-40"></title-editor> -->
         </div>
       </div>
-      <maryoku-textarea :placeholder="placeHolder"></maryoku-textarea>
+      <maryoku-textarea :placeholder="placeHolder" v-model="comment"></maryoku-textarea>
     </div>
     <rsvp-venue-carousel></rsvp-venue-carousel>
     <div class="p-50">
@@ -79,6 +79,7 @@ export default {
       placeHolder : '',
       showFeedback: true,
       showSharingOption: true,
+      comment:"",
       feedBack: [
         {
           question: "What did you like or dislike about this event?",
@@ -105,17 +106,17 @@ export default {
     }
   },
   created(){
-    const placeHolder = `
-      Thank you so much for attending! We are so glad you could join us.
-      Please take a moment to help us improve future events by taking a brief survey. 
-      Your feedback is extremely valuable to our ongoing effort to offer great ${event.guestType || 'employee'} experience.
+    this.placeHolder = `Thank you so much for attending! We are so glad you could join us.
+    Please take a moment to help us improve future events by taking a brief survey. 
+    Your feedback is extremely valuable to our ongoing effort to offer great ${event.guestType || 'employee'} experience.
 
-      If you have photos, documents or other event materials that you want to share, you can upload them here.
-      All materials is also available for download from this page.
+    If you have photos, documents or other event materials that you want to share, you can upload them here.
+    All materials is also available for download from this page.
 
-      We look forward to seeing you again soon!
+    We look forward to seeing you again soon!
     `
-    this.placeHolder = placeHolder
+    this.placeHolder = this.placeHolder.trim();
+    this.comment = this.placeHolder.trim().replace(/  /g, '');
   },
   computed: {
     event() {
