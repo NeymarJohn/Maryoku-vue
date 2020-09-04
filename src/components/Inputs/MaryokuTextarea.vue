@@ -75,6 +75,9 @@ export default {
     },
     value: function(newValue) {
       this.content = newValue
+      setTimeout(() => {
+        setResizeListeners(this.$el, ".js-autoresize");
+      },300)
     }
   }
 }
