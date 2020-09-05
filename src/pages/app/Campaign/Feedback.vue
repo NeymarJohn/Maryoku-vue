@@ -108,7 +108,7 @@ export default {
   created(){
     this.placeHolder = `Thank you so much for attending! We are so glad you could join us.
     Please take a moment to help us improve future events by taking a brief survey. 
-    Your feedback is extremely valuable to our ongoing effort to offer great ${this.event.guestType || 'employee'} experience.
+    Your feedback is extremely valuable to our ongoing effort to offer great ${event.guestType || 'employee'} experience.
 
     If you have photos, documents or other event materials that you want to share, you can upload them here.
     All materials is also available for download from this page.
