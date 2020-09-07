@@ -1,11 +1,10 @@
 <template>
   <div class="rsvp-event-timeline md-layout">
-    <div
-      class="md-layout-item md-size-100 md-small-size-100  mb-50 d-flex align-center"
-    > <span class="text-transform-uppercase font-size-30 font-bold-extra">sneaky peak to the agenda</span>
-          <md-switch v-if="canHide" v-model="hide" class="ml-10 md-switch below-label large-switch">
-            <span class="color-black font-regular">Hide Agenda</span>
-          </md-switch>
+    <div class="md-layout-item md-size-100 md-small-size-100 mb-50 d-flex align-center">
+      <span class="text-transform-uppercase font-size-30 font-bold-extra">sneaky peak to the agenda</span>
+      <md-switch v-if="canHide" v-model="hide" class="ml-10 md-switch below-label large-switch">
+        <span class="color-black font-regular">Hide Agenda</span>
+      </md-switch>
     </div>
     <div
       v-for="(schedule, index) in scheduledDays"
@@ -31,77 +30,75 @@ import RsvpTimelineItem from "./RSVPTimelineItem";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import _ from "underscore";
-import RsvpInformationModal from "@/components/Modals/RSVP/InformationModal"
-import SettingReminderModal from "@/components/Modals/RSVP/SettingReminderModal"
-import JoinZoomModal from "@/components/Modals/RSVP/JoinZoomModal"
-import SyncCalendarModal from "@/components/Modals/RSVP/SyncCalendarModal"
-import RsvpVenueCarousel from "./RSVPVenueCarousel"
-import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue"
+import RsvpInformationModal from "@/components/Modals/RSVP/InformationModal";
+import SettingReminderModal from "@/components/Modals/RSVP/SettingReminderModal";
+import JoinZoomModal from "@/components/Modals/RSVP/JoinZoomModal";
+import SyncCalendarModal from "@/components/Modals/RSVP/SyncCalendarModal";
+import RsvpVenueCarousel from "./RSVPVenueCarousel";
+import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
 
 export default {
   components: {
-    RsvpTimelineItem
+    RsvpTimelineItem,
   },
   props: {
     hide: {
       type: Boolean,
-      default: false 
+      default: false,
     },
     canHide: {
-      type:Boolean,
+      type: Boolean,
       default: false,
-    }
+    },
   },
   data() {
-    return {
-    }
+    return {};
   },
-  created() {
-  },
+  created() {},
   computed: {
     event() {
-      return this.$store.state.event.eventData
+      return this.$store.state.event.eventData;
     },
     scheduledDays() {
       var timelines = {};
       let scheduledDays = [];
 
-        // define timelines
-        if (this.event.timelineItems) {
-          this.event.timelineItems.forEach((item) => {
-            item.isItemLoading = false;
-            if (!timelines[item.plannedDate]) timelines[item.plannedDate] = [];
-            item.isItemLoading = false;
-            timelines[item.plannedDate].push(item);
+      // define timelines
+      if (this.event.timelineItems) {
+        this.event.timelineItems.forEach((item) => {
+          item.isItemLoading = false;
+          if (!timelines[item.plannedDate]) timelines[item.plannedDate] = [];
+          item.isItemLoading = false;
+          timelines[item.plannedDate].push(item);
+        });
+        console.log(timelines);
+        if (Object.keys(timelines).length > 0) {
+          Object.keys(timelines).forEach((itemDay, index) => {
+            scheduledDays.push({
+              itemDay: parseInt(itemDay),
+              isEditable: false,
+              items: timelines[itemDay],
+            });
           });
-          console.log(timelines);
-          if (Object.keys(timelines).length > 0) {
-            Object.keys(timelines).forEach((itemDay, index) => {
-              scheduledDays.push({
-                itemDay: parseInt(itemDay),
-                isEditable: false,
-                items: timelines[itemDay],
-              });
-            });
-            scheduledDays = _.sortBy(scheduledDays, function (item) {
-              return item.itemDay;
-            });
-          }
+          scheduledDays = _.sortBy(scheduledDays, function (item) {
+            return item.itemDay;
+          });
         }
-      return scheduledDays
+      }
+      return scheduledDays;
     },
-  }
-}
+  },
+};
 </script>
 <style lang="scss" scoped>
-  .rsvp-event-timeline {
-    &-day {
-      line-height: 1.5em;
-      width: 100%;
-      background-color: #3a3838;
-      text-align: center;
-      color: white;
-      border-radius: 2px;
-    }
+.rsvp-event-timeline {
+  &-day {
+    line-height: 1.5em;
+    width: 100%;
+    background-color: #3a3838;
+    text-align: center;
+    color: white;
+    border-radius: 2px;
   }
+}
 </style>
