@@ -93,14 +93,14 @@
           </md-button>
         </div>
         <div class="d-flex align-center" v-if="!campaigns[selectedTab].completed">
-          <md-button class="md-simple md-button md-black maryoku-btn">
+          <md-button class="md-simple md-button md-black maryoku-btn" @click="sendPreviewEmail">
             <span class="font-size-16 text-transform-capitalize">
               <img class="mr-20" :src="`${$iconURL}Campaign/Group 1855.svg`" />
               Send Me A Preview
             </span>
           </md-button>
           <span class="seperator"></span>
-          <md-button class="md-simple md-button md-black maryoku-btn">
+          <md-button class="md-simple md-button md-black maryoku-btn" @click="reverseSetting">
             <span class="font-size-16 text-transform-capitalize">
               <img class="mr-20" :src="`${$iconURL}Campaign/Group 8871.svg`" />Revert to original
             </span>
@@ -186,6 +186,7 @@ import DeliverySettings from "./DeliverySettings";
 import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal";
 import Campaign from "@/models/Campaign";
 import CalendarEvent from "@/models/CalendarEvent";
+import swal from "sweetalert2";
 
 const defaultSettings = {
   phone: {
@@ -224,7 +225,7 @@ export default {
         conceptName: "",
         logo: "",
       },
-      deliverySettings: defaultSettings,
+      deliverySettings: { ...defaultSettings },
       showCommentEditorPanel: false,
       selectedTab: 1,
       showScheduleModal: false,
@@ -314,10 +315,59 @@ export default {
         this.campaigns[currentCampaignIndex]
       );
     },
+    reverseSetting() {
+      console.log(defaultSettings);
+      this.deliverySettings = {
+        phone: {
+          selected: false,
+          numberString: "",
+          numberArray: [],
+          excelFileName: "",
+          excelFilePath: "",
+          smsOrWhatsapp: "",
+        },
+        email: {
+          selected: false,
+          subject: "",
+          from: "",
+          addressString: "",
+          addressArray: [],
+          excelFileName: "",
+          excelFilePath: "",
+        },
+      };
+      this.campaignInfo = {
+        conceptName: this.event.concept.name,
+        logo: "",
+      };
+    },
+    sendPreviewEmail() {
+      this.$http
+        .post(`${process.env.SERVER_URL}/1/campaigns/preview`, {
+          toEmail: this.user.email,
+          toUserName: this.user.name,
+          fromUserName: this.user.name,
+          eventName: this.event.title,
+          plannerName: this.user.name,
+          companyName: "maryoku",
+          eventUrl: `http://jeff-test2.local.maryoku.com:3000/#/rsvp/${this.event.id}`,
+        })
+        .then(() => {
+          swal({
+            title: `You will receive a preview campaign email soon!`,
+            buttonsStyling: false,
+            type: "success",
+            confirmButtonClass: "md-button md-success",
+          });
+        });
+    },
   },
   computed: {
     event() {
       return this.$store.state.event.eventData;
+    },
+    user() {
+      return this.$store.state.auth.user;
     },
   },
   created() {

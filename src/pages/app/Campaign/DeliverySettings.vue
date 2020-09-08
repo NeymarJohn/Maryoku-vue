@@ -325,6 +325,12 @@ export default {
       },
       deep: true,
     },
+    defaultSettings: {
+      handler(newValue) {
+        this.settingData = newValue
+      },
+      deep:true
+    }
   },
 };
 </script>
