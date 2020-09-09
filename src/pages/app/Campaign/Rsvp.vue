@@ -136,7 +136,7 @@ export default {
     }
   },
   created () {
-    this.coverImage = this.event.concept.images[1].url;
+    this.coverImage = this.event.concept.images[0].url;
   },
   computed: {
     event() {

@@ -239,6 +239,9 @@ input {
 .p-5 {
     padding: 5px;
 }
+.p-10 {
+    padding: 10px;
+}
 .p-15 {
     padding: 15px;
 }
@@ -455,4 +458,16 @@ hr {
 }
 .text-underline {
     text-decoration: underline;
+}
+.d-none {
+    display: none;
+}
+.transparent {
+    opacity: 0;
+}
+.page-icon {
+    width: 30px;
+}
+.label-icon {
+    width: 20px !important;
 }

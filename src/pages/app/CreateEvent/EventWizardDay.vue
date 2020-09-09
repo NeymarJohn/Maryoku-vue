@@ -39,22 +39,22 @@ import moment from "moment";
 export default {
   components: {
     WizardStatusBar,
-    FunctionalCalendar
+    FunctionalCalendar,
   },
   methods: {
     ...mapMutations("PublicEventPlanner", [
       "setEventProperty",
-      "setCurrentStep"
+      "setCurrentStep",
     ]),
     goToNext() {
       if (this.dateData.selectedDate) {
         this.setEventProperty({
           key: "eventStartMillis",
-          actualValue: new Date(this.dateData.selectedDate).getTime()
+          actualValue: new Date(this.dateData.selectedDate).getTime(),
         });
         this.setEventProperty({
           key: "eventEndMillis",
-          actualValue: new Date(this.dateData.selectedDate).getTime()
+          actualValue: new Date(this.dateData.selectedDate).getTime(),
         });
         this.setEventProperty({ key: "dateData", actualValue: this.dateData });
         this.$router.push({ path: `/event-wizard-flexibility` });
@@ -77,7 +77,7 @@ export default {
       this.cerrors = {};
       this.validating = true;
 
-      this.$validator.validateAll().then(isValid => {
+      this.$validator.validateAll().then((isValid) => {
         if (isValid) {
           // this.$parent.isLoading = true;
 
@@ -102,9 +102,9 @@ export default {
         icon: "warning",
         horizontalAlign: "center",
         verticalAlign: "top",
-        type: "danger"
+        type: "danger",
       });
-    }
+    },
   },
   data() {
     return {
@@ -112,14 +112,14 @@ export default {
         currentDate: new Date(),
         dateRange: {
           start: { date: false, dateTime: false, hour: "00", mintue: "00" },
-          end: { date: false, dateTime: false, hour: "00", mintue: "00" }
+          end: { date: false, dateTime: false, hour: "00", mintue: "00" },
         },
         selectedDate: new Date(),
         selectedDatesItem: "",
         selectedHour: "00",
         selectedMinute: "00",
-        selectedDates: []
-      }
+        selectedDates: [],
+      },
     };
   },
   created() {
@@ -138,13 +138,13 @@ export default {
       return moment(new Date(this.dateData.selectedDate)).format(
         "dddd, MMM DD, YYYY"
       );
-    }
+    },
   },
   watch: {
     dateData(newValue, oldValue) {
       console.log(newValue);
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss">

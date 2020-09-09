@@ -1,10 +1,14 @@
 <template>
   <div class="rsvp-timeline">
-    <img  class="item-icon" 
-    :src="`${$iconURL}Timeline-New/${timeline.icon.toLowerCase()}-circle.svg`">
+    <img
+      class="item-icon"
+      :src="`${$iconURL}Timeline-New/${timeline.icon.toLowerCase()}-circle.svg`"
+    />
     <div class="rsvp-timeline-content" :style="`border-color:${timeline.color}`">
       <div>
-        <span class="item-time">{{$dateUtil.formatScheduleTime(timeline.startTime)}} - {{$dateUtil.formatScheduleTime(timeline.endTime)}}</span>
+        <span
+          class="item-time"
+        >{{$dateUtil.formatScheduleTime(timeline.startTime)}} - {{$dateUtil.formatScheduleTime(timeline.endTime)}}</span>
         <span class="item-title">{{timeline.title}}</span>
       </div>
     </div>
@@ -16,19 +20,19 @@ export default {
   props: {
     timeline: {
       type: [Object, Array],
-      default: ()=>{} 
+      default: () => {},
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
 .rsvp-timeline {
-  padding-left: 80px ;
+  padding-left: 80px;
   position: relative;
   margin: 40px 0px;
   &:not(:last-child):after {
-    content: '';
+    content: "";
     position: absolute;
     height: 100%;
     border-left: 1px dashed #707070;
@@ -54,10 +58,10 @@ export default {
     font-size: 20px;
     border-radius: 100px;
     margin-right: 0.7em;
-    font-family: 'Manrope-ExtraBold',sans-serif;
+    font-family: "Manrope-ExtraBold", sans-serif;
   }
   .item-title {
-    font-family: 'Manrope-ExtraBold',sans-serif;
+    font-family: "Manrope-ExtraBold", sans-serif;
     font-size: 20px;
     opacity: 0.87;
     color: #818080;

@@ -1,7 +1,11 @@
 <template>
   <div class="maryoku_input">
-    <md-autocomplete v-model="selectedLocation" :md-options="locations" class="location" :class="{active: selectedLocation}">
-    </md-autocomplete>
+    <md-autocomplete
+      v-model="selectedLocation"
+      :md-options="locations"
+      class="location"
+      :class="{active: selectedLocation}"
+    ></md-autocomplete>
   </div>
 </template>
 <script>
@@ -24,68 +28,70 @@ export default {
     imgStyle: String,
     inputStyle: String,
   },
-  data () {
+  data() {
     return {
-      selectedLocation:this.value,
+      selectedLocation: this.value,
       addressSearch: null,
       locations: [],
       places: [],
       locationService: null,
       geocoder: null,
       results: [],
-    }
+    };
   },
   methods: {
-    handleInput (e) {
-      this.$emit('input', this.content)
+    handleInput(e) {
+      this.$emit("input", this.content);
     },
     addressSuggestions(predictions, status) {
-      console.log(predictions)
+      console.log(predictions);
       if (status != google.maps.places.PlacesServiceStatus.OK) {
         console.log(status);
         return;
       }
       this.locations = [];
-      predictions.forEach(item => {
+      predictions.forEach((item) => {
         this.locations.push(item.description);
-        this.places.push({id: item.place_id, name: item.description});
+        this.places.push({ id: item.place_id, name: item.description });
       });
-      console.log("locations", this.locations)
+      console.log("locations", this.locations);
     },
   },
   computed: {
-    getClass: function(){
-      return `${this.inputStyle} ${this.value?"active":""}`
-    }
+    getClass: function () {
+      return `${this.inputStyle} ${this.value ? "active" : ""}`;
+    },
   },
-  mounted () {
+  mounted() {
     this.locationService = new google.maps.places.AutocompleteService();
-    console.log(this.locationService)
+    console.log(this.locationService);
     this.geocoder = new google.maps.Geocoder();
-    console.log(this.geocoder)
+    console.log(this.geocoder);
   },
   watch: {
-    content: function(newValue) {
-      this.$emit('input', this.content)
+    content: function (newValue) {
+      this.$emit("input", this.content);
     },
-    selectedLocation: function(newValue) {
-      this.$emit('input', newValue)
-      const locationObject = this.places.find(item=>item.name === newValue)
-      this.$emit('change', locationObject)
+    selectedLocation: function (newValue) {
       if (newValue.length < 3) {
         // this.locations = [];
         return;
       }
+      this.$emit("input", newValue);
+      const locationObject = this.places.find((item) => item.name === newValue);
+      console.log(locationObject);
+      this.$emit("change", locationObject);
+
       this.locationService.getPlacePredictions(
         {
           input: newValue,
-          types: ['geocode'],
+          types: ["geocode"],
           // componentRestrictions: { country: ['us', 'ca'] },
         },
-        this.addressSuggestions,
+        this.addressSuggestions
       );
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss">
