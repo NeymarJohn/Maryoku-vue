@@ -1,20 +1,14 @@
 <template>
   <div class="white-card coundown-campaign">
     <div class="p-50">
-      <div
-        class="font-size-30 font-bold-extra text-transform-capitalize"
-      >send your guests a fun countdown</div>
+      <div class="font-size-30 font-bold-extra text-transform-capitalize">
+        send your guests a fun countdown
+      </div>
       <div class="countdown-cover-image mt-50">
-        <img :src="coverImage" />
+        <img :src="`${$iconURL}Campaign/Mask Group 129.png`">
         <div class="countdown-guests d-flex align-center p-20">
-          <span
-            class="font-size-30 font-bold-extra mr-10"
-          >{{event.numberOfParticipants | withComma}}</span>
-          <span
-            class="font-size-22 font-bold color-dark-gray"
-            v-if="isLaunched"
-          >Guests are Attending</span>
-          <span class="font-size-22 font-bold color-dark-gray" v-if="!isLaunched">Guests are Invited</span>
+          <span class="font-size-30 font-bold-extra mr-10">{{event.numberOfParticipants}}</span>
+          <span class="font-size-22 font-bold color-dark-gray">Guests are Attending</span>
           <hide-switch class="ml-20" v-model="showLogo" label="coming"></hide-switch>
         </div>
         <div class="d-flex countdown-time-panel align-end justify-content-center">
@@ -23,34 +17,26 @@
         </div>
       </div>
       <!-- <div class="font-size-50 font-bold-extra text-center line-height-1 mb-60">{{info.conceptName}}</div> -->
-      <title-editor
-        :value="info.conceptName"
-        @change="changeTitle"
-        class="font-size-50 font-bold-extra text-center line-height-1 mb-60"
-      ></title-editor>
+      <title-editor :value="info.conceptName" @change="changeTitle" class="font-size-50 font-bold-extra text-center line-height-1 mb-60"></title-editor>
 
-      <hr />
+      <hr/>
       <div class="d-flex mt-60">
-        <maryoku-textarea
-          :placeholder="placeholder"
-          class="mr-60 flex-1"
-          style="padding:40px 60px 40px 40px"
-        ></maryoku-textarea>
+        <maryoku-textarea :placeholder="placeholder" class="mr-60 flex-1" style="padding:40px 60px 40px 40px"></maryoku-textarea>
         <rsvp-event-info-panel class="flex-1" :event="event"></rsvp-event-info-panel>
       </div>
-      <div class="mt-60 logo-section d-flex align-center justify-content-center">
-        <img :src="info.logo" width="180" />
+      <div class=" mt-60 logo-section d-flex align-center justify-content-center">
+        <img :src="info.logo" width="180"/>
         <hide-switch class="ml-20" v-model="showLogo" label="logo"></hide-switch>
       </div>
     </div>
   </div>
 </template>
 <script>
-import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
-import CountdownTime from "./components/CountdownTime";
-import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel";
-import TitleEditor from "./components/TitleEditor";
-import HideSwitch from "@/components/HideSwitch";
+import MaryokuTextarea from '@/components/Inputs/MaryokuTextarea'
+import CountdownTime from './components/CountdownTime';
+import RsvpEventInfoPanel from '@/pages/app/RSVP/RSVPEventInfoPanel'
+import TitleEditor from './components/TitleEditor'
+import HideSwitch from '@/components/HideSwitch'
 
 export default {
   components: {
@@ -58,12 +44,12 @@ export default {
     RsvpEventInfoPanel,
     MaryokuTextarea,
     TitleEditor,
-    HideSwitch,
+    HideSwitch
   },
   props: {
     info: {
       type: Object,
-      default: {},
+      default: {}
     },
   },
   data() {
@@ -71,31 +57,28 @@ export default {
       showGuests: true,
       showCountdown: true,
       showLogo: true,
-      coverImage: "",
-      isLaunched: false,
       placeholder: `It's now time to get super exited! The event of the year is almost here( and it even rhymes). What to expect?
         out of this world live shows
         amazing food
         refreshing cocktail bar
         best employee award
-        see u soon`,
-    };
-  },
-  created() {
-    this.coverImage = this.event.concept.images[1].url;
+        see u soon`
+    }
   },
   computed: {
     event() {
       console.log(this.$store.state.event.eventData);
       return this.$store.state.event.eventData;
     },
+   
   },
   methods: {
     changeTitle(newTitle) {
-      this.$emit("changeInfo", { field: "conceptName", value: newTitle });
-    },
+      this.$emit("changeInfo", {field: "conceptName", value: newTitle})
+    } 
   },
-};
+  
+}
 </script>
 <style lang="scss" scoped>
 .coundown-campaign {
@@ -117,7 +100,7 @@ export default {
     position: absolute;
     right: 50px;
     top: 50px;
-    background-color: #fff;
+    background-color: #FFF;
     border-radius: 3px;
   }
   .logo-section {

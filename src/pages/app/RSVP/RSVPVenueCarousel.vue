@@ -8,25 +8,17 @@
     :number="2"
   >
     <div class="carousel-item" v-for="(item,index) in images" :key="index" >
-      <img :src="item.src" class="carousel-image"/>
+      <img :src="item.src" />
       <div class="carousel-item-actions">
-        <div class="color-white mb-20 font-bold font-size-16 button" @click="deleteImage(index)"><img :src="`${$iconURL}RSVP/Group 4854.svg`" class="mr-10"/> Delete</div>
-        <div class="color-white font-bold font-size-16 button"  @click="replaceImage(index)"><img :src="`${$iconURL}RSVP/Group 2344.svg`" class="mr-10"/> Replace</div>
+        <div class="color-white mb-20 font-bold font-size-16 button"><img :src="`${$iconURL}RSVP/Group 4854.svg`" class="mr-10"/> Delete</div>
+        <div class="color-white font-bold font-size-16 button"><img :src="`${$iconURL}RSVP/Group 2344.svg`" class="mr-10"/> Replace</div>
       </div>
-      <input
-              style="display: none"
-              id="carousel-file"
-              name="attachment"
-              type="file"
-              multiple="multiple"
-              @change="onFileChange"
-            />
+      
     </div>
   </carousel>
 </template>
 <script>
 import carousel from "vue-owl-carousel";
-import { getBase64 } from '@/utils/file.util'
 
 export default {
   components: {
@@ -47,22 +39,8 @@ export default {
         {
           src: `${this.$iconURL}RSVP/Image+84.jpg`,
         },
-      ],
-      selectedIndex: 0,
+      ]
     }
-  },
-  methods: {
-    deleteImage(index) {
-      this.images.splice(index, 1);
-    },
-    replaceImage(index) {
-      this.selectedIndex = index
-      document.getElementById("carousel-file").click();
-    },
-    async onFileChange(event) {
-      const image = await getBase64(event.target.files[0])
-      this.images[this.selectedIndex].src = image
-    },
   },
 }
 </script>
@@ -74,12 +52,8 @@ export default {
     border-radius: 3px;
     overflow: hidden;
     position: relative;
-    .carousel-image {
-      filter: grayscale(1)
-    }
     .carousel-item-actions {
       display: none;
-      z-index: 3;
     }
     
     &:hover {
@@ -109,7 +83,6 @@ export default {
         background-color: #050505;
         top: 0;
         left: 0;
-        z-index: 2;
       }
     }
     

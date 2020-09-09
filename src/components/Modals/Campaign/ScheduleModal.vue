@@ -25,29 +25,31 @@
         <div class="md-layout justify-content-center width-100">
           <div
             class="md-layout-item md-size-100 margin-bottom d-flex justify-content-between font-size-22 align-center mt-10"
-            :class="{'font-bold':selectedOption=='tomorrow'}"
-          >
-            <div class="d-flex align-center">
-              <md-checkbox class="md-checkbox-circle" v-model="selectedOption" value="tomorrow"></md-checkbox>
-              <span class="font-size-22">Tomorrow morning</span>
-            </div>
-            <div>
-              {{$dateUtil.formatScheduleDay(scheduleSettings.tomorrow.calcTime, "MMM D, h:mm A")}}
-              <img
-                :src="`${$iconURL}Campaign/Group 9087.svg`"
-                class="ml-20"
-              />
-            </div>
-          </div>
-          <div
-            v-if="currentCampaign.name!='SAVING_DATE'"
-            class="md-layout-item md-size-100 margin-bottom d-flex justify-content-between font-size-22 align-center mt-30"
-            :class="{'font-bold':selectedOption=='previousCampaign'}"
+            :class="{'font-bold':scheduleDate=='tomorrow'}"
           >
             <div class="d-flex align-center">
               <md-checkbox
                 class="md-checkbox-circle"
-                v-model="selectedOption"
+                v-model="scheduleDate"
+                value="tomorrow"
+                @change="calculateTomorrowMorning"
+              ></md-checkbox>
+              <span class="font-size-22">Tomorrow morning</span>
+            </div>
+            <div>
+              {{$dateUtil.formatScheduleDay(scheduleSettings.tomorrow.calcTime, "MMM D, h:mm A")}}
+              <img :src="`${$iconURL}Campaign/Group 9087.svg`" class="ml-20" />
+            </div>
+          </div>
+          <div
+            v-if="data.name!='SAVE_DATE'"
+            class="md-layout-item md-size-100 margin-bottom d-flex justify-content-between font-size-22 align-center mt-30"
+            :class="{'font-bold':scheduleDate=='previousCampaign'}"
+          >
+            <div class="d-flex align-center">
+              <md-checkbox
+                class="md-checkbox-circle"
+                v-model="scheduleDate"
                 value="previousCampaign"
               ></md-checkbox>
               <input
@@ -60,18 +62,15 @@
             </div>
             <div v-if="scheduleSettings.previousCampaign.calcTime">
               {{$dateUtil.formatScheduleDay(scheduleSettings.previousCampaign.calcTime, "MMM D, h:mm A")}}
-              <img
-                :src="`${$iconURL}Campaign/Group 9087.svg`"
-                class="ml-20"
-              />
+              <img :src="`${$iconURL}Campaign/Group 9087.svg`" class="ml-20" />
             </div>
           </div>
           <div
             class="md-layout-item md-size-100 margin-bottom d-flex justify-content-between font-size-22 align-center mt-30 mb-40"
-            :class="{'font-bold':selectedOption=='beforeEvent'}"
+            :class="{'font-bold':scheduleDate=='beforeEvent'}"
           >
             <div class="d-flex align-center">
-              <md-checkbox class="md-checkbox-circle" v-model="selectedOption" value="beforeEvent"></md-checkbox>
+              <md-checkbox class="md-checkbox-circle" v-model="scheduleDate" value="beforeEvent"></md-checkbox>
               <input
                 v-model="scheduleSettings.beforeEvent.days"
                 min="0"
@@ -81,20 +80,21 @@
               />Days before the event
             </div>
             <div>
+              <template v-if="scheduleSettings.beforeEvent.calcTime<new Date().getTime()">
+                <span class="color-red">{{$dateUtil.formatScheduleDay(scheduleSettings.beforeEvent.calcTime, "MMM D, h:mm A")}}</span>
+                <span class="ml-20 mt-10">
+                  <img :src="`${$iconURL}Campaign/Group 9087.svg`" />
+                  <md-tooltip>
+                    <div
+                      class="font-size-14 input-tooltip"
+                    >Unless we're counting backwards, there are only {{remainingDate}} days between now and the event...</div>
+                  </md-tooltip>
+                </span>
+              </template>
               <span
-                :class="{'color-red': !isValideDate}"
+                v-else
               >{{$dateUtil.formatScheduleDay(scheduleSettings.beforeEvent.calcTime, "MMM D, h:mm A")}}</span>
-              <span v-if="!isValideDate" class="ml-20 mt-10">
-                <img :src="`${$iconURL}Campaign/Group 9087.svg`" />
-                <md-tooltip>
-                  <div
-                    class="font-size-14 input-tooltip"
-                  >Unless we're counting backwards, there are only {{remainingDate}} days between now and the event...</div>
-                </md-tooltip>
-              </span>
-              <span v-if="isValideDate" class="ml-20 mt-10 transparent">
-                <img :src="`${$iconURL}Campaign/Group 9087.svg`" />
-              </span>
+              
             </div>
           </div>
         </div>
@@ -114,7 +114,7 @@
             </md-button>
           </div>
           <div
-            :class="{'font-bold':selectedOption=='calendar'}"
+            :class="{'font-bold':scheduleDate=='calendar'}"
             v-if="dateData.selectedDate"
           >{{$dateUtil.formatScheduleDay(this.scheduleSettings.calendar.calcTime, 'MMMM DD, YYYY hh:mm A')}}</div>
         </div>
@@ -148,11 +148,7 @@
       <md-button class="md-default md-simple md-black" @click="close">
         <span class="color-black">Cancel</span>
       </md-button>
-      <md-button
-        class="md-red add-category-btn mr-15"
-        @click="saveSchedule"
-        :disabled="!canSave"
-      >Save</md-button>
+      <md-button class="md-red add-category-btn mr-15" @click="saveSchedule" :disabled="!canSave">Save</md-button>
     </template>
   </modal>
 </template>
@@ -168,28 +164,21 @@ export default {
     TimeInput,
   },
   props: {
-    currentCampaign: {
+    data: {
       type: Object,
       default: () => ({}),
-    },
-    campaigns: {
-      type: Object,
-      default: () => ({}),
-    },
-    currentCampaignIndex: {
-      type: Number,
-      default: 1,
     },
   },
   data() {
     return {
       showCalendar: false,
+      scheduleTime: new Date().getTime(),
       dateData: {},
       startTime: "",
       daysBeforeEvent: 1,
       calendarTime: "",
       timezone: {},
-      selectedOption: "",
+      scheduleDate: "",
       scheduleSettings: {
         tomorrow: {
           calcTime: moment(new Date())
@@ -205,19 +194,6 @@ export default {
     };
   },
   created() {
-    console.log("campaign", this.campaign);
-
-    //set previous settings
-    if (this.campaigns[this.currentCampaignIndex].scheduleSettings) {
-      this.scheduleSettings = this.campaigns[
-        this.currentCampaignIndex
-      ].scheduleSettings;
-      this.selectedOption = this.campaigns[
-        this.currentCampaignIndex
-      ].selectedOption;
-    }
-
-    // set before event
     this.scheduleSettings.beforeEvent.calcTime = moment(
       this.event.eventStartMillis
     )
@@ -225,20 +201,6 @@ export default {
       .hours(9)
       .minutes(0)
       .valueOf();
-
-    // set after previous campaign
-    const previouseCampaignTime = this.campaigns[this.currentCampaignIndex - 1];
-    console.log(previouseCampaignTime);
-    if (previouseCampaignTime && previouseCampaignTime.scheduleTime) {
-      this.scheduleSettings.previousCampaign.calcTime = moment(
-        previouseCampaignTime.scheduleTime
-      )
-        .add(1, "weeks")
-        .hours(9)
-        .minutes(0)
-        .valueOf();
-    }
-
     this.$dateUtil
       .getTimeZoneNameFromPlaceId(this.event.locationId)
       .then((timezone) => {
@@ -256,16 +218,18 @@ export default {
           `${this.dateData.selectedDate} ${this.startTime}`
         ).valueOf();
         this.showCalendar = false;
-        this.selectedOption = "calendar";
+        this.scheduleDate = "calendar";
       } else {
-        this.$emit("changeTime", {
-          currentCampaignIndex: this.currentCampaignIndex,
-          scheduleTime: this.scheduleSettings[this.selectedOption].calcTime,
-          scheduleSettings: this.scheduleSettings,
-          selectedOption: this.selectedOption,
-        });
+        this.$emit("changeTime", this.scheduleTime);
         this.close();
       }
+    },
+    calculateTomorrowMorning() {
+      this.scheduleTime = moment(new Date())
+        .add(1, "days")
+        .hours(9)
+        .minutes(0)
+        .valueOf();
     },
   },
   watch: {
@@ -276,18 +240,7 @@ export default {
           .hours(9)
           .minutes(0)
           .valueOf();
-        const previouseCampaignTime = this.campaigns[
-          this.currentCampaignIndex - 1
-        ];
-        if (previouseCampaignTime && previouseCampaignTime.scheduleTime) {
-          newSettings.previousCampaign.calcTime = moment(
-            new Date(previouseCampaignTime.scheduleTime)
-          )
-            .add(newSettings.previousCampaign.weeks, "weeks")
-            .hours(9)
-            .minutes(0)
-            .valueOf();
-        }
+        // newSettings.previousCampaign.calcTime = moment(this.event.eventStartMillis).subtract(newSettings.previousCampaign.weeks, 'weeks').hours(9).minutes(0).valueOf()
       },
       deep: true,
     },
@@ -304,22 +257,16 @@ export default {
     canSave() {
       if (this.showCalendar) {
         if (!this.dateData.selectedDate || !this.startTime) {
-          return false;
+          return false
         }
-        return true;
-      } else if (this.selectedOption) {
-        if (
-          this.scheduleSettings[this.selectedOption].calcTime <
-          new Date().getTime()
-        ) {
-          return false;
+        return true
+      } else if(this.scheduleDate){
+        if (this.scheduleSettings[this.scheduleDate].calcTime < new Date().getTime()) {
+          return false
         }
-        return true;
+        return true
       }
-    },
-    isValideDate() {
-      return this.scheduleSettings.beforeEvent.calcTime > new Date().getTime();
-    },
+    }
   },
 };
 </script>
