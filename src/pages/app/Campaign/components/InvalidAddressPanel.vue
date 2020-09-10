@@ -1,36 +1,33 @@
 <template>
   <div class="invalid-address-panel d-flex">
-    <img :src="`${$iconURL}Campaign/enter-gray.svg`" class="mr-20" />
+    <img :src="`${$iconURL}Campaign/enter-gray.svg`" class="mr-20"/>
     <div class="invalid-address-panel-content flex-1">
       <div class="invalid-address-panel-header">
-        <img :src="`${$iconURL}Campaign/warning-white.svg`" class="mr-10" />
-        <span class="font-size-14 font-bold" v-if="type=='phone'">Valid format is ###-##-######:</span>
-        <span class="font-size-14 font-bold" v-if="type=='email'">Valid format is example@mail.com:</span>
+        <img :src="`${$iconURL}Campaign/warning-white.svg`" class="mr-10"/>
+        <span class="font-size-14 font-bold">Problem with these addresses:</span>
       </div>
-      <div class="invalid-address-panel-message">{{content}}</div>
+      <div class="invalid-address-panel-message">
+        {{content}}
+      </div>
     </div>
-  </div>
+  </div>  
 </template>
 <script>
 export default {
   props: {
     content: {
       type: String,
-      default: '',
-    },
-    type: {
-      type: String,
-      default: '',
+      default: ""
     },
   },
-};
+}
 </script>
 <style lang="scss" scoped>
-.invalid-address-panel {
+.invalid-address-panel{
   align-items: flex-start;
   width: 100%;
   &-content {
-    background-color: #ffe1e9;
+    background-color: #FFE1E9;
     border-radius: 1px;
     padding: 25px;
     font-size: 14px;
