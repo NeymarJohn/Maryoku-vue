@@ -4,7 +4,8 @@
     <div class="invalid-address-panel-content flex-1">
       <div class="invalid-address-panel-header">
         <img :src="`${$iconURL}Campaign/warning-white.svg`" class="mr-10"/>
-        <span class="font-size-14 font-bold">Problem with these addresses:</span>
+        <span class="font-size-14 font-bold" v-if="type=='phone'">Valid format is ###-##-######:</span>
+        <span class="font-size-14 font-bold" v-if="type=='email'">Valid format is example@mail.com:</span>
       </div>
       <div class="invalid-address-panel-message">
         {{content}}
@@ -19,6 +20,10 @@ export default {
       type: String,
       default: ""
     },
+    type: {
+      type: String,
+      default: ""
+    }
   },
 }
 </script>

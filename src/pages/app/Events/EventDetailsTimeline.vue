@@ -1,33 +1,34 @@
 <template>
   <div class="md-layout event-details-timeline timeline-section with-progress-bar">
     <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
-    <div class="event-page-header md-layout-item md-size-100">
-      <div class="header-name">
-        <div class="font-size-30 font-bold text-transform-capitalize mb-20">
-          <img :src="`${newTimeLineIconsURL}timeline-title.svg`" class="page-icon" />
-          CREATE TIMLINE
-        </div>
-        <div class="font-size-16">
-          <b>Things are warming up!</b> It’s time to create your event timeline!
-          <br />We helped you with the basic structure
-        </div>
-        <div class="mt-10">
-          <img :src="`${$iconURL}Event%20Page/light.svg`" class="label-icon" />
-          Our smart system has created for you timeline drawn from previous events
-        </div>
+    <div class="event-page-header md-layout-item md-size-100 with-bg">
+      <div class="header-main-actions">
+        <md-button class="md-default md-maryoku md-back md-simple">
+          <md-icon style="color:#000; font-size:30px">arrow_back</md-icon>Back
+        </md-button>
+        <md-button class="md-rose md-maryoku" @click="saveTimeline">Save Changes</md-button>
+        <md-button class="md-default md-simple">back to first version</md-button>
+        <md-button class="md-default md-simple with-left-border">start from scratch</md-button>
       </div>
       <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
     </div>
 
     <div
-      class="md-layout-item md-xlarge-size-65 md-large-size-65 md-small-size-50 time-line-section mr-auto mt-20"
+      class="md-layout-item md-xlarge-size-65 md-large-size-65 md-small-size-50 time-line-section mr-auto"
       ref="content"
     >
-      <button
-        v-scroll-to="'#timeline-edit-card'"
-        ref="scrollBtn"
-        style="display:none"
-      >Scroll to the editing card</button>
+      <!--<md-button name="event-planner-tab-timeline-preview" class="event-planner-tab-timeline-preview md-info md-sm preview-event" @click="previewEvent">
+              Preview
+      </md-button>-->
+
+      <button v-scroll-to="'#timeline-edit-card'"  ref="scrollBtn" style="display:none">
+        Scroll to the editing card
+      </button>
+
+      <div class="timeline-section-title">
+        <img :src="`${newTimeLineIconsURL}timeline-title.svg`" />Timeline
+      </div>
+
       <div class="timeline-items-list">
         <div
           class="timeline-items-list__item"
@@ -110,7 +111,7 @@
                       <div class="form-group">
                         <label>
                           <!-- <img class="time-line-blocks_icon"  :src="`${newTimeLineIconsURL}${item.icon.toLowerCase()}-circle.svg`"> -->
-                          Start At
+                          Start At 
                         </label>
                         <time-input v-model="item.startTime" :h24="false" displayFormat="hh:mm"></time-input>
                       </div>
@@ -125,7 +126,7 @@
                       <div class="form-group">
                         <label>
                           <!-- <img class="time-line-blocks_icon"  :src="`${newTimeLineIconsURL}${item.icon.toLowerCase()}-circle.svg`"> -->
-                          Finishes At
+                          Finishes At 
                         </label>
                         <time-input v-model="item.endTime" :h24="false" displayFormat="hh:mm"></time-input>
                       </div>
@@ -155,7 +156,7 @@
                           placeholder="Type name or address "
                         />
                       </div>
-                    </div>-->
+                    </div> -->
                     <div class="md-layout-item md-size-100 margin-bottom">
                       <div class="form-group">
                         <label>Location</label>
@@ -325,39 +326,56 @@
                   </md-card-content>
                 </md-card>
               </div>
+
+              <!--                    <div class="time-line-blocks_selected-items_item" v-if="!timelineItems.length">-->
+              <!--                        <div class="drag-here">-->
+              <!--                            <p>-->
+              <!--                                <img src="http://static.maryoku.com/storage/img/drag_drop.png" alt="drag and drop"-->
+              <!--                                     style="width: 62px;"/>-->
+              <!--                            </p>-->
+              <!--                            <p style="font-style: italic; font-size: 18px;">-->
+              <!--                                Start building your event timeline by dropping timeline items here-->
+              <!--                            </p>-->
+              <!--                        </div>-->
+              <!--                    </div>-->
             </draggable>
           </drop>
+        </div>
+        <div class="md-layout-item text-center event-timeline-save">
+          <md-button class="md-red md-maryoku save-timeline" @click="saveTimeline">Save Changes</md-button>
+          <div class="text-center timeline-lists-footer" v-if="timeline.length">
+            <div class="footer-title">END</div>
+            <md-button class="md-red md-simple back-to-top" @click="scrollToTop">
+              <md-icon>expand_less</md-icon>Back to top
+            </md-button>
+          </div>
         </div>
       </div>
     </div>
     <md-card
       class="md-card-plain time-line-blocks md-layout-item md-xlarge-size-35 md-large-size-35 md-small-size-40"
-      style="margin-top: 16px; padding-right: 3em"
+      style="    margin-top: 16px;"
     >
       <md-card-content class="md-layout time-line-blocks_items">
-        <div class="text-center width-100 p-10 font-size-16 mb-10">Drag Tim Slots timeline</div>
-
-        <div
-          v-for="(section,index) in blocksList"
-          :key="index"
-          class="md-layout-item md-size-100 mb-30"
-        >
-          <div v-for="block in section" :key="block.id" class="md-layout-item md-size-100">
-            <drag
-              :transfer-data="{ block }"
-              class="time-line-blocks_item"
-              :style="`color :` + block.color"
-            >
-              <div class="font-size-16 font-bold text-transform-capitalize d-flex align-center">
-                <md-icon>drag_indicator</md-icon>
-                <img
-                  :src="`${newTimeLineIconsURL}${block.icon.toLowerCase()}.svg`"
-                  class="label-icon mr-10"
-                />
-                {{block.buildingBlockType}}
-              </div>
-            </drag>
+        <div class="dragdrop-timeline-header">
+          <div class="header-title">
+            <img :src="`${newTimeLineIconsURL}add.svg`" /> Add Time Slots
           </div>
+          <p class="section-desc">
+            Drag and drop the blocks to
+            edit your timeline project
+          </p>
+        </div>
+
+        <div v-for="(block,index) in blocksList" :key="block.id" class="md-layout-item md-size-100">
+          <drag
+            :transfer-data="{ block }"
+            class="time-line-blocks_item"
+            :style="`border: 1px dashed ` + block.color + `; color :` + block.color"
+          >
+            <img :src="`${newTimeLineIconsURL}${block.icon.toLowerCase()}.svg`" />
+            <h5>{{block.buildingBlockType}}</h5>
+          </drag>
         </div>
       </md-card-content>
     </md-card>
@@ -387,66 +405,39 @@
         <md-button class="md-red add-category-btn" @click="removeTimelineItem">Yes,I'm sure</md-button>
       </template>
     </modal>
-
-    <planner-event-footer>
-      <template slot="buttons">
-        <md-button class="md-simple md-button md-black maryoku-btn" @click="startFromScratch">
-          <span class="font-size-16 text-transform-capitalize">
-            <img class="mr-20" :src="`${$iconURL}Campaign/Group 8871.svg`" />Revert to original
-          </span>
-        </md-button>
-        <span class="seperator"></span>
-        <md-button class="md-simple md-button md-black maryoku-btn" @click="revert">
-          <span class="font-size-16 text-transform-capitalize">
-            <img class="mr-10 label-icon" :src="`${$iconURL}Timeline-New/Trash.svg`" />
-            Start from scratch
-          </span>
-        </md-button>
-        <md-button class="md-simple md-button md-red maryoku-btn md-outlined" @click="saveDraft">
-          <span class="font-size-16 text-transform-capitalize">
-            <img class="mr-20 label-icon" :src="`${$iconURL}Timeline-New/save-red.svg`" />
-            Save Draft
-          </span>
-        </md-button>
-        <md-button class="md-button md-red maryoku-btn" @click="finalize">
-          <span class="font-size-16 text-transform-capitalize">Finalise timeline</span>
-        </md-button>
-      </template>
-    </planner-event-footer>
   </div>
 </template>
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
-import Calendar from '@/models/Calendar';
-import CalendarEvent from '@/models/CalendarEvent';
-import EventComponent from '@/models/EventComponent';
-import EventTimelineItem from '@/models/EventTimelineItem';
-import moment from 'moment';
-import swal from 'sweetalert2';
-import { SlideYDownTransition } from 'vue2-transitions';
-import InputMask from 'vue-input-mask';
-import { Modal, LabelEdit, LocationInput } from '@/components';
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import Calendar from "@/models/Calendar";
+import CalendarEvent from "@/models/CalendarEvent";
+import EventComponent from "@/models/EventComponent";
+import EventTimelineItem from "@/models/EventTimelineItem";
+import moment from "moment";
+import swal from "sweetalert2";
+import { SlideYDownTransition } from "vue2-transitions";
+import InputMask from "vue-input-mask";
+import { Modal, LabelEdit, LocationInput} from "@/components";
 
-import VueElementLoading from 'vue-element-loading';
+import VueElementLoading from "vue-element-loading";
 // import auth from '@/auth';
-import EventBlocks from './components/NewEventBlocks';
-import draggable from 'vuedraggable';
-import { Drag, Drop } from 'vue-drag-drop';
-import _ from 'underscore';
+import EventBlocks from "./components/NewEventBlocks";
+import draggable from "vuedraggable";
+import { Drag, Drop } from "vue-drag-drop";
+import _ from "underscore";
 
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 
-import HeaderActions from '@/components/HeaderActions';
-import CommentEditorPanel from './components/CommentEditorPanel';
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
-import ProgressSidebar from './components/progressSidebar';
-import TimeInput from '../../../components/TimeInput';
+import HeaderActions from "@/components/HeaderActions";
+import CommentEditorPanel from "./components/CommentEditorPanel";
 
-import PlannerEventFooter from '@/components/Planner/FooterPanel';
+import ProgressSidebar from "./components/progressSidebar";
+import TimeInput from "../../../components/TimeInput";
 
 export default {
-  name: 'event-time-line',
+  name: "event-time-line",
   components: {
     VueElementLoading,
     EventBlocks,
@@ -460,8 +451,7 @@ export default {
     TimeInput,
     LocationInput,
     HeaderActions,
-    CommentEditorPanel,
-    PlannerEventFooter,
+    CommentEditorPanel
   },
   props: {
     // event: Object,
@@ -471,143 +461,131 @@ export default {
     // auth: auth,
     calendar: new Calendar(),
     isLoading: true,
-    selectedDate: '',
+    selectedDate: "",
     blocksList: [
-      [
-        {
-          id: 1,
-          buildingBlockType: 'setup',
-          icon: 'Setup',
-          color: '#ffc001',
-        },
-        {
-          id: 5,
-          buildingBlockType: 'Transportation',
-          icon: 'Transportation',
-          color: '#44546a',
-        },
-      ],
-
-      [
-        {
-          id: 2,
-          buildingBlockType: 'activity',
-          icon: 'Activity',
-          color: '#20c997',
-        },
-        {
-          id: 8,
-          buildingBlockType: 'Show',
-          icon: 'Show',
-          color: '#00bcd4',
-        },
-        {
-          id: 9,
-          buildingBlockType: 'Speaker / Keynote',
-          icon: 'speaker',
-          color: '#641956',
-        },
-
-        {
-          id: 4,
-          buildingBlockType: 'Discussion',
-          icon: 'Discussion',
-          color: '#3a3838',
-        },
-      ],
-
-      [
-        {
-          id: 10,
-          buildingBlockType: 'Break',
-          icon: 'Break',
-          color: '#ff527c',
-        },
-        {
-          id: 6,
-          buildingBlockType: 'Relaxation',
-          icon: 'Relaxation',
-          color: '#0caf50',
-        },
-        {
-          id: 3,
-          buildingBlockType: 'meal',
-          icon: 'Meal',
-          color: '#f44336',
-        },
-      ],
-
-      [
-        {
-          id: 7,
-          buildingBlockType: 'Other',
-          icon: 'other',
-          color: '#a5a5a5',
-        },
-      ],
+      {
+        id: 1,
+        buildingBlockType: "setup",
+        icon: "Setup",
+        color: "#ffc001"
+      },
+      {
+        id: 6,
+        buildingBlockType: "Relaxation",
+        icon: "Relaxation",
+        color: "#0caf50"
+      },
+      {
+        id: 8,
+        buildingBlockType: "Show",
+        icon: "Show",
+        color: "#00bcd4"
+      },
+      {
+        id: 2,
+        buildingBlockType: "activity",
+        icon: "Activity",
+        color: "#20c997"
+      },
+      {
+        id: 9,
+        buildingBlockType: "Speaker / Keynote",
+        icon: "speaker",
+        color: "#641956"
+      },
+      {
+        id: 10,
+        buildingBlockType: "Break",
+        icon: "Break",
+        color: "#ff527c"
+      },
+      {
+        id: 3,
+        buildingBlockType: "meal",
+        icon: "Meal",
+        color: "#f44336"
+      },
+      {
+        id: 5,
+        buildingBlockType: "Transportation",
+        icon: "Transportation",
+        color: "#44546a"
+      },
+      {
+        id: 4,
+        buildingBlockType: "Discussion",
+        icon: "Discussion",
+        color: "#3a3838"
+      },
+      {
+        id: 7,
+        buildingBlockType: "Other",
+        icon: "other",
+        color: "#a5a5a5"
+      }
     ],
     timelineItems: [],
     hoursArray: [],
     disabledDragging: false,
     timelineAttachment: null,
-    timelineIconsURL: 'http://static.maryoku.com/storage/icons/timeline/svg/',
+    timelineIconsURL: "http://static.maryoku.com/storage/icons/timeline/svg/",
     menuIconsURL:
-      'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
+      "http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/",
     event: {},
     showDeleteConfirmModal: false,
     indexOfDeleteItem: -1,
     newTimeLineIconsURL:
-      'http://static.maryoku.com/storage/icons/Timeline-New/',
+      "http://static.maryoku.com/storage/icons/Timeline-New/",
 
     timeline: [
       {
-        date: '20/04/2020',
+        date: "20/04/2020",
         items: [],
-        itemDay: null,
-      },
+        itemDay: null
+      }
     ],
     a: [
-      '',
-      'one ',
-      'two ',
-      'three ',
-      'four ',
-      'five ',
-      'six ',
-      'seven ',
-      'eight ',
-      'nine ',
-      'ten ',
-      'eleven ',
-      'twelve ',
-      'thirteen ',
-      'fourteen ',
-      'fifteen ',
-      'sixteen ',
-      'seventeen ',
-      'eighteen ',
-      'nineteen ',
+      "",
+      "one ",
+      "two ",
+      "three ",
+      "four ",
+      "five ",
+      "six ",
+      "seven ",
+      "eight ",
+      "nine ",
+      "ten ",
+      "eleven ",
+      "twelve ",
+      "thirteen ",
+      "fourteen ",
+      "fifteen ",
+      "sixteen ",
+      "seventeen ",
+      "eighteen ",
+      "nineteen "
     ],
     b: [
-      '',
-      '',
-      'twenty',
-      'thirty',
-      'forty',
-      'fifty',
-      'sixty',
-      'seventy',
-      'eighty',
-      'ninety',
+      "",
+      "",
+      "twenty",
+      "thirty",
+      "forty",
+      "fifty",
+      "sixty",
+      "seventy",
+      "eighty",
+      "ninety"
     ],
     currentAttachments: [],
-    showCommentEditorPanel: false,
+    showCommentEditorPanel:false
   }),
   methods: {
     ...mapMutations('event', ['setEventData']),
     download() {
       this.$router.push({
-        path: `/events/` + this.eventData.id + `/edit/timeline/export`,
+        path: `/events/` + this.eventData.id + `/edit/timeline/export`
       });
     },
     /**
@@ -618,30 +596,32 @@ export default {
     handleDrop(index, data) {
       if (!this.canEdit) {
         swal({
-          title: "Sorry, you can't edit timeline. ",
-          showCancelButton: false,
-          confirmButtonClass: 'md-button md-success',
-          confirmButtonText: 'Ok, I got it',
-          buttonsStyling: false,
+        title: "Sorry, you can't edit timeline. ",
+        showCancelButton: false,
+        confirmButtonClass: "md-button md-success",
+        confirmButtonText: "Ok, I got it",
+        buttonsStyling: false
+      })
+        .then(result => {
+          if (result.value === true) {
+            return 
+          }
         })
-          .then((result) => {
-            if (result.value === true) {
-              return;
-            }
-          })
-          .catch((err) => {});
-        return;
+        .catch(err => {
+         
+        });
+        return 
       }
       if (data) {
         let block = Object.assign({}, data.block);
         block.id = new Date().getTime(); //add temp id
-        block.mode = 'edit';
+        block.mode = "edit";
 
         let startDate = new Date(this.timeline[index].itemDay);
         let endDate = new Date(this.timeline[index].itemDay);
         const timelineItemsCount = this.timeline[index].items.length;
         if (timelineItemsCount == 0) {
-          if (this.eventData.eventDayPart == 'evening') {
+          if (this.eventData.eventDayPart == "evening") {
             startDate.setHours(19);
             endDate.setHours(20);
           } else {
@@ -658,9 +638,9 @@ export default {
         block.endTime = endDate;
 
         block.title = block.buildingBlockType;
-        block.startDuration = 'am';
-        block.endDuration = 'am';
-        block.attachmentName = '';
+        block.startDuration = "am";
+        block.endDuration = "am";
+        block.attachmentName = "";
         block.isItemLoading = false;
         if (this.timelineItems.length > 0) {
           // block.startTime = this.$moment(this.timelineItems[this.timelineItems.length - 1].endTime, 'H:mm A').format('H:mm A')
@@ -671,58 +651,59 @@ export default {
       } else {
         setTimeout(this.updateTimelineITemsOrder, 100);
       }
-      setTimeout(() => {
-        const scrollBtn = this.$refs.scrollBtn;
+      setTimeout(()=>{
+        const scrollBtn = this.$refs.scrollBtn
         if (scrollBtn) {
-          scrollBtn.click();
+          scrollBtn.click()
         }
       }, 100);
+      
     },
 
     removeItem(item) {
       swal({
-        title: 'Are you sure want to delete this item?',
+        title: "Are you sure want to delete this item?",
         showCancelButton: true,
-        cancelButtonClass: 'md-button md-danger',
-        confirmButtonClass: 'md-button md-success',
+        cancelButtonClass: "md-button md-danger",
+        confirmButtonClass: "md-button md-success",
         confirmButtonText: "Yes I'm sure",
-        buttonsStyling: false,
+        buttonsStyling: false
       })
-        .then((result) => {
+        .then(result => {
           if (result.value === true) {
             this.setItemLoading(item, true, false);
             let event = new CalendarEvent({ id: this.eventData.id });
 
             let timelineItem = new EventTimelineItem({ id: item.id }).for(
               this.calendar,
-              event,
+              event
             );
 
             timelineItem
               .delete()
-              .then((result) => {
+              .then(result => {
                 this.getTimelineItems();
                 this.setItemLoading(item, false, false);
               })
-              .catch((error) => {
-                this.$root.$emit('timeline-updated', this.timelineItems);
+              .catch(error => {
+                this.$root.$emit("timeline-updated", this.timelineItems);
                 this.setItemLoading(item, false, false);
               });
           }
         })
-        .catch((err) => {
-          this.$root.$emit('timeline-updated', this.timelineItems);
+        .catch(err => {
+          this.$root.$emit("timeline-updated", this.timelineItems);
         });
     },
     modifyItem(item) {
-      const index = this.timelineItems.findIndex((it) => it.id === item.id);
-      this.$set(this.timelineItems[index], 'mode', 'edit');
+      const index = this.timelineItems.findIndex(it => it.id === item.id);
+      this.$set(this.timelineItems[index], "mode", "edit");
       this.disabledDragging = true;
     },
     previewEvent() {
       this.$router.push({
-        name: 'EventDetails',
-        params: { id: this.eventData.id },
+        name: "EventDetails",
+        params: { id: this.eventData.id }
       });
     },
     getTimelineItems() {
@@ -730,8 +711,8 @@ export default {
       new EventTimelineItem()
         .for(this.calendar, event)
         .get()
-        .then((res) => {
-          this.timelineItems = _.sortBy(res, function (item) {
+        .then(res => {
+          this.timelineItems = _.sortBy(res, function(item) {
             return item.order;
           });
 
@@ -742,7 +723,7 @@ export default {
           this.isLoading = false;
           var timelines = {};
           // define timelines
-          this.timelineItems.forEach((item) => {
+          this.timelineItems.forEach(item => {
             item.isItemLoading = false;
             if (!timelines[item.plannedDate]) timelines[item.plannedDate] = [];
             item.isItemLoading = false;
@@ -755,28 +736,28 @@ export default {
               this.timeline.push({
                 itemDay: parseInt(itemDay),
                 isEditable: false,
-                items: timelines[itemDay],
+                items: timelines[itemDay]
               });
             });
           }
-          this.timeline = _.sortBy(this.timeline, function (item) {
+          this.timeline = _.sortBy(this.timeline, function(item) {
             return item.itemDay;
           });
           // this.timeline[0].items.forEach((item) => {
           //     item.isItemLoading = false
           // })
           this.eventData.timelineItems = this.timelineItems;
-          this.$root.$emit('timeline-updated', this.timelineItems);
+          this.$root.$emit("timeline-updated", this.timelineItems);
         });
     },
     cancelTimelineItem(item, timelineIndex, itemIndexOfTimeline) {
-      const itemIndex = this.timelineItems.findIndex((it) => it.id === item.id);
+      const itemIndex = this.timelineItems.findIndex(it => it.id === item.id);
       if (item.dateCreated) {
-        this.$set(this.timelineItems[itemIndex], 'mode', 'saved');
+        this.$set(this.timelineItems[itemIndex], "mode", "saved");
         this.$set(
           this.timeline[timelineIndex].items[itemIndexOfTimeline],
-          'mode',
-          'saved',
+          "mode",
+          "saved"
         );
       } else {
         // this.timelineItems.splice(itemIndex, 1)
@@ -788,7 +769,7 @@ export default {
     saveTimelineItem(item, index, timelineDate) {
       this.setItemLoading(item, true, true);
       var plannedDate = 0;
-      if (typeof timelineDate == 'number') {
+      if (typeof timelineDate == "number") {
         plannedDate = timelineDate;
       } else if (timelineDate) {
         plannedDate = timelineDate.getTime();
@@ -796,10 +777,10 @@ export default {
       if (!item.title && !item.description) {
         this.$notify({
           message:
-            'From time, To time and ( Title or Description ) id Required',
-          horizontalAlign: 'center',
-          verticalAlign: 'top',
-          type: 'warning',
+            "From time, To time and ( Title or Description ) id Required",
+          horizontalAlign: "center",
+          verticalAlign: "top",
+          type: "warning"
         });
 
         this.setItemLoading(item, false, true);
@@ -824,49 +805,45 @@ export default {
         color: item.color,
         link: item.link,
         location: item.location,
-        plannedDate: plannedDate,
+        plannedDate: plannedDate
       };
       if (this.currentAttachments.length > 0) {
-        this.uploadAttachment(
-          item.attachment,
-          item.attachmentName,
-          (results) => {
-            if (!newTimeline.attachments) {
-              newTimeline.attachments = [];
-            }
-            newTimeline.attachments = newTimeline.attachments.concat(results);
-            newTimeline.attachmentName = '';
-            new EventTimelineItem(newTimeline)
-              .for(this.calendar, event)
-              .save()
-              .then((res) => {
-                this.getTimelineItems();
-                this.disabledDragging = false;
-                this.$root.$emit('timeline-updated', this.timelineItems);
-                this.setItemLoading(item, false, true);
-              })
-              .catch((error) => {
-                this.disabledDragging = false;
-                this.$root.$emit('timeline-updated', this.timelineItems);
-                this.setItemLoading(item, false, true);
-              });
-            this.timelineAttachment = null;
-            this.currentAttachments = [];
-          },
-        );
+        this.uploadAttachment(item.attachment, item.attachmentName, results => {
+          if (!newTimeline.attachments) {
+            newTimeline.attachments = [];
+          }
+          newTimeline.attachments = newTimeline.attachments.concat(results);
+          newTimeline.attachmentName = "";
+          new EventTimelineItem(newTimeline)
+            .for(this.calendar, event)
+            .save()
+            .then(res => {
+              this.getTimelineItems();
+              this.disabledDragging = false;
+              this.$root.$emit("timeline-updated", this.timelineItems);
+              this.setItemLoading(item, false, true);
+            })
+            .catch(error => {
+              this.disabledDragging = false;
+              this.$root.$emit("timeline-updated", this.timelineItems);
+              this.setItemLoading(item, false, true);
+            });
+          this.timelineAttachment = null;
+          this.currentAttachments = [];
+        });
       } else {
         new EventTimelineItem(newTimeline)
           .for(this.calendar, event)
           .save()
-          .then((res) => {
+          .then(res => {
             this.getTimelineItems();
             this.disabledDragging = false;
-            this.$root.$emit('timeline-updated', this.timelineItems);
+            this.$root.$emit("timeline-updated", this.timelineItems);
             this.setItemLoading(item, false, true);
           })
-          .catch((error) => {
+          .catch(error => {
             this.disabledDragging = false;
-            this.$root.$emit('timeline-updated', this.timelineItems);
+            this.$root.$emit("timeline-updated", this.timelineItems);
             this.setItemLoading(item, false, true);
           });
       }
@@ -878,13 +855,13 @@ export default {
         !item.endTime ||
         (!item.title && !item.description)
       ) {
-        this.$set(item, 'isItemLoading', false);
+        this.$set(item, "isItemLoading", false);
         this.$notify({
           message:
-            'From time, To time and ( Title or Description ) id Required',
-          horizontalAlign: 'center',
-          verticalAlign: 'top',
-          type: 'warning',
+            "From time, To time and ( Title or Description ) id Required",
+          horizontalAlign: "center",
+          verticalAlign: "top",
+          type: "warning"
         });
 
         this.setItemLoading(item, false, true);
@@ -895,7 +872,7 @@ export default {
 
       let timelineItem = new EventTimelineItem({ id: item.id }).for(
         this.calendar,
-        event,
+        event
       );
 
       timelineItem.title = item.title;
@@ -906,43 +883,39 @@ export default {
       timelineItem.location = item.location;
       timelineItem.attachments = item.attachments;
       if (this.currentAttachments.length > 0) {
-        this.uploadAttachment(
-          item.attachment,
-          item.attachmentName,
-          (results) => {
-            if (!timelineItem.attachments) {
-              timelineItem.attachments = [];
-            }
-            timelineItem.attachments = timelineItem.attachments.concat(results);
-            timelineItem.attachmentName = '';
-            timelineItem
-              .save()
-              .then((res) => {
-                this.getTimelineItems();
-                this.disabledDragging = false;
-                this.$root.$emit('timeline-updated', this.timelineItems);
-              })
-              .catch((error) => {
-                this.disabledDragging = false;
-                this.$root.$emit('timeline-updated', this.timelineItems);
-              });
+        this.uploadAttachment(item.attachment, item.attachmentName, results => {
+          if (!timelineItem.attachments) {
+            timelineItem.attachments = [];
+          }
+          timelineItem.attachments = timelineItem.attachments.concat(results);
+          timelineItem.attachmentName = "";
+          timelineItem
+            .save()
+            .then(res => {
+              this.getTimelineItems();
+              this.disabledDragging = false;
+              this.$root.$emit("timeline-updated", this.timelineItems);
+            })
+            .catch(error => {
+              this.disabledDragging = false;
+              this.$root.$emit("timeline-updated", this.timelineItems);
+            });
 
-            this.currentAttachments = []; //intialized attachmentslist
-            item.attachmentName = '';
-          },
-        );
+          this.currentAttachments = []; //intialized attachmentslist
+          item.attachmentName = "";
+        });
       } else {
         timelineItem
           .save()
-          .then((res) => {
+          .then(res => {
             this.getTimelineItems();
             this.disabledDragging = false;
-            this.$root.$emit('timeline-updated', this.timelineItems);
+            this.$root.$emit("timeline-updated", this.timelineItems);
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
             this.disabledDragging = false;
-            this.$root.$emit('timeline-updated', this.timelineItems);
+            this.$root.$emit("timeline-updated", this.timelineItems);
           });
       }
     },
@@ -951,23 +924,23 @@ export default {
       for (let i = 0; i < this.currentAttachments.length; i++) {
         const fileItem = this.currentAttachments[i];
         let formData = new FormData();
-        formData.append('file', fileItem);
-        formData.append('from', 'timeline');
-        formData.append('type', 'attachment');
-        formData.append('name', fileItem.name);
+        formData.append("file", fileItem);
+        formData.append("from", "timeline");
+        formData.append("type", "attachment");
+        formData.append("name", fileItem.name);
         const result = await this.$http.post(
           `${process.env.SERVER_URL}/uploadFile`,
           formData,
           {
             headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
+              "Content-Type": "multipart/form-data"
+            }
+          }
         );
         attachments.push({
           originalName: fileItem.name,
           url: result.data.upload.path,
-          name: result.data.upload.name,
+          name: result.data.upload.name
         });
       }
       callback(attachments);
@@ -978,22 +951,22 @@ export default {
 
       let new_order = 1;
       const timelineItemsForUpdate = [];
-      this.timelineItems.forEach((item) => {
+      this.timelineItems.forEach(item => {
         item.order = new_order;
         timelineItemsForUpdate.push({ id: item.id, order: new_order });
         new_order += 1;
       });
 
       let timelineItem = new EventTimelineItem({
-        id: 'updateMultiple',
-        timelineItems: timelineItemsForUpdate,
+        id: "updateMultiple",
+        timelineItems: timelineItemsForUpdate
       }).for(this.calendar, event);
 
       timelineItem.order = new_order;
 
       timelineItem
         .save()
-        .then((res) => {
+        .then(res => {
           /* this.$notify(
                       {
                         message: "Timeline Items order modified successfully",
@@ -1003,21 +976,21 @@ export default {
                       }); */
           this.eventData.timelineItems = this.timelineItems;
           this.isLoading = false;
-          this.$root.$emit('timeline-updated', this.timelineItems);
+          this.$root.$emit("timeline-updated", this.timelineItems);
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
-          this.$root.$emit('timeline-updated', this.timelineItems);
+          this.$root.$emit("timeline-updated", this.timelineItems);
         });
     },
     setItemLoading(item, loading, force) {
-      this.$set(item, 'isItemLoading', loading);
+      this.$set(item, "isItemLoading", loading);
       if (force) {
-        this.$set(item, 'mode', 'saved');
-        this.$set(item, 'mode', 'edit');
+        this.$set(item, "mode", "saved");
+        this.$set(item, "mode", "edit");
       } else {
-        this.$set(item, 'mode', 'edit');
-        this.$set(item, 'mode', 'saved');
+        this.$set(item, "mode", "edit");
+        this.$set(item, "mode", "saved");
       }
     },
     onFileChange(event) {
@@ -1026,9 +999,9 @@ export default {
       let reader = new FileReader();
       let vm = this;
       if (event.target.name) {
-        const itemId = event.target.getAttribute('data-item');
-        const timelineIndex = event.target.getAttribute('data-timelineindex');
-        const itemIndex = event.target.getAttribute('data-itemIndex');
+        const itemId = event.target.getAttribute("data-item");
+        const timelineIndex = event.target.getAttribute("data-timelineindex");
+        const itemIndex = event.target.getAttribute("data-itemIndex");
         let isLargeFile = false;
 
         for (let i = 0; i < files.length; i++) {
@@ -1038,15 +1011,15 @@ export default {
         }
         if (isLargeFile) {
           swal({
-            title: 'This file is larger than 10MB',
+            title: "This file is larger than 10MB",
             showCloseButton: true,
-            text: 'Please choose another file',
-            confirmButtonClass: 'md-button md-red',
-            confirmButtonText: 'I got it',
-            buttonsStyling: false,
+            text: "Please choose another file",
+            confirmButtonClass: "md-button md-red",
+            confirmButtonText: "I got it",
+            buttonsStyling: false
           })
-            .then((result) => {})
-            .catch((err) => {
+            .then(result => {})
+            .catch(err => {
               console.log(err);
             });
         } else {
@@ -1064,8 +1037,8 @@ export default {
       let reader = new FileReader();
       let vm = this;
 
-      reader.onload = (e) => {
-        if (type === 'attachment') {
+      reader.onload = e => {
+        if (type === "attachment") {
           vm.timelineAttachment = e.target.result;
           vm.timelineoriginalAttachmentName = file.name;
         } else {
@@ -1075,56 +1048,56 @@ export default {
       reader.readAsDataURL(file);
     },
     openAttachment(path) {
-      window.open(`http://static.maryoku.com/${path}`, '_blank');
+      window.open(`http://static.maryoku.com/${path}`, "_blank");
     },
     formatDate(date) {
-      if (typeof date == 'number') {
-        return moment(new Date(date)).format('MM/DD/YY');
+      if (typeof date == "number") {
+        return moment(new Date(date)).format("MM/DD/YY");
       }
-      return moment(date).format('MM/DD/YY');
+      return moment(date).format("MM/DD/YY");
     },
     formatHour(date) {
-      return moment(new Date(date)).format('hh:mm A');
+      return moment(new Date(date)).format("hh:mm A");
     },
     numberToWord(num) {
       let vm = this;
-      if ((num = num.toString()).length > 9) return 'overflow';
-      let n = ('000000000' + num)
+      if ((num = num.toString()).length > 9) return "overflow";
+      let n = ("000000000" + num)
         .substr(-9)
         .match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
       if (!n) return;
-      var str = '';
+      var str = "";
       str +=
         n[1] != 0
-          ? (vm.a[Number(n[1])] || vm.b[n[1][0]] + ' ' + vm.a[n[1][1]]) +
-            'crore '
-          : '';
+          ? (vm.a[Number(n[1])] || vm.b[n[1][0]] + " " + vm.a[n[1][1]]) +
+            "crore "
+          : "";
       str +=
         n[2] != 0
-          ? (vm.a[Number(n[2])] || vm.b[n[2][0]] + ' ' + vm.a[n[2][1]]) +
-            'lakh '
-          : '';
+          ? (vm.a[Number(n[2])] || vm.b[n[2][0]] + " " + vm.a[n[2][1]]) +
+            "lakh "
+          : "";
       str +=
         n[3] != 0
-          ? (vm.a[Number(n[3])] || vm.b[n[3][0]] + ' ' + vm.a[n[3][1]]) +
-            'thousand '
-          : '';
+          ? (vm.a[Number(n[3])] || vm.b[n[3][0]] + " " + vm.a[n[3][1]]) +
+            "thousand "
+          : "";
       str +=
         n[4] != 0
-          ? (vm.a[Number(n[4])] || vm.b[n[4][0]] + ' ' + vm.a[n[4][1]]) +
-            'hundred '
-          : '';
+          ? (vm.a[Number(n[4])] || vm.b[n[4][0]] + " " + vm.a[n[4][1]]) +
+            "hundred "
+          : "";
       str +=
         n[5] != 0
-          ? (str != '' ? 'and ' : '') +
-            (vm.a[Number(n[5])] || vm.b[n[5][0]] + ' ' + vm.a[n[5][1]])
-          : '';
+          ? (str != "" ? "and " : "") +
+            (vm.a[Number(n[5])] || vm.b[n[5][0]] + " " + vm.a[n[5][1]])
+          : "";
       return str;
     },
     addTimelineItem(index) {
       let timelineLength = this.timeline.length - 1;
       let nextDay = 0;
-      if (typeof this.timeline[index].itemDay == 'number')
+      if (typeof this.timeline[index].itemDay == "number")
         nextDay = this.timeline[index].itemDay + 1000 * 60 * 60 * 24;
       else
         nextDay = this.timeline[index].itemDay.getTime() + 1000 * 60 * 60 * 24;
@@ -1143,7 +1116,7 @@ export default {
         date: this.formatDate(nextDay),
         items: [],
         itemDay: nextDay,
-        isEditable: true,
+        isEditable: true
       });
     },
     askRemoveTimelineItem(index) {
@@ -1160,25 +1133,25 @@ export default {
     },
     saveTimeline() {
       swal({
-        title: 'Saved It!',
+        title: "Saved It!",
         showCloseButton: true,
-        text: 'We’ll update the related vendors',
-        confirmButtonClass: 'md-button md-red',
-        cancelButtonClass: 'md-button md-red',
-        confirmButtonText: 'Cool, Thanks',
-        buttonsStyling: false,
+        text: "We’ll update the related vendors",
+        confirmButtonClass: "md-button md-red",
+        cancelButtonClass: "md-button md-red",
+        confirmButtonText: "Cool, Thanks",
+        buttonsStyling: false
       })
-        .then((result) => {})
-        .catch((err) => {
+        .then(result => {})
+        .catch(err => {
           console.log(err);
         });
     },
 
     onConfirm() {
-      this.value = 'Agreed';
+      this.value = "Agreed";
     },
     onCancel() {
-      this.value = 'Disagreed';
+      this.value = "Disagreed";
     },
     editTimeline(index) {
       if (!this.timeline[index]) return;
@@ -1189,10 +1162,11 @@ export default {
       this.timeline[index].isEditable = !isEdit;
       this.$forceUpdate();
     },
-    closeEditTimeline(index) {},
+    closeEditTimeline(index) {
+    },
     getDisabledDates(index) {
       const vm = this;
-      const checkDate = function (date) {
+      const checkDate = function(date) {
         if (index == 0) {
           return false;
         }
@@ -1219,43 +1193,39 @@ export default {
     },
     initData(event) {
       // this.setEventData(event);
-      this.timeline[0].date = this.formatDate(event.eventStartMillis);
+      this.timeline[0].date = this.formatDate(
+        event.eventStartMillis
+      );
       this.timeline[0].itemDay = event.eventStartMillis;
       this.getTimelineItems();
       new EventComponent()
         .for(this.calendar, event)
         .get()
-        .then((components) => {
+        .then(components => {
           this.selectedComponents = components;
         });
-    },
-    revert() {},
-    startFromScratch() {},
-    saveDraft() {},
-    finalize() {},
+    }
   },
   created() {
-    [...Array(12).keys()].map((x) =>
-      x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined,
+    [...Array(12).keys()].map(x =>
+      x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined
     );
-    [...Array(12).keys()].map((x) =>
+    [...Array(12).keys()].map(x =>
       x === 0
         ? this.hoursArray.push(`12:00 PM`)
-        : this.hoursArray.push(`${x}:00 PM`),
+        : this.hoursArray.push(`${x}:00 PM`)
     );
-    [...Array(8).keys()].map((x) =>
+    [...Array(8).keys()].map(x =>
       x === 0
         ? this.hoursArray.push(`12:00 AM`)
-        : this.hoursArray.push(`${x}:00 AM`),
+        : this.hoursArray.push(`${x}:00 AM`)
     );
-    this.calendar = new Calendar({
-      id: this.currentUser.profile.defaultCalendarId,
-    });
+    this.calendar = new Calendar({id: this.currentUser.profile.defaultCalendarId})
 
     this.hoursArray.push();
 
     if (this.eventData) {
-      this.initData(this.eventData);
+      this.initData(this.eventData)
       this.isLoading = false;
     }
   },
@@ -1265,7 +1235,7 @@ export default {
   computed: {
     ...mapState('event', ['eventData']),
     currentUser() {
-      return this.$store.state.auth.user;
+      return this.$store.state.auth.user
     },
     dateFormat: {
       get() {
@@ -1273,36 +1243,34 @@ export default {
       },
       set(val) {
         this.$material.locale.dateFormat = val;
-      },
+      }
     },
     permission() {
       try {
-        return this.$store.state.event.eventData.permit
-          ? this.$store.state.event.eventData.permit
-          : 'edit';
-      } catch (e) {
-        return 'edit';
+        return this.$store.state.event.eventData.permit? this.$store.state.event.eventData.permit : 'edit' 
+      } catch(e) {
+        return "edit"
       }
     },
     canComment() {
-      return this.permission === 'edit' || this.permission === 'comment';
+      return this.permission === 'edit' || this.permission === 'comment'
     },
     canEdit() {
-      return this.permission === 'edit';
-    },
+      return this.permission === 'edit'
+    }
   },
   watch: {
     eventData(newVal, oldVal) {
       this.$root.$emit(
-        'set-title',
+        "set-title",
         this.eventData,
-        this.routeName === 'EditBuildingBlocks',
-        true,
+        this.routeName === "EditBuildingBlocks",
+        true
       );
-      this.initData(newVal);
+      this.initData(newVal)
       this.getTimelineItems();
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped lang="scss">
@@ -1313,5 +1281,5 @@ $btn-color: #fff;
   transform: rotate(0deg) !important;
   cursor: pointer;
 }
-@import '../../styles/EventDetailsTimeline.scss';
+@import "../../styles/EventDetailsTimeline.scss";
 </style>

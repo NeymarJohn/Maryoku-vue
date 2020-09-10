@@ -5,7 +5,7 @@
       <div class="p-50">
         <div class="font-size-30 font-bold-extra">Get everyone to RSVP</div>
         <div class="cover-preview mt-50">
-          <img :src="coverImage" class="mr-10">
+          <img :src="editingContent.coverImageUrl" class="mr-10">
           <label for="cover">
           <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="chooseFiles" >
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width:20px"/>Change Cover
@@ -51,7 +51,7 @@
               <md-switch v-model="showWhatWear" class="ml-10 md-switch below-label large-switch"><span class="color-black font-regular">Hide</span></md-switch>
               
             </div>
-            <maryoku-textarea placeholder="Give your guests details about the expected dress code"></maryoku-textarea>
+            <maryoku-textarea placeholder="Give your guests details about the expected dress code" v-model="editingContent.wearingGuide"></maryoku-textarea>
           </div>
           <div class="md-layout-item md-size-50 md-small-size-50">
             <div class="font-size-30 font-bold-extra mb-30 d-flex">
@@ -59,7 +59,7 @@
               <span style="padding-top: 10px; margin-left:20px;" class="text-transform-uppercase">What should I Know?</span>
               <md-switch v-model="showWhatKnow" class="ml-10 md-switch below-label large-switch "><span class="color-black font-regular">Hide</span></md-switch>
             </div>
-            <maryoku-textarea placeholder="Give your guests any information you find relevant"></maryoku-textarea>
+            <maryoku-textarea placeholder="Give your guests any information you find relevant" v-model="editingContent.knowledge"></maryoku-textarea>
           </div>
         </div>
       </div>
@@ -91,6 +91,7 @@ import TitleEditor from './components/TitleEditor'
 import RsvpTimelinePanel from "@/pages/app/RSVP/RSVPTimelinePanel.vue"
 
 import { getBase64 } from '@/utils/file.util'
+import swal from "sweetalert2";
 
 export default {
   components: {
@@ -107,6 +108,10 @@ export default {
       type: Object,
       default: {} 
     },
+    defaultData: {
+      type: Object,
+      default: ()=>{}
+    }
   },
   data() {
     return {
@@ -133,10 +138,20 @@ export default {
           src: `${this.$iconURL}RSVP/Image+84.jpg`,
         },
       ],
+      originContent: {},
+      editingContent: {
+        title: "",
+        description: "",
+        coverImageUrl: "",
+        wearingGuide: "",
+        knowledge: ""
+      }
     }
   },
   created () {
-    this.coverImage = this.event.concept.images[0].url;
+    this.editingContent.title = this.info.conceptName
+    this.editingContent.coverImageUrl = this.event.concept.images[0].url
+    this.originContent = { ...this.editingContent}
   },
   computed: {
     event() {
@@ -148,6 +163,21 @@ export default {
     },
   },
   methods: {
+    setDefault() {
+      swal({
+        title: "Are you sure?",
+        text: `You won't be able to revert this!`,
+        showCancelButton: true,
+        confirmButtonClass: "md-button md-success btn-fill",
+        cancelButtonClass: "md-button md-danger btn-fill",
+        confirmButtonText: "Yes, revert it!",
+        buttonsStyling: false
+      }).then(result => {
+        if (result.value) {
+          this.editingContent = { ...this.originContent }
+        }
+      });
+    },
     chooseFiles() {
        document.getElementById("coverImage").click()
     },
