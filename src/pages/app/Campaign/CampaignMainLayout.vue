@@ -3,7 +3,7 @@
     <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <div class="event-page-header md-layout-item md-size-100">
       <div class="header-name">
-        <div class="font-size-30 font-bold text-transform-capitalize mb-20">
+        <div class="font-size-30 font-bold text-transform-capitalize mb-20 mt-60">
           <img class="mr-10" :src="`${$iconURL}Campaign/Group 8857.svg`" />
           your event's brilliant campaign
         </div>
@@ -175,36 +175,36 @@
 </template>
 
 <script>
-import { Tabs, Modal } from '@/components';
-import HeaderActions from '@/components/HeaderActions';
-import CommentEditorPanel from '@/pages/app/Events/components/CommentEditorPanel';
-import SaveDate from './SaveDate';
-import Rsvp from './Rsvp';
-import Countdown from './Countdown';
-import Feedback from './Feedback';
-import DeliverySettings from './DeliverySettings';
-import CampaignScheduleModal from '@/components/Modals/Campaign/ScheduleModal';
-import Campaign from '@/models/Campaign';
-import CalendarEvent from '@/models/CalendarEvent';
-import swal from 'sweetalert2';
+import { Tabs, Modal } from "@/components";
+import HeaderActions from "@/components/HeaderActions";
+import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
+import SaveDate from "./SaveDate";
+import Rsvp from "./Rsvp";
+import Countdown from "./Countdown";
+import Feedback from "./Feedback";
+import DeliverySettings from "./DeliverySettings";
+import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal";
+import Campaign from "@/models/Campaign";
+import CalendarEvent from "@/models/CalendarEvent";
+import swal from "sweetalert2";
 
 const defaultSettings = {
   phone: {
     selected: false,
-    numberString: '',
+    numberString: "",
     numberArray: [],
-    excelFileName: '',
-    excelFilePath: '',
-    smsOrWhatsapp: '',
+    excelFileName: "",
+    excelFilePath: "",
+    smsOrWhatsapp: "",
   },
   email: {
     selected: false,
-    subject: '',
-    from: '',
-    addressString: '',
+    subject: "",
+    from: "",
+    addressString: "",
     addressArray: [],
-    excelFileName: '',
-    excelFilePath: '',
+    excelFileName: "",
+    excelFilePath: "",
   },
 };
 export default {
@@ -222,8 +222,8 @@ export default {
   data() {
     return {
       campaignInfo: {
-        conceptName: '',
-        logo: '',
+        conceptName: "",
+        logo: "",
       },
       deliverySettings: { ...defaultSettings },
       showCommentEditorPanel: false,
@@ -232,27 +232,27 @@ export default {
       campaigns: {
         1: {
           completed: false,
-          name: 'SAVING_DATE',
+          name: "SAVING_DATE",
           tooltip:
-            'Give guests enough time to clear their schedules, make travel arrangements and generally increase the chances of them atteding',
+            "Give guests enough time to clear their schedules, make travel arrangements and generally increase the chances of them atteding",
         },
         2: {
           completed: false,
-          name: 'RSVP',
+          name: "RSVP",
           tooltip:
             "Try sending your RSVP's a month in advance,  so you'll get the most accurate results",
         },
         3: {
           completed: false,
-          name: 'COMING_SOON',
+          name: "COMING_SOON",
           tooltip:
-            'A friendly reminder helps prepare attendees for your upcoming event. Aside from reminding them of the date and time, we also use this email to answer last-minute questions',
+            "A friendly reminder helps prepare attendees for your upcoming event. Aside from reminding them of the date and time, we also use this email to answer last-minute questions",
         },
         4: {
           completed: false,
-          name: 'FEEDBACK',
+          name: "FEEDBACK",
           tooltip:
-            'This touchpoint provides a valuable opportunity to promote other upcoming events, collect attendee feedback, and guide attendees towards the next step you want them to take.',
+            "This touchpoint provides a valuable opportunity to promote other upcoming events, collect attendee feedback, and guide attendees towards the next step you want them to take.",
         },
       },
     };
@@ -280,14 +280,14 @@ export default {
     saveCampaign(campaignType) {
       new Campaign({
         campaignType,
-        campaignStatus: 'ISSUED',
+        campaignStatus: "ISSUED",
         event: new CalendarEvent({ id: this.event.id }),
-        emails: ['mikelim12292@gmail.com'],
+        emails: ["mikelim12292@gmail.com"],
         byEmail: true,
         bySms: false,
         byWhatsApp: false,
         phoneNumbers: [],
-        coverImage: '',
+        coverImage: "",
         scheduleTime: new Date().getTime(),
         settings: {
           hideLogo: true,
@@ -311,8 +311,8 @@ export default {
       this.campaigns[currentCampaignIndex].scheduleSettings = scheduleSettings;
       this.campaigns[currentCampaignIndex].selectedOption = selectedOption;
       console.log(
-        'this.campaigns[currentCampaignIndex]',
-        this.campaigns[currentCampaignIndex],
+        "this.campaigns[currentCampaignIndex]",
+        this.campaigns[currentCampaignIndex]
       );
     },
     reverseSetting() {
@@ -320,25 +320,25 @@ export default {
       this.deliverySettings = {
         phone: {
           selected: false,
-          numberString: '',
+          numberString: "",
           numberArray: [],
-          excelFileName: '',
-          excelFilePath: '',
-          smsOrWhatsapp: '',
+          excelFileName: "",
+          excelFilePath: "",
+          smsOrWhatsapp: "",
         },
         email: {
           selected: false,
-          subject: '',
-          from: '',
-          addressString: '',
+          subject: "",
+          from: "",
+          addressString: "",
           addressArray: [],
-          excelFileName: '',
-          excelFilePath: '',
+          excelFileName: "",
+          excelFilePath: "",
         },
       };
       this.campaignInfo = {
         conceptName: this.event.concept.name,
-        logo: '',
+        logo: "",
       };
     },
     sendPreviewEmail() {
@@ -349,15 +349,15 @@ export default {
           fromUserName: this.user.name,
           eventName: this.event.title,
           plannerName: this.user.name,
-          companyName: 'maryoku',
+          companyName: "maryoku",
           eventUrl: `http://jeff-test2.local.maryoku.com:3000/#/rsvp/${this.event.id}`,
         })
         .then(() => {
           swal({
             title: `You will receive a preview campaign email soon!`,
             buttonsStyling: false,
-            type: 'success',
-            confirmButtonClass: 'md-button md-success',
+            type: "success",
+            confirmButtonClass: "md-button md-success",
           });
         });
     },
@@ -397,7 +397,7 @@ export default {
     }
     .completedCampaign {
       text-decoration: line-through;
-      font-family: 'Manrope-Regular';
+      font-family: "Manrope-Regular";
     }
   }
 }
@@ -425,7 +425,7 @@ export default {
     }
     .schedule-campaign-btn {
       &::after {
-        content: '';
+        content: "";
         height: 50px;
         width: 54px;
         background: #ff4f7e;
