@@ -5,7 +5,7 @@ export const validFunc = (ctx, ...rest) => {
 
 // sort func for sorting wrong value in object
 
-export function isWrong (obj, nameList) {
+export function isWrong(obj, nameList) {
   var data = {}
   nameList.forEach(item => {
     if (obj[item]) { data[item] = obj[item] }
@@ -34,7 +34,19 @@ export const oppositeColor = rgba => {
   console.log(rgba)
   rgba = rgba.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
   return (rgba && rgba.length >= 4) ? "#" +
-    ("0" + (255 - parseInt(rgba[1],10)).toString(16)).slice(-2) +
-    ("0" + (255 - parseInt(rgba[2],10)).toString(16)).slice(-2) +
-    ("0" + (255 - parseInt(rgba[3],10)).toString(16)).slice(-2) : '';
+    ("0" + (255 - parseInt(rgba[1], 10)).toString(16)).slice(-2) +
+    ("0" + (255 - parseInt(rgba[2], 10)).toString(16)).slice(-2) +
+    ("0" + (255 - parseInt(rgba[3], 10)).toString(16)).slice(-2) : '';
+}
+export const hexToRgbA = (hex, alpha = 1) => {
+  var c;
+  if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+    c = hex.substring(1).split('');
+    if (c.length == 3) {
+      c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+    }
+    c = '0x' + c.join('');
+    return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + `,${alpha})`;
+  }
+  throw new Error('Bad Hex');
 }

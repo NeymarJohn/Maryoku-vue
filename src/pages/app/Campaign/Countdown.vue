@@ -21,22 +21,6 @@
           <countdown-time :event="event"></countdown-time>
           <hide-switch class="ml-20" v-model="showLogo" label="countdown"></hide-switch>
         </div>
-        <div class="cover-image-button">
-          <md-button
-            class="md-button md-red maryoku-btn md-theme-default change-cover-btn"
-            @click="chooseFiles"
-          >
-            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width:20px" />Change Cover
-          </md-button>
-          <input
-            style="display: none"
-            id="countdown-coverImage"
-            name="attachment"
-            type="file"
-            multiple="multiple"
-            @change="onFileChange"
-          />
-        </div>
       </div>
       <!-- <div class="font-size-50 font-bold-extra text-center line-height-1 mb-60">{{info.conceptName}}</div> -->
       <title-editor
@@ -67,7 +51,6 @@ import CountdownTime from "./components/CountdownTime";
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel";
 import TitleEditor from "./components/TitleEditor";
 import HideSwitch from "@/components/HideSwitch";
-import { getBase64 } from "@/utils/file.util";
 
 export default {
   components: {
@@ -111,12 +94,6 @@ export default {
     changeTitle(newTitle) {
       this.$emit("changeInfo", { field: "conceptName", value: newTitle });
     },
-    chooseFiles() {
-      document.getElementById("countdown-coverImage").click();
-    },
-    async onFileChange(event) {
-      this.coverImage = await getBase64(event.target.files[0]);
-    },
   },
 };
 </script>
@@ -134,12 +111,6 @@ export default {
     .countdown-time-panel {
       margin: auto;
       transform: translate(70px, -50%);
-    }
-    .cover-image-button {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
     }
   }
   .countdown-guests {
