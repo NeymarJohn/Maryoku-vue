@@ -3,6 +3,8 @@ import InputText from "./Inputs/input-text.vue";
 import InputWithIcon from "./Inputs/InputWithIcon.vue";
 import MaryokuInput  from "./Inputs/MaryokuInput.vue"
 import MaryokuTextarea  from "./Inputs/MaryokuTextarea.vue"
+import MaryokuResizableTextarea  from "./Inputs/MaryokuResizableTextarea.vue"
+
 import Badge from "./Badge";
 
 import DropDown from "./Dropdown.vue";
@@ -80,6 +82,7 @@ export {
     InputWithIcon,
     MaryokuInput,
     MaryokuTextarea,
+    MaryokuResizableTextarea,
     LocationInput,
     SidebarItem,
     SideBar,

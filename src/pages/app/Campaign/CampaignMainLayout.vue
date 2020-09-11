@@ -76,11 +76,16 @@
         v-if="selectedTab == 1"
         :info="{...campaigns[1], ...campaignInfo}"
         @changeInfo="changeInfo"
+        ref="savedateCampaign"
       ></save-date>
-      <rsvp v-if="selectedTab == 2" :info="{...campaigns[2], ...campaignInfo}"></rsvp>
-      <countdown v-if="selectedTab == 3" :info="{...campaigns[3], ...campaignInfo}"></countdown>
-      <feedback v-if="selectedTab == 4" :info="{...campaigns[4], ...campaignInfo}"></feedback>
-      <delivery-settings :defaultSettings="deliverySettings" @change="changeSettings"></delivery-settings>
+      <rsvp v-if="selectedTab == 2" :info="{...campaigns[2], ...campaignInfo}" ref="rsvp"></rsvp>
+      <countdown v-if="selectedTab == 3" :info="{...campaigns[3], ...campaignInfo}" ref="countdown"></countdown>
+      <feedback v-if="selectedTab == 4" :info="{...campaigns[4], ...campaignInfo}" ref="feedback"></feedback>
+      <delivery-settings
+        :defaultSettings="deliverySettings"
+        @change="changeSettings"
+        :campaign="campaigns[selectedTab]"
+      ></delivery-settings>
     </div>
     <div class="campaign-footer">
       <div class="campaign-footer-content d-flex">
@@ -263,6 +268,7 @@ export default {
     },
     selectTab(tabIndex) {
       this.selectedTab = tabIndex;
+      this.deliverySettings = { ...defaultSettings };
     },
     scrollToTop() {
       window.scrollTo(0, 0);
@@ -340,6 +346,12 @@ export default {
         conceptName: this.event.concept.name,
         logo: '',
       };
+      if (this.selectedTab == 1)
+        //savedate
+        this.$refs.savedateCampaign.setDefault();
+      if (this.selectedTab == 2) {
+        this.$refs.rsvp.setDefault();
+      }
     },
     sendPreviewEmail() {
       this.$http

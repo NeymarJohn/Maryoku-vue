@@ -1,7 +1,11 @@
 import { postReq, getReq } from '@/utils/token'
 import { cat } from 'shelljs'
 
+
 const state = {
+  status: null,
+  vendor: {},
+  vendor_categories: [],
   vendors: [],
   allProperties:[],
   properties: {}
@@ -13,8 +17,14 @@ const getters = {
   },
   getPropertiesByCategory: (state) => (category) => {
 
-  }
+  },
+  getStatus: state => state.status,
 
+  getRoading: state => state.loading,
+
+  getVendorCategories: state => state.vendor_categories,
+
+  getVendors: state => state.vendors,
 }
 
 const actions = {
@@ -57,6 +67,24 @@ const actions = {
 const mutations = {
   setAllProperties (state, data) {
     state.allProperties = data
+  },
+  SET_LOADING(state){
+    state.loading = true;
+  },
+  GET_VENDORS(state, data){
+    state.loading = false;
+    state.vendors = data.vendors;
+    state.vendor_categories = data.vendor_categories
+  },
+  SET_DATA (state, data){
+    state.vendor = data;
+    state.status = {code: 200, title:'Success to save!', message: "Your vendor is saved successfully."}
+  },
+  FAILED (state, message){
+    state.status =  {code: 500, title: "Failed to save!", message: "Sorry, we can't save your vendor."};
+  },
+  RESET(state){
+    state.status = null;
   }
 }
 

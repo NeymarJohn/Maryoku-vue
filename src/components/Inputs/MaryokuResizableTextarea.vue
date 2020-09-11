@@ -1,21 +1,16 @@
 <template>
-  <div v-if="type=='textarea'" class='maryoku-textarea'  :style="size=='normal'?'padding:40px 140px 40px 40px':'padding:30px 40px 30px 30px'" >
-    <textarea v-model="content" @input="handleInput" :placeholder="placeholder" :rows="rows" class="textarea js-autoresize"></textarea>
-    <span  class="close-button" @click="clearContent">
-      <img :src="`${$iconURL}Campaign/Group+3602.svg`"/>
-    </span>
+  <div class="maryoku-resizable-wrapper">
+  <div contenteditable
+      class="maryoku-resizable-textarea" 
+      :data-placeholder="placeholder"
+      v-text="content"
+      @keydown="editing"
+      @blur="onEdit" >
+      
   </div>
-  <div v-else class='maryoku-textarea input'  :class="inputClass">
-    <textarea v-model="content" @input="handleInput" :rows="1" class="textarea js-autoresize"></textarea>
-    <div class="place-holder color-dark-gray font-size-16" >
-      <img v-if="type=='emails'" :src="`${$iconURL}Campaign/emails-gray.svg`" style="width:20px; margin:0 7px;"> 
-      <img v-if="type=='phones'" :src="`${$iconURL}Choose+vendor+and+Proposal/phone-gray.svg`" style="width:20px; margin:0 7px;"/>
-      {{placeholder}}
-    </div>
   </div>
 </template>
 <script>
-import { setResizeListeners } from "@/utils/auto-resize.js";
 
 export default {
   props: {
@@ -45,10 +40,10 @@ export default {
     return {
       content: "",
       inputClass: `${this.inputStyle}`,
+      hiddenPlaceholder: false,
     }
   },
   mounted () {
-    setResizeListeners(this.$el, ".js-autoresize");;
   },
   methods: {
     handleInput(e) {
@@ -59,6 +54,21 @@ export default {
       this.content = ""
       this.$emit("input", this.content);
       this.$emit("change", { value: this.content, type: this.inputStyle});
+    },
+    editing(evt) {
+      console.log("editing")
+      var src = evt.target.innerHTML
+      // this.content = src
+      this.$emit("input", src);
+      this.$emit("change", { value: src, type: this.inputStyle});
+    },
+    onEdit() {
+      this.$el.querySelector('.maryoku-resizable-textarea').blur()
+      this.hiddenPlaceholder = false
+    },
+    clickPlaceholder() {
+      this.hiddenPlaceholder = true
+      this.$el.querySelector('.maryoku-resizable-textarea').click()
     }
   },
   created () {
@@ -72,13 +82,13 @@ export default {
   watch: {
     content: function(newValue) {
       this.inputClass = `${this.inputStyle} ${newValue ? "active" : "" }`;
-      setResizeListeners(this.$el, ".js-autoresize");;
+      this.$emit("input", newValue);
+      this.$emit("change", { value: newValue, type: this.inputStyle});
+      console.log("emit")
     },
     value: function(newValue) {
       this.content = newValue
-      setTimeout(() => {
-        setResizeListeners(this.$el, ".js-autoresize");
-      },300)
+      
     }
   }
 }
@@ -93,13 +103,28 @@ export default {
   background-position-y: 20px;
   padding: 1em 20px 1em 50px;
 }
-.maryoku-textarea {
+.maryoku-resizable-wrapper {
   position: relative;
-  border: solid 1px #a0a0a0;
+  min-height: 55px;
+  background: #ffffff;
+  box-shadow: none;
+  width: 100%;
+  padding: 1em 1.5em;
+  font-size: 16px;
+  color: #050505;
+  font-family: 'Manrope-Regular',sans-serif;
+  border: solid 0.5px #bcbcbc;
   border-radius: 3px;
-  background: white;
-  display: flex;
-  
+  .placeholder {
+    position: absolute;
+    top: 1em;
+  }
+}
+.maryoku-resizable-textarea {
+  &:empty:before {
+    content: attr(data-placeholder);
+    color: #808080
+  }
   &.input{
     padding: 1em 1.5em;
     textarea {

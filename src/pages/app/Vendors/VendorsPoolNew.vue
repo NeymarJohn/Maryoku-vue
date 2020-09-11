@@ -197,10 +197,9 @@ import UploadModal from './ImportVendors'
 import VendorsGrid from './VendorsGridNew'
 import VendorsList from './VendorsList'
 
-import Vendors from '@/models/Vendors'
-import EventComponent from '@/models/EventComponent'
 import SideBar from '../../../components/SidebarPlugin/NewSideBar';
-
+import { Modal } from '@/components'
+import Vendors from '@/models/Vendors'
 import _ from 'underscore'
 
 export default {
@@ -218,8 +217,8 @@ export default {
   },
   data () {
     return {
+      working: true,
       view: 'grid', // {grid, list}
-      working: false,
       vendorsList: [],
       buildingBlocksList: [],
       ratings: [1, 2, 3, 4, 5],
@@ -289,7 +288,7 @@ export default {
   },
   mounted () {
     this.working = true
-    this.$auth.currentUser(this, true, () => {
+    // this.$auth.currentUser(this, true, () => {
       Vendors.find('categories').then(res => {
         let list = []
         _.each(res, (parentBuildingBlock) => {
@@ -300,13 +299,15 @@ export default {
         })
 
         this.buildingBlocksList = list
-
+          console.log("vendor-pool.categories", list);
         new Vendors().limit(1000).get().then((vendors) => {
+          console.log("vendor-pool.vendors", vendors);
           this.vendorsList = vendors[0].results
           this.working = false
         })
       })
-    })
+    // })
+
   },
   methods: {
     changeView (view) {
@@ -353,7 +354,8 @@ export default {
         this.filtersItems[index].expand = indexOfExpandedItem !== index ? true : false;
       }
   },
-  computed: {},
+  computed: {
+  },
   watch: {}
 }
 </script>

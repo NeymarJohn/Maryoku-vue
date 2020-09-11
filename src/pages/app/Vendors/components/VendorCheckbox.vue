@@ -212,11 +212,11 @@ export default {
   },
   mounted() {
     if (this.vendor) {
-      const item = this.vendor.categoryServices[this.camelize(this.label)]
+      const item = this.vendor.services[this.camelize(this.label)]
       if (item) {
         this.included = item.included
         this.checked = item.checked
-        this.currentItem.value = item.value
+        this.currentItem.value = JSON.stringify(item.value)
         this.currentItem.desc = item.desc
         this.exChecked = item.value
         console.log(this.currentItem)
@@ -231,17 +231,17 @@ export default {
         this.exChecked.push(item)
       }
       this.currentItem.value = this.exChecked
-      this.$root.$emit('update-vendor-value', `categoryServices.${this.camelize(this.label)}`, this.currentItem)
+      this.$root.$emit('update-vendor-value', `services.${this.camelize(this.label)}`, this.currentItem)
     },
     updateCheck() {
       this.checked = !this.checked
       this.currentItem.checked = this.checked
-      this.$root.$emit('update-vendor-value', `categoryServices.${this.camelize(this.label)}`, this.currentItem)
+      this.$root.$emit('update-vendor-value', `services.${this.camelize(this.label)}`, this.currentItem)
     },
     updateIncluded() {
       this.included = !this.included
       this.currentItem.included = this.included
-      this.$root.$emit('update-vendor-value', `categoryServices.${this.camelize(this.label)}`, this.currentItem)
+      this.$root.$emit('update-vendor-value', `services.${this.camelize(this.label)}`, this.currentItem)
     },
     camelize(str) {
       let temp = str.replace(/\W+(.)/g, function(match, chr) {
