@@ -39,6 +39,7 @@
                   @change="handleInputEmails"
                 ></maryoku-textarea>
                 <invalid-address-panel
+                  type="phone"
                   class="mt-30"
                   v-if="invalidPastedPhones"
                   :content="invalidPastedPhones"
@@ -58,6 +59,9 @@
                 <div class="font-bold text-underline mb-10">{{settingData.phone.excelFileName}}</div>
                 <md-button class="md-simple edit-btn" @click="choosePhoneExcel">
                   <span class="color-red">change</span>
+                </md-button>
+                <md-button class="md-simple edit-btn" @click="removeExcel('phone')">
+                  <span class="color-red">remove</span>
                 </md-button>
               </div>
               <span class="ml-20 mt-10">
@@ -145,6 +149,7 @@
                     @change="handleInputEmails"
                   ></maryoku-textarea>
                   <invalid-address-panel
+                    type="email"
                     class="mt-30"
                     v-if="invalidPastedEmails"
                     :content="invalidPastedEmails"
@@ -163,8 +168,12 @@
                 </md-button>
                 <div v-else class="uploadedFile border-gray-1">
                   <div class="font-bold text-underline mb-10">{{settingData.email.excelFileName}}</div>
-                  <md-button class="md-simple edit-btn" @click="chooseEmailExcel">
+                  <md-button class="md-simple edit-btn mr-10" @click="chooseEmailExcel">
                     <span class="color-red">change</span>
+                  </md-button>
+                  <span class="ml-10 mr-10"></span>
+                  <md-button class="md-simple edit-btn ml-10" @click="removeExcel('email')">
+                    <span class="color-red">remove</span>
                   </md-button>
                 </div>
                 <span class="ml-20 mt-10">
@@ -196,17 +205,19 @@ import {
   MaryokuInput,
   LocationInput,
   MaryokuTextarea,
-} from "@/components";
-import CollapsePanel from "./CollapsePanel";
-import InvalidAddressPanel from "./components/InvalidAddressPanel";
-import { validateEmail, validPhoneNumber } from "@/utils/validation.util";
-import XLSX from "xlsx";
+  MaryokuResizableTextarea,
+} from '@/components';
+import CollapsePanel from './CollapsePanel';
+import InvalidAddressPanel from './components/InvalidAddressPanel';
+import { validateEmail, validPhoneNumber } from '@/utils/validation.util';
+import XLSX from 'xlsx';
 export default {
   components: {
     MaryokuInput,
     CollapsePanel,
     MaryokuTextarea,
     InvalidAddressPanel,
+    MaryokuResizableTextarea,
   },
   props: {
     defaultSettings: {
@@ -214,55 +225,77 @@ export default {
       default: () => ({
         phone: {
           selected: false,
-          numberString: "",
+          numberString: '',
           numberArray: [],
-          excelFileName: "",
-          excelFilePath: "",
-          smsOrWhatsapp: "",
+          excelFileName: '',
+          excelFilePath: '',
+          smsOrWhatsapp: '',
         },
         email: {
           selected: false,
-          subject: "",
-          from: "",
-          addressString: "",
+          subject: '',
+          from: '',
+          addressString: '',
           addressArray: [],
-          excelFileName: "",
-          excelFilePath: "",
+          excelFileName: '',
+          excelFilePath: '',
         },
       }),
+    },
+    campaign: {
+      type: Object,
+      default: () => ({}),
     },
   },
   data() {
     return {
       settingData: {
         email: {
-          addressString: "",
+          addressString: '',
         },
         phone: {
-          numberString: "",
+          numberString: '',
         },
       },
       invalidPastedEmails: null,
       invalidPastedPhones: null,
       tooltips: {
         phoneExcel:
-          "Please upload a csv file containing only phone numbers in a valid format.",
+          'Please upload a csv file containing only phone numbers in a valid format.',
         emailExcel:
-          "Please upload a csv file containing only email addresses in a valid format.",
+          'Please upload a csv file containing only email addresses in a valid format.',
       },
-      fileInputType: "",
+      fileInputType: '',
     };
   },
   created() {
     this.settingData = this.defaultSettings;
+    // set default subject for email
+    this.settingData.email.from = this.$store.state.auth.user.username;
+    switch (this.campaign.name) {
+      case 'SAVE_DATE':
+        this.settingData.email.subject = `Save date ${this.event.title}`;
+        break;
+      case 'RSVP':
+        this.settingData.email.subject = `RSVP ${this.event.title}`;
+        break;
+      case 'COMING_SOON':
+        this.settingData.email.subject = `Comming event ${this.event.title}`;
+        break;
+      case 'FEEDBACK':
+        this.settingData.email.subject = `Feedback ${this.event.title}`;
+        break;
+      default:
+        this.settingData.email.subject = `Save date ${this.event.title}`;
+    }
   },
   methods: {
     handleInputEmails({ value, type }) {
       console.log(value);
       console.log(type);
       const addresses = value.split(/[\s,]+/);
-      let invalidEmails = "";
-      if (type == "emails") {
+      let invalidEmails = '';
+      if (type == 'emails') {
         addresses.forEach((address) => {
           if (address && address.trim() && !validateEmail(address)) {
             if (!invalidEmails) invalidEmails = address;
@@ -270,7 +303,7 @@ export default {
           }
         });
         this.invalidPastedEmails = invalidEmails;
-      } else if (type == "phone") {
+      } else if (type == 'phone') {
         addresses.forEach((address) => {
           if (address && address.trim() && !validPhoneNumber(address)) {
             if (!invalidEmails) invalidEmails = address;
@@ -281,12 +314,22 @@ export default {
       }
     },
     chooseEmailExcel() {
-      document.getElementById("execelFileInput").click();
-      this.fileInputType = "email";
+      document.getElementById('execelFileInput').click();
+      this.fileInputType = 'email';
     },
     choosePhoneExcel() {
-      document.getElementById("execelFileInput").click();
-      this.fileInputType = "phone";
+      document.getElementById('execelFileInput').click();
+      this.fileInputType = 'phone';
+    },
+    removeExcel(type) {
+      this.settingData[type].excelFileName = '';
+      const input = document.getElementById('execelFileInput');
+      input.value = '';
+      if (type === 'email') {
+        this.settingData.email.addressString = '';
+      } else {
+        this.settingData.phone.numberString = '';
+      }
     },
     onFileChange(event) {
       this.settingData[this.fileInputType].excelFileName =
@@ -299,7 +342,7 @@ export default {
       var reader = new FileReader();
       reader.onload = (e) => {
         var data = new Uint8Array(e.target.result);
-        var workbook = XLSX.read(data, { type: "array" });
+        var workbook = XLSX.read(data, { type: 'array' });
         let sheetName = workbook.SheetNames[0];
         /* DO SOMETHING WITH workbook HERE */
         let worksheet = workbook.Sheets[sheetName];
@@ -311,26 +354,47 @@ export default {
           values.push(val);
         });
         console.log(values);
-        if (this.fileInputType === "email") {
+        if (this.fileInputType === 'email') {
           this.settingData.email.addressString = values.join();
         } else this.settingData.phone.numberString = values.join();
       };
       reader.readAsArrayBuffer(file);
     },
   },
+  computed: {
+    event() {
+      return this.$store.state.event.eventData;
+    },
+  },
   watch: {
     settingData: {
       handler(newValue) {
-        this.$emit("change", newValue);
+        this.$emit('change', newValue);
       },
       deep: true,
     },
     defaultSettings: {
       handler(newValue) {
-        this.settingData = newValue
+        this.settingData = newValue;
+        switch (this.campaign.name) {
+          case 'SAVE_DATE':
+            this.settingData.email.subject = `Save date ${this.event.title}`;
+            break;
+          case 'RSVP':
+            this.settingData.email.subject = `RSVP ${this.event.title}`;
+            break;
+          case 'COMING_SOON':
+            this.settingData.email.subject = `Comming event ${this.event.title}`;
+            break;
+          case 'FEEDBACK':
+            this.settingData.email.subject = `Feedback ${this.event.title}`;
+            break;
+          default:
+            this.settingData.email.subject = `Save date ${this.event.title}`;
+        }
       },
-      deep:true
-    }
+      deep: true,
+    },
   },
 };
 </script>

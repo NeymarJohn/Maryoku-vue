@@ -8,7 +8,7 @@
     :number="2"
   >
     <div class="carousel-item" v-for="(item,index) in images" :key="index" >
-      <img :src="item.src" class="carousel-image"/>
+      <img :src="item.src" class="carousel-image" :class="{whiteBlack: item.default}"/>
       <div class="carousel-item-actions">
         <div class="color-white mb-20 font-bold font-size-16 button" @click="deleteImage(index)"><img :src="`${$iconURL}RSVP/Group 4854.svg`" class="mr-10"/> Delete</div>
         <div class="color-white font-bold font-size-16 button"  @click="replaceImage(index)"><img :src="`${$iconURL}RSVP/Group 2344.svg`" class="mr-10"/> Replace</div>
@@ -37,15 +37,19 @@ export default {
       images: [
         {
           src: `${this.$iconURL}RSVP/Image+81.jpg`,
+          default: true,
         },
         {
           src: `${this.$iconURL}RSVP/shutterstock_444402799_thumb.jpg`,
+          default: true,
         },
         {
           src: `${this.$iconURL}RSVP/Image+83.jpg`,
+          default: true,
         },
         {
           src: `${this.$iconURL}RSVP/Image+84.jpg`,
+          default: true,
         },
       ],
       selectedIndex: 0,
@@ -62,6 +66,7 @@ export default {
     async onFileChange(event) {
       const image = await getBase64(event.target.files[0])
       this.images[this.selectedIndex].src = image
+      this.images[this.selectedIndex].default = false
     },
   },
 }
@@ -69,13 +74,15 @@ export default {
 <style lang="scss" scoped>
 .rsvp-venue-carousel {
   .carousel-item {
-    width: 290px;
+    // width: 290px;
     height: 170px;
     border-radius: 3px;
     overflow: hidden;
     position: relative;
     .carousel-image {
-      filter: grayscale(1)
+      &.whiteBlack {
+        filter: grayscale(1)
+      }
     }
     .carousel-item-actions {
       display: none;

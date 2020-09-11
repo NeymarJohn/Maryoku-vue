@@ -37,6 +37,11 @@ export default {
       this.isEditing = false;
     }
   },
+  watch: {
+    value(newValue, oldValue) {
+      this.content = newValue
+    }
+  },
 }
 </script>
 <style lang="scss" scoped>

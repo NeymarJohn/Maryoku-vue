@@ -427,7 +427,7 @@ export default {
     },
     getExtraPayItems() {
       let extraPayItems = []
-      _.each(this.vendor.services, (item) => {
+      _.each(this.vendor.categoryServices, (item) => {
         if (!item.included) {
           extraPayItems.push(item)
         }
@@ -436,7 +436,7 @@ export default {
     },
     getStartingFeeItems() {
       let startingFeeItems = []
-      _.each(this.vendor.services, (item) => {
+      _.each(this.vendor.categoryServices, (item) => {
         if (item.included) {
           startingFeeItems.push(item)
         }
