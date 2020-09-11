@@ -119,16 +119,16 @@
   </div>
 </template>
 <script>
-import MaryokuTextarea from '@/components/Inputs/MaryokuTextarea';
-import { MaryokuInput } from '@/components';
-import RsvpVenueCarousel from '@/pages/app/RSVP/RSVPVenueCarousel.vue';
-import RsvpEventInfoPanel from '@/pages/app/RSVP/RSVPEventInfoPanel.vue';
-import RsvpAnalytics from './components/RSVPAnalytics';
-import TitleEditor from './components/TitleEditor';
-import RsvpTimelinePanel from '@/pages/app/RSVP/RSVPTimelinePanel.vue';
+import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
+import { MaryokuInput } from "@/components";
+import RsvpVenueCarousel from "@/pages/app/RSVP/RSVPVenueCarousel.vue";
+import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
+import RsvpAnalytics from "./components/RSVPAnalytics";
+import TitleEditor from "./components/TitleEditor";
+import RsvpTimelinePanel from "@/pages/app/RSVP/RSVPTimelinePanel.vue";
 
-import { getBase64 } from '@/utils/file.util';
-import swal from 'sweetalert2';
+import { getBase64 } from "@/utils/file.util";
+import swal from "sweetalert2";
 
 export default {
   components: {
@@ -152,11 +152,11 @@ export default {
   },
   data() {
     return {
-      coverImage: '',
-      logoImage: 'http://static.maryoku.com/storage/icons/RSVP/ms-icon.png',
+      coverImage: "",
+      logoImage: "http://static.maryoku.com/storage/icons/RSVP/ms-icon.png",
       showLogo: true,
-      content: '',
-      zoomlink: '',
+      content: "",
+      zoomlink: "",
       allowOnline: false,
       showWhatWear: true,
       showWhatKnow: true,
@@ -177,11 +177,11 @@ export default {
       ],
       originContent: {},
       editingContent: {
-        title: '',
-        description: '',
-        coverImageUrl: '',
-        wearingGuide: '',
-        knowledge: '',
+        title: "",
+        description: "",
+        coverImageUrl: "",
+        wearingGuide: "",
+        knowledge: "",
       },
     };
   },
@@ -202,12 +202,12 @@ export default {
   methods: {
     setDefault() {
       swal({
-        title: 'Are you sure?',
+        title: "Are you sure?",
         text: `You won't be able to revert this!`,
         showCancelButton: true,
-        confirmButtonClass: 'md-button md-success btn-fill',
-        cancelButtonClass: 'md-button md-danger btn-fill',
-        confirmButtonText: 'Yes, revert it!',
+        confirmButtonClass: "md-button md-success btn-fill",
+        cancelButtonClass: "md-button md-danger btn-fill",
+        confirmButtonText: "Yes, revert it!",
         buttonsStyling: false,
       }).then((result) => {
         if (result.value) {
@@ -216,13 +216,15 @@ export default {
       });
     },
     chooseFiles() {
-      document.getElementById('coverImage').click();
+      document.getElementById("coverImage").click();
     },
     async onFileChange(event) {
-      this.coverImage = await getBase64(event.target.files[0]);
+      this.editingContent.coverImageUrl = await getBase64(
+        event.target.files[0],
+      );
     },
     changeTitle(newTitle) {
-      this.$emit('changeInfo', { field: 'conceptName', value: newTitle });
+      this.$emit("changeInfo", { field: "conceptName", value: newTitle });
     },
   },
 };
@@ -237,7 +239,7 @@ export default {
     border-radius: 30px;
     &:hover {
       .cover-preview::before {
-        content: '';
+        content: "";
         width: 100%;
         height: 100%;
         opacity: 0.52;
