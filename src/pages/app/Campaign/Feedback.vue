@@ -67,13 +67,13 @@
   </div>
 </template>
 <script>
-import MaryokuTextarea from '@/components/Inputs/MaryokuTextarea';
-import FeedbackImageCarousel from './components/FeedbackImageCarousel';
-import SharingButtonGroup from './components/SharingButtonGroup';
-import FeedbackQuestion from './components/FeedbackQuestion';
-import TitleEditor from './components/TitleEditor';
-import HideSwitch from '@/components/HideSwitch';
-import swal from 'sweetalert2';
+import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
+import FeedbackImageCarousel from "./components/FeedbackImageCarousel";
+import SharingButtonGroup from "./components/SharingButtonGroup";
+import FeedbackQuestion from "./components/FeedbackQuestion";
+import TitleEditor from "./components/TitleEditor";
+import HideSwitch from "@/components/HideSwitch";
+import swal from "sweetalert2";
 
 export default {
   components: {
@@ -93,11 +93,11 @@ export default {
   data() {
     return {
       allowUploadPhoto: true,
-      placeHolder: '',
+      placeHolder: "",
       originalContent: {},
       editingContent: {
         name: this.info.conceptName,
-        description: '',
+        description: "",
         images: [
           {
             src: `${this.$iconURL}RSVP/Image+81.jpg`,
@@ -118,28 +118,28 @@ export default {
         showFeedbackQuesion: true,
         feedBack: [
           {
-            question: 'What did you like or dislike about this event?',
+            question: "What did you like or dislike about this event?",
             showQuestion: true,
             rank: 0,
-            icon: '',
+            icon: "",
           },
           {
-            question: 'What did you think of the venue?',
+            question: "What did you think of the venue?",
             showQuestion: true,
             rank: 0,
-            icon: 'venuerental',
+            icon: "venuerental",
           },
           {
-            question: 'How did you like the catering service?',
+            question: "How did you like the catering service?",
             showQuestion: true,
             rank: 0,
-            icon: 'foodandbeverage',
+            icon: "foodandbeverage",
           },
           {
-            question: 'Did you enjoy the activity?',
+            question: "Did you enjoy the activity?",
             showQuestion: true,
             rank: 0,
-            icon: 'decor',
+            icon: "decor",
           },
         ],
       },
@@ -149,7 +149,7 @@ export default {
     this.placeHolder = `Thank you so much for attending! We are so glad you could join us.
     Please take a moment to help us improve future events by taking a brief survey. 
     Your feedback is extremely valuable to our ongoing effort to offer great ${
-      this.event.guestType || 'employee'
+      this.event.guestType || "employee"
     } experience.
 
     If you have photos, documents or other event materials that you want to share, you can upload them here.
@@ -159,7 +159,7 @@ export default {
     `;
     this.placeHolder = this.placeHolder.trim();
     // this.comment = this.placeHolder.trim().replace(/  /g, '');
-    this.placeHolder = this.placeHolder.trim().replace(/  /g, '');
+    this.placeHolder = this.placeHolder.trim().replace(/  /g, "");
     this.originalContent = Object.assign({}, this.editingContent);
   },
   computed: {
@@ -170,12 +170,12 @@ export default {
   methods: {
     setDefault() {
       swal({
-        title: 'Are you sure?',
+        title: "Are you sure?",
         text: `You won't be able to revert this feedback!`,
         showCancelButton: true,
-        confirmButtonClass: 'md-button md-success btn-fill',
-        cancelButtonClass: 'md-button md-danger btn-fill',
-        confirmButtonText: 'Yes, revert it!',
+        confirmButtonClass: "md-button md-success btn-fill",
+        cancelButtonClass: "md-button md-danger btn-fill",
+        confirmButtonText: "Yes, revert it!",
         buttonsStyling: false,
       }).then((result) => {
         if (result.value) {
@@ -187,7 +187,7 @@ export default {
       this.editingContent.images.unshift({ src: image });
     },
     uploadFile() {
-      document.getElementById('file-uploader').click();
+      document.getElementById("file-uploader").click();
     },
     changeUploadFile(event) {
       const fileName = event.target.files[0].name;
