@@ -8,6 +8,7 @@
       class="feedback-carousel"
       :number="2"
       v-if="images.length > 0"
+      :key="Math.random()"
     >
       <div class="carousel-item" v-for="(item,index) in images" :key="index">
         <img :src="item.src" class="carousel-image" />
@@ -30,8 +31,8 @@
   </div>
 </template>
 <script>
-import carousel from "vue-owl-carousel";
-import { getBase64 } from "@/utils/file.util";
+import carousel from 'vue-owl-carousel';
+import { getBase64 } from '@/utils/file.util';
 
 export default {
   components: {
@@ -50,11 +51,11 @@ export default {
   },
   methods: {
     uploadImage(index) {
-      document.getElementById("carousel-file").click();
+      document.getElementById('carousel-file').click();
     },
     async onFileChange(event) {
       const image = await getBase64(event.target.files[0]);
-      this.$emit("addImage", image);
+      this.$emit('addImage', image);
     },
   },
 };
@@ -107,7 +108,7 @@ export default {
         }
       }
       &::before {
-        content: "";
+        content: '';
         position: absolute;
         width: 100%;
         height: 100%;

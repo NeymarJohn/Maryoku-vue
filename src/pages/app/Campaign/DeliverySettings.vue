@@ -205,7 +205,7 @@ import {
   MaryokuInput,
   LocationInput,
   MaryokuTextarea,
-  MaryokuResizableTextarea
+  MaryokuResizableTextarea,
 } from "@/components";
 import CollapsePanel from "./CollapsePanel";
 import InvalidAddressPanel from "./components/InvalidAddressPanel";
@@ -217,7 +217,7 @@ export default {
     CollapsePanel,
     MaryokuTextarea,
     InvalidAddressPanel,
-    MaryokuResizableTextarea
+    MaryokuResizableTextarea,
   },
   props: {
     defaultSettings: {
@@ -244,8 +244,8 @@ export default {
     },
     campaign: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   data() {
     return {
@@ -271,21 +271,22 @@ export default {
   created() {
     this.settingData = this.defaultSettings;
     // set default subject for email
+    this.settingData.email.from = this.$store.state.auth.user.username;
     switch (this.campaign.name) {
-      case 'SAVE_DATE':
-        this.settingData.email.subject = `Save date ${this.event.title}`
+      case "SAVE_DATE":
+        this.settingData.email.subject = `Save date ${this.event.title}`;
         break;
-      case 'RSVP':
-        this.settingData.email.subject = `RSVP ${this.event.title}`
+      case "RSVP":
+        this.settingData.email.subject = `RSVP ${this.event.title}`;
         break;
-      case 'COMING_SOON':
-        this.settingData.email.subject = `Comming event ${this.event.title}`
+      case "COMING_SOON":
+        this.settingData.email.subject = `Comming event ${this.event.title}`;
         break;
-      case 'FEEDBACK':
-        this.settingData.email.subject = `Feedback ${this.event.title}`
+      case "FEEDBACK":
+        this.settingData.email.subject = `Feedback ${this.event.title}`;
         break;
       default:
-        this.settingData.email.subject = `Save date ${this.event.title}`
+        this.settingData.email.subject = `Save date ${this.event.title}`;
     }
   },
   methods: {
@@ -321,13 +322,13 @@ export default {
       this.fileInputType = "phone";
     },
     removeExcel(type) {
-      this.settingData[type].excelFileName = '';
-      const input = document.getElementById('execelFileInput');
-      input.value = ''
-      if (type === 'email') {
-        this.settingData.email.addressString = '';
+      this.settingData[type].excelFileName = "";
+      const input = document.getElementById("execelFileInput");
+      input.value = "";
+      if (type === "email") {
+        this.settingData.email.addressString = "";
       } else {
-        this.settingData.phone.numberString = '';
+        this.settingData.phone.numberString = "";
       }
     },
     onFileChange(event) {
@@ -362,8 +363,8 @@ export default {
   },
   computed: {
     event() {
-      return this.$store.state.event.eventData
-    }
+      return this.$store.state.event.eventData;
+    },
   },
   watch: {
     settingData: {
@@ -374,26 +375,26 @@ export default {
     },
     defaultSettings: {
       handler(newValue) {
-        this.settingData = newValue
+        this.settingData = newValue;
         switch (this.campaign.name) {
-          case 'SAVE_DATE':
-            this.settingData.email.subject = `Save date ${this.event.title}`
+          case "SAVE_DATE":
+            this.settingData.email.subject = `Save date ${this.event.title}`;
             break;
-          case 'RSVP':
-            this.settingData.email.subject = `RSVP ${this.event.title}`
+          case "RSVP":
+            this.settingData.email.subject = `RSVP ${this.event.title}`;
             break;
-          case 'COMING_SOON':
-            this.settingData.email.subject = `Comming event ${this.event.title}`
+          case "COMING_SOON":
+            this.settingData.email.subject = `Comming event ${this.event.title}`;
             break;
-          case 'FEEDBACK':
-            this.settingData.email.subject = `Feedback ${this.event.title}`
+          case "FEEDBACK":
+            this.settingData.email.subject = `Feedback ${this.event.title}`;
             break;
           default:
-            this.settingData.email.subject = `Save date ${this.event.title}`
+            this.settingData.email.subject = `Save date ${this.event.title}`;
         }
       },
-      deep:true
-    }
+      deep: true,
+    },
   },
 };
 </script>

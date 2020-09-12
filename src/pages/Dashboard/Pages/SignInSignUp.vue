@@ -14,8 +14,8 @@
           <maryoku-input class="form-input" v-validate="modelValidations.email" inputStyle="email" v-model="user.email" placeholder="Type email address here..."></maryoku-input>
           <maryoku-input class="form-input" v-validate="modelValidations.password" type="password" inputStyle="password" v-model="user.password" placeholder="Type password here..."></maryoku-input>
           <div class="md-error">
-            <div v-if="notFoundUser" class="font-size-16">
-              Sorry, we couldn’t find you.
+            <div v-if="notFoundUser" class="font-size-16"> 
+              Sorry, we couldn’t find you. 
               <br/>
               If you are not a user please sign up <span class="signupLink" @click="toSingUp">here</span>.
             </div>
@@ -71,7 +71,6 @@ export default {
           if (this.user.email && this.user.password) {
             this.$store.dispatch('auth/login', this.user).then(
               () => {
-                console.log("after.signin");
                 if (this.keepMe) {
                   document.cookie = `rememberMe=true; path=/;`;
                 }
@@ -103,7 +102,6 @@ export default {
       this.$router.push({ path: '/forgot-password' })
     },
     redirectPage() {
-      console.log("redirect.page", this.$route.query.action, this.currentUser);
       let action = this.$route.query.action
       if (this.currentUser) {
         if (action === this.$queryEventActions.create) {
@@ -115,10 +113,8 @@ export default {
             }
         } else  {
           if (this.currentUser.currentTenant) {
-            console.log("redirect.events")
             this.$router.push({ path: '/events'})
           } else if (this.currentUser.tenants.length === 0) {
-            console.log("redirect.create-event-wizard")
             const callback = btoa('/create-event-wizard')
             this.$router.push({ path: `/create-workspace?callback=${callback}`})
           } else if (this.currentUser.tenants.length > 1) {
@@ -130,7 +126,7 @@ export default {
             this.$router.push({ path: '/error'})
           }
         }
-
+        
       }
     }
   },

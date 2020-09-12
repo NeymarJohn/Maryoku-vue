@@ -65,13 +65,11 @@ export default {
       }
     },
     tenantUrl (tenant) {
-      console.log('tenantUrl', `${this.$authService.getAppUrl(tenant)}/#/events`)
       // return `${this.$authService.getAppUrl(tenant)}/#/signedin?token=${this.$auth.getToken()}`
       return `${this.$authService.getAppUrl(tenant)}/#/events`
     }
   },
   created () {
-    console.log("choose.workspace");
     // const givenToken = this.$route.query.token;
     // this.$auth.setToken(givenToken);
     // this.$auth.currentUser(this, true);

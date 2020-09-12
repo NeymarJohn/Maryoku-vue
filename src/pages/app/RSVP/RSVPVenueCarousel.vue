@@ -3,32 +3,48 @@
     :items="4"
     :margin="25"
     :dots="false"
-    :nav="true"
+    :nav="false"
     class="rsvp-venue-carousel"
     :number="2"
+    :key="Math.random()"
   >
-    <div class="carousel-item" v-for="(item,index) in images" :key="index" >
-      <img :src="item.src" class="carousel-image" :class="{whiteBlack: item.default}"/>
+    <div class="carousel-item" v-for="(item,index) in images" :key="index">
+      <img :src="item.src" class="carousel-image" :class="{whiteBlack: item.default}" />
       <div class="carousel-item-actions">
-        <div class="color-white mb-20 font-bold font-size-16 button" @click="deleteImage(index)"><img :src="`${$iconURL}RSVP/Group 4854.svg`" class="mr-10"/> Delete</div>
-        <div class="color-white font-bold font-size-16 button"  @click="replaceImage(index)"><img :src="`${$iconURL}RSVP/Group 2344.svg`" class="mr-10"/> Replace</div>
+        <div class="color-white mb-20 font-bold font-size-16 button" @click="deleteImage(index)">
+          <img :src="`${$iconURL}RSVP/Group 4854.svg`" class="mr-10" /> Delete
+        </div>
+        <div class="color-white font-bold font-size-16 button" @click="replaceImage(index)">
+          <img :src="`${$iconURL}RSVP/Group 2344.svg`" class="mr-10" /> Replace
+        </div>
       </div>
+    </div>
+    <div v-if="editable" class="empty-carousel-item">
+      <md-button class="md-simple md-outlined maryoku-btn" @click="addImage">
+        <md-icon>add_circle</md-icon>Add image
+      </md-button>
       <input
-              style="display: none"
-              id="carousel-file"
-              name="attachment"
-              type="file"
-              multiple="multiple"
-              @change="onFileChange"
-            />
+        style="display: none"
+        id="carousel-file"
+        name="attachment"
+        type="file"
+        multiple="multiple"
+        @change="onFileChange"
+      />
     </div>
   </carousel>
 </template>
 <script>
 import carousel from "vue-owl-carousel";
-import { getBase64 } from '@/utils/file.util'
+import { getBase64 } from "@/utils/file.util";
 
 export default {
+  props: {
+    editable: {
+      type: Boolean,
+      default: true,
+    },
+  },
   components: {
     carousel,
   },
@@ -53,26 +69,37 @@ export default {
         },
       ],
       selectedIndex: 0,
-    }
+    };
   },
   methods: {
     deleteImage(index) {
       this.images.splice(index, 1);
     },
     replaceImage(index) {
-      this.selectedIndex = index
+      this.selectedIndex = index;
+      document.getElementById("carousel-file").click();
+    },
+    addImage() {
+      this.selectedIndex = -1;
       document.getElementById("carousel-file").click();
     },
     async onFileChange(event) {
-      const image = await getBase64(event.target.files[0])
-      this.images[this.selectedIndex].src = image
-      this.images[this.selectedIndex].default = false
+      const image = await getBase64(event.target.files[0]);
+      if (this.selectedIndex > -1) {
+        this.images[this.selectedIndex].src = image;
+        this.images[this.selectedIndex].default = false;
+      } else {
+        this.images.push({ src: image, default: false });
+      }
     },
   },
-}
+};
 </script>
 <style lang="scss" scoped>
 .rsvp-venue-carousel {
+  .empty-carousel-item {
+    padding: 40px;
+  }
   .carousel-item {
     // width: 290px;
     height: 170px;
@@ -81,14 +108,14 @@ export default {
     position: relative;
     .carousel-image {
       &.whiteBlack {
-        filter: grayscale(1)
+        filter: grayscale(1);
       }
     }
     .carousel-item-actions {
       display: none;
       z-index: 3;
     }
-    
+
     &:hover {
       .carousel-item-actions {
         display: block;
@@ -105,7 +132,6 @@ export default {
             display: inline;
           }
         }
-        
       }
       &::before {
         content: "";
@@ -119,7 +145,6 @@ export default {
         z-index: 2;
       }
     }
-    
   }
 }
 </style>

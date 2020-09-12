@@ -1,38 +1,29 @@
 <template>
   <div class="vsignup-edtiable-field-wrapper" :class="[{'border-bottom': borderBottom}]">
     <div class="left" :class="[{'full-width': isEdit}]">
-      <div class="title">{{title}}</div>
+      <div class="title">
+        {{title}}
+      </div>
       <div class="content">
         <div v-if="!isEdit">
-          <img v-if="img!=''" :src="img" />
+          <img v-if="img!=''" :src="img"/>
           {{title=='Business Category' ? selectedCategory.name : value}}
         </div>
         <div class="edit-content" v-else>
           <div v-if="title=='Business Category'">
             <div class="droplist" v-if="!expanded" :class="{'mt-3': !selectedCategory.icon}">
-              <img
-                class="inside-img"
-                :src="`${categoryIconUrl}${selectedCategory.icon}`"
-                v-if="selectedCategory.icon"
-              />
+              <img class="inside-img" :src="`${categoryIconUrl}${selectedCategory.icon}`" v-if="selectedCategory.icon"/>
               <input
                 readonly
                 class="default with-img"
                 :value="selectedCategory.name"
                 @click="expanded=true"
               />
-              <img
-                class="dropdown"
-                src="http://static.maryoku.com/storage/icons/Vendor Signup/Asset 523.svg"
-              />
+              <img class="dropdown" src="http://static.maryoku.com/storage/icons/Vendor Signup/Asset 523.svg"/>
             </div>
             <ul v-else>
-              <li
-                v-for="(category, cIndex) in categories"
-                :key="cIndex"
-                @click="updateCategory(category);"
-              >
-                <img :src="`${categoryIconUrl}${category.icon}`" />
+              <li v-for="(category, cIndex) in categories" :key="cIndex" @click="updateCategory(category);">
+                <img :src="`${categoryIconUrl}${category.icon}`"/>
                 {{category.name}}
               </li>
             </ul>
@@ -46,11 +37,15 @@
             />
           </div>
           <div v-else-if="title=='Email'">
-            <img class="inside-img" :src="img" v-if="img!=''" />
-            <input class="default" :class="[{'with-img': img!=''}, isEmailValid()]" v-model="value" />
+            <img class="inside-img" :src="img" v-if="img!=''"/>
+            <input
+              class="default"
+              :class="[{'with-img': img!=''}, isEmailValid()]"
+              v-model="value"
+            />
           </div>
           <div v-else-if="title=='Phone'">
-            <img class="inside-img" :src="img" v-if="img!=''" />
+            <img class="inside-img" :src="img" v-if="img!=''"/>
             <input
               class="default"
               :type="title=='Phone' ? 'number' : 'text'"
@@ -59,8 +54,12 @@
             />
           </div>
           <div v-else>
-            <img class="inside-img" :src="img" v-if="img!=''" />
-            <input class="default" :class="[{'with-img': img!=''}]" v-model="value" />
+            <img class="inside-img" :src="img" v-if="img!=''"/>
+            <input
+              class="default"
+              :class="[{'with-img': img!=''}]"
+              v-model="value"
+            />
           </div>
         </div>
       </div>
@@ -71,15 +70,14 @@
     </div>
     <div class="right" v-if="!isEdit">
       <a @click="isEdit=true">
-        Edit
-        <md-icon>navigate_next</md-icon>
+        Edit <md-icon>navigate_next</md-icon>
       </a>
     </div>
   </div>
 </template>
 <script>
-import VueElementLoading from 'vue-element-loading';
-import VueGoogleAutocomplete from 'vue-google-autocomplete';
+import VueElementLoading from 'vue-element-loading'
+import VueGoogleAutocomplete from 'vue-google-autocomplete'
 
 export default {
   name: 'v-signup-editable-field',
@@ -88,8 +86,7 @@ export default {
     VueGoogleAutocomplete,
   },
   props: {
-    title: String,
-    field: String,
+    title: String, 
     img: String,
     defaultVal: String,
     borderBottom: Boolean,
@@ -100,36 +97,36 @@ export default {
     expanded: false,
     selectedCategory: {
       name: null,
-      icon: null,
+      icon: null
     },
     address: null,
     reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
-    categoryIconUrl: 'http://static.maryoku.com/storage/icons/Budget Elements/',
+    categoryIconUrl: 'http://static.maryoku.com/storage/icons/Budget Elements/', 
     categories: [
       {
         name: 'Venue Rental',
         value: 'venuerental',
-        icon: 'venuerental.svg',
+        icon: 'venuerental.svg'
       },
       {
         name: 'Food & Beverage',
         value: 'foodandbeverage',
-        icon: 'foodandbeverage.svg',
+        icon: 'foodandbeverage.svg'
       },
       {
         name: 'Design and Decor',
         value: 'decor',
-        icon: 'decor.svg',
+        icon: 'decor.svg'
       },
       {
         name: 'Guest Services & Staffing',
         value: 'corporatesocialresponsibility',
-        icon: 'corporatesocialresponsibility.svg',
+        icon: 'corporatesocialresponsibility.svg'
       },
       {
         name: 'Signage / Printing',
         value: 'signageprinting',
-        icon: 'signageprinting.svg',
+        icon: 'signageprinting.svg'
       },
       // {
       //   name: 'Advertising and Promotion',
@@ -139,12 +136,12 @@ export default {
       {
         name: 'AV / Staging',
         value: 'audiovisualstagingservices',
-        icon: 'audiovisualstagingservices.svg',
+        icon: 'audiovisualstagingservices.svg'
       },
       {
         name: 'Swags',
         value: 'swags',
-        icon: 'swags.svg',
+        icon: 'swags.svg'
       },
       // {
       //   name: 'Shipping',
@@ -154,12 +151,12 @@ export default {
       {
         name: 'Transportation & Tour operator',
         value: 'transportation',
-        icon: 'transportation.svg',
+        icon: 'transportation.svg'
       },
       {
         name: 'Entertainment',
         value: 'entertainment',
-        icon: 'entertainment.svg',
+        icon: 'entertainment.svg'
       },
       // {
       //   name: 'Administration',
@@ -169,7 +166,7 @@ export default {
       {
         name: 'Security',
         value: 'securityservices',
-        icon: 'securityservices.svg',
+        icon: 'securityservices.svg'
       },
       // {
       //   name: 'Technology',
@@ -179,67 +176,68 @@ export default {
       {
         name: 'Videography and Photography',
         value: 'videographyandphotography',
-        icon: 'videographyandphotography.svg',
+        icon: 'videographyandphotography.svg'
       },
       {
         name: 'Equipment Rentals',
         value: 'equipmentrentals',
-        icon: 'equipmentrentals.svg',
+        icon: 'equipmentrentals.svg'
       },
     ],
     value: null,
   }),
-  mounted() {
-    this.value = this.defaultVal;
+  mounted () {
+    this.value = this.defaultVal
     if (this.value) {
-      this.selectedCategory.name = this.getCategoryNameByValue(this.value);
-      this.selectedCategory.icon = this.getCategoryIconByValue(this.value);
+      this.selectedCategory.name = this.getCategoryNameByValue(this.value)
+      this.selectedCategory.icon = this.getCategoryIconByValue(this.value)
     } else {
       this.selectedCategory = {
-        name: null,
-        icon: null,
-      };
+        name: null, 
+        icon: null
+      }
     }
     if (this.title == 'Address') {
-      this.$refs.address.focus();
+      this.$refs.address.focus()
     }
   },
   methods: {
     getAddressData: function (addressData, placeResultData, id) {
-      this.value = `${addressData.route}, ${addressData.administrative_area_level_1}, ${addressData.country}`;
+      this.value = `${addressData.route}, ${addressData.administrative_area_level_1}, ${addressData.country}`
     },
     save() {
-      this.isEdit = false;
+      this.isEdit = false
       if (this.title == 'Business Category') {
-        this.$root.$emit('update-vendor-value', 'vendorCategory', this.value);
+        this.$root.$emit('update-vendor-value', 'vendorCategory', this.value)
       } else {
-        this.$root.$emit('update-vendor-value', this.field, this.value);
+        this.$root.$emit('update-vendor-value', this.title, this.value)
       }
+
     },
     updateCategory(category) {
-      this.selectedCategory = category;
-      this.value = category.value;
-      this.expanded = false;
+      this.selectedCategory = category
+      this.value = category.value
+      this.expanded = false
     },
-    isEmailValid: function () {
+    isEmailValid: function() {
       // return (this.value == "")? "" : (this.reg.test(this.value)) ? 'has-success' : 'has-error';
-      return this.reg.test(this.value) ? 'has-success' : 'has-error';
+      return (this.reg.test(this.value)) ? 'has-success' : 'has-error'
     },
     getCategoryNameByValue(value) {
-      return this.categories.filter((c) => c.value == value)[0].name;
+      return this.categories.filter( c => c.value == value)[0].name
     },
     getCategoryIconByValue(value) {
-      return this.categories.filter((c) => c.value == value)[0].icon;
+      return this.categories.filter( c => c.value == value)[0].icon
     },
-  },
-};
+  }
+}
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/md/_variables.scss';
-@import '@/assets/scss/md/_colors.scss';
+@import "@/assets/scss/md/_variables.scss";
+@import "@/assets/scss/md/_colors.scss";
 
 .vsignup-edtiable-field-wrapper {
-  width: 100%;
+  width: 100%;  
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -343,7 +341,7 @@ export default {
     .action-cont {
       margin-top: 30px;
       text-align: right;
-
+      
       a {
         cursor: pointer;
         padding: 8px 24px;
@@ -356,7 +354,7 @@ export default {
           font: 800 16px Manrope-Regular, sans-serif;
           background-color: #f51355;
           &:hover {
-            color: #ffffff !important;
+            color: #ffffff!important;
           }
         }
       }
@@ -371,14 +369,14 @@ export default {
       color: #f51355;
       cursor: pointer;
       i {
-        color: #f51355 !important;
+        color: #f51355!important;
         position: relative;
         top: -1px;
       }
     }
   }
   .mt-3 {
-    margin-top: 3rem !important;
+    margin-top: 3rem!important;
   }
 }
 </style>

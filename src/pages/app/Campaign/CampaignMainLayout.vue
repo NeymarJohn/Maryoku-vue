@@ -323,34 +323,19 @@ export default {
     },
     reverseSetting() {
       console.log(defaultSettings);
-      this.deliverySettings = {
-        phone: {
-          selected: false,
-          numberString: '',
-          numberArray: [],
-          excelFileName: '',
-          excelFilePath: '',
-          smsOrWhatsapp: '',
-        },
-        email: {
-          selected: false,
-          subject: '',
-          from: '',
-          addressString: '',
-          addressArray: [],
-          excelFileName: '',
-          excelFilePath: '',
-        },
-      };
+      this.deliverySettings = Object.assign({}, defaultSettings);
       this.campaignInfo = {
         conceptName: this.event.concept.name,
         logo: '',
       };
-      if (this.selectedTab == 1)
-        //savedate
+      if (this.selectedTab == 1) {
         this.$refs.savedateCampaign.setDefault();
-      if (this.selectedTab == 2) {
+      } else if (this.selectedTab == 2) {
         this.$refs.rsvp.setDefault();
+      } else if (this.selectedTab == 3) {
+        this.$refs.countdown.setDefault();
+      } else if (this.selectedTab == 4) {
+        this.$refs.feedback.setDefault();
       }
     },
     sendPreviewEmail() {

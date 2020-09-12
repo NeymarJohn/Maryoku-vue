@@ -135,13 +135,12 @@ export default {
     this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
   },
   mounted() {
-    console.log("new.event.layout")
     this.$store.dispatch('auth/checkToken').then(()=>{
       this.initData();
     }).catch(()=>{
       this.$router.push({ path: `/signin`})
       return
-    })
+    }) 
   },
   computed: {
     ...mapState('event', [
