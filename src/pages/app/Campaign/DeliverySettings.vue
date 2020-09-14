@@ -39,7 +39,6 @@
                   @change="handleInputEmails"
                 ></maryoku-textarea>
                 <invalid-address-panel
-                  type="phone"
                   class="mt-30"
                   v-if="invalidPastedPhones"
                   :content="invalidPastedPhones"
@@ -59,9 +58,6 @@
                 <div class="font-bold text-underline mb-10">{{settingData.phone.excelFileName}}</div>
                 <md-button class="md-simple edit-btn" @click="choosePhoneExcel">
                   <span class="color-red">change</span>
-                </md-button>
-                <md-button class="md-simple edit-btn" @click="removeExcel('phone')">
-                  <span class="color-red">remove</span>
                 </md-button>
               </div>
               <span class="ml-20 mt-10">
@@ -149,7 +145,6 @@
                     @change="handleInputEmails"
                   ></maryoku-textarea>
                   <invalid-address-panel
-                    type="email"
                     class="mt-30"
                     v-if="invalidPastedEmails"
                     :content="invalidPastedEmails"
@@ -168,12 +163,8 @@
                 </md-button>
                 <div v-else class="uploadedFile border-gray-1">
                   <div class="font-bold text-underline mb-10">{{settingData.email.excelFileName}}</div>
-                  <md-button class="md-simple edit-btn mr-10" @click="chooseEmailExcel">
+                  <md-button class="md-simple edit-btn" @click="chooseEmailExcel">
                     <span class="color-red">change</span>
-                  </md-button>
-                  <span class="ml-10 mr-10"></span>
-                  <md-button class="md-simple edit-btn ml-10" @click="removeExcel('email')">
-                    <span class="color-red">remove</span>
                   </md-button>
                 </div>
                 <span class="ml-20 mt-10">
@@ -205,7 +196,6 @@ import {
   MaryokuInput,
   LocationInput,
   MaryokuTextarea,
-  MaryokuResizableTextarea,
 } from "@/components";
 import CollapsePanel from "./CollapsePanel";
 import InvalidAddressPanel from "./components/InvalidAddressPanel";
@@ -217,7 +207,6 @@ export default {
     CollapsePanel,
     MaryokuTextarea,
     InvalidAddressPanel,
-    MaryokuResizableTextarea,
   },
   props: {
     defaultSettings: {
@@ -241,10 +230,6 @@ export default {
           excelFilePath: "",
         },
       }),
-    },
-    campaign: {
-      type: Object,
-      default: () => ({}),
     },
   },
   data() {
@@ -270,24 +255,6 @@ export default {
   },
   created() {
     this.settingData = this.defaultSettings;
-    // set default subject for email
-    this.settingData.email.from = this.$store.state.auth.user.username;
-    switch (this.campaign.name) {
-      case "SAVE_DATE":
-        this.settingData.email.subject = `Save date ${this.event.title}`;
-        break;
-      case "RSVP":
-        this.settingData.email.subject = `RSVP ${this.event.title}`;
-        break;
-      case "COMING_SOON":
-        this.settingData.email.subject = `Comming event ${this.event.title}`;
-        break;
-      case "FEEDBACK":
-        this.settingData.email.subject = `Feedback ${this.event.title}`;
-        break;
-      default:
-        this.settingData.email.subject = `Save date ${this.event.title}`;
-    }
   },
   methods: {
     handleInputEmails({ value, type }) {
@@ -321,16 +288,6 @@ export default {
       document.getElementById("execelFileInput").click();
       this.fileInputType = "phone";
     },
-    removeExcel(type) {
-      this.settingData[type].excelFileName = "";
-      const input = document.getElementById("execelFileInput");
-      input.value = "";
-      if (type === "email") {
-        this.settingData.email.addressString = "";
-      } else {
-        this.settingData.phone.numberString = "";
-      }
-    },
     onFileChange(event) {
       this.settingData[this.fileInputType].excelFileName =
         event.target.files[0].name;
@@ -361,11 +318,6 @@ export default {
       reader.readAsArrayBuffer(file);
     },
   },
-  computed: {
-    event() {
-      return this.$store.state.event.eventData;
-    },
-  },
   watch: {
     settingData: {
       handler(newValue) {
@@ -375,26 +327,10 @@ export default {
     },
     defaultSettings: {
       handler(newValue) {
-        this.settingData = newValue;
-        switch (this.campaign.name) {
-          case "SAVE_DATE":
-            this.settingData.email.subject = `Save date ${this.event.title}`;
-            break;
-          case "RSVP":
-            this.settingData.email.subject = `RSVP ${this.event.title}`;
-            break;
-          case "COMING_SOON":
-            this.settingData.email.subject = `Comming event ${this.event.title}`;
-            break;
-          case "FEEDBACK":
-            this.settingData.email.subject = `Feedback ${this.event.title}`;
-            break;
-          default:
-            this.settingData.email.subject = `Save date ${this.event.title}`;
-        }
+        this.settingData = newValue
       },
-      deep: true,
-    },
+      deep:true
+    }
   },
 };
 </script>

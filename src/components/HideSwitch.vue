@@ -1,8 +1,8 @@
 <template>
   <md-switch class="below-label large-switch" v-model="data">
     <template v-if="label">
-      <span v-if="data">Hide {{label}}</span>
-      <span v-if="!data">Show {{label}}</span>
+      <span v-if="data"> Hide {{label}}</span>
+      <span v-if="!data"> Show {{label}}</span>
     </template>
   </md-switch>
 </template>
@@ -11,28 +11,25 @@ export default {
   props: {
     value: {
       type: Boolean,
-      default: true,
+      default: true, 
     },
     label: {
       type: String,
-      default: "",
-    },
+      default: ""
+    }
   },
   data() {
     return {
-      data: true,
-    };
+      data: true
+    }
   },
-  created() {
+  created () {
     this.data = this.value;
   },
   watch: {
     data(newValue, oldValue) {
-      this.$emit("input", newValue);
-    },
-    value(newValue, oldValue) {
-      this.data = this.value;
-    },
+      this.$emit("input", newValue)
+    }
   },
-};
+}
 </script>

@@ -11,10 +11,6 @@
           <b>Things are warming up!</b> It’s time to create your event timeline!
           <br />We helped you with the basic structure
         </div>
-        <div class="mt-10">
-          <img :src="`${$iconURL}Event%20Page/light.svg`" class="label-icon" />
-          Our smart system has created for you timeline drawn from previous events
-        </div>
       </div>
       <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
     </div>
@@ -31,7 +27,7 @@
       <div class="timeline-items-list">
         <div
           class="timeline-items-list__item"
-          v-for="(timelineItem,timelineIndex) in timeline"
+          v-for="(scheduleDate,timelineIndex) in timelineDates"
           :key="timelineIndex"
         >
           <div class="item-header">
@@ -40,9 +36,8 @@
                 <label
                   style="white-space:nowrap; padding-right:10px"
                 >Day {{numberToWord(timelineIndex + 1)}}</label>
-                <div>{{formatDate(timelineItem.itemDay)}}</div>
+                <div>{{scheduleDate}}</div>
                 <md-datepicker
-                  v-model="timeline[timelineIndex].itemDay"
                   :md-disabled-dates="getDisabledDates(timelineIndex)"
                   :md-closed="closeEditTimeline(timelineIndex)"
                   md-immediately
@@ -71,259 +66,20 @@
             @drop="handleDrop(timelineIndex, ...arguments)"
             style="height: 100%; min-height: 50px;"
             :data-index="timelineIndex"
-            :class="{lastDroppingCard:timelineIndex == timeline.length-1}"
           >
             <draggable
-              :list="timelineItem.items"
+              :list="timelineItems[scheduleDate]"
               class="time-line-blocks_selected-items"
               :options="{disabled : disabledDragging}"
             >
               <div
-                v-for="(item,index) in timelineItem.items"
+                v-for="(item,index) in timelineItems[scheduleDate]"
                 :key="index"
                 class="time-line-blocks_selected-items_item time-line-item"
               >
-                <img
-                  class="time-line-blocks_icon"
-                  :src="`${newTimeLineIconsURL}${item.icon.toLowerCase()}-circle.svg`"
-                />
-                <md-card
-                  class="block-form"
-                  v-if="!item.dateCreated || item.mode === 'edit'"
-                  :style="`border-left : 5px solid ` + item.color"
-                  ref="timeline-edit-card"
-                  id="timeline-edit-card"
-                >
-                  <vue-element-loading
-                    :active.sync="item.isItemLoading"
-                    spinner="ring"
-                    color="#FF547C"
-                  />
-                  <md-card-content class="md-layout">
-                    <div class="md-layout-item md-size-100">
-                      <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" class="form-control" v-model="item.title" />
-                      </div>
-                    </div>
-                    <div class="md-layout-item md-size-45">
-                      <div class="form-group">
-                        <label>
-                          <!-- <img class="time-line-blocks_icon"  :src="`${newTimeLineIconsURL}${item.icon.toLowerCase()}-circle.svg`"> -->
-                          Start At
-                        </label>
-                        <time-input v-model="item.startTime" :h24="false" displayFormat="hh:mm"></time-input>
-                      </div>
-                    </div>
-                    <div
-                      class="md-layout-item md-size-10 d-flex justify-content-center align-center"
-                      style="position : relative"
-                    >
-                      <div class="divider"></div>
-                    </div>
-                    <div class="md-layout-item md-size-45">
-                      <div class="form-group">
-                        <label>
-                          <!-- <img class="time-line-blocks_icon"  :src="`${newTimeLineIconsURL}${item.icon.toLowerCase()}-circle.svg`"> -->
-                          Finishes At
-                        </label>
-                        <time-input v-model="item.endTime" :h24="false" displayFormat="hh:mm"></time-input>
-                      </div>
-                    </div>
-                    <div class="md-layout-item md-size-100">
-                      <div class="form-group">
-                        <label>Description</label>
-                        <textarea
-                          row="100"
-                          type="text"
-                          class="form-control"
-                          v-model="item.description"
-                        ></textarea>
-                      </div>
-                    </div>
-
-                    <!-- <div class="md-layout-item md-size-100 margin-bottom">
-                      <div class="form-group with-icon">
-                        
-                        <div class="input-icon">
-                          <img :src="`${timelineIconsURL}place.svg`" width="20" />
-                        </div>
-                        <input
-                          type="text"
-                          class="form-control"
-                          v-model="item.location"
-                          placeholder="Type name or address "
-                        />
-                      </div>
-                    </div>-->
-                    <div class="md-layout-item md-size-100 margin-bottom">
-                      <div class="form-group">
-                        <label>Location</label>
-                        <location-input v-model="item.location"></location-input>
-                      </div>
-                    </div>
-                    <div class="md-layout-item md-size-100">
-                      <div class="form-group">
-                        <label>
-                          Attach File
-                          <small>*suggested</small>
-                        </label>
-                        <p
-                          class="item-attachment"
-                          v-if="item.attachments && item.attachments.length>0"
-                        >
-                          <span
-                            v-for="(attachmentItem, attachmentIndex) in item.attachments"
-                            :key="attachmentItem.url"
-                            class="attachment-link"
-                          >
-                            <md-icon>attachment</md-icon>
-                            <span
-                              @click="openAttachment(attachmentItem.url)"
-                              class="attachment-name"
-                            >{{ attachmentItem.originalName }}</span>
-                            <span @click="removeAttachment(item, attachmentIndex)">
-                              <md-icon class="remove-attachment">close</md-icon>
-                            </span>
-                          </span>
-                        </p>
-                        <label class="upload-section">
-                          <label
-                            class="md-rose md-outline md-simple md-sm attachment"
-                            for="file"
-                            style="cursor:pointer"
-                          >
-                            <md-icon>attachment</md-icon>Choose file(10MB)
-                          </label>
-                          <div>
-                            <span
-                              v-for="(file, index) in currentAttachments"
-                              :key="index"
-                              class="attachment-link"
-                            >
-                              {{ file.name}}
-                              <span @click="removeSelectedAttachment(index)">
-                                <md-icon class="remove-attachment">close</md-icon>
-                              </span>
-                            </span>
-                          </div>
-
-                          <!-- {{ item.attachmentName}} -->
-
-                          <!-- <div class="note">Drag your file here</div> -->
-                        </label>
-
-                        <input
-                          style="display: none"
-                          id="file"
-                          name="attachment"
-                          type="file"
-                          multiple="multiple"
-                          :data-item="item.id"
-                          :data-timelineindex="timelineIndex"
-                          :data-itemIndex="index"
-                          @change="onFileChange"
-                        />
-                      </div>
-                    </div>
-                  </md-card-content>
-                  <md-card-actions
-                    md-alignment="right"
-                    style="border: none;"
-                    class="edit-timeline-footer"
-                  >
-                    <md-button
-                      name="event-planner-tab-timeline-item-save"
-                      class="event-planner-tab-timeline-item-save md-default md-simple"
-                      @click="cancelTimelineItem(item, timelineIndex, index)"
-                    >Cancel</md-button>
-                    <md-button
-                      :disabled="item.isItemLoading"
-                      name="event-planner-tab-timeline-item-save"
-                      class="event-planner-tab-timeline-item-save md-red"
-                      v-if="!item.dateCreated"
-                      @click="saveTimelineItem(item, index, timelineItem.itemDay)"
-                    >Save</md-button>
-                    <md-button
-                      :disabled="item.isItemLoading"
-                      name="event-planner-tab-timeline-item-edit"
-                      class="event-planner-tab-timeline-item-edit md-red"
-                      v-else
-                      @click="updateTimelineItem(item)"
-                    >Save</md-button>
-                  </md-card-actions>
-                </md-card>
-
-                <md-card
-                  class="block-info"
-                  v-if="!item.mode || item.mode === 'saved' "
-                  :style="`border-left : 5px solid ` + item.color"
-                >
-                  <vue-element-loading
-                    :active.sync="item.isItemLoading"
-                    spinner="ring"
-                    color="#FF547C"
-                  />
-                  <md-card-content style="min-height: 80px;">
-                    <div class="item-title-and-time">
-                      <span
-                        class="item-time"
-                      >{{ formatHour(item.startTime) }} - {{ formatHour(item.endTime)}}</span>
-                      <span
-                        class="item-title"
-                        style="font-weight: 500; display: inline-block;"
-                        v-if="item.title"
-                      >{{item.title }}</span>
-
-                      <p class="item-desc">{{ item.description }}</p>
-                      <p
-                        class="item-attachment"
-                        v-if="item.attachments && item.attachments.length>0"
-                      >
-                        <span
-                          v-for="(attachmentItem) in item.attachments"
-                          :key="attachmentItem.url"
-                          @click="openAttachment(attachmentItem.url)"
-                          class="attachment-link"
-                        >
-                          <md-icon>attachment</md-icon>
-                          {{ attachmentItem.originalName }}
-                        </span>
-                      </p>
-                      <p class="item-location" v-if="item.location">
-                        <img :src="`${timelineIconsURL}place.svg`" width="20" style="width:18px" />
-                        <span>{{ item.location }}</span>
-                      </p>
-                      <div class="attachment" style="display : none;">
-                        <a href>
-                          <md-icon>attachment</md-icon>file name
-                        </a>
-                      </div>
-                      <md-button class="md-simple timeline-action">
-                        <img :src="`${timelineIconsURL}GoToProposal.svg`" width="20" /> Go To Proposal
-                      </md-button>
-                      <br />
-                      <md-button class="md-simple timeline-action">
-                        <img :src="`${timelineIconsURL}ContactVendor.svg`" width="20" /> Contact Vendor
-                      </md-button>
-                    </div>
-
-                    <div class="card-actions">
-                      <md-button
-                        name="event-planner-tab-timeline-item-edit"
-                        class="event-planner-tab-timeline-item-edit md-red md-simple md-xs md-round"
-                        @click="modifyItem(item)"
-                      >Edit</md-button>
-                      <md-button
-                        name="event-planner-tab-timeline-item-delete"
-                        class="event-planner-tab-timeline-item-delete md-simple md-xs md-just-icon md-round"
-                        @click="removeItem(item)"
-                      >
-                        <md-icon>delete_outline</md-icon>
-                      </md-button>
-                    </div>
-                  </md-card-content>
-                </md-card>
+                <timeline-template-item v-if="item.status=='template'" :item="item" :index="index"></timeline-template-item>
+                <timeline-item v-else :item="item" :index="index" @save="saveTimelineItem"></timeline-item>
+                <timeline-empty :index="index" :date="scheduleDate"></timeline-empty>
               </div>
             </draggable>
           </drop>
@@ -427,6 +183,9 @@ import { SlideYDownTransition } from 'vue2-transitions';
 import InputMask from 'vue-input-mask';
 import { Modal, LabelEdit, LocationInput } from '@/components';
 
+import TimelineTemplateItem from './components/TimelineTemplateItem';
+import TimelineItem from './components/TimelineItem';
+import TimelineEmpty from './components/TimelineEmpty';
 import VueElementLoading from 'vue-element-loading';
 // import auth from '@/auth';
 import EventBlocks from './components/NewEventBlocks';
@@ -442,8 +201,8 @@ import CommentEditorPanel from './components/CommentEditorPanel';
 
 import ProgressSidebar from './components/progressSidebar';
 import TimeInput from '../../../components/TimeInput';
-
 import PlannerEventFooter from '@/components/Planner/FooterPanel';
+import { timelineBlockItems } from '@/constants/event';
 
 export default {
   name: 'event-time-line',
@@ -462,6 +221,9 @@ export default {
     HeaderActions,
     CommentEditorPanel,
     PlannerEventFooter,
+    TimelineTemplateItem,
+    TimelineItem,
+    TimelineEmpty,
   },
   props: {
     // event: Object,
@@ -472,81 +234,10 @@ export default {
     calendar: new Calendar(),
     isLoading: true,
     selectedDate: '',
-    blocksList: [
-      [
-        {
-          id: 1,
-          buildingBlockType: 'setup',
-          icon: 'Setup',
-          color: '#ffc001',
-        },
-        {
-          id: 5,
-          buildingBlockType: 'Transportation',
-          icon: 'Transportation',
-          color: '#44546a',
-        },
-      ],
-
-      [
-        {
-          id: 2,
-          buildingBlockType: 'activity',
-          icon: 'Activity',
-          color: '#20c997',
-        },
-        {
-          id: 8,
-          buildingBlockType: 'Show',
-          icon: 'Show',
-          color: '#00bcd4',
-        },
-        {
-          id: 9,
-          buildingBlockType: 'Speaker / Keynote',
-          icon: 'speaker',
-          color: '#641956',
-        },
-
-        {
-          id: 4,
-          buildingBlockType: 'Discussion',
-          icon: 'Discussion',
-          color: '#3a3838',
-        },
-      ],
-
-      [
-        {
-          id: 10,
-          buildingBlockType: 'Break',
-          icon: 'Break',
-          color: '#ff527c',
-        },
-        {
-          id: 6,
-          buildingBlockType: 'Relaxation',
-          icon: 'Relaxation',
-          color: '#0caf50',
-        },
-        {
-          id: 3,
-          buildingBlockType: 'meal',
-          icon: 'Meal',
-          color: '#f44336',
-        },
-      ],
-
-      [
-        {
-          id: 7,
-          buildingBlockType: 'Other',
-          icon: 'other',
-          color: '#a5a5a5',
-        },
-      ],
-    ],
+    blocksList: timelineBlockItems,
+    backedTimelineItems: [],
     timelineItems: [],
+    timelineDates: [],
     hoursArray: [],
     disabledDragging: false,
     timelineAttachment: null,
@@ -615,6 +306,64 @@ export default {
      * @param data
      * @param event
      */
+    applyToTemplate(index, template, selectedBlock) {
+      if (!this.canEdit) {
+        swal({
+          title: "Sorry, you can't edit timeline. ",
+          showCancelButton: false,
+          confirmButtonClass: 'md-button md-success',
+          confirmButtonText: 'Ok, I got it',
+          buttonsStyling: false,
+        })
+          .then((result) => {
+            if (result.value === true) {
+              return;
+            }
+          })
+          .catch((err) => {});
+        return;
+      }
+      if (selectedBlock) {
+        let block = Object.assign({}, selectedBlock);
+        block.id = template.id;
+        block.mode = 'edit';
+        let startDate = new Date(template.date);
+        let endDate = new Date(template.date);
+        if (index == 0) {
+          if (this.eventData.eventDayPart == 'evening') {
+            startDate.setHours(19);
+            endDate.setHours(20);
+          } else {
+            startDate.setHours(8);
+            endDate.setHours(9);
+          }
+        } else {
+          const prevItem = this.timelineItems[template.date][index - 1];
+          startDate.setHours(new Date(prevItem.endTime).getHours());
+          endDate.setHours(new Date(prevItem.endTime).getHours() + 1);
+        }
+
+        block.startTime = startDate;
+        block.endTime = endDate;
+
+        block.title = selectedBlock.buildingBlockType;
+        block.startDuration = 'am';
+        block.endDuration = 'am';
+        block.attachmentName = '';
+        block.isItemLoading = false;
+        block.icon = selectedBlock.icon;
+        block.date = template.date;
+        block.event = template.event;
+        this.timelineItems[template.date][index] = block;
+        this.disabledDragging = true;
+      }
+      setTimeout(() => {
+        const scrollBtn = this.$refs.scrollBtn;
+        if (scrollBtn) {
+          scrollBtn.click();
+        }
+      }, 100);
+    },
     handleDrop(index, data) {
       if (!this.canEdit) {
         swal({
@@ -727,44 +476,12 @@ export default {
     },
     getTimelineItems() {
       let event = new CalendarEvent({ id: this.eventData.id });
-      new EventTimelineItem()
-        .for(this.calendar, event)
-        .get()
+      this.$http
+        .get(`${process.env.SERVER_URL}/1/events/${event.id}/timelineItems`)
         .then((res) => {
-          this.timelineItems = _.sortBy(res, function (item) {
-            return item.order;
-          });
-
-          // this.timeline[0].items = _.sortBy(res, function (item) {
-          //     return item.order
-          // })
-
-          this.isLoading = false;
-          var timelines = {};
-          // define timelines
-          this.timelineItems.forEach((item) => {
-            item.isItemLoading = false;
-            if (!timelines[item.plannedDate]) timelines[item.plannedDate] = [];
-            item.isItemLoading = false;
-            timelines[item.plannedDate].push(item);
-          });
-
-          if (Object.keys(timelines).length > 0) {
-            this.timeline = [];
-            Object.keys(timelines).forEach((itemDay, index) => {
-              this.timeline.push({
-                itemDay: parseInt(itemDay),
-                isEditable: false,
-                items: timelines[itemDay],
-              });
-            });
-          }
-          this.timeline = _.sortBy(this.timeline, function (item) {
-            return item.itemDay;
-          });
-          // this.timeline[0].items.forEach((item) => {
-          //     item.isItemLoading = false
-          // })
+          this.timelineItems = res.data;
+          this.backedTimelineItems = { ...this.timelineItems };
+          this.timelineDates = Object.keys(this.timelineItems).sort();
           this.eventData.timelineItems = this.timelineItems;
           this.$root.$emit('timeline-updated', this.timelineItems);
         });
@@ -785,30 +502,10 @@ export default {
       this.disabledDragging = false;
       this.currentAttachments = [];
     },
-    saveTimelineItem(item, index, timelineDate) {
+    saveTimelineItem(item) {
       this.setItemLoading(item, true, true);
-      var plannedDate = 0;
-      if (typeof timelineDate == 'number') {
-        plannedDate = timelineDate;
-      } else if (timelineDate) {
-        plannedDate = timelineDate.getTime();
-      }
-      if (!item.title && !item.description) {
-        this.$notify({
-          message:
-            'From time, To time and ( Title or Description ) id Required',
-          horizontalAlign: 'center',
-          verticalAlign: 'top',
-          type: 'warning',
-        });
-
-        this.setItemLoading(item, false, true);
-
-        return;
-      }
-
       let event = new CalendarEvent({ id: this.eventData.id });
-      let order = ++index;
+      // let order = ++index;
 
       const newTimeline = {
         event: { id: event.id },
@@ -816,60 +513,43 @@ export default {
         buildingBlockType: item.buildingBlockType,
         description: item.description,
         startTime: item.startTime,
-        endTime: item.endTime,
+        startTime: moment(
+          `${item.date} ${item.startTime}`,
+          'DD/MM/YY hh:mm a',
+        ).valueOf(),
+        endTime: moment(
+          `${item.date} ${item.endTime}`,
+          'DD/MM/YY hh:mm a',
+        ).valueOf(),
         endDuration: item.endDuration,
         startDuration: item.startDuration,
-        order: order,
+        // order: order,
         icon: item.icon,
         color: item.color,
         link: item.link,
         location: item.location,
-        plannedDate: plannedDate,
+        date: item.date,
+        plannedDate: moment(item.date, 'DD/MM/YY').valueOf(),
+        status: 'saved',
       };
-      if (this.currentAttachments.length > 0) {
-        this.uploadAttachment(
-          item.attachment,
-          item.attachmentName,
-          (results) => {
-            if (!newTimeline.attachments) {
-              newTimeline.attachments = [];
-            }
-            newTimeline.attachments = newTimeline.attachments.concat(results);
-            newTimeline.attachmentName = '';
-            new EventTimelineItem(newTimeline)
-              .for(this.calendar, event)
-              .save()
-              .then((res) => {
-                this.getTimelineItems();
-                this.disabledDragging = false;
-                this.$root.$emit('timeline-updated', this.timelineItems);
-                this.setItemLoading(item, false, true);
-              })
-              .catch((error) => {
-                this.disabledDragging = false;
-                this.$root.$emit('timeline-updated', this.timelineItems);
-                this.setItemLoading(item, false, true);
-              });
-            this.timelineAttachment = null;
-            this.currentAttachments = [];
-          },
-        );
-      } else {
-        new EventTimelineItem(newTimeline)
-          .for(this.calendar, event)
-          .save()
-          .then((res) => {
-            this.getTimelineItems();
-            this.disabledDragging = false;
-            this.$root.$emit('timeline-updated', this.timelineItems);
-            this.setItemLoading(item, false, true);
-          })
-          .catch((error) => {
-            this.disabledDragging = false;
-            this.$root.$emit('timeline-updated', this.timelineItems);
-            this.setItemLoading(item, false, true);
-          });
+
+      if (item.id) {
+        newTimeline.id = item.id;
       }
+      new EventTimelineItem(newTimeline)
+        .for(this.calendar, event)
+        .save()
+        .then((res) => {
+          this.getTimelineItems();
+          this.disabledDragging = false;
+          this.$root.$emit('timeline-updated', this.timelineItems);
+          this.setItemLoading(item, false, true);
+        })
+        .catch((error) => {
+          this.disabledDragging = false;
+          this.$root.$emit('timeline-updated', this.timelineItems);
+          this.setItemLoading(item, false, true);
+        });
     },
     updateTimelineItem(item) {
       this.setItemLoading(item, true, true);
@@ -1006,7 +686,6 @@ export default {
           this.$root.$emit('timeline-updated', this.timelineItems);
         })
         .catch((error) => {
-          console.log(error);
           this.$root.$emit('timeline-updated', this.timelineItems);
         });
     },
@@ -1261,6 +940,17 @@ export default {
   },
   mounted() {
     this.isLoading = true;
+    this.$root.$on('remove-template', ({ item, index }) => {
+      this.timelineItems[item.date].splice(index, 1);
+    });
+    this.$root.$on('apply-template', ({ item, block, index }) => {
+      this.timelineItems[item.date][index] = {};
+      this.applyToTemplate(index, item, block);
+    });
+    this.$root.$on('add-template', ({ date, block, index }) => {
+      this.timelineItems[date].splice(index + 1, 0, {});
+      this.applyToTemplate(index + 1, { date: date }, block);
+    });
   },
   computed: {
     ...mapState('event', ['eventData']),

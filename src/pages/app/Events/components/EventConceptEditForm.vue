@@ -295,18 +295,39 @@ export default {
       let imageKeys = Object.keys(this.uploadImages);
       this.isLoading = true;
 
-      this.editConcept.event = new CalendarEvent({id: this.$store.state.event.eventData.id}) 
-      const eventConcept = await new EventConcept(this.editConcept).save();
-
-      eventConcept.imageData = this.uploadImageData
-      // for (let i in Object.keys(this.uploadImageData)) {
-      //   console.log(evenConcept.images[i])
-      //   if (evenConcept.images[i])
-      //     evenConcept.images[i].url = this.uploadImageData[i]
+      // const fileNames = this.editConcept.images;
+      // const dirName = "concepts";
+      // for (let i = 0; i < imageKeys.length; i++) {
+      //   const fileItem = this.uploadImages[imageKeys[i]];
+      //   const newFileName = new Date().getTime() + "";
+      //   const extension = fileItem.type.split("/")[1];
+      //   const fileName = {
+      //     originName: fileItem.name,
+      //     name: newFileName,
+      //     url: `${process.env.S3_URL}${dirName}/${newFileName}.${extension}`,
+      //   };
+      //   fileNames[imageKeys[i]] = fileName;
+      //   // await S3Service.fileUpload(fileItem, fileName.name, dirName);
       // }
+
+      // Create Concept
+      // this.editConcept.images = this.uploadImageNames;
+      this.editConcept.event = new CalendarEvent({id: this.$store.state.event.eventData.id}) 
+      const evenConcept = await new EventConcept(this.editConcept).save();
+      // fileNames.forEach((item, index) => {
+      //   fileNames[index].url = `concept/${item.name}`;
+      // });
+
+      // setimages as object url in order to avoid blank image
+      console.log(evenConcept)
+      for (let i in Object.keys(this.uploadImageData)) {
+        console.log(evenConcept.images[i])
+        if (evenConcept.images[i])
+          evenConcept.images[i].url = this.uploadImageData[i]
+      }
       
       this.isLoading = false;
-      this.$emit("saved", eventConcept);
+      this.$emit("saved", evenConcept, this.uploadImages);
       
     },
   },
