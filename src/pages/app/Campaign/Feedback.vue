@@ -1,19 +1,21 @@
 <template>
   <div class="white-card feedback-campaign">
     <div class="p-50">
-      <div class="font-size-30 font-bold-extra mb-50">Create ‘Save The Date’ Campaign</div>
+      <div
+        class="font-size-30 font-bold-extra mb-50 text-transform-capitalize"
+      >Say thank you and ask for feedback</div>
       <hr />
       <div class="d-flex mt-70 mb-40">
         <img :src="`${$iconURL}Campaign/group-9380.svg`" class="mr-20" />
         <div class="ml-20">
           <div class="font-size-40 font-bold line-height-1 mb-20">It was great seeing you!</div>
-          <div class="font-size-22 line-height-1">{{info.conceptName}}</div>
+          <div class="font-size-22 line-height-1">{{editingContent.name}}</div>
           <!-- <title-editor :value="info.conceptName" @change="changeTitle" class="mt-40"></title-editor> -->
         </div>
       </div>
-      <maryoku-textarea :placeholder="placeHolder" v-model="comment"></maryoku-textarea>
+      <maryoku-textarea :placeholder="placeHolder" v-model="editingContent.description"></maryoku-textarea>
     </div>
-    <feedback-image-carousel class="p-50" :images="images" @addImage="addNewImage"></feedback-image-carousel>
+    <feedback-image-carousel class="p-50" :images="editingContent.images" @addImage="addNewImage"></feedback-image-carousel>
     <div class="p-50">
       <div class="d-flex align-center font-bold">
         Allow guests to upload photos form the event
@@ -21,9 +23,13 @@
       </div>
       <div class="font-size-22 font-bold line-height-2">Download files related to the event</div>
       <div class="mb-20">Like presentation</div>
-      <md-button class="md-simple edit-btn md-red">
+      <div v-if="editingContent.files.length>1">
+        <span class="font-bold">{{editingContent.files[0].name}}</span>
+      </div>
+      <md-button class="md-simple edit-btn md-red" @click="uploadFile">
         <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10" />Upload File
       </md-button>
+      <input type="file" id="file-uploader" @change="changeUploadFile" class="d-none" />
       <hr class="mt-50 mb-70" />
       <div class="share-panel">
         <div class="d-flex mb-60 align-center">
@@ -45,7 +51,7 @@
         </div>
         <div>
           <feedback-question
-            v-for="(question, index) in feedBack"
+            v-for="(question, index) in editingContent.feedBack"
             :key="index"
             :feedbackData="question"
           ></feedback-question>
@@ -67,6 +73,8 @@ import SharingButtonGroup from "./components/SharingButtonGroup";
 import FeedbackQuestion from "./components/FeedbackQuestion";
 import TitleEditor from "./components/TitleEditor";
 import HideSwitch from "@/components/HideSwitch";
+import swal from "sweetalert2";
+
 export default {
   components: {
     MaryokuTextarea,
@@ -86,49 +94,55 @@ export default {
     return {
       allowUploadPhoto: true,
       placeHolder: "",
-      showFeedback: true,
-      showSharingOption: true,
-      comment: "",
-      feedBack: [
-        {
-          question: "What did you like or dislike about this event?",
-          showQuestion: true,
-          rank: 0,
-          icon: "",
-        },
-        {
-          question: "What did you think of the venue?",
-          showQuestion: true,
-          rank: 0,
-          icon: "venuerental",
-        },
-        {
-          question: "How did you like the catering service?",
-          showQuestion: true,
-          rank: 0,
-          icon: "foodandbeverage",
-        },
-        {
-          question: "Did you enjoy the activity?",
-          showQuestion: true,
-          rank: 0,
-          icon: "decor",
-        },
-      ],
-      images: [
-        {
-          src: `${this.$iconURL}RSVP/Image+81.jpg`,
-        },
-        {
-          src: `${this.$iconURL}RSVP/shutterstock_444402799_thumb.jpg`,
-        },
-        {
-          src: `${this.$iconURL}RSVP/Image+83.jpg`,
-        },
-        {
-          src: `${this.$iconURL}RSVP/Image+84.jpg`,
-        },
-      ],
+      originalContent: {},
+      editingContent: {
+        name: this.info.conceptName,
+        description: "",
+        images: [
+          {
+            src: `${this.$iconURL}RSVP/Image+81.jpg`,
+          },
+          {
+            src: `${this.$iconURL}RSVP/shutterstock_444402799_thumb.jpg`,
+          },
+          {
+            src: `${this.$iconURL}RSVP/Image+83.jpg`,
+          },
+          {
+            src: `${this.$iconURL}RSVP/Image+84.jpg`,
+          },
+        ],
+        showImages: true,
+        showSharingOption: true,
+        files: [],
+        showFeedbackQuesion: true,
+        feedBack: [
+          {
+            question: "What did you like or dislike about this event?",
+            showQuestion: true,
+            rank: 0,
+            icon: "",
+          },
+          {
+            question: "What did you think of the venue?",
+            showQuestion: true,
+            rank: 0,
+            icon: "venuerental",
+          },
+          {
+            question: "How did you like the catering service?",
+            showQuestion: true,
+            rank: 0,
+            icon: "foodandbeverage",
+          },
+          {
+            question: "Did you enjoy the activity?",
+            showQuestion: true,
+            rank: 0,
+            icon: "decor",
+          },
+        ],
+      },
     };
   },
   created() {
@@ -146,6 +160,11 @@ export default {
     this.placeHolder = this.placeHolder.trim();
     // this.comment = this.placeHolder.trim().replace(/  /g, '');
     this.placeHolder = this.placeHolder.trim().replace(/  /g, "");
+
+    if (this.$store.state.campaign.feedback) {
+      this.editingContent = this.$store.state.campaign.feedback;
+    }
+    this.originalContent = Object.assign({}, this.editingContent);
   },
   computed: {
     event() {
@@ -153,8 +172,38 @@ export default {
     },
   },
   methods: {
+    saveData() {
+      this.$store.commit("campaign/setCampaign", {
+        name: "feedback",
+        data: this.editingContent,
+      });
+    },
+    setDefault() {
+      swal({
+        title: "Are you sure?",
+        text: `You won't be able to revert this feedback!`,
+        showCancelButton: true,
+        confirmButtonClass: "md-button md-success btn-fill",
+        cancelButtonClass: "md-button md-danger btn-fill",
+        confirmButtonText: "Yes, revert it!",
+        buttonsStyling: false,
+      }).then((result) => {
+        if (result.value) {
+          this.editingContent = Object.assign({}, this.originalContent);
+        }
+      });
+    },
     addNewImage(image) {
-      this.images.unshift({ src: image });
+      this.editingContent.images.unshift({ src: image });
+    },
+    uploadFile() {
+      document.getElementById("file-uploader").click();
+    },
+    changeUploadFile(event) {
+      const fileName = event.target.files[0].name;
+      this.editingContent.push({
+        name: fileName,
+      });
     },
   },
 };

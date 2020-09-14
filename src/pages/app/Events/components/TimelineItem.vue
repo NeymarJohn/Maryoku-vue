@@ -13,38 +13,16 @@
     >
       <vue-element-loading :active.sync="item.isItemLoading" spinner="ring" color="#FF547C" />
       <md-card-content class="md-layout">
-        <div class="md-layout-item md-size-100 mb-20">
-          <span
-            class="font-size-20 font-bold text-trans text-transform-capitalize"
-            :style="`color:${item.color};`"
-          >{{item.buildingBlockType}}</span>
-          <img :src="`${$iconURL}Timeline-New/tip.svg`" class="label-icon" style="margin-left:50px" />
-          <span>70% of events like yours timed 30 minuets to this slot</span>
-        </div>
-
         <div class="md-layout-item md-size-100">
           <div class="form-group">
             <label>Name</label>
             <input type="text" class="form-control" v-model="item.title" />
           </div>
         </div>
-        <div class="md-layout-item md-size-100">
-          <md-button class="md-simple edit-btn" @click="showDescription=!showDescription">
-            <img :src="`${$iconURL}Timeline-New/circle-plus.svg`" class="label-icon mr-10" />
-            <span class="color-red">Add Description</span>
-            <span class="color-black font-size-14">(Optional)</span>
-          </md-button>
-          <div class="form-group" v-if="showDescription">
-            <label>Description</label>
-            <textarea row="100" type="text" class="form-control" v-model="item.description"></textarea>
-          </div>
-        </div>
-        <div class="md-layout-item md-size-45 mt-50">
+        <div class="md-layout-item md-size-45">
           <div class="form-group">
-            <label class="font-size-16">
-              <img :src="`${$iconURL}Timeline-New/clock.svg`" class="label-icon mr-10" />Start At
-            </label>
-            <time-input v-model="item.startTime" :h24="false" displayFormat="hh:mm" size="normal"></time-input>
+            <label>Start At</label>
+            <time-input v-model="item.startTime" :h24="false" displayFormat="hh:mm"></time-input>
           </div>
         </div>
         <div
@@ -53,27 +31,25 @@
         >
           <div class="divider"></div>
         </div>
-        <div class="md-layout-item md-size-45 mt-50">
+        <div class="md-layout-item md-size-45">
           <div class="form-group">
-            <label class="font-size-16">
-              <img :src="`${$iconURL}Timeline-New/clock.svg`" class="label-icon mr-10" />Finishes At
-            </label>
-            <time-input v-model="item.endTime" :h24="false" displayFormat="hh:mm" size="normal"></time-input>
+            <label>Finishes At</label>
+            <time-input v-model="item.endTime" :h24="false" displayFormat="hh:mm"></time-input>
           </div>
         </div>
         <div class="md-layout-item md-size-100">
           <div class="form-group">
-            <label class="font-size-16">Assign vendor to slot</label>
+            <label>Description</label>
             <textarea row="100" type="text" class="form-control" v-model="item.description"></textarea>
           </div>
         </div>
-        <!-- <div class="md-layout-item md-size-100 margin-bottom">
+        <div class="md-layout-item md-size-100 margin-bottom">
           <div class="form-group">
             <label>Location</label>
             <location-input v-model="item.location"></location-input>
           </div>
-        </div>-->
-        <!-- <div class="md-layout-item md-size-100">
+        </div>
+        <div class="md-layout-item md-size-100">
           <div class="form-group">
             <label>
               Attach File
@@ -129,20 +105,20 @@
               @change="onFileChange"
             />
           </div>
-        </div>-->
+        </div>
       </md-card-content>
       <md-card-actions md-alignment="right" style="border: none;" class="edit-timeline-footer">
         <md-button
           name="event-planner-tab-timeline-item-save"
-          class="maryoku-btn md-default md-simple"
+          class="event-planner-tab-timeline-item-save md-default md-simple"
           @click="cancelTimelineItem(item, timelineIndex, index)"
         >Cancel</md-button>
         <md-button
           :disabled="item.isItemLoading"
           name="event-planner-tab-timeline-item-save"
-          class="maryoku-btn md-red"
+          class="event-planner-tab-timeline-item-save md-red"
           v-if="!item.dateCreated"
-          @click="saveTimelineItem(item)"
+          @click="saveTimelineItem(item, index, timelineItem.itemDay)"
         >Save</md-button>
         <md-button
           :disabled="item.isItemLoading"
@@ -153,33 +129,23 @@
         >Save</md-button>
       </md-card-actions>
     </md-card>
+    <!-- 
     <md-card
-      class="block-form"
+      class="block-info"
       v-if="!item.mode || item.mode === 'saved' "
       :style="`border-left : 5px solid ` + item.color"
     >
       <vue-element-loading :active.sync="item.isItemLoading" spinner="ring" color="#FF547C" />
       <md-card-content style="min-height: 80px;">
         <div class="item-title-and-time">
+          <span class="item-time">{{ formatHour(item.startTime) }} - {{ formatHour(item.endTime)}}</span>
           <span
-            class="item-time font-size-20 color-dark-gray"
-          >{{ formatHour(item.startTime) }} - {{ formatHour(item.endTime)}}</span>
-          <p>
-            <span class="font-size-20 font-bold-extra mr-20" v-if="item.title">{{item.title }}</span>
-            <md-button
-              class="md-button edit-btn md-red md-simple"
-              @click="showDescription=!showDescription"
-              style="margin:3px !important;"
-              v-if="item.description"
-            >
-              <span v-if="!showDescription" class="color-red font-regular">Read More</span>
-              <span v-if="showDescription" class="color-black font-regular">Read Less</span>
-              <md-icon v-if="!showDescription">keyboard_arrow_down</md-icon>
-              <md-icon v-if="showDescription">keyboard_arrow_up</md-icon>
-            </md-button>
-          </p>
+            class="item-title"
+            style="font-weight: 500; display: inline-block;"
+            v-if="item.title"
+          >{{item.title }}</span>
 
-          <p class="item-desc" v-if="showDescription">{{ item.description }}</p>
+          <p class="item-desc">{{ item.description }}</p>
           <p class="item-attachment" v-if="item.attachments && item.attachments.length>0">
             <span
               v-for="(attachmentItem) in item.attachments"
@@ -191,57 +157,52 @@
               {{ attachmentItem.originalName }}
             </span>
           </p>
+          <p class="item-location" v-if="item.location">
+            <img :src="`${timelineIconsURL}place.svg`" width="20" style="width:18px" />
+            <span>{{ item.location }}</span>
+          </p>
+          <div class="attachment" style="display : none;">
+            <a href>
+              <md-icon>attachment</md-icon>file name
+            </a>
+          </div>
+          <md-button class="md-simple timeline-action">
+            <img :src="`${timelineIconsURL}GoToProposal.svg`" width="20" /> Go To Proposal
+          </md-button>
+          <br />
+          <md-button class="md-simple timeline-action">
+            <img :src="`${timelineIconsURL}ContactVendor.svg`" width="20" /> Contact Vendor
+          </md-button>
         </div>
 
-        <!-- <div class="card-actions text-right">
+        <div class="card-actions">
           <md-button
             name="event-planner-tab-timeline-item-edit"
-            class="md-red md-simple md-xs md-round maryoku-btn"
+            class="event-planner-tab-timeline-item-edit md-red md-simple md-xs md-round"
             @click="modifyItem(item)"
           >Edit</md-button>
           <md-button
             name="event-planner-tab-timeline-item-delete"
-            class="md-red md-xs maryoku-btn"
+            class="event-planner-tab-timeline-item-delete md-simple md-xs md-just-icon md-round"
             @click="removeItem(item)"
-          >Delete</md-button>
-        </div>-->
+          >
+            <md-icon>delete_outline</md-icon>
+          </md-button>
+        </div>
       </md-card-content>
-    </md-card>
+    </md-card>-->
   </div>
 </template>
 <script>
-import TimeInput from '@/components/Inputs/TimeInput';
-import moment from 'moment';
-
 export default {
-  components: {
-    TimeInput,
-  },
   props: {
     item: {
       type: Object,
       default: () => {},
     },
   },
-  data() {
-    return {
-      showDescription: false,
-    };
-  },
-  mounted() {},
-  methods: {
-    saveTimelineItem(item) {
-      this.$emit('save', item);
-    },
-    formatDate(date) {
-      if (typeof date == 'number') {
-        return moment(new Date(date)).format('MM/DD/YY');
-      }
-      return moment(date).format('MM/DD/YY');
-    },
-    formatHour(date) {
-      return moment(new Date(Number(date))).format('hh:mm A');
-    },
+  mounted() {
+    console.log(this.item);
   },
 };
 </script>
@@ -252,7 +213,6 @@ export default {
   .block-form {
     margin: 0;
     margin-left: 20px;
-    padding: 20px 20px;
   }
   .time-line-icon {
     width: 60px;

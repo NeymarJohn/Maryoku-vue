@@ -5,7 +5,7 @@
         class="font-size-30 font-bold-extra text-transform-capitalize"
       >send your guests a fun countdown</div>
       <div class="countdown-cover-image mt-50">
-        <img :src="coverImage" />
+        <img :src="editingContent.coverImage" />
         <div class="countdown-guests d-flex align-center p-20">
           <span
             class="font-size-30 font-bold-extra mr-10"
@@ -15,32 +15,48 @@
             v-if="isLaunched"
           >Guests are Attending</span>
           <span class="font-size-22 font-bold color-dark-gray" v-if="!isLaunched">Guests are Invited</span>
-          <hide-switch class="ml-20" v-model="showLogo" label="coming"></hide-switch>
+          <hide-switch class="ml-20" v-model="editingContent.showComing" label="coming"></hide-switch>
         </div>
         <div class="d-flex countdown-time-panel align-end justify-content-center">
           <countdown-time :event="event"></countdown-time>
-          <hide-switch class="ml-20" v-model="showLogo" label="countdown"></hide-switch>
+          <hide-switch class="ml-20" v-model="editingContent.showCountdown" label="countdown"></hide-switch>
+        </div>
+        <div class="cover-image-button">
+          <md-button
+            class="md-button md-red maryoku-btn md-theme-default change-cover-btn"
+            @click="chooseFiles"
+          >
+            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width:20px" />Change Cover
+          </md-button>
+          <input
+            style="display: none"
+            id="countdown-coverImage"
+            name="attachment"
+            type="file"
+            multiple="multiple"
+            @change="onFileChange"
+          />
         </div>
       </div>
       <!-- <div class="font-size-50 font-bold-extra text-center line-height-1 mb-60">{{info.conceptName}}</div> -->
       <title-editor
-        :value="info.conceptName"
+        :value="editingContent.title"
         @change="changeTitle"
         class="font-size-50 font-bold-extra text-center line-height-1 mb-60"
       ></title-editor>
-
       <hr />
       <div class="d-flex mt-60">
         <maryoku-textarea
           :placeholder="placeholder"
           class="mr-60 flex-1"
           style="padding:40px 60px 40px 40px"
+          v-model="editingContent.description"
         ></maryoku-textarea>
         <rsvp-event-info-panel class="flex-1" :event="event"></rsvp-event-info-panel>
       </div>
       <div class="mt-60 logo-section d-flex align-center justify-content-center">
         <img :src="info.logo" width="180" />
-        <hide-switch class="ml-20" v-model="showLogo" label="logo"></hide-switch>
+        <hide-switch class="ml-20" v-model="editingContent.showLogo" label="logo"></hide-switch>
       </div>
     </div>
   </div>
@@ -51,6 +67,8 @@ import CountdownTime from "./components/CountdownTime";
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel";
 import TitleEditor from "./components/TitleEditor";
 import HideSwitch from "@/components/HideSwitch";
+import { getBase64 } from "@/utils/file.util";
+import swal from "sweetalert2";
 
 export default {
   components: {
@@ -68,9 +86,6 @@ export default {
   },
   data() {
     return {
-      showGuests: true,
-      showCountdown: true,
-      showLogo: true,
       coverImage: "",
       isLaunched: false,
       placeholder: `It's now time to get super exited! The event of the year is almost here( and it even rhymes). What to expect?
@@ -79,20 +94,68 @@ export default {
         refreshing cocktail bar
         best employee award
         see u soon`,
+      editingContent: {
+        title: "",
+        description: "",
+        showLogo: true,
+        showComing: true,
+        showCountdown: true,
+        coverImage: "",
+      },
+      originContent: {},
     };
   },
   created() {
-    this.coverImage = this.event.concept.images[1].url;
+    if (this.$store.state.campaign.countdown) {
+      this.editingContent = this.$store.state.campaign.countdown;
+    } else {
+      this.editingContent.title = this.info.conceptName;
+      this.editingContent.coverImage = `${
+        this.$storageURL
+      }Campaign+Images/ComingSoon${new Date().getDate() % 12}.png`;
+      if (this.event.concept && this.event.concept.images) {
+        this.editingContent.coverImage = this.event.concept.images[0].url;
+      }
+    }
+    this.originContent = Object.assign({}, this.editingContent);
   },
   computed: {
     event() {
-      console.log(this.$store.state.event.eventData);
       return this.$store.state.event.eventData;
     },
   },
   methods: {
+    saveData() {
+      this.$store.commit("campaign/setCampaign", {
+        name: "countdown",
+        data: this.editingContent,
+      });
+    },
+    setDefault() {
+      swal({
+        title: "Are you sure?",
+        text: `You won't be able to revert this!`,
+        showCancelButton: true,
+        confirmButtonClass: "md-button md-success btn-fill",
+        cancelButtonClass: "md-button md-danger btn-fill",
+        confirmButtonText: "Yes, revert it!",
+        buttonsStyling: false,
+      }).then((result) => {
+        if (result.value) {
+          this.editingContent = Object.assign({}, this.originContent);
+        }
+      });
+    },
     changeTitle(newTitle) {
-      this.$emit("changeInfo", { field: "conceptName", value: newTitle });
+      this.editingContent.title = newTitle;
+      this.saveData();
+      // this.$emit("changeInfo", { field: "conceptName", value: newTitle });
+    },
+    chooseFiles() {
+      document.getElementById("countdown-coverImage").click();
+    },
+    async onFileChange(event) {
+      this.editingContent.coverImage = await getBase64(event.target.files[0]);
     },
   },
 };
@@ -111,6 +174,12 @@ export default {
     .countdown-time-panel {
       margin: auto;
       transform: translate(70px, -50%);
+    }
+    .cover-image-button {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
     }
   }
   .countdown-guests {

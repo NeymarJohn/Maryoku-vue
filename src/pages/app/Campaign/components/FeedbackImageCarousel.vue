@@ -8,6 +8,7 @@
       class="feedback-carousel"
       :number="2"
       v-if="images.length > 0"
+      :key="Math.random()"
     >
       <div class="carousel-item" v-for="(item,index) in images" :key="index">
         <img :src="item.src" class="carousel-image" />

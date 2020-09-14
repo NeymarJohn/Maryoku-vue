@@ -192,16 +192,11 @@
                 v-for="(image, imageIndex) in selectedConcept.images"
                 :key="imageIndex"
               >
-                <div
+                <img
                   class="image-section"
-                  v-if="base64Images[imageIndex]"
-                  :style="`background-image:url(${base64Images[imageIndex]})  center top no-repeat`"
-                ></div>
-                <div
-                  class="image-section"
-                  v-else
-                  :style="`background:url(${image.url}) center top no-repeat`"
-                ></div>
+                  :src="`${image.url}`"
+                  @error="imageUrlAlt(selectedConcept.imageData[imageIndex], $event)"
+                />
               </div>
             </div>
           </div>
@@ -523,7 +518,7 @@ export default {
       // this.selectedConcept = this.conceptOptions[index]
       // this.showConceptList = false
     },
-    onSaveConcept(eventConcept, imageData) {
+    onSaveConcept(eventConcept) {
       let calendar = new Calendar({
         id: this.currentUser.profile.defaultCalendarId,
       });
@@ -545,9 +540,11 @@ export default {
           this.showConceptList = false;
           this.showEditForm = false;
           this.selectedConcept = eventConcept;
-          //   this.base64Images = imageData;
           this.isLoading = false;
         });
+    },
+    imageUrlAlt(image, event){
+       event.target.src = image
     },
     openConceptContest() {
       window.open(`https://www.maryoku.com/concept-contest`, "_blank");

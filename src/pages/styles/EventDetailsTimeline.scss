@@ -397,7 +397,40 @@
 									}
 							}
 	
-							
+							.block-info {
+									position : relative;
+									.card-actions {
+											position: absolute;
+											right : 0;
+											bottom : 0;
+	
+											.event-planner-tab-timeline-item-edit {
+													min-width: auto;
+													margin-right : 0.7em;
+													border-radius: 0;
+													.md-ripple {
+															font-weight: bold;
+															text-transform: capitalize;
+															font-size: 15px;
+															padding  : 0 !important;
+															color : #f51355 !important;
+													}
+											}
+	
+											.event-planner-tab-timeline-item-delete {
+													.md-ripple  {
+	
+															.md-button-content {
+																	i {
+																			font-size: 27px !important;
+																			color : #000 !important;
+																	}
+															}
+													}
+											}
+	
+									}
+							}
 					}
 			}
 	}
