@@ -25,21 +25,21 @@ export default {
     inverted: Boolean,
     transparent: {
       type: Boolean,
-      default: false
+      default: false,
     },
     badgeType: {
       type: String,
-      default: 'success'
+      default: 'success',
     },
     badgeIcon: {
       type: String,
-      default: ''
-    }
-  }
-}
+      default: '',
+    },
+  },
+};
 </script>
 <style>
-  .hide {
-    display: none;
-  }
+.hide {
+  display: none;
+}
 </style>

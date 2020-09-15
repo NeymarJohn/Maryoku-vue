@@ -160,10 +160,6 @@ export default {
     this.placeHolder = this.placeHolder.trim();
     // this.comment = this.placeHolder.trim().replace(/  /g, '');
     this.placeHolder = this.placeHolder.trim().replace(/  /g, "");
-
-    if (this.$store.state.campaign.feedback) {
-      this.editingContent = this.$store.state.campaign.feedback;
-    }
     this.originalContent = Object.assign({}, this.editingContent);
   },
   computed: {
@@ -172,12 +168,6 @@ export default {
     },
   },
   methods: {
-    saveData() {
-      this.$store.commit("campaign/setCampaign", {
-        name: "feedback",
-        data: this.editingContent,
-      });
-    },
     setDefault() {
       swal({
         title: "Are you sure?",

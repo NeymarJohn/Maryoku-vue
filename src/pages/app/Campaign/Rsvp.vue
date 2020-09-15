@@ -191,14 +191,8 @@ export default {
     };
   },
   created() {
-    if (this.$store.state.campaign.rsvp) {
-      this.editingContent = this.$store.state.campaign.rsvp;
-    } else {
-      this.editingContent.title = this.info.conceptName;
-      this.editingContent.coverImageUrl = this.event.concept
-        ? this.event.concept.images[0].url
-        : "";
-    }
+    this.editingContent.title = this.info.conceptName;
+    this.editingContent.coverImageUrl = this.event.concept.images[0].url;
     this.originContent = Object.assign({}, this.editingContent);
   },
   computed: {
@@ -211,12 +205,6 @@ export default {
     },
   },
   methods: {
-    saveData() {
-      this.$store.commit("campaign/setCampaign", {
-        name: "rsvp",
-        data: this.editingContent,
-      });
-    },
     setDefault() {
       swal({
         title: "Are you sure?",
@@ -244,7 +232,6 @@ export default {
     },
     changeTitle(newTitle) {
       this.editingContent.title = newTitle;
-      this.saveData();
       // this.$emit("changeInfo", { field: "conceptName", value: newTitle });
     },
   },

@@ -274,20 +274,16 @@ export default {
     this.settingData.email.from = this.$store.state.auth.user.username;
     switch (this.campaign.name) {
       case "SAVE_DATE":
-        const title1 = this.$store.state.savedate.title;
-        this.settingData.email.subject = `Save date ${title1}`;
+        this.settingData.email.subject = `Save date ${this.event.title}`;
         break;
       case "RSVP":
-        const title2 = this.$store.state.rsvp.title;
-        this.settingData.email.subject = `RSVP ${title2}`;
+        this.settingData.email.subject = `RSVP ${this.event.title}`;
         break;
       case "COMING_SOON":
-        const title3 = this.$store.state.rsvp.countdown;
-        this.settingData.email.subject = `Comming event ${title3}`;
+        this.settingData.email.subject = `Comming event ${this.event.title}`;
         break;
       case "FEEDBACK":
-        const title4 = this.$store.state.rsvp.feedback;
-        this.settingData.email.subject = `Feedback ${title4}`;
+        this.settingData.email.subject = `Feedback ${this.event.title}`;
         break;
       default:
         this.settingData.email.subject = `Save date ${this.event.title}`;

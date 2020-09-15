@@ -6,13 +6,11 @@
         class="font-size-30 font-bold-extra text-transform-capitalize p-50"
       >let's start with a "save the date campaign"</div>
       <concept-image-block
-        v-if="concept"
         class="ml-50"
         :images="concept.images"
         :colors="concept.colors"
         border="no-border"
       ></concept-image-block>
-      <img :src="`${$storageURL}Campaign+Images/SAVE+THE+DATE.jpg`" />
       <div class="concept p-50">
         <span class="font-size-30 font-bold">Save The Date</span>
         <span
@@ -57,14 +55,14 @@
   </div>
 </template>
 <script>
-import vue2Dropzone from "vue2-dropzone";
-import "vue2-dropzone/dist/vue2Dropzone.min.css";
-import ConceptImageBlock from "@/components/ConceptImageBlock";
-import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
-import SavedateAnalytics from "./components/SavedateAnalytics";
-import { getBase64 } from "@/utils/file.util";
-import TitleEditor from "./components/TitleEditor";
-import swal from "sweetalert2";
+import vue2Dropzone from 'vue2-dropzone';
+import 'vue2-dropzone/dist/vue2Dropzone.min.css';
+import ConceptImageBlock from '@/components/ConceptImageBlock';
+import MaryokuTextarea from '@/components/Inputs/MaryokuTextarea';
+import SavedateAnalytics from './components/SavedateAnalytics';
+import { getBase64 } from '@/utils/file.util';
+import TitleEditor from './components/TitleEditor';
+import swal from 'sweetalert2';
 
 const placeHolder =
   "Clear your schedule and get ready to mingle! the greatest event of the year is coming up! more details are yet to come, but we can already promise you it's going to be an event to remember. be sure to mark the date on your calendar. you can do it using this link: (google calendar link). see ya soon";
@@ -89,34 +87,30 @@ export default {
   data: function () {
     return {
       dropzoneOptions: {
-        url: "https://httpbin.org/post",
+        url: 'https://httpbin.org/post',
         thumbnailWidth: 150,
         maxFilesize: 0.5,
-        headers: { "My-Awesome-Header": "header value" },
+        headers: { 'My-Awesome-Header': 'header value' },
       },
       logo: null,
-      logoImageData: "",
+      logoImageData: '',
       showLogo: true,
       placeHolder: placeHolder,
-      description: "",
+      description: '',
       originContent: {
-        title: "",
-        descriptoin: "",
-        logoUrl: "",
+        title: '',
+        descriptoin: '',
+        logoUrl: '',
       },
       editingContent: {
-        title: "",
-        descriptoin: "",
-        logoUrl: "",
+        title: '',
+        descriptoin: '',
+        logoUrl: '',
       },
     };
   },
   created() {
-    if (this.$store.state.campaign.savedate) {
-      this.editingContent = this.$store.state.campaign.savedate;
-    } else {
-      this.editingContent.title = this.info.conceptName;
-    }
+    this.editingContent.title = this.info.conceptName;
     this.originContent = { ...this.editingContent };
     // console.log(this.info);
   },
@@ -126,24 +120,18 @@ export default {
       return this.$store.state.event.eventData;
     },
     concept() {
-      return this.event.concept ? this.event.concept : null;
+      return this.event.concept ? this.event.concept : {};
     },
   },
   methods: {
-    saveData() {
-      this.$store.commit("campaign/setCampaign", {
-        name: "savedate",
-        data: this.editingContent,
-      });
-    },
     setDefault() {
       swal({
-        title: "Are you sure?",
+        title: 'Are you sure?',
         text: `You won't be able to revert this!`,
         showCancelButton: true,
-        confirmButtonClass: "md-button md-success btn-fill",
-        cancelButtonClass: "md-button md-danger btn-fill",
-        confirmButtonText: "Yes, revert it!",
+        confirmButtonClass: 'md-button md-success btn-fill',
+        cancelButtonClass: 'md-button md-danger btn-fill',
+        confirmButtonText: 'Yes, revert it!',
         buttonsStyling: false,
       }).then((result) => {
         if (result.value) {
@@ -157,11 +145,10 @@ export default {
       this.logo = file;
       this.logoImageData = await getBase64(file);
       this.editingContent.logoUrl = this.logoImageData;
-      this.$emit("changeInfo", { field: "logo", value: this.logoImageData });
+      this.$emit('changeInfo', { field: 'logo', value: this.logoImageData });
     },
     changeTitle(newTitle) {
       this.editingContent.title = newTitle;
-      this.saveData();
       // this.$emit("changeInfo", {field: "conceptName", value: newTitle})
     },
   },

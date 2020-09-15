@@ -1,25 +1,31 @@
 <template>
   <div class="time-select-fields">
     <!-- <input type="time" v-model="time" class="without_ampm" @change="updateTime" /> -->
-    <div class="time-wrapper">
-      <input type="number" v-model="timeObject.hh" :maxlength="2">
+    <div class="time-wrapper" :class="size">
+      <input type="number" v-model="timeObject.hh" :maxlength="2" />
       :
-      <input type="number" v-model="timeObject.mm" :maxlength="2">
+      <input type="number" v-model="timeObject.mm" :maxlength="2" />
     </div>
-    <drop-down class="ampm" >
+    <drop-down class="ampm">
       <md-button slot="title" class="md-button edit-btn md-simple" data-toggle="dropdown">
-        <span class="font-bold font-size-30">{{timeObject.ampm}}</span>
+        <span
+          :class="size=='normal'?'font-size-16 font-regular':'font-size-30 font-bold'"
+        >{{timeObject.ampm}}</span>
       </md-button>
       <ul class="dropdown-menu dropdown-menu-left">
-        <li @click="timeObject.ampm='AM'"><a class="font-size-22">AM</a></li>
-        <li @click="timeObject.ampm='PM'"><a class="font-size-22">PM</a></li>
+        <li @click="timeObject.ampm='AM'">
+          <a class="font-size-22">AM</a>
+        </li>
+        <li @click="timeObject.ampm='PM'">
+          <a class="font-size-22">PM</a>
+        </li>
       </ul>
-      <span class="arrow-button"  data-toggle="dropdown"></span>
+      <span class="arrow-button" data-toggle="dropdown"></span>
     </drop-down>
   </div>
 </template>
 <script>
-import moment from 'moment'
+import moment from "moment";
 export default {
   name: "time-input",
   props: {
@@ -29,43 +35,71 @@ export default {
      */
     value: {
       type: [String, Date, Number],
-      default: "00:00 AM"
-    }
+      default: "00:00 AM",
+    },
+    size: {
+      type: String,
+      default: "large",
+    },
   },
   created() {
-    this.timeObject.ampm = this.value.split(" ")[1]?this.value.split(" ")[1].trim():"AM"
-    const time = this.value.split(" ")[0]
-    this.timeObject.hh = time.split(":")[0]?time.split(":")[0].trim():"00"
-    this.timeObject.mm = time.split(":")[1]?time.split(":")[1].trim():"00"
+    console.log(typeof this.value);
+    if (typeof this.value === "string") {
+      this.timeObject.ampm = this.value.split(" ")[1]
+        ? this.value.split(" ")[1].trim()
+        : "AM";
+      const time = this.value.split(" ")[0];
+      this.timeObject.hh = time.split(":")[0]
+        ? time.split(":")[0].trim()
+        : "00";
+      this.timeObject.mm = time.split(":")[1]
+        ? time.split(":")[1].trim()
+        : "00";
+    } else if (typeof this.value === "number") {
+      const date = new Date(this.value);
+      this.timeObject.ampm = moment(date).format("A");
+      this.timeObject.mm = moment(date).format("mm");
+      this.timeObject.hh = moment(date).format("hh");
+      this.date = moment(date).format("DD/MM/YY");
+    }
   },
-  methods:{
+  methods: {
     updateTime(e) {
-      console.log(e.target.value);      
+      console.log(e.target.value);
       let hours = Number(e.target.value.split(":")[0]);
-      let mins =  Number(e.target.value.split(":")[1]);
+      let mins = Number(e.target.value.split(":")[1]);
       const time = new Date(this.value);
       time.setHours(hours);
       time.setMinutes(mins);
       // this.time = moment(new Date(this.value)).format("hh:mm")
-      this.$emit("input",time.toString())
-    }
+      this.$emit("input", time.toString());
+    },
   },
   data() {
     return {
       timeObject: {
         hh: "00",
         mm: "00",
-        ampm: new Date(this.value).getHours()>=12?"pm":"am",
-      }
+        ampm: new Date(this.value).getHours() >= 12 ? "PM" : "AM",
+      },
+      date: "",
     };
   },
   watch: {
     timeObject: {
       handler(newValue) {
-        this.$emit("input",`${newValue.hh}:${newValue.mm} ${newValue.ampm}`)
+        if (typeof this.value === "string") {
+          this.$emit("input", `${newValue.hh}:${newValue.mm} ${newValue.ampm}`);
+        } else if (typeof this.value === "number") {
+          const timeStamp = moment(
+            `${this.date} ${newValue.hh}:${newValue.mm} ${newValue.ampm}`,
+            "DD/MM/YY hh:mm A",
+          ).valueOf();
+          this.$emit("input", timeStamp);
+        }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 };
 </script>
@@ -110,6 +144,17 @@ export default {
       min-height: 1em;
       height: 1em;
     }
+    &.normal {
+      font-size: 16px;
+      font-weight: normal;
+      font-family: "Manrope-Regular", sans-serif;
+      color: #050505;
+      input,
+      select {
+        font-size: 16px;
+        min-width: 30px;
+      }
+    }
   }
   .ampm {
     text-align: center;
@@ -123,16 +168,14 @@ export default {
     appearance: none;
     padding: 11px 20px;
     margin-left: 5px;
-    .dropdown-menu{
+    .dropdown-menu {
       li {
         width: 100%;
       }
-      
     }
   }
   input,
   select {
-
     background: #ffffff;
     padding: 0 12px;
     font-size: 14px;

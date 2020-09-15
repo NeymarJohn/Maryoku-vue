@@ -106,17 +106,8 @@ export default {
     };
   },
   created() {
-    if (this.$store.state.campaign.countdown) {
-      this.editingContent = this.$store.state.campaign.countdown;
-    } else {
-      this.editingContent.title = this.info.conceptName;
-      this.editingContent.coverImage = `${
-        this.$storageURL
-      }Campaign+Images/ComingSoon${new Date().getDate() % 12}.png`;
-      if (this.event.concept && this.event.concept.images) {
-        this.editingContent.coverImage = this.event.concept.images[0].url;
-      }
-    }
+    this.editingContent.title = this.info.conceptName;
+    this.editingContent.coverImage = this.event.concept.images[1].url;
     this.originContent = Object.assign({}, this.editingContent);
   },
   computed: {
@@ -125,12 +116,6 @@ export default {
     },
   },
   methods: {
-    saveData() {
-      this.$store.commit("campaign/setCampaign", {
-        name: "countdown",
-        data: this.editingContent,
-      });
-    },
     setDefault() {
       swal({
         title: "Are you sure?",
@@ -148,7 +133,6 @@ export default {
     },
     changeTitle(newTitle) {
       this.editingContent.title = newTitle;
-      this.saveData();
       // this.$emit("changeInfo", { field: "conceptName", value: newTitle });
     },
     chooseFiles() {
