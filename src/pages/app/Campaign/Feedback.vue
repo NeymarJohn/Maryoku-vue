@@ -19,7 +19,7 @@
     <div class="p-50">
       <div class="d-flex align-center font-bold">
         Allow guests to upload photos form the event
-        <md-switch class="large-switch" v-model="allowUploadPhoto"></md-switch>
+        <md-switch class="large-switch" v-model="editingContent.visibleSettings.allowUploadPhoto"></md-switch>
       </div>
       <div class="font-size-22 font-bold line-height-2">Download files related to the event</div>
       <div class="mb-20">Like presentation</div>
@@ -38,7 +38,10 @@
             <div class="font-size-30 font-bold line-height-2">share event participation</div>
             <div>(Include photos & details of the event)</div>
           </div>
-          <hide-switch v-model="showSharingOption" label="sharing option"></hide-switch>
+          <hide-switch
+            v-model="editingContent.visibleSettings.showSharingOption"
+            label="sharing option"
+          ></hide-switch>
         </div>
         <sharing-button-group class="mb-50"></sharing-button-group>
       </div>
@@ -47,7 +50,10 @@
         <div class="font-size-30 font-bold line-height-1 d-flex align-center">
           <img :src="`${$iconURL}Campaign/group-7321.svg`" class="mr-20" />
           We'd love to get your feedback
-          <hide-switch v-model="showFeedback" label="feedback section"></hide-switch>
+          <hide-switch
+            v-model="editingContent.visibleSettings.showFeedback"
+            label="feedback section"
+          ></hide-switch>
         </div>
         <div>
           <feedback-question
@@ -92,12 +98,17 @@ export default {
   },
   data() {
     return {
-      allowUploadPhoto: true,
       placeHolder: "",
       originalContent: {},
       editingContent: {
         name: this.info.conceptName,
         description: "",
+        visibleSettings: {
+          showImages: true,
+          showSharingOption: true,
+          showFeedback: true,
+          allowUploadPhoto: true,
+        },
         images: [
           {
             src: `${this.$iconURL}RSVP/Image+81.jpg`,
@@ -112,10 +123,7 @@ export default {
             src: `${this.$iconURL}RSVP/Image+84.jpg`,
           },
         ],
-        showImages: true,
-        showSharingOption: true,
         files: [],
-        showFeedbackQuesion: true,
         feedBack: [
           {
             question: "What did you like or dislike about this event?",
@@ -160,6 +168,10 @@ export default {
     this.placeHolder = this.placeHolder.trim();
     // this.comment = this.placeHolder.trim().replace(/  /g, '');
     this.placeHolder = this.placeHolder.trim().replace(/  /g, "");
+
+    if (this.$store.state.campaign.FEEDBACK) {
+      this.editingContent = this.$store.state.campaign.FEEDBACK;
+    }
     this.originalContent = Object.assign({}, this.editingContent);
   },
   computed: {
@@ -168,6 +180,12 @@ export default {
     },
   },
   methods: {
+    saveData() {
+      this.$store.commit("campaign/setCampaign", {
+        name: "FEEDBACK",
+        data: this.editingContent,
+      });
+    },
     setDefault() {
       swal({
         title: "Are you sure?",

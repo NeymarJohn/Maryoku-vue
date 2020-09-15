@@ -25,9 +25,9 @@
   </div>
 </template>
 <script>
-import moment from "moment";
+import moment from 'moment';
 export default {
-  name: "time-input",
+  name: 'time-input',
   props: {
     /**
      * Data binding
@@ -35,68 +35,46 @@ export default {
      */
     value: {
       type: [String, Date, Number],
-      default: "00:00 AM",
+      default: '00:00 AM',
     },
     size: {
       type: String,
-      default: "large",
+      default: 'large',
     },
   },
   created() {
-    console.log(typeof this.value);
-    if (typeof this.value === "string") {
-      this.timeObject.ampm = this.value.split(" ")[1]
-        ? this.value.split(" ")[1].trim()
-        : "AM";
-      const time = this.value.split(" ")[0];
-      this.timeObject.hh = time.split(":")[0]
-        ? time.split(":")[0].trim()
-        : "00";
-      this.timeObject.mm = time.split(":")[1]
-        ? time.split(":")[1].trim()
-        : "00";
-    } else if (typeof this.value === "number") {
-      const date = new Date(this.value);
-      this.timeObject.ampm = moment(date).format("A");
-      this.timeObject.mm = moment(date).format("mm");
-      this.timeObject.hh = moment(date).format("hh");
-      this.date = moment(date).format("DD/MM/YY");
-    }
+    this.timeObject.ampm = this.value.split(' ')[1]
+      ? this.value.split(' ')[1].trim()
+      : 'AM';
+    const time = this.value.split(' ')[0];
+    this.timeObject.hh = time.split(':')[0] ? time.split(':')[0].trim() : '00';
+    this.timeObject.mm = time.split(':')[1] ? time.split(':')[1].trim() : '00';
   },
   methods: {
     updateTime(e) {
       console.log(e.target.value);
-      let hours = Number(e.target.value.split(":")[0]);
-      let mins = Number(e.target.value.split(":")[1]);
+      let hours = Number(e.target.value.split(':')[0]);
+      let mins = Number(e.target.value.split(':')[1]);
       const time = new Date(this.value);
       time.setHours(hours);
       time.setMinutes(mins);
       // this.time = moment(new Date(this.value)).format("hh:mm")
-      this.$emit("input", time.toString());
+      this.$emit('input', time.toString());
     },
   },
   data() {
     return {
       timeObject: {
-        hh: "00",
-        mm: "00",
-        ampm: new Date(this.value).getHours() >= 12 ? "PM" : "AM",
+        hh: '00',
+        mm: '00',
+        ampm: new Date(this.value).getHours() >= 12 ? 'pm' : 'am',
       },
-      date: "",
     };
   },
   watch: {
     timeObject: {
       handler(newValue) {
-        if (typeof this.value === "string") {
-          this.$emit("input", `${newValue.hh}:${newValue.mm} ${newValue.ampm}`);
-        } else if (typeof this.value === "number") {
-          const timeStamp = moment(
-            `${this.date} ${newValue.hh}:${newValue.mm} ${newValue.ampm}`,
-            "DD/MM/YY hh:mm A",
-          ).valueOf();
-          this.$emit("input", timeStamp);
-        }
+        this.$emit('input', `${newValue.hh}:${newValue.mm} ${newValue.ampm}`);
       },
       deep: true,
     },
@@ -112,7 +90,7 @@ export default {
   width: max-content;
   position: relative;
   .arrow-button {
-    content: "";
+    content: '';
     border-top: solid 3px #969696;
     border-left: solid 3px #969696;
     width: 13px;
@@ -132,7 +110,7 @@ export default {
     align-items: center;
     font-size: 30px;
     font-weight: bold;
-    font-family: "Manrope-Regular", sans-serif;
+    font-family: 'Manrope-Regular', sans-serif;
     color: #050505;
     input {
       width: 30px;
@@ -147,7 +125,7 @@ export default {
     &.normal {
       font-size: 16px;
       font-weight: normal;
-      font-family: "Manrope-Regular", sans-serif;
+      font-family: 'Manrope-Regular', sans-serif;
       color: #050505;
       input,
       select {

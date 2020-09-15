@@ -11,32 +11,12 @@
       <div class="timeline-image" :style="hoverStyle">
         <img
           class="time-line-blocks_icon"
-          v-if="item.status=='template'"
           :src="`${$iconURL}Timeline-New/templates/${item.icon.toLowerCase()}.svg`"
         />
-        <img class="time-line-blocks_icon" v-else :src="`${$iconURL}Timeline-New/timegap.svg`" />
         <!-- <div class="timeline-image-mask"></div> -->
       </div>
-      <div
-        v-if="item.status=='template'"
-        class="template-form ml-20"
-        :class="`${item.group}`"
-        :style="hoverStyle"
-      >
+      <div class="template-form ml-20" :class="`${item.group}`" :style="hoverStyle">
         <span>{{item.title}}</span>
-        <md-button class="md-icon-button md-simple close-btn" @click="remove">
-          <md-icon class="close-icon">close</md-icon>
-        </md-button>
-        <!-- <div class="template-form-mask"></div> -->
-      </div>
-      <div
-        v-if="item.status=='timegap'"
-        class="template-form ml-20 text-center"
-        :style="hoverStyle"
-      >
-        <div>*{{formatHour(item.timeGap.start)}}- {{formatHour(item.timeGap.end)}}</div>
-        <div class="font-bold">Window Gap</div>
-        <div>Drag A Time Slot To Complete Timeline</div>
         <md-button class="md-icon-button md-simple close-btn" @click="remove">
           <md-icon class="close-icon">close</md-icon>
         </md-button>
@@ -46,9 +26,8 @@
   </drop>
 </template>
 <script>
-import { Drag, Drop } from "vue-drag-drop";
-import { hexToRgbA } from "@/utils/helperFunction";
-import moment from "moment";
+import { Drag, Drop } from 'vue-drag-drop';
+import { hexToRgbA } from '@/utils/helperFunction';
 
 export default {
   components: {
@@ -72,13 +51,13 @@ export default {
   },
   methods: {
     remove() {
-      this.$root.$emit("remove-template", {
+      this.$root.$emit('remove-template', {
         item: this.item,
         index: this.index,
       });
     },
     handleDrop() {
-      this.$root.$emit("apply-template", {
+      this.$root.$emit('apply-template', {
         item: this.item,
         block: this.droppingBlock,
         index: this.index,
@@ -86,21 +65,18 @@ export default {
     },
     hadleDragEnter(data) {
       console.log(data);
-      console.log("started");
+      console.log('started');
       this.droppingBlock = data.block;
       this.isHover = true;
     },
     handleDragLeave(data) {
       this.isHover = false;
     },
-    formatHour(date) {
-      return moment(new Date(Number(date))).format("hh:mm A");
-    },
   },
   computed: {
     hoverStyle() {
       if (!this.isHover) {
-        return "";
+        return '';
       }
       return `border-color: ${
         this.droppingBlock.color

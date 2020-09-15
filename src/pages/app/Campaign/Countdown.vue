@@ -15,11 +15,19 @@
             v-if="isLaunched"
           >Guests are Attending</span>
           <span class="font-size-22 font-bold color-dark-gray" v-if="!isLaunched">Guests are Invited</span>
-          <hide-switch class="ml-20" v-model="editingContent.showComing" label="coming"></hide-switch>
+          <hide-switch
+            class="ml-20"
+            v-model="editingContent.visibleSettings.showComing"
+            label="coming"
+          ></hide-switch>
         </div>
         <div class="d-flex countdown-time-panel align-end justify-content-center">
           <countdown-time :event="event"></countdown-time>
-          <hide-switch class="ml-20" v-model="editingContent.showCountdown" label="countdown"></hide-switch>
+          <hide-switch
+            class="ml-20"
+            v-model="editingContent.visibleSettings.showCountdown"
+            label="countdown"
+          ></hide-switch>
         </div>
         <div class="cover-image-button">
           <md-button
@@ -56,7 +64,7 @@
       </div>
       <div class="mt-60 logo-section d-flex align-center justify-content-center">
         <img :src="info.logo" width="180" />
-        <hide-switch class="ml-20" v-model="editingContent.showLogo" label="logo"></hide-switch>
+        <hide-switch class="ml-20" v-model="editingContent.visibleSettings.showLogo" label="logo"></hide-switch>
       </div>
     </div>
   </div>
@@ -97,17 +105,28 @@ export default {
       editingContent: {
         title: "",
         description: "",
-        showLogo: true,
-        showComing: true,
-        showCountdown: true,
         coverImage: "",
+        visibleSettings: {
+          showLogo: true,
+          showComing: true,
+          showCountdown: true,
+        },
       },
       originContent: {},
     };
   },
   created() {
-    this.editingContent.title = this.info.conceptName;
-    this.editingContent.coverImage = this.event.concept.images[1].url;
+    if (this.$store.state.campaign.COMING_SOON) {
+      this.editingContent = this.$store.state.campaign.COMING_SOON;
+    } else {
+      this.editingContent.title = this.info.conceptName;
+      this.editingContent.coverImage = `${
+        this.$storageURL
+      }Campaign+Images/ComingSoon${new Date().getDate() % 12}.png`;
+      if (this.event.concept && this.event.concept.images) {
+        this.editingContent.coverImage = this.event.concept.images[0].url;
+      }
+    }
     this.originContent = Object.assign({}, this.editingContent);
   },
   computed: {
@@ -116,6 +135,12 @@ export default {
     },
   },
   methods: {
+    saveData() {
+      this.$store.commit("campaign/setCampaign", {
+        name: "COMING_SOON",
+        data: this.editingContent,
+      });
+    },
     setDefault() {
       swal({
         title: "Are you sure?",
@@ -133,6 +158,7 @@ export default {
     },
     changeTitle(newTitle) {
       this.editingContent.title = newTitle;
+      this.saveData();
       // this.$emit("changeInfo", { field: "conceptName", value: newTitle });
     },
     chooseFiles() {
