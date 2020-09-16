@@ -1,6 +1,6 @@
-'use strict'
+"use strict";
 
-var webpack = require('webpack')
+var webpack = require("webpack");
 
 module.exports = {
     NODE_ENV: '"production"',
@@ -10,8 +10,8 @@ module.exports = {
     plugins: [
         // ...
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify('production')
-        })
+            "process.env.NODE_ENV": JSON.stringify("production"),
+        }),
     ],
     S3_BUCKET_NAME: '"maryoku"',
     AWS_REGION: '"us-east-1"',
@@ -19,5 +19,6 @@ module.exports = {
     AWS_SECRETKEY: '"kNR3rhdUD9Karwn0IAOythS7T0VGyQ8inqlwK3DX"',
     S3_URL: '"https://maryoku.s3.amazonaws.com/"',
     // RESOURCE_URL: '"http://static.maryoku.com/"'
-    RESOURCE_URL: '"https://static-maryoku.s3.amazonaws.com/"'
-}
+    // RESOURCE_URL: '"https://static-maryoku.s3.amazonaws.com/"'
+    RESOURCE_URL: '"http://static.maryoku.com/"',
+};
