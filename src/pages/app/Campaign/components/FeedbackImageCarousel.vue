@@ -10,9 +10,19 @@
       v-if="images.length > 0"
       :key="Math.random()"
     >
+      <template slot="prev">
+        <md-button class="edit-btn md-round nav-left nav-btn md-raised md-white">
+          <md-icon>keyboard_arrow_left</md-icon>
+        </md-button>
+      </template>
       <div class="carousel-item" v-for="(item,index) in images" :key="index">
         <img :src="item.src" class="carousel-image" />
       </div>
+      <template slot="next">
+        <md-button class="edit-btn md-round nav-right nav-btn md-raised md-white">
+          <md-icon>keyboard_arrow_right</md-icon>
+        </md-button>
+      </template>
     </carousel>
     <div class="upload-button-wrapper">
       <md-button class="md-red maryoku-btn" @click="uploadImage">
@@ -31,8 +41,8 @@
   </div>
 </template>
 <script>
-import carousel from 'vue-owl-carousel';
-import { getBase64 } from '@/utils/file.util';
+import carousel from "vue-owl-carousel";
+import { getBase64 } from "@/utils/file.util";
 
 export default {
   components: {
@@ -51,11 +61,11 @@ export default {
   },
   methods: {
     uploadImage(index) {
-      document.getElementById('carousel-file').click();
+      document.getElementById("carousel-file").click();
     },
     async onFileChange(event) {
       const image = await getBase64(event.target.files[0]);
-      this.$emit('addImage', image);
+      this.$emit("addImage", image);
     },
   },
 };
@@ -69,6 +79,18 @@ export default {
     top: 50%;
     transform: translate(-50%, -50%);
     z-index: 10;
+  }
+  .nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    &.nav-right {
+      right: 60px;
+    }
+    &.nav-left {
+      left: 60px;
+    }
   }
 }
 .feedback-carousel {
@@ -108,7 +130,7 @@ export default {
         }
       }
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         width: 100%;
         height: 100%;

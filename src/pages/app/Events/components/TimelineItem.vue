@@ -1,15 +1,8 @@
 <template>
-  <timeline-template-item
-    v-if="editingContent.status=='template' || editingContent.status=='timegap'"
-    :item="item"
-    :index="index"
-    @applyTemplate="applyToTemplate"
-  ></timeline-template-item>
-  <div class="timeline-item" v-else>
+  <div class="time-line-blocks_selected-items_item time-line-item">
     <img
       class="time-line-icon"
       :src="`${$iconURL}Timeline-New/${editingContent.icon.toLowerCase()}-circle.svg`"
-      v-if="editingContent.icon"
     />
     <md-card
       class="block-form"
@@ -91,12 +84,75 @@
             ></textarea>
           </div>
         </div>
+        <!-- <div class="md-layout-item md-size-100 margin-bottom">
+          <div class="form-group">
+            <label>Location</label>
+            <location-input v-model="editingContent.location"></location-input>
+          </div>
+        </div>-->
+        <!-- <div class="md-layout-item md-size-100">
+          <div class="form-group">
+            <label>
+              Attach File
+              <small>*suggested</small>
+            </label>
+            <p class="item-attachment" v-if="editingContent.attachments && editingContent.attachments.length>0">
+              <span
+                v-for="(attachmentItem, attachmentIndex) in editingContent.attachments"
+                :key="attachmentItem.url"
+                class="attachment-link"
+              >
+                <md-icon>attachment</md-icon>
+                <span
+                  @click="openAttachment(attachmentItem.url)"
+                  class="attachment-name"
+                >{{ attachmentItem.originalName }}</span>
+                <span @click="removeAttachment(item, attachmentIndex)">
+                  <md-icon class="remove-attachment">close</md-icon>
+                </span>
+              </span>
+            </p>
+            <label class="upload-section">
+              <label
+                class="md-rose md-outline md-simple md-sm attachment"
+                for="file"
+                style="cursor:pointer"
+              >
+                <md-icon>attachment</md-icon>Choose file(10MB)
+              </label>
+              <div>
+                <span
+                  v-for="(file, index) in currentAttachments"
+                  :key="index"
+                  class="attachment-link"
+                >
+                  {{ file.name}}
+                  <span @click="removeSelectedAttachment(index)">
+                    <md-icon class="remove-attachment">close</md-icon>
+                  </span>
+                </span>
+              </div>
+            </label>
+
+            <input
+              style="display: none"
+              id="file"
+              name="attachment"
+              type="file"
+              multiple="multiple"
+              :data-item="editingContent.id"
+              :data-timelineindex="timelineIndex"
+              :data-itemIndex="index"
+              @change="onFileChange"
+            />
+          </div>
+        </div>-->
       </md-card-content>
       <md-card-actions md-alignment="right" style="border: none;" class="edit-timeline-footer">
         <md-button
           name="event-planner-tab-timeline-item-save"
           class="maryoku-btn md-default md-simple"
-          @click="cancelTimelineItem"
+          @click="cancelTimelineItem(item, timelineIndex, index)"
         >Cancel</md-button>
         <md-button
           :disabled="!saveAvailable"
@@ -148,20 +204,32 @@
           </p>
 
           <p class="item-desc" v-if="showDescription">{{ editingContent.description }}</p>
+          <p
+            class="item-attachment"
+            v-if="editingContent.attachments && editingContent.attachments.length>0"
+          >
+            <span
+              v-for="(attachmentItem) in editingContent.attachments"
+              :key="attachmentItem.url"
+              @click="openAttachment(attachmentItem.url)"
+              class="attachment-link"
+            >
+              <md-icon>attachment</md-icon>
+              {{ attachmentItem.originalName }}
+            </span>
+          </p>
         </div>
       </md-card-content>
     </md-card>
   </div>
 </template>
 <script>
-import TimelineTemplateItem from "./TimelineTemplateItem";
 import TimeInput from "@/components/Inputs/TimeInput";
 import moment from "moment";
 
 export default {
   components: {
     TimeInput,
-    TimelineTemplateItem,
   },
   props: {
     item: {
@@ -171,10 +239,6 @@ export default {
     index: {
       type: Number,
       default: 0,
-    },
-    timelineItems: {
-      type: Object,
-      default: [],
     },
   },
   data() {
@@ -186,17 +250,10 @@ export default {
   mounted() {
     console.log("thjis.item", this.item);
     this.editingContent = this.item;
-    // this.$root.$on("apply-template", ({ item, block, index }) => {
-    //   // this.timelineItems[item.date][index] = {};
-    //   this.applyToTemplate(index, { ...item, action: "edited" }, block);
-    // });
   },
   computed: {
     saveAvailable() {
       return this.editingContent.startTime && this.editingContent.endTime;
-    },
-    event() {
-      return this.$store.state.event.eventData;
     },
   },
   methods: {
@@ -204,10 +261,6 @@ export default {
       console.log(this.editingContent);
       this.editingContent.mode = "saved";
       this.$emit("save", { item: this.editingContent, index: this.index });
-    },
-    cancelTimelineItem() {
-      this.editingContent = { ...this.item };
-      this.$emit("cancel", { item: this.editingContent, index: this.index });
     },
     formatDate(date) {
       if (typeof date == "number") {
@@ -218,76 +271,11 @@ export default {
     formatHour(date) {
       return moment(new Date(Number(date))).format("hh:mm A");
     },
-    applyToTemplate({ item: template, block: selectedBlock, index }) {
-      if (selectedBlock) {
-        console.log("adding block");
-        console.log(selectedBlock);
-        console.log(template);
-        let block = Object.assign({}, selectedBlock);
-        block.id = template.id;
-        block.mode = "edit";
-        let startDate = new Date(template.date);
-        let endDate = new Date(template.date);
-
-        block.startTime = moment(
-          `${template.date} 00:00 am`,
-          "DD/MM/YY hh:mm a",
-        ).valueOf();
-        block.endTime = moment(
-          `${template.date} 00:00 am`,
-          "DD/MM/YY hh:mm a",
-        ).valueOf();
-
-        if (index == 0) {
-          if (this.event.eventDayPart == "evening") {
-            block.startTime = moment(
-              `${template.date} 07:00 PM`,
-              "DD/MM/YY hh:mm A",
-            ).valueOf();
-            block.endTime = moment(
-              `${template.date} 08:00 PM`,
-              "DD/MM/YY hh:mm A",
-            ).valueOf();
-          } else {
-            block.startTime = moment(
-              `${template.date} 08:00 AM`,
-              "DD/MM/YY hh:mm A",
-            ).valueOf();
-            block.endTime = moment(
-              `${template.date} 09:00 AM`,
-              "DD/MM/YY hh:mm A",
-            ).valueOf();
-          }
-        } else {
-          const prevItem = this.timelineItems[template.date][index - 1];
-          if (prevItem.status !== "template") {
-            block.startTime = prevItem.endTime;
-            block.endTime = prevItem.endTime + 3600 * 1000;
-          }
-        }
-
-        block.title = selectedBlock.buildingBlockType;
-        block.startDuration = "am";
-        block.endDuration = "am";
-        block.attachmentName = "";
-        block.isItemLoading = false;
-        block.icon = selectedBlock.icon;
-        block.date = template.date;
-        block.event = template.event;
-        this.editingContent = { ...block };
-      }
-      // setTimeout(() => {
-      //   const scrollBtn = this.$refs.scrollBtn;
-      //   if (scrollBtn) {
-      //     scrollBtn.click();
-      //   }
-      // }, 100);
-    },
   },
 };
 </script>
 <style lang="scss" scoped>
-.timeline-item {
+.time-line-item {
   display: flex;
   align-items: flex-start;
   .block-form {
