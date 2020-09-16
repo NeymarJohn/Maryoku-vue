@@ -4,28 +4,28 @@
       <div class="countdown-time-value">{{getCountDuration.days}}</div>
       <div
         class="countdown-time-label"
-        :style="`background-color: ${event.concept.colors[0].color}; color:${backColor}`"
+        :style="`background-color: ${getBackColor}; color:${fontColor}`"
       >DAYS</div>
     </div>
     <div class="countdown-time-item">
       <div class="countdown-time-value">{{getCountDuration.hours}}</div>
       <div
         class="countdown-time-label"
-        :style="`background-color: ${event.concept.colors[0].color}; color:${backColor}`"
+        :style="`background-color: ${getBackColor}; color:${fontColor}`"
       >HOURS</div>
     </div>
     <div class="countdown-time-item">
       <div class="countdown-time-value">{{getCountDuration.mins}}</div>
       <div
         class="countdown-time-label"
-        :style="`background-color: ${event.concept.colors[0].color}; color:${backColor}`"
+        :style="`background-color: ${getBackColor}; color:${fontColor}`"
       >MINUTES</div>
     </div>
     <div class="countdown-time-item">
       <div class="countdown-time-value">{{getCountDuration.seconds}}</div>
       <div
         class="countdown-time-label"
-        :style="`background-color: ${event.concept.colors[0].color}; color:${backColor}`"
+        :style="`background-color: ${getBackColor}; color:${fontColor}`"
       >SECONDS</div>
     </div>
   </div>
@@ -72,6 +72,17 @@ export default {
         mins: ("0" + Math.abs(timeDuration.minutes())).slice(-2),
         seconds: ("0" + Math.abs(timeDuration.seconds())).slice(-2),
       };
+    },
+
+    getBackColor() {
+      if (this.event.concept) return this.event.concept.colors[0].color;
+      else {
+        return "#d9fcf2";
+      }
+    },
+    fontColor() {
+      console.log(this.getBackColor);
+      return oppositeColor(this.getBackColor);
     },
   },
 };

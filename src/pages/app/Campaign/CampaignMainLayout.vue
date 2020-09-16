@@ -20,12 +20,12 @@
           :class="{selected: selectedTab === 1}"
           @click="selectTab(1)"
         >
-          <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaigns[1].completed" />
-          <span :class="{completedCampaign: campaigns[1].completed}">Save The Date</span>
+          <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaignIssued['SAVING_DATE']" />
+          <span :class="{completedCampaign: campaignIssued['SAVING_DATE']}">Save The Date</span>
           <span>
             <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
             <md-tooltip>
-              <div class="font-size-14 tab-tooltip">{{campaigns[1].tooltip}}</div>
+              <div class="font-size-14 tab-tooltip">{{campaignTabs[1].tooltip}}</div>
             </md-tooltip>
           </span>
         </div>
@@ -34,12 +34,12 @@
           :class="{selected: selectedTab === 2}"
           @click="selectTab(2)"
         >
-          <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaigns[2].completed" />
-          <span :class="{completedCampaign: campaigns[2].completed}">RSVP</span>
+          <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaignIssued['RSVP']" />
+          <span :class="{completedCampaign: campaignIssued['RSVP']}">RSVP</span>
           <span>
             <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
             <md-tooltip>
-              <div class="font-size-14 tab-tooltip">{{campaigns[2].tooltip}}</div>
+              <div class="font-size-14 tab-tooltip">{{campaignTabs[2].tooltip}}</div>
             </md-tooltip>
           </span>
         </div>
@@ -48,12 +48,12 @@
           :class="{selected: selectedTab === 3}"
           @click="selectTab(3)"
         >
-          <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaigns[3].completed" />
-          <span :class="{completedCampaign: campaigns[3].completed}">Coming Soon</span>
+          <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaignIssued['COMING_SOON']" />
+          <span :class="{completedCampaign: campaignIssued['COMING_SOON']}">Coming Soon</span>
           <span>
             <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
             <md-tooltip>
-              <div class="font-size-14 tab-tooltip">{{campaigns[3].tooltip}}</div>
+              <div class="font-size-14 tab-tooltip">{{campaignTabs[3].tooltip}}</div>
             </md-tooltip>
           </span>
         </div>
@@ -62,29 +62,37 @@
           :class="{selected: selectedTab === 4}"
           @click="selectTab(4)"
         >
-          <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaigns[4].completed" />
-          <span :class="{completedCampaign: campaigns[4].completed}">Feedback</span>
+          <img :src="`${$iconURL}Campaign/Group 9222.svg`" v-if="campaignIssued['FEEDBACK']" />
+          <span :class="{completedCampaign: campaignIssued['FEEDBACK']}">Feedback</span>
           <span>
             <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
             <md-tooltip>
-              <div class="font-size-14 tab-tooltip">{{campaigns[4].tooltip}}</div>
+              <div class="font-size-14 tab-tooltip">{{campaignTabs[4].tooltip}}</div>
             </md-tooltip>
           </span>
         </div>
       </div>
       <save-date
         v-if="selectedTab == 1"
-        :info="{...campaigns[1], ...campaignInfo}"
+        :info="{...campaignTabs[1], ...campaignInfo}"
         @changeInfo="changeInfo"
         ref="savedateCampaign"
       ></save-date>
-      <rsvp v-if="selectedTab == 2" :info="{...campaigns[2], ...campaignInfo}" ref="rsvp"></rsvp>
-      <countdown v-if="selectedTab == 3" :info="{...campaigns[3], ...campaignInfo}" ref="countdown"></countdown>
-      <feedback v-if="selectedTab == 4" :info="{...campaigns[4], ...campaignInfo}" ref="feedback"></feedback>
+      <rsvp v-if="selectedTab == 2" :info="{...campaignTabs[2], ...campaignInfo}" ref="rsvp"></rsvp>
+      <countdown
+        v-if="selectedTab == 3"
+        :info="{...campaignTabs[3], ...campaignInfo}"
+        ref="countdown"
+      ></countdown>
+      <feedback
+        v-if="selectedTab == 4"
+        :info="{...campaignTabs[4], ...campaignInfo}"
+        ref="feedback"
+      ></feedback>
       <delivery-settings
         :defaultSettings="deliverySettings"
         @change="changeSettings"
-        :campaign="campaigns[selectedTab]"
+        :campaign="campaignTabs[selectedTab]"
       ></delivery-settings>
     </div>
     <div class="campaign-footer">
@@ -97,7 +105,7 @@
             <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
           </md-button>
         </div>
-        <div class="d-flex align-center" v-if="!campaigns[selectedTab].completed">
+        <div class="d-flex align-center" v-if="!campaignIssued[campaignTabs[selectedTab].name]">
           <md-button class="md-simple md-button md-black maryoku-btn" @click="sendPreviewEmail">
             <span class="font-size-16 text-transform-capitalize">
               <img class="mr-20" :src="`${$iconURL}Campaign/Group 1855.svg`" />
@@ -170,8 +178,8 @@
     </div>
     <campaign-schedule-modal
       v-if="showScheduleModal"
-      :campaigns="campaigns"
-      :currentCampaign="campaigns[selectedTab]"
+      :campaigns="campaignTabs"
+      :currentCampaign="campaignTabs[selectedTab]"
       :currentCampaignIndex="selectedTab"
       @changeTime="saveScheduleTime"
       @cancel="showScheduleModal=false"
@@ -180,36 +188,37 @@
 </template>
 
 <script>
-import { Tabs, Modal } from '@/components';
-import HeaderActions from '@/components/HeaderActions';
-import CommentEditorPanel from '@/pages/app/Events/components/CommentEditorPanel';
-import SaveDate from './SaveDate';
-import Rsvp from './Rsvp';
-import Countdown from './Countdown';
-import Feedback from './Feedback';
-import DeliverySettings from './DeliverySettings';
-import CampaignScheduleModal from '@/components/Modals/Campaign/ScheduleModal';
-import Campaign from '@/models/Campaign';
-import CalendarEvent from '@/models/CalendarEvent';
-import swal from 'sweetalert2';
+import { mapActions, mapGetters } from "vuex";
+import { Tabs, Modal } from "@/components";
+import HeaderActions from "@/components/HeaderActions";
+import CommentEditorPanel from "@/pages/app/Events/components/CommentEditorPanel";
+import SaveDate from "./SaveDate";
+import Rsvp from "./Rsvp";
+import Countdown from "./Countdown";
+import Feedback from "./Feedback";
+import DeliverySettings from "./DeliverySettings";
+import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal";
+import Campaign from "@/models/Campaign";
+import CalendarEvent from "@/models/CalendarEvent";
+import swal from "sweetalert2";
 
 const defaultSettings = {
   phone: {
     selected: false,
-    numberString: '',
+    numberString: "",
     numberArray: [],
-    excelFileName: '',
-    excelFilePath: '',
-    smsOrWhatsapp: '',
+    excelFileName: "",
+    excelFilePath: "",
+    smsOrWhatsapp: "",
   },
   email: {
     selected: false,
-    subject: '',
-    from: '',
-    addressString: '',
+    subject: "",
+    from: "",
+    addressString: "",
     addressArray: [],
-    excelFileName: '',
-    excelFilePath: '',
+    excelFileName: "",
+    excelFilePath: "",
   },
 };
 export default {
@@ -227,46 +236,57 @@ export default {
   data() {
     return {
       campaignInfo: {
-        conceptName: '',
-        logo: '',
+        conceptName: "",
+        logo: "",
       },
       deliverySettings: { ...defaultSettings },
       showCommentEditorPanel: false,
       selectedTab: 1,
       showScheduleModal: false,
-      campaigns: {
+      campaignTabs: {
         1: {
           completed: false,
-          name: 'SAVING_DATE',
+          name: "SAVING_DATE",
           tooltip:
-            'Give guests enough time to clear their schedules, make travel arrangements and generally increase the chances of them atteding',
+            "Give guests enough time to clear their schedules, make travel arrangements and generally increase the chances of them atteding",
         },
         2: {
           completed: false,
-          name: 'RSVP',
+          name: "RSVP",
           tooltip:
             "Try sending your RSVP's a month in advance,  so you'll get the most accurate results",
         },
         3: {
           completed: false,
-          name: 'COMING_SOON',
+          name: "COMING_SOON",
           tooltip:
-            'A friendly reminder helps prepare attendees for your upcoming event. Aside from reminding them of the date and time, we also use this email to answer last-minute questions',
+            "A friendly reminder helps prepare attendees for your upcoming event. Aside from reminding them of the date and time, we also use this email to answer last-minute questions",
         },
         4: {
           completed: false,
-          name: 'FEEDBACK',
+          name: "FEEDBACK",
           tooltip:
-            'This touchpoint provides a valuable opportunity to promote other upcoming events, collect attendee feedback, and guide attendees towards the next step you want them to take.',
+            "This touchpoint provides a valuable opportunity to promote other upcoming events, collect attendee feedback, and guide attendees towards the next step you want them to take.",
         },
       },
+      campaigns: {},
     };
   },
   methods: {
+    ...mapActions("campaign", ["getCampaigns", "saveCampaign"]),
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
     },
     selectTab(tabIndex) {
+      if (this.selectedTab == 1) {
+        this.$refs.savedateCampaign.saveData();
+      } else if (this.selectedTab == 2) {
+        this.$refs.rsvp.saveData();
+      } else if (this.selectedTab == 3) {
+        this.$refs.countdown.saveData();
+      } else if (this.selectedTab == 4) {
+        this.$refs.feedback.saveData();
+      }
       this.selectedTab = tabIndex;
       this.deliverySettings = { ...defaultSettings };
     },
@@ -275,7 +295,7 @@ export default {
     },
     startCampaign() {
       this.campaigns[this.selectedTab].completed = true;
-      this.saveCampaign(this.campaigns[this.selectedTab].name);
+      this.callSaveCampaign(this.campaigns[this.selectedTab].name);
     },
     changeInfo(data) {
       this.campaignInfo[data.field] = data.value;
@@ -283,28 +303,17 @@ export default {
     changeSettings(data) {
       this.deliverySettings = data;
     },
-    saveCampaign(campaignType) {
-      new Campaign({
+    callSaveCampaign(campaignType) {
+      console.log("campaignType", campaignType);
+      const campaignData = this.$store.state.campaign[campaignType];
+      const newCampaign = new Campaign({
         campaignType,
-        campaignStatus: 'ISSUED',
+        ...campaignData,
+        campaignStatus: "ISSUED",
         event: new CalendarEvent({ id: this.event.id }),
-        emails: ['mikelim12292@gmail.com'],
-        byEmail: true,
-        bySms: false,
-        byWhatsApp: false,
-        phoneNumbers: [],
-        coverImage: '',
         scheduleTime: new Date().getTime(),
-        settings: {
-          hideLogo: true,
-          hideWearingGuide: true,
-          hideKnowledge: true,
-        },
-      })
-        .save()
-        .then((res) => {
-          console.log(res);
-        });
+        settings: this.deliverySettings,
+      });
     },
     saveScheduleTime(data) {
       const {
@@ -317,7 +326,7 @@ export default {
       this.campaigns[currentCampaignIndex].scheduleSettings = scheduleSettings;
       this.campaigns[currentCampaignIndex].selectedOption = selectedOption;
       console.log(
-        'this.campaigns[currentCampaignIndex]',
+        "this.campaigns[currentCampaignIndex]",
         this.campaigns[currentCampaignIndex],
       );
     },
@@ -326,7 +335,7 @@ export default {
       this.deliverySettings = Object.assign({}, defaultSettings);
       this.campaignInfo = {
         conceptName: this.event.concept.name,
-        logo: '',
+        logo: "",
       };
       if (this.selectedTab == 1) {
         this.$refs.savedateCampaign.setDefault();
@@ -346,29 +355,53 @@ export default {
           fromUserName: this.user.name,
           eventName: this.event.title,
           plannerName: this.user.name,
-          companyName: 'maryoku',
+          companyName: "maryoku",
           eventUrl: `http://jeff-test2.local.maryoku.com:3000/#/rsvp/${this.event.id}`,
         })
         .then(() => {
           swal({
             title: `You will receive a preview campaign email soon!`,
             buttonsStyling: false,
-            type: 'success',
-            confirmButtonClass: 'md-button md-success',
+            type: "success",
+            confirmButtonClass: "md-button md-success",
           });
         });
     },
   },
   computed: {
+    ...mapGetters("campaign", ["campaignIssued"]),
     event() {
       return this.$store.state.event.eventData;
     },
     user() {
       return this.$store.state.auth.user;
     },
+    // campaignIssued() {
+    //   return {
+    //     SAVING_DATE:
+    //       this.campaigns["SAVING_DATE"] &&
+    //       this.campaigns["SAVING_DATE"].campaignStatus === "ISSUED",
+    //     RSVP:
+    //       this.campaigns["RSVP"] &&
+    //       this.campaigns["RSVP"].campaignStatus === "ISSUED",
+    //     COMING_SOON:
+    //       this.campaigns["COMING_SOON"] &&
+    //       this.campaigns["COMING_SOON"].campaignStatus === "ISSUED",
+    //     FEEDBACK:
+    //       this.campaigns["FEEDBACK"] &&
+    //       this.campaigns["FEEDBACK"].campaignStatus === "ISSUED",
+    //   };
+    // },
   },
   created() {
-    this.campaignInfo.conceptName = this.event.concept.name;
+    this.campaignInfo.conceptName = this.event.concept
+      ? this.event.concept.name
+      : "";
+    this.getCampaigns({ event: this.event }).then((campaigns) => {
+      this.campaigns = campaigns;
+      console.log("campaigns");
+      console.log(this.campaigns);
+    });
   },
 };
 </script>
@@ -394,7 +427,7 @@ export default {
     }
     .completedCampaign {
       text-decoration: line-through;
-      font-family: 'Manrope-Regular';
+      font-family: "Manrope-Regular";
     }
   }
 }
@@ -422,7 +455,7 @@ export default {
     }
     .schedule-campaign-btn {
       &::after {
-        content: '';
+        content: "";
         height: 50px;
         width: 54px;
         background: #ff4f7e;
