@@ -88,11 +88,6 @@ export default {
       return scheduledDays;
     },
   },
-  watch: {
-    changeVisibility(newValue, oldValue) {
-      this.$emit("changeVisibility", newValue);
-    },
-  },
 };
 </script>
 <style lang="scss" scoped>

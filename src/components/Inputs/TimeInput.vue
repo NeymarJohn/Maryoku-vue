@@ -1,33 +1,27 @@
 <template>
   <div class="time-select-fields">
     <!-- <input type="time" v-model="time" class="without_ampm" @change="updateTime" /> -->
-    <div class="time-wrapper" :class="size">
-      <input type="number" v-model="timeObject.hh" :maxlength="2" />
+    <div class="time-wrapper">
+      <input type="number" v-model="timeObject.hh" :maxlength="2">
       :
-      <input type="number" v-model="timeObject.mm" :maxlength="2" />
+      <input type="number" v-model="timeObject.mm" :maxlength="2">
     </div>
-    <drop-down class="ampm">
+    <drop-down class="ampm" >
       <md-button slot="title" class="md-button edit-btn md-simple" data-toggle="dropdown">
-        <span
-          :class="size=='normal'?'font-size-16 font-regular':'font-size-30 font-bold'"
-        >{{timeObject.ampm}}</span>
+        <span class="font-bold font-size-30">{{timeObject.ampm}}</span>
       </md-button>
       <ul class="dropdown-menu dropdown-menu-left">
-        <li @click="timeObject.ampm='AM'">
-          <a class="font-size-22">AM</a>
-        </li>
-        <li @click="timeObject.ampm='PM'">
-          <a class="font-size-22">PM</a>
-        </li>
+        <li @click="timeObject.ampm='AM'"><a class="font-size-22">AM</a></li>
+        <li @click="timeObject.ampm='PM'"><a class="font-size-22">PM</a></li>
       </ul>
-      <span class="arrow-button" data-toggle="dropdown"></span>
+      <span class="arrow-button"  data-toggle="dropdown"></span>
     </drop-down>
   </div>
 </template>
 <script>
-import moment from 'moment';
+import moment from 'moment'
 export default {
-  name: 'time-input',
+  name: "time-input",
   props: {
     /**
      * Data binding
@@ -35,49 +29,43 @@ export default {
      */
     value: {
       type: [String, Date, Number],
-      default: '00:00 AM',
-    },
-    size: {
-      type: String,
-      default: 'large',
-    },
+      default: "00:00 AM"
+    }
   },
   created() {
-    this.timeObject.ampm = this.value.split(' ')[1]
-      ? this.value.split(' ')[1].trim()
-      : 'AM';
-    const time = this.value.split(' ')[0];
-    this.timeObject.hh = time.split(':')[0] ? time.split(':')[0].trim() : '00';
-    this.timeObject.mm = time.split(':')[1] ? time.split(':')[1].trim() : '00';
+    this.timeObject.ampm = this.value.split(" ")[1]?this.value.split(" ")[1].trim():"AM"
+    const time = this.value.split(" ")[0]
+    this.timeObject.hh = time.split(":")[0]?time.split(":")[0].trim():"00"
+    this.timeObject.mm = time.split(":")[1]?time.split(":")[1].trim():"00"
   },
-  methods: {
+  methods:{
     updateTime(e) {
-      console.log(e.target.value);
-      let hours = Number(e.target.value.split(':')[0]);
-      let mins = Number(e.target.value.split(':')[1]);
+      console.log(e.target.value);      
+      let hours = Number(e.target.value.split(":")[0]);
+      let mins =  Number(e.target.value.split(":")[1]);
       const time = new Date(this.value);
       time.setHours(hours);
       time.setMinutes(mins);
       // this.time = moment(new Date(this.value)).format("hh:mm")
-      this.$emit('input', time.toString());
-    },
+      this.$emit("input",time.toString())
+    }
   },
   data() {
     return {
       timeObject: {
-        hh: '00',
-        mm: '00',
-        ampm: new Date(this.value).getHours() >= 12 ? 'pm' : 'am',
-      },
+        hh: "00",
+        mm: "00",
+        ampm: new Date(this.value).getHours()>=12?"pm":"am",
+      }
     };
   },
   watch: {
     timeObject: {
       handler(newValue) {
-        this.$emit('input', `${newValue.hh}:${newValue.mm} ${newValue.ampm}`);
+        this.$emit("input",`${newValue.hh}:${newValue.mm} ${newValue.ampm}`)
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
 };
 </script>
@@ -90,7 +78,7 @@ export default {
   width: max-content;
   position: relative;
   .arrow-button {
-    content: '';
+    content: "";
     border-top: solid 3px #969696;
     border-left: solid 3px #969696;
     width: 13px;
@@ -110,7 +98,7 @@ export default {
     align-items: center;
     font-size: 30px;
     font-weight: bold;
-    font-family: 'Manrope-Regular', sans-serif;
+    font-family: "Manrope-Regular", sans-serif;
     color: #050505;
     input {
       width: 30px;
@@ -121,17 +109,6 @@ export default {
       text-align: center;
       min-height: 1em;
       height: 1em;
-    }
-    &.normal {
-      font-size: 16px;
-      font-weight: normal;
-      font-family: 'Manrope-Regular', sans-serif;
-      color: #050505;
-      input,
-      select {
-        font-size: 16px;
-        min-width: 30px;
-      }
     }
   }
   .ampm {
@@ -146,14 +123,16 @@ export default {
     appearance: none;
     padding: 11px 20px;
     margin-left: 5px;
-    .dropdown-menu {
+    .dropdown-menu{
       li {
         width: 100%;
       }
+      
     }
   }
   input,
   select {
+
     background: #ffffff;
     padding: 0 12px;
     font-size: 14px;

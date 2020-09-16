@@ -46,6 +46,7 @@
                 ></invalid-address-panel>
               </div>
               <span class="font-size-16" style="padding: 20px 40px">Or</span>
+
               <md-button
                 class="md-outlined md-simple maryoku-btn"
                 @click="choosePhoneExcel"
@@ -271,8 +272,22 @@ export default {
     this.settingData = this.defaultSettings;
     // set default subject for email
     this.settingData.email.from = this.$store.state.auth.user.username;
-    console.log("this.emailSubject", this.emailSubject);
-    this.settingData.email.subject = this.emailSubject;
+    switch (this.campaign.name) {
+      case "SAVE_DATE":
+        this.settingData.email.subject = `Save date ${this.event.title}`;
+        break;
+      case "RSVP":
+        this.settingData.email.subject = `RSVP ${this.event.title}`;
+        break;
+      case "COMING_SOON":
+        this.settingData.email.subject = `Comming event ${this.event.title}`;
+        break;
+      case "FEEDBACK":
+        this.settingData.email.subject = `Feedback ${this.event.title}`;
+        break;
+      default:
+        this.settingData.email.subject = `Save date ${this.event.title}`;
+    }
   },
   methods: {
     handleInputEmails({ value, type }) {
@@ -350,41 +365,6 @@ export default {
     event() {
       return this.$store.state.event.eventData;
     },
-    emailSubject() {
-      const campaignData = this.$store.state.campaign;
-      // alert(campaignData.savedate.title);
-      console.log(this.campaign.name);
-      switch (this.campaign.name) {
-        case "SAVING_DATE":
-          return `${
-            campaignData.SAVING_DATE
-              ? campaignData.SAVING_DATE.title
-              : this.event.title
-          } Save The Date `;
-          break;
-        case "RSVP":
-          return `${
-            campaignData.RSVP ? campaignData.RSVP.title : this.event.title
-          } RSVP`;
-          break;
-        case "COMING_SOON":
-          return `${
-            campaignData.COMING_SOON
-              ? campaignData.COMING_SOON.title
-              : this.event.title
-          } Coming soon `;
-          break;
-        case "FEEDBACK":
-          return `${
-            campaignData.FEEDBACK
-              ? campaignData.FEEDBACK.title
-              : this.event.title
-          } Feedback`;
-          break;
-        default:
-          return "";
-      }
-    },
   },
   watch: {
     settingData: {
@@ -396,12 +376,24 @@ export default {
     defaultSettings: {
       handler(newValue) {
         this.settingData = newValue;
-        this.settingData.email.subject = this.emailSubject;
+        switch (this.campaign.name) {
+          case "SAVE_DATE":
+            this.settingData.email.subject = `Save date ${this.event.title}`;
+            break;
+          case "RSVP":
+            this.settingData.email.subject = `RSVP ${this.event.title}`;
+            break;
+          case "COMING_SOON":
+            this.settingData.email.subject = `Comming event ${this.event.title}`;
+            break;
+          case "FEEDBACK":
+            this.settingData.email.subject = `Feedback ${this.event.title}`;
+            break;
+          default:
+            this.settingData.email.subject = `Save date ${this.event.title}`;
+        }
       },
       deep: true,
-    },
-    emailSubject(newValue) {
-      this.settingData.email.subject = newValue;
     },
   },
 };

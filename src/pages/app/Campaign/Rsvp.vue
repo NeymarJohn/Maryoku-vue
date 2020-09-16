@@ -62,7 +62,7 @@
                 class="text-transform-uppercase"
               >WHAT SHOULD I WEAR?</span>
               <md-switch
-                v-model="editingContent.visibleSettings.showWearingGuide"
+                v-model="editingContent.showWearingGuide"
                 class="ml-10 md-switch below-label large-switch"
               >
                 <span class="color-black font-regular">Hide</span>
@@ -81,7 +81,7 @@
                 class="text-transform-uppercase"
               >What should I Know?</span>
               <md-switch
-                v-model="editingContent.visibleSettings.showKnowledge"
+                v-model="editingContent.showKnowledge"
                 class="ml-10 md-switch below-label large-switch"
               >
                 <span class="color-black font-regular">Hide</span>
@@ -94,12 +94,7 @@
           </div>
         </div>
       </div>
-      <rsvp-timeline-panel
-        class="p-50"
-        :canHide="true"
-        :visible="editingContent.visibleSettings.showTimeline"
-        @changeVisibility="setVisibleTimeline"
-      ></rsvp-timeline-panel>
+      <rsvp-timeline-panel class="p-50" :canHide="true"></rsvp-timeline-panel>
     </div>
     <div class="white-card p-50 mt-40">
       <div class="font-size-30 font-bold-extra mb-30">
@@ -189,23 +184,15 @@ export default {
         knowledge: "",
         zoomlink: "",
         allowOnline: false,
-        visibleSettings: {
-          showWearingGuide: true,
-          showKnowledge: true,
-          showTimeline: true,
-        },
+        showWearingGuide: true,
+        showKnowledge: true,
+        showTimeline: true,
       },
     };
   },
   created() {
-    if (this.$store.state.campaign.RSVP) {
-      this.editingContent = this.$store.state.campaign.RSVP;
-    } else {
-      this.editingContent.title = this.info.conceptName;
-      this.editingContent.coverImageUrl = this.event.concept
-        ? this.event.concept.images[0].url
-        : "";
-    }
+    this.editingContent.title = this.info.conceptName;
+    this.editingContent.coverImageUrl = this.event.concept.images[0].url;
     this.originContent = Object.assign({}, this.editingContent);
   },
   computed: {
@@ -218,12 +205,6 @@ export default {
     },
   },
   methods: {
-    saveData() {
-      this.$store.commit("campaign/setCampaign", {
-        name: "RSVP",
-        data: this.editingContent,
-      });
-    },
     setDefault() {
       swal({
         title: "Are you sure?",
@@ -251,11 +232,7 @@ export default {
     },
     changeTitle(newTitle) {
       this.editingContent.title = newTitle;
-      this.saveData();
       // this.$emit("changeInfo", { field: "conceptName", value: newTitle });
-    },
-    setVisibleTimeline(visibility) {
-      this.editingContent.visibleSettings.showTimeline = visibility;
     },
   },
 };

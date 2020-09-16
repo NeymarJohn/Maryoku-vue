@@ -7,7 +7,7 @@ module.exports = merge(devEnv, {
     NODE_ENV: '"testing"',
     SERVER_URL: '"https://api-dev.maryoku.com"',
     //SERVER_URL: '"https://api-dev.maryoku.com"',
-    HOST_URL:'"dev.maryoku.com"',
+    HOST_URL: '"dev.maryoku.com"',
     GOOGLE_API_KEY: '"AIzaSyD6JvMsiEN9jz3lfVbKlnUQhjZB6fgcCu8"',
 
     plugins: [
@@ -24,5 +24,6 @@ module.exports = merge(devEnv, {
     AWS_REGION: '"us-east-1"',
     AWS_ACCESSKEY: '"AKIAT5QXLXDJDLKXRNU7"',
     AWS_SECRETKEY: '"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"',
-    S3_URL: '"https://maryoku.s3.amazonaws.com/"'
+    S3_URL: '"https://maryoku.s3.amazonaws.com/"',
+    RESOURCE_URL: '"https://static.maryoku.com/"'
 })
