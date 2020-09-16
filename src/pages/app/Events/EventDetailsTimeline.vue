@@ -30,7 +30,7 @@
           v-for="(scheduleDate,timelineIndex) in timelineDates"
           :key="timelineIndex"
         >
-          <div class="item-header">
+          <div class="item-header mb-10">
             <div class="header-title">
               <div class="time-line-edit d-flex justify-content-center align-center">
                 <label
@@ -73,12 +73,18 @@
                 :key="index"
                 class="time-line-blocks_selected-items_item time-line-item"
               >
-                <timeline-template-item
+                <!-- <timeline-template-item
                   v-if="item.status=='template' || item.status=='timegap'"
                   :item="item"
                   :index="index"
-                ></timeline-template-item>
-                <timeline-item v-else :item="item" :index="index" @save="saveTimeline"></timeline-item>
+                ></timeline-template-item>-->
+                <timeline-item
+                  :item="item"
+                  :index="index"
+                  :timelineItems="timelineItems"
+                  @save="saveTimeline"
+                  @cancel="cancleTimeline"
+                ></timeline-item>
                 <timeline-empty :index="index" :date="scheduleDate"></timeline-empty>
               </div>
             </draggable>
@@ -90,7 +96,7 @@
       class="md-card-plain time-line-blocks md-layout-item md-xlarge-size-35 md-large-size-35 md-small-size-40"
       style="margin-top: 16px; padding-right: 3em"
     >
-      <md-card-content class="md-layout time-line-blocks_items">
+      <md-card-content class="md-layout time-line-blocks_items mb-60">
         <div class="text-center width-100 p-10 font-size-16 mb-10">Drag Tim Slots timeline</div>
 
         <div
@@ -200,12 +206,11 @@ import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./components/CommentEditorPanel";
 
 import ProgressSidebar from "./components/progressSidebar";
-import TimeInput from "../../../components/TimeInput";
 import PlannerEventFooter from "@/components/Planner/FooterPanel";
 import { timelineBlockItems } from "@/constants/event";
 
 export default {
-  name: "event-time-line",
+  name: "event-details-timeline",
   components: {
     VueElementLoading,
     EventBlocks,
@@ -216,7 +221,6 @@ export default {
     InputMask,
     ProgressSidebar,
     Modal,
-    TimeInput,
     LocationInput,
     HeaderActions,
     CommentEditorPanel,
@@ -508,21 +512,8 @@ export default {
           this.$root.$emit("timeline-updated", this.timelineItems);
         });
     },
-    cancelTimelineItem(item, timelineIndex, itemIndexOfTimeline) {
-      const itemIndex = this.timelineItems.findIndex((it) => it.id === item.id);
-      if (item.dateCreated) {
-        this.$set(this.timelineItems[itemIndex], "mode", "saved");
-        this.$set(
-          this.timeline[timelineIndex].items[itemIndexOfTimeline],
-          "mode",
-          "saved",
-        );
-      } else {
-        // this.timelineItems.splice(itemIndex, 1)
-        this.timeline[timelineIndex].items.splice(itemIndexOfTimeline, 1);
-      }
-      this.disabledDragging = false;
-      this.currentAttachments = [];
+    cancleTimeline(item, timelineIndex) {
+      this.timelineItems[item.date][timelineIndex].mode = "canceled";
     },
     saveTimeline({ item, index }) {
       console.log(item);
@@ -936,7 +927,21 @@ export default {
     revert() {},
     startFromScratch() {},
     saveDraft() {},
-    finalize() {},
+    finalize() {
+      this.$http
+        .post(
+          `${process.env.SERVER_URL}/1/events/${this.eventData.id}/timelineItems`,
+          this.timelineItems,
+          { headers: this.$auth.getAuthHeader() },
+        )
+        .then((res) => {
+          if (res.data.status) {
+            this.statusMessage = "We have sent an email to the invited users.";
+          } else {
+            this.statusMessage = "Something is wrong. Please try again later.";
+          }
+        });
+    },
   },
   created() {
     [...Array(12).keys()].map((x) =>
@@ -968,10 +973,10 @@ export default {
     this.$root.$on("remove-template", ({ item, index }) => {
       this.timelineItems[item.date].splice(index, 1);
     });
-    this.$root.$on("apply-template", ({ item, block, index }) => {
-      this.timelineItems[item.date][index] = {};
-      this.applyToTemplate(index, item, block);
-    });
+    // this.$root.$on("apply-template", ({ item, block, index }) => {
+    //   this.timelineItems[item.date][index] = {};
+    //   this.applyToTemplate(index, { ...item, action: "edited" }, block);
+    // });
     this.$root.$on("add-template", ({ date, block, index }) => {
       const prevItem = this.timelineItems[date][index];
       const nextItem = this.timelineItems[date][index + 1];
@@ -998,7 +1003,7 @@ export default {
         return;
       }
       this.timelineItems[date].splice(index + 1, 0, {});
-      this.applyToTemplate(index + 1, { date: date }, block);
+      this.applyToTemplate(index + 1, { date: date, action: "edited" }, block);
     });
   },
   computed: {
