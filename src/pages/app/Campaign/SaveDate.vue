@@ -1,6 +1,6 @@
 <template>
   <div class="campaign-save-date">
-    <savedate-analytics v-if="info.completed"></savedate-analytics>
+    <savedate-analytics v-if="editingContent.campaignStatus === 'STARTED'"></savedate-analytics>
     <div class="white-card">
       <div
         class="font-size-30 font-bold-extra text-transform-capitalize p-50"
@@ -140,10 +140,10 @@ export default {
   },
   methods: {
     saveData() {
-      console.log(this.editingContent);
+      console.log(this.originContent);
       this.$store.commit("campaign/setCampaign", {
         name: "SAVING_DATE",
-        data: this.editingContent,
+        data: Object.assign({}, this.editingContent),
       });
     },
     setDefault() {
@@ -177,10 +177,11 @@ export default {
   },
   watch: {
     campaignData: {
-      handler: (newValue) => {
-        console.log(newValue);
+      handler(newValue, oldValue) {
         this.editingContent = newValue;
         console.log(this.editingContent);
+        console.log(this.placeHolder);
+        console.log("this.editingContent");
         this.originContent = { ...this.editingContent };
       },
       deep: true,

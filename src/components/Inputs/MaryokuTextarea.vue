@@ -1,15 +1,33 @@
 <template>
-  <div v-if="type=='textarea'" class='maryoku-textarea'  :style="size=='normal'?'padding:40px 140px 40px 40px':'padding:30px 40px 30px 30px'" >
-    <textarea v-model="content" @input="handleInput" :placeholder="placeholder" :rows="rows" class="textarea js-autoresize"></textarea>
-    <span  class="close-button" @click="clearContent">
-      <img :src="`${$iconURL}Campaign/Group+3602.svg`"/>
+  <div
+    v-if="type=='textarea'"
+    class="maryoku-textarea"
+    :style="size=='normal'?'padding:40px 140px 40px 40px':'padding:30px 40px 30px 30px'"
+  >
+    <textarea
+      v-model="content"
+      @input="handleInput"
+      :placeholder="placeholder"
+      :rows="rows"
+      class="textarea js-autoresize"
+    ></textarea>
+    <span class="close-button" @click="clearContent">
+      <img :src="`${$iconURL}Campaign/Group+3602.svg`" />
     </span>
   </div>
-  <div v-else class='maryoku-textarea input'  :class="inputClass">
+  <div v-else class="maryoku-textarea input" :class="inputClass">
     <textarea v-model="content" @input="handleInput" :rows="1" class="textarea js-autoresize"></textarea>
-    <div class="place-holder color-dark-gray font-size-16" >
-      <img v-if="type=='emails'" :src="`${$iconURL}Campaign/emails-gray.svg`" style="width:20px; margin:0 7px;"> 
-      <img v-if="type=='phones'" :src="`${$iconURL}Choose+vendor+and+Proposal/phone-gray.svg`" style="width:20px; margin:0 7px;"/>
+    <div class="place-holder color-dark-gray font-size-16">
+      <img
+        v-if="type=='emails'"
+        :src="`${$iconURL}Campaign/emails-gray.svg`"
+        style="width:20px; margin:0 7px;"
+      />
+      <img
+        v-if="type=='phones'"
+        :src="`${$iconURL}Choose+vendor+and+Proposal/phone-gray.svg`"
+        style="width:20px; margin:0 7px;"
+      />
       {{placeholder}}
     </div>
   </div>
@@ -21,67 +39,71 @@ export default {
   props: {
     placeholder: {
       type: String,
-      default: ""
+      default: "",
     },
     value: String,
     rows: {
       type: String,
-      default: "3"
+      default: "3",
     },
     type: {
       type: String,
-      default: "textarea"
+      default: "textarea",
     },
     inputStyle: {
       type: String,
-      default: ""
+      default: "",
     },
     size: {
       type: String,
-      default: "normal"
+      default: "normal",
+    },
+    tooltip: {
+      type: String,
+      default: "",
     },
   },
   data() {
     return {
       content: "",
       inputClass: `${this.inputStyle}`,
-    }
+    };
   },
-  mounted () {
-    setResizeListeners(this.$el, ".js-autoresize");;
+  mounted() {
+    setResizeListeners(this.$el, ".js-autoresize");
   },
   methods: {
     handleInput(e) {
       this.$emit("input", this.content);
-      this.$emit("change", { value: this.content, type: this.inputStyle});
+      this.$emit("change", { value: this.content, type: this.inputStyle });
     },
     clearContent() {
-      this.content = ""
+      this.content = "";
       this.$emit("input", this.content);
-      this.$emit("change", { value: this.content, type: this.inputStyle});
-    }
+      this.$emit("change", { value: this.content, type: this.inputStyle });
+    },
   },
-  created () {
-    this.content = this.value
+  created() {
+    this.content = this.value;
   },
   computed: {
-    getClass: function() {
+    getClass: function () {
       return `${this.inputStyle} ${this.value ? "active" : ""} ${this.size}`;
     },
   },
   watch: {
-    content: function(newValue) {
-      this.inputClass = `${this.inputStyle} ${newValue ? "active" : "" }`;
-      setResizeListeners(this.$el, ".js-autoresize");;
+    content: function (newValue) {
+      this.inputClass = `${this.inputStyle} ${newValue ? "active" : ""}`;
+      setResizeListeners(this.$el, ".js-autoresize");
     },
-    value: function(newValue) {
-      this.content = newValue
+    value: function (newValue) {
+      this.content = newValue;
       setTimeout(() => {
         setResizeListeners(this.$el, ".js-autoresize");
-      },300)
-    }
-  }
-}
+      }, 300);
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 @mixin background-icon($url) {
@@ -99,8 +121,8 @@ export default {
   border-radius: 3px;
   background: white;
   display: flex;
-  
-  &.input{
+
+  &.input {
     padding: 1em 1.5em;
     textarea {
       z-index: 2;
@@ -134,17 +156,16 @@ export default {
     border: none;
     // overflow: hidden;
   }
-  
-    /* Hide scrollbar for Chrome, Safari and Opera */
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
   textarea::-webkit-scrollbar {
     display: none;
   }
 
   /* Hide scrollbar for IE, Edge and Firefox */
-  textarea{
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+  textarea {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 }
-
 </style>
