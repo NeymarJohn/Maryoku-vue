@@ -52,7 +52,7 @@ const actions = {
         });
     },
     saveCampaign({ commit, state }, campaign) {
-        return new Promise((resolve, reject) => {
+        return new Promise((reslove, reject) => {
             new Campaign(campaign).save().then(res => {
                 commit("setCampaign", {
                     name: res.campaignType,

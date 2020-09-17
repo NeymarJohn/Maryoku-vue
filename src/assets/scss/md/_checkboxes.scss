@@ -51,6 +51,11 @@
     color: #aaa;
     padding-left: 10px;
   }
+  &.md-checked {
+    .md-checkbox-label{
+      font-weight: 600;
+    }
+  }
 
   &.md-theme-default.md-checked .md-checkbox-container{
     background-color: transparent !important;

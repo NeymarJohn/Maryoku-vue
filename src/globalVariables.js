@@ -1,3 +1,3 @@
-export const ResourceURL = "http://static.maryoku.com/";
-export const StorageURL = `http://static.maryoku.com/storage/`;
-export const IconURL = `http://static.maryoku.com/storage/icons/`;
+export const ResourceURL = process.env.RESOURCE_URL;
+export const StorageURL = `${process.env.RESOURCE_URL}storage/`;
+export const IconURL = `${process.env.RESOURCE_URL}storage/icons/`;
