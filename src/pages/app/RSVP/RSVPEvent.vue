@@ -180,9 +180,11 @@ export default {
   },
   created() {
     const eventId = this.$route.params.eventId;
-    const eventCalendar = new CalendarEvent({ id: eventId });
+    const calendarEvent = new CalendarEvent({ id: eventId });
 
-    this.getCampaigns().then(() => {});
+    this.getCampaigns({ event: calendarEvent }).then(() => {
+      this.isLoading = false;
+    });
   },
   computed: {
     backgroundImage() {
