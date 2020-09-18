@@ -133,7 +133,7 @@
                 <md-icon class="schedule-menu-btn-icon">keyboard_arrow_down</md-icon>
               </md-button>
               <md-menu-content>
-                <md-menu-item class="text-center" @click="saveDraftCampaign">
+                <md-menu-item class="text-center" @click="startCampaign">
                   <span class="font-size-16 font-bold-extra">
                     <img
                       :src="`${$iconURL}Campaign/Group 1908.svg`"
@@ -294,19 +294,8 @@ export default {
       window.scrollTo(0, 0);
     },
     startCampaign() {
-      this.callSaveCampaign(
-        this.campaignTabs[this.selectedTab].name,
-        "STARTED",
-      );
-    },
-    saveDraftCampaign() {
-      this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "SAVED");
-    },
-    scheduleCampaign() {
-      this.callSaveCampaign(
-        this.campaignTabs[this.selectedTab].name,
-        "SCHEDULED",
-      );
+      // this.campaigns[this.selectedTab].completed = true;
+      this.callSaveCampaign(this.campaignTabs[this.selectedTab].name);
     },
     changeInfo(data) {
       this.campaignInfo[data.field] = data.value;
@@ -314,18 +303,13 @@ export default {
     changeSettings(data) {
       this.deliverySettings = data;
     },
-    callSaveCampaign(campaignType, campaignStatus) {
+    callSaveCampaign(campaignType) {
       console.log("campaignType", campaignType);
       const campaignData = this.$store.state.campaign[campaignType];
-      let referenceUrl = "";
-      if (campaignType === "RSVP") {
-        referenceUrl = `${document.location.origin}/#/rsvp/${this.event.id}`;
-      }
       const newCampaign = new Campaign({
         campaignType,
         ...campaignData,
-        campaignStatus,
-        referenceUrl,
+        campaignStatus: "ISSUED",
         event: new CalendarEvent({ id: this.event.id }),
         scheduleTime: new Date().getTime(),
         settings: this.deliverySettings,
@@ -348,7 +332,6 @@ export default {
         "this.campaigns[currentCampaignIndex]",
         this.campaigns[currentCampaignIndex],
       );
-      this.scheduleCampaign();
     },
     reverseSetting() {
       console.log(defaultSettings);
@@ -400,16 +383,16 @@ export default {
     //   return {
     //     SAVING_DATE:
     //       this.campaigns["SAVING_DATE"] &&
-    //       this.campaigns["SAVING_DATE"].campaignStatus === "STARTED",
+    //       this.campaigns["SAVING_DATE"].campaignStatus === "ISSUED",
     //     RSVP:
     //       this.campaigns["RSVP"] &&
-    //       this.campaigns["RSVP"].campaignStatus === "STARTED",
+    //       this.campaigns["RSVP"].campaignStatus === "ISSUED",
     //     COMING_SOON:
     //       this.campaigns["COMING_SOON"] &&
-    //       this.campaigns["COMING_SOON"].campaignStatus === "STARTED",
+    //       this.campaigns["COMING_SOON"].campaignStatus === "ISSUED",
     //     FEEDBACK:
     //       this.campaigns["FEEDBACK"] &&
-    //       this.campaigns["FEEDBACK"].campaignStatus === "STARTED",
+    //       this.campaigns["FEEDBACK"].campaignStatus === "ISSUED",
     //   };
     // },
   },

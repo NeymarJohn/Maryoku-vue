@@ -100,33 +100,24 @@
           >
             <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
           </md-button>
-          <md-button class="md-button md-red md-just-icon md-theme-default scroll-top-button">
+          <md-button
+            class="md-button md-red md-just-icon md-theme-default scroll-top-button"
+          >
             <img :src="`${$iconURL}RSVP/sharing-white.svg`" width="17" />
           </md-button>
         </div>
         <div>
-          <md-button class="md-simple md-button md-black maryoku-btn">
-            <span class="font-size-20">I Can't make it</span>
-          </md-button>
+          <md-button class="md-simple md-button md-black maryoku-btn"><span class="font-size-20">I Can't make it</span></md-button>
           <span class="seperator"></span>
-          <md-button class="md-simple md-button md-black maryoku-btn">
-            <span class="font-size-20">I Need To Think About It</span>
-          </md-button>
-          <md-button
-            @click="showZoomModal=true"
-            class="md-simple md-button md-black maryoku-btn virtual-btn"
-          >
-            <span class="font-size-20">Virtual Participation</span>
-          </md-button>
-          <md-button @click="showRsvpModal=true" class="md-button md-red maryoku-btn rsvp-btn">
-            <span class="font-size-20">RSVP Now</span>
-          </md-button>
+          <md-button class="md-simple md-button md-black maryoku-btn"><span class="font-size-20">I Need To Think About It</span></md-button>
+          <md-button @click="showZoomModal=true" class="md-simple md-button md-black maryoku-btn virtual-btn" ><span class="font-size-20">Virtual Participation</span></md-button>
+          <md-button @click="showRsvpModal=true" class="md-button md-red maryoku-btn rsvp-btn"><span class="font-size-20">RSVP Now</span></md-button>
         </div>
       </div>
     </div>
     <rsvp-information-modal v-if="showRsvpModal" @close="showRsvpModal=false" @setRsvp="setRsvp"></rsvp-information-modal>
     <setting-reminder-modal v-if="showReminderModal" @close="showReminderModal=false"></setting-reminder-modal>
-    <join-zoom-modal v-if="showZoomModal" @close="showZoomModal=false" @setRsvp="setZoomRsvp"></join-zoom-modal>
+    <join-zoom-modal v-if="showZoomModal"  @close="showZoomModal=false"  @setRsvp="setZoomRsvp"></join-zoom-modal>
     <sync-calendar-modal v-if="showSyncCalendarForZoom" @close="showSyncCalendarForZoom=false"></sync-calendar-modal>
   </div>
 </template>
@@ -135,13 +126,12 @@ import RsvpTimelineItem from "./RSVPTimelineItem";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import _ from "underscore";
-import RsvpInformationModal from "@/components/Modals/RSVP/InformationModal";
-import SettingReminderModal from "@/components/Modals/RSVP/SettingReminderModal";
-import JoinZoomModal from "@/components/Modals/RSVP/JoinZoomModal";
-import SyncCalendarModal from "@/components/Modals/RSVP/SyncCalendarModal";
-import RsvpVenueCarousel from "./RSVPVenueCarousel";
-import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
-import { mapActions, mapGetters } from "vuex";
+import RsvpInformationModal from "@/components/Modals/RSVP/InformationModal"
+import SettingReminderModal from "@/components/Modals/RSVP/SettingReminderModal"
+import JoinZoomModal from "@/components/Modals/RSVP/JoinZoomModal"
+import SyncCalendarModal from "@/components/Modals/RSVP/SyncCalendarModal"
+import RsvpVenueCarousel from "./RSVPVenueCarousel"
+import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue"
 
 export default {
   components: {
@@ -151,7 +141,7 @@ export default {
     JoinZoomModal,
     SyncCalendarModal,
     RsvpVenueCarousel,
-    RsvpEventInfoPanel,
+    RsvpEventInfoPanel
   },
   data() {
     return {
@@ -175,16 +165,47 @@ export default {
       showRsvpModal: false,
       showReminderModal: false,
       showZoomModal: false,
-      showSyncCalendarForZoom: false,
+      showSyncCalendarForZoom: false
     };
   },
   created() {
     const eventId = this.$route.params.eventId;
-    const calendarEvent = new CalendarEvent({ id: eventId });
+    const eventCalendar = new CalendarEvent({ id: eventId });
 
-    this.getCampaigns({ event: calendarEvent }).then(() => {
-      this.isLoading = false;
-    });
+    new Calendar({ id: this.$store.state.auth.user.profile.defaultCalendarId })
+      .calendarEvents()
+      .find(eventId)
+      .then((res) => {
+        this.event = res;
+
+        var timelines = {};
+        // define timelines
+        if (res.timelineItems) {
+          res.timelineItems.forEach((item) => {
+            item.isItemLoading = false;
+            if (!timelines[item.plannedDate]) timelines[item.plannedDate] = [];
+            item.isItemLoading = false;
+            timelines[item.plannedDate].push(item);
+          });
+          console.log(timelines);
+          if (Object.keys(timelines).length > 0) {
+            this.scheduledDays = [];
+            Object.keys(timelines).forEach((itemDay, index) => {
+              this.scheduledDays.push({
+                itemDay: parseInt(itemDay),
+                isEditable: false,
+                items: timelines[itemDay],
+              });
+            });
+            this.scheduledDays = _.sortBy(this.scheduledDays, function (item) {
+              return item.itemDay;
+            });
+            console.log(this.scheduledDays);
+          }
+        }
+        this.isLoading = false;
+        console.log(res);
+      });
   },
   computed: {
     backgroundImage() {
@@ -194,7 +215,7 @@ export default {
         const color3 = this.event.concept.colors[2].color;
         const color4 = this.event.concept.colors[3].color;
         console.log(
-          `linear-gradient(${color1} 25%, ${color2} 25%, ${color2} 50%, ${color3} 50%, ${color3} 75%, ${color4} 75%, ${color4} 100%);`,
+          `linear-gradient(${color1} 25%, ${color2} 25%, ${color2} 50%, ${color3} 50%, ${color3} 75%, ${color4} 75%, ${color4} 100%);`
         );
         return `linear-gradient(${color1} 25%, ${color2} 25%, ${color2} 50%, ${color3} 50%, ${color3} 75%, ${color4} 75%, ${color4} 100%);`;
       } else {
@@ -209,18 +230,17 @@ export default {
     },
   },
   methods: {
-    ...mapActions("campaign", ["getCampaigns"]),
     scrollToTop() {
       window.scrollTo(0, 0);
     },
     setRsvp() {
-      this.showRsvpModal = false;
-      this.showReminderModal = true;
+      this.showRsvpModal=false;
+      this.showReminderModal = true
     },
     setZoomRsvp() {
       this.showZoomModal = false;
-      this.showSyncCalendarForZoom = true;
-    },
+      this.showSyncCalendarForZoom = true
+    }
   },
 };
 </script>
@@ -320,4 +340,6 @@ export default {
     }
   }
 }
+
+
 </style>

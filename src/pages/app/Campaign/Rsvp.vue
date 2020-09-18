@@ -1,11 +1,11 @@
 <template>
   <div>
-    <rsvp-analytics v-if="editingContent.campaignStatus === 'STARTED'"></rsvp-analytics>
+    <rsvp-analytics v-if="info.completed"></rsvp-analytics>
     <div class="white-card rsvp-campaign">
       <div class="p-50">
         <div class="font-size-30 font-bold-extra">Get everyone to RSVP</div>
         <div class="cover-preview mt-50">
-          <img :src="editingContent.coverImage" class="mr-10" />
+          <img :src="editingContent.coverImageUrl" class="mr-10" />
           <label for="cover">
             <md-button
               class="md-button md-red maryoku-btn md-theme-default change-cover-btn"
@@ -70,7 +70,7 @@
             </div>
             <maryoku-textarea
               placeholder="Give your guests details about the expected dress code"
-              v-model="editingContent.additionalData.wearingGuide"
+              v-model="editingContent.wearingGuide"
             ></maryoku-textarea>
           </div>
           <div class="md-layout-item md-size-50 md-small-size-50">
@@ -89,7 +89,7 @@
             </div>
             <maryoku-textarea
               placeholder="Give your guests any information you find relevant"
-              v-model="editingContent.additionalData.knowledge"
+              v-model="editingContent.knowledge"
             ></maryoku-textarea>
           </div>
         </div>
@@ -119,7 +119,7 @@
         <div class="width-50">
           <div class="font-bold">Paste link to video communication</div>
           <maryoku-input
-            v-model="editingContent.additionalData.zoomlink"
+            v-model="editingContent.zoomlink"
             placeholder="Paste Zoom link here..."
             fieldName="link"
           ></maryoku-input>
@@ -184,18 +184,15 @@ export default {
       editingContent: {
         title: "",
         description: "",
-        coverImage: "",
-
+        coverImageUrl: "",
+        wearingGuide: "",
+        knowledge: "",
+        zoomlink: "",
         allowOnline: false,
         visibleSettings: {
           showWearingGuide: true,
           showKnowledge: true,
           showTimeline: true,
-        },
-        additionalData: {
-          wearingGuide: "",
-          knowledge: "",
-          zoomlink: "",
         },
       },
     };
@@ -205,10 +202,9 @@ export default {
       this.editingContent = this.$store.state.campaign.RSVP;
     } else {
       this.editingContent.title = this.info.conceptName;
-      this.editingContent.coverImage = this.event.concept
+      this.editingContent.coverImageUrl = this.event.concept
         ? this.event.concept.images[0].url
-        : `${this.$storageURL}Campaign Images/RSVP2.png`;
-      alert(this.editingContent.coverImage);
+        : "";
     }
     this.originContent = Object.assign({}, this.editingContent);
   },
@@ -249,7 +245,9 @@ export default {
       document.getElementById("coverImage").click();
     },
     async onFileChange(event) {
-      this.editingContent.coverImage = await getBase64(event.target.files[0]);
+      this.editingContent.coverImageUrl = await getBase64(
+        event.target.files[0],
+      );
     },
     changeTitle(newTitle) {
       this.editingContent.title = newTitle;

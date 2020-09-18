@@ -1,8 +1,15 @@
 <template>
-  <div class="time-line-blocks_selected-items_item time-line-item">
+  <timeline-template-item
+    v-if="editingContent.status=='template' || editingContent.status=='timegap'"
+    :item="item"
+    :index="index"
+    @applyTemplate="applyToTemplate"
+  ></timeline-template-item>
+  <div class="timeline-item" v-else>
     <img
       class="time-line-icon"
       :src="`${$iconURL}Timeline-New/${editingContent.icon.toLowerCase()}-circle.svg`"
+      v-if="editingContent.icon"
     />
     <md-card
       class="block-form"
@@ -26,10 +33,10 @@
           <span>70% of events like yours timed 30 minuets to this slot</span>
         </div>
 
-        <div class="md-layout-item md-size-100">
+        <div class="md-layout-item md-size-100 mb-10">
           <div class="form-group">
-            <label>Name</label>
-            <input type="text" class="form-control" v-model="editingContent.title" />
+            <label class="font-size-16 font-bold pb-10">Name</label>
+            <maryoku-input type="text" class="mt-10" v-model="editingContent.title" />
           </div>
         </div>
         <div class="md-layout-item md-size-100">
@@ -38,121 +45,58 @@
             <span class="color-red">Add Description</span>
             <span class="color-black font-size-14">(Optional)</span>
           </md-button>
-          <div class="form-group" v-if="showDescription">
-            <label>Description</label>
-            <textarea
-              row="100"
-              type="text"
-              class="form-control"
-              v-model="editingContent.description"
-            ></textarea>
+          <div class="form-group mt-30" v-if="showDescription">
+            <label class="font-size-16 font-bold">Description</label>
+            <maryoku-textarea size="small" class="mt-10" v-model="editingContent.description"></maryoku-textarea>
           </div>
         </div>
         <div class="md-layout-item md-size-100 mt-50 d-flex">
           <div class="form-group">
-            <label class="font-size-16">
+            <label class="font-size-16 font-bold pb-10">
               <img :src="`${$iconURL}Timeline-New/clock.svg`" class="label-icon mr-10" />Start At
             </label>
             <time-input
               v-model="editingContent.startTime"
               :h24="false"
+              class="mt-10"
               displayFormat="hh:mm"
               size="normal"
             ></time-input>
           </div>
           <div class="divider"></div>
           <div class="form-group">
-            <label class="font-size-16">
+            <label class="font-size-16 font-bold pb-10 d-inline-block">
               <img :src="`${$iconURL}Timeline-New/clock.svg`" class="label-icon mr-10" />Finishes At
             </label>
             <time-input
               v-model="editingContent.endTime"
               :h24="false"
               displayFormat="hh:mm"
+              class="mt-10"
               size="normal"
             ></time-input>
           </div>
         </div>
-        <div class="md-layout-item md-size-100">
+        <div class="md-layout-item md-size-100 mt-50">
           <div class="form-group">
-            <label class="font-size-16">Assign vendor to slot</label>
-            <textarea
-              row="100"
-              type="text"
-              class="form-control"
-              v-model="editingContent.description"
-            ></textarea>
+            <label class="font-size-16 font-bold pb-10">Assign vendor to slot</label>
+            <multiselect
+              v-model="vendor"
+              :options="['vendor1','vendor2']"
+              :close-on-select="true"
+              :clear-on-select="true"
+              tag-placeholder="Add this as new tag"
+              placeholder="Please select vendors"
+              class="multiple-selection small-selector mt-10"
+            ></multiselect>
           </div>
         </div>
-        <!-- <div class="md-layout-item md-size-100 margin-bottom">
-          <div class="form-group">
-            <label>Location</label>
-            <location-input v-model="editingContent.location"></location-input>
-          </div>
-        </div>-->
-        <!-- <div class="md-layout-item md-size-100">
-          <div class="form-group">
-            <label>
-              Attach File
-              <small>*suggested</small>
-            </label>
-            <p class="item-attachment" v-if="editingContent.attachments && editingContent.attachments.length>0">
-              <span
-                v-for="(attachmentItem, attachmentIndex) in editingContent.attachments"
-                :key="attachmentItem.url"
-                class="attachment-link"
-              >
-                <md-icon>attachment</md-icon>
-                <span
-                  @click="openAttachment(attachmentItem.url)"
-                  class="attachment-name"
-                >{{ attachmentItem.originalName }}</span>
-                <span @click="removeAttachment(item, attachmentIndex)">
-                  <md-icon class="remove-attachment">close</md-icon>
-                </span>
-              </span>
-            </p>
-            <label class="upload-section">
-              <label
-                class="md-rose md-outline md-simple md-sm attachment"
-                for="file"
-                style="cursor:pointer"
-              >
-                <md-icon>attachment</md-icon>Choose file(10MB)
-              </label>
-              <div>
-                <span
-                  v-for="(file, index) in currentAttachments"
-                  :key="index"
-                  class="attachment-link"
-                >
-                  {{ file.name}}
-                  <span @click="removeSelectedAttachment(index)">
-                    <md-icon class="remove-attachment">close</md-icon>
-                  </span>
-                </span>
-              </div>
-            </label>
-
-            <input
-              style="display: none"
-              id="file"
-              name="attachment"
-              type="file"
-              multiple="multiple"
-              :data-item="editingContent.id"
-              :data-timelineindex="timelineIndex"
-              :data-itemIndex="index"
-              @change="onFileChange"
-            />
-          </div>
-        </div>-->
       </md-card-content>
       <md-card-actions md-alignment="right" style="border: none;" class="edit-timeline-footer">
         <md-button
           name="event-planner-tab-timeline-item-save"
           class="maryoku-btn md-default md-simple"
-          @click="cancelTimelineItem(item, timelineIndex, index)"
+          @click="cancelTimelineItem"
         >Cancel</md-button>
         <md-button
           :disabled="!saveAvailable"
@@ -196,40 +140,37 @@
               style="margin:3px !important;"
               v-if="editingContent.description"
             >
-              <span v-if="!showDescription" class="color-red font-regular">Read More</span>
-              <span v-if="showDescription" class="color-black font-regular">Read Less</span>
-              <md-icon v-if="!showDescription">keyboard_arrow_down</md-icon>
-              <md-icon v-if="showDescription">keyboard_arrow_up</md-icon>
+              <span v-if="!showDescription" class="color-red font-regular">
+                Read More
+                <md-icon class="color-red">keyboard_arrow_down</md-icon>
+              </span>
+              <span v-if="showDescription" class="color-black font-regular">
+                Read Less
+                <md-icon class="color-black" style="color:#050505 !important;">keyboard_arrow_up</md-icon>
+              </span>
             </md-button>
           </p>
 
           <p class="item-desc" v-if="showDescription">{{ editingContent.description }}</p>
-          <p
-            class="item-attachment"
-            v-if="editingContent.attachments && editingContent.attachments.length>0"
-          >
-            <span
-              v-for="(attachmentItem) in editingContent.attachments"
-              :key="attachmentItem.url"
-              @click="openAttachment(attachmentItem.url)"
-              class="attachment-link"
-            >
-              <md-icon>attachment</md-icon>
-              {{ attachmentItem.originalName }}
-            </span>
-          </p>
         </div>
       </md-card-content>
     </md-card>
   </div>
 </template>
 <script>
+import TimelineTemplateItem from "./TimelineTemplateItem";
 import TimeInput from "@/components/Inputs/TimeInput";
+import MaryokuInput from "@/components/Inputs/MaryokuInput";
+import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 import moment from "moment";
+import Multiselect from "vue-multiselect";
 
 export default {
   components: {
     TimeInput,
+    TimelineTemplateItem,
+    MaryokuInput,
+    MaryokuTextarea,
   },
   props: {
     item: {
@@ -240,20 +181,33 @@ export default {
       type: Number,
       default: 0,
     },
+    timelineItems: {
+      type: Object,
+      default: [],
+    },
   },
   data() {
     return {
       showDescription: false,
       editingContent: {},
+      vendors: [],
+      vendor: "",
     };
   },
   mounted() {
     console.log("thjis.item", this.item);
     this.editingContent = this.item;
+    // this.$root.$on("apply-template", ({ item, block, index }) => {
+    //   // this.timelineItems[item.date][index] = {};
+    //   this.applyToTemplate(index, { ...item, action: "edited" }, block);
+    // });
   },
   computed: {
     saveAvailable() {
       return this.editingContent.startTime && this.editingContent.endTime;
+    },
+    event() {
+      return this.$store.state.event.eventData;
     },
   },
   methods: {
@@ -261,6 +215,10 @@ export default {
       console.log(this.editingContent);
       this.editingContent.mode = "saved";
       this.$emit("save", { item: this.editingContent, index: this.index });
+    },
+    cancelTimelineItem() {
+      this.editingContent = { ...this.item };
+      this.$emit("cancel", { item: this.editingContent, index: this.index });
     },
     formatDate(date) {
       if (typeof date == "number") {
@@ -271,11 +229,76 @@ export default {
     formatHour(date) {
       return moment(new Date(Number(date))).format("hh:mm A");
     },
+    applyToTemplate({ item: template, block: selectedBlock, index }) {
+      if (selectedBlock) {
+        console.log("adding block");
+        console.log(selectedBlock);
+        console.log(template);
+        let block = Object.assign({}, selectedBlock);
+        block.id = template.id;
+        block.mode = "edit";
+        let startDate = new Date(template.date);
+        let endDate = new Date(template.date);
+
+        block.startTime = moment(
+          `${template.date} 00:00 am`,
+          "DD/MM/YY hh:mm a",
+        ).valueOf();
+        block.endTime = moment(
+          `${template.date} 00:00 am`,
+          "DD/MM/YY hh:mm a",
+        ).valueOf();
+
+        if (index == 0) {
+          if (this.event.eventDayPart == "evening") {
+            block.startTime = moment(
+              `${template.date} 07:00 PM`,
+              "DD/MM/YY hh:mm A",
+            ).valueOf();
+            block.endTime = moment(
+              `${template.date} 08:00 PM`,
+              "DD/MM/YY hh:mm A",
+            ).valueOf();
+          } else {
+            block.startTime = moment(
+              `${template.date} 08:00 AM`,
+              "DD/MM/YY hh:mm A",
+            ).valueOf();
+            block.endTime = moment(
+              `${template.date} 09:00 AM`,
+              "DD/MM/YY hh:mm A",
+            ).valueOf();
+          }
+        } else {
+          const prevItem = this.timelineItems[template.date][index - 1];
+          if (prevItem.status !== "template") {
+            block.startTime = prevItem.endTime;
+            block.endTime = prevItem.endTime + 3600 * 1000;
+          }
+        }
+
+        block.title = selectedBlock.buildingBlockType;
+        block.startDuration = "am";
+        block.endDuration = "am";
+        block.attachmentName = "";
+        block.isItemLoading = false;
+        block.icon = selectedBlock.icon;
+        block.date = template.date;
+        block.event = template.event;
+        this.editingContent = { ...block };
+      }
+      // setTimeout(() => {
+      //   const scrollBtn = this.$refs.scrollBtn;
+      //   if (scrollBtn) {
+      //     scrollBtn.click();
+      //   }
+      // }, 100);
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
-.time-line-item {
+.timeline-item {
   display: flex;
   align-items: flex-start;
   .block-form {
@@ -290,11 +313,14 @@ export default {
   .divider {
     width: 20px;
     height: 1px;
-    background: #050505;
+    background: #b1abab;
     top: 0;
     left: 22px;
     bottom: 0;
     margin: auto;
+  }
+  .item-desc {
+    word-break: break-all;
   }
 }
 </style>

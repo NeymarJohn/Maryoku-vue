@@ -4,7 +4,7 @@
       <slot name="header"></slot>
       <md-button @click="toggle" class="md-icon-button md-simple collapse-button">
         <md-icon class="icon" v-if="isExpanded">keyboard_arrow_down</md-icon>
-        <md-icon class="icon" v-if="!isExpanded">keyboard_arrow_right</md-icon>
+        <md-icon class="icon"  v-if="!isExpanded">keyboard_arrow_right</md-icon>
       </md-button>
     </div>
     <div class="collapse-panel-content" v-if="isExpanded">
@@ -16,21 +16,21 @@
 export default {
   data() {
     return {
-      isExpanded: true,
-    };
+      isExpanded: false
+    }
   },
   methods: {
     toggle() {
-      this.isExpanded = !this.isExpanded;
-    },
+      this.isExpanded = !this.isExpanded
+    }
   },
-};
+}
 </script>
 <style lang="scss" scoped>
-.collapse-panel {
+.collapse-panel{
   .collapse-panel-header {
     position: relative;
-    .collapse-button {
+    .collapse-button{
       position: absolute;
       right: 0;
       top: 50%;
@@ -40,5 +40,6 @@ export default {
       }
     }
   }
+  
 }
 </style>
