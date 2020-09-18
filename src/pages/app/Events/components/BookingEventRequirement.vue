@@ -28,6 +28,7 @@
               v-for="(data, id) in requirementProperties[category]"
               :key="id"
               :data="data"
+              :currentComponent="selectedBlock"
             ></vendor-requirement-multiselect-panel>
           </template>
           <!-- <div class="requirement-section" v-else-if="category=='special'">

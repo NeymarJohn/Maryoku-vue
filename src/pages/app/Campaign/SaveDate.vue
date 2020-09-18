@@ -140,11 +140,11 @@ export default {
   },
   methods: {
     saveData() {
-      console.log(this.originContent);
-      // this.$store.commit("campaign/setCampaign", {
-      //   name: "SAVING_DATE",
-      //   data: Object.assign({}, this.editingContent),
-      // });
+      console.log(this.editingContent);
+      this.$store.commit("campaign/setCampaign", {
+        name: "SAVING_DATE",
+        data: this.editingContent,
+      });
     },
     setDefault() {
       swal({
@@ -171,20 +171,17 @@ export default {
     },
     changeTitle(newTitle) {
       this.editingContent.title = newTitle;
-      // this.saveData();
+      this.saveData();
       // this.$emit("changeInfo", {field: "conceptName", value: newTitle})
     },
   },
   watch: {
     campaignData: {
       handler: (newValue) => {
-        alert("222");
-        console.log("newValue", newValue);
-        console.log(this.editingContent);
-        this.editingContent.title = newValue.title;
+        console.log(newValue);
+        this.editingContent = newValue;
         console.log(this.editingContent);
         this.originContent = { ...this.editingContent };
-        alert();
       },
       deep: true,
     },
