@@ -99,7 +99,7 @@ export default {
     InputMask,
     SideBar,
     SidebarItem,
-    EventNotePanel,
+    EventNotePanel
   },
   props: {
     // event: Object,
@@ -115,8 +115,8 @@ export default {
   }),
   computed: {
     ...mapState("event", {
-      event: (state) => state.eventData,
-    }),
+      event: state => state.eventData
+    })
   },
   methods: {
     ...mapActions("event", ["getEventAction"]),
@@ -137,17 +137,16 @@ export default {
         route: "booking/concept",
         icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
         progress: event.conceptProgress,
-        componentId: "concept",
+        componentId: 'concept'
       };
       const budget = {
         title:
           this.event.budgetProgress <= 50 ? "Create Budget" : "Approve Budget",
         status: "not-complete",
-        route:
-          this.event.budgetProgress == 100 ? "edit/budget" : "booking/budget",
+        route: this.event.budgetProgress==100?"edit/budget":"booking/budget",
         icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
         progress: this.event.budgetProgress,
-        componentId: "budget",
+        componentId: 'budget'
       };
       const timeline = {
         title: "Generate timeline",
@@ -155,15 +154,15 @@ export default {
         route: "booking/timeline",
         icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
         progress: 0,
-        componentId: "timeline",
+        componentId: 'timeline'
       };
-      const campaign = {
+       const campaign = {
         title: "Create Campaigns",
         status: "current",
         route: "booking/campaign",
         icon: `${this.$iconURL}Campaign/Group 8857.svg`,
         progress: 0,
-        componentId: "campaign",
+        componentId: 'campaign'
       };
       const elements = [];
       if (this.event.eventType.hasConcept) {
@@ -172,20 +171,20 @@ export default {
       elements.push(budget);
       elements.push(timeline);
       elements.push(campaign);
-
+      
       const vm = this;
       new EventComponent()
         .for(this.calendar, event)
         .get()
-        .then((resp) => {
-          // resp.sort((a, b) => a.order - b.order);
-          resp.forEach((item) => {
+        .then(resp => {
+          resp.sort((a, b) => a.order - b.order);
+          resp.forEach(item => {
             if (item.componentId !== "unexpected") {
               elements.push({
                 title: item.bookTitle,
                 status: "not-complete",
                 route: "booking/" + item.id,
-                icon: `http://static.maryoku.com/storage/icons/Budget+Elements/${item.componentId}.svg`,
+                icon: `http://static.maryoku.com/storage/icons/Budget+Elements/${item.componentId}.svg`
               });
             }
           });
@@ -193,33 +192,22 @@ export default {
         });
     },
     setConstantStates(event) {
-      const conceptIndex = this.eventElements.findIndex(
-        (item) => item.componentId === "concept",
-      );
-      const budgetIndex = this.eventElements.findIndex(
-        (item) => item.componentId === "budget",
-      );
-      const timelineIndex = this.eventElements.findIndex(
-        (item) => item.componentId === "timeline",
-      );
-      const campaignIndex = this.eventElements.findIndex(
-        (item) => item.componentId === "campaign",
-      );
+      const conceptIndex = this.eventElements.findIndex(item => item.componentId === 'concept')
+      const budgetIndex = this.eventElements.findIndex(item => item.componentId === 'budget')
+      const timelineIndex = this.eventElements.findIndex(item => item.componentId === 'timeline')
+      const campaignIndex = this.eventElements.findIndex(item => item.componentId === 'campaign')
 
       if (conceptIndex >= 0) {
         this.eventElements[conceptIndex].progress = event.conceptProgress;
-        this.eventElements[conceptIndex].status =
-          event.conceptProgress == 100 ? "completed" : "not-complete";
+        this.eventElements[conceptIndex].status = event.conceptProgress == 100 ? "completed" : "not-complete";
       }
       if (budgetIndex >= 0) {
         this.eventElements[budgetIndex].progress = event.budgetProgress;
-        this.eventElements[budgetIndex].status =
-          event.budgetProgress == 100 ? "completed" : "not-complete";
+        this.eventElements[budgetIndex].status = event.budgetProgress == 100 ? "completed" : "not-complete";
       }
-      if (timelineIndex >= 0) {
+      if (timelineIndex >=0 ) {
         this.eventElements[timelineIndex].progress = event.timelineProgress;
-        this.eventElements[timelineIndex].status =
-          event.timelineProgress == 100 ? "completed" : "not-complete";
+        this.eventElements[timelineIndex].status = event.timelineProgress == 100 ? "completed" : "not-complete";
       }
       // if (campaignIndex >=0 ) {
       //   this.eventElements[campaignIndex].progress = event.timelineProgress;
@@ -228,7 +216,7 @@ export default {
     },
     fetchUrl() {
       this.currentUrl = this.$router.history.current.path;
-    },
+    }
   },
   created() {
     this.fetchUrl();
@@ -242,8 +230,8 @@ export default {
     $route: "fetchUrl",
     event(newValue) {
       this.setConstantStates(newValue);
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss">

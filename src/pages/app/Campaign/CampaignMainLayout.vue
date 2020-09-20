@@ -294,8 +294,8 @@ export default {
       window.scrollTo(0, 0);
     },
     startCampaign() {
-      this.campaigns[this.selectedTab].completed = true;
-      this.callSaveCampaign(this.campaigns[this.selectedTab].name);
+      // this.campaigns[this.selectedTab].completed = true;
+      this.callSaveCampaign(this.campaignTabs[this.selectedTab].name);
     },
     changeInfo(data) {
       this.campaignInfo[data.field] = data.value;
@@ -313,6 +313,9 @@ export default {
         event: new CalendarEvent({ id: this.event.id }),
         scheduleTime: new Date().getTime(),
         settings: this.deliverySettings,
+      });
+      this.saveCampaign(newCampaign).then(() => {
+        console.log("New Campaign");
       });
     },
     saveScheduleTime(data) {
@@ -396,7 +399,7 @@ export default {
   created() {
     this.campaignInfo.conceptName = this.event.concept
       ? this.event.concept.name
-      : "";
+      : "Event Name";
     this.getCampaigns({ event: this.event }).then((campaigns) => {
       this.campaigns = campaigns;
       console.log("campaigns");

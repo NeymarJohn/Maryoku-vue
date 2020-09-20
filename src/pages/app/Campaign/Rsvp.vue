@@ -51,7 +51,7 @@
       <div class="p-40 position-relative">
         <div
           class="rsvp-event-guid-background"
-          :style="`background-color:${event.concept.colors[0].color}`"
+          :style="`background-color:${event.concept?event.concept.colors[0].color:''}`"
         ></div>
         <div class="rsvp-event-guid md-layout">
           <div class="md-layout-item md-size-50 md-small-size-50">

@@ -194,25 +194,25 @@
   </div>
 </template>
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
-import Calendar from '@/models/Calendar';
-import CalendarEvent from '@/models/CalendarEvent';
-import EventComponent from '@/models/EventComponent';
-import EventTimelineItem from '@/models/EventTimelineItem';
-import moment from 'moment';
-import swal from 'sweetalert2';
-import { SlideYDownTransition } from 'vue2-transitions';
-import InputMask from 'vue-input-mask';
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import Calendar from "@/models/Calendar";
+import CalendarEvent from "@/models/CalendarEvent";
+import EventComponent from "@/models/EventComponent";
+import EventTimelineItem from "@/models/EventTimelineItem";
+import moment from "moment";
+import swal from "sweetalert2";
+import { SlideYDownTransition } from "vue2-transitions";
+import InputMask from "vue-input-mask";
 
-import VueElementLoading from 'vue-element-loading';
+import VueElementLoading from "vue-element-loading";
 // import auth from '@/auth';
-import EventBlocks from '../components/NewEventBlocks';
-import draggable from 'vuedraggable';
-import { Drag, Drop } from 'vue-drag-drop';
-import _ from 'underscore';
+import EventBlocks from "../components/NewEventBlocks";
+import draggable from "vuedraggable";
+import { Drag, Drop } from "vue-drag-drop";
+import _ from "underscore";
 
 export default {
-  name: 'event-time-line',
+  name: "event-timeline",
   components: {
     VueElementLoading,
     EventBlocks,
@@ -232,45 +232,45 @@ export default {
     blocksList: [
       {
         id: 1,
-        buildingBlockType: 'setup',
-        icon: 'place',
-        color: '#f44336',
+        buildingBlockType: "setup",
+        icon: "place",
+        color: "#f44336",
       },
       {
         id: 2,
-        buildingBlockType: 'activity',
-        icon: 'notifications_active',
-        color: '#4caf50',
+        buildingBlockType: "activity",
+        icon: "notifications_active",
+        color: "#4caf50",
       },
       {
         id: 3,
-        buildingBlockType: 'meal',
-        icon: 'restaurant',
-        color: '#00bcd4',
+        buildingBlockType: "meal",
+        icon: "restaurant",
+        color: "#00bcd4",
       },
       {
         id: 4,
-        buildingBlockType: 'DISCUSSION',
-        icon: 'sms',
-        color: '#ff9800',
+        buildingBlockType: "DISCUSSION",
+        icon: "sms",
+        color: "#ff9800",
       },
       {
         id: 5,
-        buildingBlockType: 'TRANSPORTATION',
-        icon: 'train',
-        color: '#f44336',
+        buildingBlockType: "TRANSPORTATION",
+        icon: "train",
+        color: "#f44336",
       },
       {
         id: 6,
-        buildingBlockType: 'RELAXATION',
-        icon: 'weekend',
-        color: '#4caf50',
+        buildingBlockType: "RELAXATION",
+        icon: "weekend",
+        color: "#4caf50",
       },
       {
         id: 7,
-        buildingBlockType: 'ADD YOUR OWN',
-        icon: 'add',
-        color: '#00bcd4',
+        buildingBlockType: "ADD YOUR OWN",
+        icon: "add",
+        color: "#00bcd4",
       },
     ],
     timelineItems: [],
@@ -287,21 +287,21 @@ export default {
     handleDrop(data, event) {
       if (data) {
         let block = Object.assign({}, data.block);
-        block.mode = 'edit';
-        block.startTime = '08:00 am';
-        block.endTime = '09:00 am';
+        block.mode = "edit";
+        block.startTime = "08:00 am";
+        block.endTime = "09:00 am";
         block.isItemLoading = false;
         if (this.timelineItems.length > 0) {
           block.startTime = this.$moment(
             this.timelineItems[this.timelineItems.length - 1].endTime,
-            'H:mm A',
-          ).format('H:mm A');
+            "H:mm A",
+          ).format("H:mm A");
           block.endTime = this.$moment(
             this.timelineItems[this.timelineItems.length - 1].endTime,
-            'H:mm A',
+            "H:mm A",
           )
-            .add(1, 'hour')
-            .format('H:mm A');
+            .add(1, "hour")
+            .format("H:mm A");
         }
         this.timelineItems.push(Object.assign({}, block));
         this.disabledDragging = true;
@@ -312,11 +312,11 @@ export default {
 
     removeItem(item) {
       swal({
-        title: 'Are you sure want to delete this item?',
+        title: "Are you sure want to delete this item?",
         showCancelButton: true,
-        confirmButtonClass: 'md-button md-success',
-        cancelButtonClass: 'md-button md-danger',
-        confirmButtonText: 'Yes, remove it!',
+        confirmButtonClass: "md-button md-success",
+        cancelButtonClass: "md-button md-danger",
+        confirmButtonText: "Yes, remove it!",
         buttonsStyling: false,
       })
         .then((result) => {
@@ -340,22 +340,22 @@ export default {
               })
               .catch((error) => {
                 console.log(error);
-                this.$root.$emit('timeline-updated', this.timelineItems);
+                this.$root.$emit("timeline-updated", this.timelineItems);
               });
           }
         })
         .catch((err) => {
           console.log(err);
-          this.$root.$emit('timeline-updated', this.timelineItems);
+          this.$root.$emit("timeline-updated", this.timelineItems);
         });
     },
     modifyItem(index) {
-      this.$set(this.timelineItems[index], 'mode', 'edit');
+      this.$set(this.timelineItems[index], "mode", "edit");
       this.disabledDragging = true;
     },
     previewEvent() {
       this.$router.push({
-        name: 'EventDetails',
+        name: "EventDetails",
         params: { id: this.event.id },
       });
     },
@@ -378,19 +378,19 @@ export default {
             item.isItemLoading = false;
           });
           this.event.timelineItems = this.timelineItems;
-          this.$root.$emit('timeline-updated', this.timelineItems);
+          this.$root.$emit("timeline-updated", this.timelineItems);
         });
     },
     cancelTimelineItem(item, index) {
       if (item.dateCreated) {
-        this.$set(this.timelineItems[index], 'mode', 'saved');
+        this.$set(this.timelineItems[index], "mode", "saved");
       } else {
         this.timelineItems.splice(index, 1);
       }
       this.disabledDragging = false;
     },
     saveTimelineItem(item, index) {
-      console.log('ameed');
+      console.log("ameed");
       this.setItemLoading(item, true, true);
 
       if (
@@ -400,10 +400,10 @@ export default {
       ) {
         this.$notify({
           message:
-            'From time, To time and ( Title or Description ) id Required',
-          horizontalAlign: 'center',
-          verticalAlign: 'top',
-          type: 'warning',
+            "From time, To time and ( Title or Description ) id Required",
+          horizontalAlign: "center",
+          verticalAlign: "top",
+          type: "warning",
         });
 
         this.setItemLoading(item, false, true);
@@ -415,7 +415,7 @@ export default {
       let event = new CalendarEvent({ id: this.event.id });
       let order = ++index;
 
-      console.log('i am here => ', item);
+      console.log("i am here => ", item);
       console.log(this.timelineAttachment);
 
       new EventTimelineItem({
@@ -436,12 +436,12 @@ export default {
         .then((res) => {
           this.getTimelineItems();
           this.disabledDragging = false;
-          this.$root.$emit('timeline-updated', this.timelineItems);
+          this.$root.$emit("timeline-updated", this.timelineItems);
         })
         .catch((error) => {
           console.log(error);
           this.disabledDragging = false;
-          this.$root.$emit('timeline-updated', this.timelineItems);
+          this.$root.$emit("timeline-updated", this.timelineItems);
         });
 
       this.timelineAttachment = null;
@@ -454,14 +454,14 @@ export default {
         !item.endTime ||
         (!item.title && !item.description)
       ) {
-        this.$set(item, 'isItemLoading', false);
+        this.$set(item, "isItemLoading", false);
 
         this.$notify({
           message:
-            'From time, To time and ( Title or Description ) id Required',
-          horizontalAlign: 'center',
-          verticalAlign: 'top',
-          type: 'warning',
+            "From time, To time and ( Title or Description ) id Required",
+          horizontalAlign: "center",
+          verticalAlign: "top",
+          type: "warning",
         });
 
         this.setItemLoading(item, false, true);
@@ -488,12 +488,12 @@ export default {
         .then((res) => {
           this.getTimelineItems();
           this.disabledDragging = false;
-          this.$root.$emit('timeline-updated', this.timelineItems);
+          this.$root.$emit("timeline-updated", this.timelineItems);
         })
         .catch((error) => {
           console.log(error);
           this.disabledDragging = false;
-          this.$root.$emit('timeline-updated', this.timelineItems);
+          this.$root.$emit("timeline-updated", this.timelineItems);
         });
 
       this.timelineAttachment = null;
@@ -512,7 +512,7 @@ export default {
       });
 
       let timelineItem = new EventTimelineItem({
-        id: 'updateMultiple',
+        id: "updateMultiple",
         timelineItems: timelineItemsForUpdate,
       }).for(calendar, event);
 
@@ -530,28 +530,28 @@ export default {
                       }); */
           this.event.timelineItems = this.timelineItems;
           this.isLoading = false;
-          this.$root.$emit('timeline-updated', this.timelineItems);
+          this.$root.$emit("timeline-updated", this.timelineItems);
         })
         .catch((error) => {
           console.log(error);
-          this.$root.$emit('timeline-updated', this.timelineItems);
+          this.$root.$emit("timeline-updated", this.timelineItems);
         });
     },
     setItemLoading(item, loading, force) {
-      this.$set(item, 'isItemLoading', loading);
+      this.$set(item, "isItemLoading", loading);
       if (force) {
-        this.$set(item, 'mode', 'saved');
-        this.$set(item, 'mode', 'edit');
+        this.$set(item, "mode", "saved");
+        this.$set(item, "mode", "edit");
       } else {
-        this.$set(item, 'mode', 'edit');
-        this.$set(item, 'mode', 'saved');
+        this.$set(item, "mode", "edit");
+        this.$set(item, "mode", "saved");
       }
     },
     onFileChange(e) {
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       if (e.target.name) {
-        this.createImage(files[0], 'attachment');
+        this.createImage(files[0], "attachment");
       } else {
         this.createImage(files[0]);
       }
@@ -561,7 +561,7 @@ export default {
       let vm = this;
 
       reader.onload = (e) => {
-        if (type === 'attachment') {
+        if (type === "attachment") {
           vm.timelineAttachment = e.target.result;
         } else {
           // vm.imageRegular = e.target.result;
@@ -591,9 +591,9 @@ export default {
     this.isLoading = true;
     if (this.event && this.event.id) {
       this.$root.$emit(
-        'set-title',
+        "set-title",
         this.event,
-        this.routeName === 'EditBuildingBlocks',
+        this.routeName === "EditBuildingBlocks",
         true,
       );
       this.getTimelineItems();
@@ -602,9 +602,9 @@ export default {
   watch: {
     event(newVal, oldVal) {
       this.$root.$emit(
-        'set-title',
+        "set-title",
         this.event,
-        this.routeName === 'EditBuildingBlocks',
+        this.routeName === "EditBuildingBlocks",
         true,
       );
       this.getTimelineItems();
