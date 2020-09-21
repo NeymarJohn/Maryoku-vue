@@ -28,7 +28,9 @@
                 class="event-block-element"
                 :class="block.title ? block.title.toLowerCase().replace(/ /g, '-').replace('&', '').replace('/', '-') : ''"
               >
-                <img :src="`http://static.maryoku.com/storage/icons/Budget Elements/${block.icon}`" />
+                <img
+                  :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${block.icon}`"
+                />
                 {{block.title}}
               </td>
               <td class="planned" width="20%" style="white-space: nowrap">
@@ -59,12 +61,12 @@
                     <template v-if="block.winningProposalId">
                       <template v-if="block.allocatedBudget < block.winingProposal.cost">
                         <img
-                          src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+29.png"
+                          src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+29.png"
                         />
                       </template>
                       <template v-else>
                         <img
-                          src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+29.png"
+                          src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+29.png"
                         />
                       </template>
                       <md-button
@@ -198,7 +200,9 @@
         <tbody>
           <tr class="extra">
             <td width="40%" class="event-block-element extra">
-              <img src="http://static.maryoku.com/storage/icons/budget screen/SVG/extra-gray.svg" />
+              <img
+                src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget screen/SVG/extra-gray.svg"
+              />
               Extras
             </td>
             <td
@@ -222,7 +226,7 @@
                 <!-- <popup ref="popup"  v-if="event.allocatedTips>0">
                   <template slot="content">
                     <img
-                      src="http://static.maryoku.com/storage/icons/budget screen/SVG/tips-gray.svg"
+                      src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget screen/SVG/tips-gray.svg"
                     />
                     Tips 12%
                   </template>
@@ -236,11 +240,13 @@
                     </div>
                   </template>
                 </popup>-->
-                <img src="http://static.maryoku.com/storage/icons/budget screen/SVG/tips-gray.svg" />
+                <img
+                  src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget screen/SVG/tips-gray.svg"
+                />
                 Tips 12%
                 <!-- <span v-else>
                   <img
-                      src="http://static.maryoku.com/storage/icons/budget screen/SVG/tips-gray.svg"
+                      src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget screen/SVG/tips-gray.svg"
                     />
                     Tips 12%
                 </span>-->
@@ -293,7 +299,9 @@
             </tr>
             <tr class="extra">
               <td width="40%" class="event-block-element extra">
-                <img src="http://static.maryoku.com/storage/icons/budget screen/SVG/fees-gray.svg" />
+                <img
+                  src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget screen/SVG/fees-gray.svg"
+                />
                 Fees 3%
               </td>
               <td width="20%" class="planned">$ {{event.allocatedFees | withComma}}</td>
@@ -308,7 +316,9 @@
         <tbody>
           <tr class="unused-budget">
             <td width="40%" class="event-block-element unused-budget">
-              <img src="http://static.maryoku.com/storage/icons/budget screen/SVG/Asset 487.svg" />
+              <img
+                src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget screen/SVG/Asset 487.svg"
+              />
               Unused
             </td>
             <td width="20%" class="planned">$ {{remainingBudget | withComma}}</td>
@@ -334,7 +344,9 @@
         <tr class="add-category" v-if="canEdit">
           <td colspan="5">
             <md-button class="md-simple add-category-btn" @click="showCategoryModal = true">
-              <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2019.svg" /> Add new category
+              <img
+                src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2019.svg"
+              /> Add new category
             </md-button>
           </td>
         </tr>
@@ -505,10 +517,12 @@ export default {
     totalActual: 0,
     totalBudgetTaxes: 0,
     showCategoryModal: false,
-    timelineIconsURL: "http://static.maryoku.com/storage/icons/timeline/svg/",
-    iconsURL: "http://static.maryoku.com/storage/icons/Event%20Page/",
+    timelineIconsURL:
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/timeline/svg/",
+    iconsURL:
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/",
     menuIconsURL:
-      "http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/",
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
     locationsList: [
       "San Francisco, California",
       "Los Angeles, California",
@@ -624,13 +638,13 @@ export default {
                 _.findIndex(this.eventBuildingBlocks, (b) => {
                   return b.id === selectedBlock.id;
                 }),
-                1
+                1,
               );
               this.getEventBuildingBlocks();
               this.$root.$emit("RefreshStatistics");
               this.$root.$emit(
                 "event-building-block-budget-changed",
-                this.event.components
+                this.event.components,
               );
               this.$forceUpdate();
 
@@ -790,7 +804,7 @@ export default {
               this.getEventBuildingBlocks();
               this.$root.$emit(
                 "event-building-block-budget-changed",
-                this.event.components
+                this.event.components,
               );
               this.$forceUpdate();
 
@@ -869,7 +883,7 @@ export default {
           this.getEventBuildingBlocks();
           this.$root.$emit(
             "event-building-block-budget-changed",
-            this.event.components
+            this.event.components,
           );
           this.$forceUpdate();
 
@@ -949,7 +963,7 @@ export default {
               _.findIndex(this.event.components, (b) => {
                 return b.id === item.id;
               }),
-              1
+              1,
             );
             this.event.components.push(JSON.parse(JSON.stringify(component)));
             this.getEventBuildingBlocks();
@@ -997,7 +1011,7 @@ export default {
           title: `Other-${this.newBuildingBlock.name}`,
           key: `other-${this.newBuildingBlock.name.toLowerCase()}`,
           color: `rgb(${parseInt(Math.random() * 255)}, ${parseInt(
-            Math.random() * 255
+            Math.random() * 255,
           )}, ${parseInt(Math.random() * 255)})`,
           icon: `other.svg`,
           type: "customized",
@@ -1031,7 +1045,7 @@ export default {
         .then((res) => {
           this.categoryBuildingBlocks = res;
           this.filteredEventBlocks = this.categoryBuildingBlocks.filter(
-            (item) => item.title !== "Unexpected"
+            (item) => item.title !== "Unexpected",
           );
         })
         .catch((error) => {
@@ -1066,7 +1080,7 @@ export default {
           break;
         case "take":
           const unexpectedComponent = this.eventBuildingBlocks.findIndex(
-            (item) => item.componentId === "unexpected"
+            (item) => item.componentId === "unexpected",
           );
           // if (unexpectedComponent) {
           //   unexpectedComponent.allocatedBudget = unexpectedComponent.allocatedBudget
@@ -1116,7 +1130,7 @@ export default {
             headers: {
               "Content-Type": "multipart/form-data",
             },
-          }
+          },
         );
         myVendor.attachments = [
           {

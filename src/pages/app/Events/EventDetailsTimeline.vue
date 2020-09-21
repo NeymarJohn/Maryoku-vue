@@ -249,14 +249,15 @@ export default {
     hoursArray: [],
     disabledDragging: false,
     timelineAttachment: null,
-    timelineIconsURL: "http://static.maryoku.com/storage/icons/timeline/svg/",
+    timelineIconsURL:
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/timeline/svg/",
     menuIconsURL:
-      "http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/",
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
     event: {},
     showDeleteConfirmModal: false,
     indexOfDeleteItem: -1,
     newTimeLineIconsURL:
-      "http://static.maryoku.com/storage/icons/Timeline-New/",
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/Timeline-New/",
 
     timeline: [
       {
@@ -763,7 +764,7 @@ export default {
       reader.readAsDataURL(file);
     },
     openAttachment(path) {
-      window.open(`http://static.maryoku.com/${path}`, "_blank");
+      window.open(`https://static-maryoku.s3.amazonaws.com/${path}`, "_blank");
     },
     formatDate(date) {
       if (typeof date == "number") {

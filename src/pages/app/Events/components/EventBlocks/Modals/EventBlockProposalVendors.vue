@@ -110,7 +110,10 @@
     <md-card class="md-card-plain" v-if="!vendors.length && !proposals.length && !isLoading">
       <md-card-content>
         <div class="text-center">
-          <img class="w-120" src="http://static.maryoku.com/storage/img/paperandpen.png" />
+          <img
+            class="w-120"
+            src="https://static-maryoku.s3.amazonaws.com/storage/img/paperandpen.png"
+          />
           <h4>No vendors found that match '{{selectedBlock.title}}'</h4>
           <md-button class="md-purple md-sm" @click="manageVendors">Manage Vendors Pool</md-button>
         </div>
@@ -120,36 +123,36 @@
   </div>
 </template>
 <script>
-import swal from 'sweetalert2'
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import Calendar from '@/models/Calendar'
-import CalendarEvent from '@/models/CalendarEvent'
-import EventComponent from '@/models/EventComponent'
-import Vendors from '@/models/Vendors'
-import EventComponentVendor from '@/models/EventComponentVendor'
-import VueElementLoading from 'vue-element-loading'
-import { paginationMixin } from '@/mixins/pagination'
-import { Pagination, Tabs } from '@/components'
-import _ from 'underscore'
-import moment from 'moment'
-import numeral from 'numeral'
+import swal from "sweetalert2";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import Calendar from "@/models/Calendar";
+import CalendarEvent from "@/models/CalendarEvent";
+import EventComponent from "@/models/EventComponent";
+import Vendors from "@/models/Vendors";
+import EventComponentVendor from "@/models/EventComponentVendor";
+import VueElementLoading from "vue-element-loading";
+import { paginationMixin } from "@/mixins/pagination";
+import { Pagination, Tabs } from "@/components";
+import _ from "underscore";
+import moment from "moment";
+import numeral from "numeral";
 
 // import auth from '@/auth';
 
-import UploadVendorsModal from '../../../../Vendors/ImportVendors'
-import ManageBlockVendors from './ManageBlockVendors.vue'
-import ViewProposals from './ViewProposals.vue'
-import MdCardContent from '../../../../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue'
-import MdCardHeader from '../../../../../../../node_modules/vue-material/src/components/MdCard/MdCardHeader/MdCardHeader.vue'
-import VendorsTable from '@/pages/app/Vendors/Table/vendorsList'
-import VendorsPoolPanel from '@/pages/app/Vendors/VendorsPoolPanel'
-import companyForm from '@/pages/app/Vendors/Form/companyForm'
-import ManageProposalsAccept from '../Modals/ManageProposalsAccept.vue'
-import ManageProposalsVendors from './ManageProposalsVendors'
-import ViewProposal from './ViewProposal.vue'
+import UploadVendorsModal from "../../../../Vendors/ImportVendors";
+import ManageBlockVendors from "./ManageBlockVendors.vue";
+import ViewProposals from "./ViewProposals.vue";
+import MdCardContent from "../../../../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue";
+import MdCardHeader from "../../../../../../../node_modules/vue-material/src/components/MdCard/MdCardHeader/MdCardHeader.vue";
+import VendorsTable from "@/pages/app/Vendors/Table/vendorsList";
+import VendorsPoolPanel from "@/pages/app/Vendors/VendorsPoolPanel";
+import companyForm from "@/pages/app/Vendors/Form/companyForm";
+import ManageProposalsAccept from "../Modals/ManageProposalsAccept.vue";
+import ManageProposalsVendors from "./ManageProposalsVendors";
+import ViewProposal from "./ViewProposal.vue";
 
 export default {
-  name: 'event-block-proposal-vendors',
+  name: "event-block-proposal-vendors",
   components: {
     MdCardHeader,
     MdCardContent,
@@ -162,204 +165,206 @@ export default {
     ManageProposalsAccept,
     ManageProposalsVendors,
     companyForm,
-    Tabs
+    Tabs,
   },
   props: {
     selectedBlock: Object,
-    event: Object
+    event: Object,
     // blockVendors : Array,
   },
   data: () => ({
     // auth: auth,
     isLoading: true,
     sendingRfp: false,
-    searchQuery: '',
+    searchQuery: "",
     ratings: [1, 2, 3, 4, 5],
     filteredBlockVendors: [],
     blockVendors: null,
     vendors: [],
     proposals: [],
-    activeList: 'vendors'
+    activeList: "vendors",
   }),
   methods: {
-    getBlockVendors () {
+    getBlockVendors() {
       if (true) {
-        let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
-        let event = new CalendarEvent({ id: this.event.id })
-        let selected_block = new EventComponent({ id: this.selectedBlock.id })
+        let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
+        let event = new CalendarEvent({ id: this.event.id });
+        let selected_block = new EventComponent({ id: this.selectedBlock.id });
 
         new EventComponentVendor()
           .for(calendar, event, selected_block)
           .get()
-          .then(resp => {
-            this.isLoading = false
-            this.selectedBlock.vendors = resp
-            this.selectedBlock.vendorsCount = resp.length
-            this.blockVendors = resp
+          .then((resp) => {
+            this.isLoading = false;
+            this.selectedBlock.vendors = resp;
+            this.selectedBlock.vendorsCount = resp.length;
+            this.blockVendors = resp;
 
             let vendorsWithProposals = _.filter(this.blockVendors, function (
-              item
+              item,
             ) {
-              return item.proposals && item.proposals.length
-            })
+              return item.proposals && item.proposals.length;
+            });
             let vendorsWithSentStatus = _.filter(this.blockVendors, function (
-              item
+              item,
             ) {
-              return item.proposals && !item.proposals.length
-            })
+              return item.proposals && !item.proposals.length;
+            });
             let vendorsWithNoStatus = _.filter(this.blockVendors, function (
-              item
+              item,
             ) {
-              return !item.proposals
-            })
+              return !item.proposals;
+            });
 
             this.filteredBlockVendors = _.union(
               vendorsWithSentStatus,
-              vendorsWithNoStatus
-            )
+              vendorsWithNoStatus,
+            );
 
-            let proposals = []
-            _.each(vendorsWithProposals, v => {
-              proposals.push(v.proposals[0])
-            })
-            this.selectedBlock.proposals = proposals
-            this.selectedBlock.proposalsCount = proposals.length
+            let proposals = [];
+            _.each(vendorsWithProposals, (v) => {
+              proposals.push(v.proposals[0]);
+            });
+            this.selectedBlock.proposals = proposals;
+            this.selectedBlock.proposalsCount = proposals.length;
 
-            this.vendors = _.union(vendorsWithSentStatus, vendorsWithNoStatus)
-            this.proposals = vendorsWithProposals
+            this.vendors = _.union(vendorsWithSentStatus, vendorsWithNoStatus);
+            this.proposals = vendorsWithProposals;
           })
-          .catch(error => {
-            this.isLoading = false
-            console.log('EventComponentVendor error =>', error)
-          })
+          .catch((error) => {
+            this.isLoading = false;
+            console.log("EventComponentVendor error =>", error);
+          });
       } else {
-        this.blockVendors = this.selectedBlock.vendors
+        this.blockVendors = this.selectedBlock.vendors;
 
         // console.log('blockVendors => ',this.blockVendors);
         let vendorsWithProposals = _.filter(this.blockVendors, function (item) {
-          return item.proposals && item.proposals.length
-        })
-        let vendorsWithSentStatus = _.filter(this.blockVendors, function (item) {
-          return item.proposals && !item.proposals.length
-        })
+          return item.proposals && item.proposals.length;
+        });
+        let vendorsWithSentStatus = _.filter(this.blockVendors, function (
+          item,
+        ) {
+          return item.proposals && !item.proposals.length;
+        });
         let vendorsWithNoStatus = _.filter(this.blockVendors, function (item) {
-          return !item.proposals
-        })
+          return !item.proposals;
+        });
 
         this.filteredBlockVendors = _.union(
           vendorsWithProposals,
           vendorsWithSentStatus,
-          vendorsWithNoStatus
-        )
-        this.isLoading = false
+          vendorsWithNoStatus,
+        );
+        this.isLoading = false;
       }
 
       // this.isLoading = this.filteredBlockVendors.length <= 0;
     },
-    sendVendor (item) {
+    sendVendor(item) {
       // this.isLoading = true;
 
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
-      let event = new CalendarEvent({ id: this.event.id })
-      let selected_block = new EventComponent({ id: this.selectedBlock.id })
+      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
+      let event = new CalendarEvent({ id: this.event.id });
+      let selected_block = new EventComponent({ id: this.selectedBlock.id });
 
-      let vendor = new EventComponentVendor(item)
+      let vendor = new EventComponentVendor(item);
 
-      vendor.id = item.id
-      vendor.cost = item.cost
-      vendor.vendor = item.vendor
-      vendor.vendorId = item.vendorId
-      vendor.rfpStatus = 'Sent'
+      vendor.id = item.id;
+      vendor.cost = item.cost;
+      vendor.vendor = item.vendor;
+      vendor.vendorId = item.vendorId;
+      vendor.rfpStatus = "Sent";
 
       vendor
         .for(calendar, event, selected_block)
         .save()
-        .then(resp => {
+        .then((resp) => {
           // console.log(resp);
-          this.$root.$emit('calendar-refresh-events')
-          this.getBlockVendors()
-          this.$forceUpdate()
+          this.$root.$emit("calendar-refresh-events");
+          this.getBlockVendors();
+          this.$forceUpdate();
         })
-        .catch(error => {
+        .catch((error) => {
           // this.isLoading = false;
-          console.log('EventComponentVendor error =>', error)
+          console.log("EventComponentVendor error =>", error);
 
           this.$notify({
-            message: 'Error while trying to add vendor, try again!',
-            horizontalAlign: 'center',
-            verticalAlign: 'top',
-            type: 'danger'
-          })
-        })
+            message: "Error while trying to add vendor, try again!",
+            horizontalAlign: "center",
+            verticalAlign: "top",
+            type: "danger",
+          });
+        });
     },
-    filterVendors () {
+    filterVendors() {
       let vendorsWithProposals = _.filter(this.blockVendors, function (item) {
-        return item.proposals && item.proposals.length
-      })
+        return item.proposals && item.proposals.length;
+      });
       let vendorsWithSentStatus = _.filter(this.blockVendors, function (item) {
-        return item.proposals && !item.proposals.length
-      })
+        return item.proposals && !item.proposals.length;
+      });
       let vendorsWithNoStatus = _.filter(this.blockVendors, function (item) {
-        return !item.proposals
-      })
+        return !item.proposals;
+      });
 
       let mergedArr = _.union(
         vendorsWithProposals,
         vendorsWithSentStatus,
-        vendorsWithNoStatus
-      )
+        vendorsWithNoStatus,
+      );
 
-      this.filteredBlockVendors = _.filter(mergedArr, v => {
+      this.filteredBlockVendors = _.filter(mergedArr, (v) => {
         return (
           v.vendor.vendorDisplayName
             .toString()
             .toLowerCase()
             .indexOf(this.searchQuery.toLowerCase()) > -1
-        )
-      })
+        );
+      });
     },
-    viewProposal (proposal) {
+    viewProposal(proposal) {
       window.currentPanel = this.$showPanel({
         component: ViewProposal,
-        cssClass: 'md-layout-item md-size-65 transition36 bg-white',
-        openOn: 'right',
+        cssClass: "md-layout-item md-size-65 transition36 bg-white",
+        openOn: "right",
         props: {
           event: this.event,
           proposal: proposal,
-          selectedBlock: this.selectedBlock
-        }
-      })
+          selectedBlock: this.selectedBlock,
+        },
+      });
     },
-    manageProposalsAccept (proposal) {
+    manageProposalsAccept(proposal) {
       window.currentPanel = this.$showPanel({
         component: ManageProposalsAccept,
-        cssClass: 'md-layout-item md-size-65 transition36 bg-grey',
-        openOn: 'right',
+        cssClass: "md-layout-item md-size-65 transition36 bg-grey",
+        openOn: "right",
         props: {
           event: this.event,
           proposal: proposal,
-          selectedBlock: this.selectedBlock
-        }
-      })
+          selectedBlock: this.selectedBlock,
+        },
+      });
     },
-    getProposalDate (eventStartMillis) {
-      let x = new Date(eventStartMillis)
-      return moment(x).fromNow()
+    getProposalDate(eventStartMillis) {
+      let x = new Date(eventStartMillis);
+      return moment(x).fromNow();
     },
-    showVendorDetail (vendor) {
+    showVendorDetail(vendor) {
       window.currentPanel = this.$showPanel({
         component: companyForm,
-        cssClass: 'md-layout-item md-size-60 transition36 ',
-        openOn: 'right',
+        cssClass: "md-layout-item md-size-60 transition36 ",
+        openOn: "right",
         disableBgClick: false,
         props: {
           categories: this.buildingBlocksList,
           selected_vendor: vendor,
-          creation_mode: false
-        }
-      })
+          creation_mode: false,
+        },
+      });
     },
-    addToCompare (proposalId) {
+    addToCompare(proposalId) {
       /* if ( this.selectedBlock.proposalComparison.length < 3 ) {
           this.selectedBlock.proposalComparison.push(proposalId);
         } else {
@@ -367,20 +372,20 @@ export default {
           this.selectedBlock.proposalComparison.push(proposalId);
         } */
       if (!this.selectedBlock.proposalComparison1) {
-        this.selectedBlock.proposalComparison1 = proposalId
+        this.selectedBlock.proposalComparison1 = proposalId;
       } else if (!this.selectedBlock.proposalComparison2) {
-        this.selectedBlock.proposalComparison2 = proposalId
+        this.selectedBlock.proposalComparison2 = proposalId;
       } else if (!this.selectedBlock.proposalComparison3) {
-        this.selectedBlock.proposalComparison3 = proposalId
+        this.selectedBlock.proposalComparison3 = proposalId;
       } else {
-        this.selectedBlock.proposalComparison1 = this.selectedBlock.proposalComparison2
-        this.selectedBlock.proposalComparison2 = this.selectedBlock.proposalComparison3
-        this.selectedBlock.proposalComparison3 = proposalId
+        this.selectedBlock.proposalComparison1 = this.selectedBlock.proposalComparison2;
+        this.selectedBlock.proposalComparison2 = this.selectedBlock.proposalComparison3;
+        this.selectedBlock.proposalComparison3 = proposalId;
       }
 
-      this.updateEventComponent()
+      this.updateEventComponent();
     },
-    removeFromCompare (proposalId) {
+    removeFromCompare(proposalId) {
       /* let i = _.indexOf( this.selectedBlock.proposalComparison, proposalId );
 
         if ( i !== -1 ) {
@@ -388,121 +393,121 @@ export default {
         } */
 
       if (this.selectedBlock.proposalComparison1 === proposalId) {
-        this.selectedBlock.proposalComparison1 = null
+        this.selectedBlock.proposalComparison1 = null;
       } else if (this.selectedBlock.proposalComparison2 === proposalId) {
-        this.selectedBlock.proposalComparison2 = null
+        this.selectedBlock.proposalComparison2 = null;
       } else if (this.selectedBlock.proposalComparison3 === proposalId) {
-        this.selectedBlock.proposalComparison3 = null
+        this.selectedBlock.proposalComparison3 = null;
       }
 
-      let count = 0
+      let count = 0;
       if (this.selectedBlock.proposalComparison1) {
-        count++
+        count++;
       }
       if (this.selectedBlock.proposalComparison2) {
-        count++
+        count++;
       }
       if (this.selectedBlock.proposalComparison3) {
-        count++
+        count++;
       }
 
-      this.updateEventComponent()
-      this.$emit('update-comparison', count)
+      this.updateEventComponent();
+      this.$emit("update-comparison", count);
     },
-    manageVendors () {
+    manageVendors() {
       // this.$router.push({ path: `/vendors-pool`});
       window.currentPanel = this.$showPanel({
         component: VendorsPoolPanel,
-        cssClass: 'md-layout-item md-size-85 transition36 bg-grey',
-        openOn: 'right',
-        props: {}
-      })
+        cssClass: "md-layout-item md-size-85 transition36 bg-grey",
+        openOn: "right",
+        props: {},
+      });
 
       let slideoutPanelBg = document.getElementsByClassName(
-        'slideout-panel-bg'
-      )
+        "slideout-panel-bg",
+      );
       if (slideoutPanelBg && slideoutPanelBg.length > 0) {
-        slideoutPanelBg[0].style = 'z-index: 101'
+        slideoutPanelBg[0].style = "z-index: 101";
       }
-      window.currentPanel.promise.then(res => {
+      window.currentPanel.promise.then((res) => {
         if (slideoutPanelBg && slideoutPanelBg.length > 0) {
-          slideoutPanelBg[0].style = 'z-index: 100'
+          slideoutPanelBg[0].style = "z-index: 100";
         }
-      })
+      });
     },
-    addedToCompare (proposalId) {
+    addedToCompare(proposalId) {
       // let isExists = _.indexOf( this.selectedBlock.proposalComparison, proposalId ) !== -1;
-      let count = 0
+      let count = 0;
       if (this.selectedBlock.proposalComparison1) {
-        count++
+        count++;
       }
       if (this.selectedBlock.proposalComparison2) {
-        count++
+        count++;
       }
       if (this.selectedBlock.proposalComparison3) {
-        count++
+        count++;
       }
 
-      this.$emit('update-comparison', count)
+      this.$emit("update-comparison", count);
 
       // this.updateEventComponent();
       if (this.selectedBlock.proposalComparison1 === proposalId) {
-        return true
+        return true;
       } else if (this.selectedBlock.proposalComparison2 === proposalId) {
-        return true
+        return true;
       } else if (this.selectedBlock.proposalComparison3 === proposalId) {
-        return true
+        return true;
       }
 
-      return false
+      return false;
     },
-    updateEventComponent () {
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
-      let event = new CalendarEvent({ id: this.event.id })
-      let selected_block = new EventComponent({ id: this.selectedBlock.id })
+    updateEventComponent() {
+      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
+      let event = new CalendarEvent({ id: this.event.id });
+      let selected_block = new EventComponent({ id: this.selectedBlock.id });
 
-      selected_block.proposalComparison1 = this.selectedBlock.proposalComparison1
-      selected_block.proposalComparison2 = this.selectedBlock.proposalComparison2
-      selected_block.proposalComparison3 = this.selectedBlock.proposalComparison3
+      selected_block.proposalComparison1 = this.selectedBlock.proposalComparison1;
+      selected_block.proposalComparison2 = this.selectedBlock.proposalComparison2;
+      selected_block.proposalComparison3 = this.selectedBlock.proposalComparison3;
       selected_block
         .for(calendar, event)
         .save()
-        .then(resp => {})
-        .catch(error => {
-          console.log('EventComponentVendor error =>', error)
-        })
+        .then((resp) => {})
+        .catch((error) => {
+          console.log("EventComponentVendor error =>", error);
+        });
     },
-    switchList (listType) {
-      this.activeList = listType
-      if (listType === 'vendors') {
-        this.filteredBlockVendors = this.vendors
+    switchList(listType) {
+      this.activeList = listType;
+      if (listType === "vendors") {
+        this.filteredBlockVendors = this.vendors;
       } else {
-        this.filteredBlockVendors = this.proposals
+        this.filteredBlockVendors = this.proposals;
       }
     },
-    routeToVendorsProposal (vendorId, proposalId) {
+    routeToVendorsProposal(vendorId, proposalId) {
       // console.log(vendorId, proposalId)
       this.$router.push({
-        name: 'VendorProposals',
-        params: { id: proposalId, vendorId: vendorId }
-      })
-    }
+        name: "VendorProposals",
+        params: { id: proposalId, vendorId: vendorId },
+      });
+    },
   },
-  created () {},
-  mounted () {
-    this.getBlockVendors()
+  created() {},
+  mounted() {
+    this.getBlockVendors();
   },
   computed: {},
   watch: {
-    searchQuery (newVal, oldVal) {
-      this.filterVendors()
+    searchQuery(newVal, oldVal) {
+      this.filterVendors();
     },
-    blockVendors (newVal, oldVal) {
+    blockVendors(newVal, oldVal) {
       // this.getBlockVendors();
-      this.isLoading = false
-    }
-  }
-}
+      this.isLoading = false;
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 @import "@/assets/scss/md/_colors.scss";

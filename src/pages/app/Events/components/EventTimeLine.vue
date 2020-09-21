@@ -168,7 +168,7 @@
             <div class="drag-here">
               <p>
                 <img
-                  src="http://static.maryoku.com/storage/img/drag_drop.png"
+                  src="https://static-maryoku.s3.amazonaws.com/storage/img/drag_drop.png"
                   alt="drag and drop"
                   style="width: 62px;"
                 />

@@ -2,7 +2,10 @@
   <div class="md-layout timeline-section export-section" ref="content">
     <div class="event-page-header md-layout-item md-size-100 with-bg">
       <div class="header-main-actions">
-        <img src="http://static.maryoku.com/storage/maryoku+-+logo+dark%402x.png" width="150" />
+        <img
+          src="https://static-maryoku.s3.amazonaws.com/storage/maryoku+-+logo+dark%402x.png"
+          width="150"
+        />
       </div>
       <div class="header-actions">
         <ul class="d-flex align-center">
@@ -133,12 +136,13 @@ export default {
     hoursArray: [],
     disabledDragging: false,
     timelineAttachment: null,
-    timelineIconsURL: "http://static.maryoku.com/storage/icons/timeline/svg/",
+    timelineIconsURL:
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/timeline/svg/",
     menuIconsURL:
-      "http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/",
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
     event: {},
     newTimeLineIconsURL:
-      "http://static.maryoku.com/storage/icons/Timeline-New/",
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/Timeline-New/",
     timeline: [
       {
         date: "20/04/2020",

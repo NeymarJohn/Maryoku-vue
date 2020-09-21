@@ -176,7 +176,7 @@
             >Compete with my brilliant concept?</a>
             <span>
               <img
-                src="http://static.maryoku.com/storage/icons/Event%20Page/light.svg"
+                src="https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/light.svg"
                 alt="Avatar"
                 width="20px"
               />
@@ -339,15 +339,18 @@ export default {
     somethingMessage: null,
     timelineAttachment: null,
     event: {},
-    timelineIconsURL: "http://static.maryoku.com/storage/icons/timeline/svg/",
+    timelineIconsURL:
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/timeline/svg/",
     menuIconsURL:
-      "http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/",
-    iconsURL: "http://static.maryoku.com/storage/icons/Event%20Page/",
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
+    iconsURL:
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/",
     newTimeLineIconsURL:
-      "http://static.maryoku.com/storage/icons/Timeline-New/",
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/Timeline-New/",
     budgetElementsIConsURL:
-      "http://static.maryoku.com/storage/icons/Budget+Elements/",
-    conceptIconsURL: "http://static.maryoku.com/storage/icons/Concept/",
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget+Elements/",
+    conceptIconsURL:
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/Concept/",
     showSomethingModal: false,
     showShareVendorModal: false,
     selectedBlock: {},

@@ -185,7 +185,7 @@ export default {
                 title: item.bookTitle,
                 status: "not-complete",
                 route: "booking/" + item.id,
-                icon: `http://static.maryoku.com/storage/icons/Budget+Elements/${item.componentId}.svg`,
+                icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget+Elements/${item.componentId}.svg`,
               });
             }
           });

@@ -163,7 +163,8 @@ export default {
   data() {
     return {
       coverImage: "",
-      logoImage: "http://static.maryoku.com/storage/icons/RSVP/ms-icon.png",
+      logoImage:
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/ms-icon.png",
       showLogo: true,
       content: "",
       images: [

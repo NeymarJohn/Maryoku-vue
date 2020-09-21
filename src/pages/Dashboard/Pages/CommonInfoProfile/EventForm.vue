@@ -1,176 +1,181 @@
 <template>
   <div v-if="role==='OM'">
-    <div class='employee-body'>
-      <div class='event_form-main'>
-        <div class='event_button-block' >
-          <Button text='next' :onClick='onNext' class="md-success md-fileinput button-md-common"/>
+    <div class="employee-body">
+      <div class="event_form-main">
+        <div class="event_button-block">
+          <Button text="next" :onClick="onNext" class="md-success md-fileinput button-md-common" />
         </div>
-        <div class='event_form-block'>
+        <div class="event_form-block">
           <div>
             <Title
-              class='event_emp-title'
+              class="event_emp-title"
               title="We're ready here..."
-              titleText='event_titleStyle'/>
+              titleText="event_titleStyle"
+            />
           </div>
           <Datepicker
-            labelStyle='event_label_input'
-            label='Your bithday'
+            labelStyle="event_label_input"
+            label="Your bithday"
             fieldStyle="field_input"
-            :value='bithday'
-            name='bithday'
-            :onChange='onChange'
-            />
+            :value="bithday"
+            name="bithday"
+            :onChange="onChange"
+          />
           <Datepicker
-            labelStyle='event_label_input'
-            label='When did you join the company'
-            :value='join_to_company'
-            name='join_to_company'
-            :onChange='onChange'
-            />
+            labelStyle="event_label_input"
+            label="When did you join the company"
+            :value="join_to_company"
+            name="join_to_company"
+            :onChange="onChange"
+          />
           <Select
-            label='Which holidays do u celebrate?'
-            labelStyle='event_label_input'
-            :list='event_list'
-            name='select_holiday'
+            label="Which holidays do u celebrate?"
+            labelStyle="event_label_input"
+            :list="event_list"
+            name="select_holiday"
             :valueName="['title','name']"
             :onChange="onChange"
             trim
-            />
-          <div class='events-add-new-date-block'  v-if='add_dates.length!==0'  v-for='item  in add_dates'>
-            <div class='event-add-new-date_input'>
+          />
+          <div
+            class="events-add-new-date-block"
+            v-if="add_dates.length!==0"
+            v-for="item  in add_dates"
+          >
+            <div class="event-add-new-date_input">
               <InputText
-                labelStyle='event_label_input'
-                label='Description'
+                labelStyle="event_label_input"
+                label="Description"
                 fieldStyle="field_input"
-                :value='item.description'
-                name='description'
-                :onChange='onChange'
+                :value="item.description"
+                name="description"
+                :onChange="onChange"
                 count
-                />
+              />
             </div>
-            <div class='event-add-new-date_datepicke'>
-              <Datepicker
-                :key='date'
-                :value='item.date'
-                name='date'
-                :onChange='onChange'
-                count
-                />
+            <div class="event-add-new-date_datepicke">
+              <Datepicker :key="date" :value="item.date" name="date" :onChange="onChange" count />
             </div>
-            <div class='event-add-new-date-delete_button' @click.prevent='deleteDate(item.description)'>
-              <md-icon  class='event-add_icon'>clear</md-icon>
+            <div
+              class="event-add-new-date-delete_button"
+              @click.prevent="deleteDate(item.description)"
+            >
+              <md-icon class="event-add_icon">clear</md-icon>
             </div>
           </div>
           <Title
-            title='The more we know about important dates, the more we can celebrate you.'
-            titleBlock='event_titleBlock'
-            titleText='event_title-span'
+            title="The more we know about important dates, the more we can celebrate you."
+            titleBlock="event_titleBlock"
+            titleText="event_title-span"
             withSpan
-            spanText=' Add dates'
-            spanStyles='event_span-title'
-            :onClick='onAddDate'
-            />
+            spanText=" Add dates"
+            spanStyles="event_span-title"
+            :onClick="onAddDate"
+          />
         </div>
-        <div class='event_button-block' >
-          <ButtonDiv buttonStyle='event_buttonStyle' text='skip' :onClick='onSkip'/>
+        <div class="event_button-block">
+          <ButtonDiv buttonStyle="event_buttonStyle" text="skip" :onClick="onSkip" />
         </div>
       </div>
-      <div class='event_logo-main'>
+      <div class="event_logo-main">
         <div>
-          <img class='event_emp-logo' src="http://static.maryoku.com/storage/img/orical_power.png">
+          <img
+            class="event_emp-logo"
+            src="https://static-maryoku.s3.amazonaws.com/storage/img/orical_power.png"
+          />
           <Title
-            title='Save time by automating'
-            titleBlock='event_titleBlock'
-            titleText='event_titleStyle'
-            />
+            title="Save time by automating"
+            titleBlock="event_titleBlock"
+            titleText="event_titleStyle"
+          />
           <Title
-            titleText='titleTextLogo'
-            titleBlock='event_titleBlock'
-            title='Automate individual congratulation cards to help you give that personal touch your guests crave, without the usual efford that comes with it'
-            />
+            titleText="titleTextLogo"
+            titleBlock="event_titleBlock"
+            title="Automate individual congratulation cards to help you give that personal touch your guests crave, without the usual efford that comes with it"
+          />
         </div>
       </div>
     </div>
   </div>
   <div v-else>
-    <div class='employee-body'>
-      <div class='event_form-main'>
-        <div class='event_button-block' >
-          <Button text='next' :onClick='onNext' class="md-success md-fileinput button-md-common"/>
+    <div class="employee-body">
+      <div class="event_form-main">
+        <div class="event_button-block">
+          <Button text="next" :onClick="onNext" class="md-success md-fileinput button-md-common" />
         </div>
-        <div class='event_form-block'>
+        <div class="event_form-block">
           <div>
             <Title
-              class='event_emp-title'
+              class="event_emp-title"
               title="We're ready here..."
-              titleText='event_titleStyle'/>
+              titleText="event_titleStyle"
+            />
           </div>
+          <Datepicker label="Your bithday" :value="bithday" name="bithday" :onChange="onChange" />
           <Datepicker
-            label='Your bithday'
-            :value='bithday'
-            name='bithday'
-            :onChange='onChange'
-            />
-          <Datepicker
-            label='When did you join the company'
-            :value='join_to_company'
-            name='join_to_company'
-            :onChange='onChange'
-            />
+            label="When did you join the company"
+            :value="join_to_company"
+            name="join_to_company"
+            :onChange="onChange"
+          />
           <Select
-            label='Which holidays do u celebrate?'
-            labelStyle='event_label_input'
-            :list='event_list'
-            name='select_holiday'
+            label="Which holidays do u celebrate?"
+            labelStyle="event_label_input"
+            :list="event_list"
+            name="select_holiday"
             :valueName="['title','name']"
             :onChange="onChange"
             trim
-            />
-          <div class='events-add-new-date-block'  v-show='add_dates.length!==0' v-for='(item,index)  in add_dates'>
-            <div class='event-add-new-date_input'>
+          />
+          <div
+            class="events-add-new-date-block"
+            v-show="add_dates.length!==0"
+            v-for="(item,index)  in add_dates"
+          >
+            <div class="event-add-new-date_input">
               <InputText
-                labelStyle='event_label_input'
-                label='Description'
+                labelStyle="event_label_input"
+                label="Description"
                 fieldStyle="field_input"
-                :value='item.description'
-                name='description'
-                :onChange='onChange'
+                :value="item.description"
+                name="description"
+                :onChange="onChange"
                 count
-                />
-            </div>
-            <Datepicker
-              :key='date'
-              :value='item.date'
-              name='date'
-              :onChange='onChange'
-              count
               />
-            <div  class='event-add-new-date-delete_button' @click.prevent='deleteDate(item.description)'>
-              <md-icon  class='event-add_icon'>clear</md-icon>
+            </div>
+            <Datepicker :key="date" :value="item.date" name="date" :onChange="onChange" count />
+            <div
+              class="event-add-new-date-delete_button"
+              @click.prevent="deleteDate(item.description)"
+            >
+              <md-icon class="event-add_icon">clear</md-icon>
             </div>
           </div>
           <Title
-            title='The more we know about important dates, the more we can celebrate you.'
-            titleBlock='event_titleBlock'
-            titleText='event_title-span'
+            title="The more we know about important dates, the more we can celebrate you."
+            titleBlock="event_titleBlock"
+            titleText="event_title-span"
             withSpan
-            spanText=' Add dates'
-            spanStyles='event_span-title'
-            :onClick='onAddDate'
-            />
+            spanText=" Add dates"
+            spanStyles="event_span-title"
+            :onClick="onAddDate"
+          />
         </div>
-        <div class='event_button-block'>
-          <ButtonDiv buttonStyle='event_buttonStyle' text='skip' :onClick='onSkip'/>
+        <div class="event_button-block">
+          <ButtonDiv buttonStyle="event_buttonStyle" text="skip" :onClick="onSkip" />
         </div>
       </div>
-      <div class='event_logo-main'>
+      <div class="event_logo-main">
         <div>
-          <img class='event_emp-logo' src="http://static.maryoku.com/storage/img/orical_power.png">
+          <img
+            class="event_emp-logo"
+            src="https://static-maryoku.s3.amazonaws.com/storage/img/orical_power.png"
+          />
           <Title
-            title='Just give us a reason to selebrate'
-            titleBlock='event_titleBlock'
-            titleText='event_titleStyle'
-            />
+            title="Just give us a reason to selebrate"
+            titleBlock="event_titleBlock"
+            titleText="event_titleStyle"
+          />
         </div>
       </div>
     </div>
@@ -179,22 +184,20 @@
 
 <script>
 // HELPER_FUNC
-import {
-  isWrong
-} from '@/utils/helperFunction'
+import { isWrong } from "@/utils/helperFunction";
 // COMPONENTS
-import InputText from '@/components/Inputs/InputText.vue'
-import Datepicker from '@/components/Datepicker/Datepicker.vue'
-import Select from '@/components/Select/Select.vue'
-import Title from '@/components/Title/Title.vue'
-import ButtonDiv from '@/components/Button/ButtonDiv.vue'
-import Button from '@/components/Button/Button.vue'
-import Modal from '@/components/Modal.vue'
+import InputText from "@/components/Inputs/InputText.vue";
+import Datepicker from "@/components/Datepicker/Datepicker.vue";
+import Select from "@/components/Select/Select.vue";
+import Title from "@/components/Title/Title.vue";
+import ButtonDiv from "@/components/Button/ButtonDiv.vue";
+import Button from "@/components/Button/Button.vue";
+import Modal from "@/components/Modal.vue";
 
 export default {
-  name: 'Employee',
+  name: "Employee",
   props: {
-    officeManager: String
+    officeManager: String,
   },
   components: {
     Datepicker,
@@ -203,77 +206,83 @@ export default {
     ButtonDiv,
     Button,
     InputText,
-    Modal
+    Modal,
   },
-  data () {
+  data() {
     return {
       role: null,
-      event_list: [{
-        title: 'Christian holidays',
-        name: 'Christian holidays'
-      }, {
-        title: 'Jewish holidays',
-        name: 'Jewish holidays'
-      }, {
-        title: 'Muslim holidays',
-        name: 'Muslim holidays'
-      }, {
-        title: 'Hindu holidays',
-        name: 'Muslim holidays'
-      }],
-      select_holiday: '',
-      bithday: '',
-      join_to_company: '',
+      event_list: [
+        {
+          title: "Christian holidays",
+          name: "Christian holidays",
+        },
+        {
+          title: "Jewish holidays",
+          name: "Jewish holidays",
+        },
+        {
+          title: "Muslim holidays",
+          name: "Muslim holidays",
+        },
+        {
+          title: "Hindu holidays",
+          name: "Muslim holidays",
+        },
+      ],
+      select_holiday: "",
+      bithday: "",
+      join_to_company: "",
       add_dates: [],
       showModal: false,
-      description: '',
-      date: '',
-      listComponentName: ['select_holiday', 'bithday', 'join_to_company'],
-      new_number_of_event: 0
-
-    }
+      description: "",
+      date: "",
+      listComponentName: ["select_holiday", "bithday", "join_to_company"],
+      new_number_of_event: 0,
+    };
   },
   mounted: function () {
-    const onboardingPath = this.$store.getters['user/getUser'].onboardingPath
-    this.role = onboardingPath
+    const onboardingPath = this.$store.getters["user/getUser"].onboardingPath;
+    this.role = onboardingPath;
   },
   methods: {
     onSkip: function () {
-      this.$router.push('/dietary')
+      this.$router.push("/dietary");
     },
     onChange: function (value, name, count) {
-      this[name] = value
-      console.log(value, name, count)
+      this[name] = value;
+      console.log(value, name, count);
       if (this.new_number_of_event && count) {
-        this.add_dates[this.new_number_of_event - 1][name] = value
+        this.add_dates[this.new_number_of_event - 1][name] = value;
       }
     },
     onNext: function () {
-      console.log(this.add_dates)
+      console.log(this.add_dates);
       // const event=isWrong(this,this.listComponentName)
       // this.$store.dispatch("user/sendEvent",event)
       // this.$router.push('/dietary')
     },
     onAddDate: function () {
       const newDate = {
-        description: '',
-        date: ''
-      }
-      this.new_number_of_event = ++this.new_number_of_event
-      this.add_dates.push(newDate)
+        description: "",
+        date: "",
+      };
+      this.new_number_of_event = ++this.new_number_of_event;
+      this.add_dates.push(newDate);
     },
     deleteDate: function (value) {
-      console.log(value, this.add_dates)
-      console.log(this.add_dates.filter((item) => item.description !== value))
-      this.add_dates = this.add_dates.filter((item) => item.description !== value)
-    }
-  }
-}
+      console.log(value, this.add_dates);
+      console.log(this.add_dates.filter((item) => item.description !== value));
+      this.add_dates = this.add_dates.filter(
+        (item) => item.description !== value,
+      );
+    },
+  },
+};
 </script>
 <style lang="scss">
 .employee-body {
   display: flex;
-  flex-direction: 'column'
+  flex-direction: "column";
 }
 
 .event_form-main {
@@ -309,7 +318,7 @@ export default {
 
 .event_emp-title {
   text-align: center;
-  margin-bottom: 20px
+  margin-bottom: 20px;
 }
 
 .event_label_input {

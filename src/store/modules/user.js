@@ -6,14 +6,14 @@ import Calendar from '@/models/Calendar'
 import listMonth, { months_short } from '@/constants/month'
 import { of } from 'rxjs'
 
-function getReq (endpoint) {
+function getReq(endpoint) {
   return axios({
     method: 'get',
     url: `${process.env.SERVER_URL}${endpoint}`,
     headers: { 'Authorization': `Bearer ${window.localStorage.getItem('manage_id_token')}` }
   })
 }
-function postReq (endpoint, data) {
+function postReq(endpoint, data) {
   return axios({
     method: 'post',
     url: `${process.env.SERVER_URL}${endpoint}`,
@@ -246,11 +246,11 @@ const getters = {
 }
 // actions
 const actions = {
-  getUserFromApi ({ commit, state }, data) {
+  getUserFromApi({ commit, state }, data) {
     Me.get()
       .then(res => {
         if (res[0] && (res[0].pictureUrl === '' || res[0].pictureUrl === 'none')) {
-          res[0].pictureUrl = 'http://static.maryoku.com/storage/img/placeholder.jpg'
+          res[0].pictureUrl = 'https://static-maryoku.s3.amazonaws.com/storage/img/placeholder.jpg'
         }
         commit('setUser', res[0])
         commit('setCustomer', res[0].customer)
@@ -282,7 +282,7 @@ const actions = {
       )
       .catch(e => console.log(e))
   },
-  async getIndustry ({ commit, state }) {
+  async getIndustry({ commit, state }) {
     Industry
       .get()
       .then(res => {
@@ -292,42 +292,42 @@ const actions = {
         commit('setIndustries', [])
       })
   },
-  async sendCompanyInfo ({ commit, state }, info) {
+  async sendCompanyInfo({ commit, state }, info) {
     try {
       const res = await postReq('/1/onboarding/me', info)
     } catch (e) {
 
     }
   },
-  async sendOMInfo ({ commit, state }, om) {
+  async sendOMInfo({ commit, state }, om) {
     try {
       const res = await postReq('/1/onboarding/customer', om)
     } catch (e) {
 
     }
   },
-  async sendEvent ({ commit, state }, event) {
+  async sendEvent({ commit, state }, event) {
     try {
       const res = await postReq('/1/onboarding/me', event)
     } catch (e) {
 
     }
   },
-  async sendDietary ({ commit, state }, dietary) {
+  async sendDietary({ commit, state }, dietary) {
     try {
       const res = await postReq('/1/onboarding/me', dietary)
     } catch (e) {
 
     }
   },
-  async sendInvitation ({ commit, state }, email) {
+  async sendInvitation({ commit, state }, email) {
     try {
       const res = await postReq('/1/onboarding/me', email)
     } catch (e) {
 
     }
   },
-  async sendIndustry ({ commit, state }, branch) {
+  async sendIndustry({ commit, state }, branch) {
     try {
       //    const res=await postReq('/1/onboarding/me',email)
       commit('addBranch', branch)
@@ -335,21 +335,21 @@ const actions = {
 
     }
   },
-  async editBranchAddress ({ commit, state }, payload) {
+  async editBranchAddress({ commit, state }, payload) {
     try {
       commit('editBranch', payload)
     } catch (e) {
       console.log(e)
     }
   },
-  async deleteBranchToCompany ({ commit, state }, branch) {
+  async deleteBranchToCompany({ commit, state }, branch) {
     try {
       commit('deleteBranch', branch)
     } catch (e) {
       console.log(e)
     }
   },
-  putUserFromApi ({ commit, state }, data) {
+  putUserFromApi({ commit, state }, data) {
     console.log(data, 'putUserFromApi')
     if (data['phoneNumber']) {
       new Me({ ...data }).save().then(res => {
@@ -374,7 +374,7 @@ const actions = {
     })
       .catch(e => console.log(e, 'false customer'))
   },
-  getChartsFromApi ({ commit, state }, id) {
+  getChartsFromApi({ commit, state }, id) {
     new Customer({ id: id })
       .statistics()
       .get()
@@ -387,31 +387,31 @@ const actions = {
 // mutations
 const mutations = {
 
-  setUser (state, data) {
+  setUser(state, data) {
     state.user = data
   },
-  setIndustries (state, industry) {
+  setIndustries(state, industry) {
     state.industry = industry
   },
-  setCustomer (state, customer) {
+  setCustomer(state, customer) {
     state.customer = customer
   },
-  addBranch (state, industry) {
+  addBranch(state, industry) {
     state.customer.branches.push(industry)
   },
-  deleteBranch (state, branchIndex) {
+  deleteBranch(state, branchIndex) {
     const updatedBranches = state.customer.branches.filter((item, index) => index !== branchIndex)
     state.customer.branches = updatedBranches
   },
-  editBranch (state, branchInfo) {
+  editBranch(state, branchInfo) {
     let editedBranches = state.customer.branches.slice()
     editedBranches[branchInfo.index].onelineAddress = branchInfo.newAddress
     state.customer.branches = editedBranches
   },
-  setCustomerChart (state, charts) {
+  setCustomerChart(state, charts) {
     state.charts = charts
   },
-  setUpcomingEvents (state, data) {
+  setUpcomingEvents(state, data) {
     state.upcomingEvents = data
   }
 }

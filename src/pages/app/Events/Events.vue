@@ -90,7 +90,7 @@
       <md-card class="md-card-plain" v-if="!upcomingEvents.length && !isLoading">
         <md-card-content>
           <div class="text-center mt-5">
-            <!-- <img src="http://static.maryoku.com/storage/img/calendar.png" style="width: 120px;" /> -->
+            <!-- <img src="https://static-maryoku.s3.amazonaws.com/storage/img/calendar.png" style="width: 120px;" /> -->
             <h3>You do not have any events planned yet</h3>
             <div class="mt-4rem">
               <md-button class="md-info md-red normal-btn" @click="routeToNewEvent">Create New Event</md-button>
@@ -194,7 +194,7 @@ export default {
     return {
       // auth: auth,
       product3:
-        "http://static.maryoku.com/storage/img/shutterstock_289440710.png",
+        "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
       recentEvents: [],
       upcomingEvents: [],
       isLoading: true,

@@ -69,7 +69,7 @@
         <div class="md-layout-item md-size-60">
           <div class="event-blocks-table">
             <tabs
-              :tab-name="['<img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+26.png\'> Total', ' <img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest']"
+              :tab-name="['<img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+26.png\'> Total', ' <img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest']"
             >
               <!-- here you can add your content for tab-content -->
               <template slot="tab-pane-1">
@@ -145,7 +145,7 @@
         <template slot="body">
           <div class="event-blocks-table edit-elements-budget-table">
             <tabs
-              :tab-name="['<img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+26.png\'> Total', ' <img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest']"
+              :tab-name="['<img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+26.png\'> Total', ' <img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest']"
             >
               <!-- here you can add your content for tab-content -->
               <template slot="tab-pane-1">
@@ -250,8 +250,9 @@ export default {
       activeTab: 0,
       totalBudget: 0,
       menuIconsURL:
-        "http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/",
-      iconsURL: "http://static.maryoku.com/storage/icons/Event%20Page/",
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
+      iconsURL:
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/",
       showBudgetModal: false,
       budgetConfirmationModal: false,
       newBudget: null,

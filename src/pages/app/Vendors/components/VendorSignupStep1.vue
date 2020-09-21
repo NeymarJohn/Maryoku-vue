@@ -2,8 +2,11 @@
   <div class="vendor-signup-step1-wrapper">
     <div class="inside-container">
       <div class="left-side">
-        <img :src="`${iconUrl}Group 5219 (2).svg`"/>
-        <h2>ABOUT YOUR <br/>COMPANY</h2>
+        <img :src="`${iconUrl}Group 5219 (2).svg`" />
+        <h2>
+          ABOUT YOUR
+          <br />COMPANY
+        </h2>
         <p>This your chance to Impress! All information will appear on your business page</p>
         <h2>1/4</h2>
       </div>
@@ -11,24 +14,28 @@
         <div class="about-wrapper">
           <div class="title-cont">
             <div class="left">
-              <h5><img :src="`${iconUrl}Asset 542.svg`"/> Tell us about your business</h5>
+              <h5>
+                <img :src="`${iconUrl}Asset 542.svg`" /> Tell us about your business
+              </h5>
             </div>
           </div>
           <div class="card">
             <div class="field mb-50">
               <div class="title-cont">
                 <div class="top">
-                  <h5><img :src="`${iconUrl}Asset 542.svg`"/> Tell us about your business</h5>
+                  <h5>
+                    <img :src="`${iconUrl}Asset 542.svg`" /> Tell us about your business
+                  </h5>
                 </div>
                 <div class="bottom">
                   <p>Include history & background</p>
                 </div>
               </div>
               <div class="main-cont">
-                <textarea 
-                  placeholder="Type 'about your business' here" 
-                  rows="5" 
-                  @blur="updateVendor($event, 'about.company')" 
+                <textarea
+                  placeholder="Type 'about your business' here"
+                  rows="5"
+                  @blur="updateVendor($event, 'about.company')"
                   v-model="vendor.about.company"
                 />
               </div>
@@ -37,7 +44,8 @@
               <div class="title-cont">
                 <div class="top">
                   <h5>
-                    <img :src="`${iconUrl}Asset 543.svg`"/> about your {{getCategoryNameByValue(vendor.vendorCategory)}}
+                    <img :src="`${iconUrl}Asset 543.svg`" />
+                    about your {{getCategoryNameByValue(vendor.vendorCategory)}}
                   </h5>
                 </div>
                 <div class="bottom">
@@ -45,10 +53,10 @@
                 </div>
               </div>
               <div class="main-cont">
-                <textarea 
-                  :placeholder="`Type 'About your ${getCategoryNameByValue(vendor.vendorCategory)}' here`" 
-                  rows="5" 
-                  @blur="updateVendor($event, 'about.category')" 
+                <textarea
+                  :placeholder="`Type 'About your ${getCategoryNameByValue(vendor.vendorCategory)}' here`"
+                  rows="5"
+                  @blur="updateVendor($event, 'about.category')"
                   v-model="vendor.about.category"
                 />
               </div>
@@ -64,7 +72,9 @@
             <div class="field mb-50">
               <div class="title-cont">
                 <div class="top">
-                  <h5><img :src="`${iconUrl}Asset 545.svg`"/> capacity</h5>
+                  <h5>
+                    <img :src="`${iconUrl}Asset 545.svg`" /> capacity
+                  </h5>
                 </div>
                 <div class="bottom">
                   <p>How many guests can you acommodate?</p>
@@ -72,25 +82,25 @@
               </div>
               <div class="main-cont">
                 <div class="suffix">
-                  <input 
-                    type="number" 
-                    placeholder="100" 
-                    v-model="vendor.capacity.low" 
-                    min="100" 
-                    max="1000" 
+                  <input
+                    type="number"
+                    placeholder="100"
+                    v-model="vendor.capacity.low"
+                    min="100"
+                    max="1000"
                     @change="updateVendor($event, 'capacity.low')"
                   />
                 </div>
                 <div class="arrow">
-                  <img :src="`${iconUrl}Group 4585 (2).svg`"/>
+                  <img :src="`${iconUrl}Group 4585 (2).svg`" />
                 </div>
                 <div class="suffix">
-                  <input 
-                    type="number" 
-                    placeholder="1000" 
-                    v-model="vendor.capacity.high" 
-                    min="100" 
-                    max="1000" 
+                  <input
+                    type="number"
+                    placeholder="1000"
+                    v-model="vendor.capacity.high"
+                    min="100"
+                    max="1000"
                     @change="updateVendor($event, 'capacity.high')"
                   />
                 </div>
@@ -108,13 +118,15 @@
               <div class="main-cont">
                 <textarea placeholder="Type 'About your cuisine' here" rows="5"/>
               </div>
-            </div> -->
+            </div>-->
           </div>
         </div>
         <div class="upload-wrapper" :class="{'mi-margin': vendor.images.length > 0}">
           <div class="title-cont">
             <div class="left">
-              <h5><img :src="`${iconUrl}art (2).svg`"/> upload photos</h5>
+              <h5>
+                <img :src="`${iconUrl}art (2).svg`" /> upload photos
+              </h5>
             </div>
             <div class="right">
               <p>(15 photos top, under 20KB)</p>
@@ -123,7 +135,9 @@
           <template v-if="vendor.images.length == 0">
             <div class="card red-border">
               <div class="upload-cont">
-                <a class="" @click="uploadVendorImage"><img :src="`${iconUrl}Asset 559.svg`"/> Choose File</a>
+                <a class @click="uploadVendorImage">
+                  <img :src="`${iconUrl}Asset 559.svg`" /> Choose File
+                </a>
                 <div class="or">Or</div>
                 <span>Drag your file here</span>
                 <input
@@ -139,7 +153,7 @@
           <template v-else>
             <!-- <img :src="img" v-for="(img, index) in vendor.images" :key="index"> -->
             <div class="images-wrapper">
-              <div 
+              <div
                 class="box item2"
                 :style="`
                   background-image: url(${vendor.images[0]});
@@ -147,10 +161,14 @@
                   background-size: 100% 100%;`
                 "
               >
-                <img :src="`${iconUrl}Asset 528.svg`" v-if="vendor.images[0]" @click="removeVendorImage(vendor.images[0])"/>
+                <img
+                  :src="`${iconUrl}Asset 528.svg`"
+                  v-if="vendor.images[0]"
+                  @click="removeVendorImage(vendor.images[0])"
+                />
               </div>
-              <div 
-                class="box item" 
+              <div
+                class="box item"
                 :class="{'no-image': !vendor.images[1]}"
                 :style="`
                   background-image: url(${vendor.images[1]});
@@ -158,10 +176,14 @@
                   background-size: 100% 100%;`
                 "
               >
-                <img :src="`${iconUrl}Asset 528.svg`" v-if="vendor.images[1]" @click="removeVendorImage(vendor.images[1])"/>
+                <img
+                  :src="`${iconUrl}Asset 528.svg`"
+                  v-if="vendor.images[1]"
+                  @click="removeVendorImage(vendor.images[1])"
+                />
               </div>
-              <div 
-                class="box item" 
+              <div
+                class="box item"
                 :class="{'no-image': !vendor.images[2]}"
                 :style="`
                   background-image: url(${vendor.images[2]});
@@ -169,10 +191,14 @@
                   background-size: 100% 100%;`
                 "
               >
-                <img :src="`${iconUrl}Asset 528.svg`" v-if="vendor.images[2]" @click="removeVendorImage(vendor.images[2])"/>
+                <img
+                  :src="`${iconUrl}Asset 528.svg`"
+                  v-if="vendor.images[2]"
+                  @click="removeVendorImage(vendor.images[2])"
+                />
               </div>
-              <div 
-                class="box item" 
+              <div
+                class="box item"
                 :class="{'no-image': !vendor.images[3]}"
                 :style="`
                   background-image: url(${vendor.images[3]});
@@ -180,11 +206,15 @@
                   background-size: 100% 100%;`
                 "
               >
-                <img :src="`${iconUrl}Asset 528.svg`" v-if="vendor.images[3]" @click="removeVendorImage(vendor.images[3])"/>
+                <img
+                  :src="`${iconUrl}Asset 528.svg`"
+                  v-if="vendor.images[3]"
+                  @click="removeVendorImage(vendor.images[3])"
+                />
               </div>
               <div class="box item add-more" @click="uploadVendorImage">
-                <img :src="`${iconUrl}Group 6501.svg`"/>
-                <br/>
+                <img :src="`${iconUrl}Group 6501.svg`" />
+                <br />
                 <span>Add more</span>
                 <input
                   type="file"
@@ -209,17 +239,14 @@
           <template v-if="vendor.signature == null">
             <div class="card red-border">
               <div class="upload-cont">
-                <a class="" @click="uploadVendorSignature"><img :src="`${iconUrl}Asset 559.svg`"/> Choose File</a>
+                <a class @click="uploadVendorSignature">
+                  <img :src="`${iconUrl}Asset 559.svg`" /> Choose File
+                </a>
                 <div class="or">Or</div>
                 <div class="sign-here">
-                  <vueSignature 
-                    ref="signature" 
-                    :sigOption="option" 
-                    :w="'100%'" 
-                    :h="'100%'"
-                  />
+                  <vueSignature ref="signature" :sigOption="option" :w="'100%'" :h="'100%'" />
                   <button class="save" @click="save">Save</button>
-		              <button class="clear" @click="clear">Clear</button>
+                  <button class="clear" @click="clear">Clear</button>
                 </div>
                 <input
                   type="file"
@@ -233,8 +260,8 @@
             </div>
           </template>
           <template v-else>
-            <div 
-              class="" 
+            <div
+              class
               :style="`
                 background-image: url(${vendor.signature});width: 100%;
                 background-position: center;
@@ -244,7 +271,12 @@
               `"
             />
             <!-- <img :src="vendor.signature"/> -->
-            <img class="remove" :src="`${iconUrl}Asset 529.svg`" v-if="vendor.signature" @click="removeSignature(vendor.signature)"/>
+            <img
+              class="remove"
+              :src="`${iconUrl}Asset 529.svg`"
+              v-if="vendor.signature"
+              @click="removeSignature(vendor.signature)"
+            />
           </template>
         </div>
         <div class="social-wrapper">
@@ -260,51 +292,54 @@
           <div class="card">
             <div class="field">
               <div class="label">
-                <img :src="`${iconUrl}Asset 539.svg`"/>
+                <img :src="`${iconUrl}Asset 539.svg`" />
                 <span>website</span>
               </div>
-              <input 
-                type="text" 
-                placeholder="Paste link here" 
-                @change="updateVendor($event, 'social.website')" 
+              <input
+                type="text"
+                placeholder="Paste link here"
+                @change="updateVendor($event, 'social.website')"
                 v-model="vendor.social.website"
               />
             </div>
             <div class="field">
               <div class="label">
-                <img :src="`${iconUrl}Asset 540.svg`" class="w-16"/>
+                <img :src="`${iconUrl}Asset 540.svg`" class="w-16" />
                 <span>facebook</span>
               </div>
-              <input 
-                type="text" 
-                placeholder="Paste link here" 
-                @change="updateVendor($event, 'social.facebook')" 
+              <input
+                type="text"
+                placeholder="Paste link here"
+                @change="updateVendor($event, 'social.facebook')"
                 v-model="vendor.social.facebook"
               />
             </div>
             <div class="field">
               <div class="label">
-                <img :src="`${iconUrl}Group 4569 (2).svg`"/>
+                <img :src="`${iconUrl}Group 4569 (2).svg`" />
                 <span>instagram</span>
               </div>
-              <input 
-                type="text" 
-                placeholder="Paste link here" 
-                @change="updateVendor($event, 'social.instagram')" 
+              <input
+                type="text"
+                placeholder="Paste link here"
+                @change="updateVendor($event, 'social.instagram')"
                 v-model="vendor.social.instagram"
               />
             </div>
             <h5>Other:</h5>
             <div class="social-item" v-for="(s, sIndex) in defSocialMedia" :key="sIndex">
               <div @click="updateSocialMedia(s)">
-                <img :src="`${iconUrl}Group 6258.svg`" v-if="socialMedia.includes(s) || vendor.social[s]"/>
-                <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
+                <img
+                  :src="`${iconUrl}Group 6258.svg`"
+                  v-if="socialMedia.includes(s) || vendor.social[s]"
+                />
+                <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
                 {{s}}
-                <br/>
+                <br />
               </div>
-              <input 
-                type="text" 
-                placeholder="Paste link here" 
+              <input
+                type="text"
+                placeholder="Paste link here"
                 :class="{'red-border': vendor.social[s] == null || !reg.test(vendor.social[s])}"
                 v-model="vendor.social[s]"
                 v-if="socialMedia.includes(s) || vendor.social[s]"
@@ -321,18 +356,18 @@
 </template>
 
 <script>
-import moment from 'moment'
-import VueElementLoading from 'vue-element-loading'
-import Vendors from '@/models/Vendors'
+import moment from "moment";
+import VueElementLoading from "vue-element-loading";
+import Vendors from "@/models/Vendors";
 
 //COMPONENTS
-import Icon from '@/components/Icon/Icon.vue'
-import VendorServiceItem from './VendorServiceItem.vue'
-import VendorCheckbox from './VendorCheckbox.vue'
-import vueSignature from "vue-signature"
+import Icon from "@/components/Icon/Icon.vue";
+import VendorServiceItem from "./VendorServiceItem.vue";
+import VendorCheckbox from "./VendorCheckbox.vue";
+import vueSignature from "vue-signature";
 
 export default {
-  name: 'vendor-signup-step1',
+  name: "vendor-signup-step1",
   props: {
     categories: Array,
     generalInfos: Array,
@@ -347,487 +382,483 @@ export default {
   },
   data() {
     return {
-      iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
+      iconUrl:
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
       socialMedia: [],
       defSocialMedia: [
-        'youtube', 
-        'linkedin', 
-        'google', 
-        'pinterest', 
-        'foursuare', 
-        'reddit', 
-        'tiktok', 
+        "youtube",
+        "linkedin",
+        "google",
+        "pinterest",
+        "foursuare",
+        "reddit",
+        "tiktok",
       ],
       reg: /^(ftp|http|https):\/\/[^ "]+$/,
       min: Number,
       max: Number,
       categoryNames: [
         {
-          name: 'Venue Rental',
-          value: 'venuerental',
+          name: "Venue Rental",
+          value: "venuerental",
         },
         {
-          name: 'Food & Beverage',
-          value: 'foodandbeverage',
+          name: "Food & Beverage",
+          value: "foodandbeverage",
         },
         {
-          name: 'Design and Decor',
-          value: 'decor',
+          name: "Design and Decor",
+          value: "decor",
         },
         {
-          name: 'Guest Services & Staffing',
-          value: 'corporatesocialresponsibility',
+          name: "Guest Services & Staffing",
+          value: "corporatesocialresponsibility",
         },
         {
-          name: 'Signage / Printing',
-          value: 'signageprinting',
+          name: "Signage / Printing",
+          value: "signageprinting",
         },
         {
-          name: 'Advertising and Promotion',
-          value: 'advertising-promotion',
+          name: "Advertising and Promotion",
+          value: "advertising-promotion",
         },
         {
-          name: 'AV / Staging',
-          value: 'audiovisualstagingservices',
+          name: "AV / Staging",
+          value: "audiovisualstagingservices",
         },
         {
-          name: 'Swags',
-          value: 'swags',
+          name: "Swags",
+          value: "swags",
         },
         {
-          name: 'Shipping',
-          value: 'shipping',
+          name: "Shipping",
+          value: "shipping",
         },
         {
-          name: 'Transportation & Tour operator',
-          value: 'transportation',
+          name: "Transportation & Tour operator",
+          value: "transportation",
         },
         {
-          name: 'Entertainment',
-          value: 'entertainment',
+          name: "Entertainment",
+          value: "entertainment",
         },
         {
-          name: 'Administration',
-          value: 'administration',
+          name: "Administration",
+          value: "administration",
         },
         {
-          name: 'Security',
-          value: 'securityservices',
+          name: "Security",
+          value: "securityservices",
         },
         {
-          name: 'Technology',
-          value: 'technologyservices',
+          name: "Technology",
+          value: "technologyservices",
         },
         {
-          name: 'Videography and Photography',
-          value: 'videographyandphotography',
+          name: "Videography and Photography",
+          value: "videographyandphotography",
         },
         {
-          name: 'Equipment Rental',
-          value: 'equipmentrentals'
-        }
+          name: "Equipment Rental",
+          value: "equipmentrentals",
+        },
       ],
       option: {
-        penColor: 'rgb(0, 0, 0)', 
-        backgroundColor: 'rgb(255,255,255)'
-      }
-    }
+        penColor: "rgb(0, 0, 0)",
+        backgroundColor: "rgb(255,255,255)",
+      },
+    };
   },
-  created() {
-    
-  },
-  mounted() {
-    
-  },
+  created() {},
+  mounted() {},
   methods: {
     updateSocialMedia(item) {
       if (this.socialMedia.includes(item)) {
-        this.socialMedia = this.socialMedia.filter(s => s != item)
+        this.socialMedia = this.socialMedia.filter((s) => s != item);
       } else {
-        this.socialMedia.push(item)
+        this.socialMedia.push(item);
       }
     },
-    uploadVendorImage (imageId = null, attachmentType = null) {
-      this.$refs.imageFile.click()
+    uploadVendorImage(imageId = null, attachmentType = null) {
+      this.$refs.imageFile.click();
     },
-    uploadVendorSignature (imageId = null, attachmentType = null) {
-      this.$refs.signatureFile.click()
+    uploadVendorSignature(imageId = null, attachmentType = null) {
+      this.$refs.signatureFile.click();
     },
-    onVendorImageFilePicked (event) {
-      let file = event.target.files || event.dataTransfer.files
+    onVendorImageFilePicked(event) {
+      let file = event.target.files || event.dataTransfer.files;
 
       if (!file.length) {
-        return
+        return;
       }
 
       if (file[0].size <= 5000000) {
         // 5mb
-        if (event.target.name == 'vendorSignature') {
-          this.createImage(file[0], 'vendorSignature')
+        if (event.target.name == "vendorSignature") {
+          this.createImage(file[0], "vendorSignature");
         } else {
-          this.createImage(file[0])
+          this.createImage(file[0]);
         }
       } else {
         this.$notify({
-          message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
-          horizontalAlign: 'center',
-          verticalAlign: 'top',
-          type: 'warning'
-        })
+          message:
+            "You've Uploaded an Image that Exceed the allowed size, try small one!",
+          horizontalAlign: "center",
+          verticalAlign: "top",
+          type: "warning",
+        });
       }
     },
-    createImage (file, type) {
-      let reader = new FileReader()
-      let vm = this
+    createImage(file, type) {
+      let reader = new FileReader();
+      let vm = this;
 
-      this.isLoading = true
+      this.isLoading = true;
 
-      reader.onload = e => {
-        if (type == 'vendorSignature') {
-          this.$root.$emit('update-vendor-value', 'signature', e.target.result)
+      reader.onload = (e) => {
+        if (type == "vendorSignature") {
+          this.$root.$emit("update-vendor-value", "signature", e.target.result);
         } else {
-          this.$root.$emit('update-vendor-value', 'images', e.target.result)
+          this.$root.$emit("update-vendor-value", "images", e.target.result);
         }
-      }
-      reader.readAsDataURL(file)
+      };
+      reader.readAsDataURL(file);
     },
     removeVendorImage(image) {
-      this.$root.$emit('update-vendor-value', 'removeImage', image)
+      this.$root.$emit("update-vendor-value", "removeImage", image);
     },
     getCategoryNameByValue(value) {
-      return this.categoryNames.filter( c => c.value == value)[0].name
+      return this.categoryNames.filter((c) => c.value == value)[0].name;
     },
     checkBlank(e) {
       if (!e.target.value || !this.reg.test(e.target.value)) {
-        e.target.style.border = "1px solid #ff0000"
+        e.target.style.border = "1px solid #ff0000";
       } else {
-        e.target.style.border = "1px solid #707070"
+        e.target.style.border = "1px solid #707070";
       }
     },
     updateVendor(event, fieldName) {
-      this.$root.$emit('update-vendor-value', fieldName, event.target.value)
+      this.$root.$emit("update-vendor-value", fieldName, event.target.value);
     },
-    save(){
-			let _this = this
-			// let png = _this.$refs.signature.save()
-			let jpeg = _this.$refs.signature.save('image/jpeg')
+    save() {
+      let _this = this;
+      // let png = _this.$refs.signature.save()
+      let jpeg = _this.$refs.signature.save("image/jpeg");
       // let svg = _this.$refs.signature.save('image/svg+xml')
-      this.$root.$emit('update-vendor-value', 'signature', jpeg)
-			console.log(this.vendor)
-		},
-		clear(){
-			let _this = this
-			_this.$refs.signature.clear()
+      this.$root.$emit("update-vendor-value", "signature", jpeg);
+      console.log(this.vendor);
+    },
+    clear() {
+      let _this = this;
+      _this.$refs.signature.clear();
     },
     removeSignature() {
-      this.$root.$emit('update-vendor-value', 'signature', null)
-    }
+      this.$root.$emit("update-vendor-value", "signature", null);
+    },
   },
-  computed: {
-    
-  },
-  filters: {
-    
-  },
-  watch: {
-  }
+  computed: {},
+  filters: {},
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>
-  .vendor-signup-step1-wrapper {
-    font-family: Manrope-Regular, sans-serif;
+.vendor-signup-step1-wrapper {
+  font-family: Manrope-Regular, sans-serif;
 
-    .inside-container {
-      display: flex;
-      color: #050505;
+  .inside-container {
+    display: flex;
+    color: #050505;
 
-      .left-side {
-        flex: 1;
-        margin-right: 122px;
+    .left-side {
+      flex: 1;
+      margin-right: 122px;
 
-        img {
-          width: 92.5px;
-        }
-        h4 {
-          margin: 36px 0 11px 0;
-          font: 800 20px Manrope-Regular, sans-serif;
-        }
-        p {
-          margin: 0;
-          padding: 0;
-          font: normal 16px Manrope-Regular, sans-serif;
-        }
-        h2 {
-          margin: 30px 0;
-          font: 800 40px Manrope-Regular, sans-serif;
-        }
-        h3 {
-          margin: 0;
-          color: #f51355;
-          font: bold 20px Manrope-Regular, sans-serif;
-        }
-      }
-      .right-side {
-        flex: 3;
-
-        .card {
-          font-family: Manrope-Regular, sans-serif;
-          color: #050505;
-          background: #ffffff;
-          -webkit-box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-          box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-          padding: 60px;
-          margin-bottom: 2rem;
-
-          .field {
-            font: 800 16px Manrope-Regular, sans-serif;
-            margin: 0 0 2rem 0;
-            .label {
-              margin-bottom: .5rem;
-              img {
-                width: 24px;
-                margin-right: .5rem;
-              }
-              span {
-                text-transform: capitalize;
-              }
-            }
-            input {
-              font-size: 16px;
-              padding: 22px 30px;
-              min-width: 75%;
-              border: 1px solid #707070;
-              border-radius: 0;
-            }
-            .main-cont {
-              display: flex;
-              align-items: center;
-
-              .suffix {
-                flex: 2;
-                input {
-                  padding-left: 45%;
-                  width: 100%;
-                }
-                &:before {
-                  position: absolute;
-                  margin-top: 12px;
-                  margin-left: 1.5rem;
-                }
-                &:first-child {
-                  &:before {
-                    content: 'Min'
-                  }
-                }
-                &:last-child {
-                  &:before {
-                    content: 'Max'
-                  }
-                }
-              }
-              .arrow {
-                flex: 1;
-                text-align: center;
-                img {
-                  width: 3rem;
-                }
-              }
-            }
-          }
-          .social-item {
-            cursor: pointer;
-            font: normal 16px Manrope-Regular, sans-serif;
-            text-transform: capitalize;
-            margin-bottom: 2rem;
-
-            img {
-              width: 27px;
-              height: 27px;
-              margin-right: 1rem;
-            }
-            input {
-              margin: 1rem 0 0 3rem;
-              font-size: 16px;
-              padding: 22px 30px;
-              min-width: calc(75% - 3rem);
-              border: 1px solid #707070;
-              border-radius: 0;
-            }
-          }
-          h5 {
-            font: 800 16px Manrope-Regular, sans-serif;
-          }
-          &.red-border {
-            border: 2px dashed #f51355;
-
-            .upload-cont {
-              text-align: center;
-              margin: -30px;
-              a {
-                display: inline-block;
-                font: 800 14px Manrope-Regular, sans-serif;
-                border: 1px solid #f51355;
-                padding: .5rem;
-                color: #f51355;
-                cursor: pointer;
-                margin-bottom: .5rem;
-
-                img {
-                  width: 10px;
-                  margin-right: .5rem;
-                }
-              }
-              span {
-                color: #818080;
-                font: normal 16px Manrope-Regular, sans-serif;
-              }
-              .sign-here {
-                margin-top: 1rem;
-                border: 1.5px dashed #f51355;
-                font: normal 50px Manrope-Regular, sans-serif;
-                color: #d5d5d5;
-              }
-            }
-          }
-        }
-      }
-    }
-    .title-cont {
-      text-transform: capitalize;
       img {
-        width: 24px;
-        margin-right: .5rem;
+        width: 92.5px;
       }
-      h5 {
-        font: 800 16px Manrope-Regular, sans-serif;
-        margin: 0;
+      h4 {
+        margin: 36px 0 11px 0;
+        font: 800 20px Manrope-Regular, sans-serif;
       }
       p {
         margin: 0;
-        font: normal 14px Manrope-Regular, sans-serif;
+        padding: 0;
+        font: normal 16px Manrope-Regular, sans-serif;
       }
-      .left, .right {
+      h2 {
+        margin: 30px 0;
+        font: 800 40px Manrope-Regular, sans-serif;
+      }
+      h3 {
         margin: 0;
-        display: inline-block;
-      }
-      .left {
-        margin: 0 1rem 2rem 0;
-      }
-      .top, .bottom {
-        margin-bottom: .5rem;
+        color: #f51355;
+        font: bold 20px Manrope-Regular, sans-serif;
       }
     }
-    .w-16 {
-      width: 16px!important;
-    }
-    .mb-50 {
-      margin-bottom: 3rem!important;
-    }
-    .mi-margin {
-      margin: 0 -1rem;
-      .title-cont {
-        margin: 0 1rem;
-      }
-    }
-    .images-wrapper {
-      margin: 0 0 20px 0;
-      width: 100%;
-      height: 400px;
-      display: grid;
-      grid-template-columns: repeat(4, 25%);
-      grid-template-rows: repeat(2, 200px);
-      justify-content: center;
-      align-content: end;
+    .right-side {
+      flex: 3;
 
-      .box {
-        margin: 1rem;
-      }
+      .card {
+        font-family: Manrope-Regular, sans-serif;
+        color: #050505;
+        background: #ffffff;
+        -webkit-box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+        box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+        padding: 60px;
+        margin-bottom: 2rem;
 
-      .item2 {
-        img {
-          width: 24px;
+        .field {
+          font: 800 16px Manrope-Regular, sans-serif;
+          margin: 0 0 2rem 0;
+          .label {
+            margin-bottom: 0.5rem;
+            img {
+              width: 24px;
+              margin-right: 0.5rem;
+            }
+            span {
+              text-transform: capitalize;
+            }
+          }
+          input {
+            font-size: 16px;
+            padding: 22px 30px;
+            min-width: 75%;
+            border: 1px solid #707070;
+            border-radius: 0;
+          }
+          .main-cont {
+            display: flex;
+            align-items: center;
+
+            .suffix {
+              flex: 2;
+              input {
+                padding-left: 45%;
+                width: 100%;
+              }
+              &:before {
+                position: absolute;
+                margin-top: 12px;
+                margin-left: 1.5rem;
+              }
+              &:first-child {
+                &:before {
+                  content: "Min";
+                }
+              }
+              &:last-child {
+                &:before {
+                  content: "Max";
+                }
+              }
+            }
+            .arrow {
+              flex: 1;
+              text-align: center;
+              img {
+                width: 3rem;
+              }
+            }
+          }
+        }
+        .social-item {
           cursor: pointer;
-          position: relative;
-          left: 90%;
-          top: 80%;
+          font: normal 16px Manrope-Regular, sans-serif;
+          text-transform: capitalize;
+          margin-bottom: 2rem;
+
+          img {
+            width: 27px;
+            height: 27px;
+            margin-right: 1rem;
+          }
+          input {
+            margin: 1rem 0 0 3rem;
+            font-size: 16px;
+            padding: 22px 30px;
+            min-width: calc(75% - 3rem);
+            border: 1px solid #707070;
+            border-radius: 0;
+          }
         }
-      }
-
-      .item {
-        img {
-          width: 24px;
-          cursor: pointer;
-          position: relative;
-          left: 80%;
-          top: 60%;
+        h5 {
+          font: 800 16px Manrope-Regular, sans-serif;
         }
-      }
+        &.red-border {
+          border: 2px dashed #f51355;
 
-      .no-image {
-        border: dashed 1px #f51355;
-        background-color: #ffffff;
-      }
+          .upload-cont {
+            text-align: center;
+            margin: -30px;
+            a {
+              display: inline-block;
+              font: 800 14px Manrope-Regular, sans-serif;
+              border: 1px solid #f51355;
+              padding: 0.5rem;
+              color: #f51355;
+              cursor: pointer;
+              margin-bottom: 0.5rem;
 
-      .item2 {
-        grid-column: 1 / 3;
-        grid-row: 1 / 4;
-      }
-      .add-more {
-        text-align: center;
-        padding: 3rem;
-        border: dashed 1px #f51355;
-        background-color: #ffffff;
-        cursor: pointer;
-        font: normal 15px Manrope-Regular, sans-serif;
-        img {
-          width: 24px;
-          position: unset;
-          padding-bottom: 1rem;
-        }
-      }
-    }
-    .signature-wrapper {
-      padding-bottom: 2rem;
-      position: relative;
-
-      .upload-cont {
-        .sign-here {
-          .save, .clear {
-            background-color: #ffffff;
-            font: 800 14px Manrope-Regular, sans-serif;
-            border: 1px solid #f51355;
-            padding: .5rem;
-            color: #f51355;
-            cursor: pointer;
-            margin-bottom: .5rem;
+              img {
+                width: 10px;
+                margin-right: 0.5rem;
+              }
+            }
+            span {
+              color: #818080;
+              font: normal 16px Manrope-Regular, sans-serif;
+            }
+            .sign-here {
+              margin-top: 1rem;
+              border: 1.5px dashed #f51355;
+              font: normal 50px Manrope-Regular, sans-serif;
+              color: #d5d5d5;
+            }
           }
         }
       }
+    }
+  }
+  .title-cont {
+    text-transform: capitalize;
+    img {
+      width: 24px;
+      margin-right: 0.5rem;
+    }
+    h5 {
+      font: 800 16px Manrope-Regular, sans-serif;
+      margin: 0;
+    }
+    p {
+      margin: 0;
+      font: normal 14px Manrope-Regular, sans-serif;
+    }
+    .left,
+    .right {
+      margin: 0;
+      display: inline-block;
+    }
+    .left {
+      margin: 0 1rem 2rem 0;
+    }
+    .top,
+    .bottom {
+      margin-bottom: 0.5rem;
+    }
+  }
+  .w-16 {
+    width: 16px !important;
+  }
+  .mb-50 {
+    margin-bottom: 3rem !important;
+  }
+  .mi-margin {
+    margin: 0 -1rem;
+    .title-cont {
+      margin: 0 1rem;
+    }
+  }
+  .images-wrapper {
+    margin: 0 0 20px 0;
+    width: 100%;
+    height: 400px;
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+    grid-template-rows: repeat(2, 200px);
+    justify-content: center;
+    align-content: end;
 
+    .box {
+      margin: 1rem;
+    }
+
+    .item2 {
       img {
-        width: 100%;
-        max-height: 162px;
+        width: 24px;
+        cursor: pointer;
+        position: relative;
+        left: 90%;
+        top: 80%;
+      }
+    }
 
-        &.remove {
-          width: 18px;
+    .item {
+      img {
+        width: 24px;
+        cursor: pointer;
+        position: relative;
+        left: 80%;
+        top: 60%;
+      }
+    }
+
+    .no-image {
+      border: dashed 1px #f51355;
+      background-color: #ffffff;
+    }
+
+    .item2 {
+      grid-column: 1 / 3;
+      grid-row: 1 / 4;
+    }
+    .add-more {
+      text-align: center;
+      padding: 3rem;
+      border: dashed 1px #f51355;
+      background-color: #ffffff;
+      cursor: pointer;
+      font: normal 15px Manrope-Regular, sans-serif;
+      img {
+        width: 24px;
+        position: unset;
+        padding-bottom: 1rem;
+      }
+    }
+  }
+  .signature-wrapper {
+    padding-bottom: 2rem;
+    position: relative;
+
+    .upload-cont {
+      .sign-here {
+        .save,
+        .clear {
+          background-color: #ffffff;
+          font: 800 14px Manrope-Regular, sans-serif;
+          border: 1px solid #f51355;
+          padding: 0.5rem;
+          color: #f51355;
           cursor: pointer;
-          position: absolute;
-          right: 1rem;
-          bottom: 3rem;
+          margin-bottom: 0.5rem;
         }
       }
     }
-    textarea {
-      resize: none;
-      width: 75%;
-      padding: 1.5rem 2rem;
-      font-size: 16px;
+
+    img {
+      width: 100%;
+      max-height: 162px;
+
+      &.remove {
+        width: 18px;
+        cursor: pointer;
+        position: absolute;
+        right: 1rem;
+        bottom: 3rem;
+      }
     }
-    .hide {
-      display: none !important;
-    }
-    .red-border {
-      border: 1px solid #f51355!important;
-    }
-  }  
+  }
+  textarea {
+    resize: none;
+    width: 75%;
+    padding: 1.5rem 2rem;
+    font-size: 16px;
+  }
+  .hide {
+    display: none !important;
+  }
+  .red-border {
+    border: 1px solid #f51355 !important;
+  }
+}
 </style>

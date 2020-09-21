@@ -14,9 +14,14 @@
           </md-button>
         </div>
       </div>
-    </md-toolbar> -->
+    </md-toolbar>-->
     <div class="wrapper wrapper-full-page" @click="toggleSidebarPage">
-      <div class="page-header header-filter" :class="setPageClass" filter-color="black" :style="setBgImage">
+      <div
+        class="page-header header-filter"
+        :class="setPageClass"
+        filter-color="black"
+        :style="setBgImage"
+      >
         <div class="container md-offset">
           <zoom-center-transition :duration="pageTransitionDuration" mode="out-in">
             <router-view></router-view>
@@ -30,19 +35,13 @@
                   <router-link :to="{path:'/dashboard'}">Home</router-link>
                 </li>-->
                 <li>
-                  <a href="https://www.maryoku.com/our-story" target="_blank">
-                    Our Story
-                  </a>
+                  <a href="https://www.maryoku.com/our-story" target="_blank">Our Story</a>
                 </li>
                 <li>
-                  <a href="https://www.maryoku.com/terms" target="_blank">
-                    Terms of Use
-                  </a>
+                  <a href="https://www.maryoku.com/terms" target="_blank">Terms of Use</a>
                 </li>
                 <li>
-                  <a href="https://www.maryoku.com/privacy" target="_blank">
-                    Privacy
-                  </a>
+                  <a href="https://www.maryoku.com/privacy" target="_blank">Privacy</a>
                 </li>
 
                 <!--<li>
@@ -53,7 +52,8 @@
               </ul>
             </nav>
             <div class="copyright text-center">
-              &copy; <a href="https://www.maryoku.com" target="_blank">maryoku Ltd</a> &middot; All rights reserved
+              &copy;
+              <a href="https://www.maryoku.com" target="_blank">maryoku Ltd</a> &middot; All rights reserved
             </div>
           </div>
         </footer>
@@ -62,175 +62,181 @@
   </div>
 </template>
 <script>
-import { ZoomCenterTransition } from 'vue2-transitions'
+import { ZoomCenterTransition } from "vue2-transitions";
 
 export default {
   components: {
-    ZoomCenterTransition
+    ZoomCenterTransition,
   },
   props: {
     backgroundColor: {
       type: String,
-      default: 'black'
-    }
+      default: "black",
+    },
   },
   inject: {
     autoClose: {
-      default: true
-    }
+      default: true,
+    },
   },
-  data () {
+  data() {
     return {
       responsive: false,
       showMenu: false,
       menuTransitionDuration: 250,
       pageTransitionDuration: 300,
-      year: new Date().getFullYear()
-    }
+      year: new Date().getFullYear(),
+    };
   },
   computed: {
-    setBgImage () {
+    setBgImage() {
       let images = {
-        Pricing: 'http://static.maryoku.com/storage/img/bg-pricing.jpg',
-        Login: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
-        Register: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
-        CreateWorkspace1: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
-        ForgotPassword: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
-        SignIn1: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
-        SignUp1: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
-        // SignOut: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
-        // GetStarted: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
-        // SignedIn: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
-        Lock: 'http://static.maryoku.com/storage/img/lock.jpg'
-      }
+        Pricing:
+          "https://static-maryoku.s3.amazonaws.com/storage/img/bg-pricing.jpg",
+        Login:
+          "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_495639391.png",
+        Register:
+          "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_495639391.png",
+        CreateWorkspace1:
+          "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_495639391.png",
+        ForgotPassword:
+          "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_732491308.png",
+        SignIn1:
+          "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_732491308.png",
+        SignUp1:
+          "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_495639391.png",
+        // SignOut: 'https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_732491308.png',
+        // GetStarted: 'https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_732491308.png',
+        // SignedIn: 'https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_732491308.png',
+        Lock: "https://static-maryoku.s3.amazonaws.com/storage/img/lock.jpg",
+      };
       if (!images[this.$route.name]) {
         return {
-          backgroundColor: `#f3f7fd`
-        }
+          backgroundColor: `#f3f7fd`,
+        };
       }
       return {
-        backgroundImage: `url(${images[this.$route.name]})`
-      }
+        backgroundImage: `url(${images[this.$route.name]})`,
+      };
     },
-    setPageClass () {
-      return `${this.$route.name}-page`.toLowerCase()
-    }
+    setPageClass() {
+      return `${this.$route.name}-page`.toLowerCase();
+    },
   },
   methods: {
-    toggleSidebarPage () {
+    toggleSidebarPage() {
       if (this.$sidebar.showSidebar) {
-        this.$sidebar.displaySidebar(false)
+        this.$sidebar.displaySidebar(false);
       }
     },
-    linkClick () {
+    linkClick() {
       if (
         this.autoClose &&
-          this.$sidebar &&
-          this.$sidebar.showSidebar === true
+        this.$sidebar &&
+        this.$sidebar.showSidebar === true
       ) {
-        this.$sidebar.displaySidebar(false)
+        this.$sidebar.displaySidebar(false);
       }
     },
-    toggleSidebar () {
-      this.$sidebar.displaySidebar(!this.$sidebar.showSidebar)
+    toggleSidebar() {
+      this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
     },
-    toggleNavbar () {
-      document.body.classList.toggle('nav-open')
-      this.showMenu = !this.showMenu
+    toggleNavbar() {
+      document.body.classList.toggle("nav-open");
+      this.showMenu = !this.showMenu;
     },
-    closeMenu () {
-      document.body.classList.remove('nav-open')
-      this.showMenu = false
+    closeMenu() {
+      document.body.classList.remove("nav-open");
+      this.showMenu = false;
     },
-    onResponsiveInverted () {
+    onResponsiveInverted() {
       if (window.innerWidth < 991) {
-        this.responsive = true
+        this.responsive = true;
       } else {
-        this.responsive = false
+        this.responsive = false;
       }
-    }
+    },
   },
-  mounted () {
-    this.onResponsiveInverted()
-    window.addEventListener('resize', this.onResponsiveInverted)
+  mounted() {
+    this.onResponsiveInverted();
+    window.addEventListener("resize", this.onResponsiveInverted);
   },
-  beforeMount(){
-    this.$store.dispatch("auth/checkToken")
-      .then(res=>{
-
-      })
-      .catch(error=>{
-        this.$store.dispatch("auth/logout").then(res=>{
-          this.$router.push({path: '/signin'})
-        })
-      })
+  beforeMount() {
+    this.$store
+      .dispatch("auth/checkToken")
+      .then((res) => {})
+      .catch((error) => {
+        this.$store.dispatch("auth/logout").then((res) => {
+          this.$router.push({ path: "/signin" });
+        });
+      });
   },
-  beforeDestroy () {
-    this.closeMenu()
-    window.removeEventListener('resize', this.onResponsiveInverted)
+  beforeDestroy() {
+    this.closeMenu();
+    window.removeEventListener("resize", this.onResponsiveInverted);
   },
-  beforeRouteUpdate (to, from, next) {
+  beforeRouteUpdate(to, from, next) {
     // Close the mobile menu first then transition to next page
     if (this.showMenu) {
-      this.closeMenu()
+      this.closeMenu();
       setTimeout(() => {
-        next()
-      }, this.menuTransitionDuration)
+        next();
+      }, this.menuTransitionDuration);
     } else {
-      next()
+      next();
     }
-  }
-}
+  },
+};
 </script>
 <style lang="scss" scoped>
-  $scaleSize: 0.1;
-  $zoomOutStart: 0.7;
-  $zoomOutEnd: 0.46;
-  @keyframes zoomIn8 {
-    from {
-      opacity: 0;
-      transform: scale3d($scaleSize, $scaleSize, $scaleSize);
-    }
-    100% {
-      opacity: 1;
-    }
+$scaleSize: 0.1;
+$zoomOutStart: 0.7;
+$zoomOutEnd: 0.46;
+@keyframes zoomIn8 {
+  from {
+    opacity: 0;
+    transform: scale3d($scaleSize, $scaleSize, $scaleSize);
   }
-  .wrapper-full-page .zoomIn {
-    animation-name: zoomIn8;
+  100% {
+    opacity: 1;
   }
-  @keyframes zoomOut8 {
-    from {
-      opacity: 1;
-      transform: scale3d($zoomOutStart, $zoomOutStart, $zoomOutStart);
-    }
-    to {
-      opacity: 0;
-      transform: scale3d($zoomOutEnd, $zoomOutEnd, $zoomOutEnd);
-    }
+}
+.wrapper-full-page .zoomIn {
+  animation-name: zoomIn8;
+}
+@keyframes zoomOut8 {
+  from {
+    opacity: 1;
+    transform: scale3d($zoomOutStart, $zoomOutStart, $zoomOutStart);
   }
-  .wrapper-full-page .zoomOut {
-    animation-name: zoomOut8;
+  to {
+    opacity: 0;
+    transform: scale3d($zoomOutEnd, $zoomOutEnd, $zoomOutEnd);
   }
-  .radius-bk {
-    // background: #5c2153!important;
-    border-radius: 0 0 50% 50%;
-    padding: 0 0 1em;
-    height: 100px;
+}
+.wrapper-full-page .zoomOut {
+  animation-name: zoomOut8;
+}
+.radius-bk {
+  // background: #5c2153!important;
+  border-radius: 0 0 50% 50%;
+  padding: 0 0 1em;
+  height: 100px;
+}
+.page-header > .container {
+  color: #ffffff;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  max-width: 100%;
+  /* padding-top: 70px; */
+  /* padding-bottom: 160px; */
+}
+.page-header::before {
+  background: transparent;
+}
+@media screen and (max-width: 500px) {
+  .container {
+    padding: 0px;
   }
-  .page-header > .container {
-      color: #FFFFFF;
-      padding-top: 0px;
-      padding-bottom: 0px;
-      max-width: 100%;
-      /* padding-top: 70px; */
-      /* padding-bottom: 160px; */
-  }
-  .page-header::before{
-    background: transparent;
-  }
-  @media screen and (max-width: 500px) {
-    .container {
-      padding: 0px;
-    }
-  }
+}
 </style>

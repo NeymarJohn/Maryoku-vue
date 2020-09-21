@@ -6,7 +6,6 @@
           <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
             <md-icon>arrow_back</md-icon>
           </md-button>
-
           {{categoryTitle}}'s Vendors List
           <div class="header-actions pull-right">
             <md-button
@@ -115,7 +114,7 @@
               <md-card-content>
                 <div class="text-center">
                   <img
-                    src="http://static.maryoku.com/storage/img/paperandpen.png"
+                    src="https://static-maryoku.s3.amazonaws.com/storage/img/paperandpen.png"
                     style="width: 120px;"
                   />
                   <h4>No vendors found that match '{{categoryTitle}}'</h4>
@@ -132,32 +131,32 @@
   </div>
 </template>
 <script>
-import swal from 'sweetalert2'
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import Calendar from '@/models/Calendar'
-import CalendarEvent from '@/models/CalendarEvent'
-import EventComponent from '@/models/EventComponent'
-import Vendors from '@/models/Vendors'
-import EventComponentVendor from '@/models/EventComponentVendor'
-import VueElementLoading from 'vue-element-loading'
-import { paginationMixin } from '@/mixins/pagination'
-import { Pagination } from '@/components'
-import _ from 'underscore'
-import moment from 'moment'
+import swal from "sweetalert2";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import Calendar from "@/models/Calendar";
+import CalendarEvent from "@/models/CalendarEvent";
+import EventComponent from "@/models/EventComponent";
+import Vendors from "@/models/Vendors";
+import EventComponentVendor from "@/models/EventComponentVendor";
+import VueElementLoading from "vue-element-loading";
+import { paginationMixin } from "@/mixins/pagination";
+import { Pagination } from "@/components";
+import _ from "underscore";
+import moment from "moment";
 
 // import auth from '@/auth';
 
-import UploadVendorsModal from '../../../../Vendors/ImportVendors'
-import ManageBlockVendors from './ManageBlockVendors.vue'
-import ViewProposals from './ViewProposals.vue'
-import MdCardContent from '../../../../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue'
-import MdCardHeader from '../../../../../../../node_modules/vue-material/src/components/MdCard/MdCardHeader/MdCardHeader.vue'
-import VendorsTable from '@/pages/app/Vendors/Table/vendorsList'
-import VendorsPoolPanel from '@/pages/app/Vendors/VendorsPoolPanel'
-import companyForm from '@/pages/app/Vendors/Form/companyForm'
+import UploadVendorsModal from "../../../../Vendors/ImportVendors";
+import ManageBlockVendors from "./ManageBlockVendors.vue";
+import ViewProposals from "./ViewProposals.vue";
+import MdCardContent from "../../../../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue";
+import MdCardHeader from "../../../../../../../node_modules/vue-material/src/components/MdCard/MdCardHeader/MdCardHeader.vue";
+import VendorsTable from "@/pages/app/Vendors/Table/vendorsList";
+import VendorsPoolPanel from "@/pages/app/Vendors/VendorsPoolPanel";
+import companyForm from "@/pages/app/Vendors/Form/companyForm";
 
 export default {
-  name: 'event-blocks-vendors',
+  name: "event-blocks-vendors",
   components: {
     MdCardHeader,
     MdCardContent,
@@ -166,16 +165,16 @@ export default {
     ManageBlockVendors,
     ViewProposals,
     VendorsTable,
-    Pagination
+    Pagination,
   },
   props: {
     selectedBlock: Object,
     event: Object,
     caseStatus: {
       type: String,
-      default: null
+      default: null,
     },
-    categoryTitle: String
+    categoryTitle: String,
   },
   data: () => ({
     // auth: auth,
@@ -190,230 +189,230 @@ export default {
     pagination: {
       limit: 10,
       total: 0,
-      page: 1
+      page: 1,
     },
     tooltipModels: [],
-    searchQuery: '',
-    sendingRfp: false
+    searchQuery: "",
+    sendingRfp: false,
   }),
   methods: {
-    openUploadModal () {
-      this.$refs.uploadModal.toggleModal(true)
+    openUploadModal() {
+      this.$refs.uploadModal.toggleModal(true);
     },
-    closePanel () {
-      this.$emit('closePanel')
-      this.$root.$emit('refreshBuildingBlock')
+    closePanel() {
+      this.$emit("closePanel");
+      this.$root.$emit("refreshBuildingBlock");
     },
-    manageBlockVendors () {
-      this.addingVendors = true
-      this.selectedVendor = null
+    manageBlockVendors() {
+      this.addingVendors = true;
+      this.selectedVendor = null;
     },
-    getBlockVendors () {
-      this.isLoading = true
+    getBlockVendors() {
+      this.isLoading = true;
 
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
-      let event = new CalendarEvent({ id: this.event.id })
-      let selected_block = new EventComponent({ id: this.selectedBlock.id })
+      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
+      let event = new CalendarEvent({ id: this.event.id });
+      let selected_block = new EventComponent({ id: this.selectedBlock.id });
 
       new EventComponentVendor()
         .for(calendar, event, selected_block)
         .get()
-        .then(resp => {
-          this.isLoading = false
-          this.blockVendors = resp
-          this.filteredBlockVendors = this.blockVendors
+        .then((resp) => {
+          this.isLoading = false;
+          this.blockVendors = resp;
+          this.filteredBlockVendors = this.blockVendors;
         })
-        .catch(error => {
-          this.isLoading = false
-          console.log('EventComponentVendor error =>', error)
-        })
+        .catch((error) => {
+          this.isLoading = false;
+          console.log("EventComponentVendor error =>", error);
+        });
     },
-    viewProposals (item) {
-      this.selectedVendor = item
-      this.addingVendors = false
+    viewProposals(item) {
+      this.selectedVendor = item;
+      this.addingVendors = false;
     },
-    onSelectVendor (data) {
-      this.isLoading = true
+    onSelectVendor(data) {
+      this.isLoading = true;
 
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
-      let event = new CalendarEvent({ id: this.event.id })
-      let selected_block = new EventComponent({ id: this.selectedBlock.id })
+      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
+      let event = new CalendarEvent({ id: this.event.id });
+      let selected_block = new EventComponent({ id: this.selectedBlock.id });
 
-      let vendor = {}
-      vendor.vendorId = data.id
+      let vendor = {};
+      vendor.vendorId = data.id;
 
       new EventComponentVendor(vendor)
         .for(calendar, event, selected_block)
         .save()
-        .then(resp => {
-          this.isLoading = false
-          this.$root.$emit('VendorAdded')
-          this.fetchData(0)
+        .then((resp) => {
+          this.isLoading = false;
+          this.$root.$emit("VendorAdded");
+          this.fetchData(0);
 
           this.$notify({
-            message: 'Vendor added successfully',
-            horizontalAlign: 'center',
-            verticalAlign: 'top',
-            type: 'success'
-          })
+            message: "Vendor added successfully",
+            horizontalAlign: "center",
+            verticalAlign: "top",
+            type: "success",
+          });
 
-          this.$forceUpdate()
+          this.$forceUpdate();
         })
-        .catch(error => {
-          this.isLoading = false
-          console.log('EventComponentVendor error =>', error)
+        .catch((error) => {
+          this.isLoading = false;
+          console.log("EventComponentVendor error =>", error);
 
           this.$notify({
-            message: 'Error while trying to add vendor, try again!',
-            horizontalAlign: 'center',
-            verticalAlign: 'top',
-            type: 'danger'
-          })
-        })
+            message: "Error while trying to add vendor, try again!",
+            horizontalAlign: "center",
+            verticalAlign: "top",
+            type: "danger",
+          });
+        });
     },
-    onRemoveVendor (data) {
-      this.isLoading = true
+    onRemoveVendor(data) {
+      this.isLoading = true;
 
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
-      let event = new CalendarEvent({ id: this.event.id })
-      let selected_block = new EventComponent({ id: this.selectedBlock.id })
+      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
+      let event = new CalendarEvent({ id: this.event.id });
+      let selected_block = new EventComponent({ id: this.selectedBlock.id });
 
-      let vendor = new EventComponentVendor({ id: data.id })
+      let vendor = new EventComponentVendor({ id: data.id });
       vendor
         .for(calendar, event, selected_block)
         .delete()
-        .then(resp => {
-          this.isLoading = false
-          this.$root.$emit('VendorAdded')
-          this.fetchData(0)
+        .then((resp) => {
+          this.isLoading = false;
+          this.$root.$emit("VendorAdded");
+          this.fetchData(0);
         })
-        .catch(error => {
-          this.isLoading = false
-        })
+        .catch((error) => {
+          this.isLoading = false;
+        });
     },
-    getVendorDate (eventStartMillis) {
-      let x = new Date(eventStartMillis)
+    getVendorDate(eventStartMillis) {
+      let x = new Date(eventStartMillis);
 
-      return moment(x).fromNow()
+      return moment(x).fromNow();
     },
-    sendVendor (item) {
+    sendVendor(item) {
       // this.isLoading = true;
 
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
-      let event = new CalendarEvent({ id: this.event.id })
-      let selected_block = new EventComponent({ id: this.selectedBlock.id })
+      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
+      let event = new CalendarEvent({ id: this.event.id });
+      let selected_block = new EventComponent({ id: this.selectedBlock.id });
 
-      let vendor = new EventComponentVendor(item)
+      let vendor = new EventComponentVendor(item);
 
-      vendor.id = item.id
-      vendor.cost = item.cost
-      vendor.vendor = item.vendor
-      vendor.vendorId = item.vendorId
-      vendor.rfpStatus = 'Sent'
+      vendor.id = item.id;
+      vendor.cost = item.cost;
+      vendor.vendor = item.vendor;
+      vendor.vendorId = item.vendorId;
+      vendor.rfpStatus = "Sent";
 
       vendor
         .for(calendar, event, selected_block)
         .save()
-        .then(resp => {
-          this.getBlockVendors()
+        .then((resp) => {
+          this.getBlockVendors();
 
-          this.$forceUpdate()
+          this.$forceUpdate();
         })
-        .catch(error => {
-          this.isLoading = false
-          console.log('EventComponentVendor error =>', error)
+        .catch((error) => {
+          this.isLoading = false;
+          console.log("EventComponentVendor error =>", error);
 
           this.$notify({
-            message: 'Error while trying to add vendor, try again!',
-            horizontalAlign: 'center',
-            verticalAlign: 'top',
-            type: 'danger'
-          })
-        })
+            message: "Error while trying to add vendor, try again!",
+            horizontalAlign: "center",
+            verticalAlign: "top",
+            type: "danger",
+          });
+        });
     },
-    manageVendors () {
+    manageVendors() {
       // this.$router.push({ path: `/vendors-pool`});
       window.currentPanel = this.$showPanel({
         component: VendorsPoolPanel,
-        cssClass: 'md-layout-item md-size-85 transition36 bg-grey',
-        openOn: 'right',
-        props: {}
-      })
+        cssClass: "md-layout-item md-size-85 transition36 bg-grey",
+        openOn: "right",
+        props: {},
+      });
 
       let slideoutPanelBg = document.getElementsByClassName(
-        'slideout-panel-bg'
-      )
+        "slideout-panel-bg",
+      );
       if (slideoutPanelBg && slideoutPanelBg.length > 0) {
-        slideoutPanelBg[0].style = 'z-index: 101'
+        slideoutPanelBg[0].style = "z-index: 101";
       }
-      window.currentPanel.promise.then(res => {
+      window.currentPanel.promise.then((res) => {
         if (slideoutPanelBg && slideoutPanelBg.length > 0) {
-          slideoutPanelBg[0].style = 'z-index: 100'
+          slideoutPanelBg[0].style = "z-index: 100";
         }
-      })
+      });
     },
-    filterVendors () {
-      this.filteredBlockVendors = _.filter(this.blockVendors, v => {
+    filterVendors() {
+      this.filteredBlockVendors = _.filter(this.blockVendors, (v) => {
         return (
           v.vendor.vendorDisplayName
             .toString()
             .toLowerCase()
             .indexOf(this.searchQuery.toLowerCase()) > -1
-        )
-      })
+        );
+      });
     },
-    vendorDetails (vendor) {
+    vendorDetails(vendor) {
       window.currentPanel = this.$showPanel({
         component: companyForm,
-        cssClass: 'md-layout-item md-size-40 transition36 ',
-        openOn: 'right',
+        cssClass: "md-layout-item md-size-40 transition36 ",
+        openOn: "right",
         disableBgClick: false,
         props: {
           categories: this.buildingBlocksList,
           selected_vendor: vendor,
-          creation_mode: false
-        }
-      })
+          creation_mode: false,
+        },
+      });
 
       let slideoutPanelBg = document.getElementsByClassName(
-        'slideout-panel-bg'
-      )
+        "slideout-panel-bg",
+      );
       if (slideoutPanelBg && slideoutPanelBg.length > 0) {
-        slideoutPanelBg[0].style = 'z-index: 101'
+        slideoutPanelBg[0].style = "z-index: 101";
       }
 
-      window.currentPanel.promise.then(res => {
+      window.currentPanel.promise.then((res) => {
         if (slideoutPanelBg && slideoutPanelBg.length > 0) {
-          slideoutPanelBg[0].style = 'z-index: 100'
+          slideoutPanelBg[0].style = "z-index: 100";
         }
-      })
+      });
     },
-    onSelect (item) {
+    onSelect(item) {
       // console.log(item);
+    },
+  },
+  created() {
+    if (this.caseStatus === "get-offers") {
+      this.addingVendors = true;
     }
   },
-  created () {
-    if (this.caseStatus === 'get-offers') {
-      this.addingVendors = true
-    }
-  },
-  mounted () {
-    this.isLoading = false
-    this.getBlockVendors()
-    this.$root.$on('VendorAdded', () => {
-      this.getBlockVendors()
-    })
+  mounted() {
+    this.isLoading = false;
+    this.getBlockVendors();
+    this.$root.$on("VendorAdded", () => {
+      this.getBlockVendors();
+    });
   },
   computed: {},
   watch: {
-    searchQuery (newVal, oldVal) {
-      this.filterVendors()
+    searchQuery(newVal, oldVal) {
+      this.filterVendors();
     },
-    selectedVendors (newVal, oldVal) {
-      console.log(newVal)
-    }
-  }
-}
+    selectedVendors(newVal, oldVal) {
+      console.log(newVal);
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 @import "@/assets/scss/md/_colors.scss";

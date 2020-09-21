@@ -23,7 +23,7 @@
               />
               <img
                 class="dropdown"
-                src="http://static.maryoku.com/storage/icons/Vendor Signup/Asset 523.svg"
+                src="https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 523.svg"
               />
             </div>
             <ul v-else>
@@ -78,11 +78,11 @@
   </div>
 </template>
 <script>
-import VueElementLoading from 'vue-element-loading';
-import VueGoogleAutocomplete from 'vue-google-autocomplete';
+import VueElementLoading from "vue-element-loading";
+import VueGoogleAutocomplete from "vue-google-autocomplete";
 
 export default {
-  name: 'v-signup-editable-field',
+  name: "v-signup-editable-field",
   components: {
     VueElementLoading,
     VueGoogleAutocomplete,
@@ -104,32 +104,33 @@ export default {
     },
     address: null,
     reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
-    categoryIconUrl: 'http://static.maryoku.com/storage/icons/Budget Elements/',
+    categoryIconUrl:
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/",
     categories: [
       {
-        name: 'Venue Rental',
-        value: 'venuerental',
-        icon: 'venuerental.svg',
+        name: "Venue Rental",
+        value: "venuerental",
+        icon: "venuerental.svg",
       },
       {
-        name: 'Food & Beverage',
-        value: 'foodandbeverage',
-        icon: 'foodandbeverage.svg',
+        name: "Food & Beverage",
+        value: "foodandbeverage",
+        icon: "foodandbeverage.svg",
       },
       {
-        name: 'Design and Decor',
-        value: 'decor',
-        icon: 'decor.svg',
+        name: "Design and Decor",
+        value: "decor",
+        icon: "decor.svg",
       },
       {
-        name: 'Guest Services & Staffing',
-        value: 'corporatesocialresponsibility',
-        icon: 'corporatesocialresponsibility.svg',
+        name: "Guest Services & Staffing",
+        value: "corporatesocialresponsibility",
+        icon: "corporatesocialresponsibility.svg",
       },
       {
-        name: 'Signage / Printing',
-        value: 'signageprinting',
-        icon: 'signageprinting.svg',
+        name: "Signage / Printing",
+        value: "signageprinting",
+        icon: "signageprinting.svg",
       },
       // {
       //   name: 'Advertising and Promotion',
@@ -137,14 +138,14 @@ export default {
       //   icon: 'advertising-promotion.svg'
       // },
       {
-        name: 'AV / Staging',
-        value: 'audiovisualstagingservices',
-        icon: 'audiovisualstagingservices.svg',
+        name: "AV / Staging",
+        value: "audiovisualstagingservices",
+        icon: "audiovisualstagingservices.svg",
       },
       {
-        name: 'Swags',
-        value: 'swags',
-        icon: 'swags.svg',
+        name: "Swags",
+        value: "swags",
+        icon: "swags.svg",
       },
       // {
       //   name: 'Shipping',
@@ -152,14 +153,14 @@ export default {
       //   icon: 'shipping.svg'
       // },
       {
-        name: 'Transportation & Tour operator',
-        value: 'transportation',
-        icon: 'transportation.svg',
+        name: "Transportation & Tour operator",
+        value: "transportation",
+        icon: "transportation.svg",
       },
       {
-        name: 'Entertainment',
-        value: 'entertainment',
-        icon: 'entertainment.svg',
+        name: "Entertainment",
+        value: "entertainment",
+        icon: "entertainment.svg",
       },
       // {
       //   name: 'Administration',
@@ -167,9 +168,9 @@ export default {
       //   icon: 'administration.svg'
       // },
       {
-        name: 'Security',
-        value: 'securityservices',
-        icon: 'securityservices.svg',
+        name: "Security",
+        value: "securityservices",
+        icon: "securityservices.svg",
       },
       // {
       //   name: 'Technology',
@@ -177,14 +178,14 @@ export default {
       //   icon: 'technologyservices.svg'
       // },
       {
-        name: 'Videography and Photography',
-        value: 'videographyandphotography',
-        icon: 'videographyandphotography.svg',
+        name: "Videography and Photography",
+        value: "videographyandphotography",
+        icon: "videographyandphotography.svg",
       },
       {
-        name: 'Equipment Rentals',
-        value: 'equipmentrentals',
-        icon: 'equipmentrentals.svg',
+        name: "Equipment Rentals",
+        value: "equipmentrentals",
+        icon: "equipmentrentals.svg",
       },
     ],
     value: null,
@@ -200,7 +201,7 @@ export default {
         icon: null,
       };
     }
-    if (this.title == 'Address') {
+    if (this.title == "Address") {
       this.$refs.address.focus();
     }
   },
@@ -210,10 +211,10 @@ export default {
     },
     save() {
       this.isEdit = false;
-      if (this.title == 'Business Category') {
-        this.$root.$emit('update-vendor-value', 'vendorCategory', this.value);
+      if (this.title == "Business Category") {
+        this.$root.$emit("update-vendor-value", "vendorCategory", this.value);
       } else {
-        this.$root.$emit('update-vendor-value', this.field, this.value);
+        this.$root.$emit("update-vendor-value", this.field, this.value);
       }
     },
     updateCategory(category) {
@@ -223,7 +224,7 @@ export default {
     },
     isEmailValid: function () {
       // return (this.value == "")? "" : (this.reg.test(this.value)) ? 'has-success' : 'has-error';
-      return this.reg.test(this.value) ? 'has-success' : 'has-error';
+      return this.reg.test(this.value) ? "has-success" : "has-error";
     },
     getCategoryNameByValue(value) {
       return this.categories.filter((c) => c.value == value)[0].name;
@@ -235,8 +236,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/md/_variables.scss';
-@import '@/assets/scss/md/_colors.scss';
+@import "@/assets/scss/md/_variables.scss";
+@import "@/assets/scss/md/_colors.scss";
 
 .vsignup-edtiable-field-wrapper {
   width: 100%;
@@ -324,7 +325,7 @@ export default {
         }
       }
       .address-cont {
-        background-image: url('http://static.maryoku.com/storage/icons/Vendor Signup/Asset 550.svg');
+        background-image: url("https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 550.svg");
         background-repeat: no-repeat;
         background-size: 20px;
         background-position-x: 22px;
