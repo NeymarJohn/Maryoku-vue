@@ -1,6 +1,6 @@
 import Campaign from "@/models/Campaign";
 import CalendarEvent from "@/models/CalendarEvent";
-import { resolve } from "promise-polyfill";
+
 const state = {
     SAVING_DATE: null,
     RSVP: null,
@@ -18,14 +18,14 @@ const getters = {
         return {
             SAVING_DATE:
                 state["SAVING_DATE"] &&
-                state["SAVING_DATE"].campaignStatus === "ISSUED",
-            RSVP: state["RSVP"] && state["RSVP"].campaignStatus === "ISSUED",
+                state["SAVING_DATE"].campaignStatus === "STARTED",
+            RSVP: state["RSVP"] && state["RSVP"].campaignStatus === "STARTED",
             COMING_SOON:
                 state["COMING_SOON"] &&
-                state["COMING_SOON"].campaignStatus === "ISSUED",
+                state["COMING_SOON"].campaignStatus === "STARTED",
             FEEDBACK:
                 state["FEEDBACK"] &&
-                state["FEEDBACK"].campaignStatus === "ISSUED",
+                state["FEEDBACK"].campaignStatus === "STARTED",
         };
     },
 };
@@ -52,7 +52,7 @@ const actions = {
         });
     },
     saveCampaign({ commit, state }, campaign) {
-        return new Promise((reslove, reject) => {
+        return new Promise((resolve, reject) => {
             new Campaign(campaign).save().then(res => {
                 commit("setCampaign", {
                     name: res.campaignType,
