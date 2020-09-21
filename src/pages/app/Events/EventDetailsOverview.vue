@@ -12,7 +12,8 @@
               :to="`/events/${event.id}/booking/concept`"
               tag="md-button"
               class="md-default md-simple md-white edit-btn text-left"
-              >Event's Concept
+            >
+              Event's Concept
               <md-icon>keyboard_arrow_right</md-icon>
             </router-link>
             <popup v-if="event.concept">
@@ -20,19 +21,19 @@
                 <h3 v-html="conceptName"></h3>
               </template>
               <template slot="popup">
-                <div class="popup-header"> 
-                  <img :src="`${$iconURL}Concept/Asset 491.svg`" width="30"/>
-                  Event's concept</div>
-                <div class="popup-body">
-                    {{event.concept.description}}
+                <div class="popup-header">
+                  <img :src="`${$iconURL}Concept/Asset 491.svg`" width="30" />
+                  Event's concept
                 </div>
+                <div class="popup-body">{{event.concept.description}}</div>
                 <div class="popup-footer">
                   <router-link
                     :to="`/events/${event.id}/booking/concept`"
                     tag="md-button"
                     class="edit-btn md-rose md-simple edit-btn"
-                  >Change Concept
-                  <md-icon>keyboard_arrow_right</md-icon>
+                  >
+                    Change Concept
+                    <md-icon>keyboard_arrow_right</md-icon>
                   </router-link>
                 </div>
               </template>
@@ -144,35 +145,57 @@
                 <div class="note-item">
                   <div class="note-item-label">Lorem ipsum dolor sit amet sit</div>
                   <div class="note-item-action">
-                    <img :src="`${this.iconsURL}edit-dark.svg`" width="20" style="margin-right:10px"/>
-                    <img :src="`${this.timlineIconsURL}Trash.svg`" width="20"/>
+                    <img
+                      :src="`${this.iconsURL}edit-dark.svg`"
+                      width="20"
+                      style="margin-right:10px"
+                    />
+                    <img :src="`${this.timlineIconsURL}Trash.svg`" width="20" />
                   </div>
                 </div>
               </md-radio>
-              <md-radio v-model="radio"  value="2">
+              <md-radio v-model="radio" value="2">
                 <div class="note-item">
-                  <div class="note-item-label">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed</div>
+                  <div
+                    class="note-item-label"
+                  >Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed</div>
                   <div class="note-item-action">
-                    <img :src="`${this.iconsURL}edit-dark.svg`" width="20" style="margin-right:10px"/>
-                    <img :src="`${this.timlineIconsURL}Trash.svg`" width="20"/>
+                    <img
+                      :src="`${this.iconsURL}edit-dark.svg`"
+                      width="20"
+                      style="margin-right:10px"
+                    />
+                    <img :src="`${this.timlineIconsURL}Trash.svg`" width="20" />
                   </div>
                 </div>
               </md-radio>
               <md-radio v-model="radio" value="3">
                 <div class="note-item">
-                  <div class="note-item-label">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempo</div>
+                  <div
+                    class="note-item-label"
+                  >Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempo</div>
                   <div class="note-item-action">
-                    <img :src="`${this.iconsURL}edit-dark.svg`" width="20" style="margin-right:10px"/>
-                    <img :src="`${this.timlineIconsURL}Trash.svg`" width="20"/>
+                    <img
+                      :src="`${this.iconsURL}edit-dark.svg`"
+                      width="20"
+                      style="margin-right:10px"
+                    />
+                    <img :src="`${this.timlineIconsURL}Trash.svg`" width="20" />
                   </div>
                 </div>
               </md-radio>
               <md-radio v-model="radio" value="4">
                 <div class="note-item">
-                  <div class="note-item-label">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor</div>
+                  <div
+                    class="note-item-label"
+                  >Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor</div>
                   <div class="note-item-action">
-                    <img :src="`${this.iconsURL}edit-dark.svg`" width="20" style="margin-right:10px"/>
-                    <img :src="`${this.timlineIconsURL}Trash.svg`" width="20"/>
+                    <img
+                      :src="`${this.iconsURL}edit-dark.svg`"
+                      width="20"
+                      style="margin-right:10px"
+                    />
+                    <img :src="`${this.timlineIconsURL}Trash.svg`" width="20" />
                   </div>
                 </div>
               </md-radio>
@@ -237,7 +260,7 @@
               <div class="book-venue">
                 <div class="booked-vendors__header d-flex justify-content-start align-center">
                   <img
-                    src="http://static.maryoku.com/storage/icons/Event Page/home-dark.svg"
+                    src="https://static-maryoku.s3.amazonaws.com/storage/icons/Event Page/home-dark.svg"
                     width="20px"
                   />
                   <h3 class="header-title">Choose your next venue</h3>
@@ -267,13 +290,13 @@
                   >
                     <div class="vendor-completed" v-if="block.status==='completed'">
                       <img
-                        src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg"
+                        src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2032.svg"
                         width="15"
                       />
                     </div>
                     <div class="vendor-icon">
                       <img
-                        src="http://static.maryoku.com/storage/icons/timeline/svg/Asset%20135.svg"
+                        src="https://static-maryoku.s3.amazonaws.com/storage/icons/timeline/svg/Asset%20135.svg"
                         width="15"
                       />
                     </div>
@@ -319,7 +342,9 @@
                 >
                   <div class="cross-line cross-line-left"></div>
                   <div class="d-flex justify-content-center align-center label">
-                    <label style="white-space:nowrap; padding-right:10px;text-transform: capitalize;">Day {{numberToWord(timelineIndex + 1)}}</label>
+                    <label
+                      style="white-space:nowrap; padding-right:10px;text-transform: capitalize;"
+                    >Day {{numberToWord(timelineIndex + 1)}}</label>
                     <div>{{formatDateString(timelineDate.itemDay)}}</div>
                   </div>
                   <div class="cross-line cross-line-right"></div>
@@ -346,7 +371,7 @@
           <div class="card-footer">
             <div class="footer-content d-flex align-center">
               <img
-                src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg"
+                src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2032.svg"
                 width="20"
               />
               <div>
@@ -423,7 +448,7 @@
               </div>
               <div class="teaser">
                 <img
-                  src="http://static.maryoku.com/storage/icons/Event Page/Group 6044.svg"
+                  src="https://static-maryoku.s3.amazonaws.com/storage/icons/Event Page/Group 6044.svg"
                   width="50"
                 />
                 <div class="campaign-description-1">
@@ -441,7 +466,7 @@
                 <div class="campaigns-section__item completed">
                   <div class="campaign-title">
                     <img
-                      src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg"
+                      src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2032.svg"
                       width="15"
                     />
                     “Save The Date” campaign
@@ -451,7 +476,7 @@
                 <div class="campaigns-section__item completed">
                   <div class="campaign-title">
                     <img
-                      src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg"
+                      src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2032.svg"
                       width="15"
                     />
                     First teaser - RSVP
@@ -583,11 +608,14 @@
           </div>
           <div class="md-layout-item md-size-100 margin-bottom text-left">
             <label class="evnet-detail-label">Location</label>
-              <!-- <div class="input-icon">
+            <!-- <div class="input-icon">
                 <img :src="`${iconsURL}location-dark.svg`" width="20" />
-              </div> -->
-              <!-- <input type="text" class="form-control" v-model="editEvent.location" /> -->
-              <location-input v-model="editEvent.location" placeholder="Type city / region or specific address here…"></location-input>
+            </div>-->
+            <!-- <input type="text" class="form-control" v-model="editEvent.location" /> -->
+            <location-input
+              v-model="editEvent.location"
+              placeholder="Type city / region or specific address here…"
+            ></location-input>
           </div>
         </div>
       </template>
@@ -622,17 +650,17 @@ import {
   StatsCard,
   ChartCard,
   Modal,
-  LocationInput
+  LocationInput,
 } from "@/components";
 import ChartComponent from "@/components/Cards/ChartComponent";
 import EditEventDetailModal from "@/components/Modals/EditEventDetailModal";
 import SideBar from "../../../components/SidebarPlugin/NewSideBar";
 import SidebarItem from "../../../components/SidebarPlugin/NewSidebarItem.vue";
 import TimeCounter from "./components/TimeCounter";
-import Popup from "../../../components/Popup"
+import Popup from "../../../components/Popup";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./components/CommentEditorPanel";
-import vSelect from 'vue-select'
+import vSelect from "vue-select";
 
 export default {
   name: "event-overview",
@@ -655,7 +683,7 @@ export default {
     HeaderActions,
     CommentEditorPanel,
     LocationInput,
-    vSelect
+    vSelect,
   },
   props: {
     // event: Object,
@@ -687,17 +715,49 @@ export default {
       timlineIconsURL: `${this.$iconURL}Timeline-New/`,
       menuIconsURL: `${this.$iconURL}menu%20_%20checklist/SVG/`,
       notes: {
-        newNote: ""
+        newNote: "",
       },
       radio: false,
       showEditDetailModal: false,
       timeline: [],
-      a : ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ','eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '],
-      b : ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety'],
-      logger : "./static/img/logo.jpg",
-      conceptName : "",
-      showCommentEditorPanel:false
-    }
+      a: [
+        "",
+        "one ",
+        "two ",
+        "three ",
+        "four ",
+        "five ",
+        "six ",
+        "seven ",
+        "eight ",
+        "nine ",
+        "ten ",
+        "eleven ",
+        "twelve ",
+        "thirteen ",
+        "fourteen ",
+        "fifteen ",
+        "sixteen ",
+        "seventeen ",
+        "eighteen ",
+        "nineteen ",
+      ],
+      b: [
+        "",
+        "",
+        "twenty",
+        "thirty",
+        "forty",
+        "fifty",
+        "sixty",
+        "seventy",
+        "eighty",
+        "ninety",
+      ],
+      logger: "./static/img/logo.jpg",
+      conceptName: "",
+      showCommentEditorPanel: false,
+    };
   },
   methods: {
     getTimelineItems() {
@@ -706,19 +766,19 @@ export default {
       new EventTimelineItem()
         .for(this.calendar, event)
         .get()
-        .then(res => {
-          this.timelineItems = _.sortBy(res, function(item) {
+        .then((res) => {
+          this.timelineItems = _.sortBy(res, function (item) {
             return item.order;
           });
 
           this.isLoading = false;
-          this.timelineItems.forEach(item => {
+          this.timelineItems.forEach((item) => {
             item.isItemLoading = false;
           });
 
           var timelines = {};
           // define timelines
-          this.timelineItems.forEach(item => {
+          this.timelineItems.forEach((item) => {
             item.isItemLoading = false;
             if (!timelines[item.plannedDate]) timelines[item.plannedDate] = [];
             item.isItemLoading = false;
@@ -731,11 +791,11 @@ export default {
               this.timeline.push({
                 itemDay: parseInt(itemDay),
                 isEditable: false,
-                items: timelines[itemDay]
+                items: timelines[itemDay],
               });
             });
           }
-          this.timeline = _.sortBy(this.timeline, function(item) {
+          this.timeline = _.sortBy(this.timeline, function (item) {
             return item.itemDay;
           });
           // this.timeline[0].items.forEach((item) => {
@@ -756,7 +816,7 @@ export default {
       new CalendarEventStatistics()
         .for(this.calendar, event)
         .get()
-        .then(resp => {
+        .then((resp) => {
           if (!resp[0].totalBookedBudget) resp[0].totalBookedBudget = 0;
           this.totalBookedBudget = resp[0].totalBookedBudget;
           this.totalRemainingBudget =
@@ -779,38 +839,38 @@ export default {
             this.seriesData = [
               {
                 value: this.percentage,
-                className: "budget-chart-slice-a-negative"
+                className: "budget-chart-slice-a-negative",
               },
               {
                 value: 100 - this.percentage,
-                className: "budget-chart-slice-b-negative"
-              }
+                className: "budget-chart-slice-b-negative",
+              },
             ];
           } else {
             this.seriesData = [
               { value: 99.99, className: "budget-chart-slice-a-negative" },
-              { value: 0.01, className: "budget-chart-slice-b-negative" }
+              { value: 0.01, className: "budget-chart-slice-b-negative" },
             ];
           }
 
           this.pieChart = {
             data: {
               labels: [" ", " "], // should be empty to remove text from chart
-              series: this.seriesData
+              series: this.seriesData,
             },
             options: {
               padding: 0,
               height: 220,
               donut: true,
-              donutWidth: 34
-            }
+              donutWidth: 34,
+            },
           };
 
           this.budgetPerEmployee = evt.budgetPerPerson; // this.totalRemainingBudget / evt.numberOfParticipants
           this.allocatedBudget = resp.totalAllocatedBudget;
           this.event.statistics["allocatedBudget"] = this.allocatedBudget;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -820,19 +880,21 @@ export default {
         eventType: this.event.eventType,
         eventStartMillis: this.event.eventStartMillis,
         numberOfParticipants: this.event.numberOfParticipants,
-        location: this.event.location
+        location: this.event.location,
       };
       this.showEditDetailModal = true;
     },
     updateEvent() {
-      let updateEvent = new CalendarEvent({id: this.event.id}).for(this.calendar)
+      let updateEvent = new CalendarEvent({ id: this.event.id }).for(
+        this.calendar,
+      );
       updateEvent.eventDayPart = this.editEvent.eventDayPart;
       updateEvent.eventStartMillis = this.editEvent.eventStartMillis;
       updateEvent.numberOfParticipants = this.editEvent.numberOfParticipants;
       updateEvent.location = this.editEvent.location;
-      
+
       const eventType = this.eventTypes.find(
-        it => it.name === this.editEvent.eventType.name
+        (it) => it.name === this.editEvent.eventType.name,
       );
       updateEvent.eventType = eventType;
       if (updateEvent.eventDayPart === "evening") {
@@ -843,44 +905,45 @@ export default {
       updateEvent.eventStartMillis = updateEvent.eventStartMillis.getTime();
       updateEvent.eventEndMillis = updateEvent.eventStartMillis + 3600 * 1000;
 
-      if (this.event.noBudget && (
-            this.editEvent.eventData !== this.event.eventData || 
-            this.editEvent.location != this.event.location || 
-            this.editEvent.eventStartMillis != this.event.eventStartMillis)) {
-          
-
-          swal({
-            title: 'Do you want to update the budget accordingly?',
-            text: ``,
-            showCancelButton: true,
-            confirmButtonClass: 'md-button md-success',
-            cancelButtonClass: 'md-button md-danger',
-            confirmButtonText: 'Yes, Recalcuate it!',
-            buttonsStyling: false
-          }).then(result => {
-            if (result.value) {
-              updateEvent.reCalculate = true
-            }
-            updateEvent.save()
-              .then(res => {
-                this.event = res;
-              })
-              .catch(err => {
-                console.log(err);
-              });
-            this.showEditDetailModal = false;
-          })
-      } else  {
-        updateEvent.save()
-          .then(res => {
+      if (
+        this.event.noBudget &&
+        (this.editEvent.eventData !== this.event.eventData ||
+          this.editEvent.location != this.event.location ||
+          this.editEvent.eventStartMillis != this.event.eventStartMillis)
+      ) {
+        swal({
+          title: "Do you want to update the budget accordingly?",
+          text: ``,
+          showCancelButton: true,
+          confirmButtonClass: "md-button md-success",
+          cancelButtonClass: "md-button md-danger",
+          confirmButtonText: "Yes, Recalcuate it!",
+          buttonsStyling: false,
+        }).then((result) => {
+          if (result.value) {
+            updateEvent.reCalculate = true;
+          }
+          updateEvent
+            .save()
+            .then((res) => {
+              this.event = res;
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+          this.showEditDetailModal = false;
+        });
+      } else {
+        updateEvent
+          .save()
+          .then((res) => {
             this.event = res;
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
           });
         this.showEditDetailModal = false;
       }
-      
     },
     formatHour(date) {
       return moment(new Date(date)).format("hh:mm A");
@@ -893,48 +956,73 @@ export default {
     },
     numberToWord(num) {
       let vm = this;
-      if ((num = num.toString()).length > 9) return 'overflow';
-      let n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
-      if (!n) return; var str = '';
-      str += (n[1] != 0) ? (vm.a[Number(n[1])] || vm.b[n[1][0]] + ' ' + vm.a[n[1][1]]) + 'crore ' : '';
-      str += (n[2] != 0) ? (vm.a[Number(n[2])] || vm.b[n[2][0]] + ' ' + vm.a[n[2][1]]) + 'lakh ' : '';
-      str += (n[3] != 0) ? (vm.a[Number(n[3])] || vm.b[n[3][0]] + ' ' + vm.a[n[3][1]]) + 'thousand ' : '';
-      str += (n[4] != 0) ? (vm.a[Number(n[4])] || vm.b[n[4][0]] + ' ' + vm.a[n[4][1]]) + 'hundred ' : '';
-      str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (vm.a[Number(n[5])] || vm.b[n[5][0]] + ' ' + vm.a[n[5][1]]) : '';
+      if ((num = num.toString()).length > 9) return "overflow";
+      let n = ("000000000" + num)
+        .substr(-9)
+        .match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+      if (!n) return;
+      var str = "";
+      str +=
+        n[1] != 0
+          ? (vm.a[Number(n[1])] || vm.b[n[1][0]] + " " + vm.a[n[1][1]]) +
+            "crore "
+          : "";
+      str +=
+        n[2] != 0
+          ? (vm.a[Number(n[2])] || vm.b[n[2][0]] + " " + vm.a[n[2][1]]) +
+            "lakh "
+          : "";
+      str +=
+        n[3] != 0
+          ? (vm.a[Number(n[3])] || vm.b[n[3][0]] + " " + vm.a[n[3][1]]) +
+            "thousand "
+          : "";
+      str +=
+        n[4] != 0
+          ? (vm.a[Number(n[4])] || vm.b[n[4][0]] + " " + vm.a[n[4][1]]) +
+            "hundred "
+          : "";
+      str +=
+        n[5] != 0
+          ? (str != "" ? "and " : "") +
+            (vm.a[Number(n[5])] || vm.b[n[5][0]] + " " + vm.a[n[5][1]])
+          : "";
       return str;
     },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
-    }
+    },
   },
   created() {
-    this.calendar = new Calendar({ id: this.$store.state.auth.user.profile.defaultCalendarId})
+    this.calendar = new Calendar({
+      id: this.$store.state.auth.user.profile.defaultCalendarId,
+    });
     this.$store.dispatch("event/getEventTypes", {
       data: this.$store.state.auth.user.profile.defaultCalendarId,
-      ctx: this
+      ctx: this,
     });
 
-    [...Array(12).keys()].map(x =>
-      x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined
+    [...Array(12).keys()].map((x) =>
+      x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined,
     );
-    [...Array(12).keys()].map(x =>
+    [...Array(12).keys()].map((x) =>
       x === 0
         ? this.hoursArray.push(`12:00 PM`)
-        : this.hoursArray.push(`${x}:00 PM`)
+        : this.hoursArray.push(`${x}:00 PM`),
     );
-    [...Array(8).keys()].map(x =>
+    [...Array(8).keys()].map((x) =>
       x === 0
         ? this.hoursArray.push(`12:00 AM`)
-        : this.hoursArray.push(`${x}:00 AM`)
+        : this.hoursArray.push(`${x}:00 AM`),
     );
     this.hoursArray.push();
-    this.event = this.$store.state.event.eventData;  // Fetch event from store
+    this.event = this.$store.state.event.eventData; // Fetch event from store
     if (this.event.concept) {
       if (this.event.concept.images && this.event.concept.images.length > 0) {
-        this.logger = this.event.concept.images[0].url
+        this.logger = this.event.concept.images[0].url;
       }
       if (this.event.concept.name) {
-        this.conceptName = this.event.concept.name
+        this.conceptName = this.event.concept.name;
       }
     }
     this.getCalendarEventStatistics(this.event);
@@ -942,7 +1030,7 @@ export default {
     new EventComponent()
       .for(this.calendar, this.event)
       .get()
-      .then(components => {
+      .then((components) => {
         this.event.components = components;
         this.selectedComponents = components;
       });
@@ -960,28 +1048,28 @@ export default {
         "set-title",
         this.event,
         this.routeName === "EditBuildingBlocks",
-        true
+        true,
       );
       this.getTimelineItems();
-    }
+    },
   },
   filters: {
-    formatDate: function(date) {
+    formatDate: function (date) {
       return moment(date).format("MMM Do YYYY");
     },
-    formatTime: function(date) {
+    formatTime: function (date) {
       return moment(date).format("h:00 A");
     },
-    formatDuration: function(startDate, endDate) {
+    formatDuration: function (startDate, endDate) {
       return moment(endDate).diff(startDate, "hours");
     },
     withComma(amount) {
       return amount ? amount.toLocaleString() : 0;
-    }
+    },
   },
   computed: {
     ...mapGetters({
-      eventTypes: "event/getEventTypesList"
+      eventTypes: "event/getEventTypesList",
     }),
     getPaidAmount() {
       let event = new CalendarEvent({ id: this.event.id });
@@ -1004,7 +1092,7 @@ export default {
       if (this.acceptedProposals.length > 0) {
         return this.acceptedProposals.reduce(
           (p, item) => p + item.proposalCost,
-          0
+          0,
         );
       } else {
         return 0;
@@ -1048,18 +1136,18 @@ export default {
     // check permission
     permission() {
       try {
-        return this.$store.state.event.eventData.permit 
-      } catch(e) {
-        return "edit"
+        return this.$store.state.event.eventData.permit;
+      } catch (e) {
+        return "edit";
       }
     },
     canComment() {
-      return this.permission === 'edit' || this.permission === 'comment'
+      return this.permission === "edit" || this.permission === "comment";
     },
     canEdit() {
-      return this.permission === 'edit'
-    }
-  }
+      return this.permission === "edit";
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

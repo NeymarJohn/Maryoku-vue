@@ -7,7 +7,7 @@
         <div class="header-name">
           <h3>Hi {{userName}}</h3>
           <p>
-            Here are 3 awesome concepts for you to choose from! 
+            Here are 3 awesome concepts for you to choose from!
             <br />If you feel like we haven’t nailed it, let us know and we’ll send 3 more.
             <br />Got some cool ideas of your own? Scroll down to create a brand new concept.
           </p>
@@ -24,7 +24,7 @@
       </div>
 
       <div class="concepts-list md-layout-item md-size-100">
-         <vue-element-loading :active="loadingConceptOptions" spinner="ring" color="#FF547C" />
+        <vue-element-loading :active="loadingConceptOptions" spinner="ring" color="#FF547C" />
         <div
           class="concepts-list__item d-flex justify-content-start"
           :class="{expanded : item.expand}"
@@ -33,8 +33,15 @@
         >
           <div class="d-flex justify-content-between align-center" v-if="item.expand">
             <label>24 have tried this!</label>
-            <md-button v-if="item.name != selectedConcept.name && canEdit" class="md-red md-bold" @click="selectConcept(index)">Select</md-button>
-            <span v-if="item.name == selectedConcept.name" class="font-size-16">You already selected this concept</span>
+            <md-button
+              v-if="item.name != selectedConcept.name && canEdit"
+              class="md-red md-bold"
+              @click="selectConcept(index)"
+            >Select</md-button>
+            <span
+              v-if="item.name == selectedConcept.name"
+              class="font-size-16"
+            >You already selected this concept</span>
           </div>
           <div :class="`images-list option-${index+1}`">
             <div class="image-backgrounds">
@@ -121,11 +128,18 @@
       </div>
       <div class="concept-actions" v-if="!expandCreateConcept">
         <div>
-          <md-button class="md-simple md-black normal-btn" v-if="!showConceptList" @click="showConceptList=true">
+          <md-button
+            class="md-simple md-black normal-btn"
+            v-if="!showConceptList"
+            @click="showConceptList=true"
+          >
             <md-icon>arrow_back</md-icon>Back
           </md-button>
-          <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
-            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17"/>
+          <md-button
+            @click="scrollToTop"
+            class="md-button md-simple md-just-icon md-theme-default scroll-top-button"
+          >
+            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
           </md-button>
         </div>
         <md-button
@@ -162,7 +176,7 @@
             >Compete with my brilliant concept?</a>
             <span>
               <img
-                src="http://static.maryoku.com/storage/icons/Event%20Page/light.svg"
+                src="https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/light.svg"
                 alt="Avatar"
                 width="20px"
               />
@@ -203,7 +217,8 @@
           <div class="concept-details">
             <div class="concept-name d-flex align-center text-transform-capitalize">
               <h3
-                :style="`font-family:${selectedConcept.selectedConcept?selectedConcept.selectedConcept:'Manrope-Regular'}`" v-html="selectedConcept.name"
+                :style="`font-family:${selectedConcept.selectedConcept?selectedConcept.selectedConcept:'Manrope-Regular'}`"
+                v-html="selectedConcept.name"
               ></h3>
               <ul class="features-list" v-if="selectedConcept.tags">
                 <li
@@ -225,14 +240,18 @@
       <div class="selected-concept-footer d-flex justify-content-end">
         <!-- <md-button class="md-black md-simple md-maryoku " @click="showConceptList=true">
           <md-icon>keyboard_arrow_left</md-icon>Back
-        </md-button> -->
+        </md-button>-->
         <div></div>
         <div>
           <span class="concept-saved">
             <img :src="`${$iconURL}common/check-circle-green.svg`" width="32" /> Concept is Saved
           </span>
           <span class="separate"></span>
-          <md-button class="md-black md-simple md-maryoku" v-if="!showEditForm" @click="showEditForm=true">Edit Concept</md-button>
+          <md-button
+            class="md-black md-simple md-maryoku"
+            v-if="!showEditForm"
+            @click="showEditForm=true"
+          >Edit Concept</md-button>
           <md-button class="md-black md-simple md-maryoku" v-else @click="showEditForm=false">Cancel</md-button>
         </div>
       </div>
@@ -267,10 +286,10 @@ import ColorButton from "../../../../components/ColorButton";
 import EventConceptEditForm from "./EventConceptEditForm";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
-import ConceptImageBlock from '@/components/ConceptImageBlock'
+import ConceptImageBlock from "@/components/ConceptImageBlock";
 
 export default {
-  name: "event-time-line",
+  name: "event-concept-choose",
   components: {
     VueElementLoading,
     EventBlocks,
@@ -284,7 +303,7 @@ export default {
     EventConceptEditForm,
     HeaderActions,
     CommentEditorPanel,
-    ConceptImageBlock
+    ConceptImageBlock,
   },
   props: {},
   computed: {
@@ -297,17 +316,17 @@ export default {
     },
     permission() {
       try {
-        return this.$store.state.event.eventData.permit 
-      } catch(e) {
-        return "edit"
+        return this.$store.state.event.eventData.permit;
+      } catch (e) {
+        return "edit";
       }
     },
     canComment() {
-      return this.permission === 'edit' || this.permission === 'comment'
+      return this.permission === "edit" || this.permission === "comment";
     },
     canEdit() {
-      return this.permission === 'edit'
-    }
+      return this.permission === "edit";
+    },
   },
   data: () => ({
     // auth: auth,
@@ -320,15 +339,18 @@ export default {
     somethingMessage: null,
     timelineAttachment: null,
     event: {},
-    timelineIconsURL: "http://static.maryoku.com/storage/icons/timeline/svg/",
+    timelineIconsURL:
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/timeline/svg/",
     menuIconsURL:
-      "http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/",
-    iconsURL: "http://static.maryoku.com/storage/icons/Event%20Page/",
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
+    iconsURL:
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/",
     newTimeLineIconsURL:
-      "http://static.maryoku.com/storage/icons/Timeline-New/",
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/Timeline-New/",
     budgetElementsIConsURL:
-      "http://static.maryoku.com/storage/icons/Budget+Elements/",
-    conceptIconsURL: "http://static.maryoku.com/storage/icons/Concept/",
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget+Elements/",
+    conceptIconsURL:
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/Concept/",
     showSomethingModal: false,
     showShareVendorModal: false,
     selectedBlock: {},
@@ -509,10 +531,14 @@ export default {
     },
     selectConcept(index) {
       let event = this.$store.state.event.eventData;
-      this.$http.get(`${process.env.SERVER_URL}/1/concepts/${event.id}/select/${this.conceptOptions[index].id}`).then(res=>{
-        console.log(res.data)
-        this.onSaveConcept(res.data);
-      })
+      this.$http
+        .get(
+          `${process.env.SERVER_URL}/1/concepts/${event.id}/select/${this.conceptOptions[index].id}`,
+        )
+        .then((res) => {
+          console.log(res.data);
+          this.onSaveConcept(res.data);
+        });
 
       // this.onSaveConcept(this.conceptOptions[index]);
       // this.selectedConcept = this.conceptOptions[index]
@@ -531,10 +557,10 @@ export default {
           "event/saveEventAction",
           new CalendarEvent({
             id: event.id,
-            concept: {id: eventConcept.id},
+            concept: { id: eventConcept.id },
             conceptProgress: 100,
             calendar: calendar,
-          })
+          }),
         )
         .then((result) => {
           this.showConceptList = false;
@@ -543,8 +569,8 @@ export default {
           this.isLoading = false;
         });
     },
-    imageUrlAlt(image, event){
-       event.target.src = image
+    imageUrlAlt(image, event) {
+      event.target.src = image;
     },
     openConceptContest() {
       window.open(`https://www.maryoku.com/concept-contest`, "_blank");
@@ -561,16 +587,21 @@ export default {
           item.url = item.url;
         });
         this.showConceptList = false;
-        this.conceptOptions.push(this.selectedConcept)
+        this.conceptOptions.push(this.selectedConcept);
       } else {
-        this.loadingConceptOptions = true
-        this.$http.get(`${process.env.SERVER_URL}/1/concepts/${this.eventData.id}/suggestions`).then(res => {
-          this.conceptOptions = res.data.slice(0,3);
-          this.showConceptList = true;
-          this.loadingConceptOptions = false
-        }).catch(err=>{
-          this.loadingConceptOptions = false
-        })
+        this.loadingConceptOptions = true;
+        this.$http
+          .get(
+            `${process.env.SERVER_URL}/1/concepts/${this.eventData.id}/suggestions`,
+          )
+          .then((res) => {
+            this.conceptOptions = res.data.slice(0, 3);
+            this.showConceptList = true;
+            this.loadingConceptOptions = false;
+          })
+          .catch((err) => {
+            this.loadingConceptOptions = false;
+          });
       }
       this.isLoading = false;
       console.log(this.event.id);

@@ -38,7 +38,11 @@
 
         <!-- Event Booking Items -->
         <div class="md-layout events-booking-items" v-if="proposals.length">
-          <div class="md-layout-item md-size-33" v-for="(proposal,index) in  proposals" :key="index">
+          <div
+            class="md-layout-item md-size-33"
+            v-for="(proposal,index) in  proposals"
+            :key="index"
+          >
             <div class="booking-item">
               <div
                 class="event-image"
@@ -165,12 +169,13 @@
         </modal>
       </template>
       <template v-if="showCounterPage">
-        <div class="text-center font-size-20 md-layout-item md-size-100 mt-50" style="line-height: 2em"> 
-          Our process is seeking vendors from our pool that are aligned with your requirements. 
-          <br/>
-          Those vendors will receive an email with a link to create a proposal.
-          <br/>
-          This process will take 
+        <div
+          class="text-center font-size-20 md-layout-item md-size-100 mt-50"
+          style="line-height: 2em"
+        >
+          Our process is seeking vendors from our pool that are aligned with your requirements.
+          <br />Those vendors will receive an email with a link to create a proposal.
+          <br />This process will take
           in 4days.
         </div>
       </template>
@@ -178,9 +183,7 @@
     <template v-if="!showProposals ">
       <booking-event-requirement @setRequirements="setRequirements" :component="selectedBlock"></booking-event-requirement>
     </template>
-    
   </div>
-  
 </template>
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
@@ -191,7 +194,7 @@ import EventTimelineItem from "@/models/EventTimelineItem";
 import moment from "moment";
 import swal from "sweetalert2";
 import InputMask from "vue-input-mask";
-import BookingEventRequirement from './BookingEventRequirement.vue'
+import BookingEventRequirement from "./BookingEventRequirement.vue";
 
 import VueElementLoading from "vue-element-loading";
 // import auth from '@/auth';
@@ -215,7 +218,7 @@ export default {
     EventChangeProposalModal,
     HeaderActions,
     CommentEditorPanel,
-    BookingEventRequirement
+    BookingEventRequirement,
   },
   props: {},
   data: () => ({
@@ -224,15 +227,16 @@ export default {
     isLoading: true,
     somethingMessage: null,
     event: {},
-    iconsURL: "http://static.maryoku.com/storage/icons/Event%20Page/",
+    iconsURL:
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/",
     showSomethingModal: false,
     showShareVendorModal: false,
     blockVendors: null,
     selectedBlock: null,
     proposals: [],
     showCommentEditorPanel: false,
-    blockId:"",
-    showProposals: false
+    blockId: "",
+    showProposals: false,
   }),
   methods: {
     ...mapMutations("event", ["setEventData"]),
@@ -241,17 +245,20 @@ export default {
       new EventComponent()
         .for(this.calendar, this.event)
         .get()
-        .then(resp => {
+        .then((resp) => {
           const selectedComponent = _.findWhere(resp, {
-            id: this.blockId
+            id: this.blockId,
           });
-          this.selectedBlock = new EventComponent(selectedComponent)
-          if (this.selectedBlock.vendorRequirements && this.selectedBlock.vendorRequirements[0]) {
-            this.showCounterPage = true
-            this.showProposals = true
+          this.selectedBlock = new EventComponent(selectedComponent);
+          if (
+            this.selectedBlock.vendorRequirements &&
+            this.selectedBlock.vendorRequirements[0]
+          ) {
+            this.showCounterPage = true;
+            this.showProposals = true;
           } else {
-            this.showCounterPage = false
-            this.showProposals = false
+            this.showCounterPage = false;
+            this.showProposals = false;
           }
         });
     },
@@ -259,21 +266,23 @@ export default {
       this.showCommentEditorPanel = mode;
     },
     fetchData() {
-      this.blockId = this.$route.params.blockId
-      this.event = this.$store.state.event.eventData
+      this.blockId = this.$route.params.blockId;
+      this.event = this.$store.state.event.eventData;
       this.getCommentComponents(this.blockId);
       this.getSelectedBlock();
     },
     setRequirements(vendors) {
-      this.selectedBlock.vendors = vendors
-      this.showCounterPage = true
-      this.showProposals = true
-    }
+      this.selectedBlock.vendors = vendors;
+      this.showCounterPage = true;
+      this.showProposals = true;
+    },
   },
   created() {
     this.isLoading = true;
-    this.calendar = new Calendar({id: this.$store.state.auth.user.profile.defaultCalendarId})
-    this.fetchData()
+    this.calendar = new Calendar({
+      id: this.$store.state.auth.user.profile.defaultCalendarId,
+    });
+    this.fetchData();
   },
   watch: {
     event(newVal, oldVal) {
@@ -281,25 +290,25 @@ export default {
         "set-title",
         this.event,
         this.routeName === "EditBuildingBlocks",
-        true
+        true,
       );
     },
-    '$route': 'fetchData'
+    $route: "fetchData",
   },
   filters: {
-    formatDate: function(date) {
+    formatDate: function (date) {
       return moment(date).format("MMM Do YYYY ");
     },
-    formatTime: function(date) {
+    formatTime: function (date) {
       return moment(date).format("h:00 A");
     },
-    formatDuration: function(startDate, endDate) {
+    formatDuration: function (startDate, endDate) {
       return moment(endDate).diff(startDate, "hours");
     },
     withComma(amount) {
       return amount ? amount.toLocaleString() : 0;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss">

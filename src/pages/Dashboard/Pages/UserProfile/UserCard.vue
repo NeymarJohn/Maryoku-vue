@@ -1,41 +1,42 @@
 <template>
   <md-card class="md-card-profile">
     <div class="md-card-avatar">
-       <img class="img" :src="cardUserImage">
+      <img class="img" :src="cardUserImage" />
     </div>
 
     <md-card-content>
       <h6 class="category text-gray">CEO / Co-Founder</h6>
       <h4 class="card-title">Alec Thompson</h4>
-      <p class="card-description">
-          Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
-      </p>
+      <p
+        class="card-description"
+      >Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...</p>
       <md-button class="md-round" :class="getColorButton(buttonColor)">Follow</md-button>
     </md-card-content>
   </md-card>
 </template>
 <script>
 export default {
-  name: 'user-card',
+  name: "user-card",
   props: {
     cardUserImage: {
       type: String,
-      default: 'http://static.maryoku.com/storage/img/faces/marc.jpg'
+      default:
+        "https://static-maryoku.s3.amazonaws.com/storage/img/faces/marc.jpg",
     },
     buttonColor: {
       type: String,
-      default: ''
-    }
+      default: "",
+    },
   },
-  data () {
-    return {}
+  data() {
+    return {};
   },
   methods: {
     getColorButton: function (buttonColor) {
-      return 'md-' + buttonColor + ''
-    }
-  }
-}
+      return "md-" + buttonColor + "";
+    },
+  },
+};
 </script>
 <style>
 </style>

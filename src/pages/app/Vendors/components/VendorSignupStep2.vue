@@ -2,18 +2,24 @@
   <div class="vendor-signup-step2-wrapper">
     <div class="inside-container">
       <div class="left-side">
-        <img :src="`${iconUrl}Group 5222 (2).svg`"/>
-        <h2>SERVICES & <br/>AMENTITIES</h2>
+        <img :src="`${iconUrl}Group 5222 (2).svg`" />
+        <h2>
+          SERVICES &
+          <br />AMENTITIES
+        </h2>
         <p>Don't leave anything out! All information will appear on your future proposals</p>
         <h2>2/4</h2>
       </div>
       <div class="right-side">
         <div class="description">
-          <h5><img :src="`${iconUrl}Group 5222 (2).svg`"/> {{getCategoryNameByValue(vendor.vendorCategory)}} Amenities</h5>
+          <h5>
+            <img :src="`${iconUrl}Group 5222 (2).svg`" />
+            {{getCategoryNameByValue(vendor.vendorCategory)}} Amenities
+          </h5>
           <p>Mark all the services you can support and will be included in your proposal. If needed please add a decsription or amount.</p>
         </div>
-        <vendor-service-item 
-          v-for="(c, cIndex) in categories.filter(category => category.name == vendor.vendorCategory)[0].categories" 
+        <vendor-service-item
+          v-for="(c, cIndex) in categories.filter(category => category.name == vendor.vendorCategory)[0].categories"
           :key="cIndex"
           :serviceItem="c"
           :vendor="vendor"
@@ -24,16 +30,16 @@
 </template>
 
 <script>
-import moment from 'moment'
-import VueElementLoading from 'vue-element-loading'
-import Vendors from '@/models/Vendors'
+import moment from "moment";
+import VueElementLoading from "vue-element-loading";
+import Vendors from "@/models/Vendors";
 
 //COMPONENTS
-import Icon from '@/components/Icon/Icon.vue'
-import VendorServiceItem from './VendorServiceItem.vue'
+import Icon from "@/components/Icon/Icon.vue";
+import VendorServiceItem from "./VendorServiceItem.vue";
 
 export default {
-  name: 'vendor-signup-step2',
+  name: "vendor-signup-step2",
   props: {
     categories: Array,
     icon: String,
@@ -41,165 +47,158 @@ export default {
   },
   components: {
     VueElementLoading,
-    VendorServiceItem
+    VendorServiceItem,
   },
   data() {
     return {
       filteredCategories: [],
       categoryNames: [
         {
-          name: 'Venue Rental',
-          value: 'venuerental',
+          name: "Venue Rental",
+          value: "venuerental",
         },
         {
-          name: 'Food & Beverage',
-          value: 'foodandbeverage',
+          name: "Food & Beverage",
+          value: "foodandbeverage",
         },
         {
-          name: 'Design and Decor',
-          value: 'decor',
+          name: "Design and Decor",
+          value: "decor",
         },
         {
-          name: 'Guest Services & Staffing',
-          value: 'corporatesocialresponsibility',
+          name: "Guest Services & Staffing",
+          value: "corporatesocialresponsibility",
         },
         {
-          name: 'Signage / Printing',
-          value: 'signageprinting',
+          name: "Signage / Printing",
+          value: "signageprinting",
         },
         {
-          name: 'Advertising and Promotion',
-          value: 'advertising-promotion',
+          name: "Advertising and Promotion",
+          value: "advertising-promotion",
         },
         {
-          name: 'AV / Staging',
-          value: 'audiovisualstagingservices',
+          name: "AV / Staging",
+          value: "audiovisualstagingservices",
         },
         {
-          name: 'Swags',
-          value: 'swags',
+          name: "Swags",
+          value: "swags",
         },
         {
-          name: 'Shipping',
-          value: 'shipping',
+          name: "Shipping",
+          value: "shipping",
         },
         {
-          name: 'Transportation & Tour operator',
-          value: 'transportation',
+          name: "Transportation & Tour operator",
+          value: "transportation",
         },
         {
-          name: 'Entertainment',
-          value: 'entertainment',
+          name: "Entertainment",
+          value: "entertainment",
         },
         {
-          name: 'Administration',
-          value: 'administration',
+          name: "Administration",
+          value: "administration",
         },
         {
-          name: 'Security',
-          value: 'securityservices',
+          name: "Security",
+          value: "securityservices",
         },
         {
-          name: 'Technology',
-          value: 'technologyservices',
+          name: "Technology",
+          value: "technologyservices",
         },
         {
-          name: 'Videography and Photography',
-          value: 'videographyandphotography',
+          name: "Videography and Photography",
+          value: "videographyandphotography",
         },
         {
-          name: 'Equipment Rentals',
-          value: 'equipmentrentals'
-        }
+          name: "Equipment Rentals",
+          value: "equipmentrentals",
+        },
       ],
-      iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
-    }
+      iconUrl:
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+    };
   },
-  created() {
-    
-  },
-  mounted() {
-  },
+  created() {},
+  mounted() {},
   methods: {
     getCategoryNameByValue(value) {
-      return this.categoryNames.filter( c => c.value == value)[0].name
+      return this.categoryNames.filter((c) => c.value == value)[0].name;
     },
   },
-  computed: {
-    
-  },
-  filters: {
-    
-  },
-  watch: {
-  }
+  computed: {},
+  filters: {},
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>
-  .vendor-signup-step2-wrapper {
-    font-family: Manrope-Regular, sans-serif;
+.vendor-signup-step2-wrapper {
+  font-family: Manrope-Regular, sans-serif;
 
-    .inside-container {
-      display: flex;
-      color: #050505;
+  .inside-container {
+    display: flex;
+    color: #050505;
 
-      .left-side {
-        flex: 1;
-        margin-right: 122px;
+    .left-side {
+      flex: 1;
+      margin-right: 122px;
 
-        img {
-          width: 92.5px;
-        }
-        h4 {
-          margin: 36px 0 11px 0;
-          font: 800 20px Manrope-Regular, sans-serif;
+      img {
+        width: 92.5px;
+      }
+      h4 {
+        margin: 36px 0 11px 0;
+        font: 800 20px Manrope-Regular, sans-serif;
+      }
+      p {
+        margin: 0;
+        padding: 0;
+        font: normal 16px Manrope-Regular, sans-serif;
+      }
+      h2 {
+        margin: 30px 0;
+        font: 800 40px Manrope-Regular, sans-serif;
+      }
+      h3 {
+        margin: 0;
+        color: #f51355;
+        font: bold 20px Manrope-Regular, sans-serif;
+      }
+    }
+    .right-side {
+      flex: 3;
+
+      h2 {
+        margin: 0;
+        margin-bottom: 40px;
+        font: 800 40px Manrope-Regular, sans-serif;
+      }
+      .card {
+        padding: 30px 60px 60px 60px;
+        background-color: #ffffff;
+        box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+      }
+      .description {
+        color: #050505;
+        h5 {
+          margin: 0;
+          font: 800 16px Manrope-Regular, sans-serif;
+          text-transform: capitalize;
+
+          img {
+            width: 22px;
+            margin-right: 12px;
+          }
         }
         p {
-          margin: 0;
-          padding: 0;
+          margin: 14px 0 30px 0;
           font: normal 16px Manrope-Regular, sans-serif;
-        }
-        h2 {
-          margin: 30px 0;
-          font: 800 40px Manrope-Regular, sans-serif;
-        }
-        h3 {
-          margin: 0;
-          color: #f51355;
-          font: bold 20px Manrope-Regular, sans-serif;
-        }
-      }
-      .right-side {
-        flex: 3;
-
-        h2 {
-          margin: 0;
-          margin-bottom: 40px;
-          font: 800 40px Manrope-Regular, sans-serif;
-        }
-        .card {
-          padding: 30px 60px 60px 60px;
-          background-color: #ffffff;
-          box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-        }
-        .description {
-          color: #050505;
-          h5 {
-            margin: 0;
-            font: 800 16px Manrope-Regular, sans-serif;
-            text-transform: capitalize;
-
-            img {
-              width: 22px;
-              margin-right: 12px;
-            }
-          }
-          p {
-            margin: 14px 0 30px 0;
-            font: normal 16px Manrope-Regular, sans-serif;
-          }
         }
       }
     }
-  }  
+  }
+}
 </style>

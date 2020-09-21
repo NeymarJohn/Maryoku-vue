@@ -57,9 +57,9 @@
   </div>
 </template>
 <script>
-import VSignupSteps from './Extra/VSignupSteps.vue';
-import { Modal } from '@/components';
-import moment from 'moment';
+import VSignupSteps from "./Extra/VSignupSteps.vue";
+import { Modal } from "@/components";
+import moment from "moment";
 
 export default {
   components: {
@@ -71,9 +71,10 @@ export default {
       vendor: {},
       reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
       savedItModal: false,
-      iconsUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
+      iconsUrl:
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       proposalIconsUrl:
-        'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       isApproved: false,
       step: 1,
     };
@@ -93,7 +94,7 @@ export default {
     },
     approve() {
       if (this.validateBasicFields()) {
-        this.$root.$emit('approve-vendor-basic-info');
+        this.$root.$emit("approve-vendor-basic-info");
         this.isApproved = true;
         this.step = 1;
       } else {
@@ -110,12 +111,12 @@ export default {
       this.scrollToTop();
     },
     next() {
-      this.$root.$emit('next-vendor-signup-step');
+      this.$root.$emit("next-vendor-signup-step");
       if (this.step < 5) {
         this.step += 1;
       } else {
         if (this.vendor.password == this.vendor.confirmPassword) {
-          this.$root.$emit('vendor-signup');
+          this.$root.$emit("vendor-signup");
           this.savedItModal = true;
         } else {
           alert();
@@ -124,7 +125,7 @@ export default {
       this.scrollToTop();
     },
     prev() {
-      this.$root.$emit('prev-vendor-signup-step');
+      this.$root.$emit("prev-vendor-signup-step");
       if (this.step > 0) {
         this.step -= 1;
       }
@@ -140,7 +141,7 @@ export default {
       this.savedItModal = true;
     },
     hideModal() {
-      this.$store.dispatch('vendor/resetStatus');
+      this.$store.dispatch("vendor/resetStatus");
     },
     camelize(str) {
       let temp = str.replace(/\W+(.)/g, function (match, chr) {
@@ -151,27 +152,27 @@ export default {
   },
   created() {},
   mounted() {
-    this.$root.$on('go-to-signup-step', (step) => {
+    this.$root.$on("go-to-signup-step", (step) => {
       this.step = step;
       this.isApproved = this.step < 1 ? false : true;
     });
-    this.$root.$on('update-vendor-value', (field, value) => {
+    this.$root.$on("update-vendor-value", (field, value) => {
       this.$set(this.vendor, this.camelize(field), value);
     });
   },
   computed: {
     nextLabel() {
       if (this.step == 5) {
-        return 'Sign Up';
+        return "Sign Up";
       } else if (this.step == 4) {
-        return 'Finish';
+        return "Finish";
       } else {
-        return 'Next';
+        return "Next";
       }
     },
     status() {
       console.log();
-      return this.$store.getters['vendor/getStatus'];
+      return this.$store.getters["vendor/getStatus"];
     },
   },
 };

@@ -14,109 +14,119 @@
       </div>
       <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
     </div>
-
-    <div
-      class="md-layout-item md-xlarge-size-65 md-large-size-65 md-small-size-50 time-line-section mr-auto mt-20"
-      ref="content"
-    >
-      <button
-        v-scroll-to="'#timeline-edit-card'"
-        ref="scrollBtn"
-        style="display:none"
-      >Scroll to the editing card</button>
-      <div class="timeline-items-list">
-        <div
-          class="timeline-items-list__item"
-          v-for="(scheduleDate,timelineIndex) in timelineDates"
-          :key="timelineIndex"
-        >
-          <div class="item-header">
-            <div class="header-title">
-              <div class="time-line-edit d-flex justify-content-center align-center">
-                <label
-                  style="white-space:nowrap; padding-right:10px"
-                >Day {{numberToWord(timelineIndex + 1)}}</label>
-                <div>{{scheduleDate}}</div>
-                <md-datepicker
-                  :md-disabled-dates="getDisabledDates(timelineIndex)"
-                  :md-closed="closeEditTimeline(timelineIndex)"
-                  md-immediately
-                ></md-datepicker>
+    <div class="md-layout">
+      <div
+        class="md-layout-item md-xlarge-size-65 md-large-size-65 md-small-size-50 time-line-section mr-auto mt-20"
+        ref="content"
+      >
+        <button
+          v-scroll-to="'#timeline-edit-card'"
+          ref="scrollBtn"
+          style="display:none"
+        >Scroll to the editing card</button>
+        <div class="timeline-items-list">
+          <div
+            class="timeline-items-list__item"
+            v-for="(scheduleDate,timelineIndex) in timelineDates"
+            :key="timelineIndex"
+          >
+            <div class="item-header mb-10">
+              <div class="header-title">
+                <div class="time-line-edit d-flex justify-content-center align-center">
+                  <label
+                    style="white-space:nowrap; padding-right:10px"
+                  >Day {{numberToWord(timelineIndex + 1)}}</label>
+                  <div>{{scheduleDate}}</div>
+                  <md-datepicker
+                    :md-disabled-dates="getDisabledDates(timelineIndex)"
+                    :md-closed="closeEditTimeline(timelineIndex)"
+                    md-immediately
+                  ></md-datepicker>
+                </div>
+              </div>
+              <div class="header-actions">
+                <md-button
+                  class="md-default md-simple md-just-icon md-wrapper"
+                  style="font-size:26px !important"
+                  @click="addTimelineItem(timelineIndex)"
+                >
+                  <md-icon>add_circle</md-icon>
+                </md-button>
+                <md-button
+                  class="md-default md-simple md-just-icon md-wrapper"
+                  style="font-size:26px !important"
+                  @click="askRemoveTimelineItem(timelineIndex)"
+                >
+                  <md-icon>delete_outline</md-icon>
+                </md-button>
               </div>
             </div>
-            <div class="header-actions">
-              <md-button
-                class="md-default md-simple md-just-icon md-wrapper"
-                style="font-size:26px !important"
-                @click="addTimelineItem(timelineIndex)"
-              >
-                <md-icon>add_circle</md-icon>
-              </md-button>
-              <md-button
-                class="md-default md-simple md-just-icon md-wrapper"
-                style="font-size:26px !important"
-                @click="askRemoveTimelineItem(timelineIndex)"
-              >
-                <md-icon>delete_outline</md-icon>
-              </md-button>
-            </div>
-          </div>
 
-          <drop
-            @drop="handleDrop(timelineIndex, ...arguments)"
-            style="height: 100%; min-height: 50px;"
-            :data-index="timelineIndex"
-          >
-            <draggable :list="timelineItems[scheduleDate]" class="time-line-blocks_selected-items">
-              <div
-                v-for="(item,index) in timelineItems[scheduleDate]"
-                :key="index"
-                class="time-line-blocks_selected-items_item time-line-item"
+            <drop
+              @drop="handleDrop(timelineIndex, ...arguments)"
+              style="height: 100%; min-height: 50px;"
+              :data-index="timelineIndex"
+            >
+              <draggable
+                :list="timelineItems[scheduleDate]"
+                class="time-line-blocks_selected-items"
               >
-                <timeline-template-item
+                <div
+                  v-for="(item,index) in timelineItems[scheduleDate]"
+                  :key="item.id?item.id:Math.random()"
+                  class="time-line-blocks_selected-items_item time-line-item"
+                >
+                  <!-- <timeline-template-item
                   v-if="item.status=='template' || item.status=='timegap'"
                   :item="item"
                   :index="index"
-                ></timeline-template-item>
-                <timeline-item v-else :item="item" :index="index" @save="saveTimeline"></timeline-item>
-                <timeline-empty :index="index" :date="scheduleDate"></timeline-empty>
-              </div>
-            </draggable>
-          </drop>
-        </div>
-      </div>
-    </div>
-    <md-card
-      class="md-card-plain time-line-blocks md-layout-item md-xlarge-size-35 md-large-size-35 md-small-size-40"
-      style="margin-top: 16px; padding-right: 3em"
-    >
-      <md-card-content class="md-layout time-line-blocks_items">
-        <div class="text-center width-100 p-10 font-size-16 mb-10">Drag Tim Slots timeline</div>
-
-        <div
-          v-for="(section,index) in blocksList"
-          :key="index"
-          class="md-layout-item md-size-100 mb-30"
-        >
-          <div v-for="block in section" :key="block.id" class="md-layout-item md-size-100">
-            <drag
-              :transfer-data="{ block }"
-              class="time-line-blocks_item"
-              :style="`color :` + block.color"
-            >
-              <div class="font-size-16 font-bold text-transform-capitalize d-flex align-center">
-                <md-icon>drag_indicator</md-icon>
-                <img
-                  :src="`${newTimeLineIconsURL}${block.icon.toLowerCase()}.svg`"
-                  class="label-icon mr-10"
-                />
-                {{block.buildingBlockType}}
-              </div>
-            </drag>
+                  ></timeline-template-item>-->
+                  <timeline-item
+                    :item="item"
+                    :index="index"
+                    :timelineItems="timelineItems"
+                    @save="saveTimeline"
+                    @cancel="cancleTimeline"
+                  ></timeline-item>
+                  <timeline-empty :index="index" :date="scheduleDate"></timeline-empty>
+                </div>
+              </draggable>
+            </drop>
           </div>
         </div>
-      </md-card-content>
-    </md-card>
+      </div>
+      <md-card
+        class="md-card-plain time-line-blocks md-layout-item md-xlarge-size-35 md-large-size-35 md-small-size-40"
+        style="margin-top: 16px; padding-right: 3em"
+      >
+        <md-card-content class="md-layout time-line-blocks_items mb-60">
+          <div class="text-center width-100 p-10 font-size-16 mb-10">Drag Tim Slots timeline</div>
+
+          <div
+            v-for="(section,index) in blocksList"
+            :key="index"
+            class="md-layout-item md-size-100 mb-30"
+          >
+            <div v-for="block in section" :key="block.id" class="md-layout-item md-size-100">
+              <drag
+                :transfer-data="{ block }"
+                class="time-line-blocks_item"
+                :style="`color :` + block.color"
+              >
+                <div class="font-size-16 font-bold text-transform-capitalize d-flex align-center">
+                  <md-icon>drag_indicator</md-icon>
+                  <img
+                    :src="`${newTimeLineIconsURL}${block.icon.toLowerCase()}.svg`"
+                    class="label-icon mr-10"
+                  />
+                  {{block.buildingBlockType}}
+                </div>
+              </drag>
+            </div>
+          </div>
+        </md-card-content>
+      </md-card>
+    </div>
 
     <!-- Confirm Modal-->
     <modal v-if="showDeleteConfirmModal" class="delete-timeline-model">
@@ -200,12 +210,11 @@ import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./components/CommentEditorPanel";
 
 import ProgressSidebar from "./components/progressSidebar";
-import TimeInput from "../../../components/TimeInput";
 import PlannerEventFooter from "@/components/Planner/FooterPanel";
 import { timelineBlockItems } from "@/constants/event";
 
 export default {
-  name: "event-time-line",
+  name: "event-details-timeline",
   components: {
     VueElementLoading,
     EventBlocks,
@@ -216,7 +225,6 @@ export default {
     InputMask,
     ProgressSidebar,
     Modal,
-    TimeInput,
     LocationInput,
     HeaderActions,
     CommentEditorPanel,
@@ -241,14 +249,15 @@ export default {
     hoursArray: [],
     disabledDragging: false,
     timelineAttachment: null,
-    timelineIconsURL: "http://static.maryoku.com/storage/icons/timeline/svg/",
+    timelineIconsURL:
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/timeline/svg/",
     menuIconsURL:
-      "http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/",
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
     event: {},
     showDeleteConfirmModal: false,
     indexOfDeleteItem: -1,
     newTimeLineIconsURL:
-      "http://static.maryoku.com/storage/icons/Timeline-New/",
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/Timeline-New/",
 
     timeline: [
       {
@@ -306,32 +315,12 @@ export default {
      * @param data
      * @param event
      */
-    applyToTemplate(index, template, selectedBlock) {
-      if (!this.canEdit) {
-        swal({
-          title: "Sorry, you can't edit timeline. ",
-          showCancelButton: false,
-          confirmButtonClass: "md-button md-success",
-          confirmButtonText: "Ok, I got it",
-          buttonsStyling: false,
-        })
-          .then((result) => {
-            if (result.value === true) {
-              return;
-            }
-          })
-          .catch((err) => {});
-        return;
-      }
+    getAddedTimelineItem(index, template, selectedBlock) {
       if (selectedBlock) {
-        console.log("adding block");
-        console.log(selectedBlock);
         let block = Object.assign({}, selectedBlock);
-        block.id = template.id;
+        if (template.id) block.id = template.id;
+        else block.id = null;
         block.mode = "edit";
-        let startDate = new Date(template.date);
-        let endDate = new Date(template.date);
-
         block.startTime = moment(
           `${template.date} 00:00 am`,
           "DD/MM/YY hh:mm a",
@@ -376,18 +365,10 @@ export default {
         block.isItemLoading = false;
         block.icon = selectedBlock.icon;
         block.date = template.date;
-        block.event = template.event;
-        console.log(this.timelineItems[template.date][index]);
-        this.timelineItems[template.date][index] = { ...block };
-        this.timelineItems = { ...this.timelineItems };
-        this.disabledDragging = true;
+        block.event = { id: this.eventData.id };
+        return block;
       }
-      // setTimeout(() => {
-      //   const scrollBtn = this.$refs.scrollBtn;
-      //   if (scrollBtn) {
-      //     scrollBtn.click();
-      //   }
-      // }, 100);
+      return null;
     },
     handleDrop(index, data) {
       return;
@@ -508,21 +489,10 @@ export default {
           this.$root.$emit("timeline-updated", this.timelineItems);
         });
     },
-    cancelTimelineItem(item, timelineIndex, itemIndexOfTimeline) {
-      const itemIndex = this.timelineItems.findIndex((it) => it.id === item.id);
-      if (item.dateCreated) {
-        this.$set(this.timelineItems[itemIndex], "mode", "saved");
-        this.$set(
-          this.timeline[timelineIndex].items[itemIndexOfTimeline],
-          "mode",
-          "saved",
-        );
-      } else {
-        // this.timelineItems.splice(itemIndex, 1)
-        this.timeline[timelineIndex].items.splice(itemIndexOfTimeline, 1);
+    cancleTimeline({ item, index }) {
+      if (!this.timelineItems[item.date][index].id) {
+        this.timelineItems[item.date].splice(index, 1);
       }
-      this.disabledDragging = false;
-      this.currentAttachments = [];
     },
     saveTimeline({ item, index }) {
       console.log(item);
@@ -794,7 +764,7 @@ export default {
       reader.readAsDataURL(file);
     },
     openAttachment(path) {
-      window.open(`http://static.maryoku.com/${path}`, "_blank");
+      window.open(`https://static-maryoku.s3.amazonaws.com/${path}`, "_blank");
     },
     formatDate(date) {
       if (typeof date == "number") {
@@ -935,8 +905,56 @@ export default {
     },
     revert() {},
     startFromScratch() {},
-    saveDraft() {},
-    finalize() {},
+    saveDraft() {
+      this.$http
+        .post(
+          `${process.env.SERVER_URL}/1/events/${this.eventData.id}/timelineItems`,
+          this.timelineItems,
+          { headers: this.$auth.getAuthHeader() },
+        )
+        .then((res) => {
+          swal({
+            title: "Good Job! ",
+            text:
+              "Your working timeline is saved successfully! You can change it anytime!",
+            showCancelButton: false,
+            confirmButtonClass: "md-button md-success",
+            confirmButtonText: "Ok",
+            buttonsStyling: false,
+          })
+            .then((result) => {
+              if (result.value === true) {
+                return;
+              }
+            })
+            .catch((err) => {});
+        });
+    },
+    finalize() {
+      this.$http
+        .post(
+          `${process.env.SERVER_URL}/1/events/${this.eventData.id}/timelineItems`,
+          this.timelineItems,
+          { headers: this.$auth.getAuthHeader() },
+        )
+        .then((res) => {
+          swal({
+            title: "Good Job! ",
+            text:
+              "You finalise timeline and your event will be processed according your timelines!",
+            showCancelButton: false,
+            confirmButtonClass: "md-button md-success",
+            confirmButtonText: "Ok",
+            buttonsStyling: false,
+          })
+            .then((result) => {
+              if (result.value === true) {
+                return;
+              }
+            })
+            .catch((err) => {});
+        });
+    },
   },
   created() {
     [...Array(12).keys()].map((x) =>
@@ -968,10 +986,6 @@ export default {
     this.$root.$on("remove-template", ({ item, index }) => {
       this.timelineItems[item.date].splice(index, 1);
     });
-    this.$root.$on("apply-template", ({ item, block, index }) => {
-      this.timelineItems[item.date][index] = {};
-      this.applyToTemplate(index, item, block);
-    });
     this.$root.$on("add-template", ({ date, block, index }) => {
       const prevItem = this.timelineItems[date][index];
       const nextItem = this.timelineItems[date][index + 1];
@@ -997,8 +1011,14 @@ export default {
           .catch((err) => {});
         return;
       }
-      this.timelineItems[date].splice(index + 1, 0, {});
-      this.applyToTemplate(index + 1, { date: date }, block);
+      const newTimeline = this.getAddedTimelineItem(
+        index + 1,
+        { date: date, action: "edited" },
+        block,
+      );
+      console.log("newTimeline", newTimeline);
+      if (newTimeline)
+        this.timelineItems[date].splice(index + 1, 0, newTimeline);
     });
   },
   computed: {

@@ -595,38 +595,38 @@
 
 <script>
 // MAIN MODULES
-import { mapGetters, mapMutations, mapState } from 'vuex'
+import { mapGetters, mapMutations, mapState } from "vuex";
 
 // import auth from '@/auth';
-import swal from 'sweetalert2'
+import swal from "sweetalert2";
 
 // COMPONENTS
-import { Tabs, NavTabsCard } from '@/components'
-import VueElementLoading from 'vue-element-loading'
-import Select from '@/components/Select/Select.vue'
-import MyCompanyDashboard from 'src/pages/app/MyCompany/MyCompanyDashboard.vue'
-import MyCompanyApprovals from 'src/pages/app/MyCompany/MyCompanyApprovals.vue'
-import MyCompanyProfile from 'src/pages/app/MyCompany/MyCompanyProfile.vue'
-import MyCompanyBilling from 'src/pages/app/MyCompany/MyCompanyBilling.vue'
-import MyCompanySettings from 'src/pages/app/MyCompany/MyCompanySettings.vue'
-import InputText from '@/components/Inputs/InputText.vue'
-import ButtonDiv from '@/components/Button/ButtonDiv.vue'
-import Button from '@/components/Button/Button.vue'
-import ControlPanel from '@/components/Button/ControlPanel.vue'
-import LineIndicator from '@/components/Chart/LineIndicator.vue'
-import LineChart from '@/components/Chart/LineChart.vue'
+import { Tabs, NavTabsCard } from "@/components";
+import VueElementLoading from "vue-element-loading";
+import Select from "@/components/Select/Select.vue";
+import MyCompanyDashboard from "src/pages/app/MyCompany/MyCompanyDashboard.vue";
+import MyCompanyApprovals from "src/pages/app/MyCompany/MyCompanyApprovals.vue";
+import MyCompanyProfile from "src/pages/app/MyCompany/MyCompanyProfile.vue";
+import MyCompanyBilling from "src/pages/app/MyCompany/MyCompanyBilling.vue";
+import MyCompanySettings from "src/pages/app/MyCompany/MyCompanySettings.vue";
+import InputText from "@/components/Inputs/InputText.vue";
+import ButtonDiv from "@/components/Button/ButtonDiv.vue";
+import Button from "@/components/Button/Button.vue";
+import ControlPanel from "@/components/Button/ControlPanel.vue";
+import LineIndicator from "@/components/Chart/LineIndicator.vue";
+import LineChart from "@/components/Chart/LineChart.vue";
 
-import Customer from '@/models/Customer'
-import CustomerFile from '@/models/CustomerFile'
-import Datepicker from '@/components/Datepicker/Datepicker.vue'
+import Customer from "@/models/Customer";
+import CustomerFile from "@/models/CustomerFile";
+import Datepicker from "@/components/Datepicker/Datepicker.vue";
 
 // CONSTANST
-import listMonth, { months_short } from '@/constants/month'
+import listMonth, { months_short } from "@/constants/month";
 
 // helper function
-import { isWrong } from '@/utils/helperFunction'
+import { isWrong } from "@/utils/helperFunction";
 
-const currentYear = new Date().getFullYear()
+const currentYear = new Date().getFullYear();
 
 export default {
   components: {
@@ -637,242 +637,242 @@ export default {
     MyCompanyProfile,
     MyCompanyBilling,
     MyCompanySettings,
-    'input-text': InputText,
+    "input-text": InputText,
     ButtonDiv,
     Button,
     ControlPanel,
     LineIndicator,
     Datepicker,
-    'select-common': Select,
+    "select-common": Select,
     LineChart,
-    VueElementLoading
+    VueElementLoading,
   },
-  mounted () {
+  mounted() {
     const options = {
-      types: ['geocode']
-    }
-    let input = document.getElementById('branch_address_search')
+      types: ["geocode"],
+    };
+    let input = document.getElementById("branch_address_search");
     // let autocomplete = new google.maps.places.Autocomplete(input, options)
 
     if (this.industryList === 0) {
-      this.$store.dispatch('user/getIndustry')
+      this.$store.dispatch("user/getIndustry");
     }
 
     this.$auth.currentUser(
       this,
       true,
       function () {
-        this.$store.dispatch('user/getUserFromApi')
+        this.$store.dispatch("user/getUserFromApi");
         this.customerLogoUrl = this.$auth.user.me.customer.logoFileId
           ? `${process.env.SERVER_URL}/1/customerFiles/${this.$auth.user.me.customer.logoFileId}`
-          : 'http://static.maryoku.com/storage/img/placeholder.jpg'
-      }.bind(this)
-    )
+          : "https://static-maryoku.s3.amazonaws.com/storage/img/placeholder.jpg";
+      }.bind(this),
+    );
   },
-  data () {
+  data() {
     return {
       // auth: auth,
       inputFocus: false,
       editing: {
-        numberOfEmployees: false
+        numberOfEmployees: false,
       },
 
       dataChart: {
         options: {
           legend: {
-            display: false
+            display: false,
           },
           elements: {
             line: {
-              borderColor: 'white'
-            }
+              borderColor: "white",
+            },
           },
           layout: {
             padding: {
               left: 20,
               right: 10,
               top: 25,
-              bottom: 10
-            }
+              bottom: 10,
+            },
           },
           scales: {
             yAxes: [
               {
-                position: 'right',
+                position: "right",
                 ticks: {
                   beginAtZero: true,
-                  fontColor: 'white',
+                  fontColor: "white",
                   padding: 5,
-                  fontSize: 15
+                  fontSize: 15,
                 },
                 gridLines: {
-                  color: 'white',
-                  zeroLineColor: 'white'
-                }
-              }
+                  color: "white",
+                  zeroLineColor: "white",
+                },
+              },
             ],
             xAxes: [
               {
                 barThickness: 20,
                 ticks: {
                   beginAtZero: true,
-                  fontColor: 'white',
+                  fontColor: "white",
                   padding: 5,
-                  fontSize: 12
+                  fontSize: 12,
                 },
                 gridLines: {
-                  color: 'white',
-                  zeroLineColor: 'white',
-                  fontColor: 'white'
+                  color: "white",
+                  zeroLineColor: "white",
+                  fontColor: "white",
                 },
                 gridLines: {
-                  display: false
-                }
-              }
-            ]
-          }
-        }
+                  display: false,
+                },
+              },
+            ],
+          },
+        },
       },
-      branch_address: '',
+      branch_address: "",
       branchIndex: 0,
       tmpObject: null,
       showSearch: false,
       showFilter: false,
-      from: '',
-      to: '',
-      startPeriod: '',
-      finishPeriod: '',
-      month: '',
-      monthRate: '',
+      from: "",
+      to: "",
+      startPeriod: "",
+      finishPeriod: "",
+      month: "",
+      monthRate: "",
       listMonth: listMonth,
       shortNameM: months_short,
       isShowForm: false,
-      formSwitcher: '',
+      formSwitcher: "",
       duration: [],
       isEnabled: true,
       currentYear: currentYear,
       ratesList: [],
       participantsList: [],
-      isLoading: true
-    }
+      isLoading: true,
+    };
   },
   computed: {
     ...mapGetters({
-      customer: 'user/getCustomer',
-      user: 'user/getUser',
-      industryList: 'user/getIndustryList',
-      charts: 'user/getChartStatistics',
-      getChartNumberOfEventsPerYear: 'user/getChartNumberOfEventsPerYear',
-      getChartEventPerEmployee: 'user/getChartEventPerEmployee',
-      getChartEventsPerCategory: 'user/getChartEventsPerCategory',
-      participants: 'user/getChartParticipantsPerEvent',
-      rate: 'user/getChartSatisfactionRate'
+      customer: "user/getCustomer",
+      user: "user/getUser",
+      industryList: "user/getIndustryList",
+      charts: "user/getChartStatistics",
+      getChartNumberOfEventsPerYear: "user/getChartNumberOfEventsPerYear",
+      getChartEventPerEmployee: "user/getChartEventPerEmployee",
+      getChartEventsPerCategory: "user/getChartEventsPerCategory",
+      participants: "user/getChartParticipantsPerEvent",
+      rate: "user/getChartSatisfactionRate",
     }),
-    branches () {
-      return this.customer.branches
+    branches() {
+      return this.customer.branches;
     },
-    numberOfEvents () {
+    numberOfEvents() {
       if (this.charts.numberOfEventsPerYear) {
-        const charts = this.charts.numberOfEventsPerYear
-        const year = new Date().getFullYear()
+        const charts = this.charts.numberOfEventsPerYear;
+        const year = new Date().getFullYear();
         for (let key in charts) {
-          if (key === year) return charts[key]
+          if (key === year) return charts[key];
         }
       } else {
-        return 0
+        return 0;
       }
     },
-    getAvatar () {
+    getAvatar() {
       return this.customer.logoFileId
         ? `${process.env.SERVER_URL}/1/customerFiles/${this.customer.logoFileId}`
-        : 'http://static.maryoku.com/storage/img/placeholder.jpg'
+        : "https://static-maryoku.s3.amazonaws.com/storage/img/placeholder.jpg";
     },
-    getMonth () {
-      return this.monthValue.map(item => item.month)
+    getMonth() {
+      return this.monthValue.map((item) => item.month);
     },
-    getEvents () {
-      return this.monthValue.map(item => item.events)
+    getEvents() {
+      return this.monthValue.map((item) => item.events);
     },
-    getMeanValue () {
-      const count = this.listMonth.indexOf(this.month)
+    getMeanValue() {
+      const count = this.listMonth.indexOf(this.month);
       if (count === -1) {
-        return 0
+        return 0;
       } else {
-        let meanValue = 0
-        this.rate[count].forEach(item => {
+        let meanValue = 0;
+        this.rate[count].forEach((item) => {
           if (item.currentValue && item.total) {
-            meanValue = meanValue + (item.currentValue * 100) / item.total
+            meanValue = meanValue + (item.currentValue * 100) / item.total;
           }
-        })
-        this.rate[count].length
+        });
+        this.rate[count].length;
         if (meanValue) {
-          return meanValue / this.rate[count].length
+          return meanValue / this.rate[count].length;
         } else {
-          return 0
+          return 0;
         }
       }
     },
-    isMonthly () {
+    isMonthly() {
       return Boolean(
-        this.from && this.to && this.startPeriod && this.finishPeriod
-      )
+        this.from && this.to && this.startPeriod && this.finishPeriod,
+      );
     },
-    getDuration () {
+    getDuration() {
       if (this.from && this.to && this.startPerion && this.finishPerion) {
-        const from = this.listMonth.indexOf(this.from)
-        const to = this.listMonth.indexOf(this.to)
-        const duration = this.listMonth.splice(from, to)
-        return duration
+        const from = this.listMonth.indexOf(this.from);
+        const to = this.listMonth.indexOf(this.to);
+        const duration = this.listMonth.splice(from, to);
+        return duration;
       } else {
-        return this.listMonth
+        return this.listMonth;
       }
     },
-    getDurationForChart () {
-      const chart = this.charts.eventCostPerEmployeePerYearMonth
-      const duration = []
+    getDurationForChart() {
+      const chart = this.charts.eventCostPerEmployeePerYearMonth;
+      const duration = [];
       for (let year in chart) {
-        const y = year.split('__')
-        if (!duration.includes(y[0])) duration.push(y[0])
+        const y = year.split("__");
+        if (!duration.includes(y[0])) duration.push(y[0]);
       }
-      this.duration = duration
-      return duration
+      this.duration = duration;
+      return duration;
     },
-    getDataFromDuration () {
-      const duration = this.duration
-      function filter (start, from, finish, to, period) {
-        const startY = period.indexOf(start)
-        const finishY = period.indexOf(finish)
-        const yearPeriod = period.splice(startY, finishY)
-        var allPeriod = []
-        yearPeriod.forEach(item => {
+    getDataFromDuration() {
+      const duration = this.duration;
+      function filter(start, from, finish, to, period) {
+        const startY = period.indexOf(start);
+        const finishY = period.indexOf(finish);
+        const yearPeriod = period.splice(startY, finishY);
+        var allPeriod = [];
+        yearPeriod.forEach((item) => {
           var month = [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December'
-          ]
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+          ];
           if (item === start) {
-            var startMonth = month.indexOf(from)
-            var firstY = month.splice(startMonth)
+            var startMonth = month.indexOf(from);
+            var firstY = month.splice(startMonth);
 
-            allPeriod = allPeriod.concat(firstY)
+            allPeriod = allPeriod.concat(firstY);
           } else if (item === finish) {
-            var finishMonth = month.indexOf(to)
-            var lastY = month.splice(0, finishMonth)
-            allPeriod = allPeriod.concat(lastY)
+            var finishMonth = month.indexOf(to);
+            var lastY = month.splice(0, finishMonth);
+            allPeriod = allPeriod.concat(lastY);
           } else {
-            allPeriod = allPeriod.concat(month)
+            allPeriod = allPeriod.concat(month);
           }
-        })
-        return allPeriod
+        });
+        return allPeriod;
       }
 
       if (this.from && this.to && this.startPeriod && this.finishPeriod) {
@@ -881,230 +881,230 @@ export default {
           this.from,
           this.finishPeriod,
           this.to,
-          duration
-        )
-        const dataArray = period.map(item => Math.ceil(Math.random() * 100))
+          duration,
+        );
+        const dataArray = period.map((item) => Math.ceil(Math.random() * 100));
         return {
           labels: period,
           datasets: [
             {
               data: dataArray,
-              backgroundColor: ['rgba(255, 255, 255, 0.2)'],
-              borderColor: ['#26cfa0'],
-              borderWidth: 1
-            }
-          ]
-        }
+              backgroundColor: ["rgba(255, 255, 255, 0.2)"],
+              borderColor: ["#26cfa0"],
+              borderWidth: 1,
+            },
+          ],
+        };
       }
-    }
+    },
   },
   watch: {
-    rate (newVal, oldVal) {
-      this.checkMonth()
+    rate(newVal, oldVal) {
+      this.checkMonth();
     },
-    participants (newVal, oldVal) {
-      this.chechParticipant()
+    participants(newVal, oldVal) {
+      this.chechParticipant();
     },
-    month (newVal, oldVal) {
-      this.checkMonth()
+    month(newVal, oldVal) {
+      this.checkMonth();
     },
-    monthRate (newVal, oldVal) {
-      this.chechParticipant()
-    }
+    monthRate(newVal, oldVal) {
+      this.chechParticipant();
+    },
   },
   methods: {
-    checkMonth () {
-      const currentMonth = this.listMonth[new Date().getMonth()]
-      const currentCount = new Date().getMonth()
+    checkMonth() {
+      const currentMonth = this.listMonth[new Date().getMonth()];
+      const currentCount = new Date().getMonth();
 
       if (!this.rate) {
-        return []
+        return [];
       }
 
       if (!this.month) {
-        this.ratesList = this.rate[currentCount]
+        this.ratesList = this.rate[currentCount];
       } else {
-        const count = this.listMonth.indexOf(this.month)
-        this.ratesList = this.rate[count]
+        const count = this.listMonth.indexOf(this.month);
+        this.ratesList = this.rate[count];
       }
 
-      this.isLoading = false
+      this.isLoading = false;
     },
-    chechParticipant () {
-      const currentCount = new Date().getMonth()
-      const currentMonth = this.listMonth[currentCount]
+    chechParticipant() {
+      const currentCount = new Date().getMonth();
+      const currentMonth = this.listMonth[currentCount];
 
       if (!this.participants) {
-        return []
+        return [];
       }
       if (!this.monthRate) {
-        this.participantsList = this.participants[currentCount]
+        this.participantsList = this.participants[currentCount];
       } else {
-        const count = this.listMonth.indexOf(this.monthRate)
-        this.participantsList = this.participants[count]
+        const count = this.listMonth.indexOf(this.monthRate);
+        this.participantsList = this.participants[count];
       }
 
-      this.isLoading = false
+      this.isLoading = false;
     },
-    onUpdateFocus (newValue) {
-      this.inputFocus = newValue
+    onUpdateFocus(newValue) {
+      this.inputFocus = newValue;
     },
-    isShow (obj, value) {
-      let ifChange = false
+    isShow(obj, value) {
+      let ifChange = false;
       for (let key in obj) {
-        if (key === value) this.formSwitcher = value
+        if (key === value) this.formSwitcher = value;
       }
     },
-    isClose () {
-      this.formSwitcher = ''
+    isClose() {
+      this.formSwitcher = "";
     },
     onSelect: function (items) {
-      this.selected = items
+      this.selected = items;
     },
     onChange: function (value, name) {
-      this[name] = value
+      this[name] = value;
     },
     onShowInput: function (value, name) {
-      this.showSearch = !this.showSearch
+      this.showSearch = !this.showSearch;
     },
     addIndustry: function (value, name) {
-      this.showSearch = !this.showSearch
-      this.$store.dispatch('user/sendIndustry', this.branch_address)
+      this.showSearch = !this.showSearch;
+      this.$store.dispatch("user/sendIndustry", this.branch_address);
     },
-    editBranchAddress (payload) {
-      this.$store.dispatch('user/editBranchAddress', payload)
+    editBranchAddress(payload) {
+      this.$store.dispatch("user/editBranchAddress", payload);
     },
-    branchFocus (index) {
-      this.inputFocus = true
-      this.branchIndex = index
+    branchFocus(index) {
+      this.inputFocus = true;
+      this.branchIndex = index;
     },
     onChangeFilter: function () {
-      this.showFilter = !this.showFilter
+      this.showFilter = !this.showFilter;
     },
-    deleteBranch (branchIndex) {
+    deleteBranch(branchIndex) {
       swal({
-        title: 'Are you sure want to delete this branch?',
+        title: "Are you sure want to delete this branch?",
         showCancelButton: true,
-        confirmButtonClass: 'md-button md-success',
-        cancelButtonClass: 'md-button md-danger',
-        confirmButtonText: 'Yes, delete it!',
-        buttonsStyling: false
+        confirmButtonClass: "md-button md-success",
+        cancelButtonClass: "md-button md-danger",
+        confirmButtonText: "Yes, delete it!",
+        buttonsStyling: false,
       })
-        .then(result => {
+        .then((result) => {
           if (result.value === true) {
-            console.log(result)
-            this.$store.dispatch('user/deleteBranchToCompany', branchIndex)
-            this.tmpObject.branches = this.branches
-            this.$store.dispatch('user/putUserFromApi', this.tmpObject)
+            console.log(result);
+            this.$store.dispatch("user/deleteBranchToCompany", branchIndex);
+            this.tmpObject.branches = this.branches;
+            this.$store.dispatch("user/putUserFromApi", this.tmpObject);
           }
         })
-        .catch(err => {
-          console.log(err)
-        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    getMonthFromControl (month) {
-      this.month = month
+    getMonthFromControl(month) {
+      this.month = month;
     },
-    getMonthControlRate (month) {
-      this.monthRate = month
+    getMonthControlRate(month) {
+      this.monthRate = month;
     },
-    onChangeFilterToEarly () {
-      this.from = ''
-      this.to = ''
-      this.startPerion = ''
-      this.finishPerion = ''
-      this.showFilter = false
+    onChangeFilterToEarly() {
+      this.from = "";
+      this.to = "";
+      this.startPerion = "";
+      this.finishPerion = "";
+      this.showFilter = false;
     },
-    isEditable () {
-      this.isShowForm = !this.isShowForm
+    isEditable() {
+      this.isShowForm = !this.isShowForm;
     },
-    saveInfoFromForm (obj, objName) {
+    saveInfoFromForm(obj, objName) {
       if (this[objName] !== obj[objName]) {
-        let a = {}
+        let a = {};
 
-        a['id'] = obj.id
+        a["id"] = obj.id;
 
-        if (objName === 'branch_address') {
-          a.branches = []
+        if (objName === "branch_address") {
+          a.branches = [];
           this.branches.push({
-            onelineAddress: this[objName]
-          })
-          a.branches = this.branches
-        } else if (objName === 'mainAddress') {
+            onelineAddress: this[objName],
+          });
+          a.branches = this.branches;
+        } else if (objName === "mainAddress") {
           a[objName] = {
-            onelineAddress: this[objName]
-          }
+            onelineAddress: this[objName],
+          };
         } else {
-          if (objName === 'branch_address_update') {
+          if (objName === "branch_address_update") {
             this.editBranchAddress({
               newAddress: this[objName],
-              index: this.branchIndex
-            })
-            a.branches = this.branches
+              index: this.branchIndex,
+            });
+            a.branches = this.branches;
 
-            console.log(a.branches)
-            return
+            console.log(a.branches);
+            return;
           } else {
-            a[objName] = this[objName]
+            a[objName] = this[objName];
           }
         }
 
-        this.tmpObject = a
-        this.$store.dispatch('user/putUserFromApi', this.tmpObject)
-        this.formSwitcher = ''
+        this.tmpObject = a;
+        this.$store.dispatch("user/putUserFromApi", this.tmpObject);
+        this.formSwitcher = "";
       }
     },
-    onFileChange (e) {
-      let files = e.target.files || e.dataTransfer.files
+    onFileChange(e) {
+      let files = e.target.files || e.dataTransfer.files;
 
-      if (!files.length) return
-      this.createImage(files[0])
+      if (!files.length) return;
+      this.createImage(files[0]);
     },
-    createImage (file) {
-      let reader = new FileReader()
-      let _this = this
+    createImage(file) {
+      let reader = new FileReader();
+      let _this = this;
 
-      reader.onload = e => {
+      reader.onload = (e) => {
         return new CustomerFile({ customerFile: e.target.result })
           .save()
-          .then(result => {
-            this.$store.dispatch('user/getUserFromApi')
-            _this.customerLogoUrl = `${process.env.SERVER_URL}/1/customerFiles/${result.id}`
+          .then((result) => {
+            this.$store.dispatch("user/getUserFromApi");
+            _this.customerLogoUrl = `${process.env.SERVER_URL}/1/customerFiles/${result.id}`;
           })
-          .catch(error => {
-            console.log(error)
-          })
-      }
-      reader.readAsDataURL(file)
+          .catch((error) => {
+            console.log(error);
+          });
+      };
+      reader.readAsDataURL(file);
     },
-    UploadAvatar () {
-      document.getElementById('company-avatar-upload').click()
+    UploadAvatar() {
+      document.getElementById("company-avatar-upload").click();
     },
-    deleteAvatar (id) {
+    deleteAvatar(id) {
       swal({
-        title: 'Are you sure want to delete company logo?',
+        title: "Are you sure want to delete company logo?",
         showCancelButton: true,
-        confirmButtonClass: 'md-button md-success',
-        cancelButtonClass: 'md-button md-danger',
-        confirmButtonText: 'Yes, delete it!',
-        buttonsStyling: false
+        confirmButtonClass: "md-button md-success",
+        cancelButtonClass: "md-button md-danger",
+        confirmButtonText: "Yes, delete it!",
+        buttonsStyling: false,
       })
-        .then(result => {
+        .then((result) => {
           new CustomerFile({ id: id })
             .delete()
-            .then(result => {
-              this.$store.dispatch('user/getUserFromApi')
+            .then((result) => {
+              this.$store.dispatch("user/getUserFromApi");
             })
-            .catch(error => {
-              console.log(error)
-            })
+            .catch((error) => {
+              console.log(error);
+            });
         })
         .catch(() => {
-          console.log(error)
-        })
-    }
-  }
-}
+          console.log(error);
+        });
+    },
+  },
+};
 </script>
 <style lang='scss'>
 .hover-block {

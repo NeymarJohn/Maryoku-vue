@@ -1,6 +1,6 @@
 import Campaign from "@/models/Campaign";
 import CalendarEvent from "@/models/CalendarEvent";
-import { resolve } from "promise-polyfill";
+
 const state = {
     SAVING_DATE: null,
     RSVP: null,

@@ -56,7 +56,10 @@
     </div>
     <div class="om_logo-main">
       <div>
-        <img class="om_emp-logo" src="http://static.maryoku.com/storage/img/secure_booker.png" />
+        <img
+          class="om_emp-logo"
+          src="https://static-maryoku.s3.amazonaws.com/storage/img/secure_booker.png"
+        />
         <Title title="Smart Leadership" titleBlock="om_titleStyle" titleText="om_titleStyle" />
         <Title
           titleText="om_titleTextLogo"
@@ -69,80 +72,80 @@
 </template>
 <script>
 // MAIN MODULES
-import { mapGetters } from 'vuex'
-import country_code from '@/constants/country_code'
+import { mapGetters } from "vuex";
+import country_code from "@/constants/country_code";
 // helper function
-import { isWrong } from '@/utils/helperFunction'
+import { isWrong } from "@/utils/helperFunction";
 
 // COMPONETS
-import InputText from '@/components/Inputs/InputText.vue'
-import Select from '@/components/Select/Select.vue'
-import Title from '@/components/Title/Title.vue'
-import Button from '@/components/Button/Button.vue'
-import Autocomplete from '@/components/Autocomplete/Autocomplete.vue'
+import InputText from "@/components/Inputs/InputText.vue";
+import Select from "@/components/Select/Select.vue";
+import Title from "@/components/Title/Title.vue";
+import Button from "@/components/Button/Button.vue";
+import Autocomplete from "@/components/Autocomplete/Autocomplete.vue";
 
 export default {
-  name: 'Employee',
+  name: "Employee",
   components: {
     InputText,
     Select,
     Title,
-    Button
+    Button,
   },
-  data () {
+  data() {
     return {
       isErrors: false,
-      full_name: '',
-      email: '',
-      phone: '',
-      country_code: '',
-      list_code: country_code
-    }
+      full_name: "",
+      email: "",
+      phone: "",
+      country_code: "",
+      list_code: country_code,
+    };
   },
   computed: {
-    isTrim () {
-      return this.country_code === ''
-    }
+    isTrim() {
+      return this.country_code === "";
+    },
   },
   methods: {
     submitForm: function () {
-      this.validFunc(this)
+      this.validFunc(this);
       if (this.isErrors === false) {
         const data = isWrong(this, [
-          'full_name',
-          'email',
-          'phone',
-          'country_code'
-        ])
-        this.$store.dispatch('user/sendOMInfo', data)
-        this.$router.push('/events-data')
+          "full_name",
+          "email",
+          "phone",
+          "country_code",
+        ]);
+        this.$store.dispatch("user/sendOMInfo", data);
+        this.$router.push("/events-data");
       }
     },
     onChange: function (value, name) {
-      this[name] = value
+      this[name] = value;
     },
     validFunc: function (ctx, required) {
-      const errorsObj = []
-      if (ctx['full_name'] === '') {
-        errorsObj.push('full_name')
+      const errorsObj = [];
+      if (ctx["full_name"] === "") {
+        errorsObj.push("full_name");
       }
-      if (ctx['email'] === '') {
-        errorsObj.push('email')
+      if (ctx["email"] === "") {
+        errorsObj.push("email");
       }
-      if (ctx['phone'] === '') {
-        errorsObj.push('phone')
+      if (ctx["phone"] === "") {
+        errorsObj.push("phone");
       }
-      if (ctx['country_code'] === '') {
-        errorsObj.push('country_code')
+      if (ctx["country_code"] === "") {
+        errorsObj.push("country_code");
       }
       if (errorsObj.length !== 0) {
-        ctx.isErrors = true
+        ctx.isErrors = true;
       } else {
-        ctx.isErrors = false
+        ctx.isErrors = false;
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 <style lang="scss">
 .om-body {

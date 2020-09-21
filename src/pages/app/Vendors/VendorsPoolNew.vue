@@ -1,391 +1,463 @@
 <template>
-    <div class="md-layout vendors-pool-page">
-        <div class="event-page-header md-layout-item md-size-100">
-            <div class="header-title">
-                <h3 >Our Vendors List</h3>
-                <p>
-                    Millions of companies turn to Maryoku as their trusted event resource, with the  largest directory of local event<br>
-                    vendors. Easily find the best event services in your area with detailed vendor reviews  for your event.
-                </p>
-            </div>
-            <div class="header-actions">
-                <div class="form-group search-field d-flex  justify-content-start align-center">
-                    <md-icon>search</md-icon>
-                    <input class="form-control" placeholder="Search">
-                </div>
-            </div>
+  <div class="md-layout vendors-pool-page">
+    <div class="event-page-header md-layout-item md-size-100">
+      <div class="header-title">
+        <h3>Our Vendors List</h3>
+        <p>
+          Millions of companies turn to Maryoku as their trusted event resource, with the largest directory of local event
+          <br />vendors. Easily find the best event services in your area with detailed vendor reviews for your event.
+        </p>
+      </div>
+      <div class="header-actions">
+        <div class="form-group search-field d-flex justify-content-start align-center">
+          <md-icon>search</md-icon>
+          <input class="form-control" placeholder="Search" />
         </div>
-
-        <div class="filters-section d-flex justify-content-start">
-            <div class="filters-section__label">
-                Filter By
-            </div>
-            <div class="filters-section__item" :class="{selected: filter.expand}" v-for="(filter, index) in filtersItems" :key="index">
-                <div class="item-title" @click="expandFilter(index)">
-                    {{filter.title}}
-                    <md-icon>keyboard_arrow_down</md-icon>
-                </div>
-                <div class="expanded-section" v-if="filter.expand">
-                    <div class="categories-filters-section d-flex" v-if="filter.title.toLowerCase() == 'category' ">
-                        <div class="main-categories-filters">
-                            <div class="main-filters-item text-center" :class="[`item-${mainFilterIndex}`,{ 'first-row' : mainFilterIndex < 4},{'second-row': mainFilterIndex >=4}]" v-for="(item,mainFilterIndex) in filter.mainCategories" :key="mainFilterIndex">
-                                <img :src="`${categoriesIconURL}${item.icon}`" width="20">
-                                <div class="filter-title">{{item.title}}</div>
-                            </div>
-                        </div>
-                        <div class="more-categories-filters">
-                            <div class="section-title">More</div>
-                            <ul class="columns-2">
-                                <li v-for="(moreItem,moreItemIndex) in filter.moreCategories" :key="moreItemIndex">
-                                    <a href="">{{moreItem}}</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="location-filters-section d-flex" v-if="filter.title.toLowerCase() == 'location' ">
-                        <div class="search-field-section">
-                            <div class="form-group">
-                                <input placeholder="Search by City, State, Country…">
-                                <md-button class="md-just-icon md-simple md-small">
-                                    <img :src="`${menuIconsURL}Asset 115.svg`" />
-                                </md-button>
-                            </div>
-                        </div>
-                        <div class="more-categories-filters">
-                            <div class="section-title">Nearby Locations</div>
-                            <ul>
-                                <li v-for="(locationItem,locationItemIndex) in filter.locations" :key="locationItemIndex">
-                                    <a href="">{{locationItem}}</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="capacity-filters-section d-flex" v-if="filter.title.toLowerCase() == 'capacity' ">
-
-                        <md-radio v-model="filters.capacity" :value="capacityItem" v-for="(capacityItem,capacityItemIndex) in filter.options" :key="capacityItemIndex">{{capacityItem}}</md-radio>
-
-                    </div>
-
-                    <div class="rank-filters-section d-flex justify-content-end" v-if="filter.title.toLowerCase() == 'rank' ">
-                        <div class="rank-item">
-                            <md-checkbox v-model="filters.rank[0]">
-                                <div class="label-title">5 Stars</div>
-                                <label
-                                    class="star-rating__star"
-                                    v-for="(rating, ratingIndex) in ratings"
-                                    :key="ratingIndex"
-                                    :class="{'is-selected' : ratingIndex <=5}"
-                                >★</label>
-                                <span class="rank-counter">(59)</span>
-                            </md-checkbox>
-                        </div>
-                        <div class="rank-item">
-                            <md-checkbox v-model="filters.rank[1]">
-                                <div class="label-title">4 Stars</div>
-                                <label
-                                    class="star-rating__star"
-                                    v-for="(rating, ratingIndex) in ratings"
-                                    :key="ratingIndex"
-                                    :class="{'is-selected' : ratingIndex <=4}"
-                                >★</label>
-                                <span class="rank-counter">(59)</span>
-                            </md-checkbox>
-                        </div>
-                        <div class="rank-item">
-                            <md-checkbox v-model="filters.rank[2]">
-                                <div class="label-title">3 Stars</div>
-                                <label
-                                    class="star-rating__star"
-                                    v-for="(rating, ratingIndex) in ratings"
-                                    :key="ratingIndex"
-                                    :class="{'is-selected' : ratingIndex <=3}"
-                                >★</label>
-                                <span class="rank-counter">(59)</span>
-                            </md-checkbox>
-                        </div>
-                        <div class="rank-item">
-                            <md-checkbox v-model="filters.rank[3]">
-                                <div class="label-title">2 Stars</div>
-                                <label
-                                    class="star-rating__star"
-                                    v-for="(rating, ratingIndex) in ratings"
-                                    :key="ratingIndex"
-                                    :class="{'is-selected' : ratingIndex <=2}"
-                                >★</label>
-                                <span class="rank-counter">(59)</span>
-                            </md-checkbox>
-                        </div>
-                        <div class="rank-item">
-                            <md-checkbox v-model="filters.rank[4]">
-                                <div class="label-title">1 Stars</div>
-                                <label
-                                    class="star-rating__star"
-                                    v-for="(rating, ratingIndex) in ratings"
-                                    :key="ratingIndex"
-                                    :class="{'is-selected' : ratingIndex <=1}"
-                                >★</label>
-                                <span class="rank-counter">(59)</span>
-                            </md-checkbox>
-                        </div>
-                        <div class="rank-item">
-                            <md-checkbox v-model="filters.rank[5]">
-                                <div class="label-title just-label">Unrated <span class="rank-counter">(59)</span></div>
-                            </md-checkbox>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="filters-section__reset">
-                <md-icon>refresh</md-icon>
-                Reset Filters
-            </div>
-        </div>
-
-<!--        <div class="md-layout-item md-size-100" style="justify-content: space-between;">-->
-<!--            <div class="md-group" style="">-->
-<!--                <md-button-->
-<!--                    class="md-xs md-icon-button"-->
-<!--                    :class="[-->
-<!--            {'md-white': view === 'list'},-->
-<!--            {'md-info': view === 'grid'},-->
-<!--          ]"-->
-<!--                    @click.prevent="changeView('grid')">-->
-<!--                    <md-icon>view_module</md-icon>-->
-<!--                </md-button>-->
-<!--                <md-button-->
-<!--                    class="md-xs md-icon-button"-->
-<!--                    :class="[-->
-<!--            {'md-white': view === 'grid'},-->
-<!--            {'md-info': view === 'list'},-->
-<!--          ]"-->
-<!--                    @click.prevent="changeView('list')">-->
-<!--                    <md-icon>view_list</md-icon>-->
-<!--                </md-button>-->
-<!--            </div>-->
-<!--            <div class="pull-right" style="margin: 0 1px;">-->
-<!--                <md-button style="display: inline-block;" class="md-info md-sm" @click="addNewVendor">Add Vendor</md-button>-->
-<!--                <md-button style="display: inline-block;" class="md-purple md-sm" @click="openUploadModal">Import Vendors From Spreadsheet</md-button>-->
-<!--            </div>-->
-<!--        </div>-->
-        <div class="md-layout-item md-size-100 clear-margins" style="padding: 0 1em 0 3em !important;">
-            <vue-element-loading :active="working" spinner="ring" color="#FF547C" background-color="transparent"/>
-            <vendors-grid v-if="view === 'grid'"
-                          :buildingBlocksList="buildingBlocksList"
-                          :vendorsList="vendorsList"
-                          :ratings="ratings"
-                          @editVendorDetails="editVendorDetails"/>
-            <vendors-list v-if="view === 'list'"
-                          :buildingBlocksList="buildingBlocksList"
-                          :vendorsList="vendorsList"
-                          @editVendorDetails="editVendorDetails"
-                          @delete="showDeleteAlert"
-                          @add-new-vendor="addNewVendor"
-                          @open-upload-modal="openUploadModal"
-            />
-        </div>
-        <upload-modal ref="uploadModal"></upload-modal>
+      </div>
     </div>
+
+    <div class="filters-section d-flex justify-content-start">
+      <div class="filters-section__label">Filter By</div>
+      <div
+        class="filters-section__item"
+        :class="{selected: filter.expand}"
+        v-for="(filter, index) in filtersItems"
+        :key="index"
+      >
+        <div class="item-title" @click="expandFilter(index)">
+          {{filter.title}}
+          <md-icon>keyboard_arrow_down</md-icon>
+        </div>
+        <div class="expanded-section" v-if="filter.expand">
+          <div
+            class="categories-filters-section d-flex"
+            v-if="filter.title.toLowerCase() == 'category' "
+          >
+            <div class="main-categories-filters">
+              <div
+                class="main-filters-item text-center"
+                :class="[`item-${mainFilterIndex}`,{ 'first-row' : mainFilterIndex < 4},{'second-row': mainFilterIndex >=4}]"
+                v-for="(item,mainFilterIndex) in filter.mainCategories"
+                :key="mainFilterIndex"
+              >
+                <img :src="`${categoriesIconURL}${item.icon}`" width="20" />
+                <div class="filter-title">{{item.title}}</div>
+              </div>
+            </div>
+            <div class="more-categories-filters">
+              <div class="section-title">More</div>
+              <ul class="columns-2">
+                <li v-for="(moreItem,moreItemIndex) in filter.moreCategories" :key="moreItemIndex">
+                  <a href>{{moreItem}}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div
+            class="location-filters-section d-flex"
+            v-if="filter.title.toLowerCase() == 'location' "
+          >
+            <div class="search-field-section">
+              <div class="form-group">
+                <input placeholder="Search by City, State, Country…" />
+                <md-button class="md-just-icon md-simple md-small">
+                  <img :src="`${menuIconsURL}Asset 115.svg`" />
+                </md-button>
+              </div>
+            </div>
+            <div class="more-categories-filters">
+              <div class="section-title">Nearby Locations</div>
+              <ul>
+                <li
+                  v-for="(locationItem,locationItemIndex) in filter.locations"
+                  :key="locationItemIndex"
+                >
+                  <a href>{{locationItem}}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div
+            class="capacity-filters-section d-flex"
+            v-if="filter.title.toLowerCase() == 'capacity' "
+          >
+            <md-radio
+              v-model="filters.capacity"
+              :value="capacityItem"
+              v-for="(capacityItem,capacityItemIndex) in filter.options"
+              :key="capacityItemIndex"
+            >{{capacityItem}}</md-radio>
+          </div>
+
+          <div
+            class="rank-filters-section d-flex justify-content-end"
+            v-if="filter.title.toLowerCase() == 'rank' "
+          >
+            <div class="rank-item">
+              <md-checkbox v-model="filters.rank[0]">
+                <div class="label-title">5 Stars</div>
+                <label
+                  class="star-rating__star"
+                  v-for="(rating, ratingIndex) in ratings"
+                  :key="ratingIndex"
+                  :class="{'is-selected' : ratingIndex <=5}"
+                >★</label>
+                <span class="rank-counter">(59)</span>
+              </md-checkbox>
+            </div>
+            <div class="rank-item">
+              <md-checkbox v-model="filters.rank[1]">
+                <div class="label-title">4 Stars</div>
+                <label
+                  class="star-rating__star"
+                  v-for="(rating, ratingIndex) in ratings"
+                  :key="ratingIndex"
+                  :class="{'is-selected' : ratingIndex <=4}"
+                >★</label>
+                <span class="rank-counter">(59)</span>
+              </md-checkbox>
+            </div>
+            <div class="rank-item">
+              <md-checkbox v-model="filters.rank[2]">
+                <div class="label-title">3 Stars</div>
+                <label
+                  class="star-rating__star"
+                  v-for="(rating, ratingIndex) in ratings"
+                  :key="ratingIndex"
+                  :class="{'is-selected' : ratingIndex <=3}"
+                >★</label>
+                <span class="rank-counter">(59)</span>
+              </md-checkbox>
+            </div>
+            <div class="rank-item">
+              <md-checkbox v-model="filters.rank[3]">
+                <div class="label-title">2 Stars</div>
+                <label
+                  class="star-rating__star"
+                  v-for="(rating, ratingIndex) in ratings"
+                  :key="ratingIndex"
+                  :class="{'is-selected' : ratingIndex <=2}"
+                >★</label>
+                <span class="rank-counter">(59)</span>
+              </md-checkbox>
+            </div>
+            <div class="rank-item">
+              <md-checkbox v-model="filters.rank[4]">
+                <div class="label-title">1 Stars</div>
+                <label
+                  class="star-rating__star"
+                  v-for="(rating, ratingIndex) in ratings"
+                  :key="ratingIndex"
+                  :class="{'is-selected' : ratingIndex <=1}"
+                >★</label>
+                <span class="rank-counter">(59)</span>
+              </md-checkbox>
+            </div>
+            <div class="rank-item">
+              <md-checkbox v-model="filters.rank[5]">
+                <div class="label-title just-label">
+                  Unrated
+                  <span class="rank-counter">(59)</span>
+                </div>
+              </md-checkbox>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="filters-section__reset">
+        <md-icon>refresh</md-icon>Reset Filters
+      </div>
+    </div>
+
+    <!--        <div class="md-layout-item md-size-100" style="justify-content: space-between;">-->
+    <!--            <div class="md-group" style="">-->
+    <!--                <md-button-->
+    <!--                    class="md-xs md-icon-button"-->
+    <!--                    :class="[-->
+    <!--            {'md-white': view === 'list'},-->
+    <!--            {'md-info': view === 'grid'},-->
+    <!--          ]"-->
+    <!--                    @click.prevent="changeView('grid')">-->
+    <!--                    <md-icon>view_module</md-icon>-->
+    <!--                </md-button>-->
+    <!--                <md-button-->
+    <!--                    class="md-xs md-icon-button"-->
+    <!--                    :class="[-->
+    <!--            {'md-white': view === 'grid'},-->
+    <!--            {'md-info': view === 'list'},-->
+    <!--          ]"-->
+    <!--                    @click.prevent="changeView('list')">-->
+    <!--                    <md-icon>view_list</md-icon>-->
+    <!--                </md-button>-->
+    <!--            </div>-->
+    <!--            <div class="pull-right" style="margin: 0 1px;">-->
+    <!--                <md-button style="display: inline-block;" class="md-info md-sm" @click="addNewVendor">Add Vendor</md-button>-->
+    <!--                <md-button style="display: inline-block;" class="md-purple md-sm" @click="openUploadModal">Import Vendors From Spreadsheet</md-button>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <div class="md-layout-item md-size-100 clear-margins" style="padding: 0 1em 0 3em !important;">
+      <vue-element-loading
+        :active="working"
+        spinner="ring"
+        color="#FF547C"
+        background-color="transparent"
+      />
+      <vendors-grid
+        v-if="view === 'grid'"
+        :buildingBlocksList="buildingBlocksList"
+        :vendorsList="vendorsList"
+        :ratings="ratings"
+        @editVendorDetails="editVendorDetails"
+      />
+      <vendors-list
+        v-if="view === 'list'"
+        :buildingBlocksList="buildingBlocksList"
+        :vendorsList="vendorsList"
+        @editVendorDetails="editVendorDetails"
+        @delete="showDeleteAlert"
+        @add-new-vendor="addNewVendor"
+        @open-upload-modal="openUploadModal"
+      />
+    </div>
+    <upload-modal ref="uploadModal"></upload-modal>
+  </div>
 </template>
 <script>
-import VueElementLoading from 'vue-element-loading'
-import swal from 'sweetalert2'
-import companyForm from './Form/companyForm.vue'
-import UploadModal from './ImportVendors'
-import VendorsGrid from './VendorsGridNew'
-import VendorsList from './VendorsList'
+import VueElementLoading from "vue-element-loading";
+import swal from "sweetalert2";
+import companyForm from "./Form/companyForm.vue";
+import UploadModal from "./ImportVendors";
+import VendorsGrid from "./VendorsGridNew";
+import VendorsList from "./VendorsList";
 
-import SideBar from '../../../components/SidebarPlugin/NewSideBar';
-import { Modal } from '@/components'
-import Vendors from '@/models/Vendors'
-import _ from 'underscore'
+import SideBar from "../../../components/SidebarPlugin/NewSideBar";
+import { Modal } from "@/components";
+import Vendors from "@/models/Vendors";
+import _ from "underscore";
 
 export default {
-  name: 'vendors-pool',
+  name: "vendors-pool",
   components: {
     VueElementLoading,
     companyForm,
     UploadModal,
     VendorsGrid,
     VendorsList,
-      SideBar
+    SideBar,
   },
   props: {
-    inPanel: Boolean
+    inPanel: Boolean,
   },
-  data () {
+  data() {
     return {
       working: true,
-      view: 'grid', // {grid, list}
+      view: "grid", // {grid, list}
       vendorsList: [],
       buildingBlocksList: [],
       ratings: [1, 2, 3, 4, 5],
-      searchTerm: '',
-        event : {},
-        categoriesIconURL: "http://static.maryoku.com/storage/icons/Vendor Signup/",
-        menuIconsURL: 'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
-        filtersItems: [
+      searchTerm: "",
+      event: {},
+      categoriesIconURL:
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      menuIconsURL:
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
+      filtersItems: [
+        {
+          title: "Category",
+          expand: false,
+          mainCategories: [
             {
-                title: "Category",
-                expand: false,
-                mainCategories: [
-                    {
-                        title: "Venue",
-                        icon: "Asset 543.svg"
-                    },
-                    {
-                        title: "Transportation",
-                        icon: "Asset 543.svg"
-                    },
-                    {
-                        title: "Photographer",
-                        icon: "Asset 543.svg"
-                    },
-                    {
-                        title: "Rentals",
-                        icon: "Asset 543.svg"
-                    },
-                    {
-                        title: "Catering",
-                        icon: "Group 1471 (2).svg"
-                    },
-                    {
-                        title: "DJ",
-                        icon: "Asset 543.svg"
-                    },
-                    {
-                        title: "decoration",
-                        icon: "Asset 543.svg"
-                    },
-                    {
-                        title: "Favours & Gifts",
-                        icon: "Asset 543.svg"
-                    },
-                ],
-                moreCategories: ["Flowers","Rentals","Photo Booths","Band","Cakes","Musicians","Decor & Lighting","Activities"]
+              title: "Venue",
+              icon: "Asset 543.svg",
             },
             {
-                title: "Location",
-                expand: false,
-                locations: ["Manhattan","New Jersey","Brooklyn","Long Island","Queens"]
+              title: "Transportation",
+              icon: "Asset 543.svg",
             },
             {
-                title: "Capacity",
-                expand: false,
-                options: ["Intimate event","Small event (100- 300 guests)","Medium event (300-700 guests)","Large event (more than 700 guests)"]
+              title: "Photographer",
+              icon: "Asset 543.svg",
             },
             {
-                title: "Rank",
-                expand: false
-            }
-        ],
-        filters:{
-          rank: []
-        }
-    }
+              title: "Rentals",
+              icon: "Asset 543.svg",
+            },
+            {
+              title: "Catering",
+              icon: "Group 1471 (2).svg",
+            },
+            {
+              title: "DJ",
+              icon: "Asset 543.svg",
+            },
+            {
+              title: "decoration",
+              icon: "Asset 543.svg",
+            },
+            {
+              title: "Favours & Gifts",
+              icon: "Asset 543.svg",
+            },
+          ],
+          moreCategories: [
+            "Flowers",
+            "Rentals",
+            "Photo Booths",
+            "Band",
+            "Cakes",
+            "Musicians",
+            "Decor & Lighting",
+            "Activities",
+          ],
+        },
+        {
+          title: "Location",
+          expand: false,
+          locations: [
+            "Manhattan",
+            "New Jersey",
+            "Brooklyn",
+            "Long Island",
+            "Queens",
+          ],
+        },
+        {
+          title: "Capacity",
+          expand: false,
+          options: [
+            "Intimate event",
+            "Small event (100- 300 guests)",
+            "Medium event (300-700 guests)",
+            "Large event (more than 700 guests)",
+          ],
+        },
+        {
+          title: "Rank",
+          expand: false,
+        },
+      ],
+      filters: {
+        rank: [],
+      },
+    };
   },
-  mounted () {
-    this.working = true
+  mounted() {
+    this.working = true;
     // this.$auth.currentUser(this, true, () => {
-      Vendors.find('categories').then(res => {
-        let list = []
-        _.each(res, (parentBuildingBlock) => {
-          /* parentBuildingBlock.childComponents.forEach((bb)=>{
+    Vendors.find("categories").then((res) => {
+      let list = [];
+      _.each(res, (parentBuildingBlock) => {
+        /* parentBuildingBlock.childComponents.forEach((bb)=>{
                             list.push({id: bb.id, value: bb.title});
                         }); */
-          list.push({id: parentBuildingBlock.id, value: parentBuildingBlock.value})
-        })
+        list.push({
+          id: parentBuildingBlock.id,
+          value: parentBuildingBlock.value,
+        });
+      });
 
-        this.buildingBlocksList = list
-          console.log("vendor-pool.categories", list);
-        new Vendors().limit(1000).get().then((vendors) => {
+      this.buildingBlocksList = list;
+      console.log("vendor-pool.categories", list);
+      new Vendors()
+        .limit(1000)
+        .get()
+        .then((vendors) => {
           console.log("vendor-pool.vendors", vendors);
-          this.vendorsList = vendors[0].results
-          this.working = false
-        })
-      })
+          this.vendorsList = vendors[0].results;
+          this.working = false;
+        });
+    });
     // })
-
   },
   methods: {
-    changeView (view) {
-      this.view = view
+    changeView(view) {
+      this.view = view;
     },
-    showDeleteAlert (vendor) {
+    showDeleteAlert(vendor) {
       swal({
-        title: 'Are you sure?',
+        title: "Are you sure?",
         text: `You won't be able to revert this!`,
-        type: 'warning',
+        type: "warning",
         showCancelButton: true,
-        confirmButtonClass: 'md-button md-success confirm-btn-bg ',
-        cancelButtonClass: 'md-button md-danger cancel-btn-bg',
-        confirmButtonText: 'Yes, delete it!',
-        buttonsStyling: false
-      }).then(result => {
+        confirmButtonClass: "md-button md-success confirm-btn-bg ",
+        cancelButtonClass: "md-button md-danger cancel-btn-bg",
+        confirmButtonText: "Yes, delete it!",
+        buttonsStyling: false,
+      }).then((result) => {
         if (result.value) {
-          this.working = true
+          this.working = true;
 
-          vendor.delete()
-            .then(result => {
-              let indx = _.findIndex(this.vendorsList, {id: vendor.id})
-              this.vendorsList.splice(indx, 1)
-              this.working = false
+          vendor
+            .delete()
+            .then((result) => {
+              let indx = _.findIndex(this.vendorsList, { id: vendor.id });
+              this.vendorsList.splice(indx, 1);
+              this.working = false;
             })
             .catch(() => {
-              this.working = false
-            })
+              this.working = false;
+            });
         }
-      })
+      });
     },
-    editVendorDetails (vendor) {
-      this.$router.push({ name: 'EditVendor', params: { id: vendor.id, creation_mode: false } })
+    editVendorDetails(vendor) {
+      this.$router.push({
+        name: "EditVendor",
+        params: { id: vendor.id, creation_mode: false },
+      });
     },
-    addNewVendor () {
-      this.$router.push({ name: 'CreateVendor', props: { default: true, creation_mode: true } })
+    addNewVendor() {
+      this.$router.push({
+        name: "CreateVendor",
+        props: { default: true, creation_mode: true },
+      });
     },
-    openUploadModal () {
-      this.$refs.uploadModal.toggleModal(true)
+    openUploadModal() {
+      this.$refs.uploadModal.toggleModal(true);
     },
-      expandFilter(index) {
-        let indexOfExpandedItem = _.findIndex(this.filtersItems, {expand : true});
-        if ( indexOfExpandedItem !== -1) this.filtersItems[indexOfExpandedItem].expand = false;
-        this.filtersItems[index].expand = indexOfExpandedItem !== index ? true : false;
-      }
+    expandFilter(index) {
+      let indexOfExpandedItem = _.findIndex(this.filtersItems, {
+        expand: true,
+      });
+      if (indexOfExpandedItem !== -1)
+        this.filtersItems[indexOfExpandedItem].expand = false;
+      this.filtersItems[index].expand =
+        indexOfExpandedItem !== index ? true : false;
+    },
   },
-  computed: {
-  },
-  watch: {}
-}
+  computed: {},
+  watch: {},
+};
 </script>
 <style lang="scss" scoped>
-    @import '@/assets/scss/md/_colors.scss';
-    %visually-hidden {
-        position: absolute;
-        overflow: hidden;
-        clip: rect(0 0 0 0);
-        height: 1px;
-        width: 1px;
-        margin: -1px;
-        padding: 0;
-        border: 0;
-    }
+@import "@/assets/scss/md/_colors.scss";
+%visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+}
 
-    /deep/ .star-rating {
-        &__star {
-            display: inline-block;
-            vertical-align: middle;
-            line-height: 1;
-            font-size: 0.9em;
-            color: #ABABAB;
-            transition: color .2s ease-out;
-            &.is-selected {
-                color: #FFD700;
-            }
-        }
-        &__checkbox {
-            @extend %visually-hidden;
-        }
+/deep/ .star-rating {
+  &__star {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
+    font-size: 0.9em;
+    color: #ababab;
+    transition: color 0.2s ease-out;
+    &.is-selected {
+      color: #ffd700;
     }
+  }
+  &__checkbox {
+    @extend %visually-hidden;
+  }
+}
 </style>

@@ -6,7 +6,10 @@
           <div class="card-icon">
             <md-icon>today</md-icon>
           </div>
-          <h4 class="title">Datepicker - <small>labeled</small></h4>
+          <h4 class="title">
+            Datepicker -
+            <small>labeled</small>
+          </h4>
         </md-card-header>
 
         <md-card-content>
@@ -22,11 +25,14 @@
           <div class="card-icon">
             <md-icon>today</md-icon>
           </div>
-          <h4 class="title">Datepicker - <small>date selected</small></h4>
+          <h4 class="title">
+            Datepicker -
+            <small>date selected</small>
+          </h4>
         </md-card-header>
 
         <md-card-content>
-          <md-datepicker v-model="selectedDate"/>
+          <md-datepicker v-model="selectedDate" />
         </md-card-content>
       </md-card>
     </div>
@@ -36,7 +42,10 @@
           <div class="card-icon">
             <md-icon>today</md-icon>
           </div>
-          <h4 class="title">Datepicker - <small>close on select</small></h4>
+          <h4 class="title">
+            Datepicker -
+            <small>close on select</small>
+          </h4>
         </md-card-header>
 
         <md-card-content>
@@ -95,29 +104,59 @@
               <div class="md-layout">
                 <div class="md-layout-item md-size-50 md-xsmall-size-100">
                   <drop-down direction="down" multiLevel>
-                    <md-button slot="title" class="md-button md-success md-round md-block dropdown-toggle" data-toggle="dropdown">
-                      Multilevel Dropdown
-                    </md-button>
+                    <md-button
+                      slot="title"
+                      class="md-button md-success md-round md-block dropdown-toggle"
+                      data-toggle="dropdown"
+                    >Multilevel Dropdown</md-button>
                     <ul class="dropdown-menu" :class="{'dropdown-menu-right': responsive}">
-                      <li><a href="#">Action</a></li>
-                      <li><a href="#">Another Action</a></li>
                       <li>
-                        <a class="dropdown-toggle" :class="{'open': multiLevel}" @click="toggleMultiLevel">Submenu</a>
+                        <a href="#">Action</a>
+                      </li>
+                      <li>
+                        <a href="#">Another Action</a>
+                      </li>
+                      <li>
+                        <a
+                          class="dropdown-toggle"
+                          :class="{'open': multiLevel}"
+                          @click="toggleMultiLevel"
+                        >Submenu</a>
                         <ul class="dropdown-menu">
-                          <li><a href="#">Submenu action</a></li>
-                          <li><a href="#">Submenu action</a></li>
                           <li>
-                            <a class="dropdown-toggle" :class="{'open': multiLevel2}" @click="toggleMultiLevel2()">Subsubmenu</a>
+                            <a href="#">Submenu action</a>
+                          </li>
+                          <li>
+                            <a href="#">Submenu action</a>
+                          </li>
+                          <li>
+                            <a
+                              class="dropdown-toggle"
+                              :class="{'open': multiLevel2}"
+                              @click="toggleMultiLevel2()"
+                            >Subsubmenu</a>
                             <ul class="dropdown-menu" :class="{'dropdown-menu-right': responsive}">
-                              <li><a href="#">Subsubmenu action 1</a></li>
-                              <li><a href="#">Subsubmenu action 2</a></li>
+                              <li>
+                                <a href="#">Subsubmenu action 1</a>
+                              </li>
+                              <li>
+                                <a href="#">Subsubmenu action 2</a>
+                              </li>
                             </ul>
                           </li>
                           <li>
-                            <a class="dropdown-toggle" :class="{'open': multiLevel3}" @click="toggleMultiLevel3">Second Subsubmenu</a>
+                            <a
+                              class="dropdown-toggle"
+                              :class="{'open': multiLevel3}"
+                              @click="toggleMultiLevel3"
+                            >Second Subsubmenu</a>
                             <ul class="dropdown-menu" :class="{'dropdown-menu-right': responsive}">
-                              <li><a href="#">Subsubmenu action 1</a></li>
-                              <li><a href="#">Subsubmenu action 2</a></li>
+                              <li>
+                                <a href="#">Subsubmenu action 1</a>
+                              </li>
+                              <li>
+                                <a href="#">Subsubmenu action 2</a>
+                              </li>
                             </ul>
                           </li>
                         </ul>
@@ -127,29 +166,53 @@
                 </div>
                 <div class="md-layout-item md-size-50 md-xsmall-size-100">
                   <drop-down direction="down">
-                    <md-button slot="title" class="md-button md-success md-round md-block dropdown-toggle" data-toggle="dropdown">
-                      Dropdown
-                    </md-button>
+                    <md-button
+                      slot="title"
+                      class="md-button md-success md-round md-block dropdown-toggle"
+                      data-toggle="dropdown"
+                    >Dropdown</md-button>
                     <ul class="dropdown-menu dropdown-menu-right">
-                      <li><a href="#">Mike John responded to your email</a></li>
-                      <li><a href="#">You have 5 new tasks</a></li>
-                      <li><a href="#">You're now friend with Andrew</a></li>
-                      <li><a href="#">Another Notification</a></li>
-                      <li><a href="#">Another One</a></li>
+                      <li>
+                        <a href="#">Mike John responded to your email</a>
+                      </li>
+                      <li>
+                        <a href="#">You have 5 new tasks</a>
+                      </li>
+                      <li>
+                        <a href="#">You're now friend with Andrew</a>
+                      </li>
+                      <li>
+                        <a href="#">Another Notification</a>
+                      </li>
+                      <li>
+                        <a href="#">Another One</a>
+                      </li>
                     </ul>
                   </drop-down>
                 </div>
                 <div class="md-layout-item md-size-50 mx-auto md-xsmall-size-100">
                   <drop-down direction="up">
-                    <md-button slot="title" class="md-button md-success md-round md-block dropdown-toggle" data-toggle="dropdown">
-                      Dropup
-                    </md-button>
+                    <md-button
+                      slot="title"
+                      class="md-button md-success md-round md-block dropdown-toggle"
+                      data-toggle="dropdown"
+                    >Dropup</md-button>
                     <ul class="dropdown-menu dropdown-menu-right">
-                      <li><a href="#">Mike John responded to your email</a></li>
-                      <li><a href="#">You have 5 new tasks</a></li>
-                      <li><a href="#">You're now friend with Andrew</a></li>
-                      <li><a href="#">Another Notification</a></li>
-                      <li><a href="#">Another One</a></li>
+                      <li>
+                        <a href="#">Mike John responded to your email</a>
+                      </li>
+                      <li>
+                        <a href="#">You have 5 new tasks</a>
+                      </li>
+                      <li>
+                        <a href="#">You're now friend with Andrew</a>
+                      </li>
+                      <li>
+                        <a href="#">Another Notification</a>
+                      </li>
+                      <li>
+                        <a href="#">Another One</a>
+                      </li>
                     </ul>
                   </drop-down>
                 </div>
@@ -159,35 +222,38 @@
               <h4 class="card-title">Progress Bar</h4>
               <md-progress-bar class="md-primary" :md-value="amount"></md-progress-bar>
               <md-progress-bar class="md-info" :md-value="amount2"></md-progress-bar>
-              <md-progress-bar class="md-warning" md-mode="buffer" :md-value="buffer" :md-buffer="buffer"></md-progress-bar>
+              <md-progress-bar
+                class="md-warning"
+                md-mode="buffer"
+                :md-value="buffer"
+                :md-buffer="buffer"
+              ></md-progress-bar>
             </div>
             <div class="md-layout-item md-size-50 md-small-size-100">
               <h4 class="card-title">Sliders</h4>
-              <slider v-model="sliders.simple">
-              </slider>
-              <br>
-              <slider v-model="sliders.rangeSlider"
-                      type="info"
-                      :connect="true">
-              </slider>
+              <slider v-model="sliders.simple"></slider>
+              <br />
+              <slider v-model="sliders.rangeSlider" type="info" :connect="true"></slider>
             </div>
             <div class="md-layout-item md-size-30 md-xsmall-size-100">
               <h4 class="card-title">Regular Image</h4>
               <div class="file-input">
                 <div v-if="!imageRegular">
                   <div class="image-container">
-                    <img :src="regularImg" title="">
+                    <img :src="regularImg" title />
                   </div>
                 </div>
                 <div class="image-container" v-else>
                   <img :src="imageRegular" />
                 </div>
                 <div class="button-container">
-                  <md-button class="md-danger md-round" @click="removeImage" v-if="imageRegular"><i class="fa fa-times"></i>Remove</md-button>
+                  <md-button class="md-danger md-round" @click="removeImage" v-if="imageRegular">
+                    <i class="fa fa-times"></i>Remove
+                  </md-button>
                   <md-button class="md-success md-round md-fileinput">
                     <template v-if="!imageRegular">Select image</template>
                     <template v-else>Change</template>
-                    <input type="file" @change="onFileChange">
+                    <input type="file" @change="onFileChange" />
                   </md-button>
                 </div>
               </div>
@@ -197,18 +263,24 @@
               <div class="file-input img-circle">
                 <template v-if="!imageCircle">
                   <div class="image-container">
-                    <img :src="avatarImg" title="">
+                    <img :src="avatarImg" title />
                   </div>
                 </template>
                 <div class="image-container" v-else>
                   <img :src="imageCircle" />
                 </div>
                 <div class="button-container">
-                  <md-button class="md-danger md-round" @click="removeImage('circle')" v-if="imageCircle"><i class="fa fa-times"></i>Remove</md-button>
+                  <md-button
+                    class="md-danger md-round"
+                    @click="removeImage('circle')"
+                    v-if="imageCircle"
+                  >
+                    <i class="fa fa-times"></i>Remove
+                  </md-button>
                   <md-button class="md-success md-round md-fileinput">
                     <template v-if="!imageCircle">Add Photo</template>
                     <template v-else>Change</template>
-                    <input type="file" name="circle" @change="onFileChange">
+                    <input type="file" name="circle" @change="onFileChange" />
                   </md-button>
                 </div>
               </div>
@@ -224,17 +296,19 @@
 import { Slider } from "@/components";
 export default {
   components: {
-    Slider
+    Slider,
   },
   props: {
     regularImg: {
       type: String,
-      default: "http://static.maryoku.com/storage/img/image_placeholder.jpg"
+      default:
+        "https://static-maryoku.s3.amazonaws.com/storage/img/image_placeholder.jpg",
     },
     avatarImg: {
       type: String,
-      default: "http://static.maryoku.com/storage/img/placeholder.jpg"
-    }
+      default:
+        "https://static-maryoku.s3.amazonaws.com/storage/img/placeholder.jpg",
+    },
   },
   data() {
     return {
@@ -257,8 +331,8 @@ export default {
       fruits: ["Amsterdam", "Washington", "Sydney", "Beijing"],
       sliders: {
         simple: 40,
-        rangeSlider: [20, 60]
-      }
+        rangeSlider: [20, 60],
+      },
     };
   },
   methods: {
@@ -286,7 +360,7 @@ export default {
       let reader = new FileReader();
       let vm = this;
 
-      reader.onload = e => {
+      reader.onload = (e) => {
         if (type === "circle") {
           vm.imageCircle = e.target.result;
         } else {
@@ -295,7 +369,7 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    removeImage: function(type) {
+    removeImage: function (type) {
       if (type === "circle") {
         this.imageCircle = "";
       } else {
@@ -308,7 +382,7 @@ export default {
       } else {
         this.responsive = false;
       }
-    }
+    },
   },
   mounted() {
     this.onResponsiveInverted();
@@ -316,7 +390,7 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.onResponsiveInverted);
-  }
+  },
 };
 </script>
 

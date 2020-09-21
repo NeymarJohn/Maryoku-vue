@@ -9,7 +9,7 @@
           <h4 class="title">Simple Table</h4>
         </md-card-header>
         <md-card-content>
-            <md-table v-model="tableData">
+          <md-table v-model="tableData">
             <md-table-row slot="md-table-row" slot-scope="{ item }">
               <md-table-cell md-label="#">{{ item.id }}</md-table-cell>
               <md-table-cell md-label="Name">{{ item.name }}</md-table-cell>
@@ -17,9 +17,15 @@
               <md-table-cell md-label="City">{{ item.city }}</md-table-cell>
               <md-table-cell md-label="Salary">{{ item.salary }}</md-table-cell>
               <md-table-cell md-label="Actions" :class="getAlignClasses(item)">
-                <md-button class="md-just-icon" :class="getClass(item.icon1, item.id)"><md-icon>{{ item.icon1 }}</md-icon></md-button>
-                <md-button class="md-just-icon" :class="getClass(item.icon2, item.id)"><md-icon>{{ item.icon2 }}</md-icon></md-button>
-                <md-button class="md-just-icon" :class="getClass(item.icon3, item.id)"><md-icon>{{ item.icon3 }}</md-icon></md-button>
+                <md-button class="md-just-icon" :class="getClass(item.icon1, item.id)">
+                  <md-icon>{{ item.icon1 }}</md-icon>
+                </md-button>
+                <md-button class="md-just-icon" :class="getClass(item.icon2, item.id)">
+                  <md-icon>{{ item.icon2 }}</md-icon>
+                </md-button>
+                <md-button class="md-just-icon" :class="getClass(item.icon3, item.id)">
+                  <md-icon>{{ item.icon3 }}</md-icon>
+                </md-button>
               </md-table-cell>
             </md-table-row>
           </md-table>
@@ -36,7 +42,12 @@
         </md-card-header>
         <md-card-content>
           <md-table v-model="tableDataStriped" class="table-striped">
-            <md-table-row slot="md-table-row" slot-scope="{ item }" md-selectable="multiple" md-auto-select>
+            <md-table-row
+              slot="md-table-row"
+              slot-scope="{ item }"
+              md-selectable="multiple"
+              md-auto-select
+            >
               <md-table-cell md-label="#">{{ item.id }}</md-table-cell>
               <md-table-cell md-label="Product Name">{{ item.name }}</md-table-cell>
               <md-table-cell md-label="Type">{{ item.type }}</md-table-cell>
@@ -47,9 +58,7 @@
           </md-table>
           <div class="table table-stats table-striped">
             <div class="td-price">
-              <div class="td-total">
-                Total
-              </div>
+              <div class="td-total">Total</div>
               <span>
                 <small>€</small>
                 €12,999
@@ -70,14 +79,14 @@
         <md-card-content>
           <md-table v-model="shoppingCartTable" class="table-shopping">
             <md-table-row slot="md-table-row" slot-scope="{ item }">
-              <md-table-cell md-label="">
+              <md-table-cell md-label>
                 <div class="img-container">
-                  <img :src="item.image" alt="products"/>
+                  <img :src="item.image" alt="products" />
                 </div>
               </md-table-cell>
               <md-table-cell md-label="Product" class="td-name">
                 <a href="#jacket">{{ item.product }}</a>
-                <br/>
+                <br />
                 <small>{{ item.category }}</small>
               </md-table-cell>
               <md-table-cell md-label="Color">{{ item.color }}</md-table-cell>
@@ -89,8 +98,18 @@
               <md-table-cell md-label="Qty" class="td-number">
                 {{ item.qty }}
                 <div class="md-group">
-                  <md-button class="md-round md-info md-just-icon" @click.native="increaseQuantity(item)"><md-icon>add</md-icon></md-button>
-                  <md-button class="md-round md-info md-just-icon" @click.native="decreaseQuantity(item)"><md-icon>remove</md-icon></md-button>
+                  <md-button
+                    class="md-round md-info md-just-icon"
+                    @click.native="increaseQuantity(item)"
+                  >
+                    <md-icon>add</md-icon>
+                  </md-button>
+                  <md-button
+                    class="md-round md-info md-just-icon"
+                    @click.native="decreaseQuantity(item)"
+                  >
+                    <md-icon>remove</md-icon>
+                  </md-button>
                 </div>
               </md-table-cell>
               <md-table-cell md-label="Amount" class="td-number">
@@ -98,15 +117,15 @@
                 {{ item.amount }}
               </md-table-cell>
               <md-table-cell>
-                <md-button class="md-just-icon md-round md-simple"><md-icon>close</md-icon></md-button>
+                <md-button class="md-just-icon md-round md-simple">
+                  <md-icon>close</md-icon>
+                </md-button>
               </md-table-cell>
             </md-table-row>
           </md-table>
           <div class="table table-stats">
             <div class="td-price">
-              <div class="td-total">
-                Total
-              </div>
+              <div class="td-total">Total</div>
               <span>
                 <small>€</small>
                 {{shoppingTotal}}
@@ -137,7 +156,7 @@ export default {
           city: "Oud-Turnhout",
           icon1: "person",
           icon2: "edit",
-          icon3: "close"
+          icon3: "close",
         },
         {
           id: 2,
@@ -147,7 +166,7 @@ export default {
           city: "Sinaai-Waas",
           icon1: "person",
           icon2: "edit",
-          icon3: "close"
+          icon3: "close",
         },
         {
           id: 3,
@@ -157,7 +176,7 @@ export default {
           city: "Baileux",
           icon1: "person",
           icon2: "edit",
-          icon3: "close"
+          icon3: "close",
         },
         {
           id: 4,
@@ -167,7 +186,7 @@ export default {
           city: "Overland Park",
           icon1: "person",
           icon2: "edit",
-          icon3: "close"
+          icon3: "close",
         },
         {
           id: 5,
@@ -177,8 +196,8 @@ export default {
           city: "Feldkirchen in Kärnten",
           icon1: "person",
           icon2: "edit",
-          icon3: "close"
-        }
+          icon3: "close",
+        },
       ],
       tableDataStriped: [
         {
@@ -187,7 +206,7 @@ export default {
           type: "Office",
           qty: "25",
           price: "€ 49",
-          amount: "€ 1,225"
+          amount: "€ 1,225",
         },
         {
           id: 2,
@@ -195,7 +214,7 @@ export default {
           type: "Office",
           qty: "30",
           price: "€ 10",
-          amount: "€ 300"
+          amount: "€ 300",
         },
         {
           id: 3,
@@ -203,7 +222,7 @@ export default {
           type: "Office",
           qty: "50",
           price: "€ 10.99",
-          amount: "€ 109"
+          amount: "€ 109",
         },
         {
           id: 4,
@@ -211,7 +230,7 @@ export default {
           type: "Meeting",
           qty: "10",
           price: "€ 499.00",
-          amount: "€ 4,990"
+          amount: "€ 4,990",
         },
         {
           id: 5,
@@ -219,41 +238,44 @@ export default {
           type: "Communication",
           qty: "10",
           price: "€ 599.00",
-          amount: "€ 5,990"
-        }
+          amount: "€ 5,990",
+        },
       ],
       shoppingCartTable: [
         {
-          image: "http://static.maryoku.com/storage/img/product1.jpg",
+          image:
+            "https://static-maryoku.s3.amazonaws.com/storage/img/product1.jpg",
           product: "Spring Jacket",
           category: "by Dolce&Gabbana",
           color: "Red",
           size: "M",
           price: 549,
           qty: 1,
-          amount: 549
+          amount: 549,
         },
         {
-          image: "http://static.maryoku.com/storage/img/product2.jpg",
+          image:
+            "https://static-maryoku.s3.amazonaws.com/storage/img/product2.jpg",
           product: "Short Pants",
           category: "by Gucci",
           color: "Purple",
           size: "M",
           price: 499,
           qty: 2,
-          amount: 998
+          amount: 998,
         },
         {
-          image: "http://static.maryoku.com/storage/img/product3.jpg",
+          image:
+            "https://static-maryoku.s3.amazonaws.com/storage/img/product3.jpg",
           product: "Pencil Skirt",
           category: "by Valentino",
           color: "Red",
           size: "M",
           price: 799,
           qty: 1,
-          amount: 799
-        }
-      ]
+          amount: 799,
+        },
+      ],
     };
   },
   computed: {
@@ -261,10 +283,10 @@ export default {
       return this.shoppingCartTable.reduce((accumulator, current) => {
         return accumulator + current.amount;
       }, 0);
-    }
+    },
   },
   methods: {
-    getClass: function(item, id) {
+    getClass: function (item, id) {
       let classes = "";
       switch (item) {
         case "person": {
@@ -298,7 +320,7 @@ export default {
       return classes;
     },
     getAlignClasses: ({ id }) => ({
-      "text-right": id
+      "text-right": id,
     }),
     increaseQuantity(item) {
       item.qty++;
@@ -312,8 +334,8 @@ export default {
     },
     computeAmount(item) {
       item.amount = item.qty * item.price;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
