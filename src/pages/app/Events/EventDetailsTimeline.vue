@@ -27,10 +27,10 @@
         <div class="timeline-items-list">
           <div
             class="timeline-items-list__item"
-            v-for="(scheduleDate,timelineIndex) in timelineDates"
+            v-for="(scheduleDate,timelineIndex) in timelineDateKeys"
             :key="timelineIndex"
           >
-            <div class="item-header mb-10">
+            <div class="item-header mb-20">
               <div class="header-title">
                 <div class="time-line-edit d-flex justify-content-center align-center">
                   <label
@@ -48,14 +48,14 @@
                 <md-button
                   class="md-default md-simple md-just-icon md-wrapper"
                   style="font-size:26px !important"
-                  @click="addTimelineItem(timelineIndex)"
+                  @click="addNewDateAfterCurrent(scheduleDate)"
                 >
                   <md-icon>add_circle</md-icon>
                 </md-button>
                 <md-button
                   class="md-default md-simple md-just-icon md-wrapper"
                   style="font-size:26px !important"
-                  @click="askRemoveTimelineItem(timelineIndex)"
+                  @click="askRemoveTimelineItem(scheduleDate)"
                 >
                   <md-icon>delete_outline</md-icon>
                 </md-button>
@@ -71,26 +71,32 @@
                 :list="timelineItems[scheduleDate]"
                 class="time-line-blocks_selected-items"
               >
-                <div
-                  v-for="(item,index) in timelineItems[scheduleDate]"
-                  :key="item.id?item.id:Math.random()"
-                  class="time-line-blocks_selected-items_item time-line-item"
-                >
-                  <!-- <timeline-template-item
+                <template v-if="timelineItems[scheduleDate].length > 0">
+                  <div
+                    v-for="(item,index) in timelineItems[scheduleDate]"
+                    :key="index"
+                    class="time-line-blocks_selected-items_item time-line-item"
+                  >
+                    <!-- <timeline-template-item
                   v-if="item.status=='template' || item.status=='timegap'"
                   :item="item"
                   :index="index"
-                  ></timeline-template-item>-->
-                  <timeline-item
-                    :item="item"
-                    :index="index"
-                    :timelineItems="timelineItems"
-                    @save="saveTimeline"
-                    @cancel="cancleTimeline"
-                    @remove="removeItem"
-                  ></timeline-item>
-                  <timeline-empty :index="index" :date="scheduleDate"></timeline-empty>
-                </div>
+                    ></timeline-template-item>-->
+                    <timeline-item
+                      :item="item"
+                      :index="index"
+                      :timelineItems="timelineItems"
+                      @save="saveTimeline"
+                      @cancel="cancleTimeline"
+                      @remove="removeItem"
+                      :key="Math.random()"
+                    ></timeline-item>
+                    <timeline-empty :index="index" :date="scheduleDate"></timeline-empty>
+                  </div>
+                </template>
+                <template v-else>
+                  <timeline-empty :index="-1" :date="scheduleDate" :placeHolder="true"></timeline-empty>
+                </template>
               </draggable>
             </drop>
           </div>
@@ -128,6 +134,12 @@
         </md-card-content>
       </md-card>
     </div>
+    <timeline-gap-modal
+      v-if="showTimelineGapModal"
+      :timelineGap="timelineGaps[0]"
+      @close="showTimelineGapModal=false"
+      @yes="finalize"
+    ></timeline-gap-modal>
 
     <!-- Confirm Modal-->
     <modal v-if="showDeleteConfirmModal" class="delete-timeline-model">
@@ -213,6 +225,8 @@ import CommentEditorPanel from "./components/CommentEditorPanel";
 import ProgressSidebar from "./components/progressSidebar";
 import PlannerEventFooter from "@/components/Planner/FooterPanel";
 import { timelineBlockItems } from "@/constants/event";
+import TimelineGapModal from "./Modals/TimelineGapModal";
+import CalendarVue from "../../../../old/src/pages/Dashboard/Calendar.vue";
 
 export default {
   name: "event-details-timeline",
@@ -233,6 +247,7 @@ export default {
     TimelineTemplateItem,
     TimelineItem,
     TimelineEmpty,
+    TimelineGapModal,
   },
   props: {
     // event: Object,
@@ -244,7 +259,7 @@ export default {
     isLoading: true,
     selectedDate: "",
     blocksList: timelineBlockItems,
-    backedTimelineItems: [],
+    originalTimelineItems: [],
     timelineItems: [],
     timelineDates: [],
     hoursArray: [],
@@ -255,7 +270,7 @@ export default {
       "http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/",
     event: {},
     showDeleteConfirmModal: false,
-    indexOfDeleteItem: -1,
+    deletingDate: -1,
     newTimeLineIconsURL:
       "http://static.maryoku.com/storage/icons/Timeline-New/",
 
@@ -302,6 +317,8 @@ export default {
     ],
     currentAttachments: [],
     showCommentEditorPanel: false,
+    showTimelineGapModal: false,
+    timelineGaps: [],
   }),
   methods: {
     ...mapMutations("event", ["setEventData"]),
@@ -450,8 +467,9 @@ export default {
       this.$http
         .get(`${process.env.SERVER_URL}/1/events/${event.id}/timelineItems`)
         .then((res) => {
-          this.timelineItems = res.data;
-          this.backedTimelineItems = { ...this.timelineItems };
+          this.timelineItems = Object.assign({}, res.data);
+          this.originalTimelineItems = JSON.stringify(res.data);
+          console.log("saved original timelines", this.originalTimelineItems);
           this.timelineDates = Object.keys(this.timelineItems).sort();
           this.eventData.timelineItems = this.timelineItems;
           this.$root.$emit("timeline-updated", this.timelineItems);
@@ -803,17 +821,39 @@ export default {
         isEditable: true,
       });
     },
-    askRemoveTimelineItem(index) {
-      this.indexOfDeleteItem = index;
+    addNewDateAfterCurrent(scheduleDate) {
+      const currentDate = new moment(scheduleDate, "DD/MM/YY");
+      const newData = moment(currentDate).add(1, "d");
+      if (this.timelineItems[newData.format("DD/MM/YY")]) {
+        swal({
+          title: `Sorry you have timelins on ${newData.format("DD/MM/YY")}`,
+          showCancelButton: false,
+          confirmButtonClass: "md-button md-success",
+          confirmButtonText: "Ok",
+          buttonsStyling: false,
+        })
+          .then((result) => {
+            if (result.value === true) {
+              return;
+            }
+          })
+          .catch((err) => {
+            return;
+          });
+      } else {
+        this.$set(this.timelineItems, newData.format("DD/MM/YY"), []);
+        this.timelineDates.push(newData.format("DD/MM/YY"));
+      }
+    },
+    askRemoveTimelineItem(scheduleDate) {
+      this.deletingDate = scheduleDate;
       this.showDeleteConfirmModal = true;
     },
     removeTimelineItem() {
-      if (this.timeline[this.indexOfDeleteItem].items.length === 0) {
-        this.timeline.splice(this.indexOfDeleteItem, 1);
-        this.indexOfDeleteItem = -1;
-        this.showDeleteConfirmModal = false;
-      } else {
-      }
+      const deletingDateIndedx = this.timelineDates.indexOf(this.deletingDate);
+      this.timelineDates.splice(deletingDateIndedx, 1);
+      delete this.timelineItems[this.deletingDate];
+      this.showDeleteConfirmModal = false;
     },
 
     onConfirm() {
@@ -871,10 +911,15 @@ export default {
           this.selectedComponents = components;
         });
     },
-    revert() {},
+    revert() {
+      console.log(this.originalTimelineItems);
+      this.timelineItems = JSON.parse(this.originalTimelineItems);
+    },
     startFromScratch() {
-      alert();
-      this.timelineItems = {};
+      this.timelineItems = {
+        [this.timelineDates[0]]: [],
+      };
+      this.timelineDates = [this.timelineDates[0]];
     },
     saveDraft() {
       this.$http
@@ -902,29 +947,84 @@ export default {
         });
     },
     finalize() {
-      this.$http
-        .post(
-          `${process.env.SERVER_URL}/1/events/${this.eventData.id}/timelineItems`,
-          this.timelineItems,
-          { headers: this.$auth.getAuthHeader() },
-        )
-        .then((res) => {
-          swal({
-            title: "Good Job! ",
-            text:
-              "You finalise timeline and your event will be processed according your timelines!",
-            showCancelButton: false,
-            confirmButtonClass: "md-button md-success",
-            confirmButtonText: "Ok",
-            buttonsStyling: false,
-          })
-            .then((result) => {
-              if (result.value === true) {
-                return;
-              }
+      if (this.checkTimeGap()) {
+        this.showTimelineGapModal = false;
+        this.$http
+          .post(
+            `${process.env.SERVER_URL}/1/events/${this.eventData.id}/timelineItems`,
+            this.timelineItems,
+            { headers: this.$auth.getAuthHeader() },
+          )
+          .then((res) => {
+            swal({
+              title: "Good Job! ",
+              text:
+                "You finalise timeline and your event will be processed according your timelines!",
+              showCancelButton: false,
+              confirmButtonClass: "md-button md-success",
+              confirmButtonText: "Ok",
+              buttonsStyling: false,
             })
-            .catch((err) => {});
+              .then((result) => {
+                if (result.value === true) {
+                  console.log(this.eventData);
+                  const updatedEvent = new CalendarEvent({
+                    id: this.eventData.id,
+                    calendar: new Calendar({
+                      id: this.eventData.calendar.id,
+                    }),
+                    timelineProgress: 100,
+                  });
+                  this.$store.dispatch("event/saveEventAction", updatedEvent);
+                  return;
+                }
+              })
+              .catch((err) => {});
+          });
+      }
+    },
+    checkTemplates() {
+      const templates = [];
+      this.timelineDateKeys.forEach((dateKey) => {
+        this.timelineItems[dateKey].forEach((item) => {
+          if (item.status === "timegap") {
+            templates.push(item);
+          }
         });
+      });
+      if (templates.length > 0) {
+        swal({
+          title: "Sorry, there is a still template ",
+          showCancelButton: false,
+          confirmButtonClass: "md-button md-success",
+          confirmButtonText: "Ok, I got it",
+          buttonsStyling: false,
+        })
+          .then((result) => {
+            if (result.value === true) {
+              return;
+            }
+          })
+          .catch((err) => {});
+        return false;
+      }
+      return true;
+    },
+    checkTimeGap() {
+      const timeGaps = [];
+      this.timelineDateKeys.forEach((dateKey) => {
+        this.timelineItems[dateKey].forEach((item) => {
+          if (item.status === "timegap") {
+            timeGaps.push(item);
+          }
+        });
+      });
+      if (timeGaps.length > 0) {
+        this.timelineGaps = { ...timeGaps };
+        this.showTimelineGapModal = true;
+        return false;
+      }
+      return true;
     },
   },
   created() {
@@ -1020,6 +1120,11 @@ export default {
     canEdit() {
       return this.permission === "edit";
     },
+    timelineDateKeys() {
+      return Object.keys(this.timelineItems).sort((a, b) => {
+        return moment(a, "DD/MM/YY") > moment(b, "DD/MM/YY") ? 1 : -1;
+      });
+    },
   },
   watch: {
     eventData(newVal, oldVal) {
@@ -1030,7 +1135,6 @@ export default {
         true,
       );
       this.initData(newVal);
-      this.getTimelineItems();
     },
   },
 };
