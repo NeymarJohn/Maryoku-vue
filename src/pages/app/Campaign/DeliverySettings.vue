@@ -362,6 +362,7 @@ export default {
     },
     emailSubject() {
       const campaignData = this.$store.state.campaign;
+      // alert(campaignData.savedate.title);
       console.log(this.campaign.name);
       switch (this.campaign.name) {
         case "SAVING_DATE":

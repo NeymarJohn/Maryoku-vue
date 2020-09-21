@@ -209,6 +209,7 @@ export default {
       this.editingContent.coverImage = this.event.concept
         ? this.event.concept.images[0].url
         : `${this.$storageURL}Campaign Images/RSVP2.png`;
+      alert(this.editingContent.coverImage);
     }
     this.originContent = Object.assign({}, this.editingContent);
   },

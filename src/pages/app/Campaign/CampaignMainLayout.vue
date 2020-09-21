@@ -156,10 +156,7 @@
           </div>
         </div>
         <div class="d-flex align-center" v-else>
-          <md-button
-            class="md-simple md-button md-black maryoku-btn"
-            @click="sendToAddtionalGuests"
-          >
+          <md-button class="md-simple md-button md-black maryoku-btn">
             <span class="font-size-16 text-transform-capitalize">
               <img class="mr-20" :src="`${$iconURL}Campaign/Group 8871.svg`" />Send To Additional Guests
             </span>
@@ -204,7 +201,6 @@ import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal";
 import Campaign from "@/models/Campaign";
 import CalendarEvent from "@/models/CalendarEvent";
 import swal from "sweetalert2";
-import S3Service from "@/services/s3.service";
 
 const defaultSettings = {
   phone: {
@@ -292,23 +288,7 @@ export default {
         this.$refs.feedback.saveData();
       }
       this.selectedTab = tabIndex;
-      this.setDefaultSettings();
-    },
-    setDefaultSettings() {
-      console.log(
-        this.$store.state.campaign[this.campaignTabs[this.selectedTab].name],
-      );
-      if (
-        this.$store.state.campaign[this.campaignTabs[this.selectedTab].name]
-      ) {
-        this.deliverySettings = {
-          ...this.$store.state.campaign[
-            this.campaignTabs[this.selectedTab].name
-          ].settings,
-        };
-      } else {
-        this.deliverySettings = { ...defaultSettings };
-      }
+      this.deliverySettings = { ...defaultSettings };
     },
     scrollToTop() {
       window.scrollTo(0, 0);
@@ -336,22 +316,7 @@ export default {
     },
     callSaveCampaign(campaignType, campaignStatus) {
       console.log("campaignType", campaignType);
-
       const campaignData = this.$store.state.campaign[campaignType];
-      if (campaignData.coverImage.indexOf("http") < 0) {
-        const fileObject = S3Service.dataURLtoFile(
-          campaignData.coverImage,
-          `${this.event.id}-${campaignType}`,
-        );
-        console.log(fileObject);
-        const extenstion = fileObject.type.split("/")[1];
-        S3Service.fileUpload(
-          fileObject,
-          `${this.event.id}-${campaignType}`,
-          "campaigns/cover-images",
-        ).then((res) => {});
-        campaignData.coverImage = `https://maryoku.s3.amazonaws.com/campaigns/cover-images/${this.event.id}-${campaignType}.${extenstion}`;
-      }
       let referenceUrl = "";
       if (campaignType === "RSVP") {
         referenceUrl = `${document.location.origin}/#/rsvp/${this.event.id}`;
@@ -422,7 +387,6 @@ export default {
           });
         });
     },
-    sendToAddtionalGuests() {},
   },
   computed: {
     ...mapGetters("campaign", ["campaignIssued"]),
@@ -455,7 +419,6 @@ export default {
       : "Event Name";
     this.getCampaigns({ event: this.event }).then((campaigns) => {
       this.campaigns = campaigns;
-      this.setDefaultSettings();
       console.log("campaigns");
       console.log(this.campaigns);
     });
