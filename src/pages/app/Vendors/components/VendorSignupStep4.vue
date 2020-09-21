@@ -235,21 +235,21 @@
 </template>
 
 <script>
-import moment from "moment";
-import VueElementLoading from "vue-element-loading";
-import Vendors from "@/models/Vendors";
+import moment from 'moment';
+import VueElementLoading from 'vue-element-loading';
+import Vendors from '@/models/Vendors';
 
 //COMPONENTS
-import Icon from "@/components/Icon/Icon.vue";
-import VendorServiceItem from "./VendorServiceItem.vue";
-import LightBox from "vue-image-lightbox";
-import carousel from "vue-owl-carousel";
-import VendorStartingFeeItem from "./VendorStartingFeeItem.vue";
-import VendorExtraPayItem from "./VendorExtraPayItem.vue";
-import _ from "underscore";
+import Icon from '@/components/Icon/Icon.vue';
+import VendorServiceItem from './VendorServiceItem.vue';
+import LightBox from 'vue-image-lightbox';
+import carousel from 'vue-owl-carousel';
+import VendorStartingFeeItem from './VendorStartingFeeItem.vue';
+import VendorExtraPayItem from './VendorExtraPayItem.vue';
+import _ from 'underscore';
 
 export default {
-  name: "vendor-signup-step4",
+  name: 'vendor-signup-step4',
   props: {
     categories: Array,
     icon: String,
@@ -265,157 +265,156 @@ export default {
   },
   data() {
     return {
-      tabs: ["About", "Pricing", "Rules", "Policy", "Contact"],
+      tabs: ['About', 'Pricing', 'Rules', 'Policy', 'Contact'],
       socialMediaBlocks: [
         {
-          name: "website",
-          icon: "Asset 539.svg",
+          name: 'website',
+          icon: 'Asset 539.svg',
         },
         {
-          name: "facebook",
-          icon: "Asset 540.svg",
+          name: 'facebook',
+          icon: 'Asset 540.svg',
         },
         {
-          name: "instagram",
-          icon: "Group 4569 (2).svg",
+          name: 'instagram',
+          icon: 'Group 4569 (2).svg',
         },
         {
-          name: "youtube",
-          icon: "socialmedia/Youtube.svg",
+          name: 'youtube',
+          icon: 'socialmedia/Youtube.svg',
         },
         {
-          name: "linkedin",
-          icon: "socialmedia/Linkdin.svg",
+          name: 'linkedin',
+          icon: 'socialmedia/Linkdin.svg',
         },
         {
-          name: "google",
-          icon: "socialmedia/GooglePlus.svg",
+          name: 'google',
+          icon: 'socialmedia/GooglePlus.svg',
         },
         {
-          name: "pinterest",
-          icon: "socialmedia/Pinterest.svg",
+          name: 'pinterest',
+          icon: 'socialmedia/Pinterest.svg',
         },
         {
-          name: "foursuare",
-          icon: "socialmedia/foursquare.svg",
+          name: 'foursuare',
+          icon: 'socialmedia/foursquare.svg',
         },
         {
-          name: "reddit",
-          icon: "socialmedia/Twitter.svg",
+          name: 'reddit',
+          icon: 'socialmedia/Twitter.svg',
         },
         {
-          name: "tiktok",
-          icon: "socialmedia/Tiktok.svg",
+          name: 'tiktok',
+          icon: 'socialmedia/Tiktok.svg',
         },
       ],
-      activeTab: "About",
+      activeTab: 'About',
       feeVenues: [
         {
-          value: "Set up",
+          value: 'Set up',
           qty: null,
         },
         {
-          value: "In-house bar services",
+          value: 'In-house bar services',
           qty: 1,
         },
       ],
       feeCatering: [
         {
-          value: "Set up",
+          value: 'Set up',
           qty: null,
         },
         {
-          value: "In-house bar services",
+          value: 'In-house bar services',
           qty: 2,
         },
       ],
       imageSlidePos: 0,
-      iconUrl:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
       defRules:
-        "Suitable for pets, Smoking allowed, Suitable for infants(Under 2 years), Dress code, Overtime Cost",
+        'Suitable for pets, Smoking allowed, Suitable for infants(Under 2 years), Dress code, Overtime Cost',
       defNa:
-        "Catering, Dj, Photographer, Show / Performance, Flowers, Transporation, Decoration, Rentals, Favours & Gifts, Other",
+        'Catering, Dj, Photographer, Show / Performance, Flowers, Transporation, Decoration, Rentals, Favours & Gifts, Other',
       categoryNames: [
         {
-          name: "Venue Rental",
-          value: "venuerental",
-          icon: "venuerental.svg",
+          name: 'Venue Rental',
+          value: 'venuerental',
+          icon: 'venuerental.svg',
         },
         {
-          name: "Food & Beverage",
-          value: "foodandbeverage",
-          icon: "foodandbeverage.svg",
+          name: 'Food & Beverage',
+          value: 'foodandbeverage',
+          icon: 'foodandbeverage.svg',
         },
         {
-          name: "Design and Decor",
-          value: "decor",
-          icon: "decor.svg",
+          name: 'Design and Decor',
+          value: 'decor',
+          icon: 'decor.svg',
         },
         {
-          name: "Guest Services & Staffing",
-          value: "corporatesocialresponsibility",
-          icon: "corporatesocialresponsibility.svg",
+          name: 'Guest Services & Staffing',
+          value: 'corporatesocialresponsibility',
+          icon: 'corporatesocialresponsibility.svg',
         },
         {
-          name: "Signage / Printing",
-          value: "signageprinting",
-          icon: "signageprinting.svg",
+          name: 'Signage / Printing',
+          value: 'signageprinting',
+          icon: 'signageprinting.svg',
         },
         {
-          name: "Advertising and Promotion",
-          value: "advertising-promotion",
-          icon: "advertising-promotion.svg",
+          name: 'Advertising and Promotion',
+          value: 'advertising-promotion',
+          icon: 'advertising-promotion.svg',
         },
         {
-          name: "AV / Staging",
-          value: "audiovisualstagingservices",
-          icon: "audiovisualstagingservices.svg",
+          name: 'AV / Staging',
+          value: 'audiovisualstagingservices',
+          icon: 'audiovisualstagingservices.svg',
         },
         {
-          name: "Swags",
-          value: "swags",
-          icon: "swags.svg",
+          name: 'Swags',
+          value: 'swags',
+          icon: 'swags.svg',
         },
         {
-          name: "Shipping",
-          value: "shipping",
-          icon: "shipping.svg",
+          name: 'Shipping',
+          value: 'shipping',
+          icon: 'shipping.svg',
         },
         {
-          name: "Transportation & Tour operator",
-          value: "transportation",
-          icon: "transportation.svg",
+          name: 'Transportation & Tour operator',
+          value: 'transportation',
+          icon: 'transportation.svg',
         },
         {
-          name: "Entertainment",
-          value: "entertainment",
-          icon: "entertainment.svg",
+          name: 'Entertainment',
+          value: 'entertainment',
+          icon: 'entertainment.svg',
         },
         {
-          name: "Administration",
-          value: "administration",
-          icon: "administration.svg",
+          name: 'Administration',
+          value: 'administration',
+          icon: 'administration.svg',
         },
         {
-          name: "Security",
-          value: "securityservices",
-          icon: "securityservices.svg",
+          name: 'Security',
+          value: 'securityservices',
+          icon: 'securityservices.svg',
         },
         {
-          name: "Technology",
-          value: "technologyservices",
-          icon: "technologyservices.svg",
+          name: 'Technology',
+          value: 'technologyservices',
+          icon: 'technologyservices.svg',
         },
         {
-          name: "Videography and Photography",
-          value: "videographyandphotography",
-          icon: "videographyandphotography.svg",
+          name: 'Videography and Photography',
+          value: 'videographyandphotography',
+          icon: 'videographyandphotography.svg',
         },
         {
-          name: "Equipment Rental",
-          value: "equipmentrentals",
-          icon: "equipmentrentals.svg",
+          name: 'Equipment Rental',
+          value: 'equipmentrentals',
+          icon: 'equipmentrentals.svg',
         },
       ],
     };
@@ -479,7 +478,7 @@ export default {
       const yOffset = -50;
       window.scrollTo({
         top: y + yOffset,
-        behavior: "smooth",
+        behavior: 'smooth',
       });
     },
     getCategoryIconByValue(value) {
@@ -489,9 +488,9 @@ export default {
       return this.categoryNames.filter((c) => c.value == value)[0].name;
     },
     mergeStringItems(items) {
-      let naItems = "";
+      let naItems = '';
       _.each(items, (n) => {
-        if (n.constructor.name == "Object") {
+        if (n.constructor.name == 'Object') {
           naItems += `${this.capitalize(n.name)}, `;
         } else {
           naItems += `${this.capitalize(n)}, `;
@@ -501,7 +500,7 @@ export default {
       return naItems;
     },
     dontWorkDays() {
-      let selectedDates = "";
+      let selectedDates = '';
       _.each(this.vendor.dontWorkDays.selectedDates, (s) => {
         selectedDates += `${s.date}, `;
       });
@@ -512,7 +511,7 @@ export default {
       return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.amPack.start} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.amPack.end}`;
     },
     capitalize: function (value) {
-      if (!value) return "";
+      if (!value) return '';
       value = value.toString();
       return value.charAt(0).toUpperCase() + value.slice(1);
     },
@@ -524,7 +523,7 @@ export default {
           temp.push({
             thumb: item,
             src: item,
-            caption: "test",
+            caption: 'test',
           });
         });
         return temp;

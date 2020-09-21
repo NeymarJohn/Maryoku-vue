@@ -25,5 +25,5 @@ module.exports = merge(devEnv, {
     AWS_ACCESSKEY: '"AKIAT5QXLXDJDLKXRNU7"',
     AWS_SECRETKEY: '"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"',
     S3_URL: '"https://maryoku.s3.amazonaws.com/"',
-    RESOURCE_URL: '"https://static-maryoku.s3.amazonaws.com/"',
+    RESOURCE_URL: '"https://static.maryoku.com/"'
 })

@@ -4,15 +4,17 @@
       <div class="add-rule-cont">
         <h4>{{title.title}}</h4>
         <div class="field" :class="{'suffix': focusedRule != ''}">
-          <input :placeholder="title.placeholder" ref="additionalRule" v-model="focusedRule" />
-          <a :disabled="true" @click="addRule()">Add</a>
+          <input :placeholder="title.placeholder" ref="additionalRule" v-model="focusedRule"/>
+          <a :disabled="true" @click="addRule()">
+            Add
+          </a>
         </div>
         <div class="rules-cont" v-if="rules.length > 0">
           <div class="rule" v-for="(r, rIndex) in rules" :key="rIndex">
             <span>{{r}}</span>
             <div class="actions">
-              <img :src="`${iconUrl}Asset 527.svg`" @click="editRule(r)" />
-              <img :src="`${iconUrl}Asset 529.svg`" @click="removeRule(r)" />
+              <img :src="`${iconUrl}Asset 527.svg`" @click="editRule(r)"/>
+              <img :src="`${iconUrl}Asset 529.svg`" @click="removeRule(r)"/>
             </div>
           </div>
         </div>
@@ -27,50 +29,36 @@
         <div class="input-cont">
           <div class="ifthan">
             <div>
-              <span>
-                <strong>If</strong>
-                {{title.labels.if}}
-              </span>
+              <span><strong>If</strong>{{title.labels.if}}</span>
             </div>
-            <input
-              :placeholder="title.placeholder.if"
-              ref="ifPolicy"
-              v-model="focusedCancelPolicy.if"
-            />
+            <input :placeholder="title.placeholder.if" ref="ifPolicy" v-model="focusedCancelPolicy.if"/>
           </div>
           <div class="arrow">
-            <img :src="`${iconUrl}Group 4585 (2).svg`" />
+            <img :src="`${iconUrl}Group 4585 (2).svg`"/>
           </div>
           <div class="ifthan">
             <div>
-              <span>
-                <strong>Than</strong>
-                {{title.labels.than}}
-              </span>
+              <span><strong>Than</strong>{{title.labels.than}}</span>
             </div>
-            <input
-              :placeholder="title.placeholder.than"
-              ref="thanPolicy"
-              v-model="focusedCancelPolicy.than"
-            />
+            <input :placeholder="title.placeholder.than" ref="thanPolicy" v-model="focusedCancelPolicy.than"/>
           </div>
           <div class="action">
-            <a :disabled="true" @click="addCancelPolicy()">Add</a>
+            <a :disabled="true" @click="addCancelPolicy()">
+              Add
+            </a>
           </div>
         </div>
         <div class="policies-cont" v-if="policies.length > 0">
           <div class="policy" v-for="(p, pIndex) in policies" :key="pIndex">
             <div class="pitem">
-              <b>If</b>
-              {{p.if}}
+              <b>If</b>{{p.if}}
             </div>
             <div class="pitem">
-              <b>Than</b>
-              {{p.than}}
+              <b>Than</b>{{p.than}}
             </div>
             <div class="actions">
               <img :src="`${iconUrl}Asset 527.svg`" @click="editCancelPolicy(p)" />
-              <img :src="`${iconUrl}Asset 529.svg`" @click="removeCancelPolicy(p)" />
+              <img :src="`${iconUrl}Asset 529.svg`" @click="removeCancelPolicy(p)"/>
             </div>
           </div>
         </div>
@@ -79,12 +67,12 @@
   </div>
 </template>
 <script>
-import VueElementLoading from "vue-element-loading";
+import VueElementLoading from 'vue-element-loading'
 
 export default {
-  name: "v-signup-add-rules",
+  name: 'v-signup-add-rules',
   components: {
-    VueElementLoading,
+    VueElementLoading
   },
   props: {
     comType: String,
@@ -97,50 +85,48 @@ export default {
       focusedRule: null,
       focusedCancelPolicy: {
         if: null,
-        than: null,
+        than: null
       },
-      iconUrl:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
-    };
+      iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
+    }
   },
-  mounted() {},
+  mounted () {
+  },
   methods: {
     addCancelPolicy() {
       this.policies.push({
         if: this.$refs.ifPolicy.value,
-        than: this.$refs.thanPolicy.value,
-      });
-      this.$refs.ifPolicy.value = null;
-      this.$refs.thanPolicy.value = null;
+        than: this.$refs.thanPolicy.value
+      })
+      this.$refs.ifPolicy.value = null
+      this.$refs.thanPolicy.value = null
       this.focusedCancelPolicy = {
         if: null,
-        than: null,
-      };
+        than: null
+      }
     },
     editCancelPolicy(p) {
-      this.focusedCancelPolicy = this.policies.filter(
-        (policy) => policy == p,
-      )[0];
-      this.policies = this.policies.filter((policy) => policy != p);
+      this.focusedCancelPolicy = this.policies.filter( policy => policy == p )[0]
+      this.policies = this.policies.filter( policy => policy != p)
     },
     removeCancelPolicy(p) {
-      this.policies = this.policies.filter((policy) => policy != p);
+      this.policies = this.policies.filter( policy => policy != p)
     },
     addRule() {
-      console.log(this.$refs.additionalRule.value);
-      this.rules.push(this.$refs.additionalRule.value);
-      this.$refs.additionalRule.value = null;
-      this.focusedRule = null;
+      console.log(this.$refs.additionalRule.value)
+      this.rules.push(this.$refs.additionalRule.value)
+      this.$refs.additionalRule.value = null
+      this.focusedRule = null
     },
     editRule(r) {
-      this.focusedRule = this.rules.filter((rule) => rule == r)[0];
-      this.rules = this.rules.filter((rule) => rule != r);
+      this.focusedRule = this.rules.filter( rule => rule == r )[0]
+      this.rules = this.rules.filter( rule => rule != r)
     },
     removeRule(r) {
-      this.rules = this.rules.filter((rule) => rule != r);
-    },
-  },
-};
+      this.rules = this.rules.filter( rule => rule != r)
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 @import "@/assets/scss/md/_variables.scss";
@@ -152,11 +138,11 @@ export default {
 
   .add-rule-cont {
     h4 {
-      margin: 0 0 0.5rem 0;
+      margin: 0 0 .5rem 0;
       text-transform: capitalize;
       font: 800 16px Manrope-Regular, sans-serif;
     }
-
+    
     .field {
       display: flex;
       align-items: center;
@@ -179,13 +165,13 @@ export default {
         cursor: pointer;
 
         &:hover {
-          color: #dddddd !important;
+          color: #dddddd!important;
         }
       }
     }
     .suffix {
       &:before {
-        content: "Event must";
+        content: 'Event must';
         position: absolute;
         margin-left: 2rem;
         border-right: 1px solid #818080;
@@ -227,7 +213,7 @@ export default {
     .title-cont {
       display: flex;
       align-items: center;
-      margin: 0 0 0.5rem 0;
+      margin: 0 0 .5rem 0;
       h4 {
         margin: 0 1rem 0 0;
         font: 800 16px Manrope-Regular, sans-serif;
@@ -237,7 +223,7 @@ export default {
       }
     }
     .input-cont {
-      display: flex;
+      display: flex; 
       justify-content: space-between;
       align-items: flex-end;
       margin-top: 2rem;
@@ -247,7 +233,7 @@ export default {
         span {
           strong {
             font: 800 22px Manrope-Regular, sans-serif;
-            margin-right: 0.5rem;
+            margin-right: .5rem;
           }
           font: normal 16px Manrope-Regular, sans-serif;
         }
@@ -259,7 +245,7 @@ export default {
           border-radius: 0;
           margin-right: 1rem;
         }
-      }
+      } 
       .arrow {
         flex: 1;
         text-align: center;
@@ -282,7 +268,7 @@ export default {
           cursor: pointer;
 
           &:hover {
-            color: #dddddd !important;
+            color: #dddddd!important;
           }
         }
       }
@@ -299,7 +285,7 @@ export default {
         .pitem {
           font: normal 16px Manrope-Regular, sans-serif;
           b {
-            margin-right: 0.5rem;
+            margin-right: .5rem;
           }
         }
         .actions {

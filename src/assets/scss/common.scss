@@ -111,6 +111,9 @@ input {
     font-size: 50px;
     line-height: 1em;
 }
+.justify-content-between {
+    justify-content: space-between;
+}
 .flex-1 {
     flex-grow: 1;
 }
@@ -126,7 +129,7 @@ input {
     color: #9f0000 !important;
 }
 .color-black {
-    color: #050505 !important;
+    color: #050505;
 }
 .color-white {
     color: #ffffff;
@@ -230,12 +233,6 @@ input {
 .ml-20 {
     margin-left: 20px;
 }
-.ml-30 {
-    margin-left: 30px;
-}
-.ml-40 {
-    margin-left: 40px;
-}
 .ml-50 {
     margin-left: 50px;
 }
@@ -265,9 +262,6 @@ input {
 }
 .pr-20 {
     padding-right: 20px;
-}
-pb-10 {
-    padding-bottom: 10px;
 }
 .color-dark-gray {
     color: #818080;
@@ -465,31 +459,6 @@ hr {
 .text-underline {
     text-decoration: underline;
 }
-
-.d-flex {
-    display : flex;
-}
-.d-inline-block {
-    display: inline-block;
-}
-.justify-content{
-    &-between {
-        justify-content: space-between;
-    }
-    &-around {
-        justify-content: space-around;
-    }
-    &-start {
-        justify-content: flex-start;
-    }
-    &-end {
-        justify-content: flex-end;
-    }
-    &-center {
-        justify-content: center;
-    }
-}
-
 .d-none {
     display: none;
 }
@@ -501,16 +470,4 @@ hr {
 }
 .label-icon {
     width: 20px !important;
-}
-.form-control {
-    min-height: 60px;
-    border-radius: 3px;
-    border: solid 0.5px #bcbcbc;
-    background: #ffffff;
-    width: 100%;
-    padding: 0 1.5em;
-    font-size: 15px;
-    color: #050505;
-    font-family: 'Manrope-Regular',sans-serif;
-
 }

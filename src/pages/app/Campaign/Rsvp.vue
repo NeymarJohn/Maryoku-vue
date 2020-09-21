@@ -163,8 +163,7 @@ export default {
   data() {
     return {
       coverImage: "",
-      logoImage:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/ms-icon.png",
+      logoImage: "http://static.maryoku.com/storage/icons/RSVP/ms-icon.png",
       showLogo: true,
       content: "",
       images: [
@@ -209,7 +208,6 @@ export default {
       this.editingContent.coverImage = this.event.concept
         ? this.event.concept.images[0].url
         : `${this.$storageURL}Campaign Images/RSVP2.png`;
-      alert(this.editingContent.coverImage);
     }
     this.originContent = Object.assign({}, this.editingContent);
   },

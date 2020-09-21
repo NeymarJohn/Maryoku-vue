@@ -50,11 +50,12 @@
             <img :src="`${menuIconsURL}Asset 117.svg`" /> Help
           </div>
         </div>
-        <div class="sidebar-menu__item">
-          <div class="item-route" @click="goTo('/vendors-pool')">
-            <img :src="`${menuIconsURL}Asset 117.svg`" /> Vendors Pool
+          <div class="sidebar-menu__item"  >
+
+              <div class="item-route" @click="goTo('/vendors-pool')">
+                  <img :src="`${menuIconsURL}Asset 117.svg`" /> Vendors Pool
+              </div>
           </div>
-        </div>
       </div>
     </div>
     <div class="sidebar-wrapper" ref="sidebarScrollArea">
@@ -79,7 +80,7 @@
           name="left-menu-yearly-plan"
           class="left-menu-yearly-plan disabled"
           v-else
-        ></sidebar-item>-->
+        ></sidebar-item> -->
       </md-list>
     </div>
     <div class="logo">
@@ -93,136 +94,134 @@
   </div>
 </template>
 <script>
-import SidebarItem from "./NewSidebarItem";
-import eventService from "@/services/event.service";
+import SidebarItem from './NewSidebarItem'
+import eventService from '@/services/event.service';
 
 export default {
-  name: "sidebar",
+  name: 'sidebar',
   data: () => {
     return {
       newTimeLineIconsURL:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/Timeline-New/",
+        'http://static.maryoku.com/storage/icons/Timeline-New/',
       menuIconsURL:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/menu _ checklist/SVG/",
+        'http://static.maryoku.com/storage/icons/menu _ checklist/SVG/',
       toggleMenu: false,
-      currentUrl: "",
-    };
+      currentUrl: ''
+    }
   },
   props: {
     title: {
       type: String,
-      default: "maryoku",
+      default: 'maryoku'
     },
     rtlTitle: {
       type: String,
-      default: "maryoku",
+      default: 'maryoku'
     },
     activeColor: {
       type: String,
-      default: "rose",
-      validator: (value) => {
+      default: 'rose',
+      validator: value => {
         let acceptedValues = [
-          "",
-          "primary",
-          "azure",
-          "green",
-          "orange",
-          "danger",
-          "rose",
-        ];
-        return acceptedValues.indexOf(value) !== -1;
-      },
+          '',
+          'primary',
+          'azure',
+          'green',
+          'orange',
+          'danger',
+          'rose'
+        ]
+        return acceptedValues.indexOf(value) !== -1
+      }
     },
     backgroundImage: {
       type: String,
-      default:
-        "https://static-maryoku.s3.amazonaws.com/storage/img/sidebar-2.jpg",
+      default: 'http://static.maryoku.com/storage/img/sidebar-2.jpg'
     },
     backgroundColor: {
       type: String,
-      default: "white",
-      validator: (value) => {
-        let acceptedValues = ["", "black", "white", "red"];
-        return acceptedValues.indexOf(value) !== -1;
-      },
+      default: 'white',
+      validator: value => {
+        let acceptedValues = ['', 'black', 'white', 'red']
+        return acceptedValues.indexOf(value) !== -1
+      }
     },
     logo: {
       type: String,
       default:
-        "https://static-maryoku.s3.amazonaws.com/storage/maryoku+-+logo+square+dark%402x.png",
+        'http://static.maryoku.com/storage/maryoku+-+logo+square+dark%402x.png'
     },
     fullLogo: {
       type: String,
-      default:
-        "https://static-maryoku.s3.amazonaws.com/storage/maryoku+-+logo+dark%402x.png",
+      default: 'http://static.maryoku.com/storage/maryoku+-+logo+dark%402x.png'
     },
     sidebarLinks: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     autoClose: {
       type: Boolean,
-      default: true,
+      default: true
     },
     event: {
       type: Object,
-      default: {},
-    },
+      default: {}
+    }
   },
-  provide() {
+  provide () {
     return {
-      autoClose: this.autoClose,
-    };
+      autoClose: this.autoClose
+    }
   },
   methods: {
-    minimizeSidebar() {
+    minimizeSidebar () {
       if (this.$sidebar) {
-        this.$sidebar.toggleMinimize();
+        this.$sidebar.toggleMinimize()
       }
     },
-    goTo(router) {
+    goTo (router) {
       this.toggleMenu = false;
-      this.$router.push(router);
+      this.$router.push(router)
     },
-    fetchUrl() {
+    fetchUrl () {
       this.currentUrl = this.$router.history.current.path;
     },
   },
   computed: {
-    sidebarStyle() {
+    sidebarStyle () {
       return {
-        backgroundImage: `url(${this.backgroundImage})`,
-      };
+        backgroundImage: `url(${this.backgroundImage})`
+      }
     },
     isEventPage() {
-      return this.currentUrl.indexOf("event") >= 0;
-    },
+      return this.currentUrl.indexOf('event') >= 0
+    }, 
     isEventPage() {
-      return this.$router.history.current.path.indexOf("event") >= 0;
-    },
+      return this.$router.history.current.path.indexOf("event") >= 0
+    }
   },
-  beforeDestroy() {
+  beforeDestroy () {
     if (this.$sidebar.showSidebar) {
-      this.$sidebar.showSidebar = false;
+      this.$sidebar.showSidebar = false
     }
   },
   components: {
-    SidebarItem,
+    SidebarItem
   },
-  created() {
-    this.fetchUrl();
-    this.taskUrl = eventService.getFirstTaskLink(this.event);
+  created () {
+    this.fetchUrl()
+    this.taskUrl = eventService.getFirstTaskLink(this.event)
   },
   watch: {
-    $route: "fetchUrl",
+    '$route': 'fetchUrl',
     event: {
       handler(newEvent) {
-        this.taskUrl = eventService.getFirstTaskLink(newEvent);
+        this.taskUrl = eventService.getFirstTaskLink(newEvent)
       },
-      deep: true,
-    },
-  },
-};
+      deep: true
+    }
+  }
+}
 </script>
 <style>
 .menu-button {

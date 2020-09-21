@@ -8,9 +8,9 @@
 
         <div
           class="preview-item"
-          :style="`background-image: url(https://static-maryoku.s3.amazonaws.com/storage/img/interactions/${selectedInteraction.templateImage}.png)`"
+          :style="`background-image: url(http://static.maryoku.com/storage/img/interactions/${selectedInteraction.templateImage}.png)`"
         >
-          <!--<iframe src="https://static-maryoku.s3.amazonaws.com/storage/img/interactions/interaction-1.html"></iframe>-->
+          <!--<iframe src="http://static.maryoku.com/storage/img/interactions/interaction-1.html"></iframe>-->
 
           <h2 class="interaction-title">{{selectedInteraction.line1}}</h2>
           <h4 class="interaction-date">{{selectedInteraction.line2}}</h4>
@@ -27,7 +27,7 @@
             >
               <div
                 class="image-item"
-                :style="`background-image: url(https://static-maryoku.s3.amazonaws.com/storage/img/interactions/${image}.png)`"
+                :style="`background-image: url(http://static.maryoku.com/storage/img/interactions/${image}.png)`"
                 :class="{selected : selectedInteraction.templateImage===image }"
               ></div>
             </li>
@@ -57,90 +57,90 @@
 </template>
 <script>
 // import auth from '@/auth';
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import CalendarEvent from "@/models/CalendarEvent";
-import EventPageHeaderImage from "@/models/EventPageHeaderImage";
-import { Modal, LabelEdit } from "@/components";
-import Calendar from "@/models/Calendar";
-import EventComponent from "@/models/EventComponent";
-import EventInviteeGroup from "@/models/EventInviteeGroup";
-import EventInvitee from "@/models/EventInvitee";
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import CalendarEvent from '@/models/CalendarEvent'
+import EventPageHeaderImage from '@/models/EventPageHeaderImage'
+import { Modal, LabelEdit } from '@/components'
+import Calendar from '@/models/Calendar'
+import EventComponent from '@/models/EventComponent'
+import EventInviteeGroup from '@/models/EventInviteeGroup'
+import EventInvitee from '@/models/EventInvitee'
 
-import EventInteraction from "@/models/EventInteraction";
+import EventInteraction from '@/models/EventInteraction'
 
-import swal from "sweetalert2";
-import { error } from "util";
-import moment from "moment";
-import _ from "underscore";
+import swal from 'sweetalert2'
+import { error } from 'util'
+import moment from 'moment'
+import _ from 'underscore'
 
 export default {
   components: {
-    LabelEdit,
+    LabelEdit
   },
   props: {
     event: Object,
-    selectedInteraction: Object,
+    selectedInteraction: Object
   },
   data: () => ({
-    auth: auth,
+    auth: auth
   }),
 
-  created() {},
-  mounted() {
+  created () {},
+  mounted () {
     if (!this.selectedInteraction.templateImage) {
       // alert(JSON.stringify(this.selectedInteraction.options[3]));
-      this.selectTemplateImage(this.selectedInteraction.options[2]);
+      this.selectTemplateImage(this.selectedInteraction.options[2])
     }
   },
   methods: {
-    cancel() {
-      this.adding = false;
+    cancel () {
+      this.adding = false
     },
-    editInteractionDesign() {
-      this.$parent.isLoading = true;
+    editInteractionDesign () {
+      this.$parent.isLoading = true
 
       // Edit event interaction
       let interaction = new EventInteraction({
-        id: this.selectedInteraction.hashed_id,
-      });
+        id: this.selectedInteraction.hashed_id
+      })
 
-      interaction.templateId = this.selectedInteraction.id;
-      interaction.line1 = this.selectedInteraction.line1;
-      interaction.line2 = this.selectedInteraction.line2;
-      interaction.line3 = this.selectedInteraction.line3;
-      interaction.templateImage = this.selectedInteraction.templateImage;
+      interaction.templateId = this.selectedInteraction.id
+      interaction.line1 = this.selectedInteraction.line1
+      interaction.line2 = this.selectedInteraction.line2
+      interaction.line3 = this.selectedInteraction.line3
+      interaction.templateImage = this.selectedInteraction.templateImage
 
-      interaction.event = { id: this.event.id };
+      interaction.event = { id: this.event.id }
 
       interaction
         .save()
-        .then((resp) => {
-          this.$parent.isLoading = false;
+        .then(resp => {
+          this.$parent.isLoading = false
 
           this.$notify({
-            message: "Changes saved successfully",
-            horizontalAlign: "center",
-            verticalAlign: "top",
-            type: "success",
-          });
-          this.$emit("closePanel", {});
+            message: 'Changes saved successfully',
+            horizontalAlign: 'center',
+            verticalAlign: 'top',
+            type: 'success'
+          })
+          this.$emit('closePanel', {})
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch(error => {
+          console.log(error)
+        })
     },
-    selectTemplateImage(image) {
-      this.selectedInteraction.templateImage = image;
-      console.log(this.selectedInteraction.templateImage);
-      this.$forceUpdate();
+    selectTemplateImage (image) {
+      this.selectedInteraction.templateImage = image
+      console.log(this.selectedInteraction.templateImage)
+      this.$forceUpdate()
     },
-    getEventStartInMillis(sendDate) {
-      let eventStartTime = new Date(sendDate).getTime();
-      return eventStartTime;
-    },
+    getEventStartInMillis (sendDate) {
+      let eventStartTime = new Date(sendDate).getTime()
+      return eventStartTime
+    }
   },
-  computed: {},
-};
+  computed: {}
+}
 </script>
 <style lang="scss" scope>
 .md-datepicker {

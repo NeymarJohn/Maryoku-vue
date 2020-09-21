@@ -38,26 +38,26 @@
 </template>
 
 <script>
-import moment from "moment";
-import VueElementLoading from "vue-element-loading";
-import Vendors from "@/models/Vendors";
+import moment from 'moment';
+import VueElementLoading from 'vue-element-loading';
+import Vendors from '@/models/Vendors';
 
 //COMPONENTS
-import Icon from "@/components/Icon/Icon.vue";
-import VSignupEditableField from "@/components/Inputs/VSignupEditableField.vue";
-import VendorBasicInfoForm from "./components/VendorBasicInfoForm.vue";
-import VendorSignupStep1 from "./components/VendorSignupStep1.vue";
-import VendorSignupStep2 from "./components/VendorSignupStep2.vue";
-import VendorSignupStep3 from "./components/VendorSignupStep3.vue";
-import VendorSignupStep4 from "./components/VendorSignupStep4.vue";
-import VendorSignupFinalForm from "./components/VendorSignupFinalForm.vue";
-import swal from "sweetalert2";
+import Icon from '@/components/Icon/Icon.vue';
+import VSignupEditableField from '@/components/Inputs/VSignupEditableField.vue';
+import VendorBasicInfoForm from './components/VendorBasicInfoForm.vue';
+import VendorSignupStep1 from './components/VendorSignupStep1.vue';
+import VendorSignupStep2 from './components/VendorSignupStep2.vue';
+import VendorSignupStep3 from './components/VendorSignupStep3.vue';
+import VendorSignupStep4 from './components/VendorSignupStep4.vue';
+import VendorSignupFinalForm from './components/VendorSignupFinalForm.vue';
+import swal from 'sweetalert2';
 
 import {
   businessCategories,
   generalInfos,
   companyServices,
-} from "@/constants/vendor";
+} from '@/constants/vendor';
 
 export default {
   components: {
@@ -122,22 +122,21 @@ export default {
       businessCategories: businessCategories,
       generalInfos: generalInfos,
       companyServices: companyServices,
-      iconUrl:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
     };
   },
   created() {},
   mounted() {
-    this.$root.$on("approve-vendor-basic-info", () => {
+    this.$root.$on('approve-vendor-basic-info', () => {
       this.isApproved = true;
       this.step = 1;
     });
-    this.$root.$on("next-vendor-signup-step", () => {
+    this.$root.$on('next-vendor-signup-step', () => {
       if (this.step < 5) {
         this.step += 1;
       }
     });
-    this.$root.$on("prev-vendor-signup-step", () => {
+    this.$root.$on('prev-vendor-signup-step', () => {
       if (this.step > 0) {
         this.step -= 1;
       }
@@ -145,36 +144,36 @@ export default {
         this.isApproved = false;
       }
     });
-    this.$root.$on("go-to-signup-step", (step) => {
+    this.$root.$on('go-to-signup-step', (step) => {
       this.step = step;
       if (this.step < 1) {
         this.isApproved = false;
       }
     });
-    this.$root.$on("update-vendor-value", (field, value) => {
-      if (field == "images") {
+    this.$root.$on('update-vendor-value', (field, value) => {
+      if (field == 'images') {
         this.vendor.images.push(value);
-      } else if (field == "removeImage") {
+      } else if (field == 'removeImage') {
         this.vendor.images = this.vendor.images.filter((i) => i != value);
-      } else if (field == "vendorCategory") {
+      } else if (field == 'vendorCategory') {
         this.$set(this.vendor, this.camelize(field), value);
-        this.$set(this.vendor, "yesRules", []);
-        this.$set(this.vendor, "noRules", []);
-        this.$set(this.vendor, "notAllowed", []);
-        this.$set(this.vendor, "exDonts", []);
-        this.$set(this.vendor, "yesPolicies", []);
-        this.$set(this.vendor, "noPolicies", []);
-        this.$set(this.vendor, "selectedWeekdays", []);
-        this.$set(this.vendor, "dontWorkDays", null);
-        this.$set(this.vendor, "dontWorkTime", null);
-        this.$set(this.vendor, "services", {});
-      } else if (field.indexOf(".") > -1) {
-        this.$set(this.vendor[field.split(".")[0]], field.split(".")[1], value);
+        this.$set(this.vendor, 'yesRules', []);
+        this.$set(this.vendor, 'noRules', []);
+        this.$set(this.vendor, 'notAllowed', []);
+        this.$set(this.vendor, 'exDonts', []);
+        this.$set(this.vendor, 'yesPolicies', []);
+        this.$set(this.vendor, 'noPolicies', []);
+        this.$set(this.vendor, 'selectedWeekdays', []);
+        this.$set(this.vendor, 'dontWorkDays', null);
+        this.$set(this.vendor, 'dontWorkTime', null);
+        this.$set(this.vendor, 'services', {});
+      } else if (field.indexOf('.') > -1) {
+        this.$set(this.vendor[field.split('.')[0]], field.split('.')[1], value);
       } else {
         this.$set(this.vendor, this.camelize(field), value);
       }
     });
-    this.$root.$on("vendor-signup", () => {
+    this.$root.$on('vendor-signup', () => {
       this.addVendor();
       // this.$store.dispatch('vendor/setData', this.vendor);
     });
@@ -187,25 +186,25 @@ export default {
       return temp.charAt(0).toLowerCase() + temp.slice(1);
     },
     async addVendor() {
-      console.log("vendor", this.vendor);
+      console.log('vendor', this.vendor);
       new Vendors(this.vendor)
         .save()
         .then((res) => {
-          console.log("*** Save vendor - done: ");
+          console.log('*** Save vendor - done: ');
           console.log(JSON.stringify(res));
           swal({
             title: `Thank you for your signup!`,
             buttonsStyling: false,
-            confirmButtonClass: "md-button md-success",
+            confirmButtonClass: 'md-button md-success',
           }).then(() => {});
         })
         .catch((error) => {
-          console.log("*** Save vendor - failed: ");
+          console.log('*** Save vendor - failed: ');
           console.log(JSON.stringify(error));
         });
     },
     setVender: function () {
-      this.$store.dispatch("vendor/setData");
+      this.$store.dispatch('vendor/setData');
     },
   },
   computed: {},

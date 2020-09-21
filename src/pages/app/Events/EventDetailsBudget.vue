@@ -50,14 +50,16 @@
             <md-icon
               class="card-overview-saved-icon"
               style="color:#167c3a "
-              v-if="getSavedAmount >= 0"
+              v-if="(statistics.allocated - statistics.booked) >= 0"
             >add_circle_outline</md-icon>
             <md-icon
               class="card-overview-saved-icon"
               v-else
               style="color:#f51355"
             >remove_circle_outline</md-icon>
-            <span class="card-overview-saved-amount">$ {{getSavedAmount| withComma}}</span>
+            <span
+              class="card-overview-saved-amount"
+            >$ {{(statistics.allocated - statistics.booked) | withComma}}</span>
           </div>
           <div class="card-section card-expense">
             <div class="section-header">Expenses</div>
@@ -69,7 +71,7 @@
         <div class="md-layout-item md-size-60">
           <div class="event-blocks-table">
             <tabs
-              :tab-name="['<img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+26.png\'> Total', ' <img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest']"
+              :tab-name="['<img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+26.png\'> Total', ' <img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest']"
             >
               <!-- here you can add your content for tab-content -->
               <template slot="tab-pane-1">
@@ -145,7 +147,7 @@
         <template slot="body">
           <div class="event-blocks-table edit-elements-budget-table">
             <tabs
-              :tab-name="['<img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+26.png\'> Total', ' <img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest']"
+              :tab-name="['<img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+26.png\'> Total', ' <img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest']"
             >
               <!-- here you can add your content for tab-content -->
               <template slot="tab-pane-1">
@@ -250,9 +252,8 @@ export default {
       activeTab: 0,
       totalBudget: 0,
       menuIconsURL:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
-      iconsURL:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/",
+        "http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/",
+      iconsURL: "http://static.maryoku.com/storage/icons/Event%20Page/",
       showBudgetModal: false,
       budgetConfirmationModal: false,
       newBudget: null,
@@ -324,7 +325,6 @@ export default {
               console.log(components);
               this.event.components = components;
               this.selectedComponents = components;
-              console.log(this.selectedComponents);
               this.seriesData = components;
             });
           this.getCalendarEventStatistics(event);
@@ -334,7 +334,7 @@ export default {
             this.event,
             this.routeName === "EditBuildingBlocks",
             this.routeName === "InviteesManagement" ||
-              this.routeName === "EventInvitees",
+              this.routeName === "EventInvitees"
           );
           this.isLoading = false;
         });
@@ -500,7 +500,7 @@ export default {
     }),
     pieChartData() {
       return this.selectedComponents.filter(
-        (item) => item.componentId !== "unexpected",
+        (item) => item.componentId !== "unexpected"
       );
     },
     categoryItems() {
@@ -521,15 +521,6 @@ export default {
     },
     canEdit() {
       return this.permission === "edit";
-    },
-    getSavedAmount() {
-      let savedAmount = 0;
-      this.selectedComponents.forEach((item) => {
-        if (item.bookedBudget) {
-          savedAmount += item.allocatedBudget - item.booked;
-        }
-      });
-      return savedAmount;
     },
   },
   filters: {

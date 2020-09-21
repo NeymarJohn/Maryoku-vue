@@ -78,7 +78,7 @@ export default {
       });
     },
     handleDrop() {
-      this.$emit("applyTemplate", {
+      this.$root.$emit("apply-template", {
         item: this.item,
         block: this.droppingBlock,
         index: this.index,

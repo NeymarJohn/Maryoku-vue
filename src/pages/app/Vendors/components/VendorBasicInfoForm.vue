@@ -65,16 +65,16 @@
 </template>
 
 <script>
-import moment from "moment";
-import VueElementLoading from "vue-element-loading";
-import Vendors from "@/models/Vendors";
+import moment from 'moment';
+import VueElementLoading from 'vue-element-loading';
+import Vendors from '@/models/Vendors';
 
 //COMPONENTS
-import Icon from "@/components/Icon/Icon.vue";
-import VSignupEditableField from "@/components/Inputs/VSignupEditableField.vue";
+import Icon from '@/components/Icon/Icon.vue';
+import VSignupEditableField from '@/components/Inputs/VSignupEditableField.vue';
 
 export default {
-  name: "vendor-basic-info-form",
+  name: 'vendor-basic-info-form',
   components: {
     VueElementLoading,
     VSignupEditableField,
@@ -84,8 +84,7 @@ export default {
   },
   data() {
     return {
-      iconUrl:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
     };
   },
   created() {},

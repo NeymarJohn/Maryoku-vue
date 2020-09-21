@@ -24,7 +24,7 @@ export default {
     me: {}
   },
 
-  login(context, creds, successCallback, errorCallback) {
+  login (context, creds, successCallback, errorCallback) {
     context.$http.post(SESSION_URL, creds)
       .then((resp) => {
         this.setToken(resp.data.access_token)
@@ -41,7 +41,7 @@ export default {
       })
   },
 
-  signupOrSignin(context, userData, successCallback, failedCallback) {
+  signupOrSignin (context, userData, successCallback, failedCallback) {
     context.$http.post(`${REGISTRATION_URL}`, userData, { 'ContentType': 'application/json' })
       .then((resp) => {
         successCallback(resp.data)
@@ -50,7 +50,7 @@ export default {
       })
   },
 
-  clientSignupOrSignin(context, email, password, department, callback) {
+  clientSignupOrSignin (context, email, password, department, callback) {
     context.$http.post(`${REGISTRATION_URL}`, { username: email, password: password, department: department, role: 'client' }, { 'ContentType': 'application/json' })
       .then((resp) => {
         if (callback) {
@@ -61,7 +61,7 @@ export default {
       })
   },
 
-  guestSignupOrSignin(context, details, callback) {
+  guestSignupOrSignin (context, details, callback) {
     context.$http.post(`${REGISTRATION_RSVP_URL}`, { username: details.email, password: details.password, role: details.role, eventId: details.eventId }, { 'ContentType': 'application/json' })
       .then((resp) => {
         if (callback) {
@@ -75,7 +75,7 @@ export default {
       })
   },
 
-  forgotPassword(context, email, successCallback, errorCallback) {
+  forgotPassword (context, email, successCallback, errorCallback) {
     context.$http.post(`${FORGOT_PASSWORD_URL}`, { email }, { 'ContentType': 'application/json' }).then((resp) => {
       if (callback) {
         successCallback(resp.data)
@@ -85,18 +85,18 @@ export default {
     })
   },
 
-  setToken(token) {
+  setToken (token) {
     window.localStorage.setItem(TOKEN_KEY, token)
   },
 
-  setHeaders(context) {
+  setHeaders (context) {
     this.user.authenticated = true
     context.$http.defaults.headers.common.Authorization = this.getAuthHeader().Authorization
     // Model.$http.defaults.headers.common.Authorization = this.getAuthHeader().Authorization;
   },
 
-  setTenantHeaders(context) {
-    if (context.tenantId) {
+  setTenantHeaders (context) {
+    if (context.tenantId)  {
       context.$http.defaults.headers.common['gorm-tenantid'] = context.tenantId
       context.$http.defaults.headers.common.gorm_tenantid = context.tenantId
     } else {
@@ -107,7 +107,7 @@ export default {
     // Model.$http.defaults.headers.common.gorm_tenantid = this.resolveTenantId();
   },
 
-  unsetToken() {
+  unsetToken () {
     window.localStorage.removeItem(TOKEN_KEY)
     this.user = {
       authenticated: false
@@ -165,7 +165,7 @@ export default {
     }
 
   },
-  currentUser(context, required, cb) {
+  currentUser (context, required, cb) {
     if (this.user.loading) {
       setTimeout(() => {
         this.currentUser(context, required, cb)
@@ -177,7 +177,7 @@ export default {
     let user = context.$ls.get('user')
     if (user) {
       if (user.me && (user.me.pictureUrl === '' || user.me.pictureUrl === 'none')) {
-        user.me.pictureUrl = 'https://static-maryoku.s3.amazonaws.com/storage/img/placeholder.jpg'
+        user.me.pictureUrl = 'http://static.maryoku.com/storage/img/placeholder.jpg'
         user.avatar = user.me.pictureUrl
       }
       this.user = user
@@ -247,7 +247,7 @@ export default {
     }
   },
 
-  logout(context, options) {
+  logout (context, options) {
     context.$http.get(LOGOUT_USER_URL, options)
       .then(data => {
         window.localStorage.removeItem(TOKEN_KEY)
@@ -266,12 +266,12 @@ export default {
       })
   },
 
-  checkAuth() {
+  checkAuth () {
     const jwt = window.localStorage.getItem(TOKEN_KEY)
     this.user.authenticated = !!jwt
   },
 
-  getAuthHeader() {
+  getAuthHeader () {
     this.checkAuth()
     if (this.user.authenticated) {
       return {
@@ -280,10 +280,10 @@ export default {
     }
     return {}
   },
-  getToken() {
+  getToken () {
     return window.localStorage.getItem(TOKEN_KEY)
   },
-  resolveTenantId() {
+  resolveTenantId () {
     let tenantId = document.location.hostname.replace('.dev.maryoku.com', '')
     tenantId = tenantId.replace('.local.maryoku.com', '')
     tenantId = tenantId.replace('.maryoku.com', '')

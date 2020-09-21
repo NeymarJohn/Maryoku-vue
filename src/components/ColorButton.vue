@@ -7,8 +7,13 @@
       @click="toggleColorPane()"
       v-if="bgc"
     ></md-button>
-    <md-button class="add-button md-just-icon md-white" @click="toggleColorPane()" v-else>
-      <img :src="`${$iconURL}Concept/Asset 488.svg`" width="20" />
+    <md-button
+      class="add-button md-just-icon md-white"
+      @click="toggleColorPane()"
+      v-else
+    >
+      <img :src="`${$iconURL}Concept/Asset 488.svg`" width="20"/>
+      
     </md-button>
 
     <chrome-picker
@@ -29,27 +34,27 @@ let defaultValue = {
     h: 150,
     s: 0.5,
     l: 0.2,
-    a: 0.9,
+    a: 0.9
   },
   hsv: {
     h: 150,
     s: 0.66,
     v: 0.3,
-    a: 0.9,
+    a: 0.9
   },
   rgba: {
     r: 159,
     g: 96,
     b: 43,
-    a: 0.9,
+    a: 0.9
   },
-  a: 0.9,
+  a: 0.9
 };
 
 export default {
-  name: "color-button",
+  name: "event-time-line",
   components: {
-    "chrome-picker": Chrome,
+    "chrome-picker": Chrome
   },
   props: {
     /**
@@ -57,52 +62,51 @@ export default {
      * @model
      */
     value: {
-      type: [Object, String],
-    },
+      type: [Object, String]
+    }
   },
   data: () => ({
     showColorPane: false,
-    selectedColour: {
-      hex: this.value ? this.value.color : "",
-      a: this.value ? this.value.opacity : 1,
-    },
+    selectedColour:  {
+      hex: this.value?this.value.color:"",
+      a: this.value?this.value.opacity:1
+    }
   }),
   computed: {
     bgc() {
-      if (this.selectedColour) return this.selectedColour.hex;
-      return "";
+      if (this.selectedColour )
+        return this.selectedColour.hex;
+      return ""
     },
     alpha() {
-      if (this.selectedColour) return this.selectedColour.a;
-      return 1;
-    },
+       if (this.selectedColour )
+        return this.selectedColour.a;
+      return 1
+    }
   },
   methods: {
-    hidePane: function (event) {
+    hidePane: function(event) {
       this.showColorPane = false;
     },
-    updateValue: function (value) {
+    updateValue: function(value) {
       this.selectedColour = value;
-      this.$emit("input", {
-        color: this.selectedColour.hex,
-        opacity: this.selectedColour.a,
-      });
+      this.$emit("input",{color: this.selectedColour.hex, opacity: this.selectedColour.a})
     },
-    toggleColorPane: function () {
+    toggleColorPane: function() {
       document.getElementsByClassName("vc-chrome");
       this.showColorPane = !this.showColorPane;
-    },
+    }
   },
   created() {
     this.selectedColour.hex = this.value.color;
-    this.selectedColour.a = this.value.alpha;
+    this.selectedColour.a = this.value.alpha
   },
   watch: {
-    value: function () {
+    value: function() {
       this.selectedColour.hex = this.value.color;
-      this.selectedColour.a = this.value.opacity;
-    },
-  },
+      this.selectedColour.a = this.value.opacity
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -112,7 +116,7 @@ export default {
     position: fixed;
     width: 100vw;
     height: 100vh;
-    left: 0px;
+    left:0px;
     top: 0px;
     z-index: 30;
   }
@@ -121,17 +125,17 @@ export default {
   width: 54px;
   height: 54px;
   border-radius: 50%;
-  margin: 0px;
+  margin:0px;
   // &.add-button {}
 }
-.add-button {
-  -webkit-box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  background-color: #ffffff;
-  border: dashed 1.5px #f51355;
-  background-color: #ffffff;
-  border-radius: 50%;
-}
+.add-button{
+    -webkit-box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+    background-color: #ffffff;
+    border: dashed 1.5px #f51355;
+    background-color: #ffffff;
+    border-radius: 50%;
+  }
 .vc-chrome {
   left: 65px;
   top: 0px;

@@ -27,7 +27,7 @@
                 :class="block.title.toLowerCase().replace(/ /g, '-')"
               >
                 <img
-                  :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${block.title}.svg`"
+                  :src="`http://static.maryoku.com/storage/icons/Budget Elements/${block.title}.svg`"
                 />
                 {{block.title}}
               </td>
@@ -46,9 +46,7 @@
               </td>
               <td class="actual red-label" width="15%">
                 <template v-if="block.allocatedBudget">
-                  <img
-                    src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+29.png"
-                  />
+                  <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+29.png" />
                   <template v-if="block.winningProposalId">
                     <md-button
                       class="md-simple actual-cost md-xs"
@@ -72,18 +70,14 @@
       <tbody>
         <tr>
           <td class="event-block-element unexpected" width="40%">
-            <img
-              src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+18.png"
-            /> Unexpected
+            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+18.png" /> Unexpected
           </td>
           <td class="planned" width="20%">$0</td>
           <td class="new-element-budget" width="15%">
             <input />
           </td>
           <td class="actual red-label" width="15%">
-            <img
-              src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+29.png"
-            />
+            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+29.png" />
           </td>
         </tr>
       </tbody>
@@ -94,23 +88,19 @@
         <tr class="taxes">
           <td class="taxes-title">
             <img
-              src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2020.svg"
+              src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2020.svg"
               width="20"
             /> Tips
             <span class="percent">12%</span>
           </td>
           <td>${{totalBudgetTaxes.toFixed(2)}}</td>
           <td class="actual green-label">
-            <img
-              src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+30.png"
-            /> $0
+            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png" /> $0
           </td>
           <td></td>
           <td class="expand" style="text-align: right; padding-right: 1em;">
             <a href>
-              <img
-                src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+24.png"
-              />
+              <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png" />
             </a>
           </td>
         </tr>
@@ -125,36 +115,36 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import swal from "sweetalert2";
-import Calendar from "@/models/Calendar";
-import CalendarEvent from "@/models/CalendarEvent";
-import EventComponent from "@/models/EventComponent";
-import VueElementLoading from "vue-element-loading";
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import swal from 'sweetalert2'
+import Calendar from '@/models/Calendar'
+import CalendarEvent from '@/models/CalendarEvent'
+import EventComponent from '@/models/EventComponent'
+import VueElementLoading from 'vue-element-loading'
 import {
   Modal,
   LabelEdit,
   AnimatedNumber,
   StatsCard,
-  ChartCard,
-} from "@/components";
+  ChartCard
+} from '@/components'
 
 // import auth from '@/auth';
-import EventBlocks from "../components/NewEventBlocks";
-import AddBuildingBlockModal from "../components/EventBlocks/Modals/AddBuildingBlocks.vue";
-import AddEventElementsModal from "../components/EventBlocks/Modals/AddEventElements.vue";
-import EventBlockRequirements from "../components/EventBlocks/Modals/EventBlockRequirements.vue";
-import EventActualCostIconTooltip from "../components/EventActualCostIconTooltip.vue";
-import EventBlockVendors from "./EventBlocks/Modals/EventBlockVendors.vue";
-import ViewProposals from "./EventBlocks/Modals/ViewProposals.vue";
-import EventComponentVendor from "@/models/EventComponentVendor";
-import _ from "underscore";
+import EventBlocks from '../components/NewEventBlocks'
+import AddBuildingBlockModal from '../components/EventBlocks/Modals/AddBuildingBlocks.vue'
+import AddEventElementsModal from '../components/EventBlocks/Modals/AddEventElements.vue'
+import EventBlockRequirements from '../components/EventBlocks/Modals/EventBlockRequirements.vue'
+import EventActualCostIconTooltip from '../components/EventActualCostIconTooltip.vue'
+import EventBlockVendors from './EventBlocks/Modals/EventBlockVendors.vue'
+import ViewProposals from './EventBlocks/Modals/ViewProposals.vue'
+import EventComponentVendor from '@/models/EventComponentVendor'
+import _ from 'underscore'
 
-import draggable from "vuedraggable";
-import { Drag, Drop } from "vue-drag-drop";
+import draggable from 'vuedraggable'
+import { Drag, Drop } from 'vue-drag-drop'
 
 export default {
-  name: "event-building-blocks",
+  name: 'event-building-blocks',
   components: {
     VueElementLoading,
     EventBlocks,
@@ -167,20 +157,20 @@ export default {
     Modal,
     draggable,
     Drag,
-    Drop,
+    Drop
   },
   props: {
     event: {
       type: Object,
       default: () => {
-        return { statistics: {} };
-      },
+        return { statistics: {} }
+      }
     },
     eventComponents: [Array, Function],
     type: {
       type: String,
-      default: "total",
-    },
+      default: 'total'
+    }
   },
   data: () => ({
     // auth: auth,
@@ -189,369 +179,367 @@ export default {
     eventBuildingBlocks: [],
     eventBuildingBlocksList: [],
     currentBlockId: null,
-    elementsBudget: "event",
+    elementsBudget: 'event',
     show: false,
     totalBudget: 0,
     totalActual: 0,
     totalBudgetTaxes: 0,
     showCategoryModal: false,
-    timelineIconsURL:
-      "https://static-maryoku.s3.amazonaws.com/storage/icons/timeline/svg/",
-    iconsURL:
-      "https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/",
+    timelineIconsURL: 'http://static.maryoku.com/storage/icons/timeline/svg/',
+    iconsURL: 'http://static.maryoku.com/storage/icons/Event%20Page/',
     menuIconsURL:
-      "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
+      'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
     locationsList: [
-      "San Francisco, California",
-      "Los Angeles, California",
-      "Jacksonville, Florida",
-      "Miami, Florida",
-      "NYC, New York",
-      "Austin, Texas",
-      "Huston, Texas",
+      'San Francisco, California',
+      'Los Angeles, California',
+      'Jacksonville, Florida',
+      'Miami, Florida',
+      'NYC, New York',
+      'Austin, Texas',
+      'Huston, Texas'
     ],
     categoryBuildingBlocks: null,
     filteredEventBlocks: null,
     newBuildingBlock: {
-      category: "",
-      name: "",
-      budget: "",
-    },
+      category: '',
+      name: '',
+      budget: ''
+    }
   }),
   methods: {
-    ...mapMutations("EventPlannerVuex", ["setBuildingBlockModal"]),
-    expandBlock(item) {
+    ...mapMutations('EventPlannerVuex', ['setBuildingBlockModal']),
+    expandBlock (item) {
       if (item.expanded) {
-        item.expanded = false;
+        item.expanded = false
       } else {
-        this.eventBuildingBlocks.forEach((g) => {
-          g.expanded = false;
-        });
-        item.expanded = true;
+        this.eventBuildingBlocks.forEach(g => {
+          g.expanded = false
+        })
+        item.expanded = true
       }
-      this.$forceUpdate();
+      this.$forceUpdate()
     },
-    deleteBlock(blockId) {
+    deleteBlock (blockId) {
       swal({
-        title: "Are you sure?",
+        title: 'Are you sure?',
         text: `You won't be able to revert this!`,
         showCancelButton: true,
-        confirmButtonClass: "md-button md-success",
-        cancelButtonClass: "md-button md-danger",
-        confirmButtonText: "Yes, delete it!",
-        buttonsStyling: false,
-      }).then((result) => {
+        confirmButtonClass: 'md-button md-success',
+        cancelButtonClass: 'md-button md-danger',
+        confirmButtonText: 'Yes, delete it!',
+        buttonsStyling: false
+      }).then(result => {
         if (result.value) {
-          this.isLoading = true;
+          this.isLoading = true
 
           let calendar = new Calendar({
-            id: this.$auth.user.defaultCalendarId,
-          });
-          let event = new CalendarEvent({ id: this.event.id });
-          let selected_block = new EventComponent({ id: blockId });
+            id: this.$auth.user.defaultCalendarId
+          })
+          let event = new CalendarEvent({ id: this.event.id })
+          let selected_block = new EventComponent({ id: blockId })
 
           selected_block
             .for(calendar, event)
             .delete()
-            .then((resp) => {
-              this.isLoading = false;
+            .then(resp => {
+              this.isLoading = false
               this.event.components.splice(
-                _.findIndex(this.eventBuildingBlocks, (b) => {
-                  return b.id === selected_block.id;
+                _.findIndex(this.eventBuildingBlocks, b => {
+                  return b.id === selected_block.id
                 }),
-                1,
-              );
-              this.getEventBuildingBlocks();
-              this.$root.$emit("RefreshStatistics");
+                1
+              )
+              this.getEventBuildingBlocks()
+              this.$root.$emit('RefreshStatistics')
               this.$root.$emit(
-                "event-building-block-budget-changed",
-                this.event.components,
-              );
-              this.$forceUpdate();
+                'event-building-block-budget-changed',
+                this.event.components
+              )
+              this.$forceUpdate()
 
-              let allocatedBudget = 0;
-              this.eventBuildingBlocks.forEach((item) => {
-                allocatedBudget += Number(item.allocatedBudget);
-              });
+              let allocatedBudget = 0
+              this.eventBuildingBlocks.forEach(item => {
+                allocatedBudget += Number(item.allocatedBudget)
+              })
 
-              this.allocatedBudget = allocatedBudget;
+              this.allocatedBudget = allocatedBudget
             })
-            .catch((error) => {
-              console.log(error);
-            });
+            .catch(error => {
+              console.log(error)
+            })
         }
-      });
+      })
     },
     /**
      * Get Event building blocks
      */
-    getEventBuildingBlocks() {
-      if (!this.event.id) return;
+    getEventBuildingBlocks () {
+      if (!this.event.id) return
 
-      let vm = this;
+      let vm = this
 
-      this.isLoading = true;
+      this.isLoading = true
 
-      vm.totalBudget = 0;
-      vm.totalBudgetTaxes = 0;
+      vm.totalBudget = 0
+      vm.totalBudgetTaxes = 0
 
-      let res = this.event.components;
-      this.$set(this, "eventBuildingBlocks", res);
+      let res = this.event.components
+      this.$set(this, 'eventBuildingBlocks', res)
 
       setTimeout(() => {
-        this.isLoading = false;
-      }, 500);
+        this.isLoading = false
+      }, 500)
 
-      this.eventBuildingBlocks.forEach((item) => {
-        item.newTotalBudget = item.allocatedBudget;
+      this.eventBuildingBlocks.forEach(item => {
+        item.newTotalBudget = item.allocatedBudget
 
-        if (item.allocatedBudget && vm.type === "total") {
-          vm.totalBudget += parseInt(item.allocatedBudget);
-          vm.totalBudgetTaxes += parseInt(item.allocatedBudget) * 0.12;
+        if (item.allocatedBudget && vm.type === 'total') {
+          vm.totalBudget += parseInt(item.allocatedBudget)
+          vm.totalBudgetTaxes += parseInt(item.allocatedBudget) * 0.12
         } else if (item.allocatedBudget) {
           vm.totalBudget += item.numberOfParticipants
             ? parseInt(item.allocatedBudget) /
               parseInt(item.numberOfParticipants)
             : parseInt(item.allocatedBudget) /
-              parseInt(vm.event.numberOfParticipants);
+              parseInt(vm.event.numberOfParticipants)
           vm.totalBudgetTaxes += item.numberOfParticipants
             ? (parseInt(item.allocatedBudget) /
                 parseInt(item.numberOfParticipants)) *
               0.12
             : (parseInt(item.allocatedBudget) /
                 parseInt(vm.event.numberOfParticipants)) *
-              0.12;
+              0.12
         }
-        console.log("vm.totalBudget ", vm.totalBudget);
+        console.log('vm.totalBudget ', vm.totalBudget)
 
         // if (item.allocatedBudget) {
         //     vm.totalBudget += parseInt(item.allocatedBudget);
         //     vm.totalBudgetTaxes  += parseInt(item.allocatedBudget) * .12;
         // }
-      });
+      })
 
-      this.$forceUpdate();
+      this.$forceUpdate()
     },
-    showAddBuildingBlocksModal() {
+    showAddBuildingBlocksModal () {
       window.currentPanel = this.$showPanel({
         component: AddBuildingBlockModal,
-        cssClass: "md-layout-item md-size-35 transition36 bg-grey",
-        openOn: "right",
-        props: { event: this.event },
-      });
-      window.currentPanel.promise.then((res) => {
-        this.event.components.push(JSON.parse(JSON.stringify(res)));
-        this.getEventBuildingBlocks();
-      });
+        cssClass: 'md-layout-item md-size-35 transition36 bg-grey',
+        openOn: 'right',
+        props: { event: this.event }
+      })
+      window.currentPanel.promise.then(res => {
+        this.event.components.push(JSON.parse(JSON.stringify(res)))
+        this.getEventBuildingBlocks()
+      })
     },
-    showAddEventElementsModal() {
+    showAddEventElementsModal () {
       window.currentPanel = this.$showPanel({
         component: AddEventElementsModal,
-        cssClass: "md-layout-item md-size-35 transition36 bg-grey",
-        openOn: "right",
+        cssClass: 'md-layout-item md-size-35 transition36 bg-grey',
+        openOn: 'right',
         props: {
           event: this.event,
-          eventBuildingBlocks: this.eventBuildingBlocks,
-        },
-      });
-      window.currentPanel.promise.then((res) => {
-        if (res.length > 0) {
-          res.forEach((item) => {
-            this.event.components.push(JSON.parse(JSON.stringify(item)));
-          });
+          eventBuildingBlocks: this.eventBuildingBlocks
         }
-        this.getEventBuildingBlocks();
-      });
+      })
+      window.currentPanel.promise.then(res => {
+        if (res.length > 0) {
+          res.forEach(item => {
+            this.event.components.push(JSON.parse(JSON.stringify(item)))
+          })
+        }
+        this.getEventBuildingBlocks()
+      })
     },
-    blockBudgetChanged(val, index) {
+    blockBudgetChanged (val, index) {
       let block = _.find(this.eventBuildingBlocks, function (item) {
-        return item.componentId === index;
-      });
+        return item.componentId === index
+      })
 
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
-      let event = new CalendarEvent({ id: this.event.id });
-      let selected_block = new EventComponent({ id: block.id });
+      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
+      let event = new CalendarEvent({ id: this.event.id })
+      let selected_block = new EventComponent({ id: block.id })
 
-      selected_block.calendarEvent = block.calendarEvent;
-      selected_block.componentId = block.componentId;
-      selected_block.icon = block.icon;
-      selected_block.color = block.color;
-      selected_block.todos = block.todos;
-      selected_block.values = block.values;
-      selected_block.vendors = block.vendors;
+      selected_block.calendarEvent = block.calendarEvent
+      selected_block.componentId = block.componentId
+      selected_block.icon = block.icon
+      selected_block.color = block.color
+      selected_block.todos = block.todos
+      selected_block.values = block.values
+      selected_block.vendors = block.vendors
 
       if (val) {
-        if (val.toString().toLowerCase() === "click to set") {
-          selected_block.allocatedBudget = null;
-          block.allocatedBudget = null;
+        if (val.toString().toLowerCase() === 'click to set') {
+          selected_block.allocatedBudget = null
+          block.allocatedBudget = null
         } else {
           if (block.allocatedBudget && block.numberOfParticipants) {
             selected_block.allocatedBudget =
-              this.type === "total" ? val : val * block.numberOfParticipants;
+              this.type === 'total' ? val : val * block.numberOfParticipants
             block.allocatedBudget =
-              this.type === "total" ? val : val * block.numberOfParticipants;
+              this.type === 'total' ? val : val * block.numberOfParticipants
           } else {
             selected_block.allocatedBudget =
-              this.type === "total"
+              this.type === 'total'
                 ? val
-                : val * this.event.numberOfParticipants;
+                : val * this.event.numberOfParticipants
             block.allocatedBudget =
-              this.type === "total"
+              this.type === 'total'
                 ? val
-                : val * this.event.numberOfParticipants;
+                : val * this.event.numberOfParticipants
           }
         }
       } else {
-        selected_block.allocatedBudget = null;
-        block.allocatedBudget = null;
+        selected_block.allocatedBudget = null
+        block.allocatedBudget = null
       }
 
       selected_block
         .for(calendar, event)
         .save()
-        .then((resp) => {
-          this.isLoading = false;
-          this.$root.$emit("RefreshStatistics");
-          this.getEventBuildingBlocks();
+        .then(resp => {
+          this.isLoading = false
+          this.$root.$emit('RefreshStatistics')
+          this.getEventBuildingBlocks()
           this.$root.$emit(
-            "event-building-block-budget-changed",
-            this.event.components,
-          );
-          this.$forceUpdate();
+            'event-building-block-budget-changed',
+            this.event.components
+          )
+          this.$forceUpdate()
 
-          console.log(" selected block ", selected_block);
+          console.log(' selected block ', selected_block)
 
-          let allocatedBudget = 0;
-          this.eventBuildingBlocks.forEach((item) => {
+          let allocatedBudget = 0
+          this.eventBuildingBlocks.forEach(item => {
             if (item.allocatedBudget) {
-              allocatedBudget += Number(item.allocatedBudget);
+              allocatedBudget += Number(item.allocatedBudget)
             }
-          });
+          })
 
-          this.allocatedBudget = allocatedBudget;
+          this.allocatedBudget = allocatedBudget
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch(error => {
+          console.log(error)
+        })
     },
 
-    addRequirements(item) {
+    addRequirements (item) {
       if (item.proposalsCount) {
         swal({
           text: `You have offers based on these requirements, after changing them you will need to request updated proposal. Would you like to proceed?`,
           showCancelButton: true,
-          type: "warning",
-          confirmButtonClass: "md-button md-success confirm-btn-bg ",
-          cancelButtonClass: "md-button md-danger cancel-btn-bg",
-          confirmButtonText: "Yes!",
-          buttonsStyling: false,
-        }).then((result) => {
+          type: 'warning',
+          confirmButtonClass: 'md-button md-success confirm-btn-bg ',
+          cancelButtonClass: 'md-button md-danger cancel-btn-bg',
+          confirmButtonText: 'Yes!',
+          buttonsStyling: false
+        }).then(result => {
           if (result.value) {
-            this.showRequirementsSidepanel(item);
+            this.showRequirementsSidepanel(item)
           }
-        });
+        })
       } else {
-        this.showRequirementsSidepanel(item);
+        this.showRequirementsSidepanel(item)
       }
     },
-    reviewProposals(item, winnerId = null) {
+    reviewProposals (item, winnerId = null) {
       window.currentPanel = this.$showPanel({
         component: ViewProposals,
-        cssClass: "md-layout-item md-size-70 transition36 bg-grey",
-        openOn: "right",
+        cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
+        openOn: 'right',
         props: {
           event: this.event,
           selectedBlock: item,
           winnerId: winnerId,
-          tab: winnerId != null ? 3 : 1,
-        },
-      });
+          tab: winnerId != null ? 3 : 1
+        }
+      })
     },
-    reviewVendors(item, categoryTitle) {
+    reviewVendors (item, categoryTitle) {
       window.currentPanel = this.$showPanel({
         component: EventBlockVendors,
-        cssClass: "md-layout-item md-size-65 transition36 bg-white",
-        openOn: "right",
+        cssClass: 'md-layout-item md-size-65 transition36 bg-white',
+        openOn: 'right',
         props: {
           event: this.event,
           selectedBlock: item,
           getOffers: true,
-          categoryTitle: categoryTitle,
-        },
-      });
-      window.currentPanel.promise.then((res) => {
-        let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
-        let event = new CalendarEvent({ id: this.event.id });
+          categoryTitle: categoryTitle
+        }
+      })
+      window.currentPanel.promise.then(res => {
+        let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
+        let event = new CalendarEvent({ id: this.event.id })
         new EventComponent()
           .for(calendar, event)
           .find(item.id)
-          .then((component) => {
+          .then(component => {
             this.event.components.splice(
-              _.findIndex(this.event.components, (b) => {
-                return b.id === item.id;
+              _.findIndex(this.event.components, b => {
+                return b.id === item.id
               }),
-              1,
-            );
-            this.event.components.push(JSON.parse(JSON.stringify(component)));
-            this.getEventBuildingBlocks();
-          });
-      });
+              1
+            )
+            this.event.components.push(JSON.parse(JSON.stringify(component)))
+            this.getEventBuildingBlocks()
+          })
+      })
     },
-    showRequirementsSidepanel(item, winnerId = null) {
+    showRequirementsSidepanel (item, winnerId = null) {
       const panelResult = this.$showPanel({
         component: ViewProposals,
-        cssClass: "md-layout-item md-size-70 transition36 bg-grey",
-        openOn: "right",
+        cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
+        openOn: 'right',
         props: {
           event: this.event,
           selectedBlock: item,
           winnerId: winnerId,
-          tab: 0,
-        },
-      });
+          tab: 0
+        }
+      })
 
-      panelResult.promise.then((res) => {
-        this.getEventBuildingBlocks();
-      });
+      panelResult.promise.then(res => {
+        this.getEventBuildingBlocks()
+      })
     },
-    switchingBudgetAndCost() {
-      let vm = this;
-      vm.event.elementsBudgetPerGuest = !vm.event.elementsBudgetPerGuest;
+    switchingBudgetAndCost () {
+      let vm = this
+      vm.event.elementsBudgetPerGuest = !vm.event.elementsBudgetPerGuest
     },
     setCurrentBlockId: function (currentBlock) {
       if (currentBlock) {
-        this.currentBlockId = currentBlock.id;
+        this.currentBlockId = currentBlock.id
       } else {
-        this.currentBlockId = null;
+        this.currentBlockId = null
       }
     },
 
-    addBuildingBlock() {
-      let vm = this;
+    addBuildingBlock () {
+      let vm = this
 
       // Save event interaction
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
-      let event = new CalendarEvent({ id: this.event.id });
+      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
+      let event = new CalendarEvent({ id: this.event.id })
 
       let new_block = {
         componentId:
-          this.newBuildingBlock.category != "Other"
+          this.newBuildingBlock.category != 'Other'
             ? this.newBuildingBlock.category
-                .replace(/ /g, "")
-                .toLocaleLowerCase()
-            : this.newBuildingBlock.name.replace(/ /g, "").toLocaleLowerCase(),
+              .replace(/ /g, '')
+              .toLocaleLowerCase()
+            : this.newBuildingBlock.name.replace(/ /g, '').toLocaleLowerCase(),
         componentCategoryId: this.newBuildingBlock.categoryId,
-        todos: "",
-        values: "",
-        vendors: "",
-        calendarEvent: { id: event.id },
-      };
+        todos: '',
+        values: '',
+        vendors: '',
+        calendarEvent: { id: event.id }
+      }
 
       new EventComponent(new_block)
         .for(calendar, event)
         .save()
-        .then((res) => {
-          this.showCategoryModal = false;
+        .then(res => {
+          this.showCategoryModal = false
           //
           // setTimeout(function(){
           //
@@ -559,60 +547,60 @@ export default {
           //
           // },2000);
 
-          location.reload();
+          location.reload()
         })
-        .catch((error) => {
-          console.log("Error while saving ", error);
-        });
+        .catch(error => {
+          console.log('Error while saving ', error)
+        })
     },
-    getCategoryBlocks() {
+    getCategoryBlocks () {
       EventComponent.get()
-        .then((res) => {
-          this.categoryBuildingBlocks = res;
+        .then(res => {
+          this.categoryBuildingBlocks = res
           this.filteredEventBlocks = _.map(
             this.categoryBuildingBlocks,
             function (item) {
-              return item.title;
-            },
-          );
-          this.filteredEventBlocks.push("Other");
-          console.log("filteredEventBlocks => ", this.categoryBuildingBlocks);
+              return item.title
+            }
+          )
+          this.filteredEventBlocks.push('Other')
+          console.log('filteredEventBlocks => ', this.categoryBuildingBlocks)
         })
-        .catch((error) => {
-          console.log("Error ", error);
-        });
-    },
+        .catch(error => {
+          console.log('Error ', error)
+        })
+    }
   },
-  created() {
-    console.log(this.event);
+  created () {
+    console.log(this.event)
   },
-  mounted() {
-    this.getEventBuildingBlocks();
-    this.getCategoryBlocks();
+  mounted () {
+    this.getEventBuildingBlocks()
+    this.getCategoryBlocks()
 
-    this.$on("refreshBuildingBlock", () => {
-      this.getEventBuildingBlocks();
-    });
+    this.$on('refreshBuildingBlock', () => {
+      this.getEventBuildingBlocks()
+    })
   },
   watch: {
-    event(newVal, oldVal) {
+    event (newVal, oldVal) {
       // Get default event building blocks
-      this.getEventBuildingBlocks();
+      this.getEventBuildingBlocks()
     },
-    eventComponents(newVal, oldVal) {
+    eventComponents (newVal, oldVal) {
       // Get default event building blocks
-      this.getEventBuildingBlocks();
+      this.getEventBuildingBlocks()
     },
-    elementsBudget(val) {
-      this.switchingBudgetAndCost();
-    },
+    elementsBudget (val) {
+      this.switchingBudgetAndCost()
+    }
   },
   filters: {
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
-  },
-};
+    withComma (amount) {
+      return amount ? amount.toLocaleString() : 0
+    }
+  }
+}
 </script>
 <style lang="scss">
 @import "@/assets/scss/md/_colors.scss";

@@ -21,7 +21,7 @@
               v-for="(image,index) in headerImages"
             >
               <img
-                :src="`https://static-maryoku.s3.amazonaws.com/storage/img/page-headers/${image.fullFileName}`"
+                :src="`http://static.maryoku.com/storage/img/page-headers/${image.fullFileName}`"
                 :class="{selected : selectedImage===image.cutFileName}"
                 @click="selectImage(image.cutFileName)"
               />
@@ -45,98 +45,96 @@
       <md-button class="md-simple md-just-icon md-round" @click="closePreviewModal">
         <md-icon>clear</md-icon>
       </md-button>
-      <img
-        :src="`https://static-maryoku.s3.amazonaws.com/storage/img/page-headers/${imagePreview}`"
-      />
+      <img :src="`http://static.maryoku.com/storage/img/page-headers/${imagePreview}`" />
     </div>
   </div>
 </template>
 <script>
 // import auth from '@/auth';
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import CalendarEvent from "@/models/CalendarEvent";
-import EventPageHeaderImage from "@/models/EventPageHeaderImage";
-import { Modal } from "@/components";
-import Calendar from "@/models/Calendar";
-import EventComponent from "@/models/EventComponent";
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import CalendarEvent from '@/models/CalendarEvent'
+import EventPageHeaderImage from '@/models/EventPageHeaderImage'
+import { Modal } from '@/components'
+import Calendar from '@/models/Calendar'
+import EventComponent from '@/models/EventComponent'
 
-import swal from "sweetalert2";
-import { error } from "util";
-import moment from "moment";
+import swal from 'sweetalert2'
+import { error } from 'util'
+import moment from 'moment'
 
 export default {
   components: {
-    Modal,
+    Modal
   },
   props: {
-    event: Object,
+    event: Object
   },
   data: () => ({
     // auth: auth,
     working: false,
     headerImages: null,
     selectedImage: null,
-    imagePreview: null,
+    imagePreview: null
   }),
 
-  created() {
-    this.getHeaderImages();
+  created () {
+    this.getHeaderImages()
   },
-  mounted() {},
+  mounted () {},
   methods: {
-    ...mapMutations("EventPlannerVuex", ["setHeaderModal"]),
-    closeModal() {
-      this.setHeaderModal({ showModal: false });
+    ...mapMutations('EventPlannerVuex', ['setHeaderModal']),
+    closeModal () {
+      this.setHeaderModal({ showModal: false })
     },
-    getHeaderImages() {
-      new EventPageHeaderImage().get().then((headerImages) => {
+    getHeaderImages () {
+      new EventPageHeaderImage().get().then(headerImages => {
         // iterate through header images
 
-        this.headerImages = headerImages;
-      });
+        this.headerImages = headerImages
+      })
     },
-    saveHeaderImage() {
-      this.working = true;
+    saveHeaderImage () {
+      this.working = true
 
-      let _calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
-      let editedEvent = new CalendarEvent({ id: this.event.id });
+      let _calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
+      let editedEvent = new CalendarEvent({ id: this.event.id })
 
-      editedEvent = this.event;
-      editedEvent.eventPage.headerImage = this.selectedImage;
+      editedEvent = this.event
+      editedEvent.eventPage.headerImage = this.selectedImage
 
-      this.closeModal();
+      this.closeModal()
 
       new CalendarEvent({
         id: editedEvent.id,
         eventPage: {
           id: editedEvent.eventPage.id,
-          headerImage: this.selectedImage,
-        },
+          headerImage: this.selectedImage
+        }
       })
         .for(_calendar)
         .save()
-        .then((response) => {
-          this.working = false;
+        .then(response => {
+          this.working = false
         })
-        .catch((error) => {
-          console.log(error);
-          this.working = false;
-        });
+        .catch(error => {
+          console.log(error)
+          this.working = false
+        })
     },
-    selectImage(selectedImage) {
-      this.selectedImage = selectedImage;
+    selectImage (selectedImage) {
+      this.selectedImage = selectedImage
     },
-    previewImage(selectedImage) {
-      this.imagePreview = selectedImage;
+    previewImage (selectedImage) {
+      this.imagePreview = selectedImage
     },
-    closePreviewModal() {
-      this.imagePreview = null;
-    },
+    closePreviewModal () {
+      this.imagePreview = null
+    }
   },
   computed: {
-    ...mapState("EventPlannerVuex", ["editHeaderModal"]),
-  },
-};
+    ...mapState('EventPlannerVuex', ['editHeaderModal'])
+  }
+}
 </script>
 <style lang="scss" scope>
 .md-datepicker {

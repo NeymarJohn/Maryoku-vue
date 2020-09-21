@@ -27,7 +27,7 @@
                     >check</md-icon>
 
                     <img
-                      :src="`https://static-maryoku.s3.amazonaws.com/storage/img/event-elements/${category.id}.png`"
+                      :src="`http://static.maryoku.com/storage/img/event-elements/${category.id}.png`"
                     />
                   </div>
                   <div class="list-item--title">{{ category.title }}</div>
@@ -53,7 +53,7 @@
                       v-if="isSubCategorySelected(subCategory) || isSelected(subCategory)"
                     >check</md-icon>
                     <img
-                      :src="`https://static-maryoku.s3.amazonaws.com/storage/img/event-elements/${subCategory.id}.png`"
+                      :src="`http://static.maryoku.com/storage/img/event-elements/${subCategory.id}.png`"
                     />
                   </div>
                   <div class="list-item--title">{{ subCategory.title }}</div>
@@ -89,220 +89,216 @@
   </div>
 </template>
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import { Modal } from "@/components";
-import EventComponent from "@/models/EventComponent";
-import CalendarEvent from "@/models/CalendarEvent";
-import Calendar from "@/models/Calendar";
-import VueElementLoading from "vue-element-loading";
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import { Modal } from '@/components'
+import EventComponent from '@/models/EventComponent'
+import CalendarEvent from '@/models/CalendarEvent'
+import Calendar from '@/models/Calendar'
+import VueElementLoading from 'vue-element-loading'
 
-import CreateCustomElement from "./Modals/CreateCustomElement";
+import CreateCustomElement from './Modals/CreateCustomElement'
 
 export default {
-  name: "get-started-step",
-  props: ["newEvent"],
+  name: 'get-started-step',
+  props: ['newEvent'],
   components: {
     VueElementLoading,
     CreateCustomElement,
-    Modal,
+    Modal
   },
   methods: {
-    ...mapMutations("EventPlannerVuex", ["setCustomElementModal"]),
-    createCustomElement() {
-      this.setCustomElementModal({ showModal: true });
+    ...mapMutations('EventPlannerVuex', ['setCustomElementModal']),
+    createCustomElement () {
+      this.setCustomElementModal({ showModal: true })
     },
-    isSelected(category) {
+    isSelected (category) {
       return (
-        _.findIndex(
-          this.eventComponents,
-          (o) => o.componentId === category.id,
-        ) > -1
-      );
+        _.findIndex(this.eventComponents, o => o.componentId === category.id) >
+        -1
+      )
     },
-    isCategorySelected(category) {
+    isCategorySelected (category) {
       return (
-        _.findIndex(this.selectedCategories, (o) => o.id === category.id) > -1
-      );
+        _.findIndex(this.selectedCategories, o => o.id === category.id) > -1
+      )
     },
 
-    isSubCategorySelected(subCategory) {
+    isSubCategorySelected (subCategory) {
       return (
-        _.findIndex(
-          this.selectedSubCategories,
-          (o) => o.id === subCategory.id,
-        ) > -1
-      );
+        _.findIndex(this.selectedSubCategories, o => o.id === subCategory.id) >
+        -1
+      )
     },
 
-    toggleSelectSubCategory(subCategory) {
+    toggleSelectSubCategory (subCategory) {
       if (this.isSubCategorySelected(subCategory)) {
         this.selectedSubCategories = this.selectedSubCategories.filter(
-          (o) => o.id != subCategory.id,
-        );
+          o => o.id != subCategory.id
+        )
       } else {
         this.selectedSubCategories = this.selectedSubCategories.concat([
-          subCategory,
-        ]);
+          subCategory
+        ])
       }
 
       this.$set(
         this,
-        "eventComponents",
-        this.eventComponents.filter((o) => o.componentId != subCategory.id),
-      );
+        'eventComponents',
+        this.eventComponents.filter(o => o.componentId != subCategory.id)
+      )
     },
 
-    toggleSelectCategory(category) {
-      this.isLoading = true;
+    toggleSelectCategory (category) {
+      this.isLoading = true
 
       if (this.isCategorySelected(category)) {
         this.selectedCategories = this.selectedCategories.filter(
-          (o) => o.id != category.id,
-        );
+          o => o.id != category.id
+        )
         // this.subCategories = this.subCategories.filter(o => o.categoryId != category.id);
         // this.selectedSubCategories = this.selectedSubCategories.filter(o => o.categoryId != category.id);
       } else if (!this.isSelected(category)) {
-        this.selectedCategories = this.selectedCategories.concat([category]);
+        this.selectedCategories = this.selectedCategories.concat([category])
         // this.subCategories = this.subCategories.concat(category.childComponents);
       }
 
       this.$set(
         this,
-        "eventComponents",
-        this.eventComponents.filter((o) => o.componentId != category.id),
-      );
+        'eventComponents',
+        this.eventComponents.filter(o => o.componentId != category.id)
+      )
 
-      this.isLoading = false;
+      this.isLoading = false
     },
 
-    validateAndSubmit() {
+    validateAndSubmit () {
       // this.$emit('goToNextPage');
       //  return;
-      this.cerrors = {};
+      this.cerrors = {}
 
       if (
         !this.selectedCategories.length &&
         !this.selectedSubCategories.length
       ) {
         this.cerrors.selectedCategories = [
-          "you must select at least one category",
-        ];
-        return;
+          'you must select at least one category'
+        ]
+        return
       }
 
-      this.isLoading = true;
-      let promisses = [];
+      this.isLoading = true
+      let promisses = []
 
       let new_block = {
         componentId: null,
         componentCategoryId: null,
-        todos: "",
-        values: "",
-        vendors: "",
-        calendarEvent: { id: this.event.id },
-      };
+        todos: '',
+        values: '',
+        vendors: '',
+        calendarEvent: { id: this.event.id }
+      }
 
-      this.event.brief = this.brief;
-      promisses.push(this.event.save());
+      this.event.brief = this.brief
+      promisses.push(this.event.save())
 
-      this.selectedCategories.forEach((category) => {
-        new_block.componentCategoryId = category.id;
-        new_block.componentId = category.id;
-
-        promisses.push(
-          new EventComponent(new_block).for(this.calendar, this.event).save(),
-        );
-      });
-
-      this.selectedSubCategories.forEach((category) => {
-        new_block.componentCategoryId = category.id;
-        new_block.componentId = category.id;
+      this.selectedCategories.forEach(category => {
+        new_block.componentCategoryId = category.id
+        new_block.componentId = category.id
 
         promisses.push(
-          new EventComponent(new_block).for(this.calendar, this.event).save(),
-        );
-      });
+          new EventComponent(new_block).for(this.calendar, this.event).save()
+        )
+      })
+
+      this.selectedSubCategories.forEach(category => {
+        new_block.componentCategoryId = category.id
+        new_block.componentId = category.id
+
+        promisses.push(
+          new EventComponent(new_block).for(this.calendar, this.event).save()
+        )
+      })
 
       Promise.all(promisses)
         .then(() => {
-          this.isLoading = false;
+          this.isLoading = false
           // this.$emit('goToNextPage');
 
           this.$router.push({
-            path: `/events/` + this.event.id + "/edit/details",
-          });
+            path: `/events/` + this.event.id + '/edit/details'
+          })
         })
-        .catch((e) => {
-          console.log("error -->", e);
-          this.isLoading = false;
-        });
+        .catch(e => {
+          console.log('error -->', e)
+          this.isLoading = false
+        })
     },
-    goBack() {
-      this.$emit("goToPrevPage");
+    goBack () {
+      this.$emit('goToPrevPage')
     },
-    getEventComponents() {
-      this.isLoading = true;
-      let vm = this;
+    getEventComponents () {
+      this.isLoading = true
+      let vm = this
 
       if (vm.newEvent) {
         vm.$auth.currentUser(vm, true, () => {
           Promise.all([
             CalendarEvent.find(
-              vm.newEvent.item ? vm.newEvent.item.id : vm.$route.params.id,
+              vm.newEvent.item ? vm.newEvent.item.id : vm.$route.params.id
             ),
-            EventComponent.get(),
+            EventComponent.get()
           ]).then(([event, components]) => {
-            vm.calendar = new Calendar({ id: vm.$auth.user.defaultCalendarId });
-            vm.event = event.for(vm.calendar);
+            vm.calendar = new Calendar({ id: vm.$auth.user.defaultCalendarId })
+            vm.event = event.for(vm.calendar)
             vm.categories = _.filter(components, function (item) {
-              return item.promoted === true;
-            });
+              return item.promoted === true
+            })
             vm.subCategories = _.filter(components, function (item) {
-              return item.promoted === false;
-            });
+              return item.promoted === false
+            })
 
             new EventComponent()
               .for(vm.calendar, vm.event)
               .get()
-              .then((resp) => {
-                console.log("components ", resp);
+              .then(resp => {
+                console.log('components ', resp)
 
-                resp.forEach((component) => {
+                resp.forEach(component => {
                   // check if component is promoted or not
                   if (
                     _.findIndex(
                       this.categories,
-                      (o) => o.title === component.title,
+                      o => o.title === component.title
                     ) > -1
                   ) {
                     vm.selectedCategories = this.selectedCategories.concat([
-                      component,
-                    ]);
+                      component
+                    ])
                   } else if (
                     _.findIndex(
                       this.subCategories,
-                      (o) => o.title === component.title,
+                      o => o.title === component.title
                     ) > -1
                   ) {
                     vm.selectedSubCategories = this.selectedSubCategories.concat(
-                      [component],
-                    );
+                      [component]
+                    )
                   }
-                });
+                })
                 // vm.selectedCategories = resp;
-                vm.$set(vm, "eventComponents", resp);
-                console.log(vm.selectedCategories);
-              });
-            vm.isLoading = false;
-          });
-        });
+                vm.$set(vm, 'eventComponents', resp)
+                console.log(vm.selectedCategories)
+              })
+            vm.isLoading = false
+          })
+        })
       }
 
       if (vm.$route.params.id) {
       }
-    },
+    }
   },
-  data() {
+  data () {
     return {
       isLoading: true,
       brief: null,
@@ -314,17 +310,17 @@ export default {
       selectedCategories: [],
       selectedSubCategories: [],
       eventComponents: [],
-      selectedEventComponents: [],
-    };
+      selectedEventComponents: []
+    }
   },
-  mounted() {
-    this.getEventComponents();
+  mounted () {
+    this.getEventComponents()
 
-    this.$root.$on("get-event-components", () => {
-      this.getEventComponents();
-    });
-  },
-};
+    this.$root.$on('get-event-components', () => {
+      this.getEventComponents()
+    })
+  }
+}
 </script>
 <style lang="scss" scoped>
 @import "@/assets/scss/md/_variables.scss";

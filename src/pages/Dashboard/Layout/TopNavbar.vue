@@ -236,204 +236,204 @@
 
 <script>
 // import auth from '@/auth';
-import MyProfile from "@/pages/app/Profile/MyProfile";
-import Team from "../../app/Team/Team";
-import MyCompany from "../../app/Profile/MyCompany";
+import MyProfile from '@/pages/app/Profile/MyProfile'
+import Team from '../../app/Team/Team'
+import MyCompany from '../../app/Profile/MyCompany'
 
-import Popper from "vue-popperjs";
-import "vue-popperjs/dist/vue-popper.css";
-import EventInfo from "../../app/Events/components/EventInfo";
-import EventSidePanel from "@/pages/app/Events/EventSidePanel";
+import Popper from 'vue-popperjs'
+import 'vue-popperjs/dist/vue-popper.css'
+import EventInfo from '../../app/Events/components/EventInfo'
+import EventSidePanel from '@/pages/app/Events/EventSidePanel'
 
 export default {
   components: {
     EventInfo,
-    popper: Popper,
+    popper: Popper
   },
-  data() {
+  data () {
     return {
       topBarTitle: null,
       topBarEventId: null,
       topBarEventDate: null,
-      topBarEventParticipants: "",
-      topBarEventLocation: "",
+      topBarEventParticipants: '',
+      topBarEventLocation: '',
       topBarEventInvitees: false,
       topBarEventProposals: false,
       topBarEvent: null,
-      avatar: "",
-      selectedEmployee: "",
+      avatar: '',
+      selectedEmployee: '',
       employees: [
-        "Jim Halpert",
-        "Dwight Schrute",
-        "Michael Scott",
-        "Pam Beesly",
-        "Angela Martin",
-        "Kelly Kapoor",
-        "Ryan Howard",
-        "Kevin Malone",
-      ],
-    };
+        'Jim Halpert',
+        'Dwight Schrute',
+        'Michael Scott',
+        'Pam Beesly',
+        'Angela Martin',
+        'Kelly Kapoor',
+        'Ryan Howard',
+        'Kevin Malone'
+      ]
+    }
   },
-  mounted() {
+  mounted () {
     setTimeout(
       function () {
-        console.log("avatar: " + this.$auth.user.avatar);
+        console.log('avatar: ' + this.$auth.user.avatar)
         this.avatar =
           this.$auth.user.avatar != null
             ? this.$auth.user.avatar
-            : "https://static-maryoku.s3.amazonaws.com/storage/img/placeholder.jpg";
+            : 'http://static.maryoku.com/storage/img/placeholder.jpg'
       }.bind(this),
-      3000,
-    );
+      3000
+    )
 
-    this.$root.$on("set-title", (eventData, invitees, proposals) => {
+    this.$root.$on('set-title', (eventData, invitees, proposals) => {
       if (eventData) {
-        this.topBarTitle = eventData.title;
-        this.topBarEvent = eventData;
-        this.topBarEventId = eventData.id;
-        this.topBarEventInvitees = invitees;
-        this.topBarEventProposals = proposals;
-        this.topBarEventParticipants = eventData.numberOfParticipants;
+        this.topBarTitle = eventData.title
+        this.topBarEvent = eventData
+        this.topBarEventId = eventData.id
+        this.topBarEventInvitees = invitees
+        this.topBarEventProposals = proposals
+        this.topBarEventParticipants = eventData.numberOfParticipants
         this.topBarEventDate = this.$moment(eventData.eventStartMillis).format(
-          "YYYY-MM-DD H:mm a",
-        );
-        this.topBarEventLocation = eventData.location || "Unknown";
+          'YYYY-MM-DD H:mm a'
+        )
+        this.topBarEventLocation = eventData.location || 'Unknown'
       } else {
-        this.topBarTitle = null;
+        this.topBarTitle = null
       }
-    });
+    })
   },
   methods: {
-    editEventDetails() {
+    editEventDetails () {
       window.currentPanel = this.$showPanel({
         component: EventSidePanel,
-        cssClass: "md-layout-item md-size-40 transition36 ",
-        openOn: "right",
+        cssClass: 'md-layout-item md-size-40 transition36 ',
+        openOn: 'right',
         disableBgClick: false,
         props: {
-          modalSubmitTitle: "Save",
+          modalSubmitTitle: 'Save',
           editMode: true,
           sourceEventData: this.topBarEvent,
           year: this.$route.params.year,
           month: this.$route.params.month,
-          openInPlannerOption: false,
-        },
-      });
+          openInPlannerOption: false
+        }
+      })
     },
-    openMyProfile() {
+    openMyProfile () {
       window.currentPanel = this.$showPanel({
         component: MyProfile,
-        cssClass: "md-layout-item md-size-75 transition36 bg-grey",
-        openOn: "right",
-        props: {},
-      });
+        cssClass: 'md-layout-item md-size-75 transition36 bg-grey',
+        openOn: 'right',
+        props: {}
+      })
     },
-    openAccountSettings() {
+    openAccountSettings () {
       window.currentPanel = this.$showPanel({
         component: MyCompany,
-        cssClass: "md-layout-item md-size-65 transition36  bg-grey",
-        openOn: "right",
-        props: {},
-      });
+        cssClass: 'md-layout-item md-size-65 transition36  bg-grey',
+        openOn: 'right',
+        props: {}
+      })
     },
-    openTeam() {
+    openTeam () {
       const panelInstance = this.$showPanel({
         component: Team,
-        cssClass: "md-layout-item md-size-75 transition36 bg-grey",
-        openOn: "right",
-        props: {},
-      });
-      window.currentPanel = panelInstance;
+        cssClass: 'md-layout-item md-size-75 transition36 bg-grey',
+        openOn: 'right',
+        props: {}
+      })
+      window.currentPanel = panelInstance
     },
-    toggleSidebar() {
-      this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
+    toggleSidebar () {
+      this.$sidebar.displaySidebar(!this.$sidebar.showSidebar)
     },
-    minimizeSidebar() {
+    minimizeSidebar () {
       if (this.$sidebar) {
-        this.$sidebar.toggleMinimize();
+        this.$sidebar.toggleMinimize()
       }
     },
-    manageInvitees() {
+    manageInvitees () {
       this.$router.push({
-        name: "EventInvitees",
-        params: { id: this.topBarEventId },
-      });
-      document.location.reload();
+        name: 'EventInvitees',
+        params: { id: this.topBarEventId }
+      })
+      document.location.reload()
     },
-    manageProposals() {
+    manageProposals () {
       this.$router.push({
-        name: "EditBuildingBlocks",
-        params: { id: this.topBarEventId },
-      });
-      document.location.reload();
+        name: 'EditBuildingBlocks',
+        params: { id: this.topBarEventId }
+      })
+      document.location.reload()
     },
-    uploadVendors() {
-      this.$router.push({ name: "Vendors" });
-      document.location.reload();
+    uploadVendors () {
+      this.$router.push({ name: 'Vendors' })
+      document.location.reload()
     },
-    manageInviteeGroups() {
+    manageInviteeGroups () {
       this.$router.push({
-        name: "EditBuildingBlocks",
-        params: { id: this.topBarEventId },
-      });
-      document.location.reload();
+        name: 'EditBuildingBlocks',
+        params: { id: this.topBarEventId }
+      })
+      document.location.reload()
     },
-    manageInteractions() {
+    manageInteractions () {
       this.$router.push({
-        name: "EditBuildingBlocks",
-        params: { id: this.topBarEventId },
-      });
-      document.location.reload();
+        name: 'EditBuildingBlocks',
+        params: { id: this.topBarEventId }
+      })
+      document.location.reload()
     },
-    eventPage() {
+    eventPage () {
       this.$router.push({
-        name: "EventDetails",
-        params: { id: this.topBarEventId },
-      });
-      document.location.reload();
+        name: 'EventDetails',
+        params: { id: this.topBarEventId }
+      })
+      document.location.reload()
     },
-    inviteesManagement() {
+    inviteesManagement () {
       this.$router.push({
-        name: "InviteesManagement",
-        params: { id: this.topBarEventId },
-      });
-      document.location.reload();
+        name: 'InviteesManagement',
+        params: { id: this.topBarEventId }
+      })
+      document.location.reload()
     },
-    manageGroups() {
+    manageGroups () {
       this.$router.push({
-        name: "EventInvitees",
-        params: { id: this.topBarEventId },
-      });
-      document.location.reload();
+        name: 'EventInvitees',
+        params: { id: this.topBarEventId }
+      })
+      document.location.reload()
     },
-    timeline() {
+    timeline () {
       this.$router.push({
-        name: "EditTimeLine",
-        params: { id: this.topBarEventId },
-      });
-      document.location.reload();
+        name: 'EditTimeLine',
+        params: { id: this.topBarEventId }
+      })
+      document.location.reload()
     },
-    gotoVendorsPool() {
+    gotoVendorsPool () {
       let routeData = this.$router.resolve({
-        name: "VendorsPool",
-        params: { id: this.topBarEventId },
-      });
-      window.open(routeData.href, "_blank");
-    },
+        name: 'VendorsPool',
+        params: { id: this.topBarEventId }
+      })
+      window.open(routeData.href, '_blank')
+    }
   },
   computed: {
-    isEventDetails() {
+    isEventDetails () {
       if (
-        this.$route.name === "EditEvent" ||
-        this.$route.title === "Event Details"
+        this.$route.name === 'EditEvent' ||
+        this.$route.title === 'Event Details'
       ) {
-        return false;
+        return false
       } else {
-        return true;
+        return true
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 .photo {

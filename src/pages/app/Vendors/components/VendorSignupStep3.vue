@@ -431,21 +431,21 @@
 </template>
 
 <script>
-import moment from "moment";
-import VueElementLoading from "vue-element-loading";
-import Vendors from "@/models/Vendors";
+import moment from 'moment';
+import VueElementLoading from 'vue-element-loading';
+import Vendors from '@/models/Vendors';
 
 //COMPONENTS
-import Icon from "@/components/Icon/Icon.vue";
-import VendorServiceItem from "./VendorServiceItem.vue";
-import VSignupAddRules from "@/components/Inputs/VSignupAddRules.vue";
+import Icon from '@/components/Icon/Icon.vue';
+import VendorServiceItem from './VendorServiceItem.vue';
+import VSignupAddRules from '@/components/Inputs/VSignupAddRules.vue';
 // import VSignupTimeSelect from '@/components/Inputs/VSignupTimeSelect.vue'
-import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
-import { FunctionalCalendar } from "vue-functional-calendar";
-import VueGoogleAutocomplete from "vue-google-autocomplete";
+import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue';
+import { FunctionalCalendar } from 'vue-functional-calendar';
+import VueGoogleAutocomplete from 'vue-google-autocomplete';
 
 export default {
-  name: "vendor-signup-step3",
+  name: 'vendor-signup-step3',
   props: {
     categories: Array,
     icon: String,
@@ -460,24 +460,23 @@ export default {
   },
   data() {
     return {
-      iconUrl:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
       allowThirdVendor: null,
       workAllDay: false,
       date: {},
       rulesDesc: {
-        title: "additional rules",
+        title: 'additional rules',
         placeholder:
-          "Event muse end before.. / Suitable for children (2-12 years)",
+          'Event muse end before.. / Suitable for children (2-12 years)',
       },
       policyDesc: {
-        title: "Add steps to your cancellation approch:",
-        subTitle: "You can add more than one step",
+        title: 'Add steps to your cancellation approch:',
+        subTitle: 'You can add more than one step',
         labels: {
-          if: "the client cancel the event after:",
-          than: "the client wil pay:",
+          if: 'the client cancel the event after:',
+          than: 'the client wil pay:',
         },
-        placeholder: "Like two weeks before the event ",
+        placeholder: 'Like two weeks before the event ',
         // placeholder: {
         //   if: 'Like two weeks before the event ',
         //   than: 'Like: 30% of deposit',
@@ -490,50 +489,50 @@ export default {
       noteRules: [],
       religions: [
         {
-          name: "Chrisitanity",
-          holidays: ["Good Friday", "Easter", "Christmas", "Thanksgiving"],
+          name: 'Chrisitanity',
+          holidays: ['Good Friday', 'Easter', 'Christmas', 'Thanksgiving'],
         },
         {
-          name: "Hindu",
+          name: 'Hindu',
           holidays: [
-            "Ganesh Chaturthi",
-            "Pitru Paksha",
-            "Mysore Dasara",
-            "Navratri",
-            "Vijayadashami",
-            "Durga Puja",
+            'Ganesh Chaturthi',
+            'Pitru Paksha',
+            'Mysore Dasara',
+            'Navratri',
+            'Vijayadashami',
+            'Durga Puja',
           ],
         },
         {
-          name: "Islamic",
+          name: 'Islamic',
           holidays: [
-            "All Islamic holiday",
-            "Eid AI-Acha",
-            "Eid AI-Fitr",
-            "Lailat al Miraj",
-            "Milad un Nabi(Shia)",
-            "Ramadan(start)",
-            "Laylat at Qadr",
-            "Eid-ai-Fitr(End of Ramadan)",
-            "Waqf ai Arafa - Hajj",
-            "Hijra - Islamic New Year",
-            "Day of Ashura / Muharram",
-            "Milad un Nabi",
-            "All Islamic holidays (Shia)",
+            'All Islamic holiday',
+            'Eid AI-Acha',
+            'Eid AI-Fitr',
+            'Lailat al Miraj',
+            'Milad un Nabi(Shia)',
+            'Ramadan(start)',
+            'Laylat at Qadr',
+            'Eid-ai-Fitr(End of Ramadan)',
+            'Waqf ai Arafa - Hajj',
+            'Hijra - Islamic New Year',
+            'Day of Ashura / Muharram',
+            'Milad un Nabi',
+            'All Islamic holidays (Shia)',
           ],
         },
         {
-          name: "Judaism",
+          name: 'Judaism',
           holidays: [
-            "Rosh Hashana",
-            "Yom Kipur",
-            "Sukkot",
-            "Shmini Atzeret",
-            "Simchat Torah",
-            "Chanukah",
-            "Purim",
-            "Pesach",
-            "Shavout",
+            'Rosh Hashana',
+            'Yom Kipur',
+            'Sukkot',
+            'Shmini Atzeret',
+            'Simchat Torah',
+            'Chanukah',
+            'Purim',
+            'Pesach',
+            'Shavout',
             `Tish'a B'Av`,
           ],
         },
@@ -543,19 +542,19 @@ export default {
       ],
       componentKey: 0,
       allowedCategoryFor3rd: [
-        "venuerental",
-        "foodandbeverage",
-        "decor",
-        "entertainment",
+        'venuerental',
+        'foodandbeverage',
+        'decor',
+        'entertainment',
       ],
       weekdays: [
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday",
-        "sunday",
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday',
       ],
       selectedWeekdays: [],
       selectedReligion: [],
@@ -568,289 +567,289 @@ export default {
       notAllowed: [],
       isOtherNa: false,
       startTime: {
-        hh: "12",
-        mm: "00",
+        hh: '12',
+        mm: '00',
       },
       endTime: {
-        hh: "12",
-        mm: "00",
+        hh: '12',
+        mm: '00',
       },
       amPack: {
-        start: "AM",
-        end: "AM",
+        start: 'AM',
+        end: 'AM',
       },
       defNa: [
         {
-          name: "Food & Beverage",
-          value: "foodandbeverage",
+          name: 'Food & Beverage',
+          value: 'foodandbeverage',
         },
         {
-          name: "Design and Decor",
-          value: "decor",
+          name: 'Design and Decor',
+          value: 'decor',
         },
         {
-          name: "Entertainment",
-          value: "entertainment",
+          name: 'Entertainment',
+          value: 'entertainment',
         },
         {
-          name: "Security",
-          value: "securityservices",
+          name: 'Security',
+          value: 'securityservices',
         },
         {
-          name: "Videography and Photography",
-          value: "videographyandphotography",
+          name: 'Videography and Photography',
+          value: 'videographyandphotography',
         },
         {
-          name: "Equipment Rental",
-          value: "equipmentrentals",
+          name: 'Equipment Rental',
+          value: 'equipmentrentals',
         },
       ],
       policies: [
         {
-          category: "venuerental",
+          category: 'venuerental',
           items: [
             // {
             //   name: 'Allowed use of outside vendors',
             //   type: Boolean,
             // },
             {
-              name: "Minimum amount of hours",
+              name: 'Minimum amount of hours',
               type: Number,
               noSuffix: true,
               hasComment: true,
             },
             {
-              name: "Suitable for infants",
+              name: 'Suitable for infants',
               type: Boolean,
               hasComment: true,
             },
             {
-              name: "Audio restrictions",
+              name: 'Audio restrictions',
               type: Boolean,
               hasComment: true,
             },
             {
-              name: "Decor restrictions",
+              name: 'Decor restrictions',
               type: Boolean,
               hasComment: true,
             },
             {
-              name: "Dress code",
+              name: 'Dress code',
               type: Boolean,
               hasComment: true,
             },
             {
-              name: "Minimum Spend",
+              name: 'Minimum Spend',
               type: Boolean,
               hasComment: true,
             },
             {
-              name: "Dry Hire",
+              name: 'Dry Hire',
               type: Boolean,
               hasComment: true,
             },
             {
-              name: "Pets",
+              name: 'Pets',
               type: Boolean,
               hasComment: true,
             },
           ],
         },
         {
-          category: "foodandbeverage",
+          category: 'foodandbeverage',
           items: [
             {
-              name: "Tastings prior to booking",
+              name: 'Tastings prior to booking',
               type: Boolean,
             },
             {
-              name: "Allow customer provided liquor",
+              name: 'Allow customer provided liquor',
               type: Boolean,
             },
           ],
         },
         {
-          category: "decor",
+          category: 'decor',
           items: [
             {
-              name: "Room temperature constraints",
+              name: 'Room temperature constraints',
               type: String,
             },
             {
-              name: "Flexible time requirement for setup",
+              name: 'Flexible time requirement for setup',
               type: String,
             },
           ],
         },
         {
-          category: "corporatesocialresponsibility",
+          category: 'corporatesocialresponsibility',
           items: [],
         },
         {
-          category: "signageprinting",
+          category: 'signageprinting',
           items: [],
         },
         {
-          category: "advertising-promotion",
+          category: 'advertising-promotion',
           items: [],
         },
         {
-          category: "audiovisualstagingservices",
+          category: 'audiovisualstagingservices',
           items: [
             {
-              name: "Accept staff attire request",
+              name: 'Accept staff attire request',
               type: Boolean,
             },
             {
-              name: "Simulcasting bandwidth requirements",
+              name: 'Simulcasting bandwidth requirements',
               type: Number,
             },
             {
-              name: "Union crew restrictions",
+              name: 'Union crew restrictions',
               type: Boolean,
               hasComment: true,
             },
           ],
         },
         {
-          category: "swags",
+          category: 'swags',
           items: [
             {
-              name: "Allow pickup",
+              name: 'Allow pickup',
               type: Boolean,
             },
             {
-              name: "Minimum size order",
+              name: 'Minimum size order',
               type: String,
             },
           ],
         },
         {
-          category: "shipping",
+          category: 'shipping',
           items: [],
         },
         {
-          category: "transportation",
+          category: 'transportation',
           items: [],
         },
         {
-          category: "entertainment",
+          category: 'entertainment',
           items: [
             {
-              name: "Accept requests from guests",
+              name: 'Accept requests from guests',
               type: Boolean,
             },
             {
-              name: "Continuous band play time",
+              name: 'Continuous band play time',
               type: Boolean,
             },
             {
-              name: "Max group size",
+              name: 'Max group size',
               type: Boolean,
             },
             {
-              name: "Accessibility of activity",
+              name: 'Accessibility of activity',
               type: Boolean,
             },
             {
-              name: "Age restrictions",
+              name: 'Age restrictions',
               type: Boolean,
             },
             {
-              name: "Time of day",
+              name: 'Time of day',
               type: Boolean,
             },
             {
-              name: "Performer require a meal",
+              name: 'Performer require a meal',
               type: Boolean,
             },
             {
-              name: "Minimum Setup time required",
+              name: 'Minimum Setup time required',
               type: Number,
             },
             {
-              name: "Number of breaks",
+              name: 'Number of breaks',
               type: Number,
             },
             {
-              name: "Additional requirements from venue",
+              name: 'Additional requirements from venue',
               type: String,
             },
             {
-              name: "Power supply needs",
+              name: 'Power supply needs',
               type: String,
             },
             {
-              name: "Flexible to different dress codes",
+              name: 'Flexible to different dress codes',
               type: Boolean,
             },
             {
-              name: "Meet before signing contract",
+              name: 'Meet before signing contract',
               type: Boolean,
             },
             {
-              name: "Arrival onsite before the event",
+              name: 'Arrival onsite before the event',
               type: Boolean,
             },
             {
-              name: "Losgistics",
+              name: 'Losgistics',
               type: Boolean,
             },
           ],
         },
         {
-          category: "administration",
+          category: 'administration',
           items: [],
         },
         {
-          category: "securityservices",
+          category: 'securityservices',
           items: [
             {
-              name: "Visit the venue in advance",
+              name: 'Visit the venue in advance',
               type: Boolean,
             },
             {
-              name: "Minimum hours of service",
+              name: 'Minimum hours of service',
               type: Boolean,
             },
             {
-              name: "Max hours per shift",
+              name: 'Max hours per shift',
               type: Boolean,
             },
             {
-              name: "Dress code",
+              name: 'Dress code',
               type: String,
               hasComment: true,
             },
           ],
         },
         {
-          category: "technologyservices",
+          category: 'technologyservices',
           items: [],
         },
         {
-          category: "videographyandphotography",
+          category: 'videographyandphotography',
           items: [
             {
-              name: "Flexible to last minute onsite changes",
+              name: 'Flexible to last minute onsite changes',
               type: Boolean,
             },
             {
-              name: "Minimum amount of hours",
+              name: 'Minimum amount of hours',
               type: Number,
               noSuffix: true,
             },
             {
-              name: "Need to control room lighting",
+              name: 'Need to control room lighting',
               type: Boolean,
             },
             {
-              name: "Minimum internet bandwidth (Simulticasting, Streaming)",
+              name: 'Minimum internet bandwidth (Simulticasting, Streaming)',
               type: Number,
             },
             {
               name:
-                "Flexibility to operate with additional Photo / Video companies during the event",
+                'Flexibility to operate with additional Photo / Video companies during the event',
               type: Boolean,
             },
           ],
@@ -858,332 +857,332 @@ export default {
       ],
       pricingPolicies: [
         {
-          category: "venuerental",
+          category: 'venuerental',
           items: [
             {
-              name: "Hours included in rental",
+              name: 'Hours included in rental',
               type: Number,
               noSuffix: true,
             },
             {
-              name: "Setup hours included in rental",
+              name: 'Setup hours included in rental',
               type: Boolean,
             },
             {
-              name: "Extra Guest (beyond agreed upon)",
+              name: 'Extra Guest (beyond agreed upon)',
               type: Number,
             },
             {
-              name: "Overtime Cost",
+              name: 'Overtime Cost',
               type: Number,
             },
             {
-              name: "Late Night fares",
+              name: 'Late Night fares',
               type: Number,
             },
             {
-              name: "Discount for large quantities",
+              name: 'Discount for large quantities',
               type: Number,
               isPercentage: true,
               hasComment: true,
             },
             {
-              name: "Tax rate",
+              name: 'Tax rate',
               type: Number,
               isPercentage: true,
             },
             {
-              name: "Suggested Gratuity",
+              name: 'Suggested Gratuity',
               type: Number,
               isPercentage: true,
             },
           ],
         },
         {
-          category: "foodandbeverage",
+          category: 'foodandbeverage',
           items: [
             {
-              name: "Travel cost",
+              name: 'Travel cost',
               type: Number,
             },
             {
-              name: "Pickup",
+              name: 'Pickup',
               type: Number,
             },
             {
-              name: "Cleanup",
+              name: 'Cleanup',
               type: Number,
             },
             {
-              name: "Breakdown",
+              name: 'Breakdown',
               type: Number,
             },
             {
-              name: "Discount for large quantities",
+              name: 'Discount for large quantities',
               type: Boolean,
               isPercentage: true,
               hasComment: true,
             },
             {
-              name: "Late Night fares",
+              name: 'Late Night fares',
               type: Number,
             },
             {
-              name: "Discount for large quantities",
+              name: 'Discount for large quantities',
               type: Number,
               isPercentage: true,
               hasComment: true,
             },
             {
-              name: "Tax rate",
+              name: 'Tax rate',
               type: Number,
               isPercentage: true,
             },
             {
-              name: "Suggested Gratuity",
+              name: 'Suggested Gratuity',
               type: Number,
             },
           ],
         },
         {
-          category: "decor",
+          category: 'decor',
           items: [
             {
-              name: "Delivery",
+              name: 'Delivery',
               type: Number,
             },
             {
-              name: "Setup",
+              name: 'Setup',
               type: Number,
             },
             {
-              name: "Working with unions",
+              name: 'Working with unions',
               type: Boolean,
             },
             {
-              name: "Discounts for large quantities",
+              name: 'Discounts for large quantities',
               type: Boolean,
             },
             {
-              name: "Tax rate",
+              name: 'Tax rate',
               type: Number,
               isPercentage: true,
             },
             {
-              name: "Suggested Gratuity",
+              name: 'Suggested Gratuity',
               type: Number,
             },
           ],
         },
         {
-          category: "corporatesocialresponsibility",
+          category: 'corporatesocialresponsibility',
           items: [],
         },
         {
-          category: "signageprinting",
+          category: 'signageprinting',
           items: [],
         },
         {
-          category: "advertising-promotion",
+          category: 'advertising-promotion',
           items: [],
         },
         {
-          category: "audiovisualstagingservices",
+          category: 'audiovisualstagingservices',
           items: [
             {
-              name: "Rushed job",
+              name: 'Rushed job',
               type: Number,
             },
             {
-              name: "Overtime",
+              name: 'Overtime',
               type: Number,
             },
             {
-              name: "Tax rate",
+              name: 'Tax rate',
               type: Number,
               isPercentage: true,
             },
             {
-              name: "Discounts",
+              name: 'Discounts',
               type: Boolean,
             },
             {
-              name: "Suggested Gratuity",
+              name: 'Suggested Gratuity',
               type: Number,
             },
           ],
         },
         {
-          category: "swags",
+          category: 'swags',
           items: [
             {
-              name: "Rushed orders",
+              name: 'Rushed orders',
               type: Boolean,
             },
             {
-              name: "Delivery",
+              name: 'Delivery',
               type: Boolean,
             },
             {
-              name: "preparing file for printing",
+              name: 'preparing file for printing',
               type: Boolean,
             },
             {
-              name: "Multiple print locations",
+              name: 'Multiple print locations',
               type: Boolean,
             },
             {
-              name: "Number of different colors",
+              name: 'Number of different colors',
               type: Boolean,
             },
             {
-              name: "Tax rate",
+              name: 'Tax rate',
               type: Number,
               isPercentage: true,
             },
             {
-              name: "Discount for large quantites",
+              name: 'Discount for large quantites',
               type: Boolean,
             },
             {
-              name: "Suggested Gratuity",
+              name: 'Suggested Gratuity',
               type: Number,
             },
           ],
         },
         {
-          category: "shipping",
+          category: 'shipping',
           items: [],
         },
         {
-          category: "transportation",
+          category: 'transportation',
           items: [
             {
-              name: "Tax rate",
+              name: 'Tax rate',
               type: Number,
               isPercentage: true,
             },
             {
-              name: "Large setup discounts",
+              name: 'Large setup discounts',
               type: Boolean,
             },
             {
-              name: "Suggested Gratuity",
+              name: 'Suggested Gratuity',
               type: Number,
             },
           ],
         },
         {
-          category: "entertainment",
+          category: 'entertainment',
           items: [
             {
-              name: "Hours included in service",
+              name: 'Hours included in service',
               type: Number,
               hasComment: true,
             },
             {
-              name: "Rushed setup",
+              name: 'Rushed setup',
               type: Boolean,
             },
             {
-              name: "Rehersal time for the band (for special requests)",
+              name: 'Rehersal time for the band (for special requests)',
               type: Number,
             },
             {
-              name: "Special operating time",
+              name: 'Special operating time',
               type: Boolean,
             },
             {
-              name: "Extra for prizes",
+              name: 'Extra for prizes',
               type: Boolean,
             },
             {
-              name: "Overtime charges",
+              name: 'Overtime charges',
               type: Boolean,
             },
             {
-              name: "Tax rate",
+              name: 'Tax rate',
               type: Number,
               isPercentage: true,
             },
             {
-              name: "Large group discounts",
+              name: 'Large group discounts',
               type: Boolean,
             },
             {
-              name: "Suggested Gratuity",
+              name: 'Suggested Gratuity',
               type: Number,
             },
           ],
         },
         {
-          category: "administration",
+          category: 'administration',
           items: [],
         },
         {
-          category: "securityservices",
+          category: 'securityservices',
           items: [
             {
-              name: "Pre-selection personal",
+              name: 'Pre-selection personal',
               type: Boolean,
             },
             {
-              name: "Number of hours",
+              name: 'Number of hours',
               type: Boolean,
             },
             {
-              name: "Level of security training/certification",
+              name: 'Level of security training/certification',
               type: Boolean,
             },
             {
-              name: "Special attire requests",
+              name: 'Special attire requests',
               type: Boolean,
             },
             {
-              name: "Tax rate",
+              name: 'Tax rate',
               type: Number,
               isPercentage: true,
             },
             {
-              name: "Large group discounts",
+              name: 'Large group discounts',
               type: Boolean,
             },
             {
-              name: "Suggested Gratuity",
+              name: 'Suggested Gratuity',
               type: Number,
             },
           ],
         },
         {
-          category: "technologyservices",
+          category: 'technologyservices',
           items: [],
         },
         {
-          category: "videographyandphotography",
+          category: 'videographyandphotography',
           items: [
             {
-              name: "Overtime charge",
+              name: 'Overtime charge',
               type: Number,
             },
             {
-              name: "Travel to multiple location",
+              name: 'Travel to multiple location',
               type: Number,
             },
             {
-              name: "Over number of pictures taken",
+              name: 'Over number of pictures taken',
               type: Number,
             },
             {
-              name: "Discount for large discounts",
+              name: 'Discount for large discounts',
               type: Boolean,
             },
             {
-              name: "Tax rate",
+              name: 'Tax rate',
               type: Number,
               isPercentage: true,
             },
             {
-              name: "Suggested Gratuity",
+              name: 'Suggested Gratuity',
               type: Number,
             },
           ],
@@ -1197,7 +1196,7 @@ export default {
       if (this.vendor.selectedWeekdays.length > 0) {
         this.selectedWeekdays = this.vendor.selectedWeekdays;
       } else {
-        this.selectedWeekdays = ["saturday", "sunday"];
+        this.selectedWeekdays = ['saturday', 'sunday'];
       }
     }
 
@@ -1221,7 +1220,7 @@ export default {
       } else {
         this.exDonts.push(item);
       }
-      this.$root.$emit("update-vendor-value", "exDonts", this.exDonts);
+      this.$root.$emit('update-vendor-value', 'exDonts', this.exDonts);
     },
     updateNa(item) {
       if (this.notAllowed.includes(item)) {
@@ -1229,7 +1228,7 @@ export default {
       } else {
         this.notAllowed.push(item);
       }
-      this.$root.$emit("update-vendor-value", "notAllowed", this.notAllowed);
+      this.$root.$emit('update-vendor-value', 'notAllowed', this.notAllowed);
     },
     yesRule(item) {
       if (this.yesRules.includes(item)) {
@@ -1238,8 +1237,8 @@ export default {
         this.noRules = this.noRules.filter((n) => n != item);
         this.yesRules.push(item);
       }
-      this.$root.$emit("update-vendor-value", "yesRules", this.yesRules);
-      this.$root.$emit("update-vendor-value", "noRules", this.noRules);
+      this.$root.$emit('update-vendor-value', 'yesRules', this.yesRules);
+      this.$root.$emit('update-vendor-value', 'noRules', this.noRules);
     },
     noRule(item) {
       if (this.noRules.includes(item)) {
@@ -1248,8 +1247,8 @@ export default {
         this.yesRules = this.yesRules.filter((n) => n != item);
         this.noRules.push(item);
       }
-      this.$root.$emit("update-vendor-value", "yesRules", this.yesRules);
-      this.$root.$emit("update-vendor-value", "noRules", this.noRules);
+      this.$root.$emit('update-vendor-value', 'yesRules', this.yesRules);
+      this.$root.$emit('update-vendor-value', 'noRules', this.noRules);
     },
     yesPolicy(item) {
       if (this.yesPolicies.includes(item)) {
@@ -1258,8 +1257,8 @@ export default {
         this.noPolicies = this.noPolicies.filter((n) => n != item);
         this.yesPolicies.push(item);
       }
-      this.$root.$emit("update-vendor-value", "yesPolicies", this.yesPolicies);
-      this.$root.$emit("update-vendor-value", "noPolicies", this.noPolicies);
+      this.$root.$emit('update-vendor-value', 'yesPolicies', this.yesPolicies);
+      this.$root.$emit('update-vendor-value', 'noPolicies', this.noPolicies);
     },
     noPolicy(item) {
       if (this.noPolicies.includes(item)) {
@@ -1268,8 +1267,8 @@ export default {
         this.yesPolicies = this.yesPolicies.filter((n) => n != item);
         this.noPolicies.push(item);
       }
-      this.$root.$emit("update-vendor-value", "yesPolicies", this.yesPolicies);
-      this.$root.$emit("update-vendor-value", "noPolicies", this.noPolicies);
+      this.$root.$emit('update-vendor-value', 'yesPolicies', this.yesPolicies);
+      this.$root.$emit('update-vendor-value', 'noPolicies', this.noPolicies);
     },
     noteRule(item) {
       if (this.noteRules.includes(item)) {
@@ -1286,8 +1285,8 @@ export default {
       }
       this.componentKey += 1;
       this.$root.$emit(
-        "update-vendor-value",
-        "selectedWeekdays",
+        'update-vendor-value',
+        'selectedWeekdays',
         this.selectedWeekdays,
       );
     },
@@ -1298,30 +1297,30 @@ export default {
         this.selectedReligion.push(item);
       }
       this.$root.$emit(
-        "update-vendor-value",
-        "selectedReligion",
+        'update-vendor-value',
+        'selectedReligion',
         this.selectedReligion,
       );
     },
     updateDontWorkDays() {
-      this.$root.$emit("update-vendor-value", "dontWorkDays", this.date);
+      this.$root.$emit('update-vendor-value', 'dontWorkDays', this.date);
     },
     updateStartA() {
-      if (this.amPack.start == "AM") {
-        this.amPack.start = "PM";
+      if (this.amPack.start == 'AM') {
+        this.amPack.start = 'PM';
       } else {
-        this.amPack.start = "AM";
+        this.amPack.start = 'AM';
       }
     },
     updateEndA() {
-      if (this.amPack.end == "AM") {
-        this.amPack.end = "PM";
+      if (this.amPack.end == 'AM') {
+        this.amPack.end = 'PM';
       } else {
-        this.amPack.end = "AM";
+        this.amPack.end = 'AM';
       }
     },
     updateDontWorkTime() {
-      this.$root.$emit("update-vendor-value", "dontWorkTime", {
+      this.$root.$emit('update-vendor-value', 'dontWorkTime', {
         startTime: this.startTime,
         endTime: this.endTime,
         amPack: this.amPack,
@@ -1329,7 +1328,7 @@ export default {
     },
     optimizeWeekDays(weekDays) {
       let res = [];
-      const wds = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+      const wds = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
       if (weekDays) {
         weekDays.forEach((wd) => {
@@ -1340,7 +1339,7 @@ export default {
       return res;
     },
     capitalize: function (value) {
-      if (!value) return "";
+      if (!value) return '';
       value = value.toString();
       return value.charAt(0).toUpperCase() + value.slice(1);
     },
@@ -1433,12 +1432,12 @@ export default {
               }
               &:first-child {
                 &:before {
-                  content: "Min";
+                  content: 'Min';
                 }
               }
               &:last-child {
                 &:before {
-                  content: "Max";
+                  content: 'Max';
                 }
               }
             }
@@ -1774,7 +1773,7 @@ export default {
               }
               &:before {
                 position: absolute;
-                content: ">";
+                content: '>';
                 transform: translateX(50%) translateY(calc(100% + 1.2rem))
                   rotate(90deg);
                 left: 40%;
@@ -1915,7 +1914,7 @@ export default {
           }
           .suffix {
             &:before {
-              content: "$";
+              content: '$';
               position: absolute;
               font-size: 16px;
               color: #818080;
@@ -1924,7 +1923,7 @@ export default {
             }
             &.percentage {
               &:before {
-                content: "%";
+                content: '%';
               }
             }
             input {

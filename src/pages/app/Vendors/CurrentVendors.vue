@@ -62,7 +62,12 @@
       </div>
       <div class="md-layout-item button-group text-right">
         <md-button class="md-success md-lg">Contact Vendor</md-button>
-        <md-button class="md-danger md-lg" @click="goToProposal()">Create Brief Ask for Proposal</md-button>
+        <md-button 
+          class="md-danger md-lg" 
+          @click="goToProposal()"
+        >
+          Create Brief Ask for Proposal
+        </md-button>
         <h4>Avg. Response Time: {{vendor.rank}}</h4>
       </div>
     </div>
@@ -306,18 +311,18 @@
 </template>
 
 <script>
-import moment from "moment";
-import VueElementLoading from "vue-element-loading";
-import Vendors from "@/models/Vendors";
-import VendorPropertyField from "./VendorPropertyField";
-import ProposalRequest from "@/models/ProposalRequest";
+import moment from 'moment'
+import VueElementLoading from 'vue-element-loading'
+import Vendors from '@/models/Vendors'
+import VendorPropertyField from './VendorPropertyField'
+import ProposalRequest from '@/models/ProposalRequest'
 
 // COMPONENTS
-import Icon from "@/components/Icon/Icon.vue";
-import VendorSimilarProposals from "./components/VendorSimilarProposals.vue";
-import VendorFeedbacks from "./components/VendorFeedbacks.vue";
-import VendorSimilarItem from "./components/VendorSimilarItem.vue";
-import LightBox from "vue-image-lightbox";
+import Icon from '@/components/Icon/Icon.vue'
+import VendorSimilarProposals from './components/VendorSimilarProposals.vue'
+import VendorFeedbacks from './components/VendorFeedbacks.vue'
+import VendorSimilarItem from './components/VendorSimilarItem.vue'
+import LightBox from 'vue-image-lightbox'
 
 export default {
   components: {
@@ -327,17 +332,17 @@ export default {
     VendorFeedbacks,
     VendorPropertyField,
     Icon,
-    LightBox,
+    LightBox
   },
   props: {
     item: {
       type: Object,
       default: () => {
-        return {};
-      },
-    },
+        return {}
+      }
+    }
   },
-  data() {
+  data () {
     return {
       isLoading: true,
       vendor: { statistics: {} },
@@ -347,145 +352,138 @@ export default {
       proposals: [],
       bgImages: [],
       vendorPropertiesItems: [],
-      defaultImg:
-        "https://static-maryoku.s3.amazonaws.com/storage/img/lock.jpg",
+      defaultImg: 'http://static.maryoku.com/storage/img/lock.jpg',
       pricesAndRules: [],
       checkListItems: [],
       feedbacks: [
         {
           image:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
-          username: "Jane Bloom, Facebook",
-          date: "2017/12/29",
-          score: "5",
-          message: "A 50% deposit will be due on or before 18/1/20.",
+            'http://static.maryoku.com/storage/img/shutterstock_289440710.png',
+          username: 'Jane Bloom, Facebook',
+          date: '2017/12/29',
+          score: '5',
+          message: 'A 50% deposit will be due on or before 18/1/20.'
         },
         {
           image:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
-          username: "Leonard Parker",
-          date: "2017/12/29",
-          score: "4",
-          message: "A 50% deposit will be due on or before 18/1/20.",
+            'http://static.maryoku.com/storage/img/shutterstock_289440710.png',
+          username: 'Leonard Parker',
+          date: '2017/12/29',
+          score: '4',
+          message: 'A 50% deposit will be due on or before 18/1/20.'
         },
         {
           image:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
-          username: "Alex Marlon",
-          date: "2017/12/29",
-          score: "3",
-          message: "A 50% deposit will be due on or before 18/1/20.",
-        },
+            'http://static.maryoku.com/storage/img/shutterstock_289440710.png',
+          username: 'Alex Marlon',
+          date: '2017/12/29',
+          score: '3',
+          message: 'A 50% deposit will be due on or before 18/1/20.'
+        }
       ],
       similarItems: [
         {
           image:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
-          thumbnail: "thumbnail",
-          score: "5",
-          title: "title",
+            'http://static.maryoku.com/storage/img/shutterstock_289440710.png',
+          thumbnail: 'thumbnail',
+          score: '5',
+          title: 'title'
         },
         {
           image:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
-          thumbnail: "thumbnail",
-          score: "5",
-          title: "title",
-        },
+            'http://static.maryoku.com/storage/img/shutterstock_289440710.png',
+          thumbnail: 'thumbnail',
+          score: '5',
+          title: 'title'
+        }
       ],
       ratings: [1, 2, 3, 4, 5],
       currentTab: 1,
-      routeName: null,
-    };
+      routeName: null
+    }
   },
-  created() {
-    this.routeName = this.$route.name;
+  created () {
+    this.routeName = this.$route.name
   },
-  mounted() {
-    let _self = this;
-    this.isLoading = false;
+  mounted () {
+    let _self = this
+    this.isLoading = false
 
-    this.getVendor();
-    this.getVendorProposals(this.$route.params.id);
+    this.getVendor()
+    this.getVendorProposals(this.$route.params.id)
   },
   methods: {
-    getVendor() {
-      Vendors.find(this.$route.params.id).then((vendor) => {
-        this.vendor = vendor;
-        this.vendorCategoryChanged(this.vendor.vendorCategory);
-        this.isLoading = false;
-      });
-    },
-    vendorCategoryChanged(vendorCategory) {
-      Vendors.params({
-        category: vendorCategory,
+    getVendor () {
+      Vendors.find(this.$route.params.id).then(vendor => {
+        this.vendor = vendor
+        this.vendorCategoryChanged(this.vendor.vendorCategory)
+        this.isLoading = false
       })
-        .find("properties")
-        .then(
-          (vendorProperties) => {
-            _.each(vendorProperties, (section) => {
-              section.items.forEach((item) => {
-                this.vendorPropertiesItems.push(item);
-              });
-            });
-          },
-          (error) => {
-            console.log(error);
-          },
-        );
     },
-    getVendorProposals(id) {
-      this.isLoading = true;
+    vendorCategoryChanged (vendorCategory) {
+      Vendors.params({
+        category: vendorCategory
+      })
+        .find('properties')
+        .then(
+          vendorProperties => {
+            _.each(vendorProperties, section => {
+              section.items.forEach(item => {
+                this.vendorPropertiesItems.push(item)
+              })
+            })
+          },
+          error => {
+            console.log(error)
+          }
+        )
+    },
+    getVendorProposals (id) {
+      this.isLoading = true
       new Vendors({ id })
         .proposalRequests()
         .first()
-        .then((proposals) => {
+        .then(proposals => {
           this.proposals = proposals.vendorProposals.filter(
-            (proposal) => proposal.bidRange != null,
-          );
-          console.log(this.proposals);
-          this.proposals.forEach((proposal) => {
-            proposal.attachments.forEach((attachment) => {
-              this.attachments.push(attachment);
+            proposal => proposal.bidRange != null
+          )
+          console.log(this.proposals)
+          this.proposals.forEach(proposal => {
+            proposal.attachments.forEach(attachment => {
+              this.attachments.push(attachment)
 
-              const fullPath = `${this.serverUrl}/1/proposal-requests/${attachment.proposalRequst.id}/files/${attachment.id}`;
+              const fullPath = `${this.serverUrl}/1/proposal-requests/${attachment.proposalRequst.id}/files/${attachment.id}`
 
-              if (attachment.vendorsFileContentType != "application/pdf") {
-                this.bgImages.push(fullPath);
+              if (attachment.vendorsFileContentType != 'application/pdf') {
+                this.bgImages.push(fullPath)
               }
-            });
-          });
-          const start = this.bgImages.length;
-          const diff = 5 - this.bgImages.length;
+            })
+          })
+          const start = this.bgImages.length
+          const diff = 5 - this.bgImages.length
           if (this.bgImages.length < 5) {
             for (let i = 0; i < diff; i++) {
-              this.bgImages.push(this.defaultImg);
+              this.bgImages.push(this.defaultImg)
             }
           }
-          this.isLoading = false;
-        });
+          this.isLoading = false
+        })
     },
-    view() {
+    view () {
       if (this.$refs.lightbox) {
-        this.$refs.lightbox.showImage(0);
+        this.$refs.lightbox.showImage(0)
       }
     },
-    goTo(router) {
-      this.$router.push(router);
+    goTo (router) {
+      this.$router.push(router)
     },
     goToProposal() {
       if (this.proposals.length > 0) {
-        this.goTo(
-          `/vendors/${this.vendor.id}/proposal-request/${this.proposals[0].id}`,
-        );
+        this.goTo(`/vendors/${this.vendor.id}/proposal-request/${this.proposals[0].id}`)
       } else {
-        let proposalRequest = new ProposalRequest({
-          id: this.$route.params.id,
-        });
-        proposalRequest.vendorId = this.vendor.id;
-        this.goTo(
-          `/vendors/${this.vendor.id}/proposal-request/${proposalRequest.id}`,
-        );
+        let proposalRequest = new ProposalRequest({ id: this.$route.params.id })
+        proposalRequest.vendorId = this.vendor.id
+        this.goTo(`/vendors/${this.vendor.id}/proposal-request/${proposalRequest.id}`)
         // 500 error
         // proposalRequest
         //   .save()
@@ -512,14 +510,14 @@ export default {
         //   type: 'danger'
         // })
       }
-    },
+    }
   },
   computed: {
     logoText: function () {
       if (!this.vendor.vendorDisplayName) {
-        return null;
+        return null
       } else {
-        const titleWords = this.vendor.vendorDisplayName.split(" ");
+        const titleWords = this.vendor.vendorDisplayName.split(' ')
         if (
           titleWords.length > 1 &&
           titleWords[titleWords.length - 1].length > 0
@@ -527,9 +525,9 @@ export default {
           return (
             titleWords[0].charAt(0) +
             titleWords[titleWords.length - 1].charAt(0)
-          );
+          )
         } else {
-          return titleWords[0].charAt(0);
+          return titleWords[0].charAt(0)
         }
       }
     },
@@ -537,41 +535,41 @@ export default {
       if (this.vendorPropertiesItems) {
         console.log(
           this.vendorPropertiesItems.filter(
-            (item) => item.categoryTitle === "Capacity",
-          ),
-        );
+            item => item.categoryTitle === 'Capacity'
+          )
+        )
         return this.vendorPropertiesItems.filter(
-          (item) => item.categoryTitle === "Capacity",
-        );
+          item => item.categoryTitle === 'Capacity'
+        )
       } else {
-        return {};
+        return {}
       }
     },
     vendorDescription: function () {
       if (this.vendorPropertiesItems) {
         return this.vendorPropertiesItems.filter(
-          (item) => item.name === "Description",
-        )[0];
+          item => item.name === 'Description'
+        )[0]
       } else {
-        return {};
+        return {}
       }
     },
     vendorPaymentPolicy: function () {
       if (this.vendorPropertiesItems) {
         return this.vendorPropertiesItems.filter(
-          (item) => item.name === "Payment Policy",
-        )[0];
+          item => item.name === 'Payment Policy'
+        )[0]
       } else {
-        return {};
+        return {}
       }
     },
     vendorCancellationPolicy: function () {
       if (this.vendorPropertiesItems) {
         return this.vendorPropertiesItems.filter(
-          (item) => item.name === "Cancellation policy",
-        )[0];
+          item => item.name === 'Cancellation policy'
+        )[0]
       } else {
-        return {};
+        return {}
       }
     },
     // "Courtesy save policy"
@@ -579,72 +577,72 @@ export default {
     vendorLogoImage: function () {
       if (this.vendor.vendorPropertiesItems) {
         return this.vendor.vendorPropertiesItems.filter(
-          (item) => item.name === "Logo" && item.type === "image",
-        );
+          item => item.name === 'Logo' && item.type === 'image'
+        )
       } else {
-        return {};
+        return {}
       }
     },
     vendorExtraImage: function () {
       if (this.vendor.vendorProperties) {
         return this.vendor.vendorProperties.filter(
-          (item) => item.name != "Logo" && item.type === "image",
-        );
+          item => item.name != 'Logo' && item.type === 'image'
+        )
       } else {
-        return [];
+        return []
       }
     },
     vendorPricesAndRules: function () {
       if (this.vendor.vendorProperties) {
         return this.vendor.vendorProperties.filter(
-          (item) => item.categoryTitle === "Cost Elements",
-        );
+          item => item.categoryTitle === 'Cost Elements'
+        )
       } else {
-        return [];
+        return []
       }
     },
     vendorServicesList: function () {
       if (this.vendor.vendorProperties) {
         return this.vendor.vendorProperties.filter(
-          (item) =>
-            item.categoryTitle === "Services" ||
-            item.categoryTitle === "Included services and amenities",
-        );
+          item =>
+            item.categoryTitle === 'Services' ||
+            item.categoryTitle === 'Included services and amenities'
+        )
       } else {
-        return [];
+        return []
       }
     },
     vendorRestrictions: function () {
       if (this.vendor.vendorProperties) {
         return this.vendor.vendorProperties.filter(
-          (item) => item.categoryTitle === "Restrictions",
-        );
+          item => item.categoryTitle === 'Restrictions'
+        )
       } else {
-        return [];
+        return []
       }
     },
     getGalleryImages: function () {
-      let temp = [];
+      let temp = []
       if (this.bgImages.length > 0) {
-        this.bgImages.forEach((item) => {
+        this.bgImages.forEach(item => {
           if (item != this.defaultImg) {
             temp.push({
               thumb: item,
               src: item,
-              caption: "",
-              srcset: "",
-            });
+              caption: '',
+              srcset: ''
+            })
           }
-        });
-        return temp;
+        })
+        return temp
       } else {
-        return [];
+        return []
       }
-    },
+    }
   },
   filters: {},
-  watch: {},
-};
+  watch: {}
+}
 </script>
 <style lang="scss" scoped>
 @import "@/assets/scss/md/_variables.scss";

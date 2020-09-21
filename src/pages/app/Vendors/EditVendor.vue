@@ -432,9 +432,7 @@
               <div class="tab-item-content-body">
                 <p>
                   Be due on or before 18/1/20. The remaining balance will be collected a week prior to the vent. We accept...
-                  <a
-                    class="more"
-                  >Read more</a>
+                  <a class="more">Read more</a>
                 </p>
               </div>
             </div>
@@ -457,17 +455,17 @@
 </template>
 
 <script>
-import moment from "moment";
-import VueElementLoading from "vue-element-loading";
-import Vendors from "@/models/Vendors";
+import moment from 'moment'
+import VueElementLoading from 'vue-element-loading'
+import Vendors from '@/models/Vendors'
 
 // COMPONENTS
-import Icon from "@/components/Icon/Icon.vue";
-import VendorSimilarProposals from "./components/VendorSimilarProposals.vue";
-import VendorFeedbacks from "./components/VendorFeedbacks.vue";
-import VendorSimilarItem from "./components/VendorSimilarItem.vue";
-import LightBox from "vue-image-lightbox";
-import { SlideYDownTransition } from "vue2-transitions";
+import Icon from '@/components/Icon/Icon.vue'
+import VendorSimilarProposals from './components/VendorSimilarProposals.vue'
+import VendorFeedbacks from './components/VendorFeedbacks.vue'
+import VendorSimilarItem from './components/VendorSimilarItem.vue'
+import LightBox from 'vue-image-lightbox'
+import { SlideYDownTransition } from 'vue2-transitions'
 
 export default {
   components: {
@@ -477,9 +475,9 @@ export default {
     VendorFeedbacks,
     Icon,
     SlideYDownTransition,
-    LightBox,
+    LightBox
   },
-  data() {
+  data () {
     return {
       isLoading: true,
       creation_mode: false,
@@ -489,165 +487,164 @@ export default {
       attachments: [],
       proposals: [],
       bgImages: [],
-      defaultImg:
-        "https://static-maryoku.s3.amazonaws.com/storage/img/lock.jpg",
+      defaultImg: 'http://static.maryoku.com/storage/img/lock.jpg',
       pricesAndRules: [],
       checkListItems: [],
       feedbacks: [
         {
           image:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
-          username: "Jane Bloom, Facebook",
-          date: "2017/12/29",
-          score: "5",
-          message: "A 50% deposit will be due on or before 18/1/20.",
+            'http://static.maryoku.com/storage/img/shutterstock_289440710.png',
+          username: 'Jane Bloom, Facebook',
+          date: '2017/12/29',
+          score: '5',
+          message: 'A 50% deposit will be due on or before 18/1/20.'
         },
         {
           image:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
-          username: "Leonard Parker",
-          date: "2017/12/29",
-          score: "4",
-          message: "A 50% deposit will be due on or before 18/1/20.",
+            'http://static.maryoku.com/storage/img/shutterstock_289440710.png',
+          username: 'Leonard Parker',
+          date: '2017/12/29',
+          score: '4',
+          message: 'A 50% deposit will be due on or before 18/1/20.'
         },
         {
           image:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
-          username: "Alex Marlon",
-          date: "2017/12/29",
-          score: "3",
-          message: "A 50% deposit will be due on or before 18/1/20.",
-        },
+            'http://static.maryoku.com/storage/img/shutterstock_289440710.png',
+          username: 'Alex Marlon',
+          date: '2017/12/29',
+          score: '3',
+          message: 'A 50% deposit will be due on or before 18/1/20.'
+        }
       ],
       similarItems: [
         {
           image:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
-          thumbnail: "thumbnail",
-          score: "5",
-          title: "title",
+            'http://static.maryoku.com/storage/img/shutterstock_289440710.png',
+          thumbnail: 'thumbnail',
+          score: '5',
+          title: 'title'
         },
         {
           image:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
-          thumbnail: "thumbnail",
-          score: "5",
-          title: "title",
-        },
+            'http://static.maryoku.com/storage/img/shutterstock_289440710.png',
+          thumbnail: 'thumbnail',
+          score: '5',
+          title: 'title'
+        }
       ],
       modelValidations: {
         vendorDisplayName: {
           required: true,
-          min: 5,
+          min: 5
         },
         vendorMainEmail: {
           required: true,
-          email: true,
+          email: true
         },
         vendorMainPhoneNumber: {
           required: true,
-          min: 5,
+          min: 5
         },
         vendorCategory: {
           required: true,
-          min: 5,
+          min: 5
         },
         vendorWebsite: {
           url: { require_protocol: true },
           regex: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,=.]+$/gm,
-          min: 10, // http://x.x
-        },
+          min: 10 // http://x.x
+        }
       },
       ratings: [1, 2, 3, 4, 5],
       currentTab: 1,
       selectedField: null,
       categories: [],
       isDropped: false,
-      routeName: null,
-    };
+      routeName: null
+    }
   },
-  created() {
-    this.routeName = this.$route.name;
-    Vendors.find("categories").then(
-      (categories) => {
-        this.categories = categories;
+  created () {
+    this.routeName = this.$route.name
+    Vendors.find('categories').then(
+      categories => {
+        this.categories = categories
       },
-      (error) => {
-        console.log(error);
-      },
-    );
+      error => {
+        console.log(error)
+      }
+    )
   },
-  mounted() {
-    let _self = this;
-    this.isLoading = false;
+  mounted () {
+    let _self = this
+    this.isLoading = false
 
     if (this.$route.params.id) {
-      this.getVendor();
-      this.getVendorProposals(this.$route.params.id);
+      this.getVendor()
+      this.getVendorProposals(this.$route.params.id)
     } else {
-      this.creation_mode = true;
-      this.fillImages();
+      this.creation_mode = true
+      this.fillImages()
     }
   },
   methods: {
-    getVendor() {
+    getVendor () {
       this.$auth.currentUser(
         this,
         true,
         function () {
-          Vendors.find(this.$route.params.id).then((vendor) => {
-            this.vendor = vendor;
-            this.isLoading = false;
-          });
-        }.bind(this),
-      );
+          Vendors.find(this.$route.params.id).then(vendor => {
+            this.vendor = vendor
+            this.isLoading = false
+          })
+        }.bind(this)
+      )
     },
-    getVendorProposals(id) {
-      this.isLoading = true;
+    getVendorProposals (id) {
+      this.isLoading = true
       new Vendors({ id })
         .proposalRequests()
         .first()
-        .then((proposals) => {
+        .then(proposals => {
           this.proposals = proposals.vendorProposals.filter(
-            (proposal) => proposal.bidRange != null,
-          );
-          this.proposals.forEach((proposal) => {
-            proposal.attachments.forEach((attachment) => {
-              this.attachments.push(attachment);
+            proposal => proposal.bidRange != null
+          )
+          this.proposals.forEach(proposal => {
+            proposal.attachments.forEach(attachment => {
+              this.attachments.push(attachment)
 
-              const fullPath = `${this.serverUrl}/1/proposal-requests/${attachment.proposalRequst.id}/files/${attachment.id}`;
+              const fullPath = `${this.serverUrl}/1/proposal-requests/${attachment.proposalRequst.id}/files/${attachment.id}`
 
-              if (attachment.vendorsFileContentType != "application/pdf") {
-                this.bgImages.push(fullPath);
+              if (attachment.vendorsFileContentType != 'application/pdf') {
+                this.bgImages.push(fullPath)
               }
-            });
-          });
-          this.fillImages();
-          this.isLoading = false;
-        });
+            })
+          })
+          this.fillImages()
+          this.isLoading = false
+        })
     },
-    view() {
+    view () {
       if (this.$refs.lightbox) {
-        this.$refs.lightbox.showImage(0);
+        this.$refs.lightbox.showImage(0)
       }
     },
-    onChangeCategory() {
+    onChangeCategory () {
       // if (this.isDropped) {
       //   this.updateVendor()
       // }
-      this.isDropped = !this.isDropped;
+      this.isDropped = !this.isDropped
     },
-    setRating(ratingIndex) {
-      this.vendor.rank = parseInt(ratingIndex) + 1;
+    setRating (ratingIndex) {
+      this.vendor.rank = parseInt(ratingIndex) + 1
     },
-    validateScore() {
+    validateScore () {
       this.vendor.avgScore =
         this.vendor.avgScore > 100
           ? (this.vendor.avgScore = 100)
-          : this.vendor.avgScore;
+          : this.vendor.avgScore
     },
-    onlyNumber(event) {
-      const key = event.keyCode ? event.keyCode : event.which;
+    onlyNumber (event) {
+      const key = event.keyCode ? event.keyCode : event.which
       if (
         !(
           event.ctrlKey ||
@@ -661,79 +658,79 @@ export default {
         )
       ) {
         // 46 is dot
-        event.preventDefault();
+        event.preventDefault()
       }
     },
-    fillImages() {
-      const start = this.bgImages.length;
-      const diff = 5 - this.bgImages.length;
+    fillImages () {
+      const start = this.bgImages.length
+      const diff = 5 - this.bgImages.length
       if (this.bgImages.length < 5) {
         for (let i = 0; i < diff; i++) {
-          this.bgImages.push(this.defaultImg);
+          this.bgImages.push(this.defaultImg)
         }
       }
     },
-    async addVendor() {
-      this.$validator.validateAll().then((res) => {
+    async addVendor () {
+      this.$validator.validateAll().then(res => {
         if (res) {
-          let newVendor = new Vendors({});
+          let newVendor = new Vendors({})
 
-          newVendor.attach(this.vendor).then((res) => {
-            this.$emit("vendorCreated");
-            this.$emit("selectVendor", res.data.item);
+          newVendor.attach(this.vendor).then(res => {
+            this.$emit('vendorCreated')
+            this.$emit('selectVendor', res.data.item)
             this.$notify({
-              message: "Vendor created successfully!",
-              horizontalAlign: "center",
-              verticalAlign: "top",
-              type: "success",
-            });
-          });
+              message: 'Vendor created successfully!',
+              horizontalAlign: 'center',
+              verticalAlign: 'top',
+              type: 'success'
+            })
+          })
         } else {
-          this.$emit("on-validated", res);
-          return res;
+          this.$emit('on-validated', res)
+          return res
         }
-      });
+      })
     },
-    async updateVendor() {
-      let newVendor = await Vendors.find(this.vendor.id);
+    async updateVendor () {
+      let newVendor = await Vendors.find(this.vendor.id)
 
-      newVendor.vendorDisplayName = this.vendor.vendorDisplayName;
-      newVendor.vendorAddressLine1 = this.vendor.vendorAddressLine1;
-      newVendor.vendorCategory = this.vendor.vendorCategory;
-      newVendor.rank = this.vendor.rank;
-      newVendor.avgScore = this.vendor.avgScore;
-      newVendor.vendorWebsite = this.vendor.vendorWebsite;
-      newVendor.vendorMainEmail = this.vendor.vendorMainEmail;
-      newVendor.vendorMainPhoneNumber = this.vendor.vendorMainPhoneNumber;
-      newVendor.vendorTagging = this.vendor.vendorTagging;
+      newVendor.vendorDisplayName = this.vendor.vendorDisplayName
+      newVendor.vendorAddressLine1 = this.vendor.vendorAddressLine1
+      newVendor.vendorCategory = this.vendor.vendorCategory
+      newVendor.rank = this.vendor.rank
+      newVendor.avgScore = this.vendor.avgScore
+      newVendor.vendorWebsite = this.vendor.vendorWebsite
+      newVendor.vendorMainEmail = this.vendor.vendorMainEmail
+      newVendor.vendorMainPhoneNumber = this.vendor.vendorMainPhoneNumber
+      newVendor.vendorTagging = this.vendor.vendorTagging
 
       if (this.errors.items.length === 0) {
-        newVendor.save();
+        newVendor.save()
 
         this.$notify({
-          message: "Vendor Updated Successfully!",
-          horizontalAlign: "center",
-          verticalAlign: "top",
-          type: "success",
-        });
+          message: 'Vendor Updated Successfully!',
+          horizontalAlign: 'center',
+          verticalAlign: 'top',
+          type: 'success'
+        })
       } else {
         this.$notify({
           message: this.errors.items[0].msg,
-          horizontalAlign: "center",
-          verticalAlign: "top",
-          type: "danger",
-        });
+          horizontalAlign: 'center',
+          verticalAlign: 'top',
+          type: 'danger'
+        })
       }
 
-      this.selectedField = null;
-    },
+      this.selectedField = null
+    }
   },
   computed: {
     logoText: function () {
       if (!this.vendor.vendorDisplayName) {
-        return null;
+        return null
       } else {
-        const titleWords = this.vendor.vendorDisplayName.split(" ");
+        const titleWords = this.vendor.vendorDisplayName.split(' ')
         if (
           titleWords.length > 1 &&
           titleWords[titleWords.length - 1].length > 0
@@ -741,90 +738,90 @@ export default {
           return (
             titleWords[0].charAt(0) +
             titleWords[titleWords.length - 1].charAt(0)
-          );
+          )
         } else {
-          return titleWords[0].charAt(0);
+          return titleWords[0].charAt(0)
         }
       }
     },
     vendorCapacities: function () {
       if (this.vendor.vendorProperties) {
         return this.vendor.vendorProperties.filter(
-          (item) => item.categoryTitle === "Capacity",
-        );
+          item => item.categoryTitle === 'Capacity'
+        )
       } else {
-        return [];
+        return []
       }
     },
     vendorLogoImage: function () {
       if (this.vendor.vendorProperties) {
         return this.vendor.vendorProperties.filter(
-          (item) => item.name === "Logo" && item.type === "image",
-        );
+          item => item.name === 'Logo' && item.type === 'image'
+        )
       } else {
-        return [];
+        return []
       }
     },
     vendorExtraImage: function () {
       if (this.vendor.vendorProperties) {
         return this.vendor.vendorProperties.filter(
-          (item) => item.name != "Logo" && item.type === "image",
-        );
+          item => item.name != 'Logo' && item.type === 'image'
+        )
       } else {
-        return [];
+        return []
       }
     },
     vendorPricesAndRules: function () {
       if (this.vendor.vendorProperties) {
         return this.vendor.vendorProperties.filter(
-          (item) => item.categoryTitle === "Cost Elements",
-        );
+          item => item.categoryTitle === 'Cost Elements'
+        )
       } else {
-        return [];
+        return []
       }
     },
     vendorServicesList: function () {
       if (this.vendor.vendorProperties) {
         return this.vendor.vendorProperties.filter(
-          (item) =>
-            item.categoryTitle === "Services" ||
-            item.categoryTitle === "Included services and amenities",
-        );
+          item =>
+            item.categoryTitle === 'Services' ||
+            item.categoryTitle === 'Included services and amenities'
+        )
       } else {
-        return [];
+        return []
       }
     },
     vendorRestrictions: function () {
       if (this.vendor.vendorProperties) {
         return this.vendor.vendorProperties.filter(
-          (item) => item.categoryTitle === "Restrictions",
-        );
+          item => item.categoryTitle === 'Restrictions'
+        )
       } else {
-        return [];
+        return []
       }
     },
     getGalleryImages: function () {
-      let temp = [];
+      let temp = []
       if (this.bgImages.length > 0) {
-        this.bgImages.forEach((item) => {
+        this.bgImages.forEach(item => {
           if (item != this.defaultImg) {
             temp.push({
               thumb: item,
               src: item,
-              caption: "",
-              srcset: "",
-            });
+              caption: '',
+              srcset: ''
+            })
           }
-        });
-        return temp;
+        })
+        return temp
       } else {
-        return [];
+        return []
       }
-    },
+    }
   },
   filters: {},
-  watch: {},
-};
+  watch: {}
+}
 </script>
 <style lang="scss" scoped>
 @import "@/assets/scss/md/_variables.scss";

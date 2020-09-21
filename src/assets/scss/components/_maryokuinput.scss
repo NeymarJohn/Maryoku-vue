@@ -31,74 +31,74 @@
     }
     &.location {
       &.active {
-        @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/location-dark.svg'))
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Event%20Page/location-dark.svg'))
       }
-      @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/location-gray.svg'))
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Event%20Page/location-gray.svg'))
     }
     &.budget {
       &.active {
-        @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/budget-dark.svg'))
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Event%20Page/budget-dark.svg'))
       }
-      @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/budget-gray.svg'))
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Event%20Page/budget-gray.svg'))
     }
     &.phone {
       &.active {
-        @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Choose+vendor+and+Proposal/phone-dark.svg'))
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Choose+vendor+and+Proposal/phone-dark.svg'))
       }
-      @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Choose+vendor+and+Proposal/phone-gray.svg'))
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Choose+vendor+and+Proposal/phone-gray.svg'))
     }
     &.email {
       &.active {
-        @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Choose+vendor+and+Proposal/email-dark.svg'))
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Choose+vendor+and+Proposal/email-dark.svg'))
       }
-      @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Choose+vendor+and+Proposal/email-gray.svg'))
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Choose+vendor+and+Proposal/email-gray.svg'))
     }
     &.date {
       &.active {
-        @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Event Page/calendar-dark.svg'))
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Event Page/calendar-dark.svg'))
       }
-      @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Event Page/calendar-gray.svg'))
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Event Page/calendar-gray.svg'))
     }
     &.time {
       &.active {
-        @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Notes/clock-dark.svg'))
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Notes/clock-dark.svg'))
       }
-      @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Notes/clock-gray.svg'))
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Notes/clock-gray.svg'))
     }
     &.sharing {
       &.active {
-        @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Share/link-dark.svg'));
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Share/link-dark.svg'));
         padding-right: 60px;
       }
-      @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Share/link-dark.svg'));
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Share/link-dark.svg'));
       padding-right: 60px;
     }
     &.password {
       &.active {
-        @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Signup/password-dark.svg'))
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Signup/password-dark.svg'))
       }
-      @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Signup/password-gray.svg'));
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Signup/password-gray.svg'));
       padding-right: 60px;
     }
     &.username {
       &.active {
-        @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Signup/user-dark.svg'))
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Signup/user-dark.svg'))
       }
-      @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Signup/user-gray.svg'));
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Signup/user-gray.svg'));
       padding-right: 60px;
     }
     &.users {
       &.active {
-        @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/users-dark.svg'))
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Event%20Page/users-dark.svg'))
       }
-      @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/users-gray.svg'));
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Event%20Page/users-gray.svg'));
       padding-right: 60px;
     }
     &.company {
       &.active {
-        @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Signup/company-dark.svg'))
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Signup/company-dark.svg'))
       }
-      @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Signup/company-gray.svg'));
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Signup/company-gray.svg'));
       padding-right: 60px;
     }
     &:focus{
@@ -109,7 +109,7 @@
   input:disabled{
     color: #a0a0a0;
     &.budget {
-      @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/budget-gray.svg'))
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Event%20Page/budget-gray.svg'))
     }
   }
   .md-field {
@@ -120,11 +120,11 @@
     &.location {
       &.active {
         input {
-          @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/location-dark.svg'))
+          @include background-icon(url('http://static.maryoku.com/storage/icons/Event%20Page/location-dark.svg'))
         }
       }
       input {
-        @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/location-gray.svg'))
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Event%20Page/location-gray.svg'))
       }
       
     }

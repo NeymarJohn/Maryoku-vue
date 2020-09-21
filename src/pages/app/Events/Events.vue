@@ -1,10 +1,7 @@
 <template>
   <div class="md-layout events-list">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen>
-      <div
-        :style="`background-image:url(/static/img/load_${imageIndex}.jpg)`"
-        class="loading-background"
-      >
+      <div :style="`background-image:url(/static/img/load_${imageIndex}.jpg)`" class="loading-background" >
         <div :class="`quote quote_${imageIndex}`">
           <span>{{quote.description}}</span>
           <span class="author">{{quote.author}}</span>
@@ -35,9 +32,7 @@
             >
               <md-table-cell md-label="Event Name">{{ item.title }}</md-table-cell>
               <!--<md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>-->
-              <md-table-cell
-                md-label="Event Type"
-              >{{item.eventType?item.eventType.name:item.eventType }}</md-table-cell>
+              <md-table-cell md-label="Event Type">{{item.eventType?item.eventType.name:item.eventType }}</md-table-cell>
               <md-table-cell md-label="Date">{{ item.eventStartMillis | moment }}</md-table-cell>
               <md-table-cell md-label="Customer Name">{{ item.owner.department }}</md-table-cell>
               <md-table-cell
@@ -67,7 +62,7 @@
                 </md-button>-->
                 <!-- <md-button @click="editEvent($event, item)" class="md-info md-just-icon md-round">
                   <md-icon>edit</md-icon>
-                </md-button>-->
+                </md-button> -->
                 <md-button
                   @click="showDeleteAlert($event, item)"
                   class="md-danger md-just-icon md-round"
@@ -90,15 +85,17 @@
       <md-card class="md-card-plain" v-if="!upcomingEvents.length && !isLoading">
         <md-card-content>
           <div class="text-center mt-5">
-            <!-- <img src="https://static-maryoku.s3.amazonaws.com/storage/img/calendar.png" style="width: 120px;" /> -->
+            <!-- <img src="http://static.maryoku.com/storage/img/calendar.png" style="width: 120px;" /> -->
             <h3>You do not have any events planned yet</h3>
             <div class="mt-4rem">
-              <md-button class="md-info md-red normal-btn" @click="routeToNewEvent">Create New Event</md-button>
-              <md-button
-                class="md-red md-simple normal-btn"
-                @click="chooseWorkspace"
-              >Choose Workspace</md-button>
+              <md-button class="md-info md-red normal-btn" @click="routeToNewEvent">
+                Create New Event
+              </md-button>
+              <md-button class="md-red md-simple normal-btn " @click="chooseWorkspace">
+                Choose Workspace
+              </md-button>
             </div>
+           
           </div>
         </md-card-content>
       </md-card>
@@ -139,89 +136,90 @@
         </template>
       </product-card>
     </div>
+    
   </div>
 </template>
 
 <script>
 // import auth from '@/auth';
-import Vue from "vue";
-import { Tabs, ProductCard } from "@/components";
+import Vue from 'vue'
+import { Tabs, ProductCard } from '@/components'
 
-import EventSidePanel from "@/pages/app/Events/EventSidePanel";
+import EventSidePanel from '@/pages/app/Events/EventSidePanel'
 
-import EventModal from "./EventModal/";
-import { mapMutations, mapGetters } from "vuex";
-import EventPlannerVuexModule from "./EventPlanner.vuex";
-import Calendar from "@/models/Calendar";
-import CalendarEvent from "@/models/CalendarEvent";
-import moment from "moment";
-import VueElementLoading from "vue-element-loading";
-import swal from "sweetalert2";
-import TeamMember from "@/models/TeamMember";
-import _ from "underscore";
-import { backgroundImages, quotes } from "@/constants/loadingBackgrounds";
-import eventService from "@/services/event.service";
+import EventModal from './EventModal/'
+import { mapMutations, mapGetters } from 'vuex'
+import EventPlannerVuexModule from './EventPlanner.vuex'
+import Calendar from '@/models/Calendar'
+import CalendarEvent from '@/models/CalendarEvent'
+import moment from 'moment'
+import VueElementLoading from 'vue-element-loading'
+import swal from 'sweetalert2'
+import TeamMember from '@/models/TeamMember'
+import _ from 'underscore'
+import {backgroundImages, quotes} from '@/constants/loadingBackgrounds'
+import eventService from '@/services/event.service';
 
-const imageIndex = new Date().getTime() % backgroundImages.length;
-const quoteIndex = new Date().getTime() % quotes.length;
-const quote = quotes[quoteIndex];
+const imageIndex = new Date().getTime() % backgroundImages.length
+const quoteIndex = new Date().getTime() % quotes.length
+const quote = quotes[quoteIndex]
 
 export default {
   components: {
     Tabs,
     ProductCard,
     VueElementLoading,
-    EventModal,
+    EventModal
   },
-  created() {
+  created () {
     const currentUser = this.$store.state.auth.user;
     if (currentUser.currentTenant && currentUser.profile.defaultCalendarId) {
-      let _calendar = new Calendar({
-        id: currentUser.profile.defaultCalendarId,
-      });
-      let m = new CalendarEvent().for(_calendar).fetch(this, true);
-      m.then((allEvents) => {
-        this.upcomingEvents = this.getExtraFields(allEvents).reverse();
-        this.isLoading = false;
-      }).catch((e) => {
-        console.log(e);
-      });
+      let _calendar = new Calendar({ id: currentUser.profile.defaultCalendarId })
+      let m = new CalendarEvent().for(_calendar).fetch(this, true)
+      m.then(allEvents => {
+        this.upcomingEvents = this.getExtraFields(allEvents).reverse()
+        this.isLoading = false
+      }).catch(e=>{
+        console.log(e)
+      })
+    } else if (!currentUser.profile.defaultCalendarId) {
+      this.$router.push({path:'/choose-workspace'})
     } else {
-      this.$router.push({ path: "/signin" });
+      this.$router.push({path:'/signin'})
     }
   },
-  data() {
+  data () {
     return {
       // auth: auth,
       product3:
-        "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
+        'http://static.maryoku.com/storage/img/shutterstock_289440710.png',
       recentEvents: [],
       upcomingEvents: [],
       isLoading: true,
       imageIndex,
       quoteIndex,
-      quote,
-    };
+      quote
+    }
   },
 
   methods: {
-    ...mapMutations("EventPlannerVuex", [
-      "setEventModal",
-      "setEditMode",
-      "setModalSubmitTitle",
-      "setEventModalAndEventData",
-      "setNumberOfParticipants",
+    ...mapMutations('EventPlannerVuex', [
+      'setEventModal',
+      'setEditMode',
+      'setModalSubmitTitle',
+      'setEventModalAndEventData',
+      'setNumberOfParticipants'
     ]),
-    openEventModal() {
-      this.setModalSubmitTitle("Save");
-      this.setEditMode({ editMode: false });
+    openEventModal () {
+      this.setModalSubmitTitle('Save')
+      this.setEditMode({ editMode: false })
 
       window.currentPanel = this.$showPanel({
         component: EventModal,
-        cssClass: "md-layout-item md-size-45 transition36 bg-grey",
-        openOn: "right",
-        props: {},
-      });
+        cssClass: 'md-layout-item md-size-45 transition36 bg-grey',
+        openOn: 'right',
+        props: {}
+      })
     },
     // getCalendarEvents() {
     //   console.log(this.$store.state.user.defaultCalendarId)
@@ -249,71 +247,71 @@ export default {
     //       this.isLoading = false;
     //     });
     // },
-    showDeleteAlert(e, ev) {
-      const _this = this;
-      e.stopPropagation();
+    showDeleteAlert (e, ev) {
+      const _this = this
+      e.stopPropagation()
       swal({
-        title: "Are you sure?",
+        title: 'Are you sure?',
         text: `You won't be able to revert this!`,
         showCancelButton: true,
-        type: "warning",
+        type: 'warning',
         showCancelButton: true,
-        confirmButtonClass: "md-button md-success confirm-btn-bg ",
-        cancelButtonClass: "md-button md-danger cancel-btn-bg",
-        confirmButtonText: "Yes, delete it!",
-        buttonsStyling: false,
-      }).then((result) => {
+        confirmButtonClass: 'md-button md-success confirm-btn-bg ',
+        cancelButtonClass: 'md-button md-danger cancel-btn-bg',
+        confirmButtonText: 'Yes, delete it!',
+        buttonsStyling: false
+      }).then(result => {
         if (result.value) {
-          _this.isLoading = true;
-          let event = _this.upcomingEvents.find((e) => {
-            return e.id === ev.id;
-          });
+          _this.isLoading = true
+          let event = _this.upcomingEvents.find(e => {
+            return e.id === ev.id
+          })
           ev.delete()
-            .then((result) => {
+            .then(result => {
               _this.upcomingEvents.splice(
                 this.upcomingEvents.indexOf(event),
-                1,
-              );
-              _this.isLoading = false;
+                1
+              )
+              _this.isLoading = false
             })
             .catch(() => {
-              _this.isLoading = false;
-            });
+              _this.isLoading = false
+            })
         }
-      });
+      })
     },
-    editEvent(ev, event) {
-      if (ev.target.tagName === "I") {
-        ev.stopPropagation();
-        this.$router.push({ name: "EditEvent", params: { id: event.id } });
+    editEvent (ev, event) {
+      if (ev.target.tagName === 'I') {
+        ev.stopPropagation()
+        this.$router.push({ name: 'EditEvent', params: { id: event.id } })
       }
     },
-    viewEvent(event) {
-      this.$router.push(`/events/${event.id}`);
+    viewEvent (event) {
+      this.$router.push(`/events/${event.id}`)
     },
-    imageHref(image) {
+    imageHref (image) {
       return image && image.href
         ? `${process.env.SERVER_URL}${image.href}`
-        : this.product3;
+        : this.product3
     },
-    duration(event) {
-      return (event.eventEndMillis - event.eventStartMillis) / 3600000;
+    duration (event) {
+      return (event.eventEndMillis - event.eventStartMillis) / 3600000
     },
-    routeToEvent(event) {
-      const gotoLink = eventService.getFirstTaskLink(event);
-      this.$router.push({ path: gotoLink });
+    routeToEvent (event) {
+      const gotoLink = eventService.getFirstTaskLink(event)
+      this.$router.push({ path: gotoLink })
     },
-    chooseWorkspace() {
-      this.$router.push({ path: "/choose-workspace" });
+    chooseWorkspace () {
+      this.$router.push({ path: '/choose-workspace' })
     },
-    refreshEvents() {
-      this.getCalendarEvents();
+    refreshEvents () {
+      this.getCalendarEvents()
     },
-    openEventSidePanel(options) {
+    openEventSidePanel (options) {
       window.currentPanel = this.$showPanel({
         component: EventSidePanel,
-        cssClass: "md-layout-item md-size-40 transition36 ",
-        openOn: "right",
+        cssClass: 'md-layout-item md-size-40 transition36 ',
+        openOn: 'right',
         disableBgClick: false,
         props: {
           modalSubmitTitle: options.modalSubmitTitle,
@@ -323,25 +321,25 @@ export default {
           year: this.year,
           month: this.month,
           occasionsOptions: this.occasionsArray,
-          openInPlannerOption: options.editMode,
-        },
-      });
+          openInPlannerOption: options.editMode
+        }
+      })
     },
     openEditEventModal: function (item) {
       if (!item.editable) {
-        item.occasion = item.title;
+        item.occasion = item.title
       }
-      debugger;
-      this.setEventModalAndEventData({ eventData: item });
-      this.setModalSubmitTitle("Save");
+      debugger
+      this.setEventModalAndEventData({ eventData: item })
+      this.setModalSubmitTitle('Save')
       this.openEventSidePanel({
-        modalSubmitTitle: "Save",
+        modalSubmitTitle: 'Save',
         editMode: true,
-        eventData: item,
-      });
+        eventData: item
+      })
     },
-    routeToNewEvent() {
-      this.$router.push(`/create-event-wizard`);
+    routeToNewEvent () {
+      this.$router.push(`/create-event-wizard`)
       // window.currentPanel = this.$showPanel({
       //   component: EventSidePanel,
       //   cssClass: 'md-layout-item md-size-40 transition36 ',
@@ -360,37 +358,37 @@ export default {
       //   }
       // })
     },
-    getExtraFields(allEvents) {
-      allEvents.forEach((item) => {
-        TeamMember.find(item.owner.id).then((owner) => {
-          Vue.set(item, "customerName", owner.customer.name);
-          Vue.set(item, "plannerEmail", owner.emailAddress);
-        });
-      });
-      return allEvents;
-    },
+    getExtraFields (allEvents) {
+      allEvents.forEach(item => {
+        TeamMember.find(item.owner.id).then(owner => {
+          Vue.set(item, 'customerName', owner.customer.name)
+          Vue.set(item, 'plannerEmail', owner.emailAddress)
+        })
+      })
+      return allEvents
+    }
   },
 
   filters: {
     moment: function (date) {
-      return moment(date).format("MMMM Do, GGGG");
-    },
+      return moment(date).format('MMMM Do, GGGG')
+    }
   },
   watch: {
-    upcomingEvents(newVal, oldVal) {
-      this.isLoading = false;
-    },
-  },
-};
+    upcomingEvents (newVal, oldVal) {
+      this.isLoading = false
+    }
+  }
+}
 </script>
 
 <style lang="scss">
-.loading-background {
+.loading-background{
   background-size: cover;
-  width: 100vw;
-  height: 100vh;
-  position: static;
-  left: 0;
+    width: 100vw;
+    height: 100vh;
+    position: static;
+    left: 0;
 }
 .button-event-creatig .md-ripple {
   background-color: #00bcd4;

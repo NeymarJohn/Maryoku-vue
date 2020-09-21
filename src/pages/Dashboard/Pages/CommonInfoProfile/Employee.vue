@@ -56,10 +56,7 @@
     </div>
     <div class="logo-main">
       <div>
-        <img
-          class="emp-logo"
-          src="https://static-maryoku.s3.amazonaws.com/storage/img/secure_booker.png"
-        />
+        <img class="emp-logo" src="http://static.maryoku.com/storage/img/secure_booker.png" />
         <Title title="Join the Hive" titleBlock="titleBlock" titleText="titleStyle" />
       </div>
     </div>
@@ -67,79 +64,79 @@
 </template>
 <script>
 // CONSTANTS
-import country_code from "@/constants/country_code";
+import country_code from '@/constants/country_code'
 
 // HELPER_FUNC
-import { isWrong } from "@/utils/helperFunction";
+import { isWrong } from '@/utils/helperFunction'
 
 // COMPONENTS
-import InputText from "@/components/Inputs/InputText.vue";
-import Select from "@/components/Select/Select.vue";
-import Title from "@/components/Title/Title.vue";
-import Button from "@/components/Button/Button.vue";
+import InputText from '@/components/Inputs/InputText.vue'
+import Select from '@/components/Select/Select.vue'
+import Title from '@/components/Title/Title.vue'
+import Button from '@/components/Button/Button.vue'
 
 export default {
-  name: "Employee",
+  name: 'Employee',
   components: {
     InputText,
     Select,
     Title,
-    Button,
+    Button
   },
-  data() {
+  data () {
     return {
-      full_name: "",
-      email: "",
-      phone: "",
+      full_name: '',
+      email: '',
+      phone: '',
       isErrors: false,
-      country_code: "",
-      list_code: country_code,
-    };
+      country_code: '',
+      list_code: country_code
+    }
   },
   computed: {
-    isTrim() {
-      return this.country_code === "";
-    },
+    isTrim () {
+      return this.country_code === ''
+    }
   },
   methods: {
     submitForm: function () {
-      this.validFunc(this);
+      this.validFunc(this)
       if (this.isErrors === false) {
         const info = isWrong(this, [
-          "full_name",
-          "email",
-          "phone",
-          "country_code",
-        ]);
-        this.$store.dispatch("user/sendCompanyInfo", info);
-        this.$router.push("/events-data");
+          'full_name',
+          'email',
+          'phone',
+          'country_code'
+        ])
+        this.$store.dispatch('user/sendCompanyInfo', info)
+        this.$router.push('/events-data')
       }
     },
     onChange: function (value, name) {
-      this[name] = value;
+      this[name] = value
     },
     validFunc: function (ctx, required) {
-      const errorsObj = [];
-      if (ctx["full_name"] === "") {
-        errorsObj.push("full_name");
+      const errorsObj = []
+      if (ctx['full_name'] === '') {
+        errorsObj.push('full_name')
       }
-      if (ctx["email"] === "") {
-        errorsObj.push("email");
+      if (ctx['email'] === '') {
+        errorsObj.push('email')
       }
-      if (ctx["phone"] === "") {
-        errorsObj.push("phone");
+      if (ctx['phone'] === '') {
+        errorsObj.push('phone')
       }
-      if (ctx["country_code"] === "") {
-        errorsObj.push("country_code");
+      if (ctx['country_code'] === '') {
+        errorsObj.push('country_code')
       }
       if (errorsObj.length !== 0) {
-        ctx.isErrors = true;
+        ctx.isErrors = true
       } else {
-        ctx.isErrors = false;
+        ctx.isErrors = false
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 <style lang="scss">
 .employee-body {
