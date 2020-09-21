@@ -20,5 +20,5 @@ module.exports = {
     S3_URL: '"https://maryoku.s3.amazonaws.com/"',
     // RESOURCE_URL: '"http://static.maryoku.com/"'
     // RESOURCE_URL: '"https://static-maryoku.s3.amazonaws.com/"'
-    RESOURCE_URL: '"http://static.maryoku.com/"',
+    RESOURCE_URL: '"https://static-maryoku.s3.amazonaws.com/"',
 };

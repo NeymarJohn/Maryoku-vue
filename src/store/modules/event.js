@@ -27,11 +27,11 @@ const state = {
     eventType: null,
     category: null,
     components: null,
-    componentComponents: [],
+    componentComponents:[],
   },
   components: [],
   notes: [],
-  commentComponents: [],
+  commentComponents:[],
   comments: {},  // The object for comments { componentId: commentslist<EventComment> }
   vendorsList: null,
   currencies: [],
@@ -59,47 +59,46 @@ const getters = {
   }
 }
 const actions = {
-  saveEventAction({ commit, state }, event) {
-    console.log(event)
-    return new Promise((resolve, reject) => {
+  saveEventAction({commit, state}, event) {
+    return new Promise((resolve, reject)=> {
       event.for(event.calendar).save()
-        .then(res => {
+        .then(res=>{
           commit('setEventData', res)
           resolve(event);
         })
-        .catch(error => {
+        .catch(error=>{
           reject(error)
         })
     })
   },
-  getEventAction({ commit, state }, { eventId, calendar }) {
-    return new Promise((resolve, reject) => {
+  getEventAction( {commit, state}, {eventId, calendar}) {
+    return new Promise((resolve, reject)=> {
       calendar
-        .calendarEvents()
-        .find(eventId)
-        .then(event => {
-          commit("setEventData", event)
-          resolve(event)
-          // if (event.concept) {
-          //   if (event.concept.images && event.concept.images.length > 0) {
-          //     this.logger = "http://static.maryoku.com/" + this.event.concept.images[0].url
-          //   }
-          //   if (event.concept.name) {
-          //     this.conceptName = event.concept.name
-          //   }
-          // }
-          // this.getCalendarEventStatistics(event);
-          // this.getTimelineItems();
-          // new EventComponent()
-          //   .for(_calendar, event)
-          //   .get()
-          //   .then(components => {
-          //     this.event.components = components;
-          //     this.selectedComponents = components;
-          //   });
-        });
+          .calendarEvents()
+          .find(eventId)
+          .then(event => {
+            commit("setEventData",event)
+            resolve(event)
+            // if (event.concept) {
+            //   if (event.concept.images && event.concept.images.length > 0) {
+            //     this.logger = "http://static.maryoku.com/" + this.event.concept.images[0].url
+            //   }
+            //   if (event.concept.name) {
+            //     this.conceptName = event.concept.name
+            //   }
+            // }
+            // this.getCalendarEventStatistics(event);
+            // this.getTimelineItems();
+            // new EventComponent()
+            //   .for(_calendar, event)
+            //   .get()
+            //   .then(components => {
+            //     this.event.components = components;
+            //     this.selectedComponents = components;
+            //   });
+          });
     })
-
+    
   },
   getEventThemes({ commit, state }, ctx) {
     new EventTheme()
@@ -131,8 +130,8 @@ const actions = {
       })
   },
   async getEventTypes({ commit, state }, { data, ctx }) {
-
-    return new Promise((resolve, reject) => {
+    
+    return new Promise((resolve, reject)=>{
       let _calendar = new Calendar({ id: data })
       if (state.eventTypes && state.eventTypes.length > 0) {
         resolve(state.eventTypes)
@@ -146,7 +145,7 @@ const actions = {
           commit('setEventTypes', [])
         })
     })
-
+    
   },
   async getComponents({ commit, state }, ctx) {
     new EventComponent()
@@ -167,7 +166,7 @@ const actions = {
     const event = new CalendarEvent({ id: eventId })
     const filters = data.filters || []
     console.log(filters)
-    const res = await postReq(`/1/calendars/${calendarId}/events/${eventId}/notes/search`, { "filters": filters })
+    const res = await postReq(`/1/calendars/${calendarId}/events/${eventId}/notes/search`, { "filters" : filters })
     console.log(res.data)
     commit('setEventNotes', res.data)
 

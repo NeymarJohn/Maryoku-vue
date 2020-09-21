@@ -30,11 +30,10 @@
           <div class="mb-50 mt-50" v-if="settingData.phone.selected">
             <div class="font-bold">To</div>
             <div class="d-flex align-start width-100">
-              <div class="flex-1 position-relative">
+              <div class="flex-1">
                 <maryoku-textarea
                   type="phones"
                   placeholder="Paste all phone numbers here…"
-                  hint="###-##-#######"
                   inputStyle="phone"
                   v-model="settingData.phone.numberString"
                   @change="handleInputEmails"
@@ -45,12 +44,6 @@
                   v-if="invalidPastedPhones"
                   :content="invalidPastedPhones"
                 ></invalid-address-panel>
-                <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
-                  <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
-                  <md-tooltip>
-                    <div class="font-size-14 input-tooltip">###-##-#######</div>
-                  </md-tooltip>
-                </span>
               </div>
               <span class="font-size-16" style="padding: 20px 40px">Or</span>
               <md-button
@@ -121,6 +114,12 @@
                   placeholder="Type your email subject here…"
                   v-model="settingData.email.subject"
                 ></maryoku-input>
+                <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
+                  <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
+                  <md-tooltip>
+                    <div class="font-size-14 input-tooltip">Email Subject</div>
+                  </md-tooltip>
+                </span>
               </div>
             </div>
             <div class="mt-50">
@@ -130,9 +129,7 @@
                 <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
                   <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
                   <md-tooltip>
-                    <div
-                      class="font-size-14 input-tooltip"
-                    >Pick the email from which you wish the guests to get this mail</div>
+                    <div class="font-size-14 input-tooltip">Your email</div>
                   </md-tooltip>
                 </span>
               </div>
@@ -142,21 +139,14 @@
                 <span class="font-bold mr-10 font-size-16">To</span>Make sure to put space / comma between each address
               </label>
               <div class="d-flex align-start width-100">
-                <div class="width-60 position-relative">
+                <div class="width-60">
                   <maryoku-textarea
                     placeholder="Paste all emails here…"
                     type="input"
                     inputStyle="emails"
-                    hint="example : example@mail.com"
                     v-model="settingData.email.addressString"
                     @change="handleInputEmails"
                   ></maryoku-textarea>
-                  <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
-                    <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
-                    <md-tooltip>
-                      <div class="font-size-14 input-tooltip">example : example@mail.com</div>
-                    </md-tooltip>
-                  </span>
                   <invalid-address-panel
                     type="email"
                     class="mt-30"

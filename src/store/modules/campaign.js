@@ -1,6 +1,6 @@
 import Campaign from "@/models/Campaign";
 import CalendarEvent from "@/models/CalendarEvent";
-
+import { resolve } from "promise-polyfill";
 const state = {
     SAVING_DATE: null,
     RSVP: null,
@@ -52,7 +52,7 @@ const actions = {
         });
     },
     saveCampaign({ commit, state }, campaign) {
-        return new Promise((resolve, reject) => {
+        return new Promise((reslove, reject) => {
             new Campaign(campaign).save().then(res => {
                 commit("setCampaign", {
                     name: res.campaignType,

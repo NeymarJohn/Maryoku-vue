@@ -115,7 +115,7 @@ export default {
   }),
   computed: {
     ...mapState("event", {
-      eventData: (state) => state.eventData,
+      event: (state) => state.eventData,
     }),
   },
   methods: {
@@ -151,10 +151,10 @@ export default {
       };
       const timeline = {
         title: "Generate timeline",
-        status: event.timelineProgress === 100 ? "completed" : "not-complete",
+        status: "current",
         route: "booking/timeline",
         icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-        progress: event.timelineProgress,
+        progress: 0,
         componentId: "timeline",
       };
       const campaign = {
@@ -178,7 +178,7 @@ export default {
         .for(this.calendar, event)
         .get()
         .then((resp) => {
-          resp.sort((a, b) => a.order - b.order);
+          // resp.sort((a, b) => a.order - b.order);
           resp.forEach((item) => {
             if (item.componentId !== "unexpected") {
               elements.push({
@@ -241,9 +241,6 @@ export default {
   watch: {
     $route: "fetchUrl",
     event(newValue) {
-      this.setConstantStates(newValue);
-    },
-    eventData(newValue) {
       this.setConstantStates(newValue);
     },
   },

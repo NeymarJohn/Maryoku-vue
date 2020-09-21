@@ -50,16 +50,14 @@
             <md-icon
               class="card-overview-saved-icon"
               style="color:#167c3a "
-              v-if="(statistics.allocated - statistics.booked) >= 0"
+              v-if="getSavedAmount >= 0"
             >add_circle_outline</md-icon>
             <md-icon
               class="card-overview-saved-icon"
               v-else
               style="color:#f51355"
             >remove_circle_outline</md-icon>
-            <span
-              class="card-overview-saved-amount"
-            >$ {{(statistics.allocated - statistics.booked) | withComma}}</span>
+            <span class="card-overview-saved-amount">$ {{getSavedAmount| withComma}}</span>
           </div>
           <div class="card-section card-expense">
             <div class="section-header">Expenses</div>
@@ -325,6 +323,7 @@ export default {
               console.log(components);
               this.event.components = components;
               this.selectedComponents = components;
+              console.log(this.selectedComponents);
               this.seriesData = components;
             });
           this.getCalendarEventStatistics(event);
@@ -334,7 +333,7 @@ export default {
             this.event,
             this.routeName === "EditBuildingBlocks",
             this.routeName === "InviteesManagement" ||
-              this.routeName === "EventInvitees"
+              this.routeName === "EventInvitees",
           );
           this.isLoading = false;
         });
@@ -500,7 +499,7 @@ export default {
     }),
     pieChartData() {
       return this.selectedComponents.filter(
-        (item) => item.componentId !== "unexpected"
+        (item) => item.componentId !== "unexpected",
       );
     },
     categoryItems() {
@@ -521,6 +520,15 @@ export default {
     },
     canEdit() {
       return this.permission === "edit";
+    },
+    getSavedAmount() {
+      let savedAmount = 0;
+      this.selectedComponents.forEach((item) => {
+        if (item.bookedBudget) {
+          savedAmount += item.allocatedBudget - item.booked;
+        }
+      });
+      return savedAmount;
     },
   },
   filters: {
