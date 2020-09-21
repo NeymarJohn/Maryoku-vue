@@ -39,11 +39,11 @@
             <maryoku-input type="text" class="mt-10" v-model="editingContent.title" />
           </div>
         </div>
-        <div class="md-layout-item md-size-100">
+        <div class="md-layout-item md-size-100 mt-20">
           <md-button class="md-simple edit-btn" @click="showDescription=!showDescription">
             <img :src="`${$iconURL}Timeline-New/circle-plus.svg`" class="label-icon mr-10" />
             <span class="color-red">Add Description</span>
-            <span class="color-black font-size-14">(Optional)</span>
+            <span class="color-black font-size-14 pl-5">(Optional)</span>
           </md-button>
           <div class="form-group mt-30" v-if="showDescription">
             <label class="font-size-16 font-bold">Description</label>
