@@ -164,6 +164,7 @@
                     </template>
                   </td>
                   <td>
+                    <div v-if="property.type==='single-selection'" style="padding: 10px 0px">&nbsp;</div>
                     <template v-if="property.qtyEnabled">
                       <input class="quantity-input" type="number" v-model="property.defaultQty" />
                       <span v-if="property.hint">
@@ -173,20 +174,24 @@
                     </template>
                   </td>
                   <td>
-                    <md-button
-                      class="md-icon-button md-simple requirement-action"
-                      v-if="property.qtyEnabled"
-                    >
-                      <img :src="`${$iconURL}Requirements/edit-dark.svg`" width="20" />
-                    </md-button>
-                    <md-button
-                      class="md-icon-button md-simple requirement-action"
-                      @click="removeRequirement(category, property)"
-                    >
-                      <img :src="`${$iconURL}Requirements/delete-dark.svg`" width="20" />
-                    </md-button>
+                    <div v-if="property.type==='single-selection'" style="padding: 10px 0px">&nbsp;</div>
+                    <div>
+                      <md-button
+                        class="md-icon-button md-simple requirement-action"
+                        v-if="property.qtyEnabled"
+                      >
+                        <img :src="`${$iconURL}Requirements/edit-dark.svg`" width="20" />
+                      </md-button>
+                      <md-button
+                        class="md-icon-button md-simple requirement-action"
+                        @click="removeRequirement(category, property)"
+                      >
+                        <img :src="`${$iconURL}Requirements/delete-dark.svg`" width="20" />
+                      </md-button>
+                    </div>
                   </td>
                   <td>
+                    <div v-if="property.type==='single-selection'" style="padding: 10px 0px">&nbsp;</div>
                     <div class="condition">
                       <md-checkbox
                         class="md-simple md-checkbox-circle md-red"
@@ -561,8 +566,10 @@ export default {
     border-top: solid 1px #b7b7b7;
   }
   .checkbox-label-wrapper {
-    margin-top: -9px;
-    margin-left: 20px;
+    img {
+      margin-top: -5px;
+    }
+    margin-left: 10px;
     margin-right: 50px;
   }
   textarea {

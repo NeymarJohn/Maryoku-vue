@@ -524,9 +524,10 @@ export default {
     },
     getSavedAmount() {
       let savedAmount = 0;
+      console.log("booked", this.selectedComponents);
       this.selectedComponents.forEach((item) => {
         if (item.bookedBudget) {
-          savedAmount += item.allocatedBudget - item.booked;
+          savedAmount += item.allocatedBudget - item.bookedBudget;
         }
       });
       return savedAmount;
