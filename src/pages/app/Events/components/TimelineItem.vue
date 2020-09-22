@@ -39,11 +39,11 @@
             <maryoku-input type="text" class="mt-10" v-model="editingContent.title" />
           </div>
         </div>
-        <div class="md-layout-item md-size-100">
+        <div class="md-layout-item md-size-100 mt-20">
           <md-button class="md-simple edit-btn" @click="showDescription=!showDescription">
             <img :src="`${$iconURL}Timeline-New/circle-plus.svg`" class="label-icon mr-10" />
             <span class="color-red">Add Description</span>
-            <span class="color-black font-size-14">(Optional)</span>
+            <span class="color-black font-size-14 pl-5">(Optional)</span>
           </md-button>
           <div class="form-group mt-30" v-if="showDescription">
             <label class="font-size-16 font-bold">Description</label>
@@ -125,6 +125,14 @@
         color="#FF547C"
       />
       <md-card-content style="min-height: 80px;">
+        <div class="timeline-actions">
+          <md-button class="md-icon-button md-simple" @click="editTimeline">
+            <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon" style="height: 30px" />
+          </md-button>
+          <md-button class="md-icon-button md-simple" @click="removeItem">
+            <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon" style="height: 30px" />
+          </md-button>
+        </div>
         <div class="item-title-and-time">
           <span
             class="item-time font-size-20 color-dark-gray"
@@ -164,6 +172,7 @@ import MaryokuInput from "@/components/Inputs/MaryokuInput";
 import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 import moment from "moment";
 import Multiselect from "vue-multiselect";
+import swal from "sweetalert2";
 
 export default {
   components: {
@@ -218,6 +227,7 @@ export default {
     },
     cancelTimelineItem() {
       this.editingContent = { ...this.item };
+      this.editingContent.mode = "saved";
       this.$emit("cancel", { item: this.editingContent, index: this.index });
     },
     formatDate(date) {
@@ -294,6 +304,27 @@ export default {
       //   }
       // }, 100);
     },
+    editTimeline() {
+      this.editingContent.mode = "edit";
+    },
+    removeItem() {
+      swal({
+        title: "Are you sure want to delete this item?",
+        showCancelButton: true,
+        cancelButtonClass: "md-button md-danger",
+        confirmButtonClass: "md-button md-success",
+        confirmButtonText: "Yes I'm sure",
+        buttonsStyling: false,
+      })
+        .then((result) => {
+          if (result.value === true) {
+            this.$emit("remove", { index: this.index, item: this.item });
+          }
+        })
+        .catch((err) => {
+          this.$root.$emit("timeline-updated", this.timelineItems);
+        });
+    },
   },
 };
 </script>
@@ -321,6 +352,19 @@ export default {
   }
   .item-desc {
     word-break: break-all;
+  }
+  .block-form {
+    .timeline-actions {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      display: none;
+    }
+    &:hover {
+      .timeline-actions {
+        display: block;
+      }
+    }
   }
 }
 </style>

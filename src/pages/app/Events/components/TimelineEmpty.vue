@@ -7,7 +7,8 @@
     class="timeline-empty-drop"
     :class="{dropping:isHover}"
   >
-    <div class="timeline-empty-item">
+    <div v-if="placeHolder" class="timeline-empty-start">Pleas drop here one of timline slots</div>
+    <div v-else class="timeline-empty-item">
       <div class="timeline-image" :style="hoverStyle">
         <md-icon>add</md-icon>
       </div>
@@ -18,8 +19,8 @@
   </drop>
 </template>
 <script>
-import { Drag, Drop } from 'vue-drag-drop';
-import { hexToRgbA } from '@/utils/helperFunction';
+import { Drag, Drop } from "vue-drag-drop";
+import { hexToRgbA } from "@/utils/helperFunction";
 
 export default {
   components: {
@@ -28,11 +29,15 @@ export default {
   props: {
     index: {
       type: Number,
-      default: 1,
+      default: 0,
     },
     date: {
       type: String,
-      default: '',
+      default: "",
+    },
+    placeHolder: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -41,10 +46,11 @@ export default {
       droppingBlock: {},
     };
   },
+  created() {},
   methods: {
     handleDrop() {
       this.isHover = false;
-      this.$root.$emit('add-template', {
+      this.$root.$emit("add-template", {
         date: this.date,
         block: this.droppingBlock,
         index: this.index,
@@ -61,7 +67,7 @@ export default {
   computed: {
     hoverStyle() {
       if (!this.isHover) {
-        return '';
+        return "";
       }
       return `border-color: ${
         this.droppingBlock.color
@@ -73,6 +79,11 @@ export default {
 <style lang="scss" scoped>
 .timeline-empty-drop {
   min-height: 20px;
+  .timeline-empty-start {
+    border: dashed 1px #a0a0a0;
+    text-align: center;
+    padding: 20px;
+  }
   .timeline-empty-item {
     display: flex;
     opacity: 0;

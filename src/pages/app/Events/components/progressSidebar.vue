@@ -115,7 +115,7 @@ export default {
   }),
   computed: {
     ...mapState("event", {
-      event: (state) => state.eventData,
+      eventData: (state) => state.eventData,
     }),
   },
   methods: {
@@ -151,10 +151,10 @@ export default {
       };
       const timeline = {
         title: "Generate timeline",
-        status: "current",
+        status: event.timelineProgress === 100 ? "completed" : "not-complete",
         route: "booking/timeline",
         icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-        progress: 0,
+        progress: event.timelineProgress,
         componentId: "timeline",
       };
       const campaign = {
@@ -241,6 +241,9 @@ export default {
   watch: {
     $route: "fetchUrl",
     event(newValue) {
+      this.setConstantStates(newValue);
+    },
+    eventData(newValue) {
       this.setConstantStates(newValue);
     },
   },

@@ -12,7 +12,25 @@
         :colors="concept.colors"
         border="no-border"
       ></concept-image-block>
-      <img v-else :src="`${$storageURL}Campaign+Images/SAVE+THE+DATE.jpg`" />
+      <div class="cover-preview" v-else>
+        <img :src="editingContent.coverImage" />
+        <label for="cover">
+          <md-button
+            class="md-button md-red maryoku-btn md-theme-default change-cover-btn"
+            @click="chooseFiles"
+          >
+            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width:20px" />Change Cover
+          </md-button>
+        </label>
+        <input
+          style="display: none"
+          id="coverImage"
+          name="attachment"
+          type="file"
+          multiple="multiple"
+          @change="onFileChange"
+        />
+      </div>
       <div class="concept p-50">
         <span class="font-size-30 font-bold">Save The Date</span>
         <span
@@ -109,6 +127,7 @@ export default {
       editingContent: {
         title: "",
         descriptoin: "",
+        coverImage: `${this.$storageURL}Campaign+Images/SAVE+THE+DATE.jpg`,
         logoUrl: "",
         visibleSettings: {
           showLogo: true,
@@ -174,6 +193,12 @@ export default {
       this.saveData();
       // this.$emit("changeInfo", {field: "conceptName", value: newTitle})
     },
+    chooseFiles() {
+      document.getElementById("coverImage").click();
+    },
+    async onFileChange(event) {
+      this.editingContent.coverImage = await getBase64(event.target.files[0]);
+    },
   },
   watch: {
     campaignData: {
@@ -191,6 +216,22 @@ export default {
 </script>
 <style lang="scss" scoped>
 .campaign-save-date {
+  .cover-preview {
+    position: relative;
+    height: 500px;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .change-cover-btn {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
   .comment {
     background-color: #d4fbf0;
     textarea {
