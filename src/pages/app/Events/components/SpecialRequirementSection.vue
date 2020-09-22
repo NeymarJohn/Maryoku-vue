@@ -32,7 +32,7 @@
     <div class="special-request-section">
       <div class="font-bold mt-10">Anything Else?</div>
 
-      <div class="mt-10">Get me a pink unicorn please.</div>
+      <div class="mt-10">Tell us what else you would love to receive in the proposals we'll send you</div>
       <div class="special-request-section-options mt-10">
         <textarea placeholder="Type name of element here..."></textarea>
       </div>

@@ -1,9 +1,9 @@
 <template>
   <div class="campaign-save-date">
-    <savedate-analytics v-if="editingContent.campaignStatus === 'STARTED'"></savedate-analytics>
-    <div class="white-card">
+    <div class>
       <div
         class="font-size-30 font-bold-extra text-transform-capitalize p-50"
+        v-if="editingContent.campaignStatus!='STARTED'"
       >let's start with a "save the date campaign"</div>
       <concept-image-block
         v-if="concept"
@@ -82,7 +82,6 @@ import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
 import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
-import SavedateAnalytics from "./components/SavedateAnalytics";
 import { getBase64 } from "@/utils/file.util";
 import TitleEditor from "./components/TitleEditor";
 import swal from "sweetalert2";
@@ -94,7 +93,6 @@ export default {
     vueDropzone: vue2Dropzone,
     ConceptImageBlock,
     MaryokuTextarea,
-    SavedateAnalytics,
     TitleEditor,
   },
   props: {
@@ -137,7 +135,6 @@ export default {
   },
   created() {
     if (this.campaignData) {
-      console.log("123123123");
       this.editingContent = this.campaignData;
     } else {
       this.editingContent.title = this.info.conceptName;

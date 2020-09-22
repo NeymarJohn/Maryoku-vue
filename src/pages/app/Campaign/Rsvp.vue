@@ -1,10 +1,12 @@
 <template>
   <div>
-    <rsvp-analytics v-if="editingContent.campaignStatus === 'STARTED'"></rsvp-analytics>
-    <div class="white-card rsvp-campaign">
+    <div class="rsvp-campaign">
       <div class="p-50">
-        <div class="font-size-30 font-bold-extra">Get everyone to RSVP</div>
-        <div class="cover-preview mt-50">
+        <div
+          class="font-size-30 font-bold-extra mb-50"
+          v-if="editingContent.campaignStatus!='STARTED'"
+        >Get everyone to RSVP</div>
+        <div class="cover-preview">
           <img :src="editingContent.coverImage" class="mr-10" />
           <label for="cover">
             <md-button
@@ -133,7 +135,6 @@ import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 import { MaryokuInput } from "@/components";
 import RsvpVenueCarousel from "@/pages/app/RSVP/RSVPVenueCarousel.vue";
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
-import RsvpAnalytics from "./components/RSVPAnalytics";
 import TitleEditor from "./components/TitleEditor";
 import RsvpTimelinePanel from "@/pages/app/RSVP/RSVPTimelinePanel.vue";
 
@@ -146,7 +147,6 @@ export default {
     MaryokuInput,
     RsvpVenueCarousel,
     RsvpEventInfoPanel,
-    RsvpAnalytics,
     TitleEditor,
     RsvpTimelinePanel,
   },
@@ -208,7 +208,7 @@ export default {
       this.editingContent.title = this.info.conceptName;
       this.editingContent.coverImage = this.event.concept
         ? this.event.concept.images[0].url
-        : `${this.$storageURL}Campaign Images/RSVP2.png`;
+        : `${this.$storageURL}Campaign Images/RSVP2-middle.png`;
     }
     this.originContent = Object.assign({}, this.editingContent);
   },

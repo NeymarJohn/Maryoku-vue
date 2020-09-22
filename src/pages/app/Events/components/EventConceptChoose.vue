@@ -60,7 +60,7 @@
               >
                 <div
                   class="image-section"
-                  :style="`background:url(${image.url}) center center no-repeat`"
+                  :style="`background:url(${image.url}) center center no-repeat; background-size: cover;`"
                 ></div>
               </div>
             </div>

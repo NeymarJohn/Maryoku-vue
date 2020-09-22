@@ -2,14 +2,14 @@
   <div class="time-select-fields">
     <!-- <input type="time" v-model="time" class="without_ampm" @change="updateTime" /> -->
     <div class="time-wrapper" :class="size">
-      <input type="number" v-model="timeObject.hh" :maxlength="2" />
+      <input type="number" v-model="timeObject.hh" maxlength="2" />
       :
-      <input type="number" v-model="timeObject.mm" :maxlength="2" />
+      <input type="number" v-model="timeObject.mm" maxlength="2" />
     </div>
     <drop-down class="ampm">
       <md-button slot="title" class="md-button edit-btn md-simple" data-toggle="dropdown">
         <span
-          :class="size=='normal'?'font-size-16 font-regular':'font-size-30 font-bold'"
+          :class="size=='normal'?'font-size-16 font-regular':'font-size-30 '"
         >{{timeObject.ampm}}</span>
       </md-button>
       <ul class="dropdown-menu dropdown-menu-left">
