@@ -2,14 +2,14 @@
   <div class="multistate-progress">
     <div class="guests-progress d-flex justify-content-center align-center">
       <div
-        v-for="(item, index) in calculatedData"
+        v-for="(item, index) in data"
         :key="index"
         class="guests-progress__item green"
-        :style="`width : ${item.percentage}%; z-index:${calculatedData.length-index};`"
+        :style="`width : ${percentage[index]}%; z-index:${data.length-index};`"
       >
         <div class="value">{{item.value}}</div>
-        <div class="progress" :style="`background-color:${item.color}`"></div>
-        <div class="percentage" :style="`color:${item.color}`">{{item.percentage}}%</div>
+        <div class="progress" :style="`background-color:${colors[index]}`"></div>
+        <div class="percentage" :style="`color:${colors[index]}`">{{percentage[index]}}%</div>
       </div>
       <!-- <div class="guests-progress__item red" style="width : 21%;">
         <div class="value">240</div>
@@ -24,12 +24,7 @@
     </div>
 
     <div class="guests-legends d-flex justify-content-center align-center mt-60">
-      <color-dot-label
-        v-for="(item, index) in data"
-        :key="index"
-        class="mb-40 flex-1"
-        :color="item.color"
-      >
+      <color-dot-label v-for="(item, index) in data" :key="index" class="mb-40 flex-1" :color="item.color">
         <span class="font-bold">{{item.label}}</span>
         ({{item.value}})
       </color-dot-label>
@@ -53,19 +48,6 @@ export default {
     return {
       colors: ["#2cde6b", "#f3423a", "#ffc001", "#43536a", "#cbc8c8"],
     };
-  },
-  created() {
-    const calculatedData = [];
-    const total = this.data.reduce((s, item) => {
-      return s + item.value;
-    }, 0);
-    this.data.forEach((item) => {
-      if (!item.value) return;
-      item.percentage = Math.round((item.value / total) * 100);
-      calculatedData.push(item);
-    });
-    this.calculatedData = calculatedData;
-    console.log(this.data);
   },
   computed: {
     percentage() {
@@ -119,12 +101,6 @@ export default {
             display: block;
             transform: translateX(-30px);
           }
-        }
-      }
-      &:first-child {
-        .progress {
-          border-radius: 100px;
-          overflow: hidden;
         }
       }
       .value {

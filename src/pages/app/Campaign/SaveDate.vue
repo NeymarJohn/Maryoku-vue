@@ -138,10 +138,6 @@ export default {
       this.editingContent = this.campaignData;
     } else {
       this.editingContent.title = this.info.conceptName;
-      this.$store.commit("campaign/setCampaign", {
-        name: "SAVING_DATE",
-        data: this.editingContent,
-      });
     }
     this.originContent = { ...this.editingContent };
     // console.log(this.info);

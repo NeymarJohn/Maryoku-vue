@@ -523,12 +523,3 @@ hr {
     color: #050505;
     font-family: "Manrope-Regular", sans-serif;
 }
-
-.swal-button {
-    background-color: #f51355;
-    color: #fff;
-    &:not([disabled]):hover,
-    &:hover {
-        background-color: #f51355;
-    }
-}

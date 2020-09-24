@@ -337,16 +337,20 @@ export default {
       this.setDefaultSettings();
     },
     setDefaultSettings() {
-      const currentCampaignType = this.campaignTabs[this.selectedTab].name;
-      const currentCampaign = this.$store.state.campaign[currentCampaignType];
-      if (currentCampaign && currentCampaign.settings) {
+      console.log(
+        this.$store.state.campaign[this.campaignTabs[this.selectedTab].name],
+      );
+      if (
+        this.$store.state.campaign[this.campaignTabs[this.selectedTab].name]
+      ) {
         this.deliverySettings = {
-          ...currentCampaign.settings,
+          ...this.$store.state.campaign[
+            this.campaignTabs[this.selectedTab].name
+          ].settings,
         };
       } else {
         this.deliverySettings = { ...defaultSettings };
       }
-      console.log(this.deliverySettings);
     },
     scrollToTop() {
       window.scrollTo(0, 0);
@@ -356,7 +360,6 @@ export default {
         this.campaignTabs[this.selectedTab].name
       ];
       console.log(campaignData);
-      console.log(this.deliverySettings);
       if (
         !campaignData ||
         (!this.deliverySettings.email.selected &&

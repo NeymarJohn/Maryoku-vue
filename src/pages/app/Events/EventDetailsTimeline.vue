@@ -1,10 +1,15 @@
 <template>
-  <div class="md-layout event-details-timeline timeline-section with-progress-bar">
+  <div
+    class="md-layout event-details-timeline timeline-section with-progress-bar"
+  >
     <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <div class="event-page-header md-layout-item md-size-100">
       <div class="header-name">
         <div class="font-size-30 font-bold text-transform-capitalize mb-20">
-          <img :src="`${newTimeLineIconsURL}timeline-title.svg`" class="page-icon" />
+          <img
+            :src="`${newTimeLineIconsURL}timeline-title.svg`"
+            class="page-icon"
+          />
           CREATE TIMLINE
         </div>
         <div class="font-size-16">
@@ -22,21 +27,25 @@
         <button
           v-scroll-to="'#timeline-edit-card'"
           ref="scrollBtn"
-          style="display:none"
-        >Scroll to the editing card</button>
+          style="display: none"
+        >
+          Scroll to the editing card
+        </button>
         <div class="timeline-items-list">
           <div
             class="timeline-items-list__item"
-            v-for="(scheduleDate,timelineIndex) in timelineDateKeys"
+            v-for="(scheduleDate, timelineIndex) in timelineDateKeys"
             :key="timelineIndex"
           >
             <div class="item-header mb-20">
               <div class="header-title">
-                <div class="time-line-edit d-flex justify-content-center align-center">
-                  <label
-                    style="white-space:nowrap; padding-right:10px"
-                  >Day {{numberToWord(timelineIndex + 1)}}</label>
-                  <div>{{scheduleDate}}</div>
+                <div
+                  class="time-line-edit d-flex justify-content-center align-center"
+                >
+                  <label style="white-space: nowrap; padding-right: 10px"
+                    >Day {{ numberToWord(timelineIndex + 1) }}</label
+                  >
+                  <div>{{ scheduleDate }}</div>
                   <md-datepicker
                     :md-disabled-dates="getDisabledDates(timelineIndex)"
                     :md-closed="closeEditTimeline(timelineIndex)"
@@ -47,14 +56,14 @@
               <div class="header-actions">
                 <md-button
                   class="md-default md-simple md-just-icon md-wrapper"
-                  style="font-size:26px !important"
+                  style="font-size: 26px !important"
                   @click="addNewDateAfterCurrent(scheduleDate)"
                 >
                   <md-icon>add_circle</md-icon>
                 </md-button>
                 <md-button
                   class="md-default md-simple md-just-icon md-wrapper"
-                  style="font-size:26px !important"
+                  style="font-size: 26px !important"
                   @click="askRemoveTimelineItem(scheduleDate)"
                 >
                   <md-icon>delete_outline</md-icon>
@@ -64,7 +73,7 @@
 
             <drop
               @drop="handleDrop(timelineIndex, ...arguments)"
-              style="height: 100%; min-height: 50px;"
+              style="height: 100%; min-height: 50px"
               :data-index="timelineIndex"
             >
               <draggable
@@ -73,7 +82,7 @@
               >
                 <template v-if="timelineItems[scheduleDate].length > 0">
                   <div
-                    v-for="(item,index) in timelineItems[scheduleDate]"
+                    v-for="(item, index) in timelineItems[scheduleDate]"
                     :key="index"
                     class="time-line-blocks_selected-items_item time-line-item"
                   >
@@ -91,11 +100,18 @@
                       @remove="removeItem"
                       :key="Math.random()"
                     ></timeline-item>
-                    <timeline-empty :index="index" :date="scheduleDate"></timeline-empty>
+                    <timeline-empty
+                      :index="index"
+                      :date="scheduleDate"
+                    ></timeline-empty>
                   </div>
                 </template>
                 <template v-else>
-                  <timeline-empty :index="-1" :date="scheduleDate" :placeHolder="true"></timeline-empty>
+                  <timeline-empty
+                    :index="-1"
+                    :date="scheduleDate"
+                    :placeHolder="true"
+                  ></timeline-empty>
                 </template>
               </draggable>
             </drop>
@@ -107,26 +123,34 @@
         style="margin-top: 16px; padding-right: 3em"
       >
         <md-card-content class="md-layout time-line-blocks_items mb-60">
-          <div class="text-center width-100 p-10 font-size-16 mb-10">Drag Tim Slots timeline</div>
+          <div class="text-center width-100 p-10 font-size-16 mb-10">
+            Drag Tim Slots timeline
+          </div>
 
           <div
-            v-for="(section,index) in blocksList"
+            v-for="(section, index) in blocksList"
             :key="index"
             class="md-layout-item md-size-100 mb-30"
           >
-            <div v-for="block in section" :key="block.id" class="md-layout-item md-size-100">
+            <div
+              v-for="block in section"
+              :key="block.id"
+              class="md-layout-item md-size-100"
+            >
               <drag
                 :transfer-data="{ block }"
                 class="time-line-blocks_item"
                 :style="`color :` + block.color"
               >
-                <div class="font-size-16 font-bold text-transform-capitalize d-flex align-center">
+                <div
+                  class="font-size-16 font-bold text-transform-capitalize d-flex align-center"
+                >
                   <md-icon>drag_indicator</md-icon>
                   <img
                     :src="`${newTimeLineIconsURL}${block.icon.toLowerCase()}.svg`"
                     class="label-icon mr-10"
                   />
-                  {{block.buildingBlockType}}
+                  {{ block.buildingBlockType }}
                 </div>
               </drag>
             </div>
@@ -137,7 +161,7 @@
     <timeline-gap-modal
       v-if="showTimelineGapModal"
       :timelineGap="timelineGaps[0]"
-      @close="showTimelineGapModal=false"
+      @close="showTimelineGapModal = false"
       @yes="finalize"
     ></timeline-gap-modal>
 
@@ -149,7 +173,9 @@
             Are you sure you want to say
             <br />goodbye to your changes?
           </h2>
-          <div class="header-description">Your changes will be deleted after that</div>
+          <div class="header-description">
+            Your changes will be deleted after that
+          </div>
           <md-button
             class="md-simple md-just-icon md-round modal-default-button modal-close-button"
             @click="showDeleteConfirmModal = false"
@@ -161,34 +187,57 @@
       <template slot="footer">
         <md-button
           class="md-default md-simple cancel-btn"
-          @click="showDeleteConfirmModal=false"
-        >Cancel</md-button>
-        <md-button class="md-red add-category-btn" @click="removeTimelineItem">Yes,I'm sure</md-button>
+          @click="showDeleteConfirmModal = false"
+          >Cancel</md-button
+        >
+        <md-button class="md-red add-category-btn" @click="removeTimelineItem"
+          >Yes,I'm sure</md-button
+        >
       </template>
     </modal>
 
     <planner-event-footer>
       <template slot="buttons">
-        <md-button class="md-simple md-button md-black maryoku-btn" @click="revert">
+        <md-button
+          class="md-simple md-button md-black maryoku-btn"
+          @click="revert"
+        >
           <span class="font-size-16 text-transform-capitalize">
-            <img class="mr-20" :src="`${$iconURL}Campaign/Group 8871.svg`" />Revert to original
+            <img
+              class="mr-20"
+              :src="`${$iconURL}Campaign/Group 8871.svg`"
+            />Revert to original
           </span>
         </md-button>
         <span class="seperator"></span>
-        <md-button class="md-simple md-button md-black maryoku-btn" @click="startFromScratch">
+        <md-button
+          class="md-simple md-button md-black maryoku-btn"
+          @click="startFromScratch"
+        >
           <span class="font-size-16 text-transform-capitalize">
-            <img class="mr-10 label-icon" :src="`${$iconURL}Timeline-New/Trash.svg`" />
+            <img
+              class="mr-10 label-icon"
+              :src="`${$iconURL}Timeline-New/Trash.svg`"
+            />
             Start from scratch
           </span>
         </md-button>
-        <md-button class="md-simple md-button md-red maryoku-btn md-outlined" @click="saveDraft">
+        <md-button
+          class="md-simple md-button md-red maryoku-btn md-outlined"
+          @click="saveDraft"
+        >
           <span class="font-size-16 text-transform-capitalize">
-            <img class="mr-20 label-icon" :src="`${$iconURL}Timeline-New/save-red.svg`" />
+            <img
+              class="mr-20 label-icon"
+              :src="`${$iconURL}Timeline-New/save-red.svg`"
+            />
             Save Draft
           </span>
         </md-button>
         <md-button class="md-button md-red maryoku-btn" @click="finalize">
-          <span class="font-size-16 text-transform-capitalize">Finalise timeline</span>
+          <span class="font-size-16 text-transform-capitalize"
+            >Finalise timeline</span
+          >
         </md-button>
       </template>
     </planner-event-footer>
@@ -473,6 +522,10 @@ export default {
           console.log("saved original timelines", this.originalTimelineItems);
           this.timelineDates = Object.keys(this.timelineItems).sort();
           this.eventData.timelineItems = this.timelineItems;
+          this.timelineData = {};
+          this.timelineDates.forEach((date) => {
+            this.timelineDates[data] = [];
+          });
           this.$root.$emit("timeline-updated", this.timelineItems);
         });
     },
