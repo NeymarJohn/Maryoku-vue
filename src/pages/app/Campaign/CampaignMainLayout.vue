@@ -72,46 +72,13 @@
           </span>
         </div>
       </div>
-      <savedate-analytics v-if="selectedTab == 1 && campaignIssued['SAVING_DATE']"></savedate-analytics>
-      <rsvp-analytics v-if="selectedTab == 2 && campaignIssued['RSVP']"></rsvp-analytics>
-
-      <!-- Save the date -->
-      <template v-if="selectedTab == 1">
-        <collapse-panel
-          class="white-card"
-          v-if="campaignIssued['SAVING_DATE']"
-          :defaultStatus="false"
-        >
-          <template slot="header">
-            <div
-              class="d-flex align-center p-50 font-size-30 font-bold"
-            >Open ‘Save The Date’ Campaign</div>
-          </template>
-          <template slot="content" ref="savedateCampaign">
-            <save-date :info="{...campaignTabs[1], ...campaignInfo}" @changeInfo="changeInfo"></save-date>
-          </template>
-        </collapse-panel>
-        <save-date
-          v-else
-          :info="{...campaignTabs[1], ...campaignInfo}"
-          @changeInfo="changeInfo"
-          ref="savedateCampaign"
-          class="white-card"
-        ></save-date>
-      </template>
-
-      <template v-if="selectedTab == 2">
-        <collapse-panel v-if="campaignIssued['RSVP']" class="white-card" :defaultStatus="false">
-          <template slot="header">
-            <div class="d-flex align-center p-50 font-size-30 font-bold">Open ‘RSVP’ Campaign</div>
-          </template>
-          <template slot="content">
-            <rsvp :info="{...campaignTabs[2], ...campaignInfo}" ref="rsvp"></rsvp>
-          </template>
-        </collapse-panel>
-        <rsvp v-else :info="{...campaignTabs[2], ...campaignInfo}" ref="rsvp" class="white-card"></rsvp>
-      </template>
-
+      <save-date
+        v-if="selectedTab == 1"
+        :info="{...campaignTabs[1], ...campaignInfo}"
+        @changeInfo="changeInfo"
+        ref="savedateCampaign"
+      ></save-date>
+      <rsvp v-if="selectedTab == 2" :info="{...campaignTabs[2], ...campaignInfo}" ref="rsvp"></rsvp>
       <countdown
         v-if="selectedTab == 3"
         :info="{...campaignTabs[3], ...campaignInfo}"
@@ -238,10 +205,6 @@ import Campaign from "@/models/Campaign";
 import CalendarEvent from "@/models/CalendarEvent";
 import swal from "sweetalert2";
 import S3Service from "@/services/s3.service";
-import CollapsePanel from "./CollapsePanel";
-
-import RsvpAnalytics from "./components/RSVPAnalytics";
-import SavedateAnalytics from "./components/SavedateAnalytics";
 
 const defaultSettings = {
   phone: {
@@ -251,7 +214,6 @@ const defaultSettings = {
     excelFileName: "",
     excelFilePath: "",
     smsOrWhatsapp: "",
-    sentTime: new Date().getTime(),
   },
   email: {
     selected: false,
@@ -261,7 +223,6 @@ const defaultSettings = {
     addressArray: [],
     excelFileName: "",
     excelFilePath: "",
-    sentTime: new Date().getTime(),
   },
 };
 export default {
@@ -275,9 +236,6 @@ export default {
     Feedback,
     DeliverySettings,
     CampaignScheduleModal,
-    SavedateAnalytics,
-    RsvpAnalytics,
-    CollapsePanel,
   },
   data() {
     return {
@@ -324,15 +282,15 @@ export default {
       this.showCommentEditorPanel = mode;
     },
     selectTab(tabIndex) {
-      // if (this.selectedTab == 1) {
-      //   this.$refs.savedateCampaign.saveData();
-      // } else if (this.selectedTab == 2) {
-      //   this.$refs.rsvp.saveData();
-      // } else if (this.selectedTab == 3) {
-      //   this.$refs.countdown.saveData();
-      // } else if (this.selectedTab == 4) {
-      //   this.$refs.feedback.saveData();
-      // }
+      if (this.selectedTab == 1) {
+        this.$refs.savedateCampaign.saveData();
+      } else if (this.selectedTab == 2) {
+        this.$refs.rsvp.saveData();
+      } else if (this.selectedTab == 3) {
+        this.$refs.countdown.saveData();
+      } else if (this.selectedTab == 4) {
+        this.$refs.feedback.saveData();
+      }
       this.selectedTab = tabIndex;
       this.setDefaultSettings();
     },
@@ -356,24 +314,6 @@ export default {
       window.scrollTo(0, 0);
     },
     startCampaign() {
-      const campaignData = this.$store.state.campaign[
-        this.campaignTabs[this.selectedTab].name
-      ];
-      console.log(campaignData);
-      if (
-        !campaignData ||
-        (!this.deliverySettings.email.selected &&
-          !this.deliverySettings.phone.selected)
-      ) {
-        swal({
-          title: `Please select email or phone or both.`,
-          buttonsStyling: false,
-          type: "warn",
-          confirmButtonClass: "md-button md-success",
-        });
-        return;
-      }
-
       this.callSaveCampaign(
         this.campaignTabs[this.selectedTab].name,
         "STARTED",
@@ -398,10 +338,9 @@ export default {
       console.log("campaignType", campaignType);
 
       const campaignData = this.$store.state.campaign[campaignType];
-      let coverImage = campaignData.coverImage;
-      if (coverImage.indexOf("http") < 0) {
+      if (campaignData.coverImage.indexOf("http") < 0) {
         const fileObject = S3Service.dataURLtoFile(
-          coverImage,
+          campaignData.coverImage,
           `${this.event.id}-${campaignType}`,
         );
         console.log(fileObject);
@@ -411,7 +350,7 @@ export default {
           `${this.event.id}-${campaignType}`,
           "campaigns/cover-images",
         ).then((res) => {});
-        coverImage = `https://maryoku.s3.amazonaws.com/campaigns/cover-images/${this.event.id}-${campaignType}.${extenstion}`;
+        campaignData.coverImage = `https://maryoku.s3.amazonaws.com/campaigns/cover-images/${this.event.id}-${campaignType}.${extenstion}`;
       }
       let referenceUrl = "";
       if (campaignType === "RSVP") {
@@ -425,16 +364,9 @@ export default {
         event: new CalendarEvent({ id: this.event.id }),
         scheduleTime: new Date().getTime(),
         settings: this.deliverySettings,
-        coverImage,
       });
-      return new Promise((resolve, reject) => {
-        this.saveCampaign(newCampaign)
-          .then(() => {
-            resolve();
-          })
-          .catch(() => {
-            reject();
-          });
+      this.saveCampaign(newCampaign).then(() => {
+        console.log("New Campaign");
       });
     },
     saveScheduleTime(data) {
@@ -490,20 +422,7 @@ export default {
           });
         });
     },
-    sendToAddtionalGuests() {
-      const campaignType = this.campaignTabs[this.selectedTab].name;
-      const campaignData = this.$store.state.campaign[campaignType];
-      this.callSaveCampaign(campaignType, campaignData.campaignStatus).then(
-        () => {
-          swal({
-            title: `Sent notitications to the added guests!`,
-            buttonsStyling: false,
-            type: "success",
-            confirmButtonClass: "md-button md-success",
-          });
-        },
-      );
-    },
+    sendToAddtionalGuests() {},
   },
   computed: {
     ...mapGetters("campaign", ["campaignIssued"]),

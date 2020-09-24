@@ -219,7 +219,7 @@ export default {
 
     // set before event
     this.scheduleSettings.beforeEvent.calcTime = moment(
-      this.event.eventStartMillis,
+      this.event.eventStartMillis
     )
       .add(this.scheduleSettings.beforeEvent, "days")
       .hours(9)
@@ -231,7 +231,7 @@ export default {
     console.log(previouseCampaignTime);
     if (previouseCampaignTime && previouseCampaignTime.scheduleTime) {
       this.scheduleSettings.previousCampaign.calcTime = moment(
-        previouseCampaignTime.scheduleTime,
+        previouseCampaignTime.scheduleTime
       )
         .add(1, "weeks")
         .hours(9)
@@ -252,10 +252,8 @@ export default {
     },
     saveSchedule() {
       if (this.showCalendar) {
-        console.log(`${this.dateData.selectedDate} ${this.startTime}`);
         this.scheduleSettings.calendar.calcTime = moment(
-          `${this.dateData.selectedDate} ${this.startTime}`,
-          "YYYY-M-DD hh:mm A",
+          `${this.dateData.selectedDate} ${this.startTime}`
         ).valueOf();
         this.showCalendar = false;
         this.selectedOption = "calendar";
@@ -283,7 +281,7 @@ export default {
         ];
         if (previouseCampaignTime && previouseCampaignTime.scheduleTime) {
           newSettings.previousCampaign.calcTime = moment(
-            new Date(previouseCampaignTime.scheduleTime),
+            new Date(previouseCampaignTime.scheduleTime)
           )
             .add(newSettings.previousCampaign.weeks, "weeks")
             .hours(9)
@@ -300,7 +298,7 @@ export default {
     },
     remainingDate() {
       return Math.round(
-        (this.event.eventStartMillis - new Date().getTime()) / 1000 / 24 / 3600,
+        (this.event.eventStartMillis - new Date().getTime()) / 1000 / 24 / 3600
       );
     },
     canSave() {

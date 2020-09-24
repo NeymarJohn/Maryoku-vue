@@ -1,8 +1,6 @@
 <template>
   <timeline-template-item
-    v-if="
-      editingContent.status == 'template' || editingContent.status == 'timegap'
-    "
+    v-if="editingContent.status=='template' || editingContent.status=='timegap'"
     :item="item"
     :index="index"
     @applyTemplate="applyToTemplate"
@@ -30,54 +28,32 @@
           <span
             class="font-size-20 font-bold text-trans text-transform-capitalize"
             :style="`color:${editingContent.color};`"
-            >{{ editingContent.buildingBlockType }}</span
-          >
-          <img
-            :src="`${$iconURL}Timeline-New/tip.svg`"
-            class="label-icon"
-            style="margin-left: 50px"
-          />
+          >{{editingContent.buildingBlockType}}</span>
+          <img :src="`${$iconURL}Timeline-New/tip.svg`" class="label-icon" style="margin-left:50px" />
           <span>70% of events like yours timed 30 minuets to this slot</span>
         </div>
 
         <div class="md-layout-item md-size-100 mb-10">
           <div class="form-group">
             <label class="font-size-16 font-bold pb-10">Name</label>
-            <maryoku-input
-              type="text"
-              class="mt-10"
-              v-model="editingContent.title"
-            />
+            <maryoku-input type="text" class="mt-10" v-model="editingContent.title" />
           </div>
         </div>
         <div class="md-layout-item md-size-100 mt-20">
-          <md-button
-            class="md-simple edit-btn"
-            @click="showDescription = !showDescription"
-          >
-            <img
-              :src="`${$iconURL}Timeline-New/circle-plus.svg`"
-              class="label-icon mr-10"
-            />
+          <md-button class="md-simple edit-btn" @click="showDescription=!showDescription">
+            <img :src="`${$iconURL}Timeline-New/circle-plus.svg`" class="label-icon mr-10" />
             <span class="color-red">Add Description</span>
             <span class="color-black font-size-14 pl-5">(Optional)</span>
           </md-button>
           <div class="form-group mt-30" v-if="showDescription">
             <label class="font-size-16 font-bold">Description</label>
-            <maryoku-textarea
-              size="small"
-              class="mt-10"
-              v-model="editingContent.description"
-            ></maryoku-textarea>
+            <maryoku-textarea size="small" class="mt-10" v-model="editingContent.description"></maryoku-textarea>
           </div>
         </div>
         <div class="md-layout-item md-size-100 mt-50 d-flex">
           <div class="form-group">
             <label class="font-size-16 font-bold pb-10">
-              <img
-                :src="`${$iconURL}Timeline-New/clock.svg`"
-                class="label-icon mr-10"
-              />Start At
+              <img :src="`${$iconURL}Timeline-New/clock.svg`" class="label-icon mr-10" />Start At
             </label>
             <time-input
               v-model="editingContent.startTime"
@@ -90,10 +66,7 @@
           <div class="divider"></div>
           <div class="form-group">
             <label class="font-size-16 font-bold pb-10 d-inline-block">
-              <img
-                :src="`${$iconURL}Timeline-New/clock.svg`"
-                class="label-icon mr-10"
-              />Finishes At
+              <img :src="`${$iconURL}Timeline-New/clock.svg`" class="label-icon mr-10" />Finishes At
             </label>
             <time-input
               v-model="editingContent.endTime"
@@ -106,12 +79,10 @@
         </div>
         <div class="md-layout-item md-size-100 mt-50">
           <div class="form-group">
-            <label class="font-size-16 font-bold pb-10"
-              >Assign vendor to slot</label
-            >
+            <label class="font-size-16 font-bold pb-10">Assign vendor to slot</label>
             <multiselect
               v-model="vendor"
-              :options="['vendor1', 'vendor2']"
+              :options="['vendor1','vendor2']"
               :close-on-select="true"
               :clear-on-select="true"
               tag-placeholder="Add this as new tag"
@@ -121,38 +92,31 @@
           </div>
         </div>
       </md-card-content>
-      <md-card-actions
-        md-alignment="right"
-        style="border: none"
-        class="edit-timeline-footer"
-      >
+      <md-card-actions md-alignment="right" style="border: none;" class="edit-timeline-footer">
         <md-button
           name="event-planner-tab-timeline-item-save"
           class="maryoku-btn md-default md-simple"
           @click="cancelTimelineItem"
-          >Cancel</md-button
-        >
+        >Cancel</md-button>
         <md-button
           :disabled="!saveAvailable"
           name="event-planner-tab-timeline-item-save"
           class="maryoku-btn md-red"
           v-if="!editingContent.dateCreated"
           @click="saveTimelineItem"
-          >Save</md-button
-        >
+        >Save</md-button>
         <md-button
           :disabled="editingContent.isItemLoading"
           name="event-planner-tab-timeline-item-edit"
           class="event-planner-tab-timeline-item-edit md-red"
           v-else
           @click="updateTimelineItem(item)"
-          >Save</md-button
-        >
+        >Save</md-button>
       </md-card-actions>
     </md-card>
     <md-card
       class="block-form"
-      v-if="!editingContent.mode || editingContent.mode === 'saved'"
+      v-if="!editingContent.mode || editingContent.mode === 'saved' "
       :style="`border-left : 5px solid ` + editingContent.color"
     >
       <vue-element-loading
@@ -160,38 +124,28 @@
         spinner="ring"
         color="#FF547C"
       />
-      <md-card-content style="min-height: 80px">
+      <md-card-content style="min-height: 80px;">
         <div class="timeline-actions">
           <md-button class="md-icon-button md-simple" @click="editTimeline">
-            <img
-              :src="`${$iconURL}common/edit-dark.svg`"
-              class="label-icon"
-              style="height: 30px"
-            />
+            <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon" style="height: 30px" />
           </md-button>
           <md-button class="md-icon-button md-simple" @click="removeItem">
-            <img
-              :src="`${$iconURL}common/trash-dark.svg`"
-              class="label-icon"
-              style="height: 30px"
-            />
+            <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon" style="height: 30px" />
           </md-button>
         </div>
         <div class="item-title-and-time">
-          <span class="item-time font-size-20 color-dark-gray"
-            >{{ formatHour(editingContent.startTime) }} -
-            {{ formatHour(editingContent.endTime) }}</span
-          >
+          <span
+            class="item-time font-size-20 color-dark-gray"
+          >{{ formatHour(editingContent.startTime) }} - {{ formatHour(editingContent.endTime)}}</span>
           <p>
             <span
               class="font-size-20 font-bold-extra mr-20"
               v-if="editingContent.title"
-              >{{ editingContent.title }}</span
-            >
+            >{{editingContent.title }}</span>
             <md-button
               class="md-button edit-btn md-red md-simple"
-              @click="showDescription = !showDescription"
-              style="margin: 3px !important"
+              @click="showDescription=!showDescription"
+              style="margin:3px !important;"
               v-if="editingContent.description"
             >
               <span v-if="!showDescription" class="color-red font-regular">
@@ -200,16 +154,12 @@
               </span>
               <span v-if="showDescription" class="color-black font-regular">
                 Read Less
-                <md-icon class="color-black" style="color: #050505 !important"
-                  >keyboard_arrow_up</md-icon
-                >
+                <md-icon class="color-black" style="color:#050505 !important;">keyboard_arrow_up</md-icon>
               </span>
             </md-button>
           </p>
 
-          <p class="item-desc" v-if="showDescription">
-            {{ editingContent.description }}
-          </p>
+          <p class="item-desc" v-if="showDescription">{{ editingContent.description }}</p>
         </div>
       </md-card-content>
     </md-card>

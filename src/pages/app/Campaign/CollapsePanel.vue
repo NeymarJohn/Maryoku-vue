@@ -2,7 +2,7 @@
   <div class="collapse-panel">
     <div class="collapse-panel-header">
       <slot name="header"></slot>
-      <md-button @click="toggle" class="md-icon-button md-simple collapse-button mr-50">
+      <md-button @click="toggle" class="md-icon-button md-simple collapse-button">
         <md-icon class="icon" v-if="isExpanded">keyboard_arrow_down</md-icon>
         <md-icon class="icon" v-if="!isExpanded">keyboard_arrow_right</md-icon>
       </md-button>
@@ -22,15 +22,6 @@ export default {
   methods: {
     toggle() {
       this.isExpanded = !this.isExpanded;
-    },
-  },
-  created() {
-    this.isExpanded = this.defaultStatus;
-  },
-  props: {
-    defaultStatus: {
-      type: Boolean,
-      default: true,
     },
   },
 };
