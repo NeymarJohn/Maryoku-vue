@@ -126,6 +126,10 @@ export default {
       if (this.event.concept && this.event.concept.images) {
         this.editingContent.coverImage = this.event.concept.images[0].url;
       }
+      this.$store.commit("campaign/setCampaign", {
+        name: "COMING_SOON",
+        data: this.editingContent,
+      });
     }
     this.originContent = Object.assign({}, this.editingContent);
   },

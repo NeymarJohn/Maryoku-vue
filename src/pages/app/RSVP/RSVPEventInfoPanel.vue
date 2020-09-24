@@ -78,6 +78,7 @@ export default {
         position: absolute;
         left: 0px;
         top: 0px;
+        opacity: 0.32;
       }
       img {
         width: 26px;
