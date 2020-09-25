@@ -17,7 +17,7 @@
       <table
         class="event-blocks__table event-block-table"
         v-for="(block, index) in eventBuildingBlocks"
-        :class="{booked: block.bookedBudget}"
+        :class="{ booked: block.bookedBudget }"
         :key="index"
       >
         <tbody>
@@ -26,40 +26,73 @@
               <td
                 width="40%"
                 class="event-block-element"
-                :class="block.title ? block.title.toLowerCase().replace(/ /g, '-').replace('&', '').replace('/', '-') : ''"
+                :class="
+                  block.title
+                    ? block.title
+                        .toLowerCase()
+                        .replace(/ /g, '-')
+                        .replace('&', '')
+                        .replace('/', '-')
+                    : ''
+                "
               >
                 <img
                   :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${block.icon}`"
                 />
-                {{block.title}}
+                {{ block.title }}
               </td>
               <td class="planned" width="20%" style="white-space: nowrap">
+                <span v-if="type === 'total'"
+                  >$
+                  {{
+                    block.allocatedBudget
+                      ? block.allocatedBudget
+                      : 0 | roundNumber | withComma
+                  }}</span
+                >
                 <span
-                  v-if="type==='total'"
-                >$ {{block.allocatedBudget ? block.allocatedBudget : 0 | roundNumber | withComma}}</span>
-                <span
-                  v-else-if="block.allocatedBudget && block.numberOfParticipants"
-                >$ {{block.allocatedBudget ? (block.allocatedBudget / block.numberOfParticipants).toFixed().toString() : 0}}</span>
-                <span
-                  v-else
-                >$ {{block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed().toString() : 0}}</span>
+                  v-else-if="
+                    block.allocatedBudget && block.numberOfParticipants
+                  "
+                  >$
+                  {{
+                    block.allocatedBudget
+                      ? (block.allocatedBudget / block.numberOfParticipants)
+                          .toFixed()
+                          .toString()
+                      : 0
+                  }}</span
+                >
+                <span v-else
+                  >$
+                  {{
+                    block.allocatedBudget
+                      ? (block.allocatedBudget / event.numberOfParticipants)
+                          .toFixed()
+                          .toString()
+                      : 0
+                  }}</span
+                >
 
                 <md-button
                   class="md-rose md-sm md-simple edit-btn"
                   v-if="!block.editBudget && !block.bookedBudget && canEdit"
                   @click="showEditElementBudget(block)"
-                >Edit</md-button>
+                  >Edit</md-button
+                >
                 <img
                   :src="`${$iconURL}Event Page/arrow-left-gray.svg`"
                   v-if="block.editBudget"
-                  style="width:25px; float:right; margin: 3px 0px;"
+                  style="width: 25px; float: right; margin: 3px 0px"
                 />
               </td>
               <template v-if="!block.editBudget">
                 <td class="actual red-label" width="15%">
                   <template v-if="block.allocatedBudget">
                     <template v-if="block.winningProposalId">
-                      <template v-if="block.allocatedBudget < block.winingProposal.cost">
+                      <template
+                        v-if="block.allocatedBudget < block.winingProposal.cost"
+                      >
                         <img
                           src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+29.png"
                         />
@@ -71,11 +104,20 @@
                       </template>
                       <md-button
                         class="md-simple actual-cost md-xs"
-                        :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`"
+                        :class="
+                          block.allocatedBudget < block.winingProposal.cost
+                            ? `md-danger`
+                            : `md-success`
+                        "
                       >
-                        {{ event.elementsBudgetPerGuest ? `$${(block.winingProposal.cost /
-                        event.numberOfParticipants).toFixed(2)}` :
-                        `$${block.winingProposal.cost.toFixed(2)}` }}
+                        {{
+                          event.elementsBudgetPerGuest
+                            ? `$${(
+                                block.winingProposal.cost /
+                                event.numberOfParticipants
+                              ).toFixed(2)}`
+                            : `$${block.winingProposal.cost.toFixed(2)}`
+                        }}
                         <md-icon>open_in_new</md-icon>
                       </md-button>
                     </template>
@@ -86,22 +128,43 @@
                     :item="block"
                     :event="event"
                   />
-                  <span class="font-size-20 whitspace-nowrap" v-if="block.vendorsCount>0">
+                  <span
+                    class="font-size-20 whitspace-nowrap"
+                    v-if="block.vendorsCount > 0"
+                  >
                     <md-icon
                       class="color-plus font-size-20"
                       v-if="block.bookedBudget <= block.allocatedBudget"
-                      style="margin-top: -0.2em;"
-                    >add_circle_outline</md-icon>
-                    <md-icon class="color-minus font-size-20" v-else>remove_circle_outline</md-icon>
-                    <span
-                      :class="block.bookedBudget <= block.allocatedBudget?'color-plus':'color-minus'"
+                      style="margin-top: -0.2em"
+                      >add_circle_outline</md-icon
                     >
-                      <template
-                        v-if="type==='total'"
-                      >$ {{block.bookedBudget ? block.bookedBudget : 0 | withComma}}</template>
+                    <md-icon class="color-minus font-size-20" v-else
+                      >remove_circle_outline</md-icon
+                    >
+                    <span
+                      :class="
+                        block.bookedBudget <= block.allocatedBudget
+                          ? 'color-plus'
+                          : 'color-minus'
+                      "
+                    >
+                      <template v-if="type === 'total'"
+                        >$
+                        {{
+                          block.bookedBudget
+                            ? block.bookedBudget
+                            : 0 | withComma
+                        }}</template
+                      >
                       <template v-else>
                         $
-                        {{block.bookedBudget ? (block.bookedBudget / event.numberOfParticipants).toFixed().toString() : 0}}
+                        {{
+                          block.bookedBudget
+                            ? (block.bookedBudget / event.numberOfParticipants)
+                                .toFixed()
+                                .toString()
+                            : 0
+                        }}
                       </template>
                     </span>
                   </span>
@@ -110,10 +173,17 @@
                   <div class="text-center">
                     <md-button
                       class="book-btn md-sm"
-                      :class="{'disabled' : block.proposalsState==='get-offers'}"
+                      :class="{
+                        disabled: block.proposalsState === 'get-offers',
+                      }"
                       @click="bookVendors(block)"
-                      v-if="!block.fixed && block.componentId!='unexpected' && !block.bookedBudget"
-                    >Book Vendors</md-button>
+                      v-if="
+                        !block.fixed &&
+                        block.componentId != 'unexpected' &&
+                        !block.bookedBudget
+                      "
+                      >Book Vendors</md-button
+                    >
                     <img
                       :src="`${$iconURL}common/check-circle-green.svg`"
                       width="32"
@@ -125,29 +195,39 @@
                   <div
                     @click="expandBlock(block)"
                     class="text-right"
-                    v-if="!block.fixed && block.componentId!='unexpected'"
+                    v-if="!block.fixed && block.componentId != 'unexpected'"
                   >
                     <img
                       :src="`${$iconURL}budget+screen/SVG/Asset+23.svg`"
-                      :class="{expanded:block.expanded}"
+                      :class="{ expanded: block.expanded }"
                     />
                   </div>
                 </td>
               </template>
               <template v-if="block.editBudget">
-                <td colspan="3" align="right" style="white-space: nowrap" class="d-flex">
+                <td
+                  colspan="3"
+                  align="right"
+                  style="white-space: nowrap"
+                  class="d-flex"
+                >
                   <maryoku-input
                     v-model="block.newBudget"
                     inputStyle="budget"
                     size="small"
-                    style="width:150px"
+                    style="width: 150px"
                     @focus="$event.target.select()"
                   ></maryoku-input>
                   <md-button
                     class="md-simple md-black normal-btn"
                     @click="showEditElementBudget(block)"
-                  >cancel</md-button>
-                  <md-button class="md-red normal-btn" @click="editElementBudget(block)">save</md-button>
+                    >cancel</md-button
+                  >
+                  <md-button
+                    class="md-red normal-btn"
+                    @click="editElementBudget(block)"
+                    >save</md-button
+                  >
                 </td>
               </template>
             </tr>
@@ -156,12 +236,14 @@
           <template v-if="block.expanded">
             <tr
               class="details-row"
-              v-for="(requirement,index) in block.predefinedRequirements"
+              v-for="(requirement, index) in block.predefinedRequirements"
               :key="index"
             >
               <td>
-                {{requirement.title}}
-                <md-button class="md-rose md-simple md-sm edit-requirement">Edit</md-button>
+                {{ requirement.title }}
+                <md-button class="md-rose md-simple md-sm edit-requirement"
+                  >Edit</md-button
+                >
               </td>
               <td>$0</td>
               <td class="actions" colspan="3">
@@ -180,16 +262,22 @@
               </td>
             </tr>
             <tr class="item-actions" v-if="!block.bookedBudget">
-              <td colspan="5" class="actions-list text-right" style="position:relative">
+              <td
+                colspan="5"
+                class="actions-list text-right"
+                style="position: relative"
+              >
                 <md-button
                   class="md-simple md-red edit-btn-1"
                   @click="addMyVendor(block)"
-                >Add My Vendor</md-button>
+                  >Add My Vendor</md-button
+                >
                 <span class="button-split"></span>
                 <md-button
                   class="md-simple md-red edit-btn-1"
                   @click="deleteBlock(block)"
-                >Delete Category</md-button>
+                  >Delete Category</md-button
+                >
               </td>
             </tr>
           </template>
@@ -205,17 +293,16 @@
               />
               Extras
             </td>
-            <td
-              width="20%"
-              class="planned"
-            >$ {{event.allocatedTips + event.allocatedFees | withComma}}</td>
+            <td width="20%" class="planned">
+              $ {{ (event.allocatedTips + event.allocatedFees) | withComma }}
+            </td>
             <td width="15%" class="actual red-label"></td>
             <td width="15%" class="status"></td>
             <td class="expand">
-              <div @click="showTips=!showTips" class="text-right">
+              <div @click="showTips = !showTips" class="text-right">
                 <img
                   :src="`${$iconURL}budget+screen/SVG/Asset+23.svg`"
-                  :class="{expanded:showTips}"
+                  :class="{ expanded: showTips }"
                 />
               </div>
             </td>
@@ -252,16 +339,17 @@
                 </span>-->
               </td>
               <td width="20%" class="planned">
-                $ {{event.allocatedTips | withComma}}
+                $ {{ event.allocatedTips | withComma }}
                 <md-button
                   class="md-rose md-sm md-simple edit-btn"
                   @click="showEditElementBudget()"
                   v-if="!editTips"
-                >Edit</md-button>
+                  >Edit</md-button
+                >
                 <img
                   :src="`${$iconURL}Event Page/arrow-left-gray.svg`"
                   v-else
-                  style="width:25px; float:right; margin: 3px 0px;"
+                  style="width: 25px; float: right; margin: 3px 0px"
                 />
               </td>
               <template v-if="!editTips">
@@ -276,19 +364,21 @@
                     v-model="newAllocatedTips"
                     inputStyle="budget"
                     size="small"
-                    style="width:150px;display: inline-block;"
+                    style="width: 150px; display: inline-block"
                     @focus="$event.target.select()"
                   ></maryoku-input>
                   <md-button
                     class="md-simple md-black normal-btn"
-                    @click="editTips=false"
-                    style="height:50px"
-                  >cancel</md-button>
+                    @click="editTips = false"
+                    style="height: 50px"
+                    >cancel</md-button
+                  >
                   <md-button
                     class="md-red normal-btn"
                     @click="updateTips()"
-                    style="height:50px"
-                  >save</md-button>
+                    style="height: 50px"
+                    >save</md-button
+                  >
                 </td>
               </template>
             </tr>
@@ -304,7 +394,9 @@
                 />
                 Fees 3%
               </td>
-              <td width="20%" class="planned">$ {{event.allocatedFees | withComma}}</td>
+              <td width="20%" class="planned">
+                $ {{ event.allocatedFees | withComma }}
+              </td>
               <td width="15%" class="actual red-label"></td>
               <td width="15%" class="status"></td>
               <td class="expand"></td>
@@ -321,7 +413,9 @@
               />
               Unused
             </td>
-            <td width="20%" class="planned">$ {{remainingBudget | withComma}}</td>
+            <td width="20%" class="planned">
+              $ {{ remainingBudget | withComma }}
+            </td>
             <td width="15%" class="actual red-label"></td>
             <td width="15%" class="status"></td>
             <td class="expand"></td>
@@ -334,19 +428,24 @@
       <tbody>
         <tr class="total">
           <td class="total-title" width="40%">Total</td>
-          <td
-            width="20%"
-            class="total-value"
-          >${{Math.round(event.totalBudget) | roundNumber | withComma}}</td>
-          <td width="15%" class="total-value">${{event.statistics.booked | withComma}}</td>
+          <td width="20%" class="total-value">
+            ${{ Math.round(event.totalBudget) | roundNumber | withComma }}
+          </td>
+          <td width="15%" class="total-value">
+            ${{ event.statistics.booked | withComma }}
+          </td>
           <td colspan="2"></td>
         </tr>
         <tr class="add-category" v-if="canEdit">
           <td colspan="5">
-            <md-button class="md-simple add-category-btn" @click="showCategoryModal = true">
+            <md-button
+              class="md-simple add-category-btn"
+              @click="showCategoryModal = true"
+            >
               <img
                 src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2019.svg"
-              /> Add new category
+              />
+              Add new categoryd
             </md-button>
           </td>
         </tr>
@@ -357,7 +456,8 @@
       <template slot="header">
         <div class="add-category-model__header">
           <h2 class="font-size-30 font-bold-extra">
-            <img :src="`${$iconURL}budget+screen/SVG/Asset%2019.svg`" /> Add new category
+            <img :src="`${$iconURL}budget+screen/SVG/Asset%2019.svg`" /> Add new
+            category
           </h2>
         </div>
         <md-button
@@ -371,7 +471,9 @@
         <div class="md-layout">
           <div class="md-layout-item md-size-70">
             <div class="form-group maryoku-field" v-if="filteredEventBlocks">
-              <label class="font-size-16 font-bold-extra color-black">Category</label>
+              <label class="font-size-16 font-bold-extra color-black"
+                >Category</label
+              >
               <multiselect
                 v-model="newBuildingBlock.category"
                 :options="filteredEventBlocks"
@@ -387,13 +489,19 @@
 
           <div
             class="md-layout-item md-size-70 d-flex"
-            v-if="newBuildingBlock.category.id==='other'"
+            v-if="newBuildingBlock.category.id === 'other'"
           >
             <md-icon class="font-size-20">subdirectory_arrow_right</md-icon>
-            <div class="form-group" style="flex-grow:1; margin-left:10px; ">
-              <label class="font-size-16 font-bold-extra color-black">Name</label>
+            <div class="form-group" style="flex-grow: 1; margin-left: 10px">
+              <label class="font-size-16 font-bold-extra color-black"
+                >Name</label
+              >
               <small class="font-size-14">(2 words top)</small>
-              <input type="text" class="form-control" v-model="newBuildingBlock.name" />
+              <input
+                type="text"
+                class="form-control"
+                v-model="newBuildingBlock.name"
+              />
             </div>
           </div>
           <div class="md-layout-item md-size-50 form-group maryoku-field">
@@ -402,22 +510,32 @@
               <br />
             </label>
             <div class="mb-10">
-              <small class="font-size-14">You have ${{remainingBudget | withComma}} to use</small>
+              <small class="font-size-14"
+                >You have ${{ remainingBudget | withComma }} to use</small
+              >
             </div>
-            <maryoku-input inputStyle="budget" v-model="newBuildingBlock.budget" />
+            <maryoku-input
+              inputStyle="budget"
+              v-model="newBuildingBlock.budget"
+            />
           </div>
           <div
             class="md-error d-flex align-center"
             v-if="remainingBudget < newBuildingBlock.budget"
           >
-            <img :src="`${iconsURL}warning-circle-gray.svg`" style="width:20px" />
-            <span
-              style="padding: 0 15px"
-            >Oops! Seems like you don’t have enough cash in your “Unused” category</span>
+            <img
+              :src="`${iconsURL}warning-circle-gray.svg`"
+              style="width: 20px"
+            />
+            <span style="padding: 0 15px"
+              >Oops! Seems like you don’t have enough cash in your “Unused”
+              category</span
+            >
             <md-button
               class="md-button md-rose md-sm md-simple edit-btn md-theme-default md-bold-extra"
               @click="addbudget()"
-            >Add More Money</md-button>
+              >Add More Money</md-button
+            >
           </div>
         </div>
       </template>
@@ -425,12 +543,14 @@
         <md-button
           class="md-default md-simple cancel-btn md-bold"
           @click="showCategoryModal = false"
-        >Cancel</md-button>
+          >Cancel</md-button
+        >
         <md-button
           :disabled="remainingBudget < newBuildingBlock.budget"
           class="md-red add-category-btn md-bold"
           @click="addBuildingBlock"
-        >Add Category</md-button>
+          >Add Category</md-button
+        >
       </template>
     </modal>
     <budget-handle-minus-modal
@@ -442,7 +562,7 @@
       v-if="showAddMyVendor"
       :value="overAddedValue"
       @select="handleMinusBudget"
-      @remindLater="showAddMyVendor=false"
+      @remindLater="showAddMyVendor = false"
       @updateVendor="updateVendor"
     ></add-my-vendor-modal>
   </div>
@@ -1222,7 +1342,6 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "@/assets/scss/md/_colors.scss";
 .event-budget-vendors {
   .add-category-model {
     .modal-container {

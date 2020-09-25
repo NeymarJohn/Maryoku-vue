@@ -29,16 +29,31 @@
                 <img
                   :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${block.title}.svg`"
                 />
-                {{block.title}}
+                {{ block.title }}
               </td>
               <td class="planned" width="20%">
-                <template v-if="type==='total'">{{block.allocatedBudget}}</template>
+                <template v-if="type === 'total'">{{
+                  block.allocatedBudget
+                }}</template>
                 <template
-                  v-else-if="block.allocatedBudget && block.numberOfParticipants"
-                >{{ block.allocatedBudget ? (block.allocatedBudget / block.numberOfParticipants).toFixed(2).toString() : '' }}</template>
-                <template
-                  v-else
-                >{{ block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString() : ''}}</template>
+                  v-else-if="
+                    block.allocatedBudget && block.numberOfParticipants
+                  "
+                  >{{
+                    block.allocatedBudget
+                      ? (block.allocatedBudget / block.numberOfParticipants)
+                          .toFixed(2)
+                          .toString()
+                      : ""
+                  }}</template
+                >
+                <template v-else>{{
+                  block.allocatedBudget
+                    ? (block.allocatedBudget / event.numberOfParticipants)
+                        .toFixed(2)
+                        .toString()
+                    : ""
+                }}</template>
               </td>
 
               <td class="new-element-budget" width="15%">
@@ -52,16 +67,29 @@
                   <template v-if="block.winningProposalId">
                     <md-button
                       class="md-simple actual-cost md-xs"
-                      :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`"
+                      :class="
+                        block.allocatedBudget < block.winingProposal.cost
+                          ? `md-danger`
+                          : `md-success`
+                      "
                     >
-                      {{ event.elementsBudgetPerGuest ? `$${(block.winingProposal.cost /
-                      event.numberOfParticipants).toFixed(2)}` :
-                      `$${block.winingProposal.cost.toFixed(2)}` }}
+                      {{
+                        event.elementsBudgetPerGuest
+                          ? `$${(
+                              block.winingProposal.cost /
+                              event.numberOfParticipants
+                            ).toFixed(2)}`
+                          : `$${block.winingProposal.cost.toFixed(2)}`
+                      }}
                       <md-icon>open_in_new</md-icon>
                     </md-button>
                   </template>
                 </template>
-                <event-actual-cost-icon-tooltip :icon="'credit_card'" :item="block" :event="event" />
+                <event-actual-cost-icon-tooltip
+                  :icon="'credit_card'"
+                  :item="block"
+                  :event="event"
+                />
               </td>
             </tr>
           </template>
@@ -74,7 +102,8 @@
           <td class="event-block-element unexpected" width="40%">
             <img
               src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+18.png"
-            /> Unexpected
+            />
+            Unexpected
           </td>
           <td class="planned" width="20%">$0</td>
           <td class="new-element-budget" width="15%">
@@ -96,17 +125,19 @@
             <img
               src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2020.svg"
               width="20"
-            /> Tips
+            />
+            Tips
             <span class="percent">12%</span>
           </td>
-          <td>${{totalBudgetTaxes.toFixed(2)}}</td>
+          <td>${{ totalBudgetTaxes.toFixed(2) }}</td>
           <td class="actual green-label">
             <img
               src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+30.png"
-            /> $0
+            />
+            $0
           </td>
           <td></td>
-          <td class="expand" style="text-align: right; padding-right: 1em;">
+          <td class="expand" style="text-align: right; padding-right: 1em">
             <a href>
               <img
                 src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+24.png"
@@ -116,8 +147,10 @@
         </tr>
         <tr class="total">
           <td class="total-title">Total</td>
-          <td>${{totalBudget | withComma}}</td>
-          <td colspan="3" class="total-value">${{totalActual | withComma}}</td>
+          <td>${{ totalBudget | withComma }}</td>
+          <td colspan="3" class="total-value">
+            ${{ totalActual | withComma }}
+          </td>
         </tr>
       </tbody>
     </table>
@@ -615,8 +648,6 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "@/assets/scss/md/_colors.scss";
-
 .requirements-cell-button {
   width: 48px;
   min-width: 48px;

@@ -22,11 +22,7 @@
 @import "md/shadows";
 
 // Core CSS
-@import "md/typography";
-@import "md/sidebar-and-main-panel";
 @import "md/buttons";
-@import "md/badges";
-@import "md/misc";
 @import "md/inputs";
 @import "md/forms";
 @import "md/alerts";
@@ -38,17 +34,11 @@
 @import "md/autocomplete";
 @import "md/rtl";
 @import "md/togglebutton";
-@import "md/pagination";
-@import "md/pills";
-@import "md/pages";
 @import "md/select";
 @import "md/fileinput";
 @import "md/progress";
-@import "md/tags";
 @import "md/dialogs";
-@import "md/timeline";
 @import "md/info-areas";
-@import "md/headers";
 @import "md/navbars";
 @import "md/popups";
 @import "md/footers";
@@ -82,7 +72,6 @@
 
 //custom styles
 @import "custom";
-
 @import "newCustom";
 
 @import "customeModal";

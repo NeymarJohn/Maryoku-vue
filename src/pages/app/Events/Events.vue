@@ -217,7 +217,7 @@ export default {
       });
       let m = new CalendarEvent().for(_calendar).fetch(this, true);
       m.then((allEvents) => {
-        this.upcomingEvents = this.getExtraFields(allEvents).reverse();
+        this.upcomingEvents = allEvents.reverse();
         this.isLoading = false;
       }).catch((e) => {
         console.log(e);

@@ -1,4 +1,9 @@
 $rose : #f51355;
+$purple-500: #9c27b0 !default;
+$green-500: rgba(0, 199, 130, 1) !default;
+$green: $green-500 !default;
+$pink-262: #FF547C !default;
+$grey-700: #616161 !default;
 @mixin gradientBackgroundRSVP($color1, $color2, $color3, $color4) {
   background-image: linear-gradient($color1 25%, $color2 25%, $color2 50%, $color3 50%, $color3 75%, $color4 75%, $color4 100%);
 }
