@@ -7,7 +7,10 @@
           <div>
             <div class="font-size-30 font-bold-extra color-red">Delivery settings</div>
             <div class="mt-2 d-flex align-center">
-              <span class="font-bold-extra font-size-30 pr-20">0</span>
+              <span
+                class="font-bold-extra font-size-30 pr-20"
+              >{{currentCampaign.guestEmails.length}}</span>
+
               <span>In your invitees list</span>
             </div>
           </div>
@@ -117,7 +120,7 @@
                 <md-icon class="icon" v-if="!settingData.email.selected">keyboard_arrow_right</md-icon>
               </md-button>
             </div>
-            <div v-if="settingData.email.selected">
+            <div v-if="settingData.email.selected && currentCampaign.campaignStatus=='EDITING'">
               <div class="mt-50">
                 <label class="font-bold mb-10 line-height-2">Subject</label>
                 <div class="width-60 position-relative">
@@ -198,6 +201,32 @@
                 </div>
               </div>
             </div>
+            <div
+              v-if="settingData.email.selected && (currentCampaign.campaignStatus=='STARTED' || currentCampaign.campaignStatus=='SCHEDULED')"
+            >
+              <div class="mt-50">
+                <div class="font-bold mb-10 line-height-2">Subject</div>
+                <div class="width-60 position-relative">{{settingData.email.subject}}</div>
+              </div>
+              <div class="mt-50">
+                <div class="font-bold mb-10 line-height-2">From</div>
+                <div class="width-60 position-relative">{{settingData.email.from}}</div>
+              </div>
+              <div class="mt-50">
+                <div
+                  class="font-bold mb-10 line-height-2"
+                >Sent to ({{currentCampaign.guestEmails?currentCampaign.guestEmails.length:0}})</div>
+                <div
+                  class="d-flex align-start width-100"
+                >{{currentCampaign.settings.email.addressString}}</div>
+                <div class="mt-20">
+                  <md-button class="md-simple md-red edit-btn" @click="downloadXml">
+                    <img :src="`${$iconURL}Campaign/excel.png`" class="mr-10" />
+                    Download Full Guests list
+                  </md-button>
+                </div>
+              </div>
+            </div>
           </div>
 
           <input
@@ -240,6 +269,7 @@ export default {
       default: () => ({
         phone: {
           selected: false,
+          status: "ready",
           numberString: "",
           numberArray: [],
           excelFileName: "",
@@ -248,6 +278,7 @@ export default {
         },
         email: {
           selected: false,
+          status: "ready",
           subject: "",
           from: "",
           addressString: "",
@@ -287,13 +318,10 @@ export default {
     this.settingData = this.defaultSettings;
     // set default subject for email
     this.settingData.email.from = this.$store.state.auth.user.username;
-    console.log("this.emailSubject", this.emailSubject);
     this.settingData.email.subject = this.emailSubject;
   },
   methods: {
     handleInputEmails({ value, type }) {
-      console.log(value);
-      console.log(type);
       const addresses = value.split(/[\s,]+/);
       let invalidEmails = "";
       if (type == "emails") {
@@ -354,13 +382,13 @@ export default {
           const val = r[key];
           values.push(val);
         });
-        console.log(values);
         if (this.fileInputType === "email") {
           this.settingData.email.addressString = values.join();
         } else this.settingData.phone.numberString = values.join();
       };
       reader.readAsArrayBuffer(file);
     },
+    downloadXml() {},
   },
   computed: {
     event() {
@@ -368,7 +396,6 @@ export default {
     },
     emailSubject() {
       const campaignData = this.$store.state.campaign;
-      console.log(this.campaign.name);
       switch (this.campaign.name) {
         case "SAVING_DATE":
           return `${
@@ -399,6 +426,9 @@ export default {
         default:
           return "";
       }
+    },
+    currentCampaign() {
+      return this.$store.state.campaign[this.campaign.name];
     },
   },
   watch: {

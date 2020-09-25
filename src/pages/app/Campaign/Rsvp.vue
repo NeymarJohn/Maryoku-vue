@@ -186,7 +186,7 @@ export default {
         title: "",
         description: "",
         coverImage: "",
-
+        campaignStatus: "EDITING",
         allowOnline: false,
         visibleSettings: {
           showWearingGuide: true,

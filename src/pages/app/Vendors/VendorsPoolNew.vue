@@ -4,16 +4,12 @@
       <div class="header-title">
         <h3>Our Vendors List</h3>
         <p>
-          Millions of companies turn to Maryoku as their trusted event resource,
-          with the largest directory of local event
-          <br />vendors. Easily find the best event services in your area with
-          detailed vendor reviews for your event.
+          Millions of companies turn to Maryoku as their trusted event resource, with the largest directory of local event
+          <br />vendors. Easily find the best event services in your area with detailed vendor reviews for your event.
         </p>
       </div>
       <div class="header-actions">
-        <div
-          class="form-group search-field d-flex justify-content-start align-center"
-        >
+        <div class="form-group search-field d-flex justify-content-start align-center">
           <md-icon>search</md-icon>
           <input class="form-control" placeholder="Search" />
         </div>
@@ -24,42 +20,35 @@
       <div class="filters-section__label">Filter By</div>
       <div
         class="filters-section__item"
-        :class="{ selected: filter.expand }"
+        :class="{selected: filter.expand}"
         v-for="(filter, index) in filtersItems"
         :key="index"
       >
         <div class="item-title" @click="expandFilter(index)">
-          {{ filter.title }}
+          {{filter.title}}
           <md-icon>keyboard_arrow_down</md-icon>
         </div>
         <div class="expanded-section" v-if="filter.expand">
           <div
             class="categories-filters-section d-flex"
-            v-if="filter.title.toLowerCase() == 'category'"
+            v-if="filter.title.toLowerCase() == 'category' "
           >
             <div class="main-categories-filters">
               <div
                 class="main-filters-item text-center"
-                :class="[
-                  `item-${mainFilterIndex}`,
-                  { 'first-row': mainFilterIndex < 4 },
-                  { 'second-row': mainFilterIndex >= 4 },
-                ]"
-                v-for="(item, mainFilterIndex) in filter.mainCategories"
+                :class="[`item-${mainFilterIndex}`,{ 'first-row' : mainFilterIndex < 4},{'second-row': mainFilterIndex >=4}]"
+                v-for="(item,mainFilterIndex) in filter.mainCategories"
                 :key="mainFilterIndex"
               >
                 <img :src="`${categoriesIconURL}${item.icon}`" width="20" />
-                <div class="filter-title">{{ item.title }}</div>
+                <div class="filter-title">{{item.title}}</div>
               </div>
             </div>
             <div class="more-categories-filters">
               <div class="section-title">More</div>
               <ul class="columns-2">
-                <li
-                  v-for="(moreItem, moreItemIndex) in filter.moreCategories"
-                  :key="moreItemIndex"
-                >
-                  <a href>{{ moreItem }}</a>
+                <li v-for="(moreItem,moreItemIndex) in filter.moreCategories" :key="moreItemIndex">
+                  <a href>{{moreItem}}</a>
                 </li>
               </ul>
             </div>
@@ -67,7 +56,7 @@
 
           <div
             class="location-filters-section d-flex"
-            v-if="filter.title.toLowerCase() == 'location'"
+            v-if="filter.title.toLowerCase() == 'location' "
           >
             <div class="search-field-section">
               <div class="form-group">
@@ -81,10 +70,10 @@
               <div class="section-title">Nearby Locations</div>
               <ul>
                 <li
-                  v-for="(locationItem, locationItemIndex) in filter.locations"
+                  v-for="(locationItem,locationItemIndex) in filter.locations"
                   :key="locationItemIndex"
                 >
-                  <a href>{{ locationItem }}</a>
+                  <a href>{{locationItem}}</a>
                 </li>
               </ul>
             </div>
@@ -92,20 +81,19 @@
 
           <div
             class="capacity-filters-section d-flex"
-            v-if="filter.title.toLowerCase() == 'capacity'"
+            v-if="filter.title.toLowerCase() == 'capacity' "
           >
             <md-radio
               v-model="filters.capacity"
               :value="capacityItem"
-              v-for="(capacityItem, capacityItemIndex) in filter.options"
+              v-for="(capacityItem,capacityItemIndex) in filter.options"
               :key="capacityItemIndex"
-              >{{ capacityItem }}</md-radio
-            >
+            >{{capacityItem}}</md-radio>
           </div>
 
           <div
             class="rank-filters-section d-flex justify-content-end"
-            v-if="filter.title.toLowerCase() == 'rank'"
+            v-if="filter.title.toLowerCase() == 'rank' "
           >
             <div class="rank-item">
               <md-checkbox v-model="filters.rank[0]">
@@ -114,9 +102,8 @@
                   class="star-rating__star"
                   v-for="(rating, ratingIndex) in ratings"
                   :key="ratingIndex"
-                  :class="{ 'is-selected': ratingIndex <= 5 }"
-                  >★</label
-                >
+                  :class="{'is-selected' : ratingIndex <=5}"
+                >★</label>
                 <span class="rank-counter">(59)</span>
               </md-checkbox>
             </div>
@@ -127,9 +114,8 @@
                   class="star-rating__star"
                   v-for="(rating, ratingIndex) in ratings"
                   :key="ratingIndex"
-                  :class="{ 'is-selected': ratingIndex <= 4 }"
-                  >★</label
-                >
+                  :class="{'is-selected' : ratingIndex <=4}"
+                >★</label>
                 <span class="rank-counter">(59)</span>
               </md-checkbox>
             </div>
@@ -140,9 +126,8 @@
                   class="star-rating__star"
                   v-for="(rating, ratingIndex) in ratings"
                   :key="ratingIndex"
-                  :class="{ 'is-selected': ratingIndex <= 3 }"
-                  >★</label
-                >
+                  :class="{'is-selected' : ratingIndex <=3}"
+                >★</label>
                 <span class="rank-counter">(59)</span>
               </md-checkbox>
             </div>
@@ -153,9 +138,8 @@
                   class="star-rating__star"
                   v-for="(rating, ratingIndex) in ratings"
                   :key="ratingIndex"
-                  :class="{ 'is-selected': ratingIndex <= 2 }"
-                  >★</label
-                >
+                  :class="{'is-selected' : ratingIndex <=2}"
+                >★</label>
                 <span class="rank-counter">(59)</span>
               </md-checkbox>
             </div>
@@ -166,9 +150,8 @@
                   class="star-rating__star"
                   v-for="(rating, ratingIndex) in ratings"
                   :key="ratingIndex"
-                  :class="{ 'is-selected': ratingIndex <= 1 }"
-                  >★</label
-                >
+                  :class="{'is-selected' : ratingIndex <=1}"
+                >★</label>
                 <span class="rank-counter">(59)</span>
               </md-checkbox>
             </div>
@@ -214,10 +197,7 @@
     <!--                <md-button style="display: inline-block;" class="md-purple md-sm" @click="openUploadModal">Import Vendors From Spreadsheet</md-button>-->
     <!--            </div>-->
     <!--        </div>-->
-    <div
-      class="md-layout-item md-size-100 clear-margins"
-      style="padding: 0 1em 0 3em !important"
-    >
+    <div class="md-layout-item md-size-100 clear-margins" style="padding: 0 1em 0 3em !important;">
       <vue-element-loading
         :active="working"
         spinner="ring"
@@ -452,6 +432,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "@/assets/scss/md/_colors.scss";
 %visually-hidden {
   position: absolute;
   overflow: hidden;

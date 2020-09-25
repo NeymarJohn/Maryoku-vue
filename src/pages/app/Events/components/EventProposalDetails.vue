@@ -38,43 +38,32 @@
       <div class="proposal-page_header d-flex justify-content-start">
         <div class="vendor-title">
           <img :src="`${submitProposalIcon}Asset 307.svg`" />
-          <a href="javascript:void(0)">{{
-            vendorProposal.vendor.vendorDisplayName
-          }}</a>
-          Proposal
+          <a href="javascript:void(0)">{{vendorProposal.vendor.vendorDisplayName}}</a> Proposal
         </div>
       </div>
       <div class="proposal-content">
         <div class="proposal-info">
           <div
             class="proposal-header"
-            style="
-              background: url('https://bit.ly/392ygCu') center center no-repeat;
-            "
+            style="background : url('https://bit.ly/392ygCu') center center no-repeat;"
           >
             <div class="event-info">
               <div class="section-header d-flex justify-content-start">
                 <h3>Event Information & Details</h3>
-                <div class="alert alert-danger">
-                  This proposal is 2 days before your original date
-                </div>
+                <div class="alert alert-danger">This proposal is 2 days before your original date</div>
               </div>
               <ul class="event-details">
                 <li class="event-details__item">
                   <label>Name</label>
-                  <div class="info-text">{{ event.title }}</div>
+                  <div class="info-text">{{event.title}}</div>
                 </li>
                 <li class="event-details__item">
                   <label>Date</label>
-                  <div class="info-text">
-                    {{ event.eventStartMillis | formatDate }}
-                  </div>
+                  <div class="info-text">{{event.eventStartMillis | formatDate}}</div>
                 </li>
                 <li class="event-details__item">
                   <label>Guest Arrival Time</label>
-                  <div class="info-text">
-                    {{ event.eventStartMillis | formatTime }}
-                  </div>
+                  <div class="info-text">{{event.eventStartMillis | formatTime}}</div>
                 </li>
               </ul>
             </div>
@@ -83,17 +72,13 @@
           <div class="proposal-body">
             <h1>Dear Rachel,</h1>
             <p>
-              {{ vendorProposal.proposals[0].personalMessage }}
+              {{vendorProposal.proposals[0].personalMessage}}
               <br />
               <br />Sincerely,
-              <span class="proposal-title">{{
-                vendorProposal.vendor.vendorDisplayName
-              }}</span>
+              <span class="proposal-title">{{vendorProposal.vendor.vendorDisplayName}}</span>
             </p>
 
-            <md-button class="md-rose md-raised md-outline"
-              >More About Us</md-button
-            >
+            <md-button class="md-rose md-raised md-outline">More About Us</md-button>
 
             <!--                    <div class="loading" v-if="vendorProposal.proposals[0].attachements.length && !fetchingAllAttachments">-->
             <!--                        Loading ...-->
@@ -131,32 +116,22 @@
             <div class="proposal-section__title">Contact Us</div>
 
             <ul class="contact-list_items d-flex justify-content-start">
-              <li
-                class="contact-list_item"
-                v-if="vendorProposal.vendor.vendorMainEmail"
-              >
+              <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainEmail">
                 <a href>
                   <img :src="`${submitProposalIcon}Asset 286.svg`" />
-                  {{ vendorProposal.vendor.vendorMainEmail }}
+                  {{vendorProposal.vendor.vendorMainEmail}}
                 </a>
               </li>
-              <li
-                class="contact-list_item"
-                v-if="vendorProposal.vendor.vendorAddressLine1"
-              >
+              <li class="contact-list_item" v-if="vendorProposal.vendor.vendorAddressLine1">
                 <a href>
                   <img :src="`${submitProposalIcon}Asset 285.svg`" />
-                  {{ vendorProposal.vendor.vendorAddressLine1 }}
-                  {{ vendorProposal.vendor.vendorAddressLine2 }}
+                  {{vendorProposal.vendor.vendorAddressLine1}} {{vendorProposal.vendor.vendorAddressLine2}}
                 </a>
               </li>
-              <li
-                class="contact-list_item"
-                v-if="vendorProposal.vendor.vendorMainPhoneNumber"
-              >
+              <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainPhoneNumber">
                 <a href>
                   <img :src="`${submitProposalIcon}Asset 284.svg`" />
-                  {{ vendorProposal.vendor.vendorMainPhoneNumber }}
+                  {{vendorProposal.vendor.vendorMainPhoneNumber}}
                 </a>
               </li>
             </ul>
@@ -168,23 +143,16 @@
             <img
               src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2010.svg"
               width="12"
-            />
-            Pricing & Details
+            /> Pricing & Details
             <small>*We work only with our catering</small>
           </div>
 
           <div class="pricing-section__list">
             <div class="pricing-section__item element-block">
               <div class="d-flex justify-content-between align-center">
-                <div
-                  class="item-info d-flex justify-content-start align-center"
-                >
+                <div class="item-info d-flex justify-content-start align-center">
                   <div class="select-item">
-                    <input
-                      class="styled-checkbox"
-                      :id="`checkbox-1`"
-                      type="checkbox"
-                    />
+                    <input class="styled-checkbox" :id="`checkbox-1`" type="checkbox" />
                     <label :for="`checkbox-1`"></label>
                   </div>
                   <div class="element-title">
@@ -192,20 +160,18 @@
                     <span class="element-duration">For Whole Event</span>
                   </div>
                 </div>
-                <div
-                  class="item-pricing d-flex justify-content-end align-center"
-                >
+                <div class="item-pricing d-flex justify-content-end align-center">
                   <div class="element-value">
-                    <div class="element-price">${{ 800 | withComma }}</div>
+                    <div class="element-price">${{800 | withComma}}</div>
                     <div class="discount-details">
                       (10% off)
-                      <span>${{ 1100 | withComma }}</span>
+                      <span>${{1100 | withComma}}</span>
                     </div>
                   </div>
                   <div class="view-element">
                     <md-button
                       class="md-just-icon md-red md-outline"
-                      :class="{ expanded: expand }"
+                      :class="{expanded : expand}"
                       @click="expand = !expand"
                     >
                       <img :src="`${submitProposalIcon}Component 36.svg`" />
@@ -217,13 +183,8 @@
               <div class="expanded-section" v-if="expand">
                 <div
                   class="loading"
-                  v-if="
-                    vendorProposal.proposals[0].attachements.length &&
-                    !fetchingAllAttachments
-                  "
-                >
-                  Loading ...
-                </div>
+                  v-if="vendorProposal.proposals[0].attachements.length && !fetchingAllAttachments"
+                >Loading ...</div>
 
                 <carousel
                   :items="3"
@@ -241,7 +202,7 @@
 
                   <div
                     class="item"
-                    v-for="(item, index) in images"
+                    v-for="(item,index) in images"
                     :key="index"
                     :style="`background: url(${item.src}) center center no-repeat; `"
                   ></div>
@@ -340,12 +301,10 @@
                           <small class="small-label">Before discount</small>
                         </td>
                         <td class="element-value">
-                          <div class="element-price">
-                            ${{ 2800 | withComma }}
-                          </div>
+                          <div class="element-price">${{2800 | withComma}}</div>
                           <div class="discount-details">
                             (10% off)
-                            <span>${{ 2900 | withComma }}</span>
+                            <span>${{2900 | withComma}}</span>
                           </div>
                         </td>
                         <td class="element-actions">
@@ -359,38 +318,30 @@
                 </div>
 
                 <div class="proposal-includes">
-                  <div class="proposal-includes__title">
-                    What Do We Include In This Proposal?
-                  </div>
+                  <div class="proposal-includes__title">What Do We Include In This Proposal?</div>
                   <template v-if="dummyIncluded.length">
                     <div
                       class="proposal-includes__item"
-                      v-for="(item, index) in dummyIncluded"
+                      v-for="(item,index) in dummyIncluded"
                       :key="index"
                     >
                       <div class="d-flex justify-content-between align-center">
                         <div class="item-title">
                           <img :src="`${submitProposalIcon}Group 4781.svg`" />
-                          {{ item.title }}
+                          {{item.title}}
                         </div>
-                        <div
-                          class="item-actions d-flex justify-content-end align-center"
-                        >
+                        <div class="item-actions d-flex justify-content-end align-center">
                           <input v-model="item.qty" placeholder="QTY" />
                           <md-button
                             class="md-simple md-just-icon"
-                            @click="expandIncludedItem(item, index)"
+                            @click="expandIncludedItem(item,index)"
                           >
-                            <img
-                              :src="`${submitProposalIcon}Component 36.svg`"
-                            />
+                            <img :src="`${submitProposalIcon}Component 36.svg`" />
                           </md-button>
                         </div>
                       </div>
 
-                      <div class="item-description" v-if="item.expanded">
-                        {{ item.description }}
-                      </div>
+                      <div class="item-description" v-if="item.expanded">{{item.description}}</div>
                     </div>
                   </template>
                 </div>
@@ -401,80 +352,62 @@
                       <img
                         src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2010.svg"
                         width="12"
-                      />
-                      Extras
+                      /> Extras
                     </h3>
                     <small>Wold you like to upgrade & add one of those?</small>
                   </div>
                   <div class="extras-section__list">
                     <div
                       class="extras-section__item"
-                      v-for="(item, index) in dummyExtras"
+                      v-for="(item,index) in dummyExtras"
                       :key="index"
                     >
                       <div class="d-flex justify-content-between align-center">
-                        <div class="item-title">{{ item.title }}</div>
+                        <div class="item-title">{{item.title}}</div>
                         <div class="item-qty text-center">
                           <input v-model="item.qty" placeholder="QTY" />
                         </div>
-                        <div class="item-price text-center">
-                          {{ item.price }}
-                        </div>
+                        <div class="item-price text-center">{{item.price}}</div>
                         <div class="item-added text-center">
                           <template v-if="item.added">
                             <div class="added-label">
                               <img
                                 src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+31.png"
                                 width="20"
-                              />
-                              added
+                              /> added
                             </div>
                           </template>
                           <md-button v-else class="md-rose md-sm">
                             <md-icon>add_circle_outline</md-icon>add
                           </md-button>
                         </div>
-                        <div
-                          class="item-actions"
-                          :class="{ expanded: item.expand }"
-                        >
+                        <div class="item-actions" :class="{expanded : item.expand}">
                           <md-button
                             class="md-small md-simple md-just-icon expand-extra-item"
-                            @click="expandExtra(item, index)"
+                            @click="expandExtra(item,index)"
                           >
-                            <img
-                              :src="`${submitProposalIcon}Component 36.svg`"
-                            />
+                            <img :src="`${submitProposalIcon}Component 36.svg`" />
                           </md-button>
                         </div>
                       </div>
 
-                      <div class="item-description" v-if="item.expanded">
-                        {{ item.description }}
-                      </div>
+                      <div class="item-description" v-if="item.expanded">{{item.description}}</div>
                     </div>
                   </div>
                 </div>
 
-                <div
-                  class="proposal-section attachments-section"
-                  v-if="attachedFiles.length"
-                >
+                <div class="proposal-section attachments-section" v-if="attachedFiles.length">
                   <div class="proposal-section__title">Attachments</div>
 
                   <ul class="attachments-list_items">
                     <li
                       class="attachments-list_item"
-                      v-for="(item, index) in attachedFiles"
+                      v-for="(item,index) in attachedFiles"
                       :key="index"
                     >
                       <a target="_blank" :href="`${item.fullPath}`">
                         <md-icon>attach_file</md-icon>
-                        {{
-                          item.tag
-                            ? item.tag.replace(/_/g, " ")
-                            : `Attachment${index + 1}`
-                        }}
+                        {{item.tag ? item.tag.replace(/_/g," ") : `Attachment${index+1}`}}
                       </a>
                     </li>
                   </ul>
@@ -489,7 +422,7 @@
               <template v-if="extraMissingRequirements.length">
                 <tr
                   class="element-block"
-                  v-for="(item, index) in extraMissingRequirements"
+                  v-for="(item,index) in extraMissingRequirements"
                   :key="index"
                 >
                   <td class="select-item">
@@ -502,16 +435,14 @@
                     <label :for="`checkbox-${index}`"></label>
                   </td>
                   <td class="element-title">
-                    {{ item.requirementTitle }}
+                    {{item.requirementTitle}}
                     <span class="element-duration">For Whole Event</span>
                   </td>
                   <td class="element-value">
-                    <div class="element-price">
-                      ${{ item.price | withComma }}
-                    </div>
+                    <div class="element-price">${{item.price | withComma}}</div>
                     <div class="discount-details">
                       (10% off)
-                      <span>${{ item.price | withComma }}</span>
+                      <span>${{item.price | withComma}}</span>
                     </div>
                   </td>
                   <td class="view-element">
@@ -531,12 +462,12 @@
                   Taxes
                   <span class="taxes-value">18%</span>
                 </td>
-                <td>${{ (extraTotal * 0.18) | withComma }}</td>
+                <td>${{(extraTotal * .18) | withComma}}</td>
                 <td></td>
               </tr>
               <tr class="total">
                 <td colspan="2">Total</td>
-                <td>${{ (extraTotal + extraTotal * 0.18) | withComma }}</td>
+                <td>${{(extraTotal + extraTotal * .18) | withComma}}</td>
                 <td></td>
               </tr>
             </tbody>
@@ -545,8 +476,7 @@
 
         <div class="proposal-section policy-section">
           <div class="proposal-section__title">
-            <img :src="`${submitProposalIcon}Asset 287.svg`" width="20" /> Our
-            Policy
+            <img :src="`${submitProposalIcon}Asset 287.svg`" width="20" /> Our Policy
           </div>
 
           <div class="policy-content">
@@ -566,15 +496,13 @@
 
             <div class="policies-list">
               <div class="policies-list__item">
-                <b>If</b> the client cancel the event after 3 weeks before the
-                event
+                <b>If</b> the client cancel the event after 3 weeks before the event
               </div>
               <div class="policies-list__item">
                 <b>Then</b> the client will pay full deposit
               </div>
               <div class="policies-list__item">
-                <b>If</b> the client cancel the event after two weeks before the
-                event
+                <b>If</b> the client cancel the event after two weeks before the event
               </div>
               <div class="policies-list__item">
                 <b>Then</b> the client will pay full price
@@ -583,15 +511,13 @@
 
             <div class="additional-info">
               <div class="additional-info__title">Additional</div>
-              <div class="additional-info__content">
-                {{ vendorProposal.proposals[0].candellationPolicy }}
-              </div>
+              <div
+                class="additional-info__content"
+              >{{vendorProposal.proposals[0].candellationPolicy}}</div>
             </div>
 
             <div class="signature-section">
-              <div class="signature-section__vendor">
-                {{ vendorProposal.vendor.vendorDisplayName }}
-              </div>
+              <div class="signature-section__vendor">{{vendorProposal.vendor.vendorDisplayName}}</div>
               <div class="signature-section__image">
                 <img src="https://bit.ly/3doZIxt" />
               </div>
@@ -606,12 +532,10 @@
           <a href>Relish caterers & venues</a>?
         </div>
         <div class="agree-checkbox">
-          <md-checkbox v-model="acceptNewTimes"
-            >I agree to the new time of this proposal</md-checkbox
-          >
-          <div class="alert alert-danger">
-            Please indicate that you accept the new time of this proposal
-          </div>
+          <md-checkbox v-model="acceptNewTimes">I agree to the new time of this proposal</md-checkbox>
+          <div
+            class="alert alert-danger"
+          >Please indicate that you accept the new time of this proposal</div>
         </div>
 
         <div class="form-actions text-right">
@@ -851,6 +775,33 @@ export default {
           this.isLoading = false;
           console.log("EventComponentVendor error =>", error);
         });
+
+      // ProposalRequest.find(this.$route.params.proposalId)
+      //     .then(resp => {
+      //         console.log('ProposalRequest', resp)
+      //
+      //         // this.$set(this, 'proposalRequest', resp)
+      //         //
+      //         // if (!this.gotProposals) {
+      //         //     this.getProposals(resp.vendorId)
+      //         //     this.gotProposals = true
+      //         // } else {
+      //         //     this.isLoading = false
+      //         // }
+      //         //
+      //         // this.proposalRequestRequirements = _.chain(resp.requirements)
+      //         //     .groupBy('requirementPriority')
+      //         //     .map(function (value, key) {
+      //         //         return {
+      //         //             title: key,
+      //         //             requirements: value
+      //         //         }
+      //         //     })
+      //         //     .value()
+      //     })
+      //     .catch(error => {
+      //         console.log(' error here   -->>>  ', error)
+      //     })
     },
     getImages() {
       let vm = this;

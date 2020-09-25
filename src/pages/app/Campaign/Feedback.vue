@@ -103,6 +103,7 @@ export default {
       editingContent: {
         name: this.info.conceptName,
         description: "",
+        campaignStatus: "EDITING",
         visibleSettings: {
           showImages: true,
           showSharingOption: true,

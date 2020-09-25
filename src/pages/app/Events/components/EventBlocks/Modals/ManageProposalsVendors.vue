@@ -1,39 +1,41 @@
 <template>
-  <div class="md-layout"></div>
+    <div class="md-layout">
+
+    </div>
 </template>
 <script>
-import EventComponentVendor from "@/models/EventComponentVendor";
+import EventComponentVendor from '@/models/EventComponentVendor'
 
 export default {
-  name: "manage-proposals-vendors",
+  name: 'manage-proposals-vendors',
   components: {},
-  data() {
+  data () {
     return {
       isLoading: false,
       blockVendors: [],
-      filteredBlockVendors: [],
-    };
+      filteredBlockVendors: []
+    }
   },
-  mounted() {},
+  mounted () {
+  },
   methods: {
-    getBuildingBlocksVendors() {
-      new EventComponentVendor()
-        .for(calendar, event, selected_block)
-        .get()
-        .then((resp) => {
-          this.isLoading = false;
-          this.blockVendors = resp;
-          this.filteredBlockVendors = this.blockVendors;
+    getBuildingBlocksVendors () {
+      new EventComponentVendor().for(calendar, event, selected_block).get()
+        .then(resp => {
+          this.isLoading = false
+          this.blockVendors = resp
+          this.filteredBlockVendors = this.blockVendors
         })
-        .catch((error) => {
-          this.isLoading = false;
-          console.log("EventComponentVendor error =>", error);
-        });
-    },
+        .catch(error => {
+          this.isLoading = false
+          console.log('EventComponentVendor error =>', error)
+        })
+    }
   },
   computed: {},
-  watch: {},
-};
+  watch: {}
+}
 </script>
 <style lang="scss" scoped>
+    @import '@/assets/scss/md/_colors.scss';
 </style>

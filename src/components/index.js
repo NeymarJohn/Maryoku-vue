@@ -1,9 +1,9 @@
 import IconCheckbox from "./Inputs/IconCheckbox.vue";
 import InputText from "./Inputs/input-text.vue";
 import InputWithIcon from "./Inputs/InputWithIcon.vue";
-import MaryokuInput from "./Inputs/MaryokuInput.vue"
-import MaryokuTextarea from "./Inputs/MaryokuTextarea.vue"
-import MaryokuResizableTextarea from "./Inputs/MaryokuResizableTextarea.vue"
+import MaryokuInput  from "./Inputs/MaryokuInput.vue"
+import MaryokuTextarea  from "./Inputs/MaryokuTextarea.vue"
+import MaryokuResizableTextarea  from "./Inputs/MaryokuResizableTextarea.vue"
 
 import Badge from "./Badge";
 
@@ -29,6 +29,9 @@ import GlobalSalesCard from "./Cards/GlobalSalesCard.vue";
 import NavTabsCard from "./Cards/NavTabsCard.vue";
 import ProductCard from "./Cards/ProductCard.vue";
 
+import TimeLine from "./Timeline/TimeLine.vue";
+import TimeLineItem from "./Timeline/TimeLineItem.vue";
+import ButtonTimeLineItem from "./Timeline/ButtonTimeLineItem.vue";
 import Tabs from "./Tabs.vue";
 import NavTabs from "./NavTabs.vue";
 import Collapse from "./Collapse.vue";
@@ -63,6 +66,9 @@ export {
     ProductCard,
     DropDown,
     SidebarPlugin,
+    TimeLine,
+    TimeLineItem,
+    ButtonTimeLineItem,
     Tabs,
     NavTabs,
     Slider,

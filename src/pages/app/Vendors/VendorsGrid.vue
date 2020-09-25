@@ -22,11 +22,7 @@
         :data-count="9999"
         :hover-count="9999"
       >
-        <img
-          class="img imgHeader"
-          slot="imageHeader"
-          :src="vendorMainImage(vendor)"
-        />
+        <img class="img imgHeader" slot="imageHeader" :src="vendorMainImage(vendor)" />
         <div slot="card-buttons">
           <md-button
             class="md-purple md-xs md-round md-just-icon"
@@ -57,31 +53,25 @@
           </md-button>
         </div>
         <h4 slot="title" class="title">
-          <a class="fw-bold" href="#pablo">{{ vendor.vendorDisplayName }}</a>
+          <a class="fw-bold" href="#pablo">{{vendor.vendorDisplayName}}</a>
           <div class="small">
             <label
               class="star-rating__star"
               v-for="(rating, ratingIndex) in ratings"
               :key="ratingIndex"
-              :class="{
-                'is-selected': vendor.rank >= rating && vendor.rank != null,
-              }"
-              >★</label
-            >
-            <span class="small text-gray">({{ vendor.voters }})</span>
+              :class="{'is-selected' : ((vendor.rank >= rating) && vendor.rank != null)}"
+            >★</label>
+            <span class="small text-gray">({{vendor.voters}})</span>
           </div>
         </h4>
         <div slot="description" class="card-description">
           <div class>
-            <p>{{ vendor.vendorTagLine }}</p>
+            <p>{{vendor.vendorTagLine}}</p>
           </div>
-          <div
-            class="tags"
-            v-if="vendor.vendorTagging && vendor.vendorTagging.length"
-          >
+          <div class="tags" v-if="vendor.vendorTagging && vendor.vendorTagging.length">
             <div v-for="(tag, index) in vendor.vendorTagging" :key="index">
-              <span class="tt-capitalize">{{ tag }}</span>
-              <span v-if="index <= vendor.vendorTagging.length">&middot;</span>
+              <span class="tt-capitalize">{{tag}}</span>
+              <span v-if="index <=  vendor.vendorTagging.length">&middot;</span>
             </div>
           </div>
         </div>
@@ -89,16 +79,13 @@
           <div class="price">
             <div
               class="badge badge-primary"
-              :class="`badge-${categoryColor(
-                vendor.vendorCategory,
-                buildingBlocksList,
-              )}`"
-            >
-              {{ categoryTitle(vendor.vendorCategory, buildingBlocksList) }}
-            </div>
+              :class="`badge-${categoryColor(vendor.vendorCategory, buildingBlocksList)}`"
+            >{{ categoryTitle(vendor.vendorCategory, buildingBlocksList) }}</div>
           </div>
           <div class="stats">
-            <p class="category"><md-icon>place</md-icon>Geography</p>
+            <p class="category">
+              <md-icon>place</md-icon>Geography
+            </p>
           </div>
         </template>
       </product-card>
@@ -202,6 +189,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "@/assets/scss/md/_colors.scss";
 .md-card-header-image {
   > img {
     max-height: 25vmin;
@@ -277,7 +265,7 @@ export default {
 .md-tooltip {
   z-index: 9999 !important;
   background: $purple-500 !important;
-  color: white !important;
+  color: $white !important;
   &[x-placement="top"]:after {
     border-bottom-color: $purple-500 !important;
   }

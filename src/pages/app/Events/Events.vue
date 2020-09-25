@@ -1,18 +1,13 @@
 <template>
   <div class="md-layout events-list">
-    <vue-element-loading
-      :active="isLoading"
-      spinner="ring"
-      color="#FF547C"
-      is-full-screen
-    >
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen>
       <div
         :style="`background-image:url(/static/img/load_${imageIndex}.jpg)`"
         class="loading-background"
       >
         <div :class="`quote quote_${imageIndex}`">
-          <span>{{ quote.description }}</span>
-          <span class="author">{{ quote.author }}</span>
+          <span>{{quote.description}}</span>
+          <span class="author">{{quote.author}}</span>
         </div>
       </div>
     </vue-element-loading>
@@ -25,11 +20,7 @@
           <h4 class="title">Upcoming Events</h4>
         </md-card-header>
         <md-card-content>
-          <vue-element-loading
-            :active="isLoading"
-            spinner="ring"
-            color="#FF547C"
-          />
+          <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
           <md-table
             v-model="upcomingEvents"
             table-header-color="rose"
@@ -42,45 +33,35 @@
               class="hover-row"
               @click="routeToEvent(item, $event)"
             >
-              <md-table-cell md-label="Event Name">{{
-                item.title
-              }}</md-table-cell>
+              <md-table-cell md-label="Event Name">{{ item.title }}</md-table-cell>
               <!--<md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>-->
-              <md-table-cell md-label="Event Type">{{
-                item.eventType ? item.eventType.name : item.eventType
-              }}</md-table-cell>
-              <md-table-cell md-label="Date">{{
-                item.eventStartMillis | moment
-              }}</md-table-cell>
-              <md-table-cell md-label="Customer Name">{{
-                item.owner.department
-              }}</md-table-cell>
+              <md-table-cell
+                md-label="Event Type"
+              >{{item.eventType?item.eventType.name:item.eventType }}</md-table-cell>
+              <md-table-cell md-label="Date">{{ item.eventStartMillis | moment }}</md-table-cell>
+              <md-table-cell md-label="Customer Name">{{ item.owner.department }}</md-table-cell>
               <md-table-cell
                 md-label="Created By"
-                style="text-transform: capitalize"
+                style="text-transform: capitalize;"
                 v-if="item.owner.id !== $auth.user.id"
               >
                 {{ item.owner.displayName }}
-                <span class="small text-primary" style="display: block">{{
-                  item.owner.emailAddress
-                }}</span>
+                <span
+                  class="small text-primary"
+                  style="display: block;"
+                >{{ item.owner.emailAddress }}</span>
               </md-table-cell>
               <md-table-cell md-label="Created By" v-else>
                 You
-                <span class="small text-primary" style="display: block">{{
-                  item.owner.emailAddress
-                }}</span>
+                <span
+                  class="small text-primary"
+                  style="display: block;"
+                >{{ item.owner.emailAddress }}</span>
               </md-table-cell>
-              <md-table-cell md-label="# Participants">{{
-                item.numberOfParticipants
-              }}</md-table-cell>
-              <md-table-cell md-label="Budget Per Participant"
-                >$ {{ item.budgetPerPerson }}</md-table-cell
-              >
-              <md-table-cell md-label="Location">{{
-                item.location
-              }}</md-table-cell>
-              <md-table-cell md-label="Actions" style="white-space: nowrap">
+              <md-table-cell md-label="# Participants">{{item.numberOfParticipants}}</md-table-cell>
+              <md-table-cell md-label="Budget Per Participant">$ {{item.budgetPerPerson}}</md-table-cell>
+              <md-table-cell md-label="Location">{{item.location}}</md-table-cell>
+              <md-table-cell md-label="Actions" style="white-space: nowrap;">
                 <!--<md-button @click="viewEvent(item)" class="md-raised md-info md-icon-button">
                   <md-icon>visibility</md-icon>
                 </md-button>-->
@@ -106,25 +87,17 @@
           </div>-->
         </md-card-content>
       </md-card>
-      <md-card
-        class="md-card-plain"
-        v-if="!upcomingEvents.length && !isLoading"
-      >
+      <md-card class="md-card-plain" v-if="!upcomingEvents.length && !isLoading">
         <md-card-content>
           <div class="text-center mt-5">
             <!-- <img src="https://static-maryoku.s3.amazonaws.com/storage/img/calendar.png" style="width: 120px;" /> -->
             <h3>You do not have any events planned yet</h3>
             <div class="mt-4rem">
-              <md-button
-                class="md-info md-red normal-btn"
-                @click="routeToNewEvent"
-                >Create New Event</md-button
-              >
+              <md-button class="md-info md-red normal-btn" @click="routeToNewEvent">Create New Event</md-button>
               <md-button
                 class="md-red md-simple normal-btn"
                 @click="chooseWorkspace"
-                >Choose Workspace</md-button
-              >
+              >Choose Workspace</md-button>
             </div>
           </div>
         </md-card-content>
@@ -147,24 +120,15 @@
       @click="routeToEvent(event)"
     >
       <product-card header-animation="true">
-        <img
-          class="img"
-          slot="imageHeader"
-          :src="imageHref(event.coverImage)"
-        />
+        <img class="img" slot="imageHeader" :src="imageHref(event.coverImage)" />
 
         <h4 slot="title" class="title">
           <a @click="routeToEvent(event)">{{ event.title }}</a>
         </h4>
-        <div slot="description" class="card-description">
-          {{ event.eventStartMillis | moment }}
-        </div>
+        <div slot="description" class="card-description">{{ event.eventStartMillis | moment }}</div>
         <template slot="footer">
           <div class="price">
-            <h4>
-              {{ event.numberOfParticipants }} Guests &middot;
-              {{ duration(event) }} hours
-            </h4>
+            <h4>{{event.numberOfParticipants}} Guests &middot; {{duration(event)}} hours</h4>
           </div>
           <div class="stats">
             <p class="category">
@@ -217,13 +181,13 @@ export default {
       });
       let m = new CalendarEvent().for(_calendar).fetch(this, true);
       m.then((allEvents) => {
-        this.upcomingEvents = allEvents.reverse();
+        this.upcomingEvents = this.getExtraFields(allEvents).reverse();
         this.isLoading = false;
       }).catch((e) => {
         console.log(e);
       });
     } else {
-      this.$router.push({ path: "/choose-workspace" });
+      this.$router.push({ path: "/signin" });
     }
   },
   data() {

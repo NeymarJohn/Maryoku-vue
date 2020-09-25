@@ -1,22 +1,15 @@
 <template>
-  <div
-    class="vsignup-edtiable-field-wrapper"
-    :class="[{ 'border-bottom': borderBottom }]"
-  >
-    <div class="left" :class="[{ 'full-width': isEdit }]">
-      <div class="title">{{ title }}</div>
+  <div class="vsignup-edtiable-field-wrapper" :class="[{'border-bottom': borderBottom}]">
+    <div class="left" :class="[{'full-width': isEdit}]">
+      <div class="title">{{title}}</div>
       <div class="content">
         <div v-if="!isEdit">
-          <img v-if="img != ''" :src="img" />
-          {{ title == "Business Category" ? selectedCategory.name : value }}
+          <img v-if="img!=''" :src="img" />
+          {{title=='Business Category' ? selectedCategory.name : value}}
         </div>
         <div class="edit-content" v-else>
-          <div v-if="title == 'Business Category'">
-            <div
-              class="droplist"
-              v-if="!expanded"
-              :class="{ 'mt-3': !selectedCategory.icon }"
-            >
+          <div v-if="title=='Business Category'">
+            <div class="droplist" v-if="!expanded" :class="{'mt-3': !selectedCategory.icon}">
               <img
                 class="inside-img"
                 :src="`${categoryIconUrl}${selectedCategory.icon}`"
@@ -26,7 +19,7 @@
                 readonly
                 class="default with-img"
                 :value="selectedCategory.name"
-                @click="expanded = true"
+                @click="expanded=true"
               />
               <img
                 class="dropdown"
@@ -37,14 +30,14 @@
               <li
                 v-for="(category, cIndex) in categories"
                 :key="cIndex"
-                @click="updateCategory(category)"
+                @click="updateCategory(category);"
               >
                 <img :src="`${categoryIconUrl}${category.icon}`" />
-                {{ category.name }}
+                {{category.name}}
               </li>
             </ul>
           </div>
-          <div class="address-cont" v-else-if="title == 'Address'">
+          <div class="address-cont" v-else-if="title=='Address'">
             <vue-google-autocomplete
               id="map"
               ref="address"
@@ -52,40 +45,32 @@
               v-on:placechanged="getAddressData"
             />
           </div>
-          <div v-else-if="title == 'Email'">
-            <img class="inside-img" :src="img" v-if="img != ''" />
-            <input
-              class="default"
-              :class="[{ 'with-img': img != '' }, isEmailValid()]"
-              v-model="value"
-            />
+          <div v-else-if="title=='Email'">
+            <img class="inside-img" :src="img" v-if="img!=''" />
+            <input class="default" :class="[{'with-img': img!=''}, isEmailValid()]" v-model="value" />
           </div>
-          <div v-else-if="title == 'Phone'">
-            <img class="inside-img" :src="img" v-if="img != ''" />
+          <div v-else-if="title=='Phone'">
+            <img class="inside-img" :src="img" v-if="img!=''" />
             <input
               class="default"
-              :type="title == 'Phone' ? 'number' : 'text'"
-              :class="[{ 'with-img': img != '' }]"
+              :type="title=='Phone' ? 'number' : 'text'"
+              :class="[{'with-img': img!=''}]"
               v-model="value"
             />
           </div>
           <div v-else>
-            <img class="inside-img" :src="img" v-if="img != ''" />
-            <input
-              class="default"
-              :class="[{ 'with-img': img != '' }]"
-              v-model="value"
-            />
+            <img class="inside-img" :src="img" v-if="img!=''" />
+            <input class="default" :class="[{'with-img': img!=''}]" v-model="value" />
           </div>
         </div>
       </div>
       <div class="action-cont" v-if="isEdit">
-        <a class="cancel" @click="isEdit = false">Cancel</a>
+        <a class="cancel" @click="isEdit=false">Cancel</a>
         <a class="save" @click="save()">Save</a>
       </div>
     </div>
     <div class="right" v-if="!isEdit">
-      <a @click="isEdit = true">
+      <a @click="isEdit=true">
         Edit
         <md-icon>navigate_next</md-icon>
       </a>
@@ -251,6 +236,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "@/assets/scss/md/_variables.scss";
+@import "@/assets/scss/md/_colors.scss";
+
 .vsignup-edtiable-field-wrapper {
   width: 100%;
   display: flex;

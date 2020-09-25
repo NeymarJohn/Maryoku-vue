@@ -2,42 +2,26 @@
   <div class="adding-building-blocks-panel">
     <div class="md-layout">
       <div class="md-layout-item md-size-100">
-        <h4 class="md-title" style="margin-bottom: 0; line-height: 51px">
-          <md-button
-            @click="closePanel"
-            class="md-button md-theme-default md-simple md-just-icon"
-          >
+        <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
+          <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
             <md-icon>arrow_back</md-icon>
           </md-button>
-          {{ categoryTitle }}'s Vendors List
+          {{categoryTitle}}'s Vendors List
           <div class="header-actions pull-right">
             <md-button
               v-if="blockVendors.length && !isLoading"
               class="md-primary md-sm"
               @click="manageVendors()"
               :disabled="isLoading"
-              >Manage Vendors</md-button
-            >
+            >Manage Vendors</md-button>
           </div>
         </h4>
 
         <div class="md-layout">
-          <div
-            class="md-layout-item md-size-100"
-            style="padding-left: 42px; min-height: 240px"
-          >
-            <vue-element-loading
-              :active="isLoading"
-              spinner="ring"
-              color="#FF547C"
-            />
-            <div style="padding-left: 6px">
-              Send vendors of your choice a request for proposal
-            </div>
-            <md-card
-              v-show="blockVendors.length && !isLoading"
-              class="md-card-plain clear-margins"
-            >
+          <div class="md-layout-item md-size-100" style="padding-left: 42px; min-height: 240px;">
+            <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
+            <div style="padding-left: 6px;">Send vendors of your choice a request for proposal</div>
+            <md-card v-show="blockVendors.length && !isLoading" class="md-card-plain clear-margins">
               <md-card-content>
                 <md-table
                   v-model="filteredBlockVendors"
@@ -64,7 +48,7 @@
                   </md-table-toolbar>
 
                   <md-table-row
-                    :class="[{ 'table-warning': item.rfpStatus === 'Sent' }]"
+                    :class="[{'table-warning':item.rfpStatus === 'Sent'}]"
                     slot="md-table-row"
                     slot-scope="{ item }"
                     :key="blockVendors.indexOf(item)"
@@ -73,12 +57,7 @@
                       <a
                         href="javascript: void(null);"
                         @click="vendorDetails(item.vendor)"
-                        >{{
-                          item.vendor
-                            ? item.vendor.vendorDisplayName
-                            : item.vendor.vendorMainEmail
-                        }}</a
-                      >
+                      >{{ item.vendor ? item.vendor.vendorDisplayName : item.vendor.vendorMainEmail}}</a>
                     </md-table-cell>
                     <md-table-cell md-label="Rank">
                       <vue-stars
@@ -97,34 +76,19 @@
                     </md-table-cell>
                     <md-table-cell md-label="Inquiry Status">
                       <template
-                        v-if="
-                          item.rfpStatus === 'Ready to send' ||
-                          item.rfpStatus === null
-                        "
-                        >{{ `Ready` }}</template
-                      >
-                      <template v-else-if="item.rfpStatus === 'Sent'"
-                        >{{ `Request sent ` }}
-                        {{ getVendorDate(item.rfpSentMillis) }}</template
-                      >
-                      <template v-else-if="item.rfpStatus === ''"
-                        >Ready</template
-                      >
+                        v-if="item.rfpStatus === 'Ready to send' || item.rfpStatus===null"
+                      >{{ `Ready` }}</template>
+                      <template
+                        v-else-if="item.rfpStatus === 'Sent'"
+                      >{{ `Request sent ` }} {{getVendorDate(item.rfpSentMillis)}}</template>
+                      <template v-else-if="item.rfpStatus === ''">Ready</template>
                     </md-table-cell>
                     <md-table-cell class="vendors-table_item-actions">
-                      <vue-element-loading
-                        :active="sendingRfp"
-                        spinner="ring"
-                        color="#FF547C"
-                      ></vue-element-loading>
+                      <vue-element-loading :active="sendingRfp" spinner="ring" color="#FF547C"></vue-element-loading>
                       <md-button
-                        v-if="
-                          !sendingRfp &&
-                          (item.rfpStatus === 'Ready to send' ||
-                            item.rfpStatus === null)
-                        "
+                        v-if="!sendingRfp && (item.rfpStatus === 'Ready to send' || item.rfpStatus===null)"
                         class="md-primary md-just-icon md-round"
-                        style="font-size: 20px"
+                        style="font-size: 20px;"
                         @click="sendVendor(item)"
                       >
                         <md-icon>near_me</md-icon>
@@ -146,20 +110,15 @@
 
             </template>-->
 
-            <md-card
-              class="md-card-plain"
-              v-if="!blockVendors.length && !isLoading"
-            >
+            <md-card class="md-card-plain" v-if="!blockVendors.length && !isLoading">
               <md-card-content>
                 <div class="text-center">
                   <img
                     src="https://static-maryoku.s3.amazonaws.com/storage/img/paperandpen.png"
-                    style="width: 120px"
+                    style="width: 120px;"
                   />
-                  <h4>No vendors found that match '{{ categoryTitle }}'</h4>
-                  <md-button class="md-purple md-sm" @click="manageVendors"
-                    >Manage Vendors Pool</md-button
-                  >
+                  <h4>No vendors found that match '{{categoryTitle}}'</h4>
+                  <md-button class="md-purple md-sm" @click="manageVendors">Manage Vendors Pool</md-button>
                 </div>
               </md-card-content>
             </md-card>
@@ -456,10 +415,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "@/assets/scss/md/_colors.scss";
+
 .md-tooltip {
   z-index: 9999 !important;
   background: $purple-500 !important;
-  color: white !important;
+  color: $white !important;
 
   &[x-placement="top"]:after {
     border-bottom-color: $purple-500 !important;

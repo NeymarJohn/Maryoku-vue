@@ -7,25 +7,25 @@
       class="special-request-section-description"
     >Which elements are important for you to have around the venue?</span>
     <div class="special-request-section-options mt-30">
-      <md-checkbox class="md-simple md-red" v-model="venues" value="Parking">
+      <md-checkbox class="md-simple md-red" v-model="value" value="Parking">
         <div class="checkbox-label-wrapper">
           <img :src="`${$iconURL}Requirements/park-dark.svg`" />
           Parking
         </div>
       </md-checkbox>
-      <md-checkbox class="md-simple md-red" v-model="venues" value="Restaurant">
+      <md-checkbox class="md-simple md-red" v-model="value" value="Restaurant">
         <div class="checkbox-label-wrapper">
           <img :src="`${$iconURL}Requirements/restaurant-dark.svg`" />
           Restaurant
         </div>
       </md-checkbox>
-      <md-checkbox class="md-simple md-red" v-model="venues" value="Shopping center">
+      <md-checkbox class="md-simple md-red" v-model="value" value="Shopping center">
         <div class="checkbox-label-wrapper">
           <img :src="`${$iconURL}Requirements/shopping-center-dark.svg`" />
           Shopping center
         </div>
       </md-checkbox>
-      <md-checkbox class="md-simple md-red" v-model="venues" value="Hotel">
+      <md-checkbox class="md-simple md-red" v-model="value" value="Hotel">
         <div class="checkbox-label-wrapper">
           <img :src="`${$iconURL}Requirements/hotel-dark.svg`" />
           Hotel
@@ -40,7 +40,7 @@
 export default {
   data() {
     return {
-      venues: [],
+      value: "",
       selected: true,
     };
   },

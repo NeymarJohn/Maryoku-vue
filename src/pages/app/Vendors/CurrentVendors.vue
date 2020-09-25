@@ -8,7 +8,8 @@
           :style="`
             background-image: url(${bgImages[0]});
             background-size: cover;
-            background-size: 100% 100%;`"
+            background-size: 100% 100%;`
+          "
         ></div>
         <div class="img-cont thumb-img-cont">
           <img :src="bgImages[1]" />
@@ -34,13 +35,13 @@
         <div class="title-cont">
           <div class="title-child">
             <img v-if="isVendorLogo" :src="isVendorLogo" />
-            <div v-else class="default-text-logo">{{ logoText }}</div>
+            <div v-else class="default-text-logo">{{logoText}}</div>
           </div>
           <div class="title-child">
-            <h3>{{ vendor.vendorDisplayName }}</h3>
+            <h3>{{vendor.vendorDisplayName}}</h3>
             <span class="address">
               <i class="fa fa-map-marker-alt"></i>
-              {{ vendor.vendorAddressLine1 }}
+              {{vendor.vendorAddressLine1}}
             </span>
             <br class="hidden-lg hidden-md" />
             <div class="hor-divider">
@@ -48,12 +49,9 @@
                 class="star-rating__star"
                 v-for="(rating, ratingIndex) in ratings"
                 :key="ratingIndex"
-                :class="{
-                  'is-selected': vendor.rank >= rating && vendor.rank != null,
-                }"
-                >★</label
-              >
-              {{ vendor.avgScore }}
+                :class="{'is-selected' : ((vendor.rank >= rating) && vendor.rank != null)}"
+              >★</label>
+              {{vendor.avgScore}}
             </div>
             <br class="hidden-lg hidden-md" />
             <a class="favorite">
@@ -64,10 +62,8 @@
       </div>
       <div class="md-layout-item button-group text-right">
         <md-button class="md-success md-lg">Contact Vendor</md-button>
-        <md-button class="md-danger md-lg" @click="goToProposal()"
-          >Create Brief Ask for Proposal</md-button
-        >
-        <h4>Avg. Response Time: {{ vendor.rank }}</h4>
+        <md-button class="md-danger md-lg" @click="goToProposal()">Create Brief Ask for Proposal</md-button>
+        <h4>Avg. Response Time: {{vendor.rank}}</h4>
       </div>
     </div>
     <div class="md-layout bg-white">
@@ -81,20 +77,17 @@
             <p>
               <template
                 v-if="vendor.vendorPropertyValues && vendorDescription"
-                >{{
-                  vendor.vendorPropertyValues[vendorDescription.id]
-                }}</template
-              >
+              >{{vendor.vendorPropertyValues[vendorDescription.id]}}</template>
             </p>
           </div>
         </div>
         <div class="description"></div>
         <div class="text-group">
           <div class>
-            <span>Past Events With the Vendor: {{ vendor.voters }}</span>
+            <span>Past Events With the Vendor: {{vendor.voters}}</span>
           </div>
           <div class>
-            <span>Past Proposals Sent by the Vendor: {{ vendor.rank }}</span>
+            <span>Past Proposals Sent by the Vendor: {{vendor.rank}}</span>
           </div>
         </div>
       </div>
@@ -104,10 +97,10 @@
     <div class="tabs-container">
       <div
         class="tab-item"
-        :class="[{ visited: currentTab > 1 }, { active: currentTab === 1 }]"
+        :class="[{'visited': currentTab > 1}, {'active': currentTab===1}]"
         v-on:click="currentTab = 1"
       >
-        <span class="capitalize">{{ vendor.vendorCategory }}</span>
+        <span class="capitalize">{{vendor.vendorCategory}}</span>
       </div>
       <!-- <div class="tab-item" :class="[{'visited': currentTab > 2}, {'active': currentTab===2}]" v-on:click="currentTab = 2">
         Venue
@@ -118,7 +111,7 @@
     <div class="md-layout tab-wrapper bg-white">
       <div class="md-layout-item">
         <div class="tab-content">
-          <div v-if="currentTab === 1">
+          <div v-if="currentTab===1">
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>apartment</md-icon>
@@ -133,8 +126,8 @@
                     :key="index"
                   >
                     <md-icon>airline_seat_recline_extra</md-icon>
-                    <h5>{{ vendor.vendorPropertyValues[item.id] }}</h5>
-                    <span>{{ item.name }}</span>
+                    <h5>{{vendor.vendorPropertyValues[item.id]}}</h5>
+                    <span>{{item.name}}</span>
                   </div>
                 </template>
                 <template v-else>No Capacity Info</template>
@@ -147,18 +140,11 @@
                 <h4>Services Offered by This Vendor</h4>
               </div>
               <div class="tab-item-content-body">
-                <template
-                  v-if="
-                    vendorServicesList.length > 0 ||
-                    vendorRestrictions.length > 0
-                  "
-                >
+                <template v-if="vendorServicesList.length > 0 || vendorRestrictions.length > 0">
                   <ul class="check-list">
                     <li>
                       <md-icon>restaurant</md-icon>
-                      <strong class="capitalize">{{
-                        vendor.vendorCategory
-                      }}</strong>
+                      <strong class="capitalize">{{vendor.vendorCategory}}</strong>
                     </li>
                     <li>
                       <br />
@@ -170,7 +156,7 @@
                       :value="item"
                     >
                       <md-icon>check</md-icon>
-                      {{ item.name }}
+                      {{item.name}}
                     </li>
                     <li
                       class="disabled"
@@ -179,7 +165,7 @@
                       :value="item"
                     >
                       <md-icon></md-icon>
-                      <span>{{ item.name }}</span>
+                      <span>{{item.name}}</span>
                     </li>
                   </ul>
                 </template>
@@ -196,12 +182,12 @@
                       :value="item"
                     >
                       <a
-                        v-if="item.vendorsFileContentType === 'application/pdf'"
+                        v-if="item.vendorsFileContentType==='application/pdf'"
                         target="_blank"
                         :href="`${serverUrl}/1/proposal-requests/${item.proposalRequst.id}/files/${item.id}`"
                       >
                         <md-icon>picture_as_pdf</md-icon>
-                        Attachment {{ index + 1 }}
+                        Attachment {{index+1}}
                       </a>
                       <a
                         v-else
@@ -209,7 +195,7 @@
                         :href="`${serverUrl}/1/proposal-requests/${item.proposalRequst.id}/files/${item.id}`"
                       >
                         <md-icon>image</md-icon>
-                        Attachment {{ index + 1 }}
+                        Attachment {{index+1}}
                       </a>
                     </div>
                   </div>
@@ -226,14 +212,12 @@
                 <template v-if="vendorPricesAndRules.length > 0">
                   <div
                     class="text-vertical"
-                    v-for="(item, index) of vendorPricesAndRules"
+                    v-for="(item,index) of vendorPricesAndRules"
                     :key="index"
                     :value="item"
                   >
-                    <h5>
-                      ${{ item.defaultValue === null ? 0 : item.defaultValue }}
-                    </h5>
-                    <span>{{ item.name }}</span>
+                    <h5>${{item.defaultValue===null ? 0 : item.defaultValue}}</h5>
+                    <span>{{item.name}}</span>
                   </div>
                 </template>
                 <template v-else>No Price Data</template>
@@ -242,12 +226,7 @@
                     <h4>Notes</h4>
                   </div>
                   <div class="notes-body">
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                      ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    </p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                   </div>
                 </div>
               </div>
@@ -259,10 +238,7 @@
                 <h4>Similar Proposals Made by Vendor</h4>
               </div>
               <div class="tab-item-content-body">
-                <vendor-similar-proposals
-                  :proposals="proposals"
-                  :ratings="ratings"
-                ></vendor-similar-proposals>
+                <vendor-similar-proposals :proposals="proposals" :ratings="ratings"></vendor-similar-proposals>
               </div>
             </div>
             <md-divider></md-divider>
@@ -275,16 +251,12 @@
                     class="star-rating__star"
                     v-for="(rating, ratingIndex) in ratings"
                     :key="ratingIndex"
-                    :class="{ 'is-selected': true }"
-                    >★</label
-                  >
+                    :class="{'is-selected' : true}"
+                  >★</label>
                 </h4>
               </div>
               <div class="tab-item-content-body">
-                <vendor-feedbacks
-                  :feedbacks="feedbacks"
-                  :ratings="ratings"
-                ></vendor-feedbacks>
+                <vendor-feedbacks :feedbacks="feedbacks" :ratings="ratings"></vendor-feedbacks>
               </div>
             </div>
             <md-divider></md-divider>
@@ -297,10 +269,7 @@
                 <p>
                   <template
                     v-if="vendor.vendorPropertyValues && vendorPaymentPolicy"
-                    >{{
-                      vendor.vendorPropertyValues[vendorPaymentPolicy.id]
-                    }}</template
-                  >
+                  >{{vendor.vendorPropertyValues[vendorPaymentPolicy.id]}}</template>
                 </p>
               </div>
             </div>
@@ -313,13 +282,8 @@
               <div class="tab-item-content-body">
                 <p>
                   <template
-                    v-if="
-                      vendor.vendorPropertyValues && vendorCancellationPolicy
-                    "
-                    >{{
-                      vendor.vendorPropertyValues[vendorCancellationPolicy.id]
-                    }}</template
-                  >
+                    v-if="vendor.vendorPropertyValues && vendorCancellationPolicy"
+                  >{{vendor.vendorPropertyValues[vendorCancellationPolicy.id]}}</template>
                 </p>
               </div>
             </div>
@@ -330,14 +294,11 @@
                 <h4>Similar Vendors</h4>
               </div>
               <div class="tab-item-content-body">
-                <vendor-similar-item
-                  :similarItems="similarItems"
-                  :ratings="ratings"
-                ></vendor-similar-item>
+                <vendor-similar-item :similarItems="similarItems" :ratings="ratings"></vendor-similar-item>
               </div>
             </div>
           </div>
-          <div v-if="currentTab === 2">Venue</div>
+          <div v-if="currentTab===2">Venue</div>
         </div>
       </div>
     </div>
@@ -686,6 +647,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "@/assets/scss/md/_variables.scss";
+@import "@/assets/scss/md/_colors.scss";
 .md-layout {
   &.bg-white {
     background: #fff;
@@ -814,7 +777,7 @@ export default {
     &.active {
       //color: $brand-primary;
       background: $brand-warning;
-      color: white;
+      color: $white-color;
 
       span {
         border-color: #fff;
