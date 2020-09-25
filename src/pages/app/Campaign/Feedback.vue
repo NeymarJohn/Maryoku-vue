@@ -171,6 +171,11 @@ export default {
 
     if (this.$store.state.campaign.FEEDBACK) {
       this.editingContent = this.$store.state.campaign.FEEDBACK;
+    } else {
+      this.$store.commit("campaign/setCampaign", {
+        name: "FEEDBACK",
+        data: this.editingContent,
+      });
     }
     this.originalContent = Object.assign({}, this.editingContent);
   },

@@ -1,89 +1,103 @@
 <template>
-  <div class="p-50 white-card mt-40 mb-40 rsvp-analytics">
+  <div class="white-card mt-40 mb-40 rsvp-analytics">
     <collapse-panel>
       <template slot="header">
-        <div class="d-flex align-center">
+        <div class="d-flex align-center p-50">
           <div>
-            <div class="font-size-30 font-bold-extra color-black">Let's talk numbers 
-              <img :src="`${$iconURL}Campaign/Group 9087.svg`" class=:/>
+            <div class="font-size-30 font-bold-extra color-black">
+              Let's talk numbers
+              <img :src="`${$iconURL}Campaign/Group 9087.svg`" class=":" />
             </div>
           </div>
         </div>
       </template>
       <template slot="content">
-        <div class="savedate-analytics-content mt-50">
-          <hr />
+        <hr />
+        <div class="savedate-analytics-content p-50">
           <div>
-            <div class="d-flex align-center color-dark-gray mt-50 font-size-20">
-              <span class="font-bold">Send on <span>{{$dateUtil.formatScheduleDay(new Date().getTime(), "MM.DD.YY")}}</span></span>
+            <div class="d-flex align-center color-dark-gray font-size-20">
+              <span class="font-bold">
+                Send on
+                <span>{{$dateUtil.formatScheduleDay(new Date().getTime(), "MM.DD.YY")}}</span>
+              </span>
               <span class="vertical-line"></span>
-              <img :src="`${$iconURL}Campaign/users-gray.svg`" style="width: 28px"/>
+              <img :src="`${$iconURL}Campaign/users-gray.svg`" style="width: 28px" />
               <img :src="`${$iconURL}Campaign/Group 9222.svg`" class="ml-20" />
               <div class="text-center ml-10" style="margin-top:25px">
-                <div class="font-size-50 font-bold font-bold color-black line-height-1">
-                  80
-                </div>
+                <div
+                  class="font-size-50 font-bold font-bold color-black line-height-1"
+                >{{numberOfEmails}}</div>
                 <div class="font-size-16">RSVP</div>
               </div>
               <div class="slash"></div>
               <div class="text-center" style="margin-top:25px">
-                <div class="ml-20 mr-20 font-size-50 font-regular font-regular color-gray line-height-1">
-                  200
-                </div>
+                <div
+                  class="ml-20 mr-20 font-size-50 font-regular font-regular color-gray line-height-1"
+                >{{numberOfEmails}}</div>
                 <div class="font-size-16">Invited Guests (Including +1)</div>
               </div>
               <div class="flex-1"></div>
               <md-button class="md-simple md-default md-red edit-btn">
-                <img :src="`${$iconURL}Campaign/download-red.svg`" style="width:20px; margin-right: 10px"/>
+                <img
+                  :src="`${$iconURL}Campaign/download-red.svg`"
+                  style="width:20px; margin-right: 10px"
+                />
                 Download Rsvp Excel
               </md-button>
             </div>
             <multistate-progressbar :data="analyticsData" class="mt-40"></multistate-progressbar>
             <div class="text-center mb-50">
               <md-button class="md-simple maryoku-btn md-red md-outlined">
-                <image-icon src="Campaign/Group 1908.svg"/>
-                Send again to invitees who haven't replayed yet
+                <image-icon src="Campaign/Group 1908.svg" />Send again to invitees who haven't replyed yet
               </md-button>
             </div>
           </div>
-          <hr/>
-          <div class="d-flex mt-60 mb-20 ">
+          <hr />
+          <div class="d-flex mt-60 mb-20">
             <div class="flex-1">
               <div class="font-size-20 font-bold-extra d-flex align-center">
-                <image-icon src="Campaign/email-dark.svg" ></image-icon>
-                Opened This Email
+                <image-icon src="Campaign/email-dark.svg"></image-icon>Opened This Email
                 <span class="vertical-line"></span>
-                <span class="font-size-16 font-regular">From</span> 
-                <span class="font-size-30 font-weight-bold p-5"> 100</span>
+                <span class="font-size-16 font-regular">From</span>
+                <span class="font-size-30 font-weight-bold p-5">{{numberOfEmails}}</span>
                 <span class="font-size-16 font-regular">Total emails sent</span>
               </div>
               <div class="openedemails-pie-container d-flex">
-                <radial-progress :percentage="90"></radial-progress>
+                <radial-progress :percentage="openedPercentage"></radial-progress>
                 <div class="ml-50 vertical-center">
-                  <color-dot-label class="mb-40" color="#00bcd4"><span class="font-bold">Opened</span> (90)</color-dot-label>
-                  <color-dot-label class="mb-40" color="#C4C1C1"><span class="font-bold">Didn't Open</span> (10)</color-dot-label>
+                  <color-dot-label class="mb-40" color="#00bcd4">
+                    <span class="font-bold">Opened</span>
+                    ({{openedCount}})
+                  </color-dot-label>
+                  <color-dot-label class="mb-40" color="#C4C1C1">
+                    <span class="font-bold">Didn't Open</span>
+                    ({{numberOfEmails - openedCount}})
+                  </color-dot-label>
                 </div>
               </div>
             </div>
             <div class="flex-1 rsvp-chart">
               <div class="font-size-20 font-bold-extra d-flex align-center">
-                <image-icon src="Campaign/user-plus.svg" ></image-icon>
-                Coming With Plus+ 
+                <image-icon src="Campaign/user-plus.svg"></image-icon>Coming With Plus+
                 <span class="vertical-line"></span>
-                <span class="font-size-16 font-regular">From</span> 
-                <span class="font-size-30 font-weight-bold p-5"> 80</span>
+                <span class="font-size-16 font-regular">From</span>
+                <span class="font-size-30 font-weight-bold p-5">80</span>
                 <span class="font-size-16 font-regular">Total RSVP</span>
               </div>
               <div class="openedemails-pie-container d-flex">
                 <radial-progress :percentage="30" color="#ffc001"></radial-progress>
                 <div class="ml-50 vertical-center">
-                  <color-dot-label class="mb-40" color="#ffc001"><span class="font-bold">Opened</span> (30)</color-dot-label>
-                  <color-dot-label class="mb-40" color="#C4C1C1"><span class="font-bold">Didn't Open</span> (10)</color-dot-label>
+                  <color-dot-label class="mb-40" color="#ffc001">
+                    <span class="font-bold">Opened</span> (30)
+                  </color-dot-label>
+                  <color-dot-label class="mb-40" color="#C4C1C1">
+                    <span class="font-bold">Didn't Open</span> (10)
+                  </color-dot-label>
                 </div>
               </div>
             </div>
           </div>
-          <hr/>
+          <hr />
           <div class="food-limitations mt-50">
             <div class="font-size-20 font-bold-extra">Food Limitations</div>
             <rsvp-food-limitations :data="foodLimitations"></rsvp-food-limitations>
@@ -102,7 +116,7 @@
     margin: 15px 10px 0 30px;
   }
   .rsvp-chart {
-    border-left: solid 1px #DFDFDF;
+    border-left: solid 1px #dfdfdf;
     width: 50%;
     padding-left: 50px;
   }
@@ -110,11 +124,11 @@
 </style>
 <script>
 import CollapsePanel from "../CollapsePanel";
-import RadialProgress from "@/components/ProgressBar/Radial"
-import ColorDotLabel from "@/components/ColorDotLabel"
-import ImageIcon from "@/components/ImageIcon"
-import MultistateProgressbar from '@/components/ProgressBar/MultiState'
-import RsvpFoodLimitations from './RSVPFoodLimitations'
+import RadialProgress from "@/components/ProgressBar/Radial";
+import ColorDotLabel from "@/components/ColorDotLabel";
+import ImageIcon from "@/components/ImageIcon";
+import MultistateProgressbar from "@/components/ProgressBar/MultiState";
+import RsvpFoodLimitations from "./RSVPFoodLimitations";
 export default {
   components: {
     CollapsePanel,
@@ -122,26 +136,83 @@ export default {
     ColorDotLabel,
     ImageIcon,
     MultistateProgressbar,
-    RsvpFoodLimitations
+    RsvpFoodLimitations,
   },
+
   data() {
     return {
-      analyticsData : [
-        {value: 80, label:"Yes", color: "#2cde6b"},
-        {value: 10, label:"No", color: "#f3423a"},
-        {value: 20, label:"Don't know yet", color: "#ffc001"},
-        {value: 20, label:"Online Participants", color: "#43536a"},
-        {value: 70, label:"No reply", color: "#cbc8c8"}
+      campaignData: {},
+      analyticsData: [
+        { value: 80, label: "Yes", color: "#2cde6b" },
+        { value: 10, label: "No", color: "#f3423a" },
+        { value: 20, label: "Don't know yet", color: "#ffc001" },
+        { value: 20, label: "Online Participants", color: "#43536a" },
+        { value: 70, label: "No reply", color: "#cbc8c8" },
       ],
       foodLimitations: [
-        {value: 26, label: "Vegetarian", icon:"RSVP/milk.svg"},
-        {value: 6, label: "Vegan", icon:"RSVP/food+(4).svg"},
-        {value: 13, label: "Milk", icon:"RSVP/kosher.svg"},
-        {value: 2, label: "Kosher", icon:"RSVP/food+(2).svg"},
-        {value: 6, label: "Halal", icon:"RSVP/spiritual.svg"},
-        {value: 2, label: "Other", icon:""}
-      ]
+        {
+          value: 26,
+          label: "Vegetarian",
+          icon: "RSVP/milk.svg",
+          color: "#2cde6b",
+        },
+        {
+          value: 6,
+          label: "Vegan",
+          icon: "RSVP/food+(4).svg",
+          color: "#f3423a",
+        },
+        { value: 13, label: "Milk", icon: "RSVP/kosher.svg", color: "#ffc001" },
+        {
+          value: 2,
+          label: "Kosher",
+          icon: "RSVP/food+(2).svg",
+          color: "#43536a",
+        },
+        {
+          value: 6,
+          label: "Halal",
+          icon: "RSVP/spiritual.svg",
+          color: "#cbc8c8",
+        },
+        { value: 2, label: "Other", icon: "", color: "#cbc8c8" },
+      ],
     };
+  },
+  created() {
+    this.campaignData = this.$store.state.campaign["RSVP"];
+    const totalEmailCount = this.campaignData.guestEmails.length;
+    let openedEmails = 0;
+    this.campaignData.guestEmails.forEach((item) => {
+      if (item.isOpened) {
+        openedEmails++;
+      }
+    });
+    this.percentage = Math.round((openedEmails / totalEmailCount) * 100);
+    this.analyticsData[0].value = 0;
+    this.analyticsData[1].value = 0;
+    this.analyticsData[2].value = 0;
+    this.analyticsData[3].value = 0;
+    this.analyticsData[4].value = this.numberOfEmails;
+  },
+  computed: {
+    numberOfEmails() {
+      return this.campaignData.guestEmails
+        ? this.campaignData.guestEmails.length
+        : 0;
+    },
+    openedCount() {
+      let openedEmails = 0;
+      this.campaignData.guestEmails.forEach((item) => {
+        if (item.isOpened) {
+          openedEmails++;
+        }
+      });
+      return openedEmails;
+    },
+    openedPercentage() {
+      return Math.round((this.openedCount / this.numberOfEmails) * 100);
+    },
   },
 };
 </script>

@@ -23,15 +23,27 @@
       </transition>
 
       <div class="my-notes">
-        <md-button v-if="!isOpenNote" class="md-red" @click="isOpenNote=true">
-          <img :src="`${$iconURL}Event Page/note-light.svg`" width="20" style="margin:0 3px" />
+        <md-button v-if="!isOpenNote" class="md-red" @click="isOpenNote = true">
+          <img
+            :src="`${$iconURL}Event Page/note-light.svg`"
+            width="20"
+            style="margin: 0 3px"
+          />
           On my plate
-          <md-icon style="font-size: 30px !important; margin-left: 5px;">keyboard_arrow_down</md-icon>
+          <md-icon style="font-size: 30px !important; margin-left: 5px"
+            >keyboard_arrow_down</md-icon
+          >
         </md-button>
-        <md-button v-if="isOpenNote" class="md-red" @click="isOpenNote=false">
-          <img :src="`${$iconURL}Event Page/note-light.svg`" width="20" style="margin:0 3px" />
+        <md-button v-if="isOpenNote" class="md-red" @click="isOpenNote = false">
+          <img
+            :src="`${$iconURL}Event Page/note-light.svg`"
+            width="20"
+            style="margin: 0 3px"
+          />
           Close
-          <md-icon style="font-size: 30px !important; margin-left: 5px;">keyboard_arrow_up</md-icon>
+          <md-icon style="font-size: 30px !important; margin-left: 5px"
+            >keyboard_arrow_up</md-icon
+          >
         </md-button>
       </div>
     </div>
@@ -41,14 +53,21 @@
         <draggable :list="eventElements">
           <div
             class="event-elements__item"
-            @click="goToRoute(item,index)"
-            :class="{current:isActiveRoute(item), progress_100: item.progress===100, progress_25: item.progress===25, progress_30: item.progress===30, progress_50: item.progress===50, progress_75: item.progress===75 }"
-            v-for="(item,index) in eventElements"
+            @click="goToRoute(item, index)"
+            :class="{
+              current: isActiveRoute(item),
+              progress_100: item.progress === 100,
+              progress_25: item.progress === 25,
+              progress_30: item.progress === 30,
+              progress_50: item.progress === 50,
+              progress_75: item.progress === 75,
+            }"
+            v-for="(item, index) in eventElements"
             :key="index"
           >
             <div class="item-title">
               <img
-                v-if="item.status==='completed' || item.progress === 100"
+                v-if="item.status === 'completed' || item.progress === 100"
                 :src="`${$iconURL}budget+screen/SVG/Asset%2032.svg`"
                 width="25"
               />
@@ -56,9 +75,9 @@
                 :src="item.icon"
                 v-if="isActiveRoute(item)"
                 width="25"
-                style="max-width:25px;max-height:25px"
+                style="max-width: 25px; max-height: 25px"
               />
-              {{item.title}}
+              {{ item.title }}
             </div>
           </div>
         </draggable>
@@ -221,10 +240,11 @@ export default {
         this.eventElements[timelineIndex].status =
           event.timelineProgress == 100 ? "completed" : "not-complete";
       }
-      // if (campaignIndex >=0 ) {
-      //   this.eventElements[campaignIndex].progress = event.timelineProgress;
-      //   this.eventElements[campaignIndex].status = event.timelineProgress == 100 ? "completed" : "not-complete";
-      // }
+      if (campaignIndex >= 0) {
+        this.eventElements[campaignIndex].progress = event.timelineProgress;
+        this.eventElements[campaignIndex].status =
+          event.timelineProgress == 100 ? "completed" : "not-complete";
+      }
     },
     fetchUrl() {
       this.currentUrl = this.$router.history.current.path;

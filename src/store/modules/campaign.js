@@ -51,12 +51,14 @@ const actions = {
                 });
         });
     },
-    saveCampaign({ commit, state }, campaign) {
+    saveCampaign({ commit, state }, data) {
         return new Promise((resolve, reject) => {
-            new Campaign(campaign).save().then(res => {
+            const campaign = new Campaign(data);
+            campaign.save().then(res => {
+                console.log("camppaignData", res.item);
                 commit("setCampaign", {
-                    name: res.campaignType,
-                    data: res,
+                    name: res.item.campaignType,
+                    data: res.item,
                 });
                 resolve(res);
             });

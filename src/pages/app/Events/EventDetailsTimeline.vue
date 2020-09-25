@@ -522,6 +522,10 @@ export default {
           console.log("saved original timelines", this.originalTimelineItems);
           this.timelineDates = Object.keys(this.timelineItems).sort();
           this.eventData.timelineItems = this.timelineItems;
+          this.timelineData = {};
+          this.timelineDates.forEach((date) => {
+            this.timelineDates[data] = [];
+          });
           this.$root.$emit("timeline-updated", this.timelineItems);
         });
     },
