@@ -8,12 +8,12 @@
       <div class="summary-cont">
         <ul>
           <li
-            :class="[{'with-help': dateTooltip}]"
-            @mouseover="dateTooltip=true"
-            @mouseleave="dateTooltip=false"
+            :class="[{ 'with-help': dateTooltip }]"
+            @mouseover="dateTooltip = true"
+            @mouseleave="dateTooltip = false"
           >
             <img :src="`${proposalIconsUrl}Path 251 (2).svg`" />
-            {{eventDate}}
+            {{ eventDate }}
             <img
               v-if="dateTooltip"
               class="question"
@@ -29,26 +29,40 @@
           </li>
           <li>
             <img :src="`${proposalIconsUrl}Group 6085 (2).svg`" />
-            {{eventTime}}
+            {{ eventTime }}
           </li>
           <li>
             <img :src="`${proposalIconsUrl}Asset 573.svg`" />
-            {{getLocation}}
+            {{ getLocation }}
           </li>
           <li>
             <img :src="`${proposalIconsUrl}Asset 572.svg`" />
-            {{proposalRequest ? proposalRequest.eventData.numberOfParticipants : '-' | withComma }}
+            {{
+              proposalRequest
+                ? proposalRequest.eventData.numberOfParticipants
+                : "-" | withComma
+            }}
           </li>
         </ul>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat.
+        </p>
         <div class="a-right">
-          <a class="see-full" @click="fullDetailsModal=true">
+          <a class="see-full" @click="fullDetailsModal = true">
             See Full Details
             <md-icon>keyboard_arrow_right</md-icon>
           </a>
         </div>
         <div class="pull-bottom-right">
-          <vendor-bid-time-counter :days="4" :hours="0" :minutes="0" :seconds="0" />
+          <vendor-bid-time-counter
+            :days="4"
+            :hours="0"
+            :minutes="0"
+            :seconds="0"
+          />
         </div>
       </div>
     </section>
@@ -74,28 +88,39 @@
         <a
           class="next"
           @click="saveProposal()"
-          :class="[{'active': selectedServices.length > 0}]"
-          v-if="step==0"
-        >Next</a>
+          :class="[{ active: selectedServices.length > 0 }]"
+          v-if="step == 0"
+          >Next</a
+        >
         <a
           class="next"
           @click="saveProposal()"
-          :class="[{'active': selectedServices.length > 0}]"
-          v-if="step==1"
-        >Next</a>
-        <a class="next active" @click="saveProposal()" v-if="step==2">
+          :class="[{ active: selectedServices.length > 0 }]"
+          v-if="step == 1"
+          >Next</a
+        >
+        <a class="next active" @click="saveProposal()" v-if="step == 2">
           Next
           <md-icon>keyboard_arrow_right</md-icon>
         </a>
-        <a class="next active" @click="saveProposal()" v-if="step>=3">Submit Proposal</a>
+        <a class="next active" @click="saveProposal()" v-if="step >= 3"
+          >Submit Proposal</a
+        >
       </div>
     </section>
-    <modal v-if="fullDetailsModal" class="full-details-modal" container-class="modal-container lg">
+    <modal
+      v-if="fullDetailsModal"
+      class="full-details-modal"
+      container-class="modal-container lg"
+    >
       <template slot="header">
         <div class="full-details-modal__header">
-          <div
-            class="header-description"
-          >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+          <div class="header-description">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat.
+          </div>
         </div>
         <button class="close" @click="hideModal()">
           <img :src="`${proposalIconsUrl}Group 3671 (2).svg`" />
@@ -108,42 +133,50 @@
               <img :src="`${landingIconsUrl}Path 251.svg`" />
               <span>
                 <strong>Date:</strong>
-                {{eventDate}}
+                {{ eventDate }}
               </span>
             </li>
             <li>
               <img :src="`${landingIconsUrl}Group 6085.svg`" />
               <span>
                 <strong>Time:</strong>
-                {{eventTime}}
+                {{ eventTime }}
               </span>
             </li>
             <li>
               <img :src="`${landingIconsUrl}Asset 506.svg`" />
               <span>
                 <strong>Address:</strong>
-                {{getLocation}}
+                {{ getLocation }}
               </span>
             </li>
             <li>
               <img :src="`${landingIconsUrl}Asset 505.svg`" />
               <span>
                 <strong>Guests:</strong>
-                {{proposalRequest ? proposalRequest.eventData.numberOfParticipants : '-' | withComma }}
+                {{
+                  proposalRequest
+                    ? proposalRequest.eventData.numberOfParticipants
+                    : "-" | withComma
+                }}
               </span>
             </li>
             <li>
               <img :src="`${landingIconsUrl}Path 1942.svg`" />
               <span>
                 <strong>Type:</strong>
-                {{proposalRequest ? proposalRequest.eventData.occasion : '-'}}
+                {{ proposalRequest ? proposalRequest.eventData.occasion : "-" }}
               </span>
             </li>
             <li>
               <img :src="`${landingIconsUrl}Path 1383.svg`" />
               <span>
                 <strong>Invited:</strong>
-                {{proposalRequest ? proposalRequest.eventData.participantsType : '-'}}
+                {{
+                  proposalRequest
+                    ? proposalRequest.eventData.participantsType
+                    : "-"
+                }}
               </span>
             </li>
           </ul>
@@ -158,7 +191,11 @@
         </div>
       </template>
     </modal>
-    <modal v-if="savedItModal" class="saved-it-modal" container-class="modal-container sl">
+    <modal
+      v-if="savedItModal"
+      class="saved-it-modal"
+      container-class="modal-container sl"
+    >
       <template slot="header">
         <div class="saved-it-modal__header">
           <h3 v-if="isTimeUp">
@@ -167,15 +204,17 @@
           <h3 v-else>
             <img :src="`${proposalIconsUrl}Asset 588.svg`" />Saved It!
           </h3>
-          <div
-            v-if="isTimeUp"
-            class="header-description"
-          >The deadline for submitting this prposal has passed. But no worries! We weill be with you soon with the next one.</div>
+          <div v-if="isTimeUp" class="header-description">
+            The deadline for submitting this prposal has passed. But no worries!
+            We weill be with you soon with the next one.
+          </div>
           <div
             v-else
             class="header-description"
-            :class="[{'text-center': !isTimeUp}]"
-          >You can return to it till the deadline!</div>
+            :class="[{ 'text-center': !isTimeUp }]"
+          >
+            You can return to it till the deadline!
+          </div>
         </div>
         <button class="close" @click="hideModal()">
           <img :src="`${proposalIconsUrl}Group 3671 (2).svg`" />
@@ -184,16 +223,28 @@
       <template slot="body">
         <div class="saved-it-modal__body">
           <div v-if="isTimeUp" class="time-cont">
-            <vendor-bid-time-counter :days="0" :hours="0" :minutes="0" :seconds="0" />
+            <vendor-bid-time-counter
+              :days="0"
+              :hours="0"
+              :minutes="0"
+              :seconds="0"
+            />
           </div>
           <div v-else class="time-cont">
-            <vendor-bid-time-counter :days="4" :hours="0" :minutes="0" :seconds="0" />
+            <vendor-bid-time-counter
+              :days="4"
+              :hours="0"
+              :minutes="0"
+              :seconds="0"
+            />
           </div>
         </div>
       </template>
       <template slot="footer">
         <div class="saved-it-modal__footer">
-          <button v-if="isTimeUp" class="cool" @click="hideModal()">Ok, Thanks</button>
+          <button v-if="isTimeUp" class="cool" @click="hideModal()">
+            Ok, Thanks
+          </button>
           <button v-else class="cool" @click="hideModal()">Cool, Thanks</button>
         </div>
       </template>
@@ -391,8 +442,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@/assets/scss/md/_variables.scss";
-@import "@/assets/scss/md/_colors.scss";
 .for-proposals-layout-wrapper {
   font-family: "Manrope-Regular", sans-serif;
   overflow: hidden;
