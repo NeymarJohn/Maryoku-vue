@@ -7,29 +7,38 @@
             <img :src="item.image" />
             <div class="text-container">
               <p>
-                {{item.vendorName}}
+                {{ item.vendorName }}
                 <label
                   class="star-rating__star"
                   v-for="(rating, ratingIndex) in ratings"
                   :key="ratingIndex"
-                  :class="{'is-selected' : ((item.bidderRank >= rating) && item.bidderRank != null)}"
-                >★</label>
+                  :class="{
+                    'is-selected':
+                      item.bidderRank >= rating && item.bidderRank != null,
+                  }"
+                  >★</label
+                >
               </p>
-              <h4>{{getEventTitle(item.eventData)}}</h4>
-              <h5>{{item.eventData.participantsType}} {{item.eventData.numberOfParticipants}}</h5>
+              <h4>{{ getEventTitle(item.eventData) }}</h4>
+              <h5>
+                {{ item.eventData.participantsType }}
+                {{ item.eventData.numberOfParticipants }}
+              </h5>
             </div>
-            <span>{{getMonth(item.eventData.eventStartMillis)}}</span>
+            <span>{{ getMonth(item.eventData.eventStartMillis) }}</span>
           </div>
         </md-card-header>
         <md-card-content>
           <div class="down-row">
-            <h4>${{(item.bidRange.low + item.bidRange.high) / 2 | numeral('0,0')}}</h4>
+            <h4>
+              ${{
+                ((item.bidRange.low + item.bidRange.high) / 2) | numeral("0,0")
+              }}
+            </h4>
             <div class="status">
-              <span>{{item.vendorName}}</span>
+              <span>{{ item.vendorName }}</span>
             </div>
-            <a class="link-photos">
-              <md-icon>photo</md-icon>view photos
-            </a>
+            <a class="link-photos"> <md-icon>photo</md-icon>view photos </a>
           </div>
         </md-card-content>
       </md-card>
@@ -38,61 +47,59 @@
   </div>
 </template>
 <script>
-import numeral from 'numeral'
-import moment from 'moment'
-import Calendar from '@/models/Calendar'
-import CalendarEvent from '@/models/CalendarEvent'
-import EventComponent from '@/models/EventComponent'
-import VueElementLoading from 'vue-element-loading'
+import numeral from "numeral";
+import moment from "moment";
+import Calendar from "@/models/Calendar";
+import CalendarEvent from "@/models/CalendarEvent";
+import EventComponent from "@/models/EventComponent";
+import VueElementLoading from "vue-element-loading";
 
 export default {
-  name: 'vendor-similar-proposals',
+  name: "vendor-similar-proposals",
   components: {
-    VueElementLoading
+    VueElementLoading,
   },
   props: {
     proposals: Array,
-    ratings: Array
+    ratings: Array,
   },
   data: () => ({
     isLoading: true,
     serverUrl: process.env.SERVER_URL,
-    events: []
+    events: [],
   }),
-  mounted () {
-    let _calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
+  mounted() {
+    let _calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
 
-    let m = new CalendarEvent().for(_calendar).fetch(this, true)
-    m.then(allEvents => {
-      this.events = allEvents
-      this.isLoading = false
-    })
+    let m = new CalendarEvent().for(_calendar).fetch(this, true);
+    m.then((allEvents) => {
+      this.events = allEvents;
+      this.isLoading = false;
+    });
   },
   methods: {
-    getMonth (eventStartMillis) {
-      let x = new Date(eventStartMillis)
-      return moment(x).format('MMMM')
+    getMonth(eventStartMillis) {
+      let x = new Date(eventStartMillis);
+      return moment(x).format("MMMM");
     },
-    getEventTitle (eventData) {
+    getEventTitle(eventData) {
       if (this.events) {
         const e = this.events.filter(
-          event =>
+          (event) =>
             event.eventStartMillis === eventData.eventStartMillis &&
-            event.eventEndMillis === eventData.eventEndMillis
-        )
+            event.eventEndMillis === eventData.eventEndMillis,
+        );
         if (e.length) {
-          return e[0].title
+          return e[0].title;
         } else {
-          return 'No Event Title'
+          return "No Event Title";
         }
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
-@import "@/assets/scss/md/_variables.scss";
-@import "@/assets/scss/md/_colors.scss";
 .full-width {
   width: 100%;
 }

@@ -34,8 +34,8 @@
         <div class="timeline-items-list">
           <div
             class="timeline-items-list__item"
-            v-for="(groups, scheduleDate, dateIndex) in timelineItems"
-            :key="dateIndex"
+            v-for="(scheduleDate, timelineIndex) in timelineDateKeys"
+            :key="timelineIndex"
           >
             <div class="item-header mb-20">
               <div class="header-title">
@@ -43,12 +43,12 @@
                   class="time-line-edit d-flex justify-content-center align-center"
                 >
                   <label style="white-space: nowrap; padding-right: 10px"
-                    >Day {{ numberToWord(dateIndex + 1) }}</label
+                    >Day {{ numberToWord(timelineIndex + 1) }}</label
                   >
                   <div>{{ scheduleDate }}</div>
                   <md-datepicker
-                    :md-disabled-dates="getDisabledDates(dateIndex)"
-                    :md-closed="closeEditTimeline(dateIndex)"
+                    :md-disabled-dates="getDisabledDates(timelineIndex)"
+                    :md-closed="closeEditTimeline(timelineIndex)"
                     md-immediately
                   ></md-datepicker>
                 </div>
@@ -72,29 +72,47 @@
             </div>
 
             <drop
-              @drop="handleDrop(dateIndex, ...arguments)"
+              @drop="handleDrop(timelineIndex, ...arguments)"
               style="height: 100%; min-height: 50px"
               :data-index="timelineIndex"
             >
-              <draggable :list="groups" class="time-line-blocks_selected-items">
-                <div
-                  v-for="(timelines, groupName, index) in groups"
-                  :key="index"
-                  class="time-line-blocks_selected-items_item time-line-item"
-                >
+              <draggable
+                :list="timelineItems[scheduleDate]"
+                class="time-line-blocks_selected-items"
+              >
+                <template v-if="timelineItems[scheduleDate].length > 0">
+                  <div
+                    v-for="(item, index) in timelineItems[scheduleDate]"
+                    :key="index"
+                    class="time-line-blocks_selected-items_item time-line-item"
+                  >
+                    <!-- <timeline-template-item
+                  v-if="item.status=='template' || item.status=='timegap'"
+                  :item="item"
+                  :index="index"
+                    ></timeline-template-item>-->
+                    <timeline-item
+                      :item="item"
+                      :index="index"
+                      :timelineItems="timelineItems"
+                      @save="saveTimeline"
+                      @cancel="cancleTimeline"
+                      @remove="removeItem"
+                      :key="Math.random()"
+                    ></timeline-item>
+                    <timeline-empty
+                      :index="index"
+                      :date="scheduleDate"
+                    ></timeline-empty>
+                  </div>
+                </template>
+                <template v-else>
                   <timeline-empty
-                    :index="index"
+                    :index="-1"
                     :date="scheduleDate"
-                    v-if="index == 0"
+                    :placeHolder="true"
                   ></timeline-empty>
-                  <timeline-group-container
-                    :timelines="timelines"
-                  ></timeline-group-container>
-                  <timeline-empty
-                    :index="index"
-                    :date="scheduleDate"
-                  ></timeline-empty>
-                </div>
+                </template>
               </draggable>
             </drop>
           </div>
@@ -240,8 +258,6 @@ import { Modal, LabelEdit, LocationInput } from "@/components";
 import TimelineTemplateItem from "./components/TimelineTemplateItem";
 import TimelineItem from "./components/TimelineItem";
 import TimelineEmpty from "./components/TimelineEmpty";
-import TimelineGroupContainer from "./components/TimelineGroupContainer";
-
 import VueElementLoading from "vue-element-loading";
 // import auth from '@/auth';
 import EventBlocks from "./components/NewEventBlocks";
@@ -281,7 +297,6 @@ export default {
     TimelineItem,
     TimelineEmpty,
     TimelineGapModal,
-    TimelineGroupContainer,
   },
   props: {
     // event: Object,
@@ -504,11 +519,12 @@ export default {
         .then((res) => {
           this.timelineItems = Object.assign({}, res.data);
           this.originalTimelineItems = JSON.stringify(res.data);
+          console.log("saved original timelines", this.originalTimelineItems);
           this.timelineDates = Object.keys(this.timelineItems).sort();
           this.eventData.timelineItems = this.timelineItems;
           this.timelineData = {};
           this.timelineDates.forEach((date) => {
-            this.timelineData[date] = [];
+            this.timelineDates[data] = [];
           });
           this.$root.$emit("timeline-updated", this.timelineItems);
         });
@@ -702,7 +718,9 @@ export default {
         id: "updateMultiple",
         timelineItems: timelineItemsForUpdate,
       }).for(this.calendar, event);
+
       timelineItem.order = new_order;
+
       timelineItem
         .save()
         .then((res) => {

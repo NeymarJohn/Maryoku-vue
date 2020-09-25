@@ -2,24 +2,25 @@
   <div class="vendor-budget-list-wrapper">
     <h4>
       <img :src="`${iconsUrl}Asset 500.svg`" />
-      {{title}}
+      {{ title }}
     </h4>
-    <div class="total">
-      <strong>Total Event Budget:</strong>$0
-    </div>
+    <div class="total"><strong>Total Event Budget:</strong>$0</div>
     <p>
       <img :src="`${iconsUrl}Group 5180.svg`" />
-      {{description}}
+      {{ description }}
     </p>
     <div class="budget-list">
       <div class="items">
         <div class="item" v-for="(r, ri) in requirements" :key="ri">
           <span>
-            <img v-if="r.category=='food'" :src="`${iconsUrl}Asset 515.svg`" />
+            <img
+              v-if="r.category == 'food'"
+              :src="`${iconsUrl}Asset 515.svg`"
+            />
             <img v-else :src="`${iconsUrl}Asset 516.svg`" />
-            {{r.category}}
+            {{ r.category }}
           </span>
-          <span>${{r.price | withComma}}</span>
+          <span>${{ r.price | withComma }}</span>
         </div>
       </div>
       <div class="total">
@@ -75,8 +76,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@/assets/scss/md/_variables.scss";
-@import "@/assets/scss/md/_colors.scss";
 .vendor-budget-list-wrapper {
   font-family: "Manrope-Regular", sans-serif !important;
 

@@ -1,15 +1,19 @@
 <template>
   <div class="v-signup-add-rules-wrapper">
-    <template v-if="comType=='rule'">
+    <template v-if="comType == 'rule'">
       <div class="add-rule-cont">
-        <h4>{{title.title}}</h4>
-        <div class="field" :class="{'suffix': focusedRule != ''}">
-          <input :placeholder="title.placeholder" ref="additionalRule" v-model="focusedRule" />
+        <h4>{{ title.title }}</h4>
+        <div class="field" :class="{ suffix: focusedRule != '' }">
+          <input
+            :placeholder="title.placeholder"
+            ref="additionalRule"
+            v-model="focusedRule"
+          />
           <a :disabled="true" @click="addRule()">Add</a>
         </div>
         <div class="rules-cont" v-if="rules.length > 0">
           <div class="rule" v-for="(r, rIndex) in rules" :key="rIndex">
-            <span>{{r}}</span>
+            <span>{{ r }}</span>
             <div class="actions">
               <img :src="`${iconUrl}Asset 527.svg`" @click="editRule(r)" />
               <img :src="`${iconUrl}Asset 529.svg`" @click="removeRule(r)" />
@@ -21,15 +25,15 @@
     <template v-else>
       <div class="cancel-policy-cont">
         <div class="title-cont">
-          <h4>{{title.title}}</h4>
-          <span>{{title.subTitle}}</span>
+          <h4>{{ title.title }}</h4>
+          <span>{{ title.subTitle }}</span>
         </div>
         <div class="input-cont">
           <div class="ifthan">
             <div>
               <span>
                 <strong>If</strong>
-                {{title.labels.if}}
+                {{ title.labels.if }}
               </span>
             </div>
             <input
@@ -45,7 +49,7 @@
             <div>
               <span>
                 <strong>Than</strong>
-                {{title.labels.than}}
+                {{ title.labels.than }}
               </span>
             </div>
             <input
@@ -62,15 +66,21 @@
           <div class="policy" v-for="(p, pIndex) in policies" :key="pIndex">
             <div class="pitem">
               <b>If</b>
-              {{p.if}}
+              {{ p.if }}
             </div>
             <div class="pitem">
               <b>Than</b>
-              {{p.than}}
+              {{ p.than }}
             </div>
             <div class="actions">
-              <img :src="`${iconUrl}Asset 527.svg`" @click="editCancelPolicy(p)" />
-              <img :src="`${iconUrl}Asset 529.svg`" @click="removeCancelPolicy(p)" />
+              <img
+                :src="`${iconUrl}Asset 527.svg`"
+                @click="editCancelPolicy(p)"
+              />
+              <img
+                :src="`${iconUrl}Asset 529.svg`"
+                @click="removeCancelPolicy(p)"
+              />
             </div>
           </div>
         </div>
@@ -143,9 +153,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@/assets/scss/md/_variables.scss";
-@import "@/assets/scss/md/_colors.scss";
-
 .v-signup-add-rules-wrapper {
   width: 100%;
   color: #050505;

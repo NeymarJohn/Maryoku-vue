@@ -5,9 +5,16 @@
         <div class="d-flex align-center p-50">
           <img class="mr-30" :src="`${$iconURL}Campaign/Group 9136.svg`" />
           <div>
-            <div class="font-size-30 font-bold-extra color-red">Delivery settings</div>
+            <div class="font-size-30 font-bold-extra color-red">
+              Delivery settings
+            </div>
             <div class="mt-2 d-flex align-center">
-              <span class="font-bold-extra font-size-30 pr-20">0</span>
+              <span class="font-bold-extra font-size-30 pr-20">{{
+                currentCampaign.guestEmails
+                  ? currentCampaign.guestEmails.length
+                  : 0
+              }}</span>
+
               <span>In your invitees list</span>
             </div>
           </div>
@@ -17,15 +24,27 @@
         <div class="delivery-setting-content pb-50">
           <div class="setting-item">
             <div class="check-wrapper">
-              <md-checkbox v-model="settingData.phone.selected" class="md-checkbox-narrow"></md-checkbox>
+              <md-checkbox
+                v-model="settingData.phone.selected"
+                class="md-checkbox-narrow"
+              ></md-checkbox>
               <div>
-                <img :src="`${$iconURL}Campaign/group-9439.svg`" class="mr-10 ml-10" />
-                <span class="font-size-22 font-bold-extra mr-30">By text message</span>
+                <img
+                  :src="`${$iconURL}Campaign/group-9439.svg`"
+                  class="mr-10 ml-10"
+                />
+                <span class="font-size-22 font-bold-extra mr-30"
+                  >By text message</span
+                >
                 <span>WhatsApp or sms</span>
               </div>
               <md-button class="md-icon-button md-simple collapse-button">
-                <md-icon class="icon" v-if="settingData.phone.selected">keyboard_arrow_down</md-icon>
-                <md-icon class="icon" v-if="!settingData.phone.selected">keyboard_arrow_right</md-icon>
+                <md-icon class="icon" v-if="settingData.phone.selected"
+                  >keyboard_arrow_down</md-icon
+                >
+                <md-icon class="icon" v-if="!settingData.phone.selected"
+                  >keyboard_arrow_right</md-icon
+                >
               </md-button>
             </div>
             <div class="mt-50" v-if="settingData.phone.selected">
@@ -46,10 +65,17 @@
                     v-if="invalidPastedPhones"
                     :content="invalidPastedPhones"
                   ></invalid-address-panel>
-                  <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
-                    <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
+                  <span
+                    class="ml-20 mt-10 input-tooltip-wrapper position-relative"
+                  >
+                    <img
+                      class="ml-20"
+                      :src="`${$iconURL}Campaign/Group 9087.svg`"
+                    />
                     <md-tooltip>
-                      <div class="font-size-14 input-tooltip">###-##-#######</div>
+                      <div class="font-size-14 input-tooltip">
+                        ###-##-#######
+                      </div>
                     </md-tooltip>
                   </span>
                 </div>
@@ -59,26 +85,44 @@
                   @click="choosePhoneExcel"
                   v-if="!settingData.phone.excelFileName"
                 >
-                  <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10" />
+                  <img
+                    :src="`${$iconURL}Campaign/Group 9241.svg`"
+                    class="mr-10"
+                  />
                   <span class="color-red">Upload Excel list file</span>
                 </md-button>
                 <div v-else class="uploadedFile border-gray-1">
-                  <div class="font-bold text-underline mb-10">{{settingData.phone.excelFileName}}</div>
-                  <md-button class="md-simple edit-btn" @click="choosePhoneExcel">
+                  <div class="font-bold text-underline mb-10">
+                    {{ settingData.phone.excelFileName }}
+                  </div>
+                  <md-button
+                    class="md-simple edit-btn"
+                    @click="choosePhoneExcel"
+                  >
                     <span class="color-red">change</span>
                   </md-button>
-                  <md-button class="md-simple edit-btn" @click="removeExcel('phone')">
+                  <md-button
+                    class="md-simple edit-btn"
+                    @click="removeExcel('phone')"
+                  >
                     <span class="color-red">remove</span>
                   </md-button>
                 </div>
                 <span class="ml-20 mt-10">
-                  <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
+                  <img
+                    class="ml-20"
+                    :src="`${$iconURL}Campaign/Group 9087.svg`"
+                  />
                   <md-tooltip>
-                    <div class="font-size-14 input-tooltip">{{tooltips.phoneExcel}}</div>
+                    <div class="font-size-14 input-tooltip">
+                      {{ tooltips.phoneExcel }}
+                    </div>
                   </md-tooltip>
                 </span>
               </div>
-              <div class="mt-50 font-bold">How would you like to send your text?</div>
+              <div class="mt-50 font-bold">
+                How would you like to send your text?
+              </div>
               <div class="mt-10">
                 <md-checkbox
                   v-model="settingData.phone.smsOrWhatsapp"
@@ -86,9 +130,12 @@
                   value="sms"
                 >
                   <span
-                    :class="{'font-bold': settingData.phone.smsOrWhatsapp === 'sms'}"
+                    :class="{
+                      'font-bold': settingData.phone.smsOrWhatsapp === 'sms',
+                    }"
                     class="p-5"
-                  >By SMS</span>
+                    >By SMS</span
+                  >
                 </md-checkbox>
                 <md-checkbox
                   v-model="settingData.phone.smsOrWhatsapp"
@@ -97,8 +144,12 @@
                 >
                   <img :src="`${$iconURL}Campaign/Image+74.png`" />
                   <span
-                    :class="{'font-bold': settingData.phone.smsOrWhatsapp === 'whatsapp'}"
-                  >By WhatsApp</span>
+                    :class="{
+                      'font-bold':
+                        settingData.phone.smsOrWhatsapp === 'whatsapp',
+                    }"
+                    >By WhatsApp</span
+                  >
                 </md-checkbox>
               </div>
             </div>
@@ -106,18 +157,36 @@
 
           <div class="setting-item">
             <div class="check-wrapper">
-              <md-checkbox v-model="settingData.email.selected" class="md-checkbox-narrow"></md-checkbox>
+              <md-checkbox
+                v-model="settingData.email.selected"
+                class="md-checkbox-narrow"
+              ></md-checkbox>
               <div>
-                <img :src="`${$iconURL}Campaign/group-9437.svg`" class="mr-10 ml-10" />
+                <img
+                  :src="`${$iconURL}Campaign/group-9437.svg`"
+                  class="mr-10 ml-10"
+                />
                 <span class="font-size-22 font-bold-extra mr-30">By email</span>
-                <span>Enter recipients emails or upload Microsoft excel or Google sheets with guests list</span>
+                <span
+                  >Enter recipients emails or upload Microsoft excel or Google
+                  sheets with guests list</span
+                >
               </div>
               <md-button class="md-icon-button md-simple collapse-button">
-                <md-icon class="icon" v-if="settingData.email.selected">keyboard_arrow_down</md-icon>
-                <md-icon class="icon" v-if="!settingData.email.selected">keyboard_arrow_right</md-icon>
+                <md-icon class="icon" v-if="settingData.email.selected"
+                  >keyboard_arrow_down</md-icon
+                >
+                <md-icon class="icon" v-if="!settingData.email.selected"
+                  >keyboard_arrow_right</md-icon
+                >
               </md-button>
             </div>
-            <div v-if="settingData.email.selected">
+            <div
+              v-if="
+                settingData.email.selected &&
+                currentCampaign.campaignStatus == 'EDITING'
+              "
+            >
               <div class="mt-50">
                 <label class="font-bold mb-10 line-height-2">Subject</label>
                 <div class="width-60 position-relative">
@@ -130,20 +199,30 @@
               <div class="mt-50">
                 <label class="font-bold mb-10 line-height-2">From</label>
                 <div class="width-60 position-relative">
-                  <maryoku-input placeholder="Your email address…" v-model="settingData.email.from"></maryoku-input>
-                  <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
-                    <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
+                  <maryoku-input
+                    placeholder="Your email address…"
+                    v-model="settingData.email.from"
+                  ></maryoku-input>
+                  <span
+                    class="ml-20 mt-10 input-tooltip-wrapper position-relative"
+                  >
+                    <img
+                      class="ml-20"
+                      :src="`${$iconURL}Campaign/Group 9087.svg`"
+                    />
                     <md-tooltip>
-                      <div
-                        class="font-size-14 input-tooltip"
-                      >Pick the email from which you wish the guests to get this mail</div>
+                      <div class="font-size-14 input-tooltip">
+                        Pick the email from which you wish the guests to get
+                        this mail
+                      </div>
                     </md-tooltip>
                   </span>
                 </div>
               </div>
               <div class="mt-50 font-size-14">
                 <label class="mb-10 line-height-2">
-                  <span class="font-bold mr-10 font-size-16">To</span>Make sure to put space / comma between each address
+                  <span class="font-bold mr-10 font-size-16">To</span>Make sure
+                  to put space / comma between each address
                 </label>
                 <div class="d-flex align-start width-100">
                   <div class="width-60 position-relative">
@@ -155,10 +234,17 @@
                       v-model="settingData.email.addressString"
                       @change="handleInputEmails"
                     ></maryoku-textarea>
-                    <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
-                      <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
+                    <span
+                      class="ml-20 mt-10 input-tooltip-wrapper position-relative"
+                    >
+                      <img
+                        class="ml-20"
+                        :src="`${$iconURL}Campaign/Group 9087.svg`"
+                      />
                       <md-tooltip>
-                        <div class="font-size-14 input-tooltip">example : example@mail.com</div>
+                        <div class="font-size-14 input-tooltip">
+                          example : example@mail.com
+                        </div>
                       </md-tooltip>
                     </span>
                     <invalid-address-panel
@@ -168,7 +254,9 @@
                       :content="invalidPastedEmails"
                     ></invalid-address-panel>
                   </div>
-                  <span class="font-size-16" style="padding: 20px 40px">Or</span>
+                  <span class="font-size-16" style="padding: 20px 40px"
+                    >Or</span
+                  >
 
                   <!-- Emails Excel File Upload  -->
                   <md-button
@@ -176,25 +264,82 @@
                     class="md-outlined md-simple maryoku-btn"
                     @click="chooseEmailExcel"
                   >
-                    <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10" />
+                    <img
+                      :src="`${$iconURL}Campaign/Group 9241.svg`"
+                      class="mr-10"
+                    />
                     <span class="color-red">Upload Excel list file</span>
                   </md-button>
                   <div v-else class="uploadedFile border-gray-1">
-                    <div class="font-bold text-underline mb-10">{{settingData.email.excelFileName}}</div>
-                    <md-button class="md-simple edit-btn mr-10" @click="chooseEmailExcel">
+                    <div class="font-bold text-underline mb-10">
+                      {{ settingData.email.excelFileName }}
+                    </div>
+                    <md-button
+                      class="md-simple edit-btn mr-10"
+                      @click="chooseEmailExcel"
+                    >
                       <span class="color-red">change</span>
                     </md-button>
                     <span class="ml-10 mr-10"></span>
-                    <md-button class="md-simple edit-btn ml-10" @click="removeExcel('email')">
+                    <md-button
+                      class="md-simple edit-btn ml-10"
+                      @click="removeExcel('email')"
+                    >
                       <span class="color-red">remove</span>
                     </md-button>
                   </div>
                   <span class="ml-20 mt-10">
-                    <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
+                    <img
+                      class="ml-20"
+                      :src="`${$iconURL}Campaign/Group 9087.svg`"
+                    />
                     <md-tooltip>
-                      <div class="font-size-14 input-tooltip">{{tooltips.emailExcel}}</div>
+                      <div class="font-size-14 input-tooltip">
+                        {{ tooltips.emailExcel }}
+                      </div>
                     </md-tooltip>
                   </span>
+                </div>
+              </div>
+            </div>
+            <div
+              v-if="
+                settingData.email.selected &&
+                (currentCampaign.campaignStatus == 'STARTED' ||
+                  currentCampaign.campaignStatus == 'SCHEDULED')
+              "
+            >
+              <div class="mt-50">
+                <div class="font-bold mb-10 line-height-2">Subject</div>
+                <div class="width-60 position-relative">
+                  {{ settingData.email.subject }}
+                </div>
+              </div>
+              <div class="mt-50">
+                <div class="font-bold mb-10 line-height-2">From</div>
+                <div class="width-60 position-relative">
+                  {{ settingData.email.from }}
+                </div>
+              </div>
+              <div class="mt-50">
+                <div class="font-bold mb-10 line-height-2">
+                  Sent to ({{
+                    currentCampaign.guestEmails
+                      ? currentCampaign.guestEmails.length
+                      : 0
+                  }})
+                </div>
+                <div class="d-flex align-start width-100">
+                  {{ currentCampaign.settings.email.addressString }}
+                </div>
+                <div class="mt-20">
+                  <md-button
+                    class="md-simple md-red edit-btn"
+                    @click="downloadXml"
+                  >
+                    <img :src="`${$iconURL}Campaign/excel.png`" class="mr-10" />
+                    Download Full Guests list
+                  </md-button>
                 </div>
               </div>
             </div>
@@ -240,6 +385,7 @@ export default {
       default: () => ({
         phone: {
           selected: false,
+          status: "ready",
           numberString: "",
           numberArray: [],
           excelFileName: "",
@@ -248,6 +394,7 @@ export default {
         },
         email: {
           selected: false,
+          status: "ready",
           subject: "",
           from: "",
           addressString: "",
@@ -287,13 +434,10 @@ export default {
     this.settingData = this.defaultSettings;
     // set default subject for email
     this.settingData.email.from = this.$store.state.auth.user.username;
-    console.log("this.emailSubject", this.emailSubject);
     this.settingData.email.subject = this.emailSubject;
   },
   methods: {
     handleInputEmails({ value, type }) {
-      console.log(value);
-      console.log(type);
       const addresses = value.split(/[\s,]+/);
       let invalidEmails = "";
       if (type == "emails") {
@@ -354,13 +498,13 @@ export default {
           const val = r[key];
           values.push(val);
         });
-        console.log(values);
         if (this.fileInputType === "email") {
           this.settingData.email.addressString = values.join();
         } else this.settingData.phone.numberString = values.join();
       };
       reader.readAsArrayBuffer(file);
     },
+    downloadXml() {},
   },
   computed: {
     event() {
@@ -368,7 +512,6 @@ export default {
     },
     emailSubject() {
       const campaignData = this.$store.state.campaign;
-      console.log(this.campaign.name);
       switch (this.campaign.name) {
         case "SAVING_DATE":
           return `${
@@ -399,6 +542,9 @@ export default {
         default:
           return "";
       }
+    },
+    currentCampaign() {
+      return this.$store.state.campaign[this.campaign.name];
     },
   },
   watch: {

@@ -4,15 +4,32 @@
     <div class="main-cont">
       <div class="one-row">
         <div class="left-side">
-          <h3>{{proposalRequest ? proposalRequest.eventData.title : 'No Event Data'}}</h3>
-          <h4>{{proposalRequest ? proposalRequest.eventData.eventType : 'No Event Data'}}</h4>
+          <h3>
+            {{
+              proposalRequest
+                ? proposalRequest.eventData.title
+                : "No Event Data"
+            }}
+          </h3>
+          <h4>
+            {{
+              proposalRequest
+                ? proposalRequest.eventData.eventType
+                : "No Event Data"
+            }}
+          </h4>
           <p v-if="proposalRequest">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat.
             <br />
             <br />
           </p>
           <p v-else>
-            There is no proposal request for this id. So, we can't show any event data now. But, we can just show how you would make a proposal here when you would get an email from us.
+            There is no proposal request for this id. So, we can't show any
+            event data now. But, we can just show how you would make a proposal
+            here when you would get an email from us.
             <br />
             <br />
           </p>
@@ -38,17 +55,25 @@
               <li>
                 <img :src="`${iconsUrl}Asset 505.svg`" />
                 <strong>Guests:</strong>
-                {{ proposalRequest ? proposalRequest.eventData.numberOfParticipants : '-' | withComma }}
+                {{
+                  proposalRequest
+                    ? proposalRequest.eventData.numberOfParticipants
+                    : "-" | withComma
+                }}
               </li>
               <li>
                 <img :src="`${iconsUrl}Path 1942.svg`" />
                 <strong>Type:</strong>
-                {{ proposalRequest ? proposalRequest.eventData.occasion : '-'}}
+                {{ proposalRequest ? proposalRequest.eventData.occasion : "-" }}
               </li>
               <li>
                 <img :src="`${iconsUrl}Path 1383.svg`" />
                 <strong>Invited:</strong>
-                {{ proposalRequest ? proposalRequest.eventData.participantsType : '-'}}
+                {{
+                  proposalRequest
+                    ? proposalRequest.eventData.participantsType
+                    : "-"
+                }}
               </li>
               <li>
                 <div class="new-time">
@@ -73,15 +98,17 @@
         <md-checkbox class="check-condition" v-model="isAgreed">
           <span
             class="regular"
-            @mouseover="conditionTooltip=true"
-            @mouseleave="conditionTooltip=false"
-          >I accept</span>
+            @mouseover="conditionTooltip = true"
+            @mouseleave="conditionTooltip = false"
+            >I accept</span
+          >
         </md-checkbox>
         <a
           class="condition"
           target="_blank"
           href="https://www.maryoku.com/terms"
-        >Maryoku's Terms & Conditions</a>
+          >Maryoku's Terms & Conditions</a
+        >
       </div>
       <!-- <div class="condition-tooltip" v-if="conditionTooltip"> -->
       <div class="condition-tooltip" v-if="true">
@@ -90,7 +117,9 @@
       </div>
     </div>
     <div class="action-cont">
-      <button class="no" @click="showNotBiddingModal">Thank You, But No.</button>
+      <button class="no" @click="showNotBiddingModal">
+        Thank You, But No.
+      </button>
       <button class="no no-border" @click="showReferModal">
         Refer Another Vendor
         <div class="refer-tooltip" v-if="referTooltip">
@@ -98,21 +127,34 @@
             Refer a new vendor
             <br />and get a commission!
           </h5>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor
+          </p>
         </div>
         <img
           :src="`${iconsUrl}Group 5522.svg`"
-          @mouseover="referTooltip=true"
-          @mouseleave="referTooltip=false"
+          @mouseover="referTooltip = true"
+          @mouseleave="referTooltip = false"
         />
       </button>
       <div class="with-description">
-        <p>You're the {{proposalRequest ? proposalRequest.bidderRank : '1' | numeral('Oo')}} catering & venue bidder</p>
+        <p>
+          You're the
+          {{
+            proposalRequest ? proposalRequest.bidderRank : "1" | numeral("Oo")
+          }}
+          catering & venue bidder
+        </p>
 
         <button class="yes" @click="goToForm()">Submit Proposal</button>
       </div>
     </div>
-    <modal v-if="referModal" class="refer-vendor-modal" container-class="modal-container sl">
+    <modal
+      v-if="referModal"
+      class="refer-vendor-modal"
+      container-class="modal-container sl"
+    >
       <template slot="header">
         <div class="refer-vendor-modal__header">
           <h3>Refer a vendor</h3>
@@ -161,7 +203,11 @@
         </div>
       </template>
     </modal>
-    <modal v-if="notBiddingModal" class="not-bidding-modal" container-class="modal-container lg">
+    <modal
+      v-if="notBiddingModal"
+      class="not-bidding-modal"
+      container-class="modal-container lg"
+    >
       <template slot="header">
         <div class="not-bidding-modal__header">
           <h3>
@@ -181,56 +227,71 @@
             <li>
               <md-checkbox
                 v-model="reasonIsDate"
-                :style="`border-color: ${reasonIsDate ? '#fc1355!important;' : 'inherit'}`"
+                :style="`border-color: ${
+                  reasonIsDate ? '#fc1355!important;' : 'inherit'
+                }`"
               >
-                <span
-                  class="colored"
-                  :class="[{'bold': reasonIsDate}]"
-                >I'm fully booked around the date of the event</span>
+                <span class="colored" :class="[{ bold: reasonIsDate }]"
+                  >I'm fully booked around the date of the event</span
+                >
               </md-checkbox>
               <a
                 class="another-date"
                 @click="showChooseDateModal()"
                 v-if="vendor.category == 'venue'"
-              >Suggest Another Date</a>
-              <a class="another-date" @click="showChooseDateModal()" v-else>Suggest Another Time</a>
+                >Suggest Another Date</a
+              >
+              <a class="another-date" @click="showChooseDateModal()" v-else
+                >Suggest Another Time</a
+              >
             </li>
             <li>
               <md-checkbox
                 v-model="reasonIsBudget"
-                :style="`border-color: ${reasonIsBudget ? '#fc1355!important;' : 'inherit'}`"
+                :style="`border-color: ${
+                  reasonIsBudget ? '#fc1355!important;' : 'inherit'
+                }`"
               >
-                <span class="colored" :class="[{'bold': reasonIsBudget}]">I'm way out of your budget</span>
+                <span class="colored" :class="[{ bold: reasonIsBudget }]"
+                  >I'm way out of your budget</span
+                >
               </md-checkbox>
             </li>
             <li>
               <md-checkbox
                 v-model="reasonIsService"
-                :style="`border-color: ${reasonIsService ? '#fc1355!important;' : 'inherit'}`"
+                :style="`border-color: ${
+                  reasonIsService ? '#fc1355!important;' : 'inherit'
+                }`"
               >
-                <span
-                  class="colored"
-                  :class="[{'bold': reasonIsService}]"
-                >I don't think my services are compatible to your requirements</span>
+                <span class="colored" :class="[{ bold: reasonIsService }]"
+                  >I don't think my services are compatible to your
+                  requirements</span
+                >
               </md-checkbox>
             </li>
             <li>
               <md-checkbox
                 v-model="reasonIsInfo"
-                :style="`border-color: ${reasonIsInfo ? '#fc1355!important;' : 'inherit'}`"
+                :style="`border-color: ${
+                  reasonIsInfo ? '#fc1355!important;' : 'inherit'
+                }`"
               >
-                <span
-                  class="colored"
-                  :class="[{'bold': reasonIsInfo}]"
-                >I don't enough information about the event</span>
+                <span class="colored" :class="[{ bold: reasonIsInfo }]"
+                  >I don't enough information about the event</span
+                >
               </md-checkbox>
             </li>
             <li>
               <md-checkbox
                 v-model="reasonIsOther"
-                :style="`border-color: ${reasonIsOther ? '#fc1355!important;' : 'inherit'}`"
+                :style="`border-color: ${
+                  reasonIsOther ? '#fc1355!important;' : 'inherit'
+                }`"
               >
-                <span class="colored" :class="[{'bold': reasonIsOther}]">Other</span>
+                <span class="colored" :class="[{ bold: reasonIsOther }]"
+                  >Other</span
+                >
               </md-checkbox>
             </li>
           </ul>
@@ -256,7 +317,11 @@
         </div>
       </template>
     </modal>
-    <modal v-if="sorryModal" class="sorry-modal" container-class="modal-container lg">
+    <modal
+      v-if="sorryModal"
+      class="sorry-modal"
+      container-class="modal-container lg"
+    >
       <template slot="header">
         <div class="sorry-modal__header">
           <div class="left-side">
@@ -267,9 +332,9 @@
               We are sorry, but someone else got there
               <br />before you and already won this bid
             </h3>
-            <div
-              class="header-description"
-            >But no worries! We will be with you soon with the next one</div>
+            <div class="header-description">
+              But no worries! We will be with you soon with the next one
+            </div>
           </div>
         </div>
         <button class="close" @click="hideModal()">
@@ -285,13 +350,18 @@
         </div>
       </template>
     </modal>
-    <modal v-if="chooseDateModal" class="choose-date-modal" container-class="modal-container lg">
+    <modal
+      v-if="chooseDateModal"
+      class="choose-date-modal"
+      container-class="modal-container lg"
+    >
       <template slot="header">
         <div class="choose-date-modal__header">
           <h3>What is your new time suggestion?</h3>
           <div class="header-description">
             <img :src="`${iconsUrl}Group 1175 (9).svg`" />
-            A new time suggestion would be possible up to three days before or after the original event
+            A new time suggestion would be possible up to three days before or
+            after the original event
           </div>
         </div>
         <button class="close" @click="hideModal()">
@@ -337,7 +407,9 @@
       <template slot="footer">
         <div class="choose-date-modal__footer">
           <button class="cancel" @click="hideModal()">Cancel</button>
-          <button class="send" @click="suggestAnotherDay()">Create Proposal With This Time</button>
+          <button class="send" @click="suggestAnotherDay()">
+            Create Proposal With This Time
+          </button>
         </div>
       </template>
     </modal>

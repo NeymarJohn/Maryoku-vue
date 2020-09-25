@@ -9,7 +9,7 @@
           <option>Popularity</option>
         </select>
       </div>
-      <div class="vendors-number">{{vendorsList.length}} Vendors:</div>
+      <div class="vendors-number">{{ vendorsList.length }} Vendors:</div>
     </div>
     <div
       class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100 md-large-size-25 md-size-20"
@@ -19,31 +19,45 @@
       <div class="vendor-item">
         <div
           class="vendor-image"
-          :style="`background : url(${vendorMainImage(vendor)}) center center no-repeat;`"
+          :style="`background : url(${vendorMainImage(
+            vendor,
+          )}) center center no-repeat;`"
         ></div>
         <div class="vendor-info">
-          <div class="category">{{ categoryTitle(vendor.vendorCategory, buildingBlocksList) }}</div>
-          <h4 class="vendor-name">{{vendor.vendorDisplayName}}</h4>
-          <div
-            class="vendor-location"
-          >{{vendor.vendorAddressLine1 ? (vendor.vendorAddressLine1).substring(0,35) : ''}}</div>
+          <div class="category">
+            {{ categoryTitle(vendor.vendorCategory, buildingBlocksList) }}
+          </div>
+          <h4 class="vendor-name">{{ vendor.vendorDisplayName }}</h4>
+          <div class="vendor-location">
+            {{
+              vendor.vendorAddressLine1
+                ? vendor.vendorAddressLine1.substring(0, 35)
+                : ""
+            }}
+          </div>
           <div class="vendor-review small">
             <label
               class="star-rating__star"
               v-for="(rating, ratingIndex) in ratings"
               :key="ratingIndex"
-              :class="{'is-selected' : ((vendor.rank >= rating) && vendor.rank != null)}"
-            >★</label>
-            <span class="small text-gray">{{vendor.voters}} Reviews</span>
+              :class="{
+                'is-selected': vendor.rank >= rating && vendor.rank != null,
+              }"
+              >★</label
+            >
+            <span class="small text-gray">{{ vendor.voters }} Reviews</span>
           </div>
-          <div
-            class="about-vendor"
-          >{{vendor.aboutUs ? (vendor.aboutUs).substring(0,180) + ' ...' : ''}}</div>
+          <div class="about-vendor">
+            {{
+              vendor.aboutUs ? vendor.aboutUs.substring(0, 180) + " ..." : ""
+            }}
+          </div>
           <div class="actions">
             <md-button
               class="md-rose md-outline"
               @click="routeToVendor(vendor.id, $event)"
-            >More Details</md-button>
+              >More Details</md-button
+            >
           </div>
         </div>
       </div>
@@ -215,7 +229,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@/assets/scss/md/_colors.scss";
 .md-card-header-image {
   > img {
     max-height: 25vmin;
@@ -291,7 +304,7 @@ export default {
 .md-tooltip {
   z-index: 9999 !important;
   background: $purple-500 !important;
-  color: $white !important;
+  color: white !important;
   &[x-placement="top"]:after {
     border-bottom-color: $purple-500 !important;
   }

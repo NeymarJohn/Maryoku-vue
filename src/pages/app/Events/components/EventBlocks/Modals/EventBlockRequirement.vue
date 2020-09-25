@@ -128,19 +128,19 @@
 </template>
 
 <script>
-import LabelEdit from '@/components/LabelEdit'
-import Badge from '@/components/Badge'
-import EventComponentValue from '@/models/EventComponentValue'
-import EventComponent from '@/models/EventComponent'
-import Calendar from '@/models/Calendar'
-import CalendarEvent from '@/models/CalendarEvent'
-import _ from 'underscore'
+import LabelEdit from "@/components/LabelEdit";
+import Badge from "@/components/Badge";
+import EventComponentValue from "@/models/EventComponentValue";
+import EventComponent from "@/models/EventComponent";
+import Calendar from "@/models/Calendar";
+import CalendarEvent from "@/models/CalendarEvent";
+import _ from "underscore";
 
 export default {
-  name: 'event-block-requirement',
+  name: "event-block-requirement",
   components: {
     LabelEdit,
-    Badge
+    Badge,
   },
   props: {
     requirement: Object,
@@ -149,185 +149,204 @@ export default {
     selectedBlockId: String,
     requirementProperties: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
-  data () {
+  data() {
     return {
       working: false,
       tempValue: 1,
-      tempTitle: '',
-      tempComment: '',
+      tempTitle: "",
+      tempComment: "",
       tempMandatory: false,
-      reqType: '',
+      reqType: "",
       tempOptions: [],
       tempAdditionalOptions: [],
       otherOption: {},
       selectedOptions: [],
       additionalSelectedOptions: [],
-      notCounted: ['lighting', 'parking', 'accessibility for disabled', 'smoking section', 'dance floor', 'coat check', 'separate cocktail hour space', 'stage']
-
-    }
+      notCounted: [
+        "lighting",
+        "parking",
+        "accessibility for disabled",
+        "smoking section",
+        "dance floor",
+        "coat check",
+        "separate cocktail hour space",
+        "stage",
+      ],
+    };
   },
-  mounted () {
+  mounted() {
     if (this.requirement.editMode) {
-      this.startEdit(this.requirement)
+      this.startEdit(this.requirement);
     }
   },
   methods: {
-    isNotCounted (component) {
-      return _.indexOf(this.notCounted, component.toLowerCase()) > -1
+    isNotCounted(component) {
+      return _.indexOf(this.notCounted, component.toLowerCase()) > -1;
     },
-    adjustInputSize (refName) {
-      let input = this.$refs[refName]
+    adjustInputSize(refName) {
+      let input = this.$refs[refName];
       if (input) {
-        input.size = input.value ? Math.ceil(input.value.length * 1.3) : 2
+        input.size = input.value ? Math.ceil(input.value.length * 1.3) : 2;
       }
     },
-    startEdit (requirement) {
-      this.requirement.editMode = true
-      this.tempValue = requirement.value
-      this.tempTitle = requirement.title
-      this.tempComment = requirement.comment
-      this.tempMandatory = requirement.mandatory
-      this.reqType = requirement.type
-      this.tempOptions = this.requirementProperties && this.requirementProperties.multiSelectionOptions ? this.requirementProperties.multiSelectionOptions : []
-      this.tempAdditionalOptions = this.requirementProperties && this.requirementProperties.additionalOptions ? this.requirementProperties.additionalOptions : []
+    startEdit(requirement) {
+      this.requirement.editMode = true;
+      this.tempValue = requirement.value;
+      this.tempTitle = requirement.title;
+      this.tempComment = requirement.comment;
+      this.tempMandatory = requirement.mandatory;
+      this.reqType = requirement.type;
+      this.tempOptions =
+        this.requirementProperties &&
+        this.requirementProperties.multiSelectionOptions
+          ? this.requirementProperties.multiSelectionOptions
+          : [];
+      this.tempAdditionalOptions =
+        this.requirementProperties &&
+        this.requirementProperties.additionalOptions
+          ? this.requirementProperties.additionalOptions
+          : [];
 
-      this.checkSelectedOptions()
+      this.checkSelectedOptions();
 
-      this.$forceUpdate()
+      this.$forceUpdate();
     },
-    cancelEdit () {
-      this.requirement.editMode = false
-      this.$forceUpdate()
+    cancelEdit() {
+      this.requirement.editMode = false;
+      this.$forceUpdate();
     },
-    saveEdit (requirement) {
-      this.working = true
-      requirement.value = this.tempValue
-      requirement.title = this.tempTitle
-      requirement.comment = this.tempComment
-      requirement.mandatory = this.tempMandatory
-      requirement.multipleSelectionValues = this.selectedOptions
-      requirement.additionalOptionsValues = this.additionalSelectedOptions
+    saveEdit(requirement) {
+      this.working = true;
+      requirement.value = this.tempValue;
+      requirement.title = this.tempTitle;
+      requirement.comment = this.tempComment;
+      requirement.mandatory = this.tempMandatory;
+      requirement.multipleSelectionValues = this.selectedOptions;
+      requirement.additionalOptionsValues = this.additionalSelectedOptions;
 
       let calendar = new Calendar({
-        id: this.$auth.user.defaultCalendarId
-      })
+        id: this.$auth.user.defaultCalendarId,
+      });
       let event = new CalendarEvent({
-        id: this.eventId
-      })
+        id: this.eventId,
+      });
       let selectedBlock = new EventComponent({
-        id: this.selectedBlockId
-      })
+        id: this.selectedBlockId,
+      });
 
-      new EventComponentValue(this.requirement).for(calendar, event, selectedBlock).save().then(res => {
-        this.requirement.editMode = false
-        this.working = false
-        this.$forceUpdate()
-        this.$root.$emit('requirement-saved', this.requirement)
-      })
+      new EventComponentValue(this.requirement)
+        .for(calendar, event, selectedBlock)
+        .save()
+        .then((res) => {
+          this.requirement.editMode = false;
+          this.working = false;
+          this.$forceUpdate();
+          this.$root.$emit("requirement-saved", this.requirement);
+        });
     },
-    getSelectedOptions () {
-      this.selectedOptions = []
+    getSelectedOptions() {
+      this.selectedOptions = [];
 
       // mapping multi select options
       _.map(this.tempOptions, (option) => {
         if (option.checked === true) {
-          let obj = {}
-          let value = option.value ? parseInt(option.value) : 0
-          obj[option.id] = value
+          let obj = {};
+          let value = option.value ? parseInt(option.value) : 0;
+          obj[option.id] = value;
 
-          this.selectedOptions.push(obj)
+          this.selectedOptions.push(obj);
         }
-      })
+      });
     },
-    getAdditionalSelectedOptions () {
-      this.additionalSelectedOptions = []
+    getAdditionalSelectedOptions() {
+      this.additionalSelectedOptions = [];
       // mapping additionl options
       _.map(this.tempAdditionalOptions, (option) => {
         if (option.checked === true) {
-          let obj = {}
-          let value = option.value ? parseInt(option.value) : 0
-          obj[option.id] = value
+          let obj = {};
+          let value = option.value ? parseInt(option.value) : 0;
+          obj[option.id] = value;
 
-          this.additionalSelectedOptions.push(obj)
+          this.additionalSelectedOptions.push(obj);
         }
-      })
+      });
     },
-    checkSelectedOptions () {
+    checkSelectedOptions() {
       if (this.requirement.multipleSelectionValues) {
         _.map(this.tempOptions, (option, key) => {
           if (_.contains(this.requirement.multipleSelectionValues, option.id)) {
-            this.tempOptions[key].checked = true
+            this.tempOptions[key].checked = true;
           }
-        })
+        });
       }
     },
-    getRequirementValue (requirement) {
-      return requirement.value !== '[]' ? requirement.value : 0
-    }
+    getRequirementValue(requirement) {
+      return requirement.value !== "[]" ? requirement.value : 0;
+    },
   },
   computed: {
-    requirementPropertiesType () {
-      console.log(this.requirementProperties)
+    requirementPropertiesType() {
+      console.log(this.requirementProperties);
       if (this.requirementProperties != null) {
-        return this.requirementProperties.type
+        return this.requirementProperties.type;
       } else {
-        return null
+        return null;
+      }
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.requirement-input {
+  border-radius: 3px;
+  border: none;
+  box-shadow: 0 0 3px #aaa;
+  padding: 3px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.separator {
+  border-left: 1px dashed #ddd;
+}
+
+.inline-badge {
+  background-color: white;
+  border: 1px solid #ff0000;
+  color: #ff0000;
+  padding: 4px 6px 3px 6px;
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  line-height: 14px;
+  margin-left: 8px;
+  display: inline;
+  top: -2px;
+  position: relative;
+}
+
+.md-table-cell-container {
+  .md-button {
+    &:not(.md-just-icon) {
+      width: auto;
+      .md-ripple {
+        font-size: 13px;
       }
     }
   }
 }
-</script>
 
-<style lang="scss" scoped>
-  .requirement-input {
-    border-radius: 3px;
-    border: none;
-    box-shadow: 0 0 3px #aaa;
-    padding: 3px;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 500;
-    margin: 0;
-  }
-
-  .separator {
-    border-left: 1px dashed #ddd;
-  }
-
-  .inline-badge {
-    background-color: white;
-    border: 1px solid #ff0000;
-    color: #ff0000;
-    padding: 4px 6px 3px 6px;
-    font-size: 8px;
-    font-weight: 500;
-    letter-spacing: 1.5px;
-    line-height: 14px;
-    margin-left: 8px;
-    display: inline;
-    top: -2px;
-    position: relative;
-  }
-
-  .md-table-cell-container {
-    .md-button {
-      &:not(.md-just-icon) {
-        width: auto;
-        .md-ripple {
-          font-size: 13px;
-        }
-      }
-    }
-  }
-
-  .other-input {
-    border-bottom: 1px solid #efefef;
-    box-shadow: none;
-    border-radius: 0;
-    font-size: 14px;
-    margin-top: -11px;
-  }
+.other-input {
+  border-bottom: 1px solid #efefef;
+  box-shadow: none;
+  border-radius: 0;
+  font-size: 14px;
+  margin-top: -11px;
+}
 </style>
