@@ -534,6 +534,8 @@ export default {
     this.getCampaigns({ event: this.event }).then((campaigns) => {
       this.campaigns = campaigns;
       this.setDefaultSettings();
+      console.log("campaigns");
+      console.log(this.campaigns);
     });
   },
 };

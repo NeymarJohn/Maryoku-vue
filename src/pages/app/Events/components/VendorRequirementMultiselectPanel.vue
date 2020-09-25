@@ -5,7 +5,7 @@
       <div>
         <div
           class="font-size-22 font-bold"
-        >What kind of {{serviceNames[currentComponent.componentId]}} would go perfectly with your event?</div>
+        >What kind of {{data.subCategory}} would go perfectly with your event?</div>
         <div class="font-size-14 mt-20">Feel free to mark more than just one</div>
       </div>
     </div>
@@ -43,6 +43,7 @@ export default {
         transportation: "transportation",
         equipmentrentals: "equipment",
         audiovisualstagingservices: "AV",
+        administraion: "Administration",
       },
     };
   },

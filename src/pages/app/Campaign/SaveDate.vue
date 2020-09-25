@@ -127,7 +127,6 @@ export default {
         descriptoin: "",
         coverImage: `${this.$storageURL}Campaign+Images/SAVE+THE+DATE.jpg`,
         logoUrl: "",
-        campaignStatus: "EDITING",
         visibleSettings: {
           showLogo: true,
         },
