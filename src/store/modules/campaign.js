@@ -12,6 +12,14 @@ const mutations = {
     setCampaign(state, { name, data }) {
         state[name] = data;
     },
+    initCampaign(state) {
+        state = {
+            SAVING_DATE: null,
+            RSVP: null,
+            COMING_SOON: null,
+            FEEDBACK: null,
+        };
+    },
 };
 const getters = {
     campaignIssued(state) {
@@ -36,8 +44,8 @@ const actions = {
                 .for(new CalendarEvent({ id: event.id }))
                 .get()
                 .then(res => {
-                    console.log(res);
                     const campaigns = {};
+                    commit("initCampaign");
                     if (res.length > 0) {
                         res.forEach(campaign => {
                             commit("setCampaign", {

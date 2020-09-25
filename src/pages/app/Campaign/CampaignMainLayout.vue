@@ -507,6 +507,7 @@ export default {
       this.campaignInfo[data.field] = data.value;
     },
     changeSettings(data) {
+      console.log(data);
       this.deliverySettings = data;
     },
     callSaveCampaign(campaignType, campaignStatus) {
@@ -641,12 +642,14 @@ export default {
         this.currentCampaign.settings.email.selected &&
         this.currentCampaign.settings.email.status !== "sent"
       ) {
+        console.log("email available");
         return true;
       }
       if (
         this.currentCampaign.settings.phone.selected &&
         this.currentCampaign.settings.phone.status !== "sent"
       ) {
+        console.log("phone available");
         return true;
       }
       return false;
@@ -660,6 +663,11 @@ export default {
       this.campaigns = campaigns;
       this.setDefaultSettings();
     });
+  },
+  watch: {
+    currentCampaign(newValue, oldValue) {
+      this.setDefaultSettings();
+    },
   },
 };
 </script>
