@@ -94,12 +94,13 @@ export default {
   watch: {
     content: function (newValue) {
       this.inputClass = `${this.inputStyle} ${newValue ? "active" : ""}`;
-      setTimeout(() => {
-        setResizeListeners(this.$el, ".js-autoresize");
-      }, 100);
+      setResizeListeners(this.$el, ".js-autoresize");
     },
     value: function (newValue) {
       this.content = newValue;
+      setTimeout(() => {
+        setResizeListeners(this.$el, ".js-autoresize");
+      }, 300);
     },
   },
 };

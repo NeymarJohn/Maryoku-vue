@@ -3,10 +3,8 @@
     <div class>
       <div
         class="font-size-30 font-bold-extra text-transform-capitalize p-50"
-        v-if="campaignData.campaignStatus != 'STARTED'"
-      >
-        let's start with a "save the date campaign"
-      </div>
+        v-if="editingContent.campaignStatus!='STARTED'"
+      >let's start with a "save the date campaign"</div>
       <concept-image-block
         v-if="concept"
         class="ml-50"
@@ -15,10 +13,13 @@
         border="no-border"
       ></concept-image-block>
       <div class="cover-preview" v-else>
-        <img :src="coverImage" />
+        <img :src="editingContent.coverImage" />
         <label for="cover">
-          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="chooseFiles">
-            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />Change Cover
+          <md-button
+            class="md-button md-red maryoku-btn md-theme-default change-cover-btn"
+            @click="chooseFiles"
+          >
+            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width:20px" />Change Cover
           </md-button>
         </label>
         <input
@@ -32,23 +33,22 @@
       </div>
       <div class="concept p-50">
         <span class="font-size-30 font-bold">Save The Date</span>
-        <span class="font-size-22 ml-10">{{
-          $dateUtil.formatScheduleDay(event.eventStartMillis, "MMMM D, YYYY")
-        }}</span>
-        <title-editor
-          class="mt-40"
-          :defaultValue="campaignTitle"
-          :key="campaignTitle"
-          @change="changeTitle"
-        ></title-editor>
+        <span
+          class="font-size-22 ml-10"
+        >{{$dateUtil.formatScheduleDay(event.eventStartMillis, "MMMM D, YYYY")}}</span>
+        <title-editor :value="editingContent.title" @change="changeTitle" class="mt-40"></title-editor>
       </div>
       <div class="p-50 comment">
-        <maryoku-textarea class="width-100" :placeholder="placeHolder" v-model="campaignDescription"></maryoku-textarea>
+        <maryoku-textarea
+          class="width-100"
+          :placeholder="placeHolder"
+          v-model="editingContent.description"
+        ></maryoku-textarea>
       </div>
       <div class="p-50 text-center">
         <div class="font-size-22 mb-50">MORE DETAILS COMING SOON</div>
         <vue-dropzone
-          v-if="!campaignStatus.logoUrl"
+          v-if="!editingContent.logoUrl"
           ref="myVueDropzone"
           id="dropzone"
           :options="dropzoneOptions"
@@ -63,11 +63,14 @@
           <span class="color-dark-gray">Drag your file here</span>
         </vue-dropzone>
         <div v-else class="d-flex align-center justify-content-center">
-          <img :src="campaignData.logoUrl" class="image-logo" />
+          <img :src="editingContent.logoUrl" class="image-logo" />
           <div class="display-logo ml-50">
-            <md-switch v-model="campaignData.visibleSettings.showLogo" class="showlogo-switch large-switch"></md-switch>
-            <div v-if="campaignData.visibleSettings.showLogo">Hide Logo</div>
-            <div v-if="!campaignData.visibleSettings.showLogo">Show Logo</div>
+            <md-switch
+              v-model="editingContent.visibleSettings.showLogo"
+              class="showlogo-switch large-switch"
+            ></md-switch>
+            <div v-if="editingContent.visibleSettings.showLogo">Hide Logo</div>
+            <div v-if="!editingContent.visibleSettings.showLogo">Show Logo</div>
           </div>
         </div>
       </div>
@@ -116,18 +119,36 @@ export default {
       description: "",
       originContent: {
         title: "",
-        description: "",
+        descriptoin: "",
+        logoUrl: "",
+      },
+      editingContent: {
+        title: "",
+        descriptoin: "",
         coverImage: `${this.$storageURL}Campaign+Images/SAVE+THE+DATE.jpg`,
         logoUrl: "",
-        campaignStatus: "EDITING",
         visibleSettings: {
           showLogo: true,
         },
       },
     };
   },
+  created() {
+    if (this.campaignData) {
+      this.editingContent = this.campaignData;
+    } else {
+      this.editingContent.title = this.info.conceptName;
+      this.$store.commit("campaign/setCampaign", {
+        name: "SAVING_DATE",
+        data: this.editingContent,
+      });
+    }
+    this.originContent = { ...this.editingContent };
+    // console.log(this.info);
+  },
   computed: {
     event() {
+      console.log(this.$store.state.event.eventData);
       return this.$store.state.event.eventData;
     },
     concept() {
@@ -136,29 +157,15 @@ export default {
     campaignData() {
       return this.$store.state.campaign.SAVING_DATE;
     },
-    campaignTitle() {
-      return this.$store.state.campaign.SAVING_DATE ? this.$store.state.campaign.SAVING_DATE.title : "New Event";
-    },
-    campaignDescription: {
-      get() {
-        return this.$store.state.campaign.SAVING_DATE ? this.$store.state.campaign.SAVING_DATE.description : "";
-      },
-      set(newValue) {
-        this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "description", value: newValue });
-      },
-    },
-    coverImage: {
-      get() {
-        return this.$store.state.campaign.SAVING_DATE
-          ? this.$store.state.campaign.SAVING_DATE.coverImage
-          : `${this.$storageURL}Campaign+Images/SAVE+THE+DATE.jpg`;
-      },
-      set(newValue) {
-        this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "coverImage", value: newValue });
-      },
-    },
   },
   methods: {
+    saveData() {
+      console.log(this.originContent);
+      this.$store.commit("campaign/setCampaign", {
+        name: "SAVING_DATE",
+        data: Object.assign({}, this.editingContent),
+      });
+    },
     setDefault() {
       swal({
         title: "Are you sure?",
@@ -169,23 +176,41 @@ export default {
         confirmButtonText: "Yes, revert it!",
         buttonsStyling: false,
       }).then((result) => {
-        this.$store.dispatch("campaign/revertCampaign", "SAVING_DATE");
+        if (result.value) {
+          this.editingContent.title = this.originContent.title;
+          this.editingContent.description = this.originContent.description;
+          this.editingContent.logoUrl = this.originContent.logoUrl;
+        }
       });
     },
     async logoSelected(file) {
       this.logo = file;
       this.logoImageData = await getBase64(file);
-      this.campaignData.logoUrl = this.logoImageData;
+      this.editingContent.logoUrl = this.logoImageData;
       this.$emit("changeInfo", { field: "logo", value: this.logoImageData });
     },
     changeTitle(newTitle) {
-      this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "title", value: newTitle });
+      this.editingContent.title = newTitle;
+      this.saveData();
+      // this.$emit("changeInfo", {field: "conceptName", value: newTitle})
     },
     chooseFiles() {
       document.getElementById("coverImage").click();
     },
     async onFileChange(event) {
-      this.coverImage = await getBase64(event.target.files[0]);
+      this.editingContent.coverImage = await getBase64(event.target.files[0]);
+    },
+  },
+  watch: {
+    campaignData: {
+      handler(newValue, oldValue) {
+        this.editingContent = newValue;
+        console.log(this.editingContent);
+        console.log(this.placeHolder);
+        console.log("this.editingContent");
+        this.originContent = { ...this.editingContent };
+      },
+      deep: true,
     },
   },
 };
