@@ -120,7 +120,7 @@
               Open ‘Save The Date’ Campaign
             </div>
           </template>
-          <template slot="content" ref="savedateCampaign">
+          <template slot="content">
             <save-date
               :info="{ ...campaignTabs[1], ...campaignInfo }"
               @changeInfo="changeInfo"
@@ -464,7 +464,6 @@ export default {
       } else {
         this.deliverySettings = { ...defaultSettings };
       }
-      console.log(this.deliverySettings);
     },
     scrollToTop() {
       window.scrollTo(0, 0);
@@ -473,8 +472,6 @@ export default {
       const campaignData = this.$store.state.campaign[
         this.campaignTabs[this.selectedTab].name
       ];
-      console.log(campaignData);
-      console.log(this.deliverySettings);
       if (
         !campaignData ||
         (!this.deliverySettings.email.selected &&
@@ -507,7 +504,6 @@ export default {
       this.campaignInfo[data.field] = data.value;
     },
     changeSettings(data) {
-      console.log(data);
       this.deliverySettings = data;
     },
     callSaveCampaign(campaignType, campaignStatus) {
@@ -634,22 +630,16 @@ export default {
       ];
     },
     canSchedule() {
-      console.log(
-        "this.currentCampaign.settings",
-        this.currentCampaign.settings,
-      );
       if (
         this.currentCampaign.settings.email.selected &&
         this.currentCampaign.settings.email.status !== "sent"
       ) {
-        console.log("email available");
         return true;
       }
       if (
         this.currentCampaign.settings.phone.selected &&
         this.currentCampaign.settings.phone.status !== "sent"
       ) {
-        console.log("phone available");
         return true;
       }
       return false;
@@ -667,6 +657,11 @@ export default {
   watch: {
     currentCampaign(newValue, oldValue) {
       this.setDefaultSettings();
+    },
+    event(newValue, oldValue) {
+      this.campaignInfo.conceptName = this.event.concept
+        ? this.event.concept.name
+        : "Event Name";
     },
   },
 };

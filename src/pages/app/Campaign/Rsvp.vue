@@ -297,9 +297,10 @@ export default {
         buttonsStyling: false,
       }).then((result) => {
         if (result.value) {
-          console.log(this.originContent);
-          this.editingContent = Object.assign({}, this.originContent);
-          // this.editingContent.title = "testse";
+          this.$store.commit("campaign/setCampaign", {
+            name: "RSVP",
+            data: this.originContent,
+          });
         }
       });
     },
