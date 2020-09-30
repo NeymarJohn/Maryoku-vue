@@ -9,9 +9,9 @@ import Chartist from "chartist";
 import ChartistTooltipPlugin from "chartist-plugin-tooltip";
 import vSelectMenu from "v-selectmenu";
 import vueNumeralFilterInstaller from "vue-numeral-filter";
+import VuePhoneNumberInput from "vue-phone-number-input";
 import VueGmaps from "vue-gmaps";
-// import VuePhoneNumberInput from "vue-phone-number-input";
-// import "vue-phone-number-input/dist/vue-phone-number-input.css";
+import "vue-phone-number-input/dist/vue-phone-number-input.css";
 import VTooltip from "v-tooltip";
 import VueGtm from "vue-gtm";
 import VueSlideoutPanel from "src/components/SlidePanel";
@@ -176,8 +176,9 @@ router.beforeEach((to, from, next) => {
 });
 
 router.afterEach((to, from) => {
-    window.document.title = `${to.meta.title ? to.meta.title : to.name
-        } @ maryoku`;
+    window.document.title = `${
+        to.meta.title ? to.meta.title : to.name
+    } @ maryoku`;
 });
 
 // global library setup
@@ -211,6 +212,7 @@ Vue.use(vueNumeralFilterInstaller, { locale: "en-gb" });
 
 Vue.use(lsWatcher, { prefix: "two62_" });
 
+Vue.component("vue-phone-number-input", VuePhoneNumberInput);
 Vue.component("vue-stars", VueStars);
 Vue.component("vue-element-loading", VueElementLoading);
 Vue.component("multiselect", Multiselect);
@@ -235,13 +237,13 @@ if (process.env.NODE_ENV === "production") {
 Vue.use(VueCookies);
 
 Vue.directive("focus", {
-    inserted: function (el) {
+    inserted: function(el) {
         el.focus();
     },
 });
 
 Vue.directive("select-all", {
-    inserted: function (el) {
+    inserted: function(el) {
         el.setSelectionRange(el.value.length, el.value.length);
     },
 });
@@ -260,7 +262,7 @@ Vue.directive("select-all", {
 //   stopProp(event) { event.stopPropagation() }
 // })
 
-Vue.filter("withComma", function (value) {
+Vue.filter("withComma", function(value) {
     return value ? value.toLocaleString() : 0;
 });
 
@@ -273,7 +275,7 @@ axios.defaults.headers.common["gorm-tenantid"] = authService.resolveTenantId();
 axios.defaults.headers.common.gorm_tenantid = authService.resolveTenantId();
 Model.$http = axios;
 
-Number.prototype.padStart = function (size, theChar) {
+Number.prototype.padStart = function(size, theChar) {
     var s = String(this);
     while (s.length < (size || 2)) {
         s = "0" + s;
@@ -281,7 +283,7 @@ Number.prototype.padStart = function (size, theChar) {
     return s;
 };
 
-String.prototype.padStart = function (size, theChar) {
+String.prototype.padStart = function(size, theChar) {
     var s = String(this);
     while (s.length < (size || 2)) {
         s = theChar + s;
