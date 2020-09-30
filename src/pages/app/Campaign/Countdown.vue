@@ -106,7 +106,6 @@ export default {
         title: "",
         description: "",
         coverImage: "",
-        campaignStatus: "EDITING",
         visibleSettings: {
           showLogo: true,
           showComing: true,
@@ -123,7 +122,7 @@ export default {
       this.editingContent.title = this.info.conceptName;
       this.editingContent.coverImage = `${
         this.$storageURL
-      }Campaign+Images/ComingSoon${(new Date().getDate() % 12) + 1}.png`;
+      }Campaign+Images/ComingSoon${new Date().getDate() % 12}.png`;
       if (this.event.concept && this.event.concept.images) {
         this.editingContent.coverImage = this.event.concept.images[0].url;
       }

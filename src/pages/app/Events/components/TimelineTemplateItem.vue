@@ -1,45 +1,46 @@
 <template>
   <drop
-    @drop="handleDrop( ...arguments)"
+    @drop="handleDrop(...arguments)"
     @dragenter="hadleDragEnter"
     @dragleave="handleDragLeave"
-    style="height: 100%; min-height: 50px;"
+    style="height: 100%; min-height: 50px"
     :data-index="index"
     class="timeline-template-drop"
   >
-    <div class="timeline-template-item" :class="{dropping:isHover}">
+    <div class="timeline-template-item" :class="{ dropping: isHover }">
       <div class="timeline-image" :style="hoverStyle">
         <img
           class="time-line-blocks_icon"
-          v-if="item.status=='template'"
+          v-if="item.status == 'template'"
           :src="`${$iconURL}Timeline-New/templates/${item.icon.toLowerCase()}.svg`"
         />
-        <img class="time-line-blocks_icon" v-else :src="`${$iconURL}Timeline-New/timegap.svg`" />
+        <img
+          class="time-line-blocks_icon"
+          v-else
+          :src="`${$iconURL}Timeline-New/timegap.svg`"
+        />
         <!-- <div class="timeline-image-mask"></div> -->
       </div>
       <div
-        v-if="item.status=='template'"
+        v-if="item.status == 'template'"
         class="template-form ml-20"
         :class="`${item.group}`"
         :style="hoverStyle"
       >
-        <span>{{item.title}}</span>
-        <md-button class="md-icon-button md-simple close-btn" @click="remove">
-          <md-icon class="close-icon">close</md-icon>
-        </md-button>
+        <span>{{ item.title }}</span>
         <!-- <div class="template-form-mask"></div> -->
       </div>
       <div
-        v-if="item.status=='timegap'"
+        v-if="item.status == 'timegap'"
         class="template-form ml-20 text-center"
         :style="hoverStyle"
       >
-        <div>*{{formatHour(item.timeGap.start)}}- {{formatHour(item.timeGap.end)}}</div>
+        <div>
+          *{{ formatHour(item.timeGap.start) }}-
+          {{ formatHour(item.timeGap.end) }}
+        </div>
         <div class="font-bold">Window Gap</div>
         <div>Drag A Time Slot To Complete Timeline</div>
-        <md-button class="md-icon-button md-simple close-btn" @click="remove">
-          <md-icon class="close-icon">close</md-icon>
-        </md-button>
         <!-- <div class="template-form-mask"></div> -->
       </div>
     </div>
@@ -110,11 +111,16 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.timeline-template-drop {
-}
 .timeline-template-item {
   display: flex;
-  margin: 10px 0px;
+  &::after {
+    content: "";
+    position: absolute;
+    height: calc(100% - 20px);
+    top: 74px;
+    left: 30px;
+    border-left: 1px dashed #707070;
+  }
   .timeline-image {
     width: 60px;
     height: 60px;
@@ -133,19 +139,10 @@ export default {
   }
   .template-form {
     position: relative;
-    border: dashed 1px #908f8f;
     flex-grow: 1;
     padding: 40px 30px;
     &.activity {
       padding: 80px 30px;
-    }
-    .close-btn {
-      position: absolute;
-      right: 10px;
-      top: 30px;
-      .close-icon {
-        font-size: 30px !important;
-      }
     }
   }
   &.dropping {

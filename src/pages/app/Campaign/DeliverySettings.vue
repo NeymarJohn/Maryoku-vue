@@ -7,10 +7,7 @@
           <div>
             <div class="font-size-30 font-bold-extra color-red">Delivery settings</div>
             <div class="mt-2 d-flex align-center">
-              <span class="font-bold-extra font-size-30 pr-20">{{
-                currentCampaign.guestEmails ? currentCampaign.guestEmails.length : 0
-              }}</span>
-
+              <span class="font-bold-extra font-size-30 pr-20">0</span>
               <span>In your invitees list</span>
             </div>
           </div>
@@ -66,9 +63,7 @@
                   <span class="color-red">Upload Excel list file</span>
                 </md-button>
                 <div v-else class="uploadedFile border-gray-1">
-                  <div class="font-bold text-underline mb-10">
-                    {{ settingData.phone.excelFileName }}
-                  </div>
+                  <div class="font-bold text-underline mb-10">{{settingData.phone.excelFileName}}</div>
                   <md-button class="md-simple edit-btn" @click="choosePhoneExcel">
                     <span class="color-red">change</span>
                   </md-button>
@@ -79,9 +74,7 @@
                 <span class="ml-20 mt-10">
                   <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
                   <md-tooltip>
-                    <div class="font-size-14 input-tooltip">
-                      {{ tooltips.phoneExcel }}
-                    </div>
+                    <div class="font-size-14 input-tooltip">{{tooltips.phoneExcel}}</div>
                   </md-tooltip>
                 </span>
               </div>
@@ -93,12 +86,9 @@
                   value="sms"
                 >
                   <span
-                    :class="{
-                      'font-bold': settingData.phone.smsOrWhatsapp === 'sms',
-                    }"
+                    :class="{'font-bold': settingData.phone.smsOrWhatsapp === 'sms'}"
                     class="p-5"
-                    >By SMS</span
-                  >
+                  >By SMS</span>
                 </md-checkbox>
                 <md-checkbox
                   v-model="settingData.phone.smsOrWhatsapp"
@@ -107,11 +97,8 @@
                 >
                   <img :src="`${$iconURL}Campaign/Image+74.png`" />
                   <span
-                    :class="{
-                      'font-bold': settingData.phone.smsOrWhatsapp === 'whatsapp',
-                    }"
-                    >By WhatsApp</span
-                  >
+                    :class="{'font-bold': settingData.phone.smsOrWhatsapp === 'whatsapp'}"
+                  >By WhatsApp</span>
                 </md-checkbox>
               </div>
             </div>
@@ -130,7 +117,7 @@
                 <md-icon class="icon" v-if="!settingData.email.selected">keyboard_arrow_right</md-icon>
               </md-button>
             </div>
-            <div v-if="settingData.email.selected && currentCampaign.campaignStatus == 'EDITING'">
+            <div v-if="settingData.email.selected">
               <div class="mt-50">
                 <label class="font-bold mb-10 line-height-2">Subject</label>
                 <div class="width-60 position-relative">
@@ -147,17 +134,16 @@
                   <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
                     <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
                     <md-tooltip>
-                      <div class="font-size-14 input-tooltip">
-                        Pick the email from which you wish the guests to get this mail
-                      </div>
+                      <div
+                        class="font-size-14 input-tooltip"
+                      >Pick the email from which you wish the guests to get this mail</div>
                     </md-tooltip>
                   </span>
                 </div>
               </div>
               <div class="mt-50 font-size-14">
                 <label class="mb-10 line-height-2">
-                  <span class="font-bold mr-10 font-size-16">To</span>Make sure to put space / comma between each
-                  address
+                  <span class="font-bold mr-10 font-size-16">To</span>Make sure to put space / comma between each address
                 </label>
                 <div class="d-flex align-start width-100">
                   <div class="width-60 position-relative">
@@ -194,9 +180,7 @@
                     <span class="color-red">Upload Excel list file</span>
                   </md-button>
                   <div v-else class="uploadedFile border-gray-1">
-                    <div class="font-bold text-underline mb-10">
-                      {{ settingData.email.excelFileName }}
-                    </div>
+                    <div class="font-bold text-underline mb-10">{{settingData.email.excelFileName}}</div>
                     <md-button class="md-simple edit-btn mr-10" @click="chooseEmailExcel">
                       <span class="color-red">change</span>
                     </md-button>
@@ -208,44 +192,9 @@
                   <span class="ml-20 mt-10">
                     <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
                     <md-tooltip>
-                      <div class="font-size-14 input-tooltip">
-                        {{ tooltips.emailExcel }}
-                      </div>
+                      <div class="font-size-14 input-tooltip">{{tooltips.emailExcel}}</div>
                     </md-tooltip>
                   </span>
-                </div>
-              </div>
-            </div>
-            <div
-              v-if="
-                settingData.email.selected &&
-                (currentCampaign.campaignStatus == 'STARTED' || currentCampaign.campaignStatus == 'SCHEDULED')
-              "
-            >
-              <div class="mt-50">
-                <div class="font-bold mb-10 line-height-2">Subject</div>
-                <div class="width-60 position-relative">
-                  {{ settingData.email.subject }}
-                </div>
-              </div>
-              <div class="mt-50">
-                <div class="font-bold mb-10 line-height-2">From</div>
-                <div class="width-60 position-relative">
-                  {{ settingData.email.from }}
-                </div>
-              </div>
-              <div class="mt-50">
-                <div class="font-bold mb-10 line-height-2">
-                  Sent to ({{ currentCampaign.guestEmails ? currentCampaign.guestEmails.length : 0 }})
-                </div>
-                <div class="d-flex align-start width-100">
-                  {{ currentCampaign.settings.email.addressString }}
-                </div>
-                <div class="mt-20">
-                  <md-button class="md-simple md-red edit-btn" @click="downloadXml">
-                    <img :src="`${$iconURL}Campaign/excel.png`" class="mr-10" />
-                    Download Full Guests list
-                  </md-button>
                 </div>
               </div>
             </div>
@@ -266,7 +215,13 @@
   </div>
 </template>
 <script>
-import { Modal, MaryokuInput, LocationInput, MaryokuTextarea, MaryokuResizableTextarea } from "@/components";
+import {
+  Modal,
+  MaryokuInput,
+  LocationInput,
+  MaryokuTextarea,
+  MaryokuResizableTextarea,
+} from "@/components";
 import CollapsePanel from "./CollapsePanel";
 import InvalidAddressPanel from "./components/InvalidAddressPanel";
 import { validateEmail, validPhoneNumber } from "@/utils/validation.util";
@@ -285,7 +240,6 @@ export default {
       default: () => ({
         phone: {
           selected: false,
-          status: "ready",
           numberString: "",
           numberArray: [],
           excelFileName: "",
@@ -294,7 +248,6 @@ export default {
         },
         email: {
           selected: false,
-          status: "ready",
           subject: "",
           from: "",
           addressString: "",
@@ -322,8 +275,10 @@ export default {
       invalidPastedEmails: null,
       invalidPastedPhones: null,
       tooltips: {
-        phoneExcel: "Please upload a csv file containing only phone numbers in a valid format.",
-        emailExcel: "Please upload a csv file containing only email addresses in a valid format.",
+        phoneExcel:
+          "Please upload a csv file containing only phone numbers in a valid format.",
+        emailExcel:
+          "Please upload a csv file containing only email addresses in a valid format.",
       },
       fileInputType: "",
     };
@@ -332,10 +287,13 @@ export default {
     this.settingData = this.defaultSettings;
     // set default subject for email
     this.settingData.email.from = this.$store.state.auth.user.username;
+    console.log("this.emailSubject", this.emailSubject);
     this.settingData.email.subject = this.emailSubject;
   },
   methods: {
     handleInputEmails({ value, type }) {
+      console.log(value);
+      console.log(type);
       const addresses = value.split(/[\s,]+/);
       let invalidEmails = "";
       if (type == "emails") {
@@ -375,7 +333,8 @@ export default {
       }
     },
     onFileChange(event) {
-      this.settingData[this.fileInputType].excelFileName = event.target.files[0].name;
+      this.settingData[this.fileInputType].excelFileName =
+        event.target.files[0].name;
       this.previewFiles(event.target.files[0]);
       //handle validation excel files.
       // this.coverImage = await getBase64(event.target.files[0])
@@ -395,13 +354,13 @@ export default {
           const val = r[key];
           values.push(val);
         });
+        console.log(values);
         if (this.fileInputType === "email") {
           this.settingData.email.addressString = values.join();
         } else this.settingData.phone.numberString = values.join();
       };
       reader.readAsArrayBuffer(file);
     },
-    downloadXml() {},
   },
   computed: {
     event() {
@@ -409,26 +368,37 @@ export default {
     },
     emailSubject() {
       const campaignData = this.$store.state.campaign;
+      console.log(this.campaign.name);
       switch (this.campaign.name) {
         case "SAVING_DATE":
-          return `${campaignData.SAVING_DATE ? campaignData.SAVING_DATE.title : this.event.title} Save The Date `;
+          return `${
+            campaignData.SAVING_DATE
+              ? campaignData.SAVING_DATE.title
+              : this.event.title
+          } Save The Date `;
           break;
         case "RSVP":
-          return `${campaignData.RSVP ? campaignData.RSVP.title : this.event.title} RSVP`;
+          return `${
+            campaignData.RSVP ? campaignData.RSVP.title : this.event.title
+          } RSVP`;
           break;
         case "COMING_SOON":
-          return `${campaignData.COMING_SOON ? campaignData.COMING_SOON.title : this.event.title} Coming soon `;
+          return `${
+            campaignData.COMING_SOON
+              ? campaignData.COMING_SOON.title
+              : this.event.title
+          } Coming soon `;
           break;
         case "FEEDBACK":
-          return `${campaignData.FEEDBACK ? campaignData.FEEDBACK.title : this.event.title} Feedback`;
+          return `${
+            campaignData.FEEDBACK
+              ? campaignData.FEEDBACK.title
+              : this.event.title
+          } Feedback`;
           break;
         default:
           return "";
       }
-    },
-    currentCampaign() {
-      console.log(this.campaign.name);
-      return this.$store.state.campaign[this.campaign.name];
     },
   },
   watch: {
