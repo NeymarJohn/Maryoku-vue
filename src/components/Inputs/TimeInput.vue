@@ -43,7 +43,6 @@ export default {
     },
   },
   created() {
-    console.log(typeof this.value);
     if (typeof this.value === "string") {
       this.timeObject.ampm = this.value.split(" ")[1]
         ? this.value.split(" ")[1].trim()
@@ -65,7 +64,6 @@ export default {
   },
   methods: {
     updateTime(e) {
-      console.log(e.target.value);
       let hours = Number(e.target.value.split(":")[0]);
       let mins = Number(e.target.value.split(":")[1]);
       const time = new Date(this.value);

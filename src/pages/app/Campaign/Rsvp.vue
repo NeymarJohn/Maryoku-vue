@@ -2,18 +2,14 @@
   <div>
     <div class="rsvp-campaign">
       <div class="p-50">
-        <div
-          class="font-size-30 font-bold-extra mb-50"
-          v-if="editingContent.campaignStatus!='STARTED'"
-        >Get everyone to RSVP</div>
+        <div class="font-size-30 font-bold-extra mb-50" v-if="campaignData.campaignStatus != 'STARTED'">
+          Get everyone to RSVP
+        </div>
         <div class="cover-preview">
-          <img :src="editingContent.coverImage" class="mr-10" />
+          <img :src="campaignData.coverImage" class="mr-10" />
           <label for="cover">
-            <md-button
-              class="md-button md-red maryoku-btn md-theme-default change-cover-btn"
-              @click="chooseFiles"
-            >
-              <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width:20px" />Change Cover
+            <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="chooseFiles">
+              <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />Change Cover
             </md-button>
           </label>
           <input
@@ -26,22 +22,32 @@
           />
         </div>
         <div class="preview-logo p-40 d-flex align-center" v-if="info.logo">
-          <img :src="info.logo" style="max-width:200px" />
+          <img :src="info.logo" style="max-width: 200px" />
           <md-switch class="large-switch below-label" v-model="showLogo">Hide logo</md-switch>
         </div>
         <div class="font-size-30 font-bold mt-20">
           Hello
-          <span
-            class="text-transform-capitalize"
-          >{{user.companyName?user.companyName : user.currentTenant}}</span>
-          <span class="text-transform-capitalize">{{event.guestType || 'Employee'}}</span>!
+          <span class="text-transform-capitalize">{{ user.companyName ? user.companyName : user.currentTenant }}</span>
+          <span class="text-transform-capitalize">{{ event.guestType || "Employee" }}</span
+          >!
         </div>
         <div class="font-size-20 mt-50">YOU ARE INVITED TO A</div>
-        <title-editor :value="editingContent.title" @change="changeTitle" class="mt-40 mb-30"></title-editor>
+        <title-editor
+          :defaultValue="campaignTitle"
+          :key="campaignTitle"
+          @change="changeTitle"
+          class="mt-40 mb-30"
+        ></title-editor>
 
         <maryoku-textarea
-          v-model="editingContent.description"
-          :placeholder="`Hey, you've been invited to ${event.title} on ${$dateUtil.formatScheduleDay(event.eventStartMillis, 'dddd, MMMM D, YYYY')} at ${event.location}. I can hardly wait to see you, please RSVP  by ${$dateUtil.formatScheduleDay(event.eventStartMillis, 'dddd, MMMM D, YYYY')}, so I'll know you feel the same way :)`"
+          v-model="campaignData.description"
+          :placeholder="`Hey, you've been invited to ${event.title} on ${$dateUtil.formatScheduleDay(
+            event.eventStartMillis,
+            'dddd, MMMM D, YYYY',
+          )} at ${event.location}. I can hardly wait to see you, please RSVP  by ${$dateUtil.formatScheduleDay(
+            event.eventStartMillis,
+            'dddd, MMMM D, YYYY',
+          )}, so I'll know you feel the same way :)`"
         ></maryoku-textarea>
         <rsvp-event-info-panel class="mt-60" :event="event"></rsvp-event-info-panel>
         <div>
@@ -53,45 +59,68 @@
       <div class="p-40 position-relative">
         <div
           class="rsvp-event-guid-background"
-          :style="`background-color:${event.concept?event.concept.colors[0].color:''}`"
+          :style="`background-color:${event.concept ? event.concept.colors[0].color : '#050505'}`"
         ></div>
         <div class="rsvp-event-guid md-layout">
           <div class="md-layout-item md-size-50 md-small-size-50">
             <div class="font-size-30 font-bold-extra mb-30 d-flex">
-              <img :src="`${$iconURL}RSVP/Path 3728.svg`" style="height:43px" />
+              <img
+                :src="
+                  campaignData.visibleSettings.showWearingGuide
+                    ? `${$iconURL}RSVP/wear.svg`
+                    : `${$iconURL}RSVP/wear-gray.svg`
+                "
+                style="height: 43px"
+              />
               <span
-                style="padding-top: 10px; margin-left:20px;"
-                class="text-transform-uppercase"
-              >WHAT SHOULD I WEAR?</span>
+                class="text-transform-uppercase font-size-26 p-10 text-ellipse"
+                :class="{
+                  'color-gray': !campaignData.visibleSettings.showWearingGuide,
+                }"
+                >WHAT SHOULD I WEAR?</span
+              >
               <md-switch
-                v-model="editingContent.visibleSettings.showWearingGuide"
+                v-model="campaignData.visibleSettings.showWearingGuide"
                 class="ml-10 md-switch below-label large-switch"
               >
                 <span class="color-black font-regular">Hide</span>
               </md-switch>
             </div>
             <maryoku-textarea
+              v-if="campaignData.visibleSettings.showWearingGuide"
               placeholder="Give your guests details about the expected dress code"
-              v-model="editingContent.additionalData.wearingGuide"
+              v-model="campaignData.additionalData.wearingGuide"
             ></maryoku-textarea>
           </div>
           <div class="md-layout-item md-size-50 md-small-size-50">
             <div class="font-size-30 font-bold-extra mb-30 d-flex">
-              <img :src="`${$iconURL}RSVP/Path 2369.svg`" style="height:43px" />
+              <img
+                :src="
+                  campaignData.visibleSettings.showKnowledge
+                    ? `${$iconURL}RSVP/lamp.svg`
+                    : `${$iconURL}RSVP/lamp-gray.svg`
+                "
+                style="height: 43px"
+              />
               <span
-                style="padding-top: 10px; margin-left:20px;"
-                class="text-transform-uppercase"
-              >What should I Know?</span>
+                class="text-transform-uppercase font-size-26 p-10 text-ellipse"
+                :class="{
+                  'color-gray': !campaignData.visibleSettings.showKnowledge,
+                }"
+                >What should I Know?</span
+              >
+
               <md-switch
-                v-model="editingContent.visibleSettings.showKnowledge"
+                v-model="campaignData.visibleSettings.showKnowledge"
                 class="ml-10 md-switch below-label large-switch"
               >
                 <span class="color-black font-regular">Hide</span>
               </md-switch>
             </div>
             <maryoku-textarea
+              v-if="campaignData.visibleSettings.showKnowledge"
               placeholder="Give your guests any information you find relevant"
-              v-model="editingContent.additionalData.knowledge"
+              v-model="campaignData.additionalData.knowledge"
             ></maryoku-textarea>
           </div>
         </div>
@@ -99,32 +128,28 @@
       <rsvp-timeline-panel
         class="p-50"
         :canHide="true"
-        :visible="editingContent.visibleSettings.showTimeline"
+        :visible="campaignData.visibleSettings.showTimeline"
         @changeVisibility="setVisibleTimeline"
       ></rsvp-timeline-panel>
-    </div>
-    <div class="white-card p-50 mt-40">
-      <div class="font-size-30 font-bold-extra mb-30">
-        <img :src="`${$iconURL}Campaign/Group+9235.svg`" class="mr-10" />
-        Online participants
-      </div>
-      <md-checkbox v-model="editingContent.allowOnline">
-        <span class="font-bold">Allow online participation</span>
-      </md-checkbox>
-      <br />
-      <div class="d-flex align-start" v-if="editingContent.allowOnline">
-        <img
-          class="ml-10 mr-20"
-          style="margin-top: -10px"
-          :src="`${$iconURL}Campaign/enter-gray.svg`"
-        />
-        <div class="width-50">
-          <div class="font-bold">Paste link to video communication</div>
-          <maryoku-input
-            v-model="editingContent.additionalData.zoomlink"
-            placeholder="Paste Zoom link here..."
-            fieldName="link"
-          ></maryoku-input>
+      <div class="p-50 pt-0">
+        <div class="font-size-30 font-bold-extra mb-30">
+          <img :src="`${$iconURL}Campaign/Group+9235.svg`" class="mr-10" />
+          Online participants
+        </div>
+        <md-checkbox v-model="campaignData.allowOnline">
+          <span class="font-bold">Allow online participation</span>
+        </md-checkbox>
+        <br />
+        <div class="d-flex align-start" v-if="campaignData.allowOnline">
+          <img class="ml-10 mr-20" style="margin-top: -10px" :src="`${$iconURL}Campaign/enter-gray.svg`" />
+          <div class="width-50">
+            <div class="font-bold">Paste link to video communication</div>
+            <maryoku-input
+              v-model="campaignData.additionalData.zoomlink"
+              placeholder="Paste Zoom link here..."
+              fieldName="link"
+            ></maryoku-input>
+          </div>
         </div>
       </div>
     </div>
@@ -163,8 +188,7 @@ export default {
   data() {
     return {
       coverImage: "",
-      logoImage:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/ms-icon.png",
+      logoImage: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/ms-icon.png",
       showLogo: true,
       content: "",
       images: [
@@ -186,7 +210,7 @@ export default {
         title: "",
         description: "",
         coverImage: "",
-
+        campaignStatus: "EDITING",
         allowOnline: false,
         visibleSettings: {
           showWearingGuide: true,
@@ -224,6 +248,12 @@ export default {
     user() {
       return this.$store.state.auth.user;
     },
+    campaignData() {
+      return this.$store.state.campaign.RSVP;
+    },
+    campaignTitle() {
+      return this.$store.state.campaign.RSVP ? this.$store.state.campaign.RSVP.title : "Event Name";
+    },
   },
   methods: {
     saveData() {
@@ -243,9 +273,10 @@ export default {
         buttonsStyling: false,
       }).then((result) => {
         if (result.value) {
-          console.log(this.originContent);
-          this.editingContent = Object.assign({}, this.originContent);
-          // this.editingContent.title = "testse";
+          this.$store.commit("campaign/setCampaign", {
+            name: "RSVP",
+            data: this.originContent,
+          });
         }
       });
     },
@@ -256,9 +287,7 @@ export default {
       this.editingContent.coverImage = await getBase64(event.target.files[0]);
     },
     changeTitle(newTitle) {
-      this.editingContent.title = newTitle;
-      this.saveData();
-      // this.$emit("changeInfo", { field: "conceptName", value: newTitle });
+      this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
     },
     setVisibleTimeline(visibility) {
       this.editingContent.visibleSettings.showTimeline = visibility;

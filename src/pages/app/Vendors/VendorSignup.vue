@@ -33,7 +33,7 @@
       :vendor="vendor"
       v-if="isApproved && step == 5"
     />
-    <div v-if="step == 6">Thank you for your signup!</div>
+    <div v-if="step==6">Thank you for your signup!</div>
   </div>
 </template>
 
@@ -59,88 +59,6 @@ import {
   companyServices,
 } from "@/constants/vendor";
 
-const emptyVendor = {
-  vendorCategory: null,
-  vendorPropertyValues: {},
-  email: null,
-  companyName: null,
-  phone: null,
-  address: null,
-  coverPhoto: null,
-  images: [],
-  signature: null,
-  capacity: {
-    low: null,
-    high: null,
-  },
-  about: {
-    company: null,
-    category: null,
-  },
-  social: {
-    website: null,
-    facebook: null,
-    instagram: null,
-    youtube: null,
-    linkedin: null,
-    google: null,
-    pinterest: null,
-    foursuare: null,
-    reddit: null,
-    tiktok: null,
-  },
-  services: {},
-  yesRules: [],
-  noRules: [],
-  notAllowed: [],
-  exDonts: [],
-  yesPolicies: [],
-  noPolicies: [],
-  selectedWeekdays: [],
-  dontWorkDays: null,
-  dontWorkTime: null,
-};
-const testVendor = {
-  vendorCategory: "venuerental",
-  vendorPropertyValues: {},
-  email: "jefflei@gmail.com",
-  companyName: "test-company",
-  phone: "123123",
-  address: "testsetaset",
-  coverPhoto: null,
-  images: [],
-  signature: null,
-  capacity: {
-    low: null,
-    high: null,
-  },
-  about: {
-    company: null,
-    category: null,
-  },
-  social: {
-    website: null,
-    facebook: null,
-    instagram: null,
-    youtube: null,
-    linkedin: null,
-    google: null,
-    pinterest: null,
-    foursuare: null,
-    reddit: null,
-    tiktok: null,
-  },
-  services: {},
-  yesRules: [],
-  noRules: [],
-  notAllowed: [],
-  exDonts: [],
-  yesPolicies: [],
-  noPolicies: [],
-  selectedWeekdays: [],
-  dontWorkDays: null,
-  dontWorkTime: null,
-};
 export default {
   components: {
     VueElementLoading,
@@ -158,7 +76,47 @@ export default {
       //   type: Object,
       //   default: {}
       // },
-      vendor: { ...testVendor },
+      vendor: {
+        vendorCategory: null,
+        vendorPropertyValues: {},
+        email: null,
+        companyName: null,
+        phone: null,
+        address: null,
+        coverPhoto: null,
+        images: [],
+        signature: null,
+        capacity: {
+          low: null,
+          high: null,
+        },
+        about: {
+          company: null,
+          category: null,
+        },
+        social: {
+          website: null,
+          facebook: null,
+          instagram: null,
+          youtube: null,
+          linkedin: null,
+          google: null,
+          pinterest: null,
+          foursuare: null,
+          reddit: null,
+          tiktok: null,
+        },
+        services: {},
+        yesRules: [],
+        noRules: [],
+        notAllowed: [],
+        exDonts: [],
+        yesPolicies: [],
+        noPolicies: [],
+        selectedWeekdays: [],
+        dontWorkDays: null,
+        dontWorkTime: null,
+      },
       isApproved: false,
       step: 1,
       businessCategories: businessCategories,
@@ -216,7 +174,6 @@ export default {
         this.$set(this.vendor, this.camelize(field), value);
       }
     });
-    console.log(this.vendor);
     this.$root.$on("vendor-signup", () => {
       this.addVendor();
       // this.$store.dispatch('vendor/setData', this.vendor);
