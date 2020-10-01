@@ -7,7 +7,7 @@
         <div class="rsvp-event-overview-content">
           <div class="md-layout">
             <div class="rsvp-event-overview-content-customer md-layout-item md-size-100">
-              <img :src="`${$iconURL}RSVP/ms-icon.png`" class="mb-40" />
+              <img v-if="campaign.logoUrl" :src="`${campaign.logoUrl}`" class="mb-40" />
               <div class="font-size-40" style="margin-bottom: 100px">Hello Microsoft special employee!</div>
             </div>
 
