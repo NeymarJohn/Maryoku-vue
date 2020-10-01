@@ -29,8 +29,75 @@ const defaultCampaignData = {
             zoomlink: "",
         },
     },
+    COMING_SOON: {
+        title: "Event Name",
+        description: "",
+        coverImage: "",
+        campaignStatus: "EDITING",
+        visibleSettings: {
+            showLogo: true,
+            showComing: true,
+            showCountdown: true,
+        },
+    },
+    FEEDBACK: {
+        name: "Event Name",
+        description: "",
+        campaignStatus: "EDITING",
+        visibleSettings: {
+            showImages: true,
+            showSharingOption: true,
+            showFeedback: true,
+            allowUploadPhoto: true,
+        },
+        images: [
+            {
+                src: `https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+81.jpg`,
+            },
+            {
+                src: `https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/shutterstock_444402799_thumb.jpg`,
+            },
+            {
+                src: `https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+83.jpg`,
+            },
+            {
+                src: `https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+84.jpg`,
+            },
+        ],
+        files: [],
+        feedBack: [
+            {
+                question: "What did you like or dislike about this event?",
+                showQuestion: true,
+                rank: 0,
+                icon: "",
+            },
+            {
+                question: "What did you think of the venue?",
+                showQuestion: true,
+                rank: 0,
+                icon: "venuerental",
+            },
+            {
+                question: "How did you like the catering service?",
+                showQuestion: true,
+                rank: 0,
+                icon: "foodandbeverage",
+            },
+            {
+                question: "Did you enjoy the activity?",
+                showQuestion: true,
+                rank: 0,
+                icon: "decor",
+            },
+        ],
+    },
 };
 const state = {
+    baseInfo: {
+        title: "",
+        logoUrl: "",
+    },
     SAVING_DATE: null,
     RSVP: null,
     COMING_SOON: null,
@@ -49,8 +116,6 @@ const mutations = {
         Vue.set(state, `${name}_BACKUP`, data);
     },
     setAttribute(state, { name, key, value }) {
-        console.log(name);
-        console.log(key);
         Vue.set(state[name], key, value);
     },
     initCampaign(state) {
@@ -78,12 +143,14 @@ const actions = {
                 .get()
                 .then(res => {
                     const campaigns = {};
+                    let logoUrl = "";
                     if (res.length > 0) {
                         res.forEach(campaign => {
                             commit("setCampaign", {
                                 name: campaign.campaignType,
                                 data: campaign,
                             });
+                            if (campaign.logoUrl) logoUrl = campaign.logoUrl;
                             campaigns[campaign.campaignType] = campaign;
                         });
                     }
@@ -91,6 +158,7 @@ const actions = {
                     const defaultData = {
                         title: eventName,
                         descriptoin: "",
+                        logoUrl,
                     };
                     if (!campaigns["SAVING_DATE"]) {
                         commit("setCampaign", {
@@ -154,6 +222,28 @@ const actions = {
         commit("setCampaign", {
             name: name,
             data: Object.assign({}, backupdata),
+        });
+    },
+    setLogo({ commit, state }, { logoUrl, campaign }) {
+        commit("setAttribute", {
+            name: "SAVING_DATE",
+            key: "logoUrl",
+            value: logoUrl,
+        });
+        commit("setAttribute", {
+            name: "RSVP",
+            key: "logoUrl",
+            value: logoUrl,
+        });
+        commit("setAttribute", {
+            name: "COMING_SOON",
+            key: "logoUrl",
+            value: logoUrl,
+        });
+        commit("setAttribute", {
+            name: "FEEDBACK",
+            key: "logoUrl",
+            value: logoUrl,
         });
     },
 };
