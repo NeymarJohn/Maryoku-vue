@@ -2,27 +2,20 @@
   <div class="rsvp-container">
     <div class="rsvp-event">
       <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
-      <div class="rsvp-event-header" :style="`background-image: url('${headerImage}');`"></div>
-      <div class="rsvp-event-overview" :style="`background-image:${backgroundImage}`">
+      <div class="rsvp-event-header" :style="`background-image: url('${campaign.coverImage}');`"></div>
+      <div class="rsvp-event-overview" :style="`background-image:${campaign.coverImage}`">
         <div class="rsvp-event-overview-content">
           <div class="md-layout">
             <div class="rsvp-event-overview-content-customer md-layout-item md-size-100">
               <img :src="`${$iconURL}RSVP/ms-icon.png`" class="mb-40" />
-              <div
-                class="font-size-40"
-                style="margin-bottom:100px"
-              >Hello Microsoft special employee!</div>
+              <div class="font-size-40" style="margin-bottom: 100px">Hello Microsoft special employee!</div>
             </div>
 
             <div class="md-layout-item md-size-50 md-small-size-50">
               <div class="mb-20">You Are Invited To A</div>
-              <div class="font-size-60 font-bold-extra mb-30">{{event.title}}</div>
+              <div class="font-size-60 font-bold-extra mb-30">{{ campaign.title }}</div>
               <div>
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-                eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-                voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-                clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-                amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+                {{ campaign.description }}
               </div>
             </div>
             <div class="md-layout-item md-size-50 md-small-size-50">
@@ -40,26 +33,24 @@
       </div>
       <div class="rsvp-event-guid md-layout">
         <div class="md-layout-item md-size-10 md-small-size-10">
-          <img :src="`${$iconURL}RSVP/Group+8056.svg`" style="margin-top: 40px;" />
+          <img :src="`${$iconURL}RSVP/Group+8056.svg`" style="margin-top: 40px" />
         </div>
         <div class="md-layout-item md-size-45 md-small-size-45">
           <div class="font-size-30 font-bold-extra mb-30 d-flex">
             <img :src="`${$iconURL}RSVP/Path 3728.svg`" />
-            <span style="padding-top: 10px; margin-left:20px;">WHAT SHOULD I WEAR?</span>
+            <span style="padding-top: 10px; margin-left: 20px">WHAT SHOULD I WEAR?</span>
           </div>
           <div>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-            sed diam nonumy eirmod tempor invidunt ut labore et
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
           </div>
         </div>
         <div class="md-layout-item md-size-45 md-small-size-45">
           <div class="font-size-30 font-bold-extra mb-30 d-flex">
             <img :src="`${$iconURL}RSVP/Path 2369.svg`" />
-            <span style="padding-top: 10px; margin-left:20px;">What should I Know?</span>
+            <span style="padding-top: 10px; margin-left: 20px">What should I Know?</span>
           </div>
           <div>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-            sed diam nonumy eirmod tempor invidunt ut labore et
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
             dolore magna aliquyam erat, sed diam voluptua. At vero
           </div>
         </div>
@@ -67,15 +58,17 @@
       <div class="rsvp-event-timeline md-layout">
         <div
           class="md-layout-item md-size-100 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra mb-50"
-        >sneaky peak to the agenda</div>
+        >
+          sneaky peak to the agenda
+        </div>
         <div
           v-for="(schedule, index) in scheduledDays"
           :key="index"
           class="md-layout-item md-size-50 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra"
         >
           <div class="rsvp-event-timeline-day">
-            <span class="font-size-22 font-bold-extra">Day 0{{index + 1}}</span>
-            <span class="font-size-16">{{$dateUtil.formatScheduleDay(schedule.itemDay)}}</span>
+            <span class="font-size-22 font-bold-extra">Day 0{{ index + 1 }}</span>
+            <span class="font-size-16">{{ $dateUtil.formatScheduleDay(schedule.itemDay) }}</span>
           </div>
           <div>
             <rsvp-timeline-item
@@ -94,10 +87,7 @@
     <div class="rsvp-footer">
       <div class="rsvp-footer-content">
         <div>
-          <md-button
-            @click="scrollToTop"
-            class="md-button md-simple md-just-icon md-theme-default scroll-top-button"
-          >
+          <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
             <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
           </md-button>
           <md-button class="md-button md-red md-just-icon md-theme-default scroll-top-button">
@@ -112,22 +102,23 @@
           <md-button class="md-simple md-button md-black maryoku-btn">
             <span class="font-size-20">I Need To Think About It</span>
           </md-button>
-          <md-button
-            @click="showZoomModal=true"
-            class="md-simple md-button md-black maryoku-btn virtual-btn"
-          >
+          <md-button @click="showZoomModal = true" class="md-simple md-button md-black maryoku-btn virtual-btn">
             <span class="font-size-20">Virtual Participation</span>
           </md-button>
-          <md-button @click="showRsvpModal=true" class="md-button md-red maryoku-btn rsvp-btn">
+          <md-button @click="showRsvpModal = true" class="md-button md-red maryoku-btn rsvp-btn">
             <span class="font-size-20">RSVP Now</span>
           </md-button>
         </div>
       </div>
     </div>
-    <rsvp-information-modal v-if="showRsvpModal" @close="showRsvpModal=false" @setRsvp="setRsvp"></rsvp-information-modal>
-    <setting-reminder-modal v-if="showReminderModal" @close="showReminderModal=false"></setting-reminder-modal>
-    <join-zoom-modal v-if="showZoomModal" @close="showZoomModal=false" @setRsvp="setZoomRsvp"></join-zoom-modal>
-    <sync-calendar-modal v-if="showSyncCalendarForZoom" @close="showSyncCalendarForZoom=false"></sync-calendar-modal>
+    <rsvp-information-modal
+      v-if="showRsvpModal"
+      @close="showRsvpModal = false"
+      @setRsvp="setRsvp"
+    ></rsvp-information-modal>
+    <setting-reminder-modal v-if="showReminderModal" @close="showReminderModal = false"></setting-reminder-modal>
+    <join-zoom-modal v-if="showZoomModal" @close="showZoomModal = false" @setRsvp="setZoomRsvp"></join-zoom-modal>
+    <sync-calendar-modal v-if="showSyncCalendarForZoom" @close="showSyncCalendarForZoom = false"></sync-calendar-modal>
   </div>
 </template>
 <script>
@@ -176,14 +167,19 @@ export default {
       showReminderModal: false,
       showZoomModal: false,
       showSyncCalendarForZoom: false,
+      campaign: {},
     };
   },
   created() {
     const eventId = this.$route.params.eventId;
     const calendarEvent = new CalendarEvent({ id: eventId });
 
-    this.getCampaigns({ event: calendarEvent }).then(() => {
+    // CalendarEvent.find(eventId).then((event) => {
+    //   console.log("eventResponse", res);
+    // });
+    this.getCampaigns({ event: calendarEvent }).then((campaigns) => {
       this.isLoading = false;
+      this.campaign = campaigns["RSVP"];
     });
   },
   computed: {
