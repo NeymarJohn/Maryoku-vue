@@ -84,6 +84,7 @@ import { getBase64 } from "@/utils/file.util";
 import TitleEditor from "./components/TitleEditor";
 import swal from "sweetalert2";
 import VueElementLoading from "vue-element-loading";
+import S3Service from "@/services/s3.service";
 
 const placeHolder =
   "Clear your schedule and get ready to mingle! the greatest event of the year is coming up! more details are yet to come, but we can already promise you it's going to be an event to remember. be sure to mark the date on your calendar. you can do it using this link: (google calendar link). see ya soon";
@@ -179,6 +180,11 @@ export default {
       this.logo = file;
       this.logoImageData = await getBase64(file);
       this.campaignData.logoUrl = this.logoImageData;
+      const extension = file.type.split("/")[1];
+      const logoName = `${this.event.id}`;
+      S3Service.fileUpload(file, logoName, "logos").then((res) => {
+        this.$store.dispatch("campaign/setLogo", { logoUrl: `${this.$uploadURL}logos/${logoName}.${extension}` });
+      });
       this.$emit("changeInfo", { field: "logo", value: this.logoImageData });
     },
     changeTitle(newTitle) {
