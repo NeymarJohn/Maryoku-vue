@@ -383,7 +383,7 @@ export default {
   display: flex;
   align-items: flex-start;
   .block-form {
-    margin: 20px 20px 20px 30px;
+    margin: 0;
     margin-left: 20px;
     padding: 20px 20px;
   }

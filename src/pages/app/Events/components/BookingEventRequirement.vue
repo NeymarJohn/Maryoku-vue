@@ -7,14 +7,19 @@
           <h3>
             <img
               :src="`${$iconURL}Budget+Elements/${selectedBlock.componentId}.svg`"
-              style="width:30px; margin-right:0.5em"
+              style="width: 30px; margin-right: 0.5em"
               v-if="selectedBlock.componentId"
             />
-            Let us know what you are looking for in a {{selectedBlock.title}}
-          </h3>Our job is to bring you the most accurate offers for your event.
-          <br />This is what we know about your event so far, let us know if there is anything we missed.
+            Let us know what you are looking for in a {{ selectedBlock.title }}
+          </h3>
+          Our job is to bring you the most accurate offers for your event.
+          <br />This is what we know about your event so far, let us know if
+          there is anything we missed.
         </div>
-        <header-actions @toggleCommentMode="toggleCommentMode" hideDownload></header-actions>
+        <header-actions
+          @toggleCommentMode="toggleCommentMode"
+          hideDownload
+        ></header-actions>
       </div>
     </div>
 
@@ -22,8 +27,11 @@
     <div class="md-layout events-booking-items">
       <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
       <div class="md-layout-item md-size-100">
-        <div v-for="(category, index) in Object.keys(requirementProperties)" :key="index">
-          <template v-if="category=='multi-selection'">
+        <div
+          v-for="(category, index) in Object.keys(requirementProperties)"
+          :key="index"
+        >
+          <template v-if="category == 'multi-selection'">
             <vendor-requirement-multiselect-panel
               v-for="(data, id) in requirementProperties[category]"
               :key="id"
@@ -122,7 +130,9 @@
               </div>
             </div>
           </div>-->
-          <special-requirement-section v-else-if="category=='special'"></special-requirement-section>
+          <special-requirement-section
+            v-else-if="category == 'special'"
+          ></special-requirement-section>
           <div class="requirement-section" v-else>
             <table class="requirement-section-table">
               <thead>
@@ -132,9 +142,9 @@
                       <img
                         :src="`${$iconURL}Requirements/${category}.svg`"
                         class="mr-20"
-                        style="width:60px"
+                        style="width: 60px"
                       />
-                      {{category}}
+                      {{ category }}
                     </span>
                   </th>
                   <th>How Many?</th>
@@ -145,12 +155,14 @@
               <tbody>
                 <tr
                   class="requirement-item"
-                  v-for="(property, index) in requirementProperties[category].filter(item=>item.isSelected)"
+                  v-for="(property, index) in requirementProperties[
+                    category
+                  ].filter((item) => item.isSelected)"
                   :key="index"
                 >
                   <td>
-                    <div style="padding: 10px 0px">{{property.item}}</div>
-                    <template v-if="property.type==='single-selection'">
+                    <div style="padding: 10px 0px">{{ property.item }}</div>
+                    <template v-if="property.type === 'single-selection'">
                       <multiselect
                         v-model="property.selectedOption"
                         :options="property.options"
@@ -164,45 +176,77 @@
                     </template>
                   </td>
                   <td>
-                    <div v-if="property.type==='single-selection'" style="padding: 10px 0px">&nbsp;</div>
+                    <div
+                      v-if="property.type === 'single-selection'"
+                      style="padding: 10px 0px"
+                    >
+                      &nbsp;
+                    </div>
                     <template v-if="property.qtyEnabled">
-                      <input class="quantity-input" type="number" v-model="property.defaultQty" />
+                      <input
+                        class="quantity-input"
+                        type="number"
+                        v-model="property.defaultQty"
+                      />
                       <span v-if="property.hint">
-                        <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
-                        <md-tooltip md-direction="bottom">{{property.hint}}</md-tooltip>
+                        <img
+                          :src="`${$iconURL}Event%20Page/light.svg`"
+                          width="20"
+                        />
+                        <md-tooltip md-direction="bottom">{{
+                          property.hint
+                        }}</md-tooltip>
                       </span>
                     </template>
                   </td>
                   <td>
-                    <div v-if="property.type==='single-selection'" style="padding: 10px 0px">&nbsp;</div>
+                    <div
+                      v-if="property.type === 'single-selection'"
+                      style="padding: 10px 0px"
+                    >
+                      &nbsp;
+                    </div>
                     <div>
                       <md-button
                         class="md-icon-button md-simple requirement-action"
                         v-if="property.qtyEnabled"
                       >
-                        <img :src="`${$iconURL}Requirements/edit-dark.svg`" width="20" />
+                        <img
+                          :src="`${$iconURL}Requirements/edit-dark.svg`"
+                          width="20"
+                        />
                       </md-button>
                       <md-button
                         class="md-icon-button md-simple requirement-action"
                         @click="removeRequirement(category, property)"
                       >
-                        <img :src="`${$iconURL}Requirements/delete-dark.svg`" width="20" />
+                        <img
+                          :src="`${$iconURL}Requirements/delete-dark.svg`"
+                          width="20"
+                        />
                       </md-button>
                     </div>
                   </td>
                   <td>
-                    <div v-if="property.type==='single-selection'" style="padding: 10px 0px">&nbsp;</div>
+                    <div
+                      v-if="property.type === 'single-selection'"
+                      style="padding: 10px 0px"
+                    >
+                      &nbsp;
+                    </div>
                     <div class="condition">
                       <md-checkbox
                         class="md-simple md-checkbox-circle md-red"
                         v-model="property.mustHave"
                         :value="true"
-                      >Must Have</md-checkbox>
+                        >Must Have</md-checkbox
+                      >
                       <md-checkbox
                         class="md-simple md-checkbox-circle md-red"
                         v-model="property.mustHave"
                         :value="false"
-                      >Nice To Have</md-checkbox>
+                        >Nice To Have</md-checkbox
+                      >
                     </div>
                   </td>
                 </tr>
@@ -216,11 +260,13 @@
               <div>
                 <div
                   class="additional-request-tag"
-                  v-for="(property, index) in requirementProperties[category].filter(item=>!item.isSelected)"
+                  v-for="(property, index) in requirementProperties[
+                    category
+                  ].filter((item) => !item.isSelected)"
                   :key="index"
                   @click="addRequirement(category, property)"
                 >
-                  {{property.item}}
+                  {{ property.item }}
                   <md-icon class="icon color-red">add_circle</md-icon>
                 </div>
               </div>
@@ -241,11 +287,12 @@
         </md-button>
       </div>
       <div>
-        <md-button class="md-bold add-category-btn md-black md-simple">Revert To Original</md-button>
-        <md-button
-          class="md-red md-bold add-category-btn"
-          @click="findVendors"
-        >Find my perfect vendor</md-button>
+        <md-button class="md-bold add-category-btn md-black md-simple"
+          >Revert To Original</md-button
+        >
+        <md-button class="md-red md-bold add-category-btn" @click="findVendors"
+          >Find my perfect vendor</md-button
+        >
       </div>
     </div>
   </div>
@@ -345,10 +392,15 @@ export default {
           const requirements = res.data;
           for (let category in requirements) {
             for (let itemIndex in requirements[category]) {
-              if (requirements[category][itemIndex].defaultQtyScript)
-                requirements[category][itemIndex].defaultQty = eval(
+              if (requirements[category][itemIndex].defaultQtyScript) {
+                const calcedValue = eval(
                   requirements[category][itemIndex].defaultQtyScript,
                 );
+                requirements[category][itemIndex].defaultQty = Math.ceil(
+                  calcedValue,
+                );
+              }
+
               // requirements[category][itemIndex].isSelected = eval(requirements[category][itemIndex].isSelected)
             }
           }
@@ -397,9 +449,10 @@ export default {
             if (index >= 0) {
               const requirements = this.requirementProperties;
               const event = this.event;
-              const defaultValue = eval(
+              let defaultValue = eval(
                 this.requirementProperties[cateogry][index].defaultQtyScript,
               );
+              defaultValue = Math.round(defaultValue);
               this.requirementProperties[cateogry][
                 index
               ].defaultQty = defaultValue;
