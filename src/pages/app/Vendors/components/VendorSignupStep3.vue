@@ -7,16 +7,18 @@
           DISCLAMER &
           <br />POLICY
         </h2>
-        <p>Those elements will automatically appear on your future proposal</p>
+        <p>
+          Don’t worry, you’ll only have to do this once. After that all elements will appear on your future proposals
+          automatically
+        </p>
         <h2>3/4</h2>
+        <p class="color-red font-bold">Good job, you're almost done!</p>
       </div>
       <div class="right-side">
         <div class="policy-wrapper mb-50">
           <div class="title-cont">
             <div class="top">
-              <h5>
-                <img :src="`${iconUrl}Asset 560.svg`" /> Policy
-              </h5>
+              <h5><img :src="`${iconUrl}Asset 560.svg`" /> Policy</h5>
             </div>
             <div class="bottom">
               <p>Set venue rules for your guests</p>
@@ -26,11 +28,11 @@
             <div class="rules">
               <div
                 class="rule"
-                v-for="(r, rIndex) in policies.filter(p => p.category == vendor.vendorCategory)[0].items"
+                v-for="(r, rIndex) in policies.filter((p) => p.category == vendor.vendorCategory)[0].items"
                 :key="rIndex"
               >
                 <div class="left v-grid-with-desc">
-                  {{r.name}}
+                  {{ r.name }}
                   <textarea
                     v-if="r.hasComment && yesRules.includes(r)"
                     class="desc"
@@ -41,7 +43,7 @@
                 </div>
                 <div class="right">
                   <div class="top">
-                    <template v-if="r.type==Boolean">
+                    <template v-if="r.type == Boolean">
                       <div class="item" @click="yesRule(r)">
                         <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="yesRules.includes(r)" />
                         <span class="unchecked" v-else></span>
@@ -53,7 +55,7 @@
                         No
                       </div>
                     </template>
-                    <template v-if="r.type==String">
+                    <template v-if="r.type == String">
                       <div class="item" v-if="!noteRules.includes(r)" @click="noteRule(r)">
                         <a class="note">+ Add Note</a>
                       </div>
@@ -91,9 +93,7 @@
         <div class="pricing-policy-wrapper mb-50">
           <div class="title-cont">
             <div class="top">
-              <h5>
-                <img :src="`${iconUrl}Asset 536.svg`" /> pricing policy
-              </h5>
+              <h5><img :src="`${iconUrl}Asset 536.svg`" /> pricing policy</h5>
             </div>
             <div class="bottom">
               <p>use the suggested element or add your own itmes to your disclaimer</p>
@@ -125,11 +125,11 @@
             <div class="rules">
               <div
                 class="rule"
-                v-for="(p, pIndex) in pricingPolicies.filter(p => p.category == vendor.vendorCategory)[0].items"
+                v-for="(p, pIndex) in pricingPolicies.filter((p) => p.category == vendor.vendorCategory)[0].items"
                 :key="pIndex"
               >
                 <div class="left">
-                  {{p.name}}
+                  {{ p.name }}
                   <textarea
                     v-if="p.hasComment && yesRules.includes(p)"
                     class="desc"
@@ -237,17 +237,17 @@
                 <span>Some</span>
               </div>
             </div>
-            <div class="not-allow-cont" v-if="allowThirdVendor==2">
+            <div class="not-allow-cont" v-if="allowThirdVendor == 2">
               <h4>Which of the vendors do you not allow to work in your venue?</h4>
               <div class="na-check-list">
                 <ul>
                   <li v-for="(n, nIndex) in defNa" :key="nIndex" @click="updateNa(n)">
                     <img
                       :src="`${iconUrl}Group 5489 (4).svg`"
-                      v-if="vendor.notAllowed.filter(nt => nt.value == n.value).length > 0"
+                      v-if="vendor.notAllowed.filter((nt) => nt.value == n.value).length > 0"
                     />
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
-                    {{n.name}}
+                    {{ n.name }}
                   </li>
                   <li v-if="notAllowed.includes('Other')">
                     <input type="text" placeholder="Type vendor category..." />
@@ -285,63 +285,67 @@
               </div>
             </div>
             <div class="calendar-cont" v-if="!workAllDay">
-              <div class="check-list">
+              <div class="calendar">
+                <div class="calendar-title">Mark the blackout days</div>
+                <!-- dateFormat='yyyy-mm-dd'  -->
+                <template>
+                  <functional-calendar
+                    :key="componentKey"
+                    :change-month-function="true"
+                    :change-year-function="true"
+                    :is-multiple-date-picker="true"
+                    :minSelDays="1"
+                    :marked-dates="markedDates"
+                    :disabled-day-names="optimizeWeekDays(selectedWeekdays)"
+                    :sundayStart="true"
+                    v-model="date"
+                    ref="calendar"
+                    v-on:dayClicked="updateDontWorkDays($event)"
+                    v-on:daychoseDay="updateDontWorkDays($event)"
+                  />
+                </template>
+              </div>
+              <div class="check-list ml-40">
                 <div class="block">
-                  <div class="check-field" @click="exEvery=!exEvery">
+                  <div class="check-field" @click="exEvery = !exEvery">
                     <img :src="`${iconUrl}Group 6258.svg`" v-if="exEvery" />
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
-                    <span :class="{'checked': exEvery}">Every:</span>
+                    <span :class="{ checked: exEvery }">Every:</span>
                   </div>
-                  <div class="cdropdown" v-if="exEvery" @click="isWeekday=!isWeekday">
+                  <div class="cdropdown ml-30" v-if="exEvery" @click="isWeekday = !isWeekday" style="margin-left: 3rem">
                     <span>Select Day</span>
                     <img :src="`${iconUrl}Asset 519.svg`" />
                   </div>
-                  <div class="cdropdown-cont" v-if="isWeekday && exEvery">
-                    <div
-                      class="weekdays"
-                      v-for="(w, wIndex) in weekdays"
-                      :key="wIndex"
-                      @click="updateWeekdays(w)"
-                    >
-                      <img
-                        :src="`${iconUrl}Group 5479 (2).svg`"
-                        v-if="selectedWeekdays.includes(w)"
-                      />
+                  <div class="cdropdown-cont" v-if="isWeekday && exEvery" style="margin-left: 3rem">
+                    <div class="weekdays" v-for="(w, wIndex) in weekdays" :key="wIndex" @click="updateWeekdays(w)">
+                      <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="selectedWeekdays.includes(w)" />
                       <span class="unchecked" v-else></span>
-                      {{w}}
+                      {{ w }}
                     </div>
                   </div>
                 </div>
                 <div class="block border">
-                  <div class="check-field" @click="exDont=!exDont">
+                  <div class="check-field" @click="exDont = !exDont">
                     <img :src="`${iconUrl}Group 6258.svg`" v-if="exDont" />
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
-                    <span :class="{'checked': exDont}">I don't work on these holidays:</span>
+                    <span :class="{ checked: exDont }">I don't work on these holidays:</span>
                   </div>
-                  <div class="cdropdown" v-if="exDont" @click="isReligion=!isReligion">
+                  <div class="cdropdown" v-if="exDont" @click="isReligion = !isReligion" style="margin-left: 3rem">
                     <span>Religion</span>
                     <img :src="`${iconUrl}Asset 519.svg`" />
                   </div>
-                  <div class="cdropdown-cont" v-if="isReligion && exDont">
-                    <div
-                      class="weekdays"
-                      v-for="(r, rIndex) in religions"
-                      :key="rIndex"
-                      @click="updateReligion(r)"
-                    >
-                      <img
-                        :src="`${iconUrl}Group 5479 (2).svg`"
-                        v-if="selectedReligion.includes(r)"
-                      />
+                  <div class="cdropdown-cont" v-if="isReligion && exDont" style="margin-left: 3rem">
+                    <div class="weekdays" v-for="(r, rIndex) in religions" :key="rIndex" @click="updateReligion(r)">
+                      <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="selectedReligion.includes(r)" />
                       <span class="unchecked" v-else></span>
-                      {{r.name}}
+                      {{ r.name }}
                     </div>
                   </div>
                   <div
                     class="holidays"
                     v-for="(r, rIndex) in religions"
                     :key="rIndex"
-                    :class="{'mt-1': selectedReligion.includes(r)}"
+                    :class="{ 'mt-1': selectedReligion.includes(r) }"
                   >
                     <template v-if="exDont && isReligion && selectedReligion.includes(r)">
                       <div class="dont">
@@ -353,7 +357,7 @@
                             <div class="check-field" @click="updateExDonts(h)">
                               <img :src="`${iconUrl}Group 6258.svg`" v-if="exDonts.includes(h)" />
                               <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
-                              <span :class="{'checked': exDonts.includes(h)}">{{h}}</span>
+                              <span :class="{ checked: exDonts.includes(h) }">{{ h }}</span>
                             </div>
                           </li>
                         </ul>
@@ -363,10 +367,10 @@
                 </div>
                 <div class="block">
                   <div class="title">Additional Limitations</div>
-                  <div class="check-field" @click="exLimitation=!exLimitation">
+                  <div class="check-field" @click="exLimitation = !exLimitation">
                     <img :src="`${iconUrl}Group 6258.svg`" v-if="exLimitation" />
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
-                    <span :class="{'checked': exLimitation}">Everyday between these hours:</span>
+                    <span :class="{ checked: exLimitation }">Everyday between these hours:</span>
                   </div>
                   <div class="exLimitation" v-if="exLimitation">
                     <div class="select-time-cont">
@@ -401,26 +405,6 @@
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="calendar">
-                <div class="calendar-title">Mark the blackout days</div>
-                <!-- dateFormat='yyyy-mm-dd'  -->
-                <template>
-                  <functional-calendar
-                    :key="componentKey"
-                    :change-month-function="true"
-                    :change-year-function="true"
-                    :is-multiple-date-picker="true"
-                    :minSelDays="1"
-                    :marked-dates="markedDates"
-                    :disabled-day-names="optimizeWeekDays(selectedWeekdays)"
-                    :sundayStart="true"
-                    v-model="date"
-                    ref="calendar"
-                    v-on:dayClicked="updateDontWorkDays($event)"
-                    v-on:daychoseDay="updateDontWorkDays($event)"
-                  />
-                </template>
               </div>
             </div>
           </div>
@@ -460,15 +444,13 @@ export default {
   },
   data() {
     return {
-      iconUrl:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
       allowThirdVendor: null,
       workAllDay: false,
       date: {},
       rulesDesc: {
         title: "additional rules",
-        placeholder:
-          "Event muse end before.. / Suitable for children (2-12 years)",
+        placeholder: "Event muse end before.. / Suitable for children (2-12 years)",
       },
       policyDesc: {
         title: "Add steps to your cancellation approch:",
@@ -495,14 +477,7 @@ export default {
         },
         {
           name: "Hindu",
-          holidays: [
-            "Ganesh Chaturthi",
-            "Pitru Paksha",
-            "Mysore Dasara",
-            "Navratri",
-            "Vijayadashami",
-            "Durga Puja",
-          ],
+          holidays: ["Ganesh Chaturthi", "Pitru Paksha", "Mysore Dasara", "Navratri", "Vijayadashami", "Durga Puja"],
         },
         {
           name: "Islamic",
@@ -542,21 +517,8 @@ export default {
         // "16/6/2020",
       ],
       componentKey: 0,
-      allowedCategoryFor3rd: [
-        "venuerental",
-        "foodandbeverage",
-        "decor",
-        "entertainment",
-      ],
-      weekdays: [
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday",
-        "sunday",
-      ],
+      allowedCategoryFor3rd: ["venuerental", "foodandbeverage", "decor", "entertainment"],
+      weekdays: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
       selectedWeekdays: [],
       selectedReligion: [],
       isWeekday: false,
@@ -613,12 +575,7 @@ export default {
             //   name: 'Allowed use of outside vendors',
             //   type: Boolean,
             // },
-            {
-              name: "Minimum amount of hours",
-              type: Number,
-              noSuffix: true,
-              hasComment: true,
-            },
+
             {
               name: "Suitable for infants",
               type: Boolean,
@@ -849,8 +806,7 @@ export default {
               type: Number,
             },
             {
-              name:
-                "Flexibility to operate with additional Photo / Video companies during the event",
+              name: "Flexibility to operate with additional Photo / Video companies during the event",
               type: Boolean,
             },
           ],
@@ -861,6 +817,12 @@ export default {
           category: "venuerental",
           items: [
             {
+              name: "Minimum amount of hours",
+              type: Number,
+              noSuffix: true,
+              hasComment: true,
+            },
+            {
               name: "Hours included in rental",
               type: Number,
               noSuffix: true,
@@ -868,9 +830,21 @@ export default {
             {
               name: "Setup hours included in rental",
               type: Boolean,
+              options: {
+                yes: {
+                  name: "Hours included in rental",
+                  type: Number,
+                  noSuffix: true,
+                },
+                no: {
+                  name: "Hours included in rental",
+                  type: Number,
+                  noSuffix: true,
+                },
+              },
             },
             {
-              name: "Extra Guest (beyond agreed upon)",
+              name: "Cost Extra Guest (beyond agreed upon)",
               type: Number,
             },
             {
@@ -878,7 +852,7 @@ export default {
               type: Number,
             },
             {
-              name: "Late Night fares",
+              name: "Cost Late Night Fares",
               type: Number,
             },
             {
@@ -925,7 +899,7 @@ export default {
               hasComment: true,
             },
             {
-              name: "Late Night fares",
+              name: "Cost Late Night Fares",
               type: Number,
             },
             {
@@ -1285,11 +1259,7 @@ export default {
         this.selectedWeekdays.push(item);
       }
       this.componentKey += 1;
-      this.$root.$emit(
-        "update-vendor-value",
-        "selectedWeekdays",
-        this.selectedWeekdays,
-      );
+      this.$root.$emit("update-vendor-value", "selectedWeekdays", this.selectedWeekdays);
     },
     updateReligion(item) {
       if (this.selectedReligion.includes(item)) {
@@ -1297,11 +1267,7 @@ export default {
       } else {
         this.selectedReligion.push(item);
       }
-      this.$root.$emit(
-        "update-vendor-value",
-        "selectedReligion",
-        this.selectedReligion,
-      );
+      this.$root.$emit("update-vendor-value", "selectedReligion", this.selectedReligion);
     },
     updateDontWorkDays() {
       this.$root.$emit("update-vendor-value", "dontWorkDays", this.date);
@@ -1372,7 +1338,6 @@ export default {
       p {
         margin: 0;
         padding: 0;
-        font: normal 16px Manrope-Regular, sans-serif;
       }
       h2 {
         margin: 30px 0;
@@ -1549,7 +1514,7 @@ export default {
 
     .calendar {
       flex: 1;
-
+      border: solid 1px #a0a0a0;
       .calendar-title {
         position: absolute;
         z-index: 999;
@@ -1558,6 +1523,7 @@ export default {
       }
       /deep/ .vfc-main-container {
         padding-top: 3rem;
+        width: 100%;
       }
       /deep/ .vfc-top-date {
         a {
@@ -1775,8 +1741,7 @@ export default {
               &:before {
                 position: absolute;
                 content: ">";
-                transform: translateX(50%) translateY(calc(100% + 1.2rem))
-                  rotate(90deg);
+                transform: translateX(50%) translateY(calc(100% + 1.2rem)) rotate(90deg);
                 left: 40%;
                 font-size: 20px;
                 font-weight: 800;
