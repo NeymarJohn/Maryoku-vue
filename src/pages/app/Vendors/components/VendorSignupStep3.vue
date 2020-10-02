@@ -14,7 +14,9 @@
         <div class="policy-wrapper mb-50">
           <div class="title-cont">
             <div class="top">
-              <h5><img :src="`${iconUrl}Asset 560.svg`" /> Policy</h5>
+              <h5>
+                <img :src="`${iconUrl}Asset 560.svg`" /> Policy
+              </h5>
             </div>
             <div class="bottom">
               <p>Set venue rules for your guests</p>
@@ -24,13 +26,11 @@
             <div class="rules">
               <div
                 class="rule"
-                v-for="(r, rIndex) in policies.filter(
-                  (p) => p.category == vendor.vendorCategory,
-                )[0].items"
+                v-for="(r, rIndex) in policies.filter(p => p.category == vendor.vendorCategory)[0].items"
                 :key="rIndex"
               >
                 <div class="left v-grid-with-desc">
-                  {{ r.name }}
+                  {{r.name}}
                   <textarea
                     v-if="r.hasComment && yesRules.includes(r)"
                     class="desc"
@@ -41,37 +41,24 @@
                 </div>
                 <div class="right">
                   <div class="top">
-                    <template v-if="r.type == Boolean">
+                    <template v-if="r.type==Boolean">
                       <div class="item" @click="yesRule(r)">
-                        <img
-                          :src="`${iconUrl}Group 5479 (2).svg`"
-                          v-if="yesRules.includes(r)"
-                        />
+                        <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="yesRules.includes(r)" />
                         <span class="unchecked" v-else></span>
                         Yes
                       </div>
                       <div class="item" @click="noRule(r)">
-                        <img
-                          :src="`${iconUrl}Group 5489 (3).svg`"
-                          v-if="noRules.includes(r)"
-                        />
+                        <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="noRules.includes(r)" />
                         <span class="unchecked" v-else></span>
                         No
                       </div>
                     </template>
-                    <template v-if="r.type == String">
-                      <div
-                        class="item"
-                        v-if="!noteRules.includes(r)"
-                        @click="noteRule(r)"
-                      >
+                    <template v-if="r.type==String">
+                      <div class="item" v-if="!noteRules.includes(r)" @click="noteRule(r)">
                         <a class="note">+ Add Note</a>
                       </div>
                       <div class="item noflex" v-else>
-                        <textarea
-                          placeholder="Except from the parking area"
-                          rows="3"
-                        />
+                        <textarea placeholder="Except from the parking area" rows="3" />
                         <br />
                         <a class="cancel" @click="noteRule(r)">Cancel</a>
                       </div>
@@ -80,11 +67,7 @@
                   <div class="bottom no-margin" v-if="r.type == Number">
                     <template v-if="r.noSuffix">
                       <div>
-                        <input
-                          type="number"
-                          class="text-center number-field"
-                          placeholder="00.00"
-                        />
+                        <input type="number" class="text-center number-field" placeholder="00.00" />
                       </div>
                     </template>
                     <template v-else>
@@ -108,13 +91,12 @@
         <div class="pricing-policy-wrapper mb-50">
           <div class="title-cont">
             <div class="top">
-              <h5><img :src="`${iconUrl}Asset 536.svg`" /> pricing policy</h5>
+              <h5>
+                <img :src="`${iconUrl}Asset 536.svg`" /> pricing policy
+              </h5>
             </div>
             <div class="bottom">
-              <p>
-                use the suggested element or add your own itmes to your
-                disclaimer
-              </p>
+              <p>use the suggested element or add your own itmes to your disclaimer</p>
             </div>
           </div>
           <div class="card">
@@ -143,13 +125,11 @@
             <div class="rules">
               <div
                 class="rule"
-                v-for="(p, pIndex) in pricingPolicies.filter(
-                  (p) => p.category == vendor.vendorCategory,
-                )[0].items"
+                v-for="(p, pIndex) in pricingPolicies.filter(p => p.category == vendor.vendorCategory)[0].items"
                 :key="pIndex"
               >
                 <div class="left">
-                  {{ p.name }}
+                  {{p.name}}
                   <textarea
                     v-if="p.hasComment && yesRules.includes(p)"
                     class="desc"
@@ -162,35 +142,22 @@
                   <div class="top">
                     <template v-if="p.type == Boolean">
                       <div class="item" @click="yesPolicy(p)">
-                        <img
-                          :src="`${iconUrl}Group 5479 (2).svg`"
-                          v-if="yesPolicies.includes(p)"
-                        />
+                        <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="yesPolicies.includes(p)" />
                         <span class="unchecked" v-else></span>
                         Yes
                       </div>
                       <div class="item" @click="noPolicy(p)">
-                        <img
-                          :src="`${iconUrl}Group 5489 (3).svg`"
-                          v-if="noPolicies.includes(p)"
-                        />
+                        <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="noPolicies.includes(p)" />
                         <span class="unchecked" v-else></span>
                         No
                       </div>
                     </template>
                     <template v-if="p.type == String">
-                      <div
-                        class="item"
-                        v-if="!noteRules.includes(p)"
-                        @click="noteRule(p)"
-                      >
+                      <div class="item" v-if="!noteRules.includes(p)" @click="noteRule(p)">
                         <a class="note">+ Add Note</a>
                       </div>
                       <div class="item noflex" v-else>
-                        <textarea
-                          placeholder="Except from the parking area"
-                          rows="3"
-                        />
+                        <textarea placeholder="Except from the parking area" rows="3" />
                         <br />
                         <a class="cancel" @click="noteRule(p)">Cancel</a>
                       </div>
@@ -199,11 +166,7 @@
                   <div class="bottom no-margin" v-if="p.type == Number">
                     <template v-if="p.noSuffix">
                       <div>
-                        <input
-                          type="number"
-                          class="text-center number-field"
-                          placeholder="00.00"
-                        />
+                        <input type="number" class="text-center number-field" placeholder="00.00" />
                       </div>
                     </template>
                     <template v-else>
@@ -242,10 +205,7 @@
             </div>-->
           </div>
         </div>
-        <div
-          class="3rd-party-vendor-wrapper mb-50"
-          v-if="vendor.vendorCategory == 'venuerental'"
-        >
+        <div class="3rd-party-vendor-wrapper mb-50" v-if="vendor.vendorCategory == 'venuerental'">
           <div class="title-cont">
             <div class="top">
               <h5>3rd party vendor</h5>
@@ -262,50 +222,32 @@
             </div>
             <div class="checks-cont">
               <div class="check-item" @click="allowThirdVendor = 0">
-                <img
-                  :src="`${iconUrl}Group 5479 (2).svg`"
-                  v-if="allowThirdVendor == 0"
-                />
+                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="allowThirdVendor == 0" />
                 <span class="unchecked" v-else></span>
                 <span>Yes</span>
               </div>
               <div class="check-item" @click="allowThirdVendor = 1">
-                <img
-                  :src="`${iconUrl}Group 5479 (2).svg`"
-                  v-if="allowThirdVendor == 1"
-                />
+                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="allowThirdVendor == 1" />
                 <span class="unchecked" v-else></span>
                 <span>No</span>
               </div>
               <div class="check-item" @click="allowThirdVendor = 2">
-                <img
-                  :src="`${iconUrl}Group 5479 (2).svg`"
-                  v-if="allowThirdVendor == 2"
-                />
+                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="allowThirdVendor == 2" />
                 <span class="unchecked" v-else></span>
                 <span>Some</span>
               </div>
             </div>
-            <div class="not-allow-cont" v-if="allowThirdVendor == 2">
-              <h4>
-                Which of the vendors do you not allow to work in your venue?
-              </h4>
+            <div class="not-allow-cont" v-if="allowThirdVendor==2">
+              <h4>Which of the vendors do you not allow to work in your venue?</h4>
               <div class="na-check-list">
                 <ul>
-                  <li
-                    v-for="(n, nIndex) in defNa"
-                    :key="nIndex"
-                    @click="updateNa(n)"
-                  >
+                  <li v-for="(n, nIndex) in defNa" :key="nIndex" @click="updateNa(n)">
                     <img
                       :src="`${iconUrl}Group 5489 (4).svg`"
-                      v-if="
-                        vendor.notAllowed.filter((nt) => nt.value == n.value)
-                          .length > 0
-                      "
+                      v-if="vendor.notAllowed.filter(nt => nt.value == n.value).length > 0"
                     />
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
-                    {{ n.name }}
+                    {{n.name}}
                   </li>
                   <li v-if="notAllowed.includes('Other')">
                     <input type="text" placeholder="Type vendor category..." />
@@ -343,47 +285,18 @@
               </div>
             </div>
             <div class="calendar-cont" v-if="!workAllDay">
-              <div class="calendar">
-                <div class="calendar-title">Mark the blackout days</div>
-                <!-- dateFormat='yyyy-mm-dd'  -->
-                <template>
-                  <functional-calendar
-                    :key="componentKey"
-                    :change-month-function="true"
-                    :change-year-function="true"
-                    :is-multiple-date-picker="true"
-                    :minSelDays="1"
-                    :marked-dates="markedDates"
-                    :disabled-day-names="optimizeWeekDays(selectedWeekdays)"
-                    :sundayStart="true"
-                    v-model="date"
-                    ref="calendar"
-                    v-on:dayClicked="updateDontWorkDays($event)"
-                    v-on:daychoseDay="updateDontWorkDays($event)"
-                  />
-                </template>
-              </div>
-              <div class="check-list ml-40">
+              <div class="check-list">
                 <div class="block">
-                  <div class="check-field" @click="exEvery = !exEvery">
+                  <div class="check-field" @click="exEvery=!exEvery">
                     <img :src="`${iconUrl}Group 6258.svg`" v-if="exEvery" />
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
-                    <span :class="{ checked: exEvery }">Every:</span>
+                    <span :class="{'checked': exEvery}">Every:</span>
                   </div>
-                  <div
-                    class="cdropdown ml-30"
-                    v-if="exEvery"
-                    @click="isWeekday = !isWeekday"
-                    style="margin-left: 3rem"
-                  >
+                  <div class="cdropdown" v-if="exEvery" @click="isWeekday=!isWeekday">
                     <span>Select Day</span>
                     <img :src="`${iconUrl}Asset 519.svg`" />
                   </div>
-                  <div
-                    class="cdropdown-cont"
-                    v-if="isWeekday && exEvery"
-                    style="margin-left: 3rem"
-                  >
+                  <div class="cdropdown-cont" v-if="isWeekday && exEvery">
                     <div
                       class="weekdays"
                       v-for="(w, wIndex) in weekdays"
@@ -395,32 +308,21 @@
                         v-if="selectedWeekdays.includes(w)"
                       />
                       <span class="unchecked" v-else></span>
-                      {{ w }}
+                      {{w}}
                     </div>
                   </div>
                 </div>
                 <div class="block border">
-                  <div class="check-field" @click="exDont = !exDont">
+                  <div class="check-field" @click="exDont=!exDont">
                     <img :src="`${iconUrl}Group 6258.svg`" v-if="exDont" />
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
-                    <span :class="{ checked: exDont }"
-                      >I don't work on these holidays:</span
-                    >
+                    <span :class="{'checked': exDont}">I don't work on these holidays:</span>
                   </div>
-                  <div
-                    class="cdropdown"
-                    v-if="exDont"
-                    @click="isReligion = !isReligion"
-                    style="margin-left: 3rem"
-                  >
+                  <div class="cdropdown" v-if="exDont" @click="isReligion=!isReligion">
                     <span>Religion</span>
                     <img :src="`${iconUrl}Asset 519.svg`" />
                   </div>
-                  <div
-                    class="cdropdown-cont"
-                    v-if="isReligion && exDont"
-                    style="margin-left: 3rem"
-                  >
+                  <div class="cdropdown-cont" v-if="isReligion && exDont">
                     <div
                       class="weekdays"
                       v-for="(r, rIndex) in religions"
@@ -432,20 +334,16 @@
                         v-if="selectedReligion.includes(r)"
                       />
                       <span class="unchecked" v-else></span>
-                      {{ r.name }}
+                      {{r.name}}
                     </div>
                   </div>
                   <div
                     class="holidays"
                     v-for="(r, rIndex) in religions"
                     :key="rIndex"
-                    :class="{ 'mt-1': selectedReligion.includes(r) }"
+                    :class="{'mt-1': selectedReligion.includes(r)}"
                   >
-                    <template
-                      v-if="
-                        exDont && isReligion && selectedReligion.includes(r)
-                      "
-                    >
+                    <template v-if="exDont && isReligion && selectedReligion.includes(r)">
                       <div class="dont">
                         <img :src="`${iconUrl}Asset 524.svg`" />
                       </div>
@@ -453,17 +351,9 @@
                         <ul>
                           <li v-for="(h, hIndex) in r.holidays" :key="hIndex">
                             <div class="check-field" @click="updateExDonts(h)">
-                              <img
-                                :src="`${iconUrl}Group 6258.svg`"
-                                v-if="exDonts.includes(h)"
-                              />
-                              <img
-                                :src="`${iconUrl}Rectangle 1245.svg`"
-                                v-else
-                              />
-                              <span :class="{ checked: exDonts.includes(h) }">{{
-                                h
-                              }}</span>
+                              <img :src="`${iconUrl}Group 6258.svg`" v-if="exDonts.includes(h)" />
+                              <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
+                              <span :class="{'checked': exDonts.includes(h)}">{{h}}</span>
                             </div>
                           </li>
                         </ul>
@@ -473,18 +363,10 @@
                 </div>
                 <div class="block">
                   <div class="title">Additional Limitations</div>
-                  <div
-                    class="check-field"
-                    @click="exLimitation = !exLimitation"
-                  >
-                    <img
-                      :src="`${iconUrl}Group 6258.svg`"
-                      v-if="exLimitation"
-                    />
+                  <div class="check-field" @click="exLimitation=!exLimitation">
+                    <img :src="`${iconUrl}Group 6258.svg`" v-if="exLimitation" />
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
-                    <span :class="{ checked: exLimitation }"
-                      >Everyday between these hours:</span
-                    >
+                    <span :class="{'checked': exLimitation}">Everyday between these hours:</span>
                   </div>
                   <div class="exLimitation" v-if="exLimitation">
                     <div class="select-time-cont">
@@ -519,6 +401,26 @@
                     </div>
                   </div>
                 </div>
+              </div>
+              <div class="calendar">
+                <div class="calendar-title">Mark the blackout days</div>
+                <!-- dateFormat='yyyy-mm-dd'  -->
+                <template>
+                  <functional-calendar
+                    :key="componentKey"
+                    :change-month-function="true"
+                    :change-year-function="true"
+                    :is-multiple-date-picker="true"
+                    :minSelDays="1"
+                    :marked-dates="markedDates"
+                    :disabled-day-names="optimizeWeekDays(selectedWeekdays)"
+                    :sundayStart="true"
+                    v-model="date"
+                    ref="calendar"
+                    v-on:dayClicked="updateDontWorkDays($event)"
+                    v-on:daychoseDay="updateDontWorkDays($event)"
+                  />
+                </template>
               </div>
             </div>
           </div>
@@ -711,7 +613,12 @@ export default {
             //   name: 'Allowed use of outside vendors',
             //   type: Boolean,
             // },
-
+            {
+              name: "Minimum amount of hours",
+              type: Number,
+              noSuffix: true,
+              hasComment: true,
+            },
             {
               name: "Suitable for infants",
               type: Boolean,
@@ -954,12 +861,6 @@ export default {
           category: "venuerental",
           items: [
             {
-              name: "Minimum amount of hours",
-              type: Number,
-              noSuffix: true,
-              hasComment: true,
-            },
-            {
               name: "Hours included in rental",
               type: Number,
               noSuffix: true,
@@ -967,18 +868,6 @@ export default {
             {
               name: "Setup hours included in rental",
               type: Boolean,
-              options: {
-                yes: {
-                  name: "Hours included in rental",
-                  type: Number,
-                  noSuffix: true,
-                },
-                no: {
-                  name: "Hours included in rental",
-                  type: Number,
-                  noSuffix: true,
-                },
-              },
             },
             {
               name: "Extra Guest (beyond agreed upon)",
@@ -1660,7 +1549,7 @@ export default {
 
     .calendar {
       flex: 1;
-      border: solid 1px #a0a0a0;
+
       .calendar-title {
         position: absolute;
         z-index: 999;
@@ -1669,7 +1558,6 @@ export default {
       }
       /deep/ .vfc-main-container {
         padding-top: 3rem;
-        width: 100%;
       }
       /deep/ .vfc-top-date {
         a {

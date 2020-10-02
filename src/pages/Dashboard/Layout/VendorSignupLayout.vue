@@ -7,11 +7,7 @@
       <v-signup-steps :step="step"></v-signup-steps>
     </section>
     <router-view></router-view>
-    <section
-      class="footer-wrapper"
-      :class="{ approved: isApproved }"
-      v-if="isApproved"
-    >
+    <section class="footer-wrapper" :class="{'approved': isApproved}" v-if="isApproved">
       <div class="left">
         <md-button class="md-vendor-signup md-simple md-red" @click="prev()">
           <img :src="`${iconsUrl}Group 4770 (2).svg`" class="label-icon" /> Back
@@ -21,36 +17,26 @@
         </span>
       </div>
       <div class="right">
-        <md-button
-          class="save md-vendor-signup md-simple md-red md-outlined"
-          @click="saveDraft()"
-        >
+        <md-button class="save md-vendor-signup md-simple md-red md-outlined" @click="saveDraft()">
           <img :src="`${iconsUrl}Asset 610.svg`" class="label-icon mr-10" />
           Save for later
         </md-button>
-        <md-button class="approve md-vendor-signup md-red" @click="next()">{{
-          nextLabel
-        }}</md-button>
+        <md-button class="approve md-vendor-signup md-red" @click="next()">{{nextLabel}}</md-button>
       </div>
     </section>
     <section class="footer-wrapper" v-else>
       <md-button
         class="approve md-vendor-signup md-red"
         @click="approve()"
-        :class="{ disabled: !validateBasicFields() }"
-        >Approve & Begin</md-button
-      >
+        :class="{'disabled': !validateBasicFields()}"
+      >Approve & Begin</md-button>
     </section>
-    <modal
-      v-if="status"
-      class="saved-it-modal"
-      container-class="modal-container sm"
-    >
+    <modal v-if="status" class="saved-it-modal" container-class="modal-container sm">
       <template slot="header">
         <div class="saved-it-modal__header">
           <h3>
             <img :src="`${proposalIconsUrl}Asset 588.svg`" />
-            {{ status.title }}
+            {{status.title}}
           </h3>
         </div>
         <button class="close" @click="hideModal()">
@@ -59,7 +45,7 @@
       </template>
       <template slot="body">
         <div class="saved-it-modal__body">
-          <p>{{ status.message }}</p>
+          <p>{{status.message}}</p>
         </div>
       </template>
       <template slot="footer">
@@ -98,13 +84,13 @@ export default {
       this.$router.push(router);
     },
     validateBasicFields() {
-      const isValid =
+      return (
         this.vendor.vendorMainEmail &&
         this.reg.test(this.vendor.vendorMainEmail) &&
         this.vendor.companyName &&
         this.vendor.vendorCategory &&
-        this.vendor.vendorAddressLine1;
-      return isValid;
+        this.vendor.vendorAddressLine1
+      );
     },
     approve() {
       if (this.validateBasicFields()) {

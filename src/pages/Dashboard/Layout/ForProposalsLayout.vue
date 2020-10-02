@@ -86,7 +86,7 @@
           <img :src="`${proposalIconsUrl}Asset 610.svg`" /> Save for later
         </a>
         <a
-          class="next"
+          class="next active"
           @click="saveProposal()"
           :class="[{ active: selectedServices.length > 0 }]"
           v-if="step == 0"
