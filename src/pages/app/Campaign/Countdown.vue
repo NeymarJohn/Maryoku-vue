@@ -1,26 +1,40 @@
 <template>
   <div class="white-card coundown-campaign">
     <div class="p-50">
-      <div class="font-size-30 font-bold-extra text-transform-capitalize">send your guests a fun countdown</div>
+      <div
+        class="font-size-30 font-bold-extra text-transform-capitalize"
+      >send your guests a fun countdown</div>
       <div class="countdown-cover-image mt-50">
-        <img :src="campaignData.coverImage" />
+        <img :src="editingContent.coverImage" />
         <div class="countdown-guests d-flex align-center p-20">
-          <span class="font-size-30 font-bold-extra mr-10">{{ event.numberOfParticipants | withComma }}</span>
-          <span class="font-size-22 font-bold color-dark-gray" v-if="isLaunched">Guests are Attending</span>
+          <span
+            class="font-size-30 font-bold-extra mr-10"
+          >{{event.numberOfParticipants | withComma}}</span>
+          <span
+            class="font-size-22 font-bold color-dark-gray"
+            v-if="isLaunched"
+          >Guests are Attending</span>
           <span class="font-size-22 font-bold color-dark-gray" v-if="!isLaunched">Guests are Invited</span>
-          <hide-switch class="ml-20" v-model="campaignData.visibleSettings.showComing" label="coming"></hide-switch>
+          <hide-switch
+            class="ml-20"
+            v-model="editingContent.visibleSettings.showComing"
+            label="coming"
+          ></hide-switch>
         </div>
         <div class="d-flex countdown-time-panel align-end justify-content-center">
           <countdown-time :event="event"></countdown-time>
           <hide-switch
             class="ml-20"
-            v-model="campaignData.visibleSettings.showCountdown"
+            v-model="editingContent.visibleSettings.showCountdown"
             label="countdown"
           ></hide-switch>
         </div>
         <div class="cover-image-button">
-          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="chooseFiles">
-            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />Change Cover
+          <md-button
+            class="md-button md-red maryoku-btn md-theme-default change-cover-btn"
+            @click="chooseFiles"
+          >
+            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width:20px" />Change Cover
           </md-button>
           <input
             style="display: none"
@@ -34,7 +48,7 @@
       </div>
       <!-- <div class="font-size-50 font-bold-extra text-center line-height-1 mb-60">{{info.conceptName}}</div> -->
       <title-editor
-        :defaultValue="campaignTitle"
+        :value="editingContent.title"
         @change="changeTitle"
         class="font-size-50 font-bold-extra text-center line-height-1 mb-60"
       ></title-editor>
@@ -43,14 +57,14 @@
         <maryoku-textarea
           :placeholder="placeholder"
           class="mr-60 flex-1"
-          style="padding: 40px 60px 40px 40px"
-          v-model="campaignData.description"
+          style="padding:40px 60px 40px 40px"
+          v-model="editingContent.description"
         ></maryoku-textarea>
         <rsvp-event-info-panel class="flex-1" :event="event"></rsvp-event-info-panel>
       </div>
       <div class="mt-60 logo-section d-flex align-center justify-content-center">
-        <img :src="campaignData.logoUrl" />
-        <hide-switch class="ml-20" v-model="campaignData.visibleSettings.showLogo" label="logo"></hide-switch>
+        <img :src="info.logo" width="180" />
+        <hide-switch class="ml-20" v-model="editingContent.visibleSettings.showLogo" label="logo"></hide-switch>
       </div>
     </div>
   </div>
@@ -88,18 +102,41 @@ export default {
         refreshing cocktail bar
         best employee award
         see u soon`,
+      editingContent: {
+        title: "",
+        description: "",
+        coverImage: "",
+        campaignStatus: "EDITING",
+        visibleSettings: {
+          showLogo: true,
+          showComing: true,
+          showCountdown: true,
+        },
+      },
       originContent: {},
     };
+  },
+  created() {
+    if (this.$store.state.campaign.COMING_SOON) {
+      this.editingContent = this.$store.state.campaign.COMING_SOON;
+    } else {
+      this.editingContent.title = this.info.conceptName;
+      this.editingContent.coverImage = `${
+        this.$storageURL
+      }Campaign+Images/ComingSoon${(new Date().getDate() % 12) + 1}.png`;
+      if (this.event.concept && this.event.concept.images) {
+        this.editingContent.coverImage = this.event.concept.images[0].url;
+      }
+      this.$store.commit("campaign/setCampaign", {
+        name: "COMING_SOON",
+        data: this.editingContent,
+      });
+    }
+    this.originContent = Object.assign({}, this.editingContent);
   },
   computed: {
     event() {
       return this.$store.state.event.eventData;
-    },
-    campaignData() {
-      return this.$store.state.campaign.RSVP;
-    },
-    campaignTitle() {
-      return this.$store.state.campaign.RSVP ? this.$store.state.campaign.RSVP.title : "Event Name";
     },
   },
   methods: {
@@ -125,15 +162,9 @@ export default {
       });
     },
     changeTitle(newTitle) {
-      this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "title", value: newTitle });
-    },
-    campaignDescription: {
-      get() {
-        return this.$store.state.campaign.COMING_SOON ? this.$store.state.campaign.COMING_SOON.description : "";
-      },
-      set(newValue) {
-        this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "description", value: newValue });
-      },
+      this.editingContent.title = newTitle;
+      this.saveData();
+      // this.$emit("changeInfo", { field: "conceptName", value: newTitle });
     },
     chooseFiles() {
       document.getElementById("countdown-coverImage").click();

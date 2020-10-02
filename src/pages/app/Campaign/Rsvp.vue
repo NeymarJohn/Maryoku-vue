@@ -21,8 +21,8 @@
             @change="onFileChange"
           />
         </div>
-        <div class="preview-logo p-40 d-flex align-center" v-if="campaignData.logoUrl">
-          <img :src="campaignData.logoUrl" style="max-width: 200px" />
+        <div class="preview-logo p-40 d-flex align-center" v-if="info.logo">
+          <img :src="info.logo" style="max-width: 200px" />
           <md-switch class="large-switch below-label" v-model="showLogo">Hide logo</md-switch>
         </div>
         <div class="font-size-30 font-bold mt-20">
@@ -59,10 +59,8 @@
       <div class="p-40 position-relative">
         <div
           class="rsvp-event-guid-background"
-          v-if="event.concept && event.concept.colors[0]"
-          :style="`background-color:${event.concept.colors[0].color}`"
+          :style="`background-color:${event.concept ? event.concept.colors[0].color : '#050505'}`"
         ></div>
-        <div class="rsvp-event-guid-background" v-else :style="`background-color:#D5FCF3;opacity:1;`"></div>
         <div class="rsvp-event-guid md-layout">
           <div class="md-layout-item md-size-50 md-small-size-50">
             <div class="font-size-30 font-bold-extra mb-30 d-flex">
@@ -72,14 +70,13 @@
                     ? `${$iconURL}RSVP/wear.svg`
                     : `${$iconURL}RSVP/wear-gray.svg`
                 "
-                style="height: 43px; z-index: 1"
+                style="height: 43px"
               />
               <span
                 class="text-transform-uppercase font-size-26 p-10 text-ellipse"
                 :class="{
                   'color-gray': !campaignData.visibleSettings.showWearingGuide,
                 }"
-                style="z-index: 1"
                 >WHAT SHOULD I WEAR?</span
               >
               <md-switch
@@ -90,9 +87,9 @@
               </md-switch>
             </div>
             <maryoku-textarea
+              v-if="campaignData.visibleSettings.showWearingGuide"
               placeholder="Give your guests details about the expected dress code"
               v-model="campaignData.additionalData.wearingGuide"
-              :disabled="!campaignData.visibleSettings.showWearingGuide"
             ></maryoku-textarea>
           </div>
           <div class="md-layout-item md-size-50 md-small-size-50">
@@ -103,14 +100,13 @@
                     ? `${$iconURL}RSVP/lamp.svg`
                     : `${$iconURL}RSVP/lamp-gray.svg`
                 "
-                style="height: 43px; z-index: 1"
+                style="height: 43px"
               />
               <span
                 class="text-transform-uppercase font-size-26 p-10 text-ellipse"
                 :class="{
                   'color-gray': !campaignData.visibleSettings.showKnowledge,
                 }"
-                style="z-index: 1"
                 >What should I Know?</span
               >
 
@@ -122,9 +118,9 @@
               </md-switch>
             </div>
             <maryoku-textarea
+              v-if="campaignData.visibleSettings.showKnowledge"
               placeholder="Give your guests any information you find relevant"
               v-model="campaignData.additionalData.knowledge"
-              :disabled="!campaignData.visibleSettings.showKnowledge"
             ></maryoku-textarea>
           </div>
         </div>
@@ -258,14 +254,6 @@ export default {
     campaignTitle() {
       return this.$store.state.campaign.RSVP ? this.$store.state.campaign.RSVP.title : "Event Name";
     },
-    campaignDescription: {
-      get() {
-        return this.$store.state.campaign.RSVP ? this.$store.state.campaign.RSVP.description : "";
-      },
-      set(newValue) {
-        this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "description", value: newValue });
-      },
-    },
   },
   methods: {
     saveData() {
@@ -284,7 +272,12 @@ export default {
         confirmButtonText: "Yes, revert it!",
         buttonsStyling: false,
       }).then((result) => {
-        this.$store.dispatch("campaign/revertCampaign", "RSVP");
+        if (result.value) {
+          this.$store.commit("campaign/setCampaign", {
+            name: "RSVP",
+            data: this.originContent,
+          });
+        }
       });
     },
     chooseFiles() {

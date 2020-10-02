@@ -1,32 +1,30 @@
 <template>
   <div class="white-card feedback-campaign">
     <div class="p-50">
-      <div class="font-size-30 font-bold-extra mb-50 text-transform-capitalize">Say thank you and ask for feedback</div>
+      <div
+        class="font-size-30 font-bold-extra mb-50 text-transform-capitalize"
+      >Say thank you and ask for feedback</div>
       <hr />
       <div class="d-flex mt-70 mb-40">
         <img :src="`${$iconURL}Campaign/group-9380.svg`" class="mr-20" />
         <div class="ml-20">
           <div class="font-size-40 font-bold line-height-1 mb-20">It was great seeing you!</div>
-          <div class="font-size-22 line-height-1">{{ campaignData.name }}</div>
+          <div class="font-size-22 line-height-1">{{editingContent.name}}</div>
           <!-- <title-editor :value="info.conceptName" @change="changeTitle" class="mt-40"></title-editor> -->
         </div>
       </div>
-      <maryoku-textarea :placeholder="placeHolder" v-model="campaignData.description"></maryoku-textarea>
+      <maryoku-textarea :placeholder="placeHolder" v-model="editingContent.description"></maryoku-textarea>
     </div>
-    <feedback-image-carousel
-      class="p-50"
-      :images="campaignData.images"
-      @addImage="addNewImage"
-    ></feedback-image-carousel>
+    <feedback-image-carousel class="p-50" :images="editingContent.images" @addImage="addNewImage"></feedback-image-carousel>
     <div class="p-50">
       <div class="d-flex align-center font-bold">
         Allow guests to upload photos form the event
-        <md-switch class="large-switch" v-model="campaignData.visibleSettings.allowUploadPhoto"></md-switch>
+        <md-switch class="large-switch" v-model="editingContent.visibleSettings.allowUploadPhoto"></md-switch>
       </div>
       <div class="font-size-22 font-bold line-height-2">Download files related to the event</div>
       <div class="mb-20">Like presentation</div>
-      <div v-if="campaignData.files.length > 1">
-        <span class="font-bold">{{ campaignData.files[0].name }}</span>
+      <div v-if="editingContent.files.length>1">
+        <span class="font-bold">{{editingContent.files[0].name}}</span>
       </div>
       <md-button class="md-simple edit-btn md-red" @click="uploadFile">
         <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10" />Upload File
@@ -40,7 +38,10 @@
             <div class="font-size-30 font-bold line-height-2">share event participation</div>
             <div>(Include photos & details of the event)</div>
           </div>
-          <hide-switch v-model="campaignData.visibleSettings.showSharingOption" label="sharing option"></hide-switch>
+          <hide-switch
+            v-model="editingContent.visibleSettings.showSharingOption"
+            label="sharing option"
+          ></hide-switch>
         </div>
         <sharing-button-group class="mb-50"></sharing-button-group>
       </div>
@@ -49,11 +50,14 @@
         <div class="font-size-30 font-bold line-height-1 d-flex align-center">
           <img :src="`${$iconURL}Campaign/group-7321.svg`" class="mr-20" />
           We'd love to get your feedback
-          <hide-switch v-model="campaignData.visibleSettings.showFeedback" label="feedback section"></hide-switch>
+          <hide-switch
+            v-model="editingContent.visibleSettings.showFeedback"
+            label="feedback section"
+          ></hide-switch>
         </div>
         <div>
           <feedback-question
-            v-for="(question, index) in campaignData.feedBack"
+            v-for="(question, index) in editingContent.feedBack"
             :key="index"
             :feedbackData="question"
           ></feedback-question>
@@ -96,6 +100,58 @@ export default {
     return {
       placeHolder: "",
       originalContent: {},
+      editingContent: {
+        name: this.info.conceptName,
+        description: "",
+        campaignStatus: "EDITING",
+        visibleSettings: {
+          showImages: true,
+          showSharingOption: true,
+          showFeedback: true,
+          allowUploadPhoto: true,
+        },
+        images: [
+          {
+            src: `${this.$iconURL}RSVP/Image+81.jpg`,
+          },
+          {
+            src: `${this.$iconURL}RSVP/shutterstock_444402799_thumb.jpg`,
+          },
+          {
+            src: `${this.$iconURL}RSVP/Image+83.jpg`,
+          },
+          {
+            src: `${this.$iconURL}RSVP/Image+84.jpg`,
+          },
+        ],
+        files: [],
+        feedBack: [
+          {
+            question: "What did you like or dislike about this event?",
+            showQuestion: true,
+            rank: 0,
+            icon: "",
+          },
+          {
+            question: "What did you think of the venue?",
+            showQuestion: true,
+            rank: 0,
+            icon: "venuerental",
+          },
+          {
+            question: "How did you like the catering service?",
+            showQuestion: true,
+            rank: 0,
+            icon: "foodandbeverage",
+          },
+          {
+            question: "Did you enjoy the activity?",
+            showQuestion: true,
+            rank: 0,
+            icon: "decor",
+          },
+        ],
+      },
     };
   },
   created() {
@@ -113,19 +169,29 @@ export default {
     this.placeHolder = this.placeHolder.trim();
     // this.comment = this.placeHolder.trim().replace(/  /g, '');
     this.placeHolder = this.placeHolder.trim().replace(/  /g, "");
+
+    if (this.$store.state.campaign.FEEDBACK) {
+      this.editingContent = this.$store.state.campaign.FEEDBACK;
+    } else {
+      this.$store.commit("campaign/setCampaign", {
+        name: "FEEDBACK",
+        data: this.editingContent,
+      });
+    }
+    this.originalContent = Object.assign({}, this.editingContent);
   },
   computed: {
     event() {
       return this.$store.state.event.eventData;
     },
-    campaignData() {
-      return this.$store.state.campaign.FEEDBACK;
-    },
-    campaignTitle() {
-      return this.$store.state.campaign.FEEDBACK ? this.$store.state.campaign.FEEDBACK.title : "Event Name";
-    },
   },
   methods: {
+    saveData() {
+      this.$store.commit("campaign/setCampaign", {
+        name: "FEEDBACK",
+        data: this.editingContent,
+      });
+    },
     setDefault() {
       swal({
         title: "Are you sure?",

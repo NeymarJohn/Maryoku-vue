@@ -9,9 +9,9 @@ import Chartist from "chartist";
 import ChartistTooltipPlugin from "chartist-plugin-tooltip";
 import vSelectMenu from "v-selectmenu";
 import vueNumeralFilterInstaller from "vue-numeral-filter";
-import VuePhoneNumberInput from "vue-phone-number-input";
 import VueGmaps from "vue-gmaps";
-import "vue-phone-number-input/dist/vue-phone-number-input.css";
+// import VuePhoneNumberInput from "vue-phone-number-input";
+// import "vue-phone-number-input/dist/vue-phone-number-input.css";
 import VTooltip from "v-tooltip";
 import VueGtm from "vue-gtm";
 import VueSlideoutPanel from "src/components/SlidePanel";
@@ -39,7 +39,7 @@ import routes from "./router/routes";
 // store setup
 import store from "./store";
 
-import { IconURL, StorageURL, ResourceURL, UploadURL } from "./globalVariables";
+import { IconURL, StorageURL, ResourceURL } from "./globalVariables";
 
 import authHeader from "@/services/auth-header";
 import authService from "@/services/auth.service";
@@ -57,7 +57,8 @@ Vue.use(DashboardPlugin);
 Vue.use(VueTour);
 Vue.use(VueSwal);
 Vue.use(VueGmaps, {
-    key: process.env.GOOGLE_API_KEY || "AIzaSyAelc-zmvKBlcW78yPFeW9xrbnrJaT-MfA",
+    key:
+        process.env.GOOGLE_API_KEY || "AIzaSyAelc-zmvKBlcW78yPFeW9xrbnrJaT-MfA",
     libraries: ["places"],
 });
 Vue.use(VueScrollTo);
@@ -92,7 +93,8 @@ router.beforeEach((to, from, next) => {
         window.currentPanel = null;
     }
     let tenantId = document.location.hostname.replace(".maryoku.com", "");
-    let isPrimeTenant = tenantId === "dev" || tenantId === "app" || tenantId === "local";
+    let isPrimeTenant =
+        tenantId === "dev" || tenantId === "app" || tenantId === "local";
     const unAuthenticatedLinks = [
         "/signout",
         "/signin",
@@ -115,8 +117,13 @@ router.beforeEach((to, from, next) => {
     ];
 
     const authenticatedLinks = ["/events", "/choose-workspace"];
-    const isAuthenticatedLink = authenticatedLinks.findIndex(link => to.path.indexOf(link) >= 0) >= 0;
-    if (to.path === "/signedin" || to.path.indexOf("/event-wizard") >= 0 || to.path === "/signout") {
+    const isAuthenticatedLink =
+        authenticatedLinks.findIndex(link => to.path.indexOf(link) >= 0) >= 0;
+    if (
+        to.path === "/signedin" ||
+        to.path.indexOf("/event-wizard") >= 0 ||
+        to.path === "/signout"
+    ) {
         next();
         return;
     }
@@ -124,7 +131,10 @@ router.beforeEach((to, from, next) => {
         .dispatch("auth/checkToken")
         .then(res => {
             if (to.path == "/signin") {
-                if (res.currentTenant && res.tenants.indexOf(res.currentTenant) >= 0) {
+                if (
+                    res.currentTenant &&
+                    res.tenants.indexOf(res.currentTenant) >= 0
+                ) {
                     next("/events");
                 } else if (res.tenants.length === 0) {
                     next("/create-event-wizard");
@@ -133,7 +143,10 @@ router.beforeEach((to, from, next) => {
                 } else {
                     next("/error");
                 }
-            } else if (to.path.startsWith("/events") && res.tenants.indexOf(res.currentTenant) < 0) {
+            } else if (
+                to.path.startsWith("/events") &&
+                res.tenants.indexOf(res.currentTenant) < 0
+            ) {
                 next("/choose-workspace");
             } else {
                 next();
@@ -163,7 +176,8 @@ router.beforeEach((to, from, next) => {
 });
 
 router.afterEach((to, from) => {
-    window.document.title = `${to.meta.title ? to.meta.title : to.name} @ maryoku`;
+    window.document.title = `${to.meta.title ? to.meta.title : to.name
+        } @ maryoku`;
 });
 
 // global library setup
@@ -197,7 +211,6 @@ Vue.use(vueNumeralFilterInstaller, { locale: "en-gb" });
 
 Vue.use(lsWatcher, { prefix: "two62_" });
 
-Vue.component("vue-phone-number-input", VuePhoneNumberInput);
 Vue.component("vue-stars", VueStars);
 Vue.component("vue-element-loading", VueElementLoading);
 Vue.component("multiselect", Multiselect);
@@ -222,13 +235,13 @@ if (process.env.NODE_ENV === "production") {
 Vue.use(VueCookies);
 
 Vue.directive("focus", {
-    inserted: function(el) {
+    inserted: function (el) {
         el.focus();
     },
 });
 
 Vue.directive("select-all", {
-    inserted: function(el) {
+    inserted: function (el) {
         el.setSelectionRange(el.value.length, el.value.length);
     },
 });
@@ -247,21 +260,20 @@ Vue.directive("select-all", {
 //   stopProp(event) { event.stopPropagation() }
 // })
 
-Vue.filter("withComma", function(value) {
+Vue.filter("withComma", function (value) {
     return value ? value.toLocaleString() : 0;
 });
 
 Vue.prototype.$resourceURL = ResourceURL;
 Vue.prototype.$storageURL = StorageURL;
 Vue.prototype.$iconURL = IconURL;
-Vue.prototype.$uploadURL = UploadURL;
 Vue.prototype.$queryEventActions = { create: "createEvent" };
 axios.defaults.headers.common.Authorization = authHeader().Authorization;
 axios.defaults.headers.common["gorm-tenantid"] = authService.resolveTenantId();
 axios.defaults.headers.common.gorm_tenantid = authService.resolveTenantId();
 Model.$http = axios;
 
-Number.prototype.padStart = function(size, theChar) {
+Number.prototype.padStart = function (size, theChar) {
     var s = String(this);
     while (s.length < (size || 2)) {
         s = "0" + s;
@@ -269,7 +281,7 @@ Number.prototype.padStart = function(size, theChar) {
     return s;
 };
 
-String.prototype.padStart = function(size, theChar) {
+String.prototype.padStart = function (size, theChar) {
     var s = String(this);
     while (s.length < (size || 2)) {
         s = theChar + s;
