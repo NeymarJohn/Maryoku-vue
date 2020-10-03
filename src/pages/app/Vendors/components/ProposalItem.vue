@@ -140,9 +140,9 @@
     <div class="editable-sub-items-cont" v-if="(step <= 1 && !isVCollapsed) || (step == 2 && isChecked)">
       <div class="editable-sub-items-header">
         <span>Description</span>
-        <span>QTY</span>
-        <span>Price per unit</span>
-        <span>Subtotal</span>
+        <span class="text-center">QTY</span>
+        <span class="text-center">Price per unit</span>
+        <span class="text-center">Subtotal</span>
       </div>
       <editable-proposal-sub-item
         v-for="(req, rIndex) in newProposalRequest.requirements"
@@ -158,7 +158,7 @@
               <img :src="`${iconUrl}Asset 612.svg`" />
               <span>Add Discount</span>
             </div>
-            <div class="ptitle" v-if="isEditDiscount">
+            <div class="ptitle text-center" v-if="isEditDiscount">
               % Percentage
               <br />
               <money
@@ -173,11 +173,11 @@
               />
             </div>
           </div>
-          <div class="percent-cont" :class="{ 'text-right': isEditDiscount }">
+          <div class="percent-cont text-center" :class="{ 'text-right': isEditDiscount }">
             <span v-if="isEditDiscount">Or</span>
             <span v-else>{{ discount }}%</span>
           </div>
-          <div class="price-cont">
+          <div class="price-cont text-center">
             <template v-if="isEditDiscount">
               <span class="pl-2">Amount</span>
               <br />
@@ -223,7 +223,7 @@
           <div class="percent-cont">
             <!-- <span>{{tax}}%</span> -->
           </div>
-          <div class="price-cont">
+          <div class="price-cont text-center">
             <span>${{ ((totalOffer() * tax) / 100) | withComma }}</span>
           </div>
           <div class="edit-cont">
@@ -894,13 +894,12 @@ export default {
       border-top: 1px solid #707070;
       padding: 40px 40px 30px 40px;
       display: grid;
-      grid-template-columns: 30% 10% 17.5% 47.5%;
+      grid-template-columns: 30% 10% 17.5% 18%;
 
       span {
         display: inline-block;
         font-size: 16px;
         font-weight: 800;
-
         &:last-child {
           margin-right: 0;
         }
@@ -912,7 +911,8 @@ export default {
         border: 2px solid #d5d5d5;
         border-bottom: none;
         display: grid;
-        grid-template-columns: 40% 17.5% 12.5% 30%;
+        // grid-template-columns: 40% 17.5% 12.5% 30%;
+        grid-template-columns: 40% 17.5% 15.5% 24%;
         align-items: center;
 
         .item-cont {
@@ -940,7 +940,6 @@ export default {
         }
         .price-cont {
           font: normal 14px "Manrope-Regular", sans-serif;
-          text-align: left;
           span {
             &.pl-2 {
               font: normal 14px "Manrope-Regular", sans-serif;
