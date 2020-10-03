@@ -1,20 +1,14 @@
 <template>
-  <div class="proposal-budget-summary-wrapper" :style="{'top': `${panelTopPos}px`}">
+  <div class="proposal-budget-summary-wrapper" :style="{ top: `${panelTopPos}px` }">
     <div class="summary-cont">
-      <h3>You're the {{newProposalRequest.bidderRank | numeral('Oo')}} catering & venue bidder</h3>
+      <h3>You're the {{ newProposalRequest.bidderRank | numeral("Oo") }} catering & venue bidder</h3>
       <p>
         Proposals range:
         <strong>
-          ${{newProposalRequest.bidRange.low | withComma}}
-          -
-          ${{newProposalRequest.bidRange.high | withComma}}
+          ${{ newProposalRequest.bidRange.low | withComma }} - ${{ newProposalRequest.bidRange.high | withComma }}
         </strong>
       </p>
-      <div
-        class="bundle-discount"
-        @click="isBundleDiscount=!isBundleDiscount"
-        v-if="additionalServices.length > 0"
-      >
+      <div class="bundle-discount" @click="isBundleDiscount = !isBundleDiscount" v-if="additionalServices.length > 0">
         <img :src="`${iconUrl}Asset 579.svg`" />
         <span>
           Add Bundle Discount
@@ -25,8 +19,8 @@
       </div>
     </div>
     <div class="items-cont">
-      <div class="item" :class="{'with-check': step == 3}">
-        <md-checkbox v-if="step == 3" class="no-margin" />
+      <div class="item" :class="{ 'with-check': isBundleDiscount }">
+        <md-checkbox v-if="isBundleDiscount" class="no-margin" value="Venue" v-model="bundleDiscountServices" />
         <ul>
           <li>
             <img :src="`${iconUrl}Asset 614.svg`" />
@@ -37,79 +31,119 @@
           </li>
           <li>
             <span>Your proposal</span>
-            <span>${{calculatedTotal(getRequirementsByCategory('venuerental')) | withComma}}</span>
+            <span>${{ calculatedTotal(getRequirementsByCategory("venuerental")) | withComma }}</span>
           </li>
-          <li :style="`margin: ${discountBlock.category == 'venuerental' ? '' : '0' }`">
+          <li :style="`margin: ${discountBlock.category == 'venuerental' ? '' : '0'}`">
             <template v-if="discountBlock.category == 'venuerental'">
               <div class="left">
                 <span>Before discount</span>
               </div>
               <div class="right">
-                <span>{{`(${discountBlock.value}% off)`}}</span>
-                <span>${{total(getRequirementsByCategory('venuerental')) | withComma}}</span>
+                <span>{{ `(${discountBlock.value}% off)` }}</span>
+                <span>${{ total(getRequirementsByCategory("venuerental")) | withComma }}</span>
               </div>
             </template>
           </li>
           <li
-            v-if="calculatedTotal(getRequirementsByCategory('venuerental')) - newProposalRequest.eventData.allocatedBudget > 0"
+            v-if="
+              calculatedTotal(getRequirementsByCategory('venuerental')) - newProposalRequest.eventData.allocatedBudget >
+              0
+            "
           >
             <md-icon>error</md-icon>
-            <span>Your proposal is ${{calculatedTotal(getRequirementsByCategory('venuerental')) - newProposalRequest.eventData.allocatedBudget | withComma}} more than the budget</span>
+            <span
+              >Your proposal is ${{
+                (calculatedTotal(getRequirementsByCategory("venuerental")) -
+                  newProposalRequest.eventData.allocatedBudget)
+                  | withComma
+              }}
+              more than the budget</span
+            >
           </li>
         </ul>
       </div>
-      <div class="item additional" v-if="step>1 && additionalServices.length > 0">
+      <div class="item additional" v-if="step > 1 && additionalServices.length > 0">
         <h3>Additional Services</h3>
-        <div
-          :class="{'with-check': step == 3}"
-          v-for="(a, aIndex) in additionalServices"
-          :key="aIndex"
-        >
-          <md-checkbox v-if="step == 3" class="no-margin" />
+        <div :class="{ 'with-check': isBundleDiscount }" v-for="(a, aIndex) in additionalServices" :key="aIndex">
+          <md-checkbox v-if="isBundleDiscount" class="no-margin" v-model="bundleDiscountServices" :value="a.value" />
           <ul>
             <li>
               <img :src="getIconUrlByCategory(a.value)" />
-              {{a.name}}
+              {{ a.name }}
             </li>
             <li>
-              <span>{{a.subTitle}}</span>
+              <span>{{ a.subTitle }}</span>
             </li>
             <li>
               <span>Your proposal</span>
-              <span>${{calculatedTotal(getRequirementsByCategory(a.value)) | withComma}}</span>
+              <span>${{ calculatedTotal(getRequirementsByCategory(a.value)) | withComma }}</span>
             </li>
             <li>
-              <span>Budget for {{a.name}}</span>
-              <span>${{calculatedTotal(getRequirementsByCategory(a.value)) | withComma}}</span>
+              <span>Budget for {{ a.name }}</span>
+              <span>${{ calculatedTotal(getRequirementsByCategory(a.value)) | withComma }}</span>
             </li>
             <li
-              v-if="calculatedTotal(getRequirementsByCategory(a.value)) - newProposalRequest.eventData.allocatedBudget > 0"
+              v-if="
+                calculatedTotal(getRequirementsByCategory(a.value)) - newProposalRequest.eventData.allocatedBudget > 0
+              "
             >
               <md-icon>error</md-icon>
-              <span>Your proposal is ${{calculatedTotal(getRequirementsByCategory(a.value)) - newProposalRequest.eventData.allocatedBudget | withComma}} more than the budget</span>
+              <span
+                >Your proposal is ${{
+                  (calculatedTotal(getRequirementsByCategory(a.value)) - newProposalRequest.eventData.allocatedBudget)
+                    | withComma
+                }}
+                more than the budget</span
+              >
             </li>
           </ul>
         </div>
       </div>
-      <div class="item bundle" v-if="isEdit">
+      <div class="item bundle" v-if="isBundleDiscount">
         <div class="element">
-          <input-proposal-sub-item
-            :title="`Add bundle new total`"
-            :placeholder="``"
-            :style="`width: 100%`"
+          <label class=""
+            ><span class="font-bold">Add bundle new total</span> (current:{{
+              calculatedTotal(getRequirementsBySelectedCategory()) | withComma
+            }})</label
+          >
+          <money
+            v-model="bundleDiscountAmount"
+            v-bind="{
+              decimal: '.',
+              thousands: ',',
+              prefix: '$ ',
+              suffix: '',
+              precision: 2,
+              masked: false,
+            }"
+            class="bundle-discount-input"
+            @click.native="discoutOption = 'amount'"
           />
         </div>
         <div class="element">
-          <input-proposal-sub-item
-            :title="`Or by percentage`"
-            :placeholder="``"
-            :style="`width: 100%`"
+          <label class="font-bold">Or by percentage </label>
+          <money
+            v-model="bundleDiscountPercentage"
+            v-bind="{
+              decimal: '.',
+              thousands: ',',
+              prefix: '% ',
+              suffix: '',
+              precision: 0,
+              masked: false,
+            }"
+            class="bundle-discount-input"
+            @keyup.native="setRange"
+            @click.native="discoutOption = 'percentage'"
           />
         </div>
-        <div class="element dis-value">$100.00 Discount</div>
+        <div class="element dis-value">
+          <span v-if="discoutOption == 'percentage'"> {{ bundleDiscountPercentage }}% </span>
+          <span v-else> ${{ bundleDiscountAmount }} </span>
+        </div>
         <div class="action-cont">
           <a class="clear">Cancel</a>
-          <a class="add">Save</a>
+          <a class="add" @click="addBunldDiscount">Add bundle</a>
         </div>
       </div>
     </div>
@@ -133,10 +167,10 @@
         <span v-if="discountBlock.value">Before discount</span>
       </div>
       <div class="price">
-        <strong>${{calculatedTotal(getRequirementsBySelectedCategory()) | withComma}}</strong>
+        <strong>${{ calculatedTotal(getRequirementsBySelectedCategory()) | withComma }}</strong>
         <br />
-        <span v-if="discountBlock.value">{{`(${discountBlock.value}% off)`}}</span>
-        <span v-if="discountBlock.value">${{total(getRequirementsBySelectedCategory()) | withComma}}</span>
+        <span v-if="discountBlock.value">{{ `(${discountBlock.value}% off)` }}</span>
+        <span v-if="discountBlock.value">${{ total(getRequirementsBySelectedCategory()) | withComma }}</span>
       </div>
     </div>
   </div>
@@ -144,11 +178,13 @@
 <script>
 import VendorService from "@/services/vendor.service";
 import InputProposalSubItem from "@/components/Inputs/InputProposalSubItem.vue";
+import { Money } from "v-money";
 
 export default {
   name: "proposal-budget-summary",
   components: {
     InputProposalSubItem,
+    Money,
   },
   props: {
     // bundleDiscount: Boolean,
@@ -164,23 +200,22 @@ export default {
       isBundleDiscount: false,
       isEdit: false,
       warning: false,
-      iconUrl:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
+      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       newProposalRequest: {},
       discountBlock: {},
       additionalServices: [],
       iconsWithCategory: null,
       panelTopPos: 0,
+      bundleDiscountServices: [],
+      bundleDiscountPercentage: 0,
+      bundleDiscountAmount: 0,
+      discoutOption: "",
     };
   },
   methods: {
     flatDeep(arr, d = 1) {
       return d > 0
-        ? arr.reduce(
-            (acc, val) =>
-              acc.concat(Array.isArray(val) ? this.flatDeep(val, d - 1) : val),
-            [],
-          )
+        ? arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? this.flatDeep(val, d - 1) : val), [])
         : arr.slice();
     },
     servicesByCategory(category) {
@@ -188,9 +223,7 @@ export default {
 
       if (services.length > 0) {
         return this.flatDeep(
-          services[0].categories.map((s) =>
-            s.subCategories.map((sc) => sc.items.map((dd) => dd.name)),
-          ),
+          services[0].categories.map((s) => s.subCategories.map((sc) => sc.items.map((dd) => dd.name))),
           Infinity,
         );
       } else {
@@ -204,9 +237,7 @@ export default {
     },
     getRequirementsByCategory(category) {
       const services = this.servicesByCategory(category) || [];
-      return this.newProposalRequest.requirements.filter((r) =>
-        services.includes(r.requirementTitle),
-      );
+      return this.newProposalRequest.requirements.filter((r) => services.includes(r.requirementTitle));
     },
     getRequirementsBySelectedCategory() {
       let selectedCategories = [];
@@ -227,9 +258,7 @@ export default {
           });
         });
 
-      return this.newProposalRequest.requirements.filter((r) =>
-        selectedServices.includes(r.requirementTitle),
-      );
+      return this.newProposalRequest.requirements.filter((r) => selectedServices.includes(r.requirementTitle));
     },
     total(requirements, category = null) {
       let total = 0;
@@ -249,6 +278,7 @@ export default {
       return total;
     },
     calculatedTotal(requirements) {
+      console.log("requirements", requirements);
       let total = this.total(requirements);
       if (this.discountBlock.value != undefined) {
         total = total - (total * this.discountBlock.value) / 100;
@@ -262,6 +292,12 @@ export default {
         this.panelTopPos = 0;
       }
     },
+    addBunldDiscount() {},
+    setRange() {
+      if (this.bundleDiscountPercentage > 100) {
+        this.bundleDiscountPercentage = 100;
+      }
+    },
   },
   created() {
     window.addEventListener("scroll", this.handleScroll);
@@ -273,26 +309,17 @@ export default {
     this.newProposalRequest = this.proposalRequest;
     this.iconsWithCategory = VendorService.categoryNameWithIcons();
 
-    this.$root.$on(
-      "update-proposal-budget-summary",
-      (newProposalRequest, discountBlock) => {
-        this.newProposalRequest = newProposalRequest;
-        this.discountBlock = discountBlock;
-      },
-    );
+    this.$root.$on("update-proposal-budget-summary", (newProposalRequest, discountBlock) => {
+      this.newProposalRequest = newProposalRequest;
+      this.discountBlock = discountBlock;
+    });
 
     this.$root.$on("update-additional-services", (category) => {
       const additionalServicesBlock = VendorService.categoryNameWithIcons();
-      const selectedBlock = additionalServicesBlock.filter(
-        (a) => a.name == category,
-      )[0];
+      const selectedBlock = additionalServicesBlock.filter((a) => a.name == category)[0];
 
-      if (
-        this.additionalServices.filter((a) => a.name == category).length > 0
-      ) {
-        this.additionalServices = this.additionalServices.filter(
-          (a) => a.name != category,
-        );
+      if (this.additionalServices.filter((a) => a.name == category).length > 0) {
+        this.additionalServices = this.additionalServices.filter((a) => a.name != category);
       } else {
         this.additionalServices.push(selectedBlock);
       }
@@ -312,9 +339,14 @@ export default {
   padding: 43px 25px 0;
   box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
   background: #ffffff;
-  position: absolute;
+  // position: absolute;
   width: calc(100% - 2rem);
-
+  .bundle-discount-input {
+    width: 100%;
+    font-size: 16px;
+    color: #707070;
+    border-color: #c9c9c9;
+  }
   .summary-cont {
     h3 {
       font-size: 30px;
@@ -495,7 +527,7 @@ export default {
     .with-check {
       display: grid;
       grid-template-columns: 10% 90%;
-
+      margin-bottom: 20px;
       .no-margin {
         margin: 0 !important;
       }

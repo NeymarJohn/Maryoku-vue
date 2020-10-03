@@ -14,14 +14,18 @@
         <div class="about-wrapper">
           <div class="title-cont">
             <div class="left">
-              <h5><img :src="`${iconUrl}Asset 542.svg`" /> Tell us about your business</h5>
+              <h5>
+                <img :src="`${iconUrl}Asset 542.svg`" /> Tell us about your business
+              </h5>
             </div>
           </div>
           <div class="card">
             <div class="field mb-50">
               <div class="title-cont">
                 <div class="top">
-                  <h5><img :src="`${iconUrl}Asset 542.svg`" /> Tell us about your business</h5>
+                  <h5>
+                    <img :src="`${iconUrl}Asset 542.svg`" /> Tell us about your business
+                  </h5>
                 </div>
                 <div class="bottom">
                   <p>Include history & background</p>
@@ -41,7 +45,7 @@
                 <div class="top">
                   <h5>
                     <img :src="`${iconUrl}Asset 543.svg`" />
-                    about your {{ getCategoryNameByValue(vendor.vendorCategory) }}
+                    about your {{getCategoryNameByValue(vendor.vendorCategory)}}
                   </h5>
                 </div>
                 <div class="bottom">
@@ -59,16 +63,18 @@
             </div>
             <div class="field mb-50">
               <vendor-checkbox
-                v-if="companyServices.filter((cs) => cs.name == vendor.vendorCategory).length > 0"
-                :item="companyServices.filter((cs) => cs.name == vendor.vendorCategory)[0]"
+                v-if="companyServices.filter(cs => cs.name == vendor.vendorCategory).length > 0"
+                :item="companyServices.filter(cs => cs.name == vendor.vendorCategory)[0]"
                 :label="`Company Serivces`"
-                v-model="companyServices.filter((cs) => cs.name == vendor.vendorCategory)[0].value"
+                v-model="companyServices.filter(cs => cs.name == vendor.vendorCategory)[0].value"
               />
             </div>
             <div class="field mb-50">
               <div class="title-cont">
                 <div class="top">
-                  <h5><img :src="`${iconUrl}Asset 545.svg`" /> capacity</h5>
+                  <h5>
+                    <img :src="`${iconUrl}Asset 545.svg`" /> capacity
+                  </h5>
                 </div>
                 <div class="bottom">
                   <p>How many guests can you acommodate?</p>
@@ -115,10 +121,12 @@
             </div>-->
           </div>
         </div>
-        <div class="upload-wrapper" :class="{ 'mi-margin': vendor.images.length > 0 }">
+        <div class="upload-wrapper" :class="{'mi-margin': vendor.images.length > 0}">
           <div class="title-cont">
             <div class="left">
-              <h5><img :src="`${iconUrl}art (2).svg`" /> Upload your best images</h5>
+              <h5>
+                <img :src="`${iconUrl}art (2).svg`" /> upload photos
+              </h5>
             </div>
             <div class="right">
               <p>(15 photos top, under 20KB)</p>
@@ -127,9 +135,11 @@
           <template v-if="vendor.images.length == 0">
             <div class="card red-border">
               <div class="upload-cont">
-                <a class @click="uploadVendorImage"> <img :src="`${iconUrl}Asset 559.svg`" /> Choose File </a>
+                <a class @click="uploadVendorImage">
+                  <img :src="`${iconUrl}Asset 559.svg`" /> Choose File
+                </a>
                 <div class="or">Or</div>
-                <span>Drag and drop photos</span>
+                <span>Drag your file here</span>
                 <input
                   type="file"
                   class="hide"
@@ -148,7 +158,8 @@
                 :style="`
                   background-image: url(${vendor.images[0]});
                   background-size: cover;
-                  background-size: 100% 100%;`"
+                  background-size: 100% 100%;`
+                "
               >
                 <img
                   :src="`${iconUrl}Asset 528.svg`"
@@ -158,11 +169,12 @@
               </div>
               <div
                 class="box item"
-                :class="{ 'no-image': !vendor.images[1] }"
+                :class="{'no-image': !vendor.images[1]}"
                 :style="`
                   background-image: url(${vendor.images[1]});
                   background-size: cover;
-                  background-size: 100% 100%;`"
+                  background-size: 100% 100%;`
+                "
               >
                 <img
                   :src="`${iconUrl}Asset 528.svg`"
@@ -172,11 +184,12 @@
               </div>
               <div
                 class="box item"
-                :class="{ 'no-image': !vendor.images[2] }"
+                :class="{'no-image': !vendor.images[2]}"
                 :style="`
                   background-image: url(${vendor.images[2]});
                   background-size: cover;
-                  background-size: 100% 100%;`"
+                  background-size: 100% 100%;`
+                "
               >
                 <img
                   :src="`${iconUrl}Asset 528.svg`"
@@ -186,11 +199,12 @@
               </div>
               <div
                 class="box item"
-                :class="{ 'no-image': !vendor.images[3] }"
+                :class="{'no-image': !vendor.images[3]}"
                 :style="`
                   background-image: url(${vendor.images[3]});
                   background-size: cover;
-                  background-size: 100% 100%;`"
+                  background-size: 100% 100%;`
+                "
               >
                 <img
                   :src="`${iconUrl}Asset 528.svg`"
@@ -219,13 +233,15 @@
               <h5>add signature</h5>
             </div>
             <div class="bottom">
-              <p>We just need your signature and that's it</p>
+              <p>drag your file or create a signature here</p>
             </div>
           </div>
           <template v-if="vendor.signature == null">
             <div class="card red-border">
               <div class="upload-cont">
-                <a class @click="uploadVendorSignature"> <img :src="`${iconUrl}Asset 559.svg`" /> Choose File </a>
+                <a class @click="uploadVendorSignature">
+                  <img :src="`${iconUrl}Asset 559.svg`" /> Choose File
+                </a>
                 <div class="or">Or</div>
                 <div class="sign-here">
                   <vueSignature ref="signature" :sigOption="option" :w="'100%'" :h="'100%'" />
@@ -313,15 +329,18 @@
             <h5>Other:</h5>
             <div class="social-item" v-for="(s, sIndex) in defSocialMedia" :key="sIndex">
               <div @click="updateSocialMedia(s)">
-                <img :src="`${iconUrl}Group 6258.svg`" v-if="socialMedia.includes(s) || vendor.social[s]" />
+                <img
+                  :src="`${iconUrl}Group 6258.svg`"
+                  v-if="socialMedia.includes(s) || vendor.social[s]"
+                />
                 <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
-                {{ s }}
+                {{s}}
                 <br />
               </div>
               <input
                 type="text"
                 placeholder="Paste link here"
-                :class="{ 'red-border': vendor.social[s] == null || !reg.test(vendor.social[s]) }"
+                :class="{'red-border': vendor.social[s] == null || !reg.test(vendor.social[s])}"
                 v-model="vendor.social[s]"
                 v-if="socialMedia.includes(s) || vendor.social[s]"
                 v-on:blur="checkBlank"
@@ -363,9 +382,18 @@ export default {
   },
   data() {
     return {
-      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      iconUrl:
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
       socialMedia: [],
-      defSocialMedia: ["youtube", "linkedin", "google", "pinterest", "foursuare", "reddit", "tiktok"],
+      defSocialMedia: [
+        "youtube",
+        "linkedin",
+        "google",
+        "pinterest",
+        "foursuare",
+        "reddit",
+        "tiktok",
+      ],
       reg: /^(ftp|http|https):\/\/[^ "]+$/,
       min: Number,
       max: Number,
@@ -473,7 +501,8 @@ export default {
         }
       } else {
         this.$notify({
-          message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
+          message:
+            "You've Uploaded an Image that Exceed the allowed size, try small one!",
           horizontalAlign: "center",
           verticalAlign: "top",
           type: "warning",
