@@ -8,7 +8,7 @@
             <div class="font-size-30 font-bold-extra color-red">Delivery settings</div>
             <div class="mt-2 d-flex align-center">
               <span class="font-bold-extra font-size-30 pr-20">{{
-                currentCampaign.guestEmails ? currentCampaign.guestEmails.length : 0
+                inviteesCount
               }}</span>
 
               <span>In your invitees list</span>
@@ -24,14 +24,14 @@
               <div>
                 <img :src="`${$iconURL}Campaign/group-9439.svg`" class="mr-10 ml-10" />
                 <span class="font-size-22 font-bold-extra mr-30">By text message</span>
-                <span>WhatsApp or sms</span>
+                <span>WhatsApp or sms </span>
               </div>
               <md-button class="md-icon-button md-simple collapse-button">
                 <md-icon class="icon" v-if="settingData.phone.selected">keyboard_arrow_down</md-icon>
                 <md-icon class="icon" v-if="!settingData.phone.selected">keyboard_arrow_right</md-icon>
               </md-button>
             </div>
-            <div class="mt-50" v-if="settingData.phone.selected">
+            <div class="mt-50" v-if="settingData.phone.selected && currentCampaign.campaignStatus == 'EDITING'">
               <div class="font-bold">To</div>
               <div class="d-flex align-start width-100">
                 <div class="flex-1 position-relative">
@@ -113,6 +113,25 @@
                     >By WhatsApp</span
                   >
                 </md-checkbox>
+              </div>
+            </div>
+            <div class="mt-50" v-if="settingData.phone.selected && currentCampaign.campaignStatus == 'STARTED' || currentCampaign.campaignStatus == 'SCHEDULED'">
+            <div class="mt-50">
+                <div class="font-bold mb-10 line-height-2">
+                  Sent to ({{ currentCampaign.guestSMS ? currentCampaign.guestSMS.length : 0 }})
+                </div>
+                <div class="d-flex align-start width-100">
+                  {{ currentCampaign.settings.phone.numberString }}
+                </div>
+                <div class="font-bold mb-10 line-height-2 mt-50" v-if="settingData.phone.smsOrWhatsapp">
+                  By {{ settingData.phone.smsOrWhatsapp }}
+                </div>
+                <div class="mt-20">
+                  <md-button class="md-simple md-red edit-btn" @click="downloadXml">
+                    <img :src="`${$iconURL}Campaign/excel.png`" class="mr-10" />
+                    Download Full Guests list
+                  </md-button>
+                </div>
               </div>
             </div>
           </div>
@@ -428,8 +447,19 @@ export default {
     },
     currentCampaign() {
       console.log(this.campaign.name);
-      return this.$store.state.campaign[this.campaign.name];
+      const currentCampaign =  this.$store.state.campaign[this.campaign.name];
+      if (!currentCampaign)  return {}
+      return currentCampaign;
     },
+    inviteesCount() {
+      if (this.currentCampaign) {
+      const emailInvitees = this.currentCampaign.guestEmails?this.currentCampaign.guestEmails.length : 0;
+      const phoneInvitees = this.currentCampaign.guestSMS?this.currentCampaign.guestSMS.length : 0;
+
+      return emailInvitees + phoneInvitees
+      }
+      return ""
+    }
   },
   watch: {
     settingData: {

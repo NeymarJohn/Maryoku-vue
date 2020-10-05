@@ -1,11 +1,13 @@
 <template>
   <div class="select-proposal-sub-item-wrapper" @click="clickItem(item)">
-    <div v-if="!selected" class="active">
-      <span>{{ item }}</span>
-      <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/Group 3668 (2).svg" />
+    <div v-if="active" class="active">
+      <span>{{item}}</span>
+      <img
+        src="https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/Group 3668 (2).svg"
+      />
     </div>
     <div v-else class="inactive">
-      <span>{{ item }}</span>
+      <span>{{item}}</span>
       <md-icon>close</md-icon>
     </div>
   </div>
@@ -16,10 +18,6 @@ export default {
   components: {},
   props: {
     item: String,
-    selected: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {

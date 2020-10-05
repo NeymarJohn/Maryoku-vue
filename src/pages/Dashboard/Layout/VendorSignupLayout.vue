@@ -7,44 +7,36 @@
       <v-signup-steps :step="step"></v-signup-steps>
     </section>
     <router-view></router-view>
-    <section class="footer-wrapper" :class="{ approved: isApproved }" v-if="isApproved">
-      <div class="left d-flex align-center">
+    <section class="footer-wrapper" :class="{'approved': isApproved}" v-if="isApproved">
+      <div class="left">
         <md-button class="md-vendor-signup md-simple md-red" @click="prev()">
-          <md-icon class="color-red font-size-30">keyboard_arrow_left</md-icon>
-          Back
+          <img :src="`${iconsUrl}Group 4770 (2).svg`" class="label-icon" /> Back
         </md-button>
-        <md-button
-          v-if="step != 6"
-          @click="scrollToTop()"
-          class="md-button md-button md-simple md-just-icon md-theme-default scroll-top-button md-theme-default"
-        >
-          <span>
-            <img :src="`${iconsUrl}Asset 602.svg`" />
-          </span>
-        </md-button>
+        <span v-if="step != 5" @click="scrollToTop()">
+          <img :src="`${iconsUrl}Asset 602.svg`" />
+        </span>
       </div>
       <div class="right">
         <md-button class="save md-vendor-signup md-simple md-red md-outlined" @click="saveDraft()">
           <img :src="`${iconsUrl}Asset 610.svg`" class="label-icon mr-10" />
           Save for later
         </md-button>
-        <md-button class="approve md-vendor-signup md-red" @click="next()">{{ nextLabel }}</md-button>
+        <md-button class="approve md-vendor-signup md-red" @click="next()">{{nextLabel}}</md-button>
       </div>
     </section>
     <section class="footer-wrapper" v-else>
       <md-button
         class="approve md-vendor-signup md-red"
         @click="approve()"
-        :class="{ disabled: !validateBasicFields() }"
-        >Approve & Begin</md-button
-      >
+        :class="{'disabled': !validateBasicFields()}"
+      >Approve & Begin</md-button>
     </section>
     <modal v-if="status" class="saved-it-modal" container-class="modal-container sm">
       <template slot="header">
         <div class="saved-it-modal__header">
           <h3>
             <img :src="`${proposalIconsUrl}Asset 588.svg`" />
-            {{ status.title }}
+            {{status.title}}
           </h3>
         </div>
         <button class="close" @click="hideModal()">
@@ -53,7 +45,7 @@
       </template>
       <template slot="body">
         <div class="saved-it-modal__body">
-          <p>{{ status.message }}</p>
+          <p>{{status.message}}</p>
         </div>
       </template>
       <template slot="footer">
@@ -79,8 +71,10 @@ export default {
       vendor: {},
       reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
       savedItModal: false,
-      iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
-      proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
+      iconsUrl:
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
+      proposalIconsUrl:
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       isApproved: false,
       step: 1,
     };
@@ -90,13 +84,13 @@ export default {
       this.$router.push(router);
     },
     validateBasicFields() {
-      const isValid =
+      return (
         this.vendor.vendorMainEmail &&
         this.reg.test(this.vendor.vendorMainEmail) &&
         this.vendor.companyName &&
         this.vendor.vendorCategory &&
-        this.vendor.vendorAddressLine1;
-      return isValid;
+        this.vendor.vendorAddressLine1
+      );
     },
     approve() {
       if (this.validateBasicFields()) {
@@ -118,7 +112,7 @@ export default {
     },
     next() {
       this.$root.$emit("next-vendor-signup-step");
-      if (this.step < 6) {
+      if (this.step < 5) {
         this.step += 1;
       } else {
         if (this.vendor.password == this.vendor.confirmPassword) {
@@ -168,9 +162,9 @@ export default {
   },
   computed: {
     nextLabel() {
-      if (this.step == 6) {
+      if (this.step == 5) {
         return "Sign Up";
-      } else if (this.step == 5) {
+      } else if (this.step == 4) {
         return "Finish";
       } else {
         return "Next";

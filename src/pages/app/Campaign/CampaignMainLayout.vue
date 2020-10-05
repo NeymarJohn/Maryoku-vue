@@ -466,16 +466,12 @@ export default {
         });
     },
     sendToAddtionalGuests() {
-      const campaignType = this.campaignTabs[this.selectedTab].name;
-      const campaignData = this.$store.state.campaign[campaignType];
-      this.callSaveCampaign(campaignType, campaignData.campaignStatus).then(() => {
-        swal({
-          title: `Sent notitications to the added guests!`,
-          buttonsStyling: false,
-          type: "success",
-          confirmButtonClass: "md-button md-success",
-        });
-      });
+      this.$store.commit('campaign/setAttribute',{
+        name: this.campaignTabs[this.selectedTab].name,
+        key: 'campaignStatus',
+        value: 'EDITING'
+      }
+      )
     },
   },
   computed: {

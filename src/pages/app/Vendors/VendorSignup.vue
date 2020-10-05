@@ -27,20 +27,13 @@
       :vendor="vendor"
       v-if="isApproved && step == 4"
     />
-
-    <vendor-signup-step5
+    <vendor-signup-final-form
       :categories="businessCategories"
       :icon="`${iconUrl}`"
       :vendor="vendor"
       v-if="isApproved && step == 5"
     />
-    <vendor-signup-final-form
-      :categories="businessCategories"
-      :icon="`${iconUrl}`"
-      :vendor="vendor"
-      v-if="isApproved && step == 6"
-    />
-    <div v-if="step == 7">Thank you for your signup!</div>
+    <div v-if="step==6">Thank you for your signup!</div>
   </div>
 </template>
 
@@ -57,94 +50,15 @@ import VendorSignupStep1 from "./components/VendorSignupStep1.vue";
 import VendorSignupStep2 from "./components/VendorSignupStep2.vue";
 import VendorSignupStep3 from "./components/VendorSignupStep3.vue";
 import VendorSignupStep4 from "./components/VendorSignupStep4.vue";
-import VendorSignupStep5 from "./components/VendorSignupStep5.vue";
 import VendorSignupFinalForm from "./components/VendorSignupFinalForm.vue";
 import swal from "sweetalert2";
 
-import { businessCategories, generalInfos, companyServices } from "@/constants/vendor";
+import {
+  businessCategories,
+  generalInfos,
+  companyServices,
+} from "@/constants/vendor";
 
-const emptyVendor = {
-  vendorCategory: null,
-  vendorPropertyValues: {},
-  email: null,
-  companyName: null,
-  phone: null,
-  address: null,
-  coverPhoto: null,
-  images: [],
-  signature: null,
-  capacity: {
-    low: null,
-    high: null,
-  },
-  about: {
-    company: null,
-    category: null,
-  },
-  social: {
-    website: null,
-    facebook: null,
-    instagram: null,
-    youtube: null,
-    linkedin: null,
-    google: null,
-    pinterest: null,
-    foursuare: null,
-    reddit: null,
-    tiktok: null,
-  },
-  services: {},
-  yesRules: [],
-  noRules: [],
-  notAllowed: [],
-  exDonts: [],
-  yesPolicies: [],
-  noPolicies: [],
-  selectedWeekdays: [],
-  dontWorkDays: null,
-  dontWorkTime: null,
-};
-const testVendor = {
-  vendorCategory: "venuerental",
-  vendorPropertyValues: {},
-  email: "jefflei@gmail.com",
-  companyName: "test-company",
-  phone: "123123",
-  address: "testsetaset",
-  coverPhoto: null,
-  images: [],
-  signature: null,
-  capacity: {
-    low: null,
-    high: null,
-  },
-  about: {
-    company: null,
-    category: null,
-  },
-  social: {
-    website: null,
-    facebook: null,
-    instagram: null,
-    youtube: null,
-    linkedin: null,
-    google: null,
-    pinterest: null,
-    foursuare: null,
-    reddit: null,
-    tiktok: null,
-  },
-  services: {},
-  yesRules: [],
-  noRules: [],
-  notAllowed: [],
-  exDonts: [],
-  yesPolicies: [],
-  noPolicies: [],
-  selectedWeekdays: [],
-  dontWorkDays: null,
-  dontWorkTime: null,
-};
 export default {
   components: {
     VueElementLoading,
@@ -154,7 +68,6 @@ export default {
     VendorSignupStep2,
     VendorSignupStep3,
     VendorSignupStep4,
-    VendorSignupStep5,
     VendorSignupFinalForm,
   },
   data() {
@@ -163,13 +76,54 @@ export default {
       //   type: Object,
       //   default: {}
       // },
-      vendor: { ...emptyVendor },
+      vendor: {
+        vendorCategory: null,
+        vendorPropertyValues: {},
+        email: null,
+        companyName: null,
+        phone: null,
+        address: null,
+        coverPhoto: null,
+        images: [],
+        signature: null,
+        capacity: {
+          low: null,
+          high: null,
+        },
+        about: {
+          company: null,
+          category: null,
+        },
+        social: {
+          website: null,
+          facebook: null,
+          instagram: null,
+          youtube: null,
+          linkedin: null,
+          google: null,
+          pinterest: null,
+          foursuare: null,
+          reddit: null,
+          tiktok: null,
+        },
+        services: {},
+        yesRules: [],
+        noRules: [],
+        notAllowed: [],
+        exDonts: [],
+        yesPolicies: [],
+        noPolicies: [],
+        selectedWeekdays: [],
+        dontWorkDays: null,
+        dontWorkTime: null,
+      },
       isApproved: false,
       step: 1,
       businessCategories: businessCategories,
       generalInfos: generalInfos,
       companyServices: companyServices,
-      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      iconUrl:
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
   },
   created() {},
@@ -179,7 +133,7 @@ export default {
       this.step = 1;
     });
     this.$root.$on("next-vendor-signup-step", () => {
-      if (this.step < 6) {
+      if (this.step < 5) {
         this.step += 1;
       }
     });
@@ -220,7 +174,6 @@ export default {
         this.$set(this.vendor, this.camelize(field), value);
       }
     });
-    console.log(this.vendor);
     this.$root.$on("vendor-signup", () => {
       this.addVendor();
       // this.$store.dispatch('vendor/setData', this.vendor);
