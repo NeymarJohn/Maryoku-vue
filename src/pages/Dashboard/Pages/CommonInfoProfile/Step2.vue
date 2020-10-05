@@ -71,7 +71,7 @@
           <div class="md-layout" style="display: none;">
             <label class="md-layout-item md-size-35 md-form-label">Phone Number</label>
             <div class="md-layout-item">
-              <vue-phone-number-input v-model="phoneNumber" @update="updatePhoneNumber" />
+              <!-- <vue-phone-number-input v-model="phoneNumber" @update="updatePhoneNumber" /> -->
             </div>
           </div>
         </div>

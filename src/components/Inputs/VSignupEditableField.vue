@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="vsignup-edtiable-field-wrapper"
-    :class="[{ 'border-bottom': borderBottom }]"
-  >
+  <div class="vsignup-edtiable-field-wrapper" :class="[{ 'border-bottom': borderBottom }]">
     <div class="left" :class="[{ 'full-width': isEdit }]">
       <div class="title">{{ title }}</div>
       <div class="content">
@@ -12,33 +9,20 @@
         </div>
         <div class="edit-content" v-else>
           <div v-if="title == 'Business Category'">
-            <div
-              class="droplist"
-              v-if="!expanded"
-              :class="{ 'mt-3': !selectedCategory.icon }"
-            >
+            <div class="droplist" v-if="!expanded" :class="{ 'mt-3': !selectedCategory.icon }">
               <img
                 class="inside-img"
                 :src="`${categoryIconUrl}${selectedCategory.icon}`"
                 v-if="selectedCategory.icon"
               />
-              <input
-                readonly
-                class="default with-img"
-                :value="selectedCategory.name"
-                @click="expanded = true"
-              />
+              <input readonly class="default with-img" :value="selectedCategory.name" @click="expanded = true" />
               <img
                 class="dropdown"
                 src="https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 523.svg"
               />
             </div>
             <ul v-else>
-              <li
-                v-for="(category, cIndex) in categories"
-                :key="cIndex"
-                @click="updateCategory(category)"
-              >
+              <li v-for="(category, cIndex) in categories" :key="cIndex" @click="updateCategory(category)">
                 <img :src="`${categoryIconUrl}${category.icon}`" />
                 {{ category.name }}
               </li>
@@ -54,11 +38,7 @@
           </div>
           <div v-else-if="title == 'Email'">
             <img class="inside-img" :src="img" v-if="img != ''" />
-            <input
-              class="default"
-              :class="[{ 'with-img': img != '' }, isEmailValid()]"
-              v-model="value"
-            />
+            <input class="default" :class="[{ 'with-img': img != '' }, isEmailValid()]" v-model="value" />
           </div>
           <div v-else-if="title == 'Phone'">
             <img class="inside-img" :src="img" v-if="img != ''" />
@@ -71,11 +51,7 @@
           </div>
           <div v-else>
             <img class="inside-img" :src="img" v-if="img != ''" />
-            <input
-              class="default"
-              :class="[{ 'with-img': img != '' }]"
-              v-model="value"
-            />
+            <input class="default" :class="[{ 'with-img': img != '' }]" v-model="value" />
           </div>
         </div>
       </div>
@@ -119,8 +95,7 @@ export default {
     },
     address: null,
     reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
-    categoryIconUrl:
-      "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/",
+    categoryIconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/",
     categories: [
       {
         name: "Venue Rental",

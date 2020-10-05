@@ -1,8 +1,9 @@
 <template>
   <div
-    v-if="type=='textarea'"
+    v-if="type == 'textarea'"
     class="maryoku-textarea"
-    :style="size=='normal'?'padding:40px 140px 40px 40px':'padding:30px 40px 30px 30px'"
+    :style="size == 'normal' ? 'padding:40px 140px 40px 40px' : 'padding:30px 40px 30px 30px'"
+    :class="{ disabled: disabled }"
   >
     <textarea
       v-model="content"
@@ -10,25 +11,28 @@
       :placeholder="placeholder"
       :rows="rows"
       class="textarea js-autoresize"
+      :disabled="disabled"
     ></textarea>
     <span class="close-button" @click="clearContent">
       <img :src="`${$iconURL}Campaign/Group+3602.svg`" />
     </span>
   </div>
   <div v-else class="maryoku-textarea input" :class="inputClass">
-    <textarea v-model="content" @input="handleInput" :rows="1" class="textarea js-autoresize"></textarea>
+    <textarea
+      v-model="content"
+      @input="handleInput"
+      :rows="1"
+      class="textarea js-autoresize"
+      :disabled="disabled"
+    ></textarea>
     <div class="place-holder color-dark-gray font-size-16">
+      <img v-if="type == 'emails'" :src="`${$iconURL}Campaign/emails-gray.svg`" style="width: 20px; margin: 0 7px" />
       <img
-        v-if="type=='emails'"
-        :src="`${$iconURL}Campaign/emails-gray.svg`"
-        style="width:20px; margin:0 7px;"
-      />
-      <img
-        v-if="type=='phones'"
+        v-if="type == 'phones'"
         :src="`${$iconURL}Choose+vendor+and+Proposal/phone-gray.svg`"
-        style="width:20px; margin:0 7px;"
+        style="width: 20px; margin: 0 7px"
       />
-      {{placeholder}}
+      {{ placeholder }}
     </div>
   </div>
 </template>
@@ -61,6 +65,10 @@ export default {
     tooltip: {
       type: String,
       default: "",
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -120,7 +128,9 @@ export default {
   border-radius: 3px;
   background: white;
   display: flex;
-
+  &.disabled {
+    opacity: 0.6;
+  }
   &.input {
     padding: 1em 1.5em;
     textarea {
@@ -165,6 +175,9 @@ export default {
   textarea {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+  }
+  textarea[disabled="disabled"] {
+    opacity: 0.6;
   }
 }
 </style>

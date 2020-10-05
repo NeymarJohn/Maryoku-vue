@@ -4,7 +4,10 @@
       <div class="left-side">
         <img :src="`${iconUrl}Group 5213 (2).svg`" />
         <h4>Hi,</h4>
-        <p>We are glad to have you onboard! Submitting quotes & proposals has never been easier. Let's begin with approving your basic info</p>
+        <p>
+          We are glad to have you onboard! Submitting quotes & proposals has never been easier. Let's begin with
+          approving your basic info
+        </p>
         <h2>0/4</h2>
         <h3>Only 4 simple steps & you're signed!</h3>
       </div>
@@ -51,6 +54,14 @@
             :img="`${iconUrl}Asset 547.svg`"
             :field="'vendorMainEmail'"
             :defaultVal="vendor.vendorMainEmail"
+            :borderBottom="true"
+            @update-focus-value="onUpdateFocus"
+          />
+          <v-signup-editable-field
+            :title="'Contact Person\'s Name'"
+            :img="`${iconUrl}Asset 547.svg`"
+            :field="'contactPerson'"
+            :defaultVal="vendor.contactPerson"
             :borderBottom="false"
             @update-focus-value="onUpdateFocus"
           />
@@ -84,8 +95,7 @@ export default {
   },
   data() {
     return {
-      iconUrl:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
   },
   created() {},
