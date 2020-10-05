@@ -5,53 +5,49 @@
         <img :src="`${iconUrl}Group 5225 (2).svg`" />
         <h2>SUMMARY</h2>
         <p>This is a summary of your company's info which we'll use in future proposal creating</p>
-        <h2>4/4</h2>
+        <h2>4/5</h2>
       </div>
       <div class="right-side">
         <div class="card">
           <div class="tabs">
             <div
               class="tab"
-              :class="{'active': t == activeTab}"
+              :class="{ active: t == activeTab }"
               v-for="(t, tIndex) in tabs"
               :key="tIndex"
               @click="goToSection(t)"
-            >{{t}}</div>
+            >
+              {{ t }}
+            </div>
           </div>
           <div class="banner">
             <img :src="vendor.images[0]" v-if="vendor.images.length > 0" />
           </div>
           <div class="about-cont" id="About">
             <div class="block">
-              <span class="capacity">
-                <img :src="`${iconUrl}Asset 545.svg`" />Capacity
-              </span>
+              <span class="capacity"> <img :src="`${iconUrl}Asset 545.svg`" />Capacity </span>
               <span class="number">
-                {{vendor.capacity.low}}
+                {{ vendor.capacity.low }}
                 <img :src="`${iconUrl}Group 4585 (2).svg`" />
-                {{vendor.capacity.high}}
+                {{ vendor.capacity.high }}
               </span>
             </div>
             <div class="block">
-              <div class="title lg">
-                <img :src="`${iconUrl}Asset 563.svg`" /> ABOUT
-              </div>
-              <div class="desc">{{vendor.about.company}}</div>
+              <div class="title lg"><img :src="`${iconUrl}Asset 563.svg`" /> ABOUT</div>
+              <div class="desc">{{ vendor.about.company }}</div>
             </div>
             <div class="block">
               <div class="title">
-                <img
-                  :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategory)}`"
-                />
-                About Our {{getCategoryNameByValue(vendor.vendorCategory)}}
+                <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategory)}`" />
+                About Our {{ getCategoryNameByValue(vendor.vendorCategory) }}
               </div>
-              <div class="desc">{{vendor.about.category}}</div>
+              <div class="desc">{{ vendor.about.category }}</div>
             </div>
             <div class="images">
               <span class="prev" @click="prev()" v-if="imageSlidePos < 0">
                 <md-icon>keyboard_arrow_left</md-icon>
               </span>
-              <div class="cont" :style="{'left': `${imageSlidePos}px`}" ref="imagesCont">
+              <div class="cont" :style="{ left: `${imageSlidePos}px` }" ref="imagesCont">
                 <img :src="img" v-for="(img, ind) in vendor.images" :key="ind" @click="view()" />
               </div>
               <span class="next" @click="next()" v-if="imageSlidePos >= 0">
@@ -69,15 +65,15 @@
               <div class="items">
                 <div class="item">
                   <img :src="`${iconUrl}Asset 547.svg`" />
-                  {{vendor.vendorMainEmail}}
+                  {{ vendor.vendorMainEmail }}
                 </div>
                 <div class="item">
                   <img :src="`${iconUrl}Asset 550.svg`" />
-                  {{vendor.vendorAddressLine1}}
+                  {{ vendor.vendorAddressLine1 }}
                 </div>
                 <div class="item">
                   <img :src="`${iconUrl}Asset 548.svg`" />
-                  {{vendor.vendorMainPhoneNumber}}
+                  {{ vendor.vendorMainPhoneNumber }}
                 </div>
               </div>
             </div>
@@ -88,7 +84,7 @@
                   class="item"
                   v-for="(s, sIndex) in socialMediaBlocks"
                   :key="sIndex"
-                  :class="{'mr-1': vendor.social[s.name]}"
+                  :class="{ 'mr-1': vendor.social[s.name] }"
                 >
                   <a v-if="vendor.social[s.name]" :href="vendor.social[s.name]" target="_blank">
                     <img :src="`${iconUrl}${s.icon}`" />
@@ -99,16 +95,14 @@
           </div>
           <div class="fee-cont" id="Pricing">
             <div class="title">
-              <h3>
-                <img :src="`${iconUrl}Asset 562.svg`" /> ELEMENTS IN STARTING FEE
-              </h3>
+              <h3><img :src="`${iconUrl}Asset 562.svg`" /> ELEMENTS IN STARTING FEE</h3>
             </div>
             <div class="cblock">
               <div class="cheader">
                 <div class="first-column">
                   <div>
                     <img :src="`${iconUrl}Asset 543.svg`" />
-                    {{getCategoryNameByValue(vendor.vendorCategory)}}
+                    {{ getCategoryNameByValue(vendor.vendorCategory) }}
                   </div>
                   <span>QTY</span>
                 </div>
@@ -117,53 +111,41 @@
                 </div>
               </div>
               <div class="citems">
-                <vendor-starting-fee-item
-                  v-for="(fv, fvIndex) in getStartingFeeItems()"
-                  :key="fvIndex"
-                  :item="fv"
-                />
+                <vendor-starting-fee-item v-for="(fv, fvIndex) in getStartingFeeItems()" :key="fvIndex" :item="fv" />
               </div>
             </div>
           </div>
           <div class="extra-cont" id="Pricing">
             <div class="title">
-              <h3>
-                <img :src="`${iconUrl}Asset 526.svg`" />WITH EXTRA PAY
-              </h3>
+              <h3><img :src="`${iconUrl}Asset 526.svg`" />WITH EXTRA PAY</h3>
             </div>
             <div class="cblock">
               <div class="cheader">
                 <div>
                   <img :src="`${iconUrl}Asset 543.svg`" />
-                  {{getCategoryNameByValue(vendor.vendorCategory)}}
+                  {{ getCategoryNameByValue(vendor.vendorCategory) }}
                 </div>
                 <span>QTY</span>
                 <span>Price</span>
               </div>
               <div class="citems">
                 <div class="citem">
-                  <vendor-extra-pay-item
-                    v-for="(cs, csIndex) in getExtraPayItems()"
-                    :key="csIndex"
-                    :item="cs"
-                  />
+                  <vendor-extra-pay-item v-for="(cs, csIndex) in getExtraPayItems()" :key="csIndex" :item="cs" />
                 </div>
               </div>
             </div>
           </div>
           <div class="policy-cont" id="Policy">
-            <div class="title">
-              <img :src="`${iconUrl}Group 1471 (2).svg`" /> OUR POLICY
-            </div>
+            <div class="title"><img :src="`${iconUrl}Group 1471 (2).svg`" /> OUR POLICY</div>
             <div class="rules">
               <div class="rule" v-for="(y, yIndex) in vendor.yesRules" :key="yIndex">
-                <div class="item">{{y.name}}</div>
+                <div class="item">{{ y.name }}</div>
                 <div class="item">
                   <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="vendor.yesRules.includes(y)" />
                 </div>
               </div>
               <div class="rule" v-for="(n, nIndex) in vendor.noRules" :key="nIndex">
-                <div class="item">{{n.name}}</div>
+                <div class="item">{{ n.name }}</div>
                 <div class="item">
                   <img :src="`${iconUrl}Group 5489 (4).svg`" v-if="vendor.noRules.includes(n)" />
                 </div>
@@ -171,41 +153,39 @@
             </div>
             <div class="not-allowed" v-if="vendor.vendorCategory == 'venuerental'">
               <h5>We don't allow these 3rd party vendor:</h5>
-              <p>{{mergeStringItems(vendor.notAllowed)}}</p>
+              <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
             </div>
             <div class="dont-work">
               <h5>We don't work on:</h5>
               <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
                 <img :src="`${iconUrl}Group 5489 (4).svg`" />
-                {{mergeStringItems(vendor.selectedWeekdays)}}
+                {{ mergeStringItems(vendor.selectedWeekdays) }}
               </div>
               <div class="item" v-for="(d, dIndex) in vendor.exDonts" :key="dIndex">
                 <img :src="`${iconUrl}Group 5489 (4).svg`" />
-                {{d}}
+                {{ d }}
               </div>
               <div class="item" v-if="vendor.dontWorkDays">
                 <img :src="`${iconUrl}Group 5489 (4).svg`" />
-                {{dontWorkDays()}}
+                {{ dontWorkDays() }}
               </div>
               <div class="item" v-if="vendor.dontWorkTime">
                 <img :src="`${iconUrl}Group 5489 (4).svg`" />
-                {{dontWorkTime()}}
+                {{ dontWorkTime() }}
               </div>
             </div>
           </div>
           <div class="pricing-policy-cont" id="Rules">
-            <div class="title">
-              <img :src="`${iconUrl}Asset 560.svg`" /> OUR PRICING POLICY
-            </div>
+            <div class="title"><img :src="`${iconUrl}Asset 560.svg`" /> OUR PRICING POLICY</div>
             <div class="rules">
               <div class="rule" v-for="(y, yIndex) in vendor.yesPolicies" :key="yIndex">
-                <div class="item">{{y.name}}</div>
+                <div class="item">{{ y.name }}</div>
                 <div class="item">
                   <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="vendor.yesPolicies.includes(y)" />
                 </div>
               </div>
               <div class="rule" v-for="(n, nIndex) in vendor.noPolicies" :key="nIndex">
-                <div class="item">{{n.name}}</div>
+                <div class="item">{{ n.name }}</div>
                 <div class="item">
                   <img :src="`${iconUrl}Group 5489 (4).svg`" v-if="vendor.noPolicies.includes(n)" />
                 </div>
@@ -330,10 +310,8 @@ export default {
         },
       ],
       imageSlidePos: 0,
-      iconUrl:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
-      defRules:
-        "Suitable for pets, Smoking allowed, Suitable for infants(Under 2 years), Dress code, Overtime Cost",
+      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      defRules: "Suitable for pets, Smoking allowed, Suitable for infants(Under 2 years), Dress code, Overtime Cost",
       defNa:
         "Catering, Dj, Photographer, Show / Performance, Flowers, Transporation, Decoration, Rentals, Favours & Gifts, Other",
       categoryNames: [

@@ -1,13 +1,31 @@
 <template>
   <div class="for-proposal-wrapper">
-    <div class="md-layout justify-content-between">
+    <vue-element-loading v-if="!event" :active="!event" spinner="ring" color="#FF547C" />
+    <div class="md-layout justify-content-between" v-else>
       <div class="md-layout-item md-size-70">
-        <proposal-steps :categoryTitle="vendor.vendorCategory" :step="step" />
-        <div class="step-wrapper" v-if="step < 2">
+        <proposal-steps
+          :categoryTitle="vendor.eventCategory.fullTitle"
+          :step="step"
+          :hasVisionStep="this.event && this.event.concept"
+        />
+        <div class="step-wrapper" v-if="step == -1">
           <div class="proposal-add-personal-message-wrapper">
-            <h3>
-              <img :src="`${iconUrl}Asset 611.svg`" />Let's begin with a personal message
-            </h3>
+            <h3><img :src="`${iconUrl}Asset 611.svg`" />Let's begin with a personal message</h3>
+            <h4>Write something nice, we'll add it to the final proposal</h4>
+            <textarea
+              rows="8"
+              placeholder="Type your message here"
+              v-model="proposalRequest.personalMessage"
+              v-if="proposalRequest"
+              @blur="updateProposalRequest()"
+            />
+            <span>Sincerely,</span>
+            <p>Relish caterers & venues</p>
+          </div>
+        </div>
+        <div class="step-wrapper" v-if="(step < 2) & (step > -1)">
+          <div class="proposal-add-personal-message-wrapper">
+            <h3><img :src="`${iconUrl}Asset 611.svg`" />Let's begin with a personal message</h3>
             <h4>Write something nice, we'll add it to the final proposal</h4>
             <textarea
               rows="8"
@@ -20,18 +38,20 @@
             <p>Relish caterers & venues</p>
           </div>
           <proposal-item
-            :category="`Venue Rental`"
-            :services="servicesByCategory('venuerental')"
+            :category="`${vendor.eventCategory.fullTitle}`"
+            :services="servicesByCategory(vendor.vendorCategory)"
             :subTitle="`For Whole Event`"
             :img="`${iconUrl}Asset 614.svg`"
             :proposalRequest="proposalRequest"
+            :vendor="vendor"
             :step="step"
           />
         </div>
         <div class="step-wrapper" v-if="step == 2">
           <h3>Can you also provide these services for this event?</h3>
           <p>
-            <img :src="`${iconUrl}Group 5280 (5).svg`" />Did you know? Adding vendors gets your fair commission if they get picked!
+            <img :src="`${iconUrl}Group 5280 (5).svg`" />Did you know? Adding vendors gets your fair commission if they
+            get picked!
           </p>
           <proposal-item
             :category="`Food & Beverage`"
@@ -107,9 +127,11 @@ import ProposalAddFiles from "./components/ProposalAddFiles.vue";
 import ProposalTitleWithIcon from "./components/ProposalTitleWithIcon.vue";
 import ReferNewVendor from "./components/ReferNewVendor.vue";
 import ProposalEventSummary from "./components/ProposalEventSummary.vue";
+import VueElementLoading from "vue-element-loading";
 
 export default {
   components: {
+    VueElementLoading,
     ProposalBudgetSummary,
     ProposalItem,
     ProposalSteps,
@@ -122,8 +144,7 @@ export default {
     return {
       step: 0,
       proposalRequest: null,
-      iconUrl:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
+      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       services: null,
       iconsWithCategory: null,
       vendor: null,
@@ -135,6 +156,7 @@ export default {
     this.iconsWithCategory = VendorService.categoryNameWithIcons();
 
     this.step = 0;
+
     this.event = {
       name: "March Madness event",
       date: "December 25, 2019",
@@ -159,15 +181,14 @@ export default {
       } else if (this.step > 0) {
         this.step--;
       } else {
-        this.$router.push(
-          `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}`,
-        );
+        this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}`);
         VendorService.setProposalRequest(this.proposalRequest);
       }
       console.log("wrapperStep", this.step);
     });
 
     this.getVendor();
+
     this.getProposal(this.$route.params.id);
 
     this.proposalRequest.requirements = VendorService.getProposalRequest().requirements;
@@ -178,6 +199,7 @@ export default {
         this.vendor = vendor;
       });
     },
+
     getProposal(id) {
       ProposalRequest.find(id)
         .then((resp) => {
@@ -213,11 +235,7 @@ export default {
     },
     flatDeep(arr, d = 1) {
       return d > 0
-        ? arr.reduce(
-            (acc, val) =>
-              acc.concat(Array.isArray(val) ? this.flatDeep(val, d - 1) : val),
-            [],
-          )
+        ? arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? this.flatDeep(val, d - 1) : val), [])
         : arr.slice();
     },
     servicesByCategory(category) {
@@ -225,9 +243,7 @@ export default {
 
       if (services.length > 0) {
         return this.flatDeep(
-          services[0].categories.map((s) =>
-            s.subCategories.map((sc) => sc.items.map((dd) => dd.name)),
-          ),
+          services[0].categories.map((s) => s.subCategories.map((sc) => sc.items.map((dd) => dd.name))),
           Infinity,
         );
       } else {
@@ -291,8 +307,22 @@ export default {
       //   })
     },
   },
-  computed: {},
-  watch: {},
+  computed: {
+    event() {
+      return this.$store.state.event.eventData;
+    },
+  },
+  watch: {
+    event: {
+      handler: function (newEvent) {
+        console.log(newEvent);
+        if (newEvent && newEvent.concept) {
+          this.step = -1;
+        }
+      },
+    },
+    deep: true,
+  },
   filters: {},
 };
 </script>

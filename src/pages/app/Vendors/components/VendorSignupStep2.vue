@@ -8,18 +8,21 @@
           <br />AMENTITIES
         </h2>
         <p>Don't leave anything out! All information will appear on your future proposals</p>
-        <h2>2/4</h2>
+        <h2>2/5</h2>
       </div>
       <div class="right-side">
         <div class="description">
           <h5>
             <img :src="`${iconUrl}Group 5222 (2).svg`" />
-            {{getCategoryNameByValue(vendor.vendorCategory)}} Amenities
+            {{ getCategoryNameByValue(vendor.vendorCategory) }} Amenities
           </h5>
-          <p>Mark all the services you can support and will be included in your proposal. If needed please add a decsription or amount.</p>
+          <p>
+            Mark all the services you can support and will be included in your proposal. If needed please add a
+            decsription or amount.
+          </p>
         </div>
         <vendor-service-item
-          v-for="(c, cIndex) in categories.filter(category => category.name == vendor.vendorCategory)[0].categories"
+          v-for="(c, cIndex) in categories.filter((category) => category.name == vendor.vendorCategory)[0].categories"
           :key="cIndex"
           :serviceItem="c"
           :vendor="vendor"
@@ -118,8 +121,7 @@ export default {
           value: "equipmentrentals",
         },
       ],
-      iconUrl:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
   },
   created() {},

@@ -1,38 +1,62 @@
 <template>
   <div
     class="editable-proposal-sub-item-wrapper"
-    :class="[{'step-3': step == 3}]"
+    :class="[{ 'step-3': step == 3 }]"
     v-if="item.requirementTitle != null"
   >
     <template v-if="step < 3">
-      <div class="item-cont">{{item.requirementTitle}}</div>
-      <div class="qty-cont">
-        <template v-if="!isEdit">{{item.priceUnit==='total' ? 1 : item.requirementValue}}</template>
+      <div class="item-cont">{{ item.requirementTitle }}</div>
+      <div class="qty-cont editor-wrapper">
+        <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue }}</template>
         <template v-else>
-          <input class="input-value" type="number" />
+          <input class="input-value" type="number" v-model="item.requirementValue" />
         </template>
       </div>
-      <div class="price-cont">
+      <div class="price-cont editor-wrapper">
         <template v-if="!isEdit">
           $
           {{
-          item.priceUnit != 'total' ? parseFloat(String(item.price).replace(/,/g, '')) / item.requirementValue :
-          item.price | withComma
+            item.priceUnit != "total"
+              ? parseFloat(String(item.price).replace(/,/g, "")) / item.requirementValue
+              : item.price | withComma
           }}
         </template>
         <template v-else>
-          <input class="input-value" v-model="item.price" type="number" />
+          <money
+            v-model="item.price"
+            v-bind="{
+              decimal: '.',
+              thousands: ',',
+              prefix: '$ ',
+              suffix: '',
+              precision: 2,
+              masked: false,
+            }"
+            class="input-value"
+          />
         </template>
       </div>
-      <div class="total-cont">
-        <template v-if="!isEdit">$ {{item.price | withComma}}</template>
+      <div class="total-cont editor-wrapper">
+        <template v-if="!isEdit">$ {{ item.price | withComma }}</template>
         <template v-else>
-          <input class="input-value" v-model="item.price" type="number" />
+          <!-- <input class="input-value" v-model="item.price" type="number" /> -->
+          <money
+            v-model="item.price"
+            v-bind="{
+              decimal: '.',
+              thousands: ',',
+              prefix: '$ ',
+              suffix: '',
+              precision: 2,
+              masked: false,
+            }"
+            class="input-value"
+          />
         </template>
       </div>
-      <div class="action-cont">
+      <div class="action-cont editor-wrapper">
         <template v-if="!isEdit">
-          <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEdit=true" />
+          <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEdit = true" />
           <img class="trash" :src="`${iconUrl}Asset 586.svg`" @click="removeRequirement(item)" />
         </template>
         <template v-else>
@@ -42,10 +66,10 @@
       </div>
     </template>
     <template v-else>
-      <span class="grid-cell">{{item.requirementTitle}}</span>
-      <span class="grid-cell">{{item.requirementValue}}</span>
-      <span class="grid-cell">$ {{item.price / item.requirementValue | withComma}}</span>
-      <span class="grid-cell">$ {{item.price | withComma}}</span>
+      <span class="grid-cell">{{ item.requirementTitle }}</span>
+      <span class="grid-cell">{{ item.requirementValue }}</span>
+      <span class="grid-cell">$ {{ (item.price / item.requirementValue) | withComma }}</span>
+      <span class="grid-cell">$ {{ item.price | withComma }}</span>
       <div class="action-cont" v-if="isHover">
         <img class="edit" :src="`${iconUrl}Asset 585.svg`" />
         <img class="trash" :src="`${iconUrl}Asset 586.svg`" @click="removeRequirement(item.id)" />
@@ -54,9 +78,13 @@
   </div>
 </template>
 <script>
+import { Money } from "v-money";
+
 export default {
   name: "editable-proposal-sub-item",
-  components: {},
+  components: {
+    Money,
+  },
   props: {
     item: Object,
     active: Boolean,
@@ -66,8 +94,7 @@ export default {
     return {
       isHover: false,
       isEdit: false,
-      iconUrl:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
+      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
     };
   },
   methods: {
@@ -134,10 +161,16 @@ export default {
       }
     }
   }
-  .input-value {
-    border: 1px solid #dddddd;
+  .editor-wrapper {
+    margin: 0 5px;
     text-align: center;
+    .input-value {
+      border: 1px solid #dddddd;
+      text-align: center;
+      width: 100%;
+    }
   }
+
   a {
     cursor: pointer;
     padding: 8px 26px;

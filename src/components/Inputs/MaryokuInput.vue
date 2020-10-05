@@ -16,14 +16,16 @@
     />
     <span class="md-error color-red" v-if="errors.has(validation)">{{ errors.first(validation) }}</span>
 
-    <div class="copy_clip" v-if="inputStyle==='sharing'">
+    <div class="copy_clip" v-if="inputStyle === 'sharing'">
       <button
         type="button"
         v-clipboard:copy="value"
         v-clipboard:success="onCopy"
         v-clipboard:error="onCopyError"
         @mouseover="mouseOver($event)"
-      >Copy</button>
+      >
+        Copy
+      </button>
       <transition name="fade" mode="out-in">
         <div class="copied-tooltip" v-if="tooltipActive">Link Copied!</div>
       </transition>
@@ -35,16 +37,11 @@
           <time-input v-model="timeInfo"></time-input>
         </div>
         <div class="btn-group">
-          <md-button class="md-simple md-black normal-btn" @click="showTimePicker=false">Cancel</md-button>
+          <md-button class="md-simple md-black normal-btn" @click="showTimePicker = false">Cancel</md-button>
           <md-button class="md-default md-rose normal-btn" @click="setTime">Set</md-button>
         </div>
       </div>
-      <div
-        class="time-picker-mask"
-        @click="showTimePicker=false"
-        ref="timePickerMask"
-        v-if="showTimePicker"
-      ></div>
+      <div class="time-picker-mask" @click="showTimePicker = false" ref="timePickerMask" v-if="showTimePicker"></div>
     </div>
 
     <div ref="timePickerElements" v-if="showDatePicker">
@@ -52,7 +49,7 @@
         <div class="d-flex pl-10">
           <img :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px" />
           <!-- {{dateData && dateData.selectedDate}} -->
-          {{getFormattedDate}}
+          {{ getFormattedDate }}
         </div>
         <!-- <div class="color-gray" style="margin-top: 40px; margin-bottom: 10px;"> Date Range Picker</div> -->
         <div>
@@ -65,16 +62,11 @@
           ></functional-calendar>
         </div>
         <div class="btn-group">
-          <md-button class="md-simple md-black normal-btn" @click="showDatePicker=false">Cancel</md-button>
+          <md-button class="md-simple md-black normal-btn" @click="showDatePicker = false">Cancel</md-button>
           <md-button class="md-default md-rose normal-btn" @click="setDate">Set</md-button>
         </div>
       </div>
-      <div
-        class="time-picker-mask"
-        @click="showDatePicker=false"
-        ref="timePickerMask"
-        v-if="showDatePicker"
-      ></div>
+      <div class="time-picker-mask" @click="showDatePicker = false" ref="timePickerMask" v-if="showDatePicker"></div>
     </div>
   </div>
 </template>
@@ -119,8 +111,7 @@ export default {
     },
   },
   beforeDestroy() {
-    if (this.$refs.timePickerPanel)
-      this.$refs.timePickerPanel.style.display = "none";
+    if (this.$refs.timePickerPanel) this.$refs.timePickerPanel.style.display = "none";
   },
   data() {
     return {
@@ -164,21 +155,16 @@ export default {
         setTimeout(() => {
           const pos = this.cumulativeOffset(this.$refs.input);
           this.$refs.timePickerPanel.style.left = `${pos.left}px`;
-          this.$refs.timePickerPanel.style.top = `${
-            window.scrollY + pos.top
-          }px`;
+          this.$refs.timePickerPanel.style.top = `${window.scrollY + pos.top}px`;
           this.$refs.timePickerPanel.style.display = "block";
-          document
-            .getElementsByTagName("body")[0]
-            .appendChild(this.$refs.timePickerElements);
+          this.$refs.timePickerPanel.style.position = "absolute";
+          document.getElementsByTagName("body")[0].appendChild(this.$refs.timePickerElements);
           window.addEventListener("scroll", this.handleScroll);
         }, 100);
       }
     },
     setDate() {
-      this.content = moment(new Date(this.dateData.selectedDate)).format(
-        "DD.MM.YYYY",
-      );
+      this.content = moment(new Date(this.dateData.selectedDate)).format("DD.MM.YYYY");
       this.showDatePicker = false;
       this.$emit("input", this.content);
     },
@@ -191,9 +177,7 @@ export default {
       console.log(window.scrollY);
       console.log(this.cumulativeOffset(this.$refs.input));
       if (this.$refs.timePickerPanel)
-        this.$refs.timePickerPanel.style.top = `${
-          window.scrollY + this.cumulativeOffset(this.$refs.input).top
-        }px`;
+        this.$refs.timePickerPanel.style.top = `${window.scrollY + this.cumulativeOffset(this.$refs.input).top}px`;
     },
     onCopy: function (e) {
       // alert('You just copied: ' + e.text)
@@ -218,9 +202,7 @@ export default {
     },
     getFormattedDate() {
       if (!this.dateData.selectedDate) return "";
-      return moment(new Date(this.dateData.selectedDate)).format(
-        "dddd, MMM DD, YYYY",
-      );
+      return moment(new Date(this.dateData.selectedDate)).format("dddd, MMM DD, YYYY");
     },
     getValidateObject() {
       if (this.validation === "url") {
@@ -235,9 +217,7 @@ export default {
   },
   created() {
     if (this.value && this.inputStyle === "budget") {
-      this.content = `${this.value}`
-        .replace(/\D/g, "")
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      this.content = `${this.value}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
     console.log(this.readonly);
   },
@@ -246,13 +226,9 @@ export default {
   },
   watch: {
     content: function (newValue) {
-      this.inputClass = `${this.inputStyle} ${this.value ? "active" : ""} ${
-        this.size
-      }`;
+      this.inputClass = `${this.inputStyle} ${this.value ? "active" : ""} ${this.size}`;
       if (this.inputStyle === "budget" || this.inputStyle === "users") {
-        const result = newValue
-          .replace(/\D/g, "")
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        const result = newValue.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         this.content = result;
       }
     },

@@ -1,13 +1,13 @@
 <template>
   <div class="proposal-item-wrapper">
-    <div class="title-cont default" :class="[{'pb-40': isVCollapsed}]" v-if="step<=1">
-      <div class="with-subtitle" @click="isVCollapsed=!isVCollapsed">
+    <div class="title-cont default" :class="[{ 'pb-40': isVCollapsed }]" v-if="step <= 1">
+      <div class="with-subtitle" @click="isVCollapsed = !isVCollapsed">
         <div class="text-cont">
           <h3 class="title">
             <img :src="img" />
-            {{category}}
+            {{ category }}
           </h3>
-          <h5 v-if="!isVCollapsed">{{subTitle}}</h5>
+          <h5 v-if="!isVCollapsed">{{ subTitle }}</h5>
         </div>
         <div class="action">
           <img v-if="!isVCollapsed" :src="`${iconUrl}Group 3671 (2).svg`" />
@@ -16,15 +16,15 @@
       </div>
       <p v-if="!isVCollapsed">
         Which element would you like to involve in your
-        <strong>{{category}}</strong> proposal?
+        <strong>{{ category }}</strong> proposal?
       </p>
       <div class="sub-items-cont" v-if="!isVCollapsed">
         <span class="prev" @click="prev()" v-if="serviceSlidePos < 0">
           <md-icon>keyboard_arrow_left</md-icon>
         </span>
-        <div class="sub-items" :style="{'left': `${serviceSlidePos}px`}" ref="servicesCont">
+        <div class="sub-items" :style="{ left: `${serviceSlidePos}px` }" ref="servicesCont">
           <select-proposal-sub-item
-            :active="true"
+            :selected="isSelectedQuickButton(s)"
             :item="s"
             v-for="(s, sIndex) in services"
             :key="sIndex"
@@ -33,7 +33,7 @@
         <span
           class="next"
           @click="next()"
-          v-if="serviceSlidePos >= 0 || (this.servicesWidth + this.serviceSlidePos - 200) > 0"
+          v-if="serviceSlidePos >= 0 || this.servicesWidth + this.serviceSlidePos - 200 > 0"
         >
           <md-icon>keyboard_arrow_right</md-icon>
         </span>
@@ -46,11 +46,11 @@
           </div>
           <div class="field">
             <span>QTY</span>
-            <money v-model="qty" v-bind="qtyFormat" @keyup.native="calculateSubTotal();" />
+            <money v-model="qty" v-bind="qtyFormat" @keyup.native="calculateSubTotal()" />
           </div>
           <div class="field">
             <span>Price per unit</span>
-            <money v-model="unit" v-bind="currencyFormat" @keyup.native="calculateSubTotal();" />
+            <money v-model="unit" v-bind="currencyFormat" @keyup.native="calculateSubTotal()" />
           </div>
           <div class="field">
             <span>Total</span>
@@ -60,11 +60,9 @@
         </div>
         <div class="action-cont">
           <a class="cancel" @click="cancel()">Clear</a>
-          <a
-            class="save"
-            :class="{'isDisabled': isDisabledAdd}"
-            @click="saveItem(serviceItem, qty, subTotal, category)"
-          >Add This</a>
+          <a class="save" :class="{ isDisabled: isDisabledAdd }" @click="saveItem(serviceItem, qty, subTotal, category)"
+            >Add This</a
+          >
         </div>
       </div>
     </div>
@@ -76,25 +74,22 @@
         </div>
         <h3 class="title">
           <img :src="img" />
-          <span>{{category}}</span>
+          <span>{{ category }}</span>
         </h3>
       </div>
       <div class="right-side">
         <div class="budget-cont">
           <span>Budget</span>
-          <span>${{totalOffer() | withComma}}</span>
+          <span>${{ totalOffer() | withComma }}</span>
         </div>
         <div class="proposal-range-cont">
           <p>You're the First bidder</p>
           <span class="grey" v-if="proposalRange">Proposals range</span>
-          <span
-            v-if="proposalRange"
-          >{{`$${newProposalRequest.bidRange.low} - $${newProposalRequest.bidRange.high}`}}</span>
+          <span v-if="proposalRange">{{
+            `$${newProposalRequest.bidRange.low} - $${newProposalRequest.bidRange.high}`
+          }}</span>
         </div>
-        <img
-          :src="`${iconUrl}Component 36 (2).svg`"
-          :style="`transform: ${isChecked ? 'rotate(90deg)' : ''}`"
-        />
+        <img :src="`${iconUrl}Component 36 (2).svg`" :style="`transform: ${isChecked ? 'rotate(90deg)' : ''}`" />
       </div>
     </div>
     <div class="sub-items-cont" v-if="step == 2 && isChecked">
@@ -103,18 +98,13 @@
         <span class="prev" @click="prev()" v-if="serviceSlidePos < 0">
           <md-icon>keyboard_arrow_left</md-icon>
         </span>
-        <div class="sub-items" :style="{'left': `${serviceSlidePos}px`}" ref="servicesCont">
-          <select-proposal-sub-item
-            :active="true"
-            :item="s"
-            v-for="(s, sIndex) in services"
-            :key="sIndex"
-          />
+        <div class="sub-items" :style="{ left: `${serviceSlidePos}px` }" ref="servicesCont">
+          <select-proposal-sub-item :active="true" :item="s" v-for="(s, sIndex) in services" :key="sIndex" />
         </div>
         <span
           class="next"
           @click="next()"
-          v-if="serviceSlidePos >= 0 || (this.servicesWidth + this.serviceSlidePos - 200) > 0"
+          v-if="serviceSlidePos >= 0 || this.servicesWidth + this.serviceSlidePos - 200 > 0"
         >
           <md-icon>keyboard_arrow_right</md-icon>
         </span>
@@ -128,11 +118,11 @@
         </div>
         <div class="field">
           <span>QTY</span>
-          <money v-model="qty" v-bind="qtyFormat" @keyup.native="calculateSubTotal();" />
+          <money v-model="qty" v-bind="qtyFormat" @keyup.native="calculateSubTotal()" />
         </div>
         <div class="field">
           <span>Price per unit</span>
-          <money v-model="unit" v-bind="currencyFormat" @keyup.native="calculateSubTotal();" />
+          <money v-model="unit" v-bind="currencyFormat" @keyup.native="calculateSubTotal()" />
         </div>
         <div class="field">
           <span>Total</span>
@@ -142,25 +132,20 @@
       </div>
       <div class="action-cont">
         <a class="cancel" @click="cancel()">Clear</a>
-        <a
-          class="save"
-          :class="{'isDisabled': isDisabledAdd}"
-          @click="saveItem(serviceItem, qty, subTotal, category)"
-        >Add This</a>
+        <a class="save" :class="{ isDisabled: isDisabledAdd }" @click="saveItem(serviceItem, qty, subTotal, category)"
+          >Add This</a
+        >
       </div>
     </div>
-    <div
-      class="editable-sub-items-cont"
-      v-if="(step <= 1 && !isVCollapsed) || (step == 2 && isChecked)"
-    >
+    <div class="editable-sub-items-cont" v-if="(step <= 1 && !isVCollapsed) || (step == 2 && isChecked)">
       <div class="editable-sub-items-header">
         <span>Description</span>
-        <span>QTY</span>
-        <span>Price per unit</span>
-        <span>Subtotal</span>
+        <span class="text-center">QTY</span>
+        <span class="text-center">Price per unit</span>
+        <span class="text-center">Subtotal</span>
       </div>
       <editable-proposal-sub-item
-        v-for="(req, rIndex) in newProposalRequest.requirements.filter( r => services.includes(r.requirementTitle))"
+        v-for="(req, rIndex) in newProposalRequest.requirements"
         :key="rIndex"
         :item="req"
         :active="true"
@@ -173,52 +158,47 @@
               <img :src="`${iconUrl}Asset 612.svg`" />
               <span>Add Discount</span>
             </div>
-            <div class="ptitle" v-if="isEditDiscount">
+            <div class="ptitle text-center" v-if="isEditDiscount">
               % Percentage
               <br />
               <money
                 v-model="discount"
                 v-bind="percentageFormat"
-                :class="[
-                  {'active-discount': isDiscountPercentage},
-                  {'inactive-discount': !isDiscountPercentage},
-                ]"
+                :class="[{ 'active-discount': isDiscountPercentage }, { 'inactive-discount': !isDiscountPercentage }]"
                 @keyup.native="setRange(discount, 'discount')"
-                @click.native="isDiscountPercentage=true;switchDiscountMethod()"
+                @click.native="
+                  isDiscountPercentage = true;
+                  switchDiscountMethod();
+                "
               />
             </div>
           </div>
-          <div class="percent-cont" :class="{'text-right': isEditDiscount}">
+          <div class="percent-cont text-center" :class="{ 'text-right': isEditDiscount }">
             <span v-if="isEditDiscount">Or</span>
-            <span v-else>{{discount}}%</span>
+            <span v-else>{{ discount }}%</span>
           </div>
-          <div class="price-cont">
+          <div class="price-cont text-center">
             <template v-if="isEditDiscount">
               <span class="pl-2">Amount</span>
               <br />
               <money
                 v-model="discount_by_amount"
                 v-bind="currencyFormat"
-                :class="[
-                  {'active-discount': !isDiscountPercentage},
-                  {'inactive-discount': isDiscountPercentage},
-                ]"
+                :class="[{ 'active-discount': !isDiscountPercentage }, { 'inactive-discount': isDiscountPercentage }]"
                 @keyup.native="setRange(discount_by_amount, 'discount_by_amount')"
-                @click.native="isDiscountPercentage=false;switchDiscountMethod()"
+                @click.native="
+                  isDiscountPercentage = false;
+                  switchDiscountMethod();
+                "
               />
             </template>
             <template v-else>
-              <span v-if="discount_by_amount==0">${{totalOffer() * discount / 100 | withComma }}</span>
-              <span v-else>${{discount_by_amount}}</span>
+              <span v-if="discount_by_amount == 0">${{ ((totalOffer() * discount) / 100) | withComma }}</span>
+              <span v-else>${{ discount_by_amount }}</span>
             </template>
           </div>
           <div class="edit-cont">
-            <img
-              class="edit"
-              :src="`${iconUrl}Asset 585.svg`"
-              @click="isEditDiscount=true"
-              v-if="!isEditDiscount"
-            />
+            <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditDiscount = true" v-if="!isEditDiscount" />
             <a class="cancel" v-if="isEditDiscount" @click="cancelDiscount()">Cancel</a>
             <a class="save" v-if="isEditDiscount" @click="saveDiscount()">Save</a>
           </div>
@@ -243,62 +223,56 @@
           <div class="percent-cont">
             <!-- <span>{{tax}}%</span> -->
           </div>
-          <div class="price-cont">
-            <span>${{totalOffer() * tax / 100 | withComma}}</span>
+          <div class="price-cont text-center">
+            <span>${{ ((totalOffer() * tax) / 100) | withComma }}</span>
           </div>
           <div class="edit-cont">
-            <img
-              class="edit"
-              :src="`${iconUrl}Asset 585.svg`"
-              @click="isEditTax=true"
-              v-if="!isEditTax"
-            />
-            <a class="cancel" v-if="isEditTax" @click="isEditTax=false;tax=0">Cancel</a>
-            <a class="save" v-if="isEditTax" @click="isEditTax=false">Save</a>
+            <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditTax = true" v-if="!isEditTax" />
+            <a
+              class="cancel"
+              v-if="isEditTax"
+              @click="
+                isEditTax = false;
+                tax = 0;
+              "
+              >Cancel</a
+            >
+            <a class="save" v-if="isEditTax" @click="isEditTax = false">Save</a>
           </div>
         </div>
       </div>
       <div class="editable-sub-items-footer">
         <span>Total</span>
-        <span>${{calculatedTotal() | withComma}}</span>
+        <span>${{ calculatedTotal() | withComma }}</span>
       </div>
     </div>
-    <div
-      class="upload-files-wrapper"
-      v-if="(step <= 1 && !isVCollapsed) || (step == 2 && isChecked)"
-    >
+    <div class="upload-files-wrapper" v-if="(step <= 1 && !isVCollapsed) || (step == 2 && isChecked)">
       <div class="title-cont">
-        <h3>
-          <img :src="`${iconUrl}Asset 608.svg`" />Upload This Files:
-        </h3>
+        <h3><img :src="`${iconUrl}Asset 608.svg`" />Upload This Files:</h3>
         <h5>And add additional if you want</h5>
       </div>
       <div class="files-cont">
-        <div class="item">
+        <div class="item" v-for="legalDoc in vendor.eventCategory.legalDocuments" :key="legalDoc">
           <div class="left">
-            <span class="filename">Legal Requirements</span>
+            <span class="filename">{{ legalDoc }}</span>
             <span class="req">Required</span>
           </div>
-          <div class="right" @click="uploadDocument('legal')" v-if="getFileByTag('legal') == null">
+          <div class="right" @click="uploadDocument(legalDoc)" v-if="getFileByTag(legalDoc) == null">
             <img :src="`${iconUrl}Asset 609.svg`" />Upload
-            <input
-              type="file"
-              class="hide"
-              ref="legalDocument"
-              accept="application/text, application/pdf"
-              @change="onFilePicked"
-            />
           </div>
           <div class="right" v-else>
-            <span class="filename">{{getFileByTag('legal')}}</span>
+            <span class="filename">{{ getFileByTag(legalDoc) }}</span>
             <img class="check" :src="`${iconUrl}Group 3599 (2).svg`" />
-            <img
-              class="remove"
-              :src="`${iconUrl}Group 3671 (2).svg`"
-              @click="removeFileByTag('legal')"
-            />
+            <img class="remove" :src="`${iconUrl}Group 3671 (2).svg`" @click="removeFileByTag(legalDoc)" />
           </div>
         </div>
+        <input
+          type="file"
+          class="hide"
+          ref="legalDocument"
+          accept="application/text, application/pdf"
+          @change="onFilePicked"
+        />
         <!-- <div class="item">
           <div class="left">
             <span class="filename">Legal Requirements</span>
@@ -313,11 +287,7 @@
             <span class="filename">Other</span>
             <span class="req">*Optional</span>
           </div>
-          <div
-            class="right"
-            @click="uploadDocument('option')"
-            v-if="getFileByTag('option') == null"
-          >
+          <div class="right" @click="uploadDocument('option')" v-if="getFileByTag('option') == null">
             <img :src="`${iconUrl}Asset 609.svg`" />Upload
             <input
               type="file"
@@ -328,22 +298,16 @@
             />
           </div>
           <div class="right" v-else>
-            <span class="filename">{{getFileByTag('option')}}</span>
+            <span class="filename">{{ getFileByTag("option") }}</span>
             <img class="check" :src="`${iconUrl}Group 3599 (2).svg`" />
-            <img
-              class="remove"
-              :src="`${iconUrl}Group 3671 (2).svg`"
-              @click="removeFileByTag('option')"
-            />
+            <img class="remove" :src="`${iconUrl}Group 3671 (2).svg`" @click="removeFileByTag('option')" />
           </div>
         </div>
       </div>
     </div>
     <div class="additional-photos-wrapper" v-if="step == 2 && isChecked">
       <div class="title-cont">
-        <h3>
-          <img :src="`${iconUrl}Asset 605.svg`" />Upload Additional Photos
-        </h3>
+        <h3><img :src="`${iconUrl}Asset 605.svg`" />Upload Additional Photos</h3>
         <h5>(15 photos top, under 20KB)</h5>
       </div>
       <div class="upload-cont">
@@ -395,12 +359,12 @@ export default {
     step: Number,
     services: Array,
     proposalRequest: Object,
+    vendor: Object,
   },
   data() {
     return {
       isAllFilledInfo: false,
-      iconUrl:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
+      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       isVCollapsed: false,
       isChecked: false,
       isEditDiscount: false,
@@ -446,6 +410,7 @@ export default {
         precision: 0,
         masked: false,
       },
+      selectedQuickButton: "",
     };
   },
   methods: {
@@ -476,9 +441,10 @@ export default {
       }
     },
     cancel() {
-      this.qty = null;
-      this.unit = null;
-      this.subTotal = null;
+      this.selectedQuickButton = "";
+      this.qty = 0;
+      this.unit = 0;
+      this.subTotal = 0;
       this.serviceItem = null;
       this.discount_by_amount = null;
     },
@@ -500,11 +466,7 @@ export default {
         requirementValue: `${qty}`,
       });
       this.$forceUpdate();
-      this.$root.$emit(
-        "update-proposal-budget-summary",
-        this.newProposalRequest,
-        {},
-      );
+      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
       this.cancel();
     },
     calculateSubTotal() {
@@ -513,14 +475,10 @@ export default {
     },
     saveDiscount() {
       this.isEditDiscount = false;
-      this.$root.$emit(
-        "update-proposal-budget-summary",
-        this.newProposalRequest,
-        {
-          category: this.category,
-          value: this.discount,
-        },
-      );
+      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {
+        category: this.category,
+        value: this.discount,
+      });
     },
     cancelDiscount() {
       this.isEditDiscount = false;
@@ -529,15 +487,15 @@ export default {
     uploadDocument(fileId = null) {
       this.docTag = fileId;
       this.selectedImage = typeof fileId !== "object" ? fileId : null;
-      if (this.docTag == "legal") {
-        this.$refs.legalDocument.click();
+      if (this.docTag == "option") {
+        this.$refs.optionDocument.click();
       } else if (this.docTag == "image") {
         this.$refs.imageFile.click();
       } else {
-        this.$refs.optionDocument.click();
+        this.$refs.legalDocument.click();
       }
     },
-    onFilePicked(event, tag) {
+    onFilePicked(event) {
       let file = event.target.files || event.dataTransfer.files;
 
       if (!file.length) {
@@ -545,19 +503,18 @@ export default {
       }
       if (file[0].size <= 5000000) {
         // 5mb
-        this.createProposalFile(file[0], tag);
+        this.createProposalFile(file[0]);
       } else {
         this.alretExceedPictureSize = true;
         this.$notify({
-          message:
-            "You've Uploaded an Image that Exceed the allowed size, try small one!",
+          message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
           horizontalAlign: "center",
           verticalAlign: "top",
           type: "warning",
         });
       }
     },
-    createProposalFile(file, tag) {
+    createProposalFile(file) {
       let reader = new FileReader();
       let vm = this;
 
@@ -598,9 +555,7 @@ export default {
       let requirements = [];
 
       if (this.newProposalRequest.requirements) {
-        requirements = this.newProposalRequest.requirements.filter((r) =>
-          this.services.includes(r.requirementTitle),
-        );
+        requirements = this.newProposalRequest.requirements.filter((r) => this.services.includes(r.requirementTitle));
       }
 
       requirements.map(function (item) {
@@ -648,6 +603,13 @@ export default {
       this.discount = 0;
       this.discount_by_amount = 0;
     },
+    isSelectedQuickButton(item) {
+      const selectedServices = this.newProposalRequest.requirements.filter((r) =>
+        this.services.includes(r.requirementTitle),
+      );
+      const selectedService = selectedServices.find((it) => it.requirementTitle === item);
+      return selectedService || item == this.selectedQuickButton;
+    },
   },
   created() {},
   mounted() {
@@ -658,11 +620,7 @@ export default {
       this.newProposalRequest.requirements = this.newProposalRequest.requirements.filter(
         (req) => req.requirementTitle != item.requirementTitle,
       );
-      this.$root.$emit(
-        "update-proposal-budget-summary",
-        this.newProposalRequest,
-        {},
-      );
+      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
       this.$forceUpdate();
       this.cancel();
     });
@@ -671,6 +629,7 @@ export default {
       this.clickedItem = !this.clickedItem;
       this.serviceItem = item;
       this.qty = this.unit = this.subTotal = 0;
+      this.selectedQuickButton = item;
     });
 
     this.$root.$on("clear-slide-pos", (item) => {
@@ -688,13 +647,7 @@ export default {
   },
   computed: {
     isDisabledAdd() {
-      return (
-        !this.qty ||
-        !this.unit ||
-        !this.subTotal ||
-        this.subTotal == 0 ||
-        !this.serviceItem
-      );
+      return !this.qty || !this.unit || !this.subTotal || this.subTotal == 0 || !this.serviceItem;
     },
   },
   watch: {},
@@ -942,13 +895,12 @@ export default {
       border-top: 1px solid #707070;
       padding: 40px 40px 30px 40px;
       display: grid;
-      grid-template-columns: 30% 10% 17.5% 47.5%;
+      grid-template-columns: 30% 10% 17.5% 18%;
 
       span {
         display: inline-block;
         font-size: 16px;
         font-weight: 800;
-
         &:last-child {
           margin-right: 0;
         }
@@ -960,7 +912,8 @@ export default {
         border: 2px solid #d5d5d5;
         border-bottom: none;
         display: grid;
-        grid-template-columns: 40% 17.5% 12.5% 30%;
+        // grid-template-columns: 40% 17.5% 12.5% 30%;
+        grid-template-columns: 40% 17.5% 15.5% 24%;
         align-items: center;
 
         .item-cont {
@@ -988,7 +941,6 @@ export default {
         }
         .price-cont {
           font: normal 14px "Manrope-Regular", sans-serif;
-          text-align: left;
           span {
             &.pl-2 {
               font: normal 14px "Manrope-Regular", sans-serif;

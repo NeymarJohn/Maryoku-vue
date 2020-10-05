@@ -7,18 +7,10 @@
       </div>
       <div class="summary-cont">
         <ul>
-          <li
-            :class="[{ 'with-help': dateTooltip }]"
-            @mouseover="dateTooltip = true"
-            @mouseleave="dateTooltip = false"
-          >
+          <li :class="[{ 'with-help': dateTooltip }]" @mouseover="dateTooltip = true" @mouseleave="dateTooltip = false">
             <img :src="`${proposalIconsUrl}Path 251 (2).svg`" />
             {{ eventDate }}
-            <img
-              v-if="dateTooltip"
-              class="question"
-              :src="`${proposalIconsUrl}Asset 582.svg`"
-            />
+            <img v-if="dateTooltip" class="question" :src="`${proposalIconsUrl}Asset 582.svg`" />
             <div class="date-tooltip" v-if="dateTooltip">
               <h3>Your Time Suggestion</h3>
               <p>
@@ -37,18 +29,13 @@
           </li>
           <li>
             <img :src="`${proposalIconsUrl}Asset 572.svg`" />
-            {{
-              proposalRequest
-                ? proposalRequest.eventData.numberOfParticipants
-                : "-" | withComma
-            }}
+            {{ proposalRequest ? event.numberOfParticipants : "-" | withComma }}
           </li>
         </ul>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+          magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat.
         </p>
         <div class="a-right">
           <a class="see-full" @click="fullDetailsModal = true">
@@ -57,12 +44,7 @@
           </a>
         </div>
         <div class="pull-bottom-right">
-          <vendor-bid-time-counter
-            :days="4"
-            :hours="0"
-            :minutes="0"
-            :seconds="0"
-          />
+          <vendor-bid-time-counter :days="4" :hours="0" :minutes="0" :seconds="0" />
         </div>
       </div>
     </section>
@@ -71,55 +53,38 @@
       <div class="back-to-top">
         <span>END</span>
         <br />
-        <div class="row" @click="scrollToTop()">
-          <md-icon>keyboard_arrow_up</md-icon>Back To Top
-        </div>
+        <div class="row" @click="scrollToTop()"><md-icon>keyboard_arrow_up</md-icon>Back To Top</div>
       </div>
     </div>
     <section class="footer-wrapper">
-      <div class="prev-cont" @click="back()">
-        <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back
-      </div>
+      <div class="prev-cont" @click="back()"><img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back</div>
       <div class="next-cont">
         <span>You can return to it till the deadline!</span>
-        <a class="save" @click="saveProposal()">
-          <img :src="`${proposalIconsUrl}Asset 610.svg`" /> Save for later
-        </a>
+        <a class="save" @click="saveProposal()"> <img :src="`${proposalIconsUrl}Asset 610.svg`" /> Save for later </a>
         <a
-          class="next"
+          class="next active"
           @click="saveProposal()"
           :class="[{ active: selectedServices.length > 0 }]"
           v-if="step == 0"
           >Next</a
         >
-        <a
-          class="next"
-          @click="saveProposal()"
-          :class="[{ active: selectedServices.length > 0 }]"
-          v-if="step == 1"
+        <a class="next" @click="saveProposal()" :class="[{ active: selectedServices.length > 0 }]" v-if="step == 1"
           >Next</a
         >
         <a class="next active" @click="saveProposal()" v-if="step == 2">
           Next
           <md-icon>keyboard_arrow_right</md-icon>
         </a>
-        <a class="next active" @click="saveProposal()" v-if="step >= 3"
-          >Submit Proposal</a
-        >
+        <a class="next active" @click="saveProposal()" v-if="step >= 3">Submit Proposal</a>
       </div>
     </section>
-    <modal
-      v-if="fullDetailsModal"
-      class="full-details-modal"
-      container-class="modal-container lg"
-    >
+    <modal v-if="fullDetailsModal" class="full-details-modal" container-class="modal-container lg">
       <template slot="header">
         <div class="full-details-modal__header">
           <div class="header-description">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+            ea commodo consequat.
           </div>
         </div>
         <button class="close" @click="hideModal()">
@@ -154,29 +119,21 @@
               <img :src="`${landingIconsUrl}Asset 505.svg`" />
               <span>
                 <strong>Guests:</strong>
-                {{
-                  proposalRequest
-                    ? proposalRequest.eventData.numberOfParticipants
-                    : "-" | withComma
-                }}
+                {{ proposalRequest ? event.numberOfParticipants : "-" | withComma }}
               </span>
             </li>
             <li>
               <img :src="`${landingIconsUrl}Path 1942.svg`" />
               <span>
                 <strong>Type:</strong>
-                {{ proposalRequest ? proposalRequest.eventData.occasion : "-" }}
+                {{ proposalRequest ? event.occasion : "-" }}
               </span>
             </li>
             <li>
               <img :src="`${landingIconsUrl}Path 1383.svg`" />
               <span>
                 <strong>Invited:</strong>
-                {{
-                  proposalRequest
-                    ? proposalRequest.eventData.participantsType
-                    : "-"
-                }}
+                {{ proposalRequest ? event.participantsType : "-" }}
               </span>
             </li>
           </ul>
@@ -191,28 +148,16 @@
         </div>
       </template>
     </modal>
-    <modal
-      v-if="savedItModal"
-      class="saved-it-modal"
-      container-class="modal-container sl"
-    >
+    <modal v-if="savedItModal" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="saved-it-modal__header">
-          <h3 v-if="isTimeUp">
-            <img :src="`${proposalIconsUrl}Asset 587.svg`" /> Time Is Up!
-          </h3>
-          <h3 v-else>
-            <img :src="`${proposalIconsUrl}Asset 588.svg`" />Saved It!
-          </h3>
+          <h3 v-if="isTimeUp"><img :src="`${proposalIconsUrl}Asset 587.svg`" /> Time Is Up!</h3>
+          <h3 v-else><img :src="`${proposalIconsUrl}Asset 588.svg`" />Saved It!</h3>
           <div v-if="isTimeUp" class="header-description">
-            The deadline for submitting this prposal has passed. But no worries!
-            We weill be with you soon with the next one.
+            The deadline for submitting this prposal has passed. But no worries! We weill be with you soon with the next
+            one.
           </div>
-          <div
-            v-else
-            class="header-description"
-            :class="[{ 'text-center': !isTimeUp }]"
-          >
+          <div v-else class="header-description" :class="[{ 'text-center': !isTimeUp }]">
             You can return to it till the deadline!
           </div>
         </div>
@@ -223,28 +168,16 @@
       <template slot="body">
         <div class="saved-it-modal__body">
           <div v-if="isTimeUp" class="time-cont">
-            <vendor-bid-time-counter
-              :days="0"
-              :hours="0"
-              :minutes="0"
-              :seconds="0"
-            />
+            <vendor-bid-time-counter :days="0" :hours="0" :minutes="0" :seconds="0" />
           </div>
           <div v-else class="time-cont">
-            <vendor-bid-time-counter
-              :days="4"
-              :hours="0"
-              :minutes="0"
-              :seconds="0"
-            />
+            <vendor-bid-time-counter :days="4" :hours="0" :minutes="0" :seconds="0" />
           </div>
         </div>
       </template>
       <template slot="footer">
         <div class="saved-it-modal__footer">
-          <button v-if="isTimeUp" class="cool" @click="hideModal()">
-            Ok, Thanks
-          </button>
+          <button v-if="isTimeUp" class="cool" @click="hideModal()">Ok, Thanks</button>
           <button v-else class="cool" @click="hideModal()">Cool, Thanks</button>
         </div>
       </template>
@@ -282,10 +215,8 @@ export default {
   data() {
     return {
       fullDetailsModal: false,
-      proposalIconsUrl:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
-      landingIconsUrl:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
+      proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
+      landingIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
       dateTooltip: false,
       selectedServices: [],
       step: 0,
@@ -378,13 +309,19 @@ export default {
     scrollToTop() {
       window.scrollTo(0, 0);
     },
+    getEvent() {
+      this.$store.dispatch("event/getEventById", this.$route.params.eventId);
+    },
   },
   created() {
     this.$root.$on("send-event-data", (evtData) => {
       this.evtData = evtData;
     });
-  },
-  mounted() {
+
+    if (this.$route.params.eventId) {
+      this.getEvent();
+    }
+
     this.fullDetailsModal = false;
     this.savedItModal = false;
     this.isTimeUp = false;
@@ -398,35 +335,29 @@ export default {
     },
   },
   computed: {
+    event() {
+      return this.$store.state.event.eventData;
+    },
     eventDate() {
-      if (!this.proposalRequest) return "-";
+      if (!this.event) return "-";
 
-      let startDate = new Date(this.proposalRequest.eventData.eventStartMillis);
-      let endDate = new Date(this.proposalRequest.eventData.eventEndMillis);
-      return `${moment(startDate).format("MMM D, YYYY")} - ${moment(
-        endDate,
-      ).format("MMM D, YYYY")}`;
+      let startDate = new Date(this.event.eventStartMillis);
+      let endDate = new Date(this.event.eventEndMillis);
+      return `${moment(startDate).format("MMM D, YYYY")} - ${moment(endDate).format("MMM D, YYYY")}`;
     },
     eventTime() {
-      if (!this.proposalRequest) return "-";
+      if (!this.event) return "-";
 
-      let startDate = new Date(this.proposalRequest.eventData.eventStartMillis);
-      let endDate = new Date(this.proposalRequest.eventData.eventEndMillis);
-      return `${moment(startDate).format("hh:mmA")} - ${moment(endDate).format(
-        "hh:mmA",
-      )}`;
+      let startDate = new Date(this.event.eventStartMillis);
+      let endDate = new Date(this.event.eventEndMillis);
+      return `${moment(startDate).format("hh:mmA")} - ${moment(endDate).format("hh:mmA")}`;
     },
     getEventDuration() {
-      return moment
-        .duration(
-          this.proposalRequest.eventData.eventEndMillis -
-            this.proposalRequest.eventData.eventStartMillis,
-        )
-        .humanize();
+      return moment.duration(this.event.eventEndMillis - this.event.eventStartMillis).humanize();
     },
     getLocation() {
       if (this.proposalRequest) {
-        return this.proposalRequest.eventData.location || "-";
+        return this.event.location || "-";
       } else {
         return "-";
       }
