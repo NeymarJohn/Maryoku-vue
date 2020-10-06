@@ -7,10 +7,17 @@
       </div>
       <div class="event-info-item-title font-size-22 font-bold-extra">WHEN?</div>
       <div class="event-info-item-content font-size-20">
-        {{$dateUtil.formatScheduleDay(event.eventStartMillis, "MMM Do YYYY")}}
+        {{ $dateUtil.formatScheduleDay(event.eventStartMillis, "MMM Do YYYY") }}
         <span
-          style="line-height:2em;border-left:solid 1px #B7B7B7; padding-left:10px; margin-left:10px;display: inline-block;"
-        >{{$dateUtil.formatScheduleTime(event.eventStartMillis)}}</span>
+          style="
+            line-height: 2em;
+            border-left: solid 1px #b7b7b7;
+            padding-left: 10px;
+            margin-left: 10px;
+            display: inline-block;
+          "
+          >{{ $dateUtil.formatScheduleTime(event.eventStartMillis) }}</span
+        >
       </div>
     </div>
     <div class="event-info-item">
@@ -19,7 +26,7 @@
         <img :src="`${$iconURL}Event%20Page/location-dark.svg`" />
       </div>
       <div class="event-info-item-title font-size-22 font-bold-extra">WHERE?</div>
-      <div class="event-info-item-content font-size-20">{{event.location}}</div>
+      <div class="event-info-item-content font-size-20">{{ event.location }}</div>
     </div>
     <div class="event-info-item">
       <div class="event-info-item-icon">
@@ -27,7 +34,7 @@
         <img :src="`${$iconURL}RSVP/Path+1383.svg`" />
       </div>
       <div class="event-info-item-title font-size-22 font-bold-extra">SOLO OR PLUS 1?</div>
-      <div class="event-info-item-content font-size-20">{{event.guestType}}</div>
+      <div class="event-info-item-content font-size-20">{{ event.guestType }}</div>
     </div>
     <div class="event-info-item">
       <div class="event-info-item-icon">
@@ -35,9 +42,13 @@
         <img :src="`${$iconURL}RSVP/Group+1279.svg`" />
       </div>
       <div class="event-info-item-title font-size-22 font-bold-extra">Arrival?</div>
-      <div
-        class="event-info-item-content font-size-20"
-      >{{event.timelines && event.timelines[0]?$dateUtil.formatScheduleDay(event.timelines[0].startTime,"MMMM dd, YYYY hh:mm A"):""}}</div>
+      <div class="event-info-item-content font-size-20">
+        {{
+          event.timelines && event.timelines[0]
+            ? $dateUtil.formatScheduleDay(event.timelines[0].startTime, "MMMM dd, YYYY hh:mm A")
+            : ""
+        }}
+      </div>
     </div>
   </div>
 </template>
@@ -54,7 +65,7 @@ export default {
       return this.event.concept ? this.event.concept : {};
     },
     backgroundColor() {
-      return this.event.concept ? this.event.concept.colors[0].color : "";
+      return this.event.concept ? this.event.concept.colors[0].color : "#d9fcf2";
     },
   },
 };
@@ -78,7 +89,7 @@ export default {
         position: absolute;
         left: 0px;
         top: 0px;
-        opacity: 0.32;
+        // opacity: 0.32;÷
       }
       img {
         width: 26px;
