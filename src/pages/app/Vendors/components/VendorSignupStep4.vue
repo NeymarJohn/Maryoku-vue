@@ -179,16 +179,10 @@
           <div class="pricing-policy-cont" id="Rules">
             <div class="title"><img :src="`${iconUrl}Asset 560.svg`" /> OUR PRICING POLICY</div>
             <div class="rules">
-              <div class="rule" v-for="(y, yIndex) in vendor.yesPolicies" :key="yIndex">
-                <div class="item">{{ y.name }}</div>
+              <div class="rule" v-for="(policy, yIndex) in vendor.pricingPolicies" :key="yIndex">
+                <div class="item">{{ policy.name }}</div>
                 <div class="item">
-                  <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="vendor.yesPolicies.includes(y)" />
-                </div>
-              </div>
-              <div class="rule" v-for="(n, nIndex) in vendor.noPolicies" :key="nIndex">
-                <div class="item">{{ n.name }}</div>
-                <div class="item">
-                  <img :src="`${iconUrl}Group 5489 (4).svg`" v-if="vendor.noPolicies.includes(n)" />
+                  {{ policy.value }}
                 </div>
               </div>
             </div>
