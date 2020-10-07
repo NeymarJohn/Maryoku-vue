@@ -491,7 +491,7 @@ let feedbackPages = {
     name: "FeedbackLayout",
     children: [
         {
-            path: "/feedback/event/:eventId",
+            path: "/feedback/event/:eventId/campaign/:campaignId",
             name: "Event Feedback",
             component: EventFeedback,
             meta: {

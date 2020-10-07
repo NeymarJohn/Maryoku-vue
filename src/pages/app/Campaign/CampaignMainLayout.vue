@@ -385,7 +385,7 @@ export default {
     callSaveCampaign(campaignType, campaignStatus) {
       const campaignData = this.$store.state.campaign[campaignType];
       let coverImage = campaignData.coverImage;
-      if (coverImage.indexOf("http") < 0) {
+      if (coverImage && coverImage.indexOf("http") < 0) {
         const fileObject = S3Service.dataURLtoFile(coverImage, `${this.event.id}-${campaignType}`);
         const extenstion = fileObject.type.split("/")[1];
         S3Service.fileUpload(
@@ -398,6 +398,9 @@ export default {
       let referenceUrl = "";
       if (campaignType === "RSVP") {
         referenceUrl = `${document.location.origin}/#/rsvp/${this.event.id}`;
+      }
+      if (campaignType === "FEEDBACK") {
+        referenceUrl = `${document.location.origin}/#/feedback/${this.event.id}`;
       }
 
       if (this.deliverySettings.email.selected) {
@@ -466,12 +469,11 @@ export default {
         });
     },
     sendToAddtionalGuests() {
-      this.$store.commit('campaign/setAttribute',{
+      this.$store.commit("campaign/setAttribute", {
         name: this.campaignTabs[this.selectedTab].name,
-        key: 'campaignStatus',
-        value: 'EDITING'
-      }
-      )
+        key: "campaignStatus",
+        value: "EDITING",
+      });
     },
   },
   computed: {
