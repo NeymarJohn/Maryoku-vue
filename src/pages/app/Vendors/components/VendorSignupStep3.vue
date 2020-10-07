@@ -177,8 +177,13 @@
                       <div class="suffix percentage" v-if="p.isPercentage">
                         <input type="number" class placeholder="00.00" />
                       </div>
-                      <div class="suffix" v-else>
+                      <div class="suffix d-flex" v-else>
                         <input type="number" class placeholder="00.00" />
+                        <div v-if="p.units">
+                          <select class="unit-select ml-10">
+                            <option v-for="(unit, index) in p.units" :key="index" :value="unit">{{ unit }}</option>
+                          </select>
+                        </div>
                       </div>
                     </template>
                   </div>
@@ -250,7 +255,7 @@
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
                     {{ n.name }}
                   </li>
-                  <li v-if="notAllowed.includes('Other')">
+                  <li v-if="vendor.notAllowed.filter((nt) => nt.value == 'Other').length > 0">
                     <input type="text" placeholder="Type vendor category..." />
                   </li>
                 </ul>
@@ -270,7 +275,7 @@
                 <h5>are there times when your don't work regularly?</h5>
               </div>
               <div class="bottom">
-                <p>This Way We Know Not To Send You Irrelevant Offers</p>
+                <p>This way we know not to send you irrelevant offers</p>
               </div>
             </div>
             <div class="checks-cont mt-2">
@@ -566,6 +571,10 @@ export default {
         {
           name: "Equipment Rental",
           value: "equipmentrentals",
+        },
+        {
+          name: "Other",
+          value: "Other",
         },
       ],
       policies: [
@@ -863,6 +872,7 @@ export default {
             {
               name: "Overtime Cost",
               type: Number,
+              units: ["Per hour", "All togeter"],
             },
             {
               name: "Cost Late Night Fares",
@@ -1973,6 +1983,13 @@ export default {
   }
   .no-margin {
     margin: 0 !important;
+  }
+  .unit-select {
+    border: 1px solid #dddddd;
+    padding: 15px;
+    font-size: 16px;
+    color: #050505;
+    box-shadow: 0 1px 3px 0 #e6ebf1;
   }
 }
 .vfc-week .vfc-day span.vfc-span-day.vfc-marked {

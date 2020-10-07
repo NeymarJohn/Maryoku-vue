@@ -8,8 +8,8 @@
           We are glad to have you onboard! Submitting quotes & proposals has never been easier. Let's begin with
           approving your basic info
         </p>
-        <h2>0/4</h2>
-        <h3>Only 4 simple steps & you're signed!</h3>
+        <h2>0/5</h2>
+        <h3>Only 5 simple steps & you're signed!</h3>
       </div>
       <div class="right-side">
         <h2>
@@ -59,7 +59,7 @@
           />
           <v-signup-editable-field
             :title="'Contact Person\'s Name'"
-            :img="`${iconUrl}Asset 547.svg`"
+            :img="`${$iconURL}Signup/user-gray.svg`"
             :field="'contactPerson'"
             :defaultVal="vendor.contactPerson"
             :borderBottom="false"

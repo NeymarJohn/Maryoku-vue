@@ -35,7 +35,7 @@
         <div class="md-layout-item md-size-10 md-small-size-10">
           <img :src="`${$iconURL}RSVP/Group+8056.svg`" style="margin-top: 40px" />
         </div>
-        <div class="md-layout-item md-size-45 md-small-size-45" v-if="campaign.visibleSettings.showWearingGuide">
+        <div class="md-layout-item md-size-45 md-small-size-45">
           <div class="font-size-30 font-bold-extra mb-30 d-flex">
             <img :src="`${$iconURL}RSVP/Path 3728.svg`" />
             <span style="padding-top: 10px; margin-left: 20px">WHAT SHOULD I WEAR?</span>
@@ -44,17 +44,18 @@
             Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
           </div>
         </div>
-        <div class="md-layout-item md-size-45 md-small-size-45" v-if="campaign.visibleSettings.showKnowledge">
+        <div class="md-layout-item md-size-45 md-small-size-45">
           <div class="font-size-30 font-bold-extra mb-30 d-flex">
             <img :src="`${$iconURL}RSVP/Path 2369.svg`" />
             <span style="padding-top: 10px; margin-left: 20px">What should I Know?</span>
           </div>
           <div>
-            {{ campaign.additionalData.knowledge }}
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+            dolore magna aliquyam erat, sed diam voluptua. At vero
           </div>
         </div>
       </div>
-      <div class="rsvp-event-timeline md-layout" v-if="campaign.visibleSettings.showTimeline">
+      <div class="rsvp-event-timeline md-layout">
         <div
           class="md-layout-item md-size-100 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra mb-50"
         >

@@ -88,6 +88,7 @@
                 >
                   <a v-if="vendor.social[s.name]" :href="vendor.social[s.name]" target="_blank">
                     <img :src="`${iconUrl}${s.icon}`" />
+                    {{ vendor.social[s.name] }}
                   </a>
                 </div>
               </div>
@@ -701,10 +702,14 @@ export default {
 
               .item {
                 font: bold 16px Manrope-Regular, sans-serif;
+                a {
+                  color: #050505;
+                  text-decoration: underline;
+                }
                 img {
                   width: 24px;
                   height: 24px;
-                  margin-right: 1rem;
+                  // margin-right: 1rem;
                 }
               }
             }

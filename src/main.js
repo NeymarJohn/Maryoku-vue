@@ -112,7 +112,6 @@ router.beforeEach((to, from, next) => {
         "/event-wizard-celebrating",
         "/event-wizard-religion",
         "/event-wizard-vibes",
-        "/rsvp",
     ];
 
     const authenticatedLinks = ["/events", "/choose-workspace"];
@@ -222,13 +221,13 @@ if (process.env.NODE_ENV === "production") {
 Vue.use(VueCookies);
 
 Vue.directive("focus", {
-    inserted: function(el) {
+    inserted: function (el) {
         el.focus();
     },
 });
 
 Vue.directive("select-all", {
-    inserted: function(el) {
+    inserted: function (el) {
         el.setSelectionRange(el.value.length, el.value.length);
     },
 });
@@ -247,7 +246,7 @@ Vue.directive("select-all", {
 //   stopProp(event) { event.stopPropagation() }
 // })
 
-Vue.filter("withComma", function(value) {
+Vue.filter("withComma", function (value) {
     return value ? value.toLocaleString() : 0;
 });
 
@@ -261,7 +260,7 @@ axios.defaults.headers.common["gorm-tenantid"] = authService.resolveTenantId();
 axios.defaults.headers.common.gorm_tenantid = authService.resolveTenantId();
 Model.$http = axios;
 
-Number.prototype.padStart = function(size, theChar) {
+Number.prototype.padStart = function (size, theChar) {
     var s = String(this);
     while (s.length < (size || 2)) {
         s = "0" + s;
@@ -269,7 +268,7 @@ Number.prototype.padStart = function(size, theChar) {
     return s;
 };
 
-String.prototype.padStart = function(size, theChar) {
+String.prototype.padStart = function (size, theChar) {
     var s = String(this);
     while (s.length < (size || 2)) {
         s = theChar + s;
