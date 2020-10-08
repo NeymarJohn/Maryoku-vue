@@ -139,7 +139,7 @@ let authPages = {
       gtm: 'Invited'
     }
   },
-  
+
   ]
 }
 
@@ -148,24 +148,24 @@ let workspacePages = {
   component: WorkspaceLayout,
   name: 'Authentication',
   children: [{
-      path: '/create-workspace',
-      name: 'CreateWorkspace',
-      component: CreateWorkspace,
-      meta: {
-        auth: false,
-        title: 'Create Workspace',
-        gtm: 'CreateWorkspace'
-      }
-    },{
-      path: '/choose-workspace',
-      name: 'ChooseWorkspace',
-      component: ChooseWorkspace,
-      meta: {
-        auth: false,
-        title: 'Choose Workspace',
-        gtm: 'ChooseWorkspace'
-      }
+    path: '/create-workspace',
+    name: 'CreateWorkspace',
+    component: CreateWorkspace,
+    meta: {
+      auth: false,
+      title: 'Create Workspace',
+      gtm: 'CreateWorkspace'
     }
+  }, {
+    path: '/choose-workspace',
+    name: 'ChooseWorkspace',
+    component: ChooseWorkspace,
+    meta: {
+      auth: false,
+      title: 'Choose Workspace',
+      gtm: 'ChooseWorkspace'
+    }
+  }
   ]
 }
 let publicPages = {
@@ -175,6 +175,16 @@ let publicPages = {
   children: [
     {
       path: '/vendors/:vendorId/proposal-request/:id',
+      name: 'VendorProposal',
+      component: ForVendors,
+      meta: {
+        auth: false,
+        title: 'For Vendors',
+        gtm: 'ForVendors'
+      },
+    },
+    {
+      path: '/proposal-request/:id',
       name: 'VendorProposal',
       component: ForVendors,
       meta: {
@@ -193,6 +203,26 @@ let forProposals = {
   children: [
     {
       path: '/vendors/:vendorId/proposal-request/:id/form',
+      name: "ForProposals",
+      component: ForProposals,
+      meta: {
+        auth: false,
+        title: 'For Proposals',
+        gtm: 'ForProposals'
+      },
+    },
+    {
+      path: '/proposal-request/:id/form',
+      name: "ForProposals",
+      component: ForProposals,
+      meta: {
+        auth: false,
+        title: 'For Proposals',
+        gtm: 'ForProposals'
+      },
+    },
+    {
+      path: '/vendors/:vendorId/events/:eventId/proposal-request/:id/form',
       name: "ForProposals",
       component: ForProposals,
       meta: {
@@ -485,7 +515,7 @@ let RSVPPages = {
 }
 
 const rememberMe = authService.getCookie("rememberMe")
-const homeLink = rememberMe==="true"?"/events":"/signin"
+const homeLink = rememberMe === "true" ? "/events" : "/signin"
 const routes = [
   {
     path: '/',

@@ -252,27 +252,27 @@
         <h5>And add additional if you want</h5>
       </div>
       <div class="files-cont">
-        <div class="item">
+        <div class="item" v-for="legalDoc in vendor.eventCategory.legalDocuments" :key="legalDoc">
           <div class="left">
-            <span class="filename">Legal Requirements</span>
+            <span class="filename">{{ legalDoc }}</span>
             <span class="req">Required</span>
           </div>
-          <div class="right" @click="uploadDocument('legal')" v-if="getFileByTag('legal') == null">
+          <div class="right" @click="uploadDocument(legalDoc)" v-if="getFileByTag(legalDoc) == null">
             <img :src="`${iconUrl}Asset 609.svg`" />Upload
-            <input
-              type="file"
-              class="hide"
-              ref="legalDocument"
-              accept="application/text, application/pdf"
-              @change="onFilePicked"
-            />
           </div>
           <div class="right" v-else>
-            <span class="filename">{{ getFileByTag("legal") }}</span>
+            <span class="filename">{{ getFileByTag(legalDoc) }}</span>
             <img class="check" :src="`${iconUrl}Group 3599 (2).svg`" />
-            <img class="remove" :src="`${iconUrl}Group 3671 (2).svg`" @click="removeFileByTag('legal')" />
+            <img class="remove" :src="`${iconUrl}Group 3671 (2).svg`" @click="removeFileByTag(legalDoc)" />
           </div>
         </div>
+        <input
+          type="file"
+          class="hide"
+          ref="legalDocument"
+          accept="application/text, application/pdf"
+          @change="onFilePicked"
+        />
         <!-- <div class="item">
           <div class="left">
             <span class="filename">Legal Requirements</span>
@@ -359,6 +359,7 @@ export default {
     step: Number,
     services: Array,
     proposalRequest: Object,
+    vendor: Object,
   },
   data() {
     return {
@@ -486,15 +487,15 @@ export default {
     uploadDocument(fileId = null) {
       this.docTag = fileId;
       this.selectedImage = typeof fileId !== "object" ? fileId : null;
-      if (this.docTag == "legal") {
-        this.$refs.legalDocument.click();
+      if (this.docTag == "option") {
+        this.$refs.optionDocument.click();
       } else if (this.docTag == "image") {
         this.$refs.imageFile.click();
       } else {
-        this.$refs.optionDocument.click();
+        this.$refs.legalDocument.click();
       }
     },
-    onFilePicked(event, tag) {
+    onFilePicked(event) {
       let file = event.target.files || event.dataTransfer.files;
 
       if (!file.length) {
@@ -502,7 +503,7 @@ export default {
       }
       if (file[0].size <= 5000000) {
         // 5mb
-        this.createProposalFile(file[0], tag);
+        this.createProposalFile(file[0]);
       } else {
         this.alretExceedPictureSize = true;
         this.$notify({
@@ -513,7 +514,7 @@ export default {
         });
       }
     },
-    createProposalFile(file, tag) {
+    createProposalFile(file) {
       let reader = new FileReader();
       let vm = this;
 

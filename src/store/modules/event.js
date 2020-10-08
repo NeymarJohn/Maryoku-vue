@@ -100,6 +100,14 @@ const actions = {
     })
 
   },
+  getEventById({ commit, state }, eventId) {
+    return new Promise((resolve, reject) => {
+      CalendarEvent.find(eventId).then(event => {
+        commit("setEventData", event)
+        resolve(event)
+      })
+    })
+  },
   getEventThemes({ commit, state }, ctx) {
     new EventTheme()
       .fetch(ctx, false)
