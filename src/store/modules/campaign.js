@@ -32,7 +32,9 @@ const defaultCampaignData = {
     COMING_SOON: {
         title: "Event Name",
         description: "",
-        coverImage: "",
+        coverImage: `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Images/ComingSoon${(new Date().getDate() %
+            10) +
+            1}.png`,
         campaignStatus: "EDITING",
         visibleSettings: {
             showLogo: true,

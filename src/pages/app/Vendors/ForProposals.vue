@@ -6,7 +6,7 @@
         <proposal-steps
           :categoryTitle="vendor.eventCategory.fullTitle"
           :step="step"
-          :hasVisionStep="!!this.event && !!this.event.concept"
+          :hasVisionStep="this.event && this.event.concept"
         />
         <div class="step-wrapper" v-if="step == -1">
           <div class="proposal-add-personal-message-wrapper">
@@ -22,7 +22,6 @@
             <span>Sincerely,</span>
             <p>Relish caterers & venues</p>
           </div>
-          <proposal-event-vision ></proposal-event-vision>
         </div>
         <div class="step-wrapper" v-if="(step < 2) & (step > -1)">
           <div class="proposal-add-personal-message-wrapper">
@@ -124,7 +123,6 @@ import Icon from "@/components/Icon/Icon.vue";
 import ProposalBudgetSummary from "./components/ProposalBudgetSummary.vue";
 import ProposalSteps from "./components/ProposalSteps.vue";
 import ProposalItem from "./components/ProposalItem.vue";
-import ProposalEventVision from "./components/ProposalEventVision.vue";
 import ProposalAddFiles from "./components/ProposalAddFiles.vue";
 import ProposalTitleWithIcon from "./components/ProposalTitleWithIcon.vue";
 import ReferNewVendor from "./components/ReferNewVendor.vue";
@@ -141,7 +139,6 @@ export default {
     ProposalTitleWithIcon,
     ProposalEventSummary,
     ReferNewVendor,
-    ProposalEventVision
   },
   data() {
     return {

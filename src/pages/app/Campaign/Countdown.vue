@@ -3,7 +3,7 @@
     <div class="p-50">
       <div class="font-size-30 font-bold-extra text-transform-capitalize">send your guests a fun countdown</div>
       <div class="countdown-cover-image mt-50">
-        <img :src="campaignData.coverImage" />
+        <img :src="coverImage" />
         <div class="countdown-guests d-flex align-center p-20">
           <span class="font-size-30 font-bold-extra mr-10">{{ event.numberOfParticipants | withComma }}</span>
           <span class="font-size-22 font-bold color-dark-gray" v-if="isLaunched">Guests are Attending</span>
@@ -80,7 +80,6 @@ export default {
   },
   data() {
     return {
-      coverImage: "",
       isLaunched: false,
       placeholder: `It's now time to get super exited! The event of the year is almost here( and it even rhymes). What to expect?
         out of this world live shows
@@ -96,10 +95,13 @@ export default {
       return this.$store.state.event.eventData;
     },
     campaignData() {
-      return this.$store.state.campaign.RSVP;
+      return this.$store.state.campaign.COMING_SOON;
     },
     campaignTitle() {
-      return this.$store.state.campaign.RSVP ? this.$store.state.campaign.RSVP.title : "Event Name";
+      return this.$store.state.campaign.COMING_SOON ? this.$store.state.campaign.COMING_SOON.title : "Event Name";
+    },
+    coverImage() {
+      return this.$store.state.campaign.COMING_SOON.coverImage;
     },
   },
   methods: {
@@ -139,7 +141,8 @@ export default {
       document.getElementById("countdown-coverImage").click();
     },
     async onFileChange(event) {
-      this.editingContent.coverImage = await getBase64(event.target.files[0]);
+      const imageData = await getBase64(event.target.files[0]);
+      this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "coverImage", value: imageData });
     },
   },
 };

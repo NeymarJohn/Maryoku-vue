@@ -121,7 +121,7 @@
               <h5><img :src="`${iconUrl}art (2).svg`" /> Upload your best images</h5>
             </div>
             <div class="right">
-              <p>(15 photos top, under 20KB)</p>
+              <p>(15 photos top, under 5MB)</p>
             </div>
           </div>
           <template v-if="vendor.images.length == 0">
@@ -346,6 +346,8 @@ import Icon from "@/components/Icon/Icon.vue";
 import VendorServiceItem from "./VendorServiceItem.vue";
 import VendorCheckbox from "./VendorCheckbox.vue";
 import vueSignature from "vue-signature";
+import S3Service from "@/services/s3.service";
+import { makeid } from "@/utils/helperFunction";
 
 export default {
   name: "vendor-signup-step1",
@@ -463,8 +465,7 @@ export default {
       if (!file.length) {
         return;
       }
-
-      if (file[0].size <= 5000000) {
+      if (file[0].size <= 5 * 1024 * 1024) {
         // 5mb
         if (event.target.name == "vendorSignature") {
           this.createImage(file[0], "vendorSignature");
@@ -488,9 +489,28 @@ export default {
 
       reader.onload = (e) => {
         if (type == "vendorSignature") {
+          const fileId = `${new Date().getTime()}_${makeid()}`;
+          S3Service.fileUpload(file, fileId, "vendor/signatures").then((uploadedName) => {
+            this.$root.$emit(
+              "update-vendor-value",
+              "signature",
+              `https://maryoku.s3.amazonaws.com/vendor/signatures/${uploadedName}`,
+            );
+          });
           this.$root.$emit("update-vendor-value", "signature", e.target.result);
         } else {
-          this.$root.$emit("update-vendor-value", "images", e.target.result);
+          const fileId = `${new Date().getTime()}_${makeid()}`;
+          const currentIndex = this.vendor.images.length;
+          S3Service.fileUpload(file, fileId, "vendor/cover-images").then((uploadedName) => {
+            this.$root.$emit("update-vendor-value", "vendorImages", {
+              index: currentIndex,
+              data: `https://maryoku.s3.amazonaws.com/vendor/cover-images/${uploadedName}`,
+            });
+          });
+          this.$root.$emit("update-vendor-value", "images", {
+            index: currentIndex,
+            data: e.target.result,
+          });
         }
       };
       reader.readAsDataURL(file);
