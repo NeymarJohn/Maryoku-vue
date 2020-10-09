@@ -14,7 +14,7 @@
             <div class="md-layout-item md-size-50 md-small-size-50">
               <div class="mb-20">You Are Invited To A</div>
               <div class="font-size-60 font-bold-extra mb-30">{{ campaign.title }}</div>
-              <div>
+              <div class="word-break">
                 {{ campaign.description }}
               </div>
             </div>
@@ -41,7 +41,7 @@
             <span style="padding-top: 10px; margin-left: 20px">WHAT SHOULD I WEAR?</span>
           </div>
           <div>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+            {{ campaign.additionalData.wearingGuide }}
           </div>
         </div>
         <div class="md-layout-item md-size-45 md-small-size-45" v-if="campaign.visibleSettings.showKnowledge">
@@ -101,7 +101,11 @@
           <md-button class="md-simple md-button md-black maryoku-btn">
             <span class="font-size-20">I Need To Think About It</span>
           </md-button>
-          <md-button @click="showZoomModal = true" class="md-simple md-button md-black maryoku-btn virtual-btn">
+          <md-button
+            v-if="campaign.additionalData.zoomlink"
+            @click="showZoomModal = true"
+            class="md-simple md-button md-black maryoku-btn virtual-btn"
+          >
             <span class="font-size-20">Virtual Participation</span>
           </md-button>
           <md-button @click="showRsvpModal = true" class="md-button md-red maryoku-btn rsvp-btn">
@@ -115,9 +119,22 @@
       @close="showRsvpModal = false"
       @setRsvp="setRsvp"
     ></rsvp-information-modal>
-    <setting-reminder-modal v-if="showReminderModal" @close="showReminderModal = false"></setting-reminder-modal>
-    <join-zoom-modal v-if="showZoomModal" @close="showZoomModal = false" @setRsvp="setZoomRsvp"></join-zoom-modal>
-    <sync-calendar-modal v-if="showSyncCalendarForZoom" @close="showSyncCalendarForZoom = false"></sync-calendar-modal>
+    <setting-reminder-modal
+      v-if="showReminderModal"
+      @close="showReminderModal = false"
+      :campaign="campaign"
+    ></setting-reminder-modal>
+    <join-zoom-modal
+      v-if="showZoomModal"
+      @close="showZoomModal = false"
+      @setRsvp="setZoomRsvp"
+      :campaign="campaign"
+    ></join-zoom-modal>
+    <sync-calendar-modal
+      v-if="showSyncCalendarForZoom"
+      @close="showSyncCalendarForZoom = false"
+      :campaign="campaign"
+    ></sync-calendar-modal>
   </div>
 </template>
 <script>
@@ -179,6 +196,9 @@ export default {
     this.getCampaigns({ event: calendarEvent }).then((campaigns) => {
       this.isLoading = false;
       this.campaign = campaigns["RSVP"];
+    });
+    CalendarEvent.find(eventId).then((event) => {
+      this.event = event;
     });
   },
   computed: {

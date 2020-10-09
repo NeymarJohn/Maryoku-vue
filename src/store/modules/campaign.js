@@ -159,7 +159,7 @@ const actions = {
                     const eventName = event.concept ? event.concept.name : "Event Name";
                     const defaultData = {
                         title: eventName,
-                        descriptoin: "",
+                        description: "",
                         logoUrl,
                     };
                     if (!campaigns["SAVING_DATE"]) {
