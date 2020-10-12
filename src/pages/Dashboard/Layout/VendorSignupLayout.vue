@@ -172,6 +172,8 @@ export default {
         return "Sign Up";
       } else if (this.step == 5) {
         return "Finish";
+      } else if (this.step == 3) {
+        return " Check out your new profile!";
       } else {
         return "Next";
       }

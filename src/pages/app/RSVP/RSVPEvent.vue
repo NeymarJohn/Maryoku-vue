@@ -8,9 +8,7 @@
           <div class="md-layout">
             <div class="rsvp-event-overview-content-customer md-layout-item md-size-100">
               <img v-if="campaign.logoUrl" :src="`${campaign.logoUrl}`" class="mb-40" />
-              <div class="font-size-40" style="margin-bottom: 100px">
-                Hello {{ campaign.companyName }} {{ event.guestType || "Employee" }}!
-              </div>
+              <div class="font-size-40" style="margin-bottom: 100px">Hello Microsoft special employee!</div>
             </div>
 
             <div class="md-layout-item md-size-50 md-small-size-50">
@@ -29,11 +27,7 @@
           </div>
           <div>
             <div class="font-size-22 font-bold mb-10">Check out the venue</div>
-            <rsvp-venue-carousel
-              :editable="false"
-              :event="event"
-              :defaultImages="campaign.images"
-            ></rsvp-venue-carousel>
+            <rsvp-venue-carousel></rsvp-venue-carousel>
           </div>
         </div>
       </div>

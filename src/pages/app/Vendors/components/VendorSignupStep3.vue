@@ -130,24 +130,30 @@
               >
                 <div class="left">
                   {{ p.name }}
-                  <textarea
-                    v-if="p.hasComment && yesRules.includes(p)"
-                    class="desc"
-                    rows="3"
-                    v-model="p.desc"
-                    :placeholder="`Add additional information`"
-                  />
+                  <div v-if="p.yesOption && p.value" class="mt-10 ml-10">
+                    <label>How many hours are included?</label><br />
+                    <input type="number" class="text-center number-field" placeholder="" v-model="p.yesOption.value" />
+                  </div>
+                  <div v-if="p.noOption && !p.value" class="mt-10 ml-10">
+                    <label>How much is hourly rate?</label><br />
+                    <input
+                      type="number"
+                      class="text-center number-field"
+                      placeholder="00.00"
+                      v-model="p.noOption.value"
+                    />
+                  </div>
                 </div>
                 <div class="right">
                   <div class="top">
                     <template v-if="p.type == Boolean">
-                      <div class="item" @click="yesPolicy(p)">
-                        <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="yesPolicies.includes(p)" />
+                      <div class="item" @click="p.value = true">
+                        <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="p.value" />
                         <span class="unchecked" v-else></span>
                         Yes
                       </div>
-                      <div class="item" @click="noPolicy(p)">
-                        <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="noPolicies.includes(p)" />
+                      <div class="item" @click="p.value = false">
+                        <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!p.value" />
                         <span class="unchecked" v-else></span>
                         No
                       </div>
@@ -167,7 +173,13 @@
                   <div class="bottom no-margin" v-if="p.type == Number">
                     <template v-if="p.noSuffix">
                       <div>
-                        <input type="number" class="text-center number-field" placeholder="00.00" />
+                        <input
+                          type="number"
+                          class="text-center number-field"
+                          placeholder="00.00"
+                          v-model="p.value"
+                          @change="setPricePolicy($event, p)"
+                        />
                       </div>
                     </template>
                     <template v-else>
@@ -175,10 +187,27 @@
                       <span v-else>Extra Payment</span>
                       <br />
                       <div class="suffix percentage" v-if="p.isPercentage">
-                        <input type="number" class placeholder="00.00" />
+                        <input
+                          type="number"
+                          class
+                          placeholder="00.00"
+                          v-model="p.value"
+                          @change="setPricePolicy($event, p)"
+                        />
                       </div>
-                      <div class="suffix" v-else>
-                        <input type="number" class placeholder="00.00" />
+                      <div class="suffix d-flex" v-else>
+                        <input
+                          type="number"
+                          class
+                          placeholder="00.00"
+                          v-model="p.value"
+                          @change="setPricePolicy($event, p)"
+                        />
+                        <div v-if="p.units">
+                          <select class="unit-select ml-10" v-model="p.unit">
+                            <option v-for="(unit, index) in p.units" :key="index" :value="unit">{{ unit }}</option>
+                          </select>
+                        </div>
                       </div>
                     </template>
                   </div>
@@ -250,7 +279,7 @@
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
                     {{ n.name }}
                   </li>
-                  <li v-if="notAllowed.includes('Other')">
+                  <li v-if="vendor.notAllowed.filter((nt) => nt.value == 'Other').length > 0">
                     <input type="text" placeholder="Type vendor category..." />
                   </li>
                 </ul>
@@ -270,7 +299,7 @@
                 <h5>are there times when your don't work regularly?</h5>
               </div>
               <div class="bottom">
-                <p>This Way We Know Not To Send You Irrelevant Offers</p>
+                <p>This way we know not to send you irrelevant offers</p>
               </div>
             </div>
             <div class="checks-cont mt-2">
@@ -567,6 +596,10 @@ export default {
           name: "Equipment Rental",
           value: "equipmentrentals",
         },
+        {
+          name: "Other",
+          value: "Other",
+        },
       ],
       policies: [
         {
@@ -843,17 +876,17 @@ export default {
             {
               name: "Setup hours included in rental",
               type: Boolean,
-              options: {
-                yes: {
-                  name: "How many hours",
-                  type: Number,
-                  noSuffix: true,
-                },
-                no: {
-                  name: "Cost of set up hours",
-                  type: Number,
-                  noSuffix: true,
-                },
+              hasComment: false,
+              value: true,
+              yesOption: {
+                name: "How many hours",
+                type: Number,
+                noSuffix: true,
+              },
+              noOption: {
+                name: "Cost of set up hours",
+                type: Number,
+                noSuffix: true,
               },
             },
             {
@@ -863,6 +896,7 @@ export default {
             {
               name: "Overtime Cost",
               type: Number,
+              units: ["Per hour", "All togeter"],
             },
             {
               name: "Cost Late Night Fares",
@@ -1354,6 +1388,11 @@ export default {
       value = value.toString();
       return value.charAt(0).toUpperCase() + value.slice(1);
     },
+    setPricePolicy(event, pricePolicyItem) {
+      console.log(pricePolicyItem);
+      const pricingPolicies = this.pricingPolicies.find((it) => it.category === this.vendor.vendorCategory);
+      this.$root.$emit("update-vendor-value", "pricingPolicies", pricingPolicies.items);
+    },
   },
   computed: {},
   filters: {},
@@ -1559,6 +1598,7 @@ export default {
     .calendar {
       flex: 1;
       border: solid 1px #a0a0a0;
+      height: max-content;
       .calendar-title {
         position: absolute;
         z-index: 999;
@@ -1653,7 +1693,8 @@ export default {
       }
       /deep/ span.vfc-cursor-not-allowed {
         // background-color: #f51355;
-        color: #aaa !important;
+        color: #fff !important;
+        background-color: #f51355;
         // height: 30px;
       }
     }
@@ -1973,6 +2014,13 @@ export default {
   }
   .no-margin {
     margin: 0 !important;
+  }
+  .unit-select {
+    border: 1px solid #dddddd;
+    padding: 15px;
+    font-size: 16px;
+    color: #050505;
+    box-shadow: 0 1px 3px 0 #e6ebf1;
   }
 }
 .vfc-week .vfc-day span.vfc-span-day.vfc-marked {

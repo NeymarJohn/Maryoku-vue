@@ -17,7 +17,7 @@
         </div>
         <div class="text-left flex-1 input-wrapper">
           <label class="font-bold">Email</label>
-          <maryoku-input v-model="email" inputStyle="email" placeholder="Type email address here..."></maryoku-input>
+          <maryoku-input v-model="name" inputStyle="email" placeholder="Type email address here..."></maryoku-input>
         </div>
       </div>
       <div class="information-section">
@@ -25,14 +25,14 @@
       </div>
       <div class="information-section">
         <div class="mb-20">
-          <img :src="`${$iconURL}RSVP/Path+1383.svg`" class="mr-10" />
+          <img :src="`${$iconURL}RSVP/Path+1383.svg`" class="mr-10"/>
           <span class="font-bold font-size-20">Will anyone join you for the event?</span>
         </div>
         <div class="guestNumber">
           <md-button class="md-icon-button md-simple" @click="decreaseGuest">
             <img :src="`${$iconURL}RSVP/Path+3734.svg`" />
           </md-button>
-          <input type="text" class="guestNumber-input" v-model="guestNumber" readonly />
+          <input type="text" class="guestNumber-input" v-model="guestNumber" readonly>
           <md-button class="md-icon-button md-simple" @click="increaseGeust">
             <img :src="`${$iconURL}RSVP/Group+7913.svg`" />
           </md-button>
@@ -40,18 +40,19 @@
       </div>
       <div class="information-section" v-for="(guest, index) in joinedGuests" :key="index">
         <div class="width-50">
-          <label class="font-bold mb-10" style="display: inline-block">Name of Guest 0{{ index + 1 }}</label>
+          <label class="font-bold mb-10" style="display:inline-block">Name of Guest 0{{index + 1}}</label>
           <maryoku-input v-model="guest.name" class="mb-20"></maryoku-input>
         </div>
         <food-limitation-set :type="2"></food-limitation-set>
       </div>
     </template>
-    <template slot="footer" v-if="step == 1">
+    <template slot="footer" v-if="step==1">
       <div class="text-center w-100">
         <md-button class="md-red md-bold" @click="setRsvp">RSVP Now</md-button>
       </div>
     </template>
   </modal>
+  
 </template>
 <script>
 import { Modal, MaryokuInput } from "@/components";
@@ -60,7 +61,7 @@ export default {
   components: {
     Modal,
     MaryokuInput,
-    FoodLimitationSet,
+    FoodLimitationSet
   },
   data() {
     return {
@@ -75,7 +76,7 @@ export default {
         },
       ],
       guestNumber: "Just Me",
-      joinedGuests: [],
+      joinedGuests:[]
     };
   },
   methods: {
@@ -86,23 +87,23 @@ export default {
       this.$emit("close");
     },
     increaseGeust() {
-      if (this.guestNumber === "Just Me") {
+      if (this.guestNumber === "Just Me")  {
         this.guestNumber = 0;
       }
       this.guestNumber = Number(this.guestNumber) + 1;
-      this.joinedGuests.push({});
+      this.joinedGuests.push({})
     },
     decreaseGuest() {
-      if (this.guestNumber === 1 || isNaN(this.guestNumber)) {
+      if (this.guestNumber === 1 || isNaN(this.guestNumber))  {
         this.guestNumber = "Just Me";
-      } else {
+      } else  {
         this.guestNumber = Number(this.guestNumber) - 1;
-        this.joinedGuests.pop();
+        this.joinedGuests.pop()
       }
     },
     setRsvp() {
-      this.$emit("setRsvp");
-    },
+      this.$emit("setRsvp")
+    }
   },
 };
 </script>
