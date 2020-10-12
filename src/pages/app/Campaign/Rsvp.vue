@@ -52,7 +52,7 @@
         <rsvp-event-info-panel class="mt-60" :event="event"></rsvp-event-info-panel>
         <div>
           <div>
-            <rsvp-venue-carousel></rsvp-venue-carousel>
+            <rsvp-venue-carousel :defaultImages="images" :event="event" @change="changeImage"></rsvp-venue-carousel>
           </div>
         </div>
       </div>
@@ -195,20 +195,6 @@ export default {
       logoImage: "https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/ms-icon.png",
       showLogo: true,
       content: "",
-      images: [
-        {
-          src: `${this.$iconURL}RSVP/Image+81.jpg`,
-        },
-        {
-          src: `${this.$iconURL}RSVP/Image+82.jpg`,
-        },
-        {
-          src: `${this.$iconURL}RSVP/Image+83.jpg`,
-        },
-        {
-          src: `${this.$iconURL}RSVP/Image+84.jpg`,
-        },
-      ],
       originContent: {},
       editingContent: {
         title: "",
@@ -242,6 +228,11 @@ export default {
         data: this.editingContent,
       });
     }
+    this.$store.commit("campaign/setAttribute", {
+      name: "RSVP",
+      key: "companyName",
+      value: this.user.companyName ? this.user.companyName : this.user.currentTenant,
+    });
     this.originContent = Object.assign({}, this.editingContent);
   },
   computed: {
@@ -264,6 +255,11 @@ export default {
       },
       set(newValue) {
         this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "description", value: newValue });
+      },
+    },
+    images: {
+      get() {
+        return this.$store.state.campaign.RSVP.images;
       },
     },
   },
@@ -298,6 +294,9 @@ export default {
     },
     setVisibleTimeline(visibility) {
       this.editingContent.visibleSettings.showTimeline = visibility;
+    },
+    changeImage(images) {
+      this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
     },
   },
 };

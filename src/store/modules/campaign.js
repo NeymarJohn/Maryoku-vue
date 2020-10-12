@@ -28,6 +28,24 @@ const defaultCampaignData = {
             knowledge: "",
             zoomlink: "",
         },
+        images: [
+            {
+                src: `https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+81.jpg`,
+                default: true,
+            },
+            {
+                src: `https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/shutterstock_444402799_thumb.jpg`,
+                default: true,
+            },
+            {
+                src: `https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+83.jpg`,
+                default: true,
+            },
+            {
+                src: `https://static-maryoku.s3.amazonaws.com/storage/icons/RSVP/Image+84.jpg`,
+                default: true,
+            },
+        ],
     },
     COMING_SOON: {
         title: "Event Name",
