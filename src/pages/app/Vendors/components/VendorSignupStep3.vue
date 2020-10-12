@@ -271,16 +271,20 @@
               <h4>Which of the vendors do you not allow to work in your venue?</h4>
               <div class="na-check-list">
                 <ul>
-                  <li v-for="(n, nIndex) in defNa" :key="nIndex" @click="updateNa(n)">
+                  <li v-for="(n, nIndex) in defNa" :key="nIndex">
                     <img
                       :src="`${iconUrl}Group 5489 (4).svg`"
+                      @click="updateNa(n)"
                       v-if="vendor.notAllowed.filter((nt) => nt.value == n.value).length > 0"
                     />
-                    <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
-                    {{ n.name }}
-                  </li>
-                  <li v-if="vendor.notAllowed.filter((nt) => nt.value == 'Other').length > 0">
-                    <input type="text" placeholder="Type vendor category..." />
+                    <img :src="`${iconUrl}Rectangle 1245.svg`" v-else @click="updateNa(n)" />
+                    <span @click="updateNa(n)">{{ n.name }}</span>
+                    <div
+                      style="margin-top: 10px"
+                      v-if="vendor.notAllowed.filter((nt) => nt.value == 'Other').length > 0 && n.value == 'Other'"
+                    >
+                      <input type="text" placeholder="Type vendor category..." />
+                    </div>
                   </li>
                 </ul>
               </div>
@@ -876,18 +880,8 @@ export default {
             {
               name: "Setup hours included in rental",
               type: Boolean,
-              hasComment: false,
-              value: true,
-              yesOption: {
-                name: "How many hours",
-                type: Number,
-                noSuffix: true,
-              },
-              noOption: {
-                name: "Cost of set up hours",
-                type: Number,
-                noSuffix: true,
-              },
+              type: Number,
+              noSuffix: true,
             },
             {
               name: "Cost Extra Guest (beyond agreed upon)",
@@ -1537,11 +1531,11 @@ export default {
               list-style: none;
               padding: 0;
               display: grid;
-              grid-template-columns: 25% 25% 25% 25%;
+              grid-template-columns: 30% 25% 20% 20%;
               li {
                 margin-bottom: 1rem;
                 cursor: pointer;
-                display: flex;
+                // display: flex;
                 img {
                   width: 27px;
                   height: 27px;
@@ -1565,12 +1559,12 @@ export default {
     }
   }
   .title-cont {
-    text-transform: capitalize;
     img {
       width: 24px;
       margin-right: 0.5rem;
     }
     h5 {
+      text-transform: capitalize;
       font: 800 16px Manrope-Regular, sans-serif;
       margin: 0;
     }

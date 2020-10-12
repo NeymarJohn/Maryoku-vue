@@ -50,20 +50,14 @@
     </section>
     <div class="main-cont">
       <router-view></router-view>
-      <!-- <div class="back-to-top">
+      <div class="back-to-top">
+        <span>END</span>
+        <br />
         <div class="row" @click="scrollToTop()"><md-icon>keyboard_arrow_up</md-icon>Back To Top</div>
-      </div> -->
+      </div>
     </div>
     <section class="footer-wrapper">
-      <div calss>
-        <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()"
-          ><img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back</md-button
-        >
-        <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
-          <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
-        </md-button>
-      </div>
-
+      <div class="prev-cont" @click="back()"><img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back</div>
       <div class="next-cont">
         <span>You can return to it till the deadline!</span>
         <a class="save" @click="saveProposal()"> <img :src="`${proposalIconsUrl}Asset 610.svg`" /> Save for later </a>
@@ -232,6 +226,7 @@ export default {
       proposals: [],
       proposalRequest: null,
       vendorCategory: null,
+      newProposalRequest: {},
     };
   },
   methods: {
@@ -239,44 +234,6 @@ export default {
       Vendors.find(this.$route.params.vendorId).then((vendor) => {
         this.vendor = vendor;
       });
-    },
-    getProposal(id) {
-      ProposalRequest.find(id)
-        .then((resp) => {
-          console.log("ProposalRequest:", resp);
-          this.$set(this, "proposalRequest", resp);
-          this.$set(this, "event", resp.eventData);
-          if (resp.eventData.concept) {
-            this.step = -1;
-          } else {
-            this.step = 0;
-          }
-          this.proposalRequestRequirements = _.chain(resp.requirements)
-            .groupBy("requirementPriority")
-            .map(function (value, key) {
-              return {
-                title: key,
-                requirements: value,
-              };
-            })
-            .value();
-        })
-        .catch((error) => {
-          console.log(" error ", error);
-        });
-
-      if (!this.proposalRequest) {
-        this.proposalRequest = new ProposalRequest({
-          id: this.$route.params.id,
-        });
-        this.proposalRequest.bidRange = { low: 0, high: 0 };
-        this.proposalRequest.requirements = [];
-        this.proposalRequest.bidderRank = 1;
-        this.proposalRequest.eventData = {
-          allocatedBudget: 0,
-        };
-        this.proposalRequest.isAgreed = true;
-      }
     },
     getVendorCategory() {
       this.$auth.currentUser(

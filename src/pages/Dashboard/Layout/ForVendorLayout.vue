@@ -24,7 +24,7 @@
       <h3>Congratulations!</h3>
       <p>
         We found you could fit perfectly for our event with your
-        <strong v-if="vendor">{{ vendor.eventCategory.fullTitle }}</strong> services.
+        <strong>{{vendor.vendorCategory}}</strong> services.
       </p>
       <button type="submit" class="submit" @click="goToForm()">Submit Now</button>
     </div>
@@ -73,7 +73,8 @@ export default {
   },
   data() {
     return {
-      iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor%20Landing%20Page/",
+      iconsUrl:
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor%20Landing%20Page/",
       vendor: null,
     };
   },

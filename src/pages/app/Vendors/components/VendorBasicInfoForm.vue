@@ -23,6 +23,7 @@
             :img="''"
             :defaultVal="vendor.companyName"
             :borderBottom="true"
+            :required="true"
             @update-focus-value="onUpdateFocus"
           />
           <v-signup-editable-field
@@ -31,6 +32,7 @@
             :img="''"
             :defaultVal="vendor.vendorCategory"
             :borderBottom="true"
+            :required="true"
             @update-focus-value="onUpdateFocus"
           />
           <v-signup-editable-field
@@ -39,6 +41,7 @@
             :img="`${iconUrl}Asset 550.svg`"
             :defaultVal="vendor.vendorAddressLine1"
             :borderBottom="true"
+            :required="true"
             @update-focus-value="onUpdateFocus"
           />
           <v-signup-editable-field
@@ -55,6 +58,7 @@
             :field="'vendorMainEmail'"
             :defaultVal="vendor.vendorMainEmail"
             :borderBottom="true"
+            :required="true"
             @update-focus-value="onUpdateFocus"
           />
           <v-signup-editable-field
