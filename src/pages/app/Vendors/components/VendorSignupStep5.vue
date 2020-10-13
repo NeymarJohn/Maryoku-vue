@@ -4,12 +4,12 @@
       <div class="left-side">
         <img :src="`${$iconURL}Vendor+Signup/recommendation.png`" />
         <h2>
-          ADD <br />
+          GET <br />
           RECOMMENDATIONS
         </h2>
         <p>
-          Take it from us; recommendations tend to go a long way. Potential customers will be impressed if you'll have
-          them in your profile. So, make sure you get them from past customers
+          We strongly recommend getting a recommendation from a customer so that potential customers can be impressed
+          with your profile and choose you over other providers
         </p>
         <h2>5/5</h2>
       </div>
@@ -22,7 +22,7 @@
               </div>
             </div>
             <div class="bottom">
-              <p>Details of the costumer you’d like to get a recommendation from</p>
+              <p>From which you would like to request a recommendation</p>
             </div>
           </div>
           <div>
@@ -54,6 +54,10 @@
                 placeholder="Type email address here..."
               ></maryoku-input>
             </div>
+            <div class="mb-50">
+              <label class="font-bold">Date Of The Event</label>
+              <md-datepicker v-model="eventDate" />
+            </div>
           </div>
           <div>
             <md-button class="edit-btn md-simple md-red">
@@ -66,7 +70,7 @@
           <div class="d-flex align-center">
             <img :src="`${$iconURL}Vendor+Signup/priview-recommedation.png`" class="mr-20" />
             <div class="flex-1">
-              <div class="color-red font-size-22 font-bold">PREVIEW THE EMAIL WE'RE ABOUT TO SEND TO YOUR CUSTOMER</div>
+              <div class="color-red font-size-22 font-bold">PREVIEW TO WHAT WE'LL SEND TO YOUR CUSTOMER</div>
               <div class="color-red font-size-16 mt-10">This is what your recommender will get in our email</div>
             </div>
             <div>
