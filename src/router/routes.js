@@ -4,7 +4,7 @@ import CreateEvent from "@/pages/Dashboard/Layout/CreateEvent.vue";
 import HomeLayout from "@/pages/Dashboard/Layout/HomeLayout.vue";
 import NewEventLayout from "@/pages/Dashboard/Layout/NewEventLayout.vue";
 import WorkspaceLayout from "@/pages/Dashboard/Layout/WorkspaceLayout.vue";
-import RSVPLayout from "@/pages/Dashboard/Layout/RSVPLayout.vue";
+import LandingPageLayout from "@/pages/Dashboard/Layout/LandingPageLayout.vue";
 import authService from "@/services/auth.service";
 
 const Events = () => import("@/pages/app/Events/Events.vue");
@@ -48,7 +48,7 @@ import EventWizardReligion from "@/pages/app/CreateEvent/EventWizardReligion.vue
 import RSVPEvent from "@/pages/app/RSVP/RSVPEvent.vue";
 import EventCreatePage from "@/pages/app/CreateEvent/EventWizardCreate.vue";
 
-import EventFeedback from "@/pages/app/Events/EventFeedback.vue";
+import FeedbackLandingPage from "@/pages/app/Events/FeedbackLandingPage.vue";
 // User authentication pages
 const SignInSignUp = () => import("@/pages/Dashboard/Pages/SignInSignUp.vue");
 const SignUp = () => import("@/pages/Dashboard/Pages/SignUp.vue");
@@ -470,8 +470,8 @@ let HomePages = {
 
 let RSVPPages = {
     path: "/app2",
-    component: RSVPLayout,
-    name: "RSVPLayout",
+    component: LandingPageLayout,
+    name: "LandingPageLayout",
     children: [
         {
             path: "/rsvp/:eventId",
@@ -487,16 +487,16 @@ let RSVPPages = {
 
 let feedbackPages = {
     path: "/app2",
-    component: RSVPLayout,
-    name: "FeedbackLayout",
+    component: LandingPageLayout,
+    name: "LandingPageLayout",
     children: [
         {
-            path: "/feedback/event/:eventId/campaign/:campaignId",
+            path: "/landingpage/feedback/:eventId",
             name: "Event Feedback",
-            component: EventFeedback,
+            component: FeedbackLandingPage,
             meta: {
-                title: "Our Events",
-                gtm: "Events",
+                title: "Feedback Form",
+                gtm: "Feedback",
             },
         },
     ],
@@ -523,6 +523,7 @@ const routes = [
     vendorSignup,
     EventPages,
     RSVPPages,
+    feedbackPages,
 ];
 
 export default routes;
