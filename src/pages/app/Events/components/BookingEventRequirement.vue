@@ -13,13 +13,9 @@
             Let us know what you are looking for in a {{ selectedBlock.title }}
           </h3>
           Our job is to bring you the most accurate offers for your event.
-          <br />This is what we know about your event so far, let us know if
-          there is anything we missed.
+          <br />This is what we know about your event so far, let us know if there is anything we missed.
         </div>
-        <header-actions
-          @toggleCommentMode="toggleCommentMode"
-          hideDownload
-        ></header-actions>
+        <header-actions @toggleCommentMode="toggleCommentMode" hideDownload></header-actions>
       </div>
     </div>
 
@@ -27,10 +23,7 @@
     <div class="md-layout events-booking-items">
       <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
       <div class="md-layout-item md-size-100">
-        <div
-          v-for="(category, index) in Object.keys(requirementProperties)"
-          :key="index"
-        >
+        <div v-for="(category, index) in Object.keys(requirementProperties)" :key="index">
           <template v-if="category == 'multi-selection'">
             <vendor-requirement-multiselect-panel
               v-for="(data, id) in requirementProperties[category]"
@@ -130,20 +123,14 @@
               </div>
             </div>
           </div>-->
-          <special-requirement-section
-            v-else-if="category == 'special'"
-          ></special-requirement-section>
+          <special-requirement-section v-else-if="category == 'special'"></special-requirement-section>
           <div class="requirement-section" v-else>
             <table class="requirement-section-table">
               <thead>
                 <tr>
                   <th>
                     <span class="section-title">
-                      <img
-                        :src="`${$iconURL}Requirements/${category}.svg`"
-                        class="mr-20"
-                        style="width: 60px"
-                      />
+                      <img :src="`${$iconURL}Requirements/${category}.svg`" class="mr-20" style="width: 60px" />
                       {{ category }}
                     </span>
                   </th>
@@ -155,9 +142,7 @@
               <tbody>
                 <tr
                   class="requirement-item"
-                  v-for="(property, index) in requirementProperties[
-                    category
-                  ].filter((item) => item.isSelected)"
+                  v-for="(property, index) in requirementProperties[category].filter((item) => item.isSelected)"
                   :key="index"
                 >
                   <td>
@@ -176,69 +161,33 @@
                     </template>
                   </td>
                   <td>
-                    <div
-                      v-if="property.type === 'single-selection'"
-                      style="padding: 10px 0px"
-                    >
-                      &nbsp;
-                    </div>
+                    <div v-if="property.type === 'single-selection'" style="padding: 10px 0px">&nbsp;</div>
                     <template v-if="property.qtyEnabled">
-                      <input
-                        class="quantity-input"
-                        type="number"
-                        v-model="property.defaultQty"
-                      />
+                      <input class="quantity-input" type="number" v-model="property.defaultQty" />
                       <span v-if="property.hint">
-                        <img
-                          :src="`${$iconURL}Event%20Page/light.svg`"
-                          width="20"
-                        />
-                        <md-tooltip md-direction="bottom">{{
-                          property.hint
-                        }}</md-tooltip>
+                        <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
+                        <md-tooltip md-direction="bottom">{{ property.hint }}</md-tooltip>
                       </span>
                     </template>
                   </td>
                   <td>
-                    <div
-                      v-if="property.type === 'single-selection'"
-                      style="padding: 10px 0px"
-                    >
-                      &nbsp;
-                    </div>
+                    <div v-if="property.type === 'single-selection'" style="padding: 10px 0px">&nbsp;</div>
                     <div>
-                      <md-button
-                        class="md-icon-button md-simple requirement-action"
-                        v-if="property.qtyEnabled"
-                      >
-                        <img
-                          :src="`${$iconURL}Requirements/edit-dark.svg`"
-                          width="20"
-                        />
+                      <md-button class="md-icon-button md-simple requirement-action" v-if="property.qtyEnabled">
+                        <img :src="`${$iconURL}Requirements/edit-dark.svg`" width="20" />
                       </md-button>
                       <md-button
                         class="md-icon-button md-simple requirement-action"
                         @click="removeRequirement(category, property)"
                       >
-                        <img
-                          :src="`${$iconURL}Requirements/delete-dark.svg`"
-                          width="20"
-                        />
+                        <img :src="`${$iconURL}Requirements/delete-dark.svg`" width="20" />
                       </md-button>
                     </div>
                   </td>
                   <td>
-                    <div
-                      v-if="property.type === 'single-selection'"
-                      style="padding: 10px 0px"
-                    >
-                      &nbsp;
-                    </div>
+                    <div v-if="property.type === 'single-selection'" style="padding: 10px 0px">&nbsp;</div>
                     <div class="condition">
-                      <md-checkbox
-                        class="md-simple md-checkbox-circle md-red"
-                        v-model="property.mustHave"
-                        :value="true"
+                      <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="property.mustHave" :value="true"
                         >Must Have</md-checkbox
                       >
                       <md-checkbox
@@ -260,9 +209,7 @@
               <div>
                 <div
                   class="additional-request-tag"
-                  v-for="(property, index) in requirementProperties[
-                    category
-                  ].filter((item) => !item.isSelected)"
+                  v-for="(property, index) in requirementProperties[category].filter((item) => !item.isSelected)"
                   :key="index"
                   @click="addRequirement(category, property)"
                 >
@@ -279,20 +226,14 @@
 
     <div class="booking-section__actions">
       <div>
-        <md-button class="md-bold add-category-btn md-black md-simple">
-          <md-icon>arrow_back</md-icon>Back
-        </md-button>
+        <md-button class="md-bold add-category-btn md-black md-simple"> <md-icon>arrow_back</md-icon>Back </md-button>
         <md-button class="md-simple md-just-icon md-black">
           <md-icon style="font-size: 40px">expand_less</md-icon>
         </md-button>
       </div>
       <div>
-        <md-button class="md-bold add-category-btn md-black md-simple"
-          >Revert To Original</md-button
-        >
-        <md-button class="md-red md-bold add-category-btn" @click="findVendors"
-          >Find my perfect vendor</md-button
-        >
+        <md-button class="md-bold add-category-btn md-black md-simple">Revert To Original</md-button>
+        <md-button class="md-red md-bold add-category-btn" @click="findVendors">Find my perfect vendor</md-button>
       </div>
     </div>
   </div>
@@ -364,17 +305,13 @@ export default {
     ...mapActions("comment", ["getCommentComponents"]),
     ...mapActions("vendor", ["fetchAllProperties"]),
     addRequirement(category, property) {
-      const index = this.requirementProperties[category].findIndex(
-        (it) => it.item == property.item,
-      );
+      const index = this.requirementProperties[category].findIndex((it) => it.item == property.item);
       this.requirementProperties[category][index].isSelected = true;
       this.requirementProperties = { ...this.requirementProperties };
       // this.$forceUpdate();
     },
     removeRequirement(category, property) {
-      const index = this.requirementProperties[category].findIndex(
-        (it) => it.item == property.item,
-      );
+      const index = this.requirementProperties[category].findIndex((it) => it.item == property.item);
       this.requirementProperties[category][index].isSelected = false;
       this.requirementProperties = { ...this.requirementProperties };
       // this.$forceUpdate();
@@ -384,21 +321,15 @@ export default {
       const event = this.event;
       if (!this.selectedBlock.componentId) return;
       this.$http
-        .get(
-          `${process.env.SERVER_URL}/1/vendor/property/${this.selectedBlock.componentId}/${this.event.id}`,
-        )
+        .get(`${process.env.SERVER_URL}/1/vendor/property/${this.selectedBlock.componentId}/${this.event.id}`)
         .then((res) => {
           this.isLoading = false;
           const requirements = res.data;
           for (let category in requirements) {
             for (let itemIndex in requirements[category]) {
               if (requirements[category][itemIndex].defaultQtyScript) {
-                const calcedValue = eval(
-                  requirements[category][itemIndex].defaultQtyScript,
-                );
-                requirements[category][itemIndex].defaultQty = Math.ceil(
-                  calcedValue,
-                );
+                const calcedValue = eval(requirements[category][itemIndex].defaultQtyScript);
+                requirements[category][itemIndex].defaultQty = Math.ceil(calcedValue);
               }
 
               // requirements[category][itemIndex].isSelected = eval(requirements[category][itemIndex].isSelected)
@@ -425,16 +356,13 @@ export default {
         vendorCategory: "foodandbeverage",
         expiredBusinessTime: moment(new Date()).add(5, "days").valueOf(),
         settingsJsonData: JSON.stringify(this.requirementProperties),
-        eventComponentInstance: new EventComponent({ id: this.blockId }),
+        eventComponentInstance: new EventComponent({ id: this.component.id }),
       }).then((res) => {
         this.$emit("setRequirements", res);
       });
     },
     addNewRequirement() {
-      this.specialRequests = [
-        ...this.addNewRequirement,
-        this.editingSpecialRequest,
-      ];
+      this.specialRequests = [...this.addNewRequirement, this.editingSpecialRequest];
     },
     checkAffectedItems(property) {
       // waitign for updating model
@@ -443,19 +371,13 @@ export default {
           for (var i in property.affectedKeys) {
             const cateogry = property.affectedKeys[i].category;
             const key = property.affectedKeys[i].key;
-            const index = this.requirementProperties[cateogry].findIndex(
-              (item) => item.key === key,
-            );
+            const index = this.requirementProperties[cateogry].findIndex((item) => item.key === key);
             if (index >= 0) {
               const requirements = this.requirementProperties;
               const event = this.event;
-              let defaultValue = eval(
-                this.requirementProperties[cateogry][index].defaultQtyScript,
-              );
+              let defaultValue = eval(this.requirementProperties[cateogry][index].defaultQtyScript);
               defaultValue = Math.round(defaultValue);
-              this.requirementProperties[cateogry][
-                index
-              ].defaultQty = defaultValue;
+              this.requirementProperties[cateogry][index].defaultQty = defaultValue;
             }
           }
         }

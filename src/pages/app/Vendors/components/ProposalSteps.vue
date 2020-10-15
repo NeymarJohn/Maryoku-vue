@@ -12,7 +12,7 @@
           <span v-if="step >= 1"><md-icon>check</md-icon></span>
           <span v-else><i>&#8226;</i></span>
           <br />
-          Proposal <br />Your Bid
+          Propose <br />Your Bid
         </li>
         <li :class="[{ active: step >= 3 }, { current: step == 2 }, { inactive: step < 2 }]">
           <span v-if="step >= 3"><md-icon>check</md-icon></span>

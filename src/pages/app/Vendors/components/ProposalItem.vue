@@ -80,7 +80,7 @@
       <div class="right-side">
         <div class="budget-cont">
           <span>Budget</span>
-          <span>${{ totalOffer() | withComma }}</span>
+          <span>${{ service.allocatedBudget | withComma }}</span>
         </div>
         <div class="proposal-range-cont">
           <p>You're the First bidder</p>
@@ -360,6 +360,7 @@ export default {
     services: Array,
     proposalRequest: Object,
     vendor: Object,
+    service: Object,
   },
   data() {
     return {
