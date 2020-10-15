@@ -25,11 +25,11 @@ class S3Service {
         };
         const S3Client = new S3(config);
         const newFileName = "my-awesome-file";
-        const extenstion = file.type.split("/").pop();
+
         return new Promise((resolve, reject) => {
             S3Client.uploadFile(file, fileName).finally(res => {
                 console.log(res);
-                resolve(`${fileName}.${extenstion}`);
+                resolve();
             });
 
             // finally(()=>{

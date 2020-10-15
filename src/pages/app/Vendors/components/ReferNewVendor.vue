@@ -14,7 +14,7 @@
       </div>
       <div class="right-side">
         <p>If the vendor you refer us to will be hired for this event, your will get a commision for your help</p>
-        <a @click="referModal = true">
+        <a @click="referModal=true">
           refer a vendor
           <md-icon>navigate_next</md-icon>
         </a>
@@ -27,7 +27,7 @@
             <img :src="`${iconUrl}Group 5649 (3).svg`" />
             <h3>
               Refer a new vendor
-              <br />and get a commission!!
+              <br />and get a commission!
             </h3>
           </div>
           <div class="header-description">
@@ -40,7 +40,11 @@
       </template>
       <template slot="body">
         <div class="refer-vendor-modal__body">
-          <refer-modal-item :category="`Photographer`" :iconUrl="iconUrl" :img="`${iconUrl}Asset 607.svg`" />
+          <refer-modal-item
+            :category="`Photographer`"
+            :iconUrl="iconUrl"
+            :img="`${iconUrl}Asset 607.svg`"
+          />
           <refer-modal-item :category="`Bar`" :iconUrl="iconUrl" :img="`${iconUrl}Asset 606.svg`" />
           <refer-modal-item :category="`Dj`" :iconUrl="iconUrl" :img="`${iconUrl}Asset 605.svg`" />
         </div>
@@ -85,17 +89,13 @@ export default {
     Modal,
     ReferModalItem,
   },
-  props: {
-    event: {
-      type: Object,
-      default: () => {},
-    },
-  },
+  props: {},
   data() {
     return {
       referModal: false,
       thanksModal: false,
-      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
+      iconUrl:
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
     };
   },
   methods: {
@@ -108,9 +108,7 @@ export default {
       this.thanksModal = false;
     },
   },
-  created() {
-    console.log("Refer Modal", this.event);
-  },
+  created() {},
   mounted() {},
   computed: {},
   watch: {},

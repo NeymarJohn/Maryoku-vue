@@ -8,8 +8,8 @@
           We are glad to have you onboard! Submitting quotes & proposals has never been easier. Let's begin with
           approving your basic info
         </p>
-        <h2>0/5</h2>
-        <h3>Only 5 simple steps & you're signed!</h3>
+        <h2>0/4</h2>
+        <h3>Only 4 simple steps & you're signed!</h3>
       </div>
       <div class="right-side">
         <h2>
@@ -23,7 +23,6 @@
             :img="''"
             :defaultVal="vendor.companyName"
             :borderBottom="true"
-            :required="true"
             @update-focus-value="onUpdateFocus"
           />
           <v-signup-editable-field
@@ -32,7 +31,6 @@
             :img="''"
             :defaultVal="vendor.vendorCategory"
             :borderBottom="true"
-            :required="true"
             @update-focus-value="onUpdateFocus"
           />
           <v-signup-editable-field
@@ -41,7 +39,6 @@
             :img="`${iconUrl}Asset 550.svg`"
             :defaultVal="vendor.vendorAddressLine1"
             :borderBottom="true"
-            :required="true"
             @update-focus-value="onUpdateFocus"
           />
           <v-signup-editable-field
@@ -58,12 +55,11 @@
             :field="'vendorMainEmail'"
             :defaultVal="vendor.vendorMainEmail"
             :borderBottom="true"
-            :required="true"
             @update-focus-value="onUpdateFocus"
           />
           <v-signup-editable-field
             :title="'Contact Person\'s Name'"
-            :img="`${$iconURL}Signup/user-gray.svg`"
+            :img="`${iconUrl}Asset 547.svg`"
             :field="'contactPerson'"
             :defaultVal="vendor.contactPerson"
             :borderBottom="false"
@@ -106,7 +102,9 @@ export default {
   mounted() {},
   methods: {
     save() {},
-    onUpdateFocus(newValue) {},
+    onUpdateFocus(newValue) {
+      alert();
+    },
   },
   computed: {},
   filters: {},

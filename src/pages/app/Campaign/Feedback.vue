@@ -25,7 +25,7 @@
       </div>
       <div class="font-size-22 font-bold line-height-2">Download files related to the event</div>
       <div class="mb-20">Like presentation</div>
-      <div v-if="campaignData.files.length > 1">
+      <div v-if="campaignData.files && campaignData.files.length > 1">
         <span class="font-bold">{{ campaignData.files[0].name }}</span>
       </div>
       <md-button class="md-simple edit-btn md-red" @click="uploadFile">
@@ -53,7 +53,7 @@
         </div>
         <div>
           <feedback-question
-            v-for="(question, index) in campaignData.feedBack"
+            v-for="(question, index) in campaignData.feedbackQuestions"
             :key="index"
             :feedbackData="question"
           ></feedback-question>

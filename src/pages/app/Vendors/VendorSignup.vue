@@ -72,7 +72,6 @@ const emptyVendor = {
   address: null,
   coverPhoto: null,
   images: [],
-  vendorImages: [],
   signature: null,
   capacity: {
     low: null,
@@ -199,12 +198,8 @@ export default {
       }
     });
     this.$root.$on("update-vendor-value", (field, value) => {
-      if (field == "images" || field == "vendorImages") {
-        if (!this.vendor.images[value.index]) {
-          this.vendor[field].push(value.data);
-        } else {
-          this.vendor[field][value.index] = value.data;
-        }
+      if (field == "images") {
+        this.vendor.images.push(value);
       } else if (field == "removeImage") {
         this.vendor.images = this.vendor.images.filter((i) => i != value);
       } else if (field == "vendorCategory") {

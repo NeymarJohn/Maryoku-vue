@@ -127,8 +127,8 @@
             v-bind="{
               decimal: '.',
               thousands: ',',
-              prefix: '',
-              suffix: ' %',
+              prefix: '% ',
+              suffix: '',
               precision: 0,
               masked: false,
             }"

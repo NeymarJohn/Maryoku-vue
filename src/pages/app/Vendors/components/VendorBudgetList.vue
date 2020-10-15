@@ -4,10 +4,7 @@
       <img :src="`${iconsUrl}Asset 500.svg`" />
       {{ title }}
     </h4>
-    <div class="total">
-      <strong>Total Event Budget:</strong>
-      <span v-if="proposalRequest">${{ proposalRequest.eventData.totalBudget | withComma }}</span>
-    </div>
+    <div class="total"><strong>Total Event Budget:</strong>$0</div>
     <p>
       <img :src="`${iconsUrl}Group 5180.svg`" />
       {{ description }}
@@ -16,7 +13,10 @@
       <div class="items">
         <div class="item" v-for="(r, ri) in requirements" :key="ri">
           <span>
-            <img v-if="r.category == 'food'" :src="`${iconsUrl}Asset 515.svg`" />
+            <img
+              v-if="r.category == 'food'"
+              :src="`${iconsUrl}Asset 515.svg`"
+            />
             <img v-else :src="`${iconsUrl}Asset 516.svg`" />
             {{ r.category }}
           </span>
@@ -48,7 +48,8 @@ export default {
     isLoading: true,
     requirements: [],
     rawRequirements: [],
-    iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
+    iconsUrl:
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
   }),
   created() {},
   mounted() {

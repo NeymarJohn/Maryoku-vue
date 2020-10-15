@@ -1,7 +1,7 @@
 <template>
   <div class="vsignup-edtiable-field-wrapper" :class="[{ 'border-bottom': borderBottom }]">
     <div class="left" :class="[{ 'full-width': isEdit }]">
-      <div class="title">{{ title }}<span v-if="required"> *</span></div>
+      <div class="title">{{ title }}</div>
       <div class="content">
         <div v-if="!isEdit">
           <img v-if="img != ''" :src="img" />
@@ -84,10 +84,6 @@ export default {
     img: String,
     defaultVal: String,
     borderBottom: Boolean,
-    required: {
-      type: Boolean,
-      default: false,
-    },
   },
   data: () => ({
     isLoading: true,
