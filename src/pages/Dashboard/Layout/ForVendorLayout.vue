@@ -20,11 +20,18 @@
         <vendor-bid-time-counter :days="4" :hours="0" :minutes="0" :seconds="0" />
       </div>
     </section>
-    <div class="banner">
+    <div
+      class="banner"
+      :style="
+        backgroundImage
+          ? `background-image: url('${backgroundImage}');`
+          : `background-image: url('https://static-maryoku.s3.amazonaws.com/storage/img/lock.jpg');`
+      "
+    >
       <h3>Congratulations!</h3>
       <p>
         We found you could fit perfectly for our event with your
-        <strong>{{vendor.vendorCategory}}</strong> services.
+        <strong v-if="vendor">{{ vendor.eventCategory.fullTitle }}</strong> services.
       </p>
       <button type="submit" class="submit" @click="goToForm()">Submit Now</button>
     </div>
@@ -55,6 +62,7 @@ import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import Vendors from "@/models/Vendors";
+import ProposalRequest from "@/models/ProposalRequest";
 
 import TopNavbar from "./TopNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
@@ -73,9 +81,9 @@ export default {
   },
   data() {
     return {
-      iconsUrl:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor%20Landing%20Page/",
+      iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor%20Landing%20Page/",
       vendor: null,
+      event: null,
     };
   },
   methods: {
@@ -87,12 +95,27 @@ export default {
         this.vendor = vendor;
       });
     },
+    getProposalRequest() {
+      ProposalRequest.find(this.$route.params.rfpId).then((proposalRequest) => {
+        this.proposalRequest = proposalRequest;
+        this.event = this.proposalRequest.eventData;
+        console.log(this.event);
+      });
+    },
   },
   created() {},
   mounted() {
     this.getVendor();
+    this.getProposalRequest();
   },
-  computed: {},
+  computed: {
+    backgroundImage() {
+      if (this.event && this.event.concept) {
+        return this.event.concept.images[new Date().getTime() % 4].url;
+      }
+      return "";
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

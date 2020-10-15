@@ -1,5 +1,5 @@
 <template>
-  <div class="white-card feedback-campaign">
+  <div class="white-card event-feedback-form">
     <div class="p-50">
       <div class="font-size-30 font-bold-extra mb-50 text-transform-capitalize">Say thank you and ask for feedback</div>
       <hr />
@@ -70,10 +70,10 @@
 </template>
 <script>
 import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
-import FeedbackImageCarousel from "./components/FeedbackImageCarousel";
-import SharingButtonGroup from "./components/SharingButtonGroup";
-import FeedbackQuestion from "./components/FeedbackQuestion";
-import TitleEditor from "./components/TitleEditor";
+import FeedbackImageCarousel from "@/pages/app/Campaign/components/FeedbackImageCarousel";
+import SharingButtonGroup from "@/pages/app/Campaign/components/SharingButtonGroup";
+import FeedbackQuestion from "@/pages/app/Campaign/components/FeedbackQuestion";
+import TitleEditor from "@/pages/app/Campaign/components/TitleEditor";
 import HideSwitch from "@/components/HideSwitch";
 import swal from "sweetalert2";
 

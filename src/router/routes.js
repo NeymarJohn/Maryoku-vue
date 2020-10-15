@@ -4,7 +4,7 @@ import CreateEvent from "@/pages/Dashboard/Layout/CreateEvent.vue";
 import HomeLayout from "@/pages/Dashboard/Layout/HomeLayout.vue";
 import NewEventLayout from "@/pages/Dashboard/Layout/NewEventLayout.vue";
 import WorkspaceLayout from "@/pages/Dashboard/Layout/WorkspaceLayout.vue";
-import LandingPageLayout from "@/pages/Dashboard/Layout/LandingPageLayout.vue";
+import RSVPLayout from "@/pages/Dashboard/Layout/RSVPLayout.vue";
 import authService from "@/services/auth.service";
 
 const Events = () => import("@/pages/app/Events/Events.vue");
@@ -48,7 +48,7 @@ import EventWizardReligion from "@/pages/app/CreateEvent/EventWizardReligion.vue
 import RSVPEvent from "@/pages/app/RSVP/RSVPEvent.vue";
 import EventCreatePage from "@/pages/app/CreateEvent/EventWizardCreate.vue";
 
-import FeedbackLandingPage from "@/pages/app/Events/FeedbackLandingPage.vue";
+import EventFeedback from "@/pages/app/Events/EventFeedback.vue";
 // User authentication pages
 const SignInSignUp = () => import("@/pages/Dashboard/Pages/SignInSignUp.vue");
 const SignUp = () => import("@/pages/Dashboard/Pages/SignUp.vue");
@@ -165,17 +165,17 @@ let publicPages = {
     name: "ForVendors",
     children: [
         {
-            path: "/vendors/:vendorId/proposal-request/:id",
-            name: "VendorProposal",
+            path: '/vendors/:vendorId/proposal-request/:rfpId',
+            name: 'VendorProposal',
             component: ForVendors,
             meta: {
                 auth: false,
-                title: "For Vendors",
-                gtm: "ForVendors",
+                title: 'For Vendors',
+                gtm: 'ForVendors'
             },
         },
-    ],
-};
+    ]
+}
 
 let forProposals = {
     path: "/",
@@ -183,27 +183,37 @@ let forProposals = {
     name: "ForProposalsLayout",
     children: [
         {
-            path: "/vendors/:vendorId/proposal-request/:id/form",
+            path: '/vendors/:vendorId/proposal-request/:id/form',
             name: "ForProposals",
             component: ForProposals,
             meta: {
                 auth: false,
-                title: "For Proposals",
-                gtm: "ForProposals",
+                title: 'For Proposals',
+                gtm: 'ForProposals'
             },
         },
         {
-            path: "/vendors/:vendorId/events/:eventId/proposal-request/:id/form",
+            path: '/proposal-request/:id/form',
             name: "ForProposals",
             component: ForProposals,
             meta: {
                 auth: false,
-                title: "For Proposals",
-                gtm: "ForProposals",
+                title: 'For Proposals',
+                gtm: 'ForProposals'
             },
         },
-    ],
-};
+        {
+            path: '/vendors/:vendorId/events/:eventId/proposal-request/:id/form',
+            name: "ForProposals",
+            component: ForProposals,
+            meta: {
+                auth: false,
+                title: 'For Proposals',
+                gtm: 'ForProposals'
+            },
+        },
+    ]
+}
 
 let vendorSignup = {
     path: "/",
@@ -470,8 +480,8 @@ let HomePages = {
 
 let RSVPPages = {
     path: "/app2",
-    component: LandingPageLayout,
-    name: "LandingPageLayout",
+    component: RSVPLayout,
+    name: "RSVPLayout",
     children: [
         {
             path: "/rsvp/:eventId",
@@ -487,16 +497,16 @@ let RSVPPages = {
 
 let feedbackPages = {
     path: "/app2",
-    component: LandingPageLayout,
-    name: "LandingPageLayout",
+    component: RSVPLayout,
+    name: "FeedbackLayout",
     children: [
         {
-            path: "/landingpage/feedback/:eventId",
+            path: "/feedback/event/:eventId/campaign/:campaignId",
             name: "Event Feedback",
-            component: FeedbackLandingPage,
+            component: EventFeedback,
             meta: {
-                title: "Feedback Form",
-                gtm: "Feedback",
+                title: "Our Events",
+                gtm: "Events",
             },
         },
     ],
@@ -523,7 +533,6 @@ const routes = [
     vendorSignup,
     EventPages,
     RSVPPages,
-    feedbackPages,
 ];
 
 export default routes;

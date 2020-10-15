@@ -1,9 +1,17 @@
 <template>
   <div class="for-proposals-layout-wrapper">
     <section class="header-wrapper">
-      <div class="proposal-banner">
-        <h2>march madness</h2>
-        <h5>Microsoft marketing event</h5>
+      <div
+        class="proposal-banner"
+        :style="
+          getHeaderImage
+            ? `background-image: url('${getHeaderImage}');`
+            : `background-image: url('https://static-maryoku.s3.amazonaws.com/storage/img/lock.jpg');`
+        "
+      >
+        <h2 v-if="event && event.concept">{{ event.concept.name }}</h2>
+        <h2 v-else>Meeting Event / Formal meeting</h2>
+        <h5>{{ event.title }}</h5>
       </div>
       <div class="summary-cont">
         <ul>
@@ -32,10 +40,8 @@
             {{ proposalRequest ? event.numberOfParticipants : "-" | withComma }}
           </li>
         </ul>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-          magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat.
+        <p v-if="event.concept">
+          {{ event.concept.description }}
         </p>
         <div class="a-right">
           <a class="see-full" @click="fullDetailsModal = true">
@@ -50,17 +56,30 @@
     </section>
     <div class="main-cont">
       <router-view></router-view>
-      <div class="back-to-top">
-        <span>END</span>
-        <br />
+      <!-- <div class="back-to-top">
         <div class="row" @click="scrollToTop()"><md-icon>keyboard_arrow_up</md-icon>Back To Top</div>
-      </div>
+      </div> -->
     </div>
     <section class="footer-wrapper">
-      <div class="prev-cont" @click="back()"><img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back</div>
+      <div calss>
+        <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()"
+          ><img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back</md-button
+        >
+        <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
+          <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
+        </md-button>
+      </div>
+
       <div class="next-cont">
         <span>You can return to it till the deadline!</span>
         <a class="save" @click="saveProposal()"> <img :src="`${proposalIconsUrl}Asset 610.svg`" /> Save for later </a>
+        <a
+          class="next active"
+          @click="saveProposal()"
+          :class="[{ active: selectedServices.length > 0 }]"
+          v-if="step == -1"
+          >Next</a
+        >
         <a
           class="next active"
           @click="saveProposal()"
@@ -81,10 +100,8 @@
     <modal v-if="fullDetailsModal" class="full-details-modal" container-class="modal-container lg">
       <template slot="header">
         <div class="full-details-modal__header">
-          <div class="header-description">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-            ea commodo consequat.
+          <div class="header-description" v-if="event.concept">
+            {{ event.concept.description }}
           </div>
         </div>
         <button class="close" @click="hideModal()">
@@ -226,7 +243,7 @@ export default {
       proposals: [],
       proposalRequest: null,
       vendorCategory: null,
-      newProposalRequest: {},
+      event: "",
     };
   },
   methods: {
@@ -234,6 +251,45 @@ export default {
       Vendors.find(this.$route.params.vendorId).then((vendor) => {
         this.vendor = vendor;
       });
+    },
+    getProposal(id) {
+      ProposalRequest.find(id)
+        .then((resp) => {
+          console.log("ProposalRequest:", resp);
+          this.$set(this, "proposalRequest", resp);
+          this.event = resp.eventData;
+          console.log(resp);
+          if (resp.eventData.concept) {
+            this.step = -1;
+          } else {
+            this.step = 0;
+          }
+          this.proposalRequestRequirements = _.chain(resp.requirements)
+            .groupBy("requirementPriority")
+            .map(function (value, key) {
+              return {
+                title: key,
+                requirements: value,
+              };
+            })
+            .value();
+        })
+        .catch((error) => {
+          console.log(" error ", error);
+        });
+
+      if (!this.proposalRequest) {
+        this.proposalRequest = new ProposalRequest({
+          id: this.$route.params.id,
+        });
+        this.proposalRequest.bidRange = { low: 0, high: 0 };
+        this.proposalRequest.requirements = [];
+        this.proposalRequest.bidderRank = 1;
+        this.proposalRequest.eventData = {
+          allocatedBudget: 0,
+        };
+        this.proposalRequest.isAgreed = true;
+      }
     },
     getVendorCategory() {
       this.$auth.currentUser(
@@ -255,24 +311,24 @@ export default {
           this.firstTime = proposals.firstTime;
         });
     },
-    getProposal(id) {
-      ProposalRequest.find(id)
-        .then((resp) => {
-          this.$set(this, "proposalRequest", resp);
-          this.$set(this, "newProposalRequest", resp);
+    // getProposal(id) {
+    //   ProposalRequest.find(id)
+    //     .then((resp) => {
+    //       this.$set(this, "proposalRequest", resp);
+    //       // this.$set(this, "newProposalRequest", resp);
 
-          this.proposalRequestRequirements = _.chain(resp.requirements)
-            .groupBy("requirementPriority")
-            .map(function (value, key) {
-              return {
-                title: key,
-                requirements: value,
-              };
-            })
-            .value();
-        })
-        .catch((error) => {});
-    },
+    //       this.proposalRequestRequirements = _.chain(resp.requirements)
+    //         .groupBy("requirementPriority")
+    //         .map(function (value, key) {
+    //           return {
+    //             title: key,
+    //             requirements: value,
+    //           };
+    //         })
+    //         .value();
+    //     })
+    //     .catch((error) => {});
+    // },
     hideModal() {
       this.fullDetailsModal = false;
       this.savedItModal = false;
@@ -285,7 +341,9 @@ export default {
         this.savedItModal = true;
       }
 
-      if (this.step == 0) {
+      if (this.step == -1) {
+        this.step = 0;
+      } else if (this.step == 0) {
         this.step = 2;
       } else if (this.step > 1 && this.step < 3) {
         this.step++;
@@ -335,9 +393,6 @@ export default {
     },
   },
   computed: {
-    event() {
-      return this.$store.state.event.eventData;
-    },
     eventDate() {
       if (!this.event) return "-";
 
@@ -368,6 +423,12 @@ export default {
       } else {
         return this.vendorCategory;
       }
+    },
+    getHeaderImage() {
+      if (this.event && this.event.concept) {
+        return this.event.concept.images[new Date().getTime() % 4].url;
+      }
+      return "";
     },
   },
 };
