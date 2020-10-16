@@ -1,10 +1,18 @@
 <template>
   <div class="rsvp-event-timeline md-layout">
-    <div class="md-layout-item md-size-100 md-small-size-100 mb-50 d-flex align-center">
-      <span class="text-transform-uppercase font-size-30 font-bold-extra" :class="{ 'color-gray': !isDisplayed }"
+    <div
+      class="md-layout-item md-size-100 md-small-size-100 mb-50 d-flex align-center"
+    >
+      <span
+        class="text-transform-uppercase font-size-30 font-bold-extra"
+        :class="{ 'color-gray': !isDisplayed }"
         >sneaky peak to the agenda</span
       >
-      <md-switch v-if="canHide" v-model="isDisplayed" class="ml-10 md-switch below-label large-switch">
+      <md-switch
+        v-if="canHide"
+        v-model="isDisplayed"
+        class="ml-10 md-switch below-label large-switch"
+      >
         <span class="color-black font-regular">Hide Agenda</span>
       </md-switch>
     </div>
@@ -16,7 +24,9 @@
       >
         <div class="rsvp-event-timeline-day">
           <span class="font-size-22 font-bold-extra">Day 0{{ index + 1 }}</span>
-          <span class="font-size-16">{{ $dateUtil.formatScheduleDay(schedule.itemDay) }}</span>
+          <span class="font-size-16">{{
+            $dateUtil.formatScheduleDay(schedule.itemDay)
+          }}</span>
         </div>
         <div>
           <rsvp-timeline-item
@@ -95,7 +105,7 @@ export default {
     },
   },
   watch: {
-    isDisplayed(newValue, oldValue) {
+    changeVisibility(newValue, oldValue) {
       this.$emit("changeVisibility", newValue);
     },
   },

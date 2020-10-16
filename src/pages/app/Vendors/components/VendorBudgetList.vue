@@ -4,10 +4,7 @@
       <img :src="`${iconsUrl}Asset 500.svg`" />
       {{ title }}
     </h4>
-    <div class="total">
-      <strong>Total Event Budget:</strong>
-      <span v-if="proposalRequest">${{ totalBudget | withComma }}</span>
-    </div>
+    <div class="total"><strong>Total Event Budget:</strong>$0</div>
     <p>
       <img :src="`${iconsUrl}Group 5180.svg`" />
       {{ description }}
@@ -16,15 +13,19 @@
       <div class="items">
         <div class="item" v-for="(r, ri) in requirements" :key="ri">
           <span>
-            <img :src="`${$iconURL}Budget Elements/${r.icon}`" />
-            {{ r.title }}
+            <img
+              v-if="r.category == 'food'"
+              :src="`${iconsUrl}Asset 515.svg`"
+            />
+            <img v-else :src="`${iconsUrl}Asset 516.svg`" />
+            {{ r.category }}
           </span>
-          <span>${{ r.allocatedBudget | withComma }}</span>
+          <span>${{ r.price | withComma }}</span>
         </div>
       </div>
       <div class="total">
         <span>Total</span>
-        <span>${{ totalBudget | withComma }}</span>
+        <span>$0</span>
       </div>
     </div>
   </div>
@@ -42,25 +43,30 @@ export default {
     title: String,
     description: String,
     proposalRequest: Object,
-    requirements: Array,
   },
   data: () => ({
     isLoading: true,
-    // requirements: [],
+    requirements: [],
     rawRequirements: [],
-    iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
+    iconsUrl:
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
   }),
   created() {},
-  mounted() {},
-  methods: {},
-  computed: {
-    totalBudget() {
-      const sum = this.requirements.reduce((s, item) => {
-        return s + item.allocatedBudget;
-      }, 0);
-      return sum;
+  mounted() {
+    this.getRequirements();
+    // this.rawRequirements = VendorService.getProposalRequest()
+  },
+  methods: {
+    getRequirements() {
+      this.requirements = [
+        {
+          category: "No requirement",
+          price: this.categoryCost,
+        },
+      ];
     },
   },
+  computed: {},
   filters: {
     withComma(amount) {
       return amount ? amount.toLocaleString() : 0;

@@ -461,6 +461,14 @@ import VSignupAddRules from "@/components/Inputs/VSignupAddRules.vue";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import { FunctionalCalendar } from "vue-functional-calendar";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
+const christanHolidaysAPI =
+  "https://www.googleapis.com/calendar/v3/calendars/en.christian%23holiday%40group.v.calendar.google.com/events?key=AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8";
+const jewishHolidaysAPI =
+  "https://www.googleapis.com/calendar/v3/calendars/en.jewish%23holiday%40group.v.calendar.google.com/events?key=AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8";
+const muslimHolidaysAPI =
+  "https://www.googleapis.com/calendar/v3/calendars/en.islamic%23holiday%40group.v.calendar.google.com/events?key=AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8";
+const hinduHolidaysAPI =
+  "https://www.googleapis.com/calendar/v3/calendars/en.islamic%23holiday%40group.v.calendar.google.com/events?key=AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8";
 
 export default {
   name: "vendor-signup-step3",
@@ -508,13 +516,16 @@ export default {
         {
           name: "Chrisitanity",
           holidays: ["Good Friday", "Easter", "Christmas", "Thanksgiving"],
+          url: christanHolidaysAPI,
         },
         {
           name: "Hindu",
           holidays: ["Ganesh Chaturthi", "Pitru Paksha", "Mysore Dasara", "Navratri", "Vijayadashami", "Durga Puja"],
+          url: hinduHolidaysAPI,
         },
         {
           name: "Islamic",
+          url: muslimHolidaysAPI,
           holidays: [
             "All Islamic holiday",
             "Eid AI-Acha",
@@ -533,6 +544,7 @@ export default {
         },
         {
           name: "Judaism",
+          url: jewishHolidaysAPI,
           holidays: [
             "Rosh Hashana",
             "Yom Kipur",
@@ -1237,7 +1249,12 @@ export default {
   },
   created() {},
   mounted() {
-    console.log(this.vendor);
+    console.log("test");
+    this.religions.forEach((religion) => {
+      this.$http.get(religion.url).then((res) => {
+        console.log(res);
+      });
+    });
     if (this.vendor.selectedWeekdays) {
       if (this.vendor.selectedWeekdays.length > 0) {
         this.selectedWeekdays = this.vendor.selectedWeekdays;

@@ -40,7 +40,7 @@
       :vendor="vendor"
       v-if="isApproved && step == 6"
     />
-    <div v-if="step == 7">Thank you for your signup!</div>
+    <div v-if="isCompletedWizard" class="final-section">Thank you for your signup!</div>
   </div>
 </template>
 
@@ -166,6 +166,7 @@ export default {
       // },
       vendor: { ...emptyVendor },
       isApproved: false,
+      isCompletedWizard: false,
       step: 1,
       businessCategories: businessCategories,
       generalInfos: generalInfos,
@@ -176,8 +177,20 @@ export default {
   created() {},
   mounted() {
     this.$root.$on("approve-vendor-basic-info", () => {
-      this.isApproved = true;
-      this.step = 1;
+      console.log("vendor", this.vendor);
+      new Vendors(this.vendor)
+        .save()
+        .then((res) => {
+          console.log("*** Save vendor - done: ");
+          console.log(JSON.stringify(res));
+          this.isApproved = true;
+          this.$set(this.vendor, "id", res.item.id);
+          this.step = 1;
+        })
+        .catch((error) => {
+          console.log("*** Save vendor - failed: ");
+          console.log(JSON.stringify(error));
+        });
     });
     this.$root.$on("next-vendor-signup-step", () => {
       if (this.step < 6) {
@@ -245,6 +258,8 @@ export default {
         .then((res) => {
           console.log("*** Save vendor - done: ");
           console.log(JSON.stringify(res));
+          this.step = this.step + 1;
+          this.isCompletedWizard = true;
           swal({
             title: `Thank you for your signup!`,
             buttonsStyling: false,
@@ -270,5 +285,11 @@ export default {
   padding: 84px 124px;
   font-family: Manrope-Regular, sans-serif;
   background: #f3f7fd;
+  .final-section {
+    min-height: 400px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 30px;
+  }
 }
 </style>

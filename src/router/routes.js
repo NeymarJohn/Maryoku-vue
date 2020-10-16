@@ -165,17 +165,17 @@ let publicPages = {
     name: "ForVendors",
     children: [
         {
-            path: '/vendors/:vendorId/proposal-request/:rfpId',
-            name: 'VendorProposal',
+            path: "/vendors/:vendorId/proposal-request/:id",
+            name: "VendorProposal",
             component: ForVendors,
             meta: {
                 auth: false,
-                title: 'For Vendors',
-                gtm: 'ForVendors'
+                title: "For Vendors",
+                gtm: "ForVendors",
             },
         },
-    ]
-}
+    ],
+};
 
 let forProposals = {
     path: "/",
@@ -183,37 +183,27 @@ let forProposals = {
     name: "ForProposalsLayout",
     children: [
         {
-            path: '/vendors/:vendorId/proposal-request/:id/form',
+            path: "/vendors/:vendorId/proposal-request/:id/form",
             name: "ForProposals",
             component: ForProposals,
             meta: {
                 auth: false,
-                title: 'For Proposals',
-                gtm: 'ForProposals'
+                title: "For Proposals",
+                gtm: "ForProposals",
             },
         },
         {
-            path: '/proposal-request/:id/form',
+            path: "/vendors/:vendorId/events/:eventId/proposal-request/:id/form",
             name: "ForProposals",
             component: ForProposals,
             meta: {
                 auth: false,
-                title: 'For Proposals',
-                gtm: 'ForProposals'
+                title: "For Proposals",
+                gtm: "ForProposals",
             },
         },
-        {
-            path: '/vendors/:vendorId/events/:eventId/proposal-request/:id/form',
-            name: "ForProposals",
-            component: ForProposals,
-            meta: {
-                auth: false,
-                title: 'For Proposals',
-                gtm: 'ForProposals'
-            },
-        },
-    ]
-}
+    ],
+};
 
 let vendorSignup = {
     path: "/",

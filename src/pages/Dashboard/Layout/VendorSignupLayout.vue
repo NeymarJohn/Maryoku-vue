@@ -7,38 +7,40 @@
       <v-signup-steps :step="step"></v-signup-steps>
     </section>
     <router-view></router-view>
-    <section class="footer-wrapper" :class="{ approved: isApproved }" v-if="isApproved">
-      <div class="left d-flex align-center">
-        <md-button class="md-vendor-signup md-simple md-red" @click="prev()">
-          <md-icon class="color-red font-size-30">keyboard_arrow_left</md-icon>
-          Back
-        </md-button>
+    <template v-if="step < 7">
+      <section class="footer-wrapper" :class="{ approved: isApproved }" v-if="isApproved">
+        <div class="left d-flex align-center">
+          <md-button class="md-vendor-signup md-simple md-red" @click="prev()">
+            <md-icon class="color-red font-size-30">keyboard_arrow_left</md-icon>
+            Back
+          </md-button>
+          <md-button
+            v-if="step != 6"
+            @click="scrollToTop()"
+            class="md-button md-button md-simple md-just-icon md-theme-default scroll-top-button md-theme-default"
+          >
+            <span>
+              <img :src="`${iconsUrl}Asset 602.svg`" />
+            </span>
+          </md-button>
+        </div>
+        <div class="right">
+          <md-button class="save md-vendor-signup md-simple md-red md-outlined" @click="saveDraft()">
+            <img :src="`${iconsUrl}Asset 610.svg`" class="label-icon mr-10" />
+            Save for later
+          </md-button>
+          <md-button class="approve md-vendor-signup md-red" @click="next()">{{ nextLabel }}</md-button>
+        </div>
+      </section>
+      <section class="footer-wrapper" v-else>
         <md-button
-          v-if="step != 6"
-          @click="scrollToTop()"
-          class="md-button md-button md-simple md-just-icon md-theme-default scroll-top-button md-theme-default"
+          class="approve md-vendor-signup md-red"
+          @click="approve()"
+          :class="{ disabled: !validateBasicFields() }"
+          >Approve & Begin</md-button
         >
-          <span>
-            <img :src="`${iconsUrl}Asset 602.svg`" />
-          </span>
-        </md-button>
-      </div>
-      <div class="right">
-        <md-button class="save md-vendor-signup md-simple md-red md-outlined" @click="saveDraft()">
-          <img :src="`${iconsUrl}Asset 610.svg`" class="label-icon mr-10" />
-          Save for later
-        </md-button>
-        <md-button class="approve md-vendor-signup md-red" @click="next()">{{ nextLabel }}</md-button>
-      </div>
-    </section>
-    <section class="footer-wrapper" v-else>
-      <md-button
-        class="approve md-vendor-signup md-red"
-        @click="approve()"
-        :class="{ disabled: !validateBasicFields() }"
-        >Approve & Begin</md-button
-      >
-    </section>
+      </section>
+    </template>
     <modal v-if="status" class="saved-it-modal" container-class="modal-container sm">
       <template slot="header">
         <div class="saved-it-modal__header">
@@ -124,7 +126,9 @@ export default {
         if (this.vendor.password == this.vendor.confirmPassword) {
           this.$root.$emit("vendor-signup");
           this.savedItModal = true;
+          this.step += 1;
         } else {
+          alert();
         }
       }
       this.scrollToTop();
