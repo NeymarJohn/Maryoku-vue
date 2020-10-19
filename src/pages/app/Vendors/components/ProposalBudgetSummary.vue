@@ -278,7 +278,7 @@ export default {
       return total;
     },
     calculatedTotal(requirements) {
-      console.log("requirements", requirements);
+      // console.log("requirements", requirements);
       let total = this.total(requirements);
       if (this.discountBlock.value != undefined) {
         total = total - (total * this.discountBlock.value) / 100;

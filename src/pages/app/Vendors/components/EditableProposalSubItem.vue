@@ -16,7 +16,7 @@
         <template v-if="!isEdit">
           $
           {{
-            item.priceUnit != "total"
+            item.priceUnit == "total"
               ? parseFloat(String(item.price).replace(/,/g, "")) / item.requirementValue
               : item.price | withComma
           }}
@@ -37,10 +37,11 @@
         </template>
       </div>
       <div class="total-cont editor-wrapper">
-        <template v-if="!isEdit">$ {{ item.price | withComma }}</template>
+        <template v-if="!isEdit">$ {{ item.priceUnit == 'total' ? item.price : item.price * item.requirementValue | withComma }}</template>
         <template v-else>
           <!-- <input class="input-value" v-model="item.price" type="number" /> -->
           <money
+            v-if="item.priceUnit == 'total'"
             v-model="item.price"
             v-bind="{
               decimal: '.',
@@ -52,6 +53,7 @@
             }"
             class="input-value"
           />
+          <div>$ {{ subTotal }}</div>
         </template>
       </div>
       <div class="action-cont editor-wrapper">
@@ -98,6 +100,12 @@ export default {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
     };
   },
+  computed: {
+    subTotal(){
+      console.log("subtotal");
+      return this.item.price * this.item.requirementValue
+    }
+  },
   methods: {
     removeRequirement(item) {
       this.$root.$emit("remove-proposal-requirement", item);
@@ -117,7 +125,6 @@ export default {
       return amount ? amount.toLocaleString() : 0;
     },
   },
-  computed: {},
   watch: {},
 };
 </script>
