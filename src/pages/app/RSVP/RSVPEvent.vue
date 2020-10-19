@@ -8,15 +8,13 @@
           <div class="md-layout">
             <div class="rsvp-event-overview-content-customer md-layout-item md-size-100">
               <img v-if="campaign.logoUrl" :src="`${campaign.logoUrl}`" class="mb-40" />
-              <div class="font-size-40" style="margin-bottom: 100px">
-                Hello {{ campaign.companyName }} {{ event.guestType || "Employee" }}!
-              </div>
+              <div class="font-size-40" style="margin-bottom: 100px">Hello Microsoft special employee!</div>
             </div>
 
             <div class="md-layout-item md-size-50 md-small-size-50">
               <div class="mb-20">You Are Invited To A</div>
               <div class="font-size-60 font-bold-extra mb-30">{{ campaign.title }}</div>
-              <div class="word-break">
+              <div>
                 {{ campaign.description }}
               </div>
             </div>
@@ -29,11 +27,7 @@
           </div>
           <div>
             <div class="font-size-22 font-bold mb-10">Check out the venue</div>
-            <rsvp-venue-carousel
-              :editable="false"
-              :event="event"
-              :defaultImages="campaign.images"
-            ></rsvp-venue-carousel>
+            <rsvp-venue-carousel></rsvp-venue-carousel>
           </div>
         </div>
       </div>
@@ -47,7 +41,7 @@
             <span style="padding-top: 10px; margin-left: 20px">WHAT SHOULD I WEAR?</span>
           </div>
           <div>
-            {{ campaign.additionalData.wearingGuide }}
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
           </div>
         </div>
         <div class="md-layout-item md-size-45 md-small-size-45" v-if="campaign.visibleSettings.showKnowledge">
@@ -100,18 +94,14 @@
           </md-button>
         </div>
         <div>
-          <md-button class="md-simple md-button md-black maryoku-btn" @click="reject">
+          <md-button class="md-simple md-button md-black maryoku-btn">
             <span class="font-size-20">I Can't make it</span>
           </md-button>
           <span class="seperator"></span>
           <md-button class="md-simple md-button md-black maryoku-btn">
             <span class="font-size-20">I Need To Think About It</span>
           </md-button>
-          <md-button
-            v-if="campaign.additionalData.zoomlink"
-            @click="showZoomModal = true"
-            class="md-simple md-button md-black maryoku-btn virtual-btn"
-          >
+          <md-button @click="showZoomModal = true" class="md-simple md-button md-black maryoku-btn virtual-btn">
             <span class="font-size-20">Virtual Participation</span>
           </md-button>
           <md-button @click="showRsvpModal = true" class="md-button md-red maryoku-btn rsvp-btn">
@@ -125,29 +115,14 @@
       @close="showRsvpModal = false"
       @setRsvp="setRsvp"
     ></rsvp-information-modal>
-    <setting-reminder-modal
-      v-if="showReminderModal"
-      @close="showReminderModal = false"
-      :campaign="campaign"
-    ></setting-reminder-modal>
-    <join-zoom-modal
-      v-if="showZoomModal"
-      @close="showZoomModal = false"
-      @setRsvp="setZoomRsvp"
-      :campaign="campaign"
-    ></join-zoom-modal>
-    <sync-calendar-modal
-      v-if="showSyncCalendarForZoom"
-      @close="showSyncCalendarForZoom = false"
-      :campaign="campaign"
-    ></sync-calendar-modal>
+    <setting-reminder-modal v-if="showReminderModal" @close="showReminderModal = false"></setting-reminder-modal>
+    <join-zoom-modal v-if="showZoomModal" @close="showZoomModal = false" @setRsvp="setZoomRsvp"></join-zoom-modal>
+    <sync-calendar-modal v-if="showSyncCalendarForZoom" @close="showSyncCalendarForZoom = false"></sync-calendar-modal>
   </div>
 </template>
 <script>
 import RsvpTimelineItem from "./RSVPTimelineItem";
 import Calendar from "@/models/Calendar";
-import Rsvp from "@/models/Rsvp";
-import Campaign from "@/models/Campaign";
 import CalendarEvent from "@/models/CalendarEvent";
 import _ from "underscore";
 import RsvpInformationModal from "@/components/Modals/RSVP/InformationModal";
@@ -205,9 +180,6 @@ export default {
       this.isLoading = false;
       this.campaign = campaigns["RSVP"];
     });
-    CalendarEvent.find(eventId).then((event) => {
-      this.event = event;
-    });
   },
   computed: {
     backgroundImage() {
@@ -243,19 +215,6 @@ export default {
     setZoomRsvp() {
       this.showZoomModal = false;
       this.showSyncCalendarForZoom = true;
-    },
-    reject() {
-      new Rsvp({
-        name: "test",
-        email: "email@gmail.com",
-        invitedEmail: "email@gmail.com",
-        campaign: new Campaign({ id: this.campaign.id }),
-        rsvpStatus: "REJECTED",
-      })
-        .save()
-        .then((res) => {
-          console.log(res);
-        });
     },
   },
 };

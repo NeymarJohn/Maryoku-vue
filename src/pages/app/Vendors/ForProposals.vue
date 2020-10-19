@@ -6,7 +6,7 @@
         <proposal-steps
           :categoryTitle="vendor.eventCategory.fullTitle"
           :step="step"
-          :hasVisionStep="!!event && !!event.concept"
+          :hasVisionStep="this.event && this.event.concept"
         />
         <div class="step-wrapper" v-if="step == -1">
           <div class="proposal-add-personal-message-wrapper">
@@ -22,7 +22,6 @@
             <span>Sincerely,</span>
             <p>Relish caterers & venues</p>
           </div>
-          <proposal-event-vision :event="event"></proposal-event-vision>
         </div>
         <div class="step-wrapper" v-if="(step < 2) & (step > -1)">
           <div class="proposal-add-personal-message-wrapper">
@@ -55,17 +54,14 @@
             get picked!
           </p>
           <proposal-item
-            v-for="(service, index) in extraServices"
-            :key="index"
-            :category="service.title"
-            :services="servicesByCategory(service.componentId)"
+            :category="`Food & Beverage`"
+            :services="servicesByCategory('foodandbeverage')"
             :isCollapsed="true"
             :isDropdown="true"
             :proposalRange="true"
-            :img="`${$iconURL}Budget Elements/${service.icon}`"
+            :img="getIconUrlByCategory('foodandbeverage')"
             :proposalRequest="proposalRequest"
             :step="step"
-            :service="service"
           />
           <proposal-item
             :category="`Design and Decor`"
@@ -87,7 +83,7 @@
             :proposalRequest="proposalRequest"
             :step="step"
           />
-          <refer-new-vendor :event="event" :vendor="vendor" />
+          <refer-new-vendor />
         </div>
         <div class="step-wrapper" v-if="step == 3">
           <proposal-event-summary
@@ -127,7 +123,6 @@ import Icon from "@/components/Icon/Icon.vue";
 import ProposalBudgetSummary from "./components/ProposalBudgetSummary.vue";
 import ProposalSteps from "./components/ProposalSteps.vue";
 import ProposalItem from "./components/ProposalItem.vue";
-import ProposalEventVision from "./components/ProposalEventVision.vue";
 import ProposalAddFiles from "./components/ProposalAddFiles.vue";
 import ProposalTitleWithIcon from "./components/ProposalTitleWithIcon.vue";
 import ReferNewVendor from "./components/ReferNewVendor.vue";
@@ -144,7 +139,6 @@ export default {
     ProposalTitleWithIcon,
     ProposalEventSummary,
     ReferNewVendor,
-    ProposalEventVision,
   },
   data() {
     return {
@@ -154,22 +148,24 @@ export default {
       services: null,
       iconsWithCategory: null,
       vendor: null,
-      event: null,
     };
   },
   created() {},
   mounted() {
-    this.getVendor();
-    this.getProposal(this.$route.params.id);
-
     this.services = VendorService.businessCategories();
     this.iconsWithCategory = VendorService.categoryNameWithIcons();
 
+    this.step = 0;
+
+    this.event = {
+      name: "March Madness event",
+      date: "December 25, 2019",
+      arrival_time: "11:00AM",
+    };
     this.$root.$on("next-step-vendor-proposal", () => {
       console.log("next");
-      if (this.step == -1) {
-        this.step = 0;
-      } else if (this.step == 0) {
+
+      if (this.step == 0) {
         this.step = 2;
       } else if (this.step > -1 && this.step < 3) {
         this.step++;
@@ -191,7 +187,11 @@ export default {
       console.log("wrapperStep", this.step);
     });
 
-    // this.proposalRequest.requirements = VendorService.getProposalRequest().requirements;
+    this.getVendor();
+
+    this.getProposal(this.$route.params.id);
+
+    this.proposalRequest.requirements = VendorService.getProposalRequest().requirements;
   },
   methods: {
     getVendor() {
@@ -205,12 +205,7 @@ export default {
         .then((resp) => {
           console.log("ProposalRequest:", resp);
           this.$set(this, "proposalRequest", resp);
-          this.$set(this, "event", resp.eventData);
-          if (resp.eventData.concept) {
-            this.step = -1;
-          } else {
-            this.step = 0;
-          }
+
           this.proposalRequestRequirements = _.chain(resp.requirements)
             .groupBy("requirementPriority")
             .map(function (value, key) {
@@ -312,14 +307,23 @@ export default {
       //   })
     },
   },
-  filters: {},
   computed: {
-    extraServices() {
-      return this.event.components.filter(
-        (item) => item.componentId !== this.vendor.vendorCategory && item.componentId !== "unexpected",
-      );
+    event() {
+      return this.$store.state.event.eventData;
     },
   },
+  watch: {
+    event: {
+      handler: function (newEvent) {
+        console.log(newEvent);
+        if (newEvent && newEvent.concept) {
+          this.step = -1;
+        }
+      },
+    },
+    deep: true,
+  },
+  filters: {},
 };
 </script>
 <style lang="scss" scoped>

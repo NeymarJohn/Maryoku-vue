@@ -128,6 +128,7 @@ export default {
           this.savedItModal = true;
           this.step += 1;
         } else {
+          alert();
         }
       }
       this.scrollToTop();
