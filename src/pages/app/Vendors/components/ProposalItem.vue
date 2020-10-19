@@ -148,7 +148,7 @@
         v-for="(req, rIndex) in newProposalRequest.requirements"
         :key="rIndex"
         :index="rIndex"
-        :item="req"
+        :item="getObject(req)"
         :active="true"
         :step="1"
       />
@@ -416,6 +416,9 @@ export default {
     };
   },
   methods: {
+    getObject (item){
+        return JSON.parse(JSON.stringify(item));
+    },
     clickItem(category) {
       this.isChecked = !this.isChecked;
       this.$root.$emit("update-additional-services", category);
@@ -555,9 +558,9 @@ export default {
       let total = 0;
       let vm = this;
       let requirements = [];
-
-      if (this.newProposalRequest.requirements) {
-        requirements = this.newProposalRequest.requirements.filter((r) => this.services.includes(r.requirementTitle));
+      console.log("total.requirements", this.newProposalRequest);
+      if (this.newProposalRequest.requirements.length) {
+        requirements = this.newProposalRequest.requirements.filter((r) => r.hasOwnProperty('requirementTitle'));
       }
 
       requirements.map(function (item) {
@@ -566,7 +569,7 @@ export default {
             total += parseFloat(String(item.price).replace(/,/g, ""));
           } else {
             if (vm.newProposalRequest != undefined) {
-              total += parseFloat(String(item.price).replace(/,/g, ""));
+              total += parseFloat(String(item.price).replace(/,/g, "")) * parseInt(item.requirementValue);
             }
           }
         }
@@ -582,7 +585,7 @@ export default {
         total = total - this.discount_by_amount;
       }
       total += (total * this.tax) / 100;
-
+      console.log("calculateTotal", total);
       return total;
     },
     prev() {
@@ -655,7 +658,8 @@ export default {
     });
 
     this.$root.$on("save-proposal-requirement", ({index, item}) => {
-      this.proposalRequest.requirements[index] = item
+      this.proposalRequest.requirements[index] = item;
+      this.newProposalRequest.requirements[index] = item;
       this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
       this.$forceUpdate();
     });

@@ -61,7 +61,7 @@
         </template>
         <template v-else>
           <a class="cancel" @click="cancel()">Cancel</a>
-          <a class="save" @click="save()">Save</a>
+          <a class="save" @click="save(item)">Save</a>
         </template>
       </div>
     </template>
@@ -102,7 +102,7 @@ export default {
     removeRequirement(item) {
       this.$root.$emit("remove-proposal-requirement", item);
     },
-    save() {
+    save(item) {
       this.isEdit = false;
       this.$root.$emit("save-proposal-requirement", {index:this.index,item});
     },
