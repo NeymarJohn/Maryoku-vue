@@ -25,8 +25,8 @@
         <div class="sub-items" :style="{ left: `${serviceSlidePos}px` }" ref="servicesCont">
           <select-proposal-sub-item
             :selected="isSelectedQuickButton(s)"
-            :item="s"
-            v-for="(s, sIndex) in services"
+            :item="requirement.item?requirement.item:requirement.subCategory"
+            v-for="(requirement, sIndex) in optionalRequirements"
             :key="sIndex"
           />
         </div>
@@ -80,7 +80,7 @@
       <div class="right-side">
         <div class="budget-cont">
           <span>Budget</span>
-          <span>${{ totalOffer() | withComma }}</span>
+          <span>${{ service.allocatedBudget | withComma }}</span>
         </div>
         <div class="proposal-range-cont">
           <p>You're the First bidder</p>
@@ -147,7 +147,8 @@
       <editable-proposal-sub-item
         v-for="(req, rIndex) in newProposalRequest.requirements"
         :key="rIndex"
-        :item="req"
+        :index="rIndex"
+        :item="getObject(req)"
         :active="true"
         :step="1"
       />
@@ -360,6 +361,7 @@ export default {
     services: Array,
     proposalRequest: Object,
     vendor: Object,
+    service: Object,
   },
   data() {
     return {
@@ -414,6 +416,9 @@ export default {
     };
   },
   methods: {
+    getObject (item){
+        return JSON.parse(JSON.stringify(item));
+    },
     clickItem(category) {
       this.isChecked = !this.isChecked;
       this.$root.$emit("update-additional-services", category);
@@ -553,9 +558,9 @@ export default {
       let total = 0;
       let vm = this;
       let requirements = [];
-
-      if (this.newProposalRequest.requirements) {
-        requirements = this.newProposalRequest.requirements.filter((r) => this.services.includes(r.requirementTitle));
+      console.log("total.requirements", this.newProposalRequest);
+      if (this.newProposalRequest.requirements.length) {
+        requirements = this.newProposalRequest.requirements.filter((r) => r.hasOwnProperty('requirementTitle'));
       }
 
       requirements.map(function (item) {
@@ -564,7 +569,7 @@ export default {
             total += parseFloat(String(item.price).replace(/,/g, ""));
           } else {
             if (vm.newProposalRequest != undefined) {
-              total += parseFloat(String(item.price).replace(/,/g, ""));
+              total += parseFloat(String(item.price).replace(/,/g, "")) * parseInt(item.requirementValue);
             }
           }
         }
@@ -580,7 +585,7 @@ export default {
         total = total - this.discount_by_amount;
       }
       total += (total * this.tax) / 100;
-
+      console.log("calculateTotal", total);
       return total;
     },
     prev() {
@@ -615,7 +620,27 @@ export default {
   mounted() {
     this.isVCollapsed = this.isCollapsed;
     this.newProposalRequest = this.proposalRequest;
-
+    this.mandatoryRequirements.forEach(item=>{
+      console.log("item",item)
+      this.newProposalRequest.requirements.push({
+        comments: [],
+        dateCreated: "",
+        includedInPrice: true,
+        itemNotAvailable: false,
+        price: 0,
+        priceUnit: "qty",
+        proposalRequest: { id: this.proposalRequest.id },
+        requirementComment: null,
+        requirementId: "",
+        requirementMandatory: false,
+        requirementPriority: null,
+        requirementTitle: item.item,
+        requirementsCategory: item.category,
+        requirementValue: 1,
+      });
+    })
+    this.$forceUpdate();
+    this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
     this.$root.$on("remove-proposal-requirement", (item) => {
       this.newProposalRequest.requirements = this.newProposalRequest.requirements.filter(
         (req) => req.requirementTitle != item.requirementTitle,
@@ -630,6 +655,13 @@ export default {
       this.serviceItem = item;
       this.qty = this.unit = this.subTotal = 0;
       this.selectedQuickButton = item;
+    });
+
+    this.$root.$on("save-proposal-requirement", ({index, item}) => {
+      this.proposalRequest.requirements[index] = item;
+      this.newProposalRequest.requirements[index] = item;
+      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
+      this.$forceUpdate();
     });
 
     this.$root.$on("clear-slide-pos", (item) => {
@@ -649,6 +681,12 @@ export default {
     isDisabledAdd() {
       return !this.qty || !this.unit || !this.subTotal || this.subTotal == 0 || !this.serviceItem;
     },
+    optionalRequirements() {
+      return this.proposalRequest.requirements.filter(item=>!item.mustHave)
+    },
+    mandatoryRequirements() {
+      return this.proposalRequest.requirements.filter(item=>item.mustHave)
+    }
   },
   watch: {},
 };

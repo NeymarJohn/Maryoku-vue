@@ -106,9 +106,7 @@ export default {
   mounted() {},
   methods: {
     save() {},
-    onUpdateFocus(newValue) {
-      alert();
-    },
+    onUpdateFocus(newValue) {},
   },
   computed: {},
   filters: {},
