@@ -89,6 +89,7 @@ export default {
     item: Object,
     active: Boolean,
     step: Number,
+    index: Number
   },
   data() {
     return {
@@ -103,6 +104,7 @@ export default {
     },
     save() {
       this.isEdit = false;
+      this.$root.$emit("save-proposal-requirement", {index:this.index,item});
     },
     cancel() {
       this.isEdit = false;

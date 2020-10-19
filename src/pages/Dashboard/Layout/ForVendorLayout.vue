@@ -20,13 +20,22 @@
         <vendor-bid-time-counter :days="4" :hours="0" :minutes="0" :seconds="0" />
       </div>
     </section>
-    <div class="banner">
-      <h3>Congratulations!</h3>
-      <p>
-        We found you could fit perfectly for our event with your
-        <strong>{{vendor.vendorCategory}}</strong> services.
-      </p>
-      <button type="submit" class="submit" @click="goToForm()">Submit Now</button>
+    <div
+      class="banner"
+      :style="
+        backgroundImage
+          ? `background-image: url('${backgroundImage}');`
+          : `background-image: url('https://static-maryoku.s3.amazonaws.com/storage/img/lock.jpg');`
+      "
+    >
+      <div class="banner-content">
+        <h3>Congratulations!</h3>
+        <p>
+          We found you could fit perfectly for our event with your
+          <strong v-if="vendor">{{ vendor.eventCategory.fullTitle }}</strong> services.
+        </p>
+        <button type="submit" class="submit" @click="goToForm()">Submit Now</button>
+      </div>
     </div>
     <router-view></router-view>
     <section class="footer-wrapper">
@@ -55,6 +64,7 @@ import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import Vendors from "@/models/Vendors";
+import ProposalRequest from "@/models/ProposalRequest";
 
 import TopNavbar from "./TopNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
@@ -73,9 +83,9 @@ export default {
   },
   data() {
     return {
-      iconsUrl:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor%20Landing%20Page/",
+      iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor%20Landing%20Page/",
       vendor: null,
+      event: null,
     };
   },
   methods: {
@@ -87,12 +97,27 @@ export default {
         this.vendor = vendor;
       });
     },
+    getProposalRequest() {
+      ProposalRequest.find(this.$route.params.rfpId).then((proposalRequest) => {
+        this.proposalRequest = proposalRequest;
+        this.event = this.proposalRequest.eventData;
+        console.log(this.event);
+      });
+    },
   },
   created() {},
   mounted() {
     this.getVendor();
+    this.getProposalRequest();
   },
-  computed: {},
+  computed: {
+    backgroundImage() {
+      if (this.event && this.event.concept) {
+        return this.event.concept.images[new Date().getTime() % 4].url;
+      }
+      return "";
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -107,6 +132,7 @@ export default {
     position: absolute;
     padding: 54.5px 64px;
     width: 100%;
+    z-index: 1;
     ul {
       list-style: none;
       display: flex;
@@ -197,9 +223,25 @@ export default {
     background-repeat: no-repeat;
     background-size: cover;
     text-align: center;
-    padding: 230px 0 214px 0;
+    min-height: 600px;
     color: #ffffff;
-
+    position: relative;
+    &-content {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+    &::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      background-color: black;
+      opacity: 0.2;
+    }
     h3 {
       font-family: "Manrope-Regular", sans-serif;
       font-size: 60px;

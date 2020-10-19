@@ -2,37 +2,34 @@
   <div class="proposal-pricing-items-wrapper">
     <div
       class="pricing-item"
-      :class="[
-        {'total-wrapper': itemType=='total'}, 
-        {'bundle-wrapper': itemType=='bundle'}
-      ]"
+      :class="[{ 'total-wrapper': itemType == 'total' }, { 'bundle-wrapper': itemType == 'bundle' }]"
     >
       <div class="summary" @click="expand()">
         <div class="left">
-          <img v-if="itemType=='price'" :src="getCategoryIcon()" />
-          <img v-if="itemType=='bundle'" :src="`${iconUrl}Asset 577.svg`" />
-          <h3 v-if="itemType=='price'">{{category}}</h3>
-          <h3 v-if="itemType=='bundle'">Bundle offer</h3>
-          <div v-if="itemType=='total'" class="total-cont">
+          <img v-if="itemType == 'price'" :src="getCategoryIcon()" />
+          <img v-if="itemType == 'bundle'" :src="`${iconUrl}Asset 577.svg`" />
+          <h3 v-if="itemType == 'price'">{{ category }}</h3>
+          <h3 v-if="itemType == 'bundle'">Bundle offer</h3>
+          <div v-if="itemType == 'total'" class="total-cont">
             <h4>Total</h4>
             <span>before discount</span>
           </div>
-          <span v-if="itemType=='price'">For Whole Event</span>
-          <div class="bundle-desc" v-if="itemType=='bundle'">
+          <span v-if="itemType == 'price'">For Whole Event</span>
+          <div class="bundle-desc" v-if="itemType == 'bundle'">
             <h4>15%</h4>
             <span>Venue + Catering</span>
           </div>
         </div>
         <div class="right">
           <div class="price-cont" v-if="!isExpanded">
-            <span class="org-price">${{ getOrgPrice() | withComma}}</span>
+            <span class="org-price">${{ getOrgPrice() | withComma }}</span>
             <div class="off-cont">
               (0% off)
-              <span>${{ getOrgPrice() | withComma}}</span>
+              <span>${{ getOrgPrice() | withComma }}</span>
             </div>
           </div>
           <img
-            v-if="itemType=='price'"
+            v-if="itemType == 'price'"
             :src="`${iconUrl}Component 36 (2).svg`"
             :style="`transform: ${isExpanded ? 'rotate(90deg)' : ''}`"
           />
@@ -75,7 +72,7 @@
         </div>
         <div class="editable-sub-items-footer">
           <span>Total</span>
-          <span>${{getOrgPrice() | withComma}}</span>
+          <span>${{ getOrgPrice() | withComma }}</span>
         </div>
         <div class="services-check-list-wrapper">
           <h4>What do we include in this proposal?</h4>
@@ -98,9 +95,7 @@
           </div>
         </div>
         <div class="extras-wrapper">
-          <h4>
-            <img :src="`${iconUrl}Asset 576.svg`" />Extras
-          </h4>
+          <h4><img :src="`${iconUrl}Asset 576.svg`" />Extras</h4>
           <p>We suggest these features to the client with this proposal</p>
           <div class="extra-items">
             <check-list-item
@@ -118,15 +113,9 @@
         <div class="attachments-cont">
           <h4>Attachments</h4>
           <div class="files-cont">
-            <div class="item">
-              <img :src="`${iconUrl}Asset 578.svg`" /> Kosher_certificate.pdf
-            </div>
-            <div class="item">
-              <img :src="`${iconUrl}Asset 578.svg`" /> Kosher_certificate.pdf
-            </div>
-            <div class="item">
-              <img :src="`${iconUrl}Asset 578.svg`" /> Kosher_certificate.pdf
-            </div>
+            <div class="item"><img :src="`${iconUrl}Asset 578.svg`" /> Kosher_certificate.pdf</div>
+            <div class="item"><img :src="`${iconUrl}Asset 578.svg`" /> Kosher_certificate.pdf</div>
+            <div class="item"><img :src="`${iconUrl}Asset 578.svg`" /> Kosher_certificate.pdf</div>
           </div>
         </div>
       </div>
@@ -176,9 +165,7 @@ export default {
       }`;
     },
     servicesByCategory() {
-      return this.requirements.filter(
-        (r) => r.requirementsCategory == this.category,
-      );
+      return this.requirements.filter((r) => r.requirementsCategory == this.category);
     },
     getOrgPrice() {
       let total = 0;
