@@ -9,7 +9,7 @@
         <div class="date-picker picker-panel">
           <div class="d-flex pl-10 justify-content-center">
             <img :src="`${$iconURL}Event Page/calendar-dark.svg`" width="21px" />
-            <span class="date-string">{{getFormattedDate}}</span>
+            <span class="date-string">{{ getFormattedDate }}</span>
           </div>
           <div>
             <functional-calendar
@@ -42,10 +42,7 @@ export default {
     FunctionalCalendar,
   },
   methods: {
-    ...mapMutations("PublicEventPlanner", [
-      "setEventProperty",
-      "setCurrentStep",
-    ]),
+    ...mapMutations("PublicEventPlanner", ["setEventProperty", "setCurrentStep"]),
     goToNext() {
       if (this.dateData.selectedDate) {
         this.setEventProperty({
@@ -135,9 +132,7 @@ export default {
     getFormattedDate() {
       console.log("object");
       if (!this.dateData.selectedDate) return "";
-      return moment(new Date(this.dateData.selectedDate)).format(
-        "dddd, MMM DD, YYYY"
-      );
+      return moment(new Date(this.dateData.selectedDate)).format("dddd, MMM DD, YYYY");
     },
   },
   watch: {
@@ -203,6 +198,8 @@ export default {
     padding: 40px 10px 0px;
     border: solid 1px #bec0c2;
     border-radius: 3px;
+    margin: auto;
+    height: max-content;
   }
   .title {
     font-family: "Manrope-Bold";
