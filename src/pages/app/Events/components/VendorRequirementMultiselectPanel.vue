@@ -31,9 +31,6 @@ export default {
       type: Object,
       default: {},
     },
-    index: {
-      type: Number,
-    }
   },
   data() {
     return {
@@ -51,9 +48,7 @@ export default {
     };
   },
   methods: {
-    changeState() {
-      this.$root.$emit('multi-select.change', {index: this.index, data: this.data});
-    },
+    changeState() {},
   },
 };
 </script>

@@ -20,18 +20,15 @@
             @click="setRequirement(index)"
             :key="index"
           >
-            {{property.label}}
+            {{property.name}}
             <md-icon class="icon color-red">add_circle</md-icon>
           </div>
         </template>
       </div>
     </div>
-    <div v-for="property in specialRequirements">
-      <special-requirement-item
-              v-if="property.selected"
-              :data="property"
-      ></special-requirement-item>
-    </div>
+    <requirement-accessibility v-if="specialRequirements[0].selected"></requirement-accessibility>
+    <requirement-around-venue v-if="specialRequirements[1].selected"></requirement-around-venue>
+    <requirement-sitting-arrangement v-if="specialRequirements[2].selected"></requirement-sitting-arrangement>
     <div class="special-request-section">
       <div class="font-bold mt-10">Anything Else?</div>
 
@@ -45,58 +42,25 @@
 <style lang="scss" scoped>
 </style>
 <script>
-import SpecialRequirementItem from './SpecialRequirementItem';
+import RequirementAccessibility from "./RequirementAccessibility";
+import RequirementAroundVenue from "./RequirementAroundVenue";
+import RequirementSittingArrangement from "./RequirementSittingArrangement";
 export default {
   components: {
-    SpecialRequirementItem,
-  },
-  props: {
-    data: {
-      type: Array,
-      required: true,
-    }
+    RequirementAccessibility,
+    RequirementAroundVenue,
+    RequirementSittingArrangement,
   },
   data() {
     return {
-      specialRequirements: [],
+      specialRequirements: [
+        { name: "Accessibility", selected: false },
+        { name: "Around The Venue", selected: false },
+        { name: "Sitting Arrangement", selected: false },
+      ],
     };
   },
   methods: {
-    getSpecialRequirements(){
-
-      let requirements = this._getUniqueValueArray(this.data, 'subCategory');
-      console.log("getSpecialRequirement", requirements);
-      this.specialRequirements = requirements.map(requirement => {
-        let items = [];
-        this.data.map(item => {
-          if(item.subCategory === requirement.subCategory){
-            items.push(item);
-          }
-        });
-
-        let type = null;
-        if ( requirement.subCategory === 'Around the space' ){
-          type = 'around_the_space';
-        } else {
-          type = requirement.subCategory.toLowerCase();
-        }
-        return {selected: false, label: requirement.subCategory, items, type};
-      });
-      console.log("getSpecialRequirement", this.specialRequirements);
-    },
-    _getUniqueValueArray(array, key){
-
-      let flags = [];
-      let output = [];
-
-      for (let i = 0; i < array.length; i++){
-        if ( flags[array[i][key]]  ) continue;
-        flags[array[i][key]] = true;
-        output.push(array[i]);
-      }
-
-      return output;
-    },
     setRequirement(index) {
       this.specialRequirements[index].selected = !this.specialRequirements[
         index
@@ -114,10 +78,5 @@ export default {
       return selectedStatus;
     },
   },
-  mounted(){
-    console.log("special.requirement.section", this.data);
-    this.getSpecialRequirements();
-
-  }
 };
 </script>
