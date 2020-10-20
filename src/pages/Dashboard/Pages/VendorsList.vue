@@ -4,7 +4,9 @@
     <table>
       <thead>
         <tr>
+          <th>No</th>
           <th>Company Name</th>
+          <th>User Name</th>
           <th>Business Category</th>
           <th>Main Email</th>
           <th>Location</th>
@@ -12,7 +14,9 @@
       </thead>
       <tbody>
         <tr v-for="(vendor, index) in vendors" :key="index">
+          <td>{{ index + 1 }}</td>
           <td>{{ vendor.companyName }}</td>
+          <td>{{ vendor.vendorDisplayName }}</td>
           <td>{{ vendor.eventCategory ? vendor.eventCategory.title : "" }}</td>
           <td>{{ vendor.vendorMainEmail }}</td>
           <td>{{ vendor.vendorAddressLine1 }}</td>
@@ -43,7 +47,7 @@ export default {
   }
   table {
     margin: auto;
-    min-width: 1000px;
+    min-width: 1200px;
     td,
     th {
       text-align: center;
