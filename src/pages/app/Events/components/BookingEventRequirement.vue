@@ -28,6 +28,7 @@
             <vendor-requirement-multiselect-panel
               v-for="(data, id) in requirementProperties[category]"
               :key="id"
+              :index="id"
               :data="data"
               :currentComponent="selectedBlock"
             ></vendor-requirement-multiselect-panel>
@@ -123,7 +124,9 @@
               </div>
             </div>
           </div>-->
-          <special-requirement-section v-else-if="category == 'special'"></special-requirement-section>
+          <div v-else-if="category == 'special'">
+            <special-requirement-section  :data="requirementProperties[category]"></special-requirement-section>
+          </div>
           <div class="requirement-section" v-else>
             <table class="requirement-section-table">
               <thead>
@@ -232,7 +235,7 @@
         </md-button>
       </div>
       <div>
-        <md-button class="md-bold add-category-btn md-black md-simple">Revert To Original</md-button>
+        <md-button class="md-bold add-category-btn md-black md-simple" @click="revertToOriginal">Revert To Original</md-button>
         <md-button class="md-red md-bold add-category-btn" @click="findVendors">Find my perfect vendor</md-button>
       </div>
     </div>
@@ -302,54 +305,86 @@ export default {
   }),
   methods: {
     ...mapMutations("event", ["setEventData"]),
+    ...mapMutations("event", ["setBookingRequirements"]),
     ...mapActions("comment", ["getCommentComponents"]),
     ...mapActions("vendor", ["fetchAllProperties"]),
+    _saveRequirementsInStore(action=null){
+      let requirements = this.storedRequirements;
+
+      let eventRequirement = requirements[this.event.id] ? requirements[this.event.id] : {};
+      let requirement = {};
+      requirement[this.blockId] = action === 'clear' ? null : this.requirementProperties;
+      requirements[this.event.id] = eventRequirement;
+      console.log("requirement", requirements);
+      this.setBookingRequirements(requirements);
+    },
     addRequirement(category, property) {
       const index = this.requirementProperties[category].findIndex((it) => it.item == property.item);
       this.requirementProperties[category][index].isSelected = true;
       this.requirementProperties = { ...this.requirementProperties };
+      this._saveRequirementsInStore()
       // this.$forceUpdate();
     },
     removeRequirement(category, property) {
       const index = this.requirementProperties[category].findIndex((it) => it.item == property.item);
       this.requirementProperties[category][index].isSelected = false;
       this.requirementProperties = { ...this.requirementProperties };
+      this._saveRequirementsInStore();
       // this.$forceUpdate();
     },
     setProperties() {
       this.selectedBlock = this.component;
       const event = this.event;
       if (!this.selectedBlock.componentId) return;
+
       this.$http
-        .get(`${process.env.SERVER_URL}/1/vendor/property/${this.selectedBlock.componentId}/${this.event.id}`)
-        .then((res) => {
-          this.isLoading = false;
-          const requirements = res.data;
-          for (let category in requirements) {
-            for (let itemIndex in requirements[category]) {
-              if (requirements[category][itemIndex].defaultQtyScript) {
-                const calcedValue = eval(requirements[category][itemIndex].defaultQtyScript);
-                requirements[category][itemIndex].defaultQty = Math.ceil(calcedValue);
-              }
+              .get(`${process.env.SERVER_URL}/1/vendor/property/${this.selectedBlock.componentId}/${this.event.id}`)
+              .then((res) => {
+                this.isLoading = false;
+                const requirements = res.data;
+                for (let category in requirements) {
+                  for (let itemIndex in requirements[category]) {
+                    if (requirements[category][itemIndex].defaultQtyScript) {
+                      const calcedValue = eval(requirements[category][itemIndex].defaultQtyScript);
+                      requirements[category][itemIndex].defaultQty = Math.ceil(calcedValue);
+                    }
 
-              // requirements[category][itemIndex].isSelected = eval(requirements[category][itemIndex].isSelected)
-            }
-          }
+                    // requirements[category][itemIndex].isSelected = eval(requirements[category][itemIndex].isSelected)
+                  }
+                }
 
-          this.requirementProperties = requirements;
-        })
-        .catch((e) => {
-          this.isLoading = false;
-        });
+                this.requirementProperties = requirements;
+              })
+              .catch((e) => {
+                this.isLoading = false;
+              });
+
+
     },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
+    },
+    scrollToTop() {
+      window.scrollTo(0, 0);
     },
     fetchData() {
       this.blockId = this.component.componentId; //this.$route.params.blockId
       this.event = this.$store.state.event.eventData;
       this.getCommentComponents(this.blockId);
-      this.setProperties();
+
+      console.log("storedRequirements", this.storedRequirements);
+      if(this.storedRequirements[this.event.id] && this.storedRequirements[this.event.id][this.blockId]){
+        this.requirementProperties = this.storedRequirements[this.event.id][this.blockId];
+        this.isLoading = false;
+      }else{
+        this.setProperties();
+      }
+    },
+    revertToOriginal(){
+      // this.$root.$emit('revertRequirements');
+      this._saveRequirementsInStore('clear');
+      this.fetchData();
+      this.scrollToTop();
     },
     findVendors() {
       postReq("/1/vendors/setting-requirements", {
@@ -391,6 +426,19 @@ export default {
   },
   mounted() {
     this.isLoading = true;
+
+    this.$root.$on('multi-select.change', (index, data) => {
+      console.log("multi-select.change", this.requirementProperties);
+      this.requirementProperties['multi-selection'][index] = data;
+      this._saveRequirementsInStore();
+    });
+
+    this.$root.$on('revertRequirements', _ => {
+      this._saveRequirementsInStore('clear');
+      this.fetchData();
+      this.scrollToTop();
+    });
+
     if (this.eventData.id) {
       this.fetchData();
     }
@@ -423,6 +471,9 @@ export default {
     },
   },
   computed: {
+    ...mapGetters({
+      storedRequirements: 'event/getBookingRequirements',
+    }),
     ...mapState("event", ["eventData"]),
   },
 };

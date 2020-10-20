@@ -273,6 +273,10 @@ export default {
     },
     setRequirements(vendors) {
       this.selectedBlock.vendors = vendors;
+      setTimeout(_ => {
+        this.showCounterPage = false;
+        this.showProposals = false;
+      }, 3000);
       this.showCounterPage = true;
       this.showProposals = true;
     },

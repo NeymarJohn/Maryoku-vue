@@ -66,9 +66,27 @@
             :proposalRequest="proposalRequest"
             :step="step"
             :service="service"
-            :vendor="vendor"
           />
-
+          <proposal-item
+            :category="`Design and Decor`"
+            :services="servicesByCategory('decor')"
+            :isCollapsed="true"
+            :isDropdown="true"
+            :proposalRange="true"
+            :img="getIconUrlByCategory('decor')"
+            :proposalRequest="proposalRequest"
+            :step="step"
+          />
+          <proposal-item
+            :category="`Guest Services & Staffing`"
+            :services="servicesByCategory('corporatesocialresponsibility')"
+            :isCollapsed="true"
+            :isDropdown="true"
+            :proposalRange="true"
+            :img="getIconUrlByCategory('corporatesocialresponsibility')"
+            :proposalRequest="proposalRequest"
+            :step="step"
+          />
           <refer-new-vendor :event="event" :vendor="vendor" />
         </div>
         <div class="step-wrapper" v-if="step == 3">
