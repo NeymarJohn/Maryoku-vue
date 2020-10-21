@@ -147,7 +147,6 @@
 import RsvpTimelineItem from "./RSVPTimelineItem";
 import Calendar from "@/models/Calendar";
 import Rsvp from "@/models/Rsvp";
-import RsvpRequest from "@/models/RsvpRequest";
 import Campaign from "@/models/Campaign";
 import CalendarEvent from "@/models/CalendarEvent";
 import _ from "underscore";
@@ -158,7 +157,6 @@ import SyncCalendarModal from "@/components/Modals/RSVP/SyncCalendarModal";
 import RsvpVenueCarousel from "./RSVPVenueCarousel";
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
 import { mapActions, mapGetters } from "vuex";
-import swal from "sweetalert2";
 
 export default {
   components: {
@@ -197,26 +195,18 @@ export default {
     };
   },
   created() {
-    const rsvpRequestId = this.$route.params.rsvpRequestId;
-    const rsvpRequest = new RsvpRequest({ id: rsvpRequest });
+    const eventId = this.$route.params.eventId;
+    const calendarEvent = new CalendarEvent({ id: eventId });
 
-    RsvpRequest.find(rsvpRequestId).then((rsvpRequest) => {
-      console.log(rsvpRequest);
-      this.event = rsvpRequest.event;
+    // CalendarEvent.find(eventId).then((event) => {
+    //   console.log("eventResponse", res);
+    // });
+    this.getCampaigns({ event: calendarEvent }).then((campaigns) => {
+      this.isLoading = false;
+      this.campaign = campaigns["RSVP"];
     });
-    this.$root.$on("setRsvp", (rsvpData) => {
-      rsvpData.attendingOption = "PERSON";
-      rsvpData.rsvpStatus = "AGREED";
-      rsvpData.invitedEmail = this.$route.params.email;
-      new Rsvp(rsvpData).save().then((requestedRSVP) => {
-        console.log(requestedRSVP);
-        swal({
-          title: `Successed!`,
-          buttonsStyling: false,
-          confirmButtonClass: "md-button md-success",
-        });
-        this.showRsvpModal = false;
-      });
+    CalendarEvent.find(eventId).then((event) => {
+      this.event = event;
     });
   },
   computed: {
