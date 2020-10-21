@@ -17,7 +17,13 @@
         <a href="https://www.maryoku.com/for-vendors" target="_blank">Get your the best jobs</a>
       </p>
       <div class="pull-top-right">
-        <vendor-bid-time-counter :days="4" :hours="0" :minutes="0" :seconds="0" />
+        <vendor-bid-time-counter
+          :key="getRemainingTime.seconds"
+          :days="getRemainingTime.days"
+          :hours="getRemainingTime.hours"
+          :minutes="getRemainingTime.mins"
+          :seconds="getRemainingTime.seconds"
+        />
       </div>
     </section>
     <div
@@ -86,6 +92,7 @@ export default {
       iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor%20Landing%20Page/",
       vendor: null,
       event: null,
+      proposalRequest: null,
     };
   },
   methods: {
@@ -102,6 +109,7 @@ export default {
         this.proposalRequest = proposalRequest;
         this.event = this.proposalRequest.eventData;
         console.log(this.event);
+        console.log("getRemainingTime", this.getRemainingTime);
       });
     },
   },
@@ -116,6 +124,20 @@ export default {
         return this.event.concept.images[new Date().getTime() % 4].url;
       }
       return "";
+    },
+    getRemainingTime() {
+      if (!this.proposalRequest) return { days: 0, hours: 0, mins: 0, seconds: 0 };
+      console.log(this.proposalRequest.expiredTime);
+      console.log(new Date().getTime());
+      let remainingMs = this.proposalRequest.expiredTime - new Date().getTime();
+      const days = Math.floor(remainingMs / 24 / 3600 / 1000);
+      remainingMs = remainingMs - days * 24 * 3600 * 1000;
+      const hours = Math.floor(remainingMs / 3600 / 1000);
+      remainingMs = remainingMs - hours * 3600 * 1000;
+      const mins = Math.floor(remainingMs / 60 / 1000);
+      remainingMs = remainingMs - mins * 60 * 1000;
+      const seconds = Math.floor(remainingMs / 1000);
+      return { days, hours, mins, seconds };
     },
   },
 };

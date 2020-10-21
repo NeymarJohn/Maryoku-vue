@@ -410,11 +410,11 @@ export default {
     },
     findVendors() {
       let component = new EventComponent({ id: this.component.id });
-      console.log('findVendors', this.requirementProperties);
       postReq("/1/vendors/setting-requirements", {
-        vendorCategory: "foodandbeverage",
+        vendorCategory: this.blockId,
         expiredBusinessTime: moment(new Date()).add(5, "days").valueOf(),
-        settingsJsonData: JSON.stringify({requirements: this.requirementProperties, noteList: this.noteList} ),
+        settingsJsonData: JSON.stringify(this.requirementProperties),
+        NoteList: JSON.stringify(this.noteList),
         eventComponentInstance: new EventComponent({ id: this.component.id }),
       }).then((res) => {
         this.$emit("setRequirements", res);
