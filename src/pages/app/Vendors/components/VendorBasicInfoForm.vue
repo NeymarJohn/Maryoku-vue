@@ -26,7 +26,7 @@
             :required="true"
             @update-focus-value="onUpdateFocus"
           />
-          <v-signup-editable-field
+          <!-- <v-signup-editable-field
             :title="'Business Category 1'"
             :field="'vendorCategory'"
             :img="''"
@@ -34,16 +34,25 @@
             :borderBottom="true"
             :required="true"
             @update-focus-value="onUpdateFocus"
-          />
+          /> -->
           <v-signup-editable-field
-            :title="'Business Category 2'"
-            :field="'secondaryVendorCategory'"
+            :title="'Business Category'"
+            :field="'vendorCategories'"
             :img="''"
-            :defaultVal="vendor.secondaryVendorCategory"
+            :defaultVal="vendor.vendorCategories || ['']"
             :borderBottom="true"
             @update-focus-value="onUpdateFocus"
           />
           <v-signup-editable-field
+            :title="'Address'"
+            :field="'vendorAddresses'"
+            :img="`${iconUrl}Asset 550.svg`"
+            :defaultVal="vendor.vendorAddresses || ['']"
+            :borderBottom="true"
+            :required="true"
+            @update-focus-value="onUpdateFocus"
+          />
+          <!-- <v-signup-editable-field
             :title="'Address 1'"
             :field="'vendorAddressLine1'"
             :img="`${iconUrl}Asset 550.svg`"
@@ -59,7 +68,7 @@
             :defaultVal="vendor.vendorAddressLine1"
             :borderBottom="true"
             @update-focus-value="onUpdateFocus"
-          />
+          /> -->
           <v-signup-editable-field
             :title="'Phone'"
             :field="'vendorMainPhoneNumber'"

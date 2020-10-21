@@ -4,8 +4,20 @@
       <div class="title">{{ title }}<span v-if="required"> *</span></div>
       <div class="content">
         <div v-if="!isEdit">
-          <img v-if="img != ''" :src="img" />
-          {{ field == "vendorCategory" || field == "secondaryVendorCategory" ? selectedCategory.name : value }}
+          <template v-if="field == 'vendorCategories'">
+            <div v-for="(category, index) in value" :key="index" style="padding: 5px">
+              {{ getCategoryNameByValue(category) }}
+            </div>
+          </template>
+          <template v-else-if="field == 'vendorAddresses'">
+            <div v-for="(address, index) in value" :key="index" style="padding: 5px">
+              <img v-if="img != ''" :src="img" />{{ address }}
+            </div>
+          </template>
+          <template v-else>
+            <img v-if="img != ''" :src="img" />
+            {{ field == "vendorCategory" || field == "secondaryVendorCategory" ? selectedCategory.name : value }}
+          </template>
         </div>
         <div class="edit-content" v-else>
           <div v-if="field == 'vendorCategory' || field == 'secondaryVendorCategory'">
@@ -28,13 +40,31 @@
               </li>
             </ul>
           </div>
-          <div class="address-cont" v-else-if="field == 'vendorAddressLine1' || field == 'vendorAddressLine2'">
-            <vue-google-autocomplete
-              id="map"
-              ref="address"
-              placeholder="Enter an an address, zipcode, or location"
-              v-on:placechanged="getAddressData"
-            />
+          <div v-else-if="field == 'vendorCategories'">
+            <div v-for="(category, index) in value" :key="index" class="d-flex align-center mt-1">
+              <v-signup-category-selector
+                @change="updateValue(index, ...arguments)"
+                :defaultValue="category"
+              ></v-signup-category-selector>
+              <md-button v-if="index > 0" class="md-simple md-black edit-btn" @click="deleteValue(index)"
+                ><md-icon>close</md-icon></md-button
+              >
+            </div>
+            <md-button class="md-simple normal-btn md-red" @click="addNewValue">Add another category</md-button>
+          </div>
+          <div class="address-cont" v-else-if="field == 'vendorAddresses'">
+            <div class="d-flex align-center mt-1" v-for="(address, index) in value" :key="index">
+              <v-signup-address-editor
+                :defaultValue="address"
+                :index="index"
+                @change="updateValue(index, ...arguments)"
+              />
+              <md-button v-if="index > 0" class="md-simple md-black edit-btn" @click="deleteValue(index)"
+                ><md-icon>close</md-icon></md-button
+              >
+            </div>
+
+            <md-button class="md-simple normal-btn md-red" @click="addNewValue">Add another address</md-button>
           </div>
           <div v-else-if="field == 'vendorMainEmail'">
             <img class="inside-img" :src="img" v-if="img != ''" />
@@ -71,12 +101,15 @@
 <script>
 import VueElementLoading from "vue-element-loading";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
-
+import VSignupCategorySelector from "./VSignupCategorySelector";
+import VSignupAddressEditor from "./VSignupAddress";
 export default {
   name: "v-signup-editable-field",
   components: {
     VueElementLoading,
     VueGoogleAutocomplete,
+    VSignupCategorySelector,
+    VSignupAddressEditor,
   },
   props: {
     title: String,
@@ -226,6 +259,23 @@ export default {
     },
     getCategoryIconByValue(value) {
       return this.categories.filter((c) => c.value == value)[0].icon;
+    },
+    addNewValue() {
+      console.log(this.value);
+      console.log(typeof this.value);
+      if (this.value && typeof this.value == "object") {
+        this.value.push("");
+      }
+    },
+    deleteValue(index) {
+      if (this.value && typeof this.value == "object") {
+        this.value.splice(index, 1);
+      }
+    },
+    updateValue(index, value) {
+      if (this.value && typeof this.value == "object") {
+        this.value[index] = value;
+      }
     },
   },
 };

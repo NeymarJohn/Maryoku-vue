@@ -28,7 +28,6 @@
             <vendor-requirement-multiselect-panel
               v-for="(data, id) in requirementProperties[category]"
               :key="id"
-              :index="id"
               :data="data"
               :currentComponent="selectedBlock"
             ></vendor-requirement-multiselect-panel>
@@ -124,13 +123,7 @@
               </div>
             </div>
           </div>-->
-          <div v-else-if="category == 'special'">
-            <special-requirement-section
-                    :data="requirementProperties[category]"
-                    :note="noteList[category]"
-                    @change="handleSpecialChange"
-            ></special-requirement-section>
-          </div>
+          <special-requirement-section v-else-if="category == 'special'"></special-requirement-section>
           <div class="requirement-section" v-else>
             <table class="requirement-section-table">
               <thead>
@@ -225,14 +218,6 @@
                 </div>
               </div>
             </div>
-            <div class="special-request-section">
-              <div class="font-bold mt-10">Anything Else?</div>
-
-              <div class="mt-10">Get me a pink unicorn please.</div>
-              <div class="special-request-section-options mt-10">
-                <textarea placeholder="Type name of element here..." v-model="noteList[category]" @input="handleNoteChange"></textarea>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -247,7 +232,7 @@
         </md-button>
       </div>
       <div>
-        <md-button class="md-bold add-category-btn md-black md-simple" @click="revertToOriginal">Revert To Original</md-button>
+        <md-button class="md-bold add-category-btn md-black md-simple">Revert To Original</md-button>
         <md-button class="md-red md-bold add-category-btn" @click="findVendors">Find my perfect vendor</md-button>
       </div>
     </div>
@@ -308,7 +293,6 @@ export default {
     blockId: "",
     value: "",
     requirementProperties: {},
-    noteList: {},
     editingSpecialRequest: {
       name: "",
       isMandatory: false,
@@ -318,109 +302,68 @@ export default {
   }),
   methods: {
     ...mapMutations("event", ["setEventData"]),
-    ...mapMutations("event", ["setBookingRequirements"]),
     ...mapActions("comment", ["getCommentComponents"]),
     ...mapActions("vendor", ["fetchAllProperties"]),
-    _saveRequirementsInStore(action=null){
-      let requirements = this.storedRequirements;
-
-      let eventRequirement = requirements[this.event.id] ? requirements[this.event.id] : {};
-
-      eventRequirement[this.blockId] = JSON.parse(JSON.stringify({requirements: null, noteList: null})) ;
-      eventRequirement[this.blockId].requirements = action === 'clear' ? null : JSON.parse(JSON.stringify(this.requirementProperties));
-      eventRequirement[this.blockId].noteList = action === 'clear' ? null : JSON.parse(JSON.stringify(this.noteList));
-
-      requirements[this.event.id] = eventRequirement;
-      console.log("requirement", requirements);
-      this.setBookingRequirements(requirements);
-    },
     addRequirement(category, property) {
       const index = this.requirementProperties[category].findIndex((it) => it.item == property.item);
       this.requirementProperties[category][index].isSelected = true;
       this.requirementProperties = { ...this.requirementProperties };
-      this._saveRequirementsInStore()
       // this.$forceUpdate();
     },
     removeRequirement(category, property) {
       const index = this.requirementProperties[category].findIndex((it) => it.item == property.item);
       this.requirementProperties[category][index].isSelected = false;
       this.requirementProperties = { ...this.requirementProperties };
-      this._saveRequirementsInStore();
       // this.$forceUpdate();
     },
-    handleSpecialChange(e){
-      // console.log('handleSpecialChange', this.noteList);
-      if(e && e.hasOwnProperty('note')){
-        this.noteList['special'] = e.note;
-      }
-      this._saveRequirementsInStore();
-    },
-    handleNoteChange(e){
-      // console.log('handleNoteChange', this.noteList);
-      this._saveRequirementsInStore();
-    },
-    setProperties: async function(){
+    setProperties() {
       this.selectedBlock = this.component;
       const event = this.event;
       if (!this.selectedBlock.componentId) return;
+      this.$http
+        .get(`${process.env.SERVER_URL}/1/vendor/property/${this.selectedBlock.componentId}/${this.event.id}`)
+        .then((res) => {
+          this.isLoading = false;
+          const requirements = res.data;
+          for (let category in requirements) {
+            for (let itemIndex in requirements[category]) {
+              if (requirements[category][itemIndex].defaultQtyScript) {
+                const calcedValue = eval(requirements[category][itemIndex].defaultQtyScript);
+                requirements[category][itemIndex].defaultQty = Math.ceil(calcedValue);
+              }
 
-      let res = await this.$http.get(`${process.env.SERVER_URL}/1/vendor/property/${this.selectedBlock.componentId}/${this.event.id}`);
-      this.isLoading = false;
-      const requirements = res.data;
-      for (let category in requirements) {
-        for (let itemIndex in requirements[category]) {
-          if (requirements[category][itemIndex].defaultQtyScript) {
-            const calcedValue = eval(requirements[category][itemIndex].defaultQtyScript);
-            requirements[category][itemIndex].defaultQty = Math.ceil(calcedValue);
+              // requirements[category][itemIndex].isSelected = eval(requirements[category][itemIndex].isSelected)
+            }
           }
-        }
-        this.noteList[category] = null;
-      }
-      this.requirementProperties = requirements;
-      console.log("setProperties", this.requirementProperties);
 
+          this.requirementProperties = requirements;
+        })
+        .catch((e) => {
+          this.isLoading = false;
+        });
     },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
     },
-    scrollToTop() {
-      window.scrollTo(0, 0);
-    },
-    fetchData: async function() {
-      this.requirementProperties = {};
+    fetchData() {
       this.blockId = this.component.componentId; //this.$route.params.blockId
       this.event = this.$store.state.event.eventData;
       this.getCommentComponents(this.blockId);
-
-      if(this.storedRequirements[this.event.id] && this.storedRequirements[this.event.id][this.blockId]
-              && this.storedRequirements[this.event.id][this.blockId].requirements){
-        this.requirementProperties = JSON.parse(JSON.stringify(this.storedRequirements[this.event.id][this.blockId].requirements));
-        this.noteList = JSON.parse(JSON.stringify(this.storedRequirements[this.event.id][this.blockId].noteList));
-
-        this.isLoading = false;
-      }else{
-        await this.setProperties();
-      }
-    },
-    revertToOriginal: async function(){
-      this._saveRequirementsInStore('clear');
-      await this.fetchData();
-      this.scrollToTop();
-      this.$root.$emit('revertRequirements');
+      this.setProperties();
     },
     findVendors() {
-      let component = new EventComponent({ id: this.component.id });
       postReq("/1/vendors/setting-requirements", {
-        vendorCategory: this.blockId,
+        vendorCategory: "foodandbeverage",
         expiredBusinessTime: moment(new Date()).add(5, "days").valueOf(),
         settingsJsonData: JSON.stringify(this.requirementProperties),
-        NoteList: JSON.stringify(this.noteList),
         eventComponentInstance: new EventComponent({ id: this.component.id }),
       }).then((res) => {
         this.$emit("setRequirements", res);
       });
     },
-
+    addNewRequirement() {
+      this.specialRequests = [...this.addNewRequirement, this.editingSpecialRequest];
+    },
     checkAffectedItems(property) {
       // waitign for updating model
       setTimeout(() => {
@@ -448,19 +391,6 @@ export default {
   },
   mounted() {
     this.isLoading = true;
-
-    this.$root.$on('multi-select.change', (index, data) => {
-      console.log("multi-select.change", this.requirementProperties);
-      this.requirementProperties['multi-selection'][index] = data;
-      this._saveRequirementsInStore();
-    });
-
-    // this.$root.$on('revertRequirements', _ => {
-    //   this._saveRequirementsInStore('clear');
-    //   this.fetchData();
-    //   this.scrollToTop();
-    // });
-
     if (this.eventData.id) {
       this.fetchData();
     }
@@ -493,9 +423,6 @@ export default {
     },
   },
   computed: {
-    ...mapGetters({
-      storedRequirements: 'event/getBookingRequirements',
-    }),
     ...mapState("event", ["eventData"]),
   },
 };
