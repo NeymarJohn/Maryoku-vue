@@ -5,10 +5,10 @@
       <div class="content">
         <div v-if="!isEdit">
           <img v-if="img != ''" :src="img" />
-          {{ field == "vendorCategory" || field == "secondaryVendorCategory" ? selectedCategory.name : value }}
+          {{ title == "Business Category" ? selectedCategory.name : value }}
         </div>
         <div class="edit-content" v-else>
-          <div v-if="field == 'vendorCategory' || field == 'secondaryVendorCategory'">
+          <div v-if="title == 'Business Category'">
             <div class="droplist" v-if="!expanded" :class="{ 'mt-3': !selectedCategory.icon }">
               <img
                 class="inside-img"
@@ -28,7 +28,7 @@
               </li>
             </ul>
           </div>
-          <div class="address-cont" v-else-if="field == 'vendorAddressLine1' || field == 'vendorAddressLine2'">
+          <div class="address-cont" v-else-if="title == 'Address'">
             <vue-google-autocomplete
               id="map"
               ref="address"
@@ -36,15 +36,15 @@
               v-on:placechanged="getAddressData"
             />
           </div>
-          <div v-else-if="field == 'vendorMainEmail'">
+          <div v-else-if="title == 'Email'">
             <img class="inside-img" :src="img" v-if="img != ''" />
             <input class="default" :class="[{ 'with-img': img != '' }, isEmailValid()]" v-model="value" />
           </div>
-          <div v-else-if="field == 'vendorMainPhoneNumber'">
+          <div v-else-if="title == 'Phone'">
             <img class="inside-img" :src="img" v-if="img != ''" />
             <input
               class="default"
-              :type="field == 'vendorMainPhoneNumber' ? 'number' : 'text'"
+              :type="title == 'Phone' ? 'number' : 'text'"
               :class="[{ 'with-img': img != '' }]"
               v-model="value"
             />
@@ -195,7 +195,7 @@ export default {
         icon: null,
       };
     }
-    if (this.field == "vendorAddressLine1" || this.field == "vendorAddressLine2") {
+    if (this.title == "Address") {
       this.$refs.address.focus();
     }
   },
@@ -205,12 +205,11 @@ export default {
     },
     save() {
       this.isEdit = false;
-      // if (this.title == "Business Category") {
-      //   this.$root.$emit("update-vendor-value", "vendorCategory", this.value);
-      // } else {
-      //   this.$root.$emit("update-vendor-value", this.field, this.value);
-      // }
-      this.$root.$emit("update-vendor-value", this.field, this.value);
+      if (this.title == "Business Category") {
+        this.$root.$emit("update-vendor-value", "vendorCategory", this.value);
+      } else {
+        this.$root.$emit("update-vendor-value", this.field, this.value);
+      }
     },
     updateCategory(category) {
       this.selectedCategory = category;

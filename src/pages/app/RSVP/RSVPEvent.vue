@@ -157,6 +157,7 @@ import SyncCalendarModal from "@/components/Modals/RSVP/SyncCalendarModal";
 import RsvpVenueCarousel from "./RSVPVenueCarousel";
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
 import { mapActions, mapGetters } from "vuex";
+import swal from "sweetalert2";
 
 export default {
   components: {
@@ -207,6 +208,20 @@ export default {
     });
     CalendarEvent.find(eventId).then((event) => {
       this.event = event;
+    });
+    this.$root.$on("setRsvp", (rsvpData) => {
+      rsvpData.attendingOption = "PERSON";
+      rsvpData.rsvpStatus = "AGREED";
+      rsvpData.invitedEmail = this.$route.params.email;
+      new Rsvp(rsvpData).save().then((requestedRSVP) => {
+        console.log(requestedRSVP);
+        swal({
+          title: `Successed!`,
+          buttonsStyling: false,
+          confirmButtonClass: "md-button md-success",
+        });
+        this.showRsvpModal = false;
+      });
     });
   },
   computed: {
