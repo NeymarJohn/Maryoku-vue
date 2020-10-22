@@ -25,7 +25,7 @@
           <proposal-event-vision :event="event"></proposal-event-vision>
         </div>
         <div class="step-wrapper" v-if="(step < 2) & (step > -1)">
-          <div class="proposal-add-personal-message-wrapper">
+          <div class="proposal-add-personal-message-wrapper" v-if="!this.event.concept">
             <h3><img :src="`${iconUrl}Asset 611.svg`" />Let's begin with a personal message</h3>
             <h4>Write something nice, we'll add it to the final proposal</h4>
             <textarea
@@ -131,19 +131,13 @@ export default {
   data() {
     return {
       step: 0,
-      proposalRequest: null,
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       services: null,
       iconsWithCategory: null,
-      vendor: null,
-      event: null,
     };
   },
   created() {},
   mounted() {
-    this.getVendor();
-    this.getProposal(this.$route.params.id);
-
     this.services = VendorService.businessCategories();
     this.iconsWithCategory = VendorService.categoryNameWithIcons();
 
@@ -176,12 +170,6 @@ export default {
     // this.proposalRequest.requirements = VendorService.getProposalRequest().requirements;
   },
   methods: {
-    getVendor() {
-      Vendors.find(this.$route.params.vendorId).then((vendor) => {
-        this.vendor = vendor;
-      });
-    },
-
     getProposal(id) {
       ProposalRequest.find(id)
         .then((resp) => {
@@ -300,6 +288,25 @@ export default {
       return this.event.components.filter(
         (item) => item.componentId !== this.vendor.vendorCategory && item.componentId !== "unexpected",
       );
+    },
+    vendor() {
+      return this.$store.state.vendorProposal.vendor;
+    },
+    proposalRequest() {
+      return this.$store.state.vendorProposal.proposalRequest;
+    },
+    event() {
+      if (!this.proposalRequest) return {};
+      return this.proposalRequest.eventData;
+    },
+  },
+  watch: {
+    proposalRequest(newValue, oldValue) {
+      if (newValue.eventData.concept) {
+        this.step = -1;
+      } else {
+        this.step = 0;
+      }
     },
   },
 };
