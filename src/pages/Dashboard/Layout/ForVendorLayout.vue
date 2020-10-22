@@ -63,13 +63,14 @@
         </ul>
       </div>
     </section>
-    <signup-request-modal v-if="showSignup"></signup-request-modal>
   </div>
 </template>
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
+import Vendors from "@/models/Vendors";
+import ProposalRequest from "@/models/ProposalRequest";
 
 import TopNavbar from "./TopNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
@@ -77,7 +78,7 @@ import MobileMenu from "./Extra/MobileMenu.vue";
 import UserMenu from "./Extra/UserMenu.vue";
 import ForVendors from "@/pages/app/Vendors/ForVendors.vue";
 import VendorBidTimeCounter from "@/pages/app/Vendors/components/VendorBidTimeCounter.vue";
-import SignupRequestModal from "@/components/Modals/VendorProposal/SignupRequestModal.vue";
+
 export default {
   components: {
     TopNavbar,
@@ -85,7 +86,6 @@ export default {
     MobileMenu,
     VendorBidTimeCounter,
     UserMenu,
-    SignupRequestModal,
   },
   data() {
     return {
@@ -93,29 +93,31 @@ export default {
       vendor: null,
       event: null,
       proposalRequest: null,
-      showSignup: false,
     };
   },
-  mounted() {
-    this.getVendor(this.$route.params.vendorId)
-      .then((vendor) => {
-        this.vendor = vendor;
-      })
-      .catch((e) => {
-        this.showSignup = true;
-      });
-    this.getProposalRequest(this.$route.params.rfpId).then((proposalRequest) => {
-      this.proposalRequest = proposalRequest;
-      this.event = this.proposalRequest.eventData;
-    });
-  },
   methods: {
-    ...mapActions("vendorProposal", ["getVendor", "getProposalRequest"]),
     goToForm() {
       this.$root.$emit("go-to-proposal-form");
     },
+    getVendor() {
+      Vendors.find(this.$route.params.vendorId).then((vendor) => {
+        this.vendor = vendor;
+      });
+    },
+    getProposalRequest() {
+      ProposalRequest.find(this.$route.params.rfpId).then((proposalRequest) => {
+        this.proposalRequest = proposalRequest;
+        this.event = this.proposalRequest.eventData;
+        console.log(this.event);
+        console.log("getRemainingTime", this.getRemainingTime);
+      });
+    },
   },
-
+  created() {},
+  mounted() {
+    this.getVendor();
+    this.getProposalRequest();
+  },
   computed: {
     backgroundImage() {
       if (this.event && this.event.concept) {

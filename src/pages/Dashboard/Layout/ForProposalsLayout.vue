@@ -252,46 +252,34 @@ export default {
       event: "",
     };
   },
-  created() {
-    this.$root.$on("send-event-data", (evtData) => {
-      this.evtData = evtData;
-    });
-
-    if (this.$route.params.eventId) {
-      this.getEvent();
-    }
-
-    this.fullDetailsModal = false;
-    this.savedItModal = false;
-    this.isTimeUp = false;
-
-    this.getVendor(this.$route.params.vendorId).then((vendor) => {
-      this.vendor = vendor;
-    });
-    this.getProposalRequest(this.$route.params.id).then((proposalRequest) => {
-      this.$set(this, "proposalRequest", proposalRequest);
-      this.event = proposalRequest.eventData;
-      if (proposalRequest.eventData.concept) {
-        this.step = -1;
-      } else {
-        this.step = 0;
-      }
-      this.proposalRequestRequirements = _.chain(proposalRequest.requirements)
-        .groupBy("requirementPriority")
-        .map(function (value, key) {
-          return {
-            title: key,
-            requirements: value,
-          };
-        })
-        .value();
-    });
-  },
   methods: {
-    ...mapActions("vendorProposal", ["getVendor", "getProposalRequest"]),
+    getVendor() {
+      Vendors.find(this.$route.params.vendorId).then((vendor) => {
+        this.vendor = vendor;
+      });
+    },
     getProposal(id) {
       ProposalRequest.find(id)
-        .then((resp) => {})
+        .then((resp) => {
+          console.log("ProposalRequest:", resp);
+          this.$set(this, "proposalRequest", resp);
+          this.event = resp.eventData;
+          console.log(resp);
+          if (resp.eventData.concept) {
+            this.step = -1;
+          } else {
+            this.step = 0;
+          }
+          this.proposalRequestRequirements = _.chain(resp.requirements)
+            .groupBy("requirementPriority")
+            .map(function (value, key) {
+              return {
+                title: key,
+                requirements: value,
+              };
+            })
+            .value();
+        })
         .catch((error) => {
           console.log(" error ", error);
         });
@@ -389,7 +377,22 @@ export default {
       this.$store.dispatch("event/getEventById", this.$route.params.eventId);
     },
   },
+  created() {
+    this.$root.$on("send-event-data", (evtData) => {
+      this.evtData = evtData;
+    });
 
+    if (this.$route.params.eventId) {
+      this.getEvent();
+    }
+
+    this.fullDetailsModal = false;
+    this.savedItModal = false;
+    this.isTimeUp = false;
+
+    this.getVendor();
+    this.getProposal(this.$route.params.id);
+  },
   filters: {
     withComma(amount) {
       return amount ? amount.toLocaleString() : 0;

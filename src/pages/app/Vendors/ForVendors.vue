@@ -366,6 +366,7 @@ export default {
   },
   data() {
     return {
+      vendor: null,
       category: null,
       notBiddingModal: false,
       chooseDateModal: false,
@@ -382,6 +383,7 @@ export default {
       conditionTooltip: false,
       proposalRequestRequirements: [],
       proposals: [],
+      proposalRequest: null,
       firstTime: false,
       suggest: false,
       categories: [
@@ -414,6 +416,8 @@ export default {
     };
   },
   mounted() {
+    this.getVendor();
+    this.getProposalRequest();
     this.today = moment(new Date());
     this.limitDateRange = {
       min: this.today.add(-3, "days").format("DD/MM/YYYY"),
@@ -490,7 +494,16 @@ export default {
       this.hideModal();
       this.sorryModal = true;
     },
-
+    getVendor() {
+      Vendors.find(this.$route.params.vendorId).then((vendor) => {
+        this.vendor = vendor;
+      });
+    },
+    getProposalRequest() {
+      ProposalRequest.find(this.$route.params.rfpId).then((proposalRequest) => {
+        this.proposalRequest = proposalRequest;
+      });
+    },
     isDateDisabled(date) {
       let startDate = new Date(this.proposalRequest.eventData.eventStartMillis);
       let endDate = new Date(this.proposalRequest.eventData.eventStartMillis);
@@ -516,12 +529,6 @@ export default {
     },
   },
   computed: {
-    vendor() {
-      return this.$store.state.vendorProposal.vendor;
-    },
-    proposalRequest() {
-      return this.$store.state.vendorProposal.proposalRequest;
-    },
     eventDate() {
       if (!this.proposalRequest) return "-";
 
@@ -556,8 +563,7 @@ export default {
       }
     },
     requiredServices() {
-      if (this.proposalRequest) return this.proposalRequest.eventData.components.sort((a, b) => a.order - b.order);
-      return [];
+      return this.proposalRequest.eventData.components.sort((a, b) => a.order - b.order);
     },
   },
   filters: {
