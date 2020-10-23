@@ -41,6 +41,7 @@
             :img="''"
             :defaultVal="vendor.vendorCategories || ['']"
             :borderBottom="true"
+            :required="true"
             @update-focus-value="onUpdateFocus"
           />
           <v-signup-editable-field
