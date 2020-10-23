@@ -1,5 +1,5 @@
 <template>
-  <div class="vendor-checkbox-wrapper" :class="{ checked: checked }">
+  <div class="vendor-checkbox-wrapper" :class="{'checked': checked}">
     <template v-if="item.type == Boolean">
       <div class="main">
         <div class="check-cont flex" @click="updateCheck()">
@@ -21,16 +21,16 @@
             `"
             v-else
           ></div>
-          <div class="text">{{ label }}</div>
+          <div class="text">{{label}}</div>
         </div>
         <div class="included-cont" v-if="checked && !item.xIncluded">
-          <div class="included" :class="{ active: included }" @click="updateIncluded()">
+          <div class="included" :class="{'active': included}" @click="updateIncluded()">
             <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="included" />
             <span class="unchecked" v-else></span>
             <span>Included</span>
           </div>
           <div class="flex-1 mr-m1">
-            <div class="included" :class="{ active: !included }" @click="updateIncluded()">
+            <div class="included" :class="{'active': !included}" @click="updateIncluded()">
               <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!included" />
               <span class="unchecked" v-else></span>
               <span>Not included</span>
@@ -49,15 +49,19 @@
           </div>-->
         </div>
       </div>
-      <div class="sub-cont" v-if="checked" :class="{ 'mt-m3': !included }">
+      <div class="sub-cont" v-if="checked" :class="{'mt-m3': !included}">
         <!-- <textarea 
           class="text"
           :placeholder="`Describe your ${label}`"
         />-->
-        <textarea class="text" v-model="currentItem.desc" :placeholder="`Add additional information`" />
+        <textarea
+          class="text"
+          v-model="currentItem.desc"
+          :placeholder="`Add additional information`"
+        />
       </div>
     </template>
-    <template v-if="item.type == Number">
+    <template v-if="item.type==Number">
       <div class="main">
         <div class="check-cont">
           <div class="check-cont flex" @click="updateCheck()">
@@ -79,7 +83,7 @@
               `"
               v-else
             ></div>
-            {{ label }}
+            {{label}}
           </div>
           <div class="how-many" v-if="checked">
             How Many?
@@ -87,13 +91,13 @@
           </div>
         </div>
         <div class="included-cont" v-if="checked && !item.xIncluded">
-          <div class="included" :class="{ active: included }" @click="updateIncluded()">
+          <div class="included" :class="{'active': included}" @click="updateIncluded()">
             <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="included" />
             <span class="unchecked" v-else></span>
             <span>Included</span>
           </div>
           <div class="flex-1 mr-m1">
-            <div class="included" :class="{ active: !included }" @click="updateIncluded()">
+            <div class="included" :class="{'active': !included}" @click="updateIncluded()">
               <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!included" />
               <span class="unchecked" v-else></span>
               <span>Not included</span>
@@ -106,7 +110,7 @@
         </div>
       </div>
     </template>
-    <template v-if="item.type == Array">
+    <template v-if="item.type==Array">
       <div class="main">
         <div class="check-cont">
           <div class="check-cont flex" @click="updateCheck()">
@@ -128,10 +132,10 @@
               `"
               v-else
             ></div>
-            {{ label }}
+            {{label}}
           </div>
-          <div class="dropdown-list" v-if="checked" @click="expanded = !expanded">
-            <div class>{{ label }}</div>
+          <div class="dropdown-list" v-if="checked" @click="expanded=!expanded">
+            <div class>{{label}}</div>
           </div>
           <div class="dropdown-cont" v-if="expanded && checked">
             <img :src="`${iconUrl}Asset 524.svg`" />
@@ -140,7 +144,7 @@
                 <div class="check-field" @click="updateExChecked(a)">
                   <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="exChecked.includes(a)" />
                   <span class="blank-circle" v-else />
-                  <span class="text" :class="{ checked: exChecked.includes(a) }">{{ a }}</span>
+                  <span class="text" :class="{'checked': exChecked.includes(a)}">{{a}}</span>
                 </div>
               </li>
             </ul>
@@ -158,13 +162,6 @@
             <span>Not included</span>
           </div>
         </div>-->
-      </div>
-      <div class="sub-cont" v-if="item.hasComment && checked" :class="{ 'mt-m3': !included }">
-        <!-- <textarea 
-          class="text"
-          :placeholder="`Describe your ${label}`"
-        />-->
-        <textarea class="text" v-model="currentItem.desc" :placeholder="`Add additional information`" />
       </div>
     </template>
   </div>
@@ -202,7 +199,8 @@ export default {
         desc: null,
       },
       exChecked: [],
-      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      iconUrl:
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
   },
   created() {},
@@ -227,17 +225,29 @@ export default {
         this.exChecked.push(item);
       }
       this.currentItem.value = this.exChecked;
-      this.$root.$emit("update-vendor-value", `services.${this.camelize(this.label)}`, this.currentItem);
+      this.$root.$emit(
+        "update-vendor-value",
+        `services.${this.camelize(this.label)}`,
+        this.currentItem,
+      );
     },
     updateCheck() {
       this.checked = !this.checked;
       this.currentItem.checked = this.checked;
-      this.$root.$emit("update-vendor-value", `services.${this.camelize(this.label)}`, this.currentItem);
+      this.$root.$emit(
+        "update-vendor-value",
+        `services.${this.camelize(this.label)}`,
+        this.currentItem,
+      );
     },
     updateIncluded() {
       this.included = !this.included;
       this.currentItem.included = this.included;
-      this.$root.$emit("update-vendor-value", `services.${this.camelize(this.label)}`, this.currentItem);
+      this.$root.$emit(
+        "update-vendor-value",
+        `services.${this.camelize(this.label)}`,
+        this.currentItem,
+      );
     },
     camelize(str) {
       let temp = str.replace(/\W+(.)/g, function (match, chr) {

@@ -25,7 +25,7 @@
         <div class="sub-items" :style="{ left: `${serviceSlidePos}px` }" ref="servicesCont">
           <select-proposal-sub-item
             :selected="isSelectedQuickButton(s)"
-            :item="requirement.item ? requirement.item : requirement.subCategory"
+            :item="requirement.item?requirement.item:requirement.subCategory"
             v-for="(requirement, sIndex) in optionalRequirements"
             :key="sIndex"
           />
@@ -311,20 +311,25 @@
         <h3><img :src="`${iconUrl}Asset 605.svg`" />Upload Additional Photos</h3>
         <h5>(15 photos top, under 20KB)</h5>
       </div>
-      <vue-dropzone
-        id="dropzone"
-        :options="dropzoneOptions"
-        :useCustomSlot="true"
-        class="dropdown-zone"
-        @vdropzone-file-added="imageSelected"
-      >
-        <span class="color-red font-bold cho">
-          <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10" />Choose File
-        </span>
-        <br />Or
-        <br />
-        <span class="color-dark-gray">Drag your file here</span>
-      </vue-dropzone>
+      <div class="upload-cont">
+        <p>You've already uploaded photos of your basic services</p>
+        <div class="upload">
+          <a class="choose-file" @click="uploadDocument('image')">
+            <img :src="`${iconUrl}Asset 578.svg`" />Choose File
+          </a>
+          <br />
+          <span class="or">Or</span>
+          <br />
+          <span>Drag your file here</span>
+          <input
+            type="file"
+            class="hide"
+            ref="imageFile"
+            accept="image/gif, image/jpg, image/png"
+            @change="onFilePicked"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -337,8 +342,6 @@ import SelectProposalSubItem from "./SelectProposalSubItem.vue";
 import EditableProposalSubItem from "./EditableProposalSubItem.vue";
 import { Money } from "v-money";
 
-import vue2Dropzone from "vue2-dropzone";
-import S3Service from "@/services/s3.service";
 export default {
   name: "proposal-item",
   components: {
@@ -346,7 +349,6 @@ export default {
     SelectProposalSubItem,
     EditableProposalSubItem,
     Money,
-    vueDropzone: vue2Dropzone,
   },
   props: {
     category: String,
@@ -411,16 +413,11 @@ export default {
         masked: false,
       },
       selectedQuickButton: "",
-      dropzoneOptions: {
-        url: "https://httpbin.org/post",
-        thumbnailWidth: 150,
-        maxFilesize: 10,
-      },
     };
   },
   methods: {
-    getObject(item) {
-      return JSON.parse(JSON.stringify(item));
+    getObject (item){
+        return JSON.parse(JSON.stringify(item));
     },
     clickItem(category) {
       this.isChecked = !this.isChecked;
@@ -563,7 +560,7 @@ export default {
       let requirements = [];
       console.log("total.requirements", this.newProposalRequest);
       if (this.newProposalRequest.requirements.length) {
-        requirements = this.newProposalRequest.requirements.filter((r) => r.hasOwnProperty("requirementTitle"));
+        requirements = this.newProposalRequest.requirements.filter((r) => r.hasOwnProperty('requirementTitle'));
       }
 
       requirements.map(function (item) {
@@ -618,20 +615,13 @@ export default {
       const selectedService = selectedServices.find((it) => it.requirementTitle === item);
       return selectedService || item == this.selectedQuickButton;
     },
-    async imageSelected(file) {
-      const imageData = await getBase64(file);
-      const extension = file.type.split("/")[1];
-      // S3Service.fileUpload(file, logoName, "logos").then((res) => {
-      //   this.$store.dispatch("campaign/setLogo", { logoUrl: `${this.$uploadURL}logos/${logoName}.${extension}` });
-      // });
-    },
   },
   created() {},
   mounted() {
     this.isVCollapsed = this.isCollapsed;
     this.newProposalRequest = this.proposalRequest;
-    this.mandatoryRequirements.forEach((item) => {
-      console.log("item", item);
+    this.mandatoryRequirements.forEach(item=>{
+      console.log("item",item)
       this.newProposalRequest.requirements.push({
         comments: [],
         dateCreated: "",
@@ -648,7 +638,7 @@ export default {
         requirementsCategory: item.category,
         requirementValue: 1,
       });
-    });
+    })
     this.$forceUpdate();
     this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
     this.$root.$on("remove-proposal-requirement", (item) => {
@@ -667,7 +657,7 @@ export default {
       this.selectedQuickButton = item;
     });
 
-    this.$root.$on("save-proposal-requirement", ({ index, item }) => {
+    this.$root.$on("save-proposal-requirement", ({index, item}) => {
       this.proposalRequest.requirements[index] = item;
       this.newProposalRequest.requirements[index] = item;
       this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
@@ -692,11 +682,11 @@ export default {
       return !this.qty || !this.unit || !this.subTotal || this.subTotal == 0 || !this.serviceItem;
     },
     optionalRequirements() {
-      return this.proposalRequest.requirements.filter((item) => !item.mustHave);
+      return this.proposalRequest.requirements.filter(item=>!item.mustHave)
     },
     mandatoryRequirements() {
-      return this.proposalRequest.requirements.filter((item) => item.mustHave);
-    },
+      return this.proposalRequest.requirements.filter(item=>item.mustHave)
+    }
   },
   watch: {},
 };
@@ -711,9 +701,6 @@ export default {
   color: #050505;
   margin: 50px 0 30px 0;
 
-  .dropdown-zone {
-    margin: 30px;
-  }
   .title-cont {
     .with-subtitle {
       display: flex;

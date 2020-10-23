@@ -68,7 +68,7 @@
             <div class="font-size-30 font-bold-extra mb-30 d-flex">
               <img
                 :src="
-                  campaignData.visibleSettings.showWearingGuide
+                  campaignData.visibleSettings && campaignData.visibleSettings.showWearingGuide
                     ? `${$iconURL}RSVP/wear.svg`
                     : `${$iconURL}RSVP/wear-gray.svg`
                 "
@@ -77,7 +77,7 @@
               <span
                 class="text-transform-uppercase font-size-26 p-10 text-ellipse"
                 :class="{
-                  'color-gray': !campaignData.visibleSettings.showWearingGuide,
+                  'color-gray': !campaignData.visibleSettings || !campaignData.visibleSettings.showWearingGuide,
                 }"
                 style="z-index: 1"
                 >WHAT SHOULD I WEAR?</span
