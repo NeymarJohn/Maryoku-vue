@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="information-section">
-        <food-limitation-set @change="setMyFoodLimitation"></food-limitation-set>
+        <food-limitation-set></food-limitation-set>
       </div>
       <div class="information-section">
         <div class="mb-20">
@@ -43,7 +43,7 @@
           <label class="font-bold mb-10" style="display: inline-block">Name of Guest 0{{ index + 1 }}</label>
           <maryoku-input v-model="guest.name" class="mb-20"></maryoku-input>
         </div>
-        <food-limitation-set :type="2" @change="setGuestFoodLimitation(index, ...arguments)"></food-limitation-set>
+        <food-limitation-set :type="2"></food-limitation-set>
       </div>
     </template>
     <template slot="footer" v-if="step == 1">
@@ -69,7 +69,7 @@ export default {
       name: "",
       email: "",
       step: 1,
-      foodLimitaion: null,
+      foodLimitaion: true,
       suggestedProposals: [
         {
           content: "",
@@ -102,21 +102,7 @@ export default {
       }
     },
     setRsvp() {
-      const guests = [{ name: this.name, email: this.email, isMainGuest: true, ...this.foodLimitaion }];
-
-      this.joinedGuests.forEach((guest) => {
-        guests.push(guest);
-      });
-      this.$root.$emit("setRsvp", { guests, name: this.name, responseEmail: this.email });
-    },
-    setMyFoodLimitation(foodLimitation) {
-      this.foodLimitaion = foodLimitation;
-      console.log(foodLimitation);
-    },
-    setGuestFoodLimitation(index, foodLimitation) {
-      this.joinedGuests[index] = { ...this.joinedGuests[index], ...foodLimitation };
-      console.log(index);
-      console.log(foodLimitation);
+      this.$emit("setRsvp");
     },
   },
 };

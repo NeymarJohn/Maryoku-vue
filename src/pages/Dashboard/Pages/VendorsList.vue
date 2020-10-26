@@ -1,15 +1,18 @@
 <template>
   <div class="card vendor-list-all">
     <h1>All Vendors</h1>
+
     <table>
       <thead>
         <tr>
           <th>No</th>
           <th>Company Name</th>
           <th>User Name</th>
-          <th>Business Category</th>
+          <th>Business Category1</th>
+          <th>Business Category2</th>
           <th>Main Email</th>
-          <th>Location</th>
+          <th>Location1</th>
+          <th>Location2</th>
         </tr>
       </thead>
       <tbody>
@@ -18,8 +21,10 @@
           <td>{{ vendor.companyName }}</td>
           <td>{{ vendor.vendorDisplayName }}</td>
           <td>{{ vendor.eventCategory ? vendor.eventCategory.title : "" }}</td>
+          <td>{{ vendor.secondaryEventCategory ? vendor.secondaryEventCategory.title : "" }}</td>
           <td>{{ vendor.vendorMainEmail }}</td>
           <td>{{ vendor.vendorAddressLine1 }}</td>
+          <td>{{ vendor.vendorAddressLine2 }}</td>
         </tr>
       </tbody>
     </table>
@@ -46,7 +51,8 @@ export default {
     text-align: center;
   }
   table {
-    margin: auto;
+    padding: 30px;
+    width: 100%;
     min-width: 1200px;
     td,
     th {

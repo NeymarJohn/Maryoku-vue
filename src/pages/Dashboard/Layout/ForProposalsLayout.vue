@@ -50,7 +50,13 @@
           </a>
         </div>
         <div class="pull-bottom-right">
-          <vendor-bid-time-counter :days="4" :hours="0" :minutes="0" :seconds="0" />
+          <vendor-bid-time-counter
+            :key="getRemainingTime.seconds"
+            :days="getRemainingTime.days"
+            :hours="getRemainingTime.hours"
+            :minutes="getRemainingTime.mins"
+            :seconds="getRemainingTime.seconds"
+          />
         </div>
       </div>
     </section>
@@ -429,6 +435,20 @@ export default {
         return this.event.concept.images[new Date().getTime() % 4].url;
       }
       return "";
+    },
+    getRemainingTime() {
+      if (!this.proposalRequest) return { days: 0, hours: 0, mins: 0, seconds: 0 };
+      console.log(this.proposalRequest.expiredTime);
+      console.log(new Date().getTime());
+      let remainingMs = this.proposalRequest.expiredTime - new Date().getTime();
+      const days = Math.floor(remainingMs / 24 / 3600 / 1000);
+      remainingMs = remainingMs - days * 24 * 3600 * 1000;
+      const hours = Math.floor(remainingMs / 3600 / 1000);
+      remainingMs = remainingMs - hours * 3600 * 1000;
+      const mins = Math.floor(remainingMs / 60 / 1000);
+      remainingMs = remainingMs - mins * 60 * 1000;
+      const seconds = Math.floor(remainingMs / 1000);
+      return { days, hours, mins, seconds };
     },
   },
 };
