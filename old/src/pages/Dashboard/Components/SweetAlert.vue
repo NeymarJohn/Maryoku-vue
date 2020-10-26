@@ -2,7 +2,8 @@
   <div>
     <div class="header text-center">
       <h3 class="title">Sweet Alert 2</h3>
-      <p class="category">A beautiful plugin, that replace the classic alert, Handcrafted by our friend
+      <p class="category">
+        A beautiful plugin, that replace the classic alert, Handcrafted by our friend
         <a target="_blank" href="https://twitter.com/t4t5">Tristan Edwards</a>. Please checkout the
         <a href="https://github.com/sweetalert2/sweetalert2" target="_blank">full documentation.</a>
       </p>
@@ -45,7 +46,9 @@
           <md-card>
             <md-card-content class="text-center">
               <h5 class="card-text">A warning message, with a function attached to the "Confirm" Button...</h5>
-              <md-button class="md-success" @click.native="showSwal('warning-message-and-confirmation')">Try me!</md-button>
+              <md-button class="md-success" @click.native="showSwal('warning-message-and-confirmation')"
+                >Try me!</md-button
+              >
             </md-card-content>
           </md-card>
         </div>
@@ -87,14 +90,14 @@ export default {
         swal({
           title: `Here's a message!`,
           buttonsStyling: false,
-          confirmButtonClass: "md-button md-success"
+          confirmButtonClass: "md-button md-success",
         });
       } else if (type === "title-and-text") {
         swal({
           title: `Here's a message!`,
           text: `It's pretty, isn't it?`,
           buttonsStyling: false,
-          confirmButtonClass: "md-button md-info"
+          confirmButtonClass: "md-button md-info",
         });
       } else if (type === "success-message") {
         swal({
@@ -102,7 +105,7 @@ export default {
           text: "You clicked the button!",
           buttonsStyling: false,
           confirmButtonClass: "md-button md-success",
-          type: "success"
+          type: "success",
         });
       } else if (type === "warning-message-and-confirmation") {
         swal({
@@ -113,15 +116,15 @@ export default {
           confirmButtonClass: "md-button md-success",
           cancelButtonClass: "md-button md-danger",
           confirmButtonText: "Yes, delete it!",
-          buttonsStyling: false
-        }).then(result => {
+          buttonsStyling: false,
+        }).then((result) => {
           if (result.value) {
             swal({
               title: "Deleted!",
               text: "Your file has been deleted.",
               type: "success",
               confirmButtonClass: "md-button md-success",
-              buttonsStyling: false
+              buttonsStyling: false,
             });
           }
         });
@@ -135,15 +138,15 @@ export default {
           cancelButtonText: "No, keep it",
           confirmButtonClass: "md-button md-success",
           cancelButtonClass: "md-button md-danger",
-          buttonsStyling: false
-        }).then(result => {
+          buttonsStyling: false,
+        }).then((result) => {
           if (result.value) {
             swal({
               title: "Deleted!",
               text: "Your imaginary file has been deleted.",
               type: "success",
               confirmButtonClass: "md-button md-success",
-              buttonsStyling: false
+              buttonsStyling: false,
             });
           } else if (result.dismiss === swal.DismissReason.cancel) {
             swal({
@@ -151,7 +154,7 @@ export default {
               text: "Your imaginary file is safe :)",
               type: "error",
               confirmButtonClass: "md-button md-info",
-              buttonsStyling: false
+              buttonsStyling: false,
             });
           }
         });
@@ -162,14 +165,14 @@ export default {
           confirmButtonClass: "md-button md-success",
           html: `You can use <b>bold text</b>,
             <a href="http://github.com">links</a>
-            and other HTML tags`
+            and other HTML tags`,
         });
       } else if (type === "auto-close") {
         swal({
           title: "Auto close alert!",
           text: "I will close in 2 seconds.",
           timer: 2000,
-          showConfirmButton: false
+          showConfirmButton: false,
         });
       } else if (type === "input-field") {
         swal({
@@ -180,21 +183,20 @@ export default {
           showCancelButton: true,
           confirmButtonClass: "md-button md-success",
           cancelButtonClass: "md-button md-danger",
-          buttonsStyling: false
+          buttonsStyling: false,
         })
           .then(() => {
             swal({
               type: "success",
-              html:
-                "You entered: <strong>" + $("#md-input").val() + "</strong>",
+              html: "You entered: <strong>" + $("#md-input").val() + "</strong>",
               confirmButtonClass: "md-button md-success",
-              buttonsStyling: false
+              buttonsStyling: false,
             });
           })
           .catch(swal.noop);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     changeState() {
-      this.$root.$emit('multi-select.change', this.index, this.data);
+      this.$root.$emit('multi-select.change', {index: this.index, data: this.data});
     },
   },
 };
@@ -60,7 +60,7 @@ export default {
 <style lang="scss" scoped>
 .vendor-requirement-multiselect {
   .option {
-    min-width: 150px;
+    width: 18%;
   }
 }
 </style>

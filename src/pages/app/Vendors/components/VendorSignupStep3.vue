@@ -830,11 +830,13 @@ export default {
             },
             {
               name: "Minimum hours of service",
-              type: Boolean,
+              type: Number,
+              noSuffix: true,
             },
             {
               name: "Max hours per shift",
-              type: Boolean,
+              type: Number,
+              noSuffix: true,
             },
             {
               name: "Dress code",
@@ -933,19 +935,19 @@ export default {
           items: [
             {
               name: "Travel cost",
-              type: Number,
+              type: Boolean,
             },
             {
               name: "Pickup",
-              type: Number,
+              type: Boolean,
             },
             {
               name: "Cleanup",
-              type: Number,
+              type: Boolean,
             },
             {
               name: "Breakdown",
-              type: Number,
+              type: Boolean,
             },
             {
               name: "Discount for large quantities",
@@ -955,7 +957,8 @@ export default {
             },
             {
               name: "Cost Late Night Fares",
-              type: Number,
+              type: Boolean,
+              hasComment: true,
             },
             {
               name: "Discount for large quantities",

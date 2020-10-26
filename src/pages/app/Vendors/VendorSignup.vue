@@ -256,7 +256,10 @@ export default {
             title: `Thank you for your signup!`,
             buttonsStyling: false,
             confirmButtonClass: "md-button md-success",
-          }).then(() => {});
+          }).then(() => {
+            const proposalRequest = this.$route.query.proposalRequest;
+            if (proposalRequest) this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
+          });
         })
         .catch((error) => {
           console.log("*** Save vendor - failed: ");
