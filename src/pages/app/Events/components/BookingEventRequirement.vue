@@ -127,9 +127,16 @@
           <div v-else-if="category == 'special'">
             <special-requirement-section
               :data="requirementProperties[category]"
-              :note="noteList[category]"
+              :note="anythingElse"
               @change="handleSpecialChange"
             ></special-requirement-section>
+          </div>
+          <div v-else-if="blockId == 'entertainment' && category == 'Services'">
+            <entertainment-services-section
+              :data="requirementProperties"
+              :note="anythingElse"
+              @change="handleServiceChange"
+            ></entertainment-services-section>
           </div>
           <div class="requirement-section" v-else>
             <table class="requirement-section-table">
@@ -141,7 +148,9 @@
                       {{ category }}
                     </span>
                   </th>
-                  <th>How Many?</th>
+                  <th>
+                    <div v-if="getInputAvailable(category)">How Many?</div>
+                  </th>
                   <th></th>
                   <th></th>
                 </tr>
@@ -216,7 +225,9 @@
               <div>
                 <div
                   class="additional-request-tag"
-                  v-for="(property, index) in requirementProperties[category].filter((item) => !item.isSelected)"
+                  v-for="(property, index) in requirementProperties[category].filter(
+                    (item) => !item.isSelected && item.visible,
+                  )"
                   :key="index"
                   @click="addRequirement(category, property)"
                 >
@@ -225,14 +236,20 @@
                 </div>
               </div>
             </div>
-            <div class="special-request-section">
+            <div
+              v-if="
+                index === Object.keys(requirementProperties).length - 1 &&
+                !requirementProperties.hasOwnProperty('special')
+              "
+              class="anything-else-section mt-30"
+            >
               <div class="font-bold mt-10">Anything Else?</div>
 
               <div class="mt-10">Get me a pink unicorn please.</div>
-              <div class="special-request-section-options mt-10">
+              <div class="anything-else-section-options mt-10">
                 <textarea
                   placeholder="Type name of element here..."
-                  v-model="noteList[category]"
+                  v-model="anythingElse"
                   @input="handleNoteChange"
                 ></textarea>
               </div>
@@ -280,6 +297,7 @@ import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
 import VendorRequirementMultiselectPanel from "./VendorRequirementMultiselectPanel";
 import SpecialRequirementSection from "./SpecialRequirementSection";
+import EntertainmentServicesSection from "./EntertainmentServicesSection";
 
 export default {
   name: "booking-event-requirement",
@@ -295,6 +313,7 @@ export default {
     MaryokuTextarea,
     VendorRequirementMultiselectPanel,
     SpecialRequirementSection,
+    EntertainmentServicesSection,
   },
   props: {
     component: {
@@ -314,7 +333,7 @@ export default {
     blockId: "",
     value: "",
     requirementProperties: {},
-    noteList: {},
+    anythingElse: null,
     editingSpecialRequest: {
       name: "",
       isMandatory: false,
@@ -332,14 +351,34 @@ export default {
 
       let eventRequirement = requirements[this.event.id] ? requirements[this.event.id] : {};
 
-      eventRequirement[this.blockId] = JSON.parse(JSON.stringify({ requirements: null, noteList: null }));
+      eventRequirement[this.blockId] = JSON.parse(JSON.stringify({ requirements: null, anythingElse: null }));
       eventRequirement[this.blockId].requirements =
         action === "clear" ? null : JSON.parse(JSON.stringify(this.requirementProperties));
-      eventRequirement[this.blockId].noteList = action === "clear" ? null : JSON.parse(JSON.stringify(this.noteList));
+      eventRequirement[this.blockId].anythingElse = action === "clear" ? null : this.anythingElse;
 
       requirements[this.event.id] = eventRequirement;
-      console.log("requirement", requirements);
+      // console.log("requirements", requirements)
       this.setBookingRequirements(requirements);
+    },
+    _handleSecurityRequirement(requirements) {
+      let vip_idx = requirements["Services"].findIndex((sv) => sv.item === "VIP Security");
+      let risk_idx = requirements["Services"].findIndex((sv) => sv.item === "Risk Assessment");
+      let parameter_idx = requirements["Services"].findIndex((sv) => sv.item === "Parameter security");
+
+      requirements["multi-selection"][0].options.map((op) => {
+        requirements["Services"][vip_idx].visible = !!(op.name === "Personal Security" && op.selected);
+        if (op.name === "Security Consultation") {
+          requirements["Services"][risk_idx].visible = op.selected;
+        }
+        // requirements['Services'][risk_idx].visible = !!(op.name === 'Security Consultation' && op.selected);
+      });
+
+      if (this.event.eventType.name === "Reception" && this.event.numberOfParticipants > 500) {
+        requirements["Services"][parameter_idx].isSelected = true;
+        requirements["Services"][parameter_idx].mustHave = true;
+      }
+
+      return requirements;
     },
     addRequirement(category, property) {
       const index = this.requirementProperties[category].findIndex((it) => it.item == property.item);
@@ -356,15 +395,31 @@ export default {
       // this.$forceUpdate();
     },
     handleSpecialChange(e) {
-      // console.log('handleSpecialChange', this.noteList);
-      if (e && e.hasOwnProperty("note")) {
-        this.noteList["special"] = e.note;
+      if (e.hasOwnProperty("note")) {
+        this.anythingElse = e.note;
       }
+
+      this._saveRequirementsInStore();
+    },
+    handleServiceChange(e) {
+      if (e.hasOwnProperty("note")) {
+        this.anythingElse = e.note;
+      }
+      this.requirementProperties = e;
       this._saveRequirementsInStore();
     },
     handleNoteChange(e) {
-      // console.log('handleNoteChange', this.noteList);
       this._saveRequirementsInStore();
+    },
+    getInputAvailable(cat) {
+      for (let i = 0; i < this.requirementProperties[cat].length; i++) {
+        let item = this.requirementProperties[cat][i];
+        if (item.isSelected && item.qtyEnabled) {
+          return true;
+        }
+      }
+
+      return false;
     },
     setProperties: async function () {
       this.selectedBlock = this.component;
@@ -375,18 +430,20 @@ export default {
         `${process.env.SERVER_URL}/1/vendor/property/${this.selectedBlock.componentId}/${this.event.id}`,
       );
       this.isLoading = false;
-      const requirements = res.data;
+      let requirements = res.data;
       for (let category in requirements) {
         for (let itemIndex in requirements[category]) {
           if (requirements[category][itemIndex].defaultQtyScript) {
             const calcedValue = eval(requirements[category][itemIndex].defaultQtyScript);
             requirements[category][itemIndex].defaultQty = Math.ceil(calcedValue);
           }
+
+          if (this.selectedBlock.componentId === "securityservices") {
+            requirements = this._handleSecurityRequirement(requirements);
+          }
         }
-        this.noteList[category] = null;
       }
       this.requirementProperties = requirements;
-      console.log("setProperties", this.requirementProperties);
     },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
@@ -396,6 +453,8 @@ export default {
     },
     fetchData: async function () {
       this.requirementProperties = {};
+      this.anythingElse = null;
+
       this.blockId = this.component.componentId; //this.$route.params.blockId
       this.event = this.$store.state.event.eventData;
       this.getCommentComponents(this.blockId);
@@ -408,7 +467,9 @@ export default {
         this.requirementProperties = JSON.parse(
           JSON.stringify(this.storedRequirements[this.event.id][this.blockId].requirements),
         );
-        this.noteList = JSON.parse(JSON.stringify(this.storedRequirements[this.event.id][this.blockId].noteList));
+        this.anythingElse = JSON.parse(
+          JSON.stringify(this.storedRequirements[this.event.id][this.blockId].anythingElse),
+        );
 
         this.isLoading = false;
       } else {
@@ -423,18 +484,16 @@ export default {
     },
     findVendors() {
       let component = new EventComponent({ id: this.component.id });
-      console.log(this.component);
-      console.log("findVendors", this.requirementProperties);
       postReq("/1/vendors/setting-requirements", {
-        vendorCategory: this.component.componentId,
+        vendorCategory: this.blockId,
         expiredBusinessTime: moment(new Date()).add(5, "days").valueOf(),
-        settingsJsonData: JSON.stringify({ requirements: this.requirementProperties, noteList: this.noteList }),
+        settingsJsonData: JSON.stringify(this.requirementProperties),
+        note: this.anythingElse,
         eventComponentInstance: new EventComponent({ id: this.component.id }),
       }).then((res) => {
         this.$emit("setRequirements", res);
       });
     },
-
     checkAffectedItems(property) {
       // waitign for updating model
       setTimeout(() => {
@@ -464,16 +523,12 @@ export default {
     this.isLoading = true;
 
     this.$root.$on("multi-select.change", (index, data) => {
-      console.log("multi-select.change", this.requirementProperties);
       this.requirementProperties["multi-selection"][index] = data;
+      // console.log("bookingEventRequirement", this.blockId);
+      if (this.blockId === "securityservices")
+        this.requirementProperties = this._handleSecurityRequirement(this.requirementProperties);
       this._saveRequirementsInStore();
     });
-
-    // this.$root.$on('revertRequirements', _ => {
-    //   this._saveRequirementsInStore('clear');
-    //   this.fetchData();
-    //   this.scrollToTop();
-    // });
 
     if (this.eventData.id) {
       this.fetchData();
@@ -623,7 +678,7 @@ export default {
       margin-right: 40px;
     }
   }
-  .special-request-section {
+  .anything-else-section {
     padding: 30px 0;
     border-top: solid 1px #b7b7b7;
   }

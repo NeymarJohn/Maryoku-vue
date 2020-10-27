@@ -140,6 +140,7 @@ export default {
       services: null,
       iconsWithCategory: null,
       isLoading: false,
+      markedDates: [],
     };
   },
   created() {},

@@ -626,12 +626,14 @@ export default {
       // });
     },
   },
-  created() {},
-  mounted() {
+  created() {
     this.isVCollapsed = this.isCollapsed;
     this.newProposalRequest = this.proposalRequest;
     this.mandatoryRequirements.forEach((item) => {
-      console.log("item", item);
+      // if (
+      //   this.newProposalRequest.requirements.length == 0 ||
+      //   this.newProposalRequest.requirements.findIndex((requirement) => requirement.requirementTitle !== item.item) < 0
+      // )
       this.newProposalRequest.requirements.push({
         comments: [],
         dateCreated: "",
@@ -649,6 +651,7 @@ export default {
         requirementValue: 1,
       });
     });
+
     this.$forceUpdate();
     this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
     this.$root.$on("remove-proposal-requirement", (item) => {
@@ -692,8 +695,7 @@ export default {
       return !this.qty || !this.unit || !this.subTotal || this.subTotal == 0 || !this.serviceItem;
     },
     optionalRequirements() {
-      if (!this.proposalRequest) return [];
-      return this.proposalRequest.requirements.filter((item) => !item.mustHave);
+      return this.proposalRequest.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
     },
     mandatoryRequirements() {
       if (!this.proposalRequest) return [];

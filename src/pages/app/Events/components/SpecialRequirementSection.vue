@@ -34,11 +34,11 @@
               @change="handleChangeItem"
       ></special-requirement-item>
     </div>
-    <div class="special-request-section">
+    <div class="anything-else-section">
       <div class="font-bold mt-10">Anything Else?</div>
 
       <div class="mt-10">Get me a pink unicorn please.</div>
-      <div class="special-request-section-options mt-10">
+      <div class="anything-else-section-options mt-10">
         <textarea placeholder="Type name of element here..." v-model="anythingElse" @input="handleNoteChange"></textarea>
       </div>
     </div>
@@ -57,7 +57,7 @@ export default {
       type: Array,
       required: true,
     },
-    note:{
+    note: {
       type: String,
       required: false,
     }
