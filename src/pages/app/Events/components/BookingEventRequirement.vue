@@ -448,17 +448,10 @@ export default {
       this.event = this.$store.state.event.eventData;
       this.getCommentComponents(this.blockId);
 
-      if (
-         this.storedRequirements[this.event.id] &&
-         this.storedRequirements[this.event.id][this.blockId] &&
-         this.storedRequirements[this.event.id][this.blockId].requirements
-      ) {
-        this.requirementProperties = JSON.parse(
-          JSON.stringify(this.storedRequirements[this.event.id][this.blockId].requirements),
-        );
-        this.anythingElse = JSON.parse(
-          JSON.stringify(this.storedRequirements[this.event.id][this.blockId].anythingElse),
-        );
+      if(this.storedRequirements[this.event.id] && this.storedRequirements[this.event.id][this.blockId]
+              && this.storedRequirements[this.event.id][this.blockId].requirements){
+        this.requirementProperties = JSON.parse(JSON.stringify(this.storedRequirements[this.event.id][this.blockId].requirements));
+        this.anythingElse = JSON.parse(JSON.stringify(this.storedRequirements[this.event.id][this.blockId].anythingElse));
 
         this.isLoading = false;
       }else{
