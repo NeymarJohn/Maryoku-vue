@@ -454,10 +454,10 @@ export default {
          this.storedRequirements[this.event.id][this.blockId].requirements
       ) {
         this.requirementProperties = JSON.parse(
-                JSON.stringify(this.storedRequirements[this.event.id][this.blockId].requirements),
+          JSON.stringify(this.storedRequirements[this.event.id][this.blockId].requirements),
         );
         this.anythingElse = JSON.parse(
-                JSON.stringify(this.storedRequirements[this.event.id][this.blockId].anythingElse),
+          JSON.stringify(this.storedRequirements[this.event.id][this.blockId].anythingElse),
         );
 
         this.isLoading = false;
