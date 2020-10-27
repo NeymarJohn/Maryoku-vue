@@ -649,6 +649,7 @@ export default {
         requirementValue: 1,
       });
     });
+
     this.$forceUpdate();
     this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
     this.$root.$on("remove-proposal-requirement", (item) => {
@@ -692,7 +693,7 @@ export default {
       return !this.qty || !this.unit || !this.subTotal || this.subTotal == 0 || !this.serviceItem;
     },
     optionalRequirements() {
-      return this.proposalRequest.requirements.filter((item) => !item.mustHave);
+      return this.proposalRequest.requirements.filter((item) => !item.mustHave && item.type !== 'multi-selection');
     },
     mandatoryRequirements() {
       return this.proposalRequest.requirements.filter((item) => item.mustHave);

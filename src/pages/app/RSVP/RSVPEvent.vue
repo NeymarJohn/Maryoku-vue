@@ -41,7 +41,10 @@
         <div class="md-layout-item md-size-10 md-small-size-10">
           <img :src="`${$iconURL}RSVP/Group+8056.svg`" style="margin-top: 40px" />
         </div>
-        <div class="md-layout-item md-size-45 md-small-size-45" v-if="campaign.visibleSettings.showWearingGuide">
+        <div
+          class="md-layout-item md-size-45 md-small-size-45"
+          v-if="campaign.visibleSettings && campaign.visibleSettings.showWearingGuide"
+        >
           <div class="font-size-30 font-bold-extra mb-30 d-flex">
             <img :src="`${$iconURL}RSVP/Path 3728.svg`" />
             <span style="padding-top: 10px; margin-left: 20px">WHAT SHOULD I WEAR?</span>
@@ -50,7 +53,10 @@
             {{ campaign.additionalData.wearingGuide }}
           </div>
         </div>
-        <div class="md-layout-item md-size-45 md-small-size-45" v-if="campaign.visibleSettings.showKnowledge">
+        <div
+          class="md-layout-item md-size-45 md-small-size-45"
+          v-if="campaign.visibleSettings && campaign.visibleSettings.showKnowledge"
+        >
           <div class="font-size-30 font-bold-extra mb-30 d-flex">
             <img :src="`${$iconURL}RSVP/Path 2369.svg`" />
             <span style="padding-top: 10px; margin-left: 20px">What should I Know?</span>
@@ -60,7 +66,10 @@
           </div>
         </div>
       </div>
-      <div class="rsvp-event-timeline md-layout" v-if="campaign.visibleSettings.showTimeline">
+      <div
+        class="rsvp-event-timeline md-layout"
+        v-if="campaign.visibleSettings && campaign.visibleSettings.showTimeline"
+      >
         <div
           class="md-layout-item md-size-100 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra mb-50"
         >
@@ -147,6 +156,7 @@
 import RsvpTimelineItem from "./RSVPTimelineItem";
 import Calendar from "@/models/Calendar";
 import Rsvp from "@/models/Rsvp";
+import RsvpRequest from "@/models/RsvpRequest";
 import Campaign from "@/models/Campaign";
 import CalendarEvent from "@/models/CalendarEvent";
 import _ from "underscore";
@@ -157,6 +167,7 @@ import SyncCalendarModal from "@/components/Modals/RSVP/SyncCalendarModal";
 import RsvpVenueCarousel from "./RSVPVenueCarousel";
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
 import { mapActions, mapGetters } from "vuex";
+import swal from "sweetalert2";
 
 export default {
   components: {
@@ -192,21 +203,34 @@ export default {
       showZoomModal: false,
       showSyncCalendarForZoom: false,
       campaign: {},
+      rsvpRequest: null,
     };
   },
   created() {
-    const eventId = this.$route.params.eventId;
-    const calendarEvent = new CalendarEvent({ id: eventId });
+    const rsvpRequestId = this.$route.params.rsvpRequestId;
+    const rsvpRequest = new RsvpRequest({ id: rsvpRequest });
 
-    // CalendarEvent.find(eventId).then((event) => {
-    //   console.log("eventResponse", res);
-    // });
-    this.getCampaigns({ event: calendarEvent }).then((campaigns) => {
+    RsvpRequest.find(rsvpRequestId).then((rsvpRequest) => {
+      console.log(rsvpRequest);
+      this.rsvpRequest = rsvpRequest;
+      this.event = rsvpRequest.event;
+      this.campaign = rsvpRequest.campaign;
       this.isLoading = false;
-      this.campaign = campaigns["RSVP"];
     });
-    CalendarEvent.find(eventId).then((event) => {
-      this.event = event;
+    this.$root.$on("setRsvp", (rsvpData) => {
+      rsvpData.attendingOption = "PERSON";
+      rsvpData.rsvpStatus = "AGREED";
+      rsvpData.invitedEmail = this.rsvpRequest.email;
+      rsvpData.rsvpRequest = new RsvpRequest({ id: this.rsvpRequest.id });
+      new Rsvp(rsvpData).save().then((requestedRSVP) => {
+        console.log(requestedRSVP);
+        swal({
+          title: `Successed!`,
+          buttonsStyling: false,
+          confirmButtonClass: "md-button md-success",
+        });
+        this.showRsvpModal = false;
+      });
     });
   },
   computed: {

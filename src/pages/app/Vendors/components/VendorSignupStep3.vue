@@ -147,12 +147,12 @@
                 <div class="right">
                   <div class="top">
                     <template v-if="p.type == Boolean">
-                      <div class="item" @click="$set(p, 'value', true)">
+                      <div class="item" @click="p.value = true">
                         <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="p.value" />
                         <span class="unchecked" v-else></span>
                         Yes
                       </div>
-                      <div class="item" @click="$set(p, 'value', false)">
+                      <div class="item" @click="p.value = false">
                         <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!p.value" />
                         <span class="unchecked" v-else></span>
                         No
@@ -668,7 +668,7 @@ export default {
           items: [
             {
               name: "Tastings prior to booking",
-              type: Number,
+              type: Boolean,
             },
             {
               name: "Allow customer provided liquor",
@@ -765,8 +765,7 @@ export default {
             },
             {
               name: "Max group size",
-              type: Number,
-              noSuffix: true,
+              type: Boolean,
             },
             {
               name: "Accessibility of activity",
