@@ -134,7 +134,7 @@
           </div>
           <div v-else-if="blockId == 'entertainment' && category == 'Services'">
             <entertainment-services-section
-                    :data="requirementProperties"
+                    :requirements="requirementProperties"
                     :note="anythingElse"
                     @change="handleServiceChange"
             ></entertainment-services-section>
@@ -150,7 +150,7 @@
                     </span>
                   </th>
                   <th>
-                    <div v-if="getInputAvailable(category)">How Many?</div>
+                    <div>How Many?</div>
                   </th>
                   <th></th>
                   <th></th>
@@ -382,8 +382,14 @@ export default {
       this._saveRequirementsInStore();
       // this.$forceUpdate();
     },
-    handleSpecialChange(e) {
-      if (e.hasOwnProperty("note")) {
+    handleMultiSelectChange(){
+      this.$forceUpdate();
+      if( this.blockId === 'securityservices' )
+        this.requirementProperties = this._handleSecurityRequirement(this.requirementProperties);
+      this._saveRequirementsInStore();
+    },
+    handleSpecialChange(e){
+      if( e.hasOwnProperty('note') ) {
         this.anythingElse = e.note;
       }
 
@@ -401,17 +407,7 @@ export default {
     handleNoteChange(e){
       this._saveRequirementsInStore();
     },
-    getInputAvailable(cat) {
-      for (let i = 0; i < this.requirementProperties[cat].length; i++) {
-        let item = this.requirementProperties[cat][i];
-        if (item.isSelected && item.qtyEnabled) {
-          return true;
-        }
-      }
-
-      return false;
-    },
-    setProperties: async function () {
+    setProperties: async function(){
       this.selectedBlock = this.component;
       const event = this.event;
       if (!this.selectedBlock.componentId) return;
@@ -504,14 +500,6 @@ export default {
   },
   mounted() {
     this.isLoading = true;
-
-    this.$root.$on("multi-select.change", (index, data) => {
-      this.requirementProperties["multi-selection"][index] = data;
-      // console.log("bookingEventRequirement", this.blockId);
-      if (this.blockId === "securityservices")
-        this.requirementProperties = this._handleSecurityRequirement(this.requirementProperties);
-      this._saveRequirementsInStore();
-    });
 
     if (this.eventData.id) {
       this.fetchData();
