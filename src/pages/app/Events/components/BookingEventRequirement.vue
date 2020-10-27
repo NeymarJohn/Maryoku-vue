@@ -459,6 +459,7 @@ export default {
         this.anythingElse = JSON.parse(
                 JSON.stringify(this.storedRequirements[this.event.id][this.blockId].anythingElse),
         );
+        
         this.isLoading = false;
       }else{
         await this.setProperties();
