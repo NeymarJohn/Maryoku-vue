@@ -14,7 +14,7 @@
         <div class="description">
           <h5>
             <img :src="`${iconUrl}Group 5222 (2).svg`" />
-            {{ getCategoryNameByValue(vendor.vendorCategories[0]) }} Amenities
+            {{ getCategoryNameByValue(vendor.vendorCategory) }} Amenities
           </h5>
           <p>
             Mark all the services you can support and will be included in your proposal. If needed please add a
@@ -22,8 +22,7 @@
           </p>
         </div>
         <vendor-service-item
-          v-for="(c, cIndex) in categories.filter((category) => category.name == vendor.vendorCategories[0])[0]
-            .categories"
+          v-for="(c, cIndex) in categories.filter((category) => category.name == vendor.vendorCategory)[0].categories"
           :key="cIndex"
           :serviceItem="c"
           :vendor="vendor"

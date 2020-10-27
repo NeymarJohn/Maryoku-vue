@@ -17,13 +17,7 @@
         <a href="https://www.maryoku.com/for-vendors" target="_blank">Get your the best jobs</a>
       </p>
       <div class="pull-top-right">
-        <vendor-bid-time-counter
-          :key="getRemainingTime.seconds"
-          :days="getRemainingTime.days"
-          :hours="getRemainingTime.hours"
-          :minutes="getRemainingTime.mins"
-          :seconds="getRemainingTime.seconds"
-        />
+        <vendor-bid-time-counter :days="4" :hours="0" :minutes="0" :seconds="0" />
       </div>
     </section>
     <div
@@ -63,13 +57,14 @@
         </ul>
       </div>
     </section>
-    <signup-request-modal v-if="showSignup"></signup-request-modal>
   </div>
 </template>
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
+import Vendors from "@/models/Vendors";
+import ProposalRequest from "@/models/ProposalRequest";
 
 import TopNavbar from "./TopNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
@@ -77,7 +72,7 @@ import MobileMenu from "./Extra/MobileMenu.vue";
 import UserMenu from "./Extra/UserMenu.vue";
 import ForVendors from "@/pages/app/Vendors/ForVendors.vue";
 import VendorBidTimeCounter from "@/pages/app/Vendors/components/VendorBidTimeCounter.vue";
-import SignupRequestModal from "@/components/Modals/VendorProposal/SignupRequestModal.vue";
+
 export default {
   components: {
     TopNavbar,
@@ -85,57 +80,42 @@ export default {
     MobileMenu,
     VendorBidTimeCounter,
     UserMenu,
-    SignupRequestModal,
   },
   data() {
     return {
       iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor%20Landing%20Page/",
       vendor: null,
       event: null,
-      proposalRequest: null,
-      showSignup: false,
     };
   },
-  mounted() {
-    this.getVendor(this.$route.params.vendorId)
-      .then((vendor) => {
-        this.vendor = vendor;
-      })
-      .catch((e) => {
-        this.showSignup = true;
-      });
-    this.getProposalRequest(this.$route.params.rfpId).then((proposalRequest) => {
-      this.proposalRequest = proposalRequest;
-      this.event = this.proposalRequest.eventData;
-    });
-  },
   methods: {
-    ...mapActions("vendorProposal", ["getVendor", "getProposalRequest"]),
     goToForm() {
       this.$root.$emit("go-to-proposal-form");
     },
+    getVendor() {
+      Vendors.find(this.$route.params.vendorId).then((vendor) => {
+        this.vendor = vendor;
+      });
+    },
+    getProposalRequest() {
+      ProposalRequest.find(this.$route.params.rfpId).then((proposalRequest) => {
+        this.proposalRequest = proposalRequest;
+        this.event = this.proposalRequest.eventData;
+        console.log(this.event);
+      });
+    },
   },
-
+  created() {},
+  mounted() {
+    this.getVendor();
+    this.getProposalRequest();
+  },
   computed: {
     backgroundImage() {
       if (this.event && this.event.concept) {
         return this.event.concept.images[new Date().getTime() % 4].url;
       }
       return "";
-    },
-    getRemainingTime() {
-      if (!this.proposalRequest) return { days: 0, hours: 0, mins: 0, seconds: 0 };
-      console.log(this.proposalRequest.expiredTime);
-      console.log(new Date().getTime());
-      let remainingMs = this.proposalRequest.expiredTime - new Date().getTime();
-      const days = Math.floor(remainingMs / 24 / 3600 / 1000);
-      remainingMs = remainingMs - days * 24 * 3600 * 1000;
-      const hours = Math.floor(remainingMs / 3600 / 1000);
-      remainingMs = remainingMs - hours * 3600 * 1000;
-      const mins = Math.floor(remainingMs / 60 / 1000);
-      remainingMs = remainingMs - mins * 60 * 1000;
-      const seconds = Math.floor(remainingMs / 1000);
-      return { days, hours, mins, seconds };
     },
   },
 };

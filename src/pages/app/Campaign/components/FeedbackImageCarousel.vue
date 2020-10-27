@@ -15,8 +15,8 @@
           <md-icon>keyboard_arrow_left</md-icon>
         </md-button>
       </template>
-      <div class="carousel-item" v-for="(item,index) in images" :key="index">
-        <img :src="item.src" class="carousel-image" />
+      <div class="carousel-item" v-for="(item, index) in images" :key="index">
+        <img :src="item.src" class="carousel-image" @error="setAltImg($event, item)" />
       </div>
       <template slot="next">
         <md-button class="edit-btn md-round nav-right nav-btn md-raised md-white">
@@ -65,7 +65,10 @@ export default {
     },
     async onFileChange(event) {
       const image = await getBase64(event.target.files[0]);
-      this.$emit("addImage", image);
+      this.$emit("addImage", { imageString: image, file: event.target.files[0] });
+    },
+    setAltImg(event, item) {
+      event.target.src = item.imageData;
     },
   },
 };

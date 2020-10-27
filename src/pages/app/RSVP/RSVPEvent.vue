@@ -59,7 +59,7 @@
         >
           <div class="font-size-30 font-bold-extra mb-30 d-flex">
             <img :src="`${$iconURL}RSVP/Path 2369.svg`" />
-            <span style="padding-top: 10px; margin-left: 20px">What should I Know?</span>
+            <span style="padding-top: 10px; margin-left: 20px">WHAT SHOULD I KNOW?</span>
           </div>
           <div>
             {{ campaign.additionalData.knowledge }}

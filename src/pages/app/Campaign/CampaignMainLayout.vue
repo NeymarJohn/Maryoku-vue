@@ -526,6 +526,7 @@ export default {
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     &-item {
       cursor: pointer;
+      width: 25%;
       &:not(:last-child) {
         border-right: solid 1px #aeaeae;
       }
