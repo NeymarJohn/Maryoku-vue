@@ -449,9 +449,9 @@ export default {
       this.getCommentComponents(this.blockId);
 
       if (
-              this.storedRequirements[this.event.id] &&
-              this.storedRequirements[this.event.id][this.blockId] &&
-              this.storedRequirements[this.event.id][this.blockId].requirements
+         this.storedRequirements[this.event.id] &&
+         this.storedRequirements[this.event.id][this.blockId] &&
+         this.storedRequirements[this.event.id][this.blockId].requirements
       ) {
         this.requirementProperties = JSON.parse(
                 JSON.stringify(this.storedRequirements[this.event.id][this.blockId].requirements),
@@ -459,7 +459,7 @@ export default {
         this.anythingElse = JSON.parse(
                 JSON.stringify(this.storedRequirements[this.event.id][this.blockId].anythingElse),
         );
-        
+
         this.isLoading = false;
       }else{
         await this.setProperties();
