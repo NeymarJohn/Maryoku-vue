@@ -216,6 +216,9 @@ export default {
       this.event = rsvpRequest.event;
       this.campaign = rsvpRequest.campaign;
       this.isLoading = false;
+      if (!this.rsvpRequest.isOpened) {
+        new RsvpRequest({ id: rsvpRequest.id, isOpened: true }).save();
+      }
     });
     this.$root.$on("setRsvp", (rsvpData) => {
       rsvpData.attendingOption = "PERSON";

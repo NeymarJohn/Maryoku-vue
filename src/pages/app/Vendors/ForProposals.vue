@@ -134,6 +134,8 @@ export default {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       services: null,
       iconsWithCategory: null,
+      isLoading: false,
+      markedDates: [],
     };
   },
   created() {},
