@@ -6,7 +6,7 @@
         <div class="with-bkimg">
           <div class="summary-cont">
             <div class="upper">
-              <h3>{{ title }}</h3>
+              <h3>{{title}}</h3>
               <div class="warning-days" v-if="warning">
                 <img :src="`${iconUrl}Asset 575.svg`" /> This proposal is 2 days before the original date
               </div>
@@ -14,30 +14,30 @@
             <ul>
               <li>
                 <span>Name</span>
-                <p>{{ event.title }}</p>
+                <p>{{eventData.name}}</p>
               </li>
               <li>
                 <span>Date</span>
-                <p>{{ $dateUtil.formatScheduleDay(event.eventStartMillis, "MM.DD.YY") }}</p>
+                <p>{{eventData.date}}</p>
               </li>
               <li>
                 <span>Guest Arrival Time</span>
-                <p>{{ event.arrival_time }}</p>
+                <p>{{eventData.arrival_time}}</p>
               </li>
             </ul>
           </div>
         </div>
         <div class="cover-letter">
-          <h4>Dear {{ event.owner.displayName }},</h4>
+          <h4>Dear {{vendor.vendorPropertyValues["5e19fb4b64841710513a4c83"]}},</h4>
           <p @mouseover="mouseOver()" @mouseleave="mouseLeave()">
-            {{ personalMessage }}
+            {{personalMessage}}
             <!-- Relish caters & venus is pleased to provide you with the attached catering proposal for you, which is currently scheduled to be held on at. -->
             <br />
             <br />Sincerely,
             <br />
-            <strong>{{ vendor.vendorCategory }}</strong>
+            <strong>{{vendor.vendorCategory}}</strong>
           </p>
-          <span @click="savedItModal = true">
+          <span @click="savedItModal=true">
             More about us
             <md-icon>navigate_next</md-icon>
           </span>
@@ -47,15 +47,15 @@
           <ul>
             <li>
               <img :src="`${iconUrl}Asset 593.svg`" />
-              <span>{{ vendor.vendorMainEmail }}</span>
+              <span>Relish@venue@hotmail.com</span>
             </li>
             <li>
               <img :src="`${iconUrl}Asset 573.svg`" />
-              <span>{{ vendor.vendorAddressLine1 }}</span>
+              <span>Relish@venue@hotmail.com</span>
             </li>
-            <li v-if="vendor.vendorMainPhoneNumber">
+            <li>
               <img :src="`${iconUrl}Asset 591.svg`" />
-              <span>{{ vendor.vendorMainPhoneNumber }}</span>
+              <span>Relish@venue@hotmail.com</span>
             </li>
           </ul>
         </div>
@@ -72,7 +72,9 @@
 
       <div class="pricing-cont">
         <div class="title">
-          <h4><img :src="`${iconUrl}Asset 576.svg`" />Pricing & Details</h4>
+          <h4>
+            <img :src="`${iconUrl}Asset 576.svg`" />Pricing & Details
+          </h4>
           <p>*Work only with our catering</p>
         </div>
         <p>What would you like to take from our suggested services?</p>
@@ -86,24 +88,28 @@
           :key="cIndex"
         />
         <proposal-pricing-item :iconUrl="iconUrl" :itemType="`bundle`" />
-        <proposal-pricing-item :iconUrl="iconUrl" :itemType="`total`" :requirements="proposalRequest.requirements" />
+        <proposal-pricing-item
+          :iconUrl="iconUrl"
+          :itemType="`total`"
+          :requirements="proposalRequest.requirements"
+        />
       </div>
       <div class="policy-cont">
         <div class="title">
-          <h4><img :src="`${iconUrl}Asset 594.svg`" /> Our Policy</h4>
+          <h4>
+            <img :src="`${iconUrl}Asset 594.svg`" /> Our Policy
+          </h4>
           <p>
             <img
               :src="`${iconUrl}Group 5280 (5).svg`"
-              @mouseover="considerUpdate = true"
-              @mouseleave="considerUpdate = false"
+              @mouseover="considerUpdate=true"
+              @mouseleave="considerUpdate=false"
             />
             Consider update
           </p>
           <div class="consider-update" v-if="considerUpdate">
             <h3>Consider Update!</h3>
-            <p>
-              If the addiiontal services you've added require additional policy changes-this is the tame to add those!
-            </p>
+            <p>If the addiiontal services you've added require additional policy changes-this is the tame to add those!</p>
           </div>
         </div>
         <div class="policy-wrapper">
@@ -116,12 +122,20 @@
             <h6>We allow free cancellation until:</h6>
             <p>30 days before the event</p>
             <div class="semi-column">
-              <p><strong>If</strong> the client cancel the vent after 3 weeks before the event</p>
-              <p><strong>If</strong> the client cancel the vent after 3 weeks before the event</p>
+              <p>
+                <strong>If</strong> the client cancel the vent after 3 weeks before the event
+              </p>
+              <p>
+                <strong>If</strong> the client cancel the vent after 3 weeks before the event
+              </p>
             </div>
             <div class="semi-column">
-              <p><strong>Than</strong> the client will pay full deposite</p>
-              <p><strong>Than</strong> the client will pay full deposite</p>
+              <p>
+                <strong>Than</strong> the client will pay full deposite
+              </p>
+              <p>
+                <strong>Than</strong> the client will pay full deposite
+              </p>
             </div>
             <div class="additional">
               <h6>Additional</h6>
@@ -129,7 +143,7 @@
             </div>
             <div class="signature-wrapper">
               <div class="half-side">
-                <h6>{{ vendor.vendorCategory }}</h6>
+                <h6>{{vendor.vendorCategory}}</h6>
                 <div class="signature-client signature-bidder"></div>
               </div>
               <div class="half-side">
@@ -141,12 +155,16 @@
                         <a class @click="uploadVendorSignature">
                           <img
                             :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 559.svg`"
-                          />
-                          Choose File
+                          /> Choose File
                         </a>
                         <div class="or">Or</div>
                         <div class="sign-here">
-                          <vueSignature ref="signature" :sigOption="option" :w="'100%'" :h="'100%'" />
+                          <vueSignature
+                            ref="signature"
+                            :sigOption="option"
+                            :w="'100%'"
+                            :h="'100%'"
+                          />
                           <button class="save" @click="save">Save</button>
                           <button class="clear" @click="clear">Clear</button>
                         </div>
@@ -207,6 +225,7 @@ export default {
     iconUrl: String,
     itemType: String,
     personalMessage: String,
+    proposalRequest: Object,
     services: Array,
   },
   data() {
@@ -218,9 +237,15 @@ export default {
       considerUpdate: false,
       warning: false,
       categories: [],
+      vendor: null,
     };
   },
   methods: {
+    getVendor() {
+      Vendors.find(this.$route.params.vendorId).then((vendor) => {
+        this.vendor = vendor;
+      });
+    },
     hideModal() {
       this.savedItModal = false;
     },
@@ -249,7 +274,8 @@ export default {
         }
       } else {
         this.$notify({
-          message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
+          message:
+            "You've Uploaded an Image that Exceed the allowed size, try small one!",
           horizontalAlign: "center",
           verticalAlign: "top",
           type: "warning",
@@ -264,7 +290,11 @@ export default {
 
       reader.onload = (e) => {
         if (type == "vendorSignature") {
-          this.$root.$emit("update-proposal-value", "signature", e.target.result);
+          this.$root.$emit(
+            "update-proposal-value",
+            "signature",
+            e.target.result,
+          );
         }
       };
       reader.readAsDataURL(file);
@@ -291,19 +321,10 @@ export default {
         this.categories.push(item.requirementsCategory);
       }
     });
+
+    this.getVendor();
   },
-  computed: {
-    vendor() {
-      return this.$store.state.vendorProposal.vendor;
-    },
-    proposalRequest() {
-      return this.$store.state.vendorProposal.proposalRequest;
-    },
-    event() {
-      if (this.proposalRequest) return this.proposalRequest.eventData;
-      return null;
-    },
-  },
+  computed: {},
   watch: {},
 };
 </script>

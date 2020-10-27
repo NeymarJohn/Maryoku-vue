@@ -31,9 +31,6 @@ export default {
       type: Object,
       default: {},
     },
-    index: {
-      type: Number,
-    }
   },
   data() {
     return {
@@ -51,16 +48,14 @@ export default {
     };
   },
   methods: {
-    changeState() {
-      this.$root.$emit('multi-select.change', this.index, this.data);
-    },
+    changeState() {},
   },
 };
 </script>
 <style lang="scss" scoped>
 .vendor-requirement-multiselect {
   .option {
-    min-width: 150px;
+    width: 18%;
   }
 }
 </style>
