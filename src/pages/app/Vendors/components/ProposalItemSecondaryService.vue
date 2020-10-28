@@ -1,72 +1,6 @@
 <template>
   <div class="proposal-item-wrapper">
-    <div class="title-cont default" :class="[{ 'pb-40': isVCollapsed }]" v-if="step <= 1">
-      <div class="with-subtitle" @click="isVCollapsed = !isVCollapsed">
-        <div class="text-cont">
-          <h3 class="title">
-            <img :src="img" />
-            {{ category }}
-          </h3>
-          <h5 v-if="!isVCollapsed">{{ subTitle }}</h5>
-        </div>
-        <div class="action">
-          <img v-if="!isVCollapsed" :src="`${iconUrl}Group 3671 (2).svg`" />
-          <img v-else :src="`${iconUrl}Asset 567.svg`" />
-        </div>
-      </div>
-      <p v-if="!isVCollapsed">
-        Which element would you like to involve in your
-        <strong>{{ category }}</strong> proposal?
-      </p>
-      <div class="sub-items-cont" v-if="!isVCollapsed">
-        <span class="prev" @click="prev()" v-if="serviceSlidePos < 0">
-          <md-icon>keyboard_arrow_left</md-icon>
-        </span>
-        <div class="sub-items" :style="{ left: `${serviceSlidePos}px` }" ref="servicesCont">
-          <select-proposal-sub-item
-            :selected="isSelectedQuickButton(s)"
-            :item="requirement.item ? requirement.item : requirement.subCategory"
-            v-for="(requirement, sIndex) in optionalRequirements"
-            :key="sIndex"
-          />
-        </div>
-        <span
-          class="next"
-          @click="next()"
-          v-if="serviceSlidePos >= 0 || this.servicesWidth + this.serviceSlidePos - 200 > 0"
-        >
-          <md-icon>keyboard_arrow_right</md-icon>
-        </span>
-      </div>
-      <div class="add-item-cont" v-if="step == 0 && !isVCollapsed">
-        <div class="fields-cont">
-          <div class="field">
-            <span>Description</span>
-            <input v-model="serviceItem" class="description" />
-          </div>
-          <div class="field">
-            <span>QTY</span>
-            <money v-model="qty" v-bind="qtyFormat" @keyup.native="calculateSubTotal()" />
-          </div>
-          <div class="field">
-            <span>Price per unit</span>
-            <money v-model="unit" v-bind="currencyFormat" @keyup.native="calculateSubTotal()" />
-          </div>
-          <div class="field">
-            <span>Total</span>
-            <money v-model="subTotal" v-bind="currencyFormat" v-if="isNumberVisible" class="total" />
-            <money v-model="unit" v-bind="currencyFormat" v-else class="total" />
-          </div>
-        </div>
-        <div class="action-cont">
-          <a class="cancel" @click="cancel()">Clear</a>
-          <a class="save" :class="{ isDisabled: isDisabledAdd }" @click="saveItem(serviceItem, qty, subTotal, category)"
-            >Add This</a
-          >
-        </div>
-      </div>
-    </div>
-    <div class="title-cont dropdown" v-if="step == 2" @click="clickItem(category)">
+    <div class="title-cont dropdown" @click="clickItem(category)">
       <div class="left-side">
         <div class="check-cont">
           <img v-if="isChecked" :src="`${iconUrl}Group 6258 (2).svg`" />
@@ -84,229 +18,17 @@
         </div>
         <div class="proposal-range-cont">
           <p>You're the First bidder</p>
-          <span class="grey" v-if="proposalRange">Proposals range</span>
+          <!-- <span class="grey" v-if="proposalRange">Proposals range</span>
           <span v-if="proposalRange">{{
             `$${newProposalRequest.bidRange.low} - $${newProposalRequest.bidRange.high}`
-          }}</span>
+          }}</span> -->
         </div>
         <img :src="`${iconUrl}Component 36 (2).svg`" :style="`transform: ${isChecked ? 'rotate(90deg)' : ''}`" />
       </div>
     </div>
-    <div class="sub-items-cont" v-if="step == 2 && isChecked">
-      <h3>Which elements would you like to involve in your proposal?</h3>
-      <div class="sub-items-cont" v-if="step == 2 && isChecked">
-        <span class="prev" @click="prev()" v-if="serviceSlidePos < 0">
-          <md-icon>keyboard_arrow_left</md-icon>
-        </span>
-        <div class="sub-items" :style="{ left: `${serviceSlidePos}px` }" ref="servicesCont">
-          <select-proposal-sub-item :active="true" :item="s" v-for="(s, sIndex) in services" :key="sIndex" />
-        </div>
-        <span
-          class="next"
-          @click="next()"
-          v-if="serviceSlidePos >= 0 || this.servicesWidth + this.serviceSlidePos - 200 > 0"
-        >
-          <md-icon>keyboard_arrow_right</md-icon>
-        </span>
-      </div>
-    </div>
-    <div class="add-item-cont" v-if="step == 2 && isChecked">
-      <div class="fields-cont">
-        <div class="field">
-          <span>Description</span>
-          <input v-model="serviceItem" readonly class="description" />
-        </div>
-        <div class="field">
-          <span>QTY</span>
-          <money v-model="qty" v-bind="qtyFormat" @keyup.native="calculateSubTotal()" />
-        </div>
-        <div class="field">
-          <span>Price per unit</span>
-          <money v-model="unit" v-bind="currencyFormat" @keyup.native="calculateSubTotal()" />
-        </div>
-        <div class="field">
-          <span>Total</span>
-          <money v-model="subTotal" v-bind="currencyFormat" v-if="isNumberVisible" class="total" />
-          <money v-model="unit" v-bind="currencyFormat" v-else class="total" />
-        </div>
-      </div>
-      <div class="action-cont">
-        <a class="cancel" @click="cancel()">Clear</a>
-        <a class="save" :class="{ isDisabled: isDisabledAdd }" @click="saveItem(serviceItem, qty, subTotal, category)"
-          >Add This</a
-        >
-      </div>
-    </div>
-    <div class="editable-sub-items-cont" v-if="(step <= 1 && !isVCollapsed) || (step == 2 && isChecked)">
-      <div class="editable-sub-items-header">
-        <span>Description</span>
-        <span class="text-center">QTY</span>
-        <span class="text-center">Price per unit</span>
-        <span class="text-center">Subtotal</span>
-      </div>
-      <editable-proposal-sub-item
-        v-for="(req, rIndex) in newProposalRequest.requirements"
-        :key="rIndex"
-        :index="rIndex"
-        :item="getObject(req)"
-        :active="true"
-        :step="1"
-      />
-      <div class="tax-discount-wrapper">
-        <div class="row grid-tax-row">
-          <div class="item-cont">
-            <div class="plabel">
-              <img :src="`${iconUrl}Asset 612.svg`" />
-              <span>Add Discount</span>
-            </div>
-            <div class="ptitle text-center" v-if="isEditDiscount">
-              % Percentage
-              <br />
-              <money
-                v-model="discount"
-                v-bind="percentageFormat"
-                :class="[{ 'active-discount': isDiscountPercentage }, { 'inactive-discount': !isDiscountPercentage }]"
-                @keyup.native="setRange(discount, 'discount')"
-                @click.native="
-                  isDiscountPercentage = true;
-                  switchDiscountMethod();
-                "
-              />
-            </div>
-          </div>
-          <div class="percent-cont text-center" :class="{ 'text-right': isEditDiscount }">
-            <span v-if="isEditDiscount">Or</span>
-            <span v-else>{{ discount }}%</span>
-          </div>
-          <div class="price-cont text-center">
-            <template v-if="isEditDiscount">
-              <span class="pl-2">Amount</span>
-              <br />
-              <money
-                v-model="discount_by_amount"
-                v-bind="currencyFormat"
-                :class="[{ 'active-discount': !isDiscountPercentage }, { 'inactive-discount': isDiscountPercentage }]"
-                @keyup.native="setRange(discount_by_amount, 'discount_by_amount')"
-                @click.native="
-                  isDiscountPercentage = false;
-                  switchDiscountMethod();
-                "
-              />
-            </template>
-            <template v-else>
-              <span v-if="discount_by_amount == 0">${{ ((totalOffer() * discount) / 100) | withComma }}</span>
-              <span v-else>${{ discount_by_amount }}</span>
-            </template>
-          </div>
-          <div class="edit-cont">
-            <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditDiscount = true" v-if="!isEditDiscount" />
-            <a class="cancel" v-if="isEditDiscount" @click="cancelDiscount()">Cancel</a>
-            <a class="save" v-if="isEditDiscount" @click="saveDiscount()">Save</a>
-          </div>
-        </div>
-        <div class="row grid-tax-row">
-          <div class="item-cont">
-            <div class="plabel">
-              <img :src="`${iconUrl}Asset 613.svg`" />
-              <span>Add Taxes</span>
-            </div>
-            <div class="ptitle" v-if="isEditTax">
-              % Percentage
-              <br />
-              <money
-                v-model="tax"
-                v-bind="percentageFormat"
-                class="active-discount"
-                @keyup.native="setRange(tax, 'tax')"
-              />
-            </div>
-          </div>
-          <div class="percent-cont">
-            <!-- <span>{{tax}}%</span> -->
-          </div>
-          <div class="price-cont text-center">
-            <span>${{ ((totalOffer() * tax) / 100) | withComma }}</span>
-          </div>
-          <div class="edit-cont">
-            <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditTax = true" v-if="!isEditTax" />
-            <a
-              class="cancel"
-              v-if="isEditTax"
-              @click="
-                isEditTax = false;
-                tax = 0;
-              "
-              >Cancel</a
-            >
-            <a class="save" v-if="isEditTax" @click="isEditTax = false">Save</a>
-          </div>
-        </div>
-      </div>
-      <div class="editable-sub-items-footer">
-        <span>Total</span>
-        <span>${{ calculatedTotal() | withComma }}</span>
-      </div>
-    </div>
-    <div class="upload-files-wrapper" v-if="(step <= 1 && !isVCollapsed) || (step == 2 && isChecked)">
-      <div class="title-cont">
-        <h3><img :src="`${iconUrl}Asset 608.svg`" />Upload This Files:</h3>
-        <h5>And add additional if you want</h5>
-      </div>
-      <div class="files-cont">
-        <div class="item" v-for="legalDoc in vendor.eventCategory.legalDocuments" :key="legalDoc">
-          <div class="left">
-            <span class="filename">{{ legalDoc }}</span>
-            <span class="req">Required</span>
-          </div>
-          <div class="right" @click="uploadDocument(legalDoc)" v-if="getFileByTag(legalDoc) == null">
-            <img :src="`${iconUrl}Asset 609.svg`" />Upload
-          </div>
-          <div class="right" v-else>
-            <span class="filename">{{ getFileByTag(legalDoc) }}</span>
-            <img class="check" :src="`${iconUrl}Group 3599 (2).svg`" />
-            <img class="remove" :src="`${iconUrl}Group 3671 (2).svg`" @click="removeFileByTag(legalDoc)" />
-          </div>
-        </div>
-        <input
-          type="file"
-          class="hide"
-          ref="legalDocument"
-          accept="application/text, application/pdf"
-          @change="onFilePicked"
-        />
-        <!-- <div class="item">
-          <div class="left">
-            <span class="filename">Legal Requirements</span>
-            <span class="req">Required</span>
-          </div>
-          <div class="right">
-            <img :src="`${iconUrl}Asset 609.svg`"/>Upload
-          </div>
-        </div>-->
-        <div class="option">
-          <div class="left">
-            <span class="filename">Other</span>
-            <span class="req">*Optional</span>
-          </div>
-          <div class="right" @click="uploadDocument('option')" v-if="getFileByTag('option') == null">
-            <img :src="`${iconUrl}Asset 609.svg`" />Upload
-            <input
-              type="file"
-              class="hide"
-              ref="optionDocument"
-              accept="application/text, application/pdf"
-              @change="onFilePicked"
-            />
-          </div>
-          <div class="right" v-else>
-            <span class="filename">{{ getFileByTag("option") }}</span>
-            <img class="check" :src="`${iconUrl}Group 3599 (2).svg`" />
-            <img class="remove" :src="`${iconUrl}Group 3671 (2).svg`" @click="removeFileByTag('option')" />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="additional-photos-wrapper" v-if="step == 2 && isChecked">
+    <h3 v-if="isChecked">Which elements would you like to involve in your proposal?</h3>
+    <proposal-service-table :category="service.componentId"></proposal-service-table>
+    <div class="additional-photos-wrapper" v-if="isChecked">
       <div class="title-cont">
         <h3><img :src="`${iconUrl}Asset 605.svg`" />Upload Additional Photos</h3>
         <h5>(15 photos top, under 20KB)</h5>
@@ -339,6 +61,7 @@ import { Money } from "v-money";
 
 import vue2Dropzone from "vue2-dropzone";
 import S3Service from "@/services/s3.service";
+import ProposalServiceTable from "./ProposalServiceTable";
 export default {
   name: "proposal-item",
   components: {

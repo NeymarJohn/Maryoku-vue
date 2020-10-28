@@ -59,7 +59,7 @@
         >
           <div class="font-size-30 font-bold-extra mb-30 d-flex">
             <img :src="`${$iconURL}RSVP/Path 2369.svg`" />
-            <span style="padding-top: 10px; margin-left: 20px">WHAT SHOULD I KNOW?</span>
+            <span style="padding-top: 10px; margin-left: 20px">What should I Know?</span>
           </div>
           <div>
             {{ campaign.additionalData.knowledge }}
@@ -216,9 +216,6 @@ export default {
       this.event = rsvpRequest.event;
       this.campaign = rsvpRequest.campaign;
       this.isLoading = false;
-      if (!this.rsvpRequest.isOpened) {
-        new RsvpRequest({ id: rsvpRequest.id, isOpened: true }).save();
-      }
     });
     this.$root.$on("setRsvp", (rsvpData) => {
       rsvpData.attendingOption = "PERSON";
