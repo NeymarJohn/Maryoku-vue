@@ -296,19 +296,22 @@
           <div class="left-side"></div>
           <div class="right-side">
             <template>
-              <div class="calendar-title">Date Range Picker</div>
-              <functional-calendar
-                :key="componentKey"
-                :change-month-function="true"
-                :change-year-function="true"
-                :is-multiple-date-picker="true"
-                :minSelDays="1"
-                :limits="limitDateRange"
-                :sundayStart="true"
-                :arrow-position="`space-between`"
-                v-model="date"
-                ref="calendar"
-              />
+              <div class="calendar-wrapper">
+                <div class="calendar-title">Date Range Picker</div>
+                <functional-calendar
+                  :key="componentKey"
+                  :change-month-function="true"
+                  :change-year-function="true"
+                  :is-multiple-date-picker="true"
+                  :minSelDays="1"
+                  :sundayStart="true"
+                  :arrow-position="`space-between`"
+                  :limits="limitDateRange"
+                  :marked-dates="markedDataRange"
+                  v-model="date"
+                  ref="calendar"
+                />
+              </div>
             </template>
             <div class="select-time-cont">
               <img :src="`${iconsUrl}Group 6085.svg`" />
@@ -366,7 +369,6 @@ export default {
   },
   data() {
     return {
-      vendor: null,
       category: null,
       notBiddingModal: false,
       chooseDateModal: false,
@@ -383,7 +385,6 @@ export default {
       conditionTooltip: false,
       proposalRequestRequirements: [],
       proposals: [],
-      proposalRequest: null,
       firstTime: false,
       suggest: false,
       categories: [
@@ -412,18 +413,20 @@ export default {
         min: null,
         max: null,
       },
+      markedDataRange: [],
       today: null,
     };
   },
   mounted() {
-    this.getVendor();
-    this.getProposalRequest();
     this.today = moment(new Date());
     this.limitDateRange = {
-      min: this.today.add(-3, "days").format("DD/MM/YYYY"),
-      max: this.today.add(6, "days").format("DD/MM/YYYY"),
+      min: moment(new Date()).add(-3, "days").format("DD/MM/YYYY"),
+      max: moment(new Date()).add(3, "days").format("DD/MM/YYYY"),
     };
+    this.markedDataRange.push({ date: moment(new Date()).add(-4, "days").format("DD/MM/YYYY"), class: "marked_end" });
+    this.markedDataRange.push({ date: moment(new Date()).add(4, "days").format("DD/MM/YYYY"), class: "marked_start" });
 
+    console.log(this.markedDataRange);
     this.$root.$on("go-to-proposal-form", () => {
       if (this.isAgreed) {
         if (this.proposalRequest) {
@@ -494,16 +497,7 @@ export default {
       this.hideModal();
       this.sorryModal = true;
     },
-    getVendor() {
-      Vendors.find(this.$route.params.vendorId).then((vendor) => {
-        this.vendor = vendor;
-      });
-    },
-    getProposalRequest() {
-      ProposalRequest.find(this.$route.params.rfpId).then((proposalRequest) => {
-        this.proposalRequest = proposalRequest;
-      });
-    },
+
     isDateDisabled(date) {
       let startDate = new Date(this.proposalRequest.eventData.eventStartMillis);
       let endDate = new Date(this.proposalRequest.eventData.eventStartMillis);
@@ -529,6 +523,12 @@ export default {
     },
   },
   computed: {
+    vendor() {
+      return this.$store.state.vendorProposal.vendor;
+    },
+    proposalRequest() {
+      return this.$store.state.vendorProposal.proposalRequest;
+    },
     eventDate() {
       if (!this.proposalRequest) return "-";
 
@@ -563,7 +563,8 @@ export default {
       }
     },
     requiredServices() {
-      return this.proposalRequest.eventData.components.sort((a, b) => a.order - b.order);
+      if (this.proposalRequest) return this.proposalRequest.eventData.components.sort((a, b) => a.order - b.order);
+      return [];
     },
   },
   filters: {
@@ -575,6 +576,14 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.marked_end {
+  border-top-right-radius: 50% !important;
+  border-bottom-right-radius: 50% !important;
+}
+.marked_start {
+  border-top-left-radius: 50% !important;
+  border-bottom-left-radius: 50% !important;
+}
 .for-vendor-wrapper {
   position: relative;
   background-color: #ffffff;
@@ -592,6 +601,14 @@ export default {
     font-weight: bold;
   }
 
+  .calendar-wrapper {
+    border: solid 1px #caced5;
+    padding: 0 1em;
+    width: max-content;
+    .vfc-popover-container {
+      width: max-content;
+    }
+  }
   .main-cont {
     background-color: #f2f2f2;
     border: 1px solid #707070;
@@ -675,6 +692,14 @@ export default {
     }
   }
 
+  .marked_end {
+    border-top-right-radius: 50% !important;
+    border-bottom-right-radius: 50% !important;
+  }
+  .marked_start {
+    border-top-left-radius: 50% !important;
+    border-bottom-left-radius: 50% !important;
+  }
   .rank-cont {
     color: #050505;
     padding-top: 84px;
@@ -1158,6 +1183,7 @@ export default {
           color: #f51355;
           border-color: #f51355;
           border-top: 2px solid;
+          background-color: white !important;
         }
         /deep/ .vfc-arrow-left {
           border-left: 2px solid;
@@ -1168,8 +1194,35 @@ export default {
         /deep/ .vfc-disabled,
         /deep/ .vfc-cursor-not-allowed {
           opacity: 0.48;
-          color: #43425d;
+          color: #43425d !important;
           background: #d5d5d5;
+          &.marked_start {
+            border-top-left-radius: 50% !important;
+            border-bottom-left-radius: 50% !important;
+          }
+          &.marked_end {
+            border-top-right-radius: 50% !important;
+            border-bottom-right-radius: 50% !important;
+          }
+        }
+        /deep/ .vfc-week {
+          .vfc-day {
+            span.vfc-disabled {
+              border-radius: 0;
+            }
+            &:first-child {
+              span.vfc-disabled {
+                border-top-left-radius: 50%;
+                border-bottom-left-radius: 50%;
+              }
+            }
+            &:last-child {
+              span.vfc-disabled {
+                border-top-right-radius: 50%;
+                border-bottom-right-radius: 50%;
+              }
+            }
+          }
         }
         .time {
           padding: 15px 32px;

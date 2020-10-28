@@ -32,7 +32,7 @@
       <feedback-image-carousel
         v-if="campaign.visibleSettings.allowUploadPhoto"
         class="p-50"
-        :images="images"
+        :images="campaign.images"
         @addImage="addNewImage"
       ></feedback-image-carousel>
       <div class="p-50">
@@ -63,7 +63,6 @@
               :key="index"
               :feedbackData="question"
               :showSwitch="false"
-              @change="changeFeedback(index, ...arguments)"
             ></feedback-question>
           </div>
         </div>
@@ -84,7 +83,7 @@
             <span class="font-size-20">I will do it later</span>
           </md-button>
 
-          <md-button class="md-button md-red maryoku-btn rsvp-btn" @click="giveFeedback">
+          <md-button class="md-button md-red maryoku-btn rsvp-btn">
             <span class="font-size-20">Give Feedback</span>
           </md-button>
         </div>
@@ -94,8 +93,6 @@
 </template>
 <script>
 import CalendarEvent from "@/models/CalendarEvent";
-import Feedback from "@/models/feedback";
-import Campaign from "@/models/campaign";
 import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 import FeedbackImageCarousel from "@/pages/app/Campaign/components/FeedbackImageCarousel";
 import SharingButtonGroup from "@/pages/app/Campaign/components/SharingButtonGroup";
@@ -104,7 +101,6 @@ import TitleEditor from "@/pages/app/Campaign/components/TitleEditor";
 import HideSwitch from "@/components/HideSwitch";
 import swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
-import S3Service from "@/services/s3.service";
 
 export default {
   components: {
@@ -124,7 +120,6 @@ export default {
       placeHolder: "",
       originalContent: {},
       info: {},
-      images: [],
     };
   },
   created() {
@@ -145,7 +140,6 @@ export default {
       this.isLoading = false;
       this.campaign = campaigns["FEEDBACK"];
       this.event = this.campaign.event;
-      this.images = this.campaign.images;
     });
   },
   methods: {
@@ -168,14 +162,8 @@ export default {
         }
       });
     },
-    addNewImage({ imageString, file }) {
-      const fileName = `${this.campaign.id}-${new Date().getTime()}`;
-      const extension = file.type.split("/")[1];
-      this.images.unshift({
-        src: `${process.env.S3_URL}feedback/${this.campaign.id}/${fileName}.${extension}`,
-        imageData: imageString,
-      });
-      S3Service.fileUpload(file, `fileName`, `feedback/${this.campaign.id}`).then((res) => {});
+    addNewImage(image) {
+      this.editingContent.images.unshift({ src: image });
     },
     uploadFile() {
       document.getElementById("file-uploader").click();
@@ -185,47 +173,6 @@ export default {
       this.editingContent.push({
         name: fileName,
       });
-    },
-    giveFeedback() {
-      const email = this.$route.query.email;
-      const feedbackQuestions = [];
-      this.campaign.feedbackQuestions.forEach((item) => {
-        feedbackQuestions.push({
-          question: item.question,
-          comment: item.comment,
-          rate: item.rank,
-        });
-      });
-      new Feedback({
-        guestName: email,
-        guestEmail: email,
-        guestComment: "",
-        feedbackCampaign: new Campaign({ id: this.campaign.id }),
-        feedbackQuestions: feedbackQuestions,
-        images: this.images,
-      })
-        .save()
-        .then((res) => {
-          swal({
-            title: "",
-            text: "Thank you for your feedback!",
-            type: "success",
-            confirmButtonClass: "md-button md-red maryoku-btn",
-            buttonsStyling: false,
-          });
-        })
-        .catch((e) => {
-          swal({
-            title: "Invalid information",
-            text: "Could you please check if you input all information on given form?",
-            type: "error",
-            confirmButtonClass: "md-button md-red maryoku-btn",
-            buttonsStyling: false,
-          });
-        });
-    },
-    changeFeedback(index, value) {
-      this.campaign.feedbackQuestions[index] = value;
     },
   },
 };

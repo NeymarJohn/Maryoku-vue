@@ -14,7 +14,7 @@
     </p>
     <div class="budget-list">
       <div class="items">
-        <div class="item" v-for="(r, ri) in requirements" :key="ri">
+        <div class="item" v-for="(r, ri) in validRequirements" :key="ri">
           <span>
             <img :src="`${$iconURL}Budget Elements/${r.icon}`" />
             {{ r.title }}
@@ -55,10 +55,13 @@ export default {
   methods: {},
   computed: {
     totalBudget() {
-      const sum = this.requirements.reduce((s, item) => {
+      const sum = this.validRequirements.reduce((s, item) => {
         return s + item.allocatedBudget;
       }, 0);
       return sum;
+    },
+    validRequirements() {
+      return this.requirements.filter((item) => item.eventCategory.type === "service");
     },
   },
   filters: {

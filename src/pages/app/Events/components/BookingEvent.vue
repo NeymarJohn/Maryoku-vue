@@ -178,6 +178,9 @@
           <br />This process will take
           in 4days.
         </div>
+        <div class="footer-container">
+          <md-button class="md-bold add-category-btn md-black md-simple" @click="back"> <md-icon>arrow_back</md-icon>Back </md-button>
+        </div>
       </template>
     </template>
     <template v-if="!showProposals ">
@@ -273,9 +276,14 @@ export default {
     },
     setRequirements(vendors) {
       this.selectedBlock.vendors = vendors;
+
       this.showCounterPage = true;
       this.showProposals = true;
     },
+    back(){
+      this.showCounterPage = false;
+      this.showProposals = false;
+    }
   },
   created() {
     this.isLoading = true;
@@ -320,5 +328,16 @@ export default {
   justify-content: flex-end;
   padding: 0 1.9em;
   margin-bottom: 1em;
+}
+
+.footer-container{
+  position: fixed;
+  bottom: 10px;
+  height: 80px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: white;
 }
 </style>

@@ -29,6 +29,7 @@ const state = {
     components: null,
     componentComponents: [],
   },
+  bookingRequirements: {},
   components: [],
   notes: [],
   commentComponents: [],
@@ -56,6 +57,9 @@ const getters = {
   },
   getComponentsList: (state) => {
     return state.components
+  },
+  getBookingRequirements: (state) => {
+    return state.bookingRequirements
   }
 }
 const actions = {
@@ -103,7 +107,7 @@ const actions = {
   getEventById({ commit, state }, eventId) {
     return new Promise((resolve, reject) => {
       CalendarEvent.find(eventId).then(event => {
-        commit("setEventData", event)
+        commit("setEventData", event);
         resolve(event)
       })
     })
@@ -243,7 +247,9 @@ const mutations = {
   setComponents(state, components) {
     state.components = components
   },
-
+  setBookingRequirements(state, requirements) {
+    state.bookingRequirements = requirements;
+  },
   setEventNotes(state, notes) {
     state.notes = notes
   },
