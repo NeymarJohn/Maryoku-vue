@@ -38,8 +38,8 @@
             </div>
             <div class="block">
               <div class="title">
-                <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategories[0])}`" />
-                About Our {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
+                <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategory)}`" />
+                About Our {{ getCategoryNameByValue(vendor.vendorCategory) }}
               </div>
               <div class="desc">{{ vendor.about.category }}</div>
             </div>
@@ -103,7 +103,7 @@
                 <div class="first-column">
                   <div>
                     <img :src="`${iconUrl}Asset 543.svg`" />
-                    {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
+                    {{ getCategoryNameByValue(vendor.vendorCategory) }}
                   </div>
                   <span>QTY</span>
                 </div>
@@ -124,7 +124,7 @@
               <div class="cheader">
                 <div>
                   <img :src="`${iconUrl}Asset 543.svg`" />
-                  {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
+                  {{ getCategoryNameByValue(vendor.vendorCategory) }}
                 </div>
                 <span>QTY</span>
                 <span>Price</span>
@@ -152,7 +152,7 @@
                 </div>
               </div>
             </div>
-            <div class="not-allowed" v-if="vendor.vendorCategories[0] == 'venuerental'">
+            <div class="not-allowed" v-if="vendor.vendorCategory == 'venuerental'">
               <h5>We don't allow these 3rd party vendor:</h5>
               <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
             </div>
@@ -179,7 +179,7 @@
           <div class="pricing-policy-cont" id="Rules">
             <div class="title"><img :src="`${iconUrl}Asset 560.svg`" /> OUR PRICING POLICY</div>
             <div class="rules">
-              <div class="rule" v-for="(policy, yIndex) in validPricingPolicy" :key="yIndex">
+              <div class="rule" v-for="(policy, yIndex) in vendor.pricingPolicies" :key="yIndex">
                 <div class="item">{{ policy.name }}</div>
                 <div class="item">
                   {{ policy.value }}
@@ -511,12 +511,7 @@ export default {
       }
     },
   },
-  computed: {
-    validPricingPolicy() {
-      if (this.vendor.pricingPolicies) return this.vendor.pricingPolicies.filter((item) => item.value);
-      return null;
-    },
-  },
+  computed: {},
   filters: {},
   watch: {},
 };

@@ -28,7 +28,7 @@
             <div class="rules">
               <div
                 class="rule"
-                v-for="(r, rIndex) in policies.filter((p) => p.category == vendor.vendorCategories[0])[0].items"
+                v-for="(r, rIndex) in policies.filter((p) => p.category == vendor.vendorCategory)[0].items"
                 :key="rIndex"
               >
                 <div class="left v-grid-with-desc">
@@ -125,7 +125,7 @@
             <div class="rules">
               <div
                 class="rule"
-                v-for="(p, pIndex) in pricingPolicies.filter((p) => p.category == vendor.vendorCategories[0])[0].items"
+                v-for="(p, pIndex) in pricingPolicies.filter((p) => p.category == vendor.vendorCategory)[0].items"
                 :key="pIndex"
               >
                 <div class="left">
@@ -235,7 +235,7 @@
             </div>-->
           </div>
         </div>
-        <div class="3rd-party-vendor-wrapper mb-50" v-if="vendor.vendorCategories[0] == 'venuerental'">
+        <div class="3rd-party-vendor-wrapper mb-50" v-if="vendor.vendorCategory == 'venuerental'">
           <div class="title-cont">
             <div class="top">
               <h5>3rd party vendor</h5>
@@ -830,13 +830,11 @@ export default {
             },
             {
               name: "Minimum hours of service",
-              type: Number,
-              noSuffix: true,
+              type: Boolean,
             },
             {
               name: "Max hours per shift",
-              type: Number,
-              noSuffix: true,
+              type: Boolean,
             },
             {
               name: "Dress code",
@@ -935,19 +933,19 @@ export default {
           items: [
             {
               name: "Travel cost",
-              type: Boolean,
+              type: Number,
             },
             {
               name: "Pickup",
-              type: Boolean,
+              type: Number,
             },
             {
               name: "Cleanup",
-              type: Boolean,
+              type: Number,
             },
             {
               name: "Breakdown",
-              type: Boolean,
+              type: Number,
             },
             {
               name: "Discount for large quantities",
@@ -957,8 +955,7 @@ export default {
             },
             {
               name: "Cost Late Night Fares",
-              type: Boolean,
-              hasComment: true,
+              type: Number,
             },
             {
               name: "Discount for large quantities",
@@ -1404,7 +1401,7 @@ export default {
     },
     setPricePolicy(event, pricePolicyItem) {
       console.log(pricePolicyItem);
-      const pricingPolicies = this.pricingPolicies.find((it) => it.category === this.vendor.vendorCategories[0]);
+      const pricingPolicies = this.pricingPolicies.find((it) => it.category === this.vendor.vendorCategory);
       this.$root.$emit("update-vendor-value", "pricingPolicies", pricingPolicies.items);
     },
   },
