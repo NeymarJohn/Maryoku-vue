@@ -26,11 +26,12 @@
         <div v-for="(category, index) in Object.keys(requirementProperties)" :key="index">
           <template v-if="category == 'multi-selection'">
             <vendor-requirement-multiselect-panel
-              v-for="(data, id) in requirementProperties[category]"
+              v-for="(data, id) in requirementProperties['multi-selection'].filter(it => it.visible)"
               :key="id"
               :index="id"
               :data="data"
               :currentComponent="selectedBlock"
+              @change="handleMultiSelectChange"
             ></vendor-requirement-multiselect-panel>
           </template>
           <!-- <div class="requirement-section" v-else-if="category=='special'">
@@ -133,9 +134,9 @@
           </div>
           <div v-else-if="blockId == 'entertainment' && category == 'Services'">
             <entertainment-services-section
-              :data="requirementProperties"
-              :note="anythingElse"
-              @change="handleServiceChange"
+                    :requirements="requirementProperties"
+                    :note="anythingElse"
+                    @change="handleServiceChange"
             ></entertainment-services-section>
           </div>
           <div class="requirement-section" v-else>
@@ -149,7 +150,7 @@
                     </span>
                   </th>
                   <th>
-                    <div v-if="getInputAvailable(category)">How Many?</div>
+                    <div class="text-center">How Many?</div>
                   </th>
                   <th></th>
                   <th></th>
@@ -370,7 +371,6 @@ export default {
         if (op.name === "Security Consultation") {
           requirements["Services"][risk_idx].visible = op.selected;
         }
-        // requirements['Services'][risk_idx].visible = !!(op.name === 'Security Consultation' && op.selected);
       });
 
       if (this.event.eventType.name === "Reception" && this.event.numberOfParticipants > 500) {
@@ -379,6 +379,20 @@ export default {
       }
 
       return requirements;
+    },
+    _handleFoodAndBeverageRequirement(requirement){
+
+      let service_index = requirement['multi-selection'].findIndex(op => op.subCategory === 'service');
+      let liquor_index = requirement['multi-selection'].findIndex(op => op.subCategory === 'liquor stations');
+      let food_spec_index = requirement['multi-selection'].findIndex(op => op.subCategory === 'food specialties');
+
+      requirement['multi-selection'][service_index].options.map(op => {
+        console.log("_handleFoodAndBeverageRequirement", food_spec_index, op.name === 'Food Catering');
+        if (op.name === 'Food Catering') requirement['multi-selection'][food_spec_index].visible = op.selected;
+        if (op.name === 'Beverage') requirement['multi-selection'][liquor_index].visible = op.selected;
+
+      });
+      return requirement;
     },
     addRequirement(category, property) {
       const index = this.requirementProperties[category].findIndex((it) => it.item == property.item);
@@ -394,8 +408,16 @@ export default {
       this._saveRequirementsInStore();
       // this.$forceUpdate();
     },
-    handleSpecialChange(e) {
-      if (e.hasOwnProperty("note")) {
+    handleMultiSelectChange(){
+      this.$forceUpdate();
+      if( this.blockId === 'securityservices' )
+        this.requirementProperties = this._handleSecurityRequirement(this.requirementProperties);
+      if( this.blockId === 'foodandbeverage')
+        this.requirementProperties = this._handleFoodAndBeverageRequirement(this.requirementProperties);
+      this._saveRequirementsInStore();
+    },
+    handleSpecialChange(e){
+      if( e.hasOwnProperty('note') ) {
         this.anythingElse = e.note;
       }
 
@@ -404,24 +426,16 @@ export default {
     handleServiceChange(e) {
       if (e.hasOwnProperty("note")) {
         this.anythingElse = e.note;
+      } else {
+        this.requirementProperties = e;
       }
-      this.requirementProperties = e;
       this._saveRequirementsInStore();
+
     },
     handleNoteChange(e) {
       this._saveRequirementsInStore();
     },
-    getInputAvailable(cat) {
-      for (let i = 0; i < this.requirementProperties[cat].length; i++) {
-        let item = this.requirementProperties[cat][i];
-        if (item.isSelected && item.qtyEnabled) {
-          return true;
-        }
-      }
-
-      return false;
-    },
-    setProperties: async function () {
+    setProperties: async function(){
       this.selectedBlock = this.component;
       const event = this.event;
       if (!this.selectedBlock.componentId) return;
@@ -437,12 +451,16 @@ export default {
             const calcedValue = eval(requirements[category][itemIndex].defaultQtyScript);
             requirements[category][itemIndex].defaultQty = Math.ceil(calcedValue);
           }
-
-          if (this.selectedBlock.componentId === "securityservices") {
-            requirements = this._handleSecurityRequirement(requirements);
-          }
         }
       }
+
+      if (this.selectedBlock.componentId === "securityservices") {
+        requirements = this._handleSecurityRequirement(requirements);
+      }
+      if (this.selectedBlock.componentId === "foodandbeverage") {
+        requirements = this._handleFoodAndBeverageRequirement(requirements);
+      }
+
       this.requirementProperties = requirements;
     },
     toggleCommentMode(mode) {
@@ -522,14 +540,6 @@ export default {
   mounted() {
     this.isLoading = true;
 
-    this.$root.$on("multi-select.change", (index, data) => {
-      this.requirementProperties["multi-selection"][index] = data;
-      // console.log("bookingEventRequirement", this.blockId);
-      if (this.blockId === "securityservices")
-        this.requirementProperties = this._handleSecurityRequirement(this.requirementProperties);
-      this._saveRequirementsInStore();
-    });
-
     if (this.eventData.id) {
       this.fetchData();
     }
@@ -604,7 +614,9 @@ export default {
       td,
       th {
         padding: 24px 0;
+        width: 25%;
       }
+
       tbody {
         td {
           border-top: solid 2px #dbdbdb !important;
