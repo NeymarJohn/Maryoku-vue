@@ -26,12 +26,10 @@
         <div v-for="(category, index) in Object.keys(requirementProperties)" :key="index">
           <template v-if="category == 'multi-selection'">
             <vendor-requirement-multiselect-panel
-              v-for="(data, id) in requirementProperties['multi-selection'].filter(it => it.visible)"
+              v-for="(data, id) in requirementProperties[category]"
               :key="id"
-              :index="id"
               :data="data"
               :currentComponent="selectedBlock"
-              @change="handleMultiSelectChange"
             ></vendor-requirement-multiselect-panel>
           </template>
           <!-- <div class="requirement-section" v-else-if="category=='special'">
@@ -125,20 +123,7 @@
               </div>
             </div>
           </div>-->
-          <div v-else-if="category == 'special'">
-            <special-requirement-section
-              :data="requirementProperties[category]"
-              :note="anythingElse"
-              @change="handleSpecialChange"
-            ></special-requirement-section>
-          </div>
-          <div v-else-if="blockId == 'entertainment' && category == 'Services'">
-            <entertainment-services-section
-                    :requirements="requirementProperties"
-                    :note="anythingElse"
-                    @change="handleServiceChange"
-            ></entertainment-services-section>
-          </div>
+          <special-requirement-section v-else-if="category == 'special'"></special-requirement-section>
           <div class="requirement-section" v-else>
             <table class="requirement-section-table">
               <thead>
@@ -149,9 +134,7 @@
                       {{ category }}
                     </span>
                   </th>
-                  <th>
-                    <div class="text-center">How Many?</div>
-                  </th>
+                  <th>How Many?</th>
                   <th></th>
                   <th></th>
                 </tr>
@@ -226,33 +209,13 @@
               <div>
                 <div
                   class="additional-request-tag"
-                  v-for="(property, index) in requirementProperties[category].filter(
-                    (item) => !item.isSelected && item.visible,
-                  )"
+                  v-for="(property, index) in requirementProperties[category].filter((item) => !item.isSelected)"
                   :key="index"
                   @click="addRequirement(category, property)"
                 >
                   {{ property.item }}
                   <md-icon class="icon color-red">add_circle</md-icon>
                 </div>
-              </div>
-            </div>
-            <div
-              v-if="
-                index === Object.keys(requirementProperties).length - 1 &&
-                !requirementProperties.hasOwnProperty('special')
-              "
-              class="anything-else-section mt-30"
-            >
-              <div class="font-bold mt-10">Anything Else?</div>
-
-              <div class="mt-10">Get me a pink unicorn please.</div>
-              <div class="anything-else-section-options mt-10">
-                <textarea
-                  placeholder="Type name of element here..."
-                  v-model="anythingElse"
-                  @input="handleNoteChange"
-                ></textarea>
               </div>
             </div>
           </div>
@@ -269,9 +232,7 @@
         </md-button>
       </div>
       <div>
-        <md-button class="md-bold add-category-btn md-black md-simple" @click="revertToOriginal"
-          >Revert To Original</md-button
-        >
+        <md-button class="md-bold add-category-btn md-black md-simple">Revert To Original</md-button>
         <md-button class="md-red md-bold add-category-btn" @click="findVendors">Find my perfect vendor</md-button>
       </div>
     </div>
@@ -298,7 +259,6 @@ import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
 import VendorRequirementMultiselectPanel from "./VendorRequirementMultiselectPanel";
 import SpecialRequirementSection from "./SpecialRequirementSection";
-import EntertainmentServicesSection from "./EntertainmentServicesSection";
 
 export default {
   name: "booking-event-requirement",
@@ -314,7 +274,6 @@ export default {
     MaryokuTextarea,
     VendorRequirementMultiselectPanel,
     SpecialRequirementSection,
-    EntertainmentServicesSection,
   },
   props: {
     component: {
@@ -334,7 +293,6 @@ export default {
     blockId: "",
     value: "",
     requirementProperties: {},
-    anythingElse: null,
     editingSpecialRequest: {
       name: "",
       isMandatory: false,
@@ -344,173 +302,67 @@ export default {
   }),
   methods: {
     ...mapMutations("event", ["setEventData"]),
-    ...mapMutations("event", ["setBookingRequirements"]),
     ...mapActions("comment", ["getCommentComponents"]),
     ...mapActions("vendor", ["fetchAllProperties"]),
-    _saveRequirementsInStore(action = null) {
-      let requirements = this.storedRequirements;
-
-      let eventRequirement = requirements[this.event.id] ? requirements[this.event.id] : {};
-
-      eventRequirement[this.blockId] = JSON.parse(JSON.stringify({ requirements: null, anythingElse: null }));
-      eventRequirement[this.blockId].requirements =
-        action === "clear" ? null : JSON.parse(JSON.stringify(this.requirementProperties));
-      eventRequirement[this.blockId].anythingElse = action === "clear" ? null : this.anythingElse;
-
-      requirements[this.event.id] = eventRequirement;
-      // console.log("requirements", requirements)
-      this.setBookingRequirements(requirements);
-    },
-    _handleSecurityRequirement(requirements) {
-      let vip_idx = requirements["Services"].findIndex((sv) => sv.item === "VIP Security");
-      let risk_idx = requirements["Services"].findIndex((sv) => sv.item === "Risk Assessment");
-      let parameter_idx = requirements["Services"].findIndex((sv) => sv.item === "Parameter security");
-
-      requirements["multi-selection"][0].options.map((op) => {
-        requirements["Services"][vip_idx].visible = !!(op.name === "Personal Security" && op.selected);
-        if (op.name === "Security Consultation") {
-          requirements["Services"][risk_idx].visible = op.selected;
-        }
-      });
-
-      if (this.event.eventType.name === "Reception" && this.event.numberOfParticipants > 500) {
-        requirements["Services"][parameter_idx].isSelected = true;
-        requirements["Services"][parameter_idx].mustHave = true;
-      }
-
-      return requirements;
-    },
-    _handleFoodAndBeverageRequirement(requirement){
-
-      let service_index = requirement['multi-selection'].findIndex(op => op.subCategory === 'service');
-      let liquor_index = requirement['multi-selection'].findIndex(op => op.subCategory === 'liquor stations');
-      let food_spec_index = requirement['multi-selection'].findIndex(op => op.subCategory === 'food specialties');
-
-      requirement['multi-selection'][service_index].options.map(op => {
-        console.log("_handleFoodAndBeverageRequirement", food_spec_index, op.name === 'Food Catering');
-        if (op.name === 'Food Catering') requirement['multi-selection'][food_spec_index].visible = op.selected;
-        if (op.name === 'Beverage') requirement['multi-selection'][liquor_index].visible = op.selected;
-
-      });
-      return requirement;
-    },
     addRequirement(category, property) {
       const index = this.requirementProperties[category].findIndex((it) => it.item == property.item);
       this.requirementProperties[category][index].isSelected = true;
       this.requirementProperties = { ...this.requirementProperties };
-      this._saveRequirementsInStore();
       // this.$forceUpdate();
     },
     removeRequirement(category, property) {
       const index = this.requirementProperties[category].findIndex((it) => it.item == property.item);
       this.requirementProperties[category][index].isSelected = false;
       this.requirementProperties = { ...this.requirementProperties };
-      this._saveRequirementsInStore();
       // this.$forceUpdate();
     },
-    handleMultiSelectChange(){
-      this.$forceUpdate();
-      if( this.blockId === 'securityservices' )
-        this.requirementProperties = this._handleSecurityRequirement(this.requirementProperties);
-      if( this.blockId === 'foodandbeverage')
-        this.requirementProperties = this._handleFoodAndBeverageRequirement(this.requirementProperties);
-      this._saveRequirementsInStore();
-    },
-    handleSpecialChange(e){
-      if( e.hasOwnProperty('note') ) {
-        this.anythingElse = e.note;
-      }
-
-      this._saveRequirementsInStore();
-    },
-    handleServiceChange(e) {
-      if (e.hasOwnProperty("note")) {
-        this.anythingElse = e.note;
-      } else {
-        this.requirementProperties = e;
-      }
-      this._saveRequirementsInStore();
-
-    },
-    handleNoteChange(e) {
-      this._saveRequirementsInStore();
-    },
-    setProperties: async function(){
+    setProperties() {
       this.selectedBlock = this.component;
       const event = this.event;
       if (!this.selectedBlock.componentId) return;
+      this.$http
+        .get(`${process.env.SERVER_URL}/1/vendor/property/${this.selectedBlock.componentId}/${this.event.id}`)
+        .then((res) => {
+          this.isLoading = false;
+          const requirements = res.data;
+          for (let category in requirements) {
+            for (let itemIndex in requirements[category]) {
+              if (requirements[category][itemIndex].defaultQtyScript) {
+                const calcedValue = eval(requirements[category][itemIndex].defaultQtyScript);
+                requirements[category][itemIndex].defaultQty = Math.ceil(calcedValue);
+              }
 
-      let res = await this.$http.get(
-        `${process.env.SERVER_URL}/1/vendor/property/${this.selectedBlock.componentId}/${this.event.id}`,
-      );
-      this.isLoading = false;
-      let requirements = res.data;
-      for (let category in requirements) {
-        for (let itemIndex in requirements[category]) {
-          if (requirements[category][itemIndex].defaultQtyScript) {
-            const calcedValue = eval(requirements[category][itemIndex].defaultQtyScript);
-            requirements[category][itemIndex].defaultQty = Math.ceil(calcedValue);
+              // requirements[category][itemIndex].isSelected = eval(requirements[category][itemIndex].isSelected)
+            }
           }
-        }
-      }
 
-      if (this.selectedBlock.componentId === "securityservices") {
-        requirements = this._handleSecurityRequirement(requirements);
-      }
-      if (this.selectedBlock.componentId === "foodandbeverage") {
-        requirements = this._handleFoodAndBeverageRequirement(requirements);
-      }
-
-      this.requirementProperties = requirements;
+          this.requirementProperties = requirements;
+        })
+        .catch((e) => {
+          this.isLoading = false;
+        });
     },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
     },
-    scrollToTop() {
-      window.scrollTo(0, 0);
-    },
-    fetchData: async function () {
-      this.requirementProperties = {};
-      this.anythingElse = null;
-
+    fetchData() {
       this.blockId = this.component.componentId; //this.$route.params.blockId
       this.event = this.$store.state.event.eventData;
       this.getCommentComponents(this.blockId);
-
-      if (
-        this.storedRequirements[this.event.id] &&
-        this.storedRequirements[this.event.id][this.blockId] &&
-        this.storedRequirements[this.event.id][this.blockId].requirements
-      ) {
-        this.requirementProperties = JSON.parse(
-          JSON.stringify(this.storedRequirements[this.event.id][this.blockId].requirements),
-        );
-        this.anythingElse = JSON.parse(
-          JSON.stringify(this.storedRequirements[this.event.id][this.blockId].anythingElse),
-        );
-
-        this.isLoading = false;
-      } else {
-        await this.setProperties();
-      }
-    },
-    revertToOriginal: async function () {
-      this._saveRequirementsInStore("clear");
-      await this.fetchData();
-      this.scrollToTop();
-      this.$root.$emit("revertRequirements");
+      this.setProperties();
     },
     findVendors() {
-      let component = new EventComponent({ id: this.component.id });
       postReq("/1/vendors/setting-requirements", {
-        vendorCategory: this.blockId,
+        vendorCategory: "foodandbeverage",
         expiredBusinessTime: moment(new Date()).add(5, "days").valueOf(),
         settingsJsonData: JSON.stringify(this.requirementProperties),
-        note: this.anythingElse,
         eventComponentInstance: new EventComponent({ id: this.component.id }),
       }).then((res) => {
         this.$emit("setRequirements", res);
       });
+    },
+    addNewRequirement() {
+      this.specialRequests = [...this.addNewRequirement, this.editingSpecialRequest];
     },
     checkAffectedItems(property) {
       // waitign for updating model
@@ -539,7 +391,6 @@ export default {
   },
   mounted() {
     this.isLoading = true;
-
     if (this.eventData.id) {
       this.fetchData();
     }
@@ -572,9 +423,6 @@ export default {
     },
   },
   computed: {
-    ...mapGetters({
-      storedRequirements: "event/getBookingRequirements",
-    }),
     ...mapState("event", ["eventData"]),
   },
 };
@@ -614,9 +462,7 @@ export default {
       td,
       th {
         padding: 24px 0;
-        width: 25%;
       }
-
       tbody {
         td {
           border-top: solid 2px #dbdbdb !important;
@@ -690,7 +536,7 @@ export default {
       margin-right: 40px;
     }
   }
-  .anything-else-section {
+  .special-request-section {
     padding: 30px 0;
     border-top: solid 1px #b7b7b7;
   }

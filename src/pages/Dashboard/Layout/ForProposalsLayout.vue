@@ -50,13 +50,7 @@
           </a>
         </div>
         <div class="pull-bottom-right">
-          <vendor-bid-time-counter
-            :key="getRemainingTime.seconds"
-            :days="getRemainingTime.days"
-            :hours="getRemainingTime.hours"
-            :minutes="getRemainingTime.mins"
-            :seconds="getRemainingTime.seconds"
-          />
+          <vendor-bid-time-counter :days="4" :hours="0" :minutes="0" :seconds="0" />
         </div>
       </div>
     </section>
@@ -252,46 +246,34 @@ export default {
       event: "",
     };
   },
-  created() {
-    this.$root.$on("send-event-data", (evtData) => {
-      this.evtData = evtData;
-    });
-
-    if (this.$route.params.eventId) {
-      this.getEvent();
-    }
-
-    this.fullDetailsModal = false;
-    this.savedItModal = false;
-    this.isTimeUp = false;
-
-    this.getVendor(this.$route.params.vendorId).then((vendor) => {
-      this.vendor = vendor;
-    });
-    this.getProposalRequest(this.$route.params.id).then((proposalRequest) => {
-      this.$set(this, "proposalRequest", proposalRequest);
-      this.event = proposalRequest.eventData;
-      if (proposalRequest.eventData.concept) {
-        this.step = -1;
-      } else {
-        this.step = 0;
-      }
-      this.proposalRequestRequirements = _.chain(proposalRequest.requirements)
-        .groupBy("requirementPriority")
-        .map(function (value, key) {
-          return {
-            title: key,
-            requirements: value,
-          };
-        })
-        .value();
-    });
-  },
   methods: {
-    ...mapActions("vendorProposal", ["getVendor", "getProposalRequest"]),
+    getVendor() {
+      Vendors.find(this.$route.params.vendorId).then((vendor) => {
+        this.vendor = vendor;
+      });
+    },
     getProposal(id) {
       ProposalRequest.find(id)
-        .then((resp) => {})
+        .then((resp) => {
+          console.log("ProposalRequest:", resp);
+          this.$set(this, "proposalRequest", resp);
+          this.event = resp.eventData;
+          console.log(resp);
+          if (resp.eventData.concept) {
+            this.step = -1;
+          } else {
+            this.step = 0;
+          }
+          this.proposalRequestRequirements = _.chain(resp.requirements)
+            .groupBy("requirementPriority")
+            .map(function (value, key) {
+              return {
+                title: key,
+                requirements: value,
+              };
+            })
+            .value();
+        })
         .catch((error) => {
           console.log(" error ", error);
         });
@@ -389,7 +371,22 @@ export default {
       this.$store.dispatch("event/getEventById", this.$route.params.eventId);
     },
   },
+  created() {
+    this.$root.$on("send-event-data", (evtData) => {
+      this.evtData = evtData;
+    });
 
+    if (this.$route.params.eventId) {
+      this.getEvent();
+    }
+
+    this.fullDetailsModal = false;
+    this.savedItModal = false;
+    this.isTimeUp = false;
+
+    this.getVendor();
+    this.getProposal(this.$route.params.id);
+  },
   filters: {
     withComma(amount) {
       return amount ? amount.toLocaleString() : 0;
@@ -432,20 +429,6 @@ export default {
         return this.event.concept.images[new Date().getTime() % 4].url;
       }
       return "";
-    },
-    getRemainingTime() {
-      if (!this.proposalRequest) return { days: 0, hours: 0, mins: 0, seconds: 0 };
-      console.log(this.proposalRequest.expiredTime);
-      console.log(new Date().getTime());
-      let remainingMs = this.proposalRequest.expiredTime - new Date().getTime();
-      const days = Math.floor(remainingMs / 24 / 3600 / 1000);
-      remainingMs = remainingMs - days * 24 * 3600 * 1000;
-      const hours = Math.floor(remainingMs / 3600 / 1000);
-      remainingMs = remainingMs - hours * 3600 * 1000;
-      const mins = Math.floor(remainingMs / 60 / 1000);
-      remainingMs = remainingMs - mins * 60 * 1000;
-      const seconds = Math.floor(remainingMs / 1000);
-      return { days, hours, mins, seconds };
     },
   },
 };

@@ -6,7 +6,7 @@
         {{ data.question }}
       </div>
       <div>
-        <maryoku-textarea size="narrow"></maryoku-textarea>
+        <maryoku-textarea size="narrow" v-model="data.comment"></maryoku-textarea>
       </div>
     </div>
     <div class="ml-50 mr-50">
@@ -79,6 +79,14 @@ export default {
         }
       }
       return "";
+    },
+  },
+  watch: {
+    data: {
+      handler: function (newValue, oldValue) {
+        this.$emit("change", newValue);
+      },
+      deep: true,
     },
   },
 };

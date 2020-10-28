@@ -7,7 +7,6 @@ import auth from "./modules/auth";
 import PublicEventPlanner from "./modules/PublicEventPlanner";
 import vendor from "./modules/vendor";
 import campaign from "./modules/campaign";
-import vendorProposal from "./modules/vendorProposal"
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -19,6 +18,5 @@ export default new Vuex.Store({
         vendor,
         PublicEventPlanner,
         campaign,
-        vendorProposal
     },
 });

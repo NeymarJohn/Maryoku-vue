@@ -57,20 +57,20 @@ export const businessCategories = [
               },
               {
                 name: 'separate cocktail hour space',
-                type: Number,
-                value: 1,
+                type: Boolean,
+                value: false,
                 xIncluded: true,
               },
               {
                 name: 'outside area for guests',
-                type: Number,
-                value: 1,
+                type: Boolean,
+                value: false,
                 xIncluded: true,
               },
               {
                 name: 'kitchen for outside caterers',
-                type: Number,
-                value: 1,
+                type: Boolean,
+                value: false,
                 xIncluded: true,
               },
               {
@@ -362,7 +362,7 @@ export const businessCategories = [
                 name: 'cuisine specialty',
                 type: Array,
                 value: [],
-                available: ['italian', 'french', 'spanish', 'german', 'belgian', 'american', 'south american', 'chinese', 'japanese', 'mexican', 'indian', 'farm-to-table']
+                available: ['italian', 'french', 'spanish', 'german', 'belgian', 'american', 'south american', 'chinese', 'japanese', 'mexican', 'indian']
               },
               {
                 name: 'food specialties',
@@ -374,8 +374,7 @@ export const businessCategories = [
                 name: 'food preparation location',
                 type: Array,
                 value: [],
-                available: ['on premisses', 'off premises'],
-                hasComment: true
+                available: ['on premisses', 'off premises']
               },
               {
                 name: 'after party entertainment food',
@@ -397,24 +396,18 @@ export const businessCategories = [
                 name: 'specialty liquor stations',
                 type: Array,
                 value: [],
-                available: ['beer', 'wine', 'tequila', 'cocktail', 'mixology', 'martini', 'bourbon', 'whiskey']
+                available: ['beer', 'wine', 'tequila', 'cocktail', 'mixology', 'martiny', 'bourbon', 'whiskey']
               },
               {
                 name: 'specialty bar services',
                 type: Boolean,
                 value: false
               },
-              // {
-              //   name: 'non alcoholic specials',
-              //   type: Array,
-              //   value: [],
-              //   available: ['smoothies & juices', 'hawaiian', 'coffee', 'tea', 'power drinks']
-              // },
               {
                 name: 'non alcoholic specials',
-                type: Number,
-                value: 0,
-                // available: ['smoothies & juices', 'hawaiian', 'coffee', 'tea', 'power drinks']
+                type: Array,
+                value: [],
+                available: ['smoothies & juices', 'hawaiian', 'coffee', 'tea', 'power drinks']
               },
             ]
           }
@@ -441,7 +434,7 @@ export const businessCategories = [
                 name: 'breakfast',
                 type: Array,
                 value: [],
-                available: ['egg station', 'bread station', 'avocado station', 'cereal station', 'health drinks', 'fresh fruit', 'yogurt bar', 'pancake/waffle station']
+                available: ['egg station', 'bread station', 'avocado station', 'cereal station', 'health drinks']
               },
               {
                 name: 'lunch',
@@ -550,8 +543,7 @@ export const businessCategories = [
                 name: 'table decor',
                 type: Array,
                 value: [],
-                available: ['candles', 'flower arrangement', 'napkins', 'napkin huggers', 'other'],
-                hasComment: true,
+                available: ['candles', 'flower arrangement', 'napkins', 'napkin huggers', 'other']
               }
             ]
           }
@@ -703,13 +695,13 @@ export const businessCategories = [
               },
               {
                 name: 'deliveries',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false
               },
               {
                 name: 'onsite setup',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false
               },
               {
                 name: 'cleanup',
@@ -878,7 +870,7 @@ export const businessCategories = [
                 value: false
               },
               {
-                name: 'day-of corrdination',
+                name: 'day-off corrdination',
                 type: Boolean,
                 value: false
               },
@@ -1005,8 +997,8 @@ export const businessCategories = [
             items: [
               {
                 name: 'adapt equipment mobility to program',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false
               },
               {
                 name: 'setup & breakdown',
@@ -1025,8 +1017,8 @@ export const businessCategories = [
             items: [
               {
                 name: 'drone and remote photo/video',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false
               },
               {
                 name: 'crane',
@@ -1527,7 +1519,11 @@ export const businessCategories = [
                 type: Boolean,
                 value: false
               },
-
+              {
+                name: 'crowd control',
+                type: Boolean,
+                value: false
+              },
             ]
           },
           {
@@ -1535,43 +1531,38 @@ export const businessCategories = [
             items: [
               {
                 name: 'chaperones',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false
               },
               {
                 name: 'patrolling officers',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false
               },
               {
                 name: 'bouncers',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false
               },
               {
                 name: 'body guards',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false
               },
               {
-                name: 'armed security officers',
-                type: Number,
-                value: 0
+                name: 'amed security officers',
+                type: Boolean,
+                value: false
               },
               {
                 name: 'unarmed security',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false
               },
               {
                 name: 'undercover',
-                type: Number,
-                value: 0
-              },
-              {
-                name: 'crowd control',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false
               },
             ]
           }
@@ -1585,8 +1576,8 @@ export const businessCategories = [
             items: [
               {
                 name: 'special equipment',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false
               },
             ]
           }
