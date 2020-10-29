@@ -131,6 +131,7 @@
     </div>
     <rsvp-information-modal
       v-if="showRsvpModal"
+      :event="event"
       @close="showRsvpModal = false"
       @setRsvp="setRsvp"
     ></rsvp-information-modal>
@@ -225,6 +226,7 @@ export default {
       rsvpData.rsvpStatus = "AGREED";
       rsvpData.invitedEmail = this.rsvpRequest.email;
       rsvpData.rsvpRequest = new RsvpRequest({ id: this.rsvpRequest.id });
+      rsvpData.event = new CalendarEvent({ id: this.event.id });
       new Rsvp(rsvpData).save().then((requestedRSVP) => {
         console.log(requestedRSVP);
         swal({

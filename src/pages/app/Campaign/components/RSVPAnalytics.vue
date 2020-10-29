@@ -96,7 +96,7 @@
             </div>
           </div>
           <hr />
-          <div class="food-limitations mt-50">
+          <div class="food-limitations mt-50" v-if="Object.keys(foodLimitations).length">
             <div class="font-size-20 font-bold-extra">Food Limitations</div>
             <rsvp-food-limitations :data="foodLimitations"></rsvp-food-limitations>
           </div>
@@ -197,8 +197,8 @@ export default {
     this.analyticsData[3].value = 0;
     this.analyticsData[4].value = this.numberOfEmails;
     this.$http.get(`${process.env.SERVER_URL}/1/rsvp-requests/statistics/${this.campaignData.id}`).then((res) => {
-      console.log(res);
       this.rsvpStatisData = res.data;
+      this.foodLimitations = res.data.limitations;
     });
   },
   computed: {

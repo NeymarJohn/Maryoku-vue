@@ -1,22 +1,20 @@
 <template>
   <div class="d-flex food-limitaions">
-    <div v-for="(item, index) in limitations" :key="index" class="flex-1 food-limit-item text-center">
-      <img :src="`${$iconURL}${item.icon}`" v-if="item.icon" />
+    <div v-for="(key, index) in Object.keys(limitations)" :key="index" class="flex-1 food-limit-item text-center">
+      <!-- <img :src="`${$iconURL}${item.icon}`" v-if="item.icon" /> -->
       <div>
         <div>
-          {{ item.label }}
+          {{ key }}
         </div>
         <div>
-          ({{ item.value }})
-          <span style="color: #050505" @click="showPannel(index)"
-            ><md-icon v-if="item.value">keyboard_arrow_down</md-icon></span
+          ({{ limitations[key].length }})
+          <span style="color: #050505" @click="showPannel(key)" v-if="limitations[key].length"
+            ><md-icon>keyboard_arrow_down</md-icon></span
           >
         </div>
       </div>
-      <div class="popover-panel" v-if="item.isOpened">
-        <div class="popup-item">AAA</div>
-        <div class="popup-item">BBB</div>
-        <div class="popup-item">CCC</div>
+      <div class="popover-panel" v-if="key == openedKey">
+        <div class="popup-item" v-for="(guest, guestIndex) in limitations[key]" :key="guestIndex">{{ guest.name }}</div>
       </div>
     </div>
   </div>
@@ -32,17 +30,16 @@ export default {
   data() {
     return {
       limitations: [],
+      openedKey: "",
     };
   },
   created() {
     this.limitations = this.data;
   },
   methods: {
-    showPannel(index) {
-      this.limitations.forEach((item) => {
-        this.$set(item, "isOpened", false);
-      });
-      this.$set(this.limitations[index], "isOpened", !this.limitations[index].isOpened);
+    showPannel(key) {
+      if (this.openedKey === key) this.openedKey = "";
+      else this.openedKey = key;
     },
   },
 };
