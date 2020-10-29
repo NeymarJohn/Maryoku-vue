@@ -70,6 +70,8 @@
 import VSignupSteps from "./Extra/VSignupSteps.vue";
 import { Modal } from "@/components";
 import moment from "moment";
+import Vendors from "@/models/Vendors";
+import swal from "sweetalert2";
 
 export default {
   components: {
@@ -96,15 +98,45 @@ export default {
         this.vendor.vendorMainEmail &&
         this.reg.test(this.vendor.vendorMainEmail) &&
         this.vendor.companyName &&
-        this.vendor.vendorCategory &&
-        this.vendor.vendorAddressLine1;
+        this.vendor.vendorCategories &&
+        this.vendor.vendorCategories.length > 0 &&
+        this.vendor.vendorAddresses &&
+        this.vendor.vendorAddresses.length > 0;
       return isValid;
     },
     approve() {
       if (this.validateBasicFields()) {
-        this.$root.$emit("approve-vendor-basic-info");
-        this.isApproved = true;
-        this.step = 1;
+        console.log("vendor", this.vendor);
+        this.$set(this.vendor, "vendorCategory", this.vendor.vendorCategories[0]);
+        this.$set(this.vendor, "vendorAddressLine1", this.vendor.vendorAddresses[0]);
+        new Vendors(this.vendor)
+          .save()
+          .then((res) => {
+            console.log("*** Save vendor - done: ");
+            console.log(JSON.stringify(res));
+            this.$set(this.vendor, "id", res.item.id);
+            this.$root.$emit("approve-vendor-basic-info", this.vendor);
+            this.isApproved = true;
+            this.step = 1;
+          })
+          .catch((error) => {
+            console.log("*** Save vendor - failed: ");
+            console.log(JSON.stringify(error));
+            this.isApproved = false;
+            if (error.message.indexOf("companyName")) {
+              swal({
+                title: `Sorry, Company Name is duplicated. Please choose another.`,
+                buttonsStyling: false,
+                confirmButtonClass: "md-button md-success",
+              }).then(() => {});
+            } else {
+              swal({
+                title: `Sorry, The information is not valid. Check your information and try again.`,
+                buttonsStyling: false,
+                confirmButtonClass: "md-button md-success",
+              }).then(() => {});
+            }
+          });
       } else {
         // swal({
         //   title: `Please make sure filling out all required fields`,

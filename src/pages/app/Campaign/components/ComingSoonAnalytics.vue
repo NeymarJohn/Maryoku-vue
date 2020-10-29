@@ -63,17 +63,17 @@ export default {
     };
   },
   created() {
-    this.campaignData = this.$store.state.campaign["SAVING_DATE"];
-    const totalEmailCount = this.campaignData.guestEmails.length;
-    let openedEmails = 0;
+    this.campaignData = this.$store.state.campaign["COMING_SOON"];
     if (this.campaignData.guestEmails) {
+      const totalEmailCount = this.campaignData.guestEmails.length;
+      let openedEmails = 0;
       this.campaignData.guestEmails.forEach((item) => {
         if (item.isOpened) {
           openedEmails++;
         }
       });
+      this.percentage = Math.round((openedEmails / totalEmailCount) * 100);
     }
-    this.percentage = Math.round((openedEmails / totalEmailCount) * 100);
   },
   computed: {
     numberOfEmails() {
@@ -81,13 +81,11 @@ export default {
     },
     openedCount() {
       let openedEmails = 0;
-      if (this.campaignData.guestEmails) {
-        this.campaignData.guestEmails.forEach((item) => {
-          if (item.isOpened) {
-            openedEmails++;
-          }
-        });
-      }
+      this.campaignData.guestEmails.forEach((item) => {
+        if (item.isOpened) {
+          openedEmails++;
+        }
+      });
       return openedEmails;
     },
   },

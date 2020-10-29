@@ -50,15 +50,18 @@
           </a>
         </div>
         <div class="pull-bottom-right">
-          <vendor-bid-time-counter :days="4" :hours="0" :minutes="0" :seconds="0" />
+          <vendor-bid-time-counter
+            :key="getRemainingTime.seconds"
+            :days="getRemainingTime.days"
+            :hours="getRemainingTime.hours"
+            :minutes="getRemainingTime.mins"
+            :seconds="getRemainingTime.seconds"
+          />
         </div>
       </div>
     </section>
     <div class="main-cont">
       <router-view></router-view>
-      <!-- <div class="back-to-top">
-        <div class="row" @click="scrollToTop()"><md-icon>keyboard_arrow_up</md-icon>Back To Top</div>
-      </div> -->
     </div>
     <section class="footer-wrapper">
       <div calss>
@@ -75,26 +78,12 @@
         <a class="save" @click="saveProposal()"> <img :src="`${proposalIconsUrl}Asset 610.svg`" /> Save for later </a>
         <a
           class="next active"
-          @click="saveProposal()"
+          @click="step = step + 1"
           :class="[{ active: selectedServices.length > 0 }]"
-          v-if="step == -1"
+          v-if="step < 3"
           >Next</a
         >
-        <a
-          class="next active"
-          @click="saveProposal()"
-          :class="[{ active: selectedServices.length > 0 }]"
-          v-if="step == 0"
-          >Next</a
-        >
-        <a class="next" @click="saveProposal()" :class="[{ active: selectedServices.length > 0 }]" v-if="step == 1"
-          >Next</a
-        >
-        <a class="next active" @click="saveProposal()" v-if="step == 2">
-          Next
-          <md-icon>keyboard_arrow_right</md-icon>
-        </a>
-        <a class="next active" @click="saveProposal()" v-if="step >= 3">Submit Proposal</a>
+        <a class="next active" @click="saveProposal()" v-else>Submit Proposal</a>
       </div>
     </section>
     <modal v-if="fullDetailsModal" class="full-details-modal" container-class="modal-container lg">
@@ -236,7 +225,6 @@ export default {
       landingIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
       dateTooltip: false,
       selectedServices: [],
-      step: 0,
       savedItModal: false,
       isTimeUp: false,
       proposalRequestRequirements: [],
@@ -246,34 +234,48 @@ export default {
       event: "",
     };
   },
+  created() {
+    this.$root.$on("send-event-data", (evtData) => {
+      this.evtData = evtData;
+    });
+
+    if (this.$route.params.eventId) {
+      this.getEvent();
+    }
+
+    this.fullDetailsModal = false;
+    this.savedItModal = false;
+    this.isTimeUp = false;
+
+    this.getVendor(this.$route.params.vendorId).then((vendor) => {
+      this.vendor = vendor;
+    });
+    this.getProposalRequest(this.$route.params.id).then((proposalRequest) => {
+      this.$set(this, "proposalRequest", proposalRequest);
+      this.event = proposalRequest.eventData;
+      if (proposalRequest.eventData.concept) {
+        this.$store.commit("vendorProposal/setWizardStep", 0);
+        this.$store.commit("vendorProposal/setInitStep", 0);
+      } else {
+        this.$store.commit("vendorProposal/setWizardStep", 1);
+        this.$store.commit("vendorProposal/setInitStep", 1);
+      }
+      this.proposalRequestRequirements = _.chain(proposalRequest.requirements)
+        .groupBy("requirementPriority")
+        .map(function (value, key) {
+          return {
+            title: key,
+            requirements: value,
+          };
+        })
+        .value();
+    });
+  },
   methods: {
-    getVendor() {
-      Vendors.find(this.$route.params.vendorId).then((vendor) => {
-        this.vendor = vendor;
-      });
-    },
+    ...mapActions("vendorProposal", ["getVendor", "getProposalRequest"]),
     getProposal(id) {
       ProposalRequest.find(id)
-        .then((resp) => {
-          console.log("ProposalRequest:", resp);
-          this.$set(this, "proposalRequest", resp);
-          this.event = resp.eventData;
-          console.log(resp);
-          if (resp.eventData.concept) {
-            this.step = -1;
-          } else {
-            this.step = 0;
-          }
-          this.proposalRequestRequirements = _.chain(resp.requirements)
-            .groupBy("requirementPriority")
-            .map(function (value, key) {
-              return {
-                title: key,
-                requirements: value,
-              };
-            })
-            .value();
-        })
+        .then((resp) => {})
         .catch((error) => {
           console.log(" error ", error);
         });
@@ -346,21 +348,26 @@ export default {
       } else if (this.step == 0) {
         this.step = 2;
       } else if (this.step > 1 && this.step < 3) {
-        this.step++;
+        this.step = this.step + 1;
       }
 
       this.scrollToTop();
     },
     back() {
-      this.$root.$emit("prev-step-vendor-proposal");
-      this.$root.$emit("clear-slide-pos");
-
-      if (this.step == 2) {
-        this.step = 0;
-      } else if (this.step > 0 && this.step != 2) {
-        this.step--;
+      const initStep = this.$store.state.vendorProposal.initStep;
+      if (this.step > initStep) {
+        this.step = this.step - 1;
       } else {
       }
+      // this.$root.$emit("prev-step-vendor-proposal");
+      // this.$root.$emit("clear-slide-pos");
+
+      // if (this.step == 2) {
+      //   this.step = 0;
+      // } else if (this.step > 0 && this.step != 2) {
+      //   this.step = this.step - 1;
+      // } else {
+      // }
 
       this.scrollToTop();
     },
@@ -371,22 +378,7 @@ export default {
       this.$store.dispatch("event/getEventById", this.$route.params.eventId);
     },
   },
-  created() {
-    this.$root.$on("send-event-data", (evtData) => {
-      this.evtData = evtData;
-    });
 
-    if (this.$route.params.eventId) {
-      this.getEvent();
-    }
-
-    this.fullDetailsModal = false;
-    this.savedItModal = false;
-    this.isTimeUp = false;
-
-    this.getVendor();
-    this.getProposal(this.$route.params.id);
-  },
   filters: {
     withComma(amount) {
       return amount ? amount.toLocaleString() : 0;
@@ -429,6 +421,28 @@ export default {
         return this.event.concept.images[new Date().getTime() % 4].url;
       }
       return "";
+    },
+    getRemainingTime() {
+      if (!this.proposalRequest) return { days: 0, hours: 0, mins: 0, seconds: 0 };
+      console.log(this.proposalRequest.expiredTime);
+      console.log(new Date().getTime());
+      let remainingMs = this.proposalRequest.expiredTime - new Date().getTime();
+      const days = Math.floor(remainingMs / 24 / 3600 / 1000);
+      remainingMs = remainingMs - days * 24 * 3600 * 1000;
+      const hours = Math.floor(remainingMs / 3600 / 1000);
+      remainingMs = remainingMs - hours * 3600 * 1000;
+      const mins = Math.floor(remainingMs / 60 / 1000);
+      remainingMs = remainingMs - mins * 60 * 1000;
+      const seconds = Math.floor(remainingMs / 1000);
+      return { days, hours, mins, seconds };
+    },
+    step: {
+      get: function () {
+        return this.$store.state.vendorProposal.wizardStep;
+      },
+      set: function (newValue) {
+        this.$store.commit("vendorProposal/setWizardStep", newValue);
+      },
     },
   },
 };

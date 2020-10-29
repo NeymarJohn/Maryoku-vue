@@ -2,14 +2,14 @@
   <div class="proposal-steps-wrapper">
     <div class="steps-cont">
       <ul class="progressbar">
-        <li v-if="hasVisionStep" :class="[{ active: step >= -1 }, { current: step == -1 }]">
-          <span v-if="step == -1"><i>&#8226;</i></span>
+        <li v-if="hasVisionStep" :class="[{ active: step >= 0 }, { current: step == 0 }]">
+          <span v-if="step == 0"><i>&#8226;</i></span>
           <span v-else><md-icon>check</md-icon></span>
           <br />
           Describe Your <br />Vision
         </li>
-        <li :class="[{ active: step >= 1 }, { current: step == 0 }, { inactive: step < 0 }]">
-          <span v-if="step >= 1"><md-icon>check</md-icon></span>
+        <li :class="[{ active: step > 1 }, { current: step == 1 }, { inactive: step < 1 }]">
+          <span v-if="step >= 2"><md-icon>check</md-icon></span>
           <span v-else><i>&#8226;</i></span>
           <br />
           Propose <br />Your Bid
@@ -39,7 +39,6 @@ export default {
   components: {},
   props: {
     hasVisionStep: Boolean,
-    step: Number,
     categoryTitle: String,
   },
   data() {
@@ -48,7 +47,11 @@ export default {
   methods: {},
   created() {},
   mounted() {},
-  computed: {},
+  computed: {
+    step() {
+      return this.$store.state.vendorProposal.wizardStep;
+    },
+  },
   watch: {},
 };
 </script>

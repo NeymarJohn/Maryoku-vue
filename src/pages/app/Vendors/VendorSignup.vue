@@ -176,21 +176,13 @@ export default {
   },
   created() {},
   mounted() {
-    this.$root.$on("approve-vendor-basic-info", () => {
+    this.$root.$on("approve-vendor-basic-info", (vendor) => {
+      if (vendor) this.vendor = { ...this.vendor, ...vendor };
       console.log("vendor", this.vendor);
-      new Vendors(this.vendor)
-        .save()
-        .then((res) => {
-          console.log("*** Save vendor - done: ");
-          console.log(JSON.stringify(res));
-          this.isApproved = true;
-          this.$set(this.vendor, "id", res.item.id);
-          this.step = 1;
-        })
-        .catch((error) => {
-          console.log("*** Save vendor - failed: ");
-          console.log(JSON.stringify(error));
-        });
+      console.log("*** Save vendor - done: ");
+      this.isApproved = true;
+
+      this.step = 1;
     });
     this.$root.$on("next-vendor-signup-step", () => {
       if (this.step < 6) {
@@ -264,7 +256,10 @@ export default {
             title: `Thank you for your signup!`,
             buttonsStyling: false,
             confirmButtonClass: "md-button md-success",
-          }).then(() => {});
+          }).then(() => {
+            const proposalRequest = this.$route.query.proposalRequest;
+            if (proposalRequest) this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
+          });
         })
         .catch((error) => {
           console.log("*** Save vendor - failed: ");

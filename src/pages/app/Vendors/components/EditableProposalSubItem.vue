@@ -37,7 +37,9 @@
         </template>
       </div>
       <div class="total-cont editor-wrapper">
-        <template v-if="!isEdit">$ {{ item.priceUnit == 'total' ? item.price : item.price * item.requirementValue | withComma }}</template>
+        <template v-if="!isEdit"
+          >$ {{ item.priceUnit == "total" ? item.price : (item.price * item.requirementValue) | withComma }}</template
+        >
         <template v-else>
           <!-- <input class="input-value" v-model="item.price" type="number" /> -->
           <money
@@ -91,7 +93,7 @@ export default {
     item: Object,
     active: Boolean,
     step: Number,
-    index: Number
+    index: Number,
   },
   data() {
     return {
@@ -101,25 +103,29 @@ export default {
     };
   },
   computed: {
-    subTotal(){
+    subTotal() {
       console.log("subtotal");
-      return this.item.price * this.item.requirementValue
-    }
+      return this.item.price * this.item.requirementValue;
+    },
   },
   methods: {
     removeRequirement(item) {
       this.$root.$emit("remove-proposal-requirement", item);
+      this.$emit("remove", this.index);
     },
     save(item) {
       this.isEdit = false;
-      this.$root.$emit("save-proposal-requirement", {index:this.index,item});
+      this.$root.$emit("save-proposal-requirement", { index: this.index, item });
+      this.$emit("save", { index: this.index, item });
     },
     cancel() {
       this.isEdit = false;
     },
   },
   created() {},
-  mounted() {},
+  mounted() {
+    console.log(this.item);
+  },
   filters: {
     withComma(amount) {
       return amount ? amount.toLocaleString() : 0;

@@ -41,7 +41,7 @@
                 <div class="top">
                   <h5>
                     <img :src="`${iconUrl}Asset 543.svg`" />
-                    about your {{ getCategoryNameByValue(vendor.vendorCategory) }}
+                    about your {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
                   </h5>
                 </div>
                 <div class="bottom">
@@ -50,7 +50,7 @@
               </div>
               <div class="main-cont">
                 <textarea
-                  :placeholder="`Type 'About your ${getCategoryNameByValue(vendor.vendorCategory)}' here`"
+                  :placeholder="`Type 'About your ${getCategoryNameByValue(vendor.vendorCategories[0])}' here`"
                   rows="5"
                   @blur="updateVendor($event, 'about.category')"
                   v-model="vendor.about.category"
@@ -59,10 +59,10 @@
             </div>
             <div class="field mb-50">
               <vendor-checkbox
-                v-if="companyServices.filter((cs) => cs.name == vendor.vendorCategory).length > 0"
-                :item="companyServices.filter((cs) => cs.name == vendor.vendorCategory)[0]"
+                v-if="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0]).length > 0"
+                :item="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0])[0]"
                 :label="`Company Serivces`"
-                v-model="companyServices.filter((cs) => cs.name == vendor.vendorCategory)[0].value"
+                v-model="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0])[0].value"
               />
             </div>
             <div class="field mb-50">

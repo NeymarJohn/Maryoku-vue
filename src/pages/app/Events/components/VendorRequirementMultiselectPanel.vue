@@ -11,7 +11,7 @@
     </div>
     <div>
       <md-checkbox
-        v-for="(option, index) in data.options"
+        v-for="(option, index) in this.data.options"
         :key="index"
         v-model="option.selected"
         @change="changeState"
@@ -31,6 +31,9 @@ export default {
       type: Object,
       default: {},
     },
+    index: {
+      type: Number,
+    }
   },
   data() {
     return {
@@ -48,14 +51,16 @@ export default {
     };
   },
   methods: {
-    changeState() {},
+    changeState() {
+      this.$emit('change');
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
 .vendor-requirement-multiselect {
   .option {
-    width: 18%;
+    min-width: 150px;
   }
 }
 </style>
