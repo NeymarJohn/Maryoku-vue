@@ -246,24 +246,6 @@
                 </div>
               </div>
             </div>
-            <div
-              v-if="
-                index === Object.keys(requirementProperties).length - 1 &&
-                !requirementProperties.hasOwnProperty('special')
-              "
-              class="anything-else-section mt-30"
-            >
-              <div class="font-bold mt-10">Anything Else?</div>
-
-              <div class="mt-10">Get me a pink unicorn please.</div>
-              <div class="anything-else-section-options mt-10">
-                <textarea
-                  placeholder="Type name of element here..."
-                  v-model="anythingElse"
-                  @input="handleNoteChange"
-                ></textarea>
-              </div>
-            </div>
           </div>
         </div>
       </div>

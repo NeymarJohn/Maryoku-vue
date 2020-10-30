@@ -147,6 +147,7 @@ export default {
   },
   methods: {
     getServicesRequirements(){
+      console.log("getServicesRequirements", this.requirements);
       this.services = [];
       let checked = this.requirements['multi-selection'][0].options.filter(ms => ms.selected);
 
@@ -170,6 +171,7 @@ export default {
           this.services.push(sv);
         }
       })
+      console.log("getServices", this.services);
     },
     addRequirement(service) {
       const index = this.services.findIndex((it) => it.item == service.item);
@@ -198,9 +200,12 @@ export default {
     },
     handleChangeItem(cat, action, e){
       this.requirements['Services'].map(it => {
-        if(it.item === e){
-          it.isSelected = action === 'select';
-          it.mustHave = action === 'select';
+
+        if ( it.subCategory && it.subCategory === cat ) {
+          if( it.item === e){
+            it.isSelected = action === 'select';
+            it.mustHave = action === 'select';
+          }
         }
       });
 
