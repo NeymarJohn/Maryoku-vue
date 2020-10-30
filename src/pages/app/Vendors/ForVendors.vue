@@ -58,10 +58,7 @@
               <li>
                 <div class="new-time">
                   Already Booked?
-                  <a @click="showChooseDateModal()" v-if="vendor.eventCategory.key == 'venuerental'"
-                    >Suggest Another Date</a
-                  >
-                  <a v-else @click="showChooseDateModal()">Suggest New time</a>
+                  <a @click="showChooseDateModal()">Suggest New time</a>
                 </div>
               </li>
             </ul>
@@ -71,7 +68,7 @@
       <hr />
       <vendor-budget-list
         :title="`Budget`"
-        :description="`usually budget is flexible and could change according to needs`"
+        :description="`Usually budget is flexible and could chane accordig to needs`"
         :proposalRequest="proposalRequest"
         :requirements="requiredServices"
       />
@@ -190,7 +187,7 @@
                   >I'm fully booked around the date of the event</span
                 >
               </md-checkbox>
-              <a class="another-date" @click="showChooseDateModal()" v-if="vendor.eventCategory.key == 'venuerental'"
+              <a class="another-date" @click="showChooseDateModal()" v-if="vendor.category == 'venue'"
                 >Suggest Another Date</a
               >
               <a class="another-date" @click="showChooseDateModal()" v-else>Suggest Another Time</a>

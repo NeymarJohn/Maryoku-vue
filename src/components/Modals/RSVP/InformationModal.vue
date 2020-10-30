@@ -54,6 +54,7 @@
   </modal>
 </template>
 <script>
+import CalendarEvent from "@/models/CalendarEvent";
 import { Modal, MaryokuInput } from "@/components";
 import FoodLimitationSet from "./FoodLimitationSet";
 export default {
@@ -61,6 +62,12 @@ export default {
     Modal,
     MaryokuInput,
     FoodLimitationSet,
+  },
+  props: {
+    event: {
+      type: Object,
+      default: {},
+    },
   },
   data() {
     return {
@@ -102,9 +109,17 @@ export default {
       }
     },
     setRsvp() {
-      const guests = [{ name: this.name, email: this.email, isMainGuest: true, ...this.foodLimitaion }];
-
+      const guests = [
+        {
+          name: this.name,
+          email: this.email,
+          isMainGuest: true,
+          ...this.foodLimitaion,
+          event: new CalendarEvent({ id: this.event.id }),
+        },
+      ];
       this.joinedGuests.forEach((guest) => {
+        guest.event = new CalendarEvent({ id: this.event.id });
         guests.push(guest);
       });
       this.$root.$emit("setRsvp", { guests, name: this.name, responseEmail: this.email });

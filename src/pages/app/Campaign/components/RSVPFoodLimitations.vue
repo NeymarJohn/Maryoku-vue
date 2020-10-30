@@ -1,24 +1,48 @@
 <template>
   <div class="d-flex food-limitaions">
-    <div v-for="(item, index) in data" :key="index" class="flex-1 food-limit-item text-center"> 
-      <img :src="`${$iconURL}${item.icon}`" v-if="item.icon"/>
-      <br/>
-      {{item.label}}
-      <br/>
-      ({{item.value}})
+    <div v-for="(key, index) in Object.keys(limitations)" :key="index" class="flex-1 food-limit-item text-center">
+      <!-- <img :src="`${$iconURL}${item.icon}`" v-if="item.icon" /> -->
+      <div>
+        <div>
+          {{ key }}
+        </div>
+        <div>
+          ({{ limitations[key].length }})
+          <span style="color: #050505" @click="showPannel(key)" v-if="limitations[key].length"
+            ><md-icon>keyboard_arrow_down</md-icon></span
+          >
+        </div>
+      </div>
+      <div class="popover-panel" v-if="key == openedKey">
+        <div class="popup-item" v-for="(guest, guestIndex) in limitations[key]" :key="guestIndex">{{ guest.name }}</div>
+      </div>
     </div>
-    
-  </div>  
+  </div>
 </template>
 <script>
 export default {
   props: {
     data: {
       type: Array,
-      default: [] 
+      default: [],
     },
   },
-}
+  data() {
+    return {
+      limitations: [],
+      openedKey: "",
+    };
+  },
+  created() {
+    this.limitations = this.data;
+  },
+  methods: {
+    showPannel(key) {
+      if (this.openedKey === key) this.openedKey = "";
+      else this.openedKey = key;
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 .food-limitaions {
@@ -26,8 +50,25 @@ export default {
     height: 100px;
     border-right: solid 1px #a0a0a0;
     padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
     &:last-child {
       border: none;
+    }
+    .popover-panel {
+      position: absolute;
+      background-color: white;
+      box-shadow: 0 3px 19px 0 rgba(0, 0, 0, 0.3);
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 30px;
+      columns: 2;
+      .popup-item {
+        width: 100px;
+      }
     }
   }
 }

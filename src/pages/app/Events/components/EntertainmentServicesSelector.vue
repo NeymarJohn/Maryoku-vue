@@ -22,7 +22,7 @@
   export default {
     name: "entertainment-services-selector",
     props: {
-      data: {
+      service: {
         type: Object,
         required: true,
       },
@@ -30,16 +30,14 @@
     },
     data: () => ({
       expanded: false,
-      service: this.data,
+      // service: this.data,
       value: null,
     }),
     mounted() {
-      console.log("entertainment.select.item", this.data);
-      this.service = this.data;
+      // this.service = this.data;
     },
     computed: {
       selectedService(){
-        if(!this.service) return '';
         let txt = '';
         let selected = this.service.options.filter(op => op.isSelected);
         selected.map((s, index) => {
@@ -81,6 +79,8 @@
         padding-left: 16px;
         cursor: pointer;
         width: 100%;
+        font-family: 'Manrope-Regular',sans-serif;
+        font-size: 16px;
       }
       .dropdown {
         position: absolute;

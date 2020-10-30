@@ -10,6 +10,10 @@
               </span>
         </th>
         <th>
+          <div class="text-center">Size</div>
+        </th>
+        <th>
+          <div class="text-center">How Many?</div>
         </th>
         <th></th>
         <th></th>
@@ -21,17 +25,38 @@
               v-for="(service, index) in services.filter(sv => sv.isSelected)"
               :key="index"
       >
-        <td style="display: flex; align-items: center">
-          <div style="padding-top: 14px; align-self: center">{{ service.item }}</div>
-        </td>
         <td>
-          <div v-if="service.type === 'select'">
-            <entertainment-services-selector
-                    :data="service"
-                    @change=handleChangeItem
-            >
-            </entertainment-services-selector>
+          <div style="padding: 10px 0" >{{ service.item }}
+            <div v-if="service.type === 'select'">
+              <multiselect
+                      v-model="service.value"
+                      :options="service.options"
+                      :close-on-select="false"
+                      :clear-on-select="false"
+                      :searchable="false"
+                      :multiple="true"
+                      :taggable="true"
+                      tag-placeholder="Add this as new tag"
+                      placeholder="Select the services"
+                      class="multiple-selection small-selector"
+                      @select="handleChangeItem(service.item, 'select', $event)"
+                      @remove="handleChangeItem(service.item, 'remove', $event)">
+                <template slot="tag" slot-scope="{option}">
+                  <span>
+                    {{option + (service.value.indexOf(option) === service.value.length - 1 ? '' : ',')}}
+                  </span>
+                </template>
+              </multiselect>
+            </div>
           </div>
+        </td>
+        <td class="text-center">
+          <div v-if="service.type === 'single-selection'" style="padding: 10px 0px">&nbsp;</div>
+          <template v-if="service.qtyEnabled">
+            <input class="quantity-input" type="number" v-model="service.size" />
+          </template>
+        </td>
+        <td class="text-center">
           <template v-if="service.qtyEnabled">
             <input class="quantity-input" type="number" v-model="service.defaultQty" />
             <span v-if="service.hint">
@@ -54,7 +79,7 @@
           </div>
         </td>
         <td>
-          <div v-if="service.type !== 'select'" class="condition">
+          <div class="condition">
             <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="service.mustHave" :value="true"
             >Must Have</md-checkbox
             >
@@ -69,21 +94,19 @@
       </tr>
       </tbody>
     </table>
-    <div class="additional-request">
+    <div class="additional-request mb-30">
       <div class="additional-request-description">
         <h4>Additional Requests</h4>
         <div>Would you like to add one of those items?</div>
-      </div>
-      <div>
-        <div
-                class="additional-request-tag"
-                v-for="(service, index) in services.filter((item) => !item.isSelected && item.visible)"
-                :key="index"
-                @click="addRequirement(service)"
-        >
-          {{ service.item }}
-          <md-icon class="icon color-red">add_circle</md-icon>
-        </div>
+      </div>      
+      <div
+              class="additional-request-tag"
+              v-for="(service, index) in services.filter((item) => !item.isSelected && item.visible)"
+              :key="index"
+              @click="addRequirement(service)"
+      >
+        {{ service.item }}
+        <md-icon class="icon color-red">add_circle</md-icon>
       </div>
     </div>
   </div>
@@ -92,14 +115,16 @@
 </style>
 <script>
 import EntertainmentServicesSelector from "./EntertainmentServicesSelector";
+import Multiselect from "vue-multiselect";
 
 export default {
   name: "entertainment-services-section",
   components: {
     EntertainmentServicesSelector,
+    Multiselect
   },
   props: {
-    data: {
+    requirements: {
       type: Object,
       required: true,
     },
@@ -111,34 +136,43 @@ export default {
   data() {
     return {
       services: [],
+      anythingElse: this.note,
+      value: [],
+      options: [
+        { name: 'Vue.js', code: 'vu' },
+        { name: 'Javascript', code: 'js' },
+        { name: 'Open Source', code: 'os' }
+      ]
     };
   },
   methods: {
     getServicesRequirements(){
+      console.log("getServicesRequirements", this.requirements);
       this.services = [];
-      let checked = this.data['multi-selection'][0].options.filter(ms => ms.selected);
+      let checked = this.requirements['multi-selection'][0].options.filter(ms => ms.selected);
+
 
       checked.map(ch => {
-        if ( ch.name === 'DJ Services' || ch.name === 'Band' || ch.name === 'Entertainment' ) {
+
           let options = [];
-          this.data['Services'].map(sv => {
-            if(sv.subCategory && sv.subCategory.trim() === ch.name.trim()) {
-              options.push({label: sv.item, isSelected: sv.isSelected});
+          let value = [];
+          this.requirements['Services'].map(sv => {
+            if(sv.subCategory && (sv.subCategory.trim() === ch.name.trim() || sv.subCategory.trim().indexOf(ch.name.trim()) !== -1)) {
+              options.push(sv.item);
+              if(sv.isSelected) value.push(sv.item);
             }
           })
-          this.services.push({item: ch.name, isSelected: ch.selected, type: 'select', options});
-          this.$forceUpdate();
-        }
+          this.services.push({item: ch.name, isSelected: ch.selected, type: 'select', options, value, mustHave:true});
+
 
       })
 
-      this.data['Services'].map(sv => {
+      this.requirements['Services'].map(sv => {
         if( sv.item === 'Onsite coordinators, instructors, guides' || sv.item === 'keynote speaker/Special MC' ) {
           this.services.push(sv);
         }
       })
-
-      console.log("getServicesRequirements", this.services);
+      console.log("entertainment.getService", this.requirements, this.services);
     },
     addRequirement(service) {
       const index = this.services.findIndex((it) => it.item == service.item);
@@ -150,42 +184,51 @@ export default {
         this.services.splice(index, 1);
       } else {
         this.services[index].isSelected = false;
+        return;
       }
 
-      let requirements = this.data;
-      requirements['multi-selection'][0].options.map(op => {
+      // let requirements = this.requirements;
+      this.requirements['multi-selection'][0].options.map(op => {
         if(op.name === service.item) op.selected = false;
       });
-      requirements['Services'].map(it => {
+      this.requirements['Services'].map(it => {
         if(it.subCategory && it.subCategory.trim() === service.item.trim()){
           service.options.map(op => {
             if(op.label === it.item) it.isSelected = false;
           })
         }
       });
-      this.$emit('change', requirements);
+
+      this.$emit('change', this.requirements);
     },
-    handleChangeItem(service){
-      let requirements = this.data;
-      requirements['Services'].map(it => {
-        if(it.subCategory && it.subCategory.trim() === service.item.trim()){
-          service.options.map(op => {
-            if(op.label === it.item) it.isSelected = op.isSelected;
-          })
+    handleChangeItem(cat, action, e){
+      this.requirements['Services'].map(it => {
+        if(it.item === e){
+          it.isSelected = action === 'select';
+          it.mustHave = action === 'select';
         }
       });
 
-      this.$emit('change', requirements);
+      this.$emit('change', this.requirements);
     },
+    handleNoteChange(){
+      this.$emit('change', {note: this.anythingElse});
+    },
+    addTag(e){
+      console.log("addTag", e);
+    }
+  },
+  watch: {
+    requirements:{
+     handler(newVal, oldVal){
+       // console.log("props.change", newVal);
+       this.getServicesRequirements();
+     },
+     deep: true,
+    }
   },
   mounted(){
     this.getServicesRequirements();
-    this.$root.$on('multi-select.change', (index, data) => {
-      this.getServicesRequirements();
-    })
-    this.$root.$on('revertRequirements', _ => {
-      this.getServicesRequirements();
-    });
   }
 };
 </script>

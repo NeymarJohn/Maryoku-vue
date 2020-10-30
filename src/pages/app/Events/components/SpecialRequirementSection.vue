@@ -27,12 +27,19 @@
       </div>
     </div>
     <div v-for="(property, idx) in specialRequirements">
-      <special-requirement-item
-              v-if="property.selected"
-              :index="idx"
-              :data="property"
-              @change="handleChangeItem"
-      ></special-requirement-item>
+      <template v-if="property.label !== 'Sitting Arrangement'">
+        <special-requirement-item
+                v-if="property.selected"
+                :index="idx"
+                :data="property"
+                @change="handleChangeItem"
+        ></special-requirement-item>
+      </template>
+      <template v-else>
+        <RequirementSittingArrangement
+                v-if="property.selected"
+        ></RequirementSittingArrangement>
+      </template>
     </div>
     <div class="anything-else-section">
       <div class="font-bold mt-10">Anything Else?</div>
@@ -48,13 +55,19 @@
 </style>
 <script>
 import SpecialRequirementItem from './SpecialRequirementItem';
+import RequirementSittingArrangement from './RequirementSittingArrangement';
 export default {
   components: {
     SpecialRequirementItem,
+    RequirementSittingArrangement
   },
   props: {
     data: {
       type: Array,
+      required: true,
+    },
+    currentComponent: {
+      type: Object,
       required: true,
     },
     note: {
@@ -70,8 +83,12 @@ export default {
   },
   methods: {
     getSpecialRequirements(){
-
+      console.log("getSpecialRequirements", this.currentComponent);
       let requirements = this._getUniqueValueArray(this.data, 'subCategory');
+
+      // add static item "sitting arrangements" in venue
+      if ( this.currentComponent.componentId === 'venuerental' ) requirements.push({subCategory: 'Sitting Arrangement'});
+
       this.specialRequirements = requirements.map(requirement => {
         let items = [];
 
@@ -85,7 +102,9 @@ export default {
         let type = null;
         if ( requirement.subCategory === 'Around the space' ){
           type = 'around_the_space';
-        } else {
+        } else if ( requirement.subCategory === 'Sitting Arrangement') {
+          type = 'sitting_arrangement';
+        } {
           type = requirement.subCategory.toLowerCase();
         }
         return {selected, label: requirement.subCategory, items, type};

@@ -509,11 +509,20 @@ let feedbackPages = {
     name: "LandingPageLayout",
     children: [
         {
-            path: "/landingpage/feedback/:eventId",
+            path: "/landingpage/feedback/form/:eventId",
             name: "Event Feedback",
             component: FeedbackLandingPage,
             meta: {
                 title: "Feedback Form",
+                gtm: "Feedback",
+            },
+        },
+        {
+            path: "/feedback/:feedbackId",
+            name: "Event Feedback",
+            component: FeedbackLandingPage,
+            meta: {
+                title: "Feedback",
                 gtm: "Feedback",
             },
         },
