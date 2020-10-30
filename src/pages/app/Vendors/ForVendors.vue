@@ -71,7 +71,7 @@
       <hr />
       <vendor-budget-list
         :title="`Budget`"
-        :description="`usually budget is flexible and could change according to needs`"
+        :description="`Usually budget is flexible and could change according to needs`"
         :proposalRequest="proposalRequest"
         :requirements="requiredServices"
       />

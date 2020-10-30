@@ -39,16 +39,16 @@
           </li>
           <li>
             <span>Your proposal</span>
-            <span>${{ mainTotalPrice | withComma }}</span>
+            <span>${{ ((mainTotalPrice * (100 - bundleDiscountPercentage)) / 100) | withComma }}</span>
           </li>
-          <li :style="`margin: ${discountBlock.category == vendor.eventCategory.key ? '' : '0'}`">
+          <li :style="`margin: ${discountBlock[vendor.eventCategory.key] ? '' : '0'}`">
             <template v-if="discountBlock[vendor.eventCategory.key]">
               <div class="left">
                 <span>Before discount</span>
               </div>
               <div class="right">
-                <span>{{ `(${discountBlock.value}% off)` }}</span>
-                <span>${{ total(getRequirementsByCategory("venuerental")) | withComma }}</span>
+                <span>{{ `(${bundleDiscountPercentage}% off)` }}</span>
+                <span>${{ pricesByCategory[vendor.vendorCategory] | withComma }}</span>
               </div>
             </template>
           </li>
@@ -84,11 +84,11 @@
             </li>
             <li>
               <span>Your proposal</span>
-              <span>${{ calculatedTotal(getRequirementsByCategory(a)) | withComma }}</span>
+              <span>${{ pricesByCategory[a] | withComma }}</span>
             </li>
             <li>
-              <span>Budget for {{ a }}</span>
-              <span>${{ calculatedTotal(getRequirementsByCategory(a)) | withComma }}</span>
+              <span>Budget for {{ getServiceCategory(a).title }}</span>
+              <span> ${{ pricesByCategory[a] | withComma }}</span>
             </li>
             <li v-if="calculatedTotal(getRequirementsByCategory(a)) - newProposalRequest.eventData.allocatedBudget > 0">
               <md-icon>error</md-icon>
@@ -145,7 +145,7 @@
           <span v-else> ${{ bundleDiscountAmount }} </span>
         </div>
         <div class="action-cont">
-          <a class="clear">Cancel</a>
+          <a class="clear" @click="cancelBundle">Cancel</a>
           <a class="add" @click="addBunldDiscount">Add bundle</a>
         </div>
       </div>
@@ -309,13 +309,21 @@ export default {
       this.bundleDiscountServices.forEach((category) => {
         this.discountBlock[category] = { value: this.bundleDiscountAmount };
       });
+      this.isBundleDiscount = false;
+      this.$store.commit("vendorProposal/setBundleDiscount", {
+        services: this.bundleDiscountServices,
+        discountPercentage: this.bundleDiscountPercentage,
+        discountAmount: this.bundleDiscountAmount,
+      });
+    },
+    cancelBundle() {
+      this.isBundleDiscount = false;
     },
     setRange() {
       if (this.bundleDiscountPercentage > 100) {
         this.bundleDiscountPercentage = 100;
       }
       this.bundleDiscountAmount = this.totalPriceForBundle * (this.bundleDiscountPercentage / 100);
-      this.isBundleDiscount = false;
     },
     setPercentage() {
       this.bundleDiscountPercentage = (this.bundleDiscountAmount / this.totalPriceForBundle) * 100;

@@ -182,7 +182,7 @@
         <div class="saved-it-modal__header">
           <h3><img :src="`${proposalIconsUrl}Asset 587.svg`" /> Time Is Up!</h3>
           <div class="header-description">
-            The deadline for submitting this prposal has passed. But no worries! We weill be with you soon with the next
+            The deadline for submitting this prposal has passed. But no worries! We will be with you soon with the next
             one.
           </div>
         </div>
