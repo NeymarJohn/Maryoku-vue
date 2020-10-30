@@ -878,7 +878,7 @@ export const businessCategories = [
                 value: false
               },
               {
-                name: 'day-of corrdination',
+                name: 'day-of coordination',
                 type: Boolean,
                 value: false
               },

@@ -13,7 +13,7 @@
           <div class="text-center">Size</div>
         </th>
         <th>
-          <div class="text-center">How Many?</div>
+          <div class="text-center mr-20">How Many?</div>
         </th>
         <th></th>
         <th></th>
@@ -53,12 +53,12 @@
         <td class="text-center">
           <div v-if="service.type === 'single-selection'" style="padding: 10px 0px">&nbsp;</div>
           <template v-if="service.qtyEnabled">
-            <input class="quantity-input" type="number" v-model="service.size" />
+            <input class="quantity-input" placeholder="Cm" type="number" v-model="service.size" />
           </template>
         </td>
         <td class="text-center">
           <template v-if="service.qtyEnabled">
-            <input class="quantity-input" type="number" v-model="service.defaultQty" />
+            <input class="quantity-input" placeholder="QTY" type="number" v-model="service.defaultQty" />
             <span v-if="service.hint">
                         <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
                         <md-tooltip md-direction="bottom">{{ service.hint }}</md-tooltip>
@@ -98,7 +98,7 @@
       <div class="additional-request-description">
         <h4>Additional Requests</h4>
         <div>Would you like to add one of those items?</div>
-      </div>      
+      </div>
       <div
               class="additional-request-tag"
               v-for="(service, index) in services.filter((item) => !item.isSelected && item.visible)"
@@ -147,22 +147,20 @@ export default {
   },
   methods: {
     getServicesRequirements(){
-      console.log("getServicesRequirements", this.requirements);
       this.services = [];
       let checked = this.requirements['multi-selection'][0].options.filter(ms => ms.selected);
 
 
       checked.map(ch => {
-
           let options = [];
           let value = [];
           this.requirements['Services'].map(sv => {
-            if(sv.subCategory && (sv.subCategory.trim() === ch.name.trim() || sv.subCategory.trim().indexOf(ch.name.trim()) !== -1)) {
+            if(sv.subCategory && (sv.subCategory.trim() === ch.name.trim())) {
               options.push(sv.item);
               if(sv.isSelected) value.push(sv.item);
             }
           })
-          this.services.push({item: ch.name, isSelected: ch.selected, type: 'select', options, value, mustHave:true});
+          this.services.push({item: ch.name, isSelected: ch.selected, type: 'select', options, value, mustHave:false});
 
 
       })
@@ -172,7 +170,6 @@ export default {
           this.services.push(sv);
         }
       })
-      console.log("entertainment.getService", this.requirements, this.services);
     },
     addRequirement(service) {
       const index = this.services.findIndex((it) => it.item == service.item);
@@ -193,9 +190,7 @@ export default {
       });
       this.requirements['Services'].map(it => {
         if(it.subCategory && it.subCategory.trim() === service.item.trim()){
-          service.options.map(op => {
-            if(op.label === it.item) it.isSelected = false;
-          })
+          it.isSelected = false;
         }
       });
 
@@ -214,14 +209,10 @@ export default {
     handleNoteChange(){
       this.$emit('change', {note: this.anythingElse});
     },
-    addTag(e){
-      console.log("addTag", e);
-    }
   },
   watch: {
     requirements:{
      handler(newVal, oldVal){
-       // console.log("props.change", newVal);
        this.getServicesRequirements();
      },
      deep: true,

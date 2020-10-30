@@ -80,6 +80,8 @@
       </div>
       <savedate-analytics v-if="selectedTab == 1 && campaignIssued['SAVING_DATE']"></savedate-analytics>
       <rsvp-analytics v-if="selectedTab == 2 && campaignIssued['RSVP']"></rsvp-analytics>
+      <comingsoon-analytics v-if="selectedTab == 3 && campaignIssued['COMING_SOON']"></comingsoon-analytics>
+      <feedback-analytics v-if="selectedTab == 4 && campaignIssued['FEEDBACK']"></feedback-analytics>
 
       <!-- Save the date -->
       <template v-if="selectedTab == 1">
@@ -112,8 +114,30 @@
         <rsvp v-else :info="{ ...campaignTabs[2], ...campaignInfo }" ref="rsvp" class="white-card"></rsvp>
       </template>
 
-      <countdown v-if="selectedTab == 3" :info="{ ...campaignTabs[3], ...campaignInfo }" ref="countdown"></countdown>
-      <feedback v-if="selectedTab == 4" :info="{ ...campaignTabs[4], ...campaignInfo }" ref="feedback"></feedback>
+      <template v-if="selectedTab == 3">
+        <collapse-panel v-if="campaignIssued['COMING_SOON']" class="white-card" :defaultStatus="false">
+          <template slot="header">
+            <div class="d-flex align-center p-50 font-size-30 font-bold">Open ‘Cooming Soon’ Campaign</div>
+          </template>
+          <template slot="content">
+            <countdown :info="{ ...campaignTabs[3], ...campaignInfo }" ref="countdown"></countdown>
+          </template>
+        </collapse-panel>
+        <countdown v-else :info="{ ...campaignTabs[3], ...campaignInfo }" ref="countdown"></countdown>
+      </template>
+
+      <template v-if="selectedTab == 4">
+        <collapse-panel v-if="campaignIssued['FEEDBACK']" class="white-card" :defaultStatus="false">
+          <template slot="header">
+            <div class="d-flex align-center p-50 font-size-30 font-bold">Open ‘Feedback’ Campaign</div>
+          </template>
+          <template slot="content">
+            <feedback :info="{ ...campaignTabs[4], ...campaignInfo }" ref="feedback"></feedback>
+          </template>
+        </collapse-panel>
+        <feedback v-else :info="{ ...campaignTabs[4], ...campaignInfo }" ref="feedback"></feedback>
+      </template>
+
       <delivery-settings
         :defaultSettings="deliverySettings"
         @change="changeSettings"
@@ -258,6 +282,8 @@ import CollapsePanel from "./CollapsePanel";
 
 import RsvpAnalytics from "./components/RSVPAnalytics";
 import SavedateAnalytics from "./components/SavedateAnalytics";
+import ComingsoonAnalytics from "./components/ComingSoonAnalytics";
+import FeedbackAnalytics from "./components/FeedbackAnalytics";
 
 const defaultSettings = {
   phone: {
@@ -294,6 +320,8 @@ export default {
     SavedateAnalytics,
     RsvpAnalytics,
     CollapsePanel,
+    ComingsoonAnalytics,
+    FeedbackAnalytics,
   },
   data() {
     return {

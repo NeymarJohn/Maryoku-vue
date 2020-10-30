@@ -154,7 +154,7 @@
                     <div class="text-center">Size</div>
                   </th>
                   <th>
-                    <div class="text-center">How Many?</div>
+                    <div class="text-center mr-20">How Many?</div>
                   </th>
                   <th></th>
                   <th></th>
@@ -184,12 +184,12 @@
                   <td class="text-center">
                     <div v-if="property.type === 'single-selection'" style="padding: 10px 0px">&nbsp;</div>
                     <template v-if="property.qtyEnabled">
-                      <input class="quantity-input" type="number" v-model="property.size" />
+                      <input class="quantity-input" placeholder="Cm" type="number" v-model="property.size" />
                     </template>
                   </td>
                   <td class="text-center">
                     <template v-if="property.qtyEnabled">
-                      <input class="quantity-input" type="number" v-model="property.defaultQty" />
+                      <input class="quantity-input" placeholder="QTY" type="number" v-model="property.defaultQty" />
                       <span v-if="property.hint">
                         <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
                         <md-tooltip md-direction="bottom">{{ property.hint }}</md-tooltip>
@@ -367,7 +367,7 @@ export default {
       eventRequirement[this.blockId].anythingElse = action === "clear" ? null : this.anythingElse;
 
       requirements[this.event.id] = eventRequirement;
-      console.log("requirements", requirements)
+      // console.log("requirements", requirements)
       this.setBookingRequirements(requirements);
     },
     _handleSecurityRequirement(requirements) {
@@ -415,7 +415,7 @@ export default {
               op.isSelected = true;
             }
           })
-        } else if ( it.name === 'Band' && it.selected){
+        } else if ( it.name === 'Band' && it.selected ){
           requirement['Services'].map(op => {
             if ( op.item === 'one man instrument' ){
               op.mustHave = true;

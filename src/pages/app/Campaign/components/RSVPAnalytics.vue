@@ -42,7 +42,7 @@
             </div>
             <multistate-progressbar :data="analyticsData" class="mt-40"></multistate-progressbar>
             <div class="text-center mb-50">
-              <md-button class="md-simple maryoku-btn md-red md-outlined">
+              <md-button class="md-simple maryoku-btn md-red md-outlined" @click="sendEmailsAgain">
                 <image-icon src="Campaign/Group 1908.svg" />Send again to invitees who haven't replyed yet
               </md-button>
             </div>
@@ -200,6 +200,23 @@ export default {
       this.rsvpStatisData = res.data;
       this.foodLimitations = res.data.limitations;
     });
+  },
+  methods: {
+    sendEmailsAgain() {
+      this.$http
+        .get(`${process.env.SERVER_URL}/1/campaigns/remind/${this.campaignData.id}`, {
+          headers: this.$auth.getAuthHeader(),
+        })
+        .then((response) => response.data)
+        .then((json) => {
+          swal({
+            title: `We sent reminder emails to guests who didn't reply yet.`,
+            buttonsStyling: false,
+            type: "success",
+            confirmButtonClass: "md-button md-success",
+          });
+        });
+    },
   },
   computed: {
     numberOfEmails() {
