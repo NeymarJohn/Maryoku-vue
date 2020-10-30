@@ -170,10 +170,10 @@
         <span v-if="discountBlock.value">Before discount</span>
       </div>
       <div class="price">
-        <strong>${{ totalPrice | withComma }}</strong>
+        <strong>${{ (totalPrice - bundleDiscountAmount) | withComma }}</strong>
         <br />
-        <span v-if="discountBlock.value">{{ `(${discountBlock.value}% off)` }}</span>
-        <span v-if="discountBlock.value">${{ total(getRequirementsBySelectedCategory()) | withComma }}</span>
+        <span v-if="bundleDiscountPercentage">{{ `(${bundleDiscountPercentage}% off)` }}</span>
+        <span v-if="bundleDiscountAmount">${{ totalPrice | withComma }}</span>
       </div>
     </div>
   </div>
