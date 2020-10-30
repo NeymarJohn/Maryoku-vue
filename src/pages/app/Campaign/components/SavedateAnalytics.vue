@@ -14,11 +14,13 @@
           <div class="d-flex align-center color-dark-gray font-size-20">
             <span class="font-bold">
               Send on
-              <span>{{ $dateUtil.formatScheduleDay(new Date().getTime(), "MM.DD.YY") }}</span>
+              <span>{{$dateUtil.formatScheduleDay(new Date().getTime(), "MM.DD.YY")}}</span>
             </span>
             <span class="vertical-line"></span>
             <img :src="`${$iconURL}Campaign/email-gray.svg`" style="width: 28px" />
-            <span class="ml-20 mr-20 font-size-30 font-bold font-bold color-black">{{ numberOfEmails }}</span>
+            <span
+              class="ml-20 mr-20 font-size-30 font-bold font-bold color-black"
+            >{{numberOfEmails}}</span>
             Total emails sent
           </div>
           <div class="font-size-20 font-bold-extra mt-60 mb-20">Opened This Email</div>
@@ -28,16 +30,17 @@
               <div>
                 <color-dot-label class="mb-40" color="#00bcd4">
                   <span class="font-bold">Opened</span>
-                  ({{ openedCount }})
+                  ({{openedCount}})
                 </color-dot-label>
                 <color-dot-label class="mb-40" color="#C4C1C1">
                   <span class="font-bold">Didn't Open</span>
-                  ({{ numberOfEmails - openedCount }})
+                  ({{numberOfEmails - openedCount}})
                 </color-dot-label>
               </div>
-              <md-button class="md-simple md-red maryoku-btn md-outlined" @click="sendEmailsAgain"
-                >Send again</md-button
-              >
+              <md-button
+                class="md-simple md-red maryoku-btn md-outlined"
+                @click="sendEmailsAgain"
+              >Send again</md-button>
               <div class="mt-10">Send to invitees who haven't opened this email</div>
             </div>
           </div>
@@ -66,37 +69,38 @@ export default {
     this.campaignData = this.$store.state.campaign["SAVING_DATE"];
     const totalEmailCount = this.campaignData.guestEmails.length;
     let openedEmails = 0;
-    if (this.campaignData.guestEmails) {
+    this.campaignData.guestEmails.forEach((item) => {
+      if (item.isOpened) {
+        openedEmails++;
+      }
+    });
+    this.percentage = Math.round((openedEmails / totalEmailCount) * 100);
+  },
+  computed: {
+    numberOfEmails() {
+      return this.campaignData.guestEmails
+        ? this.campaignData.guestEmails.length
+        : 0;
+    },
+    openedCount() {
+      let openedEmails = 0;
       this.campaignData.guestEmails.forEach((item) => {
         if (item.isOpened) {
           openedEmails++;
         }
       });
-    }
-    this.percentage = Math.round((openedEmails / totalEmailCount) * 100);
-  },
-  computed: {
-    numberOfEmails() {
-      return this.campaignData.guestEmails ? this.campaignData.guestEmails.length : 0;
-    },
-    openedCount() {
-      let openedEmails = 0;
-      if (this.campaignData.guestEmails) {
-        this.campaignData.guestEmails.forEach((item) => {
-          if (item.isOpened) {
-            openedEmails++;
-          }
-        });
-      }
       return openedEmails;
     },
   },
   methods: {
     sendEmailsAgain() {
       this.$http
-        .get(`${process.env.SERVER_URL}/1/campaigns/remind/${this.campaignData.id}`, {
-          headers: this.$auth.getAuthHeader(),
-        })
+        .get(
+          `${process.env.SERVER_URL}/1/campaigns/remind/${this.campaignData.id}`,
+          {
+            headers: this.$auth.getAuthHeader(),
+          },
+        )
         .then((response) => response.data)
         .then((json) => {
           swal({

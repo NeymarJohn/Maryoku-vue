@@ -1,5 +1,5 @@
 <template>
-  <div class="coundown-campaign">
+  <div class="white-card coundown-campaign">
     <div class="p-50">
       <div class="font-size-30 font-bold-extra text-transform-capitalize">send your guests a fun countdown</div>
       <div class="countdown-cover-image mt-50">

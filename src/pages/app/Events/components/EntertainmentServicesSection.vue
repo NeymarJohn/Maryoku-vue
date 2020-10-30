@@ -10,7 +10,6 @@
               </span>
         </th>
         <th>
-          <div class="text-center">How Many?</div>
         </th>
         <th></th>
         <th></th>
@@ -22,32 +21,17 @@
               v-for="(service, index) in services.filter(sv => sv.isSelected)"
               :key="index"
       >
-        <td>
-          <div>{{ service.item }}
-            <div v-if="service.type === 'select'">
-              <!--<entertainment-services-selector-->
-              <!--:service="service"-->
-              <!--:key="index"-->
-              <!--@change=handleChangeItem-->
-              <!--&gt;-->
-              <!--</entertainment-services-selector>-->
-              <multiselect
-                      v-model="service.value"
-                      :options="service.options"
-                      :close-on-select="false"
-                      :clear-on-select="false"
-                      :searchable="false"
-                      :multiple="true"
-                      tag-placeholder="Add this as new tag"
-                      placeholder="Select the services"
-                      class="multiple-selection small-selector"
-                      @select="handleChangeItem(service.item, 'select', $event)"
-                      @remove="handleChangeItem(service.item, 'remove', $event)"
-              ></multiselect>
-            </div>
-          </div>
+        <td style="display: flex; align-items: center">
+          <div style="padding-top: 14px; align-self: center">{{ service.item }}</div>
         </td>
         <td>
+          <div v-if="service.type === 'select'">
+            <entertainment-services-selector
+                    :data="service"
+                    @change=handleChangeItem
+            >
+            </entertainment-services-selector>
+          </div>
           <template v-if="service.qtyEnabled">
             <input class="quantity-input" type="number" v-model="service.defaultQty" />
             <span v-if="service.hint">
@@ -85,7 +69,7 @@
       </tr>
       </tbody>
     </table>
-    <div class="additional-request mb-30">
+    <div class="additional-request">
       <div class="additional-request-description">
         <h4>Additional Requests</h4>
         <div>Would you like to add one of those items?</div>
@@ -108,16 +92,14 @@
 </style>
 <script>
 import EntertainmentServicesSelector from "./EntertainmentServicesSelector";
-import Multiselect from "vue-multiselect";
 
 export default {
   name: "entertainment-services-section",
   components: {
     EntertainmentServicesSelector,
-    Multiselect
   },
   props: {
-    requirements: {
+    data: {
       type: Object,
       required: true,
     },
@@ -129,35 +111,34 @@ export default {
   data() {
     return {
       services: [],
-      anythingElse: this.note,
     };
   },
   methods: {
     getServicesRequirements(){
       this.services = [];
-      let checked = this.requirements['multi-selection'][0].options.filter(ms => ms.selected);
+      let checked = this.data['multi-selection'][0].options.filter(ms => ms.selected);
 
       checked.map(ch => {
-
+        if ( ch.name === 'DJ Services' || ch.name === 'Band' || ch.name === 'Entertainment' ) {
           let options = [];
-          let value = [];
-          this.requirements['Services'].map(sv => {
-            if(sv.subCategory && (sv.subCategory.trim() === ch.name.trim() || sv.subCategory.trim().indexOf(ch.name.trim()) !== -1)) {
-              options.push(sv.item);
-              if(sv.isSelected) value.push(sv.item);
+          this.data['Services'].map(sv => {
+            if(sv.subCategory && sv.subCategory.trim() === ch.name.trim()) {
+              options.push({label: sv.item, isSelected: sv.isSelected});
             }
           })
-          this.services.push({item: ch.name, isSelected: ch.selected, type: 'select', options, value});
-
+          this.services.push({item: ch.name, isSelected: ch.selected, type: 'select', options});
+          this.$forceUpdate();
+        }
 
       })
 
-      this.requirements['Services'].map(sv => {
+      this.data['Services'].map(sv => {
         if( sv.item === 'Onsite coordinators, instructors, guides' || sv.item === 'keynote speaker/Special MC' ) {
           this.services.push(sv);
         }
       })
-      console.log("entertainment.getService", this.requirements, this.services);
+
+      console.log("getServicesRequirements", this.services);
     },
     addRequirement(service) {
       const index = this.services.findIndex((it) => it.item == service.item);
@@ -169,47 +150,42 @@ export default {
         this.services.splice(index, 1);
       } else {
         this.services[index].isSelected = false;
-        return;
       }
 
-      // let requirements = this.requirements;
-      this.requirements['multi-selection'][0].options.map(op => {
+      let requirements = this.data;
+      requirements['multi-selection'][0].options.map(op => {
         if(op.name === service.item) op.selected = false;
       });
-      this.requirements['Services'].map(it => {
+      requirements['Services'].map(it => {
         if(it.subCategory && it.subCategory.trim() === service.item.trim()){
           service.options.map(op => {
             if(op.label === it.item) it.isSelected = false;
           })
         }
       });
-
-      this.$emit('change', this.requirements);
+      this.$emit('change', requirements);
     },
-    handleChangeItem(cat, action, e){
-      this.requirements['Services'].map(it => {
-        if(it.subCategory && it.subCategory.trim() === cat.trim() && it.item === e){
-          it.isSelected = action === 'select';
+    handleChangeItem(service){
+      let requirements = this.data;
+      requirements['Services'].map(it => {
+        if(it.subCategory && it.subCategory.trim() === service.item.trim()){
+          service.options.map(op => {
+            if(op.label === it.item) it.isSelected = op.isSelected;
+          })
         }
       });
 
-      this.$emit('change', this.requirements);
+      this.$emit('change', requirements);
     },
-    handleNoteChange(){
-      this.$emit('change', {note: this.anythingElse});
-    },
-  },
-  watch: {
-    requirements:{
-     handler(newVal, oldVal){
-       // console.log("props.change", newVal);
-       this.getServicesRequirements();
-     },
-     deep: true,
-    }
   },
   mounted(){
     this.getServicesRequirements();
+    this.$root.$on('multi-select.change', (index, data) => {
+      this.getServicesRequirements();
+    })
+    this.$root.$on('revertRequirements', _ => {
+      this.getServicesRequirements();
+    });
   }
 };
 </script>

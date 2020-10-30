@@ -41,13 +41,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     publicPath: config.dev.assetsPublicPath,
     proxy: config.dev.proxyTable,
     quiet: true, // necessary for FriendlyErrorsPlugin
-    stats:{
-      colors: true,
-      chunks: false,
-    },
     watchOptions: {
-      aggregateTimeout: 300,
-      poll: 1000
+      poll: config.dev.poll
     }
   },
   plugins: [

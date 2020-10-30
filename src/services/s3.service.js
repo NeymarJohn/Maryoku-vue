@@ -14,7 +14,7 @@ class S3Service {
 
         return new File([u8arr], filename, { type: mime });
     }
-    fileUpload(file, fileName, dirName, fileExtension) {
+    fileUpload(file, fileName, dirName) {
         const config = {
             bucketName: process.env.S3_BUCKET_NAME,
             dirName: dirName /* optional */,
@@ -25,7 +25,7 @@ class S3Service {
         };
         const S3Client = new S3(config);
         const newFileName = "my-awesome-file";
-        const extenstion = fileExtension ? fileExtension : file.type.split("/").pop();
+        const extenstion = file.type.split("/").pop();
         return new Promise((resolve, reject) => {
             S3Client.uploadFile(file, fileName).finally(res => {
                 console.log(res);

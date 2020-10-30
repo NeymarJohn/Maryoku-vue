@@ -11,7 +11,7 @@
     </div>
     <div>
       <md-checkbox
-        v-for="(option, index) in this.data.options"
+        v-for="(option, index) in data.options"
         :key="index"
         v-model="option.selected"
         @change="changeState"
@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     changeState() {
-      this.$emit('change');
+      this.$root.$emit('multi-select.change', this.index, this.data);
     },
   },
 };

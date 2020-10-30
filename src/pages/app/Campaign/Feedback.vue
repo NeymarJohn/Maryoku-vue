@@ -1,5 +1,5 @@
 <template>
-  <div class="feedback-campaign">
+  <div class="white-card feedback-campaign">
     <div class="p-50">
       <div class="font-size-30 font-bold-extra mb-50 text-transform-capitalize">Say thank you and ask for feedback</div>
       <hr />

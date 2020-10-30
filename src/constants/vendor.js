@@ -703,13 +703,13 @@ export const businessCategories = [
               },
               {
                 name: 'deliveries',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false
               },
               {
                 name: 'onsite setup',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false
               },
               {
                 name: 'cleanup',
@@ -878,7 +878,7 @@ export const businessCategories = [
                 value: false
               },
               {
-                name: 'day-of corrdination',
+                name: 'day-of coordination',
                 type: Boolean,
                 value: false
               },
@@ -1005,8 +1005,8 @@ export const businessCategories = [
             items: [
               {
                 name: 'adapt equipment mobility to program',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false
               },
               {
                 name: 'setup & breakdown',
@@ -1025,8 +1025,8 @@ export const businessCategories = [
             items: [
               {
                 name: 'drone and remote photo/video',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false
               },
               {
                 name: 'crane',
