@@ -8,53 +8,25 @@
         <div class="left">
           <img v-if="itemType == 'price'" :src="getCategoryIcon()" />
           <img v-if="itemType == 'bundle'" :src="`${iconUrl}Asset 577.svg`" />
-          <h3 v-if="itemType == 'price'">{{ getServiceCategory(category).title }}</h3>
+          <h3 v-if="itemType == 'price'">{{ category }}</h3>
           <h3 v-if="itemType == 'bundle'">Bundle offer</h3>
           <div v-if="itemType == 'total'" class="total-cont">
             <h4>Total</h4>
-            <span v-if="bundleDiscount.isApplied">before discount</span>
+            <span>before discount</span>
           </div>
           <span v-if="itemType == 'price'">For Whole Event</span>
           <div class="bundle-desc" v-if="itemType == 'bundle'">
-            <h4>{{ bundleDiscount.discountPercentage }}%</h4>
-            <span v-for="(service, index) in bundleDiscount.services" :key="index" style="padding: 0 2px"
-              >{{ getServiceCategory(service).title }},
-            </span>
+            <h4>15%</h4>
+            <span>Venue + Catering</span>
           </div>
         </div>
         <div class="right">
           <div class="price-cont" v-if="!isExpanded">
-            <template v-if="itemType == 'price'">
-              <template v-if="bundleDiscount.services.includes(category)">
-                <span class="org-price"
-                  >${{
-                    ((pricesByCategory[category] * (100 - bundleDiscount.discountPercentage)) / 100) | withComma
-                  }}</span
-                >
-                <div class="off-cont">
-                  ({{ bundleDiscount.discountPercentage }}% off)
-                  <span>${{ pricesByCategory[category] | withComma }}</span>
-                </div>
-              </template>
-              <template v-else>
-                <span class="org-price">${{ pricesByCategory[category] | withComma }}</span>
-              </template>
-            </template>
-            <template v-if="itemType == 'total'">
-              <!-- <span class="org-price">${{ totalPrice | withComma }}</span> -->
-              <template v-if="bundleDiscount.isApplied">
-                <span class="org-price"
-                  >${{ ((totalPrice * (100 - bundleDiscount.discountPercentage)) / 100) | withComma }}</span
-                >
-                <div class="off-cont">
-                  ({{ bundleDiscount.discountPercentage }}% off)
-                  <span>${{ totalPrice | withComma }}</span>
-                </div>
-              </template>
-              <template v-else>
-                <span class="org-price">${{ totalPrice | withComma }}</span>
-              </template>
-            </template>
+            <span class="org-price">${{ getOrgPrice() | withComma }}</span>
+            <div class="off-cont">
+              (0% off)
+              <span>${{ getOrgPrice() | withComma }}</span>
+            </div>
           </div>
           <img
             v-if="itemType == 'price'"
@@ -108,7 +80,7 @@
             <ul>
               <li>
                 <check-list-item
-                  v-for="(s, sIndex) in proposalServices[category]"
+                  v-for="(s, sIndex) in servicesByCategory()"
                   :key="sIndex"
                   :name="s.requirementTitle"
                   :iconUrl="iconUrl"
@@ -140,12 +112,11 @@
         </div>
         <div class="attachments-cont">
           <h4>Attachments</h4>
-          <div class="files-cont" v-if="proposalAttachments[category]">
-            <div class="item" v-for="(file, index) in proposalAttachments[category]" :key="index">
-              <img :src="`${iconUrl}Asset 578.svg`" /> Kosher_certificate.pdf
-            </div>
+          <div class="files-cont">
+            <div class="item"><img :src="`${iconUrl}Asset 578.svg`" /> Kosher_certificate.pdf</div>
+            <div class="item"><img :src="`${iconUrl}Asset 578.svg`" /> Kosher_certificate.pdf</div>
+            <div class="item"><img :src="`${iconUrl}Asset 578.svg`" /> Kosher_certificate.pdf</div>
           </div>
-          <div v-else>No attachment</div>
         </div>
       </div>
     </div>
@@ -155,7 +126,6 @@
 import EditableProposalSubItem from "./EditableProposalSubItem.vue";
 import CheckListItem from "./CheckListItem.vue";
 import VendorService from "@/services/vendor.service";
-import { mapGetters } from "vuex";
 
 export default {
   name: "proposal-pricing-item",
@@ -185,8 +155,14 @@ export default {
       }
     },
     getCategoryIcon() {
-      console.log(`https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${this.category}.svg`);
-      return `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${this.category}.svg`;
+      console.log(
+        `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${
+          this.iconsWithCategory.filter((c) => c.name == this.category)[0].icon
+        }`,
+      );
+      return `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${
+        this.iconsWithCategory.filter((c) => c.name == this.category)[0].icon
+      }`;
     },
     servicesByCategory() {
       return this.requirements.filter((r) => r.requirementsCategory == this.category);
@@ -208,36 +184,12 @@ export default {
 
       return total;
     },
-    getServiceCategory(category) {
-      return this.serviceCategories.find((item) => item.key === category);
-    },
   },
   created() {},
   mounted() {
     this.iconsWithCategory = VendorService.categoryNameWithIcons();
   },
-  computed: {
-    ...mapGetters("vendorProposal", ["mainTotalPrice", "pricesByCategory"]),
-    serviceCategories() {
-      return this.$store.state.common.serviceCategories;
-    },
-    bundleDiscount() {
-      return this.$store.state.vendorProposal.bundleDiscount;
-    },
-    proposalServices() {
-      return this.$store.state.vendorProposal.proposalServices;
-    },
-    proposalAttachments() {
-      return this.$store.state.vendorProposal.attachments;
-    },
-    totalPrice() {
-      let s = 0;
-      Object.keys(this.pricesByCategory).forEach((category) => {
-        s += this.pricesByCategory[category];
-      });
-      return s;
-    },
-  },
+  computed: {},
   filters: {
     withComma(amount) {
       return amount ? amount.toLocaleString() : 0;

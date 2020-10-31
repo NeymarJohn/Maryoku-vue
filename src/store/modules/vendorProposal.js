@@ -14,14 +14,7 @@ const state = {
   legalDocs: {},
   wizardStep: 0,
   initStep: 0,
-  additionalServices: [],
-  attachments: {},
-  bundleDiscount: {
-    isApplied: false,
-    services: [],
-    discountPercentage: 0,
-    discountAmount: 0
-  }
+  additionalServices: []
 }
 const getters = {
   mainTotalPrice(state) {
@@ -89,9 +82,6 @@ const mutations = {
   removeCategoryFromAdditional: (state, category) => {
     const index = state.additionalServices.findIndex((item) => item == category);
     state.additionalServices.splice(index, 1);
-  },
-  setBundleDiscount: (state, bundleDiscount) => {
-    state.bundleDiscount = bundleDiscount
   }
 }
 const actions = {

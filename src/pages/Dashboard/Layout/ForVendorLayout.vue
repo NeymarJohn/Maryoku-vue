@@ -26,7 +26,14 @@
         />
       </div>
     </section>
-    <div class="banner" :style="`background-image: url('${backgroundImage}');`">
+    <div
+      class="banner"
+      :style="
+        backgroundImage
+          ? `background-image: url('${backgroundImage}');`
+          : `background-image: url('https://static-maryoku.s3.amazonaws.com/storage/img/lock.jpg');`
+      "
+    >
       <div class="banner-content">
         <h3>Congratulations!</h3>
         <p>
@@ -62,7 +69,7 @@
         <div class="saved-it-modal__header">
           <h3><img :src="`${$iconURL}NewSubmitPorposal/Asset 587.svg`" /> Time Is Up!</h3>
           <div class="header-description">
-            The deadline for submitting this prposal has passed. But no worries! We will be with you soon with the next
+            The deadline for submitting this prposal has passed. But no worries! We weill be with you soon with the next
             one.
           </div>
         </div>
@@ -151,9 +158,7 @@ export default {
       return "";
     },
     getRemainingTime() {
-      if (!this.proposalRequest || !this.proposalRequest.expiredTime) {
-        return { days: 0, hours: 0, mins: 0, seconds: 0 };
-      }
+      if (!this.proposalRequest) return { days: 0, hours: 0, mins: 0, seconds: 0 };
       console.log(this.proposalRequest.expiredTime);
       console.log(new Date().getTime());
       let remainingMs = this.proposalRequest.expiredTime - new Date().getTime();
