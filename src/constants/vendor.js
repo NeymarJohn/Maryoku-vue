@@ -57,21 +57,21 @@ export const businessCategories = [
               },
               {
                 name: 'separate cocktail hour space',
-                type: Number,
-                value: 1,
-                xIncluded: true,
+                type: Boolean,
+                value: true,
+                xIncluded: false,
               },
               {
                 name: 'outside area for guests',
-                type: Number,
-                value: 1,
-                xIncluded: true,
+                type: Boolean,
+                value: true,
+                xIncluded: false,
               },
               {
                 name: 'kitchen for outside caterers',
-                type: Number,
-                value: 1,
-                xIncluded: true,
+                type: Boolean,
+                value: true,
+                xIncluded: false,
               },
               {
                 name: 'available bathrooms',
@@ -414,6 +414,7 @@ export const businessCategories = [
                 name: 'non alcoholic specials',
                 type: Number,
                 value: 0,
+                // xIncluded: true,
                 // available: ['smoothies & juices', 'hawaiian', 'coffee', 'tea', 'power drinks']
               },
             ]
@@ -708,8 +709,8 @@ export const businessCategories = [
               },
               {
                 name: 'onsite setup',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false
               },
               {
                 name: 'cleanup',
@@ -1010,8 +1011,8 @@ export const businessCategories = [
               },
               {
                 name: 'setup & breakdown',
-                type: Boolean,
-                value: false
+                type: "Cost",
+                value: 0
               },
             ]
           },
@@ -1025,7 +1026,7 @@ export const businessCategories = [
             items: [
               {
                 name: 'drone and remote photo/video',
-                type: Number,
+                type: "Cost",
                 value: 0
               },
               {
@@ -1144,7 +1145,7 @@ export const businessCategories = [
                 name: 'printing material',
                 type: Array,
                 value: [],
-                available: ['business cards', 'brochures', 'flyers', 'one-sheets', 'infographics', 'instructions', 'posters', 'tickets', 'banners', 'menues', 'place cards']
+                available: ['business cards', 'brochures', 'flyers', 'one-sheets', 'infographics', 'instructions', 'posters', 'tickets', 'banners', 'menues', 'place cards', 'other']
               },
             ]
           },

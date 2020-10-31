@@ -182,10 +182,10 @@
                     </template>
                   </td>
                   <td class="text-center">
-                    <template v-if="property.sizeEnabled && property.qtyEnabled">
+                    <div v-if="property.type === 'single-selection'" style="padding: 10px 0px">&nbsp;</div>
+                    <template v-if="property.qtyEnabled">
                       <input class="quantity-input" placeholder="Cm" type="number" v-model="property.size" />
                     </template>
-                    <div v-else>n/a</div>
                   </td>
                   <td class="text-center">
                     <template v-if="property.qtyEnabled">
@@ -195,7 +195,6 @@
                         <md-tooltip md-direction="bottom">{{ property.hint }}</md-tooltip>
                       </span>
                     </template>
-                    <div v-else class="mr-30">n/a</div>
                   </td>
                   <td>
                     <div v-if="property.type === 'single-selection'" style="padding: 10px 0px">&nbsp;</div>
@@ -245,6 +244,24 @@
                   {{ property.item }}
                   <md-icon class="icon color-red">add_circle</md-icon>
                 </div>
+              </div>
+            </div>
+            <div
+              v-if="
+                index === Object.keys(requirementProperties).length - 1 &&
+                !requirementProperties.hasOwnProperty('special')
+              "
+              class="anything-else-section mt-30"
+            >
+              <div class="font-bold mt-10">Anything Else?</div>
+
+              <div class="mt-10">Get me a pink unicorn please.</div>
+              <div class="anything-else-section-options mt-10">
+                <textarea
+                  placeholder="Type name of element here..."
+                  v-model="anythingElse"
+                  @input="handleNoteChange"
+                ></textarea>
               </div>
             </div>
           </div>
@@ -719,15 +736,11 @@ export default {
   }
   .anything-else-section {
     padding: 30px 0;
+    border-top: solid 1px #b7b7b7;
   }
   .checkbox-label-wrapper {
-    display: flex;
-    align-items: center;
-    width: 100%;
     img {
-      margin-right: 5px;
-      max-width: 25px;
-      max-height: 25px;
+      margin-top: -5px;
     }
     margin-left: 10px;
     margin-right: 50px;

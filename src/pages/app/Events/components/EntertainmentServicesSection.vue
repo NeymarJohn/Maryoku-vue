@@ -52,10 +52,9 @@
         </td>
         <td class="text-center">
           <div v-if="service.type === 'single-selection'" style="padding: 10px 0px">&nbsp;</div>
-          <template v-if="service.sizeEnabled && service.qtyEnabled">
+          <template v-if="service.qtyEnabled">
             <input class="quantity-input" placeholder="Cm" type="number" v-model="service.size" />
           </template>
-          <div v-else>n/a</div>
         </td>
         <td class="text-center">
           <template v-if="service.qtyEnabled">
@@ -65,7 +64,6 @@
                         <md-tooltip md-direction="bottom">{{ service.hint }}</md-tooltip>
                       </span>
           </template>
-          <div v-else class="mr-30">n/a</div>
         </td>
         <td>
           <div>
@@ -149,7 +147,6 @@ export default {
   },
   methods: {
     getServicesRequirements(){
-      console.log("getServicesRequirements", this.requirements);
       this.services = [];
       let checked = this.requirements['multi-selection'][0].options.filter(ms => ms.selected);
 
@@ -173,7 +170,6 @@ export default {
           this.services.push(sv);
         }
       })
-      console.log("getServices", this.services);
     },
     addRequirement(service) {
       const index = this.services.findIndex((it) => it.item == service.item);
@@ -202,12 +198,9 @@ export default {
     },
     handleChangeItem(cat, action, e){
       this.requirements['Services'].map(it => {
-
-        if ( it.subCategory && it.subCategory === cat ) {
-          if( it.item === e){
-            it.isSelected = action === 'select';
-            it.mustHave = action === 'select';
-          }
+        if(it.item === e){
+          it.isSelected = action === 'select';
+          it.mustHave = action === 'select';
         }
       });
 

@@ -42,9 +42,9 @@
       </template>
     </div>
     <div class="anything-else-section">
-      <div class="font-bold">Anything Else?</div>
+      <div class="font-bold mt-10">Anything Else?</div>
 
-      <div class="mt-10">Tell us what else you would love to receive in the proposals we’ll send you.</div>
+      <div class="mt-10">Get me a pink unicorn please.</div>
       <div class="anything-else-section-options mt-10">
         <textarea placeholder="Type name of element here..." v-model="anythingElse" @input="handleNoteChange"></textarea>
       </div>
