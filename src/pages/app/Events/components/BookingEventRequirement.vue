@@ -128,7 +128,6 @@
           <div v-else-if="category == 'special'">
             <special-requirement-section
               :data="requirementProperties[category]"
-              :currentComponent="selectedBlock"
               :note="anythingElse"
               @change="handleSpecialChange"
             ></special-requirement-section>
@@ -151,10 +150,7 @@
                     </span>
                   </th>
                   <th>
-                    <div class="text-center">Size</div>
-                  </th>
-                  <th>
-                    <div class="text-center mr-20">How Many?</div>
+                    <div class="text-center">How Many?</div>
                   </th>
                   <th></th>
                   <th></th>
@@ -181,15 +177,10 @@
                       ></multiselect>
                     </template>
                   </td>
-                  <td class="text-center">
+                  <td>
                     <div v-if="property.type === 'single-selection'" style="padding: 10px 0px">&nbsp;</div>
                     <template v-if="property.qtyEnabled">
-                      <input class="quantity-input" placeholder="Cm" type="number" v-model="property.size" />
-                    </template>
-                  </td>
-                  <td class="text-center">
-                    <template v-if="property.qtyEnabled">
-                      <input class="quantity-input" placeholder="QTY" type="number" v-model="property.defaultQty" />
+                      <input class="quantity-input" type="number" v-model="property.defaultQty" />
                       <span v-if="property.hint">
                         <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
                         <md-tooltip md-direction="bottom">{{ property.hint }}</md-tooltip>
@@ -232,7 +223,7 @@
                 <h4>Additional Requests</h4>
                 <div>Would you like to add one of those items?</div>
               </div>
-              <div class="tag-container">
+              <div>
                 <div
                   class="additional-request-tag"
                   v-for="(property, index) in requirementProperties[category].filter(
@@ -394,36 +385,13 @@ export default {
       let service_index = requirement['multi-selection'].findIndex(op => op.subCategory === 'service');
       let liquor_index = requirement['multi-selection'].findIndex(op => op.subCategory === 'liquor stations');
       let food_spec_index = requirement['multi-selection'].findIndex(op => op.subCategory === 'food specialties');
-      let cuisine_specialty_index = requirement['multi-selection'].findIndex(op => op.subCategory === 'cuisine specialty');
-      let meal_type_index = requirement['multi-selection'].findIndex(op => op.subCategory === 'meal type');
 
       requirement['multi-selection'][service_index].options.map(op => {
+        console.log("_handleFoodAndBeverageRequirement", food_spec_index, op.name === 'Food Catering');
         if (op.name === 'Food Catering') requirement['multi-selection'][food_spec_index].visible = op.selected;
-        if (op.name === 'Food Catering') requirement['multi-selection'][cuisine_specialty_index].visible = op.selected;
-        if (op.name === 'Food Catering') requirement['multi-selection'][meal_type_index].visible = op.selected;
         if (op.name === 'Beverage') requirement['multi-selection'][liquor_index].visible = op.selected;
 
       });
-      return requirement;
-    },
-    _handleEntertainmentRequirement(requirement){
-      requirement['multi-selection'][0].options.map(it => {
-        if ( it.name === 'DJ Services' && it.selected) {
-          requirement['Services'].map(op => {
-            if(op.subCategory && op.subCategory.trim() === it.name){
-              op.mustHave = true;
-              op.isSelected = true;
-            }
-          })
-        } else if ( it.name === 'Band' && it.selected ){
-          requirement['Services'].map(op => {
-            if ( op.item === 'one man instrument' ){
-              op.mustHave = true;
-              op.isSelected = true;
-            };
-          })
-        }
-      })
       return requirement;
     },
     addRequirement(category, property) {
@@ -446,9 +414,6 @@ export default {
         this.requirementProperties = this._handleSecurityRequirement(this.requirementProperties);
       if( this.blockId === 'foodandbeverage')
         this.requirementProperties = this._handleFoodAndBeverageRequirement(this.requirementProperties);
-      if ( this.blockId === 'entertainment' ){
-        this.requirementProperties = this._handleEntertainmentRequirement(this.requirementProperties);
-      }
       this._saveRequirementsInStore();
     },
     handleSpecialChange(e){
@@ -494,9 +459,6 @@ export default {
       }
       if (this.selectedBlock.componentId === "foodandbeverage") {
         requirements = this._handleFoodAndBeverageRequirement(requirements);
-      }
-      if ( this.selectedBlock.componentId === 'entertainment' ){
-        requirements = this._handleEntertainmentRequirement(requirements);
       }
 
       this.requirementProperties = requirements;
@@ -645,19 +607,16 @@ export default {
     margin: 20px 0px;
     &-table {
       border-spacing: 0px;
-      width: 100%;
       th {
         text-align: left;
       }
+      width: 100%;
       td,
       th {
         padding: 24px 0;
+        width: 25%;
       }
-      th:first-child{width: 30%}
-      th:nth-child(2){width: 10%}
-      th:nth-child(3){width: 15%; min-width: 180px}
-      th:nth-child(4){width: 15%}
-      th:nth-child(5){width: 30%}
+
       tbody {
         td {
           border-top: solid 2px #dbdbdb !important;
@@ -671,8 +630,6 @@ export default {
         border: solid 0.5px #818080;
         font-family: "Manrope-regular";
         font-size: 16px;
-        max-width: 120px;
-        margin: 0 16px;
       }
     }
   }
@@ -699,7 +656,6 @@ export default {
       font-family: "Manrope-Bold";
     }
   }
-
   .additional-request-tag {
     margin-left: 20px;
     margin-bottom: 10px;
@@ -753,7 +709,7 @@ export default {
     border-radius: 3px;
   }
   .multiple-selection {
-    width: 370px;
+    width: 300px;
     display: inline-block;
     height: 50px;
     .multiselect__select {
@@ -763,17 +719,6 @@ export default {
       height: 50px;
       .multiselect__single {
         line-height: 30px;
-      }
-      .multiselect__tags-wrap{
-        display: flex;
-        overflow: hidden;
-
-        span{
-          margin-right: 5px;
-          flex-shrink: 0;
-          font-size: 16px;
-          font-family: 'Manrope-regular';
-        }
       }
     }
     .multiselect__input {
