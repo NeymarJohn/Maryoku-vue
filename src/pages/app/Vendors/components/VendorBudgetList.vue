@@ -6,7 +6,7 @@
     </h4>
     <div class="total">
       <strong>Total Event Budget:</strong>
-      <span v-if="proposalRequest">${{ totalBudget | withComma }}</span>
+      <span v-if="proposalRequest">${{ eventBudget | withComma }}</span>
     </div>
     <p>
       <img :src="`${iconsUrl}Group 5180.svg`" />
@@ -60,8 +60,20 @@ export default {
       }, 0);
       return sum;
     },
+    eventBudget() {
+      return this.$store.state.vendorProposal.proposalRequest.eventData.allocatedBudget;
+    },
     validRequirements() {
-      return this.requirements.filter((item) => item.eventCategory.type === "service");
+      console.log(this.requirements);
+      console.log(this.vendor);
+      return this.requirements.filter(
+        (item) =>
+          item.componentId === this.vendor.vendorCategory ||
+          (this.vendor.vendorCategories && this.vendor.vendorCategories.include(item.eventCategory.key)),
+      );
+    },
+    vendor() {
+      return this.$store.state.vendorProposal.vendor;
     },
   },
   filters: {

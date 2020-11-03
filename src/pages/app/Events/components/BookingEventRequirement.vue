@@ -128,134 +128,127 @@
           <div v-else-if="category == 'special'">
             <special-requirement-section
               :data="requirementProperties[category]"
+              :currentComponent="selectedBlock"
               :note="anythingElse"
               @change="handleSpecialChange"
             ></special-requirement-section>
           </div>
-          <div v-else-if="blockId == 'entertainment' && category == 'Services'">
+          <div v-else>
             <entertainment-services-section
                     :requirements="requirementProperties"
+                    :category="category"
+                    :block-id="blockId"
                     :note="anythingElse"
                     @change="handleServiceChange"
             ></entertainment-services-section>
           </div>
-          <div class="requirement-section" v-else>
-            <table class="requirement-section-table">
-              <thead>
-                <tr>
-                  <th>
-                    <span class="section-title">
-                      <img :src="`${$iconURL}Requirements/${category}.svg`" class="mr-20" style="width: 60px" />
-                      {{ category }}
-                    </span>
-                  </th>
-                  <th>
-                    <div class="text-center">How Many?</div>
-                  </th>
-                  <th></th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  class="requirement-item"
-                  v-for="(property, index) in requirementProperties[category].filter((item) => item.isSelected)"
-                  :key="index"
-                >
-                  <td>
-                    <div style="padding: 10px 0px">{{ property.item }}</div>
-                    <template v-if="property.type === 'single-selection'">
-                      <multiselect
-                        v-model="property.selectedOption"
-                        :options="property.options"
-                        :close-on-select="true"
-                        :clear-on-select="true"
-                        tag-placeholder="Add this as new tag"
-                        placeholder="Type to search category"
-                        class="multiple-selection small-selector"
-                        @select="checkAffectedItems(property)"
-                      ></multiselect>
-                    </template>
-                  </td>
-                  <td>
-                    <div v-if="property.type === 'single-selection'" style="padding: 10px 0px">&nbsp;</div>
-                    <template v-if="property.qtyEnabled">
-                      <input class="quantity-input" type="number" v-model="property.defaultQty" />
-                      <span v-if="property.hint">
-                        <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
-                        <md-tooltip md-direction="bottom">{{ property.hint }}</md-tooltip>
-                      </span>
-                    </template>
-                  </td>
-                  <td>
-                    <div v-if="property.type === 'single-selection'" style="padding: 10px 0px">&nbsp;</div>
-                    <div>
-                      <md-button class="md-icon-button md-simple requirement-action" v-if="property.qtyEnabled">
-                        <img :src="`${$iconURL}Requirements/edit-dark.svg`" width="20" />
-                      </md-button>
-                      <md-button
-                        class="md-icon-button md-simple requirement-action"
-                        @click="removeRequirement(category, property)"
-                      >
-                        <img :src="`${$iconURL}Requirements/delete-dark.svg`" width="20" />
-                      </md-button>
-                    </div>
-                  </td>
-                  <td>
-                    <div v-if="property.type === 'single-selection'" style="padding: 10px 0px">&nbsp;</div>
-                    <div class="condition">
-                      <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="property.mustHave" :value="true"
-                        >Must Have</md-checkbox
-                      >
-                      <md-checkbox
-                        class="md-simple md-checkbox-circle md-red"
-                        v-model="property.mustHave"
-                        :value="false"
-                        >Nice To Have</md-checkbox
-                      >
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="additional-request">
-              <div class="additional-request-description">
-                <h4>Additional Requests</h4>
-                <div>Would you like to add one of those items?</div>
-              </div>
-              <div>
-                <div
-                  class="additional-request-tag"
-                  v-for="(property, index) in requirementProperties[category].filter(
-                    (item) => !item.isSelected && item.visible,
-                  )"
-                  :key="index"
-                  @click="addRequirement(category, property)"
-                >
-                  {{ property.item }}
-                  <md-icon class="icon color-red">add_circle</md-icon>
-                </div>
-              </div>
-            </div>
-            <div
-              v-if="
-                index === Object.keys(requirementProperties).length - 1 &&
-                !requirementProperties.hasOwnProperty('special')
-              "
-              class="anything-else-section mt-30"
-            >
-              <div class="font-bold mt-10">Anything Else?</div>
-
-              <div class="mt-10">Get me a pink unicorn please.</div>
-              <div class="anything-else-section-options mt-10">
-                <textarea
-                  placeholder="Type name of element here..."
-                  v-model="anythingElse"
-                  @input="handleNoteChange"
-                ></textarea>
-              </div>
-            </div>
-          </div>
+            <!--<table class="requirement-section-table">-->
+              <!--<thead>-->
+                <!--<tr>-->
+                  <!--<th>-->
+                    <!--<span class="section-title">-->
+                      <!--<img :src="`${$iconURL}Requirements/${category}.svg`" class="mr-20" style="width: 60px" />-->
+                      <!--{{ category }}-->
+                    <!--</span>-->
+                  <!--</th>-->
+                  <!--<th>-->
+                    <!--<div class="text-center">Size</div>-->
+                  <!--</th>-->
+                  <!--<th>-->
+                    <!--<div class="text-center mr-20">How Many?</div>-->
+                  <!--</th>-->
+                  <!--<th></th>-->
+                  <!--<th></th>-->
+                <!--</tr>-->
+              <!--</thead>-->
+              <!--<tbody>-->
+                <!--<tr-->
+                  <!--class="requirement-item"-->
+                  <!--v-for="(property, index) in requirementProperties[category].filter((item) => item.isSelected)"-->
+                  <!--:key="index"-->
+                <!--&gt;-->
+                  <!--<td>-->
+                    <!--<div style="padding: 10px 0px">{{ property.item }}</div>-->
+                    <!--<template v-if="property.type === 'single-selection'">-->
+                      <!--<multiselect-->
+                        <!--v-model="property.selectedOption"-->
+                        <!--:options="property.options"-->
+                        <!--:close-on-select="true"-->
+                        <!--:clear-on-select="true"-->
+                        <!--tag-placeholder="Add this as new tag"-->
+                        <!--placeholder="Type to search category"-->
+                        <!--class="multiple-selection small-selector"-->
+                        <!--@select="checkAffectedItems(property)"-->
+                      <!--&gt;</multiselect>-->
+                    <!--</template>-->
+                  <!--</td>-->
+                  <!--<td class="text-center">-->
+                    <!--<template v-if="property.sizeEnabled">-->
+                      <!--<input class="quantity-input" placeholder="Cm" type="number" v-model="property.size" />-->
+                    <!--</template>-->
+                    <!--<div v-else>n/a</div>-->
+                  <!--</td>-->
+                  <!--<td class="text-center">-->
+                    <!--<template v-if="property.qtyEnabled">-->
+                      <!--<input class="quantity-input" placeholder="QTY" type="number" v-model="property.defaultQty" />-->
+                      <!--<span v-if="property.hint">-->
+                        <!--<img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />-->
+                        <!--<md-tooltip md-direction="bottom">{{ property.hint }}</md-tooltip>-->
+                      <!--</span>-->
+                    <!--</template>-->
+                    <!--<div v-else class="mr-30">n/a</div>-->
+                  <!--</td>-->
+                  <!--<td>-->
+                    <!--<div v-if="property.type === 'single-selection'" style="padding: 10px 0px">&nbsp;</div>-->
+                    <!--<div>-->
+                      <!--<md-button class="md-icon-button md-simple requirement-action" v-if="property.qtyEnabled">-->
+                        <!--<img :src="`${$iconURL}Requirements/edit-dark.svg`" width="20" />-->
+                      <!--</md-button>-->
+                      <!--<md-button-->
+                        <!--class="md-icon-button md-simple requirement-action"-->
+                        <!--@click="removeRequirement(category, property)"-->
+                      <!--&gt;-->
+                        <!--<img :src="`${$iconURL}Requirements/delete-dark.svg`" width="20" />-->
+                      <!--</md-button>-->
+                    <!--</div>-->
+                  <!--</td>-->
+                  <!--<td>-->
+                    <!--<div v-if="property.type === 'single-selection'" style="padding: 10px 0px">&nbsp;</div>-->
+                    <!--<div class="condition">-->
+                      <!--<md-checkbox class="md-simple md-checkbox-circle md-red" v-model="property.mustHave" :value="true"-->
+                        <!--&gt;Must Have</md-checkbox-->
+                      <!--&gt;-->
+                      <!--<md-checkbox-->
+                        <!--class="md-simple md-checkbox-circle md-red"-->
+                        <!--v-model="property.mustHave"-->
+                        <!--:value="false"-->
+                        <!--&gt;Nice To Have</md-checkbox-->
+                      <!--&gt;-->
+                    <!--</div>-->
+                  <!--</td>-->
+                <!--</tr>-->
+              <!--</tbody>-->
+            <!--</table>-->
+            <!--<div class="additional-request">-->
+              <!--<div class="additional-request-description">-->
+                <!--<h4>Additional Requests</h4>-->
+                <!--<div>Would you like to add one of those items?</div>-->
+              <!--</div>-->
+              <!--<div class="tag-container">-->
+                <!--<div-->
+                  <!--class="additional-request-tag"-->
+                  <!--v-for="(property, index) in requirementProperties[category].filter(-->
+                    <!--(item) => !item.isSelected && item.visible,-->
+                  <!--)"-->
+                  <!--:key="index"-->
+                  <!--@click="addRequirement(category, property)"-->
+                <!--&gt;-->
+                  <!--{{ property.item }}-->
+                  <!--<md-icon class="icon color-red">add_circle</md-icon>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
         </div>
       </div>
     </div>
@@ -272,7 +265,7 @@
         <md-button class="md-bold add-category-btn md-black md-simple" @click="revertToOriginal"
           >Revert To Original</md-button
         >
-        <md-button class="md-red md-bold add-category-btn" @click="findVendors">Find my perfect vendor</md-button>
+        <md-button class="md-red md-bold add-category-btn" @click="findVendors">Find my perfect venue</md-button>
       </div>
     </div>
   </div>
@@ -361,39 +354,6 @@ export default {
       // console.log("requirements", requirements)
       this.setBookingRequirements(requirements);
     },
-    _handleSecurityRequirement(requirements) {
-      let vip_idx = requirements["Services"].findIndex((sv) => sv.item === "VIP Security");
-      let risk_idx = requirements["Services"].findIndex((sv) => sv.item === "Risk Assessment");
-      let parameter_idx = requirements["Services"].findIndex((sv) => sv.item === "Parameter security");
-
-      requirements["multi-selection"][0].options.map((op) => {
-        requirements["Services"][vip_idx].visible = !!(op.name === "Personal Security" && op.selected);
-        if (op.name === "Security Consultation") {
-          requirements["Services"][risk_idx].visible = op.selected;
-        }
-      });
-
-      if (this.event.eventType.name === "Reception" && this.event.numberOfParticipants > 500) {
-        requirements["Services"][parameter_idx].isSelected = true;
-        requirements["Services"][parameter_idx].mustHave = true;
-      }
-
-      return requirements;
-    },
-    _handleFoodAndBeverageRequirement(requirement){
-
-      let service_index = requirement['multi-selection'].findIndex(op => op.subCategory === 'service');
-      let liquor_index = requirement['multi-selection'].findIndex(op => op.subCategory === 'liquor stations');
-      let food_spec_index = requirement['multi-selection'].findIndex(op => op.subCategory === 'food specialties');
-
-      requirement['multi-selection'][service_index].options.map(op => {
-        console.log("_handleFoodAndBeverageRequirement", food_spec_index, op.name === 'Food Catering');
-        if (op.name === 'Food Catering') requirement['multi-selection'][food_spec_index].visible = op.selected;
-        if (op.name === 'Beverage') requirement['multi-selection'][liquor_index].visible = op.selected;
-
-      });
-      return requirement;
-    },
     addRequirement(category, property) {
       const index = this.requirementProperties[category].findIndex((it) => it.item == property.item);
       this.requirementProperties[category][index].isSelected = true;
@@ -410,25 +370,26 @@ export default {
     },
     handleMultiSelectChange(){
       this.$forceUpdate();
-      if( this.blockId === 'securityservices' )
-        this.requirementProperties = this._handleSecurityRequirement(this.requirementProperties);
-      if( this.blockId === 'foodandbeverage')
-        this.requirementProperties = this._handleFoodAndBeverageRequirement(this.requirementProperties);
+
+      let requirements = this.requirementProperties;
+      requirements['multi-selection'].map(ms => {
+        if (ms.conditionScript) ms.visible = eval(ms.conditionScript);
+      })
+
       this._saveRequirementsInStore();
     },
     handleSpecialChange(e){
-      if( e.hasOwnProperty('note') ) {
+      if(e && e.hasOwnProperty('note') ) {
         this.anythingElse = e.note;
       }
 
       this._saveRequirementsInStore();
     },
-    handleServiceChange(e) {
-      if (e.hasOwnProperty("note")) {
-        this.anythingElse = e.note;
-      } else {
-        this.requirementProperties = e;
-      }
+    handleServiceChange(requirement) {
+
+      this.requirementProperties = requirement;
+      this.$forceUpdate();
+
       this._saveRequirementsInStore();
 
     },
@@ -436,7 +397,7 @@ export default {
       this._saveRequirementsInStore();
     },
     setProperties: async function(){
-      this.selectedBlock = this.component;
+      this.selectedBlock = JSON.parse(JSON.stringify(this.component));
       const event = this.event;
       if (!this.selectedBlock.componentId) return;
 
@@ -451,14 +412,10 @@ export default {
             const calcedValue = eval(requirements[category][itemIndex].defaultQtyScript);
             requirements[category][itemIndex].defaultQty = Math.ceil(calcedValue);
           }
+          if ( category == 'multi-selection' && requirements[category][itemIndex].conditionScript ){
+            requirements[category][itemIndex].visible = eval(requirements[category][itemIndex].conditionScript);
+          }
         }
-      }
-
-      if (this.selectedBlock.componentId === "securityservices") {
-        requirements = this._handleSecurityRequirement(requirements);
-      }
-      if (this.selectedBlock.componentId === "foodandbeverage") {
-        requirements = this._handleFoodAndBeverageRequirement(requirements);
       }
 
       this.requirementProperties = requirements;
@@ -471,12 +428,11 @@ export default {
     },
     fetchData: async function () {
       this.requirementProperties = {};
-      this.anythingElse = null;
 
       this.blockId = this.component.componentId; //this.$route.params.blockId
       this.event = this.$store.state.event.eventData;
       this.getCommentComponents(this.blockId);
-
+      console.log("fetchData", this.blockId);
       if (
         this.storedRequirements[this.event.id] &&
         this.storedRequirements[this.event.id][this.blockId] &&
@@ -607,16 +563,19 @@ export default {
     margin: 20px 0px;
     &-table {
       border-spacing: 0px;
+      width: 100%;
       th {
         text-align: left;
       }
-      width: 100%;
       td,
       th {
         padding: 24px 0;
-        width: 25%;
       }
-
+      th:first-child{width: 30%}
+      th:nth-child(2){width: 10%}
+      th:nth-child(3){width: 15%; min-width: 180px}
+      th:nth-child(4){width: 15%}
+      th:nth-child(5){width: 30%}
       tbody {
         td {
           border-top: solid 2px #dbdbdb !important;
@@ -630,6 +589,8 @@ export default {
         border: solid 0.5px #818080;
         font-family: "Manrope-regular";
         font-size: 16px;
+        max-width: 120px;
+        margin: 0 16px;
       }
     }
   }
@@ -656,6 +617,7 @@ export default {
       font-family: "Manrope-Bold";
     }
   }
+
   .additional-request-tag {
     margin-left: 20px;
     margin-bottom: 10px;
@@ -692,11 +654,15 @@ export default {
   }
   .anything-else-section {
     padding: 30px 0;
-    border-top: solid 1px #b7b7b7;
   }
   .checkbox-label-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
     img {
-      margin-top: -5px;
+      margin-right: 5px;
+      max-width: 25px;
+      max-height: 25px;
     }
     margin-left: 10px;
     margin-right: 50px;
@@ -709,7 +675,7 @@ export default {
     border-radius: 3px;
   }
   .multiple-selection {
-    width: 300px;
+    width: 370px;
     display: inline-block;
     height: 50px;
     .multiselect__select {
@@ -719,6 +685,17 @@ export default {
       height: 50px;
       .multiselect__single {
         line-height: 30px;
+      }
+      .multiselect__tags-wrap{
+        display: flex;
+        overflow: hidden;
+
+        span{
+          margin-right: 5px;
+          flex-shrink: 0;
+          font-size: 16px;
+          font-family: 'Manrope-regular';
+        }
       }
     }
     .multiselect__input {

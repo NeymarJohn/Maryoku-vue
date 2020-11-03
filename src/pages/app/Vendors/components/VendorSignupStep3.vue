@@ -613,6 +613,14 @@ export default {
           value: "equipmentrentals",
         },
         {
+          name: "Staffing and Guest Services",
+          value: "staffingandguestservices",
+        },
+        {
+          name: "Rentals",
+          value: "rentals",
+        },
+        {
           name: "Other",
           value: "Other",
         },
@@ -792,14 +800,14 @@ export default {
               name: "Number of breaks",
               type: Number,
             },
-            {
-              name: "Additional requirements from venue",
-              type: String,
-            },
-            {
-              name: "Power supply needs",
-              type: String,
-            },
+            // {
+            //   name: "Additional requirements from venue",
+            //   type: String,
+            // },
+            // {
+            //   name: "Power supply needs",
+            //   type: String,
+            // },
             {
               name: "Flexible to different dress codes",
               type: Boolean,
@@ -1255,9 +1263,18 @@ export default {
   mounted() {
     console.log("test");
     this.religions.forEach((religion) => {
-      this.$http.get(religion.url).then((res) => {
-        console.log(res);
-      });
+      this.$http
+        .get(religion.url, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            Authorization: "",
+            Referer: "*",
+            "Content-Type": "jsonp",
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        });
     });
     if (this.vendor.selectedWeekdays) {
       if (this.vendor.selectedWeekdays.length > 0) {
@@ -1552,7 +1569,7 @@ export default {
               list-style: none;
               padding: 0;
               display: grid;
-              grid-template-columns: 30% 25% 20% 20%;
+              grid-template-columns: 30% 25% 25% 20%;
               li {
                 margin-bottom: 1rem;
                 cursor: pointer;
