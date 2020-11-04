@@ -10,7 +10,10 @@
               </span>
         </th>
         <th>
-          <div class="text-center">How Many?</div>
+          <div class="text-center">Size</div>
+        </th>
+        <th>
+          <div class="text-center mr-20">How Many?</div>
         </th>
         <th></th>
         <th></th>
@@ -23,14 +26,8 @@
               :key="index"
       >
         <td>
-          <div>{{ service.item }}
+          <div style="padding: 10px 0" >{{ service.item }}
             <div v-if="service.type === 'select'">
-              <!--<entertainment-services-selector-->
-              <!--:service="service"-->
-              <!--:key="index"-->
-              <!--@change=handleChangeItem-->
-              <!--&gt;-->
-              <!--</entertainment-services-selector>-->
               <multiselect
                       v-model="service.value"
                       :options="service.options"
@@ -38,18 +35,30 @@
                       :clear-on-select="false"
                       :searchable="false"
                       :multiple="true"
+                      :taggable="true"
                       tag-placeholder="Add this as new tag"
                       placeholder="Select the services"
                       class="multiple-selection small-selector"
                       @select="handleChangeItem(service.item, 'select', $event)"
-                      @remove="handleChangeItem(service.item, 'remove', $event)"
-              ></multiselect>
+                      @remove="handleChangeItem(service.item, 'remove', $event)">
+                <template slot="tag" slot-scope="{option}">
+                  <span>
+                    {{option + (service.value.indexOf(option) === service.value.length - 1 ? '' : ',')}}
+                  </span>
+                </template>
+              </multiselect>
             </div>
           </div>
         </td>
-        <td>
+        <td class="text-center">
+          <div v-if="service.type === 'single-selection'" style="padding: 10px 0px">&nbsp;</div>
           <template v-if="service.qtyEnabled">
-            <input class="quantity-input" type="number" v-model="service.defaultQty" />
+            <input class="quantity-input" placeholder="Cm" type="number" v-model="service.size" />
+          </template>
+        </td>
+        <td class="text-center">
+          <template v-if="service.qtyEnabled">
+            <input class="quantity-input" placeholder="QTY" type="number" v-model="service.defaultQty" />
             <span v-if="service.hint">
                         <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
                         <md-tooltip md-direction="bottom">{{ service.hint }}</md-tooltip>
@@ -70,7 +79,7 @@
           </div>
         </td>
         <td>
-          <div v-if="service.type !== 'select'" class="condition">
+          <div class="condition">
             <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="service.mustHave" :value="true"
             >Must Have</md-checkbox
             >
@@ -90,16 +99,14 @@
         <h4>Additional Requests</h4>
         <div>Would you like to add one of those items?</div>
       </div>
-      <div>
-        <div
-                class="additional-request-tag"
-                v-for="(service, index) in services.filter((item) => !item.isSelected && item.visible)"
-                :key="index"
-                @click="addRequirement(service)"
-        >
-          {{ service.item }}
-          <md-icon class="icon color-red">add_circle</md-icon>
-        </div>
+      <div
+              class="additional-request-tag"
+              v-for="(service, index) in services.filter((item) => !item.isSelected && item.visible)"
+              :key="index"
+              @click="addRequirement(service)"
+      >
+        {{ service.item }}
+        <md-icon class="icon color-red">add_circle</md-icon>
       </div>
     </div>
   </div>
@@ -130,6 +137,12 @@ export default {
     return {
       services: [],
       anythingElse: this.note,
+      value: [],
+      options: [
+        { name: 'Vue.js', code: 'vu' },
+        { name: 'Javascript', code: 'js' },
+        { name: 'Open Source', code: 'os' }
+      ]
     };
   },
   methods: {
@@ -137,17 +150,17 @@ export default {
       this.services = [];
       let checked = this.requirements['multi-selection'][0].options.filter(ms => ms.selected);
 
-      checked.map(ch => {
 
+      checked.map(ch => {
           let options = [];
           let value = [];
           this.requirements['Services'].map(sv => {
-            if(sv.subCategory && (sv.subCategory.trim() === ch.name.trim() || sv.subCategory.trim().indexOf(ch.name.trim()) !== -1)) {
+            if(sv.subCategory && (sv.subCategory.trim() === ch.name.trim())) {
               options.push(sv.item);
               if(sv.isSelected) value.push(sv.item);
             }
           })
-          this.services.push({item: ch.name, isSelected: ch.selected, type: 'select', options, value});
+          this.services.push({item: ch.name, isSelected: ch.selected, type: 'select', options, value, mustHave:false});
 
 
       })
@@ -157,7 +170,6 @@ export default {
           this.services.push(sv);
         }
       })
-      console.log("entertainment.getService", this.requirements, this.services);
     },
     addRequirement(service) {
       const index = this.services.findIndex((it) => it.item == service.item);
@@ -178,9 +190,7 @@ export default {
       });
       this.requirements['Services'].map(it => {
         if(it.subCategory && it.subCategory.trim() === service.item.trim()){
-          service.options.map(op => {
-            if(op.label === it.item) it.isSelected = false;
-          })
+          it.isSelected = false;
         }
       });
 
@@ -188,8 +198,9 @@ export default {
     },
     handleChangeItem(cat, action, e){
       this.requirements['Services'].map(it => {
-        if(it.subCategory && it.subCategory.trim() === cat.trim() && it.item === e){
+        if(it.item === e){
           it.isSelected = action === 'select';
+          it.mustHave = action === 'select';
         }
       });
 
@@ -202,7 +213,6 @@ export default {
   watch: {
     requirements:{
      handler(newVal, oldVal){
-       // console.log("props.change", newVal);
        this.getServicesRequirements();
      },
      deep: true,
