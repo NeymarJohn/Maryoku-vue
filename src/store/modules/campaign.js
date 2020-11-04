@@ -18,6 +18,7 @@ const defaultCampaignData = {
         coverImage: `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Images/RSVP2.png`,
         campaignStatus: "EDITING",
         allowOnline: false,
+        logoUrl: "",
         visibleSettings: {
             showWearingGuide: true,
             showKnowledge: true,
@@ -50,6 +51,7 @@ const defaultCampaignData = {
     COMING_SOON: {
         title: "Event Name",
         description: "",
+        logoUrl: "",
         coverImage: `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Images/ComingSoon${(new Date().getDate() %
             10) +
             1}.png`,
@@ -63,6 +65,7 @@ const defaultCampaignData = {
     FEEDBACK: {
         name: "Event Name",
         description: "",
+        logoUrl: "",
         campaignStatus: "EDITING",
         visibleSettings: {
             showImages: true,

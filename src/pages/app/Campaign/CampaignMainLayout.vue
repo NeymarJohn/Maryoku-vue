@@ -123,7 +123,12 @@
             <countdown :info="{ ...campaignTabs[3], ...campaignInfo }" ref="countdown"></countdown>
           </template>
         </collapse-panel>
-        <countdown v-else :info="{ ...campaignTabs[3], ...campaignInfo }" ref="countdown"></countdown>
+        <countdown
+          v-else
+          :info="{ ...campaignTabs[3], ...campaignInfo }"
+          ref="countdown"
+          class="white-card"
+        ></countdown>
       </template>
 
       <template v-if="selectedTab == 4">
@@ -135,7 +140,7 @@
             <feedback :info="{ ...campaignTabs[4], ...campaignInfo }" ref="feedback"></feedback>
           </template>
         </collapse-panel>
-        <feedback v-else :info="{ ...campaignTabs[4], ...campaignInfo }" ref="feedback"></feedback>
+        <feedback v-else :info="{ ...campaignTabs[4], ...campaignInfo }" ref="feedback" class="white-card"></feedback>
       </template>
 
       <delivery-settings

@@ -182,7 +182,7 @@
         <div class="saved-it-modal__header">
           <h3><img :src="`${proposalIconsUrl}Asset 587.svg`" /> Time Is Up!</h3>
           <div class="header-description">
-            The deadline for submitting this prposal has passed. But no worries! We weill be with you soon with the next
+            The deadline for submitting this prposal has passed. But no worries! We will be with you soon with the next
             one.
           </div>
         </div>
@@ -376,6 +376,9 @@ export default {
       if (this.step > initStep) {
         this.step = this.step - 1;
       } else {
+        const vendorId = this.$route.params.vendorId;
+        const requestId = this.$route.params.id;
+        this.$router.push(`/vendors/${vendorId}/proposal-request/${requestId}`);
       }
       // this.$root.$emit("prev-step-vendor-proposal");
       // this.$root.$emit("clear-slide-pos");

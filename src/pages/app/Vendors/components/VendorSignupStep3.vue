@@ -457,7 +457,6 @@ import Vendors from "@/models/Vendors";
 import Icon from "@/components/Icon/Icon.vue";
 import VendorServiceItem from "./VendorServiceItem.vue";
 import VSignupAddRules from "@/components/Inputs/VSignupAddRules.vue";
-import TimePicker from "@/components/Inputs/TimePicker";
 // import VSignupTimeSelect from '@/components/Inputs/VSignupTimeSelect.vue'
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import { FunctionalCalendar } from "vue-functional-calendar";

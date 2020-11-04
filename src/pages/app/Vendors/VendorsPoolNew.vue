@@ -4,20 +4,23 @@
       <div class="header-title">
         <h3>Our Vendors List</h3>
         <p>
-          Millions of companies turn to Maryoku as their trusted event resource, with the largest directory of local
-          event
-          <br />vendors. Easily find the best event services in your area with detailed vendor reviews for your event.
+          Millions of companies turn to Maryoku as their trusted event resource,
+          with the largest directory of local event
+          <br />vendors. Easily find the best event services in your area with
+          detailed vendor reviews for your event.
         </p>
       </div>
       <div class="header-actions">
-        <div class="form-group search-field d-flex justify-content-start align-center">
+        <div
+          class="form-group search-field d-flex justify-content-start align-center"
+        >
           <md-icon>search</md-icon>
           <input class="form-control" placeholder="Search" />
         </div>
       </div>
     </div>
 
-    <div class="filters-section d-flex justify-content-start font-size-16">
+    <div class="filters-section d-flex justify-content-start">
       <div class="filters-section__label">Filter By</div>
       <div
         class="filters-section__item"
@@ -30,7 +33,10 @@
           <md-icon>keyboard_arrow_down</md-icon>
         </div>
         <div class="expanded-section" v-if="filter.expand">
-          <div class="categories-filters-section d-flex" v-if="filter.title.toLowerCase() == 'category'">
+          <div
+            class="categories-filters-section d-flex"
+            v-if="filter.title.toLowerCase() == 'category'"
+          >
             <div class="main-categories-filters">
               <div
                 class="main-filters-item text-center"
@@ -49,14 +55,20 @@
             <div class="more-categories-filters">
               <div class="section-title">More</div>
               <ul class="columns-2">
-                <li v-for="(moreItem, moreItemIndex) in filter.moreCategories" :key="moreItemIndex">
+                <li
+                  v-for="(moreItem, moreItemIndex) in filter.moreCategories"
+                  :key="moreItemIndex"
+                >
                   <a href>{{ moreItem }}</a>
                 </li>
               </ul>
             </div>
           </div>
 
-          <div class="location-filters-section d-flex" v-if="filter.title.toLowerCase() == 'location'">
+          <div
+            class="location-filters-section d-flex"
+            v-if="filter.title.toLowerCase() == 'location'"
+          >
             <div class="search-field-section">
               <div class="form-group">
                 <input placeholder="Search by City, State, Country…" />
@@ -68,14 +80,20 @@
             <div class="more-categories-filters">
               <div class="section-title">Nearby Locations</div>
               <ul>
-                <li v-for="(locationItem, locationItemIndex) in filter.locations" :key="locationItemIndex">
+                <li
+                  v-for="(locationItem, locationItemIndex) in filter.locations"
+                  :key="locationItemIndex"
+                >
                   <a href>{{ locationItem }}</a>
                 </li>
               </ul>
             </div>
           </div>
 
-          <div class="capacity-filters-section d-flex" v-if="filter.title.toLowerCase() == 'capacity'">
+          <div
+            class="capacity-filters-section d-flex"
+            v-if="filter.title.toLowerCase() == 'capacity'"
+          >
             <md-radio
               v-model="filters.capacity"
               :value="capacityItem"
@@ -85,7 +103,10 @@
             >
           </div>
 
-          <div class="rank-filters-section d-flex justify-content-end" v-if="filter.title.toLowerCase() == 'rank'">
+          <div
+            class="rank-filters-section d-flex justify-content-end"
+            v-if="filter.title.toLowerCase() == 'rank'"
+          >
             <div class="rank-item">
               <md-checkbox v-model="filters.rank[0]">
                 <div class="label-title">5 Stars</div>
@@ -162,10 +183,47 @@
           </div>
         </div>
       </div>
-      <div class="filters-section__reset"><md-icon>refresh</md-icon>Reset Filters</div>
+      <div class="filters-section__reset">
+        <md-icon>refresh</md-icon>Reset Filters
+      </div>
     </div>
-    <div class="md-layout-item md-size-100 clear-margins" style="padding: 0 1em 0 3em !important">
-      <vue-element-loading :active="working" spinner="ring" color="#FF547C" background-color="transparent" />
+
+    <!--        <div class="md-layout-item md-size-100" style="justify-content: space-between;">-->
+    <!--            <div class="md-group" style="">-->
+    <!--                <md-button-->
+    <!--                    class="md-xs md-icon-button"-->
+    <!--                    :class="[-->
+    <!--            {'md-white': view === 'list'},-->
+    <!--            {'md-info': view === 'grid'},-->
+    <!--          ]"-->
+    <!--                    @click.prevent="changeView('grid')">-->
+    <!--                    <md-icon>view_module</md-icon>-->
+    <!--                </md-button>-->
+    <!--                <md-button-->
+    <!--                    class="md-xs md-icon-button"-->
+    <!--                    :class="[-->
+    <!--            {'md-white': view === 'grid'},-->
+    <!--            {'md-info': view === 'list'},-->
+    <!--          ]"-->
+    <!--                    @click.prevent="changeView('list')">-->
+    <!--                    <md-icon>view_list</md-icon>-->
+    <!--                </md-button>-->
+    <!--            </div>-->
+    <!--            <div class="pull-right" style="margin: 0 1px;">-->
+    <!--                <md-button style="display: inline-block;" class="md-info md-sm" @click="addNewVendor">Add Vendor</md-button>-->
+    <!--                <md-button style="display: inline-block;" class="md-purple md-sm" @click="openUploadModal">Import Vendors From Spreadsheet</md-button>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <div
+      class="md-layout-item md-size-100 clear-margins"
+      style="padding: 0 1em 0 3em !important"
+    >
+      <vue-element-loading
+        :active="working"
+        spinner="ring"
+        color="#FF547C"
+        background-color="transparent"
+      />
       <vendors-grid
         v-if="view === 'grid'"
         :buildingBlocksList="buildingBlocksList"
@@ -183,14 +241,6 @@
         @open-upload-modal="openUploadModal"
       />
     </div>
-    <div class="text-center width-100 mb-60 mt-50">
-      <div style="width: 400px">
-        <line-progress-bar></line-progress-bar>
-      </div>
-      <md-button class="md-simple md-black maryoku-btn md-outlined" @click="loadMoreVendor"
-        ><span style="padding: 5px 40px" class="font-size-20">Load More</span></md-button
-      >
-    </div>
     <upload-modal ref="uploadModal"></upload-modal>
   </div>
 </template>
@@ -201,7 +251,6 @@ import companyForm from "./Form/companyForm.vue";
 import UploadModal from "./ImportVendors";
 import VendorsGrid from "./VendorsGridNew";
 import VendorsList from "./VendorsList";
-import LineProgressBar from "@/components/ProgressBar/Line";
 
 import SideBar from "../../../components/SidebarPlugin/NewSideBar";
 import { Modal } from "@/components";
@@ -217,7 +266,6 @@ export default {
     VendorsGrid,
     VendorsList,
     SideBar,
-    LineProgressBar,
   },
   props: {
     inPanel: Boolean,
@@ -227,13 +275,14 @@ export default {
       working: true,
       view: "grid", // {grid, list}
       vendorsList: [],
-      page: 1,
       buildingBlocksList: [],
       ratings: [1, 2, 3, 4, 5],
       searchTerm: "",
       event: {},
-      categoriesIconURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
-      menuIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
+      categoriesIconURL:
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      menuIconsURL:
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
       filtersItems: [
         {
           title: "Category",
@@ -286,7 +335,13 @@ export default {
         {
           title: "Location",
           expand: false,
-          locations: ["Manhattan", "New Jersey", "Brooklyn", "Long Island", "Queens"],
+          locations: [
+            "Manhattan",
+            "New Jersey",
+            "Brooklyn",
+            "Long Island",
+            "Queens",
+          ],
         },
         {
           title: "Capacity",
@@ -322,27 +377,21 @@ export default {
           value: parentBuildingBlock.value,
         });
       });
-      this.loadVendors();
+
       this.buildingBlocksList = list;
       console.log("vendor-pool.categories", list);
+      new Vendors()
+        .limit(1000)
+        .get()
+        .then((vendors) => {
+          console.log("vendor-pool.vendors", vendors);
+          this.vendorsList = vendors[0].results;
+          this.working = false;
+        });
     });
     // })
   },
   methods: {
-    loadVendors() {
-      new Vendors()
-        .limit(8)
-        .page(this.page)
-        .get()
-        .then((vendors) => {
-          this.vendorsList = [...this.vendorsList, ...vendors[0].results];
-          this.working = false;
-        });
-    },
-    loadMoreVendor() {
-      this.page = this.page + 1;
-      this.loadVendors();
-    },
     changeView(view) {
       this.view = view;
     },
@@ -392,8 +441,10 @@ export default {
       let indexOfExpandedItem = _.findIndex(this.filtersItems, {
         expand: true,
       });
-      if (indexOfExpandedItem !== -1) this.filtersItems[indexOfExpandedItem].expand = false;
-      this.filtersItems[index].expand = indexOfExpandedItem !== index ? true : false;
+      if (indexOfExpandedItem !== -1)
+        this.filtersItems[indexOfExpandedItem].expand = false;
+      this.filtersItems[index].expand =
+        indexOfExpandedItem !== index ? true : false;
     },
   },
   computed: {},

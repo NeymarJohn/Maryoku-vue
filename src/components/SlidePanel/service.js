@@ -2,8 +2,8 @@ import Promise from 'promise-polyfill'
 
 import eventBus from './eventBus'
 
-function generateGuid () {
-  function s4 () {
+function generateGuid() {
+  function s4() {
     return Math.floor((1 + Math.random()) * 0x10000)
       .toString(16)
       .substring(1)
@@ -13,7 +13,7 @@ function generateGuid () {
 }
 
 class PanelResult {
-  constructor (id, promise, panelOptions) {
+  constructor(id, promise, panelOptions) {
     if (!id) throw new Error('id')
     if (!promise) throw new Error('promise')
     if (!panelOptions) throw new Error('panelOptions')
@@ -23,7 +23,7 @@ class PanelResult {
     this._panelOptions = panelOptions
   }
 
-  get promise () {
+  get promise() {
     return this._promise
   }
 
@@ -31,13 +31,13 @@ class PanelResult {
    * @param {Object} [panel]
    * @param {Object} [panel.props] - any props you want to update
    */
-  show (panel = {}) {
+  show(panel = {}) {
     const panelOptions = Object.assign(this._panelOptions, panel)
 
     return showPanel(panelOptions, this._id)
   }
 
-  hide () {
+  hide() {
     const panelOptions = Object.assign({
       id: this._id
     }, this._panelOptions)
@@ -46,7 +46,7 @@ class PanelResult {
   }
 }
 
-function showPanel (panelOptions, existingId) {
+function showPanel(panelOptions, existingId) {
   if (!panelOptions) throw new Error('panelOptions is required')
   if (!panelOptions.component) throw new Error('panelOptions.component is required')
 
@@ -78,7 +78,7 @@ function showPanel (panelOptions, existingId) {
   return panelResult
 }
 
-function showPanelStack (panelOptions) {
+function showPanelStack(panelOptions) {
   if (!panelOptions || !panelOptions.length) throw new Error('panelOptions must be an array')
 
   const panelResults = panelOptions.map((panelOption) => {
