@@ -157,8 +157,15 @@
     <modal v-if="savedItModal" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="saved-it-modal__header">
-          <h3><img :src="`${proposalIconsUrl}Asset 588.svg`" />Saved It!</h3>
-          <div class="header-description text-center">You can return to it till the deadline!</div>
+          <h3 v-if="isTimeUp"><img :src="`${proposalIconsUrl}Asset 587.svg`" /> Time Is Up!</h3>
+          <h3 v-else><img :src="`${proposalIconsUrl}Asset 588.svg`" />Saved It!</h3>
+          <div v-if="isTimeUp" class="header-description">
+            The deadline for submitting this prposal has passed. But no worries! We weill be with you soon with the next
+            one.
+          </div>
+          <div v-else class="header-description" :class="[{ 'text-center': !isTimeUp }]">
+            You can return to it till the deadline!
+          </div>
         </div>
         <button class="close" @click="hideModal()">
           <img :src="`${proposalIconsUrl}Group 3671 (2).svg`" />
@@ -166,40 +173,18 @@
       </template>
       <template slot="body">
         <div class="saved-it-modal__body">
-          <div class="time-cont">
+          <div v-if="isTimeUp" class="time-cont">
+            <vendor-bid-time-counter :days="0" :hours="0" :minutes="0" :seconds="0" />
+          </div>
+          <div v-else class="time-cont">
             <vendor-bid-time-counter :days="4" :hours="0" :minutes="0" :seconds="0" />
           </div>
         </div>
       </template>
       <template slot="footer">
         <div class="saved-it-modal__footer">
-          <button class="cool" @click="hideModal()">Cool, Thanks</button>
-        </div>
-      </template>
-    </modal>
-    <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
-      <template slot="header">
-        <div class="saved-it-modal__header">
-          <h3><img :src="`${proposalIconsUrl}Asset 587.svg`" /> Time Is Up!</h3>
-          <div class="header-description">
-            The deadline for submitting this prposal has passed. But no worries! We will be with you soon with the next
-            one.
-          </div>
-        </div>
-        <button class="close" @click="hideModal()">
-          <img :src="`${proposalIconsUrl}Group 3671 (2).svg`" />
-        </button>
-      </template>
-      <template slot="body">
-        <div class="saved-it-modal__body">
-          <div class="time-cont">
-            <vendor-bid-time-counter :days="0" :hours="0" :minutes="0" :seconds="0" />
-          </div>
-        </div>
-      </template>
-      <template slot="footer">
-        <div class="saved-it-modal__footer">
-          <md-button class="md-red maryoku-btn" @click="hideModal()">Ok, Thanks</md-button>
+          <button v-if="isTimeUp" class="cool" @click="hideModal()">Ok, Thanks</button>
+          <button v-else class="cool" @click="hideModal()">Cool, Thanks</button>
         </div>
       </template>
     </modal>
@@ -247,7 +232,6 @@ export default {
       proposalRequest: null,
       vendorCategory: null,
       event: "",
-      openedModal: "",
     };
   },
   created() {
@@ -289,7 +273,6 @@ export default {
   },
   methods: {
     ...mapActions("vendorProposal", ["getVendor", "getProposalRequest"]),
-
     getProposal(id) {
       ProposalRequest.find(id)
         .then((resp) => {})
@@ -351,7 +334,6 @@ export default {
     hideModal() {
       this.fullDetailsModal = false;
       this.savedItModal = false;
-      this.openedModal = "";
     },
     saveProposal() {
       this.$root.$emit("next-step-vendor-proposal");
@@ -442,12 +424,9 @@ export default {
     },
     getRemainingTime() {
       if (!this.proposalRequest) return { days: 0, hours: 0, mins: 0, seconds: 0 };
+      console.log(this.proposalRequest.expiredTime);
+      console.log(new Date().getTime());
       let remainingMs = this.proposalRequest.expiredTime - new Date().getTime();
-      if (remainingMs <= 0) {
-        this.isTimeUp = true;
-        this.openedModal = "timeIsUp";
-        return { days: 0, hours: 0, mins: 0, seconds: 0 };
-      }
       const days = Math.floor(remainingMs / 24 / 3600 / 1000);
       remainingMs = remainingMs - days * 24 * 3600 * 1000;
       const hours = Math.floor(remainingMs / 3600 / 1000);

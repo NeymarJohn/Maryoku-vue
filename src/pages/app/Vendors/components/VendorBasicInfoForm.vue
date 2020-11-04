@@ -142,12 +142,7 @@ export default {
 <style lang="scss" scoped>
 .vendor-basic-info-form-wrapper {
   font-family: Manrope-Regular, sans-serif;
-  .vendor-address-editor {
-    input {
-      font-size: 16px;
-      font-family: "Manrope-Regular";
-    }
-  }
+
   .inside-container {
     display: flex;
     color: #050505;
