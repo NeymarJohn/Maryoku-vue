@@ -118,7 +118,6 @@ export default {
       {
         question: "What did you like or dislike about this event?",
         showQuestion: true,
-        label: "General",
         rank: 0,
         icon: "",
       },

@@ -363,4 +363,7 @@
 
 .md-outlined {
   border: solid 1px #F51355;
+  &.md-black {
+    border: solid 1px #050505;
+  }
 }

@@ -46,6 +46,7 @@ export default {
   font: normal 16px Manrope-Regular, sans-serif;
   width: 100%;
   input {
+    font: normal 16px Manrope-Regular, sans-serif;
     width: 100%;
   }
 }

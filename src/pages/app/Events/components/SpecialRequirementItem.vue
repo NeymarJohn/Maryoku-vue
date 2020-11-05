@@ -15,7 +15,7 @@
               @change="handleItem(index)"
       >
                 <div class="checkbox-label-wrapper">
-                  <img :src="getIcon(item.item)" />
+                  <img :src="getIcon(item.item)"/>
                   {{ item.item }}
                 </div>
       </md-checkbox>
@@ -54,15 +54,15 @@ export default {
     getIcon(name){
       let icon = null;
       if ( name === 'All Indoor' ) {
-        icon = 'Requirements/elderly-people-dark.svg';
+        icon = 'Requirements/All indoor.svg';
       } else if ( name === 'Pregnant women' ) {
         icon = 'Requirements/pregnant-women-dark.svg';
       } else if ( name === 'All Outdoor' ) {
-        icon = 'Requirements/elderly-people-dark.svg';
+        icon = 'Requirements/All outdoor.svg';
       } else if ( name === 'Accessible Bathrooms' ) {
-        icon = 'Requirements/pregnant-women-dark.svg';
+        icon = 'Requirements/Accessible bathroom.svg';
       } else if ( name === 'Accessibility for people with disabilities' ) {
-        icon = 'Requirements/disabled-person-dark.svg';
+        icon = 'Requirements/Accessible for people with disabilities.svg';
       } else if ( name === 'Hotel accommodations within walking distance' ) {
         icon = 'Requirements/disabled-person-dark.svg';
       } else if ( name === 'Shopping centers' ) {

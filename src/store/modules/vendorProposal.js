@@ -13,10 +13,51 @@ const state = {
   taxes: {},
   legalDocs: {},
   wizardStep: 0,
-  initStep: 0
-
+  initStep: 0,
+  additionalServices: [],
+  attachments: {},
+  bundleDiscount: {
+    isApplied: false,
+    services: [],
+    discountPercentage: 0,
+    discountAmount: 0
+  }
 }
-const getters = {}
+const getters = {
+  mainTotalPrice(state) {
+    const mainService = state.vendor.eventCategory.key
+    if (!state.proposalServices[mainService]) return 0
+    const sumPrice = state.proposalServices[mainService].reduce((s, item) => {
+      return s + item.requirementValue * item.price;
+    }, 0);
+    let taxRate = state.taxes[mainService];
+    let discount = state.discounts[mainService] || 0
+    if (!taxRate) taxRate = 0;
+    let total = sumPrice - (sumPrice * discount) / 100;
+    const tax = (total * taxRate) / 100;
+    const result = total - tax
+    return result;
+  },
+  pricesByCategory(state, getters) {
+    const prices = {}
+    state.additionalServices.forEach(service => {
+      if (!state.proposalServices[service]) {
+        prices[service] = 0
+      }
+      const sumPrice = state.proposalServices[service].reduce((s, item) => {
+        return s + item.requirementValue * item.price;
+      }, 0);
+      let taxRate = state.taxes[service];
+      let discount = state.discounts[service] || 0
+      if (!taxRate) taxRate = 0;
+      let total = sumPrice - (sumPrice * discount) / 100;
+      const tax = (total * taxRate) / 100;
+      prices[service] = total - tax;
+    })
+    prices[state.vendor.eventCategory.key] = getters.mainTotalPrice
+    return prices
+  }
+}
 const mutations = {
   setVendor: (state, vendor) => {
     state.vendor = vendor
@@ -41,6 +82,16 @@ const mutations = {
   },
   setTax: (state, { category, tax }) => {
     Vue.set(state.taxes, category, tax);
+  },
+  setAdditionalServices: (state, services) => {
+    Vue.set(state.additionalServices, services)
+  },
+  removeCategoryFromAdditional: (state, category) => {
+    const index = state.additionalServices.findIndex((item) => item == category);
+    state.additionalServices.splice(index, 1);
+  },
+  setBundleDiscount: (state, bundleDiscount) => {
+    state.bundleDiscount = bundleDiscount
   }
 }
 const actions = {
