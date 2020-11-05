@@ -4,8 +4,11 @@ import CalendarEvent from "@/models/CalendarEvent";
 const defaultCampaignData = {
     SAVING_DATE: {
         title: "Event Name",
-        description: "",
-        coverImage: `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Images/SAVE+THE+DATE.jpg`,
+        description:
+            "Clear your schedule and get ready to mingle! the greatest event of the year is coming up! more details are yet to come, but we can already promise you it's going to be an event to remember. be sure to mark the date on your calendar. you can do it using this link: (google calendar link). see ya soon",
+        coverImage: `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Headers/save-the-date${(new Date().getDate() %
+            2) +
+            1}.png`,
         logoUrl: "",
         campaignStatus: "EDITING",
         visibleSettings: {
@@ -15,7 +18,8 @@ const defaultCampaignData = {
     RSVP: {
         title: "Event Name",
         description: "",
-        coverImage: `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Images/RSVP2.png`,
+        coverImage: `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Headers/rsvp${(new Date().getDate() % 2) +
+            1}.png`,
         campaignStatus: "EDITING",
         allowOnline: false,
         logoUrl: "",
@@ -52,8 +56,8 @@ const defaultCampaignData = {
         title: "Event Name",
         description: "",
         logoUrl: "",
-        coverImage: `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Images/ComingSoon${(new Date().getDate() %
-            10) +
+        coverImage: `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Headers/coming-soon${(new Date().getDate() %
+            4) +
             1}.png`,
         campaignStatus: "EDITING",
         visibleSettings: {
@@ -180,7 +184,7 @@ const actions = {
                     const eventName = event.concept ? event.concept.name : "Event Name";
                     const defaultData = {
                         title: eventName,
-                        description: "",
+                        // description: "",
                         logoUrl,
                     };
                     if (!campaigns["SAVING_DATE"]) {

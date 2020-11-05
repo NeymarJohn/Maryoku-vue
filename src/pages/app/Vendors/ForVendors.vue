@@ -1,18 +1,12 @@
 <template>
-  <vue-element-loading v-if="!vendor" :active="!!vendor" spinner="ring" color="#FF547C" />
-  <div class="for-vendor-wrapper" v-else>
+  <div class="for-vendor-wrapper">
     <h4>So what are the details?</h4>
     <div class="main-cont">
       <div class="one-row">
         <div class="left-side">
-          <h3 v-if="proposalRequest">
-            {{
-              proposalRequest.eventData.concept
-                ? proposalRequest.eventData.concept.name
-                : proposalRequest.eventData.eventType
-            }}
+          <h3>
+            {{ proposalRequest ? proposalRequest.eventData.title : "No Event Data" }}
           </h3>
-          <h3 v-else>No Event Data</h3>
 
           <p v-if="proposalRequest">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
@@ -54,15 +48,15 @@
               <li>
                 <img :src="`${iconsUrl}Path 1942.svg`" />
                 <strong>Type:</strong>
-                {{ proposalRequest && proposalRequest.eventData.occasion ? proposalRequest.eventData.occasion : "-" }}
+                {{ proposalRequest ? proposalRequest.eventData.occasion : "-" }}
               </li>
               <li>
                 <img :src="`${iconsUrl}Path 1383.svg`" />
                 <strong>Invited:</strong>
-                {{ proposalRequest && proposalRequest.eventData.guestType ? proposalRequest.eventData.guestType : "-" }}
+                {{ proposalRequest ? proposalRequest.eventData.participantsType : "-" }}
               </li>
               <li>
-                <div class="new-time" v-if="vendor.eventCategory.key == 'venuerental'">
+                <div class="new-time">
                   Already Booked?
                   <a @click="showChooseDateModal()">Suggest New time</a>
                 </div>
@@ -74,7 +68,7 @@
       <hr />
       <vendor-budget-list
         :title="`Budget`"
-        :description="`Usually budget is flexible and could change according to needs`"
+        :description="`Usually budget is flexible and could chane accordig to needs`"
         :proposalRequest="proposalRequest"
         :requirements="requiredServices"
       />
@@ -193,7 +187,7 @@
                   >I'm fully booked around the date of the event</span
                 >
               </md-checkbox>
-              <a class="another-date" @click="showChooseDateModal()" v-if="vendor.eventCategory.key == 'venuerental'"
+              <a class="another-date" @click="showChooseDateModal()" v-if="vendor.category == 'venue'"
                 >Suggest Another Date</a
               >
               <a class="another-date" @click="showChooseDateModal()" v-else>Suggest Another Time</a>
@@ -435,20 +429,19 @@ export default {
     console.log(this.markedDataRange);
     this.$root.$on("go-to-proposal-form", () => {
       if (this.isAgreed) {
-        this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
-        // if (this.proposalRequest) {
-        //   this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
-        // } else {
-        //   this.proposalRequest = new ProposalRequest({
-        //     id: this.$route.params.id,
-        //   });
-        //   this.$router.push({
-        //     path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
-        //     props: {
-        //       proposalRequest: this.proposalRequest,
-        //     },
-        //   });
-        // }
+        if (this.proposalRequest) {
+          this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
+        } else {
+          this.proposalRequest = new ProposalRequest({
+            id: this.$route.params.id,
+          });
+          this.$router.push({
+            path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
+            props: {
+              proposalRequest: this.proposalRequest,
+            },
+          });
+        }
       } else {
         window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
         this.conditionTooltip = true;
@@ -464,20 +457,19 @@ export default {
   methods: {
     goToForm() {
       if (this.isAgreed) {
-        this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
-        // if (this.proposalRequest) {
-        //   this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
-        // } else {
-        //   this.proposalRequest = new ProposalRequest({
-        //     id: this.$route.params.id,
-        //   });
-        //   this.$router.push({
-        //     path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
-        //     props: {
-        //       proposalRequest: this.proposalRequest,
-        //     },
-        //   });
-        // }
+        if (this.proposalRequest) {
+          this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
+        } else {
+          this.proposalRequest = new ProposalRequest({
+            id: this.$route.params.id,
+          });
+          this.$router.push({
+            path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
+            props: {
+              proposalRequest: this.proposalRequest,
+            },
+          });
+        }
       } else {
         window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
         this.conditionTooltip = true;
