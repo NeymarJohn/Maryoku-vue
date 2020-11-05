@@ -253,7 +253,7 @@
             <a @click="showReferModal()">Refer Another Vendor</a>
             <img class="question" :src="`${iconsUrl}Group 5522.svg`" />
           </div>
-          <button class="cool" @click="declineRequest()">Send</button>
+          <button class="cool" @click="showSorryModal()">Send</button>
         </div>
       </template>
     </modal>
@@ -528,21 +528,6 @@ export default {
       } else {
         this.amPack.start = "AM";
       }
-    },
-    declineRequest() {
-      new ProposalRequest({ id: this.proposalRequest.id, declineMessage: "I don't want it" }).save().then((res) => {
-        console.log(res);
-        swal({
-          title: "Thank you! ",
-          html: `We hope to see you next time.`,
-          showCancelButton: true,
-          confirmButtonClass: "md-button md-success confirm-btn-bg ",
-          cancelButtonClass: "md-button md-danger cancel-btn-bg",
-          buttonsStyling: false,
-        }).then(() => {
-          this.notBiddingModal = false;
-        });
-      });
     },
   },
   computed: {
