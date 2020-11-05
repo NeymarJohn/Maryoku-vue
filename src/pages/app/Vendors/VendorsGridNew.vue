@@ -1,6 +1,8 @@
 <template>
   <div class="md-layout md-gutter">
-    <div class="md-layout-item md-size-100 vendors-list-header d-flex justify-content-start align-center">
+    <div
+      class="md-layout-item md-size-100 vendors-list-header d-flex justify-content-start align-center"
+    >
       <div class="form-group">
         <label>Sort by</label>
         <select class="sort-by-list">
@@ -10,23 +12,28 @@
       <div class="vendors-number">{{ vendorsList.length }} Vendors:</div>
     </div>
     <div
-      class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100 md-large-size-25 md-size-25"
+      class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100 md-large-size-25 md-size-20"
       v-for="vendor in filteredVendorsList"
       :key="vendor.id"
     >
       <div class="vendor-item">
         <div
           class="vendor-image"
-          :style="`background : url(${vendorMainImage(vendor)}) center center no-repeat;`"
+          :style="`background : url(${vendorMainImage(
+            vendor,
+          )}) center center no-repeat;`"
         ></div>
         <div class="vendor-info">
-          <div class="category font-size-16">
-            <img :src="`${$iconURL}Budget+Elements/${vendor.eventCategory.icon}`" class="label-icon" />
+          <div class="category">
             {{ categoryTitle(vendor.vendorCategory, buildingBlocksList) }}
           </div>
-          <h4 class="vendor-name font-size-20">{{ vendor.companyName }}</h4>
+          <h4 class="vendor-name">{{ vendor.vendorDisplayName }}</h4>
           <div class="vendor-location">
-            {{ vendor.vendorAddressLine1 ? vendor.vendorAddressLine1.substring(0, 35) : "" }}
+            {{
+              vendor.vendorAddressLine1
+                ? vendor.vendorAddressLine1.substring(0, 35)
+                : ""
+            }}
           </div>
           <div class="vendor-review small">
             <label
@@ -41,11 +48,15 @@
             <span class="small text-gray">{{ vendor.voters }} Reviews</span>
           </div>
           <div class="about-vendor">
-            {{ vendor.about && vendor.about.company ? vendor.about.company.substring(0, 180) + " ..." : "" }}
+            {{
+              vendor.aboutUs ? vendor.aboutUs.substring(0, 180) + " ..." : ""
+            }}
           </div>
           <div class="actions">
-            <md-button class="md-rose md-outline" @click="routeToVendor(vendor.id, $event)"
-              ><span class="font-size-14">More Details</span></md-button
+            <md-button
+              class="md-rose md-outline"
+              @click="routeToVendor(vendor.id, $event)"
+              >More Details</md-button
             >
           </div>
         </div>
@@ -185,14 +196,20 @@ export default {
       this.filteredVendorsList = _.filter(this.vendorsList, (v) => {
         // let byDisplayName = v.vendorDisplayName.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
         let byCategory = v.vendorCategory
-          ? v.vendorCategory.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1
+          ? v.vendorCategory
+              .toString()
+              .toLowerCase()
+              .indexOf(this.searchQuery.toLowerCase()) > -1
           : "";
         return byCategory;
       });
     },
     isValidVendorWebsite(vendor) {
       if (vendor.vendorWebsite) {
-        return vendor.vendorWebsite.indexOf("http://") > -1 || vendor.vendorWebsite.indexOf("https://") > -1;
+        return (
+          vendor.vendorWebsite.indexOf("http://") > -1 ||
+          vendor.vendorWebsite.indexOf("https://") > -1
+        );
       }
       return false;
     },
@@ -258,10 +275,30 @@ export default {
     to(white),
     color-stop(50%, white)
   );
-  background: -moz-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
-  background: -o-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
-  background: -ms-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
-  background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+  background: -moz-linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    white 50%,
+    white
+  );
+  background: -o-linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    white 50%,
+    white
+  );
+  background: -ms-linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    white 50%,
+    white
+  );
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    white 50%,
+    white
+  );
 }
 
 .md-tooltip {

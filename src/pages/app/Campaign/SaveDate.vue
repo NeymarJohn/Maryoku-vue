@@ -117,7 +117,7 @@ export default {
       logo: null,
       logoImageData: "",
       placeHolder: placeHolder,
-      description: placeHolder,
+      description: "",
       originContent: {
         title: "",
         description: "",

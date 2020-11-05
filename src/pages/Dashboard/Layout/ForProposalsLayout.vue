@@ -407,10 +407,19 @@ export default {
   },
   computed: {
     eventDate() {
+      const suggestionDate = this.$store.state.vendorProposal.suggestionDate;
       if (!this.event) return "-";
 
       let startDate = new Date(this.event.eventStartMillis);
       let endDate = new Date(this.event.eventEndMillis);
+      if (suggestionDate && suggestionDate.length > 0) {
+        startDate = new Date(suggestionDate[0].date);
+        endDate = new Date(suggestionDate[suggestionDate.length - 1].date);
+        return `${moment(suggestionDate[0].date, "DD/MM/YYYY").format("MMM D, YYYY")} - ${moment(
+          suggestionDate[suggestionDate.length - 1].date,
+          "DD/MM/YYYY",
+        ).format("MMM D, YYYY")}`;
+      }
       return `${moment(startDate).format("MMM D, YYYY")} - ${moment(endDate).format("MMM D, YYYY")}`;
     },
     eventTime() {

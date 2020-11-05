@@ -65,6 +65,9 @@
                 <div class="new-time" v-if="vendor.eventCategory.key == 'venuerental'">
                   Already Booked?
                   <a @click="showChooseDateModal()">Suggest New time</a>
+                  <span v-if="suggestionDate">
+                    ( {{ suggestionDate[0].date }} - {{ suggestionDate[suggestionDate.length - 1].date }})</span
+                  >
                 </div>
               </li>
             </ul>
@@ -253,7 +256,7 @@
             <a @click="showReferModal()">Refer Another Vendor</a>
             <img class="question" :src="`${iconsUrl}Group 5522.svg`" />
           </div>
-          <button class="cool" @click="showSorryModal()">Send</button>
+          <button class="cool" @click="declineRequest()">Send</button>
         </div>
       </template>
     </modal>
@@ -314,7 +317,7 @@
                   :arrow-position="`space-between`"
                   :limits="limitDateRange"
                   :marked-dates="markedDataRange"
-                  v-model="date"
+                  v-model="suggestedDates"
                   ref="calendar"
                 />
               </div>
@@ -421,6 +424,7 @@ export default {
       },
       markedDataRange: [],
       today: null,
+      suggestedDates: [],
     };
   },
   mounted() {
@@ -517,6 +521,13 @@ export default {
     },
     suggestAnotherDay() {
       this.suggest = true;
+      console.log(this.suggestedDates);
+      if (this.suggestedDates.selectedDates && this.suggestedDates.selectedDates.length > 0) {
+        this.$store.commit("vendorProposal/setValue", {
+          key: "suggestionDate",
+          value: this.suggestedDates.selectedDates,
+        });
+      }
       if (this.proposalRequest) {
         this.proposalRequest.suggestedDates = new Date(this.proposalRequest.eventData.eventStartMillis);
       }
@@ -528,6 +539,21 @@ export default {
       } else {
         this.amPack.start = "AM";
       }
+    },
+    declineRequest() {
+      new ProposalRequest({ id: this.proposalRequest.id, declineMessage: "I don't want it" }).save().then((res) => {
+        console.log(res);
+        swal({
+          title: "Thank you! ",
+          html: `We hope to see you next time.`,
+          showCancelButton: true,
+          confirmButtonClass: "md-button md-success confirm-btn-bg ",
+          cancelButtonClass: "md-button md-danger cancel-btn-bg",
+          buttonsStyling: false,
+        }).then(() => {
+          this.notBiddingModal = false;
+        });
+      });
     },
   },
   computed: {
@@ -573,6 +599,9 @@ export default {
     requiredServices() {
       if (this.proposalRequest) return this.proposalRequest.eventData.components.sort((a, b) => a.order - b.order);
       return [];
+    },
+    suggestionDate() {
+      return this.$store.state.vendorProposal.suggestionDate;
     },
   },
   filters: {
