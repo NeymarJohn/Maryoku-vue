@@ -188,6 +188,15 @@ export default {
       const index = this.properties.findIndex((it) => it.item == property.item);
       this.requirements[this.category][index].isSelected = true;
 
+
+      let requirements = this.requirements;
+      if(this.blockId == 'audiovisualstagingservices' && this.category == 'Amenities' && property.item == 'Rigging') {
+        
+        requirements['Staff'].map(rq => {
+          if(rq.item == 'Rigging engineer') rq.isSelected = eval(rq.conditionScript);
+        })
+      }
+
       this.$emit('change', this.requirements);
     },
     removeRequirement(property) {
