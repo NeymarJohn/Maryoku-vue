@@ -123,19 +123,17 @@
             <countdown :info="{ ...campaignTabs[3], ...campaignInfo }" ref="countdown"></countdown>
           </template>
         </collapse-panel>
-        <countdown v-else :info="{ ...campaignTabs[3], ...campaignInfo }" ref="countdown"></countdown>
+        <countdown
+          v-else
+          :info="{ ...campaignTabs[3], ...campaignInfo }"
+          ref="countdown"
+          class="white-card"
+        ></countdown>
       </template>
 
       <template v-if="selectedTab == 4">
-        <collapse-panel v-if="campaignIssued['FEEDBACK']" class="white-card" :defaultStatus="false">
-          <template slot="header">
-            <div class="d-flex align-center p-50 font-size-30 font-bold">Open ‘Feedback’ Campaign</div>
-          </template>
-          <template slot="content">
-            <feedback :info="{ ...campaignTabs[4], ...campaignInfo }" ref="feedback"></feedback>
-          </template>
-        </collapse-panel>
-        <feedback v-else :info="{ ...campaignTabs[4], ...campaignInfo }" ref="feedback"></feedback>
+        <feedback-list v-if="campaignIssued['FEEDBACK']"> </feedback-list>
+        <feedback v-else :info="{ ...campaignTabs[4], ...campaignInfo }" ref="feedback" class="white-card"></feedback>
       </template>
 
       <delivery-settings
@@ -284,6 +282,7 @@ import RsvpAnalytics from "./components/RSVPAnalytics";
 import SavedateAnalytics from "./components/SavedateAnalytics";
 import ComingsoonAnalytics from "./components/ComingSoonAnalytics";
 import FeedbackAnalytics from "./components/FeedbackAnalytics";
+import FeedbackList from "./components/FeedbackList";
 
 const defaultSettings = {
   phone: {
@@ -322,6 +321,7 @@ export default {
     CollapsePanel,
     ComingsoonAnalytics,
     FeedbackAnalytics,
+    FeedbackList,
   },
   data() {
     return {

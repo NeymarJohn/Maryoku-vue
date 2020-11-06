@@ -13,13 +13,13 @@ const businessCategories = [
             items: [
               {
                 name: 'hotel acommondations within walking distance',
-                type: Boolean,
+                type: Boolean, 
                 value: false,
                 xIncluded: true,
               },
               {
                 name: 'shopping centers',
-                type: Boolean,
+                type: Boolean, 
                 value: false,
                 xIncluded: true,
               },
@@ -30,55 +30,55 @@ const businessCategories = [
             items: [
               {
                 name: 'number of function spaces',
-                type: Number,
+                type: Number, 
                 value: 1,
                 xIncluded: true,
               },
               {
                 name: 'number of meeting rooms',
-                type: Number,
+                type: Number, 
                 value: 1,
                 xIncluded: true,
               },
               {
                 name: 'indoor event space',
-                type: Boolean,
+                type: Boolean, 
                 value: false,
                 xIncluded: true,
               },
               {
                 name: 'outdoor event space',
-                type: Boolean,
+                type: Boolean, 
                 value: false,
                 xIncluded: true,
               },
               {
                 name: 'smoking section',
-                type: Boolean,
+                type: Boolean, 
                 value: false,
                 xIncluded: true,
               },
               {
                 name: 'separate cocktail hour space',
-                type: Boolean,
+                type: Boolean, 
                 value: false,
                 xIncluded: true,
               },
               {
                 name: 'outside area for guests',
-                type: Boolean,
+                type: Boolean, 
                 value: false,
                 xIncluded: true,
               },
               {
                 name: 'kitchen for outside caterers',
-                type: Boolean,
+                type: Boolean, 
                 value: false,
                 xIncluded: true,
               },
               {
                 name: 'available bathrooms',
-                type: Number,
+                type: Number, 
                 value: 1,
                 xIncluded: true,
               },
@@ -89,19 +89,19 @@ const businessCategories = [
             items: [
               {
                 name: 'artificial lighting',
-                type: Boolean,
+                type: Boolean, 
                 value: false,
                 xIncluded: true,
               },
               {
                 name: 'natural lighting space',
-                type: Boolean,
+                type: Boolean, 
                 value: false,
                 xIncluded: true,
               },
               {
                 name: 'control of lighting during event',
-                type: Boolean,
+                type: Boolean, 
                 value: false,
                 xIncluded: true,
               },
@@ -112,12 +112,12 @@ const businessCategories = [
             items: [
               {
                 name: 'fast reliable Wifi for guests',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'venue bandwidth (for video streaming or meeting content)',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -132,7 +132,7 @@ const businessCategories = [
             items: [
               {
                 name: 'valet services',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -142,7 +142,7 @@ const businessCategories = [
             items: [
               {
                 name: 'cleaning services during the event',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -157,25 +157,25 @@ const businessCategories = [
             items: [
               {
                 name: 'accessbility for people with disabilities',
-                type: Boolean,
+                type: Boolean, 
                 value: false,
                 xIncluded: true,
               },
               {
                 name: 'all indoor',
-                type: Boolean,
+                type: Boolean, 
                 value: false,
                 xIncluded: true,
               },
               {
                 name: 'all outdoor',
-                type: Boolean,
+                type: Boolean, 
                 value: false,
                 xIncluded: true,
               },
               {
                 name: 'accessible bathrooms',
-                type: Number,
+                type: Number, 
                 value: 1,
                 xIncluded: true,
               },
@@ -187,101 +187,101 @@ const businessCategories = [
         name: 'equipment',
         subCategories: [
           {
-            name: 'entertainment',
+            name: 'entertainment', 
             items: [
               {
                 name: 'stage',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'dance floor',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
           },
           {
-            name: 'furniture',
+            name: 'furniture', 
             items: [
               {
                 name: 'chairs',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'outdoor chairs',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'high chairs',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'tables',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'outdoor tables',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'high tables',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
           },
           {
-            name: 'power',
+            name: 'power', 
             items: [
               {
                 name: 'power supply',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'generator',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
           },
           {
-            name: 'AV',
+            name: 'AV', 
             items: [
               {
                 name: 'microphones',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'projector',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'sound system',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'LCD displays',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'monitor',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'speaker / sound system',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -296,37 +296,37 @@ const businessCategories = [
             items: [
               {
                 name: 'event coordinator',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'cleaning stuff',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'waiters',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'security',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'receptionist',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'technical support',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'bathroom attendant',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -342,34 +342,34 @@ const businessCategories = [
         name: 'what we serve',
         subCategories: [
           {
-            name: 'food',
+            name: 'food', 
             items: [
               {
                 name: 'cuisine specialty',
-                type: Array,
+                type: Array, 
                 value: [],
                 available: ['italian', 'french', 'spanish', 'german', 'belgian', 'american', 'south american', 'chinese', 'japanese', 'mexican', 'indian']
               },
               {
                 name: 'food specialties',
-                type: Array,
+                type: Array, 
                 value: [],
                 available: ['raw seafood bar', 'sushi station', 'ethnics food', 'special desserts', 'food truck', 'ice cream truck', 'salad stations', 'crudite stations', 'barbeque', 'brickoven station']
               },
               {
                 name: 'food preparation location',
-                type: Array,
+                type: Array, 
                 value: [],
                 available: ['on premisses', 'off premises']
               },
               {
                 name: 'after party entertainment food',
-                type: Boolean,
+                type: Boolean, 
                 value: false,
               },
               {
                 name: 'caterer type',
-                type: Array,
+                type: Array, 
                 value: [],
                 available: ['full service', 'drop-off service']
               },
@@ -380,18 +380,18 @@ const businessCategories = [
             items: [
               {
                 name: 'specialty liquor stations',
-                type: Array,
+                type: Array, 
                 value: [],
                 available: ['beer', 'wine', 'tequila', 'cocktail', 'mixology', 'martiny', 'bourbon', 'whiskey']
               },
               {
                 name: 'specialty bar services',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'non alcoholic specials',
-                type: Array,
+                type: Array, 
                 value: [],
                 available: ['smoothies & juices', 'hawaiian', 'coffee', 'tea', 'power drinks']
               },
@@ -407,7 +407,7 @@ const businessCategories = [
             items: [
               {
                 name: 'appetizers',
-                type: Boolean,
+                type: Boolean, 
                 value: false,
                 available: ['appetizers', 'passed hors doeuvres', 'stations', 'buffet', 'plated', 'sushi station', 'grazing service']
               },
@@ -418,46 +418,46 @@ const businessCategories = [
             items: [
               {
                 name: 'breakfast',
-                type: Array,
+                type: Array, 
                 value: [],
                 available: ['egg station', 'bread station', 'avocado station', 'cereal station', 'health drinks']
               },
               {
                 name: 'lunch',
-                type: Boolean,
+                type: Boolean, 
                 value: false,
                 xIncluded: true,
               },
               {
                 name: 'dinner',
-                type: Boolean,
+                type: Boolean, 
                 value: false,
                 xIncluded: true,
               },
               {
                 name: 'desserts',
-                type: Boolean,
+                type: Boolean, 
                 value: false,
                 xIncluded: true,
               },
             ]
           },
           {
-            name: 'other',
+            name: 'other', 
             items: [
               {
                 name: 'table setup and preparations',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'interactive stations',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'set up centerpieces, name cards, favors, etc',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -467,7 +467,7 @@ const businessCategories = [
             items: [
               {
                 name: 'breakdown, cleaning and pickup',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -478,16 +478,16 @@ const businessCategories = [
         name: 'equipment',
         subCategories: [
           {
-            name: 'furniture',
+            name: 'furniture', 
             items: [
               {
                 name: 'chairs',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'tables',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -497,32 +497,32 @@ const businessCategories = [
             items: [
               {
                 name: 'linens & tablecloth',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'glassware',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'silverware',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'disposables',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'china',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'customized items',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
@@ -543,12 +543,12 @@ const businessCategories = [
             items: [
               {
                 name: 'captain',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'maltre d',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -558,12 +558,12 @@ const businessCategories = [
             items: [
               {
                 name: 'chef',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'specialty chef',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -573,17 +573,17 @@ const businessCategories = [
             items: [
               {
                 name: 'servers',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'busboys',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'cleanup crew',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -593,18 +593,18 @@ const businessCategories = [
             items: [
               {
                 name: 'waitstaff',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'number of waitstaff',
-                type: Number,
+                type: Number, 
                 value: 0,
                 xIncluded: true,
               },
               {
                 name: 'attire of waitstaff',
-                type: Array,
+                type: Array, 
                 value: [],
                 available: ['suits/tux', 'customized color', 'branded']
               },
@@ -621,32 +621,32 @@ const businessCategories = [
             items: [
               {
                 name: 'vegetarian',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'vegan',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'gluten - free',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'egg free',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'kosher',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'halal',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -656,7 +656,7 @@ const businessCategories = [
             items: [
               {
                 name: 'children meals',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -676,22 +676,22 @@ const businessCategories = [
             items: [
               {
                 name: 'customer pickup',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'deliveries',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'onsite setup',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'cleanup',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -701,42 +701,42 @@ const businessCategories = [
             items: [
               {
                 name: 'digital decor',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'holiday decor',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'decor in motion',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'live decor',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'lighting decor',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'specialized theme designs',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'flower decor',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'designs serivces',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -751,12 +751,12 @@ const businessCategories = [
             items: [
               {
                 name: 'hypoallergenic flowers',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'non scented flowers',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -766,12 +766,12 @@ const businessCategories = [
             items: [
               {
                 name: 'special effects (pyrotechnic, waterfall, baloon, explosion, etc)',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'props',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -786,12 +786,12 @@ const businessCategories = [
             items: [
               {
                 name: 'hypoallergenic flowers',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'non scented flowers',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -811,28 +811,28 @@ const businessCategories = [
             items: [
               {
                 name: 'event staffing',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'transportation host',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'models',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'staffing services',
-                type: Array,
+                type: Array, 
                 value: [],
                 available: ['tour guide', 'wait staff', 'event registration']
               },
               {
                 name: 'hospitality professional',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -842,43 +842,43 @@ const businessCategories = [
             items: [
               {
                 name: 'general guest services',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'consierge services',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'VIP services',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
-                name: 'day-of coordination',
-                type: Boolean,
+                name: 'day-off corrdination',
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'hosting',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'tours & sightseeing',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'visiting guest services support',
-                type: Array,
+                type: Array, 
                 value: [],
                 available: ['laudry', 'wellness', 'entertainment']
               },
               {
                 name: 'last minute onsite fitting (tux, suits)',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -893,7 +893,7 @@ const businessCategories = [
             items: [
               {
                 name: 'suit / tuxido rentals',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               }
             ]
@@ -913,22 +913,22 @@ const businessCategories = [
             items: [
               {
                 name: 'journalistic',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'studio',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'traditiontal',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'candid',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -938,22 +938,22 @@ const businessCategories = [
             items: [
               {
                 name: 'video',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'audio',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'photo',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'photo invitations / thank you',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -963,17 +963,17 @@ const businessCategories = [
             items: [
               {
                 name: 'physical proof/print',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'flash drive',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'digital download',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -983,12 +983,12 @@ const businessCategories = [
             items: [
               {
                 name: 'adapt equipment mobility to program',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'setup & breakdown',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1003,17 +1003,17 @@ const businessCategories = [
             items: [
               {
                 name: 'drone and remote photo/video',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'crane',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'simulacasting/live streaming',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1033,28 +1033,28 @@ const businessCategories = [
             items: [
               {
                 name: 'speech writing',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'press releases',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'high profile sourcing',
-                type: Array,
+                type: Array, 
                 value: [],
                 available: ['politicians', 'celebrities', 'influencers', 'artists']
               },
               {
                 name: 'social media promotion',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'media pitch',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1064,22 +1064,22 @@ const businessCategories = [
             items: [
               {
                 name: 'branding strategy',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'event registration tracking',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'consultation',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'open communication',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1089,7 +1089,7 @@ const businessCategories = [
             items: [
               {
                 name: 'graphic design services',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1099,7 +1099,7 @@ const businessCategories = [
             items: [
               {
                 name: 'guest lists',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1114,13 +1114,13 @@ const businessCategories = [
             items: [
               {
                 name: 'printing method',
-                type: Array,
+                type: Array, 
                 value: [],
                 available: ['digital printing', 'screen printing', 'flexography printing', 'litho printing', 'transfer printing', 'engraving', 'embossing', 'embrolder printing']
               },
               {
                 name: 'printing material',
-                type: Array,
+                type: Array, 
                 value: [],
                 available: ['business cards', 'brochures', 'flyers', 'one-sheets', 'infographics', 'instructions', 'posters', 'tickets', 'banners', 'menues', 'place cards']
               },
@@ -1131,12 +1131,12 @@ const businessCategories = [
             items: [
               {
                 name: 'custom prints',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'branded lighting effect',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1156,27 +1156,27 @@ const businessCategories = [
             items: [
               {
                 name: 'taxi',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'airport pickup/drop off',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'round trip',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'one way',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'tours',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1191,12 +1191,12 @@ const businessCategories = [
             items: [
               {
                 name: 'uniformed drivers',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'uniform style',
-                type: String,
+                type: String, 
                 value: ''
               },
             ]
@@ -1211,32 +1211,32 @@ const businessCategories = [
             items: [
               {
                 name: 'wifi',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'bar',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'luggage',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'food',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'TV/Cable TV',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'restrooms',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1256,37 +1256,37 @@ const businessCategories = [
             items: [
               {
                 name: 'DJ',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'MC',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'instrument',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'vocalist',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'motivators',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'specialty DJ(ethnic music)',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'Act as MC',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1296,37 +1296,37 @@ const businessCategories = [
             items: [
               {
                 name: 'one man instrument',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'trio',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'quartet',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'vocalist',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'orchestra',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'nine pieces and plus',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'specialty band (ethnic music, rock and roll etc)',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1336,23 +1336,23 @@ const businessCategories = [
             items: [
               {
                 name: 'interactive',
-                type: Array,
+                type: Array, 
                 value: [],
                 available: ['photo booth', 'casino games', 'sport games', 'make your own']
               },
               {
                 name: 'singers',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'keynote speaker / special MC',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'theme entertainment ( dancers, shows, illusionist etc )',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1362,57 +1362,57 @@ const businessCategories = [
             items: [
               {
                 name: 'team building',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'events and shows',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'museum & art gallery visits',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'classes',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'sport',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'other',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'family activities',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'children activities',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'food',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'wine/beer/bourbon/etc',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'sightseeing',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1422,12 +1422,12 @@ const businessCategories = [
             items: [
               {
                 name: 'onsite coordinatores, instructors, guides',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'setup/breakdown hours included',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1442,17 +1442,17 @@ const businessCategories = [
             items: [
               {
                 name: 'audio equipment',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'stage light',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'dance floor give aways',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1467,7 +1467,7 @@ const businessCategories = [
             items: [
               {
                 name: 'acitivy is suitable for people with disabilities',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1487,12 +1487,12 @@ const businessCategories = [
             items: [
               {
                 name: 'risk assessment',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'VIP security',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1502,12 +1502,12 @@ const businessCategories = [
             items: [
               {
                 name: 'parameter security',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'crowd control',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1517,37 +1517,37 @@ const businessCategories = [
             items: [
               {
                 name: 'chaperones',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'patrolling officers',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'bouncers',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'body guards',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'amed security officers',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'unarmed security',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'undercover',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1562,7 +1562,7 @@ const businessCategories = [
             items: [
               {
                 name: 'special equipment',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1582,17 +1582,17 @@ const businessCategories = [
             items: [
               {
                 name: 'sound system',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'rigging',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'programmer',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1602,18 +1602,18 @@ const businessCategories = [
             items: [
               {
                 name: 'screens',
-                type: Array,
+                type: Array, 
                 value: [],
                 available: ['projectors(rear or font)', 'plasma/LED tv', 'LED wall', 'show and go screen']
               },
               {
                 name: 'ZAP shots',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'cranes',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1623,22 +1623,22 @@ const businessCategories = [
             items: [
               {
                 name: 'special effects',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'special equipment',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'simulcasting',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'cordless mics',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1653,27 +1653,27 @@ const businessCategories = [
             items: [
               {
                 name: 'sound/visual engineer',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'setup crew',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'programmer',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'event manager',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'rigging',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1693,52 +1693,52 @@ const businessCategories = [
             items: [
               {
                 name: 'ceremonial items',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'specialty food & liquor',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'tech items',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'apparel',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'drinkware',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'bags',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'wellness',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'fitness',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'office',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'other',
-                type: String,
+                type: String, 
                 value: ''
               },
             ]
@@ -1753,32 +1753,32 @@ const businessCategories = [
             items: [
               {
                 name: 'ability to handle rushed orders',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'graphic design',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'ability to handle special requests',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'printing',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'stuffing and packaging',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'customization',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1793,14 +1793,14 @@ const businessCategories = [
             items: [
               {
                 name: 'provide sample',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'proof',
-                type: Array,
+                type: Array, 
                 value: [],
-                available: ['digital', 'real', 'sample']
+                available: ['digital','real','sample']
               },
             ]
           }
@@ -1812,24 +1812,24 @@ const businessCategories = [
     name: 'equipmentrentals',
     categories: [
       {
-        name: 'services',
+        name: 'services', 
         subCategories: [
           {
             name: ' ',
             items: [
               {
                 name: 'onsite supervisors during event',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'special delivery and pickup',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'pre-inspection',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1837,34 +1837,34 @@ const businessCategories = [
         ]
       },
       {
-        name: 'amenities',
+        name: 'amenities', 
         subCategories: [
           {
             name: 'furniture',
             items: [
               {
                 name: 'chairs',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'tables',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'tableware',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'special catering rental equipment',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'furniture / props',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1874,22 +1874,22 @@ const businessCategories = [
             items: [
               {
                 name: 'screens',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'projections',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'recordings',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'video conferencing',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1899,37 +1899,37 @@ const businessCategories = [
             items: [
               {
                 name: 'tents',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'air conditioning',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'generator',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'tent lighting',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'flooring and carpeting',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'portable bathrooms',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
               {
                 name: 'liners',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1939,7 +1939,7 @@ const businessCategories = [
             items: [
               {
                 name: 'staging, podiums, registration areas',
-                type: Boolean,
+                type: Boolean, 
                 value: false
               },
             ]
@@ -1955,7 +1955,7 @@ const generalInfos = [
     items: [
       {
         name: 'recently renovated (up to 3 years)',
-        type: Boolean,
+        type: Boolean, 
         value: false
       }
     ]
@@ -1965,7 +1965,7 @@ const generalInfos = [
     items: [
       {
         name: 'seasonal menu update (at least twice anual)',
-        type: Boolean,
+        type: Boolean, 
         value: false
       }
     ]
@@ -1975,7 +1975,7 @@ const generalInfos = [
     items: [
       {
         name: 'years new cars are kept in inventory',
-        type: Array,
+        type: Array, 
         value: [],
         available: ['1-2 years', '3-4 years', '5+ years']
       }
@@ -1986,12 +1986,12 @@ const generalInfos = [
     items: [
       {
         name: 'amount of yearly corporate events out of total events',
-        type: Number,
+        type: Number, 
         value: 0
       },
       {
         name: 'perform at more than one vent per day?',
-        type: Boolean,
+        type: Boolean, 
         value: false
       }
     ]
@@ -2001,7 +2001,7 @@ const generalInfos = [
     items: [
       {
         name: 'inventory update-rate',
-        type: String,
+        type: String, 
         value: ''
       }
     ]
@@ -2010,67 +2010,67 @@ const generalInfos = [
 const companyServices = [
   {
     name: 'venuerental',
-    type: Array,
+    type: Array, 
     value: [],
     available: ['gallery', 'park or field or garden', 'historic establishment', 'bar or pub or club', 'restaurant', 'hotel', 'business center', 'community center', 'sport club', 'academic venue', 'stately home', 'stadium or arena'],
   },
   {
     name: 'foodandbeverage',
-    type: Array,
+    type: Array, 
     value: [],
     available: ['food catering', 'beverage'],
   },
   {
     name: 'decor',
-    type: Array,
+    type: Array, 
     value: [],
     available: ['floral', 'lighting', 'interior design'],
   },
   {
     name: 'corporatesocialresponsibility',
-    type: Array,
+    type: Array, 
     value: [],
     available: ['staffing', 'guest services', 'on-day coodination', 'concierge'],
   },
   {
     name: 'signageprinting',
-    type: Array,
+    type: Array, 
     value: [],
     available: ['PR', 'marketing', 'printing', 'graphic design'],
   },
   {
     name: 'audiovisualstagingservices',
-    type: Array,
+    type: Array, 
     value: [],
     available: ['audio', 'visual'],
   },
   {
     name: 'swags',
-    type: Array,
+    type: Array, 
     value: [],
     available: ['favors', 'promotional'],
   },
   {
     name: 'entertainment',
-    type: Array,
+    type: Array, 
     value: [],
     available: ['DJ services', 'band', 'indoor activities', 'outdoor activities', 'family activities', 'entertainment'],
   },
   {
     name: 'securityservices',
-    type: Array,
+    type: Array, 
     value: [],
     available: ['day-of security', 'security consultation', 'perosnal security'],
   },
   {
     name: 'videographyandphotography',
-    type: Array,
+    type: Array, 
     value: [],
     available: ['photography', 'videography'],
   },
   {
     name: 'equipmentrentals',
-    type: Array,
+    type: Array, 
     value: [],
     available: ['tents', 'technical equipment', 'furniture', 'constumes', 'props & decor'],
   }
