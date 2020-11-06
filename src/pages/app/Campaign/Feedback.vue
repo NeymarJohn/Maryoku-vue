@@ -53,7 +53,7 @@
         </div>
         <div>
           <feedback-question
-            v-for="(question, index) in feedbackQuestions"
+            v-for="(question, index) in campaignData.feedbackQuestions"
             :key="index"
             :feedbackData="question"
           ></feedback-question>
@@ -96,7 +96,6 @@ export default {
     return {
       placeHolder: "",
       originalContent: {},
-      feedbackQuestions: [],
     };
   },
   created() {
@@ -114,35 +113,6 @@ export default {
     this.placeHolder = this.placeHolder.trim();
     // this.comment = this.placeHolder.trim().replace(/  /g, '');
     this.placeHolder = this.placeHolder.trim().replace(/  /g, "");
-    this.feedbackQuestions = [
-      {
-        question: "What did you like or dislike about this event?",
-        showQuestion: true,
-        label: "General",
-        rank: 0,
-        icon: "",
-      },
-    ];
-    this.event.components
-      .sort((a, b) => {
-        return a.order - b.order;
-      })
-      .forEach((service) => {
-        if (service.eventCategory.type == "service") {
-          this.feedbackQuestions.push({
-            question: `How Was The ${service.eventCategory.fullTitle}?`,
-            showQuestion: true,
-            rank: 0,
-            icon: service.eventCategory.icon,
-            label: service.eventCategory.fullTitle,
-          });
-        }
-      });
-    this.$store.commit("campaign/setAttribute", {
-      name: "FEEDBACK",
-      key: "feedbackQuestions",
-      value: this.feedbackQuestions,
-    });
   },
   computed: {
     event() {
