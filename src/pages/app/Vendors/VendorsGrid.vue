@@ -2,36 +2,18 @@
   <div class="md-layout md-gutter">
     <div class="md-layout-item md-size-100 mt-42 mt-0">
       <md-field>
-        <md-input
-          type="search"
-          class="mb-3"
-          clearable
-          placeholder="Search vendors"
-          v-model="searchQuery"
-        ></md-input>
+        <md-input type="search" class="mb-3" clearable placeholder="Search vendors" v-model="searchQuery"></md-input>
       </md-field>
     </div>
     <div
-      class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100 md-large-size-25 md-size-20"
+      class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100 md-large-size-25 md-size-25"
       v-for="vendor in filteredVendorsList"
       :key="vendor.id"
     >
-      <product-card
-        header-animation="true"
-        fixed-header="false"
-        :data-count="9999"
-        :hover-count="9999"
-      >
-        <img
-          class="img imgHeader"
-          slot="imageHeader"
-          :src="vendorMainImage(vendor)"
-        />
+      <product-card header-animation="true" fixed-header="false" :data-count="9999" :hover-count="9999">
+        <img class="img imgHeader" slot="imageHeader" :src="vendorMainImage(vendor)" />
         <div slot="card-buttons">
-          <md-button
-            class="md-purple md-xs md-round md-just-icon"
-            @click="routeToVendor(vendor.id, $event)"
-          >
+          <md-button class="md-purple md-xs md-round md-just-icon" @click="routeToVendor(vendor.id, $event)">
             <md-icon>more_horiz</md-icon>
             <md-tooltip md-direction="bottom">View</md-tooltip>
           </md-button>
@@ -44,10 +26,7 @@
             <md-icon>open_in_browser</md-icon>
             <md-tooltip md-direction="bottom">Open website</md-tooltip>
           </md-button>
-          <md-button
-            class="md-warning md-xs md-round md-just-icon"
-            @click="editVendorDetails(vendor)"
-          >
+          <md-button class="md-warning md-xs md-round md-just-icon" @click="editVendorDetails(vendor)">
             <md-icon>edit</md-icon>
             <md-tooltip md-direction="bottom">Edit</md-tooltip>
           </md-button>
@@ -75,10 +54,7 @@
           <div class>
             <p>{{ vendor.vendorTagLine }}</p>
           </div>
-          <div
-            class="tags"
-            v-if="vendor.vendorTagging && vendor.vendorTagging.length"
-          >
+          <div class="tags" v-if="vendor.vendorTagging && vendor.vendorTagging.length">
             <div v-for="(tag, index) in vendor.vendorTagging" :key="index">
               <span class="tt-capitalize">{{ tag }}</span>
               <span v-if="index <= vendor.vendorTagging.length">&middot;</span>
@@ -89,10 +65,7 @@
           <div class="price">
             <div
               class="badge badge-primary"
-              :class="`badge-${categoryColor(
-                vendor.vendorCategory,
-                buildingBlocksList,
-              )}`"
+              :class="`badge-${categoryColor(vendor.vendorCategory, buildingBlocksList)}`"
             >
               {{ categoryTitle(vendor.vendorCategory, buildingBlocksList) }}
             </div>
@@ -162,6 +135,7 @@ export default {
       this.$router.push({ name: "VendorDetails", params: { id: vendorId } });
     },
     vendorMainImage(vendor) {
+      return "";
       const rndInt = Math.floor(Math.random() * this.bgImages.length);
       return this.bgImages[rndInt];
     },
@@ -169,20 +143,14 @@ export default {
       this.filteredVendorsList = _.filter(this.vendorsList, (v) => {
         // let byDisplayName = v.vendorDisplayName.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
         let byCategory = v.vendorCategory
-          ? v.vendorCategory
-              .toString()
-              .toLowerCase()
-              .indexOf(this.searchQuery.toLowerCase()) > -1
+          ? v.vendorCategory.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1
           : "";
         return byCategory;
       });
     },
     isValidVendorWebsite(vendor) {
       if (vendor.vendorWebsite) {
-        return (
-          vendor.vendorWebsite.indexOf("http://") > -1 ||
-          vendor.vendorWebsite.indexOf("https://") > -1
-        );
+        return vendor.vendorWebsite.indexOf("http://") > -1 || vendor.vendorWebsite.indexOf("https://") > -1;
       }
       return false;
     },
@@ -248,30 +216,10 @@ export default {
     to(white),
     color-stop(50%, white)
   );
-  background: -moz-linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0),
-    white 50%,
-    white
-  );
-  background: -o-linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0),
-    white 50%,
-    white
-  );
-  background: -ms-linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0),
-    white 50%,
-    white
-  );
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0),
-    white 50%,
-    white
-  );
+  background: -moz-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+  background: -o-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+  background: -ms-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
 }
 
 .md-tooltip {

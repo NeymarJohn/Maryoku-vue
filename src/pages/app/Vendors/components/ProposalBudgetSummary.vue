@@ -150,14 +150,6 @@
         </div>
       </div>
     </div>
-    <div class="bundle-information" v-if="bundleDiscount && bundleDiscount.discountPercentage">
-      <div>
-        <span>{{ bundledServicesString }}</span>
-      </div>
-      <div class="font-bold d-flex justify-content-between">
-        <span>Total Bundle</span><span class="font-bold font-size-22">$2,400</span>
-      </div>
-    </div>
     <div class="total-cont isEdit" v-if="isEdit">
       <div class="title">
         Total
@@ -403,18 +395,6 @@ export default {
       });
       return s;
     },
-    bundleDiscount() {
-      return this.$store.state.vendorProposal.bundleDiscount;
-    },
-    bundledServicesString() {
-      let result = "";
-      this.bundleDiscount.services.forEach((service, index) => {
-        console.log("service", service);
-        if (index !== 0) result += " + ";
-        result += this.getServiceCategory(service).title;
-      });
-      return result;
-    },
   },
   watch: {},
 };
@@ -435,11 +415,6 @@ export default {
     font-size: 16px;
     color: #707070;
     border-color: #c9c9c9;
-  }
-  .bundle-information {
-    background-color: #ffedb7;
-    margin: auto -25px;
-    padding: 25px;
   }
   .summary-cont {
     h3 {

@@ -21,8 +21,7 @@ const state = {
     services: [],
     discountPercentage: 0,
     discountAmount: 0
-  },
-  suggestionDate: null
+  }
 }
 const getters = {
   mainTotalPrice(state) {
@@ -93,9 +92,6 @@ const mutations = {
   },
   setBundleDiscount: (state, bundleDiscount) => {
     state.bundleDiscount = bundleDiscount
-  },
-  setValue: (state, { key, value }) => {
-    Vue.set(state, key, value)
   }
 }
 const actions = {
