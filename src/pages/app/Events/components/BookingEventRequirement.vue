@@ -158,7 +158,7 @@
         <md-button class="md-bold add-category-btn md-black md-simple" @click="revertToOriginal"
           >Revert To Original</md-button
         >
-        <md-button class="md-red md-bold add-category-btn" @click="findVendors">Find my perfect vendor</md-button>
+        <md-button class="md-red md-bold add-category-btn" @click="findVendors">Find my perfect venue</md-button>
       </div>
     </div>
   </div>
@@ -447,8 +447,8 @@ export default {
       th:first-child{width: 30%}
       th:nth-child(2){width: 10%}
       th:nth-child(3){width: 15%; min-width: 180px}
-      th:nth-child(4){width: 10%}
-      th:nth-child(5){width: 35%}
+      th:nth-child(4){width: 15%}
+      th:nth-child(5){width: 30%}
       tbody {
         td {
           border-top: solid 2px #dbdbdb !important;
@@ -534,12 +534,6 @@ export default {
   }
   .anything-else-section {
     padding: 30px 0;
-
-    h4{
-      margin-top: 5px;
-      margin-bottom: 10px;
-      font-family: "Manrope-Bold";
-    }
   }
   .checkbox-label-wrapper {
     display: flex;
@@ -561,7 +555,7 @@ export default {
     border-radius: 3px;
   }
   .multiple-selection {
-    width: 300px;
+    width: 370px;
     display: inline-block;
     margin-top: 16px;
     height: 50px;

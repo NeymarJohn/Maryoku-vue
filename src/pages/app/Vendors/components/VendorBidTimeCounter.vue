@@ -1,5 +1,5 @@
 <template>
-  <div class="vendor-bid-time-counter-wrapper event">
+  <div class="vendor-bid-time-counter-wrapper">
     <div class="time-cont">
       <ul>
         <li class="fix-digit">{{ d | attachZero }}<br /><span>Days</span></li>

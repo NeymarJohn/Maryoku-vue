@@ -23,7 +23,6 @@
           :hours="getRemainingTime.hours"
           :minutes="getRemainingTime.mins"
           :seconds="getRemainingTime.seconds"
-          :content="'To send your bid'"
         />
       </div>
     </section>
@@ -96,7 +95,7 @@ import ContentFooter from "./ContentFooter.vue";
 import MobileMenu from "./Extra/MobileMenu.vue";
 import UserMenu from "./Extra/UserMenu.vue";
 import ForVendors from "@/pages/app/Vendors/ForVendors.vue";
-import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
+import VendorBidTimeCounter from "@/pages/app/Vendors/components/VendorBidTimeCounter.vue";
 import SignupRequestModal from "@/components/Modals/VendorProposal/SignupRequestModal.vue";
 import { Modal } from "@/components";
 

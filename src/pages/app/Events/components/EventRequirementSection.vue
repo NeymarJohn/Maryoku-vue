@@ -162,6 +162,7 @@ export default {
   },
   methods: {
     getProperties(){
+      console.log("getProperties", this.category);
       this.properties = [];
       let requirements = this.requirements;
       let event = this.event = this.$store.state.event.eventData;
@@ -190,7 +191,7 @@ export default {
 
       let requirements = this.requirements;
       if(this.blockId == 'audiovisualstagingservices' && this.category == 'Amenities' && property.item == 'Rigging') {
-
+        
         requirements['Staff'].map(rq => {
           if(rq.item == 'Rigging engineer') rq.isSelected = eval(rq.conditionScript);
         })
@@ -219,7 +220,7 @@ export default {
       this.requirements[this.category][index].options.map(op => {
           if(op.name.toLowerCase() == e.name.toLowerCase()) op.selected = action === 'select';
       })
-
+        console.log("index", index, this.requirements[this.category][index]);
       this.$emit('change', this.requirements);
     },
     handleNoteChange(){
@@ -228,7 +229,7 @@ export default {
     saveComment(service, e){
       let index = this.properties.findIndex(sv => sv.item == service.item);
       this.requirements[this.category][index].defaultNote = e;
-
+      console.log("saveComment", this.requirements[this.category][index]);
       this.$emit('change', this.requirements);
     }
   },
