@@ -264,8 +264,8 @@ export default {
             this.showCounterPage = true;
             this.showProposals = true;
           } else {
-            this.showCounterPage = true;
-            this.showProposals = true;
+            this.showCounterPage = false;
+            this.showProposals = false;
           }
         });
     },
