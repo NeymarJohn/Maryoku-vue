@@ -3,7 +3,7 @@
     <feedback-answer
       v-for="(question, index) in feedbackQuestions"
       :key="index"
-      :data="question"
+      :data="feedbackAnswers[question.label]"
       class="mb-20"
     ></feedback-answer>
   </div>
@@ -14,6 +14,7 @@ export default {
   data() {
     return {
       feedbackQuestions: [],
+      feedbackAnswers: {},
     };
   },
   components: {
@@ -44,6 +45,15 @@ export default {
           });
         }
       });
+
+    this.$http.get(`${process.env.SERVER_URL}/1/feedback/answers/${this.event.id}`).then((res) => {
+      const answers = res.data;
+      answers.forEach((item) => {
+        // this.feedbackAnswers[item.label] = { ...item, icon: item.icon };
+        const icon = this.feedbackQuestions.find((q) => q.label === item._id).icon;
+        this.$set(this.feedbackAnswers, item._id, { ...item, icon: icon });
+      });
+    });
   },
   computed: {
     event() {

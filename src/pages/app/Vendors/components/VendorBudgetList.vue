@@ -6,7 +6,7 @@
     </h4>
     <div class="total">
       <strong>Total Event Budget:</strong>
-      <span v-if="proposalRequest">${{ eventBudget | withComma }}</span>
+      <span v-if="proposalRequest">${{ totalBudget | withComma }}</span>
     </div>
     <p>
       <img :src="`${iconsUrl}Group 5180.svg`" />
@@ -51,9 +51,7 @@ export default {
     iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
   }),
   created() {},
-  mounted() {
-    console.log(this.validRequirements);
-  },
+  mounted() {},
   methods: {},
   computed: {
     totalBudget() {
@@ -62,20 +60,8 @@ export default {
       }, 0);
       return sum;
     },
-    eventBudget() {
-      return this.$store.state.vendorProposal.proposalRequest.eventData.allocatedBudget;
-    },
     validRequirements() {
-      console.log(this.requirements);
-      console.log(this.vendor);
-      return this.requirements.filter(
-        (item) =>
-          item.componentId === this.vendor.vendorCategory ||
-          (this.vendor.vendorCategories && this.vendor.vendorCategories.includes(item.eventCategory.key)),
-      );
-    },
-    vendor() {
-      return this.$store.state.vendorProposal.vendor;
+      return this.requirements.filter((item) => item.eventCategory.type === "service");
     },
   },
   filters: {
