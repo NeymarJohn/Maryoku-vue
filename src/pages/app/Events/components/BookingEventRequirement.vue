@@ -447,8 +447,8 @@ export default {
       th:first-child{width: 30%}
       th:nth-child(2){width: 10%}
       th:nth-child(3){width: 15%; min-width: 180px}
-      th:nth-child(4){width: 15%}
-      th:nth-child(5){width: 30%}
+      th:nth-child(4){width: 10%}
+      th:nth-child(5){width: 35%}
       tbody {
         td {
           border-top: solid 2px #dbdbdb !important;
@@ -534,6 +534,12 @@ export default {
   }
   .anything-else-section {
     padding: 30px 0;
+
+    h4{
+      margin-top: 5px;
+      margin-bottom: 10px;
+      font-family: "Manrope-Bold";
+    }
   }
   .checkbox-label-wrapper {
     display: flex;
@@ -555,7 +561,7 @@ export default {
     border-radius: 3px;
   }
   .multiple-selection {
-    width: 370px;
+    width: 300px;
     display: inline-block;
     margin-top: 16px;
     height: 50px;
