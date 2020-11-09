@@ -249,7 +249,7 @@
     </div>
     <div class="upload-files-wrapper" v-if="(step <= 1 && !isVCollapsed) || (step == 2 && isChecked)">
       <div class="title-cont">
-        <h3><img :src="`${iconUrl}Asset 608.svg`" />Upload This Files:</h3>
+        <h3><img :src="`${iconUrl}Asset 608.svg`" />Upload These Files:</h3>
         <h5>And add additional if you want</h5>
       </div>
       <div class="files-cont">

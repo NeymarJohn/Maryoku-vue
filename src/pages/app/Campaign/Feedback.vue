@@ -101,7 +101,7 @@ export default {
   },
   created() {
     this.placeHolder = `Thank you so much for attending! We are so glad you could join us.
-    Please take a moment to help us improve future events by taking a brief survey. 
+    Please take a moment to help us improve future events by taking a brief survey.
     Your feedback is extremely valuable to our ongoing effort to offer great ${
       this.event.guestType || "employee"
     } experience.
@@ -118,7 +118,6 @@ export default {
       {
         question: "What did you like or dislike about this event?",
         showQuestion: true,
-        label: "General",
         rank: 0,
         icon: "",
       },

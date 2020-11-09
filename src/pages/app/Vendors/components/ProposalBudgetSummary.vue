@@ -1,8 +1,11 @@
 <template>
   <div class="proposal-budget-summary-wrapper" :style="{ top: `${panelTopPos}px` }">
     <div class="summary-cont">
-      <h3>You're the {{ newProposalRequest.bidderRank | numeral("Oo") }} catering & venue bidder</h3>
-      <p>
+      <h3>
+        You're the {{ newProposalRequest.bidderRank | numeral("Oo") }}
+        <span class="text-transform-lowercase">{{ vendor.eventCategory.title }}</span> bidder
+      </h3>
+      <p v-if="newProposalRequest.bidderRank > 1">
         Proposals range:
         <strong>
           ${{ newProposalRequest.bidRange.low | withComma }} - ${{ newProposalRequest.bidRange.high | withComma }}
@@ -20,27 +23,32 @@
     </div>
     <div class="items-cont">
       <div class="item" :class="{ 'with-check': isBundleDiscount }">
-        <md-checkbox v-if="isBundleDiscount" class="no-margin" value="Venue" v-model="bundleDiscountServices" />
+        <md-checkbox
+          v-if="isBundleDiscount"
+          class="no-margin"
+          :value="vendor.eventCategory.key"
+          v-model="bundleDiscountServices"
+        />
         <ul>
           <li>
             <img :src="`${iconUrl}Asset 614.svg`" />
-            Venue
+            {{ vendor.eventCategory.title }}
           </li>
           <li>
-            <span>Relish caterers & venues</span>
+            <span>{{ vendor.eventCategory.bookTitle }}</span>
           </li>
           <li>
             <span>Your proposal</span>
-            <span>${{ calculatedTotal(getRequirementsByCategory("venuerental")) | withComma }}</span>
+            <span>${{ ((mainTotalPrice * (100 - bundleDiscountPercentage)) / 100) | withComma }}</span>
           </li>
-          <li :style="`margin: ${discountBlock.category == 'venuerental' ? '' : '0'}`">
-            <template v-if="discountBlock.category == 'venuerental'">
+          <li :style="`margin: ${discountBlock[vendor.eventCategory.key] ? '' : '0'}`">
+            <template v-if="discountBlock[vendor.eventCategory.key]">
               <div class="left">
                 <span>Before discount</span>
               </div>
               <div class="right">
-                <span>{{ `(${discountBlock.value}% off)` }}</span>
-                <span>${{ total(getRequirementsByCategory("venuerental")) | withComma }}</span>
+                <span>{{ `(${bundleDiscountPercentage}% off)` }}</span>
+                <span>${{ pricesByCategory[vendor.vendorCategory] | withComma }}</span>
               </div>
             </template>
           </li>
@@ -65,28 +73,24 @@
       <div class="item additional" v-if="step > 1 && additionalServices.length > 0">
         <h3>Additional Services</h3>
         <div :class="{ 'with-check': isBundleDiscount }" v-for="(a, aIndex) in additionalServices" :key="aIndex">
-          <md-checkbox v-if="isBundleDiscount" class="no-margin" v-model="bundleDiscountServices" :value="a.value" />
+          <md-checkbox v-if="isBundleDiscount" class="no-margin" v-model="bundleDiscountServices" :value="a" />
           <ul>
             <li>
-              <img :src="getIconUrlByCategory(a.value)" />
-              {{ a.name }}
+              <img :src="getIconUrlByCategory(a)" />
+              {{ getServiceCategory(a).title }}
             </li>
             <li>
-              <span>{{ a.subTitle }}</span>
+              <span>{{ getServiceCategory(a).bookTitle }}</span>
             </li>
             <li>
               <span>Your proposal</span>
-              <span>${{ calculatedTotal(getRequirementsByCategory(a.value)) | withComma }}</span>
+              <span>${{ pricesByCategory[a] | withComma }}</span>
             </li>
             <li>
-              <span>Budget for {{ a.name }}</span>
-              <span>${{ calculatedTotal(getRequirementsByCategory(a.value)) | withComma }}</span>
+              <span>Budget for {{ getServiceCategory(a).title }}</span>
+              <span> ${{ pricesByCategory[a] | withComma }}</span>
             </li>
-            <li
-              v-if="
-                calculatedTotal(getRequirementsByCategory(a.value)) - newProposalRequest.eventData.allocatedBudget > 0
-              "
-            >
+            <li v-if="calculatedTotal(getRequirementsByCategory(a)) - newProposalRequest.eventData.allocatedBudget > 0">
               <md-icon>error</md-icon>
               <span
                 >Your proposal is ${{
@@ -102,9 +106,7 @@
       <div class="item bundle" v-if="isBundleDiscount">
         <div class="element">
           <label class=""
-            ><span class="font-bold">Add bundle new total</span> (current:{{
-              calculatedTotal(getRequirementsBySelectedCategory()) | withComma
-            }})</label
+            ><span class="font-bold">Add bundle new total</span> (current:{{ totalPriceForBundle | withComma }})</label
           >
           <money
             v-model="bundleDiscountAmount"
@@ -117,6 +119,7 @@
               masked: false,
             }"
             class="bundle-discount-input"
+            @keyup.native="setPercentage"
             @click.native="discoutOption = 'amount'"
           />
         </div>
@@ -129,7 +132,7 @@
               thousands: ',',
               prefix: '',
               suffix: ' %',
-              precision: 0,
+              precision: 2,
               masked: false,
             }"
             class="bundle-discount-input"
@@ -142,9 +145,17 @@
           <span v-else> ${{ bundleDiscountAmount }} </span>
         </div>
         <div class="action-cont">
-          <a class="clear">Cancel</a>
+          <a class="clear" @click="cancelBundle">Cancel</a>
           <a class="add" @click="addBunldDiscount">Add bundle</a>
         </div>
+      </div>
+    </div>
+    <div class="bundle-information" v-if="bundleDiscount && bundleDiscount.discountPercentage">
+      <div>
+        <span>{{ bundledServicesString }}</span>
+      </div>
+      <div class="font-bold d-flex justify-content-between">
+        <span>Total Bundle</span><span class="font-bold font-size-22">$2,400</span>
       </div>
     </div>
     <div class="total-cont isEdit" v-if="isEdit">
@@ -167,10 +178,10 @@
         <span v-if="discountBlock.value">Before discount</span>
       </div>
       <div class="price">
-        <strong>${{ calculatedTotal(getRequirementsBySelectedCategory()) | withComma }}</strong>
+        <strong>${{ (totalPrice - bundleDiscountAmount) | withComma }}</strong>
         <br />
-        <span v-if="discountBlock.value">{{ `(${discountBlock.value}% off)` }}</span>
-        <span v-if="discountBlock.value">${{ total(getRequirementsBySelectedCategory()) | withComma }}</span>
+        <span v-if="bundleDiscountPercentage">{{ `(${bundleDiscountPercentage}% off)` }}</span>
+        <span v-if="bundleDiscountAmount">${{ totalPrice | withComma }}</span>
       </div>
     </div>
   </div>
@@ -179,6 +190,7 @@
 import VendorService from "@/services/vendor.service";
 import InputProposalSubItem from "@/components/Inputs/InputProposalSubItem.vue";
 import { Money } from "v-money";
+import { mapGetters } from "vuex";
 
 export default {
   name: "proposal-budget-summary",
@@ -203,7 +215,7 @@ export default {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       newProposalRequest: {},
       discountBlock: {},
-      additionalServices: [],
+      // additionalServices: [],
       iconsWithCategory: null,
       panelTopPos: 0,
       bundleDiscountServices: [],
@@ -219,16 +231,17 @@ export default {
         : arr.slice();
     },
     servicesByCategory(category) {
-      const services = this.services.filter((s) => s.name == category);
+      // const services = this.services.filter((s) => s.name == category);
 
-      if (services.length > 0) {
-        return this.flatDeep(
-          services[0].categories.map((s) => s.subCategories.map((sc) => sc.items.map((dd) => dd.name))),
-          Infinity,
-        );
-      } else {
-        return [];
-      }
+      // if (services.length > 0) {
+      //   return this.flatDeep(
+      //     services[0].categories.map((s) => s.subCategories.map((sc) => sc.items.map((dd) => dd.name))),
+      //     Infinity,
+      //   );
+      // } else {
+      //   return [];
+      // }
+      return this.$store.state.vendorProposal.proposalServices[category] || [];
     },
     getIconUrlByCategory(category) {
       return `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${
@@ -236,8 +249,9 @@ export default {
       }`;
     },
     getRequirementsByCategory(category) {
-      const services = this.servicesByCategory(category) || [];
-      return this.newProposalRequest.requirements.filter((r) => services.includes(r.requirementTitle));
+      console.log(category);
+      console.log(this.$store.state.vendorProposal.proposalServices[category]);
+      return this.$store.state.vendorProposal.proposalServices[category] || [];
     },
     getRequirementsBySelectedCategory() {
       let selectedCategories = [];
@@ -264,17 +278,23 @@ export default {
       let total = 0;
       let vm = this;
 
-      requirements.map(function (item) {
-        if (item.price) {
-          if (item.priceUnit === "total") {
-            total += parseFloat(String(item.price).replace(/,/g, ""));
-          } else {
-            if (vm.newProposalRequest != undefined) {
-              total += parseFloat(String(item.price).replace(/,/g, ""));
-            }
-          }
-        }
-      });
+      if (!requirements || requirements.length == 0) return 0;
+      console.log(requirements);
+      total = requirements.reduce((sum, item) => {
+        console.log(sum);
+        return sum + item.price * item.requirementValue;
+      }, 0);
+      // requirements.map(function (item) {
+      //   if (item.price) {
+      //     if (item.priceUnit === "total") {
+      //       total += parseFloat(String(item.price).replace(/,/g, ""));
+      //     } else {
+      //       if (vm.newProposalRequest != undefined) {
+      //         total += parseFloat(String(item.price).replace(/,/g, ""));
+      //       }
+      //     }
+      //   }
+      // });
       return total;
     },
     calculatedTotal(requirements) {
@@ -292,11 +312,33 @@ export default {
         this.panelTopPos = 0;
       }
     },
-    addBunldDiscount() {},
+    addBunldDiscount() {
+      this.discountBlock = {};
+      this.bundleDiscountServices.forEach((category) => {
+        this.discountBlock[category] = { value: this.bundleDiscountAmount };
+      });
+      this.isBundleDiscount = false;
+      this.$store.commit("vendorProposal/setBundleDiscount", {
+        services: this.bundleDiscountServices,
+        discountPercentage: this.bundleDiscountPercentage,
+        discountAmount: this.bundleDiscountAmount,
+      });
+    },
+    cancelBundle() {
+      this.isBundleDiscount = false;
+    },
     setRange() {
       if (this.bundleDiscountPercentage > 100) {
         this.bundleDiscountPercentage = 100;
       }
+      this.bundleDiscountAmount = this.totalPriceForBundle * (this.bundleDiscountPercentage / 100);
+    },
+    setPercentage() {
+      this.bundleDiscountPercentage = (this.bundleDiscountAmount / this.totalPriceForBundle) * 100;
+    },
+    getServiceCategory(category) {
+      console.log(this.serviceCategories);
+      return this.serviceCategories.find((item) => item.key === category);
     },
   },
   created() {
@@ -314,19 +356,66 @@ export default {
       this.discountBlock = discountBlock;
     });
 
-    this.$root.$on("update-additional-services", (category) => {
-      const additionalServicesBlock = VendorService.categoryNameWithIcons();
-      const selectedBlock = additionalServicesBlock.filter((a) => a.name == category)[0];
+    // this.$root.$on("update-additional-services", (category) => {
+    //   const additionalServicesBlock = VendorService.categoryNameWithIcons();
+    //   const selectedBlock = additionalServicesBlock.filter((a) => a.name == category)[0];
 
-      if (this.additionalServices.filter((a) => a.name == category).length > 0) {
-        this.additionalServices = this.additionalServices.filter((a) => a.name != category);
-      } else {
-        this.additionalServices.push(selectedBlock);
-      }
-    });
+    //   if (this.additionalServices.filter((a) => a.name == category).length > 0) {
+    //     this.additionalServices = this.additionalServices.filter((a) => a.name != category);
+    //   } else {
+    //     this.additionalServices.push(selectedBlock);
+    //   }
+    // });
     this.$forceUpdate();
   },
-  computed: {},
+  computed: {
+    vendor() {
+      return this.$store.state.vendorProposal.vendor;
+    },
+    additionalServices() {
+      return this.$store.state.vendorProposal.additionalServices;
+    },
+    mainService() {
+      const category = this.$store.state.vendorProposal.vendor.eventCategory.key;
+      const proposalServices = this.$store.state.vendorProposal.proposalServices;
+      if (!proposalServices[category]) {
+        return {};
+      }
+      return proposalServices[category];
+    },
+    serviceCategories() {
+      return this.$store.state.common.serviceCategories;
+    },
+    ...mapGetters("vendorProposal", ["mainTotalPrice", "pricesByCategory"]),
+    totalPrice() {
+      let s = 0;
+      Object.keys(this.pricesByCategory).forEach((category) => {
+        s += this.pricesByCategory[category];
+      });
+      return s;
+    },
+    totalPriceForBundle() {
+      let s = 0;
+      Object.keys(this.pricesByCategory).forEach((category) => {
+        if (this.bundleDiscountServices.includes(category)) {
+          s += this.pricesByCategory[category];
+        }
+      });
+      return s;
+    },
+    bundleDiscount() {
+      return this.$store.state.vendorProposal.bundleDiscount;
+    },
+    bundledServicesString() {
+      let result = "";
+      this.bundleDiscount.services.forEach((service, index) => {
+        console.log("service", service);
+        if (index !== 0) result += " + ";
+        result += this.getServiceCategory(service).title;
+      });
+      return result;
+    },
+  },
   watch: {},
 };
 </script>
@@ -346,6 +435,11 @@ export default {
     font-size: 16px;
     color: #707070;
     border-color: #c9c9c9;
+  }
+  .bundle-information {
+    background-color: #ffedb7;
+    margin: auto -25px;
+    padding: 25px;
   }
   .summary-cont {
     h3 {

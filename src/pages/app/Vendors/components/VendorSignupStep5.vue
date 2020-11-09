@@ -22,7 +22,7 @@
               </div>
             </div>
             <div class="bottom">
-              <p>Details of the costumer you’d like to get a recommendation from</p>
+              <p>Details of the customer you’d like to get a recommendation from</p>
             </div>
           </div>
           <div>

@@ -14,7 +14,7 @@
         </ul>
       </div>
       <p>
-        <a href="https://www.maryoku.com/for-vendors" target="_blank">Get your the best jobs</a>
+        <a href="https://www.maryoku.com/for-vendors" target="_blank">Get you the best jobs</a>
       </p>
       <div class="pull-top-right">
         <vendor-bid-time-counter
@@ -23,17 +23,11 @@
           :hours="getRemainingTime.hours"
           :minutes="getRemainingTime.mins"
           :seconds="getRemainingTime.seconds"
+          :content="'To send your bid'"
         />
       </div>
     </section>
-    <div
-      class="banner"
-      :style="
-        backgroundImage
-          ? `background-image: url('${backgroundImage}');`
-          : `background-image: url('https://static-maryoku.s3.amazonaws.com/storage/img/lock.jpg');`
-      "
-    >
+    <div class="banner" :style="`background-image: url('${backgroundImage}');`">
       <div class="banner-content">
         <h3>Congratulations!</h3>
         <p>
@@ -64,6 +58,32 @@
       </div>
     </section>
     <signup-request-modal v-if="showSignup"></signup-request-modal>
+    <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
+      <template slot="header">
+        <div class="saved-it-modal__header">
+          <h3><img :src="`${$iconURL}NewSubmitPorposal/Asset 587.svg`" /> Time Is Up!</h3>
+          <div class="header-description">
+            The deadline for submitting this prposal has passed. But no worries! We will be with you soon with the next
+            one.
+          </div>
+        </div>
+        <button class="close" @click="hideModal()">
+          <img :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`" />
+        </button>
+      </template>
+      <template slot="body">
+        <div class="saved-it-modal__body">
+          <div class="time-cont">
+            <vendor-bid-time-counter :days="0" :hours="0" :minutes="0" :seconds="0" />
+          </div>
+        </div>
+      </template>
+      <template slot="footer">
+        <div class="saved-it-modal__footer">
+          <md-button class="md-red maryoku-btn" @click="hideModal()">Ok, Thanks</md-button>
+        </div>
+      </template>
+    </modal>
   </div>
 </template>
 <script>
@@ -76,8 +96,10 @@ import ContentFooter from "./ContentFooter.vue";
 import MobileMenu from "./Extra/MobileMenu.vue";
 import UserMenu from "./Extra/UserMenu.vue";
 import ForVendors from "@/pages/app/Vendors/ForVendors.vue";
-import VendorBidTimeCounter from "@/pages/app/Vendors/components/VendorBidTimeCounter.vue";
+import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
 import SignupRequestModal from "@/components/Modals/VendorProposal/SignupRequestModal.vue";
+import { Modal } from "@/components";
+
 export default {
   components: {
     TopNavbar,
@@ -86,6 +108,7 @@ export default {
     VendorBidTimeCounter,
     UserMenu,
     SignupRequestModal,
+    Modal,
   },
   data() {
     return {
@@ -94,6 +117,8 @@ export default {
       event: null,
       proposalRequest: null,
       showSignup: false,
+      isTimeUp: false,
+      openedModal: "",
     };
   },
   mounted() {
@@ -114,6 +139,9 @@ export default {
     goToForm() {
       this.$root.$emit("go-to-proposal-form");
     },
+    hideModal() {
+      this.openedModal = "";
+    },
   },
 
   computed: {
@@ -124,10 +152,17 @@ export default {
       return "";
     },
     getRemainingTime() {
-      if (!this.proposalRequest) return { days: 0, hours: 0, mins: 0, seconds: 0 };
+      if (!this.proposalRequest || !this.proposalRequest.expiredTime) {
+        return { days: 0, hours: 0, mins: 0, seconds: 0 };
+      }
       console.log(this.proposalRequest.expiredTime);
       console.log(new Date().getTime());
       let remainingMs = this.proposalRequest.expiredTime - new Date().getTime();
+      if (remainingMs < 0) {
+        this.isTimeUp = true;
+        this.openedModal = "timeIsUp";
+        return { days: 0, hours: 0, mins: 0, seconds: 0 };
+      }
       const days = Math.floor(remainingMs / 24 / 3600 / 1000);
       remainingMs = remainingMs - days * 24 * 3600 * 1000;
       const hours = Math.floor(remainingMs / 3600 / 1000);
@@ -294,6 +329,57 @@ export default {
       padding: 20px 0;
       cursor: pointer;
       border-radius: 3px;
+    }
+  }
+  .saved-it-modal {
+    &__header {
+      width: 100%;
+      padding: 1rem;
+      text-align: center;
+      h3 {
+        font-size: 30px;
+        font-weight: bold;
+        color: #f51355;
+
+        img {
+          width: 55px;
+          height: 55px;
+          margin-right: 15px;
+        }
+      }
+      .header-description {
+        max-width: 550px;
+        margin: 0 auto;
+        text-align: left;
+        font-size: 20px;
+        color: #050505;
+
+        &.text-center {
+          text-align: center;
+        }
+      }
+      & + .close {
+        background: transparent;
+        border: none;
+        position: absolute;
+        top: 61px;
+        right: 60px;
+        color: #050505;
+        cursor: pointer;
+        img {
+          width: 20px;
+        }
+      }
+    }
+    &__body {
+      .time-cont {
+        max-width: 320px;
+        margin: 0 auto;
+      }
+    }
+    &__footer {
+      padding: 1rem;
+      margin-top: -2rem;
     }
   }
 }

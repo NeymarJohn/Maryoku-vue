@@ -28,6 +28,7 @@
             <p>Relish caterers & venues</p>
           </div>
           <proposal-event-vision :event="event"></proposal-event-vision>
+          <proposal-additional-requirement></proposal-additional-requirement>
         </div>
         <div class="step-wrapper" v-if="step == 1">
           <div class="proposal-add-personal-message-wrapper" v-if="!this.event.concept">
@@ -46,10 +47,10 @@
           <proposal-bid />
         </div>
         <div class="step-wrapper" v-if="step == 2">
-          <h3>Can you also provide these services for this event?</h3>
+          <h3>Can you also provide any of these services for this event?</h3>
           <p>
-            <img :src="`${iconUrl}Group 5280 (5).svg`" />Did you know? Adding vendors gets your fair commission if they
-            get picked!
+            <img :src="`${iconUrl}Group 5280 (5).svg`" />Did you know, adding vendors gets you fair commission if they
+            get picked?!
           </p>
           <proposal-item-secondary-service
             v-for="(service, index) in extraServices"
@@ -112,7 +113,7 @@ import ReferNewVendor from "./components/ReferNewVendor.vue";
 import ProposalEventSummary from "./components/ProposalEventSummary.vue";
 import VueElementLoading from "vue-element-loading";
 import ProposalItemSecondaryService from "./components/ProposalItemSecondaryService";
-
+import ProposalAdditionalRequirement from "./components/ProposalAddtionalRequirement";
 export default {
   components: {
     VueElementLoading,
@@ -126,6 +127,7 @@ export default {
     ProposalEventVision,
     ProposalBid,
     ProposalItemSecondaryService,
+    ProposalAdditionalRequirement,
   },
   data() {
     return {
@@ -167,7 +169,7 @@ export default {
       console.log("wrapperStep", this.step);
     });
 
-    // this.proposalRequest.requirements = VendorService.getProposalRequest().requirements;
+    this.$store.dispatch("common/fetchAllCategories");
   },
   methods: {
     getProposal(id) {
