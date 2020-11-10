@@ -286,14 +286,10 @@ export default {
     this.savedItModal = false;
     this.isTimeUp = true;
 
-    // this.proposalRequest.requirements.forEach((item) => {
-    //   if (!this.categories.includes(item.requirementsCategory)) {
-    //     this.categories.push(item.requirementsCategory);
-    //   }
-    // });
-    this.categories.push(this.vendor.vendorCategory);
-    this.additionalServices.forEach((service) => {
-      this.categories.push(service);
+    this.proposalRequest.requirements.forEach((item) => {
+      if (!this.categories.includes(item.requirementsCategory)) {
+        this.categories.push(item.requirementsCategory);
+      }
     });
   },
   computed: {
@@ -306,9 +302,6 @@ export default {
     event() {
       if (this.proposalRequest) return this.proposalRequest.eventData;
       return null;
-    },
-    additionalServices() {
-      return this.$store.state.vendorProposal.additionalServices;
     },
   },
   watch: {},

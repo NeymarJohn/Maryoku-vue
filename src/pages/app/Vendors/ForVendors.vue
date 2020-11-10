@@ -1,18 +1,12 @@
 <template>
-  <vue-element-loading v-if="!vendor" :active="!!vendor" spinner="ring" color="#FF547C" />
-  <div class="for-vendor-wrapper" v-else>
+  <div class="for-vendor-wrapper">
     <h4>So what are the details?</h4>
     <div class="main-cont">
       <div class="one-row">
         <div class="left-side">
-          <h3 v-if="proposalRequest">
-            {{
-              proposalRequest.eventData.concept
-                ? proposalRequest.eventData.concept.name
-                : proposalRequest.eventData.eventType
-            }}
+          <h3>
+            {{ proposalRequest ? proposalRequest.eventData.title : "No Event Data" }}
           </h3>
-          <h3 v-else>No Event Data</h3>
 
           <p v-if="proposalRequest">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
@@ -54,24 +48,17 @@
               <li>
                 <img :src="`${iconsUrl}Path 1942.svg`" />
                 <strong>Type:</strong>
-                {{
-                  proposalRequest && proposalRequest.eventData.eventType
-                    ? proposalRequest.eventData.eventType.name
-                    : "-"
-                }}
+                {{ proposalRequest ? proposalRequest.eventData.occasion : "-" }}
               </li>
               <li>
                 <img :src="`${iconsUrl}Path 1383.svg`" />
                 <strong>Invited:</strong>
-                {{ proposalRequest && proposalRequest.eventData.guestType ? proposalRequest.eventData.guestType : "-" }}
+                {{ proposalRequest ? proposalRequest.eventData.participantsType : "-" }}
               </li>
               <li>
-                <div class="new-time" v-if="vendor.eventCategory.key == 'venuerental'">
+                <div class="new-time">
                   Already Booked?
                   <a @click="showChooseDateModal()">Suggest New time</a>
-                  <span v-if="suggestionDate">
-                    ( {{ suggestionDate[0].date }} - {{ suggestionDate[suggestionDate.length - 1].date }})</span
-                  >
                 </div>
               </li>
             </ul>
@@ -81,7 +68,7 @@
       <hr />
       <vendor-budget-list
         :title="`Budget`"
-        :description="`Usually budget is flexible and could change according to needs`"
+        :description="`Usually budget is flexible and could chane accordig to needs`"
         :proposalRequest="proposalRequest"
         :requirements="requiredServices"
       />
@@ -200,7 +187,7 @@
                   >I'm fully booked around the date of the event</span
                 >
               </md-checkbox>
-              <a class="another-date" @click="showChooseDateModal()" v-if="vendor.eventCategory.key == 'venuerental'"
+              <a class="another-date" @click="showChooseDateModal()" v-if="vendor.category == 'venue'"
                 >Suggest Another Date</a
               >
               <a class="another-date" @click="showChooseDateModal()" v-else>Suggest Another Time</a>
@@ -260,7 +247,7 @@
             <a @click="showReferModal()">Refer Another Vendor</a>
             <img class="question" :src="`${iconsUrl}Group 5522.svg`" />
           </div>
-          <button class="cool" @click="declineRequest()">Send</button>
+          <button class="cool" @click="showSorryModal()">Send</button>
         </div>
       </template>
     </modal>
@@ -321,7 +308,7 @@
                   :arrow-position="`space-between`"
                   :limits="limitDateRange"
                   :marked-dates="markedDataRange"
-                  v-model="suggestedDates"
+                  v-model="date"
                   ref="calendar"
                 />
               </div>
@@ -428,7 +415,6 @@ export default {
       },
       markedDataRange: [],
       today: null,
-      suggestedDates: [],
     };
   },
   mounted() {
@@ -443,20 +429,19 @@ export default {
     console.log(this.markedDataRange);
     this.$root.$on("go-to-proposal-form", () => {
       if (this.isAgreed) {
-        this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
-        // if (this.proposalRequest) {
-        //   this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
-        // } else {
-        //   this.proposalRequest = new ProposalRequest({
-        //     id: this.$route.params.id,
-        //   });
-        //   this.$router.push({
-        //     path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
-        //     props: {
-        //       proposalRequest: this.proposalRequest,
-        //     },
-        //   });
-        // }
+        if (this.proposalRequest) {
+          this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
+        } else {
+          this.proposalRequest = new ProposalRequest({
+            id: this.$route.params.id,
+          });
+          this.$router.push({
+            path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
+            props: {
+              proposalRequest: this.proposalRequest,
+            },
+          });
+        }
       } else {
         window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
         this.conditionTooltip = true;
@@ -472,20 +457,19 @@ export default {
   methods: {
     goToForm() {
       if (this.isAgreed) {
-        this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
-        // if (this.proposalRequest) {
-        //   this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
-        // } else {
-        //   this.proposalRequest = new ProposalRequest({
-        //     id: this.$route.params.id,
-        //   });
-        //   this.$router.push({
-        //     path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
-        //     props: {
-        //       proposalRequest: this.proposalRequest,
-        //     },
-        //   });
-        // }
+        if (this.proposalRequest) {
+          this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
+        } else {
+          this.proposalRequest = new ProposalRequest({
+            id: this.$route.params.id,
+          });
+          this.$router.push({
+            path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
+            props: {
+              proposalRequest: this.proposalRequest,
+            },
+          });
+        }
       } else {
         window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
         this.conditionTooltip = true;
@@ -525,13 +509,6 @@ export default {
     },
     suggestAnotherDay() {
       this.suggest = true;
-      console.log(this.suggestedDates);
-      if (this.suggestedDates.selectedDates && this.suggestedDates.selectedDates.length > 0) {
-        this.$store.commit("vendorProposal/setValue", {
-          key: "suggestionDate",
-          value: this.suggestedDates.selectedDates,
-        });
-      }
       if (this.proposalRequest) {
         this.proposalRequest.suggestedDates = new Date(this.proposalRequest.eventData.eventStartMillis);
       }
@@ -543,21 +520,6 @@ export default {
       } else {
         this.amPack.start = "AM";
       }
-    },
-    declineRequest() {
-      new ProposalRequest({ id: this.proposalRequest.id, declineMessage: "I don't want it" }).save().then((res) => {
-        console.log(res);
-        swal({
-          title: "Thank you! ",
-          html: `We hope to see you next time.`,
-          showCancelButton: true,
-          confirmButtonClass: "md-button md-success confirm-btn-bg ",
-          cancelButtonClass: "md-button md-danger cancel-btn-bg",
-          buttonsStyling: false,
-        }).then(() => {
-          this.notBiddingModal = false;
-        });
-      });
     },
   },
   computed: {
@@ -603,9 +565,6 @@ export default {
     requiredServices() {
       if (this.proposalRequest) return this.proposalRequest.eventData.components.sort((a, b) => a.order - b.order);
       return [];
-    },
-    suggestionDate() {
-      return this.$store.state.vendorProposal.suggestionDate;
     },
   },
   filters: {
