@@ -1,31 +1,107 @@
 <template>
-  <div class="special-requirement-accessibility mt-30">
+  <div class="special-request-section mt-30">
     <div>
       <div class="font-size-22 font-bold">
-        <md-checkbox class="md-red md-checkbox-circle" v-model="data.selected" @change="handleCategory">{{ data.label }}</md-checkbox>
+        <md-checkbox
+                class="md-red md-checkbox-circle"
+                v-model="data.isSelected"
+                @change="changeItem"
+        >{{ data.subCategory }}</md-checkbox>
       </div>
-      <div>{{ labels[data.type] }}</div>
+      <div ></div>
+      <div class="special-request-section-description">
+        <div class="font-size-20 font-bold mt-20"  v-if="data.desc">{{ data.desc }}</div>
+        <div class="mt-10" v-if="data.subCategory === 'Sitting arrangement'">
+          You may select up to 2 options and we will endeavor to incorporate them into your event</div>
+        <div class="mt-10" v-if="data.subCategory === 'Sitting arrangement'">
+          Please select up to 2 options</div>
+      </div>
     </div>
-    <div class="mt-30 mb-20">
+    <div class="mt-30 mb-20" v-if="data.subCategory !== 'Sitting arrangement'">
       <md-checkbox
-              v-for="(item, index) in data.items"
+              v-for="(item, index) in data.options"
               class="md-simple md-red"
               v-model="item.selected"
               :key="index"
-              @change="handleItem(index)"
+              @change="changeItem()"
       >
                 <div class="checkbox-label-wrapper">
-                  <img :src="getIcon(item.item)" />
-                  {{ item.item }}
+                  <img :src="getIcon(item.name)"/>
+                  {{ item.name }}
                 </div>
       </md-checkbox>
     </div>
+    <template v-else>
+      <div class="special-request-section-options">
+        <div class="md-layout">
+          <div
+                  class="md-layout-item md-size-50 md-small-size-100 p-50"
+                  v-for="(option, index) in data.options"
+                  :key="index"
+          >
+            <div>
+              <md-checkbox
+                      class="md-simple md-red"
+                      v-model="option.selected"
+                      @change="changeItem"
+              >
+                <span>{{option.item}}</span>
+              </md-checkbox>
+              <div class="ml-30">
+                <span class="font-bold">Popular for:</span>
+                {{option.popular}}
+                <div>
+                  <img :src="`${$iconURL}Requirements/${option.icon}`" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="md-layout-item md-size-50 md-small-size-100 p-50">
+            <div class="d-flex">
+              <md-checkbox class="md-simple md-red" @change="changeItem">
+                <span class="font-bold">Other:</span>
+              </md-checkbox>
+              <maryoku-input class="flex-1"></maryoku-input>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="special-request-section-description">
+        <div class="font-size-20 font-bold">Is there going to be group work at the event?</div>
+        <div class="mt-10">Which will require dedicated tables?</div>
+        <div>
+          <md-checkbox class="md-checkbox-circle md-red" v-model="isGroup" :value="true">Yes</md-checkbox>
+          <md-checkbox class="md-checkbox-circle md-red" v-model="isGroup" :value="false">No</md-checkbox>
+        </div>
+        <div v-if="isGroup" class="d-flex align-start mt-20">
+          <img :src="`${$iconURL}Requirements/enter-gray.svg`" style="margin-top:-10px" />
+          <div>
+            <div class="font-size-20 font-bold">Around what size of groups?</div>
+            <div class="d-flex justify-content-between mt-10">
+              <md-radio
+                      v-for="(size, idx) in data.groupSizes"
+                      v-model="groupSize"
+                      :key="idx"
+                      :value="size.item"
+                      @change="sizeChange"
+              >
+                {{`${size.item} people`}}</md-radio>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 <script>
 
+import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
+
 export default {
   name: "special-requirement-item",
+  components: {
+    MaryokuInput,
+  },
   props:{
     data: {
       type: Object,
@@ -34,35 +110,38 @@ export default {
     index: {
       type: Number,
       required: true,
-    }
+    },
   },
   data() {
     return {
-      selected: true,
-      labels: {
-        accessibility : "What kind of special attention do we need to know about?",
-        around_the_venue: "Which elements are important for you to have around the venue?",
-        around_the_space: "Which elements are important for you to have around the venue?",
-        sitting_arrangement: "You may select up to 2 options and we will endeavor to incorporate them into your event. Please select up to 2 options",
-        sustainability: "",
-        dietary_constraints: "",
-        other: "",
-      }
-    };
+      isGroup:false,
+      groupSize: null,
+    }
   },
   methods:{
+    getSpecialItem(){
+      if ( this.data.subCategory === 'Sitting arrangement' ) {
+        this.data.groupSizes.map(size => {
+          if ( size.selected ){
+            this.isGroup = true;
+            this.groupSize = size.item;
+          }
+        });
+      }
+
+    },
     getIcon(name){
       let icon = null;
       if ( name === 'All Indoor' ) {
-        icon = 'Requirements/elderly-people-dark.svg';
+        icon = 'Requirements/All indoor.svg';
       } else if ( name === 'Pregnant women' ) {
         icon = 'Requirements/pregnant-women-dark.svg';
       } else if ( name === 'All Outdoor' ) {
-        icon = 'Requirements/elderly-people-dark.svg';
+        icon = 'Requirements/All outdoor.svg';
       } else if ( name === 'Accessible Bathrooms' ) {
-        icon = 'Requirements/pregnant-women-dark.svg';
+        icon = 'Requirements/Accessible bathroom.svg';
       } else if ( name === 'Accessibility for people with disabilities' ) {
-        icon = 'Requirements/disabled-person-dark.svg';
+        icon = 'Requirements/Accessible for people with disabilities.svg';
       } else if ( name === 'Hotel accommodations within walking distance' ) {
         icon = 'Requirements/disabled-person-dark.svg';
       } else if ( name === 'Shopping centers' ) {
@@ -70,17 +149,20 @@ export default {
       }
       return `${this.$iconURL}${icon}`;
     },
-    handleCategory(){
-      this.data.items.map(item => {
-        item.selected = false;
-      })
+    changeItem(){
+      this.$emit('change');
     },
-    handleItem(idx){
-      this.data.items[idx].isSelected = !this.data.items[idx].isSelected;
-      this.$emit('change', this.index);
+    sizeChange(){
+      console.log("sizeChange");
+      this.data.groupSizes.map(size => {
+        size.selected = size.item === this.groupSize;
+      });
+      this.$emit('change');
     }
   },
-  mounted (){}
+  mounted() {
+    this.getSpecialItem();
+  }
 };
 </script>
 <style lang="scss" scoped>

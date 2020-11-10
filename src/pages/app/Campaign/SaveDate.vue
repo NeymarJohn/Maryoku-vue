@@ -8,14 +8,13 @@
       >
         let's start with a "save the date campaign"
       </div>
-      <!-- <concept-image-block
+      <concept-image-block
         v-if="concept"
         class="ml-50"
         :images="concept.images"
         :colors="concept.colors"
         border="no-border"
-      ></concept-image-block> -->
-      <concept-canvas class="ml-50" v-if="concept" :eventConcept="concept"></concept-canvas>
+      ></concept-image-block>
       <div class="cover-preview" v-else>
         <img :src="coverImage" />
         <label for="cover">
@@ -86,7 +85,6 @@ import TitleEditor from "./components/TitleEditor";
 import swal from "sweetalert2";
 import VueElementLoading from "vue-element-loading";
 import S3Service from "@/services/s3.service";
-import ConceptCanvas from "./components/ConceptCanvas";
 
 const placeHolder =
   "Clear your schedule and get ready to mingle! the greatest event of the year is coming up! more details are yet to come, but we can already promise you it's going to be an event to remember. be sure to mark the date on your calendar. you can do it using this link: (google calendar link). see ya soon";
@@ -97,7 +95,6 @@ export default {
     MaryokuTextarea,
     TitleEditor,
     VueElementLoading,
-    ConceptCanvas,
   },
   props: {
     info: {

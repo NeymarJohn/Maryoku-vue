@@ -1,6 +1,6 @@
 <template>
   <div class="proposal-item-wrapper">
-    <div class="title-cont dropdown" @click="clickItem(category)">
+    <div class="title-cont dropdown" @click="clickItem(service.componentId)">
       <div class="left-side">
         <div class="check-cont">
           <img v-if="isChecked" :src="`${iconUrl}Group 6258 (2).svg`" />
@@ -27,7 +27,7 @@
       </div>
     </div>
     <h3 v-if="isChecked">Which elements would you like to involve in your proposal?</h3>
-    <proposal-service-table :category="service.componentId"></proposal-service-table>
+    <proposal-service-table v-if="isChecked" :category="service.componentId"></proposal-service-table>
     <div class="additional-photos-wrapper" v-if="isChecked">
       <div class="title-cont">
         <h3><img :src="`${iconUrl}Asset 605.svg`" />Upload Additional Photos</h3>
@@ -70,6 +70,7 @@ export default {
     EditableProposalSubItem,
     Money,
     vueDropzone: vue2Dropzone,
+    ProposalServiceTable,
   },
   props: {
     category: String,
@@ -147,6 +148,13 @@ export default {
     },
     clickItem(category) {
       this.isChecked = !this.isChecked;
+      if (this.isChecked) {
+        this.additionalServices.push(category);
+      } else {
+        this.$store.commit("vendorProposal/removeCategoryFromAdditional");
+      }
+      console.log(this.additionalServices);
+
       this.$root.$emit("update-additional-services", category);
     },
     setRange(value, type) {
@@ -423,6 +431,14 @@ export default {
     mandatoryRequirements() {
       if (!this.proposalRequest) return [];
       return this.proposalRequest.requirements.filter((item) => item.mustHave);
+    },
+    additionalServices: {
+      get: function () {
+        return this.$store.state.vendorProposal.additionalServices;
+      },
+      set: function (newValue) {
+        return this.$store.commit("vendorProposal/setAddtionalService", newValue);
+      },
     },
   },
   watch: {},

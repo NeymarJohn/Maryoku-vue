@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import common from "./modules/common"
 import user from "./modules/user";
 import event from "./modules/event";
 import comment from "./modules/comment";
@@ -19,6 +20,7 @@ export default new Vuex.Store({
         vendor,
         PublicEventPlanner,
         campaign,
-        vendorProposal
+        vendorProposal,
+        common
     },
 });

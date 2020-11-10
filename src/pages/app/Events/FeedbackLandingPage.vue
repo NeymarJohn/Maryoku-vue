@@ -3,10 +3,10 @@
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
     <div class="event-feedback-form" v-if="campaign">
       <div class="p-50">
-        <!-- <div class="font-size-30 font-bold-extra mb-50 text-transform-capitalize">
+        <div class="font-size-30 font-bold-extra mb-50 text-transform-capitalize">
           Say thank you and ask for feedback
         </div>
-        <hr /> -->
+        <hr />
         <div class="d-flex mt-70 mb-40">
           <img :src="`${$iconURL}Campaign/group-9380.svg`" class="mr-20" />
           <div class="ml-20">

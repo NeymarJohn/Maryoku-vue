@@ -8,8 +8,7 @@
           :style="`
             background-image: url(${bgImages[0]});
             background-size: cover;
-            background-size: 100% 100%;`
-          "
+            background-size: 100% 100%;`"
         ></div>
         <div class="img-cont thumb-img-cont">
           <img :src="bgImages[1]" />
@@ -35,14 +34,15 @@
         <div class="title-cont">
           <div class="title-child">
             <img v-if="isVendorLogo" :src="isVendorLogo" />
-            <div v-else class="default-text-logo">{{logoText}}</div>
+            <div v-else class="default-text-logo">{{ logoText }}</div>
           </div>
           <div class="title-child mt-4">
             <div class="md-layout-item">
               <md-field
                 :class="[
-                {'md-valid': !errors.has('vendorDisplayName') && vendor.vendorDisplayName},
-                {'md-error': errors.has('vendorDisplayName')}]"
+                  { 'md-valid': !errors.has('vendorDisplayName') && vendor.vendorDisplayName },
+                  { 'md-error': errors.has('vendorDisplayName') },
+                ]"
               >
                 <label>Display Name</label>
                 <md-input
@@ -56,10 +56,9 @@
                   <md-icon class="error" v-show="errors.has('vendorDisplayName')">close</md-icon>
                 </slide-y-down-transition>
                 <slide-y-down-transition>
-                  <md-icon
-                    class="success"
-                    v-show="!errors.has('vendorDisplayName') && vendor.vendorDisplayName"
-                  >done</md-icon>
+                  <md-icon class="success" v-show="!errors.has('vendorDisplayName') && vendor.vendorDisplayName"
+                    >done</md-icon
+                  >
                 </slide-y-down-transition>
               </md-field>
             </div>
@@ -68,22 +67,19 @@
             <div class="md-layout-item">
               <md-field
                 :class="[
-                  {'md-valid': !errors.has('vendorDisplayName') && vendor.vendorDisplayName},
-                  {'md-error': errors.has('vendorDisplayName')}
+                  { 'md-valid': !errors.has('vendorDisplayName') && vendor.vendorDisplayName },
+                  { 'md-error': errors.has('vendorDisplayName') },
                 ]"
               >
-                <label>
-                  <i class="fa fa-map-marker-alt"></i> Address
-                </label>
+                <label> <i class="fa fa-map-marker-alt"></i> Address </label>
                 <md-input v-model="vendor.vendorAddressLine1"></md-input>
                 <slide-y-down-transition>
                   <md-icon class="error" v-show="errors.has('vendorAddressLine1')">close</md-icon>
                 </slide-y-down-transition>
                 <slide-y-down-transition>
-                  <md-icon
-                    class="success"
-                    v-show="!errors.has('vendorAddressLine1') && vendor.vendorAddressLine1"
-                  >done</md-icon>
+                  <md-icon class="success" v-show="!errors.has('vendorAddressLine1') && vendor.vendorAddressLine1"
+                    >done</md-icon
+                  >
                 </slide-y-down-transition>
               </md-field>
             </div>
@@ -107,13 +103,10 @@
               v-for="(rating, ratingIndex) in ratings"
               :key="ratingIndex"
               @click="setRating(ratingIndex)"
-              :class="{'is-selected' : ((vendor.rank >= rating) && vendor.rank != null)}"
-            >★</label>
-            <md-button
-              v-if="creation_mode"
-              class="md-purple md-lg md-save"
-              @click="addVendor"
-            >Create</md-button>
+              :class="{ 'is-selected': vendor.rank >= rating && vendor.rank != null }"
+              >★</label
+            >
+            <md-button v-if="creation_mode" class="md-purple md-lg md-save" @click="addVendor">Create</md-button>
             <md-button v-else class="md-purple md-lg md-save" @click="updateVendor">Save</md-button>
           </div>
         </div>
@@ -124,8 +117,9 @@
         <div class="md-layout-item">
           <md-field
             :class="[
-            {'md-valid': !errors.has('vendorMainEmail') && vendor.vendorMainEmail},
-            {'md-error': errors.has('vendorMainEmail')}]"
+              { 'md-valid': !errors.has('vendorMainEmail') && vendor.vendorMainEmail },
+              { 'md-error': errors.has('vendorMainEmail') },
+            ]"
           >
             <label>Email</label>
             <md-input
@@ -140,18 +134,16 @@
               <md-icon class="error" v-show="errors.has('vendorMainEmail')">close</md-icon>
             </slide-y-down-transition>
             <slide-y-down-transition>
-              <md-icon
-                class="success"
-                v-show="!errors.has('vendorMainEmail') && vendor.vendorMainEmail"
-              >done</md-icon>
+              <md-icon class="success" v-show="!errors.has('vendorMainEmail') && vendor.vendorMainEmail">done</md-icon>
             </slide-y-down-transition>
           </md-field>
         </div>
         <div class="md-layout-item">
           <md-field
             :class="[
-            {'md-valid': !errors.has('vendorMainPhoneNumber') && vendor.vendorMainPhoneNumber},
-            {'md-error': errors.has('vendorMainPhoneNumber')}]"
+              { 'md-valid': !errors.has('vendorMainPhoneNumber') && vendor.vendorMainPhoneNumber },
+              { 'md-error': errors.has('vendorMainPhoneNumber') },
+            ]"
           >
             <label>Phone Number</label>
             <md-input
@@ -167,10 +159,9 @@
               <md-icon class="error" v-show="errors.has('vendorMainPhoneNumber')">close</md-icon>
             </slide-y-down-transition>
             <slide-y-down-transition>
-              <md-icon
-                class="success"
-                v-show="!errors.has('vendorMainPhoneNumber') && vendor.vendorMainPhoneNumber"
-              >done</md-icon>
+              <md-icon class="success" v-show="!errors.has('vendorMainPhoneNumber') && vendor.vendorMainPhoneNumber"
+                >done</md-icon
+              >
             </slide-y-down-transition>
           </md-field>
         </div>
@@ -179,8 +170,9 @@
         <div class="md-layout-item">
           <md-field
             :class="[
-            {'md-valid': !errors.has('vendorWebsite') && vendor.vendorWebsite},
-            {'md-error': errors.has('vendorWebsite')}]"
+              { 'md-valid': !errors.has('vendorWebsite') && vendor.vendorWebsite },
+              { 'md-error': errors.has('vendorWebsite') },
+            ]"
           >
             <label>Website</label>
             <md-input
@@ -194,10 +186,7 @@
               <md-icon class="error" v-show="errors.has('vendorWebsite')">close</md-icon>
             </slide-y-down-transition>
             <slide-y-down-transition>
-              <md-icon
-                class="success"
-                v-show="!errors.has('vendorWebsite') && vendor.vendorWebsite"
-              >done</md-icon>
+              <md-icon class="success" v-show="!errors.has('vendorWebsite') && vendor.vendorWebsite">done</md-icon>
             </slide-y-down-transition>
           </md-field>
         </div>
@@ -211,16 +200,20 @@
             <h4>Description</h4>
           </div>
           <div class="banner-description-body">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+              ea commodo consequat.
+            </p>
           </div>
         </div>
         <div class="description"></div>
         <div class="text-group">
           <div class>
-            <span>Past Events With the Vendor: {{vendor.voters}}</span>
+            <span>Past Events With the Vendor: {{ vendor.voters }}</span>
           </div>
           <div class>
-            <span>Past Proposals Sent by the Vendor: {{vendor.rank}}</span>
+            <span>Past Proposals Sent by the Vendor: {{ vendor.rank }}</span>
           </div>
         </div>
       </div>
@@ -230,11 +223,11 @@
     <div class="tabs-container">
       <div
         class="tab-item"
-        :class="[{'visited': currentTab > 1}, {'active': currentTab===1}]"
+        :class="[{ visited: currentTab > 1 }, { active: currentTab === 1 }]"
         v-on:click="currentTab = 1"
       >
         <template>
-          <md-field :class="[{'md-error': errors.has('vendorCategory')}]" class="select-with-icon">
+          <md-field :class="[{ 'md-error': errors.has('vendorCategory') }]" class="select-with-icon">
             <label for="category">Category</label>
             <md-select
               v-model="vendor.vendorCategory"
@@ -243,16 +236,11 @@
               @md-selected="onChangeCategory()"
               required
             >
-              <md-option
-                v-for="(option, index) in categories"
-                :key="index"
-                :value="option.id"
-              >{{ option.value }}</md-option>
+              <md-option v-for="(option, index) in categories" :key="index" :value="option.id">{{
+                option.value
+              }}</md-option>
             </md-select>
-            <span
-              class="md-error"
-              v-if="errors.has('vendorCategory')"
-            >The Vendor Category is required</span>
+            <span class="md-error" v-if="errors.has('vendorCategory')">The Vendor Category is required</span>
           </md-field>
         </template>
       </div>
@@ -265,7 +253,7 @@
     <div class="md-layout tab-wrapper bg-white">
       <div class="md-layout-item">
         <div class="tab-content">
-          <div v-if="currentTab===1">
+          <div v-if="currentTab === 1">
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>apartment</md-icon>
@@ -273,15 +261,10 @@
               </div>
               <div class="tab-item-content-body">
                 <template v-if="vendorCapacities.length > 0">
-                  <div
-                    class="icon-text-vertical"
-                    v-for="(item, index) in vendorCapacities"
-                    :value="item"
-                    :key="index"
-                  >
+                  <div class="icon-text-vertical" v-for="(item, index) in vendorCapacities" :value="item" :key="index">
                     <md-icon>airline_seat_recline_extra</md-icon>
-                    <h5>{{item.defaultValue}}</h5>
-                    <span>{{item.name}}</span>
+                    <h5>{{ item.defaultValue }}</h5>
+                    <span>{{ item.name }}</span>
                   </div>
                 </template>
                 <template v-else>No Capacity Info</template>
@@ -298,28 +281,18 @@
                   <ul class="check-list">
                     <li>
                       <md-icon>restaurant</md-icon>
-                      <strong class="capitalize">{{vendor.vendorCategory}}</strong>
+                      <strong class="capitalize">{{ vendor.vendorCategory }}</strong>
                     </li>
                     <li>
                       <br />
                     </li>
-                    <li
-                      class="normal"
-                      v-for="(item, i) of vendorServicesList"
-                      :key="'S' + i"
-                      :value="item"
-                    >
+                    <li class="normal" v-for="(item, i) of vendorServicesList" :key="'S' + i" :value="item">
                       <md-icon>check</md-icon>
-                      {{item.name}}
+                      {{ item.name }}
                     </li>
-                    <li
-                      class="disabled"
-                      v-for="(item, i) of vendorRestrictions"
-                      :key="'R' + i"
-                      :value="item"
-                    >
+                    <li class="disabled" v-for="(item, i) of vendorRestrictions" :key="'R' + i" :value="item">
                       <md-icon></md-icon>
-                      <span>{{item.name}}</span>
+                      <span>{{ item.name }}</span>
                     </li>
                   </ul>
                 </template>
@@ -329,19 +302,14 @@
                     <h4>Attachment</h4>
                   </div>
                   <div class="notes-body">
-                    <div
-                      class="note-item"
-                      v-for="(item, index) in attachments"
-                      :key="index"
-                      :value="item"
-                    >
+                    <div class="note-item" v-for="(item, index) in attachments" :key="index" :value="item">
                       <a
-                        v-if="item.vendorsFileContentType==='application/pdf'"
+                        v-if="item.vendorsFileContentType === 'application/pdf'"
                         target="_blank"
                         :href="`${serverUrl}/1/proposal-requests/${item.proposalRequst.id}/files/${item.id}`"
                       >
                         <md-icon>picture_as_pdf</md-icon>
-                        Attachment {{index+1}}
+                        Attachment {{ index + 1 }}
                       </a>
                       <a
                         v-else
@@ -349,7 +317,7 @@
                         :href="`${serverUrl}/1/proposal-requests/${item.proposalRequst.id}/files/${item.id}`"
                       >
                         <md-icon>image</md-icon>
-                        Attachment {{index+1}}
+                        Attachment {{ index + 1 }}
                       </a>
                     </div>
                   </div>
@@ -364,14 +332,9 @@
               </div>
               <div class="tab-item-content-body">
                 <template v-if="vendorPricesAndRules.length > 0">
-                  <div
-                    class="text-vertical"
-                    v-for="(item,index) of vendorPricesAndRules"
-                    :key="index"
-                    :value="item"
-                  >
-                    <h5>${{item.defaultValue===null ? 0 : item.defaultValue}}</h5>
-                    <span>{{item.name}}</span>
+                  <div class="text-vertical" v-for="(item, index) of vendorPricesAndRules" :key="index" :value="item">
+                    <h5>${{ item.defaultValue === null ? 0 : item.defaultValue }}</h5>
+                    <span>{{ item.name }}</span>
                   </div>
                 </template>
                 <template v-else>No Price Data</template>
@@ -380,7 +343,11 @@
                     <h4>Notes</h4>
                   </div>
                   <div class="notes-body">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                      labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                      nisi ut aliquip ex ea commodo consequat.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -405,8 +372,9 @@
                     class="star-rating__star"
                     v-for="(rating, ratingIndex) in ratings"
                     :key="ratingIndex"
-                    :class="{'is-selected' : true}"
-                  >★</label>
+                    :class="{ 'is-selected': true }"
+                    >★</label
+                  >
                 </h4>
               </div>
               <div class="tab-item-content-body">
@@ -420,7 +388,10 @@
                 <h4>Payment Terms</h4>
               </div>
               <div class="tab-item-content-body">
-                <p>A 50% deposit will be due on or before 18/1/20. The remaining balance will b collected a week prior to the event. We accept all major credit cards and checks.</p>
+                <p>
+                  A 50% deposit will be due on or before 18/1/20. The remaining balance will b collected a week prior to
+                  the event. We accept all major credit cards and checks.
+                </p>
               </div>
             </div>
             <md-divider></md-divider>
@@ -431,10 +402,9 @@
               </div>
               <div class="tab-item-content-body">
                 <p>
-                  Be due on or before 18/1/20. The remaining balance will be collected a week prior to the vent. We accept...
-                  <a
-                    class="more"
-                  >Read more</a>
+                  Be due on or before 18/1/20. The remaining balance will be collected a week prior to the vent. We
+                  accept...
+                  <a class="more">Read more</a>
                 </p>
               </div>
             </div>
@@ -449,7 +419,7 @@
               </div>
             </div>
           </div>
-          <div v-if="currentTab===2">Venue</div>
+          <div v-if="currentTab === 2">Venue</div>
         </div>
       </div>
     </div>
@@ -489,30 +459,26 @@ export default {
       attachments: [],
       proposals: [],
       bgImages: [],
-      defaultImg:
-        "https://static-maryoku.s3.amazonaws.com/storage/img/lock.jpg",
+      defaultImg: "https://static-maryoku.s3.amazonaws.com/storage/img/lock.jpg",
       pricesAndRules: [],
       checkListItems: [],
       feedbacks: [
         {
-          image:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
+          image: "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
           username: "Jane Bloom, Facebook",
           date: "2017/12/29",
           score: "5",
           message: "A 50% deposit will be due on or before 18/1/20.",
         },
         {
-          image:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
+          image: "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
           username: "Leonard Parker",
           date: "2017/12/29",
           score: "4",
           message: "A 50% deposit will be due on or before 18/1/20.",
         },
         {
-          image:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
+          image: "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
           username: "Alex Marlon",
           date: "2017/12/29",
           score: "3",
@@ -521,15 +487,13 @@ export default {
       ],
       similarItems: [
         {
-          image:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
+          image: "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
           thumbnail: "thumbnail",
           score: "5",
           title: "title",
         },
         {
-          image:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
+          image: "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
           thumbnail: "thumbnail",
           score: "5",
           title: "title",
@@ -567,6 +531,7 @@ export default {
     };
   },
   created() {
+    alert();
     this.routeName = this.$route.name;
     Vendors.find("categories").then(
       (categories) => {
@@ -608,9 +573,7 @@ export default {
         .proposalRequests()
         .first()
         .then((proposals) => {
-          this.proposals = proposals.vendorProposals.filter(
-            (proposal) => proposal.bidRange != null,
-          );
+          this.proposals = proposals.vendorProposals.filter((proposal) => proposal.bidRange != null);
           this.proposals.forEach((proposal) => {
             proposal.attachments.forEach((attachment) => {
               this.attachments.push(attachment);
@@ -641,10 +604,7 @@ export default {
       this.vendor.rank = parseInt(ratingIndex) + 1;
     },
     validateScore() {
-      this.vendor.avgScore =
-        this.vendor.avgScore > 100
-          ? (this.vendor.avgScore = 100)
-          : this.vendor.avgScore;
+      this.vendor.avgScore = this.vendor.avgScore > 100 ? (this.vendor.avgScore = 100) : this.vendor.avgScore;
     },
     onlyNumber(event) {
       const key = event.keyCode ? event.keyCode : event.which;
@@ -734,14 +694,8 @@ export default {
         return null;
       } else {
         const titleWords = this.vendor.vendorDisplayName.split(" ");
-        if (
-          titleWords.length > 1 &&
-          titleWords[titleWords.length - 1].length > 0
-        ) {
-          return (
-            titleWords[0].charAt(0) +
-            titleWords[titleWords.length - 1].charAt(0)
-          );
+        if (titleWords.length > 1 && titleWords[titleWords.length - 1].length > 0) {
+          return titleWords[0].charAt(0) + titleWords[titleWords.length - 1].charAt(0);
         } else {
           return titleWords[0].charAt(0);
         }
@@ -749,36 +703,28 @@ export default {
     },
     vendorCapacities: function () {
       if (this.vendor.vendorProperties) {
-        return this.vendor.vendorProperties.filter(
-          (item) => item.categoryTitle === "Capacity",
-        );
+        return this.vendor.vendorProperties.filter((item) => item.categoryTitle === "Capacity");
       } else {
         return [];
       }
     },
     vendorLogoImage: function () {
       if (this.vendor.vendorProperties) {
-        return this.vendor.vendorProperties.filter(
-          (item) => item.name === "Logo" && item.type === "image",
-        );
+        return this.vendor.vendorProperties.filter((item) => item.name === "Logo" && item.type === "image");
       } else {
         return [];
       }
     },
     vendorExtraImage: function () {
       if (this.vendor.vendorProperties) {
-        return this.vendor.vendorProperties.filter(
-          (item) => item.name != "Logo" && item.type === "image",
-        );
+        return this.vendor.vendorProperties.filter((item) => item.name != "Logo" && item.type === "image");
       } else {
         return [];
       }
     },
     vendorPricesAndRules: function () {
       if (this.vendor.vendorProperties) {
-        return this.vendor.vendorProperties.filter(
-          (item) => item.categoryTitle === "Cost Elements",
-        );
+        return this.vendor.vendorProperties.filter((item) => item.categoryTitle === "Cost Elements");
       } else {
         return [];
       }
@@ -786,9 +732,7 @@ export default {
     vendorServicesList: function () {
       if (this.vendor.vendorProperties) {
         return this.vendor.vendorProperties.filter(
-          (item) =>
-            item.categoryTitle === "Services" ||
-            item.categoryTitle === "Included services and amenities",
+          (item) => item.categoryTitle === "Services" || item.categoryTitle === "Included services and amenities",
         );
       } else {
         return [];
@@ -796,9 +740,7 @@ export default {
     },
     vendorRestrictions: function () {
       if (this.vendor.vendorProperties) {
-        return this.vendor.vendorProperties.filter(
-          (item) => item.categoryTitle === "Restrictions",
-        );
+        return this.vendor.vendorProperties.filter((item) => item.categoryTitle === "Restrictions");
       } else {
         return [];
       }

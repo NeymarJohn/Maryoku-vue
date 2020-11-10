@@ -158,6 +158,8 @@ export default {
       left: 15px;
     }
     input {
+      font-size: 16px;
+      font-family: "Manrope-Regular";
       padding-left: 40px;
       cursor: pointer;
       width: 100%;
