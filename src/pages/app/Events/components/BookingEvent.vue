@@ -246,7 +246,7 @@ export default {
       let requirements = this.storedRequirements;
 
       this.allRequirements = requirements[this.event.id];
-      console.log("all.cat", requirements);
+      
       if(!this.allRequirements) {
 
         this.allRequirements = await this.$http.get(`${process.env.SERVER_URL}/1/vendor/property/${this.event.id}`);

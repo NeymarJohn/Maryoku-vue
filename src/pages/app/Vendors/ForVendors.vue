@@ -54,7 +54,11 @@
               <li>
                 <img :src="`${iconsUrl}Path 1942.svg`" />
                 <strong>Type:</strong>
-                {{ proposalRequest && proposalRequest.eventData.occasion ? proposalRequest.eventData.occasion : "-" }}
+                {{
+                  proposalRequest && proposalRequest.eventData.eventType
+                    ? proposalRequest.eventData.eventType.name
+                    : "-"
+                }}
               </li>
               <li>
                 <img :src="`${iconsUrl}Path 1383.svg`" />

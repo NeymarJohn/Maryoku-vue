@@ -155,7 +155,7 @@
         <span>{{ bundledServicesString }}</span>
       </div>
       <div class="font-bold d-flex justify-content-between">
-        <span>Total Bundle</span><span class="font-bold font-size-22">$2,400</span>
+        <span>Total Bundle</span><spanB class="font-bold font-size-22">${{ bundleDiscount.discountAmount }}</spanB>
       </div>
     </div>
     <div class="total-cont isEdit" v-if="isEdit">
