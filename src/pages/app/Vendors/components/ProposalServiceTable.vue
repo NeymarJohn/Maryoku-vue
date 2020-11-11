@@ -169,13 +169,21 @@
         <div class="item" v-for="legalDoc in vendor.eventCategory.legalDocuments" :key="legalDoc">
           <div class="left">
             <span class="filename">{{ legalDoc }}</span>
-            <span class="req">Required</span>
+            <span
+              class="req"
+              v-if="
+                vendor.eventCategory.mandatoryLegalDocs &&
+                vendor.eventCategory.mandatoryLegalDocs.findIndex((item) => item === legalDoc) >= 0
+              "
+              >*Required</span
+            >
+            <span class="req" v-else>Optional</span>
           </div>
-          <div class="right" @click="uploadDocument(legalDoc)" v-if="getFileByTag(legalDoc) == null">
+          <div class="right" @click="uploadDocument(legalDoc)" v-if="!legalDocs[legalDoc]">
             <img :src="`${$iconURL}NewSubmitPorposal/Asset 609.svg`" />Upload
           </div>
           <div class="right" v-else>
-            <span class="filename">{{ getFileByTag(legalDoc) }}</span>
+            <span class="filename">{{ legalDocs[legalDoc].filename }}</span>
             <img class="check" :src="`${$iconURL}NewSubmitPorposal/Group 3599 (2).svg`" />
             <img
               class="remove"
@@ -196,7 +204,7 @@
             <span class="filename">Other</span>
             <span class="req">*Optional</span>
           </div>
-          <div class="right" @click="uploadDocument('option')" v-if="getFileByTag('option') == null">
+          <div class="right" @click="uploadDocument('other')" v-if="!legalDocs['other']">
             <img :src="`${$iconURL}NewSubmitPorposal/Asset 609.svg`" />Upload
             <input
               type="file"
@@ -207,12 +215,12 @@
             />
           </div>
           <div class="right" v-else>
-            <span class="filename">{{ getFileByTag("option") }}</span>
+            <span class="filename">{{ legalDocs["other"].filename }}</span>
             <img class="check" :src="`${$iconURL}NewSubmitPorposal/Group 3599 (2).svg`" />
             <img
               class="remove"
               :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`"
-              @click="removeFileByTag('option')"
+              @click="removeFileByTag('other')"
             />
           </div>
         </div>
@@ -304,6 +312,7 @@ export default {
         maxFilesize: 10,
       },
       proposalData: {},
+      uploadedLegalDocs: {},
     };
   },
   methods: {
@@ -379,7 +388,7 @@ export default {
     },
     saveDiscount() {
       this.isEditDiscount = false;
-      this.$store.state.commit("vendorProposal/setDiscount", { category: this.category, value: this.discount });
+      this.$store.commit("vendorProposal/setDiscount", { category: this.category, value: this.discount });
       this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {
         category: this.category,
         value: this.discount,
@@ -400,6 +409,13 @@ export default {
         this.$refs.legalDocument.click();
       }
     },
+    addLegalDocs(fileObject) {
+      this.$store.commit("vendorProposal/addLegalDoc", {
+        category: this.category,
+        docTag: this.docTag,
+        obj: fileObject,
+      });
+    },
     onFilePicked(event) {
       let file = event.target.files || event.dataTransfer.files;
 
@@ -407,8 +423,20 @@ export default {
         return;
       }
       if (file[0].size <= 5000000) {
-        // 5mb
-        this.createProposalFile(file[0]);
+        this.addLegalDocs({
+          tag: this.docTag,
+          filename: file[0].name,
+        });
+
+        S3Service.fileUpload(file[0], this.docTag, `proposals/legal-documents/${this.proposalRequest.id}`).then(
+          (res) => {
+            this.addLegalDocs({
+              tag: this.docTag,
+              filename: file[0].name,
+              url: `${process.env.S3_URL}proposals/legal-documents/${this.proposalRequest.id}/${res}`,
+            });
+          },
+        );
       } else {
         this.alretExceedPictureSize = true;
         this.$notify({
@@ -452,6 +480,7 @@ export default {
     },
     removeFileByTag(tag) {
       this.files = this.files.filter((f) => f.tag != tag);
+      this.$store.commit("vendorProposal/addLegalDoc", { category: this.category, docTag: tag, obj: null });
     },
     totalOffer() {
       // let total = parseFloat(this.proposalRequest.requirementsCategoryCost)
@@ -542,6 +571,7 @@ export default {
       });
       this.services = defaultServices;
     }
+    if (Object.keys(this.legalDocs).length == 0) this.legalDocs = {};
 
     this.$forceUpdate();
     this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
@@ -627,10 +657,12 @@ export default {
     },
     legalDocs: {
       get: function () {
-        return this.$store.state.vendorProposal.legalDocs[this.category];
+        if (this.$store.state.vendorProposal.legalDocs[this.category])
+          return this.$store.state.vendorProposal.legalDocs[this.category];
+        return {};
       },
       set: function (files) {
-        this.$store.commit("vendorProposal/setLegalDocs", files);
+        this.$store.commit("vendorProposal/setLegalDocs", { category: this.category, files });
       },
     },
   },

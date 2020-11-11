@@ -22,7 +22,7 @@ const state = {
     discountPercentage: 0,
     discountAmount: 0
   },
-  suggestionDate: null
+  suggestionDate: null,
 }
 const getters = {
   mainTotalPrice(state) {
@@ -76,7 +76,10 @@ const mutations = {
     Vue.set(state.proposalServices, category, services);
   },
   setLegalDocs: (state, { category, files }) => {
-    state.legalDocs[category] = files
+    Vue.set(state.legalDocs, category, files)
+  },
+  addLegalDoc: (state, { category, docTag, obj }) => {
+    Vue.set(state.legalDocs[category], docTag, obj)
   },
   setDiscount: (state, { category, discount }) => {
     Vue.set(state.discounts, category, discount);
