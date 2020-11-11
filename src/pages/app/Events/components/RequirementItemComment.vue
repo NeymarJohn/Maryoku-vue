@@ -10,8 +10,8 @@
     </template>
     <template v-else>
       <div class="comment-add md-bold" @click="show">
-        <md-icon class="icon color-red">add_circle_outline</md-icon>
-        Add Note
+        <md-icon class="icon color-red">{{ note ? 'remove_circle_outline' : 'add_circle_outline'}} </md-icon>
+        {{ note ? 'Show' : 'Add'}} Note
       </div>
     </template>
   </div>
