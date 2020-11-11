@@ -30,6 +30,11 @@ export default {
         icon: "",
       },
     ];
+    this.feedbackAnswers["General"] = {
+      feedback: [],
+      averageRate: 0,
+      _id: "General",
+    };
     this.event.components
       .sort((a, b) => {
         return a.order - b.order;
@@ -43,6 +48,11 @@ export default {
             rank: 0,
             icon: service.eventCategory.icon,
           });
+          this.feedbackAnswers[service.eventCategory.fullTitle] = {
+            feedback: [],
+            averageRate: 0,
+            _id: service.eventCategory.fullTitle,
+          };
         }
       });
 

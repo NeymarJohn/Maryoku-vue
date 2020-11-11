@@ -238,26 +238,26 @@ export default {
 
       for (let cat in requirements) {
 
-        requirements[cat].map(ms => {
-          if (ms.conditionScript) ms.visible = eval(ms.conditionScript);
-          if (ms.conditionScript) ms.isSelected = eval(ms.conditionScript);
-          if (ms.defaultQtyScript) ms.defaultQty = Math.ceil(eval(ms.defaultQtyScript));
-
-          if ( this.blockId === 'swags' && (ms.item === 'Apparel' || ms.item === 'Tech items')) {
-            ms.mustHave = false;
-          }
-        })
+          requirements[cat].map(ms => {
+            if (ms.conditionScript) ms.visible = eval(ms.conditionScript);
+            if (ms.conditionScript) ms.isSelected = eval(ms.conditionScript);
+            if (ms.defaultQtyScript) ms.defaultQty = Math.ceil(eval(ms.defaultQtyScript));
+          })
       }
 
     },
     _saveRequirementsInStore(action = null) {
-
       let requirements = this.storedRequirements;
 
-      requirements[this.event.id][this.blockId].requirements = action === "clear" ? null : JSON.parse(JSON.stringify(this.requirementProperties));
-      requirements[this.event.id][this.blockId].anythingElse = action === "clear" ? null : this.anythingElse;
+      let eventRequirement = requirements[this.event.id] ? requirements[this.event.id] : {};
 
-      console.log("requirements", requirements)
+      eventRequirement[this.blockId] = JSON.parse(JSON.stringify({ requirements: null, anythingElse: null }));
+      eventRequirement[this.blockId].requirements =
+        action === "clear" ? null : JSON.parse(JSON.stringify(this.requirementProperties));
+      eventRequirement[this.blockId].anythingElse = action === "clear" ? null : this.anythingElse;
+
+      requirements[this.event.id] = eventRequirement;
+      // console.log("requirements", requirements)
       this.setBookingRequirements(requirements);
     },
     addRequirement(category, property) {
@@ -298,7 +298,20 @@ export default {
     handleNoteChange(e) {
       this._saveRequirementsInStore();
     },
+    setProperties: async function(){
+      this.selectedBlock = JSON.parse(JSON.stringify(this.component));
+      const event = this.event;
+      if (!this.selectedBlock.componentId) return;
 
+      let res = await this.$http.get(
+        `${process.env.SERVER_URL}/1/vendor/property/${this.selectedBlock.componentId}/${this.event.id}`,
+      );
+      this.isLoading = false;
+      let requirements = res.data;
+      this._checkConditionScript(requirements);
+
+      this.requirementProperties = requirements;
+    },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
     },
@@ -308,7 +321,6 @@ export default {
     fetchData: async function () {
       this.requirementProperties = {};
 
-      // console.log("fetchData", this.storedRequirements)
       this.blockId = this.component.componentId; //this.$route.params.blockId
       this.event = this.$store.state.event.eventData;
       this.getCommentComponents(this.blockId);
@@ -325,8 +337,9 @@ export default {
           JSON.stringify(this.storedRequirements[this.event.id][this.blockId].anythingElse),
         );
 
-        this._checkConditionScript(this.requirementProperties);
         this.isLoading = false;
+      } else {
+        await this.setProperties();
       }
     },
     revertToOriginal: async function () {
@@ -337,11 +350,10 @@ export default {
     },
     findVendors() {
       let component = new EventComponent({ id: this.component.id });
-      // console.log("findVendors", this.storedRequirements[this.event.id]);
       postReq("/1/vendors/setting-requirements", {
         vendorCategory: this.blockId,
         expiredBusinessTime: moment(new Date()).add(5, "days").valueOf(),
-        settingsJsonData: JSON.stringify(this.storedRequirements[this.event.id]),
+        settingsJsonData: JSON.stringify(this.requirementProperties),
         note: this.anythingElse,
         eventComponentInstance: new EventComponent({ id: this.component.id }),
       }).then((res) => {

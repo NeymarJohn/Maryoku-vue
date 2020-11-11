@@ -61,7 +61,7 @@
   }
 
   .proposal-card {
-    background: #d5d5d5; text-align: left;
+    background: #d5d5d5; width: 300px; text-align: left;
 
     .empty-img {
       height: 178px;

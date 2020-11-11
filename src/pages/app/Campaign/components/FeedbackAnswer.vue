@@ -2,23 +2,25 @@
   <collapse-panel class="white-card" :defaultStatus="false">
     <template slot="header">
       <div class="d-flex align-center p-50 font-size-30 font-bold">
-        <div>
-          <div class="mb-10">
-            <img v-if="data.icon" class="page-icon mr-10" :src="`${$iconURL}Budget+Elements/${data.icon}`" />{{
-              data._id
-            }}
+        <template v-if="data">
+          <div>
+            <div class="mb-10">
+              <img v-if="data.icon" class="page-icon mr-10" :src="`${$iconURL}Budget+Elements/${data.icon}`" />{{
+                data._id
+              }}
+            </div>
+            <div class="font-size-16 font-regular">(“How was the {{ data._id }}?”)</div>
           </div>
-          <div class="font-size-16 font-regular">(“How was the {{ data._id }}?”)</div>
-        </div>
-        <div class="ml-40">
-          <div class="mb-10"><md-icon style="color: #ffc001">star</md-icon>{{ data.averageRate }}</div>
-          <div class="font-size-16 font-regular color-gray">{{ data.feedback.length }}(reviews)</div>
-        </div>
+          <div class="ml-40">
+            <div class="mb-10"><md-icon style="color: #ffc001">star</md-icon>{{ data.averageRate }}</div>
+            <div class="font-size-16 font-regular color-gray">{{ data.feedback.length }}(reviews)</div>
+          </div>
+        </template>
       </div>
     </template>
     <template slot="content">
       <div class="feedback-result-content">
-        <div class="md-layout feedback-list-wrapper">
+        <div class="md-layout feedback-list-wrapper" v-if="data">
           <div
             v-for="(feedback, index) in data.feedback"
             :key="index"
