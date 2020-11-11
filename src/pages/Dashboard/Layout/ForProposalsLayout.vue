@@ -15,11 +15,15 @@
       </div>
       <div class="summary-cont">
         <ul>
-          <li :class="[{ 'with-help': dateTooltip }]" @mouseover="dateTooltip = true" @mouseleave="dateTooltip = false">
+          <li
+            :class="[{ 'with-help': dateTooltip && suggestionDate }]"
+            @mouseover="dateTooltip = true"
+            @mouseleave="dateTooltip = false"
+          >
             <img :src="`${proposalIconsUrl}Path 251 (2).svg`" />
             {{ eventDate }}
-            <img v-if="dateTooltip" class="question" :src="`${proposalIconsUrl}Asset 582.svg`" />
-            <div class="date-tooltip" v-if="dateTooltip">
+            <img v-if="dateTooltip && suggestionDate" class="question" :src="`${proposalIconsUrl}Asset 582.svg`" />
+            <div class="date-tooltip" v-if="dateTooltip && suggestionDate">
               <h3>Your Time Suggestion</h3>
               <p>
                 Client will get this proposal with
@@ -477,6 +481,9 @@ export default {
       set: function (newValue) {
         this.$store.commit("vendorProposal/setWizardStep", newValue);
       },
+    },
+    suggestionDate() {
+      return this.$store.state.vendorProposal.suggestionDate;
     },
   },
 };

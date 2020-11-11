@@ -247,12 +247,16 @@ export default {
 
     },
     _saveRequirementsInStore(action = null) {
-
       let requirements = this.storedRequirements;
 
-      requirements[this.event.id][this.blockId].requirements = action === "clear" ? null : JSON.parse(JSON.stringify(this.requirementProperties));
-      requirements[this.event.id][this.blockId].anythingElse = action === "clear" ? null : this.anythingElse;
+      let eventRequirement = requirements[this.event.id] ? requirements[this.event.id] : {};
 
+      eventRequirement[this.blockId] = JSON.parse(JSON.stringify({ requirements: null, anythingElse: null }));
+      eventRequirement[this.blockId].requirements =
+        action === "clear" ? null : JSON.parse(JSON.stringify(this.requirementProperties));
+      eventRequirement[this.blockId].anythingElse = action === "clear" ? null : this.anythingElse;
+
+      requirements[this.event.id] = eventRequirement;
       // console.log("requirements", requirements)
       this.setBookingRequirements(requirements);
     },
@@ -294,7 +298,20 @@ export default {
     handleNoteChange(e) {
       this._saveRequirementsInStore();
     },
+    setProperties: async function(){
+      this.selectedBlock = JSON.parse(JSON.stringify(this.component));
+      const event = this.event;
+      if (!this.selectedBlock.componentId) return;
 
+      let res = await this.$http.get(
+        `${process.env.SERVER_URL}/1/vendor/property/${this.selectedBlock.componentId}/${this.event.id}`,
+      );
+      this.isLoading = false;
+      let requirements = res.data;
+      this._checkConditionScript(requirements);
+
+      this.requirementProperties = requirements;
+    },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
     },
@@ -304,7 +321,6 @@ export default {
     fetchData: async function () {
       this.requirementProperties = {};
 
-      console.log("fetchData", this.storedRequirements)
       this.blockId = this.component.componentId; //this.$route.params.blockId
       this.event = this.$store.state.event.eventData;
       this.getCommentComponents(this.blockId);
@@ -322,6 +338,8 @@ export default {
         );
 
         this.isLoading = false;
+      } else {
+        await this.setProperties();
       }
     },
     revertToOriginal: async function () {
