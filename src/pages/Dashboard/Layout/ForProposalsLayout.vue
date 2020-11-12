@@ -137,14 +137,14 @@
               <img :src="`${landingIconsUrl}Path 1942.svg`" />
               <span>
                 <strong>Type:</strong>
-                {{ proposalRequest ? event.occasion : "-" }}
+                {{ proposalRequest ? event.eventType.name : "-" }}
               </span>
             </li>
             <li>
               <img :src="`${landingIconsUrl}Path 1383.svg`" />
               <span>
                 <strong>Invited:</strong>
-                {{ proposalRequest ? event.participantsType : "-" }}
+                {{ proposalRequest && event.guestType ? event.guestType : "-" }}
               </span>
             </li>
           </ul>

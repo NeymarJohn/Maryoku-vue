@@ -3,10 +3,10 @@
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
     <div class="event-feedback-form" v-if="campaign">
       <div class="p-50">
-        <!-- <div class="font-size-30 font-bold-extra mb-50 text-transform-capitalize">
+        <div class="font-size-30 font-bold-extra mb-50 text-transform-capitalize">
           Say thank you and ask for feedback
         </div>
-        <hr /> -->
+        <hr />
         <div class="d-flex mt-70 mb-40">
           <img :src="`${$iconURL}Campaign/group-9380.svg`" class="mr-20" />
           <div class="ml-20">
@@ -40,37 +40,33 @@
           <span class="font-bold">{{ campaign.attachments[0].name }}</span>
         </div>
         <input type="file" id="file-uploader" @change="changeUploadFile" class="d-none" />
-        <template v-if="campaign.visibleSettings.showSharingOption">
-          <hr class="mt-50 mb-70" />
-          <div class="share-panel">
-            <div class="d-flex mb-60 align-center">
-              <img :src="`${$iconURL}Campaign/group-9386.svg`" class="mr-20" />
-              <div>
-                <div class="font-size-30 font-bold line-height-2">share event participation</div>
-                <div>(Include photos & details of the event)</div>
-              </div>
-            </div>
-            <sharing-button-group class="mb-50"></sharing-button-group>
-          </div>
-        </template>
-        <template v-if="campaign.visibleSettings.showFeedback">
-          <hr />
-          <div>
-            <div class="font-size-30 font-bold line-height-1 d-flex align-center">
-              <img :src="`${$iconURL}Campaign/group-7321.svg`" class="mr-20" />
-              We'd love to get your feedback
-            </div>
+        <hr class="mt-50 mb-70" />
+        <div class="share-panel">
+          <div class="d-flex mb-60 align-center">
+            <img :src="`${$iconURL}Campaign/group-9386.svg`" class="mr-20" />
             <div>
-              <feedback-question
-                v-for="(question, index) in availableQuestions"
-                :key="index"
-                :feedbackData="question"
-                :showSwitch="false"
-                @change="changeFeedback(index, ...arguments)"
-              ></feedback-question>
+              <div class="font-size-30 font-bold line-height-2">share event participation</div>
+              <div>(Include photos & details of the event)</div>
             </div>
           </div>
-        </template>
+          <sharing-button-group class="mb-50"></sharing-button-group>
+        </div>
+        <hr />
+        <div>
+          <div class="font-size-30 font-bold line-height-1 d-flex align-center">
+            <img :src="`${$iconURL}Campaign/group-7321.svg`" class="mr-20" />
+            We'd love to get your feedback
+          </div>
+          <div>
+            <feedback-question
+              v-for="(question, index) in campaign.feedbackQuestions"
+              :key="index"
+              :feedbackData="question"
+              :showSwitch="false"
+              @change="changeFeedback(index, ...arguments)"
+            ></feedback-question>
+          </div>
+        </div>
       </div>
     </div>
     <div class="feedback-footer">
@@ -195,12 +191,11 @@ export default {
       const email = this.$route.query.email;
       const feedbackQuestions = [];
       this.campaign.feedbackQuestions.forEach((item) => {
-        if (!item.showQuestion) return;
         feedbackQuestions.push({
           question: item.question,
           comment: item.comment,
           rate: item.rank,
-          label: item.label || "General",
+          label: item.label,
           event: new CalendarEvent({ id: this.event.id }),
         });
       });
@@ -234,11 +229,6 @@ export default {
     },
     changeFeedback(index, value) {
       this.campaign.feedbackQuestions[index] = value;
-    },
-  },
-  computed: {
-    availableQuestions() {
-      return this.campaign.feedbackQuestions.filter((item) => item.showQuestion);
     },
   },
 };
