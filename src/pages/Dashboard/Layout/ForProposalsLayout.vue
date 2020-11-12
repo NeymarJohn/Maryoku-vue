@@ -496,10 +496,13 @@ export default {
 
   section.header-wrapper {
     background-color: #ffffff;
-    position: absolute;
+    position: relative;
     width: 100%;
     border-radius: 3px;
+    -webkit-box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+    /* height: 266px; */
+    display: flex;
 
     .proposal-banner {
       background-image: url("https://static-maryoku.s3.amazonaws.com/storage/img/lock.jpg");
@@ -512,7 +515,7 @@ export default {
       padding: 90px 96px;
       color: #ffffff;
       width: 495px;
-      height: 273px;
+      // height: 273px;
 
       h2 {
         font-size: 50px;
@@ -647,7 +650,7 @@ export default {
     }
   }
   .main-cont {
-    margin-top: 263px;
+    // margin-top: 263px;
     margin-bottom: 90px;
     width: 100%;
 
