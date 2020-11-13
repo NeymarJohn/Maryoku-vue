@@ -15,15 +15,11 @@
       </div>
       <div class="summary-cont">
         <ul>
-          <li
-            :class="[{ 'with-help': dateTooltip && suggestionDate }]"
-            @mouseover="dateTooltip = true"
-            @mouseleave="dateTooltip = false"
-          >
+          <li :class="[{ 'with-help': dateTooltip }]" @mouseover="dateTooltip = true" @mouseleave="dateTooltip = false">
             <img :src="`${proposalIconsUrl}Path 251 (2).svg`" />
             {{ eventDate }}
-            <img v-if="dateTooltip && suggestionDate" class="question" :src="`${proposalIconsUrl}Asset 582.svg`" />
-            <div class="date-tooltip" v-if="dateTooltip && suggestionDate">
+            <img v-if="dateTooltip" class="question" :src="`${proposalIconsUrl}Asset 582.svg`" />
+            <div class="date-tooltip" v-if="dateTooltip">
               <h3>Your Time Suggestion</h3>
               <p>
                 Client will get this proposal with
@@ -137,14 +133,14 @@
               <img :src="`${landingIconsUrl}Path 1942.svg`" />
               <span>
                 <strong>Type:</strong>
-                {{ proposalRequest ? event.eventType.name : "-" }}
+                {{ proposalRequest ? event.occasion : "-" }}
               </span>
             </li>
             <li>
               <img :src="`${landingIconsUrl}Path 1383.svg`" />
               <span>
                 <strong>Invited:</strong>
-                {{ proposalRequest && event.guestType ? event.guestType : "-" }}
+                {{ proposalRequest ? event.participantsType : "-" }}
               </span>
             </li>
           </ul>
@@ -482,9 +478,6 @@ export default {
         this.$store.commit("vendorProposal/setWizardStep", newValue);
       },
     },
-    suggestionDate() {
-      return this.$store.state.vendorProposal.suggestionDate;
-    },
   },
 };
 </script>
@@ -496,13 +489,10 @@ export default {
 
   section.header-wrapper {
     background-color: #ffffff;
-    position: relative;
+    position: absolute;
     width: 100%;
     border-radius: 3px;
-    -webkit-box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-    /* height: 266px; */
-    display: flex;
 
     .proposal-banner {
       background-image: url("https://static-maryoku.s3.amazonaws.com/storage/img/lock.jpg");
@@ -515,7 +505,7 @@ export default {
       padding: 90px 96px;
       color: #ffffff;
       width: 495px;
-      // height: 273px;
+      height: 273px;
 
       h2 {
         font-size: 50px;
@@ -650,7 +640,7 @@ export default {
     }
   }
   .main-cont {
-    // margin-top: 263px;
+    margin-top: 263px;
     margin-bottom: 90px;
     width: 100%;
 

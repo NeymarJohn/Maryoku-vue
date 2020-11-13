@@ -9,7 +9,7 @@
             {{
               proposalRequest.eventData.concept
                 ? proposalRequest.eventData.concept.name
-                : proposalRequest.eventData.eventType.name
+                : proposalRequest.eventData.eventType
             }}
           </h3>
           <h3 v-else>No Event Data</h3>
