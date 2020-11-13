@@ -38,6 +38,15 @@ export default {
   data() {
     return {
       serviceNames: {
+        venuerental: "venue",
+        foodandbeverage: "food and beverage",
+        decor: "decor",
+        videographyandphotography: "videography & photography",
+        signageprinting: "singage/printing",
+        transportation: "transportation",
+        equipmentrentals: "equipment",
+        audiovisualstagingservices: "AV",
+        administraion: "Administration",
       },
     };
   },

@@ -8,6 +8,7 @@
       :disabled="disabled"
       :placeholder="placeholder"
       :style="`padding-left: ${icon || img ? '3rem' : '1.2rem'}`"
+      @change="changeValue"
       v-if="!items"
     />
     <input
@@ -34,11 +35,7 @@
       `"
     />
     <ul v-if="expanded && items">
-      <li
-        v-for="(item, index) in items"
-        :key="index"
-        @click="selectValue(item)"
-      >
+      <li v-for="(item, index) in items" :key="index" @click="selectValue(item)">
         {{ item }}
       </li>
     </ul>
@@ -63,6 +60,7 @@ export default {
     return {
       expanded: false,
       selectedItem: null,
+      value: "",
     };
   },
   created() {},
@@ -70,6 +68,10 @@ export default {
     selectValue(item) {
       this.selectedItem = item;
       this.expanded = false;
+      this.$emit("change", item);
+    },
+    changeValue(event) {
+      this.$emit("change", event.target.value);
     },
   },
 };
