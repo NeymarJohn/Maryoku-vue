@@ -15,22 +15,32 @@
       </div>
     </div>
     <hr />
-    <div class="p-40">
+    <div
+      class="p-40"
+      v-for="requirement in specialRequirements"
+      :key="requirement.item"
+      :class="{ 'd-none': getSelectedOption(requirement.options).length == 0 }"
+    >
       <div>
         <img :src="`${$iconURL}Submit+Proposal/request arrangement.png`" />
-        <span class="font-size-30 font-bold">The client has requested these sitting arrangement, can you deliver?</span>
+        <span class="font-size-30 font-bold"
+          >The client has requested these {{ requirement.item || requirement.subCategory }}, can you deliver?</span
+        >
       </div>
-      <div class="d-flex align-center mt-40">
-        <div>
-          <div>'Theatre'</div>
-          <div><img :src="`${$iconURL}Requirements/theatre-small.png`" /></div>
+      <div class="d-flex align-center mt-40" v-if="requirement.item == 'Sitting arrangement'" style="flex-flow: wrap">
+        <div class="d-flex mb-30">
+          <template v-for="(sit, index) in requirement.options">
+            <div
+              v-if="sit.selected"
+              :key="`sitarrangement-${index}`"
+              class="d-flex flex-column justify-content-between seat-type"
+            >
+              <div>'{{ sit.item }}'</div>
+              <div><img :src="`${$iconURL}Requirements/${sit.icon}`" /></div>
+            </div>
+          </template>
         </div>
-        <div>Or</div>
-        <div>
-          <div>'U shape'</div>
-          <div><img :src="`${$iconURL}Requirements/u-shape-small.png`" /></div>
-        </div>
-        <div style="margin-left: 80px">
+        <div style="margin-left: 80px" v-if="requirement.groupSizes.findIndex((item) => item.selected) >= 0">
           <div class="font-size-22 font-bold mb-20">
             <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" class="page-icon" />
             Group Work Planned
@@ -39,10 +49,17 @@
             <div class="mb-10">Group size:</div>
             <div class="group-card">
               <img :src="`${$iconURL}common/users-gray.svg`" class="page-icon" />
-              <div class="font-size-30" style="padding: 20px">14-19</div>
+              <div class="font-size-30" style="padding: 20px">
+                {{ requirement.groupSizes.find((item) => item.selected).item }}
+              </div>
               <div class="font-size-22">people</div>
             </div>
           </div>
+        </div>
+      </div>
+      <div v-else class="align-center mt-40" :class="{ 'd-none': getSelectedOption(requirement.options).length == 0 }">
+        <div v-for="option in getSelectedOption(requirement.options)" :key="option.name" class="ml-20">
+          {{ option.name }}
         </div>
       </div>
     </div>
@@ -58,10 +75,38 @@ export default {
       agreeTerms: false,
     };
   },
+  created() {
+    console.log("specialRequirements", this.specialRequirements);
+  },
+  methods: {
+    getSelectedOption(options) {
+      return options.filter((it) => it.selected);
+    },
+  },
+  computed: {
+    specialRequirements() {
+      return this.$store.state.vendorProposal.proposalRequest.requirements.filter((item) => item.category == "special");
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
 .additional-requirements {
+  .seat-type {
+    margin-right: 30px;
+    position: relative;
+    padding: 10px;
+    &::after {
+      content: "Or";
+      position: absolute;
+      left: 100%;
+      top: 50%;
+    }
+    &:last-child::after {
+      content: "";
+      display: none !important;
+    }
+  }
   .group-card {
     display: flex;
     flex-direction: column;

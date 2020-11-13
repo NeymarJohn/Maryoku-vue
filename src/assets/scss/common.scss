@@ -491,6 +491,9 @@ hr {
 .d-flex {
     display: flex;
 }
+.flex-column {
+    flex-direction: column;
+}
 .d-inline-block {
     display: inline-block;
 }

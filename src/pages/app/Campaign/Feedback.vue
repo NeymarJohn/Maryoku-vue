@@ -42,7 +42,10 @@
           </div>
           <hide-switch v-model="campaignData.visibleSettings.showSharingOption" label="sharing option"></hide-switch>
         </div>
-        <sharing-button-group class="mb-50"></sharing-button-group>
+        <sharing-button-group
+          class="mb-50"
+          v-if="campaignData.visibleSettings.showSharingOption"
+        ></sharing-button-group>
       </div>
       <hr />
       <div>
@@ -51,7 +54,7 @@
           We'd love to get your feedback
           <hide-switch v-model="campaignData.visibleSettings.showFeedback" label="feedback section"></hide-switch>
         </div>
-        <div>
+        <div v-if="campaignData.visibleSettings.showFeedback">
           <feedback-question
             v-for="(question, index) in feedbackQuestions"
             :key="index"
@@ -171,7 +174,10 @@ export default {
       });
     },
     addNewImage(image) {
-      this.editingContent.images.unshift({ src: image });
+      console.log(image);
+      const images = this.campaignData.images;
+      images.unshift({ src: image.imageString });
+      this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "images", value: images });
     },
     uploadFile() {
       document.getElementById("file-uploader").click();
