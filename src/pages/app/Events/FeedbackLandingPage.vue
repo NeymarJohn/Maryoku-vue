@@ -195,8 +195,6 @@ export default {
           question: item.question,
           comment: item.comment,
           rate: item.rank,
-          label: item.label,
-          event: new CalendarEvent({ id: this.event.id }),
         });
       });
       new Feedback({

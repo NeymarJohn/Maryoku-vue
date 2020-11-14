@@ -39,16 +39,16 @@
           </li>
           <li>
             <span>Your proposal</span>
-            <span>${{ ((mainTotalPrice * (100 - bundleDiscountPercentage)) / 100) | withComma }}</span>
+            <span>${{ mainTotalPrice | withComma }}</span>
           </li>
-          <li :style="`margin: ${discountBlock[vendor.eventCategory.key] ? '' : '0'}`">
+          <li :style="`margin: ${discountBlock.category == vendor.eventCategory.key ? '' : '0'}`">
             <template v-if="discountBlock[vendor.eventCategory.key]">
               <div class="left">
                 <span>Before discount</span>
               </div>
               <div class="right">
-                <span>{{ `(${bundleDiscountPercentage}% off)` }}</span>
-                <span>${{ pricesByCategory[vendor.vendorCategory] | withComma }}</span>
+                <span>{{ `(${discountBlock.value}% off)` }}</span>
+                <span>${{ total(getRequirementsByCategory("venuerental")) | withComma }}</span>
               </div>
             </template>
           </li>
@@ -84,11 +84,11 @@
             </li>
             <li>
               <span>Your proposal</span>
-              <span>${{ pricesByCategory[a] | withComma }}</span>
+              <span>${{ calculatedTotal(getRequirementsByCategory(a)) | withComma }}</span>
             </li>
             <li>
-              <span>Budget for {{ getServiceCategory(a).title }}</span>
-              <span> ${{ pricesByCategory[a] | withComma }}</span>
+              <span>Budget for {{ a }}</span>
+              <span>${{ calculatedTotal(getRequirementsByCategory(a)) | withComma }}</span>
             </li>
             <li v-if="calculatedTotal(getRequirementsByCategory(a)) - newProposalRequest.eventData.allocatedBudget > 0">
               <md-icon>error</md-icon>
@@ -145,17 +145,9 @@
           <span v-else> ${{ bundleDiscountAmount }} </span>
         </div>
         <div class="action-cont">
-          <a class="clear" @click="cancelBundle">Cancel</a>
+          <a class="clear">Cancel</a>
           <a class="add" @click="addBunldDiscount">Add bundle</a>
         </div>
-      </div>
-    </div>
-    <div class="bundle-information" v-if="bundleDiscount && bundleDiscount.discountPercentage">
-      <div>
-        <span>{{ bundledServicesString }}</span>
-      </div>
-      <div class="font-bold d-flex justify-content-between">
-        <span>Total Bundle</span><spanB class="font-bold font-size-22">${{ bundleDiscount.discountAmount }}</spanB>
       </div>
     </div>
     <div class="total-cont isEdit" v-if="isEdit">
@@ -317,21 +309,13 @@ export default {
       this.bundleDiscountServices.forEach((category) => {
         this.discountBlock[category] = { value: this.bundleDiscountAmount };
       });
-      this.isBundleDiscount = false;
-      this.$store.commit("vendorProposal/setBundleDiscount", {
-        services: this.bundleDiscountServices,
-        discountPercentage: this.bundleDiscountPercentage,
-        discountAmount: this.bundleDiscountAmount,
-      });
-    },
-    cancelBundle() {
-      this.isBundleDiscount = false;
     },
     setRange() {
       if (this.bundleDiscountPercentage > 100) {
         this.bundleDiscountPercentage = 100;
       }
       this.bundleDiscountAmount = this.totalPriceForBundle * (this.bundleDiscountPercentage / 100);
+      this.isBundleDiscount = false;
     },
     setPercentage() {
       this.bundleDiscountPercentage = (this.bundleDiscountAmount / this.totalPriceForBundle) * 100;
@@ -403,18 +387,6 @@ export default {
       });
       return s;
     },
-    bundleDiscount() {
-      return this.$store.state.vendorProposal.bundleDiscount;
-    },
-    bundledServicesString() {
-      let result = "";
-      this.bundleDiscount.services.forEach((service, index) => {
-        console.log("service", service);
-        if (index !== 0) result += " + ";
-        result += this.getServiceCategory(service).title;
-      });
-      return result;
-    },
   },
   watch: {},
 };
@@ -435,11 +407,6 @@ export default {
     font-size: 16px;
     color: #707070;
     border-color: #c9c9c9;
-  }
-  .bundle-information {
-    background-color: #ffedb7;
-    margin: auto -25px;
-    padding: 25px;
   }
   .summary-cont {
     h3 {

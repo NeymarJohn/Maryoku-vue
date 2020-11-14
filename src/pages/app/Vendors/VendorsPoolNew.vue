@@ -26,7 +26,9 @@
         :key="index"
       >
         <div class="item-title" @click="expandFilter(index)">
-          {{ filter.title }}
+          <span v-if="!searchModel[filter.searchKey]">{{ filter.title }}</span>
+          <span v-else class="font-bold">{{ searchModelLabels[filter.searchKey] }}</span>
+
           <md-icon>keyboard_arrow_down</md-icon>
         </div>
         <div class="expanded-section" v-if="filter.expand">
@@ -42,15 +44,15 @@
                 v-for="(item, mainFilterIndex) in filter.mainCategories"
                 :key="mainFilterIndex"
               >
-                <img :src="`${categoriesIconURL}${item.icon}`" width="20" />
-                <div class="filter-title">{{ item.title }}</div>
+                <img :src="`${$iconURL}Budget Elements/${item.icon}`" width="20" />
+                <div class="filter-title" @click="searchByCategory(item)">{{ item.title }}</div>
               </div>
             </div>
             <div class="more-categories-filters">
               <div class="section-title">More</div>
               <ul class="columns-2">
                 <li v-for="(moreItem, moreItemIndex) in filter.moreCategories" :key="moreItemIndex">
-                  <a href>{{ moreItem }}</a>
+                  <a @click="searchByCategory(moreItem)">{{ moreItem.title }}</a>
                 </li>
               </ul>
             </div>
@@ -59,8 +61,15 @@
           <div class="location-filters-section d-flex" v-if="filter.title.toLowerCase() == 'location'">
             <div class="search-field-section">
               <div class="form-group">
-                <input placeholder="Search by City, State, Country…" />
-                <md-button class="md-just-icon md-simple md-small">
+                <!-- <input placeholder="Search by City, State, Country…" /> -->
+                <vue-google-autocomplete
+                  id="input_location"
+                  ref="address"
+                  :placeholder="'Search by City, State, Country…'"
+                  v-on:placechanged="getAddressData"
+                  types="geocode"
+                />
+                <md-button class="md-just-icon md-simple md-small" @click="searchByLocation">
                   <img :src="`${menuIconsURL}Asset 115.svg`" />
                 </md-button>
               </div>
@@ -77,7 +86,8 @@
 
           <div class="capacity-filters-section d-flex" v-if="filter.title.toLowerCase() == 'capacity'">
             <md-radio
-              v-model="filters.capacity"
+              v-model="searchModel.capacity"
+              @change="searchByCapacity"
               :value="capacityItem"
               v-for="(capacityItem, capacityItemIndex) in filter.options"
               :key="capacityItemIndex"
@@ -162,7 +172,7 @@
           </div>
         </div>
       </div>
-      <div class="filters-section__reset"><md-icon>refresh</md-icon>Reset Filters</div>
+      <div class="filters-section__reset" @click="resetFilters"><md-icon>refresh</md-icon>Reset Filters</div>
     </div>
     <div class="md-layout-item md-size-100 clear-margins" style="padding: 0 1em 0 3em !important">
       <vue-element-loading :active="working" spinner="ring" color="#FF547C" background-color="transparent" />
@@ -171,6 +181,7 @@
         :buildingBlocksList="buildingBlocksList"
         :vendorsList="vendorsList"
         :ratings="ratings"
+        :pagingData="pagingData"
         @editVendorDetails="editVendorDetails"
       />
       <vendors-list
@@ -184,9 +195,11 @@
       />
     </div>
     <div class="text-center width-100 mb-60 mt-50">
-      <div style="width: 400px">
-        <line-progress-bar></line-progress-bar>
+      <div style="width: 400px; margin: auto">
+        <div>You've viewed {{ pagingData.page * pagingData.limit }} of {{ pagingData.total }}</div>
+        <md-progress-bar class="md-accent" md-mode="determinate" :md-value="20"></md-progress-bar>
       </div>
+      <br />
       <md-button class="md-simple md-black maryoku-btn md-outlined" @click="loadMoreVendor"
         ><span style="padding: 5px 40px" class="font-size-20">Load More</span></md-button
       >
@@ -201,12 +214,12 @@ import companyForm from "./Form/companyForm.vue";
 import UploadModal from "./ImportVendors";
 import VendorsGrid from "./VendorsGridNew";
 import VendorsList from "./VendorsList";
-import LineProgressBar from "@/components/ProgressBar/Line";
 
 import SideBar from "../../../components/SidebarPlugin/NewSideBar";
 import { Modal } from "@/components";
 import Vendors from "@/models/Vendors";
 import _ from "underscore";
+import VueGoogleAutocomplete from "vue-google-autocomplete";
 
 export default {
   name: "vendors-pool",
@@ -217,7 +230,7 @@ export default {
     VendorsGrid,
     VendorsList,
     SideBar,
-    LineProgressBar,
+    VueGoogleAutocomplete,
   },
   props: {
     inPanel: Boolean,
@@ -227,6 +240,7 @@ export default {
       working: true,
       view: "grid", // {grid, list}
       vendorsList: [],
+      pagingData: {},
       page: 1,
       buildingBlocksList: [],
       ratings: [1, 2, 3, 4, 5],
@@ -237,60 +251,21 @@ export default {
       filtersItems: [
         {
           title: "Category",
+          searchKey: "vendorCategory",
           expand: false,
-          mainCategories: [
-            {
-              title: "Venue",
-              icon: "Asset 543.svg",
-            },
-            {
-              title: "Transportation",
-              icon: "Asset 543.svg",
-            },
-            {
-              title: "Photographer",
-              icon: "Asset 543.svg",
-            },
-            {
-              title: "Rentals",
-              icon: "Asset 543.svg",
-            },
-            {
-              title: "Catering",
-              icon: "Group 1471 (2).svg",
-            },
-            {
-              title: "DJ",
-              icon: "Asset 543.svg",
-            },
-            {
-              title: "decoration",
-              icon: "Asset 543.svg",
-            },
-            {
-              title: "Favours & Gifts",
-              icon: "Asset 543.svg",
-            },
-          ],
-          moreCategories: [
-            "Flowers",
-            "Rentals",
-            "Photo Booths",
-            "Band",
-            "Cakes",
-            "Musicians",
-            "Decor & Lighting",
-            "Activities",
-          ],
+          mainCategories: [],
+          moreCategories: [],
         },
         {
           title: "Location",
+          searchKey: "location",
           expand: false,
           locations: ["Manhattan", "New Jersey", "Brooklyn", "Long Island", "Queens"],
         },
         {
           title: "Capacity",
           expand: false,
+          searchKey: "capacity",
           options: [
             "Intimate event",
             "Small event (100- 300 guests)",
@@ -300,17 +275,50 @@ export default {
         },
         {
           title: "Rank",
+          searchKey: "rank",
           expand: false,
         },
       ],
       filters: {
         rank: [],
       },
+      searchModelLabels: {
+        vendorCategory: "",
+        location: "",
+        capacity: null,
+        rank: null,
+      },
+      searchModel: {
+        vendorCategory: "",
+        location: "",
+        capacity: "",
+        rank: null,
+      },
+      searchLocation: {
+        city: "",
+        state: "",
+        fullString: "",
+      },
     };
   },
   mounted() {
     this.working = true;
     // this.$auth.currentUser(this, true, () => {
+    this.$store.dispatch("common/fetchAllCategories").then((categories) => {
+      const filterCategories = [];
+
+      categories.forEach((category) => {
+        if (category.type == "service") {
+          filterCategories.push({
+            title: category.fullTitle,
+            value: category.key,
+            icon: category.icon,
+          });
+        }
+      });
+      this.$set(this.filtersItems[0], "mainCategories", filterCategories.slice(0, 8));
+      this.$set(this.filtersItems[0], "moreCategories", filterCategories.slice(8));
+    });
     Vendors.find("categories").then((res) => {
       let list = [];
       _.each(res, (parentBuildingBlock) => {
@@ -330,11 +338,20 @@ export default {
   },
   methods: {
     loadVendors() {
+      const params = {};
+      Object.keys(this.searchModel).forEach((key) => {
+        if (this.searchModel[key]) {
+          params[key] = this.searchModel[key];
+        }
+      });
       new Vendors()
+        .params(params)
         .limit(8)
         .page(this.page)
         .get()
         .then((vendors) => {
+          // console.log(vendors);
+          this.pagingData = vendors[0].model;
           this.vendorsList = [...this.vendorsList, ...vendors[0].results];
           this.working = false;
         });
@@ -395,12 +412,57 @@ export default {
       if (indexOfExpandedItem !== -1) this.filtersItems[indexOfExpandedItem].expand = false;
       this.filtersItems[index].expand = indexOfExpandedItem !== index ? true : false;
     },
+    searchByCategory(category) {
+      this.searchModelLabels.vendorCategory = category.title;
+      this.searchModel.vendorCategory = category.value;
+      this.searchVendors();
+    },
+    searchByLocation() {
+      this.searchModel.location = this.searchLocation.city;
+      this.searchModelLabels.location = this.searchLocation.city;
+      this.searchVendors();
+    },
+    searchByCapacity(value) {
+      // console.log("selected Capacity", value);
+      this.searchModel.capacity = value;
+      this.searchModelLabels.capacity = value;
+    },
+    searchByRank() {
+      this.searchModelLabels.rank = "";
+      this.searchModel.rank = "";
+    },
+    searchVendors() {
+      this.page = 1;
+      this.vendorsList = [];
+      this.loadVendors();
+    },
+    getAddressData: function (addressData, placeResultData, id) {
+      console.log(addressData);
+      console.log(placeResultData);
+      console.log(id);
+      this.searchLocation.fullString = placeResultData.formatted_address;
+      this.searchLocation.city = addressData.locality;
+      this.value = `${addressData.route}  ${addressData.administrative_area_level_1}  ${addressData.country}`;
+      this.$emit("change", this.value);
+    },
+    resetFilters() {
+      this.searchModel.location = "";
+      this.searchModel.vendorCategory = "";
+      this.searchModel.capacity = "";
+      this.searchModel.rank = "";
+    },
   },
   computed: {},
   watch: {},
+  created() {},
 };
 </script>
 <style lang="scss" scoped>
+.vendors-pool-page {
+  .filters-section__reset {
+    cursor: pointer;
+  }
+}
 %visually-hidden {
   position: absolute;
   overflow: hidden;

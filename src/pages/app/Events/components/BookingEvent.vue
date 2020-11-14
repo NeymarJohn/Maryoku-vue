@@ -169,19 +169,17 @@
         </modal>
       </template>
       <template v-if="showCounterPage">
-        <!--<div-->
-          <!--class="text-center font-size-20 md-layout-item md-size-100 mt-50"-->
-          <!--style="line-height: 2em"-->
-        <!--&gt;-->
-          <!--Our process is seeking vendors from our pool that are aligned with your requirements.-->
-          <!--<br />Those vendors will receive an email with a link to create a proposal.-->
-          <!--<br />This process will take-->
-          <!--in 4days.-->
-        <!--</div>-->
-        <PendingForVendors></PendingForVendors>
+        <div
+          class="text-center font-size-20 md-layout-item md-size-100 mt-50"
+          style="line-height: 2em"
+        >
+          Our process is seeking vendors from our pool that are aligned with your requirements.
+          <br />Those vendors will receive an email with a link to create a proposal.
+          <br />This process will take
+          in 4days.
+        </div>
         <div class="footer-container">
           <md-button class="md-bold add-category-btn md-black md-simple" @click="back"> <md-icon>arrow_back</md-icon>Back </md-button>
-          <div class="ml-auto">I need those proposals urgent</div>
         </div>
       </template>
     </template>
@@ -208,7 +206,6 @@ import _ from "underscore";
 import { Modal } from "@/components";
 import EventComponentVendor from "@/models/EventComponentVendor";
 import EventComponentProperty from "@/models/EventComponentProperty";
-import PendingForVendors from "../components/PendingForVendors";
 
 import EventChangeProposalModal from "@/components/Modals/EventChangeProposalModal";
 import HeaderActions from "@/components/HeaderActions";
@@ -225,7 +222,6 @@ export default {
     HeaderActions,
     CommentEditorPanel,
     BookingEventRequirement,
-    PendingForVendors,
   },
   props: {},
   data: () => ({
@@ -336,9 +332,9 @@ export default {
 
 .footer-container{
   position: fixed;
-  bottom: 0;
-  width: 100%;
+  bottom: 10px;
   height: 80px;
+  width: 100%;
   display: flex;
   align-items: center;
   padding: 16px;
