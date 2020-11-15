@@ -27,7 +27,7 @@
           <template v-for="social in socialList">
             <li v-if="vendor.social[social.name]" :key="social.name">
               <a :href="vendor.social[social.name]" target="_blank"
-                ><img :src="`${$iconURL}Vendor Signup/socialmedia/${social}.svg`"
+                ><img :src="`${$iconURL}Vendor Signup/${social.icon}`"
               /></a>
             </li>
           </template>
@@ -120,7 +120,7 @@ export default {
         margin-top: 20px;
         li {
           font-size: 16px;
-          margin-right: 55px;
+          margin-right: 40px;
           span {
             text-decoration: underline;
           }

@@ -7,7 +7,7 @@
             class="tab"
             :class="{ active: t == activeTab }"
             v-for="(t, tIndex) in tabs"
-            :key="tIndex"
+            :key="`tab-${tIndex}`"
             @click="goToSection(t)"
           >
             <span class="point"></span>
@@ -18,7 +18,24 @@
       <div class="right-side">
         <div class="card">
           <div class="banner">
-            <img :src="vendor.images[0]" v-if="vendor.images && vendor.images.length > 0" />
+            <!-- <img :src="vendor.vendorImages[0]" v-if="vendor.vendorImages && vendor.vendorImages.length > 0" /> -->
+            <div class="images">
+              <span class="prev" @click="prev()" v-if="imageSlidePos < 0">
+                <md-icon>keyboard_arrow_left</md-icon>
+              </span>
+              <div class="cont" :style="{ left: `${imageSlidePos}px` }" ref="imagesCont">
+                <img :src="img" v-for="(img, ind) in vendor.vendorImages" :key="`image-${ind}`" @click="view()" />
+              </div>
+              <span class="next" @click="next()" v-if="imageSlidePos >= 0">
+                <md-icon>keyboard_arrow_right</md-icon>
+              </span>
+              <LightBox
+                v-if="getGalleryImages().length > 0"
+                :images="getGalleryImages()"
+                ref="lightbox"
+                :show-light-box="false"
+              />
+            </div>
           </div>
           <div class="about-cont profile-section" id="About">
             <div class="block">
@@ -40,23 +57,6 @@
               </div>
               <div class="desc">{{ vendor.about.category }}</div>
             </div>
-            <div class="images">
-              <span class="prev" @click="prev()" v-if="imageSlidePos < 0">
-                <md-icon>keyboard_arrow_left</md-icon>
-              </span>
-              <div class="cont" :style="{ left: `${imageSlidePos}px` }" ref="imagesCont">
-                <img :src="img" v-for="(img, ind) in vendor.images" :key="ind" @click="view()" />
-              </div>
-              <span class="next" @click="next()" v-if="imageSlidePos >= 0">
-                <md-icon>keyboard_arrow_right</md-icon>
-              </span>
-              <LightBox
-                v-if="getGalleryImages().length > 0"
-                :images="getGalleryImages()"
-                ref="lightbox"
-                :show-light-box="false"
-              />
-            </div>
           </div>
           <div class="fee-cont profile-section" id="What's Included?">
             <div class="title">
@@ -76,7 +76,11 @@
                 </div>
               </div>
               <div class="citems">
-                <vendor-starting-fee-item v-for="(fv, fvIndex) in getStartingFeeItems()" :key="fvIndex" :item="fv" />
+                <vendor-starting-fee-item
+                  v-for="(fv, fvIndex) in getStartingFeeItems()"
+                  :key="`vendor-starting-fee-${fvIndex}`"
+                  :item="fv"
+                />
               </div>
             </div>
           </div>
@@ -95,7 +99,7 @@
               </div>
               <div class="citems">
                 <div class="citem">
-                  <vendor-extra-pay-item v-for="(cs, csIndex) in getExtraPayItems()" :key="csIndex" :item="cs" />
+                  <vendor-extra-pay-item v-for="(cs, index) in getExtraPayItems()" :key="`extra-${index}`" :item="cs" />
                 </div>
               </div>
             </div>
@@ -103,13 +107,13 @@
           <div class="policy-cont profile-section" id="Policy">
             <div class="title"><img :src="`${iconUrl}Group 1471 (2).svg`" /> OUR POLICY</div>
             <div class="rules">
-              <div class="rule" v-for="(y, yIndex) in vendor.yesRules" :key="yIndex">
+              <div class="rule" v-for="(y, yIndex) in vendor.yesRules" :key="`yes-${yIndex}`">
                 <div class="item">{{ y.name }}</div>
                 <div class="item">
                   <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="vendor.yesRules.includes(y)" />
                 </div>
               </div>
-              <div class="rule" v-for="(n, nIndex) in vendor.noRules" :key="nIndex">
+              <div class="rule" v-for="(n, nIndex) in vendor.noRules" :key="`rule-${nIndex}`">
                 <div class="item">{{ n.name }}</div>
                 <div class="item">
                   <img :src="`${iconUrl}Group 5489 (4).svg`" v-if="vendor.noRules.includes(n)" />
@@ -337,10 +341,10 @@ export default {
       return startingFeeItems;
     },
     prev() {
-      const ww = this.vendor.images.length * 320;
+      const ww = this.vendor.vendorImages.length * 700;
       const sw = this.$refs.imagesCont.clientWidth;
       if (ww / sw > 2) {
-        this.imageSlidePos += 320 * 4;
+        this.imageSlidePos += 700 * 4;
       } else if (ww / sw > 1) {
         this.imageSlidePos += (ww % sw) + 60;
       } else {
@@ -348,10 +352,10 @@ export default {
       }
     },
     next() {
-      const ww = this.vendor.images.length * 320;
+      const ww = this.vendor.vendorImages.length * 700;
       const sw = this.$refs.imagesCont.clientWidth;
       if (ww / sw > 2) {
-        this.imageSlidePos -= 320 * 4;
+        this.imageSlidePos -= 700 * 4;
       } else if (ww / sw > 1) {
         this.imageSlidePos -= (ww % sw) + 60;
       } else {
@@ -404,15 +408,16 @@ export default {
     },
     getGalleryImages: function () {
       let temp = [];
-      if (!this.vendor.images) return [];
-      if (this.vendor.images.length > 0) {
-        this.vendor.images.forEach((item) => {
+      if (!this.vendor.vendorImages) return [];
+      if (this.vendor.vendorImages.length > 0) {
+        this.vendor.vendorImages.forEach((item, index) => {
           temp.push({
             thumb: item,
             src: item,
-            caption: "test",
+            caption: index,
           });
         });
+        console.log(temp);
         return temp;
       } else {
         return [];
@@ -478,14 +483,55 @@ export default {
     }
     .right-side {
       flex: 5;
+
       .card {
-        padding: 30px 60px 60px 60px;
+        padding: 0px 60px 60px 60px;
         background-color: #ffffff;
         box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
 
         .banner {
           margin: 30px -60px calc(30px - 2rem) -60px;
           padding-bottom: 2rem;
+          overflow: hidden;
+          .images {
+            display: block;
+            overflow: hidden;
+            padding: 0;
+            white-space: nowrap;
+            position: relative;
+            margin-right: -60px;
+
+            span {
+              cursor: pointer;
+              position: absolute;
+              width: 28px;
+              height: 28px;
+              background-color: #ffffff;
+              box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+              border-radius: 50%;
+              text-align: center;
+              font-weight: 800;
+              z-index: 99;
+              top: 50%;
+              transform: translateY(-50%);
+
+              &.prev {
+                left: 0;
+              }
+              &.next {
+                right: 60px;
+              }
+            }
+            .cont {
+              position: relative;
+              img {
+                width: 700px;
+                height: 500px;
+                margin-right: 2rem;
+                cursor: zoom-in;
+              }
+            }
+          }
           img {
             width: 100%;
             height: 460px;
@@ -533,45 +579,7 @@ export default {
               width: 60%;
             }
           }
-          .images {
-            display: block;
-            overflow: hidden;
-            padding: 2rem 0;
-            white-space: nowrap;
-            position: relative;
-            margin-right: -60px;
 
-            span {
-              cursor: pointer;
-              position: absolute;
-              width: 28px;
-              height: 28px;
-              background-color: #ffffff;
-              box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-              border-radius: 50%;
-              text-align: center;
-              font-weight: 800;
-              z-index: 99;
-              top: 50%;
-              transform: translateY(-50%);
-
-              &.prev {
-                left: 0;
-              }
-              &.next {
-                right: 60px;
-              }
-            }
-            .cont {
-              position: relative;
-              img {
-                width: 300px;
-                height: 177px;
-                margin-right: 2rem;
-                cursor: zoom-in;
-              }
-            }
-          }
           .contact-us {
             padding: 2rem 0;
 
