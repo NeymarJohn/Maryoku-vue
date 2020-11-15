@@ -16,7 +16,7 @@
           <star-rating :border-width="0" :star-size="30" :show-rating="false" v-model="review.rank"></star-rating>
         </div>
       </div>
-      <div class="text-center">
+      <div class="text-center mt-50" style="width: 50%; margin: 50px auto">
         <div class="color-gray">You've viewed 3 of 12</div>
         <md-progress-bar class="md-accent" md-mode="determinate" :md-value="20"></md-progress-bar>
         <md-button class="md-black maryoku-btn md-simple md-outlined" style="padding: 10px 30px">Load More</md-button>

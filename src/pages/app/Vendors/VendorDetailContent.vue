@@ -124,7 +124,7 @@
               <h5>We don't allow these 3rd party vendor:</h5>
               <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
             </div>
-            <div class="dont-work">
+            <div class="dont-work" v-if="vendor.selectedWeekdays.length && vendor.exDonts.length">
               <h5>We don't work on:</h5>
               <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
                 <img :src="`${iconUrl}Group 5489 (4).svg`" />
