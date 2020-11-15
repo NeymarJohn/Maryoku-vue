@@ -583,6 +583,7 @@ export default {
           img {
             width: 100%;
             height: 460px;
+            object-fit: cover;
           }
         }
         .about-cont {

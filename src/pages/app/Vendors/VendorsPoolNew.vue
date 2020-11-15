@@ -195,12 +195,12 @@
       />
     </div>
     <div class="text-center width-100 mb-60 mt-50">
-      <div style="width: 400px; margin: auto">
-        <div>You've viewed {{ pagingData.page * pagingData.limit }} of {{ pagingData.total }}</div>
-        <md-progress-bar class="md-accent" md-mode="determinate" :md-value="20"></md-progress-bar>
+      <div style="width: 400px; margin: auto" v-if="pagingData.total > 0">
+        <div>You've viewed {{ viewedCount }} of {{ pagingData.total }}</div>
+        <md-progress-bar class="md-accent" md-mode="determinate" :md-value="pagingProgress"></md-progress-bar>
       </div>
       <br />
-      <md-button class="md-simple md-black maryoku-btn md-outlined" @click="loadMoreVendor"
+      <md-button class="md-simple md-black maryoku-btn md-outlined" @click="loadMoreVendor" v-if="canLoadMore"
         ><span style="padding: 5px 40px" class="font-size-20">Load More</span></md-button
       >
     </div>
@@ -452,7 +452,20 @@ export default {
       this.searchModel.rank = "";
     },
   },
-  computed: {},
+  computed: {
+    pagingProgress() {
+      return ((this.pagingData.limit * this.pagingData.page) / this.pagingData.total) * 100;
+    },
+    canLoadMore() {
+      return this.pagingData.limit * this.pagingData.page < this.pagingData.total;
+    },
+    viewedCount() {
+      if (this.pagingData.limit * this.pagingData.page > this.pagingData.total) {
+        return this.pagingData.total;
+      }
+      return this.pagingData.limit * this.pagingData.page;
+    },
+  },
   watch: {},
   created() {},
 };

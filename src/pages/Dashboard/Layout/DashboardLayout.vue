@@ -1,38 +1,7 @@
 <template>
   <div :class="[{ 'nav-open': $sidebar.showSidebar }, { rtl: $route.meta.rtlActive }]">
     <notifications></notifications>
-    <side-bar>
-      <mobile-menu></mobile-menu>
-      <template slot="links">
-        <sidebar-item
-          name="left-menu-events-list"
-          class="left-menu-events-list"
-          :link="{ name: 'Create Event', icon: 'event', path: '/event/create' }"
-        ></sidebar-item>
-
-        <li class="menu-divider"></li>
-
-        <sidebar-item
-          name="left-menu-events-list"
-          class="left-menu-events-list"
-          :link="{ name: 'Events List', icon: 'event', path: '/events' }"
-        ></sidebar-item>
-        <sidebar-item
-          name="left-menu-yearly-plan"
-          class="left-menu-yearly-plan"
-          :link="{ name: 'Year Planner', icon: 'event', path: '/planner' }"
-        ></sidebar-item>
-
-        <li class="menu-divider"></li>
-
-        <sidebar-item
-          name="left-menu-vendors-list"
-          class="left-menu-vendors-list"
-          :link="{ name: 'Vendors Pool', icon: 'contacts', path: '/vendors-pool' }"
-        >
-        </sidebar-item>
-      </template>
-    </side-bar>
+    <side-bar></side-bar>
     <div class="main-panel" style="height: 50%">
       <!-- <top-navbar></top-navbar> -->
 
@@ -63,6 +32,7 @@ import UserMenu from "./Extra/UserMenu.vue";
 import { ZoomCenterTransition } from "vue2-transitions";
 // import auth from "src/auth";
 import EventSidePanel from "@/pages/app/Events/EventSidePanel";
+import SideBar from "@/components/SidebarPlugin/NewSideBar";
 
 function hasElement(className) {
   return document.getElementsByClassName(className).length > 0;
@@ -86,6 +56,7 @@ export default {
     MobileMenu,
     UserMenu,
     ZoomCenterTransition,
+    SideBar,
   },
   data() {
     return {

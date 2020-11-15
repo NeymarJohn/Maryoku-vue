@@ -178,8 +178,12 @@ export default {
       this.$router.push({ name: "VendorDetails", params: { id: vendorId } });
     },
     vendorMainImage(vendor) {
-      const rndInt = Math.floor(Math.random() * this.bgImages.length);
-      return this.bgImages[rndInt];
+      if (vendor.vendorImages && vendor.vendorImages.length > 0) {
+        return vendor.vendorImages[0];
+      } else {
+        const rndInt = Math.floor(Math.random() * this.bgImages.length);
+        return this.bgImages[rndInt];
+      }
     },
     filterVendors() {
       this.filteredVendorsList = _.filter(this.vendorsList, (v) => {
