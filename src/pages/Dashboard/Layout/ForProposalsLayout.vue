@@ -15,11 +15,15 @@
       </div>
       <div class="summary-cont">
         <ul>
-          <li :class="[{ 'with-help': dateTooltip }]" @mouseover="dateTooltip = true" @mouseleave="dateTooltip = false">
+          <li
+            :class="[{ 'with-help': dateTooltip && suggestionDate }]"
+            @mouseover="dateTooltip = true"
+            @mouseleave="dateTooltip = false"
+          >
             <img :src="`${proposalIconsUrl}Path 251 (2).svg`" />
             {{ eventDate }}
-            <img v-if="dateTooltip" class="question" :src="`${proposalIconsUrl}Asset 582.svg`" />
-            <div class="date-tooltip" v-if="dateTooltip">
+            <img v-if="dateTooltip && suggestionDate" class="question" :src="`${proposalIconsUrl}Asset 582.svg`" />
+            <div class="date-tooltip" v-if="dateTooltip && suggestionDate">
               <h3>Your Time Suggestion</h3>
               <p>
                 Client will get this proposal with
@@ -56,6 +60,7 @@
             :hours="getRemainingTime.hours"
             :minutes="getRemainingTime.mins"
             :seconds="getRemainingTime.seconds"
+            :content="'To send your bid'"
           />
         </div>
       </div>
@@ -132,14 +137,14 @@
               <img :src="`${landingIconsUrl}Path 1942.svg`" />
               <span>
                 <strong>Type:</strong>
-                {{ proposalRequest ? event.occasion : "-" }}
+                {{ proposalRequest ? event.eventType.name : "-" }}
               </span>
             </li>
             <li>
               <img :src="`${landingIconsUrl}Path 1383.svg`" />
               <span>
                 <strong>Invited:</strong>
-                {{ proposalRequest ? event.participantsType : "-" }}
+                {{ proposalRequest && event.guestType ? event.guestType : "-" }}
               </span>
             </li>
           </ul>
@@ -182,7 +187,7 @@
         <div class="saved-it-modal__header">
           <h3><img :src="`${proposalIconsUrl}Asset 587.svg`" /> Time Is Up!</h3>
           <div class="header-description">
-            The deadline for submitting this prposal has passed. But no worries! We weill be with you soon with the next
+            The deadline for submitting this prposal has passed. But no worries! We will be with you soon with the next
             one.
           </div>
         </div>
@@ -203,6 +208,30 @@
         </div>
       </template>
     </modal>
+    <modal v-if="showCloseProposalModal" class="saved-it-modal" container-class="modal-container sl">
+      <template slot="header">
+        <div class="saved-it-modal__header d-flex">
+          <img :src="`${$iconURL}NewSubmitPorposal/closeproposal.png`" />
+          <div class="ml-20">
+            <h3 class="text-left color-black">
+              We are sorry, but someone else got there <br />before you and already won this bid.
+            </h3>
+            <div class="text-left">But no worries! We will be with you soon with the next one</div>
+          </div>
+        </div>
+        <button class="close" @click="showCloseProposalModal = false">
+          <img :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`" />
+        </button>
+      </template>
+      <template slot="body">
+        <div class="saved-it-modal__body"></div>
+      </template>
+      <template slot="footer">
+        <div class="saved-it-modal__footer">
+          <md-button class="md-red maryoku-btn" @click="showCloseProposalModal = false">Ok, Thanks</md-button>
+        </div>
+      </template>
+    </modal>
   </div>
 </template>
 <script>
@@ -219,7 +248,7 @@ import ContentFooter from "./ContentFooter.vue";
 import MobileMenu from "./Extra/MobileMenu.vue";
 import UserMenu from "./Extra/UserMenu.vue";
 import ForVendors from "@/pages/app/Vendors/ForVendors.vue";
-import VendorBidTimeCounter from "@/pages/app/Vendors/components/VendorBidTimeCounter.vue";
+import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
 
 export default {
   components: {
@@ -248,6 +277,7 @@ export default {
       vendorCategory: null,
       event: "",
       openedModal: "",
+      showCloseProposalModal: false,
     };
   },
   created() {
@@ -267,6 +297,10 @@ export default {
       this.vendor = vendor;
     });
     this.getProposalRequest(this.$route.params.id).then((proposalRequest) => {
+      console.log("proposalRequest", proposalRequest);
+      if (proposalRequest.componentInstance.proposalAccepted) {
+        this.showCloseProposalModal = true;
+      }
       this.$set(this, "proposalRequest", proposalRequest);
       this.event = proposalRequest.eventData;
       if (proposalRequest.eventData.concept) {
@@ -376,6 +410,9 @@ export default {
       if (this.step > initStep) {
         this.step = this.step - 1;
       } else {
+        const vendorId = this.$route.params.vendorId;
+        const requestId = this.$route.params.id;
+        this.$router.push(`/vendors/${vendorId}/proposal-request/${requestId}`);
       }
       // this.$root.$emit("prev-step-vendor-proposal");
       // this.$root.$emit("clear-slide-pos");
@@ -404,10 +441,19 @@ export default {
   },
   computed: {
     eventDate() {
+      const suggestionDate = this.$store.state.vendorProposal.suggestionDate;
       if (!this.event) return "-";
 
       let startDate = new Date(this.event.eventStartMillis);
       let endDate = new Date(this.event.eventEndMillis);
+      if (suggestionDate && suggestionDate.length > 0) {
+        startDate = new Date(suggestionDate[0].date);
+        endDate = new Date(suggestionDate[suggestionDate.length - 1].date);
+        return `${moment(suggestionDate[0].date, "DD/MM/YYYY").format("MMM D, YYYY")} - ${moment(
+          suggestionDate[suggestionDate.length - 1].date,
+          "DD/MM/YYYY",
+        ).format("MMM D, YYYY")}`;
+      }
       return `${moment(startDate).format("MMM D, YYYY")} - ${moment(endDate).format("MMM D, YYYY")}`;
     },
     eventTime() {
@@ -465,6 +511,9 @@ export default {
         this.$store.commit("vendorProposal/setWizardStep", newValue);
       },
     },
+    suggestionDate() {
+      return this.$store.state.vendorProposal.suggestionDate;
+    },
   },
 };
 </script>
@@ -476,10 +525,13 @@ export default {
 
   section.header-wrapper {
     background-color: #ffffff;
-    position: absolute;
+    position: relative;
     width: 100%;
     border-radius: 3px;
+    -webkit-box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+    /* height: 266px; */
+    display: flex;
 
     .proposal-banner {
       background-image: url("https://static-maryoku.s3.amazonaws.com/storage/img/lock.jpg");
@@ -492,7 +544,7 @@ export default {
       padding: 90px 96px;
       color: #ffffff;
       width: 495px;
-      height: 273px;
+      // height: 273px;
 
       h2 {
         font-size: 50px;
@@ -627,7 +679,7 @@ export default {
     }
   }
   .main-cont {
-    margin-top: 263px;
+    // margin-top: 263px;
     margin-bottom: 90px;
     width: 100%;
 
@@ -665,7 +717,7 @@ export default {
     align-items: center;
     position: absolute;
     width: 100%;
-    z-index: 9999;
+    z-index: 9000;
     overflow: hidden;
 
     .prev-cont {

@@ -11,7 +11,8 @@
         <li class="fix-digit">{{ s | attachZero }}<br /><span>Sec</span></li>
       </ul>
     </div>
-    <div class="action-cont">To send your bid</div>
+    <div class="action-cont">{{ content }}</div>
+    <!--<div class="action-cont">To send your bid</div>-->
   </div>
 </template>
 <script>
@@ -23,6 +24,7 @@ export default {
     hours: Number,
     minutes: Number,
     seconds: Number,
+    content: String,
   },
   data() {
     return {

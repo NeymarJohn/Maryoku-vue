@@ -23,17 +23,11 @@
           :hours="getRemainingTime.hours"
           :minutes="getRemainingTime.mins"
           :seconds="getRemainingTime.seconds"
+          :content="'To send your bid'"
         />
       </div>
     </section>
-    <div
-      class="banner"
-      :style="
-        backgroundImage
-          ? `background-image: url('${backgroundImage}');`
-          : `background-image: url('https://static-maryoku.s3.amazonaws.com/storage/img/lock.jpg');`
-      "
-    >
+    <div class="banner" :style="`background-image: url('${backgroundImage}');`">
       <div class="banner-content">
         <h3>Congratulations!</h3>
         <p>
@@ -64,12 +58,36 @@
       </div>
     </section>
     <signup-request-modal v-if="showSignup"></signup-request-modal>
+    <modal v-if="showCloseProposalModal" class="saved-it-modal" container-class="modal-container sl">
+      <template slot="header">
+        <div class="saved-it-modal__header d-flex">
+          <img :src="`${$iconURL}NewSubmitPorposal/closeproposal.png`" />
+          <div class="ml-20">
+            <h3 class="text-left color-black">
+              We are sorry, but someone else got there <br />before you and already won this bid.
+            </h3>
+            <div class="text-left">But no worries! We will be with you soon with the next one</div>
+          </div>
+        </div>
+        <button class="close" @click="showCloseProposalModal = false">
+          <img :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`" />
+        </button>
+      </template>
+      <template slot="body">
+        <div class="saved-it-modal__body"></div>
+      </template>
+      <template slot="footer">
+        <div class="saved-it-modal__footer">
+          <md-button class="md-red maryoku-btn" @click="showCloseProposalModal = false">Ok, Thanks</md-button>
+        </div>
+      </template>
+    </modal>
     <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="saved-it-modal__header">
           <h3><img :src="`${$iconURL}NewSubmitPorposal/Asset 587.svg`" /> Time Is Up!</h3>
           <div class="header-description">
-            The deadline for submitting this prposal has passed. But no worries! We weill be with you soon with the next
+            The deadline for submitting this prposal has passed. But no worries! We will be with you soon with the next
             one.
           </div>
         </div>
@@ -102,7 +120,7 @@ import ContentFooter from "./ContentFooter.vue";
 import MobileMenu from "./Extra/MobileMenu.vue";
 import UserMenu from "./Extra/UserMenu.vue";
 import ForVendors from "@/pages/app/Vendors/ForVendors.vue";
-import VendorBidTimeCounter from "@/pages/app/Vendors/components/VendorBidTimeCounter.vue";
+import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
 import SignupRequestModal from "@/components/Modals/VendorProposal/SignupRequestModal.vue";
 import { Modal } from "@/components";
 
@@ -125,12 +143,16 @@ export default {
       showSignup: false,
       isTimeUp: false,
       openedModal: "",
+      showCloseProposalModal: false,
     };
   },
   mounted() {
     this.getVendor(this.$route.params.vendorId)
       .then((vendor) => {
         this.vendor = vendor;
+        if (this.vendor.isEditing) {
+          this.showSignup = true;
+        }
       })
       .catch((e) => {
         this.showSignup = true;
@@ -138,6 +160,9 @@ export default {
     this.getProposalRequest(this.$route.params.rfpId).then((proposalRequest) => {
       this.proposalRequest = proposalRequest;
       this.event = this.proposalRequest.eventData;
+      if (this.proposalRequest.componentInstance.proposalAccepted) {
+        this.showCloseProposalModal = true;
+      }
     });
   },
   methods: {
@@ -158,7 +183,9 @@ export default {
       return "";
     },
     getRemainingTime() {
-      if (!this.proposalRequest) return { days: 0, hours: 0, mins: 0, seconds: 0 };
+      if (!this.proposalRequest || !this.proposalRequest.expiredTime) {
+        return { days: 0, hours: 0, mins: 0, seconds: 0 };
+      }
       console.log(this.proposalRequest.expiredTime);
       console.log(new Date().getTime());
       let remainingMs = this.proposalRequest.expiredTime - new Date().getTime();

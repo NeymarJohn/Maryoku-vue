@@ -16,35 +16,28 @@
         <template v-for="(property, index) in specialRequirements">
           <div
             class="additional-request-tag"
-            :class="{selected:property.selected}"
+            :class="{selected:property.isSelected}"
             @click="setRequirement(index)"
             :key="index"
           >
-            {{property.label}}
+            {{property.subCategory}}
             <md-icon class="icon color-red">add_circle</md-icon>
           </div>
         </template>
       </div>
     </div>
     <div v-for="(property, idx) in specialRequirements">
-      <template v-if="property.label !== 'Sitting Arrangement'">
         <special-requirement-item
-                v-if="property.selected"
+                v-if="property.isSelected"
                 :index="idx"
                 :data="property"
                 @change="handleChangeItem"
         ></special-requirement-item>
-      </template>
-      <template v-else>
-        <RequirementSittingArrangement
-                v-if="property.selected"
-        ></RequirementSittingArrangement>
-      </template>
     </div>
     <div class="anything-else-section">
-      <div class="font-bold mt-10">Anything Else?</div>
+      <h4>Get me a pink unicorn please</h4>
 
-      <div class="mt-10">Get me a pink unicorn please.</div>
+      <div class="mt-10">We love a good challenge! Tell us whatever you need, and we’ll add it to your proposal.</div>
       <div class="anything-else-section-options mt-10">
         <textarea placeholder="Type name of element here..." v-model="anythingElse" @input="handleNoteChange"></textarea>
       </div>
@@ -55,11 +48,10 @@
 </style>
 <script>
 import SpecialRequirementItem from './SpecialRequirementItem';
-import RequirementSittingArrangement from './RequirementSittingArrangement';
+
 export default {
   components: {
     SpecialRequirementItem,
-    RequirementSittingArrangement
   },
   props: {
     data: {
@@ -83,75 +75,33 @@ export default {
   },
   methods: {
     getSpecialRequirements(){
-      console.log("getSpecialRequirements", this.currentComponent);
-      let requirements = this._getUniqueValueArray(this.data, 'subCategory');
-
-      // add static item "sitting arrangements" in venue
-      if ( this.currentComponent.componentId === 'venuerental' ) requirements.push({subCategory: 'Sitting Arrangement'});
-
-      this.specialRequirements = requirements.map(requirement => {
-        let items = [];
-
-        this.data.map(item => {
-          if(item.subCategory === requirement.subCategory){
-            items.push(item);
-          }
-        });
-
-        let selected = items.some(item => item.isSelected === true);
-        let type = null;
-        if ( requirement.subCategory === 'Around the space' ){
-          type = 'around_the_space';
-        } else if ( requirement.subCategory === 'Sitting Arrangement') {
-          type = 'sitting_arrangement';
-        } {
-          type = requirement.subCategory.toLowerCase();
-        }
-        return {selected, label: requirement.subCategory, items, type};
-      });
+      this.specialRequirements = this.data;
 
     },
-    _getUniqueValueArray(array, key){
-
-      let flags = [];
-      let output = [];
-
-      for (let i = 0; i < array.length; i++){
-        if ( flags[array[i][key]]  ) continue;
-        flags[array[i][key]] = true;
-        output.push(array[i]);
-      }
-
-      return output;
-    },
-    handleChangeItem(index){
-      this.specialRequirements[index].items.map(item => {
-          let index = this.data.findIndex(option => option.item === item.item);
-          this.data[index] = JSON.parse(JSON.stringify(item));
-      });
+    handleChangeItem(){
+      console.log("handleChangeItem", this.data);
       this.$emit('change');
     },
     handleNoteChange(){
       this.$emit('change', {note: this.anythingElse});
     },
     setRequirement(index) {
-      this.specialRequirements[index].selected = !this.specialRequirements[index].selected;
+      this.data[index].isSelected = !this.data[index].isSelected;
+      this.$emit('change', this.data);
     },
   },
-  computed: {
-    selected() {
-      const selectedStatus = {};
-      this.specialRequirements.forEach((item) => {
-        selectedStatus[item.name] = item.selectedAccessibility;
-      }, {});
-      return selectedStatus;
-    },
+  watch: {
+    data:{
+      handler(newVal, oldVal){
+        if (newVal) {
+          this.getSpecialRequirements();
+        }
+      },
+      deep: true
+    }
   },
   mounted(){
     this.getSpecialRequirements();
-    this.$root.$on('revertRequirements', _ => {
-      this.getSpecialRequirements();
-    });
   }
 };
 </script>

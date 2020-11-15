@@ -14,7 +14,15 @@ const state = {
   legalDocs: {},
   wizardStep: 0,
   initStep: 0,
-  additionalServices: []
+  additionalServices: [],
+  attachments: {},
+  bundleDiscount: {
+    isApplied: false,
+    services: [],
+    discountPercentage: 0,
+    discountAmount: 0
+  },
+  suggestionDate: null,
 }
 const getters = {
   mainTotalPrice(state) {
@@ -68,7 +76,10 @@ const mutations = {
     Vue.set(state.proposalServices, category, services);
   },
   setLegalDocs: (state, { category, files }) => {
-    state.legalDocs[category] = files
+    Vue.set(state.legalDocs, category, files)
+  },
+  addLegalDoc: (state, { category, docTag, obj }) => {
+    Vue.set(state.legalDocs[category], docTag, obj)
   },
   setDiscount: (state, { category, discount }) => {
     Vue.set(state.discounts, category, discount);
@@ -82,6 +93,12 @@ const mutations = {
   removeCategoryFromAdditional: (state, category) => {
     const index = state.additionalServices.findIndex((item) => item == category);
     state.additionalServices.splice(index, 1);
+  },
+  setBundleDiscount: (state, bundleDiscount) => {
+    state.bundleDiscount = bundleDiscount
+  },
+  setValue: (state, { key, value }) => {
+    Vue.set(state, key, value)
   }
 }
 const actions = {

@@ -1,40 +1,64 @@
 <template>
-  <div class="concept-image-block">
+  <div class="concept-image-block" ref="content">
     <div
       class="image-background"
       v-for="idx in 4"
       :key="idx"
-      :style="`background-color: ${colors[idx-1].color}; opacity:${colors[idx-1].opacity}`"
+      :style="`background-color: ${colors[idx - 1].color}; opacity:${colors[idx - 1].opacity}`"
     ></div>
     <div>
       <div :class="`images-list__item ${border}`" v-for="indx in 5" :key="indx">
         <div
           class="image-section d-flex justify-content-center align-center text-center"
-          :style="`background-image:url(${images[indx-1].url})`"
+          :style="`background-image:url(${images[indx - 1].url})`"
           :for="`file-${indx}`"
-        ></div></div>
+        ></div>
+      </div>
     </div>
+    <img :src="imageData" />
   </div>
 </template>
 <script>
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 export default {
+  data() {
+    return {
+      imageData: "",
+    };
+  },
   props: {
     images: {
       type: Array,
-      default: []
+      default: [],
     },
     colors: {
       type: Array,
-      default: []
+      default: [],
     },
     border: {
       type: String,
-      default: ''
-    }
+      default: "",
+    },
   },
-  created () {
-    console.log("images", this.images)
-    console.log("colors", this.colors)
+  created() {
+    /** WITH CSS */
+    setTimeout(() => {
+      var canvasElement = document.createElement("canvas");
+      canvasElement.height = 500;
+      canvasElement.width = 1000;
+      html2canvas(this.$refs.content, {
+        canvas: canvasElement,
+        scale: 1,
+      }).then((canvas) => {
+        const img = canvas.toDataURL("image/png");
+
+        this.imageData = img;
+        console.log(img);
+        // doc.addImage(img, "PNG", 20, -10);
+        // doc.save("sample.pdf");
+      });
+    }, 10000);
   },
 };
 </script>

@@ -107,26 +107,39 @@
           </div>
         </div>
         <div class="policy-wrapper">
-          <div class="condition">
-            <h6>We charge deposite is:</h6>
-            <p>50% of the total event</p>
+          <div class="policy mb-50">
+            <div class="mb-10" v-for="(policy, index) in vendor.yesRules" :key="index">
+              <span class="font-bold" style="width: 50%; display: inline-block">{{ policy.name }}</span>
+              <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" class="label-icon" />
+            </div>
+            <div class="mb-10" v-for="(policy, index) in vendor.noRules" :key="index">
+              <span class="font-bold" style="min-width: 50%; display: inline-block">{{ policy.name }}</span>
+              <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" class="label-icon" />
+            </div>
           </div>
           <div class="cancellation">
-            <h5 class="subtitle">Our cancellation approach</h5>
-            <h6>We allow free cancellation until:</h6>
-            <p>30 days before the event</p>
-            <div class="semi-column">
+            <h5 class="subtitle">Pricing Policy</h5>
+            <div class="pricingPolicy mt-50">
+              <div class="mb-10 mt-10" v-for="(policy, index) in vendor.pricingPolicies" :key="policy.name">
+                <span class="font-bold" style="min-width: 50%; display: inline-block">{{ policy.name }}</span>
+                <span>{{ policy.value }}</span>
+              </div>
+            </div>
+
+            <!-- <h6>We allow free cancellation until:</h6>
+            <p>30 days before the event</p> -->
+            <!-- <div class="semi-column">
               <p><strong>If</strong> the client cancel the vent after 3 weeks before the event</p>
               <p><strong>If</strong> the client cancel the vent after 3 weeks before the event</p>
             </div>
             <div class="semi-column">
               <p><strong>Than</strong> the client will pay full deposite</p>
               <p><strong>Than</strong> the client will pay full deposite</p>
-            </div>
-            <div class="additional">
+            </div> -->
+            <!-- <div class="additional">
               <h6>Additional</h6>
               <p>Lorem</p>
-            </div>
+            </div> -->
             <div class="signature-wrapper">
               <div class="half-side">
                 <h6>{{ vendor.vendorCategory }}</h6>
@@ -281,15 +294,21 @@ export default {
     },
     removeSignature() {},
   },
-  created() {},
+  created() {
+    console.log(this.vendor);
+  },
   mounted() {
     this.savedItModal = false;
     this.isTimeUp = true;
 
-    this.proposalRequest.requirements.forEach((item) => {
-      if (!this.categories.includes(item.requirementsCategory)) {
-        this.categories.push(item.requirementsCategory);
-      }
+    // this.proposalRequest.requirements.forEach((item) => {
+    //   if (!this.categories.includes(item.requirementsCategory)) {
+    //     this.categories.push(item.requirementsCategory);
+    //   }
+    // });
+    this.categories.push(this.vendor.vendorCategory);
+    this.additionalServices.forEach((service) => {
+      this.categories.push(service);
     });
   },
   computed: {
@@ -302,6 +321,9 @@ export default {
     event() {
       if (this.proposalRequest) return this.proposalRequest.eventData;
       return null;
+    },
+    additionalServices() {
+      return this.$store.state.vendorProposal.additionalServices;
     },
   },
   watch: {},

@@ -1,12 +1,18 @@
 <template>
-  <div class="for-vendor-wrapper">
+  <vue-element-loading v-if="!vendor" :active="!!vendor" spinner="ring" color="#FF547C" />
+  <div class="for-vendor-wrapper" v-else>
     <h4>So what are the details?</h4>
     <div class="main-cont">
       <div class="one-row">
         <div class="left-side">
-          <h3>
-            {{ proposalRequest ? proposalRequest.eventData.title : "No Event Data" }}
+          <h3 v-if="proposalRequest">
+            {{
+              proposalRequest.eventData.concept
+                ? proposalRequest.eventData.concept.name
+                : proposalRequest.eventData.eventType.name
+            }}
           </h3>
+          <h3 v-else>No Event Data</h3>
 
           <p v-if="proposalRequest">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
@@ -48,20 +54,24 @@
               <li>
                 <img :src="`${iconsUrl}Path 1942.svg`" />
                 <strong>Type:</strong>
-                {{ proposalRequest ? proposalRequest.eventData.occasion : "-" }}
+                {{
+                  proposalRequest && proposalRequest.eventData.eventType
+                    ? proposalRequest.eventData.eventType.name
+                    : "-"
+                }}
               </li>
               <li>
                 <img :src="`${iconsUrl}Path 1383.svg`" />
                 <strong>Invited:</strong>
-                {{ proposalRequest ? proposalRequest.eventData.participantsType : "-" }}
+                {{ proposalRequest && proposalRequest.eventData.guestType ? proposalRequest.eventData.guestType : "-" }}
               </li>
               <li>
-                <div class="new-time">
+                <div class="new-time" v-if="vendor.eventCategory.key == 'venuerental'">
                   Already Booked?
-                  <a @click="showChooseDateModal()" v-if="vendor.eventCategory.key == 'venuerental'"
-                    >Suggest Another Date</a
+                  <a @click="showChooseDateModal()">Suggest New time</a>
+                  <span v-if="suggestionDate">
+                    ( {{ suggestionDate[0].date }} - {{ suggestionDate[suggestionDate.length - 1].date }})</span
                   >
-                  <a v-else @click="showChooseDateModal()">Suggest New time</a>
                 </div>
               </li>
             </ul>
@@ -71,7 +81,7 @@
       <hr />
       <vendor-budget-list
         :title="`Budget`"
-        :description="`usually budget is flexible and could change according to needs`"
+        :description="`Usually budget is flexible and could change according to needs`"
         :proposalRequest="proposalRequest"
         :requirements="requiredServices"
       />
@@ -133,6 +143,7 @@
             :title="`Vendor's Name`"
             :placeholder="`Type vendor's name here`"
             :style="`width: 100%`"
+            @change="setReferredVendorProperty('companyName', ...arguments)"
           />
           <input-proposal-sub-item
             :title="`Category`"
@@ -140,6 +151,7 @@
             :style="`width: 100%`"
             :img="`https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/Component 36 (2).svg`"
             :items="categories"
+            @change="setReferredVendorProperty('vendorCategory', ...arguments)"
           />
           <input-proposal-sub-item
             :title="`Email`"
@@ -147,6 +159,7 @@
             :style="`width: 100%`"
             :img="`${iconsUrl}Asset 499.svg`"
             :isLeft="true"
+            @change="setReferredVendorProperty('vendorMainEmail', ...arguments)"
           />
           <input-proposal-sub-item
             :title="`Link to Website`"
@@ -154,13 +167,14 @@
             :style="`width: 100%`"
             :img="`${iconsUrl}Asset 498.svg`"
             :isLeft="true"
+            @change="setReferredVendorProperty('social.website', ...arguments)"
           />
         </div>
       </template>
       <template slot="footer">
         <div class="refer-vendor-modal__footer">
           <a class="cancel" @click="hideModal()">Cancel</a>
-          <a class="cool" @click="hideModal()">Refer</a>
+          <a class="cool" @click="referNewVendor()">Refer</a>
         </div>
       </template>
     </modal>
@@ -250,7 +264,7 @@
             <a @click="showReferModal()">Refer Another Vendor</a>
             <img class="question" :src="`${iconsUrl}Group 5522.svg`" />
           </div>
-          <button class="cool" @click="showSorryModal()">Send</button>
+          <button class="cool" @click="declineRequest()">Send</button>
         </div>
       </template>
     </modal>
@@ -311,7 +325,7 @@
                   :arrow-position="`space-between`"
                   :limits="limitDateRange"
                   :marked-dates="markedDataRange"
-                  v-model="date"
+                  v-model="suggestedDates"
                   ref="calendar"
                 />
               </div>
@@ -360,6 +374,7 @@ import VendorBudgetList from "./components/VendorBudgetList.vue";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import { FunctionalCalendar } from "vue-functional-calendar";
 import { Modal } from "@/components";
+import swal from "sweetalert2";
 
 export default {
   components: {
@@ -390,20 +405,7 @@ export default {
       proposals: [],
       firstTime: false,
       suggest: false,
-      categories: [
-        "Venue Rental",
-        "Food & Beverage",
-        "Design and Decor",
-        "Guest Services & Staffing",
-        "Signage / Printing",
-        "AV / Staging",
-        "Swags",
-        "Transportation & Tour operator",
-        "Entertainment",
-        "Security",
-        "Videography and Photography",
-        "Equipment Rentals",
-      ],
+      categories: [],
       amPack: {
         start: "AM",
         end: "AM",
@@ -418,6 +420,15 @@ export default {
       },
       markedDataRange: [],
       today: null,
+      suggestedDates: [],
+      referredVendor: {
+        companyName: "",
+        vendorCategory: "",
+        vendorMainEmail: "",
+        social: {
+          website: "",
+        },
+      },
     };
   },
   mounted() {
@@ -432,19 +443,20 @@ export default {
     console.log(this.markedDataRange);
     this.$root.$on("go-to-proposal-form", () => {
       if (this.isAgreed) {
-        if (this.proposalRequest) {
-          this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
-        } else {
-          this.proposalRequest = new ProposalRequest({
-            id: this.$route.params.id,
-          });
-          this.$router.push({
-            path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
-            props: {
-              proposalRequest: this.proposalRequest,
-            },
-          });
-        }
+        this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
+        // if (this.proposalRequest) {
+        //   this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
+        // } else {
+        //   this.proposalRequest = new ProposalRequest({
+        //     id: this.$route.params.id,
+        //   });
+        //   this.$router.push({
+        //     path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
+        //     props: {
+        //       proposalRequest: this.proposalRequest,
+        //     },
+        //   });
+        // }
       } else {
         window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
         this.conditionTooltip = true;
@@ -456,23 +468,68 @@ export default {
     if (this.proposalRequest) {
       this.isAgreed = this.proposalRequest.isAgreed;
     }
+    this.categories = [];
+    this.$store.dispatch("common/fetchAllCategories").then((services) => {
+      services.forEach((serviceCategory) => {
+        if (serviceCategory.type == "service") this.categories.push(serviceCategory.fullTitle);
+      });
+    });
   },
   methods: {
+    setReferredVendorProperty(property, value) {
+      if (property.includes(".")) {
+        const properties = property.split(".");
+        this.referredVendor[properties[0]][properties[1]] = value;
+      } else if (property == "vendorCategory") {
+        this.referredVendor[property] = this.findVendorCategoryByTitle(value);
+      } else {
+        this.referredVendor[property] = value;
+      }
+    },
+    referNewVendor() {
+      this.$http
+        .post(`${process.env.SERVER_URL}/1/vendors/refer/${this.proposalRequest.componentInstance.id}`, {
+          isEditing: true,
+          referingVendor: new Vendors({ id: this.vendor.id }),
+          ...this.referredVendor,
+        })
+        .then((res) => {
+          console.log(res);
+          swal({
+            title: "Thank you for your referring! ",
+            html: `We will send proposal request to this vendor`,
+            showCancelButton: true,
+            confirmButtonClass: "md-button md-success confirm-btn-bg ",
+            cancelButtonClass: "md-button md-danger cancel-btn-bg",
+            buttonsStyling: false,
+          }).then(() => {});
+        })
+        .catch((err) => {
+          swal({
+            title: "Please check information! ",
+            html: `You may try to refer the existing vendor on our system`,
+            showCancelButton: false,
+            confirmButtonClass: "md-button md-success confirm-btn-bg ",
+            buttonsStyling: false,
+          }).then(() => {});
+        });
+    },
     goToForm() {
       if (this.isAgreed) {
-        if (this.proposalRequest) {
-          this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
-        } else {
-          this.proposalRequest = new ProposalRequest({
-            id: this.$route.params.id,
-          });
-          this.$router.push({
-            path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
-            props: {
-              proposalRequest: this.proposalRequest,
-            },
-          });
-        }
+        this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
+        // if (this.proposalRequest) {
+        //   this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
+        // } else {
+        //   this.proposalRequest = new ProposalRequest({
+        //     id: this.$route.params.id,
+        //   });
+        //   this.$router.push({
+        //     path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
+        //     props: {
+        //       proposalRequest: this.proposalRequest,
+        //     },
+        //   });
+        // }
       } else {
         window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
         this.conditionTooltip = true;
@@ -512,6 +569,13 @@ export default {
     },
     suggestAnotherDay() {
       this.suggest = true;
+      console.log(this.suggestedDates);
+      if (this.suggestedDates.selectedDates && this.suggestedDates.selectedDates.length > 0) {
+        this.$store.commit("vendorProposal/setValue", {
+          key: "suggestionDate",
+          value: this.suggestedDates.selectedDates,
+        });
+      }
       if (this.proposalRequest) {
         this.proposalRequest.suggestedDates = new Date(this.proposalRequest.eventData.eventStartMillis);
       }
@@ -523,6 +587,27 @@ export default {
       } else {
         this.amPack.start = "AM";
       }
+    },
+    declineRequest() {
+      new ProposalRequest({ id: this.proposalRequest.id, declineMessage: "I don't want it" }).save().then((res) => {
+        console.log(res);
+        swal({
+          title: "Thank you! ",
+          html: `We hope to see you next time.`,
+          showCancelButton: true,
+          confirmButtonClass: "md-button md-success confirm-btn-bg ",
+          cancelButtonClass: "md-button md-danger cancel-btn-bg",
+          buttonsStyling: false,
+        }).then(() => {
+          this.notBiddingModal = false;
+        });
+      });
+    },
+    findVendorCategoryByTitle(title) {
+      return this.vendorCategories.find((item) => item.fullTitle == title).key;
+    },
+    findVendorCategoryTitleByKey(key) {
+      return this.vendorCategories.find((item) => item.fullkey == key).key;
     },
   },
   computed: {
@@ -568,6 +653,12 @@ export default {
     requiredServices() {
       if (this.proposalRequest) return this.proposalRequest.eventData.components.sort((a, b) => a.order - b.order);
       return [];
+    },
+    suggestionDate() {
+      return this.$store.state.vendorProposal.suggestionDate;
+    },
+    vendorCategories() {
+      return this.$store.state.common.serviceCategories;
     },
   },
   filters: {

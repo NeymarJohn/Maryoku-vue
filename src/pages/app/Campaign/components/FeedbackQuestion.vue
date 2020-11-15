@@ -2,7 +2,7 @@
   <div class="d-flex mt-50 feedback-question" :class="{ isHidden: !data.showQuestion }">
     <div class="feedback-message">
       <div class="font-size-20 font-bold mb-20">
-        <img v-if="data.icon" :src="`${$iconURL}Budget+Elements/${data.icon}.svg`" />
+        <img v-if="data.icon" :src="`${$iconURL}Budget+Elements/${data.icon}`" />
         {{ data.question }}
       </div>
       <div>
