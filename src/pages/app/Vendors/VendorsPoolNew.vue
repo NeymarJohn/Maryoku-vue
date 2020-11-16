@@ -12,7 +12,7 @@
       <div class="header-actions">
         <div class="form-group search-field d-flex justify-content-start align-center">
           <md-icon>search</md-icon>
-          <input class="form-control" placeholder="Search" />
+          <input class="form-control" placeholder="Search" @change="searchByQuery" />
         </div>
       </div>
     </div>
@@ -91,7 +91,7 @@
               :value="capacityItem"
               v-for="(capacityItem, capacityItemIndex) in filter.options"
               :key="capacityItemIndex"
-              >{{ capacityItem }}</md-radio
+              >{{ capacityItem.fullLabel }}</md-radio
             >
           </div>
 
@@ -267,10 +267,30 @@ export default {
           expand: false,
           searchKey: "capacity",
           options: [
-            "Intimate event",
-            "Small event (100- 300 guests)",
-            "Medium event (300-700 guests)",
-            "Large event (more than 700 guests)",
+            {
+              fullLabel: "Intimate event",
+              value: "Intimate event",
+              max: 100,
+              min: 0,
+            },
+            {
+              fullLabel: "Small event (100- 300 guests)",
+              value: "Small event",
+              max: 300,
+              min: 100,
+            },
+            {
+              fullLabel: "Medium event (300-700 guests)",
+              value: "Medium event",
+              max: 700,
+              min: 300,
+            },
+            {
+              fullLabel: "Large event (more than 700 guests)",
+              value: "Large event",
+              max: 0,
+              min: 700,
+            },
           ],
         },
         {
@@ -341,7 +361,12 @@ export default {
       const params = {};
       Object.keys(this.searchModel).forEach((key) => {
         if (this.searchModel[key]) {
-          params[key] = this.searchModel[key];
+          if (key === "capacity") {
+            params["minGuests"] = this.searchModel[key].min;
+            params["maxGuests"] = this.searchModel[key].max;
+          } else {
+            params[key] = this.searchModel[key];
+          }
         }
       });
       new Vendors()
@@ -350,7 +375,7 @@ export default {
         .page(this.page)
         .get()
         .then((vendors) => {
-          // console.log(vendors);
+          console.log(vendors);
           this.pagingData = vendors[0].model;
           this.vendorsList = [...this.vendorsList, ...vendors[0].results];
           this.working = false;
@@ -412,6 +437,11 @@ export default {
       if (indexOfExpandedItem !== -1) this.filtersItems[indexOfExpandedItem].expand = false;
       this.filtersItems[index].expand = indexOfExpandedItem !== index ? true : false;
     },
+    closeFileterPanel() {
+      this.filtersItems.forEach((item, index) => {
+        this.filtersItems[index].expand = false;
+      });
+    },
     searchByCategory(category) {
       this.searchModelLabels.vendorCategory = category.title;
       this.searchModel.vendorCategory = category.value;
@@ -422,18 +452,27 @@ export default {
       this.searchModelLabels.location = this.searchLocation.city;
       this.searchVendors();
     },
-    searchByCapacity(value) {
+    searchByCapacity(selectedOption) {
       // console.log("selected Capacity", value);
-      this.searchModel.capacity = value;
-      this.searchModelLabels.capacity = value;
+      this.searchModel.capacity = selectedOption;
+      this.searchModel.minGuests = selectedOption.min;
+      this.searchModel.maxGuests = selectedOption.max;
+      this.searchModelLabels.capacity = selectedOption.value;
+      this.searchVendors();
     },
     searchByRank() {
       this.searchModelLabels.rank = "";
       this.searchModel.rank = "";
+      this.searchVendors();
+    },
+    searchByQuery(event) {
+      this.searchModel.q = event.target.value;
+      this.searchVendors();
     },
     searchVendors() {
       this.page = 1;
       this.vendorsList = [];
+      this.closeFileterPanel();
       this.loadVendors();
     },
     getAddressData: function (addressData, placeResultData, id) {
@@ -446,10 +485,15 @@ export default {
       this.$emit("change", this.value);
     },
     resetFilters() {
-      this.searchModel.location = "";
-      this.searchModel.vendorCategory = "";
-      this.searchModel.capacity = "";
-      this.searchModel.rank = "";
+      this.searchModel = {
+        location: "",
+        vendorCategory: "",
+        capacity: null,
+        rank: "",
+        minGuests: null,
+        maxGuests: null,
+      };
+      this.searchVendors();
     },
   },
   computed: {
