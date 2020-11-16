@@ -26,7 +26,7 @@
         :key="index"
       >
         <div class="item-title" @click="expandFilter(index)">
-          <span v-if="!searchModel[filter.searchKey]">{{ filter.title }}</span>
+          <span v-if="!searchModel[filter.searchKey] || !searchModel[filter.searchKey].length">{{ filter.title }}</span>
           <span v-else class="font-bold">{{ searchModelLabels[filter.searchKey] }}</span>
 
           <md-icon>keyboard_arrow_down</md-icon>
@@ -96,79 +96,24 @@
           </div>
 
           <div class="rank-filters-section d-flex justify-content-end" v-if="filter.title.toLowerCase() == 'rank'">
-            <div class="rank-item">
-              <md-checkbox v-model="filters.rank[0]">
-                <div class="label-title">5 Stars</div>
-                <label
-                  class="star-rating__star"
-                  v-for="(rating, ratingIndex) in ratings"
-                  :key="ratingIndex"
-                  :class="{ 'is-selected': ratingIndex <= 5 }"
-                  >★</label
-                >
-                <span class="rank-counter">(59)</span>
+            <div class="rank-item" v-for="(rank, index) in [5, 4, 3, 2, 1, 0]" :key="`rank-${index}`">
+              <md-checkbox v-model="searchModel.rank" :value="rank">
+                <div class="label-title" v-if="rank">{{ rank }} Stars<span class="rank-counter">(59)</span></div>
+                <div class="label-title" v-else>Unrated<span class="rank-counter">(59)</span></div>
+                <tempate v-if="rank">
+                  <label
+                    class="star-rating__star"
+                    v-for="(rating, ratingIndex) in [1, 2, 3, 4, 5]"
+                    :key="ratingIndex"
+                    :class="{ 'is-selected': ratingIndex < rank }"
+                    >★</label
+                  >
+                </tempate>
               </md-checkbox>
             </div>
-            <div class="rank-item">
-              <md-checkbox v-model="filters.rank[1]">
-                <div class="label-title">4 Stars</div>
-                <label
-                  class="star-rating__star"
-                  v-for="(rating, ratingIndex) in ratings"
-                  :key="ratingIndex"
-                  :class="{ 'is-selected': ratingIndex <= 4 }"
-                  >★</label
-                >
-                <span class="rank-counter">(59)</span>
-              </md-checkbox>
-            </div>
-            <div class="rank-item">
-              <md-checkbox v-model="filters.rank[2]">
-                <div class="label-title">3 Stars</div>
-                <label
-                  class="star-rating__star"
-                  v-for="(rating, ratingIndex) in ratings"
-                  :key="ratingIndex"
-                  :class="{ 'is-selected': ratingIndex <= 3 }"
-                  >★</label
-                >
-                <span class="rank-counter">(59)</span>
-              </md-checkbox>
-            </div>
-            <div class="rank-item">
-              <md-checkbox v-model="filters.rank[3]">
-                <div class="label-title">2 Stars</div>
-                <label
-                  class="star-rating__star"
-                  v-for="(rating, ratingIndex) in ratings"
-                  :key="ratingIndex"
-                  :class="{ 'is-selected': ratingIndex <= 2 }"
-                  >★</label
-                >
-                <span class="rank-counter">(59)</span>
-              </md-checkbox>
-            </div>
-            <div class="rank-item">
-              <md-checkbox v-model="filters.rank[4]">
-                <div class="label-title">1 Stars</div>
-                <label
-                  class="star-rating__star"
-                  v-for="(rating, ratingIndex) in ratings"
-                  :key="ratingIndex"
-                  :class="{ 'is-selected': ratingIndex <= 1 }"
-                  >★</label
-                >
-                <span class="rank-counter">(59)</span>
-              </md-checkbox>
-            </div>
-            <div class="rank-item">
-              <md-checkbox v-model="filters.rank[5]">
-                <div class="label-title just-label">
-                  Unrated
-                  <span class="rank-counter">(59)</span>
-                </div>
-              </md-checkbox>
-            </div>
+            <md-button class="md-simple md-black edit-btn md-icon" @click="searchByRank"
+              ><md-icon>search</md-icon></md-button
+            >
           </div>
         </div>
       </div>
@@ -306,13 +251,13 @@ export default {
         vendorCategory: "",
         location: "",
         capacity: null,
-        rank: null,
+        rank: "Rank",
       },
       searchModel: {
         vendorCategory: "",
         location: "",
         capacity: "",
-        rank: null,
+        rank: [],
       },
       searchLocation: {
         city: "",
@@ -364,6 +309,8 @@ export default {
           if (key === "capacity") {
             params["minGuests"] = this.searchModel[key].min;
             params["maxGuests"] = this.searchModel[key].max;
+          } else if (key === "rank") {
+            params["rank"] = this.searchModel[key].join(",");
           } else {
             params[key] = this.searchModel[key];
           }
@@ -460,9 +407,9 @@ export default {
       this.searchModelLabels.capacity = selectedOption.value;
       this.searchVendors();
     },
-    searchByRank() {
-      this.searchModelLabels.rank = "";
-      this.searchModel.rank = "";
+    searchByRank(rank) {
+      console.log(rank);
+      // this.searchModelLabels.rank = "";
       this.searchVendors();
     },
     searchByQuery(event) {
