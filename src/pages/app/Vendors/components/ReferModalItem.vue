@@ -4,31 +4,25 @@
       <div class="left-side">
         <img v-if="isSelected" :src="`${iconUrl}Group 6258 (2).svg`" />
         <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`" />
-        <h3 class="title"><img :src="img" />{{ category.title }}</h3>
+        <h3 class="title"><img :src="img" />{{ category }}</h3>
       </div>
       <div class="right-side">
         <img :src="`${iconUrl}Component 36 (2).svg`" :style="`transform: ${isSelected ? 'rotate(90deg)' : ''}`" />
       </div>
     </div>
     <div class="vendor-info-cont" v-if="isSelected">
-      <input-proposal-sub-item
-        :title="`Vendor's Name`"
-        :placeholder="`Type vendor's name here`"
-        @change="setReferredVendorProperty('companyName', ...arguments)"
-      >
+      <input-proposal-sub-item :title="`Vendor's Name`" :placeholder="`Type vendor's name here`">
       </input-proposal-sub-item>
       <input-proposal-sub-item
         :title="`Email`"
         :placeholder="`Type email address here`"
         :img="`${iconUrl}Asset 620.svg`"
-        @change="setReferredVendorProperty('vendorMainEmail', ...arguments)"
       >
       </input-proposal-sub-item>
       <input-proposal-sub-item
         :title="`Link to Website`"
         :placeholder="`Paste link here`"
         :img="`${iconUrl}Asset 619.svg`"
-        @change="setReferredVendorProperty('social.website', ...arguments)"
       >
       </input-proposal-sub-item>
     </div>
@@ -43,47 +37,20 @@ export default {
     InputProposalSubItem,
   },
   props: {
-    category: Object,
+    category: String,
     img: String,
     iconUrl: String,
   },
   data() {
     return {
       isSelected: false,
-      vendorInfo: {
-        componentId: this.category.id,
-        companyName: "",
-        vendorCategory: this.category.componentId,
-        vendorMainEmail: "",
-        social: {
-          website: "",
-        },
-      },
     };
   },
-  methods: {
-    setReferredVendorProperty(property, value) {
-      if (property.includes(".")) {
-        const properties = property.split(".");
-        this.vendorInfo[properties[0]][properties[1]] = value;
-      } else if (property == "vendorCategory") {
-        this.vendorInfo[property] = this.findVendorCategoryByTitle(value);
-      } else {
-        this.vendorInfo[property] = value;
-      }
-      this.$emit("set", this.vendorInfo);
-    },
-  },
+  methods: {},
   created() {},
   mounted() {},
   computed: {},
-  watch: {
-    isSelected(newValue) {
-      if (!newValue) {
-        this.$emit("cancel", this.vendorCategory.vendorCategory);
-      }
-    },
-  },
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>

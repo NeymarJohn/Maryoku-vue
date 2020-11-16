@@ -59,6 +59,7 @@
             v-for="(question, index) in feedbackQuestions"
             :key="index"
             :feedbackData="question"
+            :disabled="true"
           ></feedback-question>
         </div>
       </div>

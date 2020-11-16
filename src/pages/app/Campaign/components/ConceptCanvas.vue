@@ -1,5 +1,8 @@
 <template>
-  <canvas id="concept-area" width="1000" height="400"> </canvas>
+  <div>
+    <canvas id="concept-area" width="1000" height="400"> </canvas>
+    <img :src="renderedImage" />
+  </div>
 </template>
 <script>
 export default {
@@ -26,6 +29,7 @@ export default {
         { x: 720, y: 50, w: 230, h: 150 },
       ],
       completedImages: 0,
+      renderedImage: null,
     };
   },
   mounted() {
@@ -38,8 +42,9 @@ export default {
     drawConcept() {
       this.conceptCanvas.clearRect(0, 0, 1000, 400);
       this.colorPositions.forEach((pos, index) => {
+        console.log(this.eventConcept.colors);
         if (this.eventConcept.colors[index]) {
-          this.conceptCanvas.fillStyle = this.eventConcept.colors[index].color;
+          this.conceptCanvas.fillStyle = this.eventConcept.colors[index].color || this.eventConcept.colors[index].value;
           this.conceptCanvas.fillRect(pos.x, pos.y, pos.w, pos.h);
         }
       });
@@ -48,8 +53,8 @@ export default {
         if (this.eventConcept.images[index]) {
           var img = new Image();
           img.style.objectFit = "cover";
-          img.src = this.eventConcept.images[index].url;
-          // img.crossOrigin = "anonymous";
+          img.src = this.eventConcept.images[index].url.replace("https", "http");
+          img.crossOrigin = "anonymous";
           // img.crossOrigin = "anonymous";
           img.onload = () => {
             // this.conceptCanvas.drawImage(img, pos.x, pos.y, pos.w, pos.h);
@@ -57,6 +62,7 @@ export default {
             this.completedImages = this.completedImages + 1;
             if (this.completedImages === 5) {
               var dataURL = document.getElementById("concept-area").toDataURL();
+              this.renderedImage = dataURL;
               console.log(dataURL);
             }
           };

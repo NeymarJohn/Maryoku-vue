@@ -109,7 +109,6 @@ export default {
         console.log("vendor", this.vendor);
         this.$set(this.vendor, "vendorCategory", this.vendor.vendorCategories[0]);
         this.$set(this.vendor, "vendorAddressLine1", this.vendor.vendorAddresses[0]);
-        this.$set(this.vendor, "isEditing", true);
         new Vendors(this.vendor)
           .save()
           .then((res) => {

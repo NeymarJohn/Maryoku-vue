@@ -9,7 +9,7 @@ import authService from "@/services/auth.service";
 
 const Events = () => import("@/pages/app/Events/Events.vue");
 const EventProposal = () => import("@/pages/app/Events/EventProposal.vue");
-const VendorDetail = () => import("@/pages/app/Vendors/VendorDetail.vue");
+const CurrentVendors = () => import("@/pages/app/Vendors/CurrentVendors.vue");
 const AddEditVendor = () => import("@/pages/app/Vendors/AddEditVendor.vue");
 const VendorsPoolNew = () => import("@/pages/app/Vendors/VendorsPoolNew.vue");
 
@@ -240,17 +240,9 @@ let appPages = {
     name: "App",
     children: [
         {
-            path: "/vendors-pool",
-            name: "VendorsPoolNew",
-            component: VendorsPoolNew,
-            meta: {
-                gtm: "VendorsPoolNew",
-            },
-        },
-        {
             path: "/vendors/:id/detail",
             name: "VendorDetails",
-            component: VendorDetail,
+            component: CurrentVendors,
             meta: {
                 title: "Vendor Page",
                 gtm: "Vendor Details",
@@ -329,7 +321,14 @@ let EventPages = {
                 opaque: false,
             },
         },
-
+        {
+            path: "/vendors-pool",
+            name: "VendorsPoolNew",
+            component: VendorsPoolNew,
+            meta: {
+                gtm: "VendorsPoolNew",
+            },
+        },
     ],
 };
 let PublicCreateEvent = {

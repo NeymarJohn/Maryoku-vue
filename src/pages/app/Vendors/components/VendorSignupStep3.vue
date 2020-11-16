@@ -723,10 +723,6 @@ export default {
           items: [],
         },
         {
-          category: "equipmentrentals",
-          items: [],
-        },
-        {
           category: "audiovisualstagingservices",
           items: [
             {
@@ -1061,10 +1057,6 @@ export default {
           items: [],
         },
         {
-          category: "equipmentrentals",
-          items: [],
-        },
-        {
           category: "audiovisualstagingservices",
           items: [
             {
@@ -1271,7 +1263,6 @@ export default {
   created() {},
   mounted() {
     console.log("test");
-    console.log(this.vendor);
     this.religions.forEach((religion) => {
       this.$http
         .get(religion.url, {
