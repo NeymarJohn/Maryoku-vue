@@ -25,8 +25,8 @@
     font-weight: 200;
     z-index: 9999;
     width: 80px;
-    box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12),
-        0 8px 10px -5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56),
+        0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
     background-size: cover;
     background-position: 50%;
     background: #fff;
@@ -2025,8 +2025,10 @@
                                 background: $rose;
                                 width: 2px;
                                 height: 2px;
-                                box-shadow: -2px 0 0 $rose, 2px 0 0 $rose, 4px 0 0 $rose, 4px -2px 0 $rose,
-                                    4px -4px 0 $rose, 4px -6px 0 $rose, 4px -8px 0 $rose, 4px -10px 0 $rose;
+                                box-shadow: -2px 0 0 $rose, 2px 0 0 $rose,
+                                    4px 0 0 $rose, 4px -2px 0 $rose,
+                                    4px -4px 0 $rose, 4px -6px 0 $rose,
+                                    4px -8px 0 $rose, 4px -10px 0 $rose;
                                 transform: rotate(45deg);
                             }
                         }
@@ -3885,14 +3887,8 @@
 
 .swal2-container {
     z-index: 100000 !important;
-}
+}   
 .budget-pie-container .budget-chart-slice-a-negative {
     opacity: 0.27;
     stroke: #000;
-}
-.emailTooltip {
-    padding: 20px;
-    max-width: 300px;
-    white-space: normal;
-    text-align: left;
 }

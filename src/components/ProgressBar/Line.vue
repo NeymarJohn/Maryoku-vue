@@ -17,7 +17,7 @@ export default {};
 </script>
 <style lang="scss" scoped>
 .line-progressbar {
-  &__item {
+  .line-progress__item {
     &:first-child {
       z-index: 10;
       .progress {

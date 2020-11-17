@@ -7,7 +7,7 @@
           <option>Popularity</option>
         </select>
       </div>
-      <div class="vendors-number">{{ vendorsList.length }} Vendors:</div>
+      <div class="vendors-number">Vendors:{{ pagingData.total }}</div>
     </div>
     <div
       class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100 md-large-size-25 md-size-25"
@@ -131,7 +131,7 @@ export default {
     ProductCard,
     AnimatedNumber,
   },
-  props: ["vendorsList", "ratings", "buildingBlocksList"],
+  props: ["vendorsList", "ratings", "buildingBlocksList", "pagingData"],
   data() {
     return {
       searchQuery: "",
@@ -178,8 +178,12 @@ export default {
       this.$router.push({ name: "VendorDetails", params: { id: vendorId } });
     },
     vendorMainImage(vendor) {
-      const rndInt = Math.floor(Math.random() * this.bgImages.length);
-      return this.bgImages[rndInt];
+      if (vendor.vendorImages && vendor.vendorImages.length > 0) {
+        return vendor.vendorImages[0];
+      } else {
+        const rndInt = Math.floor(Math.random() * this.bgImages.length);
+        return this.bgImages[rndInt];
+      }
     },
     filterVendors() {
       this.filteredVendorsList = _.filter(this.vendorsList, (v) => {

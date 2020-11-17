@@ -42,10 +42,12 @@
         <div class="refer-vendor-modal__body">
           <refer-modal-item
             v-for="(service, index) in referringServices"
-            :category="service.title"
+            :category="service"
             :key="index"
             :iconUrl="iconUrl"
             :img="`${$iconURL}Budget Elements/${service.icon}`"
+            @set="setVendorInfo"
+            @cancel="removeVendorInfo"
           />
           <!-- <refer-modal-item :category="`Bar`" :iconUrl="iconUrl" :img="`${iconUrl}Asset 606.svg`" />
           <refer-modal-item :category="`Dj`" :iconUrl="iconUrl" :img="`${iconUrl}Asset 605.svg`" /> -->
@@ -54,7 +56,7 @@
       <template slot="footer">
         <div class="refer-vendor-modal__footer">
           <a class="cancel" @click="hideModal()">Cancel</a>
-          <a class="cool" @click="showThanksModal()">Refer</a>
+          <a class="cool" @click="referVendors()">Refer</a>
         </div>
       </template>
     </modal>
@@ -84,7 +86,7 @@
 <script>
 import { Modal } from "@/components";
 import ReferModalItem from "./ReferModalItem.vue";
-
+import Vendors from "@/models/Vendors";
 export default {
   name: "refer-new-vendor",
   components: {
@@ -106,6 +108,7 @@ export default {
       referModal: false,
       thanksModal: false,
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
+      referredVendors: {},
     };
   },
   methods: {
@@ -116,6 +119,30 @@ export default {
     hideModal() {
       this.referModal = false;
       this.thanksModal = false;
+    },
+    setVendorInfo(vendorInfo) {
+      // this
+      console.log("vendorInfo", vendorInfo);
+      this.referredVendors[vendorInfo.vendorCategory] = vendorInfo;
+    },
+    async referVendors() {
+      console.log(this.referredVendors);
+      for (let i = 0; i < Object.keys(this.referredVendors).length; i++) {
+        const vendorCategory = Object.keys(this.referredVendors)[i];
+        await this.$http.post(
+          `${process.env.SERVER_URL}/1/vendors/refer/${this.referredVendors[vendorCategory].componentId}`,
+          {
+            isEditing: true,
+            // referingVendor: new Vendors({ id: this.vendor.id }),
+            referringVendorId: this.vendor.id,
+            ...this.referredVendors[vendorCategory],
+          },
+        );
+      }
+      this.showThanksModal();
+    },
+    removeVendorInfo(category) {
+      this.referredVendors[category] = null;
     },
   },
   created() {

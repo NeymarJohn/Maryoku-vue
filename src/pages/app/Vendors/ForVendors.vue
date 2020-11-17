@@ -9,7 +9,7 @@
             {{
               proposalRequest.eventData.concept
                 ? proposalRequest.eventData.concept.name
-                : proposalRequest.eventData.eventType
+                : proposalRequest.eventData.eventType.name
             }}
           </h3>
           <h3 v-else>No Event Data</h3>
@@ -143,6 +143,7 @@
             :title="`Vendor's Name`"
             :placeholder="`Type vendor's name here`"
             :style="`width: 100%`"
+            @change="setReferredVendorProperty('companyName', ...arguments)"
           />
           <input-proposal-sub-item
             :title="`Category`"
@@ -150,6 +151,7 @@
             :style="`width: 100%`"
             :img="`https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/Component 36 (2).svg`"
             :items="categories"
+            @change="setReferredVendorProperty('vendorCategory', ...arguments)"
           />
           <input-proposal-sub-item
             :title="`Email`"
@@ -157,6 +159,7 @@
             :style="`width: 100%`"
             :img="`${iconsUrl}Asset 499.svg`"
             :isLeft="true"
+            @change="setReferredVendorProperty('vendorMainEmail', ...arguments)"
           />
           <input-proposal-sub-item
             :title="`Link to Website`"
@@ -164,13 +167,14 @@
             :style="`width: 100%`"
             :img="`${iconsUrl}Asset 498.svg`"
             :isLeft="true"
+            @change="setReferredVendorProperty('social.website', ...arguments)"
           />
         </div>
       </template>
       <template slot="footer">
         <div class="refer-vendor-modal__footer">
           <a class="cancel" @click="hideModal()">Cancel</a>
-          <a class="cool" @click="hideModal()">Refer</a>
+          <a class="cool" @click="referNewVendor()">Refer</a>
         </div>
       </template>
     </modal>
@@ -370,6 +374,7 @@ import VendorBudgetList from "./components/VendorBudgetList.vue";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import { FunctionalCalendar } from "vue-functional-calendar";
 import { Modal } from "@/components";
+import swal from "sweetalert2";
 
 export default {
   components: {
@@ -400,20 +405,7 @@ export default {
       proposals: [],
       firstTime: false,
       suggest: false,
-      categories: [
-        "Venue Rental",
-        "Food & Beverage",
-        "Design and Decor",
-        "Guest Services & Staffing",
-        "Signage / Printing",
-        "AV / Staging",
-        "Swags",
-        "Transportation & Tour operator",
-        "Entertainment",
-        "Security",
-        "Videography and Photography",
-        "Equipment Rentals",
-      ],
+      categories: [],
       amPack: {
         start: "AM",
         end: "AM",
@@ -429,6 +421,14 @@ export default {
       markedDataRange: [],
       today: null,
       suggestedDates: [],
+      referredVendor: {
+        companyName: "",
+        vendorCategory: "",
+        vendorMainEmail: "",
+        social: {
+          website: "",
+        },
+      },
     };
   },
   mounted() {
@@ -468,8 +468,52 @@ export default {
     if (this.proposalRequest) {
       this.isAgreed = this.proposalRequest.isAgreed;
     }
+    this.categories = [];
+    this.$store.dispatch("common/fetchAllCategories").then((services) => {
+      services.forEach((serviceCategory) => {
+        if (serviceCategory.type == "service") this.categories.push(serviceCategory.fullTitle);
+      });
+    });
   },
   methods: {
+    setReferredVendorProperty(property, value) {
+      if (property.includes(".")) {
+        const properties = property.split(".");
+        this.referredVendor[properties[0]][properties[1]] = value;
+      } else if (property == "vendorCategory") {
+        this.referredVendor[property] = this.findVendorCategoryByTitle(value);
+      } else {
+        this.referredVendor[property] = value;
+      }
+    },
+    referNewVendor() {
+      this.$http
+        .post(`${process.env.SERVER_URL}/1/vendors/refer/${this.proposalRequest.componentInstance.id}`, {
+          isEditing: true,
+          referingVendor: new Vendors({ id: this.vendor.id }),
+          ...this.referredVendor,
+        })
+        .then((res) => {
+          console.log(res);
+          swal({
+            title: "Thank you for your referring! ",
+            html: `We will send proposal request to this vendor`,
+            showCancelButton: true,
+            confirmButtonClass: "md-button md-success confirm-btn-bg ",
+            cancelButtonClass: "md-button md-danger cancel-btn-bg",
+            buttonsStyling: false,
+          }).then(() => {});
+        })
+        .catch((err) => {
+          swal({
+            title: "Please check information! ",
+            html: `You may try to refer the existing vendor on our system`,
+            showCancelButton: false,
+            confirmButtonClass: "md-button md-success confirm-btn-bg ",
+            buttonsStyling: false,
+          }).then(() => {});
+        });
+    },
     goToForm() {
       if (this.isAgreed) {
         this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
@@ -559,6 +603,12 @@ export default {
         });
       });
     },
+    findVendorCategoryByTitle(title) {
+      return this.vendorCategories.find((item) => item.fullTitle == title).key;
+    },
+    findVendorCategoryTitleByKey(key) {
+      return this.vendorCategories.find((item) => item.fullkey == key).key;
+    },
   },
   computed: {
     vendor() {
@@ -606,6 +656,9 @@ export default {
     },
     suggestionDate() {
       return this.$store.state.vendorProposal.suggestionDate;
+    },
+    vendorCategories() {
+      return this.$store.state.common.serviceCategories;
     },
   },
   filters: {

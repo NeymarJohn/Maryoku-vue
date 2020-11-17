@@ -88,7 +88,7 @@ export const businessCategories = [
                 name: 'on site parking',
                 type: Boolean,
                 value: false,
-                xIncluded: true,
+                xIncluded: false,
               },
               {
                 name: 'on street parking',

@@ -7,7 +7,9 @@
           <div>
             <div class="font-size-30 font-bold-extra color-red">Delivery settings</div>
             <div class="mt-2 d-flex align-center">
-              <span class="font-bold-extra font-size-30 pr-20">{{ inviteesCount }}</span>
+              <span class="font-bold-extra font-size-30 pr-20">{{
+                inviteesCount
+              }}</span>
 
               <span>In your invitees list</span>
             </div>
@@ -29,13 +31,7 @@
                 <md-icon class="icon" v-if="!settingData.phone.selected">keyboard_arrow_right</md-icon>
               </md-button>
             </div>
-            <div
-              class="mt-50"
-              v-if="
-                settingData.phone.selected &&
-                (currentCampaign.campaignStatus == 'EDITING' || currentCampaign.campaignStatus == 'TESTING')
-              "
-            >
+            <div class="mt-50" v-if="settingData.phone.selected && currentCampaign.campaignStatus == 'EDITING'">
               <div class="font-bold">To</div>
               <div class="d-flex align-start width-100">
                 <div class="flex-1 position-relative">
@@ -119,14 +115,8 @@
                 </md-checkbox>
               </div>
             </div>
-            <div
-              class="mt-50"
-              v-if="
-                (settingData.phone.selected && currentCampaign.campaignStatus == 'STARTED') ||
-                currentCampaign.campaignStatus == 'SCHEDULED'
-              "
-            >
-              <div class="mt-50">
+            <div class="mt-50" v-if="settingData.phone.selected && currentCampaign.campaignStatus == 'STARTED' || currentCampaign.campaignStatus == 'SCHEDULED'">
+            <div class="mt-50">
                 <div class="font-bold mb-10 line-height-2">
                   Sent to ({{ currentCampaign.guestSMS ? currentCampaign.guestSMS.length : 0 }})
                 </div>
@@ -159,12 +149,7 @@
                 <md-icon class="icon" v-if="!settingData.email.selected">keyboard_arrow_right</md-icon>
               </md-button>
             </div>
-            <div
-              v-if="
-                settingData.email.selected &&
-                (currentCampaign.campaignStatus == 'EDITING' || currentCampaign.campaignStatus == 'TESTING')
-              "
-            >
+            <div v-if="settingData.email.selected && currentCampaign.campaignStatus == 'EDITING'">
               <div class="mt-50">
                 <label class="font-bold mb-10 line-height-2">Subject</label>
                 <div class="width-60 position-relative">
@@ -180,8 +165,10 @@
                   <maryoku-input placeholder="Your email address…" v-model="settingData.email.from"></maryoku-input>
                   <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
                     <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
-                    <md-tooltip class="emailTooltip">
-                      Pick the email from which you wish the guests to get this mail
+                    <md-tooltip>
+                      <div class="font-size-14 input-tooltip">
+                        Pick the email from which you wish the guests to get this mail
+                      </div>
                     </md-tooltip>
                   </span>
                 </div>
@@ -460,19 +447,19 @@ export default {
     },
     currentCampaign() {
       console.log(this.campaign.name);
-      const currentCampaign = this.$store.state.campaign[this.campaign.name];
-      if (!currentCampaign) return {};
+      const currentCampaign =  this.$store.state.campaign[this.campaign.name];
+      if (!currentCampaign)  return {}
       return currentCampaign;
     },
     inviteesCount() {
       if (this.currentCampaign) {
-        const emailInvitees = this.currentCampaign.guestEmails ? this.currentCampaign.guestEmails.length : 0;
-        const phoneInvitees = this.currentCampaign.guestSMS ? this.currentCampaign.guestSMS.length : 0;
+      const emailInvitees = this.currentCampaign.guestEmails?this.currentCampaign.guestEmails.length : 0;
+      const phoneInvitees = this.currentCampaign.guestSMS?this.currentCampaign.guestSMS.length : 0;
 
-        return emailInvitees + phoneInvitees;
+      return emailInvitees + phoneInvitees
       }
-      return "";
-    },
+      return ""
+    }
   },
   watch: {
     settingData: {

@@ -139,9 +139,9 @@ export default {
   data() {
     return {
       days: 2,
-      hours: 12,
-      mins: 23,
-      seconds: 34,
+      hours: 23,
+      mins: 59,
+      seconds: 59,
     }
   },
 };
