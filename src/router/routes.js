@@ -15,6 +15,7 @@ const VendorsPoolNew = () => import("@/pages/app/Vendors/VendorsPoolNew.vue");
 
 // Event Pages
 import EventDetailsOverView from "@/pages/app/Events/EventDetailsOverview.vue";
+import EventDetail from "@/pages/app/Events/EventDetail.vue";
 import EventDetailsBudget from "@/pages/app/Events/EventDetailsBudget.vue";
 import EventPlan from "@/pages/app/Events/EventPlan.vue";
 import EventProposalDetails from "@/pages/app/Events/components/EventProposalDetails.vue";
@@ -293,8 +294,8 @@ let EventPages = {
         },
         {
             path: "/events/:id/overview",
-            name: "EventDetailsOverView",
-            component: EventDetailsOverView,
+            name: "EventDetail",
+            component: EventDetail,
             meta: {
                 title: "Event Details",
                 gtm: "Event Edit",

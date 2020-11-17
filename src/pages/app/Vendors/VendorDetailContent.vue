@@ -529,7 +529,6 @@ export default {
                 height: 500px;
                 margin-right: 2rem;
                 cursor: zoom-in;
-                object-fit: cover;
               }
             }
           }
