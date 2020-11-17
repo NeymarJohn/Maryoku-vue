@@ -132,7 +132,7 @@ export default {
     opacity: 0.6;
   }
   &.input {
-    padding: 1em 1.5em;
+    padding: 1em 2.5em 1em 1.5em;
     textarea {
       z-index: 2;
       background: transparent;
