@@ -58,30 +58,6 @@
       </div>
     </section>
     <signup-request-modal v-if="showSignup"></signup-request-modal>
-    <modal v-if="showCloseProposalModal" class="saved-it-modal" container-class="modal-container sl">
-      <template slot="header">
-        <div class="saved-it-modal__header d-flex">
-          <img :src="`${$iconURL}NewSubmitPorposal/closeproposal.png`" />
-          <div class="ml-20">
-            <h3 class="text-left color-black">
-              We are sorry, but someone else got there <br />before you and already won this bid.
-            </h3>
-            <div class="text-left">But no worries! We will be with you soon with the next one</div>
-          </div>
-        </div>
-        <button class="close" @click="showCloseProposalModal = false">
-          <img :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`" />
-        </button>
-      </template>
-      <template slot="body">
-        <div class="saved-it-modal__body"></div>
-      </template>
-      <template slot="footer">
-        <div class="saved-it-modal__footer">
-          <md-button class="md-red maryoku-btn" @click="showCloseProposalModal = false">Ok, Thanks</md-button>
-        </div>
-      </template>
-    </modal>
     <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="saved-it-modal__header">
@@ -143,16 +119,12 @@ export default {
       showSignup: false,
       isTimeUp: false,
       openedModal: "",
-      showCloseProposalModal: false,
     };
   },
   mounted() {
     this.getVendor(this.$route.params.vendorId)
       .then((vendor) => {
         this.vendor = vendor;
-        if (this.vendor.isEditing) {
-          this.showSignup = true;
-        }
       })
       .catch((e) => {
         this.showSignup = true;
@@ -160,9 +132,6 @@ export default {
     this.getProposalRequest(this.$route.params.rfpId).then((proposalRequest) => {
       this.proposalRequest = proposalRequest;
       this.event = this.proposalRequest.eventData;
-      if (this.proposalRequest.componentInstance.proposalAccepted) {
-        this.showCloseProposalModal = true;
-      }
     });
   },
   methods: {

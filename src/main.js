@@ -39,7 +39,7 @@ import routes from "./router/routes";
 // store setup
 import store from "./store";
 
-import { IconURL, SecondIconURL, StorageURL, ResourceURL, UploadURL } from "./globalVariables";
+import { IconURL, StorageURL, ResourceURL, UploadURL } from "./globalVariables";
 
 import authHeader from "@/services/auth-header";
 import authService from "@/services/auth.service";
@@ -254,7 +254,6 @@ Vue.filter("withComma", function(value) {
 Vue.prototype.$resourceURL = ResourceURL;
 Vue.prototype.$storageURL = StorageURL;
 Vue.prototype.$iconURL = IconURL;
-Vue.prototype.$secondIconURL = SecondIconURL;
 Vue.prototype.$uploadURL = UploadURL;
 Vue.prototype.$queryEventActions = { create: "createEvent" };
 axios.defaults.headers.common.Authorization = authHeader().Authorization;

@@ -26,7 +26,7 @@
         <div v-for="(category, index) in Object.keys(requirementProperties)" :key="index">
           <template v-if="category == 'multi-selection'">
             <vendor-requirement-multiselect-panel
-              v-for="(data, id) in requirementProperties[category].filter(it => it.visible)"
+              v-for="(data, id) in requirementProperties['multi-selection'].filter(it => it.visible)"
               :key="id"
               :index="id"
               :data="data"
@@ -34,16 +34,97 @@
               @change="handleMultiSelectChange"
             ></vendor-requirement-multiselect-panel>
           </template>
-          <template v-else-if="category == 'radio'">
-            <vendor-requirement-singleselect-panel
-                    v-for="(data, id) in requirementProperties[category].filter(it => it.visible)"
-                    :key="id"
-                    :index="id"
-                    :data="data"
-                    :currentComponent="selectedBlock"
-                    @change="handleSingleSelectChange"
-            ></vendor-requirement-singleselect-panel>
-          </template>
+          <!-- <div class="requirement-section" v-else-if="category=='special'">
+            <div class="d-flex align-start">
+              <div class="d-flex align-center" style="min-width: 400px;">
+                <img :src="`${$iconURL}Requirements/special-request-red.svg`" class="mr-20" />
+                <div class="title">
+                  <div class="font-size-22 font-bold">Special Requests</div>Tell us what you need, and we'll find vendors that can deliver!
+                </div>
+              </div>
+
+              <div>
+                <div
+                  class="additional-request-tag"
+                  v-for="(property, index) in requirementProperties[category].filter(item=>!item.isSelected)"
+                  :key="index"
+                  @click="addRequirement(category, property)"
+                >
+                  {{property.item}}
+                  <md-icon class="icon color-red">add_circle</md-icon>
+                </div>
+              </div>
+            </div>
+            <div
+              class="md-layout mt-50"
+              v-for="(property, index) in requirementProperties[category].filter(item=>item.isSelected)"
+              :key="index"
+            >
+              <div class="md-layout-item md-size-40 mx-auto pl-0">
+                <label>Name of item</label>
+                <maryoku-input class="mt-20" v-model="property.item"></maryoku-input>
+              </div>
+              <div class="md-layout-item md-size-20 mx-auto">
+                <label>Is this</label>
+                <div>
+                  <md-checkbox
+                    class="md-simple md-checkbox-circle md-red"
+                    v-model="property.mustHave"
+                    :value="true"
+                  >
+                    <span class="font-size-16">Mandatory</span>
+                  </md-checkbox>
+                  <md-checkbox
+                    class="md-simple md-checkbox-circle md-red"
+                    v-model="property.mustHave"
+                    :value="false"
+                  >
+                    <span class="font-size-16">Nice To Have</span>
+                  </md-checkbox>
+                </div>
+              </div>
+              <div class="md-layout-item md-size-40 mx-auto pr-0">
+                <label>Notes</label>
+                <maryoku-textarea class="mt-20" v-model="editingSpecialRequest.notes" size="narrow"></maryoku-textarea>
+              </div>
+              <div class="md-layout-item md-size-100 mx-auto pr-0 text-right mt-30 mb-30">
+                <md-button
+                  class="md-simple md-red maryoku-btn"
+                  @click="removeRequirement(category, property)"
+                >Clear</md-button>
+                <md-button class="md-red maryoku-btn" @click="addNewRequirement">Add</md-button>
+              </div>
+            </div>
+            <div
+              class="special-request-section d-flex"
+              v-for="item in specialRequests"
+              :key="item.name"
+            >
+              <div class="flex-1 font-size-16 font-bold">{{item.name}}</div>
+              <div class="flex-1">
+                <span v-if="item.isMandatory">
+                  <img :src="`${$iconURL}Requirements/check-red.svg`" class="mr-10" />Mandatory
+                </span>
+              </div>
+              <div class="flex-1">{{item.notes}}</div>
+              <div class="flex-1 text-right">
+                <md-button class="md-icon-button md-simple">
+                  <img :src="`${$iconURL}Requirements/edit-dark.svg`" />
+                </md-button>
+                <md-button class="md-icon-button md-simple">
+                  <img :src="`${$iconURL}Requirements/delete-dark.svg`" />
+                </md-button>
+              </div>
+            </div>
+            <div class="special-request-section">
+              <div class="font-bold">Anything Else?</div>
+
+              <div>Tell us what else you would love to receive in the proposals we'll send you</div>
+              <div class="special-request-section-options">
+                <textarea placeholder="Type name of element here..."></textarea>
+              </div>
+            </div>
+          </div>-->
           <div v-else-if="category == 'special'">
             <special-requirement-section
               :data="requirementProperties[category]"
@@ -102,7 +183,6 @@ import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
 import VendorRequirementMultiselectPanel from "./VendorRequirementMultiselectPanel";
-import VendorRequirementSingleselectPanel from "./VendorRequirementSingleselectPanel";
 import SpecialRequirementSection from "./SpecialRequirementSection";
 import EventRequirementSection from "./EventRequirementSection";
 
@@ -119,7 +199,6 @@ export default {
     MaryokuInput,
     MaryokuTextarea,
     VendorRequirementMultiselectPanel,
-    VendorRequirementSingleselectPanel,
     SpecialRequirementSection,
     EventRequirementSection,
   },
@@ -169,7 +248,7 @@ export default {
           }
         })
       }
-      console.log("checkCondition", requirements);
+
     },
     _saveRequirementsInStore(action = null) {
 
@@ -198,13 +277,6 @@ export default {
     handleMultiSelectChange(){
       this.$forceUpdate();
       this._checkConditionScript(this.requirementProperties);
-      this._saveRequirementsInStore();
-    },
-    handleSingleSelectChange(e) {
-      this.requirementProperties['radio'].map(it => {
-        if(it.subCategory == e.subCategory) it = e;
-      });
-
       this._saveRequirementsInStore();
     },
     handleSpecialChange(e){
@@ -236,7 +308,7 @@ export default {
     fetchData: async function () {
       this.requirementProperties = {};
 
-      console.log("fetchData", this.component.componentId, this.storedRequirements)
+      // console.log("fetchData", this.storedRequirements)
       this.blockId = this.component.componentId; //this.$route.params.blockId
       this.event = this.$store.state.event.eventData;
       this.getCommentComponents(this.blockId);
@@ -269,7 +341,7 @@ export default {
       postReq("/1/vendors/setting-requirements", {
         vendorCategory: this.blockId,
         expiredBusinessTime: moment(new Date()).add(5, "days").valueOf(),
-        settingsJsonData: JSON.stringify(this.requirementProperties),
+        settingsJsonData: JSON.stringify(this.storedRequirements[this.event.id]),
         note: this.anythingElse,
         eventComponentInstance: new EventComponent({ id: this.component.id }),
       }).then((res) => {
