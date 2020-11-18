@@ -54,7 +54,7 @@ export default {
         const img = canvas.toDataURL("image/png");
 
         this.imageData = img;
-        console.log(img);
+        // console.log(img);
         // doc.addImage(img, "PNG", 20, -10);
         // doc.save("sample.pdf");
       });

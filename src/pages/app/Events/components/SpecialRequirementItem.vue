@@ -133,43 +133,21 @@ export default {
     getIcon(name){
       let icon = null;
       if ( name === 'All Indoor' ) {
-        icon = 'All indoor';
+        icon = 'Requirements/All indoor.svg';
       } else if ( name === 'Pregnant women' ) {
-        icon = 'pregnant-women-dark';
+        icon = 'Requirements/pregnant-women-dark.svg';
       } else if ( name === 'All Outdoor' ) {
-        icon = 'All outdoor';
+        icon = 'Requirements/All outdoor.svg';
       } else if ( name === 'Accessible Bathrooms' ) {
-        icon = 'Accessible bathroom';
+        icon = 'Requirements/Accessible bathroom.svg';
       } else if ( name === 'Accessibility for people with disabilities' ) {
-        icon = 'Accessible for people with disabilities';
+        icon = 'Requirements/Accessible for people with disabilities.svg';
       } else if ( name === 'Hotel accommodations within walking distance' ) {
-        icon = 'Hotel';
+        icon = 'Requirements/disabled-person-dark.svg';
       } else if ( name === 'Shopping centers' ) {
-        icon = 'Shopping center';
-      } else if ( name === 'Water saving protocols' ) {
-        icon = 'Water saving';
-      } else if ( name === 'Green power and energy efficient' ) {
-        icon = 'Green power';
-      } else if ( name === 'Waste recycle procedures' ) {
-        icon = 'Waste recycle';
-      } else if ( name === 'Non toxic products' ) {
-        icon = 'Non toxic';
-      } else if ( name === 'Prioritizing diversity and inclution' ) {
-        icon = 'Diversity';
-      } else if ( name === 'Women on senior staff' ) {
-        icon = 'Women on senior';
-      } else if ( name === 'Strict sexual harrasment policy' ) {
-        icon = 'sexual harassment';
-      } else if ( name === 'Acknowledge all religious and cultural holidays' ) {
-        icon = 'All religious';
-      } else {
-        icon = `${name}`
+        icon = 'Requirements/pregnant-women-dark.svg';
       }
-      if (this.data.subCategory === 'Accessibility') {
-        return `${this.$iconURL}Requirements/${icon}.svg`;
-      } else {
-        return `${this.$secondIconURL}Requirements/Accessibility+Sustainability+and+Inclusion/${icon}.svg`;
-      }
+      return `${this.$iconURL}${icon}`;
     },
     changeItem(){
       this.$emit('change');
