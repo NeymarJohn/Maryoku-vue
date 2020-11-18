@@ -123,7 +123,6 @@
       }
 
       p.content {
-        font-size: 18px;
         margin: 10px 0;
       }
 
@@ -133,39 +132,14 @@
 
       .value {
         margin-left: 50px;
-        font-size: 18px;
-        white-space: nowrap;
 
         h3 {
           font: 800 24px Manrope-Regular, sans-serif;
           margin: 0 0 12px;
         }
-
-        img {
-          margin-right: 15px;
-          max-width: 25px;
-          max-height: 25px;
-        }
-
         .picker-panel {
-          padding: 10px 30px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
+          padding: 0;
         }
-      }
-
-      .checkbox-label-wrapper{
-        display: flex;
-        align-items: center;
-        width: 100%;
-        img {
-          margin-right: 5px;
-          max-width: 25px;
-          max-height: 25px;
-        }
-        margin-left: 10px;
-        margin-right: 50px;
       }
     }
 

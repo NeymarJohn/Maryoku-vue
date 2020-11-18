@@ -22,8 +22,56 @@
                 v-for="(section, index) in sections"
                 :key="index"
                 :section="section"
-                @change="changeEvent"
         ></event-overview-section>
+
+        <div v-if="1 == 2" class="card-section align-center">
+          <div class="left">
+            <img class="mr-30" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Onboarding/balloon-calendar.svg">
+            <div style="width: 40%">
+              <h3 class="title">EventType</h3>
+              <p v-if="!isEdit" class="content">{{ event.eventType.name }}</p>
+
+              <multiselect
+                           v-if="isEdit"
+                           v-model="eventType"
+                           class="multiple-selection my-15"
+                           track-by="name"
+                           label="name"
+                           placeholder="Select one"
+                           :options="eventTypes" :searchable="false"
+                           :allow-empty="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <span>{{ option.name }}</span>
+                </template>
+              </multiselect>
+
+              <div v-if="isEdit" class="warning">
+                <img class="mr-10" :src="`${iconsUrl}Group 1175 (9).svg`" width="20" />
+                Changing the time on your status might cause price changes
+              </div>
+            </div>
+            <div v-if="!isEdit" class="value align-self-center">{{event.occasion}}</div>
+            <div v-if="isEdit" class="value">
+              <h3>Who's invited</h3>
+              <multiselect v-model="occasion"
+                           class="multiple-selection"
+                           track-by="name"
+                           label="name"
+                           placeholder="Select one"
+                           :options="occasions" :searchable="false"
+                           :allow-empty="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <span>{{ option.name }}</span>
+                </template>
+              </multiselect>
+            </div>
+          </div>
+          <div class="right">
+            <md-button class="md-simple" @click="isEdit = !isEdit">
+              <md-icon style="font-size: 40px!important;"> {{ isEdit ? 'keyboard_arrow_down' : 'keyboard_arrow_right' }} </md-icon>
+            </md-button>
+          </div>
+        </div>
       </div>
     </div>
     <div class="footer-container">
@@ -44,9 +92,9 @@ import VueElementLoading from "vue-element-loading";
 import { FunctionalCalendar } from "vue-functional-calendar";
 import { LabelEdit, AnimatedNumber, StatsCard, ChartCard, Modal, LocationInput } from "@/components";
 import HeaderActions from "@/components/HeaderActions";
-import CommentEditorPanel from "./CommentEditorPanel";
+import CommentEditorPanel from "./components/CommentEditorPanel";
 import Multiselect from "vue-multiselect";
-import EventOverviewSection from "./EventOverviewSection";
+import EventOverviewSection from "./components/EventOverviewSection";
 
 export default {
   name: "event-overview",
@@ -79,7 +127,59 @@ export default {
       isEdit: false,
       showEditDetailModal: false,
       showCommentEditorPanel: false,
-
+      dateData: {
+        currentDate: new Date(),
+        dateRange: {
+          start: { date: false, dateTime: false, hour: "00", mintue: "00" },
+          end: { date: false, dateTime: false, hour: "00", mintue: "00" },
+        },
+        selectedDate: new Date(),
+        selectedDatesItem: "",
+        selectedHour: "00",
+        selectedMinute: "00",
+        selectedDates: [],
+      },
+      location: null,
+      inOutdoors: null,
+      guestsTypes: [
+        {
+          value: "employees", name: "Employees"
+        },
+        {
+          value: "employees-spouses", name: "Employees & Spouses"
+        },
+        {
+          value: "families", name: "Familes"
+        },
+        {
+          value: "business-associates", name: "Business Associates"
+        },
+        {
+          value: "customers", name: "Customers"
+        },
+        {
+          value: "board-members", name: "Board Members"
+        },
+      ],
+      guestType: null,
+      eventType: null,
+      occasions: [
+        {
+          value: "National Day", name: "National Day", icon: "ballons-dark.svg"
+        },
+        {
+          value: "Holiday", name: "Holiday", icon: "gift-dark.svg"
+        },
+        {
+          value: "Milestone", name: "Milestone", icon: "flag-dark.svg"
+        },
+        {
+          value: "Company Day", name: "Company Day", icon: "champaign-dark.svg"
+        },
+        {
+          value: "Season", name: "Season", icon: "beach.svg"
+        }],
+      occasion: null,
       sections: [],
     };
   },
@@ -144,30 +244,21 @@ export default {
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = !this.showCommentEditorPanel;
     },
-    changeEvent(e) {
-      if ( e.hasOwnProperty('created_at') ){
-        this.event.eventPage.dateCreated = e.created_at;
-      } else if ( e.hasOwnProperty('location') ) {
-        this.event.location = e.location;
-      } else if ( e.hasOwnProperty('inOutDoor') ) {
-        this.event.inOutDoor = e.inOutDoor;
-      } else if ( e.hasOwnProperty('numberOfParticipants') ) {
-        this.event.numberOfParticipants = e.numberOfParticipants;
-      } else if ( e.hasOwnProperty('guestType') ) {
-        this.event.guestType = e.guestType;
-      } else if ( e.hasOwnProperty('eventType') ) {
-        this.event.eventPage.name = e.eventType;
-      } else if ( e.hasOwnProperty('occasion') ) {
-        this.event.occasion = e.occasion;
-      } else if ( e.hasOwnProperty('holiday') ) {
-        this.event.holiday = e.holiday;
-      }
-
-      this.init();
+    changeLocation(loc) {
+      console.log("change.location", loc);
     },
     init(){
+      this.$store.dispatch("event/getEventTypes", {
+        data: this.$store.state.auth.user.profile.defaultCalendarId,
+        ctx: this,
+      });
 
       this.event = this.$store.state.event.eventData; // Fetch event from store
+      if (this.event) {
+        this.guestType = this.guestsTypes.find(it => it.value === this.event.guestType);
+        this.eventType = this.eventTypes.find(it => it.key === this.event.eventType.key);
+        this.occasion = this.occasions.find(it => it.value === this.event.occasion);
+      }
 
       this.sections = [
         {
@@ -176,7 +267,6 @@ export default {
           img_src : `${this.$iconURL}Onboarding/balloon-calendar.svg`,
           warning: 'Changing the time on your status might cause price changes',
           created_at: this.event.eventPage.dateCreated,
-          more_one_day: null,
         },
         {
           title: "Location",
@@ -192,16 +282,16 @@ export default {
           img_src : `${this.$iconURL}Onboarding/balloon-calendar.svg`,
           warning: 'Changing the number of guests on your status might cause price changes',
           numberOfParticipants: this.event.numberOfParticipants,
-          guestType: this.event.guestType ? this.event.guestType : '',
+          guestType: this.event.guestType,
         },
         {
           title: "Event type",
           key: 'event_type',
-          img_src : `${this.$iconURL}Onboarding/reception.svg`,
+          img_src : `${this.$iconURL}Onboarding/balloon-calendar.svg`,
           warning: null,
           eventType: this.event.eventType.name,
-          occasion: this.event.occasion ? this.event.occasion : '',
-          holiday: this.event.holiday ? this.event.holiday : '',
+          occasion: this.event.occasion,
+          singer: this.event.singer,
         }
       ];
     }
@@ -231,7 +321,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      eventTypeList: "event/getEventTypesList",
+      eventTypes: "event/getEventTypesList",
     }),
     getFormattedDate() {
       if (!this.event) return "";
@@ -255,6 +345,6 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-@import "../../../styles/EventDetailsOverview";
+<style lang="scss" scoped>
+@import "../../styles/EventDetailsOverview.scss";
 </style>

@@ -773,12 +773,22 @@ export const businessCategories = [
             name: 'floral',
             items: [
               {
-                name: 'hypoallergenic flowers',
+                name: 'Plants',
                 type: Boolean,
                 value: false
               },
               {
-                name: 'non scented flowers',
+                name: 'Extra flowers for caterer (boufet decor)',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Refrigerated Truck',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Permanent botanical arrangements',
                 type: Boolean,
                 value: false
               },
@@ -1011,7 +1021,7 @@ export const businessCategories = [
               },
               {
                 name: 'setup & breakdown',
-                type: "Cost",
+                type: Boolean,
                 value: 0
               },
             ]
@@ -1536,43 +1546,44 @@ export const businessCategories = [
             items: [
               {
                 name: 'chaperones',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false,
+                // xIncluded: true,
               },
               {
                 name: 'patrolling officers',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false,
               },
               {
                 name: 'bouncers',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false,
               },
               {
                 name: 'body guards',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false,
               },
               {
                 name: 'armed security officers',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false,
               },
               {
                 name: 'unarmed security',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false,
               },
               {
                 name: 'undercover',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false,
               },
               {
                 name: 'crowd control',
-                type: Number,
-                value: 0
+                type: Boolean,
+                value: false,
               },
             ]
           }

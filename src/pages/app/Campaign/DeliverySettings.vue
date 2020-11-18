@@ -137,9 +137,8 @@
                   By {{ settingData.phone.smsOrWhatsapp }}
                 </div>
                 <div class="mt-20">
-                  <md-button class="md-simple md-red edit-btn" @click="downloadXml">
-                    <img :src="`${$iconURL}Campaign/excel.png`" class="mr-10" />
-                    Download Full Guests list
+                  <md-button class="md-simple md-red edit-btn" @click="downloadUsersPhone">
+                    <img :src="`${$iconURL}Campaign/excel.png`" class="mr-10" />Download Full Guests list
                   </md-button>
                 </div>
               </div>
@@ -274,9 +273,8 @@
                   {{ currentCampaign.settings.email.addressString }}
                 </div>
                 <div class="mt-20">
-                  <md-button class="md-simple md-red edit-btn" @click="downloadXml">
-                    <img :src="`${$iconURL}Campaign/excel.png`" class="mr-10" />
-                    Download Full Guests list
+                  <md-button class="md-simple md-red edit-btn" @click="downloadUsersEmailList">
+                    <img :src="`${$iconURL}Campaign/excel.png`" class="mr-10" />Download Full Guests list
                   </md-button>
                 </div>
               </div>
@@ -303,6 +301,7 @@ import CollapsePanel from "./CollapsePanel";
 import InvalidAddressPanel from "./components/InvalidAddressPanel";
 import { validateEmail, validPhoneNumber } from "@/utils/validation.util";
 import XLSX from "xlsx";
+import FileSaver from "file-saver";
 export default {
   components: {
     MaryokuInput,
@@ -421,8 +420,14 @@ export default {
         /* DO SOMETHING WITH workbook HERE */
         let worksheet = workbook.Sheets[sheetName];
         const arrayOfRecords = XLSX.utils.sheet_to_json(worksheet);
+        console.log("arrayOfRecords", arrayOfRecords);
         const key = Object.keys(arrayOfRecords[0])[0];
         const values = [];
+
+        // if the list start at header, then add the key
+        if (validateEmail(key)) {
+          values.push(key);
+        }
         arrayOfRecords.forEach((r) => {
           const val = r[key];
           values.push(val);
@@ -433,7 +438,28 @@ export default {
       };
       reader.readAsArrayBuffer(file);
     },
-    downloadXml() {},
+    downloadUsersPhone() {
+      this.exportXls(this.currentCampaign.guestSMS, "phonenumbers");
+    },
+    downloadUsersEmailList() {
+      const csvData = [
+        ["id", "name", "value"],
+        [1, "sheetjs", 7262],
+        [2, "js-xlsx", 6969],
+      ];
+      console.log(this.currentCampaign);
+      this.exportXls(this.currentCampaign.guestEmails, "emails");
+    },
+    exportXls(csvData, fileName) {
+      const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+      const fileExtension = ".xlsx";
+
+      const ws = XLSX.utils.json_to_sheet(csvData);
+      const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+      const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+      const data = new Blob([excelBuffer], { type: fileType });
+      FileSaver.saveAs(data, this.currentCampaign.campaignType + "_" + fileName + fileExtension);
+    },
   },
   computed: {
     event() {

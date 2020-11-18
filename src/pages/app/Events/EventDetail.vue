@@ -4,15 +4,15 @@
                 :elements="eventElements"
                 page="event"
         ></progress-sidebar>
-        <EventDetailsOverview v-if="pageId == 'overview'" ></EventDetailsOverview>
-        <EventDetailsOther v-else ></EventDetailsOther>
+        <EventDetailsOverview></EventDetailsOverview>
     </div>
 </template>
 <script>
     import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
     import Calendar from "@/models/Calendar";
-    import EventDetailsOverview from './components/EventDetailsOverview'
-    import EventDetailsOther from './components/EventDetailsOther'
+    import CalendarEvent from "@/models/CalendarEvent";
+    import EventComponent from "@/models/EventComponent";
+    import EventDetailsOverview from './EventDetailsOverview'
     import ProgressSidebar from "./components/progressSidebarForEvent";
 
     export default {
@@ -24,7 +24,6 @@
         components: {
             EventDetailsOverview,
             ProgressSidebar,
-            EventDetailsOther,
         },
         data() {
             return {
@@ -42,62 +41,32 @@
                     title: "Create Event",
                     status: "not-complete",
                     route: "overview",
-                    icon: `${this.$iconURL}budget+screen/SVG/Asset%2032.svg`,
+                    icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
                     progress: 0,
                     componentId: "",
                 };
-                const venue = {
+                const create1 = {
                     title: "Book Venue",
                     status: "not-complete",
                     route: "venue",
-                    icon: `${this.$iconURL}budget+screen/SVG/Asset%2032.svg`,
+                    icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
                     progress: 0,
                     componentId: "",
                 };
 
-                const catering = {
+                const create2 = {
                     title: "Book catering",
                     status: "not-complete",
                     route: "catering",
-                    icon: `${this.$iconURL}budget+screen/SVG/Asset%2032.svg`,
-                    progress: 0,
-                    componentId: "",
-                };
-
-                const timeline = {
-                    title: "Create timeline",
-                    status: "not-complete",
-                    route: "timeline",
-                    icon: `${this.$iconURL}budget+screen/SVG/Asset%2032.svg`,
-                    progress: 0,
-                    componentId: "",
-                };
-
-                const dj = {
-                    title: "Hire DJ",
-                    status: "not-complete",
-                    route: "dj",
-                    icon: `${this.$iconURL}budget+screen/SVG/Asset%2032.svg`,
-                    progress: 0,
-                    componentId: "",
-                };
-
-                const photographer = {
-                    title: "Hir photographer",
-                    status: "not-complete",
-                    route: "catering",
-                    icon: `${this.$iconURL}budget+screen/SVG/Asset%2032.svg`,
+                    icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
                     progress: 0,
                     componentId: "",
                 };
                 const elements = [];
 
                 elements.push(create);
-                elements.push(venue);
-                elements.push(catering);
-                elements.push(timeline);
-                elements.push(dj);
-                elements.push(photographer);
+                elements.push(create1);
+                elements.push(create2);
 
                 const vm = this;
 
@@ -105,8 +74,7 @@
 
             },
             fetchData() {
-                this.pageId = this.$route.params.blockId?this.$route.params.blockId:"overview"
-                console.log("fetchData", this.pageId);
+                this.pageId = this.$route.params.blockId?this.$route.params.blockId:"timeline"
             }
         },
         created (){
