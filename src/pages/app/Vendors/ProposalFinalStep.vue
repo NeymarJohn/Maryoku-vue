@@ -35,6 +35,36 @@
         </div>
       </p>
       </template>
+      <template v-if="selectedTab ==1">
+        Deciding between vendors, isn't an easy job but someone has to do it...
+        to make our decision a little easier, we want to know how long  it took you to reply and what was the number of times you were chosen when your bid was one of the three finalists. we also look at the rating you got on our website, and go over all your  Recommendation.
+        Remember- even if your offer didn't make it to the final 3, you still have a chance, if the event planner asks for more offers, you might make the list this time.
+      </template>
+      <template v-if="selectedTab ===2">
+        <p>
+          <h3 class="font-size-22 font-bold"> I got the job, what's next?</h3>
+          <div>
+            According to our policy, you'll now receive your down payment. If all goes well and there are no complaints or disputes filed, then you'll get fully paid within 7 days of the event.
+            Next, you'll get a link connecting you with the other vendors who won, so you can work together and make sure everything is in sync.
+          </div>
+        </p>
+        <p>
+          <h3 class="font-size-22 font-bold"> What if the event gets cancelled?</h3>
+          <div>
+            According to our policy, if from any reason you decide to cancel, then you'll have to give back your down payment.
+            If the client cancels, then you'll be Compensated according to our policy.
+          </div>
+        </p>  
+        <p>
+          <h3 class="font-size-22 font-bold"> Changes</h3>
+          <div>
+            If any changes were made in the number of guests, location, date etc. you'll be informed immediately. Some changes may require a new and updated proposal. In that case, you'll receive a link to the proposal and you will be able to update it and save it as a new version.
+          </div>
+        </p>  
+      </template>
+      <template v-if="selectedTab ==3">
+        We save every offer you ever submitted, do we can learn all about your business and price range. next time we we'll already fill out most of the bid for you so you can take it easy . we will also compare between your offer and other offers in your filed of expertise, so that we can help you get the most out of yours.
+      </template>
       <template v-if="selectedTab == 4">
         <p>
           <h3 class="font-size-22 font-bold"> Can I improve my chances?</h3>
