@@ -25,7 +25,7 @@
                   <img :src="`${$iconURL}Concept/Asset 491.svg`" width="30" />
                   Event's concept
                 </div>
-                <div class="popup-body">{{event.concept.description}}</div>
+                <div class="popup-body">{{ event.concept.description }}</div>
                 <div class="popup-footer">
                   <router-link
                     :to="`/events/${event.id}/booking/concept`"
@@ -53,16 +53,10 @@
               <div class="bar">
                 <div class="progress-bar">
                   <div class="guests-progress d-flex justify-content-center align-center">
-                    <div
-                      class="guests-progress__item header-status red"
-                      style="width : 22%; height:8px"
-                    >
+                    <div class="guests-progress__item header-status red" style="width: 22%; height: 8px">
                       <div class="progress"></div>
                     </div>
-                    <div
-                      class="guests-progress__item header-status gray"
-                      style="width : 78%; height:8px"
-                    >
+                    <div class="guests-progress__item header-status gray" style="width: 78%; height: 8px">
                       <div class="progress"></div>
                     </div>
                   </div>
@@ -83,29 +77,28 @@
               <li class="event-details-item">
                 <img :src="`${iconsURL}calendar-gray.svg`" width="20" />
                 <span>
-                  {{event.eventStartMillis | formatDate}},
-                  {{event.eventStartMillis | formatTime}}
-                  ({{event.eventStartMillis |
-                  formatDuration(event.eventEndMillis)}}h)
+                  {{ event.eventStartMillis | formatDate }},
+                  {{ event.eventStartMillis | formatTime }}
+                  ({{ event.eventStartMillis | formatDuration(event.eventEndMillis) }}h)
                 </span>
               </li>
               <li class="event-details-item">
                 <img :src="`${iconsURL}users-gray.svg`" width="20" />
-                <span>{{event.numberOfParticipants}} Invited</span>
+                <span>{{ event.numberOfParticipants }} Invited</span>
               </li>
               <li class="event-details-item">
                 <img :src="`${iconsURL}flag-gray.svg`" width="20" />
-                <span>{{event.eventType.name}}</span>
+                <span>{{ event.eventType.name }}</span>
               </li>
             </ul>
             <ul class="list-items">
               <li class="event-details-item">
                 <img :src="`${iconsURL}location-gray.svg`" width="20" />
-                <span>{{event.location}}</span>
+                <span>{{ event.location }}</span>
               </li>
               <li class="event-details-item">
                 <img :src="`${iconsURL}sun.svg`" width="20" />
-                <span>{{event.eventDayPart}} Time event</span>
+                <span>{{ event.eventDayPart }} Time event</span>
               </li>
               <li class="event-details-item" v-if="canEdit">
                 <md-button class="md-rose md-simple edit-btn" @click="openEditDetail">
@@ -119,15 +112,12 @@
         <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
       </div>
     </div>
-    <div class="md-layout justify-content-between notes" style="margin:2em 50px;">
+    <div class="md-layout justify-content-between notes" style="margin: 2em 50px">
       <div class="md-layout-item md-size-30 first-row">
         <div class="card-section">
           <div class="section-header">
             <img :src="`${iconsURL}note-dark.svg`" /> Notes
-            <button
-              class="md-rose md-simple notes-filter-btn"
-              @click="showEditDetailModal=true"
-            >
+            <button class="md-rose md-simple notes-filter-btn" @click="showEditDetailModal = true">
               <img :src="`${iconsURL}filter-dark.svg`" width="20" />
             </button>
           </div>
@@ -145,56 +135,38 @@
                 <div class="note-item">
                   <div class="note-item-label">Lorem ipsum dolor sit amet sit</div>
                   <div class="note-item-action">
-                    <img
-                      :src="`${this.iconsURL}edit-dark.svg`"
-                      width="20"
-                      style="margin-right:10px"
-                    />
+                    <img :src="`${this.iconsURL}edit-dark.svg`" width="20" style="margin-right: 10px" />
                     <img :src="`${this.timlineIconsURL}Trash.svg`" width="20" />
                   </div>
                 </div>
               </md-radio>
               <md-radio v-model="radio" value="2">
                 <div class="note-item">
-                  <div
-                    class="note-item-label"
-                  >Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed</div>
+                  <div class="note-item-label">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed</div>
                   <div class="note-item-action">
-                    <img
-                      :src="`${this.iconsURL}edit-dark.svg`"
-                      width="20"
-                      style="margin-right:10px"
-                    />
+                    <img :src="`${this.iconsURL}edit-dark.svg`" width="20" style="margin-right: 10px" />
                     <img :src="`${this.timlineIconsURL}Trash.svg`" width="20" />
                   </div>
                 </div>
               </md-radio>
               <md-radio v-model="radio" value="3">
                 <div class="note-item">
-                  <div
-                    class="note-item-label"
-                  >Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempo</div>
+                  <div class="note-item-label">
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempo
+                  </div>
                   <div class="note-item-action">
-                    <img
-                      :src="`${this.iconsURL}edit-dark.svg`"
-                      width="20"
-                      style="margin-right:10px"
-                    />
+                    <img :src="`${this.iconsURL}edit-dark.svg`" width="20" style="margin-right: 10px" />
                     <img :src="`${this.timlineIconsURL}Trash.svg`" width="20" />
                   </div>
                 </div>
               </md-radio>
               <md-radio v-model="radio" value="4">
                 <div class="note-item">
-                  <div
-                    class="note-item-label"
-                  >Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor</div>
+                  <div class="note-item-label">
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                  </div>
                   <div class="note-item-action">
-                    <img
-                      :src="`${this.iconsURL}edit-dark.svg`"
-                      width="20"
-                      style="margin-right:10px"
-                    />
+                    <img :src="`${this.iconsURL}edit-dark.svg`" width="20" style="margin-right: 10px" />
                     <img :src="`${this.timlineIconsURL}Trash.svg`" width="20" />
                   </div>
                 </div>
@@ -218,12 +190,13 @@
             <div class="d-flex justify-content-between align-center">
               <div class="budget-details">
                 <div>Total Budget</div>
-                <div class="total-budget-value">$ {{event.totalBudget | withComma}}</div>
+                <div class="total-budget-value">$ {{ event.totalBudget | withComma }}</div>
                 <router-link
                   :to="`/events/${event.id}/edit/budget`"
                   tag="md-button"
                   class="edit-btn md-rose md-simple edit-btn"
-                >Edit</router-link>
+                  >Edit</router-link
+                >
               </div>
               <div class="budget-percentage">
                 <div class="chart-section">
@@ -233,7 +206,7 @@
                         :chart-data="pieChart.data"
                         :chart-options="pieChart.options"
                         chart-type="Pie"
-                        style="grid-column: 1; grid-row: 1; color:green"
+                        style="grid-column: 1; grid-row: 1; color: green"
                       />
                       <animated-number
                         ref="totalRemainingBudgetNumber"
@@ -247,11 +220,11 @@
                   <div class="chart-legends">
                     <div class="legend-item used">
                       <span class="legend-item-mark">Booked</span>
-                      <span>$ {{event.totalBudget - getTotalRemainingBudget}}</span>
+                      <span>$ {{ event.totalBudget - getTotalRemainingBudget }}</span>
                     </div>
                     <div class="legend-item remaining">
                       <span class="legend-item-mark">Remaining</span>
-                      <span>$ {{getTotalRemainingBudget | withComma}}</span>
+                      <span>$ {{ getTotalRemainingBudget | withComma }}</span>
                     </div>
                   </div>
                 </div>
@@ -332,26 +305,20 @@
           </div>
           <div class="card-content timeline-card">
             <div class="timeline-items">
-              <div
-                class="timeline-item-day"
-                v-for="(timelineDate,timelineIndex) in timeline"
-                :key="timelineIndex"
-              >
-                <div
-                  class="time-line-edit d-flex justify-content-center align-center time-line-header"
-                >
+              <div class="timeline-item-day" v-for="(timelineDate, timelineIndex) in timeline" :key="timelineIndex">
+                <div class="time-line-edit d-flex justify-content-center align-center time-line-header">
                   <div class="cross-line cross-line-left"></div>
                   <div class="d-flex justify-content-center align-center label">
-                    <label
-                      style="white-space:nowrap; padding-right:10px;text-transform: capitalize;"
-                    >Day {{numberToWord(timelineIndex + 1)}}</label>
-                    <div>{{formatDateString(timelineDate.itemDay)}}</div>
+                    <label style="white-space: nowrap; padding-right: 10px; text-transform: capitalize"
+                      >Day {{ numberToWord(timelineIndex + 1) }}</label
+                    >
+                    <div>{{ formatDateString(timelineDate.itemDay) }}</div>
                   </div>
                   <div class="cross-line cross-line-right"></div>
                 </div>
                 <div
                   class="timeline-item d-flex justify-content-start"
-                  v-for="(timeline,index) in timelineDate.items"
+                  v-for="(timeline, index) in timelineDate.items"
                   :key="index"
                 >
                   <img
@@ -360,8 +327,8 @@
                     width="45"
                   />
                   <div class="timeline-item_time">
-                    {{formatHour(timeline.startTime)}} - {{formatHour(timeline.endTime)}}
-                    <div class="timeline-item_time_title">{{timeline.title}}</div>
+                    {{ formatHour(timeline.startTime) }} - {{ formatHour(timeline.endTime) }}
+                    <div class="timeline-item_time_title">{{ timeline.title }}</div>
                   </div>
                 </div>
               </div>
@@ -380,11 +347,7 @@
               </div>
             </div>
             <div class="footer-actions">
-              <router-link
-                :to="`/events/${event.id}/edit/timeline`"
-                tag="md-button"
-                class="edit-btn md-rose md-simple"
-              >
+              <router-link :to="`/events/${event.id}/edit/timeline`" tag="md-button" class="edit-btn md-rose md-simple">
                 Edit
                 <md-icon>keyboard_arrow_right</md-icon>
               </router-link>
@@ -405,26 +368,26 @@
           </div>
 
           <div class="card-content rsvp d-flex align-center justify-center">
-            <div class="d-flex justify-around align-center" style="width:100%">
+            <div class="d-flex justify-around align-center" style="width: 100%">
               <div class="guests-details text-center">
                 <img :src="`${iconsURL}users-gray.svg`" width="50" />
                 <div class="total-budget">Total Guests</div>
-                <div class="total-budget-value">{{event.numberOfParticipants | withComma}}</div>
+                <div class="total-budget-value">{{ event.numberOfParticipants | withComma }}</div>
                 <md-button class="md-rose md-simple edit-btn" @click="openEditDetail">Edit</md-button>
               </div>
               <div class="progress-bar">
                 <div class="guests-progress d-flex justify-content-center align-center">
-                  <div class="guests-progress__item green" style="width : 66%;">
+                  <div class="guests-progress__item green" style="width: 66%">
                     <div class="value">1204</div>
                     <div class="progress"></div>
                     <div class="percentage">66%</div>
                   </div>
-                  <div class="guests-progress__item red" style="width : 21%;">
+                  <div class="guests-progress__item red" style="width: 21%">
                     <div class="value">240</div>
                     <div class="progress"></div>
                     <div class="percentage">21%</div>
                   </div>
-                  <div class="guests-progress__item gray" style="width : 13%;">
+                  <div class="guests-progress__item gray" style="width: 13%">
                     <div class="value">120</div>
                     <div class="progress"></div>
                     <div class="percentage">13%</div>
@@ -447,10 +410,7 @@
                 </div>
               </div>
               <div class="teaser">
-                <img
-                  src="https://static-maryoku.s3.amazonaws.com/storage/icons/Event Page/Group 6044.svg"
-                  width="50"
-                />
+                <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/Event Page/Group 6044.svg" width="50" />
                 <div class="campaign-description-1">
                   Create your
                   <br />"Don't forget" teaser
@@ -518,10 +478,7 @@
             <img :src="`${iconsURL}warning-circle-gray.svg`" width="20" />
             <span>Changing the time on your status might cause price changes</span>
           </div>
-          <md-button
-            class="md-simple md-just-icon md-round modal-default-button"
-            @click="showEditDetailModal = false"
-          >
+          <md-button class="md-simple md-just-icon md-round modal-default-button" @click="showEditDetailModal = false">
             <md-icon>clear</md-icon>
           </md-button>
         </div>
@@ -531,11 +488,11 @@
           <div class="md-layout-item md-size-100">
             <div class="d-flex justify-content-between">
               <md-radio v-model="editEvent.eventDayPart" value="daytime">
-                <img :src="`${iconsURL}sun-dark.svg`" width="25" style="margin:0 10px" />
+                <img :src="`${iconsURL}sun-dark.svg`" width="25" style="margin: 0 10px" />
                 <span>Day Time event</span>
               </md-radio>
               <md-radio v-model="editEvent.eventDayPart" value="evening">
-                <img :src="`${iconsURL}night-dark.svg`" width="20" style="margin:0 10px" />
+                <img :src="`${iconsURL}night-dark.svg`" width="20" style="margin: 0 10px" />
                 <span>Evening event</span>
               </md-radio>
               <md-radio v-model="editEvent.eventDayPart" value="wholeday">A whole day or more</md-radio>
@@ -563,7 +520,11 @@
             <div class="form-group maryoku-field" v-if="editEvent.eventType">
               <!-- <v-select v-model="editEvent.type" :options="eventTypes" item-text="name"></v-select> -->
               <v-select
-                :options="eventTypes.map(item => {return item.name})"
+                :options="
+                  eventTypes.map((item) => {
+                    return item.name;
+                  })
+                "
                 name="category"
                 v-model="editEvent.eventType.name"
                 v-validate="'required'"
@@ -588,7 +549,7 @@
             <label class="evnet-detail-label">Date</label>
             <div class="form-group">
               <md-datepicker
-                :class="[{'md-error': (editEvent.date)}]"
+                :class="[{ 'md-error': editEvent.date }]"
                 v-model="editEvent.eventStartMillis"
                 data-vv-name="date"
                 md-immediately
@@ -620,7 +581,7 @@
         </div>
       </template>
       <template slot="footer">
-        <md-button class="md-default md-simple cancel-btn" @click="showEditDetailModal=false">Cancel</md-button>
+        <md-button class="md-default md-simple cancel-btn" @click="showEditDetailModal = false">Cancel</md-button>
         <md-button class="md-red add-category-btn" @click="updateEvent">Save</md-button>
       </template>
     </modal>
@@ -644,14 +605,7 @@ import VueElementLoading from "vue-element-loading";
 import draggable from "vuedraggable";
 import { Drag, Drop } from "vue-drag-drop";
 import _ from "underscore";
-import {
-  LabelEdit,
-  AnimatedNumber,
-  StatsCard,
-  ChartCard,
-  Modal,
-  LocationInput,
-} from "@/components";
+import { LabelEdit, AnimatedNumber, StatsCard, ChartCard, Modal, LocationInput } from "@/components";
 import ChartComponent from "@/components/Cards/ChartComponent";
 import EditEventDetailModal from "@/components/Modals/EditEventDetailModal";
 import SideBar from "../../../components/SidebarPlugin/NewSideBar";
@@ -742,18 +696,7 @@ export default {
         "eighteen ",
         "nineteen ",
       ],
-      b: [
-        "",
-        "",
-        "twenty",
-        "thirty",
-        "forty",
-        "fifty",
-        "sixty",
-        "seventy",
-        "eighty",
-        "ninety",
-      ],
+      b: ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"],
       logger: "./static/img/logo.jpg",
       conceptName: "",
       showCommentEditorPanel: false,
@@ -819,15 +762,10 @@ export default {
         .then((resp) => {
           if (!resp[0].totalBookedBudget) resp[0].totalBookedBudget = 0;
           this.totalBookedBudget = resp[0].totalBookedBudget;
-          this.totalRemainingBudget =
-            evt.totalBudget - resp[0].totalBookedBudget;
+          this.totalRemainingBudget = evt.totalBudget - resp[0].totalBookedBudget;
           this.totalBookedBudget = resp[0].totalBookedBudget;
-          this.remainingBudgetPerEmployee =
-            this.totalRemainingBudget / evt.numberOfParticipants; // evt.totalBudget - resp[0].totalAllocatedBudget
-          this.percentage = (
-            (this.totalBookedBudget / evt.totalBudget) *
-            100
-          ).toFixed(2);
+          this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants; // evt.totalBudget - resp[0].totalAllocatedBudget
+          this.percentage = ((this.totalBookedBudget / evt.totalBudget) * 100).toFixed(2);
           // 100 -
           // (
           //   (resp[0].totalAllocatedBudget /
@@ -885,17 +823,13 @@ export default {
       this.showEditDetailModal = true;
     },
     updateEvent() {
-      let updateEvent = new CalendarEvent({ id: this.event.id }).for(
-        this.calendar,
-      );
+      let updateEvent = new CalendarEvent({ id: this.event.id }).for(this.calendar);
       updateEvent.eventDayPart = this.editEvent.eventDayPart;
       updateEvent.eventStartMillis = this.editEvent.eventStartMillis;
       updateEvent.numberOfParticipants = this.editEvent.numberOfParticipants;
       updateEvent.location = this.editEvent.location;
 
-      const eventType = this.eventTypes.find(
-        (it) => it.name === this.editEvent.eventType.name,
-      );
+      const eventType = this.eventTypes.find((it) => it.name === this.editEvent.eventType.name);
       updateEvent.eventType = eventType;
       if (updateEvent.eventDayPart === "evening") {
         updateEvent.eventStartMillis.setHours(19);
@@ -957,36 +891,14 @@ export default {
     numberToWord(num) {
       let vm = this;
       if ((num = num.toString()).length > 9) return "overflow";
-      let n = ("000000000" + num)
-        .substr(-9)
-        .match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+      let n = ("000000000" + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
       if (!n) return;
       var str = "";
-      str +=
-        n[1] != 0
-          ? (vm.a[Number(n[1])] || vm.b[n[1][0]] + " " + vm.a[n[1][1]]) +
-            "crore "
-          : "";
-      str +=
-        n[2] != 0
-          ? (vm.a[Number(n[2])] || vm.b[n[2][0]] + " " + vm.a[n[2][1]]) +
-            "lakh "
-          : "";
-      str +=
-        n[3] != 0
-          ? (vm.a[Number(n[3])] || vm.b[n[3][0]] + " " + vm.a[n[3][1]]) +
-            "thousand "
-          : "";
-      str +=
-        n[4] != 0
-          ? (vm.a[Number(n[4])] || vm.b[n[4][0]] + " " + vm.a[n[4][1]]) +
-            "hundred "
-          : "";
-      str +=
-        n[5] != 0
-          ? (str != "" ? "and " : "") +
-            (vm.a[Number(n[5])] || vm.b[n[5][0]] + " " + vm.a[n[5][1]])
-          : "";
+      str += n[1] != 0 ? (vm.a[Number(n[1])] || vm.b[n[1][0]] + " " + vm.a[n[1][1]]) + "crore " : "";
+      str += n[2] != 0 ? (vm.a[Number(n[2])] || vm.b[n[2][0]] + " " + vm.a[n[2][1]]) + "lakh " : "";
+      str += n[3] != 0 ? (vm.a[Number(n[3])] || vm.b[n[3][0]] + " " + vm.a[n[3][1]]) + "thousand " : "";
+      str += n[4] != 0 ? (vm.a[Number(n[4])] || vm.b[n[4][0]] + " " + vm.a[n[4][1]]) + "hundred " : "";
+      str += n[5] != 0 ? (str != "" ? "and " : "") + (vm.a[Number(n[5])] || vm.b[n[5][0]] + " " + vm.a[n[5][1]]) : "";
       return str;
     },
     toggleCommentMode(mode) {
@@ -1002,19 +914,9 @@ export default {
       ctx: this,
     });
 
-    [...Array(12).keys()].map((x) =>
-      x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined,
-    );
-    [...Array(12).keys()].map((x) =>
-      x === 0
-        ? this.hoursArray.push(`12:00 PM`)
-        : this.hoursArray.push(`${x}:00 PM`),
-    );
-    [...Array(8).keys()].map((x) =>
-      x === 0
-        ? this.hoursArray.push(`12:00 AM`)
-        : this.hoursArray.push(`${x}:00 AM`),
-    );
+    [...Array(12).keys()].map((x) => (x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined));
+    [...Array(12).keys()].map((x) => (x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`)));
+    [...Array(8).keys()].map((x) => (x === 0 ? this.hoursArray.push(`12:00 AM`) : this.hoursArray.push(`${x}:00 AM`)));
     this.hoursArray.push();
     this.event = this.$store.state.event.eventData; // Fetch event from store
     if (this.event.concept) {
@@ -1044,12 +946,7 @@ export default {
   },
   watch: {
     event(newVal, oldVal) {
-      this.$root.$emit(
-        "set-title",
-        this.event,
-        this.routeName === "EditBuildingBlocks",
-        true,
-      );
+      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
       this.getTimelineItems();
     },
   },
@@ -1090,10 +987,7 @@ export default {
       this.getAcceptedAndPaidProposals(this.calendar, event, eventComponents);
 
       if (this.acceptedProposals.length > 0) {
-        return this.acceptedProposals.reduce(
-          (p, item) => p + item.proposalCost,
-          0,
-        );
+        return this.acceptedProposals.reduce((p, item) => p + item.proposalCost, 0);
       } else {
         return 0;
       }
@@ -1115,9 +1009,7 @@ export default {
         return 0;
       } else {
         if (this.event.participantsType === "Guests and spouse") {
-          return (
-            this.getTotalRemainingBudget / this.event.numberOfParticipants / 2
-          );
+          return this.getTotalRemainingBudget / this.event.numberOfParticipants / 2;
         } else {
           return this.getTotalRemainingBudget / this.event.numberOfParticipants;
         }
@@ -1127,9 +1019,7 @@ export default {
       if (this.event.budgetPerPerson === 0) {
         return 0;
       } else {
-        return (
-          (this.getTotalRemainingBudget / this.getTotalAmountByGuestType) * 100
-        );
+        return (this.getTotalRemainingBudget / this.getTotalAmountByGuestType) * 100;
       }
     },
 

@@ -1,26 +1,26 @@
 <template>
   <div class="vendor-service-item-wrapper">
     <div class="title-cont">
-      <div class="title" @click="collapsed=!collapsed">{{serviceItem.name}}</div>
+      <div class="title" @click="collapsed = !collapsed">{{ serviceItem.name }}</div>
       <div class="help" v-if="!collapsed">
         Are all these included in your starting offer?
         <img
           :src="`${iconUrl}Group 5522 (2).svg`"
-          @mouseover="conditionTooltip=true"
-          @mouseleave="conditionTooltip=false"
+          @mouseover="conditionTooltip = true"
+          @mouseleave="conditionTooltip = false"
         />
         <div class="condition-tooltip" v-if="conditionTooltip">
           <h5>What do you charge extra for?</h5>
           <p>Tell us so we know which elements to include in the original proposal and which ones are extra</p>
         </div>
       </div>
-      <div class="arrow" :class="{'expanded': !collapsed}" @click="collapsed=!collapsed">
+      <div class="arrow" :class="{ expanded: !collapsed }" @click="collapsed = !collapsed">
         <img :src="`${iconUrl}Asset 519.svg`" />
       </div>
     </div>
     <div class="items-cont" v-if="!collapsed">
       <div class="items" v-for="(sub, sIndex) in serviceItem.subCategories" :key="sIndex">
-        <div class="sub-category-title">{{sub.name}}</div>
+        <div class="sub-category-title">{{ sub.name }}</div>
         <div class="checklist" v-for="(item, index) in sub.items" :key="index">
           <vendor-checkbox :item="item" :label="item.name" :vendor="vendor" v-model="item.value" />
         </div>
@@ -53,8 +53,7 @@ export default {
     return {
       collapsed: true,
       conditionTooltip: false,
-      iconUrl:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
   },
   created() {},

@@ -7,7 +7,7 @@
         <div class="rsvp-event-overview-content">
           <div class="md-layout">
             <div class="rsvp-event-overview-content-customer md-layout-item md-size-100">
-              <img v-if="campaign.logoUrl" :src="`${campaign.logoUrl}`" class="mb-40 logo-image" />
+              <img v-if="campaign.logoUrl" :src="`${campaign.logoUrl}`" class="mb-40" />
               <div class="font-size-40" style="margin-bottom: 100px">
                 Hello {{ campaign.companyName }} {{ event.guestType || "Employee" }}!
               </div>
@@ -299,10 +299,6 @@ export default {
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     overflow: hidden;
     background-color: #fff;
-    .logo-image {
-      max-width: 150px;
-      max-height: 150px;
-    }
     .rsvp-event-header {
       height: 430px;
 

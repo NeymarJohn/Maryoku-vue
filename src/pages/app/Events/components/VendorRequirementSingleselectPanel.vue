@@ -10,13 +10,14 @@
       </div>
     </div>
     <div>
-      <md-checkbox
+      <md-radio
         v-for="(option, index) in this.data.options"
         :key="index"
-        v-model="option.selected"
+        v-model="selected"
         @change="changeState"
         class="option"
-      >{{option.name}}</md-checkbox>
+        :value="index"
+      >{{option.name}}</md-radio>
     </div>
   </div>
 </template>
@@ -37,15 +38,32 @@ export default {
   },
   data() {
     return {
-      serviceNames: {
-      },
+      selected: -1,
     };
   },
   methods: {
     changeState() {
-      this.$emit('change');
+      this.data.options.map((op, index) => {
+        op.selected = index === this.selected;
+      });
+
+      this.$emit('change', this.data);
     },
   },
+  watch: {
+    data: {
+      handler(newVal, oldVal){
+        console.log("watch.data", newVal);
+        if (newVal) {
+          this.selected = this.data.options.findIndex(op => op.selected);
+        }
+      },
+      deep: true,
+    }
+  },
+  mounted() {
+    this.selected = this.data.options.findIndex(op => op.selected);
+  }
 };
 </script>
 <style lang="scss" scoped>

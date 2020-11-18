@@ -2,6 +2,9 @@
   height: 4px;
   margin-bottom: 20px;
 
+  &.md-accent {
+    background-color: #cbc8c8 !important;
+  }
   &.md-rose{
     @include md-progress-bar($brand-rose);
   }

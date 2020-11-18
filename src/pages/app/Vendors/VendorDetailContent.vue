@@ -1,29 +1,43 @@
 <template>
-  <div class="vendor-signup-step4-wrapper">
+  <div class="vendor-detail-summary">
     <div class="inside-container">
       <div class="left-side">
-        <img :src="`${iconUrl}Group 5225 (2).svg`" />
-        <h2>SUMMARY</h2>
-        <p>This is a summary of your company's info which we'll use in future proposal creating</p>
-        <h2>4/5</h2>
+        <div class="tabs">
+          <div
+            class="tab"
+            :class="{ active: t == activeTab }"
+            v-for="(t, tIndex) in tabs"
+            :key="`tab-${tIndex}`"
+            @click="goToSection(t)"
+          >
+            <span class="point"></span>
+            {{ t }}
+          </div>
+        </div>
       </div>
       <div class="right-side">
         <div class="card">
-          <div class="tabs">
-            <div
-              class="tab"
-              :class="{ active: t == activeTab }"
-              v-for="(t, tIndex) in tabs"
-              :key="tIndex"
-              @click="goToSection(t)"
-            >
-              {{ t }}
+          <div class="banner">
+            <!-- <img :src="vendor.vendorImages[0]" v-if="vendor.vendorImages && vendor.vendorImages.length > 0" /> -->
+            <div class="images">
+              <span class="prev" @click="prev()" v-if="imageSlidePos < 0">
+                <md-icon>keyboard_arrow_left</md-icon>
+              </span>
+              <div class="cont" :style="{ left: `${imageSlidePos}px` }" ref="imagesCont">
+                <img :src="img" v-for="(img, ind) in vendor.vendorImages" :key="`image-${ind}`" @click="view()" />
+              </div>
+              <span class="next" @click="next()" v-if="imageSlidePos >= 0">
+                <md-icon>keyboard_arrow_right</md-icon>
+              </span>
+              <LightBox
+                v-if="getGalleryImages().length > 0"
+                :images="getGalleryImages()"
+                ref="lightbox"
+                :show-light-box="false"
+              />
             </div>
           </div>
-          <div class="banner">
-            <img :src="vendor.images[0]" v-if="vendor.images.length > 0" />
-          </div>
-          <div class="about-cont" id="About">
+          <div class="about-cont profile-section" id="About">
             <div class="block">
               <span class="capacity"> <img :src="`${iconUrl}Asset 545.svg`" />Capacity </span>
               <span class="number">
@@ -38,63 +52,13 @@
             </div>
             <div class="block">
               <div class="title">
-                <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategories[0])}`" />
-                About Our {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
+                <img :src="`${$iconURL}Budget Elements/${vendor.eventCategory.icon}`" />
+                <span> About Our {{ vendor.eventCategory.fullTitle }} </span>
               </div>
               <div class="desc">{{ vendor.about.category }}</div>
             </div>
-            <div class="images">
-              <span class="prev" @click="prev()" v-if="imageSlidePos < 0">
-                <md-icon>keyboard_arrow_left</md-icon>
-              </span>
-              <div class="cont" :style="{ left: `${imageSlidePos}px` }" ref="imagesCont">
-                <img :src="img" v-for="(img, ind) in vendor.images" :key="ind" @click="view()" />
-              </div>
-              <span class="next" @click="next()" v-if="imageSlidePos >= 0">
-                <md-icon>keyboard_arrow_right</md-icon>
-              </span>
-              <LightBox
-                v-if="getGalleryImages().length > 0"
-                :images="getGalleryImages()"
-                ref="lightbox"
-                :show-light-box="false"
-              />
-            </div>
-            <div class="contact-us" id="Contact">
-              <h4>CONTACT US</h4>
-              <div class="items">
-                <div class="item">
-                  <img :src="`${iconUrl}Asset 547.svg`" />
-                  {{ vendor.vendorMainEmail }}
-                </div>
-                <div class="item">
-                  <img :src="`${iconUrl}Asset 550.svg`" />
-                  {{ vendor.vendorAddressLine1 }}
-                </div>
-                <div class="item">
-                  <img :src="`${iconUrl}Asset 548.svg`" />
-                  {{ vendor.vendorMainPhoneNumber }}
-                </div>
-              </div>
-            </div>
-            <div class="social" v-if="isSocial()">
-              Website & social
-              <div class="items">
-                <div
-                  class="item"
-                  v-for="(s, sIndex) in socialMediaBlocks"
-                  :key="sIndex"
-                  :class="{ 'mr-1': vendor.social[s.name] }"
-                >
-                  <a v-if="vendor.social[s.name]" :href="vendor.social[s.name]" target="_blank">
-                    <img :src="`${iconUrl}${s.icon}`" />
-                    {{ vendor.social[s.name] }}
-                  </a>
-                </div>
-              </div>
-            </div>
           </div>
-          <div class="fee-cont" id="Pricing">
+          <div class="fee-cont profile-section" id="What's Included?">
             <div class="title">
               <h3><img :src="`${iconUrl}Asset 562.svg`" /> ELEMENTS IN STARTING FEE</h3>
             </div>
@@ -103,7 +67,7 @@
                 <div class="first-column">
                   <div>
                     <img :src="`${iconUrl}Asset 543.svg`" />
-                    {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
+                    {{ vendor.eventCategory.fullTitle }}
                   </div>
                   <span>QTY</span>
                 </div>
@@ -112,11 +76,15 @@
                 </div>
               </div>
               <div class="citems">
-                <vendor-starting-fee-item v-for="(fv, fvIndex) in getStartingFeeItems()" :key="fvIndex" :item="fv" />
+                <vendor-starting-fee-item
+                  v-for="(fv, fvIndex) in getStartingFeeItems()"
+                  :key="`vendor-starting-fee-${fvIndex}`"
+                  :item="fv"
+                />
               </div>
             </div>
           </div>
-          <div class="extra-cont" id="Pricing">
+          <div class="extra-cont profile-section" id="Extras">
             <div class="title">
               <h3><img :src="`${iconUrl}Asset 526.svg`" />WITH EXTRA PAY</h3>
             </div>
@@ -124,39 +92,39 @@
               <div class="cheader">
                 <div>
                   <img :src="`${iconUrl}Asset 543.svg`" />
-                  {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
+                  {{ vendor.eventCategory.fullTitle }}
                 </div>
                 <span>QTY</span>
                 <span>Price</span>
               </div>
               <div class="citems">
                 <div class="citem">
-                  <vendor-extra-pay-item v-for="(cs, csIndex) in getExtraPayItems()" :key="csIndex" :item="cs" />
+                  <vendor-extra-pay-item v-for="(cs, index) in getExtraPayItems()" :key="`extra-${index}`" :item="cs" />
                 </div>
               </div>
             </div>
           </div>
-          <div class="policy-cont" id="Policy">
+          <div class="policy-cont profile-section" id="Policy">
             <div class="title"><img :src="`${iconUrl}Group 1471 (2).svg`" /> OUR POLICY</div>
             <div class="rules">
-              <div class="rule" v-for="(y, yIndex) in vendor.yesRules" :key="yIndex">
+              <div class="rule" v-for="(y, yIndex) in vendor.yesRules" :key="`yes-${yIndex}`">
                 <div class="item">{{ y.name }}</div>
                 <div class="item">
                   <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="vendor.yesRules.includes(y)" />
                 </div>
               </div>
-              <div class="rule" v-for="(n, nIndex) in vendor.noRules" :key="nIndex">
+              <div class="rule" v-for="(n, nIndex) in vendor.noRules" :key="`rule-${nIndex}`">
                 <div class="item">{{ n.name }}</div>
                 <div class="item">
                   <img :src="`${iconUrl}Group 5489 (4).svg`" v-if="vendor.noRules.includes(n)" />
                 </div>
               </div>
             </div>
-            <div class="not-allowed" v-if="vendor.vendorCategories[0] == 'venuerental'">
+            <div class="not-allowed" v-if="vendor.eventCategory.key == 'venuerental'">
               <h5>We don't allow these 3rd party vendor:</h5>
               <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
             </div>
-            <div class="dont-work">
+            <div class="dont-work" v-if="vendor.selectedWeekdays.length && vendor.exDonts.length">
               <h5>We don't work on:</h5>
               <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
                 <img :src="`${iconUrl}Group 5489 (4).svg`" />
@@ -176,7 +144,7 @@
               </div>
             </div>
           </div>
-          <div class="pricing-policy-cont" id="Rules">
+          <div class="pricing-policy-cont profile-section" id="Pricing Policy">
             <div class="title"><img :src="`${iconUrl}Asset 560.svg`" /> OUR PRICING POLICY</div>
             <div class="rules">
               <div class="rule" v-for="(policy, yIndex) in validPricingPolicy" :key="yIndex">
@@ -203,6 +171,7 @@
               />
             </div>
           </div>
+          <vendor-detail-reviews></vendor-detail-reviews>
         </div>
       </div>
     </div>
@@ -213,14 +182,14 @@
 import moment from "moment";
 import VueElementLoading from "vue-element-loading";
 import Vendors from "@/models/Vendors";
-
+import VendorDetailReviews from "./components/VendorDetailReviews";
 //COMPONENTS
 import Icon from "@/components/Icon/Icon.vue";
-import VendorServiceItem from "./VendorServiceItem.vue";
+import VendorServiceItem from "./components/VendorServiceItem.vue";
 import LightBox from "vue-image-lightbox";
 import carousel from "vue-owl-carousel";
-import VendorStartingFeeItem from "./VendorStartingFeeItem.vue";
-import VendorExtraPayItem from "./VendorExtraPayItem.vue";
+import VendorStartingFeeItem from "./components/VendorStartingFeeItem.vue";
+import VendorExtraPayItem from "./components/VendorExtraPayItem.vue";
 import _ from "underscore";
 
 export default {
@@ -237,52 +206,12 @@ export default {
     carousel,
     VendorStartingFeeItem,
     VendorExtraPayItem,
+    VendorDetailReviews,
   },
   data() {
     return {
-      tabs: ["About", "Pricing", "Rules", "Policy", "Contact"],
-      socialMediaBlocks: [
-        {
-          name: "website",
-          icon: "Asset 539.svg",
-        },
-        {
-          name: "facebook",
-          icon: "Asset 540.svg",
-        },
-        {
-          name: "instagram",
-          icon: "Group 4569 (2).svg",
-        },
-        {
-          name: "youtube",
-          icon: "socialmedia/Youtube.svg",
-        },
-        {
-          name: "linkedin",
-          icon: "socialmedia/Linkdin.svg",
-        },
-        {
-          name: "google",
-          icon: "socialmedia/GooglePlus.svg",
-        },
-        {
-          name: "pinterest",
-          icon: "socialmedia/Pinterest.svg",
-        },
-        {
-          name: "foursuare",
-          icon: "socialmedia/foursquare.svg",
-        },
-        {
-          name: "reddit",
-          icon: "socialmedia/Twitter.svg",
-        },
-        {
-          name: "tiktok",
-          icon: "socialmedia/Tiktok.svg",
-        },
-      ],
+      tabs: ["About", "What's Included?", "Extras", "Policy", "Pricing Policy", "Reviews"],
+
       activeTab: "About",
       feeVenues: [
         {
@@ -306,9 +235,6 @@ export default {
       ],
       imageSlidePos: 0,
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
-      defRules: "Suitable for pets, Smoking allowed, Suitable for infants(Under 2 years), Dress code, Overtime Cost",
-      defNa:
-        "Catering, Dj, Photographer, Show / Performance, Flowers, Transporation, Decoration, Rentals, Favours & Gifts, Other",
       categoryNames: [
         {
           name: "Venue Rental",
@@ -396,15 +322,6 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    isSocial() {
-      let isBlank = true;
-
-      _.each(this.vendor.social, (s) => {
-        isBlank &= s === null;
-      });
-
-      return !isBlank;
-    },
     getExtraPayItems() {
       let extraPayItems = [];
       _.each(this.vendor.services, (item) => {
@@ -424,10 +341,10 @@ export default {
       return startingFeeItems;
     },
     prev() {
-      const ww = this.vendor.images.length * 320;
+      const ww = this.vendor.vendorImages.length * 700;
       const sw = this.$refs.imagesCont.clientWidth;
       if (ww / sw > 2) {
-        this.imageSlidePos += 320 * 4;
+        this.imageSlidePos += 700 * 4;
       } else if (ww / sw > 1) {
         this.imageSlidePos += (ww % sw) + 60;
       } else {
@@ -435,10 +352,10 @@ export default {
       }
     },
     next() {
-      const ww = this.vendor.images.length * 320;
+      const ww = this.vendor.vendorImages.length * 700;
       const sw = this.$refs.imagesCont.clientWidth;
       if (ww / sw > 2) {
-        this.imageSlidePos -= 320 * 4;
+        this.imageSlidePos -= 700 * 4;
       } else if (ww / sw > 1) {
         this.imageSlidePos -= (ww % sw) + 60;
       } else {
@@ -491,15 +408,16 @@ export default {
     },
     getGalleryImages: function () {
       let temp = [];
-
-      if (this.vendor.images.length > 0) {
-        this.vendor.images.forEach((item) => {
+      if (!this.vendor.vendorImages) return [];
+      if (this.vendor.vendorImages.length > 0) {
+        this.vendor.vendorImages.forEach((item, index) => {
           temp.push({
             thumb: item,
             src: item,
-            caption: "test",
+            caption: index,
           });
         });
+        console.log(temp);
         return temp;
       } else {
         return [];
@@ -522,68 +440,102 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.vendor-signup-step4-wrapper {
+.vendor-detail-summary {
   font-family: Manrope-Regular, sans-serif;
-
+  padding: 60px 120px;
   .inside-container {
     display: flex;
     color: #050505;
 
     .left-side {
       flex: 1;
-      margin-right: 122px;
-
-      img {
-        width: 92.5px;
-      }
-      h4 {
-        margin: 36px 0 11px 0;
-        font: 800 20px Manrope-Regular, sans-serif;
-      }
-      p {
-        margin: 0;
-        padding: 0;
-        font: normal 16px Manrope-Regular, sans-serif;
-      }
-      h2 {
-        margin: 30px 0;
-        font: 800 40px Manrope-Regular, sans-serif;
-      }
-      h3 {
-        margin: 0;
-        color: #f51355;
-        font: bold 20px Manrope-Regular, sans-serif;
+      .tabs {
+        display: flex;
+        flex-direction: column;
+        .tab {
+          padding: 1rem 0rem;
+          cursor: pointer;
+          position: relative;
+          &.active {
+            font: bold 16px Manrope-Regular, sans-serif;
+            .point {
+              background-color: #f51355;
+            }
+          }
+          .point {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            background-color: #818080;
+            margin-right: 30px;
+          }
+          &:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            border-left: dashed 1px #050505;
+            height: 50px;
+            left: 5px;
+            top: 33px;
+          }
+        }
       }
     }
     .right-side {
-      flex: 3;
+      flex: 5;
 
       .card {
-        padding: 30px 60px 60px 60px;
+        padding: 0px 60px 60px 60px;
         background-color: #ffffff;
         box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
 
-        .tabs {
-          display: flex;
-          margin: -30px -60px;
-          .tab {
-            padding: 1rem 2rem;
-            border-right: 1px solid #818080;
-            cursor: pointer;
-
-            &.active {
-              border-top: 5px solid #f51355;
-              font: bold 16px Manrope-Regular, sans-serif;
-            }
-          }
-        }
         .banner {
           margin: 30px -60px calc(30px - 2rem) -60px;
           padding-bottom: 2rem;
+          overflow: hidden;
+          .images {
+            display: block;
+            overflow: hidden;
+            padding: 0;
+            white-space: nowrap;
+            position: relative;
+            margin-right: -60px;
+
+            span {
+              cursor: pointer;
+              position: absolute;
+              width: 28px;
+              height: 28px;
+              background-color: #ffffff;
+              box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+              border-radius: 50%;
+              text-align: center;
+              font-weight: 800;
+              z-index: 99;
+              top: 50%;
+              transform: translateY(-50%);
+
+              &.prev {
+                left: 0;
+              }
+              &.next {
+                right: 60px;
+              }
+            }
+            .cont {
+              position: relative;
+              img {
+                width: 700px;
+                height: 500px;
+                margin-right: 2rem;
+                cursor: zoom-in;
+                object-fit: cover;
+              }
+            }
+          }
           img {
             width: 100%;
             height: 460px;
-            object-fit: cover;
           }
         }
         .about-cont {
@@ -628,45 +580,7 @@ export default {
               width: 60%;
             }
           }
-          .images {
-            display: block;
-            overflow: hidden;
-            padding: 2rem 0;
-            white-space: nowrap;
-            position: relative;
-            margin-right: -60px;
 
-            span {
-              cursor: pointer;
-              position: absolute;
-              width: 28px;
-              height: 28px;
-              background-color: #ffffff;
-              box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-              border-radius: 50%;
-              text-align: center;
-              font-weight: 800;
-              z-index: 99;
-              top: 50%;
-              transform: translateY(-50%);
-
-              &.prev {
-                left: 0;
-              }
-              &.next {
-                right: 60px;
-              }
-            }
-            .cont {
-              position: relative;
-              img {
-                width: 300px;
-                height: 177px;
-                margin-right: 2rem;
-                cursor: zoom-in;
-              }
-            }
-          }
           .contact-us {
             padding: 2rem 0;
 
@@ -870,6 +784,7 @@ export default {
         .pricing-policy-cont {
           padding: 60px 60px 0 60px;
           margin: 0 -60px;
+          border-bottom: 2px solid #818080;
           .title {
             margin-bottom: 2rem;
             img {
@@ -936,6 +851,23 @@ export default {
           .signatures {
             display: grid;
             grid-template-columns: 50% 50%;
+          }
+        }
+        .review-cont {
+          padding: 60px 0 0 0;
+          .review-list {
+            .review-list-item {
+              padding: 30px 0px;
+              border-bottom: solid 1px #B7B7B7;
+            }
+          }
+        }
+        .profile-section {
+          .title {
+            img {
+              width: 30px;
+              margin-right: 1rem;
+            }
           }
         }
       }

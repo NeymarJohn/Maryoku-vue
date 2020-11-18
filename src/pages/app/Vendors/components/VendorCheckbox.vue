@@ -193,7 +193,7 @@
             {{ label }}
           </div>
           <div class="how-many" v-if="checked && included">
-            How Much Cost?
+            <label>How Much Cost?</label>
             <input type="number" placeholder="Cost" v-model="currentItem.value" />
           </div>
         </div>

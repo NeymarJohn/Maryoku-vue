@@ -180,6 +180,10 @@ export default {
                   }
               })
           }
+
+          if (this.blockId == 'foodandbeverage' && this.category == 'Services') {
+            visible = it.conditionScript ? eval(it.conditionScript) : true;
+          }
           this.properties.push({...it, visible, value});
       });
     },

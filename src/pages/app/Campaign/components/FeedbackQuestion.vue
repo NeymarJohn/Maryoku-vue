@@ -6,7 +6,7 @@
         {{ data.question }}
       </div>
       <div>
-        <maryoku-textarea size="narrow" v-model="data.comment" :disabled="disabled"></maryoku-textarea>
+        <maryoku-textarea size="narrow" v-model="data.comment"></maryoku-textarea>
       </div>
     </div>
     <div class="ml-50 mr-50">
@@ -47,10 +47,6 @@ export default {
     showSwitch: {
       type: Boolean,
       default: true,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
     },
   },
   data() {

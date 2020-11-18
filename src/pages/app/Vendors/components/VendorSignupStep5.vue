@@ -8,8 +8,9 @@
           RECOMMENDATIONS
         </h2>
         <p>
-          Take it from us; recommendations tend to go a long way. Potential customers will be impressed if you'll have
-          them in your profile. So, make sure you get them from past customers
+          Take it from us - recommendations go a long way! Want to display a recommendation from a previous customer of
+          yours on your vendor page? Enter the details of the customer that you’d like to get a recommendation from, and
+          we’ll reach out to them to get their review and post it on your page.
         </p>
         <h2>5/5</h2>
       </div>
