@@ -245,7 +245,7 @@ export default {
     },
     async addVendor() {
       console.log("vendor", this.vendor);
-      new Vendors(this.vendor)
+      new Vendors({ ...this.vendor, isEditing: false })
         .save()
         .then((res) => {
           console.log("*** Save vendor - done: ");

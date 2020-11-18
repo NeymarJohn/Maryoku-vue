@@ -42,10 +42,7 @@
           </div>
           <hide-switch v-model="campaignData.visibleSettings.showSharingOption" label="sharing option"></hide-switch>
         </div>
-        <sharing-button-group
-          class="mb-50"
-          v-if="campaignData.visibleSettings.showSharingOption"
-        ></sharing-button-group>
+        <sharing-button-group class="mb-50"></sharing-button-group>
       </div>
       <hr />
       <div>
@@ -54,24 +51,16 @@
           We'd love to get your feedback
           <hide-switch v-model="campaignData.visibleSettings.showFeedback" label="feedback section"></hide-switch>
         </div>
-        <div v-if="campaignData.visibleSettings.showFeedback">
+        <div>
           <feedback-question
             v-for="(question, index) in feedbackQuestions"
             :key="index"
             :feedbackData="question"
-            :disabled="true"
           ></feedback-question>
         </div>
       </div>
-      <div class="mt-60 d-flex align-center" v-if="isEditingNewQuestion">
-        <input v-model="newQuestion" style="width: 40%" />
-        <md-button class="md-simple md-red maryoku-btn" @click="addNewQuestion">Add</md-button>
-        <md-button class="md-simple md-red maryoku-btn md-outlined" @click="isEditingNewQuestion = false"
-          >Cancel</md-button
-        >
-      </div>
-      <div class="mt-60" v-else>
-        <md-button class="md-simple edit-btn md-red" @click="editNewQuestion">
+      <div class="mt-60">
+        <md-button class="md-simple edit-btn md-red">
           <img :src="`${$iconURL}Campaign/Group 9327.svg`" class="mr-20" />Feel free to add more questions
         </md-button>
       </div>
@@ -108,8 +97,6 @@ export default {
       placeHolder: "",
       originalContent: {},
       feedbackQuestions: [],
-      isEditingNewQuestion: false,
-      newQuestion: "",
     };
   },
   created() {
@@ -184,10 +171,7 @@ export default {
       });
     },
     addNewImage(image) {
-      console.log(image);
-      const images = this.campaignData.images;
-      images.unshift({ src: image.imageString });
-      this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "images", value: images });
+      this.editingContent.images.unshift({ src: image });
     },
     uploadFile() {
       document.getElementById("file-uploader").click();
@@ -197,28 +181,6 @@ export default {
       this.editingContent.push({
         name: fileName,
       });
-    },
-    editNewQuestion() {
-      this.isEditingNewQuestion = true;
-    },
-    addNewQuestion() {
-      const newQuestion = {
-        icon: "",
-        label: this.newQuestion,
-        question: this.newQuestion,
-        rank: 0,
-        showQuestion: true,
-      };
-      this.feedbackQuestions.push(newQuestion);
-      this.newQuestion = "";
-      // const feedbackQuestions = [...this.campaignData.feedbackQuestions, newQuestion];
-      // console.log(feedbackQuestions);
-      // this.$store.commit("campaign/setAttribute", {
-      //   name: "FEEDBACK",
-      //   key: "feedbackQuestions",
-      //   value: feedbackQuestions,
-      // });
-      this.isEditingNewQuestion = false;
     },
   },
 };
