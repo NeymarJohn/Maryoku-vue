@@ -477,24 +477,15 @@ export default {
       }
     },
     sendPreviewEmail() {
-      this.$http
-        .post(`${process.env.SERVER_URL}/1/campaigns/preview`, {
-          toEmail: this.user.email,
-          toUserName: this.user.name,
-          fromUserName: this.user.name,
-          eventName: this.event.title,
-          plannerName: this.user.name,
-          companyName: "maryoku",
-          eventUrl: `http://jeff-test2.local.maryoku.com:3000/#/rsvp/${this.event.id}`,
-        })
-        .then(() => {
-          swal({
-            title: `You will receive a preview campaign email soon!`,
-            buttonsStyling: false,
-            type: "success",
-            confirmButtonClass: "md-button md-success",
-          });
+      const campaignData = this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
+      this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "TESTING").then((res) => {
+        swal({
+          title: `You will receive a preview campaign email soon!`,
+          buttonsStyling: false,
+          type: "success",
+          confirmButtonClass: "md-button md-success",
         });
+      });
     },
     sendToAddtionalGuests() {
       this.$store.commit("campaign/setAttribute", {

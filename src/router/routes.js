@@ -9,12 +9,12 @@ import authService from "@/services/auth.service";
 
 const Events = () => import("@/pages/app/Events/Events.vue");
 const EventProposal = () => import("@/pages/app/Events/EventProposal.vue");
-const CurrentVendors = () => import("@/pages/app/Vendors/CurrentVendors.vue");
+const VendorDetail = () => import("@/pages/app/Vendors/VendorDetail.vue");
 const AddEditVendor = () => import("@/pages/app/Vendors/AddEditVendor.vue");
 const VendorsPoolNew = () => import("@/pages/app/Vendors/VendorsPoolNew.vue");
 
 // Event Pages
-import EventDetailsOverView from "@/pages/app/Events/EventDetailsOverview.vue";
+import EventDetail from "@/pages/app/Events/EventDetail.vue";
 import EventDetailsBudget from "@/pages/app/Events/EventDetailsBudget.vue";
 import EventPlan from "@/pages/app/Events/EventPlan.vue";
 import EventProposalDetails from "@/pages/app/Events/components/EventProposalDetails.vue";
@@ -240,9 +240,17 @@ let appPages = {
     name: "App",
     children: [
         {
+            path: "/vendors-pool",
+            name: "VendorsPoolNew",
+            component: VendorsPoolNew,
+            meta: {
+                gtm: "VendorsPoolNew",
+            },
+        },
+        {
             path: "/vendors/:id/detail",
             name: "VendorDetails",
-            component: CurrentVendors,
+            component: VendorDetail,
             meta: {
                 title: "Vendor Page",
                 gtm: "Vendor Details",
@@ -285,10 +293,20 @@ let EventPages = {
         },
         {
             path: "/events/:id/overview",
-            name: "EventDetailsOverView",
-            component: EventDetailsOverView,
+            name: "EventDetail",
+            component: EventDetail,
             meta: {
                 title: "Event Details",
+                gtm: "Event Edit",
+                opaque: false,
+            },
+        },
+        {
+            path: "/events/:id/:blockId",
+            name: "EventDetail",
+            component: EventDetail,
+            meta: {
+                title: "Event Detail",
                 gtm: "Event Edit",
                 opaque: false,
             },
@@ -321,14 +339,7 @@ let EventPages = {
                 opaque: false,
             },
         },
-        {
-            path: "/vendors-pool",
-            name: "VendorsPoolNew",
-            component: VendorsPoolNew,
-            meta: {
-                gtm: "VendorsPoolNew",
-            },
-        },
+
     ],
 };
 let PublicCreateEvent = {

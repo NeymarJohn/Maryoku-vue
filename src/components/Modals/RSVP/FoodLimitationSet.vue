@@ -16,13 +16,13 @@
         <img :src="`${$iconURL}RSVP/Group 9278.svg`" />
         <option-card
           icon="milk.svg"
-          label="I’m Vegetarian"
+          :label="type == 1 ? 'I’m Vegetarian' : 'Vegetarian'"
           :selected="limitationType == 'vegetarian'"
           @select="limitationType = 'vegetarian'"
         ></option-card>
         <option-card
           icon="food+(4).svg"
-          label="I’m Vegan"
+          :label="type == 1 ? 'I’m Vegan' : 'Vegan'"
           :selected="limitationType == 'vegan'"
           @select="limitationType = 'vegan'"
         ></option-card>
