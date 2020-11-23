@@ -89,6 +89,7 @@ export default {
         width: 140px;
         height: 140px;
         border-radius: 50%;
+        object-fit: cover;
       }
     }
   }

@@ -137,14 +137,14 @@
               <img :src="`${landingIconsUrl}Path 1942.svg`" />
               <span>
                 <strong>Type:</strong>
-                {{ proposalRequest ? event.occasion : "-" }}
+                {{ proposalRequest ? event.eventType.name : "-" }}
               </span>
             </li>
             <li>
               <img :src="`${landingIconsUrl}Path 1383.svg`" />
               <span>
                 <strong>Invited:</strong>
-                {{ proposalRequest ? event.participantsType : "-" }}
+                {{ proposalRequest && event.guestType ? event.guestType : "-" }}
               </span>
             </li>
           </ul>
@@ -178,7 +178,7 @@
       </template>
       <template slot="footer">
         <div class="saved-it-modal__footer">
-          <button class="cool" @click="hideModal()">Cool, Thanks</button>
+          <button class="cool" @click="completeProposal()">Cool, Thanks</button>
         </div>
       </template>
     </modal>
@@ -205,6 +205,30 @@
       <template slot="footer">
         <div class="saved-it-modal__footer">
           <md-button class="md-red maryoku-btn" @click="hideModal()">Ok, Thanks</md-button>
+        </div>
+      </template>
+    </modal>
+    <modal v-if="showCloseProposalModal" class="saved-it-modal" container-class="modal-container sl">
+      <template slot="header">
+        <div class="saved-it-modal__header d-flex">
+          <img :src="`${$iconURL}NewSubmitPorposal/closeproposal.png`" />
+          <div class="ml-20">
+            <h3 class="text-left color-black">
+              We are sorry, but someone else got there <br />before you and already won this bid.
+            </h3>
+            <div class="text-left">But no worries! We will be with you soon with the next one</div>
+          </div>
+        </div>
+        <button class="close" @click="showCloseProposalModal = false">
+          <img :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`" />
+        </button>
+      </template>
+      <template slot="body">
+        <div class="saved-it-modal__body"></div>
+      </template>
+      <template slot="footer">
+        <div class="saved-it-modal__footer">
+          <md-button class="md-red maryoku-btn" @click="showCloseProposalModal = false">Ok, Thanks</md-button>
         </div>
       </template>
     </modal>
@@ -253,6 +277,7 @@ export default {
       vendorCategory: null,
       event: "",
       openedModal: "",
+      showCloseProposalModal: false,
     };
   },
   created() {
@@ -272,6 +297,10 @@ export default {
       this.vendor = vendor;
     });
     this.getProposalRequest(this.$route.params.id).then((proposalRequest) => {
+      console.log("proposalRequest", proposalRequest);
+      if (proposalRequest.componentInstance.proposalAccepted) {
+        this.showCloseProposalModal = true;
+      }
       this.$set(this, "proposalRequest", proposalRequest);
       this.event = proposalRequest.eventData;
       if (proposalRequest.eventData.concept) {
@@ -376,6 +405,7 @@ export default {
 
       this.scrollToTop();
     },
+
     back() {
       const initStep = this.$store.state.vendorProposal.initStep;
       if (this.step > initStep) {
@@ -402,6 +432,9 @@ export default {
     },
     getEvent() {
       this.$store.dispatch("event/getEventById", this.$route.params.eventId);
+    },
+    completeProposal() {
+      this.$router.push({ path: `/completed-bidding` });
     },
   },
 
@@ -496,10 +529,13 @@ export default {
 
   section.header-wrapper {
     background-color: #ffffff;
-    position: absolute;
+    position: relative;
     width: 100%;
     border-radius: 3px;
+    -webkit-box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+    /* height: 266px; */
+    display: flex;
 
     .proposal-banner {
       background-image: url("https://static-maryoku.s3.amazonaws.com/storage/img/lock.jpg");
@@ -512,7 +548,7 @@ export default {
       padding: 90px 96px;
       color: #ffffff;
       width: 495px;
-      height: 273px;
+      // height: 273px;
 
       h2 {
         font-size: 50px;
@@ -647,7 +683,7 @@ export default {
     }
   }
   .main-cont {
-    margin-top: 263px;
+    // margin-top: 263px;
     margin-bottom: 90px;
     width: 100%;
 
@@ -685,7 +721,7 @@ export default {
     align-items: center;
     position: absolute;
     width: 100%;
-    z-index: 9999;
+    z-index: 9000;
     overflow: hidden;
 
     .prev-cont {

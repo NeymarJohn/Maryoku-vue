@@ -1,54 +1,54 @@
 <template>
-  <div :class="[{ 'nav-open': $sidebar.showSidebar }, { rtl: $route.meta.rtlActive }]">
+  <div  :class="[{'nav-open': $sidebar.showSidebar}, {'rtl': $route.meta.rtlActive}]">
     <notifications></notifications>
     <!-- <side-bar> -->
-    <!--<user-menu></user-menu>-->
-    <!-- <mobile-menu></mobile-menu> -->
-    <!-- <template slot="links"> -->
-    <!--<sidebar-item :link="{name: 'Me', icon: 'person_pin', path: '/me'}">
+      <!--<user-menu></user-menu>-->
+      <!-- <mobile-menu></mobile-menu> -->
+      <!-- <template slot="links"> -->
+        <!--<sidebar-item :link="{name: 'Me', icon: 'person_pin', path: '/me'}">
           </sidebar-item>-->
-    <!--<sidebar-item :link="{name: 'My Company', icon: 'fingerprint', path: '/my-company'}">
+        <!--<sidebar-item :link="{name: 'My Company', icon: 'fingerprint', path: '/my-company'}">
           <sidebar-item :link="{name: 'Dashboard', icon: 'dashboard', path: '/my-company/dashboard'}"></sidebar-item>
           <sidebar-item :link="{name: 'Edit Company Profile', icon: 'dashboard', path: '/my-company/company-profile'}"></sidebar-item>
           <sidebar-item :link="{name: 'Approvals & Sign Off', icon: 'dashboard', path: '/my-company/approvals'}"></sidebar-item>
           <sidebar-item :link="{name: 'Billing', icon: 'dashboard', path: '/my-company/billing'}"></sidebar-item>
           <sidebar-item :link="{name: 'Settings', icon: 'settings', path: '/my-company/company-settings'}"></sidebar-item>
           </sidebar-item>-->
-    <!--<sidebar-item :link="{name: 'Community', icon: 'people', path: '/community-new'}">
+        <!--<sidebar-item :link="{name: 'Community', icon: 'people', path: '/community-new'}">
           </sidebar-item>-->
-    <!--<sidebar-item name="left-menu-dashboard" :link="{name: 'Dashboard', icon: 'dashboard', path: '/company'}">
+        <!--<sidebar-item name="left-menu-dashboard" :link="{name: 'Dashboard', icon: 'dashboard', path: '/company'}">
           </sidebar-item>-->
-    <!--<sidebar-item :link="{name: 'Yearly Planner', icon: 'calendar_today', path: '/yearly-plan'}">
+        <!--<sidebar-item :link="{name: 'Yearly Planner', icon: 'calendar_today', path: '/yearly-plan'}">
           </sidebar-item>-->
-    <!--                <li class="nav-item router-link-active">-->
-    <!--                    <md-button name="left-menu-create-event" class="left-menu-create-event md-button md-purple" @click="openEventModal()" :disabled="createEventModalOpen">-->
-    <!--                        <md-icon>event</md-icon>-->
-    <!--                        <span>Create New Event</span>-->
-    <!--                    </md-button>-->
-    <!--                </li>-->
-    <!-- <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Create Event',  icon: 'event', path: '/event/create'}"></sidebar-item> -->
-    <!-- <li class="menu-divider"></li> -->
-    <!-- <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Events List',  icon: 'event', path: '/events'}"></sidebar-item> -->
-    <!-- <sidebar-item name="left-menu-yearly-plan" class="left-menu-yearly-plan" :link="{name: 'Year Planner',  icon: 'event', path: '/planner'}"></sidebar-item>
+        <!--                <li class="nav-item router-link-active">-->
+        <!--                    <md-button name="left-menu-create-event" class="left-menu-create-event md-button md-purple" @click="openEventModal()" :disabled="createEventModalOpen">-->
+        <!--                        <md-icon>event</md-icon>-->
+        <!--                        <span>Create New Event</span>-->
+        <!--                    </md-button>-->
+        <!--                </li>-->
+        <!-- <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Create Event',  icon: 'event', path: '/event/create'}"></sidebar-item> -->
+        <!-- <li class="menu-divider"></li> -->
+        <!-- <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Events List',  icon: 'event', path: '/events'}"></sidebar-item> -->
+        <!-- <sidebar-item name="left-menu-yearly-plan" class="left-menu-yearly-plan" :link="{name: 'Year Planner',  icon: 'event', path: '/planner'}"></sidebar-item>
         <li class="menu-divider"></li>
         <sidebar-item name="left-menu-vendors-list" class="left-menu-vendors-list" :link="{name: 'Vendors Pool', icon: 'contacts', path: '/vendors-pool'}">
         </sidebar-item> -->
-    <!--<sidebar-item :link="{name: 'My Vendors', icon: 'contacts', path: '/vendors'}">
+        <!--<sidebar-item :link="{name: 'My Vendors', icon: 'contacts', path: '/vendors'}">
           </sidebar-item>
 
           <sidebar-item :link="{name: 'Proposals', icon: 'local_offer', path: '/proposals'}">
           </sidebar-item>-->
-    <!--<li class="menu-divider"></li>
+        <!--<li class="menu-divider"></li>
           -->
-    <!--<sidebar-item :link="{name: 'Team', icon: 'group_add', path: '/team'}">
+        <!--<sidebar-item :link="{name: 'Team', icon: 'group_add', path: '/team'}">
           </sidebar-item>-->
-    <!--
+        <!--
           <sidebar-item :link="{name: 'Proposals', icon: 'local_offer', path: '/proposals'}">
           </sidebar-item>
 
           <sidebar-item :link="{name: 'Notes', icon: 'speaker_notes', path: '/notes'}">
           </sidebar-item>-->
-    <!--<sidebar-item v-if="$route.meta.rtlActive" :link="{name: 'لوحة القيادةة', icon: 'dashboard', path: '/dashboard'}">
+        <!--<sidebar-item v-if="$route.meta.rtlActive" :link="{name: 'لوحة القيادةة', icon: 'dashboard', path: '/dashboard'}">
           </sidebar-item>
           <sidebar-item v-else :link="{name: 'Dashboard', icon: 'dashboard', path: '/dashboard'}">
           </sidebar-item>
@@ -138,13 +138,13 @@
           <sidebar-item
             v-else
             :link="{name: 'Calendar', icon: 'date_range', path: '/calendar'}"></sidebar-item>-->
-    <!-- </template> -->
+      <!-- </template> -->
     <!-- </side-bar> -->
-    <div class="main-panel" style="height: 50%">
-      <div class="top-navbar-section" style="background: #fff">
+    <div class="main-panel" style="height: 50%;">
+      <div class="top-navbar-section" style="background : #fff;">
         <top-navbar></top-navbar>
       </div>
-      <div :class="{ content: !$route.meta.hideContent }" @click="toggleSidebar">
+      <div :class="{content: !$route.meta.hideContent}" @click="toggleSidebar">
         <zoom-center-transition :duration="200" mode="out-in">
           <!-- your content here -->
           <router-view></router-view>
@@ -156,35 +156,35 @@
 </template>
 <script>
 /* eslint-disable no-new */
-import PerfectScrollbar from "perfect-scrollbar";
-import "perfect-scrollbar/css/perfect-scrollbar.css";
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import Calendar from "@/models/Calendar";
-import CalendarEvent from "@/models/CalendarEvent";
+import PerfectScrollbar from 'perfect-scrollbar'
+import 'perfect-scrollbar/css/perfect-scrollbar.css'
+import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+import Calendar from '@/models/Calendar'
+import CalendarEvent from '@/models/CalendarEvent'
 
-import EventModal from "../../app/Events/EventModal/";
-import EventPlannerVuexModule from "../../app/Events/EventPlanner.vuex";
+import EventModal from '../../app/Events/EventModal/'
+import EventPlannerVuexModule from '../../app/Events/EventPlanner.vuex'
 
-import TopNavbar from "./TopNavbar.vue";
-import ContentFooter from "./ContentFooter.vue";
-import MobileMenu from "./Extra/MobileMenu.vue";
-import UserMenu from "./Extra/UserMenu.vue";
-import { ZoomCenterTransition } from "vue2-transitions";
+import TopNavbar from './TopNavbar.vue'
+import ContentFooter from './ContentFooter.vue'
+import MobileMenu from './Extra/MobileMenu.vue'
+import UserMenu from './Extra/UserMenu.vue'
+import { ZoomCenterTransition } from 'vue2-transitions'
 // import auth from "src/auth";
-import EventSidePanel from "@/pages/app/Events/EventSidePanel";
+import EventSidePanel from '@/pages/app/Events/EventSidePanel'
 
-function hasElement(className) {
-  return document.getElementsByClassName(className).length > 0;
+function hasElement (className) {
+  return document.getElementsByClassName(className).length > 0
 }
 
-function initScrollbar(className) {
+function initScrollbar (className) {
   if (hasElement(className)) {
-    new PerfectScrollbar(`.${className}`);
+    new PerfectScrollbar(`.${className}`)
   } else {
     // try to init it later in case this component is loaded async
     setTimeout(() => {
-      initScrollbar(className);
-    }, 100);
+      initScrollbar(className)
+    }, 100)
   }
 }
 
@@ -194,62 +194,62 @@ export default {
     ContentFooter,
     MobileMenu,
     UserMenu,
-    ZoomCenterTransition,
+    ZoomCenterTransition
   },
-  data() {
+  data () {
     return {
       // auth: auth,
       event: null,
-      createEventModalOpen: false,
-    };
+      createEventModalOpen: false
+    }
   },
   methods: {
-    ...mapMutations("EventPlannerVuex", [
-      "setEventModal",
-      "setEditMode",
-      "setModalSubmitTitle",
-      "setEventModalAndEventData",
-      "setNumberOfParticipants",
+    ...mapMutations('EventPlannerVuex', [
+      'setEventModal',
+      'setEditMode',
+      'setModalSubmitTitle',
+      'setEventModalAndEventData',
+      'setNumberOfParticipants'
     ]),
-    toggleSidebar() {
+    toggleSidebar () {
       if (this.$sidebar.showSidebar) {
-        this.$sidebar.displaySidebar(false);
+        this.$sidebar.displaySidebar(false)
       }
     },
-    openEventModal() {
-      this.setModalSubmitTitle("Create");
-      let now = new Date();
-      this.createEventModalOpen = true;
+    openEventModal () {
+      this.setModalSubmitTitle('Create')
+      let now = new Date()
+      this.createEventModalOpen = true
       window.currentPanel = this.$showPanel({
         component: EventSidePanel,
-        cssClass: "md-layout-item md-size-40 transition36 ",
-        openOn: "right",
+        cssClass: 'md-layout-item md-size-40 transition36 ',
+        openOn: 'right',
         disableBgClick: false,
         props: {
-          modalSubmitTitle: "Save",
+          modalSubmitTitle: 'Save',
           editMode: false,
-          sourceEventData: {
-            eventStartMillis: new Date().getTime(),
-            numberOfParticipants: this.$auth.user.customer.numberOfEmployees,
-          },
+          sourceEventData: {eventStartMillis: new Date().getTime(), numberOfParticipants: this.$auth.user.customer.numberOfEmployees},
           refreshEvents: null,
           year: now.getFullYear(),
           month: now.getMonth(),
           occasionsOptions: this.occasionsArray,
-          openInPlannerOption: false,
-        },
-      });
+          openInPlannerOption: false
+        }
+      })
 
-      window.currentPanel.promise.then((res) => {
-        this.createEventModalOpen = false;
-      });
-    },
+      window.currentPanel.promise.then(res => {
+        this.createEventModalOpen = false
+      })
+    }
+
   },
-  created() {
-    this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
+  created () {
+    this.$store.registerModule('EventPlannerVuex', EventPlannerVuexModule)
   },
-  mounted() {
+  mounted () {
+
     /*  NEET CODE REVIEW !!!!!!!!!!!!!!!!!!!! */
+
     // this.$auth.currentUser(this, true, function(){
     //   let docClasses = document.body.classList;
     //   let isWindows = navigator.platform.startsWith("Win");
@@ -258,48 +258,51 @@ export default {
     //     initScrollbar("sidebar");
     //     initScrollbar("sidebar-wrapper");
     //     initScrollbar("main-panel");
+
     //     docClasses.add("perfect-scrollbar-on");
     //   } else {
     //     docClasses.add("perfect-scrollbar-off");
     //   }
     // });
   },
-  computed: {},
-};
+  computed: {
+
+  }
+}
 </script>
 <style lang="scss">
-.menu-divider {
-  height: 1px;
-  margin-top: 10px;
-  background-color: rgba(0, 0, 0, 0.12);
-}
-
-$scaleSize: 0.95;
-@keyframes zoomIn95 {
-  from {
-    opacity: 0;
-    transform: scale3d($scaleSize, $scaleSize, $scaleSize);
+  .menu-divider {
+    height: 1px;
+    margin-top: 10px;
+    background-color: rgba(0, 0, 0, .12);
   }
-  to {
-    opacity: 1;
-  }
-}
 
-.main-panel .zoomIn {
-  animation-name: zoomIn95;
-}
-
-@keyframes zoomOut95 {
-  from {
-    opacity: 1;
+  $scaleSize: 0.95;
+  @keyframes zoomIn95 {
+    from {
+      opacity: 0;
+      transform: scale3d($scaleSize, $scaleSize, $scaleSize);
+    }
+    to {
+      opacity: 1;
+    }
   }
-  to {
-    opacity: 0;
-    transform: scale3d($scaleSize, $scaleSize, $scaleSize);
-  }
-}
 
-.main-panel .zoomOut {
-  animation-name: zoomOut95;
-}
+  .main-panel .zoomIn {
+    animation-name: zoomIn95;
+  }
+
+  @keyframes zoomOut95 {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+      transform: scale3d($scaleSize, $scaleSize, $scaleSize);
+    }
+  }
+
+  .main-panel .zoomOut {
+    animation-name: zoomOut95;
+  }
 </style>

@@ -65,6 +65,11 @@
                         <a class="cancel" @click="noteRule(r)">Cancel</a>
                       </div>
                     </template>
+                    <template v-if="r.type == 'Selection'">
+                      <select class="unit-select" v-model="r.value">
+                        <option v-for="(option, index) in r.options" :key="index" :value="option">{{ option }}</option>
+                      </select>
+                    </template>
                   </div>
                   <div class="bottom no-margin" v-if="r.type == Number">
                     <template v-if="r.noSuffix">
@@ -130,6 +135,13 @@
               >
                 <div class="left">
                   {{ p.name }}
+                  <textarea
+                    v-if="p.hasComment"
+                    class="desc"
+                    rows="3"
+                    v-model="p.desc"
+                    :placeholder="`Add additional information`"
+                  />
                   <div v-if="p.yesOption && p.value" class="mt-10 ml-10">
                     <label>How many hours are included?</label><br />
                     <input type="number" class="text-center number-field" placeholder="" v-model="p.yesOption.value" />
@@ -168,7 +180,23 @@
                         <a class="cancel" @click="noteRule(p)">Cancel</a>
                       </div>
                     </template>
-                    <div v-if="yesPolicies.includes(p)"></div>
+                    <template v-if="p.type == 'Including'">
+                      <div class="item" @click="$set(p, 'value', true)">
+                        <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="p.value" />
+                        <span class="unchecked" v-else></span>
+                        Include
+                      </div>
+                      <div class="item" @click="$set(p, 'value', false)">
+                        <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!p.value" />
+                        <span class="unchecked" v-else></span>
+                        Not Include
+                      </div>
+                    </template>
+                    <template v-if="p.type == 'Selection'">
+                      <select class="unit-select" v-model="p.value">
+                        <option v-for="(option, index) in p.options" :key="index" :value="option">{{ option }}</option>
+                      </select>
+                    </template>
                   </div>
                   <div class="bottom no-margin" v-if="p.type == Number">
                     <template v-if="p.noSuffix">
@@ -210,6 +238,50 @@
                         </div>
                       </div>
                     </template>
+                  </div>
+                  <div class="bottom mt-10" v-if="p.type == 'Including' && !p.value">
+                    <span>Extra Payment</span>
+                    <br />
+                    <div class="suffix">
+                      <input
+                        type="number"
+                        class="text-center number-field"
+                        placeholder="00.00"
+                        v-model="p.cost"
+                        @change="setPricePolicy($event, p)"
+                      />
+                    </div>
+                  </div>
+                  <div class="bottom no-margin" v-if="p.type == 'Cost'">
+                    <span>Cost per {{ p.unit }}</span>
+                    <br />
+                    <div class="suffix">
+                      <input
+                        type="number"
+                        class="text-center number-field"
+                        placeholder="00.00"
+                        v-model="p.value"
+                        @change="setPricePolicy($event, p)"
+                      />
+                    </div>
+                  </div>
+                  <div class="bottom no-margin" v-if="p.type == 'Discount'">
+                    <span>Discount</span>
+                    <br />
+                    <div class="suffix percentage d-flex">
+                      <input
+                        type="number"
+                        class="text-center number-field"
+                        placeholder="00.00"
+                        v-model="p.value"
+                        @change="setPricePolicy($event, p)"
+                      />
+                      <div v-if="p.units">
+                        <select class="unit-select ml-10" v-model="p.unit">
+                          <option v-for="(unit, index) in p.units" :key="index" :value="unit">{{ unit }}</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -723,6 +795,10 @@ export default {
           items: [],
         },
         {
+          category: "equipmentrentals",
+          items: [],
+        },
+        {
           category: "audiovisualstagingservices",
           items: [
             {
@@ -767,10 +843,12 @@ export default {
             {
               name: "Accept requests from guests",
               type: Boolean,
+              hasComment: true,
             },
             {
               name: "Continuous band play time",
               type: Boolean,
+              hasComment: true,
             },
             {
               name: "Max group size",
@@ -779,7 +857,7 @@ export default {
             },
             {
               name: "Accessibility of activity",
-              type: Boolean,
+              type: String,
             },
             {
               name: "Age restrictions",
@@ -787,7 +865,9 @@ export default {
             },
             {
               name: "Time of day",
-              type: Boolean,
+              type: "Selection",
+              options: ["morning", "after noon", "evening", "night"],
+              value: "",
             },
             {
               name: "Performer require a meal",
@@ -796,6 +876,7 @@ export default {
             {
               name: "Minimum Setup time required",
               type: Number,
+              noSuffix: true,
             },
             {
               name: "Number of breaks",
@@ -811,15 +892,17 @@ export default {
             // },
             {
               name: "Flexible to different dress codes",
-              type: Boolean,
+              type: String,
             },
             {
               name: "Meet before signing contract",
               type: Boolean,
+              hasComment: true,
             },
             {
               name: "Arrival onsite before the event",
-              type: Boolean,
+              type: Number,
+              noSuffix: true,
             },
             {
               name: "Losgistics",
@@ -957,7 +1040,7 @@ export default {
             },
             {
               name: "Breakdown",
-              type: Boolean,
+              type: "Including",
             },
             {
               name: "Discount for large quantities",
@@ -1057,6 +1140,10 @@ export default {
           items: [],
         },
         {
+          category: "equipmentrentals",
+          items: [],
+        },
+        {
           category: "audiovisualstagingservices",
           items: [
             {
@@ -1147,40 +1234,63 @@ export default {
           items: [
             {
               name: "Hours included in service",
+              subCategory: "charge",
+              type: Number,
+              value: 0,
+              hasComment: true,
+              noSuffix: true,
+            },
+            {
+              name: "Rushed setup",
+              subCategory: "charge",
+              type: "Including",
+              value: true,
+              cost: "0.00",
+            },
+            {
+              name: "Rehersal time for the band (for special requests)",
+              subCategory: "charge",
+              type: "Including",
+              value: true,
+              cost: "0.00",
+            },
+            {
+              name: "Special operating time",
+              subCategory: "charge",
+              type: "Selection",
+              options: ["morning", "afternoon", "evening"],
+              value: "",
+            },
+            {
+              name: "Extra for prizes",
+              subCategory: "charge",
               type: Number,
               hasComment: true,
             },
             {
-              name: "Rushed setup",
-              type: Boolean,
-            },
-            {
-              name: "Rehersal time for the band (for special requests)",
-              type: Number,
-            },
-            {
-              name: "Special operating time",
-              type: Boolean,
-            },
-            {
-              name: "Extra for prizes",
-              type: Boolean,
-            },
-            {
               name: "Overtime charges",
-              type: Boolean,
+              subCategory: "charge",
+              type: "Cost",
+              value: "",
+              unit: "hour",
             },
             {
               name: "Tax rate",
+              subCategory: "tax",
               type: Number,
+
               isPercentage: true,
             },
             {
               name: "Large group discounts",
-              type: Boolean,
+              subCategory: "discount",
+              type: "Discount",
+              hasUnit: true,
+              units: ["Per guest", "Total"],
             },
             {
               name: "Suggested Gratuity",
+              subCategory: "tips",
               type: Number,
             },
           ],
@@ -1194,19 +1304,23 @@ export default {
           items: [
             {
               name: "Pre-selection personal",
-              type: Boolean,
+              type: "Including",
+              value: true,
+              cost: "0.00",
             },
             {
               name: "Number of hours",
-              type: Boolean,
+              type: Number,
+              noSuffix: true,
             },
             {
               name: "Level of security training/certification",
-              type: Boolean,
+              type: String,
             },
             {
               name: "Special attire requests",
               type: Boolean,
+              hasComment: true,
             },
             {
               name: "Tax rate",
@@ -1215,7 +1329,8 @@ export default {
             },
             {
               name: "Large group discounts",
-              type: Boolean,
+              type: "Discount",
+              units: ["per guest", "total"],
             },
             {
               name: "Suggested Gratuity",
@@ -1263,6 +1378,7 @@ export default {
   created() {},
   mounted() {
     console.log("test");
+    console.log(this.vendor);
     this.religions.forEach((religion) => {
       this.$http
         .get(religion.url, {
@@ -2052,7 +2168,8 @@ export default {
     border: 1px solid #dddddd;
     padding: 15px;
     font-size: 16px;
-    color: #050505;
+    color: #32325d;
+    // #32325d;
     box-shadow: 0 1px 3px 0 #e6ebf1;
   }
 }
