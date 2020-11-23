@@ -87,18 +87,9 @@ export default {
     },
     setRequirement(index) {
       this.data[index].isSelected = !this.data[index].isSelected;
-      this.$emit('change', this.data);
     },
   },
-  watch: {
-    data:{
-      handler(newVal, oldVal){
-        if (newVal) {
-          this.getSpecialRequirements();
-        }
-      },
-      deep: true
-    }
+  computed: {
   },
   mounted(){
     this.getSpecialRequirements();

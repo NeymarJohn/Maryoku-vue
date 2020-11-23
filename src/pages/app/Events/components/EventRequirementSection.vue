@@ -37,14 +37,16 @@
                       :multiple="true"
                       :taggable="true"
                       track-by="name"
+                      tag-placeholder="Add this as new tag"
+                      placeholder="Select the services"
                       class="multiple-selection small-selector"
                       @select="handleChangeItem(service, 'select', $event)"
                       @remove="handleChangeItem(service, 'remove', $event)">
-                <template slot="option" slot-scope="{option}">
+                  <template slot="option" slot-scope="{option}">
                   <span>
                     {{option.name}}
                   </span>
-                </template>
+                  </template>
                 <template slot="tag" slot-scope="{option}">
                   <span>
                     {{option.name + (service.value.findIndex(it => it.name == option.name) === service.value.length - 1 ? '' : ',')}}
@@ -108,148 +110,144 @@
         <h4>Additional Requests</h4>
         <div>Would you like to add one of those items?</div>
       </div>
-      <div class="additional-tag-container">
-        <div
-                class="additional-request-tag"
-                v-for="(service, index) in properties.filter((item) => !item.isSelected && item.visible)"
-                :key="index"
-                @click="addRequirement(service)"
-        >
-          {{ service.item }}
-          <md-icon class="icon color-red">add_circle</md-icon>
+        <div class="additional-tag-container">
+            <div
+                    class="additional-request-tag"
+                    v-for="(service, index) in properties.filter((item) => !item.isSelected && item.visible)"
+                    :key="index"
+                    @click="addRequirement(service)"
+            >
+                {{ service.item }}
+                <md-icon class="icon color-red">add_circle</md-icon>
+            </div>
         </div>
-      </div>
     </div>
   </div>
 </template>
 <style lang="scss" scoped>
 </style>
 <script>
-  import RequirementItemComment from "./RequirementItemComment";
-  import Multiselect from "vue-multiselect";
+import RequirementItemComment from "./RequirementItemComment";
+import Multiselect from "vue-multiselect";
 
-  export default {
-    name: "event-requirement-section",
-    components: {
-      RequirementItemComment,
-      Multiselect
+export default {
+  name: "event-requirement-section",
+  components: {
+    RequirementItemComment,
+    Multiselect
+  },
+  props: {
+    requirements: {
+      type: Object,
+      required: true,
     },
-    props: {
-      requirements: {
-        type: Object,
-        required: true,
-      },
-      category: {
-        type: String,
-        required: true,
-      },
-      blockId: {
-        type: String,
-        required: true,
-      },
-      note: {
-        type: String,
-        required: false,
-      }
+    category: {
+      type: String,
+      required: true,
     },
-    data() {
-      return {
-        properties: [],
-        value: [],
-      };
+    blockId: {
+      type: String,
+      required: true,
     },
-    methods: {
-      getProperties(){
-        this.properties = [];
-        let requirements = this.requirements;
-        let event = this.event = this.$store.state.event.eventData;
-        requirements[this.category].map(it => {
+    note: {
+      type: String,
+      required: false,
+    }
+  },
+  data() {
+    return {
+      properties: [],
+      value: [],
+    };
+  },
+  methods: {
+    getProperties(){
+      this.properties = [];
+      let requirements = this.requirements;
+      let event = this.event = this.$store.state.event.eventData;
+      requirements[this.category].map(it => {
           let value = null;
           let visible = true;
 
           if ( it.type == 'single-selection' ) {
-            value = [];
-            visible = this.blockId == 'entertainment' && it.conditionScript ? eval(it.conditionScript) : true;
+              value = [];
+              visible = this.blockId == 'entertainment' && it.conditionScript ? eval(it.conditionScript) : true;
 
-            it.options.map(op => {
+              it.options.map(op => {
 
-              if( op.selected){
-                value.push(op);
-              }
-            })
-          }
-
-          if (this.blockId == 'foodandbeverage' && this.category == 'Services') {
-            visible = it.conditionScript ? eval(it.conditionScript) : true;
+                  if( op.selected){
+                      value.push(op);
+                  }
+              })
           }
           this.properties.push({...it, visible, value});
-        });
-      },
-      addRequirement(property) {
-        const index = this.properties.findIndex((it) => it.item == property.item);
-        this.requirements[this.category][index].isSelected = true;
+      });
+    },
+    addRequirement(property) {
+      const index = this.properties.findIndex((it) => it.item == property.item);
+      this.requirements[this.category][index].isSelected = true;
 
 
-        let requirements = this.requirements;
-        if(this.blockId == 'audiovisualstagingservices' && this.category == 'Amenities' && property.item == 'Rigging') {
+      let requirements = this.requirements;
+      if(this.blockId == 'audiovisualstagingservices' && this.category == 'Amenities' && property.item == 'Rigging') {
 
-          requirements['Staff'].map(rq => {
-            if(rq.item == 'Rigging engineer') rq.isSelected = eval(rq.conditionScript);
-          })
-        }
-
-        this.$emit('change', this.requirements);
-      },
-      removeRequirement(property) {
-        const index = this.properties.findIndex((it) => it.item == property.item);
-        property.isSelected = false;
-        this.requirements[this.category][index].isSelected = false;
-
-        this.requirements['multi-selection'][0].options.map(op => {
-          if(op.name.trim() == property.item.trim()) {
-            op.selected = false;
-          }
+        requirements['Staff'].map(rq => {
+          if(rq.item == 'Rigging engineer') rq.isSelected = eval(rq.conditionScript);
         })
-
-
-        this.$emit('change', this.requirements);
-      },
-      handleChangeItem(property, action, e){
-
-        let index = this.properties.findIndex(pt => pt.item == property.item)
-
-        this.requirements[this.category][index].options.map(op => {
-          if(op.name.toLowerCase() == e.name.toLowerCase()) op.selected = action === 'select';
-        })
-
-        this.$emit('change', this.requirements);
-      },
-      handleNoteChange(){
-        this.$emit('change', {note: this.anythingElse});
-      },
-      saveComment(service, e){
-        let index = this.properties.findIndex(sv => sv.item == service.item);
-        this.requirements[this.category][index].defaultNote = e;
-
-        this.$emit('change', this.requirements);
       }
+
+      this.$emit('change', this.requirements);
     },
-    watch: {
-      requirements:{
-        handler(newVal, oldVal){
-          this.getProperties();
-        },
-        deep: true,
-      },
-      multiSelection:{
-        handler(newVal, oldVal){
-          this.getProperties();
-        },
-        deep: true,
-      },
+    removeRequirement(property) {
+      const index = this.properties.findIndex((it) => it.item == property.item);
+      property.isSelected = false;
+      this.requirements[this.category][index].isSelected = false;
+
+      this.requirements['multi-selection'][0].options.map(op => {
+          if(op.name.trim() == property.item.trim()) {
+              op.selected = false;
+          }
+      })
+
+
+      this.$emit('change', this.requirements);
     },
-    mounted(){
-      this.getProperties();
+    handleChangeItem(property, action, e){
+
+      let index = this.properties.findIndex(pt => pt.item == property.item)
+
+      this.requirements[this.category][index].options.map(op => {
+          if(op.name.toLowerCase() == e.name.toLowerCase()) op.selected = action === 'select';
+      })
+
+      this.$emit('change', this.requirements);
+    },
+    handleNoteChange(){
+      this.$emit('change', {note: this.anythingElse});
+    },
+    saveComment(service, e){
+      let index = this.properties.findIndex(sv => sv.item == service.item);
+      this.requirements[this.category][index].defaultNote = e;
+
+      this.$emit('change', this.requirements);
     }
-  };
+  },
+  watch: {
+    requirements:{
+      handler(newVal, oldVal){
+       this.getProperties();
+     },
+     deep: true,
+    },
+    multiSelection:{
+      handler(newVal, oldVal){
+        this.getProperties();
+      },
+      deep: true,
+    },
+  },
+  mounted(){
+    this.getProperties();
+  }
+};
 </script>

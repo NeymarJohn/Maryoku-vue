@@ -17,7 +17,9 @@
         :show-rating="false"
         @rating-selected="setRating"
         v-model="data.rank"
+        v-if="!disabled"
       ></star-rating>
+      <star-rating :border-width="0" :star-size="30" :show-rating="false" read-only v-else></star-rating>
       <div class="font-size-12 mt-10 text-transform-capitalize">{{ rankLabel }}</div>
     </div>
     <md-switch v-if="showSwitch" class="below-label large-switch" v-model="data.showQuestion" :value="true">
