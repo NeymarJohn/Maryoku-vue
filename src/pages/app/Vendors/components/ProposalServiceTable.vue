@@ -1,6 +1,9 @@
 <template>
   <div class="proposal-service-table-wrapper">
     <div class="title-cont default">
+      <div>
+        Mandatory elements to involve in proposals are in the table, we recommend adding these elements as well:
+      </div>
       <div class="sub-items-cont">
         <span class="prev" @click="prev()" v-if="serviceSlidePos < 0">
           <md-icon>keyboard_arrow_left</md-icon>
@@ -21,11 +24,7 @@
         <div class="fields-cont">
           <div class="field">
             <span>Description</span>
-            <input v-model="serviceItem" class="description" placeholder="Type name of element here" />
-          </div>
-          <div class="field">
-            <span>Size</span>
-            <input v-model="serviceItemSize" />
+            <input v-model="serviceItem" class="description" />
           </div>
           <div class="field">
             <span>QTY</span>
@@ -41,23 +40,9 @@
             <money v-model="unit" v-bind="currencyFormat" v-else class="total" />
           </div>
         </div>
-        <div class="fields-cont">
-          <md-checkbox v-model="isRequiredPlannerChoice"
-            ><span class="mr-10">This item requires planners choice</span>
-            <md-icon class="color-black">keyboard_arrow_downz</md-icon
-            ><md-icon class="color-red">help_outline</md-icon></md-checkbox
-          >
-        </div>
         <div class="action-cont">
           <a class="cancel" @click="cancel()">Clear</a>
-          <a class="addNote" @click="cancel()">
-            <md-icon>add_circle_outline</md-icon>
-            Add Note</a
-          >
-          <a
-            class="save"
-            :class="{ isDisabled: isDisabledAdd }"
-            @click="saveItem(serviceItem, serviceItemSize, qty, unit, category)"
+          <a class="save" :class="{ isDisabled: isDisabledAdd }" @click="saveItem(serviceItem, qty, unit, category)"
             >Add This</a
           >
         </div>
@@ -66,7 +51,6 @@
     <div class="editable-sub-items-cont">
       <div class="editable-sub-items-header">
         <span>Description</span>
-        <span class="text-center">Size</span>
         <span class="text-center">QTY</span>
         <span class="text-center">Price per unit</span>
         <span class="text-center">Subtotal</span>
@@ -176,6 +160,72 @@
         <span>${{ calculatedTotal | withComma }}</span>
       </div>
     </div>
+    <div class="upload-files-wrapper">
+      <div class="title-cont">
+        <h3><img :src="`${$iconURL}NewSubmitPorposal/Asset 608.svg`" />Upload These Files:</h3>
+        <h5>And add additional if you want</h5>
+      </div>
+      <div class="files-cont">
+        <div class="item" v-for="legalDoc in vendor.eventCategory.legalDocuments" :key="legalDoc">
+          <div class="left">
+            <span class="filename">{{ legalDoc }}</span>
+            <span
+              class="req"
+              v-if="
+                vendor.eventCategory.mandatoryLegalDocs &&
+                vendor.eventCategory.mandatoryLegalDocs.findIndex((item) => item === legalDoc) >= 0
+              "
+              >*Required</span
+            >
+            <span class="req" v-else>Optional</span>
+          </div>
+          <div class="right" @click="uploadDocument(legalDoc)" v-if="!legalDocs[legalDoc]">
+            <img :src="`${$iconURL}NewSubmitPorposal/Asset 609.svg`" />Upload
+          </div>
+          <div class="right" v-else>
+            <span class="filename">{{ legalDocs[legalDoc].filename }}</span>
+            <img class="check" :src="`${$iconURL}NewSubmitPorposal/Group 3599 (2).svg`" />
+            <img
+              class="remove"
+              :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`"
+              @click="removeFileByTag(legalDoc)"
+            />
+          </div>
+        </div>
+        <input
+          type="file"
+          class="d-none"
+          ref="legalDocument"
+          accept="application/text, application/pdf"
+          @change="onFilePicked"
+        />
+        <div class="option">
+          <div class="left">
+            <span class="filename">Other</span>
+            <span class="req">*Optional</span>
+          </div>
+          <div class="right" @click="uploadDocument('other')" v-if="!legalDocs['other']">
+            <img :src="`${$iconURL}NewSubmitPorposal/Asset 609.svg`" />Upload
+            <input
+              type="file"
+              class="d-none"
+              ref="optionDocument"
+              accept="application/text, application/pdf"
+              @change="onFilePicked"
+            />
+          </div>
+          <div class="right" v-else>
+            <span class="filename">{{ legalDocs["other"].filename }}</span>
+            <img class="check" :src="`${$iconURL}NewSubmitPorposal/Group 3599 (2).svg`" />
+            <img
+              class="remove"
+              :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`"
+              @click="removeFileByTag('other')"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -206,7 +256,6 @@ export default {
     subTitle: String,
     img: String,
     service: Object,
-    tableCategory: String,
   },
   data() {
     return {
@@ -222,10 +271,8 @@ export default {
       isDiscountPercentage: true,
       tax: 0,
       serviceItem: null,
-      serviceItemSize: "",
       qty: null,
       unit: null,
-      isRequiredPlannerChoice: false,
       subTotal: null,
       inputType: "text",
       temp: null,
@@ -265,6 +312,7 @@ export default {
         maxFilesize: 10,
       },
       proposalData: {},
+      uploadedLegalDocs: {},
     };
   },
   methods: {
@@ -299,14 +347,13 @@ export default {
     },
     cancel() {
       this.selectedQuickButton = "";
-      this.serviceItemSize = "";
       this.qty = 0;
       this.unit = 0;
       this.subTotal = 0;
       this.serviceItem = null;
       this.discount_by_amount = null;
     },
-    saveItem(serviceItem, size, qty, price, category) {
+    saveItem(serviceItem, qty, price, category) {
       this.services.unshift({
         comments: [],
         dateCreated: "",
@@ -321,7 +368,6 @@ export default {
         requirementPriority: null,
         requirementTitle: serviceItem,
         requirementsCategory: category,
-        requirementSize: size,
         requirementValue: `${qty}`,
       });
       this.$forceUpdate();
@@ -352,7 +398,55 @@ export default {
       this.isEditDiscount = false;
       this.discount = 0;
     },
+    uploadDocument(fileId = null) {
+      this.docTag = fileId;
+      this.selectedImage = typeof fileId !== "object" ? fileId : null;
+      if (this.docTag == "option") {
+        this.$refs.optionDocument.click();
+      } else if (this.docTag == "image") {
+        this.$refs.imageFile.click();
+      } else {
+        this.$refs.legalDocument.click();
+      }
+    },
+    addLegalDocs(fileObject) {
+      this.$store.commit("vendorProposal/addLegalDoc", {
+        category: this.category,
+        docTag: this.docTag,
+        obj: fileObject,
+      });
+    },
+    onFilePicked(event) {
+      let file = event.target.files || event.dataTransfer.files;
 
+      if (!file.length) {
+        return;
+      }
+      if (file[0].size <= 5000000) {
+        this.addLegalDocs({
+          tag: this.docTag,
+          filename: file[0].name,
+        });
+
+        S3Service.fileUpload(file[0], this.docTag, `proposals/legal-documents/${this.proposalRequest.id}`).then(
+          (res) => {
+            this.addLegalDocs({
+              tag: this.docTag,
+              filename: file[0].name,
+              url: `${process.env.S3_URL}proposals/legal-documents/${this.proposalRequest.id}/${res}`,
+            });
+          },
+        );
+      } else {
+        this.alretExceedPictureSize = true;
+        this.$notify({
+          message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
+          horizontalAlign: "center",
+          verticalAlign: "top",
+          type: "warning",
+        });
+      }
+    },
     createProposalFile(file) {
       let reader = new FileReader();
       let vm = this;
@@ -376,7 +470,18 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-
+    getFileByTag(tag) {
+      const file = this.files.filter((f) => f.tag == tag);
+      if (file.length > 0) {
+        return file[0].filename;
+      } else {
+        return null;
+      }
+    },
+    removeFileByTag(tag) {
+      this.files = this.files.filter((f) => f.tag != tag);
+      this.$store.commit("vendorProposal/addLegalDoc", { category: this.category, docTag: tag, obj: null });
+    },
     totalOffer() {
       // let total = parseFloat(this.proposalRequest.requirementsCategoryCost)
       let total = 0;
@@ -401,6 +506,17 @@ export default {
 
       return total;
     },
+    // calculatedTotal() {
+    //   let total = this.totalOffer();
+
+    //   total = total - (total * this.discount) / 100;
+    //   if (total > 0) {
+    //     total = total - this.discount_by_amount;
+    //   }
+    //   total += (total * this.tax) / 100;
+    //   console.log("calculateTotal", total);
+    //   return total;
+    // },
     prev() {
       if (this.$refs.servicesCont) {
         this.servicesWidth = this.$refs.servicesCont.clientWidth;
@@ -450,13 +566,12 @@ export default {
           requirementPriority: null,
           requirementTitle: item.item,
           requirementsCategory: item.category,
-          requirementValue: item.defaultQty ? item.defaultQty : 1,
-          requirementSize: item.defaultSize ? item.defaultSize : "",
-          isMandatory: true,
+          requirementValue: 1,
         });
       });
       this.services = defaultServices;
     }
+    if (Object.keys(this.legalDocs).length == 0) this.legalDocs = {};
 
     this.$forceUpdate();
     this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
@@ -539,6 +654,16 @@ export default {
         return s + item.requirementValue * item.price;
       }, 0);
       return sumPrice;
+    },
+    legalDocs: {
+      get: function () {
+        if (this.$store.state.vendorProposal.legalDocs[this.category])
+          return this.$store.state.vendorProposal.legalDocs[this.category];
+        return {};
+      },
+      set: function (files) {
+        this.$store.commit("vendorProposal/setLegalDocs", { category: this.category, files });
+      },
     },
   },
   watch: {},
@@ -677,7 +802,7 @@ export default {
     margin-top: 1rem;
     .fields-cont {
       display: grid;
-      grid-template-columns: 40% 15% 15% 15% 15%;
+      grid-template-columns: 55% 15% 15% 15%;
       .field {
         margin-right: 1em;
         span {
@@ -686,7 +811,7 @@ export default {
           font: 800 16px "Manrope-Regular", sans-serif;
         }
         input {
-          // text-transform: capitalize;
+          text-transform: capitalize;
           width: 100%;
           padding: 1.5rem 1rem;
           border: 1px solid #d5d5d5;
@@ -749,34 +874,6 @@ export default {
     display: flex;
   }
 
-  a {
-    cursor: pointer;
-    padding: 8px 26px;
-    &:hover {
-      color: #dddddd !important;
-      .md-icon {
-        color: #dddddd !important;
-        font-weight: normal;
-      }
-    }
-    &.cancel {
-      font: 800 16px "Manrope-Regular", sans-serif;
-      color: #050505;
-      background: transparent;
-    }
-    &.save {
-      font: 800 16px "Manrope-Regular", sans-serif;
-      color: white;
-      background: #f51355;
-      border-radius: 3px;
-
-      &.isDisabled {
-        pointer-events: none;
-        cursor: not-allowed;
-        background: #d5d5d5;
-      }
-    }
-  }
   .action-cont {
     text-align: right;
     margin-top: 35px;
@@ -786,15 +883,6 @@ export default {
 
       &.clear {
         color: #050505;
-        padding: 8px 32px;
-        margin-right: 1rem;
-      }
-      &.addNote {
-        .md-icon {
-          color: #f51355;
-          font-weight: normal;
-        }
-        color: #f51355;
         padding: 8px 32px;
         margin-right: 1rem;
       }
@@ -821,7 +909,7 @@ export default {
       border-top: 1px solid #707070;
       padding: 40px 40px 30px 40px;
       display: grid;
-      grid-template-columns: 30% 10% 10% 12% 15%;
+      grid-template-columns: 30% 10% 17.5% 18%;
 
       span {
         display: inline-block;
@@ -934,6 +1022,101 @@ export default {
     font: normal 16px "Manrope-Regular", sans-serif;
   }
 
+  .upload-files-wrapper {
+    margin-top: 60px;
+    margin-left: -34px;
+    margin-right: -34px;
+    padding: 60px 0 10px 0;
+    border-top: 1px solid #707070;
+
+    .title-cont {
+      display: flex;
+      align-items: flex-end;
+      margin-bottom: 25px;
+      padding: 0 34px;
+
+      h3 {
+        font-size: 30px;
+        font-weight: 800;
+        margin: 0;
+        margin-right: 10px;
+        img {
+          width: 24px;
+          margin-right: 10px;
+        }
+        margin-right: 10px;
+      }
+      h5 {
+        margin: 0;
+        font-size: 14px;
+        position: relative;
+        top: -6px;
+      }
+    }
+    .files-cont {
+      .item,
+      .option {
+        display: flex;
+        justify-content: space-between;
+        padding: 30px 34px;
+        border-bottom: 1px solid #707070;
+
+        .left {
+          span {
+            font-weight: 800;
+            &.filename {
+              font-size: 20px;
+              margin-right: 23px;
+            }
+            &.req {
+              color: #818080;
+              font-size: 14px;
+            }
+          }
+        }
+        .right {
+          cursor: pointer;
+          color: #f51355;
+          font-size: 16px;
+          font-weight: 800;
+          img {
+            width: 13px;
+            margin-right: 9px;
+
+            &.check {
+              width: 32px;
+              margin-right: 0;
+              margin-left: 2rem;
+            }
+            &.remove {
+              margin-right: 0;
+              margin-left: 1rem;
+            }
+          }
+          span {
+            &.filename {
+              color: #050505;
+              text-decoration: underline;
+              font: 800 16px "Manrope-Regular", sans-serif;
+            }
+          }
+        }
+      }
+      .option {
+        margin-bottom: 10px;
+        border: none;
+        .left {
+          span {
+            &.filename {
+              font-size: 20px;
+              font-weight: normal;
+            }
+          }
+        }
+      }
+    }
+  }
+
   .additional-photos-wrapper {
     margin-left: -34px;
     margin-right: -34px;
@@ -1010,7 +1193,31 @@ export default {
     padding-bottom: 40px;
     cursor: pointer;
   }
+  a {
+    cursor: pointer;
+    padding: 8px 26px;
 
+    &.cancel {
+      font: 800 16px "Manrope-Regular", sans-serif;
+      color: #050505;
+      background: transparent;
+    }
+    &.save {
+      font: 800 16px "Manrope-Regular", sans-serif;
+      color: white;
+      background: #f51355;
+      border-radius: 3px;
+
+      &.isDisabled {
+        pointer-events: none;
+        cursor: not-allowed;
+        background: #d5d5d5;
+      }
+    }
+    &:hover {
+      color: #dddddd !important;
+    }
+  }
   .hide {
     display: none;
   }

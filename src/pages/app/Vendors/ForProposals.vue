@@ -44,26 +44,7 @@
             <span>Sincerely,</span>
             <p>Relish caterers & venues</p>
           </div>
-          <proposal-bid
-            label="Cost Requirements"
-            tableCategory="cost"
-            :hasCategoryHeader="true"
-            icon="Group+10662.svg"
-            description="Mandatory elements to involve in proposals are in the table, you can add more here:"
-          />
-          <proposal-bid
-            tableCategory="included"
-            label="Included in Price"
-            icon="includedPrice.png"
-            description="(from your “included in price” items)"
-          />
-          <proposal-bid
-            tableCategory="extra"
-            label="Offered Extras"
-            icon="cost-requirements.png"
-            description="What elements would you like to suggest to the client with extra pay? "
-          />
-          <proposal-upload-legal></proposal-upload-legal>
+          <proposal-bid />
         </div>
         <div class="step-wrapper" v-if="step == 2">
           <h3>Can you also provide any of these services for this event?</h3>
@@ -126,7 +107,6 @@ import ProposalSteps from "./components/ProposalSteps.vue";
 import ProposalItem from "./components/ProposalItem.vue";
 import ProposalEventVision from "./components/ProposalEventVision.vue";
 import ProposalBid from "./components/ProposalBid.vue";
-import ProposalUploadLegal from "./components/ProposalUploadLegal.vue";
 import ProposalAddFiles from "./components/ProposalAddFiles.vue";
 import ProposalTitleWithIcon from "./components/ProposalTitleWithIcon.vue";
 import ReferNewVendor from "./components/ReferNewVendor.vue";
@@ -148,7 +128,6 @@ export default {
     ProposalBid,
     ProposalItemSecondaryService,
     ProposalAdditionalRequirement,
-    ProposalUploadLegal,
   },
   data() {
     return {

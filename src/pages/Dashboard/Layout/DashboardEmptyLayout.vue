@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" :class="[{'nav-open': $sidebar.showSidebar}, {'rtl': $route.meta.rtlActive}]">
+  <div class="wrapper" :class="[{ 'nav-open': $sidebar.showSidebar }, { rtl: $route.meta.rtlActive }]">
     <notifications></notifications>
     <side-bar>
       <!--<user-menu></user-menu>-->
@@ -18,22 +18,17 @@
 
         <!--<sidebar-item :link="{name: 'Community', icon: 'people', path: '/community-new'}">
         </sidebar-item>-->
-        <sidebar-item :link="{name: 'Annual Planner', icon: 'key', path: '/planner'}">
-        </sidebar-item>
+        <sidebar-item :link="{ name: 'Annual Planner', icon: 'key', path: '/planner' }"> </sidebar-item>
 
-        <sidebar-item :link="{name: 'Yearly Planner', icon: 'event', path: '/yearly-plan'}">
-        </sidebar-item>
+        <sidebar-item :link="{ name: 'Yearly Planner', icon: 'event', path: '/yearly-plan' }"> </sidebar-item>
 
-        <sidebar-item :link="{name: 'Our Events', icon: 'local_play', path: '/events'}">
-        </sidebar-item>
+        <sidebar-item :link="{ name: 'Our Events', icon: 'local_play', path: '/events' }"> </sidebar-item>
 
-        <sidebar-item :link="{name: 'My Vendors', icon: 'contacts', path: '/vendors'}">
-        </sidebar-item>
+        <sidebar-item :link="{ name: 'My Vendors', icon: 'contacts', path: '/vendors' }"> </sidebar-item>
 
         <li class="menu-divider"></li>
 
-        <sidebar-item :link="{name: 'Team', icon: 'group_add', path: '/team'}">
-        </sidebar-item>
+        <sidebar-item :link="{ name: 'Team', icon: 'group_add', path: '/team' }"> </sidebar-item>
 
         <!--<li class="menu-divider"></li>
 
@@ -138,7 +133,7 @@
     <div class="main-panel">
       <top-navbar></top-navbar>
 
-      <div :class="{content: !$route.meta.hideContent}" @click="toggleSidebar">
+      <div :class="{ content: !$route.meta.hideContent }" @click="toggleSidebar">
         <zoom-center-transition :duration="200" mode="out-in">
           <!-- your content here -->
           <router-view></router-view>
@@ -150,27 +145,27 @@
 </template>
 <script>
 /* eslint-disable no-new */
-import PerfectScrollbar from 'perfect-scrollbar'
-import 'perfect-scrollbar/css/perfect-scrollbar.css'
+import PerfectScrollbar from "perfect-scrollbar";
+import "perfect-scrollbar/css/perfect-scrollbar.css";
 
-import TopNavbar from './TopNavbar.vue'
-import ContentFooter from './ContentFooter.vue'
-import MobileMenu from './Extra/MobileMenu.vue'
-import UserMenu from './Extra/UserMenu.vue'
-import { ZoomCenterTransition } from 'vue2-transitions'
+import TopNavbar from "./TopNavbar.vue";
+import ContentFooter from "./ContentFooter.vue";
+import MobileMenu from "./Extra/MobileMenu.vue";
+import UserMenu from "./Extra/UserMenu.vue";
+import { ZoomCenterTransition } from "vue2-transitions";
 
-function hasElement (className) {
-  return document.getElementsByClassName(className).length > 0
+function hasElement(className) {
+  return document.getElementsByClassName(className).length > 0;
 }
 
-function initScrollbar (className) {
+function initScrollbar(className) {
   if (hasElement(className)) {
-    new PerfectScrollbar(`.${className}`)
+    new PerfectScrollbar(`.${className}`);
   } else {
     // try to init it later in case this component is loaded async
     setTimeout(() => {
-      initScrollbar(className)
-    }, 100)
+      initScrollbar(className);
+    }, 100);
   }
 }
 // import auth from "src/auth";
@@ -181,44 +176,44 @@ export default {
     ContentFooter,
     MobileMenu,
     UserMenu,
-    ZoomCenterTransition
+    ZoomCenterTransition,
   },
-  data () {
+  data() {
     return {
-      auth: auth
-    }
+      auth: auth,
+    };
   },
   methods: {
-    toggleSidebar () {
+    toggleSidebar() {
       if (this.$sidebar.showSidebar) {
-        this.$sidebar.displaySidebar(false)
+        this.$sidebar.displaySidebar(false);
       }
-    }
+    },
   },
-  mounted () {
+  mounted() {
     this.$auth.currentUser(this, true, function () {
-      let docClasses = document.body.classList
-      let isWindows = navigator.platform.startsWith('Win')
+      let docClasses = document.body.classList;
+      let isWindows = navigator.platform.startsWith("Win");
       if (isWindows) {
         // if we are on windows OS we activate the perfectScrollbar function
-        initScrollbar('sidebar')
-        initScrollbar('sidebar-wrapper')
-        initScrollbar('main-panel')
+        initScrollbar("sidebar");
+        initScrollbar("sidebar-wrapper");
+        initScrollbar("main-panel");
 
-        docClasses.add('perfect-scrollbar-on')
+        docClasses.add("perfect-scrollbar-on");
       } else {
-        docClasses.add('perfect-scrollbar-off')
+        docClasses.add("perfect-scrollbar-off");
       }
-    })
-  }
-}
+    });
+  },
+};
 </script>
 <style lang="scss">
-  .menu-divider {
-    height: 1px;
-    margin-top: 10px;
-    background-color: rgba(0,0,0,.12);
-  }
+.menu-divider {
+  height: 1px;
+  margin-top: 10px;
+  background-color: rgba(0, 0, 0, 0.12);
+}
 $scaleSize: 0.95;
 @keyframes zoomIn95 {
   from {

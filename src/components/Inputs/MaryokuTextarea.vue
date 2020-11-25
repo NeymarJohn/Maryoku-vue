@@ -13,7 +13,7 @@
       class="textarea js-autoresize"
       :disabled="disabled"
     ></textarea>
-    <span class="close-button" @click="clearContent">
+    <span class="close-button" @click="clearContent" v-if="!disabled">
       <img :src="`${$iconURL}Campaign/Group+3602.svg`" />
     </span>
   </div>

@@ -1,11 +1,11 @@
 <template>
-  <div :class="[{'nav-open': $sidebar.showSidebar}, {'rtl': $route.meta.rtlActive}]">
+  <div :class="[{ 'nav-open': $sidebar.showSidebar }, { rtl: $route.meta.rtlActive }]">
     <notifications></notifications>
-    <div class="main-panel" style="height: 50%;">
+    <div class="main-panel" style="height: 50%">
       <div
-        :class="{content: !$route.meta.hideContent}"
+        :class="{ content: !$route.meta.hideContent }"
         @click="toggleSidebar"
-        style="padding-right : 0;"
+        style="padding-right: 0"
         v-if="renderChild"
       >
         <!-- your content here -->
@@ -61,7 +61,7 @@ export default {
     MobileMenu,
     UserMenu,
     ZoomCenterTransition,
-    SideBar
+    SideBar,
   },
   data() {
     return {
@@ -69,7 +69,7 @@ export default {
       event: null,
       createEventModalOpen: false,
       renderChild: false,
-      showError: false
+      showError: false,
     };
   },
   methods: {
@@ -78,11 +78,9 @@ export default {
       "setEditMode",
       "setModalSubmitTitle",
       "setEventModalAndEventData",
-      "setNumberOfParticipants"
+      "setNumberOfParticipants",
     ]),
-    ...mapActions("event", [
-      "getEventAction"
-    ]),
+    ...mapActions("event", ["getEventAction"]),
     toggleSidebar() {
       if (this.$sidebar.showSidebar) {
         this.$sidebar.displaySidebar(false);
@@ -102,51 +100,53 @@ export default {
           editMode: false,
           sourceEventData: {
             eventStartMillis: new Date().getTime(),
-            numberOfParticipants: this.$auth.user.customer.numberOfEmployees
+            numberOfParticipants: this.$auth.user.customer.numberOfEmployees,
           },
           refreshEvents: null,
           year: now.getFullYear(),
           month: now.getMonth(),
           occasionsOptions: this.occasionsArray,
-          openInPlannerOption: false
-        }
+          openInPlannerOption: false,
+        },
       });
 
-      window.currentPanel.promise.then(res => {
+      window.currentPanel.promise.then((res) => {
         this.createEventModalOpen = false;
       });
     },
     initData() {
       const calendar = new Calendar({ id: this.$store.state.auth.user.profile.defaultCalendarId });
-      const eventId = this.$route.params.id
+      const eventId = this.$route.params.id;
       if (!eventId) {
-        this.renderChild = true
-        return
-      }
-      this.getEventAction({eventId, calendar}).then(event=>{
         this.renderChild = true;
-      }).catch(error=>{
-        this.showError = true
-        console.error(error)
-      });
-    }
+        return;
+      }
+      this.getEventAction({ eventId, calendar })
+        .then((event) => {
+          this.renderChild = true;
+        })
+        .catch((error) => {
+          this.showError = true;
+          console.error(error);
+        });
+    },
   },
   created() {
     this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
   },
   mounted() {
-    console.log("new.event.layout")
-    this.$store.dispatch('auth/checkToken').then(()=>{
-      this.initData();
-    }).catch(()=>{
-      this.$router.push({ path: `/signin`})
-      return
-    })
+    this.$store
+      .dispatch("auth/checkToken")
+      .then(() => {
+        this.initData();
+      })
+      .catch(() => {
+        this.$router.push({ path: `/signin` });
+        return;
+      });
   },
   computed: {
-    ...mapState('event', [
-      'eventData',
-    ]),
+    ...mapState("event", ["eventData"]),
   },
 };
 </script>

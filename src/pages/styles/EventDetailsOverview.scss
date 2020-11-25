@@ -123,6 +123,7 @@
       }
 
       p.content {
+        font-size: 18px;
         margin: 10px 0;
       }
 
@@ -132,14 +133,39 @@
 
       .value {
         margin-left: 50px;
+        font-size: 18px;
+        white-space: nowrap;
 
         h3 {
           font: 800 24px Manrope-Regular, sans-serif;
           margin: 0 0 12px;
         }
-        .picker-panel {
-          padding: 0;
+
+        img {
+          margin-right: 15px;
+          max-width: 25px;
+          max-height: 25px;
         }
+
+        .picker-panel {
+          padding: 10px 30px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+
+      .checkbox-label-wrapper{
+        display: flex;
+        align-items: center;
+        width: 100%;
+        img {
+          margin-right: 5px;
+          max-width: 25px;
+          max-height: 25px;
+        }
+        margin-left: 10px;
+        margin-right: 50px;
       }
     }
 
@@ -158,30 +184,6 @@
   .align-self-center {
     align-self: center;
   }
-
-  .multiple-selection {
-    width: 300px;
-    display: inline-block;
-    height: 50px;
-
-    .multiselect__select {
-      top: 15px;
-    }
-
-    .multiselect__tags {
-      border: solid 0.5px #bcbcbc !important;
-      height: 50px;
-    }
-
-    .multiselect__input {
-      height: 30px;
-      text-transform: capitalize;
-    }
-
-    .multiselect__placeholder {
-      line-height: 20px;
-    }
-  }
 }
 
 .footer-container{
@@ -194,4 +196,45 @@
   align-items: center;
   background: white;
   font-family: 'Manrope-Regular', sans-serif;
+}
+
+.multiple-selection {
+  min-width: 350px;
+  display: inline-block;
+  margin-top: 16px;
+  height: 55px;
+  .multiselect__select {
+    top: 15px;
+  }
+  .multiselect__tags {
+    height: 55px;
+    border: solid 0.5px #bcbcbc;
+
+    .multiselect__single {
+      line-height: 30px;
+    }
+    .multiselect__tags-wrap{
+      display: flex;
+      overflow: hidden;
+
+      span{
+        margin-right: 5px;
+        flex-shrink: 0;
+        font-size: 16px;
+        font-family: 'Manrope-regular';
+      }
+    }
+  }
+
+  .multiselect__content{
+    z-index: 100;
+  }
+
+  .multiselect__input {
+    height: 30px;
+    text-transform: capitalize;
+  }
+  .multiselect__placeholder {
+    line-height: 20px;
+  }
 }
