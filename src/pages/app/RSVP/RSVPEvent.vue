@@ -24,9 +24,9 @@
               <rsvp-event-info-panel :event="event"></rsvp-event-info-panel>
             </div>
           </div>
-          <!-- <div class="mb-50">
+          <div class="mb-50">
             <img :src="`${$iconURL}RSVP/Group+8056.svg`" />
-          </div> -->
+          </div>
           <div>
             <div class="font-size-22 font-bold mb-10">Check out the venue</div>
             <rsvp-venue-carousel
@@ -38,9 +38,9 @@
         </div>
       </div>
       <div class="rsvp-event-guid md-layout">
-        <!-- <div class="md-layout-item md-size-10 md-small-size-10">
+        <div class="md-layout-item md-size-10 md-small-size-10">
           <img :src="`${$iconURL}RSVP/Group+8056.svg`" style="margin-top: 40px" />
-        </div> -->
+        </div>
         <div
           class="md-layout-item md-size-45 md-small-size-45"
           v-if="campaign.visibleSettings && campaign.visibleSettings.showWearingGuide"

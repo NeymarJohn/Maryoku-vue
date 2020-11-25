@@ -126,7 +126,7 @@
       input {
         @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/location-gray.svg'))
       }
-
+      
     }
     input {
       border: solid 0.5px #bcbcbc;
@@ -225,7 +225,7 @@
     &.md-ripple {
       font-size: 16px !important;
       font-family: "Manrope-Regular" !important;
-
+      
     }
     &.highlight {
       background-color: #f51355;
@@ -254,9 +254,9 @@
     .time-select-fields {
       flex-grow: 1;
     }
-
+    
   }
-
+  
   .vfc-main-container {
     box-shadow: none;
     .vfc-week .vfc-day span.vfc-span-day.vfc-marked {
@@ -265,16 +265,7 @@
       border-radius: 50%;
       opacity: 1;
       z-index: 1;
-
-      &:not(.vfc-start-marked):not(.vfc-end-marked):before{
-        background-color: #f51355 !important;
-      }
     }
-
-    .vfc-day .vfc-base-start, .vfc-base-end{
-      background-color: #f51355 !important;
-    }
-
     .vfc-underline {
       color: #050505;
     }

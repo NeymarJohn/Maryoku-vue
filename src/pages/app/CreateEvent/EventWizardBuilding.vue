@@ -8,7 +8,7 @@
             <div class="event-building event-basic-info">
               <div class="setting-title mt-5">
                 <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator">
-                Staying in or in need of some fresh air?
+                Staying in or in need of some fresh air? 
               </div>
               <div class="text-center mt-2">
                 Is it an indoor or outdoor event?
@@ -115,9 +115,6 @@ export default {
         },
         {
           value: "outdoors", name: "Outdoor Event", selected:false
-        },
-        {
-          value: "virtual", name: "Virtual Event", selected:false
         }
       ]
     }
@@ -137,7 +134,7 @@ export default {
         margin: 0 auto;
         padding: 0;
     }
-
+    
     .md-checkbox-circle {
       margin: 0px;
     }
