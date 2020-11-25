@@ -34,10 +34,7 @@
         <img :src="`${$iconURL}RSVP/Path+1383.svg`" />
       </div>
       <div class="event-info-item-title font-size-22 font-bold-extra">SOLO OR PLUS 1?</div>
-      <div class="event-info-item-content font-size-20" v-if="isPlusOne">+ 1</div>
-      <div class="event-info-item-content font-size-20" v-else>
-        <input type="text" v-model="eventSolo" />
-      </div>
+      <div class="event-info-item-content font-size-20">{{ event.guestType }}</div>
     </div>
     <div class="event-info-item">
       <div class="event-info-item-icon">
@@ -46,8 +43,11 @@
       </div>
       <div class="event-info-item-title font-size-22 font-bold-extra">Arrival?</div>
       <div class="event-info-item-content font-size-20">
-        <div v-if="event.arrival">{{ event.arrival }}</div>
-        <input type="text" v-model="eventArrival" />
+        {{
+          event.timelines && event.timelines[0]
+            ? $dateUtil.formatScheduleDay(event.timelines[0].startTime, "MMMM dd, YYYY hh:mm A")
+            : ""
+        }}
       </div>
     </div>
   </div>
@@ -60,21 +60,12 @@ export default {
       default: {},
     },
   },
-  data() {
-    return {
-      eventSolo: "-",
-      eventArrival: "-",
-    };
-  },
   computed: {
     concept() {
       return this.event.concept ? this.event.concept : {};
     },
     backgroundColor() {
       return this.event.concept ? this.event.concept.colors[0].color : "#d9fcf2";
-    },
-    isPlusOne() {
-      return this.event.guestType === "employees-spouses" || this.event.guestType === "families";
     },
   },
 };

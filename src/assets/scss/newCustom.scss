@@ -995,6 +995,10 @@
                 &:before {
                     width: 100%;
                 }
+
+                .item-title{
+                    text-decoration-line: line-through;
+                }
             }
         }
     }

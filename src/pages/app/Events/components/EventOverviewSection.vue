@@ -5,13 +5,14 @@
       <div class="mr-30" style="width: 30%">
         <h3 class="title"> {{ section.title }} </h3>
 
-        <p class="content" v-if="section.created_at"> {{ section.created_at | formatDate }} </p>
+        <p class="content" v-if="section.started_at && section.started_at !== section.ended_at"> {{ section.started_at | formatDate }} ~ {{ section.ended_at | formatDate }}</p>
+        <p class="content" v-if="section.started_at && section.started_at === section.ended_at"> {{ section.started_at | formatDate }} </p>
         <p class="content" v-if="!isEdit && section.location"> {{ section.location }} </p>
         <p v-if="!isEdit && section.numberOfParticipants" class="content">{{ section.numberOfParticipants }}
           Guests</p>
         <p v-if="!isEdit && section.eventType" class="content">{{ section.eventType }}</p>
 
-        <location-input v-if="isEdit && section.location"
+        <location-input v-if="isEdit && section.hasOwnProperty('location')"
                         v-model="section.location"
                         placeholder="Type city / region or specific address here…"
                         class="my-10"
@@ -19,7 +20,7 @@
         </location-input>
 
         <maryoku-input
-                v-if="isEdit && section.numberOfParticipants"
+                v-if="isEdit && section.hasOwnProperty('numberOfParticipants')"
                 class="form-input my-10"
                 placeholder="Type number…..."
                 inputStyle="users"
@@ -28,7 +29,7 @@
         ></maryoku-input>
 
         <category-selector
-                v-if="isEdit && section.eventType"
+                v-if="isEdit && section.hasOwnProperty('eventType')"
                 :value="section.eventType"
                 :categories="eventTypes"
                 class="my-10"
@@ -51,11 +52,11 @@
         <img v-if="this.section.occasion" :src="getIconUrl('occasion')">
         {{section.occasion}}</div>
 
-      <div v-if="isEdit && section.hasOwnProperty('created_at')" class="value">
+      <div v-if="isEdit && section.hasOwnProperty('started_at') && section.hasOwnProperty('ended_at')" class="value">
         <div class="picker-panel">
 
           <functional-calendar
-                  :is-date-picker="true"
+                  :is-date-range="true"
                   :change-month-function="true"
                   :change-year-function="true"
                   @dayClicked="changeDate"
@@ -73,24 +74,16 @@
 
       <div v-if="isEdit && section.inOutDoor" class="value align-self-center">
           <md-radio
+                  v-for="(item, index) in inOutDoorTypes"
                   v-model="section.inOutDoor"
                   @change="inOutDoorChange"
-                  :value="'outdoors'">
+                  :key="index"
+                  :value="item.value">
             <div class="checkbox-label-wrapper">
-              <img :src="getIconUrl('outdoors')">
-              Outdoors event
+              <img :src="getIconUrl(item.value)">
+              {{ item.label }}
             </div>
             </md-radio>
-
-          <md-radio
-                  v-model="section.inOutDoor"
-                  @change="inOutDoorChange"
-                  :value="'indoors'">
-            <div class="checkbox-label-wrapper">
-              <img :src="getIconUrl('indoors')">
-              Indoors event
-            </div>
-          </md-radio>
       </div>
 
       <div v-if="isEdit && section.hasOwnProperty('guestType')" class="value">
@@ -140,6 +133,7 @@ import { FunctionalCalendar } from "vue-functional-calendar";
 import moment from "moment";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import CategorySelector from "@/components/Inputs/CategorySelector";
+import swal from "sweetalert2";
 
 export default {
   name: "event-overview-section",
@@ -167,8 +161,16 @@ export default {
       dateData: {
         currentDate: null,
         dateRange: {
-          start: { date: false, dateTime: false, hour: "00", mintue: "00" },
-          end: { date: false, dateTime: false, hour: "00", mintue: "00" },
+          start: {
+            date: moment(this.section.started_at).format('YYYY-MM-DD'),
+            dateTime: false,
+            hour: "00",
+            mintue: "00" },
+          end: {
+            date: moment(this.section.ended_at).format('YYYY-MM-DD'),
+            dateTime: false,
+            hour: "00",
+            mintue: "00" },
         },
         selectedDate: null,
         selectedDatesItem: "",
@@ -176,8 +178,16 @@ export default {
         selectedMinute: "00",
         selectedDates: [],
       },
+      started_at: null,
+      dateClick: false,
+      ended_at: null,
       location: null,
       inOutdoors: null,
+      inOutDoorTypes: [
+        {label: 'Outdoors event', value: 'outdoors', icon: 'outdoors'},
+        {label: 'Indoors event', value: 'indoors', icon: 'indoors'},
+        {label: 'Virtual event', value: 'virtual', icon: 'virtual'},
+      ],
       guestsTypes: [
         {
           value: "Employees",
@@ -249,21 +259,19 @@ export default {
       } else if (name === 'indoors') {
         return `${this.$iconURL}Requirements/All%20indoor.svg`
       } else if (name === 'guestType') {
-        let guestType = this.guestsTypes.find(it => it.name === this.section.guestType)
-        // return `${this.$iconURL}${guestType.icon}`
         return `${this.$secondIconURL}Event%20Page/Path%204858.svg`
       } else if (name === 'occasion') {
-        let occasion = this.occasions.find(it => it.name === this.section.occasion)
-        // return `${this.$iconURL}${occasion.icon}`
         return `${this.$secondIconURL}Event%20Page/Path%204856.svg`
+      } else if (name === 'virtual') {
+        return `${this.$secondIconURL}Creation/group-11232.svg`
       }
-
     },
     changeLocation(loc) {
       console.log("change.location", loc);
       this.$emit('change', {location: e});
     },
     inOutDoorChange() {
+      console.log('inOutDoorChange', this.section.inOutDoor);
       this.$emit('change', {inOutDoor: this.section.inOutDoor});
     },
     guestNumberChange(e){
@@ -289,14 +297,24 @@ export default {
       this.$emit('change', {holiday: e});
     },
     changeDate(e){
-      console.log("changeDate", e, this.dateData);
-      this.$emit('change', {created_at: new Date(e.date)});
+      this.dateClick = !this.dateClick;
+
+      if(this.dateClick) {
+        this.started_at = e.date;
+      }
+
+      if(!this.dateClick) {
+        this.ended_at = e.date;
+        this.$emit('change', {
+          dateData: {
+            started_at: this.started_at,
+            ended_at: this.ended_at,
+          }
+        })
+      }
+
     },
     init(){
-      if(this.section.hasOwnProperty('created_at')){
-        this.dateData.currentDate = new Date(this.section.created_at);
-        this.dateData.selectedDate = moment(this.section.created_at).format('YYYY-MM-DD');
-      }
 
       this.eventTypes = this.eventTypesList.map(it => {
         return {name: it.name, value: it.name, icon: `${this.$iconURL}Onboarding/${it.key}.svg` };
@@ -313,7 +331,7 @@ export default {
       eventTypesList: "event/getEventTypesList",
     }),
     inOutDoorValue(){
-      return this.section.inOutDoor === 'indoors' ? 'Indoors Event' : 'Outdoors Event';
+      return this.inOutDoorTypes.find(it => it.value === this.section.inOutDoor)['label'];
     },
     guestTypeValue(){
       return this.guestsTypes.find(it => it.value === this.section.guestType).name;

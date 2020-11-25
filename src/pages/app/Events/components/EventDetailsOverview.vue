@@ -90,7 +90,8 @@ export default {
       isEdit: false,
       showEditDetailModal: false,
       showCommentEditorPanel: false,
-
+      reCalculate: false,
+      reSchedule: false,
       sections: [],
     };
   },
@@ -102,37 +103,63 @@ export default {
           id: this.event.calendar.id,
         }),
         location: this.event.location,
+        locationId: this.event.locationId,
         inOutDoor: this.event.inOutDoor,
         numberOfParticipants: this.event.numberOfParticipants,
         eventType: this.event.eventType,
         occasion: this.event.occasion,
-        eventPage: this.event.eventPage,
+        eventStartMillis: this.event.eventStartMillis,
+        eventEndMillis: this.event.eventEndMillis,
         guestType: this.event.guestType,
-      });
-      this.$store.dispatch("event/saveEventAction", updatedEvent).then((res) => {
-        console.log("updateEvent.res", res);
+        reSchedule: this.reSchedule,
+        reCalculate: this.reCalculate,
       });
 
+      const arrow = `<i data-v-a76b6a56="" style="color:#050505" class="md-icon md-icon-font md-theme-default">arrow_back</i>`;
+      const description = `<div class="description">Your edits changed the event, do you want to change it?</div>`;
+
+      swal({
+        title: `<div class="text-left">${arrow}<div>Are Your Sure?</div>${description}</div>`,
+        showCancelButton: true,
+        confirmButtonClass: "md-button md-success",
+        cancelButtonClass: "md-button md-danger",
+        confirmButtonText: "Yes I'm sure",
+        cancelButtonText: "No, take me back",
+        buttonsStyling: false,
+      }).then((result) => {
+        if (result.dismiss != "cancel") {
+          this.$store.dispatch("event/saveEventAction", updatedEvent).then((res) => {
+            this.reSchedule = false;
+            this.reCalculate = false;
+          });
+        }
+      });
     },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = !this.showCommentEditorPanel;
     },
     changeEvent(e) {
-      console.log("changeEvent", e)
-      if ( e.hasOwnProperty('created_at') ){
-        this.event.eventPage.dateCreated = e.created_at;
+
+      if ( e.hasOwnProperty('dateData') ){
+        this.event.eventStartMillis = new Date(e.dateData.started_at).getTime() ;
+        this.event.eventEndMillis = new Date(e.dateData.ended_at).getTime();
+        this.reSchedule = true;
       } else if ( e.hasOwnProperty('location') ) {
-        this.event.location = e.location;
+        this.event.location = e.location.name;
+        this.event.locationId = e.location.id;
       } else if ( e.hasOwnProperty('inOutDoor') ) {
         this.event.inOutDoor = e.inOutDoor;
       } else if ( e.hasOwnProperty('numberOfParticipants') ) {
+        this.reCalculate = true;
         this.event.numberOfParticipants = e.numberOfParticipants;
       } else if ( e.hasOwnProperty('guestType') ) {
         this.event.guestType = e.guestType;
       } else if ( e.hasOwnProperty('eventType') ) {
         let eventType = this.eventTypeList.find(it => it.name === e.eventType);
-        this.event.eventPage.name = eventType.name;
-        this.event.eventPage.key = eventType.key;
+        this.event.eventType.name = eventType.name;
+        this.event.eventType.key = eventType.key;
+        this.event.eventType.id = eventType.id;
+        this.reCalculate = true;
       } else if ( e.hasOwnProperty('occasion') ) {
         this.event.occasion = e.occasion;
       } else if ( e.hasOwnProperty('holiday') ) {
@@ -151,7 +178,8 @@ export default {
           key: 'date',
           img_src : `${this.$secondIconURL}Event Page/Group 8708.svg`,
           warning: 'Changing the time on your status might cause price changes',
-          created_at: this.event.eventPage.dateCreated,
+          started_at: this.event.eventStartMillis,
+          ended_at: this.event.eventEndMillis,
           more_one_day: null,
         },
         {
