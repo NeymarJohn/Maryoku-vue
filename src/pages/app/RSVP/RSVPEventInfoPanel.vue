@@ -34,7 +34,11 @@
         <img :src="`${$iconURL}RSVP/Path+1383.svg`" />
       </div>
       <div class="event-info-item-title font-size-22 font-bold-extra">SOLO OR PLUS 1?</div>
-      <div class="event-info-item-content font-size-20">{{ event.guestType }}</div>
+      <div class="event-info-item-content font-size-20" v-if="isPlusOne">+ 1</div>
+      <div class="event-info-item-content font-size-20" v-else>
+        <input v-if="editable" type="text" v-model="eventSolo" />
+        <span v-else>{{ eventSolo }}</span>
+      </div>
     </div>
     <div class="event-info-item">
       <div class="event-info-item-icon">
@@ -43,11 +47,9 @@
       </div>
       <div class="event-info-item-title font-size-22 font-bold-extra">Arrival?</div>
       <div class="event-info-item-content font-size-20">
-        {{
-          event.timelines && event.timelines[0]
-            ? $dateUtil.formatScheduleDay(event.timelines[0].startTime, "MMMM dd, YYYY hh:mm A")
-            : ""
-        }}
+        <div v-if="event.arrival">{{ event.arrival }}</div>
+        <input v-if="editable" type="text" v-model="eventArrival" />
+        <span v-else>{{ eventArrival }}</span>
       </div>
     </div>
   </div>
@@ -59,6 +61,16 @@ export default {
       type: Object,
       default: {},
     },
+    editable: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  data() {
+    return {
+      eventSolo: "-",
+      eventArrival: "-",
+    };
   },
   computed: {
     concept() {
@@ -66,6 +78,9 @@ export default {
     },
     backgroundColor() {
       return this.event.concept ? this.event.concept.colors[0].color : "#d9fcf2";
+    },
+    isPlusOne() {
+      return this.event.guestType === "employees-spouses" || this.event.guestType === "families";
     },
   },
 };

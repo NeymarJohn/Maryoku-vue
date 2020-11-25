@@ -4,8 +4,7 @@
             :elements="eventElements"
             page="plan"
     ></progress-sidebar>
-    <EventDetailsOverview v-if="pageId == 'overview'" ></EventDetailsOverview>
-    <event-details-timeline v-else-if="pageId=='timeline'"></event-details-timeline>
+    <event-details-timeline v-if="pageId=='timeline'"></event-details-timeline>
     <event-concept-choose v-else-if="pageId=='concept'"></event-concept-choose>
     <event-budget-requirement v-else-if="pageId=='budget'"></event-budget-requirement>
     <event-campaign v-else-if="pageId=='campaign'"></event-campaign>
@@ -18,7 +17,6 @@ import EventConceptChoose from './components/EventConceptChoose'
 import BookingEvent from './components/BookingEvent'
 import BookingEventRequirement from './components/BookingEventRequirement.vue'
 import EventBudgetRequirement from './components/EventBudgetRequirement.vue'
-import EventDetailsOverview from './components/EventDetailsOverview'
 import EventCampaign from '@/pages/app/Campaign/CampaignMainLayout.vue'
 import ProgressSidebar from "./components/progressSidebarForEvent";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
@@ -33,7 +31,6 @@ export default {
     BookingEvent,
     BookingEventRequirement,
     ProgressSidebar,
-    EventDetailsOverview,
     EventBudgetRequirement,
     EventCampaign
   },
@@ -54,14 +51,6 @@ export default {
   },
   methods: {
     generatedItems(event) {
-      const overview = {
-        title: "Create Event",
-        status: "completed",
-        route: "overview",
-        // icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-        progress: 100,
-        componentId: "overview",
-      };
       const concept = {
         title: "Choose Concept",
         status: event.conceptProgress === 100 ? "completed" : "not-complete",
@@ -97,7 +86,6 @@ export default {
         componentId: "campaign",
       };
       const elements = [];
-      elements.push(overview)
       if (this.event.eventType.hasConcept) {
         elements.push(concept);
       }
@@ -125,9 +113,6 @@ export default {
               });
     },
     setConstantStates(event) {
-      const overviewIndex = this.eventElements.findIndex(
-              (item) => item.componentId === "overview",
-      );
       const conceptIndex = this.eventElements.findIndex(
               (item) => item.componentId === "concept",
       );
@@ -141,11 +126,6 @@ export default {
               (item) => item.componentId === "campaign",
       );
 
-      if (overviewIndex >= 0) {
-        // this.eventElements[conceptIndex].progress = event.conceptProgress;
-        // this.eventElements[conceptIndex].status =
-        //         event.conceptProgress == 100 ? "completed" : "not-complete";
-      }
       if (conceptIndex >= 0) {
         this.eventElements[conceptIndex].progress = event.conceptProgress;
         this.eventElements[conceptIndex].status =
@@ -169,7 +149,6 @@ export default {
     },
     fetchData() {
       this.pageId = this.$route.params.blockId?this.$route.params.blockId:"timeline"
-      console.log('pageid', this.pageId);
     }
   },
   created (){

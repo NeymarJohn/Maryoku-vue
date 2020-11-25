@@ -14,11 +14,8 @@ const VendorDetail = () => import("@/pages/app/Vendors/VendorDetail.vue");
 const AddEditVendor = () => import("@/pages/app/Vendors/AddEditVendor.vue");
 const VendorsPoolNew = () => import("@/pages/app/Vendors/VendorsPoolNew.vue");
 
-// Profile Pages
-import Profile from "@/pages/app/Profile/Layout.vue";
-import ProfileOverview from "@/pages/app/Profile/index.vue";
-
 // Event Pages
+import EventDetail from "@/pages/app/Events/EventDetail.vue";
 import EventDetailsBudget from "@/pages/app/Events/EventDetailsBudget.vue";
 import EventPlan from "@/pages/app/Events/EventPlan.vue";
 import EventProposalDetails from "@/pages/app/Events/components/EventProposalDetails.vue";
@@ -275,25 +272,6 @@ let appPages = {
         },
     ],
 };
-
-let ProfilePages = {
-    path: "/",
-    component: Profile,
-    name: "Profile",
-    children: [
-        {
-            path: "/profile",
-            name: "overview",
-            component: ProfileOverview,
-            meta: {
-                auth: false,
-                title: "Profile",
-                gtm: "Profile",
-            },
-        },
-    ],
-};
-
 let EventPages = {
     path: "/app2",
     component: NewEventLayout,
@@ -319,10 +297,20 @@ let EventPages = {
         },
         {
             path: "/events/:id/overview",
-            redirect: "/events/:id/booking/overview",
             name: "EventDetail",
+            component: EventDetail,
             meta: {
                 title: "Event Details",
+                gtm: "Event Edit",
+                opaque: false,
+            },
+        },
+        {
+            path: "/events/:id/:blockId",
+            name: "EventDetail",
+            component: EventDetail,
+            meta: {
+                title: "Event Detail",
                 gtm: "Event Edit",
                 opaque: false,
             },
@@ -604,7 +592,6 @@ const routes = [
     HomePages,
     forProposals,
     vendorSignup,
-    ProfilePages,
     EventPages,
     RSVPPages,
     vendorListPage,
