@@ -43,7 +43,7 @@
             <div class="d-flex align-center">
               <md-checkbox class="md-checkbox-circle" v-model="selectedOption" value="previousCampaign"></md-checkbox>
               <input
-                v-model="scheduleSettings.previousCampaign.value"
+                v-model="scheduleSettings.previousCampaign.weeks"
                 type="number"
                 min="0"
                 class="text-center mr-20"
@@ -77,7 +77,7 @@
             <div class="d-flex align-center">
               <md-checkbox class="md-checkbox-circle" v-model="selectedOption" value="beforeEvent"></md-checkbox>
               <input
-                v-model="scheduleSettings.beforeEvent.value"
+                v-model="scheduleSettings.beforeEvent.days"
                 min="0"
                 class="text-center mr-20"
                 type="number"
@@ -111,8 +111,8 @@
               <md-icon style="color: #050505 !important">keyboard_arrow_right</md-icon>
             </md-button>
           </div>
-          <div :class="{ 'font-bold': selectedOption == 'calendar' }">
-            {{ $dateUtil.formatScheduleDay(scheduleSettings.calendar.calcTime, "MMMM DD, YYYY hh:mm A") }}
+          <div :class="{ 'font-bold': selectedOption == 'calendar' }" v-if="dateData.selectedDate">
+            {{ $dateUtil.formatScheduleDay(this.scheduleSettings.calendar.calcTime, "MMMM DD, YYYY hh:mm A") }}
           </div>
         </div>
       </div>
@@ -134,8 +134,7 @@
             ></functional-calendar>
           </div>
           <div class="flex-1" style="padding-left: 80px; border-left: solid 1px #aeaeae">
-            <!-- <time-input v-model="startTime" :h24="false" displayFormat="hh:mm" class="mt-100"></time-input> -->
-            <time-picker class="mt-100" style="width: 70%" @change="setTimeFromCalendar"></time-picker>
+            <time-input v-model="startTime" :h24="false" displayFormat="hh:mm" class="mt-100"></time-input>
           </div>
         </div>
       </div>
@@ -157,14 +156,12 @@
 import { Modal } from "@/components";
 import { FunctionalCalendar } from "vue-functional-calendar";
 import TimeInput from "@/components/Inputs/TimeInput";
-import TimePicker from "@/components/Inputs/TimePicker";
 import moment from "moment";
 export default {
   components: {
     Modal,
     FunctionalCalendar,
     TimeInput,
-    TimePicker,
   },
   props: {
     currentCampaign: {
@@ -192,41 +189,38 @@ export default {
       scheduleSettings: {
         tomorrow: {
           calcTime: moment(new Date()).add(1, "days").hours(9).minutes(0).valueOf(),
-          value: 0,
         },
-        previousCampaign: { value: 1, calcTime: "" },
-        beforeEvent: { value: 1, calcTime: "" },
-        calendar: { value: 0, calcTime: 0 },
+        previousCampaign: { weeks: 1, calcTime: "" },
+        beforeEvent: { days: 1, calcTime: "" },
+        calendar: { calcTime: 0 },
       },
     };
   },
   created() {
+    console.log("campaign", this.campaign);
+
     //set previous settings
-    const currentCampaignData = this.$store.state.campaign[this.currentCampaign.name];
-    if (currentCampaignData.scheduleSettings) {
-      const scheduleSettings = currentCampaignData.scheduleSettings;
-      console.log(scheduleSettings);
-      this.scheduleSettings[scheduleSettings.scheduleOption].value = scheduleSettings.scheduleOptionValue;
-      this.scheduleSettings[scheduleSettings.scheduleOption].calcTime = scheduleSettings.scheduleTime;
-      this.selectedOption = scheduleSettings.scheduleOption;
-    } else {
-      // set before event
-      this.scheduleSettings.beforeEvent.calcTime = moment(this.event.eventStartMillis)
-        .add(this.scheduleSettings.beforeEvent, "days")
+    if (this.campaigns[this.currentCampaignIndex].scheduleSettings) {
+      this.scheduleSettings = this.campaigns[this.currentCampaignIndex].scheduleSettings;
+      this.selectedOption = this.campaigns[this.currentCampaignIndex].selectedOption;
+    }
+
+    // set before event
+    this.scheduleSettings.beforeEvent.calcTime = moment(this.event.eventStartMillis)
+      .add(this.scheduleSettings.beforeEvent, "days")
+      .hours(9)
+      .minutes(0)
+      .valueOf();
+
+    // set after previous campaign
+    const previouseCampaignTime = this.campaigns[this.currentCampaignIndex - 1];
+    console.log(previouseCampaignTime);
+    if (previouseCampaignTime && previouseCampaignTime.scheduleTime) {
+      this.scheduleSettings.previousCampaign.calcTime = moment(previouseCampaignTime.scheduleTime)
+        .add(1, "weeks")
         .hours(9)
         .minutes(0)
         .valueOf();
-
-      // set after previous campaign
-      const previouseCampaignTime = this.campaigns[this.currentCampaignIndex - 1];
-      console.log(previouseCampaignTime);
-      if (previouseCampaignTime && previouseCampaignTime.scheduleTime) {
-        this.scheduleSettings.previousCampaign.calcTime = moment(previouseCampaignTime.scheduleTime)
-          .add(1, "weeks")
-          .hours(9)
-          .minutes(0)
-          .valueOf();
-      }
     }
 
     this.$dateUtil.getTimeZoneNameFromPlaceId(this.event.locationId).then((timezone) => {
@@ -237,9 +231,6 @@ export default {
   methods: {
     close() {
       this.$emit("cancel");
-    },
-    setTimeFromCalendar(time) {
-      this.startTime = time;
     },
     saveSchedule() {
       if (this.showCalendar) {
@@ -265,7 +256,7 @@ export default {
     scheduleSettings: {
       handler(newSettings) {
         newSettings.beforeEvent.calcTime = moment(this.event.eventStartMillis)
-          .subtract(newSettings.beforeEvent.value, "days")
+          .subtract(newSettings.beforeEvent.days, "days")
           .hours(9)
           .minutes(0)
           .valueOf();
@@ -278,7 +269,7 @@ export default {
           newSettings.previousCampaign.calcTime = moment(
             new Date(this.campaignData[previouseCampaignTime.name].scheduleTime),
           )
-            .add(newSettings.previousCampaign.value, "weeks")
+            .add(newSettings.previousCampaign.weeks, "weeks")
             .hours(9)
             .minutes(0)
             .valueOf();

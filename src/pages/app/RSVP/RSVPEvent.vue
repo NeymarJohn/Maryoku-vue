@@ -24,9 +24,9 @@
               <rsvp-event-info-panel :event="event"></rsvp-event-info-panel>
             </div>
           </div>
-          <!-- <div class="mb-50">
+          <div class="mb-50">
             <img :src="`${$iconURL}RSVP/Group+8056.svg`" />
-          </div> -->
+          </div>
           <div>
             <div class="font-size-22 font-bold mb-10">Check out the venue</div>
             <rsvp-venue-carousel
@@ -38,9 +38,9 @@
         </div>
       </div>
       <div class="rsvp-event-guid md-layout">
-        <!-- <div class="md-layout-item md-size-10 md-small-size-10">
+        <div class="md-layout-item md-size-10 md-small-size-10">
           <img :src="`${$iconURL}RSVP/Group+8056.svg`" style="margin-top: 40px" />
-        </div> -->
+        </div>
         <div
           class="md-layout-item md-size-45 md-small-size-45"
           v-if="campaign.visibleSettings && campaign.visibleSettings.showWearingGuide"
@@ -113,7 +113,7 @@
             <span class="font-size-20">I Can't make it</span>
           </md-button>
           <span class="seperator"></span>
-          <md-button class="md-simple md-button md-black maryoku-btn" @click="thinkLater">
+          <md-button class="md-simple md-button md-black maryoku-btn">
             <span class="font-size-20">I Need To Think About It</span>
           </md-button>
           <md-button
@@ -223,7 +223,7 @@ export default {
     });
     this.$root.$on("setRsvp", (rsvpData) => {
       rsvpData.attendingOption = "PERSON";
-      rsvpData.rsvpStatus = "ACCEPTED";
+      rsvpData.rsvpStatus = "AGREED";
       rsvpData.invitedEmail = this.rsvpRequest.email;
       rsvpData.rsvpRequest = new RsvpRequest({ id: this.rsvpRequest.id });
       rsvpData.event = new CalendarEvent({ id: this.event.id });
@@ -274,22 +274,17 @@ export default {
       this.showSyncCalendarForZoom = true;
     },
     reject() {
-      new RsvpRequest({ id: this.rsvpRequest.id, status: "REJECTED" }).save().then((res) => {
-        swal({
-          title: `Sorry to hear that. Hope to see you on next event! `,
-          buttonsStyling: false,
-          confirmButtonClass: "md-button md-success",
+      new Rsvp({
+        name: "test",
+        email: "email@gmail.com",
+        invitedEmail: "email@gmail.com",
+        campaign: new Campaign({ id: this.campaign.id }),
+        rsvpStatus: "REJECTED",
+      })
+        .save()
+        .then((res) => {
+          console.log(res);
         });
-      });
-    },
-    thinkLater() {
-      new RsvpRequest({ id: this.rsvpRequest.id, status: "CONSIDERED" }).save().then((res) => {
-        swal({
-          title: `You can send RSVP anytime!`,
-          buttonsStyling: false,
-          confirmButtonClass: "md-button md-success",
-        });
-      });
     },
   },
 };
