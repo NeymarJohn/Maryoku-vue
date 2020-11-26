@@ -21,7 +21,7 @@
               </div>
             </div>
             <div class="md-layout-item md-size-50 md-small-size-50">
-              <rsvp-event-info-panel :event="event" :editable="false"></rsvp-event-info-panel>
+              <rsvp-event-info-panel :event="event"></rsvp-event-info-panel>
             </div>
           </div>
           <!-- <div class="mb-50">
@@ -104,10 +104,7 @@
           <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
             <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
           </md-button>
-          <md-button
-            class="md-button md-red md-just-icon md-theme-default scroll-top-button"
-            @click="showSharingModal = true"
-          >
+          <md-button class="md-button md-red md-just-icon md-theme-default scroll-top-button">
             <img :src="`${$iconURL}RSVP/sharing-white.svg`" width="17" />
           </md-button>
         </div>
@@ -116,7 +113,7 @@
             <span class="font-size-20">I Can't make it</span>
           </md-button>
           <span class="seperator"></span>
-          <md-button class="md-simple md-button md-black maryoku-btn">
+          <md-button class="md-simple md-button md-black maryoku-btn" @click="thinkLater">
             <span class="font-size-20">I Need To Think About It</span>
           </md-button>
           <md-button
@@ -154,7 +151,6 @@
       @close="showSyncCalendarForZoom = false"
       :campaign="campaign"
     ></sync-calendar-modal>
-    <social-sharing-modal v-if="showSharingModal" @cancel="showSharingModal = false"></social-sharing-modal>
   </div>
 </template>
 <script>
@@ -171,7 +167,6 @@ import JoinZoomModal from "@/components/Modals/RSVP/JoinZoomModal";
 import SyncCalendarModal from "@/components/Modals/RSVP/SyncCalendarModal";
 import RsvpVenueCarousel from "./RSVPVenueCarousel";
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
-import SocialSharingModal from "@/components/Modals/SocialSharingModal";
 import { mapActions, mapGetters } from "vuex";
 import swal from "sweetalert2";
 
@@ -184,7 +179,6 @@ export default {
     SyncCalendarModal,
     RsvpVenueCarousel,
     RsvpEventInfoPanel,
-    SocialSharingModal,
   },
   data() {
     return {
@@ -211,7 +205,6 @@ export default {
       showSyncCalendarForZoom: false,
       campaign: {},
       rsvpRequest: null,
-      showSharingModal: false,
     };
   },
   created() {
@@ -230,7 +223,7 @@ export default {
     });
     this.$root.$on("setRsvp", (rsvpData) => {
       rsvpData.attendingOption = "PERSON";
-      rsvpData.rsvpStatus = "AGREED";
+      rsvpData.rsvpStatus = "ACCEPTED";
       rsvpData.invitedEmail = this.rsvpRequest.email;
       rsvpData.rsvpRequest = new RsvpRequest({ id: this.rsvpRequest.id });
       rsvpData.event = new CalendarEvent({ id: this.event.id });
@@ -281,17 +274,22 @@ export default {
       this.showSyncCalendarForZoom = true;
     },
     reject() {
-      new Rsvp({
-        name: "test",
-        email: "email@gmail.com",
-        invitedEmail: "email@gmail.com",
-        campaign: new Campaign({ id: this.campaign.id }),
-        rsvpStatus: "REJECTED",
-      })
-        .save()
-        .then((res) => {
-          console.log(res);
+      new RsvpRequest({ id: this.rsvpRequest.id, status: "REJECTED" }).save().then((res) => {
+        swal({
+          title: `Sorry to hear that. Hope to see you on next event! `,
+          buttonsStyling: false,
+          confirmButtonClass: "md-button md-success",
         });
+      });
+    },
+    thinkLater() {
+      new RsvpRequest({ id: this.rsvpRequest.id, status: "CONSIDERED" }).save().then((res) => {
+        swal({
+          title: `You can send RSVP anytime!`,
+          buttonsStyling: false,
+          confirmButtonClass: "md-button md-success",
+        });
+      });
     },
   },
 };
