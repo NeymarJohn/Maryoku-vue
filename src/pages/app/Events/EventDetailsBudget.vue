@@ -1,6 +1,6 @@
 <template>
   <div>
-    <event-state-message type="positive" v-if="showMessage" @closeMessage="showMessage = false"></event-state-message>
+    <event-state-message type="positive" v-if="showMessage" @closeMessage="showMessage=false"></event-state-message>
     <div class="edit-event-details event-details-budget">
       <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
       <!-- Event Header -->
@@ -20,30 +20,44 @@
             <div class="budget-list d-flex justify-content-between">
               <div class="budget-list__item">
                 <div class="label-title">Budget</div>
-                <div class="budget-value">${{ statistics.total | withComma }}</div>
-                <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="showBudgetModal = true"
-                  >Edit</md-button
-                >
+                <div class="budget-value">${{statistics.total | withComma}}</div>
+                <md-button
+                  v-if="canEdit"
+                  class="md-rose md-simple md-sm edit-budget"
+                  @click="showBudgetModal = true"
+                >Edit</md-button>
               </div>
               <div class="budget-list__item">
                 <div class="label-title">Allocated</div>
-                <div class="budget-value">${{ statistics.allocated | roundNumber | withComma }}</div>
-                <div class="percent">{{ ((statistics.allocated * 100) / calendarEvent.totalBudget).toFixed(1) }} %</div>
+                <div class="budget-value">${{statistics.allocated | roundNumber | withComma}}</div>
+                <div
+                  class="percent"
+                >{{ (( statistics.allocated ) * 100 / calendarEvent.totalBudget).toFixed(1)}} %</div>
               </div>
               <div class="budget-list__item">
                 <div class="label-title">Booked</div>
-                <div class="budget-value">${{ statistics.booked | withComma }}</div>
-                <div class="percent">{{ ((statistics.booked * 100) / calendarEvent.totalBudget).toFixed(1) }}%</div>
+                <div class="budget-value">${{statistics.booked | withComma}}</div>
+                <div
+                  class="percent"
+                >{{ ((statistics.booked * 100) / calendarEvent.totalBudget).toFixed(1) }}%</div>
               </div>
             </div>
           </div>
-          <div class="card-section card-overview-saved text-center d-flex justify-center align-center">
+          <div
+            class="card-section card-overview-saved text-center d-flex justify-center align-center"
+          >
             <span>So far you saved :</span>
-            <md-icon class="card-overview-saved-icon" style="color: #167c3a" v-if="getSavedAmount >= 0"
-              >add_circle_outline</md-icon
-            >
-            <md-icon class="card-overview-saved-icon" v-else style="color: #f51355">remove_circle_outline</md-icon>
-            <span class="card-overview-saved-amount">$ {{ getSavedAmount | withComma }}</span>
+            <md-icon
+              class="card-overview-saved-icon"
+              style="color:#167c3a "
+              v-if="getSavedAmount >= 0"
+            >add_circle_outline</md-icon>
+            <md-icon
+              class="card-overview-saved-icon"
+              v-else
+              style="color:#f51355"
+            >remove_circle_outline</md-icon>
+            <span class="card-overview-saved-amount">$ {{getSavedAmount| withComma}}</span>
           </div>
           <div class="card-section card-expense">
             <div class="section-header">Expenses</div>
@@ -55,10 +69,7 @@
         <div class="md-layout-item md-size-60">
           <div class="event-blocks-table">
             <tabs
-              :tab-name="[
-                '<img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+26.png\'> Total',
-                ' <img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest',
-              ]"
+              :tab-name="['<img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+26.png\'> Total', ' <img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest']"
             >
               <!-- here you can add your content for tab-content -->
               <template slot="tab-pane-1">
@@ -87,7 +98,7 @@
       <budget-edit-modal
         v-if="showBudgetModal"
         :event="event"
-        @cancel="showBudgetModal = false"
+        @cancel="showBudgetModal=false"
         @save="updateBudget"
       ></budget-edit-modal>
       <modal v-if="budgetConfirmationModal" class="add-category-model">
@@ -107,12 +118,15 @@
         </template>
         <template slot="body"></template>
         <template slot="footer">
-          <md-button class="md-rose md-outline md-simple cancel-btn" @click="budgetConfirmationModal = false"
-            >Yes I’m sure</md-button
-          >
-          <md-button class="md-rose add-category-btn" :class="{ disabled: !newBudget }" @click="updateBudget"
-            >No, take me back</md-button
-          >
+          <md-button
+            class="md-rose md-outline md-simple cancel-btn"
+            @click="budgetConfirmationModal = false"
+          >Yes I’m sure</md-button>
+          <md-button
+            class="md-rose add-category-btn"
+            :class="{ 'disabled' : !newBudget }"
+            @click="updateBudget"
+          >No, take me back</md-button>
         </template>
       </modal>
 
@@ -131,10 +145,7 @@
         <template slot="body">
           <div class="event-blocks-table edit-elements-budget-table">
             <tabs
-              :tab-name="[
-                '<img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+26.png\'> Total',
-                ' <img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest',
-              ]"
+              :tab-name="['<img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+26.png\'> Total', ' <img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest']"
             >
               <!-- here you can add your content for tab-content -->
               <template slot="tab-pane-1">
@@ -155,7 +166,10 @@
           </div>
         </template>
         <template slot="footer">
-          <md-button class="md-default md-simple cancel-btn" @click="editBudgetElementsModal = false">Cancel</md-button>
+          <md-button
+            class="md-default md-simple cancel-btn"
+            @click="editBudgetElementsModal = false"
+          >Cancel</md-button>
           <md-button class="md-rose add-category-btn" @click="updateBudget">Save</md-button>
         </template>
       </modal>
@@ -235,8 +249,10 @@ export default {
       budgetPerEmployee: 0,
       activeTab: 0,
       totalBudget: 0,
-      menuIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
-      iconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/",
+      menuIconsURL:
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
+      iconsURL:
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/",
       showBudgetModal: false,
       budgetConfirmationModal: false,
       newBudget: null,
@@ -297,7 +313,9 @@ export default {
           this.eventId = event.id;
           this.calendarEvent = event;
           if (event.totalBudget)
-            this.newBudget = (event.totalBudget + "").replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            this.newBudget = (event.totalBudget + "")
+              .replace(/\D/g, "")
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           new EventComponent()
             .for(_calendar, event)
             .get()
@@ -315,7 +333,8 @@ export default {
             "set-title",
             this.event,
             this.routeName === "EditBuildingBlocks",
-            this.routeName === "InviteesManagement" || this.routeName === "EventInvitees",
+            this.routeName === "InviteesManagement" ||
+              this.routeName === "EventInvitees",
           );
           this.isLoading = false;
         });
@@ -378,10 +397,17 @@ export default {
             allocated: resp[0].totalAllocatedBudget,
             booked: resp[0].totalBookedBudget,
           };
-          this.totalRemainingBudget = resp[0].totalBudget - resp[0].totalAllocatedBudget; // (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget // evt.totalBudget - resp[0].totalAllocatedBudget;
-          this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants; // evt.totalBudget - resp[0].totalAllocatedBudget;
+          this.totalRemainingBudget =
+            resp[0].totalBudget - resp[0].totalAllocatedBudget; // (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget // evt.totalBudget - resp[0].totalAllocatedBudget;
+          this.remainingBudgetPerEmployee =
+            this.totalRemainingBudget / evt.numberOfParticipants; // evt.totalBudget - resp[0].totalAllocatedBudget;
           this.percentage =
-            100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2);
+            100 -
+            (
+              (resp[0].totalAllocatedBudget /
+                (evt.budgetPerPerson * evt.numberOfParticipants)) *
+              100
+            ).toFixed(2);
 
           this.budgetPerEmployee = evt.budgetPerPerson; // this.totalRemainingBudget / evt.numberOfParticipants;
           this.allocatedBudget = resp[0].totalAllocatedBudget;
@@ -451,7 +477,9 @@ export default {
       this.getEvent();
     },
     onAddMoreBudget(value) {
-      this.newBudget = `${this.event.totalBudget + value}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      this.newBudget = `${this.event.totalBudget + value}`
+        .replace(/\D/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       this.updateBudget();
     },
     toggleCommentMode(mode) {
@@ -459,13 +487,21 @@ export default {
     },
   },
   computed: {
-    ...mapState("EventPlannerVuex", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode"]),
+    ...mapState("EventPlannerVuex", [
+      "eventData",
+      "eventModalOpen",
+      "modalTitle",
+      "modalSubmitTitle",
+      "editMode",
+    ]),
     ...mapGetters({
       components: "event/getComponentsList",
       currentUser: "auth/currentUser",
     }),
     pieChartData() {
-      return this.selectedComponents.filter((item) => item.componentId !== "unexpected");
+      return this.selectedComponents.filter(
+        (item) => item.componentId !== "unexpected",
+      );
     },
     categoryItems() {
       return {
@@ -484,7 +520,7 @@ export default {
       return this.permission === "edit" || this.permission === "comment";
     },
     canEdit() {
-      return !this.permission || this.permission === "edit";
+      return this.permission === "edit";
     },
     getSavedAmount() {
       let savedAmount = 0;
@@ -517,7 +553,9 @@ export default {
   watch: {
     newBudget: function (newValue) {
       console.log("change", newValue);
-      const result = newValue.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      const result = newValue
+        .replace(/\D/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       this.newBudget = result;
     },
   },

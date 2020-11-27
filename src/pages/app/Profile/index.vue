@@ -1,165 +1,67 @@
 <template>
-  <div class="md-layout">
-    <div class="md-layout-item md-size-100">
-      <tabs :tab-name="['My Profile', 'My Company', 'My Team']" color-button="info" plain>
-        <template slot="tab-pane-1">
-          <div class="md-layout">
-            <div class="md-layout-item md-size-30">
-              <personal-information :user-info="auth.user"></personal-information>
-              <holidays-celebrate></holidays-celebrate>
+  <div class="md-layout p-20">
+    <div class="md-layout-item md-size-30">
+      <md-card class="left-sidebar">
+        <md-card-header>
+          <div class="profile">
+            <div class="avatar" style=""></div>
+            <div class="company-logo d-flex justify-content-center align-center">
+              Company Logo
             </div>
-            <div class="md-layout-item md-size-35">
-              <dietary-constraints></dietary-constraints>
-              <my-special-dates
-                :birthDate="auth.user.me.birthday"
-                :workingSince="auth.user.me.companyStartDate"
-                :key="auth.user.me"
-              ></my-special-dates>
-            </div>
-            <div class="md-layout-item md-size-35">
-              <my-events :events="upComingEvents"></my-events>
-            </div>
+            <h3 class="name">
+              RACHEL MENDELOVICH
+            </h3>
           </div>
-        </template>
-        <template slot="tab-pane-2">
-          <div class="md-layout">
-            <div class="md-layout-item md-size-33">
-              <company-dashboard-info></company-dashboard-info>
-            </div>
-            <div class="md-layout-item md-size-33">
-              <md-card>
-                <md-card-header class="md-card-header-icon md-card-header-rose">
-                  <div class="card-icon">
-                    <md-icon>group</md-icon>
-                  </div>
-                  <h5 class="title profile-title">Contact Information</h5>
-                </md-card-header>
-                <md-card-content style="min-height: 320px;">
-                  <div class="md-layout" style="text-align: left;">
-                    <div class="md-layout-item md-size-10">
-                      <i class="fa fa-map-marker-alt text-gray"></i>
-                    </div>
-                    <div class="md-layout-item md-size-90">
-                      <span class="text-gray" style="font-weight: 500;">
-                        <label-edit placeholder="Your Main Office Address"></label-edit>
-                      </span>
-                    </div>
-                    <div class="md-layout-item md-size-10">
-                      <i class="fa fa-phone-volume text-gray"></i>
-                    </div>
-                    <div class="md-layout-item md-size-90">
-                      <span class="text-gray" style="font-weight: 500;">
-                        <label-edit placeholder="Phone Number"></label-edit>
-                      </span>
-                    </div>
-                    <div class="md-layout-item md-size-10">
-                      <i class="fa fa-envelope text-gray"></i>
-                    </div>
-                    <div class="md-layout-item md-size-90">
-                      <span class="text-gray" style="font-weight: 500;">
-                        <label-edit placeholder="Email Address"></label-edit>
-                      </span>
-                    </div>
-                    <div class="md-layout-item md-size-10">
-                      <i class="fa fa-globe text-gray"></i>
-                    </div>
-                    <div class="md-layout-item md-size-90">
-                      <span class="text-gray" style="font-weight: 500;">
-                        <label-edit placeholder="Website address"></label-edit>
-                      </span>
-                    </div>
-                  </div>
-                </md-card-content>
-              </md-card>
-            </div>
-            <div class="md-layout-item md-size-33">
-              <md-card>
-                <md-card-header class="md-card-header-icon md-card-header-warning">
-                  <div class="card-icon">
-                    <md-icon>language</md-icon>
-                  </div>
-                  <h5 class="title profile-title">Branches</h5>
-                </md-card-header>
-                <md-card-content style="min-height: 320px;">
-                  <div class="md-layout" style="text-align: left;">
-                    <div class="md-layout-item md-size-33">
-                      <span class="text-gray" style="font-weight: 500;">Branch 1</span>
-                    </div>
-                    <div class="md-layout-item md-size-66 text-right">
-                      <h6
-                        style="padding: 0;margin: 4px 0; text-transform: none !important;"
-                      >San Diego, CA</h6>
-                    </div>
-                    <div class="md-layout-item md-size-50">
-                      <span class="text-gray" style="font-weight: 500;">Branch 2</span>
-                    </div>
-                    <div class="md-layout-item md-size-50 text-right">
-                      <h6
-                        style="padding: 0;margin: 4px 0; text-transform: none !important;"
-                      >Seatle, WA</h6>
-                    </div>
-                    <div class="md-layout-item md-size-33">
-                      <span class="text-gray" style="font-weight: 500;">Branch 3</span>
-                    </div>
-                    <div class="md-layout-item md-size-66 text-right">
-                      <h6
-                        style="padding: 0;margin: 4px 0; text-transform: none !important;"
-                      >New York, NY</h6>
-                    </div>
-                  </div>
-                </md-card-content>
-              </md-card>
-            </div>
+        </md-card-header>
+        <md-card-content>
+          <md-list>
+            <md-list-item>
+              Profile Settings
+            </md-list-item>
+            <md-list-item>
+              My Events
+            </md-list-item>
+            <md-list-item>
+              My Points
+            </md-list-item>
+            <md-list-item>
+              Saved inspirations
+            </md-list-item>
+          </md-list>
+        </md-card-content>
+        <md-card-actions class="md-alignment-left">
+          <div class="logout">
+            Log Out
           </div>
-        </template>
-        <template slot="tab-pane-3">
-          <div class="md-layout">
-            <div class="md-layout-item md-size-30">
-              <personal-information :user-info="auth.user"></personal-information>
-              <holidays-celebrate></holidays-celebrate>
-            </div>
-            <div class="md-layout-item md-size-35">
-              <dietary-constraints></dietary-constraints>
-              <my-special-dates
-                :birthDate="auth.user.me.birthday"
-                :workingSince="auth.user.me.companyStartDate"
-                :key="auth.user.me"
-              ></my-special-dates>
-            </div>
-            <div class="md-layout-item md-size-35">
-              <my-events :events="upCommingEvents"></my-events>
-            </div>
-          </div>
-        </template>
-      </tabs>
+        </md-card-actions>
+      </md-card>
     </div>
-    <!---->
-    <!--<vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen />
+    <div class="md-layout-item md-size-70">
+      <div class="profile-container">
 
-    <div class="md-layout ">
-      <div class="md-layout-item md-size-25">
-        <personal-information :userInfo="auth.user" v-if="auth.user.displayName" :key="auth.user"></personal-information>
+        <tabs :tab-name="['Profile Detail', 'Payment & Invoices', 'Notifications', 'Permissions']" color-button="info" plain>
+          <template slot="tab-pane-1">
+            <md-list>
+              <md-list-item>
+                <div>
+                  <h3>Full Name</h3>
+                  <md-label>Rachel Mandelovich</md-label>
+                </div>
+              </md-list-item>
+            </md-list>
+          </template>
+          <template slot="tab-pane-2">
+            Payment
+          </template>
+          <template slot="tab-pane-3">
+            Notification
+          </template>
+          <template slot="tab-pane-4">
+            Permissions
+          </template>
+        </tabs>
       </div>
-      <div class="md-layout-item md-size-35">
-        <div class="md-layout">
-          <dietary-constraints></dietary-constraints>
-        </div>
-
-        <div class="md-layout">
-
-          <my-special-dates :birthDate="auth.user.me.birthday" :workingSince="auth.user.me.companyStartDate" :key="auth.user.me" ></my-special-dates>
-        </div>
-
-        <div class="md-layout">
-          <holidays-celebrate></holidays-celebrate>
-        </div>
-      </div>
-
-      <div class="md-layout-item md-size-35">
-        <my-events :events="upCommingEvents"  ></my-events>
-      </div>
-
-    </div>-->
+    </div>
   </div>
 </template>
 
@@ -175,7 +77,7 @@ import { LabelEdit, Tabs } from "@/components";
 import { EditProfileForm, UserCard } from "@/pages";
 
 // import auth from '@/auth';
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
   components: {
@@ -195,6 +97,7 @@ export default {
     return {
       // auth: auth,
       chips: [],
+      user: null,
     };
   },
 
@@ -203,14 +106,24 @@ export default {
       upComingEvents: "user/getUpcomingEvents",
       // user:'user/getUser'
     }),
+    ...mapState("event", ["eventData"]),
   },
   mounted() {
     // TODO : user state should be reviewed
-    this.$auth.currentUser(this, true, () => {
-      this.$store.dispatch("user/getUserFromApi");
-    });
+    console.log("profile", this.$auth.user);
+
+    this.$store
+            .dispatch("auth/checkToken")
+            .then(() => {
+              this.user = this.$auth.user;
+            })
+            .catch(() => {
+              this.$router.push({ path: `/signin` });
+            });
+
   },
   methods: {
+    ...mapActions("event", ["getEventAction"]),
     onFileChange(e) {
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
@@ -262,14 +175,37 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.md-card-tabs {
-  .active.md-list-item.md-rose .md-list-item-button {
-    background-color: transparent !important;
-    box-shadow: none;
-    -webkit-box-shadow: none;
-    color: black !important;
-    border-bottom: 3px solid #ff547c;
-    border-radius: 0;
+.left-sidebar{
+  .profile{
+    padding: 30px 15px 0;
+    position: relative;
+
+    .avatar{
+      background-color: rgba(245, 19, 85, 0.08);
+      width: 245px;
+      height: 245px;
+      border-radius: 3px;
+      border: dashed 1.5px #f51355;
+    }
+
+    .company-logo{
+      position: absolute;
+      top: 80px;
+      left: 200px;
+      width: 138px;
+      height: 135px;
+      border-radius: 50%;
+      border: dashed 1px #f51355;
+      background-color: #FFFFFF;
+      z-index: 1;
+    }
+  }
+
+  .logout{
+    padding: 10px 25px;
+    font-size: 16px;
+    font-weight: 400;
   }
 }
+
 </style>

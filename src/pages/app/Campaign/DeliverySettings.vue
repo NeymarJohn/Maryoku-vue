@@ -7,9 +7,7 @@
           <div>
             <div class="font-size-30 font-bold-extra color-red">Delivery settings</div>
             <div class="mt-2 d-flex align-center">
-              <span class="font-bold-extra font-size-30 pr-20">{{
-                inviteesCount
-              }}</span>
+              <span class="font-bold-extra font-size-30 pr-20">{{ inviteesCount }}</span>
 
               <span>In your invitees list</span>
             </div>
@@ -31,7 +29,13 @@
                 <md-icon class="icon" v-if="!settingData.phone.selected">keyboard_arrow_right</md-icon>
               </md-button>
             </div>
-            <div class="mt-50" v-if="settingData.phone.selected && currentCampaign.campaignStatus == 'EDITING'">
+            <div
+              class="mt-50"
+              v-if="
+                settingData.phone.selected &&
+                (currentCampaign.campaignStatus == 'EDITING' || currentCampaign.campaignStatus == 'TESTING')
+              "
+            >
               <div class="font-bold">To</div>
               <div class="d-flex align-start width-100">
                 <div class="flex-1 position-relative">
@@ -115,8 +119,14 @@
                 </md-checkbox>
               </div>
             </div>
-            <div class="mt-50" v-if="settingData.phone.selected && currentCampaign.campaignStatus == 'STARTED' || currentCampaign.campaignStatus == 'SCHEDULED'">
-            <div class="mt-50">
+            <div
+              class="mt-50"
+              v-if="
+                (settingData.phone.selected && currentCampaign.campaignStatus == 'STARTED') ||
+                currentCampaign.campaignStatus == 'SCHEDULED'
+              "
+            >
+              <div class="mt-50">
                 <div class="font-bold mb-10 line-height-2">
                   Sent to ({{ currentCampaign.guestSMS ? currentCampaign.guestSMS.length : 0 }})
                 </div>
@@ -127,9 +137,8 @@
                   By {{ settingData.phone.smsOrWhatsapp }}
                 </div>
                 <div class="mt-20">
-                  <md-button class="md-simple md-red edit-btn" @click="downloadXml">
-                    <img :src="`${$iconURL}Campaign/excel.png`" class="mr-10" />
-                    Download Full Guests list
+                  <md-button class="md-simple md-red edit-btn" @click="downloadUsersPhone">
+                    <img :src="`${$iconURL}Campaign/excel.png`" class="mr-10" />Download Full Guests list
                   </md-button>
                 </div>
               </div>
@@ -149,7 +158,12 @@
                 <md-icon class="icon" v-if="!settingData.email.selected">keyboard_arrow_right</md-icon>
               </md-button>
             </div>
-            <div v-if="settingData.email.selected && currentCampaign.campaignStatus == 'EDITING'">
+            <div
+              v-if="
+                settingData.email.selected &&
+                (currentCampaign.campaignStatus == 'EDITING' || currentCampaign.campaignStatus == 'TESTING')
+              "
+            >
               <div class="mt-50">
                 <label class="font-bold mb-10 line-height-2">Subject</label>
                 <div class="width-60 position-relative">
@@ -165,10 +179,8 @@
                   <maryoku-input placeholder="Your email address…" v-model="settingData.email.from"></maryoku-input>
                   <span class="ml-20 mt-10 input-tooltip-wrapper position-relative">
                     <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
-                    <md-tooltip>
-                      <div class="font-size-14 input-tooltip">
-                        Pick the email from which you wish the guests to get this mail
-                      </div>
+                    <md-tooltip class="emailTooltip">
+                      Pick the email from which you wish the guests to get this mail
                     </md-tooltip>
                   </span>
                 </div>
@@ -261,9 +273,8 @@
                   {{ currentCampaign.settings.email.addressString }}
                 </div>
                 <div class="mt-20">
-                  <md-button class="md-simple md-red edit-btn" @click="downloadXml">
-                    <img :src="`${$iconURL}Campaign/excel.png`" class="mr-10" />
-                    Download Full Guests list
+                  <md-button class="md-simple md-red edit-btn" @click="downloadUsersEmailList">
+                    <img :src="`${$iconURL}Campaign/excel.png`" class="mr-10" />Download Full Guests list
                   </md-button>
                 </div>
               </div>
@@ -290,6 +301,7 @@ import CollapsePanel from "./CollapsePanel";
 import InvalidAddressPanel from "./components/InvalidAddressPanel";
 import { validateEmail, validPhoneNumber } from "@/utils/validation.util";
 import XLSX from "xlsx";
+import FileSaver from "file-saver";
 export default {
   components: {
     MaryokuInput,
@@ -408,8 +420,14 @@ export default {
         /* DO SOMETHING WITH workbook HERE */
         let worksheet = workbook.Sheets[sheetName];
         const arrayOfRecords = XLSX.utils.sheet_to_json(worksheet);
+        console.log("arrayOfRecords", arrayOfRecords);
         const key = Object.keys(arrayOfRecords[0])[0];
         const values = [];
+
+        // if the list start at header, then add the key
+        if (validateEmail(key)) {
+          values.push(key);
+        }
         arrayOfRecords.forEach((r) => {
           const val = r[key];
           values.push(val);
@@ -420,7 +438,28 @@ export default {
       };
       reader.readAsArrayBuffer(file);
     },
-    downloadXml() {},
+    downloadUsersPhone() {
+      this.exportXls(this.currentCampaign.guestSMS, "phonenumbers");
+    },
+    downloadUsersEmailList() {
+      const csvData = [
+        ["id", "name", "value"],
+        [1, "sheetjs", 7262],
+        [2, "js-xlsx", 6969],
+      ];
+      console.log(this.currentCampaign);
+      this.exportXls(this.currentCampaign.guestEmails, "emails");
+    },
+    exportXls(csvData, fileName) {
+      const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+      const fileExtension = ".xlsx";
+
+      const ws = XLSX.utils.json_to_sheet(csvData);
+      const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+      const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+      const data = new Blob([excelBuffer], { type: fileType });
+      FileSaver.saveAs(data, this.currentCampaign.campaignType + "_" + fileName + fileExtension);
+    },
   },
   computed: {
     event() {
@@ -447,19 +486,19 @@ export default {
     },
     currentCampaign() {
       console.log(this.campaign.name);
-      const currentCampaign =  this.$store.state.campaign[this.campaign.name];
-      if (!currentCampaign)  return {}
+      const currentCampaign = this.$store.state.campaign[this.campaign.name];
+      if (!currentCampaign) return {};
       return currentCampaign;
     },
     inviteesCount() {
       if (this.currentCampaign) {
-      const emailInvitees = this.currentCampaign.guestEmails?this.currentCampaign.guestEmails.length : 0;
-      const phoneInvitees = this.currentCampaign.guestSMS?this.currentCampaign.guestSMS.length : 0;
+        const emailInvitees = this.currentCampaign.guestEmails ? this.currentCampaign.guestEmails.length : 0;
+        const phoneInvitees = this.currentCampaign.guestSMS ? this.currentCampaign.guestSMS.length : 0;
 
-      return emailInvitees + phoneInvitees
+        return emailInvitees + phoneInvitees;
       }
-      return ""
-    }
+      return "";
+    },
   },
   watch: {
     settingData: {

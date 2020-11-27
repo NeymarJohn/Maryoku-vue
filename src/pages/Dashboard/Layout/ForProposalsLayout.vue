@@ -178,7 +178,7 @@
       </template>
       <template slot="footer">
         <div class="saved-it-modal__footer">
-          <button class="cool" @click="hideModal()">Cool, Thanks</button>
+          <button class="cool" @click="completeProposal()">Cool, Thanks</button>
         </div>
       </template>
     </modal>
@@ -405,6 +405,7 @@ export default {
 
       this.scrollToTop();
     },
+
     back() {
       const initStep = this.$store.state.vendorProposal.initStep;
       if (this.step > initStep) {
@@ -431,6 +432,9 @@ export default {
     },
     getEvent() {
       this.$store.dispatch("event/getEventById", this.$route.params.eventId);
+    },
+    completeProposal() {
+      this.$router.push({ path: `/completed-bidding` });
     },
   },
 

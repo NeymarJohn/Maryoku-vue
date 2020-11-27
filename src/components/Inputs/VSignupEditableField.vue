@@ -115,7 +115,7 @@ export default {
     title: String,
     field: String,
     img: String,
-    defaultVal: String,
+    defaultVal: [String, Array],
     borderBottom: Boolean,
     required: {
       type: Boolean,
@@ -219,7 +219,7 @@ export default {
   }),
   mounted() {
     this.value = this.defaultVal;
-    if (this.value) {
+    if (this.field == 'vendorCategories' && this.value && this.value[0]) {
       this.selectedCategory.name = this.getCategoryNameByValue(this.value);
       this.selectedCategory.icon = this.getCategoryIconByValue(this.value);
     } else {
@@ -255,9 +255,11 @@ export default {
       return this.reg.test(this.value) ? "has-success" : "has-error";
     },
     getCategoryNameByValue(value) {
+      if (!value) return null;
       return this.categories.filter((c) => c.value == value)[0].name;
     },
     getCategoryIconByValue(value) {
+      if (!value) return null;
       return this.categories.filter((c) => c.value == value)[0].icon;
     },
     addNewValue() {

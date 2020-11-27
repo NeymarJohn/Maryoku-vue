@@ -5,7 +5,17 @@
     v-if="item.requirementTitle != null"
   >
     <template v-if="step < 3">
-      <div class="item-cont">{{ item.requirementTitle }}</div>
+      <div class="item-cont">
+        {{ item.requirementTitle }}
+        <span class="madatory-badge" v-if="item.isMandatory">Mandatory</span>
+        <span class="complimentary-badge" v-else>Complimentary</span>
+      </div>
+      <div class="size-cont editor-wrapper">
+        <template v-if="!isEdit">{{ item.requirementSize }}</template>
+        <template v-else>
+          <input class="input-value" type="text" v-model="item.requirementSize" />
+        </template>
+      </div>
       <div class="qty-cont editor-wrapper">
         <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue }}</template>
         <template v-else>
@@ -143,9 +153,30 @@ export default {
   font-size: 16px;
   font-weight: 600;
   display: grid;
-  grid-template-columns: 30% 10% 17.5% 17.5% 25%;
+  grid-template-columns: 30% 10% 10% 12% 15% 23%;
   align-items: center;
-
+  .madatory-badge {
+    color: #f51355;
+    font-weight: normal;
+    font-size: 0.75em;
+    display: inline-block;
+    border: solid 1px #f51355;
+    padding: 4px 8px;
+    border-radius: 30px;
+    margin-left: 0.5em;
+    line-height: 1em;
+  }
+  .complimentary-badge {
+    color: #ba8d05;
+    font-weight: normal;
+    font-size: 0.75em;
+    display: inline-block;
+    border: solid 1px #ba8d05;
+    padding: 4px 8px;
+    border-radius: 30px;
+    margin-left: 0.5em;
+    line-height: 1em;
+  }
   div {
     &.item-cont {
       text-transform: capitalize;

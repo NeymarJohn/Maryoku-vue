@@ -27,7 +27,7 @@
           </div>
         </div>
         <div class="sidebar-menu__item">
-          <div class="item-route">
+          <div class="item-route" @click="goTo('/profile')">
             <img :src="`${menuIconsURL}Asset 117.svg`" /> Profile
           </div>
           <div class="item-action" @click="goTo('/signout')">
@@ -58,7 +58,7 @@
       </div>
     </div>
     <div class="sidebar-wrapper" ref="sidebarScrollArea">
-      <md-list class="nav" v-if="currentUrl.indexOf('event') >= 0">
+      <md-list class="nav" >
         <sidebar-item
           name="left-menu-events-list"
           class="left-menu-events-list"

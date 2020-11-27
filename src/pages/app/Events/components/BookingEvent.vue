@@ -1,185 +1,200 @@
 <template>
-  <div class="md-layout booking-section" v-if="allRequirements && selectedBlock">
-      <template v-if="showProposals">
-        <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
-        <div class="event-page-header md-layout-item md-size-100">
-          <div class="header-title">
-            <h3>
-              <img
-                      :src="`${$iconURL}Budget+Elements/${selectedBlock.componentId}.svg`"
-                      style="width:30px; margin-right:0.5em"
-              />
-              {{selectedBlock.bookTitle}}
-            </h3>
-          </div>
-          <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
+  <div class="md-layout booking-section">
+    <!--<vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>-->
+    <template v-if="showProposals">
+      <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
+      <div class="event-page-header md-layout-item md-size-100">
+        <div class="header-title">
+          <h3>
+            <img
+                    :src="`${$iconURL}Budget+Elements/${selectedBlock.componentId}.svg`"
+                    style="width:30px; margin-right:0.5em"
+            />
+            {{selectedBlock.bookTitle}}
+          </h3>
         </div>
-        <template v-if="!showCounterPage">
-          <div class="booking-header md-layout-item md-size-100">
-            <div class="header-title w-100">
-              <h4>Hi Rachel</h4>
-            </div>
-            <div class="d-flex justify-content-between">
-              <div>
-                We found the top {{selectedBlock.proposalsCount}} proposals for your event,
-                <br />Book now before it’s too late
-              </div>
-              <div class="header-actions">
-                <md-button class="md-simple normal-btn md-red">
-                  <md-icon>keyboard_arrow_right</md-icon>Compare Proposals
-                </md-button>
-                <span></span>
-                <md-button class="md-simple normal-btn md-red">
-                  <md-icon>keyboard_arrow_right</md-icon>Change Venue Requirements
-                </md-button>
-              </div>
-            </div>
+        <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
+      </div>
+      <template v-if="!showCounterPage">
+        <div class="booking-header md-layout-item md-size-100">
+          <div class="header-title w-100">
+            <h4>Hi Rachel</h4>
           </div>
-
-          <!-- Event Booking Items -->
-          <div class="md-layout events-booking-items" v-if="proposals.length">
-            <div
-                    class="md-layout-item md-size-33"
-                    v-for="(proposal,index) in  proposals"
-                    :key="index"
-            >
-              <div class="booking-item">
-                <div
-                        class="event-image"
-                        style="background: url(https://bit.ly/2Q77CBI) center center no-repeat"
-                ></div>
-                <div class="price">
-                  <span class="price-value">${{proposal.proposals[0].cost | withComma}}</span>
-                  <small>For 3 hours</small>
-                </div>
-                <h4 class="event-title">{{proposal.vendor.vendorDisplayName}}</h4>
-                <div class="probability">Probability 92%</div>
-                <ul class="event-info">
-                  <li class="event-info__item">{{proposal.vendor.vendorAddressLine1}}</li>
-                  <li class="event-info__item">{{proposal.vendor.vendorCity}}</li>
-                </ul>
-                <p class="event-desc">{{proposal.proposals[0].aboutUsMessage}}</p>
-
-                <div class="item-actions text-right">
-                  <md-button
-                          class="md-rose details-btn"
-                          @click="proposalDetails(proposal)"
-                  >Details & Booking</md-button>
-                </div>
-              </div>
+          <div class="d-flex justify-content-between">
+            <div>
+              We found the top {{selectedBlock.proposalsCount}} proposals for your event,
+              <br/>Book now before it’s too late
             </div>
-          </div>
-          <!-- ./Event Booking Items -->
-
-          <div class="booking-section__actions">
-            <md-button
-                    class="md-simple md-black normal-btn"
-                    @click="showShareVendorModal = true"
-            >I already have a venue for my event</md-button>
-            <md-button
-                    class="md-simple md-black normal-btn"
-                    @click="showSomethingModal = true"
-            >I want something different</md-button>
-          </div>
-
-          <event-change-proposal-modal v-if="showSomethingModal" @close="showSomethingModal=false"></event-change-proposal-modal>
-
-          <modal v-if="showShareVendorModal" class="add-category-model something-modal">
-            <template slot="header">
-              <div class="add-category-model__header">
-                <h2>Share your vendor info</h2>
-                <div class="header-description">Share your vendor info</div>
-              </div>
-              <md-button
-                      class="md-simple md-just-icon md-round modal-default-button"
-                      @click="showShareVendorModal = false"
-              >
-                <md-icon>clear</md-icon>
+            <div class="header-actions">
+              <md-button class="md-simple normal-btn md-red">
+                <md-icon>keyboard_arrow_right</md-icon>
+                Compare Proposals
               </md-button>
-            </template>
-            <template slot="body">
-              <div class="md-layout">
-                <div class="md-layout-item md-size-100">
-                  <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" class="form-control" />
-                  </div>
-                </div>
-                <div class="md-layout-item md-size-100 margin-bottom">
-                  <div class="form-group with-icon">
-                    <label>Price of the service</label>
-                    <div class="input-icon">
-                      <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5" />
-                    </div>
-                    <input type="text" class="form-control" placeholder="Type number here" />
-                  </div>
-                </div>
-                <div class="md-layout-item md-size-100 margin-bottom">
-                  <div class="form-group with-icon">
-                    <label>Location</label>
-                    <div class="input-icon">
-                      <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5" />
-                    </div>
-                    <input type="text" class="form-control" placeholder />
-                  </div>
-                </div>
-                <div class="md-layout-item md-size-100 margin-bottom">
-                  <div class="form-group with-icon">
-                    <label>Phone</label>
-                    <div class="input-icon">
-                      <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5" />
-                    </div>
-                    <input type="text" class="form-control" placeholder="Type number here" />
-                  </div>
-                </div>
-                <div class="md-layout-item md-size-100 margin-bottom">
-                  <div class="form-group with-icon">
-                    <label>Email</label>
-                    <div class="input-icon">
-                      <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5" />
-                    </div>
-                    <input type="text" class="form-control" placeholder="Type email address here" />
-                  </div>
-                </div>
+              <span></span>
+              <md-button class="md-simple normal-btn md-red">
+                <md-icon>keyboard_arrow_right</md-icon>
+                Change Venue Requirements
+              </md-button>
+            </div>
+          </div>
+        </div>
 
-                <div class="md-layout-item md-size-100 margin-bottom">
-                  <div class="form-group">
-                    <label>Attach Proposal</label>
-                    <label class="upload-section" for="file">
-                      <md-button class="md-rose md-outline md-simple md-sm">Choose file</md-button>
-                      <div>Or</div>
-                      <div class="note">Drag your file here</div>
-                    </label>
+        <!-- Event Booking Items -->
+        <div class="md-layout events-booking-items" v-if="proposals.length">
+          <div
+                  class="md-layout-item md-size-33"
+                  v-for="(proposal,index) in  proposals"
+                  :key="index"
+          >
+            <div class="booking-item">
+              <div
+                      class="event-image"
+                      style="background: url(https://bit.ly/2Q77CBI) center center no-repeat"
+              ></div>
+              <div class="price">
+                <span class="price-value">${{proposal.proposals[0].cost | withComma}}</span>
+                <small>For 3 hours</small>
+              </div>
+              <h4 class="event-title">{{proposal.vendor.vendorDisplayName}}</h4>
+              <div class="probability">Probability 92%</div>
+              <ul class="event-info">
+                <li class="event-info__item">{{proposal.vendor.vendorAddressLine1}}</li>
+                <li class="event-info__item">{{proposal.vendor.vendorCity}}</li>
+              </ul>
+              <p class="event-desc">{{proposal.proposals[0].aboutUsMessage}}</p>
 
-                    <input style="display: none" id="file" name="attachment" type="file" @change />
-                  </div>
+              <div class="item-actions text-right">
+                <md-button
+                        class="md-rose details-btn"
+                        @click="proposalDetails(proposal)"
+                >Details & Booking
+                </md-button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ./Event Booking Items -->
+
+        <div class="booking-section__actions">
+          <md-button
+                  class="md-simple md-black normal-btn"
+                  @click="showShareVendorModal = true"
+          >I already have a venue for my event
+          </md-button>
+          <md-button
+                  class="md-simple md-black normal-btn"
+                  @click="showSomethingModal = true"
+          >I want something different
+          </md-button>
+        </div>
+
+        <event-change-proposal-modal v-if="showSomethingModal"
+                                     @close="showSomethingModal=false"></event-change-proposal-modal>
+
+        <modal v-if="showShareVendorModal" class="add-category-model something-modal">
+          <template slot="header">
+            <div class="add-category-model__header">
+              <h2>Share your vendor info</h2>
+              <div class="header-description">Share your vendor info</div>
+            </div>
+            <md-button
+                    class="md-simple md-just-icon md-round modal-default-button"
+                    @click="showShareVendorModal = false"
+            >
+              <md-icon>clear</md-icon>
+            </md-button>
+          </template>
+          <template slot="body">
+            <div class="md-layout">
+              <div class="md-layout-item md-size-100">
+                <div class="form-group">
+                  <label>Name</label>
+                  <input type="text" class="form-control"/>
                 </div>
               </div>
-            </template>
-            <template slot="footer">
-              <md-button
-                      class="md-default md-simple cancel-btn"
-                      @click="showShareVendorModal = false"
-              >Remind Me Later</md-button>
-              <md-button
-                      class="md-rose add-category-btn"
-                      :class="{'disabled' : !somethingMessage}"
-              >Update Vendor</md-button>
-            </template>
-          </modal>
-        </template>
-        <template v-if="showCounterPage">
-          <PendingForVendors></PendingForVendors>
-          <div class="footer-container">
-            <md-button class="md-bold add-category-btn md-black md-simple" @click="back"> <md-icon>arrow_back</md-icon>Back </md-button>
-            <md-button class="md-bold add-category-btn md-black md-simple ml-auto  mr-20">
-              <img class="mr-10" src="https://s3.amazonaws.com/static.maryoku.com/storage/3Proposals/Group 10912.svg">I need those proposals urgent</md-button>
-          </div>
-        </template>
+              <div class="md-layout-item md-size-100 margin-bottom">
+                <div class="form-group with-icon">
+                  <label>Price of the service</label>
+                  <div class="input-icon">
+                    <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5"/>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Type number here"/>
+                </div>
+              </div>
+              <div class="md-layout-item md-size-100 margin-bottom">
+                <div class="form-group with-icon">
+                  <label>Location</label>
+                  <div class="input-icon">
+                    <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5"/>
+                  </div>
+                  <input type="text" class="form-control" placeholder/>
+                </div>
+              </div>
+              <div class="md-layout-item md-size-100 margin-bottom">
+                <div class="form-group with-icon">
+                  <label>Phone</label>
+                  <div class="input-icon">
+                    <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5"/>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Type number here"/>
+                </div>
+              </div>
+              <div class="md-layout-item md-size-100 margin-bottom">
+                <div class="form-group with-icon">
+                  <label>Email</label>
+                  <div class="input-icon">
+                    <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5"/>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Type email address here"/>
+                </div>
+              </div>
+
+              <div class="md-layout-item md-size-100 margin-bottom">
+                <div class="form-group">
+                  <label>Attach Proposal</label>
+                  <label class="upload-section" for="file">
+                    <md-button class="md-rose md-outline md-simple md-sm">Choose file</md-button>
+                    <div>Or</div>
+                    <div class="note">Drag your file here</div>
+                  </label>
+
+                  <input style="display: none" id="file" name="attachment" type="file" @change/>
+                </div>
+              </div>
+            </div>
+          </template>
+          <template slot="footer">
+            <md-button
+                    class="md-default md-simple cancel-btn"
+                    @click="showShareVendorModal = false"
+            >Remind Me Later
+            </md-button>
+            <md-button
+                    class="md-rose add-category-btn"
+                    :class="{'disabled' : !somethingMessage}"
+            >Update Vendor
+            </md-button>
+          </template>
+        </modal>
       </template>
-      <template v-if="!showProposals ">
-        <booking-event-requirement @setRequirements="setRequirements" :component="selectedBlock"></booking-event-requirement>
+      <template v-if="showCounterPage">
+        <PendingForVendors></PendingForVendors>
+        <div class="footer-container">
+          <md-button class="md-bold add-category-btn md-black md-simple" @click="back">
+            <md-icon>arrow_back</md-icon>
+            Back
+          </md-button>
+          <md-button class="md-bold add-category-btn md-black md-simple ml-auto  mr-20">
+            <img class="mr-10" src="https://s3.amazonaws.com/static.maryoku.com/storage/3Proposals/Group 10912.svg">I
+            need those proposals urgent
+          </md-button>
+        </div>
       </template>
+    </template>
+    <template v-if="!showProposals ">
+      <booking-event-requirement v-if="selectedBlock" @setRequirements="setRequirements"
+                                 :component="selectedBlock"></booking-event-requirement>
+    </template>
   </div>
 </template>
 <script>
@@ -246,7 +261,7 @@ export default {
       let requirements = this.storedRequirements;
 
       this.allRequirements = requirements[this.event.id];
-      
+
       if(!this.allRequirements) {
 
         this.allRequirements = await this.$http.get(`${process.env.SERVER_URL}/1/vendor/property/${this.event.id}`);
@@ -275,6 +290,7 @@ export default {
           } else {
             this.showCounterPage = false;
             this.showProposals = false;
+            this.isLoading = false;
           }
         });
     },

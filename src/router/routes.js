@@ -5,6 +5,7 @@ import HomeLayout from "@/pages/Dashboard/Layout/HomeLayout.vue";
 import NewEventLayout from "@/pages/Dashboard/Layout/NewEventLayout.vue";
 import WorkspaceLayout from "@/pages/Dashboard/Layout/WorkspaceLayout.vue";
 import LandingPageLayout from "@/pages/Dashboard/Layout/LandingPageLayout.vue";
+import MainLayoutWithBottomLogo from "@/pages/Dashboard/Layout/MainLayoutWithBottomLogo.vue";
 import authService from "@/services/auth.service";
 
 const Events = () => import("@/pages/app/Events/Events.vue");
@@ -13,8 +14,11 @@ const VendorDetail = () => import("@/pages/app/Vendors/VendorDetail.vue");
 const AddEditVendor = () => import("@/pages/app/Vendors/AddEditVendor.vue");
 const VendorsPoolNew = () => import("@/pages/app/Vendors/VendorsPoolNew.vue");
 
+// Profile Pages
+import Profile from "@/pages/app/Profile/Layout.vue";
+import ProfileOverview from "@/pages/app/Profile/index.vue";
+
 // Event Pages
-import EventDetailsOverView from "@/pages/app/Events/EventDetailsOverview.vue";
 import EventDetailsBudget from "@/pages/app/Events/EventDetailsBudget.vue";
 import EventPlan from "@/pages/app/Events/EventPlan.vue";
 import EventProposalDetails from "@/pages/app/Events/components/EventProposalDetails.vue";
@@ -29,6 +33,7 @@ const VendorSignupLayout = () => import("@/pages/Dashboard/Layout/VendorSignupLa
 const ForVendors = () => import("@/pages/app/Vendors/ForVendors.vue");
 const ForProposals = () => import("@/pages/app/Vendors/ForProposals.vue");
 const VendorSignup = () => import("@/pages/app/Vendors/VendorSignup.vue");
+const ProposalFinalStep = () => import("@/pages/app/Vendors/ProposalFinalStep.vue")
 
 // OnBoardingPages
 import EventWizardStart from "@/pages/app/CreateEvent/EventWizardStart.vue";
@@ -213,7 +218,9 @@ let forProposals = {
                 gtm: "ForProposals",
             },
         },
+
     ],
+
 };
 
 let vendorSignup = {
@@ -268,6 +275,25 @@ let appPages = {
         },
     ],
 };
+
+let ProfilePages = {
+    path: "/",
+    component: Profile,
+    name: "Profile",
+    children: [
+        {
+            path: "/profile",
+            name: "overview",
+            component: ProfileOverview,
+            meta: {
+                auth: false,
+                title: "Profile",
+                gtm: "Profile",
+            },
+        },
+    ],
+};
+
 let EventPages = {
     path: "/app2",
     component: NewEventLayout,
@@ -293,8 +319,8 @@ let EventPages = {
         },
         {
             path: "/events/:id/overview",
-            name: "EventDetailsOverView",
-            component: EventDetailsOverView,
+            redirect: "/events/:id/booking/overview",
+            name: "EventDetail",
             meta: {
                 title: "Event Details",
                 gtm: "Event Edit",
@@ -530,6 +556,25 @@ let feedbackPages = {
     ],
 };
 
+
+let others = {
+    path: "/app2",
+    component: MainLayoutWithBottomLogo,
+    name: "MainLayoutWithBottomLogo",
+    children: [
+        {
+            path: "/completed-bidding",
+            name: "What's next?",
+            component: ProposalFinalStep,
+            meta: {
+                auth: false,
+                title: "ProposalFinalStep",
+                gtm: "ProposalFinalStep",
+            },
+        },
+    ],
+};
+
 let vendorListPage = {
     path: "/vendorlist",
     name: "VendorList",
@@ -550,6 +595,7 @@ const routes = [
             gtm: "Root",
         },
     },
+
     authPages,
     workspacePages,
     appPages,
@@ -558,10 +604,12 @@ const routes = [
     HomePages,
     forProposals,
     vendorSignup,
+    ProfilePages,
     EventPages,
     RSVPPages,
     vendorListPage,
     feedbackPages,
+    others
 ];
 
 export default routes;

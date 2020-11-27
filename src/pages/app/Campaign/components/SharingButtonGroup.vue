@@ -14,13 +14,19 @@
         <img :src="`${$iconURL}Campaign/Image+168.png`" />
       </li>
     </ul>
-    <md-button class="md-simple md-red normal-btn"
+    <md-button class="md-simple md-red normal-btn" v-if="copyLink"
       ><img :src="`${$iconURL}Campaign/Path 2639.svg`" /><span>Copy Link</span></md-button
     >
   </div>
 </template>
 <script>
 export default {
+  props: {
+    copyLink: {
+      type: Boolean,
+      default: true,
+    },
+  },
   data() {
     return {
       socialLinks: {

@@ -40,7 +40,7 @@
           <div class="about-cont profile-section" id="About">
             <div class="block">
               <span class="capacity"> <img :src="`${iconUrl}Asset 545.svg`" />Capacity </span>
-              <span class="number" v-if="vendor.capacity">
+              <span class="number">
                 {{ vendor.capacity.low }}
                 <img :src="`${iconUrl}Group 4585 (2).svg`" />
                 {{ vendor.capacity.high }}
@@ -48,9 +48,9 @@
             </div>
             <div class="block">
               <div class="title lg"><img :src="`${iconUrl}Asset 563.svg`" /> ABOUT</div>
-              <div class="desc" v-if="vendor.about">{{ vendor.about.company }}</div>
+              <div class="desc">{{ vendor.about.company }}</div>
             </div>
-            <div class="block" v-if="vendor.about">
+            <div class="block">
               <div class="title">
                 <img :src="`${$iconURL}Budget Elements/${vendor.eventCategory.icon}`" />
                 <span> About Our {{ vendor.eventCategory.fullTitle }} </span>
@@ -124,12 +124,7 @@
               <h5>We don't allow these 3rd party vendor:</h5>
               <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
             </div>
-            <div
-              class="dont-work"
-              v-if="
-                vendor.selectedWeekdays && vendor.exDonts && vendor.selectedWeekdays.length && vendor.exDonts.length
-              "
-            >
+            <div class="dont-work" v-if="vendor.selectedWeekdays.length && vendor.exDonts.length">
               <h5>We don't work on:</h5>
               <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
                 <img :src="`${iconUrl}Group 5489 (4).svg`" />
@@ -156,6 +151,10 @@
                 <div class="item">{{ policy.name }}</div>
                 <div class="item">
                   {{ policy.value }}
+
+                  <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
+                  {{ policy.attendees }} attendees
+                  </span>
                 </div>
               </div>
             </div>
@@ -863,7 +862,7 @@ export default {
           .review-list {
             .review-list-item {
               padding: 30px 0px;
-              border-bottom: solid 1px #b7b7b7;
+              border-bottom: solid 1px #B7B7B7;
             }
           }
         }

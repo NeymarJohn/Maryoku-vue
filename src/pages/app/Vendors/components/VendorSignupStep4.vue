@@ -183,6 +183,10 @@
                 <div class="item">{{ policy.name }}</div>
                 <div class="item">
                   {{ policy.value }}
+
+                  <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
+                  {{ policy.attendees }} attendees
+                  </span>
                 </div>
               </div>
             </div>
@@ -394,7 +398,9 @@ export default {
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    console.log('vendorSignup.step4', this.vendor);
+  },
   methods: {
     isSocial() {
       let isBlank = true;
