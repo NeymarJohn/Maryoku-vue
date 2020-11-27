@@ -13,7 +13,7 @@
           </div>
           <div>
             <functional-calendar
-              :is-date-range="true"
+              :is-date-picker="true"
               :change-month-function="true"
               :change-year-function="true"
               dateFormat="yyyy-mm-dd"
@@ -44,15 +44,14 @@ export default {
   methods: {
     ...mapMutations("PublicEventPlanner", ["setEventProperty", "setCurrentStep"]),
     goToNext() {
-      if (this.dateData.dateRange.start.date) {
-        console.log(this.dateData);
+      if (this.dateData.selectedDate) {
         this.setEventProperty({
           key: "eventStartMillis",
-          actualValue: new Date(this.dateData.dateRange.start.date).getTime(),
+          actualValue: new Date(this.dateData.selectedDate).getTime(),
         });
         this.setEventProperty({
           key: "eventEndMillis",
-          actualValue: new Date(this.dateData.dateRange.end.date).getTime(),
+          actualValue: new Date(this.dateData.selectedDate).getTime(),
         });
         this.setEventProperty({ key: "dateData", actualValue: this.dateData });
         this.$router.push({ path: `/event-wizard-flexibility` });
@@ -178,9 +177,6 @@ export default {
     border-right: 3px solid !important;
     border-radius: 1px;
   }
-  .vfc-day .vfc-base-start, .vfc-base-end{
-    background-color: #f51355 !important;
-  }
   span.vfc-span-day {
     color: #43425d !important;
     width: 36px !important;
@@ -188,17 +184,11 @@ export default {
     &.vfc-today {
       color: #f51355 !important;
     }
-
   }
   span.vfc-span-day.vfc-marked,
   .vfc-today.vfc-marked {
     color: white !important;
-
-    &:not(.vfc-start-marked):not(.vfc-end-marked):before{
-      background-color: #f51355 !important;
-    }
   }
-
   span.vfc-span-day.vfc-hide {
     color: white !important;
   }

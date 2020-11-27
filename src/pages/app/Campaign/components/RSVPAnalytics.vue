@@ -48,7 +48,7 @@
             </div>
           </div>
           <hr />
-          <!-- <div class="d-flex mt-60 mb-20">
+          <div class="d-flex mt-60 mb-20">
             <div class="flex-1">
               <div class="font-size-20 font-bold-extra d-flex align-center">
                 <image-icon src="Campaign/email-dark.svg"></image-icon>Opened This Email
@@ -95,7 +95,7 @@
               </div>
             </div>
           </div>
-          <hr /> -->
+          <hr />
           <div class="food-limitations mt-50" v-if="Object.keys(foodLimitations).length">
             <div class="font-size-20 font-bold-extra">Food Limitations</div>
             <rsvp-food-limitations :data="foodLimitations"></rsvp-food-limitations>

@@ -13,7 +13,7 @@
       class="textarea js-autoresize"
       :disabled="disabled"
     ></textarea>
-    <span class="close-button" @click="clearContent" v-if="!disabled">
+    <span class="close-button" @click="clearContent">
       <img :src="`${$iconURL}Campaign/Group+3602.svg`" />
     </span>
   </div>
@@ -132,7 +132,7 @@ export default {
     opacity: 0.6;
   }
   &.input {
-    padding: 1em 2.5em 1em 1.5em;
+    padding: 1em 1.5em;
     textarea {
       z-index: 2;
       background: transparent;

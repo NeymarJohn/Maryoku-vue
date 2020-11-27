@@ -25,7 +25,7 @@
             <span>{{ vendor.vendorMainPhoneNumber }}</span>
           </li>
           <template v-for="social in socialList">
-            <li v-if="vendor.social[social.name]" :key="social.name">
+            <li v-if="vendor.social && vendor.social[social.name]" :key="social.name">
               <a :href="vendor.social[social.name]" target="_blank"
                 ><img :src="`${$iconURL}Vendor Signup/${social.icon}`"
               /></a>
@@ -109,7 +109,7 @@ export default {
       right: 60px;
       top: 60px;
     }
-    background-color: #FFF;
+    background-color: #fff;
     padding: 60px 60px 60px 120px;
     .vendor-detail-basic {
       ul {
@@ -148,7 +148,7 @@ export default {
         border-right: solid 1px #818080;
         border-left: solid 1px #818080;
         &.active {
-          border-bottom: solid 3px #F51355;
+          border-bottom: solid 3px #f51355;
         }
       }
     }

@@ -2,14 +2,11 @@
   <md-toolbar
     md-elevation="0"
     class="md-transparent"
-    :class="{
-      'md-toolbar-absolute md-white md-fixed-top': $route.meta.navbarAbsolute,
-      'navbar-white': $route.meta.opaque,
-    }"
+    :class="{'md-toolbar-absolute md-white md-fixed-top': $route.meta.navbarAbsolute, 'navbar-white': $route.meta.opaque}"
   >
     <div class="md-toolbar-row">
       <div class="md-toolbar-section-start event-top-bar">
-        <h3 v-if="topBarTitle" class="md-title">{{ topBarTitle }}</h3>
+        <h3 v-if="topBarTitle" class="md-title">{{topBarTitle}}</h3>
         <!--<drop-down direction="down" v-if="topBarTitle" :has-caret="false" :hover="true">
           <md-button slot="title" class="md-button md-simple md-red dropdown-toggle md-tiny" data-toggle="dropdown" style="border-radius: 3px 3px 0 0; text-transform: capitalize; font-size: 18px !important; font-weight: 400 !important;">
             {{topBarTitle}}
@@ -62,13 +59,13 @@
         </drop-down>-->
         <h3 class="md-title cst-style" v-if="isEventDetails">
           <md-icon class="text-rose" v-if="topBarTitle">arrow_right</md-icon>
-          {{ $route.meta.title ? $route.meta.title : $route.name }}
+          {{$route.meta.title ? $route.meta.title : $route.name}}
         </h3>
       </div>
       <div class="md-toolbar-section-end">
         <md-button
           class="md-just-icon md-round md-simple md-toolbar-toggle"
-          :class="{ toggled: $sidebar.showSidebar }"
+          :class="{toggled: $sidebar.showSidebar}"
           @click="toggleSidebar"
         >
           <span class="icon-bar"></span>
@@ -153,8 +150,12 @@
             <!--            </li>-->
 
             <li class="md-list-item import-vendor" v-if="topBarEventId">
-              <a class="import" @click="gotoVendorsPool"> <md-icon>file_upload</md-icon>import your vendors </a>
-              <a class="import"> <md-icon>play_arrow</md-icon>learn more </a>
+              <a class="import" @click="gotoVendorsPool">
+                <md-icon>file_upload</md-icon>import your vendors
+              </a>
+              <a class="import">
+                <md-icon>play_arrow</md-icon>learn more
+              </a>
               <!-- <md-button class="md-danger md-xs no-padding btn-learn-more">
                 <md-icon>play_arrow</md-icon>
                 <span>
@@ -163,7 +164,10 @@
               </md-button>-->
             </li>
             <li class="md-list-item">
-              <a href="#" class="md-list-item-router md-list-item-container md-button-clean dropdown">
+              <a
+                href="#"
+                class="md-list-item-router md-list-item-container md-button-clean dropdown"
+              >
                 <div class="md-list-item-content">
                   <drop-down direction="down" :hover="true">
                     <md-button
@@ -188,8 +192,7 @@
                           name="user-top-menu-my-profile"
                           class="user-top-menu-my-profile"
                           @click="openMyProfile"
-                          >My Profile</a
-                        >
+                        >My Profile</a>
                       </li>
                       <li>
                         <a
@@ -197,25 +200,22 @@
                           name="user-top-menu-account-settings"
                           class="user-top-menu-account-settings"
                           @click="openAccountSettings"
-                          >My Company</a
-                        >
+                        >My Company</a>
                       </li>
                       <li>
                         <router-link
                           name="user-top-menu-my-profile"
                           class="user-top-menu-my-profile"
-                          :to="{ name: 'Team' }"
-                          >Manage Team</router-link
-                        >
+                          :to="{name: 'Team'}"
+                        >Manage Team</router-link>
                       </li>
                       <li class="divider"></li>
                       <li>
                         <router-link
                           name="user-top-menu-sign-out"
                           class="user-top-menu-sign-out"
-                          :to="{ path: '/signout' }"
-                          >Sign Out</router-link
-                        >
+                          :to="{path: '/signout'}"
+                        >Sign Out</router-link>
                       </li>
                     </ul>
                   </drop-down>
@@ -294,7 +294,9 @@ export default {
         this.topBarEventInvitees = invitees;
         this.topBarEventProposals = proposals;
         this.topBarEventParticipants = eventData.numberOfParticipants;
-        this.topBarEventDate = this.$moment(eventData.eventStartMillis).format("YYYY-MM-DD H:mm a");
+        this.topBarEventDate = this.$moment(eventData.eventStartMillis).format(
+          "YYYY-MM-DD H:mm a",
+        );
         this.topBarEventLocation = eventData.location || "Unknown";
       } else {
         this.topBarTitle = null;
@@ -421,7 +423,10 @@ export default {
   },
   computed: {
     isEventDetails() {
-      if (this.$route.name === "EditEvent" || this.$route.title === "Event Details") {
+      if (
+        this.$route.name === "EditEvent" ||
+        this.$route.title === "Event Details"
+      ) {
         return false;
       } else {
         return true;
@@ -499,7 +504,8 @@ export default {
   color: white !important;
 }
 
-.md-button:not(.md-just-icon):not(.md-btn-fab):not(.md-icon-button):not(.md-toolbar-toggle) .md-ripple {
+.md-button:not(.md-just-icon):not(.md-btn-fab):not(.md-icon-button):not(.md-toolbar-toggle)
+  .md-ripple {
   padding: 6px 12px !important;
 }
 

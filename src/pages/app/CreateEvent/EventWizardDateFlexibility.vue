@@ -113,15 +113,7 @@ export default {
       'publicEventData'
     ]),
     formattedDate() {
-       if ( this.publicEventData.eventStartMillis !== this.publicEventData.eventEndMillis ) {
-
-           return `${ moment(new Date(this.publicEventData.eventStartMillis)).format("DD.MM.YY")} ~ ${ moment(new Date(this.publicEventData.eventEndMillis)).format("DD.MM.YY")}`;
-
-       } else if ( this.publicEventData.eventStartMillis === this.publicEventData.eventEndMillis ) {
-
-           return `${ moment(new Date(this.publicEventData.eventStartMillis)).format("DD.MM.YY")}`;
-       }
-
+      return moment(new Date(this.publicEventData.eventStartMillis)).format("DD.MM.YY")
     }
   },
   // filters: {
