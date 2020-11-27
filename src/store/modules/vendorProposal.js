@@ -9,9 +9,6 @@ const state = {
   vendor: null,
   proposalRequest: null,
   proposalServices: {},
-  proposalCostServices: {},
-  proposalIncludedServices: {},
-  proposalExtraServices: {},
   discounts: {},
   taxes: {},
   legalDocs: {},
@@ -77,15 +74,6 @@ const mutations = {
   },
   setServices: (state, { category, services }) => {
     Vue.set(state.proposalServices, category, services);
-  },
-  setCostServices: (state, { category, services }) => {
-    Vue.set(state.proposalCostServices, category, services);
-  },
-  setIncludedServices: (state, { category, services }) => {
-    Vue.set(state.proposalIncludedServices, category, services);
-  },
-  setExtraServices: (state, { category, services }) => {
-    Vue.set(state.proposalExtraServices, category, services);
   },
   setLegalDocs: (state, { category, files }) => {
     Vue.set(state.legalDocs, category, files)

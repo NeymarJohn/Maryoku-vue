@@ -112,7 +112,7 @@ input {
     flex-grow: 1;
 }
 .color-red {
-    color: #f51355 !important;
+    color: #f51355;
 }
 
 .color-plus {
@@ -217,6 +217,9 @@ input {
 }
 .mr-60 {
     margin-right: 60px;
+}
+.ml-5 {
+    margin-left: 5px;
 }
 .ml-10 {
     margin-left: 20px;

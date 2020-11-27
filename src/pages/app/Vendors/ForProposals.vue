@@ -44,29 +44,7 @@
             <span>Sincerely,</span>
             <p>Relish caterers & venues</p>
           </div>
-          <proposal-bid
-            label="Cost Requirements"
-            key="cost"
-            tableCategory="cost"
-            :hasCategoryHeader="true"
-            icon="Group+10662.svg"
-            description="Mandatory elements to involve in proposals are in the table, you can add more here:"
-          />
-          <proposal-bid
-            tableCategory="included"
-            label="Included in Price"
-            icon="includedPrice.png"
-            description="(from your “included in price” items)"
-            key="included"
-          />
-          <proposal-bid
-            tableCategory="extra"
-            label="Offered Extras"
-            icon="cost-requirements.png"
-            description="What elements would you like to suggest to the client with extra pay? "
-            key="extra"
-          />
-          <proposal-upload-legal></proposal-upload-legal>
+          <proposal-bid />
         </div>
         <div class="step-wrapper" v-if="step == 2">
           <h3>Can you also provide any of these services for this event?</h3>
@@ -129,7 +107,6 @@ import ProposalSteps from "./components/ProposalSteps.vue";
 import ProposalItem from "./components/ProposalItem.vue";
 import ProposalEventVision from "./components/ProposalEventVision.vue";
 import ProposalBid from "./components/ProposalBid.vue";
-import ProposalUploadLegal from "./components/ProposalUploadLegal.vue";
 import ProposalAddFiles from "./components/ProposalAddFiles.vue";
 import ProposalTitleWithIcon from "./components/ProposalTitleWithIcon.vue";
 import ReferNewVendor from "./components/ReferNewVendor.vue";
@@ -151,7 +128,6 @@ export default {
     ProposalBid,
     ProposalItemSecondaryService,
     ProposalAdditionalRequirement,
-    ProposalUploadLegal,
   },
   data() {
     return {
@@ -168,6 +144,7 @@ export default {
     this.iconsWithCategory = VendorService.categoryNameWithIcons();
 
     this.$root.$on("next-step-vendor-proposal", () => {
+      console.log("next");
       if (this.step == -1) {
         this.step = 0;
       } else if (this.step == 0) {
@@ -175,8 +152,12 @@ export default {
       } else if (this.step > -1 && this.step < 3) {
         this.step++;
       }
+
+      console.log("wrapperStep", this.step);
     });
     this.$root.$on("prev-step-vendor-proposal", () => {
+      console.log("prev");
+
       if (this.step == 2) {
         this.step = 0;
       } else if (this.step > 0) {
@@ -185,6 +166,7 @@ export default {
         this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}`);
         VendorService.setProposalRequest(this.proposalRequest);
       }
+      console.log("wrapperStep", this.step);
     });
 
     this.$store.dispatch("common/fetchAllCategories");
@@ -193,6 +175,7 @@ export default {
     getProposal(id) {
       ProposalRequest.find(id)
         .then((resp) => {
+          console.log("ProposalRequest:", resp);
           this.$set(this, "proposalRequest", resp);
           this.$set(this, "event", resp.eventData);
           if (resp.eventData.concept) {
@@ -211,7 +194,7 @@ export default {
             .value();
         })
         .catch((error) => {
-          console.error(error);
+          console.log(" error ", error);
         });
 
       if (!this.proposalRequest) {
@@ -251,6 +234,54 @@ export default {
     },
     updateProposalRequest(submitted = null) {
       if (this.proposalRequest.submitted) return;
+
+      // let proposalRequest = new ProposalRequest({ id: this.$route.params.id })
+      // let _self = this
+
+      // if (submitted != null && submitted === true) {
+      //   _self.isLoading = true
+      // }
+
+      // proposalRequest.id = this.proposalRequest.id
+      // proposalRequest.attachments = this.proposalRequest.attachments
+      // proposalRequest.eventData = this.proposalRequest.eventData
+      // proposalRequest.insuranceDocument = this.proposalRequest.insuranceDocument
+      // proposalRequest.licenseDocument = this.proposalRequest.licenseDocument
+      // proposalRequest.nudgeCount = this.proposalRequest.nudgeCount
+      // proposalRequest.requirements = this.proposalRequest.requirements
+      // proposalRequest.requirementsCategory = this.proposalRequest.requirementsCategory
+      // proposalRequest.requirementsCategoryCost = this.proposalRequest.requirementsCategoryCost
+      // if (!this.proposalRequest.submitted) {
+      //   proposalRequest.submitted = submitted || false
+      // }
+      // proposalRequest.personalMessage = this.proposalRequest.personalMessage
+      // proposalRequest.aboutUsMessage = this.proposalRequest.aboutUsMessage
+      // proposalRequest.updateOnOutbid = this.proposalRequest.updateOnOutbid
+      // proposalRequest.cancellationPolicy = this.proposalRequest.cancellationPolicy
+      // proposalRequest.depositCost = this.proposalRequest.depositCost
+      // proposalRequest.bid = this.totalOffer
+
+      // proposalRequest
+      //   .save()
+      //   .then(res => {
+      //     console.log('saved ', res)
+
+      //     if (submitted != null && submitted === true) {
+      //       swal({
+      //         title: 'Proposal Submitted',
+      //         text: 'Thank you for submitting your proposal.',
+      //         type: 'success',
+      //         timer: 2000
+      //       }).then(result => {
+      //         document.location.reload()
+      //       })
+
+      //       _self.isLoading = false
+      //     }
+      //   })
+      //   .catch(error => {
+      //     console.log(error)
+      //   })
     },
   },
   filters: {},

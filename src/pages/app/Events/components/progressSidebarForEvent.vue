@@ -77,7 +77,7 @@
               />
               <img
                 :src="item.icon"
-                v-if="isActiveRoute(item)"
+                v-if="isActiveRoute(item) && item.icon"
                 width="25"
                 style="max-width: 25px; max-height: 25px"
               />
