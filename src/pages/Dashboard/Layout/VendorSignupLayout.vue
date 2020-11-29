@@ -72,7 +72,7 @@ import { Modal } from "@/components";
 import moment from "moment";
 import Vendors from "@/models/Vendors";
 import swal from "sweetalert2";
-import {mapMutations, mapGetters} from "Vuex";
+import {mapMutations, mapGetters} from "vuex";
 
 export default {
   components: {
