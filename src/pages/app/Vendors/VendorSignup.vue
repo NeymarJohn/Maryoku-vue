@@ -174,8 +174,15 @@ export default {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
   },
-  created() {},
   mounted() {
+    //if this is edit page
+    if (this.$route.params.id) {
+      Vendors.find(this.$route.params.id).then((vendor) => {
+        this.vendor = vendor;
+        this.$root.$emit("set-vendor", this.vendor);
+        this.$forceUpdate();
+      });
+    }
     this.$root.$on("approve-vendor-basic-info", (vendor) => {
       if (vendor) this.vendor = { ...this.vendor, ...vendor };
       console.log("vendor", this.vendor);

@@ -200,6 +200,9 @@ export default {
     this.$root.$on("update-vendor-value", (field, value) => {
       this.$set(this.vendor, this.camelize(field), value);
     });
+    this.$root.$on("set-vendor", (vendor) => {
+      this.vendor = vendor;
+    });
   },
   computed: {
     nextLabel() {

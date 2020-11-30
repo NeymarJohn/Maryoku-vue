@@ -233,6 +233,21 @@ export default {
     }
   },
   methods: {
+    initialize() {
+      this.value = this.defaultVal;
+      if (this.value) {
+        this.selectedCategory.name = this.getCategoryNameByValue(this.value);
+        this.selectedCategory.icon = this.getCategoryIconByValue(this.value);
+      } else {
+        this.selectedCategory = {
+          name: null,
+          icon: null,
+        };
+      }
+      if (this.field == "vendorAddressLine1" || this.field == "vendorAddressLine2") {
+        this.$refs.address.focus();
+      }
+    },
     getAddressData: function (addressData, placeResultData, id) {
       this.value = `${addressData.route}, ${addressData.administrative_area_level_1}, ${addressData.country}`;
     },
@@ -275,6 +290,23 @@ export default {
     updateValue(index, value) {
       if (this.value && typeof this.value == "object") {
         this.value[index] = value;
+      }
+    },
+  },
+  watch: {
+    defaultVal(newValue, oldValue) {
+      this.value = newValue;
+      if (this.value) {
+        this.selectedCategory.name = this.getCategoryNameByValue(this.value);
+        this.selectedCategory.icon = this.getCategoryIconByValue(this.value);
+      } else {
+        this.selectedCategory = {
+          name: null,
+          icon: null,
+        };
+      }
+      if (this.field == "vendorAddressLine1" || this.field == "vendorAddressLine2") {
+        this.$refs.address.focus();
       }
     },
   },

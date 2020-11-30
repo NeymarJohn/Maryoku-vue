@@ -43,7 +43,7 @@
         <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ index + 1 }}</md-table-cell>
         <md-table-cell md-label="Company Name" md-sort-by="companyName">{{ item.companyName }} </md-table-cell>
         <md-table-cell md-label="User Name" md-sort-by="vendorDisplayName">{{
-          `${currentPath}/vendor-signup/update/${item.id}`
+          `${currentPath}/#/vendor-signup/edit/${item.id}`
         }}</md-table-cell>
         <md-table-cell md-label="User Name" md-sort-by="vendorDisplayName">{{ item.vendorDisplayName }}</md-table-cell>
         <md-table-cell md-label="Business Category" md-sort-by="eventCategory.title">{{
