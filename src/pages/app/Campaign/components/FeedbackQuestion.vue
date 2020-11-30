@@ -6,7 +6,7 @@
         {{ data.question }}
       </div>
       <div>
-        <maryoku-textarea size="narrow" v-model="data.comment"></maryoku-textarea>
+        <maryoku-textarea size="narrow" v-model="data.comment" :disabled="disabled"></maryoku-textarea>
       </div>
     </div>
     <div class="ml-50 mr-50">
@@ -17,7 +17,9 @@
         :show-rating="false"
         @rating-selected="setRating"
         v-model="data.rank"
+        v-if="!disabled"
       ></star-rating>
+      <star-rating :border-width="0" :star-size="30" :show-rating="false" read-only v-else></star-rating>
       <div class="font-size-12 mt-10 text-transform-capitalize">{{ rankLabel }}</div>
     </div>
     <md-switch v-if="showSwitch" class="below-label large-switch" v-model="data.showQuestion" :value="true">
@@ -47,6 +49,10 @@ export default {
     showSwitch: {
       type: Boolean,
       default: true,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

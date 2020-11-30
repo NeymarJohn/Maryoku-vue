@@ -132,7 +132,14 @@
       </template>
 
       <template v-if="selectedTab == 4">
-        <feedback-list v-if="campaignIssued['FEEDBACK']"> </feedback-list>
+        <collapse-panel v-if="campaignIssued['FEEDBACK']" class="white-card" :defaultStatus="false">
+          <template slot="header">
+            <div class="d-flex align-center p-50 font-size-30 font-bold">Open ‘Feedback’ Campaign</div>
+          </template>
+          <template slot="content">
+            <feedback :info="{ ...campaignTabs[4], ...campaignInfo }" ref="feedback"></feedback>
+          </template>
+        </collapse-panel>
         <feedback v-else :info="{ ...campaignTabs[4], ...campaignInfo }" ref="feedback" class="white-card"></feedback>
       </template>
 
@@ -141,6 +148,10 @@
         @change="changeSettings"
         :campaign="campaignTabs[selectedTab]"
       ></delivery-settings>
+      <template v-if="selectedTab == 4">
+        <div class="mt-50 font-size-22 font-bold">Feedback from guests:</div>
+        <feedback-list class="mt-20" v-if="campaignIssued['FEEDBACK']"> </feedback-list>
+      </template>
     </div>
     <div class="campaign-footer">
       <div class="campaign-footer-content d-flex">
@@ -412,6 +423,7 @@ export default {
     },
     callSaveCampaign(campaignType, campaignStatus) {
       const campaignData = this.$store.state.campaign[campaignType];
+      console.log("campaignData from VUEx", campaignData);
       let coverImage = campaignData.coverImage;
       if (coverImage && coverImage.indexOf("http") < 0) {
         const fileObject = S3Service.dataURLtoFile(coverImage, `${this.event.id}-${campaignType}`);
@@ -459,9 +471,20 @@ export default {
     },
     saveScheduleTime(data) {
       const { currentCampaignIndex, scheduleTime, scheduleSettings, selectedOption } = data;
-      this.campaigns[currentCampaignIndex].scheduleTime = scheduleTime;
-      this.campaigns[currentCampaignIndex].scheduleSettings = scheduleSettings;
-      this.campaigns[currentCampaignIndex].selectedOption = selectedOption;
+      const scheduleSettingsData = {
+        timeZone: "EST",
+        scheduleTime: scheduleTime,
+        scheduleOption: selectedOption,
+        scheduleOptionValue: scheduleSettings[selectedOption].value,
+      };
+      this.$store.commit("campaign/setAttribute", {
+        name: this.campaignTabs[currentCampaignIndex].name,
+        key: "scheduleSettings",
+        value: scheduleSettingsData,
+      });
+
+      const campaign = this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
+      console.log(campaign);
       this.scheduleCampaign();
     },
     revertSetting() {
@@ -477,24 +500,15 @@ export default {
       }
     },
     sendPreviewEmail() {
-      this.$http
-        .post(`${process.env.SERVER_URL}/1/campaigns/preview`, {
-          toEmail: this.user.email,
-          toUserName: this.user.name,
-          fromUserName: this.user.name,
-          eventName: this.event.title,
-          plannerName: this.user.name,
-          companyName: "maryoku",
-          eventUrl: `http://jeff-test2.local.maryoku.com:3000/#/rsvp/${this.event.id}`,
-        })
-        .then(() => {
-          swal({
-            title: `You will receive a preview campaign email soon!`,
-            buttonsStyling: false,
-            type: "success",
-            confirmButtonClass: "md-button md-success",
-          });
+      const campaignData = this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
+      this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "TESTING").then((res) => {
+        swal({
+          title: `You will receive a preview campaign email soon!`,
+          buttonsStyling: false,
+          type: "success",
+          confirmButtonClass: "md-button md-success",
         });
+      });
     },
     sendToAddtionalGuests() {
       this.$store.commit("campaign/setAttribute", {

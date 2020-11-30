@@ -9,16 +9,13 @@
         </div>
         <div class="header-actions md-layout-item md-size-50 md-small-size-60">
           <ul class="actions-list unstyled">
-            <md-button
-              v-if="!isLoggedIn"
-              class="md-simple md-black md-maryoku"
-              @click="showSingupDialog"
-            >Already A User?</md-button>
+            <md-button v-if="!isLoggedIn" class="md-simple md-black md-maryoku" @click="showSingupDialog"
+              >Already A User?</md-button
+            >
             <md-menu v-else md-size="large" md-align-trigger>
-              <md-button
-                class="md-simple md-black md-maryoku normal-btn"
-                md-menu-trigger
-              >{{tenantUser.name?tenantUser.name:tenantUser.username}}</md-button>
+              <md-button class="md-simple md-black md-maryoku normal-btn" md-menu-trigger>{{
+                tenantUser.name ? tenantUser.name : tenantUser.username
+              }}</md-button>
               <md-menu-content class="user-menu-content">
                 <md-menu-item @click="logout">Logout</md-menu-item>
               </md-menu-content>
@@ -64,10 +61,7 @@
       </md-dialog-title>
       <md-dialog-content>
         <div class="social-line text-center">
-          <md-button
-            class="md-black md-maryoku md-simple md-google"
-            @click="authenticate('google')"
-          >
+          <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
             <img :src="`${$iconURL}Signup/google-icon.jpg`" />
             <span>Sign in with Google</span>
           </md-button>
@@ -93,11 +87,8 @@
         <div class="terms-and-conditions">
           <md-checkbox v-model="keepMe">Keep me signed in</md-checkbox>
         </div>
-        <div class="md-error">{{error}}</div>
-        <md-button
-          class="md-default md-red md-maryoku md-sm md-square custom-btn"
-          @click="singup"
-        >Sign In</md-button>
+        <div class="md-error">{{ error }}</div>
+        <md-button class="md-default md-red md-maryoku md-sm md-square custom-btn" @click="singup">Sign In</md-button>
         <div class="text-center">
           <!-- <a href class="forget-password">Forgot your password ?</a> -->
           <md-button class="md-black md-maryoku mt-4 md-simple mt-4">Forgot my password?</md-button>
@@ -122,35 +113,32 @@ export default {
       touched: {
         email: false,
         password: false,
-        department: false
+        department: false,
       },
       modelValidations: {
         email: {
           required: true,
-          email: true
+          email: true,
         },
         password: {
           required: true,
-          min: 8
+          min: 8,
         },
         department: {
-          required: true
-        }
+          required: true,
+        },
       },
       serverURL: process.env.SERVER_URL,
       keepMe: false,
-      error: ""
+      error: "",
     };
   },
   components: {
     FadeTransition,
-    MaryokuInput
+    MaryokuInput,
   },
   methods: {
-    ...mapMutations("PublicEventPlanner", [
-      "setEventProperty",
-      "setSingupModal"
-    ]),
+    ...mapMutations("PublicEventPlanner", ["setEventProperty", "setSingupModal"]),
     closeSingupModal() {
       this.setSingupModal({ showModal: false });
     },
@@ -163,24 +151,24 @@ export default {
     singup() {
       this.loading = true;
       let that = this;
-      this.$validator.validateAll().then(isValid => {
+      this.$validator.validateAll().then((isValid) => {
         if (isValid) {
           if (this.email && this.password) {
             this.$store
               .dispatch("auth/login", {
                 email: this.email,
-                password: this.password
+                password: this.password,
               })
               .then(
                 () => {
                   this.setSingupModal({ showModal: false });
                   this.redirectPage();
                 },
-                error => {
+                (error) => {
                   this.loading = false;
                   this.error = "Invalid email or wrong password, try again.";
                   this.setSingupModal({ showModal: false });
-                }
+                },
               );
           }
         } else {
@@ -191,11 +179,9 @@ export default {
     },
     authenticate(provider) {
       this.loading = true;
-      let tenantId = document.location.hostname
-        .replace(".maryoku.com", "")
-        .replace(".", "_");
+      let tenantId = document.location.hostname.replace(".maryoku.com", "").replace(".", "_");
       const callback = btoa(
-        `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`
+        `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`,
       );
       document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
     },
@@ -203,20 +189,16 @@ export default {
       this.$store.dispatch("auth/logout");
       // this.$auth.logout(this);
       // this.$ls.remove("user");
-    }
+    },
   },
   computed: {
-    ...mapState("PublicEventPlanner", [
-      "publicEventData",
-      "shoWSignupModal",
-      "currentStep"
-    ]),
+    ...mapState("PublicEventPlanner", ["publicEventData", "shoWSignupModal", "currentStep"]),
     isLoggedIn() {
       return this.$store.state.auth.status.loggedIn;
     },
     tenantUser() {
       return this.$store.state.auth.user;
-    }
+    },
   },
   watch: {
     email() {
@@ -227,70 +209,70 @@ export default {
     },
     department() {
       this.touched.department = true;
-    }
+    },
   },
   beforeRouteUpdate(to, from, next) {
     next();
-  }
+  },
 };
 </script>
 <style lang="scss">
 $baseColor: #5c2153;
 
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700|Rubik:400,500,700&display=swap");
-  .md-dialog.singin-form {
-    border-radius: 10px;
-    padding: 2em 40px;
-    width: 428px;
-    z-index: 9999999;
-    height: auto;
+.md-dialog.singin-form {
+  border-radius: 10px;
+  padding: 2em 40px;
+  width: 428px;
+  z-index: 9999999;
+  height: auto;
 
-    .md-dialog-container {
-    }
+  .md-dialog-container {
+  }
 
-    .md-dialog-title {
-      color: $baseColor;
-      position: relative;
-      padding: 0;
+  .md-dialog-title {
+    color: $baseColor;
+    position: relative;
+    padding: 0;
 
-      button {
-        position: absolute;
-        right: 0;
-      }
-    }
-    .social-line {
-      img {
-        margin-right: 10px;
-      }
-    }
-    .form-input {
-      margin: 20px 0;
-    }
-
-    .md-dialog-content {
-      padding: 0;
-      overflow-x: hidden;
-    }
-
-    .custom-btn {
-      width: 100%;
-    }
-
-    .close-btn {
-      background: none !important;
-      border: none !important;
-      padding: 0;
-
-      .md-icon {
-        color: $baseColor !important;
-      }
-    }
-
-    .md-dialog-actions {
-      padding: 8px 0;
-      margin-top: 3em;
+    button {
+      position: absolute;
+      right: 0;
     }
   }
+  .social-line {
+    img {
+      margin-right: 10px;
+    }
+  }
+  .form-input {
+    margin: 20px 0;
+  }
+
+  .md-dialog-content {
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  .custom-btn {
+    width: 100%;
+  }
+
+  .close-btn {
+    background: none !important;
+    border: none !important;
+    padding: 0;
+
+    .md-icon {
+      color: $baseColor !important;
+    }
+  }
+
+  .md-dialog-actions {
+    padding: 8px 0;
+    margin-top: 3em;
+  }
+}
 .create-event {
   .md-overlay {
     z-index: 21 !important;
@@ -332,7 +314,6 @@ $baseColor: #5c2153;
       font-size: 16px !important;
     }
   }
-
 
   .forget-password {
     text-align: center;
@@ -1217,7 +1198,5 @@ $baseColor: #5c2153;
       width: 100%;
     }
   }
-  
 }
-
 </style>

@@ -1,20 +1,39 @@
 <template>
-  <div class="collapse-panel card proposal-bid">
-    <div class="collapse-panel-header d-flex align-center justify-content-between" @click="isExpanded = !isExpanded">
+  <div class="collapse-panel white-card card proposal-bid">
+    <div class="collapse-panel-header d-flex align-center justify-content-between" v-if="hasCategoryHeader">
       <div class="text-cont d-flex">
         <h3 class="title font-bold">
           <img :src="`${$iconURL}NewSubmitPorposal/Asset 614.svg`" class="page-icon mr-10" />
           {{ categoryName }}
         </h3>
-        <h5 v-if="isExpanded" class="ml-10">For Whole Event</h5>
+        <h5 class="ml-10">For Whole Event</h5>
       </div>
-      <div class="action">
-        <img v-if="isExpanded" :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`" class="label-icon" />
-        <img v-else :src="`${$iconURL}NewSubmitPorposal/Asset 567.svg`" class="label-icon" />
+    </div>
+    <hr v-if="hasCategoryHeader" />
+    <div class="collapse-panel-header" @click="isExpanded = !isExpanded">
+      <div class="d-flex align-center justify-content-between">
+        <div class="text-cont d-flex">
+          <h3 class="title font-bold">
+            <img :src="`${$iconURL}NewSubmitPorposal/${icon}`" class="page-icon mr-10" />
+            {{ label }}
+          </h3>
+        </div>
+        <div class="action">
+          <!-- <img v-if="isExpanded" :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`" class="label-icon" /> -->
+          <md-icon style="color: #a0a0a0; font-size: 30px !important" v-if="isExpanded">keyboard_arrow_right</md-icon>
+          <md-icon style="color: #a0a0a0; font-size: 30px !important" v-else>keyboard_arrow_down</md-icon>
+          <!-- <img v-else :src="`${$iconURL}NewSubmitPorposal/Asset 567.svg`" class="label-icon" /> -->
+        </div>
+      </div>
+      <div>
+        {{ description }}
       </div>
     </div>
     <div class="collapse-panel-content" v-if="isExpanded">
-      <proposal-service-table :category="vendor.eventCategory.key"></proposal-service-table>
+      <proposal-service-table
+        :category="vendor.eventCategory.key"
+        :tableCategory="tableCategory"
+      ></proposal-service-table>
     </div>
   </div>
 </template>
@@ -22,10 +41,29 @@
 import ProposalServiceTable from "./ProposalServiceTable";
 
 export default {
+  props: {
+    label: {
+      type: String,
+      default: "",
+    },
+    hasCategoryHeader: {
+      type: Boolean,
+      default: false,
+    },
+    icon: {
+      type: String,
+      default: "",
+    },
+    description: String,
+    tableCategory: {
+      type: String,
+      default: "",
+    },
+  },
   data() {
     return {
       category: "",
-      isExpanded: true,
+      isExpanded: false,
       files: [],
     };
   },
@@ -61,6 +99,10 @@ export default {
 }
 .collapse-panel {
   background-color: white;
+  hr {
+    background-color: #dddddd;
+    margin: 0 40px;
+  }
   .collapse-panel-header {
     position: relative;
 

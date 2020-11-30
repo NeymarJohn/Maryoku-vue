@@ -7,7 +7,7 @@
         <div class="rsvp-event-overview-content">
           <div class="md-layout">
             <div class="rsvp-event-overview-content-customer md-layout-item md-size-100">
-              <img v-if="campaign.logoUrl" :src="`${campaign.logoUrl}`" class="mb-40" />
+              <img v-if="campaign.logoUrl" :src="`${campaign.logoUrl}`" class="mb-40 logo-image" />
               <div class="font-size-40" style="margin-bottom: 100px">
                 Hello {{ campaign.companyName }} {{ event.guestType || "Employee" }}!
               </div>
@@ -21,12 +21,12 @@
               </div>
             </div>
             <div class="md-layout-item md-size-50 md-small-size-50">
-              <rsvp-event-info-panel :event="event"></rsvp-event-info-panel>
+              <rsvp-event-info-panel :event="event" :editable="false"></rsvp-event-info-panel>
             </div>
           </div>
-          <div class="mb-50">
+          <!-- <div class="mb-50">
             <img :src="`${$iconURL}RSVP/Group+8056.svg`" />
-          </div>
+          </div> -->
           <div>
             <div class="font-size-22 font-bold mb-10">Check out the venue</div>
             <rsvp-venue-carousel
@@ -38,9 +38,9 @@
         </div>
       </div>
       <div class="rsvp-event-guid md-layout">
-        <div class="md-layout-item md-size-10 md-small-size-10">
+        <!-- <div class="md-layout-item md-size-10 md-small-size-10">
           <img :src="`${$iconURL}RSVP/Group+8056.svg`" style="margin-top: 40px" />
-        </div>
+        </div> -->
         <div
           class="md-layout-item md-size-45 md-small-size-45"
           v-if="campaign.visibleSettings && campaign.visibleSettings.showWearingGuide"
@@ -104,7 +104,10 @@
           <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
             <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
           </md-button>
-          <md-button class="md-button md-red md-just-icon md-theme-default scroll-top-button">
+          <md-button
+            class="md-button md-red md-just-icon md-theme-default scroll-top-button"
+            @click="showSharingModal = true"
+          >
             <img :src="`${$iconURL}RSVP/sharing-white.svg`" width="17" />
           </md-button>
         </div>
@@ -113,7 +116,7 @@
             <span class="font-size-20">I Can't make it</span>
           </md-button>
           <span class="seperator"></span>
-          <md-button class="md-simple md-button md-black maryoku-btn">
+          <md-button class="md-simple md-button md-black maryoku-btn" @click="thinkLater">
             <span class="font-size-20">I Need To Think About It</span>
           </md-button>
           <md-button
@@ -151,6 +154,7 @@
       @close="showSyncCalendarForZoom = false"
       :campaign="campaign"
     ></sync-calendar-modal>
+    <social-sharing-modal v-if="showSharingModal" @cancel="showSharingModal = false"></social-sharing-modal>
   </div>
 </template>
 <script>
@@ -167,6 +171,7 @@ import JoinZoomModal from "@/components/Modals/RSVP/JoinZoomModal";
 import SyncCalendarModal from "@/components/Modals/RSVP/SyncCalendarModal";
 import RsvpVenueCarousel from "./RSVPVenueCarousel";
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
+import SocialSharingModal from "@/components/Modals/SocialSharingModal";
 import { mapActions, mapGetters } from "vuex";
 import swal from "sweetalert2";
 
@@ -179,6 +184,7 @@ export default {
     SyncCalendarModal,
     RsvpVenueCarousel,
     RsvpEventInfoPanel,
+    SocialSharingModal,
   },
   data() {
     return {
@@ -205,6 +211,7 @@ export default {
       showSyncCalendarForZoom: false,
       campaign: {},
       rsvpRequest: null,
+      showSharingModal: false,
     };
   },
   created() {
@@ -223,7 +230,7 @@ export default {
     });
     this.$root.$on("setRsvp", (rsvpData) => {
       rsvpData.attendingOption = "PERSON";
-      rsvpData.rsvpStatus = "AGREED";
+      rsvpData.rsvpStatus = "ACCEPTED";
       rsvpData.invitedEmail = this.rsvpRequest.email;
       rsvpData.rsvpRequest = new RsvpRequest({ id: this.rsvpRequest.id });
       rsvpData.event = new CalendarEvent({ id: this.event.id });
@@ -274,17 +281,22 @@ export default {
       this.showSyncCalendarForZoom = true;
     },
     reject() {
-      new Rsvp({
-        name: "test",
-        email: "email@gmail.com",
-        invitedEmail: "email@gmail.com",
-        campaign: new Campaign({ id: this.campaign.id }),
-        rsvpStatus: "REJECTED",
-      })
-        .save()
-        .then((res) => {
-          console.log(res);
+      new RsvpRequest({ id: this.rsvpRequest.id, status: "REJECTED" }).save().then((res) => {
+        swal({
+          title: `Sorry to hear that. Hope to see you on next event! `,
+          buttonsStyling: false,
+          confirmButtonClass: "md-button md-success",
         });
+      });
+    },
+    thinkLater() {
+      new RsvpRequest({ id: this.rsvpRequest.id, status: "CONSIDERED" }).save().then((res) => {
+        swal({
+          title: `You can send RSVP anytime!`,
+          buttonsStyling: false,
+          confirmButtonClass: "md-button md-success",
+        });
+      });
     },
   },
 };
@@ -299,6 +311,10 @@ export default {
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     overflow: hidden;
     background-color: #fff;
+    .logo-image {
+      max-width: 150px;
+      max-height: 150px;
+    }
     .rsvp-event-header {
       height: 430px;
 

@@ -533,6 +533,7 @@ export default {
       }
     },
     updateVendor(event, fieldName) {
+      console.log('updateVendor', fieldName);
       this.$root.$emit("update-vendor-value", fieldName, event.target.value);
     },
     save() {

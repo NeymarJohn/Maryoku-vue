@@ -1,6 +1,6 @@
 <template>
   <div class="vendor-signup-layout-wrapper">
-    <section class="header-wrapper" v-if="isApproved">
+    <section class="header-wrapper" v-if="step > 0">
       <a href="https://www.maryoku.com">
         <img src="/static/img/maryoku-logo-dark.png" />
       </a>
@@ -8,7 +8,7 @@
     </section>
     <router-view></router-view>
     <template v-if="step < 7">
-      <section class="footer-wrapper" :class="{ approved: isApproved }" v-if="isApproved">
+      <section class="footer-wrapper" :class="{ approved: step > 0 }" v-if="step > 0">
         <div class="left d-flex align-center">
           <md-button class="md-vendor-signup md-simple md-red" @click="prev()">
             <md-icon class="color-red font-size-30">keyboard_arrow_left</md-icon>
@@ -72,6 +72,7 @@ import { Modal } from "@/components";
 import moment from "moment";
 import Vendors from "@/models/Vendors";
 import swal from "sweetalert2";
+import { mapMutations, mapGetters } from "vuex";
 
 export default {
   components: {
@@ -80,16 +81,14 @@ export default {
   },
   data() {
     return {
-      vendor: {},
       reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
       savedItModal: false,
       iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
-      isApproved: false,
-      step: 1,
     };
   },
   methods: {
+    ...mapMutations("vendor", ["setVendor", "setEditing", "setStep"]),
     goTo(router) {
       this.$router.push(router);
     },
@@ -104,75 +103,81 @@ export default {
         this.vendor.vendorAddresses.length > 0;
       return isValid;
     },
+
     approve() {
-      if (this.validateBasicFields()) {
-        console.log("vendor", this.vendor);
-        this.$set(this.vendor, "vendorCategory", this.vendor.vendorCategories[0]);
-        this.$set(this.vendor, "vendorAddressLine1", this.vendor.vendorAddresses[0]);
-        this.$set(this.vendor, "isEditing", true);
-        new Vendors(this.vendor)
-          .save()
-          .then((res) => {
-            console.log("*** Save vendor - done: ");
-            console.log(JSON.stringify(res));
-            this.$set(this.vendor, "id", res.item.id);
-            this.$root.$emit("approve-vendor-basic-info", this.vendor);
-            this.isApproved = true;
-            this.step = 1;
-          })
-          .catch((error) => {
-            console.log("*** Save vendor - failed: ");
-            console.log(JSON.stringify(error));
-            this.isApproved = false;
-            if (error.message.indexOf("companyName")) {
-              swal({
-                title: `Sorry, Company Name is duplicated. Please choose another.`,
-                buttonsStyling: false,
-                confirmButtonClass: "md-button md-success",
-              }).then(() => {});
-            } else {
-              swal({
-                title: `Sorry, The information is not valid. Check your information and try again.`,
-                buttonsStyling: false,
-                confirmButtonClass: "md-button md-success",
-              }).then(() => {});
-            }
-          });
+      if (this.$store.state.vendor.isEditing) {
+        this.setStep(1);
       } else {
-        // swal({
-        //   title: `Please make sure filling out all required fields`,
-        //   showCancelButton: true,
-        //   confirmButtonClass: 'md-button md-success',
-        //   cancelButtonClass: 'md-button md-danger',
-        //   confirmButtonText: "Yes I'm sure",
-        //   cancelButtonText: 'No, take me back',
-        //   buttonsStyling: false
-        // })
+        if (this.validateBasicFields()) {
+          console.log("approve.vendor", this.vendor);
+          this.$set(this.vendor, "vendorCategory", this.vendor.vendorCategories[0]);
+          this.$set(this.vendor, "vendorAddressLine1", this.vendor.vendorAddresses[0]);
+          this.$set(this.vendor, "isEditing", true);
+          new Vendors(this.vendor)
+            .save()
+            .then((res) => {
+              console.log("*** Save vendor - done: ");
+              console.log(JSON.stringify(res));
+              this.$set(res.item, "about", {});
+              this.$set(res.item, "capacity", {});
+              this.$set(res.item, "images", []);
+              this.$set(res.item, "social", {});
+              this.$set(res.item, "services", {});
+              this.$set(res.item, "yesRules", []);
+              this.$set(res.item, "noRules", []);
+              this.$set(res.item, "notAllowed", []);
+              this.$set(res.item, "exDonts", []);
+              this.$set(res.item, "yesPolicies", []);
+              this.$set(res.item, "noPolicies", []);
+              this.$set(res.item, "selectedWeekdays", []);
+              this.setVendor(res.item);
+              this.setEditing(true);
+
+              // save vendor in store
+
+              this.setStep(1);
+            })
+            .catch((error) => {
+              console.log("*** Save vendor - failed: ");
+              console.log(JSON.stringify(error));
+
+              if (error.message.indexOf("companyName")) {
+                swal({
+                  title: `Sorry, Company Name is duplicated. Please choose another.`,
+                  buttonsStyling: false,
+                  confirmButtonClass: "md-button md-success",
+                }).then(() => {});
+              } else {
+                swal({
+                  title: `Sorry, The information is not valid. Check your information and try again.`,
+                  buttonsStyling: false,
+                  confirmButtonClass: "md-button md-success",
+                }).then(() => {});
+              }
+            });
+        } else {
+        }
+        this.scrollToTop();
       }
-      this.scrollToTop();
     },
     next() {
-      this.$root.$emit("next-vendor-signup-step");
       if (this.step < 6) {
-        this.step += 1;
+        this.setStep(this.step + 1);
       } else {
+        console.log("final", this.vendor);
         if (this.vendor.password == this.vendor.confirmPassword) {
-          this.$root.$emit("vendor-signup");
           this.savedItModal = true;
-          this.step += 1;
+          this.setStep(this.step + 1);
         } else {
         }
       }
       this.scrollToTop();
     },
     prev() {
-      this.$root.$emit("prev-vendor-signup-step");
       if (this.step > 0) {
-        this.step -= 1;
+        this.setStep(this.step - 1);
       }
-      if (this.step == 0) {
-        this.isApproved = false;
-      }
+
       this.scrollToTop();
     },
     scrollToTop() {
@@ -193,18 +198,17 @@ export default {
   },
   created() {},
   mounted() {
-    this.$root.$on("go-to-signup-step", (step) => {
-      this.step = step;
-      this.isApproved = this.step < 1 ? false : true;
-    });
-    this.$root.$on("update-vendor-value", (field, value) => {
-      this.$set(this.vendor, this.camelize(field), value);
-    });
-    this.$root.$on("set-vendor", (vendor) => {
-      this.vendor = vendor;
-    });
+    console.log("vendor.signup.layout.vendor", this.vendor, this.step);
+    this.$root.$on("go-to-signup-step", (step) => {});
+    // this.$root.$on("update-vendor-value", (field, value) => {
+    //   this.$set(this.vendor, this.camelize(field), value);
+    // });
   },
   computed: {
+    ...mapGetters({
+      vendor: "vendor/getVendor",
+      step: "vendor/getStep",
+    }),
     nextLabel() {
       if (this.step == 6) {
         return "Sign Up";
@@ -219,6 +223,11 @@ export default {
     status() {
       console.log();
       return this.$store.getters["vendor/getStatus"];
+    },
+  },
+  watch: {
+    step(newVal) {
+      console.log("signup.layout.wathc.step", newVal);
     },
   },
 };

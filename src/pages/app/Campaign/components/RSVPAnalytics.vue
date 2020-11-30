@@ -24,13 +24,15 @@
               <img :src="`${$iconURL}Campaign/users-gray.svg`" style="width: 28px" />
               <img :src="`${$iconURL}Campaign/Group 9222.svg`" class="ml-20" />
               <div class="text-center ml-10" style="margin-top: 25px">
-                <div class="font-size-50 font-bold font-bold color-black line-height-1">{{ numberOfEmails }}</div>
+                <div class="font-size-50 font-bold font-bold color-black line-height-1">
+                  {{ rsvpStatisData.rsvpCount }}
+                </div>
                 <div class="font-size-16">RSVP</div>
               </div>
               <div class="slash"></div>
               <div class="text-center" style="margin-top: 25px">
                 <div class="ml-20 mr-20 font-size-50 font-regular font-regular color-gray line-height-1">
-                  {{ numberOfEmails }}
+                  {{ rsvpStatisData.guests.length }}
                 </div>
                 <div class="font-size-16">Invited Guests (Including +1)</div>
               </div>
@@ -48,7 +50,7 @@
             </div>
           </div>
           <hr />
-          <div class="d-flex mt-60 mb-20">
+          <!-- <div class="d-flex mt-60 mb-20">
             <div class="flex-1">
               <div class="font-size-20 font-bold-extra d-flex align-center">
                 <image-icon src="Campaign/email-dark.svg"></image-icon>Opened This Email
@@ -95,7 +97,7 @@
               </div>
             </div>
           </div>
-          <hr />
+          <hr /> -->
           <div class="food-limitations mt-50" v-if="Object.keys(foodLimitations).length">
             <div class="font-size-20 font-bold-extra">Food Limitations</div>
             <rsvp-food-limitations :data="foodLimitations"></rsvp-food-limitations>
@@ -125,7 +127,7 @@ import CollapsePanel from "../CollapsePanel";
 import RadialProgress from "@/components/ProgressBar/Radial";
 import ColorDotLabel from "@/components/ColorDotLabel";
 import ImageIcon from "@/components/ImageIcon";
-import MultistateProgressbar from "@/components/ProgressBar/MultiState";
+import MultistateProgressbar from "./MultiState";
 import RsvpFoodLimitations from "./RSVPFoodLimitations";
 export default {
   components: {
@@ -145,11 +147,11 @@ export default {
         openedCount: 0,
       },
       analyticsData: [
-        { value: 80, label: "Yes", color: "#2cde6b" },
-        { value: 10, label: "No", color: "#f3423a" },
-        { value: 20, label: "Don't know yet", color: "#ffc001" },
-        { value: 20, label: "Online Participants", color: "#43536a" },
-        { value: 70, label: "No reply", color: "#cbc8c8" },
+        { value: 0, label: "Yes", color: "#2cde6b", list: [], category: "accepted" },
+        { value: 0, label: "No", color: "#f3423a", list: [], category: "rejected" },
+        { value: 0, label: "Don't know yet", color: "#ffc001", list: [], category: "considering" },
+        { value: 0, label: "Online Participants", color: "#43536a", list: [], category: "online" },
+        { value: 0, label: "No reply", color: "#cbc8c8", list: [], category: "noreply" },
       ],
       foodLimitations: [
         {
@@ -191,13 +193,13 @@ export default {
       }
     });
     this.percentage = Math.round((openedEmails / totalEmailCount) * 100);
-    this.analyticsData[0].value = 0;
-    this.analyticsData[1].value = 0;
-    this.analyticsData[2].value = 0;
-    this.analyticsData[3].value = 0;
-    this.analyticsData[4].value = this.numberOfEmails;
     this.$http.get(`${process.env.SERVER_URL}/1/rsvp-requests/statistics/${this.campaignData.id}`).then((res) => {
       this.rsvpStatisData = res.data;
+      this.analyticsData[0].list = this.rsvpStatisData.guests;
+      this.analyticsData[1].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "REJECTED");
+      this.analyticsData[2].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "CONSIDERED");
+      this.analyticsData[3].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "VIRTUAL");
+      this.analyticsData[4].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "REQUESTED");
       this.foodLimitations = res.data.limitations;
     });
   },

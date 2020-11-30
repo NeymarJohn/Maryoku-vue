@@ -8,7 +8,7 @@
             <div class="event-building event-basic-info">
               <div class="setting-title mt-5">
                 <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator">
-                Staying in or in need of some fresh air? 
+                Staying in or in need of some fresh air?
               </div>
               <div class="text-center mt-2">
                 Is it an indoor or outdoor event?
@@ -16,7 +16,7 @@
               <div class="mt-3 types">
                 <div class="type-card" @click="selectedType=type.value" :class="{selected:type.value==selectedType}" v-for="(type) in types" :key="type.value">
                   <div>
-                    <img :src="`${$iconURL}Onboarding/${type.value}-dark.svg`">
+                    <img :src="getIconUrl(type.value)">
                   </div>
                   <div>
                     {{type.name}}
@@ -103,6 +103,13 @@ export default {
     },
     back() {
       this.$router.push({path: `/event-wizard-location`})
+    },
+    getIconUrl(value) {
+        if (value === 'indoors' || value === 'outdoors' ) {
+            return `${this.$iconURL}Onboarding/${value}-dark.svg`;
+        } else if (value === 'virtual'){
+            return `${this.$secondIconURL}Creation/group-11232.svg`;
+        }
     }
   },
   data () {
@@ -115,6 +122,9 @@ export default {
         },
         {
           value: "outdoors", name: "Outdoor Event", selected:false
+        },
+        {
+          value: "virtual", name: "Virtual Event", selected:false
         }
       ]
     }
@@ -134,7 +144,7 @@ export default {
         margin: 0 auto;
         padding: 0;
     }
-    
+
     .md-checkbox-circle {
       margin: 0px;
     }
