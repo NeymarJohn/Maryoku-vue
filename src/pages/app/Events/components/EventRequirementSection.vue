@@ -47,7 +47,7 @@
                 </template>
                 <template slot="tag" slot-scope="{option}">
                   <span>
-                    {{option.name + (service.value.findIndex(it => it.name == option.name) === service.value.length - 1 ? '' : ',')}}
+                    {{option.name + (service.value.findIndex(it => it.name == option.name) == service.value.length - 1 ? '' : ',')}}
                   </span>
                 </template>
               </multiselect>

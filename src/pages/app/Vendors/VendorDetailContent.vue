@@ -130,9 +130,11 @@
                 <img :src="`${iconUrl}Group 5489 (4).svg`" />
                 {{ mergeStringItems(vendor.selectedWeekdays) }}
               </div>
-              <div class="item" v-for="(d, dIndex) in vendor.exDonts" :key="dIndex">
-                <img :src="`${iconUrl}Group 5489 (4).svg`" />
-                {{ d }}
+              <div v-for="(r, rIndex) in vendor.exDonts" :key="rIndex">
+                <div class="item" v-for="(d, dIndex) in r.holidays.filter(d => d.selected)" :key="dIndex">
+                  <img :src="`${iconUrl}Group 5489 (4).svg`" />
+                  {{ d.holiday }}
+                </div>
               </div>
               <div class="item" v-if="vendor.dontWorkDays">
                 <img :src="`${iconUrl}Group 5489 (4).svg`" />

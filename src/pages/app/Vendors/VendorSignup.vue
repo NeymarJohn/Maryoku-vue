@@ -176,6 +176,7 @@ export default {
   created() {},
   mounted() {
     this.$root.$on("update-vendor-value", (field, value) => {
+      console.log('update-vendor-value', field, value);
       let vendor = JSON.parse(JSON.stringify(this.vendor));
       if (field == "images" || field == "vendorImages") {
         if (!vendor.images[value.index]) {
@@ -187,6 +188,7 @@ export default {
         vendor.images = vendor.images.filter((i) => i != value);
       } else if (field == "vendorCategories") {
         this.$set(vendor, this.camelize(field), value);
+        this.$set(vendor, "vendorCategory", value[0]);
         this.$set(vendor, "yesRules", []);
         this.$set(vendor, "noRules", []);
         this.$set(vendor, "notAllowed", []);
@@ -195,7 +197,7 @@ export default {
         this.$set(vendor, "yesPolicies", []);
         this.$set(vendor, "noPolicies", []);
         this.$set(vendor, "selectedWeekdays", []);
-        this.$set(vendor, "dontWorkDays", null);
+        this.$set(vendor, "dontWorkDays", []);
         this.$set(vendor, "dontWorkTime", null);
         this.$set(vendor, "services", {});
       } else if (field.indexOf(".") > -1) {
@@ -251,6 +253,7 @@ export default {
   filters: {},
   watch: {
     vendor(newVal) {
+      console.log("vendor.signup.watch.vendor", newVal);
     },
     step(newVal){
       console.log("vendor.signup.watch.step", newVal);

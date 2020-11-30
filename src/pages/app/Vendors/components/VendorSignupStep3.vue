@@ -182,12 +182,12 @@
                       </div>
                     </template>
                     <template v-if="p.type == 'Including'">
-                      <div class="item" @click="setPricePolicy(null, p.name, true)">
+                      <div class="item" @click="setPricePolicy(null, 'Including', p.name, true)">
                         <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="p.value" />
                         <span class="unchecked" v-else></span>
                         Include
                       </div>
-                      <div class="item" @click="setPricePolicy(null, p.name, false)">
+                      <div class="item" @click="setPricePolicy(null, 'Including', p.name, false)">
                         <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!p.value" />
                         <span class="unchecked" v-else></span>
                         Not Include
@@ -197,6 +197,29 @@
                       <select class="unit-select" v-model="p.value" @change="setPricePolicy">
                         <option v-for="(option, index) in p.options" :key="index" :value="option">{{ option }}</option>
                       </select>
+                    </template>
+                    <template v-if="p.type == 'MultiSelection'">
+                      <multiselect
+                              v-model="p.value"
+                              :options="p.options"
+                              :close-on-select="false"
+                              :clear-on-select="false"
+                              :searchable="false"
+                              :multiple="true"
+                              class="multiple-selection medium-selector"
+                              @select="setPricePolicy('', 'MultiSelection', p, $event)"
+                              @remove="setPricePolicy('', 'MultiSelection', p, $event)">
+                        <template slot="option" slot-scope="{option}">
+                  <span>
+                    {{option}}
+                  </span>
+                        </template>
+                        <template slot="tag" slot-scope="{option}">
+                  <span>
+                    {{option + (p.value.findIndex(it => it == option) == p.value.length - 1 ? '' : ',')}}
+                  </span>
+                        </template>
+                      </multiselect>
                     </template>
                   </div>
                   <div class="bottom no-margin" v-if="p.type == Number">
@@ -240,7 +263,7 @@
                       </div>
                     </template>
                   </div>
-                  <div class="bottom mt-10" v-if="p.type == 'Including' && !p.value">
+                  <div class="bottom mt-0 ml-40" v-if="p.type == 'Including' && !p.value">
                     <span>Extra Payment</span>
                     <br />
                     <div class="suffix">
@@ -253,7 +276,7 @@
                       />
                     </div>
                   </div>
-                  <div class="bottom no-margin" v-if="p.type == 'Cost'">
+                  <div class="bottom mt-0 no-margin" v-if="p.type == 'Cost'">
                     <span>Cost per {{ p.unit }}</span>
                     <br />
                     <div class="suffix">
@@ -266,7 +289,7 @@
                       />
                     </div>
                   </div>
-                  <div class="bottom no-margin" v-if="p.type == 'Discount'">
+                  <div class="bottom mt-0 no-margin" v-if="p.type == 'Discount'">
                     <span>Discount</span>
                     <br />
                     <div class="suffix percentage d-flex">
@@ -475,9 +498,9 @@
                         <ul>
                           <li v-for="(h, hIndex) in r.holidays" :key="hIndex">
                             <div class="check-field" @click="updateExDonts(h)">
-                              <img :src="`${iconUrl}Group 6258.svg`" v-if="exDonts.includes(h)" />
+                              <img :src="`${iconUrl}Group 6258.svg`" v-if="h.selected" />
                               <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
-                              <span :class="{ checked: exDonts.includes(h) }">{{ h }}</span>
+                              <span :class="{ checked: h.selected }">{{ h.holiday}}</span>
                             </div>
                           </li>
                         </ul>
@@ -538,6 +561,7 @@
 import moment from "moment";
 import VueElementLoading from "vue-element-loading";
 import Vendors from "@/models/Vendors";
+import Multiselect from "vue-multiselect";
 
 //COMPONENTS
 import Icon from "@/components/Icon/Icon.vue";
@@ -570,6 +594,7 @@ export default {
     VSignupAddRules,
     FunctionalCalendar,
     VueTimepicker,
+    Multiselect,
   },
   data() {
     return {
@@ -599,53 +624,7 @@ export default {
       yesPolicies: [],
       noPolicies: [],
       noteRules: [],
-      religions: [
-        {
-          name: "Chrisitanity",
-          holidays: ["Good Friday", "Easter", "Christmas", "Thanksgiving"],
-          url: christanHolidaysAPI,
-        },
-        {
-          name: "Hindu",
-          holidays: ["Ganesh Chaturthi", "Pitru Paksha", "Mysore Dasara", "Navratri", "Vijayadashami", "Durga Puja"],
-          url: hinduHolidaysAPI,
-        },
-        {
-          name: "Islamic",
-          url: muslimHolidaysAPI,
-          holidays: [
-            "All Islamic holiday",
-            "Eid AI-Acha",
-            "Eid AI-Fitr",
-            "Lailat al Miraj",
-            "Milad un Nabi(Shia)",
-            "Ramadan(start)",
-            "Laylat at Qadr",
-            "Eid-ai-Fitr(End of Ramadan)",
-            "Waqf ai Arafa - Hajj",
-            "Hijra - Islamic New Year",
-            "Day of Ashura / Muharram",
-            "Milad un Nabi",
-            "All Islamic holidays (Shia)",
-          ],
-        },
-        {
-          name: "Judaism",
-          url: jewishHolidaysAPI,
-          holidays: [
-            "Rosh Hashana",
-            "Yom Kipur",
-            "Sukkot",
-            "Shmini Atzeret",
-            "Simchat Torah",
-            "Chanukah",
-            "Purim",
-            "Pesach",
-            "Shavout",
-            `Tish'a B'Av`,
-          ],
-        },
-      ],
+      religions: [],
       markedDates: [
         // "16/6/2020",
       ],
@@ -879,8 +858,8 @@ export default {
             },
             {
               name: "Time of day",
-              type: "Selection",
-              options: ["morning", "after noon", "evening", "night"],
+              type: "MultiSelection",
+              options: ["Morning", "After noon", "Evening", "Night"],
               value: "",
             },
             {
@@ -1277,9 +1256,9 @@ export default {
             {
               name: "Special operating time",
               subCategory: "charge",
-              type: "Selection",
-              options: ["morning", "afternoon", "evening"],
-              value: "",
+              type: "MultiSelection",
+              options: ["Morning", "Afternoon", "Evening", "Night"],
+              value: [],
             },
             {
               name: "Extra for prizes",
@@ -1407,20 +1386,17 @@ export default {
       this.$set(this.vendorPricingPolicies, 'items', this.vendor.pricingPolicies)
     }
     console.log("vendor.signup.step3.mounted", this.vendorPricingPolicies);
-    this.religions.forEach((religion) => {
-      this.$http
-        .get(religion.url, {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            Authorization: "",
-            Referer: "*",
-            "Content-Type": "jsonp",
-          },
-        })
-        .then((res) => {
-          console.log(res);
-        });
-    });
+
+    if(!this.vendor.exDonts || !this.vendor.exDonts.length) {
+      this.$http.get(`${process.env.SERVER_URL}/1/holidays`).then(res => {
+        console.log("holidays", res);
+        this.religions = res.data;
+      });
+    } else {
+      this.religions = this.vendor.exDonts;
+    }
+
+
     if (this.vendor.selectedWeekdays) {
       if (this.vendor.selectedWeekdays.length > 0) {
         this.selectedWeekdays = this.vendor.selectedWeekdays;
@@ -1429,7 +1405,7 @@ export default {
       }
     }
 
-    if (this.vendor.dontWorkDays) {
+    if (this.vendor.dontWorkDays && this.vendor.dontWorkDays.selectedDates) {
       if (this.vendor.dontWorkDays.selectedDates.length > 0) {
         this.markedDates = [];
         _.each(this.vendor.dontWorkDays.selectedDates, (sd) => {
@@ -1444,12 +1420,9 @@ export default {
   },
   methods: {
     updateExDonts(item) {
-      if (this.exDonts.includes(item)) {
-        this.exDonts = this.exDonts.filter((d) => d != item);
-      } else {
-        this.exDonts.push(item);
-      }
-      this.$root.$emit("update-vendor-value", "exDonts", this.exDonts);
+      item.selected = !item.selected;
+
+      this.$root.$emit("update-vendor-value", "exDonts", this.religions);
     },
     updateNa(item) {
       if (this.notAllowed.includes(item)) {
@@ -1525,6 +1498,7 @@ export default {
       this.$root.$emit("update-vendor-value", "selectedReligion", this.selectedReligion);
     },
     updateDontWorkDays() {
+      console.log("selectedDays", this.date);
       this.$root.$emit("update-vendor-value", "dontWorkDays", this.date);
     },
     updateStartA() {
@@ -1565,13 +1539,19 @@ export default {
       value = value.toString();
       return value.charAt(0).toUpperCase() + value.slice(1);
     },
-    setPricePolicy(e, name, value) {
-      console.log("setPricePolicy", name, value);
-      if ( name ) {
+    setPricePolicy(e, type, name, value) {
+      console.log("setPricePolicy", type, name, value);
+      if ( type === 'Including' && name ) {
         let p = this.vendorPricingPolicies.items.find(it => it.name == name);
         p.value = value;
       }
-      console.log('setPricePolicy', this.vendorPricingPolicies);
+
+      if ( type === 'MultiSelection' && name ) {
+        let index = name.value.findIndex(o => o.toLowerCase() === value.toLowerCase())
+        console.log("setPricePolicy", index, value);
+        if ( index !== -1 ) name.value.splice(index, 1);
+      }
+
       this.$root.$emit("update-vendor-value", "pricingPolicies", this.vendorPricingPolicies.items);
     },
   },
@@ -2188,6 +2168,7 @@ export default {
     font-size: 16px;
 
     &.desc {
+      display: block;
       margin-top: 1rem;
       padding: 0.5rem 1rem;
     }
@@ -2205,6 +2186,42 @@ export default {
     color: #32325d;
     // #32325d;
     box-shadow: 0 1px 3px 0 #e6ebf1;
+  }
+
+  .multiple-selection {
+    width: 18rem;
+    display: inline-block;
+    height: 50px;
+
+    .multiselect__select {
+      top: 15px;
+    }
+    .multiselect__tags {
+      height: 50px;
+      border: 1px solid #dddddd;
+
+      .multiselect__single {
+        line-height: 30px;
+      }
+      .multiselect__tags-wrap{
+        display: flex;
+        overflow: hidden;
+
+        span{
+          margin-right: 5px;
+          flex-shrink: 0;
+          font-size: 16px;
+          font-family: 'Manrope-regular';
+        }
+      }
+    }
+    .multiselect__input {
+      height: 30px;
+      text-transform: capitalize;
+    }
+    .multiselect__placeholder {
+      line-height: 20px;
+    }
   }
 }
 .vfc-week .vfc-day span.vfc-span-day.vfc-marked {
