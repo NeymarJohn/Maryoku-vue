@@ -2047,7 +2047,7 @@ export const companyServices = [
     name: 'venuerental',
     type: Array,
     value: [],
-    available: ['ballroom', 'gallery', 'park or field or garden', 'historic establishment', 'bar or pub or club', 'restaurant', 'hotel', 'business center', 'community center', 'sport club', 'academic venue', 'stately home', 'stadium or arena'],
+    available: ['gallery', 'park or field or garden', 'historic establishment', 'bar or pub or club', 'restaurant', 'hotel', 'business center', 'community center', 'sport club', 'academic venue', 'stately home', 'stadium or arena'],
   },
   {
     name: 'foodandbeverage',
@@ -2075,13 +2075,13 @@ export const companyServices = [
   },
   // {
   //   name: 'advertising-promotion',
-  //   type: Array,
+  //   type: Array, 
   //   value: [],
   //   available: [],
   // },
   // {
   //   name: 'transportation',
-  //   type: Array,
+  //   type: Array, 
   //   value: [],
   //   available: [],
   // },

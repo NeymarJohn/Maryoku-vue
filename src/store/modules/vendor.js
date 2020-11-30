@@ -3,8 +3,6 @@ import { cat } from 'shelljs'
 
 
 const state = {
-  isEditing: false,
-  step: 0,
   status: null,
   vendor: {},
   vendor_categories: [],
@@ -27,10 +25,6 @@ const getters = {
   getVendorCategories: state => state.vendor_categories,
 
   getVendors: state => state.vendors,
-
-  getVendor: state => state.vendor,
-
-  getStep: state => state.step,
 }
 
 const actions = {
@@ -65,7 +59,7 @@ const actions = {
   },
   getProperties: ({commit, state}, categoryName) => {
     if ( !state[categoryName] ) {
-
+      
     }
   }
 }
@@ -81,17 +75,6 @@ const mutations = {
     state.loading = false;
     state.vendors = data.vendors;
     state.vendor_categories = data.vendor_categories
-  },
-  setStep(state, step){
-    console.log("setStep", step)
-    state.step = step;
-  },
-  setEditing(state, editing){
-    state.isEditing = editing;
-  },
-  setVendor(state, vendor){
-    console.log("setVendor", vendor);
-    state.vendor = vendor;
   },
   SET_DATA (state, data){
     state.vendor = data;

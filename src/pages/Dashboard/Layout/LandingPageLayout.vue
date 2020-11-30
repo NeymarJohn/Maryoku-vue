@@ -8,13 +8,14 @@ import { ZoomCenterTransition } from "vue2-transitions";
 export default {
   components: {
     ZoomCenterTransition,
-  },
+  },  
   methods: {
     scrollToTop() {
       window.scrollTo(0, 0);
     },
   },
-};
+}
 </script>
 <style lang="scss" scoped>
+  
 </style>

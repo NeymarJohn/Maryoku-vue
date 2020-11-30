@@ -11,27 +11,50 @@
       <div class="md-layout maryoku-modal-body">
         <div class="md-layout-item md-size-100 form-group maryoku-field mb-30">
           <label class="font-size-16 font-bold-extra color-black mt-40">Name</label>
-          <maryoku-input inputStyle="normal" v-model="editingVendor.vendorDisplayName"></maryoku-input>
+          <maryoku-input
+            inputStyle="normal"
+            name="vendorDisplayName"
+            v-model="editingVendor.vendorDisplayName"
+            v-validate.initial="modelValidations.vendorDisplayName"
+          ></maryoku-input>
         </div>
         <div class="md-layout-item md-size-50 form-group maryoku-field mb-30">
           <label class="font-size-16 font-bold-extra color-black">Price of the serivce</label>
-          <maryoku-input inputStyle="budget" v-model="editingVendor.cost"></maryoku-input>
+          <maryoku-input
+            inputStyle="budget"
+            name="cost"
+            v-model="editingVendor.cost"
+            v-validate.initial="modelValidations.cost"
+          ></maryoku-input>
         </div>
         <div class="md-layout-item md-size-100 mb-30">
           <label class="font-size-16 font-bold-extra color-black">Location</label>
-          <location-input v-model="editingVendor.vendorAddressLine1"></location-input>
+          <location-input
+            name="vendorAddressLine1"
+            v-model="editingVendor.vendorAddressLine1"
+            v-validate.initial="modelValidations.vendorAddressLine1"
+          >
+          </location-input>
         </div>
         <div class="md-layout-item md-size-50 form-group maryoku-field mb-30">
           <label class="font-size-16 font-bold-extra color-black">Phone</label>
           <maryoku-input
             inputStyle="phone"
             type="phonenumber"
+            name="vendorMainPhoneNumber"
             v-model="editingVendor.vendorMainPhoneNumber"
+            v-validate.initial="modelValidations.vendorMainPhoneNumber"
           ></maryoku-input>
         </div>
         <div class="md-layout-item md-size-100 form-group maryoku-field mb-30">
           <label class="font-size-16 font-bold-extra color-black">Email</label>
-          <maryoku-input inputStyle="email" type="email" v-model="editingVendor.vendorMainEmail"></maryoku-input>
+          <maryoku-input
+            inputStyle="email"
+            type="email"
+            name="vendorMainEmail"
+            v-model="editingVendor.vendorMainEmail"
+            v-validate.initial="modelValidations.vendorMainEmail"
+          ></maryoku-input>
         </div>
         <div class="md-layout-item md-size-100 form-group maryoku-field">
           <label class="font-size-16 font-bold-extra color-black">Attach Proposal</label>
@@ -39,7 +62,7 @@
             <label
               class="md-rose md-outline md-simple md-sm attachment upload-button"
               for="file"
-              style="cursor:pointer"
+              style="cursor: pointer"
             >
               <md-icon>attachment</md-icon>Choose file(10MB)
             </label>
@@ -47,12 +70,8 @@
             Or
             <div style="color: #818080">Drag your file here</div>
             <div>
-              <span
-                v-for="(file, index) in currentAttachments"
-                :key="index"
-                class="attachment-link"
-              >
-                {{ file.name}}
+              <span v-for="(file, index) in currentAttachments" :key="index" class="attachment-link">
+                {{ file.name }}
                 <span @click="removeSelectedAttachment(index)">
                   <md-icon class="remove-attachment">close</md-icon>
                 </span>
@@ -68,8 +87,8 @@
             />
           </label>
           <div v-else class="attchment-item">
-            {{editingVendor.attachment.name}}
-            <button @click="editingVendor.attachment=null">
+            {{ editingVendor.attachment.name }}
+            <button @click="editingVendor.attachment = null">
               <md-icon class="color-white">close</md-icon>
             </button>
           </div>
@@ -77,11 +96,10 @@
       </div>
     </template>
     <template slot="footer">
-      <md-button
-        class="md-button md-black md-simple md-theme-default"
-        @click="remindLater"
-      >Remind Me Later</md-button>
-      <md-button class="md-red md-bold add-category-btn" @click="updateMyVendor">Update Vendor</md-button>
+      <md-button class="md-button md-black md-simple md-theme-default" @click="remindLater">Remind Me Later</md-button>
+      <md-button class="md-red md-bold add-category-btn" :disabled="errors.all().length > 0" @click="updateMyVendor"
+        >Update Vendor</md-button
+      >
     </template>
   </modal>
 </template>
@@ -96,11 +114,11 @@ export default {
     Modal,
     MaryokuInput,
     LocationInput,
-    VueElementLoading
+    VueElementLoading,
   },
   props: {
     show: [Boolean],
-    value: [Number]
+    value: [Number],
   },
   data: () => {
     return {
@@ -108,6 +126,7 @@ export default {
       location: "",
       currentAttachments: [],
       isLoading: false,
+      isValid: false,
       editingVendor: {
         vendorDisplayName: "",
         cost: "",
@@ -115,8 +134,24 @@ export default {
         vendorMainPhoneNumber: "",
         vendorMainEmail: "",
         attachedProposal: "",
-        attachment: null
-      }
+        attachment: null,
+      },
+      modelValidations: {
+        vendorDisplayName: {
+          required: true,
+        },
+        vendorMainEmail: {
+          required: true,
+          email: true,
+        },
+        vendorAddressLine1: {
+          required: true,
+        },
+        vendorMainPhoneNumber: {
+          required: true,
+          numeric: true,
+        },
+      },
     };
   },
   methods: {
@@ -132,10 +167,20 @@ export default {
       this.editingVendor.attachment = files[0];
     },
     updateMyVendor() {
-      this.isLoading = true
-      this.$emit("updateVendor", this.editingVendor);
-    }
-  }
+      this.isLoading = true;
+      this.$emit("updateVendor", { ...this.editingVendor, companyName: this.editingVendor.vendorDisplayName });
+    },
+    validate() {
+      this.$validator
+        .validateAll()
+        .then((isValid) => {
+          this.isValid = true;
+        })
+        .catch((err) => {
+          this.isValid = false;
+        });
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

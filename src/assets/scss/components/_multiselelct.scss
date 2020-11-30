@@ -6,21 +6,6 @@
       padding: 10px 50px 8px 8px;
     }
   }
-  &.medium-selector {
-    min-height: 40px;
-    .multiselect__tags {
-      min-height: 40px;
-      padding: 7px 30px;
-      border: 1px solid #dddddd !important;
-      box-shadow: 0 1px 3px 0 #e6ebf1;
-      border-radius: 0;
-      font-weight: 400;
-      font-size: 16px;
-    }
-    .multiselect__select{
-      top: 15px;
-    }
-  }
   &__select{
     top: 23px;
     width: 20px;
@@ -38,7 +23,7 @@
       border-style: solid;
       border-width: 0px 3px 3px 0px;
       content: "";
-      // transform:
+      // transform: 
       transform: translateY(-50%) rotate(45deg);
       width: 100%;
       height: 100%;

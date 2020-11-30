@@ -39,8 +39,7 @@ import LabelEdit from "./LabelEdit.vue";
 import Pagination from "./Pagination.vue";
 import SidebarPlugin from "./SidebarPlugin";
 import AnimatedNumber from "./AnimatedNumber";
-import LocationInput from './LocationInput';
-import HolidayInput from './HolidayInput';
+import LocationInput from './LocationInput'
 import SidebarItem from './SidebarPlugin/NewSidebarItem.vue'
 import SideBar from './SidebarPlugin/NewSideBar.vue'
 import TimeInput from './TimeInput'
@@ -79,7 +78,6 @@ export {
     MaryokuTextarea,
     MaryokuResizableTextarea,
     LocationInput,
-    HolidayInput,
     SidebarItem,
     SideBar,
     TimeInput

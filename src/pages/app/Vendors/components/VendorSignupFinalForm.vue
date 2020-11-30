@@ -16,7 +16,7 @@
           class="field"
           placeholder="Type your email here"
           v-model="vendor.vendorDisplayName"
-          @input="updateVendor('vendorDisplayName')"
+          @change="updateVendor($event, 'vendorDisplayName')"
         />
         <p>Set Password</p>
         <input
@@ -24,8 +24,8 @@
           :class="{'red-border': password != confirmPassword && confirmPassword}"
           placeholder="Type password here"
           type="password"
-          v-model="vendor.password"
-          @input="updateVendor('password')"
+          v-model="password"
+          @change="updateVendor($event, 'password')"
         />
         <p>Confirm Password</p>
         <input
@@ -33,8 +33,8 @@
           :class="{'red-border': password != confirmPassword}"
           placeholder="Type password here"
           type="password"
-          v-model="vendor.confirmPassword"
-          @input="updateVendor('confirmPassword')"
+          v-model="confirmPassword"
+          @change="updateVendor($event, 'confirmPassword')"
         />
       </div>
     </div>
@@ -72,8 +72,8 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    updateVendor(fieldName) {
-      this.$root.$emit("update-vendor-value", fieldName, this.vendor[fieldName]);
+    updateVendor(event, fieldName) {
+      this.$root.$emit("update-vendor-value", fieldName, event.target.value);
     },
   },
   computed: {},
