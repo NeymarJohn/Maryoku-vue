@@ -72,7 +72,7 @@ import { Modal } from "@/components";
 import moment from "moment";
 import Vendors from "@/models/Vendors";
 import swal from "sweetalert2";
-import {mapMutations, mapGetters} from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 
 export default {
   components: {
@@ -105,7 +105,7 @@ export default {
     },
 
     approve() {
-      if(this.$store.state.vendor.isEditing){
+      if (this.$store.state.vendor.isEditing) {
         this.setStep(1);
       } else {
         if (this.validateBasicFields()) {
@@ -114,47 +114,47 @@ export default {
           this.$set(this.vendor, "vendorAddressLine1", this.vendor.vendorAddresses[0]);
           this.$set(this.vendor, "isEditing", true);
           new Vendors(this.vendor)
-                  .save()
-                  .then((res) => {
-                    console.log("*** Save vendor - done: ");
-                    console.log(JSON.stringify(res));
-                    this.$set(res.item, 'about', {});
-                    this.$set(res.item, 'capacity', {});
-                    this.$set(res.item, 'images', []);
-                    this.$set(res.item, 'social', {});
-                    this.$set(res.item, 'services', {});
-                    this.$set(res.item, 'yesRules', []);
-                    this.$set(res.item, 'noRules', []);
-                    this.$set(res.item, 'notAllowed', []);
-                    this.$set(res.item, 'exDonts', []);
-                    this.$set(res.item, 'yesPolicies', []);
-                    this.$set(res.item, 'noPolicies', []);
-                    this.$set(res.item, 'selectedWeekdays', []);
-                    this.setVendor(res.item);
-                    this.setEditing(true);
+            .save()
+            .then((res) => {
+              console.log("*** Save vendor - done: ");
+              console.log(JSON.stringify(res));
+              this.$set(res.item, "about", {});
+              this.$set(res.item, "capacity", {});
+              this.$set(res.item, "images", []);
+              this.$set(res.item, "social", {});
+              this.$set(res.item, "services", {});
+              this.$set(res.item, "yesRules", []);
+              this.$set(res.item, "noRules", []);
+              this.$set(res.item, "notAllowed", []);
+              this.$set(res.item, "exDonts", []);
+              this.$set(res.item, "yesPolicies", []);
+              this.$set(res.item, "noPolicies", []);
+              this.$set(res.item, "selectedWeekdays", []);
+              this.setVendor(res.item);
+              this.setEditing(true);
 
-                    // save vendor in store
+              // save vendor in store
 
-                    this.setStep(1);
-                  })
-                  .catch((error) => {
-                    console.log("*** Save vendor - failed: ");
-                    console.log(JSON.stringify(error));
+              this.setStep(1);
+            })
+            .catch((error) => {
+              console.log("*** Save vendor - failed: ");
+              console.log(JSON.stringify(error));
 
-                    if (error.message.indexOf("companyName")) {
-                      swal({
-                        title: `Sorry, Company Name is duplicated. Please choose another.`,
-                        buttonsStyling: false,
-                        confirmButtonClass: "md-button md-success",
-                      }).then(() => {});
-                    } else {
-                      swal({
-                        title: `Sorry, The information is not valid. Check your information and try again.`,
-                        buttonsStyling: false,
-                        confirmButtonClass: "md-button md-success",
-                      }).then(() => {});
-                    }
-                  });
+              if (error.message.indexOf("companyName")) {
+                swal({
+                  title: `Sorry, Company Name is duplicated. Please choose another.`,
+                  buttonsStyling: false,
+                  confirmButtonClass: "md-button md-success",
+                }).then(() => {});
+              } else {
+                swal({
+                  title: `Sorry, The information is not valid. Check your information and try again.`,
+                  buttonsStyling: false,
+                  confirmButtonClass: "md-button md-success",
+                }).then(() => {});
+              }
+            });
         } else {
         }
         this.scrollToTop();
@@ -162,12 +162,12 @@ export default {
     },
     next() {
       if (this.step < 6) {
-        this.setStep(this.step + 1)
+        this.setStep(this.step + 1);
       } else {
         console.log("final", this.vendor);
         if (this.vendor.password == this.vendor.confirmPassword) {
           this.savedItModal = true;
-          this.setStep(this.step + 1)
+          this.setStep(this.step + 1);
         } else {
         }
       }
@@ -175,7 +175,7 @@ export default {
     },
     prev() {
       if (this.step > 0) {
-        this.setStep(this.step - 1)
+        this.setStep(this.step - 1);
       }
 
       this.scrollToTop();
@@ -199,17 +199,15 @@ export default {
   created() {},
   mounted() {
     console.log("vendor.signup.layout.vendor", this.vendor, this.step);
-    this.$root.$on("go-to-signup-step", (step) => {
-
-    });
+    this.$root.$on("go-to-signup-step", (step) => {});
     // this.$root.$on("update-vendor-value", (field, value) => {
     //   this.$set(this.vendor, this.camelize(field), value);
     // });
   },
   computed: {
     ...mapGetters({
-      vendor: 'vendor/getVendor',
-      step: 'vendor/getStep',
+      vendor: "vendor/getVendor",
+      step: "vendor/getStep",
     }),
     nextLabel() {
       if (this.step == 6) {
@@ -228,10 +226,10 @@ export default {
     },
   },
   watch: {
-    step(newVal){
-      console.log("signup.layout.wathc.step", newVal)
-    }
-  }
+    step(newVal) {
+      console.log("signup.layout.wathc.step", newVal);
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

@@ -238,6 +238,16 @@ let vendorSignup = {
                 gtm: "VendorSignup",
             },
         },
+        {
+            path: "/vendor-signup/edit/:id",
+            name: "VendorSignup",
+            component: VendorSignup,
+            meta: {
+                auth: false,
+                title: "Vendor Signup",
+                gtm: "VendorSignup",
+            },
+        },
     ],
 };
 
@@ -576,7 +586,7 @@ let others = {
 };
 
 let vendorListPage = {
-    path: "/vendorlist",
+    path: "/admin/vendorlist",
     name: "VendorList",
     component: Vendors,
     meta: {
