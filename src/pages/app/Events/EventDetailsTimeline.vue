@@ -1,15 +1,20 @@
 <template>
-  <div class="md-layout event-details-timeline timeline-section with-progress-bar">
+  <div
+    class="md-layout event-details-timeline timeline-section with-progress-bar"
+  >
     <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <div class="event-page-header md-layout-item md-size-100">
       <div class="header-name">
         <div class="font-size-30 font-bold text-transform-capitalize mb-20">
-          <img :src="`${newTimeLineIconsURL}timeline-title.svg`" class="page-icon" />
+          <img
+            :src="`${newTimeLineIconsURL}timeline-title.svg`"
+            class="page-icon"
+          />
           CREATE TIMLINE
         </div>
         <div class="font-size-16">
-          <b>Things are warming up!</b> It’s time to create your event timeline! <br />We helped you with the basic
-          structure
+          <b>Things are warming up!</b> It’s time to create your event timeline!
+          <br />We helped you with the basic structure
         </div>
       </div>
       <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
@@ -19,7 +24,11 @@
         class="md-layout-item md-xlarge-size-65 md-large-size-65 md-small-size-50 time-line-section mr-auto mt-20"
         ref="content"
       >
-        <button v-scroll-to="'#timeline-edit-card'" ref="scrollBtn" style="display: none">
+        <button
+          v-scroll-to="'#timeline-edit-card'"
+          ref="scrollBtn"
+          style="display: none"
+        >
           Scroll to the editing card
         </button>
         <div class="timeline-items-list">
@@ -29,9 +38,15 @@
             :key="dateIndex"
           >
             <div class="item-header mb-20">
-              <div class="header-title font-size-14 color-gray text-transform-capitalize">
-                <div class="time-line-edit d-flex justify-content-center align-center">
-                  <label style="white-space: nowrap; padding-right: 10px">Day {{ numberToWord(dateIndex + 1) }}</label>
+              <div
+                class="header-title font-size-14 color-gray text-transform-capitalize"
+              >
+                <div
+                  class="time-line-edit d-flex justify-content-center align-center"
+                >
+                  <label style="white-space: nowrap; padding-right: 10px"
+                    >Day {{ numberToWord(dateIndex + 1) }}</label
+                  >
                   <div>{{ scheduleDate }}</div>
                   <md-datepicker
                     :md-disabled-dates="getDisabledDates(dateIndex)"
@@ -68,9 +83,18 @@
                 :key="index"
                 class="time-line-blocks_selected-items_item time-line-item"
               >
-                <timeline-empty :index="index" :date="scheduleDate" v-if="index == 0"></timeline-empty>
-                <timeline-group-container :timelines="timelines"></timeline-group-container>
-                <timeline-empty :index="index" :date="scheduleDate"></timeline-empty>
+                <timeline-empty
+                  :index="index"
+                  :date="scheduleDate"
+                  v-if="index == 0"
+                ></timeline-empty>
+                <timeline-group-container
+                  :timelines="timelines"
+                ></timeline-group-container>
+                <timeline-empty
+                  :index="index"
+                  :date="scheduleDate"
+                ></timeline-empty>
               </div>
             </drop>
           </div>
@@ -81,14 +105,33 @@
         style="margin-top: 16px; padding-right: 3em"
       >
         <md-card-content class="md-layout time-line-blocks_items mb-60">
-          <div class="text-center width-100 p-10 font-size-16 mb-10">Drag Tim Slots timeline</div>
+          <div class="text-center width-100 p-10 font-size-16 mb-10">
+            Drag Tim Slots timeline
+          </div>
 
-          <div v-for="(section, index) in blocksList" :key="index" class="md-layout-item md-size-100 mb-30">
-            <div v-for="block in section" :key="block.id" class="md-layout-item md-size-100">
-              <drag :transfer-data="{ block }" class="time-line-blocks_item" :style="`color :` + block.color">
-                <div class="font-size-16 font-bold text-transform-capitalize d-flex align-center">
+          <div
+            v-for="(section, index) in blocksList"
+            :key="index"
+            class="md-layout-item md-size-100 mb-30"
+          >
+            <div
+              v-for="block in section"
+              :key="block.id"
+              class="md-layout-item md-size-100"
+            >
+              <drag
+                :transfer-data="{ block }"
+                class="time-line-blocks_item"
+                :style="`color :` + block.color"
+              >
+                <div
+                  class="font-size-16 font-bold text-transform-capitalize d-flex align-center"
+                >
                   <md-icon>drag_indicator</md-icon>
-                  <img :src="`${newTimeLineIconsURL}${block.icon.toLowerCase()}.svg`" class="label-icon mr-10" />
+                  <img
+                    :src="`${newTimeLineIconsURL}${block.icon.toLowerCase()}.svg`"
+                    class="label-icon mr-10"
+                  />
                   {{ block.buildingBlockType }}
                 </div>
               </drag>
@@ -112,7 +155,9 @@
             Are you sure you want to say
             <br />goodbye to your changes?
           </h2>
-          <div class="header-description">Your changes will be deleted after that</div>
+          <div class="header-description">
+            Your changes will be deleted after that
+          </div>
           <md-button
             class="md-simple md-just-icon md-round modal-default-button modal-close-button"
             @click="showDeleteConfirmModal = false"
@@ -122,33 +167,59 @@
         </div>
       </template>
       <template slot="footer">
-        <md-button class="md-default md-simple cancel-btn" @click="showDeleteConfirmModal = false">Cancel</md-button>
-        <md-button class="md-red add-category-btn" @click="removeTimelineItem">Yes,I'm sure</md-button>
+        <md-button
+          class="md-default md-simple cancel-btn"
+          @click="showDeleteConfirmModal = false"
+          >Cancel</md-button
+        >
+        <md-button class="md-red add-category-btn" @click="removeTimelineItem"
+          >Yes,I'm sure</md-button
+        >
       </template>
     </modal>
 
     <planner-event-footer>
       <template slot="buttons">
-        <md-button class="md-simple md-button md-black maryoku-btn" @click="revert">
+        <md-button
+          class="md-simple md-button md-black maryoku-btn"
+          @click="revert"
+        >
           <span class="font-size-16 text-transform-capitalize">
-            <img class="mr-20" :src="`${$iconURL}Campaign/Group 8871.svg`" />Revert to original
+            <img
+              class="mr-20"
+              :src="`${$iconURL}Campaign/Group 8871.svg`"
+            />Revert to original
           </span>
         </md-button>
         <span class="seperator"></span>
-        <md-button class="md-simple md-button md-black maryoku-btn" @click="startFromScratch">
+        <md-button
+          class="md-simple md-button md-black maryoku-btn"
+          @click="startFromScratch"
+        >
           <span class="font-size-16 text-transform-capitalize">
-            <img class="mr-10 label-icon" :src="`${$iconURL}Timeline-New/Trash.svg`" />
+            <img
+              class="mr-10 label-icon"
+              :src="`${$iconURL}Timeline-New/Trash.svg`"
+            />
             Start from scratch
           </span>
         </md-button>
-        <md-button class="md-simple md-button md-red maryoku-btn md-outlined" @click="saveDraft">
+        <md-button
+          class="md-simple md-button md-red maryoku-btn md-outlined"
+          @click="saveDraft"
+        >
           <span class="font-size-16 text-transform-capitalize">
-            <img class="mr-20 label-icon" :src="`${$iconURL}Timeline-New/save-red.svg`" />
+            <img
+              class="mr-20 label-icon"
+              :src="`${$iconURL}Timeline-New/save-red.svg`"
+            />
             Save Draft
           </span>
         </md-button>
         <md-button class="md-button md-red maryoku-btn" @click="finalize">
-          <span class="font-size-16 text-transform-capitalize">Finalise timeline</span>
+          <span class="font-size-16 text-transform-capitalize"
+            >Finalise timeline</span
+          >
         </md-button>
       </template>
     </planner-event-footer>
@@ -188,6 +259,7 @@ import ProgressSidebar from "./components/progressSidebar";
 import PlannerEventFooter from "@/components/Planner/FooterPanel";
 import { timelineBlockItems } from "@/constants/event";
 import TimelineGapModal from "./Modals/TimelineGapModal";
+import CalendarVue from "../../../../old/src/pages/Dashboard/Calendar.vue";
 
 export default {
   name: "event-details-timeline",
@@ -227,12 +299,15 @@ export default {
     hoursArray: [],
     disabledDragging: false,
     timelineAttachment: null,
-    timelineIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/timeline/svg/",
-    menuIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
+    timelineIconsURL:
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/timeline/svg/",
+    menuIconsURL:
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
     event: {},
     showDeleteConfirmModal: false,
     deletingDate: -1,
-    newTimeLineIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/Timeline-New/",
+    newTimeLineIconsURL:
+      "https://static-maryoku.s3.amazonaws.com/storage/icons/Timeline-New/",
 
     timeline: [
       {
@@ -263,7 +338,18 @@ export default {
       "eighteen ",
       "nineteen ",
     ],
-    b: ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"],
+    b: [
+      "",
+      "",
+      "twenty",
+      "thirty",
+      "forty",
+      "fifty",
+      "sixty",
+      "seventy",
+      "eighty",
+      "ninety",
+    ],
     currentAttachments: [],
     showCommentEditorPanel: false,
     showTimelineGapModal: false,
@@ -287,16 +373,34 @@ export default {
         if (template.id) block.id = template.id;
         else block.id = null;
         block.mode = "edit";
-        block.startTime = moment(`${template.date} 00:00 am`, "DD/MM/YY hh:mm a").valueOf();
-        block.endTime = moment(`${template.date} 00:00 am`, "DD/MM/YY hh:mm a").valueOf();
+        block.startTime = moment(
+          `${template.date} 00:00 am`,
+          "DD/MM/YY hh:mm a",
+        ).valueOf();
+        block.endTime = moment(
+          `${template.date} 00:00 am`,
+          "DD/MM/YY hh:mm a",
+        ).valueOf();
 
         if (index == 0) {
           if (this.eventData.eventDayPart == "evening") {
-            block.startTime = moment(`${template.date} 07:00 PM`, "DD/MM/YY hh:mm A").valueOf();
-            block.endTime = moment(`${template.date} 08:00 PM`, "DD/MM/YY hh:mm A").valueOf();
+            block.startTime = moment(
+              `${template.date} 07:00 PM`,
+              "DD/MM/YY hh:mm A",
+            ).valueOf();
+            block.endTime = moment(
+              `${template.date} 08:00 PM`,
+              "DD/MM/YY hh:mm A",
+            ).valueOf();
           } else {
-            block.startTime = moment(`${template.date} 08:00 AM`, "DD/MM/YY hh:mm A").valueOf();
-            block.endTime = moment(`${template.date} 09:00 AM`, "DD/MM/YY hh:mm A").valueOf();
+            block.startTime = moment(
+              `${template.date} 08:00 AM`,
+              "DD/MM/YY hh:mm A",
+            ).valueOf();
+            block.endTime = moment(
+              `${template.date} 09:00 AM`,
+              "DD/MM/YY hh:mm A",
+            ).valueOf();
           }
         } else {
           const prevItem = this.timelineItems[template.date][index - 1];
@@ -395,12 +499,14 @@ export default {
     },
     getTimelineItems() {
       let event = new CalendarEvent({ id: this.eventData.id });
-      this.$http.get(`${process.env.SERVER_URL}/1/events/${event.id}/timelineItems`).then((res) => {
-        this.timelineItems = Object.assign({}, res.data);
-        this.originalTimelineItems = JSON.stringify(res.data);
-        this.timelineDates = Object.keys(this.timelineItems).sort();
-        this.$root.$emit("timeline-updated", this.timelineItems);
-      });
+      this.$http
+        .get(`${process.env.SERVER_URL}/1/events/${event.id}/timelineItems`)
+        .then((res) => {
+          this.timelineItems = Object.assign({}, res.data);
+          this.originalTimelineItems = JSON.stringify(res.data);
+          this.timelineDates = Object.keys(this.timelineItems).sort();
+          this.$root.$emit("timeline-updated", this.timelineItems);
+        });
     },
     cancleTimeline({ item, index }) {
       if (!this.timelineItems[item.date][index].id) {
@@ -436,8 +542,14 @@ export default {
         buildingBlockType: item.buildingBlockType,
         description: item.description,
         startTime: item.startTime,
-        startTime: moment(`${item.date} ${item.startTime}`, "DD/MM/YY hh:mm a").valueOf(),
-        endTime: moment(`${item.date} ${item.endTime}`, "DD/MM/YY hh:mm a").valueOf(),
+        startTime: moment(
+          `${item.date} ${item.startTime}`,
+          "DD/MM/YY hh:mm a",
+        ).valueOf(),
+        endTime: moment(
+          `${item.date} ${item.endTime}`,
+          "DD/MM/YY hh:mm a",
+        ).valueOf(),
         endDuration: item.endDuration,
         startDuration: item.startDuration,
         // order: order,
@@ -470,10 +582,15 @@ export default {
     },
     updateTimelineItem(item) {
       this.setItemLoading(item, true, true);
-      if (!item.startTime || !item.endTime || (!item.title && !item.description)) {
+      if (
+        !item.startTime ||
+        !item.endTime ||
+        (!item.title && !item.description)
+      ) {
         this.$set(item, "isItemLoading", false);
         this.$notify({
-          message: "From time, To time and ( Title or Description ) id Required",
+          message:
+            "From time, To time and ( Title or Description ) id Required",
           horizontalAlign: "center",
           verticalAlign: "top",
           type: "warning",
@@ -485,7 +602,10 @@ export default {
 
       let event = new CalendarEvent({ id: this.eventData.id });
 
-      let timelineItem = new EventTimelineItem({ id: item.id }).for(this.calendar, event);
+      let timelineItem = new EventTimelineItem({ id: item.id }).for(
+        this.calendar,
+        event,
+      );
 
       timelineItem.title = item.title;
       timelineItem.description = item.description;
@@ -495,27 +615,31 @@ export default {
       timelineItem.location = item.location;
       timelineItem.attachments = item.attachments;
       if (this.currentAttachments.length > 0) {
-        this.uploadAttachment(item.attachment, item.attachmentName, (results) => {
-          if (!timelineItem.attachments) {
-            timelineItem.attachments = [];
-          }
-          timelineItem.attachments = timelineItem.attachments.concat(results);
-          timelineItem.attachmentName = "";
-          timelineItem
-            .save()
-            .then((res) => {
-              this.getTimelineItems();
-              this.disabledDragging = false;
-              this.$root.$emit("timeline-updated", this.timelineItems);
-            })
-            .catch((error) => {
-              this.disabledDragging = false;
-              this.$root.$emit("timeline-updated", this.timelineItems);
-            });
+        this.uploadAttachment(
+          item.attachment,
+          item.attachmentName,
+          (results) => {
+            if (!timelineItem.attachments) {
+              timelineItem.attachments = [];
+            }
+            timelineItem.attachments = timelineItem.attachments.concat(results);
+            timelineItem.attachmentName = "";
+            timelineItem
+              .save()
+              .then((res) => {
+                this.getTimelineItems();
+                this.disabledDragging = false;
+                this.$root.$emit("timeline-updated", this.timelineItems);
+              })
+              .catch((error) => {
+                this.disabledDragging = false;
+                this.$root.$emit("timeline-updated", this.timelineItems);
+              });
 
-          this.currentAttachments = []; //intialized attachmentslist
-          item.attachmentName = "";
-        });
+            this.currentAttachments = []; //intialized attachmentslist
+            item.attachmentName = "";
+          },
+        );
       } else {
         timelineItem
           .save()
@@ -540,11 +664,15 @@ export default {
         formData.append("from", "timeline");
         formData.append("type", "attachment");
         formData.append("name", fileItem.name);
-        const result = await this.$http.post(`${process.env.SERVER_URL}/uploadFile`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
+        const result = await this.$http.post(
+          `${process.env.SERVER_URL}/uploadFile`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           },
-        });
+        );
         attachments.push({
           originalName: fileItem.name,
           url: result.data.upload.path,
@@ -667,23 +795,51 @@ export default {
     numberToWord(num) {
       let vm = this;
       if ((num = num.toString()).length > 9) return "overflow";
-      let n = ("000000000" + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+      let n = ("000000000" + num)
+        .substr(-9)
+        .match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
       if (!n) return;
       var str = "";
-      str += n[1] != 0 ? (vm.a[Number(n[1])] || vm.b[n[1][0]] + " " + vm.a[n[1][1]]) + "crore " : "";
-      str += n[2] != 0 ? (vm.a[Number(n[2])] || vm.b[n[2][0]] + " " + vm.a[n[2][1]]) + "lakh " : "";
-      str += n[3] != 0 ? (vm.a[Number(n[3])] || vm.b[n[3][0]] + " " + vm.a[n[3][1]]) + "thousand " : "";
-      str += n[4] != 0 ? (vm.a[Number(n[4])] || vm.b[n[4][0]] + " " + vm.a[n[4][1]]) + "hundred " : "";
-      str += n[5] != 0 ? (str != "" ? "and " : "") + (vm.a[Number(n[5])] || vm.b[n[5][0]] + " " + vm.a[n[5][1]]) : "";
+      str +=
+        n[1] != 0
+          ? (vm.a[Number(n[1])] || vm.b[n[1][0]] + " " + vm.a[n[1][1]]) +
+            "crore "
+          : "";
+      str +=
+        n[2] != 0
+          ? (vm.a[Number(n[2])] || vm.b[n[2][0]] + " " + vm.a[n[2][1]]) +
+            "lakh "
+          : "";
+      str +=
+        n[3] != 0
+          ? (vm.a[Number(n[3])] || vm.b[n[3][0]] + " " + vm.a[n[3][1]]) +
+            "thousand "
+          : "";
+      str +=
+        n[4] != 0
+          ? (vm.a[Number(n[4])] || vm.b[n[4][0]] + " " + vm.a[n[4][1]]) +
+            "hundred "
+          : "";
+      str +=
+        n[5] != 0
+          ? (str != "" ? "and " : "") +
+            (vm.a[Number(n[5])] || vm.b[n[5][0]] + " " + vm.a[n[5][1]])
+          : "";
       return str;
     },
     addTimelineItem(index) {
       let timelineLength = this.timeline.length - 1;
       let nextDay = 0;
-      if (typeof this.timeline[index].itemDay == "number") nextDay = this.timeline[index].itemDay + 1000 * 60 * 60 * 24;
-      else nextDay = this.timeline[index].itemDay.getTime() + 1000 * 60 * 60 * 24;
+      if (typeof this.timeline[index].itemDay == "number")
+        nextDay = this.timeline[index].itemDay + 1000 * 60 * 60 * 24;
+      else
+        nextDay = this.timeline[index].itemDay.getTime() + 1000 * 60 * 60 * 24;
 
-      if (this.timeline[index + 1] && this.formatDate(this.timeline[index + 1].itemDay) === this.formatDate(nextDay)) {
+      if (
+        this.timeline[index + 1] &&
+        this.formatDate(this.timeline[index + 1].itemDay) ===
+          this.formatDate(nextDay)
+      ) {
         return;
       }
       this.timeline.forEach((item, index) => {
@@ -753,8 +909,12 @@ export default {
         if (index == 0) {
           return false;
         }
-        if (!vm.timeline[index + 1]) return date.getTime() <= vm.timeline[index - 1].itemDay;
-        return date.getTime() <= vm.timeline[index - 1].itemDay || date.getTime() >= vm.timeline[index + 1].itemDay;
+        if (!vm.timeline[index + 1])
+          return date.getTime() <= vm.timeline[index - 1].itemDay;
+        return (
+          date.getTime() <= vm.timeline[index - 1].itemDay ||
+          date.getTime() >= vm.timeline[index + 1].itemDay
+        );
       };
       return checkDate;
     },
@@ -794,13 +954,16 @@ export default {
     },
     saveDraft() {
       this.$http
-        .post(`${process.env.SERVER_URL}/1/events/${this.eventData.id}/timelineItems`, this.timelineItems, {
-          headers: this.$auth.getAuthHeader(),
-        })
+        .post(
+          `${process.env.SERVER_URL}/1/events/${this.eventData.id}/timelineItems`,
+          this.timelineItems,
+          { headers: this.$auth.getAuthHeader() },
+        )
         .then((res) => {
           swal({
             title: "Good Job! ",
-            text: "Your working timeline is saved successfully! You can change it anytime!",
+            text:
+              "Your working timeline is saved successfully! You can change it anytime!",
             showCancelButton: false,
             confirmButtonClass: "md-button md-success",
             confirmButtonText: "Ok",
@@ -818,13 +981,16 @@ export default {
       if (this.checkTimeGap()) {
         this.showTimelineGapModal = false;
         this.$http
-          .post(`${process.env.SERVER_URL}/1/events/${this.eventData.id}/timelineItems`, this.timelineItems, {
-            headers: this.$auth.getAuthHeader(),
-          })
+          .post(
+            `${process.env.SERVER_URL}/1/events/${this.eventData.id}/timelineItems`,
+            this.timelineItems,
+            { headers: this.$auth.getAuthHeader() },
+          )
           .then((res) => {
             swal({
               title: "Good Job! ",
-              text: "You finalise timeline and your event will be processed according your timelines!",
+              text:
+                "You finalise timeline and your event will be processed according your timelines!",
               showCancelButton: false,
               confirmButtonClass: "md-button md-success",
               confirmButtonText: "Ok",
@@ -893,9 +1059,19 @@ export default {
     },
   },
   created() {
-    [...Array(12).keys()].map((x) => (x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined));
-    [...Array(12).keys()].map((x) => (x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`)));
-    [...Array(8).keys()].map((x) => (x === 0 ? this.hoursArray.push(`12:00 AM`) : this.hoursArray.push(`${x}:00 AM`)));
+    [...Array(12).keys()].map((x) =>
+      x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined,
+    );
+    [...Array(12).keys()].map((x) =>
+      x === 0
+        ? this.hoursArray.push(`12:00 PM`)
+        : this.hoursArray.push(`${x}:00 PM`),
+    );
+    [...Array(8).keys()].map((x) =>
+      x === 0
+        ? this.hoursArray.push(`12:00 AM`)
+        : this.hoursArray.push(`${x}:00 AM`),
+    );
     this.calendar = new Calendar({
       id: this.currentUser.profile.defaultCalendarId,
     });
@@ -937,9 +1113,14 @@ export default {
           .catch((err) => {});
         return;
       }
-      const newTimeline = this.getAddedTimelineItem(index + 1, { date: date, action: "edited" }, block);
+      const newTimeline = this.getAddedTimelineItem(
+        index + 1,
+        { date: date, action: "edited" },
+        block,
+      );
       console.log("newTimeline", newTimeline);
-      if (newTimeline) this.timelineItems[date].splice(index + 1, 0, newTimeline);
+      if (newTimeline)
+        this.timelineItems[date].splice(index + 1, 0, newTimeline);
     });
   },
   computed: {
@@ -957,7 +1138,9 @@ export default {
     },
     permission() {
       try {
-        return this.$store.state.event.eventData.permit ? this.$store.state.event.eventData.permit : "edit";
+        return this.$store.state.event.eventData.permit
+          ? this.$store.state.event.eventData.permit
+          : "edit";
       } catch (e) {
         return "edit";
       }
@@ -976,7 +1159,12 @@ export default {
   },
   watch: {
     eventData(newVal, oldVal) {
-      this.$root.$emit("set-title", this.eventData, this.routeName === "EditBuildingBlocks", true);
+      this.$root.$emit(
+        "set-title",
+        this.eventData,
+        this.routeName === "EditBuildingBlocks",
+        true,
+      );
       this.initData(newVal);
     },
   },

@@ -1,5 +1,15 @@
 <template>
   <div class="collapse-panel white-card card proposal-bid">
+    <div class="collapse-panel-header d-flex align-center justify-content-between" v-if="hasCategoryHeader">
+      <div class="text-cont d-flex">
+        <h3 class="title font-bold">
+          <img :src="`${$iconURL}NewSubmitPorposal/Asset 614.svg`" class="page-icon mr-10" />
+          {{ categoryName }}
+        </h3>
+        <h5 class="ml-10">For Whole Event</h5>
+      </div>
+    </div>
+    <hr v-if="hasCategoryHeader" />
     <div class="collapse-panel-header" @click="isExpanded = !isExpanded">
       <div class="d-flex align-center justify-content-between">
         <div class="text-cont d-flex">
@@ -9,8 +19,10 @@
           </h3>
         </div>
         <div class="action">
+          <!-- <img v-if="isExpanded" :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`" class="label-icon" /> -->
           <md-icon style="color: #a0a0a0; font-size: 30px !important" v-if="isExpanded">keyboard_arrow_right</md-icon>
           <md-icon style="color: #a0a0a0; font-size: 30px !important" v-else>keyboard_arrow_down</md-icon>
+          <!-- <img v-else :src="`${$iconURL}NewSubmitPorposal/Asset 567.svg`" class="label-icon" /> -->
         </div>
       </div>
       <div>
@@ -18,7 +30,6 @@
       </div>
     </div>
     <div class="collapse-panel-content" v-if="isExpanded">
-      <proposal-add-item-form></proposal-add-item-form>
       <proposal-service-table
         :category="vendor.eventCategory.key"
         :tableCategory="tableCategory"
@@ -27,7 +38,6 @@
   </div>
 </template>
 <script>
-import ProposalAddItemForm from "./ProposalAddItemForm.vue";
 import ProposalServiceTable from "./ProposalServiceTable";
 
 export default {
@@ -72,7 +82,6 @@ export default {
   },
   components: {
     ProposalServiceTable,
-    ProposalAddItemForm,
   },
   computed: {
     categoryName() {
