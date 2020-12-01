@@ -9,17 +9,43 @@
       :vendor="vendor"
       v-if="step == 1"
     />
-    <vendor-signup-step2 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 2" />
-    <vendor-signup-step3 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 3" />
-    <vendor-signup-step4 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 4" />
+    <vendor-signup-step2
+      :categories="businessCategories"
+      :icon="`${iconUrl}`"
+      :vendor="vendor"
+      v-if="step == 2"
+    />
+    <vendor-signup-step3
+      :categories="businessCategories"
+      :icon="`${iconUrl}`"
+      :vendor="vendor"
+      v-if="step == 3"
+    />
+    <vendor-signup-step4
+      :categories="businessCategories"
+      :icon="`${iconUrl}`"
+      :vendor="vendor"
+      v-if="step == 4"
+    />
 
-    <vendor-signup-step5 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 5" />
-    <vendor-signup-final-form :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 6" />
+    <vendor-signup-step5
+      :categories="businessCategories"
+      :icon="`${iconUrl}`"
+      :vendor="vendor"
+      v-if="step == 5"
+    />
+    <vendor-signup-final-form
+      :categories="businessCategories"
+      :icon="`${iconUrl}`"
+      :vendor="vendor"
+      v-if="step == 6"
+    />
     <div v-if="isCompletedWizard" class="final-section">Thank you for your signup!</div>
   </div>
 </template>
 
 <script>
+
 import VueElementLoading from "vue-element-loading";
 import Vendors from "@/models/Vendors";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
@@ -147,46 +173,10 @@ export default {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
   },
+  created() {},
   mounted() {
-    //if this is edit page
-    if (this.$route.params.id) {
-      Vendors.find(this.$route.params.id).then((vendor) => {
-        this.vendor = vendor;
-        //
-        this.setVendor(vendor);
-        this.$root.$emit("set-vendor", this.vendor);
-        this.$forceUpdate();
-      });
-    }
-    this.$root.$on("approve-vendor-basic-info", (vendor) => {
-      if (vendor) this.vendor = { ...this.vendor, ...vendor };
-      console.log("vendor", this.vendor);
-      console.log("*** Save vendor - done: ");
-      this.isApproved = true;
-
-      this.step = 1;
-    });
-    this.$root.$on("next-vendor-signup-step", () => {
-      if (this.step < 6) {
-        this.step += 1;
-      }
-    });
-    this.$root.$on("prev-vendor-signup-step", () => {
-      if (this.step > 0) {
-        this.step -= 1;
-      }
-      if (this.step == 0) {
-        this.isApproved = false;
-      }
-    });
-    this.$root.$on("go-to-signup-step", (step) => {
-      this.step = step;
-      if (this.step < 1) {
-        this.isApproved = false;
-      }
-    });
     this.$root.$on("update-vendor-value", (field, value) => {
-      console.log("update-vendor-value", field, value);
+      console.log('update-vendor-value', field, value);
       let vendor = JSON.parse(JSON.stringify(this.vendor));
       if (field == "images" || field == "vendorImages") {
         if (!vendor.images[value.index]) {
@@ -204,6 +194,7 @@ export default {
         this.$set(vendor, "notAllowed", []);
         this.$set(vendor, "exDonts", []);
         this.$set(vendor, "pricingPolicies", []);
+        this.$set(vendor, "policies", []);
         this.$set(vendor, "yesPolicies", []);
         this.$set(vendor, "noPolicies", []);
         this.$set(vendor, "selectedWeekdays", []);
@@ -256,19 +247,19 @@ export default {
   },
   computed: {
     ...mapGetters({
-      vendor: "vendor/getVendor",
-      step: "vendor/getStep",
-    }),
+      vendor: 'vendor/getVendor',
+      step: 'vendor/getStep'
+    })
   },
   filters: {},
   watch: {
     vendor(newVal) {
       console.log("vendor.signup.watch.vendor", newVal);
     },
-    step(newVal) {
+    step(newVal){
       console.log("vendor.signup.watch.step", newVal);
-      if (this.step === 7) this.addVendor();
-    },
+      if ( this.step === 7 ) this.addVendor();
+    }
   },
 };
 </script>

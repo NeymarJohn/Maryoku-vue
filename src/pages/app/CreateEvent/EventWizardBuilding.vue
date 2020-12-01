@@ -1,168 +1,164 @@
 <template>
-  <div class="event-wizard-building">
-    <div class="container">
-      <div class="title">3/5</div>
-      <selected-value :value="publicEventData.location" property="location"></selected-value>
-      <div class="event-building event-basic-info">
-        <div class="setting-title mt-5">
-          <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator" />
-          Staying in or in need of some fresh air?
+    <div class="">
+        <div class="container">
+            <div class="title">
+              3/5
+            </div>
+            <selected-value :value="publicEventData.location" property="location"></selected-value>
+            <div class="event-building event-basic-info">
+              <div class="setting-title mt-5">
+                <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator">
+                Staying in or in need of some fresh air?
+              </div>
+              <div class="text-center mt-2">
+                Is it an indoor or outdoor event?
+              </div>
+              <div class="mt-3 types">
+                <div class="type-card" @click="selectedType=type.value" :class="{selected:type.value==selectedType}" v-for="(type) in types" :key="type.value">
+                  <div>
+                    <img :src="getIconUrl(type.value)">
+                  </div>
+                  <div>
+                    {{type.name}}
+                  </div>
+                  <div>
+                    <md-checkbox class="md-checkbox-circle md-red" v-model="selectedType" :value="type.value"></md-checkbox>
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
-        <div class="text-center mt-2">Is it an indoor or outdoor event?</div>
-        <div class="mt-3 types">
-          <div
-            class="type-card"
-            @click="selectedType = type.value"
-            :class="{ selected: type.value == selectedType }"
-            v-for="type in types"
-            :key="type.value"
-          >
-            <div>
-              <img :src="getIconUrl(type.value)" />
-            </div>
-            <div>
-              {{ type.name }}
-            </div>
-            <div>
-              <md-checkbox class="md-checkbox-circle md-red" v-model="selectedType" :value="type.value"></md-checkbox>
-            </div>
-          </div>
-        </div>
-      </div>
+        <wizard-status-bar :currentStep="3" @next="goToNext" @skip="skip" @back="back"></wizard-status-bar>
     </div>
-    <wizard-status-bar :currentStep="3" @next="goToNext" @skip="skip" @back="back"></wizard-status-bar>
-  </div>
 </template>
 
 <script>
-import GoBack from "./componenets/GoBack";
-import SelectedValue from "./componenets/SelectedValue";
-import WizardStatusBar from "./componenets/WizardStatusBar";
-import { MaryokuInput } from "@/components";
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+
+import GoBack from './componenets/GoBack'
+import SelectedValue from './componenets/SelectedValue'
+import WizardStatusBar from './componenets/WizardStatusBar'
+import { MaryokuInput} from '@/components'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
   components: {
     GoBack,
     SelectedValue,
     WizardStatusBar,
-    MaryokuInput,
+    MaryokuInput
   },
-  created() {
+  created () {
     if (this.publicEventData.inOutDoor) {
-      this.selectedType = this.publicEventData.inOutDoor;
+      this.selectedType = this.publicEventData.inOutDoor
     }
   },
   methods: {
-    ...mapMutations("PublicEventPlanner", ["setEventProperty", "setCurrentStep"]),
-    validateDate() {
-      return this.$refs.datePicker.$el.classList.contains("md-has-value");
+    ...mapMutations('PublicEventPlanner', ['setEventProperty', 'setCurrentStep']),
+    validateDate () {
+      return this.$refs.datePicker.$el.classList.contains('md-has-value')
     },
-    validateAndSubmit() {
+    validateAndSubmit () {
       // this.$emit('goToNextPage');
       //  return;
-      let vm = this;
+      let vm = this
 
-      this.cerrors = {};
-      this.validating = true;
+      this.cerrors = {}
+      this.validating = true
 
-      this.$validator.validateAll().then((isValid) => {
+      this.$validator.validateAll().then(isValid => {
         if (isValid) {
           // this.$parent.isLoading = true;
 
           if (this.eventId) {
-            vm.updateEvent();
+            vm.updateEvent()
           } else {
-            vm.createEvent();
+            vm.createEvent()
           }
         } else {
-          this.showNotify();
+          this.showNotify()
         }
-      });
+      })
 
       if (!this.eventType) {
+
       } else {
         // this.$emit('goToNextPage');
       }
     },
-    showNotify() {
+    showNotify () {
       this.$notify({
-        message: "Please, check all required fields",
-        icon: "warning",
-        horizontalAlign: "center",
-        verticalAlign: "top",
-        type: "danger",
-      });
+        message: 'Please, check all required fields',
+        icon: 'warning',
+        horizontalAlign: 'center',
+        verticalAlign: 'top',
+        type: 'danger'
+      })
     },
     goToNext() {
-      this.setEventProperty({ key: "inOutDoor", actualValue: this.selectedType });
-      this.$router.push({ path: `/event-wizard-type` });
+      this.setEventProperty({key: 'inOutDoor', actualValue: this.selectedType})
+      this.$router.push({path: `/event-wizard-type`})
     },
     skip() {
-      this.$router.push({ path: `/event-wizard-type` });
+      this.$router.push({path: `/event-wizard-type`})
     },
     back() {
-      this.$router.push({ path: `/event-wizard-location` });
+      this.$router.push({path: `/event-wizard-location`})
     },
     getIconUrl(value) {
-      if (value === "indoors" || value === "outdoors") {
-        return `${this.$iconURL}Onboarding/${value}-dark.svg`;
-      } else if (value === "virtual") {
-        return `${this.$secondIconURL}Creation/group-11232.svg`;
-      }
-    },
+        if (value === 'indoors' || value === 'outdoors' ) {
+            return `${this.$iconURL}Onboarding/${value}-dark.svg`;
+        } else if (value === 'virtual'){
+            return `${this.$secondIconURL}Creation/group-11232.svg`;
+        }
+    }
   },
-  data() {
+  data () {
     return {
-      buildings: [],
-      selectedType: "",
+      buildings:[],
+      selectedType:"",
       types: [
         {
-          value: "indoors",
-          name: "Indoor Event",
-          selected: false,
+          value: "indoors", name: "Indoor Event", selected:false
         },
         {
-          value: "outdoors",
-          name: "Outdoor Event",
-          selected: false,
+          value: "outdoors", name: "Outdoor Event", selected:false
         },
         {
-          value: "virtual",
-          name: "Virtual Event",
-          selected: false,
-        },
-      ],
-    };
+          value: "virtual", name: "Virtual Event", selected:false
+        }
+      ]
+    }
   },
   computed: {
-    ...mapState("PublicEventPlanner", ["publicEventData"]),
-  },
-};
-</script>
-<style lang="scss">
-.event-wizard-building {
-  .event-building.event-basic-info {
-    width: 100%;
-    margin: 0 auto;
-    padding: 0;
+    ...mapState('PublicEventPlanner', [
+      'publicEventData'
+    ])
   }
 
-  .md-checkbox-circle {
-    margin: 0px;
-  }
-  .input-name {
-    width: 80%;
-    text-align: right;
-    .form-input {
-      width: 280px;
-      margin: 0 0 0 auto;
-      display: inline-block;
-    }
-  }
-  .indicator-reverse {
-    transform: scaleX(-1);
-    margin-left: 20px;
-  }
 }
+</script>
+<style lang="scss">
+
+    .event-building.event-basic-info {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    .md-checkbox-circle {
+      margin: 0px;
+    }
+    .input-name {
+      width: 80%;
+      text-align: right;
+      .form-input {
+        width: 280px;
+        margin: 0 0 0 auto;
+        display: inline-block;
+      }
+    }
+    .indicator-reverse {
+      transform: scaleX(-1);
+      margin-left: 20px;
+    }
 </style>

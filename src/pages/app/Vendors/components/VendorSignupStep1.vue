@@ -59,11 +59,7 @@
             </div>
             <div class="field mb-50">
               <vendor-checkbox
-                v-if="
-                  vendor.vendorCategories &&
-                  companyServices.filter((cs) => cs.name == vendor.vendorCategories[0]) &&
-                  companyServices.filter((cs) => cs.name == vendor.vendorCategories[0]).length > 0
-                "
+                v-if="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0]).length > 0"
                 :item="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0])[0]"
                 :label="`Company Serivces`"
                 v-model="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0])[0].value"
@@ -119,7 +115,7 @@
             </div>-->
           </div>
         </div>
-        <div class="upload-wrapper" :class="{ 'mi-margin': vendor.images && vendor.images.length > 0 }">
+        <div class="upload-wrapper" :class="{ 'mi-margin': vendor.images.length > 0 }">
           <div class="title-cont">
             <div class="left">
               <h5><img :src="`${iconUrl}art (2).svg`" /> Upload your best images</h5>
@@ -128,7 +124,7 @@
               <p>(15 photos top, under 5MB)</p>
             </div>
           </div>
-          <template v-if="!vendor.images || vendor.images.length == 0">
+          <template v-if="vendor.images.length == 0">
             <div class="card red-border">
               <div class="upload-cont">
                 <a class @click="uploadVendorImage"> <img :src="`${iconUrl}Asset 559.svg`" /> Choose File </a>

@@ -115,6 +115,8 @@ export default {
       const total = this.data.reduce((s, item) => {
         return s + item.list.length;
       }, 0);
+      console.log("total", total);
+      console.log(Array.from(this.data, (item) => (item.list.length / total) * 100));
       return Array.from(this.data, (item) => (item.list.length / total) * 100);
     },
   },

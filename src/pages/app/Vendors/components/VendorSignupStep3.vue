@@ -28,29 +28,30 @@
             <div class="rules">
               <div
                 class="rule"
-                v-for="(r, rIndex) in policies.filter((p) => p.category == vendor.vendorCategories[0])[0].items"
+                v-for="(r, rIndex) in vendorPolicies.items"
                 :key="rIndex"
               >
                 <div class="left v-grid-with-desc">
                   {{ r.name }}
                   <textarea
-                    v-if="r.hasComment && yesRules.includes(r)"
+                    v-if="r.hasComment && r.value"
                     class="desc"
                     rows="3"
                     v-model="r.desc"
                     :placeholder="`Add additional information`"
+                    @input="setPolicy"
                   />
                 </div>
                 <div class="right">
                   <div class="top">
                     <template v-if="r.type == Boolean">
-                      <div class="item" @click="yesRule(r)">
-                        <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="yesRules.includes(r)" />
+                      <div class="item" @click="setPolicy(null, 'option', r.name, true)">
+                        <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="r.value" />
                         <span class="unchecked" v-else></span>
                         Yes
                       </div>
-                      <div class="item" @click="noRule(r)">
-                        <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="noRules.includes(r)" />
+                      <div class="item" @click="setPolicy(null, 'option', r.name, false)">
+                        <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!r.value" />
                         <span class="unchecked" v-else></span>
                         No
                       </div>
@@ -70,6 +71,31 @@
                         <option v-for="(option, index) in r.options" :key="index" :value="option">{{ option }}</option>
                       </select>
                     </template>
+
+                    <template v-if="r.type == 'MultiSelection'">
+                      <multiselect
+                              v-model="r.value"
+                              :options="r.options"
+                              :close-on-select="false"
+                              :clear-on-select="false"
+                              :searchable="false"
+                              :multiple="true"
+                              class="multiple-selection medium-selector"
+                              @select="setPolicy('', 'MultiSelection', r, $event)"
+                              @remove="setPolicy('', 'MultiSelection', r, $event)">
+                        <template slot="option" slot-scope="{option}">
+                          <span>
+                            {{option}}
+                          </span>
+                        </template>
+                        <template slot="tag" slot-scope="{option}">
+                          <span>
+                            {{option + (p.value.findIndex(it => it == option) == p.value.length - 1 ? '' : ',')}}
+                          </span>
+                        </template>
+                      </multiselect>
+                    </template>
+
                   </div>
                   <div class="bottom no-margin" v-if="r.type == Number">
                     <template v-if="r.noSuffix">
@@ -160,12 +186,12 @@
                   <div class="d-flex align-center">
                   <div class="top">
                     <template v-if="p.type == Boolean">
-                      <div class="item" @click="setPricePolicy(null, p.name, true)">
+                      <div class="item" @click="setPricePolicy(null, 'option', p.name, true)">
                         <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="p.value" />
                         <span class="unchecked" v-else></span>
                         Yes
                       </div>
-                      <div class="item" @click="setPricePolicy(null, p.name, false)">
+                      <div class="item" @click="setPricePolicy(null, 'option', p.name, false)">
                         <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!p.value" />
                         <span class="unchecked" v-else></span>
                         No
@@ -855,6 +881,7 @@ export default {
             {
               name: "Age restrictions",
               type: Boolean,
+              hasComment: true,
             },
             {
               name: "Time of day",
@@ -868,12 +895,17 @@ export default {
             },
             {
               name: "Minimum Setup time required",
+              subCategory: 'charge',
               type: Number,
+              value: 0,
               noSuffix: true,
             },
             {
               name: "Number of breaks",
               type: Number,
+              subCategory: 'charge',
+              value: 0,
+              noSuffix: true,
             },
             // {
             //   name: "Additional requirements from venue",
@@ -898,8 +930,9 @@ export default {
               noSuffix: true,
             },
             {
-              name: "Losgistics",
+              name: "Handles Losgistics",
               type: Boolean,
+              hasComment: true,
             },
           ],
         },
@@ -1022,19 +1055,27 @@ export default {
           items: [
             {
               name: "Travel cost",
-              type: Boolean,
+              type: 'Including',
+              value: true,
+              cost: '0.00'
             },
             {
               name: "Pickup",
-              type: Boolean,
+              type: 'Including',
+              value: true,
+              cost: '0.00'
             },
             {
               name: "Cleanup",
-              type: Boolean,
+              type: 'Including',
+              value: true,
+              cost: '0.00'
             },
             {
               name: "Breakdown",
               type: "Including",
+              value: true,
+              cost: '0.00'
             },
             {
               name: "Discount for large quantities",
@@ -1381,11 +1422,18 @@ export default {
   mounted() {
     console.log("vendor.signup.step3.mounted", this.vendor);
 
-    this.vendorPricingPolicies = this.pricingPolicies.find(p => p.category == this.vendor.vendorCategory);
-    if ( this.vendor.pricingPolicies && this.vendor.pricingPolicies.length) {
+    this.vendorPricingPolicies = this.pricingPolicies.find(p => p.category === this.vendor.vendorCategory);
+
+    if ( this.vendor.pricingPolicies && this.vendor.pricingPolicies.length ) {
       this.$set(this.vendorPricingPolicies, 'items', this.vendor.pricingPolicies)
     }
-    console.log("vendor.signup.step3.mounted", this.vendorPricingPolicies);
+
+    this.vendorPolicies = this.policies.find(p => p.category === this.vendor.vendorCategory);
+
+    if ( this.vendor.policies && this.vendor.policies.legnth ) {
+      this.$set(this.vendorPolicies, 'items', this.vendor.policies)
+    }
+    console.log("policy", this.vendor.policies, this.vendor.vendorCategory)
 
     if(!this.vendor.exDonts || !this.vendor.exDonts.length) {
       this.$http.get(`${process.env.SERVER_URL}/1/holidays`).then(res => {
@@ -1540,20 +1588,36 @@ export default {
       return value.charAt(0).toUpperCase() + value.slice(1);
     },
     setPricePolicy(e, type, name, value) {
-      console.log("setPricePolicy", type, name, value);
-      if ( type === 'Including' && name ) {
-        let p = this.vendorPricingPolicies.items.find(it => it.name == name);
+
+      if ( (type === 'option' ||  type === 'Including' ) && name ) {
+        let p = this.vendorPricingPolicies.items.find(it => it.name === name);
         p.value = value;
       }
 
       if ( type === 'MultiSelection' && name ) {
         let index = name.value.findIndex(o => o.toLowerCase() === value.toLowerCase())
-        console.log("setPricePolicy", index, value);
+
         if ( index !== -1 ) name.value.splice(index, 1);
       }
 
       this.$root.$emit("update-vendor-value", "pricingPolicies", this.vendorPricingPolicies.items);
     },
+    setPolicy(e, type, name, value) {
+
+      if ( (type === 'option' ||  type === 'Including' ) && name ) {
+        let p = this.vendorPolicies.items.find(it => it.name === name);
+        p.value = value;
+      }
+
+      if ( type === 'MultiSelection' && name ) {
+        let index = name.value.findIndex(o => o.toLowerCase() === value.toLowerCase())
+
+        if ( index !== -1 ) name.value.splice(index, 1);
+      }
+
+      this.$root.$emit("update-vendor-value", "policies", this.vendorPolicies.items);
+    }
+
   },
   computed: {},
   filters: {},
