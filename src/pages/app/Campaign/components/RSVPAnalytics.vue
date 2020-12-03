@@ -32,7 +32,7 @@
               <div class="slash"></div>
               <div class="text-center" style="margin-top: 25px">
                 <div class="ml-20 mr-20 font-size-50 font-regular font-regular color-gray line-height-1">
-                  {{ rsvpStatisData.guests.length }}
+                  {{ rsvpStatisData.rsvpRequests.length * (isPlusOne ? 2 : 1) }}
                 </div>
                 <div class="font-size-16">Invited Guests (Including +1)</div>
               </div>
@@ -235,6 +235,15 @@ export default {
     },
     openedPercentage() {
       return Math.round((this.openedCount / this.numberOfEmails) * 100);
+    },
+    isPlusOne() {
+      if ("isPlusOne" in this.$store.state.event) {
+        return this.$store.state.event.isPlusOne;
+      } else {
+        return (
+          this.$store.state.event.guestType === "employees-spouses" || this.$store.state.event.guestType === "families"
+        );
+      }
     },
   },
 };
