@@ -1,7 +1,7 @@
 <template>
   <div class="select-proposal-sub-item-wrapper" @click="clickItem(item)">
     <div v-if="!selected" class="active">
-      <span>{{ item.item }}</span>
+      <span>{{ item }}</span>
       <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/Group 3668 (2).svg" />
     </div>
     <div v-else class="inactive">
@@ -15,7 +15,7 @@ export default {
   name: "select-proposal-sub-item",
   components: {},
   props: {
-    item: Object,
+    item: String,
     selected: {
       type: Boolean,
       default: false,
@@ -29,7 +29,7 @@ export default {
   methods: {
     clickItem(item) {
       this.active = !this.active;
-      this.$emit("click", item);
+      this.$root.$emit("add-service-item", item);
     },
   },
   created() {},
@@ -62,7 +62,7 @@ export default {
         display: inline-block;
       }
       img {
-        width: 22px;
+        width: 26px;
         margin-left: 1rem;
         display: inline-block;
       }

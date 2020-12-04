@@ -83,12 +83,14 @@ const mutations = {
     state.vendor_categories = data.vendor_categories
   },
   setStep(state, step){
+    console.log("setStep", step)
     state.step = step;
   },
   setEditing(state, editing){
     state.isEditing = editing;
   },
   setVendor(state, vendor){
+    console.log("setVendor", vendor);
     state.vendor = vendor;
   },
   SET_DATA (state, data){
