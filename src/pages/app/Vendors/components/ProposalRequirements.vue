@@ -18,7 +18,11 @@
       </div>
     </div>
     <div class="collapse-panel-content" v-if="isExpanded">
-      <proposal-add-item-form></proposal-add-item-form>
+      <proposal-add-item-form
+        :optionalRequirements="optionalRequirements"
+        :serviceType="tableCategory"
+        @addItem="addItem"
+      ></proposal-add-item-form>
       <proposal-service-table
         :category="vendor.eventCategory.key"
         :tableCategory="tableCategory"
@@ -49,6 +53,10 @@ export default {
       type: String,
       default: "",
     },
+    vendorCategory: {
+      type: String,
+      default: "",
+    },
   },
   data() {
     return {
@@ -69,6 +77,10 @@ export default {
         return null;
       }
     },
+    addItem(serviceItem) {
+      if (!this.services) this.services = [];
+      this.services.push(serviceItem);
+    },
   },
   components: {
     ProposalServiceTable,
@@ -80,6 +92,43 @@ export default {
     },
     vendor() {
       return this.$store.state.vendorProposal.vendor;
+    },
+    proposalRequest() {
+      return this.$store.state.vendorProposal.proposalRequest;
+    },
+    requirements() {
+      return this.proposalRequest.componentRequirements[this.vendor.eventCategory.key];
+    },
+    optionalRequirements() {
+      if (!this.requirements) return [];
+      return this.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
+    },
+    services: {
+      get: function () {
+        if (this.tableCategory === "cost")
+          return this.$store.state.vendorProposal.proposalCostServices[this.vendorCategory];
+        else if (this.tableCategory === "included")
+          return this.$store.state.vendorProposal.proposalIncludedServices[this.vendorCategory];
+        else if (this.tableCategory === "extra")
+          return this.$store.state.vendorProposal.proposalExtraServices[this.vendorCategory];
+      },
+      set: function (newServices) {
+        if (this.tableCategory === "cost")
+          this.$store.commit("vendorProposal/setCostServices", {
+            category: this.vendorCategory,
+            services: newServices,
+          });
+        else if (this.tableCategory === "included")
+          this.$store.commit("vendorProposal/setIncludedServices", {
+            category: this.vendorCategory,
+            services: newServices,
+          });
+        else if (this.tableCategory === "extra")
+          this.$store.commit("vendorProposal/setExtraServices", {
+            category: this.vendorCategory,
+            services: newServices,
+          });
+      },
     },
   },
 };

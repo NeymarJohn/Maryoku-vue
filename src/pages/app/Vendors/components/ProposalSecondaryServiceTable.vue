@@ -790,51 +790,6 @@ export default {
     }
   }
 
-  .sub-items-cont {
-    padding: 1rem 0;
-    overflow: hidden;
-    position: relative;
-
-    h3 {
-      font-size: 30px;
-      font-weight: 800;
-      padding-bottom: 2rem;
-      margin: 0;
-    }
-    .sub-items {
-      // display: flex;
-      display: block;
-      position: relative;
-      white-space: nowrap;
-      width: calc(100% - 2rem);
-      // overflow-x: auto;
-    }
-    .prev {
-      position: absolute;
-      cursor: pointer;
-      z-index: 99;
-      left: 0;
-      background: #fff;
-      padding: 1.5rem 0;
-      top: 0;
-      i {
-        color: #f51355 !important;
-      }
-    }
-    .next {
-      z-index: 99;
-      position: absolute;
-      cursor: pointer;
-      right: 0;
-      background: #fff;
-      padding: 1.5rem 0;
-      top: 0;
-      i {
-        color: #f51355 !important;
-      }
-    }
-  }
-
   .add-attributes-cont {
     display: flex;
   }

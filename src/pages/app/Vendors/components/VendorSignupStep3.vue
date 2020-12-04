@@ -43,88 +43,62 @@
                   />
                 </div>
                 <div class="right">
-                  <div class="d-flex align-center">
-                    <div class="top">
-                      <template v-if="r.type == Boolean">
-                        <div class="item" @click="setPolicy(null, 'option', r.name, true)">
-                          <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="r.value" />
-                          <span class="unchecked" v-else></span>
-                          Yes
-                        </div>
-                        <div class="item" @click="setPolicy(null, 'option', r.name, false)">
-                          <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!r.value" />
-                          <span class="unchecked" v-else></span>
-                          No
-                        </div>
-                      </template>
-                      <template v-if="r.type == String">
-                        <div class="item" v-if="!noteRules.includes(r)" @click="noteRule(r)">
-                          <a class="note">+ Add Note</a>
-                        </div>
-                        <div class="item noflex" v-else>
-                          <textarea placeholder="Except from the parking area" rows="3" />
-                          <br />
-                          <a class="cancel" @click="noteRule(r)">Cancel</a>
-                        </div>
-                      </template>
-                      <template v-if="r.type == 'Selection'">
-                        <select class="unit-select" v-model="r.value">
-                          <option v-for="(option, index) in r.options" :key="index" :value="option">{{ option }}</option>
-                        </select>
-                      </template>
-                      <template v-if="r.type == 'Including'">
-                        <div class="item" @click="setPolicy(null, 'Including', r.name, true)">
-                          <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="r.value" />
-                          <span class="unchecked" v-else></span>
-                          Include
-                        </div>
-                        <div class="item" @click="setPolicy(null, 'Including', r.name, false)">
-                          <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!r.value" />
-                          <span class="unchecked" v-else></span>
-                          Not Include
-                        </div>
-                      </template>
-                      <template v-if="r.type == 'MultiSelection'">
-                        <category-selector
-                                :value="r.value"
-                                :categories="r.options"
-                                multiple="true"
-                                @change="changeCategorySelector('policy', r, ...arguments)"
-                        ></category-selector>
-                      </template>
-
-                    </div>
-                    <div class="bottom no-margin" v-if="r.type == Number">
-                      <template v-if="r.noSuffix">
-                        <div>
-                          <input type="number" class="text-center number-field" placeholder="00.00" />
-                        </div>
-                      </template>
-                      <template v-else>
-                        <span v-if="r.isPercentage">Rate (%)</span>
-                        <span v-else>Extra Payment</span>
-                        <br />
-                        <div class="suffix percentage" v-if="r.isPercentage">
-                          <input type="number" class placeholder="00.00" />
-                        </div>
-                        <div class="suffix" v-else>
-                          <input type="number" class placeholder="00.00" />
-                        </div>
-                      </template>
-                    </div>
-                    <div class="bottom mt-0 ml-40" v-if="r.type == 'Including' && !r.value">
-                      <span>Extra Payment</span>
-                      <br />
-                      <div class="suffix">
-                        <input
-                                type="number"
-                                class="text-center number-field"
-                                placeholder="00.00"
-                                v-model="r.cost"
-                                @change="setPolicy"
-                        />
+                  <div class="top">
+                    <template v-if="r.type == Boolean">
+                      <div class="item" @click="setPolicy(null, 'option', r.name, true)">
+                        <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="r.value" />
+                        <span class="unchecked" v-else></span>
+                        Yes
                       </div>
-                    </div>
+                      <div class="item" @click="setPolicy(null, 'option', r.name, false)">
+                        <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!r.value" />
+                        <span class="unchecked" v-else></span>
+                        No
+                      </div>
+                    </template>
+                    <template v-if="r.type == String">
+                      <div class="item" v-if="!noteRules.includes(r)" @click="noteRule(r)">
+                        <a class="note">+ Add Note</a>
+                      </div>
+                      <div class="item noflex" v-else>
+                        <textarea placeholder="Except from the parking area" rows="3" />
+                        <br />
+                        <a class="cancel" @click="noteRule(r)">Cancel</a>
+                      </div>
+                    </template>
+                    <template v-if="r.type == 'Selection'">
+                      <select class="unit-select" v-model="r.value">
+                        <option v-for="(option, index) in r.options" :key="index" :value="option">{{ option }}</option>
+                      </select>
+                    </template>
+
+                    <template v-if="r.type == 'MultiSelection'">
+                      <category-selector
+                              :value="r.value"
+                              :categories="r.options"
+                              multiple="true"
+                              @change="changeCategorySelector('policy', r, ...arguments)"
+                      ></category-selector>
+                    </template>
+
+                  </div>
+                  <div class="bottom no-margin" v-if="r.type == Number">
+                    <template v-if="r.noSuffix">
+                      <div>
+                        <input type="number" class="text-center number-field" placeholder="00.00" />
+                      </div>
+                    </template>
+                    <template v-else>
+                      <span v-if="r.isPercentage">Rate (%)</span>
+                      <span v-else>Extra Payment</span>
+                      <br />
+                      <div class="suffix percentage" v-if="r.isPercentage">
+                        <input type="number" class placeholder="00.00" />
+                      </div>
+                      <div class="suffix" v-else>
+                        <input type="number" class placeholder="00.00" />
+                      </div>
+                    </template>
                   </div>
                 </div>
               </div>
@@ -462,14 +436,10 @@
                     :is-multiple-date-picker="true"
                     :minSelDays="1"
                     :marked-dates="markedDates"
-                    :marked-date-range="markedDateRange"
                     :disabled-day-names="optimizeWeekDays(selectedWeekdays)"
                     :sundayStart="true"
-                    :date-format="'yyyy-mm-dd'"
                     v-model="date"
                     ref="calendar"
-                    :isMultipleDatePicker="true"
-                    :isMultipleDateRange="true"
                     v-on:dayClicked="updateDontWorkDays($event)"
                     v-on:daychoseDay="updateDontWorkDays($event)"
                   />
@@ -664,7 +634,6 @@ export default {
       markedDates: [
         // "16/6/2020",
       ],
-      markedDateRange: [],
       componentKey: 0,
       allowedCategoryFor3rd: ["venuerental", "foodandbeverage", "decor", "entertainment"],
       weekdays: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
@@ -937,9 +906,8 @@ export default {
             },
             {
               name: "Arrival onsite before the event",
-              type: 'Including',
-              value: true,
-              cost: '0.00'
+              type: Number,
+              noSuffix: true,
             },
             {
               name: "Handles Losgistics",
@@ -1430,11 +1398,67 @@ export default {
       vendorPricingPolicies:{},
     };
   },
+  created() {},
+  mounted() {
+    console.log("vendor.signup.step3.mounted", this.vendor);
+
+    this.vendorPricingPolicies = this.pricingPolicies.find(p => p.category === this.vendor.vendorCategory);
+
+    if ( this.vendor.pricingPolicies && this.vendor.pricingPolicies.length ) {
+      this.$set(this.vendorPricingPolicies, 'items', this.vendor.pricingPolicies)
+    }
+
+    this.vendorPolicies = this.policies.find(p => p.category === this.vendor.vendorCategory);
+
+    if ( this.vendor.policies && this.vendor.policies.legnth ) {
+      this.$set(this.vendorPolicies, 'items', this.vendor.policies)
+    }
+
+    if(this.vendor.selectedReligion && this.vendor.selectedReligion.length) {
+      this.selectedReligion = this.vendor.selectedReligion;
+      this.isReligion = true;
+      this.exDont = true;
+    }
+
+    console.log("selectedReligion", this.selectedReligion);
+
+    if(!this.vendor.exDonts || !this.vendor.exDonts.length) {
+      this.$http.get(`${process.env.SERVER_URL}/1/holidays`).then(res => {
+        this.religions = res.data;
+      });
+    } else {
+      this.religions = this.vendor.exDonts;
+
+      this.religions.map(r => {
+        if(r.holidays.some(h => h.selected)) this.exDont = true;
+      })
+    }
+
+
+    if (this.vendor.selectedWeekdays) {
+      if (this.vendor.selectedWeekdays.length > 0) {
+        this.selectedWeekdays = this.vendor.selectedWeekdays;
+      } else {
+        this.selectedWeekdays = ["saturday", "sunday"];
+      }
+    }
+
+    if (this.vendor.dontWorkDays && this.vendor.dontWorkDays.selectedDates) {
+      if (this.vendor.dontWorkDays.selectedDates.length > 0) {
+        this.markedDates = [];
+        _.each(this.vendor.dontWorkDays.selectedDates, (sd) => {
+          this.markedDates.push(sd.date);
+        });
+      }
+    }
+
+    this.optimizeWeekDays(this.selectedWeekdays);
+    this.componentKey += 1;
+    this.$forceUpdate();
+  },
   methods: {
     updateExDonts(item) {
-      console.log("updateExDonts", item);
       item.selected = !item.selected;
-
 
       this.$root.$emit("update-vendor-value", "exDonts", this.religions);
     },
@@ -1591,93 +1615,11 @@ export default {
     },
     isAllHolidays(data){
       return data.holidays.every(it => it.selected);
-    },
-    init(){
-      this.vendorPricingPolicies = this.pricingPolicies.find(p => p.category === this.vendor.vendorCategory);
-
-      if ( this.vendor.pricingPolicies && this.vendor.pricingPolicies.length ) {
-        this.$set(this.vendorPricingPolicies, 'items', this.vendor.pricingPolicies)
-      }
-
-      this.vendorPolicies = this.policies.find(p => p.category === this.vendor.vendorCategory);
-
-      if ( this.vendor.policies && this.vendor.policies.legnth ) {
-        this.$set(this.vendorPolicies, 'items', this.vendor.policies)
-      }
-
-      if(this.vendor.selectedReligion && this.vendor.selectedReligion.length) {
-        this.selectedReligion = this.vendor.selectedReligion;
-        this.isReligion = true;
-        this.exDont = true;
-      }
-
-      if(!this.vendor.exDonts || !this.vendor.exDonts.length) {
-        this.$http.get(`${process.env.SERVER_URL}/1/holidays`).then(res => {
-          this.religions = res.data;
-        });
-      } else {
-        this.religions = this.vendor.exDonts;
-
-        this.religions.map(r => {
-          if(r.holidays.some(h => h.selected)) this.exDont = true;
-        })
-      }
-
-
-      if (this.vendor.selectedWeekdays) {
-        if (this.vendor.selectedWeekdays.length > 0) {
-          this.selectedWeekdays = this.vendor.selectedWeekdays;
-        } else {
-          this.selectedWeekdays = ["saturday", "sunday"];
-        }
-      }
-
-      if (this.vendor.dontWorkDays && this.vendor.dontWorkDays.selectedDates) {
-        if (this.vendor.dontWorkDays.selectedDates.length > 0) {
-          this.markedDates = [];
-          _.each(this.vendor.dontWorkDays.selectedDates, (sd) => {
-            this.markedDates.push(sd.date);
-          });
-        }
-      }
-
-      if ( this.vendor.exDonts && this.vendor.exDonts.length ) {
-        this.vendor.exDonts.map(ex => {
-          ex.holidays.map(h => {
-            if (h.selected) this.markedDates.push(h.start)
-          })
-        })
-      }
-      // this.markedDates = [{date:'2020-12-21', class:'vfc-marked vfc-start-marked'}, {date:'2020-12-22', class:'vfc-marked'}, {date:'2020-12-23', class:'vfc-marked vfc-end-marked'}]
-      // this.markedDateRange = [{start: '2020-12-28', end: '2020-12-30'}];
-      this.optimizeWeekDays(this.selectedWeekdays);
-      this.componentKey += 1;
     }
   },
   computed: {},
   filters: {},
-  mounted() {
-    this.init()
-
-    // $('.vfc-day').each(function (index, day) {
-    //   console.log('day', index, $(day).find('span.vfc-span-day')[0]);
-    //   if ($(day).find('span.vfc-span-day').hasClass('vfc-marked')) console.log('selected', index);
-    //   // if ($(day).hasClass('') && $(day).hasClass('')) console.log('');
-    //   // if ($(day).hasClass('')) console.log('');
-    // })
-
-  },
-  afterupdated(){
-
-  },
-  watch: {
-    vendor:{
-      handler(newVal) {
-        this.init()
-      },
-      deep: true,
-    }
-  },
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>
