@@ -340,7 +340,7 @@ export default {
         conceptName: "",
         logo: "",
       },
-      deliverySettings: this.defaultSettings,
+      deliverySettings: { ...defaultSettings },
       showCommentEditorPanel: false,
       selectedTab: 1,
       showScheduleModal: false,
@@ -389,7 +389,7 @@ export default {
           ...currentCampaign.settings,
         };
       } else {
-        this.deliverySettings = { ...this.defaultSettings };
+        this.deliverySettings = { ...defaultSettings };
       }
     },
     scrollToTop() {
@@ -488,7 +488,7 @@ export default {
       this.scheduleCampaign();
     },
     revertSetting() {
-      this.deliverySettings = Object.assign({}, this.defaultSettings);
+      this.deliverySettings = Object.assign({}, defaultSettings);
       if (this.selectedTab == 1) {
         this.$refs.savedateCampaign.setDefault();
       } else if (this.selectedTab == 2) {
@@ -519,7 +519,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters("campaign", ["campaignIssued", "defaultSettings"]),
+    ...mapGetters("campaign", ["campaignIssued"]),
     event() {
       return this.$store.state.event.eventData;
     },

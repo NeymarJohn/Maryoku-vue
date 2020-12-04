@@ -1,5 +1,5 @@
 <template>
-  <div class="event-wizard-vibes">
+  <div class="">
     <div class="container">
       <div class="title">5/5</div>
       <div class="event-basic-info">
@@ -186,22 +186,20 @@ export default {
   min-height: 440px;
 }
 
-.event-wizard-vibes {
-  .md-checkbox-circle {
-    margin: 0px;
+.md-checkbox-circle {
+  margin: 0px;
+}
+.input-name {
+  width: 80%;
+  text-align: right;
+  .form-input {
+    width: 280px;
+    margin: 0 0 0 auto;
+    display: inline-block;
   }
-  .input-name {
-    width: 80%;
-    text-align: right;
-    .form-input {
-      width: 280px;
-      margin: 0 0 0 auto;
-      display: inline-block;
-    }
-  }
-  .indicator-reverse {
-    transform: scaleX(-1);
-    margin-left: 20px;
-  }
+}
+.indicator-reverse {
+  transform: scaleX(-1);
+  margin-left: 20px;
 }
 </style>

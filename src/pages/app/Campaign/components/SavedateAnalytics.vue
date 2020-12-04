@@ -83,7 +83,7 @@ export default {
       let openedEmails = 0;
       if (this.campaignData.guestEmails) {
         this.campaignData.guestEmails.forEach((item) => {
-          if (item.status == "opened") {
+          if (item.isOpened) {
             openedEmails++;
           }
         });
