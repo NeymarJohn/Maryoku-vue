@@ -204,6 +204,7 @@ export default {
         this.$set(vendor, "notAllowed", []);
         this.$set(vendor, "exDonts", []);
         this.$set(vendor, "pricingPolicies", []);
+        this.$set(vendor, "policies", []);
         this.$set(vendor, "yesPolicies", []);
         this.$set(vendor, "noPolicies", []);
         this.$set(vendor, "selectedWeekdays", []);

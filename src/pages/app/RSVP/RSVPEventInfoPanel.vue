@@ -42,14 +42,14 @@
       </div>
       <div class="event-info-item-content d-flex align-center font-size-20" v-else>
         <!-- <input type="text" v-model="isPluseOne" /> -->
-        <!-- <select v-model="isPluseOne">
+        <select v-model="isPluseOne">
           <option :value="false">Solo</option>
           <option :value="true">+1</option>
-        </select> -->
-        <md-checkbox v-model="isPluseOne" :value="false">Solo</md-checkbox>
-        <md-checkbox v-model="isPluseOne" :value="true">+1</md-checkbox>
-        <md-button class="md-simple md-black maryoku-btn" @click="editingPlusOne = !editingPlusOne">Cancel</md-button>
-        <md-button class="md-red maryoku-btn" @click="updateEvent">Save</md-button>
+        </select>
+        <md-button class="md-simple md-red maryoku-btn" @click="updateEvent">Save</md-button>
+        <md-button class="md-simple md-black md-outlined maryoku-btn" @click="editingPlusOne = !editingPlusOne"
+          >Cancel</md-button
+        >
       </div>
     </div>
     <div class="event-info-item">
@@ -66,8 +66,10 @@
       </div>
       <div class="event-info-item-content d-flex align-center font-size-20" v-else>
         <input type="text" v-model="eventArrival" />
-        <md-button class="md-simple md-black maryoku-btn" @click="editingArrival = !editingArrival">Cancel</md-button>
-        <md-button class="md-red maryoku-btn" @click="updateEvent">Save</md-button>
+        <md-button class="md-simple md-red maryoku-btn" @click="updateEvent">Save</md-button>
+        <md-button class="md-simple md-black md-outlined maryoku-btn" @click="editingArrival = !editingArrival"
+          >Cancel</md-button
+        >
       </div>
     </div>
   </div>
@@ -89,7 +91,7 @@ export default {
   data() {
     return {
       isPluseOne: this.isPlusOne,
-      eventArrival: this.event.arrival || "-",
+      eventArrival: this.event.arrival,
       editingPlusOne: false,
       editingArrival: false,
     };

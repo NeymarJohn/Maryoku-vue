@@ -3,24 +3,8 @@
     <template v-if="item.type == Boolean">
       <div class="main">
         <div class="check-cont flex" @click="updateCheck()">
-          <div
-            class="img"
-            :style="`
-              background-image: url('${iconUrl}Group 6258.svg');
-              background-repeat: no-repeat;
-              background-size: contain;
-            `"
-            v-if="checked"
-          ></div>
-          <div
-            class="img"
-            :style="`
-              background-image: url('${iconUrl}Rectangle 1245.svg');
-              background-repeat: no-repeat;
-              background-size: contain;
-            `"
-            v-else
-          ></div>
+          <img v-if="checked" class="mr-20" :src="iconUrl + 'Group 6258.svg'" width="27">
+          <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27">
           <div class="text">{{ label }}</div>
         </div>
         <div class="included-cont" v-if="checked && !item.xIncluded">
@@ -35,50 +19,27 @@
               <span class="unchecked" v-else></span>
               <span>Not included</span>
             </div>
-            <div class="extra-field" v-if="!included">
-              <div class="inb">How much extra?</div>
-              <div class="field">
-                <input type="number" placeholder="00.00" v-model="currentItem.value" />
-              </div>
+          </div>
+        </div>
+        <div class="included-cont" v-if="checked && !included">
+          <div class="extra-field">
+            Extra payment
+            <div class="field">
+              <input type="number" class="mt-20" placeholder="00.00" v-model="currentItem.value" />
             </div>
           </div>
-          <!-- <div class="included" :class="{'active': !included}" @click="updateIncluded()">
-            <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!included"/>
-            <span class="unchecked" v-else></span>
-            <span>Not included</span>
-          </div>-->
         </div>
       </div>
       <div class="sub-cont" v-if="checked" :class="{ 'mt-m3': !included }">
-        <!-- <textarea 
-          class="text"
-          :placeholder="`Describe your ${label}`"
-        />-->
         <textarea class="text" v-model="currentItem.desc" :placeholder="`Add additional information`" />
       </div>
     </template>
     <template v-if="item.type == Number">
       <div class="main">
-        <div class="check-cont">
-          <div class="check-cont flex" @click="updateCheck()">
-            <div
-              class="img"
-              :style="`
-                background-image: url('${iconUrl}Group 6258.svg');
-                background-repeat: no-repeat;
-                background-size: contain;
-              `"
-              v-if="checked"
-            ></div>
-            <div
-              class="img"
-              :style="`
-                background-image: url('${iconUrl}Rectangle 1245.svg');
-                background-repeat: no-repeat;
-                background-size: contain;
-              `"
-              v-else
-            ></div>
+        <div class="check-cont" >
+          <div class="flex" @click="updateCheck()">
+            <img v-if="checked" class="mr-20" :src="iconUrl + 'Group 6258.svg'" width="27">
+            <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27">
             {{ label }}
           </div>
           <div class="how-many" v-if="checked && included">
@@ -98,36 +59,23 @@
               <span class="unchecked" v-else></span>
               <span>Not included</span>
             </div>
-            <div class="extra-field" v-if="!included">
-              How much extra?
-              <input type="number" placeholder="00.00" v-model="currentItem.value" />
-            </div>
           </div>
         </div>
+        <div class="included-cont" v-if="checked && !included">
+          <div class="extra-field">
+            Extra payment
+            <input type="number" class="mt-20" placeholder="00.00" v-model="currentItem.value" />
+          </div>
+        </div>
+
       </div>
     </template>
     <template v-if="item.type == Array">
       <div class="main">
-        <div class="check-cont">
-          <div class="check-cont flex" @click="updateCheck()">
-            <div
-              class="img"
-              :style="`
-                background-image: url('${iconUrl}Group 6258.svg');
-                background-repeat: no-repeat;
-                background-size: contain;
-              `"
-              v-if="checked"
-            ></div>
-            <div
-              class="img"
-              :style="`
-                background-image: url('${iconUrl}Rectangle 1245.svg');
-                background-repeat: no-repeat;
-                background-size: contain;
-              `"
-              v-else
-            ></div>
+        <div class="check-cont" >
+          <div class="flex" @click="updateCheck()">
+            <img v-if="checked" class="mr-20" :src="iconUrl + 'Group 6258.svg'" width="27">
+            <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27">
             {{ label }}
           </div>
           <div class="dropdown-list" v-if="checked" @click="expanded = !expanded">
@@ -147,54 +95,19 @@
             </ul>
           </div>
         </div>
-        <!-- <div class="included-cont" v-if="checked">
-          <div class="included" :class="{'active': included}" @click="updateIncluded()">
-            <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="included"/>
-            <span class="unchecked" v-else></span>
-            <span>Included</span>
-          </div>
-          <div class="included" :class="{'active': !included}" @click="updateIncluded()">
-            <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!included"/>
-            <span class="unchecked" v-else></span>
-            <span>Not included</span>
-          </div>
-        </div>-->
       </div>
       <div class="sub-cont" v-if="item.hasComment && checked" :class="{ 'mt-m3': !included }">
-        <!-- <textarea 
-          class="text"
-          :placeholder="`Describe your ${label}`"
-        />-->
         <textarea class="text" v-model="currentItem.desc" :placeholder="`Add additional information`" />
       </div>
     </template>
     <template v-if="item.type == 'Cost'">
       <div class="main">
         <div class="check-cont">
-          <div class="check-cont flex" @click="updateCheck()">
-            <div
-              class="img"
-              :style="`
-                background-image: url('${iconUrl}Group 6258.svg');
-                background-repeat: no-repeat;
-                background-size: contain;
-              `"
-              v-if="checked"
-            ></div>
-            <div
-              class="img"
-              :style="`
-                background-image: url('${iconUrl}Rectangle 1245.svg');
-                background-repeat: no-repeat;
-                background-size: contain;
-              `"
-              v-else
-            ></div>
+          <div class="flex"@click="updateCheck()">
+
+            <img v-if="checked" class="mr-20" :src="iconUrl + 'Group 6258.svg'" width="27">
+            <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27">
             {{ label }}
-          </div>
-          <div class="how-many" v-if="checked && included">
-            <label>How Much Cost?</label>
-            <input type="number" placeholder="Cost" v-model="currentItem.value" />
           </div>
         </div>
         <div class="included-cont" v-if="checked && !item.xIncluded">
@@ -209,12 +122,15 @@
               <span class="unchecked" v-else></span>
               <span>Not included</span>
             </div>
-            <div class="extra-field" v-if="!included">
-              How much extra?
-              <input type="number" placeholder="00.00" v-model="currentItem.value" />
-            </div>
           </div>
         </div>
+        <div class="included-cont" v-if="checked && !included">
+          <div class="extra-field">
+            Extra payment
+            <input type="number" class="mt-20" placeholder="00.00" v-model="currentItem.value" />
+          </div>
+        </div>
+
       </div>
     </template>
   </div>
@@ -308,7 +224,7 @@ export default {
   background: #ffffff;
   margin: auto -60px;
   margin-bottom: 0px;
-  padding: 15px 60px;
+  padding: 25px 60px;
   cursor: pointer;
 
   .main {
@@ -317,7 +233,7 @@ export default {
     .check-cont {
       margin-right: 1rem;
       align-items: flex-start;
-      flex: 2;
+      width: 40%;
       .img {
         width: 27px;
         height: 27px;
@@ -427,25 +343,24 @@ export default {
         }
       }
       .extra-field {
-        padding: 1rem 0 0 44px;
-        width: calc(100% + 44px);
+        padding-left: 44px;
+        display: block;
         .field {
           display: inline-block;
           &:before {
             content: "$";
             position: absolute;
-            margin-top: 9px;
+            margin-top: 30px;
             margin-left: 4rem;
           }
-          input {
-            margin-left: 0.5rem;
-            text-align: center;
-            border-radius: 3px;
-            border: 1px solid #818080;
-            max-width: 100%;
-            font: normal 16px Manrope-Regular, sans-serif;
-            color: #050505;
-          }
+        }
+        input {
+          text-align: center;
+          border-radius: 3px;
+          border: 1px solid #818080;
+          max-width: 100%;
+          font: normal 16px Manrope-Regular, sans-serif;
+          color: #050505;
         }
       }
       span {

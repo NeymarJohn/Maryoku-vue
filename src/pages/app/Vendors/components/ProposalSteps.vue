@@ -1,5 +1,15 @@
 <template>
   <div class="proposal-steps-wrapper">
+    <div class="title-cont">
+      <h3>
+        <img :src="`${$iconURL}Budget Elements/${eventCategory.icon}`" />
+        {{ categoryTitle }} Proposal &nbsp;
+        <span class="color-red font-size-20 font-bold">Relish Catering & Venues</span>
+      </h3>
+      <div class="d-flex justify-content-center">
+        <span>Dining room, Loren Epsom, Loren Epsom</span><span class="seperator"></span><span>For Whole Event</span>
+      </div>
+    </div>
     <div class="steps-cont">
       <ul class="progressbar">
         <li v-if="hasVisionStep" :class="[{ active: step >= 0 }, { current: step == 0 }]">
@@ -27,10 +37,6 @@
         </li>
       </ul>
     </div>
-    <div class="title-cont">
-      <h3>{{ categoryTitle }} Proposal</h3>
-      <p>Relish Catering & Venues</p>
-    </div>
   </div>
 </template>
 <script>
@@ -40,6 +46,7 @@ export default {
   props: {
     hasVisionStep: Boolean,
     categoryTitle: String,
+    eventCategory: Object,
   },
   data() {
     return {};
@@ -159,23 +166,27 @@ export default {
   }
 
   .title-cont {
-    padding-top: 37px;
     text-align: center;
-
     h3 {
-      font-size: 34px;
+      font-size: 30px;
       margin: 0;
       font-weight: 800;
       color: #050505;
-      padding-top: 70px;
       margin-bottom: 10px;
       text-transform: capitalize;
+      img {
+        width: 30px;
+        height: 30px;
+      }
     }
-    p {
-      color: #f11355;
-      font-size: 20px;
-      font-weight: 800;
-      margin: 0;
+    span {
+      display: inline-block;
+      line-height: 35px;
+      &.seperator {
+        border-right: solid 1px #e2e2e2;
+        height: 35px;
+        margin: 0 20px;
+      }
     }
   }
 }
