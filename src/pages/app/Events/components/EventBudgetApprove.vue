@@ -5,17 +5,15 @@
         <div class="card-section card-overview">
           <div class="budget-card">
             <div class="font-size-22">Budget</div>
-            <div class="font-size-50 font-bold value">${{event.totalBudget | withComma}}</div>
-            <md-button
-              v-if="canEdit"
-              class="md-rose md-simple md-sm edit-btn"
-              @click="showBudgetModal = true"
-            >Edit</md-button>
+            <div class="font-size-50 font-bold value">${{ event.totalBudget | withComma }}</div>
+            <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-btn" @click="showBudgetModal = true"
+              >Edit</md-button
+            >
           </div>
         </div>
         <div class="card-section card-expense mt-3">
           <div class="section-header with-border">Expenses</div>
-          <div style="margin:40px 30px">
+          <div style="margin: 40px 30px">
             <pie-chart-round :event.sync="event" :items="pieChartData" columns="1"></pie-chart-round>
           </div>
         </div>
@@ -23,28 +21,43 @@
       <div class="md-layout-item md-size-60">
         <div class="event-blocks-table">
           <tabs
-            :tab-name="['<img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+26.png\'> Total', ' <img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest']"
+            :tab-name="[
+              '<img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+26.png\'> Total',
+              ' <img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest',
+            ]"
           >
             <template slot="tab-pane-1">
               <event-budget-component
-                v-for="(component,  index) in selectedComponents"
+                v-for="component in selectedComponents"
                 :component="component"
-                :key="index"
+                :key="component.id"
                 :editable="canEdit"
                 @delete="deleteCategory"
                 @updateCategory="updateCategory"
               ></event-budget-component>
               <event-budget-component
                 :editable="canEdit"
-                :component="{ title: 'Extra', color:'#818080', fontColor:'#818080', icon: 'extra.svg', allocatedBudget: event.allocatedFees + event.allocatedTips }"
+                :component="{
+                  title: 'Extra',
+                  color: '#818080',
+                  fontColor: '#818080',
+                  icon: 'extra.svg',
+                  allocatedBudget: event.allocatedFees + event.allocatedTips,
+                }"
+              ></event-budget-component>
+              <event-budget-component
+                :editable="false"
+                :component="{
+                  title: 'Unused',
+                  color: '#0047cc',
+                  fontColor: '#0047cc',
+                  icon: 'unused.svg',
+                  allocatedBudget: unusedBudget,
+                }"
               ></event-budget-component>
               <event-budget-component
                 :editable="canEdit"
-                :component="{ title: 'Unused', color:'#0047cc', fontColor:'#0047cc', icon: 'unused.svg', allocatedBudget: unusedBudget }"
-              ></event-budget-component>
-              <event-budget-component
-                :editable="canEdit"
-                :component="{ title: 'Total',  allocatedBudget: event.totalBudget }"
+                :component="{ title: 'Total', allocatedBudget: event.totalBudget }"
               ></event-budget-component>
               <div class="add-category-row" v-if="canEdit">
                 <md-button
@@ -61,25 +74,37 @@
                 :editable="canEdit"
                 type="perguest"
                 :participants="event.numberOfParticipants"
-                v-for="(component,  index) in selectedComponents"
+                v-for="(component, index) in selectedComponents"
                 :component="component"
                 :key="index"
               ></event-budget-component>
               <event-budget-component
                 :editable="canEdit"
-                :component="{ title: 'Extra', color:'#818080', fontColor:'#818080', icon: 'extra.svg', allocatedBudget: event.allocatedFees + event.allocatedTips }"
+                :component="{
+                  title: 'Extra',
+                  color: '#818080',
+                  fontColor: '#818080',
+                  icon: 'extra.svg',
+                  allocatedBudget: event.allocatedFees + event.allocatedTips,
+                }"
                 type="perguest"
                 :participants="event.numberOfParticipants"
               ></event-budget-component>
               <event-budget-component
                 :editable="canEdit"
-                :component="{ title: 'Unused', color:'#0047cc', fontColor:'#0047cc', icon: 'unused.svg', allocatedBudget: unusedBudget }"
+                :component="{
+                  title: 'Unused',
+                  color: '#0047cc',
+                  fontColor: '#0047cc',
+                  icon: 'unused.svg',
+                  allocatedBudget: unusedBudget,
+                }"
                 type="perguest"
                 :participants="event.numberOfParticipants"
               ></event-budget-component>
               <event-budget-component
                 :editable="canEdit"
-                :component="{title:'Total', allocatedBudget:event.totalBudget}"
+                :component="{ title: 'Total', allocatedBudget: event.totalBudget }"
                 type="perguest"
                 :participants="event.numberOfParticipants"
               ></event-budget-component>
@@ -101,14 +126,14 @@
     <budget-edit-modal
       v-if="showBudgetModal"
       :event="event"
-      @cancel="showBudgetModal=false"
+      @cancel="showBudgetModal = false"
       @save="updateBudget"
     ></budget-edit-modal>
     <add-new-category-modal
       v-if="showAddNewCategory"
       :event="event"
       :components="selectedComponents"
-      @cancel="showAddNewCategory=false"
+      @cancel="showAddNewCategory = false"
       @save="addNewCategory"
     ></add-new-category-modal>
   </div>
@@ -142,12 +167,9 @@ export default {
     };
   },
   created() {
-    const _calendar = new Calendar({
-      id: this.$store.state.auth.user.profile.defaultCalendarId,
-    });
     const event = new CalendarEvent({ id: this.event.id });
     new EventComponent()
-      .for(_calendar, event)
+      .for(event)
       .get()
       .then((components) => {
         components.sort((a, b) => a.order - b.order);
@@ -167,12 +189,10 @@ export default {
       return addedBudget + this.event.allocatedTips + this.event.allocatedFees;
     },
     unusedBudget() {
-      return this.event.totalBudget - this.allocatedTotal;
+      return this.event.totalBudget;
     },
     pieChartData() {
-      return this.selectedComponents.filter(
-        (item) => item.componentId !== "unexpected",
-      );
+      return this.selectedComponents.filter((item) => item.componentId !== "unexpected");
     },
     permission() {
       console.log(this.$store.state.event.eventData);
@@ -186,7 +206,7 @@ export default {
       return this.permission === "edit" || this.permission === "comment";
     },
     canEdit() {
-      return this.permission === "edit";
+      return !this.permission || this.permission === "edit";
     },
   },
   methods: {
@@ -206,9 +226,9 @@ export default {
         const newCategory = {
           title: `Other-${newCategory.name}`,
           key: `other-${newCategory.name.toLowerCase()}`,
-          color: `rgb(${parseInt(Math.random() * 255)}, ${parseInt(
+          color: `rgb(${parseInt(Math.random() * 255)}, ${parseInt(Math.random() * 255)}, ${parseInt(
             Math.random() * 255,
-          )}, ${parseInt(Math.random() * 255)})`,
+          )})`,
           icon: `other.svg`,
           type: "customized",
           categoryId: "other",
@@ -226,13 +246,11 @@ export default {
       };
 
       new EventComponent(newBlock)
-        .for(new Calendar({ id: this.event.calendar.id }), this.event)
+        .for(this.event)
         .save()
         .then((res) => {
           this.showAddNewCategory = false;
-          this.selectedComponents = [...this.selectedComponents, res.item].sort(
-            (a, b) => a.order > b.order,
-          );
+          this.selectedComponents = res.eventComponents.sort((a, b) => a.eventCategory.order - b.eventCategory.order);
         })
         .catch((error) => {
           console.log("Error while saving ", error);
@@ -241,7 +259,7 @@ export default {
     deleteCategory(category) {
       const deletingCategory = new EventComponent({ id: category.id });
       deletingCategory
-        .for(new Calendar({ id: this.event.calendar.id }), this.event)
+        .for(this.event)
         .delete()
         .then((resp) => {
           this.isLoading = false;
@@ -267,16 +285,21 @@ export default {
     updateCategory(category) {
       const eventComponent = new EventComponent(category);
       eventComponent
-        .for(new Calendar({ id: this.event.calendar.id }), this.event)
+        .for(this.event)
         .save()
         .then((res) => {
-          this.selectedComponents.splice(
-            this.selectedComponents.findIndex((b) => {
-              return b.id === eventComponent.id;
-            }),
-            1,
-            res.item,
-          );
+          this.selectedComponents = res.eventComponents.sort((a, b) => a.eventCategory.order - b.eventCategory.order);
+          const totalAllocatedBudget = this.selectedComponents.reduce((s, item) => {
+            return s + item.allocatedBudget;
+          }, 0);
+          const event = new CalendarEvent({
+            id: this.event.id,
+            totalBudget: totalAllocatedBudget,
+            calendar: new Calendar({ id: this.event.calendar.id }),
+          });
+          this.$store.dispatch("event/saveEventAction", event).then((res) => {
+            this.showBudgetModal = false;
+          });
           this.$forceUpdate();
         });
     },
