@@ -1,14 +1,28 @@
 <template>
-  <div class="vendor-category-editor">
+  <div class="selector-wrapper" :style="{'width': multiple === 'true' ? '150px':''}">
     <div class="droplist" v-if="!expanded">
-      <img class="inside-img" :src="`${selectedCategory.icon}`" v-if="selectedCategory.icon" />
-      <input readonly class="default with-img" :value="selectedCategory.name" @click="expanded = true" />
+      <template v-if="multiple === 'true'">
+        <input readonly class="default" :value="selectedCategory" @click="expanded = true" />
+      </template>
+      <template v-else>
+        <img class="inside-img" :src="`${selectedCategory.icon}`" v-if="selectedCategory.icon" />
+        <input readonly class="default with-img" :value="selectedCategory.name" @click="expanded = true" />
+      </template>
       <img class="dropdown" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 523.svg" />
     </div>
-    <ul :style="{'column-count' : column}" v-else>
-      <li v-for="(category, cIndex) in categories" :key="cIndex" @click="updateCategory(category)">
-        <img class="mr-10" v-if="category.icon" :src="`${category.icon}`" />
-        {{ category.name }}
+    <ul :style="{'column-count' : column}" v-click-outside="close" v-else>
+      <li v-for="(category, cIndex) in categories" :key="cIndex" @click="updateCategory(category)" :class="{'mb-40': cIndex < categories.length - 1}">
+        <template v-if="multiple === 'true'">
+          <div class="d-flex align-center">
+            <img class="mr-10" :src="`${iconUrl}Group 5479 (2).svg`" v-if="selectedCategory.includes(category)" />
+            <span class="unchecked" v-else></span>
+            <span>{{ category }}</span>
+          </div>
+        </template>
+        <template v-else>
+          <img class="mr-10" v-if="category.icon" :src="`${category.icon}`" />
+          {{ category.name }}
+        </template>
       </li>
       <li v-if="additional">
         <div>
@@ -24,7 +38,7 @@ export default {
   name: "category-selector",
   props: {
     value: {
-      type: String,
+      type: [String, Array],
       required: true,
     },
     categories: {
@@ -36,38 +50,66 @@ export default {
       required: false,
       default: '1'
     },
+    multiple: {
+      type: String,
+      required: false,
+      default: 'false',
+    },
     additional:{
       type: Boolean,
       required: false,
     },
+    customClass:{
+      type: String,
+    }
   },
   data: () => ({
+    iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     expanded: false,
-    selectedCategory: {},
+    selectedCategory: null,
     additionalValue: null,
     reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
   }),
   mounted() {
+    console.log("mounted", this.multiple == 'true', this.value.length);
     if (this.value) {
-      this.selectedCategory = this.categories.find(it => it.value === this.value);
-      console.log('categorySelect.mounted', this.additional);
-    } else {
+      if ( this.multiple == 'true' ) {
+        this.selectedCategory = this.value.length ? this.categories.filter(it => this.value.includes(it)) : [];
+      } else {
+        this.selectedCategory = this.categories.find(it => it.value === this.value);
+      }
     }
+    console.log('category-selector', this.selectedCategory);
   },
   methods: {
     updateCategory(category) {
-      this.selectedCategory = category;
-      this.expanded = false;
-      this.$emit("change", category.value);
+      if (this.multiple === 'true' ) {
+
+        if (this.selectedCategory.find(cat => cat === category)) {
+          this.selectedCategory = this.selectedCategory.filter(cat => cat !== category);
+        } else {
+          this.selectedCategory.push(category);
+        }
+
+        this.$emit("change", this.selectedCategory);
+      } else {
+        this.selectedCategory = category;
+        this.expanded = false;
+        this.$emit("change", category.value);
+      }
+
     },
     input(){
       this.$emit("input", this.additionalValue);
+    },
+    close(){
+      this.expanded = false;
     }
   },
 };
 </script>
 <style lang="scss" scoped>
-.vendor-category-editor {
+.selector-wrapper {
   font: normal 16px Manrope-Regular, sans-serif;
   min-width: 350px;
   width: 100%;
@@ -106,7 +148,6 @@ export default {
 
     li {
       cursor: pointer;
-      margin-bottom: 40px;
       font: normal 18px Manrope-Regular, sans-serif;
       img {
         width: 30px;
@@ -115,6 +156,17 @@ export default {
       p{
         font-weight: bold;
         margin: 0 0 10px;
+      }
+
+      span.unchecked{
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        border: 1px solid #707070;
+        border-radius: 50%;
+        background: #ffffff;
+        margin-right: 14px;
+        position: relative;
       }
     }
   }

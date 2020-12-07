@@ -270,8 +270,8 @@
 
     .event-blocks__table {
         width: 100%;
+        border-spacing: 0;
         font-family: "Manrope-Regular", sans-serif;
-        border-collapse: collapse;
         text-align: left;
         color: #050505;
 
@@ -489,141 +489,6 @@
                 &.event-block-element {
                     font-family: "Manrope-Regular", sans-serif;
                     font-size: 18px;
-
-                    &:after {
-                        width: 7px;
-                        background: #641956;
-                        height: 100%;
-                        content: " ";
-                        position: absolute;
-                        left: 0;
-                        top: 0;
-                        border-radius: 3px 0 0 3px;
-                    }
-
-                    &.venue,
-                    &.venue-rental {
-                        &:after {
-                            background: rgb(255, 192, 0);
-                        }
-                    }
-
-                    &.shipping {
-                        &:after {
-                            background: rgb(29, 154, 120);
-                        }
-                    }
-                    &.signage-printing {
-                        &:after {
-                            background: rgb(0, 176, 80);
-                        }
-                    }
-
-                    &.technology-services {
-                        &:after {
-                            background: rgb(196, 144, 170);
-                        }
-                    }
-
-                    &.food-and-beverage {
-                        &:after {
-                            background: rgb(255, 82, 124);
-                        }
-                    }
-
-                    &.security-services {
-                        &:after {
-                            background: rgb(104, 147, 49);
-                        }
-                    }
-                    &.swags,
-                    &.swag {
-                        &:after {
-                            background: rgb(68, 84, 106);
-                        }
-                    }
-                    &.audio-visual-staging-services {
-                        &:after {
-                            background: rgb(0, 188, 212);
-                        }
-                    }
-                    &.decor {
-                        &:after {
-                            background: rgb(100, 25, 86);
-                        }
-                    }
-                    &.entertainment {
-                        &:after {
-                            background: rgb(32, 201, 151);
-                        }
-                    }
-                    &.equipment-rental {
-                        &:after {
-                            background: rgb(231, 230, 230);
-                        }
-                    }
-
-                    &.videography-and-photography {
-                        &:after {
-                            background: rgb(127, 127, 127);
-                        }
-                    }
-
-                    // &.dj {
-                    //     &:after {
-                    //         background: #fe537a;
-                    //     }
-                    // }
-
-                    // &.catering {
-                    //     &:after {
-                    //         background: #f3423a;
-                    //     }
-                    // }
-
-                    // &.rentals {
-                    //     &:after {
-                    //         background: #43536a;
-                    //     }
-                    // }
-
-                    &.meeting-organization-fees {
-                        &:after {
-                            background: rgb(183, 73, 25);
-                        }
-                    }
-
-                    &.advertising-and-promotion {
-                        &:after {
-                            background: #a5a5a5;
-                        }
-                    }
-                    &.meeting-labor,
-                    &.advertising-and-promotion,
-                    &.meeting-organization-fee {
-                        &:after {
-                            background: rgb(165, 165, 165);
-                        }
-                    }
-
-                    &.corporate-social-responsibility {
-                        &:after {
-                            background: rgb(241, 157, 25);
-                        }
-                    }
-
-                    &.administration {
-                        &:after {
-                            background: rgb(139, 193, 69);
-                        }
-                    }
-
-                    &.transportation,
-                    &.transportation--tour-operator-services {
-                        &:after {
-                            background: rgb(255, 0, 102);
-                        }
-                    }
 
                     img {
                         width: 28px;

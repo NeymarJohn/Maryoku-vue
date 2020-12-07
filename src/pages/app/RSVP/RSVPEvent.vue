@@ -111,7 +111,7 @@
             <img :src="`${$iconURL}RSVP/sharing-white.svg`" width="17" />
           </md-button>
         </div>
-        <div class="d-flex align-center">
+        <div>
           <md-button class="md-simple md-button md-black maryoku-btn" @click="reject">
             <span class="font-size-20">I Can't make it</span>
           </md-button>
@@ -126,13 +126,9 @@
           >
             <span class="font-size-20">Virtual Participation</span>
           </md-button>
-          <md-button v-if="!isSentRsvp" @click="showRsvpModal = true" class="md-button md-red maryoku-btn rsvp-btn">
+          <md-button @click="showRsvpModal = true" class="md-button md-red maryoku-btn rsvp-btn">
             <span class="font-size-20">RSVP Now</span>
           </md-button>
-          <div v-else class="font-size-20">
-            <img :src="`${$iconURL}Campaign/Group 9222.svg`" />
-            Sent Already
-          </div>
         </div>
       </div>
     </div>
@@ -216,7 +212,6 @@ export default {
       campaign: {},
       rsvpRequest: null,
       showSharingModal: false,
-      isSentRsvp: false,
     };
   },
   created() {
@@ -232,9 +227,6 @@ export default {
       if (!this.rsvpRequest.isOpened) {
         new RsvpRequest({ id: rsvpRequest.id, isOpened: true }).save();
       }
-      if (this.rsvpRequest.status == "ACCEPTED") {
-        this.isSentRsvp = true;
-      }
     });
     this.$root.$on("setRsvp", (rsvpData) => {
       rsvpData.attendingOption = "PERSON";
@@ -242,16 +234,14 @@ export default {
       rsvpData.invitedEmail = this.rsvpRequest.email;
       rsvpData.rsvpRequest = new RsvpRequest({ id: this.rsvpRequest.id });
       rsvpData.event = new CalendarEvent({ id: this.event.id });
-      rsvpData.guests = rsvpData.guests.filter((item) => item.name);
       new Rsvp(rsvpData).save().then((requestedRSVP) => {
         console.log(requestedRSVP);
         swal({
-          title: `Thank you! You sent RSVP to the Event Hosts!`,
+          title: `Successed!`,
           buttonsStyling: false,
           confirmButtonClass: "md-button md-success",
         });
         this.showRsvpModal = false;
-        this.isSentRsvp = true;
       });
     });
   },
@@ -398,6 +388,7 @@ export default {
       display: inline-block;
       border-left: solid 1px #050505;
       height: 2rem;
+      margin-top: 1rem;
     }
     .rsvp-btn {
       min-width: 280px;

@@ -1,68 +1,5 @@
 <template>
   <div class="proposal-service-table-wrapper">
-    <div class="title-cont default">
-      <div class="sub-items-cont">
-        <span class="prev" @click="prev()" v-if="serviceSlidePos < 0">
-          <md-icon>keyboard_arrow_left</md-icon>
-        </span>
-        <div class="sub-items" :style="{ left: `${serviceSlidePos}px` }" ref="servicesCont">
-          <select-proposal-sub-item
-            :selected="isSelectedQuickButton('')"
-            :item="requirement.item ? requirement.item : requirement.subCategory"
-            v-for="(requirement, sIndex) in optionalRequirements"
-            :key="sIndex"
-          />
-        </div>
-        <span class="next" @click="next()">
-          <md-icon>keyboard_arrow_right</md-icon>
-        </span>
-      </div>
-      <div class="add-item-cont">
-        <div class="fields-cont">
-          <div class="field">
-            <span>Description</span>
-            <input v-model="serviceItem" class="description" placeholder="Type name of element here" />
-          </div>
-          <div class="field">
-            <span>Size</span>
-            <input v-model="serviceItemSize" />
-          </div>
-          <div class="field">
-            <span>QTY</span>
-            <money v-model="qty" v-bind="qtyFormat" @keyup.native="calculateSubTotal()" />
-          </div>
-          <div class="field">
-            <span>Price per unit</span>
-            <money v-model="unit" v-bind="currencyFormat" @keyup.native="calculateSubTotal()" />
-          </div>
-          <div class="field">
-            <span>Total</span>
-            <money v-model="subTotal" v-bind="currencyFormat" v-if="isNumberVisible" class="total" />
-            <money v-model="unit" v-bind="currencyFormat" v-else class="total" />
-          </div>
-        </div>
-        <div class="fields-cont">
-          <md-checkbox v-model="isRequiredPlannerChoice"
-            ><span class="mr-10">This item requires planners choice</span>
-            <md-icon class="color-black">keyboard_arrow_downz</md-icon
-            ><md-icon class="color-red">help_outline</md-icon></md-checkbox
-          >
-        </div>
-        <div class="action-cont">
-          <a class="cancel" @click="cancel()">Clear</a>
-          <a class="addNote" @click="cancel()">
-            <md-icon>add_circle_outline</md-icon>
-            Add Note</a
-          >
-          <a
-            class="save"
-            :class="{ isDisabled: isDisabledAdd }"
-            @click="saveItem(serviceItem, serviceItemSize, qty, unit, category)"
-            >Add This</a
-          >
-        </div>
-      </div>
-    </div>
     <div class="editable-sub-items-cont">
       <div class="editable-sub-items-header">
         <span>Description</span>
@@ -71,8 +8,9 @@
         <span class="text-center">Price per unit</span>
         <span class="text-center">Subtotal</span>
       </div>
-      <editable-proposal-sub-item
+      <proposal-service-table-item
         v-for="(req, rIndex) in services"
+        :serviceType="tableCategory"
         :key="rIndex"
         :index="rIndex"
         :item="req"
@@ -81,7 +19,7 @@
         @save="updateItem"
         @remove="removeItem"
       />
-      <div class="tax-discount-wrapper">
+      <div class="tax-discount-wrapper" v-if="tableCategory === 'cost'">
         <div class="row grid-tax-row">
           <div class="item-cont">
             <div class="plabel">
@@ -171,7 +109,7 @@
           </div>
         </div>
       </div>
-      <div class="editable-sub-items-footer">
+      <div class="editable-sub-items-footer" v-if="tableCategory === 'cost'">
         <span>Total</span>
         <span>${{ calculatedTotal | withComma }}</span>
       </div>
@@ -184,7 +122,7 @@ import ProposalRequestFile from "@/models/ProposalRequestFile";
 
 import InputProposalSubItem from "@/components/Inputs/InputProposalSubItem.vue";
 import SelectProposalSubItem from "./SelectProposalSubItem.vue";
-import EditableProposalSubItem from "./EditableProposalSubItem.vue";
+import ProposalServiceTableItem from "./ProposalServiceTableItem.vue";
 import { Money } from "v-money";
 
 import vue2Dropzone from "vue2-dropzone";
@@ -196,7 +134,7 @@ export default {
   components: {
     InputProposalSubItem,
     SelectProposalSubItem,
-    EditableProposalSubItem,
+    ProposalServiceTableItem,
     Money,
     vueDropzone: vue2Dropzone,
   },
@@ -223,18 +161,15 @@ export default {
       discount_by_amount: 0,
       isDiscountPercentage: true,
       tax: 0,
-      serviceItem: null,
-      serviceItemSize: "",
-      qty: null,
-      unit: null,
+
       isRequiredPlannerChoice: false,
-      subTotal: null,
+
       inputType: "text",
       temp: null,
       isNumberVisible: true,
       files: [],
       docTag: null,
-      serviceSlidePos: 0,
+
       servicesWidth: 0,
       currencyFormat: {
         decimal: ".",
@@ -402,83 +337,18 @@ export default {
 
       return total;
     },
-    prev() {
-      if (this.$refs.servicesCont) {
-        this.servicesWidth = this.$refs.servicesCont.clientWidth;
-        if (this.servicesWidth - this.serviceSlidePos > 0) {
-          this.serviceSlidePos += 200;
-        }
-      }
-    },
-    next() {
-      if (this.$refs.servicesCont) {
-        this.servicesWidth = this.$refs.servicesCont.clientWidth;
-        if (this.servicesWidth + this.serviceSlidePos - 200 > 0) {
-          this.serviceSlidePos -= 200;
-        }
-      }
-    },
+
     switchDiscountMethod() {
       this.discount = 0;
       this.discount_by_amount = 0;
     },
-    isSelectedQuickButton(item) {
-      return false;
-    },
+
     async imageSelected(file) {
       const imageData = await getBase64(file);
       const extension = file.type.split("/")[1];
     },
   },
   created() {
-    const defaultServices = [];
-    let includedVendorServices = [];
-    let costVendorServices = [];
-    _.each(this.vendor.services, (vendorService) => {
-      if (vendorService.included) {
-        includedVendorServices.push(vendorService);
-      } else if (!vendorService.included && vendorService.value) {
-        costVendorServices.push(vendorService);
-      }
-    });
-
-    this.mandatoryRequirements.forEach((item) => {
-      let isValid = false;
-      if (this.tableCategory === "cost") {
-        isValid =
-          costVendorServices.findIndex((vendorService) => {
-            return item.item && vendorService.label.toLowerCase() == item.item.toLowerCase();
-          }) >= 0;
-      } else if (this.tableCategory === "included") {
-        isValid =
-          includedVendorServices.findIndex((vendorService) => {
-            return item.item && vendorService.label.toLowerCase() == item.item.toLowerCase();
-          }) >= 0;
-      }
-      if (isValid) {
-        defaultServices.push({
-          comments: [],
-          dateCreated: "",
-          includedInPrice: true,
-          itemNotAvailable: false,
-          price: 0,
-          priceUnit: "qty",
-          proposalRequest: { id: this.proposalRequest.id },
-          requirementComment: null,
-          requirementId: "",
-          requirementMandatory: false,
-          requirementPriority: null,
-          requirementTitle: item.item,
-          requirementsCategory: item.category,
-          requirementValue: item.defaultQty ? item.defaultQty : 1,
-          requirementSize: item.defaultSize ? item.defaultSize : "",
-          isMandatory: true,
-        });
-      }
-    });
-    this.services = defaultServices;
-
-    this.$forceUpdate();
     this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
     this.$root.$on("remove-proposal-requirement", (item) => {
       this.proposalRequest.requirements = this.proposalRequest.requirements.filter(
@@ -503,10 +373,6 @@ export default {
       this.$forceUpdate();
     });
 
-    this.$root.$on("clear-slide-pos", (item) => {
-      this.serviceSlidePos = 0;
-    });
-
     if (this.$refs.servicesCont) {
       this.servicesWidth = this.$refs.servicesCont.clientWidth;
     }
@@ -517,9 +383,6 @@ export default {
     },
   },
   computed: {
-    isDisabledAdd() {
-      return !this.qty || !this.unit || !this.subTotal || this.subTotal == 0 || !this.serviceItem;
-    },
     requirements() {
       return this.proposalRequest.componentRequirements[this.category];
     },
@@ -562,6 +425,9 @@ export default {
       return total - tax;
     },
     totalPrice() {
+      if (!this.services) {
+        return 0;
+      }
       const sumPrice = this.services.reduce((s, item) => {
         return s + item.requirementValue * item.price;
       }, 0);
@@ -578,153 +444,6 @@ export default {
   color: #050505;
   .dropdown-zone {
     margin: 30px;
-  }
-  .title-cont {
-    .with-subtitle {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      .text-cont {
-        display: flex;
-        align-items: center;
-        h3.title {
-          font-weight: 800;
-          font-size: 30px;
-          margin: 0;
-          margin-right: 20px;
-          img {
-            width: 28px;
-            margin-right: 19px;
-            position: relative;
-            top: -3px;
-          }
-        }
-        h5 {
-          font-size: 20px;
-          margin: 0;
-        }
-      }
-      .action {
-        cursor: pointer;
-        img {
-          width: 20px;
-        }
-      }
-    }
-    p {
-      font-size: 16px;
-      margin: 0;
-      margin-top: 23px;
-
-      strong {
-        font-weight: 800;
-      }
-    }
-
-    &.dropdown {
-      padding: 8px 8px 42px 0px;
-      display: grid;
-      grid-template-columns: 50% 50%;
-      align-items: center;
-      cursor: pointer;
-
-      .left-side {
-        width: 100%;
-        display: grid;
-        grid-template-columns: 10% 90%;
-        align-items: center;
-
-        .check-cont {
-          img {
-            width: 33px;
-          }
-        }
-        h3 {
-          display: grid;
-          align-items: center;
-          grid-template-columns: 10% 90%;
-          margin: 0;
-          font-size: 30px;
-          font-weight: 800;
-
-          img {
-            width: 34px;
-            height: 34px;
-          }
-        }
-      }
-      .right-side {
-        display: flex;
-        width: 100%;
-        justify-content: space-between;
-        align-items: center;
-
-        .budget-cont {
-          margin-left: 4em;
-          span {
-            color: #818080;
-            &:first-child {
-              font-size: 14px;
-              margin-right: 1rem;
-            }
-            &:nth-child(2) {
-              font-size: 20px;
-              font-weight: 800;
-            }
-          }
-        }
-        .proposal-range-cont {
-          text-align: right;
-          margin-left: 65px;
-          p {
-            margin-top: 0;
-            font-size: 14px;
-          }
-          span {
-            font-size: 14px;
-            &.grey {
-              color: #818080;
-            }
-            &:last-child {
-              color: #050505;
-              font-weight: 800;
-            }
-          }
-        }
-        img {
-          width: 12px;
-          margin-left: 50px;
-        }
-      }
-    }
-  }
-
-  .add-item-cont {
-    margin-top: 1rem;
-    .fields-cont {
-      display: grid;
-      grid-template-columns: 40% 15% 15% 15% 15%;
-      .field {
-        margin-right: 1em;
-        span {
-          margin-bottom: 0.5rem;
-          display: inline-block;
-          font: 800 16px "Manrope-Regular", sans-serif;
-        }
-        input {
-          // text-transform: capitalize;
-          width: 100%;
-          padding: 1.5rem 1rem;
-          border: 1px solid #d5d5d5;
-          font: normal 16px "Manrope-Regular", sans-serif;
-          color: #050505;
-        }
-        &:last-child {
-          margin-right: 0;
-        }
-      }
-    }
   }
 
   .sub-items-cont {
@@ -801,42 +520,6 @@ export default {
         pointer-events: none;
         cursor: not-allowed;
         background: #d5d5d5;
-      }
-    }
-  }
-  .action-cont {
-    text-align: right;
-    margin-top: 35px;
-    a {
-      font-size: 16px;
-      font-weight: 800;
-
-      &.clear {
-        color: #050505;
-        padding: 8px 32px;
-        margin-right: 1rem;
-      }
-      &.addNote {
-        .md-icon {
-          color: #f51355;
-          font-weight: normal;
-        }
-        color: #f51355;
-        padding: 8px 32px;
-        margin-right: 1rem;
-      }
-      &.add {
-        background-color: #d5d5d5;
-        border-radius: 3px;
-        padding: 8px 32px;
-        color: #ffffff;
-        max-height: 38px;
-        cursor: pointer;
-
-        &.active {
-          background-color: #f51355;
-          color: #ffffff;
-        }
       }
     }
   }
