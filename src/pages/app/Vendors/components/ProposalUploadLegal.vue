@@ -1,5 +1,5 @@
 <template>
-  <div class="upload-files-wrapper white-card">
+  <div class="upload-files-wrapper">
     <div class="title-cont">
       <h3>
         <!-- <img :src="`${$iconURL}NewSubmitPorposal/Asset 608.svg`" /> -->
@@ -164,7 +164,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .upload-files-wrapper {
-  margin-top: 60px;
   padding: 60px 0 10px 0;
   // border-top: 1px solid #707070;
 
@@ -172,7 +171,7 @@ export default {
     display: flex;
     align-items: flex-end;
     margin-bottom: 25px;
-    padding: 0 34px;
+    padding: 0 40px;
 
     h3 {
       font-size: 30px;
@@ -200,7 +199,7 @@ export default {
       // padding: 30px 34px;
       border-bottom: 1px solid #e0e0e0;
       padding: 30px 0px;
-      margin: 0px 35px;
+      margin: 0px 40px;
       .left {
         span {
           font-weight: 800;
