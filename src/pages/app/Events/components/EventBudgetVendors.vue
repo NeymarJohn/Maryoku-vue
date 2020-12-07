@@ -19,7 +19,6 @@
         v-for="(block, index) in eventBuildingBlocks"
         :class="{ booked: block.bookedBudget }"
         :key="index"
-        :style="`border-left: 10px solid ${block.color}`"
       >
         <tbody>
           <template>
@@ -193,21 +192,8 @@
           </template>
         </tbody>
       </table>
-      <table class="event-blocks__table event-block-table" :style="`border-left: 10px solid #80B93D`">
-        <tbody>
-          <tr class="unexpected-budget">
-            <td width="40%" class="event-block-element unused-budget">
-              <img :src="`${$iconURL}Budget Elements/unexpected.svg`" />
-              Unexpected
-            </td>
-            <td width="20%" class="planned">$ {{ event.unexpectedBudget | withComma }}</td>
-            <td width="15%" class="actual red-label"></td>
-            <td width="15%" class="status"></td>
-            <td class="expand"></td>
-          </tr>
-        </tbody>
-      </table>
-      <table class="event-blocks__table event-block-table" :style="`border-left: 10px solid #818080`">
+
+      <table class="event-blocks__table event-block-table">
         <tbody>
           <tr class="extra">
             <td width="40%" class="event-block-element extra">
@@ -303,14 +289,14 @@
           </template>
         </tbody>
       </table>
-      <table class="event-blocks__table event-block-table" :style="`border-left: 10px solid #0047cc`">
+      <table class="event-blocks__table event-block-table">
         <tbody>
           <tr class="unused-budget">
             <td width="40%" class="event-block-element unused-budget">
               <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget screen/SVG/Asset 487.svg" />
               Unused
             </td>
-            <td width="20%" class="planned">$ {{ unusedBudget | withComma }}</td>
+            <td width="20%" class="planned">$ {{ remainingBudget | withComma }}</td>
             <td width="15%" class="actual red-label"></td>
             <td width="15%" class="status"></td>
             <td class="expand"></td>
@@ -534,16 +520,6 @@ export default {
     },
     canEdit() {
       return !this.permission || this.permission === "edit";
-    },
-    allocatedTotal() {
-      const addedBudget = this.eventBuildingBlocks.reduce((sum, item) => {
-        return sum + item.bookedBudget;
-      }, 0);
-      return addedBudget; //+ this.event.allocatedTips + this.event.allocatedFees;
-    },
-    unusedBudget() {
-      console.log("allocatedBUdgtet", this.allocatedTotal);
-      return this.event.totalBudget - this.allocatedTotal;
     },
   },
   methods: {

@@ -88,7 +88,7 @@
                         <category-selector
                                 :value="r.value"
                                 :categories="r.options"
-                                multiple="true"
+                                :multiple="true"
                                 @change="changeCategorySelector('policy', r, ...arguments)"
                         ></category-selector>
                       </template>
@@ -1545,7 +1545,6 @@ export default {
           res.push(wds[(wds.indexOf(this.capitalize(wd.slice(0, 2))) + 6) % 7]);
         });
       }
-
       return res;
     },
     capitalize: function (value) {
@@ -1624,12 +1623,12 @@ export default {
       }
 
 
-      if (this.vendor.selectedWeekdays) {
-        if (this.vendor.selectedWeekdays.length > 0) {
-          this.selectedWeekdays = this.vendor.selectedWeekdays;
-        } else {
-          this.selectedWeekdays = ["saturday", "sunday"];
-        }
+      if (this.vendor.selectedWeekdays && this.vendor.selectedWeekdays.length) {
+
+        this.selectedWeekdays = this.vendor.selectedWeekdays;
+      } else {
+        this.selectedWeekdays = ['Saturday', 'Sunday'];
+        this.$emit('update-vendor-value', 'selectedWeekdays', this.selectedWeekdays);
       }
 
       if (this.vendor.dontWorkDays && this.vendor.dontWorkDays.selectedDates) {

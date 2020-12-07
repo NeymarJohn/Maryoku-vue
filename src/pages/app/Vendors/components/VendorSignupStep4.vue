@@ -476,13 +476,13 @@ export default {
       let naItems = "";
       _.each(items, (n) => {
         if (n.constructor.name == "Object") {
-          naItems += `${this.capitalize(n.name)}, `;
+          naItems += `${this.capitalize(n.name)}s, `;
         } else {
-          naItems += `${this.capitalize(n)}, `;
+          naItems += `${this.capitalize(n)}s, `;
         }
       });
       naItems = naItems.substring(0, naItems.length - 2);
-      return naItems;
+      return "All " + naItems;
     },
     dontWorkDays() {
       let selectedDates = "";
