@@ -362,7 +362,7 @@ export default {
   created() {
     this.settingData = this.defaultSettings;
     // set default subject for email
-    this.settingData.email.from = this.$store.state.auth.user.username;
+    this.settingData.email.from = this.$store.state.auth.user.email || this.$store.state.auth.user.username;
     this.settingData.email.subject = this.emailSubject;
   },
   methods: {
@@ -511,6 +511,8 @@ export default {
       handler(newValue) {
         this.settingData = newValue;
         this.settingData.email.subject = this.emailSubject;
+        if (!this.settingData.email.from)
+          this.settingData.email.from = this.$store.state.auth.user.email || this.$store.state.auth.user.username;
       },
       deep: true,
     },

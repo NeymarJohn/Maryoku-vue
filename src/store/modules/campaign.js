@@ -1,6 +1,27 @@
 import Vue from "vue";
 import Campaign from "@/models/Campaign";
 import CalendarEvent from "@/models/CalendarEvent";
+const defaultSettings = {
+    phone: {
+        selected: false,
+        numberString: "",
+        numberArray: [],
+        excelFileName: "",
+        excelFilePath: "",
+        smsOrWhatsapp: "",
+        sentTime: new Date().getTime(),
+    },
+    email: {
+        selected: false,
+        subject: "",
+        from: "",
+        addressString: "",
+        addressArray: [],
+        excelFileName: "",
+        excelFilePath: "",
+        sentTime: new Date().getTime(),
+    },
+};
 const defaultCampaignData = {
     SAVING_DATE: {
         title: "Event Name",
@@ -160,6 +181,21 @@ const getters = {
             COMING_SOON: state["COMING_SOON"] && state["COMING_SOON"].campaignStatus === "STARTED",
             FEEDBACK: state["FEEDBACK"] && state["FEEDBACK"].campaignStatus === "STARTED",
         };
+    },
+    defaultSettings(state) {
+        if (state["SAVING_DATE"] && state["SAVING_DATE"].settings) {
+            return state["SAVING_DATE"].settings;
+        }
+        if (state["RSVP"] && state["RSVP"].settings) {
+            return state["RSVP"].settings;
+        }
+        if (state["COMING_SOON"] && state["COMING_SOON"].settings) {
+            return state["COMING_SOON"].settings;
+        }
+        if (state["FEEDBACK"] && state["FEEDBACK"].settings) {
+            return state["FEEDBACK"].settings;
+        }
+        return defaultSettings;
     },
 };
 const actions = {

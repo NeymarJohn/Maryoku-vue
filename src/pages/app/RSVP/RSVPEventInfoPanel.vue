@@ -34,10 +34,22 @@
         <img :src="`${$iconURL}RSVP/Path+1383.svg`" />
       </div>
       <div class="event-info-item-title font-size-22 font-bold-extra">SOLO OR PLUS 1?</div>
-      <div class="event-info-item-content font-size-20" v-if="isPlusOne">+ 1</div>
-      <div class="event-info-item-content font-size-20" v-else>
-        <input v-if="editable" type="text" v-model="eventSolo" />
-        <span v-else>{{ eventSolo }}</span>
+      <div class="event-info-item-content d-flex align-center font-size-20" v-if="!editingPlusOne">
+        <span>{{ isPluseOne ? "+1" : "Solo" }} &emsp;</span>
+        <md-button class="md-simple edit-btn md-red" v-if="editable" @click="editingPlusOne = !editingPlusOne"
+          >Edit</md-button
+        >
+      </div>
+      <div class="event-info-item-content d-flex align-center font-size-20" v-else>
+        <!-- <input type="text" v-model="isPluseOne" /> -->
+        <!-- <select v-model="isPluseOne">
+          <option :value="false">Solo</option>
+          <option :value="true">+1</option>
+        </select> -->
+        <md-checkbox v-model="isPluseOne" :value="false">Solo</md-checkbox>
+        <md-checkbox v-model="isPluseOne" :value="true">+1</md-checkbox>
+        <md-button class="md-simple md-black maryoku-btn" @click="editingPlusOne = !editingPlusOne">Cancel</md-button>
+        <md-button class="md-red maryoku-btn" @click="updateEvent">Save</md-button>
       </div>
     </div>
     <div class="event-info-item">
@@ -46,15 +58,23 @@
         <img :src="`${$iconURL}RSVP/Group+1279.svg`" />
       </div>
       <div class="event-info-item-title font-size-22 font-bold-extra">Arrival?</div>
-      <div class="event-info-item-content font-size-20">
-        <div v-if="event.arrival">{{ event.arrival }}</div>
-        <input v-if="editable" type="text" v-model="eventArrival" />
-        <span v-else>{{ eventArrival }}</span>
+      <div class="event-info-item-content font-size-20" v-if="!editingArrival">
+        {{ eventArrival }}&emsp;
+        <md-button class="md-simple edit-btn md-red" v-if="editable" @click="editingArrival = !editingArrival"
+          >Edit</md-button
+        >
+      </div>
+      <div class="event-info-item-content d-flex align-center font-size-20" v-else>
+        <input type="text" v-model="eventArrival" />
+        <md-button class="md-simple md-black maryoku-btn" @click="editingArrival = !editingArrival">Cancel</md-button>
+        <md-button class="md-red maryoku-btn" @click="updateEvent">Save</md-button>
       </div>
     </div>
   </div>
 </template>
 <script>
+import CalendarEvent from "@/models/CalendarEvent";
+import Calendar from "@/models/Calendar";
 export default {
   props: {
     event: {
@@ -68,9 +88,26 @@ export default {
   },
   data() {
     return {
-      eventSolo: "-",
-      eventArrival: "-",
+      isPluseOne: this.isPlusOne,
+      eventArrival: this.event.arrival || "-",
+      editingPlusOne: false,
+      editingArrival: false,
     };
+  },
+  methods: {
+    updateEvent() {
+      this.$store.dispatch(
+        "event/saveEventAction",
+        new CalendarEvent({
+          id: this.event.id,
+          calendar: new Calendar({ id: this.event.calendar.id }),
+          isPluseOne: this.isPluseOne,
+          arrival: this.eventArrival,
+        }),
+      );
+      this.editingPlusOne = false;
+      this.editingArrival = false;
+    },
   },
   computed: {
     concept() {
@@ -80,6 +117,9 @@ export default {
       return this.event.concept ? this.event.concept.colors[0].color : "#d9fcf2";
     },
     isPlusOne() {
+      if ("isPlusOne" in this.event) {
+        return this.event.isPlusOne;
+      }
       return this.event.guestType === "employees-spouses" || this.event.guestType === "families";
     },
   },
@@ -117,6 +157,11 @@ export default {
     &-title {
       width: 250px;
       padding: 10px 24px;
+    }
+    &-content {
+      .maryoku-btn {
+        margin: 0;
+      }
     }
   }
 }
