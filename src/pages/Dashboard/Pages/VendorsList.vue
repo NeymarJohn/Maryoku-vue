@@ -29,6 +29,7 @@
       </tbody>
     </table> -->
 
+    <md-button @click="exportXls" class="md-simple md-red maryoku-btn">Export XLSX</md-button>
     <md-table v-if="vendors && vendors.length > 0" md-sort="companyName" md-sort-order="asc">
       <md-table-row>
         <md-table-head md-numeric>No</md-table-head>
@@ -42,9 +43,19 @@
       <md-table-row v-for="(item, index) in vendors" :key="item.id">
         <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ index + 1 }}</md-table-cell>
         <md-table-cell md-label="Company Name" md-sort-by="companyName">{{ item.companyName }} </md-table-cell>
-        <md-table-cell md-label="User Name" md-sort-by="vendorDisplayName">{{
-          `${currentPath}/#/vendor-signup/edit/${item.id}`
-        }}</md-table-cell>
+        <md-table-cell md-label="User Name" md-sort-by="vendorDisplayName">
+          <a :href="`${currentPath}/#/vendor-signup/edit/${item.id}`" target="_blank">{{
+            `${currentPath}/#/vendor-signup/edit/${item.id}`
+          }}</a>
+          &emsp;<md-button
+            class="md-simple md-red edit-btn md-just-icon"
+            @click="copyUrl(`${currentPath}/#/vendor-signup/edit/${item.id}`)"
+            v-clipboard:copy="`${currentPath}/#/vendor-signup/edit/${item.id}`"
+            v-clipboard:success="onCopy"
+            v-clipboard:error="onCopyError"
+            ><md-icon>content_copy</md-icon></md-button
+          ></md-table-cell
+        >
         <md-table-cell md-label="User Name" md-sort-by="vendorDisplayName">{{ item.vendorDisplayName }}</md-table-cell>
         <md-table-cell md-label="Business Category" md-sort-by="eventCategory.title">{{
           item.eventCategory ? item.eventCategory.title : ""
@@ -53,14 +64,19 @@
         <md-table-cell md-label="Address" md-sort-by="vendorAddressLine1">{{ item.vendorAddressLine1 }}</md-table-cell>
       </md-table-row>
     </md-table>
+    <md-dialog-alert :md-active.sync="showAlert" md-content="Copied vendor link!" md-confirm-text="Cool!" />
   </div>
 </template>
 <script>
 import Vendors from "@/models/Vendors";
+import FileSaver from "file-saver";
+import XLSX from "xlsx";
+
 export default {
   data() {
     return {
       vendors: null,
+      showAlert: false,
       currentPath: location.origin,
     };
   },
@@ -72,6 +88,26 @@ export default {
     new Vendors().get().then((vendors) => {
       this.vendors = vendors[0].results;
     });
+  },
+  methods: {
+    copyUrl(url) {},
+    onCopy() {
+      this.showAlert = true;
+      setTimeout(() => {
+        this.showAlert = false;
+      }, 2000);
+    },
+    onCopyError() {},
+    exportXls() {
+      const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+      const fileExtension = ".xlsx";
+
+      const ws = XLSX.utils.json_to_sheet(this.vendors);
+      const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+      const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+      const data = new Blob([excelBuffer], { type: fileType });
+      FileSaver.saveAs(data, "vendors.xlsx");
+    },
   },
 };
 </script>
