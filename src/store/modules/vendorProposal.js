@@ -30,8 +30,8 @@ const state = {
 const getters = {
   mainTotalPrice(state) {
     const mainService = state.vendor.eventCategory.key
-    if (!state.proposalServices[mainService]) return 0
-    const sumPrice = state.proposalServices[mainService].reduce((s, item) => {
+    if (!state.proposalCostServices[mainService]) return 0
+    const sumPrice = state.proposalCostServices[mainService].reduce((s, item) => {
       return s + item.requirementValue * item.price;
     }, 0);
     let taxRate = state.taxes[mainService];

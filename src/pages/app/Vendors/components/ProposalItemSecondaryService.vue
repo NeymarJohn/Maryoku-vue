@@ -463,7 +463,8 @@ export default {
     },
     mandatoryRequirements() {
       if (!this.proposalRequest) return [];
-      return this.proposalRequest.requirements.filter((item) => item.mustHave);
+      if (!this.proposalRequest.requirements[this.category]) return [];
+      return this.proposalRequest.requirements[this.category].filter((item) => item.mustHave);
     },
     additionalServices: {
       get: function () {
