@@ -159,7 +159,7 @@
         </div>
       </template>
     </modal>
-    <!-- <modal v-if="savedItModal" class="saved-it-modal" container-class="modal-container sl">
+    <modal v-if="savedItModal" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="saved-it-modal__header">
           <h3><img :src="`${proposalIconsUrl}Asset 588.svg`" />Saved It!</h3>
@@ -179,28 +179,6 @@
       <template slot="footer">
         <div class="saved-it-modal__footer">
           <button class="cool" @click="completeProposal()">Cool, Thanks</button>
-        </div>
-      </template>
-    </modal> -->
-    <modal v-if="savedItModal" class="saved-it-modal" container-class="modal-container sl">
-      <template slot="header">
-        <div class="saved-it-modal__header">
-          <img :src="`${proposalIconsUrl}thanks-proposal.png`" />
-          <div class="font-size-30 font-bold color-red mt-30">Thank you for submitting a proposal!</div>
-          <div class="text-center font-size-22 mt-40 mb-40">You will get a reply in 4 days</div>
-        </div>
-        <button class="close" @click="hideModal()">
-          <img :src="`${proposalIconsUrl}Group 3671 (2).svg`" />
-        </button>
-      </template>
-      <template slot="body">
-        <div class="saved-it-modal__body">
-          <div>
-            <md-button class="md-simple maryoku-btn md-red" @click="goToProcessingGuid"
-              >How does our bidding process work?</md-button
-            >
-            <md-button class="md-simple maryoku-btn md-red md-outlined">Go to my Dashboard</md-button>
-          </div>
         </div>
       </template>
     </modal>
@@ -455,7 +433,7 @@ export default {
     getEvent() {
       this.$store.dispatch("event/getEventById", this.$route.params.eventId);
     },
-    goToProcessingGuid() {
+    completeProposal() {
       this.$router.push({ path: `/completed-bidding` });
     },
   },
@@ -858,9 +836,6 @@ export default {
     }
   }
   .saved-it-modal {
-    /deep/ .modal-header {
-      background-color: #f3f7fd;
-    }
     &__header {
       width: 100%;
       padding: 1rem;
@@ -904,9 +879,6 @@ export default {
       .time-cont {
         max-width: 320px;
         margin: 0 auto;
-      }
-      .maryoku-btn {
-        width: 40%;
       }
     }
     &__footer {

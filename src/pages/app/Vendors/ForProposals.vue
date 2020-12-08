@@ -10,7 +10,6 @@
       <div class="md-layout-item md-size-70">
         <proposal-steps
           :categoryTitle="vendor.eventCategory.fullTitle"
-          :eventCategory="vendor.eventCategory"
           :step="step"
           :hasVisionStep="!!event && !!event.concept"
         />
@@ -45,7 +44,29 @@
             <span>Sincerely,</span>
             <p>Relish caterers & venues</p>
           </div>
-          <proposal-bid-content></proposal-bid-content>
+          <proposal-bid
+            label="Cost Requirements"
+            key="cost"
+            tableCategory="cost"
+            :hasCategoryHeader="true"
+            icon="Group+10662.svg"
+            description="Mandatory elements to involve in proposals are in the table, you can add more here:"
+          />
+          <proposal-bid
+            tableCategory="included"
+            label="Included in Price"
+            icon="includedPrice.png"
+            description="(from your “included in price” items)"
+            key="included"
+          />
+          <proposal-bid
+            tableCategory="extra"
+            label="Offered Extras"
+            icon="cost-requirements.png"
+            description="What elements would you like to suggest to the client with extra pay? "
+            key="extra"
+          />
+          <proposal-upload-legal></proposal-upload-legal>
         </div>
         <div class="step-wrapper" v-if="step == 2">
           <h3>Can you also provide any of these services for this event?</h3>
@@ -107,7 +128,8 @@ import ProposalBudgetSummary from "./components/ProposalBudgetSummary.vue";
 import ProposalSteps from "./components/ProposalSteps.vue";
 import ProposalItem from "./components/ProposalItem.vue";
 import ProposalEventVision from "./components/ProposalEventVision.vue";
-import ProposalBidContent from "./components/ProposalBidContent.vue";
+import ProposalBid from "./components/ProposalBid.vue";
+import ProposalUploadLegal from "./components/ProposalUploadLegal.vue";
 import ProposalAddFiles from "./components/ProposalAddFiles.vue";
 import ProposalTitleWithIcon from "./components/ProposalTitleWithIcon.vue";
 import ReferNewVendor from "./components/ReferNewVendor.vue";
@@ -126,9 +148,10 @@ export default {
     ProposalEventSummary,
     ReferNewVendor,
     ProposalEventVision,
+    ProposalBid,
     ProposalItemSecondaryService,
     ProposalAdditionalRequirement,
-    ProposalBidContent,
+    ProposalUploadLegal,
   },
   data() {
     return {

@@ -18,7 +18,7 @@
           <span v-if="step >= 4"><md-icon>check</md-icon></span>
           <span v-else><i>&#8226;</i></span>
           <br />
-          <strong class="text">policy</strong>
+          <strong class="text">photoes &<br />disclamer</strong>
         </li>
         <li @click="goToStep(4)" :class="[{ active: step >= 5 }, { current: step == 4 }, { inactive: step < 4 }]">
           <span v-if="step >= 5"><md-icon>check</md-icon></span>

@@ -300,10 +300,7 @@ export default {
     fetchData: async function() {
       this.blockId = this.$route.params.blockId;
       this.event = this.$store.state.event.eventData;
-
-      // todo check if commentComponent is used
-      // this.getCommentComponents(this.blockId);
-
+      this.getCommentComponents(this.blockId);
       await this.getAllRequirements();
       this.getSelectedBlock();
     },

@@ -50,7 +50,6 @@ import dateUtil from "./utils/date.util";
 require("vue-tour/dist/vue-tour.css");
 
 const VueScrollTo = require("vue-scrollto");
-window.$ = window.jQuery = require('jquery');
 
 // plugin setup
 Vue.use(VueRouter);

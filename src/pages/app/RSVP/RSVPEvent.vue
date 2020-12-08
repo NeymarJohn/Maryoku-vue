@@ -119,17 +119,13 @@
           <md-button class="md-simple md-button md-black maryoku-btn" @click="thinkLater">
             <span class="font-size-20">I Need To Think About It</span>
           </md-button>
-          <md-button
-            v-if="campaign.additionalData.zoomlink"
-            @click="showZoomModal = true"
-            class="md-simple md-button md-black maryoku-btn virtual-btn"
-          >
+          <md-button @click="showZoomModal = true" class="md-simple md-button md-black maryoku-btn virtual-btn">
             <span class="font-size-20">Virtual Participation</span>
           </md-button>
           <md-button v-if="!isSentRsvp" @click="showRsvpModal = true" class="md-button md-red maryoku-btn rsvp-btn">
             <span class="font-size-20">RSVP Now</span>
           </md-button>
-          <div v-else class="font-size-20">
+          <div v-else class="font-size-20 ml-20">
             <img :src="`${$iconURL}Campaign/Group 9222.svg`" />
             Sent Already
           </div>
@@ -159,6 +155,19 @@
       :campaign="campaign"
     ></sync-calendar-modal>
     <social-sharing-modal v-if="showSharingModal" @cancel="showSharingModal = false"></social-sharing-modal>
+    <modal v-if="showRejectConformModal">
+      <template slot="header">
+        <md-button class="md-simple md-just-icon md-round modal-default-button" @click="showRejectConformModal = false">
+          <md-icon>clear</md-icon>
+        </md-button>
+      </template>
+      <template slot="body">
+        <img :src="`${$iconURL}RSVP/reject-icon.svg`" />
+        <div class="font-size-30 mt-40 font-bold-extra text-transform-uppercase">We are sorry you can’t make it!</div>
+        <div class="mt-30 font-size-20">But we are sure you’v got your reasons.</div>
+        <div class="mt-10 font-size-20">Incase you regret anytime soon- let us know</div>
+      </template>
+    </modal>
   </div>
 </template>
 <script>
@@ -178,6 +187,7 @@ import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
 import SocialSharingModal from "@/components/Modals/SocialSharingModal";
 import { mapActions, mapGetters } from "vuex";
 import swal from "sweetalert2";
+import Modal from "../../../components/Modal.vue";
 
 export default {
   components: {
@@ -189,6 +199,7 @@ export default {
     RsvpVenueCarousel,
     RsvpEventInfoPanel,
     SocialSharingModal,
+    Modal,
   },
   data() {
     return {
@@ -217,6 +228,7 @@ export default {
       rsvpRequest: null,
       showSharingModal: false,
       isSentRsvp: false,
+      showRejectConformModal: false,
     };
   },
   created() {
@@ -232,9 +244,9 @@ export default {
       if (!this.rsvpRequest.isOpened) {
         new RsvpRequest({ id: rsvpRequest.id, isOpened: true }).save();
       }
-      if (this.rsvpRequest.status == "ACCEPTED") {
-        this.isSentRsvp = true;
-      }
+      // if (this.rsvpRequest.status == "ACCEPTED") {
+      //   this.isSentRsvp = true;
+      // }
     });
     this.$root.$on("setRsvp", (rsvpData) => {
       rsvpData.attendingOption = "PERSON";
@@ -245,11 +257,8 @@ export default {
       rsvpData.guests = rsvpData.guests.filter((item) => item.name);
       new Rsvp(rsvpData).save().then((requestedRSVP) => {
         console.log(requestedRSVP);
-        swal({
-          title: `Thank you! You sent RSVP to the Event Hosts!`,
-          buttonsStyling: false,
-          confirmButtonClass: "md-button md-success",
-        });
+        this.showReminderModal = true;
+
         this.showRsvpModal = false;
         this.isSentRsvp = true;
       });
@@ -292,11 +301,12 @@ export default {
     },
     reject() {
       new RsvpRequest({ id: this.rsvpRequest.id, status: "REJECTED" }).save().then((res) => {
-        swal({
-          title: `Sorry to hear that. Hope to see you on next event! `,
-          buttonsStyling: false,
-          confirmButtonClass: "md-button md-success",
-        });
+        // swal({
+        //   title: `Sorry to hear that. Hope to see you on next event! `,
+        //   buttonsStyling: false,
+        //   confirmButtonClass: "md-button md-success",
+        // });
+        this.showRejectConformModal = true;
       });
     },
     thinkLater() {
