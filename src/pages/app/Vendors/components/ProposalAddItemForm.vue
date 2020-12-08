@@ -125,10 +125,10 @@ export default {
   data() {
     return {
       serviceSlidePos: 0,
-      serviceItem: "",
+      serviceItem: null,
       serviceItemSize: "",
-      qty: "",
-      unit: "",
+      qty: null,
+      unit: null,
       isRequiredPlannerChoice: false,
       isComplementary: false,
       plannerChoices: [
@@ -226,7 +226,7 @@ export default {
       this.serviceItemSize = "";
       this.qty = 0;
       this.unit = 0;
-      this.serviceItem = "";
+      this.serviceItem = null;
       this.isRequiredPlannerChoice = false;
       this.isComplementary = false;
     },
