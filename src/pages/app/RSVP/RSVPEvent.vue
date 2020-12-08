@@ -2,8 +2,8 @@
   <div class="rsvp-container">
     <div class="rsvp-event">
       <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
-      <div class="rsvp-event-header" :style="`background-image: url('${campaign.coverImage}');`"></div>
-      <div class="rsvp-event-overview" :style="`background-image:${campaign.coverImage}`">
+      <div class="rsvp-event-header" :style="`background-image: url('${headerImage}');`"></div>
+      <div class="rsvp-event-overview" :style="`background-image:${backgroundImage}`">
         <div class="rsvp-event-overview-content">
           <div class="md-layout">
             <div class="rsvp-event-overview-content-customer md-layout-item md-size-100">
@@ -119,7 +119,11 @@
           <md-button class="md-simple md-button md-black maryoku-btn" @click="thinkLater">
             <span class="font-size-20">I Need To Think About It</span>
           </md-button>
-          <md-button @click="showZoomModal = true" class="md-simple md-button md-black maryoku-btn virtual-btn">
+          <md-button
+            @click="showZoomModal = true"
+            v-if="campaign.allowOnline"
+            class="md-simple md-button md-black maryoku-btn virtual-btn"
+          >
             <span class="font-size-20">Virtual Participation</span>
           </md-button>
           <md-button v-if="!isSentRsvp" @click="showRsvpModal = true" class="md-button md-red maryoku-btn rsvp-btn">
@@ -283,7 +287,7 @@ export default {
       if (this.event.concept) {
         return this.event.concept.images[0].url;
       }
-      return "";
+      return this.event.coverImage;
     },
   },
   methods: {
@@ -339,7 +343,7 @@ export default {
       height: 430px;
 
       background-repeat: no-repeat;
-      background-size: cover;
+      background-size: 200%;
       background-position: center 60%;
     }
     &-overview {
