@@ -199,10 +199,10 @@ export default {
   created() {},
   mounted() {
     console.log("vendor.signup.layout.vendor", this.vendor, this.step);
-    this.$root.$on("go-to-signup-step", (step) => {});
-    // this.$root.$on("update-vendor-value", (field, value) => {
-    //   this.$set(this.vendor, this.camelize(field), value);
-    // });
+    this.$root.$on("go-to-signup-step", (step) => {
+      this.setStep(step);
+    });
+
   },
   computed: {
     ...mapGetters({

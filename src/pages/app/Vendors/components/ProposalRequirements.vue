@@ -1,15 +1,5 @@
 <template>
   <div class="collapse-panel white-card card proposal-bid">
-    <div class="collapse-panel-header d-flex align-center justify-content-between" v-if="hasCategoryHeader">
-      <div class="text-cont d-flex">
-        <h3 class="title font-bold">
-          <img :src="`${$iconURL}NewSubmitPorposal/Asset 614.svg`" class="page-icon mr-10" />
-          {{ categoryName }}
-        </h3>
-        <h5 class="ml-10">For Whole Event</h5>
-      </div>
-    </div>
-    <hr v-if="hasCategoryHeader" />
     <div class="collapse-panel-header" @click="isExpanded = !isExpanded">
       <div class="d-flex align-center justify-content-between">
         <div class="text-cont d-flex">
@@ -19,10 +9,8 @@
           </h3>
         </div>
         <div class="action">
-          <!-- <img v-if="isExpanded" :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`" class="label-icon" /> -->
           <md-icon style="color: #a0a0a0; font-size: 30px !important" v-if="isExpanded">keyboard_arrow_right</md-icon>
           <md-icon style="color: #a0a0a0; font-size: 30px !important" v-else>keyboard_arrow_down</md-icon>
-          <!-- <img v-else :src="`${$iconURL}NewSubmitPorposal/Asset 567.svg`" class="label-icon" /> -->
         </div>
       </div>
       <div>
@@ -30,6 +18,11 @@
       </div>
     </div>
     <div class="collapse-panel-content" v-if="isExpanded">
+      <proposal-add-item-form
+        :optionalRequirements="optionalRequirements"
+        :serviceType="tableCategory"
+        @addItem="addItem"
+      ></proposal-add-item-form>
       <proposal-service-table
         :category="vendor.eventCategory.key"
         :tableCategory="tableCategory"
@@ -38,6 +31,7 @@
   </div>
 </template>
 <script>
+import ProposalAddItemForm from "./ProposalAddItemForm.vue";
 import ProposalServiceTable from "./ProposalServiceTable";
 
 export default {
@@ -56,6 +50,10 @@ export default {
     },
     description: String,
     tableCategory: {
+      type: String,
+      default: "",
+    },
+    vendorCategory: {
       type: String,
       default: "",
     },
@@ -79,9 +77,14 @@ export default {
         return null;
       }
     },
+    addItem(serviceItem) {
+      if (!this.services) this.services = [];
+      this.services.push(serviceItem);
+    },
   },
   components: {
     ProposalServiceTable,
+    ProposalAddItemForm,
   },
   computed: {
     categoryName() {
@@ -89,6 +92,43 @@ export default {
     },
     vendor() {
       return this.$store.state.vendorProposal.vendor;
+    },
+    proposalRequest() {
+      return this.$store.state.vendorProposal.proposalRequest;
+    },
+    requirements() {
+      return this.proposalRequest.componentRequirements[this.vendor.eventCategory.key];
+    },
+    optionalRequirements() {
+      if (!this.requirements) return [];
+      return this.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
+    },
+    services: {
+      get: function () {
+        if (this.tableCategory === "cost")
+          return this.$store.state.vendorProposal.proposalCostServices[this.vendorCategory];
+        else if (this.tableCategory === "included")
+          return this.$store.state.vendorProposal.proposalIncludedServices[this.vendorCategory];
+        else if (this.tableCategory === "extra")
+          return this.$store.state.vendorProposal.proposalExtraServices[this.vendorCategory];
+      },
+      set: function (newServices) {
+        if (this.tableCategory === "cost")
+          this.$store.commit("vendorProposal/setCostServices", {
+            category: this.vendorCategory,
+            services: newServices,
+          });
+        else if (this.tableCategory === "included")
+          this.$store.commit("vendorProposal/setIncludedServices", {
+            category: this.vendorCategory,
+            services: newServices,
+          });
+        else if (this.tableCategory === "extra")
+          this.$store.commit("vendorProposal/setExtraServices", {
+            category: this.vendorCategory,
+            services: newServices,
+          });
+      },
     },
   },
 };

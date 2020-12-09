@@ -231,6 +231,8 @@ export default {
         const result = newValue.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         this.content = result;
       }
+      console.log(this.content);
+      this.$emit("input", this.content);
     },
     dateData: function (newValue) {
       // this.content = dateData.selectedDate

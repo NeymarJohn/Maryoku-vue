@@ -19,6 +19,7 @@
         v-for="(block, index) in eventBuildingBlocks"
         :class="{ booked: block.bookedBudget }"
         :key="index"
+        :style="`border-left: 10px solid ${block.color}`"
       >
         <tbody>
           <template>
@@ -192,8 +193,21 @@
           </template>
         </tbody>
       </table>
-
-      <table class="event-blocks__table event-block-table">
+      <table class="event-blocks__table event-block-table" :style="`border-left: 10px solid #80B93D`">
+        <tbody>
+          <tr class="unexpected-budget">
+            <td width="40%" class="event-block-element unused-budget">
+              <img :src="`${$iconURL}Budget Elements/unexpected.svg`" />
+              Unexpected
+            </td>
+            <td width="20%" class="planned">$ {{ event.unexpectedBudget | withComma }}</td>
+            <td width="15%" class="actual red-label"></td>
+            <td width="15%" class="status"></td>
+            <td class="expand"></td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="event-blocks__table event-block-table" :style="`border-left: 10px solid #818080`">
         <tbody>
           <tr class="extra">
             <td width="40%" class="event-block-element extra">
@@ -289,14 +303,14 @@
           </template>
         </tbody>
       </table>
-      <table class="event-blocks__table event-block-table">
+      <table class="event-blocks__table event-block-table" :style="`border-left: 10px solid #0047cc`">
         <tbody>
           <tr class="unused-budget">
             <td width="40%" class="event-block-element unused-budget">
               <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget screen/SVG/Asset 487.svg" />
               Unused
             </td>
-            <td width="20%" class="planned">$ {{ remainingBudget | withComma }}</td>
+            <td width="20%" class="planned">$ {{ unusedBudget | withComma }}</td>
             <td width="15%" class="actual red-label"></td>
             <td width="15%" class="status"></td>
             <td class="expand"></td>
@@ -317,14 +331,22 @@
           <td colspan="5">
             <md-button class="md-simple add-category-btn" @click="showCategoryModal = true">
               <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2019.svg" />
-              Add new categoryd
+              Add new category
             </md-button>
           </td>
         </tr>
       </tbody>
     </table>
 
-    <modal v-if="showCategoryModal" class="add-category-model">
+    <add-new-category-modal
+      v-if="showCategoryModal"
+      :event="event"
+      :components="filteredEventBlocks"
+      @cancel="showCategoryModal = false"
+      @save="addBuildingBlock"
+    ></add-new-category-modal>
+
+    <!-- <modal v-if="showCategoryModal" class="add-category-model">
       <template slot="header">
         <div class="add-category-model__header">
           <h2 class="font-size-30 font-bold-extra">
@@ -391,7 +413,7 @@
           >Add Category</md-button
         >
       </template>
-    </modal>
+    </modal> -->
     <budget-handle-minus-modal
       v-if="showMinusHandleModal"
       :value="overAddedValue"
@@ -432,7 +454,7 @@ import BudgetHandleMinusModal from "@/components/Modals/BudgetHandleMinusModal";
 import AddMyVendorModal from "@/components/Modals/AddMyVendorModal";
 import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 import EventComponentVendorItem from "./Utilities/EventComponentVendorItem";
-
+import AddNewCategoryModal from "@/components/Modals/AddNewCategoryModal";
 import swal from "sweetalert2";
 
 export default {
@@ -448,14 +470,9 @@ export default {
     EventComponentVendorItem,
     Popup,
     MaryokuInput,
+    AddNewCategoryModal,
   },
   props: {
-    event: {
-      type: Object,
-      default: () => {
-        return { statistics: {} };
-      },
-    },
     eventComponents: [Array, Function],
     type: {
       type: String,
@@ -508,6 +525,9 @@ export default {
     ...mapGetters({
       components: "event/getComponentsList",
     }),
+    event() {
+      return this.$store.state.event.eventData;
+    },
     permission() {
       try {
         return this.$store.state.event.eventData.permit;
@@ -520,6 +540,16 @@ export default {
     },
     canEdit() {
       return !this.permission || this.permission === "edit";
+    },
+    allocatedTotal() {
+      const addedBudget = this.eventBuildingBlocks.reduce((sum, item) => {
+        return sum + item.bookedBudget;
+      }, 0);
+      return addedBudget; //+ this.event.allocatedTips + this.event.allocatedFees;
+    },
+    unusedBudget() {
+      console.log("allocatedBUdgtet", this.allocatedTotal);
+      return this.event.totalBudget - this.allocatedTotal;
     },
   },
   methods: {
@@ -921,46 +951,9 @@ export default {
       }
     },
 
-    async addBuildingBlock() {
-      if (this.remainingBudget < this.newBuildingBlock.budget) {
-        return;
-      }
-
-      //let newComponent = _.findWhere(this.components, {title: this.newBuildingBlock.category})
-      let newComponent = this.newBuildingBlock.category;
-      if (newComponent.id === "other") {
-        const newCategory = {
-          title: `Other-${this.newBuildingBlock.name}`,
-          key: `other-${this.newBuildingBlock.name.toLowerCase()}`,
-          color: `rgb(${parseInt(Math.random() * 255)}, ${parseInt(Math.random() * 255)}, ${parseInt(
-            Math.random() * 255,
-          )})`,
-          icon: `other.svg`,
-          type: "customized",
-          categoryId: "other",
-        };
-        newComponent = await new EventCategory(newCategory).save();
-      }
-      let newBlock = {
-        componentId: newComponent ? newComponent.key : "other",
-        componentCategoryId: newComponent ? newComponent.key : "other",
-        calendarEvent: { id: this.event.id },
-        allocatedBudget: this.newBuildingBlock.budget,
-        order: this.event.components.length,
-        icon: newComponent.icon,
-        category: newComponent,
-      };
-
-      new EventComponent(newBlock)
-        .for(this.calendar, this.event)
-        .save()
-        .then((res) => {
-          this.showCategoryModal = false;
-          this.$emit("change");
-        })
-        .catch((error) => {
-          console.log("Error while saving ", error);
-        });
+    addBuildingBlock() {
+      this.showCategoryModal = false;
+      this.$emit("change");
     },
     getCategoryBlocks() {
       EventComponent.get()
