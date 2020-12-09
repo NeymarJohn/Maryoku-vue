@@ -57,7 +57,9 @@ export default {
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    console.log("vendorService", this.serviceItem);
+  },
   methods: {},
   computed: {},
   filters: {},

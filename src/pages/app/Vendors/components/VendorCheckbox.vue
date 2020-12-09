@@ -78,22 +78,16 @@
             <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27">
             {{ label }}
           </div>
-          <div class="dropdown-list" v-if="checked" @click="expanded = !expanded">
-            <div class>{{ label }}</div>
-          </div>
-          <div class="dropdown-cont" v-if="expanded && checked">
-            <img :src="`${iconUrl}Asset 524.svg`" />
-            <ul>
-              <li v-for="(a, aIndex) in item.available" :key="aIndex">
-                <div class="check-field" @click="updateExChecked(a)">
-                  <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="exChecked.includes(a)" />
-                  <span class="blank-circle" v-else />
-                  <span class="text" :class="{ checked: exChecked.includes(a) }">{{ a }}</span>
-                </div>
-                <input class="font-size-16" v-if="exChecked.includes(a) && a == 'other'" v-model="item.customValue" />
-              </li>
-            </ul>
-          </div>
+          <category-selector
+                  v-if="checked"
+                  :value="item.value"
+                  :categories="item.available"
+                  :column="columnCount"
+                  :multiple="true"
+                  @change="updateExChecked"
+                  class="mt-20 service"
+                  style="margin-left: 47px"
+          ></category-selector>
         </div>
       </div>
       <div class="sub-cont" v-if="item.hasComment && checked" :class="{ 'mt-m3': !included }">
@@ -143,6 +137,7 @@ import Vendors from "@/models/Vendors";
 
 //COMPONENTS
 import Icon from "@/components/Icon/Icon.vue";
+import CategorySelector from "@/components/Inputs/CategorySelector";
 
 export default {
   name: "vendor-checkbox",
@@ -153,6 +148,7 @@ export default {
     vendor: Object,
   },
   components: {
+    CategorySelector,
     VueElementLoading,
   },
   data() {
@@ -173,6 +169,7 @@ export default {
   },
   created() {},
   mounted() {
+    console.log("vendor.check.box", this.props);
     if (this.vendor) {
       const item = this.vendor.services[this.camelize(this.label)];
       if (item) {
@@ -181,18 +178,16 @@ export default {
         this.currentItem.value = JSON.stringify(item.value);
         this.currentItem.desc = item.desc;
         this.exChecked = item.value;
-        console.log(this.currentItem);
+
       }
+    }
+    if( this.item.type == Array) {
     }
   },
   methods: {
-    updateExChecked(item) {
-      if (this.exChecked.includes(item)) {
-        this.exChecked = this.exChecked.filter((d) => d != item);
-      } else {
-        this.exChecked.push(item);
-      }
-      this.currentItem.value = this.exChecked;
+    updateExChecked(items) {
+
+      this.exChecked = this.currentItem.value = items;
       this.$root.$emit("update-vendor-value", `services.${this.camelize(this.label)}`, this.currentItem);
     },
     updateCheck() {
@@ -212,7 +207,11 @@ export default {
       return temp.charAt(0).toLowerCase() + temp.slice(1);
     },
   },
-  computed: {},
+  computed: {
+    columnCount(){
+      return this.item.available.length > 8 ? "2" : "1"
+    }
+  },
   filters: {},
   watch: {},
 };
