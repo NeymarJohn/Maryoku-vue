@@ -346,6 +346,91 @@ export const businessCategories = [
             ]
           }
         ]
+      },
+      {
+        name: 'Sustainability, Inclusion and Diversity',
+        subCategories: [
+          {
+            name: 'Sustainability',
+            items: [
+              {
+                name: 'Green policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Water saving protocols',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Green power and energy efficient',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Waste recycle procedures',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Non toxic products',
+                type: Boolean,
+                value: false
+              }
+            ]
+          },
+          {
+            name: 'Inclusion',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
+                type: Boolean,
+                value: false
+              },
+            ]
+          },
+          {
+            name: 'Diversity',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
+                type: Boolean,
+                value: false
+              },
+            ]
+          }
+        ]
       }
     ]
   },
@@ -637,11 +722,61 @@ export const businessCategories = [
         ]
       },
       {
-        name: 'inclusions',
+        name: 'Sustainability, Inclusion and Diversity',
         subCategories: [
           {
-            name: 'dietary constraints',
+            name: 'Sustainability',
             items: [
+              {
+                name: 'Green policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Water saving protocols',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Green power and energy efficient',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Waste recycle procedures',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Non toxic products',
+                type: Boolean,
+                value: false
+              }
+            ]
+          },
+          {
+            name: 'Inclusion',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
+                type: Boolean,
+                value: false
+              },
               {
                 name: 'vegetarian',
                 type: Boolean,
@@ -675,10 +810,25 @@ export const businessCategories = [
             ]
           },
           {
-            name: 'other',
+            name: 'Diversity',
             items: [
               {
-                name: 'children meals',
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 value: false
               },
@@ -812,11 +962,61 @@ export const businessCategories = [
         ]
       },
       {
-        name: 'inclusion',
+        name: 'Sustainability, Inclusion and Diversity',
         subCategories: [
           {
-            name: 'floral',
+            name: 'Sustainability',
             items: [
+              {
+                name: 'Green policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Water saving protocols',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Green power and energy efficient',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Waste recycle procedures',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Non toxic products',
+                type: Boolean,
+                value: false
+              }
+            ]
+          },
+          {
+            name: 'Inclusion',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
+                type: Boolean,
+                value: false
+              },
               {
                 name: 'hypoallergenic flowers',
                 type: Boolean,
@@ -829,6 +1029,31 @@ export const businessCategories = [
               },
             ]
           },
+          {
+            name: 'Diversity',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
+                type: Boolean,
+                value: false
+              },
+            ]
+          }
         ]
       }
     ]
@@ -929,6 +1154,91 @@ export const businessCategories = [
                 type: Boolean,
                 value: false
               }
+            ]
+          }
+        ]
+      },
+      {
+        name: 'Sustainability, Inclusion and Diversity',
+        subCategories: [
+          {
+            name: 'Sustainability',
+            items: [
+              {
+                name: 'Green policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Water saving protocols',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Green power and energy efficient',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Waste recycle procedures',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Non toxic products',
+                type: Boolean,
+                value: false
+              }
+            ]
+          },
+          {
+            name: 'Inclusion',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
+                type: Boolean,
+                value: false
+              },
+            ]
+          },
+          {
+            name: 'Diversity',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
+                type: Boolean,
+                value: false
+              },
             ]
           }
         ]
@@ -1046,6 +1356,91 @@ export const businessCategories = [
               },
               {
                 name: 'simulacasting/live streaming',
+                type: Boolean,
+                value: false
+              },
+            ]
+          }
+        ]
+      },
+      {
+        name: 'Sustainability, Inclusion and Diversity',
+        subCategories: [
+          {
+            name: 'Sustainability',
+            items: [
+              {
+                name: 'Green policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Water saving protocols',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Green power and energy efficient',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Waste recycle procedures',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Non toxic products',
+                type: Boolean,
+                value: false
+              }
+            ]
+          },
+          {
+            name: 'Inclusion',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
+                type: Boolean,
+                value: false
+              },
+            ]
+          },
+          {
+            name: 'Diversity',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 value: false
               },
@@ -1176,6 +1571,91 @@ export const businessCategories = [
           }
         ]
       },
+      {
+        name: 'Sustainability, Inclusion and Diversity',
+        subCategories: [
+          {
+            name: 'Sustainability',
+            items: [
+              {
+                name: 'Green policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Water saving protocols',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Green power and energy efficient',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Waste recycle procedures',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Non toxic products',
+                type: Boolean,
+                value: false
+              }
+            ]
+          },
+          {
+            name: 'Inclusion',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
+                type: Boolean,
+                value: false
+              },
+            ]
+          },
+          {
+            name: 'Diversity',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
+                type: Boolean,
+                value: false
+              },
+            ]
+          }
+        ]
+      }
     ]
   },
   {
@@ -1269,6 +1749,91 @@ export const businessCategories = [
               },
               {
                 name: 'restrooms',
+                type: Boolean,
+                value: false
+              },
+            ]
+          }
+        ]
+      },
+      {
+        name: 'Sustainability, Inclusion and Diversity',
+        subCategories: [
+          {
+            name: 'Sustainability',
+            items: [
+              {
+                name: 'Green policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Water saving protocols',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Green power and energy efficient',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Waste recycle procedures',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Non toxic products',
+                type: Boolean,
+                value: false
+              }
+            ]
+          },
+          {
+            name: 'Inclusion',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
+                type: Boolean,
+                value: false
+              },
+            ]
+          },
+          {
+            name: 'Diversity',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 value: false
               },
@@ -1506,6 +2071,91 @@ export const businessCategories = [
             ]
           }
         ]
+      },
+      {
+        name: 'Sustainability, Inclusion and Diversity',
+        subCategories: [
+          {
+            name: 'Sustainability',
+            items: [
+              {
+                name: 'Green policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Water saving protocols',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Green power and energy efficient',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Waste recycle procedures',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Non toxic products',
+                type: Boolean,
+                value: false
+              }
+            ]
+          },
+          {
+            name: 'Inclusion',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
+                type: Boolean,
+                value: false
+              },
+            ]
+          },
+          {
+            name: 'Diversity',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
+                type: Boolean,
+                value: false
+              },
+            ]
+          }
+        ]
       }
     ]
   },
@@ -1599,6 +2249,91 @@ export const businessCategories = [
                 name: 'special equipment',
                 type: Number,
                 value: 0
+              },
+            ]
+          }
+        ]
+      },
+      {
+        name: 'Sustainability, Inclusion and Diversity',
+        subCategories: [
+          {
+            name: 'Sustainability',
+            items: [
+              {
+                name: 'Green policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Water saving protocols',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Green power and energy efficient',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Waste recycle procedures',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Non toxic products',
+                type: Boolean,
+                value: false
+              }
+            ]
+          },
+          {
+            name: 'Inclusion',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
+                type: Boolean,
+                value: false
+              },
+            ]
+          },
+          {
+            name: 'Diversity',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
+                type: Boolean,
+                value: false
               },
             ]
           }
@@ -1715,6 +2450,91 @@ export const businessCategories = [
           }
         ]
       },
+      {
+        name: 'Sustainability, Inclusion and Diversity',
+        subCategories: [
+          {
+            name: 'Sustainability',
+            items: [
+              {
+                name: 'Green policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Water saving protocols',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Green power and energy efficient',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Waste recycle procedures',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Non toxic products',
+                type: Boolean,
+                value: false
+              }
+            ]
+          },
+          {
+            name: 'Inclusion',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
+                type: Boolean,
+                value: false
+              },
+            ]
+          },
+          {
+            name: 'Diversity',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
+                type: Boolean,
+                value: false
+              },
+            ]
+          }
+        ]
+      }
     ]
   },
   {
@@ -1821,11 +2641,61 @@ export const businessCategories = [
         ]
       },
       {
-        name: 'inclusion',
+        name: 'Sustainability, Inclusion and Diversity',
         subCategories: [
           {
-            name: ' ',
+            name: 'Sustainability',
             items: [
+              {
+                name: 'Green policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Water saving protocols',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Green power and energy efficient',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Waste recycle procedures',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Non toxic products',
+                type: Boolean,
+                value: false
+              }
+            ]
+          },
+          {
+            name: 'Inclusion',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
+                type: Boolean,
+                value: false
+              },
               {
                 name: 'provide sample',
                 type: Boolean,
@@ -1838,9 +2708,34 @@ export const businessCategories = [
                 available: ['digital', 'real', 'sample']
               },
             ]
+          },
+          {
+            name: 'Diversity',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
+                type: Boolean,
+                value: false
+              },
+            ]
           }
         ]
-      }
+      },
     ]
   },
   {
@@ -1974,6 +2869,91 @@ export const businessCategories = [
             items: [
               {
                 name: 'staging, podiums, registration areas',
+                type: Boolean,
+                value: false
+              },
+            ]
+          }
+        ]
+      },
+      {
+        name: 'Sustainability, Inclusion and Diversity',
+        subCategories: [
+          {
+            name: 'Sustainability',
+            items: [
+              {
+                name: 'Green policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Water saving protocols',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Green power and energy efficient',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Waste recycle procedures',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Non toxic products',
+                type: Boolean,
+                value: false
+              }
+            ]
+          },
+          {
+            name: 'Inclusion',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
+                type: Boolean,
+                value: false
+              },
+            ]
+          },
+          {
+            name: 'Diversity',
+            items: [
+              {
+                name: 'Prioritizing diversity and inclution',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Women on senior staff',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Strict sexual harrasment policy',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 value: false
               },
