@@ -74,7 +74,7 @@ export default {
     reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
   }),
   mounted() {
-
+    console.log("mounted", this.trackBy, this.value, this.categories);
     if (this.value) {
       if ( this.multiple  ) {
         if ( this.value.length ) {
@@ -87,7 +87,7 @@ export default {
         this.selectedCategory = this.categories.find(it => it.value === this.value);
       }
     }
-
+    console.log('category-selector', this.selectedCategory);
   },
   computed:{
     _value() {
@@ -196,7 +196,7 @@ export default {
     padding: 40px;
     border: solid 1px #050505;
     box-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.16);
-    background: white;
+
     li {
       cursor: pointer;
       font: normal 18px Manrope-Regular, sans-serif;
@@ -225,10 +225,6 @@ export default {
         width: 100%;
       }
     }
-  }
-
-  &.service .droplist input{
-    border: solid 1px #707070 !important;
   }
 }
 </style>

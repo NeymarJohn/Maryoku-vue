@@ -53,7 +53,7 @@
       }
     },
     mounted() {
-
+      console.log('mounted', this.property.defaultNote);
       if (this.property) {
         this.note = this.property.defaultNote;
       }

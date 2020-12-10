@@ -71,28 +71,14 @@
       </div>
     </template>
     <template v-if="item.type == Array">
-      <div class="main">
-        <div class="check-cont" >
-          <div class="flex" @click="updateCheck()">
-            <img v-if="checked" class="mr-20" :src="iconUrl + 'Group 6258.svg'" width="27">
-            <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27">
-            {{ label }}
-          </div>
-          <category-selector
-                  v-if="checked"
-                  :value="item.value"
-                  :categories="item.available"
-                  :column="columnCount"
-                  :multiple="true"
-                  @change="updateExChecked"
-                  class="mt-20 service"
-                  style="margin-left: 47px"
-          ></category-selector>
-        </div>
-      </div>
-      <div class="sub-cont" v-if="item.hasComment && checked" :class="{ 'mt-m3': !included }">
-        <textarea class="text" v-model="currentItem.desc" :placeholder="`Add additional information`" />
-      </div>
+
+      <category-selector
+              :value="item.value"
+              :categories="item.available"
+              :multiple="true"
+              @change="updateExChecked"
+      ></category-selector>
+
     </template>
     <template v-if="item.type == 'Cost'">
       <div class="main">
@@ -169,7 +155,6 @@ export default {
   },
   created() {},
   mounted() {
-    console.log("vendor.check.box", this.props);
     if (this.vendor) {
       const item = this.vendor.services[this.camelize(this.label)];
       if (item) {
@@ -178,10 +163,11 @@ export default {
         this.currentItem.value = JSON.stringify(item.value);
         this.currentItem.desc = item.desc;
         this.exChecked = item.value;
-
+        console.log(this.currentItem);
       }
     }
     if( this.item.type == Array) {
+      console.log("mounted", this.item)
     }
   },
   methods: {
@@ -207,11 +193,7 @@ export default {
       return temp.charAt(0).toLowerCase() + temp.slice(1);
     },
   },
-  computed: {
-    columnCount(){
-      return this.item.available.length > 8 ? "2" : "1"
-    }
-  },
+  computed: {},
   filters: {},
   watch: {},
 };
