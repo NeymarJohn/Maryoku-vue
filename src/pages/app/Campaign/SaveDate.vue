@@ -10,12 +10,12 @@
       </div>
       <concept-image-block
         v-if="concept"
-        class="ml-50 hidden"
+        class="ml-50"
         :images="concept.images"
         :colors="concept.colors"
         border="no-border"
       ></concept-image-block>
-      <concept-canvas class="ml-50" v-if="concept" :eventConcept="concept" style="display: none"> </concept-canvas>
+      <!-- <concept-canvas class="ml-50" v-if="concept" :eventConcept="concept"></concept-canvas> -->
       <div class="cover-preview" v-else>
         <img :src="coverImage" />
         <label for="cover">
@@ -192,9 +192,6 @@ export default {
     },
     changeTitle(newTitle) {
       this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "title", value: newTitle });
-      this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
-      this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "title", value: newTitle });
-      this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "title", value: newTitle });
     },
     chooseFiles() {
       document.getElementById("coverImage").click();

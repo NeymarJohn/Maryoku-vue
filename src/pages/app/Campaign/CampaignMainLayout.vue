@@ -111,7 +111,7 @@
             <rsvp :info="{ ...campaignTabs[2], ...campaignInfo }" ref="rsvp"></rsvp>
           </template>
         </collapse-panel>
-        <rsvp v-else :info="{ ...campaignTabs[2], ...campaignInfo }" ref="rsvp"></rsvp>
+        <rsvp v-else :info="{ ...campaignTabs[2], ...campaignInfo }" ref="rsvp" class="white-card"></rsvp>
       </template>
 
       <template v-if="selectedTab == 3">

@@ -71,14 +71,34 @@
       </div>
     </template>
     <template v-if="item.type == Array">
-
-      <category-selector
-              :value="item.value"
-              :categories="item.available"
-              :multiple="true"
-              @change="updateExChecked"
-      ></category-selector>
-
+      <div class="main">
+        <div class="check-cont" >
+          <div class="flex" @click="updateCheck()">
+            <img v-if="checked" class="mr-20" :src="iconUrl + 'Group 6258.svg'" width="27">
+            <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27">
+            {{ label }}
+          </div>
+          <div class="dropdown-list" v-if="checked" @click="expanded = !expanded">
+            <div class>{{ label }}</div>
+          </div>
+          <div class="dropdown-cont" v-if="expanded && checked">
+            <img :src="`${iconUrl}Asset 524.svg`" />
+            <ul>
+              <li v-for="(a, aIndex) in item.available" :key="aIndex">
+                <div class="check-field" @click="updateExChecked(a)">
+                  <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="exChecked.includes(a)" />
+                  <span class="blank-circle" v-else />
+                  <span class="text" :class="{ checked: exChecked.includes(a) }">{{ a }}</span>
+                </div>
+                <input class="font-size-16" v-if="exChecked.includes(a) && a == 'other'" v-model="item.customValue" />
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="sub-cont" v-if="item.hasComment && checked" :class="{ 'mt-m3': !included }">
+        <textarea class="text" v-model="currentItem.desc" :placeholder="`Add additional information`" />
+      </div>
     </template>
     <template v-if="item.type == 'Cost'">
       <div class="main">
@@ -123,7 +143,6 @@ import Vendors from "@/models/Vendors";
 
 //COMPONENTS
 import Icon from "@/components/Icon/Icon.vue";
-import CategorySelector from "@/components/Inputs/CategorySelector";
 
 export default {
   name: "vendor-checkbox",
@@ -134,7 +153,6 @@ export default {
     vendor: Object,
   },
   components: {
-    CategorySelector,
     VueElementLoading,
   },
   data() {
@@ -166,14 +184,15 @@ export default {
         console.log(this.currentItem);
       }
     }
-    if( this.item.type == Array) {
-      console.log("mounted", this.item)
-    }
   },
   methods: {
-    updateExChecked(items) {
-
-      this.exChecked = this.currentItem.value = items;
+    updateExChecked(item) {
+      if (this.exChecked.includes(item)) {
+        this.exChecked = this.exChecked.filter((d) => d != item);
+      } else {
+        this.exChecked.push(item);
+      }
+      this.currentItem.value = this.exChecked;
       this.$root.$emit("update-vendor-value", `services.${this.camelize(this.label)}`, this.currentItem);
     },
     updateCheck() {

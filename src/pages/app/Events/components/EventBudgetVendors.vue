@@ -31,7 +31,7 @@
                   block.title ? block.title.toLowerCase().replace(/ /g, '-').replace('&', '').replace('/', '-') : ''
                 "
               >
-                <img :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${block.icon}`" />
+                <img :src="`${$iconURL}Budget Elements/${block.icon}`" />
                 {{ block.title }}
               </td>
               <td class="planned" width="20%" style="white-space: nowrap">
@@ -72,15 +72,9 @@
                   <template v-if="block.allocatedBudget">
                     <template v-if="block.winningProposalId">
                       <template v-if="block.allocatedBudget < block.winingProposal.cost">
-                        <img
-                          src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+29.png"
-                        />
+                        <img :src="`${$iconURL}budget+screen/png/Asset+29.png`" />
                       </template>
-                      <template v-else>
-                        <img
-                          src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+29.png"
-                        />
-                      </template>
+                      <template v-else> <img :src="`${$iconURL}budget+screen/png/Asset+29.png`" /> </template>
                       <md-button
                         class="md-simple actual-cost md-xs"
                         :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`"
@@ -750,6 +744,9 @@ export default {
         selected_block.values = block.values;
         selected_block.vendors = block.vendors;
 
+        block.newBudget = Number(block.newBudget.replace(/,/g, ""));
+        let offsetBudget = block.newBudget - block.allocatedBudget;
+
         if (block.allocatedBudget && block.numberOfParticipants) {
           selected_block.allocatedBudget =
             this.type === "total" ? block.newBudget : block.newBudget * block.numberOfParticipants;
@@ -761,9 +758,10 @@ export default {
           block.allocatedBudget =
             this.type === "total" ? block.newBudget : block.newBudget * this.event.numberOfParticipants;
         }
+        alert(offsetBudget);
         if (result.dismiss != "cancel") {
           selected_block
-            .for(this.calendar, event)
+            .for(this.event)
             .save()
             .then((resp) => {
               this.isLoading = false;
@@ -779,12 +777,31 @@ export default {
                 }
               });
 
-              this.allocatedBudget = allocatedBudget;
-              if (this.event.totalBudget < this.allocatedBudget) {
-                console.log(this.totalBudget);
+              // this.allocatedBudget = allocatedBudget;
+              // if (this.event.totalBudget < this.allocatedBudget) {
+              //   console.log(this.totalBudget);
+              //   this.showMinusHandleModal = true;
+              //   this.overAddedValue = this.allocatedBudget - this.event.totalBudget;
+              // }
+              const event = new CalendarEvent({
+                id: this.event.id,
+                calendar: new Calendar({ id: this.event.calendar.id }),
+              });
+
+              // planer has extra budget
+              if (this.event.unexpectedBudget + this.event.allocatedTips < offsetBudget) {
                 this.showMinusHandleModal = true;
-                this.overAddedValue = this.allocatedBudget - this.event.totalBudget;
+              } else {
+                if (this.event.unexpectedBudget < offsetBudget) {
+                  offsetBudget -= offsetBudget - this.event.unexpectedBudget;
+                  event.unexpectedBudget = 0;
+                  event.allocatedTips = this.allocatedTips - offsetBudget;
+                } else {
+                  event.unexpectedBudget = this.event.unexpectedBudget - offsetBudget;
+                }
               }
+              this.$store.dispatch("event/saveEventAction", event).then((res) => {});
+
               this.showEditElementBudget(block);
               this.$emit("change");
             })

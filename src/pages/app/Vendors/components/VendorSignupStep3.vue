@@ -88,7 +88,7 @@
                         <category-selector
                                 :value="r.value"
                                 :categories="r.options"
-                                :multiple="true"
+                                multiple="true"
                                 @change="changeCategorySelector('policy', r, ...arguments)"
                         ></category-selector>
                       </template>
@@ -239,7 +239,7 @@
                       <category-selector
                               :value="p.value"
                               :categories="p.options"
-                              :multiple="true"
+                              multiple="true"
                               @change="changeCategorySelector('pricePolicy', p, ...arguments)"
                       ></category-selector>
 
@@ -315,7 +315,7 @@
                   <div class="bottom mt-0 no-margin" v-if="p.type == 'Discount'">
                     <span>Discount</span>
                     <br />
-                    <div class="suffix d-flex">
+                    <div class="suffix percentage d-flex">
                       <input
                         type="number"
                         class="text-center number-field"
@@ -462,18 +462,17 @@
                     :is-multiple-date-picker="true"
                     :minSelDays="1"
                     :marked-dates="markedDates"
+                    :marked-date-range="markedDateRange"
                     :disabled-day-names="optimizeWeekDays(selectedWeekdays)"
                     :sundayStart="true"
                     :date-format="'yyyy-mm-dd'"
                     v-model="date"
                     ref="calendar"
-                    @changedMonth="changeMonth"
-                    @changedYear="changeYear"
+                    :isMultipleDatePicker="true"
+                    :isMultipleDateRange="true"
                     v-on:dayClicked="updateDontWorkDays($event)"
                     v-on:daychoseDay="updateDontWorkDays($event)"
                   />
-                  <!-- todo update page when month change -->
-                  <div style="display: none">{{this.month}}</div>
                 </template>
               </div>
               <div class="check-list ml-40">
@@ -678,7 +677,6 @@ export default {
       exLimitation: false,
       exDonts: [],
       notAllowed: [],
-      month: null,
       isOtherNa: false,
       startTime: {
         hh: "12",
@@ -1434,7 +1432,9 @@ export default {
   },
   methods: {
     updateExDonts(item) {
+      console.log("updateExDonts", item);
       item.selected = !item.selected;
+
 
       this.$root.$emit("update-vendor-value", "exDonts", this.religions);
     },
@@ -1515,14 +1515,6 @@ export default {
       console.log("selectedDays", this.date);
       this.$root.$emit("update-vendor-value", "dontWorkDays", this.date);
     },
-    changeMonth(e) {
-        console.log("changeMonth", e);
-        this.month = e;
-    },
-    changeYear(e) {
-        console.log("changeYear", e);
-        this.month = e;
-    },
     updateStartA() {
       if (this.amPack.start == "AM") {
         this.amPack.start = "PM";
@@ -1553,6 +1545,7 @@ export default {
           res.push(wds[(wds.indexOf(this.capitalize(wd.slice(0, 2))) + 6) % 7]);
         });
       }
+
       return res;
     },
     capitalize: function (value) {
@@ -1599,8 +1592,7 @@ export default {
     isAllHolidays(data){
       return data.holidays.every(it => it.selected);
     },
-    init: async function(){
-      console.log("init", this.vendor);
+    init(){
       this.vendorPricingPolicies = this.pricingPolicies.find(p => p.category === this.vendor.vendorCategory);
 
       if ( this.vendor.pricingPolicies && this.vendor.pricingPolicies.length ) {
@@ -1620,9 +1612,9 @@ export default {
       }
 
       if(!this.vendor.exDonts || !this.vendor.exDonts.length) {
-        let res = await this.$http.get(`${process.env.SERVER_URL}/1/holidays`);
-        this.religions = res.data;
-
+        this.$http.get(`${process.env.SERVER_URL}/1/holidays`).then(res => {
+          this.religions = res.data;
+        });
       } else {
         this.religions = this.vendor.exDonts;
 
@@ -1632,12 +1624,12 @@ export default {
       }
 
 
-      if (this.vendor.selectedWeekdays && this.vendor.selectedWeekdays.length) {
-
-        this.selectedWeekdays = this.vendor.selectedWeekdays;
-      } else {
-        this.selectedWeekdays = ['Saturday', 'Sunday'];
-        this.$emit('update-vendor-value', 'selectedWeekdays', this.selectedWeekdays);
+      if (this.vendor.selectedWeekdays) {
+        if (this.vendor.selectedWeekdays.length > 0) {
+          this.selectedWeekdays = this.vendor.selectedWeekdays;
+        } else {
+          this.selectedWeekdays = ["saturday", "sunday"];
+        }
       }
 
       if (this.vendor.dontWorkDays && this.vendor.dontWorkDays.selectedDates) {
@@ -1656,53 +1648,27 @@ export default {
           })
         })
       }
-
+      // this.markedDates = [{date:'2020-12-21', class:'vfc-marked vfc-start-marked'}, {date:'2020-12-22', class:'vfc-marked'}, {date:'2020-12-23', class:'vfc-marked vfc-end-marked'}]
+      // this.markedDateRange = [{start: '2020-12-28', end: '2020-12-30'}];
       this.optimizeWeekDays(this.selectedWeekdays);
       this.componentKey += 1;
-    },
-    renderCalendar(){
-        console.log("renderCalendar");
-        $('.vfc-day').each(function (index, day) {
-            if ($(day).find('span.vfc-span-day').hasClass('vfc-marked') || $(day).find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed')) {
-
-                if (($(day).next().find('span.vfc-span-day').hasClass('vfc-marked') && $(day).prev().find('span.vfc-span-day').hasClass('vfc-marked')) || ($(day).next().find('span.vfc-span-day').hasClass('vfc-marked') && $(day).prev().find('span.vfc-cursor-not-allowed').hasClass('vfc-marked')) || ($(day).next().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed') && $(day).prev().find('span.vfc-span-day').hasClass('vfc-marked'))) {
-                    $(day).find('span.vfc-span-day').removeClass('vfc-end-marked');
-                    $(day).find('span.vfc-span-day').removeClass('vfc-start-marked');
-                    $(day).find('div.vfc-base-start').remove();
-                    $(day).find('div.vfc-base-end').remove();
-                }
-
-                if (($(day).next().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed') || $(day).next().find('span.vfc-span-day').hasClass('vfc-marked')) && !$(day).prev().find('span.vfc-span-day').hasClass('vfc-marked') && !$(day).prev().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed')) {
-                    $(day).find('span.vfc-span-day').addClass('vfc-start-marked');
-                    if(!$(day).find('div.vfc-base-start').length)
-                        $(day).prepend("<div class='vfc-base-start'></div>");
-                }
-
-                if (!$(day).next().find('span.vfc-span-day').hasClass('vfc-marked') && !$(day).next().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed') && ($(day).prev().find('span.vfc-span-day').hasClass('vfc-marked') || $(day).prev().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed'))) {
-                    $(day).find('span.vfc-span-day').addClass('vfc-end-marked');
-                    if(!$(day).find('div.vfc-base-end').length)
-                        $(day).prepend("<div class='vfc-base-end'></div>")
-                }
-
-                if (!$(day).next().find('span.vfc-span-day').hasClass('vfc-marked') && !$(day).prev().find('span.vfc-span-day').hasClass('vfc-marked')) {
-                    $(day).find('span.vfc-span-day').addClass('vfc-end-marked');
-                    $(day).find('div.vfc-base-start').remove();
-                    $(day).find('div.vfc-base-end').remove();
-                }
-            } else {
-                $(day).find('div.vfc-base-start').remove();
-                $(day).find('div.vfc-base-end').remove();
-            }
-        })
     }
   },
   computed: {},
   filters: {},
   mounted() {
     this.init()
+
+    // $('.vfc-day').each(function (index, day) {
+    //   console.log('day', index, $(day).find('span.vfc-span-day')[0]);
+    //   if ($(day).find('span.vfc-span-day').hasClass('vfc-marked')) console.log('selected', index);
+    //   // if ($(day).hasClass('') && $(day).hasClass('')) console.log('');
+    //   // if ($(day).hasClass('')) console.log('');
+    // })
+
   },
-  updated(){
-      this.renderCalendar()
+  afterupdated(){
+
   },
   watch: {
     vendor:{
@@ -1962,9 +1928,13 @@ export default {
       }
       /deep/ span.vfc-span-day {
         &.vfc-marked {
-            &:not(.vfc-start-marked):not(.vfc-end-marked):before{
-                background-color: #f51355 !important;
-            }
+          // width: 30px;
+          // height: 30px;
+          &:before {
+            // background-color: #f51355;
+            color: #ffffff;
+            // border-radius: 50%;
+          }
         }
       }
       /deep/ .vfc-span-day.vfc-start-marked {
@@ -2003,18 +1973,11 @@ export default {
         }
       }
       /deep/ span.vfc-cursor-not-allowed {
+        // background-color: #f51355;
         color: #fff !important;
         background-color: #f51355;
-        z-index: 1;
+        // height: 30px;
       }
-
-        .vfc-select-start {
-            background: linear-gradient(90deg, #ffffff 50%, #f51355 50%);
-        }
-
-        .vfc-half-end {
-            background: linear-gradient(90deg, #f51355 50%, #ffffff 50%);
-        }
     }
     .check-list {
       flex: 2;
@@ -2222,7 +2185,7 @@ export default {
         flex: 1;
         .top {
           display: flex;
-          align-items: start;
+          align-items: top;
 
           .item {
             display: flex;
@@ -2381,5 +2344,12 @@ export default {
     }
   }
 }
-
+.vfc-week .vfc-day span.vfc-span-day.vfc-marked {
+  border: 1px solid black;
+  margin: auto;
+  background-color: #fc1355 !important;
+  border-radius: 50%;
+  opacity: 1;
+  z-index: 1;
+}
 </style>

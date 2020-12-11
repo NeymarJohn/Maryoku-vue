@@ -57,7 +57,7 @@
         </ul>
       </div>
     </section>
-    <signup-request-modal :vendor="vendor" v-if="showSignup"></signup-request-modal>
+    <signup-request-modal v-if="showSignup"></signup-request-modal>
     <modal v-if="showCloseProposalModal" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="saved-it-modal__header d-flex">

@@ -2,8 +2,8 @@
   <div class="rsvp-container">
     <div class="rsvp-event">
       <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
-      <div class="rsvp-event-header" :style="`background-image: url('${headerImage}');`"></div>
-      <div class="rsvp-event-overview" :style="`background-image:${backgroundImage}`">
+      <div class="rsvp-event-header" :style="`background-image: url('${campaign.coverImage}');`"></div>
+      <div class="rsvp-event-overview" :style="`background-image:${campaign.coverImage}`">
         <div class="rsvp-event-overview-content">
           <div class="md-layout">
             <div class="rsvp-event-overview-content-customer md-layout-item md-size-100">
@@ -111,7 +111,7 @@
             <img :src="`${$iconURL}RSVP/sharing-white.svg`" width="17" />
           </md-button>
         </div>
-        <div class="d-flex align-center">
+        <div>
           <md-button class="md-simple md-button md-black maryoku-btn" @click="reject">
             <span class="font-size-20">I Can't make it</span>
           </md-button>
@@ -120,19 +120,15 @@
             <span class="font-size-20">I Need To Think About It</span>
           </md-button>
           <md-button
+            v-if="campaign.additionalData.zoomlink"
             @click="showZoomModal = true"
-            v-if="campaign.allowOnline"
             class="md-simple md-button md-black maryoku-btn virtual-btn"
           >
             <span class="font-size-20">Virtual Participation</span>
           </md-button>
-          <md-button v-if="!isSentRsvp" @click="showRsvpModal = true" class="md-button md-red maryoku-btn rsvp-btn">
+          <md-button @click="showRsvpModal = true" class="md-button md-red maryoku-btn rsvp-btn">
             <span class="font-size-20">RSVP Now</span>
           </md-button>
-          <div v-else class="font-size-20 ml-20">
-            <img :src="`${$iconURL}Campaign/Group 9222.svg`" />
-            Sent Already
-          </div>
         </div>
       </div>
     </div>
@@ -159,19 +155,6 @@
       :campaign="campaign"
     ></sync-calendar-modal>
     <social-sharing-modal v-if="showSharingModal" @cancel="showSharingModal = false"></social-sharing-modal>
-    <modal v-if="showRejectConformModal">
-      <template slot="header">
-        <md-button class="md-simple md-just-icon md-round modal-default-button" @click="showRejectConformModal = false">
-          <md-icon>clear</md-icon>
-        </md-button>
-      </template>
-      <template slot="body">
-        <img :src="`${$iconURL}RSVP/reject-icon.svg`" />
-        <div class="font-size-30 mt-40 font-bold-extra text-transform-uppercase">We are sorry you can’t make it!</div>
-        <div class="mt-30 font-size-20">But we are sure you’v got your reasons.</div>
-        <div class="mt-10 font-size-20">Incase you regret anytime soon- let us know</div>
-      </template>
-    </modal>
   </div>
 </template>
 <script>
@@ -191,7 +174,6 @@ import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
 import SocialSharingModal from "@/components/Modals/SocialSharingModal";
 import { mapActions, mapGetters } from "vuex";
 import swal from "sweetalert2";
-import Modal from "../../../components/Modal.vue";
 
 export default {
   components: {
@@ -203,7 +185,6 @@ export default {
     RsvpVenueCarousel,
     RsvpEventInfoPanel,
     SocialSharingModal,
-    Modal,
   },
   data() {
     return {
@@ -231,8 +212,6 @@ export default {
       campaign: {},
       rsvpRequest: null,
       showSharingModal: false,
-      isSentRsvp: false,
-      showRejectConformModal: false,
     };
   },
   created() {
@@ -248,9 +227,6 @@ export default {
       if (!this.rsvpRequest.isOpened) {
         new RsvpRequest({ id: rsvpRequest.id, isOpened: true }).save();
       }
-      // if (this.rsvpRequest.status == "ACCEPTED") {
-      //   this.isSentRsvp = true;
-      // }
     });
     this.$root.$on("setRsvp", (rsvpData) => {
       rsvpData.attendingOption = "PERSON";
@@ -258,13 +234,14 @@ export default {
       rsvpData.invitedEmail = this.rsvpRequest.email;
       rsvpData.rsvpRequest = new RsvpRequest({ id: this.rsvpRequest.id });
       rsvpData.event = new CalendarEvent({ id: this.event.id });
-      rsvpData.guests = rsvpData.guests.filter((item) => item.name);
       new Rsvp(rsvpData).save().then((requestedRSVP) => {
         console.log(requestedRSVP);
-        this.showReminderModal = true;
-
+        swal({
+          title: `Successed!`,
+          buttonsStyling: false,
+          confirmButtonClass: "md-button md-success",
+        });
         this.showRsvpModal = false;
-        this.isSentRsvp = true;
       });
     });
   },
@@ -287,7 +264,7 @@ export default {
       if (this.event.concept) {
         return this.event.concept.images[0].url;
       }
-      return this.event.coverImage;
+      return "";
     },
   },
   methods: {
@@ -305,12 +282,11 @@ export default {
     },
     reject() {
       new RsvpRequest({ id: this.rsvpRequest.id, status: "REJECTED" }).save().then((res) => {
-        // swal({
-        //   title: `Sorry to hear that. Hope to see you on next event! `,
-        //   buttonsStyling: false,
-        //   confirmButtonClass: "md-button md-success",
-        // });
-        this.showRejectConformModal = true;
+        swal({
+          title: `Sorry to hear that. Hope to see you on next event! `,
+          buttonsStyling: false,
+          confirmButtonClass: "md-button md-success",
+        });
       });
     },
     thinkLater() {
@@ -343,7 +319,7 @@ export default {
       height: 430px;
 
       background-repeat: no-repeat;
-      background-size: 200%;
+      background-size: cover;
       background-position: center 60%;
     }
     &-overview {
@@ -412,6 +388,7 @@ export default {
       display: inline-block;
       border-left: solid 1px #050505;
       height: 2rem;
+      margin-top: 1rem;
     }
     .rsvp-btn {
       min-width: 280px;

@@ -1,5 +1,5 @@
 <template>
-  <div class="collapse-panel proposal-bid">
+  <div class="collapse-panel white-card card proposal-bid">
     <div class="collapse-panel-header" @click="isExpanded = !isExpanded">
       <div class="d-flex align-center justify-content-between">
         <div class="text-cont d-flex">
@@ -134,6 +134,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.proposal-bid {
+  margin-top: 50px;
+}
 .collapse-panel {
   background-color: white;
   hr {

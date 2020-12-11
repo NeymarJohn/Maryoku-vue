@@ -1,31 +1,31 @@
 <template>
-  <div class="selector-wrapper" :style="{'width': multiple ? '150px':''}">
+  <div class="selector-wrapper" :style="{'width': multiple === 'true' ? '150px':''}">
     <div class="droplist" v-if="!expanded">
-      <template v-if="multiple">
-        <input readonly class="default" v-model="_value" @click="expanded = true" />
+      <template v-if="multiple === 'true'">
+        <input readonly class="default" :value="selectedCategory" @click="expanded = true" />
       </template>
       <template v-else>
         <img class="inside-img" :src="`${selectedCategory.icon}`" v-if="selectedCategory.icon" />
-        <input readonly class="default with-img" v-model="_value" @click="expanded = true" />
+        <input readonly class="default with-img" :value="selectedCategory.name" @click="expanded = true" />
       </template>
       <img class="dropdown" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 523.svg" />
     </div>
-    <ul :style="{'column-count' : column, 'min-width' : column > 1 ? '500px' : '350px'}" v-click-outside="close" v-else>
+    <ul :style="{'column-count' : column}" v-click-outside="close" v-else>
       <li v-for="(category, cIndex) in categories" :key="cIndex" @click="updateCategory(category)" :class="{'mb-40': cIndex < categories.length - 1}">
-        <template v-if="multiple">
+        <template v-if="multiple === 'true'">
           <div class="d-flex align-center">
-            <img class="mr-10" :src="`${iconUrl}Group 5479 (2).svg`" v-if="_includes(selectedCategory, category)" />
+            <img class="mr-10" :src="`${iconUrl}Group 5479 (2).svg`" v-if="selectedCategory.includes(category)" />
             <span class="unchecked" v-else></span>
-            <span>{{ _option(category)  }}</span>
+            <span>{{ category }}</span>
           </div>
         </template>
         <template v-else>
           <img class="mr-10" v-if="category.icon" :src="`${category.icon}`" />
-          {{ _option(category) }}
+          {{ category.name }}
         </template>
       </li>
       <li v-if="additional">
-        <div class="mt-20">
+        <div>
           <p>Other</p>
           <input class="default with-img" v-model="additionalValue" @input="input"/>
         </div>
@@ -48,19 +48,16 @@ export default {
     column: {
       type: String,
       required: false,
-      default: "1",
+      default: '1'
     },
     multiple: {
-      type: Boolean,
+      type: String,
       required: false,
+      default: 'false',
     },
     additional:{
       type: Boolean,
       required: false,
-    },
-    trackBy:{
-      type: String,
-      required: false
     },
     customClass:{
       type: String,
@@ -74,45 +71,22 @@ export default {
     reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
   }),
   mounted() {
-    console.log("mounted", this.trackBy, this.value, this.categories);
+    console.log("mounted", this.multiple == 'true', this.value.length);
     if (this.value) {
-      if ( this.multiple  ) {
-        if ( this.value.length ) {
-            this.selectedCategory = this.categories.filter(it => this._includes(this.value, it));
-        } else {
-          this.selectedCategory = [];
-        }
-
+      if ( this.multiple == 'true' ) {
+        this.selectedCategory = this.value.length ? this.categories.filter(it => this.value.includes(it)) : [];
       } else {
         this.selectedCategory = this.categories.find(it => it.value === this.value);
       }
     }
     console.log('category-selector', this.selectedCategory);
   },
-  computed:{
-    _value() {
-      if ( this.multiple ) {
-        if ( !this.selectedCategory ) return null;
-        if ( this.trackBy ) {
-          return this.selectedCategory.map(it => it[this.trackBy])
-        } else {
-          return this.selectedCategory;
-        }
-      } else {
-        if ( this.trackBy ) {
-          return this.selectedCategory[this.trackBy];
-        } else {
-          return this.selectedCategory;
-        }
-      }
-    }
-  },
   methods: {
     updateCategory(category) {
-      if (this.multiple ) {
+      if (this.multiple === 'true' ) {
 
-        if (this._find(this.selectedCategory, category)) {
-          this.selectedCategory = this._filter(this.selectedCategory, category);
+        if (this.selectedCategory.find(cat => cat === category)) {
+          this.selectedCategory = this.selectedCategory.filter(cat => cat !== category);
         } else {
           this.selectedCategory.push(category);
         }
@@ -121,34 +95,9 @@ export default {
       } else {
         this.selectedCategory = category;
         this.expanded = false;
-        this.$emit("change", this._value(this.selectedCategory));
+        this.$emit("change", category.value);
       }
 
-    },
-    _filter(array, value){
-      if ( this.trackBy ) {
-        return array.filter(el => el[this.trackBy] !== value[this.trackBy])
-      } else {
-        return array.filter(el => el !== value);
-      }
-    },
-    _find(array, value) {
-      if ( this.trackBy ) {
-        return array.find(el => el[this.trackBy] === value[this.trackBy]);
-      } else {
-        return array.find(el => el === value);
-      }
-    },
-    _includes(array, value){
-      if ( this.trackBy ) {
-        // return array.includes(value[this.trackBy]);
-        return array.findIndex(el => el[this.trackBy] === value[this.trackBy]) > -1;
-      } else {
-        return array.includes(value);
-      }
-    },
-    _option (option) {
-      return this.trackBy ? option[this.trackBy] : option;
     },
     input(){
       this.$emit("input", this.additionalValue);
@@ -161,8 +110,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .selector-wrapper {
-  min-width: 350px;
   font: normal 16px Manrope-Regular, sans-serif;
+  min-width: 350px;
   width: 100%;
   .droplist {
     position: relative;
@@ -201,7 +150,7 @@ export default {
       cursor: pointer;
       font: normal 18px Manrope-Regular, sans-serif;
       img {
-        width: 30px !important;
+        width: 30px;
       }
 
       p{
@@ -212,17 +161,12 @@ export default {
       span.unchecked{
         display: inline-block;
         width: 30px;
-        min-width: 30px !important;
         height: 30px;
         border: 1px solid #707070;
         border-radius: 50%;
         background: #ffffff;
         margin-right: 14px;
         position: relative;
-      }
-
-      input{
-        width: 100%;
       }
     }
   }
