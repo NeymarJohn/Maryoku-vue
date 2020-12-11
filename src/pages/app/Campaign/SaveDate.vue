@@ -10,12 +10,12 @@
       </div>
       <concept-image-block
         v-if="concept"
-        class="ml-50"
+        class="ml-50 hidden"
         :images="concept.images"
         :colors="concept.colors"
         border="no-border"
       ></concept-image-block>
-      <!-- <concept-canvas class="ml-50" v-if="concept" :eventConcept="concept"></concept-canvas> -->
+      <concept-canvas class="ml-50" v-if="concept" :eventConcept="concept" style="display: none"> </concept-canvas>
       <div class="cover-preview" v-else>
         <img :src="coverImage" />
         <label for="cover">

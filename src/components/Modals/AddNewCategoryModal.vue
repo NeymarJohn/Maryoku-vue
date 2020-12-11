@@ -6,10 +6,7 @@
           <img :src="`${$iconURL}budget+screen/SVG/Asset%2019.svg`" /> Add new category
         </h2>
       </div>
-      <md-button
-        class="md-simple md-just-icon md-round modal-default-button"
-        @click="close"
-      >
+      <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
         <md-icon>clear</md-icon>
       </md-button>
     </template>
@@ -31,88 +28,77 @@
           </div>
         </div>
 
-        <div
-          class="md-layout-item md-size-70 d-flex"
-          v-if="newBuildingBlock.category.id==='other'"
-        >
+        <div class="md-layout-item md-size-70 d-flex" v-if="newBuildingBlock.category.id === 'other'">
           <md-icon class="font-size-20">subdirectory_arrow_right</md-icon>
-          <div class="form-group" style="flex-grow:1; margin-left:10px; ">
+          <div class="form-group" style="flex-grow: 1; margin-left: 10px">
             <label class="font-size-16 font-bold-extra color-black">Name</label>
             <small class="font-size-14">(2 words top)</small>
             <input type="text" class="form-control" v-model="newBuildingBlock.name" />
           </div>
         </div>
-        <div class="md-layout-item md-size-50 form-group maryoku-field ">
-            <label class="font-size-16 font-bold-extra color-black">
-              Budget
-              <br />
-            </label>
-            <div class="mb-10">
-              <small class="font-size-14">You have ${{remainedBudget | withComma}} to use</small>
-            </div>
-            <maryoku-input inputStyle="budget" v-model="newBuildingBlock.budget" />
+        <div class="md-layout-item md-size-50 form-group maryoku-field">
+          <label class="font-size-16 font-bold-extra color-black">
+            Budget
+            <br />
+          </label>
+          <div class="mb-10">
+            <small class="font-size-14">You have ${{ availableBudget | withComma }} to use</small>
+          </div>
+          <maryoku-input inputStyle="budget" v-model="newBuildingBlock.budget" />
         </div>
-        <div
-          class="md-error d-flex align-center"
-          v-if="remainedBudget < newBuildingBlock.budget"
-        >
-          <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width:20px" />
-          <span
-            style="padding: 0 15px"
-          >Oops! Seems like you don’t have enough cash in your “Unused” category</span>
+        <div class="md-error d-flex align-center" v-if="availableBudget < newBuildingBlock.budget">
+          <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" />
+          <span style="padding: 0 15px">Oops! Seems like you don’t have enough cash in your “Unexpected” category</span>
           <md-button
             class="md-button md-rose md-sm md-simple edit-btn md-theme-default md-bold-extra"
             @click="addMoreMoney"
-          >Add More Money</md-button>
+            >Add More Money</md-button
+          >
         </div>
       </div>
     </template>
     <template slot="footer">
-      <md-button
-        class="md-default md-simple cancel-btn md-bold"
-        @click="close"
-      >Cancel</md-button>
-      <md-button
-        :disabled="remainedBudget < newBuildingBlock.budget"
-        class="md-red add-category-btn md-bold"
-        @click="addNewCategory"
-      >Add Category</md-button>
+      <md-button class="md-default md-simple cancel-btn md-bold" @click="close">Cancel</md-button>
+      <md-button :disabled="!isAvailable" class="md-red add-category-btn md-bold" @click="addNewCategory"
+        >Add Category</md-button
+      >
     </template>
-  </modal>  
+  </modal>
 </template>
 <script>
-import { Modal } from '@/components'
+import { Modal } from "@/components";
 import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 import EventComponent from "@/models/EventComponent";
+import CalendarEvent from "@/models/CalendarEvent";
 
 export default {
   components: {
     Modal,
-    MaryokuInput
+    MaryokuInput,
   },
   props: {
     event: {
       type: Object,
-      default: {} 
+      default: {},
     },
     components: {
       type: Array,
-      default: []
-    }
+      default: [],
+    },
   },
-  created () {
+  created() {
     EventComponent.get()
-      .then(components => {
-        const availableComponents = []
-        components.forEach(item => {
-          const index = this.components.findIndex(comp=>item.key == comp.componentId)
+      .then((components) => {
+        const availableComponents = [];
+        components.forEach((item) => {
+          const index = this.components.findIndex((comp) => item.key == comp.componentId);
           if (index < 0) {
-            availableComponents.push(item)
+            availableComponents.push(item);
           }
-        })
-        this.filteredEventBlocks = availableComponents
+        });
+        this.filteredEventBlocks = availableComponents;
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("Error ", error);
       });
   },
@@ -122,33 +108,70 @@ export default {
       newBuildingBlock: {
         category: "",
         name: "",
-        budget: ""
+        budget: "",
       },
-    }
+    };
   },
   methods: {
     close() {
-      this.$emit("cancel")
+      this.$emit("cancel");
     },
-    addNewCategory() {
-      console.log(this.newBuildingBlock)
-      this.$emit("save", this.newBuildingBlock)
-    },
-    addMoreMoney() {
+    async addNewCategory() {
+      console.log(this.newBuildingBlock);
 
-    }
+      let newComponent = this.newBuildingBlock.category;
+      if (newComponent.id === "other") {
+        const newCategory = {
+          title: `Other-${this.newBuildingBlock.name}`,
+          key: `other-${this.newBuildingBlock.name.toLowerCase()}`,
+          color: `rgb(${parseInt(Math.random() * 255)}, ${parseInt(Math.random() * 255)}, ${parseInt(
+            Math.random() * 255,
+          )})`,
+          icon: `other.svg`,
+          type: "customized",
+          categoryId: "other",
+        };
+        newComponent = await new EventCategory(newCategory).save();
+      }
+      let newBlock = {
+        componentId: newComponent ? newComponent.key : "other",
+        componentCategoryId: newComponent ? newComponent.key : "other",
+        calendarEvent: { id: this.event.id },
+        allocatedBudget: this.newBuildingBlock.budget,
+        order: this.event.components.length,
+        icon: newComponent.icon,
+        category: newComponent,
+      };
+
+      new EventComponent(newBlock)
+        .for(this.event)
+        .save()
+        .then((res) => {
+          this.$store.dispatch(
+            "event/saveEventAction",
+            new CalendarEvent({
+              id: this.event.id,
+              unexpectedBudget: this.event.unexpectedBudget - Number(this.newBuildingBlock.budget),
+            }),
+          );
+          this.$emit("save", res.item);
+        })
+        .catch((error) => {
+          console.log("Error while saving ", error);
+        });
+    },
+    addMoreMoney() {},
   },
   computed: {
-    remainedBudget() {
-      let allocatedBudget = this.components.reduce((s, item) => {
-        return s + item.allocatedBudget;
-      }, 0);
-      // allocatedBudget = allocatedBudget + this.event.allocatedFees + this.event.allocatedTips;
-      return Math.round((this.event.totalBudget - allocatedBudget) / 10) * 10;
-    }
+    availableBudget() {
+      return this.event.unexpectedBudget;
+    },
+    isAvailable() {
+      const budget = Number(this.newBuildingBlock.budget.replace(/,/g, ""));
+      return budget > 0 && this.availableBudget >= budget;
+    },
   },
-}
+};
 </script>
 <style lang="scss" scoped>
-
 </style>
