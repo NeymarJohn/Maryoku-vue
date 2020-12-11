@@ -186,12 +186,18 @@
                 <div class="item" v-if="policy.type === 'MultiSelection'">
                   <span class="mr-10" v-for="(v, vIndex) in policy.value" >{{ `${v}${vIndex == policy.value.length - 1 ? '':','}` }}</span>
                 </div>
+                <div class="item" v-else-if="policy.type === 'Including'">
+                  <span class="mr-10" v-if="policy.value"> Yes </span>
+                  <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
+                </div>
                 <div class="item" v-else>
+                    <span v-if="policy.name == 'Large group discounts'">$</span>
                   {{ policy.value }}
 
                   <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
                   {{ policy.attendees }} attendees
                   </span>
+                  <span v-if="policy.isPercentage">%</span>
                 </div>
               </div>
             </div>
@@ -476,13 +482,13 @@ export default {
       let naItems = "";
       _.each(items, (n) => {
         if (n.constructor.name == "Object") {
-          naItems += `${this.capitalize(n.name)}, `;
+          naItems += `${this.capitalize(n.name)}s, `;
         } else {
-          naItems += `${this.capitalize(n)}, `;
+          naItems += `${this.capitalize(n)}s, `;
         }
       });
       naItems = naItems.substring(0, naItems.length - 2);
-      return naItems;
+      return "All " + naItems;
     },
     dontWorkDays() {
       let selectedDates = "";
@@ -524,7 +530,7 @@ export default {
   },
   computed: {
     validPricingPolicy() {
-      if (this.vendor.pricingPolicies) return this.vendor.pricingPolicies.filter((item) => item.value);
+      if (this.vendor.pricingPolicies) return this.vendor.pricingPolicies.filter((item) => item.value || item.type === 'Including' && item.cost);
       return null;
     },
   },

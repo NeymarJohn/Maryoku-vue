@@ -1,6 +1,6 @@
 <template>
-  <div class="proposal-item-wrapper">
-    <div class="title-cont dropdown" @click="clickItem(service.componentId)">
+  <div class="proposal-item-secondary-service">
+    <div class="title-cont dropdown" @click="clickItem(service.componentId)" :class="{ opened: isChecked }">
       <div class="left-side">
         <div class="check-cont">
           <img v-if="isChecked" :src="`${iconUrl}Group 6258 (2).svg`" />
@@ -17,7 +17,7 @@
           <span>${{ service.allocatedBudget | withComma }}</span>
         </div>
         <div class="proposal-range-cont">
-          <p>You're the First bidder</p>
+          <span>You're the First bidder</span>
           <!-- <span class="grey" v-if="proposalRange">Proposals range</span>
           <span v-if="proposalRange">{{
             `$${newProposalRequest.bidRange.low} - $${newProposalRequest.bidRange.high}`
@@ -26,9 +26,38 @@
         <img :src="`${iconUrl}Component 36 (2).svg`" :style="`transform: ${isChecked ? 'rotate(90deg)' : ''}`" />
       </div>
     </div>
-    <h3 v-if="isChecked">Which elements would you like to involve in your proposal?</h3>
-    <proposal-service-table v-if="isChecked" :category="service.componentId"></proposal-service-table>
-    <div class="additional-photos-wrapper" v-if="isChecked">
+    <!-- <proposal-service-table v-if="isChecked" :category="service.componentId"></proposal-service-table> -->
+    <template v-if="isChecked">
+      <proposal-requirements
+        class="additional-service"
+        label="Cost Requirements"
+        key="cost"
+        tableCategory="cost"
+        icon="Group+10662.svg"
+        description="Mandatory elements to involve in proposals are in the table, you can add more here:"
+        :vendorCategory="service.componentId"
+      />
+      <proposal-requirements
+        class="additional-service"
+        tableCategory="included"
+        label="Included in Price"
+        icon="includedPrice.png"
+        description="(from your “included in price” items)"
+        key="included"
+        :vendorCategory="service.componentId"
+      />
+      <proposal-requirements
+        class="additional-service"
+        tableCategory="extra"
+        label="Offered Extras"
+        icon="cost-requirements.png"
+        description="What elements would you like to suggest to the client with extra pay? "
+        key="extra"
+        :vendorCategory="service.componentId"
+      />
+      <proposal-upload-legal></proposal-upload-legal>
+    </template>
+    <!-- <div class="additional-photos-wrapper" v-if="isChecked">
       <div class="title-cont">
         <h3><img :src="`${iconUrl}Asset 605.svg`" />Upload Additional Photos</h3>
         <h5>(15 photos top, under 20KB)</h5>
@@ -47,7 +76,7 @@
         <br />
         <span class="color-dark-gray">Drag your file here</span>
       </vue-dropzone>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -62,6 +91,8 @@ import { Money } from "v-money";
 import vue2Dropzone from "vue2-dropzone";
 import S3Service from "@/services/s3.service";
 import ProposalServiceTable from "./ProposalServiceTable";
+import ProposalUploadLegal from "./ProposalUploadLegal";
+import ProposalRequirements from "./ProposalRequirements.vue";
 export default {
   name: "proposal-item",
   components: {
@@ -71,6 +102,8 @@ export default {
     Money,
     vueDropzone: vue2Dropzone,
     ProposalServiceTable,
+    ProposalRequirements,
+    ProposalUploadLegal,
   },
   props: {
     category: String,
@@ -430,7 +463,8 @@ export default {
     },
     mandatoryRequirements() {
       if (!this.proposalRequest) return [];
-      return this.proposalRequest.requirements.filter((item) => item.mustHave);
+      if (!this.proposalRequest.requirements[this.category]) return [];
+      return this.proposalRequest.requirements[this.category].filter((item) => item.mustHave);
     },
     additionalServices: {
       get: function () {
@@ -445,11 +479,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.proposal-item-wrapper {
+.proposal-item-secondary-service {
   border-radius: 3px;
   box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
   background-color: #ffffff;
-  padding: 40px 34px 0px 34px;
+  // padding: 40px 34px 0px 34px;
   font-family: "Manrope-Regular", sans-serif;
   color: #050505;
   margin: 50px 0 30px 0;
@@ -458,55 +492,15 @@ export default {
     margin: 30px;
   }
   .title-cont {
-    .with-subtitle {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      .text-cont {
-        display: flex;
-        align-items: center;
-        h3.title {
-          font-weight: 800;
-          font-size: 30px;
-          margin: 0;
-          margin-right: 20px;
-          img {
-            width: 28px;
-            margin-right: 19px;
-            position: relative;
-            top: -3px;
-          }
-        }
-        h5 {
-          font-size: 20px;
-          margin: 0;
-        }
-      }
-      .action {
-        cursor: pointer;
-        img {
-          width: 20px;
-        }
-      }
-    }
-    p {
-      font-size: 16px;
-      margin: 0;
-      margin-top: 23px;
-
-      strong {
-        font-weight: 800;
-      }
-    }
-
     &.dropdown {
-      padding: 8px 8px 42px 0px;
+      padding: 40px 40px;
       display: grid;
       grid-template-columns: 50% 50%;
       align-items: center;
       cursor: pointer;
-
+      &.opened {
+        border-bottom: solid 1px #050505;
+      }
       .left-side {
         width: 100%;
         display: grid;
@@ -555,10 +549,6 @@ export default {
         .proposal-range-cont {
           text-align: right;
           margin-left: 65px;
-          p {
-            margin-top: 0;
-            font-size: 14px;
-          }
           span {
             font-size: 14px;
             &.grey {
@@ -577,326 +567,9 @@ export default {
       }
     }
   }
-
-  .add-item-cont {
-    margin-top: 1rem;
-    .fields-cont {
-      display: grid;
-      grid-template-columns: 55% 15% 15% 15%;
-      .field {
-        margin-right: 1em;
-        span {
-          margin-bottom: 0.5rem;
-          display: inline-block;
-          font: 800 16px "Manrope-Regular", sans-serif;
-        }
-        input {
-          text-transform: capitalize;
-          width: 100%;
-          padding: 1.5rem 1rem;
-          border: 1px solid #d5d5d5;
-          font: normal 16px "Manrope-Regular", sans-serif;
-          color: #050505;
-        }
-        &:last-child {
-          margin-right: 0;
-        }
-      }
-    }
+  .additional-service {
+    border-bottom: solid 2px #828282;
   }
-
-  .sub-items-cont {
-    padding: 1rem 0;
-    overflow: hidden;
-    position: relative;
-
-    h3 {
-      font-size: 30px;
-      font-weight: 800;
-      padding-bottom: 2rem;
-      margin: 0;
-    }
-    .sub-items {
-      // display: flex;
-      display: block;
-      position: relative;
-      white-space: nowrap;
-      width: calc(100% - 2rem);
-      // overflow-x: auto;
-    }
-    .prev {
-      position: absolute;
-      cursor: pointer;
-      z-index: 99;
-      left: 0;
-      background: #fff;
-      padding: 1.5rem 0;
-      top: 0;
-      i {
-        color: #f51355 !important;
-      }
-    }
-    .next {
-      z-index: 99;
-      position: absolute;
-      cursor: pointer;
-      right: 0;
-      background: #fff;
-      padding: 1.5rem 0;
-      top: 0;
-      i {
-        color: #f51355 !important;
-      }
-    }
-  }
-
-  .add-attributes-cont {
-    display: flex;
-  }
-
-  .action-cont {
-    text-align: right;
-    margin-top: 35px;
-    a {
-      font-size: 16px;
-      font-weight: 800;
-
-      &.clear {
-        color: #050505;
-        padding: 8px 32px;
-        margin-right: 1rem;
-      }
-      &.add {
-        background-color: #d5d5d5;
-        border-radius: 3px;
-        padding: 8px 32px;
-        color: #ffffff;
-        max-height: 38px;
-        cursor: pointer;
-
-        &.active {
-          background-color: #f51355;
-          color: #ffffff;
-        }
-      }
-    }
-  }
-
-  .editable-sub-items-cont {
-    margin-top: 2rem;
-
-    .editable-sub-items-header {
-      border-top: 1px solid #707070;
-      padding: 40px 40px 30px 40px;
-      display: grid;
-      grid-template-columns: 30% 10% 17.5% 18%;
-
-      span {
-        display: inline-block;
-        font-size: 16px;
-        font-weight: 800;
-        &:last-child {
-          margin-right: 0;
-        }
-      }
-    }
-    .tax-discount-wrapper {
-      .row {
-        padding: 35px;
-        border: 2px solid #d5d5d5;
-        border-bottom: none;
-        display: grid;
-        // grid-template-columns: 40% 17.5% 12.5% 30%;
-        grid-template-columns: 40% 17.5% 15.5% 24%;
-        align-items: center;
-
-        .item-cont {
-          display: grid;
-          grid-template-columns: 40% 60%;
-          align-items: center;
-
-          .plabel {
-          }
-          .ptitle {
-            padding-left: 1rem;
-            font: normal 14px "Manrope-Regular", sans-serif;
-            text-align: left;
-          }
-        }
-        .percent-cont {
-          font: normal 14px "Manrope-Regular", sans-serif;
-          color: #050505;
-          &.text-right {
-            padding-right: 1rem;
-            span {
-              font-weight: 400 !important;
-            }
-          }
-        }
-        .price-cont {
-          font: normal 14px "Manrope-Regular", sans-serif;
-          span {
-            &.pl-2 {
-              font: normal 14px "Manrope-Regular", sans-serif;
-              color: #050505;
-              padding-left: 20px;
-            }
-          }
-        }
-        .edit-cont {
-          text-align: right;
-          .edit {
-            width: 21px;
-            height: 21px;
-            margin-right: 2rem;
-            cursor: pointer;
-          }
-        }
-
-        img {
-          width: 15px;
-          margin-right: 22px;
-
-          &.edit {
-            cursor: pointer;
-          }
-        }
-        span {
-          color: #818080;
-          font-size: 16px;
-          font-weight: 800;
-        }
-      }
-    }
-    .editable-sub-items-footer {
-      box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-      background-color: #d5d5d5;
-      padding: 21px 40px;
-      border: 2px solid #d5d5d5;
-      border-bottom: none;
-      display: grid;
-      grid-template-columns: 57.5% 42.5%;
-
-      span {
-        font-size: 20px;
-        font-weight: 800;
-        display: inline-block;
-      }
-    }
-  }
-
-  .active-discount {
-    width: 100px;
-    margin-top: 5px;
-    border: 1px solid #050505;
-    text-align: center;
-    font: normal 16px "Manrope-Regular", sans-serif;
-  }
-  .inactive-discount {
-    opacity: 0.6;
-    width: 100px;
-    text-align: center;
-    margin-top: 5px;
-    background: #d5d5d5;
-    border: 1px solid #707070;
-    font: normal 16px "Manrope-Regular", sans-serif;
-  }
-
-  .upload-files-wrapper {
-    margin-top: 60px;
-    margin-left: -34px;
-    margin-right: -34px;
-    padding: 60px 0 10px 0;
-    border-top: 1px solid #707070;
-
-    .title-cont {
-      display: flex;
-      align-items: flex-end;
-      margin-bottom: 25px;
-      padding: 0 34px;
-
-      h3 {
-        font-size: 30px;
-        font-weight: 800;
-        margin: 0;
-        margin-right: 10px;
-        img {
-          width: 24px;
-          margin-right: 10px;
-        }
-        margin-right: 10px;
-      }
-      h5 {
-        margin: 0;
-        font-size: 14px;
-        position: relative;
-        top: -6px;
-      }
-    }
-    .files-cont {
-      .item,
-      .option {
-        display: flex;
-        justify-content: space-between;
-        padding: 30px 34px;
-        border-bottom: 1px solid #707070;
-
-        .left {
-          span {
-            font-weight: 800;
-            &.filename {
-              font-size: 20px;
-              margin-right: 23px;
-            }
-            &.req {
-              color: #818080;
-              font-size: 14px;
-            }
-          }
-        }
-        .right {
-          cursor: pointer;
-          color: #f51355;
-          font-size: 16px;
-          font-weight: 800;
-          img {
-            width: 13px;
-            margin-right: 9px;
-
-            &.check {
-              width: 32px;
-              margin-right: 0;
-              margin-left: 2rem;
-            }
-            &.remove {
-              margin-right: 0;
-              margin-left: 1rem;
-            }
-          }
-          span {
-            &.filename {
-              color: #050505;
-              text-decoration: underline;
-              font: 800 16px "Manrope-Regular", sans-serif;
-            }
-          }
-        }
-      }
-      .option {
-        margin-bottom: 10px;
-        border: none;
-        .left {
-          span {
-            &.filename {
-              font-size: 20px;
-              font-weight: normal;
-            }
-          }
-        }
-      }
-    }
-  }
-
   .additional-photos-wrapper {
     margin-left: -34px;
     margin-right: -34px;
@@ -968,38 +641,6 @@ export default {
         }
       }
     }
-  }
-  .pb-40 {
-    padding-bottom: 40px;
-    cursor: pointer;
-  }
-  a {
-    cursor: pointer;
-    padding: 8px 26px;
-
-    &.cancel {
-      font: 800 16px "Manrope-Regular", sans-serif;
-      color: #050505;
-      background: transparent;
-    }
-    &.save {
-      font: 800 16px "Manrope-Regular", sans-serif;
-      color: white;
-      background: #f51355;
-      border-radius: 3px;
-
-      &.isDisabled {
-        pointer-events: none;
-        cursor: not-allowed;
-        background: #d5d5d5;
-      }
-    }
-    &:hover {
-      color: #dddddd !important;
-    }
-  }
-  .hide {
-    display: none;
   }
 }
 </style>

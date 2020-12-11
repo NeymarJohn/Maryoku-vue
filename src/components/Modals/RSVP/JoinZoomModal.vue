@@ -21,32 +21,43 @@
         <div class="d-flex user-info">
           <div class="text-left flex-1 input-wrapper mr-10">
             <label class="font-bold">Name</label>
-            <maryoku-input v-model="name" inputStyle="username" placeholder="Type your name here..."></maryoku-input>
+            <maryoku-input
+              v-model="name"
+              v-validate.initial="validations.name"
+              inputStyle="username"
+              placeholder="Type your name here..."
+            ></maryoku-input>
           </div>
           <div class="text-left flex-1 input-wrapper">
             <label class="font-bold">Email</label>
-            <maryoku-input v-model="name" inputStyle="email" placeholder="Type email address here..."></maryoku-input>
+            <maryoku-input
+              v-model="email"
+              v-validate.initial="validations.email"
+              inputStyle="email"
+              placeholder="Type email address here..."
+            ></maryoku-input>
           </div>
         </div>
-        <md-checkbox v-model="approveAccessCalendar"
+        <!-- <md-checkbox v-model="approveAccessCalendar"
           ><span :class="{ 'font-bold': approveAccessCalendar }">I approve access to my calendar</span></md-checkbox
         >
         <div v-if="approveAccessCalendar" class="calendar-type">
           <img :src="`${$iconURL}RSVP/Group 9278.svg`" />
           <md-radio v-model="calendarType" value="outlook">Outlook</md-radio>
           <md-radio v-model="calendarType" value="gmail">Gmail</md-radio>
-        </div>
+        </div> -->
       </div>
     </template>
     <template slot="footer">
       <div class="text-center w-100">
-        <md-button class="md-red md-bold" @click="setRsvpToZoom">RSVP TO ZOOM</md-button>
+        <md-button class="md-red md-bold" @click="setRsvpToZoom" :disabled="!canSet">RSVP TO ZOOM</md-button>
       </div>
     </template>
   </modal>
 </template>
 <script>
 import { Modal, MaryokuInput } from "@/components";
+import CalendarEvent from "@/models/CalendarEvent";
 export default {
   props: {
     campaign: {
@@ -60,8 +71,19 @@ export default {
   },
   data() {
     return {
+      name: "",
+      email: "",
       approveAccessCalendar: false,
       calendarType: "outlook",
+      validations: {
+        name: {
+          required: true,
+        },
+        email: {
+          required: true,
+          email: true,
+        },
+      },
     };
   },
   methods: {
@@ -69,7 +91,21 @@ export default {
       this.$emit("close");
     },
     setRsvpToZoom() {
-      this.$emit("setRsvp");
+      const guests = [
+        {
+          name: this.name,
+          email: this.email,
+          guestNumber: 1,
+          isMainGuest: true,
+          event: new CalendarEvent({ id: this.campaign.event.id }),
+        },
+      ];
+      this.$emit("setRsvp", { name: this.name, responseEmail: this.email, guests });
+    },
+  },
+  computed: {
+    canSet() {
+      return this.errors.items.length == 0;
     },
   },
 };

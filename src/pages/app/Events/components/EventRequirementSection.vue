@@ -26,31 +26,17 @@
               :key="index"
       >
         <td>
-          <div style="padding: 10px 0">{{ service.item }}
-            <div v-if="service.type === 'single-selection'">
-              <multiselect
-                      v-model="service.value"
-                      :options="service.options"
-                      :close-on-select="false"
-                      :clear-on-select="false"
-                      :searchable="false"
+          <div class="py-10">{{ service.item }}
+            <div class="mt-10" v-if="service.type === 'single-selection'">
+              <category-selector
+                      :value="service.value"
+                      :categories="service.options"
                       :multiple="true"
-                      :taggable="true"
                       track-by="name"
-                      class="multiple-selection small-selector"
-                      @select="handleChangeItem(service, 'select', $event)"
-                      @remove="handleChangeItem(service, 'remove', $event)">
-                <template slot="option" slot-scope="{option}">
-                  <span>
-                    {{option.name}}
-                  </span>
-                </template>
-                <template slot="tag" slot-scope="{option}">
-                  <span>
-                    {{option.name + (service.value.findIndex(it => it.name == option.name) == service.value.length - 1 ? '' : ',')}}
-                  </span>
-                </template>
-              </multiselect>
+                      column="2"
+                      :additional="true"
+                      @change="handleChangeCategorySelector(service, ...arguments)"
+              ></category-selector>
             </div>
             <requirement-item-comment
                     v-if="service.notable"
@@ -127,12 +113,14 @@
 <script>
   import RequirementItemComment from "./RequirementItemComment";
   import Multiselect from "vue-multiselect";
+  import CategorySelector from "@/components/Inputs/CategorySelector";
 
   export default {
     name: "event-requirement-section",
     components: {
       RequirementItemComment,
-      Multiselect
+      Multiselect,
+      CategorySelector,
     },
     props: {
       requirements: {
@@ -214,14 +202,20 @@
 
         this.$emit('change', this.requirements);
       },
-      handleChangeItem(property, action, e){
 
-        let index = this.properties.findIndex(pt => pt.item == property.item)
+      handleChangeCategorySelector(property, value){
+        console.log("handleChangeCategorySelector", property, value);
+
+        let index = this.properties.findIndex(pt => pt.item === property.item);
 
         this.requirements[this.category][index].options.map(op => {
-          if(op.name.toLowerCase() == e.name.toLowerCase()) op.selected = action === 'select';
+          if(value.findIndex(el => el.name === op.name) > -1) {
+            op.selected = true;
+          } else {
+            op.selected = false;
+          }
         })
-
+        console.log("handleChangeCategorySelector", this.requirements[this.category][index]);
         this.$emit('change', this.requirements);
       },
       handleNoteChange(){

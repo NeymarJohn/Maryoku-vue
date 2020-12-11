@@ -46,6 +46,10 @@ export default {
       type: Array,
       default: [],
     },
+    vendor: {
+      type: Object,
+      default: [],
+    },
   },
   created() {
     EventComponent.get()
@@ -83,7 +87,11 @@ export default {
     },
     addMoreMoney() {},
     gotoVendorSignup() {
-      this.$router.push({ path: `/vendor-signup?proposalRequest=${this.$route.params.rfpId}` });
+      if (this.vendor) {
+        this.$router.push({
+          path: `/vendor-signup/edit/${this.vendor.id}?proposalRequest=${this.$route.params.rfpId}`,
+        });
+      }
     },
   },
   computed: {

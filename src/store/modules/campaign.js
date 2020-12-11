@@ -232,6 +232,8 @@ const actions = {
                             name: "SAVING_DATE",
                             data: { ...defaultCampaignData["SAVING_DATE"], ...defaultData },
                         });
+                    } else {
+                        defaultData.title = campaigns["SAVING_DATE"].title;
                     }
                     if (!campaigns["RSVP"]) {
                         commit("setCampaign", {

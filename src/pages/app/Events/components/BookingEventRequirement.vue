@@ -239,7 +239,9 @@ export default {
       console.log("fetchData", this.component.componentId, this.storedRequirements)
       this.blockId = this.component.componentId; //this.$route.params.blockId
       this.event = this.$store.state.event.eventData;
-      this.getCommentComponents(this.blockId);
+
+      // todo check if commentComponent is used
+      //this.getCommentComponents(this.blockId);
 
       if (
         this.storedRequirements[this.event.id] &&

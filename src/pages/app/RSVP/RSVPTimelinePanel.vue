@@ -39,7 +39,7 @@ import SettingReminderModal from "@/components/Modals/RSVP/SettingReminderModal"
 import JoinZoomModal from "@/components/Modals/RSVP/JoinZoomModal";
 import SyncCalendarModal from "@/components/Modals/RSVP/SyncCalendarModal";
 import RsvpVenueCarousel from "./RSVPVenueCarousel";
-import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
+import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel";
 
 export default {
   components: {
@@ -70,6 +70,7 @@ export default {
       let scheduledDays = [];
 
       // define timelines
+      console.log(this.event.timelineItems);
       if (this.event.timelineItems) {
         this.event.timelineItems.forEach((item) => {
           item.isItemLoading = false;
