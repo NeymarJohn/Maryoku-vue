@@ -46,13 +46,13 @@
         </td>
         <td>
           <template v-if="service.sizeEnabled">
-            <input class="quantity-input" placeholder="Cm" type="number" v-model="service.defaultSize" />
+            <input class="quantity-input" placeholder="Cm" type="number" v-model="service.defaultSize" @input="updateRequirement"/>
           </template>
           <div v-else class="empty">n/a</div>
         </td>
         <td class="text-center">
           <template v-if="service.qtyEnabled">
-            <input class="quantity-input" placeholder="QTY" type="number" v-model="service.defaultQty" />
+            <input class="quantity-input" placeholder="QTY" type="number" v-model="service.defaultQty" @input="updateRequirement"/>
             <span v-if="service.hint" style="position: absolute; margin-top: 10px">
                         <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
                         <md-tooltip md-direction="bottom">{{ service.hint }}</md-tooltip>
@@ -172,6 +172,13 @@
           }
           this.properties.push({...it, visible, value});
         });
+
+        // console.log("getProperties", this.requirements)
+      },
+      updateRequirement(){
+
+        this.requirements[this.category] = this.properties;
+        this.$emit('change', this.requirements);
       },
       addRequirement(property) {
         const index = this.properties.findIndex((it) => it.item == property.item);
@@ -204,7 +211,7 @@
       },
 
       handleChangeCategorySelector(property, value){
-        console.log("handleChangeCategorySelector", property, value);
+        // console.log("handleChangeCategorySelector", property, value);
 
         let index = this.properties.findIndex(pt => pt.item === property.item);
 
@@ -215,7 +222,7 @@
             op.selected = false;
           }
         })
-        console.log("handleChangeCategorySelector", this.requirements[this.category][index]);
+        // console.log("handleChangeCategorySelector", this.requirements[this.category][index]);
         this.$emit('change', this.requirements);
       },
       handleNoteChange(){

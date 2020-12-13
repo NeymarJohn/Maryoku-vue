@@ -193,11 +193,10 @@
                 <div class="item" v-else>
                     <span v-if="policy.name == 'Large group discounts'">$</span>
                   {{ policy.value }}
-
+                  <span v-if="policy.isPercentage">%</span>
                   <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
                   {{ policy.attendees }} attendees
                   </span>
-                  <span v-if="policy.isPercentage">%</span>
                 </div>
               </div>
             </div>

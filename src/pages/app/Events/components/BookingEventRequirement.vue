@@ -132,7 +132,7 @@ export default {
   data: () => ({
     // auth: auth,
     calendar: null,
-    isLoading: true,
+    isLoading: false,
     event: {},
     blockVendors: null,
     selectedBlock: {},
@@ -255,8 +255,10 @@ export default {
           JSON.stringify(this.storedRequirements[this.event.id][this.blockId].anythingElse),
         );
 
-        this._checkConditionScript(this.requirementProperties);
-        this.isLoading = false;
+        if (this.isLoading) {
+          this._checkConditionScript(this.requirementProperties);
+          this.isLoading = false;
+        }
       }
     },
     revertToOriginal: async function () {
@@ -267,7 +269,7 @@ export default {
     },
     findVendors() {
       let component = new EventComponent({ id: this.component.id });
-      // console.log("findVendors", this.storedRequirements[this.event.id]);
+
       postReq("/1/vendors/setting-requirements", {
         vendorCategory: this.blockId,
         expiredBusinessTime: moment(new Date()).add(5, "days").valueOf(),

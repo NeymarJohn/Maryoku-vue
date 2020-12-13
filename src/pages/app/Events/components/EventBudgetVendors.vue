@@ -31,7 +31,7 @@
                   block.title ? block.title.toLowerCase().replace(/ /g, '-').replace('&', '').replace('/', '-') : ''
                 "
               >
-                <img :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${block.icon}`" />
+                <img :src="`${$iconURL}Budget Elements/${block.icon}`" />
                 {{ block.title }}
               </td>
               <td class="planned" width="20%" style="white-space: nowrap">
@@ -72,15 +72,9 @@
                   <template v-if="block.allocatedBudget">
                     <template v-if="block.winningProposalId">
                       <template v-if="block.allocatedBudget < block.winingProposal.cost">
-                        <img
-                          src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+29.png"
-                        />
+                        <img :src="`${$iconURL}budget+screen/png/Asset+29.png`" />
                       </template>
-                      <template v-else>
-                        <img
-                          src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+29.png"
-                        />
-                      </template>
+                      <template v-else> <img :src="`${$iconURL}budget+screen/png/Asset+29.png`" /> </template>
                       <md-button
                         class="md-simple actual-cost md-xs"
                         :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`"
@@ -193,14 +187,14 @@
           </template>
         </tbody>
       </table>
-      <table class="event-blocks__table event-block-table" :style="`border-left: 10px solid #80B93D`">
+      <table class="event-blocks__table event-block-table" :style="`border-left: 10px solid #80B93D;color:#80B93D`">
         <tbody>
           <tr class="unexpected-budget">
-            <td width="40%" class="event-block-element unused-budget">
+            <td width="40%" class="event-block-element unexpected">
               <img :src="`${$iconURL}Budget Elements/unexpected.svg`" />
               Unexpected
             </td>
-            <td width="20%" class="planned">$ {{ event.unexpectedBudget | withComma }}</td>
+            <td width="20%" class="planned unexpected">$ {{ event.unexpectedBudget | withComma }}</td>
             <td width="15%" class="actual red-label"></td>
             <td width="15%" class="status"></td>
             <td class="expand"></td>
@@ -324,7 +318,7 @@
         <tr class="total">
           <td class="total-title" width="40%">Total</td>
           <td width="20%" class="total-value">${{ Math.round(event.totalBudget) | roundNumber | withComma }}</td>
-          <td width="15%" class="total-value">${{ event.statistics.booked | withComma }}</td>
+          <td width="15%" class="total-value">${{ bookedTotal | withComma }}</td>
           <td colspan="2"></td>
         </tr>
         <tr class="add-category" v-if="canEdit">
@@ -422,6 +416,8 @@
     <add-my-vendor-modal
       v-if="showAddMyVendor"
       :value="overAddedValue"
+      :event="event"
+      :selectedComponent="selectedComponent"
       @select="handleMinusBudget"
       @remindLater="showAddMyVendor = false"
       @updateVendor="updateVendor"
@@ -436,7 +432,6 @@ import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
 import EventCategory from "@/models/EventCategory";
-import EventComponentVendor from "@/models/EventComponentVendor";
 import EventComponentTodo from "@/models/EventComponentTodo";
 import EventComponentValue from "@/models/EventComponentValue";
 import Occasion from "@/models/Occasion";
@@ -541,15 +536,15 @@ export default {
     canEdit() {
       return !this.permission || this.permission === "edit";
     },
-    allocatedTotal() {
+    bookedTotal() {
       const addedBudget = this.eventBuildingBlocks.reduce((sum, item) => {
         return sum + item.bookedBudget;
       }, 0);
       return addedBudget; //+ this.event.allocatedTips + this.event.allocatedFees;
     },
     unusedBudget() {
-      console.log("allocatedBUdgtet", this.allocatedTotal);
-      return this.event.totalBudget - this.allocatedTotal;
+      console.log("allocatedBUdgtet", this.bookedTotal);
+      return this.event.totalBudget - this.bookedTotal;
     },
   },
   methods: {
@@ -669,7 +664,7 @@ export default {
       vm.totalBudgetTaxes = 0;
 
       let res = this.event.components;
-
+      res.sort((a, b) => a.order - b.order);
       this.$set(this, "eventBuildingBlocks", res);
 
       setTimeout(() => {
@@ -739,31 +734,35 @@ export default {
         cancelButtonText: "No, take me back",
         buttonsStyling: false,
       }).then((result) => {
-        let event = new CalendarEvent({ id: this.event.id });
-        let selected_block = new EventComponent({ id: block.id });
-
-        selected_block.calendarEvent = block.calendarEvent;
-        selected_block.componentId = block.componentId;
-        selected_block.icon = block.icon;
-        selected_block.color = block.color;
-        selected_block.todos = block.todos;
-        selected_block.values = block.values;
-        selected_block.vendors = block.vendors;
-
-        if (block.allocatedBudget && block.numberOfParticipants) {
-          selected_block.allocatedBudget =
-            this.type === "total" ? block.newBudget : block.newBudget * block.numberOfParticipants;
-          block.allocatedBudget =
-            this.type === "total" ? block.newBudget : block.newBudget * block.numberOfParticipants;
-        } else {
-          selected_block.allocatedBudget =
-            this.type === "total" ? block.newBudget : block.newBudget * this.event.numberOfParticipants;
-          block.allocatedBudget =
-            this.type === "total" ? block.newBudget : block.newBudget * this.event.numberOfParticipants;
-        }
         if (result.dismiss != "cancel") {
+          let event = new CalendarEvent({ id: this.event.id });
+          let selected_block = new EventComponent({ id: block.id });
+
+          selected_block.calendarEvent = block.calendarEvent;
+          selected_block.componentId = block.componentId;
+          selected_block.icon = block.icon;
+          selected_block.color = block.color;
+          selected_block.todos = block.todos;
+          selected_block.values = block.values;
+          selected_block.vendors = block.vendors;
+
+          block.newBudget = Number(block.newBudget.replace(/,/g, ""));
+          let offsetBudget = block.newBudget - block.allocatedBudget;
+
+          if (block.allocatedBudget && block.numberOfParticipants) {
+            selected_block.allocatedBudget =
+              this.type === "total" ? block.newBudget : block.newBudget * block.numberOfParticipants;
+            block.allocatedBudget =
+              this.type === "total" ? block.newBudget : block.newBudget * block.numberOfParticipants;
+          } else {
+            selected_block.allocatedBudget =
+              this.type === "total" ? block.newBudget : block.newBudget * this.event.numberOfParticipants;
+            block.allocatedBudget =
+              this.type === "total" ? block.newBudget : block.newBudget * this.event.numberOfParticipants;
+          }
+
           selected_block
-            .for(this.calendar, event)
+            .for(this.event)
             .save()
             .then((resp) => {
               this.isLoading = false;
@@ -779,18 +778,38 @@ export default {
                 }
               });
 
-              this.allocatedBudget = allocatedBudget;
-              if (this.event.totalBudget < this.allocatedBudget) {
-                console.log(this.totalBudget);
+              // this.allocatedBudget = allocatedBudget;
+              // if (this.event.totalBudget < this.allocatedBudget) {
+              //   console.log(this.totalBudget);
+              //   this.showMinusHandleModal = true;
+              //   this.overAddedValue = this.allocatedBudget - this.event.totalBudget;
+              // }
+              const event = new CalendarEvent({
+                id: this.event.id,
+                calendar: new Calendar({ id: this.event.calendar.id }),
+              });
+
+              // planer has extra budget
+              if (this.event.unexpectedBudget + this.event.allocatedTips < offsetBudget) {
                 this.showMinusHandleModal = true;
-                this.overAddedValue = this.allocatedBudget - this.event.totalBudget;
+              } else {
+                if (this.event.unexpectedBudget < offsetBudget) {
+                  offsetBudget -= offsetBudget - this.event.unexpectedBudget;
+                  event.unexpectedBudget = 0;
+                  event.allocatedTips = this.allocatedTips - offsetBudget;
+                } else {
+                  event.unexpectedBudget = this.event.unexpectedBudget - offsetBudget;
+                }
               }
+              this.$store.dispatch("event/saveEventAction", event).then((res) => {});
+
               this.showEditElementBudget(block);
               this.$emit("change");
             })
             .catch((error) => {
               console.log(error);
             });
+        } else {
         }
       });
     },
@@ -1021,56 +1040,13 @@ export default {
       this.showMinusHandleModal = false;
     },
     async updateVendor(myVendor) {
-      let event = new CalendarEvent({ id: this.event.id });
-      let selectedBlock = new EventComponent({ id: this.selectedComponent.id });
-
-      myVendor.vendorCategory = this.selectedComponent.componentId;
-      if (myVendor.attachment) {
-        let formData = new FormData();
-        formData.append("file", myVendor.attachment);
-        formData.append("from", "eventvendor");
-        formData.append("type", "attachment");
-        formData.append("name", myVendor.attachment.name);
-        const result = await this.$http.post(`${process.env.SERVER_URL}/uploadFile`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        myVendor.attachments = [
-          {
-            originalName: myVendor.attachment.name,
-            url: result.data.upload.path,
-            name: result.data.upload.name,
-          },
-        ];
-      }
-
-      // Add new Vendors
-      new EventComponentVendor(myVendor)
-        .save()
-        .then((newVendor) => {
-          this.isLoading = false;
-
-          // Add new Vendors to component
-          const eventComponentVendor = {
-            vendorId: newVendor.item.id,
-            cost: myVendor.cost,
-            eventComponentInstance: this.selectedComponent,
-            rfpStatus: new Date().getTime(),
-            attachments: myVendor.attachments,
-          };
-          new EventComponentVendor(eventComponentVendor)
-            .for(this.calendar, event, selectedBlock)
-            .save()
-            .then((result) => {
-              this.showAddMyVendor = false;
-              this.$emit("change");
-            });
-        })
-        .catch((error) => {
-          console.log(error);
-          this.isLoading = false;
-        });
+      this.showAddMyVendor = false;
+      let event = new CalendarEvent({
+        id: this.event.id,
+        bookedBudget: this.event.bookedBudget + Number(myVendor.cost.replace(/,/g, "")),
+      });
+      this.$store.dispatch("event/saveEventAction", event);
+      this.$emit("change");
     },
     updateTips() {
       let event = new CalendarEvent({

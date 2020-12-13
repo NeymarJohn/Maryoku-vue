@@ -668,8 +668,8 @@ export default {
       markedDateRange: [],
       componentKey: 0,
       allowedCategoryFor3rd: ["venuerental", "foodandbeverage", "decor", "entertainment"],
-      weekdays: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
-      selectedWeekdays: [],
+      weekdays: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      selectedWeekdays: ['Saturday', 'Sunday'],
       selectedReligion: [],
       isWeekday: false,
       exEvery: false,
@@ -1092,12 +1092,6 @@ export default {
               cost: '0.00'
             },
             {
-              name: "Discount for large quantities",
-              type: Boolean,
-              isPercentage: true,
-              hasComment: true,
-            },
-            {
               name: "Cost Late Night Fares",
               type: Boolean,
               hasComment: true,
@@ -1168,8 +1162,10 @@ export default {
             },
             {
               name: "Discount for large quantities",
-              type: Boolean,
-              attendees: null,
+                type: Number,
+                isPercentage: true,
+                hasComment: true,
+                attendees: null,
             },
             {
               name: "Tax rate",
@@ -1495,6 +1491,7 @@ export default {
       }
     },
     updateWeekdays(item) {
+        console.log("updateWeekdays", item);
       if (this.selectedWeekdays.includes(item)) {
         this.selectedWeekdays = this.selectedWeekdays.filter((s) => s != item);
       } else {
@@ -1635,9 +1632,6 @@ export default {
       if (this.vendor.selectedWeekdays && this.vendor.selectedWeekdays.length) {
 
         this.selectedWeekdays = this.vendor.selectedWeekdays;
-      } else {
-        this.selectedWeekdays = ['Saturday', 'Sunday'];
-        this.$emit('update-vendor-value', 'selectedWeekdays', this.selectedWeekdays);
       }
 
       if (this.vendor.dontWorkDays && this.vendor.dontWorkDays.selectedDates) {
@@ -1679,12 +1673,14 @@ export default {
                 }
 
                 if (!$(day).next().find('span.vfc-span-day').hasClass('vfc-marked') && !$(day).next().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed') && ($(day).prev().find('span.vfc-span-day').hasClass('vfc-marked') || $(day).prev().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed'))) {
+                    // console.log('vfc-end-mark', day)
                     $(day).find('span.vfc-span-day').addClass('vfc-end-marked');
                     if(!$(day).find('div.vfc-base-end').length)
                         $(day).prepend("<div class='vfc-base-end'></div>")
                 }
 
-                if (!$(day).next().find('span.vfc-span-day').hasClass('vfc-marked') && !$(day).prev().find('span.vfc-span-day').hasClass('vfc-marked')) {
+                if (!$(day).next().find('span.vfc-span-day').hasClass('vfc-marked') && !$(day).prev().find('span.vfc-span-day').hasClass('vfc-marked') && !$(day).next().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed') && !$(day).prev().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed')) {
+                    // console.log("alone", day);
                     $(day).find('span.vfc-span-day').addClass('vfc-end-marked');
                     $(day).find('div.vfc-base-start').remove();
                     $(day).find('div.vfc-base-end').remove();
@@ -2006,15 +2002,19 @@ export default {
         color: #fff !important;
         background-color: #f51355;
         z-index: 1;
+
+        &:before{
+              background-color: #f51355 !important;
+        }
       }
 
-        .vfc-select-start {
+      .vfc-select-start {
             background: linear-gradient(90deg, #ffffff 50%, #f51355 50%);
-        }
+      }
 
-        .vfc-half-end {
+      .vfc-half-end {
             background: linear-gradient(90deg, #f51355 50%, #ffffff 50%);
-        }
+      }
     }
     .check-list {
       flex: 2;

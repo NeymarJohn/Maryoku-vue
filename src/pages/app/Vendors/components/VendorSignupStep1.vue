@@ -65,7 +65,7 @@
                   companyServices.filter((cs) => cs.name == vendor.vendorCategories[0]).length > 0
                 "
                 :item="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0])[0]"
-                :label="`Company Serivces`"
+                :label="`Company Services`"
                 v-model="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0])[0].value"
               />
             </div>
@@ -129,20 +129,27 @@
             </div>
           </div>
           <template v-if="!vendor.images || vendor.images.length == 0">
-            <div class="card red-border">
-              <div class="upload-cont">
+            <Drop
+                    @drop="handleDrop"
+                    @dragenter="handleDragEnter"
+                    @dragleave="handleDragLeave"
+                    style="height: 100%;"
+                    :class="{'drag-over': isDragOver, 'red-border': !isDragOver}"
+                    class="card d-flex justify-content-center align-center">
+              <div class="upload-cont" v-if="!isDragOver">
                 <a class @click="uploadVendorImage"> <img :src="`${iconUrl}Asset 559.svg`" /> Choose File </a>
                 <div class="or">Or</div>
                 <span>Drag and drop photos</span>
                 <input
-                  type="file"
-                  class="hide"
-                  ref="imageFile"
-                  accept="image/gif, image/jpg, image/png"
-                  @change="onVendorImageFilePicked"
+                        type="file"
+                        class="hide"
+                        ref="imageFile"
+                        accept="image/gif, image/jpg, image/png"
+                        @change="onVendorImageFilePicked"
                 />
               </div>
-            </div>
+              <span class="font-size-30 drop-cont" v-else>Drop Here</span>
+            </Drop>
           </template>
           <template v-else>
             <!-- <img :src="img" v-for="(img, index) in vendor.images" :key="index"> -->
@@ -344,6 +351,7 @@
 import moment from "moment";
 import VueElementLoading from "vue-element-loading";
 import Vendors from "@/models/Vendors";
+import { Drop } from "vue-drag-drop";
 
 //COMPONENTS
 import Icon from "@/components/Icon/Icon.vue";
@@ -362,6 +370,7 @@ export default {
     vendor: Object,
   },
   components: {
+    Drop,
     VueElementLoading,
     VendorCheckbox,
     VendorServiceItem,
@@ -441,6 +450,7 @@ export default {
           value: "equipmentrentals",
         },
       ],
+      isDragOver: false,
       option: {
         penColor: "rgb(0, 0, 0)",
         backgroundColor: "rgb(255,255,255)",
@@ -450,6 +460,42 @@ export default {
   created() {},
   mounted() {},
   methods: {
+    handleDrop(data, event) {
+      event.preventDefault();
+      const files = event.dataTransfer.files;
+
+      // validate upload files
+      for (let i = 0; i < files.length; i ++) {
+        let message = null;
+        if (files[i].type !== 'image/jpeg' && files[i].type !== 'image/png' && files[i].type !== 'image/gif') {
+          message = 'Please update a image (.png, .jpeg, .gif) file!';
+        }
+
+        if (files[i].size > 5 * 1024 * 1024) {
+          message = "You've Uploaded an Image that Exceed the allowed size, try small one!";
+        }
+
+        if (message) {
+          console.log(message, files);
+          this.$notify({
+            message,
+            horizontalAlign: "center",
+            verticalAlign: "top",
+            type: "warning",
+          });
+          this.isDragOver = false;
+          return;
+
+        }
+      }
+      this.createImage(files[0]);
+    },
+    handleDragEnter(e){
+      this.isDragOver = true;
+    },
+    handleDragLeave(e){
+      this.isDragOver = false;
+    },
     updateSocialMedia(item) {
       if (this.socialMedia.includes(item)) {
         this.socialMedia = this.socialMedia.filter((s) => s != item);
@@ -686,7 +732,6 @@ export default {
 
           .upload-cont {
             text-align: center;
-            margin: -30px;
             a {
               display: inline-block;
               font: 800 14px Manrope-Regular, sans-serif;
@@ -711,6 +756,16 @@ export default {
               font: normal 50px Manrope-Regular, sans-serif;
               color: #d5d5d5;
             }
+          }
+        }
+
+        &.drag-over{
+          border: 2px dotted #f51355;
+          min-height: 210px;
+
+          .drop-cont{
+            color: #cfcfcf;
+            font-weight: bold;
           }
         }
       }
