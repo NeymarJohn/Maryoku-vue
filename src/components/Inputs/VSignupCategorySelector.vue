@@ -11,7 +11,7 @@
                   :categories="vendorCategories"
                   column="2"
                   trackBy="value"
-                  class="my-10 width-66"
+                  class="my-10 w-max-450"
                   @change="updateCategory(index, ...arguments)"
           >
           </category-selector>

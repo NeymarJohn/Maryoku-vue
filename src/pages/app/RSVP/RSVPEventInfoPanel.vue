@@ -5,7 +5,9 @@
         <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
         <img :src="`${$iconURL}RSVP/Path+251.svg`" />
       </div>
-      <div class="event-info-item-title font-size-22 font-bold-extra">WHEN?</div>
+      <div class="event-info-item-title font-size-22 font-bold-extra">
+        <span :class="{ underline: !editable }">WHEN?</span>
+      </div>
       <div class="event-info-item-content font-size-20">
         {{ $dateUtil.formatScheduleDay(event.eventStartMillis, "MMM Do YYYY") }}
         <span
@@ -25,7 +27,9 @@
         <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
         <img :src="`${$iconURL}Event%20Page/location-dark.svg`" />
       </div>
-      <div class="event-info-item-title font-size-22 font-bold-extra">WHERE?</div>
+      <div class="event-info-item-title font-size-22 font-bold-extra">
+        <span :class="{ underline: !editable }">WHERE?</span>
+      </div>
       <div class="event-info-item-content font-size-20">{{ event.location }}</div>
     </div>
     <div class="event-info-item">
@@ -33,7 +37,9 @@
         <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
         <img :src="`${$iconURL}RSVP/Path+1383.svg`" />
       </div>
-      <div class="event-info-item-title font-size-22 font-bold-extra">SOLO OR PLUS 1?</div>
+      <div class="event-info-item-title font-size-22 font-bold-extra">
+        <span :class="{ underline: !editable }">SOLO OR PLUS 1?</span>
+      </div>
       <div class="event-info-item-content d-flex align-center font-size-20" v-if="!editingPlusOne">
         <span>{{ isPluseOne ? "+1" : "Solo" }} &emsp;</span>
         <md-button class="md-simple edit-btn md-red" v-if="editable" @click="editingPlusOne = !editingPlusOne"
@@ -57,7 +63,10 @@
         <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
         <img :src="`${$iconURL}RSVP/Group+1279.svg`" />
       </div>
-      <div class="event-info-item-title font-size-22 font-bold-extra">Arrival?</div>
+      <div class="event-info-item-title font-size-22 font-bold-extra">
+        <span :class="{ underline: !editable }">Arrival?</span>
+      </div>
+
       <div class="event-info-item-content font-size-20" v-if="!editingArrival">
         {{ eventArrival }}&emsp;
         <md-button class="md-simple edit-btn md-red" v-if="editable" @click="editingArrival = !editingArrival"
@@ -157,6 +166,9 @@ export default {
     &-title {
       width: 250px;
       padding: 10px 24px;
+      span.underline {
+        border-bottom: solid 2px #ff7600;
+      }
     }
     &-content {
       .maryoku-btn {

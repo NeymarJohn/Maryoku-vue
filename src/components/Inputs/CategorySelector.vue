@@ -197,6 +197,7 @@ export default {
     border: solid 1px #050505;
     box-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.16);
     background: white;
+    width: 100%;
     li {
       cursor: pointer;
       font: normal 18px Manrope-Regular, sans-serif;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="rsvp-campaign">
+    <div class="rsvp-campaign white-card">
       <div class="p-50">
         <div class="font-size-30 font-bold-extra mb-50" v-if="campaignData.campaignStatus != 'STARTED'">
           Get everyone to RSVP
@@ -135,25 +135,25 @@
         :visible="campaignData.visibleSettings.showTimeline"
         @changeVisibility="setVisibleTimeline"
       ></rsvp-timeline-panel>
-      <div class="p-50 pt-0">
-        <div class="font-size-30 font-bold-extra mb-30">
-          <img :src="`${$iconURL}Campaign/Group+9235.svg`" class="mr-10" />
-          Online participants
-        </div>
-        <md-checkbox v-model="campaignData.allowOnline">
-          <span class="font-bold">Allow online participation</span>
-        </md-checkbox>
-        <br />
-        <div class="d-flex align-start" v-if="campaignData.allowOnline">
-          <img class="ml-10 mr-20" style="margin-top: -10px" :src="`${$iconURL}Campaign/enter-gray.svg`" />
-          <div class="width-50">
-            <div class="font-bold">Paste link to video communication</div>
-            <maryoku-input
-              v-model="campaignData.additionalData.zoomlink"
-              placeholder="Paste Zoom link here..."
-              fieldName="link"
-            ></maryoku-input>
-          </div>
+    </div>
+    <div class="p-50 pt-0 mt-40 white-card">
+      <div class="font-size-30 font-bold-extra mb-30">
+        <img :src="`${$iconURL}Campaign/Group+9235.svg`" class="mr-10" />
+        Digital Participation
+      </div>
+      <md-checkbox v-model="campaignData.allowOnline">
+        <span class="font-bold">Allow digital participation</span>
+      </md-checkbox>
+      <br />
+      <div class="d-flex align-start" v-if="campaignData.allowOnline">
+        <img class="ml-10 mr-20" style="margin-top: -10px" :src="`${$iconURL}Campaign/enter-gray.svg`" />
+        <div class="width-50">
+          <div class="font-bold">Paste link to video communication</div>
+          <maryoku-input
+            v-model="campaignData.additionalData.zoomlink"
+            placeholder="Paste Zoom link here..."
+            fieldName="link"
+          ></maryoku-input>
         </div>
       </div>
     </div>

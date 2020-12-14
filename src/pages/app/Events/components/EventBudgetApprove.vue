@@ -236,6 +236,7 @@ export default {
       const event = new CalendarEvent({
         id: this.event.id,
         totalBudget: eventBudget.totalBudget,
+        unexpectedBudget: this.event.unexpectedBudget + (eventBudget.totalBudget - this.event.totalBudget),
         calendar: new Calendar({ id: this.event.calendar.id }),
       });
       this.$store.dispatch("event/saveEventAction", event).then((res) => {
@@ -304,7 +305,7 @@ export default {
           console.log(error);
         });
     },
-    updateCategory(category) {
+    updateCategory({ category, offset }) {
       const eventComponent = new EventComponent(category);
       eventComponent
         .for(this.event)
@@ -316,7 +317,8 @@ export default {
           }, 0);
           const event = new CalendarEvent({
             id: this.event.id,
-            totalBudget: totalAllocatedBudget,
+            unexpectedBudget:
+              this.event.totalBudget - totalAllocatedBudget - this.event.allocatedTips - this.event.allocatedFees,
             calendar: new Calendar({ id: this.event.calendar.id }),
           });
           this.$store.dispatch("event/saveEventAction", event).then((res) => {

@@ -3441,31 +3441,27 @@ export const VendorPricingPolicy = [
     items: [
       {
         name: "Travel cost",
-        type: 'Including',
-        value: true,
-        cost: '0.00'
+        type: Number,
+        hasComment: true,
       },
       {
         name: "Pickup",
-        type: 'Including',
-        value: true,
-        cost: '0.00'
+        type: Number,
+        hasComment: true,
       },
       {
         name: "Cleanup",
-        type: 'Including',
-        value: true,
-        cost: '0.00'
+        type: Number,
+        hasComment: true,
       },
       {
         name: "Breakdown",
-        type: "Including",
-        value: true,
-        cost: '0.00'
+        type: Number,
+        hasComment: true,
       },
       {
         name: "Cost Late Night Fares",
-        type: Boolean,
+        type: Number,
         hasComment: true,
       },
       {
@@ -3483,6 +3479,7 @@ export const VendorPricingPolicy = [
       {
         name: "Suggested Gratuity",
         type: Number,
+        hasComment: true,
       },
     ],
   },
@@ -3492,14 +3489,17 @@ export const VendorPricingPolicy = [
       {
         name: "Delivery",
         type: Number,
+        hasComment: true,
       },
       {
         name: "Setup",
         type: Number,
+        hasComment: true,
       },
       {
         name: "Working with unions",
-        type: Boolean,
+        type: Number,
+        hasComment: true,
       },
       {
         name: "Discounts for large quantities",
@@ -3514,6 +3514,7 @@ export const VendorPricingPolicy = [
       {
         name: "Suggested Gratuity",
         type: Number,
+        hasComment: true,
       },
     ],
   },
@@ -3523,14 +3524,17 @@ export const VendorPricingPolicy = [
       {
         name: "Travel distance to event",
         type: Number,
+        hasComment: true,
       },
       {
         name: "Special attire requests",
         type: Number,
+        hasComment: true,
       },
       {
         name: "Last minute requests",
-        type: Boolean,
+        type: Number,
+        hasComment: true,
       },
       {
         name: "Discount for large quantities",
@@ -3547,7 +3551,7 @@ export const VendorPricingPolicy = [
       {
         name: "Suggested Gratuity",
         type: Number,
-        noSuffix: true,
+        hasComment: true,
       },
     ],
   },
@@ -3569,10 +3573,12 @@ export const VendorPricingPolicy = [
       {
         name: "Rushed job",
         type: Number,
+        hasComment: true,
       },
       {
         name: "Overtime",
         type: Number,
+        hasComment: true,
       },
       {
         name: "Tax rate",
@@ -3581,11 +3587,13 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Discounts",
-        type: Boolean,
+        type: Number,
+        hasComment: true,
       },
       {
         name: "Suggested Gratuity",
         type: Number,
+        hasComment: true,
       },
     ],
   },
@@ -3594,23 +3602,28 @@ export const VendorPricingPolicy = [
     items: [
       {
         name: "Rushed orders",
-        type: Boolean,
+        type: Number,
+        hasComment: true,
       },
       {
         name: "Delivery",
-        type: Boolean,
+        type: Number,
+        hasComment: true,
       },
       {
         name: "preparing file for printing",
-        type: Boolean,
+        type: Number,
+        hasComment: true,
       },
       {
         name: "Multiple print locations",
-        type: Boolean,
+        type: Number,
+        hasComment: true,
       },
       {
         name: "Number of different colors",
-        type: Boolean,
+        type: Number,
+        hasComment: true,
       },
       {
         name: "Tax rate",
@@ -3619,13 +3632,14 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Discount for large quantites",
-        type: Boolean,
-        attendees: null,
+        type: Number,
+        hasComment: true,
 
       },
       {
         name: "Suggested Gratuity",
         type: Number,
+        hasComment: true,
       },
     ],
   },
@@ -3648,6 +3662,7 @@ export const VendorPricingPolicy = [
       {
         name: "Suggested Gratuity",
         type: Number,
+        hasComment: true,
       },
     ],
   },
@@ -3658,23 +3673,19 @@ export const VendorPricingPolicy = [
         name: "Hours included in service",
         subCategory: "charge",
         type: Number,
-        value: 0,
         hasComment: true,
-        noSuffix: true,
       },
       {
         name: "Rushed setup",
         subCategory: "charge",
-        type: "Including",
-        value: true,
-        cost: "0.00",
+        type: Number,
+        hasComment: true,
       },
       {
         name: "Rehersal time for the band (for special requests)",
         subCategory: "charge",
-        type: "Including",
-        value: true,
-        cost: "0.00",
+        type: Number,
+        hasComment: true,
       },
       {
         name: "Special operating time",
@@ -3726,22 +3737,22 @@ export const VendorPricingPolicy = [
     items: [
       {
         name: "Pre-selection personal",
-        type: "Including",
-        value: true,
-        cost: "0.00",
+        type: Number,
+        hasComment: true,
       },
       {
         name: "Number of hours",
         type: Number,
-        noSuffix: true,
+        hasComment: true,
       },
       {
         name: "Level of security training/certification",
-        type: String,
+        type: Number,
+        hasComment: true,
       },
       {
         name: "Special attire requests",
-        type: Boolean,
+        type: Number,
         hasComment: true,
       },
       {
@@ -3757,6 +3768,7 @@ export const VendorPricingPolicy = [
       {
         name: "Suggested Gratuity",
         type: Number,
+        hasComment: true,
       },
     ],
   },
@@ -3770,14 +3782,17 @@ export const VendorPricingPolicy = [
       {
         name: "Overtime charge",
         type: Number,
+        hasComment: true,
       },
       {
         name: "Travel to multiple location",
         type: Number,
+        hasComment: true,
       },
       {
         name: "Over number of pictures taken",
         type: Number,
+        hasComment: true,
       },
       {
         name: "Discount for large discounts",
@@ -3792,6 +3807,7 @@ export const VendorPricingPolicy = [
       {
         name: "Suggested Gratuity",
         type: Number,
+        hasComment: true,
       },
     ],
   },

@@ -640,7 +640,9 @@ export default {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
       allowThirdVendor: null,
       workAllDay: false,
-      date: {},
+      date: {
+        selectedDates: [],
+      },
       rulesDesc: {
         title: "additional rules",
         placeholder: "Event muse end before.. / Suitable for children (2-12 years)",
@@ -740,7 +742,17 @@ export default {
   },
   methods: {
     updateExDonts(item) {
+
       item.selected = !item.selected;
+      let day = item.start.split('-')[2];
+      // console.log("updateExDonts", item, this.markedDates, this.markedDates.find(m => m === item.start));
+      if ( this.markedDates.find(m => m === item.start ) ) {
+        console.log("removeClass");
+        this.markedDates = this.markedDates.filter(m => m !== item.start);
+        $('span.vfc-span-day:contains('+day+')').removeClass('vfc-marked vfc-start-marked vfc-end-marked');
+      } else {
+        this.markedDates.push(item.start);
+      }
 
       this.$root.$emit("update-vendor-value", "exDonts", this.religions);
     },
@@ -811,6 +823,7 @@ export default {
       this.$root.$emit("update-vendor-value", "selectedWeekdays", this.selectedWeekdays);
     },
     updateReligion(item) {
+      console.log("updateReligion", item, this.markedDates, this.date.selectedDates);
       if (this.selectedReligion.length && this.selectedReligion.find(s => s.name === item.name)) {
         this.selectedReligion = this.selectedReligion.filter((s) => s.name !== item.name);
       } else {
@@ -818,12 +831,23 @@ export default {
       }
       this.$root.$emit("update-vendor-value", "selectedReligion", this.selectedReligion);
     },
-    updateDontWorkDays() {
+    updateDontWorkDays(e) {
       console.log("selectedDays", this.date);
-      this.$root.$emit("update-vendor-value", "dontWorkDays", this.date);
+      let day = e.date.split('-')[2];
+      let selectedDates = this.date.selectedDates;
+      if ( this.markedDates.find(m => m === e.date) ) {
+
+        selectedDates = this.date.selectedDates.filter(s => s.date !== e.date);
+
+        this.markedDates = this.markedDates.filter(m => m !== e.date);
+        $('span.vfc-span-day:contains('+day+')').removeClass('vfc-marked vfc-start-marked vfc-end-marked');
+      }
+      console.log("selectedDays", day, e, this.markedDates, this.date);
+
+      this.$root.$emit("update-vendor-value", "dontWorkDays", selectedDates);
     },
     changeMonth(e) {
-        console.log("changeMonth", e);
+        console.log("changeMonth", this.markedDates, this.date);
         this.month = e;
     },
     changeYear(e) {
@@ -900,14 +924,24 @@ export default {
 
       data.holidays.map(it => {
         it.selected = value;
-      })
+        let day = it.start.split('-')[2];
+        if (value) {
+          this.markedDates.push(it.start);
+        } else {
+          this.markedDates = this.markedDates.filter(m => m !== it.start);
+          $('span.vfc-span-day:contains('+day+')').removeClass('vfc-marked vfc-start-marked vfc-end-marked');
+        }
+      });
+
+
+
       this.$root.$emit("update-vendor-value", "exDonts", this.religions);
     },
     isAllHolidays(data){
       return data.holidays.every(it => it.selected);
     },
     init: async function(){
-      console.log("init", this.vendor, VendorPolicy, VendorPricingPolicy);
+
       this.vendorPricingPolicies = this.pricingPolicies.find(p => p.category === this.vendor.vendorCategory);
 
       if ( this.vendor.pricingPolicies && this.vendor.pricingPolicies.length ) {
@@ -943,11 +977,13 @@ export default {
 
         this.selectedWeekdays = this.vendor.selectedWeekdays;
       }
+      console.log('init.dontWorkDays', this.vendor.dontWorkDays);
+      if (this.vendor.dontWorkDays ) {
 
-      if (this.vendor.dontWorkDays && this.vendor.dontWorkDays.selectedDates) {
-        if (this.vendor.dontWorkDays.selectedDates.length > 0) {
+        this.$set(this.date, 'selectedDates', this.vendor.dontWorkDays);
+        if (this.vendor.dontWorkDays.length > 0) {
           this.markedDates = [];
-          _.each(this.vendor.dontWorkDays.selectedDates, (sd) => {
+          _.each(this.vendor.dontWorkDays, (sd) => {
             this.markedDates.push(sd.date);
           });
         }
@@ -956,7 +992,7 @@ export default {
       if ( this.vendor.exDonts && this.vendor.exDonts.length ) {
         this.vendor.exDonts.map(ex => {
           ex.holidays.map(h => {
-            if (h.selected) this.markedDates.push(h.start)
+            if (h.selected) this.markedDates.push(h.start);
           })
         })
       }
@@ -969,11 +1005,12 @@ export default {
         $('.vfc-day').each(function (index, day) {
             if ($(day).find('span.vfc-span-day').hasClass('vfc-marked') || $(day).find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed')) {
 
-                if (($(day).next().find('span.vfc-span-day').hasClass('vfc-marked') && $(day).prev().find('span.vfc-span-day').hasClass('vfc-marked')) || ($(day).next().find('span.vfc-span-day').hasClass('vfc-marked') && $(day).prev().find('span.vfc-cursor-not-allowed').hasClass('vfc-marked')) || ($(day).next().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed') && $(day).prev().find('span.vfc-span-day').hasClass('vfc-marked'))) {
+                if (($(day).next().find('span.vfc-span-day').hasClass('vfc-marked') && $(day).prev().find('span.vfc-span-day').hasClass('vfc-marked')) || ($(day).next().find('span.vfc-span-day').hasClass('vfc-marked') && $(day).prev().find('span.vfc-cursor-not-allowed').hasClass('vfc-cursor-not-allowed')) || ($(day).next().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed') && $(day).prev().find('span.vfc-span-day').hasClass('vfc-marked')) || ($(day).next().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed') && $(day).prev().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed'))) {
                     $(day).find('span.vfc-span-day').removeClass('vfc-end-marked');
                     $(day).find('span.vfc-span-day').removeClass('vfc-start-marked');
                     $(day).find('div.vfc-base-start').remove();
                     $(day).find('div.vfc-base-end').remove();
+                  $(day).find('span.vfc-span-day').addClass('selected');
                 }
 
                 if (($(day).next().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed') || $(day).next().find('span.vfc-span-day').hasClass('vfc-marked')) && !$(day).prev().find('span.vfc-span-day').hasClass('vfc-marked') && !$(day).prev().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed')) {
@@ -1011,12 +1048,12 @@ export default {
       this.renderCalendar()
   },
   watch: {
-    vendor:{
-      handler(newVal) {
-        this.init()
-      },
-      deep: true,
-    }
+    // vendor:{
+    //   handler(newVal) {
+    //     this.init()
+    //   },
+    //   deep: true,
+    // }
   },
 };
 </script>
@@ -1268,9 +1305,29 @@ export default {
       }
       /deep/ span.vfc-span-day {
         &.vfc-marked {
-            &:not(.vfc-start-marked):not(.vfc-end-marked):before{
-                background-color: #f51355 !important;
-            }
+          background-color: #f51355;
+          color: #ffffff;
+
+          &:not(.vfc-start-marked):not(.vfc-end-marked):before{
+            background-color: #f51355 !important;
+          }
+        }
+
+        &.vfc-cursor-not-allowed {
+          color: #fff !important;
+          background-color: #f51355;
+          z-index: 1;
+
+          &.selected:before{
+            background-color: #f51355 !important;
+            top: 0;
+            left: 0;
+            position: absolute;
+            content: '';
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+          }
         }
       }
       /deep/ .vfc-span-day.vfc-start-marked {
@@ -1301,21 +1358,6 @@ export default {
         background-color: #ffd9e4;
         color: #f51355;
         font: 600 14px Manrope-Regular, sans-serif;
-      }
-      /deep/ span.vfc-span-day {
-        &.vfc-marked {
-          background-color: #f51355;
-          color: #ffffff;
-        }
-      }
-      /deep/ span.vfc-cursor-not-allowed {
-        color: #fff !important;
-        background-color: #f51355;
-        z-index: 1;
-
-        &:before{
-              background-color: #f51355 !important;
-        }
       }
 
       .vfc-select-start {

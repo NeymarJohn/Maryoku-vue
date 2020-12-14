@@ -65,7 +65,7 @@
                   companyServices.filter((cs) => cs.name == vendor.vendorCategories[0]).length > 0
                 "
                 :item="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0])[0]"
-                :label="`Company Serivces`"
+                :label="`Company Services`"
                 v-model="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0])[0].value"
               />
             </div>

@@ -30,8 +30,8 @@ const state = {
 const getters = {
   mainTotalPrice(state) {
     const mainService = state.vendor.eventCategory.key
-    if (!state.proposalServices[mainService]) return 0
-    const sumPrice = state.proposalServices[mainService].reduce((s, item) => {
+    if (!state.proposalCostServices[mainService]) return 0
+    const sumPrice = state.proposalCostServices[mainService].reduce((s, item) => {
       return s + item.requirementValue * item.price;
     }, 0);
     let taxRate = state.taxes[mainService];
@@ -48,15 +48,18 @@ const getters = {
       if (!state.proposalServices[service]) {
         prices[service] = 0
       }
-      const sumPrice = state.proposalServices[service].reduce((s, item) => {
-        return s + item.requirementValue * item.price;
-      }, 0);
-      let taxRate = state.taxes[service];
-      let discount = state.discounts[service] || 0
-      if (!taxRate) taxRate = 0;
-      let total = sumPrice - (sumPrice * discount) / 100;
-      const tax = (total * taxRate) / 100;
-      prices[service] = total - tax;
+      if (state.proposalServices[service]) {
+        const sumPrice = state.proposalServices[service].reduce((s, item) => {
+          return s + item.requirementValue * item.price;
+        }, 0);
+        let taxRate = state.taxes[service];
+        let discount = state.discounts[service] || 0
+        if (!taxRate) taxRate = 0;
+        let total = sumPrice - (sumPrice * discount) / 100;
+        const tax = (total * taxRate) / 100;
+        prices[service] = total - tax;
+      }
+
     })
     prices[state.vendor.eventCategory.key] = getters.mainTotalPrice
     return prices

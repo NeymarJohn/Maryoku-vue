@@ -31,7 +31,7 @@
                   block.title ? block.title.toLowerCase().replace(/ /g, '-').replace('&', '').replace('/', '-') : ''
                 "
               >
-                <img :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${block.icon}`" />
+                <img :src="`${$iconURL}Budget Elements/${block.icon}`" />
                 {{ block.title }}
               </td>
               <td class="planned" width="20%" style="white-space: nowrap">
@@ -72,15 +72,9 @@
                   <template v-if="block.allocatedBudget">
                     <template v-if="block.winningProposalId">
                       <template v-if="block.allocatedBudget < block.winingProposal.cost">
-                        <img
-                          src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+29.png"
-                        />
+                        <img :src="`${$iconURL}budget+screen/png/Asset+29.png`" />
                       </template>
-                      <template v-else>
-                        <img
-                          src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+29.png"
-                        />
-                      </template>
+                      <template v-else> <img :src="`${$iconURL}budget+screen/png/Asset+29.png`" /> </template>
                       <md-button
                         class="md-simple actual-cost md-xs"
                         :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`"
@@ -331,14 +325,22 @@
           <td colspan="5">
             <md-button class="md-simple add-category-btn" @click="showCategoryModal = true">
               <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2019.svg" />
-              Add new categoryd
+              Add new category
             </md-button>
           </td>
         </tr>
       </tbody>
     </table>
 
-    <modal v-if="showCategoryModal" class="add-category-model">
+    <add-new-category-modal
+      v-if="showCategoryModal"
+      :event="event"
+      :components="filteredEventBlocks"
+      @cancel="showCategoryModal = false"
+      @save="addBuildingBlock"
+    ></add-new-category-modal>
+
+    <!-- <modal v-if="showCategoryModal" class="add-category-model">
       <template slot="header">
         <div class="add-category-model__header">
           <h2 class="font-size-30 font-bold-extra">
@@ -405,7 +407,7 @@
           >Add Category</md-button
         >
       </template>
-    </modal>
+    </modal> -->
     <budget-handle-minus-modal
       v-if="showMinusHandleModal"
       :value="overAddedValue"
@@ -446,7 +448,7 @@ import BudgetHandleMinusModal from "@/components/Modals/BudgetHandleMinusModal";
 import AddMyVendorModal from "@/components/Modals/AddMyVendorModal";
 import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 import EventComponentVendorItem from "./Utilities/EventComponentVendorItem";
-
+import AddNewCategoryModal from "@/components/Modals/AddNewCategoryModal";
 import swal from "sweetalert2";
 
 export default {
@@ -462,14 +464,9 @@ export default {
     EventComponentVendorItem,
     Popup,
     MaryokuInput,
+    AddNewCategoryModal,
   },
   props: {
-    event: {
-      type: Object,
-      default: () => {
-        return { statistics: {} };
-      },
-    },
     eventComponents: [Array, Function],
     type: {
       type: String,
@@ -522,6 +519,9 @@ export default {
     ...mapGetters({
       components: "event/getComponentsList",
     }),
+    event() {
+      return this.$store.state.event.eventData;
+    },
     permission() {
       try {
         return this.$store.state.event.eventData.permit;
@@ -744,6 +744,9 @@ export default {
         selected_block.values = block.values;
         selected_block.vendors = block.vendors;
 
+        block.newBudget = Number(block.newBudget.replace(/,/g, ""));
+        let offsetBudget = block.newBudget - block.allocatedBudget;
+
         if (block.allocatedBudget && block.numberOfParticipants) {
           selected_block.allocatedBudget =
             this.type === "total" ? block.newBudget : block.newBudget * block.numberOfParticipants;
@@ -755,9 +758,10 @@ export default {
           block.allocatedBudget =
             this.type === "total" ? block.newBudget : block.newBudget * this.event.numberOfParticipants;
         }
+        alert(offsetBudget);
         if (result.dismiss != "cancel") {
           selected_block
-            .for(this.calendar, event)
+            .for(this.event)
             .save()
             .then((resp) => {
               this.isLoading = false;
@@ -773,12 +777,31 @@ export default {
                 }
               });
 
-              this.allocatedBudget = allocatedBudget;
-              if (this.event.totalBudget < this.allocatedBudget) {
-                console.log(this.totalBudget);
+              // this.allocatedBudget = allocatedBudget;
+              // if (this.event.totalBudget < this.allocatedBudget) {
+              //   console.log(this.totalBudget);
+              //   this.showMinusHandleModal = true;
+              //   this.overAddedValue = this.allocatedBudget - this.event.totalBudget;
+              // }
+              const event = new CalendarEvent({
+                id: this.event.id,
+                calendar: new Calendar({ id: this.event.calendar.id }),
+              });
+
+              // planer has extra budget
+              if (this.event.unexpectedBudget + this.event.allocatedTips < offsetBudget) {
                 this.showMinusHandleModal = true;
-                this.overAddedValue = this.allocatedBudget - this.event.totalBudget;
+              } else {
+                if (this.event.unexpectedBudget < offsetBudget) {
+                  offsetBudget -= offsetBudget - this.event.unexpectedBudget;
+                  event.unexpectedBudget = 0;
+                  event.allocatedTips = this.allocatedTips - offsetBudget;
+                } else {
+                  event.unexpectedBudget = this.event.unexpectedBudget - offsetBudget;
+                }
               }
+              this.$store.dispatch("event/saveEventAction", event).then((res) => {});
+
               this.showEditElementBudget(block);
               this.$emit("change");
             })
@@ -945,46 +968,9 @@ export default {
       }
     },
 
-    async addBuildingBlock() {
-      if (this.remainingBudget < this.newBuildingBlock.budget) {
-        return;
-      }
-
-      //let newComponent = _.findWhere(this.components, {title: this.newBuildingBlock.category})
-      let newComponent = this.newBuildingBlock.category;
-      if (newComponent.id === "other") {
-        const newCategory = {
-          title: `Other-${this.newBuildingBlock.name}`,
-          key: `other-${this.newBuildingBlock.name.toLowerCase()}`,
-          color: `rgb(${parseInt(Math.random() * 255)}, ${parseInt(Math.random() * 255)}, ${parseInt(
-            Math.random() * 255,
-          )})`,
-          icon: `other.svg`,
-          type: "customized",
-          categoryId: "other",
-        };
-        newComponent = await new EventCategory(newCategory).save();
-      }
-      let newBlock = {
-        componentId: newComponent ? newComponent.key : "other",
-        componentCategoryId: newComponent ? newComponent.key : "other",
-        calendarEvent: { id: this.event.id },
-        allocatedBudget: this.newBuildingBlock.budget,
-        order: this.event.components.length,
-        icon: newComponent.icon,
-        category: newComponent,
-      };
-
-      new EventComponent(newBlock)
-        .for(this.calendar, this.event)
-        .save()
-        .then((res) => {
-          this.showCategoryModal = false;
-          this.$emit("change");
-        })
-        .catch((error) => {
-          console.log("Error while saving ", error);
-        });
+    addBuildingBlock() {
+      this.showCategoryModal = false;
+      this.$emit("change");
     },
     getCategoryBlocks() {
       EventComponent.get()
