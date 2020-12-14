@@ -28,8 +28,8 @@
             <span>Sincerely,</span>
             <p>Relish caterers & venues</p>
           </div>
-          <proposal-event-vision v-if="event.concept" :event="event"></proposal-event-vision>
-          <proposal-bid-content></proposal-bid-content>
+          <proposal-event-vision :event="event"></proposal-event-vision>
+          <proposal-additional-requirement></proposal-additional-requirement>
         </div>
         <div class="step-wrapper" v-if="step == 1">
           <div class="proposal-add-personal-message-wrapper" v-if="!this.event.concept">
@@ -87,6 +87,7 @@
           :additional="true"
           :isEdit="true"
           :step="step"
+          :proposalRequest="proposalRequest"
           :services="services"
         />
       </div>
@@ -142,6 +143,27 @@ export default {
   mounted() {
     this.services = VendorService.businessCategories();
     this.iconsWithCategory = VendorService.categoryNameWithIcons();
+
+    this.$root.$on("next-step-vendor-proposal", () => {
+      if (this.step == -1) {
+        this.step = 0;
+      } else if (this.step == 0) {
+        this.step = 2;
+      } else if (this.step > -1 && this.step < 3) {
+        this.step++;
+      }
+    });
+    this.$root.$on("prev-step-vendor-proposal", () => {
+      if (this.step == 2) {
+        this.step = 0;
+      } else if (this.step > 0) {
+        this.step--;
+      } else {
+        this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}`);
+        VendorService.setProposalRequest(this.proposalRequest);
+      }
+    });
+
     this.$store.dispatch("common/fetchAllCategories");
   },
   methods: {
@@ -150,6 +172,11 @@ export default {
         .then((resp) => {
           this.$set(this, "proposalRequest", resp);
           this.$set(this, "event", resp.eventData);
+          if (resp.eventData.concept) {
+            this.step = -1;
+          } else {
+            this.step = 0;
+          }
           this.proposalRequestRequirements = _.chain(resp.requirements)
             .groupBy("requirementPriority")
             .map(function (value, key) {
@@ -222,6 +249,15 @@ export default {
     },
     step() {
       return this.$store.state.vendorProposal.wizardStep;
+    },
+  },
+  watch: {
+    proposalRequest(newValue, oldValue) {
+      if (newValue.eventData.concept) {
+        this.step = -1;
+      } else {
+        this.step = 0;
+      }
     },
   },
 };

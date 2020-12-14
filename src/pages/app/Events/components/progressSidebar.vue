@@ -24,14 +24,26 @@
 
       <div class="my-notes">
         <md-button v-if="!isOpenNote" class="md-red" @click="isOpenNote = true">
-          <img :src="`${$iconURL}Event Page/note-light.svg`" width="20" style="margin: 0 3px" />
+          <img
+            :src="`${$iconURL}Event Page/note-light.svg`"
+            width="20"
+            style="margin: 0 3px"
+          />
           On my plate
-          <md-icon style="font-size: 30px !important; margin-left: 5px">keyboard_arrow_down</md-icon>
+          <md-icon style="font-size: 30px !important; margin-left: 5px"
+            >keyboard_arrow_down</md-icon
+          >
         </md-button>
         <md-button v-if="isOpenNote" class="md-red" @click="isOpenNote = false">
-          <img :src="`${$iconURL}Event Page/note-light.svg`" width="20" style="margin: 0 3px" />
+          <img
+            :src="`${$iconURL}Event Page/note-light.svg`"
+            width="20"
+            style="margin: 0 3px"
+          />
           Close
-          <md-icon style="font-size: 30px !important; margin-left: 5px">keyboard_arrow_up</md-icon>
+          <md-icon style="font-size: 30px !important; margin-left: 5px"
+            >keyboard_arrow_up</md-icon
+          >
         </md-button>
       </div>
     </div>
@@ -59,7 +71,12 @@
                 :src="`${$iconURL}budget+screen/SVG/Asset%2032.svg`"
                 width="25"
               />
-              <img :src="item.icon" v-if="isActiveRoute(item)" width="25" style="max-width: 25px; max-height: 25px" />
+              <img
+                :src="item.icon"
+                v-if="isActiveRoute(item)"
+                width="25"
+                style="max-width: 25px; max-height: 25px"
+              />
               {{ item.title }}
             </div>
           </div>
@@ -133,19 +150,20 @@ export default {
       this.$router.push(`/events/${this.event.id}/${item.route}`);
     },
     generatedItems(event) {
-      console.log(event.concept, "event.concept");
       const concept = {
         title: "Choose Concept",
-        status: event.conceptProgress === 100 && event.concept ? "completed" : "not-complete",
+        status: event.conceptProgress === 100 ? "completed" : "not-complete",
         route: "booking/concept",
         icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-        progress: event.concept ? event.conceptProgress : 0,
+        progress: event.conceptProgress,
         componentId: "concept",
       };
       const budget = {
-        title: this.event.budgetProgress <= 50 ? "Create Budget" : "Approve Budget",
+        title:
+          this.event.budgetProgress <= 50 ? "Create Budget" : "Approve Budget",
         status: "not-complete",
-        route: this.event.budgetProgress == 100 ? "edit/budget" : "booking/budget",
+        route:
+          this.event.budgetProgress == 100 ? "edit/budget" : "booking/budget",
         icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
         progress: this.event.budgetProgress,
         componentId: "budget",
@@ -194,26 +212,38 @@ export default {
         });
     },
     setConstantStates(event) {
-      const conceptIndex = this.eventElements.findIndex((item) => item.componentId === "concept");
-      const budgetIndex = this.eventElements.findIndex((item) => item.componentId === "budget");
-      const timelineIndex = this.eventElements.findIndex((item) => item.componentId === "timeline");
-      const campaignIndex = this.eventElements.findIndex((item) => item.componentId === "campaign");
+      const conceptIndex = this.eventElements.findIndex(
+        (item) => item.componentId === "concept",
+      );
+      const budgetIndex = this.eventElements.findIndex(
+        (item) => item.componentId === "budget",
+      );
+      const timelineIndex = this.eventElements.findIndex(
+        (item) => item.componentId === "timeline",
+      );
+      const campaignIndex = this.eventElements.findIndex(
+        (item) => item.componentId === "campaign",
+      );
 
       if (conceptIndex >= 0) {
         this.eventElements[conceptIndex].progress = event.conceptProgress;
-        this.eventElements[conceptIndex].status = event.conceptProgress == 100 ? "completed" : "not-complete";
+        this.eventElements[conceptIndex].status =
+          event.conceptProgress == 100 ? "completed" : "not-complete";
       }
       if (budgetIndex >= 0) {
         this.eventElements[budgetIndex].progress = event.budgetProgress;
-        this.eventElements[budgetIndex].status = event.budgetProgress == 100 ? "completed" : "not-complete";
+        this.eventElements[budgetIndex].status =
+          event.budgetProgress == 100 ? "completed" : "not-complete";
       }
       if (timelineIndex >= 0) {
         this.eventElements[timelineIndex].progress = event.timelineProgress;
-        this.eventElements[timelineIndex].status = event.timelineProgress == 100 ? "completed" : "not-complete";
+        this.eventElements[timelineIndex].status =
+          event.timelineProgress == 100 ? "completed" : "not-complete";
       }
       if (campaignIndex >= 0) {
         this.eventElements[campaignIndex].progress = event.timelineProgress;
-        this.eventElements[campaignIndex].status = event.timelineProgress == 100 ? "completed" : "not-complete";
+        this.eventElements[campaignIndex].status =
+          event.timelineProgress == 100 ? "completed" : "not-complete";
       }
     },
     fetchUrl() {

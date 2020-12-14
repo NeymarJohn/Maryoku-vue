@@ -31,7 +31,7 @@
                   block.title ? block.title.toLowerCase().replace(/ /g, '-').replace('&', '').replace('/', '-') : ''
                 "
               >
-                <img :src="`${$iconURL}Budget Elements/${block.icon}`" />
+                <img :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${block.icon}`" />
                 {{ block.title }}
               </td>
               <td class="planned" width="20%" style="white-space: nowrap">
@@ -72,9 +72,15 @@
                   <template v-if="block.allocatedBudget">
                     <template v-if="block.winningProposalId">
                       <template v-if="block.allocatedBudget < block.winingProposal.cost">
-                        <img :src="`${$iconURL}budget+screen/png/Asset+29.png`" />
+                        <img
+                          src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+29.png"
+                        />
                       </template>
-                      <template v-else> <img :src="`${$iconURL}budget+screen/png/Asset+29.png`" /> </template>
+                      <template v-else>
+                        <img
+                          src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+29.png"
+                        />
+                      </template>
                       <md-button
                         class="md-simple actual-cost md-xs"
                         :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`"
@@ -187,14 +193,14 @@
           </template>
         </tbody>
       </table>
-      <table class="event-blocks__table event-block-table" :style="`border-left: 10px solid #80B93D;color:#80B93D`">
+      <table class="event-blocks__table event-block-table" :style="`border-left: 10px solid #80B93D`">
         <tbody>
           <tr class="unexpected-budget">
-            <td width="40%" class="event-block-element unexpected">
+            <td width="40%" class="event-block-element unused-budget">
               <img :src="`${$iconURL}Budget Elements/unexpected.svg`" />
               Unexpected
             </td>
-            <td width="20%" class="planned unexpected">$ {{ event.unexpectedBudget | withComma }}</td>
+            <td width="20%" class="planned">$ {{ event.unexpectedBudget | withComma }}</td>
             <td width="15%" class="actual red-label"></td>
             <td width="15%" class="status"></td>
             <td class="expand"></td>
@@ -318,29 +324,21 @@
         <tr class="total">
           <td class="total-title" width="40%">Total</td>
           <td width="20%" class="total-value">${{ Math.round(event.totalBudget) | roundNumber | withComma }}</td>
-          <td width="15%" class="total-value">${{ bookedTotal | withComma }}</td>
+          <td width="15%" class="total-value">${{ event.statistics.booked | withComma }}</td>
           <td colspan="2"></td>
         </tr>
         <tr class="add-category" v-if="canEdit">
           <td colspan="5">
             <md-button class="md-simple add-category-btn" @click="showCategoryModal = true">
               <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2019.svg" />
-              Add new category
+              Add new categoryd
             </md-button>
           </td>
         </tr>
       </tbody>
     </table>
 
-    <add-new-category-modal
-      v-if="showCategoryModal"
-      :event="event"
-      :components="filteredEventBlocks"
-      @cancel="showCategoryModal = false"
-      @save="addBuildingBlock"
-    ></add-new-category-modal>
-
-    <!-- <modal v-if="showCategoryModal" class="add-category-model">
+    <modal v-if="showCategoryModal" class="add-category-model">
       <template slot="header">
         <div class="add-category-model__header">
           <h2 class="font-size-30 font-bold-extra">
@@ -407,7 +405,7 @@
           >Add Category</md-button
         >
       </template>
-    </modal> -->
+    </modal>
     <budget-handle-minus-modal
       v-if="showMinusHandleModal"
       :value="overAddedValue"
@@ -416,8 +414,6 @@
     <add-my-vendor-modal
       v-if="showAddMyVendor"
       :value="overAddedValue"
-      :event="event"
-      :selectedComponent="selectedComponent"
       @select="handleMinusBudget"
       @remindLater="showAddMyVendor = false"
       @updateVendor="updateVendor"
@@ -432,6 +428,7 @@ import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
 import EventCategory from "@/models/EventCategory";
+import EventComponentVendor from "@/models/EventComponentVendor";
 import EventComponentTodo from "@/models/EventComponentTodo";
 import EventComponentValue from "@/models/EventComponentValue";
 import Occasion from "@/models/Occasion";
@@ -449,7 +446,7 @@ import BudgetHandleMinusModal from "@/components/Modals/BudgetHandleMinusModal";
 import AddMyVendorModal from "@/components/Modals/AddMyVendorModal";
 import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 import EventComponentVendorItem from "./Utilities/EventComponentVendorItem";
-import AddNewCategoryModal from "@/components/Modals/AddNewCategoryModal";
+
 import swal from "sweetalert2";
 
 export default {
@@ -465,9 +462,14 @@ export default {
     EventComponentVendorItem,
     Popup,
     MaryokuInput,
-    AddNewCategoryModal,
   },
   props: {
+    event: {
+      type: Object,
+      default: () => {
+        return { statistics: {} };
+      },
+    },
     eventComponents: [Array, Function],
     type: {
       type: String,
@@ -520,9 +522,6 @@ export default {
     ...mapGetters({
       components: "event/getComponentsList",
     }),
-    event() {
-      return this.$store.state.event.eventData;
-    },
     permission() {
       try {
         return this.$store.state.event.eventData.permit;
@@ -536,15 +535,15 @@ export default {
     canEdit() {
       return !this.permission || this.permission === "edit";
     },
-    bookedTotal() {
+    allocatedTotal() {
       const addedBudget = this.eventBuildingBlocks.reduce((sum, item) => {
         return sum + item.bookedBudget;
       }, 0);
       return addedBudget; //+ this.event.allocatedTips + this.event.allocatedFees;
     },
     unusedBudget() {
-      console.log("allocatedBUdgtet", this.bookedTotal);
-      return this.event.totalBudget - this.bookedTotal;
+      console.log("allocatedBUdgtet", this.allocatedTotal);
+      return this.event.totalBudget - this.allocatedTotal;
     },
   },
   methods: {
@@ -664,7 +663,7 @@ export default {
       vm.totalBudgetTaxes = 0;
 
       let res = this.event.components;
-      res.sort((a, b) => a.order - b.order);
+
       this.$set(this, "eventBuildingBlocks", res);
 
       setTimeout(() => {
@@ -734,35 +733,31 @@ export default {
         cancelButtonText: "No, take me back",
         buttonsStyling: false,
       }).then((result) => {
+        let event = new CalendarEvent({ id: this.event.id });
+        let selected_block = new EventComponent({ id: block.id });
+
+        selected_block.calendarEvent = block.calendarEvent;
+        selected_block.componentId = block.componentId;
+        selected_block.icon = block.icon;
+        selected_block.color = block.color;
+        selected_block.todos = block.todos;
+        selected_block.values = block.values;
+        selected_block.vendors = block.vendors;
+
+        if (block.allocatedBudget && block.numberOfParticipants) {
+          selected_block.allocatedBudget =
+            this.type === "total" ? block.newBudget : block.newBudget * block.numberOfParticipants;
+          block.allocatedBudget =
+            this.type === "total" ? block.newBudget : block.newBudget * block.numberOfParticipants;
+        } else {
+          selected_block.allocatedBudget =
+            this.type === "total" ? block.newBudget : block.newBudget * this.event.numberOfParticipants;
+          block.allocatedBudget =
+            this.type === "total" ? block.newBudget : block.newBudget * this.event.numberOfParticipants;
+        }
         if (result.dismiss != "cancel") {
-          let event = new CalendarEvent({ id: this.event.id });
-          let selected_block = new EventComponent({ id: block.id });
-
-          selected_block.calendarEvent = block.calendarEvent;
-          selected_block.componentId = block.componentId;
-          selected_block.icon = block.icon;
-          selected_block.color = block.color;
-          selected_block.todos = block.todos;
-          selected_block.values = block.values;
-          selected_block.vendors = block.vendors;
-
-          block.newBudget = Number(block.newBudget.replace(/,/g, ""));
-          let offsetBudget = block.newBudget - block.allocatedBudget;
-
-          if (block.allocatedBudget && block.numberOfParticipants) {
-            selected_block.allocatedBudget =
-              this.type === "total" ? block.newBudget : block.newBudget * block.numberOfParticipants;
-            block.allocatedBudget =
-              this.type === "total" ? block.newBudget : block.newBudget * block.numberOfParticipants;
-          } else {
-            selected_block.allocatedBudget =
-              this.type === "total" ? block.newBudget : block.newBudget * this.event.numberOfParticipants;
-            block.allocatedBudget =
-              this.type === "total" ? block.newBudget : block.newBudget * this.event.numberOfParticipants;
-          }
-
           selected_block
-            .for(this.event)
+            .for(this.calendar, event)
             .save()
             .then((resp) => {
               this.isLoading = false;
@@ -778,38 +773,18 @@ export default {
                 }
               });
 
-              // this.allocatedBudget = allocatedBudget;
-              // if (this.event.totalBudget < this.allocatedBudget) {
-              //   console.log(this.totalBudget);
-              //   this.showMinusHandleModal = true;
-              //   this.overAddedValue = this.allocatedBudget - this.event.totalBudget;
-              // }
-              const event = new CalendarEvent({
-                id: this.event.id,
-                calendar: new Calendar({ id: this.event.calendar.id }),
-              });
-
-              // planer has extra budget
-              if (this.event.unexpectedBudget + this.event.allocatedTips < offsetBudget) {
+              this.allocatedBudget = allocatedBudget;
+              if (this.event.totalBudget < this.allocatedBudget) {
+                console.log(this.totalBudget);
                 this.showMinusHandleModal = true;
-              } else {
-                if (this.event.unexpectedBudget < offsetBudget) {
-                  offsetBudget -= offsetBudget - this.event.unexpectedBudget;
-                  event.unexpectedBudget = 0;
-                  event.allocatedTips = this.allocatedTips - offsetBudget;
-                } else {
-                  event.unexpectedBudget = this.event.unexpectedBudget - offsetBudget;
-                }
+                this.overAddedValue = this.allocatedBudget - this.event.totalBudget;
               }
-              this.$store.dispatch("event/saveEventAction", event).then((res) => {});
-
               this.showEditElementBudget(block);
               this.$emit("change");
             })
             .catch((error) => {
               console.log(error);
             });
-        } else {
         }
       });
     },
@@ -970,9 +945,46 @@ export default {
       }
     },
 
-    addBuildingBlock() {
-      this.showCategoryModal = false;
-      this.$emit("change");
+    async addBuildingBlock() {
+      if (this.remainingBudget < this.newBuildingBlock.budget) {
+        return;
+      }
+
+      //let newComponent = _.findWhere(this.components, {title: this.newBuildingBlock.category})
+      let newComponent = this.newBuildingBlock.category;
+      if (newComponent.id === "other") {
+        const newCategory = {
+          title: `Other-${this.newBuildingBlock.name}`,
+          key: `other-${this.newBuildingBlock.name.toLowerCase()}`,
+          color: `rgb(${parseInt(Math.random() * 255)}, ${parseInt(Math.random() * 255)}, ${parseInt(
+            Math.random() * 255,
+          )})`,
+          icon: `other.svg`,
+          type: "customized",
+          categoryId: "other",
+        };
+        newComponent = await new EventCategory(newCategory).save();
+      }
+      let newBlock = {
+        componentId: newComponent ? newComponent.key : "other",
+        componentCategoryId: newComponent ? newComponent.key : "other",
+        calendarEvent: { id: this.event.id },
+        allocatedBudget: this.newBuildingBlock.budget,
+        order: this.event.components.length,
+        icon: newComponent.icon,
+        category: newComponent,
+      };
+
+      new EventComponent(newBlock)
+        .for(this.calendar, this.event)
+        .save()
+        .then((res) => {
+          this.showCategoryModal = false;
+          this.$emit("change");
+        })
+        .catch((error) => {
+          console.log("Error while saving ", error);
+        });
     },
     getCategoryBlocks() {
       EventComponent.get()
@@ -1040,13 +1052,56 @@ export default {
       this.showMinusHandleModal = false;
     },
     async updateVendor(myVendor) {
-      this.showAddMyVendor = false;
-      let event = new CalendarEvent({
-        id: this.event.id,
-        bookedBudget: this.event.bookedBudget + Number(myVendor.cost.replace(/,/g, "")),
-      });
-      this.$store.dispatch("event/saveEventAction", event);
-      this.$emit("change");
+      let event = new CalendarEvent({ id: this.event.id });
+      let selectedBlock = new EventComponent({ id: this.selectedComponent.id });
+
+      myVendor.vendorCategory = this.selectedComponent.componentId;
+      if (myVendor.attachment) {
+        let formData = new FormData();
+        formData.append("file", myVendor.attachment);
+        formData.append("from", "eventvendor");
+        formData.append("type", "attachment");
+        formData.append("name", myVendor.attachment.name);
+        const result = await this.$http.post(`${process.env.SERVER_URL}/uploadFile`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        myVendor.attachments = [
+          {
+            originalName: myVendor.attachment.name,
+            url: result.data.upload.path,
+            name: result.data.upload.name,
+          },
+        ];
+      }
+
+      // Add new Vendors
+      new EventComponentVendor(myVendor)
+        .save()
+        .then((newVendor) => {
+          this.isLoading = false;
+
+          // Add new Vendors to component
+          const eventComponentVendor = {
+            vendorId: newVendor.item.id,
+            cost: myVendor.cost,
+            eventComponentInstance: this.selectedComponent,
+            rfpStatus: new Date().getTime(),
+            attachments: myVendor.attachments,
+          };
+          new EventComponentVendor(eventComponentVendor)
+            .for(this.calendar, event, selectedBlock)
+            .save()
+            .then((result) => {
+              this.showAddMyVendor = false;
+              this.$emit("change");
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isLoading = false;
+        });
     },
     updateTips() {
       let event = new CalendarEvent({

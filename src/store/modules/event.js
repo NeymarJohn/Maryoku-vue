@@ -65,7 +65,7 @@ const actions = {
         console.log(event);
         return new Promise((resolve, reject) => {
             event
-                // .for(event.calendar)
+                .for(event.calendar)
                 .save()
                 .then(res => {
                     commit("setEventData", res);

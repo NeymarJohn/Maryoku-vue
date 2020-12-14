@@ -10,15 +10,17 @@
       <div :class="`images-list__item ${border}`" v-for="indx in 5" :key="indx">
         <div
           class="image-section d-flex justify-content-center align-center text-center"
-          :style="`background-image:url(${images[indx - 1].thumb_url || images[indx - 1].url})`"
+          :style="`background-image:url(${images[indx - 1].url})`"
           :for="`file-${indx}`"
         ></div>
       </div>
     </div>
+    <img :src="imageData" />
   </div>
 </template>
 <script>
 import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 export default {
   data() {
     return {
@@ -39,7 +41,25 @@ export default {
       default: "",
     },
   },
-  created() {},
+  created() {
+    /** WITH CSS */
+    setTimeout(() => {
+      var canvasElement = document.createElement("canvas");
+      canvasElement.height = 500;
+      canvasElement.width = 1000;
+      html2canvas(this.$refs.content, {
+        canvas: canvasElement,
+        scale: 1,
+      }).then((canvas) => {
+        const img = canvas.toDataURL("image/png");
+
+        this.imageData = img;
+        // console.log(img);
+        // doc.addImage(img, "PNG", 20, -10);
+        // doc.save("sample.pdf");
+      });
+    }, 10000);
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -87,7 +107,7 @@ export default {
     }
     .image-section {
       background-size: cover !important;
-      background-position: center center;
+      background-position: center top;
     }
     &:first-child {
       top: 70px;

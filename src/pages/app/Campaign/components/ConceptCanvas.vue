@@ -63,7 +63,6 @@ export default {
             if (this.completedImages === 5) {
               var dataURL = document.getElementById("concept-area").toDataURL();
               this.renderedImage = dataURL;
-              this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "coverImage", value: dataURL });
               console.log(dataURL);
             }
           };

@@ -1,5 +1,5 @@
 <template>
-  <modal class="add-vendor-modal">
+  <modal class="add-vendor-model">
     <template slot="header">
       <div class="maryoku-modal-header">
         <h2>Add my vendor</h2>
@@ -93,12 +93,6 @@
             </button>
           </div>
         </div>
-        <div class="md-layout-item md-size-100 form-group maryoku-field mt-30" v-if="this.errorMessage">
-          <div class="error-message">
-            <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" />
-            {{ this.errorMessage }}
-          </div>
-        </div>
       </div>
     </template>
     <template slot="footer">
@@ -113,9 +107,7 @@
 <script>
 import { Modal, MaryokuInput, LocationInput } from "@/components";
 import VueElementLoading from "vue-element-loading";
-import CalendarEvent from "@/models/CalendarEvent";
-import EventComponent from "@/models/EventComponent";
-import EventComponentVendor from "@/models/EventComponentVendor";
+
 export default {
   name: "add-vendor-modal",
   components: {
@@ -127,8 +119,6 @@ export default {
   props: {
     show: [Boolean],
     value: [Number],
-    event: Object,
-    selectedComponent: Object,
   },
   data: () => {
     return {
@@ -137,7 +127,6 @@ export default {
       currentAttachments: [],
       isLoading: false,
       isValid: false,
-      errorMessage: "",
       editingVendor: {
         vendorDisplayName: "",
         cost: "",
@@ -177,65 +166,9 @@ export default {
       let files = event.target.files || event.dataTransfer.files;
       this.editingVendor.attachment = files[0];
     },
-    async updateMyVendor() {
-      let event = new CalendarEvent({ id: this.event.id });
-      let selectedBlock = new EventComponent({ id: this.selectedComponent.id });
-      const myVendor = { ...this.editingVendor, companyName: this.editingVendor.vendorDisplayName };
-
-      myVendor.vendorCategory = this.selectedComponent.componentId;
-      if (myVendor.attachment) {
-        let formData = new FormData();
-        formData.append("file", myVendor.attachment);
-        formData.append("from", "eventvendor");
-        formData.append("type", "attachment");
-        formData.append("name", myVendor.attachment.name);
-        const result = await this.$http.post(`${process.env.SERVER_URL}/uploadFile`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        myVendor.attachments = [
-          {
-            originalName: myVendor.attachment.name,
-            url: result.data.upload.path,
-            name: result.data.upload.name,
-          },
-        ];
-      }
-
-      // Add new Vendors
-      new EventComponentVendor(myVendor)
-        .save()
-        .then((newVendor) => {
-          this.isLoading = false;
-
-          // Add new Vendors to component
-          const eventComponentVendor = {
-            vendorId: newVendor.item.id,
-            cost: myVendor.cost,
-            eventComponentInstance: this.selectedComponent,
-            rfpStatus: new Date().getTime(),
-            attachments: myVendor.attachments,
-          };
-          new EventComponentVendor(eventComponentVendor)
-            .for(event, selectedBlock)
-            .save()
-            .then((result) => {
-              this.errorMessage = "";
-              this.$emit("updateVendor", { ...this.editingVendor, companyName: this.editingVendor.vendorDisplayName });
-            });
-        })
-        .catch((error) => {
-          console.log(error);
-          this.isLoading = false;
-          if (error.response) {
-            if (error.response.status === 422) {
-              this.errorMessage = "This vendor alreday exists.";
-            } else {
-              this.errorMessage = "Your request is not succeeded. Please try later";
-            }
-          }
-        });
+    updateMyVendor() {
+      this.isLoading = true;
+      this.$emit("updateVendor", { ...this.editingVendor, companyName: this.editingVendor.vendorDisplayName });
     },
     validate() {
       this.$validator
@@ -251,15 +184,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.add-vendor-modal {
-  .error-message {
-    background-color: #ffe5ec;
-    padding: 10px;
-    img {
-      width: 20px;
-    }
-  }
-}
 .maryoku-modal-body {
   padding: 0 5px;
 }

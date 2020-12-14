@@ -402,7 +402,6 @@ export default {
     },
     services: {
       get: function () {
-        console.log(this.category);
         if (this.tableCategory === "cost") return this.$store.state.vendorProposal.proposalCostServices[this.category];
         else if (this.tableCategory === "included")
           return this.$store.state.vendorProposal.proposalIncludedServices[this.category];
@@ -410,7 +409,6 @@ export default {
           return this.$store.state.vendorProposal.proposalExtraServices[this.category];
       },
       set: function (newServices) {
-        console.log(this.category);
         if (this.tableCategory === "cost")
           this.$store.commit("vendorProposal/setCostServices", { category: this.category, services: newServices });
         else if (this.tableCategory === "included")

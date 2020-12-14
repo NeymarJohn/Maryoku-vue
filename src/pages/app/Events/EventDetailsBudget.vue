@@ -27,7 +27,7 @@
               </div>
               <div class="budget-list__item">
                 <div class="label-title">Allocated</div>
-                <div class="budget-value">${{ allocatedTotalBudget | roundNumber | withComma }}</div>
+                <div class="budget-value">${{ statistics.allocated | roundNumber | withComma }}</div>
                 <div class="percent">{{ ((statistics.allocated * 100) / calendarEvent.totalBudget).toFixed(1) }} %</div>
               </div>
               <div class="budget-list__item">
@@ -495,14 +495,6 @@ export default {
         }
       });
       return savedAmount;
-    },
-    allocatedTotalBudget() {
-      return (
-        this.calendarEvent.totalBudget -
-        this.calendarEvent.unexpectedBudget -
-        this.calendarEvent.allocatedTips -
-        this.calendarEvent.allocatedFees
-      );
     },
   },
   filters: {

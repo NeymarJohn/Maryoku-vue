@@ -204,6 +204,7 @@ export default {
     // warning: Boolean,
     // isEdit: Boolean,
     step: Number,
+    proposalRequest: Object,
     services: Array,
   },
   data() {
@@ -283,6 +284,17 @@ export default {
         console.log(sum);
         return sum + item.price * item.requirementValue;
       }, 0);
+      // requirements.map(function (item) {
+      //   if (item.price) {
+      //     if (item.priceUnit === "total") {
+      //       total += parseFloat(String(item.price).replace(/,/g, ""));
+      //     } else {
+      //       if (vm.newProposalRequest != undefined) {
+      //         total += parseFloat(String(item.price).replace(/,/g, ""));
+      //       }
+      //     }
+      //   }
+      // });
       return total;
     },
     calculatedTotal(requirements) {
@@ -344,12 +356,19 @@ export default {
       this.discountBlock = discountBlock;
     });
 
+    // this.$root.$on("update-additional-services", (category) => {
+    //   const additionalServicesBlock = VendorService.categoryNameWithIcons();
+    //   const selectedBlock = additionalServicesBlock.filter((a) => a.name == category)[0];
+
+    //   if (this.additionalServices.filter((a) => a.name == category).length > 0) {
+    //     this.additionalServices = this.additionalServices.filter((a) => a.name != category);
+    //   } else {
+    //     this.additionalServices.push(selectedBlock);
+    //   }
+    // });
     this.$forceUpdate();
   },
   computed: {
-    proposalRequest() {
-      return this.$store.state.vendorProposal.proposalRequest;
-    },
     vendor() {
       return this.$store.state.vendorProposal.vendor;
     },
