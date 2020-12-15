@@ -1,50 +1,33 @@
 <template>
   <div class="event-component-vedor-item">
-    <div class="vendor-title">{{ vendor.vendor.vendorDisplayName }}</div>
+    <div class="vendor-title">{{vendor.vendor.vendorDisplayName}}</div>
     <div class="vendor-actions">
-      <md-button class="md-button md-red md-simple md-theme-default edit-btn-1" @click="viewContract(vendor)"
-        >View Contract</md-button
-      >
-      <div style="position: relative">
+      <md-button
+        class="md-button md-red md-simple md-theme-default edit-btn-1"
+        @click="viewContract(vendor)"
+      >View Contract</md-button>
+      <div style="position:relative">
         <md-button class="md-button md-black md-simple md-theme-default edit-btn-1">Request Changes</md-button>
         <span class="divider"></span>
-        <md-button class="md-button md-black md-simple md-theme-default edit-btn-1" @click="cancelModalOpened = true"
-          >Cancel Vendor</md-button
-        >
+        <md-button class="md-button md-black md-simple md-theme-default edit-btn-1">Cancel Vendor</md-button>
       </div>
     </div>
-    <vendor-cancel-modal
-      v-if="cancelModalOpened"
-      :categoryItem="categoryItem"
-      :vendor="vendor"
-      @cancel="cancelModalOpened = false"
-      @deleteVendor="deleteVendor"
-    ></vendor-cancel-modal>
   </div>
 </template>
 <script>
-import VendorCancelModal from "@/components/Modals/VendorCancelModal";
-
 export default {
   name: "event-component-vendor-item",
-  components: {
-    VendorCancelModal,
-  },
   props: {
     vendor: Object,
-    categoryItem: Object,
-  },
-  data() {
-    return {
-      cancelModalOpened: false,
-    };
   },
   methods: {
     viewContract(vendor) {
       console.log(vendor);
-      window.open(`https://static-maryoku.s3.amazonaws.com/${vendor.attachments[0].url}`, "_blank");
+      window.open(
+        `https://static-maryoku.s3.amazonaws.com/${vendor.attachments[0].url}`,
+        "_blank",
+      );
     },
-    deleteVendor(vendor) {},
   },
 };
 </script>

@@ -1,15 +1,9 @@
 <template>
   <transition name="modal">
-    <div
-      class="modal-mask"
-      @click="modalMaskClick"
-      @dragstart="modalMaskClick"
-      @dragenter="modalMaskClick"
-      @dragover="modalMaskClick"
-      @dragleave="modalMaskClick"
-    >
+    <div class="modal-mask">
       <div class="modal-wrapper">
         <div :class="containerClass" v-click-outside="closeModal">
+
           <div class="modal-header">
             <slot name="header"></slot>
           </div>
@@ -32,25 +26,21 @@ export default {
   props: {
     containerClass: {
       type: String,
-      default: "modal-container",
+      default: 'modal-container'
     },
     allowClickOutside: {
       type: Boolean,
-      default: true,
-    },
+      default: true
+    }
   },
   methods: {
     closeModal: function () {
       if (this.allowClickOutside) {
-        this.$emit("close");
+        this.$emit('close')
       }
-    },
-    modalMaskClick: function (event) {
-      event.stopPropagation();
-      return;
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="scss">
@@ -72,7 +62,8 @@ export default {
 }
 
 .modal-enter .modal-container-wizard,
-.modal-leave-active .modal-container-wizard .modal-enter .modal-container,
+.modal-leave-active .modal-container-wizard
+.modal-enter .modal-container,
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);

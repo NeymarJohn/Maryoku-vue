@@ -157,7 +157,7 @@ export default {
     ...mapState("PublicEventPlanner", ["publicEventData"]),
     formattedString() {
       if (this.publicEventData.numberOfParticipants === null) return "Not Sure";
-      return `${this.publicEventData.numberOfParticipants}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      return this.publicEventData.numberOfParticipants.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
   },
 };

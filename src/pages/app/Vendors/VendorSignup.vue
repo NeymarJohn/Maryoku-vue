@@ -264,13 +264,16 @@ export default {
   filters: {},
   watch: {
     vendor(newVal) {
-      // console.log("vendor.signup.watch.vendor", newVal);
+      console.log("vendor.signup.watch.vendor", newVal);
     },
     step(newVal) {
       console.log("vendor.signup.watch.step", newVal);
       if (this.step === 7) this.addVendor();
     },
   },
+  beforeDestroy() {
+    this.$root.$off("update-vendor-value");
+  }
 };
 </script>
 <style lang="scss" scoped>
