@@ -88,7 +88,7 @@ export default {
      * Data binding
      * @model
      */
-    value: String,
+    value: [String, Number],
     name: String,
     srcLogo: String,
     type: String,
@@ -228,21 +228,18 @@ export default {
     content: function (newValue) {
       this.inputClass = `${this.inputStyle} ${this.value ? "active" : ""} ${this.size}`;
       if (this.inputStyle === "budget" || this.inputStyle === "users") {
-        const result = newValue.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        this.content = result;
+        const result = Number(newValue.replace(/,/g, ""));
+        this.$emit("input", result);
+      } else {
+        this.$emit("input", this.content);
       }
-      console.log(this.content);
-      this.$emit("input", this.content);
-    },
-    dateData: function (newValue) {
-      // this.content = dateData.selectedDate
-    },
-    timeInfo: function (newValue) {
-      console.log(newValue);
-      // this.content = newValue
     },
     value: function (newValue) {
-      this.content = newValue;
+      if (this.inputStyle === "budget" || this.inputStyle === "users") {
+        this.content = `${newValue}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      } else {
+        this.content = newValue;
+      }
     },
   },
 };

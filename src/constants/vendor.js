@@ -79,13 +79,6 @@ export const businessCategories = [
                 value: 1,
                 xIncluded: true,
               },
-              {
-                name: 'coat check',
-                type: Boolean,
-                value: null,
-                xIncluded: false,
-                comment: true,
-              }
             ]
           },
           {
@@ -126,13 +119,6 @@ export const businessCategories = [
                 value: false,
                 xIncluded: true,
               },
-              {
-                name: "light effects",
-                type: Boolean,
-                value: false,
-                xIncluded: false,
-                comment: true,
-              }
             ]
           },
           {
@@ -357,12 +343,6 @@ export const businessCategories = [
                 type: Boolean,
                 value: false
               },
-              {
-                name: 'staff : guest ratio',
-                type: 'Ratio',
-                staff: null,
-                quest: null,
-              }
             ]
           }
         ]
@@ -374,21 +354,18 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'green policy applied',
+                name: 'Green policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols in place',
+                name: 'Water saving protocols',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'We use Green power and energy efficient',
+                name: 'Green power and energy efficient',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
@@ -682,12 +659,6 @@ export const businessCategories = [
                 type: Boolean,
                 value: false
               },
-              {
-                name: 'staff : guest ratio',
-                type: 'Ratio',
-                staff: null,
-                quest: null,
-              }
             ]
           },
           {
@@ -757,21 +728,18 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'green policy applied',
+                name: 'Green policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols in place',
+                name: 'Water saving protocols',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'We use Green power and energy efficient',
+                name: 'Green power and energy efficient',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
@@ -1000,21 +968,18 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'green policy applied',
+                name: 'Green policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols in place',
+                name: 'Water saving protocols',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'We use Green power and energy efficient',
+                name: 'Green power and energy efficient',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
@@ -1200,21 +1165,18 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'green policy applied',
+                name: 'Green policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols in place',
+                name: 'Water saving protocols',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'We use Green power and energy efficient',
+                name: 'Green power and energy efficient',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
@@ -1408,21 +1370,18 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'green policy applied',
+                name: 'Green policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols in place',
+                name: 'Water saving protocols',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'We use Green power and energy efficient',
+                name: 'Green power and energy efficient',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
@@ -1619,21 +1578,18 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'green policy applied',
+                name: 'Green policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols in place',
+                name: 'Water saving protocols',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'We use Green power and energy efficient',
+                name: 'Green power and energy efficient',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
@@ -1756,12 +1712,6 @@ export const businessCategories = [
                 type: String,
                 value: ''
               },
-              {
-                name: 'staff : guest ratio',
-                type: 'Ratio',
-                staff: null,
-                quest: null,
-              }
             ]
           }
         ]
@@ -1813,21 +1763,18 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'green policy applied',
+                name: 'Green policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols in place',
+                name: 'Water saving protocols',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'We use Green power and energy efficient',
+                name: 'Green power and energy efficient',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
@@ -2132,21 +2079,18 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'green policy applied',
+                name: 'Green policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols in place',
+                name: 'Water saving protocols',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'We use Green power and energy efficient',
+                name: 'Green power and energy efficient',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
@@ -2317,21 +2261,18 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'green policy applied',
+                name: 'Green policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols in place',
+                name: 'Water saving protocols',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'We use Green power and energy efficient',
+                name: 'Green power and energy efficient',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
@@ -2516,21 +2457,18 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'green policy applied',
+                name: 'Green policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols in place',
+                name: 'Water saving protocols',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'We use Green power and energy efficient',
+                name: 'Green power and energy efficient',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
@@ -2709,21 +2647,18 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'green policy applied',
+                name: 'Green policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols in place',
+                name: 'Water saving protocols',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'We use Green power and energy efficient',
+                name: 'Green power and energy efficient',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
@@ -2948,21 +2883,18 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'green policy applied',
+                name: 'Green policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols in place',
+                name: 'Water saving protocols',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
-                name: 'We use Green power and energy efficient',
+                name: 'Green power and energy efficient',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {

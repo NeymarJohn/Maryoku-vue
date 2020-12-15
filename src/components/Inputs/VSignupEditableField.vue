@@ -46,11 +46,15 @@
 </template>
 <script>
 import VueElementLoading from "vue-element-loading";
+import VueGoogleAutocomplete from "vue-google-autocomplete";
+import VSignupCategorySelector from "./VSignupCategorySelector";
 import VSignupAddressEditor from "./VSignupAddress";
 export default {
   name: "v-signup-editable-field",
   components: {
     VueElementLoading,
+    VueGoogleAutocomplete,
+    VSignupCategorySelector,
     VSignupAddressEditor,
   },
   props: {
@@ -88,6 +92,11 @@ export default {
   methods: {
     save() {
       this.isEdit = false;
+      // if (this.title == "Business Category") {
+      //   this.$root.$emit("update-vendor-value", "vendorCategory", this.value);
+      // } else {
+      //   this.$root.$emit("update-vendor-value", this.field, this.value);
+      // }
       this.$root.$emit("update-vendor-value", this.field, this.value);
     },
     updateCategory(category) {
@@ -108,9 +117,6 @@ export default {
       }
     },
   },
-  beforeDestroy() {
-    this.$root.$off('update-vendor-value');
-  }
 };
 </script>
 <style lang="scss" scoped>

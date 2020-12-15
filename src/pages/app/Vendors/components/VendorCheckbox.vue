@@ -127,25 +127,6 @@
 
       </div>
     </template>
-    <template v-if="item.type == 'Ratio'">
-      <div class="main">
-        <div class="check-cont">
-          <div class="flex"@click="updateCheck()">
-
-            <img v-if="checked" class="mr-20" :src="iconUrl + 'Group 6258.svg'" width="27">
-            <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27">
-            {{ label }}
-          </div>
-        </div>
-        <div class="included-cont" v-if="checked">
-          <div class="d-flex align-center">
-            <input class="mr-10 w-max-120" type="number" placeholder="Staff" v-model="currentItem.staff" />
-            <div class="font-size-30">:</div>
-            <input class="ml-10 w-max-120" type="number" placeholder="Guest" v-model="currentItem.quest" />
-          </div>
-        </div>
-      </div>
-    </template>
   </div>
 </template>
 
