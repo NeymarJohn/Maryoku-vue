@@ -2,9 +2,8 @@
   <div class="vendor-service-item-wrapper">
     <div class="title-cont">
       <div class="title" @click="collapsed = !collapsed">{{ serviceItem.name }}</div>
-      <div class="help d-flex align-start mr-20" v-if="!collapsed">
-        <div v-if="serviceItem.name === 'Sustainability, Inclusion and Diversity'">Do you comply with global policies to maintain green, inclusive and diversified environment?</div>
-        <div v-else>Are all these included in your starting offer?</div>
+      <div class="help" v-if="!collapsed">
+        Are all these included in your starting offer?
         <img
           :src="`${iconUrl}Group 5522 (2).svg`"
           @mouseover="conditionTooltip = true"
@@ -59,6 +58,7 @@ export default {
   },
   created() {},
   mounted() {
+    console.log("vendorService", this.serviceItem);
   },
   methods: {},
   computed: {},
@@ -117,9 +117,8 @@ export default {
           width: 0;
           height: 0;
           top: 4px;
-          /*left: 60px;*/
+          left: 60px;
           box-sizing: border-box;
-          z-index: 999;
 
           border: 12px solid black;
           border-color: transparent transparent #ffedb7 #ffedb7;

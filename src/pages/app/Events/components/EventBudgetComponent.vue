@@ -101,7 +101,7 @@ export default {
       });
     },
     updateComponent() {
-      this.component.allocatedBudget = Number(this.newBudget.replace(/,/g, ""));
+      this.component.allocatedBudget = this.newBudget;
       this.isEditing = false;
       this.$emit("updateCategory", {
         category: this.component,

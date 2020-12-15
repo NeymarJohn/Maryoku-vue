@@ -162,12 +162,12 @@ export default {
     selectedValue: [],
   }),
   mounted() {
-    // console.log("signup.category.selector.mounted", this.value)
+    console.log("signup.category.selector.mounted", this.value)
     this.selectedValue = this.value;
   },
   methods: {
     updateCategory(index, data) {
-      // console.log('updateCategory', index, data);
+      console.log('updateCategory', index, data);
       this.selectedValue[index] = data;
     },
     save() {
@@ -176,20 +176,20 @@ export default {
     },
     addNewValue(){
       this.selectedValue.push('');
-      // console.log("addNewValue", this.selectedValue);
+      console.log("addNewValue", this.selectedValue);
       this.$root.$emit("update-vendor-value", this.field, this.selectedValue);
     },
     removeValue(index){
       this.$root.$emit("update-vendor-value", this.field, this.selectedValue.filter((s, sIdx) => index !== sIdx));
     },
     getAddressData: function (index, addressData, placeResultData, id) {
-      // console.log("getAddressData", index, addressData, id);
+      console.log("getAddressData", index, addressData, id);
       this.selectedValue[index] = `${addressData.route}, ${addressData.administrative_area_level_1}, ${addressData.country}`;
     },
   },
   watch: {
     value(newValue){
-      // console.log("signup.category.selector.watch", newValue, this.field);
+      console.log("signup.category.selector.watch", newValue, this.field);
       this.selectedValue = newValue;
     }
   }

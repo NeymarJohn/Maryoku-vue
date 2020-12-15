@@ -166,9 +166,6 @@ export default {
     };
   },
   methods: {
-    selectOption() {
-      this.$emit("select", this.selectedOption, this.value);
-    },
     remindLater() {
       this.$emit("remindLater");
     },

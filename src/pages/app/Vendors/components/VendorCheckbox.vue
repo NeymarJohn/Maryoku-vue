@@ -33,25 +33,6 @@
       <div class="sub-cont" v-if="checked" :class="{ 'mt-m3': !included }">
         <textarea class="text" v-model="currentItem.desc" :placeholder="`Add additional information`" />
       </div>
-      <div class="main mt-10" v-if="checked && item.hasOwnProperty('dry')">
-        <div class="check-cont" style="padding-left: 3rem">
-          Allow dry run
-        </div>
-        <div class="included-cont">
-          <div class="included" :class="{ active: currentItem.dry }" @click="currentItem.dry = true">
-            <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="currentItem.dry" />
-            <span class="unchecked" v-else></span>
-            <span>Yes</span>
-          </div>
-          <div class="flex-1 mr-m1">
-            <div class="included" :class="{ active: currentItem.dry === false }" @click="currentItem.dry = false">
-              <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="currentItem.dry === false" />
-              <span class="unchecked" v-else></span>
-              <span>No</span>
-            </div>
-          </div>
-        </div>
-      </div>
     </template>
     <template v-if="item.type == Number">
       <div class="main">
@@ -113,9 +94,7 @@
         <textarea class="text" v-model="currentItem.desc" :placeholder="`Add additional information`" />
       </div>
     </template>
-    <template v-if="item.type == 'Cost'"
-              
-    <template v-if="item.type == 'Ratio'">
+    <template v-if="item.type == 'Cost'">
       <div class="main">
         <div class="check-cont">
           <div class="flex"@click="updateCheck()">
@@ -125,13 +104,27 @@
             {{ label }}
           </div>
         </div>
-        <div class="included-cont" v-if="checked">
-          <div class="d-flex align-center">
-            <input class="mr-10 w-max-120" type="number" placeholder="Staff" v-model="currentItem.staff" />
-            <div class="font-size-30">:</div>
-            <input class="ml-10 w-max-120" type="number" placeholder="Guest" v-model="currentItem.quest" />
+        <div class="included-cont" v-if="checked && !item.xIncluded">
+          <div class="included" :class="{ active: included }" @click="updateIncluded()">
+            <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="included" />
+            <span class="unchecked" v-else></span>
+            <span>Included</span>
+          </div>
+          <div class="flex-1 mr-m1">
+            <div class="included" :class="{ active: !included }" @click="updateIncluded()">
+              <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!included" />
+              <span class="unchecked" v-else></span>
+              <span>Not included</span>
+            </div>
           </div>
         </div>
+        <div class="included-cont" v-if="checked && !included">
+          <div class="extra-field">
+            Extra payment
+            <input type="number" class="mt-20" placeholder="00.00" v-model="currentItem.value" />
+          </div>
+        </div>
+
       </div>
     </template>
   </div>
@@ -169,7 +162,6 @@ export default {
         included: true,
         value: null,
         desc: null,
-        dry: null,
       },
       exChecked: [],
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
@@ -185,7 +177,6 @@ export default {
         this.checked = item.checked;
         this.currentItem.value = JSON.stringify(item.value);
         this.currentItem.desc = item.desc;
-        this.currentItem.dry = item.dry;
         this.exChecked = item.value;
 
       }
@@ -200,7 +191,6 @@ export default {
       this.$root.$emit("update-vendor-value", `services.${this.camelize(this.label)}`, this.currentItem);
     },
     updateCheck() {
-      console.log('check', this.item, this.currentItem)
       this.checked = !this.checked;
       this.currentItem.checked = this.checked;
       this.$root.$emit("update-vendor-value", `services.${this.camelize(this.label)}`, this.currentItem);
