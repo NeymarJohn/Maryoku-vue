@@ -88,7 +88,7 @@
         v-if="showBudgetModal"
         :event="event"
         @cancel="showBudgetModal = false"
-        @save="updateBudget"
+        @save="updateTotalBudget"
       ></budget-edit-modal>
       <modal v-if="budgetConfirmationModal" class="add-category-model">
         <template slot="header">
@@ -412,6 +412,16 @@ export default {
       } else {
         this.showBudgetModal = false;
       }
+    },
+    updateTotalBudget(newBudget) {
+      const event = new CalendarEvent({
+        id: this.event.id,
+        totalBudget: newBudget.totalBudget,
+        unexpectedBudget: this.event.unexpectedBudget + (newBudget.totalBudget - this.event.totalBudget),
+      });
+      this.$store.dispatch("event/saveEventAction", event).then((res) => {
+        this.showBudgetModal = false;
+      });
     },
     onChangeComponent(event) {
       this.getEvent();
