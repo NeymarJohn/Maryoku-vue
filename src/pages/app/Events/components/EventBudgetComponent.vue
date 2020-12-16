@@ -101,7 +101,7 @@ export default {
       });
     },
     updateComponent() {
-      this.component.allocatedBudget = Number(this.newBudget.replace(/,/g, ""));
+      this.component.allocatedBudget = this.newBudget;
       this.isEditing = false;
       this.$emit("updateCategory", {
         category: this.component,
@@ -149,6 +149,8 @@ export default {
       max-width: 22px;
       max-height: 20px;
       margin: 10px;
+      width: 20px;
+      height: 20px;
     }
   }
   &.editable:hover {

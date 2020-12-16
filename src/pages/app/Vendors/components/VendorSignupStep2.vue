@@ -126,7 +126,9 @@ export default {
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    console.log("vendor.signup.step2.mounted", this.vendor)
+  },
   methods: {
     getCategoryNameByValue(value) {
       return this.categoryNames.filter((c) => c.value == value)[0].name;

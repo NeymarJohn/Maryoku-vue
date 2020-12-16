@@ -271,6 +271,9 @@ export default {
       if (this.step === 7) this.addVendor();
     },
   },
+  beforeDestroy() {
+    this.$root.$off("update-vendor-value");
+  }
 };
 </script>
 <style lang="scss" scoped>

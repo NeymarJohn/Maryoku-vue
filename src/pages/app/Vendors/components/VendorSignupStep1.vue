@@ -209,18 +209,26 @@
                   @click="removeVendorImage(vendor.images[3])"
                 />
               </div>
-              <div class="box item add-more" @click="uploadVendorImage">
-                <img :src="`${iconUrl}Group 6501.svg`" />
-                <br />
-                <span>Add more</span>
-                <input
-                  type="file"
-                  class="hide"
-                  ref="imageFile"
-                  accept="image/gif, image/jpg, image/png"
-                  @change="onVendorImageFilePicked"
-                />
-              </div>
+                <Drop
+                        @drop="handleDrop"
+                        @dragenter="handleDragEnter"
+                        @dragleave="handleDragLeave"
+                        :class="{'drag-over': isDragOver}"
+                        class="box item add-more d-flex justify-content-center align-center">
+                    <div v-if="!isDragOver">
+                        <img :src="`${iconUrl}Group 6501.svg`" @click="uploadVendorImage"/>
+                        <br />
+                        <span>Add more</span>
+                        <input
+                                type="file"
+                                class="hide"
+                                ref="imageFile"
+                                accept="image/gif, image/jpg, image/png"
+                                @change="onVendorImageFilePicked"
+                        />
+                    </div>
+                    <span class="font-size-16 drop-cont" v-else>Drop Here</span>
+                </Drop>
             </div>
           </template>
         </div>
@@ -489,6 +497,7 @@ export default {
         }
       }
       this.createImage(files[0]);
+      this.isDragOver = false;
     },
     handleDragEnter(e){
       this.isDragOver = true;
@@ -861,9 +870,18 @@ export default {
       cursor: pointer;
       font: normal 15px Manrope-Regular, sans-serif;
       img {
-        width: 24px;
+        width: 28px;
         position: unset;
-        padding-bottom: 1rem;
+        padding-bottom: 10px;
+      }
+
+      .drop-cont{
+          font-weight: bold;
+          color: #cfcfcf;
+      }
+
+      &.drag-over{
+            border: 2px dotted #f51355;
       }
     }
   }

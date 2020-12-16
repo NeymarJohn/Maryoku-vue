@@ -79,6 +79,13 @@ export const businessCategories = [
                 value: 1,
                 xIncluded: true,
               },
+              {
+                name: 'coat check',
+                type: Boolean,
+                value: null,
+                xIncluded: false,
+                comment: true,
+              }
             ]
           },
           {
@@ -119,6 +126,13 @@ export const businessCategories = [
                 value: false,
                 xIncluded: true,
               },
+              {
+                name: "light effects",
+                type: Boolean,
+                value: false,
+                xIncluded: false,
+                comment: true,
+              }
             ]
           },
           {
@@ -271,32 +285,38 @@ export const businessCategories = [
               {
                 name: 'microphones',
                 type: Boolean,
-                value: false
+                value: false,
+                dry: null,
               },
               {
                 name: 'projector',
                 type: Boolean,
-                value: false
+                value: false,
+                dry: null,
               },
               {
                 name: 'sound system',
                 type: Boolean,
-                value: false
+                value: false,
+                dry: null,
               },
               {
                 name: 'LCD displays',
                 type: Boolean,
-                value: false
+                value: false,
+                dry: null,
               },
               {
                 name: 'monitor',
                 type: Boolean,
-                value: false
+                value: false,
+                dry: null,
               },
               {
                 name: 'speaker / sound system',
                 type: Boolean,
-                value: false
+                value: false,
+                dry: null,
               },
             ]
           },
@@ -343,6 +363,12 @@ export const businessCategories = [
                 type: Boolean,
                 value: false
               },
+              {
+                name: 'staff : guest ratio',
+                type: 'Ratio',
+                staff: null,
+                quest: null,
+              }
             ]
           }
         ]
@@ -354,18 +380,21 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'Green policy',
+                name: 'green policy applied',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols',
+                name: 'Water saving protocols in place',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Green power and energy efficient',
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
@@ -659,6 +688,12 @@ export const businessCategories = [
                 type: Boolean,
                 value: false
               },
+              {
+                name: 'staff : guest ratio',
+                type: 'Ratio',
+                staff: null,
+                quest: null,
+              }
             ]
           },
           {
@@ -728,18 +763,21 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'Green policy',
+                name: 'green policy applied',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols',
+                name: 'Water saving protocols in place',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Green power and energy efficient',
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
@@ -968,18 +1006,21 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'Green policy',
+                name: 'green policy applied',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols',
+                name: 'Water saving protocols in place',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Green power and energy efficient',
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
@@ -1165,18 +1206,21 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'Green policy',
+                name: 'green policy applied',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols',
+                name: 'Water saving protocols in place',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Green power and energy efficient',
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
@@ -1370,18 +1414,21 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'Green policy',
+                name: 'green policy applied',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols',
+                name: 'Water saving protocols in place',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Green power and energy efficient',
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
@@ -1578,18 +1625,21 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'Green policy',
+                name: 'green policy applied',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols',
+                name: 'Water saving protocols in place',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Green power and energy efficient',
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
@@ -1712,6 +1762,12 @@ export const businessCategories = [
                 type: String,
                 value: ''
               },
+              {
+                name: 'staff : guest ratio',
+                type: 'Ratio',
+                staff: null,
+                quest: null,
+              }
             ]
           }
         ]
@@ -1763,18 +1819,21 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'Green policy',
+                name: 'green policy applied',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols',
+                name: 'Water saving protocols in place',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Green power and energy efficient',
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
@@ -2079,18 +2138,21 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'Green policy',
+                name: 'green policy applied',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols',
+                name: 'Water saving protocols in place',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Green power and energy efficient',
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
@@ -2261,18 +2323,21 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'Green policy',
+                name: 'green policy applied',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols',
+                name: 'Water saving protocols in place',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Green power and energy efficient',
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
@@ -2457,18 +2522,21 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'Green policy',
+                name: 'green policy applied',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols',
+                name: 'Water saving protocols in place',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Green power and energy efficient',
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
@@ -2647,18 +2715,21 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'Green policy',
+                name: 'green policy applied',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols',
+                name: 'Water saving protocols in place',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Green power and energy efficient',
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
@@ -2883,18 +2954,21 @@ export const businessCategories = [
             name: 'Sustainability',
             items: [
               {
-                name: 'Green policy',
+                name: 'green policy applied',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Water saving protocols',
+                name: 'Water saving protocols in place',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
-                name: 'Green power and energy efficient',
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
+                xIncluded: true,
                 value: false
               },
               {
@@ -3102,3 +3176,713 @@ export const companyServices = [
     available: ['tents', 'technical equipment', 'furniture', 'constumes', 'props & decor'],
   }
 ]
+export const VendorPolicy = [
+  {
+    category: "venuerental",
+    items: [
+      // {
+      //   name: 'Allowed use of outside vendors',
+      //   type: Boolean,
+      // },
+
+      {
+        name: "Suitable for infants",
+        type: Boolean,
+        hasComment: true,
+      },
+      {
+        name: "Audio restrictions",
+        type: Boolean,
+        hasComment: true,
+      },
+      {
+        name: "Decor restrictions",
+        type: Boolean,
+        hasComment: true,
+      },
+      {
+        name: "Dress code",
+        type: Boolean,
+        hasComment: true,
+      },
+      {
+        name: "Minimum Spend",
+        type: Boolean,
+        hasComment: true,
+      },
+      {
+        name: "Dry Hire",
+        type: Boolean,
+        hasComment: true,
+      },
+      {
+        name: "Pets",
+        type: Boolean,
+        hasComment: true,
+      },
+    ],
+  },
+  {
+    category: "foodandbeverage",
+    items: [
+      {
+        name: "Tastings prior to booking",
+        type: Number,
+      },
+      {
+        name: "Allow customer provided liquor",
+        type: Boolean,
+      },
+    ],
+  },
+  {
+    category: "decor",
+    items: [
+      {
+        name: "Room temperature constraints",
+        type: String,
+      },
+      {
+        name: "Flexible time requirement for setup",
+        type: String,
+      },
+    ],
+  },
+  {
+    category: "corporatesocialresponsibility",
+    items: [
+      {
+        name: "Minimum hour of service",
+        type: Number,
+        noSuffix: true,
+        hasComment: true,
+      },
+      {
+        name: "Max guest to staff ratio",
+        type: Number,
+        isPercentage: true,
+      },
+    ],
+  },
+  {
+    category: "signageprinting",
+    items: [],
+  },
+  {
+    category: "advertising-promotion",
+    items: [],
+  },
+  {
+    category: "equipmentrentals",
+    items: [],
+  },
+  {
+    category: "audiovisualstagingservices",
+    items: [
+      {
+        name: "Accept staff attire request",
+        type: Boolean,
+      },
+      {
+        name: "Simulcasting bandwidth requirements",
+        type: Number,
+      },
+      {
+        name: "Union crew restrictions",
+        type: Boolean,
+        hasComment: true,
+      },
+    ],
+  },
+  {
+    category: "swags",
+    items: [
+      {
+        name: "Allow pickup",
+        type: Boolean,
+      },
+      {
+        name: "Minimum size order",
+        type: String,
+      },
+    ],
+  },
+  {
+    category: "shipping",
+    items: [],
+  },
+  {
+    category: "transportation",
+    items: [],
+  },
+  {
+    category: "entertainment",
+    items: [
+      {
+        name: "Accept requests from guests",
+        type: Boolean,
+        hasComment: true,
+      },
+      {
+        name: "Continuous band play time",
+        type: Boolean,
+        hasComment: true,
+      },
+      {
+        name: "Max group size",
+        type: Number,
+        noSuffix: true,
+      },
+      {
+        name: "Accessibility of activity",
+        type: String,
+      },
+      {
+        name: "Age restrictions",
+        type: Boolean,
+        hasComment: true,
+      },
+      {
+        name: "Time of day",
+        type: "MultiSelection",
+        options: ["Morning", "Afternoon", "Evening", "Night"],
+        value: [],
+      },
+      {
+        name: "Performer require a meal",
+        type: Boolean,
+      },
+      {
+        name: "Minimum Setup time required",
+        subCategory: 'charge',
+        type: Number,
+        value: 0,
+        noSuffix: true,
+      },
+      {
+        name: "Number of breaks",
+        type: Number,
+        subCategory: 'charge',
+        value: 0,
+        noSuffix: true,
+      },
+      // {
+      //   name: "Additional requirements from venue",
+      //   type: String,
+      // },
+      // {
+      //   name: "Power supply needs",
+      //   type: String,
+      // },
+      {
+        name: "Flexible to different dress codes",
+        type: String,
+      },
+      {
+        name: "Meet before signing contract",
+        type: Boolean,
+        hasComment: true,
+      },
+      {
+        name: "Arrival onsite before the event",
+        type: 'Including',
+        value: true,
+        cost: '0.00'
+      },
+      {
+        name: "Handles Losgistics",
+        type: Boolean,
+        hasComment: true,
+      },
+    ],
+  },
+  {
+    category: "administration",
+    items: [],
+  },
+  {
+    category: "securityservices",
+    items: [
+      {
+        name: "Visit the venue in advance",
+        type: Boolean,
+      },
+      {
+        name: "Minimum hours of service",
+        type: Number,
+        noSuffix: true,
+      },
+      {
+        name: "Max hours per shift",
+        type: Number,
+        noSuffix: true,
+      },
+      {
+        name: "Dress code",
+        type: String,
+        hasComment: true,
+      },
+    ],
+  },
+  {
+    category: "technologyservices",
+    items: [],
+  },
+  {
+    category: "videographyandphotography",
+    items: [
+      {
+        name: "Flexible to last minute onsite changes",
+        type: Boolean,
+      },
+      {
+        name: "Minimum amount of hours",
+        type: Number,
+        noSuffix: true,
+      },
+      {
+        name: "Need to control room lighting",
+        type: Boolean,
+      },
+      {
+        name: "Minimum internet bandwidth (Simulticasting, Streaming)",
+        type: Number,
+      },
+      {
+        name: "Flexibility to operate with additional Photo / Video companies during the event",
+        type: Boolean,
+      },
+    ],
+  },
+];
+export const VendorPricingPolicy = [
+  {
+    category: "venuerental",
+    items: [
+      {
+        name: "Minimum amount of hours",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Hours included in rental",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Setup hours included in rental",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Cost Extra Guest (beyond agreed upon)",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Overtime Cost",
+        type: Number,
+        units: ["Per hour", "All togeter"],
+        hasComment: true,
+      },
+      {
+        name: "Cost Late Night Fares",
+        type: Number,
+        hasUnit: true,
+        units: ["Per person", "All together"],
+      },
+      {
+        name: "Discount for large quantities",
+        type: Number,
+        isPercentage: true,
+        hasComment: true,
+        attendees: null,
+      },
+      {
+        name: "Tax rate",
+        type: Number,
+        isPercentage: true,
+      },
+      {
+        name: "Suggested Gratuity",
+        type: Number,
+        isPercentage: true,
+      },
+    ],
+  },
+  {
+    category: "foodandbeverage",
+    items: [
+      {
+        name: "Travel cost",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Pickup",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Cleanup",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Breakdown",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Cost Late Night Fares",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Discount for large quantities",
+        type: Number,
+        isPercentage: true,
+        hasComment: true,
+        attendees: null,
+      },
+      {
+        name: "Tax rate",
+        type: Number,
+        isPercentage: true,
+      },
+      {
+        name: "Suggested Gratuity",
+        type: Number,
+        hasComment: true,
+      },
+    ],
+  },
+  {
+    category: "decor",
+    items: [
+      {
+        name: "Delivery",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Setup",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Working with unions",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Discounts for large quantities",
+        type: Boolean,
+        attendees: null,
+      },
+      {
+        name: "Tax rate",
+        type: Number,
+        isPercentage: true,
+      },
+      {
+        name: "Suggested Gratuity",
+        type: Number,
+        hasComment: true,
+      },
+    ],
+  },
+  {
+    category: "corporatesocialresponsibility",
+    items: [
+      {
+        name: "Travel distance to event",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Special attire requests",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Last minute requests",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Discount for large quantities",
+        type: Number,
+        isPercentage: true,
+        hasComment: true,
+        attendees: null,
+      },
+      {
+        name: "Tax rate",
+        type: Number,
+        isPercentage: true,
+      },
+      {
+        name: "Suggested Gratuity",
+        type: Number,
+        hasComment: true,
+      },
+    ],
+  },
+  {
+    category: "signageprinting",
+    items: [],
+  },
+  {
+    category: "advertising-promotion",
+    items: [],
+  },
+  {
+    category: "equipmentrentals",
+    items: [],
+  },
+  {
+    category: "audiovisualstagingservices",
+    items: [
+      {
+        name: "Rushed job",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Overtime",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Tax rate",
+        type: Number,
+        isPercentage: true,
+      },
+      {
+        name: "Discounts",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Suggested Gratuity",
+        type: Number,
+        hasComment: true,
+      },
+    ],
+  },
+  {
+    category: "swags",
+    items: [
+      {
+        name: "Rushed orders",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Delivery",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "preparing file for printing",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Multiple print locations",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Number of different colors",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Tax rate",
+        type: Number,
+        isPercentage: true,
+      },
+      {
+        name: "Discount for large quantites",
+        type: Number,
+        hasComment: true,
+
+      },
+      {
+        name: "Suggested Gratuity",
+        type: Number,
+        hasComment: true,
+      },
+    ],
+  },
+  {
+    category: "shipping",
+    items: [],
+  },
+  {
+    category: "transportation",
+    items: [
+      {
+        name: "Tax rate",
+        type: Number,
+        isPercentage: true,
+      },
+      {
+        name: "Large setup discounts",
+        type: Boolean,
+      },
+      {
+        name: "Suggested Gratuity",
+        type: Number,
+        hasComment: true,
+      },
+    ],
+  },
+  {
+    category: "entertainment",
+    items: [
+      {
+        name: "Hours included in service",
+        subCategory: "charge",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Rushed setup",
+        subCategory: "charge",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Rehersal time for the band (for special requests)",
+        subCategory: "charge",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Special operating time",
+        subCategory: "charge",
+        type: "MultiSelection",
+        options: ["Morning", "Afternoon", "Evening", "Night"],
+        value: [],
+      },
+      {
+        name: "Extra for prizes",
+        subCategory: "charge",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Overtime charges",
+        subCategory: "charge",
+        type: "Cost",
+        value: "",
+        unit: "hour",
+      },
+      {
+        name: "Tax rate",
+        subCategory: "tax",
+        type: Number,
+
+        isPercentage: true,
+      },
+      {
+        name: "Large group discounts",
+        subCategory: "discount",
+        type: "Discount",
+        hasUnit: true,
+        units: ["Per guest", "Total"],
+      },
+      {
+        name: "Suggested Gratuity",
+        subCategory: "tips",
+        type: Number,
+      },
+    ],
+  },
+  {
+    category: "administration",
+    items: [],
+  },
+  {
+    category: "securityservices",
+    items: [
+      {
+        name: "Pre-selection personal",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Number of hours",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Level of security training/certification",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Special attire requests",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Tax rate",
+        type: Number,
+        isPercentage: true,
+      },
+      {
+        name: "Large group discounts",
+        type: "Discount",
+        units: ["per guest", "total"],
+      },
+      {
+        name: "Suggested Gratuity",
+        type: Number,
+        hasComment: true,
+      },
+    ],
+  },
+  {
+    category: "technologyservices",
+    items: [],
+  },
+  {
+    category: "videographyandphotography",
+    items: [
+      {
+        name: "Overtime charge",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Travel to multiple location",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Over number of pictures taken",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Discount for large discounts",
+        type: Boolean,
+        attendees: null,
+      },
+      {
+        name: "Tax rate",
+        type: Number,
+        isPercentage: true,
+      },
+      {
+        name: "Suggested Gratuity",
+        type: Number,
+        hasComment: true,
+      },
+    ],
+  },
+];

@@ -79,6 +79,7 @@ export default {
       this.$emit("cancel");
     },
     updateBudget() {
+      console.log(this.newBudget);
       this.$emit("save", { totalBudget: Number(this.newBudget.replace(/,/g, "")) });
     },
   },

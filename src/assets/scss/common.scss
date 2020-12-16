@@ -240,7 +240,7 @@ select {
     margin-left: 5px;
 }
 .ml-10 {
-    margin-left: 20px;
+    margin-left: 10px;
 }
 .ml-15 {
     margin-left: 15px;
@@ -316,6 +316,9 @@ pt-0 {
 .py-10 {
     padding: 10px 0;
 }
+.py-20 {
+    padding: 20px 0;
+}
 .color-dark-gray {
     color: #818080;
 }
@@ -338,6 +341,12 @@ pt-0 {
 }
 .width-100 {
     width: 100%;
+}
+.w-max-120{
+    max-width: 120px;
+}
+.w-max-450{
+    max-width: 450px;
 }
 .line-height-1 {
     line-height: 1em;
@@ -590,4 +599,8 @@ hr {
 }
 .text-center {
     text-align: center;
+}
+
+.cursor-pointer{
+    cursor: pointer;
 }

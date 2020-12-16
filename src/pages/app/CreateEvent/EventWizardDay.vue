@@ -35,6 +35,7 @@ import Vue from "vue";
 import vSelect from "vue-select";
 import { FunctionalCalendar } from "vue-functional-calendar";
 import moment from "moment";
+import { extendMoment } from "moment-range";
 
 export default {
   components: {
@@ -53,6 +54,33 @@ export default {
         this.setEventProperty({
           key: "eventEndMillis",
           actualValue: new Date(this.dateData.dateRange.end.date).getTime(),
+        });
+
+        const extendedMoment = extendMoment(moment);
+        const start = new Date(this.dateData.dateRange.start.date);
+        const end = new Date(this.dateData.dateRange.end.date);
+        const range = extendedMoment.range(moment(start), moment(end));
+
+        const dateList = Array.from(range.by("day")).map((m) => m.format("YYYY-MM-DD"));
+        const timelineDates = [];
+        dateList.forEach((d) => {
+          timelineDates.push({
+            date: d,
+            templates: ["registration", "activity", "meal", "activity", "summary"],
+            status: "editing",
+          });
+        });
+        this.setEventProperty({
+          key: "timeline",
+          actualValue: {
+            dateList: dateList,
+            mode: "template", // default
+            status: "editing",
+          },
+        });
+        this.setEventProperty({
+          key: "timelineDates",
+          actualValue: timelineDates,
         });
         this.setEventProperty({ key: "dateData", actualValue: this.dateData });
         this.$router.push({ path: `/event-wizard-flexibility` });
@@ -178,7 +206,8 @@ export default {
     border-right: 3px solid !important;
     border-radius: 1px;
   }
-  .vfc-day .vfc-base-start, .vfc-base-end{
+  .vfc-day .vfc-base-start,
+  .vfc-base-end {
     background-color: #f51355 !important;
   }
   span.vfc-span-day {
@@ -188,13 +217,12 @@ export default {
     &.vfc-today {
       color: #f51355 !important;
     }
-
   }
   span.vfc-span-day.vfc-marked,
   .vfc-today.vfc-marked {
     color: white !important;
 
-    &:not(.vfc-start-marked):not(.vfc-end-marked):before{
+    &:not(.vfc-start-marked):not(.vfc-end-marked):before {
       background-color: #f51355 !important;
     }
   }
