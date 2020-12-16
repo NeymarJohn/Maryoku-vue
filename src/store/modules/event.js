@@ -59,29 +59,6 @@ const getters = {
     getBookingRequirements: state => {
         return state.bookingRequirements;
     },
-    budgetStatistics: state => {
-        const allocatedBudget = state.eventData.components.reduce((s, item) => {
-            return s + item.allocatedBudget
-        }, 0)
-        const bookedBudget = state.eventData.components.reduce((s, item) => {
-            return s + item.bookedBudget
-        }, 0)
-        const savedBudget = state.eventData.components.reduce((s, item) => {
-            if (item.bookedBudget) {
-                return s + (item.allocatedBudget - item.bookedBudget)
-            } else {
-                return s
-            }
-        }, 0)
-        return {
-            total: state.eventData.totalBudget,
-            allocated: allocatedBudget,
-            allocatedPercentage: ((allocatedBudget * 100) / state.eventData.totalBudget).toFixed(1),
-            booked: bookedBudget,
-            bookedPercentage: ((bookedBudget * 100) / state.eventData.totalBudget).toFixed(1),
-            saved: savedBudget
-        }
-    }
 };
 const actions = {
     saveEventAction({ commit, state }, event) {

@@ -20,30 +20,56 @@
           <v-signup-editable-field
             :title="'Company Name'"
             :field="'companyName'"
-            :img="`${secondUrl}Path 1584.svg`"
+            :img="''"
             :defaultVal="vendor.companyName"
             :borderBottom="true"
             :required="true"
             @update-focus-value="onUpdateFocus"
           />
-          <v-signup-category-selector
+          <!-- <v-signup-editable-field
+            :title="'Business Category 1'"
+            :field="'vendorCategory'"
+            :img="''"
+            :defaultVal="vendor.vendorCategory"
+            :borderBottom="true"
+            :required="true"
+            @update-focus-value="onUpdateFocus"
+          /> -->
+          <v-signup-editable-field
             :title="'Business Category'"
             :field="'vendorCategories'"
             :img="''"
-            :value="vendor.vendorCategories || ['']"
+            :defaultVal="vendor.vendorCategories || ['']"
             :borderBottom="true"
             :required="true"
             @update-focus-value="onUpdateFocus"
           />
-          <v-signup-category-selector
-              :title="'Address'"
-              :field="'vendorAddresses'"
-              :img="`${iconUrl}Asset 550.svg`"
-              :value="vendor.vendorAddresses || ['']"
-              :borderBottom="true"
-              :required="true"
-              @update-focus-value="onUpdateFocus"
+          <v-signup-editable-field
+            :title="'Address'"
+            :field="'vendorAddresses'"
+            :img="`${iconUrl}Asset 550.svg`"
+            :defaultVal="vendor.vendorAddresses || ['']"
+            :borderBottom="true"
+            :required="true"
+            @update-focus-value="onUpdateFocus"
           />
+          <!-- <v-signup-editable-field
+            :title="'Address 1'"
+            :field="'vendorAddressLine1'"
+            :img="`${iconUrl}Asset 550.svg`"
+            :defaultVal="vendor.vendorAddressLine1"
+            :borderBottom="true"
+            :required="true"
+            @update-focus-value="onUpdateFocus"
+          />
+          <v-signup-editable-field
+            :title="'Address 2'"
+            :field="'vendorAddressLine2'"
+            :img="`${iconUrl}Asset 550.svg`"
+            :defaultVal="vendor.vendorAddressLine1"
+            :borderBottom="true"
+            @update-focus-value="onUpdateFocus"
+          /> -->
           <v-signup-editable-field
             :title="'Phone'"
             :field="'vendorMainPhoneNumber'"
@@ -87,39 +113,30 @@ import Vendors from "@/models/Vendors";
 //COMPONENTS
 import Icon from "@/components/Icon/Icon.vue";
 import VSignupEditableField from "@/components/Inputs/VSignupEditableField.vue";
-import VSignupCategorySelector from "@/components/Inputs/VSignupCategorySelector.vue";
 
 export default {
   name: "vendor-basic-info-form",
   components: {
     VueElementLoading,
     VSignupEditableField,
-    VSignupCategorySelector,
   },
   props: {
     vendor: Object,
   },
   data() {
     return {
-      iconUrl: `${this.$iconURL}Vendor Signup/`,
-      secondUrl: `${this.$iconURL}VendorSignup/`,
+      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
   },
   created() {},
-  mounted() {
-      console.log("basic.info.vendor", this.vendor);
-  },
+  mounted() {},
   methods: {
     save() {},
     onUpdateFocus(newValue) {},
   },
   computed: {},
   filters: {},
-  watch: {
-      vendor(newVal){
-          console.log("vendor.basicInfo.watch.vendor", newVal);
-      }
-  },
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>

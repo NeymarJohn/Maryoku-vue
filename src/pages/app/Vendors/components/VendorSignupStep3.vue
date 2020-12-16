@@ -259,7 +259,7 @@
                     </template>
                     <template v-else>
                       <span v-if="p.isPercentage">Rate (%)</span>
-                      <span v-else>How much extra</span>
+                      <span v-else>Extra Payment</span>
                       <br />
                       <div class="suffix percentage" v-if="p.isPercentage">
                         <input
@@ -607,8 +607,6 @@ import TimePicker from "@/components/Inputs/TimePicker";
 // import VSignupTimeSelect from '@/components/Inputs/VSignupTimeSelect.vue'
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import { FunctionalCalendar } from "vue-functional-calendar";
-import { VendorPolicy, VendorPricingPolicy } from "@/constants/vendor";
-
 import VueGoogleAutocomplete from "vue-google-autocomplete";
 const christanHolidaysAPI =
   "https://www.googleapis.com/calendar/v3/calendars/en.christian%23holiday%40group.v.calendar.google.com/events?key=AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8";
@@ -640,9 +638,7 @@ export default {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
       allowThirdVendor: null,
       workAllDay: false,
-      date: {
-        selectedDates: [],
-      },
+      date: {},
       rulesDesc: {
         title: "additional rules",
         placeholder: "Event muse end before.. / Suitable for children (2-12 years)",
@@ -734,25 +730,707 @@ export default {
           value: "Other",
         },
       ],
-      policies: VendorPolicy,
-      pricingPolicies: VendorPricingPolicy,
+      policies: [
+        {
+          category: "venuerental",
+          items: [
+            // {
+            //   name: 'Allowed use of outside vendors',
+            //   type: Boolean,
+            // },
+
+            {
+              name: "Suitable for infants",
+              type: Boolean,
+              hasComment: true,
+            },
+            {
+              name: "Audio restrictions",
+              type: Boolean,
+              hasComment: true,
+            },
+            {
+              name: "Decor restrictions",
+              type: Boolean,
+              hasComment: true,
+            },
+            {
+              name: "Dress code",
+              type: Boolean,
+              hasComment: true,
+            },
+            {
+              name: "Minimum Spend",
+              type: Boolean,
+              hasComment: true,
+            },
+            {
+              name: "Dry Hire",
+              type: Boolean,
+              hasComment: true,
+            },
+            {
+              name: "Pets",
+              type: Boolean,
+              hasComment: true,
+            },
+          ],
+        },
+        {
+          category: "foodandbeverage",
+          items: [
+            {
+              name: "Tastings prior to booking",
+              type: Number,
+            },
+            {
+              name: "Allow customer provided liquor",
+              type: Boolean,
+            },
+          ],
+        },
+        {
+          category: "decor",
+          items: [
+            {
+              name: "Room temperature constraints",
+              type: String,
+            },
+            {
+              name: "Flexible time requirement for setup",
+              type: String,
+            },
+          ],
+        },
+        {
+          category: "corporatesocialresponsibility",
+          items: [
+            {
+              name: "Minimum hour of service",
+              type: Number,
+              noSuffix: true,
+              hasComment: true,
+            },
+            {
+              name: "Max guest to staff ratio",
+              type: Number,
+              isPercentage: true,
+            },
+          ],
+        },
+        {
+          category: "signageprinting",
+          items: [],
+        },
+        {
+          category: "advertising-promotion",
+          items: [],
+        },
+        {
+          category: "equipmentrentals",
+          items: [],
+        },
+        {
+          category: "audiovisualstagingservices",
+          items: [
+            {
+              name: "Accept staff attire request",
+              type: Boolean,
+            },
+            {
+              name: "Simulcasting bandwidth requirements",
+              type: Number,
+            },
+            {
+              name: "Union crew restrictions",
+              type: Boolean,
+              hasComment: true,
+            },
+          ],
+        },
+        {
+          category: "swags",
+          items: [
+            {
+              name: "Allow pickup",
+              type: Boolean,
+            },
+            {
+              name: "Minimum size order",
+              type: String,
+            },
+          ],
+        },
+        {
+          category: "shipping",
+          items: [],
+        },
+        {
+          category: "transportation",
+          items: [],
+        },
+        {
+          category: "entertainment",
+          items: [
+            {
+              name: "Accept requests from guests",
+              type: Boolean,
+              hasComment: true,
+            },
+            {
+              name: "Continuous band play time",
+              type: Boolean,
+              hasComment: true,
+            },
+            {
+              name: "Max group size",
+              type: Number,
+              noSuffix: true,
+            },
+            {
+              name: "Accessibility of activity",
+              type: String,
+            },
+            {
+              name: "Age restrictions",
+              type: Boolean,
+              hasComment: true,
+            },
+            {
+              name: "Time of day",
+              type: "MultiSelection",
+              options: ["Morning", "Afternoon", "Evening", "Night"],
+              value: [],
+            },
+            {
+              name: "Performer require a meal",
+              type: Boolean,
+            },
+            {
+              name: "Minimum Setup time required",
+              subCategory: 'charge',
+              type: Number,
+              value: 0,
+              noSuffix: true,
+            },
+            {
+              name: "Number of breaks",
+              type: Number,
+              subCategory: 'charge',
+              value: 0,
+              noSuffix: true,
+            },
+            // {
+            //   name: "Additional requirements from venue",
+            //   type: String,
+            // },
+            // {
+            //   name: "Power supply needs",
+            //   type: String,
+            // },
+            {
+              name: "Flexible to different dress codes",
+              type: String,
+            },
+            {
+              name: "Meet before signing contract",
+              type: Boolean,
+              hasComment: true,
+            },
+            {
+              name: "Arrival onsite before the event",
+              type: 'Including',
+              value: true,
+              cost: '0.00'
+            },
+            {
+              name: "Handles Losgistics",
+              type: Boolean,
+              hasComment: true,
+            },
+          ],
+        },
+        {
+          category: "administration",
+          items: [],
+        },
+        {
+          category: "securityservices",
+          items: [
+            {
+              name: "Visit the venue in advance",
+              type: Boolean,
+            },
+            {
+              name: "Minimum hours of service",
+              type: Number,
+              noSuffix: true,
+            },
+            {
+              name: "Max hours per shift",
+              type: Number,
+              noSuffix: true,
+            },
+            {
+              name: "Dress code",
+              type: String,
+              hasComment: true,
+            },
+          ],
+        },
+        {
+          category: "technologyservices",
+          items: [],
+        },
+        {
+          category: "videographyandphotography",
+          items: [
+            {
+              name: "Flexible to last minute onsite changes",
+              type: Boolean,
+            },
+            {
+              name: "Minimum amount of hours",
+              type: Number,
+              noSuffix: true,
+            },
+            {
+              name: "Need to control room lighting",
+              type: Boolean,
+            },
+            {
+              name: "Minimum internet bandwidth (Simulticasting, Streaming)",
+              type: Number,
+            },
+            {
+              name: "Flexibility to operate with additional Photo / Video companies during the event",
+              type: Boolean,
+            },
+          ],
+        },
+      ],
+      pricingPolicies: [
+        {
+          category: "venuerental",
+          items: [
+            {
+              name: "Minimum amount of hours",
+              type: Number,
+              noSuffix: true,
+              hasComment: true,
+            },
+            {
+              name: "Hours included in rental",
+              type: Number,
+              noSuffix: true,
+            },
+            {
+              name: "Setup hours included in rental",
+              type: Boolean,
+              type: Number,
+              noSuffix: true,
+            },
+            {
+              name: "Cost Extra Guest (beyond agreed upon)",
+              type: Number,
+            },
+            {
+              name: "Overtime Cost",
+              type: Number,
+              units: ["Per hour", "All togeter"],
+            },
+            {
+              name: "Cost Late Night Fares",
+              type: Number,
+              hasUnit: true,
+              units: ["Per person", "All together"],
+            },
+            {
+              name: "Discount for large quantities",
+              type: Number,
+              isPercentage: true,
+              hasComment: true,
+              attendees: null,
+            },
+            {
+              name: "Tax rate",
+              type: Number,
+              isPercentage: true,
+            },
+            {
+              name: "Suggested Gratuity",
+              type: Number,
+              isPercentage: true,
+            },
+          ],
+        },
+        {
+          category: "foodandbeverage",
+          items: [
+            {
+              name: "Travel cost",
+              type: 'Including',
+              value: true,
+              cost: '0.00'
+            },
+            {
+              name: "Pickup",
+              type: 'Including',
+              value: true,
+              cost: '0.00'
+            },
+            {
+              name: "Cleanup",
+              type: 'Including',
+              value: true,
+              cost: '0.00'
+            },
+            {
+              name: "Breakdown",
+              type: "Including",
+              value: true,
+              cost: '0.00'
+            },
+            {
+              name: "Cost Late Night Fares",
+              type: Boolean,
+              hasComment: true,
+            },
+            {
+              name: "Discount for large quantities",
+              type: Number,
+              isPercentage: true,
+              hasComment: true,
+              attendees: null,
+            },
+            {
+              name: "Tax rate",
+              type: Number,
+              isPercentage: true,
+            },
+            {
+              name: "Suggested Gratuity",
+              type: Number,
+            },
+          ],
+        },
+        {
+          category: "decor",
+          items: [
+            {
+              name: "Delivery",
+              type: Number,
+            },
+            {
+              name: "Setup",
+              type: Number,
+            },
+            {
+              name: "Working with unions",
+              type: Boolean,
+            },
+            {
+              name: "Discounts for large quantities",
+              type: Boolean,
+              attendees: null,
+            },
+            {
+              name: "Tax rate",
+              type: Number,
+              isPercentage: true,
+            },
+            {
+              name: "Suggested Gratuity",
+              type: Number,
+            },
+          ],
+        },
+        {
+          category: "corporatesocialresponsibility",
+          items: [
+            {
+              name: "Travel distance to event",
+              type: Number,
+            },
+            {
+              name: "Special attire requests",
+              type: Number,
+            },
+            {
+              name: "Last minute requests",
+              type: Boolean,
+            },
+            {
+              name: "Discount for large quantities",
+                type: Number,
+                isPercentage: true,
+                hasComment: true,
+                attendees: null,
+            },
+            {
+              name: "Tax rate",
+              type: Number,
+              isPercentage: true,
+            },
+            {
+              name: "Suggested Gratuity",
+              type: Number,
+              noSuffix: true,
+            },
+          ],
+        },
+        {
+          category: "signageprinting",
+          items: [],
+        },
+        {
+          category: "advertising-promotion",
+          items: [],
+        },
+        {
+          category: "equipmentrentals",
+          items: [],
+        },
+        {
+          category: "audiovisualstagingservices",
+          items: [
+            {
+              name: "Rushed job",
+              type: Number,
+            },
+            {
+              name: "Overtime",
+              type: Number,
+            },
+            {
+              name: "Tax rate",
+              type: Number,
+              isPercentage: true,
+            },
+            {
+              name: "Discounts",
+              type: Boolean,
+            },
+            {
+              name: "Suggested Gratuity",
+              type: Number,
+            },
+          ],
+        },
+        {
+          category: "swags",
+          items: [
+            {
+              name: "Rushed orders",
+              type: Boolean,
+            },
+            {
+              name: "Delivery",
+              type: Boolean,
+            },
+            {
+              name: "preparing file for printing",
+              type: Boolean,
+            },
+            {
+              name: "Multiple print locations",
+              type: Boolean,
+            },
+            {
+              name: "Number of different colors",
+              type: Boolean,
+            },
+            {
+              name: "Tax rate",
+              type: Number,
+              isPercentage: true,
+            },
+            {
+              name: "Discount for large quantites",
+              type: Boolean,
+              attendees: null,
+
+            },
+            {
+              name: "Suggested Gratuity",
+              type: Number,
+            },
+          ],
+        },
+        {
+          category: "shipping",
+          items: [],
+        },
+        {
+          category: "transportation",
+          items: [
+            {
+              name: "Tax rate",
+              type: Number,
+              isPercentage: true,
+            },
+            {
+              name: "Large setup discounts",
+              type: Boolean,
+            },
+            {
+              name: "Suggested Gratuity",
+              type: Number,
+            },
+          ],
+        },
+        {
+          category: "entertainment",
+          items: [
+            {
+              name: "Hours included in service",
+              subCategory: "charge",
+              type: Number,
+              value: 0,
+              hasComment: true,
+              noSuffix: true,
+            },
+            {
+              name: "Rushed setup",
+              subCategory: "charge",
+              type: "Including",
+              value: true,
+              cost: "0.00",
+            },
+            {
+              name: "Rehersal time for the band (for special requests)",
+              subCategory: "charge",
+              type: "Including",
+              value: true,
+              cost: "0.00",
+            },
+            {
+              name: "Special operating time",
+              subCategory: "charge",
+              type: "MultiSelection",
+              options: ["Morning", "Afternoon", "Evening", "Night"],
+              value: [],
+            },
+            {
+              name: "Extra for prizes",
+              subCategory: "charge",
+              type: Number,
+              hasComment: true,
+            },
+            {
+              name: "Overtime charges",
+              subCategory: "charge",
+              type: "Cost",
+              value: "",
+              unit: "hour",
+            },
+            {
+              name: "Tax rate",
+              subCategory: "tax",
+              type: Number,
+
+              isPercentage: true,
+            },
+            {
+              name: "Large group discounts",
+              subCategory: "discount",
+              type: "Discount",
+              hasUnit: true,
+              units: ["Per guest", "Total"],
+            },
+            {
+              name: "Suggested Gratuity",
+              subCategory: "tips",
+              type: Number,
+            },
+          ],
+        },
+        {
+          category: "administration",
+          items: [],
+        },
+        {
+          category: "securityservices",
+          items: [
+            {
+              name: "Pre-selection personal",
+              type: "Including",
+              value: true,
+              cost: "0.00",
+            },
+            {
+              name: "Number of hours",
+              type: Number,
+              noSuffix: true,
+            },
+            {
+              name: "Level of security training/certification",
+              type: String,
+            },
+            {
+              name: "Special attire requests",
+              type: Boolean,
+              hasComment: true,
+            },
+            {
+              name: "Tax rate",
+              type: Number,
+              isPercentage: true,
+            },
+            {
+              name: "Large group discounts",
+              type: "Discount",
+              units: ["per guest", "total"],
+            },
+            {
+              name: "Suggested Gratuity",
+              type: Number,
+            },
+          ],
+        },
+        {
+          category: "technologyservices",
+          items: [],
+        },
+        {
+          category: "videographyandphotography",
+          items: [
+            {
+              name: "Overtime charge",
+              type: Number,
+            },
+            {
+              name: "Travel to multiple location",
+              type: Number,
+            },
+            {
+              name: "Over number of pictures taken",
+              type: Number,
+            },
+            {
+              name: "Discount for large discounts",
+              type: Boolean,
+              attendees: null,
+            },
+            {
+              name: "Tax rate",
+              type: Number,
+              isPercentage: true,
+            },
+            {
+              name: "Suggested Gratuity",
+              type: Number,
+            },
+          ],
+        },
+      ],
       vendorPolicies: {},
       vendorPricingPolicies:{},
     };
   },
   methods: {
     updateExDonts(item) {
-
       item.selected = !item.selected;
-      let day = item.start.split('-')[2];
-      // console.log("updateExDonts", item, this.markedDates, this.markedDates.find(m => m === item.start));
-      if ( this.markedDates.find(m => m === item.start ) ) {
-        console.log("removeClass");
-        this.markedDates = this.markedDates.filter(m => m !== item.start);
-        $('span.vfc-span-day:contains('+day+')').removeClass('vfc-marked vfc-start-marked vfc-end-marked');
-      } else {
-        this.markedDates.push(item.start);
-      }
 
       this.$root.$emit("update-vendor-value", "exDonts", this.religions);
     },
@@ -823,7 +1501,6 @@ export default {
       this.$root.$emit("update-vendor-value", "selectedWeekdays", this.selectedWeekdays);
     },
     updateReligion(item) {
-      console.log("updateReligion", item, this.markedDates, this.date.selectedDates);
       if (this.selectedReligion.length && this.selectedReligion.find(s => s.name === item.name)) {
         this.selectedReligion = this.selectedReligion.filter((s) => s.name !== item.name);
       } else {
@@ -831,23 +1508,12 @@ export default {
       }
       this.$root.$emit("update-vendor-value", "selectedReligion", this.selectedReligion);
     },
-    updateDontWorkDays(e) {
+    updateDontWorkDays() {
       console.log("selectedDays", this.date);
-      let day = e.date.split('-')[2];
-      let selectedDates = this.date.selectedDates;
-      if ( this.markedDates.find(m => m === e.date) ) {
-
-        selectedDates = this.date.selectedDates.filter(s => s.date !== e.date);
-
-        this.markedDates = this.markedDates.filter(m => m !== e.date);
-        $('span.vfc-span-day:contains('+day+')').removeClass('vfc-marked vfc-start-marked vfc-end-marked');
-      }
-      console.log("selectedDays", day, e, this.markedDates, this.date);
-
-      this.$root.$emit("update-vendor-value", "dontWorkDays", selectedDates);
+      this.$root.$emit("update-vendor-value", "dontWorkDays", this.date);
     },
     changeMonth(e) {
-        console.log("changeMonth", this.markedDates, this.date);
+        console.log("changeMonth", e);
         this.month = e;
     },
     changeYear(e) {
@@ -924,24 +1590,14 @@ export default {
 
       data.holidays.map(it => {
         it.selected = value;
-        let day = it.start.split('-')[2];
-        if (value) {
-          this.markedDates.push(it.start);
-        } else {
-          this.markedDates = this.markedDates.filter(m => m !== it.start);
-          $('span.vfc-span-day:contains('+day+')').removeClass('vfc-marked vfc-start-marked vfc-end-marked');
-        }
-      });
-
-
-
+      })
       this.$root.$emit("update-vendor-value", "exDonts", this.religions);
     },
     isAllHolidays(data){
       return data.holidays.every(it => it.selected);
     },
     init: async function(){
-
+      console.log("init", this.vendor);
       this.vendorPricingPolicies = this.pricingPolicies.find(p => p.category === this.vendor.vendorCategory);
 
       if ( this.vendor.pricingPolicies && this.vendor.pricingPolicies.length ) {
@@ -977,13 +1633,11 @@ export default {
 
         this.selectedWeekdays = this.vendor.selectedWeekdays;
       }
-      console.log('init.dontWorkDays', this.vendor.dontWorkDays);
-      if (this.vendor.dontWorkDays ) {
 
-        this.$set(this.date, 'selectedDates', this.vendor.dontWorkDays);
-        if (this.vendor.dontWorkDays.length > 0) {
+      if (this.vendor.dontWorkDays && this.vendor.dontWorkDays.selectedDates) {
+        if (this.vendor.dontWorkDays.selectedDates.length > 0) {
           this.markedDates = [];
-          _.each(this.vendor.dontWorkDays, (sd) => {
+          _.each(this.vendor.dontWorkDays.selectedDates, (sd) => {
             this.markedDates.push(sd.date);
           });
         }
@@ -992,7 +1646,7 @@ export default {
       if ( this.vendor.exDonts && this.vendor.exDonts.length ) {
         this.vendor.exDonts.map(ex => {
           ex.holidays.map(h => {
-            if (h.selected) this.markedDates.push(h.start);
+            if (h.selected) this.markedDates.push(h.start)
           })
         })
       }
@@ -1005,12 +1659,11 @@ export default {
         $('.vfc-day').each(function (index, day) {
             if ($(day).find('span.vfc-span-day').hasClass('vfc-marked') || $(day).find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed')) {
 
-                if (($(day).next().find('span.vfc-span-day').hasClass('vfc-marked') && $(day).prev().find('span.vfc-span-day').hasClass('vfc-marked')) || ($(day).next().find('span.vfc-span-day').hasClass('vfc-marked') && $(day).prev().find('span.vfc-cursor-not-allowed').hasClass('vfc-cursor-not-allowed')) || ($(day).next().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed') && $(day).prev().find('span.vfc-span-day').hasClass('vfc-marked')) || ($(day).next().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed') && $(day).prev().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed'))) {
+                if (($(day).next().find('span.vfc-span-day').hasClass('vfc-marked') && $(day).prev().find('span.vfc-span-day').hasClass('vfc-marked')) || ($(day).next().find('span.vfc-span-day').hasClass('vfc-marked') && $(day).prev().find('span.vfc-cursor-not-allowed').hasClass('vfc-marked')) || ($(day).next().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed') && $(day).prev().find('span.vfc-span-day').hasClass('vfc-marked'))) {
                     $(day).find('span.vfc-span-day').removeClass('vfc-end-marked');
                     $(day).find('span.vfc-span-day').removeClass('vfc-start-marked');
                     $(day).find('div.vfc-base-start').remove();
                     $(day).find('div.vfc-base-end').remove();
-                  $(day).find('span.vfc-span-day').addClass('selected');
                 }
 
                 if (($(day).next().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed') || $(day).next().find('span.vfc-span-day').hasClass('vfc-marked')) && !$(day).prev().find('span.vfc-span-day').hasClass('vfc-marked') && !$(day).prev().find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed')) {
@@ -1048,12 +1701,12 @@ export default {
       this.renderCalendar()
   },
   watch: {
-    // vendor:{
-    //   handler(newVal) {
-    //     this.init()
-    //   },
-    //   deep: true,
-    // }
+    vendor:{
+      handler(newVal) {
+        this.init()
+      },
+      deep: true,
+    }
   },
 };
 </script>
@@ -1305,29 +1958,9 @@ export default {
       }
       /deep/ span.vfc-span-day {
         &.vfc-marked {
-          background-color: #f51355;
-          color: #ffffff;
-
-          &:not(.vfc-start-marked):not(.vfc-end-marked):before{
-            background-color: #f51355 !important;
-          }
-        }
-
-        &.vfc-cursor-not-allowed {
-          color: #fff !important;
-          background-color: #f51355;
-          z-index: 1;
-
-          &.selected:before{
-            background-color: #f51355 !important;
-            top: 0;
-            left: 0;
-            position: absolute;
-            content: '';
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-          }
+            &:not(.vfc-start-marked):not(.vfc-end-marked):before{
+                background-color: #f51355 !important;
+            }
         }
       }
       /deep/ .vfc-span-day.vfc-start-marked {
@@ -1358,6 +1991,21 @@ export default {
         background-color: #ffd9e4;
         color: #f51355;
         font: 600 14px Manrope-Regular, sans-serif;
+      }
+      /deep/ span.vfc-span-day {
+        &.vfc-marked {
+          background-color: #f51355;
+          color: #ffffff;
+        }
+      }
+      /deep/ span.vfc-cursor-not-allowed {
+        color: #fff !important;
+        background-color: #f51355;
+        z-index: 1;
+
+        &:before{
+              background-color: #f51355 !important;
+        }
       }
 
       .vfc-select-start {

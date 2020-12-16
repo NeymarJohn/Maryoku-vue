@@ -167,7 +167,7 @@ export default {
       return this.event.unexpectedBudget;
     },
     isAvailable() {
-      const budget = this.newBuildingBlock.budget;
+      const budget = Number(this.newBuildingBlock.budget.replace(/,/g, ""));
       return budget > 0 && this.availableBudget >= budget;
     },
   },

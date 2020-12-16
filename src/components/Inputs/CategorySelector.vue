@@ -5,12 +5,12 @@
         <input readonly class="default" v-model="_value" @click="expanded = true" />
       </template>
       <template v-else>
-        <img class="inside-img" :src="`${selectedCategory.icon}`" v-if="selectedCategory && selectedCategory.icon" />
+        <img class="inside-img" :src="`${selectedCategory.icon}`" v-if="selectedCategory.icon" />
         <input readonly class="default with-img" v-model="_value" @click="expanded = true" />
       </template>
       <img class="dropdown" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 523.svg" />
     </div>
-    <ul :style="{'column-count' : column, 'min-width' : column > 1 ? '600px' : '350px'}" v-click-outside="close" v-else>
+    <ul :style="{'column-count' : column, 'min-width' : column > 1 ? '500px' : '350px'}" v-click-outside="close" v-else>
       <li v-for="(category, cIndex) in categories" :key="cIndex" @click="updateCategory(category)" :class="{'mb-40': cIndex < categories.length - 1}">
         <template v-if="multiple">
           <div class="d-flex align-center">
@@ -74,7 +74,7 @@ export default {
     reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
   }),
   mounted() {
-    console.log("category-selector.mounted", this.value);
+
     if (this.value) {
       if ( this.multiple  ) {
         if ( this.value.length ) {
@@ -91,8 +91,8 @@ export default {
   },
   computed:{
     _value() {
-      if ( !this.selectedCategory ) return null;
       if ( this.multiple ) {
+        if ( !this.selectedCategory ) return null;
         if ( this.trackBy ) {
           return this.selectedCategory.map(it => it[this.trackBy])
         } else {
@@ -109,7 +109,6 @@ export default {
   },
   methods: {
     updateCategory(category) {
-      console.log("updateCategory", category);
       if (this.multiple ) {
 
         if (this._find(this.selectedCategory, category)) {
@@ -122,7 +121,7 @@ export default {
       } else {
         this.selectedCategory = category;
         this.expanded = false;
-        this.$emit("change", this._value);
+        this.$emit("change", this._value(this.selectedCategory));
       }
 
     },
@@ -164,6 +163,7 @@ export default {
 .selector-wrapper {
   min-width: 350px;
   font: normal 16px Manrope-Regular, sans-serif;
+  width: 100%;
   .droplist {
     position: relative;
     .inside-img {
@@ -197,7 +197,6 @@ export default {
     border: solid 1px #050505;
     box-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.16);
     background: white;
-    width: 100%;
     li {
       cursor: pointer;
       font: normal 18px Manrope-Regular, sans-serif;

@@ -1,107 +1,62 @@
 <template>
-  <div class="vendor-category-editor" :class="[{ 'border-bottom': borderBottom }]">
-    <div class="left" :class="[{ 'full-width': isEdit }]">
-      <div class="title">{{ title }}<span v-if="required"> *</span></div>
-      <div v-if="isEdit">
-        <div class="d-flex position-relative" v-for="(item, index) of selectedValue" :key="index">
-          <img class="inside-img" :src="img" v-if="img != '' && field !== 'vendorCategories'"/>
-          <category-selector
-                  v-if="field === 'vendorCategories'"
-                  :value="item || ''"
-                  :categories="vendorCategories"
-                  column="2"
-                  trackBy="value"
-                  class="my-10 w-max-450"
-                  @change="updateCategory(index, ...arguments)"
-          >
-          </category-selector>
-          <vue-google-autocomplete
-                  v-else-if="field === 'vendorAddresses'"
-                  :id="`map-${index}`"
-                  ref="address"
-                  class="my-10 width-100 address"
-                  :placeholder="item ? item : 'Enter an an address, zipcode, or location'"
-                  v-on:placechanged="getAddressData(index, ...arguments)"
-          />
-          <img class="ml-10" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg" v-if="selectedValue.length > 1" @click="removeValue(index)">
-        </div>
-        <div class="d-flex align-center py-10 color-red font-bold cursor-pointer" @click="addNewValue">
-          <img class="mr-10" src="https://static-maryoku.s3.amazonaws.com/storage/icons/VendorSignup/Group%209632.svg">
-          Add another category</div>
-      </div>
-      <div v-else>
-        <template v-if="selectedValue.length">
-          <div class="content mt-10" v-for="item of selectedValue">
-              <img class="mr-10" :src="vendorCategories.find(v => v.value === item).icon" v-if="field === 'vendorCategories' && item"/>
-              <img class="mr-10" :src="img" v-if="img != '' &&  item" />
-              {{ item }}
-          </div>
-        </template>
-      </div>
-      <div class="action-cont" :class="{'width-66': field === 'vendorCategories'}" v-if="isEdit">
-        <a class="cancel" @click="isEdit = false">Cancel</a>
-        <a class="save" @click="save()">Save</a>
-      </div>
+  <div class="vendor-category-editor">
+    <div class="droplist" v-if="!expanded">
+      <img class="inside-img" :src="`${categoryIconUrl}${selectedCategory.icon}`" v-if="selectedCategory.icon" />
+      <input readonly class="default with-img" :value="selectedCategory.name" @click="expanded = true" />
+      <img class="dropdown" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 523.svg" />
     </div>
-    <div class="right" v-if="!isEdit">
-      <a @click="isEdit = true">
-        Edit
-        <md-icon>navigate_next</md-icon>
-      </a>
-    </div>
+    <ul v-else>
+      <li v-for="(category, cIndex) in categories" :key="cIndex" @click="updateCategory(category)">
+        <img :src="`${categoryIconUrl}${category.icon}`" />
+        {{ category.name }}
+      </li>
+    </ul>
   </div>
 </template>
 <script>
-
-import VueGoogleAutocomplete from "vue-google-autocomplete";
-import CategorySelector from "@/components/Inputs/CategorySelector";
-
 export default {
   name: "v-signup-editable-field",
-  components:{
-    VueGoogleAutocomplete,
-    CategorySelector,
-  },
   props: {
     title: String,
     field: String,
     img: String,
-    borderBottom: Boolean,
-    required: {
-      type: Boolean,
-      default: false,
-    },
-    value: [String, Array]
+    defaultValue: String,
   },
   data: () => ({
+    isLoading: true,
     isEdit: false,
+    expanded: false,
+    selectedCategory: {
+      name: null,
+      icon: null,
+    },
     reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
     categoryIconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/",
-    vendorCategories: [
+    categories: [
       {
         name: "Venue Rental",
         value: "venuerental",
-        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/venuerental.svg`,
+        icon: "venuerental.svg",
       },
       {
         name: "Food & Beverage",
         value: "foodandbeverage",
-        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/foodandbeverage.svg`,
+        icon: "foodandbeverage.svg",
       },
       {
         name: "Design and Decor",
         value: "decor",
-        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/decor.svg`,
+        icon: "decor.svg",
       },
       {
         name: "Guest Services & Staffing",
         value: "corporatesocialresponsibility",
-        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/corporatesocialresponsibility.svg`,
+        icon: "corporatesocialresponsibility.svg",
       },
       {
         name: "Signage / Printing",
         value: "signageprinting",
-        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/signageprinting.svg`,
+        icon: "signageprinting.svg",
       },
       // {
       //   name: 'Advertising and Promotion',
@@ -111,12 +66,12 @@ export default {
       {
         name: "AV / Staging",
         value: "audiovisualstagingservices",
-        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/audiovisualstagingservices.svg`,
+        icon: "audiovisualstagingservices.svg",
       },
       {
         name: "Swags",
         value: "swags",
-        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/swags.svg`,
+        icon: "swags.svg",
       },
       // {
       //   name: 'Shipping',
@@ -126,12 +81,12 @@ export default {
       {
         name: "Transportation & Tour operator",
         value: "transportation",
-        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/transportation.svg`,
+        icon: "transportation.svg",
       },
       {
         name: "Entertainment",
         value: "entertainment",
-        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/entertainment.svg`,
+        icon: "entertainment.svg",
       },
       // {
       //   name: 'Administration',
@@ -141,7 +96,7 @@ export default {
       {
         name: "Security",
         value: "securityservices",
-        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/securityservices.svg`,
+        icon: "securityservices.svg",
       },
       // {
       //   name: 'Technology',
@@ -151,125 +106,86 @@ export default {
       {
         name: "Videography and Photography",
         value: "videographyandphotography",
-        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/videographyandphotography.svg`,
+        icon: "videographyandphotography.svg",
       },
       {
         name: "Equipment Rentals",
         value: "equipmentrentals",
-        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/equipmentrentals.svg`,
+        icon: "equipmentrentals.svg",
       },
     ],
-    selectedValue: [],
+    value: null,
   }),
   mounted() {
-    console.log("signup.category.selector.mounted", this.value)
-    this.selectedValue = this.value;
+    this.value = this.defaultValue;
+    if (this.value) {
+      this.selectedCategory.name = this.getCategoryNameByValue(this.value);
+      this.selectedCategory.icon = this.getCategoryIconByValue(this.value);
+    } else {
+      this.selectedCategory = {
+        name: null,
+        icon: null,
+      };
+    }
   },
   methods: {
-    updateCategory(index, data) {
-      console.log('updateCategory', index, data);
-      this.selectedValue[index] = data;
+    updateCategory(category) {
+      this.selectedCategory = category;
+      this.value = category.value;
+      this.expanded = false;
+      this.$emit("change", this.value);
     },
-    save() {
-      this.isEdit = false;
-      this.$root.$emit("update-vendor-value", this.field, this.selectedValue);
+    getCategoryNameByValue(value) {
+      return this.categories.filter((c) => c.value == value)[0].name;
     },
-    addNewValue(){
-      this.selectedValue.push('');
-      console.log("addNewValue", this.selectedValue);
-      this.$root.$emit("update-vendor-value", this.field, this.selectedValue);
-    },
-    removeValue(index){
-      this.$root.$emit("update-vendor-value", this.field, this.selectedValue.filter((s, sIdx) => index !== sIdx));
-    },
-    getAddressData: function (index, addressData, placeResultData, id) {
-      console.log("getAddressData", index, addressData, id);
-      this.selectedValue[index] = `${addressData.route}, ${addressData.administrative_area_level_1}, ${addressData.country}`;
+    getCategoryIconByValue(value) {
+      return this.categories.filter((c) => c.value == value)[0].icon;
     },
   },
-  watch: {
-    value(newValue){
-      console.log("signup.category.selector.watch", newValue, this.field);
-      this.selectedValue = newValue;
-    }
-  }
 };
 </script>
 <style lang="scss" scoped>
 .vendor-category-editor {
+  font: normal 16px Manrope-Regular, sans-serif;
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  color: #050505;
-  margin-top: 30px;
-
-  &.border-bottom {
-    padding-bottom: 35px;
-    border-bottom: 1px solid #dddddd;
-  }
-
-  .left {
-    width: 75%;
-
-    .title {
-      font: 800 16px Manrope-Regular, sans-serif;
-    }
-
-    .inside-img{
-      width: 20px;
-      position: absolute;
-      top: 25px;
-      left: 25px;
+  .droplist {
+    position: relative;
+    .inside-img {
+      width: 22px;
       z-index: 99;
+      position: absolute;
+      top: 15px;
+      left: 15px;
     }
-
-    input.address{
-      padding-left: 60px;
-      min-height: 55px;
-      border: solid 0.5px #bcbcbc;
-      font: normal 16px Manrope-Regular, sans-serif;
-    }
-
-    .content {
-      img {width: 20px}
-    }
-
-    .action-cont {
-      margin-top: 30px;
-      text-align: right;
-
-      a {
-        cursor: pointer;
-        padding: 8px 24px;
-        &.cancel {
-          color: #050505;
-          font: 800 16px Manrope-Regular, sans-serif;
-        }
-        &.save {
-          color: #ffffff;
-          font: 800 16px Manrope-Regular, sans-serif;
-          background-color: #f51355;
-          &:hover {
-            color: #ffffff !important;
-          }
-        }
-      }
-    }
-    &.full-width {
+    input {
+      font-size: 16px;
+      font-family: "Manrope-Regular";
+      padding-left: 40px;
+      cursor: pointer;
       width: 100%;
     }
+    .dropdown {
+      position: absolute;
+      margin-top: 20px;
+      width: 14px;
+      right: 15px;
+    }
   }
 
-  .right {
-    a {
-      font: 800 16px Manrope-Regular, sans-serif;
-      color: #f51355;
+  ul {
+    list-style: none;
+    margin: 0;
+    column-count: 2;
+    padding: 40px;
+    border: solid 1px #050505;
+    box-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.16);
+
+    li {
       cursor: pointer;
-      i {
-        color: #f51355 !important;
-        position: relative;
-        top: -1px;
+      margin-bottom: 40px;
+      font: normal 16px Manrope-Regular, sans-serif;
+      img {
+        width: 22px;
       }
     }
   }
