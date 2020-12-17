@@ -284,10 +284,14 @@ export default {
       }
     },
     headerImage() {
+      console.log(this.event.concept);
       if (this.event.concept) {
         return this.event.concept.images[0].url;
       }
-      return this.event.coverImage;
+      if (this.campaign) {
+        return this.campaign.coverImage;
+      }
+      return "";
     },
   },
   methods: {
@@ -349,9 +353,7 @@ export default {
     }
     .rsvp-event-header {
       height: 430px;
-
       background-repeat: no-repeat;
-      background-size: 200%;
       background-position: center 60%;
     }
     &-overview {

@@ -22,7 +22,59 @@
         <button v-scroll-to="'#timeline-edit-card'" ref="scrollBtn" style="display: none">
           Scroll to the editing card
         </button>
-        <timeline-edit-panel></timeline-edit-panel>
+        <div class="timeline-items-list">
+          <div
+            class="timeline-items-list__item"
+            v-for="(groups, scheduleDate, dateIndex) in timelineItems"
+            :key="dateIndex"
+          >
+            <div class="item-header mb-20">
+              <div class="header-title font-size-14 color-gray text-transform-capitalize">
+                <div class="time-line-edit d-flex justify-content-center align-center">
+                  <label style="white-space: nowrap; padding-right: 10px">Day {{ numberToWord(dateIndex + 1) }}</label>
+                  <div>{{ scheduleDate }}</div>
+                  <md-datepicker
+                    :md-disabled-dates="getDisabledDates(dateIndex)"
+                    :md-closed="closeEditTimeline(dateIndex)"
+                    md-immediately
+                  ></md-datepicker>
+                </div>
+              </div>
+              <div class="header-actions">
+                <md-button
+                  class="md-default md-icon-button md-simple md-just-icon md-wrapper edit-btn"
+                  style="font-size: 26px !important"
+                  @click="addNewDateAfterCurrent(scheduleDate)"
+                >
+                  <md-icon>add_circle</md-icon>
+                </md-button>
+                <md-button
+                  class="md-default md-simple md-just-icon md-wrapper edit-btn"
+                  style="font-size: 26px !important"
+                  @click="askRemoveTimelineItem(scheduleDate)"
+                >
+                  <md-icon>delete_outline</md-icon>
+                </md-button>
+              </div>
+            </div>
+
+            <drop
+              @drop="handleDrop(dateIndex, ...arguments)"
+              style="height: 100%; min-height: 50px"
+              :data-index="dateIndex"
+            >
+              <div
+                v-for="(timelines, groupName, index) in groups"
+                :key="index"
+                class="time-line-blocks_selected-items_item time-line-item"
+              >
+                <timeline-empty :index="index" :date="scheduleDate" v-if="index == 0"></timeline-empty>
+                <timeline-group-container :timelines="timelines"></timeline-group-container>
+                <timeline-empty :index="index" :date="scheduleDate"></timeline-empty>
+              </div>
+            </drop>
+          </div>
+        </div>
       </div>
       <md-card
         class="md-card-plain time-line-blocks md-layout-item md-xlarge-size-35 md-large-size-35 md-small-size-40"
@@ -131,7 +183,7 @@ import html2canvas from "html2canvas";
 
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./components/CommentEditorPanel";
-import TimelineEditPanel from "./components/TimelineEditPanel";
+
 import ProgressSidebar from "./components/progressSidebar";
 import PlannerEventFooter from "@/components/Planner/FooterPanel";
 import { timelineBlockItems } from "@/constants/event";
@@ -158,7 +210,6 @@ export default {
     TimelineEmpty,
     TimelineGapModal,
     TimelineGroupContainer,
-    TimelineEditPanel,
   },
   props: {
     // event: Object,
@@ -191,7 +242,29 @@ export default {
         itemDay: null,
       },
     ],
-
+    a: [
+      "",
+      "one ",
+      "two ",
+      "three ",
+      "four ",
+      "five ",
+      "six ",
+      "seven ",
+      "eight ",
+      "nine ",
+      "ten ",
+      "eleven ",
+      "twelve ",
+      "thirteen ",
+      "fourteen ",
+      "fifteen ",
+      "sixteen ",
+      "seventeen ",
+      "eighteen ",
+      "nineteen ",
+    ],
+    b: ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"],
     currentAttachments: [],
     showCommentEditorPanel: false,
     showTimelineGapModal: false,
@@ -245,6 +318,66 @@ export default {
         return block;
       }
       return null;
+    },
+    handleDrop(index, data) {
+      return;
+      if (!this.canEdit) {
+        swal({
+          title: "Sorry, you can't edit timeline. ",
+          showCancelButton: false,
+          confirmButtonClass: "md-button md-success",
+          confirmButtonText: "Ok, I got it",
+          buttonsStyling: false,
+        })
+          .then((result) => {
+            if (result.value === true) {
+              return;
+            }
+          })
+          .catch((err) => {});
+        return;
+      }
+      if (data) {
+        let block = Object.assign({}, data.block);
+        block.id = new Date().getTime(); //add temp id
+        block.mode = "edit";
+
+        let startDate = new Date(this.timeline[index].itemDay);
+        let endDate = new Date(this.timeline[index].itemDay);
+        const timelineItemsCount = this.timeline[index].items.length;
+        if (timelineItemsCount == 0) {
+          if (this.eventData.eventDayPart == "evening") {
+            startDate.setHours(19);
+            endDate.setHours(20);
+          } else {
+            startDate.setHours(8);
+            endDate.setHours(9);
+          }
+        } else {
+          const prevItem = this.timeline[index].items[timelineItemsCount - 1];
+          startDate.setHours(new Date(prevItem.endTime).getHours());
+          endDate.setHours(new Date(prevItem.endTime).getHours() + 1);
+        }
+
+        block.startTime = startDate;
+        block.endTime = endDate;
+
+        block.title = block.buildingBlockType;
+        block.startDuration = "am";
+        block.endDuration = "am";
+        block.attachmentName = "";
+        block.isItemLoading = false;
+        this.timeline[index].items.push(Object.assign({}, block));
+        this.disabledDragging = true;
+      } else {
+        setTimeout(this.updateTimelineITemsOrder, 100);
+      }
+      setTimeout(() => {
+        const scrollBtn = this.$refs.scrollBtn;
+        if (scrollBtn) {
+          scrollBtn.click();
+        }
+      }, 100);
     },
 
     removeItem({ index, item }) {
@@ -564,7 +697,34 @@ export default {
         isEditable: true,
       });
     },
-
+    addNewDateAfterCurrent(scheduleDate) {
+      const currentDate = new moment(scheduleDate, "DD/MM/YY");
+      const newData = moment(currentDate).add(1, "d");
+      if (this.timelineItems[newData.format("DD/MM/YY")]) {
+        swal({
+          title: `Sorry you have timelins on ${newData.format("DD/MM/YY")}`,
+          showCancelButton: false,
+          confirmButtonClass: "md-button md-success",
+          confirmButtonText: "Ok",
+          buttonsStyling: false,
+        })
+          .then((result) => {
+            if (result.value === true) {
+              return;
+            }
+          })
+          .catch((err) => {
+            return;
+          });
+      } else {
+        this.$set(this.timelineItems, newData.format("DD/MM/YY"), []);
+        this.timelineDates.push(newData.format("DD/MM/YY"));
+      }
+    },
+    askRemoveTimelineItem(scheduleDate) {
+      this.deletingDate = scheduleDate;
+      this.showDeleteConfirmModal = true;
+    },
     removeTimelineItem() {
       const deletingDateIndedx = this.timelineDates.indexOf(this.deletingDate);
       this.timelineDates.splice(deletingDateIndedx, 1);
@@ -588,7 +748,17 @@ export default {
       this.$forceUpdate();
     },
     closeEditTimeline(index) {},
-
+    getDisabledDates(index) {
+      const vm = this;
+      const checkDate = function (date) {
+        if (index == 0) {
+          return false;
+        }
+        if (!vm.timeline[index + 1]) return date.getTime() <= vm.timeline[index - 1].itemDay;
+        return date.getTime() <= vm.timeline[index - 1].itemDay || date.getTime() >= vm.timeline[index + 1].itemDay;
+      };
+      return checkDate;
+    },
     removeAttachment(timelineItem, attachmentIndex) {
       timelineItem.attachments.splice(attachmentIndex, 1);
     },

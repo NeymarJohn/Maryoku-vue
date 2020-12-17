@@ -20,30 +20,30 @@
             <div class="budget-list d-flex justify-content-between">
               <div class="budget-list__item">
                 <div class="label-title">Budget</div>
-                <div class="budget-value">${{ statistics.total | withComma }}</div>
+                <div class="budget-value">${{ budgetStatistics.total | withComma }}</div>
                 <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="showBudgetModal = true"
                   >Edit</md-button
                 >
               </div>
               <div class="budget-list__item">
                 <div class="label-title">Allocated</div>
-                <div class="budget-value">${{ allocatedTotalBudget | roundNumber | withComma }}</div>
-                <div class="percent">{{ ((statistics.allocated * 100) / calendarEvent.totalBudget).toFixed(1) }} %</div>
+                <div class="budget-value">${{ budgetStatistics.allocated | withComma }}</div>
+                <div class="percent">{{ budgetStatistics.allocatedPercentage }} %</div>
               </div>
               <div class="budget-list__item">
                 <div class="label-title">Booked</div>
-                <div class="budget-value">${{ statistics.booked | withComma }}</div>
-                <div class="percent">{{ ((statistics.booked * 100) / calendarEvent.totalBudget).toFixed(1) }}%</div>
+                <div class="budget-value">${{ budgetStatistics.booked | withComma }}</div>
+                <div class="percent">{{ budgetStatistics.bookedPercentage }}%</div>
               </div>
             </div>
           </div>
           <div class="card-section card-overview-saved text-center d-flex justify-center align-center">
             <span>So far you saved :</span>
-            <md-icon class="card-overview-saved-icon" style="color: #167c3a" v-if="getSavedAmount >= 0"
+            <md-icon class="card-overview-saved-icon" style="color: #167c3a" v-if="budgetStatistics.saved >= 0"
               >add_circle_outline</md-icon
             >
-            <md-icon class="card-overview-saved-icon" v-else style="color: #f51355">remove_circle_outline</md-icon>
-            <span class="card-overview-saved-amount">$ {{ getSavedAmount | withComma }}</span>
+            <md-icon class="card-overview-saved-icon color-red" v-else>remove_circle_outline</md-icon>
+            <span class="card-overview-saved-amount">$ {{ budgetStatistics.saved | withComma }}</span>
           </div>
           <div class="card-section card-expense">
             <div class="section-header">Expenses</div>
@@ -56,8 +56,8 @@
           <div class="event-blocks-table">
             <tabs
               :tab-name="[
-                '<img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+26.png\'> Total',
-                ' <img src=\'https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest',
+                `<img src='${$iconURL}budget+screen/png/Asset+26.png'> Total`,
+                `<img src='${$iconURL}budget+screen/png/Asset+28.png'> Per Guest`,
               ]"
             >
               <!-- here you can add your content for tab-content -->
@@ -88,7 +88,7 @@
         v-if="showBudgetModal"
         :event="event"
         @cancel="showBudgetModal = false"
-        @save="updateBudget"
+        @save="updateTotalBudget"
       ></budget-edit-modal>
       <modal v-if="budgetConfirmationModal" class="add-category-model">
         <template slot="header">
@@ -235,8 +235,8 @@ export default {
       budgetPerEmployee: 0,
       activeTab: 0,
       totalBudget: 0,
-      menuIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
-      iconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/",
+      menuIconsURL: `${this.$iconURL}menu%20_%20checklist/SVG/`,
+      iconsURL: `${this.$iconURL}Event%20Page/`,
       showBudgetModal: false,
       budgetConfirmationModal: false,
       newBudget: null,
@@ -309,7 +309,6 @@ export default {
               console.log(this.selectedComponents);
               this.seriesData = components;
             });
-          this.getCalendarEventStatistics(event);
 
           this.$root.$emit(
             "set-title",
@@ -360,37 +359,6 @@ export default {
       });
       location.reload();
     },
-    getCalendarEventStatistics(evt) {
-      let calendar = new Calendar({
-        id: this.currentUser.profile.defaultCalendarId,
-      });
-      let event = new CalendarEvent({
-        id: this.event.id,
-      });
-
-      new CalendarEventStatistics()
-        .for(calendar, event)
-        .get()
-        .then((resp) => {
-          console.log(resp);
-          this.statistics = {
-            total: resp[0].totalBudget,
-            allocated: resp[0].totalAllocatedBudget,
-            booked: resp[0].totalBookedBudget,
-          };
-          this.totalRemainingBudget = resp[0].totalBudget - resp[0].totalAllocatedBudget; // (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget // evt.totalBudget - resp[0].totalAllocatedBudget;
-          this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants; // evt.totalBudget - resp[0].totalAllocatedBudget;
-          this.percentage =
-            100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2);
-
-          this.budgetPerEmployee = evt.budgetPerPerson; // this.totalRemainingBudget / evt.numberOfParticipants;
-          this.allocatedBudget = resp[0].totalAllocatedBudget;
-          this.event.statistics = this.statistics;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
     openUploadModal() {
       this.$refs.uploadModal.toggleModal(true);
     },
@@ -422,7 +390,6 @@ export default {
               .save()
               .then((response) => {
                 this.showBudgetModal = false;
-                //this.getCalendarEventStatistics()
                 this.getEvent();
               })
               .catch((error) => {
@@ -437,7 +404,6 @@ export default {
           .save()
           .then((response) => {
             this.showBudgetModal = false;
-            //this.getCalendarEventStatistics()
             this.getEvent();
           })
           .catch((error) => {
@@ -446,6 +412,16 @@ export default {
       } else {
         this.showBudgetModal = false;
       }
+    },
+    updateTotalBudget(newBudget) {
+      const event = new CalendarEvent({
+        id: this.event.id,
+        totalBudget: newBudget.totalBudget,
+        unexpectedBudget: this.event.unexpectedBudget + (newBudget.totalBudget - this.event.totalBudget),
+      });
+      this.$store.dispatch("event/saveEventAction", event).then((res) => {
+        this.showBudgetModal = false;
+      });
     },
     onChangeComponent(event) {
       this.getEvent();
@@ -461,16 +437,12 @@ export default {
   computed: {
     ...mapState("EventPlannerVuex", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode"]),
     ...mapGetters({
+      budgetStatistics: "event/budgetStatistics",
       components: "event/getComponentsList",
       currentUser: "auth/currentUser",
     }),
     pieChartData() {
-      return this.selectedComponents.filter((item) => item.componentId !== "unexpected");
-    },
-    categoryItems() {
-      return {
-        data: this.seriesData,
-      };
+      return this.$store.state.event.eventData.components;
     },
     // check permission
     permission() {
@@ -485,16 +457,6 @@ export default {
     },
     canEdit() {
       return !this.permission || this.permission === "edit";
-    },
-    getSavedAmount() {
-      let savedAmount = 0;
-      console.log("booked", this.selectedComponents);
-      this.selectedComponents.forEach((item) => {
-        if (item.bookedBudget) {
-          savedAmount += item.allocatedBudget - item.bookedBudget;
-        }
-      });
-      return savedAmount;
     },
     allocatedTotalBudget() {
       return (

@@ -39,9 +39,7 @@ class EventService {
             if (event.components) {
                 for (let i in event.components) {
                     event.components[i].progress !== 100;
-                    return `/events/${event.id}/booking/${
-                        event.components[i].id
-                    }`;
+                    return `/events/${event.id}/booking/${event.components[i].id}`;
                 }
             }
             return `/events/${event.id}/booking/timeline`;
@@ -49,30 +47,20 @@ class EventService {
     }
     saveEventFromStorage(calendarId) {
         const editingEvent = JSON.parse(localStorage.getItem("event"));
+        delete editingEvent["id"];
         const calendar = new Calendar({ id: calendarId });
         return new Promise((resolve, reject) => {
             let newEvent = new CalendarEvent({
+                ...editingEvent,
+                expectedAttendacePercent: 0,
                 calendar: calendar,
-                title: editingEvent.title,
-                occasion: editingEvent.occasion
-                    ? editingEvent.occasion.value
-                    : "",
-                eventStartMillis: editingEvent.eventStartMillis,
-                eventEndMillis: editingEvent.eventEndMillis,
-                numberOfParticipants: editingEvent.numberOfParticipants,
+                occasion: editingEvent.occasion ? editingEvent.occasion.value : "",
                 budgetPerPerson: 0,
                 totalBudget: 0,
                 status: "draft",
                 currency: "USD",
                 eventType: editingEvent.eventType,
-                category: editingEvent.occasion
-                    ? editingEvent.occasion.name
-                    : "",
                 editable: true,
-                location: editingEvent.location,
-                locationId: editingEvent.locationId,
-                inOutDoor: editingEvent.inOutDoor,
-                eventSongId: editingEvent.eventSongId,
                 guestType: editingEvent.guestType.name,
             })
                 .for(calendar)

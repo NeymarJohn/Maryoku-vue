@@ -109,7 +109,7 @@ export default {
     },
   },
   beforeDestroy() {
-    //this.$root.$off('update-vendor-value');
+    this.$root.$off('update-vendor-value');
   }
 };
 </script>

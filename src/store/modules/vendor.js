@@ -86,11 +86,9 @@ const mutations = {
     state.step = step;
   },
   setEditing(state, editing){
-    console.log("setEditing", editing);
     state.isEditing = editing;
   },
   setVendor(state, vendor){
-    console.log('setVendor', vendor);
     state.vendor = vendor;
   },
   SET_DATA (state, data){

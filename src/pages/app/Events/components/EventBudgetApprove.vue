@@ -28,7 +28,7 @@
           >
             <template slot="tab-pane-1">
               <event-budget-component
-                v-for="component in selectedComponents"
+                v-for="component in categoryList"
                 :component="component"
                 :key="component.id"
                 :editable="canEdit"
@@ -84,7 +84,7 @@
                 :editable="canEdit"
                 type="perguest"
                 :participants="event.numberOfParticipants"
-                v-for="(component, index) in selectedComponents"
+                v-for="(component, index) in categoryList"
                 :component="component"
                 :key="index"
               ></event-budget-component>
@@ -154,7 +154,7 @@
     <add-new-category-modal
       v-if="showAddNewCategory"
       :event="event"
-      :components="selectedComponents"
+      :components="categoryList"
       @cancel="showAddNewCategory = false"
       @save="addNewCategory"
     ></add-new-category-modal>
@@ -230,6 +230,9 @@ export default {
     canEdit() {
       return !this.permission || this.permission === "edit";
     },
+    categoryList() {
+      return this.$store.state.event.eventData.components.sort((a, b) => a.eventCategory.order - b.eventCategory.order);
+    },
   },
   methods: {
     updateBudget(eventBudget) {
@@ -244,40 +247,13 @@ export default {
       });
     },
     async addNewCategory(newCategory) {
-      let newComponent = newCategory.category;
-      if (newComponent.id === "other") {
-        const newCategory = {
-          title: `Other-${newCategory.name}`,
-          key: `other-${newCategory.name.toLowerCase()}`,
-          color: `rgb(${parseInt(Math.random() * 255)}, ${parseInt(Math.random() * 255)}, ${parseInt(
-            Math.random() * 255,
-          )})`,
-          icon: `other.svg`,
-          type: "customized",
-          categoryId: "other",
-        };
-        newComponent = await new EventCategory(newCategory).save();
-      }
-      let newBlock = {
-        componentId: newComponent ? newComponent.key : "other",
-        componentCategoryId: newComponent ? newComponent.key : "other",
-        calendarEvent: { id: this.event.id },
-        allocatedBudget: newCategory.budget,
-        order: this.selectedComponents.length,
-        icon: newComponent.icon,
-        category: newComponent,
-      };
-
-      new EventComponent(newBlock)
-        .for(this.event)
-        .save()
-        .then((res) => {
-          this.showAddNewCategory = false;
-          this.selectedComponents = res.eventComponents.sort((a, b) => a.eventCategory.order - b.eventCategory.order);
-        })
-        .catch((error) => {
-          console.log("Error while saving ", error);
-        });
+      const event = new CalendarEvent({
+        id: this.event.id,
+        unexpectedBudget: this.event.unexpectedBudget - newCategory.allocatedBudget,
+        calendar: new Calendar({ id: this.event.calendar.id }),
+      });
+      this.showAddNewCategory = false;
+      this.$store.dispatch("event/saveEventAction", event).then((res) => {});
     },
     deleteCategory(category) {
       const deletingCategory = new EventComponent({ id: category.id });
@@ -286,6 +262,14 @@ export default {
         .delete()
         .then((resp) => {
           this.isLoading = false;
+
+          const event = new CalendarEvent({
+            id: this.event.id,
+            unexpectedBudget: this.event.unexpectedBudget + category.allocatedBudget,
+            calendar: new Calendar({ id: this.event.calendar.id }),
+          });
+          this.$store.dispatch("event/saveEventAction", event).then((res) => {});
+
           this.selectedComponents.splice(
             this.selectedComponents.findIndex((b) => {
               return b.id === deletingCategory.id;
