@@ -21,7 +21,7 @@
             </div>
           </div>
           <div class="banner">
-            <img :src="vendor.images[0]" v-if="vendor.images.length > 0" />
+            <img :src="vendor.images[0]" v-if="vendor.hasOwnProperty('images') && vendor.images.length > 0" />
           </div>
           <div class="about-cont" id="About">
             <div class="block">
@@ -508,7 +508,7 @@ export default {
     getGalleryImages: function () {
       let temp = [];
 
-      if (this.vendor.images.length > 0) {
+      if (this.vendor.hasOwnProperty('images') && this.vendor.images.length) {
         this.vendor.images.forEach((item) => {
           temp.push({
             thumb: item,

@@ -41,14 +41,14 @@
           <div v-if="showCalendar">
             <div>Choose your email account:</div>
             <div class="mt-30">
-              <md-radio v-model="emailAccount" class="mr-60" value="google"
+              <md-radio v-model="emailAccount" class="mr-60" value="gmail"
                 ><img :src="`${$iconURL}RSVP/Image+200.png`" style="margin-top: -10px"
               /></md-radio>
               <md-radio v-model="emailAccount" value="outlook"
                 ><img :src="`${$iconURL}RSVP/Image+201.png`" style="margin-top: -15px"
               /></md-radio>
             </div>
-            <md-button class="md-outlined md-simple md-red mt-20 sync_button" @click="syncCalendar">Sync</md-button>
+            <md-button class="md-outlined md-simple md-red mt-20 sync_button">Sync</md-button>
           </div>
         </div>
       </div>
@@ -58,15 +58,6 @@
 </template>
 <script>
 import { Modal, MaryokuInput } from "@/components";
-// Client ID and API key from the Developer Console
-const CLIENT_ID = "1016422269325-8bhm78m73gebu9k38nj61nr2246r1a1h.apps.googleusercontent.com";
-const API_KEY = "AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8";
-// Array of API discovery doc URLs for APIs used by the quickstart
-const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
-// Authorization scopes required by the API; multiple scopes can be
-// included, separated by spaces.
-const SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
-
 export default {
   components: {
     Modal,
@@ -84,15 +75,12 @@ export default {
   },
   created() {
     console.log(this.campaign);
-    this.api = gapi;
-    this.initClient();
   },
   data() {
     return {
       showZoomLink: false,
       showCalendar: false,
       emailAccount: "outlook",
-      authorized: false,
     };
   },
   methods: {
@@ -101,36 +89,6 @@ export default {
     },
     setRsvpToZoom() {
       this.$emit("setRSVP");
-    },
-    initClient() {
-      let vm = this;
-
-      vm.api.client
-        .init({
-          apiKey: API_KEY,
-          clientId: CLIENT_ID,
-          discoveryDocs: DISCOVERY_DOCS,
-          scope: SCOPES,
-        })
-        .then((_) => {
-          // Listen for sign-in state changes.
-          vm.api.auth2.getAuthInstance().isSignedIn.listen(vm.authorized);
-        });
-    },
-
-    handleAuthClick() {
-      Promise.resolve(this.api.auth2.getAuthInstance().signIn()).then((_) => {
-        this.authorized = true;
-      });
-    },
-    syncCalendar() {
-      if (this.emailAccount === "google") {
-        this.handleAuthClick();
-        // this.$gapi._load().then((gapi) => {
-        //   console.log("gapi object :", gapi);
-
-        // });
-      }
     },
   },
 };

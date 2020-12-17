@@ -109,7 +109,7 @@ export default {
         this.setStep(1);
       } else {
         if (this.validateBasicFields()) {
-          console.log("approve.vendor", this.vendor);
+          // console.log("approve.vendor", this.vendor);
           this.$set(this.vendor, "vendorCategory", this.vendor.vendorCategories[0]);
           this.$set(this.vendor, "vendorAddressLine1", this.vendor.vendorAddresses[0]);
           this.$set(this.vendor, "isEditing", true);
@@ -198,7 +198,7 @@ export default {
   },
   created() {},
   mounted() {
-    console.log("vendor.signup.layout.vendor", this.vendor, this.step);
+    // console.log("vendor.signup.layout.vendor", this.vendor, this.step);
     this.$root.$on("go-to-signup-step", (step) => {
       this.setStep(step);
     });
@@ -221,13 +221,12 @@ export default {
       }
     },
     status() {
-      console.log();
       return this.$store.getters["vendor/getStatus"];
     },
   },
   watch: {
     step(newVal) {
-      console.log("signup.layout.wathc.step", newVal);
+      // console.log("signup.layout.wathc.step", newVal);
     },
   },
 };

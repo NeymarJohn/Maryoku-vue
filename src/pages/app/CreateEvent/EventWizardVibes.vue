@@ -100,8 +100,12 @@ export default {
     },
     getEventData() {
       return new CalendarEvent({
-        ...this.publicEventData,
         calendar: this.defaultCalendar,
+        title: this.publicEventData.title,
+        occasion: this.publicEventData.occasion,
+        eventStartMillis: this.publicEventData.eventStartMillis,
+        eventEndMillis: this.publicEventData.eventEndMillis,
+        numberOfParticipants: this.publicEventData.numberOfParticipants,
         budgetPerPerson: 0,
         totalBudget: 0,
         status: "draft",
@@ -109,6 +113,11 @@ export default {
         eventType: this.publicEventData.eventType.id,
         category: "Holidays", //! this.publicEventData.editable ? 'Holidays' : 'CompanyDays',
         editable: true,
+        location: this.publicEventData.location,
+        locationId: this.publicEventData.locationId,
+        inOutDoor: this.publicEventData.inOutDoor,
+        eventSongId: this.publicEventData.eventSongId,
+        guestType: this.publicEventData.guestType,
       });
     },
     createEvent() {
