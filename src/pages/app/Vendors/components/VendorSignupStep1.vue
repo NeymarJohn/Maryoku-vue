@@ -466,7 +466,9 @@ export default {
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    console.log("mounted", this.vendor);
+  },
   methods: {
     handleDrop(data, event) {
       event.preventDefault();
@@ -588,7 +590,7 @@ export default {
       }
     },
     updateVendor(event, fieldName) {
-      console.log('updateVendor', fieldName);
+      // console.log('updateVendor', fieldName);
       this.$root.$emit("update-vendor-value", fieldName, event.target.value);
     },
     save() {
@@ -597,7 +599,7 @@ export default {
       let jpeg = _this.$refs.signature.save("image/jpeg");
       // let svg = _this.$refs.signature.save('image/svg+xml')
       this.$root.$emit("update-vendor-value", "signature", jpeg);
-      console.log(this.vendor);
+      // console.log(this.vendor);
     },
     clear() {
       let _this = this;

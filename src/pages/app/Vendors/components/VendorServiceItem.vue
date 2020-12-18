@@ -59,6 +59,7 @@ export default {
   },
   created() {},
   mounted() {
+    // console.log("vendor.service.item", this.serviceItem)
   },
   methods: {},
   computed: {},

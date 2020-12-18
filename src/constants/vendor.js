@@ -190,18 +190,6 @@ export const businessCategories = [
                 xIncluded: true,
               },
               {
-                name: 'all indoor',
-                type: Boolean,
-                value: false,
-                xIncluded: true,
-              },
-              {
-                name: 'all outdoor',
-                type: Boolean,
-                value: false,
-                xIncluded: true,
-              },
-              {
                 name: 'accessible bathrooms',
                 type: Number,
                 value: 1,
@@ -2297,6 +2285,12 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
               },
+              {
+                name: 'staff : guest ratio',
+                type: 'Ratio',
+                staff: null,
+                quest: null,
+              }
             ]
           }
         ]
@@ -2511,6 +2505,12 @@ export const businessCategories = [
                 type: Boolean,
                 value: false
               },
+              {
+                name: 'staff : guest ratio',
+                type: 'Ratio',
+                staff: null,
+                quest: null,
+              }
             ]
           }
         ]

@@ -107,7 +107,7 @@ export default {
   },
   created() {},
   mounted() {
-      console.log("basic.info.vendor", this.vendor);
+      // console.log("basic.info.vendor", this.vendor);
   },
   methods: {
     save() {},
@@ -117,7 +117,7 @@ export default {
   filters: {},
   watch: {
       vendor(newVal){
-          console.log("vendor.basicInfo.watch.vendor", newVal);
+          // console.log("vendor.basicInfo.watch.vendor", newVal);
       }
   },
 };

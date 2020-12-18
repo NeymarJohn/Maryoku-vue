@@ -54,6 +54,7 @@ import TimelineTemplateItem from "./TimelineTemplateItem";
 import { Drag, Drop } from "vue-drag-drop";
 import { hexToRgbA } from "@/utils/helperFunction";
 import moment from "moment";
+import CalendarEvent from "@/models/CalendarEvent";
 export default {
   components: {
     TimelineItem,
@@ -150,9 +151,9 @@ export default {
       block.icon = droppedData.block.icon;
       block.date = this.timelineDate.date;
       block.groupNumber = this.groupIndex;
-      console.log(block);
-      console.log(this.timelineItems);
+      block.event = new CalendarEvent({ id: this.event.id });
       this.isHover = false;
+      delete block.id;
       this.timelineItems.push(block);
       console.log(this.timelineItems);
     },

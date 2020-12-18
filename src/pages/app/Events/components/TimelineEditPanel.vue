@@ -201,7 +201,6 @@ export default {
 
     gettingSlotData(data, scheduleDate) {
       let block = Object.assign({}, data.block);
-      block.id = new Date().getTime(); //add temp id
       block.mode = "edit";
 
       let startDate = new Date(scheduleDate);
@@ -229,6 +228,8 @@ export default {
       block.endDuration = "am";
       block.attachmentName = "";
       block.isItemLoading = false;
+      block.event = { id: this.event.id };
+      delete block.id;
       return block;
     },
   },
