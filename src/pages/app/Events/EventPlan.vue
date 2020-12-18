@@ -1,6 +1,6 @@
 <template>
   <div class="event-plan">
-    <progress-sidebar :elements="eventElements" page="plan"></progress-sidebar>
+    <progress-sidebar :elements="barItems" page="plan"></progress-sidebar>
     <EventDetailsOverview v-if="pageId == 'overview'"></EventDetailsOverview>
     <event-details-timeline v-else-if="pageId == 'timeline'"></event-details-timeline>
     <event-concept-choose v-else-if="pageId == 'concept'"></event-concept-choose>
@@ -38,6 +38,78 @@ export default {
     ...mapState("event", {
       eventData: (state) => state.eventData,
     }),
+    event() {
+      return this.$store.state.event.eventData;
+    },
+    barItems() {
+      if (this.event) {
+        const overview = {
+          title: "Create Event",
+          status: "completed",
+          route: "overview",
+          // icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
+          progress: 100,
+          componentId: "overview",
+        };
+        const concept = {
+          title: "Choose Concept",
+          status: this.event.concept && this.event.conceptProgress === 100 ? "completed" : "not-complete",
+          route: "booking/concept",
+          icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
+          progress: this.event.concept ? this.event.conceptProgress : 0,
+          componentId: "concept",
+        };
+        const budget = {
+          title: this.event.budgetProgress <= 50 ? "Create Budget" : "Approve Budget",
+          status: "not-complete",
+          route: this.event.budgetProgress == 100 ? "edit/budget" : "booking/budget",
+          icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
+          progress: this.event.budgetProgress,
+          componentId: "budget",
+        };
+        const timeline = {
+          title: "Generate timeline",
+          status: this.event.timelineProgress === 100 ? "completed" : "not-complete",
+          route: "booking/timeline",
+          icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
+          progress: this.event.timelineProgress,
+          componentId: "timeline",
+        };
+        const campaign = {
+          title: "Create Campaigns",
+          status: "current",
+          route: "booking/campaign",
+          icon: `${this.$iconURL}Campaign/Group 8857.svg`,
+          progress: 0,
+          componentId: "campaign",
+        };
+        const elements = [];
+        elements.push(overview);
+        if (this.event.eventType.hasConcept) {
+          elements.push(concept);
+        }
+        elements.push(budget);
+        elements.push(timeline);
+        elements.push(campaign);
+
+        // show when you approve budget
+        if (this.event.budgetProgress == 100) {
+          this.event.components.forEach((item) => {
+            if (item.componentId !== "unexpected") {
+              elements.push({
+                title: item.bookTitle,
+                status: "not-complete",
+                route: "booking/" + item.id,
+                icon: `${this.$iconURL}Budget+Elements/${item.componentId}.svg`,
+              });
+            }
+          });
+        }
+        return elements;
+      } else {
+        return [];
+      }
+    },
   },
   data() {
     return {
@@ -50,75 +122,6 @@ export default {
     this.fetchData();
   },
   methods: {
-    generatedItems(event) {
-      const overview = {
-        title: "Create Event",
-        status: "completed",
-        route: "overview",
-        // icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-        progress: 100,
-        componentId: "overview",
-      };
-      const concept = {
-        title: "Choose Concept",
-        status: event.concept && event.conceptProgress === 100 ? "completed" : "not-complete",
-        route: "booking/concept",
-        icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-        progress: event.concept ? event.conceptProgress : 0,
-        componentId: "concept",
-      };
-      const budget = {
-        title: this.event.budgetProgress <= 50 ? "Create Budget" : "Approve Budget",
-        status: "not-complete",
-        route: this.event.budgetProgress == 100 ? "edit/budget" : "booking/budget",
-        icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
-        progress: this.event.budgetProgress,
-        componentId: "budget",
-      };
-      const timeline = {
-        title: "Generate timeline",
-        status: event.timelineProgress === 100 ? "completed" : "not-complete",
-        route: "booking/timeline",
-        icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-        progress: event.timelineProgress,
-        componentId: "timeline",
-      };
-      const campaign = {
-        title: "Create Campaigns",
-        status: "current",
-        route: "booking/campaign",
-        icon: `${this.$iconURL}Campaign/Group 8857.svg`,
-        progress: 0,
-        componentId: "campaign",
-      };
-      const elements = [];
-      elements.push(overview);
-      if (this.event.eventType.hasConcept) {
-        elements.push(concept);
-      }
-      elements.push(budget);
-      elements.push(timeline);
-      elements.push(campaign);
-
-      const vm = this;
-      new EventComponent()
-        .for(this.calendar, event)
-        .get()
-        .then((resp) => {
-          // resp.sort((a, b) => a.order - b.order);
-          resp.forEach((item) => {
-            if (item.componentId !== "unexpected") {
-              elements.push({
-                title: item.bookTitle,
-                status: "not-complete",
-                route: "booking/" + item.id,
-                icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget+Elements/${item.componentId}.svg`,
-              });
-            }
-          });
-          vm.eventElements = elements;
-        });
-    },
     setConstantStates(event) {
       const overviewIndex = this.eventElements.findIndex((item) => item.componentId === "overview");
       const conceptIndex = this.eventElements.findIndex((item) => item.componentId === "concept");
@@ -153,12 +156,7 @@ export default {
       console.log("pageid", this.pageId);
     },
   },
-  created() {
-    const currentUser = this.$store.state.auth.user;
-    this.calendar = new Calendar({ id: currentUser.profile.defaultCalendarId });
-    this.event = this.$store.state.event.eventData;
-    this.generatedItems(this.event);
-  },
+  created() {},
   watch: {
     $route: "fetchData",
     event(newValue) {

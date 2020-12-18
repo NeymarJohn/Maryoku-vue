@@ -31,19 +31,17 @@
         </div>
       </div>
 
-      <div
-        v-for="(templateName, templateIndex) in scheduleDate.templates"
-        :key="`${templateName}-${templateIndex}`"
-        class="time-line-blocks_selected-items_item time-line-item"
-      >
-        <timeline-empty :index="templateIndex" :date="scheduleDate" v-if="templateIndex == 0"></timeline-empty>
-        <timeline-template-container
-          :templateName="templateName"
-          :groupIndex="templateIndex"
-          :timelineDate="scheduleDate"
-        ></timeline-template-container>
-        <timeline-empty :index="templateIndex" :date="scheduleDate"></timeline-empty>
-      </div>
+      <drop @drop="handleDrop(dateIndex, ...arguments)" style="height: 100%; min-height: 50px" :data-index="dateIndex">
+        <div
+          v-for="(templateName, templateIndex) in scheduleDate.templates"
+          :key="templateName"
+          class="time-line-blocks_selected-items_item time-line-item"
+        >
+          <timeline-empty :index="templateIndex" :date="scheduleDate" v-if="templateIndex == 0"></timeline-empty>
+          <timeline-template-container :templateName="templateName"></timeline-template-container>
+          <timeline-empty :index="templateIndex" :date="scheduleDate"></timeline-empty>
+        </div>
+      </drop>
     </div>
   </div>
 </template>
