@@ -13,6 +13,7 @@
           class="mt-10 mb-10"
         ></timeline-item>
       </template>
+
       <drop
         v-if="template.type === 'group'"
         style="height: 100%; min-height: 50px"
@@ -174,9 +175,10 @@ export default {
     width: 100%;
     position: relative;
     .empty-template-icon {
-      width: 50px;
-      height: 50px;
+      width: 60px;
+      height: 60px;
       border: dashed 1px #908f8f;
+      background-color: #f5f5f5;
       border-radius: 50%;
       position: absolute;
       left: 0;

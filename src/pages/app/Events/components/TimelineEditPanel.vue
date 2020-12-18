@@ -236,6 +236,17 @@ export default {
 </script>
 <style lang="scss" scoped>
 .timeline-items-list {
+  .timeline-group-wrapper {
+    position: relative;
+    &:not(:last-child)::before {
+      content: "";
+      position: absolute;
+      border-left: dashed 1px #908f8f;
+      height: 100%;
+      top: 50px;
+      left: 30px;
+    }
+  }
   margin-top: 1em;
   height: 100%;
   &__item {
