@@ -188,17 +188,33 @@ export default {
       showAddNewCategory: false,
     };
   },
-  created() {},
+  created() {
+    const event = new CalendarEvent({ id: this.event.id });
+    new EventComponent()
+      .for(event)
+      .get()
+      .then((components) => {
+        components.sort((a, b) => a.order - b.order);
+        this.selectedComponents = components;
+        this.$forceUpdate();
+        this.isRendered = true;
+      });
+  },
   computed: {
     event() {
       return this.$store.state.event.eventData;
     },
-
+    allocatedTotal() {
+      const addedBudget = this.selectedComponents.reduce((sum, item) => {
+        return sum + item.allocatedBudget;
+      }, 0);
+      return addedBudget + this.event.allocatedTips + this.event.allocatedFees;
+    },
     unusedBudget() {
       return this.event.totalBudget;
     },
     pieChartData() {
-      return this.categoryList.filter((item) => item.componentId !== "unexpected");
+      return this.selectedComponents.filter((item) => item.componentId !== "unexpected");
     },
     permission() {
       console.log(this.$store.state.event.eventData);
@@ -246,12 +262,27 @@ export default {
         .delete()
         .then((resp) => {
           this.isLoading = false;
+
           const event = new CalendarEvent({
             id: this.event.id,
             unexpectedBudget: this.event.unexpectedBudget + category.allocatedBudget,
             calendar: new Calendar({ id: this.event.calendar.id }),
           });
           this.$store.dispatch("event/saveEventAction", event).then((res) => {});
+
+          this.selectedComponents.splice(
+            this.selectedComponents.findIndex((b) => {
+              return b.id === deletingCategory.id;
+            }),
+            1,
+          );
+          this.$forceUpdate();
+
+          let allocatedBudget = 0;
+          this.selectedComponents.forEach((item) => {
+            allocatedBudget += Number(item.allocatedBudget);
+          });
+          this.allocatedBudget = allocatedBudget;
           this.$emit("change");
         })
         .catch((error) => {

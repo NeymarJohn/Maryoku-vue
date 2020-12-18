@@ -12,8 +12,8 @@
         <div class="mt-3 types">
           <div
             class="type-card"
-            @click="addType(type.value)"
-            :class="{ selected: isSelected(type.value) }"
+            @click="selectedType = type.value"
+            :class="{ selected: type.value == selectedType }"
             v-for="type in types"
             :key="type.value"
           >
@@ -24,7 +24,7 @@
               {{ type.name }}
             </div>
             <div>
-              <md-checkbox class="md-checkbox-circle md-red" v-model="selectedTypes" :value="type.value"></md-checkbox>
+              <md-checkbox class="md-checkbox-circle md-red" v-model="selectedType" :value="type.value"></md-checkbox>
             </div>
           </div>
         </div>
@@ -49,19 +49,12 @@ export default {
     MaryokuInput,
   },
   created() {
-    if (this.publicEventData.places) {
-      this.selectedTypes = this.publicEventData.places;
+    if (this.publicEventData.inOutDoor) {
+      this.selectedType = this.publicEventData.inOutDoor;
     }
   },
   methods: {
     ...mapMutations("PublicEventPlanner", ["setEventProperty", "setCurrentStep"]),
-    addType(value) {
-      if (this.isSelected(value)) {
-        this.selectedTypes.splice(this.selectedTypes.indexOf(value), 1);
-      } else {
-        this.selectedTypes.push(value);
-      }
-    },
     validateDate() {
       return this.$refs.datePicker.$el.classList.contains("md-has-value");
     },
@@ -102,7 +95,7 @@ export default {
       });
     },
     goToNext() {
-      this.setEventProperty({ key: "places", actualValue: this.selectedTypes });
+      this.setEventProperty({ key: "inOutDoor", actualValue: this.selectedType });
       this.$router.push({ path: `/event-wizard-type` });
     },
     skip() {
@@ -112,33 +105,30 @@ export default {
       this.$router.push({ path: `/event-wizard-location` });
     },
     getIconUrl(value) {
-      if (value === "INDOORS" || value === "OUTDOORS") {
-        return `${this.$iconURL}Onboarding/${value.toLowerCase()}-dark.svg`;
-      } else if (value === "VIRTUAL") {
+      if (value === "indoors" || value === "outdoors") {
+        return `${this.$iconURL}Onboarding/${value}-dark.svg`;
+      } else if (value === "virtual") {
         return `${this.$secondIconURL}Creation/group-11232.svg`;
       }
-    },
-    isSelected(value) {
-      return this.selectedTypes.indexOf(value) > -1;
     },
   },
   data() {
     return {
       buildings: [],
-      selectedTypes: [],
+      selectedType: "",
       types: [
         {
-          value: "INDOORS",
+          value: "indoors",
           name: "Indoor Event",
           selected: false,
         },
         {
-          value: "OUTDOORS",
+          value: "outdoors",
           name: "Outdoor Event",
           selected: false,
         },
         {
-          value: "VIRTUAL",
+          value: "virtual",
           name: "Virtual Event",
           selected: false,
         },

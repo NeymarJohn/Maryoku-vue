@@ -299,10 +299,10 @@ export default {
       }
     },
     canComment() {
-      return this.canEdit || this.permission === "comment";
+      return this.permission === "edit" || this.permission === "comment";
     },
     canEdit() {
-      return !this.permission || this.permission === "edit";
+      return this.permission === "edit";
     },
   },
   data: () => ({

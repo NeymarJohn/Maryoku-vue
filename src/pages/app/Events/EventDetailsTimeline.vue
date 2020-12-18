@@ -648,6 +648,7 @@ export default {
     finalize() {
       if (this.checkTimeGap()) {
         this.showTimelineGapModal = false;
+        console.log(this.eventData);
         this.$http
           .post(`${process.env.SERVER_URL}/1/events/${this.eventData.id}/timelineItems`, this.timelineItems, {
             headers: this.$auth.getAuthHeader(),
@@ -707,19 +708,19 @@ export default {
       return true;
     },
     checkTimeGap() {
-      const timeGaps = [];
-      this.timelineDateKeys.forEach((dateKey) => {
-        this.timelineItems[dateKey].forEach((item) => {
-          if (item.status === "timegap") {
-            timeGaps.push(item);
-          }
-        });
-      });
-      if (timeGaps.length > 0) {
-        this.timelineGaps = { ...timeGaps };
-        this.showTimelineGapModal = true;
-        return false;
-      }
+      // const timeGaps = [];
+      // this.timelineDateKeys.forEach((dateKey) => {
+      //   this.timelineItems[dateKey].forEach((item) => {
+      //     if (item.status === "timegap") {
+      //       timeGaps.push(item);
+      //     }
+      //   });
+      // });
+      // if (timeGaps.length > 0) {
+      //   this.timelineGaps = { ...timeGaps };
+      //   this.showTimelineGapModal = true;
+      //   return false;
+      // }
       return true;
     },
   },
@@ -775,6 +776,7 @@ export default {
   },
   computed: {
     ...mapState("event", ["eventData"]),
+
     currentUser() {
       return this.$store.state.auth.user;
     },
