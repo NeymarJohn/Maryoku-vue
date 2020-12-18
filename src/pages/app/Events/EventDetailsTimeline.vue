@@ -651,7 +651,7 @@ export default {
         console.log(this.eventData);
         const newEvent = new CalendarEvent({
           id: this.eventData.id,
-          timelineDates: this.eventData.timelineDates,
+          // timelineDates: this.eventData.timelineDates,
           timelineProgress: 100,
         });
         this.$store.dispatch("event/saveEventAction", newEvent).then((event) => {
