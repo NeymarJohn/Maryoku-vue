@@ -76,12 +76,12 @@
                         <div class="item" @click="setPolicy(null, 'Including', r.name, true)">
                           <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="r.value" />
                           <span class="unchecked" v-else></span>
-                          Include
+                          Included
                         </div>
                         <div class="item" @click="setPolicy(null, 'Including', r.name, false)">
                           <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!r.value" />
                           <span class="unchecked" v-else></span>
-                          Not Include
+                          Not Included
                         </div>
                       </template>
                       <template v-if="r.type == 'MultiSelection'">
@@ -901,7 +901,7 @@ export default {
       this.$root.$emit("update-vendor-value", "pricingPolicies", this.vendorPricingPolicies.items);
     },
     setPolicy(e, type, name, value) {
-      console.log('setPricePolicy', value);
+      // console.log('setPricePolicy', value);
       if ( (type === 'option' ||  type === 'Including' ) && name ) {
         let p = this.vendorPolicies.items.find(it => it.name === name);
         p.value = value;
@@ -910,7 +910,7 @@ export default {
       this.$root.$emit("update-vendor-value", "policies", this.vendorPolicies.items);
     },
     changeCategorySelector(type, item, value){
-      console.log(type, item, value);
+      // console.log(type, item, value);
       item.value = value;
 
       if ( type === 'policy' ) {
@@ -1001,7 +1001,7 @@ export default {
       this.componentKey += 1;
     },
     renderCalendar(){
-        console.log("renderCalendar");
+        // console.log("renderCalendar");
         $('.vfc-day').each(function (index, day) {
             if ($(day).find('span.vfc-span-day').hasClass('vfc-marked') || $(day).find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed')) {
 
@@ -1048,12 +1048,12 @@ export default {
       this.renderCalendar()
   },
   watch: {
-    // vendor:{
-    //   handler(newVal) {
-    //     this.init()
-    //   },
-    //   deep: true,
-    // }
+    vendor:{
+      handler(newVal) {
+        // console.log("signup.step3", newVal);
+      },
+      deep: true,
+    }
   },
 };
 </script>

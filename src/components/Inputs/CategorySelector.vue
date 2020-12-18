@@ -10,7 +10,7 @@
       </template>
       <img class="dropdown" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 523.svg" />
     </div>
-    <ul :style="{'column-count' : column, 'min-width' : column > 1 ? '600px' : '350px'}" v-click-outside="close" v-else>
+    <ul :style="{'column-count' : column, 'min-width' : column > 1 ? '670px' : '350px'}" v-click-outside="close" v-else>
       <li v-for="(category, cIndex) in categories" :key="cIndex" @click="updateCategory(category)" :class="{'mb-40': cIndex < categories.length - 1}">
         <template v-if="multiple">
           <div class="d-flex align-center">
@@ -74,7 +74,7 @@ export default {
     reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
   }),
   mounted() {
-    console.log("category-selector.mounted", this.value);
+    // console.log("category-selector.mounted", this.value);
     if (this.value) {
       if ( this.multiple  ) {
         if ( this.value.length ) {

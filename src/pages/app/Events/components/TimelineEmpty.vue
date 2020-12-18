@@ -1,11 +1,11 @@
 <template>
   <drop
-    @drop="handleDrop( ...arguments)"
+    @drop="handleDrop(...arguments)"
     @dragenter="hadleDragEnter"
     @dragleave="handleDragLeave"
-    style="height: 100%;"
+    style="height: 100%"
     class="timeline-empty-drop"
-    :class="{dropping:isHover}"
+    :class="{ dropping: isHover }"
   >
     <div v-if="placeHolder" class="timeline-empty-start">Pleas drop here one of timline slots</div>
     <div v-else class="timeline-empty-item">
@@ -50,7 +50,7 @@ export default {
   methods: {
     handleDrop() {
       this.isHover = false;
-      this.$root.$emit("add-template", {
+      this.$emit("addSlot", {
         date: this.date,
         block: this.droppingBlock,
         index: this.index,
@@ -69,9 +69,10 @@ export default {
       if (!this.isHover) {
         return "";
       }
-      return `border-color: ${
-        this.droppingBlock.color
-      }; background-color: ${hexToRgbA(this.droppingBlock.color, 0.25)}`;
+      return `border-color: ${this.droppingBlock.color}; background-color: ${hexToRgbA(
+        this.droppingBlock.color,
+        0.25,
+      )}`;
     },
   },
 };
