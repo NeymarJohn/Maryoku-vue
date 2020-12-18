@@ -6,11 +6,11 @@
           <div class="time-line-edit d-flex justify-content-center align-center">
             <label style="white-space: nowrap; padding-right: 10px">Day {{ numberToWord(dateIndex + 1) }}</label>
             <div>{{ scheduleDate.date }}</div>
-            <md-datepicker
+            <!-- <md-datepicker
               :md-disabled-dates="getDisabledDates(dateIndex)"
               :md-closed="closeEditTimeline(dateIndex)"
               md-immediately
-            ></md-datepicker>
+            ></md-datepicker> -->
           </div>
         </div>
         <div class="header-actions">
@@ -267,8 +267,14 @@ export default {
       .header-title {
         position: absolute;
         left: 50%;
+        -webkit-transform: translateX(-50%);
         transform: translateX(-50%);
-        top: -6px;
+        top: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 10px;
+        background-color: #f5f5f5;
       }
       .header-actions {
         position: absolute;
