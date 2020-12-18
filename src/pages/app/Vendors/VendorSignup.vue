@@ -151,25 +151,11 @@ export default {
     //if this is edit page
     if (this.$route.params.id) {
       Vendors.find(this.$route.params.id).then((vendor) => {
-        if (!vendor.about) this.$set(vendor, "about", {});
-        if (!vendor.capacity) this.$set(vendor, "capacity", {});
-        if (!vendor.social) this.$set(vendor, "social", {});
-        if (!vendor.images) this.$set(vendor, "images", []);
-        if (!vendor.vendorImages) this.$set(vendor, "vendorImages", []);
-        if (!vendor.hasOwnProperty('yesRules')) this.$set(vendor, "yesRules", []);
-        if (!vendor.hasOwnProperty('noRules')) this.$set(vendor, "noRules", []);
-        if (!vendor.hasOwnProperty('notAllowed')) this.$set(vendor, "notAllowed", []);
-        if (!vendor.hasOwnProperty('exDonts')) this.$set(vendor, "exDonts", []);
-        if (!vendor.hasOwnProperty('pricingPolicies')) this.$set(vendor, "pricingPolicies", []);
-        if (!vendor.hasOwnProperty('policies')) this.$set(vendor, "policies", []);
-        if (!vendor.hasOwnProperty('yesPolicies')) this.$set(vendor, "yesPolicies", []);
-        if (!vendor.hasOwnProperty('noPolicies')) this.$set(vendor, "noPolicies", []);
-        if (!vendor.hasOwnProperty('selectedWeekdays')) this.$set(vendor, "selectedWeekdays", []);
-        if (!vendor.hasOwnProperty('dontWorkDays')) this.$set(vendor, "dontWorkDays", []);
-        if (!vendor.hasOwnProperty('dontWorkTime')) this.$set(vendor, "dontWorkTime", null);
-        if (!vendor.hasOwnProperty('services')) this.$set(vendor, "services", {});
+        this.vendor = vendor;
+        //
         this.setVendor(vendor);
-        this.setEditing(true);
+        this.$root.$emit("set-vendor", this.vendor);
+        this.$forceUpdate();
       });
     }
     this.$root.$on("approve-vendor-basic-info", (vendor) => {
@@ -234,7 +220,7 @@ export default {
     });
   },
   methods: {
-    ...mapMutations("vendor", ["setVendor", "setStep", "setEditing"]),
+    ...mapMutations("vendor", ["setVendor", "setStep"]),
     camelize(str) {
       let temp = str.replace(/\W+(.)/g, function (match, chr) {
         return chr.toUpperCase();
@@ -257,10 +243,10 @@ export default {
           }).then(() => {
             const proposalRequest = this.$route.query.proposalRequest;
             if (proposalRequest) this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
+            this.setStep(0);
             this.setVendor({});
             this.setEditing(false);
             this.isCompletedWizard = false;
-            this.$router.push('/vendor-signup');
           });
         })
         .catch((error) => {
@@ -281,9 +267,12 @@ export default {
       console.log("vendor.signup.watch.vendor", newVal);
     },
     step(newVal) {
-      // console.log("vendor.signup.watch.step", newVal);
+      console.log("vendor.signup.watch.step", newVal);
       if (this.step === 7) this.addVendor();
     },
+  },
+  beforeDestroy() {
+    this.$root.$off("update-vendor-value");
   }
 };
 </script>

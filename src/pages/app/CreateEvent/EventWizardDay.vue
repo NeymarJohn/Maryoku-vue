@@ -66,13 +66,7 @@ export default {
         dateList.forEach((d) => {
           timelineDates.push({
             date: d,
-            templates: [
-              { name: "registration", type: "group" },
-              { name: "activity", type: "group" },
-              { name: "meal", type: "group" },
-              { name: "activity", type: "group" },
-              { name: "summary", type: "group" },
-            ],
+            templates: ["registration", "activity", "meal", "activity", "summary"],
             status: "editing",
           });
         });

@@ -1,48 +1,24 @@
 <template>
-  <div
-    class="timeline-template-container"
-    :class="{ group: template.type === 'group', slot: template.type === 'slot' }"
-  >
+  <div class="timeline-template-container">
     <template v-if="hasTemplate">
-      <template v-if="groupedItems.length > 0">
+      <div v-if="timelines.length > 0">
         <timeline-item
-          v-for="(item, index) in groupedItems"
+          v-for="(item, index) in timelines"
           :key="index"
           :item="item"
           :index="index"
           class="mt-10 mb-10"
         ></timeline-item>
-      </template>
-
-      <drop
-        v-if="template.type === 'group'"
-        style="height: 100%; min-height: 50px"
-        class="empty-template"
-        @drop="handleDrop(groupedItems.length, ...arguments)"
-        @dragenter="hadleDragEnter"
-        @dragleave="handleDragLeave"
-        :class="{ dropping: isHover }"
-      >
-        <div
-          class="empty-template-icon"
-          :style="hoverStyle"
-          :class="{ hovering: isHover }"
-          v-if="groupedItems.length == 0"
-        >
-          <img :src="`${$iconURL}Timeline-New/templates/${template.name}.svg`" />
-        </div>
-
-        <div class="empty-template-panel" :class="{ adding: groupedItems.length > 0 }" :style="hoverStyle">
-          <span v-if="isEmpty">{{ template.name }}</span>
-          <span v-else><md-icon>add</md-icon>{{ template.name }}</span>
-        </div></drop
-      >
+        <timelineline-empty v-if="timelines.length > 1"></timelineline-empty>
+      </div>
+      <div class="empty-template" v-else>
+        <div class="empty-template-icon"></div>
+        {{ templateName }}
+      </div>
     </template>
-    <md-button
-      class="md-icon-button md-simple close-btn"
-      @click="remove"
-      v-if="template.type === 'group' && groupedItems.length == 0"
-    >
+    <template v-else> </template>
+
+    <md-button class="md-icon-button md-simple close-btn" @click="remove">
       <md-icon class="close-icon">close</md-icon>
     </md-button>
   </div>
@@ -51,153 +27,56 @@
 import TimelineItem from "./TimelineItem";
 import TimelineEmpty from "./TimelineEmpty";
 import TimelineTemplateItem from "./TimelineTemplateItem";
-import { Drag, Drop } from "vue-drag-drop";
-import { hexToRgbA } from "@/utils/helperFunction";
-import moment from "moment";
-import CalendarEvent from "@/models/CalendarEvent";
 export default {
   components: {
     TimelineItem,
     TimelineTemplateItem,
     TimelineEmpty,
-    Drop,
-  },
-  data() {
-    return {
-      isHover: false,
-    };
   },
   props: {
     timelines: {
       type: Array,
       default: () => [],
     },
-    template: [Object],
-    groupIndex: [Number],
-    timelineDate: [Object],
+    groupName: {
+      type: String,
+      default: "",
+    },
+    templateName: [String],
   },
   computed: {
+    isGroup() {
+      return this.groupName.indexOf("timeline") < 0;
+    },
     event() {
       return this.$store.state.event.eventData;
     },
     hasTemplate() {
       return this.event.timeline.mode === "template";
     },
-    hoverStyle() {
-      if (!this.isHover) {
-        return "";
-      }
-      return `border: solid 2px ${this.droppingBlock.color}; background-color: ${hexToRgbA(
-        this.droppingBlock.color,
-        0.25,
-      )}`;
-    },
-    timelineDates() {
-      if (this.event) {
-        return this.event.timelineDates;
-      }
-      return [];
-    },
-    timelineItems() {
-      return this.timelineDates[this.timelineDate.dateIndex].timelineItems;
-    },
-    groupedItems() {
-      return this.timelineItems.filter((item) => item.groupNumber == this.groupIndex);
-    },
-    isEmpty() {
-      return this.groupedItems.length === 0;
-    },
   },
   methods: {
     remove() {},
-    hadleDragEnter(data) {
-      console.log(data);
-      console.log("started");
-      this.droppingBlock = data.block;
-      this.isHover = true;
-    },
-    handleDragLeave(data) {
-      this.isHover = false;
-    },
-    handleDrop(index, droppedData) {
-      let block = Object.assign({}, droppedData.block);
-      block.mode = "edit";
-      let startDate = new Date(this.timelineDate.date);
-      let endDate = new Date(this.timelineDate.date);
-
-      block.startTime = moment(`${this.timelineDate.date} 00:00 am`, "YYYY-MM-DD hh:mm a").valueOf();
-      block.endTime = moment(`${this.timelineDate.date} 00:00 am`, "YYYY-MM-DD hh:mm a").valueOf();
-
-      console.log(block);
-      if (index == 0) {
-        if (this.event.eventDayPart == "evening") {
-          block.startTime = moment(`${this.timelineDate.date} 07:00 PM`, "YYYY-MM-DD hh:mm A").valueOf();
-          block.endTime = moment(`${this.timelineDate.date} 08:00 PM`, "YYYY-MM-DD hh:mm A").valueOf();
-        } else {
-          block.startTime = moment(`${this.timelineDate.date} 08:00 AM`, "YYYY-MM-DD hh:mm A").valueOf();
-          block.endTime = moment(`${this.timelineDate.date} 09:00 AM`, "YYYY-MM-DD hh:mm A").valueOf();
-        }
-      } else {
-        const prevItem = this.groupedItems[index - 1];
-        block.startTime = prevItem.endTime;
-        block.endTime = prevItem.endTime + 3600 * 1000;
-      }
-
-      block.title = droppedData.block.buildingBlockType;
-      block.startDuration = "am";
-      block.endDuration = "am";
-      block.attachmentName = "";
-      block.isItemLoading = false;
-      block.icon = droppedData.block.icon;
-      block.date = this.timelineDate.date;
-      block.groupNumber = this.groupIndex;
-      block.event = new CalendarEvent({ id: this.event.id });
-      this.isHover = false;
-      delete block.id;
-      this.timelineItems.push(block);
-      console.log(this.timelineItems);
-    },
   },
 };
 </script>
 <style lang="scss" scoped>
 .timeline-template-container {
   position: relative;
-  .adding-slot {
-    height: 100%;
-    min-height: 50px;
-    margin-left: 70px;
-    text-align: center;
-    color: #818080;
-    text-transform: capitalize;
-    font-weight: bold;
-  }
   .empty-template {
-    width: 100%;
+    width: calc(100% - 70px);
+    padding: 30px 0 30px 100px;
+    text-transform: capitalize;
+    color: #818080;
     position: relative;
     .empty-template-icon {
-      width: 60px;
-      height: 60px;
+      width: 50px;
+      height: 50px;
       border: dashed 1px #908f8f;
-      background-color: #f5f5f5;
       border-radius: 50%;
       position: absolute;
       left: 0;
       top: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .empty-template-panel {
-      width: calc(100% - 70px);
-      margin-left: 70px;
-      padding: 30px;
-      text-transform: capitalize;
-      color: #818080;
-      &.adding {
-        text-align: center;
-        padding: 10px;
-      }
     }
     // &::before {
     //   border-left: dashed 1px #908f8f;
@@ -207,7 +86,7 @@ export default {
     //   content: "";
     // }
   }
-  &.group::before {
+  &::before {
     content: "";
     border: dashed 1px #908f8f;
     position: absolute;
@@ -221,14 +100,6 @@ export default {
     top: 30px;
     .close-icon {
       font-size: 30px !important;
-    }
-  }
-  .close-btn {
-    display: none;
-  }
-  &:hover {
-    .close-btn {
-      display: block;
     }
   }
 }

@@ -648,41 +648,35 @@ export default {
     finalize() {
       if (this.checkTimeGap()) {
         this.showTimelineGapModal = false;
-        console.log(this.eventData);
-        const newEvent = new CalendarEvent({
-          id: this.eventData.id,
-          // timelineDates: this.eventData.timelineDates,
-          timelineProgress: 100,
-        });
-        this.$store.dispatch("event/saveEventAction", newEvent).then((event) => {
-          swal({
-            title: "Good Job! ",
-            text: "You finalise timeline and your event will be processed according your timelines!",
-            showCancelButton: false,
-            confirmButtonClass: "md-button md-success",
-            confirmButtonText: "Ok",
-            buttonsStyling: false,
+        this.$http
+          .post(`${process.env.SERVER_URL}/1/events/${this.eventData.id}/timelineItems`, this.timelineItems, {
+            headers: this.$auth.getAuthHeader(),
           })
-            .then((result) => {
-              // if (result.value === true) {
-              //   console.log(this.eventData);
-              //   const updatedEvent = new CalendarEvent({
-              //     id: this.eventData.id,
-              //     calendar: new Calendar({
-              //       id: this.eventData.calendar.id,
-              //     }),
-              //   });
-              //   this.$store.dispatch("event/saveEventAction", updatedEvent);
-              //   return;
-              // }
+          .then((res) => {
+            swal({
+              title: "Good Job! ",
+              text: "You finalise timeline and your event will be processed according your timelines!",
+              showCancelButton: false,
+              confirmButtonClass: "md-button md-success",
+              confirmButtonText: "Ok",
+              buttonsStyling: false,
             })
-            .catch((err) => {});
-        });
-        // this.$http
-        //   .post(`${process.env.SERVER_URL}/1/events/${this.eventData.id}/timelineItems`, this.timelineItems, {
-        //     headers: this.$auth.getAuthHeader(),
-        //   })
-        //   .then((res) => {});
+              .then((result) => {
+                if (result.value === true) {
+                  console.log(this.eventData);
+                  const updatedEvent = new CalendarEvent({
+                    id: this.eventData.id,
+                    calendar: new Calendar({
+                      id: this.eventData.calendar.id,
+                    }),
+                    timelineProgress: 100,
+                  });
+                  this.$store.dispatch("event/saveEventAction", updatedEvent);
+                  return;
+                }
+              })
+              .catch((err) => {});
+          });
       }
     },
     checkTemplates() {
@@ -713,19 +707,19 @@ export default {
       return true;
     },
     checkTimeGap() {
-      // const timeGaps = [];
-      // this.timelineDateKeys.forEach((dateKey) => {
-      //   this.timelineItems[dateKey].forEach((item) => {
-      //     if (item.status === "timegap") {
-      //       timeGaps.push(item);
-      //     }
-      //   });
-      // });
-      // if (timeGaps.length > 0) {
-      //   this.timelineGaps = { ...timeGaps };
-      //   this.showTimelineGapModal = true;
-      //   return false;
-      // }
+      const timeGaps = [];
+      this.timelineDateKeys.forEach((dateKey) => {
+        this.timelineItems[dateKey].forEach((item) => {
+          if (item.status === "timegap") {
+            timeGaps.push(item);
+          }
+        });
+      });
+      if (timeGaps.length > 0) {
+        this.timelineGaps = { ...timeGaps };
+        this.showTimelineGapModal = true;
+        return false;
+      }
       return true;
     },
   },
@@ -781,7 +775,6 @@ export default {
   },
   computed: {
     ...mapState("event", ["eventData"]),
-
     currentUser() {
       return this.$store.state.auth.user;
     },

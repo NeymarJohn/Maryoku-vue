@@ -157,7 +157,6 @@
       v-if="showSyncCalendarForZoom"
       @close="showSyncCalendarForZoom = false"
       :campaign="campaign"
-      :rsvp="rsvpData"
     ></sync-calendar-modal>
     <social-sharing-modal v-if="showSharingModal" @cancel="showSharingModal = false"></social-sharing-modal>
     <modal v-if="showRejectConformModal">
@@ -234,7 +233,6 @@ export default {
       showSharingModal: false,
       isSentRsvp: false,
       showRejectConformModal: false,
-      rsvpData: null,
     };
   },
   created() {
@@ -311,9 +309,7 @@ export default {
       rsvpData.invitedEmail = this.rsvpRequest.email;
       rsvpData.rsvpRequest = new RsvpRequest({ id: this.rsvpRequest.id });
       rsvpData.event = new CalendarEvent({ id: this.event.id });
-      new Rsvp(rsvpData).save().then((requestedRSVP) => {
-        this.rsvpData = requestedRSVP;
-      });
+      new Rsvp(rsvpData).save().then((requestedRSVP) => {});
       new RsvpRequest({ id: this.rsvpRequest.id, status: "VIRTUAL" }).save().then((res) => {
         this.showZoomModal = false;
         this.showSyncCalendarForZoom = true;
