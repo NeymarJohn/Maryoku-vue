@@ -25,9 +25,9 @@
             <img :src="`${menuIconsURL}Asset 118.svg`" />
           </div>
         </div>
-        <!-- <div class="sidebar-menu__item">
+        <div class="sidebar-menu__item">
           <div class="item-route" @click="goTo('/events')"><img :src="`${menuIconsURL}Asset 114.svg`" /> My Events</div>
-        </div> -->
+        </div>
         <div class="sidebar-menu__item" @click="goTo('/settings')">
           <div class="item-route"><img :src="`${menuIconsURL}Asset 116.svg`" /> Settings</div>
         </div>
