@@ -8,7 +8,7 @@
         <div style="max-width: 600px; margin: 3rem auto 2rem">
           <maryoku-input
             inputStyle="budget"
-            placeholder="Type number here"
+            placeholder="Type your total budget here"
             v-model="eventInfo.budget"
             :disabled="eventInfo.noBudget"
             :readonly="eventInfo.noBudget"
@@ -27,14 +27,14 @@
           <div class="mt-4rem slider-wrapper">
             <div>
               <img :src="`${$iconURL}Budget Requirements/group-8347.svg`" />
-              <div class="font-bold">Super Glue</div>
-              <div>Within Budget</div>
+              <div class="font-bold">Must stick</div>
+              <div class="font-bold">to the budget</div>
             </div>
             <range-slider class="slider" min="0" max="10" step="1" v-model="eventInfo.flexibility"> </range-slider>
             <div>
               <img :src="`${$iconURL}Budget Requirements/group-8348.svg`" />
-              <div class="font-bold">Telflon Pan</div>
-              <div>Value For Money</div>
+              <div class="font-bold">Can be flexible</div>
+              <div class="font-bold">for value added</div>
             </div>
           </div>
         </template>
