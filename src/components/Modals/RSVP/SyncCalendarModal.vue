@@ -8,10 +8,7 @@
     <template slot="body">
       <div>
         <img :src="`${$iconURL}RSVP/Group+7946.svg`" class="mb-30" />
-        <div class="font-size-30 font-bold mb-30">
-          SEE YOU THERE <span class="text-transform-uppercase">{{ rsvp.name }}</span
-          >!
-        </div>
+        <div class="font-size-30 font-bold mb-30">SEE YOU THERE SAM!</div>
         <div>
           <md-button
             class="md-simple maryoku-btn"
@@ -84,7 +81,6 @@ export default {
       type: Object,
       default: () => {},
     },
-    rsvp: [Object],
   },
   created() {
     console.log(this.campaign);
