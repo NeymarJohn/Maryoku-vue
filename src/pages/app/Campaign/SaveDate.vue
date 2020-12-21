@@ -6,7 +6,7 @@
         class="font-size-30 font-bold-extra text-transform-capitalize p-50"
         v-if="campaignData.campaignStatus != 'STARTED'"
       >
-        let's start with a "save the date campaign"
+        let's start with a "save the date"
       </div>
       <concept-image-block
         v-if="concept"

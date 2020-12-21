@@ -6,11 +6,11 @@
           <div class="time-line-edit d-flex justify-content-center align-center">
             <label style="white-space: nowrap; padding-right: 10px">Day {{ numberToWord(dateIndex + 1) }}</label>
             <div>{{ scheduleDate.date }}</div>
-            <md-datepicker
+            <!-- <md-datepicker
               :md-disabled-dates="getDisabledDates(dateIndex)"
               :md-closed="closeEditTimeline(dateIndex)"
               md-immediately
-            ></md-datepicker>
+            ></md-datepicker> -->
           </div>
         </div>
         <div class="header-actions">
@@ -31,17 +31,23 @@
         </div>
       </div>
 
-      <drop @drop="handleDrop(dateIndex, ...arguments)" style="height: 100%; min-height: 50px" :data-index="dateIndex">
-        <div
-          v-for="(templateName, templateIndex) in scheduleDate.templates"
-          :key="templateName"
-          class="time-line-blocks_selected-items_item time-line-item"
-        >
-          <timeline-empty :index="templateIndex" :date="scheduleDate" v-if="templateIndex == 0"></timeline-empty>
-          <timeline-template-container :templateName="templateName"></timeline-template-container>
-          <timeline-empty :index="templateIndex" :date="scheduleDate"></timeline-empty>
-        </div>
-      </drop>
+      <div
+        v-for="(template, templateIndex) in scheduleDate.templates"
+        :key="`${template.name}-${templateIndex}`"
+        class="timeline-group-wrapper time-line-item"
+      >
+        <timeline-empty :index="templateIndex" :date="scheduleDate" v-if="templateIndex == 0"></timeline-empty>
+        <timeline-template-container
+          :template="template"
+          :groupIndex="templateIndex"
+          :timelineDate="{ dateIndex: dateIndex, ...scheduleDate }"
+        ></timeline-template-container>
+        <timeline-empty
+          :index="templateIndex"
+          :date="scheduleDate"
+          @addSlot="addSlot(dateIndex, templateIndex + 1, ...arguments)"
+        ></timeline-empty>
+      </div>
     </div>
   </div>
 </template>
@@ -184,11 +190,64 @@ export default {
         }
       }, 100);
     },
+    addSlot(dateIndex, templateIndex, slotData) {
+      console.log("dataeImdex0", dateIndex);
+      console.log("template", templateIndex);
+      const newTimelineItem = this.gettingSlotData(slotData, this.timelineDates[dateIndex].date);
+      newTimelineItem.groupNumber = templateIndex;
+      this.timelineDates[dateIndex].timelineItems.push(newTimelineItem);
+      this.timelineDates[dateIndex].templates.splice(templateIndex, 0, { name: "test", type: "slot" });
+    },
+
+    gettingSlotData(data, scheduleDate) {
+      let block = Object.assign({}, data.block);
+      block.mode = "edit";
+
+      let startDate = new Date(scheduleDate);
+      let endDate = new Date(scheduleDate);
+      // const timelineItemsCount = this.timeline[index].items.length;
+      // if (timelineItemsCount == 0) {
+      //   if (this.eventData.eventDayPart == "evening") {
+      //     startDate.setHours(19);
+      //     endDate.setHours(20);
+      //   } else {
+      //     startDate.setHours(8);
+      //     endDate.setHours(9);
+      //   }
+      // } else {
+      //   const prevItem = this.timeline[index].items[timelineItemsCount - 1];
+      //   startDate.setHours(new Date(prevItem.endTime).getHours());
+      //   endDate.setHours(new Date(prevItem.endTime).getHours() + 1);
+      // }
+
+      block.startTime = startDate;
+      block.endTime = endDate;
+
+      block.title = block.buildingBlockType;
+      block.startDuration = "am";
+      block.endDuration = "am";
+      block.attachmentName = "";
+      block.isItemLoading = false;
+      block.event = { id: this.event.id };
+      delete block.id;
+      return block;
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
 .timeline-items-list {
+  .timeline-group-wrapper {
+    position: relative;
+    &:not(:last-child)::before {
+      content: "";
+      position: absolute;
+      border-left: dashed 1px #908f8f;
+      height: 100%;
+      top: 50px;
+      left: 30px;
+    }
+  }
   margin-top: 1em;
   height: 100%;
   &__item {
@@ -209,8 +268,14 @@ export default {
       .header-title {
         position: absolute;
         left: 50%;
+        -webkit-transform: translateX(-50%);
         transform: translateX(-50%);
-        top: -6px;
+        top: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 10px;
+        background-color: #f5f5f5;
       }
       .header-actions {
         position: absolute;

@@ -99,7 +99,7 @@
           </div>
           <category-selector
                   v-if="checked"
-                  :value="currentItem.value || ''"
+                  :value="currentItem.value"
                   :categories="item.available"
                   :column="columnCount"
                   :multiple="true"

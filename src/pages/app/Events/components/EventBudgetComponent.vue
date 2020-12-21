@@ -11,7 +11,7 @@
     </div>
     <template v-if="!isEditing">
       <div class="text-right font-size-20 flex-1 budget" v-if="type == 'perguest'">
-        ${{ (component.allocatedBudget / participants) | withComma }}
+        ${{ (component.allocatedBudget / participants).toFixed(0) | withComma }}
       </div>
       <div class="text-right font-size-20 flex-1 budget" v-else>${{ component.allocatedBudget | withComma }}</div>
       <div class="actions">
