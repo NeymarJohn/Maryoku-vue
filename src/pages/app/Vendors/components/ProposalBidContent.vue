@@ -53,6 +53,8 @@ export default {
       });
     }
 
+    console.log("costVendorServices", costVendorServices);
+    console.log("mandatoryRequirements", this.mandatoryRequirements);
     const includedSevices = [];
     const costServices = [];
     this.mandatoryRequirements.forEach((item) => {
@@ -72,13 +74,18 @@ export default {
         requirementsCategory: item.category,
         requirementValue: item.defaultQty ? item.defaultQty : 1,
         requirementSize: item.defaultSize ? item.defaultSize : "",
+        plannerOptions: [],
         isMandatory: true,
       };
+
       if (
         costVendorServices.findIndex((vendorService) => {
           return item.item && vendorService.label.toLowerCase() == item.item.toLowerCase();
         }) >= 0
       ) {
+        service.price = costVendorServices.find((vendorService) => {
+          return item.item && vendorService.label.toLowerCase() == item.item.toLowerCase();
+        }).value;
         costServices.push(service);
       }
       if (
