@@ -9,8 +9,7 @@
           <img :src="campaignData.coverImage" class="mr-10" />
           <label for="cover">
             <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="chooseFiles">
-              <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />Change Cover(Size
-              1200 * 400)
+              <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />Change Cover
             </md-button>
           </label>
           <input
@@ -219,9 +218,6 @@ export default {
   created() {
     if (this.$store.state.campaign.RSVP) {
       this.editingContent = this.$store.state.campaign.RSVP;
-      this.editingContent.coverImage = this.event.concept
-        ? this.event.concept.images[0].url
-        : `${this.$storageURL}Campaign Images/RSVP2-middle.png`;
     } else {
       this.editingContent.title = this.info.conceptName;
       this.editingContent.coverImage = this.event.concept

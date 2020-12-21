@@ -1,7 +1,15 @@
 <template>
   <div class="md-layout events-list">
-    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen>
-      <div :style="`background-image:url(/static/img/load_${imageIndex}.jpg)`" class="loading-background">
+    <vue-element-loading
+      :active="isLoading"
+      spinner="ring"
+      color="#FF547C"
+      is-full-screen
+    >
+      <div
+        :style="`background-image:url(/static/img/load_${imageIndex}.jpg)`"
+        class="loading-background"
+      >
         <div :class="`quote quote_${imageIndex}`">
           <span>{{ quote.description }}</span>
           <span class="author">{{ quote.author }}</span>
@@ -17,7 +25,11 @@
           <h4 class="title">Upcoming Events</h4>
         </md-card-header>
         <md-card-content>
-          <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
+          <vue-element-loading
+            :active="isLoading"
+            spinner="ring"
+            color="#FF547C"
+          />
           <md-table
             v-model="upcomingEvents"
             table-header-color="rose"
@@ -30,28 +42,44 @@
               class="hover-row"
               @click="routeToEvent(item, $event)"
             >
-              <md-table-cell md-label="Event Name">{{ item.title }}</md-table-cell>
+              <md-table-cell md-label="Event Name">{{
+                item.title
+              }}</md-table-cell>
               <!--<md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>-->
               <md-table-cell md-label="Event Type">{{
                 item.eventType ? item.eventType.name : item.eventType
               }}</md-table-cell>
-              <md-table-cell md-label="Date">{{ item.eventStartMillis | moment }}</md-table-cell>
-              <md-table-cell md-label="Customer Name">{{ item.owner.department }}</md-table-cell>
+              <md-table-cell md-label="Date">{{
+                item.eventStartMillis | moment
+              }}</md-table-cell>
+              <md-table-cell md-label="Customer Name">{{
+                item.owner.department
+              }}</md-table-cell>
               <md-table-cell
                 md-label="Created By"
                 style="text-transform: capitalize"
                 v-if="item.owner.id !== $auth.user.id"
               >
                 {{ item.owner.displayName }}
-                <span class="small text-primary" style="display: block">{{ item.owner.emailAddress }}</span>
+                <span class="small text-primary" style="display: block">{{
+                  item.owner.emailAddress
+                }}</span>
               </md-table-cell>
               <md-table-cell md-label="Created By" v-else>
                 You
-                <span class="small text-primary" style="display: block">{{ item.owner.emailAddress }}</span>
+                <span class="small text-primary" style="display: block">{{
+                  item.owner.emailAddress
+                }}</span>
               </md-table-cell>
-              <md-table-cell md-label="# Participants">{{ item.numberOfParticipants }}</md-table-cell>
-              <md-table-cell md-label="Budget Per Participant">$ {{ item.budgetPerPerson }}</md-table-cell>
-              <md-table-cell md-label="Location">{{ item.location }}</md-table-cell>
+              <md-table-cell md-label="# Participants">{{
+                item.numberOfParticipants
+              }}</md-table-cell>
+              <md-table-cell md-label="Budget Per Participant"
+                >$ {{ item.budgetPerPerson }}</md-table-cell
+              >
+              <md-table-cell md-label="Location">{{
+                item.location
+              }}</md-table-cell>
               <md-table-cell md-label="Actions" style="white-space: nowrap">
                 <!--<md-button @click="viewEvent(item)" class="md-raised md-info md-icon-button">
                   <md-icon>visibility</md-icon>
@@ -59,7 +87,10 @@
                 <!-- <md-button @click="editEvent($event, item)" class="md-info md-just-icon md-round">
                   <md-icon>edit</md-icon>
                 </md-button>-->
-                <md-button @click="showDeleteAlert($event, item)" class="md-danger md-just-icon md-round">
+                <md-button
+                  @click="showDeleteAlert($event, item)"
+                  class="md-danger md-just-icon md-round"
+                >
                   <md-icon>delete</md-icon>
                 </md-button>
 
@@ -75,21 +106,35 @@
           </div>-->
         </md-card-content>
       </md-card>
-      <md-card class="md-card-plain" v-if="!upcomingEvents.length && !isLoading">
+      <md-card
+        class="md-card-plain"
+        v-if="!upcomingEvents.length && !isLoading"
+      >
         <md-card-content>
           <div class="text-center mt-5">
             <!-- <img src="https://static-maryoku.s3.amazonaws.com/storage/img/calendar.png" style="width: 120px;" /> -->
             <h3>You do not have any events planned yet</h3>
             <div class="mt-4rem">
-              <md-button class="md-info md-red normal-btn" @click="routeToNewEvent">Create New Event</md-button>
-              <md-button class="md-red md-simple normal-btn" @click="chooseWorkspace">Choose Workspace</md-button>
+              <md-button
+                class="md-info md-red normal-btn"
+                @click="routeToNewEvent"
+                >Create New Event</md-button
+              >
+              <md-button
+                class="md-red md-simple normal-btn"
+                @click="chooseWorkspace"
+                >Choose Workspace</md-button
+              >
             </div>
           </div>
         </md-card-content>
       </md-card>
     </div>
 
-    <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100" v-if="recentEvents.length">
+    <div
+      class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100"
+      v-if="recentEvents.length"
+    >
       <div class="header text-center">
         <h4 class="title">Recent Events</h4>
       </div>
@@ -102,7 +147,11 @@
       @click="routeToEvent(event)"
     >
       <product-card header-animation="true">
-        <img class="img" slot="imageHeader" :src="imageHref(event.coverImage)" />
+        <img
+          class="img"
+          slot="imageHeader"
+          :src="imageHref(event.coverImage)"
+        />
 
         <h4 slot="title" class="title">
           <a @click="routeToEvent(event)">{{ event.title }}</a>
@@ -112,7 +161,10 @@
         </div>
         <template slot="footer">
           <div class="price">
-            <h4>{{ event.numberOfParticipants }} Guests &middot; {{ duration(event) }} hours</h4>
+            <h4>
+              {{ event.numberOfParticipants }} Guests &middot;
+              {{ duration(event) }} hours
+            </h4>
           </div>
           <div class="stats">
             <p class="category">
@@ -163,9 +215,9 @@ export default {
       let _calendar = new Calendar({
         id: currentUser.profile.defaultCalendarId,
       });
-      let m = new CalendarEvent().get();
+      let m = new CalendarEvent().for(_calendar).fetch(this, true);
       m.then((allEvents) => {
-        this.upcomingEvents = allEvents;
+        this.upcomingEvents = allEvents.reverse();
         this.isLoading = false;
       }).catch((e) => {
         console.log(e);
@@ -177,7 +229,8 @@ export default {
   data() {
     return {
       // auth: auth,
-      product3: "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
+      product3:
+        "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
       recentEvents: [],
       upcomingEvents: [],
       isLoading: true,
@@ -253,7 +306,10 @@ export default {
           });
           ev.delete()
             .then((result) => {
-              _this.upcomingEvents.splice(this.upcomingEvents.indexOf(event), 1);
+              _this.upcomingEvents.splice(
+                this.upcomingEvents.indexOf(event),
+                1,
+              );
               _this.isLoading = false;
             })
             .catch(() => {
@@ -272,7 +328,9 @@ export default {
       this.$router.push(`/events/${event.id}`);
     },
     imageHref(image) {
-      return image && image.href ? `${process.env.SERVER_URL}${image.href}` : this.product3;
+      return image && image.href
+        ? `${process.env.SERVER_URL}${image.href}`
+        : this.product3;
     },
     duration(event) {
       return (event.eventEndMillis - event.eventStartMillis) / 3600000;

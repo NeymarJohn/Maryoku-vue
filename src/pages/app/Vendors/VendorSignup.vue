@@ -259,6 +259,7 @@ export default {
             if (proposalRequest) this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
             this.setVendor({});
             this.setEditing(false);
+            this.setStep(0);
             this.isCompletedWizard = false;
             this.$router.push('/vendor-signup');
           });
@@ -281,7 +282,7 @@ export default {
       console.log("vendor.signup.watch.vendor", newVal);
     },
     step(newVal) {
-      // console.log("vendor.signup.watch.step", newVal);
+      console.log("vendor.signup.watch.step", newVal);
       if (this.step === 7) this.addVendor();
     },
   }

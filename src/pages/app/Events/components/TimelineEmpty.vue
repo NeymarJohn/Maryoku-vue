@@ -32,7 +32,7 @@ export default {
       default: 0,
     },
     date: {
-      type: [Object, String],
+      type: String,
       default: "",
     },
     placeHolder: {

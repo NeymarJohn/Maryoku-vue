@@ -5,9 +5,7 @@
         <div class="header-title font-size-14 color-gray text-transform-capitalize">
           <div class="time-line-edit d-flex justify-content-center align-center">
             <label style="white-space: nowrap; padding-right: 10px">Day {{ numberToWord(dateIndex + 1) }}</label>
-            <div>
-              {{ $dateUtil.formatScheduleDay(scheduleDate.date, "MM/DD/YY") }}
-            </div>
+            <div>{{ scheduleDate.date }}</div>
             <!-- <md-datepicker
               :md-disabled-dates="getDisabledDates(dateIndex)"
               :md-closed="closeEditTimeline(dateIndex)"
@@ -86,7 +84,6 @@ export default {
     },
   },
   methods: {
-    formatDate() {},
     numberToWord(num) {
       return numberToWord(num);
     },

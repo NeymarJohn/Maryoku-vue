@@ -1001,7 +1001,7 @@ export default {
       this.componentKey += 1;
     },
     renderCalendar(){
-        // console.log("renderCalendar");
+        console.log("renderCalendar");
         $('.vfc-day').each(function (index, day) {
             if ($(day).find('span.vfc-span-day').hasClass('vfc-marked') || $(day).find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed')) {
 

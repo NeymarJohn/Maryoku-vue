@@ -73,7 +73,7 @@
         <div
           class="md-layout-item md-size-100 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra mb-50"
         >
-          sneak peak to the agenda
+          sneaky peak to the agenda
         </div>
         <div
           v-for="(schedule, index) in scheduledDays"
@@ -359,7 +359,6 @@ export default {
       height: 430px;
       background-repeat: no-repeat;
       background-position: center 60%;
-      background-size: 120%;
     }
     &-overview {
       // background-color: #fff;
