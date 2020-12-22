@@ -26,7 +26,7 @@
         <div v-for="(category, index) in Object.keys(requirementProperties)" :key="index">
           <template v-if="category == 'multi-selection'">
             <vendor-requirement-multiselect-panel
-              v-for="(data, id) in requirementProperties[category].filter(it => it.visible)"
+              v-for="(data, id) in requirementProperties[category].filter((it) => it.visible)"
               :key="id"
               :index="id"
               :data="data"
@@ -36,12 +36,12 @@
           </template>
           <template v-else-if="category == 'radio'">
             <vendor-requirement-singleselect-panel
-                    v-for="(data, id) in requirementProperties[category].filter(it => it.visible)"
-                    :key="id"
-                    :index="id"
-                    :data="data"
-                    :currentComponent="selectedBlock"
-                    @change="handleSingleSelectChange"
+              v-for="(data, id) in requirementProperties[category].filter((it) => it.visible)"
+              :key="id"
+              :index="id"
+              :data="data"
+              :currentComponent="selectedBlock"
+              @change="handleSingleSelectChange"
             ></vendor-requirement-singleselect-panel>
           </template>
           <div v-else-if="category == 'special'">
@@ -54,11 +54,11 @@
           </div>
           <div v-else>
             <event-requirement-section
-                    :requirements="requirementProperties"
-                    :category="category"
-                    :block-id="blockId"
-                    :note="anythingElse"
-                    @change="handlePropertyChange"
+              :requirements="requirementProperties"
+              :category="category"
+              :block-id="blockId"
+              :note="anythingElse"
+              @change="handlePropertyChange"
             ></event-requirement-section>
           </div>
         </div>
@@ -101,6 +101,7 @@ import CommentEditorPanel from "./CommentEditorPanel";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
+import EventCategoryRequirement from "@/models/EventCategoryRequirement";
 import VendorRequirementMultiselectPanel from "./VendorRequirementMultiselectPanel";
 import VendorRequirementSingleselectPanel from "./VendorRequirementSingleselectPanel";
 import SpecialRequirementSection from "./SpecialRequirementSection";
@@ -158,27 +159,26 @@ export default {
       let event = this.event;
 
       for (let cat in requirements) {
-
-        requirements[cat].map(ms => {
+        requirements[cat].map((ms) => {
           if (ms.conditionScript) ms.visible = eval(ms.conditionScript);
           if (ms.conditionScript) ms.isSelected = eval(ms.conditionScript);
           if (ms.defaultQtyScript) ms.defaultQty = Math.ceil(eval(ms.defaultQtyScript));
 
-          if ( this.blockId === 'swags' && (ms.item === 'Apparel' || ms.item === 'Tech items')) {
+          if (this.blockId === "swags" && (ms.item === "Apparel" || ms.item === "Tech items")) {
             ms.mustHave = false;
           }
-        })
+        });
       }
       console.log("checkCondition", requirements);
     },
     _saveRequirementsInStore(action = null) {
-
       let requirements = this.storedRequirements;
 
-      requirements[this.event.id][this.blockId].requirements = action === "clear" ? null : JSON.parse(JSON.stringify(this.requirementProperties));
+      requirements[this.event.id][this.blockId].requirements =
+        action === "clear" ? null : JSON.parse(JSON.stringify(this.requirementProperties));
       requirements[this.event.id][this.blockId].anythingElse = action === "clear" ? null : this.anythingElse;
 
-      console.log("requirements", requirements)
+      console.log("requirements", requirements);
       this.setBookingRequirements(requirements);
     },
     addRequirement(category, property) {
@@ -195,33 +195,31 @@ export default {
       this._saveRequirementsInStore();
       // this.$forceUpdate();
     },
-    handleMultiSelectChange(){
+    handleMultiSelectChange() {
       this.$forceUpdate();
       this._checkConditionScript(this.requirementProperties);
       this._saveRequirementsInStore();
     },
     handleSingleSelectChange(e) {
-      this.requirementProperties['radio'].map(it => {
-        if(it.subCategory == e.subCategory) it = e;
+      this.requirementProperties["radio"].map((it) => {
+        if (it.subCategory == e.subCategory) it = e;
       });
 
       this._saveRequirementsInStore();
     },
-    handleSpecialChange(e){
-      if(e && e.hasOwnProperty('note') ) {
+    handleSpecialChange(e) {
+      if (e && e.hasOwnProperty("note")) {
         this.anythingElse = e.note;
       }
 
       this._saveRequirementsInStore();
     },
     handlePropertyChange(requirement) {
-
       this.requirementProperties = requirement;
       this.$forceUpdate();
 
       // this._checkConditionScript(this.requirementProperties);
       this._saveRequirementsInStore();
-
     },
     handleNoteChange(e) {
       this._saveRequirementsInStore();
@@ -236,7 +234,7 @@ export default {
     fetchData: async function () {
       this.requirementProperties = {};
 
-      console.log("fetchData", this.component.componentId, this.storedRequirements)
+      console.log("fetchData", this.component.componentId, this.storedRequirements);
       this.blockId = this.component.componentId; //this.$route.params.blockId
       this.event = this.$store.state.event.eventData;
 
@@ -270,14 +268,15 @@ export default {
     findVendors() {
       let component = new EventComponent({ id: this.component.id });
 
-      postReq("/1/vendors/setting-requirements", {
+      postReq("/1/setting-requirements", {
         vendorCategory: this.blockId,
-        expiredBusinessTime: moment(new Date()).add(5, "days").valueOf(),
+        issuedTime: new Date().getTime(),
+        expiredBusinessTime: moment(new Date()).add(3, "days").valueOf(),
         settingsJsonData: JSON.stringify(this.requirementProperties),
         note: this.anythingElse,
         eventComponentInstance: new EventComponent({ id: this.component.id }),
       }).then((res) => {
-        this.$emit("setRequirements", res);
+        this.$emit("setRequirements", res.data.item);
       });
     },
   },
@@ -364,18 +363,29 @@ export default {
       th {
         padding: 24px 0;
       }
-      th:first-child{width: 30%}
-      th:nth-child(2){width: 10%}
-      th:nth-child(3){width: 15%; min-width: 180px}
-      th:nth-child(4){width: 10%}
-      th:nth-child(5){width: 35%}
+      th:first-child {
+        width: 30%;
+      }
+      th:nth-child(2) {
+        width: 10%;
+      }
+      th:nth-child(3) {
+        width: 15%;
+        min-width: 180px;
+      }
+      th:nth-child(4) {
+        width: 10%;
+      }
+      th:nth-child(5) {
+        width: 35%;
+      }
       tbody {
         td {
           border-top: solid 2px #dbdbdb !important;
           border-collapse: collapse;
           vertical-align: top;
 
-          .empty{
+          .empty {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -455,7 +465,7 @@ export default {
   .anything-else-section {
     padding: 30px 0;
 
-    h4{
+    h4 {
       margin-top: 5px;
       margin-bottom: 10px;
       font-family: "Manrope-Bold";
@@ -493,15 +503,15 @@ export default {
       .multiselect__single {
         line-height: 30px;
       }
-      .multiselect__tags-wrap{
+      .multiselect__tags-wrap {
         display: flex;
         overflow: hidden;
 
-        span{
+        span {
           margin-right: 5px;
           flex-shrink: 0;
           font-size: 16px;
-          font-family: 'Manrope-regular';
+          font-family: "Manrope-regular";
         }
       }
     }
