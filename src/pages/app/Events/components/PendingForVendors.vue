@@ -1,7 +1,14 @@
 <template>
   <div class="text-center md-layout-item md-size-90 mt-50" style="margin: 0 auto">
     <img src="https://s3.amazonaws.com/static.maryoku.com/storage/3Proposals/Group 10668.svg" />
-    <div class="font-size-22 font-bold mt-50 mb-50">OUR VENDORS ARE WORKING ON QUOTES FOR YOU</div>
+    <div
+      class="mt-10 mb-30"
+      style="background-color: #e7e6e6; padding: 5px 20px; max-width: 1100px; margin-left: auto; margin-right: auto"
+    >
+      <div class="font-size-22 font-bold">WAIT FOR IT...WAIT FOR IT...</div>
+      We are seeking vendors that are aligned with your requirements. Those vendors will receive a link to create a
+      proposal. All proposals will be compared and analyzed to give you three best and final options.
+    </div>
     <div class="md-layout">
       <div class="md-layout-item d-flex text-right">
         <div class="p-40 proposal-card">
