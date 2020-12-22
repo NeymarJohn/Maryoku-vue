@@ -277,6 +277,7 @@ export default {
         eventComponentInstance: new EventComponent({ id: this.component.id }),
       }).then((res) => {
         this.$emit("setRequirements", res.data.item);
+        this.$store.dispatch("event/getEventAction", { eventId: this.eventData.id });
       });
     },
   },
