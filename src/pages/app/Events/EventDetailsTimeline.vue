@@ -22,7 +22,7 @@
         <button v-scroll-to="'#timeline-edit-card'" ref="scrollBtn" style="display: none">
           Scroll to the editing card
         </button>
-        <timeline-edit-panel></timeline-edit-panel>
+        <timeline-edit-panel :isEditMode="isEditMode"></timeline-edit-panel>
       </div>
       <md-card
         class="md-card-plain time-line-blocks md-layout-item md-xlarge-size-35 md-large-size-35 md-small-size-40"
@@ -130,7 +130,6 @@ import { Modal, LabelEdit, LocationInput } from "@/components";
 import TimelineTemplateItem from "./components/TimelineTemplateItem";
 import TimelineItem from "./components/TimelineItem";
 import TimelineEmpty from "./components/TimelineEmpty";
-import TimelineGroupContainer from "./components/TimelineGroupContainer";
 
 import VueElementLoading from "vue-element-loading";
 // import auth from '@/auth';
@@ -170,7 +169,6 @@ export default {
     TimelineItem,
     TimelineEmpty,
     TimelineGapModal,
-    TimelineGroupContainer,
     TimelineEditPanel,
   },
   props: {
