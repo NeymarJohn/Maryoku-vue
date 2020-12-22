@@ -67,12 +67,12 @@
         <div v-else class="d-flex align-center justify-content-center">
           <div class="image-logo">
             <div class="logo-action">
-              <md-button class="md-white maryoku-btn md-simple" @click="changeLogo">
-                <md-icon>edit</md-icon>
-              </md-button>
-              <md-button class="md-white maryoku-btn md-simple" @click="removeLogo">
-                <md-icon>delete</md-icon>
-              </md-button>
+              <div class="color-white mb-20 font-bold font-size-16 button" @click="removeLogo">
+                <img :src="`${$iconURL}RSVP/Group 4854.svg`" class="mr-10" /> Delete
+              </div>
+              <div class="color-white font-bold font-size-16 button" @click="changeLogo">
+                <img :src="`${$iconURL}RSVP/Group 2344.svg`" class="mr-10" /> Replace
+              </div>
             </div>
             <img :src="campaignData.logoUrl" />
             <input
@@ -221,7 +221,8 @@ export default {
       this.coverImage = await getBase64(event.target.files[0]);
     },
     async onLogoChange(event) {
-      this.campaignData.logoUrl = await getBase64(event.target.files[0]);
+      // this.campaignData.logoUrl = await getBase64(event.target.files[0]);
+      this.logoSelected(event.target.files[0]);
     },
     changeLogo() {
       document.getElementById("logoImage").click();
@@ -272,10 +273,14 @@ export default {
     .logo-action {
       align-content: center;
       justify-content: center;
+      flex-direction: column;
       position: absolute;
       width: 100%;
       height: 100%;
       display: none;
+      .button {
+        cursor: pointer;
+      }
     }
     &:hover {
       .logo-action {
