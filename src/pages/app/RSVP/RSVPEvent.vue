@@ -168,9 +168,8 @@
       </template>
       <template slot="body">
         <img :src="`${$iconURL}RSVP/reject-icon.svg`" />
-        <div class="font-size-30 mt-40 font-bold-extra text-transform-uppercase">We are sorry you can’t make it!</div>
-        <div class="mt-30 font-size-20">But we are sure you’v got your reasons.</div>
-        <div class="mt-10 font-size-20">Incase you regret anytime soon- let us know</div>
+        <div class="font-size-30 mt-40 font-bold-extra text-transform-uppercase">You’ll be missed</div>
+        <div class="mt-30 font-size-20">We’re sorry you can’t make it. If anything changes please let us know</div>
       </template>
     </modal>
   </div>
