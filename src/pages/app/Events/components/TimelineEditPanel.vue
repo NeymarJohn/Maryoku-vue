@@ -32,24 +32,35 @@
           </md-button>
         </div>
       </div>
-
-      <div
-        v-for="(template, templateIndex) in scheduleDate.templates"
-        :key="`${template.name}-${templateIndex}`"
-        class="timeline-group-wrapper time-line-item"
-      >
-        <timeline-empty :index="templateIndex" :date="scheduleDate" v-if="templateIndex == 0"></timeline-empty>
-        <timeline-template-container
-          :template="template"
-          :groupIndex="templateIndex"
-          :timelineDate="{ dateIndex: dateIndex, ...scheduleDate }"
-        ></timeline-template-container>
-        <timeline-empty
-          :index="templateIndex"
-          :date="scheduleDate"
-          @addSlot="addSlot(dateIndex, templateIndex + 1, ...arguments)"
-        ></timeline-empty>
-      </div>
+      <template v-if="isEditMode">
+        <div
+          v-for="(template, templateIndex) in scheduleDate.templates"
+          :key="`${template.name}-${templateIndex}`"
+          class="timeline-group-wrapper time-line-item"
+        >
+          <timeline-empty :index="templateIndex" :date="scheduleDate" v-if="templateIndex == 0"></timeline-empty>
+          <timeline-template-container
+            :template="template"
+            :groupIndex="templateIndex"
+            :timelineDate="{ dateIndex: dateIndex, ...scheduleDate }"
+          ></timeline-template-container>
+          <timeline-empty
+            :index="templateIndex"
+            :date="scheduleDate"
+            @addSlot="addSlot(dateIndex, templateIndex + 1, ...arguments)"
+          ></timeline-empty>
+        </div>
+      </template>
+      <template v-else>
+        <timeline-item
+          v-for="(timelineItem, index) in scheduleDate.timelineItems"
+          :key="`timelineItem-${index}`"
+          :item="timelineItem"
+          :index="index"
+          :timelineDate="scheduleDate"
+          class="mt-10 mb-10 timeline-group-wrapper"
+        ></timeline-item>
+      </template>
     </div>
   </div>
 </template>
@@ -83,6 +94,12 @@ export default {
         return this.event.timelineDates;
       }
       return [];
+    },
+  },
+  props: {
+    isEditMode: {
+      type: Boolean,
+      default: true,
     },
   },
   methods: {
@@ -247,7 +264,7 @@ export default {
       position: absolute;
       border-left: dashed 1px #908f8f;
       height: 100%;
-      top: 50px;
+      top: 75px;
       left: 30px;
     }
   }
