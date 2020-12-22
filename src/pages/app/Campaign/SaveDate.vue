@@ -65,7 +65,25 @@
           <span class="color-dark-gray">Drag your file here</span>
         </vue-dropzone>
         <div v-else class="d-flex align-center justify-content-center">
-          <img :src="campaignData.logoUrl" class="image-logo" />
+          <div class="image-logo">
+            <div class="logo-action">
+              <md-button class="md-white maryoku-btn md-simple" @click="changeLogo">
+                <md-icon>edit</md-icon>
+              </md-button>
+              <md-button class="md-white maryoku-btn md-simple" @click="removeLogo">
+                <md-icon>delete</md-icon>
+              </md-button>
+            </div>
+            <img :src="campaignData.logoUrl" />
+            <input
+              style="display: none"
+              id="logoImage"
+              name="attachment"
+              type="file"
+              multiple="multiple"
+              @change="onLogoChange"
+            />
+          </div>
           <div class="display-logo ml-50">
             <md-switch v-model="campaignData.visibleSettings.showLogo" class="showlogo-switch large-switch"></md-switch>
             <div v-if="campaignData.visibleSettings.showLogo">Hide Logo</div>
@@ -202,6 +220,15 @@ export default {
     async onFileChange(event) {
       this.coverImage = await getBase64(event.target.files[0]);
     },
+    async onLogoChange(event) {
+      this.campaignData.logoUrl = await getBase64(event.target.files[0]);
+    },
+    changeLogo() {
+      document.getElementById("logoImage").click();
+    },
+    removeLogo() {
+      this.campaignData.logoUrl = null;
+    },
   },
 };
 </script>
@@ -241,6 +268,21 @@ export default {
   .image-logo {
     margin-left: 200px;
     width: 200px;
+    position: relative;
+    .logo-action {
+      align-content: center;
+      justify-content: center;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: none;
+    }
+    &:hover {
+      .logo-action {
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+      }
+    }
   }
   .display-logo {
     width: 150px;

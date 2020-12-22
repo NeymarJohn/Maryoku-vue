@@ -30,7 +30,6 @@
           </div>
           <proposal-event-vision v-if="event.concept" :event="event"></proposal-event-vision>
           <proposal-bid-content></proposal-bid-content>
-          <proposal-additional-requirement></proposal-additional-requirement>
         </div>
         <div class="step-wrapper" v-if="step == 1">
           <div class="proposal-add-personal-message-wrapper" v-if="!this.event.concept">

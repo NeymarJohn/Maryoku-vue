@@ -21,7 +21,7 @@
         <p>Set Password</p>
         <input
           class="field"
-          :class="{ 'red-border': password != confirmPassword && confirmPassword }"
+          :class="{'red-border': password != confirmPassword && confirmPassword}"
           placeholder="Type password here"
           type="password"
           v-model="vendor.password"
@@ -30,7 +30,7 @@
         <p>Confirm Password</p>
         <input
           class="field"
-          :class="{ 'red-border': password != confirmPassword }"
+          :class="{'red-border': password != confirmPassword}"
           placeholder="Type password here"
           type="password"
           v-model="vendor.confirmPassword"
@@ -63,7 +63,8 @@ export default {
   },
   data() {
     return {
-      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      iconUrl:
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
       password: null,
       confirmPassword: null,
     };

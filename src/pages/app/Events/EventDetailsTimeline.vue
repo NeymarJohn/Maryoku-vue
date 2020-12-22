@@ -27,6 +27,7 @@
       <md-card
         class="md-card-plain time-line-blocks md-layout-item md-xlarge-size-35 md-large-size-35 md-small-size-40"
         style="margin-top: 16px; padding-right: 3em"
+        v-if="isEditMode"
       >
         <md-card-content class="md-layout time-line-blocks_items mb-60">
           <div class="text-center width-100 p-10 font-size-16 mb-10">Drag Tim Slots timeline</div>
@@ -77,27 +78,39 @@
 
     <planner-event-footer>
       <template slot="buttons">
-        <md-button class="md-simple md-button md-black maryoku-btn" @click="revert">
-          <span class="font-size-16 text-transform-capitalize">
-            <img class="mr-20" :src="`${$iconURL}Campaign/Group 8871.svg`" />Revert to original
-          </span>
-        </md-button>
-        <span class="seperator"></span>
-        <md-button class="md-simple md-button md-black maryoku-btn" @click="startFromScratch">
-          <span class="font-size-16 text-transform-capitalize">
-            <img class="mr-10 label-icon" :src="`${$iconURL}Timeline-New/Trash.svg`" />
-            Start from scratch
-          </span>
-        </md-button>
-        <md-button class="md-simple md-button md-red maryoku-btn md-outlined" @click="saveDraft">
-          <span class="font-size-16 text-transform-capitalize">
-            <img class="mr-20 label-icon" :src="`${$iconURL}Timeline-New/save-red.svg`" />
-            Save Draft
-          </span>
-        </md-button>
-        <md-button class="md-button md-red maryoku-btn" @click="finalize">
-          <span class="font-size-16 text-transform-capitalize">Finalise timeline</span>
-        </md-button>
+        <template v-if="isEditMode">
+          <md-button class="md-simple md-button md-black maryoku-btn" @click="revert">
+            <span class="font-size-16 text-transform-capitalize">
+              <img class="mr-20" :src="`${$iconURL}Campaign/Group 8871.svg`" />Revert to original
+            </span>
+          </md-button>
+          <span class="seperator"></span>
+          <md-button class="md-simple md-button md-black maryoku-btn" @click="startFromScratch">
+            <span class="font-size-16 text-transform-capitalize">
+              <img class="mr-10 label-icon" :src="`${$iconURL}Timeline-New/Trash.svg`" />
+              Start from scratch
+            </span>
+          </md-button>
+          <md-button class="md-simple md-button md-red maryoku-btn md-outlined" @click="saveDraft">
+            <span class="font-size-16 text-transform-capitalize">
+              <img class="mr-20 label-icon" :src="`${$iconURL}Timeline-New/save-red.svg`" />
+              Save Draft
+            </span>
+          </md-button>
+          <md-button class="md-button md-red maryoku-btn" @click="finalize">
+            <span class="font-size-16 text-transform-capitalize">Finalize timeline</span>
+          </md-button>
+        </template>
+        <template v-else>
+          <div class="ml-40 mr-40">
+            <img :src="`${$iconURL}Campaign/Group 9222.svg`" />
+            Timeline Is Finalized.
+          </div>
+          <span class="seperator" style="margin-top: 0; margin-left: 30px"></span>
+          <md-button class="md-button md-red md-simple maryoku-btn" @click="isEditMode = true">
+            <span class="font-size-16 text-transform-capitalize">Edit Timeline</span>
+          </md-button>
+        </template>
       </template>
     </planner-event-footer>
   </div>
@@ -184,6 +197,7 @@ export default {
     deletingDate: -1,
     newTimeLineIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/Timeline-New/",
 
+    isEditMode: true,
     timeline: [
       {
         date: "20/04/2020",
@@ -629,20 +643,20 @@ export default {
           headers: this.$auth.getAuthHeader(),
         })
         .then((res) => {
-          swal({
-            title: "Good Job! ",
-            text: "Your working timeline is saved successfully! You can change it anytime!",
-            showCancelButton: false,
-            confirmButtonClass: "md-button md-success",
-            confirmButtonText: "Ok",
-            buttonsStyling: false,
-          })
-            .then((result) => {
-              if (result.value === true) {
-                return;
-              }
-            })
-            .catch((err) => {});
+          // swal({
+          //   title: "Good Job! ",
+          //   text: "Your working timeline is saved successfully! You can change it anytime!",
+          //   showCancelButton: false,
+          //   confirmButtonClass: "md-button md-success",
+          //   confirmButtonText: "Ok",
+          //   buttonsStyling: false,
+          // })
+          //   .then((result) => {
+          //     if (result.value === true) {
+          //       return;
+          //     }
+          //   })
+          //   .catch((err) => {});
         });
     },
     finalize() {
@@ -655,28 +669,29 @@ export default {
           timelineProgress: 100,
         });
         this.$store.dispatch("event/saveEventAction", newEvent).then((event) => {
-          swal({
-            title: "Good Job! ",
-            text: "You finalise timeline and your event will be processed according your timelines!",
-            showCancelButton: false,
-            confirmButtonClass: "md-button md-success",
-            confirmButtonText: "Ok",
-            buttonsStyling: false,
-          })
-            .then((result) => {
-              // if (result.value === true) {
-              //   console.log(this.eventData);
-              //   const updatedEvent = new CalendarEvent({
-              //     id: this.eventData.id,
-              //     calendar: new Calendar({
-              //       id: this.eventData.calendar.id,
-              //     }),
-              //   });
-              //   this.$store.dispatch("event/saveEventAction", updatedEvent);
-              //   return;
-              // }
-            })
-            .catch((err) => {});
+          this.isEditMode = false;
+          // swal({
+          //   title: "Good Job! ",
+          //   text: "You finalise timeline and your event will be processed according your timelines!",
+          //   showCancelButton: false,
+          //   confirmButtonClass: "md-button md-success",
+          //   confirmButtonText: "Ok",
+          //   buttonsStyling: false,
+          // })
+          //   .then((result) => {
+          //     // if (result.value === true) {
+          //     //   console.log(this.eventData);
+          //     //   const updatedEvent = new CalendarEvent({
+          //     //     id: this.eventData.id,
+          //     //     calendar: new Calendar({
+          //     //       id: this.eventData.calendar.id,
+          //     //     }),
+          //     //   });
+          //     //   this.$store.dispatch("event/saveEventAction", updatedEvent);
+          //     //   return;
+          //     // }
+          //   })
+          //   .catch((err) => {});
         });
         // this.$http
         //   .post(`${process.env.SERVER_URL}/1/events/${this.eventData.id}/timelineItems`, this.timelineItems, {
@@ -741,6 +756,9 @@ export default {
 
     if (this.eventData) {
       this.initData(this.eventData);
+      if (this.eventData.timelineProgress === 100) {
+        this.isEditMode = false;
+      }
       this.isLoading = false;
     }
   },
