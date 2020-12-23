@@ -46,12 +46,13 @@ import authService from "@/services/auth.service";
 
 import "./assets/scss/main.scss";
 import dateUtil from "./utils/date.util";
-import helper from "@/utils/helperFunction";
+import VueYoutube from 'vue-youtube'
+
 
 require("vue-tour/dist/vue-tour.css");
 
 const VueScrollTo = require("vue-scrollto");
-window.$ = window.jQuery = require("jquery");
+window.$ = window.jQuery = require('jquery');
 
 // plugin setup
 Vue.use(VueRouter);
@@ -63,7 +64,7 @@ Vue.use(VueGmaps, {
     libraries: ["places"],
 });
 Vue.use(VueScrollTo);
-
+Vue.use(VueYoutube)
 VueClipboard.config.autoSetContainer = true;
 Vue.use(VueClipboard);
 
@@ -224,13 +225,13 @@ if (process.env.NODE_ENV === "production") {
 Vue.use(VueCookies);
 
 Vue.directive("focus", {
-    inserted: function(el) {
+    inserted: function (el) {
         el.focus();
     },
 });
 
 Vue.directive("select-all", {
-    inserted: function(el) {
+    inserted: function (el) {
         el.setSelectionRange(el.value.length, el.value.length);
     },
 });
@@ -249,7 +250,7 @@ Vue.directive("select-all", {
 //   stopProp(event) { event.stopPropagation() }
 // })
 
-Vue.filter("withComma", function(value) {
+Vue.filter("withComma", function (value) {
     return value ? value.toLocaleString() : 0;
 });
 
@@ -264,7 +265,7 @@ axios.defaults.headers.common["gorm-tenantid"] = authService.resolveTenantId();
 axios.defaults.headers.common.gorm_tenantid = authService.resolveTenantId();
 Model.$http = axios;
 
-Number.prototype.padStart = function(size, theChar) {
+Number.prototype.padStart = function (size, theChar) {
     var s = String(this);
     while (s.length < (size || 2)) {
         s = "0" + s;
@@ -272,7 +273,7 @@ Number.prototype.padStart = function(size, theChar) {
     return s;
 };
 
-String.prototype.padStart = function(size, theChar) {
+String.prototype.padStart = function (size, theChar) {
     var s = String(this);
     while (s.length < (size || 2)) {
         s = theChar + s;
@@ -288,11 +289,6 @@ Object.defineProperty(Vue.prototype, "$auth", {
 Object.defineProperty(Vue.prototype, "$dateUtil", {
     get() {
         return dateUtil;
-    },
-});
-Object.defineProperty(Vue.prototype, "$helper", {
-    get() {
-        return helper;
     },
 });
 Object.defineProperty(Vue.prototype, "$authHeader", {

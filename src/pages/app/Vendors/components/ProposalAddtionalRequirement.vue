@@ -1,5 +1,5 @@
 <template>
-  <div class="white-card mt-40 additional-requirements" v-if="specialRequirements.length > 0">
+  <div class="white-card mt-40 additional-requirements">
     <div class="p-40">
       <div>
         <img :src="`${$iconURL}Submit+Proposal/Group+8840.svg`" />
@@ -67,7 +67,6 @@
       <md-checkbox v-model="agreeTerms">I read this section & I agree</md-checkbox>
     </div>
   </div>
-  <div v-else></div>
 </template>
 <script>
 export default {

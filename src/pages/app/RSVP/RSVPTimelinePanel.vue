@@ -12,15 +12,15 @@
       <div
         v-for="(schedule, index) in scheduledDays"
         :key="index"
-        class="md-layout-item md-size-50 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra mt-20"
+        class="md-layout-item md-size-50 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra"
       >
         <div class="rsvp-event-timeline-day">
-          <span class="font-size-22 font-bold-extra">Day {{ $helper.numberToWord(index + 1) }}</span>
-          <span class="font-size-16">{{ $dateUtil.formatScheduleDay(schedule.date) }}</span>
+          <span class="font-size-22 font-bold-extra">Day 0{{ index + 1 }}</span>
+          <span class="font-size-16">{{ $dateUtil.formatScheduleDay(schedule.itemDay) }}</span>
         </div>
         <div>
           <rsvp-timeline-item
-            v-for="(timeline, index) in schedule.timelineItems"
+            v-for="(timeline, index) in schedule.items"
             :key="index"
             :timeline="timeline"
           ></rsvp-timeline-item>
@@ -40,7 +40,7 @@ import JoinZoomModal from "@/components/Modals/RSVP/JoinZoomModal";
 import SyncCalendarModal from "@/components/Modals/RSVP/SyncCalendarModal";
 import RsvpVenueCarousel from "./RSVPVenueCarousel";
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel";
-import { numberToWord } from "@/utils/helperFunction";
+
 export default {
   components: {
     RsvpTimelineItem,
@@ -67,7 +67,32 @@ export default {
     },
     scheduledDays() {
       var timelines = {};
-      return this.event.timelineDates;
+      let scheduledDays = [];
+
+      // define timelines
+      console.log(this.event.timelineItems);
+      if (this.event.timelineItems) {
+        this.event.timelineItems.forEach((item) => {
+          item.isItemLoading = false;
+          if (!timelines[item.plannedDate]) timelines[item.plannedDate] = [];
+          item.isItemLoading = false;
+          timelines[item.plannedDate].push(item);
+        });
+        console.log(timelines);
+        if (Object.keys(timelines).length > 0) {
+          Object.keys(timelines).forEach((itemDay, index) => {
+            scheduledDays.push({
+              itemDay: parseInt(itemDay),
+              isEditable: false,
+              items: timelines[itemDay],
+            });
+          });
+          scheduledDays = _.sortBy(scheduledDays, function (item) {
+            return item.itemDay;
+          });
+        }
+      }
+      return scheduledDays;
     },
   },
   watch: {

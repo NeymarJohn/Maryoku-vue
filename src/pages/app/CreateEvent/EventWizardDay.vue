@@ -36,7 +36,7 @@ import vSelect from "vue-select";
 import { FunctionalCalendar } from "vue-functional-calendar";
 import moment from "moment";
 import { extendMoment } from "moment-range";
-import { timelineTempates } from "@/constants/event.js";
+
 export default {
   components: {
     WizardStatusBar,
@@ -66,7 +66,13 @@ export default {
         dateList.forEach((d) => {
           timelineDates.push({
             date: d,
-            templates: timelineTempates,
+            templates: [
+              { name: "registration", type: "group" },
+              { name: "activity", type: "group" },
+              { name: "meal", type: "group" },
+              { name: "activity", type: "group" },
+              { name: "summary", type: "group" },
+            ],
             status: "editing",
           });
         });

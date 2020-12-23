@@ -93,7 +93,3 @@ export const asyncForEach = async (array, callback) => {
         await callback(array[index], index, array);
     }
 };
-
-export default {
-    numberToWord,
-};

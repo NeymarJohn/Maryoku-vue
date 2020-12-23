@@ -32,7 +32,7 @@
           <span class="text-transform-capitalize">{{ event.guestType || "Employee" }}</span
           >!
         </div>
-        <div class="font-size-20 mt-50">YOU ARE INVITED TO</div>
+        <div class="font-size-20 mt-50">YOU ARE INVITED TO A</div>
         <title-editor
           :defaultValue="campaignTitle"
           :key="campaignTitle"

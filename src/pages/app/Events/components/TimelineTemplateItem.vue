@@ -14,14 +14,27 @@
           v-if="item.status == 'template'"
           :src="`${$iconURL}Timeline-New/templates/${item.icon.toLowerCase()}.svg`"
         />
-        <img class="time-line-blocks_icon" v-else :src="`${$iconURL}Timeline-New/timegap.svg`" />
+        <img
+          class="time-line-blocks_icon"
+          v-else
+          :src="`${$iconURL}Timeline-New/timegap.svg`"
+        />
         <!-- <div class="timeline-image-mask"></div> -->
       </div>
-      <div v-if="item.status == 'template'" class="template-form ml-20" :class="`${item.group}`" :style="hoverStyle">
+      <div
+        v-if="item.status == 'template'"
+        class="template-form ml-20"
+        :class="`${item.group}`"
+        :style="hoverStyle"
+      >
         <span>{{ item.title }}</span>
         <!-- <div class="template-form-mask"></div> -->
       </div>
-      <div v-if="item.status == 'timegap'" class="template-form ml-20 text-center" :style="hoverStyle">
+      <div
+        v-if="item.status == 'timegap'"
+        class="template-form ml-20 text-center"
+        :style="hoverStyle"
+      >
         <div>
           *{{ formatHour(item.timeGap.start) }}-
           {{ formatHour(item.timeGap.end) }}
@@ -90,10 +103,9 @@ export default {
       if (!this.isHover) {
         return "";
       }
-      return `border-color: ${this.droppingBlock.color}; background-color: ${hexToRgbA(
-        this.droppingBlock.color,
-        0.25,
-      )}`;
+      return `border-color: ${
+        this.droppingBlock.color
+      }; background-color: ${hexToRgbA(this.droppingBlock.color, 0.25)}`;
     },
   },
 };

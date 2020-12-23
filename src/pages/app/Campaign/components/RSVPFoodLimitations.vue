@@ -1,9 +1,9 @@
 <template>
   <div class="d-flex food-limitaions">
     <div v-for="(key, index) in Object.keys(limitations)" :key="index" class="flex-1 food-limit-item text-center">
-      <img :src="`${$iconURL}RSVP/${icons[key]}`" />
+      <!-- <img :src="`${$iconURL}${item.icon}`" v-if="item.icon" /> -->
       <div>
-        <div class="text-transform-capitalize">
+        <div>
           {{ key }}
         </div>
         <div>
@@ -30,19 +30,6 @@ export default {
   data() {
     return {
       limitations: [],
-      icons: {
-        vegetarian: "milk.svg",
-        vegan: "food+(4).svg",
-        Wheat: "food+(1).svg",
-        Shellfish: "animals.svg",
-        Peanuts: "salty.svg",
-        Milk: "food+(2).svg",
-        Soy: "food+(4).svg",
-        "Halal food": "spiritual.svg",
-        Eggs: "shape.svg",
-        "Tree Nuts": "food+(3).svg",
-        "Kosher food": "kosher.svg",
-      },
       openedKey: "",
     };
   },
