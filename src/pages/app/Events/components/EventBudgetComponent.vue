@@ -8,17 +8,10 @@
     <div class="font-size-20 font-bold name">
       <img class="icon" :src="`${$iconURL}Budget Elements/${component.icon}`" />
       {{ component.title }}
-      <span v-if="component.eventCategory">
-        <img :src="`${$iconURL}Campaign/Group 9087.svg`" class="label-icon" />
-        <md-tooltip>
-          <div class="font-size-14 tab-tooltip">{{ component.eventCategory.tooltipText }}</div>
-        </md-tooltip>
-      </span>
     </div>
-
     <template v-if="!isEditing">
       <div class="text-right font-size-20 flex-1 budget" v-if="type == 'perguest'">
-        ${{ (component.allocatedBudget / participants).toFixed(0) | withComma }}
+        ${{ (component.allocatedBudget / participants) | withComma }}
       </div>
       <div class="text-right font-size-20 flex-1 budget" v-else>${{ component.allocatedBudget | withComma }}</div>
       <div class="actions">

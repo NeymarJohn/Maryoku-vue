@@ -73,7 +73,7 @@
         <div
           class="md-layout-item md-size-100 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra mb-50"
         >
-          sneak peak to the agenda
+          sneaky peak to the agenda
         </div>
         <div
           v-for="(schedule, index) in scheduledDays"
@@ -157,7 +157,6 @@
       v-if="showSyncCalendarForZoom"
       @close="showSyncCalendarForZoom = false"
       :campaign="campaign"
-      :rsvp="rsvpData"
     ></sync-calendar-modal>
     <social-sharing-modal v-if="showSharingModal" @cancel="showSharingModal = false"></social-sharing-modal>
     <modal v-if="showRejectConformModal">
@@ -234,7 +233,6 @@ export default {
       showSharingModal: false,
       isSentRsvp: false,
       showRejectConformModal: false,
-      rsvpData: null,
     };
   },
   created() {
@@ -311,9 +309,7 @@ export default {
       rsvpData.invitedEmail = this.rsvpRequest.email;
       rsvpData.rsvpRequest = new RsvpRequest({ id: this.rsvpRequest.id });
       rsvpData.event = new CalendarEvent({ id: this.event.id });
-      new Rsvp(rsvpData).save().then((requestedRSVP) => {
-        this.rsvpData = requestedRSVP;
-      });
+      new Rsvp(rsvpData).save().then((requestedRSVP) => {});
       new RsvpRequest({ id: this.rsvpRequest.id, status: "VIRTUAL" }).save().then((res) => {
         this.showZoomModal = false;
         this.showSyncCalendarForZoom = true;
@@ -359,7 +355,6 @@ export default {
       height: 430px;
       background-repeat: no-repeat;
       background-position: center 60%;
-      background-size: 120%;
     }
     &-overview {
       // background-color: #fff;

@@ -8,7 +8,9 @@
         summer party
         <small>checklist</small>
       </div>
-      <div class="subTitle-label" v-if="page === 'event'">Let's Begin</div>
+      <div class="subTitle-label" v-if="page === 'event'">
+        Let's Begin
+      </div>
       <div class="completion-progress">
         <div class="progress-done"></div>
       </div>
@@ -26,14 +28,26 @@
 
       <div class="my-notes">
         <md-button v-if="!isOpenNote" class="md-red" @click="isOpenNote = true">
-          <img :src="`${$iconURL}Event Page/note-light.svg`" width="20" style="margin: 0 3px" />
+          <img
+            :src="`${$iconURL}Event Page/note-light.svg`"
+            width="20"
+            style="margin: 0 3px"
+          />
           On my plate
-          <md-icon style="font-size: 30px !important; margin-left: 5px">keyboard_arrow_down</md-icon>
+          <md-icon style="font-size: 30px !important; margin-left: 5px"
+            >keyboard_arrow_down</md-icon
+          >
         </md-button>
         <md-button v-if="isOpenNote" class="md-red" @click="isOpenNote = false">
-          <img :src="`${$iconURL}Event Page/note-light.svg`" width="20" style="margin: 0 3px" />
+          <img
+            :src="`${$iconURL}Event Page/note-light.svg`"
+            width="20"
+            style="margin: 0 3px"
+          />
           Close
-          <md-icon style="font-size: 30px !important; margin-left: 5px">keyboard_arrow_up</md-icon>
+          <md-icon style="font-size: 30px !important; margin-left: 5px"
+            >keyboard_arrow_up</md-icon
+          >
         </md-button>
       </div>
     </div>
@@ -76,6 +90,7 @@
   </div>
 </template>
 <script>
+
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 import { SlideYDownTransition } from "vue2-transitions";
@@ -109,13 +124,13 @@ export default {
     page: {
       type: String,
       required: true,
-    },
+    }
   },
   data: () => ({
     isLoading: true,
     isOpenNote: false,
     currentUrl: "",
-    event: {},
+    event: {}
   }),
   computed: {
     // ...mapState("event", {
@@ -145,7 +160,9 @@ export default {
   mounted() {},
   watch: {
     $route: "fetchUrl",
-    elements(newValue) {},
+    elements(newValue) {
+
+    },
   },
 };
 </script>

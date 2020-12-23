@@ -94,7 +94,6 @@ export default {
 
         // show when you approve budget
         if (this.event.budgetProgress == 100) {
-          this.event.components.sort((a, b) => a.order - b.order);
           this.event.components.forEach((item) => {
             if (item.componentId !== "unexpected") {
               elements.push({
@@ -102,7 +101,6 @@ export default {
                 status: "not-complete",
                 route: "booking/" + item.id,
                 icon: `${this.$iconURL}Budget+Elements/${item.componentId}.svg`,
-                progress: item.progress ? item.progress : 0,
               });
             }
           });

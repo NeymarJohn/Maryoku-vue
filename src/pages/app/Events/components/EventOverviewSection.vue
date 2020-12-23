@@ -32,6 +32,7 @@
                 v-if="isEdit && section.hasOwnProperty('eventType')"
                 :value="section.eventType"
                 :categories="eventTypes"
+                trackBy="name"
                 class="my-10"
                 @change="eventTypeChange"
         ></category-selector>
@@ -93,6 +94,7 @@
                 column="2"
                 :categories="guestsTypes"
                 :additional="additional"
+                trackBy="name"
                 @change="guestTypeChange"
                 @input="inputQuestType"
         ></category-selector>
@@ -103,6 +105,7 @@
         <category-selector
                 :value="section.occasion"
                 :categories="occasions"
+                trackBy="name"
                 @change="occasionChange"
         ></category-selector>
 
