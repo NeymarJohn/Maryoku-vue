@@ -86,8 +86,6 @@ export default {
       } else {
         this.selectedCategory = this.categories.find(it => it.value === this.value);
       }
-    } else {
-      if ( this.multiple ) this.selectedCategory = [];
     }
 
   },

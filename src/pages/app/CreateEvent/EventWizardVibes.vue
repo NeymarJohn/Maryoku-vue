@@ -122,8 +122,9 @@ export default {
         eventData.calendar = new Calendar({ id: this.$store.state.auth.user.profile.defaultCalendarId });
         eventService
           .saveEventFromStorage(this.$store.state.auth.user.profile.defaultCalendarId)
-          .then(() => {
-            this.$router.push({ path: `/events` });
+          .then((newEvent) => {
+            console.log(newEvent);
+            this.$router.push({ path: `/events/${newEvent.id}/booking/overview` });
           })
           .catch((err) => {
             swal({

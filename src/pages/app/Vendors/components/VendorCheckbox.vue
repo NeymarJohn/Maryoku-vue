@@ -67,7 +67,7 @@
           </div>
         </div>
         <div class="included-cont" v-if="checked && !item.xIncluded">
-          <div class="included mr-20" :class="{ active: included }" @click="updateIncluded()">
+          <div class="included" :class="{ active: included }" @click="updateIncluded()">
             <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="included" />
             <span class="unchecked" v-else></span>
             <span>Included</span>
@@ -99,7 +99,7 @@
           </div>
           <category-selector
                   v-if="checked"
-                  :value="currentItem.value || ''"
+                  :value="currentItem.value"
                   :categories="item.available"
                   :column="columnCount"
                   :multiple="true"

@@ -124,7 +124,7 @@ export default {
         },
         {
           value: "employees-spouses",
-          name: "Employees & Spouses",
+          name: "Plus 1",
           selected: false,
         },
         {
