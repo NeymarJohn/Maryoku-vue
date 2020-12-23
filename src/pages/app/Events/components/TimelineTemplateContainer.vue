@@ -10,7 +10,6 @@
           :key="index"
           :item="item"
           :index="index"
-          :timelineDate="timelineDate"
           class="mt-10 mb-10"
         ></timeline-item>
       </template>

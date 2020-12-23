@@ -1,5 +1,5 @@
 <template>
-  <div class="selector-wrapper" :style="{'width': multiple ? '150px':''}">
+  <div class="selector-wrapper" :style="{ width: multiple ? '150px' : '' }">
     <div class="droplist" v-if="!expanded">
       <template v-if="multiple">
         <input readonly class="default" v-model="_value" @click="expanded = true" />
@@ -10,13 +10,18 @@
       </template>
       <img class="dropdown" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 523.svg" />
     </div>
-    <ul :style="{'column-count' : column, 'min-width' : column > 1 ? '670px' : '350px'}" v-click-outside="close" v-else>
-      <li v-for="(category, cIndex) in categories" :key="cIndex" @click="updateCategory(category)" :class="{'mb-40': cIndex < categories.length - 1}">
+    <ul :style="{ 'column-count': column, 'min-width': column > 1 ? '670px' : '350px' }" v-click-outside="close" v-else>
+      <li
+        v-for="(category, cIndex) in categories"
+        :key="cIndex"
+        @click="updateCategory(category)"
+        :class="{ 'mb-40': cIndex < categories.length - 1 }"
+      >
         <template v-if="multiple">
           <div class="d-flex align-center">
             <img class="mr-10" :src="`${iconUrl}Group 5479 (2).svg`" v-if="_includes(selectedCategory, category)" />
             <span class="unchecked" v-else></span>
-            <span>{{ _option(category)  }}</span>
+            <span>{{ _option(category) }}</span>
           </div>
         </template>
         <template v-else>
@@ -27,7 +32,7 @@
       <li v-if="additional">
         <div class="mt-20">
           <p>Other</p>
-          <input class="default with-img" v-model="additionalValue" @input="input"/>
+          <input class="default with-img" v-model="additionalValue" @input="input" />
         </div>
       </li>
     </ul>
@@ -54,64 +59,62 @@ export default {
       type: Boolean,
       required: false,
     },
-    additional:{
+    additional: {
       type: Boolean,
       required: false,
     },
-    trackBy:{
+    trackBy: {
       type: String,
-      required: false
+      required: false,
     },
-    customClass:{
+    customClass: {
       type: String,
-    }
+    },
   },
   data: () => ({
     iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     expanded: false,
     selectedCategory: null,
     additionalValue: null,
-    reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
+    reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
   }),
   mounted() {
     // console.log("category-selector.mounted", this.value);
     if (this.value) {
-      if ( this.multiple  ) {
-        if ( this.value.length ) {
-            this.selectedCategory = this.categories.filter(it => this._includes(this.value, it));
+      if (this.multiple) {
+        if (this.value.length) {
+          this.selectedCategory = this.categories.filter((it) => this._includes(this.value, it));
         } else {
           this.selectedCategory = [];
         }
-
       } else {
-        this.selectedCategory = this.categories.find(it => it.value === this.value);
+        this.selectedCategory = this.categories.find((it) => it.value === this.value);
       }
     }
-
   },
-  computed:{
+  computed: {
     _value() {
-      if ( !this.selectedCategory ) return null;
-      if ( this.multiple ) {
-        if ( this.trackBy ) {
-          return this.selectedCategory.map(it => it[this.trackBy])
+      if (!this.selectedCategory) return null;
+      if (this.multiple) {
+        if (this.trackBy) {
+          return this.selectedCategory.map((it) => it[this.trackBy]);
         } else {
           return this.selectedCategory;
         }
       } else {
-        if ( this.trackBy ) {
+        if (this.trackBy) {
           return this.selectedCategory[this.trackBy];
         } else {
           return this.selectedCategory;
         }
       }
-    }
+    },
   },
   methods: {
     updateCategory(category) {
       console.log("updateCategory", category);
-      if (this.multiple ) {
-
+      if (this.multiple) {
+        if (!this.selectedCategory) this.selectedCategory = [];
         if (this._find(this.selectedCategory, category)) {
           this.selectedCategory = this._filter(this.selectedCategory, category);
         } else {
@@ -124,39 +127,41 @@ export default {
         this.expanded = false;
         this.$emit("change", this._value);
       }
-
     },
-    _filter(array, value){
-      if ( this.trackBy ) {
-        return array.filter(el => el[this.trackBy] !== value[this.trackBy])
+    _filter(array, value) {
+      if (!array) return false;
+      if (this.trackBy) {
+        return array.filter((el) => el[this.trackBy] !== value[this.trackBy]);
       } else {
-        return array.filter(el => el !== value);
+        return array.filter((el) => el !== value);
       }
     },
     _find(array, value) {
-      if ( this.trackBy ) {
-        return array.find(el => el[this.trackBy] === value[this.trackBy]);
+      if (!array) return false;
+      if (this.trackBy) {
+        return array.find((el) => el[this.trackBy] === value[this.trackBy]);
       } else {
-        return array.find(el => el === value);
+        return array.find((el) => el === value);
       }
     },
-    _includes(array, value){
-      if ( this.trackBy ) {
+    _includes(array, value) {
+      if (!array) return false;
+      if (this.trackBy) {
         // return array.includes(value[this.trackBy]);
-        return array.findIndex(el => el[this.trackBy] === value[this.trackBy]) > -1;
+        return array.findIndex((el) => el[this.trackBy] === value[this.trackBy]) > -1;
       } else {
         return array.includes(value);
       }
     },
-    _option (option) {
+    _option(option) {
       return this.trackBy ? option[this.trackBy] : option;
     },
-    input(){
+    input() {
       this.$emit("input", this.additionalValue);
     },
-    close(){
+    close() {
       this.expanded = false;
-    }
+    },
   },
 };
 </script>
@@ -205,12 +210,12 @@ export default {
         width: 30px !important;
       }
 
-      p{
+      p {
         font-weight: bold;
         margin: 0 0 10px;
       }
 
-      span.unchecked{
+      span.unchecked {
         display: inline-block;
         width: 30px;
         min-width: 30px !important;
@@ -222,13 +227,13 @@ export default {
         position: relative;
       }
 
-      input{
+      input {
         width: 100%;
       }
     }
   }
 
-  &.service .droplist input{
+  &.service .droplist input {
     border: solid 1px #707070 !important;
   }
 }

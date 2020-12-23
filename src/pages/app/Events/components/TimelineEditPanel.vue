@@ -5,9 +5,7 @@
         <div class="header-title font-size-14 color-gray text-transform-capitalize">
           <div class="time-line-edit d-flex justify-content-center align-center">
             <label style="white-space: nowrap; padding-right: 10px">Day {{ numberToWord(dateIndex + 1) }}</label>
-            <div>
-              {{ $dateUtil.formatScheduleDay(scheduleDate.date, "MM/DD/YY") }}
-            </div>
+            <div>{{ scheduleDate.date }}</div>
             <!-- <md-datepicker
               :md-disabled-dates="getDisabledDates(dateIndex)"
               :md-closed="closeEditTimeline(dateIndex)"
@@ -32,35 +30,24 @@
           </md-button>
         </div>
       </div>
-      <template v-if="isEditMode">
-        <div
-          v-for="(template, templateIndex) in scheduleDate.templates"
-          :key="`${template.name}-${templateIndex}`"
-          class="timeline-group-wrapper time-line-item"
-        >
-          <timeline-empty :index="templateIndex" :date="scheduleDate" v-if="templateIndex == 0"></timeline-empty>
-          <timeline-template-container
-            :template="template"
-            :groupIndex="templateIndex"
-            :timelineDate="{ dateIndex: dateIndex, ...scheduleDate }"
-          ></timeline-template-container>
-          <timeline-empty
-            :index="templateIndex"
-            :date="scheduleDate"
-            @addSlot="addSlot(dateIndex, templateIndex + 1, ...arguments)"
-          ></timeline-empty>
-        </div>
-      </template>
-      <template v-else>
-        <timeline-item
-          v-for="(timelineItem, index) in scheduleDate.timelineItems"
-          :key="`timelineItem-${index}`"
-          :item="timelineItem"
-          :index="index"
-          :timelineDate="scheduleDate"
-          class="mt-10 mb-10 timeline-group-wrapper"
-        ></timeline-item>
-      </template>
+
+      <div
+        v-for="(template, templateIndex) in scheduleDate.templates"
+        :key="`${template.name}-${templateIndex}`"
+        class="timeline-group-wrapper time-line-item"
+      >
+        <timeline-empty :index="templateIndex" :date="scheduleDate" v-if="templateIndex == 0"></timeline-empty>
+        <timeline-template-container
+          :template="template"
+          :groupIndex="templateIndex"
+          :timelineDate="{ dateIndex: dateIndex, ...scheduleDate }"
+        ></timeline-template-container>
+        <timeline-empty
+          :index="templateIndex"
+          :date="scheduleDate"
+          @addSlot="addSlot(dateIndex, templateIndex + 1, ...arguments)"
+        ></timeline-empty>
+      </div>
     </div>
   </div>
 </template>
@@ -96,14 +83,7 @@ export default {
       return [];
     },
   },
-  props: {
-    isEditMode: {
-      type: Boolean,
-      default: true,
-    },
-  },
   methods: {
-    formatDate() {},
     numberToWord(num) {
       return numberToWord(num);
     },
@@ -264,7 +244,7 @@ export default {
       position: absolute;
       border-left: dashed 1px #908f8f;
       height: 100%;
-      top: 75px;
+      top: 50px;
       left: 30px;
     }
   }

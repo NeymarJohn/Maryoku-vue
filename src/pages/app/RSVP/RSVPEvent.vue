@@ -14,7 +14,7 @@
             </div>
 
             <div class="md-layout-item md-size-50 md-small-size-50">
-              <div class="mb-20">You Are Invited To</div>
+              <div class="mb-20">You Are Invited To A</div>
               <div class="font-size-60 font-bold-extra mb-30">{{ campaign.title }}</div>
               <div class="word-break">
                 {{ campaign.description }}
@@ -81,12 +81,12 @@
           class="md-layout-item md-size-50 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra"
         >
           <div class="rsvp-event-timeline-day">
-            <span class="font-size-22 font-bold-extra">Day {{ $helper.numberToWord(index + 1) }}</span>
-            <span class="font-size-16">{{ $dateUtil.formatScheduleDay(schedule.date) }}</span>
+            <span class="font-size-22 font-bold-extra">Day 0{{ index + 1 }}</span>
+            <span class="font-size-16">{{ $dateUtil.formatScheduleDay(schedule.itemDay) }}</span>
           </div>
           <div>
             <rsvp-timeline-item
-              v-for="(timeline, index) in schedule.timelineItems"
+              v-for="(timeline, index) in schedule.items"
               :key="index"
               :timeline="timeline"
             ></rsvp-timeline-item>
@@ -168,8 +168,9 @@
       </template>
       <template slot="body">
         <img :src="`${$iconURL}RSVP/reject-icon.svg`" />
-        <div class="font-size-30 mt-40 font-bold-extra text-transform-uppercase">You’ll be missed</div>
-        <div class="mt-30 font-size-20">We’re sorry you can’t make it. If anything changes please let us know</div>
+        <div class="font-size-30 mt-40 font-bold-extra text-transform-uppercase">We are sorry you can’t make it!</div>
+        <div class="mt-30 font-size-20">But we are sure you’v got your reasons.</div>
+        <div class="mt-10 font-size-20">Incase you regret anytime soon- let us know</div>
       </template>
     </modal>
   </div>
@@ -222,7 +223,7 @@ export default {
         },
       ],
       event: {},
-
+      scheduledDays: [],
       isLoading: true,
       showRsvpModal: false,
       showReminderModal: false,
@@ -294,9 +295,6 @@ export default {
       }
       return "";
     },
-    scheduledDays() {
-      return this.event.timelineDates;
-    },
   },
   methods: {
     ...mapActions("campaign", ["getCampaigns"]),
@@ -305,7 +303,7 @@ export default {
     },
     setRsvp() {
       this.showRsvpModal = false;
-      // this.showReminderModal = true;
+      this.showReminderModal = true;
     },
     setZoomRsvp(rsvpData) {
       rsvpData.attendingOption = "VIRTUAL";
@@ -333,7 +331,11 @@ export default {
     },
     thinkLater() {
       new RsvpRequest({ id: this.rsvpRequest.id, status: "CONSIDERED" }).save().then((res) => {
-        this.showReminderModal = true;
+        swal({
+          title: `You can send RSVP anytime!`,
+          buttonsStyling: false,
+          confirmButtonClass: "md-button md-success",
+        });
       });
     },
   },

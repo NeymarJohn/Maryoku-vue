@@ -1,6 +1,8 @@
 <template>
   <timeline-template-item
-    v-if="editingContent.status == 'template' || editingContent.status == 'timegap'"
+    v-if="
+      editingContent.status == 'template' || editingContent.status == 'timegap'
+    "
     :item="item"
     :index="index"
     @applyTemplate="applyToTemplate"
@@ -18,7 +20,11 @@
       ref="timeline-edit-card"
       id="timeline-edit-card"
     >
-      <vue-element-loading :active.sync="editingContent.isItemLoading" spinner="ring" color="#FF547C" />
+      <vue-element-loading
+        :active.sync="editingContent.isItemLoading"
+        spinner="ring"
+        color="#FF547C"
+      />
       <md-card-content class="md-layout">
         <div class="md-layout-item md-size-100 mb-20">
           <span
@@ -26,31 +32,52 @@
             :style="`color:${editingContent.color};`"
             >{{ editingContent.buildingBlockType }}</span
           >
-          <img :src="`${$iconURL}Timeline-New/tip.svg`" class="label-icon" style="margin-left: 50px" />
+          <img
+            :src="`${$iconURL}Timeline-New/tip.svg`"
+            class="label-icon"
+            style="margin-left: 50px"
+          />
           <span>70% of events like yours timed 30 minuets to this slot</span>
         </div>
 
         <div class="md-layout-item md-size-100 mb-10">
           <div class="form-group">
             <label class="font-size-16 font-bold pb-10">Name</label>
-            <maryoku-input type="text" class="mt-10" v-model="editingContent.title" />
+            <maryoku-input
+              type="text"
+              class="mt-10"
+              v-model="editingContent.title"
+            />
           </div>
         </div>
         <div class="md-layout-item md-size-100 mt-20">
-          <md-button class="md-simple edit-btn" @click="showDescription = !showDescription">
-            <img :src="`${$iconURL}Timeline-New/circle-plus.svg`" class="label-icon mr-10" />
+          <md-button
+            class="md-simple edit-btn"
+            @click="showDescription = !showDescription"
+          >
+            <img
+              :src="`${$iconURL}Timeline-New/circle-plus.svg`"
+              class="label-icon mr-10"
+            />
             <span class="color-red">Add Description</span>
             <span class="color-black font-size-14 pl-5">(Optional)</span>
           </md-button>
           <div class="form-group mt-30" v-if="showDescription">
             <label class="font-size-16 font-bold">Description</label>
-            <maryoku-textarea size="small" class="mt-10" v-model="editingContent.description"></maryoku-textarea>
+            <maryoku-textarea
+              size="small"
+              class="mt-10"
+              v-model="editingContent.description"
+            ></maryoku-textarea>
           </div>
         </div>
         <div class="md-layout-item md-size-100 mt-50 d-flex">
           <div class="form-group">
             <label class="font-size-16 font-bold pb-10">
-              <img :src="`${$iconURL}Timeline-New/clock.svg`" class="label-icon mr-10" />Start At
+              <img
+                :src="`${$iconURL}Timeline-New/clock.svg`"
+                class="label-icon mr-10"
+              />Start At
             </label>
             <time-input
               v-model="editingContent.startTime"
@@ -63,7 +90,10 @@
           <div class="divider"></div>
           <div class="form-group">
             <label class="font-size-16 font-bold pb-10 d-inline-block">
-              <img :src="`${$iconURL}Timeline-New/clock.svg`" class="label-icon mr-10" />Finishes At
+              <img
+                :src="`${$iconURL}Timeline-New/clock.svg`"
+                class="label-icon mr-10"
+              />Finishes At
             </label>
             <time-input
               v-model="editingContent.endTime"
@@ -76,7 +106,9 @@
         </div>
         <div class="md-layout-item md-size-100 mt-50">
           <div class="form-group">
-            <label class="font-size-16 font-bold pb-10">Assign vendor to slot</label>
+            <label class="font-size-16 font-bold pb-10"
+              >Assign vendor to slot</label
+            >
             <multiselect
               v-model="vendor"
               :options="['vendor1', 'vendor2']"
@@ -89,7 +121,11 @@
           </div>
         </div>
       </md-card-content>
-      <md-card-actions md-alignment="right" style="border: none" class="edit-timeline-footer">
+      <md-card-actions
+        md-alignment="right"
+        style="border: none"
+        class="edit-timeline-footer"
+      >
         <md-button
           name="event-planner-tab-timeline-item-save"
           class="maryoku-btn md-default md-simple"
@@ -119,24 +155,39 @@
       v-if="!editingContent.mode || editingContent.mode === 'saved'"
       :style="`border-left : 5px solid ` + editingContent.color"
     >
-      <vue-element-loading :active.sync="editingContent.isItemLoading" spinner="ring" color="#FF547C" />
+      <vue-element-loading
+        :active.sync="editingContent.isItemLoading"
+        spinner="ring"
+        color="#FF547C"
+      />
       <md-card-content style="min-height: 80px">
         <div class="timeline-actions">
           <md-button class="md-icon-button md-simple" @click="editTimeline">
-            <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon" style="height: 30px" />
+            <img
+              :src="`${$iconURL}common/edit-dark.svg`"
+              class="label-icon"
+              style="height: 30px"
+            />
           </md-button>
           <md-button class="md-icon-button md-simple" @click="removeItem">
-            <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon" style="height: 30px" />
+            <img
+              :src="`${$iconURL}common/trash-dark.svg`"
+              class="label-icon"
+              style="height: 30px"
+            />
           </md-button>
         </div>
         <div class="item-title-and-time">
           <span class="item-time font-size-20 color-dark-gray"
-            >{{ formatHour(editingContent.startTime) }} - {{ formatHour(editingContent.endTime) }}</span
+            >{{ formatHour(editingContent.startTime) }} -
+            {{ formatHour(editingContent.endTime) }}</span
           >
           <p>
-            <span class="font-size-20 font-bold-extra mr-20" v-if="editingContent.title">{{
-              editingContent.title
-            }}</span>
+            <span
+              class="font-size-20 font-bold-extra mr-20"
+              v-if="editingContent.title"
+              >{{ editingContent.title }}</span
+            >
             <md-button
               class="md-button edit-btn md-red md-simple"
               @click="showDescription = !showDescription"
@@ -149,7 +200,9 @@
               </span>
               <span v-if="showDescription" class="color-black font-regular">
                 Read Less
-                <md-icon class="color-black" style="color: #050505 !important">keyboard_arrow_up</md-icon>
+                <md-icon class="color-black" style="color: #050505 !important"
+                  >keyboard_arrow_up</md-icon
+                >
               </span>
             </md-button>
           </p>
@@ -170,8 +223,6 @@ import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 import moment from "moment";
 import Multiselect from "vue-multiselect";
 import swal from "sweetalert2";
-import EventTimelineItem from "@/models/EventTimelineItem";
-import EventTimelineDate from "@/models/EventTimelineDate";
 
 export default {
   components: {
@@ -190,12 +241,8 @@ export default {
       default: 0,
     },
     timelineItems: {
-      type: Array,
-      default: () => [],
-    },
-    timelineDate: {
       type: Object,
-      default: () => {},
+      default: [],
     },
   },
   data() {
@@ -224,15 +271,9 @@ export default {
   },
   methods: {
     saveTimelineItem() {
-      this.editingContent.mode = "saved";
       console.log(this.editingContent);
-      new EventTimelineItem(this.editingContent)
-        .for(new EventTimelineDate({ id: this.timelineDate.id }))
-        .save()
-        .then((res) => {
-          console.log(res);
-          this.$emit("save", { item: this.editingContent, index: this.index });
-        });
+      this.editingContent.mode = "saved";
+      this.$emit("save", { item: this.editingContent, index: this.index });
     },
     cancelTimelineItem() {
       this.editingContent = { ...this.item };
@@ -259,16 +300,34 @@ export default {
         let startDate = new Date(template.date);
         let endDate = new Date(template.date);
 
-        block.startTime = moment(`${template.date} 00:00 am`, "DD/MM/YY hh:mm a").valueOf();
-        block.endTime = moment(`${template.date} 00:00 am`, "DD/MM/YY hh:mm a").valueOf();
+        block.startTime = moment(
+          `${template.date} 00:00 am`,
+          "DD/MM/YY hh:mm a",
+        ).valueOf();
+        block.endTime = moment(
+          `${template.date} 00:00 am`,
+          "DD/MM/YY hh:mm a",
+        ).valueOf();
 
         if (index == 0) {
           if (this.event.eventDayPart == "evening") {
-            block.startTime = moment(`${template.date} 07:00 PM`, "DD/MM/YY hh:mm A").valueOf();
-            block.endTime = moment(`${template.date} 08:00 PM`, "DD/MM/YY hh:mm A").valueOf();
+            block.startTime = moment(
+              `${template.date} 07:00 PM`,
+              "DD/MM/YY hh:mm A",
+            ).valueOf();
+            block.endTime = moment(
+              `${template.date} 08:00 PM`,
+              "DD/MM/YY hh:mm A",
+            ).valueOf();
           } else {
-            block.startTime = moment(`${template.date} 08:00 AM`, "DD/MM/YY hh:mm A").valueOf();
-            block.endTime = moment(`${template.date} 09:00 AM`, "DD/MM/YY hh:mm A").valueOf();
+            block.startTime = moment(
+              `${template.date} 08:00 AM`,
+              "DD/MM/YY hh:mm A",
+            ).valueOf();
+            block.endTime = moment(
+              `${template.date} 09:00 AM`,
+              "DD/MM/YY hh:mm A",
+            ).valueOf();
           }
         } else {
           const prevItem = this.timelineItems[template.date][index - 1];
