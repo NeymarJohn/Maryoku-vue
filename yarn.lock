@@ -6809,6 +6809,11 @@ hash-sum@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/hash-sum/-/hash-sum-1.0.2.tgz#33b40777754c6432573c120cc3808bbd10d47f04"
 
+hash-sum@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/hash-sum/-/hash-sum-2.0.0.tgz#81d01bb5de8ea4a214ad5d6ead1b523460b0b45a"
+  integrity sha512-WdZTbAByD+pHfl/g9QSsBIIwy8IT+EsPiKDs0KNX+zSHhdDLFKdZu0BQHljvO+0QI/BasbMSUa8wYNCZTvhslg==
+
 hash.js@^1.0.0, hash.js@^1.0.3:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/hash.js/-/hash.js-1.1.7.tgz#0babca538e8d4ee4a0f8988d68866537a003cf42"
@@ -10075,9 +10080,14 @@ pn@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/pn/-/pn-1.1.0.tgz#e2f4cef0e219f463c179ab37463e4e1ecdccbafb"
 
-popper.js@^1.14.4, popper.js@^1.14.7, popper.js@^1.15.0:
+popper.js@^1.14.7, popper.js@^1.15.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.15.0.tgz#5560b99bbad7647e9faa475c6b8056621f5a4ff2"
+
+popper.js@^1.16.0:
+  version "1.16.1"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.16.1.tgz#2a223cb3dc7b6213d740e40372be40de43e65b1b"
+  integrity sha512-Wb4p1J4zyFTbM+u6WuO4XstYx4Ky9Cewe4DWrel7B0w6VVICvPwdOpotjzcf6eD8TsckVnIMNONQyPIUFOUbCQ==
 
 portfinder@^1.0.13, portfinder@^1.0.19, portfinder@^1.0.20, portfinder@^1.0.9:
   version "1.0.20"
@@ -13363,15 +13373,15 @@ vue-timeago@^5.1.2:
   dependencies:
     date-fns "^1.29.0"
 
-vue-tour@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/vue-tour/-/vue-tour-1.1.0.tgz#20da6e6697b8d286438d90616e847e1af9b82801"
-  integrity sha512-AcJ4pksVbKEKyk5qI3sEBQ6rGwhm2psFpqwsht4aT3vGpNi7Ft3359wrQedfctBcCHJATVB3wVBlFkmYfuRgNg==
+vue-tour@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/vue-tour/-/vue-tour-1.5.0.tgz#4dbbbc03ea6932a1ae3ccd819c219304f3a30109"
+  integrity sha512-T92vetsw4iLO+31kQ7Q5DIKVbgqEE7SmLmfkUEgIznMn59tCELfsklxyUP9irAcRqrZdlV8zT0HgFgzGXeZemg==
   dependencies:
-    hash-sum "^1.0.2"
+    hash-sum "^2.0.0"
     jump.js "^1.0.2"
-    popper.js "^1.14.4"
-    vue "^2.5.17"
+    popper.js "^1.16.0"
+    vue "^2.6.10"
 
 vue-youtube@^1.4.0:
   version "1.4.0"
