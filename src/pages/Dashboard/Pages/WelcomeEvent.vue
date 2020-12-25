@@ -29,12 +29,13 @@
           </div>
         </div>
       </div>
-      <!-- <youtube video-id="pELHFctXOcQ" ref="youtube"></youtube> -->
-      <youtube-player :videoId="selectedVideoId"></youtube-player>
+
+      <youtube-player :videoId="selectedVideoId" v-if="openPlayer" @close="openPlayer = false"></youtube-player>
     </div>
     <div class="weclome-event-page-footer white-card">
       <md-button class="md-red maryoku-btn">Let's Begin</md-button>
     </div>
+    <!-- <youtube video-id="BBJa32lCaaY" /> -->
   </div>
 </template>
 <script>
@@ -61,6 +62,9 @@ export default {
     playVideo(id) {
       this.selectedVideoId = id;
       this.openPlayer = true;
+    },
+    playing() {
+      console.log("o/ we are watching!!!");
     },
   },
 };

@@ -22,7 +22,7 @@
           </p>
         </div>
         <vendor-service-item
-          v-for="(c, cIndex) in categories.filter((category) => category.name == vendor.vendorCategories[0])[0]
+          v-for="(c, cIndex) in categories.find((category) => category.name == vendor.vendorCategory)
             .categories"
           :key="cIndex"
           :serviceItem="c"

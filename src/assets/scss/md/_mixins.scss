@@ -383,12 +383,12 @@
       &:active:hover,
       &.active:focus,
       &.active:hover{
-        color: $color !important;
+        color: $color ;
         background-color: transparent;
         box-shadow: none;
 
         i{
-          color: $color !important;
+          color: $color ;
         }
       }
     }

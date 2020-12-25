@@ -79,7 +79,7 @@ export default {
     reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
   }),
   mounted() {
-    // console.log("category-selector.mounted", this.value);
+    console.log("category-selector.mounted", this.value);
     if (this.value) {
       if (this.multiple) {
         if (this.value.length) {
@@ -88,8 +88,14 @@ export default {
           this.selectedCategory = [];
         }
       } else {
-        this.selectedCategory = this.categories.find((it) => it.value === this.value);
+        if (this.trackBy) {
+          this.selectedCategory = this.categories.find(it => it[this.trackBy] === this.value);
+        } else {
+          this.selectedCategory = this.categories.find(it => it.value === this.value);
+        }
       }
+    } else {
+      if ( this.multiple ) this.selectedCategory = [];
     }
   },
   computed: {

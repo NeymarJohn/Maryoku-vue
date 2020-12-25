@@ -258,6 +258,7 @@ export default {
             const proposalRequest = this.$route.query.proposalRequest;
             this.setVendor({});
             this.setEditing(false);
+            this.setStep(0);
             this.isCompletedWizard = false;
             if (proposalRequest) this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
             else this.$router.push("/vendor-signup");
@@ -281,7 +282,7 @@ export default {
       console.log("vendor.signup.watch.vendor", newVal);
     },
     step(newVal) {
-      // console.log("vendor.signup.watch.step", newVal);
+      console.log("vendor.signup.watch.step", newVal);
       if (this.step === 7) this.addVendor();
     },
   },

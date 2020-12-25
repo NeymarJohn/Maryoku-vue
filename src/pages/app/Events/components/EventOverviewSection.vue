@@ -32,6 +32,7 @@
                 v-if="isEdit && section.hasOwnProperty('eventType')"
                 :value="section.eventType"
                 :categories="eventTypes"
+                trackBy="name"
                 class="my-10"
                 @change="eventTypeChange"
         ></category-selector>
@@ -93,6 +94,7 @@
                 column="2"
                 :categories="guestsTypes"
                 :additional="additional"
+                trackBy="name"
                 @change="guestTypeChange"
                 @input="inputQuestType"
         ></category-selector>
@@ -103,6 +105,7 @@
         <category-selector
                 :value="section.occasion"
                 :categories="occasions"
+                trackBy="name"
                 @change="occasionChange"
         ></category-selector>
 
@@ -331,7 +334,8 @@ export default {
       eventTypesList: "event/getEventTypesList",
     }),
     inOutDoorValue(){
-      return this.inOutDoorTypes.find(it => it.value === this.section.inOutDoor)['label'];
+      let inOutDoor = this.inOutDoorTypes.find(it => it.value === this.section.inOutDoor);
+      return inOutDoor ? inOutDoor['label'] : '';
     },
     guestTypeValue(){
       return this.guestsTypes.find(it => it.value === this.section.guestType).name;

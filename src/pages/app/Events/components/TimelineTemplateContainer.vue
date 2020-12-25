@@ -10,6 +10,7 @@
           :key="index"
           :item="item"
           :index="index"
+          :timelineDate="timelineDate"
           class="mt-10 mb-10"
         ></timeline-item>
       </template>
@@ -29,7 +30,7 @@
           :class="{ hovering: isHover }"
           v-if="groupedItems.length == 0"
         >
-          <img :src="`${$iconURL}Timeline-New/templates/${template.name}.svg`" />
+          <img :src="`${$iconURL}Timeline-New/templates/${template.name.split('-')[0]}.svg`" />
         </div>
 
         <div class="empty-template-panel" :class="{ adding: groupedItems.length > 0 }" :style="hoverStyle">

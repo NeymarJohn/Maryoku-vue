@@ -236,13 +236,17 @@ const actions = {
                         defaultData.title = campaigns["SAVING_DATE"].title;
                     }
                     if (!campaigns["RSVP"]) {
+                        const rsvpData = { ...defaultCampaignData["RSVP"], ...defaultData };
+                        if (event.places && event.places.includes("VIRTUAL")) {
+                            rsvpData.allowOnline = true;
+                        }
                         commit("setCampaign", {
                             name: "RSVP",
-                            data: { ...defaultCampaignData["RSVP"], ...defaultData },
+                            data: rsvpData,
                         });
                         commit("setBackupCampaign", {
                             name: "RSVP",
-                            data: { ...defaultCampaignData["RSVP"], ...defaultData },
+                            data: rsvpData,
                         });
                     }
                     if (!campaigns["COMING_SOON"]) {

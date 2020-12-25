@@ -33,7 +33,7 @@
                   rows="5"
                   @blur="updateVendor($event, 'about.company')"
                   v-model="vendor.about.company"
-                />
+                ></textarea>
               </div>
             </div>
             <div class="field mb-50">
@@ -117,6 +117,24 @@
                 <textarea placeholder="Type 'About your cuisine' here" rows="5"/>
               </div>
             </div>-->
+          </div>
+        </div>
+        <div class="my-30">
+          <div class="title-cont d-flex align-center mb-10">
+            <h5 class=" my-0"><img class="mr-10" :src="`${iconUrl}Asset 542.svg`" width="30"/> Add a Personal message to your clients</h5>
+            <p class="my-0 pl-20">This paragraph will be added automatically to your proposals</p>
+          </div>
+          <div class="card">
+            <div class="field">
+              <h5 class="my-0 pb-10">DEAR PLANNER...</h5>
+              <textarea
+                  placeholder="Type 'about your personal message' here"
+                  class="width-100"
+                  rows="5"
+                  @blur="updateVendor($event, 'personalMessage')"
+                  v-model="vendor.personalMessage"
+              ></textarea>
+            </div>
           </div>
         </div>
         <div class="upload-wrapper" :class="{ 'mi-margin': vendor.images && vendor.images.length > 0 }">

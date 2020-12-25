@@ -48,11 +48,12 @@ import "./assets/scss/main.scss";
 import dateUtil from "./utils/date.util";
 import VueYoutube from 'vue-youtube'
 
+import helper from "@/utils/helperFunction";
 
 require("vue-tour/dist/vue-tour.css");
 
 const VueScrollTo = require("vue-scrollto");
-window.$ = window.jQuery = require('jquery');
+window.$ = window.jQuery = require("jquery");
 
 // plugin setup
 Vue.use(VueRouter);
@@ -289,6 +290,11 @@ Object.defineProperty(Vue.prototype, "$auth", {
 Object.defineProperty(Vue.prototype, "$dateUtil", {
     get() {
         return dateUtil;
+    },
+});
+Object.defineProperty(Vue.prototype, "$helper", {
+    get() {
+        return helper;
     },
 });
 Object.defineProperty(Vue.prototype, "$authHeader", {

@@ -55,19 +55,19 @@
     </template>
     <template v-if="item.type == Number">
       <div class="main">
-        <div class="check-cont" >
+        <div class="check-cont">
           <div class="flex" @click="updateCheck()">
             <img v-if="checked" class="mr-20" :src="iconUrl + 'Group 6258.svg'" width="27">
             <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27">
             {{ label }}
           </div>
-          <div class="how-many" v-if="checked && included">
-            How Many?
-            <input type="number" placeholder="QTY" v-model="currentItem.value" @input="updateValue"/>
-          </div>
+        </div>
+        <div class="how-many" v-if="checked && included">
+          How Many?
+          <input type="number" placeholder="QTY" v-model="currentItem.value" @input="updateValue"/>
         </div>
         <div class="included-cont" v-if="checked && !item.xIncluded">
-          <div class="included" :class="{ active: included }" @click="updateIncluded()">
+          <div class="included mr-20" :class="{ active: included }" @click="updateIncluded()">
             <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="included" />
             <span class="unchecked" v-else></span>
             <span>Included</span>
@@ -86,7 +86,9 @@
             <input type="number" class="mt-20" placeholder="00.00" v-model="currentItem.value" @input="updateValue"/>
           </div>
         </div>
-
+      </div>
+      <div class="sub-cont" v-if="item.hasComment && checked" :class="{ 'mt-m3': !included }">
+        <textarea class="text" v-model="currentItem.desc" :placeholder="`Add additional information`" @input="updateValue"/>
       </div>
     </template>
     <template v-if="item.type == Array">
@@ -99,7 +101,7 @@
           </div>
           <category-selector
                   v-if="checked"
-                  :value="currentItem.value"
+                  :value="currentItem.value || ''"
                   :categories="item.available"
                   :column="columnCount"
                   :multiple="true"
@@ -146,17 +148,14 @@
 
       </div>
     </template>
-    <template v-if="item.type == 'Ratio'">
-      <div class="main">
+    <template v-if="category == 'staff' && checked">
+      <div class="main mt-10">
         <div class="check-cont">
-          <div class="flex"@click="updateCheck()">
-
-            <img v-if="checked" class="mr-20" :src="iconUrl + 'Group 6258.svg'" width="27">
-            <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27">
-            {{ label }}
+          <div class="flex mt-10 ml-40">
+            Staff : guest ratio
           </div>
         </div>
-        <div class="included-cont" v-if="checked">
+        <div>
           <div class="d-flex align-center">
             <input class="mr-10 w-max-120" type="number" placeholder="Staff" v-model="currentItem.staff" @input="updateValue"/>
             <div class="font-size-30">:</div>
@@ -180,6 +179,7 @@ import CategorySelector from "@/components/Inputs/CategorySelector";
 export default {
   name: "vendor-checkbox",
   props: {
+    category: String,
     type: String,
     label: String,
     item: Object,
@@ -289,16 +289,6 @@ export default {
       &.checked {
         background-color: #f7f7f7;
       }
-      .how-many {
-        padding: 1rem 0 0 53px;
-        input {
-          margin-left: 1rem;
-          text-align: center;
-          border-radius: 3px;
-          border: 1px solid #818080;
-          max-width: 8rem;
-        }
-      }
       .dropdown-list {
         background-color: #ffffff;
         border: 1px solid #818080;
@@ -368,6 +358,15 @@ export default {
             }
           }
         }
+      }
+    }
+    .how-many {
+      input {
+        margin-left: 1rem;
+        text-align: center;
+        border-radius: 3px;
+        border: 1px solid #818080;
+        max-width: 8rem;
       }
     }
     .included-cont {

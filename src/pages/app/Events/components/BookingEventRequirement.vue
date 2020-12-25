@@ -156,6 +156,7 @@ export default {
     ...mapActions("comment", ["getCommentComponents"]),
     ...mapActions("vendor", ["fetchAllProperties"]),
     _checkConditionScript(requirements) {
+      console.log("_checkConditionScript");
       let event = this.event;
 
       for (let cat in requirements) {
@@ -301,6 +302,7 @@ export default {
     },
     component(newVal, oldVal) {
       if (newVal.componentId) {
+        this.isLoading = true;
         this.fetchData();
       }
     },

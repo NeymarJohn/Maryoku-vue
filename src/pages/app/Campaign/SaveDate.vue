@@ -65,7 +65,25 @@
           <span class="color-dark-gray">Drag your file here</span>
         </vue-dropzone>
         <div v-else class="d-flex align-center justify-content-center">
-          <img :src="campaignData.logoUrl" class="image-logo" />
+          <div class="image-logo">
+            <div class="logo-action">
+              <div class="color-white mb-20 font-bold font-size-16 button" @click="removeLogo">
+                <img :src="`${$iconURL}RSVP/Group 4854.svg`" class="mr-10" /> Delete
+              </div>
+              <div class="color-white font-bold font-size-16 button" @click="changeLogo">
+                <img :src="`${$iconURL}RSVP/Group 2344.svg`" class="mr-10" /> Replace
+              </div>
+            </div>
+            <img :src="campaignData.logoUrl" />
+            <input
+              style="display: none"
+              id="logoImage"
+              name="attachment"
+              type="file"
+              multiple="multiple"
+              @change="onLogoChange"
+            />
+          </div>
           <div class="display-logo ml-50">
             <md-switch v-model="campaignData.visibleSettings.showLogo" class="showlogo-switch large-switch"></md-switch>
             <div v-if="campaignData.visibleSettings.showLogo">Hide Logo</div>
@@ -202,6 +220,16 @@ export default {
     async onFileChange(event) {
       this.coverImage = await getBase64(event.target.files[0]);
     },
+    async onLogoChange(event) {
+      // this.campaignData.logoUrl = await getBase64(event.target.files[0]);
+      this.logoSelected(event.target.files[0]);
+    },
+    changeLogo() {
+      document.getElementById("logoImage").click();
+    },
+    removeLogo() {
+      this.campaignData.logoUrl = null;
+    },
   },
 };
 </script>
@@ -241,6 +269,25 @@ export default {
   .image-logo {
     margin-left: 200px;
     width: 200px;
+    position: relative;
+    .logo-action {
+      align-content: center;
+      justify-content: center;
+      flex-direction: column;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: none;
+      .button {
+        cursor: pointer;
+      }
+    }
+    &:hover {
+      .logo-action {
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+      }
+    }
   }
   .display-logo {
     width: 150px;
