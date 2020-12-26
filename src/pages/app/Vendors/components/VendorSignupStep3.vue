@@ -946,9 +946,7 @@ export default {
       if ( this.vendor.pricingPolicies && this.vendor.pricingPolicies.length ) {
         this.$set(this.vendorPricingPolicies, 'items', this.vendor.pricingPolicies)
         this.vendorPricingPolicies.items.map((it, idx) => {
-          if (vendorPricingPolicies.items[idx] && vendorPricingPolicies.items[idx].type) {
-            this.$set(it, 'type', vendorPricingPolicies.items[idx].type)
-          }
+          this.$set(it, 'type', vendorPricingPolicies.items[idx].type)
         })
       } else {
         this.vendorPricingPolicies = vendorPricingPolicies;

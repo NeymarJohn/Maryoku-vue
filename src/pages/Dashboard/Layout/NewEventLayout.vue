@@ -19,6 +19,34 @@
       </div>
       <!--<content-footer v-if="!$route.meta.hideFooter"></content-footer>-->
     </div>
+    <v-tour name="invite" :steps="steps.invite" :options="tourOptions" :callbacks="tourCallback"></v-tour>
+    <v-tour name="comment" :steps="steps.comment" :options="tourOptions" :callbacks="tourCallback"></v-tour>
+    <v-tour name="download" :steps="steps.download" :options="tourOptions" :callbacks="tourCallback"></v-tour>
+    <v-tour name="controlPanel" :steps="steps.controlPanel" :options="tourOptions" :callbacks="tourCallback"></v-tour>
+    <v-tour name="footerPanel" :steps="steps.footerPanel" :options="tourOptions" :callbacks="tourCallback"></v-tour>
+    <!-- <v-tour name="myTour" :steps="steps.invite">
+      <template slot-scope="tour">
+        <transition name="fade">
+          <v-step
+            v-if="tour.steps[tour.currentStep]"
+            :key="tour.currentStep"
+            :step="tour.steps[tour.currentStep]"
+            :previous-step="tour.previousStep"
+            :next-step="tour.nextStep"
+            :stop="tour.stop"
+            :skip="tour.skip"
+            :is-first="tour.isFirst"
+            :is-last="tour.isLast"
+            :labels="tour.labels"
+          >
+            <div slot="actions">
+              <button @click="tour.previousStep" class="btn btn-primary">Previous step</button>
+              <button @click="tour.nextStep" class="btn btn-primary">Next step</button>
+            </div>
+          </v-step>
+        </transition>
+      </template>
+    </v-tour> -->
   </div>
 </template>
 <script>
@@ -70,6 +98,116 @@ export default {
       createEventModalOpen: false,
       renderChild: false,
       showError: false,
+      tourOptions: {
+        useKeyboardNavigation: false,
+        labels: {
+          buttonSkip: "Skip tour",
+          buttonPrevious: "Previous",
+          buttonNext: "Keep going",
+          buttonStop: "Got it",
+        },
+        enabledButtons: {
+          buttonSkip: false,
+          buttonPrevious: true,
+          buttonNext: true,
+          buttonStop: true,
+        },
+      },
+      currentTourIndex: 0,
+      tourCallback: {
+        onFinish: this.nextTour,
+      },
+      steps: {
+        invite: [
+          {
+            target: "#invite-button", // We're using document.querySelector() under the hood
+            header: {
+              title: "Invite",
+            },
+            content:
+              "Share your success! Use this feature to set different roles for a specific event and invite people to co-produce and review this event.",
+          },
+          {
+            header: {
+              title: "How can you use it?",
+            },
+            target: "#invite-button",
+            content:
+              "By sending out a link to the event or using an email, Each invitee, will be able to take actions based on the role you decide to grant him or her. Oh, and don’t worry,every action is reversible, so feel free to change your mind at any time",
+          },
+        ],
+        comment: [
+          {
+            target: "#comment-button", // We're using document.querySelector() under the hood
+            header: {
+              title: "Comment Mode",
+            },
+            content:
+              "Want to comment on something in the page? Want to see comments made to you? Simply click on this icon to see all the comments directed for you, and reply either to a specific person or to all the people you invited.",
+          },
+          {
+            header: {
+              title: "How can you use it?",
+            },
+            target: "#comment-button",
+            content:
+              "When a red dot appears next to this icon, you’ll know that there are comments waiting for you to read. Use @ to direct a reply or start a new comment to a specific person. That person will also get a notification to his or her email.",
+          },
+        ],
+        download: [
+          {
+            target: "#download-button", // We're using document.querySelector() under the hood
+            header: {
+              title: "Download",
+            },
+            content:
+              "Get other people’s take on the event without having to invite them! simply click on this icon, download current page to pdf and send it by email. E-a-s-y",
+          },
+          {
+            header: {
+              title: "How can you use it?",
+            },
+            target: "#download-button",
+            content:
+              "If the download icon doesn't appear, then downloading is not applicable. Missing other types of download? Let us know by sending us feedback here",
+          },
+        ],
+        controlPanel: [
+          {
+            target: "#control-panel", // We're using document.querySelector() under the hood
+            header: {
+              title: "Control Panel",
+            },
+            content:
+              "Meet the only checklist you'll ever need! Our control panel is built automatically(!!) based on your event. items turn green when you start to advance and are crossed over when you’re done with the task",
+          },
+          {
+            header: {
+              title: "How can you use it?",
+            },
+            target: "#control-panel",
+            content:
+              "The items sequence is designed based on best practices and its goal is to direct your attention to the most important thing that needs to be done right now. However, you can play with the sequence – move items up and down. The item you now need to handle, will get all the focus whenever you open the system.",
+          },
+        ],
+        footerPanel: [
+          {
+            target: "#footer-panel", // We're using document.querySelector() under the hood
+            header: {
+              title: "Control Panel",
+            },
+            content: "Every page has its unique footer stripe that contains the actions available to you.",
+          },
+          {
+            header: {
+              title: "How can you use it?",
+            },
+            target: "#footer-panel",
+            content:
+              "Revert to original button– will delete changes you’ve made and take you back to default values Back button – in case of multi steps actions, you can always go back to the previous page Action Button - from save to finding you vendors, This button will put in motion your next action",
+          },
+        ],
+      },
     };
   },
   methods: {
@@ -130,11 +268,19 @@ export default {
           console.error(error);
         });
     },
+    nextTour() {
+      const tourName = Object.keys(this.steps)[this.currentTourIndex + 1];
+      this.currentTourIndex += 1;
+      if (tourName) this.$tours[tourName].start();
+    },
   },
   created() {
     this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
   },
   mounted() {
+    setTimeout(() => {
+      this.$tours["invite"].start();
+    }, 1000);
     this.$store
       .dispatch("auth/checkToken")
       .then(() => {

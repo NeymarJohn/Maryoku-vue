@@ -156,7 +156,7 @@ export default {
     ...mapActions("comment", ["getCommentComponents"]),
     ...mapActions("vendor", ["fetchAllProperties"]),
     _checkConditionScript(requirements) {
-
+      console.log("_checkConditionScript");
       let event = this.event;
 
       for (let cat in requirements) {
@@ -254,7 +254,10 @@ export default {
           JSON.stringify(this.storedRequirements[this.event.id][this.blockId].anythingElse),
         );
 
-        this.isLoading = false;
+        if (this.isLoading) {
+          this._checkConditionScript(this.requirementProperties);
+          this.isLoading = false;
+        }
       }
     },
     revertToOriginal: async function () {
@@ -299,6 +302,7 @@ export default {
     },
     component(newVal, oldVal) {
       if (newVal.componentId) {
+        this.isLoading = true;
         this.fetchData();
       }
     },

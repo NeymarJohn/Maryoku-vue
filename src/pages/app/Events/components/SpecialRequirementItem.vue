@@ -146,8 +146,6 @@ export default {
         icon = 'Hotel';
       } else if ( name === 'Shopping centers' ) {
         icon = 'Shopping center';
-      } else if ( name === 'Dining options within walking distance' ) {
-        icon = 'Shopping center';
       } else if ( name === 'Water saving protocols' ) {
         icon = 'Water saving';
       } else if ( name === 'Green power and energy efficient' ) {

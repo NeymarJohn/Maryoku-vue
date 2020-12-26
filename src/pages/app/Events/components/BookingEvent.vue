@@ -254,29 +254,6 @@ export default {
       if (!this.allRequirements) {
         this.allRequirements = await this.$http.get(`${process.env.SERVER_URL}/1/vendor/property/${this.event.id}`);
 
-        // set default value by conditionSript
-        let event = this.$store.state.event.eventData;
-        console.log("getAllRequirents", this.allRequirements);
-
-        for(let com in this.allRequirements.data){
-          let requirements = this.allRequirements.data[com].requirements;
-          console.log("requirements", com, requirements);
-          if (Object.keys(requirements).length ) {
-            for (let cat in requirements) {
-              requirements[cat].map((ms) => {
-                if (ms.conditionScript) console.log("conditionScript", com, cat, ms.conditionScript);
-                if (ms.conditionScript) ms.visible = eval(ms.conditionScript);
-                if (ms.conditionScript) ms.isSelected = eval(ms.conditionScript);
-                if (ms.defaultQtyScript) ms.defaultQty = Math.ceil(eval(ms.defaultQtyScript));
-
-                if (this.blockId === "swags" && (ms.item === "Apparel" || ms.item === "Tech items")) {
-                  ms.mustHave = false;
-                }
-              });
-            }
-          }
-        }
-
         requirements[this.event.id] = this.allRequirements.data;
         this.setBookingRequirements(requirements);
       }
@@ -285,7 +262,7 @@ export default {
       this.selectedBlock = _.findWhere(this.categoryList, {
         id: this.blockId,
       });
-      if (this.selectedBlock && this.selectedBlock.vendorRequirements && this.selectedBlock.vendorRequirements[0]) {
+      if (this.selectedBlock.vendorRequirements && this.selectedBlock.vendorRequirements[0]) {
         this.showCounterPage = true;
         this.showProposals = true;
       } else {

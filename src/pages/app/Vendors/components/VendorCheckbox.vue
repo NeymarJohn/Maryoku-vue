@@ -23,7 +23,7 @@
         </div>
         <div class="included-cont" v-if="checked && !included">
           <div class="extra-field">
-            Basic cost
+            Extra payment
             <div class="field">
               <input type="number" class="mt-20" placeholder="00.00" v-model="currentItem.value" @input="updateValue"/>
             </div>
@@ -62,11 +62,11 @@
             {{ label }}
           </div>
         </div>
-        <div class="how-many mr-10" v-if="checked && included">
+        <div class="how-many" v-if="checked && included">
           How Many?
           <input type="number" placeholder="QTY" v-model="currentItem.value" @input="updateValue"/>
         </div>
-        <div class="included-cont mt-10" v-if="checked && !item.xIncluded">
+        <div class="included-cont" v-if="checked && !item.xIncluded">
           <div class="included mr-20" :class="{ active: included }" @click="updateIncluded()">
             <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="included" />
             <span class="unchecked" v-else></span>
@@ -80,9 +80,9 @@
             </div>
           </div>
         </div>
-        <div class="included-cont mt-10" v-if="checked && !included">
+        <div class="included-cont" v-if="checked && !included">
           <div class="extra-field">
-            Basic cost
+            Extra payment
             <input type="number" class="mt-20" placeholder="00.00" v-model="currentItem.value" @input="updateValue"/>
           </div>
         </div>

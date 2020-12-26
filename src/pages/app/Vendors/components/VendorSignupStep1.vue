@@ -120,7 +120,7 @@
           </div>
         </div>
         <div class="my-30">
-          <div class="title-cont d-flex align-center mb-20">
+          <div class="title-cont d-flex align-center mb-10">
             <h5 class=" my-0"><img class="mr-10" :src="`${iconUrl}Asset 542.svg`" width="30"/> Add a Personal message to your clients</h5>
             <p class="my-0 pl-20">This paragraph will be added automatically to your proposals</p>
           </div>

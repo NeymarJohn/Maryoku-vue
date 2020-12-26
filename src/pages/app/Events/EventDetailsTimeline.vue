@@ -22,7 +22,7 @@
         <button v-scroll-to="'#timeline-edit-card'" ref="scrollBtn" style="display: none">
           Scroll to the editing card
         </button>
-        <timeline-edit-panel :isEditMode="isEditMode"></timeline-edit-panel>
+        <timeline-edit-panel :isEditMode="isEditMode" :editingMode="editingMode"></timeline-edit-panel>
       </div>
       <md-card
         class="md-card-plain time-line-blocks md-layout-item md-xlarge-size-35 md-large-size-35 md-small-size-40"
@@ -53,30 +53,7 @@
       @yes="finalize"
     ></timeline-gap-modal>
 
-    <!-- Confirm Modal-->
-    <modal v-if="showDeleteConfirmModal" class="delete-timeline-model">
-      <template slot="header">
-        <div class="maryoku-modal-header delete-timeline-model__header">
-          <h2>
-            Are you sure you want to say
-            <br />goodbye to your changes?
-          </h2>
-          <div class="header-description">Your changes will be deleted after that</div>
-          <md-button
-            class="md-simple md-just-icon md-round modal-default-button modal-close-button"
-            @click="showDeleteConfirmModal = false"
-          >
-            <md-icon>clear</md-icon>
-          </md-button>
-        </div>
-      </template>
-      <template slot="footer">
-        <md-button class="md-default md-simple cancel-btn" @click="showDeleteConfirmModal = false">Cancel</md-button>
-        <md-button class="md-red add-category-btn" @click="removeTimelineItem">Yes,I'm sure</md-button>
-      </template>
-    </modal>
-
-    <planner-event-footer>
+    <planner-event-footer id="footer-panel">
       <template slot="buttons">
         <template v-if="isEditMode">
           <md-button class="md-simple md-button md-black maryoku-btn" @click="revert">
@@ -97,7 +74,7 @@
               Save Draft
             </span>
           </md-button>
-          <md-button class="md-button md-red maryoku-btn" @click="finalize">
+          <md-button class="md-button md-red maryoku-btn" @click="finalize" key="finalize-button">
             <span class="font-size-16 text-transform-capitalize">Finalize timeline</span>
           </md-button>
         </template>
@@ -107,7 +84,7 @@
             Timeline Is Finalized.
           </div>
           <span class="seperator" style="margin-top: 0; margin-left: 30px"></span>
-          <md-button class="md-button md-red md-simple maryoku-btn" @click="isEditMode = true">
+          <md-button class="md-button md-red md-simple maryoku-btn" @click="isEditMode = true" key="edit-button">
             <span class="font-size-16 text-transform-capitalize">Edit Timeline</span>
           </md-button>
         </template>
@@ -122,6 +99,7 @@ import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
 import EventTimelineItem from "@/models/EventTimelineItem";
 import moment from "moment";
+import { extendMoment } from "moment-range";
 import swal from "sweetalert2";
 import { SlideYDownTransition } from "vue2-transitions";
 import InputMask from "vue-input-mask";
@@ -149,6 +127,9 @@ import PlannerEventFooter from "@/components/Planner/FooterPanel";
 import { timelineBlockItems } from "@/constants/event";
 import TimelineGapModal from "./Modals/TimelineGapModal";
 
+import { timelineTempates } from "@/constants/event.js";
+
+import { postReq, getReq } from "@/utils/token";
 export default {
   name: "event-details-timeline",
   components: {
@@ -544,19 +525,6 @@ export default {
     formatHour(date) {
       return moment(new Date(date)).format("hh:mm A");
     },
-    numberToWord(num) {
-      let vm = this;
-      if ((num = num.toString()).length > 9) return "overflow";
-      let n = ("000000000" + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
-      if (!n) return;
-      var str = "";
-      str += n[1] != 0 ? (vm.a[Number(n[1])] || vm.b[n[1][0]] + " " + vm.a[n[1][1]]) + "crore " : "";
-      str += n[2] != 0 ? (vm.a[Number(n[2])] || vm.b[n[2][0]] + " " + vm.a[n[2][1]]) + "lakh " : "";
-      str += n[3] != 0 ? (vm.a[Number(n[3])] || vm.b[n[3][0]] + " " + vm.a[n[3][1]]) + "thousand " : "";
-      str += n[4] != 0 ? (vm.a[Number(n[4])] || vm.b[n[4][0]] + " " + vm.a[n[4][1]]) + "hundred " : "";
-      str += n[5] != 0 ? (str != "" ? "and " : "") + (vm.a[Number(n[5])] || vm.b[n[5][0]] + " " + vm.a[n[5][1]]) : "";
-      return str;
-    },
     addTimelineItem(index) {
       let timelineLength = this.timeline.length - 1;
       let nextDay = 0;
@@ -575,13 +543,6 @@ export default {
         itemDay: nextDay,
         isEditable: true,
       });
-    },
-
-    removeTimelineItem() {
-      const deletingDateIndedx = this.timelineDates.indexOf(this.deletingDate);
-      this.timelineDates.splice(deletingDateIndedx, 1);
-      delete this.timelineItems[this.deletingDate];
-      this.showDeleteConfirmModal = false;
     },
 
     onConfirm() {
@@ -625,15 +586,46 @@ export default {
           this.selectedComponents = components;
         });
     },
-    revert() {
-      console.log(this.originalTimelineItems);
-      this.timelineItems = JSON.parse(this.originalTimelineItems);
+    async clearTimeline() {
+      await getReq(`/1/events/${this.eventData.id}/timelineDates/clear`);
     },
-    startFromScratch() {
-      this.timelineItems = {
-        [this.timelineDates[0]]: [],
-      };
-      this.timelineDates = [this.timelineDates[0]];
+    async revert() {
+      await this.clearTimeline();
+      this.editingMode = "template";
+      const extendedMoment = extendMoment(moment);
+      const start = new Date(this.eventData.eventStartMillis);
+      const end = new Date(this.eventData.eventEndMillis);
+      const range = extendedMoment.range(moment(start), moment(end));
+
+      const dateList = Array.from(range.by("day")).map((m) => m.format("YYYY-MM-DD"));
+      const timelineDates = [];
+      dateList.forEach((d) => {
+        timelineDates.push({
+          date: d,
+          templates: timelineTempates,
+          status: "editing",
+        });
+      });
+      this.$store.dispatch("event/saveEventAction", new CalendarEvent({ id: this.eventData.id, timelineDates }));
+    },
+    async startFromScratch() {
+      await this.clearTimeline();
+      this.editingMode = "scratch";
+      const extendedMoment = extendMoment(moment);
+      const start = new Date(this.eventData.eventStartMillis);
+      const end = new Date(this.eventData.eventEndMillis);
+      const range = extendedMoment.range(moment(start), moment(end));
+
+      const dateList = Array.from(range.by("day")).map((m) => m.format("YYYY-MM-DD"));
+      const timelineDates = [];
+      dateList.forEach((d) => {
+        timelineDates.push({
+          date: d,
+          templates: [{ name: "slot-1", type: "slot" }],
+          status: "editing",
+        });
+      });
+      this.$store.dispatch("event/saveEventAction", new CalendarEvent({ id: this.eventData.id, timelineDates }));
     },
     saveDraft() {
       this.$http

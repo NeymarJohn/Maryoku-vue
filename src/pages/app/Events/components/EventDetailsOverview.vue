@@ -255,7 +255,7 @@ export default {
       eventTypeList: "event/getEventTypesList",
     }),
     getFormattedDate() {
-      if (!this.event || !this.event.eventPage) return "";
+      if (!this.event) return "";
       return moment(new Date(this.event.eventPage.dateCreated)).format("DD MMM YYYY");
     },
     // check permission
