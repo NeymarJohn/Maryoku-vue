@@ -1,13 +1,15 @@
 <template>
   <div class="rsvp-timeline">
-    <img class="item-icon" :src="`${$iconURL}Timeline-New/${timeline.icon.toLowerCase()}-circle.svg`" />
+    <img
+      class="item-icon"
+      :src="`${$iconURL}Timeline-New/${timeline.icon.toLowerCase()}-circle.svg`"
+    />
     <div class="rsvp-timeline-content" :style="`border-color:${timeline.color}`">
       <div>
-        <span class="item-time"
-          >{{ $dateUtil.formatScheduleTime(Number(timeline.startTime)) }} -
-          {{ $dateUtil.formatScheduleTime(Number(timeline.endTime)) }}</span
-        >
-        <span class="item-title">{{ timeline.title }}</span>
+        <span
+          class="item-time"
+        >{{$dateUtil.formatScheduleTime(timeline.startTime)}} - {{$dateUtil.formatScheduleTime(timeline.endTime)}}</span>
+        <span class="item-title">{{timeline.title}}</span>
       </div>
     </div>
   </div>
@@ -20,9 +22,6 @@ export default {
       type: [Object, Array],
       default: () => {},
     },
-  },
-  created() {
-    console.log(this.timeline);
   },
 };
 </script>

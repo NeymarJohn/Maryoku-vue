@@ -2,22 +2,15 @@
   <div class="header-actions">
     <ul>
       <li v-if="!hideDownload">
-        <md-button class="md-simple md-just-icon"
-          ><img :src="`${$iconURL}common/download-dark.svg`" id="download-button"
-        /></md-button>
+        <md-button class="md-simple md-just-icon"><img :src="`${$iconURL}common/download-dark.svg`" /></md-button>
       </li>
       <li>
-        <md-button class="md-simple md-just-icon" @click="toggleSharingMode" id="invite-button">
+        <md-button class="md-simple md-just-icon" @click="toggleSharingMode">
           <img :src="`${$iconURL}common/share-dark.svg`" />
         </md-button>
       </li>
       <li v-if="canComment">
-        <md-button
-          class="md-simple md-just-icon"
-          :class="{ active: isCommentMode }"
-          @click="toggleCommentMode"
-          id="comment-button"
-        >
+        <md-button class="md-simple md-just-icon" :class="{ active: isCommentMode }" @click="toggleCommentMode">
           <img :src="`${$iconURL}common/message-dark.svg`" />
         </md-button>
       </li>

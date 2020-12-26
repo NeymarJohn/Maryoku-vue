@@ -8,6 +8,11 @@
             <div>
               {{ $dateUtil.formatScheduleDay(scheduleDate.date, "MM/DD/YY") }}
             </div>
+            <!-- <md-datepicker
+              :md-disabled-dates="getDisabledDates(dateIndex)"
+              :md-closed="closeEditTimeline(dateIndex)"
+              md-immediately
+            ></md-datepicker> -->
           </div>
         </div>
         <div class="header-actions">
@@ -57,28 +62,6 @@
         ></timeline-item>
       </template>
     </div>
-    <!-- Confirm Modal-->
-    <modal v-if="showDeleteConfirmModal" class="delete-timeline-model">
-      <template slot="header">
-        <div class="maryoku-modal-header delete-timeline-model__header">
-          <h2>
-            Are you sure you want to say
-            <br />goodbye to your changes?
-          </h2>
-          <div class="header-description">Your changes will be deleted after that</div>
-          <md-button
-            class="md-simple md-just-icon md-round modal-default-button modal-close-button"
-            @click="showDeleteConfirmModal = false"
-          >
-            <md-icon>clear</md-icon>
-          </md-button>
-        </div>
-      </template>
-      <template slot="footer">
-        <md-button class="md-default md-simple cancel-btn" @click="showDeleteConfirmModal = false">Cancel</md-button>
-        <md-button class="md-red add-category-btn" @click="removeTimelineItem">Yes,I'm sure</md-button>
-      </template>
-    </modal>
   </div>
 </template>
 <script>
@@ -89,11 +72,6 @@ import TimelineItem from "./TimelineItem";
 import TimelineEmpty from "./TimelineEmpty";
 import TimelineTemplateContainer from "./TimelineTemplateContainer";
 import TimelineGapModal from "../Modals/TimelineGapModal";
-import EventTimelineDate from "@/models/EventTimelineDate";
-import CalendarEvent from "@/models/CalendarEvent";
-import moment from "moment";
-import { Modal } from "@/components";
-import { timelineTempates } from "@/constants/event.js";
 export default {
   name: "event-details-timeline",
   components: {
@@ -103,7 +81,6 @@ export default {
     TimelineEmpty,
     TimelineGapModal,
     TimelineTemplateContainer,
-    Modal,
   },
   created() {
     console.log(numberToWord);
@@ -119,19 +96,10 @@ export default {
       return [];
     },
   },
-  data() {
-    return {
-      showDeleteConfirmModal: false,
-    };
-  },
   props: {
     isEditMode: {
       type: Boolean,
       default: true,
-    },
-    editingMode: {
-      type: String,
-      default: "template",
     },
   },
   methods: {
@@ -155,13 +123,11 @@ export default {
     },
     closeEditTimeline(index) {},
     addNewDateAfterCurrent(scheduleDate) {
-      const currentDate = new moment(scheduleDate, "YYYY-MM-DD");
-      const newDate = moment(currentDate).add(1, "d");
-      console.log(this.timelineDates);
-
-      if (this.timelineDates.findIndex((item) => item.date === newDate.format("YYYY-MM-DD")) >= 0) {
+      const currentDate = new moment(scheduleDate, "DD/MM/YY");
+      const newData = moment(currentDate).add(1, "d");
+      if (this.timelineItems[newData.format("DD/MM/YY")]) {
         swal({
-          title: `Sorry you have timelins on ${newDate.format("DD/MM/YY")}`,
+          title: `Sorry you have timelins on ${newData.format("DD/MM/YY")}`,
           showCancelButton: false,
           confirmButtonClass: "md-button md-success",
           confirmButtonText: "Ok",
@@ -176,27 +142,13 @@ export default {
             return;
           });
       } else {
-        new EventTimelineDate({
-          date: newDate.format("YYYY-MM-DD"),
-          templates: timelineTempates,
-          status: "editing",
-          event: new CalendarEvent({ id: this.event.id }),
-        })
-          .for(new CalendarEvent({ id: this.event.id }))
-          .save()
-          .then((res) => {
-            this.timelineDates.push(res);
-          });
+        this.$set(this.timelineItems, newData.format("DD/MM/YY"), []);
+        this.timelineDates.push(newData.format("DD/MM/YY"));
       }
     },
     askRemoveTimelineItem(scheduleDate) {
       this.deletingDate = scheduleDate;
       this.showDeleteConfirmModal = true;
-    },
-    removeTimelineItem() {
-      const deletingDateIndedx = this.timelineDates.indexOf(this.deletingDate);
-      this.timelineDates.splice(deletingDateIndedx, 1);
-      this.showDeleteConfirmModal = false;
     },
     handleDrop(index, data) {
       return;

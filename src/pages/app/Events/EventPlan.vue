@@ -1,6 +1,6 @@
 <template>
   <div class="event-plan">
-    <progress-sidebar :elements="barItems" page="plan" id="control-panel"></progress-sidebar>
+    <progress-sidebar :elements="barItems" page="plan"></progress-sidebar>
     <EventDetailsOverview v-if="pageId == 'overview'"></EventDetailsOverview>
     <event-details-timeline v-else-if="pageId == 'timeline'"></event-details-timeline>
     <event-concept-choose v-else-if="pageId == 'concept'"></event-concept-choose>

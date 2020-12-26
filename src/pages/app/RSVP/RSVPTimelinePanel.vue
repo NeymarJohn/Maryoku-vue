@@ -12,7 +12,7 @@
       <div
         v-for="(schedule, index) in scheduledDays"
         :key="index"
-        class="md-layout-item md-size-50 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra mt-20"
+        class="md-layout-item md-size-50 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra"
       >
         <div class="rsvp-event-timeline-day">
           <span class="font-size-22 font-bold-extra">Day {{ $helper.numberToWord(index + 1) }}</span>
