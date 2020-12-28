@@ -162,9 +162,11 @@ export default {
   watch: {
     $route: "fetchData",
     event(newValue) {
+      console.log('event');
       this.setConstantStates(newValue);
     },
     eventData(newValue) {
+      console.log('eventData');
       this.setConstantStates(newValue);
     },
   },

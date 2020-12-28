@@ -946,7 +946,9 @@ export default {
       if ( this.vendor.pricingPolicies && this.vendor.pricingPolicies.length ) {
         this.$set(this.vendorPricingPolicies, 'items', this.vendor.pricingPolicies)
         this.vendorPricingPolicies.items.map((it, idx) => {
-          this.$set(it, 'type', vendorPricingPolicies.items[idx].type)
+          if (vendorPricingPolicies.items[idx] && vendorPricingPolicies.items[idx].type) {
+            this.$set(it, 'type', vendorPricingPolicies.items[idx].type)
+          }
         })
       } else {
         this.vendorPricingPolicies = vendorPricingPolicies;
@@ -975,8 +977,10 @@ export default {
 
       // get holidays from serve if they are not saved
 
-      let res = await this.$http.get(`${process.env.SERVER_URL}/1/holidays`);
-      this.religions = res.data;
+      if ( !this.religions.length ) {
+        let res = await this.$http.get(`${process.env.SERVER_URL}/1/holidays`);
+        this.religions = res.data;
+      }
 
       if ( this.vendor.exDonts && this.vendor.exDonts.length ) {
         this.religions.map(r => {
