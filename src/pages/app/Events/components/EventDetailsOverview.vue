@@ -7,11 +7,19 @@
           Created on {{ getFormattedDate }}
           <md-button class="md-simple md-red" style="color: white">
             See event history
-            <img class="ml-5" src="https://s3.amazonaws.com/static.maryoku.com/storage/icons/Event%20Page/Group%2010036.svg" width="10">
+            <img
+              class="ml-5"
+              src="https://s3.amazonaws.com/static.maryoku.com/storage/icons/Event%20Page/Group%2010036.svg"
+              width="10"
+            />
           </md-button>
         </div>
         <h3>
-          <img class="mr-10" src="https://s3.amazonaws.com/static.maryoku.com/storage/icons/Event%20Page/Group%20793.svg" width="25">
+          <img
+            class="mr-10"
+            src="https://s3.amazonaws.com/static.maryoku.com/storage/icons/Event%20Page/Group%20793.svg"
+            width="25"
+          />
           YOUR EVENT
         </h3>
       </div>
@@ -20,27 +28,31 @@
     <div class="md-layout">
       <div class="md-layout-item md-size-100">
         <event-overview-section
-                v-for="(section, index) in sections"
-                :key="index"
-                :section="section"
-                @change="changeEvent"
+          v-for="(section, index) in sections"
+          :key="index"
+          :section="section"
+          @change="changeEvent"
         ></event-overview-section>
       </div>
     </div>
-    <div class="footer-container">
+    <div class="footer-container" id="footer-panel">
       <div class="ml-20">
-        <md-button class="md-bold add-category-btn md-black md-simple" > <md-icon>arrow_back</md-icon>Back </md-button>
+        <md-button class="md-bold add-category-btn md-black md-simple"> <md-icon>arrow_back</md-icon>Back </md-button>
         <md-button class="md-simple md-just-icon md-black">
           <md-icon style="font-size: 40px">expand_less</md-icon>
         </md-button>
       </div>
 
       <div class="ml-auto mr-50">
-        <md-button class="md-bold add-category-btn md-black md-simple ml-auto  mr-20">
-          <img class="mr-10" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg" @click="cancelEvent">Cancel Event</md-button>
+        <md-button class="md-bold add-category-btn md-black md-simple ml-auto mr-20">
+          <img
+            class="mr-10"
+            src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg"
+            @click="cancelEvent"
+          />Cancel Event</md-button
+        >
         <md-button class="md-red md-bold add-category-btn" @click="updateEvent">Save changes</md-button>
       </div>
-
     </div>
   </div>
 </template>
@@ -50,7 +62,7 @@ import CalendarEvent from "@/models/CalendarEvent";
 
 import moment from "moment";
 import swal from "sweetalert2";
-import { MaryokuInput} from '@/components'
+import { MaryokuInput } from "@/components";
 import VueElementLoading from "vue-element-loading";
 import { FunctionalCalendar } from "vue-functional-calendar";
 import { LabelEdit, AnimatedNumber, StatsCard, ChartCard, Modal, LocationInput } from "@/components";
@@ -139,85 +151,84 @@ export default {
       this.showCommentEditorPanel = !this.showCommentEditorPanel;
     },
     changeEvent(e) {
-
-      if ( e.hasOwnProperty('dateData') ){
-        this.event.eventStartMillis = new Date(e.dateData.started_at).getTime() ;
+      if (e.hasOwnProperty("dateData")) {
+        this.event.eventStartMillis = new Date(e.dateData.started_at).getTime();
         this.event.eventEndMillis = new Date(e.dateData.ended_at).getTime();
         this.reSchedule = true;
-      } else if ( e.hasOwnProperty('location') ) {
+      } else if (e.hasOwnProperty("location")) {
         this.event.location = e.location.name;
         this.event.locationId = e.location.id;
-      } else if ( e.hasOwnProperty('inOutDoor') ) {
+      } else if (e.hasOwnProperty("inOutDoor")) {
         this.event.inOutDoor = e.inOutDoor;
-      } else if ( e.hasOwnProperty('numberOfParticipants') ) {
+      } else if (e.hasOwnProperty("numberOfParticipants")) {
         this.reCalculate = true;
         this.event.numberOfParticipants = e.numberOfParticipants;
-      } else if ( e.hasOwnProperty('guestType') ) {
+      } else if (e.hasOwnProperty("guestType")) {
         this.event.guestType = e.guestType;
-      } else if ( e.hasOwnProperty('eventType') ) {
-        let eventType = this.eventTypeList.find(it => it.name === e.eventType);
+      } else if (e.hasOwnProperty("eventType")) {
+        let eventType = this.eventTypeList.find((it) => it.name === e.eventType);
         this.event.eventType.name = eventType.name;
         this.event.eventType.key = eventType.key;
         this.event.eventType.id = eventType.id;
         this.reCalculate = true;
-      } else if ( e.hasOwnProperty('occasion') ) {
+      } else if (e.hasOwnProperty("occasion")) {
         this.event.occasion = e.occasion;
-      } else if ( e.hasOwnProperty('holiday') ) {
+      } else if (e.hasOwnProperty("holiday")) {
         this.event.holiday = e.holiday;
       }
 
       this.setSection();
     },
-    cancelEvent(){
-        console.log("cancelEvent");
+    cancelEvent() {
+      console.log("cancelEvent");
     },
-    setSection(){
+    setSection() {
       this.sections = [
         {
           title: "Date",
-          key: 'date',
-          img_src : `${this.$secondIconURL}Event Page/Group 8708.svg`,
-          warning: 'Changing the time on your status might cause price changes',
+          key: "date",
+          img_src: `${this.$secondIconURL}Event Page/Group 8708.svg`,
+          warning: "Changing the time on your status might cause price changes",
           started_at: this.event.eventStartMillis,
           ended_at: this.event.eventEndMillis,
           more_one_day: null,
         },
         {
           title: "Location",
-          key: 'location',
-          img_src : `${this.$secondIconURL}Event Page/Group 10492.svg`,
-          warning: 'Changing the address on your status might cause price changes',
+          key: "location",
+          img_src: `${this.$secondIconURL}Event Page/Group 10492.svg`,
+          warning: "Changing the address on your status might cause price changes",
           location: this.event.location,
           inOutDoor: this.event.inOutDoor,
         },
         {
           title: "Number OF Guests",
-          key: 'number_of_guest',
-          img_src : `${this.$secondIconURL}Event Page/Group 10482.svg`,
-          warning: 'Changing the number of guests on your status might cause price changes',
+          key: "number_of_guest",
+          img_src: `${this.$secondIconURL}Event Page/Group 10482.svg`,
+          warning: "Changing the number of guests on your status might cause price changes",
           numberOfParticipants: this.event.numberOfParticipants,
-          guestType: this.event.guestType ? this.event.guestType : '',
+          guestType: this.event.guestType ? this.event.guestType : "",
         },
         {
           title: "Event type",
-          key: 'event_type',
-          img_src : `${this.$secondIconURL}Event Page/Group 10495.svg`,
+          key: "event_type",
+          img_src: `${this.$secondIconURL}Event Page/Group 10495.svg`,
           warning: null,
           eventType: this.event.eventType.name,
-          occasion: this.event.occasion ? this.event.occasion : '',
-          holiday: this.event.holiday ? this.event.holiday : '',
-        }
+          occasion: this.event.occasion ? this.event.occasion : "",
+          holiday: this.event.holiday ? this.event.holiday : "",
+        },
       ];
     },
-    init(){
+    init() {
       if (this.eventTypeList.length) {
         this.isLoading = false;
         this.setSection();
       }
-    }
+    },
   },
   mounted() {
-    if(!this.eventTypeList.length){
+    if (!this.eventTypeList.length) {
       this.$store.dispatch("event/getEventTypes", {
         data: this.$store.state.auth.user.profile.defaultCalendarId,
         ctx: this,
@@ -226,15 +237,15 @@ export default {
 
     let event = this.$store.state.event.eventData; // Fetch event from store
     this.event = JSON.parse(JSON.stringify(event));
-    this.init()
+    this.init();
   },
   watch: {
     event(newVal, oldVal) {
       this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
     },
-    eventTypeList(newVal){
-      this.init()
-    }
+    eventTypeList(newVal) {
+      this.init();
+    },
   },
   filters: {
     formatDate: function (date) {
@@ -255,8 +266,8 @@ export default {
       eventTypeList: "event/getEventTypesList",
     }),
     getFormattedDate() {
-      if (!this.event || !this.event.eventPage) return "";
-      return moment(new Date(this.event.eventPage.dateCreated)).format("DD MMM YYYY");
+      if (!this.event) return "";
+      return moment(new Date(this.event.dateCreated)).format("DD MMM YYYY");
     },
     // check permission
     permission() {

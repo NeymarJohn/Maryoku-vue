@@ -27,7 +27,6 @@ const state = {
         components: null,
         componentComponents: [],
     },
-    initBookingRequirements: {},
     bookingRequirements: {},
     components: [],
     notes: [],
@@ -251,10 +250,6 @@ const mutations = {
     },
     setComponents(state, components) {
         state.components = components;
-    },
-    setInitBookingRequirements(state, requirements) {
-        console.log('setInitBookingRequirements', requirements)
-        state.initBookingRequirements = requirements;
     },
     setBookingRequirements(state, requirements) {
         state.bookingRequirements = requirements;

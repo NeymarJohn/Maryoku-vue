@@ -21,7 +21,7 @@
             </div>
           </div>
           <div class="banner">
-            <!--<img :src="vendor.images[0]" v-if="vendor.hasOwnProperty('images') && vendor.images.length > 0" />-->
+            <img :src="vendor.images[0]" v-if="vendor.hasOwnProperty('images') && vendor.images.length > 0" />
           </div>
           <div class="about-cont" id="About">
             <div class="block">
@@ -189,9 +189,8 @@
                   <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
                 </div>
                 <div class="item" v-else>
-                    <span v-if="policy.type === Number && !policy.isPercentage">$</span>
-                  <span v-if="policy.value === true">Yes</span>
-                  <span v-else>{{ policy.value }}</span>
+                    <span v-if="policy.name == 'Large group discounts'">$</span>
+                  {{ policy.value }}
                   <span v-if="policy.isPercentage">%</span>
                   <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
                   {{ policy.attendees }} attendees
@@ -711,13 +710,12 @@ export default {
             border-top: 1px solid #dddddd;
 
             .items {
-              display: block;
+              display: flex;
+              white-space: nowrap;
               margin-top: 2rem;
 
               .item {
                 font: bold 16px Manrope-Regular, sans-serif;
-                display: block;
-                margin: 20px 0;
                 a {
                   color: #050505;
                   text-decoration: underline;
@@ -725,7 +723,7 @@ export default {
                 img {
                   width: 24px;
                   height: 24px;
-                  margin-right: 10px;
+                  // margin-right: 1rem;
                 }
               }
             }

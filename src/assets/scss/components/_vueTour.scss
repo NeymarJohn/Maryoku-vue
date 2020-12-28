@@ -1,0 +1,20 @@
+.v-step {
+  background-color :#F51355 !important;
+  font-family: 'Manrope-Bold';
+  &__header {
+    background-color :#F51355 !important;
+    border:none;
+    font-family: 'Manrope-ExtraBold';
+  }
+  &__content {
+    text-align: justify;
+    padding: 0 20px 20px 20px;
+  }
+  &__arrow--dark {
+    border-color: #F51355 !important;
+    border-left-color: transparent !important;
+    border-right-color: transparent !important;
+    border-top-color: transparent !important;
+  }
+
+}

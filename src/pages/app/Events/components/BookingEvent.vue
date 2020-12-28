@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout booking-section">
-    <vue-element-loading class="ml-400 height-100vh" :active="isLoading" spinner="ring" color="#FF547C"/>
+    <vue-element-loading class="ml-400 height-100vh" :active="isLoading" spinner="ring" color="#FF547C" />
     <template v-if="showProposals">
       <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
       <div class="event-page-header md-layout-item md-size-100">
@@ -243,12 +243,9 @@ export default {
     currentRequirement: null,
   }),
   methods: {
-    ...mapMutations("event", [
-            "setEventData",
-            "setBookingRequirements",
-            "setInitBookingRequirements"
-    ]),
+    ...mapMutations("event", ["setEventData"]),
     ...mapActions("comment", ["getCommentComponents"]),
+    ...mapMutations("event", ["setBookingRequirements"]),
     getAllRequirements: async function () {
       let requirements = this.storedRequirements;
 
@@ -257,35 +254,12 @@ export default {
       if (!this.allRequirements) {
         this.allRequirements = await this.$http.get(`${process.env.SERVER_URL}/1/vendor/property/${this.event.id}`);
 
-        // set default value by conditionSript
-        let event = this.$store.state.event.eventData;
-        console.log("getAllRequirents", this.allRequirements);
-
-        for(let com in this.allRequirements.data){
-          let requirements = this.allRequirements.data[com].requirements;
-
-          if (Object.keys(requirements).length ) {
-            for (let cat in requirements) {
-              requirements[cat].map((ms) => {
-                if (ms.conditionScript) console.log("conditionScript", com, cat);
-                if (ms.conditionScript) ms.visible = eval(ms.conditionScript);
-                if (ms.conditionScript) ms.isSelected = eval(ms.conditionScript);
-                if (ms.defaultQtyScript) ms.defaultQty = Math.ceil(eval(ms.defaultQtyScript));
-
-                if (this.blockId === "swags" && (ms.item === "Apparel" || ms.item === "Tech items")) {
-                  ms.mustHave = false;
-                }
-              });
-            }
-          }
-        }
-
         requirements[this.event.id] = this.allRequirements.data;
         this.setBookingRequirements(requirements);
-        this.setInitBookingRequirements(requirements);
       }
     },
     getSelectedBlock() {
+      console.log(this.categoryList);
       this.selectedBlock = _.findWhere(this.categoryList, {
         id: this.blockId,
       });

@@ -2,7 +2,7 @@
   <div>
     <multiselect
             v-model="holiday"
-            :options="options"
+            :options="religions"
             :close-on-select="true"
             :clear-on-select="true"
             group-values="options"
@@ -20,10 +20,6 @@ export default {
   model: {},
   props: {
     value: String,
-    options: {
-      type: Array,
-      default: this.religions,
-    },
   },
   data() {
     return {

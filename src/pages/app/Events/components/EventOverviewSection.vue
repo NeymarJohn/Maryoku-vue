@@ -112,7 +112,6 @@
           <HolidayInput
                   v-if="section.occasion === 'Holiday'"
                   :value="section.holiday"
-                  :options="holidays"
                   @change="holidayChange"
           >
           </HolidayInput>
@@ -253,7 +252,7 @@ export default {
           icon: `${this.$iconURL}Onboarding/beach.svg`,
         }],
       occasion: null,
-      holidays: [],
+
     };
   },
   methods: {
@@ -318,19 +317,7 @@ export default {
       }
 
     },
-    init: async function(){
-      // get holidays from server
-      if ( !this.holidays.length && this.section.key === 'event_type') {
-        let res = await this.$http.get(`${process.env.SERVER_URL}/1/holidays`);
-
-        res.data.map(rel => {
-          let options = [];
-          rel.holidays.map(h => {
-            options.push(h.holiday);
-          })
-          this.holidays.push({name: rel.name, options});
-        });
-      }
+    init(){
 
       this.eventTypes = this.eventTypesList.map(it => {
         return {name: it.name, value: it.name, icon: `${this.$iconURL}Onboarding/${it.key}.svg` };
