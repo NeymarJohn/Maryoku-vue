@@ -156,7 +156,7 @@ export default {
     ...mapActions("comment", ["getCommentComponents"]),
     ...mapActions("vendor", ["fetchAllProperties"]),
     _checkConditionScript(requirements) {
-      console.log("_checkConditionScript");
+
       let event = this.event;
 
       for (let cat in requirements) {
@@ -175,11 +175,16 @@ export default {
     _saveRequirementsInStore(action = null) {
       let requirements = this.storedRequirements;
 
-      requirements[this.event.id][this.blockId].requirements =
-        action === "clear" ? null : JSON.parse(JSON.stringify(this.requirementProperties));
-      requirements[this.event.id][this.blockId].anythingElse = action === "clear" ? null : this.anythingElse;
+      if ( action === 'clear' ) {
+        let initRequirements = this.$store.state.event.initBookingRequirements;
+        console.log('clear', initRequirements);
+        requirements[this.event.id][this.blockId].requirements = JSON.parse(JSON.stringify(initRequirements[this.event.id][this.blockId].requirements));
+        requirements[this.event.id][this.blockId].anythingElse = null;
+      } else {
+        requirements[this.event.id][this.blockId].requirements = JSON.parse(JSON.stringify(this.requirementProperties));
+        requirements[this.event.id][this.blockId].anythingElse = this.anythingElse;
+      }
 
-      console.log("requirements", requirements);
       this.setBookingRequirements(requirements);
     },
     addRequirement(category, property) {
@@ -254,10 +259,7 @@ export default {
           JSON.stringify(this.storedRequirements[this.event.id][this.blockId].anythingElse),
         );
 
-        if (this.isLoading) {
-          this._checkConditionScript(this.requirementProperties);
-          this.isLoading = false;
-        }
+        this.isLoading = false;
       }
     },
     revertToOriginal: async function () {
@@ -302,7 +304,6 @@ export default {
     },
     component(newVal, oldVal) {
       if (newVal.componentId) {
-        this.isLoading = true;
         this.fetchData();
       }
     },

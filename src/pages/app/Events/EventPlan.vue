@@ -1,11 +1,11 @@
 <template>
   <div class="event-plan">
-    <progress-sidebar :elements="barItems" page="plan" id="control-panel"></progress-sidebar>
-    <EventDetailsOverview v-if="pageId == 'overview'"></EventDetailsOverview>
-    <event-details-timeline v-else-if="pageId == 'timeline'"></event-details-timeline>
-    <event-concept-choose v-else-if="pageId == 'concept'"></event-concept-choose>
-    <event-budget-requirement v-else-if="pageId == 'budget'"></event-budget-requirement>
-    <event-campaign v-else-if="pageId == 'campaign'"></event-campaign>
+    <progress-sidebar :elements="barItems" page="plan"></progress-sidebar>
+    <EventDetailsOverview v-if="pageId === 'overview'"></EventDetailsOverview>
+    <event-details-timeline v-else-if="pageId === 'timeline'"></event-details-timeline>
+    <event-concept-choose v-else-if="pageId === 'concept'"></event-concept-choose>
+    <event-budget-requirement v-else-if="pageId === 'budget'"></event-budget-requirement>
+    <event-campaign v-else-if="pageId === 'campaign'"></event-campaign>
     <booking-event v-else></booking-event>
   </div>
 </template>
@@ -162,9 +162,11 @@ export default {
   watch: {
     $route: "fetchData",
     event(newValue) {
+      console.log('event');
       this.setConstantStates(newValue);
     },
     eventData(newValue) {
+      console.log('eventData');
       this.setConstantStates(newValue);
     },
   },

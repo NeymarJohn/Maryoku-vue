@@ -53,7 +53,7 @@
       @yes="finalize"
     ></timeline-gap-modal>
 
-    <planner-event-footer id="footer-panel">
+    <planner-event-footer>
       <template slot="buttons">
         <template v-if="isEditMode">
           <md-button class="md-simple md-button md-black maryoku-btn" @click="revert">
