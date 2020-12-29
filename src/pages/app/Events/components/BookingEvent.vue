@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout booking-section">
-    <vue-element-loading class="ml-400 height-100vh" :active="isLoading" spinner="ring" color="#FF547C"/>
+    <vue-element-loading class="ml-400 height-100vh" :active="isLoading" spinner="ring" color="#FF547C" />
     <template v-if="showProposals">
       <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
       <div class="event-page-header md-layout-item md-size-100">
@@ -286,6 +286,7 @@ export default {
       }
     },
     getSelectedBlock() {
+      console.log(this.categoryList);
       this.selectedBlock = _.findWhere(this.categoryList, {
         id: this.blockId,
       });

@@ -19,34 +19,169 @@
       </div>
       <!--<content-footer v-if="!$route.meta.hideFooter"></content-footer>-->
     </div>
-    <v-tour name="invite" :steps="steps.invite" :options="tourOptions" :callbacks="tourCallback"></v-tour>
+    <!-- <v-tour name="invite" :steps="steps.invite" :options="tourOptions" :callbacks="tourCallback"></v-tour>
     <v-tour name="comment" :steps="steps.comment" :options="tourOptions" :callbacks="tourCallback"></v-tour>
     <v-tour name="download" :steps="steps.download" :options="tourOptions" :callbacks="tourCallback"></v-tour>
     <v-tour name="controlPanel" :steps="steps.controlPanel" :options="tourOptions" :callbacks="tourCallback"></v-tour>
-    <v-tour name="footerPanel" :steps="steps.footerPanel" :options="tourOptions" :callbacks="tourCallback"></v-tour>
-    <!-- <v-tour name="myTour" :steps="steps.invite">
+    <v-tour name="footerPanel" :steps="steps.footerPanel" :options="tourOptions" :callbacks="tourCallback"></v-tour> -->
+    <v-tour name="invite" :steps="steps.invite" :callbacks="tourCallback">
       <template slot-scope="tour">
         <transition name="fade">
           <v-step
             v-if="tour.steps[tour.currentStep]"
             :key="tour.currentStep"
             :step="tour.steps[tour.currentStep]"
-            :previous-step="tour.previousStep"
             :next-step="tour.nextStep"
             :stop="tour.stop"
-            :skip="tour.skip"
             :is-first="tour.isFirst"
             :is-last="tour.isLast"
             :labels="tour.labels"
+            :finish="tour.finish"
           >
-            <div slot="actions">
-              <button @click="tour.previousStep" class="btn btn-primary">Previous step</button>
-              <button @click="tour.nextStep" class="btn btn-primary">Next step</button>
+            <div slot="actions" class="d-flex justify-content-between tour-actions">
+              <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
+              <span class="step-label">{{ tour.currentStep + 1 }}/{{ tour.steps.length }}</span>
+              <md-button
+                v-if="tour.isLast"
+                @click="tour.finish"
+                class="md-simple md-red maryoku-btn"
+                style="background-color: white !important"
+                >Got it</md-button
+              >
+              <md-button
+                v-else
+                @click="tour.nextStep"
+                class="md-simple md-red maryoku-btn"
+                style="background-color: white !important"
+                >Keep going</md-button
+              >
             </div>
           </v-step>
         </transition>
       </template>
-    </v-tour> -->
+    </v-tour>
+    <v-tour name="comment" :steps="steps.comment" :callbacks="tourCallback">
+      <template slot-scope="tour">
+        <transition name="fade">
+          <v-step
+            v-if="tour.steps[tour.currentStep]"
+            :key="tour.currentStep"
+            :step="tour.steps[tour.currentStep]"
+            :next-step="tour.nextStep"
+            :stop="tour.stop"
+            :is-first="tour.isFirst"
+            :is-last="tour.isLast"
+            :labels="tour.labels"
+            :finish="tour.finish"
+          >
+            <div slot="actions" class="d-flex justify-content-between tour-actions">
+              <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
+              <span class="step-label">{{ tour.currentStep + 1 }}/{{ tour.steps.length }}</span>
+              <md-button
+                v-if="tour.isLast"
+                @click="tour.finish"
+                class="md-simple md-red maryoku-btn"
+                style="background-color: white !important"
+                >Got it</md-button
+              >
+              <md-button
+                v-else
+                @click="tour.nextStep"
+                class="md-simple md-red maryoku-btn"
+                style="background-color: white !important"
+                >Keep going</md-button
+              >
+            </div>
+          </v-step>
+        </transition>
+      </template>
+    </v-tour>
+    <v-tour name="download" :steps="steps.download" :callbacks="tourCallback">
+      <template slot-scope="tour">
+        <transition name="fade">
+          <v-step
+            v-if="tour.steps[tour.currentStep]"
+            :key="tour.currentStep"
+            :step="tour.steps[tour.currentStep]"
+            :next-step="tour.nextStep"
+            :stop="tour.stop"
+            :is-first="tour.isFirst"
+            :is-last="tour.isLast"
+            :labels="tour.labels"
+            :finish="tour.finish"
+          >
+            <div slot="actions" class="d-flex justify-content-between tour-actions">
+              <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
+              <span class="step-label">{{ tour.currentStep + 1 }}/{{ tour.steps.length }}</span>
+              <md-button
+                v-if="tour.isLast"
+                @click="tour.finish"
+                class="md-simple md-red maryoku-btn"
+                style="background-color: white !important"
+                >Got it</md-button
+              >
+              <md-button
+                v-else
+                @click="tour.nextStep"
+                class="md-simple md-red maryoku-btn"
+                style="background-color: white !important"
+                >Keep going</md-button
+              >
+            </div>
+          </v-step>
+        </transition>
+      </template>
+    </v-tour>
+    <v-tour name="controlPanel" :steps="steps.controlPanel" :callbacks="tourCallback">
+      <template slot-scope="tour">
+        <transition name="fade">
+          <v-step
+            v-if="tour.steps[tour.currentStep]"
+            :key="tour.currentStep"
+            :step="tour.steps[tour.currentStep]"
+            :next-step="tour.nextStep"
+            :stop="tour.stop"
+            :is-first="tour.isFirst"
+            :is-last="tour.isLast"
+            :labels="tour.labels"
+            :finish="tour.finish"
+            class="dark"
+          >
+            <div slot="actions" class="d-flex justify-content-between tour-actions">
+              <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
+              <span class="step-label dark">{{ tour.currentStep + 1 }}/{{ tour.steps.length }}</span>
+              <md-button v-if="tour.isLast" @click="tour.finish" class="md-red maryoku-btn">Got it</md-button>
+              <md-button v-else @click="tour.nextStep" class="md-red maryoku-btn">Keep going</md-button>
+            </div>
+          </v-step>
+        </transition>
+      </template>
+    </v-tour>
+    <v-tour name="footerPanel" :steps="steps.footerPanel" :callbacks="tourCallback">
+      <template slot-scope="tour">
+        <transition name="fade">
+          <v-step
+            v-if="tour.steps[tour.currentStep]"
+            :key="tour.currentStep"
+            :step="tour.steps[tour.currentStep]"
+            :next-step="tour.nextStep"
+            :stop="tour.stop"
+            :is-first="tour.isFirst"
+            :is-last="tour.isLast"
+            :labels="tour.labels"
+            :finish="tour.finish"
+            class="dark"
+          >
+            <div slot="actions" class="d-flex justify-content-between tour-actions">
+              <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
+              <span class="step-label dark">{{ tour.currentStep + 1 }}/{{ tour.steps.length }}</span>
+              <md-button v-if="tour.isLast" @click="tour.finish" class="md-red maryoku-btn">Got it</md-button>
+              <md-button v-else @click="tour.nextStep" class="md-red maryoku-btn">Keep going</md-button>
+            </div>
+          </v-step>
+        </transition>
+      </template>
+    </v-tour>
   </div>
 </template>
 <script>
@@ -278,9 +413,12 @@ export default {
     this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
   },
   mounted() {
-    setTimeout(() => {
-      this.$tours["invite"].start();
-    }, 1000);
+    if (this.$route.query.walkWithMe) {
+      setTimeout(() => {
+        this.$tours["invite"].start();
+      }, 1000);
+    }
+
     this.$store
       .dispatch("auth/checkToken")
       .then(() => {
@@ -302,7 +440,19 @@ export default {
   margin-top: 10px;
   background-color: rgba(0, 0, 0, 0.12);
 }
-
+.tour-actions {
+  padding: 0 20px;
+}
+.step-label {
+  display: inline-block;
+  background-color: #ff4f7e;
+  padding: 10px 20px;
+  margin: 5px 0;
+  border-radius: 4px;
+  &.dark {
+    background-color: #696969;
+  }
+}
 $scaleSize: 0.95;
 @keyframes zoomIn95 {
   from {

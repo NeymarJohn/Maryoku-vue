@@ -3401,29 +3401,7 @@ export const VendorPolicy = [
   },
   {
     category: "signageprinting",
-    items: [
-        {
-            name: "Must use in house graphics designer",
-            type: Boolean,
-            hasComment: true,
-        },
-        {
-            name: "Number of PR drafts",
-            type: Boolean,
-            hasComment: true,
-        },
-        {
-            name: "Customizable size of prints",
-            type: Boolean,
-            hasComment: true,
-        },
-        {
-            name: "Minimum number of prints",
-            type: Number,
-            noSuffix: true,
-            hasComment: true,
-        },
-    ],
+    items: [],
   },
   {
     category: "advertising-promotion",
@@ -3788,35 +3766,7 @@ export const VendorPricingPolicy = [
   },
   {
     category: "signageprinting",
-    items: [
-        {
-            name: "Minimum package budget",
-            type: Number,
-            hasComment: true,
-        },
-        {
-            name: "Rush order",
-            type: Number,
-            hasComment: true,
-        },
-        {
-            name: "Discount for large quantities",
-            type: Number,
-            isPercentage: true,
-            hasComment: true,
-            attendees: null,
-        },
-        {
-            name: "Tax rate",
-            type: Number,
-            isPercentage: true,
-        },
-        {
-            name: "Suggested Gratuity",
-            type: Number,
-            hasComment: true,
-        },
-    ],
+    items: [],
   },
   {
     category: "advertising-promotion",

@@ -123,8 +123,12 @@ export default {
         eventService
           .saveEventFromStorage(this.$store.state.auth.user.profile.defaultCalendarId)
           .then((newEvent) => {
-            console.log(newEvent);
-            this.$router.push({ path: `/events/${newEvent.id}/booking/overview` });
+            localStorage.setItem("currentEventId", newEvent.id);
+            if (newEvent.isFirstEvent) {
+              this.$router.push({ path: `/welcome/event` });
+            } else {
+              this.$router.push({ path: `/events/${newEvent.id}/booking/overview` });
+            }
           })
           .catch((err) => {
             swal({

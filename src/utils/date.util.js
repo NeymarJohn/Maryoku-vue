@@ -42,7 +42,7 @@ const getTimeZoneNameFromPlaceId = async placeId => {
 
         var xhr = new XMLHttpRequest(); // create new XMLHttpRequest2 object
         xhr.open("GET", apicall); // open GET request
-        xhr.onload = function() {
+        xhr.onload = function () {
             if (xhr.status === 200) {
                 // if Ajax request successful
                 var output = JSON.parse(xhr.responseText); // convert returned JSON string to JSON object
