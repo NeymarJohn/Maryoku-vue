@@ -4173,11 +4173,6 @@ iframe {
     box-shadow: none !important;
 }
 
-.v-tour {
-    .v-step {
-        z-index: 1000000;
-    }
-}
 
 .building-blocks-requirements {
     .md-table-content {
@@ -4240,51 +4235,6 @@ iframe {
     letter-spacing: 0.14px;
 }
 
-.v-step {
-    background-color: $brand-primary !important;
-
-    &__header {
-        background-color: $purple-300 !important;
-        padding-left: 148px;
-        padding-right: 148px;
-        border-bottom: 1px solid $purple-200 !important;
-    }
-
-    &__buttons {
-        padding-top: 12px;
-    }
-
-    &__content {
-    }
-
-    &[x-placement^="bottom"] .v-step__arrow {
-        border-color: $brand-primary !important;
-        border-left-color: transparent !important;
-        border-right-color: transparent !important;
-        border-top-color: transparent !important;
-    }
-
-    &[x-placement^="top"] .v-step__arrow {
-        border-color: $brand-primary !important;
-        border-left-color: transparent !important;
-        border-right-color: transparent !important;
-        border-bottom-color: transparent !important;
-    }
-
-    &[x-placement^="left"] .v-step__arrow {
-        border-color: $brand-primary !important;
-        border-bottom-color: transparent !important;
-        border-right-color: transparent !important;
-        border-top-color: transparent !important;
-    }
-
-    &[x-placement^="right"] .v-step__arrow {
-        border-color: $brand-primary !important;
-        border-left-color: transparent !important;
-        border-bottom-color: transparent !important;
-        border-top-color: transparent !important;
-    }
-}
 
 .selected-proposals-list {
     height: 100%;
@@ -4751,5 +4701,55 @@ input[type="number"] {
 
     .no-padding-mobile {
         padding: 0px;
+    }
+}
+
+.vendor-tooltip-theme{
+    top: 10px !important;
+
+    &[x-placement^="bottom"] {
+        margin-bottom: 5px;
+
+        .tooltip-arrow {
+            border-width: 0 10px 10px 10px !important;
+            border-right-color: transparent !important;
+            border-top-color: transparent !important;
+            border-left-color: transparent !important;
+            bottom: -5px;
+            left: calc(50% - 5px);
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    }
+
+    .tooltip-arrow {
+        width: 0;
+        height: 0;
+        border-style: solid;
+        position: absolute;
+        margin: 5px;
+        border-color: #ffedb7;
+        z-index: 1;
+    }
+
+    .tooltip-inner{
+        margin-top: 5px;
+        max-width: 360px;
+        background-color: #ffedb7;
+        color: #050505;
+        padding: 18px 29px;
+        text-align: center;
+        border: 0;
+        border-radius: 0;
+
+        h5 {
+            margin: 14px 0 0 0;
+            font: 800 16px Manrope-Regular, sans-serif;
+        }
+        p {
+            margin: 14px 0 0 0;
+            padding: 0;
+            font: normal 16px Manrope-Regular, sans-serif;
+        }
     }
 }

@@ -32,6 +32,7 @@
                 v-if="isEdit && section.hasOwnProperty('eventType')"
                 :value="section.eventType"
                 :categories="eventTypes"
+                trackBy="name"
                 class="my-10"
                 @change="eventTypeChange"
         ></category-selector>
@@ -93,6 +94,7 @@
                 column="2"
                 :categories="guestsTypes"
                 :additional="additional"
+                trackBy="name"
                 @change="guestTypeChange"
                 @input="inputQuestType"
         ></category-selector>
@@ -103,12 +105,14 @@
         <category-selector
                 :value="section.occasion"
                 :categories="occasions"
+                trackBy="name"
                 @change="occasionChange"
         ></category-selector>
 
           <HolidayInput
                   v-if="section.occasion === 'Holiday'"
                   :value="section.holiday"
+                  :options="holidays"
                   @change="holidayChange"
           >
           </HolidayInput>
@@ -249,7 +253,7 @@ export default {
           icon: `${this.$iconURL}Onboarding/beach.svg`,
         }],
       occasion: null,
-
+      holidays: [],
     };
   },
   methods: {
@@ -314,7 +318,19 @@ export default {
       }
 
     },
-    init(){
+    init: async function(){
+      // get holidays from server
+      if ( !this.holidays.length && this.section.key === 'event_type') {
+        let res = await this.$http.get(`${process.env.SERVER_URL}/1/holidays`);
+
+        res.data.map(rel => {
+          let options = [];
+          rel.holidays.map(h => {
+            options.push(h.holiday);
+          })
+          this.holidays.push({name: rel.name, options});
+        });
+      }
 
       this.eventTypes = this.eventTypesList.map(it => {
         return {name: it.name, value: it.name, icon: `${this.$iconURL}Onboarding/${it.key}.svg` };
@@ -331,7 +347,8 @@ export default {
       eventTypesList: "event/getEventTypesList",
     }),
     inOutDoorValue(){
-      return this.inOutDoorTypes.find(it => it.value === this.section.inOutDoor)['label'];
+      let inOutDoor = this.inOutDoorTypes.find(it => it.value === this.section.inOutDoor);
+      return inOutDoor ? inOutDoor['label'] : '';
     },
     guestTypeValue(){
       return this.guestsTypes.find(it => it.value === this.section.guestType).name;

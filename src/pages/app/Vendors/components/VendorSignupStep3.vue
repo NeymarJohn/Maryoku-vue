@@ -142,28 +142,7 @@
             </div>
           </div>
           <div class="card">
-            <!-- <div class="field mb-50">
-              <div class="label">
-                <span>How much deposit do you charge?</span>
-              </div>
-              <input type="text" class="" placeholder="Like: 50% of the total event"/>
-            </div>-->
-            <!-- <div class="field ml-title">
-              <h4>cancellation approach</h4>
-            </div>
-            <div class="field mb-50">
-              <div class="label">
-                <div class="title-cont">
-                  <div class="left m-0">
-                    <h5>cancellation is allowed until...?</h5>
-                  </div>
-                  <div class="right">
-                    <p>(With full refund)</p>
-                  </div>
-                </div>
-              </div>
-              <input type="text" class="" placeholder="Like: 60 days prior to the start of the event..."/>
-            </div>-->
+
             <div class="rules">
               <div
                 class="rule"
@@ -532,7 +511,7 @@
                             </div>
                           </li>
                           <li v-for="(h, hIndex) in r.holidays" :key="hIndex">
-                            <div class="check-field" @click="updateExDonts(h)">
+                            <div class="check-field" @click="updateExDonts(r, h)">
                               <img :src="`${iconUrl}Group 6258.svg`" v-if="h.selected" />
                               <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
                               <span :class="{ checked: h.selected }">{{ h.holiday}}</span>
@@ -741,20 +720,29 @@ export default {
     };
   },
   methods: {
-    updateExDonts(item) {
+    updateExDonts(religion, holiday) {
+      console.log("updateExDonts", holiday);
+      holiday.selected = !holiday.selected;
+      let day = holiday.start.split('-')[2];
 
-      item.selected = !item.selected;
-      let day = item.start.split('-')[2];
-      // console.log("updateExDonts", item, this.markedDates, this.markedDates.find(m => m === item.start));
-      if ( this.markedDates.find(m => m === item.start ) ) {
-        console.log("removeClass");
-        this.markedDates = this.markedDates.filter(m => m !== item.start);
+      if ( this.markedDates.find(m => m === holiday.start ) ) {
+        this.markedDates = this.markedDates.filter(m => m !== holiday.start);
         $('span.vfc-span-day:contains('+day+')').removeClass('vfc-marked vfc-start-marked vfc-end-marked');
       } else {
-        this.markedDates.push(item.start);
+        this.markedDates.push(holiday.start);
       }
 
-      this.$root.$emit("update-vendor-value", "exDonts", this.religions);
+      if (this.vendor.exDonts.find(h => h.holiday === holiday.holiday)) {
+        this.vendor.exDonts.filter(h => h.holiday !== holiday.holiday);
+      } else {
+        this.vendor.exDonts.push({
+          date: holiday.start,
+          holiday: holiday.holiday,
+          religion: religion.name,
+        })
+      }
+
+      this.$root.$emit("update-vendor-value", "exDonts", this.vendor.exDonts);
     },
     updateNa(item) {
       if (this.notAllowed.includes(item)) {
@@ -832,7 +820,7 @@ export default {
       this.$root.$emit("update-vendor-value", "selectedReligion", this.selectedReligion);
     },
     updateDontWorkDays(e) {
-      console.log("selectedDays", this.date);
+
       let day = e.date.split('-')[2];
       let selectedDates = this.date.selectedDates;
       if ( this.markedDates.find(m => m === e.date) ) {
@@ -922,6 +910,7 @@ export default {
     updateAllExDonts(data){
       let value = !this.isAllHolidays(data);
 
+      this.vendor.exDonts.filter(h => h.religion !== data.name);
       data.holidays.map(it => {
         it.selected = value;
         let day = it.start.split('-')[2];
@@ -931,53 +920,83 @@ export default {
           this.markedDates = this.markedDates.filter(m => m !== it.start);
           $('span.vfc-span-day:contains('+day+')').removeClass('vfc-marked vfc-start-marked vfc-end-marked');
         }
+
+        if (value) {
+          this.vendor.exDonts.push({
+            date: it.start,
+            holiday: it.holiday,
+            religion: date.name,
+          })
+        }
       });
 
 
 
-      this.$root.$emit("update-vendor-value", "exDonts", this.religions);
+      this.$root.$emit("update-vendor-value", "exDonts", this.vendor.exDonts);
     },
     isAllHolidays(data){
       return data.holidays.every(it => it.selected);
     },
     init: async function(){
 
-      this.vendorPricingPolicies = this.pricingPolicies.find(p => p.category === this.vendor.vendorCategory);
+      // set vendorPricingPolicies from initial pricing policies
+      let vendorPricingPolicies = this.pricingPolicies.find(p => p.category === this.vendor.vendorCategory);
 
+      // replace vendorPricingPolicies with saved vendor
       if ( this.vendor.pricingPolicies && this.vendor.pricingPolicies.length ) {
         this.$set(this.vendorPricingPolicies, 'items', this.vendor.pricingPolicies)
+        this.vendorPricingPolicies.items.map((it, idx) => {
+          if (vendorPricingPolicies.items[idx] && vendorPricingPolicies.items[idx].type) {
+            this.$set(it, 'type', vendorPricingPolicies.items[idx].type)
+          }
+        })
+      } else {
+        this.vendorPricingPolicies = vendorPricingPolicies;
       }
+      console.log("vendor.price.policy", this.vendorPricingPolicies);
 
-      this.vendorPolicies = this.policies.find(p => p.category === this.vendor.vendorCategory);
+      // set vendorPolicies from initial policies
+      let vendorPolicies = this.policies.find(p => p.category === this.vendor.vendorCategory);
 
+      // replace vendorPolices with saved vendor
       if ( this.vendor.policies && this.vendor.policies.legnth ) {
         this.$set(this.vendorPolicies, 'items', this.vendor.policies)
+        this.vendorPolicies.items.map((it, idx) => {
+          this.$set(it, 'type', vendorPolicies.items[idx].type)
+        })
+      } else {
+        this.vendorPolicies = vendorPolicies;
       }
 
+      // set selectedReligion from saved vendor
       if(this.vendor.selectedReligion && this.vendor.selectedReligion.length) {
         this.selectedReligion = this.vendor.selectedReligion;
         this.isReligion = true;
         this.exDont = true;
       }
 
-      if(!this.vendor.exDonts || !this.vendor.exDonts.length) {
+      // get holidays from serve if they are not saved
+
+      if ( !this.religions.length ) {
         let res = await this.$http.get(`${process.env.SERVER_URL}/1/holidays`);
         this.religions = res.data;
+      }
 
-      } else {
-        this.religions = this.vendor.exDonts;
-
+      if ( this.vendor.exDonts && this.vendor.exDonts.length ) {
         this.religions.map(r => {
-          if(r.holidays.some(h => h.selected)) this.exDont = true;
+          r.holidays.map(h => {
+            h.selected = this.vendor.exDonts.findIndex(e => e.holiday === h.holiday) !== -1;
+          })
         })
       }
+      console.log("exDonts", this.religions);
 
-
+      // set selectedWeekdays from saved vendor
       if (this.vendor.selectedWeekdays && this.vendor.selectedWeekdays.length) {
-
         this.selectedWeekdays = this.vendor.selectedWeekdays;
       }
-      console.log('init.dontWorkDays', this.vendor.dontWorkDays);
+
+      // set dontWorkSays from saved vendor
       if (this.vendor.dontWorkDays ) {
 
         this.$set(this.date, 'selectedDates', this.vendor.dontWorkDays);
@@ -989,19 +1008,19 @@ export default {
         }
       }
 
+      //
       if ( this.vendor.exDonts && this.vendor.exDonts.length ) {
-        this.vendor.exDonts.map(ex => {
-          ex.holidays.map(h => {
-            if (h.selected) this.markedDates.push(h.start);
-          })
+        this.vendor.exDonts.map(h => {
+           this.markedDates.push(h.date);
         })
       }
 
       this.optimizeWeekDays(this.selectedWeekdays);
       this.componentKey += 1;
     },
+
     renderCalendar(){
-        // console.log("renderCalendar");
+        console.log("renderCalendar");
         $('.vfc-day').each(function (index, day) {
             if ($(day).find('span.vfc-span-day').hasClass('vfc-marked') || $(day).find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed')) {
 

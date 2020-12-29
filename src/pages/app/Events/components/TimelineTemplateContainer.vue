@@ -41,7 +41,7 @@
     </template>
     <md-button
       class="md-icon-button md-simple close-btn"
-      @click="remove(template)"
+      @click="remove"
       v-if="template.type === 'group' && groupedItems.length == 0"
     >
       <md-icon class="close-icon">close</md-icon>
@@ -110,9 +110,7 @@ export default {
     },
   },
   methods: {
-    remove() {
-      this.$emit("remove");
-    },
+    remove() {},
     hadleDragEnter(data) {
       console.log(data);
       console.log("started");

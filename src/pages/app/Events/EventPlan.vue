@@ -1,6 +1,6 @@
 <template>
   <div class="event-plan">
-    <progress-sidebar :elements="barItems" page="plan"></progress-sidebar>
+    <progress-sidebar :elements="barItems" page="plan" id="control-panel"></progress-sidebar>
     <EventDetailsOverview v-if="pageId == 'overview'"></EventDetailsOverview>
     <event-details-timeline v-else-if="pageId == 'timeline'"></event-details-timeline>
     <event-concept-choose v-else-if="pageId == 'concept'"></event-concept-choose>
@@ -94,6 +94,7 @@ export default {
 
         // show when you approve budget
         if (this.event.budgetProgress == 100) {
+          this.event.components.sort((a, b) => a.order - b.order);
           this.event.components.forEach((item) => {
             if (item.componentId !== "unexpected") {
               elements.push({
@@ -101,6 +102,7 @@ export default {
                 status: "not-complete",
                 route: "booking/" + item.id,
                 icon: `${this.$iconURL}Budget+Elements/${item.componentId}.svg`,
+                progress: item.progress ? item.progress : 0,
               });
             }
           });
@@ -160,9 +162,11 @@ export default {
   watch: {
     $route: "fetchData",
     event(newValue) {
+      console.log('event');
       this.setConstantStates(newValue);
     },
     eventData(newValue) {
+      console.log('eventData');
       this.setConstantStates(newValue);
     },
   },

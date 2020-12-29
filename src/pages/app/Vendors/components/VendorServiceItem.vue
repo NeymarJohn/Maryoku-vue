@@ -2,28 +2,28 @@
   <div class="vendor-service-item-wrapper">
     <div class="title-cont">
       <div class="title" @click="collapsed = !collapsed">{{ serviceItem.name }}</div>
-      <div class="help d-flex align-start mr-20" v-if="!collapsed">
-        <div v-if="serviceItem.name === 'Sustainability, Inclusion and Diversity'">Do you comply with global policies to maintain green, inclusive and diversified environment?</div>
-        <div v-else>Are all these included in your starting offer?</div>
-        <img
-          :src="`${iconUrl}Group 5522 (2).svg`"
-          @mouseover="conditionTooltip = true"
-          @mouseleave="conditionTooltip = false"
-        />
-        <div class="condition-tooltip" v-if="conditionTooltip">
-          <h5>What do you charge extra for?</h5>
-          <p>Tell us so we know which elements to include in the original proposal and which ones are extra</p>
-        </div>
+      <div class="help d-flex justify-content-end align-center mr-20" v-if="!collapsed">
+        <div v-if="serviceItem.name !== 'Sustainability, Inclusion and Diversity'">Check all of the services that are included in your initial offer.</div>
+          <img
+            v-tooltip="{
+              html: true,
+              content: getTooltip(serviceItem),
+              delay: {show: 200, hide:100},
+              trigger: 'hover',
+              placement: 'bottom',
+              classes: 'vendor-tooltip-theme',
+            }"
+            :src="`${iconUrl}Group 5522 (2).svg`"/>
       </div>
       <div class="arrow" :class="{ expanded: !collapsed }" @click="collapsed = !collapsed">
-        <img :src="`${iconUrl}Asset 519.svg`" />
+        <img class="mt-5" :src="`${iconUrl}Asset 519.svg`" />
       </div>
     </div>
     <div class="items-cont" v-if="!collapsed">
       <div class="items" v-for="(sub, sIndex) in serviceItem.subCategories" :key="sIndex">
         <div class="sub-category-title">{{ sub.name }}</div>
         <div class="checklist" v-for="(item, index) in sub.items" :key="index">
-          <vendor-checkbox :item="item" :label="item.name" :vendor="vendor" v-model="item.value" />
+          <vendor-checkbox :category="serviceItem.name" :item="item" :label="item.name" :vendor="vendor" v-model="item.value" />
         </div>
       </div>
     </div>
@@ -61,7 +61,15 @@ export default {
   mounted() {
     // console.log("vendor.service.item", this.serviceItem)
   },
-  methods: {},
+  methods: {
+    getTooltip(item) {
+      if ( item.name === 'Sustainability, Inclusion and Diversity' ) {
+        return '<p>Do you comply with global policies to maintain green, inclusive and diversified environment?</p>';
+      } else {
+        return '<p>if not included in the starting offer, but offered by your team, select “not included” and input the estimated additional cost of the feature, that way we can better match you with planners</p>';
+      }
+    }
+  },
   computed: {},
   filters: {},
   watch: {},
@@ -158,6 +166,12 @@ export default {
       .checklist {
         text-transform: capitalize;
       }
+    }
+  }
+
+  .tooltip-theme{
+    .tooltip-inner{
+      max-width: 400px;
     }
   }
 }

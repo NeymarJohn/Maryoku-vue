@@ -21,7 +21,7 @@
             </div>
           </div>
           <div class="banner">
-            <img :src="vendor.images[0]" v-if="vendor.hasOwnProperty('images') && vendor.images.length > 0" />
+            <!--<img :src="vendor.images[0]" v-if="vendor.hasOwnProperty('images') && vendor.images.length > 0" />-->
           </div>
           <div class="about-cont" id="About">
             <div class="block">
@@ -162,11 +162,9 @@
                 <img :src="`${iconUrl}Group 5489 (4).svg`" />
                 {{ mergeStringItems(vendor.selectedWeekdays) }}
               </div>
-              <div v-for="(r, rIndex) in vendor.exDonts" :key="rIndex">
-                <div class="item" v-for="(d, dIndex) in r.holidays.filter(d => d.selected)" :key="dIndex">
-                  <img :src="`${iconUrl}Group 5489 (4).svg`" />
-                  {{ d.holiday }}
-                </div>
+              <div class="item" v-for="(d, dIndex) in vendor.exDonts" :key="dIndex">
+                <img :src="`${iconUrl}Group 5489 (4).svg`" />
+                {{ d.holiday }}
               </div>
               <div class="item" v-if="vendor.dontWorkDays">
                 <img :src="`${iconUrl}Group 5489 (4).svg`" />
@@ -191,8 +189,9 @@
                   <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
                 </div>
                 <div class="item" v-else>
-                    <span v-if="policy.name == 'Large group discounts'">$</span>
-                  {{ policy.value }}
+                    <span v-if="policy.type === Number && !policy.isPercentage">$</span>
+                  <span v-if="policy.value === true">Yes</span>
+                  <span v-else>{{ policy.value }}</span>
                   <span v-if="policy.isPercentage">%</span>
                   <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
                   {{ policy.attendees }} attendees
@@ -491,7 +490,7 @@ export default {
     },
     dontWorkDays() {
       let selectedDates = "";
-      _.each(this.vendor.dontWorkDays.selectedDates, (s) => {
+      _.each(this.vendor.dontWorkDays, (s) => {
         selectedDates += `${s.date}, `;
       });
       selectedDates = selectedDates.substring(0, selectedDates.length - 2);
@@ -712,12 +711,13 @@ export default {
             border-top: 1px solid #dddddd;
 
             .items {
-              display: flex;
-              white-space: nowrap;
+              display: block;
               margin-top: 2rem;
 
               .item {
                 font: bold 16px Manrope-Regular, sans-serif;
+                display: block;
+                margin: 20px 0;
                 a {
                   color: #050505;
                   text-decoration: underline;
@@ -725,7 +725,7 @@ export default {
                 img {
                   width: 24px;
                   height: 24px;
-                  // margin-right: 1rem;
+                  margin-right: 10px;
                 }
               }
             }

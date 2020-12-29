@@ -7,9 +7,8 @@
         <div class="header-name">
           <h3>Hi {{ userName }}</h3>
           <p>
-            Here are 3 awesome concepts for you to choose from!
-            <br />If you feel like we haven’t nailed it, let us know and we’ll send 3 more. <br />Got some cool ideas of
-            your own? Scroll down to create a brand new concept.
+            Here are 3 awesome event concepts based on everything you told us about your event.
+            <br />Got some cool ideas of your own? &nbsp;&nbsp;Scroll down to create a brilliant new concept.
           </p>
         </div>
         <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
@@ -135,14 +134,14 @@
       <div class="event-page-header md-layout-item md-size-100">
         <div class="header-name">
           <h3>Great Choice!</h3>
-          <p>This concept will be our guiding for the upcoming steps of creating the event</p>
+          <p>This theme will inspire us when planning our next steps.</p>
         </div>
         <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
       </div>
 
       <div class="booking-header d-flex justify-content-between md-layout-item md-size-100">
         <div class="header-name">
-          <h4><img :src="`${conceptIconsURL}Asset 491.svg`" width="30" /> Your Selected Concept</h4>
+          <h4><img :src="`${conceptIconsURL}Asset 491.svg`" width="30" /> Your Selected Theme</h4>
         </div>
       </div>
 
