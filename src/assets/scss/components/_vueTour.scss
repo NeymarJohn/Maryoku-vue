@@ -1,19 +1,10 @@
 .v-step {
   background-color :#F51355 !important;
   font-family: 'Manrope-Bold';
-  max-width: 400px !important;
-  &.dark {
-    background-color: #383838 !important;
-    .v-step__header {
-      background-color: #383838 !important;
-    }
-  }
   &__header {
     background-color :#F51355 !important;
     border:none;
     font-family: 'Manrope-ExtraBold';
-    text-align: left;
-    padding: 15px 35px !important;
   }
   &__content {
     text-align: justify;

@@ -3,28 +3,16 @@
     <div class="welcome-event-content white-card">
       <div class="header d-flex justify-content-between">
         <img :src="`${$iconURL}Onboarding/maryoku-logo-dark%402x%403x.png`" />
-        <md-button class="md-simple edit-btn" @click="closePanel"
-          ><md-icon class="color-black">close</md-icon></md-button
-        >
+        <md-button class="md-simple edit-btn"><md-icon class="color-black">close</md-icon></md-button>
       </div>
       <div class="title text-center">
         <img :src="`${$iconURL}common/welcome-header.png`" />
         <h1 class="font-size-50 font-bold">Welcome to your event rachel!</h1>
-        <div class="summary">
-          <span>Your on board summary:</span>
-          <span class="font-bold summary-item">
-            <img :src="`${$iconURL}common/calendar-dark.svg`" class="label-icon" />
-            {{ $dateUtil.formatScheduleDay(event.eventStartMills, "MMMM DD, YYYY") }}(Flexible)</span
-          >
-          <span class="font-bold summary-item">
-            <img :src="`${$iconURL}common/users-dark.svg`" class="label-icon" />{{
-              event.numberOfParticipants | withComma
-            }}
-            Invited</span
-          >
-          <span class="font-bold summary-item">
-            <img :src="`${$iconURL}common/location-dark.svg`" class="label-icon" />{{ event.location }}</span
-          >
+        <div class="sumarry">
+          <span>Your on board sumarry:</span>
+          <span>December 25, 2019(Flexible)</span>
+          <span>2,034 Invited</span>
+          <span>New York, NY, USA</span>
         </div>
       </div>
       <div class="text-center mt-100 font-size-22 font-bold">Explore Mayroku's Main Features</div>
@@ -45,14 +33,13 @@
       <youtube-player :videoId="selectedVideoId" v-if="openPlayer" @close="openPlayer = false"></youtube-player>
     </div>
     <div class="weclome-event-page-footer white-card">
-      <md-button class="md-red maryoku-btn" @click="gotoEvent">Let's Begin</md-button>
+      <md-button class="md-red maryoku-btn">Let's Begin</md-button>
     </div>
     <!-- <youtube video-id="BBJa32lCaaY" /> -->
   </div>
 </template>
 <script>
 import YoutubePlayer from "@/components/YoutubePlayer.vue";
-import CalendarEvent from "@/models/CalendarEvent";
 export default {
   components: {
     YoutubePlayer,
@@ -69,16 +56,7 @@ export default {
         { title: "VENDORS COMMUNICATION", id: "pELHFctXOcQ" },
         { title: "TIMELINE", id: "pELHFctXOcQ" },
       ],
-      event: {},
     };
-  },
-  mounted() {
-    const eventId = localStorage.getItem("currentEventId");
-    if (eventId) {
-      CalendarEvent.find(eventId).then((event) => {
-        this.event = event;
-      });
-    }
   },
   methods: {
     playVideo(id) {
@@ -87,14 +65,6 @@ export default {
     },
     playing() {
       console.log("o/ we are watching!!!");
-    },
-    gotoEvent() {
-      const currentEventId = localStorage.getItem("currentEventId");
-      this.$router.push({ path: `/events/${currentEventId}/booking/overview?walkWithMe=true` });
-    },
-    closePanel() {
-      const currentEventId = localStorage.getItem("currentEventId");
-      this.$router.push({ path: `/events/${currentEventId}/booking/overview` });
     },
   },
 };
@@ -105,14 +75,6 @@ export default {
     background: linear-gradient(#fdf0f4 0%, #fdf0f4 60%, white 60%, white 100%);
     margin: 60px;
     padding: 50px;
-    .summary {
-      .label-icon {
-        margin: 0 15px;
-      }
-      &-item {
-        margin: 0 20px;
-      }
-    }
     .header {
       img {
         width: 200px;

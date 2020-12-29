@@ -31,7 +31,7 @@
         <div class="sidebar-menu__item" @click="goTo('/settings')">
           <div class="item-route"><img :src="`${menuIconsURL}Asset 116.svg`" /> Settings</div>
         </div>
-        <div class="sidebar-menu__item" @click="goToHelp">
+        <div class="sidebar-menu__item">
           <div class="item-route"><img :src="`${menuIconsURL}Asset 117.svg`" /> Help</div>
         </div>
         <div class="sidebar-menu__item">
@@ -169,10 +169,6 @@ export default {
     goTo(router) {
       this.toggleMenu = false;
       this.$router.push(router);
-    },
-    goToHelp() {
-      localStorage.setItem("currentEventId", this.$route.params.id);
-      this.goTo("/welcome/event");
     },
     fetchUrl() {
       this.currentUrl = this.$router.history.current.path;
