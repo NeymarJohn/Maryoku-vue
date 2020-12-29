@@ -11,12 +11,6 @@
             <td width="40%" class="event-block-element">
               <img :src="`${$iconURL}Budget Elements/${eventCategoryItem.icon}`" />
               {{ eventCategoryItem.title }}
-              <span v-if="eventCategoryItem.eventCategory">
-                <img :src="`${$iconURL}Campaign/Group 9087.svg`" class="label-icon" />
-                <md-tooltip>
-                  <div class="font-size-14 tab-tooltip">{{ eventCategoryItem.eventCategory.tooltipText }}</div>
-                </md-tooltip>
-              </span>
             </td>
             <td class="planned" width="20%" style="white-space: nowrap">
               <span v-if="type === 'total'">$ {{ eventCategoryItem.allocatedBudget | withComma }}</span>

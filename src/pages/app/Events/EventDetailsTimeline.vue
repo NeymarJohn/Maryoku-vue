@@ -7,9 +7,13 @@
           <img :src="`${newTimeLineIconsURL}timeline-title.svg`" class="page-icon" />
           CREATE TIMLINE
         </div>
-        <div class="font-size-16">
+        <div class="font-size-16" v-if="isEditMode">
           <b>Things are warming up!</b> It’s time to create your event timeline! <br />We helped you with the basic
           structure
+        </div>
+        <div class="font-size-16" v-if="!isEditMode">
+          Now that you’re making progress with building the timeline- <br />you can <b>assign slots to vendors</b> so
+          that your invitees will know what to expect!
         </div>
       </div>
       <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
@@ -53,7 +57,7 @@
       @yes="finalize"
     ></timeline-gap-modal>
 
-    <planner-event-footer id="footer-panel">
+    <planner-event-footer>
       <template slot="buttons">
         <template v-if="isEditMode">
           <md-button class="md-simple md-button md-black maryoku-btn" @click="revert">

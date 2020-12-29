@@ -27,7 +27,6 @@ const state = {
         components: null,
         componentComponents: [],
     },
-    initBookingRequirements: {},
     bookingRequirements: {},
     components: [],
     notes: [],
@@ -86,6 +85,7 @@ const getters = {
 };
 const actions = {
     saveEventAction({ commit, state }, event) {
+        console.log(event);
         return new Promise((resolve, reject) => {
             event
                 // .for(event.calendar)
@@ -99,12 +99,31 @@ const actions = {
                 });
         });
     },
-    getEventAction({ commit, state }, { eventId }) {
+    getEventAction({ commit, state }, { eventId, calendar }) {
         return new Promise((resolve, reject) => {
-            CalendarEvent.find(eventId)
+            calendar
+                .calendarEvents()
+                .find(eventId)
                 .then(event => {
                     commit("setEventData", event);
                     resolve(event);
+                    // if (event.concept) {
+                    //   if (event.concept.images && event.concept.images.length > 0) {
+                    //     this.logger = "https://static-maryoku.s3.amazonaws.com/" + this.event.concept.images[0].url
+                    //   }
+                    //   if (event.concept.name) {
+                    //     this.conceptName = event.concept.name
+                    //   }
+                    // }
+                    // this.getCalendarEventStatistics(event);
+                    // this.getTimelineItems();
+                    // new EventComponent()
+                    //   .for(_calendar, event)
+                    //   .get()
+                    //   .then(components => {
+                    //     this.event.components = components;
+                    //     this.selectedComponents = components;
+                    //   });
                 });
         });
     },
@@ -251,10 +270,6 @@ const mutations = {
     },
     setComponents(state, components) {
         state.components = components;
-    },
-    setInitBookingRequirements(state, requirements) {
-        console.log('setInitBookingRequirements', requirements)
-        state.initBookingRequirements = requirements;
     },
     setBookingRequirements(state, requirements) {
         state.bookingRequirements = requirements;

@@ -319,52 +319,44 @@ export const businessCategories = [
               {
                 name: 'event coordinator',
                 type: Boolean,
-                value: false,
-                staff: null,
-                quest: null,
+                value: false
               },
               {
                 name: 'cleaning staff',
                 type: Boolean,
-                value: false,
-                staff: null,
-                quest: null,
+                value: false
               },
               {
                 name: 'Catering and Waite Staff',
                 type: Boolean,
-                value: false,
-                staff: null,
-                quest: null,
+                value: false
               },
               {
                 name: 'security',
                 type: Boolean,
-                value: false,
-                staff: null,
-                quest: null,
+                value: false
               },
               {
                 name: 'receptionist',
                 type: Boolean,
-                value: false,
-                staff: null,
-                quest: null,
+                value: false
               },
               {
                 name: 'technical support',
                 type: Boolean,
-                value: false,
-                staff: null,
-                quest: null,
+                value: false
               },
               {
                 name: 'bathroom attendant',
                 type: Boolean,
-                value: false,
+                value: false
+              },
+              {
+                name: 'staff : guest ratio',
+                type: 'Ratio',
                 staff: null,
                 quest: null,
-              },
+              }
             ]
           }
         ]
@@ -677,17 +669,19 @@ export const businessCategories = [
               {
                 name: 'captain',
                 type: Boolean,
-                value: false,
-                staff: null,
-                quest: null,
+                value: false
               },
               {
                 name: 'maltre d',
                 type: Boolean,
-                value: false,
+                value: false
+              },
+              {
+                name: 'staff : guest ratio',
+                type: 'Ratio',
                 staff: null,
                 quest: null,
-              },
+              }
             ]
           },
           {
@@ -735,7 +729,6 @@ export const businessCategories = [
               },
               {
                 name: 'number of waitstaff',
-                hasComment: true,
                 type: Number,
                 value: 0,
                 xIncluded: true,
@@ -778,14 +771,12 @@ export const businessCategories = [
               {
                 name: 'Waste recycle procedures',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Non toxic products',
                 type: Boolean,
-                value: false,
-                xIncluded: true,
+                value: false
               }
             ]
           },
@@ -795,61 +786,51 @@ export const businessCategories = [
               {
                 name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Women on senior staff',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'vegetarian',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'vegan',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'gluten - free',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'egg free',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'kosher',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'halal',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
             ]
@@ -860,25 +841,21 @@ export const businessCategories = [
               {
                 name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Women on senior staff',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
             ]
@@ -1037,13 +1014,11 @@ export const businessCategories = [
               {
                 name: 'Waste recycle procedures',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Non toxic products',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               }
             ]
@@ -1054,37 +1029,31 @@ export const businessCategories = [
               {
                 name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Women on senior staff',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'hypoallergenic flowers',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'non scented flowers',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
             ]
@@ -1095,25 +1064,21 @@ export const businessCategories = [
               {
                 name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Women on senior staff',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
             ]
@@ -1249,13 +1214,11 @@ export const businessCategories = [
               {
                 name: 'Waste recycle procedures',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Non toxic products',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               }
             ]
@@ -1266,25 +1229,21 @@ export const businessCategories = [
               {
                 name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Women on senior staff',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
             ]
@@ -1295,25 +1254,21 @@ export const businessCategories = [
               {
                 name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Women on senior staff',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
             ]
@@ -1467,13 +1422,11 @@ export const businessCategories = [
               {
                 name: 'Waste recycle procedures',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Non toxic products',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               }
             ]
@@ -1612,16 +1565,6 @@ export const businessCategories = [
                 type: Boolean,
                 value: false
               },
-              {
-                name: 'translation',
-                type: Boolean,
-                value: false
-              },
-              {
-                name: 'transcription',
-                type: Boolean,
-                value: false
-              },
             ]
           },
         ]
@@ -1690,13 +1633,11 @@ export const businessCategories = [
               {
                 name: 'Waste recycle procedures',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Non toxic products',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               }
             ]
@@ -1802,24 +1743,19 @@ export const businessCategories = [
               {
                 name: 'uniformed drivers',
                 type: Boolean,
-                value: false,
-                staff: null,
-                quest: null,
-              },
-              {
-                name: 'transportation coordinator',
-                type: Boolean,
-                value: false,
-                staff: null,
-                quest: null,
+                value: false
               },
               {
                 name: 'uniform style',
-                type: Boolean,
-                value: '',
+                type: String,
+                value: ''
+              },
+              {
+                name: 'staff : guest ratio',
+                type: 'Ratio',
                 staff: null,
                 quest: null,
-              },
+              }
             ]
           }
         ]
@@ -1891,13 +1827,11 @@ export const businessCategories = [
               {
                 name: 'Waste recycle procedures',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Non toxic products',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               }
             ]
@@ -1908,25 +1842,21 @@ export const businessCategories = [
               {
                 name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Women on senior staff',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
             ]
@@ -1937,25 +1867,21 @@ export const businessCategories = [
               {
                 name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Women on senior staff',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
             ]
@@ -2220,13 +2146,11 @@ export const businessCategories = [
               {
                 name: 'Waste recycle procedures',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Non toxic products',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               }
             ]
@@ -2237,25 +2161,21 @@ export const businessCategories = [
               {
                 name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Women on senior staff',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
             ]
@@ -2266,25 +2186,21 @@ export const businessCategories = [
               {
                 name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Women on senior staff',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
             ]
@@ -2333,58 +2249,48 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
                 // xIncluded: true,
-                staff: null,
-                quest: null,
               },
               {
                 name: 'patrolling officers',
                 type: Boolean,
                 value: false,
-                staff: null,
-                quest: null,
               },
               {
                 name: 'bouncers',
                 type: Boolean,
                 value: false,
-                staff: null,
-                quest: null,
               },
               {
                 name: 'body guards',
                 type: Boolean,
                 value: false,
-                staff: null,
-                quest: null,
               },
               {
                 name: 'armed security officers',
                 type: Boolean,
                 value: false,
-                staff: null,
-                quest: null,
               },
               {
                 name: 'unarmed security',
                 type: Boolean,
                 value: false,
-                staff: null,
-                quest: null,
               },
               {
                 name: 'undercover',
                 type: Boolean,
                 value: false,
-                staff: null,
-                quest: null,
               },
               {
                 name: 'crowd control',
                 type: Boolean,
                 value: false,
+              },
+              {
+                name: 'staff : guest ratio',
+                type: 'Ratio',
                 staff: null,
                 quest: null,
-              },
+              }
             ]
           }
         ]
@@ -2431,13 +2337,11 @@ export const businessCategories = [
               {
                 name: 'Waste recycle procedures',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Non toxic products',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               }
             ]
@@ -2448,25 +2352,21 @@ export const businessCategories = [
               {
                 name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Women on senior staff',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
             ]
@@ -2477,25 +2377,21 @@ export const businessCategories = [
               {
                 name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Women on senior staff',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
             ]
@@ -2587,35 +2483,31 @@ export const businessCategories = [
               {
                 name: 'sound/visual engineer',
                 type: Boolean,
-                value: false,
-                staff: null,
-                quest: null,
+                value: false
               },
               {
                 name: 'setup crew',
                 type: Boolean,
-                value: false,
-                staff: null,
-                quest: null,
+                value: false
               },
               {
                 name: 'programmer',
                 type: Boolean,
-                value: false,
-                staff: null,
-                quest: null,
+                value: false
               },
               {
                 name: 'event manager',
                 type: Boolean,
-                value: false,
-                staff: null,
-                quest: null,
+                value: false
               },
               {
                 name: 'rigging',
                 type: Boolean,
-                value: false,
+                value: false
+              },
+              {
+                name: 'staff : guest ratio',
+                type: 'Ratio',
                 staff: null,
                 quest: null,
               }
@@ -2650,13 +2542,11 @@ export const businessCategories = [
               {
                 name: 'Waste recycle procedures',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Non toxic products',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               }
             ]
@@ -2667,25 +2557,21 @@ export const businessCategories = [
               {
                 name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Women on senior staff',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
             ]
@@ -2849,13 +2735,11 @@ export const businessCategories = [
               {
                 name: 'Waste recycle procedures',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Non toxic products',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               }
             ]
@@ -2866,31 +2750,26 @@ export const businessCategories = [
               {
                 name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Women on senior staff',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'provide sample',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
@@ -2907,25 +2786,21 @@ export const businessCategories = [
               {
                 name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Women on senior staff',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
             ]
@@ -3099,13 +2974,11 @@ export const businessCategories = [
               {
                 name: 'Waste recycle procedures',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Non toxic products',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               }
             ]
@@ -3116,25 +2989,21 @@ export const businessCategories = [
               {
                 name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Women on senior staff',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
             ]
@@ -3145,25 +3014,21 @@ export const businessCategories = [
               {
                 name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Women on senior staff',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
               {
                 name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                xIncluded: true,
                 value: false
               },
             ]
@@ -3242,7 +3107,7 @@ export const companyServices = [
     name: 'foodandbeverage',
     type: Array,
     value: [],
-    available: ['Food catering', 'Beverage'],
+    available: ['food catering', 'beverage'],
   },
   {
     name: 'decor',

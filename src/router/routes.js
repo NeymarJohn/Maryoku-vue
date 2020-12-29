@@ -6,7 +6,6 @@ import NewEventLayout from "@/pages/Dashboard/Layout/NewEventLayout.vue";
 import WorkspaceLayout from "@/pages/Dashboard/Layout/WorkspaceLayout.vue";
 import LandingPageLayout from "@/pages/Dashboard/Layout/LandingPageLayout.vue";
 import MainLayoutWithBottomLogo from "@/pages/Dashboard/Layout/MainLayoutWithBottomLogo.vue";
-
 import authService from "@/services/auth.service";
 
 const Events = () => import("@/pages/app/Events/Events.vue");
@@ -65,7 +64,6 @@ const SignedIn = () => import("@/pages/Dashboard/Pages/SignedIn.vue");
 const Invited = () => import("@/pages/Dashboard/Pages/Invited.vue");
 
 const Vendors = () => import("@/pages/Dashboard/Pages/VendorsList.vue");
-const WelcomeEventPage = () => import("@/pages/Dashboard/Pages/WelcomeEvent.vue")
 let authPages = {
     path: "/",
     component: AuthLayout,
@@ -596,16 +594,6 @@ let vendorListPage = {
         gtm: "Vendors",
     },
 };
-
-let welcomeEventPage = {
-    path: "/welcome/event",
-    name: "Welcome",
-    component: WelcomeEventPage,
-    meta: {
-        title: "Welcome to your first event",
-        gtm: "welcom event",
-    },
-}
 const rememberMe = authService.getCookie("rememberMe");
 const homeLink = rememberMe === "true" ? "/events" : "/signin";
 const routes = [
@@ -631,7 +619,6 @@ const routes = [
     RSVPPages,
     vendorListPage,
     feedbackPages,
-    welcomeEventPage,
     others
 ];
 

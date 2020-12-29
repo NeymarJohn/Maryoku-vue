@@ -10,7 +10,7 @@
                   :value="item || ''"
                   :categories="vendorCategories"
                   column="2"
-                  trackBy="name"
+                  trackBy="value"
                   class="my-10 w-max-450"
                   @change="updateCategory(index, ...arguments)"
           >
@@ -32,7 +32,7 @@
       <div v-else>
         <template v-if="selectedValue.length">
           <div class="content mt-10" v-for="item of selectedValue">
-              <img class="mr-10" :src="vendorCategories.find(v => v.name === item).icon" v-if="field === 'vendorCategories' && item"/>
+              <img class="mr-10" :src="vendorCategories.find(v => v.value === item).icon" v-if="field === 'vendorCategories' && item"/>
               <img class="mr-10" :src="img" v-if="img != '' &&  item" />
               {{ item }}
           </div>
@@ -162,57 +162,35 @@ export default {
     selectedValue: [],
   }),
   mounted() {
-    this.init();
+    // console.log("signup.category.selector.mounted", this.value)
+    this.selectedValue = this.value;
   },
   methods: {
     updateCategory(index, data) {
-      console.log('updateCategory', index, data);
+      // console.log('updateCategory', index, data);
       this.selectedValue[index] = data;
     },
     save() {
       this.isEdit = false;
-      let selectedValue = [];
-
-      console.log("vendor.signup.category", this.selectedValue);
-      if (this.field === 'vendorCategories') {
-        this.selectedValue.map(v => {
-          let item = this.vendorCategories.find(cat => cat.name === v);
-          selectedValue.push(item ? item['value'] : '');
-        });
-      } else {
-        selectedValue = this.selectedValue;
-      }
-
-
-      this.$root.$emit("update-vendor-value", this.field, selectedValue);
+      this.$root.$emit("update-vendor-value", this.field, this.selectedValue);
     },
     addNewValue(){
       this.selectedValue.push('');
+      // console.log("addNewValue", this.selectedValue);
       this.$root.$emit("update-vendor-value", this.field, this.selectedValue);
     },
     removeValue(index){
       this.$root.$emit("update-vendor-value", this.field, this.selectedValue.filter((s, sIdx) => index !== sIdx));
     },
     getAddressData: function (index, addressData, placeResultData, id) {
+      // console.log("getAddressData", index, addressData, id);
       this.selectedValue[index] = `${addressData.route}, ${addressData.administrative_area_level_1}, ${addressData.country}`;
     },
-    init() {
-      console.log('init', this.value);
-      this.selectedValue = [];
-      if (this.value.length && this.field === 'vendorCategories') {
-        this.value.map (v => {
-          let item = this.vendorCategories.find(cat => cat.value === v);
-          this.selectedValue.push(item ? item['name'] : '');
-        });
-      } else {
-        this.selectedValue = this.value;
-      }
-    }
   },
   watch: {
     value(newValue){
       // console.log("signup.category.selector.watch", newValue, this.field);
-      this.init();
+      this.selectedValue = newValue;
     }
   }
 };

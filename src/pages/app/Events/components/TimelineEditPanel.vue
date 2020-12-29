@@ -38,6 +38,7 @@
             :template="template"
             :groupIndex="templateIndex"
             :timelineDate="{ dateIndex: dateIndex, ...scheduleDate }"
+            @remove="removeTemplate(dateIndex, templateIndex, template)"
           ></timeline-template-container>
           <timeline-empty
             :index="templateIndex"
@@ -299,6 +300,9 @@ export default {
       block.event = { id: this.event.id };
       delete block.id;
       return block;
+    },
+    removeTemplate(dateIndex, templateIndex, template) {
+      this.timelineDates[dateIndex].templates.splice(templateIndex, 1);
     },
   },
 };
