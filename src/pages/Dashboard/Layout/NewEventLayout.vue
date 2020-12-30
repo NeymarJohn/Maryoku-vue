@@ -19,11 +19,6 @@
       </div>
       <!--<content-footer v-if="!$route.meta.hideFooter"></content-footer>-->
     </div>
-    <!-- <v-tour name="invite" :steps="steps.invite" :options="tourOptions" :callbacks="tourCallback"></v-tour>
-    <v-tour name="comment" :steps="steps.comment" :options="tourOptions" :callbacks="tourCallback"></v-tour>
-    <v-tour name="download" :steps="steps.download" :options="tourOptions" :callbacks="tourCallback"></v-tour>
-    <v-tour name="controlPanel" :steps="steps.controlPanel" :options="tourOptions" :callbacks="tourCallback"></v-tour>
-    <v-tour name="footerPanel" :steps="steps.footerPanel" :options="tourOptions" :callbacks="tourCallback"></v-tour> -->
     <v-tour name="invite" :steps="steps.invite" :callbacks="tourCallback">
       <template slot-scope="tour">
         <transition name="fade">
@@ -38,6 +33,16 @@
             :labels="tour.labels"
             :finish="tour.finish"
           >
+            <div
+              slot="header"
+              class="d-flex align-center font-bold-extra justify-content-between"
+              style="padding: 10px 20px"
+            >
+              {{ tour.steps[tour.currentStep].header.title }}
+              <md-button class="md-simple md-icon-button" @click="tour.finish"
+                ><md-icon style="color: white !important">close</md-icon></md-button
+              >
+            </div>
             <div slot="actions" class="d-flex justify-content-between tour-actions">
               <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
               <span class="step-label">{{ tour.currentStep + 1 }}/{{ tour.steps.length }}</span>
@@ -74,6 +79,16 @@
             :labels="tour.labels"
             :finish="tour.finish"
           >
+            <div
+              slot="header"
+              class="d-flex align-center font-bold-extra justify-content-between"
+              style="padding: 10px 20px"
+            >
+              {{ tour.steps[tour.currentStep].header.title }}
+              <md-button class="md-simple md-icon-button" @click="tour.finish"
+                ><md-icon style="color: white !important">close</md-icon></md-button
+              >
+            </div>
             <div slot="actions" class="d-flex justify-content-between tour-actions">
               <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
               <span class="step-label">{{ tour.currentStep + 1 }}/{{ tour.steps.length }}</span>
@@ -110,9 +125,20 @@
             :labels="tour.labels"
             :finish="tour.finish"
           >
+            <div
+              slot="header"
+              class="d-flex align-center font-bold-extra justify-content-between"
+              style="padding: 10px 20px"
+            >
+              {{ tour.steps[tour.currentStep].header.title }}
+              <md-button class="md-simple md-icon-button" @click="tour.finish"
+                ><md-icon style="color: white !important">close</md-icon></md-button
+              >
+            </div>
             <div slot="actions" class="d-flex justify-content-between tour-actions">
               <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
               <span class="step-label">{{ tour.currentStep + 1 }}/{{ tour.steps.length }}</span>
+
               <md-button
                 v-if="tour.isLast"
                 @click="tour.finish"
@@ -147,6 +173,16 @@
             :finish="tour.finish"
             class="dark"
           >
+            <div
+              slot="header"
+              class="d-flex align-center font-bold-extra justify-content-between"
+              style="padding: 10px 20px"
+            >
+              {{ tour.steps[tour.currentStep].header.title }}
+              <md-button class="md-simple md-icon-button" @click="tour.finish"
+                ><md-icon style="color: white !important">close</md-icon></md-button
+              >
+            </div>
             <div slot="actions" class="d-flex justify-content-between tour-actions">
               <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
               <span class="step-label dark">{{ tour.currentStep + 1 }}/{{ tour.steps.length }}</span>
@@ -172,6 +208,16 @@
             :finish="tour.finish"
             class="dark"
           >
+            <div
+              slot="header"
+              class="d-flex align-center font-bold-extra justify-content-between"
+              style="padding: 10px 20px"
+            >
+              {{ tour.steps[tour.currentStep].header.title }}
+              <md-button class="md-simple md-icon-button" @click="tour.finish"
+                ><md-icon style="color: white !important">close</md-icon></md-button
+              >
+            </div>
             <div slot="actions" class="d-flex justify-content-between tour-actions">
               <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
               <span class="step-label dark">{{ tour.currentStep + 1 }}/{{ tour.steps.length }}</span>

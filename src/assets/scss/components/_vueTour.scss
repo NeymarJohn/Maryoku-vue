@@ -2,6 +2,7 @@
   background-color :#F51355 !important;
   font-family: 'Manrope-Bold';
   max-width: 400px !important;
+  transition: translateY(-100px);
   &.dark {
     background-color: #383838 !important;
     .v-step__header {

@@ -15,7 +15,7 @@
               </div>
               <div class="signup-title">TIME TO POUR YOURSELF <br />A DRINK & RELAX!</div>
               <div class="signup-description">
-                You can start think about what you'll wear to <br />the event, cause everything else is covered.
+                Start thinking about what you'll wear to <br />the event, cause everything else is covered.
               </div>
             </div>
             <div class="logo">
