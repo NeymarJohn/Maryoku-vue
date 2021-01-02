@@ -142,6 +142,12 @@
       @close="showRsvpModal = false"
       @setRsvp="setRsvp"
     ></rsvp-information-modal>
+    <sync-calendar-event-modal
+      v-if="showSyncCalendarModal"
+      @close="showSyncCalendarModal = false"
+      :campaign="campaign"
+      :rsvp="rsvpData"
+    ></sync-calendar-event-modal>
     <setting-reminder-modal
       v-if="showReminderModal"
       @close="showReminderModal = false"
@@ -186,13 +192,13 @@ import RsvpInformationModal from "@/components/Modals/RSVP/InformationModal";
 import SettingReminderModal from "@/components/Modals/RSVP/SettingReminderModal";
 import JoinZoomModal from "@/components/Modals/RSVP/JoinZoomModal";
 import SyncCalendarModal from "@/components/Modals/RSVP/SyncCalendarModal";
+import SyncCalendarEventModal from "@/components/Modals/RSVP/SyncCalendarEventModal";
 import RsvpVenueCarousel from "./RSVPVenueCarousel";
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
 import SocialSharingModal from "@/components/Modals/SocialSharingModal";
 import { mapActions, mapGetters } from "vuex";
 import swal from "sweetalert2";
 import Modal from "../../../components/Modal.vue";
-
 export default {
   components: {
     RsvpTimelineItem,
@@ -203,6 +209,7 @@ export default {
     RsvpVenueCarousel,
     RsvpEventInfoPanel,
     SocialSharingModal,
+    SyncCalendarEventModal,
     Modal,
   },
   data() {
@@ -228,6 +235,7 @@ export default {
       showReminderModal: false,
       showZoomModal: false,
       showSyncCalendarForZoom: false,
+      showSyncCalendarModal: false,
       campaign: {},
       rsvpRequest: null,
       showSharingModal: false,
@@ -262,8 +270,8 @@ export default {
       rsvpData.guests = rsvpData.guests.filter((item) => item.name);
       new Rsvp(rsvpData).save().then((requestedRSVP) => {
         console.log(requestedRSVP);
-        this.showReminderModal = true;
-
+        this.showSyncCalendarModal = true;
+        this.rsvpData = requestedRSVP;
         this.showRsvpModal = false;
         this.isSentRsvp = true;
       });
@@ -357,7 +365,7 @@ export default {
       height: 430px;
       background-repeat: no-repeat;
       background-position: center 60%;
-      background-size: 120%;
+      background-size: 100%;
     }
     &-overview {
       // background-color: #fff;
