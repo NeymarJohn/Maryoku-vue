@@ -29,20 +29,29 @@
       </div>
       <div class="text-center mt-100 font-size-22 font-bold">Explore Mayroku's Main Features</div>
       <div class="video-list mt-50">
-        <div v-for="video in videos" :key="video.title" class="video-item">
-          <img :src="`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`" />
-          <div class="video-item-wrapper">
-            <div class="video-item-title font-bold-extra">
-              {{ video.title }}
+        <div v-for="(video, index) in videos" :key="video.title" class="video-item">
+          <iframe
+            width="330"
+            height="100%"
+            :src="`https://www.youtube.com/embed/${video.id}?autoplay=1&mute=1`"
+            v-if="selectedVideoId === index && openPlayer"
+          >
+          </iframe>
+          <template v-else>
+            <div class="video-item-wrapper">
+              <div class="video-item-title font-bold-extra">
+                {{ video.title }}
+              </div>
+              <md-button class="md-icon-button md-red md-raised play-button" @click="playVideo(index)">
+                <md-icon>play_arrow</md-icon>
+              </md-button>
             </div>
-            <md-button class="md-icon-button md-red md-raised play-button" @click="playVideo(video.id)">
-              <md-icon>play_arrow</md-icon>
-            </md-button>
-          </div>
+          </template>
+          <img :src="`${$storageURL}thumbnails/budget.png`" />
         </div>
       </div>
 
-      <youtube-player :videoId="selectedVideoId" v-if="openPlayer" @close="openPlayer = false"></youtube-player>
+      <!-- <youtube-player :videoId="selectedVideoId" v-if="openPlayer" @close="openPlayer = false"></youtube-player> -->
     </div>
     <div class="weclome-event-page-footer white-card">
       <md-button class="md-red maryoku-btn" @click="gotoEvent">Let's Begin</md-button>
@@ -124,12 +133,16 @@ export default {
       margin: 50px auto;
       .video-item {
         display: inline-block;
-        width: 330px;
-        height: 204px;
+        width: 320px;
+        height: 180px;
         position: relative;
         margin: 25px;
         border-radius: 5px;
         overflow: hidden;
+        iframe {
+          height: 100%;
+          border: none;
+        }
         img {
           width: 100%;
           height: 100%;
