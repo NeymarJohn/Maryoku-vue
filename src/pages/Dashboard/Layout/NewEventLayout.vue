@@ -354,7 +354,7 @@ export default {
         ],
         controlPanel: [
           {
-            target: "#concept-item", // We're using document.querySelector() under the hood
+            target: "#control-panel", // We're using document.querySelector() under the hood
             header: {
               title: "Control Panel",
             },
@@ -365,7 +365,7 @@ export default {
             header: {
               title: "How can you use it?",
             },
-            target: "#concept-item",
+            target: "#control-panel",
             content:
               "The items sequence is designed based on best practices and its goal is to direct your attention to the most important thing that needs to be done right now. However, you can play with the sequence – move items up and down. The item you now need to handle, will get all the focus whenever you open the system.",
           },

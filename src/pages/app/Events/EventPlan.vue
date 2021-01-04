@@ -1,7 +1,7 @@
 <template>
   <div class="event-plan">
     <progress-sidebar :elements="barItems" page="plan"></progress-sidebar>
-    <EventDetailsOverview v-if="pageId == 'overview'"></EventDetailsOverview>
+    <event-details-overview v-if="pageId == 'overview'"></event-details-overview>
     <event-details-timeline v-else-if="pageId == 'timeline'"></event-details-timeline>
     <event-concept-choose v-else-if="pageId == 'concept'"></event-concept-choose>
     <event-budget-requirement v-else-if="pageId == 'budget'"></event-budget-requirement>

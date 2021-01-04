@@ -32,6 +32,12 @@
 .v-step .v-step__arrow {
   border-color: #F51355 !important;       /* set to desired popper arrow color */
   &--dark {
+      border-color: #F51355 !important;   /* set to desired popper arrow color */
+  }
+}
+.v-step.dark .v-step__arrow {
+  border-color: #383838 !important;       /* set to desired popper arrow color */
+  &--dark {
       border-color: #383838 !important;   /* set to desired popper arrow color */
   }
 }

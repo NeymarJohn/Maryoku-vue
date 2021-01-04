@@ -2,8 +2,8 @@
   <div class="header-actions">
     <ul>
       <li v-if="!hideDownload">
-        <md-button class="md-simple md-just-icon"
-          ><img :src="`${$iconURL}common/download-dark.svg`" id="download-button"
+        <md-button class="md-simple md-just-icon" id="download-button"
+          ><img :src="`${$iconURL}common/download-dark.svg`"
         /></md-button>
       </li>
       <li>
