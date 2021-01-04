@@ -45,7 +45,7 @@
             </div>
             <div slot="actions" class="d-flex justify-content-between tour-actions">
               <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
-              <span class="step-label">{{ tour.currentStep + 1 }}&nbsp;/&nbsp;{{ tour.steps.length }}</span>
+              <span class="step-label">{{ tour.currentStep + 1 }}/{{ tour.steps.length }}</span>
               <md-button
                 v-if="tour.isLast"
                 @click="tour.finish"
@@ -91,7 +91,7 @@
             </div>
             <div slot="actions" class="d-flex justify-content-between tour-actions">
               <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
-              <span class="step-label">{{ tour.currentStep + 1 }}&nbsp;/&nbsp;{{ tour.steps.length }}</span>
+              <span class="step-label">{{ tour.currentStep + 1 }}/{{ tour.steps.length }}</span>
               <md-button
                 v-if="tour.isLast"
                 @click="tour.finish"
@@ -137,7 +137,7 @@
             </div>
             <div slot="actions" class="d-flex justify-content-between tour-actions">
               <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
-              <span class="step-label">{{ tour.currentStep + 1 }}&nbsp;/&nbsp;{{ tour.steps.length }}</span>
+              <span class="step-label">{{ tour.currentStep + 1 }}/{{ tour.steps.length }}</span>
 
               <md-button
                 v-if="tour.isLast"
@@ -185,7 +185,7 @@
             </div>
             <div slot="actions" class="d-flex justify-content-between tour-actions">
               <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
-              <span class="step-label dark">{{ tour.currentStep + 1 }}&nbsp;/&nbsp;{{ tour.steps.length }}</span>
+              <span class="step-label dark">{{ tour.currentStep + 1 }}/{{ tour.steps.length }}</span>
               <md-button v-if="tour.isLast" @click="tour.finish" class="md-red maryoku-btn">Got it</md-button>
               <md-button v-else @click="tour.nextStep" class="md-red maryoku-btn">Keep going</md-button>
             </div>
@@ -220,7 +220,7 @@
             </div>
             <div slot="actions" class="d-flex justify-content-between tour-actions">
               <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
-              <span class="step-label dark">{{ tour.currentStep + 1 }}&nbsp;/&nbsp;{{ tour.steps.length }}</span>
+              <span class="step-label dark">{{ tour.currentStep + 1 }}/{{ tour.steps.length }}</span>
               <md-button v-if="tour.isLast" @click="tour.finish" class="md-red maryoku-btn">Got it</md-button>
               <md-button v-else @click="tour.nextStep" class="md-red maryoku-btn">Keep going</md-button>
             </div>
@@ -244,6 +244,7 @@ import MobileMenu from "./Extra/MobileMenu.vue";
 import UserMenu from "./Extra/UserMenu.vue";
 import { ZoomCenterTransition } from "vue2-transitions";
 import SideBar from "@/components/SidebarPlugin/NewSideBar";
+
 // import auth from "src/auth";
 import EventSidePanel from "@/pages/app/Events/EventSidePanel";
 

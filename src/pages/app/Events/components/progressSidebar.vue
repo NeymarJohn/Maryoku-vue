@@ -51,7 +51,6 @@
               progress_75: item.progress === 75,
             }"
             v-for="(item, index) in eventElements"
-            :id="item.id"
             :key="index"
           >
             <div class="item-title">
@@ -142,7 +141,6 @@ export default {
         icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
         progress: event.concept ? event.conceptProgress : 0,
         componentId: "concept",
-        id: "control-panel",
       };
       const budget = {
         title: this.event.budgetProgress <= 50 ? "Create Budget" : "Approve Budget",
@@ -151,7 +149,6 @@ export default {
         icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
         progress: this.event.budgetProgress,
         componentId: "budget",
-        id: "budget-panel",
       };
       const timeline = {
         title: "Generate timeline",
@@ -160,7 +157,6 @@ export default {
         icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
         progress: event.timelineProgress,
         componentId: "timeline",
-        id: "timeline-panel",
       };
       const campaign = {
         title: "Create Campaigns",

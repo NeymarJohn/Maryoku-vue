@@ -128,10 +128,16 @@
                 </div>
                 <span>QTY</span>
                 <span>Price</span>
+                <span></span>
               </div>
               <div class="citems">
                 <div class="citem">
-                  <vendor-extra-pay-item v-for="(cs, csIndex) in getExtraPayItems()" :key="csIndex" :item="cs" />
+                  <vendor-extra-pay-item
+                          v-for="(cs, csIndex) in getExtraPayItems()"
+                          :key="csIndex"
+                          :item="cs"
+                          @change="changeServiceItem"
+                  />
                 </div>
               </div>
             </div>
@@ -421,18 +427,20 @@ export default {
       return !isBlank;
     },
     getExtraPayItems() {
+      console.log('getExtraPayItems')
       let extraPayItems = [];
       _.each(this.vendor.services, (item) => {
-        if (!item.included) {
+        if (item.checked && item.hasOwnProperty('included') && !item.included) {
           extraPayItems.push(item);
         }
       });
       return extraPayItems;
     },
     getStartingFeeItems() {
+      console.log('getStartingFeeItems')
       let startingFeeItems = [];
       _.each(this.vendor.services, (item) => {
-        if (item.included) {
+        if (item.checked && item.hasOwnProperty('included') && item.included) {
           startingFeeItems.push(item);
         }
       });
@@ -525,6 +533,16 @@ export default {
         this.$refs.lightbox.showImage(0);
       }
     },
+    changeServiceItem(item){
+        console.log('changeServiceItem', item);
+        _.each(this.vendor.services, s => {
+            if ( s.label === item.label ) {
+                this.vendor.services[s] = item;
+            }
+        });
+
+        this.$root.$emit("update-vendor-value", "services", this.vendor.services);
+    }
   },
   computed: {
     validPricingPolicy() {
@@ -533,7 +551,14 @@ export default {
     },
   },
   filters: {},
-  watch: {},
+  watch: {
+      vendor:{
+          handler: function (newVal) {
+              console.log('handler', newVal)
+          },
+          deep: true,
+      }
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -806,7 +831,7 @@ export default {
           .cblock {
             .cheader {
               display: grid;
-              grid-template-columns: 40% 20% 40%;
+              grid-template-columns: 40% 20% 20% 20%;
               padding: 1rem 0 1rem 60px;
               background: #ededed;
               margin: 0 -60px;

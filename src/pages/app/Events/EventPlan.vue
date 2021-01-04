@@ -1,6 +1,6 @@
 <template>
   <div class="event-plan">
-    <progress-sidebar :elements="barItems" page="plan"></progress-sidebar>
+    <progress-sidebar :elements="barItems" page="plan" id="control-panel"></progress-sidebar>
     <EventDetailsOverview v-if="pageId == 'overview'"></EventDetailsOverview>
     <event-details-timeline v-else-if="pageId == 'timeline'"></event-details-timeline>
     <event-concept-choose v-else-if="pageId == 'concept'"></event-concept-choose>
@@ -162,11 +162,11 @@ export default {
   watch: {
     $route: "fetchData",
     event(newValue) {
-      console.log("event");
+      console.log('event');
       this.setConstantStates(newValue);
     },
     eventData(newValue) {
-      console.log("eventData");
+      console.log('eventData');
       this.setConstantStates(newValue);
     },
   },
