@@ -28,3 +28,33 @@
   }
 
 }
+
+.v-step .v-step__arrow {
+  border-color: #F51355 !important;       /* set to desired popper arrow color */
+  &--dark {
+      border-color: #383838 !important;   /* set to desired popper arrow color */
+  }
+}
+.v-step[x-placement^='top'] .v-step__arrow {
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+  border-bottom-color: transparent !important;
+}
+
+.v-step[x-placement^='bottom'] .v-step__arrow {
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+  border-top-color: transparent !important;
+}
+
+.v-step[x-placement^='right'] .v-step__arrow {
+  border-left-color: transparent !important;
+  border-top-color: transparent !important;
+  border-bottom-color: transparent !important;
+}
+
+.v-step[x-placement^='left'] .v-step__arrow {
+  border-top-color: transparent !important;
+  border-right-color: transparent !important;
+  border-bottom-color: transparent !important;
+}
