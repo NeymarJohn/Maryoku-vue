@@ -45,7 +45,7 @@
             </div>
             <div slot="actions" class="d-flex justify-content-between tour-actions">
               <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
-              <span class="step-label">{{ tour.currentStep + 1 }}/{{ tour.steps.length }}</span>
+              <span class="step-label">{{ tour.currentStep + 1 }}&nbsp;/&nbsp;{{ tour.steps.length }}</span>
               <md-button
                 v-if="tour.isLast"
                 @click="tour.finish"
@@ -91,7 +91,7 @@
             </div>
             <div slot="actions" class="d-flex justify-content-between tour-actions">
               <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
-              <span class="step-label">{{ tour.currentStep + 1 }}/{{ tour.steps.length }}</span>
+              <span class="step-label">{{ tour.currentStep + 1 }}&nbsp;/&nbsp;{{ tour.steps.length }}</span>
               <md-button
                 v-if="tour.isLast"
                 @click="tour.finish"
@@ -137,7 +137,7 @@
             </div>
             <div slot="actions" class="d-flex justify-content-between tour-actions">
               <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
-              <span class="step-label">{{ tour.currentStep + 1 }}/{{ tour.steps.length }}</span>
+              <span class="step-label">{{ tour.currentStep + 1 }}&nbsp;/&nbsp;{{ tour.steps.length }}</span>
 
               <md-button
                 v-if="tour.isLast"
@@ -185,7 +185,7 @@
             </div>
             <div slot="actions" class="d-flex justify-content-between tour-actions">
               <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
-              <span class="step-label dark">{{ tour.currentStep + 1 }}/{{ tour.steps.length }}</span>
+              <span class="step-label dark">{{ tour.currentStep + 1 }}&nbsp;/&nbsp;{{ tour.steps.length }}</span>
               <md-button v-if="tour.isLast" @click="tour.finish" class="md-red maryoku-btn">Got it</md-button>
               <md-button v-else @click="tour.nextStep" class="md-red maryoku-btn">Keep going</md-button>
             </div>
@@ -220,7 +220,7 @@
             </div>
             <div slot="actions" class="d-flex justify-content-between tour-actions">
               <!-- <button @click="tour.previousStep" class="btn btn-primary">Previous step</button> -->
-              <span class="step-label dark">{{ tour.currentStep + 1 }}/{{ tour.steps.length }}</span>
+              <span class="step-label dark">{{ tour.currentStep + 1 }}&nbsp;/&nbsp;{{ tour.steps.length }}</span>
               <md-button v-if="tour.isLast" @click="tour.finish" class="md-red maryoku-btn">Got it</md-button>
               <md-button v-else @click="tour.nextStep" class="md-red maryoku-btn">Keep going</md-button>
             </div>
@@ -244,7 +244,6 @@ import MobileMenu from "./Extra/MobileMenu.vue";
 import UserMenu from "./Extra/UserMenu.vue";
 import { ZoomCenterTransition } from "vue2-transitions";
 import SideBar from "@/components/SidebarPlugin/NewSideBar";
-
 // import auth from "src/auth";
 import EventSidePanel from "@/pages/app/Events/EventSidePanel";
 
@@ -355,7 +354,7 @@ export default {
         ],
         controlPanel: [
           {
-            target: "#control-panel", // We're using document.querySelector() under the hood
+            target: "#concept-item", // We're using document.querySelector() under the hood
             header: {
               title: "Control Panel",
             },
@@ -366,7 +365,7 @@ export default {
             header: {
               title: "How can you use it?",
             },
-            target: "#control-panel",
+            target: "#concept-item",
             content:
               "The items sequence is designed based on best practices and its goal is to direct your attention to the most important thing that needs to be done right now. However, you can play with the sequence – move items up and down. The item you now need to handle, will get all the focus whenever you open the system.",
           },

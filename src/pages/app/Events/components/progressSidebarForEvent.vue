@@ -54,6 +54,7 @@
             }"
             v-for="(item, index) in elements"
             :key="index"
+            :id="item.id"
           >
             <div class="item-title">
               <img

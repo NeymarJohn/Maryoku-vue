@@ -1,6 +1,6 @@
 <template>
   <div class="event-plan">
-    <progress-sidebar :elements="barItems" page="plan" id="control-panel"></progress-sidebar>
+    <progress-sidebar :elements="barItems" page="plan"></progress-sidebar>
     <EventDetailsOverview v-if="pageId == 'overview'"></EventDetailsOverview>
     <event-details-timeline v-else-if="pageId == 'timeline'"></event-details-timeline>
     <event-concept-choose v-else-if="pageId == 'concept'"></event-concept-choose>
@@ -50,6 +50,7 @@ export default {
           // icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
           progress: 100,
           componentId: "overview",
+          id: "overview-item",
         };
         const concept = {
           title: "Choose Concept",
@@ -58,6 +59,7 @@ export default {
           icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
           progress: this.event.concept ? this.event.conceptProgress : 0,
           componentId: "concept",
+          id: "concept-item",
         };
         const budget = {
           title: this.event.budgetProgress <= 50 ? "Create Budget" : "Approve Budget",
@@ -66,6 +68,7 @@ export default {
           icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
           progress: this.event.budgetProgress,
           componentId: "budget",
+          id: "budget-item",
         };
         const timeline = {
           title: "Generate timeline",
@@ -74,6 +77,7 @@ export default {
           icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
           progress: this.event.timelineProgress,
           componentId: "timeline",
+          id: "timeline-item",
         };
         const campaign = {
           title: "Create Campaigns",
@@ -82,6 +86,7 @@ export default {
           icon: `${this.$iconURL}Campaign/Group 8857.svg`,
           progress: 0,
           componentId: "campaign",
+          id: "campaign-item",
         };
         const elements = [];
         elements.push(overview);
@@ -103,6 +108,7 @@ export default {
                 route: "booking/" + item.id,
                 icon: `${this.$iconURL}Budget+Elements/${item.componentId}.svg`,
                 progress: item.progress ? item.progress : 0,
+                id: item.id,
               });
             }
           });
@@ -162,11 +168,11 @@ export default {
   watch: {
     $route: "fetchData",
     event(newValue) {
-      console.log('event');
+      console.log("event");
       this.setConstantStates(newValue);
     },
     eventData(newValue) {
-      console.log('eventData');
+      console.log("eventData");
       this.setConstantStates(newValue);
     },
   },
