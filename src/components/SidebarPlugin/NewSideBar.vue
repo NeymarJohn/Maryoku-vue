@@ -28,7 +28,7 @@
         <div class="sidebar-menu__item">
           <div class="item-route" @click="goTo('/events')"><img :src="`${menuIconsURL}Asset 114.svg`" /> My Events</div>
         </div>
-        <div class="sidebar-menu__item" @click="reloadPage(`/events/${event.id}/booking/overview?walkWithMe=true`)">
+        <div class="sidebar-menu__item" @click="goTo(`/events/${event.id}/booking/overview?walkWithMe=true`)">
           <div class="item-route"><img :src="`${menuIconsURL}Asset 116.svg`" /> Product tour</div>
         </div>
         <div class="sidebar-menu__item" @click="goToHelp">

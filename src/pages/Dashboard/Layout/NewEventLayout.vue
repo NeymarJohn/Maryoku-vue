@@ -452,6 +452,15 @@ export default {
       const tourName = Object.keys(this.steps)[this.currentTourIndex + 1];
       this.currentTourIndex += 1;
       if (tourName) this.$tours[tourName].start();
+      else {
+        this.currentTourIndex = 0;
+        this.$router.push(`/events/${this.$route.params.id}/booking/overview`);
+      }
+    },
+    checkTour() {
+      if (this.$route.query.walkWithMe) {
+        this.$tours["invite"].start();
+      }
     },
   },
   created() {
@@ -476,6 +485,9 @@ export default {
   },
   computed: {
     ...mapState("event", ["eventData"]),
+  },
+  watch: {
+    $route: "checkTour",
   },
 };
 </script>

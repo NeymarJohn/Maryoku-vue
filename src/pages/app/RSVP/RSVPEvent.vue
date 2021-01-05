@@ -365,7 +365,7 @@ export default {
       height: 430px;
       background-repeat: no-repeat;
       background-position: center 60%;
-      background-size: 100%;
+      background-size: 120%;
     }
     &-overview {
       // background-color: #fff;

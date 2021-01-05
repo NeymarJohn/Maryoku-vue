@@ -46,16 +46,16 @@
                   <div class="d-flex align-center">
                     <div class="top">
                       <template v-if="r.type == Boolean">
-                          <div class="item" @click="setPolicy(null, 'option', r.name, true)">
-                            <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="r.value" />
-                            <span class="unchecked" v-else></span>
-                            Yes
-                          </div>
-                          <div class="item" @click="setPolicy(null, 'option', r.name, false)">
-                            <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!r.value" />
-                            <span class="unchecked" v-else></span>
-                            No
-                          </div>
+                        <div class="item" @click="setPolicy(null, 'option', r.name, true)">
+                          <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="r.value" />
+                          <span class="unchecked" v-else></span>
+                          Yes
+                        </div>
+                        <div class="item" @click="setPolicy(null, 'option', r.name, false)">
+                          <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!r.value" />
+                          <span class="unchecked" v-else></span>
+                          No
+                        </div>
                       </template>
                       <template v-if="r.type == String">
                         <div class="item" v-if="!noteRules.includes(r)" @click="noteRule(r)">
@@ -109,13 +109,6 @@
                         </div>
                         <div class="suffix" v-else>
                           <input type="number" class placeholder="00.00" />
-                        </div>
-                      </template>
-                    </div>
-                    <div class="bottom mt-0 ml-40" v-if="r.type == Boolean">
-                      <template v-if="r.noSuffix && r.value">
-                        <div>
-                          <input type="number" v-model="r.count" class="text-center number-field" placeholder="" />
                         </div>
                       </template>
                     </div>
