@@ -9,10 +9,11 @@
     <div class="md-layout justify-content-between" v-else>
       <div class="md-layout-item md-size-70">
         <proposal-steps
-          :categoryTitle="vendor.eventCategory.fullTitle"
           :eventCategory="vendor.eventCategory"
           :step="step"
           :hasVisionStep="!!event && !!event.concept"
+          :vendor="vendor"
+          :proposalRequest="proposalRequest"
         />
         <div class="step-wrapper" v-if="step == 0">
           <div class="proposal-add-personal-message-wrapper">
