@@ -453,12 +453,12 @@ export default {
       this.currentTourIndex += 1;
       if (tourName) this.$tours[tourName].start();
       else {
-        this.currentTourIndex = 0;
         this.$router.push(`/events/${this.$route.params.id}/booking/overview`);
       }
     },
     checkTour() {
       if (this.$route.query.walkWithMe) {
+        this.currentTourIndex = 0;
         this.$tours["invite"].start();
       }
     },
