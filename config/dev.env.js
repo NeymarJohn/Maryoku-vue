@@ -7,7 +7,7 @@ module.exports = merge(prodEnv, {
     SERVER_URL: '"https://api-dev.maryoku.com"',
     // SERVER_URL: '"http://localhost:8080"',
     HOST_URL: '"local.maryoku.com"',
-    GOOGLE_API_KEY: '"AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8"',
+    GOOGLE_API_KEY: '"AIzaSyD6JvMsiEN9jz3lfVbKlnUQhjZB6fgcCu8"',
     S3_BUCKET_NAME: '"maryoku"',
     AWS_REGION: '"us-east-1"',
     AWS_ACCESSKEY: '"AKIAT5QXLXDJDLKXRNU7"',

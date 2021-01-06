@@ -30,28 +30,19 @@
       <div class="text-center mt-100 font-size-22 font-bold">Explore Mayroku's Main Features</div>
       <div class="video-list mt-50">
         <div v-for="(video, index) in videos" :key="video.title" class="video-item">
-          <iframe
-            width="330"
-            height="100%"
-            :src="`https://www.youtube.com/embed/${video.id}?autoplay=1&mute=1`"
-            v-if="selectedVideoId === index && openPlayer"
-          >
-          </iframe>
-          <template v-else>
-            <div class="video-item-wrapper">
-              <div class="video-item-title font-bold-extra">
-                {{ video.title }}
-              </div>
-              <md-button class="md-icon-button md-red md-raised play-button" @click="playVideo(index)">
-                <md-icon>play_arrow</md-icon>
-              </md-button>
+          <div class="video-item-wrapper">
+            <div class="video-item-title font-bold-extra">
+              {{ video.title }}
             </div>
-          </template>
+            <md-button class="md-icon-button md-red md-raised play-button" @click="playVideo(video.id)">
+              <md-icon>play_arrow</md-icon>
+            </md-button>
+          </div>
           <img :src="`${$storageURL}thumbnails/budget.png`" />
         </div>
       </div>
 
-      <!-- <youtube-player :videoId="selectedVideoId" v-if="openPlayer" @close="openPlayer = false"></youtube-player> -->
+      <youtube-player :videoId="selectedVideoId" v-if="openPlayer" @close="openPlayer = false"></youtube-player>
     </div>
     <div class="weclome-event-page-footer white-card">
       <md-button class="md-red maryoku-btn" @click="gotoEvent">Let's Begin</md-button>
