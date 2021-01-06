@@ -360,9 +360,6 @@ export default {
             },
             content:
               "Meet the only checklist you'll ever need! Our control panel is built automatically(!!) based on your event. items turn green when you start to advance and are crossed over when you’re done with the task",
-            params: {
-              placement: "right", // Any valid Popper.js placement. See https://popper.js.org/popper-documentation.html#Popper.placements
-            },
           },
           {
             header: {
@@ -371,9 +368,6 @@ export default {
             target: "#control-panel",
             content:
               "The items sequence is designed based on best practices and its goal is to direct your attention to the most important thing that needs to be done right now. However, you can play with the sequence – move items up and down. The item you now need to handle, will get all the focus whenever you open the system.",
-            params: {
-              placement: "right", // Any valid Popper.js placement. See https://popper.js.org/popper-documentation.html#Popper.placements
-            },
           },
         ],
         footerPanel: [
@@ -458,15 +452,6 @@ export default {
       const tourName = Object.keys(this.steps)[this.currentTourIndex + 1];
       this.currentTourIndex += 1;
       if (tourName) this.$tours[tourName].start();
-      else {
-        this.$router.push(`/events/${this.$route.params.id}/booking/overview`);
-      }
-    },
-    checkTour() {
-      if (this.$route.query.walkWithMe) {
-        this.currentTourIndex = 0;
-        this.$tours["invite"].start();
-      }
     },
   },
   created() {
@@ -491,9 +476,6 @@ export default {
   },
   computed: {
     ...mapState("event", ["eventData"]),
-  },
-  watch: {
-    $route: "checkTour",
   },
 };
 </script>

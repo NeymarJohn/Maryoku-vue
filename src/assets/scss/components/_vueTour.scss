@@ -1,6 +1,6 @@
 .v-step {
   background-color :#F51355 !important;
-  font-family: 'Manrope-Regular';
+  font-family: 'Manrope-Bold';
   max-width: 400px !important;
   transition: translateY(-100px);
   &.dark {
@@ -28,25 +28,11 @@
   }
 
 }
-.v-step[x-placement^='top'] {
-  margin-bottom: 3.5rem !important;
-}
-.v-step[x-placement^='bottom'] {
-  margin-top: 3.5rem !important;
-}
-.v-step[x-placement^='right'] {
-  margin-left: 3.5rem !important;
-}
+
 .v-step .v-step__arrow {
   border-color: #F51355 !important;       /* set to desired popper arrow color */
   &--dark {
       border-color: #F51355 !important;   /* set to desired popper arrow color */
-  }
-  &:before {
-    content: "";
-    position: absolute;
-    border-left:solid 0.5px #F51355;
-    height: 3rem;
   }
 }
 .v-step.dark .v-step__arrow {
@@ -54,48 +40,23 @@
   &--dark {
       border-color: #383838 !important;   /* set to desired popper arrow color */
   }
-  &:before {
-    content: "";
-    border-color: #383838;
-    border-left:solid 0.5px #383838;
-    position: absolute;
-    height: 3rem;
-  }
 }
 .v-step[x-placement^='top'] .v-step__arrow {
-  // border-left-color: transparent !important;
-  // border-right-color: transparent !important;
-  // border-bottom-color: transparent !important;
-  bottom:-3rem !important;
-  border-radius: 50% !important;
-  border-width: 4px !important;  
-  &:before {
-    transform: translateY(-100%);
-  }
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+  border-bottom-color: transparent !important;
 }
 
 .v-step[x-placement^='bottom'] .v-step__arrow {
-  // border-left-color: transparent !important;
-  // border-right-color: transparent !important;
-  // border-top-color: transparent !important;
-  top:-3rem !important;
-  border-radius: 50% !important;
-  border-width: 4px !important;
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+  border-top-color: transparent !important;
 }
 
 .v-step[x-placement^='right'] .v-step__arrow {
-  // border-left-color: transparent !important;
-  // border-top-color: transparent !important;
-  // border-bottom-color: transparent !important;
-  border-radius: 50% !important;
-  border-width: 4px !important;
-  left: -3rem !important;
-  &:before {
-    width: 3rem;
-    border-top-width: 1px;
-    border-top-style: solid;
-    border-left-width: 0;
-  }
+  border-left-color: transparent !important;
+  border-top-color: transparent !important;
+  border-bottom-color: transparent !important;
 }
 
 .v-step[x-placement^='left'] .v-step__arrow {
