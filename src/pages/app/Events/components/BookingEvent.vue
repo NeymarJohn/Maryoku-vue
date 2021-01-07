@@ -250,39 +250,35 @@ export default {
     ]),
     ...mapActions("comment", ["getCommentComponents"]),
     getAllRequirements: async function () {
-      let requirements = this.storedRequirements;
 
-      this.allRequirements = requirements[this.event.id];
+      this.allRequirements = this.storedRequirements[this.event.id];
 
       if (!this.allRequirements) {
         this.allRequirements = await this.$http.get(`${process.env.SERVER_URL}/1/vendor/property/${this.event.id}`);
 
         // set default value by conditionSript
         let event = this.$store.state.event.eventData;
-        console.log("getAllRequirents", this.allRequirements);
 
-        for(let com in this.allRequirements.data){
-          let requirements = this.allRequirements.data[com].requirements;
+        _.each(this.allRequirements.data, it => {
+          let requirements = it.requirements;
+          _.each(requirements, requirement => {
+            requirement.map((ms) => {
+              // if (ms.conditionScript) console.log("conditionScript", com, cat);
+              if (ms.conditionScript) ms.visible = eval(ms.conditionScript);
+              if (ms.conditionScript) ms.isSelected = eval(ms.conditionScript);
+              if (ms.defaultQtyScript) ms.defaultQty = Math.ceil(eval(ms.defaultQtyScript));
 
-          if (Object.keys(requirements).length ) {
-            for (let cat in requirements) {
-              requirements[cat].map((ms) => {
-                if (ms.conditionScript) console.log("conditionScript", com, cat);
-                if (ms.conditionScript) ms.visible = eval(ms.conditionScript);
-                if (ms.conditionScript) ms.isSelected = eval(ms.conditionScript);
-                if (ms.defaultQtyScript) ms.defaultQty = Math.ceil(eval(ms.defaultQtyScript));
+              if (this.blockId === "swags" && (ms.item === "Apparel" || ms.item === "Tech items")) {
+                ms.mustHave = false;
+              }
+            });
+          })
+        });
 
-                if (this.blockId === "swags" && (ms.item === "Apparel" || ms.item === "Tech items")) {
-                  ms.mustHave = false;
-                }
-              });
-            }
-          }
-        }
-
-        requirements[this.event.id] = this.allRequirements.data;
-        this.setBookingRequirements(requirements);
-        this.setInitBookingRequirements(requirements);
+        let updatedRequirements = this.storedRequirements;
+        updatedRequirements[this.event.id] = this.allRequirements.data;
+        this.setBookingRequirements(JSON.parse(JSON.stringify(updatedRequirements)));
+        this.setInitBookingRequirements(JSON.parse(JSON.stringify(updatedRequirements)));
       }
     },
     getSelectedBlock() {

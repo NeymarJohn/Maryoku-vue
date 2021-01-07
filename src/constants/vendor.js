@@ -3410,6 +3410,8 @@ export const VendorPolicy = [
         {
             name: "Number of PR drafts",
             type: Boolean,
+            noSuffix: true,
+            count: null,
             hasComment: true,
         },
         {

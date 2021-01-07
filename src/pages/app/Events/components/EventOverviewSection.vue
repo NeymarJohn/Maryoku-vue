@@ -138,6 +138,8 @@ import moment from "moment";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import CategorySelector from "@/components/Inputs/CategorySelector";
 import swal from "sweetalert2";
+import { extendMoment } from "moment-range";
+import { timelineTempates } from "@/constants/event.js";
 
 export default {
   name: "event-overview-section",
@@ -182,9 +184,6 @@ export default {
         selectedMinute: "00",
         selectedDates: [],
       },
-      started_at: null,
-      dateClick: false,
-      ended_at: null,
       location: null,
       inOutdoors: null,
       inOutDoorTypes: [
@@ -301,24 +300,41 @@ export default {
       this.$emit('change', {holiday: e});
     },
     changeDate(e){
-      this.dateClick = !this.dateClick;
+      console.log('changeDate', this.dateData);
 
-      if(this.dateClick) {
-        this.started_at = e.date;
-      }
+      if(this.dateData.dateRange.start.date && this.dateData.dateRange.end.date) {
+        const extendedMoment = extendMoment(moment);
+        const start = new Date(this.dateData.dateRange.start.date);
+        const end = new Date(this.dateData.dateRange.end.date);
+        const range = extendedMoment.range(moment(start), moment(end));
 
-      if(!this.dateClick) {
-        this.ended_at = e.date;
+        const dateList = Array.from(range.by("day")).map((m) => m.format("YYYY-MM-DD"));
+        let timelineDates = [];
+        dateList.forEach((d) => {
+          timelineDates.push({
+            date: d,
+            templates: timelineTempates,
+            status: "editing",
+          });
+        });
+
         this.$emit('change', {
           dateData: {
-            started_at: this.started_at,
-            ended_at: this.ended_at,
-          }
+            started_at: this.dateData.dateRange.start.date,
+            ended_at: this.dateData.dateRange.end.date,
+          },
+          timeline: {
+            dateList: dateList,
+            mode: "template", // default
+            status: "editing",
+          },
+          timelineDates,
         })
       }
 
     },
     init: async function(){
+      console.log('init', this.dateData);
       // get holidays from server
       if ( !this.holidays.length && this.section.key === 'event_type') {
         let res = await this.$http.get(`${process.env.SERVER_URL}/1/holidays`);

@@ -289,6 +289,7 @@ export default {
       return this.event.totalBudget - this.bookedTotal;
     },
     eventCategoryList() {
+      console.log('eventCategoryList', this.event.components);
       return this.event.components;
     },
   },
@@ -524,11 +525,6 @@ export default {
         this.showRequirementsSidepanel(item);
       }
     },
-    bookVendors(item) {
-      // go to booking page
-      this.$router.push(`/events/${this.event.id}/booking/${item.id}`);
-    },
-
     reviewProposals(item, winnerId = null) {
       window.currentPanel = this.$showPanel({
         component: ViewProposals,
