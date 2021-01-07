@@ -148,7 +148,6 @@
     },
     methods: {
       getProperties(){
-        console.log('getProperties', this.requirements);
         this.properties = [];
         let requirements = this.requirements;
         let event = this.event = this.$store.state.event.eventData;

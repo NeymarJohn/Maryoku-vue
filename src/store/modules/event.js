@@ -29,7 +29,6 @@ const state = {
     },
     initBookingRequirements: {},
     bookingRequirements: {},
-    checkList: [],
     components: [],
     notes: [],
     commentComponents: [],

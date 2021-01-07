@@ -98,13 +98,9 @@
             </div>
           </div>
           <hr /> -->
-          <div class="food-limitations mt-50">
+          <div class="food-limitations mt-50" v-if="Object.keys(foodLimitations).length">
             <div class="font-size-20 font-bold-extra">Food Limitations</div>
-            <rsvp-food-limitations
-              v-if="Object.keys(foodLimitations).length"
-              :data="foodLimitations"
-            ></rsvp-food-limitations>
-            <div class="text-center" style="padding: 10px" v-else>Nobody replied yet.</div>
+            <rsvp-food-limitations :data="foodLimitations"></rsvp-food-limitations>
           </div>
         </div>
       </template>
