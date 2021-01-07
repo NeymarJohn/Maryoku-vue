@@ -124,6 +124,8 @@ export default {
         eventStartMillis: this.event.eventStartMillis,
         eventEndMillis: this.event.eventEndMillis,
         guestType: this.event.guestType,
+        timeline: this.event.timeline,
+        timelineDates: this.event.timelineDates,
         reSchedule: this.reSchedule,
         reCalculate: this.reCalculate,
       });

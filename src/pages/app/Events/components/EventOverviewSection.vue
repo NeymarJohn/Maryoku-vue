@@ -184,6 +184,10 @@ export default {
         selectedMinute: "00",
         selectedDates: [],
       },
+      dateRange: {},
+      started_at: null,
+      dateClick: false,
+      ended_at: null,
       location: null,
       inOutdoors: null,
       inOutDoorTypes: [
@@ -301,11 +305,18 @@ export default {
     },
     changeDate(e){
       console.log('changeDate', this.dateData);
+      this.dateClick = !this.dateClick;
 
-      if(this.dateData.dateRange.start.date && this.dateData.dateRange.end.date) {
+      if(this.dateClick) {
+        this.started_at = e.date;
+      }
+
+      if(!this.dateClick) {
+        this.ended_at = e.date;
+
         const extendedMoment = extendMoment(moment);
-        const start = new Date(this.dateData.dateRange.start.date);
-        const end = new Date(this.dateData.dateRange.end.date);
+        const start = new Date(this.started_at);
+        const end = new Date(this.ended_at);
         const range = extendedMoment.range(moment(start), moment(end));
 
         const dateList = Array.from(range.by("day")).map((m) => m.format("YYYY-MM-DD"));
@@ -320,15 +331,15 @@ export default {
 
         this.$emit('change', {
           dateData: {
-            started_at: this.dateData.dateRange.start.date,
-            ended_at: this.dateData.dateRange.end.date,
+            started_at: this.started_at,
+            ended_at: this.ended_at,
           },
-          timeline: {
+          timeline:{
             dateList: dateList,
             mode: "template", // default
             status: "editing",
           },
-          timelineDates,
+          timelineDates
         })
       }
 
