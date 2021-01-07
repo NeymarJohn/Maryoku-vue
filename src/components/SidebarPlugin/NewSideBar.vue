@@ -19,7 +19,9 @@
           </div>
         </div> -->
         <div class="sidebar-menu__item">
-          <div class="item-route" @click="goTo('/profile')"><img :src="`${menuIconsURL}Asset 117.svg`" /> Profile</div>
+          <div class="item-route" @click="goTo('/profile/settings')">
+            <img :src="`${menuIconsURL}Asset 117.svg`" /> Profile
+          </div>
           <div class="item-action" @click="goTo('/signout')">
             Sign Out
             <img :src="`${menuIconsURL}Asset 118.svg`" />

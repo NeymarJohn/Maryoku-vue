@@ -1,29 +1,6 @@
 <template>
-  <div>
-    <md-card>
-      <md-card-header class="md-card-header-icon md-card-header-warning">
-        <div class="card-icon" style="padding: 12px">
-          <md-icon>event</md-icon>
-        </div>
-        <h5 class="title profile-title">My Events</h5>
-      </md-card-header>
-
-      <md-card-content>
-        <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
-        <h6 v-if="events.length === 0">No events yet</h6>
-        <collapse :collapse="events" icon="keyboard_arrow_down" color-collapse="warning">
-          <template v-for="(item, index) in events" :slot="`md-collapse-pane-${index + 1}`">
-            <event-details
-              :key="item.id"
-              :titleCollaps="eventTitleFromCollaps"
-              :where="item.location"
-              :when="item.eventStartMillis"
-              :dressCode="item.dressCode"
-            ></event-details>
-          </template>
-        </collapse>
-      </md-card-content>
-    </md-card>
+  <div class="profile-my-events white-card">
+    <div class="title profile-title font-size-30 font-bold-extra">My Events</div>
   </div>
 </template>
 
@@ -75,6 +52,9 @@ export default {
 </script>
 
 <style lang="scss">
+.profile-my-events {
+  padding: 60px;
+}
 .title-My-Events {
   width: 81px;
   height: 18px;

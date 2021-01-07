@@ -4,20 +4,14 @@
       :tab-name="['Profile Detail', 'Payment & Invoices', 'Notifications', 'Permissions']"
       color-button="info"
       plain
+      class="profile-container white-card"
     >
       <template slot="tab-pane-1">
-        <md-list>
-          <md-list-item>
-            <div>
-              <h3>Full Name</h3>
-              <md-label>Rachel Mandelovich</md-label>
-            </div>
-          </md-list-item>
-        </md-list>
+        <profile-details></profile-details>
       </template>
       <template slot="tab-pane-2"> Payment </template>
       <template slot="tab-pane-3"> Notification </template>
-      <template slot="tab-pane-4"> Permissions </template>
+      <template slot="tab-pane-4"> <permissions></permissions> </template>
     </tabs>
   </div>
 </template>
@@ -31,6 +25,8 @@ import MySpecialDates from "./MySpecialDates.vue";
 import HolidaysCelebrate from "./HolidaysCelebrate.vue";
 import Me from "@/models/Me";
 import { LabelEdit, Tabs } from "@/components";
+import ProfileDetails from "./ProfileDetails";
+import Permissions from "./Permissions";
 // import auth from '@/auth';
 import { mapGetters } from "vuex";
 
@@ -45,6 +41,8 @@ export default {
     HolidaysCelebrate,
     LabelEdit,
     Tabs,
+    ProfileDetails,
+    Permissions,
   },
   data() {
     return {

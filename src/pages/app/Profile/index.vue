@@ -1,15 +1,15 @@
 <template>
   <div class="md-layout p-20">
     <div class="md-layout-item md-size-25">
-      <md-card class="left-sidebar">
-        <md-card-header>
+      <div class="left-sidebar white-card">
+        <div>
           <div class="profile">
             <div class="avatar" style=""></div>
             <div class="company-logo d-flex justify-content-center align-center">Company Logo</div>
             <h3 class="name">{{ userData.profile.displayName }}</h3>
           </div>
-        </md-card-header>
-        <md-card-content>
+        </div>
+        <div>
           <md-list>
             <md-list-item @click="goTo('settings')" :class="{ 'font-bold-extra': pageName === 'settings' }">
               <label
@@ -56,15 +56,16 @@
               >
             </md-list-item>
           </md-list>
-        </md-card-content>
-        <md-card-actions class="md-alignment-left">
+        </div>
+        <div class="md-alignment-left">
           <div class="logout">Log Out</div>
-        </md-card-actions>
-      </md-card>
+        </div>
+      </div>
     </div>
     <div class="md-layout-item md-size-70">
       <profile-settings v-if="pageName === 'settings'"></profile-settings>
       <my-events v-if="pageName === 'events'"></my-events>
+      <inspirations v-if="pageName === 'inspirations'"></inspirations>
     </div>
   </div>
 </template>
@@ -82,6 +83,7 @@ import ProfileSettings from "./ProfileSettings";
 import MyEvents from "./MyEvents.vue";
 // import auth from '@/auth';
 import { mapGetters, mapActions, mapState } from "vuex";
+import Inspirations from "./Inspirations.vue";
 
 export default {
   components: {
@@ -97,6 +99,7 @@ export default {
     LabelEdit,
     ProfileSettings,
     MyEvents,
+    Inspirations,
   },
   data() {
     return {
@@ -194,8 +197,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .left-sidebar {
+  padding: 50px;
   .profile {
-    padding: 30px 15px 0;
     position: relative;
 
     .avatar {
