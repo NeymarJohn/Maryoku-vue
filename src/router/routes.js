@@ -294,7 +294,7 @@ let ProfilePages = {
     name: "Profile",
     children: [
         {
-            path: "/profile",
+            path: "/profile/:pageName",
             name: "overview",
             component: ProfileOverview,
             meta: {

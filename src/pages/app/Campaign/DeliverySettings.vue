@@ -108,7 +108,6 @@
                   v-model="settingData.phone.smsOrWhatsapp"
                   class="md-checkbox-circle md-red ml-50"
                   value="whatsapp"
-                  disabled
                 >
                   <img :src="`${$iconURL}Campaign/Image+74.png`" />
                   <span
@@ -365,7 +364,6 @@ export default {
     // set default subject for email
     this.settingData.email.from = this.$store.state.auth.user.email || this.$store.state.auth.user.username;
     this.settingData.email.subject = this.emailSubject;
-    this.settingData.phone.smsOrWhatsapp = "sms";
   },
   methods: {
     handleInputEmails({ value, type }) {

@@ -2,7 +2,7 @@
 import axios from 'axios';
 import store from '../store'
 
-const { SERVER_URL, HOST_URL } = { SERVER_URL: process.env.SERVER_URL, HOST_URL: process.env.HOST_URL}
+const { SERVER_URL, HOST_URL } = { SERVER_URL: process.env.SERVER_URL, HOST_URL: process.env.HOST_URL }
 
 const API_URL = `${SERVER_URL}`;
 const HOSTNAME = `${HOST_URL}`;
@@ -14,9 +14,8 @@ const LOGOUT_URL = `${API_URL}/api/logout`;
 const FORGOT_PASSWORD_URL = `${API_URL}/1/forgot-password`;
 const CURRENT_USER_URL = `${API_URL}/1/me`;
 const CURRENT_TENANT_USER = `${API_URL}/1/userInfo`;
-import Vue from 'vue'
 import authHeader from './auth-header';
-import { Model } from 'vue-api-query'
+import UserProfile from "@/models/UserProfile"
 
 class AuthService {
   login(user) {
@@ -44,7 +43,7 @@ class AuthService {
   }
 
   logout() {
-    return axios.post(LOGOUT_URL).then(response=>{
+    return axios.post(LOGOUT_URL).then(response => {
       if (response.data.access_token) {
         localStorage.removeItem('user');
         localStorage.removeItem('manage_id_token')
@@ -74,7 +73,7 @@ class AuthService {
     axios.defaults.headers.common.gorm_tenantid = tenantId
   }
 
-  resolveTenantId () {
+  resolveTenantId() {
     let tenantId = document.location.hostname.replace('.dev.maryoku.com', '')
     tenantId = tenantId.replace('.local.maryoku.com', '')
     tenantId = tenantId.replace('.maryoku.com', '')
@@ -101,7 +100,7 @@ class AuthService {
       const cookieToken = this.getCookie("authToken")
       axios.defaults.headers.common.Authorization = `Bearer ${cookieToken}`
     }
-    return axios.post(VALIDATE_URL).then(response=>{
+    return axios.post(VALIDATE_URL).then(response => {
       if (response.data.access_token) {
         localStorage.setItem('manage_id_token', response.data.access_token)
         localStorage.setItem('user', JSON.stringify(response.data));
@@ -109,7 +108,7 @@ class AuthService {
         this.setTokenToCookie(response.data.access_token)
       }
       return response.data;
-    }).catch(err=>{
+    }).catch(err => {
       localStorage.removeItem('user');
       localStorage.removeItem('manage_id_token')
       axios.defaults.headers.common.Authorization = null
@@ -122,7 +121,7 @@ class AuthService {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
     var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
+    for (var i = 0; i < ca.length; i++) {
       var c = ca[i];
       while (c.charAt(0) == ' ') {
         c = c.substring(1);
@@ -148,7 +147,7 @@ class AuthService {
   setTokenToCookie(token) {
     const days = 1;
     const expiredDate = new Date();
-    expiredDate.setTime(expiredDate.getTime() + ( days * 24 * 60 * 60 * 1000 ))
+    expiredDate.setTime(expiredDate.getTime() + (days * 24 * 60 * 60 * 1000))
     const domain = ".maryoku.com"
     document.cookie = `authToken=${token}; expires=${expiredDate.toGMTString()}; path=/; domain=${domain}`
   }
@@ -156,6 +155,10 @@ class AuthService {
     const domain = ".maryoku.com"
     // document.cookie = `authToken=; expires=; path=/; domain=${domain}`
     document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  }
+
+  updateProfile(userData) {
+    return new UserProfile(userData).save();
   }
 }
 

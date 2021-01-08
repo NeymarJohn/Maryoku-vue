@@ -26,6 +26,7 @@
       <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
     </div>
     <div class="md-layout">
+      <div id="control-panel" style="width: 1px; height: 100%; float: left; margin-left: -1px"></div>
       <div class="md-layout-item md-size-100">
         <event-overview-section
           v-for="(section, index) in sections"

@@ -1,16 +1,12 @@
 <template>
   <div class="md-layout">
-    <div class="md-layout-item" style="text-align: center;" v-if="this.messageIndex < 0">
+    <div class="md-layout-item" style="text-align: center" v-if="this.messageIndex < 0">
       <img src="/static/img/maryoku-loader.gif" />
       <!-- <img src="https://static-maryoku.s3.amazonaws.com/storage/img/calendar-loader-3.gif" class="text-center" style="width: 64px;"/> -->
-      <h2
-        class="title text-center"
-        slot="title"
-        style="text-align: center;"
-      >Hi there, one moment please ...</h2>
+      <h2 class="title text-center" slot="title" style="text-align: center">Hi there, one moment please ...</h2>
     </div>
-    <div v-else class="md-layout-item font-size-30" style="text-align: center; color:#050505;">
-      {{messages[messageIndex]}}
+    <div v-else class="md-layout-item font-size-30" style="text-align: center; color: #050505">
+      {{ messages[messageIndex] }}
       <div class="mt-4rem">
         <md-button class="md-simple md-red normal-btn" @click="toCreateWorkspace">Create Worspace</md-button>
         <md-button class="md-simple md-red normal-btn" @click="toChooseWorkspace">Choose Workspace</md-button>
@@ -22,7 +18,6 @@
 // import auth from '@/auth';
 import SockJS from "sockjs-client"; // NEW: SockJS & Stomp instead of socket.io
 import Stomp from "stompjs";
-import TenantUser from "@/models/TenantUser";
 import Model from "@/models/Model";
 export default {
   components: {},
