@@ -267,7 +267,6 @@ export default {
       this.timelineDates[dateIndex].timelineItems.push(newTimelineItem);
       this.timelineDates[dateIndex].templates.splice(templateIndex, 0, { name: "test", type: "slot" });
     },
-
     gettingSlotData(data, scheduleDate) {
       let block = Object.assign({}, data.block);
       block.mode = "edit";

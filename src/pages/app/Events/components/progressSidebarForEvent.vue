@@ -40,7 +40,7 @@
     <div class="progress-sidebar-content">
       <!-- Sidebar Elements -->
       <div class="event-elements">
-        <draggable :list="elements">
+        <draggable :list="elements" id="control-panel">
           <div
             class="event-elements__item"
             @click="goToRoute(item, index)"

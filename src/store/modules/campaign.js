@@ -8,7 +8,7 @@ const defaultSettings = {
         numberArray: [],
         excelFileName: "",
         excelFilePath: "",
-        smsOrWhatsapp: "",
+        smsOrWhatsapp: "sms",
         sentTime: new Date().getTime(),
     },
     email: {

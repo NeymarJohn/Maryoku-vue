@@ -1,13 +1,14 @@
 <template>
   <div class="proposal-steps-wrapper">
     <div class="title-cont">
-      <h3>
-        <img :src="`${$iconURL}Budget Elements/${eventCategory.icon}`" />
-        {{ categoryTitle }} Proposal &nbsp;
-        <span class="color-red font-size-20 font-bold">Relish Catering & Venues</span>
-      </h3>
+      <div class="d-flex justify-content-center font-size-30 mb-10">
+        <img :src="`${$iconURL}Budget Elements/${eventCategory.icon}`" class="page-icon" />
+        <span> {{ vendor.eventCategory.fullTitle }} Proposal &nbsp;</span>
+        <span class="color-red font-size-30 font-bold">{{ vendor.companyName }}</span>
+      </div>
       <div class="d-flex justify-content-center">
-        <span>Dining room, Loren Epsom, Loren Epsom</span><span class="seperator"></span><span>For Whole Event</span>
+        <span>{{ selectedServices }}</span
+        ><span class="seperator"></span><span>{{ serviceTime }}</span>
       </div>
     </div>
     <div class="steps-cont">
@@ -45,18 +46,52 @@ export default {
   components: {},
   props: {
     hasVisionStep: Boolean,
-    categoryTitle: String,
     eventCategory: Object,
+    vendor: Object,
+    proposalRequest: Object,
   },
   data() {
-    return {};
+    return {
+      lookingFor: {},
+    };
   },
   methods: {},
   created() {},
-  mounted() {},
+  mounted() {
+    this.lookingFor = this.proposalRequest.requirements.find((item) => item.category == "multi-selection");
+    console.log(this.proposalRequest);
+  },
   computed: {
     step() {
       return this.$store.state.vendorProposal.wizardStep;
+    },
+    selectedServices() {
+      let str = "";
+      if (this.lookingFor.options) {
+        const services = [];
+        this.lookingFor.options.forEach((item) => {
+          if (item.selected) {
+            return services.push(item.name);
+          }
+        });
+        str = services.join(", ");
+      }
+      return str;
+    },
+    serviceTime() {
+      let serviceTimeString = "For Whole Event";
+      this.proposalRequest.eventData.timelineDates.forEach((td) => {
+        td.timelineItems.forEach((timelineItem) => {
+          if (timelineItem.eventCategory && timelineItem.eventCategory.includes(this.vendor.eventCategory.key)) {
+            console.log(timelineItem.eventCategory, this.vendor.eventCategory.key);
+            serviceTimeString = `${this.$dateUtil.formatScheduleDay(
+              Number(timelineItem.startTime),
+              "MM.DD.YY hh:mm A",
+            )}-${this.$dateUtil.formatScheduleDay(Number(timelineItem.endTime), "MM.DD.YY hh:mm A")}`;
+          }
+        });
+      });
+      return serviceTimeString;
     },
   },
   watch: {},
@@ -182,6 +217,10 @@ export default {
     span {
       display: inline-block;
       line-height: 35px;
+      max-width: 50%;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
       &.seperator {
         border-right: solid 1px #e2e2e2;
         height: 35px;
