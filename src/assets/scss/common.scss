@@ -49,11 +49,6 @@ h5 {
 textarea {
     font-family: "Manrope-Regular";
     font-size: 16px;
-    resize: none;
-    padding:20px;
-    width: 100%;
-    border: solid 1px #B7B7B7;
-    border-radius: 3px;
 }
 input,
 select {
@@ -603,7 +598,7 @@ hr {
     opacity: 0;
 }
 .page-icon {
-    width: 30px !important;
+    width: 30px;
 }
 .label-icon {
     width: 20px !important;

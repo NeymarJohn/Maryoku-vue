@@ -4,9 +4,14 @@
     <div class="md-layout-item md-size-100" v-if="user">
       <div class="pull-right">
         <drop-down direction="down" :hover="true">
-          <md-button name="user-top-menu" slot="title" class="md-purple md-sm" data-toggle="dropdown">
+          <md-button
+            name="user-top-menu"
+            slot="title"
+            class="md-purple md-sm"
+            data-toggle="dropdown"
+          >
             <md-icon>person</md-icon>
-            {{ user ? user.displayName : "" }}
+            {{user ? user.displayName : ''}}
           </md-button>
           <ul class="dropdown-menu dropdown-menu-right">
             <li>
@@ -15,8 +20,7 @@
                 name="user-top-menu-my-profile"
                 class="user-top-menu-my-profile"
                 @click="openMyProfile"
-                >My Profile</a
-              >
+              >My Profile</a>
             </li>
             <li>
               <a
@@ -24,14 +28,15 @@
                 name="user-top-menu-my-profile"
                 class="user-top-menu-my-profile"
                 @click="openMyEvents"
-                >My Events</a
-              >
+              >My Events</a>
             </li>
             <li class="divider"></li>
             <li>
-              <router-link name="user-top-menu-sign-out" class="user-top-menu-sign-out" :to="{ path: '/signout' }"
-                >Sign Out</router-link
-              >
+              <router-link
+                name="user-top-menu-sign-out"
+                class="user-top-menu-sign-out"
+                :to="{path: '/signout'}"
+              >Sign Out</router-link>
             </li>
           </ul>
         </drop-down>
@@ -53,9 +58,9 @@
           <!-- Event Info -->
           <div class="md-layout-item md-size-50 md-small-size-100">
             <div class="event-title-date">
-              <h4>{{ calendarEvent.title }}</h4>
+              <h4>{{calendarEvent.title}}</h4>
 
-              <div class="event-date">{{ getEventDate(calendarEvent.eventStartMillis) }}</div>
+              <div class="event-date">{{getEventDate(calendarEvent.eventStartMillis)}}</div>
 
               <div class="number-of-users">12 people accepted</div>
             </div>
@@ -64,11 +69,7 @@
 
             <event-images :event="calendarEvent" :readonly="readonly" v-if="!isMobile"></event-images>
 
-            <event-questions-answers
-              :event="calendarEvent"
-              :readonly="readonly"
-              v-if="!isMobile"
-            ></event-questions-answers>
+            <event-questions-answers :event="calendarEvent" :readonly="readonly" v-if="!isMobile"></event-questions-answers>
           </div>
           <!-- ./Event Info -->
 
@@ -114,7 +115,7 @@
 // MAIN MODULES
 import ChartComponent from "@/components/Cards/ChartComponent";
 
-import ProfileSettings from "@/pages/app/Profile/ProfileSettings";
+import MyProfile from "@/pages/app/Profile/MyProfile";
 import MyEventsPanel from "@/pages/app/Profile/MyEventsPanel";
 
 import moment from "moment";
@@ -168,7 +169,8 @@ export default {
       readonly: true,
       shoWSignup: false,
       isMobile: window.innerWidth <= 500,
-      avatar: "https://static-maryoku.s3.amazonaws.com/storage/img/placeholder.jpg",
+      avatar:
+        "https://static-maryoku.s3.amazonaws.com/storage/img/placeholder.jpg",
       invitee: {},
       pendingResponse: null,
     };
@@ -190,7 +192,10 @@ export default {
           Object.assign(inviteeResponse, this.userResponse);
           inviteeResponse.attending = isGoing;
           new EventInviteeResponse(inviteeResponse)
-            .for(new Calendar({ id: this.calendarEvent.calendar.id }), new CalendarEvent(this.calendarEvent))
+            .for(
+              new Calendar({ id: this.calendarEvent.calendar.id }),
+              new CalendarEvent(this.calendarEvent),
+            )
             .save()
             .then((res) => {
               this.userResponse = res.item;
@@ -200,7 +205,10 @@ export default {
             attending: isGoing,
             invitee: { id: this.invitee.id },
           })
-            .for(new Calendar({ id: this.calendarEvent.calendar.id }), new CalendarEvent(this.calendarEvent))
+            .for(
+              new Calendar({ id: this.calendarEvent.calendar.id }),
+              new CalendarEvent(this.calendarEvent),
+            )
             .save()
             .then((res) => {
               this.userResponse = res.item;
@@ -216,7 +224,9 @@ export default {
       this.isLoading = true;
       this.$auth.currentUser(this, false, () => {
         this.user = this.$auth.user;
-        this.avatar = this.user.avatar || "https://static-maryoku.s3.amazonaws.com/storage/img/placeholder.jpg";
+        this.avatar =
+          this.user.avatar ||
+          "https://static-maryoku.s3.amazonaws.com/storage/img/placeholder.jpg";
         this.getEvent();
         this.isLoading = false;
       });
@@ -226,7 +236,9 @@ export default {
     this.$auth.currentUser(this, false, () => {
       if (this.$auth.user.authenticated) {
         this.user = this.$auth.user;
-        this.avatar = this.user.avatar || "https://static-maryoku.s3.amazonaws.com/storage/img/placeholder.jpg";
+        this.avatar =
+          this.user.avatar ||
+          "https://static-maryoku.s3.amazonaws.com/storage/img/placeholder.jpg";
       }
       this.getEvent();
     });
@@ -238,8 +250,9 @@ export default {
   methods: {
     openMyProfile() {
       window.currentPanel = this.$showPanel({
-        component: ProfileSettings,
-        cssClass: "md-layout-item md-small-size-100 md-medium-size-65 md-size-50 transition36 bg-grey",
+        component: MyProfile,
+        cssClass:
+          "md-layout-item md-small-size-100 md-medium-size-65 md-size-50 transition36 bg-grey",
         openOn: "right",
         props: {},
       });
@@ -247,7 +260,8 @@ export default {
     openMyEvents() {
       window.currentPanel = this.$showPanel({
         component: MyEventsPanel,
-        cssClass: "md-layout-item md-small-size-100 md-medium-size-50 md-size-35 transition36  bg-grey",
+        cssClass:
+          "md-layout-item md-small-size-100 md-medium-size-50 md-size-35 transition36  bg-grey",
         openOn: "right",
         props: {},
       });
@@ -255,7 +269,8 @@ export default {
     showSignupPanel(isGoing) {
       window.currentPanel = this.$showPanel({
         component: SignInSignUpPanel,
-        cssClass: "md-layout-item md-small-size-100 md-medium-size-50 md-size-30 transition36 ",
+        cssClass:
+          "md-layout-item md-small-size-100 md-medium-size-50 md-size-30 transition36 ",
         openOn: "right",
         disableBgClick: false,
         props: {
@@ -268,7 +283,8 @@ export default {
       new CalendarEvent().find(this.$route.params.id).then((event) => {
         this.calendarEvent = event.for(new Calendar({ id: event.calendar.id }));
         this.totalRemainingBudget = event.totalBudget - event.allocatedBudget;
-        this.percentage = 100 - ((event.allocatedBudget / event.totalBudget) * 100).toFixed(2);
+        this.percentage =
+          100 - ((event.allocatedBudget / event.totalBudget) * 100).toFixed(2);
         this.seriesData = [100 - this.percentage, this.percentage];
 
         if (event.eventPage === null) {
@@ -287,7 +303,10 @@ export default {
               if (this.pendingResponse) {
                 this.pendingResponse.invitee = this.invitee;
                 new EventInviteeResponse(this.pendingResponse)
-                  .for(new Calendar({ id: this.calendarEvent.calendar.id }), new CalendarEvent(this.calendarEvent))
+                  .for(
+                    new Calendar({ id: this.calendarEvent.calendar.id }),
+                    new CalendarEvent(this.calendarEvent),
+                  )
                   .save()
                   .then((res) => {
                     this.userResponse = res.item;
@@ -343,7 +362,9 @@ export default {
     },
     date: {
       get() {
-        return this.calendarEvent.eventStartMillis ? new Date(this.calendarEvent.eventStartMillis) : null;
+        return this.calendarEvent.eventStartMillis
+          ? new Date(this.calendarEvent.eventStartMillis)
+          : null;
       },
       set(value) {
         let eventStartTime = new Date(value).getTime();

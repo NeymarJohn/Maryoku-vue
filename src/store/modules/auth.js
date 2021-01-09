@@ -22,12 +22,12 @@ export default {
       );
     },
     logout({ commit }) {
-      AuthService.logout().then(() => {
+      AuthService.logout().then(()=>{
         commit('logout');
       })
-        .catch(err => {
-          commit('logout');
-        });
+      .catch(err=>{
+        commit('logout');
+      });
     },
     register({ commit }, user) {
       return AuthService.register(user).then(
@@ -40,12 +40,6 @@ export default {
           return Promise.reject(error);
         }
       );
-    },
-    updateProfile({ commit }, userData) {
-      AuthService.updateProfile(userData).then(userProfile => {
-        console.log(userProfile)
-        commit('updateUserData', userProfile)
-      })
     },
     checkToken({ commit }, token) {
       return AuthService.checkToken(token).then(
@@ -78,9 +72,6 @@ export default {
     },
     registerFailure(state) {
       state.status.loggedIn = false;
-    },
-    updateUserData(state, userData) {
-      state.user = { ...state.user, ...userData }
     }
   },
   getters: {

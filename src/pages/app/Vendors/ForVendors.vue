@@ -34,12 +34,12 @@
               <li>
                 <img :src="`${iconsUrl}Path 251.svg`" />
                 <strong>Date:</strong>
-                {{ eventDate }}
+                {{ serviceTime.date }}
               </li>
               <li>
                 <img :src="`${iconsUrl}Group 6085.svg`" />
                 <strong>Time:</strong>
-                {{ eventTime }}
+                {{ serviceTime.time }}
               </li>
               <li>
                 <img :src="`${iconsUrl}Asset 506.svg`" />
@@ -630,6 +630,26 @@ export default {
       let startDate = new Date(this.proposalRequest.eventData.eventStartMillis);
       let endDate = new Date(this.proposalRequest.eventData.eventEndMillis);
       return `${moment(startDate).format("hh:mmA")} - ${moment(endDate).format("hh:mmA")}`;
+    },
+    serviceTime() {
+      let serviceTimeString = "For Whole Event";
+      let serviceDate = "";
+      this.proposalRequest.eventData.timelineDates.forEach((td) => {
+        td.timelineItems.forEach((timelineItem) => {
+          if (timelineItem.eventCategory && timelineItem.eventCategory.includes(this.vendor.eventCategory.key)) {
+            console.log(timelineItem.eventCategory, this.vendor.eventCategory.key);
+            serviceTimeString = `${this.$dateUtil.formatScheduleDay(
+              Number(timelineItem.startTime),
+              "hh:mm A",
+            )}-${this.$dateUtil.formatScheduleDay(Number(timelineItem.endTime), "hh:mm A")}`;
+            serviceDate = this.$dateUtil.formatScheduleDay(Number(timelineItem.endTime), "MMM DD, YYYY");
+          }
+        });
+      });
+      return {
+        time: serviceTimeString,
+        date: serviceDate,
+      };
     },
     getEventDuration() {
       return moment
