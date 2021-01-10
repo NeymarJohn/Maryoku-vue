@@ -27,7 +27,8 @@
         ><span style="padding: 5px">(15 photos top, under 20 KB)</span>
       </div>
       <div style="padding: 10px 10px 30px 40px">Photos that could fit in with the concept</div>
-      <vue-dropzone
+      <proposal-inspirational-photos></proposal-inspirational-photos>
+      <!-- <vue-dropzone
         id="dropzone"
         :options="dropzoneOptions"
         :useCustomSlot="true"
@@ -39,17 +40,19 @@
         <br />Or
         <br />
         <span class="color-dark-gray">Drag your file here</span>
-      </vue-dropzone>
+      </vue-dropzone> -->
     </div>
   </div>
 </template>
 <script>
 import vue2Dropzone from "vue2-dropzone";
 import S3Service from "@/services/s3.service";
+import ProposalInspirationalPhotos from "./ProposalInspirationalPhotos.vue";
 
 export default {
   components: {
     vueDropzone: vue2Dropzone,
+    ProposalInspirationalPhotos,
   },
   props: {
     event: {

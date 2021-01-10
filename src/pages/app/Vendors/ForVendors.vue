@@ -632,6 +632,11 @@ export default {
       return `${moment(startDate).format("hh:mmA")} - ${moment(endDate).format("hh:mmA")}`;
     },
     serviceTime() {
+      if (!this.vendor)
+        return {
+          time: "",
+          date: "",
+        };
       let serviceTimeString = "For Whole Event";
       let serviceDate = "";
       this.proposalRequest.eventData.timelineDates.forEach((td) => {
