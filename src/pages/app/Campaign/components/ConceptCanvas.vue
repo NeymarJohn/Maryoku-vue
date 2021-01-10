@@ -44,7 +44,9 @@ export default {
       this.colorPositions.forEach((pos, index) => {
         console.log(this.eventConcept.colors);
         if (this.eventConcept.colors[index]) {
-          this.conceptCanvas.fillStyle = this.eventConcept.colors[index].color || this.eventConcept.colors[index].value;
+          let colorString = this.eventConcept.colors[index].color || this.eventConcept.colors[index].value;
+          if (!colorString) colorString = "#EDEDED";
+          this.conceptCanvas.fillStyle = colorString;
           this.conceptCanvas.fillRect(pos.x, pos.y, pos.w, pos.h);
         }
       });

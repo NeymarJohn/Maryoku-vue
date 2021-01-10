@@ -236,7 +236,7 @@
 
 <script>
 // import auth from '@/auth';
-import MyProfile from "@/pages/app/Profile/MyProfile";
+import ProfileSettings from "@/pages/app/Profile/ProfileSettings";
 import Team from "../../app/Team/Team";
 import MyCompany from "../../app/Profile/MyCompany";
 
@@ -320,7 +320,7 @@ export default {
     },
     openMyProfile() {
       window.currentPanel = this.$showPanel({
-        component: MyProfile,
+        component: ProfileSettings,
         cssClass: "md-layout-item md-size-75 transition36 bg-grey",
         openOn: "right",
         props: {},

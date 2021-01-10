@@ -1,66 +1,71 @@
 <template>
   <div class="md-layout p-20">
-    <div class="md-layout-item md-size-30">
-      <md-card class="left-sidebar">
-        <md-card-header>
+    <div class="md-layout-item md-size-25">
+      <div class="left-sidebar white-card">
+        <div>
           <div class="profile">
             <div class="avatar" style=""></div>
-            <div class="company-logo d-flex justify-content-center align-center">
-              Company Logo
-            </div>
-            <h3 class="name">
-              RACHEL MENDELOVICH
-            </h3>
+            <div class="company-logo d-flex justify-content-center align-center">Company Logo</div>
+            <h3 class="name">{{ userData.profile.displayName }}</h3>
           </div>
-        </md-card-header>
-        <md-card-content>
+        </div>
+        <div>
           <md-list>
-            <md-list-item>
-              Profile Settings
+            <md-list-item @click="goTo('settings')" :class="{ 'font-bold-extra': pageName === 'settings' }">
+              <label
+                ><img
+                  :src="
+                    pageName === 'settings'
+                      ? `${$iconURL}Profile/settings-dark.svg`
+                      : `${$iconURL}Profile/settings-gray.svg`
+                  "
+                  class="page-icon"
+                /><span class="pl-20 font-size-20">Profile Settings</span></label
+              >
             </md-list-item>
-            <md-list-item>
-              My Events
+            <md-list-item @click="goTo('events')" :class="{ 'font-bold-extra': pageName === 'events' }">
+              <label
+                ><img
+                  :src="
+                    pageName === 'events' ? `${$iconURL}Profile/events-dark.svg` : `${$iconURL}Profile/events-gray.svg`
+                  "
+                  class="page-icon"
+                /><span class="pl-20 font-size-20">My Events</span></label
+              >
             </md-list-item>
-            <md-list-item>
-              My Points
+            <md-list-item @click="goTo('points')" :class="{ 'font-bold-extra': pageName === 'points' }">
+              <label
+                ><img
+                  :src="
+                    pageName === 'points' ? `${$iconURL}Profile/points-dark.svg` : `${$iconURL}Profile/points-gray.svg`
+                  "
+                  class="page-icon"
+                /><span class="pl-20 font-size-20">My Points</span></label
+              >
             </md-list-item>
-            <md-list-item>
-              Saved inspirations
+            <md-list-item @click="goTo('inspirations')" :class="{ 'font-bold-extra': pageName === 'inspirations' }">
+              <label
+                ><img
+                  :src="
+                    pageName === 'inspirations'
+                      ? `${$iconURL}Profile/inspirations-dark.svg`
+                      : `${$iconURL}Profile/inspirations-gray.svg`
+                  "
+                  class="page-icon"
+                /><span class="pl-20 font-size-20">Saved inspirations</span></label
+              >
             </md-list-item>
           </md-list>
-        </md-card-content>
-        <md-card-actions class="md-alignment-left">
-          <div class="logout">
-            Log Out
-          </div>
-        </md-card-actions>
-      </md-card>
+        </div>
+        <div class="md-alignment-left">
+          <div class="logout">Log Out</div>
+        </div>
+      </div>
     </div>
     <div class="md-layout-item md-size-70">
-      <div class="profile-container">
-
-        <tabs :tab-name="['Profile Detail', 'Payment & Invoices', 'Notifications', 'Permissions']" color-button="info" plain>
-          <template slot="tab-pane-1">
-            <md-list>
-              <md-list-item>
-                <div>
-                  <h3>Full Name</h3>
-                  <md-label>Rachel Mandelovich</md-label>
-                </div>
-              </md-list-item>
-            </md-list>
-          </template>
-          <template slot="tab-pane-2">
-            Payment
-          </template>
-          <template slot="tab-pane-3">
-            Notification
-          </template>
-          <template slot="tab-pane-4">
-            Permissions
-          </template>
-        </tabs>
-      </div>
+      <profile-settings v-if="pageName === 'settings'"></profile-settings>
+      <my-events v-if="pageName === 'events'"></my-events>
+      <inspirations v-if="pageName === 'inspirations'"></inspirations>
     </div>
   </div>
 </template>
@@ -69,21 +74,21 @@
 import VueElementLoading from "vue-element-loading";
 import PersonalInformation from "./PersonalInformation.vue";
 import CompanyDashboardInfo from "../CompanyDashboard/CompanyDashboardInfo.vue";
-import MyEvents from "./MyEvents.vue";
 import DietaryConstraints from "./DietaryConstraints.vue";
 import MySpecialDates from "./MySpecialDates.vue";
 import HolidaysCelebrate from "./HolidaysCelebrate.vue";
 import { LabelEdit, Tabs } from "@/components";
 import { EditProfileForm, UserCard } from "@/pages";
-
+import ProfileSettings from "./ProfileSettings";
+import MyEvents from "./MyEvents.vue";
 // import auth from '@/auth';
 import { mapGetters, mapActions, mapState } from "vuex";
+import Inspirations from "./Inspirations.vue";
 
 export default {
   components: {
     VueElementLoading,
     PersonalInformation,
-    MyEvents,
     DietaryConstraints,
     MySpecialDates,
     HolidaysCelebrate,
@@ -92,12 +97,16 @@ export default {
     UserCard,
     CompanyDashboardInfo,
     LabelEdit,
+    ProfileSettings,
+    MyEvents,
+    Inspirations,
   },
   data() {
     return {
       // auth: auth,
       chips: [],
       user: null,
+      pageName: "",
     };
   },
 
@@ -107,23 +116,29 @@ export default {
       // user:'user/getUser'
     }),
     ...mapState("event", ["eventData"]),
+    userData() {
+      return this.$store.state.auth.user;
+    },
   },
   mounted() {
     // TODO : user state should be reviewed
     console.log("profile", this.$auth.user);
-
+    this.getPageName();
     this.$store
-            .dispatch("auth/checkToken")
-            .then(() => {
-              this.user = this.$auth.user;
-            })
-            .catch(() => {
-              this.$router.push({ path: `/signin` });
-            });
-
+      .dispatch("auth/checkToken")
+      .then(() => {
+        this.user = this.$auth.user;
+      })
+      .catch(() => {
+        this.$router.push({ path: `/signin` });
+      });
   },
   methods: {
     ...mapActions("event", ["getEventAction"]),
+    getPageName() {
+      this.pageName = this.$route.params.pageName ? this.$route.params.pageName : "timeline";
+      console.log("pageName", this.pageName);
+    },
     onFileChange(e) {
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
@@ -171,16 +186,22 @@ export default {
           this.loaded = true;
         });
     },
+    goTo(pageName) {
+      this.$router.push(`/profile/${pageName}`);
+    },
+  },
+  watch: {
+    $route: "getPageName",
   },
 };
 </script>
 <style lang="scss" scoped>
-.left-sidebar{
-  .profile{
-    padding: 30px 15px 0;
+.left-sidebar {
+  padding: 50px;
+  .profile {
     position: relative;
 
-    .avatar{
+    .avatar {
       background-color: rgba(245, 19, 85, 0.08);
       width: 245px;
       height: 245px;
@@ -188,7 +209,7 @@ export default {
       border: dashed 1.5px #f51355;
     }
 
-    .company-logo{
+    .company-logo {
       position: absolute;
       top: 80px;
       left: 200px;
@@ -196,16 +217,18 @@ export default {
       height: 135px;
       border-radius: 50%;
       border: dashed 1px #f51355;
-      background-color: #FFFFFF;
+      background-color: #ffffff;
       z-index: 1;
     }
   }
 
-  .logout{
+  .md-list-item {
+    margin: 10px 0;
+  }
+  .logout {
     padding: 10px 25px;
     font-size: 16px;
     font-weight: 400;
   }
 }
-
 </style>
