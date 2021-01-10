@@ -641,7 +641,11 @@ export default {
       let serviceDate = "";
       this.proposalRequest.eventData.timelineDates.forEach((td) => {
         td.timelineItems.forEach((timelineItem) => {
-          if (timelineItem.eventCategory && timelineItem.eventCategory.includes(this.vendor.eventCategory.key)) {
+          if (
+            timelineItem &&
+            timelineItem.eventCategory &&
+            timelineItem.eventCategory.includes(this.vendor.eventCategory.key)
+          ) {
             console.log(timelineItem.eventCategory, this.vendor.eventCategory.key);
             serviceTimeString = `${this.$dateUtil.formatScheduleDay(
               Number(timelineItem.startTime),
