@@ -471,16 +471,16 @@ export default {
       const campaignData = this.$store.state.campaign;
       switch (this.campaign.name) {
         case "SAVING_DATE":
-          return `Save the date - ${campaignData.SAVING_DATE ? campaignData.SAVING_DATE.title : this.event.title}`;
+          return `${campaignData.SAVING_DATE ? campaignData.SAVING_DATE.title : this.event.title} Save The Date `;
           break;
         case "RSVP":
-          return `RSVP - ${campaignData.RSVP ? campaignData.RSVP.title : this.event.title}`;
+          return `${campaignData.RSVP ? campaignData.RSVP.title : this.event.title} RSVP`;
           break;
         case "COMING_SOON":
-          return `Coming soon - ${campaignData.COMING_SOON ? campaignData.COMING_SOON.title : this.event.title}`;
+          return `${campaignData.COMING_SOON ? campaignData.COMING_SOON.title : this.event.title} Coming soon `;
           break;
         case "FEEDBACK":
-          return `Feedback - ${campaignData.FEEDBACK ? campaignData.FEEDBACK.title : this.event.title}`;
+          return `${campaignData.FEEDBACK ? campaignData.FEEDBACK.title : this.event.title} Feedback`;
           break;
         default:
           return "";

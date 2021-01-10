@@ -112,6 +112,7 @@ export default {
           category: item.eventCategory ? item.eventCategory.title : "",
           email: item.vendorMainEmail,
           address: item.vendorAddressLine1,
+          contactPerson: item.contactPerson,
         });
       });
       const ws = XLSX.utils.json_to_sheet(exportVendors);

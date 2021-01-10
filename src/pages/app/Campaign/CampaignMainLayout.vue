@@ -423,8 +423,9 @@ export default {
     },
     callSaveCampaign(campaignType, campaignStatus) {
       const campaignData = this.$store.state.campaign[campaignType];
+      console.log("campaignData from VUEx", campaignData);
       let coverImage = campaignData.coverImage;
-      if (coverImage && coverImage.indexOf("base64") >= 0) {
+      if (coverImage && coverImage.indexOf("http") < 0) {
         const fileObject = S3Service.dataURLtoFile(coverImage, `${this.event.id}-${campaignType}`);
         const extenstion = fileObject.type.split("/")[1];
         S3Service.fileUpload(
@@ -483,6 +484,7 @@ export default {
       });
 
       const campaign = this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
+      console.log(campaign);
       this.scheduleCampaign();
     },
     revertSetting() {

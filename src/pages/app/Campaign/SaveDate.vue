@@ -86,8 +86,8 @@
           </div>
           <div class="display-logo ml-50">
             <md-switch v-model="campaignData.visibleSettings.showLogo" class="showlogo-switch large-switch"></md-switch>
-            <div v-if="campaignData.visibleSettings.showLogo">Show Logo</div>
-            <div v-if="!campaignData.visibleSettings.showLogo">Hide Logo</div>
+            <div v-if="campaignData.visibleSettings.showLogo">Hide Logo</div>
+            <div v-if="!campaignData.visibleSettings.showLogo">Show Logo</div>
           </div>
         </div>
       </div>
