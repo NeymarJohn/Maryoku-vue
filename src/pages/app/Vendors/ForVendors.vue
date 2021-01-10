@@ -632,11 +632,11 @@ export default {
       return `${moment(startDate).format("hh:mmA")} - ${moment(endDate).format("hh:mmA")}`;
     },
     serviceTime() {
-      if (!this.vendor)
-        return {
-          time: "",
-          date: "",
-        };
+      // if (!this.vendor)
+      //   return {
+      //     time: "",
+      //     date: "",
+      //   };
       let serviceTimeString = "For Whole Event";
       let serviceDate = "";
       this.proposalRequest.eventData.timelineDates.forEach((td) => {
@@ -655,6 +655,12 @@ export default {
           }
         });
       });
+      if (!serviceDate) {
+        serviceDate = `${this.$dateUtil.formatScheduleDay(
+          Number(this.proposalRequest.eventData.eventStartMillis),
+          "MMM DD, YYYY",
+        )}`;
+      }
       return {
         time: serviceTimeString,
         date: serviceDate,
