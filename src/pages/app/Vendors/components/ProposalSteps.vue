@@ -83,17 +83,33 @@ export default {
       return str;
     },
     serviceTime() {
-      let serviceTimeString = "For Whole Event";
+      let serviceTimeString = "";
+      if (this.proposalRequest.requirementsCategory === "venuerental") {
+        const startString = `${this.$dateUtil.formatScheduleDay(
+          Number(this.proposalRequest.eventData.eventStartMillis),
+          "MM.DD.YY",
+        )}`;
+        const endString = `${this.$dateUtil.formatScheduleDay(
+          Number(this.proposalRequest.eventData.eventEndMillis),
+          "MM.DD.YY",
+        )}`;
+        if (startString === endString) {
+          return startString;
+        } else return `${startString}-${endString}`;
+      }
       this.proposalRequest.eventData.timelineDates.forEach((td) => {
+        let timeString = "";
         td.timelineItems.forEach((timelineItem) => {
           if (timelineItem.eventCategory && timelineItem.eventCategory.includes(this.vendor.eventCategory.key)) {
-            console.log(timelineItem.eventCategory, this.vendor.eventCategory.key);
-            serviceTimeString = `${this.$dateUtil.formatScheduleDay(
+            timeString += `${this.$dateUtil.formatScheduleDay(
               Number(timelineItem.startTime),
-              "MM.DD.YY hh:mm A",
-            )}-${this.$dateUtil.formatScheduleDay(Number(timelineItem.endTime), "MM.DD.YY hh:mm A")}`;
+              "hh:mm A",
+            )}-${this.$dateUtil.formatScheduleDay(Number(timelineItem.endTime), "hh:mm A")}, `;
           }
         });
+        if (timeString) {
+          serviceTimeString += `${this.$dateUtil.formatScheduleDay(td.date, "MM.DD.YY")} ${timeString}`;
+        }
       });
       return serviceTimeString;
     },

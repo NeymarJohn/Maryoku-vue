@@ -90,6 +90,12 @@ export default {
         height: 140px;
         border-radius: 50%;
         object-fit: cover;
+        transition: 0.2s;
+        &:hover {
+          border-radius: 3px;
+          transform: scale(2);
+          transition: 0.5s;
+        }
       }
     }
   }
