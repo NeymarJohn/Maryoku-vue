@@ -471,7 +471,7 @@ export default {
       const campaignData = this.$store.state.campaign;
       switch (this.campaign.name) {
         case "SAVING_DATE":
-          return `${campaignData.SAVING_DATE ? campaignData.SAVING_DATE.title : this.event.title} Save The Date `;
+          return `${campaignData.SAVING_DATE ? campaignData.SAVING_DATE.title : this.event.title}  `;
           break;
         case "RSVP":
           return `${campaignData.RSVP ? campaignData.RSVP.title : this.event.title} RSVP`;
