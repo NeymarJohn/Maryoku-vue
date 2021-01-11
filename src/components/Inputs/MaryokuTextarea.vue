@@ -163,7 +163,6 @@ export default {
     width: 100%;
     resize: none;
     border: none;
-    padding: 2px;
     // overflow: hidden;
   }
 

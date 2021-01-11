@@ -68,7 +68,7 @@
       </div>
 
       <div class="event-info-item-content font-size-20" v-if="!editingArrival">
-        {{ event.arrival || "-" }}&emsp;
+        {{ eventArrival }}&emsp;
         <md-button class="md-simple edit-btn md-red" v-if="editable" @click="editingArrival = !editingArrival"
           >Edit</md-button
         >
@@ -164,7 +164,7 @@ export default {
       }
     }
     &-title {
-      min-width: 250px;
+      width: 250px;
       padding: 10px 24px;
       span.underline {
         border-bottom: solid 2px #ff7600;

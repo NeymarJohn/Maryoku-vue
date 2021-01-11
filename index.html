@@ -16,7 +16,7 @@
         <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet" />
 
         <script
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8&libraries=places&language=en"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6JvMsiEN9jz3lfVbKlnUQhjZB6fgcCu8&libraries=places&language=en"
             async
             defer
         ></script>
@@ -134,7 +134,6 @@
                 top: 25%;
                 color: white;
             }
-
             .quote_2,
             .quote_3,
             .quote_7 {
@@ -149,7 +148,6 @@
                 align-items: center;
                 bottom: 100px;
             }
-
             .quote_2::before,
             .quote_3::before,
             .quote_7::before {
@@ -161,7 +159,6 @@
                 left: 0;
                 top: -10px;
             }
-
             .quote_2::after,
             .quote_3::after,
             .quote_7::after {
@@ -173,7 +170,6 @@
                 left: 0;
                 top: 85px;
             }
-
             .quote_4 {
                 width: 50%;
                 left: 50%;
@@ -189,7 +185,6 @@
                 color: white;
                 max-width: 500px;
             }
-
             .quote_6 {
                 left: 5%;
                 max-width: 40%;
@@ -325,8 +320,13 @@
             // qutoDescription.classList.add("quote");
             // qutoDescription.classList.add("quote_" + imageIndex);
             // document.getElementById("loading-background").appendChild(qutoDescription)
-        </script>
 
-        <script async defer src="https://apis.google.com/js/api.js"></script>
+            function handleClientLoad() {
+                alert();
+                console.log("loaded client");
+                gapi.load("client:auth2", initClient);
+            }
+        </script>
+        <script type="text/javascript" src="https://apis.google.com/js/api.js" gapi_processed="true"></script>
     </body>
 </html>

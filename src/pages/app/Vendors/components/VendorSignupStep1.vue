@@ -121,20 +121,18 @@
         </div>
         <div class="my-30">
           <div class="title-cont d-flex align-center mb-20">
-            <h5 class="my-0">
-              <img class="mr-10" :src="`${iconUrl}Asset 542.svg`" width="30" /> Add a Personal message to your clients
-            </h5>
+            <h5 class=" my-0"><img class="mr-10" :src="`${iconUrl}Asset 542.svg`" width="30"/> Add a Personal message to your clients</h5>
             <p class="my-0 pl-20">This paragraph will be added automatically to your proposals</p>
           </div>
           <div class="card">
             <div class="field">
               <h5 class="my-0 pb-10">DEAR PLANNER...</h5>
               <textarea
-                placeholder="Type 'about your personal message' here"
-                class="width-100"
-                rows="5"
-                @blur="updateVendor($event, 'personalMessage')"
-                v-model="vendor.personalMessage"
+                  placeholder="Type 'about your personal message' here"
+                  class="width-100"
+                  rows="5"
+                  @blur="updateVendor($event, 'personalMessage')"
+                  v-model="vendor.personalMessage"
               ></textarea>
             </div>
           </div>
@@ -150,23 +148,22 @@
           </div>
           <template v-if="!vendor.images || vendor.images.length == 0">
             <Drop
-              @drop="handleDrop"
-              @dragenter="handleDragEnter"
-              @dragleave="handleDragLeave"
-              style="height: 100%"
-              :class="{ 'drag-over': isDragOver, 'red-border': !isDragOver }"
-              class="card d-flex justify-content-center align-center"
-            >
+                    @drop="handleDrop"
+                    @dragenter="handleDragEnter"
+                    @dragleave="handleDragLeave"
+                    style="height: 100%;"
+                    :class="{'drag-over': isDragOver, 'red-border': !isDragOver}"
+                    class="card d-flex justify-content-center align-center">
               <div class="upload-cont" v-if="!isDragOver">
                 <a class @click="uploadVendorImage"> <img :src="`${iconUrl}Asset 559.svg`" /> Choose File </a>
                 <div class="or">Or</div>
                 <span>Drag and drop photos</span>
                 <input
-                  type="file"
-                  class="hide"
-                  ref="imageFile"
-                  accept="image/gif, image/jpg, image/png"
-                  @change="onVendorImageFilePicked"
+                        type="file"
+                        class="hide"
+                        ref="imageFile"
+                        accept="image/gif, image/jpg, image/png"
+                        @change="onVendorImageFilePicked"
                 />
               </div>
               <span class="font-size-30 drop-cont" v-else>Drop Here</span>
@@ -230,27 +227,26 @@
                   @click="removeVendorImage(vendor.images[3])"
                 />
               </div>
-              <Drop
-                @drop="handleDrop"
-                @dragenter="handleDragEnter"
-                @dragleave="handleDragLeave"
-                :class="{ 'drag-over': isDragOver }"
-                class="box item add-more d-flex justify-content-center align-center"
-              >
-                <div v-if="!isDragOver">
-                  <img :src="`${iconUrl}Group 6501.svg`" @click="uploadVendorImage" />
-                  <br />
-                  <span>Add more</span>
-                  <input
-                    type="file"
-                    class="hide"
-                    ref="imageFile"
-                    accept="image/gif, image/jpg, image/png"
-                    @change="onVendorImageFilePicked"
-                  />
-                </div>
-                <span class="font-size-16 drop-cont" v-else>Drop Here</span>
-              </Drop>
+                <Drop
+                        @drop="handleDrop"
+                        @dragenter="handleDragEnter"
+                        @dragleave="handleDragLeave"
+                        :class="{'drag-over': isDragOver}"
+                        class="box item add-more d-flex justify-content-center align-center">
+                    <div v-if="!isDragOver">
+                        <img :src="`${iconUrl}Group 6501.svg`" @click="uploadVendorImage"/>
+                        <br />
+                        <span>Add more</span>
+                        <input
+                                type="file"
+                                class="hide"
+                                ref="imageFile"
+                                accept="image/gif, image/jpg, image/png"
+                                @change="onVendorImageFilePicked"
+                        />
+                    </div>
+                    <span class="font-size-16 drop-cont" v-else>Drop Here</span>
+                </Drop>
             </div>
           </template>
         </div>
@@ -497,10 +493,10 @@ export default {
       const files = event.dataTransfer.files;
 
       // validate upload files
-      for (let i = 0; i < files.length; i++) {
+      for (let i = 0; i < files.length; i ++) {
         let message = null;
-        if (files[i].type !== "image/jpeg" && files[i].type !== "image/png" && files[i].type !== "image/gif") {
-          message = "Please update a image (.png, .jpeg, .gif) file!";
+        if (files[i].type !== 'image/jpeg' && files[i].type !== 'image/png' && files[i].type !== 'image/gif') {
+          message = 'Please update a image (.png, .jpeg, .gif) file!';
         }
 
         if (files[i].size > 5 * 1024 * 1024) {
@@ -517,15 +513,16 @@ export default {
           });
           this.isDragOver = false;
           return;
+
         }
       }
       this.createImage(files[0]);
       this.isDragOver = false;
     },
-    handleDragEnter(e) {
+    handleDragEnter(e){
       this.isDragOver = true;
     },
-    handleDragLeave(e) {
+    handleDragLeave(e){
       this.isDragOver = false;
     },
     updateSocialMedia(item) {
@@ -791,11 +788,11 @@ export default {
           }
         }
 
-        &.drag-over {
+        &.drag-over{
           border: 2px dotted #f51355;
           min-height: 210px;
 
-          .drop-cont {
+          .drop-cont{
             color: #cfcfcf;
             font-weight: bold;
           }
@@ -898,13 +895,13 @@ export default {
         padding-bottom: 10px;
       }
 
-      .drop-cont {
-        font-weight: bold;
-        color: #cfcfcf;
+      .drop-cont{
+          font-weight: bold;
+          color: #cfcfcf;
       }
 
-      &.drag-over {
-        border: 2px dotted #f51355;
+      &.drag-over{
+            border: 2px dotted #f51355;
       }
     }
   }

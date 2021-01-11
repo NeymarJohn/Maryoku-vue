@@ -75,8 +75,8 @@ export default {
   },
   methods: {
     getSpecialRequirements(){
-      console.log('specialRequirements', this.anythingElse);
       this.specialRequirements = this.data;
+
     },
     handleChangeItem(){
       console.log("handleChangeItem", this.data);

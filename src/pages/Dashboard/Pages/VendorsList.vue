@@ -102,19 +102,7 @@ export default {
       const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
       const fileExtension = ".xlsx";
 
-      const exportVendors = [];
-      this.vendors.forEach((item, index) => {
-        exportVendors.push({
-          number: index + 1,
-          companyName: item.companyName,
-          editUrl: `${this.currentPath}/#/vendor-signup/edit/${item.id}`,
-          userName: item.vendorDisplayName,
-          category: item.eventCategory ? item.eventCategory.title : "",
-          email: item.vendorMainEmail,
-          address: item.vendorAddressLine1,
-        });
-      });
-      const ws = XLSX.utils.json_to_sheet(exportVendors);
+      const ws = XLSX.utils.json_to_sheet(this.vendors);
       const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
       const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
       const data = new Blob([excelBuffer], { type: fileType });

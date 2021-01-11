@@ -68,7 +68,6 @@ const getters = {
 const mutations = {
   setVendor: (state, vendor) => {
     state.vendor = vendor
-    state.personalMessage = vendor.personMessage
   },
   setPropsalRequest: (state, propsoalRequest) => {
     state.proposalRequest = propsoalRequest
