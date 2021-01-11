@@ -185,6 +185,7 @@ export default {
         },
         { value: 2, label: "Other", icon: "", color: "#cbc8c8" },
       ],
+      timer: null,
     };
   },
   created() {
@@ -198,7 +199,7 @@ export default {
     });
     this.percentage = Math.round((openedEmails / totalEmailCount) * 100);
     this.getAnalyzingData();
-    setInterval(() => {
+    this.timer = setInterval(() => {
       this.getAnalyzingData();
     }, 5000);
     // this.$http.get(`${process.env.SERVER_URL}/1/rsvp-requests/statistics/${this.campaignData.id}`).then((res) => {
@@ -238,6 +239,9 @@ export default {
         this.foodLimitations = res.data.limitations;
       });
     },
+  },
+  destroyed() {
+    clearInterval(this.timer);
   },
   computed: {
     numberOfEmails() {

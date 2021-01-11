@@ -66,7 +66,6 @@
                 "
                 :item="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0])[0]"
                 :label="`Company Services`"
-                :vendor="vendor"
                 v-model="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0])[0].value"
               />
             </div>
@@ -490,7 +489,7 @@ export default {
   },
   created() {},
   mounted() {
-    console.log("step1.mounted", this.companyServices);
+    console.log("mounted", this.vendor);
   },
   methods: {
     handleDrop(data, event) {

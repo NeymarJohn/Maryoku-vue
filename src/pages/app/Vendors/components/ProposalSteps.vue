@@ -13,25 +13,25 @@
     </div>
     <div class="steps-cont">
       <ul class="progressbar">
-        <li v-if="hasVisionStep" :class="[{ active: step >= 0 }, { current: step == 0 }]" @click="goToStep(0)">
+        <li v-if="hasVisionStep" :class="[{ active: step >= 0 }, { current: step == 0 }]">
           <span v-if="step == 0"><i>&#8226;</i></span>
           <span v-else><md-icon>check</md-icon></span>
           <br />
           Describe Your <br />Vision
         </li>
-        <li :class="[{ active: step > 1 }, { current: step == 1 }, { inactive: step < 1 }]" @click="goToStep(1)">
+        <li :class="[{ active: step > 1 }, { current: step == 1 }, { inactive: step < 1 }]">
           <span v-if="step >= 2"><md-icon>check</md-icon></span>
           <span v-else><i>&#8226;</i></span>
           <br />
           Propose <br />Your Bid
         </li>
-        <li :class="[{ active: step >= 3 }, { current: step == 2 }, { inactive: step < 2 }]" @click="goToStep(2)">
+        <li :class="[{ active: step >= 3 }, { current: step == 2 }, { inactive: step < 2 }]">
           <span v-if="step >= 3"><md-icon>check</md-icon></span>
           <span v-else><i>&#8226;</i></span>
           <br />
           Additional <br />Services
         </li>
-        <li :class="[{ current: step >= 3 }, { inactive: step < 3 }]" @click="goToStep(3)">
+        <li :class="[{ current: step >= 3 }, { inactive: step < 3 }]">
           <span v-if="step >= 3"><i>&#8226;</i></span>
           <span v-else><i>&#8226;</i></span>
           <br />Preview <br />Proposal
@@ -55,11 +55,7 @@ export default {
       lookingFor: {},
     };
   },
-  methods: {
-    goToStep(step) {
-      this.$store.commit("vendorProposal/setWizardStep", step);
-    },
-  },
+  methods: {},
   created() {},
   mounted() {
     this.lookingFor = this.proposalRequest.requirements.find((item) => item.category == "multi-selection");
@@ -83,33 +79,17 @@ export default {
       return str;
     },
     serviceTime() {
-      let serviceTimeString = "";
-      if (this.proposalRequest.requirementsCategory === "venuerental") {
-        const startString = `${this.$dateUtil.formatScheduleDay(
-          Number(this.proposalRequest.eventData.eventStartMillis),
-          "MM.DD.YY",
-        )}`;
-        const endString = `${this.$dateUtil.formatScheduleDay(
-          Number(this.proposalRequest.eventData.eventEndMillis),
-          "MM.DD.YY",
-        )}`;
-        if (startString === endString) {
-          return startString;
-        } else return `${startString}-${endString}`;
-      }
+      let serviceTimeString = "For Whole Event";
       this.proposalRequest.eventData.timelineDates.forEach((td) => {
-        let timeString = "";
         td.timelineItems.forEach((timelineItem) => {
           if (timelineItem.eventCategory && timelineItem.eventCategory.includes(this.vendor.eventCategory.key)) {
-            timeString += `${this.$dateUtil.formatScheduleDay(
+            console.log(timelineItem.eventCategory, this.vendor.eventCategory.key);
+            serviceTimeString = `${this.$dateUtil.formatScheduleDay(
               Number(timelineItem.startTime),
-              "hh:mm A",
-            )}-${this.$dateUtil.formatScheduleDay(Number(timelineItem.endTime), "hh:mm A")}, `;
+              "MM.DD.YY hh:mm A",
+            )}-${this.$dateUtil.formatScheduleDay(Number(timelineItem.endTime), "MM.DD.YY hh:mm A")}`;
           }
         });
-        if (timeString) {
-          serviceTimeString += `${this.$dateUtil.formatScheduleDay(td.date, "MM.DD.YY")} ${timeString}`;
-        }
       });
       return serviceTimeString;
     },
@@ -141,8 +121,8 @@ export default {
         text-align: center;
         font-weight: 600;
         font-size: 16px;
+
         span {
-          cursor: pointer;
           width: 34px;
           height: 34px;
           display: inline-block;

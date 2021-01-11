@@ -6,7 +6,7 @@
         v-for="(color, index) in event.concept.colors"
         :key="index"
         class="concept-color"
-        :style="`background: ${color.color || '#EDEDED'}`"
+        :style="`background: ${color.color}`"
       >
         <img class="concept-image" :src="`${event.concept.images[index].url}`" />
       </div>
@@ -27,8 +27,7 @@
         ><span style="padding: 5px">(15 photos top, under 20 KB)</span>
       </div>
       <div style="padding: 10px 10px 30px 40px">Photos that could fit in with the concept</div>
-      <proposal-inspirational-photos></proposal-inspirational-photos>
-      <!-- <vue-dropzone
+      <vue-dropzone
         id="dropzone"
         :options="dropzoneOptions"
         :useCustomSlot="true"
@@ -40,19 +39,17 @@
         <br />Or
         <br />
         <span class="color-dark-gray">Drag your file here</span>
-      </vue-dropzone> -->
+      </vue-dropzone>
     </div>
   </div>
 </template>
 <script>
 import vue2Dropzone from "vue2-dropzone";
 import S3Service from "@/services/s3.service";
-import ProposalInspirationalPhotos from "./ProposalInspirationalPhotos.vue";
 
 export default {
   components: {
     vueDropzone: vue2Dropzone,
-    ProposalInspirationalPhotos,
   },
   props: {
     event: {
@@ -93,12 +90,6 @@ export default {
         height: 140px;
         border-radius: 50%;
         object-fit: cover;
-        transition: 0.2s;
-        &:hover {
-          border-radius: 3px;
-          transform: scale(2);
-          transition: 0.5s;
-        }
       }
     }
   }

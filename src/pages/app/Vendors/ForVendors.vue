@@ -632,20 +632,11 @@ export default {
       return `${moment(startDate).format("hh:mmA")} - ${moment(endDate).format("hh:mmA")}`;
     },
     serviceTime() {
-      // if (!this.vendor)
-      //   return {
-      //     time: "",
-      //     date: "",
-      //   };
       let serviceTimeString = "For Whole Event";
       let serviceDate = "";
       this.proposalRequest.eventData.timelineDates.forEach((td) => {
         td.timelineItems.forEach((timelineItem) => {
-          if (
-            timelineItem &&
-            timelineItem.eventCategory &&
-            timelineItem.eventCategory.includes(this.vendor.eventCategory.key)
-          ) {
+          if (timelineItem.eventCategory && timelineItem.eventCategory.includes(this.vendor.eventCategory.key)) {
             console.log(timelineItem.eventCategory, this.vendor.eventCategory.key);
             serviceTimeString = `${this.$dateUtil.formatScheduleDay(
               Number(timelineItem.startTime),
@@ -655,12 +646,6 @@ export default {
           }
         });
       });
-      if (!serviceDate) {
-        serviceDate = `${this.$dateUtil.formatScheduleDay(
-          Number(this.proposalRequest.eventData.eventStartMillis),
-          "MMM DD, YYYY",
-        )}`;
-      }
       return {
         time: serviceTimeString,
         date: serviceDate,

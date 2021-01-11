@@ -166,14 +166,14 @@ export default {
   },
   methods: {
     updateCategory(index, data) {
-      // console.log('updateCategory', index, data);
+      console.log('updateCategory', index, data);
       this.selectedValue[index] = data;
     },
     save() {
       this.isEdit = false;
       let selectedValue = [];
 
-      // console.log("vendor.signup.category", this.selectedValue);
+      console.log("vendor.signup.category", this.selectedValue);
       if (this.field === 'vendorCategories') {
         this.selectedValue.map(v => {
           let item = this.vendorCategories.find(cat => cat.name === v);
@@ -197,7 +197,7 @@ export default {
       this.selectedValue[index] = `${addressData.route}, ${addressData.administrative_area_level_1}, ${addressData.country}`;
     },
     init() {
-      // console.log('init', this.value);
+      console.log('init', this.value);
       this.selectedValue = [];
       if (this.value.length && this.field === 'vendorCategories') {
         this.value.map (v => {

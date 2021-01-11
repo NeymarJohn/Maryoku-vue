@@ -274,38 +274,37 @@ export default {
       }
     },
     changeLocation(loc) {
-      // console.log("change.location", loc);
-      if (!loc) return;
-      this.$emit('change', {location: loc});
+      console.log("change.location", loc);
+      this.$emit('change', {location: e});
     },
     inOutDoorChange() {
-      // console.log('inOutDoorChange', this.section.inOutDoor);
+      console.log('inOutDoorChange', this.section.inOutDoor);
       this.$emit('change', {inOutDoor: this.section.inOutDoor});
     },
     guestNumberChange(e){
       this.$emit('change', {numberOfParticipants: parseInt(e) });
     },
     inputQuestType(e){
-      // console.log('inputQuestType', e);
+      console.log('inputQuestType', e);
     },
     guestTypeChange(e) {
-      // console.log('guestTypeChange', e);
+      console.log('guestTypeChange', e);
       this.$emit('change', {guestType: e});
     },
     eventTypeChange(e){
-      // console.log('eventTypeChange', e);
+      console.log('eventTypeChange', e);
       this.$emit('change', {eventType: e});
     },
     occasionChange(e){
-      // console.log('occasionChange', e);
+      console.log('occasionChange', e);
       this.$emit('change', {occasion: e});
     },
     holidayChange(e){
-      // console.log('holidayChange', e);
+      console.log('holidayChange', e);
       this.$emit('change', {holiday: e});
     },
     changeDate(e){
-      // console.log('changeDate', this.dateData);
+      console.log('changeDate', this.dateData);
       this.dateClick = !this.dateClick;
 
       if(this.dateClick) {

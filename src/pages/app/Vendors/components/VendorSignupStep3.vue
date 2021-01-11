@@ -34,7 +34,7 @@
                 <div class="left v-grid-with-desc">
                   {{ r.name }}
                   <textarea
-                    v-if="r.hasComment"
+                    v-if="r.hasComment && r.value"
                     class="desc"
                     rows="3"
                     v-model="r.desc"
@@ -97,12 +97,7 @@
                     <div class="bottom no-margin" v-if="r.type == Number">
                       <template v-if="r.noSuffix">
                         <div>
-                          <input type="number"
-                                 class="text-center number-field"
-                                 placeholder="00.00"
-                                 v-model="r.value"
-                                 @input="setPolicy"
-                          />
+                          <input type="number" class="text-center number-field" placeholder="00.00" />
                         </div>
                       </template>
                       <template v-else>
@@ -110,18 +105,17 @@
                         <span v-else>Extra Payment</span>
                         <br />
                         <div class="suffix percentage" v-if="r.isPercentage">
-                          <input type="number"
-                                 placeholder="00.00"
-                                 v-model="r.value"
-                                 @input="setPolicy"
-                          />
+                          <input type="number" class placeholder="00.00" />
                         </div>
                         <div class="suffix" v-else>
-                          <input type="number"
-                                 placeholder="00.00"
-                                 v-model="r.value"
-                                 @input="setPolicy"
-                          />
+                          <input type="number" class placeholder="00.00" />
+                        </div>
+                      </template>
+                    </div>
+                    <div class="bottom mt-0 ml-40" v-if="r.type == Boolean">
+                      <template v-if="r.noSuffix && r.value">
+                        <div>
+                          <input type="number" v-model="r.count" class="text-center number-field" placeholder="" />
                         </div>
                       </template>
                     </div>
@@ -134,7 +128,7 @@
                                 class="text-center number-field"
                                 placeholder="00.00"
                                 v-model="r.cost"
-                                @input="setPolicy"
+                                @change="setPolicy"
                         />
                       </div>
                     </div>
@@ -902,7 +896,7 @@ export default {
       this.$root.$emit("update-vendor-value", "pricingPolicies", this.vendorPricingPolicies.items);
     },
     setPolicy(e, type, name, value) {
-      console.log('setPricePolicy', this.vendorPolicies.items);
+      // console.log('setPricePolicy', value);
       if ( (type === 'option' ||  type === 'Including' ) && name ) {
         let p = this.vendorPolicies.items.find(it => it.name === name);
         p.value = value;

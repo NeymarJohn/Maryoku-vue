@@ -3409,8 +3409,9 @@ export const VendorPolicy = [
         },
         {
             name: "Number of PR drafts",
-            type: Number,
+            type: Boolean,
             noSuffix: true,
+            count: null,
             hasComment: true,
         },
         {
@@ -3730,7 +3731,7 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Working with unions",
-        type: Boolean,
+        type: Number,
         hasComment: true,
       },
       {
