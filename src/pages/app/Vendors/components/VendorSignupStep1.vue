@@ -66,6 +66,7 @@
                 "
                 :item="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0])[0]"
                 :label="`Company Services`"
+                :vendor="vendor"
                 v-model="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0])[0].value"
               />
             </div>
@@ -148,7 +149,7 @@
               <p>(15 photos top, under 5MB)</p>
             </div>
           </div>
-          <template v-if="!vendor.images || vendor.images.length == 0">
+          <template v-if="!vendor.vendorImages.length">
             <Drop
               @drop="handleDrop"
               @dragenter="handleDragEnter"
@@ -178,57 +179,69 @@
               <div
                 class="box item2"
                 :style="`
-                  background-image: url(${vendor.images[0]});
+                  background-image: url(${vendor.vendorImages[0]});
                   background-size: cover;
                   background-size: 100% 100%;`"
               >
-                <img
-                  :src="`${iconUrl}Asset 528.svg`"
-                  v-if="vendor.images[0]"
-                  @click="removeVendorImage(vendor.images[0])"
-                />
+                <div class="trash"
+                     v-if="vendor.vendorImages[0]"
+                     @click="removeVendorImage(vendor.vendorImages[0])"
+                >
+                  <img
+                    src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg"
+                  />
+                </div>
               </div>
               <div
                 class="box item"
-                :class="{ 'no-image': !vendor.images[1] }"
+                :class="{ 'no-image': !vendor.vendorImages[1] }"
                 :style="`
-                  background-image: url(${vendor.images[1]});
+                  background-image: url(${vendor.vendorImages[1]});
                   background-size: cover;
                   background-size: 100% 100%;`"
               >
-                <img
-                  :src="`${iconUrl}Asset 528.svg`"
-                  v-if="vendor.images[1]"
-                  @click="removeVendorImage(vendor.images[1])"
-                />
+                <div class="trash"
+                     v-if="vendor.vendorImages[1]"
+                     @click="removeVendorImage(vendor.vendorImages[1])"
+                >
+                  <img
+                      src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg"
+                  />
+                </div>
               </div>
               <div
                 class="box item"
-                :class="{ 'no-image': !vendor.images[2] }"
+                :class="{ 'no-image': !vendor.vendorImages[2] }"
                 :style="`
-                  background-image: url(${vendor.images[2]});
+                  background-image: url(${vendor.vendorImages[2]});
                   background-size: cover;
                   background-size: 100% 100%;`"
               >
-                <img
-                  :src="`${iconUrl}Asset 528.svg`"
-                  v-if="vendor.images[2]"
-                  @click="removeVendorImage(vendor.images[2])"
-                />
+                <div class="trash"
+                     v-if="vendor.vendorImages[2]"
+                     @click="removeVendorImage(vendor.vendorImages[2])"
+                >
+                  <img
+                    src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg"
+                  />
+                </div>
               </div>
               <div
                 class="box item"
-                :class="{ 'no-image': !vendor.images[3] }"
+                :class="{ 'no-image': !vendor.vendorImages[3] }"
                 :style="`
-                  background-image: url(${vendor.images[3]});
+                  background-image: url(${vendor.vendorImages[3]});
                   background-size: cover;
                   background-size: 100% 100%;`"
               >
-                <img
-                  :src="`${iconUrl}Asset 528.svg`"
-                  v-if="vendor.images[3]"
-                  @click="removeVendorImage(vendor.images[3])"
-                />
+                <div class="trash"
+                     v-if="vendor.vendorImages[3]"
+                     @click="removeVendorImage(vendor.vendorImages[3])"
+                >
+                  <img
+                    src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg"
+                  />
+                </div>
               </div>
               <Drop
                 @drop="handleDrop"
@@ -489,7 +502,7 @@ export default {
   },
   created() {},
   mounted() {
-    console.log("mounted", this.vendor);
+    console.log("step1.mounted", this.companyServices);
   },
   methods: {
     handleDrop(data, event) {
@@ -582,8 +595,9 @@ export default {
           this.$root.$emit("update-vendor-value", "signature", e.target.result);
         } else {
           const fileId = `${new Date().getTime()}_${makeid()}`;
-          const currentIndex = this.vendor.images.length;
+          const currentIndex = this.vendor.vendorImages.length;
           S3Service.fileUpload(file, fileId, "vendor/cover-images").then((uploadedName) => {
+            console.log('createImage', uploadedName);
             this.$root.$emit("update-vendor-value", "vendorImages", {
               index: currentIndex,
               data: `https://maryoku.s3.amazonaws.com/vendor/cover-images/${uploadedName}`,
@@ -854,25 +868,36 @@ export default {
 
     .box {
       margin: 1rem;
+      position: relative;
     }
 
     .item2 {
-      img {
-        width: 24px;
+      .trash{
         cursor: pointer;
-        position: relative;
-        left: 90%;
-        top: 80%;
+        position: absolute;
+        right: 1rem;
+        bottom: 1rem;
+        background-color: white;
+        border-radius: 50%;
+        padding: 8px 12px;
+      }
+      img {
+        width: 20px;
       }
     }
 
     .item {
-      img {
-        width: 24px;
+      .trash{
         cursor: pointer;
-        position: relative;
-        left: 80%;
-        top: 60%;
+        position: absolute;
+        right: .5rem;
+        bottom: .5rem;
+        background-color: white;
+        border-radius: 50%;
+        padding: 4px 8px;
+      }
+      img {
+        width: 18px;
       }
     }
 
@@ -935,7 +960,7 @@ export default {
         width: 18px;
         cursor: pointer;
         position: absolute;
-        right: 1rem;
+        right: 2rem;
         bottom: 3rem;
       }
     }

@@ -185,6 +185,7 @@ export default {
         },
         { value: 2, label: "Other", icon: "", color: "#cbc8c8" },
       ],
+      timer: null,
     };
   },
   created() {
@@ -197,15 +198,19 @@ export default {
       }
     });
     this.percentage = Math.round((openedEmails / totalEmailCount) * 100);
-    this.$http.get(`${process.env.SERVER_URL}/1/rsvp-requests/statistics/${this.campaignData.id}`).then((res) => {
-      this.rsvpStatisData = res.data;
-      this.analyticsData[0].list = this.rsvpStatisData.guests;
-      this.analyticsData[1].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "REJECTED");
-      this.analyticsData[2].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "CONSIDERED");
-      this.analyticsData[3].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "VIRTUAL");
-      this.analyticsData[4].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "REQUESTED");
-      this.foodLimitations = res.data.limitations;
-    });
+    this.getAnalyzingData();
+    this.timer = setInterval(() => {
+      this.getAnalyzingData();
+    }, 5000);
+    // this.$http.get(`${process.env.SERVER_URL}/1/rsvp-requests/statistics/${this.campaignData.id}`).then((res) => {
+    //   this.rsvpStatisData = res.data;
+    //   this.analyticsData[0].list = this.rsvpStatisData.guests;
+    //   this.analyticsData[1].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "REJECTED");
+    //   this.analyticsData[2].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "CONSIDERED");
+    //   this.analyticsData[3].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "VIRTUAL");
+    //   this.analyticsData[4].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "REQUESTED");
+    //   this.foodLimitations = res.data.limitations;
+    // });
   },
   methods: {
     sendEmailsAgain() {
@@ -223,6 +228,20 @@ export default {
           });
         });
     },
+    getAnalyzingData() {
+      this.$http.get(`${process.env.SERVER_URL}/1/rsvp-requests/statistics/${this.campaignData.id}`).then((res) => {
+        this.rsvpStatisData = res.data;
+        this.analyticsData[0].list = this.rsvpStatisData.guests;
+        this.analyticsData[1].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "REJECTED");
+        this.analyticsData[2].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "CONSIDERED");
+        this.analyticsData[3].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "VIRTUAL");
+        this.analyticsData[4].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "REQUESTED");
+        this.foodLimitations = res.data.limitations;
+      });
+    },
+  },
+  destroyed() {
+    clearInterval(this.timer);
   },
   computed: {
     numberOfEmails() {

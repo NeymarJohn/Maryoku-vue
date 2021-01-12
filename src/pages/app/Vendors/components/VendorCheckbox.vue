@@ -258,6 +258,9 @@ export default {
   },
   filters: {},
   watch: {},
+  beforeDestroy(){
+    // this.$root.$off('update-vendor-value')
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -421,8 +424,10 @@ export default {
     .text {
       margin: 12px 0 0 3rem;
       min-width: 30%;
+      max-width: 30%;
       border: solid 1px #707070;
       padding: 10px 17px;
+
       min-height: 80px;
       background: #ffffff;
       resize: none;

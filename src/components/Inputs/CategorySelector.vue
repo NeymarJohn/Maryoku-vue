@@ -211,7 +211,7 @@ export default {
     width: 100%;
     li {
       cursor: pointer;
-      font: normal 18px Manrope-Regular, sans-serif;
+      font: normal 16px Manrope-Regular, sans-serif;
       img {
         width: 30px !important;
       }
