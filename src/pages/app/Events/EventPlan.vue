@@ -91,10 +91,10 @@ export default {
         };
         const campaign = {
           title: "Create Campaigns",
-          status: "current",
+          status: this.event.campaignProgress === 100 ? "completed" : "not-complete",
           route: "booking/campaign",
           icon: `${this.$iconURL}Campaign/Group 8857.svg`,
-          progress: 0,
+          progress: this.event.campaignProgress,
           componentId: "campaign",
           id: "campaign-item",
         };
@@ -163,14 +163,14 @@ export default {
     fetchData() {
       this.pageId = this.$route.params.blockId ? this.$route.params.blockId : "timeline";
     },
-    changeCheckList(e){
-      console.log('changeCheckList', e);
+    changeCheckList(e) {
+      console.log("changeCheckList", e);
       let event = this.event;
       event.checkList = e;
-      this.$store.dispatch('event/saveEventAction', event).then(res => {
-        console.log('plan.updateEvent', res);
+      this.$store.dispatch("event/saveEventAction", event).then((res) => {
+        console.log("plan.updateEvent", res);
       });
-    }
+    },
   },
   created() {},
   watch: {

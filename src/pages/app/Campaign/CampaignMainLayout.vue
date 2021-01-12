@@ -461,7 +461,8 @@ export default {
       });
       return new Promise((resolve, reject) => {
         this.saveCampaign(newCampaign)
-          .then(() => {
+          .then((res) => {
+            this.$store.commit("event/setEventData", res.item.event);
             resolve();
           })
           .catch(() => {
