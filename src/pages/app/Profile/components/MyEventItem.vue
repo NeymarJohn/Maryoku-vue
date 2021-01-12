@@ -22,8 +22,8 @@
         <div class="info-wrapper d-flex justify-content-center flex-column">
           <div class="font-size-22">Date</div>
           <div class="font-size-16 mt-5">
-            {{ $dateUtil.formatScheduleDay(event.eventStartMills, "MMMM DD, YYYY") }} -
-            {{ $dateUtil.formatScheduleDay(event.eventEndMills, "MMMM DD, YYYY") }}
+            {{ $dateUtil.formatScheduleDay(event.eventStartMillis, "MMMM DD, YYYY") }} -
+            {{ $dateUtil.formatScheduleDay(event.eventEndMillis, "MMMM DD, YYYY") }}
           </div>
         </div>
       </div>
