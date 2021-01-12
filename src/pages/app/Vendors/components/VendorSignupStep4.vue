@@ -54,8 +54,8 @@
                 <md-icon>keyboard_arrow_right</md-icon>
               </span>
               <LightBox
-                v-if="medias.length"
-                :media="medias"
+                v-if="getGalleryImages().length > 0"
+                :images="getGalleryImages()"
                 ref="lightbox"
                 :show-light-box="false"
               />
@@ -193,11 +193,6 @@
                 <div class="item" v-else-if="policy.type === 'Including'">
                   <span class="mr-10" v-if="policy.value"> Yes </span>
                   <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
-                </div>
-                <div class="item" v-else-if="policy.type === Boolean && policy.value && policy.discount">
-                  <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '$'"> $ </span>
-                  <span class="mr-10" v-if="policy.discount"> {{ policy.discount }} </span>
-                  <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '%'"> % </span>
                 </div>
                 <div class="item" v-else>
                     <span v-if="policy.type === Number && !policy.isPercentage">$</span>
@@ -415,22 +410,11 @@ export default {
           icon: "equipmentrentals.svg",
         },
       ],
-      medias: [],
     };
   },
   created() {},
   mounted() {
     console.log('vendorSignup.step4', this.vendor);
-    if (this.vendor.hasOwnProperty('vendorImages') && this.vendor.vendorImages.length) {
-      this.vendor.images.forEach((item) => {
-        this.medias.push({
-          thumb: item,
-          src: item,
-          caption: "test",
-        });
-      });
-    }
-    console.log('vendorSignup.step4.mounted', this.medias);
   },
   methods: {
     isSocial() {
@@ -527,6 +511,22 @@ export default {
       if (!value) return "";
       value = value.toString();
       return value.charAt(0).toUpperCase() + value.slice(1);
+    },
+    getGalleryImages: function () {
+      let temp = [];
+
+      if (this.vendor.hasOwnProperty('images') && this.vendor.images.length) {
+        this.vendor.images.forEach((item) => {
+          temp.push({
+            thumb: item,
+            src: item,
+            caption: "test",
+          });
+        });
+        return temp;
+      } else {
+        return [];
+      }
     },
     view() {
       if (this.$refs.lightbox) {

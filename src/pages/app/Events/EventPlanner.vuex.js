@@ -60,7 +60,7 @@ export default {
     setQuestionsAnswersModal (state, data) {
       state.questionsAnswersModal = data.showModal
     },
-      setPublishEventModal (state, data) {
+    setPublishEventModal (state, data) {
       state.publishEventModal = data.showModal
     },
     setHeaderModal (state, data) {
