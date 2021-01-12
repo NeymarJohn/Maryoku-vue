@@ -678,6 +678,59 @@
     }
 }
 
+.profile-container{
+    .md-card {
+        .md-list {
+            .md-list-item {
+                &-button {
+                    border-bottom: 2px solid rgba(0, 0, 0, 0);
+                    text-transform: capitalize;
+                    font-size: 16px;
+                    height: 100%;
+                    padding-left: 30px;
+                    padding-right: 30px;
+                }
+                &.active {
+                    .md-list-item-button {
+                        background: none !important;
+                        border-bottom-color: #f51355;
+                        box-shadow: none;
+                        border-radius: 0;
+                        color: #000 !important;
+                        font-weight: bold;
+                        height: 100%;
+                    }
+                }
+            }
+            img {
+                height: 18px;
+                width: auto;
+                margin-right: 0.5em;
+            }
+        }
+    }
+
+    .nav-tabs.md-card {
+        margin-left: auto;
+        padding-left: 0;
+        justify-content: center !important;
+        border-radius: 3px;
+        height: 80px;
+        background-color: white !important;
+        border-bottom: .5px solid #707070;
+    }
+
+    .md-card-tabs .tab-content {
+        margin: 0 !important;
+        padding: 24px;
+        background-color: white;
+
+        > div {
+            width: 100% !important;
+        }
+    }
+}
+
 .progress-sidebar {
     position: fixed;
     left: 80px;

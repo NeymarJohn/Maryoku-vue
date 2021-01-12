@@ -138,6 +138,8 @@ import moment from "moment";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import CategorySelector from "@/components/Inputs/CategorySelector";
 import swal from "sweetalert2";
+import { extendMoment } from "moment-range";
+import { timelineTempates } from "@/constants/event.js";
 
 export default {
   name: "event-overview-section",
@@ -182,6 +184,7 @@ export default {
         selectedMinute: "00",
         selectedDates: [],
       },
+      dateRange: {},
       started_at: null,
       dateClick: false,
       ended_at: null,
@@ -301,6 +304,7 @@ export default {
       this.$emit('change', {holiday: e});
     },
     changeDate(e){
+      console.log('changeDate', this.dateData);
       this.dateClick = !this.dateClick;
 
       if(this.dateClick) {
@@ -309,16 +313,39 @@ export default {
 
       if(!this.dateClick) {
         this.ended_at = e.date;
+
+        const extendedMoment = extendMoment(moment);
+        const start = new Date(this.started_at);
+        const end = new Date(this.ended_at);
+        const range = extendedMoment.range(moment(start), moment(end));
+
+        const dateList = Array.from(range.by("day")).map((m) => m.format("YYYY-MM-DD"));
+        let timelineDates = [];
+        dateList.forEach((d) => {
+          timelineDates.push({
+            date: d,
+            templates: timelineTempates,
+            status: "editing",
+          });
+        });
+
         this.$emit('change', {
           dateData: {
             started_at: this.started_at,
             ended_at: this.ended_at,
-          }
+          },
+          timeline:{
+            dateList: dateList,
+            mode: "template", // default
+            status: "editing",
+          },
+          timelineDates
         })
       }
 
     },
     init: async function(){
+      console.log('init', this.dateData);
       // get holidays from server
       if ( !this.holidays.length && this.section.key === 'event_type') {
         let res = await this.$http.get(`${process.env.SERVER_URL}/1/holidays`);

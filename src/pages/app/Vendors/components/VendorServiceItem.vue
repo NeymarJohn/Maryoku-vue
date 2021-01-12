@@ -23,7 +23,12 @@
       <div class="items" v-for="(sub, sIndex) in serviceItem.subCategories" :key="sIndex">
         <div class="sub-category-title">{{ sub.name }}</div>
         <div class="checklist" v-for="(item, index) in sub.items" :key="index">
-          <vendor-checkbox :category="serviceItem.name" :item="item" :label="item.name" :vendor="vendor" v-model="item.value" />
+          <vendor-checkbox
+                  :category="serviceItem.name"
+                  :item="item"
+                  :label="item.name"
+                  :vendor="vendor"
+                  v-model="item.value" />
         </div>
       </div>
     </div>

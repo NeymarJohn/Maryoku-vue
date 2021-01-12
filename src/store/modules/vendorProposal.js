@@ -19,6 +19,7 @@ const state = {
   initStep: 0,
   additionalServices: [],
   attachments: {},
+  inspirationalPhotos: new Array(15),
   bundleDiscount: {
     isApplied: false,
     services: [],
@@ -68,6 +69,7 @@ const getters = {
 const mutations = {
   setVendor: (state, vendor) => {
     state.vendor = vendor
+    state.personalMessage = vendor.personMessage
   },
   setPropsalRequest: (state, propsoalRequest) => {
     state.proposalRequest = propsoalRequest
@@ -114,6 +116,9 @@ const mutations = {
   },
   setValue: (state, { key, value }) => {
     Vue.set(state, key, value)
+  },
+  setInspirationalPhoto: (state, { index, photo }) => {
+    Vue.set(state.inspirationalPhotos, index, photo)
   }
 }
 const actions = {

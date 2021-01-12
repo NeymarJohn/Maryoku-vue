@@ -1,17 +1,13 @@
 <template>
   <div class="profile-my-events white-card">
-    <div class="title profile-title font-size-30 font-bold-extra d-flex justify-content-between align-center">
-      <span>My Events</span>
-      <md-button class="md-simple md-outlined md-red maryoku-btn">Create New Event</md-button>
-    </div>
-    <div>{{ myEvents }}</div>
+    <div class="title profile-title font-size-30 font-bold-extra">My Events</div>
   </div>
 </template>
 
 <script>
 import { Collapse } from "@/components";
 import EventDetails from "./EventDetails";
-import CalendarEvent from "@/models/CalendarEvent";
+
 import VueElementLoading from "vue-element-loading";
 
 export default {
@@ -40,21 +36,8 @@ export default {
     } else {
       this.events = this.userInfo.myEvents || [];
       this.isLoading = false;
-      console.log(this.events);
       console.log(JSON.stringify(this.events, null, 4));
     }
-    new CalendarEvent()
-      .where("myEvents", true)
-      .get()
-      .then((events) => {
-        console.log(events);
-      });
-  },
-  computed: {
-    myEvents() {
-      if (!this.userInfo) return [];
-      return this.userInfo.myEvents || [];
-    },
   },
 
   watch: {

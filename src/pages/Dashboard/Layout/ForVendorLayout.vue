@@ -30,6 +30,7 @@
     <div class="banner" :style="`background-image: url('${backgroundImage}');`">
       <div class="banner-content">
         <h3>Congratulations!</h3>
+        <h3>{{ vendor.companyName }}</h3>
         <p>
           We found you could fit perfectly for our event with your
           <strong v-if="vendor">{{ vendor.eventCategory.fullTitle }}</strong> services.

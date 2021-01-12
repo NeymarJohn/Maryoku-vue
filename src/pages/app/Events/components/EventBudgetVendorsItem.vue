@@ -87,7 +87,7 @@
                   <md-button
                     class="book-btn md-sm"
                     :class="{
-                      disabled: eventCategoryItem.proposalsState === 'get-offers',
+                      disabled: eventCategoryItem.proposalsState !== 'get-offers',
                     }"
                     @click="bookVendors(eventCategoryItem)"
                     v-if="
@@ -304,6 +304,10 @@ export default {
           this.addVendorModalOpened = false;
           this.$emit("addVendor", myVendor);
         });
+    },
+    bookVendors(item) {
+      // go to booking page
+      this.$router.push(`/events/${this.event.id}/booking/${item.id}`);
     },
   },
   computed: {
