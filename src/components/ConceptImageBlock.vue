@@ -12,7 +12,6 @@
           class="image-section d-flex justify-content-center align-center text-center"
           :style="`background-image:url(${images[indx - 1].thumb_url || images[indx - 1].url})`"
           :for="`file-${indx}`"
-          v-if="images[indx - 1]"
         ></div>
       </div>
     </div>

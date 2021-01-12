@@ -102,7 +102,7 @@ export default {
   },
   watch: {
     limitationType(newValue, oldValue) {
-      this.$emit("change", { limitationType: newValue, limitations: this.selectedLimitations });
+      this.$emit("change", { limitationType: newValue, limitations: this.selectedLimitations, has });
     },
     selectedLimitations(newValue, oldValue) {
       this.$emit("change", { limitationType: this.limitationType, limitations: newValue });

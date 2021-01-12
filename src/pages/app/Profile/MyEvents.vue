@@ -1,25 +1,32 @@
 <template>
   <div class="profile-my-events white-card">
-    <div class="title profile-title font-size-30 font-bold-extra">My Events</div>
+    <div class="title profile-title font-size-30 font-bold-extra d-flex justify-content-between align-center">
+      <span>My Events</span>
+      <md-button class="md-simple md-outlined md-red maryoku-btn" @click="createNewEvent">Create New Event</md-button>
+    </div>
+    <div>
+      <my-event-item v-for="event in myEvents" :key="event.id" :event="event"></my-event-item>
+    </div>
   </div>
 </template>
 
 <script>
 import { Collapse } from "@/components";
 import EventDetails from "./EventDetails";
-
+import CalendarEvent from "@/models/CalendarEvent";
 import VueElementLoading from "vue-element-loading";
-
+import MyEventItem from "./components/MyEventItem.vue";
 export default {
   components: {
     Collapse,
     EventDetails,
     VueElementLoading,
+    MyEventItem,
   },
   data() {
     return {
       isLoading: true,
-      events: [],
+      myEvents: [],
       eventLocation: "",
       eventDate: "",
       eventDressCode: "",
@@ -36,18 +43,32 @@ export default {
     } else {
       this.events = this.userInfo.myEvents || [];
       this.isLoading = false;
+      console.log(this.events);
       console.log(JSON.stringify(this.events, null, 4));
     }
+    let filters = {
+      filters: {
+        myEvents: true,
+      },
+    };
+    this.$http
+      .get(`${process.env.SERVER_URL}/1/events`, {
+        params: filters,
+      })
+      .then((response) => {
+        this.myEvents = response.data;
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
 
-  watch: {
-    userInfo(newVal, oldVal) {
-      this.events = newVal.myEvents || [];
-      this.emptyEvents = this.events.length === 0;
-      this.isLoading = false;
+  methods: {
+    createNewEvent() {
+      this.$router.push("/create-event-wizard");
     },
   },
-  methods: {},
 };
 </script>
 

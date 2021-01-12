@@ -1,41 +1,53 @@
 <template>
-  <div class="md-layout" style="margin-top: 18px">
+  <div class="md-layout" style="margin-top: 18px;">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
-    <md-card class="md-card-plain time-line-blocks md-layout-item md-xlarge-size-20 md-large-size-20 md-small-size-30">
+    <md-card
+      class="md-card-plain time-line-blocks md-layout-item md-xlarge-size-20 md-large-size-20 md-small-size-30"
+    >
       <md-card-content class="md-layout time-line-blocks_items">
         <h5 class="section-desc">Create a timeline of your event by dragging timeline items.</h5>
-        <div v-for="(block, index) in blocksList" :key="block.id" class="md-layout-item md-size-100">
+        <div v-for="(block,index) in blocksList" :key="block.id" class="md-layout-item md-size-100">
           <drag
             :transfer-data="{ block }"
             class="time-line-blocks_item"
             :style="`border: 1px dashed ` + block.color + `; color :` + block.color"
           >
-            <md-icon>{{ block.icon }}</md-icon>
-            <h5>{{ block.buildingBlockType }}</h5>
+            <md-icon>{{block.icon}}</md-icon>
+            <h5>{{block.buildingBlockType}}</h5>
           </drag>
         </div>
       </md-card-content>
     </md-card>
     <div class="md-layout-item md-size-5"></div>
-    <div class="md-layout-item md-xlarge-size-70 md-large-size-70 md-small-size-60 time-line-section mr-auto" style>
+    <div
+      class="md-layout-item md-xlarge-size-70 md-large-size-70 md-small-size-60 time-line-section mr-auto"
+      style
+    >
       <!--<md-button name="event-planner-tab-timeline-preview" class="event-planner-tab-timeline-preview md-info md-sm preview-event" @click="previewEvent">
               Preview
       </md-button>-->
 
-      <drop @drop="handleDrop" style="height: 100%">
+      <drop @drop="handleDrop" style="height: 100%;">
         <draggable
           :list="timelineItems"
           class="time-line-blocks_selected-items"
-          :options="{ disabled: disabledDragging }"
+          :options="{disabled : disabledDragging}"
         >
           <div
-            v-for="(item, index) in timelineItems"
+            v-for="(item,index) in timelineItems"
             :key="index"
             class="time-line-blocks_selected-items_item time-line-item"
           >
-            <md-icon class="time-line-blocks_icon" :style="`background : ` + item.color">{{ item.icon }}</md-icon>
-            <md-card class="block-form" v-if="!item.dateCreated || item.mode === 'edit'">
-              <vue-element-loading :active.sync="item.isItemLoading" spinner="ring" color="#FF547C" />
+            <md-icon
+              class="time-line-blocks_icon"
+              :style="`background : ` + item.color"
+            >{{item.icon}}</md-icon>
+            <md-card class="block-form" v-if="!item.dateCreated || item.mode === 'edit' ">
+              <vue-element-loading
+                :active.sync="item.isItemLoading"
+                spinner="ring"
+                color="#FF547C"
+              />
               <md-card-content class="md-layout">
                 <div class="md-layout-item md-size-50">
                   <md-field>
@@ -86,48 +98,42 @@
                   </md-field>
                 </div>
               </md-card-content>
-              <md-card-actions md-alignment="right" style="border: none">
+              <md-card-actions md-alignment="right" style="border: none;">
                 <md-button
                   name="event-planner-tab-timeline-item-save"
                   class="event-planner-tab-timeline-item-save md-danger md-simple"
-                  @click="cancelTimelineItem(item, index)"
-                  >Cancel</md-button
-                >
+                  @click="cancelTimelineItem(item,index)"
+                >Cancel</md-button>
                 <md-button
                   :disabled="item.isItemLoading"
                   name="event-planner-tab-timeline-item-save"
                   class="event-planner-tab-timeline-item-save md-info"
                   v-if="!item.dateCreated"
-                  @click="saveTimelineItem(item, index)"
-                  >Save</md-button
-                >
+                  @click="saveTimelineItem(item,index)"
+                >Save</md-button>
                 <md-button
                   :disabled="item.isItemLoading"
                   name="event-planner-tab-timeline-item-edit"
                   class="event-planner-tab-timeline-item-edit md-info"
                   v-else
                   @click="updateTimelineItem(item)"
-                  >Save</md-button
-                >
+                >Save</md-button>
               </md-card-actions>
             </md-card>
 
-            <md-card class="block-info" v-if="!item.mode || item.mode === 'saved'">
-              <vue-element-loading :active.sync="item.isItemLoading" spinner="ring" color="#FF547C" />
-              <md-card-content style="min-height: 80px">
-                <div class="card-actions" style="width: 100%; text-align: right">
+            <md-card class="block-info" v-if="!item.mode || item.mode === 'saved' ">
+              <vue-element-loading
+                :active.sync="item.isItemLoading"
+                spinner="ring"
+                color="#FF547C"
+              />
+              <md-card-content style="min-height: 80px;">
+                <div class="card-actions" style="width: 100%; text-align: right;">
                   <span
                     class="item-time md-xs pull-left"
-                    style="
-                      display: inline-block;
-                      margin-top: 3px;
-                      padding: 2px 12px !important;
-                      margin-right: 0;
-                      font-size: 1.6vmin;
-                    "
+                    style="display: inline-block; margin-top: 3px; padding: 2px 12px !important; margin-right: 0; font-size: 1.6vmin;"
                     :style="`background : ` + item.color"
-                    >{{ item.startTime }} - {{ item.endTime }}</span
-                  >
+                  >{{ item.startTime }} - {{item.endTime}}</span>
                   <md-button
                     name="event-planner-tab-timeline-item-edit"
                     class="event-planner-tab-timeline-item-edit md-info md-xs md-just-icon md-round"
@@ -143,10 +149,15 @@
                     <md-icon>delete_outline</md-icon>
                   </md-button>
                 </div>
-                <div class="item-title-and-time" style="padding-top: 32px !important; padding-left: 4px">
-                  <span class="item-title" style="font-weight: 500; display: inline-block" v-if="item.title">{{
-                    item.title
-                  }}</span>
+                <div
+                  class="item-title-and-time"
+                  style="padding-top: 32px !important; padding-left: 4px;"
+                >
+                  <span
+                    class="item-title"
+                    style="font-weight: 500; display: inline-block;"
+                    v-if="item.title"
+                  >{{item.title }}</span>
                   <p class="item-desc">{{ item.description }}</p>
                 </div>
               </md-card-content>
@@ -159,12 +170,12 @@
                 <img
                   src="https://static-maryoku.s3.amazonaws.com/storage/img/drag_drop.png"
                   alt="drag and drop"
-                  style="width: 62px"
+                  style="width: 62px;"
                 />
               </p>
-              <p style="font-style: italic; font-size: 18px">
-                Start building your event timeline by dropping timeline items here
-              </p>
+              <p
+                style="font-style: italic; font-size: 18px;"
+              >Start building your event timeline by dropping timeline items here</p>
             </div>
           </div>
 
@@ -172,7 +183,9 @@
             <md-icon class="time-line-blocks_icon">add</md-icon>
             <div class="drag-here">
               Continue building your event timeline by dropping more timeline items here
-              <div class="small">You can change the order of items by dragging them to the right place</div>
+              <div
+                class="small"
+              >You can change the order of items by dragging them to the right place</div>
             </div>
           </div>
         </draggable>
@@ -279,10 +292,14 @@ export default {
         block.endTime = "09:00 am";
         block.isItemLoading = false;
         if (this.timelineItems.length > 0) {
-          block.startTime = this.$moment(this.timelineItems[this.timelineItems.length - 1].endTime, "H:mm A").format(
+          block.startTime = this.$moment(
+            this.timelineItems[this.timelineItems.length - 1].endTime,
             "H:mm A",
-          );
-          block.endTime = this.$moment(this.timelineItems[this.timelineItems.length - 1].endTime, "H:mm A")
+          ).format("H:mm A");
+          block.endTime = this.$moment(
+            this.timelineItems[this.timelineItems.length - 1].endTime,
+            "H:mm A",
+          )
             .add(1, "hour")
             .format("H:mm A");
         }
@@ -311,7 +328,10 @@ export default {
             });
             let event = new CalendarEvent({ id: this.event.id });
 
-            let timelineItem = new EventTimelineItem({ id: item.id }).for(calendar, event);
+            let timelineItem = new EventTimelineItem({ id: item.id }).for(
+              calendar,
+              event,
+            );
 
             timelineItem
               .delete()
@@ -373,9 +393,14 @@ export default {
       console.log("ameed");
       this.setItemLoading(item, true, true);
 
-      if (!item.startTime || !item.endTime || (!item.title && !item.description)) {
+      if (
+        !item.startTime ||
+        !item.endTime ||
+        (!item.title && !item.description)
+      ) {
         this.$notify({
-          message: "From time, To time and ( Title or Description ) id Required",
+          message:
+            "From time, To time and ( Title or Description ) id Required",
           horizontalAlign: "center",
           verticalAlign: "top",
           type: "warning",
@@ -397,7 +422,6 @@ export default {
         event: { id: event.id },
         title: item.title,
         buildingBlockType: item.buildingBlockType,
-        eventCategory: item.eventCategory,
         description: item.description,
         startTime: item.startTime,
         endTime: item.endTime,
@@ -425,11 +449,16 @@ export default {
     updateTimelineItem(item) {
       this.setItemLoading(item, true, true);
 
-      if (!item.startTime || !item.endTime || (!item.title && !item.description)) {
+      if (
+        !item.startTime ||
+        !item.endTime ||
+        (!item.title && !item.description)
+      ) {
         this.$set(item, "isItemLoading", false);
 
         this.$notify({
-          message: "From time, To time and ( Title or Description ) id Required",
+          message:
+            "From time, To time and ( Title or Description ) id Required",
           horizontalAlign: "center",
           verticalAlign: "top",
           type: "warning",
@@ -442,7 +471,10 @@ export default {
       let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
       let event = new CalendarEvent({ id: this.event.id });
 
-      let timelineItem = new EventTimelineItem({ id: item.id }).for(calendar, event);
+      let timelineItem = new EventTimelineItem({ id: item.id }).for(
+        calendar,
+        event,
+      );
 
       timelineItem.title = item.title;
       timelineItem.description = item.description;
@@ -539,22 +571,42 @@ export default {
     },
   },
   created() {
-    [...Array(12).keys()].map((x) => (x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined));
-    [...Array(12).keys()].map((x) => (x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`)));
-    [...Array(8).keys()].map((x) => (x === 0 ? this.hoursArray.push(`12:00 AM`) : this.hoursArray.push(`${x}:00 AM`)));
+    [...Array(12).keys()].map((x) =>
+      x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined,
+    );
+    [...Array(12).keys()].map((x) =>
+      x === 0
+        ? this.hoursArray.push(`12:00 PM`)
+        : this.hoursArray.push(`${x}:00 PM`),
+    );
+    [...Array(8).keys()].map((x) =>
+      x === 0
+        ? this.hoursArray.push(`12:00 AM`)
+        : this.hoursArray.push(`${x}:00 AM`),
+    );
 
     this.hoursArray.push();
   },
   mounted() {
     this.isLoading = true;
     if (this.event && this.event.id) {
-      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
+      this.$root.$emit(
+        "set-title",
+        this.event,
+        this.routeName === "EditBuildingBlocks",
+        true,
+      );
       this.getTimelineItems();
     }
   },
   watch: {
     event(newVal, oldVal) {
-      this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
+      this.$root.$emit(
+        "set-title",
+        this.event,
+        this.routeName === "EditBuildingBlocks",
+        true,
+      );
       this.getTimelineItems();
     },
   },

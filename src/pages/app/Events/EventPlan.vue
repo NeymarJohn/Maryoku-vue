@@ -1,6 +1,6 @@
 <template>
   <div class="event-plan">
-    <progress-sidebar :elements="barItems" page="plan" @change="changeCheckList"></progress-sidebar>
+    <progress-sidebar :elements="barItems" page="plan"></progress-sidebar>
     <event-details-overview v-if="pageId == 'overview'"></event-details-overview>
     <event-details-timeline v-else-if="pageId == 'timeline'"></event-details-timeline>
     <event-concept-choose v-else-if="pageId == 'concept'"></event-concept-choose>
@@ -34,16 +34,6 @@ export default {
     EventBudgetRequirement,
     EventCampaign,
   },
-  data() {
-    return {
-      eventElements: [],
-      pageId: "",
-      resevedPages: [],
-    };
-  },
-  mounted() {
-    this.fetchData();
-  },
   computed: {
     ...mapState("event", {
       eventData: (state) => state.eventData,
@@ -52,7 +42,7 @@ export default {
       return this.$store.state.event.eventData;
     },
     barItems() {
-      if (!this.event.checkList) {
+      if (this.event) {
         const overview = {
           title: "Create Event",
           status: "completed",
@@ -91,10 +81,10 @@ export default {
         };
         const campaign = {
           title: "Create Campaigns",
-          status: this.event.campaignProgress === 100 ? "completed" : "not-complete",
+          status: "current",
           route: "booking/campaign",
           icon: `${this.$iconURL}Campaign/Group 8857.svg`,
-          progress: this.event.campaignProgress,
+          progress: 0,
           componentId: "campaign",
           id: "campaign-item",
         };
@@ -123,12 +113,21 @@ export default {
             }
           });
         }
-
         return elements;
       } else {
-        return this.event.checkList;
+        return [];
       }
     },
+  },
+  data() {
+    return {
+      eventElements: [],
+      pageId: "",
+      resevedPages: [],
+    };
+  },
+  mounted() {
+    this.fetchData();
   },
   methods: {
     setConstantStates(event) {
@@ -162,14 +161,7 @@ export default {
     },
     fetchData() {
       this.pageId = this.$route.params.blockId ? this.$route.params.blockId : "timeline";
-    },
-    changeCheckList(e) {
-      console.log("changeCheckList", e);
-      let event = this.event;
-      event.checkList = e;
-      this.$store.dispatch("event/saveEventAction", event).then((res) => {
-        console.log("plan.updateEvent", res);
-      });
+      console.log("pageid", this.pageId);
     },
   },
   created() {},

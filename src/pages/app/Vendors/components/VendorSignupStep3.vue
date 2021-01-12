@@ -34,7 +34,7 @@
                 <div class="left v-grid-with-desc">
                   {{ r.name }}
                   <textarea
-                    v-if="r.hasComment"
+                    v-if="r.hasComment && r.value"
                     class="desc"
                     rows="3"
                     v-model="r.desc"
@@ -46,16 +46,16 @@
                   <div class="d-flex align-center">
                     <div class="top">
                       <template v-if="r.type == Boolean">
-                          <div class="item" @click="setPolicy(null, 'option', r.name, true)">
-                            <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="r.value" />
-                            <span class="unchecked" v-else></span>
-                            Yes
-                          </div>
-                          <div class="item" @click="setPolicy(null, 'option', r.name, false)">
-                            <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!r.value" />
-                            <span class="unchecked" v-else></span>
-                            No
-                          </div>
+                        <div class="item" @click="setPolicy(null, 'option', r.name, true)">
+                          <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="r.value" />
+                          <span class="unchecked" v-else></span>
+                          Yes
+                        </div>
+                        <div class="item" @click="setPolicy(null, 'option', r.name, false)">
+                          <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!r.value" />
+                          <span class="unchecked" v-else></span>
+                          No
+                        </div>
                       </template>
                       <template v-if="r.type == String">
                         <div class="item" v-if="!noteRules.includes(r)" @click="noteRule(r)">
@@ -97,12 +97,7 @@
                     <div class="bottom no-margin" v-if="r.type == Number">
                       <template v-if="r.noSuffix">
                         <div>
-                          <input type="number"
-                                 class="text-center number-field"
-                                 placeholder="00.00"
-                                 v-model="r.value"
-                                 @input="setPolicy"
-                          />
+                          <input type="number" class="text-center number-field" placeholder="00.00" />
                         </div>
                       </template>
                       <template v-else>
@@ -110,18 +105,10 @@
                         <span v-else>Extra Payment</span>
                         <br />
                         <div class="suffix percentage" v-if="r.isPercentage">
-                          <input type="number"
-                                 placeholder="00.00"
-                                 v-model="r.value"
-                                 @input="setPolicy"
-                          />
+                          <input type="number" class placeholder="00.00" />
                         </div>
                         <div class="suffix" v-else>
-                          <input type="number"
-                                 placeholder="00.00"
-                                 v-model="r.value"
-                                 @input="setPolicy"
-                          />
+                          <input type="number" class placeholder="00.00" />
                         </div>
                       </template>
                     </div>
@@ -134,7 +121,7 @@
                                 class="text-center number-field"
                                 placeholder="00.00"
                                 v-model="r.cost"
-                                @input="setPolicy"
+                                @change="setPolicy"
                         />
                       </div>
                     </div>
@@ -902,7 +889,7 @@ export default {
       this.$root.$emit("update-vendor-value", "pricingPolicies", this.vendorPricingPolicies.items);
     },
     setPolicy(e, type, name, value) {
-      console.log('setPricePolicy', this.vendorPolicies.items);
+      // console.log('setPricePolicy', value);
       if ( (type === 'option' ||  type === 'Including' ) && name ) {
         let p = this.vendorPolicies.items.find(it => it.name === name);
         p.value = value;
@@ -938,12 +925,8 @@ export default {
           this.vendor.exDonts.push({
             date: it.start,
             holiday: it.holiday,
-            religion: data.name,
+            religion: date.name,
           })
-        } else {
-          console.log('removeItem', value, it.holiday);
-          this.vendor.exDonts = this.vendor.exDonts.filter(e => e.holiday !== it.holiday);
-          console.log('removeItem', this.vendor.exDonts);
         }
       });
 

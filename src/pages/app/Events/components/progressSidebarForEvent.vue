@@ -40,10 +40,7 @@
     <div class="progress-sidebar-content">
       <!-- Sidebar Elements -->
       <div class="event-elements">
-        <draggable
-                :list="elements"
-                @change="changeItem"
-        >
+        <draggable :list="elements">
           <div
             class="event-elements__item"
             @click="goToRoute(item, index)"
@@ -141,9 +138,6 @@ export default {
     fetchUrl() {
       this.currentUrl = this.$router.history.current.path;
     },
-    changeItem(){
-      this.$emit('change', this.elements);
-    }
   },
   created() {
     this.fetchUrl();

@@ -1,12 +1,12 @@
 <template>
-    <div class="mt-50">
+    <div class="">
         <div class="container">
             <div class="form-section event-basic-info">
                 <div>
                   <img :src="`${$iconURL}Onboarding/balloon-calendar.svg`">
                 </div>
                 <div class="title">
-                  HELLO THERE
+                  HELLO 
                   <span v-if="isLoggedIn">{{tenantUser.name}}!</span>
                   <span v-else>THERE!</span>
                 </div>
@@ -133,6 +133,6 @@ export default {
         text-align: center;
     }
     @media screen and (max-width: 500px) {
-
+      
     }
 </style>

@@ -209,17 +209,17 @@ export default {
   mounted() {
     if (this.vendor) {
       const item = this.vendor.services[this.camelize(this.label)];
-      console.log("vendor.check.box", this.item, item);
+      // console.log("vendor.check.box", this.item, item);
       if (item) {
-        console.log('vendor.checkbox', item.label, item);
-        this.included = item.hasOwnProperty('included') ? item.included : this.item.included;
-        this.checked = item.hasOwnProperty('checked') ? item.checked : this.item.checked;
-        this.currentItem.included = this.included;
-        this.currentItem.checked = this.checked;
-        this.currentItem.value = item.hasOwnProperty('value') ? item.value : this.item.value;
-        this.currentItem.desc = item.hasOwnProperty('desc') ? item.desc : this.item.desc;
-        this.currentItem.dry = item.hasOwnProperty('dry') ? item.dry : this.item.dry;
+        this.included = item.included;
+        this.checked = item.checked;
+        this.currentItem.value = JSON.stringify(item.value);
+        this.currentItem.desc = item.desc;
+        this.currentItem.dry = item.dry;
+
       }
+    }
+    if( this.item.type == Array) {
     }
   },
   methods: {
@@ -421,7 +421,6 @@ export default {
     .text {
       margin: 12px 0 0 3rem;
       min-width: 30%;
-      max-width: 30%;
       border: solid 1px #707070;
       padding: 10px 17px;
       min-height: 80px;
