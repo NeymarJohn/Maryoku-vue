@@ -214,7 +214,7 @@
             </span>
           </md-button>
           <span class="seperator" style="margin-top: 0"></span>
-          <md-button class="md-simple md-button md-black maryoku-btn">
+          <md-button class="md-simple md-button md-black maryoku-btn" @click="sendPreviewEmail">
             <span class="font-size-16 text-transform-capitalize">
               <img class="mr-20" :src="`${$iconURL}Campaign/Group 1855.svg`" />
               Send Me A Preview
@@ -421,11 +421,10 @@ export default {
     changeSettings(data) {
       this.deliverySettings = data;
     },
-    callSaveCampaign(campaignType, campaignStatus) {
+    callSaveCampaign(campaignType, campaignStatus, isPreview = false) {
       const campaignData = this.$store.state.campaign[campaignType];
-      console.log("campaignData from VUEx", campaignData);
       let coverImage = campaignData.coverImage;
-      if (coverImage && coverImage.indexOf("http") < 0) {
+      if (coverImage && coverImage.indexOf("base64") >= 0) {
         const fileObject = S3Service.dataURLtoFile(coverImage, `${this.event.id}-${campaignType}`);
         const extenstion = fileObject.type.split("/")[1];
         S3Service.fileUpload(
@@ -458,10 +457,12 @@ export default {
         scheduleTime: new Date().getTime(),
         settings: this.deliverySettings,
         coverImage,
+        isPreview,
       });
       return new Promise((resolve, reject) => {
         this.saveCampaign(newCampaign)
-          .then(() => {
+          .then((res) => {
+            this.$store.commit("event/setEventData", res.item.event);
             resolve();
           })
           .catch(() => {
@@ -484,7 +485,6 @@ export default {
       });
 
       const campaign = this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
-      console.log(campaign);
       this.scheduleCampaign();
     },
     revertSetting() {
@@ -501,7 +501,12 @@ export default {
     },
     sendPreviewEmail() {
       const campaignData = this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
-      this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "TESTING").then((res) => {
+      console.log(campaignData.campaignStatus);
+      this.callSaveCampaign(
+        this.campaignTabs[this.selectedTab].name,
+        campaignData.campaignStatus || "TESTING",
+        true,
+      ).then((res) => {
         swal({
           title: `You will receive a preview campaign email soon!`,
           buttonsStyling: false,

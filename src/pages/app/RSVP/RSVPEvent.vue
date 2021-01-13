@@ -248,19 +248,23 @@ export default {
     const rsvpRequestId = this.$route.params.rsvpRequestId;
     const rsvpRequest = new RsvpRequest({ id: rsvpRequest });
 
-    RsvpRequest.find(rsvpRequestId).then((rsvpRequest) => {
-      console.log(rsvpRequest);
-      this.rsvpRequest = rsvpRequest;
-      this.event = rsvpRequest.event;
-      this.campaign = rsvpRequest.campaign;
-      this.isLoading = false;
-      if (!this.rsvpRequest.isOpened) {
-        new RsvpRequest({ id: rsvpRequest.id, isOpened: true }).save();
-      }
-      // if (this.rsvpRequest.status == "ACCEPTED") {
-      //   this.isSentRsvp = true;
-      // }
-    });
+    RsvpRequest.find(rsvpRequestId)
+      .then((rsvpRequest) => {
+        console.log(rsvpRequest);
+        this.rsvpRequest = rsvpRequest;
+        this.event = rsvpRequest.event;
+        this.campaign = rsvpRequest.campaign;
+        this.isLoading = false;
+        if (!this.rsvpRequest.isOpened) {
+          new RsvpRequest({ id: rsvpRequest.id, isOpened: true }).save();
+        }
+        // if (this.rsvpRequest.status == "ACCEPTED") {
+        //   this.isSentRsvp = true;
+        // }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
     this.$root.$on("setRsvp", (rsvpData) => {
       rsvpData.attendingOption = "PERSON";
       rsvpData.rsvpStatus = "ACCEPTED";
@@ -365,7 +369,7 @@ export default {
       height: 430px;
       background-repeat: no-repeat;
       background-position: center 60%;
-      background-size: 120%;
+      background-size: 100%;
     }
     &-overview {
       // background-color: #fff;

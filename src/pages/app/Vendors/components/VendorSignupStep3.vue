@@ -34,7 +34,7 @@
                 <div class="left v-grid-with-desc">
                   {{ r.name }}
                   <textarea
-                    v-if="r.hasComment && r.value"
+                    v-if="r.hasComment"
                     class="desc"
                     rows="3"
                     v-model="r.desc"
@@ -46,16 +46,16 @@
                   <div class="d-flex align-center">
                     <div class="top">
                       <template v-if="r.type == Boolean">
-                        <div class="item" @click="setPolicy(null, 'option', r.name, true)">
-                          <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="r.value" />
-                          <span class="unchecked" v-else></span>
-                          Yes
-                        </div>
-                        <div class="item" @click="setPolicy(null, 'option', r.name, false)">
-                          <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!r.value" />
-                          <span class="unchecked" v-else></span>
-                          No
-                        </div>
+                          <div class="item" @click="setPolicy(null, 'option', r.name, true)">
+                            <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="r.value" />
+                            <span class="unchecked" v-else></span>
+                            Yes
+                          </div>
+                          <div class="item" @click="setPolicy(null, 'option', r.name, false)">
+                            <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!r.value" />
+                            <span class="unchecked" v-else></span>
+                            No
+                          </div>
                       </template>
                       <template v-if="r.type == String">
                         <div class="item" v-if="!noteRules.includes(r)" @click="noteRule(r)">
@@ -97,7 +97,12 @@
                     <div class="bottom no-margin" v-if="r.type == Number">
                       <template v-if="r.noSuffix">
                         <div>
-                          <input type="number" class="text-center number-field" placeholder="00.00" />
+                          <input type="number"
+                                 class="text-center number-field"
+                                 placeholder="00.00"
+                                 v-model="r.value"
+                                 @input="setPolicy"
+                          />
                         </div>
                       </template>
                       <template v-else>
@@ -105,10 +110,18 @@
                         <span v-else>Extra Payment</span>
                         <br />
                         <div class="suffix percentage" v-if="r.isPercentage">
-                          <input type="number" class placeholder="00.00" />
+                          <input type="number"
+                                 placeholder="00.00"
+                                 v-model="r.value"
+                                 @input="setPolicy"
+                          />
                         </div>
                         <div class="suffix" v-else>
-                          <input type="number" class placeholder="00.00" />
+                          <input type="number"
+                                 placeholder="00.00"
+                                 v-model="r.value"
+                                 @input="setPolicy"
+                          />
                         </div>
                       </template>
                     </div>
@@ -121,9 +134,40 @@
                                 class="text-center number-field"
                                 placeholder="00.00"
                                 v-model="r.cost"
-                                @change="setPolicy"
+                                @input="setPolicy"
                         />
                       </div>
+                    </div>
+                    <div class="bottom mt-0 ml-40" v-if="r.type == Boolean && r.value && r.hasOwnProperty('cost')">
+                      <template v-if="r.noSuffix">
+                        <div>
+                          <input type="number"
+                                 class="text-center number-field"
+                                 placeholder="00.00"
+                                 v-model="r.cost"
+                                 @input="setPolicy"
+                          />
+                        </div>
+                      </template>
+                      <template v-else>
+                        <span v-if="r.isPercentage">Rate (%)</span>
+                        <span v-else>Extra Payment</span>
+                        <br />
+                        <div class="suffix percentage" v-if="r.isPercentage">
+                          <input type="number"
+                                 placeholder="00.00"
+                                 v-model="r.cost"
+                                 @input="setPolicy"
+                          />
+                        </div>
+                        <div class="suffix" v-else>
+                          <input type="number"
+                                 placeholder="00.00"
+                                 v-model="r.cost"
+                                 @input="setPolicy"
+                          />
+                        </div>
+                      </template>
                     </div>
                   </div>
                 </div>
@@ -174,88 +218,135 @@
                 </div>
                 <div class="right">
                   <div class="d-flex align-center">
-                  <div class="top">
-                    <template v-if="p.type == Boolean">
-                      <div class="item" @click="setPricePolicy(null, 'option', p.name, true)">
-                        <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="p.value" />
-                        <span class="unchecked" v-else></span>
-                        Yes
-                      </div>
-                      <div class="item" @click="setPricePolicy(null, 'option', p.name, false)">
-                        <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!p.value" />
-                        <span class="unchecked" v-else></span>
-                        No
-                      </div>
-                    </template>
-                    <template v-if="p.type == String">
-                      <div class="item" v-if="!noteRules.includes(p)" @click="noteRule(p)">
-                        <a class="note">+ Add Note</a>
-                      </div>
-                      <div class="item noflex" v-else>
-                        <textarea placeholder="Except from the parking area" rows="3" />
-                        <br />
-                        <a class="cancel" @click="noteRule(p)">Cancel</a>
-                      </div>
-                    </template>
-                    <template v-if="p.type == 'Including'">
-                      <div class="item" @click="setPricePolicy(null, 'Including', p.name, true)">
-                        <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="p.value" />
-                        <span class="unchecked" v-else></span>
-                        Include
-                      </div>
-                      <div class="item" @click="setPricePolicy(null, 'Including', p.name, false)">
-                        <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!p.value" />
-                        <span class="unchecked" v-else></span>
-                        Not Include
-                      </div>
-                    </template>
-                    <template v-if="p.type == 'Selection'">
-                      <select class="unit-select" v-model="p.value" @change="setPricePolicy">
-                        <option v-for="(option, index) in p.options" :key="index" :value="option">{{ option }}</option>
-                      </select>
-                    </template>
-                    <template v-if="p.type == 'MultiSelection'">
-                      <category-selector
-                              :value="p.value"
-                              :categories="p.options"
-                              :multiple="true"
-                              @change="changeCategorySelector('pricePolicy', p, ...arguments)"
-                      ></category-selector>
+                    <div class="top">
+                      <template v-if="p.type == Boolean">
+                        <div class="item" @click="setPricePolicy(null, 'option', p.name, true)">
+                          <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="p.value"/>
+                          <span class="unchecked" v-else></span>
+                          Yes
+                        </div>
+                        <div class="item" @click="setPricePolicy(null, 'option', p.name, false)">
+                          <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!p.value"/>
+                          <span class="unchecked" v-else></span>
+                          No
+                        </div>
+                      </template>
+                      <template v-if="p.type == String">
+                        <div class="item" v-if="!noteRules.includes(p)" @click="noteRule(p)">
+                          <a class="note">+ Add Note</a>
+                        </div>
+                        <div class="item noflex" v-else>
+                          <textarea placeholder="Except from the parking area" rows="3"/>
+                          <br/>
+                          <a class="cancel" @click="noteRule(p)">Cancel</a>
+                        </div>
+                      </template>
+                      <template v-if="p.type == 'Including'">
+                        <div class="item" @click="setPricePolicy(null, 'Including', p.name, true)">
+                          <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="p.value"/>
+                          <span class="unchecked" v-else></span>
+                          Include
+                        </div>
+                        <div class="item" @click="setPricePolicy(null, 'Including', p.name, false)">
+                          <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!p.value"/>
+                          <span class="unchecked" v-else></span>
+                          Not Include
+                        </div>
+                      </template>
+                      <template v-if="p.type == 'Selection'">
+                        <select class="unit-select" v-model="p.value" @change="setPricePolicy">
+                          <option v-for="(option, index) in p.options" :key="index" :value="option">{{ option }}
+                          </option>
+                        </select>
+                      </template>
+                      <template v-if="p.type == 'MultiSelection'">
+                        <category-selector
+                                :value="p.value"
+                                :categories="p.options"
+                                :multiple="true"
+                                @change="changeCategorySelector('pricePolicy', p, ...arguments)"
+                        ></category-selector>
 
-                    </template>
-                  </div>
-                  <div class="bottom no-margin" v-if="p.type == Number">
-                    <template v-if="p.noSuffix">
-                      <div>
+                      </template>
+                    </div>
+                    <div class="bottom no-margin" v-if="p.type == Number">
+                      <template v-if="p.noSuffix">
+                        <span v-if="p.label">{{ p.label }}</span>
+                        <div>
+                          <input
+                                  type="number"
+                                  class="text-center number-field"
+                                  placeholder=""
+                                  v-model="p.value"
+                                  @input="setPricePolicy"
+                          />
+                        </div>
+                      </template>
+                      <template v-else>
+                        <span v-if="p.isPercentage">Rate (%)</span>
+                        <span v-else>How much extra</span>
+                        <br/>
+                        <div class="suffix percentage" v-if="p.isPercentage">
+                          <input
+                                  type="number"
+                                  class
+                                  placeholder="00.00"
+                                  v-model="p.value"
+                                  @input="setPricePolicy"
+                          />
+                        </div>
+                        <div class="suffix d-flex" v-else>
+                          <input
+                                  type="number"
+                                  class
+                                  placeholder="00.00"
+                                  v-model="p.value"
+                                  @input="setPricePolicy"
+                          />
+                          <div v-if="p.units">
+                            <select class="unit-select ml-10" v-model="p.unit">
+                              <option v-for="(unit, index) in p.units" :key="index" :value="unit">{{ unit }}</option>
+                            </select>
+                          </div>
+                        </div>
+                      </template>
+                    </div>
+                    <div class="bottom mt-0 ml-40" v-if="p.type == 'Including' && !p.value">
+                      <span>Extra Payment</span>
+                      <br/>
+                      <div class="suffix">
                         <input
-                          type="number"
-                          class="text-center number-field"
-                          placeholder="00.00"
-                          v-model="p.value"
-                          @change="setPricePolicy"
+                                type="number"
+                                class="text-center number-field"
+                                placeholder="00.00"
+                                v-model="p.cost"
+                                @change="setPricePolicy"
                         />
                       </div>
-                    </template>
-                    <template v-else>
-                      <span v-if="p.isPercentage">Rate (%)</span>
-                      <span v-else>How much extra</span>
-                      <br />
-                      <div class="suffix percentage" v-if="p.isPercentage">
+                    </div>
+                    <div class="bottom mt-0 no-margin" v-if="p.type == 'Cost'">
+                      <span>Cost per {{ p.unit }}</span>
+                      <br/>
+                      <div class="suffix">
                         <input
-                          type="number"
-                          class
-                          placeholder="00.00"
-                          v-model="p.value"
-                          @change="setPricePolicy"
+                                type="number"
+                                class="text-center number-field"
+                                placeholder="00.00"
+                                v-model="p.value"
+                                @input="setPricePolicy"
                         />
                       </div>
-                      <div class="suffix d-flex" v-else>
+                    </div>
+                    <div class="bottom mt-0 no-margin" v-if="p.type == 'Discount'">
+                      <span>Discount</span>
+                      <br/>
+                      <div class="suffix d-flex">
                         <input
-                          type="number"
-                          class
-                          placeholder="00.00"
-                          v-model="p.value"
-                          @change="setPricePolicy"
+                                type="number"
+                                class="text-center number-field"
+                                placeholder="00.00"
+                                v-model="p.value"
+                                @change="setPricePolicy"
                         />
                         <div v-if="p.units">
                           <select class="unit-select ml-10" v-model="p.unit">
@@ -263,64 +354,37 @@
                           </select>
                         </div>
                       </div>
-                    </template>
-                  </div>
-                  <div class="bottom mt-0 ml-40" v-if="p.type == 'Including' && !p.value">
-                    <span>Extra Payment</span>
-                    <br />
-                    <div class="suffix">
-                      <input
-                        type="number"
-                        class="text-center number-field"
-                        placeholder="00.00"
-                        v-model="p.cost"
-                        @change="setPricePolicy"
-                      />
                     </div>
-                  </div>
-                  <div class="bottom mt-0 no-margin" v-if="p.type == 'Cost'">
-                    <span>Cost per {{ p.unit }}</span>
-                    <br />
-                    <div class="suffix">
-                      <input
-                        type="number"
-                        class="text-center number-field"
-                        placeholder="00.00"
-                        v-model="p.value"
-                        @change="setPricePolicy"
-                      />
-                    </div>
-                  </div>
-                  <div class="bottom mt-0 no-margin" v-if="p.type == 'Discount'">
-                    <span>Discount</span>
-                    <br />
-                    <div class="suffix d-flex">
-                      <input
-                        type="number"
-                        class="text-center number-field"
-                        placeholder="00.00"
-                        v-model="p.value"
-                        @change="setPricePolicy"
-                      />
-                      <div v-if="p.units">
-                        <select class="unit-select ml-10" v-model="p.unit">
-                          <option v-for="(unit, index) in p.units" :key="index" :value="unit">{{ unit }}</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="bottom mt-0 ml-40" v-if="p.hasOwnProperty('attendees') && (p.type == Boolean && p.value || p.type == Number)">
-                    <span :class="{'d-block': p.type != Boolean, 'mr-10': p.type == Boolean}">How Many</span>
+                    <div class="bottom mt-0 ml-40"
+                         v-if="p.hasOwnProperty('attendees') && (p.type == Boolean && p.value || p.type == Number)">
+                      <span :class="{'d-block': p.type != Boolean, 'mr-10': p.type == Boolean}">How Many</span>
 
                       <input
                               type="number"
                               class="text-center number-field"
                               placeholder="attendees"
                               v-model="p.attendees"
-                              @change="setPricePolicy()"
+                              @input="setPricePolicy()"
                       />
 
-                  </div>
+                    </div>
+                    <div class="bottom mt-0 ml-50"
+                         v-if="p.hasOwnProperty('discount') && p.type == Boolean && p.value">
+                      <span class="d-block">How Many</span>
+
+                      <input
+                              type="number"
+                              class="text-center number-field w-max-120"
+                              placeholder=""
+                              v-model="p.discount"
+                              @input="setPricePolicy()"
+                      />
+                      <span class="ml-10" v-if="p.hasUnit">
+                        <select class="unit-select ml-10" v-model="p.unit">
+                          <option v-for="(unit, index) in p.units" :key="index" :value="unit">{{ unit }}</option>
+                        </select>
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -752,47 +816,6 @@ export default {
       }
       this.$root.$emit("update-vendor-value", "notAllowed", this.notAllowed);
     },
-    yesRule(item) {
-      if (this.yesRules.includes(item)) {
-        this.yesRules = this.yesRules.filter((n) => n != item);
-      } else {
-        this.noRules = this.noRules.filter((n) => n != item);
-        this.yesRules.push(item);
-      }
-      this.$root.$emit("update-vendor-value", "yesRules", this.yesRules);
-      this.$root.$emit("update-vendor-value", "noRules", this.noRules);
-    },
-    noRule(item) {
-      if (this.noRules.includes(item)) {
-        this.noRules = this.noRules.filter((n) => n != item);
-      } else {
-        this.yesRules = this.yesRules.filter((n) => n != item);
-        this.noRules.push(item);
-      }
-      this.$root.$emit("update-vendor-value", "yesRules", this.yesRules);
-      this.$root.$emit("update-vendor-value", "noRules", this.noRules);
-    },
-    yesPolicy(item) {
-      console.log(item);
-      if (this.yesPolicies.includes(item)) {
-        this.yesPolicies = this.yesPolicies.filter((n) => n != item);
-      } else {
-        this.noPolicies = this.noPolicies.filter((n) => n != item);
-        this.yesPolicies.push(item);
-      }
-      this.$root.$emit("update-vendor-value", "yesPolicies", this.yesPolicies);
-      this.$root.$emit("update-vendor-value", "noPolicies", this.noPolicies);
-    },
-    noPolicy(item) {
-      if (this.noPolicies.includes(item)) {
-        this.noPolicies = this.noPolicies.filter((n) => n != item);
-      } else {
-        this.yesPolicies = this.yesPolicies.filter((n) => n != item);
-        this.noPolicies.push(item);
-      }
-      this.$root.$emit("update-vendor-value", "yesPolicies", this.yesPolicies);
-      this.$root.$emit("update-vendor-value", "noPolicies", this.noPolicies);
-    },
     noteRule(item) {
       if (this.noteRules.includes(item)) {
         this.noteRules = this.noteRules.filter((n) => n != item);
@@ -889,7 +912,7 @@ export default {
       this.$root.$emit("update-vendor-value", "pricingPolicies", this.vendorPricingPolicies.items);
     },
     setPolicy(e, type, name, value) {
-      // console.log('setPricePolicy', value);
+      console.log('setPricePolicy', this.vendorPolicies.items);
       if ( (type === 'option' ||  type === 'Including' ) && name ) {
         let p = this.vendorPolicies.items.find(it => it.name === name);
         p.value = value;
@@ -925,8 +948,12 @@ export default {
           this.vendor.exDonts.push({
             date: it.start,
             holiday: it.holiday,
-            religion: date.name,
+            religion: data.name,
           })
+        } else {
+          console.log('removeItem', value, it.holiday);
+          this.vendor.exDonts = this.vendor.exDonts.filter(e => e.holiday !== it.holiday);
+          console.log('removeItem', this.vendor.exDonts);
         }
       });
 
@@ -959,7 +986,7 @@ export default {
       let vendorPolicies = this.policies.find(p => p.category === this.vendor.vendorCategory);
 
       // replace vendorPolices with saved vendor
-      if ( this.vendor.policies && this.vendor.policies.legnth ) {
+      if ( this.vendor.policies && this.vendor.policies.length ) {
         this.$set(this.vendorPolicies, 'items', this.vendor.policies)
         this.vendorPolicies.items.map((it, idx) => {
           this.$set(it, 'type', vendorPolicies.items[idx].type)
@@ -989,7 +1016,7 @@ export default {
           })
         })
       }
-      console.log("exDonts", this.religions);
+
 
       // set selectedWeekdays from saved vendor
       if (this.vendor.selectedWeekdays && this.vendor.selectedWeekdays.length) {
@@ -1020,7 +1047,6 @@ export default {
     },
 
     renderCalendar(){
-        console.log("renderCalendar");
         $('.vfc-day').each(function (index, day) {
             if ($(day).find('span.vfc-span-day').hasClass('vfc-marked') || $(day).find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed')) {
 
@@ -1065,6 +1091,10 @@ export default {
   },
   updated(){
       this.renderCalendar()
+  },
+  beforeDestroy(){
+    console.log('vendor.signup.step3.destroy');
+    this.$root.$off('update-vendor-value')
   },
   watch: {
     vendor:{

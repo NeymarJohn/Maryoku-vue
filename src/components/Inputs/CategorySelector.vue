@@ -79,7 +79,7 @@ export default {
     reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
   }),
   mounted() {
-    console.log("category-selector.mounted", this.value);
+    // console.log("category-selector.mounted", this.value);
     if (this.value) {
       if (this.multiple) {
         if (this.value.length) {
@@ -211,7 +211,7 @@ export default {
     width: 100%;
     li {
       cursor: pointer;
-      font: normal 18px Manrope-Regular, sans-serif;
+      font: normal 16px Manrope-Regular, sans-serif;
       img {
         width: 30px !important;
       }

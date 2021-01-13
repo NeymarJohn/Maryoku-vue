@@ -124,6 +124,8 @@ export default {
         eventStartMillis: this.event.eventStartMillis,
         eventEndMillis: this.event.eventEndMillis,
         guestType: this.event.guestType,
+        timeline: this.event.timeline,
+        timelineDates: this.event.timelineDates,
         reSchedule: this.reSchedule,
         reCalculate: this.reCalculate,
       });
@@ -155,6 +157,8 @@ export default {
       if (e.hasOwnProperty("dateData")) {
         this.event.eventStartMillis = new Date(e.dateData.started_at).getTime();
         this.event.eventEndMillis = new Date(e.dateData.ended_at).getTime();
+        this.event.timeline = e.timeline;
+        this.event.timelineDates = e.timelineDates;
         this.reSchedule = true;
       } else if (e.hasOwnProperty("location")) {
         this.event.location = e.location.name;
@@ -238,6 +242,7 @@ export default {
 
     let event = this.$store.state.event.eventData; // Fetch event from store
     this.event = JSON.parse(JSON.stringify(event));
+    console.log('event', event);
     this.init();
   },
   watch: {

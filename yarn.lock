@@ -1274,7 +1274,14 @@
     core-js "^2.6.5"
     regenerator-runtime "^0.13.2"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.4.3":
+"@babel/runtime@7.9.2":
+  version "7.9.2"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.9.2.tgz#d90df0583a3a252f09aaa619665367bae518db06"
+  integrity sha512-NE2DtOdufG7R5vnfQUTehdTfNycfUANEtCa9PssN9O/xmTzP4E08UI797ixaei6hBEVL9BI/PsdJS5x7mWoB9Q==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
+"@babel/runtime@^7.0.0":
   version "7.4.4"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.4.4.tgz#dc2e34982eb236803aa27a07fea6857af1b9171d"
   dependencies:
@@ -2632,7 +2639,7 @@ babel-loader@^7.1.1:
     loader-utils "^1.0.2"
     mkdirp "^0.5.1"
 
-babel-loader@^8.0.4, babel-loader@^8.0.5:
+babel-loader@^8.0.4:
   version "8.0.6"
   resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-8.0.6.tgz#e33bdb6f362b03f4bb141a0c21ab87c501b70dfb"
   dependencies:
@@ -6708,6 +6715,7 @@ gzip-size@^5.0.0:
 hammerjs@^2.0.8:
   version "2.0.8"
   resolved "https://registry.yarnpkg.com/hammerjs/-/hammerjs-2.0.8.tgz#04ef77862cff2bb79d30f7692095930222bf60f1"
+  integrity sha1-BO93hiz/K7edMPdpIJWTAiK/YPE=
 
 handle-thing@^2.0.0:
   version "2.0.0"
@@ -13124,15 +13132,14 @@ vue-hot-reload-api@^2.2.0, vue-hot-reload-api@^2.3.0:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.3.tgz#2756f46cb3258054c5f4723de8ae7e87302a1ccf"
 
-vue-image-lightbox@^6.2.1:
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/vue-image-lightbox/-/vue-image-lightbox-6.2.1.tgz#9c7e8aa0f65eb89444689c4ff8172b5670d2c3de"
-  integrity sha512-QezruRbIHzVrTFUbx/gaA5rEnXnrdyIjAgXqwlj+qwou4vP1BNAmeDmJHufXX4WQhAg792kNfo9fmhzLLKJBoQ==
+vue-image-lightbox@^7.2.0:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/vue-image-lightbox/-/vue-image-lightbox-7.2.0.tgz#531304d3fc85ce778d429cb2371f4798dd494f5c"
+  integrity sha512-Gykb05xg3tHqUKny/p4pjHp2B68izo5vOg6meUAZd3oKSc+eqQvd9q54n0L94KBkF2m8zjusKMP1tdhu150VOQ==
   dependencies:
-    "@babel/runtime" "^7.4.3"
-    babel-loader "^8.0.5"
+    "@babel/runtime" "7.9.2"
     hammerjs "^2.0.8"
-    vue-lazyload "^1.2.6"
+    vue-lazyload "^1.3.2"
 
 vue-input-autowidth@^1.0.10:
   version "1.0.10"
@@ -13175,9 +13182,10 @@ vue-jest@^1.0.2:
     tsconfig "^7.0.0"
     vue-template-es2015-compiler "^1.5.3"
 
-vue-lazyload@^1.2.6:
-  version "1.2.6"
-  resolved "https://registry.yarnpkg.com/vue-lazyload/-/vue-lazyload-1.2.6.tgz#baa04c172d52a812608eb12c7a6bfb14f5c91079"
+vue-lazyload@^1.3.2, vue-lazyload@^1.3.3:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/vue-lazyload/-/vue-lazyload-1.3.3.tgz#4df50a271bde9b74c3caf7a228d6e0af50d5682f"
+  integrity sha512-uHnq0FTEeNmqnbBC2aRKlmtd9LofMZ6Q3mWvgfLa+i9vhxU8fDK+nGs9c1iVT85axSua/AUnMttIq3xPaU9G3A==
 
 vue-loader@^13.3.0:
   version "13.7.3"

@@ -9,10 +9,11 @@
     <div class="md-layout justify-content-between" v-else>
       <div class="md-layout-item md-size-70">
         <proposal-steps
-          :categoryTitle="vendor.eventCategory.fullTitle"
           :eventCategory="vendor.eventCategory"
           :step="step"
           :hasVisionStep="!!event && !!event.concept"
+          :vendor="vendor"
+          :proposalRequest="proposalRequest"
         />
         <div class="step-wrapper" v-if="step == 0">
           <div class="proposal-add-personal-message-wrapper">
@@ -21,15 +22,14 @@
             <textarea
               rows="8"
               placeholder="Type your message here"
-              v-model="proposalRequest.personalMessage"
+              v-model="personalMessage"
               v-if="proposalRequest"
               @blur="updateProposalRequest()"
             />
             <span>Sincerely,</span>
-            <p>Relish caterers & venues</p>
+            <p>{{ vendor.eventCategory.fullTitle }}</p>
           </div>
           <proposal-event-vision v-if="event.concept" :event="event"></proposal-event-vision>
-          <proposal-bid-content></proposal-bid-content>
           <proposal-additional-requirement></proposal-additional-requirement>
         </div>
         <div class="step-wrapper" v-if="step == 1">
@@ -39,12 +39,12 @@
             <textarea
               rows="8"
               placeholder="Type your message here"
-              v-model="proposalRequest.personalMessage"
+              v-model="personalMessage"
               v-if="proposalRequest"
               @blur="updateProposalRequest()"
             />
             <span>Sincerely,</span>
-            <p>Relish caterers & venues</p>
+            <p>{{ vendor.eventCategory.fullTitle }}</p>
           </div>
           <proposal-bid-content></proposal-bid-content>
         </div>
@@ -144,6 +144,7 @@ export default {
     this.services = VendorService.businessCategories();
     this.iconsWithCategory = VendorService.categoryNameWithIcons();
     this.$store.dispatch("common/fetchAllCategories");
+    this.personalMessage = this.vendor.personalMessage;
   },
   methods: {
     getProposal(id) {
@@ -175,6 +176,7 @@ export default {
         this.proposalRequest.eventData = {
           allocatedBudget: 0,
         };
+        this.proposalRequest.personalMessage = this.vendor.personalMessage;
         this.proposalRequest.isAgreed = true;
       }
     },
@@ -210,6 +212,14 @@ export default {
       return this.event.components.filter(
         (item) => item.componentId !== this.vendor.vendorCategory && item.componentId !== "unexpected",
       );
+    },
+    personalMessage: {
+      get() {
+        return this.$store.state.vendorProposal.personalMessage;
+      },
+      set(value) {
+        this.$store.commit("vendorProposal/setValue", { key: "personalMessage", value });
+      },
     },
     vendor() {
       return this.$store.state.vendorProposal.vendor;

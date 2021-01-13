@@ -88,7 +88,26 @@ export default {
         best employee award
         see u soon`,
       originContent: {},
+      editingContent: {
+        coverImage: "",
+      },
     };
+  },
+  created() {
+    const defaultCoverImage = `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Headers/coming-soon${
+      (new Date().getDate() % 4) + 1
+    }.png`;
+    if (this.$store.state.campaign.COMING_SOON) {
+      this.editingContent = this.$store.state.campaign.COMING_SOON;
+      this.editingContent.coverImage = this.event.concept ? this.event.concept.images[1].url : defaultCoverImage;
+    } else {
+      this.editingContent.title = this.info.conceptName;
+      this.editingContent.coverImage = this.event.concept ? this.event.concept.images[1].url : defaultCoverImage;
+      this.$store.commit("campaign/setCampaign", {
+        name: "COMING_SOON",
+        data: this.editingContent,
+      });
+    }
   },
   computed: {
     event() {
