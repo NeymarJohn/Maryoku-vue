@@ -49,7 +49,8 @@ export default {
   methods: {
     goToStep(step) {
       if (step < this.step) {
-        this.$root.$emit("go-to-signup-step", step);
+        this.step = step;
+        this.$root.$emit("go-to-signup-step", this.step);
       }
     },
   },

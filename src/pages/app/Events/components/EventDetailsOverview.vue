@@ -242,7 +242,6 @@ export default {
 
     let event = this.$store.state.event.eventData; // Fetch event from store
     this.event = JSON.parse(JSON.stringify(event));
-    console.log('event', event);
     this.init();
   },
   watch: {

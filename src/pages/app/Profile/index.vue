@@ -2,73 +2,64 @@
   <div class="md-layout p-20">
     <div class="md-layout-item md-size-25">
       <div class="left-sidebar white-card">
-        <div class="profile">
-          <div class="avatar" style="">
-            <img :src="`${$iconURL}Planner+Profile/woman+(2).svg`" style="margin: auto" />
+        <div>
+          <div class="profile">
+            <div class="avatar" style=""></div>
             <div class="company-logo d-flex justify-content-center align-center">Company Logo</div>
+            <h3 class="name">{{ userData.profile.displayName }}</h3>
           </div>
-
-          <h3 class="name font-bold">{{ userData.profile.displayName }}</h3>
         </div>
-        <md-list>
-          <md-list-item @click="goTo('settings')" :class="{ 'font-bold-extra': pageName === 'settings' }">
-            <label
-              ><img
-                :src="
-                  pageName === 'settings'
-                    ? `${$iconURL}Profile/settings-dark.svg`
-                    : `${$iconURL}Profile/settings-gray.svg`
-                "
-                class="page-icon"
-              /><span class="pl-20 font-size-20">Profile Settings</span></label
-            >
-          </md-list-item>
-          <md-list-item @click="goTo('events')" :class="{ 'font-bold-extra': pageName === 'events' }">
-            <label
-              ><img
-                :src="
-                  pageName === 'events' ? `${$iconURL}Profile/events-dark.svg` : `${$iconURL}Profile/events-gray.svg`
-                "
-                class="page-icon"
-              /><span class="pl-20 font-size-20">My Events</span></label
-            >
-          </md-list-item>
-          <md-list-item @click="goTo('points')" :class="{ 'font-bold-extra': pageName === 'points' }">
-            <label
-              ><img
-                :src="
-                  pageName === 'points' ? `${$iconURL}Profile/points-dark.svg` : `${$iconURL}Profile/points-gray.svg`
-                "
-                class="page-icon"
-              /><span class="pl-20 font-size-20">My Points</span></label
-            >
-          </md-list-item>
-          <md-list-item
-            class="mb-30"
-            @click="goTo('inspirations')"
-            :class="{ 'font-bold-extra': pageName === 'inspirations' }"
-          >
-            <label
-              ><img
-                :src="
-                  pageName === 'inspirations'
-                    ? `${$iconURL}Profile/inspirations-dark.svg`
-                    : `${$iconURL}Profile/inspirations-gray.svg`
-                "
-                class="page-icon"
-              /><span class="pl-20 font-size-20">Saved inspirations</span></label
-            >
-          </md-list-item>
-          <md-divider></md-divider>
-          <md-list-item @click="logout">
-            <label
-              ><img :src="`${$iconURL}menu _ checklist/SVG/Asset 118.svg`" class="page-icon" /><span
-                class="pl-20 font-size-20"
-                >Log Out</span
-              ></label
-            >
-          </md-list-item>
-        </md-list>
+        <div>
+          <md-list>
+            <md-list-item @click="goTo('settings')" :class="{ 'font-bold-extra': pageName === 'settings' }">
+              <label
+                ><img
+                  :src="
+                    pageName === 'settings'
+                      ? `${$iconURL}Profile/settings-dark.svg`
+                      : `${$iconURL}Profile/settings-gray.svg`
+                  "
+                  class="page-icon"
+                /><span class="pl-20 font-size-20">Profile Settings</span></label
+              >
+            </md-list-item>
+            <md-list-item @click="goTo('events')" :class="{ 'font-bold-extra': pageName === 'events' }">
+              <label
+                ><img
+                  :src="
+                    pageName === 'events' ? `${$iconURL}Profile/events-dark.svg` : `${$iconURL}Profile/events-gray.svg`
+                  "
+                  class="page-icon"
+                /><span class="pl-20 font-size-20">My Events</span></label
+              >
+            </md-list-item>
+            <md-list-item @click="goTo('points')" :class="{ 'font-bold-extra': pageName === 'points' }">
+              <label
+                ><img
+                  :src="
+                    pageName === 'points' ? `${$iconURL}Profile/points-dark.svg` : `${$iconURL}Profile/points-gray.svg`
+                  "
+                  class="page-icon"
+                /><span class="pl-20 font-size-20">My Points</span></label
+              >
+            </md-list-item>
+            <md-list-item @click="goTo('inspirations')" :class="{ 'font-bold-extra': pageName === 'inspirations' }">
+              <label
+                ><img
+                  :src="
+                    pageName === 'inspirations'
+                      ? `${$iconURL}Profile/inspirations-dark.svg`
+                      : `${$iconURL}Profile/inspirations-gray.svg`
+                  "
+                  class="page-icon"
+                /><span class="pl-20 font-size-20">Saved inspirations</span></label
+              >
+            </md-list-item>
+          </md-list>
+        </div>
+        <div class="md-alignment-left">
+          <div class="logout">Log Out</div>
+        </div>
       </div>
     </div>
     <div class="md-layout-item md-size-70">
@@ -198,9 +189,6 @@ export default {
     goTo(pageName) {
       this.$router.push(`/profile/${pageName}`);
     },
-    logout() {
-      this.$router.push("/signout");
-    },
   },
   watch: {
     $route: "getPageName",
@@ -209,43 +197,33 @@ export default {
 </script>
 <style lang="scss" scoped>
 .left-sidebar {
+  padding: 50px;
   .profile {
     position: relative;
-    padding: 50px;
+
     .avatar {
       background-color: rgba(245, 19, 85, 0.08);
       width: 245px;
       height: 245px;
       border-radius: 3px;
       border: dashed 1.5px #f51355;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      .company-logo {
-        position: absolute;
-        top: 50%;
-        left: 100%;
-        width: 120px;
-        height: 120px;
-        padding: 20px;
-        text-align: center;
-        border-radius: 50%;
-        border: dashed 1px #f51355;
-        background-color: #ffffff;
-        z-index: 1;
-        transform: translate(-40px, -50%);
-        color: #f51355;
-        font-weight: bold;
-      }
+    }
+
+    .company-logo {
+      position: absolute;
+      top: 80px;
+      left: 200px;
+      width: 138px;
+      height: 135px;
+      border-radius: 50%;
+      border: dashed 1px #f51355;
+      background-color: #ffffff;
+      z-index: 1;
     }
   }
 
   .md-list-item {
-    margin: 20px 0;
-    /deep/ .md-list-item-content {
-      padding: 10px 50px;
-    }
+    margin: 10px 0;
   }
   .logout {
     padding: 10px 25px;

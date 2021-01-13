@@ -1,6 +1,11 @@
 <template>
   <div class="profile-container">
-    <tabs :tab-name="['Profile Details', 'Payment & Invoices', 'Notifications', 'Permissions']" color-button="info">
+    <tabs
+      :tab-name="['Profile Detail', 'Payment & Invoices', 'Notifications', 'Permissions']"
+      color-button="info"
+      plain
+      class="profile-container white-card"
+    >
       <template slot="tab-pane-1">
         <profile-details></profile-details>
       </template>
@@ -63,63 +68,4 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.profile-container {
-  /deep/ .md-card {
-    .md-list {
-      .md-list-item {
-        margin: 0 50px;
-        .md-list-item-content {
-          padding: 30px 0px 20px;
-        }
-        &-button {
-          border-bottom: 2px solid rgba(0, 0, 0, 0);
-          text-transform: capitalize;
-          font-size: 20px;
-          height: 100%;
-          padding-left: 0px;
-          padding-right: 0px;
-          // margin-left: 50px;
-          // margin-right: 50px;
-          font-weight: normal;
-        }
-        &.active {
-          .md-list-item-button {
-            background: none !important;
-            border-bottom-color: #f51355;
-            box-shadow: none;
-            border-radius: 0;
-            color: #000 !important;
-            font-weight: bold;
-            height: 100%;
-          }
-        }
-      }
-      img {
-        height: 18px;
-        width: auto;
-        margin-right: 0.5em;
-      }
-    }
-  }
-
-  /deep/ .nav-tabs.md-card {
-    margin-left: auto;
-    padding-left: 0;
-    justify-content: start !important;
-    border-radius: 3px;
-    height: 100px;
-    background-color: white !important;
-    border-bottom: 1px solid #e1e1e1;
-    box-shadow: none;
-  }
-
-  /deep/ .md-card-tabs .tab-content {
-    margin: 0 !important;
-    padding: 0 50px;
-    background-color: white;
-    > div {
-      width: 100% !important;
-    }
-  }
-}
 </style>

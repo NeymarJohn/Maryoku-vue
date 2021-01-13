@@ -305,6 +305,7 @@ export default {
       this.$emit('change', {holiday: e});
     },
     changeDate(e){
+      // console.log('changeDate', this.dateData);
       this.dateClick = !this.dateClick;
 
       if(this.dateClick) {
@@ -362,12 +363,6 @@ export default {
       this.eventTypes = this.eventTypesList.map(it => {
         return {name: it.name, value: it.name, icon: `${this.$iconURL}Onboarding/${it.key}.svg` };
       });
-    },
-    renderCalendar(){
-      let start_day = moment(this.section.started_at).
-      $('.vfc-day').each(function (index, day) {
-
-      });
     }
   },
   filters: {
@@ -383,12 +378,15 @@ export default {
       let inOutDoor = this.inOutDoorTypes.find(it => it.value === this.section.inOutDoor);
       return inOutDoor ? inOutDoor['label'] : '';
     },
+    guestTypeValue(){
+      return this.guestsTypes.find(it => it.value === this.section.guestType).name;
+    },
+    occasionValue(){
+      return this.occasions.find(it => it.value === this.section.occasion).name;
+    },
   },
   mounted(){
     this.init();
-  },
-  updated(){
-    this.renderCalendar();
   },
   watch:{
     section:{
