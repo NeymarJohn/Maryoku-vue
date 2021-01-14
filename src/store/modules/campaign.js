@@ -50,6 +50,7 @@ const defaultCampaignData = {
             showTimeline: true,
         },
         additionalData: {
+            greetingWords: "",
             wearingGuide: "",
             wearingGuideTitle: "WHAT SHOULD I WEAR?",
             knowledge: "",

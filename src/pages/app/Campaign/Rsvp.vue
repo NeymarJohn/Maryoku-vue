@@ -27,10 +27,7 @@
           <md-switch class="large-switch below-label" v-model="showLogo">Hide logo</md-switch>
         </div>
         <div class="font-size-30 font-bold mt-20">
-          Hello
-          <span class="text-transform-capitalize">{{ user.companyName ? user.companyName : user.currentTenant }}</span>
-          <span class="text-transform-capitalize">{{ event.guestType || "Employee" }}</span
-          >!
+          {{ campaignData.additionalData.greetingWords }}
         </div>
         <div class="font-size-20 mt-50">YOU ARE INVITED TO</div>
         <title-editor
@@ -235,6 +232,7 @@ export default {
           showTimeline: true,
         },
         additionalData: {
+          greetingWords: "",
           wearingGuide: "",
           wearingGuideTitle: "WHAT SHOULD I WEAR?",
           knowledge: "",
@@ -247,11 +245,24 @@ export default {
   created() {
     if (this.$store.state.campaign.RSVP) {
       this.editingContent = this.$store.state.campaign.RSVP;
+      if (!this.editingContent.additionalData.greetingWords) {
+        const greetingWords = `Hello ${this.user.companyName ? this.user.companyName : this.user.currentTenant} ${
+          this.event.guestType || "Employee"
+        }`;
+        this.$store.commit("campaign/setAttribute", {
+          name: "RSVP",
+          key: "additionalData",
+          value: { ...this.editingContent.additionalData, greetingWords },
+        });
+      }
     } else {
       this.editingContent.title = this.info.conceptName;
       this.editingContent.coverImage = this.event.concept
         ? this.event.concept.images[0].url
         : `${this.$storageURL}Campaign Images/RSVP2-middle.png`;
+      this.editingContent.additionalData.greetingWords = `Hello ${
+        user.companyName ? user.companyName : user.currentTenant
+      }} ${event.guestType || "Employee"}`;
       this.$store.commit("campaign/setCampaign", {
         name: "RSVP",
         data: this.editingContent,
@@ -334,7 +345,7 @@ export default {
       this.editingContent.visibleSettings.showTimeline = visibility;
     },
     changeImage(images) {
-      this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
+      this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "images", value: images });
     },
   },
 };

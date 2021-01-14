@@ -107,7 +107,7 @@
       Provided by
       <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
     </div>
-    <div class="rsvp-footer">
+    <div class="rsvp-footer white-card">
       <div class="rsvp-footer-content">
         <div>
           <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
@@ -373,6 +373,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .rsvp-container {
+  padding-bottom: 100px;
   .rsvp-event {
     background-color: #fff;
     max-width: 1520px;
@@ -447,8 +448,12 @@ export default {
     }
   }
   .rsvp-footer {
-    padding: 35px 10px;
+    padding: 30px 10px;
     background-color: white;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    z-index: 999;
     &-content {
       max-width: 1520px;
       margin: auto;

@@ -6,9 +6,11 @@
     :nav="false"
     class="rsvp-venue-carousel"
     :number="2"
-    :key="Math.random()"
+    :key="`carousel-${images.length}`"
+    :responsive="{ 0: { items: 1, dots: true }, 800: { items: 2 }, 1200: { items: 4 } }"
   >
     <div class="carousel-item" v-for="(item, index) in images" :key="index">
+      <vue-element-loading :active="item.loading" spinner="ring" color="#FF547C" />
       <img :src="item.src" class="carousel-image" :class="{ whiteBlack: item.default }" />
       <div class="carousel-item-actions" v-if="editable">
         <div class="color-white mb-20 font-bold font-size-16 button" @click="deleteImage(index)">
@@ -97,9 +99,10 @@ export default {
         this.images.push({ src: image, default: false });
         imageIndex = this.images.length - 1;
       }
-
+      this.images[imageIndex].loading = true;
       S3Service.fileUpload(event.target.files[0], `${imageName}`, `campaigns/venues/${this.event.id}`).then((res) => {
         this.images[imageIndex].src = imageUrl;
+        this.images[imageIndex].loading = false;
       });
       this.$emit("change", this.images);
     },

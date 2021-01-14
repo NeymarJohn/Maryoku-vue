@@ -40,7 +40,7 @@
         </div>
         <span :class="{ underline: !editable }">WHERE?</span>
       </div>
-      <div class="event-info-item-content font-size-20">{{ zoomLink }}</div>
+      <div class="event-info-item-content font-size-20">Zoom</div>
     </div>
     <div class="event-info-item" v-if="!isVirtualEvent">
       <div class="event-info-item-title font-size-22 font-bold-extra">
