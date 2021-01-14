@@ -51,7 +51,9 @@ const defaultCampaignData = {
         },
         additionalData: {
             wearingGuide: "",
+            wearingGuideTitle: "WHAT SHOULD I WEAR?",
             knowledge: "",
+            knowledgeTitle: "WHAT SHOULD I KNOW?",
             zoomlink: "",
         },
         images: [

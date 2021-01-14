@@ -22,7 +22,7 @@
         >
       </div>
     </div>
-    <div class="event-info-item">
+    <div class="event-info-item" v-if="!isVirtualEvent">
       <div class="event-info-item-icon">
         <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
         <img :src="`${$iconURL}Event%20Page/location-dark.svg`" />
@@ -32,7 +32,17 @@
       </div>
       <div class="event-info-item-content font-size-20">{{ event.location }}</div>
     </div>
-    <div class="event-info-item">
+    <div class="event-info-item" v-else>
+      <div class="event-info-item-icon">
+        <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
+        <img :src="`${$iconURL}Event%20Page/location-dark.svg`" />
+      </div>
+      <div class="event-info-item-title font-size-22 font-bold-extra">
+        <span :class="{ underline: !editable }">WHERE?</span>
+      </div>
+      <div class="event-info-item-content font-size-20">{{ zoomLink }}</div>
+    </div>
+    <div class="event-info-item" v-if="!isVirtualEvent">
       <div class="event-info-item-icon">
         <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
         <img :src="`${$iconURL}RSVP/Path+1383.svg`" />
@@ -94,6 +104,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    zoomLink: {
+      type: String,
+      default: "",
+    },
   },
   data() {
     return {
@@ -130,6 +144,9 @@ export default {
         return this.event.isPlusOne;
       }
       return this.event.guestType === "employees-spouses" || this.event.guestType === "families";
+    },
+    isVirtualEvent() {
+      return this.event.places && this.event.places.length === 1 && this.event.places[0] === "VIRTUAL";
     },
   },
 };

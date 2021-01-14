@@ -145,25 +145,16 @@
           <div class="policy-cont" id="Policy">
             <div class="title"><img :src="`${iconUrl}Group 1471 (2).svg`" /> OUR POLICY</div>
             <div class="rules">
-              <div class="rules">
-                <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
-                  <div class="item">{{ policy.name }}</div>
-                  <div class="item" v-if="policy.type === 'MultiSelection'">
-                    <span class="mr-10" v-for="(v, vIndex) in policy.value" >{{ `${v}${vIndex == policy.value.length - 1 ? '':','}` }}</span>
-                  </div>
-                  <div class="item" v-else-if="policy.type === 'Including'">
-                    <span class="mr-10" v-if="policy.value"> Yes </span>
-                    <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
-                  </div>
-                  <div class="item" v-else>
-                    <span v-if="policy.type === Number && !policy.isPercentage">$</span>
-                    <span v-if="policy.value === true">Yes</span>
-                    <span v-else>{{ policy.value }}</span>
-                    <span v-if="policy.isPercentage">%</span>
-                    <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
-                  {{ policy.attendees }} attendees
-                  </span>
-                  </div>
+              <div class="rule" v-for="(y, yIndex) in vendor.yesRules" :key="yIndex">
+                <div class="item">{{ y.name }}</div>
+                <div class="item">
+                  <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="vendor.yesRules.includes(y)" />
+                </div>
+              </div>
+              <div class="rule" v-for="(n, nIndex) in vendor.noRules" :key="nIndex">
+                <div class="item">{{ n.name }}</div>
+                <div class="item">
+                  <img :src="`${iconUrl}Group 5489 (4).svg`" v-if="vendor.noRules.includes(n)" />
                 </div>
               </div>
             </div>
@@ -209,7 +200,7 @@
                   <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '%'"> % </span>
                 </div>
                 <div class="item" v-else>
-                  <span v-if="policy.type === Number && !policy.isPercentage">$</span>
+                    <span v-if="policy.type === Number && !policy.isPercentage">$</span>
                   <span v-if="policy.value === true">Yes</span>
                   <span v-else>{{ policy.value }}</span>
                   <span v-if="policy.isPercentage">%</span>
@@ -439,6 +430,7 @@ export default {
         });
       });
     }
+    console.log('vendorSignup.step4.mounted', this.medias);
   },
   methods: {
     isSocial() {
@@ -557,10 +549,6 @@ export default {
       if (this.vendor.pricingPolicies) return this.vendor.pricingPolicies.filter((item) => item.value || item.type === 'Including' && item.cost);
       return null;
     },
-    validPolicy(){
-      if (this.vendor.policies) return this.vendor.policies.filter((item) => item.value || item.type === 'Including' && item.cost);
-      return null;
-    }
   },
   filters: {},
   watch: {

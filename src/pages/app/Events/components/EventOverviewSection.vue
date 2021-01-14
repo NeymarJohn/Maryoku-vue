@@ -57,16 +57,13 @@
         <div class="picker-panel">
 
           <functional-calendar
-                  ref="Calendar"
                   :is-date-range="true"
                   :change-month-function="true"
                   :change-year-function="true"
-                  :markedDateRange="markedDates"
-                  @dayClicked="changeDate($event)"
-                  :date-format="'yyyy-mm-dd'"
+                  @dayClicked="changeDate"
+                  dateFormat="yyyy-mm-dd"
                   v-model="dateData"
           ></functional-calendar>
-
           <md-checkbox
                   v-model="section.more_one_day"
                   value="more_one_day"
@@ -167,19 +164,16 @@ export default {
       isEdit: false,
       iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
       additional: true,
-      markedDates: {},
       dateData: {
         currentDate: null,
         dateRange: {
           start: {
             date: moment(this.section.started_at).format('YYYY-MM-DD'),
-            // date: null,
             dateTime: false,
             hour: "00",
             mintue: "00" },
           end: {
             date: moment(this.section.ended_at).format('YYYY-MM-DD'),
-            // date: null,
             dateTime: false,
             hour: "00",
             mintue: "00" },
@@ -311,18 +305,16 @@ export default {
       this.$emit('change', {holiday: e});
     },
     changeDate(e){
-      console.log('changeDate', e, this.dateData);
+      // console.log('changeDate', this.dateData);
       this.dateClick = !this.dateClick;
 
       if(this.dateClick) {
         this.started_at = e.date;
-        this.markedDates = {start: null, end: null};
-        console.log('changeDate', this.markedDates);
-        this.$forceUpdate();
       }
 
       if(!this.dateClick) {
         this.ended_at = e.date;
+
         const extendedMoment = extendMoment(moment);
         const start = new Date(this.started_at);
         const end = new Date(this.ended_at);
@@ -354,6 +346,7 @@ export default {
 
     },
     init: async function(){
+      console.log('init', this.dateData);
       // get holidays from server
       if ( !this.holidays.length && this.section.key === 'event_type') {
         let res = await this.$http.get(`${process.env.SERVER_URL}/1/holidays`);
@@ -367,51 +360,8 @@ export default {
         });
       }
 
-      if ( this.section.started_at && this.section.ended_at ) {
-        this.markedDates = {
-          start: moment(this.section.started_at).format('YYYY-MM-DD'),
-          end: moment(this.section.ended_at).format('YYYY-MM-DD'),
-        }
-      }
-      console.log('init', this.dateData, this.markedDates);
-
       this.eventTypes = this.eventTypesList.map(it => {
         return {name: it.name, value: it.name, icon: `${this.$iconURL}Onboarding/${it.key}.svg` };
-      });
-    },
-    renderCalendar(){
-      console.log('renderCalendar');
-      let started_date = moment(this.section.started_at).date();
-      let ended_date = moment(this.section.ended_at).date();
-      let year = moment(this.section.started_at).year();
-      let month = moment(this.section.started_at).month();
-
-      $('.vfc-day').each(function (index, day) {
-        let el = $(day).find('span.vfc-span-day');
-
-        if (el.text() == started_date){
-
-          el.addClass('vfc-start-marked')
-          if(!$(day).find('div.vfc-base-start').length)
-            $(day).prepend("<div class='vfc-base-start'></div>");
-        } else if(el.text() == ended_date) {
-
-          el.addClass('vfc-end-marked')
-          if(!$(day).find('div.vfc-base-end').length)
-            $(day).prepend("<div class='vfc-base-end'></div>");
-        } else {
-
-          el.removeClass('vfc-start-marked')
-          el.removeClass('vfc-end-marked')
-          $(day).find('div.vfc-base-start').remove();
-          $(day).find('div.vfc-base-end').remove();
-        }
-
-        if (el.text() <= ended_date && el.text() >= started_date) {
-          el.addClass('vfc-marked')
-        } else {
-          el.removeClass('vfc-marked');
-        }
       });
     }
   },
@@ -428,12 +378,15 @@ export default {
       let inOutDoor = this.inOutDoorTypes.find(it => it.value === this.section.inOutDoor);
       return inOutDoor ? inOutDoor['label'] : '';
     },
+    guestTypeValue(){
+      return this.guestsTypes.find(it => it.value === this.section.guestType).name;
+    },
+    occasionValue(){
+      return this.occasions.find(it => it.value === this.section.occasion).name;
+    },
   },
   mounted(){
     this.init();
-  },
-  updated(){
-    this.renderCalendar();
   },
   watch:{
     section:{

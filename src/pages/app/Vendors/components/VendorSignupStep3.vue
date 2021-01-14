@@ -278,7 +278,7 @@
                                   class="text-center number-field"
                                   placeholder=""
                                   v-model="p.value"
-                                  @input="setPricePolicy"
+                                  @change="setPricePolicy"
                           />
                         </div>
                       </template>
@@ -292,7 +292,7 @@
                                   class
                                   placeholder="00.00"
                                   v-model="p.value"
-                                  @input="setPricePolicy"
+                                  @change="setPricePolicy"
                           />
                         </div>
                         <div class="suffix d-flex" v-else>
@@ -301,7 +301,7 @@
                                   class
                                   placeholder="00.00"
                                   v-model="p.value"
-                                  @input="setPricePolicy"
+                                  @change="setPricePolicy"
                           />
                           <div v-if="p.units">
                             <select class="unit-select ml-10" v-model="p.unit">
@@ -333,7 +333,7 @@
                                 class="text-center number-field"
                                 placeholder="00.00"
                                 v-model="p.value"
-                                @input="setPricePolicy"
+                                @change="setPricePolicy"
                         />
                       </div>
                     </div>
@@ -364,7 +364,7 @@
                               class="text-center number-field"
                               placeholder="attendees"
                               v-model="p.attendees"
-                              @input="setPricePolicy()"
+                              @change="setPricePolicy()"
                       />
 
                     </div>
@@ -377,7 +377,7 @@
                               class="text-center number-field w-max-120"
                               placeholder=""
                               v-model="p.discount"
-                              @input="setPricePolicy()"
+                              @change="setPricePolicy()"
                       />
                       <span class="ml-10" v-if="p.hasUnit">
                         <select class="unit-select ml-10" v-model="p.unit">
@@ -816,6 +816,47 @@ export default {
       }
       this.$root.$emit("update-vendor-value", "notAllowed", this.notAllowed);
     },
+    yesRule(item) {
+      if (this.yesRules.includes(item)) {
+        this.yesRules = this.yesRules.filter((n) => n != item);
+      } else {
+        this.noRules = this.noRules.filter((n) => n != item);
+        this.yesRules.push(item);
+      }
+      this.$root.$emit("update-vendor-value", "yesRules", this.yesRules);
+      this.$root.$emit("update-vendor-value", "noRules", this.noRules);
+    },
+    noRule(item) {
+      if (this.noRules.includes(item)) {
+        this.noRules = this.noRules.filter((n) => n != item);
+      } else {
+        this.yesRules = this.yesRules.filter((n) => n != item);
+        this.noRules.push(item);
+      }
+      this.$root.$emit("update-vendor-value", "yesRules", this.yesRules);
+      this.$root.$emit("update-vendor-value", "noRules", this.noRules);
+    },
+    yesPolicy(item) {
+      console.log(item);
+      if (this.yesPolicies.includes(item)) {
+        this.yesPolicies = this.yesPolicies.filter((n) => n != item);
+      } else {
+        this.noPolicies = this.noPolicies.filter((n) => n != item);
+        this.yesPolicies.push(item);
+      }
+      this.$root.$emit("update-vendor-value", "yesPolicies", this.yesPolicies);
+      this.$root.$emit("update-vendor-value", "noPolicies", this.noPolicies);
+    },
+    noPolicy(item) {
+      if (this.noPolicies.includes(item)) {
+        this.noPolicies = this.noPolicies.filter((n) => n != item);
+      } else {
+        this.yesPolicies = this.yesPolicies.filter((n) => n != item);
+        this.noPolicies.push(item);
+      }
+      this.$root.$emit("update-vendor-value", "yesPolicies", this.yesPolicies);
+      this.$root.$emit("update-vendor-value", "noPolicies", this.noPolicies);
+    },
     noteRule(item) {
       if (this.noteRules.includes(item)) {
         this.noteRules = this.noteRules.filter((n) => n != item);
@@ -986,7 +1027,7 @@ export default {
       let vendorPolicies = this.policies.find(p => p.category === this.vendor.vendorCategory);
 
       // replace vendorPolices with saved vendor
-      if ( this.vendor.policies && this.vendor.policies.length ) {
+      if ( this.vendor.policies && this.vendor.policies.legnth ) {
         this.$set(this.vendorPolicies, 'items', this.vendor.policies)
         this.vendorPolicies.items.map((it, idx) => {
           this.$set(it, 'type', vendorPolicies.items[idx].type)
@@ -1016,7 +1057,7 @@ export default {
           })
         })
       }
-
+      console.log("exDonts", this.religions);
 
       // set selectedWeekdays from saved vendor
       if (this.vendor.selectedWeekdays && this.vendor.selectedWeekdays.length) {
@@ -1047,6 +1088,7 @@ export default {
     },
 
     renderCalendar(){
+        console.log("renderCalendar");
         $('.vfc-day').each(function (index, day) {
             if ($(day).find('span.vfc-span-day').hasClass('vfc-marked') || $(day).find('span.vfc-span-day').hasClass('vfc-cursor-not-allowed')) {
 

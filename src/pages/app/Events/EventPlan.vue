@@ -54,7 +54,7 @@ export default {
     barItems() {
       if (!this.event.checkList) {
         const overview = {
-          title: "Create an event to remember",
+          title: "Create Event",
           status: "completed",
           route: "overview",
           // icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
@@ -63,7 +63,7 @@ export default {
           id: "overview-item",
         };
         const concept = {
-          title: "Pick Unforgettable Concepts",
+          title: "Choose Concept",
           status: this.event.concept && this.event.conceptProgress === 100 ? "completed" : "not-complete",
           route: "booking/concept",
           icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
@@ -72,7 +72,7 @@ export default {
           id: "concept-item",
         };
         const budget = {
-          title: this.event.budgetProgress <= 50 ? "Create Budget" : "Balance your budget",
+          title: this.event.budgetProgress <= 50 ? "Create Budget" : "Approve Budget",
           status: "not-complete",
           route: this.event.budgetProgress == 100 ? "edit/budget" : "booking/budget",
           icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
@@ -81,7 +81,7 @@ export default {
           id: "budget-item",
         };
         const timeline = {
-          title: "Set the agenda \ plan a head",
+          title: "Generate timeline",
           status: this.event.timelineProgress === 100 ? "completed" : "not-complete",
           route: "booking/timeline",
           icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
@@ -90,7 +90,7 @@ export default {
           id: "timeline-item",
         };
         const campaign = {
-          title: "Stay connected to your guests",
+          title: "Create Campaigns",
           status: this.event.campaignProgress === 100 ? "completed" : "not-complete",
           route: "booking/campaign",
           icon: `${this.$iconURL}Campaign/Group 8857.svg`,

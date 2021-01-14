@@ -168,12 +168,18 @@
             </span>
           </md-button>
           <span class="seperator"></span>
-          <md-button class="md-simple md-button md-black maryoku-btn" @click="revertSetting">
+          <md-button class="md-simple md-button md-black maryoku-btn" @click="revertSetting" v-if="!isScheduled">
             <span class="font-size-16 text-transform-capitalize">
               <img class="mr-20" :src="`${$iconURL}Campaign/Group 8871.svg`" />Revert to original
             </span>
           </md-button>
-          <div class="schedule-btn d-flex">
+          <md-button class="md-simple md-button md-black maryoku-btn" @click="startCampaign" v-else>
+            <span class="font-size-16 text-transform-capitalize">
+              <img :src="`${$iconURL}Campaign/group-2428.svg`" class="mr-10" style="width: 20px; height: 20px" />
+              Send Now
+            </span>
+          </md-button>
+          <div class="schedule-btn d-flex" v-if="!isScheduled">
             <md-button class="md-button md-red maryoku-btn schedule-campaign-btn" @click="showScheduleModal = true">
               <span class="font-size-16 text-transform-capitalize">
                 <img class="mr-20" :src="`${$iconURL}Campaign/Path 4377.svg`" />
@@ -206,6 +212,13 @@
               </md-menu-content>
             </md-menu>
           </div>
+          <template v-else>
+            <span class="seperator"></span>
+            <img class="mr-20 label-icon-1 ml-30" :src="`${$iconURL}Campaign/clock-gray.svg`" />
+            Scheduled Send:
+            {{ $dateUtil.formatScheduleDay(currentCampaign.scheduleSettings.scheduleTime, "DD.MM.YY  |  hh:mm A") }}
+            <md-button class="maryoku-btn md-simple md-red" @click="cancelSchedule">Cancel</md-button>
+          </template>
         </div>
         <div class="d-flex align-center" v-else>
           <md-button class="md-simple md-button md-black maryoku-btn" @click="sendToAddtionalGuests">
@@ -412,6 +425,9 @@ export default {
     saveDraftCampaign() {
       this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "SAVED");
     },
+    cancelSchedule() {
+      this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "SAVED");
+    },
     scheduleCampaign() {
       this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "SCHEDULED");
     },
@@ -543,6 +559,9 @@ export default {
       }
       return false;
     },
+    isScheduled() {
+      return this.currentCampaign.campaignStatus === "SCHEDULED";
+    },
   },
   created() {
     this.campaignInfo.conceptName = this.event.concept ? this.event.concept.name : "Event Name";
@@ -608,7 +627,7 @@ export default {
       display: inline-block;
       border-left: solid 1px #050505;
       height: 2rem;
-      margin-top: 1rem;
+      // margin-top: 1rem;
     }
     .schedule-campaign-btn {
       &::after {

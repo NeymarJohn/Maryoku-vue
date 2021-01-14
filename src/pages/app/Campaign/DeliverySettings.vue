@@ -33,7 +33,9 @@
               class="mt-50"
               v-if="
                 settingData.phone.selected &&
-                (currentCampaign.campaignStatus == 'EDITING' || currentCampaign.campaignStatus == 'TESTING')
+                (currentCampaign.campaignStatus == 'EDITING' ||
+                  currentCampaign.campaignStatus == 'TESTING' ||
+                  currentCampaign.campaignStatus == 'SAVED')
               "
             >
               <div class="font-bold">To</div>
@@ -162,7 +164,9 @@
             <div
               v-if="
                 settingData.email.selected &&
-                (currentCampaign.campaignStatus == 'EDITING' || currentCampaign.campaignStatus == 'TESTING')
+                (currentCampaign.campaignStatus == 'EDITING' ||
+                  currentCampaign.campaignStatus == 'TESTING' ||
+                  currentCampaign.campaignStatus == 'SAVED')
               "
             >
               <div class="mt-50">

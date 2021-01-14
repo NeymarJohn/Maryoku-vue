@@ -21,7 +21,11 @@
               </div>
             </div>
             <div class="md-layout-item md-size-50 md-small-size-50">
-              <rsvp-event-info-panel :event="event" :editable="false"></rsvp-event-info-panel>
+              <rsvp-event-info-panel
+                :event="event"
+                :editable="false"
+                :zoomLink="campaign.additionalData.zoomlink"
+              ></rsvp-event-info-panel>
             </div>
           </div>
           <!-- <div class="mb-50">
@@ -42,24 +46,28 @@
           <img :src="`${$iconURL}RSVP/Group+8056.svg`" style="margin-top: 40px" />
         </div> -->
         <div
-          class="md-layout-item md-size-45 md-small-size-45"
+          class="md-layout-item md-size-50 md-small-size-50"
           v-if="campaign.visibleSettings && campaign.visibleSettings.showWearingGuide"
         >
           <div class="font-size-30 font-bold-extra mb-30 d-flex">
             <img :src="`${$iconURL}RSVP/Path 3728.svg`" />
-            <span style="padding-top: 10px; margin-left: 20px">WHAT SHOULD I WEAR?</span>
+            <span style="padding-top: 10px; margin-left: 20px; line-height: 1.2em">{{
+              campaign.additionalData.wearingGuideTitle
+            }}</span>
           </div>
           <div>
             {{ campaign.additionalData.wearingGuide }}
           </div>
         </div>
         <div
-          class="md-layout-item md-size-45 md-small-size-45"
+          class="md-layout-item md-size-50 md-small-size-50"
           v-if="campaign.visibleSettings && campaign.visibleSettings.showKnowledge"
         >
           <div class="font-size-30 font-bold-extra mb-30 d-flex">
             <img :src="`${$iconURL}RSVP/Path 2369.svg`" />
-            <span style="padding-top: 10px; margin-left: 20px">WHAT SHOULD I KNOW?</span>
+            <span style="padding-top: 10px; margin-left: 20px; line-height: 1.2em">{{
+              campaign.additionalData.knowledgeTitle
+            }}</span>
           </div>
           <div>
             {{ campaign.additionalData.knowledge }}
@@ -119,20 +127,28 @@
           <md-button class="md-simple md-button md-black maryoku-btn" @click="thinkLater">
             <span class="font-size-20">I Need To Think About It</span>
           </md-button>
-          <md-button
-            @click="showZoomModal = true"
-            v-if="campaign.allowOnline"
-            class="md-simple md-button md-black maryoku-btn virtual-btn"
-          >
-            <span class="font-size-20">Virtual Participation</span>
-          </md-button>
-          <md-button v-if="!isSentRsvp" @click="showRsvpModal = true" class="md-button md-red maryoku-btn rsvp-btn">
-            <span class="font-size-20">RSVP Now</span>
-          </md-button>
-          <div v-else class="font-size-20 ml-20">
-            <img :src="`${$iconURL}Campaign/Group 9222.svg`" />
-            Sent Already
-          </div>
+
+          <template v-if="isVirtualEvent">
+            <md-button v-if="!isSentRsvp" @click="showZoomModal = true" class="md-button md-red maryoku-btn rsvp-btn">
+              <span class="font-size-20">RSVP Now</span>
+            </md-button>
+          </template>
+          <template v-else>
+            <md-button
+              @click="showZoomModal = true"
+              v-if="campaign.allowOnline"
+              class="md-simple md-button md-black maryoku-btn virtual-btn"
+            >
+              <span class="font-size-20">Virtual Participation</span>
+            </md-button>
+            <md-button v-if="!isSentRsvp" @click="showRsvpModal = true" class="md-button md-red maryoku-btn rsvp-btn">
+              <span class="font-size-20">RSVP Now</span>
+            </md-button>
+            <div v-else class="font-size-20 ml-20">
+              <img :src="`${$iconURL}Campaign/Group 9222.svg`" />
+              Sent Already
+            </div>
+          </template>
         </div>
       </div>
     </div>
@@ -308,6 +324,9 @@ export default {
     },
     scheduledDays() {
       return this.event.timelineDates;
+    },
+    isVirtualEvent() {
+      return this.event.places && this.event.places.length === 1 && this.event.places[0] === "VIRTUAL";
     },
   },
   methods: {
