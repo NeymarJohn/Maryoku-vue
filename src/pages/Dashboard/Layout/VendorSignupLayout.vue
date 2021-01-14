@@ -199,10 +199,6 @@ export default {
   created() {},
   mounted() {
     // console.log("vendor.signup.layout.vendor", this.vendor, this.step);
-    this.$root.$on("go-to-signup-step", (step) => {
-      this.setStep(step);
-    });
-
   },
   computed: {
     ...mapGetters({

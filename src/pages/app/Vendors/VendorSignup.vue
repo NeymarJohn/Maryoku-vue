@@ -38,89 +38,6 @@ import swal from "sweetalert2";
 
 import { businessCategories, generalInfos, companyServices } from "@/constants/vendor";
 
-const emptyVendor = {
-  vendorCategory: null,
-  vendorPropertyValues: {},
-  email: null,
-  companyName: null,
-  phone: null,
-  address: null,
-  coverPhoto: null,
-  images: [],
-  vendorImages: [],
-  signature: null,
-  capacity: {
-    low: null,
-    high: null,
-  },
-  about: {
-    company: null,
-    category: null,
-  },
-  social: {
-    website: null,
-    facebook: null,
-    instagram: null,
-    youtube: null,
-    linkedin: null,
-    google: null,
-    pinterest: null,
-    foursuare: null,
-    reddit: null,
-    tiktok: null,
-  },
-  services: {},
-  yesRules: [],
-  noRules: [],
-  notAllowed: [],
-  exDonts: [],
-  yesPolicies: [],
-  noPolicies: [],
-  selectedWeekdays: [],
-  dontWorkDays: null,
-  dontWorkTime: null,
-};
-const testVendor = {
-  vendorCategory: "venuerental",
-  vendorPropertyValues: {},
-  email: "jefflei@gmail.com",
-  companyName: "test-company",
-  phone: "123123",
-  address: "testsetaset",
-  coverPhoto: null,
-  images: [],
-  signature: null,
-  capacity: {
-    low: null,
-    high: null,
-  },
-  about: {
-    company: null,
-    category: null,
-  },
-  social: {
-    website: null,
-    facebook: null,
-    instagram: null,
-    youtube: null,
-    linkedin: null,
-    google: null,
-    pinterest: null,
-    foursuare: null,
-    reddit: null,
-    tiktok: null,
-  },
-  services: {},
-  yesRules: [],
-  noRules: [],
-  notAllowed: [],
-  exDonts: [],
-  yesPolicies: [],
-  noPolicies: [],
-  selectedWeekdays: [],
-  dontWorkDays: null,
-  dontWorkTime: null,
-};
 export default {
   components: {
     VueElementLoading,
@@ -180,36 +97,27 @@ export default {
 
       this.step = 1;
     });
-    this.$root.$on("next-vendor-signup-step", () => {
-      if (this.step < 6) {
-        this.step += 1;
-      }
-    });
-    this.$root.$on("prev-vendor-signup-step", () => {
-      if (this.step > 0) {
-        this.step -= 1;
-      }
-      if (this.step == 0) {
-        this.isApproved = false;
-      }
-    });
+
     this.$root.$on("go-to-signup-step", (step) => {
-      this.step = step;
-      if (this.step < 1) {
+      if (step < 1) {
         this.isApproved = false;
       }
+      this.setStep(step);
     });
     this.$root.$on("update-vendor-value", (field, value) => {
       console.log("update-vendor-value", field, value);
       let vendor = JSON.parse(JSON.stringify(this.vendor));
       if (field == "images" || field == "vendorImages") {
-        if (!vendor.images[value.index]) {
+        if (!vendor[field][value.index]) {
+          console.log('!update.vendor.image', value);
           vendor[field].push(value.data);
         } else {
+          console.log('update.vendor.image', value);
           vendor[field][value.index] = value.data;
         }
       } else if (field == "removeImage") {
         vendor.images = vendor.images.filter((i) => i != value);
+        vendor.vendorImages = vendor.vendorImages.filter(i => i != value);
       } else if (field == "vendorCategories") {
         this.$set(vendor, this.camelize(field), value);
         this.$set(vendor, "vendorCategory", value[0]);
@@ -279,10 +187,10 @@ export default {
   filters: {},
   watch: {
     vendor(newVal) {
-      console.log("vendor.signup.watch.vendor", newVal);
+      // console.log("vendor.signup.watch.vendor", newVal);
     },
     step(newVal) {
-      console.log("vendor.signup.watch.step", newVal);
+      // console.log("vendor.signup.watch.step", newVal);
       if (this.step === 7) this.addVendor();
     },
   },

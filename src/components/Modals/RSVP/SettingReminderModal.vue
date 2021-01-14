@@ -35,7 +35,7 @@
             class="mb-20 width-50"
             inputStyle="phone"
             type="text"
-            v-model="remindingPhone"
+            v-model="remindEmail"
             key="phone-input"
             v-if="remindTool == 'sms'"
           ></maryoku-input>
@@ -45,7 +45,7 @@
             class="mb-20 width-50"
             inputStyle="email"
             type="email"
-            v-model="remindingEmail"
+            v-model="remindEmail"
             v-if="remindTool == 'email'"
             key="email-input"
           ></maryoku-input>
@@ -79,12 +79,12 @@
       <div v-if="screen == 3">
         <img :src="`${$iconURL}RSVP/Group 8005.svg`" class="mt-20" />
         <div class="font-size-30 mb-30 mt-30 font-bold">WE WILL SEND YOU A REMINDER TONIGHT</div>
-        <div class>{{ remindTool === "email" ? `By email` : `By SMS` }}</div>
+        <div class>By email</div>
       </div>
     </template>
     <template slot="footer">
       <div class="text-center w-100" v-if="screen == 2">
-        <md-button class="md-red md-bold" @click="setRemind" :disabled="!canSetReminder">Set A Reminder</md-button>
+        <md-button class="md-red md-bold" @click="screen = 3">Set A Reminder</md-button>
       </div>
     </template>
   </modal>
@@ -92,8 +92,6 @@
 <script>
 import { Modal, MaryokuInput } from "@/components";
 import OptionCard from "./OptionCard";
-import moment from "moment";
-import Reminder from "@/models/Reminder";
 export default {
   components: {
     Modal,
@@ -104,8 +102,7 @@ export default {
   data() {
     return {
       screen: 2,
-      remindingEmail: "",
-      remindingPhone: "",
+      remindEmail: "",
       remindTool: "email",
       remindTime: "tomorrow",
     };
@@ -116,34 +113,6 @@ export default {
     },
     close() {
       this.$emit("close");
-    },
-    setRemind() {
-      let remindingTime = 0;
-      if (this.remindTime === "week") {
-        remindingTime = moment(new Date()).add(1, "week").valueOf();
-      } else if (this.remindTime === "tomorrow") {
-        remindingTime = moment(new Date()).add(1, "day").valueOf();
-      } else if (this.remindTime === "tonight") {
-        remindingTime = moment(new Date()).hours(21).valueOf();
-        if (remindingTime < new Date().getTime()) {
-          remindingTime = moment(new Date()).add(1, "hour").valueOf();
-        }
-      }
-      const remindingData = {
-        reminder: this.remindTool,
-        phoneNumber: this.remindingPhone,
-        email: this.remindingEmail,
-        remindingTime: remindingTime,
-        type: "campaign",
-      };
-      new Reminder(remindingData).save().then((res) => {
-        this.screen = 3;
-      });
-    },
-  },
-  computed: {
-    canSetReminder() {
-      return (this.remindTool === "email" && this.remindingEmail) || (this.remindTool === "sms" && this.remindingPhone);
     },
   },
 };

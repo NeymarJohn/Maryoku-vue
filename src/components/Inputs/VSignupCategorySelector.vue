@@ -209,6 +209,9 @@ export default {
       }
     }
   },
+  beforeDestroy(){
+    // this.$root.$off('update-vendor-value')
+  },
   watch: {
     value(newValue){
       // console.log("signup.category.selector.watch", newValue, this.field);

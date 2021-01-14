@@ -50,9 +50,9 @@ textarea {
     font-family: "Manrope-Regular";
     font-size: 16px;
     resize: none;
-    padding: 20px;
+    padding:20px;
     width: 100%;
-    border: solid 1px #b7b7b7;
+    border: solid 1px #B7B7B7;
     border-radius: 3px;
 }
 input,
@@ -378,13 +378,16 @@ pt-0 {
 .width-100 {
     width: 100% !important;
 }
-.w-max-120 {
+.w-max-80{
+    max-width: 80px;
+}
+.w-max-120{
     max-width: 120px;
 }
-.w-max-450 {
+.w-max-450{
     max-width: 450px;
 }
-.height-100vh {
+.height-100vh{
     height: 100vh;
 }
 .line-height-1 {
@@ -608,9 +611,6 @@ hr {
 .label-icon {
     width: 20px !important;
 }
-.label-icon-1 {
-    width: 25px !important;
-}
 .form-control {
     min-height: 60px;
     border-radius: 3px;
@@ -643,6 +643,6 @@ hr {
     text-align: center;
 }
 
-.cursor-pointer {
+.cursor-pointer{
     cursor: pointer;
 }
