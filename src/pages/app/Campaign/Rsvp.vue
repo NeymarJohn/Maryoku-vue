@@ -247,9 +247,6 @@ export default {
   created() {
     if (this.$store.state.campaign.RSVP) {
       this.editingContent = this.$store.state.campaign.RSVP;
-      this.editingContent.coverImage = this.event.concept
-        ? this.event.concept.images[0].url
-        : `${this.$storageURL}Campaign Images/RSVP2-middle.png`;
     } else {
       this.editingContent.title = this.info.conceptName;
       this.editingContent.coverImage = this.event.concept

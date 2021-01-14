@@ -8,19 +8,19 @@
           <div class="md-layout">
             <div class="rsvp-event-overview-content-customer md-layout-item md-size-100">
               <img v-if="campaign.logoUrl" :src="`${campaign.logoUrl}`" class="mb-40 logo-image" />
-              <div class="font-size-40" style="margin-bottom: 100px">
+              <div class="font-size-40 greeting-word">
                 Hello {{ campaign.companyName }} {{ event.guestType || "Employee" }}!
               </div>
             </div>
 
-            <div class="md-layout-item md-size-50 md-small-size-50">
+            <div class="md-layout-item md-size-50 md-small-size-100">
               <div class="mb-20">You Are Invited To</div>
               <div class="font-size-60 font-bold-extra mb-30">{{ campaign.title }}</div>
-              <div class="word-break">
+              <div class="word-break mb-30">
                 {{ campaign.description }}
               </div>
             </div>
-            <div class="md-layout-item md-size-50 md-small-size-50">
+            <div class="md-layout-item md-size-50 md-small-size-100">
               <rsvp-event-info-panel
                 :event="event"
                 :editable="false"
@@ -34,6 +34,7 @@
           <div>
             <div class="font-size-22 font-bold mb-10">Check out the venue</div>
             <rsvp-venue-carousel
+              v-if="campaign.images"
               :editable="false"
               :event="event"
               :defaultImages="campaign.images"
@@ -46,7 +47,7 @@
           <img :src="`${$iconURL}RSVP/Group+8056.svg`" style="margin-top: 40px" />
         </div> -->
         <div
-          class="md-layout-item md-size-50 md-small-size-50"
+          class="md-layout-item md-size-50 md-small-size-100"
           v-if="campaign.visibleSettings && campaign.visibleSettings.showWearingGuide"
         >
           <div class="font-size-30 font-bold-extra mb-30 d-flex">
@@ -60,7 +61,7 @@
           </div>
         </div>
         <div
-          class="md-layout-item md-size-50 md-small-size-50"
+          class="md-layout-item md-size-50 md-small-size-100"
           v-if="campaign.visibleSettings && campaign.visibleSettings.showKnowledge"
         >
           <div class="font-size-30 font-bold-extra mb-30 d-flex">
@@ -102,7 +103,7 @@
         </div>
       </div>
     </div>
-    <div class="text-center mb-50">
+    <div class="text-center mb-50 mt-30">
       Provided by
       <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
     </div>
@@ -119,7 +120,7 @@
             <img :src="`${$iconURL}RSVP/sharing-white.svg`" width="17" />
           </md-button>
         </div>
-        <div class="d-flex align-center">
+        <div class="d-flex align-center btn-group">
           <md-button class="md-simple md-button md-black maryoku-btn" @click="reject">
             <span class="font-size-20">I Can't make it</span>
           </md-button>
@@ -388,7 +389,7 @@ export default {
       height: 430px;
       background-repeat: no-repeat;
       background-position: center 60%;
-      background-size: 100%;
+      background-size: cover;
     }
     &-overview {
       // background-color: #fff;
@@ -397,6 +398,10 @@ export default {
         background-color: white;
         margin-left: 27px;
         padding: 60px 120px;
+        .greeting-word {
+          margin-bottom: 100px;
+          line-height: 1em;
+        }
       }
       .event-info {
         .event-info-item {
@@ -442,7 +447,7 @@ export default {
     }
   }
   .rsvp-footer {
-    height: 128px;
+    padding: 35px 10px;
     background-color: white;
     &-content {
       max-width: 1520px;
@@ -465,6 +470,73 @@ export default {
     .virtual-btn {
       border: solid 1px #f51355;
       margin-left: 30px;
+    }
+  }
+}
+@media only screen and (max-width: 959px) {
+  .rsvp-container {
+    .rsvp-event {
+      margin: 0 auto 0px;
+      border-radius: 10px;
+      .rsvp-event-header {
+        height: 250px;
+      }
+      &-overview {
+        &-content {
+          margin-left: 12px;
+          padding: 30px 20px;
+          .greeting-word {
+            margin-bottom: 50px;
+          }
+        }
+        .event-info {
+          .event-info-item {
+            margin-bottom: 50px;
+            display: flex;
+            align-items: center;
+            &-icon {
+              width: 42px;
+              height: 42px;
+              background-color: #d9fcf2;
+              border-radius: 21px;
+              padding: 8px;
+            }
+            &-title {
+              width: 150px;
+              padding: 10px 24px;
+            }
+          }
+        }
+      }
+      &-guid {
+        padding: 20px;
+      }
+      &-timeline {
+        padding: 20px;
+      }
+      .owl-carousel {
+        .owl-item {
+          .item {
+            width: 340px;
+            height: 200px;
+          }
+        }
+      }
+    }
+    .rsvp-footer-content {
+      flex-flow: wrap-reverse;
+      justify-content: center;
+      .btn-group {
+        flex-flow: wrap;
+        justify-content: center;
+        margin-bottom: 10px;
+        button {
+          margin: 10px 0px;
+        }
+        .seperator {
+          display: none;
+        }
+      }
     }
   }
 }

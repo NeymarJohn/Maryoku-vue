@@ -1,11 +1,11 @@
 <template>
   <div class="rsvp-event-info">
     <div class="event-info-item">
-      <div class="event-info-item-icon">
-        <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
-        <img :src="`${$iconURL}RSVP/Path+251.svg`" />
-      </div>
       <div class="event-info-item-title font-size-22 font-bold-extra">
+        <div class="event-info-item-icon">
+          <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
+          <img :src="`${$iconURL}RSVP/Path+251.svg`" />
+        </div>
         <span :class="{ underline: !editable }">WHEN?</span>
       </div>
       <div class="event-info-item-content font-size-20">
@@ -23,31 +23,31 @@
       </div>
     </div>
     <div class="event-info-item" v-if="!isVirtualEvent">
-      <div class="event-info-item-icon">
-        <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
-        <img :src="`${$iconURL}Event%20Page/location-dark.svg`" />
-      </div>
       <div class="event-info-item-title font-size-22 font-bold-extra">
+        <div class="event-info-item-icon">
+          <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
+          <img :src="`${$iconURL}Event%20Page/location-dark.svg`" />
+        </div>
         <span :class="{ underline: !editable }">WHERE?</span>
       </div>
       <div class="event-info-item-content font-size-20">{{ event.location }}</div>
     </div>
     <div class="event-info-item" v-else>
-      <div class="event-info-item-icon">
-        <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
-        <img :src="`${$iconURL}Event%20Page/location-dark.svg`" />
-      </div>
       <div class="event-info-item-title font-size-22 font-bold-extra">
+        <div class="event-info-item-icon">
+          <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
+          <img :src="`${$iconURL}Event%20Page/location-dark.svg`" />
+        </div>
         <span :class="{ underline: !editable }">WHERE?</span>
       </div>
       <div class="event-info-item-content font-size-20">{{ zoomLink }}</div>
     </div>
     <div class="event-info-item" v-if="!isVirtualEvent">
-      <div class="event-info-item-icon">
-        <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
-        <img :src="`${$iconURL}RSVP/Path+1383.svg`" />
-      </div>
       <div class="event-info-item-title font-size-22 font-bold-extra">
+        <div class="event-info-item-icon">
+          <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
+          <img :src="`${$iconURL}RSVP/Path+1383.svg`" />
+        </div>
         <span :class="{ underline: !editable }">SOLO OR PLUS 1?</span>
       </div>
       <div class="event-info-item-content d-flex align-center font-size-20" v-if="!editingPlusOne">
@@ -69,11 +69,11 @@
       </div>
     </div>
     <div class="event-info-item">
-      <div class="event-info-item-icon">
-        <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
-        <img :src="`${$iconURL}RSVP/Group+1279.svg`" />
-      </div>
       <div class="event-info-item-title font-size-22 font-bold-extra">
+        <div class="event-info-item-icon">
+          <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
+          <img :src="`${$iconURL}RSVP/Group+1279.svg`" />
+        </div>
         <span :class="{ underline: !editable }">Arrival?</span>
       </div>
 
@@ -157,6 +157,7 @@ export default {
     margin-bottom: 50px;
     display: flex;
     align-items: center;
+    flex-flow: wrap;
     &-icon {
       width: 42px;
       height: 42px;
@@ -164,6 +165,9 @@ export default {
       padding: 8px;
       position: relative;
       overflow: hidden;
+      vertical-align: middle;
+      display: inline-block;
+      margin-right: 20px;
       &-background {
         width: 42px;
         height: 42px;
@@ -182,9 +186,10 @@ export default {
     }
     &-title {
       min-width: 250px;
-      padding: 10px 24px;
+      // padding: 10px 24px;
       span.underline {
         border-bottom: solid 2px #ff7600;
+        vertical-align: middle;
       }
     }
     &-content {
