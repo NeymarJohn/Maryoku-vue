@@ -10,6 +10,7 @@ import ChartistTooltipPlugin from "chartist-plugin-tooltip";
 import vSelectMenu from "v-selectmenu";
 import vueNumeralFilterInstaller from "vue-numeral-filter";
 import VueGmaps from "vue-gmaps";
+import VueLazyLoad from 'vue-lazyload'
 // import VuePhoneNumberInput from "vue-phone-number-input";
 // import "vue-phone-number-input/dist/vue-phone-number-input.css";
 import VTooltip from "v-tooltip";
@@ -60,6 +61,7 @@ Vue.use(VueRouter);
 Vue.use(DashboardPlugin);
 Vue.use(VueTour);
 Vue.use(VueSwal);
+Vue.use(VueLazyLoad);
 Vue.use(VueGmaps, {
     key: process.env.GOOGLE_API_KEY || "AIzaSyAelc-zmvKBlcW78yPFeW9xrbnrJaT-MfA",
     libraries: ["places"],

@@ -8,7 +8,7 @@ const defaultSettings = {
         numberArray: [],
         excelFileName: "",
         excelFilePath: "",
-        smsOrWhatsapp: "",
+        smsOrWhatsapp: "sms",
         sentTime: new Date().getTime(),
     },
     email: {
@@ -50,8 +50,11 @@ const defaultCampaignData = {
             showTimeline: true,
         },
         additionalData: {
+            greetingWords: "",
             wearingGuide: "",
+            wearingGuideTitle: "WHAT SHOULD I WEAR?",
             knowledge: "",
+            knowledgeTitle: "WHAT SHOULD I KNOW?",
             zoomlink: "",
         },
         images: [

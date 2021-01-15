@@ -66,6 +66,7 @@
                 "
                 :item="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0])[0]"
                 :label="`Company Services`"
+                :vendor="vendor"
                 v-model="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0])[0].value"
               />
             </div>
@@ -121,18 +122,20 @@
         </div>
         <div class="my-30">
           <div class="title-cont d-flex align-center mb-20">
-            <h5 class=" my-0"><img class="mr-10" :src="`${iconUrl}Asset 542.svg`" width="30"/> Add a Personal message to your clients</h5>
+            <h5 class="my-0">
+              <img class="mr-10" :src="`${iconUrl}Asset 542.svg`" width="30" /> Add a Personal message to your clients
+            </h5>
             <p class="my-0 pl-20">This paragraph will be added automatically to your proposals</p>
           </div>
           <div class="card">
             <div class="field">
               <h5 class="my-0 pb-10">DEAR PLANNER...</h5>
               <textarea
-                  placeholder="Type 'about your personal message' here"
-                  class="width-100"
-                  rows="5"
-                  @blur="updateVendor($event, 'personalMessage')"
-                  v-model="vendor.personalMessage"
+                placeholder="Type 'about your personal message' here"
+                class="width-100"
+                rows="5"
+                @blur="updateVendor($event, 'personalMessage')"
+                v-model="vendor.personalMessage"
               ></textarea>
             </div>
           </div>
@@ -146,24 +149,25 @@
               <p>(15 photos top, under 5MB)</p>
             </div>
           </div>
-          <template v-if="!vendor.images || vendor.images.length == 0">
+          <template v-if="!vendor.vendorImages.length">
             <Drop
-                    @drop="handleDrop"
-                    @dragenter="handleDragEnter"
-                    @dragleave="handleDragLeave"
-                    style="height: 100%;"
-                    :class="{'drag-over': isDragOver, 'red-border': !isDragOver}"
-                    class="card d-flex justify-content-center align-center">
+              @drop="handleDrop"
+              @dragenter="handleDragEnter"
+              @dragleave="handleDragLeave"
+              style="height: 100%"
+              :class="{ 'drag-over': isDragOver, 'red-border': !isDragOver }"
+              class="card d-flex justify-content-center align-center"
+            >
               <div class="upload-cont" v-if="!isDragOver">
                 <a class @click="uploadVendorImage"> <img :src="`${iconUrl}Asset 559.svg`" /> Choose File </a>
                 <div class="or">Or</div>
                 <span>Drag and drop photos</span>
                 <input
-                        type="file"
-                        class="hide"
-                        ref="imageFile"
-                        accept="image/gif, image/jpg, image/png"
-                        @change="onVendorImageFilePicked"
+                  type="file"
+                  class="hide"
+                  ref="imageFile"
+                  accept="image/gif, image/jpg, image/png"
+                  @change="onVendorImageFilePicked"
                 />
               </div>
               <span class="font-size-30 drop-cont" v-else>Drop Here</span>
@@ -175,78 +179,91 @@
               <div
                 class="box item2"
                 :style="`
-                  background-image: url(${vendor.images[0]});
+                  background-image: url(${vendor.vendorImages[0]});
                   background-size: cover;
                   background-size: 100% 100%;`"
               >
-                <img
-                  :src="`${iconUrl}Asset 528.svg`"
-                  v-if="vendor.images[0]"
-                  @click="removeVendorImage(vendor.images[0])"
-                />
+                <div class="trash"
+                     v-if="vendor.vendorImages[0]"
+                     @click="removeVendorImage(vendor.vendorImages[0])"
+                >
+                  <img
+                    src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg"
+                  />
+                </div>
               </div>
               <div
                 class="box item"
-                :class="{ 'no-image': !vendor.images[1] }"
+                :class="{ 'no-image': !vendor.vendorImages[1] }"
                 :style="`
-                  background-image: url(${vendor.images[1]});
+                  background-image: url(${vendor.vendorImages[1]});
                   background-size: cover;
                   background-size: 100% 100%;`"
               >
-                <img
-                  :src="`${iconUrl}Asset 528.svg`"
-                  v-if="vendor.images[1]"
-                  @click="removeVendorImage(vendor.images[1])"
-                />
+                <div class="trash"
+                     v-if="vendor.vendorImages[1]"
+                     @click="removeVendorImage(vendor.vendorImages[1])"
+                >
+                  <img
+                      src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg"
+                  />
+                </div>
               </div>
               <div
                 class="box item"
-                :class="{ 'no-image': !vendor.images[2] }"
+                :class="{ 'no-image': !vendor.vendorImages[2] }"
                 :style="`
-                  background-image: url(${vendor.images[2]});
+                  background-image: url(${vendor.vendorImages[2]});
                   background-size: cover;
                   background-size: 100% 100%;`"
               >
-                <img
-                  :src="`${iconUrl}Asset 528.svg`"
-                  v-if="vendor.images[2]"
-                  @click="removeVendorImage(vendor.images[2])"
-                />
+                <div class="trash"
+                     v-if="vendor.vendorImages[2]"
+                     @click="removeVendorImage(vendor.vendorImages[2])"
+                >
+                  <img
+                    src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg"
+                  />
+                </div>
               </div>
               <div
                 class="box item"
-                :class="{ 'no-image': !vendor.images[3] }"
+                :class="{ 'no-image': !vendor.vendorImages[3] }"
                 :style="`
-                  background-image: url(${vendor.images[3]});
+                  background-image: url(${vendor.vendorImages[3]});
                   background-size: cover;
                   background-size: 100% 100%;`"
               >
-                <img
-                  :src="`${iconUrl}Asset 528.svg`"
-                  v-if="vendor.images[3]"
-                  @click="removeVendorImage(vendor.images[3])"
-                />
+                <div class="trash"
+                     v-if="vendor.vendorImages[3]"
+                     @click="removeVendorImage(vendor.vendorImages[3])"
+                >
+                  <img
+                    src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg"
+                  />
+                </div>
               </div>
-                <Drop
-                        @drop="handleDrop"
-                        @dragenter="handleDragEnter"
-                        @dragleave="handleDragLeave"
-                        :class="{'drag-over': isDragOver}"
-                        class="box item add-more d-flex justify-content-center align-center">
-                    <div v-if="!isDragOver">
-                        <img :src="`${iconUrl}Group 6501.svg`" @click="uploadVendorImage"/>
-                        <br />
-                        <span>Add more</span>
-                        <input
-                                type="file"
-                                class="hide"
-                                ref="imageFile"
-                                accept="image/gif, image/jpg, image/png"
-                                @change="onVendorImageFilePicked"
-                        />
-                    </div>
-                    <span class="font-size-16 drop-cont" v-else>Drop Here</span>
-                </Drop>
+              <Drop
+                @drop="handleDrop"
+                @dragenter="handleDragEnter"
+                @dragleave="handleDragLeave"
+                :class="{ 'drag-over': isDragOver }"
+                class="box item add-more d-flex justify-content-center align-center"
+              >
+                <div v-if="!isDragOver">
+                  <img :src="`${iconUrl}Group 6501.svg`" @click="uploadVendorImage" />
+                  <br />
+                  <span>Add more</span>
+                  <input
+                    type="file"
+                    class="hide"
+                    ref="imageFile"
+                    accept="image/gif, image/jpg, image/png"
+                    @change="onVendorImageFilePicked"
+                  />
+                </div>
+                <span class="font-size-16 drop-cont" v-else>Drop Here</span>
+              </Drop>
             </div>
           </template>
         </div>
@@ -485,7 +502,7 @@ export default {
   },
   created() {},
   mounted() {
-    console.log("mounted", this.vendor);
+    console.log("step1.mounted", this.companyServices);
   },
   methods: {
     handleDrop(data, event) {
@@ -493,10 +510,10 @@ export default {
       const files = event.dataTransfer.files;
 
       // validate upload files
-      for (let i = 0; i < files.length; i ++) {
+      for (let i = 0; i < files.length; i++) {
         let message = null;
-        if (files[i].type !== 'image/jpeg' && files[i].type !== 'image/png' && files[i].type !== 'image/gif') {
-          message = 'Please update a image (.png, .jpeg, .gif) file!';
+        if (files[i].type !== "image/jpeg" && files[i].type !== "image/png" && files[i].type !== "image/gif") {
+          message = "Please update a image (.png, .jpeg, .gif) file!";
         }
 
         if (files[i].size > 5 * 1024 * 1024) {
@@ -513,16 +530,15 @@ export default {
           });
           this.isDragOver = false;
           return;
-
         }
       }
       this.createImage(files[0]);
       this.isDragOver = false;
     },
-    handleDragEnter(e){
+    handleDragEnter(e) {
       this.isDragOver = true;
     },
-    handleDragLeave(e){
+    handleDragLeave(e) {
       this.isDragOver = false;
     },
     updateSocialMedia(item) {
@@ -579,8 +595,9 @@ export default {
           this.$root.$emit("update-vendor-value", "signature", e.target.result);
         } else {
           const fileId = `${new Date().getTime()}_${makeid()}`;
-          const currentIndex = this.vendor.images.length;
+          const currentIndex = this.vendor.vendorImages.length;
           S3Service.fileUpload(file, fileId, "vendor/cover-images").then((uploadedName) => {
+            console.log('createImage', uploadedName);
             this.$root.$emit("update-vendor-value", "vendorImages", {
               index: currentIndex,
               data: `https://maryoku.s3.amazonaws.com/vendor/cover-images/${uploadedName}`,
@@ -788,11 +805,11 @@ export default {
           }
         }
 
-        &.drag-over{
+        &.drag-over {
           border: 2px dotted #f51355;
           min-height: 210px;
 
-          .drop-cont{
+          .drop-cont {
             color: #cfcfcf;
             font-weight: bold;
           }
@@ -851,25 +868,36 @@ export default {
 
     .box {
       margin: 1rem;
+      position: relative;
     }
 
     .item2 {
-      img {
-        width: 24px;
+      .trash{
         cursor: pointer;
-        position: relative;
-        left: 90%;
-        top: 80%;
+        position: absolute;
+        right: 1rem;
+        bottom: 1rem;
+        background-color: white;
+        border-radius: 50%;
+        padding: 8px 12px;
+      }
+      img {
+        width: 20px;
       }
     }
 
     .item {
-      img {
-        width: 24px;
+      .trash{
         cursor: pointer;
-        position: relative;
-        left: 80%;
-        top: 60%;
+        position: absolute;
+        right: .5rem;
+        bottom: .5rem;
+        background-color: white;
+        border-radius: 50%;
+        padding: 4px 8px;
+      }
+      img {
+        width: 18px;
       }
     }
 
@@ -895,13 +923,13 @@ export default {
         padding-bottom: 10px;
       }
 
-      .drop-cont{
-          font-weight: bold;
-          color: #cfcfcf;
+      .drop-cont {
+        font-weight: bold;
+        color: #cfcfcf;
       }
 
-      &.drag-over{
-            border: 2px dotted #f51355;
+      &.drag-over {
+        border: 2px dotted #f51355;
       }
     }
   }
@@ -932,7 +960,7 @@ export default {
         width: 18px;
         cursor: pointer;
         position: absolute;
-        right: 1rem;
+        right: 2rem;
         bottom: 3rem;
       }
     }

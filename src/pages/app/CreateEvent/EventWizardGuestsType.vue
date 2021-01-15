@@ -4,7 +4,7 @@
       <div class="title">2/5</div>
       <selected-value :value="formattedString" property="users"></selected-value>
       <div class="event-guests-type event-basic-info">
-        <div class="setting-title mt-5">
+        <div class="setting-title mt-70">
           <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator" />
           so, who’s coming?
         </div>

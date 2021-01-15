@@ -33,7 +33,9 @@
               class="mt-50"
               v-if="
                 settingData.phone.selected &&
-                (currentCampaign.campaignStatus == 'EDITING' || currentCampaign.campaignStatus == 'TESTING')
+                (currentCampaign.campaignStatus == 'EDITING' ||
+                  currentCampaign.campaignStatus == 'TESTING' ||
+                  currentCampaign.campaignStatus == 'SAVED')
               "
             >
               <div class="font-bold">To</div>
@@ -108,6 +110,7 @@
                   v-model="settingData.phone.smsOrWhatsapp"
                   class="md-checkbox-circle md-red ml-50"
                   value="whatsapp"
+                  disabled
                 >
                   <img :src="`${$iconURL}Campaign/Image+74.png`" />
                   <span
@@ -161,7 +164,9 @@
             <div
               v-if="
                 settingData.email.selected &&
-                (currentCampaign.campaignStatus == 'EDITING' || currentCampaign.campaignStatus == 'TESTING')
+                (currentCampaign.campaignStatus == 'EDITING' ||
+                  currentCampaign.campaignStatus == 'TESTING' ||
+                  currentCampaign.campaignStatus == 'SAVED')
               "
             >
               <div class="mt-50">
@@ -364,6 +369,7 @@ export default {
     // set default subject for email
     this.settingData.email.from = this.$store.state.auth.user.email || this.$store.state.auth.user.username;
     this.settingData.email.subject = this.emailSubject;
+    this.settingData.phone.smsOrWhatsapp = "sms";
   },
   methods: {
     handleInputEmails({ value, type }) {
@@ -469,16 +475,16 @@ export default {
       const campaignData = this.$store.state.campaign;
       switch (this.campaign.name) {
         case "SAVING_DATE":
-          return `${campaignData.SAVING_DATE ? campaignData.SAVING_DATE.title : this.event.title} Save The Date `;
+          return `Save the date - ${campaignData.SAVING_DATE ? campaignData.SAVING_DATE.title : this.event.title}`;
           break;
         case "RSVP":
-          return `${campaignData.RSVP ? campaignData.RSVP.title : this.event.title} RSVP`;
+          return `RSVP - ${campaignData.RSVP ? campaignData.RSVP.title : this.event.title}`;
           break;
         case "COMING_SOON":
-          return `${campaignData.COMING_SOON ? campaignData.COMING_SOON.title : this.event.title} Coming soon `;
+          return `Coming soon - ${campaignData.COMING_SOON ? campaignData.COMING_SOON.title : this.event.title}`;
           break;
         case "FEEDBACK":
-          return `${campaignData.FEEDBACK ? campaignData.FEEDBACK.title : this.event.title} Feedback`;
+          return `Feedback - ${campaignData.FEEDBACK ? campaignData.FEEDBACK.title : this.event.title}`;
           break;
         default:
           return "";

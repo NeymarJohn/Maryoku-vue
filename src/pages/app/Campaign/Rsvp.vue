@@ -26,18 +26,22 @@
           <img :src="campaignData.logoUrl" style="max-width: 200px" />
           <md-switch class="large-switch below-label" v-model="showLogo">Hide logo</md-switch>
         </div>
-        <div class="font-size-30 font-bold mt-20">
-          Hello
-          <span class="text-transform-capitalize">{{ user.companyName ? user.companyName : user.currentTenant }}</span>
-          <span class="text-transform-capitalize">{{ event.guestType || "Employee" }}</span
-          >!
+        <div class="font-size-30 font-bold mt-20 d-flex align-center">
+          <!-- <div class="mr-10">{{ campaignData.additionalData.greetingWords }}</div>
+          <md-button class="edit-btn md-simple md-red">Edit</md-button> -->
+          <title-editor
+            :defaultValue="campaignData.additionalData.greetingWords"
+            :key="campaignData.additionalData.greetingWords"
+            @change="changeGreetings"
+            class="mt-40 mb-30"
+          ></title-editor>
         </div>
         <div class="font-size-20 mt-50">YOU ARE INVITED TO</div>
         <title-editor
           :defaultValue="campaignTitle"
           :key="campaignTitle"
           @change="changeTitle"
-          class="mt-40 mb-30"
+          class="mt-40 mb-30 font-size-60"
         ></title-editor>
 
         <maryoku-textarea
@@ -66,7 +70,7 @@
         <div class="rsvp-event-guid-background" v-else :style="`background-color:#D5FCF3;opacity:1;`"></div>
         <div class="rsvp-event-guid md-layout">
           <div class="md-layout-item md-size-50 md-small-size-50">
-            <div class="font-size-30 font-bold-extra mb-30 d-flex">
+            <div class="font-size-30 font-bold-extra mb-30 d-flex" v-if="!isEditingWearing" style="height: 52px">
               <img
                 :src="
                   campaignData.visibleSettings && campaignData.visibleSettings.showWearingGuide
@@ -81,14 +85,27 @@
                   'color-gray': !campaignData.visibleSettings || !campaignData.visibleSettings.showWearingGuide,
                 }"
                 style="z-index: 1"
-                >WHAT SHOULD I WEAR?</span
               >
-              <md-switch
+                {{ campaignData.additionalData.wearingGuideTitle }}
+              </span>
+              <div>
+                <md-button
+                  class="edit-btn md-red md-simple"
+                  @click="isEditingWearing = true"
+                  :disabled="!campaignData.visibleSettings.showWearingGuide"
+                  >Edit</md-button
+                >
+              </div>
+              <hide-switch
+                class="ml-10"
                 v-model="campaignData.visibleSettings.showWearingGuide"
-                class="ml-10 md-switch below-label large-switch"
-              >
-                <span class="color-black font-regular">Hide</span>
-              </md-switch>
+                label=" "
+              ></hide-switch>
+            </div>
+            <div class="mb-30 d-flex" style="height: 52px" v-else>
+              <maryoku-input class="flex-1" v-model="wearingTitleContent"></maryoku-input>
+              <md-button class="md-simple md-red maryoku-btn" @click="isEditingWearing = false">Cancel</md-button>
+              <md-button class="md-red maryoku-btn" @click="saveTitle('wearing')">Save</md-button>
             </div>
             <maryoku-textarea
               placeholder="Give your guests details about the expected dress code"
@@ -97,7 +114,7 @@
             ></maryoku-textarea>
           </div>
           <div class="md-layout-item md-size-50 md-small-size-50">
-            <div class="font-size-30 font-bold-extra mb-30 d-flex">
+            <div class="font-size-30 font-bold-extra mb-30 d-flex" v-if="!isEditingKnowledge" style="height: 52px">
               <img
                 :src="
                   campaignData.visibleSettings.showKnowledge
@@ -112,15 +129,23 @@
                   'color-gray': !campaignData.visibleSettings.showKnowledge,
                 }"
                 style="z-index: 1"
-                >What should I Know?</span
               >
-
-              <md-switch
-                v-model="campaignData.visibleSettings.showKnowledge"
-                class="ml-10 md-switch below-label large-switch"
-              >
-                <span class="color-black font-regular">Hide</span>
-              </md-switch>
+                {{ campaignData.additionalData.knowledgeTitle }}
+              </span>
+              <div>
+                <md-button
+                  class="edit-btn md-red md-simple"
+                  @click="isEditingKnowledge = true"
+                  :disabled="!campaignData.visibleSettings.showKnowledge"
+                  >Edit</md-button
+                >
+              </div>
+              <hide-switch class="ml-10" v-model="campaignData.visibleSettings.showKnowledge" label=" "></hide-switch>
+            </div>
+            <div class="mb-30 d-flex" style="height: 52px" v-else>
+              <maryoku-input class="flex-1" v-model="knowledgeTitleContent"></maryoku-input>
+              <md-button class="md-simple md-red maryoku-btn" @click="isEditingKnowledge = false">Cancel</md-button>
+              <md-button class="md-red maryoku-btn" @click="saveTitle('knowledge')">Save</md-button>
             </div>
             <maryoku-textarea
               placeholder="Give your guests any information you find relevant"
@@ -167,7 +192,7 @@ import RsvpVenueCarousel from "@/pages/app/RSVP/RSVPVenueCarousel.vue";
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
 import TitleEditor from "./components/TitleEditor";
 import RsvpTimelinePanel from "@/pages/app/RSVP/RSVPTimelinePanel.vue";
-
+import HideSwitch from "@/components/HideSwitch";
 import { getBase64 } from "@/utils/file.util";
 import swal from "sweetalert2";
 
@@ -179,6 +204,7 @@ export default {
     RsvpEventInfoPanel,
     TitleEditor,
     RsvpTimelinePanel,
+    HideSwitch,
   },
   props: {
     info: {
@@ -197,6 +223,10 @@ export default {
       showLogo: true,
       content: "",
       originContent: {},
+      isEditingKnowledge: false,
+      isEditingWearing: false,
+      wearingTitleContent: "WHAT SHOULD I WEAR?",
+      knowledgeTitleContent: "WHAT SHOULD I KNOW?",
       editingContent: {
         title: "",
         description: "",
@@ -209,8 +239,11 @@ export default {
           showTimeline: true,
         },
         additionalData: {
+          greetingWords: "",
           wearingGuide: "",
+          wearingGuideTitle: "WHAT SHOULD I WEAR?",
           knowledge: "",
+          knowledgeTitle: "WHAT SHOULD I KNOW?",
           zoomlink: "",
         },
       },
@@ -219,14 +252,24 @@ export default {
   created() {
     if (this.$store.state.campaign.RSVP) {
       this.editingContent = this.$store.state.campaign.RSVP;
-      this.editingContent.coverImage = this.event.concept
-        ? this.event.concept.images[0].url
-        : `${this.$storageURL}Campaign Images/RSVP2-middle.png`;
+      if (!this.editingContent.additionalData.greetingWords) {
+        const greetingWords = `Hello ${this.user.companyName ? this.user.companyName : this.user.currentTenant} ${
+          this.event.guestType || "Employee"
+        }`;
+        this.$store.commit("campaign/setAttribute", {
+          name: "RSVP",
+          key: "additionalData",
+          value: { ...this.editingContent.additionalData, greetingWords },
+        });
+      }
     } else {
       this.editingContent.title = this.info.conceptName;
       this.editingContent.coverImage = this.event.concept
         ? this.event.concept.images[0].url
         : `${this.$storageURL}Campaign Images/RSVP2-middle.png`;
+      this.editingContent.additionalData.greetingWords = `Hello ${
+        user.companyName ? user.companyName : user.currentTenant
+      }} ${event.guestType || "Employee"}`;
       this.$store.commit("campaign/setCampaign", {
         name: "RSVP",
         data: this.editingContent,
@@ -268,6 +311,15 @@ export default {
     },
   },
   methods: {
+    saveTitle(type) {
+      if (type === "knowledge") {
+        this.campaignData.additionalData.knowledgeTitle = this.knowledgeTitleContent;
+        this.isEditingKnowledge = false;
+      } else if (type === "wearing") {
+        this.campaignData.additionalData.wearingGuideTitle = this.wearingTitleContent;
+        this.isEditingWearing = false;
+      }
+    },
     saveData() {
       this.$store.commit("campaign/setCampaign", {
         name: "RSVP",
@@ -296,11 +348,21 @@ export default {
     changeTitle(newTitle) {
       this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
     },
+    changeGreetings(newGreetings) {
+      const additionalData = this.campaignData.additionalData;
+      console.log(this.campaignData);
+      additionalData.greetingWords = newGreetings;
+      this.$store.commit("campaign/setAttribute", {
+        name: "RSVP",
+        key: "additionalData",
+        value: additionalData,
+      });
+    },
     setVisibleTimeline(visibility) {
       this.editingContent.visibleSettings.showTimeline = visibility;
     },
     changeImage(images) {
-      this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
+      this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "images", value: images });
     },
   },
 };
@@ -339,6 +401,9 @@ export default {
       display: block;
       padding: 0;
     }
+  }
+  .edit-btn {
+    margin-top: 1em !important;
   }
   .rsvp-event-guid-background {
     position: absolute;

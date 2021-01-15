@@ -8,20 +8,25 @@
           <div class="md-layout">
             <div class="rsvp-event-overview-content-customer md-layout-item md-size-100">
               <img v-if="campaign.logoUrl" :src="`${campaign.logoUrl}`" class="mb-40 logo-image" />
-              <div class="font-size-40" style="margin-bottom: 100px">
-                Hello {{ campaign.companyName }} {{ event.guestType || "Employee" }}!
+              <div class="font-size-40 greeting-word">
+                <!-- Hello {{ campaign.companyName }} {{ event.guestType || "Employee" }}! -->
+                {{ campaign.additionalData.greetingWords }}
               </div>
             </div>
 
-            <div class="md-layout-item md-size-50 md-small-size-50">
+            <div class="md-layout-item md-size-50 md-small-size-100">
               <div class="mb-20">You Are Invited To</div>
               <div class="font-size-60 font-bold-extra mb-30">{{ campaign.title }}</div>
-              <div class="word-break">
+              <div class="word-break mb-30">
                 {{ campaign.description }}
               </div>
             </div>
-            <div class="md-layout-item md-size-50 md-small-size-50">
-              <rsvp-event-info-panel :event="event" :editable="false"></rsvp-event-info-panel>
+            <div class="md-layout-item md-size-50 md-small-size-100">
+              <rsvp-event-info-panel
+                :event="event"
+                :editable="false"
+                :zoomLink="campaign.additionalData.zoomlink"
+              ></rsvp-event-info-panel>
             </div>
           </div>
           <!-- <div class="mb-50">
@@ -30,6 +35,7 @@
           <div>
             <div class="font-size-22 font-bold mb-10">Check out the venue</div>
             <rsvp-venue-carousel
+              v-if="campaign.images"
               :editable="false"
               :event="event"
               :defaultImages="campaign.images"
@@ -42,24 +48,28 @@
           <img :src="`${$iconURL}RSVP/Group+8056.svg`" style="margin-top: 40px" />
         </div> -->
         <div
-          class="md-layout-item md-size-45 md-small-size-45"
+          class="md-layout-item md-size-50 md-small-size-100"
           v-if="campaign.visibleSettings && campaign.visibleSettings.showWearingGuide"
         >
           <div class="font-size-30 font-bold-extra mb-30 d-flex">
             <img :src="`${$iconURL}RSVP/Path 3728.svg`" />
-            <span style="padding-top: 10px; margin-left: 20px">WHAT SHOULD I WEAR?</span>
+            <span style="padding-top: 10px; margin-left: 20px; line-height: 1.2em">{{
+              campaign.additionalData.wearingGuideTitle
+            }}</span>
           </div>
           <div>
             {{ campaign.additionalData.wearingGuide }}
           </div>
         </div>
         <div
-          class="md-layout-item md-size-45 md-small-size-45"
+          class="md-layout-item md-size-50 md-small-size-100"
           v-if="campaign.visibleSettings && campaign.visibleSettings.showKnowledge"
         >
           <div class="font-size-30 font-bold-extra mb-30 d-flex">
             <img :src="`${$iconURL}RSVP/Path 2369.svg`" />
-            <span style="padding-top: 10px; margin-left: 20px">WHAT SHOULD I KNOW?</span>
+            <span style="padding-top: 10px; margin-left: 20px; line-height: 1.2em">{{
+              campaign.additionalData.knowledgeTitle
+            }}</span>
           </div>
           <div>
             {{ campaign.additionalData.knowledge }}
@@ -94,11 +104,11 @@
         </div>
       </div>
     </div>
-    <div class="text-center mb-50">
+    <div class="text-center mb-50 mt-30">
       Provided by
       <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
     </div>
-    <div class="rsvp-footer">
+    <div class="rsvp-footer white-card">
       <div class="rsvp-footer-content">
         <div>
           <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
@@ -111,7 +121,7 @@
             <img :src="`${$iconURL}RSVP/sharing-white.svg`" width="17" />
           </md-button>
         </div>
-        <div class="d-flex align-center">
+        <div class="d-flex align-center btn-group">
           <md-button class="md-simple md-button md-black maryoku-btn" @click="reject">
             <span class="font-size-20">I Can't make it</span>
           </md-button>
@@ -119,20 +129,28 @@
           <md-button class="md-simple md-button md-black maryoku-btn" @click="thinkLater">
             <span class="font-size-20">I Need To Think About It</span>
           </md-button>
-          <md-button
-            @click="showZoomModal = true"
-            v-if="campaign.allowOnline"
-            class="md-simple md-button md-black maryoku-btn virtual-btn"
-          >
-            <span class="font-size-20">Virtual Participation</span>
-          </md-button>
-          <md-button v-if="!isSentRsvp" @click="showRsvpModal = true" class="md-button md-red maryoku-btn rsvp-btn">
-            <span class="font-size-20">RSVP Now</span>
-          </md-button>
-          <div v-else class="font-size-20 ml-20">
-            <img :src="`${$iconURL}Campaign/Group 9222.svg`" />
-            Sent Already
-          </div>
+
+          <template v-if="isVirtualEvent">
+            <md-button v-if="!isSentRsvp" @click="showZoomModal = true" class="md-button md-red maryoku-btn rsvp-btn">
+              <span class="font-size-20">RSVP Now</span>
+            </md-button>
+          </template>
+          <template v-else>
+            <md-button
+              @click="showZoomModal = true"
+              v-if="campaign.allowOnline"
+              class="md-simple md-button md-black maryoku-btn virtual-btn"
+            >
+              <span class="font-size-20">Virtual Participation</span>
+            </md-button>
+            <md-button v-if="!isSentRsvp" @click="showRsvpModal = true" class="md-button md-red maryoku-btn rsvp-btn">
+              <span class="font-size-20">RSVP Now</span>
+            </md-button>
+            <div v-else class="font-size-20 ml-20">
+              <img :src="`${$iconURL}Campaign/Group 9222.svg`" />
+              Sent Already
+            </div>
+          </template>
         </div>
       </div>
     </div>
@@ -248,19 +266,23 @@ export default {
     const rsvpRequestId = this.$route.params.rsvpRequestId;
     const rsvpRequest = new RsvpRequest({ id: rsvpRequest });
 
-    RsvpRequest.find(rsvpRequestId).then((rsvpRequest) => {
-      console.log(rsvpRequest);
-      this.rsvpRequest = rsvpRequest;
-      this.event = rsvpRequest.event;
-      this.campaign = rsvpRequest.campaign;
-      this.isLoading = false;
-      if (!this.rsvpRequest.isOpened) {
-        new RsvpRequest({ id: rsvpRequest.id, isOpened: true }).save();
-      }
-      // if (this.rsvpRequest.status == "ACCEPTED") {
-      //   this.isSentRsvp = true;
-      // }
-    });
+    RsvpRequest.find(rsvpRequestId)
+      .then((rsvpRequest) => {
+        console.log(rsvpRequest);
+        this.rsvpRequest = rsvpRequest;
+        this.event = rsvpRequest.event;
+        this.campaign = rsvpRequest.campaign;
+        this.isLoading = false;
+        if (!this.rsvpRequest.isOpened) {
+          new RsvpRequest({ id: rsvpRequest.id, isOpened: true }).save();
+        }
+        // if (this.rsvpRequest.status == "ACCEPTED") {
+        //   this.isSentRsvp = true;
+        // }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
     this.$root.$on("setRsvp", (rsvpData) => {
       rsvpData.attendingOption = "PERSON";
       rsvpData.rsvpStatus = "ACCEPTED";
@@ -304,6 +326,9 @@ export default {
     },
     scheduledDays() {
       return this.event.timelineDates;
+    },
+    isVirtualEvent() {
+      return this.event.places && this.event.places.length === 1 && this.event.places[0] === "VIRTUAL";
     },
   },
   methods: {
@@ -349,6 +374,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .rsvp-container {
+  padding-bottom: 100px;
   .rsvp-event {
     background-color: #fff;
     max-width: 1520px;
@@ -365,7 +391,7 @@ export default {
       height: 430px;
       background-repeat: no-repeat;
       background-position: center 60%;
-      background-size: 120%;
+      background-size: cover;
     }
     &-overview {
       // background-color: #fff;
@@ -374,6 +400,10 @@ export default {
         background-color: white;
         margin-left: 27px;
         padding: 60px 120px;
+        .greeting-word {
+          margin-bottom: 100px;
+          line-height: 1em;
+        }
       }
       .event-info {
         .event-info-item {
@@ -419,8 +449,12 @@ export default {
     }
   }
   .rsvp-footer {
-    height: 128px;
+    padding: 30px 10px;
     background-color: white;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    z-index: 999;
     &-content {
       max-width: 1520px;
       margin: auto;
@@ -442,6 +476,73 @@ export default {
     .virtual-btn {
       border: solid 1px #f51355;
       margin-left: 30px;
+    }
+  }
+}
+@media only screen and (max-width: 959px) {
+  .rsvp-container {
+    .rsvp-event {
+      margin: 0 auto 0px;
+      border-radius: 10px;
+      .rsvp-event-header {
+        height: 250px;
+      }
+      &-overview {
+        &-content {
+          margin-left: 12px;
+          padding: 30px 20px;
+          .greeting-word {
+            margin-bottom: 50px;
+          }
+        }
+        .event-info {
+          .event-info-item {
+            margin-bottom: 50px;
+            display: flex;
+            align-items: center;
+            &-icon {
+              width: 42px;
+              height: 42px;
+              background-color: #d9fcf2;
+              border-radius: 21px;
+              padding: 8px;
+            }
+            &-title {
+              width: 150px;
+              padding: 10px 24px;
+            }
+          }
+        }
+      }
+      &-guid {
+        padding: 20px;
+      }
+      &-timeline {
+        padding: 20px;
+      }
+      .owl-carousel {
+        .owl-item {
+          .item {
+            width: 340px;
+            height: 200px;
+          }
+        }
+      }
+    }
+    .rsvp-footer-content {
+      flex-flow: wrap-reverse;
+      justify-content: center;
+      .btn-group {
+        flex-flow: wrap;
+        justify-content: center;
+        margin-bottom: 10px;
+        button {
+          margin: 10px 0px;
+        }
+        .seperator {
+          display: none;
+        }
+      }
     }
   }
 }

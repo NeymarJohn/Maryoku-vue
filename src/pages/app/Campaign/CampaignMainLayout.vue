@@ -168,12 +168,18 @@
             </span>
           </md-button>
           <span class="seperator"></span>
-          <md-button class="md-simple md-button md-black maryoku-btn" @click="revertSetting">
+          <md-button class="md-simple md-button md-black maryoku-btn" @click="revertSetting" v-if="!isScheduled">
             <span class="font-size-16 text-transform-capitalize">
               <img class="mr-20" :src="`${$iconURL}Campaign/Group 8871.svg`" />Revert to original
             </span>
           </md-button>
-          <div class="schedule-btn d-flex">
+          <md-button class="md-simple md-button md-black maryoku-btn" @click="startCampaign" v-else>
+            <span class="font-size-16 text-transform-capitalize">
+              <img :src="`${$iconURL}Campaign/group-2428.svg`" class="mr-10" style="width: 20px; height: 20px" />
+              Send Now
+            </span>
+          </md-button>
+          <div class="schedule-btn d-flex" v-if="!isScheduled">
             <md-button class="md-button md-red maryoku-btn schedule-campaign-btn" @click="showScheduleModal = true">
               <span class="font-size-16 text-transform-capitalize">
                 <img class="mr-20" :src="`${$iconURL}Campaign/Path 4377.svg`" />
@@ -206,6 +212,13 @@
               </md-menu-content>
             </md-menu>
           </div>
+          <template v-else>
+            <span class="seperator"></span>
+            <img class="mr-20 label-icon-1 ml-30" :src="`${$iconURL}Campaign/clock-gray.svg`" />
+            Scheduled Send:
+            {{ $dateUtil.formatScheduleDay(currentCampaign.scheduleSettings.scheduleTime, "DD.MM.YY  |  hh:mm A") }}
+            <md-button class="maryoku-btn md-simple md-red" @click="cancelSchedule">Cancel</md-button>
+          </template>
         </div>
         <div class="d-flex align-center" v-else>
           <md-button class="md-simple md-button md-black maryoku-btn" @click="sendToAddtionalGuests">
@@ -214,7 +227,7 @@
             </span>
           </md-button>
           <span class="seperator" style="margin-top: 0"></span>
-          <md-button class="md-simple md-button md-black maryoku-btn">
+          <md-button class="md-simple md-button md-black maryoku-btn" @click="sendPreviewEmail">
             <span class="font-size-16 text-transform-capitalize">
               <img class="mr-20" :src="`${$iconURL}Campaign/Group 1855.svg`" />
               Send Me A Preview
@@ -412,6 +425,9 @@ export default {
     saveDraftCampaign() {
       this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "SAVED");
     },
+    cancelSchedule() {
+      this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "SAVED");
+    },
     scheduleCampaign() {
       this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "SCHEDULED");
     },
@@ -421,11 +437,10 @@ export default {
     changeSettings(data) {
       this.deliverySettings = data;
     },
-    callSaveCampaign(campaignType, campaignStatus) {
+    callSaveCampaign(campaignType, campaignStatus, isPreview = false) {
       const campaignData = this.$store.state.campaign[campaignType];
-      console.log("campaignData from VUEx", campaignData);
       let coverImage = campaignData.coverImage;
-      if (coverImage && coverImage.indexOf("http") < 0) {
+      if (coverImage && coverImage.indexOf("base64") >= 0) {
         const fileObject = S3Service.dataURLtoFile(coverImage, `${this.event.id}-${campaignType}`);
         const extenstion = fileObject.type.split("/")[1];
         S3Service.fileUpload(
@@ -458,10 +473,12 @@ export default {
         scheduleTime: new Date().getTime(),
         settings: this.deliverySettings,
         coverImage,
+        isPreview,
       });
       return new Promise((resolve, reject) => {
         this.saveCampaign(newCampaign)
-          .then(() => {
+          .then((res) => {
+            this.$store.commit("event/setEventData", res.item.event);
             resolve();
           })
           .catch(() => {
@@ -484,7 +501,6 @@ export default {
       });
 
       const campaign = this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
-      console.log(campaign);
       this.scheduleCampaign();
     },
     revertSetting() {
@@ -501,7 +517,12 @@ export default {
     },
     sendPreviewEmail() {
       const campaignData = this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
-      this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "TESTING").then((res) => {
+      console.log(campaignData.campaignStatus);
+      this.callSaveCampaign(
+        this.campaignTabs[this.selectedTab].name,
+        campaignData.campaignStatus || "TESTING",
+        true,
+      ).then((res) => {
         swal({
           title: `You will receive a preview campaign email soon!`,
           buttonsStyling: false,
@@ -537,6 +558,9 @@ export default {
         return true;
       }
       return false;
+    },
+    isScheduled() {
+      return this.currentCampaign.campaignStatus === "SCHEDULED";
     },
   },
   created() {
@@ -603,7 +627,7 @@ export default {
       display: inline-block;
       border-left: solid 1px #050505;
       height: 2rem;
-      margin-top: 1rem;
+      // margin-top: 1rem;
     }
     .schedule-campaign-btn {
       &::after {
