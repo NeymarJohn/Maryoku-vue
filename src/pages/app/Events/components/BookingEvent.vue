@@ -319,7 +319,7 @@ export default {
 
       await this.getAllRequirements();
       this.getSelectedBlock();
-      this.getRequirements();
+      // this.getRequirements();
     },
     setRequirements(requirementContent) {
       console.log(requirementContent);

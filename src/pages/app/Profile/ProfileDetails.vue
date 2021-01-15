@@ -45,7 +45,7 @@
       <div>Lorem ipsum dolor sit amet, consetetur sadipscing</div>
       <textarea class="mb-30" placeholder="Write description here" v-model="companyDescription"></textarea>
     </div>
-    <div class="mt-30 mb-30">
+    <div class="mt-30 pb-50">
       <md-button class="md-simple edit-btn">Delete My Profile</md-button>
       <div>You will receive an email to confirm your decision.</div>
       <div>
