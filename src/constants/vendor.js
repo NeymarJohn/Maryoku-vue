@@ -1979,6 +1979,11 @@ export const businessCategories = [
                 value: false
               },
               {
+                name: 'MC',
+                type: Boolean,
+                value: false
+              },
+              {
                 name: 'instrument',
                 type: Boolean,
                 value: false
@@ -3357,8 +3362,7 @@ export const VendorPolicy = [
     items: [
       {
         name: "Tastings prior to booking",
-        type: Boolean,
-        cost: null,
+        type: Number,
       },
       {
         name: "Allow customer provided liquor",
@@ -3405,8 +3409,7 @@ export const VendorPolicy = [
         },
         {
             name: "Number of PR drafts",
-            type: Number,
-            noSuffix: true,
+            type: Boolean,
             hasComment: true,
         },
         {
@@ -3428,20 +3431,7 @@ export const VendorPolicy = [
   },
   {
     category: "equipmentrentals",
-    items: [
-      {
-        name: "Minimum time needed for setup",
-        type: Number,
-        noSuffix: true,
-        hasComment: true,
-      },
-      {
-        name: "Minimum tent time needed for set up",
-        type: Number,
-        noSuffix: true,
-        hasComment: true,
-      }
-    ],
+    items: [],
   },
   {
     category: "audiovisualstagingservices",
@@ -3634,8 +3624,6 @@ export const VendorPricingPolicy = [
       {
         name: "Hours included in rental",
         type: Number,
-        noSuffix: true,
-        label: 'Number of hours',
         hasComment: true,
       },
       {
@@ -3741,7 +3729,7 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Working with unions",
-        type: Boolean,
+        type: Number,
         hasComment: true,
       },
       {
@@ -3836,62 +3824,7 @@ export const VendorPricingPolicy = [
   },
   {
     category: "equipmentrentals",
-    items: [
-      {
-        name: 'Tent permit',
-        type: Number,
-        hasComment: true,
-      },
-      {
-        name: 'Extra setup and breakdown charge',
-        type: Number,
-        hasComment: true,
-      },
-      {
-        name: 'Late charge for returned items',
-        type: Number,
-        hasComment: true,
-      },
-      {
-        name: 'Damage to equipment',
-        type: Number,
-        hasComment: true,
-      },
-      {
-        name: 'Large quantity discount',
-        type: Number,
-        isPercentage: true,
-        hasComment: true,
-        attendees: null,
-      },
-      {
-        name: 'Off-season discount',
-        type: Boolean,
-        hasComment: true,
-      },
-      {
-        name: 'Quantity discount',
-        type: Boolean,
-        hasComment: true,
-      },
-      {
-        name: 'Tax rate',
-        type: Number,
-        isPercentage: true,
-      },
-      {
-        name: 'Large group discounts',
-        subCategory: "discount",
-        type: "Discount",
-        hasUnit: true,
-        units: ["Per guest", "Total"],
-      },
-      {
-        name: 'Suggested Gratuity',
-        type: Number,
-        hasComment: true,
-      }
-    ],
+    items: [],
   },
   {
     category: "audiovisualstagingservices",
@@ -3984,9 +3917,6 @@ export const VendorPricingPolicy = [
       {
         name: "Large setup discounts",
         type: Boolean,
-        discount: null,
-        hasUnit: true,
-        units: ['%' , '$'],
       },
       {
         name: "Suggested Gratuity",
@@ -4110,10 +4040,8 @@ export const VendorPricingPolicy = [
     items: [
       {
         name: "Overtime charge",
-        subCategory: "charge",
-        type: "Cost",
-        value: "",
-        unit: "hour",
+        type: Number,
+        hasComment: true,
       },
       {
         name: "Travel to multiple location",

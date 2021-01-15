@@ -7,7 +7,7 @@
         :property="publicEventData.eventType.key"
       ></selected-value>
       <div class="event-basic-info">
-        <div class="setting-title mt-70">
+        <div class="setting-title mt-5">
           <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator" />
           What are we celebrating?
         </div>

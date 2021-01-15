@@ -1,21 +1,21 @@
 <template>
   <div class="propsal-bid-content">
     <proposal-requirements
-      tableCategory="included"
-      label="Included in Price"
-      icon="includedPrice.png"
-      description="(from your “included in price” items)"
-      key="included"
-      class="white-card card"
-      :vendorCategory="vendor.eventCategory.key"
-    />
-    <proposal-requirements
       class="white-card card"
       label="Cost Requirements"
       key="cost"
       tableCategory="cost"
       icon="Group+10662.svg"
       description="Mandatory elements to involve in proposals are in the table, you can add more here:"
+      :vendorCategory="vendor.eventCategory.key"
+    />
+    <proposal-requirements
+      tableCategory="included"
+      label="Included in Price"
+      icon="includedPrice.png"
+      description="(from your “included in price” items)"
+      key="included"
+      class="white-card card"
       :vendorCategory="vendor.eventCategory.key"
     />
     <proposal-requirements

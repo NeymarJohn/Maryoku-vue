@@ -177,14 +177,14 @@ export default {
 
       if ( action === 'clear' ) {
         let initRequirements = this.$store.state.event.initBookingRequirements;
-        console.log('clear.initRequirement', initRequirements);
+        console.log('clear', initRequirements);
         requirements[this.event.id][this.blockId].requirements = JSON.parse(JSON.stringify(initRequirements[this.event.id][this.blockId].requirements));
         requirements[this.event.id][this.blockId].anythingElse = null;
       } else {
         requirements[this.event.id][this.blockId].requirements = JSON.parse(JSON.stringify(this.requirementProperties));
         requirements[this.event.id][this.blockId].anythingElse = this.anythingElse;
       }
-      console.log('updatedRequirement', requirements[this.event.id][this.blockId].requirements);
+
       this.setBookingRequirements(requirements);
     },
     addRequirement(category, property) {

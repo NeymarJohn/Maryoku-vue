@@ -4,7 +4,7 @@
       <div class="title">3/5</div>
       <selected-value :value="publicEventData.location" property="location"></selected-value>
       <div class="event-building event-basic-info">
-        <div class="setting-title mt-70">
+        <div class="setting-title mt-5">
           <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator" />
           Staying in or in need of some fresh air?
         </div>

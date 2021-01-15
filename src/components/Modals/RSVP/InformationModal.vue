@@ -29,11 +29,11 @@
           <span class="font-bold font-size-20">Will anyone join you for the event?</span>
         </div>
         <div class="guestNumber">
-          <md-button class="handle-btn md-icon-button md-simple" @click="decreaseGuest">
+          <md-button class="md-icon-button md-simple" @click="decreaseGuest">
             <img :src="`${$iconURL}RSVP/Path+3734.svg`" />
           </md-button>
           <input type="text" class="guestNumber-input" v-model="guestNumber" readonly />
-          <md-button class="handle-btn md-icon-button md-simple" @click="increaseGeust">
+          <md-button class="md-icon-button md-simple" @click="increaseGeust">
             <img :src="`${$iconURL}RSVP/Group+7913.svg`" />
           </md-button>
         </div>
@@ -41,7 +41,7 @@
       <div class="information-section" v-for="(guest, index) in joinedGuests" :key="index">
         <div class="width-50">
           <label class="font-bold mb-10" style="display: inline-block">Name of Guest 0{{ index + 1 }}</label>
-          <maryoku-input v-model="guest.name" class="mb-20" placeholder="Just Me"></maryoku-input>
+          <maryoku-input v-model="guest.name" class="mb-20"></maryoku-input>
         </div>
         <food-limitation-set :type="2" @change="setGuestFoodLimitation(index, ...arguments)"></food-limitation-set>
       </div>
@@ -101,12 +101,11 @@ export default {
       this.joinedGuests.push({});
     },
     decreaseGuest() {
-      if (this.guestNumber > 0) {
+      if (this.guestNumber === 1 || isNaN(this.guestNumber)) {
+        this.guestNumber = "Just Me";
+      } else {
         this.guestNumber = Number(this.guestNumber) - 1;
         this.joinedGuests.pop();
-        if (this.guestNumber === 0) {
-          this.guestNumber = "Just Me";
-        }
       }
     },
     setRsvp() {
@@ -156,11 +155,6 @@ export default {
       display: flex;
       align-items: center;
       margin-top: 10px;
-      .handle-btn {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-      }
       &-input {
         height: 80px;
         text-align: center;

@@ -34,8 +34,8 @@ const VendorSignupLayout = () => import("@/pages/Dashboard/Layout/VendorSignupLa
 const ForVendors = () => import("@/pages/app/Vendors/ForVendors.vue");
 const ForProposals = () => import("@/pages/app/Vendors/ForProposals.vue");
 const VendorSignup = () => import("@/pages/app/Vendors/VendorSignup.vue");
-const ProposalFinalStep = () => import("@/pages/app/Vendors/ProposalFinalStep.vue");
-const CalendarSync = () => import("@/pages/app/CalendarSync.vue");
+const ProposalFinalStep = () => import("@/pages/app/Vendors/ProposalFinalStep.vue")
+
 // OnBoardingPages
 import EventWizardStart from "@/pages/app/CreateEvent/EventWizardStart.vue";
 import EventWizardDay from "@/pages/app/CreateEvent/EventWizardDay.vue";
@@ -65,7 +65,7 @@ const SignedIn = () => import("@/pages/Dashboard/Pages/SignedIn.vue");
 const Invited = () => import("@/pages/Dashboard/Pages/Invited.vue");
 
 const Vendors = () => import("@/pages/Dashboard/Pages/VendorsList.vue");
-const WelcomeEventPage = () => import("@/pages/Dashboard/Pages/WelcomeEvent.vue");
+const WelcomeEventPage = () => import("@/pages/Dashboard/Pages/WelcomeEvent.vue")
 let authPages = {
     path: "/",
     component: AuthLayout,
@@ -220,7 +220,9 @@ let forProposals = {
                 gtm: "ForProposals",
             },
         },
+
     ],
+
 };
 
 let vendorSignup = {
@@ -365,6 +367,7 @@ let EventPages = {
                 opaque: false,
             },
         },
+
     ],
 };
 let PublicCreateEvent = {
@@ -565,6 +568,7 @@ let feedbackPages = {
     ],
 };
 
+
 let others = {
     path: "/app2",
     component: MainLayoutWithBottomLogo,
@@ -593,16 +597,6 @@ let vendorListPage = {
     },
 };
 
-let calendarSyncPage = {
-    path: "/calendar/sync/:calendarName",
-    name: "CalendarSyncPage",
-    component: CalendarSync,
-    meta: {
-        title: "Calendar Synchroniztion",
-        gtm: "Calendar Synchroniztion",
-    },
-};
-
 let welcomeEventPage = {
     path: "/welcome/event",
     name: "Welcome",
@@ -611,7 +605,7 @@ let welcomeEventPage = {
         title: "Welcome to your first event",
         gtm: "welcom event",
     },
-};
+}
 const rememberMe = authService.getCookie("rememberMe");
 const homeLink = rememberMe === "true" ? "/events" : "/signin";
 const routes = [
@@ -638,8 +632,7 @@ const routes = [
     vendorListPage,
     feedbackPages,
     welcomeEventPage,
-    others,
-    calendarSyncPage,
+    others
 ];
 
 export default routes;
