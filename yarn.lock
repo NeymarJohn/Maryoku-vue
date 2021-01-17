@@ -13021,6 +13021,11 @@ vue-api-query@^1.2.0:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/vue-api-query/-/vue-api-query-1.5.1.tgz#7abfd61f06fe3f22712c5c63bc101a53fd4147a8"
 
+vue-avatar-cropper@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/vue-avatar-cropper/-/vue-avatar-cropper-1.0.9.tgz#b4e04cdb407fe16d159a7b2d0db6cb170ab1bf80"
+  integrity sha512-qTHlx+PLtU/iZc9Pu6muP2hGrBbL0CpaBDGsenRvS7qKDsV/WzWQSM8z8CD5XpBWXm7l2toNAYwkhmWepk0YMg==
+
 vue-axios@^2.1.4:
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/vue-axios/-/vue-axios-2.1.4.tgz#a9d298f7e876f9a87feb336b37adcbce34ff9f9f"
