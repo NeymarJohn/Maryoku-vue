@@ -165,9 +165,16 @@ export default {
     },
     changeCheckList(e) {
       console.log("changeCheckList", e);
-      let event = this.event;
-      event.checkList = e;
-      this.$store.dispatch("event/saveEventAction", event).then((res) => {
+      const updatedEvent = new CalendarEvent({
+        id: this.event.id,
+        calendar: new Calendar({
+          id: this.event.calendar.id,
+        }),
+        checkList: e,
+        reSchedule: false,
+        reCalculate: false,
+      });
+      this.$store.dispatch("event/saveEventAction", updatedEvent).then((res) => {
         console.log("plan.updateEvent", res);
       });
     },

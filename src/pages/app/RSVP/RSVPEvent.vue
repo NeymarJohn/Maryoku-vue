@@ -51,9 +51,8 @@
           </div>
         </div>
       </div>
-      <div class="p-20" v-if="isMobile">
-        <div style="color: #818080; font-size: 13px; margin-bottom: 20px">More Info</div>
-        <more-info-item class="mb-20" v-if="campaign.visibleSettings && campaign.visibleSettings.showWearingGuide">
+      <template v-if="isMobile">
+        <more-info-item v-if="campaign.visibleSettings && campaign.visibleSettings.showWearingGuide">
           <template slot="header">
             <img :src="`${$iconURL}RSVP/Path 3728.svg`" class="label-icon" />
             <span style="padding-top: 10px; margin-left: 20px; line-height: 1.2em" class="font-bold">
@@ -62,7 +61,7 @@
           </template>
           <template slot="content">{{ campaign.additionalData.wearingGuide }}</template>
         </more-info-item>
-        <more-info-item class="mb-20" v-if="campaign.visibleSettings && campaign.visibleSettings.showKnowledge">
+        <more-info-item v-if="campaign.visibleSettings && campaign.visibleSettings.showKnowledge">
           <template slot="header">
             <img :src="`${$iconURL}RSVP/Path 2369.svg`" class="label-icon" />
             <span style="padding-top: 10px; margin-left: 20px; line-height: 1.2em" class="font-bold">
@@ -71,7 +70,7 @@
           </template>
           <template slot="content">{{ campaign.additionalData.knowledge }}</template>
         </more-info-item>
-        <more-info-item class="mb-20" v-if="campaign.visibleSettings && campaign.visibleSettings.showTimeline">
+        <more-info-item v-if="campaign.visibleSettings && campaign.visibleSettings.showTimeline">
           <template slot="header">
             <img :src="`${$iconURL}RSVP/Path 3728.svg`" class="label-icon" />
             <span style="padding-top: 10px; margin-left: 20px; line-height: 1.2em" class="font-bold"> AGENDA </span>
@@ -81,10 +80,9 @@
               v-for="(schedule, index) in scheduledDays"
               :key="index"
               class="md-layout-item md-size-50 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra mt-20"
-              style="padding: 0"
             >
               <div class="rsvp-event-timeline-day">
-                <!-- <span class="font-size-22 font-bold-extra">Day {{ $helper.numberToWord(index + 1) }}</span> -->
+                <span class="font-size-22 font-bold-extra">Day {{ $helper.numberToWord(index + 1) }}</span>
                 <span class="font-size-16">{{ $dateUtil.formatScheduleDay(schedule.date) }}</span>
               </div>
               <div>
@@ -97,17 +95,7 @@
             </div>
           </template>
         </more-info-item>
-        <div style="color: #818080; font-size: 13px; margin: 40px 0 20px" @click="reject">Can't make it?</div>
-        <md-button class="md-simple md-red maryoku-btn edit-btn" @click="thinkLater"> <u>I Can't Make It</u></md-button
-        ><br /><br />
-        <md-button class="md-simple md-red maryoku-btn edit-btn"> <u>I Need To Think About It</u></md-button>
-        <hr style="margin-top: 40px" />
-        <div class="text-center mb-50 mt-30">
-          Provided by
-          <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
-          <span style="text-transform: uppercase">&#169;</span>
-        </div>
-      </div>
+      </template>
       <template v-else>
         <div class="rsvp-event-guid md-layout">
           <div
@@ -166,20 +154,13 @@
             </div>
           </div>
         </div>
-        <div class="text-center mb-50 mt-30">
-          Provided by
-          <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
-        </div>
       </template>
     </div>
-
-    <div v-if="isMobile" class="d-flex rsvp-footer">
-      <md-button class="md-simple md-outlined md-red maryoku-btn flex-1" @click="showZoomModal = true">
-        Virutal Event
-      </md-button>
-      <md-button class="md-red maryoku-btn flex-1" @click="showRsvpModal = true"> RSVP Now</md-button>
+    <div class="text-center mb-50 mt-30">
+      Provided by
+      <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
     </div>
-    <div v-else class="rsvp-footer white-card">
+    <div class="rsvp-footer white-card">
       <div class="rsvp-footer-content">
         <div>
           <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
@@ -408,6 +389,9 @@ export default {
     },
     headerImage() {
       console.log(this.event.concept);
+      if (this.event.concept) {
+        return this.event.concept.images[0].url;
+      }
       if (this.campaign) {
         return this.campaign.coverImage;
       }
@@ -585,7 +569,6 @@ export default {
 }
 @media only screen and (max-width: 959px) {
   .rsvp-container {
-    padding-bottom: 0px;
     .scroll-top-button {
       position: fixed;
       bottom: 30px;
@@ -657,10 +640,7 @@ export default {
       }
     }
     .rsvp-footer {
-      padding: 0;
-      button {
-        border-radius: 0px;
-      }
+      display: none;
     }
     // .rsvp-footer-content {
     //   flex-flow: wrap-reverse;

@@ -112,7 +112,7 @@ export default {
 
 <style lang="css">
 .nav-tabs.md-card {
-  margin-top: 0px;
+  margin-top: -15px;
   /* width: 110%; */
   /* margin-left: -55px;
   padding-left: 55px; */

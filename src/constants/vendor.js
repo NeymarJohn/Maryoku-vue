@@ -3502,7 +3502,7 @@ export const VendorPolicy = [
       },
       {
         name: "Accessibility of activity",
-        type: String,
+        type: Boolean,
       },
       {
         name: "Age restrictions",
@@ -3544,6 +3544,7 @@ export const VendorPolicy = [
       {
         name: "Flexible to different dress codes",
         type: String,
+        hasComment: true,
       },
       {
         name: "Meet before signing contract",
@@ -3629,6 +3630,8 @@ export const VendorPricingPolicy = [
       {
         name: "Minimum amount of hours",
         type: Number,
+        noSuffix: true,
+        label: 'Number of hours',
         hasComment: true,
       },
       {
@@ -3867,12 +3870,16 @@ export const VendorPricingPolicy = [
       {
         name: 'Off-season discount',
         type: Boolean,
-        hasComment: true,
+        discount: null,
+        hasUnit: true,
+        units: ['%' , '$'],
       },
       {
         name: 'Quantity discount',
         type: Boolean,
-        hasComment: true,
+        discount: null,
+        hasUnit: true,
+        units: ['%' , '$'],
       },
       {
         name: 'Tax rate',
