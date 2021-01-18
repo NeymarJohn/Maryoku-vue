@@ -55,6 +55,7 @@
           :index="index"
           :timelineDate="scheduleDate"
           class="mt-10 mb-10 timeline-group-wrapper"
+          @remove="removeItem"
         ></timeline-item>
       </template>
     </div>
@@ -194,7 +195,11 @@ export default {
       this.deletingDate = scheduleDate;
       this.showDeleteConfirmModal = true;
     },
+    removeItem() {
+      alert();
+    },
     removeTimelineItem() {
+      // alert();
       const deletingDateIndedx = this.timelineDates.indexOf(this.deletingDate);
       this.timelineDates.splice(deletingDateIndedx, 1);
       this.showDeleteConfirmModal = false;

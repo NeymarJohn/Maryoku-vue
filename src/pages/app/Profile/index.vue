@@ -4,9 +4,10 @@
       <div class="left-sidebar white-card">
         <div class="profile">
           <div class="avatar" style="">
-            <user-avatar :user="userData" @set="setAvatar"></user-avatar>
-            <company-logo :user="userData" @set="setLogo"></company-logo>
+            <img :src="`${$iconURL}Planner+Profile/woman+(2).svg`" style="margin: auto" />
+            <div class="company-logo d-flex justify-content-center align-center">Company Logo</div>
           </div>
+
           <h3 class="name font-bold">{{ userData.profile.displayName }}</h3>
         </div>
         <md-list>
@@ -92,8 +93,6 @@ import MyEvents from "./MyEvents.vue";
 // import auth from '@/auth';
 import { mapGetters, mapActions, mapState } from "vuex";
 import Inspirations from "./Inspirations.vue";
-import UserAvatar from "./components/UserAvatar.vue";
-import CompanyLogo from "./components/CompanyLogo.vue";
 
 export default {
   components: {
@@ -110,8 +109,6 @@ export default {
     ProfileSettings,
     MyEvents,
     Inspirations,
-    UserAvatar,
-    CompanyLogo,
   },
   data() {
     return {
@@ -147,17 +144,11 @@ export default {
   },
   methods: {
     ...mapActions("event", ["getEventAction"]),
-    setAvatar(avatar) {
-      this.$store.dispatch("auth/updateProfile", { avatar, id: this.userData.id });
-    },
-    setLogo(companyLogo) {
-      this.$store.dispatch("auth/updateProfile", { companyLogo, id: this.userData.id });
-    },
     getPageName() {
       this.pageName = this.$route.params.pageName ? this.$route.params.pageName : "timeline";
       console.log("pageName", this.pageName);
     },
-    onUserAvatarChange(e) {
+    onFileChange(e) {
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       this.createImage(files[0]);
@@ -222,15 +213,22 @@ export default {
     position: relative;
     padding: 50px;
     .avatar {
-      position: relative;
+      background-color: rgba(245, 19, 85, 0.08);
       width: 245px;
       height: 245px;
+      border-radius: 3px;
+      border: dashed 1.5px #f51355;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
       .company-logo {
         position: absolute;
         top: 50%;
         left: 100%;
         width: 120px;
         height: 120px;
+        padding: 20px;
         text-align: center;
         border-radius: 50%;
         border: dashed 1px #f51355;

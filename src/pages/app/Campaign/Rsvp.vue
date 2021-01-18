@@ -26,15 +26,22 @@
           <img :src="campaignData.logoUrl" style="max-width: 200px" />
           <md-switch class="large-switch below-label" v-model="showLogo">Hide logo</md-switch>
         </div>
-        <div class="font-size-30 font-bold mt-20">
-          {{ campaignData.additionalData.greetingWords }}
+        <div class="font-size-30 font-bold mt-20 d-flex align-center">
+          <!-- <div class="mr-10">{{ campaignData.additionalData.greetingWords }}</div>
+          <md-button class="edit-btn md-simple md-red">Edit</md-button> -->
+          <title-editor
+            :defaultValue="campaignData.additionalData.greetingWords"
+            :key="campaignData.additionalData.greetingWords"
+            @change="changeGreetings"
+            class="mt-40 mb-30"
+          ></title-editor>
         </div>
         <div class="font-size-20 mt-50">YOU ARE INVITED TO</div>
         <title-editor
           :defaultValue="campaignTitle"
           :key="campaignTitle"
           @change="changeTitle"
-          class="mt-40 mb-30"
+          class="mt-40 mb-30 font-size-60"
         ></title-editor>
 
         <maryoku-textarea
@@ -255,6 +262,18 @@ export default {
           value: { ...this.editingContent.additionalData, greetingWords },
         });
       }
+      let coverImage = this.editingContent.coverImage;
+      if (coverImage.indexOf("RSVP2-middle")) {
+        // if coverImage is default
+        coverImage = this.event.concept
+          ? this.event.concept.images[0].url
+          : `${this.$storageURL}Campaign Images/RSVP2-middle.png`;
+        this.$store.commit("campaign/setAttribute", {
+          name: "RSVP",
+          key: "coverImage",
+          value: coverImage,
+        });
+      }
     } else {
       this.editingContent.title = this.info.conceptName;
       this.editingContent.coverImage = this.event.concept
@@ -336,10 +355,21 @@ export default {
       document.getElementById("coverImage").click();
     },
     async onFileChange(event) {
-      this.editingContent.coverImage = await getBase64(event.target.files[0]);
+      const coverImageData = await getBase64(event.target.files[0]);
+      this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "coverImage", value: coverImageData });
     },
     changeTitle(newTitle) {
       this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
+    },
+    changeGreetings(newGreetings) {
+      const additionalData = this.campaignData.additionalData;
+      console.log(this.campaignData);
+      additionalData.greetingWords = newGreetings;
+      this.$store.commit("campaign/setAttribute", {
+        name: "RSVP",
+        key: "additionalData",
+        value: additionalData,
+      });
     },
     setVisibleTimeline(visibility) {
       this.editingContent.visibleSettings.showTimeline = visibility;
