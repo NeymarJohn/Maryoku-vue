@@ -173,8 +173,8 @@
       </template>
       <template slot="footer">
         <div class="refer-vendor-modal__footer">
-          <a class="cancel" @click="hideModal">Cancel</a>
-          <a class="cool" @click="referNewVendor">Refer</a>
+          <a class="cancel" @click="hideModal()">Cancel</a>
+          <a class="cool" @click="referNewVendor()">Refer</a>
         </div>
       </template>
     </modal>
@@ -490,7 +490,7 @@ export default {
       this.$http
         .post(`${process.env.SERVER_URL}/1/vendors/refer/${this.proposalRequest.componentInstance.id}`, {
           isEditing: true,
-          referringVendorId: this.vendor.id,
+          referingVendor: new Vendors({ id: this.vendor.id }),
           ...this.referredVendor,
         })
         .then((res) => {
@@ -502,9 +502,7 @@ export default {
             confirmButtonClass: "md-button md-success confirm-btn-bg ",
             cancelButtonClass: "md-button md-danger cancel-btn-bg",
             buttonsStyling: false,
-          }).then(() => {
-            this.hideModal();
-          });
+          }).then(() => {});
         })
         .catch((err) => {
           swal({
@@ -513,9 +511,7 @@ export default {
             showCancelButton: false,
             confirmButtonClass: "md-button md-success confirm-btn-bg ",
             buttonsStyling: false,
-          }).then(() => {
-            this.hideModal();
-          });
+          }).then(() => {});
         });
     },
     goToForm() {

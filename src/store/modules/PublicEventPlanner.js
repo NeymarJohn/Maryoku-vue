@@ -2,13 +2,13 @@ import moment from 'moment'
 
 export default {
   namespaced: true,
-  state () {
+  state() {
     return {
       publicEventData: {
         id: null,
         occasion: '',
         occasionCache: '',
-        title: 'New Event',
+        title: '',
         eventStartMillis: null,
         theme: '',
         time: '',
@@ -30,7 +30,7 @@ export default {
         expectedAttendacePercent: null,
         eventMovieId: null,
         eventNeededServices: null,
-        guestTypes:null,
+        guestTypes: null,
         guestGroupName: ""
       },
       eventDecisionFactors: {
@@ -45,19 +45,19 @@ export default {
   },
 
   mutations: {
-    setSingupModal (state, data) {
+    setSingupModal(state, data) {
       state.shoWSignupModal = data.showModal
     },
-    setCurrentStep (state, data) {
+    setCurrentStep(state, data) {
       state.currentStep = data.currentPage
     },
-    setEventProperty (state, {key, actualValue}) {
+    setEventProperty(state, { key, actualValue }) {
       state.publicEventData[key] = actualValue
     },
-    setEventDecisionFactor (state, {key, actualValue}) {
+    setEventDecisionFactor(state, { key, actualValue }) {
       state.eventDecisionFactors[key] = actualValue
     },
-    setEventData (state, data) {
+    setEventData(state, data) {
       state.publicEventData['id'] = data.id
       state.publicEventData['occasion'] = data.occasion ? data.occasion : state.eventData['occasion']
       state.publicEventData['occasionCache'] = state.eventData['occasion']

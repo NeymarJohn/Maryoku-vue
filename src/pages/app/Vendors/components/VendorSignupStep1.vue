@@ -149,7 +149,7 @@
               <p>(15 photos top, under 5MB)</p>
             </div>
           </div>
-          <template v-if="!vendor.vendorImages || !vendor.vendorImages.length">
+          <template v-if="!vendor.vendorImages.length">
             <Drop
               @drop="handleDrop"
               @dragenter="handleDragEnter"
@@ -183,8 +183,13 @@
                   background-size: cover;
                   background-size: 100% 100%;`"
               >
-                <div class="trash" v-if="vendor.vendorImages[0]" @click="removeVendorImage(vendor.vendorImages[0])">
-                  <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg" />
+                <div class="trash"
+                     v-if="vendor.vendorImages[0]"
+                     @click="removeVendorImage(vendor.vendorImages[0])"
+                >
+                  <img
+                    src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg"
+                  />
                 </div>
               </div>
               <div
@@ -195,8 +200,13 @@
                   background-size: cover;
                   background-size: 100% 100%;`"
               >
-                <div class="trash" v-if="vendor.vendorImages[1]" @click="removeVendorImage(vendor.vendorImages[1])">
-                  <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg" />
+                <div class="trash"
+                     v-if="vendor.vendorImages[1]"
+                     @click="removeVendorImage(vendor.vendorImages[1])"
+                >
+                  <img
+                      src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg"
+                  />
                 </div>
               </div>
               <div
@@ -207,8 +217,13 @@
                   background-size: cover;
                   background-size: 100% 100%;`"
               >
-                <div class="trash" v-if="vendor.vendorImages[2]" @click="removeVendorImage(vendor.vendorImages[2])">
-                  <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg" />
+                <div class="trash"
+                     v-if="vendor.vendorImages[2]"
+                     @click="removeVendorImage(vendor.vendorImages[2])"
+                >
+                  <img
+                    src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg"
+                  />
                 </div>
               </div>
               <div
@@ -219,8 +234,13 @@
                   background-size: cover;
                   background-size: 100% 100%;`"
               >
-                <div class="trash" v-if="vendor.vendorImages[3]" @click="removeVendorImage(vendor.vendorImages[3])">
-                  <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg" />
+                <div class="trash"
+                     v-if="vendor.vendorImages[3]"
+                     @click="removeVendorImage(vendor.vendorImages[3])"
+                >
+                  <img
+                    src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg"
+                  />
                 </div>
               </div>
               <Drop
@@ -577,7 +597,7 @@ export default {
           const fileId = `${new Date().getTime()}_${makeid()}`;
           const currentIndex = this.vendor.vendorImages.length;
           S3Service.fileUpload(file, fileId, "vendor/cover-images").then((uploadedName) => {
-            console.log("createImage", uploadedName);
+            console.log('createImage', uploadedName);
             this.$root.$emit("update-vendor-value", "vendorImages", {
               index: currentIndex,
               data: `https://maryoku.s3.amazonaws.com/vendor/cover-images/${uploadedName}`,
@@ -852,7 +872,7 @@ export default {
     }
 
     .item2 {
-      .trash {
+      .trash{
         cursor: pointer;
         position: absolute;
         right: 1rem;
@@ -867,11 +887,11 @@ export default {
     }
 
     .item {
-      .trash {
+      .trash{
         cursor: pointer;
         position: absolute;
-        right: 0.5rem;
-        bottom: 0.5rem;
+        right: .5rem;
+        bottom: .5rem;
         background-color: white;
         border-radius: 50%;
         padding: 4px 8px;

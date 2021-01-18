@@ -8,8 +8,18 @@
         </div>
         <span :class="{ underline: !editable }">WHEN?</span>
       </div>
-      <div class="event-info-item-content">
-        {{ $dateUtil.formatScheduleDay(event.eventStartMillis, "MMM DD, YYYY hh:mm A ") }}
+      <div class="event-info-item-content font-size-20">
+        {{ $dateUtil.formatScheduleDay(event.eventStartMillis, "MMM Do YYYY") }}
+        <span
+          style="
+            line-height: 2em;
+            border-left: solid 1px #b7b7b7;
+            padding-left: 10px;
+            margin-left: 10px;
+            display: inline-block;
+          "
+          >{{ $dateUtil.formatScheduleTime(event.eventStartMillis) }}</span
+        >
       </div>
     </div>
     <div class="event-info-item" v-if="!isVirtualEvent">
@@ -20,7 +30,7 @@
         </div>
         <span :class="{ underline: !editable }">WHERE?</span>
       </div>
-      <div class="event-info-item-content">{{ event.location }}</div>
+      <div class="event-info-item-content font-size-20">{{ event.location }}</div>
     </div>
     <div class="event-info-item" v-else>
       <div class="event-info-item-title font-size-22 font-bold-extra">
@@ -30,7 +40,7 @@
         </div>
         <span :class="{ underline: !editable }">WHERE?</span>
       </div>
-      <div class="event-info-item-content">Zoom</div>
+      <div class="event-info-item-content font-size-20">Zoom</div>
     </div>
     <div class="event-info-item" v-if="!isVirtualEvent">
       <div class="event-info-item-title font-size-22 font-bold-extra">
@@ -40,13 +50,13 @@
         </div>
         <span :class="{ underline: !editable }">SOLO OR PLUS 1?</span>
       </div>
-      <div class="event-info-item-content d-flex align-center" v-if="!editingPlusOne">
+      <div class="event-info-item-content d-flex align-center font-size-20" v-if="!editingPlusOne">
         <span>{{ isPluseOne ? "+1" : "Solo" }} &emsp;</span>
         <md-button class="md-simple edit-btn md-red" v-if="editable" @click="editingPlusOne = !editingPlusOne"
           >Edit</md-button
         >
       </div>
-      <div class="event-info-item-content d-flex align-center" v-else>
+      <div class="event-info-item-content d-flex align-center font-size-20" v-else>
         <!-- <input type="text" v-model="isPluseOne" /> -->
         <!-- <select v-model="isPluseOne">
           <option :value="false">Solo</option>
@@ -67,7 +77,7 @@
         <span :class="{ underline: !editable }">Arrival?</span>
       </div>
 
-      <div class="event-info-item-content" v-if="!editingArrival">
+      <div class="event-info-item-content font-size-20" v-if="!editingArrival">
         {{ event.arrival || "-" }}&emsp;
         <md-button class="md-simple edit-btn md-red" v-if="editable" @click="editingArrival = !editingArrival"
           >Edit</md-button
@@ -183,46 +193,8 @@ export default {
       }
     }
     &-content {
-      font-size: 20px;
       .maryoku-btn {
         margin: 0;
-      }
-    }
-  }
-}
-@media only screen and (max-width: 959px) {
-  .rsvp-event-info {
-    .event-info-item {
-      margin-bottom: 20px;
-      &-icon {
-        width: 25px;
-        height: 25px;
-        border-radius: 21px;
-        padding: 8px;
-        margin-right: 5px;
-        &-background {
-          width: 25px;
-          height: 25px;
-          left: 0px;
-          top: 0px;
-        }
-        img {
-          width: 60%;
-          height: 25px;
-          left: 5px;
-          top: 0px;
-        }
-      }
-      &-title {
-        min-width: 110px;
-        span.underline {
-          border-bottom: solid 2px #ff7600;
-          vertical-align: middle;
-          font-size: 16px;
-        }
-      }
-      &-content {
-        font-size: 14px;
       }
     }
   }

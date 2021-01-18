@@ -12,7 +12,6 @@
           :index="index"
           :timelineDate="timelineDate"
           class="mt-10 mb-10"
-          @remove="removeItem"
         ></timeline-item>
       </template>
 
@@ -57,8 +56,6 @@ import { Drag, Drop } from "vue-drag-drop";
 import { hexToRgbA } from "@/utils/helperFunction";
 import moment from "moment";
 import CalendarEvent from "@/models/CalendarEvent";
-import EventTimelineItem from "@/models/EventTimelineItem";
-import EventTimelineDate from "@/models/EventTimelineDate";
 export default {
   components: {
     TimelineItem,
@@ -106,22 +103,13 @@ export default {
       return this.timelineDates[this.timelineDate.dateIndex].timelineItems;
     },
     groupedItems() {
-      return this.timelineItems.filter((item) => item && item.groupNumber == this.groupIndex);
+      return this.timelineItems.filter((item) => item.groupNumber == this.groupIndex);
     },
     isEmpty() {
       return this.groupedItems.length === 0;
     },
   },
   methods: {
-    removeItem(removeItemData) {
-      new EventTimelineItem(removeItemData.item)
-        .for(new EventTimelineDate({ id: this.timelineDate.id }))
-        .delete()
-        .then((res) => {
-          const itemIndex = this.timelineItems.findIndex((item) => item.id == removeItemData.item.id);
-          this.timelineItems.splice(itemIndex, 1);
-        });
-    },
     remove() {
       this.$emit("remove");
     },
