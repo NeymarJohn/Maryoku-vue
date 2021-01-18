@@ -1,9 +1,9 @@
 <template>
-  <modal class="rsvp-modal">
+  <modal class="rsvp-modal join-zoom-modal">
     <template slot="header">
       <div class="">
-        <img :src="`${$iconURL}RSVP/Group 9565.svg`" class="mr-30" style="margin-top: -10px" />
-        <span class="font-size-30 font-bold-extra">CELEBRATE WITH US VIRTUALLY ON ZOOM</span>
+        <img :src="`${$iconURL}RSVP/Group 9565.svg`" class="mr-30 logo" style="margin-top: -10px" />
+        <span class="font-size-30 font-bold-extra header-title">CELEBRATE WITH US VIRTUALLY ON ZOOM</span>
       </div>
       <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
         <md-icon>clear</md-icon>
@@ -38,14 +38,6 @@
             ></maryoku-input>
           </div>
         </div>
-        <!-- <md-checkbox v-model="approveAccessCalendar"
-          ><span :class="{ 'font-bold': approveAccessCalendar }">I approve access to my calendar</span></md-checkbox
-        >
-        <div v-if="approveAccessCalendar" class="calendar-type">
-          <img :src="`${$iconURL}RSVP/Group 9278.svg`" />
-          <md-radio v-model="calendarType" value="outlook">Outlook</md-radio>
-          <md-radio v-model="calendarType" value="gmail">Gmail</md-radio>
-        </div> -->
       </div>
     </template>
     <template slot="footer">
@@ -202,6 +194,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.join-zoom-modal {
+}
 .user-info {
   padding: 30px 0;
   .input-wrapper {
@@ -216,6 +210,29 @@ export default {
   img {
     margin-top: -45px;
     margin-right: 20px;
+  }
+}
+@media only screen and (max-width: 959px) {
+  .join-zoom-modal {
+    .logo {
+      width: 70px;
+    }
+    .header-title {
+      display: block;
+      font-size: 26px !important;
+      line-height: 1.1em;
+    }
+    .user-info {
+      flex-direction: column;
+      .input-wrapper {
+        width: 100%;
+        padding: 0px;
+        margin-bottom: 20px;
+        label {
+          display: none;
+        }
+      }
+    }
   }
 }
 </style>
