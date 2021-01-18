@@ -1,6 +1,5 @@
 <template>
   <div class="md-layout event-campaign-section booking-section">
-    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
     <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <div class="event-page-header md-layout-item md-size-100">
       <div class="header-name">
@@ -13,6 +12,7 @@
       <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
     </div>
     <div class="campaign-content md-layout-item md-size-100 mt-30">
+      <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
       <div class="campaign-content-tab d-flex mb-40">
         <div
           class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center"
