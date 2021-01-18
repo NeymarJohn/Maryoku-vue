@@ -262,6 +262,18 @@ export default {
           value: { ...this.editingContent.additionalData, greetingWords },
         });
       }
+      let coverImage = this.editingContent.coverImage;
+      if (coverImage.indexOf("RSVP2-middle")) {
+        // if coverImage is default
+        coverImage = this.event.concept
+          ? this.event.concept.images[0].url
+          : `${this.$storageURL}Campaign Images/RSVP2-middle.png`;
+        this.$store.commit("campaign/setAttribute", {
+          name: "RSVP",
+          key: "coverImage",
+          value: coverImage,
+        });
+      }
     } else {
       this.editingContent.title = this.info.conceptName;
       this.editingContent.coverImage = this.event.concept
@@ -343,7 +355,8 @@ export default {
       document.getElementById("coverImage").click();
     },
     async onFileChange(event) {
-      this.editingContent.coverImage = await getBase64(event.target.files[0]);
+      const coverImageData = await getBase64(event.target.files[0]);
+      this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "coverImage", value: coverImageData });
     },
     changeTitle(newTitle) {
       this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });

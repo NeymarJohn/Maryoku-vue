@@ -103,6 +103,7 @@ const actions = {
     getEventAction({ commit, state }, { eventId }) {
         return new Promise((resolve, reject) => {
             CalendarEvent.find(eventId).then(event => {
+                commit('initEventData')
                 commit("setEventData", event);
                 resolve(event);
             });
@@ -234,6 +235,9 @@ const actions = {
 };
 
 const mutations = {
+    initEventData(state) {
+        state.eventData = {};
+    },
     setEventData(state, eventData) {
         state.eventData = { ...state.eventData, ...eventData };
     },

@@ -12,6 +12,7 @@
       <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
     </div>
     <div class="campaign-content md-layout-item md-size-100 mt-30">
+      <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
       <div class="campaign-content-tab d-flex mb-40">
         <div
           class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center"
@@ -307,7 +308,7 @@ import SavedateAnalytics from "./components/SavedateAnalytics";
 import ComingsoonAnalytics from "./components/ComingSoonAnalytics";
 import FeedbackAnalytics from "./components/FeedbackAnalytics";
 import FeedbackList from "./components/FeedbackList";
-
+import VueElementLoading from "vue-element-loading";
 const defaultSettings = {
   phone: {
     selected: false,
@@ -331,6 +332,7 @@ const defaultSettings = {
 };
 export default {
   components: {
+    VueElementLoading,
     Tabs,
     HeaderActions,
     CommentEditorPanel,
@@ -349,6 +351,7 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       campaignInfo: {
         conceptName: "",
         logo: "",
@@ -437,17 +440,14 @@ export default {
     changeSettings(data) {
       this.deliverySettings = data;
     },
-    callSaveCampaign(campaignType, campaignStatus, isPreview = false) {
+    async callSaveCampaign(campaignType, campaignStatus, isPreview = false) {
+      this.isLoading = true;
       const campaignData = this.$store.state.campaign[campaignType];
       let coverImage = campaignData.coverImage;
       if (coverImage && coverImage.indexOf("base64") >= 0) {
         const fileObject = S3Service.dataURLtoFile(coverImage, `${this.event.id}-${campaignType}`);
         const extenstion = fileObject.type.split("/")[1];
-        S3Service.fileUpload(
-          fileObject,
-          `${this.event.id}-${campaignType}`,
-          "campaigns/cover-images",
-        ).then((res) => {});
+        await S3Service.fileUpload(fileObject, `${this.event.id}-${campaignType}`, "campaigns/cover-images");
         coverImage = `https://maryoku.s3.amazonaws.com/campaigns/cover-images/${this.event.id}-${campaignType}.${extenstion}`;
       }
       let referenceUrl = "";
@@ -479,9 +479,11 @@ export default {
         this.saveCampaign(newCampaign)
           .then((res) => {
             this.$store.commit("event/setEventData", res.item.event);
+            this.isLoading = false;
             resolve();
           })
           .catch(() => {
+            this.isLoading = false;
             reject();
           });
       });
@@ -560,6 +562,7 @@ export default {
       return false;
     },
     isScheduled() {
+      if (!this.currentCampagin) return false;
       return this.currentCampaign.campaignStatus === "SCHEDULED";
     },
   },
