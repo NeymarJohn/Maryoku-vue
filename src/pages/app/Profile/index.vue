@@ -219,6 +219,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.planner-profile {
+  align-items: stretch;
+}
 .left-sidebar {
   /deep/ .md-list-item-button {
     &:hover {

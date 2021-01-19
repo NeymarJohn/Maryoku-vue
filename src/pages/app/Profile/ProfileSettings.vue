@@ -64,6 +64,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .profile-container {
+  height: 100%;
   /deep/ .md-card {
     .md-list {
       .md-list-item {

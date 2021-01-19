@@ -30,23 +30,29 @@
       </div>
       <md-button class="maryoku-btn md-red">Add</md-button>
     </div>
-    <hr />
+    <hr class="mt-50 mb-50" />
     <div class="permision-list">
-      <div v-for="(user, index) in permittedUsers" :key="index" class="permission-row">
+      <div class="permission-row">
         <div><img :src="userData.avatar" class="user-icon" /></div>
-        <div>March Madness</div>
-        <div>March Madness</div>
-        <div>March Madness</div>
+        <div>{{ userData.name }}</div>
+        <div></div>
+        <div class="color-gray">Owner</div>
+        <div></div>
       </div>
+      <permitted-user-row v-for="(user, index) in permittedUsers" :key="index"></permitted-user-row>
     </div>
   </div>
 </template>
 
 <script>
 import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
+import Avartar from "../../../components/Avartar.vue";
+import PermittedUserRow from "./components/PermittedUserRow.vue";
 export default {
   components: {
     MaryokuInput,
+    Avartar,
+    PermittedUserRow,
   },
   data() {
     return {
@@ -97,9 +103,10 @@ export default {
   .permision-list {
     .permission-row {
       display: grid;
-      grid-template-columns: 80px 25% 25% auto;
+      grid-template-columns: 80px 25% 25% 25% auto;
       padding: 20px 0;
       font-size: 16px;
+      align-items: center;
       img.user-icon {
         width: 50px;
         height: 50px;
