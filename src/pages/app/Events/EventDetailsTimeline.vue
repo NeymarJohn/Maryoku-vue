@@ -583,12 +583,6 @@ export default {
       this.timeline[0].date = this.formatDate(event.eventStartMillis);
       this.timeline[0].itemDay = event.eventStartMillis;
       // this.getTimelineItems();
-      new EventComponent()
-        .for(this.calendar, event)
-        .get()
-        .then((components) => {
-          this.selectedComponents = components;
-        });
     },
     async clearTimeline() {
       await getReq(`/1/events/${this.eventData.id}/timelineDates/clear`);

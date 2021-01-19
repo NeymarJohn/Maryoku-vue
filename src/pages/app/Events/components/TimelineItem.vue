@@ -62,7 +62,7 @@
           </div>
           <div class="divider"></div>
           <div class="form-group">
-            <label class="font-size-16 font-bold pb-10 d-inline-block">
+            <label class="font-size-16 font-bold pb-10">
               <img :src="`${$iconURL}Timeline-New/clock.svg`" class="label-icon mr-10" />Finishes At
             </label>
             <time-input
@@ -231,6 +231,7 @@ export default {
         .save()
         .then((res) => {
           console.log(res);
+          this.editingContent = res;
           this.$emit("save", { item: this.editingContent, index: this.index });
         });
     },
@@ -309,7 +310,8 @@ export default {
       })
         .then((result) => {
           if (result.value === true) {
-            this.$emit("remove", { index: this.index, item: this.item });
+            console.log(this.item);
+            this.$emit("remove", { index: this.index, item: this.editingContent });
           }
         })
         .catch((err) => {
@@ -339,7 +341,7 @@ export default {
     top: 0;
     left: 22px;
     bottom: 0;
-    margin: auto;
+    margin: auto 5px;
   }
   .item-desc {
     word-break: break-all;
