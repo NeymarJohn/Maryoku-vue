@@ -1,6 +1,6 @@
 <template>
   <div class="refer-modal-item-wrapper">
-    <div class="title-cont" @click="isSelected = !isSelected">
+    <div class="title-cont" @click="handleSelection">
       <div class="left-side">
         <img v-if="isSelected" :src="`${iconUrl}Group 6258 (2).svg`" />
         <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`" />
@@ -62,6 +62,12 @@ export default {
     };
   },
   methods: {
+    handleSelection() {
+      this.isSelected = !this.isSelected;
+      if (!this.isSelected) {
+        this.$emit("cancel", this.vendorInfo.vendorCategory);
+      }
+    },
     setReferredVendorProperty(property, value) {
       if (property.includes(".")) {
         const properties = property.split(".");
@@ -77,13 +83,6 @@ export default {
   created() {},
   mounted() {},
   computed: {},
-  watch: {
-    isSelected(newValue) {
-      if (!newValue) {
-        this.$emit("cancel", this.vendorCategory.vendorCategory);
-      }
-    },
-  },
 };
 </script>
 <style lang="scss" scoped>

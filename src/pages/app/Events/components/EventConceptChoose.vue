@@ -495,7 +495,6 @@ export default {
           new CalendarEvent({
             id: event.id,
             concept: { id: eventConcept.id },
-            title: eventConcept.name,
             conceptProgress: 100,
             calendar: calendar,
           }),

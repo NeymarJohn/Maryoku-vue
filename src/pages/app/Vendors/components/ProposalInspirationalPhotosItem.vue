@@ -92,13 +92,17 @@ export default {
         event.target.files[0],
         `photo-${this.currentPhotoIndex}`,
         `proposal/inspirationalPhotos/${this.proposalRequest.id}`,
-      ).then((res) => {
-        this.isLoading = false;
-        this.$emit("change", {
-          url: `https://maryoku.s3.amazonaws.com/proposal/inspirationalPhotos/${this.proposalRequest.id}/photo-${this.currentPhotoIndex}.${extension}`,
-          caption: "",
+      )
+        .then((res) => {
+          this.isLoading = false;
+          this.$emit("change", {
+            url: `https://maryoku.s3.amazonaws.com/proposal/inspirationalPhotos/${this.proposalRequest.id}/photo-${this.currentPhotoIndex}.${extension}`,
+            caption: "",
+          });
+        })
+        .catch((event) => {
+          this.isLoading = false;
         });
-      });
 
       // this.$forceUpdate();
     },

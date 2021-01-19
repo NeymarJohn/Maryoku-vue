@@ -73,7 +73,7 @@
         </more-info-item>
         <more-info-item class="mb-20" v-if="campaign.visibleSettings && campaign.visibleSettings.showTimeline">
           <template slot="header">
-            <img :src="`${$iconURL}Timeline-New/timeline-title.svg`" class="label-icon" />
+            <img :src="`${$iconURL}RSVP/Path 3728.svg`" class="label-icon" />
             <span style="padding-top: 10px; margin-left: 20px; line-height: 1.2em" class="font-bold"> AGENDA </span>
           </template>
           <template slot="content">
@@ -97,12 +97,10 @@
             </div>
           </template>
         </more-info-item>
-        <div style="color: #818080; font-size: 13px; margin: 40px 0 20px">Can't make it?</div>
-        <md-button class="md-simple md-red maryoku-btn edit-btn" @click="reject"> <u>I Can't Make It</u></md-button
+        <div style="color: #818080; font-size: 13px; margin: 40px 0 20px" @click="reject">Can't make it?</div>
+        <md-button class="md-simple md-red maryoku-btn edit-btn" @click="thinkLater"> <u>I Can't Make It</u></md-button
         ><br /><br />
-        <md-button class="md-simple md-red maryoku-btn edit-btn" @click="thinkLater">
-          <u>I Need To Think About It</u></md-button
-        >
+        <md-button class="md-simple md-red maryoku-btn edit-btn"> <u>I Need To Think About It</u></md-button>
         <hr style="margin-top: 40px" />
         <div class="text-center mb-50 mt-30">
           Provided by
@@ -264,7 +262,7 @@
       :rsvp="rsvpData"
     ></sync-calendar-modal>
     <social-sharing-modal v-if="showSharingModal" @cancel="showSharingModal = false"></social-sharing-modal>
-    <modal v-if="showRejectConformModal" class="rsvp-modal reject-modal">
+    <modal v-if="showRejectConformModal">
       <template slot="header">
         <md-button class="md-simple md-just-icon md-round modal-default-button" @click="showRejectConformModal = false">
           <md-icon>clear</md-icon>
@@ -664,17 +662,21 @@ export default {
         border-radius: 0px;
       }
     }
-    .reject-modal {
-      img {
-        width: 100px;
-      }
-      .font-size-30 {
-        font-size: 24px !important;
-      }
-      .font-size-20 {
-        line-height: 1.5em;
-      }
-    }
+    // .rsvp-footer-content {
+    //   flex-flow: wrap-reverse;
+    //   justify-content: center;
+    //   .btn-group {
+    //     flex-flow: wrap;
+    //     justify-content: center;
+    //     margin-bottom: 10px;
+    //     button {
+    //       margin: 10px 0px;
+    //     }
+    //     .seperator {
+    //       display: none;
+    //     }
+    //   }
+    // }
   }
 }
 </style>

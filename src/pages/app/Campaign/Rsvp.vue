@@ -9,8 +9,8 @@
           <img :src="campaignData.coverImage" class="mr-10" />
           <label for="cover">
             <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="chooseFiles">
-              <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
-              Change Cover(Size 1200 * 400)
+              <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />Change Cover(Size
+              1200 * 400)
             </md-button>
           </label>
           <input
@@ -195,7 +195,7 @@ import RsvpTimelinePanel from "@/pages/app/RSVP/RSVPTimelinePanel.vue";
 import HideSwitch from "@/components/HideSwitch";
 import { getBase64 } from "@/utils/file.util";
 import swal from "sweetalert2";
-import CalendarEvent from "@/models/CalendarEvent";
+
 export default {
   components: {
     MaryokuTextarea,
@@ -358,24 +358,8 @@ export default {
       const coverImageData = await getBase64(event.target.files[0]);
       this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "coverImage", value: coverImageData });
     },
-    // changeTitle(newTitle) {
-    //   this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
-
-    // },
     changeTitle(newTitle) {
-      this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "title", value: newTitle });
       this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
-      this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "title", value: newTitle });
-      this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "title", value: newTitle });
-      this.$store
-        .dispatch(
-          "event/saveEventAction",
-          new CalendarEvent({
-            id: this.event.id,
-            title: newTitle,
-          }),
-        )
-        .then((result) => {});
     },
     changeGreetings(newGreetings) {
       const additionalData = this.campaignData.additionalData;

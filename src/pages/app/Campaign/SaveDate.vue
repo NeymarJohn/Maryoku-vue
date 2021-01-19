@@ -38,7 +38,7 @@
           $dateUtil.formatScheduleDay(event.eventStartMillis, "MMMM D, YYYY")
         }}</span>
         <title-editor
-          class="mt-40 font-size-60"
+          class="mt-40"
           :defaultValue="campaignTitle"
           :key="campaignTitle"
           @change="changeTitle"
@@ -105,7 +105,6 @@ import swal from "sweetalert2";
 import VueElementLoading from "vue-element-loading";
 import S3Service from "@/services/s3.service";
 import ConceptCanvas from "./components/ConceptCanvas";
-import CalendarEvent from "@/models/CalendarEvent"
 
 const placeHolder =
   "Clear your schedule and get ready to mingle! the greatest event of the year is coming up! more details are yet to come, but we can already promise you it's going to be an event to remember. be sure to mark the date on your calendar. you can do it using this link: (google calendar link). see ya soon";
@@ -214,15 +213,6 @@ export default {
       this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
       this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "title", value: newTitle });
       this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "title", value: newTitle });
-      this.$store
-        .dispatch(
-          "event/saveEventAction",
-          new CalendarEvent({
-            id: this.event.id,
-            title: newTitle,
-          }),
-        )
-        .then((result) => {});
     },
     chooseFiles() {
       document.getElementById("coverImage").click();

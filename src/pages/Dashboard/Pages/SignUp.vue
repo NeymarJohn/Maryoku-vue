@@ -15,7 +15,7 @@
               </div>
               <div class="signup-title">TIME TO POUR YOURSELF <br />A DRINK & RELAX!</div>
               <div class="signup-description">
-                Start thinking about what you'll wear to <br />the event, cause everything else is covered.
+                Start thinking about what you'll wear to <br />the event, because we've got everything else covered.
               </div>
             </div>
             <div class="logo">
@@ -84,7 +84,7 @@
           <div class="text-center">
             <div><md-button @click="signup" class="md-default md-red md-maryoku mt-4">Sign Up</md-button></div>
             <div>
-              <md-button @click="toSignin" class="md-black md-maryoku mt-4 md-simple mt-4">Already Singed?</md-button>
+              <md-button @click="toSignin" class="md-black md-maryoku mt-4 md-simple mt-4">Already Registered?</md-button>
             </div>
           </div>
         </div>

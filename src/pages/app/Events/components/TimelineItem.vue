@@ -231,7 +231,6 @@ export default {
         .save()
         .then((res) => {
           console.log(res);
-          this.editingContent = res;
           this.$emit("save", { item: this.editingContent, index: this.index });
         });
     },
@@ -310,8 +309,8 @@ export default {
       })
         .then((result) => {
           if (result.value === true) {
-            console.log(this.item);
-            this.$emit("remove", { index: this.index, item: this.editingContent });
+            // alert();
+            this.$emit("remove", { index: this.index, item: this.item });
           }
         })
         .catch((err) => {

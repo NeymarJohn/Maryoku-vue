@@ -562,7 +562,7 @@ export default {
       return false;
     },
     isScheduled() {
-      if (!this.currentCampaign) return false;
+      if (!this.currentCampagin) return false;
       return this.currentCampaign.campaignStatus === "SCHEDULED";
     },
   },

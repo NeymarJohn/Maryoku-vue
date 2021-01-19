@@ -140,9 +140,10 @@ export default {
         );
       }
       this.showThanksModal();
+      this.referredVendors = {};
     },
     removeVendorInfo(category) {
-      this.referredVendors[category] = null;
+      delete this.referredVendors[category];
     },
   },
   created() {

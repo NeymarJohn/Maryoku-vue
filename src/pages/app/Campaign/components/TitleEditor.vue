@@ -62,7 +62,6 @@ export default {
     width: max-content;
     border: none;
     box-shadow: none;
-    font-size: inherit;
     &.isEditing {
       border: solid 1px #a0a0a0;
     }
