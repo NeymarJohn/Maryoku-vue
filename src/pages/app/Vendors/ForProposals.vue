@@ -27,7 +27,7 @@
               @blur="updateProposalRequest()"
             />
             <span>Sincerely,</span>
-            <p>{{ vendor.companyName }}</p>
+            <p>{{ vendor.eventCategory.fullTitle }}</p>
           </div>
           <proposal-event-vision v-if="event.concept" :event="event"></proposal-event-vision>
           <proposal-additional-requirement></proposal-additional-requirement>
@@ -44,7 +44,7 @@
               @blur="updateProposalRequest()"
             />
             <span>Sincerely,</span>
-            <p>{{ vendor.companyName }}</p>
+            <p>{{ vendor.eventCategory.fullTitle }}</p>
           </div>
           <proposal-bid-content></proposal-bid-content>
         </div>

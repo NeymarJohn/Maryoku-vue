@@ -109,15 +109,15 @@ export default {
       let vendor = JSON.parse(JSON.stringify(this.vendor));
       if (field == "images" || field == "vendorImages") {
         if (!vendor[field][value.index]) {
-          console.log("!update.vendor.image", value);
+          console.log('!update.vendor.image', value);
           vendor[field].push(value.data);
         } else {
-          console.log("update.vendor.image", value);
+          console.log('update.vendor.image', value);
           vendor[field][value.index] = value.data;
         }
       } else if (field == "removeImage") {
         vendor.images = vendor.images.filter((i) => i != value);
-        vendor.vendorImages = vendor.vendorImages.filter((i) => i != value);
+        vendor.vendorImages = vendor.vendorImages.filter(i => i != value);
       } else if (field == "vendorCategories") {
         this.$set(vendor, this.camelize(field), value);
         this.$set(vendor, "vendorCategory", value[0]);

@@ -12,10 +12,7 @@
       <template slot="tab-pane-1">
         <div>
           <div class="concept-list-wrapper">
-            <concept-item></concept-item>
-            <concept-item></concept-item>
-            <concept-item></concept-item>
-            <concept-item></concept-item>
+            <concept-item v-for="concept in myConcepts" :key="concept.id" :concept="concept"></concept-item>
           </div>
           <div class="white-card compete-box">
             <img :src="`${$iconURL}Planner Profile/group-7399.svg`" style="width: 70px" />
@@ -45,6 +42,16 @@ export default {
   components: {
     Tabs,
     ConceptItem,
+  },
+  data() {
+    return {
+      myConcepts: [],
+    };
+  },
+  created() {
+    this.$http.get(`${process.env.SERVER_URL}/1/myConcepts`).then((res) => {
+      this.myConcepts = res.data;
+    });
   },
   methods: {
     goToWall() {

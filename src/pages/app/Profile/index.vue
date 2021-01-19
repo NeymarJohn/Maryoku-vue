@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout p-20">
+  <div class="md-layout p-20 planner-profile">
     <div class="md-layout-item md-size-25">
       <div class="left-sidebar white-card">
         <div class="profile">
@@ -11,26 +11,28 @@
         </div>
         <md-list>
           <md-list-item @click="goTo('settings')" :class="{ 'font-bold-extra': pageName === 'settings' }">
-            <label
-              ><img
+            <label>
+              <img
                 :src="
                   pageName === 'settings'
                     ? `${$iconURL}Profile/settings-dark.svg`
                     : `${$iconURL}Profile/settings-gray.svg`
                 "
                 class="page-icon"
-              /><span class="pl-20 font-size-20">Profile Settings</span></label
-            >
+              />
+              <span class="pl-20 font-size-20">Profile Settings</span>
+            </label>
           </md-list-item>
           <md-list-item @click="goTo('events')" :class="{ 'font-bold-extra': pageName === 'events' }">
-            <label
-              ><img
+            <label>
+              <img
                 :src="
                   pageName === 'events' ? `${$iconURL}Profile/events-dark.svg` : `${$iconURL}Profile/events-gray.svg`
                 "
                 class="page-icon"
-              /><span class="pl-20 font-size-20">My Events</span></label
-            >
+              />
+              <span class="pl-20 font-size-20">My Events</span>
+            </label>
           </md-list-item>
           <md-list-item @click="goTo('points')" :class="{ 'font-bold-extra': pageName === 'points' }">
             <label
@@ -218,6 +220,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .left-sidebar {
+  /deep/ .md-list-item-button {
+    &:hover {
+      background-color: transparent !important;
+    }
+  }
   .profile {
     position: relative;
     padding: 50px;

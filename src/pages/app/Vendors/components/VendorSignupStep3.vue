@@ -325,7 +325,7 @@
                       </div>
                     </div>
                     <div class="bottom mt-0 no-margin" v-if="p.type == 'Cost'">
-                      <span>Cost</span>
+                      <span>Cost per {{ p.unit }}</span>
                       <br/>
                       <div class="suffix">
                         <input
@@ -335,7 +335,6 @@
                                 v-model="p.value"
                                 @input="setPricePolicy"
                         />
-                        <span class="ml-10" v-if="p.unit">per {{ p.unit }}</span>
                       </div>
                     </div>
                     <div class="bottom mt-0 no-margin" v-if="p.type == 'Discount'">
@@ -358,7 +357,7 @@
                     </div>
                     <div class="bottom mt-0 ml-40"
                          v-if="p.hasOwnProperty('attendees') && (p.type == Boolean && p.value || p.type == Number)">
-                      <span :class="{'d-block': p.type != Boolean, 'mr-10': p.type == Boolean}">How many</span>
+                      <span :class="{'d-block': p.type != Boolean, 'mr-10': p.type == Boolean}">How Many</span>
 
                       <input
                               type="number"
@@ -369,9 +368,9 @@
                       />
 
                     </div>
-                    <div class="bottom mt-0 ml-70"
+                    <div class="bottom mt-0 ml-50"
                          v-if="p.hasOwnProperty('discount') && p.type == Boolean && p.value">
-                      <span class="d-block">{{ p.hasOwnProperty('label') ? p.label : 'How many' }}</span>
+                      <span class="d-block">How Many</span>
 
                       <input
                               type="number"
