@@ -1,7 +1,7 @@
 <template>
-  <modal class="setting-reminder-model">
+  <modal class="rsvp-modal setting-reminder-modal">
     <template slot="header">
-      <!-- <div class="maryoku-modal-header" v-if="screen == 2">
+      <!-- <div class="max-resolution: modal;header" v-if="screen == 2">
         <md-button class="md-simple md-black normal-btn" @click="screen = screen - 1">
           <img class="mr-10" :src="`${$iconURL}RSVP/Group+3593.svg`" />
           Back
@@ -27,7 +27,7 @@
         </md-button>
       </div>
       <div v-if="screen == 2" class="text-left">
-        <div class="font-size-30 font-bold mb-50 mt-30">TAKE YOUR TIME, WE’LL REMIND YOU LATER</div>
+        <div class="font-size-30 font-bold mb-50 mt-30 header-text">TAKE YOUR TIME, WE’LL REMIND YOU LATER</div>
         <div class="text-left">
           <div><md-radio v-model="remindTool" value="sms">Remind me by Sms</md-radio></div>
           <maryoku-input
@@ -55,7 +55,7 @@
           <img class="mr-30" :src="`${$iconURL}RSVP/ring.svg`" />
           <span class="font-size-20 font-bold">When Do You Want Your Reminder? </span>
         </div>
-        <div class="d-flex">
+        <div class="options-list">
           <option-card
             icon="Group+4311.svg"
             label="Remind Me Tonight"
@@ -83,9 +83,9 @@
       </div>
     </template>
     <template slot="footer">
-      <div class="text-center w-100" v-if="screen == 2">
-        <md-button class="md-red md-bold" @click="setRemind" :disabled="!canSetReminder">Set A Reminder</md-button>
-      </div>
+      <md-button class="md-red md-bold reminder-button" @click="setRemind" :disabled="!canSetReminder">
+        Set A Reminder
+      </md-button>
     </template>
   </modal>
 </template>
@@ -149,4 +149,41 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.setting-reminder-modal {
+  .options-list {
+    display: flex;
+  }
+}
+@media only screen and (max-width: 959px) {
+  .setting-reminder-modal {
+    .header-text {
+      line-height: 1.2em;
+      font-size: 24px !important;
+      margin-bottom: 30px;
+    }
+    .maryoku_input {
+      width: 100%;
+    }
+    .options-list {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-around;
+      margin-top: 20px;
+      .option-card {
+        margin: 10px 10px;
+        width: 100px;
+        height: 100px;
+        padding: 10px;
+        font-size: 14px;
+        img {
+          width: 20px !important;
+        }
+      }
+    }
+    .reminder-button {
+      width: 100%;
+    }
+  }
+}
 </style>
