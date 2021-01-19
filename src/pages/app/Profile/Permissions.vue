@@ -46,12 +46,10 @@
 
 <script>
 import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
-import Avartar from "../../../components/Avartar.vue";
 import PermittedUserRow from "./components/PermittedUserRow.vue";
 export default {
   components: {
     MaryokuInput,
-    Avartar,
     PermittedUserRow,
   },
   data() {
