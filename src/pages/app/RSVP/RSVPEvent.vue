@@ -73,7 +73,7 @@
         </more-info-item>
         <more-info-item class="mb-20" v-if="campaign.visibleSettings && campaign.visibleSettings.showTimeline">
           <template slot="header">
-            <img :src="`${$iconURL}RSVP/Path 3728.svg`" class="label-icon" />
+            <img :src="`${$iconURL}Timeline-New/timeline-title.svg`" class="label-icon" />
             <span style="padding-top: 10px; margin-left: 20px; line-height: 1.2em" class="font-bold"> AGENDA </span>
           </template>
           <template slot="content">
