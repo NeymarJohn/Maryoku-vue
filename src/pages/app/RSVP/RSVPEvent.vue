@@ -246,6 +246,7 @@
     <setting-reminder-modal
       v-if="showReminderModal"
       @close="showReminderModal = false"
+      @setRemind="onSetReminder"
       :campaign="campaign"
     ></setting-reminder-modal>
     <join-zoom-modal
@@ -461,9 +462,10 @@ export default {
       });
     },
     thinkLater() {
-      new RsvpRequest({ id: this.rsvpRequest.id, status: "CONSIDERED" }).save().then((res) => {
-        this.showReminderModal = true;
-      });
+      this.showReminderModal = true;
+    },
+    onSetReminder() {
+      new RsvpRequest({ id: this.rsvpRequest.id, status: "CONSIDERED" }).save().then((res) => {});
     },
     onResize() {
       this.windowWidth = window.innerWidth;

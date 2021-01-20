@@ -137,6 +137,7 @@ export default {
         type: "campaign",
       };
       new Reminder(remindingData).save().then((res) => {
+        this.$emit("setRemind", res);
         this.screen = 3;
       });
     },
