@@ -146,7 +146,19 @@ export default {
       });
     },
     changeTitle(newTitle) {
+      this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "title", value: newTitle });
+      this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
       this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "title", value: newTitle });
+      this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "title", value: newTitle });
+      this.$store
+        .dispatch(
+          "event/saveEventAction",
+          new CalendarEvent({
+            id: this.event.id,
+            title: newTitle,
+          }),
+        )
+        .then((result) => {});
     },
     campaignDescription: {
       get() {

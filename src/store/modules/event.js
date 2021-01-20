@@ -13,7 +13,7 @@ const state = {
         id: null,
         occasion: "",
         occasionCache: "",
-        title: "",
+        title: "New Event",
         date: null,
         time: "",
         duration: "",

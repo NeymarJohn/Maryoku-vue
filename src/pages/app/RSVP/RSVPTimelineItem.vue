@@ -1,5 +1,5 @@
 <template>
-  <div class="rsvp-timeline">
+  <div class="rsvp-timeline" v-if="timeline">
     <img class="item-icon" :src="`${$iconURL}Timeline-New/${timeline.icon.toLowerCase()}-circle.svg`" />
     <div class="rsvp-timeline-content" :style="`border-color:${timeline.color}`">
       <div>
@@ -73,6 +73,31 @@ export default {
     padding: 30px;
     border-width: 2px;
     border-style: dashed;
+  }
+}
+@media only screen and (max-width: 959px) {
+  .rsvp-timeline {
+    padding-left: 50px;
+    margin: 25px 0px;
+    &:not(:last-child):after {
+      left: 20px;
+      top: 52px;
+    }
+    .item-icon {
+      left: 0;
+      top: 13px;
+      width: 40px;
+      height: 40px;
+    }
+    .item-time {
+      font-size: 16px;
+    }
+    .item-title {
+      font-size: 16px;
+    }
+    &-content {
+      padding: 15px;
+    }
   }
 }
 </style>

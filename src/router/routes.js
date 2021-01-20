@@ -66,7 +66,6 @@ const Invited = () => import("@/pages/Dashboard/Pages/Invited.vue");
 
 const Vendors = () => import("@/pages/Dashboard/Pages/VendorsList.vue");
 const WelcomeEventPage = () => import("@/pages/Dashboard/Pages/WelcomeEvent.vue");
-const ConceptDetail = () => import("@/pages/Dashboard/Pages/ConceptDetail.vue");
 let authPages = {
     path: "/",
     component: AuthLayout,
@@ -516,33 +515,26 @@ let HomePages = {
     ],
 };
 
-let landingPages = {
+let RSVPPages = {
     path: "/app2",
     component: LandingPageLayout,
     name: "LandingPageLayout",
     children: [
         {
-            path: "/rsvp/:eventId/:email",
+            path: "/rsvp/:tenantId/:rsvpRequestId",
             name: "RSVP",
             component: RSVPEvent,
             meta: {
                 title: "Our Events",
                 gtm: "Events",
             },
-            path: "/rsvp/:rsvpRequestId",
-            name: "RSVP",
-            component: RSVPEvent,
-            meta: {
-                title: "Our Events",
-                gtm: "Events",
-            },
-            path: "/concepts/:conceptId",
-            name: "Concept Detail",
-            component: ConceptDetail,
-            meta: {
-                title: "Concept Detail",
-                gtm: "Concept Detail",
-            },
+            // path: "/rsvp/:rsvpRequestId",
+            // name: "RSVP",
+            // component: RSVPEvent,
+            // meta: {
+            //     title: "Our Events",
+            //     gtm: "Events",
+            // },
         },
     ],
 };
@@ -642,7 +634,7 @@ const routes = [
     vendorSignup,
     ProfilePages,
     EventPages,
-    landingPages,
+    RSVPPages,
     vendorListPage,
     feedbackPages,
     welcomeEventPage,

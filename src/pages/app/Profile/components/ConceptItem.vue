@@ -1,33 +1,20 @@
 <template>
   <div class="concept-item-wrapper white-card">
-    <img :src="`${concept.images[0].url}`" class="img_box" />
+    <img :src="`https://www.maryoku.com/images/made/images/uploads/glitters2_1_290_193_s_c1_c_c.jpg`" class="img_box" />
     <div class="concept-body">
-      <div class="votes">{{ concept.votes || 0 }}</div>
-      <div class="name">{{ concept.name }}</div>
+      <div class="votes">1</div>
+      <div class="status">Contest N.12</div>
+      <div class="name">Mexican Fiest</div>
+      <div class="organizations">By Amy Winehose</div>
       <div class="concept-description">
-        {{ concept.description }}
+        Throw a Mexican fiesta for everyone to enjoy. This is a great celebration to throw for...
       </div>
-      <md-button class="edit-btn md-simple md-black" @click="gotoDetail"
+      <md-button class="edit-btn md-simple md-black"
         ><span class="font-size-12">Read More <md-icon>keyboard_arrow_right</md-icon></span></md-button
       >
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    concept: {
-      type: Object,
-      default: {},
-    },
-  },
-  methods: {
-    gotoDetail() {
-      this.$router.push(`/concepts/${this.concept.id}`);
-    },
-  },
-};
-</script>
 <style lang="scss" scoped>
 .concept-item-wrapper {
   width: 300px;
@@ -36,7 +23,6 @@ export default {
   margin-bottom: 20px;
   .img_box {
     height: 160px;
-    object-fit: cover;
   }
   .concept-body {
     padding: 40px 25px 25px;

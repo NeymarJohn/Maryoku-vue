@@ -9,8 +9,8 @@
           <img :src="campaignData.coverImage" class="mr-10" />
           <label for="cover">
             <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="chooseFiles">
-              <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />Change Cover(Size
-              1200 * 400)
+              <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
+              Change Cover(Size 1200 * 400)
             </md-button>
           </label>
           <input
@@ -26,15 +26,22 @@
           <img :src="campaignData.logoUrl" style="max-width: 200px" />
           <md-switch class="large-switch below-label" v-model="showLogo">Hide logo</md-switch>
         </div>
-        <div class="font-size-30 font-bold mt-20">
-          {{ campaignData.additionalData.greetingWords }}
+        <div class="font-size-30 font-bold mt-20 d-flex align-center">
+          <!-- <div class="mr-10">{{ campaignData.additionalData.greetingWords }}</div>
+          <md-button class="edit-btn md-simple md-red">Edit</md-button> -->
+          <title-editor
+            :defaultValue="campaignData.additionalData.greetingWords"
+            :key="campaignData.additionalData.greetingWords"
+            @change="changeGreetings"
+            class="mt-40 mb-30"
+          ></title-editor>
         </div>
         <div class="font-size-20 mt-50">YOU ARE INVITED TO</div>
         <title-editor
           :defaultValue="campaignTitle"
           :key="campaignTitle"
           @change="changeTitle"
-          class="mt-40 mb-30"
+          class="mt-40 mb-30 font-size-60"
         ></title-editor>
 
         <maryoku-textarea
@@ -188,7 +195,7 @@ import RsvpTimelinePanel from "@/pages/app/RSVP/RSVPTimelinePanel.vue";
 import HideSwitch from "@/components/HideSwitch";
 import { getBase64 } from "@/utils/file.util";
 import swal from "sweetalert2";
-
+import CalendarEvent from "@/models/CalendarEvent";
 export default {
   components: {
     MaryokuTextarea,
@@ -253,6 +260,18 @@ export default {
           name: "RSVP",
           key: "additionalData",
           value: { ...this.editingContent.additionalData, greetingWords },
+        });
+      }
+      let coverImage = this.editingContent.coverImage;
+      if (coverImage.indexOf("RSVP2-middle")) {
+        // if coverImage is default
+        coverImage = this.event.concept
+          ? this.event.concept.images[0].url
+          : `${this.$storageURL}Campaign Images/RSVP2-middle.png`;
+        this.$store.commit("campaign/setAttribute", {
+          name: "RSVP",
+          key: "coverImage",
+          value: coverImage,
         });
       }
     } else {
@@ -336,10 +355,37 @@ export default {
       document.getElementById("coverImage").click();
     },
     async onFileChange(event) {
-      this.editingContent.coverImage = await getBase64(event.target.files[0]);
+      const coverImageData = await getBase64(event.target.files[0]);
+      this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "coverImage", value: coverImageData });
     },
+    // changeTitle(newTitle) {
+    //   this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
+
+    // },
     changeTitle(newTitle) {
+      this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "title", value: newTitle });
       this.$store.commit("campaign/setAttribute", { name: "RSVP", key: "title", value: newTitle });
+      this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "title", value: newTitle });
+      this.$store.commit("campaign/setAttribute", { name: "FEEDBACK", key: "title", value: newTitle });
+      this.$store
+        .dispatch(
+          "event/saveEventAction",
+          new CalendarEvent({
+            id: this.event.id,
+            title: newTitle,
+          }),
+        )
+        .then((result) => {});
+    },
+    changeGreetings(newGreetings) {
+      const additionalData = this.campaignData.additionalData;
+      console.log(this.campaignData);
+      additionalData.greetingWords = newGreetings;
+      this.$store.commit("campaign/setAttribute", {
+        name: "RSVP",
+        key: "additionalData",
+        value: additionalData,
+      });
     },
     setVisibleTimeline(visibility) {
       this.editingContent.visibleSettings.showTimeline = visibility;

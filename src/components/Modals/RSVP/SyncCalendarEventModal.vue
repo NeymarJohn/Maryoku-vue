@@ -87,21 +87,7 @@ export default {
     setRsvpToZoom() {
       this.$emit("setRSVP");
     },
-    initClient() {
-      let vm = this;
-
-      vm.api.client
-        .init({
-          apiKey: API_KEY,
-          clientId: CLIENT_ID,
-          discoveryDocs: DISCOVERY_DOCS,
-          scope: SCOPES,
-        })
-        .then((_) => {
-          // Listen for sign-in state changes.
-          vm.api.auth2.getAuthInstance().isSignedIn.listen(vm.authorized);
-        });
-    },
+    initClient() {},
 
     handleAuthClick() {
       Promise.resolve(this.api.auth2.getAuthInstance().signIn()).then((_) => {
