@@ -170,43 +170,7 @@
               </md-tooltip>
             </span>
           </div>
-          <div :class="`images-list selected-concept`">
-            <div class="image-backgrounds">
-              <div
-                class="image-background"
-                v-for="(bg, bgIndex) in selectedConcept.colors"
-                :key="bgIndex"
-                :style="`background:${bg.color}; opacity:${bg.opacity}`"
-              ></div>
-            </div>
-            <div>
-              <div :class="`images-list__item`" v-for="(image, imageIndex) in selectedConcept.images" :key="imageIndex">
-                <img
-                  class="image-section"
-                  :src="`${image.url}`"
-                  @error="imageUrlAlt(selectedConcept.imageData[imageIndex], $event)"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="concept-details">
-            <div class="concept-name d-flex align-center text-transform-capitalize">
-              <h3
-                :style="`font-family:${
-                  selectedConcept.selectedConcept ? selectedConcept.selectedConcept : 'Manrope-Regular'
-                }`"
-                v-html="selectedConcept.name"
-              ></h3>
-              <ul class="features-list" v-if="selectedConcept.tags">
-                <li class="features-list__item" v-for="(tag, featureIndex) in selectedConcept.tags" :key="featureIndex">
-                  {{ tag.name }}
-                </li>
-              </ul>
-            </div>
-            <div class="concept-description">
-              {{ selectedConcept.description }}
-            </div>
-          </div>
+          <concept-box :concept="selectedConcept"></concept-box>
         </div>
       </div>
       <div class="concepts-list md-layout-item md-size-100" v-else>
@@ -263,6 +227,7 @@ import EventConceptEditForm from "./EventConceptEditForm";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
+import ConceptBox from "../../../../components/ConceptBox.vue";
 
 export default {
   name: "event-concept-choose",
@@ -280,6 +245,7 @@ export default {
     HeaderActions,
     CommentEditorPanel,
     ConceptImageBlock,
+    ConceptBox,
   },
   props: {},
   computed: {

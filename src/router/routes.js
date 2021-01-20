@@ -66,6 +66,7 @@ const Invited = () => import("@/pages/Dashboard/Pages/Invited.vue");
 
 const Vendors = () => import("@/pages/Dashboard/Pages/VendorsList.vue");
 const WelcomeEventPage = () => import("@/pages/Dashboard/Pages/WelcomeEvent.vue");
+const ConceptDetail = () => import("@/pages/Dashboard/Pages/ConceptDetail.vue");
 let authPages = {
     path: "/",
     component: AuthLayout,
@@ -515,7 +516,7 @@ let HomePages = {
     ],
 };
 
-let RSVPPages = {
+let landingPages = {
     path: "/app2",
     component: LandingPageLayout,
     name: "LandingPageLayout",
@@ -534,6 +535,13 @@ let RSVPPages = {
             meta: {
                 title: "Our Events",
                 gtm: "Events",
+            },
+            path: "/concepts/:conceptId",
+            name: "Concept Detail",
+            component: ConceptDetail,
+            meta: {
+                title: "Concept Detail",
+                gtm: "Concept Detail",
             },
         },
     ],
@@ -634,7 +642,7 @@ const routes = [
     vendorSignup,
     ProfilePages,
     EventPages,
-    RSVPPages,
+    landingPages,
     vendorListPage,
     feedbackPages,
     welcomeEventPage,
