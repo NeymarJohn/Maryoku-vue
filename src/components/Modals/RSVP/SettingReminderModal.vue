@@ -100,12 +100,7 @@ export default {
     MaryokuInput,
     OptionCard,
   },
-  props: {
-    rsvpRequest: {
-      type: Object,
-      default: () => {},
-    },
-  },
+
   data() {
     return {
       screen: 2,
@@ -139,9 +134,7 @@ export default {
         phoneNumber: this.remindingPhone,
         email: this.remindingEmail,
         remindingTime: remindingTime,
-        type: "rsvp",
-        emailTransactionId: this.rsvpRequest.emailTransactionId,
-        phoneTransactionId: this.rsvpRequest.phoneTransactionId,
+        type: "campaign",
       };
       new Reminder(remindingData).save().then((res) => {
         this.$emit("setRemind", res);

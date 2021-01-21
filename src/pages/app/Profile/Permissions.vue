@@ -11,19 +11,19 @@
           :close-on-select="true"
           :clear-on-select="true"
           tag-placeholder="Add this as new tag"
-          placeholder="Type to search category"
+          placeholder="User permission"
           label="title"
           track-by="id"
         ></multiselect>
       </div>
       <div class="input-wrapper">
         <multiselect
-          v-model="newColleague.role"
-          :options="roles"
+          v-model="newColleague.invitedEvent"
+          :options="myEvents"
           :close-on-select="true"
           :clear-on-select="true"
           tag-placeholder="Add this as new tag"
-          placeholder="Type to search category"
+          placeholder="Type to search event"
           label="title"
           track-by="id"
         ></multiselect>
@@ -39,7 +39,12 @@
         <div class="color-gray">Owner</div>
         <div></div>
       </div>
-      <permitted-user-row v-for="(user, index) in permittedUsers" :key="index"></permitted-user-row>
+      <permitted-user-row
+        v-for="(user, index) in permittedUsers"
+        :key="index"
+        :index="index"
+        :use="user"
+      ></permitted-user-row>
     </div>
   </div>
 </template>
@@ -65,7 +70,26 @@ export default {
         role: "editor",
         invitedEvent: "",
       },
+      myEvents: [],
     };
+  },
+  created() {
+    let filters = {
+      filters: {
+        myEvents: true,
+      },
+    };
+    this.$http
+      .get(`${process.env.SERVER_URL}/1/events`, {
+        params: filters,
+      })
+      .then((response) => {
+        this.myEvents = response.data;
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
   computed: {
     userData() {

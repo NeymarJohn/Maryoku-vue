@@ -429,11 +429,6 @@ export default {
       this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "SAVED");
     },
     cancelSchedule() {
-      this.$store.commit("campaign/setAttribute", {
-        name: this.campaignTabs[this.selectedTab].name,
-        key: "scheduleSettings",
-        value: null,
-      });
       this.callSaveCampaign(this.campaignTabs[this.selectedTab].name, "SAVED");
     },
     scheduleCampaign() {
