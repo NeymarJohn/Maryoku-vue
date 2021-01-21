@@ -140,7 +140,7 @@ export default {
 <style lang="scss" scoped>
 .rsvp-information-model {
   .user-info {
-    padding: 50px 0;
+    padding: 0px 0 50px;
     .input-wrapper {
       width: 50%;
       &:first-child {
@@ -150,7 +150,7 @@ export default {
   }
   .information-section {
     border-top: solid 2px #dbdbdb;
-    padding: 50px 0;
+    padding: 30px 0;
     text-align: left;
     .guestNumber {
       display: flex;
