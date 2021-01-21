@@ -35,7 +35,7 @@
             <br />
             <br />Sincerely,
             <br />
-            <strong>{{ vendor.vendorCategory }}</strong>
+            <strong>{{ vendor.companyName }}</strong>
           </p>
           <span @click="savedItModal = true">
             More about us

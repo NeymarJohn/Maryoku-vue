@@ -37,6 +37,9 @@
               ></rsvp-event-info-panel>
             </div>
           </div>
+          <!-- <div class="mb-50">
+            <img :src="`${$iconURL}RSVP/Group+8056.svg`" />
+          </div> -->
           <div>
             <div class="font-size-22 font-bold mb-10">Check out the venue</div>
             <rsvp-venue-carousel
@@ -246,7 +249,6 @@
     <setting-reminder-modal
       v-if="showReminderModal"
       @close="showReminderModal = false"
-      @setRemind="onSetReminder"
       :campaign="campaign"
     ></setting-reminder-modal>
     <join-zoom-modal
@@ -296,7 +298,6 @@ import { mapActions, mapGetters } from "vuex";
 import swal from "sweetalert2";
 import Modal from "../../../components/Modal.vue";
 import MoreInfoItem from "./mobile/MoreInfoItem.vue";
-import { Model } from "vue-api-query";
 export default {
   components: {
     RsvpTimelineItem,
@@ -336,9 +337,7 @@ export default {
       showZoomModal: false,
       showSyncCalendarForZoom: false,
       showSyncCalendarModal: false,
-      campaign: {
-        additionalData: {},
-      },
+      campaign: {},
       rsvpRequest: null,
       showSharingModal: false,
       isSentRsvp: false,
@@ -348,11 +347,6 @@ export default {
   },
   created() {
     const rsvpRequestId = this.$route.params.rsvpRequestId;
-    const tenantId = this.$route.params.tenantId;
-
-    Model.$http.defaults.headers.common["gorm-tenantid"] = tenantId;
-    Model.$http.defaults.headers.common.gorm_tenantid = tenantId;
-
     const rsvpRequest = new RsvpRequest({ id: rsvpRequest });
 
     this.$nextTick(() => {
@@ -462,10 +456,9 @@ export default {
       });
     },
     thinkLater() {
-      this.showReminderModal = true;
-    },
-    onSetReminder() {
-      new RsvpRequest({ id: this.rsvpRequest.id, status: "CONSIDERED" }).save().then((res) => {});
+      new RsvpRequest({ id: this.rsvpRequest.id, status: "CONSIDERED" }).save().then((res) => {
+        this.showReminderModal = true;
+      });
     },
     onResize() {
       this.windowWidth = window.innerWidth;

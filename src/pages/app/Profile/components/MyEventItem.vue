@@ -3,7 +3,9 @@
     <div class="my-event-item-header">
       <div>
         <img class="event-image" :src="event.concept && event.concept.images[0].url" />
-        <span class="font-size-22 font-bold" style="padding: 20px">{{ event.title }}</span>
+        <span class="font-size-22 font-bold" style="padding: 20px">{{
+          event.concept ? event.concept.name : event.title
+        }}</span>
         <span class="color-gray font-size-14" style="padding: 20px"
           >Created on {{ $dateUtil.formatScheduleDay(event.dateCreated, "MMM DD YYYY") }}</span
         >

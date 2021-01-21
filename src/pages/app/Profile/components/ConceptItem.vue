@@ -2,12 +2,12 @@
   <div class="concept-item-wrapper white-card">
     <img :src="`https://www.maryoku.com/images/made/images/uploads/glitters2_1_290_193_s_c1_c_c.jpg`" class="img_box" />
     <div class="concept-body">
-      <div class="votes">1</div>
-      <div class="status">Contest N.12</div>
-      <div class="name">Mexican Fiest</div>
-      <div class="organizations">By Amy Winehose</div>
+      <div class="votes">{{ concept.votes || 0 }}</div>
+      <div class="status">{{ concept.isContest ? `Contest N.12` : "No Contest" }}</div>
+      <div class="name">{{ concept.name }}</div>
+      <div class="organizations">By Me</div>
       <div class="concept-description">
-        Throw a Mexican fiesta for everyone to enjoy. This is a great celebration to throw for...
+        {{ concept.description }}
       </div>
       <md-button class="edit-btn md-simple md-black"
         ><span class="font-size-12">Read More <md-icon>keyboard_arrow_right</md-icon></span></md-button
@@ -15,6 +15,16 @@
     </div>
   </div>
 </template>
+<script>
+export default {
+  props: {
+    concept: {
+      type: Object,
+      default: {},
+    },
+  },
+};
+</script>
 <style lang="scss" scoped>
 .concept-item-wrapper {
   width: 300px;

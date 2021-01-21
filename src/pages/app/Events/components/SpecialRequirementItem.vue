@@ -147,7 +147,7 @@ export default {
       } else if ( name === 'Shopping centers' ) {
         icon = 'Shopping center';
       } else if ( name === 'Dining options within walking distance' ) {
-        icon = 'Shopping center';
+        icon = 'Food2';
       } else if ( name === 'Water saving protocols' ) {
         icon = 'Water saving';
       } else if ( name === 'Green power and energy efficient' ) {
@@ -167,9 +167,11 @@ export default {
       } else {
         icon = `${name}`
       }
-      if (this.data.subCategory === 'Accessibility') {
+      if ( this.data.subCategory === 'Accessibility' ) {
         return `${this.$iconURL}Requirements/${icon}.svg`;
-      } else {
+      } else if (this.data.subCategory === 'Around the space' && name === 'Dining options within walking distance') {
+        return `${this.$iconURL}Requirements/${icon}.svg`;
+      }else {
         return `${this.$secondIconURL}Requirements/Accessibility+Sustainability+and+Inclusion/${icon}.svg`;
       }
     },

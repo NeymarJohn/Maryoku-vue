@@ -1,5 +1,5 @@
 <template>
-  <div class="rsvp-timeline" v-if="timeline">
+  <div class="rsvp-timeline">
     <img class="item-icon" :src="`${$iconURL}Timeline-New/${timeline.icon.toLowerCase()}-circle.svg`" />
     <div class="rsvp-timeline-content" :style="`border-color:${timeline.color}`">
       <div>

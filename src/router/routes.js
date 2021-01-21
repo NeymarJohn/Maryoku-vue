@@ -521,20 +521,20 @@ let RSVPPages = {
     name: "LandingPageLayout",
     children: [
         {
-            path: "/rsvp/:tenantId/:rsvpRequestId",
+            path: "/rsvp/:eventId/:email",
             name: "RSVP",
             component: RSVPEvent,
             meta: {
                 title: "Our Events",
                 gtm: "Events",
             },
-            // path: "/rsvp/:rsvpRequestId",
-            // name: "RSVP",
-            // component: RSVPEvent,
-            // meta: {
-            //     title: "Our Events",
-            //     gtm: "Events",
-            // },
+            path: "/rsvp/:rsvpRequestId",
+            name: "RSVP",
+            component: RSVPEvent,
+            meta: {
+                title: "Our Events",
+                gtm: "Events",
+            },
         },
     ],
 };
