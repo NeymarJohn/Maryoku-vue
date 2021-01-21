@@ -111,7 +111,7 @@
               <md-icon style="color: #050505 !important">keyboard_arrow_right</md-icon>
             </md-button>
           </div>
-          <div :class="{ 'font-bold': selectedOption == 'calendar' }" v-if="scheduleSettings.calendar.calcTime > 0">
+          <div :class="{ 'font-bold': selectedOption == 'calendar' }">
             {{ $dateUtil.formatScheduleDay(scheduleSettings.calendar.calcTime, "MMMM DD, YYYY hh:mm A") }}
           </div>
         </div>
