@@ -70,7 +70,6 @@ import { Modal } from "@/components";
 import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 import EventComponent from "@/models/EventComponent";
 import CalendarEvent from "@/models/CalendarEvent";
-import Calendar from "@/models/Calendar";
 
 export default {
   components: {
@@ -144,13 +143,8 @@ export default {
         category: newComponent,
       };
 
-      let event = new CalendarEvent({
-        id: this.event.id,
-      })
-
-
       new EventComponent(newBlock)
-        .for(event)
+        .for(this.event)
         .save()
         .then((res) => {
           this.$store.dispatch(

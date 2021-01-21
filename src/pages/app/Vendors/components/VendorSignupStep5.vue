@@ -70,24 +70,9 @@
               <div class="color-red font-size-22 font-bold">PREVIEW THE EMAIL WE'RE ABOUT TO SEND TO YOUR CUSTOMER</div>
               <div class="color-red font-size-16 mt-10">This is what your recommender will get in our email</div>
             </div>
-            <a @click="open">
-              <md-icon class="color-red font-size-40">{{ opened ? 'keyboard_arrow_down' : 'keyboard_arrow_right' }} </md-icon>
-            </a>
-          </div>
-          <div v-if="opened" class="card-content">
-            <h2 class="person-name">
-              Hey <span>(Person's Name)</span>
-            </h2>
-            <h5 class="pt-20">How are you?</h5>
-            <h5>I hope this email finds you well & happy!</h5>
-            <p class="pt-20">
-              I just joined a fantastic platform named Maryoku which creates matches between
-              event planners to vendors like me. I’m new to this system and that is why I would love
-              to get your recommendation…
-            </p>
-            <button class="review">Write A Review</button>
-            <p>Warm regards,</p>
-            <p>Relish caterers & venues</p>
+            <div>
+              <md-icon class="color-red font-size-30">keyboard_arrow_right</md-icon>
+            </div>
           </div>
         </div>
       </div>
@@ -135,54 +120,6 @@
         padding: 40px 60px 40px 60px;
         background-color: #ffffff;
         box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-
-        .card-content{
-          padding: 40px 50px;
-          margin-top: 30px;
-          border: solid 1px #707070;
-          background-color: #f7f7f7;
-
-          h2.person-name{
-            font-family: Georgia, "Times New Roman", Times, serif;
-            font-size: 30px;
-            font-weight: 600;
-            margin: 0;
-            line-height: 1.23;
-            color: #707070;
-
-            span{
-              font-style: italic;
-              font-size: 22px;
-            }
-          }
-
-          h5{
-            font-size: 18px;
-            font-weight: 600;
-            margin: 0;
-            color: #707070;
-            font-family: Georgia, "Times New Roman", Times, serif;
-          }
-
-          p{
-            font-size: 16px;
-            margin: 0;
-            color: #707070;
-            font-family: Georgia, "Times New Roman", Times, serif;
-          }
-
-          button.review{
-            margin: 25px 0;
-            padding: 15px 30px;
-            font-size: 18px;
-            border-radius: 3px;
-            border: solid 1px #707070;
-            background-color: #f7f7f7;
-            font-family: Georgia, "Times New Roman", Times, serif;
-            font-weight: 600;
-            color: #707070;;
-          }
-        }
       }
     }
   }
@@ -201,14 +138,7 @@ export default {
       contactPersonName: "",
       email: "",
       eventDate: "",
-      opened: false,
     };
   },
-  methods:{
-    open(){
-      console.log('open');
-      this.opened = !this.opened;
-    }
-  }
 };
 </script>

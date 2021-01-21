@@ -26,7 +26,7 @@ import Calendar from "@/models/Calendar";
 
 class EventService {
     getFirstTaskLink(event) {
-        if (event.conceptProgress !== 100 && event.eventType.hasConcept) {
+        if (event.conceptProgress !== 100) {
             return `/events/${event.id}/booking/concept`;
         } else if (event.budgetProgress !== 100) {
             return `/events/${event.id}/booking/budget`;
