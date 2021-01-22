@@ -184,6 +184,7 @@ export default {
     }
     &-content {
       font-size: 20px;
+      padding-left: 10px;
       .maryoku-btn {
         margin: 0;
       }

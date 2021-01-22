@@ -247,6 +247,7 @@
       v-if="showReminderModal"
       @close="showReminderModal = false"
       @setRemind="onSetReminder"
+      :rsvpRequest="rsvpRequest"
       :campaign="campaign"
     ></setting-reminder-modal>
     <join-zoom-modal

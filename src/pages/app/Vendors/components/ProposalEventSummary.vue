@@ -27,47 +27,50 @@
             </ul>
           </div>
         </div>
-        <div class="cover-letter">
-          <h4>Dear {{ event.owner.displayName }},</h4>
-          <p @mouseover="mouseOver()" @mouseleave="mouseLeave()">
-            {{ personalMessage }}
-            <!-- Relish caters & venus is pleased to provide you with the attached catering proposal for you, which is currently scheduled to be held on at. -->
-            <br />
-            <br />Sincerely,
-            <br />
-            <strong>{{ vendor.companyName }}</strong>
-          </p>
-          <span @click="savedItModal = true">
-            More about us
+        <div class="event-summary-body">
+          <div class="cover-letter font-bold-extra mb-50">
+            <h4 class="font-bold-extra text-transform-uppercase">Dear {{ event.owner.displayName }},</h4>
+            <textarea v-model="personalMessage"> </textarea>
+          </div>
+
+          <div class="vision-section">
+            <div class="font-size-22 font-bold-extra mt-30 mb-20">
+              <img :src="`${$iconURL}Vendor+Landing+Page/Asset+491.svg`" class="page-icon" />
+              Our vision for your event
+            </div>
+            <div>
+              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
+              et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+              Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
+              amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
+              aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+              gubergren, no sea
+            </div>
+          </div>
+          <div class="font-bold mb-10">Some references to the experience you will get from us</div>
+          <proposal-inspirational-photos class="mb-60"></proposal-inspirational-photos>
+          <md-button class="md-simple edit-btn md-red mb-30" @click="savedItModal = true">
+            About us
             <md-icon>navigate_next</md-icon>
-          </span>
+          </md-button>
+          <div class="contact-cont">
+            <h4>Contact Us</h4>
+            <ul>
+              <li>
+                <img :src="`${iconUrl}Asset 593.svg`" />
+                <span>{{ vendor.vendorMainEmail }}</span>
+              </li>
+              <li>
+                <img :src="`${iconUrl}Asset 573.svg`" />
+                <span>{{ vendor.vendorAddressLine1 }}</span>
+              </li>
+              <li v-if="vendor.vendorMainPhoneNumber">
+                <img :src="`${iconUrl}Asset 591.svg`" />
+                <span>{{ vendor.vendorMainPhoneNumber }}</span>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div class="contact-cont">
-          <h4>Contact Us</h4>
-          <ul>
-            <li>
-              <img :src="`${iconUrl}Asset 593.svg`" />
-              <span>{{ vendor.vendorMainEmail }}</span>
-            </li>
-            <li>
-              <img :src="`${iconUrl}Asset 573.svg`" />
-              <span>{{ vendor.vendorAddressLine1 }}</span>
-            </li>
-            <li v-if="vendor.vendorMainPhoneNumber">
-              <img :src="`${iconUrl}Asset 591.svg`" />
-              <span>{{ vendor.vendorMainPhoneNumber }}</span>
-            </li>
-          </ul>
-        </div>
-        <!-- <div class="image-slider">
-          <img class="item" src="https://static-maryoku.s3.amazonaws.com/storage/img/sidebar-2.jpg">
-          <img class="item" src="https://static-maryoku.s3.amazonaws.com/storage/img/sidebar-2.jpg">
-          <img class="item" src="https://static-maryoku.s3.amazonaws.com/storage/img/sidebar-2.jpg">
-          <img class="item" src="https://static-maryoku.s3.amazonaws.com/storage/img/sidebar-2.jpg">
-          <a class="more">
-            <md-icon>keyboard_arrow_right</md-icon>
-          </a>
-        </div>-->
       </div>
 
       <div class="pricing-cont">
@@ -126,20 +129,6 @@
               </div>
             </div>
 
-            <!-- <h6>We allow free cancellation until:</h6>
-            <p>30 days before the event</p> -->
-            <!-- <div class="semi-column">
-              <p><strong>If</strong> the client cancel the vent after 3 weeks before the event</p>
-              <p><strong>If</strong> the client cancel the vent after 3 weeks before the event</p>
-            </div>
-            <div class="semi-column">
-              <p><strong>Than</strong> the client will pay full deposite</p>
-              <p><strong>Than</strong> the client will pay full deposite</p>
-            </div> -->
-            <!-- <div class="additional">
-              <h6>Additional</h6>
-              <p>Lorem</p>
-            </div> -->
             <div class="signature-wrapper">
               <div class="half-side">
                 <h6>{{ vendor.vendorCategory }}</h6>
@@ -206,11 +195,13 @@
 import ProposalPricingItem from "./ProposalPricingItem.vue";
 import Vendors from "@/models/Vendors";
 import vueSignature from "vue-signature";
+import ProposalInspirationalPhotos from "./ProposalInspirationalPhotos.vue";
 
 export default {
   name: "proposal-event-summary",
   components: {
     ProposalPricingItem,
+    ProposalInspirationalPhotos,
     vueSignature,
   },
   props: {
@@ -437,124 +428,126 @@ export default {
         }
       }
     }
-
-    .cover-letter {
-      padding: 0 60px;
-      h4 {
-        font-size: 30px;
-        font-weight: 800;
-        margin: 0;
-        padding-top: 60px;
-        padding-bottom: 25px;
-      }
-      p {
-        margin: 0;
-        font-size: 14px;
-
-        strong {
-          text-transform: capitalize;
-          font-weight: 800;
-        }
-      }
-      span {
-        display: inline-block;
-        font-weight: 800;
-        padding-top: 36px;
-        padding-bottom: 60px;
-        font-size: 16px;
-        color: #f51355;
-        text-transform: capitalize;
-        cursor: pointer;
-        i {
-          color: #f51355;
-        }
-      }
-    }
-
-    .contact-cont {
+    .event-summary-body {
       padding: 60px;
-      border-top: 1px solid #818080;
+      .cover-letter {
+        h4 {
+          font-size: 30px;
+          margin: 0;
+          padding-bottom: 25px;
+        }
+        textarea {
+          height: 170px;
+          padding: 30px;
+        }
+        p {
+          margin: 0;
+          font-size: 14px;
 
-      h4 {
-        font-size: 22px;
-        font-weight: 800;
-        margin: 0;
-      }
-      ul {
-        display: flex;
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        margin-top: 20px;
-
-        li {
+          strong {
+            text-transform: capitalize;
+            font-weight: 800;
+          }
+        }
+        span {
+          display: inline-block;
+          font-weight: 800;
+          padding-top: 36px;
+          padding-bottom: 60px;
           font-size: 16px;
-          margin-right: 55px;
-
-          span {
-            text-decoration: underline;
+          color: #f51355;
+          text-transform: capitalize;
+          cursor: pointer;
+          i {
+            color: #f51355;
           }
+        }
+      }
+      .vision-section {
+        margin-bottom: 50px;
+      }
+      .contact-cont {
+        margin-top: 30px;
+        h4 {
+          font-size: 22px;
+          font-weight: 800;
+          margin: 0;
+        }
+        ul {
+          display: flex;
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          margin-top: 20px;
+          li {
+            font-size: 16px;
+            margin-right: 55px;
 
-          img {
-            width: 26px;
-            height: 26px;
-            margin-right: 14px;
+            span {
+              text-decoration: underline;
+            }
+
+            img {
+              width: 26px;
+              height: 26px;
+              margin-right: 14px;
+            }
+
+            &:last-child {
+              margin-right: 0;
+            }
           }
+        }
+      }
+
+      .image-slider {
+        padding-left: 60px;
+        display: flex;
+        overflow: hidden;
+
+        .item {
+          margin-right: 30px;
+          width: 300px;
+          min-width: 300px;
+          max-height: 177px;
 
           &:last-child {
             margin-right: 0;
           }
         }
-      }
-    }
-
-    .image-slider {
-      padding-left: 60px;
-      display: flex;
-      overflow: hidden;
-
-      .item {
-        margin-right: 30px;
-        width: 300px;
-        min-width: 300px;
-        max-height: 177px;
-
-        &:last-child {
-          margin-right: 0;
+        a.more {
+          cursor: pointer;
+          position: absolute;
+          background: white;
+          border-radius: 20px;
+          margin-top: 75px;
         }
       }
-      a.more {
-        cursor: pointer;
-        position: absolute;
-        background: white;
-        border-radius: 20px;
-        margin-top: 75px;
-      }
-    }
 
-    .check-list-wrapper {
-      padding: 0 60px;
-      h4 {
-        font-size: 22px;
-        font-weight: 800;
-        margin: 0;
-        margin-top: 40px;
-        margin-bottom: 30px;
-        text-transform: capitalize;
-      }
-      ul {
-        padding: 0;
-        list-style: none;
-        -webkit-column-count: 3;
-        -moz-column-count: 3;
-        column-count: 3;
-        li {
-          margin-bottom: 33px;
+      .check-list-wrapper {
+        padding: 0 60px;
+        h4 {
+          font-size: 22px;
+          font-weight: 800;
+          margin: 0;
+          margin-top: 40px;
+          margin-bottom: 30px;
+          text-transform: capitalize;
+        }
+        ul {
+          padding: 0;
+          list-style: none;
+          -webkit-column-count: 3;
+          -moz-column-count: 3;
+          column-count: 3;
+          li {
+            margin-bottom: 33px;
 
-          i {
-            color: #f51355;
-            font-size: 22px;
-            margin-right: 22px;
+            i {
+              color: #f51355;
+              font-size: 22px;
+              margin-right: 22px;
+            }
           }
         }
       }
