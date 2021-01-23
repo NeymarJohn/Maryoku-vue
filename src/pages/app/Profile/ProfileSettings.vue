@@ -4,8 +4,8 @@
       <template slot="tab-pane-1">
         <profile-details></profile-details>
       </template>
-      <template slot="tab-pane-2"> <div class="p-40"></div> </template>
-      <template slot="tab-pane-3"> <div class="p-40"></div> </template>
+      <template slot="tab-pane-2"> Payment </template>
+      <template slot="tab-pane-3"> Notification </template>
       <template slot="tab-pane-4"> <permissions></permissions> </template>
     </tabs>
   </div>

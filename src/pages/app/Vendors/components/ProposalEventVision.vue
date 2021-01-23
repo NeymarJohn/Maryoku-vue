@@ -22,10 +22,9 @@
     <div class="mt-50">
       <div>
         <span class="font-size-30 font-bold-extra">
-          <img :src="`${$iconURL}Vendor+Landing+Page/art.svg`" class="page-icon mr-10" />
-          Upload Inspirational Photos
-        </span>
-        <span style="padding: 5px">(15 photos top, under 20 KB)</span>
+          <img :src="`${$iconURL}Vendor+Landing+Page/art.svg`" class="page-icon mr-10" />Upload Inspirational
+          Photos</span
+        ><span style="padding: 5px">(15 photos top, under 20 KB)</span>
       </div>
       <div style="padding: 10px 10px 30px 40px">Photos that could fit in with the concept</div>
       <proposal-inspirational-photos></proposal-inspirational-photos>

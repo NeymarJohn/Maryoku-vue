@@ -109,6 +109,7 @@ export default {
   },
   created() {
     console.log(numberToWord);
+    this.$store.dispatch("event/getTimelineDates", this.event.id);
   },
   computed: {
     event() {

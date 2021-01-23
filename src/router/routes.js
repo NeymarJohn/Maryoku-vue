@@ -66,7 +66,6 @@ const Invited = () => import("@/pages/Dashboard/Pages/Invited.vue");
 
 const Vendors = () => import("@/pages/Dashboard/Pages/VendorsList.vue");
 const WelcomeEventPage = () => import("@/pages/Dashboard/Pages/WelcomeEvent.vue");
-const ConceptDetail = () => import("@/pages/Dashboard/Pages/ConceptDetail.vue");
 let authPages = {
     path: "/",
     component: AuthLayout,
@@ -516,7 +515,7 @@ let HomePages = {
     ],
 };
 
-let landingPages = {
+let RSVPPages = {
     path: "/app2",
     component: LandingPageLayout,
     name: "LandingPageLayout",
@@ -635,7 +634,7 @@ const routes = [
     vendorSignup,
     ProfilePages,
     EventPages,
-    landingPages,
+    RSVPPages,
     vendorListPage,
     feedbackPages,
     welcomeEventPage,
