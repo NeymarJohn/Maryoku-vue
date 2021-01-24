@@ -13,6 +13,7 @@
           :timelineDate="timelineDate"
           class="mt-10 mb-10"
           @remove="removeItem"
+          @cancel="cancelItem"
         ></timeline-item>
       </template>
 
@@ -121,6 +122,11 @@ export default {
           const itemIndex = this.timelineItems.findIndex((item) => item.id == removeItemData.item.id);
           this.timelineItems.splice(itemIndex, 1);
         });
+    },
+    cancelItem(itemData) {
+      if (!itemData.item.id || itemData.item.id === undefined) {
+        this.timelineItems.splice(itemData.index, 1);
+      }
     },
     remove() {
       this.$emit("remove");

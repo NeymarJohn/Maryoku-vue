@@ -41,13 +41,13 @@ export default {
     },
   },
   created() {
-    if (typeof this.value === "string") {
+    if (typeof this.value === "string" && !this.isNumeric(this.value)) {
       this.timeObject.ampm = this.value.split(" ")[1] ? this.value.split(" ")[1].trim() : "AM";
       const time = this.value.split(" ")[0];
       this.timeObject.hh = time.split(":")[0] ? time.split(":")[0].trim() : "00";
       this.timeObject.mm = time.split(":")[1] ? time.split(":")[1].trim() : "00";
-    } else if (typeof this.value === "number") {
-      const date = new Date(this.value);
+    } else if (typeof this.value === "number" || this.isNumeric(this.value)) {
+      const date = new Date(Number(this.value));
       this.timeObject.ampm = moment(date).format("A");
       this.timeObject.mm = moment(date).format("mm");
       this.timeObject.hh = moment(date).format("hh");
@@ -63,6 +63,13 @@ export default {
       time.setMinutes(mins);
       // this.time = moment(new Date(this.value)).format("hh:mm")
       this.$emit("input", time.toString());
+    },
+    isNumeric(str) {
+      if (typeof str != "string") return false; // we only process strings!
+      return (
+        !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+        !isNaN(parseFloat(str))
+      ); // ...and ensure strings of whitespace fail
     },
   },
   data() {

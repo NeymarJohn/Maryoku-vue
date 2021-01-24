@@ -1,3 +1,4 @@
+import Vue from "vue";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import EventNote from "@/models/EventNote";
@@ -87,13 +88,14 @@ const getters = {
     },
 };
 const actions = {
-    saveEventAction({ commit, state }, event) {
+    saveEventAction({ commit, state, dispatch }, event) {
         return new Promise((resolve, reject) => {
             event
                 // .for(event.calendar)
                 .save()
                 .then(res => {
                     commit("setEventData", res);
+                    dispatch("getTimelineDates", event.id);
                     resolve(event);
                 })
                 .catch(error => {
@@ -232,12 +234,15 @@ const actions = {
             });
     },
     getTimelineDates({ commit, state }, eventId) {
-        new EventTimelineDate()
-            .for(new CalendarEvent({ id: eventId }))
-            .get()
-            .then(res => {
-                console.log(res);
-            });
+        return new Promise((resolve, reject) => {
+            new EventTimelineDate()
+                .for(new CalendarEvent({ id: eventId }))
+                .get()
+                .then(res => {
+                    console.log(res);
+                    commit("setTimelineDates", res);
+                });
+        });
     },
 };
 
@@ -298,6 +303,7 @@ const mutations = {
 
     setTimelineDates(state, data) {
         state.timelineDates = data;
+        Vue.set(state.eventData, "timelineDates", data);
     },
 };
 

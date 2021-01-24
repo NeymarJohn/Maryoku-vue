@@ -109,7 +109,7 @@
           name="event-planner-tab-timeline-item-edit"
           class="event-planner-tab-timeline-item-edit md-red"
           v-else
-          @click="updateTimelineItem(item)"
+          @click="updateTimelineItem"
           >Save</md-button
         >
       </md-card-actions>
@@ -236,6 +236,16 @@ export default {
           this.$emit("save", { item: this.editingContent, index: this.index });
         });
     },
+    updateTimelineItem() {
+      this.editingContent.mode = "saved";
+      new EventTimelineItem(this.editingContent)
+        .for(new EventTimelineDate({ id: this.timelineDate.id }))
+        .save()
+        .then((res) => {
+          this.editingContent = res;
+          this.$emit("save", { item: this.editingContent, index: this.index });
+        });
+    },
     cancelTimelineItem() {
       this.editingContent = { ...this.item };
       this.editingContent.mode = "saved";
@@ -295,7 +305,7 @@ export default {
       // }, 100);
     },
     editTimeline() {
-      this.editingContent.mode = "edit";
+      this.$set(this.editingContent, "mode", "edit");
     },
     removeItem() {
       swal({
