@@ -203,66 +203,6 @@ export default {
       this.timelineDates.splice(deletingDateIndedx, 1);
       this.showDeleteConfirmModal = false;
     },
-    handleDrop(index, data) {
-      return;
-      if (!this.canEdit) {
-        swal({
-          title: "Sorry, you can't edit timeline. ",
-          showCancelButton: false,
-          confirmButtonClass: "md-button md-success",
-          confirmButtonText: "Ok, I got it",
-          buttonsStyling: false,
-        })
-          .then((result) => {
-            if (result.value === true) {
-              return;
-            }
-          })
-          .catch((err) => {});
-        return;
-      }
-      if (data) {
-        let block = Object.assign({}, data.block);
-        block.id = new Date().getTime(); //add temp id
-        block.mode = "edit";
-
-        let startDate = new Date(this.timeline[index].itemDay);
-        let endDate = new Date(this.timeline[index].itemDay);
-        const timelineItemsCount = this.timeline[index].items.length;
-        if (timelineItemsCount == 0) {
-          if (this.eventData.eventDayPart == "evening") {
-            startDate.setHours(19);
-            endDate.setHours(20);
-          } else {
-            startDate.setHours(8);
-            endDate.setHours(9);
-          }
-        } else {
-          const prevItem = this.timeline[index].items[timelineItemsCount - 1];
-          startDate.setHours(new Date(prevItem.endTime).getHours());
-          endDate.setHours(new Date(prevItem.endTime).getHours() + 1);
-        }
-
-        block.startTime = startDate;
-        block.endTime = endDate;
-
-        block.title = block.buildingBlockType;
-        block.startDuration = "am";
-        block.endDuration = "am";
-        block.attachmentName = "";
-        block.isItemLoading = false;
-        this.timeline[index].items.push(Object.assign({}, block));
-        this.disabledDragging = true;
-      } else {
-        setTimeout(this.updateTimelineITemsOrder, 100);
-      }
-      setTimeout(() => {
-        const scrollBtn = this.$refs.scrollBtn;
-        if (scrollBtn) {
-          scrollBtn.click();
-        }
-      }, 100);
-    },
     addSlot(dateIndex, templateIndex, slotData) {
       const newTimelineItem = this.gettingSlotData(slotData, this.timelineDates[dateIndex].date);
       newTimelineItem.groupNumber = templateIndex;

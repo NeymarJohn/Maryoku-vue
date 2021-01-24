@@ -137,13 +137,7 @@ export default {
     handleDrop(index, droppedData) {
       let block = Object.assign({}, droppedData.block);
       block.mode = "edit";
-      let startDate = new Date(this.timelineDate.date);
-      let endDate = new Date(this.timelineDate.date);
 
-      block.startTime = moment(`${this.timelineDate.date} 00:00 am`, "YYYY-MM-DD hh:mm a").valueOf();
-      block.endTime = moment(`${this.timelineDate.date} 00:00 am`, "YYYY-MM-DD hh:mm a").valueOf();
-
-      console.log(block);
       if (index == 0) {
         if (this.event.eventDayPart == "evening") {
           block.startTime = moment(`${this.timelineDate.date} 07:00 PM`, "YYYY-MM-DD hh:mm A").valueOf();
@@ -154,8 +148,8 @@ export default {
         }
       } else {
         const prevItem = this.groupedItems[index - 1];
-        block.startTime = prevItem.endTime;
-        block.endTime = prevItem.endTime + 3600 * 1000;
+        block.startTime = Number(prevItem.endTime);
+        block.endTime = Number(prevItem.endTime) + 3600 * 1000;
       }
 
       block.title = droppedData.block.buildingBlockType;

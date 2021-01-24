@@ -300,7 +300,6 @@ export default {
         title: item.title,
         buildingBlockType: item.buildingBlockType,
         description: item.description,
-        startTime: item.startTime,
         startTime: moment(`${item.date} ${item.startTime}`, "DD/MM/YY hh:mm a").valueOf(),
         endTime: moment(`${item.date} ${item.endTime}`, "DD/MM/YY hh:mm a").valueOf(),
         endDuration: item.endDuration,
