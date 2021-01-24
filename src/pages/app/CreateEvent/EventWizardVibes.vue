@@ -126,8 +126,10 @@ export default {
             localStorage.setItem("currentEventId", newEvent.id);
             if (newEvent.isFirstEvent) {
               this.$router.push({ path: `/welcome/event` });
+            } else if (newEvent.eventType.hasConcept){
+              this.$router.push({ path: `/events/${newEvent.id}/booking/concept`});
             } else {
-              this.$router.push({ path: `/events/${newEvent.id}/booking/overview` });
+              this.$router.push({ path: `/events/${newEvent.id}/booking/overview`});
             }
           })
           .catch((err) => {

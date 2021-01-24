@@ -67,12 +67,12 @@ select {
     }
 }
 .font-regular {
-    // font-family: "Manrope-Regular";
-    font-weight: 400;
+    font-family: "Manrope-Regular";
+    font-weight: 400 !important;
 }
 
 .font-bold-extra {
-    font-family: "Manrope-ExtraBold";
+    font-family: "Manrope-ExtraBold" !important;
 }
 
 .font-bold {
@@ -109,7 +109,7 @@ select {
 }
 
 .font-size-40 {
-    font-size: 40px;
+    font-size: 40px !important;
 }
 .font-size-50 {
     font-size: 50px;
@@ -356,7 +356,15 @@ pt-0 {
 .pb-50 {
     padding-bottom: 50px;
 }
-
+.pt-10 {
+    padding-top: 10px;
+}
+.pt-20 {
+    padding-top: 20px;
+}
+.pt-50 {
+    padding-top: 50px;
+}
 .py-5 {
     padding: 5px 0 !important;
 }
