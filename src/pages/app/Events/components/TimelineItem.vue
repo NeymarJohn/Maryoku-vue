@@ -211,7 +211,7 @@ export default {
     };
   },
   mounted() {
-    this.editingContent = this.item;
+    this.editingContent = { ...this.item };
     // this.$root.$on("apply-template", ({ item, block, index }) => {
     //   // this.timelineItems[item.date][index] = {};
     //   this.applyToTemplate(index, { ...item, action: "edited" }, block);
@@ -227,7 +227,7 @@ export default {
   },
   methods: {
     saveTimelineItem() {
-      this.editingContent.mode = "saved";
+      this.$set(this.editingContent, "mode", "saved");
       new EventTimelineItem(this.editingContent)
         .for(new EventTimelineDate({ id: this.timelineDate.id }))
         .save()
@@ -237,7 +237,7 @@ export default {
         });
     },
     updateTimelineItem() {
-      this.editingContent.mode = "saved";
+      this.$set(this.editingContent, "mode", "saved");
       new EventTimelineItem(this.editingContent)
         .for(new EventTimelineDate({ id: this.timelineDate.id }))
         .save()
@@ -248,7 +248,7 @@ export default {
     },
     cancelTimelineItem() {
       this.editingContent = { ...this.item };
-      this.editingContent.mode = "saved";
+      this.$set(this.editingContent, "mode", "saved");
       this.$emit("cancel", { item: this.editingContent, index: this.index });
     },
     formatDate(date) {

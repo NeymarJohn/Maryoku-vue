@@ -85,9 +85,9 @@ export default {
   watch: {
     timeObject: {
       handler(newValue) {
-        if (typeof this.value === "string") {
+        if (typeof this.value === "string" && !this.isNumeric(this.value)) {
           this.$emit("input", `${newValue.hh}:${newValue.mm} ${newValue.ampm}`);
-        } else if (typeof this.value === "number") {
+        } else if (typeof this.value === "number" || this.isNumeric(this.value)) {
           const timeStamp = moment(
             `${this.date} ${newValue.hh}:${newValue.mm} ${newValue.ampm}`,
             "DD/MM/YY hh:mm A",
