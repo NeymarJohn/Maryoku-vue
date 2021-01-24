@@ -56,6 +56,7 @@
           :timelineDate="scheduleDate"
           class="mt-10 mb-10 timeline-group-wrapper"
           @remove="removeItem"
+          :editMode="false"
         ></timeline-item>
       </template>
     </div>
@@ -108,7 +109,7 @@ export default {
     Modal,
   },
   created() {
-    console.log(numberToWord);
+    this.$store.dispatch("event/getTimelineDates", this.event.id);
   },
   computed: {
     event() {
@@ -159,8 +160,6 @@ export default {
     addNewDateAfterCurrent(scheduleDate) {
       const currentDate = new moment(scheduleDate, "YYYY-MM-DD");
       const newDate = moment(currentDate).add(1, "d");
-      console.log(this.timelineDates);
-
       if (this.timelineDates.findIndex((item) => item.date === newDate.format("YYYY-MM-DD")) >= 0) {
         swal({
           title: `Sorry you have timelins on ${newDate.format("DD/MM/YY")}`,
@@ -265,8 +264,6 @@ export default {
       }, 100);
     },
     addSlot(dateIndex, templateIndex, slotData) {
-      console.log("dataeImdex0", dateIndex);
-      console.log("template", templateIndex);
       const newTimelineItem = this.gettingSlotData(slotData, this.timelineDates[dateIndex].date);
       newTimelineItem.groupNumber = templateIndex;
       this.timelineDates[dateIndex].timelineItems.push(newTimelineItem);

@@ -5,7 +5,7 @@ import Currency from "@/models/Currency";
 import EventTheme from "@/models/EventTheme";
 import EventComponent from "@/models/EventComponent";
 import { postReq, getReq } from "@/utils/token";
-
+import EventTimelineDate from "@/models/EventTimelineDate";
 const state = {
     currentUser: {},
     param1: "test param",
@@ -40,6 +40,7 @@ const state = {
     eventTypes: [],
     eventThemes: [],
     calendarId: null,
+    timelineDates: [],
 };
 
 const getters = {
@@ -103,7 +104,7 @@ const actions = {
     getEventAction({ commit, state }, { eventId }) {
         return new Promise((resolve, reject) => {
             CalendarEvent.find(eventId).then(event => {
-                commit('initEventData')
+                commit("initEventData");
                 commit("setEventData", event);
                 resolve(event);
             });
@@ -183,9 +184,7 @@ const actions = {
         const calendar = new Calendar({ id: calendarId });
         const event = new CalendarEvent({ id: eventId });
         const filters = data.filters || [];
-        console.log(filters);
         const res = await postReq(`/1/calendars/${calendarId}/events/${eventId}/notes/search`, { filters: filters });
-        console.log(res.data);
         commit("setEventNotes", res.data);
 
         // new EventNote()
@@ -232,6 +231,14 @@ const actions = {
                 commit("updateEventNote", { index, note });
             });
     },
+    getTimelineDates({ commit, state }, eventId) {
+        new EventTimelineDate()
+            .for(new CalendarEvent({ id: eventId }))
+            .get()
+            .then(res => {
+                console.log(res);
+            });
+    },
 };
 
 const mutations = {
@@ -257,7 +264,6 @@ const mutations = {
         state.components = components;
     },
     setInitBookingRequirements(state, requirements) {
-        console.log("setInitBookingRequirements", requirements);
         state.initBookingRequirements = requirements;
     },
     setBookingRequirements(state, requirements) {
@@ -288,6 +294,10 @@ const mutations = {
     },
     setCurrentUserData(state, data) {
         state.currentUser = data;
+    },
+
+    setTimelineDates(state, data) {
+        state.timelineDates = data;
     },
 };
 

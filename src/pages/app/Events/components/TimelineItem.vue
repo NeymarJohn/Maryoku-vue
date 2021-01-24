@@ -121,7 +121,7 @@
     >
       <vue-element-loading :active.sync="editingContent.isItemLoading" spinner="ring" color="#FF547C" />
       <md-card-content style="min-height: 80px">
-        <div class="timeline-actions">
+        <div class="timeline-actions" v-if="editMode">
           <md-button class="md-icon-button md-simple" @click="editTimeline">
             <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon" style="height: 30px" />
           </md-button>
@@ -181,6 +181,10 @@ export default {
     MaryokuTextarea,
   },
   props: {
+    editMode: {
+      type: Boolean,
+      default: true,
+    },
     item: {
       type: Object,
       default: () => {},
@@ -207,7 +211,6 @@ export default {
     };
   },
   mounted() {
-    console.log("thjis.item", this.item);
     this.editingContent = this.item;
     // this.$root.$on("apply-template", ({ item, block, index }) => {
     //   // this.timelineItems[item.date][index] = {};
@@ -225,12 +228,10 @@ export default {
   methods: {
     saveTimelineItem() {
       this.editingContent.mode = "saved";
-      console.log(this.editingContent);
       new EventTimelineItem(this.editingContent)
         .for(new EventTimelineDate({ id: this.timelineDate.id }))
         .save()
         .then((res) => {
-          console.log(res);
           this.editingContent = res;
           this.$emit("save", { item: this.editingContent, index: this.index });
         });
@@ -251,9 +252,6 @@ export default {
     },
     applyToTemplate({ item: template, block: selectedBlock, index }) {
       if (selectedBlock) {
-        console.log("adding block");
-        console.log(selectedBlock);
-        console.log(template);
         let block = Object.assign({}, selectedBlock);
         block.id = template.id;
         block.mode = "edit";
@@ -310,7 +308,6 @@ export default {
       })
         .then((result) => {
           if (result.value === true) {
-            console.log(this.item);
             this.$emit("remove", { index: this.index, item: this.editingContent });
           }
         })
