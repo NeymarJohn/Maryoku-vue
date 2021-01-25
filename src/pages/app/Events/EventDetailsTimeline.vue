@@ -5,7 +5,7 @@
       <div class="header-name">
         <div class="font-size-30 font-bold text-transform-capitalize mb-20">
           <img :src="`${newTimeLineIconsURL}timeline-title.svg`" class="page-icon" />
-          CREATE TIMLINE
+          CREATE TIMELINE
         </div>
         <div class="font-size-16" v-if="isEditMode">
           <b>Things are warming up!</b> It’s time to create your event timeline! <br />We helped you with the basic

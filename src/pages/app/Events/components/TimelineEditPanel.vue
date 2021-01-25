@@ -10,7 +10,7 @@
             </div>
           </div>
         </div>
-        <div class="header-actions">
+        <div class="header-actions" v-if="isEditMode">
           <md-button
             class="md-default md-icon-button md-simple md-just-icon md-wrapper edit-btn"
             style="font-size: 26px !important"
@@ -213,6 +213,7 @@ export default {
       newTimelineItem.groupNumber = templateIndex;
       this.timelineDates[dateIndex].timelineItems.push(newTimelineItem);
       this.timelineDates[dateIndex].templates.splice(templateIndex, 0, { name: "test", type: "slot" });
+      console.log(this.timelineDates);
     },
     gettingSlotData(data, scheduleDate) {
       let block = Object.assign({}, data.block);
