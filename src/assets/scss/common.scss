@@ -67,12 +67,12 @@ select {
     }
 }
 .font-regular {
-    // font-family: "Manrope-Regular";
-    font-weight: 400;
+    font-family: "Manrope-Regular";
+    font-weight: 400 !important;
 }
 
 .font-bold-extra {
-    font-family: "Manrope-ExtraBold";
+    font-family: "Manrope-ExtraBold" !important;
 }
 
 .font-bold {

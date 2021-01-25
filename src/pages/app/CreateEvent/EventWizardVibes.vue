@@ -119,17 +119,16 @@ export default {
         this.$router.push({ path: `/create-workspace` });
       } else {
         const eventData = this.getEventData();
-        eventData.calendar = new Calendar({ id: this.$store.state.auth.user.profile.defaultCalendarId });
         eventService
           .saveEventFromStorage(this.$store.state.auth.user.profile.defaultCalendarId)
           .then((newEvent) => {
             localStorage.setItem("currentEventId", newEvent.id);
             if (newEvent.isFirstEvent) {
               this.$router.push({ path: `/welcome/event` });
-            } else if (newEvent.eventType.hasConcept){
-              this.$router.push({ path: `/events/${newEvent.id}/booking/concept`});
+            } else if (newEvent.eventType.hasConcept) {
+              this.$router.push({ path: `/events/${newEvent.id}/booking/concept` });
             } else {
-              this.$router.push({ path: `/events/${newEvent.id}/booking/overview`});
+              this.$router.push({ path: `/events/${newEvent.id}/booking/overview` });
             }
           })
           .catch((err) => {

@@ -7,7 +7,7 @@
     class="timeline-empty-drop"
     :class="{ dropping: isHover }"
   >
-    <div v-if="placeHolder" class="timeline-empty-start">Pleas drop here one of timline slots</div>
+    <div v-if="placeHolder" class="timeline-empty-start">Pleas drop here one of timeline slots</div>
     <div v-else class="timeline-empty-item">
       <div class="timeline-image" :style="hoverStyle">
         <md-icon>add</md-icon>

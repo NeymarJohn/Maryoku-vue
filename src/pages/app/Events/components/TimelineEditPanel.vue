@@ -10,7 +10,7 @@
             </div>
           </div>
         </div>
-        <div class="header-actions">
+        <div class="header-actions" v-if="isEditMode">
           <md-button
             class="md-default md-icon-button md-simple md-just-icon md-wrapper edit-btn"
             style="font-size: 26px !important"
@@ -33,7 +33,12 @@
           :key="`${template.name}-${templateIndex}`"
           class="timeline-group-wrapper time-line-item"
         >
-          <timeline-empty :index="templateIndex" :date="scheduleDate" v-if="templateIndex == 0"></timeline-empty>
+          <timeline-empty
+            :index="templateIndex"
+            :date="scheduleDate"
+            v-if="templateIndex == 0"
+            @addSlot="addSlot(dateIndex, templateIndex + 1, ...arguments)"
+          ></timeline-empty>
           <timeline-template-container
             :template="template"
             :groupIndex="templateIndex"
@@ -56,6 +61,7 @@
           :timelineDate="scheduleDate"
           class="mt-10 mb-10 timeline-group-wrapper"
           @remove="removeItem"
+          :editMode="false"
         ></timeline-item>
       </template>
     </div>
@@ -108,7 +114,7 @@ export default {
     Modal,
   },
   created() {
-    console.log(numberToWord);
+    this.$store.dispatch("event/getTimelineDates", this.event.id);
   },
   computed: {
     event() {
@@ -159,8 +165,6 @@ export default {
     addNewDateAfterCurrent(scheduleDate) {
       const currentDate = new moment(scheduleDate, "YYYY-MM-DD");
       const newDate = moment(currentDate).add(1, "d");
-      console.log(this.timelineDates);
-
       if (this.timelineDates.findIndex((item) => item.date === newDate.format("YYYY-MM-DD")) >= 0) {
         swal({
           title: `Sorry you have timelins on ${newDate.format("DD/MM/YY")}`,
@@ -204,105 +208,37 @@ export default {
       this.timelineDates.splice(deletingDateIndedx, 1);
       this.showDeleteConfirmModal = false;
     },
-    handleDrop(index, data) {
-      return;
-      if (!this.canEdit) {
-        swal({
-          title: "Sorry, you can't edit timeline. ",
-          showCancelButton: false,
-          confirmButtonClass: "md-button md-success",
-          confirmButtonText: "Ok, I got it",
-          buttonsStyling: false,
-        })
-          .then((result) => {
-            if (result.value === true) {
-              return;
-            }
-          })
-          .catch((err) => {});
-        return;
-      }
-      if (data) {
-        let block = Object.assign({}, data.block);
-        block.id = new Date().getTime(); //add temp id
-        block.mode = "edit";
-
-        let startDate = new Date(this.timeline[index].itemDay);
-        let endDate = new Date(this.timeline[index].itemDay);
-        const timelineItemsCount = this.timeline[index].items.length;
-        if (timelineItemsCount == 0) {
-          if (this.eventData.eventDayPart == "evening") {
-            startDate.setHours(19);
-            endDate.setHours(20);
-          } else {
-            startDate.setHours(8);
-            endDate.setHours(9);
-          }
-        } else {
-          const prevItem = this.timeline[index].items[timelineItemsCount - 1];
-          startDate.setHours(new Date(prevItem.endTime).getHours());
-          endDate.setHours(new Date(prevItem.endTime).getHours() + 1);
-        }
-
-        block.startTime = startDate;
-        block.endTime = endDate;
-
-        block.title = block.buildingBlockType;
-        block.startDuration = "am";
-        block.endDuration = "am";
-        block.attachmentName = "";
-        block.isItemLoading = false;
-        this.timeline[index].items.push(Object.assign({}, block));
-        this.disabledDragging = true;
-      } else {
-        setTimeout(this.updateTimelineITemsOrder, 100);
-      }
-      setTimeout(() => {
-        const scrollBtn = this.$refs.scrollBtn;
-        if (scrollBtn) {
-          scrollBtn.click();
-        }
-      }, 100);
-    },
     addSlot(dateIndex, templateIndex, slotData) {
-      console.log("dataeImdex0", dateIndex);
-      console.log("template", templateIndex);
       const newTimelineItem = this.gettingSlotData(slotData, this.timelineDates[dateIndex].date);
       newTimelineItem.groupNumber = templateIndex;
       this.timelineDates[dateIndex].timelineItems.push(newTimelineItem);
       this.timelineDates[dateIndex].templates.splice(templateIndex, 0, { name: "test", type: "slot" });
+      console.log(this.timelineDates);
     },
     gettingSlotData(data, scheduleDate) {
       let block = Object.assign({}, data.block);
       block.mode = "edit";
 
-      let startDate = new Date(scheduleDate);
-      let endDate = new Date(scheduleDate);
-      // const timelineItemsCount = this.timeline[index].items.length;
-      // if (timelineItemsCount == 0) {
-      //   if (this.eventData.eventDayPart == "evening") {
-      //     startDate.setHours(19);
-      //     endDate.setHours(20);
-      //   } else {
-      //     startDate.setHours(8);
-      //     endDate.setHours(9);
-      //   }
-      // } else {
-      //   const prevItem = this.timeline[index].items[timelineItemsCount - 1];
-      //   startDate.setHours(new Date(prevItem.endTime).getHours());
-      //   endDate.setHours(new Date(prevItem.endTime).getHours() + 1);
-      // }
+      if (this.event.eventDayPart == "evening") {
+        block.startTime = moment(`${scheduleDate} 07:00 PM`, "YYYY-MM-DD hh:mm A").valueOf();
+        block.endTime = moment(`${scheduleDate} 08:00 PM`, "YYYY-MM-DD hh:mm A").valueOf();
+      } else {
+        block.startTime = moment(`${scheduleDate} 08:00 AM`, "YYYY-MM-DD hh:mm A").valueOf();
+        block.endTime = moment(`${scheduleDate} 09:00 AM`, "YYYY-MM-DD hh:mm A").valueOf();
+      }
 
-      block.startTime = startDate;
-      block.endTime = endDate;
-
-      block.title = block.buildingBlockType;
+      block.title = data.block.buildingBlockType;
       block.startDuration = "am";
       block.endDuration = "am";
       block.attachmentName = "";
       block.isItemLoading = false;
-      block.event = { id: this.event.id };
+      block.icon = data.block.icon;
+      block.date = this.scheduleDate;
+      block.groupNumber = this.groupIndex;
+      block.event = new CalendarEvent({ id: this.event.id });
+      this.isHover = false;
       delete block.id;
+      console.log(block);
       return block;
     },
     removeTemplate(dateIndex, templateIndex, template) {

@@ -12,7 +12,7 @@
             <md-button v-if="!isLoggedIn" class="md-simple md-black md-maryoku" @click="showSingupDialog"
               >Already A User?</md-button
             >
-            <md-menu v-else md-size="large" md-align-trigger>
+            <md-menu v-else md-size="medium" md-align-trigger>
               <md-button class="md-simple md-black md-maryoku normal-btn" md-menu-trigger>{{
                 tenantUser.name ? tenantUser.name : tenantUser.username
               }}</md-button>

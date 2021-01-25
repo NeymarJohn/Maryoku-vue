@@ -81,7 +81,7 @@ export default {
           id: "budget-item",
         };
         const timeline = {
-          title: "Set the agenda \ plan a head",
+          title: "Set the agenda  plan a head",
           status: this.event.timelineProgress === 100 ? "completed" : "not-complete",
           route: "booking/timeline",
           icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
@@ -100,9 +100,9 @@ export default {
         };
         const elements = [];
         elements.push(overview);
-        if (this.event.eventType.hasConcept) {
-          elements.push(concept);
-        }
+        // if (this.event.eventType.hasConcept) {
+        elements.push(concept);
+        // }
         elements.push(budget);
         elements.push(timeline);
         elements.push(campaign);
