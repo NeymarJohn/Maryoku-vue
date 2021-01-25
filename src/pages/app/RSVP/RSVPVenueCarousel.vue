@@ -101,7 +101,7 @@ export default {
       }
       this.images[imageIndex].loading = true;
       S3Service.fileUpload(event.target.files[0], `${imageName}`, `campaigns/venues/${this.event.id}`).then((res) => {
-        this.images[imageIndex].src = imageUrl;
+        this.images[imageIndex].src = `${imageUrl}?timestamp=${new Date().getTime()}`;
         this.images[imageIndex].loading = false;
       });
       this.$emit("change", this.images);
@@ -121,6 +121,9 @@ export default {
     overflow: hidden;
     position: relative;
     .carousel-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       &.whiteBlack {
         filter: grayscale(1);
       }
