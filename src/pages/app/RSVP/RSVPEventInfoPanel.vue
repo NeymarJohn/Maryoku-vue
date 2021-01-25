@@ -9,7 +9,7 @@
         <span :class="{ underline: !editable }">WHEN?</span>
       </div>
       <div class="event-info-item-content">
-        <span>{{ $dateUtil.formatScheduleDay(event.eventStartMillis, "MMM DD, YYYY hh:mm A ") }}</span>
+        {{ $dateUtil.formatScheduleDay(event.eventStartMillis, "MMM DD, YYYY hh:mm A ") }}
       </div>
     </div>
     <div class="event-info-item" v-if="!isVirtualEvent">
@@ -20,9 +20,7 @@
         </div>
         <span :class="{ underline: !editable }">WHERE?</span>
       </div>
-      <div class="event-info-item-content">
-        <span>{{ event.location }}</span>
-      </div>
+      <div class="event-info-item-content">{{ event.location }}</div>
     </div>
     <div class="event-info-item" v-else>
       <div class="event-info-item-title font-size-22 font-bold-extra">
@@ -32,7 +30,7 @@
         </div>
         <span :class="{ underline: !editable }">WHERE?</span>
       </div>
-      <div class="event-info-item-content"><span>Zoom</span></div>
+      <div class="event-info-item-content">Zoom</div>
     </div>
     <div class="event-info-item" v-if="!isVirtualEvent">
       <div class="event-info-item-title font-size-22 font-bold-extra">
@@ -44,9 +42,9 @@
       </div>
       <div class="event-info-item-content d-flex align-center" v-if="!editingPlusOne">
         <span>{{ isPluseOne ? "+1" : "Solo" }} &emsp;</span>
-        <md-button class="md-simple edit-btn md-red" v-if="editable" @click="editingPlusOne = !editingPlusOne">
-          Edit
-        </md-button>
+        <md-button class="md-simple edit-btn md-red" v-if="editable" @click="editingPlusOne = !editingPlusOne"
+          >Edit</md-button
+        >
       </div>
       <div class="event-info-item-content d-flex align-center" v-else>
         <!-- <input type="text" v-model="isPluseOne" /> -->
@@ -70,12 +68,10 @@
       </div>
 
       <div class="event-info-item-content" v-if="!editingArrival">
-        <span>
-          {{ event.arrival || "-" }}&emsp;
-          <md-button class="md-simple edit-btn md-red" v-if="editable" @click="editingArrival = !editingArrival">
-            Edit</md-button
-          >
-        </span>
+        {{ event.arrival || "-" }}&emsp;
+        <md-button class="md-simple edit-btn md-red" v-if="editable" @click="editingArrival = !editingArrival"
+          >Edit</md-button
+        >
       </div>
       <div class="event-info-item-content d-flex align-center font-size-20" v-else>
         <input type="text" v-model="eventArrival" />
@@ -150,8 +146,8 @@ export default {
   .event-info-item {
     margin-bottom: 50px;
     display: flex;
-    align-items: stretch;
-    // flex-flow: wrap;
+    align-items: center;
+    flex-flow: wrap;
     &-icon {
       width: 42px;
       height: 42px;
@@ -189,9 +185,6 @@ export default {
     &-content {
       font-size: 20px;
       padding-left: 10px;
-      word-break: break-all;
-      display: flex;
-      align-items: center;
       .maryoku-btn {
         margin: 0;
       }

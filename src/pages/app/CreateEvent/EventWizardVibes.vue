@@ -114,7 +114,7 @@ export default {
     createEvent() {
       // in case that user is signed
       const tenantId = this.$authService.resolveTenantId();
-      if (tenantId.toLowerCase() === "default") {
+      if (tenantId.toLowerCase() === "default" || !this.tenantUser.tenants.includes(tenantId)) {
         localStorage.setItem("event", JSON.stringify(this.getEventData()));
         this.$router.push({ path: `/create-workspace` });
       } else {

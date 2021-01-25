@@ -23,7 +23,6 @@ const defaultSettings = {
     },
 };
 const defaultCampaignData = {
-    initialized: false,
     SAVING_DATE: {
         title: "Event Name",
         description:
@@ -176,9 +175,6 @@ const mutations = {
         Vue.set(state, "COMING_SOON", null);
         Vue.set(state, "FEEDBACK", null);
     },
-    setInitialized(state, value) {
-        Vue.set(state, "initialized", value);
-    },
 };
 const getters = {
     campaignIssued(state) {
@@ -208,10 +204,6 @@ const getters = {
 const actions = {
     getCampaigns({ commit, state }, { event }) {
         return new Promise((resolve, reject) => {
-            if (state.initialized) {
-                resolve(state);
-                return;
-            }
             new Campaign()
                 .for(new CalendarEvent({ id: event.id }))
                 .get()
@@ -280,7 +272,6 @@ const actions = {
                             data: { ...defaultCampaignData["FEEDBACK"], ...defaultData },
                         });
                     }
-                    commit("setInitialized", true);
                     resolve(campaigns);
                 });
         });

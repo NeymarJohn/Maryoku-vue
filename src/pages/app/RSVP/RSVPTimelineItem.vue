@@ -9,9 +9,6 @@
         >
         <span class="item-title">{{ timeline.title }}</span>
       </div>
-      <div class="item-description">
-        {{ timeline.description }}
-      </div>
     </div>
   </div>
 </template>
@@ -72,14 +69,6 @@ export default {
     border-left: 1px solid #707070;
     padding-left: 0.7em;
   }
-  .item-description {
-    font-size: 14px;
-    font-weight: normal;
-    line-height: 1em;
-    margin-top: 15px;
-    font-family: "Manrope-Regular";
-    word-break: break-all;
-  }
   &-content {
     padding: 30px;
     border-width: 2px;
@@ -104,9 +93,6 @@ export default {
       font-size: 16px;
     }
     .item-title {
-      font-size: 16px;
-    }
-    .item-description {
       font-size: 16px;
     }
     &-content {

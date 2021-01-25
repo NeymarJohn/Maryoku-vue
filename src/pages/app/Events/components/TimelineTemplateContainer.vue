@@ -14,7 +14,6 @@
           class="mt-10 mb-10"
           @remove="removeItem"
           @cancel="cancelItem"
-          @save="saveItem"
         ></timeline-item>
       </template>
 
@@ -116,16 +115,13 @@ export default {
   },
   methods: {
     removeItem(removeItemData) {
-      const itemIndex = this.timelineItems.findIndex((item) => item.id == removeItemData.item.id);
       new EventTimelineItem(removeItemData.item)
         .for(new EventTimelineDate({ id: this.timelineDate.id }))
         .delete()
         .then((res) => {
+          const itemIndex = this.timelineItems.findIndex((item) => item.id == removeItemData.item.id);
           this.timelineItems.splice(itemIndex, 1);
         });
-    },
-    saveItem() {
-      this.$store.dispatch("event/getTimelineDates", this.event.id);
     },
     cancelItem(itemData) {
       if (!itemData.item.id || itemData.item.id === undefined) {
@@ -171,7 +167,6 @@ export default {
       block.date = this.timelineDate.date;
       block.groupNumber = this.groupIndex;
       block.event = new CalendarEvent({ id: this.event.id });
-      block.timelineDate = new EventTimelineDate({ id: this.timelineDate.id });
       this.isHover = false;
       delete block.id;
       this.timelineItems.push(block);

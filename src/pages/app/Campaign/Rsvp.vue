@@ -263,8 +263,7 @@ export default {
         });
       }
       let coverImage = this.editingContent.coverImage;
-      console.log(coverImage);
-      if (coverImage.indexOf("RSVP2-middle") >= 0) {
+      if (coverImage.indexOf("RSVP2-middle")) {
         // if coverImage is default
         coverImage = this.event.concept
           ? this.event.concept.images[0].url

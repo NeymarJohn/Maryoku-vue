@@ -36,6 +36,12 @@ export default {
       (tenantUser) => {
         const tenantId = this.$authService.resolveTenantId();
         this.$authService.setTenant(tenantId);
+
+        //check if user doesn't have any tenants
+        if (!tenantUser.tenants || tenantUser.tenants.length === 0) {
+          this.$router.push({ path: "/create-event-wizard" });
+          return;
+        }
         if (tenantId.toLowerCase() === "default") {
           if (tenantUser.tenants && tenantUser.tenants.length > 0) {
             this.$router.push({ name: "ChooseWorkspace" });
