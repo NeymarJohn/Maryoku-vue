@@ -33,7 +33,12 @@
           :key="`${template.name}-${templateIndex}`"
           class="timeline-group-wrapper time-line-item"
         >
-          <timeline-empty :index="templateIndex" :date="scheduleDate" v-if="templateIndex == 0"></timeline-empty>
+          <timeline-empty
+            :index="templateIndex"
+            :date="scheduleDate"
+            v-if="templateIndex == 0"
+            @addSlot="addSlot(dateIndex, templateIndex + 1, ...arguments)"
+          ></timeline-empty>
           <timeline-template-container
             :template="template"
             :groupIndex="templateIndex"
@@ -213,33 +218,26 @@ export default {
       let block = Object.assign({}, data.block);
       block.mode = "edit";
 
-      let startDate = new Date(scheduleDate);
-      let endDate = new Date(scheduleDate);
-      // const timelineItemsCount = this.timeline[index].items.length;
-      // if (timelineItemsCount == 0) {
-      //   if (this.eventData.eventDayPart == "evening") {
-      //     startDate.setHours(19);
-      //     endDate.setHours(20);
-      //   } else {
-      //     startDate.setHours(8);
-      //     endDate.setHours(9);
-      //   }
-      // } else {
-      //   const prevItem = this.timeline[index].items[timelineItemsCount - 1];
-      //   startDate.setHours(new Date(prevItem.endTime).getHours());
-      //   endDate.setHours(new Date(prevItem.endTime).getHours() + 1);
-      // }
+      if (this.event.eventDayPart == "evening") {
+        block.startTime = moment(`${scheduleDate} 07:00 PM`, "YYYY-MM-DD hh:mm A").valueOf();
+        block.endTime = moment(`${scheduleDate} 08:00 PM`, "YYYY-MM-DD hh:mm A").valueOf();
+      } else {
+        block.startTime = moment(`${scheduleDate} 08:00 AM`, "YYYY-MM-DD hh:mm A").valueOf();
+        block.endTime = moment(`${scheduleDate} 09:00 AM`, "YYYY-MM-DD hh:mm A").valueOf();
+      }
 
-      block.startTime = startDate;
-      block.endTime = endDate;
-
-      block.title = block.buildingBlockType;
+      block.title = data.block.buildingBlockType;
       block.startDuration = "am";
       block.endDuration = "am";
       block.attachmentName = "";
       block.isItemLoading = false;
-      block.event = { id: this.event.id };
+      block.icon = data.block.icon;
+      block.date = this.scheduleDate;
+      block.groupNumber = this.groupIndex;
+      block.event = new CalendarEvent({ id: this.event.id });
+      this.isHover = false;
       delete block.id;
+      console.log(block);
       return block;
     },
     removeTemplate(dateIndex, templateIndex, template) {

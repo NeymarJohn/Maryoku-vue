@@ -48,12 +48,11 @@ class EventService {
     saveEventFromStorage(calendarId) {
         const editingEvent = JSON.parse(localStorage.getItem("event"));
         delete editingEvent["id"];
-        const calendar = new Calendar({ id: calendarId });
         return new Promise((resolve, reject) => {
             let newEvent = new CalendarEvent({
                 ...editingEvent,
                 expectedAttendacePercent: 0,
-                calendar: calendar,
+                // calendar: calendar,
                 occasion: editingEvent.occasion ? editingEvent.occasion.value : "",
                 budgetPerPerson: 0,
                 totalBudget: 0,
@@ -63,7 +62,6 @@ class EventService {
                 editable: true,
                 guestType: editingEvent.guestType.name,
             })
-                .for(calendar)
                 .save()
                 .then(response => {
                     localStorage.removeItem("event");
