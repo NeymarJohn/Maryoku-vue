@@ -1,5 +1,5 @@
 <template>
-  <div class="avatar-symbol" :style="`background-color:${color}`">
+  <div class="avatar-symbol">
     {{ symbol }}
   </div>
 </template>
@@ -9,10 +9,6 @@ export default {
     name: {
       type: String,
       default: "",
-    },
-    color: {
-      type: String,
-      default: "#F51355",
     },
   },
   computed: {

@@ -8,7 +8,7 @@
   </div>
 </template>
 <script>
-import moment from "moment";
+import moment from 'moment'
 export default {
   name: "time-input",
   props: {
@@ -17,45 +17,38 @@ export default {
      * @model
      */
     value: {
-      type: [String, Date, Number],
-    },
-  },
-  created() {
-    if (typeof this.value === "string") {
-      this.ampm = new Date(this.value).getHours() >= 12 ? "pm" : "am";
-      this.time = moment(new Date(this.value)).format("HH:mm");
+      type: [String, Date, Number]
     }
   },
-  methods: {
+  created() {
+    if (typeof(this.value)==="string") {
+      this.ampm = new Date(this.value).getHours()>=12?"pm":"am"
+      this.time = moment(new Date(this.value)).format("HH:mm")
+    }
+  },
+  methods:{
     updateTime(e) {
-      console.log(e.target.value);
+      console.log(e.target.value);      
       let hours = Number(e.target.value.split(":")[0]);
-      let mins = Number(e.target.value.split(":")[1]);
+      let mins =  Number(e.target.value.split(":")[1]);
       const time = new Date(this.value);
       time.setHours(hours);
       time.setMinutes(mins);
       // this.time = moment(new Date(this.value)).format("hh:mm")
-      this.$emit("input", time.toString());
-    },
-    isNumeric(str) {
-      if (typeof str != "string") return false; // we only process strings!
-      return (
-        !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
-        !isNaN(parseFloat(str))
-      ); // ...and ensure strings of whitespace fail
-    },
+      this.$emit("input",time.toString())
+    }
   },
   data() {
     return {
-      ampm: new Date(this.value).getHours() >= 12 ? "pm" : "am",
-      time: moment(new Date(this.value)).format("HH:mm"),
+      ampm: new Date(this.value).getHours()>=12?"pm":"am",
+      time: moment(new Date(this.value)).format("HH:mm")
     };
   },
   watch: {
     value: function () {
-      this.ampm = new Date(this.value).getHours() >= 12 ? "pm" : "am";
-      this.time = moment(new Date(this.value)).format("HH:mm");
-    },
+      this.ampm = new Date(this.value).getHours()>=12?"pm":"am"
+      this.time = moment(new Date(this.value)).format("HH:mm")
+    }
   },
 };
 </script>

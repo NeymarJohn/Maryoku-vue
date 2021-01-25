@@ -109,7 +109,7 @@
           name="event-planner-tab-timeline-item-edit"
           class="event-planner-tab-timeline-item-edit md-red"
           v-else
-          @click="updateTimelineItem"
+          @click="updateTimelineItem(item)"
           >Save</md-button
         >
       </md-card-actions>
@@ -121,7 +121,7 @@
     >
       <vue-element-loading :active.sync="editingContent.isItemLoading" spinner="ring" color="#FF547C" />
       <md-card-content style="min-height: 80px">
-        <div class="timeline-actions" v-if="editMode">
+        <div class="timeline-actions">
           <md-button class="md-icon-button md-simple" @click="editTimeline">
             <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon" style="height: 30px" />
           </md-button>
@@ -181,10 +181,6 @@ export default {
     MaryokuTextarea,
   },
   props: {
-    editMode: {
-      type: Boolean,
-      default: true,
-    },
     item: {
       type: Object,
       default: () => {},
@@ -211,7 +207,8 @@ export default {
     };
   },
   mounted() {
-    this.editingContent = { ...this.item };
+    console.log("thjis.item", this.item);
+    this.editingContent = this.item;
     // this.$root.$on("apply-template", ({ item, block, index }) => {
     //   // this.timelineItems[item.date][index] = {};
     //   this.applyToTemplate(index, { ...item, action: "edited" }, block);
@@ -227,28 +224,20 @@ export default {
   },
   methods: {
     saveTimelineItem() {
-      this.$set(this.editingContent, "mode", "saved");
+      this.editingContent.mode = "saved";
+      console.log(this.editingContent);
       new EventTimelineItem(this.editingContent)
         .for(new EventTimelineDate({ id: this.timelineDate.id }))
         .save()
         .then((res) => {
-          this.editingContent = res;
-          this.$emit("save", { item: this.editingContent, index: this.index });
-        });
-    },
-    updateTimelineItem() {
-      this.$set(this.editingContent, "mode", "saved");
-      new EventTimelineItem(this.editingContent)
-        .for(new EventTimelineDate({ id: this.timelineDate.id }))
-        .save()
-        .then((res) => {
+          console.log(res);
           this.editingContent = res;
           this.$emit("save", { item: this.editingContent, index: this.index });
         });
     },
     cancelTimelineItem() {
       this.editingContent = { ...this.item };
-      this.$set(this.editingContent, "mode", "saved");
+      this.editingContent.mode = "saved";
       this.$emit("cancel", { item: this.editingContent, index: this.index });
     },
     formatDate(date) {
@@ -262,6 +251,9 @@ export default {
     },
     applyToTemplate({ item: template, block: selectedBlock, index }) {
       if (selectedBlock) {
+        console.log("adding block");
+        console.log(selectedBlock);
+        console.log(template);
         let block = Object.assign({}, selectedBlock);
         block.id = template.id;
         block.mode = "edit";
@@ -305,7 +297,7 @@ export default {
       // }, 100);
     },
     editTimeline() {
-      this.$set(this.editingContent, "mode", "edit");
+      this.editingContent.mode = "edit";
     },
     removeItem() {
       swal({
@@ -318,6 +310,7 @@ export default {
       })
         .then((result) => {
           if (result.value === true) {
+            console.log(this.item);
             this.$emit("remove", { index: this.index, item: this.editingContent });
           }
         })

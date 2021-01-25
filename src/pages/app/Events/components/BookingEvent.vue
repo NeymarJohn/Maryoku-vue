@@ -243,9 +243,14 @@ export default {
     currentRequirement: null,
   }),
   methods: {
-    ...mapMutations("event", ["setEventData", "setBookingRequirements", "setInitBookingRequirements"]),
+    ...mapMutations("event", [
+            "setEventData",
+            "setBookingRequirements",
+            "setInitBookingRequirements"
+    ]),
     ...mapActions("comment", ["getCommentComponents"]),
     getAllRequirements: async function () {
+
       this.allRequirements = this.storedRequirements[this.event.id];
 
       if (!this.allRequirements) {
@@ -254,10 +259,11 @@ export default {
         // set default value by conditionSript
         let event = this.$store.state.event.eventData;
 
-        _.each(this.allRequirements.data, (it) => {
+        _.each(this.allRequirements.data, it => {
           let requirements = it.requirements;
-          _.each(requirements, (requirement) => {
+          _.each(requirements, requirement => {
             requirement.map((ms) => {
+              // if (ms.conditionScript) console.log("conditionScript", com, cat);
               if (ms.conditionScript) ms.visible = eval(ms.conditionScript);
               if (ms.conditionScript) ms.isSelected = eval(ms.conditionScript);
               if (ms.defaultQtyScript) ms.defaultQty = Math.ceil(eval(ms.defaultQtyScript));
@@ -266,7 +272,7 @@ export default {
                 ms.mustHave = false;
               }
             });
-          });
+          })
         });
 
         let updatedRequirements = this.storedRequirements;
@@ -276,6 +282,7 @@ export default {
       }
     },
     getSelectedBlock() {
+      console.log(this.categoryList);
       this.selectedBlock = _.findWhere(this.categoryList, {
         id: this.blockId,
       });
@@ -291,6 +298,7 @@ export default {
     getRequirements() {
       getReq(`/1/events/${this.event.id}/components/${this.blockId}/requirements`)
         .then((res) => {
+          console.log("res", res.data.item);
           this.currentRequirement = res.data.item;
           this.showProposals = true;
           this.showCounterPage = true;
@@ -314,6 +322,7 @@ export default {
       // this.getRequirements();
     },
     setRequirements(requirementContent) {
+      console.log(requirementContent);
       this.currentRequirement = requirementContent;
       this.showCounterPage = true;
       this.showProposals = true;

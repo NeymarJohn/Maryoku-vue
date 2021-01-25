@@ -5,7 +5,7 @@
       <div class="header-name">
         <div class="font-size-30 font-bold text-transform-capitalize mb-20">
           <img :src="`${newTimeLineIconsURL}timeline-title.svg`" class="page-icon" />
-          CREATE TIMELINE
+          CREATE TIMLINE
         </div>
         <div class="font-size-16" v-if="isEditMode">
           <b>Things are warming up!</b> It’s time to create your event timeline! <br />We helped you with the basic
@@ -300,6 +300,7 @@ export default {
         title: item.title,
         buildingBlockType: item.buildingBlockType,
         description: item.description,
+        startTime: item.startTime,
         startTime: moment(`${item.date} ${item.startTime}`, "DD/MM/YY hh:mm a").valueOf(),
         endTime: moment(`${item.date} ${item.endTime}`, "DD/MM/YY hh:mm a").valueOf(),
         endDuration: item.endDuration,
@@ -587,88 +588,63 @@ export default {
       await getReq(`/1/events/${this.eventData.id}/timelineDates/clear`);
     },
     async revert() {
-      swal({
-        title: "Do you really want to revert all?",
-        showCancelButton: true,
-        confirmButtonClass: "md-button md-success",
-        confirmButtonText: "Ok",
-        cancelButtonClass: "md-button md-danger md-simple md-red ",
-        cancelButtonText: "Cancel",
-        buttonsStyling: false,
-      }).then(async (result) => {
-        if (result.value === true) {
-          await this.clearTimeline();
-          this.editingMode = "template";
-          const extendedMoment = extendMoment(moment);
-          const start = new Date(this.eventData.eventStartMillis);
-          const end = new Date(this.eventData.eventEndMillis);
-          const range = extendedMoment.range(moment(start), moment(end));
+      await this.clearTimeline();
+      this.editingMode = "template";
+      const extendedMoment = extendMoment(moment);
+      const start = new Date(this.eventData.eventStartMillis);
+      const end = new Date(this.eventData.eventEndMillis);
+      const range = extendedMoment.range(moment(start), moment(end));
 
-          const dateList = Array.from(range.by("day")).map((m) => m.format("YYYY-MM-DD"));
-          const timelineDates = [];
-          dateList.forEach((d) => {
-            timelineDates.push({
-              date: d,
-              templates: timelineTempates,
-              status: "editing",
-            });
-          });
-          this.$store.dispatch("event/saveEventAction", new CalendarEvent({ id: this.eventData.id, timelineDates }));
-        }
+      const dateList = Array.from(range.by("day")).map((m) => m.format("YYYY-MM-DD"));
+      const timelineDates = [];
+      dateList.forEach((d) => {
+        timelineDates.push({
+          date: d,
+          templates: timelineTempates,
+          status: "editing",
+        });
       });
+      this.$store.dispatch("event/saveEventAction", new CalendarEvent({ id: this.eventData.id, timelineDates }));
     },
     async startFromScratch() {
-      swal({
-        title: "Do you really want to start from scratch?",
-        showCancelButton: true,
-        confirmButtonClass: "md-button md-success",
-        confirmButtonText: "Ok",
-        cancelButtonClass: "md-button md-danger md-simple md-red ",
-        cancelButtonText: "Cancel",
-        buttonsStyling: false,
-      })
-        .then(async (result) => {
-          console.log(result);
-          if (result.value === true) {
-            await this.clearTimeline();
-            this.editingMode = "scratch";
-            const extendedMoment = extendMoment(moment);
-            const start = new Date(this.eventData.eventStartMillis);
-            const end = new Date(this.eventData.eventEndMillis);
-            const range = extendedMoment.range(moment(start), moment(end));
+      await this.clearTimeline();
+      this.editingMode = "scratch";
+      const extendedMoment = extendMoment(moment);
+      const start = new Date(this.eventData.eventStartMillis);
+      const end = new Date(this.eventData.eventEndMillis);
+      const range = extendedMoment.range(moment(start), moment(end));
 
-            const dateList = Array.from(range.by("day")).map((m) => m.format("YYYY-MM-DD"));
-            const timelineDates = [];
-            dateList.forEach((d) => {
-              timelineDates.push({
-                date: d,
-                templates: [{ name: "slot-1", type: "slot" }],
-                status: "editing",
-              });
-            });
-            this.$store.dispatch("event/saveEventAction", new CalendarEvent({ id: this.eventData.id, timelineDates }));
-          }
-        })
-        .catch((err) => {});
+      const dateList = Array.from(range.by("day")).map((m) => m.format("YYYY-MM-DD"));
+      const timelineDates = [];
+      dateList.forEach((d) => {
+        timelineDates.push({
+          date: d,
+          templates: [{ name: "slot-1", type: "slot" }],
+          status: "editing",
+        });
+      });
+      this.$store.dispatch("event/saveEventAction", new CalendarEvent({ id: this.eventData.id, timelineDates }));
     },
     saveDraft() {
-      this.$store
-        .dispatch("event/saveEventAction", new CalendarEvent({ id: this.eventData.id, timelineProgress: 0 }))
-        .then((event) => {
-          swal({
-            title: "Good Job! ",
-            text: "Your working timeline is saved successfully! You can change it anytime!",
-            showCancelButton: false,
-            confirmButtonClass: "md-button md-success",
-            confirmButtonText: "Ok",
-            buttonsStyling: false,
-          })
-            .then((result) => {
-              if (result.value === true) {
-                return;
-              }
-            })
-            .catch((err) => {});
+      this.$http
+        .post(`${process.env.SERVER_URL}/1/events/${this.eventData.id}/timelineItems`, this.timelineItems, {
+          headers: this.$auth.getAuthHeader(),
+        })
+        .then((res) => {
+          // swal({
+          //   title: "Good Job! ",
+          //   text: "Your working timeline is saved successfully! You can change it anytime!",
+          //   showCancelButton: false,
+          //   confirmButtonClass: "md-button md-success",
+          //   confirmButtonText: "Ok",
+          //   buttonsStyling: false,
+          // })
+          //   .then((result) => {
+          //     if (result.value === true) {
+          //       return;
+          //     }
+          //   })
+          //   .catch((err) => {});
         });
     },
     finalize() {
