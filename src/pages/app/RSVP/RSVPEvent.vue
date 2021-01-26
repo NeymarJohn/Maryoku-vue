@@ -75,7 +75,7 @@
           </template>
           <template slot="content">
             <div
-              v-for="(schedule, index) in scheduledDays"
+              v-for="(schedule, index) in timelineDates"
               :key="index"
               class="md-layout-item md-size-50 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra mt-20"
               style="padding: 0"
@@ -148,7 +148,7 @@
             sneak peak to the agenda
           </div>
           <div
-            v-for="(schedule, index) in scheduledDays"
+            v-for="(schedule, index) in timelineDates"
             :key="index"
             class="md-layout-item md-size-50 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra mt-20"
           >
@@ -284,6 +284,7 @@ import Rsvp from "@/models/Rsvp";
 import RsvpRequest from "@/models/RsvpRequest";
 import Campaign from "@/models/Campaign";
 import CalendarEvent from "@/models/CalendarEvent";
+import EventTimelineDate from "@/models/EventTimelineDate";
 import _ from "underscore";
 import RsvpInformationModal from "@/components/Modals/RSVP/InformationModal";
 import SettingReminderModal from "@/components/Modals/RSVP/SettingReminderModal";
@@ -345,6 +346,7 @@ export default {
       isSentRsvp: false,
       showRejectConformModal: false,
       rsvpData: null,
+      timelineDates: [],
     };
   },
   created() {
@@ -371,9 +373,13 @@ export default {
         if (!this.rsvpRequest.isOpened) {
           new RsvpRequest({ id: rsvpRequest.id, isOpened: true }).save();
         }
-        // if (this.rsvpRequest.status == "ACCEPTED") {
-        //   this.isSentRsvp = true;
-        // }
+
+        new EventTimelineDate()
+          .for(new CalendarEvent({ id: this.event.id }))
+          .get()
+          .then((timelineData) => {
+            this.timelineDates = timelineData;
+          });
       })
       .catch((e) => {
         console.log(e);

@@ -1,8 +1,11 @@
 <template>
   <div class="permission-row">
-    <div><avartar :name="`March Madness`" :color="palette[index]"></avartar></div>
-    <div>March Madness</div>
-    <div>March Madness<md-icon class="schedule-menu-btn-icon">keyboard_arrow_down</md-icon></div>
+    <div><avartar :name="user.email" :color="palette[index]"></avartar></div>
+    <div>{{ user.email }}</div>
+    <div>
+      {{ user.eventList[0].concept ? user.eventList[0].concept.name : user.eventList[0].title
+      }}<md-icon class="schedule-menu-btn-icon">keyboard_arrow_down</md-icon>
+    </div>
     <div>
       <popper trigger="click" :options="{ placement: 'bottom' }">
         <div class="popper white-card permit-page">
@@ -80,8 +83,11 @@ export default {
     },
     user: {
       type: Object,
-      default: {},
+      default: () => {},
     },
+  },
+  created() {
+    this.permittedRole = this.user.role;
   },
   data() {
     return {
