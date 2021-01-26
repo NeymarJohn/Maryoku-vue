@@ -38,7 +38,7 @@
             </div>
           </div>
           <div>
-            <div class="font-size-22 font-bold mb-10">{{ campaign.additionalData.carouselTitle }}</div>
+            <div class="font-size-22 font-bold mb-30 mt-30">{{ campaign.additionalData.carouselTitle }}</div>
             <rsvp-venue-carousel
               v-if="campaign.images"
               :editable="false"
@@ -109,6 +109,11 @@
       </div>
       <template v-else>
         <div class="rsvp-event-guid md-layout">
+          <div
+            class="rsvp-event-guid-background"
+            v-if="event.concept && event.concept.colors[0]"
+            :style="`background-color:${event.concept.colors[0].color}`"
+          ></div>
           <div
             class="md-layout-item md-size-50 md-small-size-100"
             v-if="campaign.visibleSettings && campaign.visibleSettings.showWearingGuide"
@@ -434,6 +439,12 @@ export default {
     isVirtualEvent() {
       return this.event.places && this.event.places.length === 1 && this.event.places[0] === "VIRTUAL";
     },
+    conceptColor() {
+      if (!this.event.concept || !this.event.concept.colors[0]) {
+        return "rgba(87, 242, 195, 0.23)";
+      }
+      return this.event.concept.colors[0].color;
+    },
   },
   methods: {
     ...mapActions("campaign", ["getCampaigns"]),
@@ -545,8 +556,17 @@ export default {
       }
     }
     &-guid {
-      background-color: rgba(#57f2c3, 0.23);
+      // background-color: rgba(#57f2c3, 0.23);
       padding: 60px 135px;
+      position: relative;
+      .rsvp-event-guid-background {
+        position: absolute;
+        opacity: 0.2;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+      }
     }
     &-timeline {
       padding: 60px 135px;
@@ -559,6 +579,7 @@ export default {
         border-radius: 2px;
       }
     }
+
     .owl-carousel {
       .owl-item {
         .item {
