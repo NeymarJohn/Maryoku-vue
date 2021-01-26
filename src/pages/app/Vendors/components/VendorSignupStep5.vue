@@ -157,7 +157,7 @@
           }
 
           h5{
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             margin: 0;
             color: #707070;
@@ -165,7 +165,7 @@
           }
 
           p{
-            font-size: 16px;
+            font-size: 14px;
             margin: 0;
             color: #707070;
             font-family: Georgia, "Times New Roman", Times, serif;
@@ -173,7 +173,7 @@
 
           button.review{
             margin: 25px 0;
-            padding: 15px 30px;
+            padding: 15px 40px;
             font-size: 18px;
             border-radius: 3px;
             border: solid 1px #707070;
