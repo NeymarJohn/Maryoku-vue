@@ -445,10 +445,6 @@ export default {
         this.renderChild = true;
         return;
       }
-      if (eventId !== this.eventData.id) {
-        // format campaign data
-        this.$store.commit("campaign/setInitialized", false);
-      }
       this.getEventAction({ eventId, calendar })
         .then((event) => {
           this.renderChild = true;

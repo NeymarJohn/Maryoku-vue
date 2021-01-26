@@ -32,21 +32,16 @@
           <title-editor
             :defaultValue="campaignData.additionalData.greetingWords"
             :key="campaignData.additionalData.greetingWords"
-            @change="handleChangeAddtionalData('greetingWords', ...arguments)"
-            class="mt-40 mb-30 font-bold-extra"
+            @change="changeGreetings"
+            class="mt-40 mb-30"
           ></title-editor>
         </div>
-        <div class="font-size-20 mt-50">
-          <title-editor
-            :defaultValue="campaignData.additionalData.prefixEvent"
-            @change="handleChangeAddtionalData('prefixEvent', ...arguments)"
-          ></title-editor>
-        </div>
+        <div class="font-size-20 mt-50">YOU ARE INVITED TO</div>
         <title-editor
           :defaultValue="campaignTitle"
           :key="campaignTitle"
           @change="changeTitle"
-          class="mt-40 mb-30 font-size-60 font-bold-extra"
+          class="mt-40 mb-30 font-size-60"
         ></title-editor>
 
         <maryoku-textarea
@@ -61,11 +56,6 @@
         ></maryoku-textarea>
         <rsvp-event-info-panel class="mt-60" :event="event"></rsvp-event-info-panel>
         <div>
-          <title-editor
-            :defaultValue="campaignData.additionalData.carouselTitle"
-            @change="handleChangeAddtionalData('carouselTitle', ...arguments)"
-            class="font-size-20 mb-20"
-          ></title-editor>
           <div>
             <rsvp-venue-carousel :defaultImages="images" :event="event" @change="changeImage"></rsvp-venue-carousel>
           </div>
@@ -272,22 +262,6 @@ export default {
           value: { ...this.editingContent.additionalData, greetingWords },
         });
       }
-      if (!this.editingContent.additionalData.prefixEvent) {
-        const prefixEvent = `YOU ARE INVITED TO`;
-        this.$store.commit("campaign/setAttribute", {
-          name: "RSVP",
-          key: "additionalData",
-          value: { ...this.editingContent.additionalData, prefixEvent },
-        });
-      }
-      if (!this.editingContent.additionalData.carouselTitle) {
-        const carouselTitle = `ADD YOUR TITLE HERE`;
-        this.$store.commit("campaign/setAttribute", {
-          name: "RSVP",
-          key: "additionalData",
-          value: { ...this.editingContent.additionalData, carouselTitle },
-        });
-      }
       let coverImage = this.editingContent.coverImage;
       console.log(coverImage);
       if (coverImage.indexOf("RSVP2-middle") >= 0) {
@@ -404,11 +378,14 @@ export default {
         )
         .then((result) => {});
     },
-    handleChangeAddtionalData(key, value) {
-      this.$store.commit("campaign/setAddtionalData", {
+    changeGreetings(newGreetings) {
+      const additionalData = this.campaignData.additionalData;
+      console.log(this.campaignData);
+      additionalData.greetingWords = newGreetings;
+      this.$store.commit("campaign/setAttribute", {
         name: "RSVP",
-        key,
-        value,
+        key: "additionalData",
+        value: additionalData,
       });
     },
     setVisibleTimeline(visibility) {
