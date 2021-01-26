@@ -23,7 +23,7 @@
             </div>
 
             <div class="md-layout-item md-size-50 md-small-size-100">
-              <div class="mb-20">You Are Invited To</div>
+              <div class="mb-20">{{ campaign.additionalData.prefixEvent }}</div>
               <div class="font-bold-extra mb-30 campaign-title">{{ campaign.title }}</div>
               <div class="word-break mb-30">
                 {{ campaign.description }}
@@ -38,7 +38,7 @@
             </div>
           </div>
           <div>
-            <div class="font-size-22 font-bold mb-10">Check out the venue</div>
+            <div class="font-size-22 font-bold mb-10">{{ campaign.additionalData.carouselTitle }}</div>
             <rsvp-venue-carousel
               v-if="campaign.images"
               :editable="false"

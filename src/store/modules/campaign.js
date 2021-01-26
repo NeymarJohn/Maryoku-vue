@@ -57,6 +57,8 @@ const defaultCampaignData = {
             knowledge: "",
             knowledgeTitle: "WHAT SHOULD I KNOW?",
             zoomlink: "",
+            prefixEvent: "YOU ARE INVITED TO",
+            carouselTitle: "ADD YOUR TITLE HERE",
         },
         images: [
             {
@@ -178,6 +180,12 @@ const mutations = {
     },
     setInitialized(state, value) {
         Vue.set(state, "initialized", value);
+    },
+    setAddtionalData(state, { name, key, value }) {
+        if (!state[name].additionalData) {
+            Vue.set(state[name], "additionalData", {});
+        }
+        Vue.set(state[name].additionalData, key, value);
     },
 };
 const getters = {

@@ -78,7 +78,8 @@ export default {
     line-height: 1em;
     margin-top: 15px;
     font-family: "Manrope-Regular";
-    word-break: break-all;
+    word-break: break-word;
+    line-height: 1.5em;
   }
   &-content {
     padding: 30px;
