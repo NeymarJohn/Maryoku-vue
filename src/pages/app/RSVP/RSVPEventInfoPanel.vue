@@ -9,7 +9,7 @@
         <span :class="{ underline: !editable }">WHEN?</span>
       </div>
       <div class="event-info-item-content">
-        <span>{{ $dateUtil.formatScheduleDay(event.eventStartMillis, "MMM DD, YYYY hh:mm A ") }}</span>
+        <span>{{ $dateUtil.formatScheduleDay(startTime || event.eventStartMillis, "MMM DD, YYYY hh:mm A ") }}</span>
       </div>
     </div>
     <div class="event-info-item" v-if="!isVirtualEvent">
@@ -101,6 +101,10 @@ export default {
     zoomLink: {
       type: String,
       default: "",
+    },
+    startTime: {
+      type: Number,
+      default: 0,
     },
   },
   data() {

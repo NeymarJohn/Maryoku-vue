@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex campaign-title-editor font-bold-extra" v-if="!isEditing">
+  <div class="d-flex campaign-title-editor" v-if="!isEditing">
     {{ content }}
     <md-button class="md-simple md-icon-button edit-btn ml-10" @click="isEditing = true">
       <!-- <img :src="`${$iconURL}Campaign/edit-dark.svg`" style="width: 20px; margin-left: 20px" /> -->
@@ -9,7 +9,7 @@
   <div class="d-flex campaign-title-editor" v-else>
     <input
       v-model="content"
-      class="font-bold-extra"
+      class=""
       :class="{ isEditing: isEditing }"
       v-autowidth="{ maxWidth: '960px', minWidth: '20px', comfortZone: 0 }"
     />
