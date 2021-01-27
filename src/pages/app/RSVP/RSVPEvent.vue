@@ -34,6 +34,7 @@
                 :event="event"
                 :editable="false"
                 :zoomLink="campaign.additionalData.zoomlink"
+                :startTime="eventStartTime"
               ></rsvp-event-info-panel>
             </div>
           </div>
@@ -102,7 +103,7 @@
         >
         <hr style="margin-top: 40px" />
         <div class="text-center mb-50 mt-30">
-          Provided by
+          Powered by &nbsp;
           <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
           <span style="text-transform: uppercase">&#169;</span>
         </div>
@@ -158,8 +159,7 @@
             class="md-layout-item md-size-50 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra mt-20"
           >
             <div class="rsvp-event-timeline-day">
-              <span class="font-size-22 font-bold-extra">Day {{ $helper.numberToWord(index + 1) }}</span>
-              <span class="font-size-16">{{ $dateUtil.formatScheduleDay(schedule.date) }}</span>
+              <span class="font-size-22 font-bold-extra">{{ $dateUtil.formatScheduleDay(schedule.date) }}</span>
             </div>
             <div>
               <rsvp-timeline-item
@@ -171,7 +171,7 @@
           </div>
         </div>
         <div class="text-center mb-50 mt-30">
-          Provided by
+          Powered by &nbsp;
           <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
         </div>
       </template>
@@ -435,6 +435,12 @@ export default {
     },
     scheduledDays() {
       return this.event.timelineDates;
+    },
+    eventStartTime() {
+      if (this.timelineDates[0]) {
+        return Number(this.timelineDates[0].timelineItems[0] ? this.timelineDates[0].timelineItems[0].startTime : 0);
+      }
+      return 0;
     },
     isVirtualEvent() {
       return this.event.places && this.event.places.length === 1 && this.event.places[0] === "VIRTUAL";

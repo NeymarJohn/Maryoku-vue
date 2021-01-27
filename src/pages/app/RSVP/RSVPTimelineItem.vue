@@ -3,11 +3,11 @@
     <img class="item-icon" :src="`${$iconURL}Timeline-New/${timeline.icon.toLowerCase()}-circle.svg`" />
     <div class="rsvp-timeline-content" :style="`border-color:${timeline.color}`">
       <div>
-        <span class="item-time"
-          >{{ $dateUtil.formatScheduleTime(Number(timeline.startTime)) }} -
-          {{ $dateUtil.formatScheduleTime(Number(timeline.endTime)) }}</span
-        >
-        <span class="item-title">{{ timeline.title }}</span>
+        <div class="item-time">
+          {{ $dateUtil.formatScheduleTime(Number(timeline.startTime)) }} -
+          {{ $dateUtil.formatScheduleTime(Number(timeline.endTime)) }}
+        </div>
+        <div class="item-title">{{ timeline.title }}</div>
       </div>
       <div class="item-description">
         {{ timeline.description }}
@@ -39,7 +39,7 @@ export default {
     content: "";
     position: absolute;
     height: 100%;
-    border-left: 1px dashed #707070;
+    // border-left: 1px dashed #707070;
     left: 32px;
     top: 77px;
   }
@@ -69,8 +69,9 @@ export default {
     font-size: 20px;
     opacity: 0.87;
     color: #818080;
-    border-left: 1px solid #707070;
-    padding-left: 0.7em;
+    // border-left: 1px solid #707070;
+    // padding-left: 0.7em;
+    padding-top: 0.5em;
   }
   .item-description {
     font-size: 14px;
