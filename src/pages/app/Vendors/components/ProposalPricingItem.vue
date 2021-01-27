@@ -71,7 +71,7 @@
           <span>Subtotal</span>
         </div>
         <editable-proposal-sub-item
-          v-for="(s, sIndex) in servicesByCategory()"
+          v-for="(s, sIndex) in costedServices"
           :key="sIndex"
           :item="s"
           :active="true"
@@ -102,42 +102,26 @@
           <span>Total</span>
           <span>${{ getOrgPrice() | withComma }}</span>
         </div>
-        <div class="services-check-list-wrapper">
-          <h4>What do we include in this proposal?</h4>
-          <div class="check-list-cont">
-            <ul>
-              <li>
-                <check-list-item
-                  v-for="(s, sIndex) in proposalServices[category]"
-                  :key="sIndex"
-                  :name="s.requirementTitle"
-                  :iconUrl="iconUrl"
-                  :qty="s.requirementValue"
-                  :desc="`Lorem`"
-                />
-              </li>
-              <!-- <li>
-                <a class="add-service"><img :src="`${iconUrl}Asset 567.svg`"/>Add Another</a>
-              </li>-->
-            </ul>
-          </div>
-        </div>
-        <div class="extras-wrapper">
-          <h4><img :src="`${iconUrl}Asset 576.svg`" />Extras</h4>
-          <p>We suggest these features to the client with this proposal</p>
-          <div class="extra-items">
-            <check-list-item
-              v-for="(s, sIndex) in servicesByCategory()"
-              :key="sIndex"
-              :name="s.requirementTitle"
-              :iconUrl="iconUrl"
-              :desc="`Lorem`"
-              :extra="true"
-              :qty="s.requirementValue"
-              :price="`$${s.price}`"
-            />
-          </div>
-        </div>
+
+        <proposal-requirements
+          class="additional-service white-card"
+          tableCategory="included"
+          label="What Do We Include In This Proposal?"
+          icon="includedPrice.png"
+          description=""
+          key="included"
+          :canAdd="false"
+          :vendorCategory="category"
+        />
+        <proposal-requirements
+          class="additional-service white-card"
+          tableCategory="extra"
+          label="Extras"
+          icon="cost-requirements.png"
+          description="(Asking the client) Wold you like to upgrade & add one of those?"
+          key="extra"
+          :vendorCategory="category"
+        />
         <div class="attachments-cont">
           <h4>Attachments</h4>
           <div class="files-cont" v-if="proposalAttachments[category]">
@@ -156,12 +140,14 @@ import EditableProposalSubItem from "./EditableProposalSubItem.vue";
 import CheckListItem from "./CheckListItem.vue";
 import VendorService from "@/services/vendor.service";
 import { mapGetters } from "vuex";
+import ProposalRequirements from "./ProposalRequirements.vue";
 
 export default {
   name: "proposal-pricing-item",
   components: {
     EditableProposalSubItem,
     CheckListItem,
+    ProposalRequirements,
   },
   props: {
     category: String,
@@ -236,6 +222,42 @@ export default {
         s += this.pricesByCategory[category];
       });
       return s;
+    },
+    costedServices() {
+      return this.$store.state.vendorProposal.proposalCostServices[this.category];
+    },
+    includedServices() {
+      return this.$store.state.vendorProposal.proposalIncludedServices[this.category];
+    },
+    extraServices() {
+      return this.$store.state.vendorProposal.proposalExtraServices[this.category];
+    },
+    services: {
+      get: function () {
+        if (this.tableCategory === "cost")
+          return this.$store.state.vendorProposal.proposalCostServices[this.vendorCategory];
+        else if (this.tableCategory === "included")
+          return this.$store.state.vendorProposal.proposalIncludedServices[this.vendorCategory];
+        else if (this.tableCategory === "extra")
+          return this.$store.state.vendorProposal.proposalExtraServices[this.vendorCategory];
+      },
+      set: function (newServices) {
+        if (this.tableCategory === "cost")
+          this.$store.commit("vendorProposal/setCostServices", {
+            category: this.vendorCategory,
+            services: newServices,
+          });
+        else if (this.tableCategory === "included")
+          this.$store.commit("vendorProposal/setIncludedServices", {
+            category: this.vendorCategory,
+            services: newServices,
+          });
+        else if (this.tableCategory === "extra")
+          this.$store.commit("vendorProposal/setExtraServices", {
+            category: this.vendorCategory,
+            services: newServices,
+          });
+      },
     },
   },
   filters: {
@@ -370,7 +392,7 @@ export default {
     }
 
     .subitems {
-      background: #f7f7f7;
+      // background: #f7f7f7;
       margin-top: 30px;
 
       .editable-sub-items-header {
@@ -423,6 +445,13 @@ export default {
           }
         }
       }
+    }
+    .additional-service {
+      margin-left: -60px;
+      margin-right: -50px;
+      padding: 20px;
+      background: #ffffff;
+      margin-top: 10px;
     }
     .services-check-list-wrapper {
       background-color: #ffffff;

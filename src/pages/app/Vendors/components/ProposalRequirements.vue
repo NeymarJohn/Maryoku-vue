@@ -19,6 +19,7 @@
     </div>
     <div class="collapse-panel-content" v-if="isExpanded">
       <proposal-add-item-form
+        v-if="canAdd"
         :optionalRequirements="optionalRequirements"
         :serviceType="tableCategory"
         @addItem="addItem"
@@ -56,6 +57,10 @@ export default {
     vendorCategory: {
       type: String,
       default: "",
+    },
+    canAdd: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -163,7 +168,7 @@ export default {
     }
   }
   .collapse-panel-content {
-    padding: 0px 34px 34px;
+    padding: 0px 40px 40px;
   }
 }
 </style>
