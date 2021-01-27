@@ -1,8 +1,11 @@
 <template>
   <div class="permission-row">
-    <div><avartar :name="`March Madness`" :color="palette[index]"></avartar></div>
-    <div>March Madness</div>
-    <div>March Madness<md-icon class="schedule-menu-btn-icon">keyboard_arrow_down</md-icon></div>
+    <div><avartar :name="user.email" :color="palette[index]"></avartar></div>
+    <div>{{ user.email }}</div>
+    <div>
+      {{ user.eventList[0].concept ? user.eventList[0].concept.name : user.eventList[0].title
+      }}<md-icon class="schedule-menu-btn-icon">keyboard_arrow_down</md-icon>
+    </div>
     <div>
       <popper trigger="click" :options="{ placement: 'bottom' }">
         <div class="popper white-card permit-page">
@@ -56,7 +59,7 @@
             <span class="font-size-16" :class="{ 'font-bold-extra': permittedRole === 'comment' }"> Can comment </span>
           </md-menu-item>
           <md-divider></md-divider>
-          <md-menu-item class="text-center" @click="selectRole('remove')">
+          <md-menu-item class="text-center" @click="removeUser">
             <span class="font-size-16" :class="{ 'font-bold-extra': false }"> Remove </span>
           </md-menu-item>
         </md-menu-content>
@@ -67,6 +70,8 @@
 <script>
 import Avartar from "@/components/Avartar.vue";
 import Popper from "vue-popperjs";
+import Collaborator from "@/models/Collaborator";
+
 import "vue-popperjs/dist/vue-popper.css";
 export default {
   components: {
@@ -80,13 +85,15 @@ export default {
     },
     user: {
       type: Object,
-      default: {},
+      default: () => {},
     },
+  },
+  created() {
+    console.log(this.user.role);
   },
   data() {
     return {
       permittedPages: [],
-      permittedRole: "view",
       selectedPages: [],
       allPages: [
         { id: "125", title: "Event Detail" },
@@ -113,7 +120,9 @@ export default {
   },
   methods: {
     selectRole(role) {
-      this.permittedRole = role;
+      new Collaborator({ id: this.user.id, role }).save().then((res) => {
+        this.$emit("update", res.item);
+      });
     },
     selectPage(selectedoption, id) {
       this.selectedPages.push(selectedoption);
@@ -121,12 +130,20 @@ export default {
     removeSelectedPage(index) {
       this.selectedPages.splice(index, 1);
     },
+    removeUser() {
+      new Collaborator({ id: this.user.id }).delete().then((res) => {
+        this.$emit("remove", this.user);
+      });
+    },
   },
   computed: {
     availablePages() {
       return this.allPages.filter((page) => {
         return this.selectedPages.findIndex((item) => item.id === page.id) < 0;
       });
+    },
+    permittedRole() {
+      return this.user.role;
     },
   },
 };

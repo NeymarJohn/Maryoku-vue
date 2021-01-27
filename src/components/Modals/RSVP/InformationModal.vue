@@ -20,16 +20,6 @@
           <maryoku-input v-model="email" inputStyle="email" placeholder="Type email address here..."></maryoku-input>
         </div>
       </div>
-      <div class="d-flex user-info" v-if="isCustomerEvent">
-        <div class="text-left flex-1 input-wrapper">
-          <label class="font-bold">Role</label>
-          <maryoku-input v-model="role" placeholder="Type your role here..."></maryoku-input>
-        </div>
-        <div class="text-left flex-1 input-wrapper">
-          <label class="font-bold">Company Name</label>
-          <maryoku-input v-model="companyName" placeholder="Type company name here..."></maryoku-input>
-        </div>
-      </div>
       <div class="information-section">
         <food-limitation-set @change="setMyFoodLimitation"></food-limitation-set>
       </div>
@@ -85,8 +75,6 @@ export default {
       selected: false,
       name: "",
       email: "",
-      role: "",
-      companyName: "",
       step: 1,
       foodLimitaion: null,
       suggestedProposals: [
@@ -135,13 +123,7 @@ export default {
         guest.event = new CalendarEvent({ id: this.event.id });
         guests.push(guest);
       });
-      this.$root.$emit("setRsvp", {
-        guests,
-        name: this.name,
-        responseEmail: this.email,
-        role: this.role,
-        companyName: this.companyName,
-      });
+      this.$root.$emit("setRsvp", { guests, name: this.name, responseEmail: this.email });
     },
     setMyFoodLimitation(foodLimitation) {
       this.foodLimitaion = foodLimitation;
@@ -151,11 +133,6 @@ export default {
       this.joinedGuests[index] = { ...this.joinedGuests[index], ...foodLimitation };
       console.log(index);
       console.log(foodLimitation);
-    },
-  },
-  computed: {
-    isCustomerEvent() {
-      return this.event.guestType === "Customers" || this.event.guestType === "Business Associates";
     },
   },
 };
