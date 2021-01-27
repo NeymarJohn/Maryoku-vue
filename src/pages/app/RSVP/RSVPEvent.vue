@@ -21,10 +21,11 @@
                 {{ campaign.additionalData.greetingWords }}
               </div>
             </div>
-
-            <div class="md-layout-item md-size-50 md-small-size-100">
+            <div class="md-layout-item md-size-100">
               <div class="mb-20">{{ campaign.additionalData.prefixEvent }}</div>
               <div class="font-bold-extra mb-30 campaign-title">{{ campaign.title }}</div>
+            </div>
+            <div class="md-layout-item md-size-50 md-small-size-100">
               <div class="word-break mb-30">
                 {{ campaign.description }}
               </div>
@@ -34,6 +35,7 @@
                 :event="event"
                 :editable="false"
                 :zoomLink="campaign.additionalData.zoomlink"
+                :startTime="eventStartTime"
               ></rsvp-event-info-panel>
             </div>
           </div>
@@ -102,7 +104,7 @@
         >
         <hr style="margin-top: 40px" />
         <div class="text-center mb-50 mt-30">
-          Provided by
+          Powered by &nbsp;
           <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
           <span style="text-transform: uppercase">&#169;</span>
         </div>
@@ -120,7 +122,7 @@
           >
             <div class="font-size-30 font-bold-extra mb-30 d-flex">
               <img :src="`${$iconURL}RSVP/Path 3728.svg`" />
-              <span style="padding-top: 10px; margin-left: 20px; line-height: 1.2em">{{
+              <span class="text-transform-uppercase" style="padding-top: 10px; margin-left: 20px; line-height: 1.2em">{{
                 campaign.additionalData.wearingGuideTitle
               }}</span>
             </div>
@@ -134,7 +136,7 @@
           >
             <div class="font-size-30 font-bold-extra mb-30 d-flex">
               <img :src="`${$iconURL}RSVP/Path 2369.svg`" />
-              <span style="padding-top: 10px; margin-left: 20px; line-height: 1.2em">{{
+              <span class="text-transform-uppercase" style="padding-top: 10px; margin-left: 20px; line-height: 1.2em">{{
                 campaign.additionalData.knowledgeTitle
               }}</span>
             </div>
@@ -158,8 +160,7 @@
             class="md-layout-item md-size-50 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra mt-20"
           >
             <div class="rsvp-event-timeline-day">
-              <span class="font-size-22 font-bold-extra">Day {{ $helper.numberToWord(index + 1) }}</span>
-              <span class="font-size-16">{{ $dateUtil.formatScheduleDay(schedule.date) }}</span>
+              <span class="font-size-22 font-bold-extra">{{ $dateUtil.formatScheduleDay(schedule.date) }}</span>
             </div>
             <div>
               <rsvp-timeline-item
@@ -171,7 +172,7 @@
           </div>
         </div>
         <div class="text-center mb-50 mt-30">
-          Provided by
+          Powered by &nbsp;
           <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
         </div>
       </template>
@@ -242,6 +243,13 @@
       @close="showRsvpModal = false"
       @setRsvp="setRsvp"
     ></rsvp-information-modal>
+    <join-zoom-modal
+      v-if="showZoomModal"
+      :event="event"
+      @close="showZoomModal = false"
+      @setRsvp="setZoomRsvp"
+      :campaign="campaign"
+    ></join-zoom-modal>
     <sync-calendar-event-modal
       v-if="showSyncCalendarModal"
       @close="showSyncCalendarModal = false"
@@ -255,12 +263,7 @@
       :rsvpRequest="rsvpRequest"
       :campaign="campaign"
     ></setting-reminder-modal>
-    <join-zoom-modal
-      v-if="showZoomModal"
-      @close="showZoomModal = false"
-      @setRsvp="setZoomRsvp"
-      :campaign="campaign"
-    ></join-zoom-modal>
+
     <sync-calendar-modal
       v-if="showSyncCalendarForZoom"
       @close="showSyncCalendarForZoom = false"
@@ -390,6 +393,7 @@ export default {
         console.log(e);
       });
     this.$root.$on("setRsvp", (rsvpData) => {
+      this.isLoading = true;
       rsvpData.attendingOption = "PERSON";
       rsvpData.rsvpStatus = "ACCEPTED";
       rsvpData.invitedEmail = this.rsvpRequest.email;
@@ -397,6 +401,7 @@ export default {
       rsvpData.event = new CalendarEvent({ id: this.event.id });
       rsvpData.guests = rsvpData.guests.filter((item) => item.name);
       new Rsvp(rsvpData).save().then((requestedRSVP) => {
+        this.isLoading = false;
         console.log(requestedRSVP);
         this.showSyncCalendarModal = true;
         this.rsvpData = requestedRSVP;
@@ -436,6 +441,12 @@ export default {
     scheduledDays() {
       return this.event.timelineDates;
     },
+    eventStartTime() {
+      if (this.timelineDates[0]) {
+        return Number(this.timelineDates[0].timelineItems[0] ? this.timelineDates[0].timelineItems[0].startTime : 0);
+      }
+      return 0;
+    },
     isVirtualEvent() {
       return this.event.places && this.event.places.length === 1 && this.event.places[0] === "VIRTUAL";
     },
@@ -456,6 +467,7 @@ export default {
       // this.showReminderModal = true;
     },
     setZoomRsvp(rsvpData) {
+      this.isLoading = true;
       rsvpData.attendingOption = "VIRTUAL";
       rsvpData.rsvpStatus = "ACCEPTED";
       rsvpData.invitedEmail = this.rsvpRequest.email;
@@ -467,6 +479,7 @@ export default {
       new RsvpRequest({ id: this.rsvpRequest.id, status: "VIRTUAL" }).save().then((res) => {
         this.showZoomModal = false;
         this.showSyncCalendarForZoom = true;
+        this.isLoading = false;
       });
     },
     reject() {

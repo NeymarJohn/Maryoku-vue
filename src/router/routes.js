@@ -624,15 +624,7 @@ const routes = [
             gtm: "Root",
         },
     },
-    {
-        path: "/concepts/:conceptId",
-        name: "Concept Detail",
-        component: ConceptDetail,
-        meta: {
-            title: "Concept Detail",
-            gtm: "concept detail",
-        },
-    },
+
     authPages,
     workspacePages,
     appPages,

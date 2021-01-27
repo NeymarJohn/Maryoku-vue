@@ -1,45 +1,89 @@
 <template>
-  <carousel
-    :items="4"
-    :margin="25"
-    :dots="false"
-    :nav="false"
-    class="rsvp-venue-carousel"
-    :number="2"
-    :key="`carousel-${images.length}`"
-    :responsive="{ 0: { items: 1, dots: true }, 800: { items: 2 }, 1200: { items: 4 } }"
-  >
-    <div class="carousel-item" v-for="(item, index) in images" :key="index">
-      <vue-element-loading :active="item.loading" spinner="ring" color="#FF547C" />
-      <img :src="item.src" class="carousel-image" :class="{ whiteBlack: item.default }" />
-      <div class="carousel-item-actions" v-if="editable">
-        <div class="color-white mb-20 font-bold font-size-16 button" @click="deleteImage(index)">
-          <img :src="`${$iconURL}RSVP/Group 4854.svg`" class="mr-10" /> Delete
+  <div>
+    <carousel
+      :items="4"
+      :margin="25"
+      :dots="false"
+      :nav="false"
+      class="rsvp-venue-carousel"
+      :number="2"
+      :key="`carousel-${images.length}`"
+      :responsive="{ 0: { items: 1, dots: true }, 800: { items: 2 }, 1200: { items: 4 } }"
+    >
+      <div class="carousel-item" v-for="(item, index) in images" :key="index">
+        <vue-element-loading :active="item.loading" spinner="ring" color="#FF547C" />
+        <img :src="item.src" class="carousel-image" :class="{ whiteBlack: item.default }" />
+        <div class="carousel-item-actions" v-if="editable">
+          <div class="color-white mb-20 font-bold font-size-16 button" @click="deleteImage(index)">
+            <img :src="`${$iconURL}RSVP/Group 4854.svg`" class="mr-10" /> Delete
+          </div>
+          <div class="color-white font-bold font-size-16 button" @click="replaceImage(index)">
+            <img :src="`${$iconURL}RSVP/Group 2344.svg`" class="mr-10" /> Replace
+          </div>
         </div>
-        <div class="color-white font-bold font-size-16 button" @click="replaceImage(index)">
-          <img :src="`${$iconURL}RSVP/Group 2344.svg`" class="mr-10" /> Replace
+        <div v-if="editable" class="mt-10">
+          <md-button v-if="!item.caption" class="md-simple edit-btn md-red" @click="openTitleModal(item, index)">
+            Add caption
+          </md-button>
+          <div v-else>
+            {{ item.caption }}
+            <md-button class="md-simple edit-btn md-red" @click="openTitleModal(item, index)"> Edit caption </md-button>
+          </div>
         </div>
+        <div class="mt-10" v-else>{{ item.caption }}</div>
       </div>
-    </div>
-    <div v-if="editable" class="empty-carousel-item">
-      <md-button class="md-simple md-outlined maryoku-btn" @click="addImage">
-        <md-icon>add_circle</md-icon>Add image
-      </md-button>
-      <input
-        style="display: none"
-        id="carousel-file"
-        name="attachment"
-        type="file"
-        multiple="multiple"
-        @change="onFileChange"
-      />
-    </div>
-  </carousel>
+      <div v-if="editable" class="empty-carousel-item">
+        <md-button class="md-simple md-outlined maryoku-btn" @click="addImage">
+          <md-icon>add_circle</md-icon>Add image
+        </md-button>
+        <input
+          style="display: none"
+          id="carousel-file"
+          name="attachment"
+          type="file"
+          multiple="multiple"
+          @change="onFileChange"
+        />
+      </div>
+    </carousel>
+    <modal class="add-caption-modal" v-if="showTitleModal">
+      <template slot="header">
+        <div class="maryoku-modal-header">
+          <h2>Add caption</h2>
+        </div>
+        <md-button class="md-simple md-just-icon md-round modal-default-button" @click="showTitleModal = false">
+          <md-icon>clear</md-icon>
+        </md-button>
+      </template>
+      <template slot="body">
+        <div class="md-layout">
+          <div class="md-layout-item md-size-60">
+            <img :src="titleFormData.src" />
+          </div>
+          <div class="md-layout-item md-size-40" style="text-align: left; padding-right: 0px; padding-left: 20px">
+            <div class="font-bold">Add caption</div>
+            <textarea
+              v-model="titleFormData.caption"
+              placeholder="Write a brief description of the photo."
+              rows="6"
+            ></textarea>
+          </div>
+        </div>
+      </template>
+      <template slot="footer">
+        <div>
+          <md-button class="md-simple md-black maryoku-btn" @click="showTitleModal = false">Cancel</md-button>
+          <md-button class="md-red maryoku-btn" @click="saveCaption">Save</md-button>
+        </div>
+      </template>
+    </modal>
+  </div>
 </template>
 <script>
 import carousel from "vue-owl-carousel";
 import { getBase64 } from "@/utils/file.util";
 import S3Service from "@/services/s3.service";
+import { Modal } from "@/components";
 
 export default {
   props: {
@@ -58,11 +102,14 @@ export default {
   },
   components: {
     carousel,
+    Modal,
   },
   data() {
     return {
       selectedIndex: 0,
       images: [],
+      showTitleModal: false,
+      titleFormData: {},
     };
   },
   created() {
@@ -80,6 +127,16 @@ export default {
     addImage() {
       this.selectedIndex = -1;
       document.getElementById("carousel-file").click();
+    },
+    openTitleModal(item, index) {
+      this.showTitleModal = true;
+      this.selectedIndex = index;
+      this.titleFormData = { ...item };
+    },
+    saveCaption() {
+      this.images[this.selectedIndex].caption = this.titleFormData.caption;
+      this.$emit("change", this.images);
+      this.showTitleModal = false;
     },
     async onFileChange(event) {
       const image = await getBase64(event.target.files[0]);
@@ -116,13 +173,13 @@ export default {
   }
   .carousel-item {
     // width: 290px;
-    height: 170px;
+    height: 230px;
     border-radius: 3px;
     overflow: hidden;
     position: relative;
     .carousel-image {
       width: 100%;
-      height: 100%;
+      height: 170px;
       object-fit: cover;
       &.whiteBlack {
         filter: grayscale(1);
@@ -154,7 +211,7 @@ export default {
         content: "";
         position: absolute;
         width: 100%;
-        height: 100%;
+        height: 170px;
         opacity: 0.52;
         background-color: #050505;
         top: 0;
