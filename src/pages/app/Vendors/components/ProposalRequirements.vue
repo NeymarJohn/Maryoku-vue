@@ -101,7 +101,15 @@ export default {
     },
     optionalRequirements() {
       if (!this.requirements) return [];
-      return this.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
+      console.log("this.requirements", this.requirements);
+      const multiSelectionCategories = this.requirements.filter((item) => item.type === "multi-selection");
+      let optionalRequirements = [];
+      multiSelectionCategories.forEach((category) => {
+        const selectedOptions = category.options.filter((item) => item.selected);
+        optionalRequirements = optionalRequirements.concat(selectedOptions);
+      });
+      console.log("optionalRequirements", optionalRequirements);
+      return optionalRequirements;
     },
     services: {
       get: function () {

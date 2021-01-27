@@ -69,14 +69,32 @@
         </template>
       </div>
       <div class="action-cont editor-wrapper">
-        <template v-if="!isEdit">
-          <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEdit = true" />
-          <img class="trash" :src="`${iconUrl}Asset 586.svg`" @click="removeRequirement(item)" />
-        </template>
-        <template v-else>
+        <template v-if="isEdit">
           <a class="cancel" @click="cancel()">Cancel</a>
           <a class="save" @click="save(item)">Save</a>
         </template>
+        <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu">
+          <md-button md-menu-trigger class="edit-btn md-simple" style="height: 40px">
+            <md-icon style="font-size: 40px !important">more_vert</md-icon>
+          </md-button>
+          <md-menu-content>
+            <md-menu-item @click="isEdit = true">
+              <span> <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />Edit</span>
+            </md-menu-item>
+            <md-menu-item @click="removeRequirement(item)">
+              <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Delete</span>
+            </md-menu-item>
+            <md-menu-item @click="isEdit = true">
+              <span> <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />Add comment</span>
+            </md-menu-item>
+            <md-menu-item @click="isEdit = true">
+              <span>
+                <md-icon class="color-black mr-10">add_circle_outline</md-icon>
+                Add an alternative</span
+              >
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
       </div>
     </template>
     <template v-else>
@@ -169,11 +187,7 @@
       </div>
       <div class="total-cont editor-wrapper"></div>
       <div class="action-cont editor-wrapper">
-        <template v-if="!isEdit">
-          <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEdit = true" />
-          <img class="trash" :src="`${iconUrl}Asset 586.svg`" @click="removeRequirement(item)" />
-        </template>
-        <template v-else>
+        <template v-if="isEdit">
           <a class="cancel" @click="cancel()">Cancel</a>
           <a class="save" @click="save(item)">Save</a>
         </template>
@@ -181,6 +195,27 @@
           <md-icon class="color-dark" v-if="isExpanded">keyboard_arrow_down</md-icon>
           <md-icon class="color-dark" v-else>keyboard_arrow_right</md-icon>
         </md-button>
+        <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu">
+          <md-button md-menu-trigger class="edit-btn md-simple" style="height: 40px">
+            <md-icon style="font-size: 40px !important">more_vert</md-icon>
+          </md-button>
+          <md-menu-content>
+            <md-menu-item @click="isEdit = true">
+              <span> <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />Edit</span>
+            </md-menu-item>
+            <md-menu-item @click="removeRequirement(item)">
+              <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Delete</span>
+            </md-menu-item>
+            <md-menu-item @click="isEdit = true">
+              <span> <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />Add comment</span>
+            </md-menu-item>
+            <md-menu-item @click="isEdit = true">
+              <span>
+                <img :src="`${$iconURL}common/gift-dark.svg`" class="label-icon mr-10" />Mark as complimentary</span
+              >
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
       </div>
     </div>
   </div>
@@ -188,10 +223,7 @@
   <div v-else-if="serviceType == 'extra'">
     <div class="proposal-service-item-wrapper included-services">
       <div class="item-cont">
-        <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" style="width: 25px; height: 25px" />
         {{ item.requirementTitle }}
-        <span class="madatory-badge" v-if="item.isMandatory">Mandatory</span>
-        <span class="complimentary-badge" v-if="item.isComplementary">Complimentary</span>
         <br />
         <div v-if="isExpanded"></div>
       </div>
@@ -208,7 +240,7 @@
         </template>
       </div>
       <div class="price-cont editor-wrapper">
-        <template v-if="!isEdit"> </template>
+        <template v-if="!isEdit">+${{ item.price }} </template>
         <template v-else>
           <money
             v-model="item.price"
@@ -226,11 +258,7 @@
       </div>
       <div class="total-cont editor-wrapper"></div>
       <div class="action-cont editor-wrapper">
-        <template v-if="!isEdit">
-          <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEdit = true" />
-          <img class="trash" :src="`${iconUrl}Asset 586.svg`" @click="removeRequirement(item)" />
-        </template>
-        <template v-else>
+        <template v-if="isEdit">
           <a class="cancel" @click="cancel()">Cancel</a>
           <a class="save" @click="save(item)">Save</a>
         </template>
@@ -238,6 +266,22 @@
           <md-icon class="color-dark" v-if="isExpanded">keyboard_arrow_down</md-icon>
           <md-icon class="color-dark" v-else>keyboard_arrow_right</md-icon>
         </md-button>
+        <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu">
+          <md-button md-menu-trigger class="edit-btn md-simple" style="height: 40px">
+            <md-icon style="font-size: 40px !important">more_vert</md-icon>
+          </md-button>
+          <md-menu-content>
+            <md-menu-item @click="isEdit = true">
+              <span> <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />Edit</span>
+            </md-menu-item>
+            <md-menu-item @click="removeRequirement(item)">
+              <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Delete</span>
+            </md-menu-item>
+            <md-menu-item @click="isEdit = true">
+              <span> <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />Add comment</span>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
       </div>
     </div>
   </div>
@@ -311,6 +355,14 @@ export default {
   display: grid;
   grid-template-columns: 30% 10% 10% 12% 15% 23%;
   align-items: center;
+  .action-menu {
+    visibility: hidden;
+  }
+  &:hover {
+    .action-menu {
+      visibility: unset;
+    }
+  }
   &.containPlannerOptions {
     display: grid;
     grid-template-columns: 80%;

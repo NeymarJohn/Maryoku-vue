@@ -97,6 +97,29 @@ export default {
       }
     });
 
+    const extraServices = !this.vendor.pricingPolicies
+      ? []
+      : this.vendor.pricingPolicies.map((item) => {
+          return {
+            comments: [],
+            dateCreated: "",
+            includedInPrice: true,
+            itemNotAvailable: false,
+            price: Number(item.value),
+            priceUnit: "qty",
+            proposalRequest: { id: this.proposalRequest.id },
+            requirementComment: null,
+            requirementId: "",
+            requirementMandatory: false,
+            requirementPriority: null,
+            requirementTitle: item.name,
+            requirementsCategory: item.category,
+            requirementValue: item.defaultQty ? item.defaultQty : 1,
+            requirementSize: item.defaultSize ? item.defaultSize : "",
+            plannerOptions: [],
+            isMandatory: true,
+          };
+        });
     this.$store.commit("vendorProposal/setCostServices", {
       category: this.vendor.eventCategory.key,
       services: costServices,
@@ -104,6 +127,11 @@ export default {
     this.$store.commit("vendorProposal/setIncludedServices", {
       category: this.vendor.eventCategory.key,
       services: includedSevices,
+    });
+
+    this.$store.commit("vendorProposal/setExtraServices", {
+      category: this.vendor.eventCategory.key,
+      services: extraServices,
     });
   },
   computed: {

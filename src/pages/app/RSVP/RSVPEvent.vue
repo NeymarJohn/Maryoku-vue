@@ -21,11 +21,10 @@
                 {{ campaign.additionalData.greetingWords }}
               </div>
             </div>
-            <div class="md-layout-item md-size-100">
+
+            <div class="md-layout-item md-size-50 md-small-size-100">
               <div class="mb-20">{{ campaign.additionalData.prefixEvent }}</div>
               <div class="font-bold-extra mb-30 campaign-title">{{ campaign.title }}</div>
-            </div>
-            <div class="md-layout-item md-size-50 md-small-size-100">
               <div class="word-break mb-30">
                 {{ campaign.description }}
               </div>
@@ -122,7 +121,7 @@
           >
             <div class="font-size-30 font-bold-extra mb-30 d-flex">
               <img :src="`${$iconURL}RSVP/Path 3728.svg`" />
-              <span class="text-transform-uppercase" style="padding-top: 10px; margin-left: 20px; line-height: 1.2em">{{
+              <span style="padding-top: 10px; margin-left: 20px; line-height: 1.2em">{{
                 campaign.additionalData.wearingGuideTitle
               }}</span>
             </div>
@@ -136,7 +135,7 @@
           >
             <div class="font-size-30 font-bold-extra mb-30 d-flex">
               <img :src="`${$iconURL}RSVP/Path 2369.svg`" />
-              <span class="text-transform-uppercase" style="padding-top: 10px; margin-left: 20px; line-height: 1.2em">{{
+              <span style="padding-top: 10px; margin-left: 20px; line-height: 1.2em">{{
                 campaign.additionalData.knowledgeTitle
               }}</span>
             </div>
@@ -243,13 +242,6 @@
       @close="showRsvpModal = false"
       @setRsvp="setRsvp"
     ></rsvp-information-modal>
-    <join-zoom-modal
-      v-if="showZoomModal"
-      :event="event"
-      @close="showZoomModal = false"
-      @setRsvp="setZoomRsvp"
-      :campaign="campaign"
-    ></join-zoom-modal>
     <sync-calendar-event-modal
       v-if="showSyncCalendarModal"
       @close="showSyncCalendarModal = false"
@@ -263,7 +255,12 @@
       :rsvpRequest="rsvpRequest"
       :campaign="campaign"
     ></setting-reminder-modal>
-
+    <join-zoom-modal
+      v-if="showZoomModal"
+      @close="showZoomModal = false"
+      @setRsvp="setZoomRsvp"
+      :campaign="campaign"
+    ></join-zoom-modal>
     <sync-calendar-modal
       v-if="showSyncCalendarForZoom"
       @close="showSyncCalendarForZoom = false"
@@ -393,7 +390,6 @@ export default {
         console.log(e);
       });
     this.$root.$on("setRsvp", (rsvpData) => {
-      this.isLoading = true;
       rsvpData.attendingOption = "PERSON";
       rsvpData.rsvpStatus = "ACCEPTED";
       rsvpData.invitedEmail = this.rsvpRequest.email;
@@ -401,7 +397,6 @@ export default {
       rsvpData.event = new CalendarEvent({ id: this.event.id });
       rsvpData.guests = rsvpData.guests.filter((item) => item.name);
       new Rsvp(rsvpData).save().then((requestedRSVP) => {
-        this.isLoading = false;
         console.log(requestedRSVP);
         this.showSyncCalendarModal = true;
         this.rsvpData = requestedRSVP;
@@ -467,7 +462,6 @@ export default {
       // this.showReminderModal = true;
     },
     setZoomRsvp(rsvpData) {
-      this.isLoading = true;
       rsvpData.attendingOption = "VIRTUAL";
       rsvpData.rsvpStatus = "ACCEPTED";
       rsvpData.invitedEmail = this.rsvpRequest.email;
@@ -479,7 +473,6 @@ export default {
       new RsvpRequest({ id: this.rsvpRequest.id, status: "VIRTUAL" }).save().then((res) => {
         this.showZoomModal = false;
         this.showSyncCalendarForZoom = true;
-        this.isLoading = false;
       });
     },
     reject() {

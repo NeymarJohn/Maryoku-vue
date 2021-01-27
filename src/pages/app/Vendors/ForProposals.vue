@@ -144,42 +144,8 @@ export default {
     this.services = VendorService.businessCategories();
     this.iconsWithCategory = VendorService.categoryNameWithIcons();
     this.$store.dispatch("common/fetchAllCategories");
-    this.personalMessage = this.vendor.personalMessage;
   },
   methods: {
-    getProposal(id) {
-      ProposalRequest.find(id)
-        .then((resp) => {
-          this.$set(this, "proposalRequest", resp);
-          this.$set(this, "event", resp.eventData);
-          this.proposalRequestRequirements = _.chain(resp.requirements)
-            .groupBy("requirementPriority")
-            .map(function (value, key) {
-              return {
-                title: key,
-                requirements: value,
-              };
-            })
-            .value();
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-
-      if (!this.proposalRequest) {
-        this.proposalRequest = new ProposalRequest({
-          id: this.$route.params.id,
-        });
-        this.proposalRequest.bidRange = { low: 0, high: 0 };
-        this.proposalRequest.requirements = [];
-        this.proposalRequest.bidderRank = 1;
-        this.proposalRequest.eventData = {
-          allocatedBudget: 0,
-        };
-        this.proposalRequest.personalMessage = this.vendor.personalMessage;
-        this.proposalRequest.isAgreed = true;
-      }
-    },
     flatDeep(arr, d = 1) {
       return d > 0
         ? arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? this.flatDeep(val, d - 1) : val), [])
