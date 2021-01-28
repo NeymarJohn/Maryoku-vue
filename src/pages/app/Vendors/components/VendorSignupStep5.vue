@@ -76,18 +76,19 @@
           </div>
           <div v-if="opened" class="card-content">
             <h2 class="person-name">
-              Hey <span>(Person's Name)</span>
+              Hey <span>{{ contactPersonName }}</span>
             </h2>
             <h5 class="pt-20">How are you?</h5>
             <h5>I hope this email finds you well & happy!</h5>
-            <p class="pt-20">
-              I just joined a fantastic platform named Maryoku which creates matches between
-              event planners to vendors like me. I’m new to this system and that is why I would love
-              to get your recommendation…
+            <p class="pt-20 font-size-16">
+              I'm writing to let you know I recently started working with maryoku –an awesome web platform for non-professional event planners, helping them plan events like pros. These days, I’m looking for people who can speak positively about my services and help me gain credibility as a business.</p>
+            <p class="font-size-16"> Hope you can spare some time.
             </p>
             <button class="review">Write A Review</button>
-            <p>Warm regards,</p>
-            <p>Relish caterers & venues</p>
+            <!--<p>Warm regards,</p>-->
+            <!--<p>Relish caterers & venues</p>-->
+            <h5 class="pt-10">Many thanks</h5>
+            <h5>{{$store.state.auth.user.name}}</h5>
           </div>
         </div>
       </div>

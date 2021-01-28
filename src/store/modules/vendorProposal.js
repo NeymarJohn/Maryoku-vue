@@ -4,8 +4,6 @@ import { cat } from 'shelljs'
 import Vendors from "@/models/Vendors";
 import ProposalRequest from "@/models/ProposalRequest";
 import { reject, resolve } from 'promise-polyfill';
-import EventTimelineDate from "@/models/EventTimelineDate";
-import CalendarEvent from "@/models/CalendarEvent";
 
 const state = {
   vendor: null,
@@ -29,8 +27,6 @@ const state = {
     discountAmount: 0
   },
   suggestionDate: null,
-  timelineDates: [],
-  personalMessage: ""
 }
 const getters = {
   mainTotalPrice(state) {
@@ -73,7 +69,7 @@ const getters = {
 const mutations = {
   setVendor: (state, vendor) => {
     state.vendor = vendor
-    state.personalMessage = vendor.personalMessage
+    state.personalMessage = vendor.personMessage
   },
   setPropsalRequest: (state, propsoalRequest) => {
     state.proposalRequest = propsoalRequest
@@ -123,8 +119,7 @@ const mutations = {
   },
   setInspirationalPhoto: (state, { index, photo }) => {
     Vue.set(state.inspirationalPhotos, index, photo)
-  },
-
+  }
 }
 const actions = {
   getVendor: ({ commit, state }, vendorId) => {
@@ -139,27 +134,15 @@ const actions = {
         })
     })
   },
-  getProposalRequest: ({ commit, state, dispatch }, requestId) => {
+  getProposalRequest: ({ commit, state }, requestId) => {
     return new Promise((resolve, reject) => {
       ProposalRequest.find(requestId)
         .then((resp) => {
           commit("setPropsalRequest", resp);
-          dispatch("getTimelineDates", resp.eventData.id)
           resolve(resp)
         })
     })
-  },
-  getTimelineDates({ commit, state }, eventId) {
-    return new Promise((resolve, reject) => {
-      new EventTimelineDate()
-        .for(new CalendarEvent({ id: eventId }))
-        .get()
-        .then(res => {
-          console.log(res);
-          commit("setValue", "timelineDates", res);
-        });
-    });
-  },
+  }
 }
 
 

@@ -3,7 +3,7 @@
     <template v-if="isEdit"></template>
     <template v-else>
       <div class="event-summary-wrapper">
-        <div class="with-bkimg" :style="`background-image:url(${vendor.images[0]})`">
+        <div class="with-bkimg">
           <div class="summary-cont">
             <div class="upper">
               <h3>{{ title }}</h3>
@@ -22,7 +22,7 @@
               </li>
               <li>
                 <span>Guest Arrival Time</span>
-                <p>{{ event.arrival }}</p>
+                <p>{{ event.arrival_time }}</p>
               </li>
             </ul>
           </div>
@@ -116,61 +116,21 @@
             </div>
           </div>
           <div class="cancellation">
-            <h5 class="subtitle">Our Policy</h5>
-            <div id="Policy">
-              <div class="rules">
-                <div class="rules">
-                  <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
-                    <div class="item">{{ policy.name }}</div>
-                    <div class="item" v-if="policy.type === 'MultiSelection'">
-                      <span class="mr-10" v-for="(v, vIndex) in policy.value" :key="`policy-${vIndex}`">{{
-                        `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
-                      }}</span>
-                    </div>
-                    <div class="item" v-else-if="policy.type === 'Including'">
-                      <span class="mr-10" v-if="policy.value"> Yes </span>
-                      <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
-                    </div>
-                    <div class="item" v-else>
-                      <span v-if="policy.type === Number && !policy.isPercentage">$</span>
-                      <span v-if="policy.value === true">Yes</span>
-                      <span v-else>{{ policy.value }}</span>
-                      <span v-if="policy.isPercentage">%</span>
-                      <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
-                        {{ policy.attendees }} attendees
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="not-allowed" v-if="vendor.vendorCategories[0] == 'venuerental'">
-                <h5>We don't allow these 3rd party vendor:</h5>
-                <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
-              </div>
-              <div class="dont-work">
-                <h5>We don't work on:</h5>
-                <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
-                  <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
-                  {{ mergeStringItems(vendor.selectedWeekdays) }}
-                </div>
-                <div class="item" v-for="(d, dIndex) in vendor.exDonts" :key="dIndex">
-                  <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
-                  {{ d.holiday }}
-                </div>
-                <div class="item" v-if="vendor.dontWorkDays">
-                  <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
-                  {{ dontWorkDays() }}
-                </div>
-                <div class="item" v-if="vendor.dontWorkTime">
-                  <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
-                  {{ dontWorkTime() }}
-                </div>
+            <h5 class="subtitle">Pricing Policy</h5>
+            <div class="pricingPolicy mt-50">
+              <div class="mb-10 mt-10" v-for="(policy, index) in vendor.pricingPolicies" :key="policy.name">
+                <span class="font-bold" style="min-width: 50%; display: inline-block">{{ policy.name }}</span>
+                <span>{{ policy.value }}</span>
               </div>
             </div>
 
             <div class="signature-wrapper">
               <div class="half-side">
-                <h6>{{ vendor.companyName }}</h6>
+                <h6>{{ vendor.vendorCategory }}</h6>
+                <div class="signature-client signature-bidder"></div>
+              </div>
+              <div class="half-side">
+                <h6>Client</h6>
                 <div class="signature-client">
                   <template v-if="vendor.signature == null">
                     <div class="card red-border">
@@ -219,10 +179,6 @@
                   </template>
                 </div>
               </div>
-              <div class="half-side">
-                <h6>Client</h6>
-                <div class="signature-client signature-bidder"></div>
-              </div>
             </div>
           </div>
         </div>
@@ -235,7 +191,6 @@ import ProposalPricingItem from "./ProposalPricingItem.vue";
 import Vendors from "@/models/Vendors";
 import vueSignature from "vue-signature";
 import ProposalInspirationalPhotos from "./ProposalInspirationalPhotos.vue";
-import ProposalPricingSummary from "./ProposalPricingSummary.vue";
 
 export default {
   name: "proposal-event-summary",
@@ -243,7 +198,6 @@ export default {
     ProposalPricingItem,
     ProposalInspirationalPhotos,
     vueSignature,
-    ProposalPricingSummary,
   },
   props: {
     title: String,
@@ -251,6 +205,7 @@ export default {
     isEdit: Boolean,
     iconUrl: String,
     itemType: String,
+    personalMessage: String,
     services: Array,
   },
   data() {
@@ -324,55 +279,6 @@ export default {
       _this.$refs.signature.clear();
     },
     removeSignature() {},
-    getServices(category) {
-      if (this.tableCategory === "cost") return this.$store.state.vendorProposal.proposalCostServices[category];
-      else if (this.tableCategory === "included")
-        return this.$store.state.vendorProposal.proposalIncludedServices[category];
-      else if (this.tableCategory === "extra") return this.$store.state.vendorProposal.proposalExtraServices[category];
-    },
-    flatDeep(arr, d = 1) {
-      return d > 0
-        ? arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? this.flatDeep(val, d - 1) : val), [])
-        : arr.slice();
-    },
-    servicesByCategory(category) {
-      const services = this.services.filter((s) => s.name == category);
-
-      if (services.length > 0) {
-        return this.flatDeep(
-          services[0].categories.map((s) => s.subCategories.map((sc) => sc.items.map((dd) => dd.name))),
-          Infinity,
-        );
-      } else {
-        return [];
-      }
-    },
-    selectedServices() {
-      return this.event.components.filter((item) => this.categories.includes(item.componentId));
-    },
-    mergeStringItems(items) {
-      let naItems = "";
-      _.each(items, (n) => {
-        if (n.constructor.name == "Object") {
-          naItems += `${this.capitalize(n.name)}s, `;
-        } else {
-          naItems += `${this.capitalize(n)}s, `;
-        }
-      });
-      naItems = naItems.substring(0, naItems.length - 2);
-      return "All " + naItems;
-    },
-    dontWorkDays() {
-      let selectedDates = "";
-      _.each(this.vendor.dontWorkDays, (s) => {
-        selectedDates += `${s.date}, `;
-      });
-      selectedDates = selectedDates.substring(0, selectedDates.length - 2);
-      return selectedDates;
-    },
-    dontWorkTime() {
-      return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.amPack.start} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.amPack.end}`;
-    },
   },
   created() {
     console.log(this.vendor);
@@ -380,6 +286,12 @@ export default {
   mounted() {
     this.savedItModal = false;
     this.isTimeUp = true;
+
+    // this.proposalRequest.requirements.forEach((item) => {
+    //   if (!this.categories.includes(item.requirementsCategory)) {
+    //     this.categories.push(item.requirementsCategory);
+    //   }
+    // });
     this.categories.push(this.vendor.vendorCategory);
     this.additionalServices.forEach((service) => {
       this.categories.push(service);
@@ -409,17 +321,6 @@ export default {
     },
     additionalServices() {
       return this.$store.state.vendorProposal.additionalServices;
-    },
-    extraServices() {
-      return this.event.components.filter((item) => item.componentId !== "unexpected");
-    },
-    step() {
-      return this.$store.state.vendorProposal.wizardStep;
-    },
-    validPolicy() {
-      if (this.vendor.policies)
-        return this.vendor.policies.filter((item) => item.value || (item.type === "Including" && item.cost));
-      return null;
     },
   },
   watch: {},
@@ -477,7 +378,7 @@ export default {
 
       .summary-cont {
         padding: 60px;
-        background: rgba(255, 255, 255, 0.7);
+        background: rgba(255, 255, 255, 0.4);
 
         .upper {
           display: flex;
@@ -701,55 +602,6 @@ export default {
     padding: 20px 0;
     margin: 0 -60px;
 
-    .title {
-      img {
-        width: 30px;
-        margin-right: 1rem;
-      }
-      font: 800 30px Manrope-Regular, sans-serif;
-    }
-    .rules {
-      margin: 3rem 0;
-      .rule {
-        padding: 2rem 0;
-        border-bottom: 1px solid #dddddd;
-        font: 600 16px Manrope-Regular, sans-serif;
-        display: flex;
-        align-items: center;
-
-        .item {
-          flex: 1;
-
-          img {
-            width: 30px;
-          }
-        }
-        &:first-child {
-          border-top: 1px solid #dddddd;
-        }
-      }
-    }
-    .not-allowed {
-      h5 {
-        font: 800 20px Manrope-Regular, sans-serif;
-      }
-      p {
-        font: normal 16px Manrope-Regular, sans-serif;
-      }
-    }
-    .dont-work {
-      h5 {
-        font: 800 20px Manrope-Regular, sans-serif;
-      }
-      .item {
-        margin-bottom: 1rem;
-        display: flex;
-        img {
-          width: 21px;
-          margin-right: 1rem;
-        }
-      }
-    }
     .title {
       display: flex;
       align-items: center;

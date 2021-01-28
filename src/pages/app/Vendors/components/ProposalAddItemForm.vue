@@ -1,6 +1,6 @@
 <template>
   <div class="title-cont default add-item-form">
-    <div class="sub-items-cont" v-if="serviceType === 'cost'">
+    <div class="sub-items-cont">
       <span class="prev" @click="prev()" v-if="serviceSlidePos < 0">
         <md-icon>keyboard_arrow_left</md-icon>
       </span>
@@ -192,8 +192,8 @@ export default {
     },
     fillFormWithSelected(item) {
       console.log(item);
-      this.serviceItem = item.name;
-      this.size = "";
+      this.serviceItem = item.item;
+      this.size = item.size;
       this.qty = 1;
       this.plannerChoices = [
         { description: "", price: 0 },

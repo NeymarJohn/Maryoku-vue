@@ -2715,7 +2715,7 @@ export const businessCategories = [
     ]
   },
   {
-    name: 'swags',
+    name: 'giveaways',
     categories: [
       {
         name: 'amenities',
@@ -3276,7 +3276,7 @@ export const companyServices = [
     available: ['audio', 'visual'],
   },
   {
-    name: 'swags',
+    name: 'giveaways',
     type: Array,
     value: [],
     available: ['favors', 'promotional'],
@@ -3462,7 +3462,7 @@ export const VendorPolicy = [
     ],
   },
   {
-    category: "swags",
+    category: "giveaways",
     items: [
       {
         name: "Allow pickup",
@@ -3543,7 +3543,7 @@ export const VendorPolicy = [
       // },
       {
         name: "Flexible to different dress codes",
-        type: String,
+        type: Boolean,
         hasComment: true,
       },
       {
@@ -3933,7 +3933,7 @@ export const VendorPricingPolicy = [
     ],
   },
   {
-    category: "swags",
+    category: "giveaways",
     items: [
       {
         name: "Rushed orders",

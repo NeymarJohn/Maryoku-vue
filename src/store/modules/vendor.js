@@ -7,7 +7,7 @@ const state = {
   step: 0,
   status: null,
   vendor: {
-    vendorImages: []
+
   },
   vendor_categories: [],
   vendors: [],

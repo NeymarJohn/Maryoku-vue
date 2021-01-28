@@ -212,9 +212,7 @@ export default {
       isEdit: false,
       warning: false,
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
-      newProposalRequest: {
-        eventData: {},
-      },
+      newProposalRequest: {},
       discountBlock: {},
       // additionalServices: [],
       iconsWithCategory: null,

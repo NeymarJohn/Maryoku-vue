@@ -18,10 +18,15 @@
         </div>
         <div class="proposal-range-cont">
           <span>You're the First bidder</span>
+          <!-- <span class="grey" v-if="proposalRange">Proposals range</span>
+          <span v-if="proposalRange">{{
+            `$${newProposalRequest.bidRange.low} - $${newProposalRequest.bidRange.high}`
+          }}</span> -->
         </div>
         <img :src="`${iconUrl}Component 36 (2).svg`" :style="`transform: ${isChecked ? 'rotate(90deg)' : ''}`" />
       </div>
     </div>
+    <!-- <proposal-service-table v-if="isChecked" :category="service.componentId"></proposal-service-table> -->
     <template v-if="isChecked">
       <proposal-requirements
         class="additional-service"
@@ -52,6 +57,26 @@
       />
       <proposal-upload-legal></proposal-upload-legal>
     </template>
+    <!-- <div class="additional-photos-wrapper" v-if="isChecked">
+      <div class="title-cont">
+        <h3><img :src="`${iconUrl}Asset 605.svg`" />Upload Additional Photos</h3>
+        <h5>(15 photos top, under 20KB)</h5>
+      </div>
+      <vue-dropzone
+        id="dropzone"
+        :options="dropzoneOptions"
+        :useCustomSlot="true"
+        class="dropdown-zone"
+        @vdropzone-file-added="imageSelected"
+      >
+        <span class="color-red font-bold cho">
+          <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10" />Choose File
+        </span>
+        <br />Or
+        <br />
+        <span class="color-dark-gray">Drag your file here</span>
+      </vue-dropzone>
+    </div> -->
   </div>
 </template>
 <script>
