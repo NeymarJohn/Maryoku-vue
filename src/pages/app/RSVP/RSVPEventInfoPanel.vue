@@ -66,7 +66,7 @@
           <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
           <img :src="`${$iconURL}RSVP/Group+1279.svg`" />
         </div>
-        <span :class="{ underline: !editable }">Arrival?</span>
+        <span :class="{ underline: !editable }">ARRIVAL?</span>
       </div>
 
       <div class="event-info-item-content" v-if="!editingArrival">

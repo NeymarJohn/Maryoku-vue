@@ -86,8 +86,8 @@ export default {
           value: "audiovisualstagingservices",
         },
         {
-          name: "Giveaways",
-          value: "giveaways",
+          name: "Swags",
+          value: "swags",
         },
         {
           name: "Shipping",
