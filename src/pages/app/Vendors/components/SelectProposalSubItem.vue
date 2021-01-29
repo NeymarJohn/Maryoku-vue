@@ -1,11 +1,11 @@
 <template>
   <div class="select-proposal-sub-item-wrapper" @click="clickItem(item)">
     <div v-if="!selected" class="active">
-      <span>{{ item.item }}</span>
+      <span>{{ item.name }}</span>
       <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/Group 3668 (2).svg" />
     </div>
     <div v-else class="inactive">
-      <span>{{ item }}</span>
+      <span>{{ item.name }}</span>
       <md-icon>close</md-icon>
     </div>
   </div>
@@ -42,12 +42,11 @@ export default {
 .select-proposal-sub-item-wrapper {
   margin-right: 1rem;
   display: inline-block;
-
+  font-size: 14px;
   div {
     padding: 0.5rem 1rem;
     border-radius: 100px;
     background-color: #ffffff;
-    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     float: left;

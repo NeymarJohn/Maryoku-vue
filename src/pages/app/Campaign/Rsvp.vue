@@ -59,7 +59,7 @@
             'dddd, MMMM D, YYYY',
           )}, so I'll know you feel the same way :)`"
         ></maryoku-textarea>
-        <rsvp-event-info-panel class="mt-60" :event="event" :startTime="eventStartTime"></rsvp-event-info-panel>
+        <rsvp-event-info-panel class="mt-60" :event="event"></rsvp-event-info-panel>
         <div>
           <title-editor
             :defaultValue="campaignData.additionalData.carouselTitle"
@@ -347,16 +347,6 @@ export default {
       get() {
         return this.$store.state.campaign.RSVP.images;
       },
-    },
-    timelineDates() {
-      var timelines = {};
-      return this.event.timelineDates;
-    },
-    eventStartTime() {
-      if (this.timelineDates[0]) {
-        return Number(this.timelineDates[0].timelineItems[0] ? this.timelineDates[0].timelineItems[0].startTime : 0);
-      }
-      return 0;
     },
   },
   methods: {

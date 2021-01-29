@@ -103,12 +103,11 @@ const actions = {
                 });
         });
     },
-    getEventAction({ commit, state, dispatch }, { eventId }) {
+    getEventAction({ commit, state }, { eventId }) {
         return new Promise((resolve, reject) => {
             CalendarEvent.find(eventId).then(event => {
                 commit("initEventData");
                 commit("setEventData", event);
-                dispatch("getTimelineDates", event.id);
                 resolve(event);
             });
         });

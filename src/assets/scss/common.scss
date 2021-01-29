@@ -66,6 +66,9 @@ select {
         border: solid 1px #050505;
     }
 }
+input[type="text"] {
+    font-size: 16px;
+}
 .font-regular {
     font-family: "Manrope-Regular";
     font-weight: 400 !important;

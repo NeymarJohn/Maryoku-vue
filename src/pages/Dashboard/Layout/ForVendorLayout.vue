@@ -138,7 +138,9 @@ export default {
   data() {
     return {
       iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor%20Landing%20Page/",
-      vendor: null,
+      vendor: {
+        eventCategory: {},
+      },
       event: null,
       proposalRequest: null,
       showSignup: false,
