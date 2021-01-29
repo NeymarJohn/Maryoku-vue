@@ -5,17 +5,11 @@
   height: auto;
   text-align: center;
   border-radius: $border-radius-base;
-  // background-color: $white-color !important;
-  background-color: #FFEDBC !important;
-
+  background-color: $white-color !important;
   color: $gray !important;
   font-size: $tooltip-font-size;
   font-weight: 400;
   z-index: 9999;
-
-  &.bg-gray {
-    background-color: #e6e6e6 !important;
-  }
   @include shadow-8dp();
 
   .tooltip-wrapper {
@@ -37,23 +31,17 @@
   }
 
   &[x-placement="top"]:after{
-    border-top: 5px solid #FFEDBC;
+    border-top: 5px solid $white-color;
     border-right: 5px solid transparent;
     border-bottom: 0;
     border-left: 5px solid transparent;
-  }
-  &.bg-gray[x-placement="top"]:after{
-    border-top: 5px solid #e6e6e6;
   }
   &[x-placement="bottom"]:after{
     top: -5px;
     border-top: 0;
     border-right: 5px solid transparent;
-    border-bottom: 5px solid #FFEDBC;
+    border-bottom: 5px solid $white-color;
     border-left: 5px solid transparent;
-  }
-  &.bg-gray[x-placement="bottom"]:after{
-    border-bottom: 5px solid #e6e6e6;
   }
   &[x-placement="left"]:after{
     margin-right: 0;
@@ -61,10 +49,7 @@
     top: 16px;
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
-    border-left: 5px solid #FFEDBC;
-  }
-  &.bg-gray[x-placement="left"]:after{
-    border-left: 5px solid #e6e6e6;
+    border-left: 5px solid $white-color;
   }
   &[x-placement="right"]:after{
     margin-left: 0;
@@ -72,9 +57,6 @@
     top: 16px;
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
-    border-right: 5px solid #FFEDBC;
-  }
-  &.bg-gray[x-placement="right"]:after{
-    border-right: 5px solid #FFEDBC;
+    border-right: 5px solid $white-color;
   }
 }

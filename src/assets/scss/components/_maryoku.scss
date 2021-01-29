@@ -40,7 +40,9 @@
       }
   }
 }
-
+.md-tooltip {
+  background-color: #FFEDBC !important;
+}
 .md-tooltip[x-placement="bottom"]:after {
   top: -5px;
   border-top: 0;

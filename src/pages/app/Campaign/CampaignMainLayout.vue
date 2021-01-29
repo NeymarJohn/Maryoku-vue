@@ -680,5 +680,9 @@ export default {
     }
   }
 }
-
+.tab-tooltip {
+  max-width: 300px !important;
+  white-space: break-spaces;
+  text-align: left;
+}
 </style>

@@ -444,11 +444,26 @@ export default {
     this.$root.$on("go-to-proposal-form", () => {
       if (this.isAgreed) {
         this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
+        // if (this.proposalRequest) {
+        //   this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
+        // } else {
+        //   this.proposalRequest = new ProposalRequest({
+        //     id: this.$route.params.id,
+        //   });
+        //   this.$router.push({
+        //     path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
+        //     props: {
+        //       proposalRequest: this.proposalRequest,
+        //     },
+        //   });
+        // }
       } else {
         window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
         this.conditionTooltip = true;
       }
     });
+
+    this.$set(this, "proposalRequest", VendorService.getProposalRequest());
 
     if (this.proposalRequest) {
       this.isAgreed = this.proposalRequest.isAgreed;
@@ -606,9 +621,6 @@ export default {
     proposalRequest() {
       return this.$store.state.vendorProposal.proposalRequest;
     },
-    timelineDates() {
-      return this.$store.state.vendorProposal.timelineDates;
-    },
     eventDate() {
       if (!this.proposalRequest) return "-";
 
@@ -624,15 +636,14 @@ export default {
       return `${moment(startDate).format("hh:mmA")} - ${moment(endDate).format("hh:mmA")}`;
     },
     serviceTime() {
-      if (!this.proposalRequest) {
-        return {
-          time: "",
-          date: "",
-        };
-      }
+      // if (!this.vendor)
+      //   return {
+      //     time: "",
+      //     date: "",
+      //   };
       let serviceTimeString = "For Whole Event";
       let serviceDate = "";
-      this.timelineDates.forEach((td) => {
+      this.proposalRequest.eventData.timelineDates.forEach((td) => {
         td.timelineItems.forEach((timelineItem) => {
           if (
             timelineItem &&

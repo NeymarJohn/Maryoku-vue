@@ -8,7 +8,7 @@
       <div class="item-cont">
         {{ item.requirementTitle }}
         <span class="madatory-badge" v-if="item.isMandatory">Mandatory</span>
-        <span class="complementary-badge" v-else>Complementary</span>
+        <span class="complimentary-badge" v-else>Complimentary</span>
       </div>
       <div class="size-cont editor-wrapper">
         <template v-if="!isEdit">{{ item.requirementSize }}</template>
@@ -166,7 +166,7 @@ export default {
     margin-left: 0.5em;
     line-height: 1em;
   }
-  .complementary-badge {
+  .complimentary-badge {
     color: #ba8d05;
     font-weight: normal;
     font-size: 0.75em;

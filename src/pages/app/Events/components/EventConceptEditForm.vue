@@ -138,7 +138,7 @@
       </div>
     </div>
   </div>
-</template>
+</template>                    
 <script>
 import Multiselect from "vue-multiselect";
 
@@ -182,7 +182,6 @@ const tags = [
   { name: "gleeful", selected: false },
   { name: "cheerful", selected: false },
   { name: "different", selected: false },
-  { name: "seasonal", selected: false },
 ];
 
 const initialConcept = {

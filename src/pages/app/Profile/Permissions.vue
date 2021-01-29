@@ -3,7 +3,7 @@
     <div class="font-size-20 font-bold-extra">Add colleague to your projects</div>
     <div class="font-size-16 font-bold mt-40">Email</div>
     <div class="add-form">
-      <maryoku-input v-model="newColleague.email" inputStyle="email"></maryoku-input>
+      <maryoku-input v-model="invitedEmail" inputStyle="email"></maryoku-input>
       <div class="input-wrapper">
         <multiselect
           v-model="newColleague.role"
@@ -28,7 +28,7 @@
           track-by="id"
         ></multiselect>
       </div>
-      <md-button class="maryoku-btn md-red" @click="addCollaborator">Add</md-button>
+      <md-button class="maryoku-btn md-red">Add</md-button>
     </div>
     <hr class="mt-50 mb-50" />
     <div class="permision-list">
@@ -43,9 +43,7 @@
         v-for="(user, index) in permittedUsers"
         :key="index"
         :index="index"
-        :user="user"
-        @remove="removeUser"
-        @update="updateCollobrator"
+        :use="user"
       ></permitted-user-row>
     </div>
   </div>
@@ -54,8 +52,6 @@
 <script>
 import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 import PermittedUserRow from "./components/PermittedUserRow.vue";
-import Collaborator from "@/models/Collaborator";
-import CalendarEvent from "@/models/CalendarEvent";
 export default {
   components: {
     MaryokuInput,
@@ -66,13 +62,12 @@ export default {
       invitedEmail: "",
       permittedUsers: [{ name: "Rachel Mendelovich" }, { name: "Rachel Mendelovich" }, { name: "Rachel Mendelovich" }],
       roles: [
-        { id: "edit", title: "Can Edit" },
-        { id: "view", title: "Can View" },
-        { id: "comment", title: "Can Comment" },
+        { id: "editor", title: "Editor" },
+        { id: "Admin", title: "Admin" },
       ],
       newColleague: {
         email: "",
-        role: { id: "edit", title: "Can Edit" },
+        role: "editor",
         invitedEvent: "",
       },
       myEvents: [],
@@ -84,7 +79,6 @@ export default {
         myEvents: true,
       },
     };
-    this.getCollaborators();
     this.$http
       .get(`${process.env.SERVER_URL}/1/events`, {
         params: filters,
@@ -100,38 +94,6 @@ export default {
   computed: {
     userData() {
       return this.$store.state.auth.user;
-    },
-  },
-  methods: {
-    addCollaborator() {
-      new Collaborator({
-        email: this.newColleague.email,
-        role: this.newColleague.role.id,
-        eventList: [new CalendarEvent({ id: this.newColleague.invitedEvent.id })],
-      })
-        .save()
-        .then((res) => {
-          this.permittedUsers.push(res);
-          this.newColleague = {
-            email: "",
-            role: "edit",
-            invitedEvent: null,
-          };
-        });
-    },
-    updateCollobrator() {
-      this.getCollaborators();
-    },
-    removeUser(user) {
-      const userIndex = this.permittedUsers.findIndex((item) => item.id == user.id);
-      setTimeout(() => {
-        this.permittedUsers.splice(userIndex, 1);
-      }, 300);
-    },
-    getCollaborators() {
-      new Collaborator().get().then((res) => {
-        this.permittedUsers = res;
-      });
     },
   },
 };

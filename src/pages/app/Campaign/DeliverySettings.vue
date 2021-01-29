@@ -448,13 +448,23 @@ export default {
       this.exportXls(this.currentCampaign.guestSMS, "phonenumbers");
     },
     downloadUsersEmailList() {
-      const csvData = [
-        ["id", "name", "value"],
-        [1, "sheetjs", 7262],
-        [2, "js-xlsx", 6969],
-      ];
-      console.log(this.currentCampaign);
-      this.exportXls(this.currentCampaign.guestEmails, "emails");
+      console.log("campaign", this.campaign);
+      console.log("currentCamaopign", this.currentCampaign);
+      if (this.campaign.name === "RSVP") {
+        this.$http.get(`${process.env.SERVER_URL}/1/rsvp/guests-excel/${this.event.id}`).then((res) => {
+          const rsvpUsers = res.data;
+          const guestData = [];
+          this.currentCampaign.guestEmails.forEach((guest) => {
+            if (rsvpUsers.findIndex((it) => it.email === guest.email) < 0) {
+              guestData.push(guest);
+            }
+          });
+          console.log(guestData);
+          this.exportXls(rsvpUsers.concat(guestData), "emails");
+        });
+      } else {
+        this.exportXls(this.currentCampaign.guestEmails, "emails");
+      }
     },
     exportXls(csvData, fileName) {
       const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";

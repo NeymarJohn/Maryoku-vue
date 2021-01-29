@@ -43,12 +43,9 @@
         </div>
       </div>
 
-      <div v-if="!isEdit && section.inOutDoor && section.inOutDoor.length" class="value align-self-center d-flex">
-        <div class="mr-30" v-for="item in section.inOutDoor">
-          <img  :src="getIconUrl(item.toLowerCase())">
-          {{ item.toLowerCase()}}
-        </div>
-      </div>
+      <div v-if="!isEdit && section.hasOwnProperty('inOutDoor')" class="value align-self-center d-flex">
+        <img v-if="this.section.inOutDoor" :src="getIconUrl(section.inOutDoor)">
+        {{ inOutDoorValue}} </div>
       <div v-if="!isEdit && section.hasOwnProperty('guestType')" class="value align-self-center d-flex">
         <img v-if="this.section.guestType" :src="getIconUrl('guestType')">
         {{section.guestType}}</div>
@@ -79,11 +76,10 @@
         </div>
       </div>
 
-      <div v-if="isEdit && section.hasOwnProperty('inOutDoor')" class="value align-self-center">
-          <md-checkbox
+      <div v-if="isEdit && section.inOutDoor" class="value align-self-center">
+          <md-radio
                   v-for="(item, index) in inOutDoorTypes"
                   v-model="section.inOutDoor"
-                  class="md-checkbox-circle md-red"
                   @change="inOutDoorChange"
                   :key="index"
                   :value="item.value">
@@ -91,7 +87,7 @@
               <img :src="getIconUrl(item.value)">
               {{ item.label }}
             </div>
-            </md-checkbox>
+            </md-radio>
       </div>
 
       <div v-if="isEdit && section.hasOwnProperty('guestType')" class="value">
@@ -289,6 +285,7 @@ export default {
       this.$emit('change', {location: loc});
     },
     inOutDoorChange() {
+      // console.log('inOutDoorChange', this.section.inOutDoor);
       this.$emit('change', {inOutDoor: this.section.inOutDoor});
     },
     guestNumberChange(e){
@@ -376,7 +373,7 @@ export default {
           end: moment(this.section.ended_at).format('YYYY-MM-DD'),
         }
       }
-      console.log('init', this.section);
+      console.log('init', this.dateData, this.markedDates);
 
       this.eventTypes = this.eventTypesList.map(it => {
         return {name: it.name, value: it.name, icon: `${this.$iconURL}Onboarding/${it.key}.svg` };

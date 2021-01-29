@@ -1,6 +1,6 @@
 <template>
   <div class="title-cont default add-item-form">
-    <div class="sub-items-cont" v-if="serviceType === 'cost'">
+    <div class="sub-items-cont">
       <span class="prev" @click="prev()" v-if="serviceSlidePos < 0">
         <md-icon>keyboard_arrow_left</md-icon>
       </span>
@@ -21,51 +21,40 @@
       <div class="fields-cont">
         <div class="field">
           <span>Description</span>
-          <input
-            v-model="serviceItem"
-            class="input-value"
-            :class="{ isFilled: !!serviceItem }"
-            type="text"
-            placeholder="Type name of element here"
-          />
+          <input v-model="serviceItem" class="description" placeholder="Type name of element here" />
         </div>
         <div class="field">
           <span>Size</span>
-          <input v-model="serviceItemSize" :class="{ isFilled: !!serviceItemSize }" />
+          <input v-model="serviceItemSize" />
         </div>
         <div class="field">
           <span>QTY</span>
-          <money v-model="qty" v-bind="qtyFormat" :class="{ isFilled: !!qty }" />
+          <money v-model="qty" v-bind="qtyFormat" />
         </div>
         <div class="field">
           <span>Price per unit</span>
-          <money v-model="unit" v-bind="currencyFormat" :class="{ isFilled: !!unit }" />
+          <money v-model="unit" v-bind="currencyFormat" />
         </div>
         <div class="field">
           <span>Total</span>
           <money :value="subTotal" v-bind="currencyFormat" v-if="isNumberVisible" class="total" />
-          <money v-model="unit" v-bind="currencyFormat" v-else class="total" :class="{ isFilled: !!unit }" />
+          <money v-model="unit" v-bind="currencyFormat" v-else class="total" />
         </div>
       </div>
       <div class="planer-choice-cont" v-if="serviceType === 'cost'">
-        <md-checkbox v-model="isRequiredPlannerChoice">
-          <span class="mr-10">
-            <md-icon class="color-black" style="font-size: 30px !important; margin-right: 10px; font-weight: normal">
-              add_circle_outline
-            </md-icon>
-            Add alternative
-          </span>
-          <md-icon class="color-black">keyboard_arrow_downz </md-icon>
-          <md-icon class="color-gray" style="font-size: 35px !important; font-weight: normal">help_outline</md-icon>
-        </md-checkbox>
+        <md-checkbox v-model="isRequiredPlannerChoice"
+          ><span class="mr-10">This item requires planners choice</span>
+          <md-icon class="color-black">keyboard_arrow_downz</md-icon
+          ><md-icon class="color-red">help_outline</md-icon></md-checkbox
+        >
       </div>
       <div class="planer-choice-cont" v-if="serviceType === 'included'">
-        <md-checkbox v-model="isComplementary">
-          <span class="mr-10"><img :src="`${$iconURL}common/gift-dark.svg`" class="mr-10" />Mark as complementary</span>
-          <md-icon class="color-red">help_outline</md-icon>
-        </md-checkbox>
+        <md-checkbox v-model="isComplementary"
+          ><span class="mr-10">Mark as complementary</span>
+          <md-icon class="color-red">help_outline</md-icon></md-checkbox
+        >
       </div>
-      <div v-if="isRequiredPlannerChoice" class="d-flex align-start mt-20">
+      <div v-if="isRequiredPlannerChoice" class="d-flex align-start">
         <img :src="`${$iconURL}Onboarding/enter-gray.svg`" style="margin-right: 10px" />
         <div>
           <div class="d-flex mb-20" v-for="(option, index) in plannerChoices" :key="`planer-option-${index}`">
@@ -75,22 +64,18 @@
                 <input
                   v-model="option.description"
                   style="width: 500px"
-                  class="input-value"
-                  type="text"
-                  :placeholder="`Type option here`"
-                  :class="{ isFilled: !!option.description }"
+                  class="description"
+                  placeholder="Type name of element here"
                 />
               </div>
             </div>
             <div style="width: 150px">
               <span class="font-bold">Price</span>
               <div>
-                <money
+                <input
                   v-model="option.price"
-                  class="input-value"
-                  placeholder="0.00"
-                  v-bind="currencyFormat"
-                  :class="{ isFilled: !!option.price }"
+                  class="description"
+                  placeholder="Type name of element here"
                   style="width: 160px"
                 />
               </div>
@@ -104,30 +89,12 @@
           </div>
         </div>
       </div>
-      <div v-if="isEditingComment" class="mt-30">
-        <div class="pb-10"><img :src="`${$iconURL}common/comment-dark.svg`" class="mr-10" /> <u>Add comment</u></div>
-        <textarea v-model="comment" class="textbox-comment" placeholder="Type your comment here"></textarea>
-        <md-button
-          class="maryoku-btn md-simple md-black"
-          style="vertical-align: bottom"
-          @click="isEditingComment = false"
-        >
-          Cancel
-        </md-button>
-      </div>
       <div class="action-cont">
-        <md-button class="md-simple md-black maryoku-btn" @click="cancel()"><u>Clear</u></md-button>
-        <md-button
-          class="md-simple md-black maryoku-btn"
-          @click="
-            isEditingComment = true;
-            comment = '';
-          "
-          :disabled="isEditingComment"
+        <md-button class="md-simple md-black maryoku-btn" @click="cancel()">Clear</md-button>
+        <md-button class="md-simple md-black maryoku-btn" @click="cancel()">
+          <md-icon>add_circle_outline</md-icon>
+          Add comment</md-button
         >
-          <img :src="`${$iconURL}common/comment-dark.svg`" class="mr-10" />
-          Add comment
-        </md-button>
         <md-button
           class="md-red maryoku-btn"
           :disabled="isDisabledAdd"
@@ -164,7 +131,6 @@ export default {
       unit: "",
       isRequiredPlannerChoice: false,
       isComplementary: false,
-      ttpCommunicationException: "",
       plannerChoices: [
         { description: "", price: 0 },
         { description: "", price: 0 },
@@ -194,7 +160,6 @@ export default {
         precision: 0,
         masked: false,
       },
-      isEditingComment: false,
     };
   },
   created() {
@@ -227,8 +192,8 @@ export default {
     },
     fillFormWithSelected(item) {
       console.log(item);
-      this.serviceItem = item.name;
-      this.size = "";
+      this.serviceItem = item.item;
+      this.size = item.size;
       this.qty = 1;
       this.plannerChoices = [
         { description: "", price: 0 },
@@ -237,7 +202,7 @@ export default {
     },
     saveItem(serviceItem, size, qty, price) {
       const editingService = {
-        comment: this.comment,
+        comments: [],
         dateCreated: "",
         includedInPrice: true,
         itemNotAvailable: false,
@@ -264,12 +229,6 @@ export default {
       this.serviceItem = "";
       this.isRequiredPlannerChoice = false;
       this.isComplementary = false;
-      this.comment = "";
-      this.isEditingComment = false;
-      this.plannerChoices = [
-        { description: "", price: 0 },
-        { description: "", price: 0 },
-      ];
     },
   },
   computed: {
@@ -287,31 +246,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .add-item-form {
-  input {
-    font-size: 16px;
-    width: 100%;
-    padding: 1.5rem 1rem;
-    border: 1px solid #b7b7b7;
-    box-shadow: none;
-    font: normal 16px "Manrope-Regular", sans-serif;
-    color: #050505;
-    &.isFilled {
-      border: 1px solid #828282;
-    }
-  }
-
-  input {
-    font-size: 16px;
-    width: 100%;
-    padding: 1.5rem 1rem;
-    border: 1px solid #b7b7b7;
-    box-shadow: none;
-    font: normal 16px "Manrope-Regular", sans-serif;
-    color: #050505;
-    &.isFilled {
-      border: 1px solid #828282;
-    }
-  }
   .sub-items-cont {
     padding: 1rem 0;
     overflow: hidden;
@@ -489,7 +423,14 @@ export default {
           display: inline-block;
           font: 800 16px "Manrope-Regular", sans-serif;
         }
-
+        input {
+          // text-transform: capitalize;
+          width: 100%;
+          padding: 1.5rem 1rem;
+          border: 1px solid #d5d5d5;
+          font: normal 16px "Manrope-Regular", sans-serif;
+          color: #050505;
+        }
         &:last-child {
           margin-right: 0;
         }
@@ -499,9 +440,6 @@ export default {
   .action-cont {
     text-align: right;
     margin-top: 35px;
-  }
-  .textbox-comment {
-    max-width: 380px;
   }
 }
 </style>
