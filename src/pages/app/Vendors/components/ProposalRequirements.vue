@@ -19,6 +19,7 @@
     </div>
     <div class="collapse-panel-content" v-if="isExpanded">
       <proposal-add-item-form
+        v-if="canAdd"
         :optionalRequirements="optionalRequirements"
         :serviceType="tableCategory"
         @addItem="addItem"
@@ -57,6 +58,10 @@ export default {
       type: String,
       default: "",
     },
+    canAdd: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -80,6 +85,7 @@ export default {
     addItem(serviceItem) {
       if (!this.services) this.services = [];
       this.services.push(serviceItem);
+      this.services = Object.assign([], this.services);
     },
   },
   components: {
@@ -101,7 +107,15 @@ export default {
     },
     optionalRequirements() {
       if (!this.requirements) return [];
-      return this.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
+      console.log("this.requirements", this.requirements);
+      const multiSelectionCategories = this.requirements.filter((item) => item.type === "multi-selection");
+      let optionalRequirements = [];
+      multiSelectionCategories.forEach((category) => {
+        const selectedOptions = category.options.filter((item) => item.selected);
+        optionalRequirements = optionalRequirements.concat(selectedOptions);
+      });
+      console.log("optionalRequirements", optionalRequirements);
+      return optionalRequirements;
     },
     services: {
       get: function () {
@@ -155,7 +169,7 @@ export default {
     }
   }
   .collapse-panel-content {
-    padding: 0px 34px 34px;
+    padding: 0px 40px 40px;
   }
 }
 </style>

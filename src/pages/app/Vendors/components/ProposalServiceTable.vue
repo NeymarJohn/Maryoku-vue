@@ -267,7 +267,7 @@ export default {
     },
     updateItem({ index, item }) {
       this.services[index] = item;
-      this.services = this.services;
+      this.services = Object.assign([], this.services);
     },
     removeItem(index) {
       this.services.splice(index, 1);
