@@ -266,6 +266,10 @@ export default {
       this.isComplementary = false;
       this.comment = "";
       this.isEditingComment = false;
+      this.plannerChoices = [
+        { description: "", price: 0 },
+        { description: "", price: 0 },
+      ];
     },
   },
   computed: {
