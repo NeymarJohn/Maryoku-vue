@@ -448,8 +448,6 @@ export default {
       this.exportXls(this.currentCampaign.guestSMS, "phonenumbers");
     },
     downloadUsersEmailList() {
-      console.log("campaign", this.campaign);
-      console.log("currentCamaopign", this.currentCampaign);
       if (this.campaign.name === "RSVP") {
         this.$http.get(`${process.env.SERVER_URL}/1/rsvp/guests-excel/${this.event.id}`).then((res) => {
           const rsvpUsers = res.data;
@@ -459,7 +457,6 @@ export default {
               guestData.push(guest);
             }
           });
-          console.log(guestData);
           this.exportXls(rsvpUsers.concat(guestData), "emails");
         });
       } else {
