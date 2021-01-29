@@ -23,7 +23,7 @@
           <span>Description</span>
           <input
             v-model="serviceItem"
-            class="description"
+            class="input-value"
             :class="{ isFilled: !!serviceItem }"
             type="text"
             placeholder="Type name of element here"
@@ -75,19 +75,22 @@
                 <input
                   v-model="option.description"
                   style="width: 500px"
-                  class="description"
+                  class="input-value"
                   type="text"
                   :placeholder="`Type option here`"
+                  :class="{ isFilled: !!option.description }"
                 />
               </div>
             </div>
             <div style="width: 150px">
               <span class="font-bold">Price</span>
               <div>
-                <input
+                <money
                   v-model="option.price"
-                  class="description"
-                  placeholder="Type name of element here"
+                  class="input-value"
+                  placeholder="0.00"
+                  v-bind="currencyFormat"
+                  :class="{ isFilled: !!option.price }"
                   style="width: 160px"
                 />
               </div>
@@ -113,7 +116,7 @@
         </md-button>
       </div>
       <div class="action-cont">
-        <md-button class="md-simple md-black maryoku-btn" @click="cancel()">Clear</md-button>
+        <md-button class="md-simple md-black maryoku-btn" @click="cancel()"><u>Clear</u></md-button>
         <md-button
           class="md-simple md-black maryoku-btn"
           @click="
@@ -280,6 +283,31 @@ export default {
 </script>
 <style lang="scss" scoped>
 .add-item-form {
+  input {
+    font-size: 16px;
+    width: 100%;
+    padding: 1.5rem 1rem;
+    border: 1px solid #b7b7b7;
+    box-shadow: none;
+    font: normal 16px "Manrope-Regular", sans-serif;
+    color: #050505;
+    &.isFilled {
+      border: 1px solid #828282;
+    }
+  }
+
+  input {
+    font-size: 16px;
+    width: 100%;
+    padding: 1.5rem 1rem;
+    border: 1px solid #b7b7b7;
+    box-shadow: none;
+    font: normal 16px "Manrope-Regular", sans-serif;
+    color: #050505;
+    &.isFilled {
+      border: 1px solid #828282;
+    }
+  }
   .sub-items-cont {
     padding: 1rem 0;
     overflow: hidden;
@@ -457,18 +485,7 @@ export default {
           display: inline-block;
           font: 800 16px "Manrope-Regular", sans-serif;
         }
-        input {
-          // text-transform: capitalize;
-          width: 100%;
-          padding: 1.5rem 1rem;
-          border: 1px solid #b7b7b7;
-          box-shadow: none;
-          font: normal 16px "Manrope-Regular", sans-serif;
-          color: #050505;
-          &.isFilled {
-            border: 1px solid #828282;
-          }
-        }
+
         &:last-child {
           margin-right: 0;
         }

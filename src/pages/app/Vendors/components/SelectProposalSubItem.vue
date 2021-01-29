@@ -42,12 +42,11 @@ export default {
 .select-proposal-sub-item-wrapper {
   margin-right: 1rem;
   display: inline-block;
-
+  font-size: 14px;
   div {
     padding: 0.5rem 1rem;
     border-radius: 100px;
     background-color: #ffffff;
-    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     float: left;

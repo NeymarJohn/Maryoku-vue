@@ -123,8 +123,8 @@
             class="planner-options-item"
           >
             <div>
-              <div class="font-size-14 font-normal color-gray">Option {{ ("0" + (index + 1)).slice(-2) }}</div>
-              <div class="font-size-16 font-normal color-gray">{{ plannerOption.description }}</div>
+              <div class="font-size-14 font-regular color-gray">Option {{ ("0" + (index + 1)).slice(-2) }}</div>
+              <div class="font-size-16 font-regular color-gray">{{ plannerOption.description }}</div>
             </div>
             <money
               v-model="plannerOption.price"
@@ -138,7 +138,7 @@
               }"
               class="input-value"
             />
-            <div class="font-size-16 font-normal color-gray text-center">$ {{ subTotal }}</div>
+            <div class="font-size-16 font-regular color-gray text-center">$ {{ subTotal }}</div>
           </div>
         </div>
       </div>
@@ -213,7 +213,7 @@
                 Add price
                 <span>
                   <md-icon class="color-gray" style="font-size: 40px; margin-left: 10px">help_outline</md-icon>
-                  <md-tooltip md-direction="top" class="bg-gray" :md-active="true">
+                  <md-tooltip md-direction="top" class="bg-gray">
                     Clicking ‘Add price’ will move this item to <br />the “Paid elements” table above
                   </md-tooltip>
                 </span>
@@ -377,8 +377,20 @@ export default {
   font-size: 16px;
   font-weight: 600;
   display: grid;
-  grid-template-columns: 30% 10% 10% 12% 15% 23%;
+  grid-template-columns: 40% 10% 12% 12% 10% 16%;
   align-items: center;
+  input {
+    font-size: 16px;
+    width: 100%;
+    padding: 1.5rem 1rem;
+    border: 1px solid #b7b7b7;
+    box-shadow: none;
+    font: normal 16px "Manrope-Regular", sans-serif;
+    color: #050505;
+    &.isFilled {
+      border: 1px solid #828282;
+    }
+  }
   .action-menu {
     visibility: hidden;
   }
@@ -392,7 +404,7 @@ export default {
     grid-template-columns: 80%;
     .description-wrapper {
       display: grid;
-      grid-template-columns: 30% 10% 60%;
+      grid-template-columns: 40% 10% 50%;
     }
   }
   &.included-services {
@@ -417,7 +429,7 @@ export default {
   .madatory-badge {
     color: #f51355;
     font-weight: normal;
-    font-size: 0.75em;
+    font-size: 11px;
     display: inline-block;
     border: solid 1px #f51355;
     padding: 4px 8px;
@@ -428,7 +440,7 @@ export default {
   .complementary-badge {
     color: #ba8d05;
     font-weight: normal;
-    font-size: 0.75em;
+    font-size: 11px;
     display: inline-block;
     border: solid 1px #ba8d05;
     padding: 4px 8px;
