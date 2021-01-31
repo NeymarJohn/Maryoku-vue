@@ -44,7 +44,7 @@
       </div>
 
       <div v-if="!isEdit && section.inOutDoor && section.inOutDoor.length" class="value align-self-center d-flex">
-        <div class="mr-50" v-for="item in section.inOutDoor">
+        <div class="mr-30" v-for="item in section.inOutDoor">
           <img  :src="getIconUrl(item.toLowerCase())">
           {{ item.toLowerCase()}}
         </div>

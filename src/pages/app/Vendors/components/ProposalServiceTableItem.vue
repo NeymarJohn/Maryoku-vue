@@ -11,12 +11,12 @@
         <div class="mt-20 comment-area" v-if="!isEdit">{{ item.comment }}</div>
         <textarea class="mt-20" v-else v-model="item.comment"></textarea>
       </div>
-      <div class="size-cont editor-wrapper">
+      <!-- <div class="size-cont editor-wrapper">
         <template v-if="!isEdit">{{ item.requirementSize }}</template>
         <template v-else>
           <input class="input-value" type="text" v-model="item.requirementSize" />
         </template>
-      </div>
+      </div> -->
       <div class="qty-cont editor-wrapper">
         <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue }}</template>
         <template v-else>
@@ -91,8 +91,14 @@
             <md-menu-item @click="isEdit = true">
               <span>
                 <md-icon class="color-black mr-10">add_circle_outline</md-icon>
-                Add an alternative</span
-              >
+                Add an alternative
+              </span>
+            </md-menu-item>
+            <md-menu-item @click="isEdit = true">
+              <span>
+                <img :src="`${$iconURL}common/gift-dark.svg`" class="label-icon mr-10" />
+                Mark as complimentary
+              </span>
             </md-menu-item>
           </md-menu-content>
         </md-menu>
@@ -105,12 +111,12 @@
             {{ item.requirementTitle }}
             <span class="madatory-badge" v-if="item.isMandatory">Mandatory</span>
           </div>
-          <div class="size-cont editor-wrapper">
+          <!-- <div class="size-cont editor-wrapper">
             <template v-if="!isEdit">{{ item.requirementSize }}</template>
             <template v-else>
               <input class="input-value" type="text" v-model="item.requirementSize" />
             </template>
-          </div>
+          </div> -->
         </div>
         <div class="planner-options">
           <img
@@ -147,7 +153,6 @@
   <div v-else-if="serviceType == 'included'">
     <div class="proposal-service-item-wrapper included-services">
       <div class="item-cont">
-        <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" style="width: 25px; height: 25px" />
         {{ item.requirementTitle }}
         <span class="madatory-badge" v-if="item.isMandatory">Mandatory</span>
         <span class="complementary-badge" v-if="item.isComplementary">
@@ -160,12 +165,12 @@
         <div class="mt-20 comment-area" v-if="!isEdit">{{ item.comment }}</div>
         <textarea class="mt-20" v-else v-model="item.comment"></textarea>
       </div>
-      <div class="size-cont editor-wrapper">
+      <!-- <div class="size-cont editor-wrapper">
         <template v-if="!isEdit">{{ item.requirementSize }}</template>
         <template v-else>
           <input class="input-value" type="text" v-model="item.requirementSize" />
         </template>
-      </div>
+      </div> -->
       <div class="qty-cont editor-wrapper">
         <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue }}</template>
         <template v-else>
@@ -187,8 +192,11 @@
             class="input-value"
           />
         </template>
+        <span v-else>${{ item.price }}</span>
       </div>
-      <div class="total-cont editor-wrapper"></div>
+      <div class="total-cont editor-wrapper">
+        <span>${{ subTotal }}</span>
+      </div>
       <div class="action-cont editor-wrapper">
         <template v-if="isEdit">
           <a class="cancel" @click="cancel()">Cancel</a>
@@ -245,12 +253,12 @@
         <br />
         <div v-if="isExpanded"></div>
       </div>
-      <div class="size-cont editor-wrapper">
+      <!-- <div class="size-cont editor-wrapper">
         <template v-if="!isEdit">{{ item.requirementSize }}</template>
         <template v-else>
           <input class="input-value" type="text" v-model="item.requirementSize" />
         </template>
-      </div>
+      </div> -->
       <div class="qty-cont editor-wrapper">
         <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue }}</template>
         <template v-else>
@@ -274,7 +282,7 @@
           />
         </template>
       </div>
-      <div class="total-cont editor-wrapper"></div>
+      <div class="total-cont editor-wrapper">${{ subTotal | withComma }}</div>
       <div class="action-cont editor-wrapper">
         <template v-if="isEdit">
           <a class="cancel" @click="cancel()">Cancel</a>
@@ -332,7 +340,6 @@ export default {
   },
   computed: {
     subTotal() {
-      console.log("subtotal");
       return this.item.price * this.item.requirementValue;
     },
   },
@@ -377,7 +384,7 @@ export default {
   font-size: 16px;
   font-weight: 600;
   display: grid;
-  grid-template-columns: 40% 10% 12% 12% 10% 16%;
+  grid-template-columns: 40% 15% 15% 15% 15%;
   align-items: center;
   input {
     font-size: 16px;
@@ -408,7 +415,7 @@ export default {
     }
   }
   &.included-services {
-    padding: 20px 0px;
+    // padding: 20px 0px;
     border-top: 1px solid #d5d5d5;
     border-left: none;
     border-right: none;

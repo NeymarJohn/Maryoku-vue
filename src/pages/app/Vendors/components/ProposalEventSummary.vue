@@ -3,7 +3,7 @@
     <template v-if="isEdit"></template>
     <template v-else>
       <div class="event-summary-wrapper">
-        <div class="with-bkimg" :style="`background-image:url(${vendor.images[0]})`">
+        <div class="with-bkimg" :style="vendor.images ? `background-image:url(${vendor.images[0]})` : ''">
           <div class="summary-cont">
             <div class="upper">
               <h3>{{ title }}</h3>
@@ -113,6 +113,20 @@
             <div class="mb-10" v-for="(policy, index) in vendor.noRules" :key="index">
               <span class="font-bold" style="min-width: 50%; display: inline-block">{{ policy.name }}</span>
               <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" class="label-icon" />
+            </div>
+          </div>
+          <div class="cancellation">
+            <h5 class="subtitle">Our cancellation approach</h5>
+            <div id="Policy">
+              <div class="rules">
+                <div class="rules">
+                  <div class="rule" v-for="(policy, yIndex) in cancellationData" :key="yIndex">
+                    <div class="item">{{ policy.notice }}</div>
+                    <div class="item">{{ policy.vendorPayout }}</div>
+                    <div class="item">{{ policy.cancellationFee }}</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="cancellation">
@@ -262,6 +276,28 @@ export default {
       considerUpdate: false,
       warning: false,
       categories: [],
+      cancellationData: [
+        {
+          notice: "Cancellation on the day of the Event",
+          vendorPayout: "Full payment",
+          cancellationFee: "Full Payment-no refund will be given",
+        },
+        {
+          notice: "Cancellation less than a week prior of the Event but not on the day of the Event",
+          vendorPayout: "80% payment",
+          cancellationFee: "Full Payment-no refund will be given",
+        },
+        {
+          notice: "Cancellation less than two weeks prior of the Event bu more than one week prior to the Event",
+          vendorPayout: "60% payment",
+          cancellationFee: "80% Payment(20% refunded to Planner)",
+        },
+        {
+          notice: "Cancellation more than two weeks prior to the Event",
+          vendorPayout: "15% payment equivalent to down payment",
+          cancellationFee: "Down payment will not be refunded",
+        },
+      ],
     };
   },
   methods: {
@@ -716,7 +752,7 @@ export default {
     .rules {
       margin: 3rem 0;
       .rule {
-        padding: 2rem 0;
+        padding: 2rem 2rem 2rem 0;
         border-bottom: 1px solid #dddddd;
         font: 600 16px Manrope-Regular, sans-serif;
         display: flex;

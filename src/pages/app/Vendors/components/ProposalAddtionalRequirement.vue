@@ -1,5 +1,5 @@
 <template>
-  <div class="white-card mt-40 additional-requirements">
+  <div class="white-card mt-40 additional-requirements" v-if="specialRequirements.length > 0">
     <div class="p-40">
       <div>
         <img :src="`${$iconURL}Submit+Proposal/Group+8840.svg`" />
@@ -35,6 +35,7 @@
             </div>
           </template>
         </div>
+        <md-button class="md-simple md-outlined md-red maryoku-btn">Suggest new seating arrangement</md-button>
         <div style="margin-left: 80px" v-if="requirement.groupSizes.findIndex((item) => item.selected) >= 0">
           <div class="font-size-22 font-bold mb-20">
             <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" class="page-icon" />
@@ -62,6 +63,7 @@
       <md-checkbox v-model="agreeTerms">I read this section & I agree</md-checkbox>
     </div>
   </div>
+  <div v-else></div>
 </template>
 <script>
 export default {

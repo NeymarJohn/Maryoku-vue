@@ -36,13 +36,13 @@
             @update-focus-value="onUpdateFocus"
           />
           <v-signup-category-selector
-              :title="'Address'"
-              :field="'vendorAddresses'"
-              :img="`${iconUrl}Asset 550.svg`"
-              :value="vendor.vendorAddresses || ['']"
-              :borderBottom="true"
-              :required="true"
-              @update-focus-value="onUpdateFocus"
+            :title="'Address'"
+            :field="'vendorAddresses'"
+            :img="`${iconUrl}Asset 550.svg`"
+            :value="vendor.vendorAddresses || ['']"
+            :borderBottom="true"
+            :required="true"
+            @update-focus-value="onUpdateFocus"
           />
           <v-signup-editable-field
             :title="'Phone'"
@@ -107,7 +107,7 @@ export default {
   },
   created() {},
   mounted() {
-      // console.log("basic.info.vendor", this.vendor);
+    // console.log("basic.info.vendor", this.vendor);
   },
   methods: {
     save() {},
@@ -116,9 +116,9 @@ export default {
   computed: {},
   filters: {},
   watch: {
-      vendor(newVal){
-          // console.log("vendor.basicInfo.watch.vendor", newVal);
-      }
+    vendor(newVal) {
+      // console.log("vendor.basicInfo.watch.vendor", newVal);
+    },
   },
 };
 </script>

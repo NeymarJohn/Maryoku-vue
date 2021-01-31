@@ -21,7 +21,7 @@
             </div>
           </div>
           <div class="banner">
-            <img :src="vendor.images[0]" v-if="vendor.hasOwnProperty('images') && vendor.images.length > 0" />
+            <!--<img :src="vendor.images[0]" v-if="vendor.hasOwnProperty('images') && vendor.images.length > 0" />-->
           </div>
           <div class="about-cont" id="About">
             <div class="block">
@@ -379,8 +379,8 @@ export default {
           icon: "audiovisualstagingservices.svg",
         },
         {
-          name: "Giveaways",
-          value: "giveaways",
+          name: "Swags",
+          value: "swags",
           icon: "swags.svg",
         },
         {

@@ -47,7 +47,7 @@
           <money v-model="unit" v-bind="currencyFormat" v-else class="total" :class="{ isFilled: !!unit }" />
         </div>
       </div>
-      <div class="planer-choice-cont" v-if="serviceType === 'cost'">
+      <!-- <div class="planer-choice-cont" v-if="serviceType === 'cost'">
         <md-checkbox v-model="isRequiredPlannerChoice">
           <span class="mr-10">
             <md-icon class="color-black" style="font-size: 30px !important; margin-right: 10px; font-weight: normal">
@@ -58,13 +58,13 @@
           <md-icon class="color-black">keyboard_arrow_downz </md-icon>
           <md-icon class="color-gray" style="font-size: 35px !important; font-weight: normal">help_outline</md-icon>
         </md-checkbox>
-      </div>
-      <div class="planer-choice-cont" v-if="serviceType === 'included'">
+      </div> -->
+      <!-- <div class="planer-choice-cont" v-if="serviceType === 'included'">
         <md-checkbox v-model="isComplementary">
           <span class="mr-10"><img :src="`${$iconURL}common/gift-dark.svg`" class="mr-10" />Mark as complementary</span>
           <md-icon class="color-red">help_outline</md-icon>
         </md-checkbox>
-      </div>
+      </div> -->
       <div v-if="isRequiredPlannerChoice" class="d-flex align-start mt-20">
         <img :src="`${$iconURL}Onboarding/enter-gray.svg`" style="margin-right: 10px" />
         <div>
@@ -117,7 +117,7 @@
       </div>
       <div class="action-cont">
         <md-button class="md-simple md-black maryoku-btn" @click="cancel()"><u>Clear</u></md-button>
-        <md-button
+        <!-- <md-button
           class="md-simple md-black maryoku-btn"
           @click="
             isEditingComment = true;
@@ -127,13 +127,13 @@
         >
           <img :src="`${$iconURL}common/comment-dark.svg`" class="mr-10" />
           Add comment
-        </md-button>
+        </md-button> -->
         <md-button
           class="md-red maryoku-btn"
           :disabled="isDisabledAdd"
           @click="saveItem(serviceItem, serviceItemSize, qty, unit)"
-          >Add This</md-button
-        >
+          >Add item
+        </md-button>
       </div>
     </div>
   </div>

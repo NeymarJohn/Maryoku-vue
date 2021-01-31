@@ -283,8 +283,8 @@ export default {
           icon: "audiovisualstagingservices.svg",
         },
         {
-          name: "Giveaways",
-          value: "giveaways",
+          name: "Swags",
+          value: "swags",
           icon: "swags.svg",
         },
         {

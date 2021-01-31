@@ -29,7 +29,7 @@
             <span>Sincerely,</span>
             <p>{{ vendor.companyName }}</p>
           </div>
-          <proposal-event-vision v-if="event.concept" :event="event"></proposal-event-vision>
+          <proposal-event-vision :event="event"></proposal-event-vision>
           <proposal-additional-requirement></proposal-additional-requirement>
         </div>
         <div class="step-wrapper" v-if="step == 1">
@@ -38,8 +38,8 @@
         <div class="step-wrapper" v-if="step == 2">
           <h3>Can you also provide any of these services for this event?</h3>
           <p>
-            <img :src="`${iconUrl}Group 5280 (5).svg`" />Did you know, adding vendors gets you fair commission if they
-            get picked?!
+            <img :src="`${iconUrl}Group 5280 (5).svg`" />
+            Did you know? Referring us to vendors for these services can get you a commission get!
           </p>
           <proposal-item-secondary-service
             v-for="(service, index) in extraServices"

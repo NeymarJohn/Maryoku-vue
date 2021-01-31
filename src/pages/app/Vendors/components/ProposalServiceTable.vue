@@ -3,7 +3,6 @@
     <div class="editable-sub-items-cont">
       <div class="editable-sub-items-header">
         <span>Description</span>
-        <span class="text-center">Size</span>
         <span class="text-center">QTY</span>
         <span class="text-center">Price per unit</span>
         <span class="text-center">Subtotal</span>
@@ -535,7 +534,7 @@ export default {
       padding: 40px 40px 30px 40px;
       display: grid;
       // grid-template-columns: 30% 10% 10% 12% 15%;
-      grid-template-columns: 40% 10% 12% 12% 10% 16%;
+      grid-template-columns: 40% 15% 15% 15% 15%;
 
       span {
         display: inline-block;

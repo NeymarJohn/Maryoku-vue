@@ -46,7 +46,7 @@
       <textarea class="mb-30" placeholder="Write description here" v-model="companyDescription"></textarea>
     </div>
     <div class="mt-30 pb-50">
-      <md-button class="md-simple edit-btn" @click="deleteProfile">Delete My Profile</md-button>
+      <md-button class="md-simple edit-btn">Delete My Profile</md-button>
       <div>You will receive an email to confirm your decision.</div>
       <div>
         Please note, that all events you have created will be permanently erased. You may want to save backups of these
@@ -57,7 +57,6 @@
 </template>
 <script>
 import ProfileInfoField from "./components/ProfileInfoField.vue";
-import swal from "sweetalert2";
 export default {
   components: {
     ProfileInfoField,
@@ -77,26 +76,6 @@ export default {
   methods: {
     saveProfileField(profileData) {
       this.$store.dispatch("auth/updateProfile", { [profileData.name]: profileData.value, id: this.userData.id });
-    },
-    deleteProfile() {
-      swal({
-        title: "<div style='text-align:center'>Are you sure?</div>",
-        text: `You won't be able to login with current credetials!`,
-        showCancelButton: true,
-        type: "warning",
-        confirmButtonClass: "md-button md-success confirm-btn-bg ",
-        cancelButtonClass: "md-button md-danger cancel-btn-bg",
-        confirmButtonText: "Yes, I'll delete my profile!",
-        buttonsStyling: false,
-      }).then((result) => {
-        if (result.value) {
-          this.$http
-            .post(`${process.env.SERVER_URL}/1/delete-profile`, {}, { headers: this.$auth.getAuthHeader() })
-            .then((res) => {
-              this.$router.push("/signout");
-            });
-        }
-      });
     },
   },
   created() {

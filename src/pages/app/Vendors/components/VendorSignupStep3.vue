@@ -58,14 +58,14 @@
                           </div>
                       </template>
                       <template v-if="r.type == String">
-                        <!--<div class="item" v-if="!noteRules.includes(r)" @click="noteRule(r)">-->
-                          <!--<a class="note">+ Add Note</a>-->
-                        <!--</div>-->
-                        <!--<div class="item noflex" v-else>-->
-                          <!--<textarea placeholder="Except from the parking area" rows="3" />-->
-                          <!--<br />-->
-                          <!--<a class="cancel" @click="noteRule(r)">Cancel</a>-->
-                        <!--</div>-->
+                        <div class="item" v-if="!noteRules.includes(r)" @click="noteRule(r)">
+                          <a class="note">+ Add Note</a>
+                        </div>
+                        <div class="item noflex" v-else>
+                          <textarea placeholder="Except from the parking area" rows="3" />
+                          <br />
+                          <a class="cancel" @click="noteRule(r)">Cancel</a>
+                        </div>
                       </template>
                       <template v-if="r.type == 'Selection'">
                         <select class="unit-select" v-model="r.value">
@@ -786,7 +786,7 @@ export default {
   },
   methods: {
     updateExDonts(religion, holiday) {
-      // console.log("updateExDonts", holiday);
+      console.log("updateExDonts", holiday);
       holiday.selected = !holiday.selected;
       let day = holiday.start.split('-')[2];
 
@@ -1043,7 +1043,6 @@ export default {
         })
       }
 
-      console.log('markedDates', this.markedDates);
       this.optimizeWeekDays(this.selectedWeekdays);
       this.componentKey += 1;
     },
