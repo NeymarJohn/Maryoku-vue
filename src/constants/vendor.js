@@ -20,6 +20,12 @@ export const businessCategories = [
                 value: false,
                 xIncluded: true,
               },
+              {
+                name: 'dining options within walking distance',
+                type: Boolean,
+                value: false,
+                xIncluded: true,
+              },
             ]
           },
           {
@@ -2715,7 +2721,7 @@ export const businessCategories = [
     ]
   },
   {
-    name: 'swags',
+    name: 'giveaways',
     categories: [
       {
         name: 'amenities',
@@ -3276,7 +3282,7 @@ export const companyServices = [
     available: ['audio', 'visual'],
   },
   {
-    name: 'swags',
+    name: 'giveaways',
     type: Array,
     value: [],
     available: ['favors', 'promotional'],
@@ -3332,11 +3338,6 @@ export const VendorPolicy = [
       },
       {
         name: "Dress code",
-        type: Boolean,
-        hasComment: true,
-      },
-      {
-        name: "Minimum Spend",
         type: Boolean,
         hasComment: true,
       },
@@ -3462,7 +3463,7 @@ export const VendorPolicy = [
     ],
   },
   {
-    category: "swags",
+    category: "giveaways",
     items: [
       {
         name: "Allow pickup",
@@ -3543,7 +3544,7 @@ export const VendorPolicy = [
       // },
       {
         name: "Flexible to different dress codes",
-        type: String,
+        type: Boolean,
         hasComment: true,
       },
       {
@@ -3642,8 +3643,14 @@ export const VendorPricingPolicy = [
         hasComment: true,
       },
       {
+        name: "Minimum Spend",
+        type: Number,
+        hasComment: true,
+      },
+      {
         name: "Setup hours included in rental",
         type: Number,
+        label: 'Number of hours',
         hasComment: true,
       },
       {
@@ -3933,7 +3940,7 @@ export const VendorPricingPolicy = [
     ],
   },
   {
-    category: "swags",
+    category: "giveaways",
     items: [
       {
         name: "Rushed orders",

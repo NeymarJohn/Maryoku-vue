@@ -247,10 +247,10 @@ export default {
     ...mapActions("comment", ["getCommentComponents"]),
     getAllRequirements: async function () {
       this.allRequirements = this.storedRequirements[this.event.id];
-
+      console.log('getAllRequirements', this.allRequirements);
       if (!this.allRequirements) {
         this.allRequirements = await this.$http.get(`${process.env.SERVER_URL}/1/vendor/property/${this.event.id}`);
-
+        console.log('getAllRequirements.result', this.allRequirements);
         // set default value by conditionSript
         let event = this.$store.state.event.eventData;
 
@@ -262,7 +262,7 @@ export default {
               if (ms.conditionScript) ms.isSelected = eval(ms.conditionScript);
               if (ms.defaultQtyScript) ms.defaultQty = Math.ceil(eval(ms.defaultQtyScript));
 
-              if (this.blockId === "swags" && (ms.item === "Apparel" || ms.item === "Tech items")) {
+              if (this.blockId === "giveaways" && (ms.item === "Apparel" || ms.item === "Tech items")) {
                 ms.mustHave = false;
               }
             });

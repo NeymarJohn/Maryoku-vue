@@ -14,9 +14,9 @@
           </div>
         </div>
         <div class="md-layout-item md-size-100 font-size-40 font-bold mt-100 mb-50">
-          <md-button class="md-red maryoku-btn" @click="gotoVendorSignup()"
-            ><span class="font-size-20" style="padding: 10px 40px">Let's Sign Up </span></md-button
-          >
+          <md-button class="md-red maryoku-btn" @click="gotoVendorSignup()">
+            <span class="font-size-20" style="padding: 10px 40px">Let's Sign Up </span>
+          </md-button>
         </div>
       </div>
     </template>
