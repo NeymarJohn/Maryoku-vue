@@ -20,6 +20,12 @@ export const businessCategories = [
                 value: false,
                 xIncluded: true,
               },
+              {
+                name: 'dining options within walking distance',
+                type: Boolean,
+                value: false,
+                xIncluded: true,
+              },
             ]
           },
           {
@@ -2715,7 +2721,7 @@ export const businessCategories = [
     ]
   },
   {
-    name: 'swags',
+    name: 'giveaways',
     categories: [
       {
         name: 'amenities',
@@ -3276,7 +3282,7 @@ export const companyServices = [
     available: ['audio', 'visual'],
   },
   {
-    name: 'swags',
+    name: 'giveaways',
     type: Array,
     value: [],
     available: ['favors', 'promotional'],
@@ -3336,11 +3342,6 @@ export const VendorPolicy = [
         hasComment: true,
       },
       {
-        name: "Minimum Spend",
-        type: Boolean,
-        hasComment: true,
-      },
-      {
         name: "Dry Hire",
         type: Boolean,
         hasComment: true,
@@ -3348,6 +3349,11 @@ export const VendorPolicy = [
       {
         name: "Pets",
         type: Boolean,
+        hasComment: true,
+      },
+      {
+        name: "Minimum Spend",
+        type: Number,
         hasComment: true,
       },
     ],
@@ -3462,7 +3468,7 @@ export const VendorPolicy = [
     ],
   },
   {
-    category: "swags",
+    category: "giveaways",
     items: [
       {
         name: "Allow pickup",
@@ -3480,7 +3486,29 @@ export const VendorPolicy = [
   },
   {
     category: "transportation",
-    items: [],
+    items: [
+      {
+        name: 'Hourly Reservation Minimum',
+        type: Boolean,
+        hasComment: true,
+      },
+      {
+        name: 'Airports Pickup Delays',
+        hasComment: true,
+        desc: 'Company monitors all commercial airline arrivals to ensure on-time airport pickups. A forty-five (45) minute grace period is allowed on all domestic arrivals and seventy-five (75) minutes on all international arrivals. Waiting time charges will apply after the grace period and are accrued in quarter-hour increments, based on the vehicle’s hourly rate.'
+      },
+      {
+        name: 'Non-Airport Pickup Delays',
+        hasComment: true,
+        desc: 'Customers are granted a window of time to greet their chauffeurs at the requested pick-up time and location before incurring waiting time charges. Standard grace period is (15) minutes before charges are incurred. ',
+      },
+      {
+        name: 'No show',
+        hasComment: true,
+        desc: 'A reservation is considered a “No Show” if the passenger cannot be located or contacted within (a) one (1) hour for airport pickups (time begins when passenger’s plane lands) or (b) thirty (30) minutes at other pickup locations. For all No-Shows, the full trip fare, including a twenty (20) percent gratuity, will be charged. '
+      },
+
+    ],
   },
   {
     category: "entertainment",
@@ -3543,7 +3571,7 @@ export const VendorPolicy = [
       // },
       {
         name: "Flexible to different dress codes",
-        type: String,
+        type: Boolean,
         hasComment: true,
       },
       {
@@ -3644,6 +3672,8 @@ export const VendorPricingPolicy = [
       {
         name: "Setup hours included in rental",
         type: Number,
+        label: 'Number of hours',
+        noSuffix: true,
         hasComment: true,
       },
       {
@@ -3933,7 +3963,7 @@ export const VendorPricingPolicy = [
     ],
   },
   {
-    category: "swags",
+    category: "giveaways",
     items: [
       {
         name: "Rushed orders",
@@ -3991,11 +4021,40 @@ export const VendorPricingPolicy = [
         isPercentage: true,
       },
       {
-        name: "Large setup discounts",
-        type: Boolean,
-        discount: null,
+        name: 'Large group discounts',
+        subCategory: "discount",
+        type: "Discount",
         hasUnit: true,
-        units: ['%' , '$'],
+        units: ["Per guest", "Total"],
+      },
+      {
+        name: 'Road tolls',
+        hasComment: true,
+        desc: 'TBD fee to be charged for all tolls that cars pass through.',
+      },
+      {
+        name: 'Packing fees',
+        hasComment: true,
+        desc: 'TBD fee to be charged for all parking that a car incurs.',
+      },
+      {
+        name: 'Service fee',
+        hasComment: true,
+      },
+      {
+        name: 'Administration fee',
+        cost: null,
+        hasComment: true,
+      },
+      {
+        name: 'Additional Stops',
+        cost: null,
+        hasComment: true,
+      },
+      {
+        name: 'Meet & Greet fee',
+        cost: null,
+        hasComment: true,
       },
       {
         name: "Suggested Gratuity",

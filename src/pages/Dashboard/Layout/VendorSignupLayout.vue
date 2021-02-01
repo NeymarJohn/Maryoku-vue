@@ -163,8 +163,9 @@ export default {
     next() {
       if (this.step < 6) {
         this.setStep(this.step + 1);
+
       } else {
-        console.log("final", this.vendor);
+
         if (this.vendor.password == this.vendor.confirmPassword) {
           this.savedItModal = true;
           this.setStep(this.step + 1);
@@ -184,7 +185,8 @@ export default {
       window.scrollTo(0, 0);
     },
     saveDraft() {
-      this.savedItModal = true;
+      // this.savedItModal = true;
+      this.addVendor();
     },
     hideModal() {
       this.$store.dispatch("vendor/resetStatus");
@@ -194,6 +196,44 @@ export default {
         return chr.toUpperCase();
       });
       return temp.charAt(0).toLowerCase() + temp.slice(1);
+    },
+    async addVendor() {
+      let title = null;
+
+      if (this.step === 7) {
+        title = 'Thank you for your sign up!';
+      } else {
+        title = 'Success to save for later!';
+      }
+      new Vendors({ ...this.vendor, isEditing: false })
+              .save()
+              .then((res) => {
+                console.log("*** Save vendor - done: ");
+                console.log(JSON.stringify(res));
+                // this.setStep(this.step + 1);
+                this.isCompletedWizard = true;
+                swal({
+                  title,
+                  buttonsStyling: false,
+                  confirmButtonClass: "md-button md-success",
+                }).then(() => {
+                  const proposalRequest = this.$route.query.proposalRequest;
+                  if (this.step === 7) {
+                    this.setVendor({});
+                    this.setEditing(false);
+                    this.setStep(0);
+
+                    this.isCompletedWizard = false;
+                    if (proposalRequest) this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
+                    else this.$router.push("/vendor-signup");
+                  }
+
+                });
+              })
+              .catch((error) => {
+                console.log("*** Save vendor - failed: ");
+                console.log(JSON.stringify(error));
+              });
     },
   },
   created() {},
@@ -223,6 +263,7 @@ export default {
   watch: {
     step(newVal) {
       // console.log("signup.layout.wathc.step", newVal);
+      if (this.step === 7) this.addVendor();
     },
   },
 };

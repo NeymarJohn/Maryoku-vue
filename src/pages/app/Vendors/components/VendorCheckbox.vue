@@ -36,18 +36,18 @@
       <div class="main mt-10" v-if="checked && item.hasOwnProperty('dry')">
         <div class="check-cont" style="padding-left: 3rem">
           Allow dry run
-        </div>
-        <div class="included-cont">
-          <div class="included mr-60" :class="{ active: currentItem.dry }" @click="updateValue('dry', true)">
-            <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="currentItem.dry" />
-            <span class="unchecked" v-else></span>
-            <span>Yes</span>
-          </div>
-          <div class="flex-1 mr-m1">
-            <div class="included" :class="{ active: currentItem.dry === false }" @click="updateValue('dry', false)">
-              <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="currentItem.dry === false" />
+          <div class="included-cont mt-10 ml-20">
+            <div class="included mr-30" :class="{ active: currentItem.dry }" @click="updateValue('dry', true)">
+              <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="currentItem.dry" />
               <span class="unchecked" v-else></span>
-              <span>No</span>
+              <span>Yes</span>
+            </div>
+            <div class="flex-1 mr-m1">
+              <div class="included" :class="{ active: currentItem.dry === false }" @click="updateValue('dry', false)">
+                <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="currentItem.dry === false" />
+                <span class="unchecked" v-else></span>
+                <span>No</span>
+              </div>
             </div>
           </div>
         </div>

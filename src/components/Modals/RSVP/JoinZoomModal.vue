@@ -38,6 +38,16 @@
             ></maryoku-input>
           </div>
         </div>
+        <div class="d-flex user-info" v-if="isCustomerEvent">
+          <div class="text-left flex-1 input-wrapper mr-10">
+            <label class="font-bold">Role</label>
+            <maryoku-input v-model="role" placeholder="Type your role here..."></maryoku-input>
+          </div>
+          <div class="text-left flex-1 input-wrapper">
+            <label class="font-bold">Company Name</label>
+            <maryoku-input v-model="companyName" placeholder="Type company name here..."></maryoku-input>
+          </div>
+        </div>
       </div>
     </template>
     <template slot="footer">
@@ -59,6 +69,10 @@ const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v
 const SCOPES = "https://www.googleapis.com/auth/calendar";
 export default {
   props: {
+    event: {
+      type: Object,
+      default: () => {},
+    },
     campaign: {
       type: Object,
       default: () => {},
@@ -77,6 +91,8 @@ export default {
     return {
       name: "",
       email: "",
+      role: "",
+      companyName: "",
       approveAccessCalendar: false,
       calendarType: "outlook",
       validations: {
@@ -108,7 +124,13 @@ export default {
           event: new CalendarEvent({ id: this.campaign.event.id }),
         },
       ];
-      this.$emit("setRsvp", { name: this.name, responseEmail: this.email, guests });
+      this.$emit("setRsvp", {
+        name: this.name,
+        responseEmail: this.email,
+        guests,
+        role: this.role,
+        companyName: this.companyName,
+      });
     },
 
     handleClientLoad() {
@@ -189,6 +211,9 @@ export default {
   computed: {
     canSet() {
       return this.errors.items.length == 0;
+    },
+    isCustomerEvent() {
+      return this.event.guestType === "Customers" || this.event.guestType === "Business Associates";
     },
   },
 };
