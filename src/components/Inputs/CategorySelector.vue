@@ -212,6 +212,10 @@ export default {
     li {
       cursor: pointer;
       font: normal 16px Manrope-Regular, sans-serif;
+      list-style-position: inside;
+      -webkit-column-break-inside: avoid;
+      page-break-inside: avoid;
+      break-inside: avoid;
       img {
         width: 30px !important;
       }

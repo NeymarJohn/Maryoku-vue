@@ -294,13 +294,19 @@
 }
 
 .md-menu-content{
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  box-shadow: 0 3px 22px 0 rgba(0, 0, 0, 0.08);
   border-radius: $border-radius-base !important;
   overflow: hidden;
-  z-index: 999999!important;
-
+  z-index: 99!important;
+  min-width: 300px !important;
   .md-list .md-list-item a{
     font-size: 10px;
+  }
+  .md-list {
+    padding: 20px 0px;
+    .md-list-item-button {
+      padding: 5px 20px;
+    }
   }
 }
 

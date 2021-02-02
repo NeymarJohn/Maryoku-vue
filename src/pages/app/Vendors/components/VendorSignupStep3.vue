@@ -38,7 +38,7 @@
                     class="desc"
                     rows="3"
                     v-model="r.desc"
-                    :placeholder="`Add additional information`"
+                    :placeholder="r.placeholder ? r.placeholder : `Add additional information`"
                     @input="setPolicy"
                   />
                 </div>
@@ -58,14 +58,14 @@
                           </div>
                       </template>
                       <template v-if="r.type == String">
-                        <div class="item" v-if="!noteRules.includes(r)" @click="noteRule(r)">
-                          <a class="note">+ Add Note</a>
-                        </div>
-                        <div class="item noflex" v-else>
-                          <textarea placeholder="Except from the parking area" rows="3" />
-                          <br />
-                          <a class="cancel" @click="noteRule(r)">Cancel</a>
-                        </div>
+                        <!--<div class="item" v-if="!noteRules.includes(r)" @click="noteRule(r)">-->
+                          <!--<a class="note">+ Add Note</a>-->
+                        <!--</div>-->
+                        <!--<div class="item noflex" v-else>-->
+                          <!--<textarea placeholder="Except from the parking area" rows="3" />-->
+                          <!--<br />-->
+                          <!--<a class="cancel" @click="noteRule(r)">Cancel</a>-->
+                        <!--</div>-->
                       </template>
                       <template v-if="r.type == 'Selection'">
                         <select class="unit-select" v-model="r.value">
@@ -200,7 +200,7 @@
                     class="desc"
                     rows="3"
                     v-model="p.desc"
-                    :placeholder="`Add additional information`"
+                    :placeholder="p.placeholder ? p.placeholder : `Add additional information`"
                   />
                   <div v-if="p.yesOption && p.value" class="mt-10 ml-10">
                     <label>How many hours are included?</label><br />
@@ -786,7 +786,7 @@ export default {
   },
   methods: {
     updateExDonts(religion, holiday) {
-      console.log("updateExDonts", holiday);
+      // console.log("updateExDonts", holiday);
       holiday.selected = !holiday.selected;
       let day = holiday.start.split('-')[2];
 
@@ -806,6 +806,7 @@ export default {
           religion: religion.name,
         })
       }
+      // console.log('updateExDonts.markedDates', this.markedDates);
 
       this.$root.$emit("update-vendor-value", "exDonts", this.vendor.exDonts);
     },
@@ -825,7 +826,7 @@ export default {
       }
     },
     updateWeekdays(item) {
-        console.log("updateWeekdays", item);
+        // console.log("updateWeekdays", item);
       if (this.selectedWeekdays.includes(item)) {
         this.selectedWeekdays = this.selectedWeekdays.filter((s) => s != item);
       } else {
@@ -835,7 +836,7 @@ export default {
       this.$root.$emit("update-vendor-value", "selectedWeekdays", this.selectedWeekdays);
     },
     updateReligion(item) {
-      console.log("updateReligion", item, this.markedDates, this.date.selectedDates);
+      // console.log("updateReligion", item, this.markedDates, this.date.selectedDates);
       if (this.selectedReligion.length && this.selectedReligion.find(s => s.name === item.name)) {
         this.selectedReligion = this.selectedReligion.filter((s) => s.name !== item.name);
       } else {
@@ -854,16 +855,16 @@ export default {
         this.markedDates = this.markedDates.filter(m => m !== e.date);
         $('span.vfc-span-day:contains('+day+')').removeClass('vfc-marked vfc-start-marked vfc-end-marked');
       }
-      console.log("selectedDays", day, e, this.markedDates, this.date);
+      // console.log("selectedDays", day, e, this.markedDates, this.date);
 
       this.$root.$emit("update-vendor-value", "dontWorkDays", selectedDates);
     },
     changeMonth(e) {
-        console.log("changeMonth", this.markedDates, this.date);
+        // console.log("changeMonth", this.markedDates, this.date);
         this.month = e;
     },
     changeYear(e) {
-        console.log("changeYear", e);
+        // console.log("changeYear", e);
         this.month = e;
     },
     updateStartA() {
@@ -904,7 +905,7 @@ export default {
       return value.charAt(0).toUpperCase() + value.slice(1);
     },
     setPricePolicy(e, type, name, value) {
-      console.log('setPricePolicy', value);
+      // console.log('setPricePolicy', value);
       if ( (type === 'option' ||  type === 'Including' ) && name ) {
         let p = this.vendorPricingPolicies.items.find(it => it.name === name);
         p.value = value;
@@ -913,7 +914,7 @@ export default {
       this.$root.$emit("update-vendor-value", "pricingPolicies", this.vendorPricingPolicies.items);
     },
     setPolicy(e, type, name, value) {
-      console.log('setPricePolicy', this.vendorPolicies.items);
+      // console.log('setPricePolicy', this.vendorPolicies.items);
       if ( (type === 'option' ||  type === 'Including' ) && name ) {
         let p = this.vendorPolicies.items.find(it => it.name === name);
         p.value = value;
@@ -952,9 +953,9 @@ export default {
             religion: data.name,
           })
         } else {
-          console.log('removeItem', value, it.holiday);
+          // console.log('removeItem', value, it.holiday);
           this.vendor.exDonts = this.vendor.exDonts.filter(e => e.holiday !== it.holiday);
-          console.log('removeItem', this.vendor.exDonts);
+          // console.log('removeItem', this.vendor.exDonts);
         }
       });
 
@@ -981,7 +982,7 @@ export default {
       } else {
         this.vendorPricingPolicies = vendorPricingPolicies;
       }
-      console.log("vendor.price.policy", this.vendorPricingPolicies);
+      // console.log("vendor.price.policy", this.vendorPricingPolicies);
 
       // set vendorPolicies from initial policies
       let vendorPolicies = this.policies.find(p => p.category === this.vendor.vendorCategory);
@@ -1043,6 +1044,8 @@ export default {
         })
       }
 
+      // console.log('markedDates', this.markedDates);
+
       this.optimizeWeekDays(this.selectedWeekdays);
       this.componentKey += 1;
     },
@@ -1094,7 +1097,6 @@ export default {
       this.renderCalendar()
   },
   beforeDestroy(){
-    console.log('vendor.signup.step3.destroy');
     this.$root.$off('update-vendor-value')
   },
   watch: {

@@ -1683,7 +1683,7 @@ const businessCategories = [
     ]
   },
   {
-    name: 'swags',
+    name: 'giveaways',
     categories: [
       {
         name: 'amenities',
@@ -2045,7 +2045,7 @@ const companyServices = [
     available: ['audio', 'visual'],
   },
   {
-    name: 'swags',
+    name: 'giveaways',
     type: Array,
     value: [],
     available: ['favors', 'promotional'],
@@ -2113,8 +2113,8 @@ const categoryNameWithIcons = [
     icon: 'audiovisualstagingservices.svg'
   },
   {
-    name: 'Swags',
-    value: 'swags',
+    name: 'giveaways',
+    value: 'giveaways',
     icon: 'swags.svg'
   },
   // {

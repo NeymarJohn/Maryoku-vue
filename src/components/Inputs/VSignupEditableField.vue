@@ -4,12 +4,10 @@
       <div class="title">{{ title }}<span v-if="required"> *</span></div>
       <div class="content">
         <div v-if="!isEdit">
-
-            <div class="d-flex align-center">
-                <img class="mr-10" v-if="img != '' && value" :src="img" />
-                {{ field == "vendorCategory" || field == "secondaryVendorCategory" ? selectedCategory.name : value }}
-            </div>
-
+          <div class="d-flex align-center">
+            <img class="mr-10" v-if="img != '' && value" :src="img" />
+            {{ field == "vendorCategory" || field == "secondaryVendorCategory" ? selectedCategory.name : value }}
+          </div>
         </div>
         <div class="edit-content" v-else>
           <div v-if="field == 'vendorMainEmail'">
@@ -31,7 +29,7 @@
           </div>
         </div>
       </div>
-      <div class="action-cont" :class="{'width-66': field === 'vendorCategories'}" v-if="isEdit">
+      <div class="action-cont" :class="{ 'width-66': field === 'vendorCategories' }" v-if="isEdit">
         <a class="cancel" @click="isEdit = false">Cancel</a>
         <a class="save" @click="save()">Save</a>
       </div>
@@ -76,10 +74,9 @@ export default {
     reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
     categoryIconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/",
     value: null,
-    iconUrl: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/`
+    iconUrl: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/`,
   }),
   mounted() {
-
     this.value = this.defaultVal;
     if (this.field == "vendorAddressLine1" || this.field == "vendorAddressLine2") {
       this.$refs.address.focus();
@@ -110,7 +107,7 @@ export default {
   },
   beforeDestroy() {
     //this.$root.$off('update-vendor-value');
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>

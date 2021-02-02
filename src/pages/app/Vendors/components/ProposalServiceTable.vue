@@ -3,7 +3,6 @@
     <div class="editable-sub-items-cont">
       <div class="editable-sub-items-header">
         <span>Description</span>
-        <span class="text-center">Size</span>
         <span class="text-center">QTY</span>
         <span class="text-center">Price per unit</span>
         <span class="text-center">Subtotal</span>
@@ -65,11 +64,11 @@
               <span v-else>${{ discount_by_amount }}</span>
             </template>
           </div>
-          <div class="edit-cont">
+          <!-- <div class="edit-cont">
             <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditDiscount = true" v-if="!isEditDiscount" />
             <a class="cancel" v-if="isEditDiscount" @click="cancelDiscount()">Cancel</a>
             <a class="save" v-if="isEditDiscount" @click="saveDiscount()">Save</a>
-          </div>
+          </div> -->
         </div>
         <div class="row grid-tax-row">
           <div class="item-cont">
@@ -94,7 +93,7 @@
           <div class="price-cont text-center">
             <span>${{ ((totalOffer() * tax) / 100) | withComma }}</span>
           </div>
-          <div class="edit-cont">
+          <!-- <div class="edit-cont">
             <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditTax = true" v-if="!isEditTax" />
             <a
               class="cancel"
@@ -106,12 +105,12 @@
               >Cancel</a
             >
             <a class="save" v-if="isEditTax" @click="isEditTax = false">Save</a>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="editable-sub-items-footer" v-if="tableCategory === 'cost'">
         <span>Total</span>
-        <span>${{ calculatedTotal | withComma }}</span>
+        <span><span class="font-regular">Approx</span>&nbsp;&nbsp;&nbsp;&nbsp;${{ calculatedTotal | withComma }}</span>
       </div>
     </div>
   </div>
@@ -267,7 +266,7 @@ export default {
     },
     updateItem({ index, item }) {
       this.services[index] = item;
-      this.services = this.services;
+      this.services = Object.assign([], this.services);
     },
     removeItem(index) {
       this.services.splice(index, 1);
@@ -444,6 +443,7 @@ export default {
   padding: 0px;
   font-family: "Manrope-Regular", sans-serif;
   color: #050505;
+
   .dropdown-zone {
     margin: 30px;
   }
@@ -533,7 +533,8 @@ export default {
       border-top: 1px solid #707070;
       padding: 40px 40px 30px 40px;
       display: grid;
-      grid-template-columns: 30% 10% 10% 12% 15%;
+      // grid-template-columns: 30% 10% 10% 12% 15%;
+      grid-template-columns: 40% 15% 15% 15% 15%;
 
       span {
         display: inline-block;
@@ -550,10 +551,19 @@ export default {
         border: 2px solid #d5d5d5;
         border-bottom: none;
         display: grid;
-        // grid-template-columns: 40% 17.5% 12.5% 30%;
-        grid-template-columns: 40% 17.5% 15.5% 24%;
+        grid-template-columns: 62% 12% 10% 16%;
         align-items: center;
-
+        input {
+          font-size: 16px;
+          padding: 1.5rem 1rem;
+          border: 1px solid #b7b7b7;
+          box-shadow: none;
+          font: normal 16px "Manrope-Regular", sans-serif;
+          color: #050505;
+          &.isFilled {
+            border: 1px solid #828282;
+          }
+        }
         .item-cont {
           display: grid;
           grid-template-columns: 40% 60%;

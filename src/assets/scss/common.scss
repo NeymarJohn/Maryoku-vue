@@ -66,6 +66,9 @@ select {
         border: solid 1px #050505;
     }
 }
+input[type="text"] {
+    font-size: 16px;
+}
 .font-regular {
     font-family: "Manrope-Regular";
     font-weight: 400 !important;
@@ -89,6 +92,10 @@ select {
 
 .font-size-16 {
     font-size: 16px !important;
+}
+
+.font-size-18 {
+    font-size: 18px !important;
 }
 
 .font-size-20 {
@@ -293,8 +300,14 @@ select {
 .my-15 {
     margin: 15px 0;
 }
+.my-20 {
+    margin: 20px 0;
+}
 .my-30 {
     margin: 30px 0;
+}
+.my-40 {
+    margin: 40px 0;
 }
 .mx-auto {
     margin: 0 auto;

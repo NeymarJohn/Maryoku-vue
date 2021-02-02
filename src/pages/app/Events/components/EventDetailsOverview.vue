@@ -110,6 +110,8 @@ export default {
   },
   methods: {
     updateEvent() {
+      let places = this.event.places.map(p => p.toUpperCase());
+
       const updatedEvent = new CalendarEvent({
         id: this.event.id,
         calendar: new Calendar({
@@ -117,7 +119,7 @@ export default {
         }),
         location: this.event.location,
         locationId: this.event.locationId,
-        inOutDoor: this.event.inOutDoor,
+        places: places,
         numberOfParticipants: this.event.numberOfParticipants,
         eventType: this.event.eventType,
         occasion: this.event.occasion,
@@ -154,6 +156,7 @@ export default {
       this.showCommentEditorPanel = !this.showCommentEditorPanel;
     },
     changeEvent(e) {
+
       if (e.hasOwnProperty("dateData")) {
         this.event.eventStartMillis = new Date(e.dateData.started_at).getTime();
         this.event.eventEndMillis = new Date(e.dateData.ended_at).getTime();
@@ -164,7 +167,8 @@ export default {
         this.event.location = e.location.name;
         this.event.locationId = e.location.id;
       } else if (e.hasOwnProperty("inOutDoor")) {
-        this.event.inOutDoor = e.inOutDoor;
+        this.event.places = e.inOutDoor;
+        this.reCalculate = true;
       } else if (e.hasOwnProperty("numberOfParticipants")) {
         this.reCalculate = true;
         this.event.numberOfParticipants = e.numberOfParticipants;
@@ -188,6 +192,9 @@ export default {
       console.log("cancelEvent");
     },
     setSection() {
+
+      let places = this.event.places ? this.event.places.map(p => p.toLowerCase()) : [];
+
       this.sections = [
         {
           title: "Date",
@@ -204,7 +211,7 @@ export default {
           img_src: `${this.$secondIconURL}Event Page/Group 10492.svg`,
           warning: "Changing the address on your status might cause price changes",
           location: this.event.location,
-          inOutDoor: this.event.inOutDoor,
+          inOutDoor: places,
         },
         {
           title: "Number OF Guests",

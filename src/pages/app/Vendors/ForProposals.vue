@@ -29,30 +29,17 @@
             <span>Sincerely,</span>
             <p>{{ vendor.companyName }}</p>
           </div>
-          <proposal-event-vision v-if="event.concept" :event="event"></proposal-event-vision>
+          <proposal-event-vision :event="event"></proposal-event-vision>
           <proposal-additional-requirement></proposal-additional-requirement>
         </div>
         <div class="step-wrapper" v-if="step == 1">
-          <div class="proposal-add-personal-message-wrapper" v-if="!this.event.concept">
-            <h3><img :src="`${iconUrl}Asset 611.svg`" />Let's begin with a personal message</h3>
-            <h4>Write something nice, we'll add it to the final proposal</h4>
-            <textarea
-              rows="8"
-              placeholder="Type your message here"
-              v-model="personalMessage"
-              v-if="proposalRequest"
-              @blur="updateProposalRequest()"
-            />
-            <span>Sincerely,</span>
-            <p>{{ vendor.companyName }}</p>
-          </div>
           <proposal-bid-content></proposal-bid-content>
         </div>
         <div class="step-wrapper" v-if="step == 2">
           <h3>Can you also provide any of these services for this event?</h3>
           <p>
-            <img :src="`${iconUrl}Group 5280 (5).svg`" />Did you know, adding vendors gets you fair commission if they
-            get picked?!
+            <img :src="`${iconUrl}Group 5280 (5).svg`" />
+            Did you know? Referring us to vendors for these services can get you a commission get!
           </p>
           <proposal-item-secondary-service
             v-for="(service, index) in extraServices"
@@ -144,42 +131,8 @@ export default {
     this.services = VendorService.businessCategories();
     this.iconsWithCategory = VendorService.categoryNameWithIcons();
     this.$store.dispatch("common/fetchAllCategories");
-    this.personalMessage = this.vendor.personalMessage;
   },
   methods: {
-    getProposal(id) {
-      ProposalRequest.find(id)
-        .then((resp) => {
-          this.$set(this, "proposalRequest", resp);
-          this.$set(this, "event", resp.eventData);
-          this.proposalRequestRequirements = _.chain(resp.requirements)
-            .groupBy("requirementPriority")
-            .map(function (value, key) {
-              return {
-                title: key,
-                requirements: value,
-              };
-            })
-            .value();
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-
-      if (!this.proposalRequest) {
-        this.proposalRequest = new ProposalRequest({
-          id: this.$route.params.id,
-        });
-        this.proposalRequest.bidRange = { low: 0, high: 0 };
-        this.proposalRequest.requirements = [];
-        this.proposalRequest.bidderRank = 1;
-        this.proposalRequest.eventData = {
-          allocatedBudget: 0,
-        };
-        this.proposalRequest.personalMessage = this.vendor.personalMessage;
-        this.proposalRequest.isAgreed = true;
-      }
-    },
     flatDeep(arr, d = 1) {
       return d > 0
         ? arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? this.flatDeep(val, d - 1) : val), [])
