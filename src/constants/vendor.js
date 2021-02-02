@@ -3351,6 +3351,11 @@ export const VendorPolicy = [
         type: Boolean,
         hasComment: true,
       },
+      {
+        name: "Minimum Spend",
+        type: Number,
+        hasComment: true,
+      },
     ],
   },
   {
@@ -3490,17 +3495,17 @@ export const VendorPolicy = [
       {
         name: 'Airports Pickup Delays',
         hasComment: true,
-        placeholder: 'Company monitors all commercial airline arrivals to ensure on-time airport pickups. A forty-five (45) minute grace period is allowed on all domestic arrivals and seventy-five (75) minutes on all international arrivals. Waiting time charges will apply after the grace period and are accrued in quarter-hour increments, based on the vehicle’s hourly rate.'
+        desc: 'Company monitors all commercial airline arrivals to ensure on-time airport pickups. A forty-five (45) minute grace period is allowed on all domestic arrivals and seventy-five (75) minutes on all international arrivals. Waiting time charges will apply after the grace period and are accrued in quarter-hour increments, based on the vehicle’s hourly rate.'
       },
       {
         name: 'Non-Airport Pickup Delays',
         hasComment: true,
-        placeholder: 'Customers are granted a window of time to greet their chauffeurs at the requested pick-up time and location before incurring waiting time charges. Standard grace period is (15) minutes before charges are incurred. ',
+        desc: 'Customers are granted a window of time to greet their chauffeurs at the requested pick-up time and location before incurring waiting time charges. Standard grace period is (15) minutes before charges are incurred. ',
       },
       {
         name: 'No show',
         hasComment: true,
-        placeholder: 'A reservation is considered a “No Show” if the passenger cannot be located or contacted within (a) one (1) hour for airport pickups (time begins when passenger’s plane lands) or (b) thirty (30) minutes at other pickup locations. For all No-Shows, the full trip fare, including a twenty (20) percent gratuity, will be charged. '
+        desc: 'A reservation is considered a “No Show” if the passenger cannot be located or contacted within (a) one (1) hour for airport pickups (time begins when passenger’s plane lands) or (b) thirty (30) minutes at other pickup locations. For all No-Shows, the full trip fare, including a twenty (20) percent gratuity, will be charged. '
       },
 
     ],
@@ -3669,11 +3674,6 @@ export const VendorPricingPolicy = [
         type: Number,
         label: 'Number of hours',
         noSuffix: true,
-        hasComment: true,
-      },
-      {
-        name: "Minimum Spend",
-        type: Number,
         hasComment: true,
       },
       {
@@ -4030,12 +4030,12 @@ export const VendorPricingPolicy = [
       {
         name: 'Road tolls',
         hasComment: true,
-        placeholder: 'TBD fee to be charged for all tolls that cars pass through.',
+        desc: 'TBD fee to be charged for all tolls that cars pass through.',
       },
       {
         name: 'Packing fees',
         hasComment: true,
-        placeholder: 'TBD fee to be charged for all parking that a car incurs.',
+        desc: 'TBD fee to be charged for all parking that a car incurs.',
       },
       {
         name: 'Service fee',

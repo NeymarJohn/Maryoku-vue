@@ -44,13 +44,15 @@ class AuthService {
 
   logout() {
     return axios.post(LOGOUT_URL).then(response => {
-      if (response.data.access_token) {
-        localStorage.removeItem('user');
-        localStorage.removeItem('manage_id_token')
-        axios.defaults.headers.common.Authorization = null
-        this.removeCookie()
-      }
+      localStorage.removeItem('user');
+      localStorage.removeItem('manage_id_token')
+      axios.defaults.headers.common.Authorization = null
+      this.removeCookie()
     }).catch(err => {
+      localStorage.removeItem('user');
+      localStorage.removeItem('manage_id_token')
+      axios.defaults.headers.common.Authorization = null
+      this.removeCookie()
       throw err
     });
   }

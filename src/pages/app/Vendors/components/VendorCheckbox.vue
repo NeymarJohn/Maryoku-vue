@@ -36,7 +36,7 @@
       <div class="main mt-10" v-if="checked && item.hasOwnProperty('dry')">
         <div class="check-cont" style="padding-left: 3rem">
           Allow dry run
-          <div class="included-cont mt-10">
+          <div class="included-cont mt-10 ml-20">
             <div class="included mr-30" :class="{ active: currentItem.dry }" @click="updateValue('dry', true)">
               <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="currentItem.dry" />
               <span class="unchecked" v-else></span>

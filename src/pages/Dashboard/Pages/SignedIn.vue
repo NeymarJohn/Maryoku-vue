@@ -74,9 +74,12 @@ export default {
           }
           const firstEvent = this.$route.query.firstEvent;
           let redirectURL = this.$route.query.redirectURL;
+          const lastUrl = this.$route.query.lastUrl;
           if (redirectURL) {
             redirectURL = atob(redirectURL);
             this.$router.push({ path: `${redirectURL}` });
+          } else if (lastUrl) {
+            location.href = atob(lastUrl);
           } else {
             this.$router.push({ path: "/events" });
           }

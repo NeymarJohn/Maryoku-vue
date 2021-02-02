@@ -41,6 +41,25 @@ export default {
     MaryokuInput,
     MusicCard,
   },
+  beforeCreate() {
+    const savedEvent = localStorage.getItem("event");
+    if (savedEvent) {
+      eventService
+        .saveEventFromStorage(this.$store.state.auth.user.profile.defaultCalendarId)
+        .then((newEvent) => {
+          localStorage.setItem("currentEventId", newEvent.id);
+          localStorage.removeItem("event");
+          if (newEvent.isFirstEvent) {
+            this.$router.push({ path: `/welcome/event` });
+          } else if (newEvent.eventType.hasConcept) {
+            this.$router.push({ path: `/events/${newEvent.id}/booking/concept` });
+          } else {
+            this.$router.push({ path: `/events/${newEvent.id}/booking/overview` });
+          }
+        })
+        .catch((err) => {});
+    }
+  },
   created() {
     this.$http.get(`${process.env.SERVER_URL}/1/eventSongs`).then((res) => {
       this.songs = res.data;
@@ -92,8 +111,10 @@ export default {
       localStorage.setItem("event", JSON.stringify(this.getEventData()));
       // location.href="https://www.maryoku.com/signup-beta"  //tempary code
       // return;
+
+      console.log(location.href);
       if (!this.isLoggedIn) {
-        this.$router.push({ path: `/signup?action=${this.$queryEventActions.create}` });
+        this.$router.push({ path: `/signin?lastUrl=${btoa(location.href)}&action=${this.$queryEventActions.create}` });
       } else {
         this.createEvent();
       }
