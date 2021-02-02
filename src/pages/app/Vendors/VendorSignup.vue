@@ -116,14 +116,8 @@ export default {
           vendor[field][value.index] = value.data;
         }
       } else if (field == "removeImage") {
-        console.log('removeImage', vendor.images, vendor.vendorImages);
-        // vendor.images = vendor.images.filter((i) => i != value);
-        // vendor.vendorImages = vendor.vendorImages.filter((i) => i != value);
-        let images = vendor.images.filter((i) => i != value);
-        let vendorImages = vendor.vendorImages.filter((i) => i != value);
-
-        this.$set(vendor, "images", images);
-        this.$set(vendor, "vendorImages", vendorImages);
+        vendor.images = vendor.images.filter((i) => i != value);
+        vendor.vendorImages = vendor.vendorImages.filter((i) => i != value);
       } else if (field == "vendorCategories") {
         this.$set(vendor, this.camelize(field), value);
         this.$set(vendor, "vendorCategory", value[0]);
@@ -155,6 +149,34 @@ export default {
       });
       return temp.charAt(0).toLowerCase() + temp.slice(1);
     },
+    async addVendor() {
+      console.log("addVendor.vendor", this.vendor);
+      new Vendors({ ...this.vendor, isEditing: false })
+        .save()
+        .then((res) => {
+          console.log("*** Save vendor - done: ");
+          console.log(JSON.stringify(res));
+          this.setStep(this.step + 1);
+          this.isCompletedWizard = true;
+          swal({
+            title: `Thank you for your signup!`,
+            buttonsStyling: false,
+            confirmButtonClass: "md-button md-success",
+          }).then(() => {
+            const proposalRequest = this.$route.query.proposalRequest;
+            this.setVendor({});
+            this.setEditing(false);
+            this.setStep(0);
+            this.isCompletedWizard = false;
+            if (proposalRequest) this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
+            else this.$router.push("/vendor-signup");
+          });
+        })
+        .catch((error) => {
+          console.log("*** Save vendor - failed: ");
+          console.log(JSON.stringify(error));
+        });
+    },
   },
   computed: {
     ...mapGetters({
@@ -168,7 +190,8 @@ export default {
       // console.log("vendor.signup.watch.vendor", newVal);
     },
     step(newVal) {
-      console.log("vendor.signup.watch.step", newVal);
+      // console.log("vendor.signup.watch.step", newVal);
+      if (this.step === 7) this.addVendor();
     },
   },
 };

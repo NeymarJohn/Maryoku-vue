@@ -1,6 +1,34 @@
 <template>
   <div class="card vendor-list-all">
     <h1>All Vendors</h1>
+
+    <!-- <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Company Name</th>
+          <th>User Name</th>
+          <th>Business Category1</th>
+          <th>Business Category2</th>
+          <th>Main Email</th>
+          <th>Location1</th>
+          <th>Location2</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(vendor, index) in vendors" :key="index">
+          <td>{{ index + 1 }}</td>
+          <td>{{ vendor.companyName }}</td>
+          <td>{{ vendor.vendorDisplayName }}</td>
+          <td>{{ vendor.eventCategory ? vendor.eventCategory.title : "" }}</td>
+          <td>{{ vendor.secondaryEventCategory ? vendor.secondaryEventCategory.title : "" }}</td>
+          <td>{{ vendor.vendorMainEmail }}</td>
+          <td>{{ vendor.vendorAddressLine1 }}</td>
+          <td>{{ vendor.vendorAddressLine2 }}</td>
+        </tr>
+      </tbody>
+    </table> -->
+
     <md-button @click="exportXls" class="md-simple md-red maryoku-btn">Export XLSX</md-button>
     <md-table v-if="vendors && vendors.length > 0" md-sort="companyName" md-sort-order="asc">
       <md-table-row>
@@ -33,7 +61,7 @@
           item.eventCategory ? item.eventCategory.title : ""
         }}</md-table-cell>
         <md-table-cell md-label="Main Email" md-sort-by="vendorMainEmail">{{ item.vendorMainEmail }}</md-table-cell>
-        <md-table-cell md-label="Address" md-sort-by="vendorAddresses">{{ item.vendorAddresses[0] }}</md-table-cell>
+        <md-table-cell md-label="Address" md-sort-by="vendorAddressLine1">{{ item.vendorAddressLine1 }}</md-table-cell>
       </md-table-row>
     </md-table>
     <md-dialog-alert :md-active.sync="showAlert" md-content="Copied vendor link!" md-confirm-text="Cool!" />
@@ -83,7 +111,7 @@ export default {
           userName: item.vendorDisplayName,
           category: item.eventCategory ? item.eventCategory.title : "",
           email: item.vendorMainEmail,
-          address: item.vendorAddresses[0],
+          address: item.vendorAddressLine1,
           contactPerson: item.contactPerson,
         });
       });

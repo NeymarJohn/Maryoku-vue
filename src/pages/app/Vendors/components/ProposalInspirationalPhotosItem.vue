@@ -16,10 +16,9 @@
         </md-button>
       </div>
       <div class="photo-caption" v-if="photo.caption">
-        {{ photo.caption }}&nbsp;&nbsp;
-        <md-button class="edit-btn md-black md-simple" @click="addCaption">
-          <u>Edit</u>
-        </md-button>
+        {{ photo.caption }}&nbsp;<md-button class="edit-btn md-black md-simple" @click="addCaption"
+          ><u>Edit</u></md-button
+        >
       </div>
       <div class="photo-caption" v-else>
         <md-button class="md-simple edit-btn md-black" @click="addCaption"><u>Add caption</u></md-button>
@@ -39,7 +38,6 @@
 import carousel from "vue-owl-carousel";
 import S3Service from "@/services/s3.service";
 import { getBase64 } from "@/utils/file.util";
-import swal from "sweetalert2";
 export default {
   components: {
     carousel,
@@ -86,24 +84,6 @@ export default {
   },
   methods: {
     async onFileChange(event) {
-      if (!event.target.files[0]) return;
-      console.log(event.target.files[0].size);
-      if (event.target.files[0].size > 1024 * 1024 * 5) {
-        swal({
-          title: `The size of file that you selected is ${Math.floor(
-            event.target.files[0].size / 1024 / 1024,
-          )}MB. This file should be under 5MB`,
-          showCancelButton: false,
-          confirmButtonClass: "md-button md-success",
-          cancelButtonClass: "md-button md-danger",
-          confirmButtonText: "I got it",
-          buttonsStyling: false,
-        }).then((result) => {
-          if (result.value) {
-          }
-        });
-        return;
-      }
       this.isLoading = true;
       const extension = event.target.files[0].type.split("/")[1];
       if (!this.photo) this.photo = {};
@@ -142,7 +122,7 @@ export default {
 <style lang="scss" scoped>
 .photo-inpirational-item {
   width: 100%;
-  min-height: 250px;
+  height: 250px;
   display: inline-block;
   overflow: hidden;
   .empty-item {
@@ -173,7 +153,6 @@ export default {
   }
   .photo-caption {
     margin-top: 10px;
-    white-space: normal;
   }
 
   .photo-add-label {

@@ -13,7 +13,7 @@
     </div>
     <div class="steps-cont">
       <ul class="progressbar">
-        <li :class="[{ active: step >= 0 }, { current: step == 0 }]" @click="goToStep(0)">
+        <li v-if="hasVisionStep" :class="[{ active: step >= 0 }, { current: step == 0 }]" @click="goToStep(0)">
           <span v-if="step == 0"><i>&#8226;</i></span>
           <span v-else><md-icon>check</md-icon></span>
           <br />

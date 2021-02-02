@@ -1,21 +1,19 @@
 <template>
   <div class="event-vision-wrapper proposal-add-personal-message-wrapper mt-40">
-    <template v-if="event.concept">
-      <div class="conceptTitle font-size-40 line-height-1 mb-20">{{ event.concept.name }}</div>
-      <div class="d-flex concept-image-wrapper">
-        <div
-          v-for="(color, index) in event.concept.colors"
-          :key="index"
-          class="concept-color"
-          :style="`background: ${color.color || '#EDEDED'}`"
-        >
-          <img class="concept-image" :src="`${event.concept.images[index].url}`" />
-        </div>
+    <div class="conceptTitle font-size-40 line-height-1 mb-20">{{ event.concept.name }}</div>
+    <div class="d-flex concept-image-wrapper">
+      <div
+        v-for="(color, index) in event.concept.colors"
+        :key="index"
+        class="concept-color"
+        :style="`background: ${color.color || '#EDEDED'}`"
+      >
+        <img class="concept-image" :src="`${event.concept.images[index].url}`" />
       </div>
-      <div class="concept-description mt-30 mb-30">
-        {{ event.concept.description }}
-      </div>
-    </template>
+    </div>
+    <div class="concept-description mt-30 mb-30">
+      {{ event.concept.description }}
+    </div>
     <div class="font-size-30 font-bold-extra mt-30 mb-30">
       <img :src="`${$iconURL}Vendor+Landing+Page/Asset+491.svg`" class="page-icon" />
       How does your vision of the event fit in with the concept?
@@ -27,10 +25,23 @@
           <img :src="`${$iconURL}Vendor+Landing+Page/art.svg`" class="page-icon mr-10" />
           Upload Inspirational Photos
         </span>
-        <span style="padding: 5px">(15 photos under 5M each)</span>
+        <span style="padding: 5px">(15 photos top, under 20 KB)</span>
       </div>
       <div style="padding: 10px 10px 30px 40px">Photos that could fit in with the concept</div>
       <proposal-inspirational-photos></proposal-inspirational-photos>
+      <!-- <vue-dropzone
+        id="dropzone"
+        :options="dropzoneOptions"
+        :useCustomSlot="true"
+        @vdropzone-file-added="imageSelected"
+      >
+        <span class="color-red font-bold cho">
+          <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10" />Choose File
+        </span>
+        <br />Or
+        <br />
+        <span class="color-dark-gray">Drag your file here</span>
+      </vue-dropzone> -->
     </div>
   </div>
 </template>

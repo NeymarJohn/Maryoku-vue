@@ -149,7 +149,7 @@
               <p>(15 photos top, under 5MB)</p>
             </div>
           </div>
-          <template v-if="!vendor.images || !vendor.images.length">
+          <template v-if="!vendor.vendorImages || !vendor.vendorImages.length">
             <Drop
               @drop="handleDrop"
               @dragenter="handleDragEnter"
@@ -179,47 +179,47 @@
               <div
                 class="box item2"
                 :style="`
-                  background-image: url(${vendor.images[0]});
+                  background-image: url(${vendor.vendorImages[0]});
                   background-size: cover;
                   background-size: 100% 100%;`"
               >
-                <div class="trash" v-if="vendor.images[0]" @click="removeVendorImage(vendor.images[0])">
+                <div class="trash" v-if="vendor.vendorImages[0]" @click="removeVendorImage(vendor.vendorImages[0])">
                   <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg" />
                 </div>
               </div>
               <div
                 class="box item"
-                :class="{ 'no-image': !vendor.images[1] }"
+                :class="{ 'no-image': !vendor.vendorImages[1] }"
                 :style="`
-                  background-image: url(${vendor.images[1]});
+                  background-image: url(${vendor.vendorImages[1]});
                   background-size: cover;
                   background-size: 100% 100%;`"
               >
-                <div class="trash" v-if="vendor.images[1]" @click="removeVendorImage(vendor.images[1])">
+                <div class="trash" v-if="vendor.vendorImages[1]" @click="removeVendorImage(vendor.vendorImages[1])">
                   <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg" />
                 </div>
               </div>
               <div
                 class="box item"
-                :class="{ 'no-image': !vendor.images[2] }"
+                :class="{ 'no-image': !vendor.vendorImages[2] }"
                 :style="`
-                  background-image: url(${vendor.images[2]});
+                  background-image: url(${vendor.vendorImages[2]});
                   background-size: cover;
                   background-size: 100% 100%;`"
               >
-                <div class="trash" v-if="vendor.images[2]" @click="removeVendorImage(vendor.images[2])">
+                <div class="trash" v-if="vendor.vendorImages[2]" @click="removeVendorImage(vendor.vendorImages[2])">
                   <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg" />
                 </div>
               </div>
               <div
                 class="box item"
-                :class="{ 'no-image': !vendor.images[3] }"
+                :class="{ 'no-image': !vendor.vendorImages[3] }"
                 :style="`
-                  background-image: url(${vendor.images[3]});
+                  background-image: url(${vendor.vendorImages[3]});
                   background-size: cover;
                   background-size: 100% 100%;`"
               >
-                <div class="trash" v-if="vendor.images[3]" @click="removeVendorImage(vendor.images[3])">
+                <div class="trash" v-if="vendor.vendorImages[3]" @click="removeVendorImage(vendor.vendorImages[3])">
                   <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg" />
                 </div>
               </div>
@@ -437,8 +437,8 @@ export default {
           value: "audiovisualstagingservices",
         },
         {
-          name: "Giveaways",
-          value: "giveaways",
+          name: "Swags",
+          value: "swags",
         },
         {
           name: "Shipping",
@@ -482,7 +482,7 @@ export default {
   },
   created() {},
   mounted() {
-    console.log("step1.mounted", this.vendor);
+    console.log("step1.mounted", this.companyServices);
   },
   methods: {
     handleDrop(data, event) {
@@ -575,7 +575,7 @@ export default {
           this.$root.$emit("update-vendor-value", "signature", e.target.result);
         } else {
           const fileId = `${new Date().getTime()}_${makeid()}`;
-          const currentIndex = this.vendor.images.length;
+          const currentIndex = this.vendor.vendorImages.length;
           S3Service.fileUpload(file, fileId, "vendor/cover-images").then((uploadedName) => {
             console.log("createImage", uploadedName);
             this.$root.$emit("update-vendor-value", "vendorImages", {
@@ -592,7 +592,6 @@ export default {
       reader.readAsDataURL(file);
     },
     removeVendorImage(image) {
-      console.log('removeVendorImage', image);
       this.$root.$emit("update-vendor-value", "removeImage", image);
     },
     getCategoryNameByValue(value) {
@@ -627,11 +626,7 @@ export default {
   },
   computed: {},
   filters: {},
-  watch: {
-    vendor(){
-      console.log('step.watch.vendor', this.vendor);
-    }
-  },
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>

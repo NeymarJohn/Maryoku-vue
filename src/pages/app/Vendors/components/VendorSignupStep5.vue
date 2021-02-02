@@ -76,17 +76,18 @@
           </div>
           <div v-if="opened" class="card-content">
             <h2 class="person-name">
-              Hey <span>{{ contactPersonName }}</span>
+              Hey <span>(Person's Name)</span>
             </h2>
-            <h5 class="pt-20 font-size-18">How are you?</h5>
-            <h5 class="font-size-18">I hope this email finds you well & happy!</h5>
-            <p class="pt-20 font-size-18">
-              I'm writing to let you know I recently started working with maryoku –an awesome web platform for non-professional event planners, helping them plan events like pros. These days, I’m looking for people who can speak positively about my services and help me gain credibility as a business.</p>
-            <p class="font-size-18"> Hope you can spare some time.
+            <h5 class="pt-20">How are you?</h5>
+            <h5>I hope this email finds you well & happy!</h5>
+            <p class="pt-20">
+              I just joined a fantastic platform named Maryoku which creates matches between
+              event planners to vendors like me. I’m new to this system and that is why I would love
+              to get your recommendation…
             </p>
-            <md-button class="my-30 md-vendor-review md-simple md-outlined">Write A Review</md-button>
-            <h5 class="font-size-18">Many thanks</h5>
-            <h5 class="font-size-18">{{vendor.companyName}}</h5>
+            <button class="review">Write A Review</button>
+            <p>Warm regards,</p>
+            <p>Relish caterers & venues</p>
           </div>
         </div>
       </div>
@@ -156,7 +157,7 @@
           }
 
           h5{
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 600;
             margin: 0;
             color: #707070;
@@ -164,10 +165,22 @@
           }
 
           p{
-            font-size: 14px;
+            font-size: 16px;
             margin: 0;
             color: #707070;
             font-family: Georgia, "Times New Roman", Times, serif;
+          }
+
+          button.review{
+            margin: 25px 0;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 3px;
+            border: solid 1px #707070;
+            background-color: #f7f7f7;
+            font-family: Georgia, "Times New Roman", Times, serif;
+            font-weight: 600;
+            color: #707070;;
           }
         }
       }
@@ -181,12 +194,6 @@ import { SignupCard, MaryokuInput } from "@/components";
 export default {
   components: {
     MaryokuInput,
-  },
-  props:{
-    vendor:{
-      type: Object,
-      required: true,
-    }
   },
   data() {
     return {

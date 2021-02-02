@@ -6,9 +6,9 @@
                   <img :src="`${$iconURL}Onboarding/balloon-calendar.svg`">
                 </div>
                 <div class="title">
-                  HELLO There
-                  <div v-if="isLoggedIn">{{tenantUser.name}}!</div>
-                  <div v-else>THERE!</div>
+                  HELLO THERE
+                  <span v-if="isLoggedIn">{{tenantUser.name}}!</span>
+                  <span v-else>THERE!</span>
                 </div>
                 <div>
                   Please answer a few questions to complete the background we need!
@@ -118,7 +118,6 @@ export default {
       return this.$store.state.auth.status.loggedIn;
     },
     tenantUser() {
-        console.log('user', this.$store.state.auth.user);
       return this.$store.state.auth.user
     }
   }

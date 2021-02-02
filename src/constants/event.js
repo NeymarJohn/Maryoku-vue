@@ -7,7 +7,7 @@ export const timelineBlockItems = [
                 'venuerental',
                 'equipmentrentals',
                 'securityservices',
-                'giveaways',
+                'swags',
                 'videographyandphotography',
                 'advertising-promotion',
                 'audiovisualstagingservices',

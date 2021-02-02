@@ -4,58 +4,43 @@
       <div class="title">{{ title }}<span v-if="required"> *</span></div>
       <div v-if="isEdit">
         <div class="d-flex position-relative" v-for="(item, index) of selectedValue" :key="index">
-          <img class="inside-img" :src="img" v-if="img != '' && field !== 'vendorCategories'" />
+          <img class="inside-img" :src="img" v-if="img != '' && field !== 'vendorCategories'"/>
           <category-selector
-            v-if="field === 'vendorCategories'"
-            :value="item || ''"
-            :categories="vendorCategories"
-            column="2"
-            trackBy="name"
-            class="my-10 w-max-450"
-            @change="updateCategory(index, ...arguments)"
+                  v-if="field === 'vendorCategories'"
+                  :value="item || ''"
+                  :categories="vendorCategories"
+                  column="2"
+                  trackBy="name"
+                  class="my-10 w-max-450"
+                  @change="updateCategory(index, ...arguments)"
           >
           </category-selector>
           <vue-google-autocomplete
-            v-else-if="field === 'vendorAddresses'"
-            :id="`map-${index}`"
-            ref="address"
-            class="my-10 width-100 address"
-            :placeholder="item ? item : 'Enter an an address, zipcode, or location'"
-            v-on:placechanged="getAddressData(index, ...arguments)"
+                  v-else-if="field === 'vendorAddresses'"
+                  :id="`map-${index}`"
+                  ref="address"
+                  class="my-10 width-100 address"
+                  :placeholder="item ? item : 'Enter an an address, zipcode, or location'"
+                  v-on:placechanged="getAddressData(index, ...arguments)"
           />
-          <img
-            class="ml-10"
-            src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg"
-            v-if="selectedValue.length > 1"
-            @click="removeValue(index)"
-          />
+          <img class="ml-10" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg" v-if="selectedValue.length > 1" @click="removeValue(index)">
         </div>
         <div class="d-flex align-center py-10 color-red font-bold cursor-pointer" @click="addNewValue">
-          <img
-            class="mr-10"
-            src="https://static-maryoku.s3.amazonaws.com/storage/icons/VendorSignup/Group%209632.svg"
-          />
-
-          <span v-if="field === 'vendorAddresses'">Add another address</span>
-          <span v-else>Add another category</span>
-        </div>
+          <img class="mr-10" src="https://static-maryoku.s3.amazonaws.com/storage/icons/VendorSignup/Group%209632.svg">
+          Add another category</div>
       </div>
       <div v-else>
         <template v-if="selectedValue.length">
           <div class="content mt-10" v-for="item of selectedValue">
-            <img
-              class="mr-10"
-              :src="vendorCategories.find((v) => v.name === item).icon"
-              v-if="field === 'vendorCategories' && item"
-            />
-            <img class="mr-10" :src="img" v-if="img != '' && item" />
-            {{ item }}
+              <img class="mr-10" :src="vendorCategories.find(v => v.name === item).icon" v-if="field === 'vendorCategories' && item"/>
+              <img class="mr-10" :src="img" v-if="img != '' &&  item" />
+              {{ item }}
           </div>
         </template>
       </div>
-      <div class="action-cont" :class="{ 'width-66': field === 'vendorCategories' }" v-if="isEdit">
+      <div class="action-cont" :class="{'width-66': field === 'vendorCategories'}" v-if="isEdit">
         <a class="cancel" @click="isEdit = false">Cancel</a>
-        <a class="save" @click="save">Save</a>
+        <a class="save" @click="save()">Save</a>
       </div>
     </div>
     <div class="right" v-if="!isEdit">
@@ -67,12 +52,13 @@
   </div>
 </template>
 <script>
+
 import VueGoogleAutocomplete from "vue-google-autocomplete";
 import CategorySelector from "@/components/Inputs/CategorySelector";
 
 export default {
   name: "v-signup-editable-field",
-  components: {
+  components:{
     VueGoogleAutocomplete,
     CategorySelector,
   },
@@ -85,7 +71,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    value: [String, Array],
+    value: [String, Array]
   },
   data: () => ({
     isEdit: false,
@@ -128,8 +114,8 @@ export default {
         icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/audiovisualstagingservices.svg`,
       },
       {
-        name: "Giveaways",
-        value: "giveaways",
+        name: "Swags",
+        value: "swags",
         icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/swags.svg`,
       },
       // {
@@ -188,55 +174,50 @@ export default {
       let selectedValue = [];
 
       // console.log("vendor.signup.category", this.selectedValue);
-      if (this.field === "vendorCategories") {
-        this.selectedValue.map((v) => {
-          let item = this.vendorCategories.find((cat) => cat.name === v);
-          selectedValue.push(item ? item["value"] : "");
+      if (this.field === 'vendorCategories') {
+        this.selectedValue.map(v => {
+          let item = this.vendorCategories.find(cat => cat.name === v);
+          selectedValue.push(item ? item['value'] : '');
         });
       } else {
         selectedValue = this.selectedValue;
       }
 
+
       this.$root.$emit("update-vendor-value", this.field, selectedValue);
     },
-    addNewValue() {
-      this.selectedValue.push("");
+    addNewValue(){
+      this.selectedValue.push('');
       this.$root.$emit("update-vendor-value", this.field, this.selectedValue);
     },
-    removeValue(index) {
-      this.$root.$emit(
-        "update-vendor-value",
-        this.field,
-        this.selectedValue.filter((s, sIdx) => index !== sIdx),
-      );
+    removeValue(index){
+      this.$root.$emit("update-vendor-value", this.field, this.selectedValue.filter((s, sIdx) => index !== sIdx));
     },
     getAddressData: function (index, addressData, placeResultData, id) {
-      this.selectedValue[
-        index
-      ] = `${addressData.route}, ${addressData.administrative_area_level_1}, ${addressData.country}`;
+      this.selectedValue[index] = `${addressData.route}, ${addressData.administrative_area_level_1}, ${addressData.country}`;
     },
     init() {
       // console.log('init', this.value);
       this.selectedValue = [];
-      if (this.value.length && this.field === "vendorCategories") {
-        this.value.map((v) => {
-          let item = this.vendorCategories.find((cat) => cat.value === v);
-          this.selectedValue.push(item ? item["name"] : "");
+      if (this.value.length && this.field === 'vendorCategories') {
+        this.value.map (v => {
+          let item = this.vendorCategories.find(cat => cat.value === v);
+          this.selectedValue.push(item ? item['name'] : '');
         });
       } else {
         this.selectedValue = this.value;
       }
-    },
+    }
   },
-  beforeDestroy() {
+  beforeDestroy(){
     // this.$root.$off('update-vendor-value')
   },
   watch: {
-    value(newValue) {
+    value(newValue){
       // console.log("signup.category.selector.watch", newValue, this.field);
       this.init();
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -260,7 +241,7 @@ export default {
       font: 800 16px Manrope-Regular, sans-serif;
     }
 
-    .inside-img {
+    .inside-img{
       width: 20px;
       position: absolute;
       top: 25px;
@@ -268,7 +249,7 @@ export default {
       z-index: 99;
     }
 
-    input.address {
+    input.address{
       padding-left: 60px;
       min-height: 55px;
       border: solid 0.5px #bcbcbc;
@@ -276,9 +257,7 @@ export default {
     }
 
     .content {
-      img {
-        width: 20px;
-      }
+      img {width: 20px}
     }
 
     .action-cont {

@@ -325,15 +325,13 @@ export default {
       }
       this.$set(this, "proposalRequest", proposalRequest);
       this.event = proposalRequest.eventData;
-      this.$store.commit("vendorProposal/setWizardStep", 0);
-      this.$store.commit("vendorProposal/setInitStep", 0);
-      // if (proposalRequest.eventData.concept) {
-      //   this.$store.commit("vendorProposal/setWizardStep", 0);
-      //   this.$store.commit("vendorProposal/setInitStep", 0);
-      // } else {
-      //   this.$store.commit("vendorProposal/setWizardStep", 1);
-      //   this.$store.commit("vendorProposal/setInitStep", 1);
-      // }
+      if (proposalRequest.eventData.concept) {
+        this.$store.commit("vendorProposal/setWizardStep", 0);
+        this.$store.commit("vendorProposal/setInitStep", 0);
+      } else {
+        this.$store.commit("vendorProposal/setWizardStep", 1);
+        this.$store.commit("vendorProposal/setInitStep", 1);
+      }
       this.proposalRequestRequirements = _.chain(proposalRequest.requirements)
         .groupBy("requirementPriority")
         .map(function (value, key) {

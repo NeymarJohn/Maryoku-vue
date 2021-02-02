@@ -11,11 +11,7 @@
           ${{ newProposalRequest.bidRange.low | withComma }} - ${{ newProposalRequest.bidRange.high | withComma }}
         </strong>
       </p>
-      <div
-        class="bundle-discount mt-20"
-        @click="isBundleDiscount = !isBundleDiscount"
-        v-if="additionalServices.length > 0"
-      >
+      <div class="bundle-discount" @click="isBundleDiscount = !isBundleDiscount" v-if="additionalServices.length > 0">
         <img :src="`${iconUrl}Asset 579.svg`" />
         <span>
           Add Bundle Discount
@@ -84,7 +80,7 @@
               {{ getServiceCategory(a).title }}
             </li>
             <li>
-              <span>{{ getServiceCategory(a).bookTitle }} {{ a }}</span>
+              <span>{{ getServiceCategory(a).bookTitle }}</span>
             </li>
             <li>
               <span>Your proposal</span>
@@ -216,9 +212,7 @@ export default {
       isEdit: false,
       warning: false,
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
-      newProposalRequest: {
-        eventData: {},
-      },
+      newProposalRequest: {},
       discountBlock: {},
       // additionalServices: [],
       iconsWithCategory: null,

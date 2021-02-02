@@ -1,9 +1,9 @@
 <template>
   <div class="rsvp-event-timeline md-layout">
     <div class="md-layout-item md-size-100 md-small-size-100 mb-50 d-flex align-center">
-      <span class="text-transform-uppercase font-size-30 font-bold-extra" :class="{ 'color-gray': !isDisplayed }"
-        >sneak peak to the agenda</span
-      >
+      <span class="text-transform-uppercase font-size-30 font-bold-extra" :class="{ 'color-gray': !isDisplayed }">
+        sneak peak into the agenda
+      </span>
       <md-switch v-if="canHide" v-model="isDisplayed" class="ml-10 md-switch below-label large-switch">
         <span class="color-black font-regular">Hide Agenda</span>
       </md-switch>
