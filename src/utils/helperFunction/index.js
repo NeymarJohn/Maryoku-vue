@@ -53,14 +53,7 @@ export const numberToWord = num => {
     str += n[5] != 0 ? (str != "" ? "and " : "") + (a[Number(n[5])] || b[n[5][0]] + " " + a[n[5][1]]) : "";
     return str;
 };
-export const firstLetter = fullString => {
-    const phrases = fullString.split(" ");
-    const result = phrases.reduce((s, phrase) => {
-        return `${s}${phrase.substr(0, 1).toUpperCase()}`;
-    }, "");
-    console.log(result);
-    return result;
-};
+
 export const oppositeColor = rgba => {
     console.log(rgba);
     rgba = rgba.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);

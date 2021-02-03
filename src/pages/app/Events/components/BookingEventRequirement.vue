@@ -1,16 +1,16 @@
 <template>
-  <div v-if="component" class="booking-event-requirement">
+  <div v-if="selectedBlock" class="booking-event-requirement">
     <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <div class="booking-header md-layout-item md-size-100">
       <div class="d-flex justify-content-between">
         <div>
           <h3>
             <img
-              :src="`${$iconURL}Budget+Elements/${component.componentId}.svg`"
+              :src="`${$iconURL}Budget+Elements/${selectedBlock.componentId}.svg`"
               style="width: 30px; margin-right: 0.5em"
-              v-if="component.componentId"
+              v-if="selectedBlock.componentId"
             />
-            Let us know what you are looking for in a {{ component.title }}
+            Let us know what you are looking for in a {{ selectedBlock.title }}
           </h3>
           Our job is to bring you the most accurate offers for your event.
           <br />This is what we know about your event so far, let us know if there is anything we missed.
@@ -30,7 +30,7 @@
               :key="id"
               :index="id"
               :data="data"
-              :currentComponent="component"
+              :currentComponent="selectedBlock"
               @change="handleMultiSelectChange"
             ></vendor-requirement-multiselect-panel>
           </template>
@@ -40,14 +40,14 @@
               :key="id"
               :index="id"
               :data="data"
-              :currentComponent="component"
+              :currentComponent="selectedBlock"
               @change="handleSingleSelectChange"
             ></vendor-requirement-singleselect-panel>
           </template>
           <div v-else-if="category == 'special'">
             <special-requirement-section
               :data="requirementProperties[category]"
-              :currentComponent="component"
+              :currentComponent="selectedBlock"
               :note="anythingElse"
               @change="handleSpecialChange"
             ></special-requirement-section>
@@ -136,6 +136,7 @@ export default {
     isLoading: false,
     event: {},
     blockVendors: null,
+    selectedBlock: {},
     proposals: [],
     showCommentEditorPanel: false,
     blockId: "",
@@ -164,7 +165,7 @@ export default {
           if (ms.conditionScript) ms.isSelected = eval(ms.conditionScript);
           if (ms.defaultQtyScript) ms.defaultQty = Math.ceil(eval(ms.defaultQtyScript));
 
-          if (this.blockId === "giveaways" && (ms.item === "Apparel" || ms.item === "Tech items")) {
+          if (this.blockId === "swags" && (ms.item === "Apparel" || ms.item === "Tech items")) {
             ms.mustHave = false;
           }
         });
@@ -239,7 +240,7 @@ export default {
     fetchData: async function () {
       this.requirementProperties = {};
 
-      console.log("fetchData", this.component, this.component.componentId, this.storedRequirements);
+      console.log("fetchData", this.component.componentId, this.storedRequirements);
       this.blockId = this.component.componentId; //this.$route.params.blockId
       this.event = this.$store.state.event.eventData;
 
