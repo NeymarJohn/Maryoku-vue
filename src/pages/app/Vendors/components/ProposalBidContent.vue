@@ -27,7 +27,7 @@
       class="white-card card"
       :vendorCategory="vendor.eventCategory.key"
     />
-    <!-- <proposal-upload-legal class="white-card legal-upload"></proposal-upload-legal> -->
+    <proposal-upload-legal class="white-card legal-upload"></proposal-upload-legal>
   </div>
 </template>
 <script>

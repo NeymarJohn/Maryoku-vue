@@ -9,7 +9,10 @@
         <span :class="{ underline: !editable }">WHEN?</span>
       </div>
       <div class="event-info-item-content">
-        <span>{{ $dateUtil.formatScheduleDay(startTime || event.eventStartMillis, "MMM DD, YYYY hh:mm A ") }}</span>
+        <span>
+          {{ $dateUtil.formatScheduleDay(startTime || event.eventStartMillis, "MMM DD, YYYY hh:mm A ") }}
+          ({{ timezone }})
+        </span>
       </div>
     </div>
     <div class="event-info-item" v-if="!isVirtualEvent">
@@ -66,7 +69,7 @@
           <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
           <img :src="`${$iconURL}RSVP/Group+1279.svg`" />
         </div>
-        <span :class="{ underline: !editable }">Arrival?</span>
+        <span :class="{ underline: !editable }">ARRIVAL?</span>
       </div>
 
       <div class="event-info-item-content" v-if="!editingArrival">
@@ -88,6 +91,8 @@
 <script>
 import CalendarEvent from "@/models/CalendarEvent";
 import Calendar from "@/models/Calendar";
+import { firstLetters } from "@/utils/helperFunction";
+
 export default {
   props: {
     event: {
@@ -113,7 +118,19 @@ export default {
       eventArrival: this.event.arrival || "-",
       editingPlusOne: false,
       editingArrival: false,
+      timezone: "",
     };
+  },
+  created() {
+    if (this.event.locationId) {
+      this.$dateUtil.getTimeZoneNameFromPlaceId(this.event.locationId).then((timezone) => {
+        const phrases = timezone.timeZoneName.split(" ");
+        const result = phrases.reduce((s, phrase) => {
+          return `${s}${phrase.substr(0, 1).toUpperCase()}`;
+        }, "");
+        this.timezone = result;
+      });
+    }
   },
   methods: {
     updateEvent() {
@@ -145,6 +162,17 @@ export default {
     },
     isVirtualEvent() {
       return this.event.places && this.event.places.length === 1 && this.event.places[0] === "VIRTUAL";
+    },
+  },
+  watch: {
+    event(newValue, oldValue) {
+      this.$dateUtil.getTimeZoneNameFromPlaceId(newValue.locationId).then((timezone) => {
+        const phrases = timezone.timeZoneName.split(" ");
+        const result = phrases.reduce((s, phrase) => {
+          return `${s}${phrase.substr(0, 1).toUpperCase()}`;
+        }, "");
+        this.timezone = result;
+      });
     },
   },
 };

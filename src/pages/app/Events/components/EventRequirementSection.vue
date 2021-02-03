@@ -3,20 +3,20 @@
     <table class="requirement-section-table">
       <thead>
       <tr>
-        <th>
+        <th class="width-30">
               <span class="section-title">
                 <img :src="`${$iconURL}Requirements/Services.svg`" class="mr-20" style="width: 60px" />
                 {{ category }}
               </span>
         </th>
-        <th>
+        <th :class="category !== 'Amenities' ? 'width-20' : 'width-10'" v-if="category !== 'Amenities'">
           <div class="text-center">Size</div>
         </th>
-        <th>
+        <th class="width-10">
           <div class="text-center mr-20">How Many?</div>
         </th>
-        <th></th>
-        <th></th>
+        <th class="width-10"></th>
+        <th class="width-30"></th>
       </tr>
       </thead>
       <tbody>
@@ -25,7 +25,7 @@
               v-for="(service, index) in properties.filter(sv => sv.isSelected)"
               :key="index"
       >
-        <td>
+        <td class="width-30">
           <div class="py-10">{{ service.item }}
             <div class="mt-10" v-if="service.type === 'single-selection'">
               <category-selector
@@ -44,13 +44,13 @@
                     @save="saveComment"></requirement-item-comment>
           </div>
         </td>
-        <td>
+        <td :class="category !== 'Amenities' ? 'width-20' : 'width-10'" v-if="category !== 'Amenities'">
           <template v-if="service.sizeEnabled">
             <input class="quantity-input" placeholder="Cm" type="number" v-model="service.defaultSize" @input="updateRequirement"/>
           </template>
           <div v-else class="empty">n/a</div>
         </td>
-        <td class="text-center">
+        <td class="width-10 text-center">
           <template v-if="service.qtyEnabled">
             <input class="quantity-input" placeholder="QTY" type="number" v-model="service.defaultQty" @input="updateRequirement"/>
             <span v-if="service.hint" style="position: absolute; margin-top: 10px">
@@ -60,7 +60,7 @@
           </template>
           <div v-else class="empty mr-30">n/a</div>
         </td>
-        <td>
+        <td class="width-10">
           <div class="empty">
             <md-button class="md-icon-button md-simple requirement-action" v-if="service.qtyEnabled">
               <img :src="`${$iconURL}Requirements/edit-dark.svg`" width="20" />
@@ -73,7 +73,7 @@
             </md-button>
           </div>
         </td>
-        <td>
+        <td class="width-30">
           <div class="condition">
             <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="service.mustHave" :value="true"
             >Must Have</md-checkbox
@@ -148,7 +148,7 @@
     },
     methods: {
       getProperties(){
-        console.log('getProperties', this.requirements);
+        console.log('getProperties', this.category);
         this.properties = [];
         let requirements = this.requirements;
         let event = this.event = this.$store.state.event.eventData;

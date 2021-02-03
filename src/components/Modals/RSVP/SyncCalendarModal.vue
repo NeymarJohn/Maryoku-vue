@@ -44,12 +44,12 @@
           <div v-if="showCalendar">
             <div>Choose your email account:</div>
             <div class="mt-30">
-              <md-radio v-model="emailAccount" class="mr-60" value="google"
-                ><img :src="`${$iconURL}RSVP/Image+200.png`" style="margin-top: -10px"
-              /></md-radio>
-              <md-radio v-model="emailAccount" value="outlook"
-                ><img :src="`${$iconURL}RSVP/Image+201.png`" style="margin-top: -15px"
-              /></md-radio>
+              <md-radio v-model="emailAccount" class="mr-60" value="google">
+                <img :src="`${$iconURL}common/google.svg`" style="margin-top: -10px; width: 40px" />
+              </md-radio>
+              <md-radio v-model="emailAccount" value="outlook">
+                <img :src="`${$iconURL}common/outlook.svg`" style="margin-top: -10px; width: 40px" />
+              </md-radio>
             </div>
             <md-button class="md-outlined md-simple md-red mt-20 sync_button" @click="syncCalendar">Sync</md-button>
           </div>

@@ -212,12 +212,6 @@
           </md-button>
           <md-menu-content>
             <md-menu-item @click="isEdit = true">
-              <span> <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />Edit</span>
-            </md-menu-item>
-            <md-menu-item @click="removeRequirement(item)">
-              <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Delete</span>
-            </md-menu-item>
-            <md-menu-item @click="isEdit = true">
               <span>
                 <img
                   :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"

@@ -119,24 +119,13 @@
             <h5 class="subtitle">Our cancellation approach</h5>
             <div id="Policy">
               <div class="rules">
-                <div class="rule" v-for="(policy, yIndex) in cancellationData" :key="yIndex">
-                  <div class="item">
-                    <span class="font-bold-extra">If</span> {{ policy.notice }}
-                    <span class="font-bold-extra">Then</span>
-                    {{ policy.vendorPayout }} <span class="font-bold-extra">and</span> {{ policy.cancellationFee }}
+                <div class="rules">
+                  <div class="rule" v-for="(policy, yIndex) in cancellationData" :key="yIndex">
+                    <div class="item">{{ policy.notice }}</div>
+                    <div class="item">{{ policy.vendorPayout }}</div>
+                    <div class="item">{{ policy.cancellationFee }}</div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div class="cancellation">
-            <h5 class="subtitle">Act of God</h5>
-            <div id="Policy">
-              <div class="rules">
-                <span class="font-bold"> {{ vendor.companyName }}</span>
-                is not liable for any acts of God, dangerous incident to the sea, fires, acts of government or other
-                authorities, wars, acts of terrorism, civil unrest, strikes, riots, thefts, pilferage, epidemics,
-                quarantines, other diseases, climatic aberrations, or from any other cause beyond company’s control.
               </div>
             </div>
           </div>
@@ -172,13 +161,32 @@
                 <h5>We don't allow these 3rd party vendor:</h5>
                 <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
               </div>
+              <div class="dont-work">
+                <h5>We don't work on:</h5>
+                <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
+                  <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
+                  {{ mergeStringItems(vendor.selectedWeekdays) }}
+                </div>
+                <div class="item" v-for="(d, dIndex) in vendor.exDonts" :key="dIndex">
+                  <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
+                  {{ d.holiday }}
+                </div>
+                <div class="item" v-if="vendor.dontWorkDays">
+                  <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
+                  {{ dontWorkDays() }}
+                </div>
+                <div class="item" v-if="vendor.dontWorkTime">
+                  <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
+                  {{ dontWorkTime() }}
+                </div>
+              </div>
             </div>
 
             <div class="signature-wrapper">
               <div class="half-side">
                 <h6>{{ vendor.companyName }}</h6>
                 <div class="signature-client">
-                  <template v-if="vendor.signature == null && !signatureImage">
+                  <template v-if="vendor.signature == null">
                     <div class="card red-border">
                       <div class="upload-cont">
                         <a class @click="uploadVendorSignature">
@@ -199,7 +207,7 @@
                           ref="signatureFile"
                           name="vendorSignature"
                           accept="image/gif, image/jpg, image/png"
-                          @change="onUploadVendorSignature"
+                          @change="onVendorImageFilePicked"
                         />
                       </div>
                     </div>
@@ -208,7 +216,7 @@
                     <div
                       class
                       :style="`
-                        background-image: url(${vendor.signature || signatureImage});width: 100%;
+                        background-image: url(${vendor.signature});width: 100%;
                         background-position: center;
                         background-repeat: no-repeat;
                         height: 162px;
@@ -242,7 +250,7 @@ import Vendors from "@/models/Vendors";
 import vueSignature from "vue-signature";
 import ProposalInspirationalPhotos from "./ProposalInspirationalPhotos.vue";
 import ProposalPricingSummary from "./ProposalPricingSummary.vue";
-import { getBase64 } from "@/utils/file.util";
+
 export default {
   name: "proposal-event-summary",
   components: {
@@ -268,26 +276,25 @@ export default {
       considerUpdate: false,
       warning: false,
       categories: [],
-      signatureImage: "",
       cancellationData: [
         {
-          notice: "the client cancel on the day of the Event",
-          vendorPayout: "the client will pay in full",
-          cancellationFee: "full Payment-no refund will be given",
+          notice: "Cancellation on the day of the Event",
+          vendorPayout: "Full payment",
+          cancellationFee: "Full Payment-no refund will be given",
         },
         {
-          notice: "the client cancel less than a week prior of the Event but not on the day of the Event",
-          vendorPayout: "the client will pay 80% ",
-          cancellationFee: "full Payment-no refund will be given",
+          notice: "Cancellation less than a week prior of the Event but not on the day of the Event",
+          vendorPayout: "80% payment",
+          cancellationFee: "Full Payment-no refund will be given",
         },
         {
-          notice: "the client cancel less than two weeks prior of the Event bu more than one week prior to the Event",
-          vendorPayout: "the client willl pay 60%",
+          notice: "Cancellation less than two weeks prior of the Event bu more than one week prior to the Event",
+          vendorPayout: "60% payment",
           cancellationFee: "80% Payment(20% refunded to Planner)",
         },
         {
-          notice: "the client cancel more than two weeks prior to the Event",
-          vendorPayout: "the client will pay 15% equivalent to down payment",
+          notice: "Cancellation more than two weeks prior to the Event",
+          vendorPayout: "15% payment equivalent to down payment",
           cancellationFee: "Down payment will not be refunded",
         },
       ],
@@ -306,9 +313,41 @@ export default {
     uploadVendorSignature(imageId = null, attachmentType = null) {
       this.$refs.signatureFile.click();
     },
+    onVendorImageFilePicked(event) {
+      let file = event.target.files || event.dataTransfer.files;
 
-    async onUploadVendorSignature(event) {
-      this.signatureImage = await getBase64(event.target.files[0]);
+      if (!file.length) {
+        return;
+      }
+
+      if (file[0].size <= 5000000) {
+        // 5mb
+        if (event.target.name == "vendorSignature") {
+          this.createImage(file[0], "vendorSignature");
+        } else {
+          this.createImage(file[0]);
+        }
+      } else {
+        this.$notify({
+          message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
+          horizontalAlign: "center",
+          verticalAlign: "top",
+          type: "warning",
+        });
+      }
+    },
+    createImage(file, type) {
+      let reader = new FileReader();
+      let vm = this;
+
+      this.isLoading = true;
+
+      reader.onload = (e) => {
+        if (type == "vendorSignature") {
+          this.$root.$emit("update-proposal-value", "signature", e.target.result);
+        }
+      };
+      reader.readAsDataURL(file);
     },
     save() {
       let _this = this;
@@ -357,8 +396,7 @@ export default {
         }
       });
       naItems = naItems.substring(0, naItems.length - 2);
-      if (naItems) return "All " + naItems;
-      return "";
+      return "All " + naItems;
     },
     capitalize: function (value) {
       if (!value) return "";
@@ -713,10 +751,10 @@ export default {
     }
     .rules {
       margin: 3rem 0;
-      font-size: 18px;
       .rule {
         padding: 2rem 2rem 2rem 0;
         border-bottom: 1px solid #dddddd;
+        font: 600 16px Manrope-Regular, sans-serif;
         display: flex;
         align-items: center;
 
@@ -899,8 +937,6 @@ export default {
               min-height: 270px;
               border: 1px dashed #f51355 !important;
               border-radius: 3px;
-              display: flex;
-              align-items: center;
             }
 
             &:first-child {

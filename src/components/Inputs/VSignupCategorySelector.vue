@@ -128,8 +128,8 @@ export default {
         icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/audiovisualstagingservices.svg`,
       },
       {
-        name: "Swags",
-        value: "swags",
+        name: "Giveaways",
+        value: "giveaways",
         icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/swags.svg`,
       },
       // {
