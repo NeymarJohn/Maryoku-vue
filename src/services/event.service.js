@@ -60,7 +60,7 @@ class EventService {
                 currency: "USD",
                 eventType: editingEvent.eventType,
                 editable: true,
-                guestType: editingEvent.guestType.name,
+                guestType: editingEvent.guestType ? editingEvent.guestType.name : "",
             })
                 .save()
                 .then(response => {

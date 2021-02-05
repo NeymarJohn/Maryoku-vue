@@ -43,13 +43,13 @@
           <div class="form-buttons">
             <div>
               <md-button @click="signIn" class="md-default md-red md-maryoku mt-4" slot="footer">Sign In</md-button>
-              <md-button @click="toSingUp" class="md-black md-maryoku mt-4 md-simple mt-4" slot="footer"
-                >Sign Up</md-button
-              >
+              <md-button @click="toSingUp" class="md-black md-maryoku mt-4 md-simple mt-4" slot="footer">
+                Sign Up
+              </md-button>
             </div>
-            <md-button @click="toForgotPassword" class="md-black md-maryoku mt-4 md-simple mt-4" slot="footer"
-              >Forgot my password?</md-button
-            >
+            <md-button @click="toForgotPassword" class="md-black md-maryoku mt-4 md-simple mt-4" slot="footer">
+              Forgot my password?
+            </md-button>
           </div>
         </div>
       </signup-card>
@@ -75,11 +75,20 @@ export default {
   },
   methods: {
     authenticate(provider) {
+      let action = this.$route.query.action;
       this.loading = true;
       let tenantId = this.$authService.resolveTenantId();
-      const callback = btoa(
+
+      let callback = btoa(
         `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`,
       );
+
+      if (action) {
+        callback = btoa(
+          `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?action=${action}&token=`,
+        );
+      }
+
       console.log(`${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`);
       document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
     },

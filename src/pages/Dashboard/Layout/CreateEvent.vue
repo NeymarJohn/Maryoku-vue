@@ -9,13 +9,13 @@
         </div>
         <div class="header-actions md-layout-item md-size-50 md-small-size-60">
           <ul class="actions-list unstyled">
-            <md-button v-if="!isLoggedIn" class="md-simple md-black md-maryoku" @click="showSingupDialog"
-              >Already A User?</md-button
-            >
+            <md-button v-if="!isLoggedIn" class="md-simple md-black md-maryoku" @click="showSingupDialog">
+              Already A User?
+            </md-button>
             <md-menu v-else md-size="medium" md-align-trigger>
-              <md-button class="md-simple md-black md-maryoku normal-btn" md-menu-trigger>{{
-                tenantUser.name ? tenantUser.name : tenantUser.username
-              }}</md-button>
+              <md-button class="md-simple md-black md-maryoku normal-btn" md-menu-trigger>
+                {{ tenantUser.name ? tenantUser.name : tenantUser.username }}
+              </md-button>
               <md-menu-content class="user-menu-content">
                 <md-menu-item @click="logout">Logout</md-menu-item>
               </md-menu-content>
@@ -101,7 +101,7 @@
 import { FadeTransition } from "vue2-transitions";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import { MaryokuInput } from "@/components";
-
+import AuthService from "@/services/auth.service";
 export default {
   data() {
     return {
@@ -186,9 +186,13 @@ export default {
       document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
     },
     logout() {
-      this.$store.dispatch("auth/logout");
-      // this.$auth.logout(this);
-      // this.$ls.remove("user");
+      AuthService.logout()
+        .then(() => {
+          this.$store.dispatch("auth/logout");
+        })
+        .catch((err) => {
+          this.$store.dispatch("auth/logout");
+        });
     },
   },
   computed: {

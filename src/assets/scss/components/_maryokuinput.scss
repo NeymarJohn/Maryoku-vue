@@ -109,6 +109,7 @@
   }
   input:disabled{
     color: #a0a0a0;
+    background-color: #EFEFEF;;
     &.budget {
       @include background-icon(url('https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/budget-gray.svg'))
     }

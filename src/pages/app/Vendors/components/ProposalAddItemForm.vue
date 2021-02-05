@@ -29,10 +29,10 @@
             placeholder="Type name of element here"
           />
         </div>
-        <div class="field">
+        <!-- <div class="field">
           <span>Size</span>
           <input v-model="serviceItemSize" :class="{ isFilled: !!serviceItemSize }" />
-        </div>
+        </div> -->
         <div class="field">
           <span>QTY</span>
           <money v-model="qty" v-bind="qtyFormat" :class="{ isFilled: !!qty }" />
@@ -484,7 +484,7 @@ export default {
     margin-top: 1rem;
     .fields-cont {
       display: grid;
-      grid-template-columns: 40% 15% 15% 15% 15%;
+      grid-template-columns: 40% 20% 20% 20%;
       .field {
         margin-right: 1em;
         span {

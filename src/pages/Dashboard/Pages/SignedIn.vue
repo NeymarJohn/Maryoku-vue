@@ -19,6 +19,7 @@
 import SockJS from "sockjs-client"; // NEW: SockJS & Stomp instead of socket.io
 import Stomp from "stompjs";
 import Model from "@/models/Model";
+import eventService from "@/services/event.service";
 export default {
   components: {},
   methods: {
@@ -34,45 +35,58 @@ export default {
     const givenToken = this.$route.query.token;
     this.$store.dispatch("auth/checkToken", givenToken).then(
       (tenantUser) => {
+        console.log(tenantUser);
         const tenantId = this.$authService.resolveTenantId();
         this.$authService.setTenant(tenantId);
 
-        //check if user doesn't have any tenants
-        if (!tenantUser.tenants || tenantUser.tenants.length === 0) {
-          this.$router.push({ path: "/create-event-wizard" });
-          return;
+        // SET LIVE CHAT INFORMANTION
+        if (process.env.NODE_ENV === "production") {
+          try {
+            window.heap.identify(this.$auth.user.email);
+          } catch (e) {
+            console.error(e);
+          }
+          try {
+            this.$Tawk.$updateChatUser({
+              name: this.$store.state.auth.user.displayName,
+              email: this.$store.state.auth.user.email,
+            });
+          } catch (e) {
+            console.error(e);
+          }
         }
-        if (tenantId.toLowerCase() === "default") {
-          if (tenantUser.tenants && tenantUser.tenants.length > 0) {
-            this.$router.push({ name: "ChooseWorkspace" });
-          } else {
-            this.$router.push({ path: "/create-event-wizard" });
-          }
+        /// SET GTM
+        this.$gtm.trackEvent({
+          event: "user_signed_in", // Event type [default = 'interaction'] (Optional)
+          category: "Users",
+          action: "signin",
+          label: "User Signed In",
+          value: this.$store.state.auth.user.email,
+          noninteraction: false, // Optional
+        });
+
+        const action = this.$route.query.action;
+        const noTenant = !tenantUser.tenants || tenantUser.tenants.length === 0;
+        const isDefaultTenant = tenantId.toLowerCase() === "default";
+        if (noTenant && !action) {
+          // WHEN PLANNER STARTD BY SIGNIN
+          this.$router.push({ path: `/create-event-wizard?action=${action}` });
+        } else if (noTenant && action) {
+          // WHEN PLANNER STAARTED BY CREATE EVENT
+          this.$router.push({ path: `/create-workspace?action=${action}` });
+        } else if (!noTenant && isDefaultTenant) {
+          this.$router.push({ path: `/choose-workspace?action=${action}` });
+        } else if (!noTenant && !isDefaultTenant && action) {
+          eventService
+            .saveEventFromStorage(res.defaultCalendar)
+            .then((event) => {
+              callback = btoa(`events/${event.id}/booking/overview`);
+              document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         } else {
-          this.$gtm.trackEvent({
-            event: "user_signed_in", // Event type [default = 'interaction'] (Optional)
-            category: "Users",
-            action: "signin",
-            label: "User Signed In",
-            value: this.$store.state.auth.user.email,
-            noninteraction: false, // Optional
-          });
-          if (process.env.NODE_ENV === "production") {
-            try {
-              window.heap.identify(this.$auth.user.email);
-            } catch (e) {
-              console.error(e);
-            }
-            try {
-              this.$Tawk.$updateChatUser({
-                name: this.$store.state.auth.user.displayName,
-                email: this.$store.state.auth.user.email,
-              });
-            } catch (e) {
-              console.error(e);
-            }
-          }
-          const firstEvent = this.$route.query.firstEvent;
           let redirectURL = this.$route.query.redirectURL;
           if (redirectURL) {
             redirectURL = atob(redirectURL);
@@ -80,19 +94,6 @@ export default {
           } else {
             this.$router.push({ path: "/events" });
           }
-          // if (firstEvent) {
-          //   // this.$router.push({ path: `/events/${firstEvent}/booking/budget` })
-          //   this.$router.push({ path: '/events' })
-          // } else if( redirectURL ) {
-          //   redirectURL = atob(redirectURL)
-          //   this.$router.push({ path: `${redirectURL}` })
-          // } else {
-          //   this.messageIndex = 0;
-          //   // setTimeout(() => {
-          //   //   this.$router.push({ path: '/choose-workspace' })
-
-          //   // }, 5000);
-          // }
         }
       },
       (error) => {

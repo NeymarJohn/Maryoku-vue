@@ -69,8 +69,8 @@
                   newProposalRequest.eventData.allocatedBudget)
                   | withComma
               }}
-              more than the budget</span
-            >
+              more than the budget
+            </span>
           </li>
         </ul>
       </div>

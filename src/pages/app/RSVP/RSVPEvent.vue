@@ -152,7 +152,7 @@
           <div
             class="md-layout-item md-size-100 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra mb-50"
           >
-            sneak peak to the agenda
+            sneak peak into the agenda
           </div>
           <div
             v-for="(schedule, index) in timelineDates"
