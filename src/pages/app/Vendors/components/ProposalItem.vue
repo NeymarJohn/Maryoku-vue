@@ -247,7 +247,7 @@
         <span>${{ calculatedTotal() | withComma }}</span>
       </div>
     </div>
-    <div class="upload-files-wrapper" v-if="(step <= 1 && !isVCollapsed) || (step == 2 && isChecked)">
+    <!-- <div class="upload-files-wrapper" v-if="(step <= 1 && !isVCollapsed) || (step == 2 && isChecked)">
       <div class="title-cont">
         <h3><img :src="`${iconUrl}Asset 608.svg`" />Upload These Files:</h3>
         <h5>And add additional if you want</h5>
@@ -274,7 +274,7 @@
           accept="application/text, application/pdf"
           @change="onFilePicked"
         />
-        <!-- <div class="item">
+        <div class="item">
           <div class="left">
             <span class="filename">Legal Requirements</span>
             <span class="req">Required</span>
@@ -282,7 +282,7 @@
           <div class="right">
             <img :src="`${iconUrl}Asset 609.svg`"/>Upload
           </div>
-        </div>-->
+        </div>
         <div class="option">
           <div class="left">
             <span class="filename">Other</span>
@@ -305,7 +305,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="additional-photos-wrapper" v-if="step == 2 && isChecked">
       <div class="title-cont">
         <h3><img :src="`${iconUrl}Asset 605.svg`" />Upload Additional Photos</h3>

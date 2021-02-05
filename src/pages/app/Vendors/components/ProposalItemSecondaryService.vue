@@ -50,7 +50,7 @@
         key="extra"
         :vendorCategory="service.componentId"
       />
-      <proposal-upload-legal></proposal-upload-legal>
+      <!-- <proposal-upload-legal></proposal-upload-legal> -->
     </template>
   </div>
 </template>
@@ -542,7 +542,7 @@ export default {
       }
     }
   }
-  .additional-service {
+  .additional-service:not(:last-child) {
     border-bottom: solid 2px #828282;
   }
   .additional-photos-wrapper {

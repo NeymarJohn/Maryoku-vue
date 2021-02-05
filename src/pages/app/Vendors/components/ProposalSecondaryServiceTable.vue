@@ -160,7 +160,7 @@
         <span>${{ calculatedTotal | withComma }}</span>
       </div>
     </div>
-    <div class="upload-files-wrapper">
+    <!-- <div class="upload-files-wrapper">
       <div class="title-cont">
         <h3><img :src="`${$iconURL}NewSubmitPorposal/Asset 608.svg`" />Upload These Files:</h3>
         <h5>And add additional if you want</h5>
@@ -217,7 +217,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>

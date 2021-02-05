@@ -15,26 +15,23 @@
     </div>
     <div class="tab-content">
       <h2 class="font-bold-extra">{{ tabs[selectedTab].title }}</h2>
-      <template v-if="selectedTab==0">
-      <p>
-        <h3 class="font-size-22 font-bold"> What can I do to make my chances better?</h3>
+      <div v-if="selectedTab==0">
         <div>
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+            Now we review the suitability of your proposal with the requirements of the event and budget. We also weigh in how long it took you to answer, and how many times you were selected when you were one of the "three best & final", Maryoku's ranking system. We also look at how many recommenders you have and what their recommendations are. The three best bids will be presented to the planner as best & final. The planner can now choose one of them or ask for other alternatives. If she won't ask for another alternative instead of your offer, we will let you know. If she decides not to choose you, but someone else, we will let you know why. When the planner chooses you, we take care of all the prepayment. You will receive a down payment based on Maryoku's policy. Within 7 days of the event, if there are no appeals/ complaints, you will receive the rest of the payment to your account.
         </div>
-      </p>
-      <p>
-        <h3 class="font-size-22 font-bold"> What if I submitted the offer and I am interested in canceling?</h3>
+        <br/>
         <div>
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren
+            Every offer you submit is kept with us, so we can better learn your price range.
         </div>
-      </p>
-      <p>
-        <h3 class="font-size-22 font-bold"> What if I submitted the offer and I am interested in canceling?</h3>
+        <br/>
         <div>
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren
+            When you are chosen to do an event, you will get a link to the area where you can create a dialogue with the other vendors working the event, so you can work together and make sure everything is in sync. If you cancel, for any reason, you will have to return the down payment, in accordance with Maryoku's policy.
         </div>
-      </p>
-      </template>
+        <br/>
+        <div>
+            If the event is canceled, you will receive compensation in accordance Maryoku's policy.Any change in the number of people, date, location, etc. will be reflected to you as soon as the planner defines a change. Some changes may require a new and updated proposal from you. In this case, you will receive a link to your original proposal, there you will be able to update it and save a new version.
+        </div>
+      </div>
       <template v-if="selectedTab ==1">
         Deciding between vendors, isn't an easy job but someone has to do it...
         to make our decision a little easier, we want to know how long  it took you to reply and what was the number of times you were chosen when your bid was one of the three finalists. we also look at the rating you got on our website, and go over all your  Recommendation.

@@ -39,7 +39,7 @@
             {{ vendor.eventCategory.title }}
           </li>
           <li>
-            <span>{{ vendor.eventCategory.bookTitle }}</span>
+            <a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
           </li>
           <li>
             <span>Your proposal</span>
@@ -84,7 +84,8 @@
               {{ getServiceCategory(a).title }}
             </li>
             <li>
-              <span>{{ getServiceCategory(a).bookTitle }} {{ a }}</span>
+              <!-- <span>{{ getServiceCategory(a).bookTitle }} {{ a }}</span> -->
+              <a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
             </li>
             <li>
               <span>Your proposal</span>
@@ -254,8 +255,6 @@ export default {
       }`;
     },
     getRequirementsByCategory(category) {
-      console.log(category);
-      console.log(this.$store.state.vendorProposal.proposalServices[category]);
       return this.$store.state.vendorProposal.proposalServices[category] || [];
     },
     getRequirementsBySelectedCategory() {

@@ -4,8 +4,9 @@
       <h3>
         <!-- <img :src="`${$iconURL}NewSubmitPorposal/Asset 608.svg`" /> -->
         <md-icon class="color-black" style="font-size: 30px !important; font-weight: normal; margin-right: 10px">
-          arrow_circle_up</md-icon
-        >Upload These Files:
+          arrow_circle_up
+        </md-icon>
+        Upload These Files:
       </h3>
       <h5>And add additional if you want</h5>
     </div>

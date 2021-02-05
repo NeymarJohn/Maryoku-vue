@@ -41,106 +41,109 @@ export default {
     ProposalRequirements,
   },
   created() {
-    let includedVendorServices = [];
-    let costVendorServices = [];
-    if (this.vendor.services) {
-      _.each(this.vendor.services, (vendorService) => {
-        if (vendorService.included) {
-          includedVendorServices.push(vendorService);
-        } else if (!vendorService.included) {
-          costVendorServices.push(vendorService);
+    if (!this.$store.state.vendorProposal.initialized) {
+      let includedVendorServices = [];
+      let costVendorServices = [];
+      if (this.vendor.services) {
+        _.each(this.vendor.services, (vendorService) => {
+          if (vendorService.included) {
+            includedVendorServices.push(vendorService);
+          } else if (!vendorService.included) {
+            costVendorServices.push(vendorService);
+          }
+        });
+      }
+
+      console.log(
+        "costVendorServices",
+        costVendorServices.map((item) => item.label),
+      );
+      console.log(
+        "requirementsFromPlanner",
+        this.requirementsFromPlanner.map((item) => item.item),
+      );
+      const includedSevices = [];
+      const costServices = [];
+      this.requirementsFromPlanner.forEach((item) => {
+        const service = {
+          comments: [],
+          dateCreated: "",
+          includedInPrice: true,
+          itemNotAvailable: false,
+          price: 0,
+          priceUnit: "qty",
+          proposalRequest: { id: this.proposalRequest.id },
+          requirementComment: null,
+          requirementId: "",
+          requirementMandatory: false,
+          requirementPriority: null,
+          requirementTitle: item.item,
+          requirementsCategory: item.category,
+          requirementValue: item.defaultQty ? item.defaultQty : 1,
+          requirementSize: item.defaultSize ? item.defaultSize : "",
+          requirementNote: item.desc,
+          plannerOptions: [],
+          isMandatory: true,
+          isComplementary: false,
+        };
+
+        if (
+          costVendorServices.findIndex((vendorService) => {
+            return item.item && vendorService.label.toLowerCase() == item.item.toLowerCase();
+          }) >= 0
+        ) {
+          service.price = costVendorServices.find((vendorService) => {
+            return item.item && vendorService.label.toLowerCase() == item.item.toLowerCase();
+          }).value;
+          costServices.push(service);
+        }
+        if (
+          includedVendorServices.findIndex((vendorService) => {
+            return item.item && vendorService.label.toLowerCase() == item.item.toLowerCase();
+          }) >= 0
+        ) {
+          includedSevices.push(service);
         }
       });
+
+      const extraServices = !this.vendor.pricingPolicies
+        ? []
+        : this.vendor.pricingPolicies.map((item) => {
+            return {
+              comments: [],
+              dateCreated: "",
+              includedInPrice: true,
+              itemNotAvailable: false,
+              price: Number(item.value),
+              priceUnit: "qty",
+              proposalRequest: { id: this.proposalRequest.id },
+              requirementComment: null,
+              requirementId: "",
+              requirementMandatory: false,
+              requirementPriority: null,
+              requirementTitle: item.name,
+              requirementsCategory: item.category,
+              requirementValue: item.defaultQty ? item.defaultQty : 1,
+              requirementSize: item.defaultSize ? item.defaultSize : "",
+              plannerOptions: [],
+              isMandatory: true,
+            };
+          });
+      this.$store.commit("vendorProposal/setCostServices", {
+        category: this.vendor.eventCategory.key,
+        services: costServices,
+      });
+      this.$store.commit("vendorProposal/setIncludedServices", {
+        category: this.vendor.eventCategory.key,
+        services: includedSevices,
+      });
+
+      this.$store.commit("vendorProposal/setExtraServices", {
+        category: this.vendor.eventCategory.key,
+        services: extraServices,
+      });
+      this.$store.commit("vendorProposal/setValue", { key: "initialized", value: true });
     }
-
-    console.log(
-      "costVendorServices",
-      costVendorServices.map((item) => item.label),
-    );
-    console.log(
-      "requirementsFromPlanner",
-      this.requirementsFromPlanner.map((item) => item.item),
-    );
-    const includedSevices = [];
-    const costServices = [];
-    this.requirementsFromPlanner.forEach((item) => {
-      const service = {
-        comments: [],
-        dateCreated: "",
-        includedInPrice: true,
-        itemNotAvailable: false,
-        price: 0,
-        priceUnit: "qty",
-        proposalRequest: { id: this.proposalRequest.id },
-        requirementComment: null,
-        requirementId: "",
-        requirementMandatory: false,
-        requirementPriority: null,
-        requirementTitle: item.item,
-        requirementsCategory: item.category,
-        requirementValue: item.defaultQty ? item.defaultQty : 1,
-        requirementSize: item.defaultSize ? item.defaultSize : "",
-        requirementNote: item.desc,
-        plannerOptions: [],
-        isMandatory: true,
-        isComplementary: false,
-      };
-
-      if (
-        costVendorServices.findIndex((vendorService) => {
-          return item.item && vendorService.label.toLowerCase() == item.item.toLowerCase();
-        }) >= 0
-      ) {
-        service.price = costVendorServices.find((vendorService) => {
-          return item.item && vendorService.label.toLowerCase() == item.item.toLowerCase();
-        }).value;
-        costServices.push(service);
-      }
-      if (
-        includedVendorServices.findIndex((vendorService) => {
-          return item.item && vendorService.label.toLowerCase() == item.item.toLowerCase();
-        }) >= 0
-      ) {
-        includedSevices.push(service);
-      }
-    });
-
-    const extraServices = !this.vendor.pricingPolicies
-      ? []
-      : this.vendor.pricingPolicies.map((item) => {
-          return {
-            comments: [],
-            dateCreated: "",
-            includedInPrice: true,
-            itemNotAvailable: false,
-            price: Number(item.value),
-            priceUnit: "qty",
-            proposalRequest: { id: this.proposalRequest.id },
-            requirementComment: null,
-            requirementId: "",
-            requirementMandatory: false,
-            requirementPriority: null,
-            requirementTitle: item.name,
-            requirementsCategory: item.category,
-            requirementValue: item.defaultQty ? item.defaultQty : 1,
-            requirementSize: item.defaultSize ? item.defaultSize : "",
-            plannerOptions: [],
-            isMandatory: true,
-          };
-        });
-    this.$store.commit("vendorProposal/setCostServices", {
-      category: this.vendor.eventCategory.key,
-      services: costServices,
-    });
-    this.$store.commit("vendorProposal/setIncludedServices", {
-      category: this.vendor.eventCategory.key,
-      services: includedSevices,
-    });
-
-    this.$store.commit("vendorProposal/setExtraServices", {
-      category: this.vendor.eventCategory.key,
-      services: extraServices,
-    });
   },
   computed: {
     category() {

@@ -3,9 +3,9 @@
     <div class="welcome-event-content white-card">
       <div class="header d-flex justify-content-between">
         <img :src="`${$iconURL}Onboarding/maryoku-logo-dark%402x%403x.png`" />
-        <md-button class="md-simple edit-btn" @click="closePanel"
-          ><md-icon class="color-black">close</md-icon></md-button
-        >
+        <md-button class="md-simple edit-btn" @click="closePanel">
+          <md-icon class="color-black">close</md-icon>
+        </md-button>
       </div>
       <div class="title text-center">
         <img :src="`${$iconURL}common/welcome-header.png`" />

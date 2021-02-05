@@ -9,6 +9,7 @@ import CalendarEvent from "@/models/CalendarEvent";
 
 const state = {
   vendor: null,
+  initialized: false,
   proposalRequest: null,
   proposalServices: {},
   proposalCostServices: {},

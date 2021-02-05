@@ -71,7 +71,7 @@
       <div class="pricing-cont">
         <div class="title">
           <h4><img :src="`${iconUrl}Asset 576.svg`" />Pricing & Details</h4>
-          <p>*Work only with our catering</p>
+          <p v-if="categories.length === 1">*Work only with our {{ vendor.eventCategory.fullTitle }}</p>
         </div>
         <p>What would you like to take from our suggested services?</p>
         <proposal-pricing-item
@@ -167,10 +167,6 @@
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="not-allowed" v-if="vendor.vendorCategories[0] == 'venuerental'">
-                <h5>We don't allow these 3rd party vendor:</h5>
-                <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
               </div>
             </div>
 
@@ -901,6 +897,7 @@ export default {
               border-radius: 3px;
               display: flex;
               align-items: center;
+              justify-content: center;
             }
 
             &:first-child {
