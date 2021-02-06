@@ -11,8 +11,16 @@
       <div class="event-info-item-content">
         <span>
           {{ $dateUtil.formatScheduleDay(startTime || event.eventStartMillis, "MMM DD, YYYY hh:mm A ") }}
-          ({{ timezone }})
         </span>
+        <template v-if="!editingTimezone">
+          <span>({{ timezone }})</span>
+          <md-button class="edit-btn md-simple md-red" @click="editingTimezone = true">Edit</md-button>
+        </template>
+        <template v-if="editingTimezone">
+          <v-select class="timezone-selector" v-model="timezone" :options="timezoneList"></v-select>
+          <md-button class="maryoku-btn md-simple md-red" @click="editingTimezone = false">Cancel</md-button>
+          <md-button class="maryoku-btn md-red" @click="updateEvent">Save</md-button>
+        </template>
       </div>
     </div>
     <div class="event-info-item" v-if="!isVirtualEvent">
@@ -52,11 +60,6 @@
         </md-button>
       </div>
       <div class="event-info-item-content d-flex align-center" v-else>
-        <!-- <input type="text" v-model="isPluseOne" /> -->
-        <!-- <select v-model="isPluseOne">
-          <option :value="false">Solo</option>
-          <option :value="true">+1</option>
-        </select> -->
         <md-checkbox v-model="isPluseOne" :value="false">Solo</md-checkbox>
         <md-checkbox v-model="isPluseOne" :value="true">+1</md-checkbox>
         <md-button class="md-simple md-black maryoku-btn" @click="editingPlusOne = !editingPlusOne">Cancel</md-button>
@@ -92,8 +95,12 @@
 import CalendarEvent from "@/models/CalendarEvent";
 import Calendar from "@/models/Calendar";
 import { firstLetters } from "@/utils/helperFunction";
-
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
 export default {
+  components: {
+    vSelect,
+  },
   props: {
     event: {
       type: Object,
@@ -116,9 +123,11 @@ export default {
     return {
       isPluseOne: this.isPlusOne,
       eventArrival: this.event.arrival || "-",
+      timezone: "",
       editingPlusOne: false,
       editingArrival: false,
-      timezone: "",
+      editingTimezone: false,
+      timezoneList: ["EST", "PST", "CST", "MST", "EDT", "HST"],
     };
   },
   created() {
@@ -141,6 +150,7 @@ export default {
           calendar: new Calendar({ id: this.event.calendar.id }),
           isPluseOne: this.isPluseOne,
           arrival: this.eventArrival,
+          timezone: this.timezone,
         }),
       );
       this.editingPlusOne = false;
@@ -184,6 +194,9 @@ export default {
     display: flex;
     align-items: stretch;
     // flex-flow: wrap;
+    .timezone-selector {
+      min-width: 120px;
+    }
     &-icon {
       width: 42px;
       height: 42px;
