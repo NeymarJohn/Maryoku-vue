@@ -12,15 +12,15 @@
         <span>
           {{ $dateUtil.formatScheduleDay(startTime || event.eventStartMillis, "MMM DD, YYYY hh:mm A ") }}
         </span>
-        <template v-if="!editingTimezone">
+        <div class="timezone-wrapper" v-if="!editingTimezone">
           <span>({{ timezone }})</span>
-          <md-button class="edit-btn md-simple md-red" @click="editingTimezone = true">Edit</md-button>
-        </template>
-        <template v-if="editingTimezone">
+          <md-button class="edit-btn md-simple md-red" @click="editingTimezone = true" v-if="editable">Edit</md-button>
+        </div>
+        <div class="timezone-wrapper" v-if="editingTimezone">
           <v-select class="timezone-selector" v-model="timezone" :options="timezoneList"></v-select>
           <md-button class="maryoku-btn md-simple md-red" @click="editingTimezone = false">Cancel</md-button>
           <md-button class="maryoku-btn md-red" @click="updateEvent">Save</md-button>
-        </template>
+        </div>
       </div>
     </div>
     <div class="event-info-item" v-if="!isVirtualEvent">
@@ -131,7 +131,7 @@ export default {
     };
   },
   created() {
-    if (this.event.locationId) {
+    if (this.event.locationId && !this.event.timezone) {
       this.$dateUtil.getTimeZoneNameFromPlaceId(this.event.locationId).then((timezone) => {
         const phrases = timezone.timeZoneName.split(" ");
         const result = phrases.reduce((s, phrase) => {
@@ -139,6 +139,8 @@ export default {
         }, "");
         this.timezone = result;
       });
+    } else {
+      this.timezone = this.event.timezone;
     }
   },
   methods: {
@@ -155,6 +157,7 @@ export default {
       );
       this.editingPlusOne = false;
       this.editingArrival = false;
+      this.editingTimezone = false;
     },
   },
   computed: {
@@ -176,13 +179,16 @@ export default {
   },
   watch: {
     event(newValue, oldValue) {
-      this.$dateUtil.getTimeZoneNameFromPlaceId(newValue.locationId).then((timezone) => {
-        const phrases = timezone.timeZoneName.split(" ");
-        const result = phrases.reduce((s, phrase) => {
-          return `${s}${phrase.substr(0, 1).toUpperCase()}`;
-        }, "");
-        this.timezone = result;
-      });
+      if (!newValue.timezone) {
+        console.log(newValue);
+        this.$dateUtil.getTimeZoneNameFromPlaceId(newValue.locationId).then((timezone) => {
+          const phrases = timezone.timeZoneName.split(" ");
+          const result = phrases.reduce((s, phrase) => {
+            return `${s}${phrase.substr(0, 1).toUpperCase()}`;
+          }, "");
+          this.timezone = result;
+        });
+      }
     },
   },
 };
@@ -237,10 +243,15 @@ export default {
       word-break: break-all;
       display: flex;
       align-items: center;
+      max-height: 40px;
       .maryoku-btn {
         margin: 0;
       }
     }
+  }
+  .timezone-wrapper {
+    margin-left: 20px;
+    display: flex;
   }
 }
 @media only screen and (max-width: 959px) {
