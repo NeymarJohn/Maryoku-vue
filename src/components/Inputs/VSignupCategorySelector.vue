@@ -69,7 +69,6 @@
 <script>
 import VueGoogleAutocomplete from "vue-google-autocomplete";
 import CategorySelector from "@/components/Inputs/CategorySelector";
-import { VendorCategories } from "@/constants/vendor";
 
 export default {
   name: "v-signup-editable-field",
@@ -92,7 +91,88 @@ export default {
     isEdit: false,
     reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
     categoryIconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/",
-    vendorCategories: VendorCategories,
+    vendorCategories: [
+      {
+        name: "Venue Rental",
+        value: "venuerental",
+        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/venuerental.svg`,
+      },
+      {
+        name: "Food & Beverage",
+        value: "foodandbeverage",
+        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/foodandbeverage.svg`,
+      },
+      {
+        name: "Design and Decor",
+        value: "decor",
+        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/decor.svg`,
+      },
+      {
+        name: "Guest Services & Staffing",
+        value: "corporatesocialresponsibility",
+        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/corporatesocialresponsibility.svg`,
+      },
+      {
+        name: "Signage / Printing",
+        value: "signageprinting",
+        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/signageprinting.svg`,
+      },
+      // {
+      //   name: 'Advertising and Promotion',
+      //   value: 'advertising-promotion',
+      //   icon: 'advertising-promotion.svg'
+      // },
+      {
+        name: "AV / Staging",
+        value: "audiovisualstagingservices",
+        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/audiovisualstagingservices.svg`,
+      },
+      {
+        name: "Giveaways",
+        value: "giveaways",
+        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/swags.svg`,
+      },
+      // {
+      //   name: 'Shipping',
+      //   value: 'shipping',
+      //   icon: 'shipping.svg'
+      // },
+      {
+        name: "Transportation & Tour operator",
+        value: "transportation",
+        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/transportation.svg`,
+      },
+      {
+        name: "Entertainment",
+        value: "entertainment",
+        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/entertainment.svg`,
+      },
+      // {
+      //   name: 'Administration',
+      //   value: 'administration',
+      //   icon: 'administration.svg'
+      // },
+      {
+        name: "Security",
+        value: "securityservices",
+        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/securityservices.svg`,
+      },
+      // {
+      //   name: 'Technology',
+      //   value: 'technologyservices',
+      //   icon: 'technologyservices.svg'
+      // },
+      {
+        name: "Videography and Photography",
+        value: "videographyandphotography",
+        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/videographyandphotography.svg`,
+      },
+      {
+        name: "Equipment Rentals",
+        value: "equipmentrentals",
+        icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/equipmentrentals.svg`,
+      },
+    ],
     selectedValue: [],
   }),
   mounted() {

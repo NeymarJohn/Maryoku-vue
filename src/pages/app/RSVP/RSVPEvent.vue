@@ -267,6 +267,7 @@
     <sync-calendar-modal
       v-if="showSyncCalendarForZoom"
       @close="showSyncCalendarForZoom = false"
+      @scheduled="showSyncCalendarForZoom = false"
       :campaign="campaign"
       :rsvp="rsvpData"
     ></sync-calendar-modal>
