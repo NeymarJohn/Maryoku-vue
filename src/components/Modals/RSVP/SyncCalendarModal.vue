@@ -61,6 +61,10 @@
 </template>
 <script>
 import { Modal, MaryokuInput } from "@/components";
+import { convertTimezoneName } from "@/utils/helperFunction";
+import moment from "moment-timezone";
+import { msSignIn } from "@/auth/msAuth.js";
+
 // Client ID and API key from the Developer Console
 const CLIENT_ID = "1016422269325-8bhm78m73gebu9k38nj61nr2246r1a1h.apps.googleusercontent.com";
 const API_KEY = "AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8";
@@ -122,18 +126,64 @@ export default {
         });
     },
 
-    handleAuthClick() {
+    handleGoogleAuthClick() {
       Promise.resolve(this.api.auth2.getAuthInstance().signIn()).then((_) => {
         this.authorized = true;
+        const timeZoneName = convertTimezoneName(this.campaign.event.timezone);
+        var event = {
+          summary: this.campaign.event.title,
+          location: this.campaign.event.location,
+          description: this.campaign.event.concept ? this.campaign.event.concept.description : "",
+          start: {
+            dateTime: moment.tz(this.campaign.event.eventStartMillis, timeZoneName).format(),
+            timeZone: timeZoneName,
+          },
+          end: {
+            dateTime: moment.tz(this.campaign.event.eventEndMillis, timeZoneName).format(),
+            timeZone: timeZoneName,
+          },
+          recurrence: ["RRULE:FREQ=DAILY;COUNT=2"],
+          attendees: this.campaign.guestEmails,
+          reminders: {
+            useDefault: false,
+            overrides: [
+              { method: "email", minutes: 24 * 60 },
+              { method: "popup", minutes: 10 },
+            ],
+          },
+        };
+
+        var request = gapi.client.calendar.events.insert({
+          calendarId: "primary",
+          resource: event,
+        });
+
+        const vm = this;
+        request.execute(function (event) {
+          // appendPre("Event created: " + event.htmlLink);
+          console.log(event.htmlLink);
+          swal({
+            title: "Thank you for your attending!",
+            text: `See you there!`,
+            showCancelButton: false,
+            confirmButtonClass: "md-button md-success btn-fill",
+            cancelButtonClass: "md-button md-danger btn-fill",
+            confirmButtonText: "OK",
+            buttonsStyling: false,
+          }).then((result) => {
+            vm.$emit("scheduled");
+          });
+        });
       });
+    },
+    handleMsAuthClick() {
+      msSignIn();
     },
     syncCalendar() {
       if (this.emailAccount === "google") {
-        this.handleAuthClick();
-        // this.$gapi._load().then((gapi) => {
-        //   console.log("gapi object :", gapi);
-
-        // });
+        this.handleGoogleAuthClick();
+      } else if (this.emailAccount === "outlook") {
+        this.handleMsAuthClick();
       }
     },
   },
