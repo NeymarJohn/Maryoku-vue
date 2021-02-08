@@ -448,21 +448,19 @@ export default {
       this.exportXls(this.currentCampaign.guestSMS, "phonenumbers");
     },
     downloadUsersEmailList() {
-      if (this.currentCampaign.guestEmails) {
-        if (this.campaign.name === "RSVP") {
-          this.$http.get(`${process.env.SERVER_URL}/1/rsvp/guests-excel/${this.event.id}`).then((res) => {
-            const rsvpUsers = res.data;
-            const guestData = [];
-            this.currentCampaign.guestEmails.forEach((guest) => {
-              if (rsvpUsers.findIndex((it) => it.email === guest.email) < 0) {
-                guestData.push(guest);
-              }
-            });
-            this.exportXls(rsvpUsers.concat(guestData), "emails");
+      if (this.campaign.name === "RSVP") {
+        this.$http.get(`${process.env.SERVER_URL}/1/rsvp/guests-excel/${this.event.id}`).then((res) => {
+          const rsvpUsers = res.data;
+          const guestData = [];
+          this.currentCampaign.guestEmails.forEach((guest) => {
+            if (rsvpUsers.findIndex((it) => it.email === guest.email) < 0) {
+              guestData.push(guest);
+            }
           });
-        } else {
-          this.exportXls(this.currentCampaign.guestEmails, "emails");
-        }
+          this.exportXls(rsvpUsers.concat(guestData), "emails");
+        });
+      } else {
+        this.exportXls(this.currentCampaign.guestEmails, "emails");
       }
     },
     exportXls(csvData, fileName) {

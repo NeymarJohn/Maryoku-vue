@@ -366,22 +366,6 @@ export default {
       th {
         padding: 24px 0;
       }
-      th:first-child {
-        width: 30%;
-      }
-      th:nth-child(2) {
-        width: 10%;
-      }
-      th:nth-child(3) {
-        width: 15%;
-        min-width: 180px;
-      }
-      th:nth-child(4) {
-        width: 10%;
-      }
-      th:nth-child(5) {
-        width: 35%;
-      }
       tbody {
         td {
           border-top: solid 2px #dbdbdb !important;
@@ -390,7 +374,6 @@ export default {
 
           .empty {
             display: flex;
-            justify-content: center;
             align-items: center;
             height: 50px;
           }
