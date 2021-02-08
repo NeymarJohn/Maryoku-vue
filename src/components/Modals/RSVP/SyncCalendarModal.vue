@@ -178,6 +178,7 @@ export default {
     },
     async handleMsAuthClick() {
       await msSignIn();
+      const timeZoneName = convertTimezoneName(this.campaign.event.timezone);
       let newEvent = {
         subject: this.campaign.event.title,
         start: {
