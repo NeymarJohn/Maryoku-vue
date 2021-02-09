@@ -5,29 +5,29 @@ export const businessCategories = [
       {
         name: 'amenities',
         subCategories: [
-          // {
-          //   name: 'around the space',
-          //   items: [
-          //     {
-          //       name: 'hotel acommondations within walking distance',
-          //       type: Boolean,
-          //       value: false,
-          //       xIncluded: true,
-          //     },
-          //     {
-          //       name: 'shopping centers',
-          //       type: Boolean,
-          //       value: false,
-          //       xIncluded: true,
-          //     },
-          //     {
-          //       name: 'dining options within walking distance',
-          //       type: Boolean,
-          //       value: false,
-          //       xIncluded: true,
-          //     },
-          //   ]
-          // },
+          {
+            name: 'around the space',
+            items: [
+              {
+                name: 'hotel acommondations within walking distance',
+                type: Boolean,
+                value: false,
+                xIncluded: true,
+              },
+              {
+                name: 'shopping centers',
+                type: Boolean,
+                value: false,
+                xIncluded: true,
+              },
+              {
+                name: 'dining options within walking distance',
+                type: Boolean,
+                value: false,
+                xIncluded: true,
+              },
+            ]
+          },
           {
             name: 'the space',
             items: [
@@ -43,26 +43,14 @@ export const businessCategories = [
                 value: 1,
                 xIncluded: true,
               },
-              // {
-              //   name: 'indoor event space',
-              //   type: Boolean,
-              //   value: false,
-              //   xIncluded: true,
-              // },
-              // {
-              //   name: 'outdoor event space',
-              //   type: Boolean,
-              //   value: false,
-              //   xIncluded: true,
-              // },
               {
-                name: 'Raw Event space',
+                name: 'indoor event space',
                 type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
-                name: 'Furnished Event space',
+                name: 'outdoor event space',
                 type: Boolean,
                 value: false,
                 xIncluded: true,
@@ -85,12 +73,12 @@ export const businessCategories = [
                 value: true,
                 xIncluded: false,
               },
-              // {
-              //   name: 'kitchen for outside caterers',
-              //   type: Boolean,
-              //   value: true,
-              //   xIncluded: false,
-              // },
+              {
+                name: 'kitchen for outside caterers',
+                type: Boolean,
+                value: true,
+                xIncluded: false,
+              },
               {
                 name: 'available bathrooms',
                 type: Number,
@@ -123,44 +111,44 @@ export const businessCategories = [
               },
             ]
           },
-          // {
-          //   name: 'lighting',
-          //   items: [
-          //     {
-          //       name: 'artificial lighting',
-          //       type: Boolean,
-          //       value: false,
-          //       xIncluded: true,
-          //     },
-          //     {
-          //       name: 'natural lighting space',
-          //       type: Boolean,
-          //       value: false,
-          //       xIncluded: true,
-          //     },
-          //     // {
-          //     //   name: 'control of lighting during event',
-          //     //   type: Boolean,
-          //     //   value: false,
-          //     //   xIncluded: true,
-          //     // },
-          //     {
-          //       name: "light effects",
-          //       type: Boolean,
-          //       value: false,
-          //       xIncluded: false,
-          //       comment: true,
-          //     }
-          //   ]
-          // },
+          {
+            name: 'lighting',
+            items: [
+              {
+                name: 'artificial lighting',
+                type: Boolean,
+                value: false,
+                xIncluded: true,
+              },
+              {
+                name: 'natural lighting space',
+                type: Boolean,
+                value: false,
+                xIncluded: true,
+              },
+              {
+                name: 'control of lighting during event',
+                type: Boolean,
+                value: false,
+                xIncluded: true,
+              },
+              {
+                name: "light effects",
+                type: Boolean,
+                value: false,
+                xIncluded: false,
+                comment: true,
+              }
+            ]
+          },
           {
             name: 'network',
             items: [
-              // {
-              //   name: 'fast reliable Wifi for guests',
-              //   type: Boolean,
-              //   value: false
-              // },
+              {
+                name: 'fast reliable Wifi for guests',
+                type: Boolean,
+                value: false
+              },
               {
                 name: 'venue bandwidth (for video streaming or meeting content)',
                 type: Boolean,
@@ -186,11 +174,11 @@ export const businessCategories = [
           {
             name: 'cleaning',
             items: [
-              // {
-              //   name: 'cleaning services during the event',
-              //   type: Boolean,
-              //   value: false
-              // },
+              {
+                name: 'cleaning services during the event',
+                type: Boolean,
+                value: false
+              },
             ]
           },
         ]
@@ -273,16 +261,16 @@ export const businessCategories = [
           {
             name: 'power',
             items: [
-              // {
-              //   name: 'power supply',
-              //   type: Boolean,
-              //   value: false
-              // },
-              // {
-              //   name: 'generator',
-              //   type: Boolean,
-              //   value: false
-              // },
+              {
+                name: 'power supply',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'generator',
+                type: Boolean,
+                value: false
+              },
             ]
           },
           {
@@ -319,41 +307,11 @@ export const businessCategories = [
                 dry: null,
               },
               {
-                name: 'Built in Screen',
+                name: 'speaker / sound system',
                 type: Boolean,
                 value: false,
                 dry: null,
               },
-              {
-                name: 'Clickers',
-                type: Boolean,
-                value: false,
-                dry: null,
-              },
-              {
-                name: 'Teleprompter',
-                type: Boolean,
-                value: false,
-                dry: null,
-              },
-              {
-                name: 'Riser',
-                type: Boolean,
-                value: false,
-                dry: null,
-              },
-              {
-                name: 'Switcher',
-                type: Boolean,
-                value: false,
-                dry: null,
-              },
-              // {
-              //   name: 'speaker / sound system',
-              //   type: Boolean,
-              //   value: false,
-              //   dry: null,
-              // },
             ]
           },
         ]
@@ -371,13 +329,13 @@ export const businessCategories = [
                 staff: null,
                 quest: null,
               },
-              // {
-              //   name: 'cleaning staff',
-              //   type: Boolean,
-              //   value: false,
-              //   staff: null,
-              //   quest: null,
-              // },
+              {
+                name: 'cleaning staff',
+                type: Boolean,
+                value: false,
+                staff: null,
+                quest: null,
+              },
               {
                 name: 'Catering and Waite Staff',
                 type: Boolean,
@@ -392,13 +350,13 @@ export const businessCategories = [
                 staff: null,
                 quest: null,
               },
-              // {
-              //   name: 'receptionist',
-              //   type: Boolean,
-              //   value: false,
-              //   staff: null,
-              //   quest: null,
-              // },
+              {
+                name: 'receptionist',
+                type: Boolean,
+                value: false,
+                staff: null,
+                quest: null,
+              },
               {
                 name: 'technical support',
                 type: Boolean,
@@ -406,13 +364,13 @@ export const businessCategories = [
                 staff: null,
                 quest: null,
               },
-              // {
-              //   name: 'bathroom attendant',
-              //   type: Boolean,
-              //   value: false,
-              //   staff: null,
-              //   quest: null,
-              // },
+              {
+                name: 'bathroom attendant',
+                type: Boolean,
+                value: false,
+                staff: null,
+                quest: null,
+              },
             ]
           }
         ]
@@ -3279,7 +3237,7 @@ export const companyServices = [
     name: 'venuerental',
     type: Array,
     value: [],
-    available: ['ballroom', 'gallery', 'park or field or garden', 'historic establishment', 'bar or pub or club', 'restaurant', 'Meeting Room', 'Theatre', 'business center', 'community center', 'sport venue', 'academic venue', 'stately home', 'stadium or arena'],
+    available: ['ballroom', 'gallery', 'park or field or garden', 'historic establishment', 'bar or pub or club', 'restaurant', 'hotel', 'business center', 'community center', 'sport club', 'academic venue', 'stately home', 'stadium or arena'],
   },
   {
     name: 'foodandbeverage',

@@ -58,8 +58,8 @@ const authProvider = {
 const graphClient = MicrosoftGraph.Client.initWithMiddleware({ authProvider });
 export const addCalendarEvent = async event => {
     try {
-        await graphClient.api("/me/events").post(newEvent);
-        getEvents();
+        await graphClient.api("/me/events").post(event);
+        // getEvents();
     } catch (error) {
         console.error(error);
     }

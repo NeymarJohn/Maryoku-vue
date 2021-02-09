@@ -18,9 +18,9 @@
     >
       <div>
         <img :src="`${$iconURL}Submit+Proposal/request arrangement.png`" />
-        <span class="font-size-30 font-bold">
-          The client has requested these {{ requirement.item || requirement.subCategory }}, can you deliver?
-        </span>
+        <span class="font-size-30 font-bold"
+          >The client has requested these {{ requirement.item || requirement.subCategory }}, can you deliver?</span
+        >
       </div>
       <div class="d-flex align-center mt-40" v-if="requirement.item == 'Sitting arrangement'" style="flex-flow: wrap">
         <div class="d-flex mb-30">
