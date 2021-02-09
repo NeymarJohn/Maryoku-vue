@@ -3399,28 +3399,28 @@ export const VendorPolicy = [
   {
     category: "signageprinting",
     items: [
-      {
-        name: "Must use in house graphics designer",
-        type: Boolean,
-        hasComment: true,
-      },
-      {
-        name: "Number of PR drafts",
-        type: Number,
-        noSuffix: true,
-        hasComment: true,
-      },
-      {
-        name: "Customizable size of prints",
-        type: Boolean,
-        hasComment: true,
-      },
-      {
-        name: "Minimum number of prints",
-        type: Number,
-        noSuffix: true,
-        hasComment: true,
-      },
+        {
+            name: "Must use in house graphics designer",
+            type: Boolean,
+            hasComment: true,
+        },
+        {
+            name: "Number of PR drafts",
+            type: Number,
+            noSuffix: true,
+            hasComment: true,
+        },
+        {
+            name: "Customizable size of prints",
+            type: Boolean,
+            hasComment: true,
+        },
+        {
+            name: "Minimum number of prints",
+            type: Number,
+            noSuffix: true,
+            hasComment: true,
+        },
     ],
   },
   {
@@ -3695,7 +3695,6 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Discount for large quantities",
-        hideOnProposal: true,
         type: Number,
         isPercentage: true,
         hasComment: true,
@@ -3705,13 +3704,11 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true
       },
       {
         name: "Suggested Gratuity",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true
       },
     ],
   },
@@ -3746,7 +3743,6 @@ export const VendorPricingPolicy = [
       {
         name: "Discount for large quantities",
         type: Number,
-        hideOnProposal: true,
         isPercentage: true,
         hasComment: true,
         attendees: null,
@@ -3755,13 +3751,11 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true
       },
       {
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
-        hideOnProposal: true
       },
     ],
   },
@@ -3792,13 +3786,11 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true
       },
       {
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
-        hideOnProposal: true
       },
     ],
   },
@@ -3823,7 +3815,6 @@ export const VendorPricingPolicy = [
       {
         name: "Discount for large quantities",
         type: Number,
-        hideOnProposal: true,
         isPercentage: true,
         hasComment: true,
         attendees: null,
@@ -3832,49 +3823,44 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true
       },
       {
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
-        hideOnProposal: true
       },
     ],
   },
   {
     category: "signageprinting",
     items: [
-      {
-        name: "Minimum package budget",
-        type: Number,
-        hasComment: true,
-      },
-      {
-        name: "Rush order",
-        type: Number,
-        hasComment: true,
-      },
-      {
-        name: "Discount for large quantities",
-        type: Number,
-        hideOnProposal: true,
-        isPercentage: true,
-        hasComment: true,
-        attendees: null,
-      },
-      {
-        name: "Tax rate",
-        type: Number,
-        isPercentage: true,
-        hideOnProposal: true
-      },
-      {
-        name: "Suggested Gratuity",
-        type: Number,
-        hasComment: true,
-        hideOnProposal: true
-      },
+        {
+            name: "Minimum package budget",
+            type: Number,
+            hasComment: true,
+        },
+        {
+            name: "Rush order",
+            type: Number,
+            hasComment: true,
+        },
+        {
+            name: "Discount for large quantities",
+            type: Number,
+            isPercentage: true,
+            hasComment: true,
+            attendees: null,
+        },
+        {
+            name: "Tax rate",
+            type: Number,
+            isPercentage: true,
+        },
+        {
+            name: "Suggested Gratuity",
+            type: Number,
+            hasComment: true,
+        },
     ],
   },
   {
@@ -3917,7 +3903,7 @@ export const VendorPricingPolicy = [
         label: 'Discount rate',
         discount: null,
         hasUnit: true,
-        units: ['%', '$'],
+        units: ['%' , '$'],
       },
       {
         name: 'Quantity discount',
@@ -3925,13 +3911,12 @@ export const VendorPricingPolicy = [
         label: 'Discount rage',
         discount: null,
         hasUnit: true,
-        units: ['%', '$'],
+        units: ['%' , '$'],
       },
       {
         name: 'Tax rate',
         type: Number,
         isPercentage: true,
-        hideOnProposal: true
       },
       {
         name: 'Large group discounts',
@@ -3944,7 +3929,6 @@ export const VendorPricingPolicy = [
         name: 'Suggested Gratuity',
         type: Number,
         hasComment: true,
-        hideOnProposal: true
       }
     ],
   },
@@ -3965,7 +3949,6 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true
       },
       {
         name: "Discounts",
@@ -3976,7 +3959,6 @@ export const VendorPricingPolicy = [
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
-        hideOnProposal: true
       },
     ],
   },
@@ -4012,19 +3994,17 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true
       },
       {
         name: "Discount for large quantites",
         type: Number,
-        hideOnProposal: true,
         hasComment: true,
+
       },
       {
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
-        hideOnProposal: true
       },
     ],
   },
@@ -4039,7 +4019,6 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true
       },
       {
         name: 'Large group discounts',
@@ -4081,7 +4060,6 @@ export const VendorPricingPolicy = [
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
-        hideOnProposal: true
       },
     ],
   },
@@ -4130,7 +4108,7 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         subCategory: "tax",
         type: Number,
-        hideOnProposal: true,
+
         isPercentage: true,
       },
       {
@@ -4144,7 +4122,6 @@ export const VendorPricingPolicy = [
         name: "Suggested Gratuity",
         subCategory: "tips",
         type: Number,
-        hideOnProposal: true
       },
     ],
   },
@@ -4179,7 +4156,6 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true
       },
       {
         name: "Large group discounts",
@@ -4190,7 +4166,6 @@ export const VendorPricingPolicy = [
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
-        hideOnProposal: true
       },
     ],
   },
@@ -4222,19 +4197,16 @@ export const VendorPricingPolicy = [
         name: "Discount for large discounts",
         type: Boolean,
         attendees: null,
-        hideOnProposal: true,
       },
       {
         name: "Tax rate",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true
       },
       {
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
-        hideOnProposal: true
       },
     ],
   },

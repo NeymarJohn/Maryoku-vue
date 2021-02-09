@@ -51,9 +51,9 @@
           ></maryoku-input>
         </div>
 
-        <div class="text-left">
+        <div class="text-left d-flex">
           <img class="mr-30" :src="`${$iconURL}RSVP/ring.svg`" />
-          <span class="font-size-20 font-bold">When Do You Want Your Reminder? </span>
+          <div class="font-size-20 font-bold time-question">When Do You Want Your Reminder?</div>
         </div>
         <div class="options-list">
           <option-card
