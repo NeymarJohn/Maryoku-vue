@@ -1,65 +1,3 @@
-export const VendorCategories = [
-  {
-    name: "Venue Rental",
-    value: "venuerental",
-    icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/venuerental.svg`,
-  },
-  {
-    name: "Food & Beverage",
-    value: "foodandbeverage",
-    icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/foodandbeverage.svg`,
-  },
-  {
-    name: "Design and Decor",
-    value: "decor",
-    icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/decor.svg`,
-  },
-  {
-    name: "Guest Services & Staffing",
-    value: "corporatesocialresponsibility",
-    icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/corporatesocialresponsibility.svg`,
-  },
-  {
-    name: "Signage / Printing",
-    value: "signageprinting",
-    icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/signageprinting.svg`,
-  },
-  {
-    name: "AV / Staging",
-    value: "audiovisualstagingservices",
-    icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/audiovisualstagingservices.svg`,
-  },
-  {
-    name: "Giveaways",
-    value: "giveaways",
-    icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/swags.svg`,
-  },
-  {
-    name: "Transportation & Tour operator",
-    value: "transportation",
-    icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/transportation.svg`,
-  },
-  {
-    name: "Entertainment",
-    value: "entertainment",
-    icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/entertainment.svg`,
-  },
-  {
-    name: "Security",
-    value: "securityservices",
-    icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/securityservices.svg`,
-  },
-  {
-    name: "Videography and Photography",
-    value: "videographyandphotography",
-    icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/videographyandphotography.svg`,
-  },
-  {
-    name: "Equipment Rentals",
-    value: "equipmentrentals",
-    icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/equipmentrentals.svg`,
-  },
-];
 export const businessCategories = [
   {
     name: 'venuerental',
@@ -67,29 +5,29 @@ export const businessCategories = [
       {
         name: 'amenities',
         subCategories: [
-          // {
-          //   name: 'around the space',
-          //   items: [
-          //     {
-          //       name: 'hotel acommondations within walking distance',
-          //       type: Boolean,
-          //       value: false,
-          //       xIncluded: true,
-          //     },
-          //     {
-          //       name: 'shopping centers',
-          //       type: Boolean,
-          //       value: false,
-          //       xIncluded: true,
-          //     },
-          //     {
-          //       name: 'dining options within walking distance',
-          //       type: Boolean,
-          //       value: false,
-          //       xIncluded: true,
-          //     },
-          //   ]
-          // },
+          {
+            name: 'around the space',
+            items: [
+              {
+                name: 'hotel acommondations within walking distance',
+                type: Boolean,
+                value: false,
+                xIncluded: true,
+              },
+              {
+                name: 'shopping centers',
+                type: Boolean,
+                value: false,
+                xIncluded: true,
+              },
+              {
+                name: 'dining options within walking distance',
+                type: Boolean,
+                value: false,
+                xIncluded: true,
+              },
+            ]
+          },
           {
             name: 'the space',
             items: [
@@ -105,26 +43,14 @@ export const businessCategories = [
                 value: 1,
                 xIncluded: true,
               },
-              // {
-              //   name: 'indoor event space',
-              //   type: Boolean,
-              //   value: false,
-              //   xIncluded: true,
-              // },
-              // {
-              //   name: 'outdoor event space',
-              //   type: Boolean,
-              //   value: false,
-              //   xIncluded: true,
-              // },
               {
-                name: 'Raw Event space',
+                name: 'indoor event space',
                 type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
-                name: 'Furnished Event space',
+                name: 'outdoor event space',
                 type: Boolean,
                 value: false,
                 xIncluded: true,
@@ -147,12 +73,12 @@ export const businessCategories = [
                 value: true,
                 xIncluded: false,
               },
-              // {
-              //   name: 'kitchen for outside caterers',
-              //   type: Boolean,
-              //   value: true,
-              //   xIncluded: false,
-              // },
+              {
+                name: 'kitchen for outside caterers',
+                type: Boolean,
+                value: true,
+                xIncluded: false,
+              },
               {
                 name: 'available bathrooms',
                 type: Number,
@@ -185,44 +111,44 @@ export const businessCategories = [
               },
             ]
           },
-          // {
-          //   name: 'lighting',
-          //   items: [
-          //     {
-          //       name: 'artificial lighting',
-          //       type: Boolean,
-          //       value: false,
-          //       xIncluded: true,
-          //     },
-          //     {
-          //       name: 'natural lighting space',
-          //       type: Boolean,
-          //       value: false,
-          //       xIncluded: true,
-          //     },
-          //     // {
-          //     //   name: 'control of lighting during event',
-          //     //   type: Boolean,
-          //     //   value: false,
-          //     //   xIncluded: true,
-          //     // },
-          //     {
-          //       name: "light effects",
-          //       type: Boolean,
-          //       value: false,
-          //       xIncluded: false,
-          //       comment: true,
-          //     }
-          //   ]
-          // },
+          {
+            name: 'lighting',
+            items: [
+              {
+                name: 'artificial lighting',
+                type: Boolean,
+                value: false,
+                xIncluded: true,
+              },
+              {
+                name: 'natural lighting space',
+                type: Boolean,
+                value: false,
+                xIncluded: true,
+              },
+              {
+                name: 'control of lighting during event',
+                type: Boolean,
+                value: false,
+                xIncluded: true,
+              },
+              {
+                name: "light effects",
+                type: Boolean,
+                value: false,
+                xIncluded: false,
+                comment: true,
+              }
+            ]
+          },
           {
             name: 'network',
             items: [
-              // {
-              //   name: 'fast reliable Wifi for guests',
-              //   type: Boolean,
-              //   value: false
-              // },
+              {
+                name: 'fast reliable Wifi for guests',
+                type: Boolean,
+                value: false
+              },
               {
                 name: 'venue bandwidth (for video streaming or meeting content)',
                 type: Boolean,
@@ -248,11 +174,11 @@ export const businessCategories = [
           {
             name: 'cleaning',
             items: [
-              // {
-              //   name: 'cleaning services during the event',
-              //   type: Boolean,
-              //   value: false
-              // },
+              {
+                name: 'cleaning services during the event',
+                type: Boolean,
+                value: false
+              },
             ]
           },
         ]
@@ -335,16 +261,16 @@ export const businessCategories = [
           {
             name: 'power',
             items: [
-              // {
-              //   name: 'power supply',
-              //   type: Boolean,
-              //   value: false
-              // },
-              // {
-              //   name: 'generator',
-              //   type: Boolean,
-              //   value: false
-              // },
+              {
+                name: 'power supply',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'generator',
+                type: Boolean,
+                value: false
+              },
             ]
           },
           {
@@ -381,41 +307,11 @@ export const businessCategories = [
                 dry: null,
               },
               {
-                name: 'Built in Screen',
+                name: 'speaker / sound system',
                 type: Boolean,
                 value: false,
                 dry: null,
               },
-              {
-                name: 'Clickers',
-                type: Boolean,
-                value: false,
-                dry: null,
-              },
-              {
-                name: 'Teleprompter',
-                type: Boolean,
-                value: false,
-                dry: null,
-              },
-              {
-                name: 'Riser',
-                type: Boolean,
-                value: false,
-                dry: null,
-              },
-              {
-                name: 'Switcher',
-                type: Boolean,
-                value: false,
-                dry: null,
-              },
-              // {
-              //   name: 'speaker / sound system',
-              //   type: Boolean,
-              //   value: false,
-              //   dry: null,
-              // },
             ]
           },
         ]
@@ -433,13 +329,13 @@ export const businessCategories = [
                 staff: null,
                 quest: null,
               },
-              // {
-              //   name: 'cleaning staff',
-              //   type: Boolean,
-              //   value: false,
-              //   staff: null,
-              //   quest: null,
-              // },
+              {
+                name: 'cleaning staff',
+                type: Boolean,
+                value: false,
+                staff: null,
+                quest: null,
+              },
               {
                 name: 'Catering and Waite Staff',
                 type: Boolean,
@@ -454,13 +350,13 @@ export const businessCategories = [
                 staff: null,
                 quest: null,
               },
-              // {
-              //   name: 'receptionist',
-              //   type: Boolean,
-              //   value: false,
-              //   staff: null,
-              //   quest: null,
-              // },
+              {
+                name: 'receptionist',
+                type: Boolean,
+                value: false,
+                staff: null,
+                quest: null,
+              },
               {
                 name: 'technical support',
                 type: Boolean,
@@ -468,13 +364,13 @@ export const businessCategories = [
                 staff: null,
                 quest: null,
               },
-              // {
-              //   name: 'bathroom attendant',
-              //   type: Boolean,
-              //   value: false,
-              //   staff: null,
-              //   quest: null,
-              // },
+              {
+                name: 'bathroom attendant',
+                type: Boolean,
+                value: false,
+                staff: null,
+                quest: null,
+              },
             ]
           }
         ]
@@ -3341,7 +3237,7 @@ export const companyServices = [
     name: 'venuerental',
     type: Array,
     value: [],
-    available: ['ballroom', 'gallery', 'park or field or garden', 'historic establishment', 'bar or pub or club', 'restaurant', 'Meeting Room', 'Theatre', 'business center', 'community center', 'sport venue', 'academic venue', 'stately home', 'stadium or arena'],
+    available: ['ballroom', 'gallery', 'park or field or garden', 'historic establishment', 'bar or pub or club', 'restaurant', 'hotel', 'business center', 'community center', 'sport club', 'academic venue', 'stately home', 'stadium or arena'],
   },
   {
     name: 'foodandbeverage',
@@ -3503,28 +3399,28 @@ export const VendorPolicy = [
   {
     category: "signageprinting",
     items: [
-        {
-            name: "Must use in house graphics designer",
-            type: Boolean,
-            hasComment: true,
-        },
-        {
-            name: "Number of PR drafts",
-            type: Number,
-            noSuffix: true,
-            hasComment: true,
-        },
-        {
-            name: "Customizable size of prints",
-            type: Boolean,
-            hasComment: true,
-        },
-        {
-            name: "Minimum number of prints",
-            type: Number,
-            noSuffix: true,
-            hasComment: true,
-        },
+      {
+        name: "Must use in house graphics designer",
+        type: Boolean,
+        hasComment: true,
+      },
+      {
+        name: "Number of PR drafts",
+        type: Number,
+        noSuffix: true,
+        hasComment: true,
+      },
+      {
+        name: "Customizable size of prints",
+        type: Boolean,
+        hasComment: true,
+      },
+      {
+        name: "Minimum number of prints",
+        type: Number,
+        noSuffix: true,
+        hasComment: true,
+      },
     ],
   },
   {
@@ -3799,6 +3695,7 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Discount for large quantities",
+        hideOnProposal: true,
         type: Number,
         isPercentage: true,
         hasComment: true,
@@ -3808,11 +3705,13 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
+        hideOnProposal: true
       },
       {
         name: "Suggested Gratuity",
         type: Number,
         isPercentage: true,
+        hideOnProposal: true
       },
     ],
   },
@@ -3847,6 +3746,7 @@ export const VendorPricingPolicy = [
       {
         name: "Discount for large quantities",
         type: Number,
+        hideOnProposal: true,
         isPercentage: true,
         hasComment: true,
         attendees: null,
@@ -3855,11 +3755,13 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
+        hideOnProposal: true
       },
       {
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
+        hideOnProposal: true
       },
     ],
   },
@@ -3890,11 +3792,13 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
+        hideOnProposal: true
       },
       {
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
+        hideOnProposal: true
       },
     ],
   },
@@ -3919,6 +3823,7 @@ export const VendorPricingPolicy = [
       {
         name: "Discount for large quantities",
         type: Number,
+        hideOnProposal: true,
         isPercentage: true,
         hasComment: true,
         attendees: null,
@@ -3927,44 +3832,49 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
+        hideOnProposal: true
       },
       {
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
+        hideOnProposal: true
       },
     ],
   },
   {
     category: "signageprinting",
     items: [
-        {
-            name: "Minimum package budget",
-            type: Number,
-            hasComment: true,
-        },
-        {
-            name: "Rush order",
-            type: Number,
-            hasComment: true,
-        },
-        {
-            name: "Discount for large quantities",
-            type: Number,
-            isPercentage: true,
-            hasComment: true,
-            attendees: null,
-        },
-        {
-            name: "Tax rate",
-            type: Number,
-            isPercentage: true,
-        },
-        {
-            name: "Suggested Gratuity",
-            type: Number,
-            hasComment: true,
-        },
+      {
+        name: "Minimum package budget",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Rush order",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Discount for large quantities",
+        type: Number,
+        hideOnProposal: true,
+        isPercentage: true,
+        hasComment: true,
+        attendees: null,
+      },
+      {
+        name: "Tax rate",
+        type: Number,
+        isPercentage: true,
+        hideOnProposal: true
+      },
+      {
+        name: "Suggested Gratuity",
+        type: Number,
+        hasComment: true,
+        hideOnProposal: true
+      },
     ],
   },
   {
@@ -4007,7 +3917,7 @@ export const VendorPricingPolicy = [
         label: 'Discount rate',
         discount: null,
         hasUnit: true,
-        units: ['%' , '$'],
+        units: ['%', '$'],
       },
       {
         name: 'Quantity discount',
@@ -4015,12 +3925,13 @@ export const VendorPricingPolicy = [
         label: 'Discount rage',
         discount: null,
         hasUnit: true,
-        units: ['%' , '$'],
+        units: ['%', '$'],
       },
       {
         name: 'Tax rate',
         type: Number,
         isPercentage: true,
+        hideOnProposal: true
       },
       {
         name: 'Large group discounts',
@@ -4033,6 +3944,7 @@ export const VendorPricingPolicy = [
         name: 'Suggested Gratuity',
         type: Number,
         hasComment: true,
+        hideOnProposal: true
       }
     ],
   },
@@ -4053,6 +3965,7 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
+        hideOnProposal: true
       },
       {
         name: "Discounts",
@@ -4063,6 +3976,7 @@ export const VendorPricingPolicy = [
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
+        hideOnProposal: true
       },
     ],
   },
@@ -4098,17 +4012,19 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
+        hideOnProposal: true
       },
       {
         name: "Discount for large quantites",
         type: Number,
+        hideOnProposal: true,
         hasComment: true,
-
       },
       {
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
+        hideOnProposal: true
       },
     ],
   },
@@ -4123,6 +4039,7 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
+        hideOnProposal: true
       },
       {
         name: 'Large group discounts',
@@ -4164,6 +4081,7 @@ export const VendorPricingPolicy = [
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
+        hideOnProposal: true
       },
     ],
   },
@@ -4212,7 +4130,7 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         subCategory: "tax",
         type: Number,
-
+        hideOnProposal: true,
         isPercentage: true,
       },
       {
@@ -4226,6 +4144,7 @@ export const VendorPricingPolicy = [
         name: "Suggested Gratuity",
         subCategory: "tips",
         type: Number,
+        hideOnProposal: true
       },
     ],
   },
@@ -4260,6 +4179,7 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
+        hideOnProposal: true
       },
       {
         name: "Large group discounts",
@@ -4270,6 +4190,7 @@ export const VendorPricingPolicy = [
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
+        hideOnProposal: true
       },
     ],
   },
@@ -4301,16 +4222,19 @@ export const VendorPricingPolicy = [
         name: "Discount for large discounts",
         type: Boolean,
         attendees: null,
+        hideOnProposal: true,
       },
       {
         name: "Tax rate",
         type: Number,
         isPercentage: true,
+        hideOnProposal: true
       },
       {
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
+        hideOnProposal: true
       },
     ],
   },

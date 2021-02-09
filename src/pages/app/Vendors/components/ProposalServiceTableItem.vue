@@ -136,6 +136,14 @@
           </md-button>
         </div>
       </div>
+      <div class="planner-options-item">
+        <div>
+          <md-button class="md-simple edit-btn md-red" @click="addAlternative">
+            <md-icon>add_circle_outline</md-icon>
+            Add option {{ ("0" + (item.plannerOptions.length + 1)).slice(-2) }}
+          </md-button>
+        </div>
+      </div>
     </div>
   </div>
   <div v-else-if="serviceType == 'included'" class="proposal-service-table-item included-services">
@@ -247,12 +255,6 @@
         <br />
         <div v-if="isExpanded"></div>
       </div>
-      <!-- <div class="size-cont editor-wrapper">
-        <template v-if="!isEdit">{{ item.requirementSize }}</template>
-        <template v-else>
-          <input class="input-value" type="text" v-model="item.requirementSize" />
-        </template>
-      </div> -->
       <div class="qty-cont editor-wrapper">
         <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue }}</template>
         <template v-else>

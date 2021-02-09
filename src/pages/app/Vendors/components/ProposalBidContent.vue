@@ -106,10 +106,13 @@ export default {
         }
       });
 
-      const extraServices = !this.vendor.pricingPolicies
-        ? []
-        : this.vendor.pricingPolicies.map((item) => {
-            return {
+      const extraServices = [];
+      const hiddenValues = ["Discount for large quantities", "Tax rate", "Suggested Gratuity"];
+      let taxRate = 0;
+      if (this.vendor.pricingPolicies) {
+        this.vendor.pricingPolicies.forEach((item) => {
+          if (!hiddenValues.includes(item.name)) {
+            extraServices.push({
               comments: [],
               dateCreated: "",
               includedInPrice: true,
@@ -127,8 +130,13 @@ export default {
               requirementSize: item.defaultSize ? item.defaultSize : "",
               plannerOptions: [],
               isMandatory: true,
-            };
-          });
+            });
+          }
+          if (item.name === "Tax rate") {
+            taxRate = Number(item.value);
+          }
+        });
+      }
       this.$store.commit("vendorProposal/setCostServices", {
         category: this.vendor.eventCategory.key,
         services: costServices,
@@ -143,6 +151,10 @@ export default {
         services: extraServices,
       });
       this.$store.commit("vendorProposal/setValue", { key: "initialized", value: true });
+      this.$store.commit("vendorProposal/setValue", {
+        key: "taxes",
+        value: { [this.vendor.eventCategory.key]: taxRate },
+      });
     }
   },
   computed: {
