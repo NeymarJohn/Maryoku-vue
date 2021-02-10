@@ -18,6 +18,14 @@
       </md-button>
     </template>
     <template slot="body">
+      <div v-if="screen == 1">
+        <img :src="`${$iconURL}RSVP/Group+7946.svg`" class="mb-30" />
+        <div class="font-size-30 font-bold mb-30">SEE YOU THERE SAM!</div>
+        <md-button class="md-simple md-red maryoku-btn" @click="screen = screen + 1">
+          Sync Your Calendar
+          <md-icon>keyboard_arrow_right</md-icon>
+        </md-button>
+      </div>
       <div v-if="screen == 2" class="text-left">
         <div class="font-size-30 font-bold mb-50 mt-30 header-text">TAKE YOUR TIME, WE’LL REMIND YOU LATER</div>
         <div class="text-left">
@@ -43,9 +51,9 @@
           ></maryoku-input>
         </div>
 
-        <div class="text-left d-flex">
+        <div class="text-left">
           <img class="mr-30" :src="`${$iconURL}RSVP/ring.svg`" />
-          <div class="font-size-20 font-bold time-question">When Do You Want Your Reminder?</div>
+          <span class="font-size-20 font-bold">When Do You Want Your Reminder? </span>
         </div>
         <div class="options-list">
           <option-card
@@ -70,19 +78,12 @@
       </div>
       <div v-if="screen == 3">
         <img :src="`${$iconURL}RSVP/Group 8005.svg`" class="mt-20" />
-        <div class="font-size-30 mb-30 mt-30 font-bold" style="line-height: 1.5em">
-          WE WILL SEND YOU A REMINDER {{ remindTime === "week" ? "WITHIN A WEEK" : remindTime.toUpperCase() }}
-        </div>
+        <div class="font-size-30 mb-30 mt-30 font-bold">WE WILL SEND YOU A REMINDER TONIGHT</div>
         <div class>{{ remindTool === "email" ? `By email` : `By SMS` }}</div>
       </div>
     </template>
     <template slot="footer">
-      <md-button
-        v-if="screen == 2"
-        class="md-red md-bold reminder-button"
-        @click="setRemind"
-        :disabled="!canSetReminder"
-      >
+      <md-button class="md-red md-bold reminder-button" @click="setRemind" :disabled="!canSetReminder">
         Set A Reminder
       </md-button>
     </template>
@@ -139,10 +140,6 @@ export default {
         email: this.remindingEmail,
         remindingTime: remindingTime,
         type: "rsvp",
-        emailParams: {
-          guestName: this.remindingEmail,
-          eventDate: this.$dateUtil.formatScheduleDay(this.rsvpRequest.event.eventStartMillis, "MMM DD, YYYY"),
-        },
         emailTransactionId: this.rsvpRequest.emailTransactionId,
         phoneTransactionId: this.rsvpRequest.phoneTransactionId,
       };
