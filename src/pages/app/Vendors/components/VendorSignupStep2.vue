@@ -13,7 +13,7 @@
       <div class="right-side">
         <div class="description">
           <h5>
-            <img :src="getCategoryIconByValue(vendor.vendorCategories[0])" width="40"/>
+            <img :src="`${iconUrl}Group 5222 (2).svg`" />
             {{ getCategoryNameByValue(vendor.vendorCategories[0]) }} Amenities
           </h5>
           <p>
@@ -41,7 +41,6 @@ import Vendors from "@/models/Vendors";
 //COMPONENTS
 import Icon from "@/components/Icon/Icon.vue";
 import VendorServiceItem from "./VendorServiceItem.vue";
-import { VendorCategories } from "@/constants/vendor";
 
 export default {
   name: "vendor-signup-step2",
@@ -57,7 +56,72 @@ export default {
   data() {
     return {
       filteredCategories: [],
-      vendorCategories: VendorCategories,
+      categoryNames: [
+        {
+          name: "Venue Rental",
+          value: "venuerental",
+        },
+        {
+          name: "Food & Beverage",
+          value: "foodandbeverage",
+        },
+        {
+          name: "Design and Decor",
+          value: "decor",
+        },
+        {
+          name: "Guest Services & Staffing",
+          value: "corporatesocialresponsibility",
+        },
+        {
+          name: "Signage / Printing",
+          value: "signageprinting",
+        },
+        {
+          name: "Advertising and Promotion",
+          value: "advertising-promotion",
+        },
+        {
+          name: "AV / Staging",
+          value: "audiovisualstagingservices",
+        },
+        {
+          name: "Giveaways",
+          value: "giveaways",
+        },
+        {
+          name: "Shipping",
+          value: "shipping",
+        },
+        {
+          name: "Transportation & Tour operator",
+          value: "transportation",
+        },
+        {
+          name: "Entertainment",
+          value: "entertainment",
+        },
+        {
+          name: "Administration",
+          value: "administration",
+        },
+        {
+          name: "Security",
+          value: "securityservices",
+        },
+        {
+          name: "Technology",
+          value: "technologyservices",
+        },
+        {
+          name: "Videography and Photography",
+          value: "videographyandphotography",
+        },
+        {
+          name: "Equipment Rentals",
+          value: "equipmentrentals",
+        },
+      ],
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
   },
@@ -67,10 +131,7 @@ export default {
   },
   methods: {
     getCategoryNameByValue(value) {
-      return this.vendorCategories.filter((c) => c.value == value)[0].name;
-    },
-    getCategoryIconByValue(value) {
-      return this.vendorCategories.filter((c) => c.value == value)[0].icon;
+      return this.categoryNames.filter((c) => c.value == value)[0].name;
     },
   },
   computed: {},
@@ -133,6 +194,7 @@ export default {
           text-transform: capitalize;
 
           img {
+            width: 22px;
             margin-right: 12px;
           }
         }

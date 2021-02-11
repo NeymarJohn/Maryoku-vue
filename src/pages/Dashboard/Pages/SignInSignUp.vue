@@ -148,9 +148,8 @@ export default {
             console.log("redirect.events");
             // Gettin last event
             CalendarEvent.get().then((events) => {
-              if (events.length > 0) {
-                this.$router.push({ path: `/events/${events[0].id}/booking/concept`});
-              }
+              console.log(events);
+              if (events.length > 0) this.$router.push({ path: `/events/${events[0].id}/booking/overview` });
               else this.$router.push({ path: `/create-event-wizard` });
             });
           } else if (this.currentUser.tenants.length === 0) {
