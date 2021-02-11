@@ -23,7 +23,6 @@ const state = {
   additionalServices: [],
   attachments: {},
   inspirationalPhotos: new Array(15),
-  coverImage: "",
   bundleDiscount: {
     isApplied: false,
     services: [],

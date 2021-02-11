@@ -136,14 +136,6 @@
           </md-button>
         </div>
       </div>
-      <div class="planner-options-item">
-        <div>
-          <md-button class="md-simple edit-btn md-red" @click="addAlternative">
-            <md-icon>add_circle_outline</md-icon>
-            Add option {{ ("0" + (item.plannerOptions.length + 1)).slice(-2) }}
-          </md-button>
-        </div>
-      </div>
     </div>
   </div>
   <div v-else-if="serviceType == 'included'" class="proposal-service-table-item included-services">
@@ -161,6 +153,12 @@
         <div class="mt-20 comment-area" v-if="!isEdit">{{ item.comment }}</div>
         <textarea class="mt-20" v-else v-model="item.comment"></textarea>
       </div>
+      <!-- <div class="size-cont editor-wrapper">
+        <template v-if="!isEdit">{{ item.requirementSize }}</template>
+        <template v-else>
+          <input class="input-value" type="text" v-model="item.requirementSize" />
+        </template>
+      </div> -->
       <div class="qty-cont editor-wrapper">
         <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue }}</template>
         <template v-else>
@@ -231,9 +229,9 @@
                 <img :src="`${$iconURL}common/gift-dark.svg`" class="label-icon mr-10" />Mark as complementary</span
               >
             </md-menu-item>
-            <md-menu-item @click="isEdit = true">
+            <md-menu-item @click="isEdit = true" v-else>
               <span>
-                <img :src="`${$iconURL}common/replace-dark.svg`" class="label-icon mr-10" />Suggest alternatives
+                <img :src="`${$iconURL}common/replace-dark.svg`" class="label-icon mr-10" />Suggest something
               </span>
             </md-menu-item>
           </md-menu-content>
@@ -249,6 +247,12 @@
         <br />
         <div v-if="isExpanded"></div>
       </div>
+      <!-- <div class="size-cont editor-wrapper">
+        <template v-if="!isEdit">{{ item.requirementSize }}</template>
+        <template v-else>
+          <input class="input-value" type="text" v-model="item.requirementSize" />
+        </template>
+      </div> -->
       <div class="qty-cont editor-wrapper">
         <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue }}</template>
         <template v-else>
@@ -555,8 +559,5 @@ export default {
       border-bottom: none;
     }
   }
-}
-.md-menu-content {
-  max-height: max-content !important;
 }
 </style>

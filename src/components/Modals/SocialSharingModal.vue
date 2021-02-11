@@ -167,4 +167,24 @@ textarea {
     margin-right: auto;
   }
 }
+@media only screen and (max-width: 959px) {
+  .sharing-model {
+    .sharelink {
+      input.sharing {
+        padding-right: 60px !important;
+        height: 60px;
+      }
+    }
+    .sharing-button-group-wrapper {
+      width: 100%;
+      .sharing-button-group {
+        flex-flow: wrap;
+        li {
+          border: none;
+          width: 30%;
+        }
+      }
+    }
+  }
+}
 </style>
