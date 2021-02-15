@@ -278,6 +278,13 @@
       background-color: #f51355 !important;
     }
 
+    .vfc-span-day.vfc-end-marked {
+      &:before {
+        border-top-right-radius: 50%;
+        border-bottom-right-radius: 50%;
+      }
+    }
+
     .vfc-underline {
       color: #050505;
     }

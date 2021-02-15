@@ -58,6 +58,7 @@ export default {
     // });
 
     new Vendors().get().then((vendors) => {
+      console.log('vendors', vendors);
       this.vendors = vendors[0].results;
     });
   },

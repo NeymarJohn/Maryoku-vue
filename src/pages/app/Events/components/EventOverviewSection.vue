@@ -392,12 +392,16 @@ export default {
       $('.vfc-day').each(function (index, day) {
         let el = $(day).find('span.vfc-span-day');
 
-        if (el.text() == started_date){
+
+        if (started_date === ended_date){
+
+          el.addClass('vfc-end-marked')
+        } else if (el.text() == started_date){
 
           el.addClass('vfc-start-marked')
           if(!$(day).find('div.vfc-base-start').length)
             $(day).prepend("<div class='vfc-base-start'></div>");
-        } else if(el.text() == ended_date) {
+        } else if (el.text() == ended_date ) {
 
           el.addClass('vfc-end-marked')
           if(!$(day).find('div.vfc-base-end').length)

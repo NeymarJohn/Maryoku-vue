@@ -26,7 +26,7 @@
               <div class="font-bold-extra mb-30 campaign-title">{{ campaign.title }}</div>
             </div>
             <div class="md-layout-item md-size-50 md-small-size-100">
-              <div class="word-break mb-30 font-size-20 campaign-description">
+              <div class="word-break mb-30 font-size-18 campaign-description">
                 {{ campaign.description }}
               </div>
             </div>
@@ -152,7 +152,7 @@
           <div
             class="md-layout-item md-size-100 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra mb-50"
           >
-            A glimpse at the agenda
+            sneak peak into the agenda
           </div>
           <div
             v-for="(schedule, index) in timelineDates"
