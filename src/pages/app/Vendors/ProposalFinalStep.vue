@@ -126,6 +126,7 @@ export default {
       padding: 20px;
       border-right: solid 1px #c5c7cb;
       width: 20%;
+      cursor: pointer;
       &:last-child {
         border-right: none;
       }

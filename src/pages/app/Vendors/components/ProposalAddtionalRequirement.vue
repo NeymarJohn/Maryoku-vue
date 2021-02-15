@@ -34,8 +34,27 @@
               <div><img :src="`${$iconURL}Requirements/${sit.icon}`" /></div>
             </div>
           </template>
+          <template v-for="suggestedSeating in suggestedNewSeatings">
+            <div
+              :key="`sitarrangement-${index}`"
+              class="d-flex flex-column justify-content-between seat-type suggested-seat"
+            >
+              <div>{{ suggestedSeating }}</div>
+            </div>
+          </template>
         </div>
-        <md-button class="md-simple md-outlined md-red maryoku-btn">Suggest new seating arrangement</md-button>
+        <md-button
+          class="md-simple md-outlined md-red maryoku-btn"
+          @click="editingNewSeating = true"
+          v-if="!editingNewSeating"
+        >
+          Suggest new seating arrangement
+        </md-button>
+        <div v-else>
+          <textarea v-model="newSeatingSuggest"></textarea>
+          <md-button class="maryoku-btn md-red" @click="saveNewSeating">Save</md-button>
+          <md-button class="md-simple maryoku-btn md-black" @click="editingNewSeating = false">Cancel</md-button>
+        </div>
         <div style="margin-left: 80px" v-if="requirement.groupSizes.findIndex((item) => item.selected) >= 0">
           <div class="font-size-22 font-bold mb-20">
             <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" class="page-icon" />
@@ -70,6 +89,8 @@ export default {
   data() {
     return {
       agreeTerms: false,
+      newSeatingSuggest: "",
+      editingNewSeating: false,
     };
   },
   created() {
@@ -78,6 +99,13 @@ export default {
   methods: {
     getSelectedOption(options) {
       return options.filter((it) => it.selected);
+    },
+    saveNewSeating() {
+      const suggestedNewSeatings = this.$store.state.vendorProposal.suggestedNewSeatings;
+      suggestedNewSeatings.push(this.newSeatingSuggest);
+      this.$store.commit("vendorProposal/setValue", { key: "suggestedNewSeatings", value: suggestedNewSeatings });
+      this.editingNewSeating = false;
+      this.newSeatingSuggest = "";
     },
   },
   computed: {
@@ -89,6 +117,9 @@ export default {
         (item) => item.category == "special" && item.isSelected,
       );
     },
+    suggestedNewSeatings() {
+      return this.$store.state.vendorProposal.suggestedNewSeatings;
+    },
   },
 };
 </script>
@@ -98,6 +129,11 @@ export default {
     margin-right: 30px;
     position: relative;
     padding: 10px;
+    &.suggested-seat {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
     &::after {
       content: "Or";
       position: absolute;

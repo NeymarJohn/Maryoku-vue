@@ -179,15 +179,10 @@
     </div>
 
     <div v-if="isMobile" class="d-flex rsvp-footer">
-      <template v-if="isVirtualEvent">
-        <md-button class="md-red maryoku-btn flex-1" @click="showZoomModal = true"> RSVP Now</md-button>
-      </template>
-      <template v-else>
-        <md-button class="md-simple md-outlined md-red maryoku-btn flex-1" @click="showZoomModal = true">
-          Virutal Event
-        </md-button>
-        <md-button class="md-red maryoku-btn flex-1" @click="showRsvpModal = true"> RSVP Now</md-button>
-      </template>
+      <md-button class="md-simple md-outlined md-red maryoku-btn flex-1" @click="showZoomModal = true">
+        Virutal Event
+      </md-button>
+      <md-button class="md-red maryoku-btn flex-1" @click="showRsvpModal = true"> RSVP Now</md-button>
     </div>
     <div v-else class="rsvp-footer white-card">
       <div class="rsvp-footer-content">
@@ -272,16 +267,10 @@
     <sync-calendar-modal
       v-if="showSyncCalendarForZoom"
       @close="showSyncCalendarForZoom = false"
-      @scheduled="showSyncCalendarForZoom = false"
       :campaign="campaign"
       :rsvp="rsvpData"
-      class="rsvp-modal"
     ></sync-calendar-modal>
-    <social-sharing-modal
-      v-if="showSharingModal"
-      @cancel="showSharingModal = false"
-      class="rsvp-modal"
-    ></social-sharing-modal>
+    <social-sharing-modal v-if="showSharingModal" @cancel="showSharingModal = false"></social-sharing-modal>
     <modal v-if="showRejectConformModal" class="rsvp-modal reject-modal">
       <template slot="header">
         <md-button class="md-simple md-just-icon md-round modal-default-button" @click="showRejectConformModal = false">
