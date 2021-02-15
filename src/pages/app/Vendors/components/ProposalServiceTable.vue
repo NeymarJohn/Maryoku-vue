@@ -269,8 +269,14 @@ export default {
       this.cancel();
     },
     updateItem({ index, item }) {
-      this.services[index] = item;
-      this.services = Object.assign([], this.services);
+      if (this.tableCategory === "included" && item.price > 0) {
+        //if item in included has price, then move to cost table
+        this.services.splice(index, 1);
+        this.$store.state.vendorProposal.proposalCostServices[this.category].push(item);
+      } else {
+        this.services[index] = item;
+        this.services = Object.assign([], this.services);
+      }
     },
     removeItem(index) {
       this.services.splice(index, 1);

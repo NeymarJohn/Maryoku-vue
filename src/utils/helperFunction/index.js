@@ -104,15 +104,3 @@ export const asyncForEach = async (array, callback) => {
 export default {
     numberToWord,
 };
-export const convertTimezoneName = timezoneAbbr => {
-    const timezoneList = ["EST", "PST", "CST", "MST", "EDT", "HST"];
-    const timezoneNameList = {
-        EST: "America/New_York",
-        PST: "America/Los_Angeles",
-        CST: "America/Chicago",
-        MST: "America/Denver",
-        EDT: "America/New_York",
-        HST: "US/Hawaii",
-    };
-    return timezoneNameList[timezoneAbbr];
-};

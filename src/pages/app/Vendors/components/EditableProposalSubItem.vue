@@ -4,91 +4,88 @@
     :class="[{ 'step-3': step == 3 }]"
     v-if="item.requirementTitle != null"
   >
-    <template v-if="step < 3">
-      <div class="item-cont">
-        {{ item.requirementTitle }}
-        <span class="madatory-badge" v-if="item.isMandatory">Mandatory</span>
-        <span class="complementary-badge" v-else>Complementary</span>
+    <div class="item-cont">
+      {{ item.requirementTitle }}
+      <span class="madatory-badge" v-if="item.isMandatory">Mandatory</span>
+      <span class="complementary-badge" v-else>Complementary</span>
+    </div>
+    <div class="qty-cont editor-wrapper">
+      <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue }}</template>
+      <template v-else>
+        <input class="input-value" type="number" v-model="item.requirementValue" />
+      </template>
+    </div>
+    <div class="price-cont editor-wrapper">
+      <template v-if="!isEdit">
+        $
+        {{
+          item.priceUnit == "total"
+            ? parseFloat(String(item.price).replace(/,/g, "")) / item.requirementValue
+            : item.price | withComma
+        }}
+      </template>
+      <template v-else>
+        <money
+          v-model="item.price"
+          v-bind="{
+            decimal: '.',
+            thousands: ',',
+            prefix: '$ ',
+            suffix: '',
+            precision: 2,
+            masked: false,
+          }"
+          class="input-value"
+        />
+      </template>
+    </div>
+    <div class="total-cont editor-wrapper">
+      <template v-if="!isEdit"
+        >$ {{ item.priceUnit == "total" ? item.price : (item.price * item.requirementValue) | withComma }}</template
+      >
+      <template v-else>
+        <!-- <input class="input-value" v-model="item.price" type="number" /> -->
+        <money
+          v-if="item.priceUnit == 'total'"
+          v-model="item.price"
+          v-bind="{
+            decimal: '.',
+            thousands: ',',
+            prefix: '$ ',
+            suffix: '',
+            precision: 2,
+            masked: false,
+          }"
+          class="input-value"
+        />
+        <div>$ {{ subTotal }}</div>
+      </template>
+    </div>
+    <div class="action-cont editor-wrapper">
+      <div v-if="!isEdit" class="editing-buttons">
+        <md-button @click="isEdit = true" class="md-simple edit-btn">
+          <img class="edit" :src="`${iconUrl}Asset 585.svg`" />
+        </md-button>
+        <md-button @click="removeRequirement(item)" class="md-simple edit-btn">
+          <img class="trash" :src="`${iconUrl}Asset 586.svg`" />
+        </md-button>
       </div>
-      <div class="size-cont editor-wrapper">
-        <template v-if="!isEdit">{{ item.requirementSize }}</template>
-        <template v-else>
-          <input class="input-value" type="text" v-model="item.requirementSize" />
-        </template>
-      </div>
-      <div class="qty-cont editor-wrapper">
-        <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue }}</template>
-        <template v-else>
-          <input class="input-value" type="number" v-model="item.requirementValue" />
-        </template>
-      </div>
-      <div class="price-cont editor-wrapper">
-        <template v-if="!isEdit">
-          $
-          {{
-            item.priceUnit == "total"
-              ? parseFloat(String(item.price).replace(/,/g, "")) / item.requirementValue
-              : item.price | withComma
-          }}
-        </template>
-        <template v-else>
-          <money
-            v-model="item.price"
-            v-bind="{
-              decimal: '.',
-              thousands: ',',
-              prefix: '$ ',
-              suffix: '',
-              precision: 2,
-              masked: false,
-            }"
-            class="input-value"
-          />
-        </template>
-      </div>
-      <div class="total-cont editor-wrapper">
-        <template v-if="!isEdit"
-          >$ {{ item.priceUnit == "total" ? item.price : (item.price * item.requirementValue) | withComma }}</template
-        >
-        <template v-else>
-          <!-- <input class="input-value" v-model="item.price" type="number" /> -->
-          <money
-            v-if="item.priceUnit == 'total'"
-            v-model="item.price"
-            v-bind="{
-              decimal: '.',
-              thousands: ',',
-              prefix: '$ ',
-              suffix: '',
-              precision: 2,
-              masked: false,
-            }"
-            class="input-value"
-          />
-          <div>$ {{ subTotal }}</div>
-        </template>
-      </div>
-      <div class="action-cont editor-wrapper">
-        <template v-if="!isEdit">
-          <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEdit = true" />
-          <img class="trash" :src="`${iconUrl}Asset 586.svg`" @click="removeRequirement(item)" />
-        </template>
-        <template v-else>
-          <a class="cancel" @click="cancel()">Cancel</a>
-          <a class="save" @click="save(item)">Save</a>
-        </template>
-      </div>
-    </template>
+      <template v-else>
+        <a class="cancel" @click="cancel()">Cancel</a>
+        <a class="save" @click="save(item)">Save</a>
+      </template>
+    </div>
+    <!-- </template>
     <template v-else>
-      <span class="grid-cell">{{ item.requirementTitle }}</span>
+      <span class="grid-cell">{{ item.requirementTitle }}123</span>
       <span class="grid-cell">{{ item.requirementValue }}</span>
       <span class="grid-cell">$ {{ (item.price / item.requirementValue) | withComma }}</span>
       <span class="grid-cell">$ {{ item.price | withComma }}</span>
-      <div class="action-cont" v-if="isHover">
+      <div class="action-cont">
         <img class="edit" :src="`${iconUrl}Asset 585.svg`" />
         <img class="trash" :src="`${iconUrl}Asset 586.svg`" @click="removeRequirement(item.id)" />
       </div>
-    </template>
+    </template> -->
   </div>
 </template>
 <script>
@@ -177,21 +174,33 @@ export default {
     margin-left: 0.5em;
     line-height: 1em;
   }
+  &:hover {
+    .editing-buttons {
+      visibility: visible;
+    }
+  }
+  .editing-buttons {
+    visibility: hidden;
+  }
+  .action-cont {
+    display: flex;
+    justify-content: flex-end;
+    .edit {
+      width: 21px;
+      margin-right: 31px;
+      cursor: pointer;
+    }
+    .trash {
+      width: 21px;
+      cursor: pointer;
+    }
+  }
   div {
     &.item-cont {
       text-transform: capitalize;
     }
-    &.action-cont {
-      text-align: right;
-      .edit {
-        width: 21px;
-        margin-right: 31px;
-        cursor: pointer;
-      }
-      .trash {
-        width: 21px;
-        cursor: pointer;
-      }
+    &:hover.action-cont {
+      display: block;
     }
   }
   &.step-3 {

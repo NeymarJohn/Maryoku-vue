@@ -66,16 +66,16 @@
       <div v-if="isExpanded" class="subitems">
         <div class="editable-sub-items-header">
           <span>Description</span>
-          <span>QTY</span>
-          <span>Price per unit</span>
-          <span>Subtotal</span>
+          <span class="text-center">QTY</span>
+          <span class="text-center">Price per unit</span>
+          <span class="text-center">Subtotal</span>
         </div>
         <editable-proposal-sub-item
           v-for="(s, sIndex) in costedServices"
           :key="sIndex"
           :item="s"
           :active="true"
-          :isEdit="false"
+          :isEdit="true"
           :step="3"
         />
         <div class="discount-tax-wrapper">

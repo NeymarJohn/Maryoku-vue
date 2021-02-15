@@ -32,7 +32,8 @@ const state = {
   },
   suggestionDate: null,
   timelineDates: [],
-  personalMessage: ""
+  personalMessage: "",
+  suggestedNewSeatings: [],
 }
 const getters = {
   mainTotalPrice(state) {
@@ -76,6 +77,17 @@ const mutations = {
   setVendor: (state, vendor) => {
     state.vendor = vendor
     state.personalMessage = vendor.personalMessage
+  },
+  setProposal: (state, proposal) => {
+    state.id = proposal.id
+    state.proposalCostServices = proposal.costServices;
+    state.proposalIncludedServices = proposal.includedServices;
+    state.proposalExtraServices = proposal.proposalExtraServices
+    state.inspirationalPhotos = proposal.inspirationalPhotos
+    state.personalMessage = proposal.personalMessage
+    state.tax = proposal.tax
+    state.suggestedNewSeatings = proposal.suggestedNewSeatings
+    state.initialized = true
   },
   setPropsalRequest: (state, propsoalRequest) => {
     state.proposalRequest = propsoalRequest
@@ -129,6 +141,9 @@ const mutations = {
 
 }
 const actions = {
+  getProposal: ({ commit, state }, proposalRequestId) => {
+
+  },
   getVendor: ({ commit, state }, vendorId) => {
     return new Promise((resolve, reject) => {
       Vendors.find(vendorId)
@@ -147,6 +162,9 @@ const actions = {
         .then((resp) => {
           commit("setPropsalRequest", resp);
           dispatch("getTimelineDates", resp.eventData.id)
+          if (resp.proposal) {
+            commit('setProposal', resp.proposal)
+          }
           resolve(resp)
         })
     })

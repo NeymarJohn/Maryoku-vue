@@ -276,6 +276,7 @@ import UserMenu from "./Extra/UserMenu.vue";
 import ForVendors from "@/pages/app/Vendors/ForVendors.vue";
 import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
 import EventComponentVendorItemVue from "../../app/Events/components/EventComponentVendorItem.vue";
+import S3Service from "@/services/s3.service";
 
 export default {
   components: {
@@ -365,9 +366,22 @@ export default {
       this.$root.$emit("clear-slide-pos");
       this.scrollToTop();
       const vendorProposal = this.$store.state.vendorProposal;
+
+      let coverImageUrl = "";
+      if (vendorProposal.coverImage && vendorProposal.coverImage.indexOf("base64") >= 0) {
+        const fileObject = S3Service.dataURLtoFile(
+          vendorProposal.coverImage,
+          `${this.event.id}-${vendorProposal.vendor.id}`,
+        );
+        const extenstion = fileObject.type.split("/")[1];
+        S3Service.fileUpload(fileObject, `${this.event.id}-${vendorProposal.vendor.id}`, "proposals/cover-images");
+        coverImageUrl = `https://maryoku.s3.amazonaws.com/campaigns/cover-images/${this.event.id}-${vendorProposal.vendor.id}.${extenstion}`;
+      }
+
       const proposal = new Proposal({
+        id: vendorProposal.id,
         personalMessage: vendorProposal.personalMessage,
-        vendorImages: vendorProposal.vendorImages,
+        inspirationalPhotos: vendorProposal.inspirationalPhotos,
         proposalRequest: new ProposalRequest({ id: vendorProposal.proposalRequest.id }),
         eventVision: vendorProposal.vision,
         eventComponentInstance: vendorProposal.proposalRequest.eventComponentInstance,
@@ -375,6 +389,7 @@ export default {
         costServices: vendorProposal.proposalCostServices,
         includedServices: vendorProposal.proposalIncludedServices,
         extraServices: vendorProposal.proposalExtraServices,
+        coverImage: coverImageUrl,
       });
       if (type === "save") {
         proposal.status = "save";

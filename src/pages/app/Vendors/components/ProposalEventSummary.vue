@@ -82,7 +82,9 @@
       <div class="pricing-cont">
         <div class="title">
           <h4><img :src="`${iconUrl}Asset 576.svg`" />Pricing & Details</h4>
-          <p v-if="categories.length === 1">*Work only with our {{ vendor.eventCategory.fullTitle }}</p>
+          <p v-if="categories.length === 1 && vendor.vendorCategory === 'venuerental'">
+            *Work only with our {{ vendor.eventCategory.fullTitle }}
+          </p>
         </div>
         <p>What would you like to take from our suggested services?</p>
         <proposal-pricing-item
