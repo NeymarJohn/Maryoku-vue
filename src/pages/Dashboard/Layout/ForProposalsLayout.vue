@@ -80,9 +80,7 @@
 
       <div class="next-cont">
         <span>You can return to it till the deadline!</span>
-        <a class="save" @click="saveProposal('save')">
-          <img :src="`${proposalIconsUrl}Asset 610.svg`" /> Save for later
-        </a>
+        <a class="save" @click="saveProposal()"> <img :src="`${proposalIconsUrl}Asset 610.svg`" /> Save for later </a>
         <a
           class="next active"
           @click="step = step + 1"
@@ -90,7 +88,7 @@
           v-if="step < 3"
           >Next</a
         >
-        <a class="next active" @click="saveProposal('submit')" v-else>Submit Proposal</a>
+        <a class="next active" @click="saveProposal()" v-else>Submit Proposal</a>
       </div>
     </section>
     <modal v-if="fullDetailsModal" class="full-details-modal" container-class="modal-container lg">
@@ -161,7 +159,7 @@
         </div>
       </template>
     </modal>
-    <!-- <modal v-if="submittedModal" class="saved-it-modal" container-class="modal-container sl">
+    <!-- <modal v-if="savedItModal" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="saved-it-modal__header">
           <h3><img :src="`${proposalIconsUrl}Asset 588.svg`" />Saved It!</h3>
@@ -184,7 +182,7 @@
         </div>
       </template>
     </modal> -->
-    <modal v-if="submittedModal" class="saved-it-modal" container-class="modal-container sl">
+    <modal v-if="savedItModal" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="saved-it-modal__header">
           <img :src="`${proposalIconsUrl}thanks-proposal.png`" />
@@ -263,20 +261,16 @@ import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import moment from "moment";
 import Vendors from "@/models/Vendors";
 import ProposalRequest from "@/models/ProposalRequest";
-import Proposal from "@/models/Proposal";
-import Vendor from "@/models/Vendors";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import { Modal } from "@/components";
-import swal from "sweetalert2";
+
 import TopNavbar from "./TopNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
 import MobileMenu from "./Extra/MobileMenu.vue";
 import UserMenu from "./Extra/UserMenu.vue";
 import ForVendors from "@/pages/app/Vendors/ForVendors.vue";
 import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
-import EventComponentVendorItemVue from "../../app/Events/components/EventComponentVendorItem.vue";
-import S3Service from "@/services/s3.service";
 
 export default {
   components: {
@@ -297,7 +291,7 @@ export default {
       landingIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
       dateTooltip: false,
       selectedServices: [],
-      submittedModal: false,
+      savedItModal: false,
       isTimeUp: false,
       proposalRequestRequirements: [],
       proposals: [],
@@ -318,7 +312,7 @@ export default {
     }
 
     this.fullDetailsModal = false;
-    this.submittedModal = false;
+    this.savedItModal = false;
     this.isTimeUp = false;
 
     this.getVendor(this.$route.params.vendorId).then((vendor) => {
@@ -333,6 +327,13 @@ export default {
       this.event = proposalRequest.eventData;
       this.$store.commit("vendorProposal/setWizardStep", 0);
       this.$store.commit("vendorProposal/setInitStep", 0);
+      // if (proposalRequest.eventData.concept) {
+      //   this.$store.commit("vendorProposal/setWizardStep", 0);
+      //   this.$store.commit("vendorProposal/setInitStep", 0);
+      // } else {
+      //   this.$store.commit("vendorProposal/setWizardStep", 1);
+      //   this.$store.commit("vendorProposal/setInitStep", 1);
+      // }
       this.proposalRequestRequirements = _.chain(proposalRequest.requirements)
         .groupBy("requirementPriority")
         .map(function (value, key) {
@@ -346,6 +347,27 @@ export default {
   },
   methods: {
     ...mapActions("vendorProposal", ["getVendor", "getProposalRequest"]),
+
+    getProposal(id) {
+      ProposalRequest.find(id)
+        .then((resp) => {})
+        .catch((error) => {
+          console.log(" error ", error);
+        });
+
+      if (!this.proposalRequest) {
+        this.proposalRequest = new ProposalRequest({
+          id: this.$route.params.id,
+        });
+        this.proposalRequest.bidRange = { low: 0, high: 0 };
+        this.proposalRequest.requirements = [];
+        this.proposalRequest.bidderRank = 1;
+        this.proposalRequest.eventData = {
+          allocatedBudget: 0,
+        };
+        this.proposalRequest.isAgreed = true;
+      }
+    },
     getVendorCategory() {
       this.$auth.currentUser(
         this,
@@ -357,57 +379,55 @@ export default {
         }.bind(this),
       );
     },
+    getProposals(id) {
+      new Vendors({ id })
+        .proposalRequests()
+        .first()
+        .then((proposals) => {
+          this.proposals = proposals.vendorProposals;
+          this.firstTime = proposals.firstTime;
+        });
+    },
+    // getProposal(id) {
+    //   ProposalRequest.find(id)
+    //     .then((resp) => {
+    //       this.$set(this, "proposalRequest", resp);
+    //       // this.$set(this, "newProposalRequest", resp);
+
+    //       this.proposalRequestRequirements = _.chain(resp.requirements)
+    //         .groupBy("requirementPriority")
+    //         .map(function (value, key) {
+    //           return {
+    //             title: key,
+    //             requirements: value,
+    //           };
+    //         })
+    //         .value();
+    //     })
+    //     .catch((error) => {});
+    // },
     hideModal() {
       this.fullDetailsModal = false;
-      this.submittedModal = false;
+      this.savedItModal = false;
       this.openedModal = "";
     },
-    saveProposal(type) {
+    saveProposal() {
+      this.$root.$emit("next-step-vendor-proposal");
       this.$root.$emit("clear-slide-pos");
+
+      if (this.step == 3) {
+        this.savedItModal = true;
+      }
+
+      if (this.step == -1) {
+        this.step = 0;
+      } else if (this.step == 0) {
+        this.step = 2;
+      } else if (this.step > 1 && this.step < 3) {
+        this.step = this.step + 1;
+      }
+
       this.scrollToTop();
-      const vendorProposal = this.$store.state.vendorProposal;
-
-      let coverImageUrl = "";
-      if (vendorProposal.coverImage && vendorProposal.coverImage.indexOf("base64") >= 0) {
-        const fileObject = S3Service.dataURLtoFile(
-          vendorProposal.coverImage,
-          `${this.event.id}-${vendorProposal.vendor.id}`,
-        );
-        const extenstion = fileObject.type.split("/")[1];
-        S3Service.fileUpload(fileObject, `${this.event.id}-${vendorProposal.vendor.id}`, "proposals/cover-images");
-        coverImageUrl = `https://maryoku.s3.amazonaws.com/campaigns/cover-images/${this.event.id}-${vendorProposal.vendor.id}.${extenstion}`;
-      }
-
-      const proposal = new Proposal({
-        id: vendorProposal.id,
-        personalMessage: vendorProposal.personalMessage,
-        inspirationalPhotos: vendorProposal.inspirationalPhotos,
-        proposalRequest: new ProposalRequest({ id: vendorProposal.proposalRequest.id }),
-        eventVision: vendorProposal.vision,
-        eventComponentInstance: vendorProposal.proposalRequest.eventComponentInstance,
-        vendor: new Vendor({ id: vendorProposal.vendor.id }),
-        costServices: vendorProposal.proposalCostServices,
-        includedServices: vendorProposal.proposalIncludedServices,
-        extraServices: vendorProposal.proposalExtraServices,
-        coverImage: coverImageUrl,
-      });
-      if (type === "save") {
-        proposal.status = "save";
-      } else {
-        proposal.status = "submit";
-      }
-      proposal.save().then((res) => {
-        console.log(res);
-        if (type === "submit") this.submittedModal = true;
-        else {
-          swal({
-            title: `You saved the current proposal. You can edit anytime later!`,
-            buttonsStyling: false,
-            type: "success",
-            confirmButtonClass: "md-button md-success",
-          });
-        }
-      });
     },
 
     back() {

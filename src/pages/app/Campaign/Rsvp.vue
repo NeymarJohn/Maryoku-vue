@@ -27,8 +27,6 @@
           <md-switch class="large-switch below-label" v-model="showLogo">Hide logo</md-switch>
         </div>
         <div class="font-size-30 font-bold mt-20 d-flex align-center">
-          <!-- <div class="mr-10">{{ campaignData.additionalData.greetingWords }}</div>
-          <md-button class="edit-btn md-simple md-red">Edit</md-button> -->
           <title-editor
             :defaultValue="campaignData.additionalData.greetingWords"
             :key="campaignData.additionalData.greetingWords"
@@ -51,6 +49,7 @@
 
         <maryoku-textarea
           v-model="campaignData.description"
+          :fontSize="18"
           :placeholder="`Hey, you've been invited to ${event.title} on ${$dateUtil.formatScheduleDay(
             event.eventStartMillis,
             'dddd, MMMM D, YYYY',

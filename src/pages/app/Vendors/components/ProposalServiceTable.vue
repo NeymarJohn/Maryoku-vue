@@ -88,10 +88,10 @@
             </div>
           </div>
           <div class="percent-cont">
-            <span>{{ tax }}%</span>
+            <!-- <span>{{tax}}%</span> -->
           </div>
           <div class="price-cont text-center">
-            <span>${{ ((calculatedTotal * tax) / 100) | withComma }}</span>
+            <span>${{ ((totalOffer() * tax) / 100) | withComma }}</span>
           </div>
           <!-- <div class="edit-cont">
             <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditTax = true" v-if="!isEditTax" />
@@ -110,11 +110,7 @@
       </div>
       <div class="editable-sub-items-footer" v-if="tableCategory === 'cost'">
         <span>Total</span>
-        <span
-          ><span class="font-regular">Approx</span>&nbsp;&nbsp;&nbsp;&nbsp; ${{
-            (calculatedTotal + calculatedTotal * tax) | withComma
-          }}
-        </span>
+        <span><span class="font-regular">Approx</span>&nbsp;&nbsp;&nbsp;&nbsp;${{ calculatedTotal | withComma }}</span>
       </div>
     </div>
   </div>
@@ -379,7 +375,6 @@ export default {
     if (this.$refs.servicesCont) {
       this.servicesWidth = this.$refs.servicesCont.clientWidth;
     }
-    this.tax = this.$store.state.vendorProposal.taxes[this.vendor.eventCategory.key];
   },
   filters: {
     withComma(amount) {
@@ -556,7 +551,7 @@ export default {
         border: 2px solid #d5d5d5;
         border-bottom: none;
         display: grid;
-        grid-template-columns: 55% 15% 15% 15%;
+        grid-template-columns: 62% 12% 10% 16%;
         align-items: center;
         input {
           font-size: 16px;
@@ -585,7 +580,6 @@ export default {
         .percent-cont {
           font: normal 14px "Manrope-Regular", sans-serif;
           color: #050505;
-          text-align: center;
           &.text-right {
             padding-right: 1rem;
             span {

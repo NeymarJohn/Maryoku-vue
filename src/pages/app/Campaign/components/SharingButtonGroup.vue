@@ -14,9 +14,9 @@
         <img :src="`${$iconURL}Campaign/Image+168.png`" />
       </li>
     </ul>
-    <md-button class="md-simple md-red normal-btn" v-if="copyLink"
-      ><img :src="`${$iconURL}Campaign/Path 2639.svg`" /><span>Copy Link</span></md-button
-    >
+    <md-button class="md-simple md-red normal-btn" v-if="copyLink">
+      <img :src="`${$iconURL}Campaign/Path 2639.svg`" /><span>Copy Link</span>
+    </md-button>
   </div>
 </template>
 <script>
@@ -65,6 +65,16 @@ export default {
   }
   li:not(:last-child) {
     border-right: solid 1px #999999;
+  }
+}
+@media only screen and (max-width: 959px) {
+  .sharing-button-group {
+    width: 100%;
+    flex-flow: wrap;
+    li {
+      border: none !important;
+      width: 33%;
+    }
   }
 }
 </style>

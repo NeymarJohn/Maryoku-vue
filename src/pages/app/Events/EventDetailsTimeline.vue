@@ -121,6 +121,7 @@ import { Drag, Drop } from "vue-drag-drop";
 import _ from "underscore";
 
 import jsPDF from "jspdf";
+import VueHtml2pdf from "vue-html2pdf";
 import html2canvas from "html2canvas";
 
 import HeaderActions from "@/components/HeaderActions";
@@ -155,6 +156,7 @@ export default {
     TimelineEmpty,
     TimelineGapModal,
     TimelineEditPanel,
+    VueHtml2pdf,
   },
   props: {
     // event: Object,
