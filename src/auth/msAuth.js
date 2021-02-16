@@ -1,7 +1,7 @@
 export const msalConfig = {
     auth: {
-        clientId: "3b6954a6-fa95-462d-828a-43607e115fd2",
-        authority: "https://login.microsoftonline.com/8a0e3e43-10cf-4b0b-9761-c764b35aaf5f",
+        clientId: "c5f0507b-2be5-4b08-97ef-c03631cb51fd",
+        authority: "https://login.microsoftonline.com/f8cdef31-a31e-4b4a-93e4-5f571e91255a",
     },
 };
 const msalRequest = {
@@ -58,8 +58,8 @@ const authProvider = {
 const graphClient = MicrosoftGraph.Client.initWithMiddleware({ authProvider });
 export const addCalendarEvent = async event => {
     try {
-        await graphClient.api("/me/events").post(event);
-        // getEvents();
+        await graphClient.api("/me/events").post(newEvent);
+        getEvents();
     } catch (error) {
         console.error(error);
     }
