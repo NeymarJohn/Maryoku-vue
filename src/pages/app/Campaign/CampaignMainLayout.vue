@@ -529,13 +529,12 @@ export default {
         this.campaignTabs[this.selectedTab].name,
         campaignData.campaignStatus || "TESTING",
         true,
-      ).then((res) => {
-        swal({
-          title: `You will receive a preview campaign email soon!`,
-          buttonsStyling: false,
-          type: "success",
-          confirmButtonClass: "md-button md-success",
-        });
+      ).then((res) => {});
+      swal({
+        title: `You will receive a preview campaign email soon!`,
+        buttonsStyling: false,
+        type: "success",
+        confirmButtonClass: "md-button md-success",
       });
     },
     sendToAddtionalGuests() {
@@ -680,5 +679,4 @@ export default {
     }
   }
 }
-
 </style>

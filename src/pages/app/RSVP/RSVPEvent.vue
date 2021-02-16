@@ -26,7 +26,7 @@
               <div class="font-bold-extra mb-30 campaign-title">{{ campaign.title }}</div>
             </div>
             <div class="md-layout-item md-size-50 md-small-size-100">
-              <div class="word-break mb-30 font-size-18 campaign-description">
+              <div class="word-break mb-30 font-size-20 campaign-description">
                 {{ campaign.description }}
               </div>
             </div>
@@ -103,7 +103,7 @@
           <u>I Need To Think About It</u></md-button
         >
         <hr style="margin-top: 40px" />
-        <div class="text-center mb-50 mt-30">
+        <div class="text-center mb-50 mt-30 logo" @click="gotoWeb">
           Powered by &nbsp;
           <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
           <span style="text-transform: uppercase">&#169;</span>
@@ -152,7 +152,7 @@
           <div
             class="md-layout-item md-size-100 md-small-size-100 text-transform-uppercase font-size-30 font-bold-extra mb-50"
           >
-            sneak peak into the agenda
+            A glimpse at the agenda
           </div>
           <div
             v-for="(schedule, index) in timelineDates"
@@ -171,7 +171,7 @@
             </div>
           </div>
         </div>
-        <div class="text-center mb-50 mt-30">
+        <div class="text-center mb-50 mt-30 logo" @click="gotoWeb">
           Powered by &nbsp;
           <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
         </div>
@@ -179,10 +179,15 @@
     </div>
 
     <div v-if="isMobile" class="d-flex rsvp-footer">
-      <md-button class="md-simple md-outlined md-red maryoku-btn flex-1" @click="showZoomModal = true">
-        Virutal Event
-      </md-button>
-      <md-button class="md-red maryoku-btn flex-1" @click="showRsvpModal = true"> RSVP Now</md-button>
+      <template v-if="isVirtualEvent">
+        <md-button class="md-red maryoku-btn flex-1" @click="showZoomModal = true"> RSVP Now</md-button>
+      </template>
+      <template v-else>
+        <md-button class="md-simple md-outlined md-red maryoku-btn flex-1" @click="showZoomModal = true">
+          Virutal Event
+        </md-button>
+        <md-button class="md-red maryoku-btn flex-1" @click="showRsvpModal = true"> RSVP Now</md-button>
+      </template>
     </div>
     <div v-else class="rsvp-footer white-card">
       <div class="rsvp-footer-content">
@@ -270,8 +275,13 @@
       @scheduled="showSyncCalendarForZoom = false"
       :campaign="campaign"
       :rsvp="rsvpData"
+      class="rsvp-modal"
     ></sync-calendar-modal>
-    <social-sharing-modal v-if="showSharingModal" @cancel="showSharingModal = false"></social-sharing-modal>
+    <social-sharing-modal
+      v-if="showSharingModal"
+      @cancel="showSharingModal = false"
+      class="rsvp-modal"
+    ></social-sharing-modal>
     <modal v-if="showRejectConformModal" class="rsvp-modal reject-modal">
       <template slot="header">
         <md-button class="md-simple md-just-icon md-round modal-default-button" @click="showRejectConformModal = false">
@@ -460,6 +470,9 @@ export default {
   },
   methods: {
     ...mapActions("campaign", ["getCampaigns"]),
+    gotoWeb() {
+      window.open("https://www.maryoku.com", "_blank");
+    },
     scrollToTop() {
       window.scrollTo(0, 0);
     },
@@ -636,6 +649,9 @@ export default {
       border: solid 1px #f51355;
       margin-left: 30px;
     }
+  }
+  .logo {
+    cursor: pointer;
   }
 }
 @media only screen and (max-width: 959px) {

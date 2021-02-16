@@ -24,10 +24,7 @@
         :serviceType="tableCategory"
         @addItem="addItem"
       ></proposal-add-item-form>
-      <proposal-service-table
-        :category="vendor.eventCategory.key"
-        :tableCategory="tableCategory"
-      ></proposal-service-table>
+      <proposal-service-table :category="vendorCategory" :tableCategory="tableCategory"></proposal-service-table>
     </div>
   </div>
 </template>

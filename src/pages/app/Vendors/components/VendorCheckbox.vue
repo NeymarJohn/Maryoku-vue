@@ -208,7 +208,7 @@ export default {
   created() {},
   mounted() {
     if (this.vendor) {
-      const item = this.vendor.services[this.camelize(this.label)];
+      let item = this.vendor.services[this.camelize(this.label)];
       console.log("vendor.check.box", this.item, item);
       if (item) {
         console.log('vendor.checkbox', item.label, item);

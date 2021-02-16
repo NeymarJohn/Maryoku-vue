@@ -3,7 +3,7 @@
     <template v-if="isEdit"></template>
     <template v-else>
       <div class="event-summary-wrapper">
-        <div class="with-bkimg" :style="vendor.images ? `background-image:url(${vendor.images[0]})` : ''">
+        <div class="with-bkimg" :style="headerBackgroundImage ? `background-image:url(${headerBackgroundImage})` : ''">
           <div class="summary-cont">
             <div class="upper">
               <h3>{{ title }}</h3>
@@ -26,6 +26,17 @@
               </li>
             </ul>
           </div>
+          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="chooseFiles">
+            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />Change Cover
+          </md-button>
+          <input
+            style="display: none"
+            id="coverImage"
+            name="attachment"
+            type="file"
+            multiple="multiple"
+            @change="onFileChange"
+          />
         </div>
         <div class="event-summary-body">
           <div class="cover-letter font-bold-extra mb-50">
@@ -71,7 +82,9 @@
       <div class="pricing-cont">
         <div class="title">
           <h4><img :src="`${iconUrl}Asset 576.svg`" />Pricing & Details</h4>
-          <p v-if="categories.length === 1">*Work only with our {{ vendor.eventCategory.fullTitle }}</p>
+          <p v-if="categories.length === 1 && vendor.vendorCategory === 'venuerental'">
+            *Work only with our {{ vendor.eventCategory.fullTitle }}
+          </p>
         </div>
         <p>What would you like to take from our suggested services?</p>
         <proposal-pricing-item
@@ -290,6 +303,9 @@ export default {
     };
   },
   methods: {
+    chooseFiles() {
+      document.getElementById("coverImage").click();
+    },
     hideModal() {
       this.savedItModal = false;
     },
@@ -372,6 +388,9 @@ export default {
     dontWorkTime() {
       return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.amPack.start} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.amPack.end}`;
     },
+    async onFileChange(event) {
+      this.coverImage = await getBase64(event.target.files[0]);
+    },
   },
   created() {
     console.log(this.vendor);
@@ -420,6 +439,19 @@ export default {
         return this.vendor.policies.filter((item) => item.value || (item.type === "Including" && item.cost));
       return null;
     },
+    headerBackgroundImage() {
+      if (this.coverImage) return this.coverImage;
+      if (this.vendor.images && this.vendor.images[0]) return vendor.images[0];
+      return "";
+    },
+    coverImage: {
+      get() {
+        return this.$store.state.vendorProposal.coverImage;
+      },
+      set(value) {
+        this.$store.commit("vendorProposal/setValue", { key: "coverImage", value });
+      },
+    },
   },
   watch: {},
 };
@@ -433,6 +465,10 @@ export default {
   margin-top: 50px;
   color: #050505;
 
+  .change-cover-btn {
+    margin: 10% 50%;
+    transform: translateX(-50%);
+  }
   .tabs-cont {
     display: flex;
     justify-content: flex-start;

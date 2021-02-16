@@ -49,6 +49,7 @@
 
         <maryoku-textarea
           v-model="campaignData.description"
+          :fontSize="18"
           :placeholder="`Hey, you've been invited to ${event.title} on ${$dateUtil.formatScheduleDay(
             event.eventStartMillis,
             'dddd, MMMM D, YYYY',
