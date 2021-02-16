@@ -146,13 +146,6 @@ export default {
       }).then((result) => {
         if (result.dismiss != "cancel") {
           this.$store.dispatch("event/saveEventAction", updatedEvent).then((res) => {
-            swal({
-              title: "Success to save your changes!",
-              confirmButtonClass: "md-button md-success confirm-btn-bg ",
-              cancelButtonClass: "md-button md-danger cancel-btn-bg",
-              buttonsStyling: false,
-              timer: 3000,
-            })
             this.reSchedule = false;
             this.reCalculate = false;
           });

@@ -1,5 +1,5 @@
 <template>
-  <modal class="sync-calendar-modal">
+  <modal>
     <template slot="header">
       <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
         <md-icon>clear</md-icon>
@@ -8,7 +8,7 @@
     <template slot="body">
       <div>
         <img :src="`${$iconURL}RSVP/Group+7946.svg`" class="mb-30" />
-        <div class="font-size-30 font-bold mb-30 header-text">
+        <div class="font-size-30 font-bold mb-30">
           SEE YOU THERE <span class="text-transform-uppercase">{{ rsvp.name }}</span
           >!
         </div>
@@ -223,15 +223,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.sync-calendar-modal {
-  .header-text {
-    line-height: 1.5em;
-  }
-  .sync_button {
-    width: 250px;
-    height: 50px;
-    border: solid 1px #f51355;
-    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  }
+.sync_button {
+  width: 250px;
+  height: 50px;
+  border: solid 1px #f51355;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
 }
 </style>

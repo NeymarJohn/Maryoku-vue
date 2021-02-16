@@ -8,7 +8,7 @@
                 <div class="title">
                   HELLO There
                   <div v-if="isLoggedIn">{{tenantUser.name}}!</div>
-                  <span v-else>!</span>
+                  <div v-else>THERE!</div>
                 </div>
                 <div>
                   Please answer a few questions to complete the background we need!

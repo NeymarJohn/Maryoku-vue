@@ -48,7 +48,7 @@
           <template v-if="service.sizeEnabled">
             <input class="quantity-input" placeholder="Cm" type="number" v-model="service.defaultSize" @input="updateRequirement"/>
           </template>
-          <div v-else class="empty text-center">n/a</div>
+          <div v-else class="empty">n/a</div>
         </td>
         <td :class="category !== 'Amenities' ? 'text-center' : 'text-left ml-30'">
           <template v-if="service.qtyEnabled">
@@ -58,7 +58,7 @@
                         <md-tooltip md-direction="bottom">{{ service.hint }}</md-tooltip>
                       </span>
           </template>
-          <div v-else class="empty" :class="category !== 'Amenities' ? 'text-center mr-30' : 'text-left ml-60'">n/a</div>
+          <div v-else class="empty mr-30">n/a</div>
         </td>
         <td class="width-10">
           <div class="empty">

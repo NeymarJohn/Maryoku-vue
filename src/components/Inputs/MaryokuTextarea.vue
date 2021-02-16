@@ -12,7 +12,6 @@
       :rows="rows"
       class="textarea js-autoresize"
       :disabled="disabled"
-      :style="`font-size:${fontSize}px`"
     ></textarea>
     <span class="close-button" @click="clearContent" v-if="!disabled">
       <img :src="`${$iconURL}Campaign/Group+3602.svg`" />
@@ -70,9 +69,6 @@ export default {
     disabled: {
       type: Boolean,
       default: false,
-    },
-    fontSize: {
-      type: [String, Number],
     },
   },
   data() {
