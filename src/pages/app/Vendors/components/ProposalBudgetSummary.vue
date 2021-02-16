@@ -283,9 +283,7 @@ export default {
       let vm = this;
 
       if (!requirements || requirements.length == 0) return 0;
-      console.log(requirements);
       total = requirements.reduce((sum, item) => {
-        console.log(sum);
         return sum + item.price * item.requirementValue;
       }, 0);
       return total;
@@ -330,7 +328,6 @@ export default {
       this.bundleDiscountPercentage = (this.bundleDiscountAmount / this.totalPriceForBundle) * 100;
     },
     getServiceCategory(category) {
-      console.log(this.serviceCategories);
       return this.serviceCategories.find((item) => item.key === category);
     },
   },
@@ -395,7 +392,6 @@ export default {
     bundledServicesString() {
       let result = "";
       this.bundleDiscount.services.forEach((service, index) => {
-        console.log("service", service);
         if (index !== 0) result += " + ";
         result += this.getServiceCategory(service).title;
       });

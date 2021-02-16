@@ -93,19 +93,20 @@ export default {
       editingNewSeating: false,
     };
   },
-  created() {
-    console.log("specialRequirements", this.specialRequirements);
-  },
+  created() {},
   methods: {
     getSelectedOption(options) {
       return options.filter((it) => it.selected);
     },
     saveNewSeating() {
-      const suggestedNewSeatings = this.$store.state.vendorProposal.suggestedNewSeatings;
-      suggestedNewSeatings.push(this.newSeatingSuggest);
-      this.$store.commit("vendorProposal/setValue", { key: "suggestedNewSeatings", value: suggestedNewSeatings });
-      this.editingNewSeating = false;
-      this.newSeatingSuggest = "";
+      if (this.newSeatingSuggest.trim()) {
+        let suggestedNewSeatings = this.$store.state.vendorProposal.suggestedNewSeatings;
+        if (!suggestedNewSeatings) suggestedNewSeatings = [];
+        suggestedNewSeatings.push(this.newSeatingSuggest);
+        this.$store.commit("vendorProposal/setValue", { key: "suggestedNewSeatings", value: suggestedNewSeatings });
+        this.editingNewSeating = false;
+        this.newSeatingSuggest = "";
+      }
     },
   },
   computed: {

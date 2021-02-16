@@ -103,7 +103,7 @@
           <u>I Need To Think About It</u></md-button
         >
         <hr style="margin-top: 40px" />
-        <div class="text-center mb-50 mt-30 logo" @click="gotoWeb">
+        <div class="text-center mb-50 mt-30">
           Powered by &nbsp;
           <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
           <span style="text-transform: uppercase">&#169;</span>
@@ -171,7 +171,7 @@
             </div>
           </div>
         </div>
-        <div class="text-center mb-50 mt-30 logo" @click="gotoWeb">
+        <div class="text-center mb-50 mt-30">
           Powered by &nbsp;
           <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" />
         </div>
@@ -470,9 +470,6 @@ export default {
   },
   methods: {
     ...mapActions("campaign", ["getCampaigns"]),
-    gotoWeb() {
-      window.open("https://www.maryoku.com", "_blank");
-    },
     scrollToTop() {
       window.scrollTo(0, 0);
     },
@@ -649,9 +646,6 @@ export default {
       border: solid 1px #f51355;
       margin-left: 30px;
     }
-  }
-  .logo {
-    cursor: pointer;
   }
 }
 @media only screen and (max-width: 959px) {

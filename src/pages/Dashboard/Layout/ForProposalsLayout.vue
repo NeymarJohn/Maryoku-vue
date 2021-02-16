@@ -325,7 +325,6 @@ export default {
       this.vendor = vendor;
     });
     this.getProposalRequest(this.$route.params.id).then((proposalRequest) => {
-      console.log("proposalRequest", proposalRequest);
       if (proposalRequest.componentInstance.proposalAccepted) {
         this.showCloseProposalModal = true;
       }
@@ -397,7 +396,6 @@ export default {
         proposal.status = "submit";
       }
       proposal.save().then((res) => {
-        console.log(res);
         if (type === "submit") this.submittedModal = true;
         else {
           swal({
