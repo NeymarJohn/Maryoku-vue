@@ -63,12 +63,11 @@ export default {
 
         const dateList = Array.from(range.by("day")).map((m) => m.format("YYYY-MM-DD"));
         const timelineDates = [];
-        dateList.forEach((d, index) => {
+        dateList.forEach((d) => {
           timelineDates.push({
             date: d,
             templates: timelineTempates,
             status: "editing",
-            dateIndex: index,
           });
         });
         this.setEventProperty({
