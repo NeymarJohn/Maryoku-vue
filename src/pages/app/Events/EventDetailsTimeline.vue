@@ -94,6 +94,28 @@
         </template>
       </template>
     </planner-event-footer>
+    <vue-html2pdf
+      :show-layout="false"
+      :float-layout="true"
+      :enable-download="true"
+      :preview-modal="true"
+      :paginate-elements-by-height="1400"
+      :filename="`timeline-${eventData.id}`"
+      :pdf-quality="2"
+      :manual-pagination="false"
+      pdf-format="a4"
+      pdf-orientation="landscape"
+      pdf-content-width="800px"
+      @progress="onProgress($event)"
+      @hasStartedGeneration="hasStartedGeneration()"
+      @hasGenerated="hasGenerated($event)"
+      ref="html2Pdf"
+    >
+      <section slot="pdf-content">
+        <!-- PDF Content Here -->
+        <timeline-edit-panel :isEditMode="false" :editingMode="editingMode"></timeline-edit-panel>
+      </section>
+    </vue-html2pdf>
   </div>
 </template>
 <script>
@@ -122,6 +144,7 @@ import _ from "underscore";
 
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import VueHtml2pdf from "vue-html2pdf";
 
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./components/CommentEditorPanel";
@@ -155,6 +178,7 @@ export default {
     TimelineEmpty,
     TimelineGapModal,
     TimelineEditPanel,
+    VueHtml2pdf,
   },
   props: {
     // event: Object,
@@ -196,6 +220,11 @@ export default {
   }),
   methods: {
     ...mapMutations("event", ["setEventData"]),
+
+    //pdf handling event
+    onProgress() {},
+    hasStartedGerneration() {},
+    hasGenerated() {},
     download() {
       this.$router.push({
         path: `/events/` + this.eventData.id + `/edit/timeline/export`,
@@ -773,6 +802,9 @@ export default {
       }
       this.isLoading = false;
     }
+    this.$root.$on("pageExport", () => {
+      this.$refs.html2Pdf.generatePdf();
+    });
   },
   mounted() {
     this.isLoading = true;

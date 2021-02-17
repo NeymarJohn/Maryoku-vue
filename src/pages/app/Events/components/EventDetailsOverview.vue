@@ -110,7 +110,7 @@ export default {
   },
   methods: {
     updateEvent() {
-      let places = this.event.places.map(p => p.toUpperCase());
+      let places = this.event.places.map((p) => p.toUpperCase());
 
       const updatedEvent = new CalendarEvent({
         id: this.event.id,
@@ -152,7 +152,7 @@ export default {
               cancelButtonClass: "md-button md-danger cancel-btn-bg",
               buttonsStyling: false,
               timer: 3000,
-            })
+            });
             this.reSchedule = false;
             this.reCalculate = false;
           });
@@ -163,7 +163,6 @@ export default {
       this.showCommentEditorPanel = !this.showCommentEditorPanel;
     },
     changeEvent(e) {
-
       if (e.hasOwnProperty("dateData")) {
         this.event.eventStartMillis = new Date(e.dateData.started_at).getTime();
         this.event.eventEndMillis = new Date(e.dateData.ended_at).getTime();
@@ -199,8 +198,7 @@ export default {
       console.log("cancelEvent");
     },
     setSection() {
-
-      let places = this.event.places ? this.event.places.map(p => p.toLowerCase()) : [];
+      let places = this.event.places ? this.event.places.map((p) => p.toLowerCase()) : [];
 
       this.sections = [
         {
@@ -210,6 +208,7 @@ export default {
           warning: "Changing the time on your status might cause price changes",
           started_at: this.event.eventStartMillis,
           ended_at: this.event.eventEndMillis,
+          timelineDates: this.$store.state.event.timelineDates,
           more_one_day: null,
         },
         {
@@ -256,7 +255,7 @@ export default {
 
     let event = this.$store.state.event.eventData; // Fetch event from store
     this.event = JSON.parse(JSON.stringify(event));
-    console.log('event', event);
+    console.log("event", event);
     this.init();
   },
   watch: {
