@@ -102,6 +102,7 @@ import ProposalEventSummary from "./components/ProposalEventSummary.vue";
 import VueElementLoading from "vue-element-loading";
 import ProposalItemSecondaryService from "./components/ProposalItemSecondaryService";
 import ProposalAdditionalRequirement from "./components/ProposalAddtionalRequirement";
+import S3Service from "@/services/s3.service";
 export default {
   components: {
     VueElementLoading,
@@ -131,6 +132,15 @@ export default {
     this.services = VendorService.businessCategories();
     this.iconsWithCategory = VendorService.categoryNameWithIcons();
     this.$store.dispatch("common/fetchAllCategories");
+
+    // handling uploading photo backhand process
+    this.$root.$on("update-inspirational-photo", ({ file, index, link, url }) => {
+      const currentPhoto = this.$store.state.vendorProposal.inspirationalPhotos[index];
+      this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: { ...currentPhoto, url } });
+      S3Service.fileUpload(file, `photo-${index}`, link)
+        .then((res) => {})
+        .catch((event) => {});
+    });
   },
   methods: {
     flatDeep(arr, d = 1) {

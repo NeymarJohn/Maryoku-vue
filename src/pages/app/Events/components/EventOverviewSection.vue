@@ -340,7 +340,7 @@ export default {
         const dateList = Array.from(range.by("day")).map((m) => m.format("YYYY-MM-DD"));
         const currentTimelineDates = this.section.timelineDates;
         const newTimelineDates = currentTimelineDates.map((item, index) => {
-          item.date = dateList[index];
+          if (dateList[index]) item.date = dateList[index];
           return item;
         });
         console.log("newTimelineDates", newTimelineDates);
@@ -403,23 +403,30 @@ export default {
       $(".vfc-day").each(function (index, day) {
         let el = $(day).find("span.vfc-span-day");
 
-        if (el.text() == started_date) {
+        if (started_date === ended_date) {
+          el.addClass("vfc-end-marked");
+        } else if (el.text() == started_date) {
           el.addClass("vfc-start-marked");
           if (!$(day).find("div.vfc-base-start").length) $(day).prepend("<div class='vfc-base-start'></div>");
         } else if (el.text() == ended_date) {
-          el.addClass("vfc-end-marked");
-          if (!$(day).find("div.vfc-base-end").length) $(day).prepend("<div class='vfc-base-end'></div>");
-        } else {
-          el.removeClass("vfc-start-marked");
-          el.removeClass("vfc-end-marked");
-          $(day).find("div.vfc-base-start").remove();
-          $(day).find("div.vfc-base-end").remove();
-        }
+          if (el.text() == started_date) {
+            el.addClass("vfc-start-marked");
+            if (!$(day).find("div.vfc-base-start").length) $(day).prepend("<div class='vfc-base-start'></div>");
+          } else if (el.text() == ended_date) {
+            el.addClass("vfc-end-marked");
+            if (!$(day).find("div.vfc-base-end").length) $(day).prepend("<div class='vfc-base-end'></div>");
+          } else {
+            el.removeClass("vfc-start-marked");
+            el.removeClass("vfc-end-marked");
+            $(day).find("div.vfc-base-start").remove();
+            $(day).find("div.vfc-base-end").remove();
+          }
 
-        if (el.text() <= ended_date && el.text() >= started_date) {
-          el.addClass("vfc-marked");
-        } else {
-          el.removeClass("vfc-marked");
+          if (el.text() <= ended_date && el.text() >= started_date) {
+            el.addClass("vfc-marked");
+          } else {
+            el.removeClass("vfc-marked");
+          }
         }
       });
     },

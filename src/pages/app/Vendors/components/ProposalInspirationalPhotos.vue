@@ -99,7 +99,6 @@ export default {
       this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: photoData });
     },
     addCaption(index, photoData) {
-      console.log(photoData);
       this.captionModal.isOpen = true;
       this.captionModal.photoUrl = photoData.url;
       this.captionModal.caption = photoData.caption;
