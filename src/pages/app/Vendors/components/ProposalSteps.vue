@@ -63,6 +63,7 @@ export default {
   created() {},
   mounted() {
     this.lookingFor = this.proposalRequest.requirements.find((item) => item.category == "multi-selection");
+    console.log(this.proposalRequest);
   },
   computed: {
     step() {

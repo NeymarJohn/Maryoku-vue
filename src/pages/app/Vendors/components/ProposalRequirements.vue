@@ -100,16 +100,19 @@ export default {
       return this.$store.state.vendorProposal.proposalRequest;
     },
     requirements() {
-      return this.proposalRequest.componentRequirements[this.vendorCategory];
+      return this.proposalRequest.componentRequirements[this.vendor.eventCategory.key];
     },
     optionalRequirements() {
       if (!this.requirements) return [];
+      console.log("this.requirements", this.requirements);
       const multiSelectionCategories = this.requirements.filter((item) => item.subCategory === "service");
+      console.log("multiSelectionCategories", multiSelectionCategories);
       let optionalRequirements = [];
       multiSelectionCategories.forEach((category) => {
         const selectedOptions = category.options.filter((item) => item.selected);
         optionalRequirements = optionalRequirements.concat(selectedOptions);
       });
+      console.log("optionalRequirements", optionalRequirements);
       return optionalRequirements;
     },
     services: {

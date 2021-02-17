@@ -380,7 +380,7 @@ export default {
   }
   .tags-list {
     margin: 0 0 3em;
-    width: 100%;
+    width: 70%;
     &-wrapper {
       flex-flow: wrap;
       justify-content: flex-start;
@@ -389,23 +389,20 @@ export default {
       width: 100%;
       transition: height 0.5s;
       &.expanded {
-        height: 300px;
+        height: 360px;
         max-height: max-content;
         transition: height 0.5s;
       }
     }
     &__item {
       border-radius: 100px;
-      flex: 1 1 10%;
+      width: 150px;
       border: solid 1px #a0a0a0;
       font-size: 14px;
       padding: 0.3em 0.9em;
       margin: 1em 1em 1em 0;
       text-transform: capitalize;
-      height: fit-content;
-      line-height: 30px;
       display: flex;
-      align-items: center;
       justify-content: center;
       cursor: pointer;
       img {

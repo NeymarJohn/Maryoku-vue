@@ -54,6 +54,14 @@ export default {
         });
       }
 
+      console.log(
+        "costVendorServices",
+        costVendorServices.map((item) => item.label),
+      );
+      console.log(
+        "requirementsFromPlanner",
+        this.requirementsFromPlanner.map((item) => item.item),
+      );
       const includedSevices = [];
       const costServices = [];
       this.requirementsFromPlanner.forEach((item) => {

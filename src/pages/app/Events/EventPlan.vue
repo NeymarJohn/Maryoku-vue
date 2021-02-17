@@ -52,82 +52,82 @@ export default {
       return this.$store.state.event.eventData;
     },
     barItems() {
-      // if (!this.event.checkList) {
-      const overview = {
-        title: "Create an event to remember",
-        status: "completed",
-        route: "overview",
-        // icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-        progress: 100,
-        componentId: "overview",
-        id: "overview-item",
-      };
-      const concept = {
-        title: "Inspiration Board",
-        status: this.event.concept && this.event.conceptProgress === 100 ? "completed" : "not-complete",
-        route: "booking/concept",
-        icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-        progress: this.event.concept ? this.event.conceptProgress : 0,
-        componentId: "concept",
-        id: "concept-item",
-      };
-      const budget = {
-        title: this.event.budgetProgress <= 50 ? "Budget Wizard" : "Balance Wizard",
-        status: "not-complete",
-        route: this.event.budgetProgress == 100 ? "edit/budget" : "booking/budget",
-        icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
-        progress: this.event.budgetProgress,
-        componentId: "budget",
-        id: "budget-item",
-      };
-      const timeline = {
-        title: "Event Scheduler",
-        status: this.event.timelineProgress === 100 ? "completed" : "not-complete",
-        route: "booking/timeline",
-        icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-        progress: this.event.timelineProgress,
-        componentId: "timeline",
-        id: "timeline-item",
-      };
-      const campaign = {
-        title: "Guests Communicator",
-        status: this.event.campaignProgress === 100 ? "completed" : "not-complete",
-        route: "booking/campaign",
-        icon: `${this.$iconURL}Campaign/Group 8857.svg`,
-        progress: this.event.campaignProgress,
-        componentId: "campaign",
-        id: "campaign-item",
-      };
-      const elements = [];
-      elements.push(overview);
-      // if (this.event.eventType.hasConcept) {
-      elements.push(concept);
-      // }
-      elements.push(timeline);
-      elements.push(campaign);
-      elements.push(budget);
+      if (!this.event.checkList) {
+        const overview = {
+          title: "Create an event to remember",
+          status: "completed",
+          route: "overview",
+          // icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
+          progress: 100,
+          componentId: "overview",
+          id: "overview-item",
+        };
+        const concept = {
+          title: "Inspiration Board",
+          status: this.event.concept && this.event.conceptProgress === 100 ? "completed" : "not-complete",
+          route: "booking/concept",
+          icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
+          progress: this.event.concept ? this.event.conceptProgress : 0,
+          componentId: "concept",
+          id: "concept-item",
+        };
+        const budget = {
+          title: this.event.budgetProgress <= 50 ? "Budget Wizard" : "Balance your budget",
+          status: "not-complete",
+          route: this.event.budgetProgress == 100 ? "edit/budget" : "booking/budget",
+          icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
+          progress: this.event.budgetProgress,
+          componentId: "budget",
+          id: "budget-item",
+        };
+        const timeline = {
+          title: "Event Scheduler",
+          status: this.event.timelineProgress === 100 ? "completed" : "not-complete",
+          route: "booking/timeline",
+          icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
+          progress: this.event.timelineProgress,
+          componentId: "timeline",
+          id: "timeline-item",
+        };
+        const campaign = {
+          title: "Guests Communicator",
+          status: this.event.campaignProgress === 100 ? "completed" : "not-complete",
+          route: "booking/campaign",
+          icon: `${this.$iconURL}Campaign/Group 8857.svg`,
+          progress: this.event.campaignProgress,
+          componentId: "campaign",
+          id: "campaign-item",
+        };
+        const elements = [];
+        elements.push(overview);
+        // if (this.event.eventType.hasConcept) {
+        elements.push(concept);
+        // }
+        elements.push(budget);
+        elements.push(timeline);
+        elements.push(campaign);
 
-      // show when you approve budget
-      if (this.event.budgetProgress == 100) {
-        this.event.components.sort((a, b) => a.order - b.order);
-        this.event.components.forEach((item) => {
-          if (item.componentId !== "unexpected") {
-            elements.push({
-              title: item.bookTitle,
-              status: "not-complete",
-              route: "booking/" + item.id,
-              icon: `${this.$iconURL}Budget+Elements/${item.componentId}.svg`,
-              progress: item.progress ? item.progress : 0,
-              id: item.id,
-            });
-          }
-        });
+        // show when you approve budget
+        if (this.event.budgetProgress == 100) {
+          this.event.components.sort((a, b) => a.order - b.order);
+          this.event.components.forEach((item) => {
+            if (item.componentId !== "unexpected") {
+              elements.push({
+                title: item.bookTitle,
+                status: "not-complete",
+                route: "booking/" + item.id,
+                icon: `${this.$iconURL}Budget+Elements/${item.componentId}.svg`,
+                progress: item.progress ? item.progress : 0,
+                id: item.id,
+              });
+            }
+          });
+        }
+
+        return elements;
+      } else {
+        return this.event.checkList;
       }
-
-      return elements;
-      // } else {
-      //   return this.event.checkList;
-      // }
     },
   },
   methods: {

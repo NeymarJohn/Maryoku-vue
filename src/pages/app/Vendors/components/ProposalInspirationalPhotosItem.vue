@@ -61,8 +61,10 @@ export default {
     };
   },
   created() {
+    console.log("create", this.index);
     this.photo = this.defaultPhoto;
     this.$root.$on("saveCaption", (captionData) => {
+      console.log(captionData);
       if (this.index == captionData.currentIndex) {
         if (!this.photo) this.photo = {};
         this.$set(this.photo, "caption", captionData.caption);
@@ -102,32 +104,25 @@ export default {
         });
         return;
       }
-      // this.isLoading = true;
+      this.isLoading = true;
       const extension = event.target.files[0].type.split("/")[1];
       if (!this.photo) this.photo = {};
-      const photoData = await getBase64(event.target.files[0]);
-      this.$set(this.photo, "url", photoData);
-      this.$root.$emit("update-inspirational-photo", {
-        file: event.target.files[0],
-        index: this.index,
-        link: `proposal/inspirationalPhotos/${this.proposalRequest.id}`,
-        url: `https://maryoku.s3.amazonaws.com/proposal/inspirationalPhotos/${this.proposalRequest.id}/photo-${this.index}.${extension}`,
-      });
-      // S3Service.fileUpload(
-      //   event.target.files[0],
-      //   `photo-${this.currentPhotoIndex}`,
-      //   `proposal/inspirationalPhotos/${this.proposalRequest.id}`,
-      // )
-      //   .then((res) => {
-      //     this.isLoading = false;
-      //     this.$emit("change", {
-      //       url: `https://maryoku.s3.amazonaws.com/proposal/inspirationalPhotos/${this.proposalRequest.id}/photo-${this.currentPhotoIndex}.${extension}`,
-      //       caption: "",
-      //     });
-      //   })
-      //   .catch((event) => {
-      //     this.isLoading = false;
-      //   });
+      this.photo.url = await getBase64(event.target.files[0]);
+      S3Service.fileUpload(
+        event.target.files[0],
+        `photo-${this.currentPhotoIndex}`,
+        `proposal/inspirationalPhotos/${this.proposalRequest.id}`,
+      )
+        .then((res) => {
+          this.isLoading = false;
+          this.$emit("change", {
+            url: `https://maryoku.s3.amazonaws.com/proposal/inspirationalPhotos/${this.proposalRequest.id}/photo-${this.currentPhotoIndex}.${extension}`,
+            caption: "",
+          });
+        })
+        .catch((event) => {
+          this.isLoading = false;
+        });
 
       // this.$forceUpdate();
     },

@@ -175,6 +175,7 @@ const actions = {
         .for(new CalendarEvent({ id: eventId }))
         .get()
         .then(res => {
+          console.log(res);
           commit("setValue", "timelineDates", res);
         });
     });

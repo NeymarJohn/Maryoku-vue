@@ -352,6 +352,7 @@ export default {
     setValue(key, value) {
       const item = this.item;
       item[key] = value;
+      console.log(item);
       this.$emit("save", { index: this.index, item });
     },
     cancel() {
@@ -364,7 +365,9 @@ export default {
     },
   },
   created() {},
-  mounted() {},
+  mounted() {
+    console.log(this.item);
+  },
   filters: {
     withComma(amount) {
       return amount ? amount.toLocaleString() : 0;

@@ -441,7 +441,7 @@ export default {
     },
     headerBackgroundImage() {
       if (this.coverImage) return this.coverImage;
-      if (this.vendor.images && this.vendor.images[0]) return this.vendor.images[0];
+      if (this.vendor.images && this.vendor.images[0]) return vendor.images[0];
       return "";
     },
     coverImage: {
