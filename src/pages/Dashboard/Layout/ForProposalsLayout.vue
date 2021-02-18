@@ -1,7 +1,27 @@
 <template>
   <div class="for-proposals-layout-wrapper">
     <section class="header-wrapper">
-      <div
+      <div class="background-image">
+        <div class="d-flex concept-image-wrapper">
+          <div
+            v-for="(color, index) in event.concept.colors"
+            :key="index"
+            class="concept-color"
+            :style="`background: ${color.color || '#EDEDED'}`"
+          >
+            <img class="concept-image" :src="`${event.concept.images[index].url}`" />
+          </div>
+          <div
+            v-for="(color, index) in event.concept.colors"
+            :key="index"
+            class="concept-color"
+            :style="`background: ${color.color || '#EDEDED'}`"
+          >
+            <img class="concept-image" :src="`${event.concept.images[index].url}`" />
+          </div>
+        </div>
+      </div>
+      <!-- <div
         class="proposal-banner"
         :style="
           getHeaderImage
@@ -12,57 +32,70 @@
         <h2 v-if="event && event.concept">{{ event.concept.name }}</h2>
         <h2 v-else>Meeting Event / Formal meeting</h2>
         <h5>{{ event.title }}</h5>
+      </div> -->
+      <div class="proposal-banner">
+        <div class="summary-cont">
+          <ul>
+            <li class="font-size-30">
+              {{ event.title }}
+            </li>
+            <li>
+              <!-- <img :src="`${proposalIconsUrl}Asset 573.svg`" /> -->
+              <!-- {{ getLocation }} -->
+            </li>
+          </ul>
+        </div>
+        <div class="summary-cont">
+          <ul>
+            <li>
+              <img :src="`${$iconURL}common/users-white.svg`" />
+              {{ proposalRequest ? event.numberOfParticipants : "-" | withComma }}
+            </li>
+            <li>
+              <img :src="`${$iconURL}common/clock-white.svg`" />
+              {{ eventTime }}
+            </li>
+            <li
+              :class="[{ 'with-help': dateTooltip && suggestionDate }]"
+              @mouseover="dateTooltip = true"
+              @mouseleave="dateTooltip = false"
+            >
+              <img :src="`${$iconURL}common/calendar-white.svg`" />
+              {{ eventDate }}
+              <img v-if="dateTooltip && suggestionDate" class="question" :src="`${proposalIconsUrl}Asset 582.svg`" />
+              <div class="date-tooltip" v-if="dateTooltip && suggestionDate">
+                <h3>Your Time Suggestion</h3>
+                <p>
+                  Client will get this proposal with
+                  <br />your new suggested date
+                </p>
+              </div>
+            </li>
+
+            <li>
+              <img :src="`${$iconURL}common/location-white.svg`" />
+              {{ getLocation }}
+            </li>
+
+            <li>
+              <a class="see-full" @click="fullDetailsModal = true">
+                Full Details
+                <md-icon>keyboard_arrow_right</md-icon>
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="summary-cont">
-        <ul>
-          <li
-            :class="[{ 'with-help': dateTooltip && suggestionDate }]"
-            @mouseover="dateTooltip = true"
-            @mouseleave="dateTooltip = false"
-          >
-            <img :src="`${proposalIconsUrl}Path 251 (2).svg`" />
-            {{ eventDate }}
-            <img v-if="dateTooltip && suggestionDate" class="question" :src="`${proposalIconsUrl}Asset 582.svg`" />
-            <div class="date-tooltip" v-if="dateTooltip && suggestionDate">
-              <h3>Your Time Suggestion</h3>
-              <p>
-                Client will get this proposal with
-                <br />your new suggested date
-              </p>
-            </div>
-          </li>
-          <li>
-            <img :src="`${proposalIconsUrl}Group 6085 (2).svg`" />
-            {{ eventTime }}
-          </li>
-          <li>
-            <img :src="`${proposalIconsUrl}Asset 573.svg`" />
-            {{ getLocation }}
-          </li>
-          <li>
-            <img :src="`${proposalIconsUrl}Asset 572.svg`" />
-            {{ proposalRequest ? event.numberOfParticipants : "-" | withComma }}
-          </li>
-        </ul>
-        <p v-if="event.concept">
-          {{ event.concept.description }}
-        </p>
-        <div class="a-right">
-          <a class="see-full" @click="fullDetailsModal = true">
-            See Full Details
-            <md-icon>keyboard_arrow_right</md-icon>
-          </a>
-        </div>
-        <div class="pull-bottom-right">
-          <vendor-bid-time-counter
-            :key="getRemainingTime.seconds"
-            :days="getRemainingTime.days"
-            :hours="getRemainingTime.hours"
-            :minutes="getRemainingTime.mins"
-            :seconds="getRemainingTime.seconds"
-            :content="'To send your bid'"
-          />
-        </div>
+
+      <div class="pull-bottom-right">
+        <vendor-bid-time-counter
+          :key="getRemainingTime.seconds"
+          :days="getRemainingTime.days"
+          :hours="getRemainingTime.hours"
+          :minutes="getRemainingTime.mins"
+          :seconds="getRemainingTime.seconds"
+          :content="'To send your bid'"
+        />
       </div>
     </section>
     <div class="main-cont">
@@ -536,152 +569,157 @@ export default {
     border-radius: 3px;
     -webkit-box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-    /* height: 266px; */
-    display: flex;
-
-    .proposal-banner {
-      background-image: url("https://static-maryoku.s3.amazonaws.com/storage/img/lock.jpg");
-      clip-path: circle(111% at 0% 50%);
-      shape-outside: circle(111% at 0% 50%) border-box;
-      background-size: cover;
-      background-repeat: no-repeat;
-      display: block;
-      float: left;
-      padding: 90px 96px;
-      color: #ffffff;
-      width: 495px;
-      // height: 273px;
-
-      h2 {
-        font-size: 50px;
-        text-shadow: 0 3px 6px rgba(0, 0, 0, 0.77);
-        font-family: "Cooperative-Regular", sans-serif;
-        font-size: 50px;
-        text-transform: uppercase;
-        margin: 0;
+    height: 200px;
+    .background-image {
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      position: absolute;
+      &::after {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        content: "";
+        top: 0;
+        left: 0;
+        background-color: #000;
+        opacity: 0.6;
       }
-      h5 {
-        margin-top: 8px;
-        margin-bottom: 0;
-        font-family: "Manrope-Regular", sans-serif;
-        font-size: 20px;
-        font-weight: bold;
-        text-shadow: 0 3px 6px rgba(0, 0, 0, 0.77);
-      }
-    }
-    .summary-cont {
-      font-family: "Manrope-Regular", sans-serif;
-      width: calc(100% - 454px);
-      display: inline-block;
-      padding-top: 47px;
-      padding-left: 41px;
-
-      ul {
-        list-style: none;
+      .concept-color {
+        width: 250px;
+        height: 200px;
+        text-align: center;
         display: flex;
         align-items: center;
-        justify-content: flex-start;
-        padding: 0;
-        margin: 0;
-        color: #050505;
-
-        li {
-          font-size: 16px;
-          font-weight: bold;
-          padding: 9px 25px;
+        justify-content: center;
+        .concept-image {
+          width: 140px;
+          height: 140px;
+          border-radius: 50%;
+          object-fit: cover;
+          transition: 0.2s;
+        }
+      }
+    }
+    .proposal-banner {
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      position: absolute;
+      padding: 40px 60px;
+      .summary-cont {
+        font-family: "Manrope-Regular", sans-serif;
+        width: calc(100% - 454px);
+        margin: 10px 0;
+        ul {
+          list-style: none;
           display: flex;
-          margin-right: 40px;
+          align-items: center;
+          justify-content: flex-start;
+          padding: 0;
+          margin: 0;
+          color: white;
+          li {
+            font-size: 16px;
+            font-weight: bold;
+            padding: 9px 25px;
+            display: flex;
+            margin-right: 40px;
+            img {
+              width: 20px;
+              margin-right: 10px;
+            }
 
-          img {
-            width: 20px;
-            margin-right: 10px;
+            i {
+              color: #818080;
+              padding-right: 8px;
+            }
+
+            &.with-help {
+              background: #ffedb7;
+              cursor: pointer;
+              position: relative;
+
+              img {
+                &.question {
+                  margin-left: 12px;
+                  margin-right: 0;
+                }
+              }
+
+              .date-tooltip {
+                position: absolute;
+                display: inline-block;
+                width: 300px;
+                background-color: #ffedb7;
+                padding: 24px 32px;
+                color: #050505;
+                font-size: 14px;
+                left: 2rem;
+                top: 3.5rem;
+                text-align: center;
+
+                h3 {
+                  font-size: 20px;
+                  font-weight: 800;
+                  margin-top: 0;
+                  margin-bottom: 17px;
+                }
+                p {
+                  font-size: 16px;
+                  max-width: 100% !important;
+                  margin: 0;
+                }
+
+                &::after {
+                  content: "";
+                  position: absolute;
+                  width: 0;
+                  height: 0;
+                  top: 4px;
+                  left: 70px;
+                  box-sizing: border-box;
+
+                  border: 12px solid black;
+                  border-color: transparent transparent #ffedb7 #ffedb7;
+
+                  transform-origin: 0 0;
+                  transform: rotate(135deg);
+                }
+              }
+            }
+
+            &:last-child {
+              margin-right: 0;
+            }
           }
+        }
+        p {
+          font-size: 16px;
+          font-weight: normal;
+          color: #050505;
+          max-width: 60%;
+          margin: 2rem 0;
+        }
+        .a-right {
+          text-align: right;
+          max-width: 60%;
 
           i {
-            color: #818080;
-            padding-right: 8px;
-          }
-
-          &.with-help {
-            background: #ffedb7;
-            cursor: pointer;
             position: relative;
-
-            img {
-              &.question {
-                margin-left: 12px;
-                margin-right: 0;
-              }
-            }
-
-            .date-tooltip {
-              position: absolute;
-              display: inline-block;
-              width: 300px;
-              background-color: #ffedb7;
-              padding: 24px 32px;
-              color: #050505;
-              font-size: 14px;
-              left: 2rem;
-              top: 3.5rem;
-              text-align: center;
-
-              h3 {
-                font-size: 20px;
-                font-weight: 800;
-                margin-top: 0;
-                margin-bottom: 17px;
-              }
-              p {
-                font-size: 16px;
-                max-width: 100% !important;
-                margin: 0;
-              }
-
-              &::after {
-                content: "";
-                position: absolute;
-                width: 0;
-                height: 0;
-                top: 4px;
-                left: 70px;
-                box-sizing: border-box;
-
-                border: 12px solid black;
-                border-color: transparent transparent #ffedb7 #ffedb7;
-
-                transform-origin: 0 0;
-                transform: rotate(135deg);
-              }
-            }
-          }
-
-          &:last-child {
-            margin-right: 0;
+            top: -1px;
           }
         }
       }
-      p {
-        font-size: 16px;
-        font-weight: normal;
-        color: #050505;
-        max-width: 60%;
-        margin: 2rem 0;
-      }
-      .a-right {
-        text-align: right;
-        max-width: 60%;
+    }
 
-        i {
-          position: relative;
-          top: -1px;
-        }
-      }
-      .pull-bottom-right {
-        position: absolute;
-        right: 64px;
-        bottom: 0;
-      }
+    .pull-bottom-right {
+      position: absolute;
+      right: 64px;
+      top: 50%;
+      transform: translateY(-50%);
     }
   }
   .main-cont {
@@ -897,11 +935,11 @@ export default {
   .see-full {
     font-size: 16px;
     font-weight: 800;
-    color: #f51355 !important;
+    color: white !important;
     cursor: pointer;
 
     i {
-      color: #f51355 !important;
+      color: white !important;
     }
     &:visited {
       color: #f51355 !important;
