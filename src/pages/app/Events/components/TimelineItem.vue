@@ -8,7 +8,9 @@
   <div class="timeline-item" v-else>
     <img
       class="time-line-icon"
-      :src="`${$iconURL}Timeline-New/${editingContent.icon.toLowerCase()}-circle.svg`"
+      width="60"
+      height="60"
+      :src="`/static/icons/${editingContent.icon.toLowerCase()}-circle.svg`"
       v-if="editingContent.icon"
     />
     <md-card
@@ -114,7 +116,7 @@
         >
       </md-card-actions>
     </md-card>
-    <md-card class="block-form" :class="cardStyle" :style="getBorderStyle(editingContent.color)">
+    <md-card class="block-form" :style="getBorderStyle(editingContent.color)" v-else>
       <vue-element-loading :active.sync="editingContent.isItemLoading" spinner="ring" color="#FF547C" />
       <md-card-content style="min-height: 80px">
         <div class="timeline-actions" v-if="editMode">
@@ -340,12 +342,10 @@ export default {
     margin: 20px 20px 20px 30px;
     margin-left: 20px;
     padding: 20px 20px;
-    &.outlined {
-      background: transparent !important;
-    }
   }
   .time-line-icon {
     width: 60px;
+    height: 60px;
     margin-top: 15px;
   }
   .divider {

@@ -99,6 +99,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .timeline-items-list {
+  margin: 40px;
   .timeline-group-wrapper {
     position: relative;
     &:not(:last-child)::before {
