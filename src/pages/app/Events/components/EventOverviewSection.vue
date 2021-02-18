@@ -5,12 +5,6 @@
       <div class="mr-30" style="width: 30%">
         <h3 class="title">{{ section.title }}</h3>
 
-        <p class="content" v-if="section.started_at && section.started_at !== section.ended_at">
-          {{ section.started_at | formatDate }} ~ {{ section.ended_at | formatDate }}
-        </p>
-        <p class="content" v-if="section.started_at && section.started_at === section.ended_at">
-          {{ section.started_at | formatDate }}
-        </p>
         <p class="content" v-if="!isEdit && section.location">{{ section.location }}</p>
         <p v-if="!isEdit && section.numberOfParticipants" class="content">{{ section.numberOfParticipants }} Guests</p>
         <p v-if="!isEdit && section.eventType" class="content">{{ section.eventType }}</p>
@@ -62,24 +56,6 @@
         <img v-if="this.section.occasion" :src="getIconUrl('occasion')" />
         {{ section.occasion }}
       </div>
-
-      <div v-if="isEdit && section.hasOwnProperty('started_at') && section.hasOwnProperty('ended_at')" class="value">
-        <div class="picker-panel">
-          <functional-calendar
-            ref="Calendar"
-            :is-date-range="true"
-            :change-month-function="true"
-            :change-year-function="true"
-            :markedDateRange="markedDates"
-            @dayClicked="changeDate($event)"
-            :date-format="'yyyy-mm-dd'"
-            v-model="dateData"
-          ></functional-calendar>
-
-          <md-checkbox v-model="section.more_one_day" value="more_one_day"> More than one day event </md-checkbox>
-        </div>
-      </div>
-
       <div v-if="isEdit && section.hasOwnProperty('inOutDoor')" class="value align-self-center">
         <md-checkbox
           v-for="(item, index) in inOutDoorTypes"
@@ -179,7 +155,7 @@ export default {
         currentDate: null,
         dateRange: {
           start: {
-            date: moment(this.section.started_at).format("YYYY-MM-DD"),
+            date: moment(this.section.started_at).subtract(1, 'days').format("YYYY-MM-DD"),
             // date: null,
             dateTime: false,
             hour: "00",
@@ -319,57 +295,11 @@ export default {
       // console.log('holidayChange', e);
       this.$emit("change", { holiday: e });
     },
-    changeDate(e) {
-      console.log("changeDate", e, this.dateData);
-      this.dateClick = !this.dateClick;
-
-      if (this.dateClick) {
-        this.started_at = e.date;
-        this.markedDates = { start: null, end: null };
-        console.log("changeDate", this.markedDates);
-        this.$forceUpdate();
-      }
-
-      if (!this.dateClick) {
-        this.ended_at = e.date;
-        const extendedMoment = extendMoment(moment);
-        const start = new Date(this.started_at);
-        const end = new Date(this.ended_at);
-        const range = extendedMoment.range(moment(start), moment(end));
-
-        const dateList = Array.from(range.by("day")).map((m) => m.format("YYYY-MM-DD"));
-        const currentTimelineDates = this.section.timelineDates;
-        const newTimelineDates = currentTimelineDates.map((item, index) => {
-          if (dateList[index]) item.date = dateList[index];
-          return item;
-        });
-        console.log("newTimelineDates", newTimelineDates);
-        // let timelineDates = [];
-        // dateList.forEach((d) => {
-        //   timelineDates.push({
-        //     date: d,
-        //     templates: timelineTempates,
-        //     status: "editing",
-        //   });
-        // });
-
-        this.$emit("change", {
-          dateData: {
-            started_at: this.started_at,
-            ended_at: this.ended_at,
-          },
-          timeline: {
-            dateList: dateList,
-            mode: "template", // default
-            status: "editing",
-          },
-          timelineDates: newTimelineDates,
-        });
-      }
-    },
     init: async function () {
+
+      this.holidays = JSON.parse(localStorage.getItem('two62-app.holidays'));
       // get holidays from server
-      if (!this.holidays.length && this.section.key === "event_type") {
+      if (this.section.key === "event_type" && (!this.holidays || !this.holidays.length)) {
         let res = await this.$http.get(`${process.env.SERVER_URL}/1/holidays`);
 
         res.data.map((rel) => {
@@ -379,57 +309,13 @@ export default {
           });
           this.holidays.push({ name: rel.name, options });
         });
+        localStorage.setItem('two62-app.holidays', this.holidays)
       }
-
-      if (this.section.started_at && this.section.ended_at) {
-        this.markedDates = {
-          start: moment(this.section.started_at).format("YYYY-MM-DD"),
-          end: moment(this.section.ended_at).format("YYYY-MM-DD"),
-        };
-      }
-      console.log("init", this.section);
 
       this.eventTypes = this.eventTypesList.map((it) => {
         return { name: it.name, value: it.name, icon: `${this.$iconURL}Onboarding/${it.key}.svg` };
       });
-    },
-    renderCalendar() {
-      console.log("renderCalendar");
-      let started_date = moment(this.section.started_at).date();
-      let ended_date = moment(this.section.ended_at).date();
-      let year = moment(this.section.started_at).year();
-      let month = moment(this.section.started_at).month();
-
-      $(".vfc-day").each(function (index, day) {
-        let el = $(day).find("span.vfc-span-day");
-
-        if (started_date === ended_date) {
-          el.addClass("vfc-end-marked");
-        } else if (el.text() == started_date) {
-          el.addClass("vfc-start-marked");
-          if (!$(day).find("div.vfc-base-start").length) $(day).prepend("<div class='vfc-base-start'></div>");
-        } else if (el.text() == ended_date) {
-          if (el.text() == started_date) {
-            el.addClass("vfc-start-marked");
-            if (!$(day).find("div.vfc-base-start").length) $(day).prepend("<div class='vfc-base-start'></div>");
-          } else if (el.text() == ended_date) {
-            el.addClass("vfc-end-marked");
-            if (!$(day).find("div.vfc-base-end").length) $(day).prepend("<div class='vfc-base-end'></div>");
-          } else {
-            el.removeClass("vfc-start-marked");
-            el.removeClass("vfc-end-marked");
-            $(day).find("div.vfc-base-start").remove();
-            $(day).find("div.vfc-base-end").remove();
-          }
-
-          if (el.text() <= ended_date && el.text() >= started_date) {
-            el.addClass("vfc-marked");
-          } else {
-            el.removeClass("vfc-marked");
-          }
-        }
-      });
-    },
+    }
   },
   filters: {
     formatDate: function (date) {
@@ -447,9 +333,6 @@ export default {
   },
   mounted() {
     this.init();
-  },
-  updated() {
-    this.renderCalendar();
   },
   watch: {
     section: {
