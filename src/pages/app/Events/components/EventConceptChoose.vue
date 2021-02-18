@@ -498,7 +498,6 @@ export default {
             let suggestions = JSON.parse(localStorage.getItem('concept.suggestions'));
             if(!suggestions || !suggestions.length) {
                 let res = await this.$http.get(`${process.env.SERVER_URL}/1/concepts/${this.eventData.id}/suggestions`)
-                console.log('res', res);
                 suggestions = res.data;
                 localStorage.setItem('concept.suggestions', JSON.stringify(suggestions));
             }
@@ -558,15 +557,13 @@ export default {
                 } else {
                     weight += "0";
                 }
-                console.log('weight:' + weight + '  title' + concept.name)
                 this.$set(concept, 'weight', weight);
             })
 
             suggestions.sort((a, b) => a.weight < b.weight ? 1 : a.weight > b.weight ? -1 : 0);
 
-            console.log('filtered', suggestions);
+
             this.conceptOptions = suggestions.slice(0, 3);
-            console.log('suggestion', this.conceptOptions);
             this.showConceptList = true;
             this.loadingConceptOptions = false;
         } catch (e) {

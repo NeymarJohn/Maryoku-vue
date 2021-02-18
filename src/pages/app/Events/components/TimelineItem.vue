@@ -6,14 +6,13 @@
     @applyTemplate="applyToTemplate"
   ></timeline-template-item>
   <div class="timeline-item" v-else>
-    <div class="time-line-icon" :style="`background-color:${editingContent.color}`">
-      <img
-        width="60"
-        height="60"
-        :src="`/static/icons/${editingContent.icon.toLowerCase()}-circle.png`"
-        v-if="editingContent.icon"
-      />
-    </div>
+    <img
+      class="time-line-icon"
+      width="60"
+      height="60"
+      :src="`/static/icons/${editingContent.icon.toLowerCase()}-circle.svg`"
+      v-if="editingContent.icon"
+    />
     <md-card
       class="block-form"
       v-if="editingContent.mode === 'edit'"
@@ -345,10 +344,9 @@ export default {
     padding: 20px 20px;
   }
   .time-line-icon {
-    min-width: 60px;
+    width: 60px;
     height: 60px;
     margin-top: 15px;
-    border-radius: 50%;
   }
   .divider {
     width: 20px;
