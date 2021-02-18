@@ -2,9 +2,9 @@
   <div class="header-actions">
     <ul>
       <li v-if="!hideDownload">
-        <md-button class="md-simple md-just-icon" id="download-button"
-          ><img :src="`${$iconURL}common/download-dark.svg`"
-        /></md-button>
+        <md-button class="md-simple md-just-icon" id="download-button" @click="startDownload">
+          <img :src="`${$iconURL}common/download-dark.svg`" />
+        </md-button>
       </li>
       <li>
         <md-button class="md-simple md-just-icon" @click="toggleSharingMode" id="invite-button">
@@ -61,6 +61,9 @@ export default {
         this.$route.path
       }`;
       return this.shareLink;
+    },
+    startDownload() {
+      this.$root.$emit("pageExport", { type: "pdf" });
     },
   },
   computed: {

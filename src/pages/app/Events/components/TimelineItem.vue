@@ -114,11 +114,7 @@
         >
       </md-card-actions>
     </md-card>
-    <md-card
-      class="block-form"
-      v-if="!editingContent.mode || editingContent.mode === 'saved'"
-      :style="`border-left : 5px solid ` + editingContent.color"
-    >
+    <md-card class="block-form" :class="cardStyle" :style="getBorderStyle(editingContent.color)">
       <vue-element-loading :active.sync="editingContent.isItemLoading" spinner="ring" color="#FF547C" />
       <md-card-content style="min-height: 80px">
         <div class="timeline-actions" v-if="editMode">
@@ -201,6 +197,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    cardStyle: {
+      type: String,
+      default: "white",
+    },
   },
   data() {
     return {
@@ -226,6 +226,10 @@ export default {
     },
   },
   methods: {
+    getBorderStyle(color) {
+      if (this.cardStyle === "outlined") return `border : 2px dashed ${color}`;
+      else return `border-left : 5px solid ${color}`;
+    },
     saveTimelineItem() {
       this.$set(this.editingContent, "mode", "saved");
       new EventTimelineItem(this.editingContent)
@@ -336,6 +340,9 @@ export default {
     margin: 20px 20px 20px 30px;
     margin-left: 20px;
     padding: 20px 20px;
+    &.outlined {
+      background: transparent !important;
+    }
   }
   .time-line-icon {
     width: 60px;
