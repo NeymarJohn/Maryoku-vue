@@ -462,7 +462,7 @@ export default {
   background-color: #f5f5f5;
   font-family: "Manrope-Regular", sans-serif;
   padding: 0 60px;
-  margin-top: 50px;
+  margin-top: 20px;
   color: #050505;
 
   .change-cover-btn {
@@ -697,7 +697,7 @@ export default {
 
   .pricing-cont {
     margin: 0 -60px;
-    padding: 60px 0;
+    padding: 30px 0;
 
     .title {
       display: flex;

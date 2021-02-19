@@ -30,8 +30,7 @@
         <div class="addtional-requests">
           <div class="font-bold">Addtional Requests</div>
           <div>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-            dolore magna aliquyam erat, sed diam
+            {{ proposalRequest.requirement.note }}
           </div>
         </div>
         <md-button class="md-outlined md-red md-simple maryoku-btn width-100">
@@ -54,6 +53,16 @@ export default {
         return [];
       }
     },
+    proposalRequest() {
+      return this.$store.state.vendorProposal.proposalRequest;
+    },
+    additionalNote() {
+      try {
+        return this.$store.state.vendorProposal.proposalRequest.requirement.note;
+      } catch (e) {
+        return "";
+      }
+    },
   },
 };
 </script>
@@ -73,6 +82,7 @@ export default {
       .requirement-item {
         margin-top: 20px;
         text-transform: capitalize;
+        padding-right: 15px;
       }
     }
     .checkmark {

@@ -1,5 +1,5 @@
 <template>
-  <div class="white-card mt-40 additional-requirements" v-if="specialRequirements.length > 0">
+  <div class="white-card mt-20 additional-requirements" v-if="specialRequirements.length > 0">
     <div class="p-40">
       <div>
         <img :src="`${$iconURL}Submit+Proposal/Group+8840.svg`" />

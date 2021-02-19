@@ -2,7 +2,7 @@
   <div class="for-proposals-layout-wrapper">
     <section class="header-wrapper">
       <div class="background-image">
-        <div class="d-flex concept-image-wrapper">
+        <div class="d-flex concept-image-wrapper" v-if="event.concept">
           <div
             v-for="(color, index) in event.concept.colors"
             :key="index"

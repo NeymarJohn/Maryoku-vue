@@ -206,7 +206,7 @@ export default {
 <style lang="scss" scoped>
 .propsal-bid-content {
   .white-card {
-    margin-top: 50px;
+    margin-top: 20px;
   }
   .legal-upload {
     margin-top: 60px;
