@@ -110,6 +110,9 @@ export default {
     toggleColorPane: function () {
       document.getElementsByClassName("vc-chrome");
       this.showColorPane = !this.showColorPane;
+      if (!this.showColorPane) {
+        this.$emit("closed");
+      }
     },
   },
   created() {
@@ -169,8 +172,8 @@ export default {
     position: absolute;
     left: 50%;
     top: 50%;
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     transform: translate(-50%, -50%);
     cursor: pointer;
   }

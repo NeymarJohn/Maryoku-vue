@@ -318,7 +318,6 @@ export default {
   },
   computed: {
     event() {
-      console.log(this.$store.state.event.eventData);
       return this.$store.state.event.eventData;
     },
     user() {

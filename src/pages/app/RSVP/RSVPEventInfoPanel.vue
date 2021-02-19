@@ -3,10 +3,11 @@
     <div class="event-info-item">
       <div class="event-info-item-title font-size-22 font-bold-extra">
         <color-button
-          v-model="selectedIconColor"
+          v-model="iconColors.timeColor"
           class="event-info-item-icon"
           :size="42"
           :icon="`${$iconURL}RSVP/Path+251.svg`"
+          @closed="updateEvent"
         >
         </color-button>
         <span :class="{ underline: !editable }">WHEN?</span>
@@ -29,7 +30,7 @@
     <div class="event-info-item" v-if="!isVirtualEvent">
       <div class="event-info-item-title font-size-22 font-bold-extra">
         <color-button
-          v-model="selectedIconColor"
+          v-model="iconColors.locationColor"
           class="event-info-item-icon"
           :size="42"
           :icon="`${$iconURL}Event%20Page/location-dark.svg`"
@@ -44,10 +45,11 @@
     <div class="event-info-item" v-else>
       <div class="event-info-item-title font-size-22 font-bold-extra">
         <color-button
-          v-model="selectedIconColor"
+          v-model="iconColors.locationColor"
           class="event-info-item-icon"
           :size="42"
           :icon="`${$iconURL}Event%20Page/location-dark.svg`"
+          @closed="updateEvent"
         >
         </color-button>
         <span :class="{ underline: !editable }">WHERE?</span>
@@ -57,7 +59,7 @@
     <div class="event-info-item" v-if="!isVirtualEvent">
       <div class="event-info-item-title font-size-22 font-bold-extra">
         <color-button
-          v-model="selectedIconColor"
+          v-model="iconColors.soloColor"
           class="event-info-item-icon"
           :size="42"
           :icon="`${$iconURL}RSVP/Path+1383.svg`"
@@ -81,7 +83,7 @@
     <div class="event-info-item">
       <div class="event-info-item-title font-size-22 font-bold-extra">
         <color-button
-          v-model="selectedIconColor"
+          v-model="iconColors.arrivalColor"
           class="event-info-item-icon"
           :size="42"
           :icon="`${$iconURL}RSVP/Group+1279.svg`"
@@ -145,7 +147,7 @@ export default {
       editingArrival: false,
       editingTimezone: false,
       timezoneList: ["EST", "PST", "CST", "MST", "EDT", "HST"],
-      selectedIconColor: "",
+      iconColors: {},
     };
   },
   created() {
@@ -160,9 +162,23 @@ export default {
     } else {
       this.timezone = this.event.timezone;
     }
+    if (this.event.additionalData && this.event.additionalData.iconColors) {
+      this.iconColors = this.event.additionalData.iconColors;
+    } else {
+      this.$set(this.iconColors, "timeColor", this.event.concept.colors[0]);
+      this.$set(this.iconColors, "locationColor", this.event.concept.colors[0]);
+      this.$set(this.iconColors, "soloColor", this.event.concept.colors[0]);
+      this.$set(this.iconColors, "arrivalColor", this.event.concept.colors[0]);
+    }
+    console.log("iconColors", this.iconColors);
   },
   methods: {
     updateEvent() {
+      let additionalData = this.event.additionalData;
+      if (!additionalData) {
+        additionalData = {};
+      }
+      additionalData.iconColors = this.iconColors;
       this.$store.dispatch(
         "event/saveEventAction",
         new CalendarEvent({
@@ -171,6 +187,7 @@ export default {
           isPluseOne: this.isPluseOne,
           arrival: this.eventArrival,
           timezone: this.timezone,
+          additionalData,
         }),
       );
       this.editingPlusOne = false;
@@ -247,6 +264,8 @@ export default {
     }
     &-title {
       min-width: 250px;
+      display: flex;
+      align-items: center;
       // padding: 10px 24px;
       span.underline {
         border-bottom: solid 2px #ff7600;
@@ -295,6 +314,7 @@ export default {
       }
       &-title {
         min-width: 110px;
+
         span.underline {
           border-bottom: solid 2px #ff7600;
           vertical-align: middle;
