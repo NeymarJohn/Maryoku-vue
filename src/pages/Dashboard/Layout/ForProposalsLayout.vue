@@ -5,19 +5,19 @@
         <div class="d-flex concept-image-wrapper" v-if="event.concept">
           <div
             v-for="(color, index) in event.concept.colors"
-            :key="index"
+            :key="`header-image-${index}-1`"
             class="concept-color"
             :style="`background: ${color.color || '#EDEDED'}`"
           >
-            <img class="concept-image" :src="`${event.concept.images[index].url}`" />
+            <img class="concept-image" :src="`${event.concept.images[index].thumb_url}`" />
           </div>
           <div
             v-for="(color, index) in event.concept.colors"
-            :key="index"
+            :key="`header-image-${index}-2`"
             class="concept-color"
             :style="`background: ${color.color || '#EDEDED'}`"
           >
-            <img class="concept-image" :src="`${event.concept.images[index].url}`" />
+            <img class="concept-image" :src="`${event.concept.images[index].thumb_url}`" />
           </div>
         </div>
       </div>

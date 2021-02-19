@@ -15,9 +15,7 @@
           <h3 v-else>No Event Data</h3>
 
           <p v-if="proposalRequest">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-            ea commodo consequat.
+            {{ proposalRequest.eventData.concept ? proposalRequest.eventData.concept.description : "" }}
             <br />
             <br />
           </p>
@@ -119,7 +117,7 @@
         <p>
           You're the
           {{ proposalRequest ? proposalRequest.bidderRank : "1" | numeral("Oo") }}
-          catering & venue bidder
+          <span class="text-transform-lowercase">{{ vendor.eventCategory.title }} </span>bidder
         </p>
 
         <button class="yes" @click="goToForm()">Submit Proposal</button>
@@ -630,7 +628,7 @@ export default {
           date: "",
         };
       }
-      let serviceTimeString = "For Whole Event";
+      let serviceTimeString = this.vendor.eventCategory.key === "venuerental" ? "For Whole Event" : "Not planned yet";
       let serviceDate = "";
       this.timelineDates.forEach((td) => {
         td.timelineItems.forEach((timelineItem) => {

@@ -10,25 +10,22 @@
   </div>
 </template>
 <script>
-import EventDetailsTimeline from "./EventDetailsTimeline";
-import EventConceptChoose from "./components/EventConceptChoose";
-import BookingEvent from "./components/BookingEvent";
-import BookingEventRequirement from "./components/BookingEventRequirement.vue";
-import EventBudgetRequirement from "./components/EventBudgetRequirement.vue";
-import EventDetailsOverview from "./components/EventDetailsOverview";
-import EventCampaign from "@/pages/app/Campaign/CampaignMainLayout.vue";
+const EventDetailsTimeline = () => import("./EventDetailsTimeline");
+const EventConceptChoose = () => import("./components/EventConceptChoose");
+const BookingEvent = () => import("./components/BookingEvent");
+const EventBudgetRequirement = () => import("./components/EventBudgetRequirement.vue");
+const EventDetailsOverview = () => import("./components/EventDetailsOverview");
+const EventCampaign = () => import("@/pages/app/Campaign/CampaignMainLayout.vue");
 import ProgressSidebar from "./components/progressSidebarForEvent";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
-import EventComponent from "@/models/EventComponent";
 
 export default {
   components: {
     EventDetailsTimeline,
     EventConceptChoose,
     BookingEvent,
-    BookingEventRequirement,
     ProgressSidebar,
     EventDetailsOverview,
     EventBudgetRequirement,
@@ -72,7 +69,7 @@ export default {
         id: "concept-item",
       };
       const budget = {
-        title: "Budget Wizard",
+        title: this.event.budgetProgress <= 50 ? "Budget Wizard" : "Balance Wizard",
         status: "not-complete",
         route: this.event.budgetProgress == 100 ? "edit/budget" : "booking/budget",
         icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
@@ -103,21 +100,20 @@ export default {
       // if (this.event.eventType.hasConcept) {
       elements.push(concept);
       // }
-      elements.push(budget);
       elements.push(timeline);
       elements.push(campaign);
+      elements.push(budget);
 
       // show when you approve budget
       if (this.event.budgetProgress == 100) {
         this.event.components.sort((a, b) => a.order - b.order);
         this.event.components.forEach((item) => {
           if (item.componentId !== "unexpected") {
-            // let icon = item.componentId === 'giveaways' ? 'swags' : item.componentId;
             elements.push({
               title: item.bookTitle,
               status: "not-complete",
               route: "booking/" + item.id,
-              icon: `${this.$iconURL}Budget+Elements/${item.icon}`,
+              icon: `${this.$iconURL}Budget+Elements/${item.componentId}.svg`,
               progress: item.progress ? item.progress : 0,
               id: item.id,
             });

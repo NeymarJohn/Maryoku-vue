@@ -582,13 +582,13 @@ export const businessCategories = [
                 name: 'cuisine specialty',
                 type: Array,
                 value: [],
-                available: ['italian', 'french', 'spanish', 'german', 'belgian', 'american', 'Colombian', 'chinese', 'japanese', 'mexican', 'indian', 'farm-to-table', 'Peruvian', 'Argentine', 'Thai', 'Cuban', 'Greek']
+                available: ['italian', 'french', 'spanish', 'german', 'belgian', 'american', 'south american', 'chinese', 'japanese', 'mexican', 'indian', 'farm-to-table']
               },
               {
                 name: 'food specialties',
                 type: Array,
                 value: [],
-                available: ['raw seafood bar', 'sushi station', 'special desserts', 'food truck', 'ice cream truck', 'salad stations', 'crudite stations', 'barbeque', 'brickoven station']
+                available: ['raw seafood bar', 'sushi station', 'ethnics food', 'special desserts', 'food truck', 'ice cream truck', 'salad stations', 'crudite stations', 'barbeque', 'brickoven station']
               },
               {
                 name: 'food preparation location',
@@ -672,12 +672,6 @@ export const businessCategories = [
               },
               {
                 name: 'dinner',
-                type: Boolean,
-                value: false,
-                xIncluded: true,
-              },
-              {
-                name: 'snacks',
                 type: Boolean,
                 value: false,
                 xIncluded: true,

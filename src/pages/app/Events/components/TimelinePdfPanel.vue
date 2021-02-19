@@ -3,8 +3,17 @@
     <div class="timeline-items-header">
       <img src="/static/icons/timeline-title.png" /><span class="font-size-24">Timeline</span>
     </div>
-    <div class="timeline-items-list__item" v-for="(scheduleDate, dateIndex) in timelineDates" :key="scheduleDate.date">
-      <div class="item-header mb-20">
+    <section
+      class="timeline-items-list__item"
+      v-for="(scheduleDate, dateIndex) in timelineDates"
+      :key="scheduleDate.date"
+    >
+      <div
+        v-if="dateIndex > 0 && timelineDates[dateIndex - 1].timelineItems.length > 3"
+        class="html2pdf__page-break"
+      ></div>
+
+      <div class="item-header mb-20 mt-20">
         <div class="header-line"></div>
         <div class="time-line-edit d-flex justify-content-center align-center">
           <label style="white-space: nowrap; padding-right: 10px">Day {{ numberToWord(dateIndex + 1) }}</label>
@@ -14,7 +23,13 @@
         </div>
         <div class="header-line"></div>
       </div>
-      <timeline-item
+
+      <rsvp-timeline-item
+        v-for="(timeline, index) in scheduleDate.timelineItems"
+        :key="index"
+        :timeline="timeline"
+      ></rsvp-timeline-item>
+      <!-- <timeline-item
         v-for="(timelineItem, index) in scheduleDate.timelineItems"
         :key="`timelineItem-${index}`"
         :item="timelineItem"
@@ -24,8 +39,8 @@
         @remove="removeItem"
         :editMode="false"
         cardStyle="outlined"
-      ></timeline-item>
-    </div>
+      ></timeline-item> -->
+    </section>
   </div>
 </template>
 <script>
@@ -36,10 +51,7 @@ import TimelineItem from "./TimelineItem";
 import TimelineEmpty from "./TimelineEmpty";
 import TimelineTemplateContainer from "./TimelineTemplateContainer";
 import TimelineGapModal from "../Modals/TimelineGapModal";
-import EventTimelineDate from "@/models/EventTimelineDate";
-import CalendarEvent from "@/models/CalendarEvent";
-import moment from "moment";
-import { timelineTempates } from "@/constants/event.js";
+import RsvpTimelineItem from "../../RSVP/RSVPTimelineItem.vue";
 export default {
   name: "event-details-timeline",
   components: {
@@ -49,6 +61,7 @@ export default {
     TimelineEmpty,
     TimelineGapModal,
     TimelineTemplateContainer,
+    RsvpTimelineItem,
   },
   created() {
     this.$store.dispatch("event/getTimelineDates", this.event.id);
@@ -122,7 +135,6 @@ export default {
       left: 30px;
     }
   }
-  margin-top: 1em;
   height: 100%;
   &__item {
     padding-bottom: 1em;
