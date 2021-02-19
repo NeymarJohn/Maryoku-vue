@@ -94,28 +94,6 @@
         </template>
       </template>
     </planner-event-footer>
-    <vue-html2pdf
-      :show-layout="false"
-      :float-layout="true"
-      :enable-download="true"
-      :preview-modal="false"
-      :paginate-elements-by-height="1400"
-      :filename="`timeline-${eventData.id}`"
-      :pdf-quality="2"
-      :manual-pagination="false"
-      pdf-format="a4"
-      pdf-orientation="portrait"
-      pdf-content-width="700px"
-      @progress="onProgress($event)"
-      @hasStartedGeneration="hasStartedGeneration()"
-      @hasGenerated="hasGenerated($event)"
-      ref="html2Pdf"
-    >
-      <section slot="pdf-content">
-        <!-- PDF Content Here -->
-        <timeline-pdf-panel></timeline-pdf-panel>
-      </section>
-    </vue-html2pdf>
   </div>
 </template>
 <script>
@@ -142,12 +120,12 @@ import draggable from "vuedraggable";
 import { Drag, Drop } from "vue-drag-drop";
 import _ from "underscore";
 
-const VueHtml2pdf = () => import("vue-html2pdf");
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./components/CommentEditorPanel";
 import TimelineEditPanel from "./components/TimelineEditPanel";
-import TimelinePdfPanel from "./components/TimelinePdfPanel";
 import ProgressSidebar from "./components/progressSidebar";
 import PlannerEventFooter from "@/components/Planner/FooterPanel";
 import { timelineBlockItems } from "@/constants/event";
@@ -177,8 +155,6 @@ export default {
     TimelineEmpty,
     TimelineGapModal,
     TimelineEditPanel,
-    VueHtml2pdf,
-    TimelinePdfPanel,
   },
   props: {
     // event: Object,
@@ -220,11 +196,6 @@ export default {
   }),
   methods: {
     ...mapMutations("event", ["setEventData"]),
-
-    //pdf handling event
-    onProgress() {},
-    hasStartedGerneration() {},
-    hasGenerated() {},
     download() {
       this.$router.push({
         path: `/events/` + this.eventData.id + `/edit/timeline/export`,
@@ -802,9 +773,6 @@ export default {
       }
       this.isLoading = false;
     }
-    this.$root.$on("pageExport", () => {
-      this.$refs.html2Pdf.generatePdf();
-    });
   },
   mounted() {
     this.isLoading = true;

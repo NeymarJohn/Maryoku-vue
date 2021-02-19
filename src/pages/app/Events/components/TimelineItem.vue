@@ -6,14 +6,11 @@
     @applyTemplate="applyToTemplate"
   ></timeline-template-item>
   <div class="timeline-item" v-else>
-    <div class="time-line-icon" :style="`background-color:${editingContent.color}`">
-      <img
-        width="60"
-        height="60"
-        :src="`/static/icons/${editingContent.icon.toLowerCase()}-circle.png`"
-        v-if="editingContent.icon"
-      />
-    </div>
+    <img
+      class="time-line-icon"
+      :src="`${$iconURL}Timeline-New/${editingContent.icon.toLowerCase()}-circle.svg`"
+      v-if="editingContent.icon"
+    />
     <md-card
       class="block-form"
       v-if="editingContent.mode === 'edit'"
@@ -117,7 +114,11 @@
         >
       </md-card-actions>
     </md-card>
-    <md-card class="block-form" :style="getBorderStyle(editingContent.color)" v-else>
+    <md-card
+      class="block-form"
+      v-if="!editingContent.mode || editingContent.mode === 'saved'"
+      :style="`border-left : 5px solid ` + editingContent.color"
+    >
       <vue-element-loading :active.sync="editingContent.isItemLoading" spinner="ring" color="#FF547C" />
       <md-card-content style="min-height: 80px">
         <div class="timeline-actions" v-if="editMode">
@@ -200,10 +201,6 @@ export default {
       type: Object,
       default: () => {},
     },
-    cardStyle: {
-      type: String,
-      default: "white",
-    },
   },
   data() {
     return {
@@ -229,10 +226,6 @@ export default {
     },
   },
   methods: {
-    getBorderStyle(color) {
-      if (this.cardStyle === "outlined") return `border : 2px dashed ${color}`;
-      else return `border-left : 5px solid ${color}`;
-    },
     saveTimelineItem() {
       this.$set(this.editingContent, "mode", "saved");
       new EventTimelineItem(this.editingContent)
@@ -345,10 +338,8 @@ export default {
     padding: 20px 20px;
   }
   .time-line-icon {
-    min-width: 60px;
-    height: 60px;
+    width: 60px;
     margin-top: 15px;
-    border-radius: 50%;
   }
   .divider {
     width: 20px;

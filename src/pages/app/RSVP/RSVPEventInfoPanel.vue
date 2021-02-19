@@ -2,10 +2,13 @@
   <div class="rsvp-event-info">
     <div class="event-info-item">
       <div class="event-info-item-title font-size-22 font-bold-extra">
-        <div class="event-info-item-icon">
-          <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
-          <img :src="`${$iconURL}RSVP/Path+251.svg`" />
-        </div>
+        <color-button
+          v-model="selectedIconColor"
+          class="event-info-item-icon"
+          :size="42"
+          :icon="`${$iconURL}RSVP/Path+251.svg`"
+        >
+        </color-button>
         <span :class="{ underline: !editable }">WHEN?</span>
       </div>
       <div class="event-info-item-content">
@@ -25,10 +28,13 @@
     </div>
     <div class="event-info-item" v-if="!isVirtualEvent">
       <div class="event-info-item-title font-size-22 font-bold-extra">
-        <div class="event-info-item-icon">
-          <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
-          <img :src="`${$iconURL}Event%20Page/location-dark.svg`" />
-        </div>
+        <color-button
+          v-model="selectedIconColor"
+          class="event-info-item-icon"
+          :size="42"
+          :icon="`${$iconURL}Event%20Page/location-dark.svg`"
+        >
+        </color-button>
         <span :class="{ underline: !editable }">WHERE?</span>
       </div>
       <div class="event-info-item-content">
@@ -37,20 +43,26 @@
     </div>
     <div class="event-info-item" v-else>
       <div class="event-info-item-title font-size-22 font-bold-extra">
-        <div class="event-info-item-icon">
-          <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
-          <img :src="`${$iconURL}Event%20Page/location-dark.svg`" />
-        </div>
+        <color-button
+          v-model="selectedIconColor"
+          class="event-info-item-icon"
+          :size="42"
+          :icon="`${$iconURL}Event%20Page/location-dark.svg`"
+        >
+        </color-button>
         <span :class="{ underline: !editable }">WHERE?</span>
       </div>
       <div class="event-info-item-content"><span>Zoom</span></div>
     </div>
     <div class="event-info-item" v-if="!isVirtualEvent">
       <div class="event-info-item-title font-size-22 font-bold-extra">
-        <div class="event-info-item-icon">
-          <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
-          <img :src="`${$iconURL}RSVP/Path+1383.svg`" />
-        </div>
+        <color-button
+          v-model="selectedIconColor"
+          class="event-info-item-icon"
+          :size="42"
+          :icon="`${$iconURL}RSVP/Path+1383.svg`"
+        >
+        </color-button>
         <span :class="{ underline: !editable }">SOLO OR PLUS 1?</span>
       </div>
       <div class="event-info-item-content d-flex align-center" v-if="!editingPlusOne">
@@ -68,10 +80,13 @@
     </div>
     <div class="event-info-item">
       <div class="event-info-item-title font-size-22 font-bold-extra">
-        <div class="event-info-item-icon">
-          <div class="event-info-item-icon-background" :style="`background-color:${backgroundColor}`"></div>
-          <img :src="`${$iconURL}RSVP/Group+1279.svg`" />
-        </div>
+        <color-button
+          v-model="selectedIconColor"
+          class="event-info-item-icon"
+          :size="42"
+          :icon="`${$iconURL}RSVP/Group+1279.svg`"
+        >
+        </color-button>
         <span :class="{ underline: !editable }">ARRIVAL?</span>
       </div>
 
@@ -97,9 +112,11 @@ import Calendar from "@/models/Calendar";
 import { firstLetters } from "@/utils/helperFunction";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
+import ColorButton from "@/components/ColorButton";
 export default {
   components: {
     vSelect,
+    ColorButton,
   },
   props: {
     event: {
@@ -128,6 +145,7 @@ export default {
       editingArrival: false,
       editingTimezone: false,
       timezoneList: ["EST", "PST", "CST", "MST", "EDT", "HST"],
+      selectedIconColor: "",
     };
   },
   created() {
@@ -204,13 +222,7 @@ export default {
       min-width: 120px;
     }
     &-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 21px;
-      padding: 8px;
       position: relative;
-      overflow: hidden;
-      vertical-align: middle;
       display: inline-block;
       margin-right: 20px;
       &-background {
@@ -219,14 +231,18 @@ export default {
         position: absolute;
         left: 0px;
         top: 0px;
+        cursor: pointer;
         // opacity: 0.32;÷
       }
       img {
-        width: 26px;
+        width: 42px;
         height: 42px;
         position: absolute;
-        left: 8px;
+        left: 0px;
         top: 0px;
+        padding: 8px;
+        cursor: pointer;
+        background-color: #ff7600;
       }
     }
     &-title {

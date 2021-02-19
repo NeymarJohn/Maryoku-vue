@@ -6,7 +6,7 @@
           Get everyone to RSVP
         </div>
         <div class="cover-preview">
-          <img :src="campaignData.coverImage" class="mr-10" />
+          <img :src="campaignData.coverImage || campaignData.defaultCoverImage" class="mr-10" />
           <label for="cover">
             <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="chooseFiles">
               <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
@@ -288,12 +288,8 @@ export default {
         });
       }
       let coverImage = this.editingContent.coverImage;
-      console.log(coverImage);
-      if (coverImage.indexOf("RSVP2-middle") >= 0) {
-        // if coverImage is default
-        coverImage = this.event.concept
-          ? this.event.concept.images[0].url
-          : `${this.$storageURL}Campaign Images/RSVP2-middle.png`;
+      if (!coverImage && this.event.concept) {
+        coverImage = this.event.concept.images[0].url;
         this.$store.commit("campaign/setAttribute", {
           name: "RSVP",
           key: "coverImage",

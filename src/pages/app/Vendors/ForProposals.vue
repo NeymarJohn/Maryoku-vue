@@ -69,7 +69,6 @@
         </div>
       </div>
       <div class="md-layout-item md-size-30 pos-relative">
-        <proposal-requirements-panel class="requirements-panel"></proposal-requirements-panel>
         <proposal-budget-summary
           :bundleDiscount="true"
           :warning="true"
@@ -92,7 +91,6 @@ import ProposalRequest from "@/models/ProposalRequest";
 //COMPONENTS
 import Icon from "@/components/Icon/Icon.vue";
 import ProposalBudgetSummary from "./components/ProposalBudgetSummary.vue";
-import ProposalRequirementsPanel from "./components/ProposalRequirementsPanel";
 import ProposalSteps from "./components/ProposalSteps.vue";
 import ProposalItem from "./components/ProposalItem.vue";
 import ProposalEventVision from "./components/ProposalEventVision.vue";
@@ -119,7 +117,6 @@ export default {
     ProposalItemSecondaryService,
     ProposalAdditionalRequirement,
     ProposalBidContent,
-    ProposalRequirementsPanel,
   },
   data() {
     return {
@@ -214,7 +211,7 @@ export default {
       border-radius: 3px;
       box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
       background-color: #ffffff;
-      margin-top: 20px;
+      margin-top: 50px;
       padding: 40px 40px 40px 34px;
       font-family: "Manrope-Regular", sans-serif;
       color: #050505;
@@ -259,7 +256,7 @@ export default {
     h3 {
       font-size: 30px;
       font-weight: 800;
-      margin-top: 2em;
+      margin-top: 3em;
       margin-bottom: 0.5em;
     }
     p {
@@ -275,9 +272,6 @@ export default {
   }
   .pos-relative {
     position: relative;
-  }
-  .requirements-panel {
-    margin-bottom: 20px;
   }
 }
 </style>

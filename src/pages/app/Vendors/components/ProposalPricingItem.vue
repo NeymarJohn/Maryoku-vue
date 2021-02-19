@@ -273,7 +273,7 @@ export default {
   background-color: #ffffff;
   font-family: "Manrope-Regular", sans-serif;
   color: #050505;
-  margin: 20px 0;
+  margin: 30px 0;
 
   .pricing-item {
     padding: 46px 50px 48px 60px;

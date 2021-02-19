@@ -10,22 +10,25 @@
   </div>
 </template>
 <script>
-const EventDetailsTimeline = () => import("./EventDetailsTimeline");
-const EventConceptChoose = () => import("./components/EventConceptChoose");
-const BookingEvent = () => import("./components/BookingEvent");
-const EventBudgetRequirement = () => import("./components/EventBudgetRequirement.vue");
-const EventDetailsOverview = () => import("./components/EventDetailsOverview");
-const EventCampaign = () => import("@/pages/app/Campaign/CampaignMainLayout.vue");
+import EventDetailsTimeline from "./EventDetailsTimeline";
+import EventConceptChoose from "./components/EventConceptChoose";
+import BookingEvent from "./components/BookingEvent";
+import BookingEventRequirement from "./components/BookingEventRequirement.vue";
+import EventBudgetRequirement from "./components/EventBudgetRequirement.vue";
+import EventDetailsOverview from "./components/EventDetailsOverview";
+import EventCampaign from "@/pages/app/Campaign/CampaignMainLayout.vue";
 import ProgressSidebar from "./components/progressSidebarForEvent";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
+import EventComponent from "@/models/EventComponent";
 
 export default {
   components: {
     EventDetailsTimeline,
     EventConceptChoose,
     BookingEvent,
+    BookingEventRequirement,
     ProgressSidebar,
     EventDetailsOverview,
     EventBudgetRequirement,

@@ -17,12 +17,12 @@ const VendorsPoolNew = () => import("@/pages/app/Vendors/VendorsPoolNew.vue");
 
 // Profile Pages
 import Profile from "@/pages/app/Profile/Layout.vue";
-const ProfileOverview = () => import("@/pages/app/Profile/index.vue");
+import ProfileOverview from "@/pages/app/Profile/index.vue";
 
 // Event Pages
-const EventDetailsBudget = () => import("@/pages/app/Events/EventDetailsBudget.vue");
-const EventPlan = () => import("@/pages/app/Events/EventPlan.vue");
-const EventProposalDetails = () => import("@/pages/app/Events/components/EventProposalDetails.vue");
+import EventDetailsBudget from "@/pages/app/Events/EventDetailsBudget.vue";
+import EventPlan from "@/pages/app/Events/EventPlan.vue";
+import EventProposalDetails from "@/pages/app/Events/components/EventProposalDetails.vue";
 
 const CreateWorkspace = () => import("@/pages/Dashboard/Pages/CreateWorkspace");
 const ChooseWorkspace = () => import("@/pages/Dashboard/Pages/ChooseWorkspace");
@@ -37,24 +37,24 @@ const VendorSignup = () => import("@/pages/app/Vendors/VendorSignup.vue");
 const ProposalFinalStep = () => import("@/pages/app/Vendors/ProposalFinalStep.vue");
 const CalendarSync = () => import("@/pages/app/CalendarSync.vue");
 // OnBoardingPages
-const EventWizardStart = () => import("@/pages/app/CreateEvent/EventWizardStart.vue");
-const EventWizardDay = () => import("@/pages/app/CreateEvent/EventWizardDay.vue");
-const EventWizardDateFlexibility = () => import("@/pages/app/CreateEvent/EventWizardDateFlexibility.vue");
-const EventWizardGuests = () => import("@/pages/app/CreateEvent/EventWizardGuests.vue");
-const EventWizardGuestsType = () => import("@/pages/app/CreateEvent/EventWizardGuestsType.vue");
-const EventWizardLocation = () => import("@/pages/app/CreateEvent/EventWizardLocation.vue");
-const EventWizardBuilding = () => import("@/pages/app/CreateEvent/EventWizardBuilding.vue");
-const EventWizardType = () => import("@/pages/app/CreateEvent/EventWizardType.vue");
-const EventWizardCelebrating = () => import("@/pages/app/CreateEvent/EventWizardCelebrating.vue");
-const EventWizardVibes = () => import("@/pages/app/CreateEvent/EventWizardVibes.vue");
-const EventWizardReligion = () => import("@/pages/app/CreateEvent/EventWizardReligion.vue");
+import EventWizardStart from "@/pages/app/CreateEvent/EventWizardStart.vue";
+import EventWizardDay from "@/pages/app/CreateEvent/EventWizardDay.vue";
+import EventWizardDateFlexibility from "@/pages/app/CreateEvent/EventWizardDateFlexibility.vue";
+import EventWizardGuests from "@/pages/app/CreateEvent/EventWizardGuests.vue";
+import EventWizardGuestsType from "@/pages/app/CreateEvent/EventWizardGuestsType.vue";
+import EventWizardLocation from "@/pages/app/CreateEvent/EventWizardLocation.vue";
+import EventWizardBuilding from "@/pages/app/CreateEvent/EventWizardBuilding.vue";
+import EventWizardType from "@/pages/app/CreateEvent/EventWizardType.vue";
+import EventWizardCelebrating from "@/pages/app/CreateEvent/EventWizardCelebrating.vue";
+import EventWizardVibes from "@/pages/app/CreateEvent/EventWizardVibes.vue";
+import EventWizardReligion from "@/pages/app/CreateEvent/EventWizardReligion.vue";
 
 // RSVP
 
-const RSVPEvent = () => import("@/pages/app/RSVP/RSVPEvent.vue");
-const EventCreatePage = () => import("@/pages/app/CreateEvent/EventWizardCreate.vue");
+import RSVPEvent from "@/pages/app/RSVP/RSVPEvent.vue";
+import EventCreatePage from "@/pages/app/CreateEvent/EventWizardCreate.vue";
 
-const FeedbackLandingPage = () => import("@/pages/app/Events/FeedbackLandingPage.vue");
+import FeedbackLandingPage from "@/pages/app/Events/FeedbackLandingPage.vue";
 // User authentication pages
 const SignInSignUp = () => import("@/pages/Dashboard/Pages/SignInSignUp.vue");
 const SignUp = () => import("@/pages/Dashboard/Pages/SignUp.vue");

@@ -786,18 +786,15 @@ export default {
   },
   methods: {
     updateExDonts(religion, holiday) {
-      console.log("updateExDonts", holiday);
+      // console.log("updateExDonts", holiday);
       holiday.selected = !holiday.selected;
+      let day = holiday.start.split('-')[2];
 
-      let date = moment(holiday.start).format('YYYY-M-D');
-      let day = moment(holiday.start).date()
-
-      console.log('updateExDonts', day, date)
-      if ( this.markedDates.find(m => m === date) ) {
-        this.markedDates = this.markedDates.filter(m => m !== date);
+      if ( this.markedDates.find(m => m === holiday.start ) ) {
+        this.markedDates = this.markedDates.filter(m => m !== holiday.start);
         $('span.vfc-span-day:contains('+day+')').removeClass('vfc-marked vfc-start-marked vfc-end-marked');
       } else {
-        this.markedDates.push(date);
+        this.markedDates.push(holiday.start);
       }
 
       if (this.vendor.exDonts.find(h => h.holiday === holiday.holiday)) {
@@ -809,7 +806,7 @@ export default {
           religion: religion.name,
         })
       }
-      console.log('updateExDonts.markedDates', date, this.markedDates);
+      // console.log('updateExDonts.markedDates', this.markedDates);
 
       this.$root.$emit("update-vendor-value", "exDonts", this.vendor.exDonts);
     },
@@ -849,14 +846,13 @@ export default {
     },
     updateDontWorkDays(e) {
 
-      let day = moment(e.date).date();
-      let date = moment(e.date).format('YYYY-M-D');
+      let day = e.date.split('-')[2];
       let selectedDates = this.date.selectedDates;
-      if ( this.markedDates.find(m => m === date) ) {
+      if ( this.markedDates.find(m => m === e.date) ) {
 
         selectedDates = this.date.selectedDates.filter(s => s.date !== e.date);
 
-        this.markedDates = this.markedDates.filter(m => m !== date);
+        this.markedDates = this.markedDates.filter(m => m !== e.date);
         $('span.vfc-span-day:contains('+day+')').removeClass('vfc-marked vfc-start-marked vfc-end-marked');
       }
       // console.log("selectedDays", day, e, this.markedDates, this.date);
@@ -865,11 +861,11 @@ export default {
     },
     changeMonth(e) {
         // console.log("changeMonth", this.markedDates, this.date);
-        this.month = moment(e).month();
+        this.month = e;
     },
     changeYear(e) {
         // console.log("changeYear", e);
-        this.month = moment(e).month();
+        this.month = e;
     },
     updateStartA() {
       if (this.amPack.start == "AM") {
@@ -942,12 +938,11 @@ export default {
       this.vendor.exDonts.filter(h => h.religion !== data.name);
       data.holidays.map(it => {
         it.selected = value;
-        let day = moment(it.start).date();
-        let date = moment(it.start).format('YYYY-M-D');
+        let day = it.start.split('-')[2];
         if (value) {
-          this.markedDates.push(date);
+          this.markedDates.push(it.start);
         } else {
-          this.markedDates = this.markedDates.filter(m => m !== date);
+          this.markedDates = this.markedDates.filter(m => m !== it.start);
           $('span.vfc-span-day:contains('+day+')').removeClass('vfc-marked vfc-start-marked vfc-end-marked');
         }
 
@@ -958,10 +953,14 @@ export default {
             religion: data.name,
           })
         } else {
+          // console.log('removeItem', value, it.holiday);
           this.vendor.exDonts = this.vendor.exDonts.filter(e => e.holiday !== it.holiday);
+          // console.log('removeItem', this.vendor.exDonts);
         }
       });
-      console.log('updateAllExDonts', this.markedDates)
+
+
+
       this.$root.$emit("update-vendor-value", "exDonts", this.vendor.exDonts);
     },
     isAllHolidays(data){
@@ -1007,11 +1006,9 @@ export default {
 
       // get holidays from serve if they are not saved
 
-      this.religions = JSON.parse(localStorage.getItem('two62-app.holidays'));
-      if ( !this.religions || !this.religions.length ) {
+      if ( !this.religions.length ) {
         let res = await this.$http.get(`${process.env.SERVER_URL}/1/holidays`);
         this.religions = res.data;
-        localStorage.setItem('two62-app.holidays', JSON.stringify(this.religions));
       }
 
       if ( this.vendor.exDonts && this.vendor.exDonts.length ) {
@@ -1043,12 +1040,11 @@ export default {
       //
       if ( this.vendor.exDonts && this.vendor.exDonts.length ) {
         this.vendor.exDonts.map(h => {
-           console.log('exdonts', moment(h.date).format('YYYY-M-D'));
-           this.markedDates.push(moment(h.date).format('YYYY-M-D'));
+           this.markedDates.push(h.date);
         })
       }
 
-      console.log('markedDates', this.markedDates);
+      // console.log('markedDates', this.markedDates);
 
       this.optimizeWeekDays(this.selectedWeekdays);
       this.componentKey += 1;
