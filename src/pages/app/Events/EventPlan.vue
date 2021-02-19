@@ -72,7 +72,7 @@ export default {
         id: "concept-item",
       };
       const budget = {
-        title: this.event.budgetProgress <= 50 ? "Budget Wizard" : "Balance Wizard",
+        title: "Budget Wizard",
         status: "not-complete",
         route: this.event.budgetProgress == 100 ? "edit/budget" : "booking/budget",
         icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
@@ -103,20 +103,21 @@ export default {
       // if (this.event.eventType.hasConcept) {
       elements.push(concept);
       // }
+      elements.push(budget);
       elements.push(timeline);
       elements.push(campaign);
-      elements.push(budget);
 
       // show when you approve budget
       if (this.event.budgetProgress == 100) {
         this.event.components.sort((a, b) => a.order - b.order);
         this.event.components.forEach((item) => {
           if (item.componentId !== "unexpected") {
+            // let icon = item.componentId === 'giveaways' ? 'swags' : item.componentId;
             elements.push({
               title: item.bookTitle,
               status: "not-complete",
               route: "booking/" + item.id,
-              icon: `${this.$iconURL}Budget+Elements/${item.componentId}.svg`,
+              icon: `${this.$iconURL}Budget+Elements/${item.icon}`,
               progress: item.progress ? item.progress : 0,
               id: item.id,
             });

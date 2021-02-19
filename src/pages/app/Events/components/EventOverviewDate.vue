@@ -116,7 +116,7 @@ export default {
   },
   methods: {
     changeMonth(e){
-        console.log('markedDates', this.markedDates)
+        // console.log('markedDates', this.markedDates)
         this.month = moment(e).month();
         this.year = moment(e).year();
     },
@@ -136,6 +136,10 @@ export default {
 
       if (!this.dateClick) {
         this.ended_at = e.date;
+        if (this.started_at > e.date) {
+            this.ended_at = this.started_at;
+            this.started_at = e.date;
+        }
         const extendedMoment = extendMoment(moment);
         const start = new Date(this.started_at);
         const end = new Date(this.ended_at);
@@ -181,7 +185,7 @@ export default {
       let started_date = moment(this.section.started_at).date();
       let ended_date = moment(this.section.ended_at).date();
 
-      console.log('renderCalendar', this.month)
+      // console.log('renderCalendar', this.month)
       $(".vfc-day").each(function (index, day) {
         let el = $(day).find("span.vfc-span-day");
 
