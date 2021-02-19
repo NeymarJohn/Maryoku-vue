@@ -1,35 +1,17 @@
 <template>
   <div class="timeline-items-list">
-    <div class="timeline-items-header">
-      <img src="/static/icons/timeline-title.png" /><span class="font-size-24">Timeline</span>
-    </div>
-    <section
-      class="timeline-items-list__item"
-      v-for="(scheduleDate, dateIndex) in timelineDates"
-      :key="scheduleDate.date"
-    >
-      <div
-        v-if="dateIndex > 0 && timelineDates[dateIndex - 1].timelineItems.length > 3"
-        class="html2pdf__page-break"
-      ></div>
-
-      <div class="item-header mb-20 mt-20">
-        <div class="header-line"></div>
-        <div class="time-line-edit d-flex justify-content-center align-center">
-          <label style="white-space: nowrap; padding-right: 10px">Day {{ numberToWord(dateIndex + 1) }}</label>
-          <div>
-            {{ $dateUtil.formatScheduleDay(scheduleDate.date, "MM/DD/YY") }}
+    <div class="timeline-items-list__item" v-for="(scheduleDate, dateIndex) in timelineDates" :key="scheduleDate.date">
+      <div class="item-header mb-20">
+        <div class="header-title font-size-14 color-gray text-transform-capitalize">
+          <div class="time-line-edit d-flex justify-content-center align-center">
+            <label style="white-space: nowrap; padding-right: 10px">Day {{ numberToWord(dateIndex + 1) }}</label>
+            <div>
+              {{ $dateUtil.formatScheduleDay(scheduleDate.date, "MM/DD/YY") }}
+            </div>
           </div>
         </div>
-        <div class="header-line"></div>
       </div>
-
-      <rsvp-timeline-item
-        v-for="(timeline, index) in scheduleDate.timelineItems"
-        :key="index"
-        :timeline="timeline"
-      ></rsvp-timeline-item>
-      <!-- <timeline-item
+      <timeline-item
         v-for="(timelineItem, index) in scheduleDate.timelineItems"
         :key="`timelineItem-${index}`"
         :item="timelineItem"
@@ -39,8 +21,8 @@
         @remove="removeItem"
         :editMode="false"
         cardStyle="outlined"
-      ></timeline-item> -->
-    </section>
+      ></timeline-item>
+    </div>
   </div>
 </template>
 <script>
@@ -51,7 +33,10 @@ import TimelineItem from "./TimelineItem";
 import TimelineEmpty from "./TimelineEmpty";
 import TimelineTemplateContainer from "./TimelineTemplateContainer";
 import TimelineGapModal from "../Modals/TimelineGapModal";
-import RsvpTimelineItem from "../../RSVP/RSVPTimelineItem.vue";
+import EventTimelineDate from "@/models/EventTimelineDate";
+import CalendarEvent from "@/models/CalendarEvent";
+import moment from "moment";
+import { timelineTempates } from "@/constants/event.js";
 export default {
   name: "event-details-timeline",
   components: {
@@ -61,7 +46,6 @@ export default {
     TimelineEmpty,
     TimelineGapModal,
     TimelineTemplateContainer,
-    RsvpTimelineItem,
   },
   created() {
     this.$store.dispatch("event/getTimelineDates", this.event.id);
@@ -115,15 +99,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .timeline-items-list {
-  width: 700px;
-  margin: 50px;
-  .timeline-items-header {
-    img {
-      margin-right: 20px;
-    }
-    display: flex;
-    align-items: center;
-  }
+  margin: 40px;
   .timeline-group-wrapper {
     position: relative;
     &:not(:last-child)::before {
@@ -135,6 +111,7 @@ export default {
       left: 30px;
     }
   }
+  margin-top: 1em;
   height: 100%;
   &__item {
     padding-bottom: 1em;
@@ -142,27 +119,81 @@ export default {
       position: relative;
       text-align: center;
       min-height: 30px;
-      display: flex;
-      align-items: center;
-      .header-line {
-        position: relative;
-        flex: 1;
-        &:before {
-          content: " ";
-          position: absolute;
-          border: 0.5px solid #a0a0a0;
-          left: 0px;
-          width: 100%;
+      &:before {
+        content: " ";
+        position: absolute;
+        top: 16px;
+        border: 0.5px solid #a0a0a0;
+        left: 0px;
+        width: 100%;
+      }
+
+      .header-title {
+        position: absolute;
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+        top: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 10px;
+        background-color: #f5f5f5;
+      }
+      .header-actions {
+        position: absolute;
+        right: -5px;
+        top: 5px;
+        background-color: #f5f5f5;
+        padding-left: 10px;
+        .md-button {
+          margin: 0;
+          width: auto;
+          height: auto;
+          min-width: auto;
+          .md-ripple {
+            padding: 0 !important;
+            .md-icon {
+              font-size: 22px !important;
+            }
+          }
         }
       }
     }
     .time-line-edit {
       max-width: 180px;
       margin: auto;
+      background: #f5f5f5;
       font-size: 16px;
       font-family: "Manrope-ExtraBold";
-      padding: 10px;
-      color: #a0a0a0;
+      .md-input {
+        font-size: 14px;
+        padding: 0;
+        padding-left: 10px;
+        margin: 0;
+        font-weight: 800;
+        -webkit-text-fill-color: #a0a0a0 !important;
+        color: #a0a0a0 !important;
+        border: none;
+      }
+      .md-icon,
+      .md-icon-button {
+        display: none;
+      }
+      .md-datepicker {
+        margin-left: -180px !important;
+        opacity: 0;
+        &:before,
+        &:after {
+          width: calc(100% - 0px);
+          margin-left: 0;
+          display: none;
+        }
+      }
+      .md-field {
+        margin: 0px;
+        padding: 0;
+      }
     }
   }
 }

@@ -39,7 +39,7 @@
               style="padding: 10px 20px"
             >
               {{ tour.steps[tour.currentStep].header.title }}
-              <md-button class="md-simple md-icon-button" @click="stopTour"
+              <md-button class="md-simple md-icon-button" @click="tour.finish"
                 ><md-icon style="color: white !important">close</md-icon></md-button
               >
             </div>
@@ -85,7 +85,7 @@
               style="padding: 10px 20px"
             >
               {{ tour.steps[tour.currentStep].header.title }}
-              <md-button class="md-simple md-icon-button" @click="stopTour"
+              <md-button class="md-simple md-icon-button" @click="tour.finish"
                 ><md-icon style="color: white !important">close</md-icon></md-button
               >
             </div>
@@ -131,7 +131,7 @@
               style="padding: 10px 20px"
             >
               {{ tour.steps[tour.currentStep].header.title }}
-              <md-button class="md-simple md-icon-button" @click="stopTour"
+              <md-button class="md-simple md-icon-button" @click="tour.finish"
                 ><md-icon style="color: white !important">close</md-icon></md-button
               >
             </div>
@@ -179,7 +179,7 @@
               style="padding: 10px 20px"
             >
               {{ tour.steps[tour.currentStep].header.title }}
-              <md-button class="md-simple md-icon-button" @click="stopTour"
+              <md-button class="md-simple md-icon-button" @click="tour.finish"
                 ><md-icon style="color: white !important">close</md-icon></md-button
               >
             </div>
@@ -214,7 +214,7 @@
               style="padding: 10px 20px"
             >
               {{ tour.steps[tour.currentStep].header.title }}
-              <md-button class="md-simple md-icon-button" @click="stopTour"
+              <md-button class="md-simple md-icon-button" @click="tour.finish"
                 ><md-icon style="color: white !important">close</md-icon></md-button
               >
             </div>
@@ -380,7 +380,7 @@ export default {
           {
             target: "#footer-panel", // We're using document.querySelector() under the hood
             header: {
-              title: "Action Panel",
+              title: "Control Panel",
             },
             content: "Every page has its unique footer stripe that contains the actions available to you.",
           },
@@ -465,10 +465,6 @@ export default {
       else {
         this.$router.push(`/events/${this.$route.params.id}/booking/overview`);
       }
-    },
-    stopTour() {
-      const tourName = Object.keys(this.steps)[this.currentTourIndex];
-      this.$tours[tourName].stop();
     },
     checkTour() {
       if (this.$route.query.walkWithMe) {

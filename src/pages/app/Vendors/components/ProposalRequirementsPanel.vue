@@ -36,8 +36,8 @@
         </div>
         <md-button class="md-outlined md-red md-simple maryoku-btn width-100">
           <img src="/static/icons/chart-red.svg" class="page-icon mr-10" />
-          Questions? Chat with the planner</md-button
-        >
+          Questions? Send a question to planner
+        </md-button>
       </div>
     </template>
   </collapse-panel>

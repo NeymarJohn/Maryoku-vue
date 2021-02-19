@@ -1,7 +1,7 @@
 <template>
   <div class="rsvp-timeline" v-if="timeline">
-    <img class="item-icon" :src="`/static/icons/${timeline.icon.toLowerCase()}-circle.png`" />
-    <div class="rsvp-timeline-content" :style="`border:dashed 2px ${timeline.color}`">
+    <img class="item-icon" :src="`${$iconURL}Timeline-New/${timeline.icon.toLowerCase()}-circle.svg`" />
+    <div class="rsvp-timeline-content" :style="`border-color:${timeline.color}`">
       <div>
         <div class="item-time">
           {{ $dateUtil.formatScheduleTime(Number(timeline.startTime)) }} -
@@ -39,9 +39,7 @@ export default {
     content: "";
     position: absolute;
     height: 100%;
-    border-left-color: #707070;
-    border-left-width: 2px;
-    border-left-style: dashed;
+    // border-left: 1px dashed #707070;
     left: 32px;
     top: 77px;
   }
