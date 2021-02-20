@@ -483,7 +483,7 @@ export default {
       this.showCommentEditorPanel = mode;
     },
   },
-  created() {
+  async created() {
     if (this.eventData.id) {
       if (this.eventData.concept) {
         this.selectedConcept = this.eventData.concept;
@@ -494,19 +494,84 @@ export default {
         this.conceptOptions.push(this.selectedConcept);
       } else {
         this.loadingConceptOptions = true;
-        this.$http
-          .get(`${process.env.SERVER_URL}/1/concepts/${this.eventData.id}/suggestions`)
-          .then((res) => {
-            this.conceptOptions = res.data.slice(0, 3);
+        try {
+            let suggestions = JSON.parse(localStorage.getItem('concept.suggestions'));
+            if(!suggestions || !suggestions.length) {
+                let res = await this.$http.get(`${process.env.SERVER_URL}/1/concepts/${this.eventData.id}/suggestions`)
+                suggestions = res.data;
+                localStorage.setItem('concept.suggestions', JSON.stringify(suggestions));
+            }
+
+            suggestions.map(concept => {
+                let weight = "";
+                // filter by event places
+                if (this.eventData.places && this.eventData.places.length) {
+                    let tags = concept.tags.map(tag => tag.name);
+                    let isContain = tags.some(tag => this.eventData.places.includes(tag.toUpperCase()));
+
+                    weight += isContain ? "1" : "0";
+                } else {
+                    weight += "0";
+                }
+
+                // filter by event song
+                if (this.eventData.eventSong && this.eventData.eventSong.tags && this.eventData.eventSong.tags.length) {
+                    let isContain = this.eventData.eventSong.tags.every(songTag => {
+                        return concept.tags.some(conceptTag => {
+                            conceptTag.name.toLowerCase() === songTag.toLowerCase()
+                        })
+                    })
+                    weight += isContain ? "1" : "0";
+                } else {
+                    weight += "0";
+                }
+
+                // filter by event occasion
+                if (this.eventData.occasion && concept.occasion && concept.occasion.length) {
+                    let isContain = concept.occasion.some(it => it.value === this.eventData.occasion);
+                    weight += isContain ? "1" : "0";
+                } else {
+                    weight += "0";
+                }
+
+                // filter by event month
+                if (this.eventData.eventStartMillis) {
+                    let startDate = new Date(this.eventData.eventStartMillis);
+                    let eventMonth = startDate.toLocaleString('default', {month: 'long'});
+                    weight += eventMonth === concept.eventMonthName ? '1' : '0';
+                } else {
+                    weight += "0";
+                }
+
+                // filter by range of cost per person
+                if (concept.rangeOfCostPerPerson) {
+                    let cost = this.eventData.totalBudget / this.eventData.numberOfParticipants;
+                    weight += parseInt(concept.rangeOfCostPerPerson.min) <= cost <= parseInt(concept.rangeOfCostPerPerson.max) ? '1' : '0'
+                } else {
+                    weight += "0";
+                }
+
+                // filter by guests number
+                if (concept.rangeOfGuests) {
+                    weight += parseInt(concept.rangeOfGuests.min) <= this.eventData.numberOfParticipants <= parseInt(concept.rangeOfGuests.max) ? '1' : '0'
+                } else {
+                    weight += "0";
+                }
+                this.$set(concept, 'weight', weight);
+            })
+
+            suggestions.sort((a, b) => a.weight < b.weight ? 1 : a.weight > b.weight ? -1 : 0);
+
+
+            this.conceptOptions = suggestions.slice(0, 3);
             this.showConceptList = true;
             this.loadingConceptOptions = false;
-          })
-          .catch((err) => {
+        } catch (e) {
+            console.log('filter.error', e);
             this.loadingConceptOptions = false;
-          });
+        }
       }
       this.isLoading = false;
-      console.log(this.event.id);
     }
   },
   watch: {

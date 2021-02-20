@@ -411,7 +411,7 @@ export default {
   box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
   background: #ffffff;
   // position: absolute;
-  width: calc(100% - 2rem);
+  // width: calc(100% - 2rem);
   .bundle-discount-input {
     width: 100%;
     font-size: 16px;

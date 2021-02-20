@@ -28,6 +28,10 @@
     <div class="md-layout">
       <div id="control-panel" style="width: 1px; height: 100%; float: left; margin-left: -1px"></div>
       <div class="md-layout-item md-size-100">
+          <event-overview-date
+              :section="eventDateSection"
+              @change="changeEvent"
+          ></event-overview-date>
         <event-overview-section
           v-for="(section, index) in sections"
           :key="index"
@@ -71,6 +75,7 @@ import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
 import Multiselect from "vue-multiselect";
 import EventOverviewSection from "./EventOverviewSection";
+import EventOverviewDate from "./EventOverviewDate";
 import Calendar from "@/models/Calendar";
 export default {
   name: "event-overview",
@@ -83,6 +88,7 @@ export default {
     MaryokuInput,
     Multiselect,
     EventOverviewSection,
+    EventOverviewDate
   },
   props: {
     // event: Object,
@@ -105,6 +111,7 @@ export default {
       showCommentEditorPanel: false,
       reCalculate: false,
       reSchedule: false,
+      eventDateSection: null,
       sections: [],
     };
   },
@@ -200,8 +207,7 @@ export default {
     setSection() {
       let places = this.event.places ? this.event.places.map((p) => p.toLowerCase()) : [];
 
-      this.sections = [
-        {
+      this.eventDateSection = {
           title: "Date",
           key: "date",
           img_src: `${this.$secondIconURL}Event Page/Group 8708.svg`,
@@ -210,7 +216,8 @@ export default {
           ended_at: this.event.eventEndMillis,
           timelineDates: this.$store.state.event.timelineDates,
           more_one_day: null,
-        },
+      }
+      this.sections = [
         {
           title: "Location",
           key: "location",

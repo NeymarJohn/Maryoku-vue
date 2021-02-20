@@ -62,6 +62,7 @@
         "vue-gmaps": "^0.2.2",
         "vue-google-autocomplete": "^1.1.0",
         "vue-gtm": "^2.0.0",
+        "vue-html2pdf": "^1.8.0",
         "vue-image-lightbox": "^7.2.0",
         "vue-input-autowidth": "^1.0.10",
         "vue-input-mask": "^0.0.10",
