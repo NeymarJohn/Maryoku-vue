@@ -142,9 +142,7 @@ import draggable from "vuedraggable";
 import { Drag, Drop } from "vue-drag-drop";
 import _ from "underscore";
 
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-import VueHtml2pdf from "vue-html2pdf";
+const VueHtml2pdf = () => import("vue-html2pdf");
 
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./components/CommentEditorPanel";

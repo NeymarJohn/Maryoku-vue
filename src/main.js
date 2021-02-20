@@ -54,7 +54,6 @@ import helper from "@/utils/helperFunction";
 require("vue-tour/dist/vue-tour.css");
 
 const VueScrollTo = require("vue-scrollto");
-window.$ = window.jQuery = require("jquery");
 
 // plugin setup
 Vue.use(VueRouter);

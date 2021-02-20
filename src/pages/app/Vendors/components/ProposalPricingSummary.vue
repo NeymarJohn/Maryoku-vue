@@ -470,7 +470,7 @@ export default {
   // padding: 40px 34px 0px 34px;
   font-family: "Manrope-Regular", sans-serif;
   color: #050505;
-  margin: 50px 0 30px 0;
+  margin: 20px 0 20px 0;
 
   .dropdown-zone {
     margin: 30px;

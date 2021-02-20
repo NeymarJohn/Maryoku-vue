@@ -259,7 +259,7 @@ export default {
     h3 {
       font-size: 30px;
       font-weight: 800;
-      margin-top: 3em;
+      margin-top: 2em;
       margin-bottom: 0.5em;
     }
     p {
