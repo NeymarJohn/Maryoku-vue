@@ -617,7 +617,7 @@ export const businessCategories = [
                 name: 'specialty liquor stations',
                 type: Array,
                 value: [],
-                available: ['beer', 'wine', 'tequila', 'cocktail', 'mixology', 'martini', 'bourbon', 'whiskey']
+                available: ['beer', 'wine', 'tequila', 'cocktail', 'mixology', 'martini', 'bourbon', 'whiskey', 'Vodka', 'Rum', 'Margaritas', 'Champagne']
               },
               {
                 name: 'specialty bar services',
@@ -3840,11 +3840,6 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Cleanup",
-        type: Number,
-        hasComment: true,
-      },
-      {
-        name: "Breakdown",
         type: Number,
         hasComment: true,
       },

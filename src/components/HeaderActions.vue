@@ -63,7 +63,7 @@ export default {
       return this.shareLink;
     },
     startDownload() {
-      this.$emit("export", { type: "pdf" });
+      this.$root.$emit("pageExport", { type: "pdf" });
     },
   },
   computed: {
