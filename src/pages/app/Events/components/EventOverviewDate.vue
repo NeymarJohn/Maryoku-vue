@@ -109,6 +109,7 @@ export default {
       dateRange: {},
       started_at: null,
       dateClick: false,
+      day: null,
       ended_at: null,
       month: moment(Date.now()).month(),
       year: moment(Date.now()).year(),
@@ -130,13 +131,13 @@ export default {
 
       if (this.dateClick) {
         this.started_at = e.date;
-        this.resetCalendar();
+        this.day = e.day;
         this.$forceUpdate();
       }
 
       if (!this.dateClick) {
         this.ended_at = e.date;
-        if (this.started_at > e.date) {
+        if (this.day > e.day) {
             this.ended_at = this.started_at;
             this.started_at = e.date;
         }
@@ -185,19 +186,22 @@ export default {
       let started_date = moment(this.section.started_at).date();
       let ended_date = moment(this.section.ended_at).date();
 
-      // console.log('renderCalendar', this.month)
+      console.log('renderCalendar', this.month)
       $(".vfc-day").each(function (index, day) {
         let el = $(day).find("span.vfc-span-day");
 
-          if (el.text() <= ended_date && el.text() >= started_date) {
-              el.addClass("vfc-marked");
-          } else {
-              el.removeClass("vfc-marked");
-              el.removeClass("vfc-start-marked");
-              el.removeClass("vfc-end-marked");
-              $(day).find("div.vfc-base-start").remove();
-              $(day).find("div.vfc-base-end").remove();
-          }
+        // don't check the same day of next month
+        if($(day).find("span.vfc-span-day").hasClass('vfc-hide')) return;
+
+        if (el.text() <= ended_date && el.text() >= started_date) {
+          el.addClass("vfc-marked");
+        } else {
+          el.removeClass("vfc-marked");
+          el.removeClass("vfc-start-marked");
+          el.removeClass("vfc-end-marked");
+          $(day).find("div.vfc-base-start").remove();
+          $(day).find("div.vfc-base-end").remove();
+        }
 
         if (started_date === ended_date) {
           el.addClass("vfc-end-marked");

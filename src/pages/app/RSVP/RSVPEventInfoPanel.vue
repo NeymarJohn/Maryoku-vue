@@ -34,7 +34,6 @@
           class="event-info-item-icon"
           :size="42"
           :icon="`${$iconURL}Event%20Page/location-dark.svg`"
-          @closed="updateEvent"
         >
         </color-button>
         <span :class="{ underline: !editable }">WHERE?</span>
@@ -64,7 +63,6 @@
           class="event-info-item-icon"
           :size="42"
           :icon="`${$iconURL}RSVP/Path+1383.svg`"
-          @closed="updateEvent"
         >
         </color-button>
         <span :class="{ underline: !editable }">SOLO OR PLUS 1?</span>
@@ -89,7 +87,6 @@
           class="event-info-item-icon"
           :size="42"
           :icon="`${$iconURL}RSVP/Group+1279.svg`"
-          @closed="updateEvent"
         >
         </color-button>
         <span :class="{ underline: !editable }">ARRIVAL?</span>
