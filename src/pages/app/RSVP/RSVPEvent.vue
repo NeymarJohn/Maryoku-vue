@@ -36,6 +36,7 @@
                 :editable="false"
                 :zoomLink="campaign.additionalData.zoomlink"
                 :startTime="eventStartTime"
+                v-if="!isLoading"
               ></rsvp-event-info-panel>
             </div>
           </div>
@@ -381,6 +382,7 @@ export default {
       window.addEventListener("resize", this.onResize);
     });
 
+    this.isLoading = true;
     console.log("isMobile", this.isMobile);
     RsvpRequest.find(rsvpRequestId)
       .then((rsvpRequest) => {
