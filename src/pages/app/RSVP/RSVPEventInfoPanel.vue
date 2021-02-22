@@ -34,6 +34,7 @@
           class="event-info-item-icon"
           :size="42"
           :icon="`${$iconURL}Event%20Page/location-dark.svg`"
+          @closed="updateEvent"
         >
         </color-button>
         <span :class="{ underline: !editable }">WHERE?</span>

@@ -10,7 +10,7 @@
       <img
         width="60"
         height="60"
-        :src="`/static/icons/${editingContent.icon.toLowerCase()}-circle.png`"
+        :src="`/static/icons/timeline/${editingContent.icon.toLowerCase()}-circle.png`"
         v-if="editingContent.icon"
       />
     </div>
