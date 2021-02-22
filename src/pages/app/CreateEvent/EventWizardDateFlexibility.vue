@@ -1,136 +1,78 @@
 <template>
-    <div class="">
-        <div class="container">
-            <div class="title">
-              1/5
-            </div>
-            <selected-value :value="formattedDate" property="calendar"></selected-value>
-            <div class="event-flexibility event-basic-info">
-              <div class="mt-4rem">Between a camel yoga pose and plywood</div>
-              <div class="setting-title mt-1">
-                <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator">
-                how flexible is this date?
-              </div>
-              <div class="mt-4rem slider-wrapper">
-                <img :src="`${$iconURL}Onboarding/block-red.svg`">
-                <range-slider
-                  class="slider"
-                  min="0"
-                  max="10"
-                  step="1"
-                  v-model="flexibility">
-                </range-slider>
-                <img :src="`${$iconURL}Onboarding/excersie-red.svg`">
-              </div>
-            </div>
+  <div class="">
+    <div class="container">
+      <div class="title">1/5</div>
+      <selected-value :value="formattedDate" property="calendar"></selected-value>
+      <div class="event-flexibility event-basic-info">
+        <div class="mt-4rem">Between a camel yoga pose and plywood</div>
+        <div class="setting-title mt-1">
+          <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator" />
+          how flexible is this date?
         </div>
-        <wizard-status-bar :currentStep="1" @next="goToNext" @skip="skip" @back="back"></wizard-status-bar>
+        <div class="mt-4rem slider-wrapper">
+          <img :src="`${$iconURL}Onboarding/block-red.svg`" />
+          <range-slider class="slider" min="0" max="10" step="1" v-model="flexibility"> </range-slider>
+          <img :src="`${$iconURL}Onboarding/excersie-red.svg`" />
+        </div>
+      </div>
     </div>
+    <wizard-status-bar :currentStep="1" @next="goToNext" @skip="skip" @back="back"></wizard-status-bar>
+  </div>
 </template>
 
 <script>
-
-import SelectedValue from './componenets/SelectedValue'
-import WizardStatusBar from './componenets/WizardStatusBar'
-import RangeSlider from 'vue-range-slider'
-import 'vue-range-slider/dist/vue-range-slider.css'
-import moment from 'moment'
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import SelectedValue from "./componenets/SelectedValue";
+import WizardStatusBar from "./componenets/WizardStatusBar";
+import RangeSlider from "vue-range-slider";
+import "vue-range-slider/dist/vue-range-slider.css";
+import moment from "moment";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
   components: {
     SelectedValue,
     WizardStatusBar,
-    RangeSlider
+    RangeSlider,
   },
-  created () {
-  },
+  created() {},
   methods: {
-    ...mapMutations('PublicEventPlanner', ['setEventProperty', 'setCurrentStep']),
-    validateDate () {
-      return this.$refs.datePicker.$el.classList.contains('md-has-value')
-    },
-    validateAndSubmit () {
-      // this.$emit('goToNextPage');
-      //  return;
-      let vm = this
-
-      this.cerrors = {}
-      this.validating = true
-
-      this.$validator.validateAll().then(isValid => {
-        if (isValid) {
-          // this.$parent.isLoading = true;
-
-          if (this.eventId) {
-            vm.updateEvent()
-          } else {
-            vm.createEvent()
-          }
-        } else {
-          this.showNotify()
-        }
-      })
-
-      if (!this.eventType) {
-
-      } else {
-        // this.$emit('goToNextPage');
-      }
-    },
-    showNotify () {
-      this.$notify({
-        message: 'Please, check all required fields',
-        icon: 'warning',
-        horizontalAlign: 'center',
-        verticalAlign: 'top',
-        type: 'danger'
-      })
-    },
+    ...mapMutations("PublicEventPlanner", ["setEventProperty", "setCurrentStep"]),
     goToNext() {
-      this.setEventProperty({key: 'flexibleWithDates', actualValue: this.flexibility})
-      this.$router.push({path: `/event-wizard-guests`})
+      this.setEventProperty({ key: "flexibleWithDates", actualValue: this.flexibility });
+      this.$router.push({ path: `/event-wizard-guests` });
     },
     skip() {
-      this.$router.push({path: `/event-wizard-guests`})
+      this.$router.push({ path: `/event-wizard-guests` });
     },
     back() {
-      this.$router.push({path: `/event-wizard-day`})
-    }
+      this.$router.push({ path: `/event-wizard-day` });
+    },
   },
-  data () {
+  data() {
     return {
-      flexibility: 5
-    }
+      flexibility: 5,
+    };
   },
-  created () {
+  created() {
     if (this.publicEventData.flexibleWithDates) {
-      this.flexibility = this.publicEventData.flexibleWithDates
+      this.flexibility = this.publicEventData.flexibleWithDates;
     }
   },
   computed: {
-    ...mapState('PublicEventPlanner', [
-      'publicEventData'
-    ]),
+    ...mapState("PublicEventPlanner", ["publicEventData"]),
     formattedDate() {
-       if ( this.publicEventData.eventStartMillis !== this.publicEventData.eventEndMillis ) {
-
-           return `${ moment(new Date(this.publicEventData.eventStartMillis)).format("DD.MM.YY")} ~ ${ moment(new Date(this.publicEventData.eventEndMillis)).format("DD.MM.YY")}`;
-
-       } else if ( this.publicEventData.eventStartMillis === this.publicEventData.eventEndMillis ) {
-
-           return `${ moment(new Date(this.publicEventData.eventStartMillis)).format("DD.MM.YY")}`;
-       }
-
-    }
+      if (!this.publicEventData.eventStartMillis) {
+        return "Not Sure";
+      } else if (this.publicEventData.eventStartMillis !== this.publicEventData.eventEndMillis) {
+        return `${moment(new Date(this.publicEventData.eventStartMillis)).format("DD.MM.YY")} ~ ${moment(
+          new Date(this.publicEventData.eventEndMillis),
+        ).format("DD.MM.YY")}`;
+      } else if (this.publicEventData.eventStartMillis === this.publicEventData.eventEndMillis) {
+        return `${moment(new Date(this.publicEventData.eventStartMillis)).format("DD.MM.YY")}`;
+      }
+    },
   },
-  // filters: {
-  //   formattedDate: function(eventStartMillis) {
-  //    return moment(new Date(this.publicEventData.eventStartMillis)).format("DD.MM.YY")
-  //   }
-  // }
-
-}
+};
 </script>
 <style lang="scss">
 </style>

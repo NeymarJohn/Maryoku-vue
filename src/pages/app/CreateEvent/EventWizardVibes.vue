@@ -52,7 +52,7 @@ export default {
           if (newEvent.isFirstEvent) {
             this.$router.push({ path: `/welcome/event` });
           } else {
-              this.$router.push({path: `/events/${newEvent.id}/booking/concept`});
+            this.$router.push({ path: `/events/${newEvent.id}/booking/concept` });
           }
         })
         .catch((err) => {});
