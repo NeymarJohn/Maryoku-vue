@@ -598,11 +598,6 @@ export const businessCategories = [
                 hasComment: true
               },
               {
-                name: 'after party entertainment food',
-                type: Boolean,
-                value: false,
-              },
-              {
                 name: 'caterer type',
                 type: Array,
                 value: [],
@@ -651,7 +646,7 @@ export const businessCategories = [
                 name: 'appetizers',
                 type: Boolean,
                 value: false,
-                available: ['appetizers', 'passed hors doeuvres', 'stations', 'buffet', 'plated', 'sushi station', 'grazing service']
+                available: ['appetizers', 'passed hors doeuvres', 'stations', 'buffet', 'plated']
               },
             ]
           },
@@ -754,7 +749,7 @@ export const businessCategories = [
                 value: false
               },
               {
-                name: 'silverware',
+                name: 'Utensils',
                 type: Boolean,
                 value: false
               },
@@ -764,7 +759,7 @@ export const businessCategories = [
                 value: false
               },
               {
-                name: 'china',
+                name: 'Plateware',
                 type: Boolean,
                 value: false
               },
