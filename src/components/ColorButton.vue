@@ -156,6 +156,8 @@ export default {
   .vc-chrome {
     left: 65px;
     top: 0px;
+    position: absolute;
+    z-index: 100;
     &:before {
       content: "";
       width: 10px;
