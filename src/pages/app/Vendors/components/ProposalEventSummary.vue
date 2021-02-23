@@ -59,6 +59,9 @@
             About us
             <md-icon>navigate_next</md-icon>
           </md-button>
+          <div>
+            {{ vendor.about.company }}
+          </div>
           <div class="contact-cont">
             <h4>Contact Us</h4>
             <ul>

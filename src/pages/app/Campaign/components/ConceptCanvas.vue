@@ -42,6 +42,7 @@ export default {
     drawConcept() {
       this.conceptCanvas.clearRect(0, 0, 1000, 400);
       this.colorPositions.forEach((pos, index) => {
+        console.log(this.eventConcept.colors);
         if (this.eventConcept.colors[index]) {
           let colorString = this.eventConcept.colors[index].color || this.eventConcept.colors[index].value;
           if (!colorString) colorString = "#EDEDED";
@@ -65,6 +66,7 @@ export default {
               var dataURL = document.getElementById("concept-area").toDataURL();
               this.renderedImage = dataURL;
               this.$store.commit("campaign/setAttribute", { name: "SAVING_DATE", key: "coverImage", value: dataURL });
+              console.log(dataURL);
             }
           };
         }

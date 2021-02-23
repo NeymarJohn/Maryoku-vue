@@ -21,23 +21,11 @@
           </div>
         </div>
       </div>
-      <!-- <div
-        class="proposal-banner"
-        :style="
-          getHeaderImage
-            ? `background-image: url('${getHeaderImage}');`
-            : `background-image: url('https://static-maryoku.s3.amazonaws.com/storage/img/lock.jpg');`
-        "
-      >
-        <h2 v-if="event && event.concept">{{ event.concept.name }}</h2>
-        <h2 v-else>Meeting Event / Formal meeting</h2>
-        <h5>{{ event.title }}</h5>
-      </div> -->
       <div class="proposal-banner">
-        <div class="summary-cont">
+        <div class="header-content">
           <ul>
             <li class="font-size-30">
-              {{ event.title }}
+              {{ event.concept ? event.concept.name : event.title }}
             </li>
             <li>
               <!-- <img :src="`${proposalIconsUrl}Asset 573.svg`" /> -->
@@ -79,7 +67,7 @@
 
             <li>
               <a class="see-full" @click="fullDetailsModal = true">
-                Full Details
+                <u>Full Details</u>
                 <md-icon>keyboard_arrow_right</md-icon>
               </a>
             </li>
@@ -365,15 +353,6 @@ export default {
       this.event = proposalRequest.eventData;
       this.$store.commit("vendorProposal/setWizardStep", 0);
       this.$store.commit("vendorProposal/setInitStep", 0);
-      this.proposalRequestRequirements = _.chain(proposalRequest.requirements)
-        .groupBy("requirementPriority")
-        .map(function (value, key) {
-          return {
-            title: key,
-            requirements: value,
-          };
-        })
-        .value();
     });
   },
   methods: {
@@ -609,6 +588,17 @@ export default {
       top: 0;
       position: absolute;
       padding: 40px 60px;
+      .header-content {
+        color: white;
+        margin: 20px 0;
+        ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          li {
+          }
+        }
+      }
       .summary-cont {
         font-family: "Manrope-Regular", sans-serif;
         width: calc(100% - 454px);
@@ -624,9 +614,16 @@ export default {
           li {
             font-size: 16px;
             font-weight: bold;
-            padding: 9px 25px;
+            padding: 0px 25px;
             display: flex;
-            margin-right: 40px;
+            margin-right: 0px;
+            border-right: solid 1px white;
+            &:first-child {
+              padding-left: 0px;
+            }
+            &:last-child {
+              border-right: none;
+            }
             img {
               width: 20px;
               margin-right: 10px;

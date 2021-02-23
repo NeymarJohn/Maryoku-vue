@@ -51,10 +51,10 @@ const EventWizardReligion = () => import("@/pages/app/CreateEvent/EventWizardRel
 
 // RSVP
 
-import RSVPEvent from "@/pages/app/RSVP/RSVPEvent.vue";
-import EventCreatePage from "@/pages/app/CreateEvent/EventWizardCreate.vue";
+const RSVPEvent = () => import("@/pages/app/RSVP/RSVPEvent.vue");
+const EventCreatePage = () => import("@/pages/app/CreateEvent/EventWizardCreate.vue");
 
-import FeedbackLandingPage from "@/pages/app/Events/FeedbackLandingPage.vue";
+const FeedbackLandingPage = () => import("@/pages/app/Events/FeedbackLandingPage.vue");
 // User authentication pages
 const SignInSignUp = () => import("@/pages/Dashboard/Pages/SignInSignUp.vue");
 const SignUp = () => import("@/pages/Dashboard/Pages/SignUp.vue");

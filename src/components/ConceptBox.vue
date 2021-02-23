@@ -9,7 +9,7 @@
       </ul>
     </div>
     <div>{{ concept.description }}</div>
-    <div class="images-box" :style="`transform:scale(${scale});transform-origin:left`">
+    <div class="images-box">
       <div class="image-backgrounds">
         <div
           class="image-background"
@@ -36,10 +36,6 @@ export default {
     concept: {
       type: Object,
       default: () => {},
-    },
-    scale: {
-      type: Number,
-      default: 1,
     },
   },
 };
@@ -72,7 +68,6 @@ export default {
   .images-box {
     position: relative;
     height: 350px;
-    width: 900px;
     .image-background {
       background: #ededed;
       position: absolute;

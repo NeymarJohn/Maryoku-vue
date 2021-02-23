@@ -39,12 +39,30 @@
         </div>
         <div class="field">
           <span>Price per unit</span>
-          <money v-model="unit" v-bind="currencyFormat" :class="{ isFilled: !!unit }" />
+          <money
+            v-model="unit"
+            v-bind="currencyFormat"
+            :class="{ isFilled: !!unit }"
+            :disabled="serviceType !== 'cost'"
+          />
         </div>
         <div class="field">
           <span>Total</span>
-          <money :value="subTotal" v-bind="currencyFormat" v-if="isNumberVisible" class="total" />
-          <money v-model="unit" v-bind="currencyFormat" v-else class="total" :class="{ isFilled: !!unit }" />
+          <money
+            :value="subTotal"
+            v-bind="currencyFormat"
+            v-if="isNumberVisible"
+            class="total"
+            :disabled="serviceType !== 'cost'"
+          />
+          <money
+            v-model="unit"
+            v-bind="currencyFormat"
+            v-else
+            class="total"
+            :class="{ isFilled: !!unit }"
+            :disabled="serviceType !== 'cost'"
+          />
         </div>
       </div>
       <!-- <div class="planer-choice-cont" v-if="serviceType === 'cost'">
@@ -301,6 +319,9 @@ export default {
     &.isFilled {
       border: 1px solid #828282;
     }
+    &:disabled {
+      color: #828282;
+    }
   }
 
   input {
@@ -312,7 +333,7 @@ export default {
     font: normal 16px "Manrope-Regular", sans-serif;
     color: #050505;
     &.isFilled {
-      border: 1px solid #828282;
+      border: 1px solid #b7b7b7;
     }
   }
   .sub-items-cont {
