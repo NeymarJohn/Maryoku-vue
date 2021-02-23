@@ -2,7 +2,7 @@
   <div class="event-wizard-building">
     <div class="container">
       <div class="title">3/5</div>
-      <selected-value :value="publicEventData.location" property="location"></selected-value>
+      <selected-value :value="publicEventData.location || 'Not Sure'" property="location"></selected-value>
       <div class="event-building event-basic-info">
         <div class="setting-title mt-70">
           <img :src="`${$iconURL}Onboarding/enter-gray.svg`" class="indicator" />

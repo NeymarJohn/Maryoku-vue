@@ -578,7 +578,7 @@ export default {
           const currentIndex = this.vendor.images.length;
           S3Service.fileUpload(file, fileId, "vendor/cover-images").then((uploadedName) => {
             console.log("createImage", uploadedName);
-            this.$root.$emit("update-vendor-value", "images", {
+            this.$root.$emit("update-vendor-value", "vendorImages", {
               index: currentIndex,
               data: `https://maryoku.s3.amazonaws.com/vendor/cover-images/${uploadedName}`,
             });
@@ -592,7 +592,7 @@ export default {
       reader.readAsDataURL(file);
     },
     removeVendorImage(image) {
-      console.log("removeVendorImage", image);
+      console.log('removeVendorImage', image);
       this.$root.$emit("update-vendor-value", "removeImage", image);
     },
     getCategoryNameByValue(value) {
@@ -628,9 +628,9 @@ export default {
   computed: {},
   filters: {},
   watch: {
-    vendor() {
-      console.log("step.watch.vendor", this.vendor);
-    },
+    vendor(){
+      console.log('step.watch.vendor', this.vendor);
+    }
   },
 };
 </script>

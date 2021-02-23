@@ -81,18 +81,8 @@ export default {
     },
     addItem(serviceItem) {
       if (!this.services) this.services = [];
-      if (serviceItem.price > 0) {
-        const costServices = this.$store.state.vendorProposal.proposalCostServices[this.vendorCategory];
-        costServices.push(serviceItem);
-        const newServices = Object.assign([], costServices);
-        this.$store.commit("vendorProposal/setCostServices", {
-          category: this.vendorCategory,
-          services: newServices,
-        });
-      } else {
-        this.services.push(serviceItem);
-        this.services = Object.assign([], this.services);
-      }
+      this.services.push(serviceItem);
+      this.services = Object.assign([], this.services);
     },
   },
   components: {

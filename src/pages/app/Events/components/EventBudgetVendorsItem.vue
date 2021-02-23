@@ -2,14 +2,24 @@
   <div>
     <table
       class="event-blocks__table event-block-table"
-      :class="{ booked: eventCategoryItem.bookedBudget }"
-      :style="`border-left: 10px solid ${eventCategoryItem.color}`"
+      :class="{ booked: eventCategoryItem.bookedBudget, borderCard: !editingMode }"
+      :style="
+        editingMode
+          ? `border-left: 10px solid ${eventCategoryItem.color}`
+          : `border: 2px solid ${eventCategoryItem.color}`
+      "
     >
       <tbody>
         <template>
           <tr>
             <td width="40%" class="event-block-element">
-              <img :src="`${$iconURL}Budget Elements/${eventCategoryItem.icon}`" />
+              <img
+                :src="
+                  editingMode
+                    ? `${$iconURL}Budget Elements/${eventCategoryItem.icon}`
+                    : `/static/icons/budget/${eventCategoryItem.icon.replace('svg', 'png')}`
+                "
+              />
               {{ eventCategoryItem.title }}
               <span v-if="eventCategoryItem.eventCategory">
                 <img :src="`${$iconURL}Campaign/Group 9087.svg`" class="label-icon" />
@@ -21,7 +31,9 @@
             <td class="planned" width="20%" style="white-space: nowrap">
               <span v-if="type === 'total'">$ {{ eventCategoryItem.allocatedBudget | withComma }}</span>
               <span v-else>$ {{ (eventCategoryItem.allocatedBudget / event.numberOfParticipants).toFixed(0) }}</span>
-              <md-button class="md-rose md-sm md-simple edit-btn" v-if="isEditable" @click="switchEdit">Edit</md-button>
+              <md-button class="md-rose md-sm md-simple edit-btn" v-if="isEditable && editingMode" @click="switchEdit"
+                >Edit</md-button
+              >
               <img
                 :src="`${$iconURL}Event Page/arrow-left-gray.svg`"
                 v-if="isEditing"
@@ -93,7 +105,8 @@
                     v-if="
                       !eventCategoryItem.fixed &&
                       eventCategoryItem.componentId != 'unexpected' &&
-                      !eventCategoryItem.bookedBudget
+                      !eventCategoryItem.bookedBudget &&
+                      editingMode
                     "
                     >Book Vendors</md-button
                   >
@@ -217,6 +230,10 @@ export default {
     type: {
       type: String,
       default: "total",
+    },
+    editingMode: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {

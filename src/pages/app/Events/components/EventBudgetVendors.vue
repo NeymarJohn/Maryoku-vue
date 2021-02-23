@@ -20,16 +20,22 @@
       :eventCategoryItem="block"
       :key="block.id"
       :type="type"
+      :editingMode="editingMode"
       @update="updateCategoryBudget"
       @delete="deleteCategory"
       @addVendor="addMyVendor"
     ></event-budget-vendors-item>
 
-    <table class="event-blocks__table event-block-table" :style="`border-left: 10px solid #80B93D;color:#80B93D`">
+    <table
+      class="event-blocks__table event-block-table"
+      :style="editingMode ? `border-left: 10px solid #80B93D;color:#80B93D` : `border: 2px solid #80B93D;color:#80B93D`"
+    >
       <tbody>
         <tr class="unexpected-budget">
           <td width="40%" class="event-block-element unexpected">
-            <img :src="`${$iconURL}Budget Elements/unexpected.svg`" />
+            <img
+              :src="editingMode ? `${$iconURL}Budget Elements/unexpected.svg` : `/static/icons/budget/unexpected.png`"
+            />
             Unexpected
           </td>
           <td width="20%" class="planned unexpected">$ {{ event.unexpectedBudget | withComma }}</td>
@@ -39,11 +45,16 @@
         </tr>
       </tbody>
     </table>
-    <table class="event-blocks__table event-block-table" :style="`border-left: 10px solid #818080`">
+    <table
+      class="event-blocks__table event-block-table"
+      :style="editingMode ? `border-left: 10px solid #818080;color:#818080` : `border: 2px solid #818080;color:#80B93D`"
+    >
       <tbody>
         <tr class="extra">
           <td width="40%" class="event-block-element extra">
-            <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget screen/SVG/extra-gray.svg" />
+            <img
+              :src="editingMode ? `${$iconURL}budget screen/SVG/extra-gray.svg` : `/static/icons/budget/extra-gray.png`"
+            />
             Extras
           </td>
           <td width="20%" class="planned">$ {{ (event.allocatedTips + event.allocatedFees) | withComma }}</td>
@@ -58,7 +69,10 @@
         <template v-if="showTips">
           <tr class="extra">
             <td width="40%" class="event-block-element extra">
-              <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget screen/SVG/tips-gray.svg" />
+              <img
+                :src="editingMode ? `${$iconURL}budget screen/SVG/tips-gray.png` : `/static/icons/budget/tips-gray.png`"
+              />
+
               Tips 12%
             </td>
             <td width="20%" class="planned">
@@ -101,7 +115,10 @@
           </tr>
           <tr class="extra">
             <td width="40%" class="event-block-element extra">
-              <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget screen/SVG/fees-gray.svg" />
+              <img
+                :src="editingMode ? `${$iconURL}budget screen/SVG/fees-gray.svg` : `/static/icons/budget/fees-gray.png`"
+              />
+
               Fees 3%
             </td>
             <td width="20%" class="planned">$ {{ event.allocatedFees | withComma }}</td>
@@ -112,11 +129,16 @@
         </template>
       </tbody>
     </table>
-    <table class="event-blocks__table event-block-table" :style="`border-left: 10px solid #0047cc`">
+    <table
+      class="event-blocks__table event-block-table"
+      :style="editingMode ? `border-left: 10px solid #0047cc` : `border: 1px solid #0047cc`"
+    >
       <tbody>
         <tr class="unused-budget">
           <td width="40%" class="event-block-element unused-budget">
-            <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget screen/SVG/Asset 487.svg" />
+            <img
+              :src="editingMode ? `${$iconURL}budget+screen/SVG/Asset+487.svg` : `/static/icons/budget/unused.png`"
+            />
             Unused
           </td>
           <td width="20%" class="planned">$ {{ unusedBudget | withComma }}</td>
@@ -136,7 +158,7 @@
           <td width="15%" class="total-value">${{ bookedTotal | withComma }}</td>
           <td colspan="2"></td>
         </tr>
-        <tr class="add-category" v-if="canEdit">
+        <tr class="add-category" v-if="canEdit && editingMode">
           <td colspan="5">
             <md-button class="md-simple add-category-btn" @click="showCategoryModal = true">
               <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2019.svg" />
@@ -214,6 +236,10 @@ export default {
       type: String,
       default: "total",
     },
+    editingMode: {
+      type: Boolean,
+      default: true,
+    },
   },
   data: () => ({
     // auth: auth,
@@ -289,7 +315,7 @@ export default {
       return this.event.totalBudget - this.bookedTotal;
     },
     eventCategoryList() {
-      console.log('eventCategoryList', this.event.components);
+      console.log("eventCategoryList", this.event.components);
       return this.event.components;
     },
   },
