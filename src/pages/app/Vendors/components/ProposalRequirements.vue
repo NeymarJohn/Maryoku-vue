@@ -161,7 +161,7 @@ export default {
   }
   .collapse-panel-header {
     position: relative;
-
+    cursor: pointer;
     padding: 20px 40px;
     .collapse-button {
       position: absolute;

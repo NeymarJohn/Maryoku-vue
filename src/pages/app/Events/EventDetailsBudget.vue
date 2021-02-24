@@ -1,6 +1,6 @@
 <template>
   <div>
-    <event-state-message v-if="showMessage" :type="type"  @closeMessage="showMessage = false"></event-state-message>
+    <event-state-message type="positive" v-if="showMessage" @closeMessage="showMessage = false"></event-state-message>
     <div class="edit-event-details event-details-budget">
       <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
       <!-- Event Header -->
@@ -136,7 +136,7 @@
             <div class="card-section card-expense" style="border: solid 2px #dbdbdb !important">
               <div class="section-header" style="border-bottom: solid 2px #dbdbdb !important">Expenses</div>
               <div>
-                <pie-chart-round :event.sync="event" :items="pieChartData"></pie-chart-round>
+                <pie-chart-round :event.sync="event" :items="pieChartData" :showImage="true"></pie-chart-round>
               </div>
             </div>
           </div>
@@ -325,11 +325,10 @@ export default {
       showBudgetModal: false,
       budgetConfirmationModal: false,
       newBudget: null,
-      type: null,
       editBudgetElementsModal: false,
       showHandleMinus: false,
       showCommentEditorPanel: false,
-      showMessage: false,
+      showMessage: true,
     };
   },
   created() {
@@ -382,17 +381,6 @@ export default {
           this.event = event;
           this.eventId = event.id;
           this.calendarEvent = event;
-          if (event.budgetProgress < 100) {
-            this.type = 'not_approved';
-          }
-          let now = moment();
-          let created_at = moment(event.dateCreated);
-          if (now.diff(created_at, 'days') < 15) {
-            this.type = 'approved_budget_in_two_weeks';
-          }
-          console.log('budget.detail.event', this.type);
-          if (!this.type) this.type = 'not_approved';
-
           if (event.totalBudget)
             this.newBudget = (event.totalBudget + "").replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           new EventComponent()
@@ -414,7 +402,6 @@ export default {
             this.routeName === "InviteesManagement" || this.routeName === "EventInvitees",
           );
           this.isLoading = false;
-          this.showMessage = true;
         });
     },
     selectServices() {
