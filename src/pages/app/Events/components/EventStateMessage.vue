@@ -1,30 +1,28 @@
 <template>
   <div class="event-state-message">
     <div class="event-state-message-image">
-      <img v-if="type=='positive'" :src="`${$iconURL}messages/positive.svg`" />
-      <img v-if="type=='action'" :src="`${$iconURL}messages/CTA.svg`" />
-      <img v-if="type=='benchmark'" :src="`${$iconURL}messages/Benchmark.svg`" />
-      <img v-if="type=='alert'" :src="`${$iconURL}messages/Alert.svg`" />
+      <img v-if="data.type==='positive'" :src="`${$iconURL}messages/positive.svg`" />
+      <img v-if="data.type==='action'" :src="`${$iconURL}messages/CTA.svg`" />
+      <img v-if="data.type==='benchmark'" :src="`${$iconURL}messages/Benchmark.svg`" />
+      <img v-if="data.type==='alert'" :src="`${$iconURL}messages/Alert.svg`" />
 
     </div>
-    <div v-if="type=='positive'" class="event-state-message-content">
-      <div class="message-title">Great Job!</div>
-      <div class="message-content">You saved</div>
+    <div v-if="data.type==='positive'" class="event-state-message-content">
+      <div class="message-title">{{data.title}}</div>
+      <div class="message-content">{{data.message}}</div>
       <div class="message-action">
-        <div class="message-action-content">
-          Want to upgrade your event and get a fantastic clip?
-        </div>
+        <div class="message-action-content">{{data.action}}</div>
         <div class="message-action-button">
           <md-button class="md-bold add-category-btn md-black md-simple">Cancel</md-button>
           <md-button class="md-red md-bold add-category-btn">Send</md-button>
         </div>
       </div>
     </div>
-    <div v-if="type=='action'"  class="event-state-message-content">
-      <div class="message-title">Great Job!</div>
-      <div class="message-content">You saved</div>
+    <div v-if="data.type==='action'"  class="event-state-message-content">
+      <div class="message-title">{{data.title}}</div>
+      <div class="message-content">{{data.message}}</div>
       <div class="message-action">
-        <div class="message-action-content"></div>
+        <div class="message-action-content">{{data.action}}</div>
         <div class="message-action-button">
           <md-button
             class="md-bold add-category-btn md-black md-simple"
@@ -33,11 +31,11 @@
         </div>
       </div>
     </div>
-    <div v-if="type=='benchmark'"  class="event-state-message-content">
-      <div class="message-title benchmark">{{messages[2].title}}</div>
-      <div class="message-content benchmark">{{messages[2].message}}</div>
+    <div v-if="data.type==='benchmark'"  class="event-state-message-content">
+      <div class="message-title benchmark">{{data.title}}</div>
+      <div class="message-content benchmark">{{data.message}}</div>
       <div class="message-action">
-        <div class="message-action-content benchmark">{{messages[2].action}}</div>
+        <div class="message-action-content benchmark">{{data.action}}</div>
         <div class="message-action-button">
           <md-button
             class="md-red md-simple normal-btn"
@@ -45,14 +43,14 @@
         </div>
       </div>
     </div>
-    <div v-if="type=='alert'"  class="event-state-message-content">
+    <div v-if="data.type==='alert'"  class="event-state-message-content">
       <div class="message-title alert-message">
         <md-icon class="color-minus">remove_circle_outline</md-icon>
         $ 2,200
       </div>
-      <div class="message-title alert-message">{{messages[3].title}}</div>
+      <div class="message-title alert-message">{{data.title}}</div>
       <div class="message-action">
-        <div class="message-action-content alert-message">{{messages[3].message}}</div>
+        <div class="message-action-content alert-message">{{data.message}}</div>
         <div class="message-action-button">
           <md-button
             class="md-bold add-category-btn md-black md-simple"
@@ -94,24 +92,32 @@ const messages = [
     type: "alert"
   }
 ]
+import { BUDGET_MESSAGES } from "@/constants/messages";
 export default {
   name: "event-state-message",
   props: {
     type: {
       type: String,
-      default: 'positive'
+      default: 'not_approved'
     },
   },
   data() {
     return {
-      messages: messages
+      data: {}
     }
   },
   methods: {
+    init(){
+      console.log('event.state.message', this.type);
+      this.data = BUDGET_MESSAGES.find(m => m.key === this.type)
+    },
     closeMessage() {
       this.$emit("closeMessage");
     }
   },
+  mounted() {
+     this.init();
+  }
 }
 </script>
 <style lang="scss" scoped>

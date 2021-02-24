@@ -2,6 +2,11 @@
   font-family: "Manrope-Regular";
   color : #050505;
   padding: 10px 50px;
+  .pdf-content{
+    .card-section {
+      border:solid 1px #a0a0a0;
+    }
+  }
   .card-overview, .card-activity, .card-expense {
     .section-header {
       border-bottom: solid 2px #DBDBDB !important;

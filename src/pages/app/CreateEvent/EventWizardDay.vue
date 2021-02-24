@@ -88,49 +88,18 @@ export default {
       }
     },
     skip() {
+      this.setEventProperty({
+        key: "eventStartMillis",
+        actualValue: 0,
+      });
+      this.setEventProperty({
+        key: "eventEndMillis",
+        actualValue: 0,
+      });
       this.$router.push({ path: `/event-wizard-flexibility` });
     },
     back() {
       this.$router.push({ path: `/create-event-wizard` });
-    },
-    validateDate() {
-      return this.$refs.datePicker.$el.classList.contains("md-has-value");
-    },
-    validateAndSubmit() {
-      // this.$emit('goToNextPage');
-      //  return;
-      let vm = this;
-
-      this.cerrors = {};
-      this.validating = true;
-
-      this.$validator.validateAll().then((isValid) => {
-        if (isValid) {
-          // this.$parent.isLoading = true;
-
-          if (this.eventId) {
-            vm.updateEvent();
-          } else {
-            vm.createEvent();
-          }
-        } else {
-          this.showNotify();
-        }
-      });
-
-      if (!this.eventType) {
-      } else {
-        // this.$emit('goToNextPage');
-      }
-    },
-    showNotify() {
-      this.$notify({
-        message: "Please, check all required fields",
-        icon: "warning",
-        horizontalAlign: "center",
-        verticalAlign: "top",
-        type: "danger",
-      });
     },
   },
   data() {
