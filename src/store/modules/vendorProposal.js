@@ -53,23 +53,24 @@ const getters = {
   pricesByCategory(state, getters) {
     const prices = {}
     state.additionalServices.forEach(service => {
-      if (!state.proposalServices[service]) {
+      if (!state.proposalCostServices[service]) {
         prices[service] = 0
       }
-      if (state.proposalServices[service]) {
-        const sumPrice = state.proposalServices[service].reduce((s, item) => {
+      if (state.proposalCostServices[service]) {
+        const sumPrice = state.proposalCostServices[service].reduce((s, item) => {
           return s + item.requirementValue * item.price;
         }, 0);
         let taxRate = state.taxes[service];
-        let discount = state.discounts[service] || 0
         if (!taxRate) taxRate = 0;
-        let total = sumPrice - (sumPrice * discount) / 100;
-        const tax = (total * taxRate) / 100;
-        prices[service] = total - tax;
+        let discount = state.discounts[service] || { price: 0, percentage: 0 }
+        let total = sumPrice - discount.price;
+        const tax = Math.round((total * taxRate) / 100);
+        prices[service] = total + tax;
       }
 
     })
     prices[state.vendor.eventCategory.key] = getters.mainTotalPrice
+    console.log("prices", prices)
     return prices
   }
 }
