@@ -9,17 +9,35 @@
         {{ this.proposalRequest.requirement.note }}
       </div>
     </div>
-    <hr />
+    <!-- <hr /> -->
     <div
-      class="p-40"
+      class="pb-40 pr-40 pl-40"
       v-for="requirement in specialRequirements"
       :key="requirement.item"
       :class="{ 'd-none': getSelectedOption(requirement.options).length == 0 }"
     >
-      <div>
+      <div
+        class="d-flex align-center"
+        v-if="requirement.groupSizes && requirement.groupSizes.findIndex((item) => item.selected) >= 0"
+      >
+        <div class="font-size-22 font-bold">
+          <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" class="page-icon" />
+          Group Work Planned
+        </div>
+        <div class="group-card">
+          <span class="">Group size:</span>
+          <img :src="`${$iconURL}common/users-gray.svg`" class="page-icon ml-10" />
+          <div class="font-size-30 ml-10" style="padding: 5px">
+            {{ requirement.groupSizes.find((item) => item.selected).item }}
+          </div>
+          <div class="font-size-22 ml-10">people</div>
+        </div>
+      </div>
+      <hr style="background-color: #ececec" />
+      <div class="mt-30">
         <img :src="`${$iconURL}Submit+Proposal/request arrangement.png`" />
         <span class="font-size-30 font-bold">
-          The client has requested these {{ requirement.item || requirement.subCategory }}, can you deliver?
+          {{ requirement.item || requirement.subCategory }}
         </span>
       </div>
       <div class="d-flex align-center mt-40" v-if="requirement.item == 'Sitting arrangement'" style="flex-flow: wrap">
@@ -54,22 +72,6 @@
           <textarea v-model="newSeatingSuggest"></textarea>
           <md-button class="maryoku-btn md-red" @click="saveNewSeating">Save</md-button>
           <md-button class="md-simple maryoku-btn md-black" @click="editingNewSeating = false">Cancel</md-button>
-        </div>
-        <div style="margin-left: 80px" v-if="requirement.groupSizes.findIndex((item) => item.selected) >= 0">
-          <div class="font-size-22 font-bold mb-20">
-            <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" class="page-icon" />
-            Group Work Planned
-          </div>
-          <div class="text-center">
-            <div class="mb-10">Group size:</div>
-            <div class="group-card">
-              <img :src="`${$iconURL}common/users-gray.svg`" class="page-icon" />
-              <div class="font-size-30" style="padding: 20px">
-                {{ requirement.groupSizes.find((item) => item.selected).item }}
-              </div>
-              <div class="font-size-22">people</div>
-            </div>
-          </div>
         </div>
       </div>
       <div v-else class="align-center mt-40" :class="{ 'd-none': getSelectedOption(requirement.options).length == 0 }">
@@ -148,14 +150,13 @@ export default {
   }
   .group-card {
     display: flex;
-    flex-direction: column;
+    // flex-direction: column;
     align-items: center;
     justify-content: center;
-    border: solid 1px #707070;
-    border-radius: 3px;
-    width: 160px;
-    height: 160px;
-    margin: auto;
+    // border: solid 1px #707070;
+    margin-left: 20px;
+    padding-left: 20px;
+    border-left: solid 1px #ececec;
   }
 }
 </style>

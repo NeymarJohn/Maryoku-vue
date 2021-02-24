@@ -13,6 +13,21 @@
           :key="`requirement-category-${index}`"
         >
           <template v-if="requirementCategory === 'multi-selection'"> </template>
+          <template v-else-if="requirementCategory.toLowerCase() === 'special'">
+            <div class="category-section" v-if="selectedOptions(requirementsData[requirementCategory]).length > 0">
+              <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
+              <div class="requirement-grid">
+                <div
+                  class="d-flex requirement-item"
+                  v-for="requirementItem in selectedOptions(requirementsData[requirementCategory])"
+                  :key="requirementItem.item"
+                >
+                  <div class="checkmark"></div>
+                  <div class="d-inline-block">{{ requirementItem.item || requirementItem.subCategory }}</div>
+                </div>
+              </div>
+            </div>
+          </template>
           <div v-else class="category-section">
             <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
             <div class="requirement-grid">
@@ -45,6 +60,11 @@
 import CollapsePanel from "../../Campaign/CollapsePanel.vue";
 export default {
   components: { CollapsePanel },
+  methods: {
+    selectedOptions(specialRequirements) {
+      return specialRequirements.filter((item) => item.options.findIndex((option) => option.selected) > 0);
+    },
+  },
   computed: {
     requirementsData() {
       try {

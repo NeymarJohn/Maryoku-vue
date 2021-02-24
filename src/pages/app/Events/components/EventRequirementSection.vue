@@ -42,10 +42,6 @@
                     v-if="service.notable"
                     :property="service"
                     @save="saveComment"></requirement-item-comment>
-            <span v-if="service.hint" class="ml-10">
-                    <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
-                    <md-tooltip md-direction="bottom">{{ service.hint }}</md-tooltip>
-            </span>
           </div>
         </td>
         <td v-if="category !== 'Amenities'">

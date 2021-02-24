@@ -16,7 +16,7 @@
           that your invitees will know what to expect!
         </div>
       </div>
-      <header-actions @toggleCommentMode="toggleCommentMode" @export="exportToPdf"></header-actions>
+      <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
     </div>
     <div class="md-layout">
       <div
@@ -784,9 +784,6 @@ export default {
       // }
       return true;
     },
-    exportToPdf() {
-      this.$refs.html2Pdf.generatePdf();
-    },
   },
   created() {
     [...Array(12).keys()].map((x) => (x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined));
@@ -805,6 +802,9 @@ export default {
       }
       this.isLoading = false;
     }
+    this.$root.$on("pageExport", () => {
+      this.$refs.html2Pdf.generatePdf();
+    });
   },
   mounted() {
     this.isLoading = true;

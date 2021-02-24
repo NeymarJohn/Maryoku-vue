@@ -174,6 +174,8 @@ export default {
       this.$emit("input", this.content);
     },
     handleScroll(event) {
+      console.log(window.scrollY);
+      console.log(this.cumulativeOffset(this.$refs.input));
       if (this.$refs.timePickerPanel)
         this.$refs.timePickerPanel.style.top = `${window.scrollY + this.cumulativeOffset(this.$refs.input).top}px`;
     },
@@ -217,6 +219,7 @@ export default {
     if (this.value && this.inputStyle === "budget") {
       this.content = `${this.value}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
+    console.log(this.readonly);
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll);

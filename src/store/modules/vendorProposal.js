@@ -43,11 +43,11 @@ const getters = {
       return s + item.requirementValue * item.price;
     }, 0);
     let taxRate = state.taxes[mainService];
-    let discount = state.discounts[mainService] || 0
+    let discount = state.discounts[mainService] || { price: 0, percentage: 0 }
     if (!taxRate) taxRate = 0;
-    let total = sumPrice - (sumPrice * discount) / 100;
-    const tax = (total * taxRate) / 100;
-    const result = total - tax
+    let total = sumPrice - discount.price;
+    const tax = Math.round((total * taxRate) / 100);
+    const result = total + tax
     return result;
   },
   pricesByCategory(state, getters) {

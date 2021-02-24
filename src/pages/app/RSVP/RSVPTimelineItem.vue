@@ -1,6 +1,6 @@
 <template>
   <div class="rsvp-timeline" v-if="timeline">
-    <img class="item-icon" :src="`/static/icons/timeline/${timeline.icon.toLowerCase()}-circle.png`" />
+    <img class="item-icon" :src="`/static/icons/${timeline.icon.toLowerCase()}-circle.png`" />
     <div class="rsvp-timeline-content" :style="`border:dashed 2px ${timeline.color}`">
       <div>
         <div class="item-time">
