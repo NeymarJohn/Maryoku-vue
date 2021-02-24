@@ -28,7 +28,7 @@
               {{ event.concept ? event.concept.name : event.title }}
             </li>
             <li>
-              <img alt="" v-if="event.owner.companyLogo" :src="`${event.owner.companyLogo}`" />
+              <img class="company-logo" alt="" v-if="event.owner.companyLogo" :src="`${event.owner.companyLogo}`" />
               {{ event.owner.company }}
             </li>
           </ul>
@@ -604,6 +604,10 @@ export default {
             }
             &:not(:last-child) {
               border-right: solid 1px white;
+            }
+            .company-logo {
+              max-height: 30px;
+              max-width: 30px;
             }
           }
         }
