@@ -28,8 +28,8 @@
               {{ event.concept ? event.concept.name : event.title }}
             </li>
             <li>
-              <img alt="" v-if="event.owner.companyLogo" :src="`${event.owner.companyLogo}`" />
-              {{ event.owner.company }}
+              <!-- <img :src="`${proposalIconsUrl}Asset 573.svg`" /> -->
+              <!-- {{ getLocation }} -->
             </li>
           </ul>
         </div>
@@ -595,16 +595,7 @@ export default {
           list-style: none;
           padding: 0;
           margin: 0;
-          display: flex;
-          align-items: center;
           li {
-            padding: 5px 20px;
-            &:first-child {
-              padding-left: 0px;
-            }
-            &:not(:last-child) {
-              border-right: solid 1px white;
-            }
           }
         }
       }

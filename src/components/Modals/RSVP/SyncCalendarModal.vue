@@ -63,7 +63,7 @@
 import { Modal, MaryokuInput } from "@/components";
 import { convertTimezoneName } from "@/utils/helperFunction";
 import moment from "moment-timezone";
-import { msSignIn, addCalendarEvent } from "@/auth/msAuth.js";
+import { addOutlookCalendarEvent } from "@/auth/msAuth.js";
 
 // Client ID and API key from the Developer Console
 const CLIENT_ID = "1016422269325-8bhm78m73gebu9k38nj61nr2246r1a1h.apps.googleusercontent.com";
@@ -176,8 +176,7 @@ export default {
         });
       });
     },
-    async handleMsAuthClick() {
-      await msSignIn();
+    handleMsAuthClick() {
       const timeZoneName = convertTimezoneName(this.campaign.event.timezone);
       let newEvent = {
         subject: this.campaign.event.title,
@@ -210,7 +209,35 @@ export default {
           content: this.campaign.event.concept.description,
         };
       }
-      addCalendarEvent(newEvent);
+      const vm = this;
+      addOutlookCalendarEvent(newEvent)
+        .then(() => {
+          swal({
+            title: "Thank you for your attending!",
+            text: `See you there!`,
+            showCancelButton: false,
+            confirmButtonClass: "md-button md-success btn-fill",
+            cancelButtonClass: "md-button md-danger btn-fill",
+            confirmButtonText: "OK",
+            buttonsStyling: false,
+          }).then((result) => {
+            vm.$emit("scheduled");
+          });
+        })
+        .catch((error) => {
+          swal({
+            title: "Sorry something is wrong!",
+            text: `Please try again.`,
+            showCancelButton: false,
+            confirmButtonClass: "md-button md-success btn-fill",
+            cancelButtonClass: "md-button md-danger btn-fill",
+            confirmButtonText: "OK",
+            buttonsStyling: false,
+          }).then((result) => {
+            vm.$emit("scheduled");
+          });
+        });
+      // handle response
     },
     syncCalendar() {
       if (this.emailAccount === "google") {

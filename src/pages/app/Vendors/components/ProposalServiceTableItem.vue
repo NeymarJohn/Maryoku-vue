@@ -381,7 +381,6 @@ export default {
   font-family: "Manrope-Regular", sans-serif;
   font-size: 16px;
   font-weight: 600;
-  cursor: pointer;
   &.included-services {
     // padding: 20px 0px;
     border-top: 1px solid #d5d5d5;

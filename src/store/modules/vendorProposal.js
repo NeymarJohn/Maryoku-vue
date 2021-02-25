@@ -43,34 +43,33 @@ const getters = {
       return s + item.requirementValue * item.price;
     }, 0);
     let taxRate = state.taxes[mainService];
-    let discount = state.discounts[mainService] || { price: 0, percentage: 0 }
+    let discount = state.discounts[mainService] || 0
     if (!taxRate) taxRate = 0;
-    let total = sumPrice - discount.price;
-    const tax = Math.round((total * taxRate) / 100);
-    const result = total + tax
+    let total = sumPrice - (sumPrice * discount) / 100;
+    const tax = (total * taxRate) / 100;
+    const result = total - tax
     return result;
   },
   pricesByCategory(state, getters) {
     const prices = {}
     state.additionalServices.forEach(service => {
-      if (!state.proposalCostServices[service]) {
+      if (!state.proposalServices[service]) {
         prices[service] = 0
       }
-      if (state.proposalCostServices[service]) {
-        const sumPrice = state.proposalCostServices[service].reduce((s, item) => {
+      if (state.proposalServices[service]) {
+        const sumPrice = state.proposalServices[service].reduce((s, item) => {
           return s + item.requirementValue * item.price;
         }, 0);
         let taxRate = state.taxes[service];
+        let discount = state.discounts[service] || 0
         if (!taxRate) taxRate = 0;
-        let discount = state.discounts[service] || { price: 0, percentage: 0 }
-        let total = sumPrice - discount.price;
-        const tax = Math.round((total * taxRate) / 100);
-        prices[service] = total + tax;
+        let total = sumPrice - (sumPrice * discount) / 100;
+        const tax = (total * taxRate) / 100;
+        prices[service] = total - tax;
       }
 
     })
     prices[state.vendor.eventCategory.key] = getters.mainTotalPrice
-    console.log("prices", prices)
     return prices
   }
 }

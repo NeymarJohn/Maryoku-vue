@@ -16,10 +16,7 @@
       :key="requirement.item"
       :class="{ 'd-none': getSelectedOption(requirement.options).length == 0 }"
     >
-      <div
-        class="d-flex align-center"
-        v-if="requirement.groupSizes && requirement.groupSizes.findIndex((item) => item.selected) >= 0"
-      >
+      <div class="d-flex align-center" v-if="requirement.groupSizes.findIndex((item) => item.selected) >= 0">
         <div class="font-size-22 font-bold">
           <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" class="page-icon" />
           Group Work Planned

@@ -152,7 +152,6 @@ export default {
   display: grid;
   grid-template-columns: 30% 10% 10% 12% 15% 23%;
   align-items: center;
-  cursor: pointer;
   .madatory-badge {
     color: #f51355;
     font-weight: normal;
@@ -187,14 +186,12 @@ export default {
     display: flex;
     justify-content: flex-end;
     .edit {
-      width: 20px;
-      height: 20px;
+      width: 21px;
       margin-right: 31px;
       cursor: pointer;
     }
     .trash {
-      width: 20px;
-      height: 20px;
+      width: 21px;
       cursor: pointer;
     }
   }
@@ -202,11 +199,15 @@ export default {
     &.item-cont {
       text-transform: capitalize;
     }
+    &:hover.action-cont {
+      display: block;
+    }
   }
   &.step-3 {
     border: none;
     border-top: 1px solid #818080;
-    padding: 50px 40px;
+    margin: 0 38px;
+    padding: 50px 0;
     grid-template-columns: 40% 15% 15% 15% 15%;
 
     .whole-cont {

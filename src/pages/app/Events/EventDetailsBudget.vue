@@ -136,7 +136,7 @@
             <div class="card-section card-expense" style="border: solid 2px #dbdbdb !important">
               <div class="section-header" style="border-bottom: solid 2px #dbdbdb !important">Expenses</div>
               <div>
-                <pie-chart-round :event.sync="event" :items="pieChartData" :showImage="true"></pie-chart-round>
+                <pie-chart-round :event.sync="event" :items="pieChartData"></pie-chart-round>
               </div>
             </div>
           </div>

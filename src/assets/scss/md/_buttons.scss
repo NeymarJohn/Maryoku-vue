@@ -90,9 +90,6 @@
   &.md-red {
     @include btn-styles($brand-red);
   }
-  &.md-vendor {
-    @include btn-styles($vendorColor);
-  }
 
   &.md-yellow {
     @include btn-styles($brand-yellow);

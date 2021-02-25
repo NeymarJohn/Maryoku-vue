@@ -137,7 +137,9 @@
         <tr class="unused-budget">
           <td width="40%" class="event-block-element unused-budget">
             <img
-              :src="editingMode ? `${$iconURL}budget+screen/SVG/Asset+487.svg` : `/static/icons/budget/unused.png`"
+              :src="
+                editingMode ? `${$iconURL}budget screen/SVG/Asset 487.svg` : `/static/icons/budget/unused.png`
+              "
             />
             Unused
           </td>

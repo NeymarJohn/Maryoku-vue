@@ -29,10 +29,10 @@
               % Percentage
               <br />
               <money
-                v-model="discount.percentage"
+                v-model="discount"
                 v-bind="percentageFormat"
                 :class="[{ 'active-discount': isDiscountPercentage }, { 'inactive-discount': !isDiscountPercentage }]"
-                @keyup.native="setRange(discount.percentage, 'percentage')"
+                @keyup.native="setRange(discount, 'discount')"
                 @click.native="
                   isDiscountPercentage = true;
                   switchDiscountMethod();
@@ -42,17 +42,17 @@
           </div>
           <div class="percent-cont text-center" :class="{ 'text-right': isEditDiscount }">
             <span v-if="isEditDiscount">Or</span>
-            <span v-else>{{ discount.percentage }}%</span>
+            <span v-else>{{ discount }}%</span>
           </div>
           <div class="price-cont text-center">
             <template v-if="isEditDiscount">
               <span class="pl-2">Amount</span>
               <br />
               <money
-                v-model="discount.price"
+                v-model="discount_by_amount"
                 v-bind="currencyFormat"
                 :class="[{ 'active-discount': !isDiscountPercentage }, { 'inactive-discount': isDiscountPercentage }]"
-                @keyup.native="setRange(discount.price, 'discount_by_amount')"
+                @keyup.native="setRange(discount_by_amount, 'discount_by_amount')"
                 @click.native="
                   isDiscountPercentage = false;
                   switchDiscountMethod();
@@ -60,14 +60,15 @@
               />
             </template>
             <template v-else>
-              <span>-${{ discount.price | withComma }}</span>
+              <span v-if="discount_by_amount == 0">${{ ((totalOffer() * discount) / 100) | withComma }}</span>
+              <span v-else>${{ discount_by_amount }}</span>
             </template>
           </div>
-          <div class="edit-cont">
+          <!-- <div class="edit-cont">
             <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditDiscount = true" v-if="!isEditDiscount" />
             <a class="cancel" v-if="isEditDiscount" @click="cancelDiscount()">Cancel</a>
             <a class="save" v-if="isEditDiscount" @click="saveDiscount()">Save</a>
-          </div>
+          </div> -->
         </div>
         <div class="row grid-tax-row">
           <div class="item-cont">
@@ -90,9 +91,9 @@
             <span>{{ tax }}%</span>
           </div>
           <div class="price-cont text-center">
-            <span>${{ taxPrice | withComma }}</span>
+            <span>${{ ((calculatedTotal * tax) / 100) | withComma }}</span>
           </div>
-          <div class="edit-cont">
+          <!-- <div class="edit-cont">
             <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditTax = true" v-if="!isEditTax" />
             <a
               class="cancel"
@@ -103,14 +104,17 @@
               "
               >Cancel</a
             >
-            <a class="save" v-if="isEditTax" @click="saveTax">Save</a>
-          </div>
+            <a class="save" v-if="isEditTax" @click="isEditTax = false">Save</a>
+          </div> -->
         </div>
       </div>
       <div class="editable-sub-items-footer" v-if="tableCategory === 'cost'">
         <span>Total</span>
-        <span class="font-regular text-center">Approx</span>
-        <span class="text-center">${{ calculatedTotal | withComma }} </span>
+        <span
+          ><span class="font-regular">Approx</span>&nbsp;&nbsp;&nbsp;&nbsp; ${{
+            (calculatedTotal + calculatedTotal * tax) | withComma
+          }}
+        </span>
       </div>
     </div>
   </div>
@@ -156,7 +160,7 @@ export default {
       isEditDiscount: false,
       isEditTax: false,
       clickedItem: false,
-      discount: {},
+      discount: 0,
       discount_by_amount: 0,
       isDiscountPercentage: true,
       tax: 0,
@@ -191,7 +195,7 @@ export default {
         thousands: ",",
         prefix: "",
         suffix: "  %",
-        precision: 2,
+        precision: 0,
         masked: false,
       },
       selectedQuickButton: "",
@@ -213,7 +217,8 @@ export default {
     },
     setRange(value, type) {
       let val = value;
-      if (type == "discount_percentage") {
+
+      if (type != "discount_by_amount") {
         if (value > 100) {
           val = 100;
         }
@@ -221,13 +226,15 @@ export default {
           val = 0;
         }
       }
+
       if (type == "tax") {
         this.tax = val;
         this.discount_by_amount = 0;
       } else if (type == "discount_by_amount") {
-        this.discount.percentage = ((val / this.totalPrice) * 100).toFixed(2);
+        this.discount_by_amount = val;
+        this.tax = 0;
       } else {
-        this.discount.price = ((this.totalPrice * val) / 100).toFixed(0);
+        this.discount = val;
       }
     },
     cancel() {
@@ -281,7 +288,6 @@ export default {
     },
     saveDiscount() {
       this.isEditDiscount = false;
-      console.log("this.discount", this.discount);
       this.$store.commit("vendorProposal/setDiscount", { category: this.category, value: this.discount });
       this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {
         category: this.category,
@@ -293,10 +299,6 @@ export default {
       this.discount = 0;
     },
 
-    saveTax() {
-      this.isEditTax = false;
-      this.$store.commit("vendorProposal/setTax", { category: this.category, tax: this.tax });
-    },
     createProposalFile(file) {
       let reader = new FileReader();
       let vm = this;
@@ -321,11 +323,6 @@ export default {
       reader.readAsDataURL(file);
     },
 
-    totalCost() {
-      return this.services.reduce((s, item) => {
-        return s + item.price * item.requirementValue;
-      }, 0);
-    },
     totalOffer() {
       // let total = parseFloat(this.proposalRequest.requirementsCategoryCost)
       let total = 0;
@@ -351,8 +348,8 @@ export default {
     },
 
     switchDiscountMethod() {
-      // this.discount.price = 0;
-      // this.discount.percentage = 0;
+      this.discount = 0;
+      this.discount_by_amount = 0;
     },
 
     async imageSelected(file) {
@@ -389,13 +386,6 @@ export default {
       this.servicesWidth = this.$refs.servicesCont.clientWidth;
     }
     this.tax = this.$store.state.vendorProposal.taxes[this.vendor.eventCategory.key];
-    this.discount = this.$store.state.vendorProposal.discounts[this.vendor.eventCategory.key];
-    if (!this.discount) {
-      this.discount = {
-        percentage: 0,
-        price: 0,
-      };
-    }
   },
   filters: {
     withComma(amount) {
@@ -439,10 +429,11 @@ export default {
       },
     },
     calculatedTotal() {
-      return this.totalPrice - this.discount.price + this.taxPrice;
-    },
-    taxPrice() {
-      return Math.round(((this.totalPrice - this.discount.price) * this.tax) / 100);
+      let taxRate = this.$store.state.vendorProposal.taxes[this.categroy];
+      if (!taxRate) taxRate = 0;
+      let total = this.totalPrice - (this.totalPrice * this.discount) / 100;
+      const tax = (total * taxRate) / 100;
+      return total - tax;
     },
     totalPrice() {
       if (!this.services) {
@@ -617,24 +608,16 @@ export default {
             }
           }
         }
-        &:hover {
-          .edit-cont {
-            .edit {
-              visibility: unset;
-            }
-          }
-        }
         .edit-cont {
           text-align: right;
-          white-space: nowrap;
           .edit {
             width: 21px;
             height: 21px;
             margin-right: 2rem;
             cursor: pointer;
-            visibility: hidden;
           }
         }
+
         img {
           width: 15px;
           margin-right: 22px;
@@ -657,10 +640,12 @@ export default {
       border: 2px solid #d5d5d5;
       border-bottom: none;
       display: grid;
-      grid-template-columns: 55% 15% 15%;
+      grid-template-columns: 57.5% 42.5%;
+
       span {
         font-size: 20px;
         font-weight: 800;
+        display: inline-block;
       }
     }
   }
