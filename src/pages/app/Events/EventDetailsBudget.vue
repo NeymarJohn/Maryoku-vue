@@ -1,6 +1,6 @@
 <template>
   <div>
-    <event-state-message type="positive" v-if="showMessage" @closeMessage="showMessage = false"></event-state-message>
+    <event-state-message v-if="showMessage" :type="type"  @closeMessage="showMessage = false"></event-state-message>
     <div class="edit-event-details event-details-budget">
       <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
       <!-- Event Header -->
@@ -136,7 +136,7 @@
             <div class="card-section card-expense" style="border: solid 2px #dbdbdb !important">
               <div class="section-header" style="border-bottom: solid 2px #dbdbdb !important">Expenses</div>
               <div>
-                <pie-chart-round :event.sync="event" :items="pieChartData"></pie-chart-round>
+                <pie-chart-round :event.sync="event" :items="pieChartData" :showImage="true"></pie-chart-round>
               </div>
             </div>
           </div>
@@ -325,10 +325,11 @@ export default {
       showBudgetModal: false,
       budgetConfirmationModal: false,
       newBudget: null,
+      type: null,
       editBudgetElementsModal: false,
       showHandleMinus: false,
       showCommentEditorPanel: false,
-      showMessage: true,
+      showMessage: false,
     };
   },
   created() {
@@ -381,6 +382,29 @@ export default {
           this.event = event;
           this.eventId = event.id;
           this.calendarEvent = event;
+          if (event.budgetProgress < 100) {
+            this.type = 'not_approved';
+          }
+          let now = moment();
+          let created_at = moment(event.dateCreated);
+          if (!this.type && now.diff(created_at, 'days') < 15) {
+            this.type = 'approved_budget_in_two_weeks';
+          }
+
+          if (!this.type && event.approvedBudget !== 0) {
+              if (event.approvedBudget < event.totalBudget) {
+                  this.type = 'higher_than_average';
+              } else {
+                  this.type = 'lower_than_average';
+              }
+          }
+
+          if (!this.type && event.unexpected < event.totalBudget * 0.1) {
+            this.type = 'unexpected_budget_less_10';
+          }
+          console.log('budget.detail.event', this.type);
+          if (!this.type) this.type = 'not_approved';
+
           if (event.totalBudget)
             this.newBudget = (event.totalBudget + "").replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           new EventComponent()
@@ -402,6 +426,7 @@ export default {
             this.routeName === "InviteesManagement" || this.routeName === "EventInvitees",
           );
           this.isLoading = false;
+          this.showMessage = true;
         });
     },
     selectServices() {

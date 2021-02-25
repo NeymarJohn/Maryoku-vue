@@ -84,7 +84,6 @@
               {{ getServiceCategory(a).title }}
             </li>
             <li>
-              <!-- <span>{{ getServiceCategory(a).bookTitle }} {{ a }}</span> -->
               <a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
             </li>
             <li>
@@ -92,8 +91,8 @@
               <span>${{ pricesByCategory[a] | withComma }}</span>
             </li>
             <li>
-              <span>Budget for {{ getServiceCategory(a).title }}</span>
-              <span> ${{ pricesByCategory[a] | withComma }}</span>
+              <span>Budget for {{ getServiceCategory(a).title }} &nbsp;</span>
+              <span> ${{ event.components.find((item) => item.componentId == a).allocatedBudget | withComma }}</span>
             </li>
             <li v-if="calculatedTotal(getRequirementsByCategory(a)) - newProposalRequest.eventData.allocatedBudget > 0">
               <md-icon>error</md-icon>
@@ -110,9 +109,9 @@
       </div>
       <div class="item bundle" v-if="isBundleDiscount">
         <div class="element">
-          <label class=""
-            ><span class="font-bold">Add bundle new total</span> (current:{{ totalPriceForBundle | withComma }})</label
-          >
+          <label class="">
+            <span class="font-bold">Add bundle new total</span> (current:{{ totalPriceForBundle | withComma }})
+          </label>
           <money
             v-model="bundleDiscountAmount"
             v-bind="{
@@ -351,6 +350,10 @@ export default {
   computed: {
     proposalRequest() {
       return this.$store.state.vendorProposal.proposalRequest;
+    },
+    event() {
+      if (!this.proposalRequest) return {};
+      return this.proposalRequest.eventData;
     },
     vendor() {
       return this.$store.state.vendorProposal.vendor;

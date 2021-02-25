@@ -31,10 +31,8 @@
             @dayClicked="changeDate($event)"
             @changedMonth="changeMonth($event)"
             @changedYear="changeYear($event)"
-            :date-format="'yyyy-mm-dd'"
             v-model="dateData"
           ></functional-calendar>
-
           <md-checkbox v-model="section.more_one_day" value="more_one_day"> More than one day event </md-checkbox>
         </div>
       </div>
@@ -81,7 +79,10 @@ export default {
       isEdit: false,
       iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
       additional: true,
-      markedDates: {},
+      markedDates: {
+          start: '9/2/2021',
+          end: '19/2/2021',
+      },
       dateData: {
         currentDate: null,
         dateRange: {
@@ -117,30 +118,33 @@ export default {
   },
   methods: {
     changeMonth(e){
-        // console.log('markedDates', this.markedDates)
         this.month = moment(e).month();
-        this.year = moment(e).year();
+        this.year = moment(e).year()
+        this.resetCalendar();
     },
-      changeYear(e){
-          this.year = moment(e).year();
-          this.month = moment(e).month();
-      },
+    changeYear(e){
+        this.month = moment(e).month();
+        this.year = moment(e).year()
+    },
     changeDate(e) {
       console.log("changeDate", e, this.dateData);
       this.dateClick = !this.dateClick;
 
       if (this.dateClick) {
-        this.started_at = e.date;
+        this.started_at = moment(e.date, 'D/M/YYYY').format('YYYY-MM-DD');
         this.day = e.day;
+        this.resetCalendar();
         this.$forceUpdate();
+        return;
       }
 
       if (!this.dateClick) {
-        this.ended_at = e.date;
+        this.ended_at = moment(e.date, 'D/M/YYYY').format('YYYY-MM-DD') ;
         if (this.day > e.day) {
             this.ended_at = this.started_at;
-            this.started_at = e.date;
+            this.started_at = moment(e.date, 'D/M/YYYY').format('YYYY-MM-DD');
         }
+
         const extendedMoment = extendMoment(moment);
         const start = new Date(this.started_at);
         const end = new Date(this.ended_at);
@@ -152,7 +156,7 @@ export default {
           if (dateList[index]) item.date = dateList[index];
           return item;
         });
-        this.markedDates = {};
+
         this.$emit("change", {
           dateData: {
             started_at: this.started_at,
@@ -167,62 +171,21 @@ export default {
         });
       }
     },
-    init: async function () {
+      resetCalendar(){
+          $(".vfc-day").each(function (index, day) {
+              $(day).find("div.vfc-base-start").remove();
+              $(day).find("div.vfc-base-end").remove();
+              $(day).find("span.vfc-span-day").removeClass('vfc-marked vfc-start-marked vfc-end-marked');
+          })
+      },
+    init: function () {
         if (this.section.started_at && this.section.ended_at) {
           this.markedDates = {
-            start: moment(this.section.started_at).format("YYYY-MM-DD"),
-            end: moment(this.section.ended_at).format("YYYY-MM-DD"),
+            start: moment(this.section.started_at).format("D/M/YYYY"),
+            end: moment(this.section.ended_at).format("D/M/YYYY"),
           };
         }
-    },
-    resetCalendar(){
-        $(".vfc-day").each(function (index, day) {
-            $(day).find("div.vfc-base-start").remove();
-            $(day).find("div.vfc-base-end").remove();
-            $(day).find("span.vfc-span-day").removeClass('vfc-marked vfc-start-marked vfc-end-marked');
-        })
-    },
-    renderCalendar() {
-      let started_date = moment(this.section.started_at).date();
-      let ended_date = moment(this.section.ended_at).date();
-
-      console.log('renderCalendar', this.month)
-      $(".vfc-day").each(function (index, day) {
-        let el = $(day).find("span.vfc-span-day");
-
-        // don't check the same day of next month
-        if($(day).find("span.vfc-span-day").hasClass('vfc-hide')) return;
-
-        if (el.text() <= ended_date && el.text() >= started_date) {
-          el.addClass("vfc-marked");
-        } else {
-          el.removeClass("vfc-marked");
-          el.removeClass("vfc-start-marked");
-          el.removeClass("vfc-end-marked");
-          $(day).find("div.vfc-base-start").remove();
-          $(day).find("div.vfc-base-end").remove();
-        }
-
-        if (started_date === ended_date) {
-          el.addClass("vfc-end-marked");
-        } else if (el.text() == started_date) {
-          el.addClass("vfc-start-marked");
-          if (!$(day).find("div.vfc-base-start").length) $(day).prepend("<div class='vfc-base-start'></div>");
-        } else if (el.text() == ended_date) {
-          if (el.text() == started_date) {
-            el.addClass("vfc-start-marked");
-            if (!$(day).find("div.vfc-base-start").length) $(day).prepend("<div class='vfc-base-start'></div>");
-          } else if (el.text() == ended_date) {
-            el.addClass("vfc-end-marked");
-            if (!$(day).find("div.vfc-base-end").length) $(day).prepend("<div class='vfc-base-end'></div>");
-          } else {
-            el.removeClass("vfc-start-marked");
-            el.removeClass("vfc-end-marked");
-            $(day).find("div.vfc-base-start").remove();
-            $(day).find("div.vfc-base-end").remove();
-          }
-        }
-      });
+        console.log('init', this.markedDates);
     },
   },
   filters: {
@@ -234,24 +197,20 @@ export default {
     this.init();
   },
   updated() {
-    let year = moment(this.section.started_at).year();
-    let month = moment(this.section.started_at).month();
-
-    if (this.year === year && this.month === month) {
-        this.renderCalendar();
-    } else {
-        this.resetCalendar();
-    }
+      let year = moment(this.section.started_at).year()
+      let month = moment(this.section.started_at).month()
+      if (year !== this.year || month !== this.month){
+          // this.resetCalendar();
+      }
 
   },
   watch: {
-    section: {
-      handler(newVal) {
-        this.markedDates = {};
-        if (newVal) this.init();
-      },
-      deep: true,
+  section: {
+    handler(newVal) {
+      if (newVal) this.init();
     },
+    deep: true,
+},
   },
 };
 </script>
