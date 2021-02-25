@@ -1,29 +1,29 @@
 <template>
   <div class="adding-building-blocks-panel">
     <div class="md-layout main-wrapper">
-      <div class="md-layout-item md-size-95" style="max-height: 50vh;">
+      <div class="md-layout-item md-size-95" style="max-height: 50vh">
         <div class="md-title">
           <h4>Add Event Elements</h4>
-          <md-button
-            v-if="selectedItems.length > 0"
-            class="md-danger no-padding"
-            @click="addSelectedElements()"
-          >Add {{selectedItems.length}} Elements</md-button>
+          <md-button v-if="selectedItems.length > 0" class="md-danger no-padding" @click="addSelectedElements()"
+            >Add {{ selectedItems.length }} Elements</md-button
+          >
         </div>
-        <div class="md-layout" style="overflow: auto; max-height: 80vh;">
+        <div class="md-layout" style="overflow: auto; max-height: 80vh">
           <div
-            v-for="(item,index) in filteredEventBlocks"
+            v-for="(item, index) in filteredEventBlocks"
             :key="index"
-            :class="[`md-layout-item md-size-100 mx-auto event-element-item no-padding`, {'disabled': isElementAdded(item)}]"
+            :class="[
+              `md-layout-item md-size-100 mx-auto event-element-item no-padding`,
+              { disabled: isElementAdded(item) },
+            ]"
             @click="addElement(item)"
           >
             <drag
-              :class="[
-              `md-button block-item text-center`,
-              {'active': isElementSelected(item)}]"
+              :class="[`md-button block-item text-center`, { active: isElementSelected(item) }]"
               :transfer-data="{ item }"
               v-if="!item.childComponents"
-            >{{item.title}}</drag>
+              >{{ item.title }}</drag
+            >
           </div>
         </div>
       </div>
@@ -33,7 +33,7 @@
         <img
           src="https://static-maryoku.s3.amazonaws.com/storage/img/drag_drop_white.png"
           alt="drag and drop"
-          style="width: 52px;"
+          style="width: 52px"
         />
       </p>
       <p class style>Drag Event Elements Here</p>
@@ -47,7 +47,7 @@ import EventPageHeaderImage from "@/models/EventPageHeaderImage";
 import { Modal } from "@/components";
 import Calendar from "@/models/Calendar";
 import EventComponent from "@/models/EventComponent";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import { error } from "util";
 import moment from "moment";
 import draggable from "vuedraggable";
@@ -127,9 +127,7 @@ export default {
             id: event.id,
           },
         };
-        this.selectedItemsRequests.push(
-          new EventComponent(new_item).for(calendar, event).save(),
-        );
+        this.selectedItemsRequests.push(new EventComponent(new_item).for(calendar, event).save());
       });
 
       Promise.all(this.selectedItemsRequests)

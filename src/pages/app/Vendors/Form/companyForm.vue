@@ -5,9 +5,11 @@
         <div class="card-icon">
           <md-icon>mail_outline</md-icon>
         </div>
-        <h4
-          class="title2"
-        >{{selected_vendor.vendorDisplayName ? `${selected_vendor.vendorDisplayName}’s Company`: "Create New Vendor"}}</h4>
+        <h4 class="title2">
+          {{
+            selected_vendor.vendorDisplayName ? `${selected_vendor.vendorDisplayName}’s Company` : "Create New Vendor"
+          }}
+        </h4>
         <md-card-actions md-alignment="right">
           <md-button class="md-default md-sm" @click="closePanel">Close</md-button>
           <md-button v-if="creation_mode" class="md-success md-sm" @click="addVendor">Create</md-button>
@@ -18,8 +20,9 @@
         <div class="md-layout-item md-size-100">
           <md-field
             :class="[
-            {'md-valid': !errors.has('vendorDisplayName') && selected_vendor.vendorDisplayName},
-            {'md-error': errors.has('vendorDisplayName')}]"
+              { 'md-valid': !errors.has('vendorDisplayName') && selected_vendor.vendorDisplayName },
+              { 'md-error': errors.has('vendorDisplayName') },
+            ]"
           >
             <label>Vendor Name</label>
             <md-input
@@ -35,18 +38,18 @@
               <md-icon class="error" v-show="errors.has('vendorDisplayName')">close</md-icon>
             </slide-y-down-transition>
             <slide-y-down-transition>
-              <md-icon
-                class="success"
-                v-show="!errors.has('vendorDisplayName') && selected_vendor.vendorDisplayName"
-              >done</md-icon>
+              <md-icon class="success" v-show="!errors.has('vendorDisplayName') && selected_vendor.vendorDisplayName"
+                >done</md-icon
+              >
             </slide-y-down-transition>
           </md-field>
         </div>
         <div class="md-layout-item md-size-50">
           <md-field
             :class="[
-            {'md-valid': !errors.has('vendorWebsite') && selected_vendor.vendorWebsite},
-            {'md-error': errors.has('vendorWebsite')}]"
+              { 'md-valid': !errors.has('vendorWebsite') && selected_vendor.vendorWebsite },
+              { 'md-error': errors.has('vendorWebsite') },
+            ]"
           >
             <label>Website</label>
             <md-input
@@ -59,18 +62,18 @@
               <md-icon class="error" v-show="errors.has('vendorWebsite')">close</md-icon>
             </slide-y-down-transition>
             <slide-y-down-transition>
-              <md-icon
-                class="success"
-                v-show="!errors.has('vendorWebsite') && selected_vendor.vendorWebsite"
-              >done</md-icon>
+              <md-icon class="success" v-show="!errors.has('vendorWebsite') && selected_vendor.vendorWebsite"
+                >done</md-icon
+              >
             </slide-y-down-transition>
           </md-field>
         </div>
         <div class="md-layout-item md-size-50">
           <md-field
             :class="[
-            {'md-valid': !errors.has('vendorMainEmail') && selected_vendor.vendorMainEmail},
-            {'md-error': errors.has('vendorMainEmail')}]"
+              { 'md-valid': !errors.has('vendorMainEmail') && selected_vendor.vendorMainEmail },
+              { 'md-error': errors.has('vendorMainEmail') },
+            ]"
           >
             <label>Email</label>
             <md-input
@@ -85,10 +88,9 @@
               <md-icon class="error" v-show="errors.has('vendorMainEmail')">close</md-icon>
             </slide-y-down-transition>
             <slide-y-down-transition>
-              <md-icon
-                class="success"
-                v-show="!errors.has('vendorMainEmail') && selected_vendor.vendorMainEmail"
-              >done</md-icon>
+              <md-icon class="success" v-show="!errors.has('vendorMainEmail') && selected_vendor.vendorMainEmail"
+                >done</md-icon
+              >
             </slide-y-down-transition>
           </md-field>
         </div>
@@ -108,18 +110,18 @@
               <md-icon class="error" v-show="errors.has('vendorAddressLine1')">close</md-icon>
             </slide-y-down-transition>
             <slide-y-down-transition>
-              <md-icon
-                class="success"
-                v-show="!errors.has('vendorAddressLine1') && selected_vendor.vendorAddressLine1"
-              >done</md-icon>
+              <md-icon class="success" v-show="!errors.has('vendorAddressLine1') && selected_vendor.vendorAddressLine1"
+                >done</md-icon
+              >
             </slide-y-down-transition>
           </md-field>
         </div>
         <div class="md-layout-item md-size-50">
           <md-field
             :class="[
-            {'md-valid': !errors.has('vendorMainPhoneNumber') && selected_vendor.vendorMainPhoneNumber},
-            {'md-error': errors.has('vendorMainPhoneNumber')}]"
+              { 'md-valid': !errors.has('vendorMainPhoneNumber') && selected_vendor.vendorMainPhoneNumber },
+              { 'md-error': errors.has('vendorMainPhoneNumber') },
+            ]"
           >
             <label>Phone Number</label>
             <md-input
@@ -138,12 +140,13 @@
               <md-icon
                 class="success"
                 v-show="!errors.has('vendorMainPhoneNumber') && selected_vendor.vendorMainPhoneNumber"
-              >done</md-icon>
+                >done</md-icon
+              >
             </slide-y-down-transition>
           </md-field>
         </div>
         <div class="md-layout-item md-size-50">
-          <md-field :class="[{'md-error': errors.has('vendorCategory')}]" class="select-with-icon">
+          <md-field :class="[{ 'md-error': errors.has('vendorCategory') }]" class="select-with-icon">
             <label for="category">Category</label>
             <md-select
               v-model="selected_vendor.vendorCategory"
@@ -152,16 +155,11 @@
               v-validate="modelValidations.vendorCategory"
               required
             >
-              <md-option
-                v-for="(option, index) in categories"
-                :key="index"
-                :value="option.id"
-              >{{ option.value }}</md-option>
+              <md-option v-for="(option, index) in categories" :key="index" :value="option.id">{{
+                option.value
+              }}</md-option>
             </md-select>
-            <span
-              class="md-error"
-              v-if="errors.has('vendorCategory')"
-            >The Vendor Category is required</span>
+            <span class="md-error" v-if="errors.has('vendorCategory')">The Vendor Category is required</span>
           </md-field>
         </div>
         <div class="md-layout-item md-size-50" v-if="selected_vendor.vendorTagging">
@@ -187,7 +185,7 @@
           <label>Phone Number</label>
         </div>
         <div
-          v-for="(contactPerson , index) in selected_vendor.vendorContactPerson"
+          v-for="(contactPerson, index) in selected_vendor.vendorContactPerson"
           :key="index"
           class="md-layout-item md-size-100 contact-person-list"
         >
@@ -203,11 +201,7 @@
           </div>
           <div class="md-layout-item md-size-30">
             <md-field>
-              <md-input
-                v-model="contactPerson.phone_number"
-                :name="'phone_number_' + index"
-                type="text"
-              ></md-input>
+              <md-input v-model="contactPerson.phone_number" :name="'phone_number_' + index" type="text"></md-input>
             </md-field>
           </div>
           <div class="delete-item" @click="deleteContactPersonItem(index)">
@@ -221,12 +215,12 @@
           <label>Attachments</label>
           <template v-if="selected_vendor">
             <div
-              v-for="(attachment , index) in selected_vendor.vendorAttachments"
+              v-for="(attachment, index) in selected_vendor.vendorAttachments"
               :key="index"
               class="md-layout-item md-size-100 contact-person-list"
             >
               <md-field>
-                <md-file class="attachments-file" :ref="'file-'+index" v-model="attachment.path" />
+                <md-file class="attachments-file" :ref="'file-' + index" v-model="attachment.path" />
                 <div class="delete-item" @click="deleteAttachmentItem(index)">
                   <md-icon class="md-theme-rose">delete_outline</md-icon>
                 </div>
@@ -277,181 +271,179 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 </style>
 <script>
-import Vue from 'vue'
-import Vendors from '@/models/Vendors'
-import VendorCategories from '@/models/VendorCategories'
-import swal from 'sweetalert2'
-import { SlideYDownTransition } from 'vue2-transitions'
+import Vue from "vue";
+import Vendors from "@/models/Vendors";
+import VendorCategories from "@/models/VendorCategories";
+import Swal from "sweetalert2";
+import { SlideYDownTransition } from "vue2-transitions";
 
 export default {
   components: {
-    SlideYDownTransition
+    SlideYDownTransition,
   },
   props: {
     selected_vendor: {
       type: Object,
-      default: {}
+      default: {},
     },
     creation_mode: {
       type: Boolean,
-      default: false
+      default: false,
     },
-    categories: Array
+    categories: Array,
   },
-  created () {
+  created() {
     /**
      * Get categories for vendors
      */
-    Vendors.find('categories').then(
-      categories => {
-        this.categories = categories
+    Vendors.find("categories").then(
+      (categories) => {
+        this.categories = categories;
       },
-      error => {
-        console.log(error)
-      }
-    )
+      (error) => {
+        console.log(error);
+      },
+    );
   },
-  beforeUpdate () {
+  beforeUpdate() {
     if (!this.selected_vendor.vendorContactPerson) {
       this.selected_vendor.vendorContactPerson = [
         {
           name: null,
           email: null,
-          phone_number: null
-        }
-      ]
+          phone_number: null,
+        },
+      ];
     }
 
     if (!this.selected_vendor.vendorAttachments) {
-      this.selected_vendor.vendorAttachments = []
+      this.selected_vendor.vendorAttachments = [];
     }
 
     if (!this.selected_vendor.vendorTagging) {
-      this.selected_vendor.vendorTagging = []
+      this.selected_vendor.vendorTagging = [];
     }
   },
-  mounted () {},
-  data () {
+  mounted() {},
+  data() {
     return {
       company: {},
       vendorCategory: [],
       contactPersonList: [],
       vendorAttachments: [],
       vm: {
-        searchPlace: '',
-        location: {}
+        searchPlace: "",
+        location: {},
       },
       selectedVendor: this.selected_vendor,
       modelValidations: {
         vendorDisplayName: {
           required: true,
-          min: 5
+          min: 5,
         },
         vendorMainEmail: {
           required: true,
-          email: true
+          email: true,
         },
         vendorMainPhoneNumber: {
           required: true,
-          min: 5
+          min: 5,
         },
         vendorCategory: {
           required: true,
-          min: 5
-        }
-      }
-    }
+          min: 5,
+        },
+      },
+    };
   },
   methods: {
     /**
      * Modify selected vendor from vendors list
      */
-    async saveVendor () {
-      let vendor = await Vendors.find(this.selected_vendor.id)
+    async saveVendor() {
+      let vendor = await Vendors.find(this.selected_vendor.id);
 
-      vendor.vendorDisplayName = this.selected_vendor.vendorDisplayName
-      vendor.vendorWebsite = this.selected_vendor.vendorWebsite
-      vendor.vendorMainEmail = this.selected_vendor.vendorMainEmail
-      vendor.vendorAddressLine1 = this.selected_vendor.vendorAddressLine1
-      vendor.vendorMainPhoneNumber = this.selected_vendor.vendorMainPhoneNumber
-      vendor.vendorCategory = this.selected_vendor.vendorCategory
-      vendor.vendorTagging = this.selected_vendor.vendorTagging
-      vendor.vendorContactPerson = this.selected_vendor.vendorContactPerson
-      vendor.vendorAttachments = this.selected_vendor.vendorAttachments
-      vendor.save()
+      vendor.vendorDisplayName = this.selected_vendor.vendorDisplayName;
+      vendor.vendorWebsite = this.selected_vendor.vendorWebsite;
+      vendor.vendorMainEmail = this.selected_vendor.vendorMainEmail;
+      vendor.vendorAddressLine1 = this.selected_vendor.vendorAddressLine1;
+      vendor.vendorMainPhoneNumber = this.selected_vendor.vendorMainPhoneNumber;
+      vendor.vendorCategory = this.selected_vendor.vendorCategory;
+      vendor.vendorTagging = this.selected_vendor.vendorTagging;
+      vendor.vendorContactPerson = this.selected_vendor.vendorContactPerson;
+      vendor.vendorAttachments = this.selected_vendor.vendorAttachments;
+      vendor.save();
 
       this.$notify({
-        message: 'Vendor Updated successfully!',
-        horizontalAlign: 'center',
-        verticalAlign: 'top',
-        type: 'success'
-      })
+        message: "Vendor Updated successfully!",
+        horizontalAlign: "center",
+        verticalAlign: "top",
+        type: "success",
+      });
     },
     /**
      * Add new contact person to the selected vendor
      */
-    addContactPerson () {
+    addContactPerson() {
       this.selected_vendor.vendorContactPerson.push({
         name: null,
         email: null,
-        phone_number: null
-      })
-      this.$forceUpdate()
+        phone_number: null,
+      });
+      this.$forceUpdate();
     },
     /**
      * Delete item from contact person list
      * @param index
      */
-    deleteContactPersonItem (index) {
-      this.selected_vendor.vendorContactPerson.splice(index, 1)
+    deleteContactPersonItem(index) {
+      this.selected_vendor.vendorContactPerson.splice(index, 1);
     },
     /**
      * Add new attachment file to the selected vendor
      */
-    addAttachment () {
+    addAttachment() {
       this.selected_vendor.vendorAttachments.push({
-        path: null
-      })
-      this.$forceUpdate()
+        path: null,
+      });
+      this.$forceUpdate();
       setTimeout(() => {
-        this.$refs[
-          'file-' + (this.selected_vendor.vendorAttachments.length - 1)
-        ][0].$children[0].$el.click()
-      }, 200)
+        this.$refs["file-" + (this.selected_vendor.vendorAttachments.length - 1)][0].$children[0].$el.click();
+      }, 200);
     },
     /**
      * Delete item from attachments list
      * @param index
      */
-    deleteAttachmentItem (index) {
-      this.selected_vendor.vendorAttachments.splice(index, 1)
+    deleteAttachmentItem(index) {
+      this.selected_vendor.vendorAttachments.splice(index, 1);
       this.selected_vendor = {
-        ...this.selected_vendor
-      }
+        ...this.selected_vendor,
+      };
     },
-    async addVendor () {
-      this.$validator.validateAll().then(res => {
+    async addVendor() {
+      this.$validator.validateAll().then((res) => {
         if (res) {
-          let vendor = new Vendors({})
+          let vendor = new Vendors({});
 
-          vendor.attach(this.selected_vendor).then(res => {
-            this.$emit('vendorCreated')
-            this.$emit('selectVendor', res.data.item)
+          vendor.attach(this.selected_vendor).then((res) => {
+            this.$emit("vendorCreated");
+            this.$emit("selectVendor", res.data.item);
             this.$notify({
-              message: 'Vendor created successfully!',
-              horizontalAlign: 'center',
-              verticalAlign: 'top',
-              type: 'success'
-            })
-          })
+              message: "Vendor created successfully!",
+              horizontalAlign: "center",
+              verticalAlign: "top",
+              type: "success",
+            });
+          });
         } else {
-          this.$emit('on-validated', res)
-          return res
+          this.$emit("on-validated", res);
+          return res;
         }
-      })
+      });
     },
-    onlyNumber (event) {
-      const key = event.keyCode ? event.keyCode : event.which
+    onlyNumber(event) {
+      const key = event.keyCode ? event.keyCode : event.which;
       if (
         !(
           event.ctrlKey ||
@@ -465,14 +457,14 @@ export default {
         )
       ) {
         // 46 is dot
-        event.preventDefault()
+        event.preventDefault();
       }
     },
-    closePanel () {
-      this.$emit('closePanel', {
-        a: 'b'
-      })
-    }
-  }
-}
+    closePanel() {
+      this.$emit("closePanel", {
+        a: "b",
+      });
+    },
+  },
+};
 </script>

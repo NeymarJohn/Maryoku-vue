@@ -28,10 +28,7 @@
     <div class="md-layout">
       <div id="control-panel" style="width: 1px; height: 100%; float: left; margin-left: -1px"></div>
       <div class="md-layout-item md-size-100">
-          <event-overview-date
-              :section="eventDateSection"
-              @change="changeEvent"
-          ></event-overview-date>
+        <event-overview-date :section="eventDateSection" @change="changeEvent"></event-overview-date>
         <event-overview-section
           v-for="(section, index) in sections"
           :key="index"
@@ -66,7 +63,7 @@ import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import CalendarEvent from "@/models/CalendarEvent";
 
 import moment from "moment";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import { MaryokuInput } from "@/components";
 import VueElementLoading from "vue-element-loading";
 import { FunctionalCalendar } from "vue-functional-calendar";
@@ -88,7 +85,7 @@ export default {
     MaryokuInput,
     Multiselect,
     EventOverviewSection,
-    EventOverviewDate
+    EventOverviewDate,
   },
   props: {
     // event: Object,
@@ -142,7 +139,7 @@ export default {
       const arrow = `<i data-v-a76b6a56="" style="color:#050505" class="md-icon md-icon-font md-theme-default">arrow_back</i>`;
       const description = `<div class="description">Your edits changed the event, do you want to change it?</div>`;
 
-      swal({
+      Swal.fire({
         title: `<div class="text-left">${arrow}<div>Are Your Sure?</div>${description}</div>`,
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",
@@ -153,7 +150,7 @@ export default {
       }).then((result) => {
         if (result.dismiss != "cancel") {
           this.$store.dispatch("event/saveEventAction", updatedEvent).then((res) => {
-            swal({
+            Swal.fire({
               title: "Success to save your changes!",
               confirmButtonClass: "md-button md-success confirm-btn-bg ",
               cancelButtonClass: "md-button md-danger cancel-btn-bg",
@@ -208,15 +205,15 @@ export default {
       let places = this.event.places ? this.event.places.map((p) => p.toLowerCase()) : [];
 
       this.eventDateSection = {
-          title: "Date",
-          key: "date",
-          img_src: `${this.$secondIconURL}Event Page/Group 8708.svg`,
-          warning: "Changing the time on your status might cause price changes",
-          started_at: this.event.eventStartMillis,
-          ended_at: this.event.eventEndMillis,
-          timelineDates: this.$store.state.event.timelineDates,
-          more_one_day: null,
-      }
+        title: "Date",
+        key: "date",
+        img_src: `${this.$secondIconURL}Event Page/Group 8708.svg`,
+        warning: "Changing the time on your status might cause price changes",
+        started_at: this.event.eventStartMillis,
+        ended_at: this.event.eventEndMillis,
+        timelineDates: this.$store.state.event.timelineDates,
+        more_one_day: null,
+      };
       this.sections = [
         {
           title: "Location",

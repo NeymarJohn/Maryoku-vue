@@ -289,7 +289,7 @@ import Vendor from "@/models/Vendors";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import { Modal } from "@/components";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import TopNavbar from "./TopNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
 import MobileMenu from "./Extra/MobileMenu.vue";
@@ -410,7 +410,7 @@ export default {
       proposal.save().then((res) => {
         if (type === "submit") this.submittedModal = true;
         else {
-          swal({
+          Swal.fire({
             title: `You saved the current proposal. You can edit anytime later!`,
             buttonsStyling: false,
             type: "success",

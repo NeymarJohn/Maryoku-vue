@@ -154,7 +154,7 @@
 </template>
 <script>
 import VueElementLoading from "vue-element-loading";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import companyForm from "./Form/companyForm.vue";
 import UploadModal from "./ImportVendors";
 import VendorsGrid from "./VendorsGridNew";
@@ -336,10 +336,10 @@ export default {
       this.view = view;
     },
     showDeleteAlert(vendor) {
-      swal({
+      Swal.fire({
         title: "Are you sure?",
         text: `You won't be able to revert this!`,
-        type: "warning",
+        icon: "warning",
         showCancelButton: true,
         confirmButtonClass: "md-button md-success confirm-btn-bg ",
         cancelButtonClass: "md-button md-danger cancel-btn-bg",

@@ -129,7 +129,7 @@ export default {
           message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
           horizontalAlign: "center",
           verticalAlign: "top",
-          type: "warning",
+          icon: "warning",
         });
       }
     },

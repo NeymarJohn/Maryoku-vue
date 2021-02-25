@@ -1,16 +1,12 @@
 <template>
   <div class="event-images-list md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen />
-    <md-card
-      v-for="(image,index) in event.eventPage.images"
-      :key="index"
-      class="md-layout-item md-size-25"
-    >
+    <md-card v-for="(image, index) in event.eventPage.images" :key="index" class="md-layout-item md-size-25">
       <md-card-media>
         <div
           class="event-images_image-item"
-          style="margin: auto;"
-          :style="`background-image : url(`+`${serverUrl}/1/eventPageImages/${image.id}`+`)`"
+          style="margin: auto"
+          :style="`background-image : url(` + `${serverUrl}/1/eventPageImages/${image.id}` + `)`"
           @click="previewImage(image.id)"
         ></div>
         <md-button
@@ -32,26 +28,28 @@
       </md-card-media>
     </md-card>
     <md-card
-      v-for="(n,index) in (3 - Math.min(3,event.eventPage.images.length))"
+      v-for="(n, index) in 3 - Math.min(3, event.eventPage.images.length)"
       :key="index + 1000"
       class="md-layout-item md-size-33 default-image-box"
-      :style="`cursor: pointer; background: url('https://static-maryoku.s3.amazonaws.com/storage/img/default${index+1}.jpg') center center no-repeat; background-size: cover;`"
+      :style="`cursor: pointer; background: url('https://static-maryoku.s3.amazonaws.com/storage/img/default${
+        index + 1
+      }.jpg') center center no-repeat; background-size: cover;`"
     >
       <div
         v-if="!readonly"
         class
         @click="uploadEventImage"
-        style="color: black; text-shadow: 0 0 3px #fff; font-size: 18px; font-weight: 500;"
+        style="color: black; text-shadow: 0 0 3px #fff; font-size: 18px; font-weight: 500"
       >
-        <md-icon
-          style="color: black; text-shadow: 0 0 3px #fff; font-size: 24px; font-weight: 500;"
-        >add_to_photos</md-icon>Add image
+        <md-icon style="color: black; text-shadow: 0 0 3px #fff; font-size: 24px; font-weight: 500"
+          >add_to_photos</md-icon
+        >Add image
       </div>
     </md-card>
     <div class="update-banner-form" v-if="!readonly">
       <input
         type="file"
-        style="display: none;"
+        style="display: none"
         ref="eventFile"
         accept="image/gif, image/jpg, image/png"
         @change="onEventFilePicked"
@@ -73,7 +71,7 @@ import EventComponent from "@/models/EventComponent";
 import CalendarEventPageImage from "@/models/CalendarEventPageImage";
 import VueElementLoading from "vue-element-loading";
 // import auth from '@/auth';
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 
 export default {
   name: "event-images",
@@ -113,11 +111,10 @@ export default {
       } else {
         this.alretExceedPictureSize = true;
         this.$notify({
-          message:
-            "You've Uploaded an Image that Exceed the allowed size, try small one!",
+          message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
           horizontalAlign: "center",
           verticalAlign: "top",
-          type: "warning",
+          icon: "warning",
         });
       }
     },

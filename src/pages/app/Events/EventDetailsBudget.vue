@@ -1,6 +1,6 @@
 <template>
   <div>
-    <event-state-message v-if="showMessage" :type="type"  @closeMessage="showMessage = false"></event-state-message>
+    <event-state-message type="positive" v-if="showMessage" @closeMessage="showMessage = false"></event-state-message>
     <div class="edit-event-details event-details-budget">
       <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
       <!-- Event Header -->
@@ -253,7 +253,7 @@ import { Tabs, Modal } from "@/components";
 
 // import auth from '@/auth';
 import moment from "moment";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
@@ -325,11 +325,10 @@ export default {
       showBudgetModal: false,
       budgetConfirmationModal: false,
       newBudget: null,
-      type: null,
       editBudgetElementsModal: false,
       showHandleMinus: false,
       showCommentEditorPanel: false,
-      showMessage: false,
+      showMessage: true,
     };
   },
   created() {
@@ -382,29 +381,6 @@ export default {
           this.event = event;
           this.eventId = event.id;
           this.calendarEvent = event;
-          if (event.budgetProgress < 100) {
-            this.type = 'not_approved';
-          }
-          let now = moment();
-          let created_at = moment(event.dateCreated);
-          if (!this.type && now.diff(created_at, 'days') < 15) {
-            this.type = 'approved_budget_in_two_weeks';
-          }
-
-          if (!this.type && event.approvedBudget !== 0) {
-              if (event.approvedBudget < event.totalBudget) {
-                  this.type = 'higher_than_average';
-              } else {
-                  this.type = 'lower_than_average';
-              }
-          }
-
-          if (!this.type && event.unexpected < event.totalBudget * 0.1) {
-            this.type = 'unexpected_budget_less_10';
-          }
-          console.log('budget.detail.event', this.type);
-          if (!this.type) this.type = 'not_approved';
-
           if (event.totalBudget)
             this.newBudget = (event.totalBudget + "").replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           new EventComponent()
@@ -426,7 +402,6 @@ export default {
             this.routeName === "InviteesManagement" || this.routeName === "EventInvitees",
           );
           this.isLoading = false;
-          this.showMessage = true;
         });
     },
     selectServices() {
@@ -483,7 +458,7 @@ export default {
         const arrow = `<i data-v-a76b6a56="" style="color:#050505" class="md-icon md-icon-font md-theme-default">arrow_back</i>`;
         const budgetString = `<div class="font-size-40 font-regular color-red" style="margin:20px 0">$ ${this.newBudget}</div>`;
         const description = `<div class="description">Your edits changed the total budget, do you want to change it?</div>`;
-        swal({
+        Swal.fire({
           title: `<div class="text-left">${arrow}${budgetString}<div>Are Your Sure?</div>${description}</div>`,
           showCancelButton: true,
           confirmButtonClass: "md-button md-success",

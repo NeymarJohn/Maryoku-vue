@@ -155,7 +155,6 @@ export default {
           id: this.event.id,
           calendar: new Calendar({ id: this.event.calendar.id }),
           budgetProgress: 100,
-          approvedBudget: this.event.totalBudget,
         });
         this.$store.dispatch("event/saveEventAction", event).then((res) => {
           this.$router.push({ path: `/events/${this.event.id}/edit/budget` });

@@ -1,10 +1,5 @@
 <template>
-  <md-table
-    @md-selected="onSelect"
-    v-model="teamMembers"
-    table-header-color="rose"
-    class="table-striped table-hover"
-  >
+  <md-table @md-selected="onSelect" v-model="teamMembers" table-header-color="rose" class="table-striped table-hover">
     <div class="grid-col pad-20" slot="md-table-alternate-header" slot-scope="{ count }">
       <div class="md-toolbar-section-start">{{ getAlternateLabel(count) }}</div>
 
@@ -17,7 +12,8 @@
         </md-button>
       </div>
     </div>
-    <md-table-row slot="md-table-row" slot-scope="{ item }" > <!--md-selectable="multiple" md-auto-select-->
+    <md-table-row slot="md-table-row" slot-scope="{ item }">
+      <!--md-selectable="multiple" md-auto-select-->
       <div class="popup-box" v-click-outside="closePopup" v-if="openPopover" md-direction="left">
         <div class="header-position">
           <h3 class="title">Tagging</h3>
@@ -31,28 +27,62 @@
           <md-button class="btn-success md-success">Submit</md-button>
         </div>
       </div>
-      <md-table-cell md-label="First Name" style="width: 10%;">
-        <label-edit tabindex="1"  :scope="item" :text="item.firstName" field-name="firstName"  @text-updated-blur="teamMemberDetailsChanged" @text-updated-enter="teamMemberDetailsChanged"></label-edit>
+      <md-table-cell md-label="First Name" style="width: 10%">
+        <label-edit
+          tabindex="1"
+          :scope="item"
+          :text="item.firstName"
+          field-name="firstName"
+          @text-updated-blur="teamMemberDetailsChanged"
+          @text-updated-enter="teamMemberDetailsChanged"
+        ></label-edit>
       </md-table-cell>
-      <md-table-cell md-label="Last Name" style="width: 10%;">
-        <label-edit tabindex="1"  :scope="item" :text="item.lastName" field-name="lastName"  @text-updated-blur="teamMemberDetailsChanged" @text-updated-enter="teamMemberDetailsChanged"></label-edit>
+      <md-table-cell md-label="Last Name" style="width: 10%">
+        <label-edit
+          tabindex="1"
+          :scope="item"
+          :text="item.lastName"
+          field-name="lastName"
+          @text-updated-blur="teamMemberDetailsChanged"
+          @text-updated-enter="teamMemberDetailsChanged"
+        ></label-edit>
       </md-table-cell>
-      <md-table-cell md-label="Email" style="width: 25%;">
-        <label-edit tabindex="1"  :scope="item" :text="item.emailAddress" field-name="emailAddress"  @text-updated-blur="teamMemberDetailsChanged" @text-updated-enter="teamMemberDetailsChanged"></label-edit>
+      <md-table-cell md-label="Email" style="width: 25%">
+        <label-edit
+          tabindex="1"
+          :scope="item"
+          :text="item.emailAddress"
+          field-name="emailAddress"
+          @text-updated-blur="teamMemberDetailsChanged"
+          @text-updated-enter="teamMemberDetailsChanged"
+        ></label-edit>
       </md-table-cell>
-      <md-table-cell md-label="Role" style="width: 10%;">
-        <label-edit tabindex="1"  :scope="item" :text="availableRoleIdToTitle(item.role)" field-name="role"  @text-updated-blur="teamMemberDetailsChanged" @text-updated-enter="teamMemberDetailsChanged"></label-edit>
+      <md-table-cell md-label="Role" style="width: 10%">
+        <label-edit
+          tabindex="1"
+          :scope="item"
+          :text="availableRoleIdToTitle(item.role)"
+          field-name="role"
+          @text-updated-blur="teamMemberDetailsChanged"
+          @text-updated-enter="teamMemberDetailsChanged"
+        ></label-edit>
       </md-table-cell>
-      <md-table-cell md-label="Permissions" style="width: 25%;">
+      <md-table-cell md-label="Permissions" style="width: 25%">
         {{ permissionTitles(item.permissions) }}
       </md-table-cell>
-      <md-table-cell md-label="Last Login" v-if="item.invitationStatus === 'pending'" style="width: 10%;">{{ item.invitationStatus }}</md-table-cell>
-      <md-table-cell md-label="Last Login" v-else style="width: 10%;">{{ item.lastLogin | moment }}</md-table-cell>
-      <md-table-cell md-label="Actions" style="width: 10%;">
+      <md-table-cell md-label="Last Login" v-if="item.invitationStatus === 'pending'" style="width: 10%">{{
+        item.invitationStatus
+      }}</md-table-cell>
+      <md-table-cell md-label="Last Login" v-else style="width: 10%">{{ item.lastLogin | moment }}</md-table-cell>
+      <md-table-cell md-label="Actions" style="width: 10%">
         <md-button @click.native="toggleEditModal(true, item)" class="md-info md-just-icon md-round">
           <md-icon>edit</md-icon>
         </md-button>
-        <md-button v-if="currentUserId !== item.id" class="md-primary md-icon-button md-round" @click="deleteTeamMember(item)">
+        <md-button
+          v-if="currentUserId !== item.id"
+          class="md-primary md-icon-button md-round"
+          @click="deleteTeamMember(item)"
+        >
           <md-icon>delete</md-icon>
           <md-tooltip md-direction="top">Delete</md-tooltip>
         </md-button>
@@ -62,186 +92,182 @@
 </template>
 
 <script>
-import { Modal, SimpleWizard, WizardTab, LabelEdit } from '@/components'
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import swal from 'sweetalert2'
-import Teams from '@/models/Team'
-import TeamMember from '@/models/TeamMember'
-import indexVuexModule from '@/store/index'
+import { Modal, SimpleWizard, WizardTab, LabelEdit } from "@/components";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import Swal from "sweetalert2";
+import Teams from "@/models/Team";
+import TeamMember from "@/models/TeamMember";
+import indexVuexModule from "@/store/index";
 // import auth from '@/auth';
-import _ from 'underscore'
-import moment from 'moment'
+import _ from "underscore";
+import moment from "moment";
 
 export default {
   components: {
     Modal,
     SimpleWizard,
     WizardTab,
-    LabelEdit
+    LabelEdit,
   },
   props: {
     currentUserId: String,
     teamId: {
-      type: String
+      type: String,
     },
     teamMembers: {
       type: Array,
       default: () => {
-        return {}
-      }
+        return {};
+      },
     },
     item: {
       type: Object,
       default: () => {
-        return {}
-      }
+        return {};
+      },
     },
     availableRoles: Array,
     availablePermissions: Array,
     openEditTeamInviteSidePanel: {
       type: Function,
-      required: true
-    }
+      required: true,
+    },
   },
-  data () {
+  data() {
     return {
       // auth: auth,
       selected: [],
       hideBtn: false,
-      openPopover: false
-    }
+      openPopover: false,
+    };
   },
   filters: {
     moment: function (date) {
-      return moment(date).format('MMMM Do, GGGG')
-    }
+      return moment(date).format("MMMM Do, GGGG");
+    },
   },
   methods: {
-    ...mapActions('teamVuex', ['setInviteModalAndTeamMember']),
-    teamMemberDetailsChanged (val, fieldName, item) {
-
+    ...mapActions("teamVuex", ["setInviteModalAndTeamMember"]),
+    teamMemberDetailsChanged(val, fieldName, item) {},
+    onSelect(items) {
+      this.selected = items;
     },
-    onSelect (items) {
-      this.selected = items
+    closePopup() {
+      this.openPopover = false;
     },
-    closePopup () {
-      this.openPopover = false
+    openPopup() {
+      this.openPopover = true;
     },
-    openPopup () {
-      this.openPopover = true
-    },
-    getAlternateLabel (count) {
-      let plural = ''
+    getAlternateLabel(count) {
+      let plural = "";
 
       if (count > 1) {
-        plural = 's'
+        plural = "s";
       }
 
-      return `${count} User${plural} selected`
+      return `${count} User${plural} selected`;
     },
     toggleEditModal: function (show, item) {
-      this.setInviteModalAndTeamMember({ showModal: show, teamMember: item })
-      this.openEditTeamInviteSidePanel(show, item)
+      this.setInviteModalAndTeamMember({ showModal: show, teamMember: item });
+      this.openEditTeamInviteSidePanel(show, item);
     },
-    async deleteTeam (id) {
-      let team = await Teams.first(id)
-      team.delete()
-      let teamIndex = this.teamMembers.findIndex(obj => obj.id === id)
+    async deleteTeam(id) {
+      let team = await Teams.first(id);
+      team.delete();
+      let teamIndex = this.teamMembers.findIndex((obj) => obj.id === id);
 
-      this.teamMembers.splice(teamIndex, 1)
+      this.teamMembers.splice(teamIndex, 1);
     },
-    changeRollAndPermission () {},
-    async deleteTeamMember (teamMember) {
-      swal({
-        title: 'Are you sure?',
+    changeRollAndPermission() {},
+    async deleteTeamMember(teamMember) {
+      Swal.fire({
+        title: "Are you sure?",
         text: "You won't be able to revert this!",
-        type: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonClass: 'md-button md-success confirm-btn-bg btn-fill',
-        cancelButtonClass: 'md-button md-danger cancel-btn-bg btn-fill',
-        confirmButtonText: 'Yes, delete it!'
-      }).then(async result => {
+        confirmButtonClass: "md-button md-success confirm-btn-bg btn-fill",
+        cancelButtonClass: "md-button md-danger cancel-btn-bg btn-fill",
+        confirmButtonText: "Yes, delete it!",
+      }).then(async (result) => {
         if (result.value) {
-          let notifySuccessMessage = 'Team member deleted successfully!'
+          let notifySuccessMessage = "Team member deleted successfully!";
 
-          this.deleteMember(teamMember)
-          this.$emit('membersRefresh')
+          this.deleteMember(teamMember);
+          this.$emit("membersRefresh");
 
           this.$notify({
-            message: 'Team member deleted successfully!',
-            horizontalAlign: 'center',
-            verticalAlign: 'top',
-            type: 'success'
-          })
+            message: "Team member deleted successfully!",
+            horizontalAlign: "center",
+            verticalAlign: "top",
+            type: "success",
+          });
         }
-      })
+      });
     },
-    async deleteAllTeamMember (teamMember) {
-      swal({
-        title: 'Are you sure?',
+    async deleteAllTeamMember(teamMember) {
+      Swal.fire({
+        title: "Are you sure?",
         text: "You won't be able to revert this!",
-        type: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonClass: 'md-button md-success btn-fill',
-        cancelButtonClass: 'md-button md-danger btn-fill',
-        confirmButtonText: 'Yes, delete it!'
-      }).then(async result => {
+        confirmButtonClass: "md-button md-success btn-fill",
+        cancelButtonClass: "md-button md-danger btn-fill",
+        confirmButtonText: "Yes, delete it!",
+      }).then(async (result) => {
         if (result.value) {
-          let notifySuccessMessage = 'Team member deleted successfully!'
+          let notifySuccessMessage = "Team member deleted successfully!";
 
           this.selected.forEach((item, index) => {
-            this.deleteMember(item)
-          })
+            this.deleteMember(item);
+          });
 
-          this.$emit('membersRefresh')
+          this.$emit("membersRefresh");
 
           this.$notify({
-            message: 'Team members deleted successfully!',
-            horizontalAlign: 'center',
-            verticalAlign: 'top',
-            type: 'success'
-          })
+            message: "Team members deleted successfully!",
+            horizontalAlign: "center",
+            verticalAlign: "top",
+            type: "success",
+          });
 
-          this.selected = []
+          this.selected = [];
         }
-      })
+      });
     },
-    async deleteMember (teamMember) {
-      let team = await Teams.first()
-      let member = await TeamMembers.find(teamMember.id)
+    async deleteMember(teamMember) {
+      let team = await Teams.first();
+      let member = await TeamMembers.find(teamMember.id);
 
       member
         .for(team)
         .delete()
-        .then(response => {
-          let teamMemberIndex = this.teamMembers.findIndex(
-            obj => obj.id === teamMember.id
-          )
-          this.teamMembers.splice(teamMemberIndex)
+        .then((response) => {
+          let teamMemberIndex = this.teamMembers.findIndex((obj) => obj.id === teamMember.id);
+          this.teamMembers.splice(teamMemberIndex);
         })
-        .catch(error => {
-          console.log(error)
-        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
-    availableRoleIdToTitle (roleId) {
-      let role = _.findWhere(this.availableRoles, {id: roleId})
-      return role ? role.title : roleId
+    availableRoleIdToTitle(roleId) {
+      let role = _.findWhere(this.availableRoles, { id: roleId });
+      return role ? role.title : roleId;
     },
-    permissionTitles (permissions) {
-      let permissionsArray = permissions ? permissions.split(',') : []
-      let permissionsTitles = []
+    permissionTitles(permissions) {
+      let permissionsArray = permissions ? permissions.split(",") : [];
+      let permissionsTitles = [];
 
       permissionsArray.forEach((permission) => {
-        let availablePermission = _.findWhere(this.availablePermissions, {id: permission})
+        let availablePermission = _.findWhere(this.availablePermissions, { id: permission });
         if (availablePermission) {
-          permissionsTitles.push(availablePermission.title)
+          permissionsTitles.push(availablePermission.title);
         }
-      })
+      });
 
-      return permissionsTitles.join(', ')
-    }
-  }
-}
+      return permissionsTitles.join(", ");
+    },
+  },
+};
 </script>
 <style>
 .pad-20 {

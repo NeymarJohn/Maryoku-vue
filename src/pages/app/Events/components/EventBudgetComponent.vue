@@ -50,7 +50,7 @@
   </div>
 </template>
 <script>
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 export default {
   components: {
@@ -91,7 +91,7 @@ export default {
       this.isEditing = true;
     },
     deleteComponent() {
-      swal({
+      Swal.fire({
         title: `<div class="text-left"><div class="font-size-30 cross-line"><img src="${this.$iconURL}Budget Elements/${this.component.componentId}.svg" width="40"/>${this.component.title}</div>
                   <div >Are You Sure You Want To <br/>Delete This Category?
                   </div></div>`,

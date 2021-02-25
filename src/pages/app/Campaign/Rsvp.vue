@@ -203,7 +203,7 @@ import TitleEditor from "./components/TitleEditor";
 import RsvpTimelinePanel from "@/pages/app/RSVP/RSVPTimelinePanel.vue";
 import HideSwitch from "@/components/HideSwitch";
 import { getBase64 } from "@/utils/file.util";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import CalendarEvent from "@/models/CalendarEvent";
 export default {
   components: {
@@ -370,7 +370,7 @@ export default {
       });
     },
     setDefault() {
-      swal({
+      Swal.fire({
         title: "Are you sure?",
         text: `You won't be able to revert this!`,
         showCancelButton: true,

@@ -299,7 +299,7 @@ import DeliverySettings from "./DeliverySettings";
 import CampaignScheduleModal from "@/components/Modals/Campaign/ScheduleModal";
 import Campaign from "@/models/Campaign";
 import CalendarEvent from "@/models/CalendarEvent";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import S3Service from "@/services/s3.service";
 import CollapsePanel from "./CollapsePanel";
 
@@ -414,10 +414,10 @@ export default {
     startCampaign() {
       const campaignData = this.$store.state.campaign[this.campaignTabs[this.selectedTab].name];
       if (!campaignData || (!this.deliverySettings.email.selected && !this.deliverySettings.phone.selected)) {
-        swal({
+        Swal.fire({
           title: `Please select email or phone or both.`,
           buttonsStyling: false,
-          type: "warning",
+          icon: "warning",
           confirmButtonClass: "md-button md-success",
         });
         return;
@@ -530,7 +530,7 @@ export default {
         campaignData.campaignStatus || "TESTING",
         true,
       ).then((res) => {});
-      swal({
+      Swal.fire({
         title: `You will receive a preview campaign email soon!`,
         buttonsStyling: false,
         type: "success",
