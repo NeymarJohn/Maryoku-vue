@@ -71,7 +71,9 @@
         </p>
         <div class="white-card sharing-form">
           <div class="upoad-photo">
-            <md-button class="md-simple maryoku-btn md-red"><md-icon>add</md-icon><br/><div>Add Photo</div></md-button>
+            <img :src="imageData" v-if="imageData"/>
+            <md-button v-else class="md-simple maryoku-btn md-red" @click="openPhotoDialog"><md-icon>add</md-icon><br/><div>Add Photo</div></md-button>
+            <input type="file" id="fileSelector" class="d-none" @change="onFileChange"/>
           </div>
           <p>
           <h3 class="font-size-22 font-bold"> POST TO SHARE</h3>
@@ -89,10 +91,13 @@
   </div>
 </template>
 <script>
+import { getBase64 } from "@/utils/file.util";
+import S3Service from "@/services/s3.service";
 export default {
   data() {
     return {
       selectedTab: 0,
+      imageData: "",
       tabs: [
         { title: "NOW WHAT?", icon: "final-tab-1.png" },
         { title: "HOW DO WE PICK?", icon: "final-tab-2.png" },
@@ -105,6 +110,18 @@ export default {
   methods: {
     selectTab(tabIndex) {
       this.selectedTab = tabIndex;
+    },
+    openPhotoDialog() {
+      document.getElementById("fileSelector").click();
+    },
+    async onFileChange(event) {
+      const file = event.target.files[0];
+      this.imageData = await getBase64(file);
+      const extension = file.type.split("/")[1];
+      const logoName = `xxxxxx`;
+      S3Service.fileUpload(file, logoName, "logos").then((res) => {
+        this.$store.dispatch("sharing", { logoUrl: `${this.$uploadURL}logos/${logoName}.${extension}` });
+      });
     },
   },
 };
@@ -148,9 +165,13 @@ export default {
     .sharing-form {
       padding: 60px;
       .upoad-photo {
+        height: 400px;
         border: dashed 1px #f51355;
-        padding: 150px 10px;
         text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
       }
     }
   }
