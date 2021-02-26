@@ -12,11 +12,17 @@
                     <label
                       >{{ event.eventStartMillis | formatDate }},
                       {{ event.eventStartMillis | formatTime }}
-                      ({{ event.eventStartMillis | formatDuration(event.eventEndMillis) }}h)</label
+                      ({{
+                        event.eventStartMillis
+                          | formatDuration(event.eventEndMillis)
+                      }}h)</label
                     >
                   </div>
                 </div>
-                <div class="md-layout-item md-size-100 required" style="margin-top: 2em">
+                <div
+                  class="md-layout-item md-size-100 required"
+                  style="margin-top: 2em"
+                >
                   <md-datepicker
                     v-model="eventData.date"
                     data-vv-name="date"
@@ -28,19 +34,36 @@
                   </md-datepicker>
                 </div>
                 <div class="md-layout-item md-size-50">
-                  <md-field class="required" :class="[{ 'md-error': errors.has('time') }]">
+                  <md-field
+                    class="required"
+                    :class="[{ 'md-error': errors.has('time') }]"
+                  >
                     <label>Start Time</label>
-                    <md-select v-model="eventData.time" v-validate="modelValidations.time" data-vv-name="time" required>
-                      <md-option v-for="hour in hoursArray" :key="hour" :value="hour">
+                    <md-select
+                      v-model="eventData.time"
+                      v-validate="modelValidations.time"
+                      data-vv-name="time"
+                      required
+                    >
+                      <md-option
+                        v-for="hour in hoursArray"
+                        :key="hour"
+                        :value="hour"
+                      >
                         {{ hour }}
                       </md-option>
                     </md-select>
 
-                    <span class="md-error" v-if="errors.has('time')">The start time is required</span>
+                    <span class="md-error" v-if="errors.has('time')"
+                      >The start time is required</span
+                    >
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-50">
-                  <md-field class="required" :class="[{ 'md-error': errors.has('duration') }]">
+                  <md-field
+                    class="required"
+                    :class="[{ 'md-error': errors.has('duration') }]"
+                  >
                     <label>Duration</label>
                     <md-select
                       v-model="eventData.duration"
@@ -48,11 +71,17 @@
                       data-vv-name="duration"
                       required
                     >
-                      <md-option v-for="hour in durationArray" :key="hour" :value="hour">
+                      <md-option
+                        v-for="hour in durationArray"
+                        :key="hour"
+                        :value="hour"
+                      >
                         {{ hour + " hours" }}
                       </md-option>
                     </md-select>
-                    <span class="md-error" v-if="errors.has('duration')">The duration is required</span>
+                    <span class="md-error" v-if="errors.has('duration')"
+                      >The duration is required</span
+                    >
                   </md-field>
                 </div>
               </div>
@@ -60,7 +89,12 @@
             <div class="md-layout-item md-size-60">
               <div class="md-layout">
                 <div class="md-layout-item md-size-33">
-                  <md-field class="required" :class="[{ 'md-error': errors.has('numberOfParticipants') }]">
+                  <md-field
+                    class="required"
+                    :class="[
+                      { 'md-error': errors.has('numberOfParticipants') },
+                    ]"
+                  >
                     <md-icon>person</md-icon>
                     <label>Guest Count</label>
                     <md-input
@@ -71,11 +105,18 @@
                       type="number"
                       @change="updateEventComponent"
                     ></md-input>
-                    <span class="md-error" v-if="errors.has('numberOfParticipants')">The Guest Count is required</span>
+                    <span
+                      class="md-error"
+                      v-if="errors.has('numberOfParticipants')"
+                      >The Guest Count is required</span
+                    >
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-33">
-                  <md-field class="required" :class="[{ 'md-error': errors.has('budget') }]">
+                  <md-field
+                    class="required"
+                    :class="[{ 'md-error': errors.has('budget') }]"
+                  >
                     <md-icon>account_balance_wallet</md-icon>
                     <label>Budget</label>
                     <md-input
@@ -86,13 +127,18 @@
                       type="number"
                       @change="updateEventComponent"
                     ></md-input>
-                    <span class="md-error" v-if="errors.has('budget')">The Budget is required</span>
+                    <span class="md-error" v-if="errors.has('budget')"
+                      >The Budget is required</span
+                    >
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-33">
                   <md-field class="disabled" style="pointer-events: none">
                     <label>Per Guest</label>
-                    <md-input v-model="selectedBlock.budgetPerPerson" style="color: gray"></md-input>
+                    <md-input
+                      v-model="selectedBlock.budgetPerPerson"
+                      style="color: gray"
+                    ></md-input>
                   </md-field>
                 </div>
               </div>
@@ -107,7 +153,10 @@
       >
         {{ this.selectedBlock.title }} Requirements
 
-        <md-button class="md-info md-sm add-new-requirements pull-right" @click="addNewValue">
+        <md-button
+          class="md-info md-sm add-new-requirements pull-right"
+          @click="addNewValue"
+        >
           <md-icon>add</md-icon> Add Requirement
         </md-button>
       </h4>
@@ -126,7 +175,11 @@
                             </li>
                         </ul>
                         <div style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;" >&nbsp;</div>-->
-            <md-table class="clear-margins" v-if="eventBlockRequirements" v-model="filteredEventBlockRequirements">
+            <md-table
+              class="clear-margins"
+              v-if="eventBlockRequirements"
+              v-model="filteredEventBlockRequirements"
+            >
               <!--                            <md-table-toolbar >-->
               <!--                                <div class="md-toolbar-section-start">-->
               <!--                                    <md-field>-->
@@ -149,12 +202,22 @@
               <md-table-empty-state
                 :md-description="`No requirements found for '${searchQuery}'. Try a different search term or create a new requirement.`"
               >
-                <md-button class="md-primary md-raised" @click="addNewValue">Add Requirement</md-button>
+                <md-button class="md-primary md-raised" @click="addNewValue"
+                  >Add Requirement</md-button
+                >
               </md-table-empty-state>
 
-              <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id">
+              <md-table-row
+                slot="md-table-row"
+                slot-scope="{ item, index }"
+                :key="item.id"
+              >
                 <md-table-cell>
-                  <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
+                  <vue-element-loading
+                    :active="isLoading"
+                    spinner="ring"
+                    color="#FF547C"
+                  />
                   <event-block-requirement
                     :delete-value="deleteValue"
                     :requirement.sync="item"
@@ -166,9 +229,17 @@
               </md-table-row>
             </md-table>
             <md-table class="clear-margins" v-else v-model="dummyList">
-              <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id">
+              <md-table-row
+                slot="md-table-row"
+                slot-scope="{ item, index }"
+                :key="item.id"
+              >
                 <md-table-cell>
-                  <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
+                  <vue-element-loading
+                    :active="isLoading"
+                    spinner="ring"
+                    color="#FF547C"
+                  />
                   <event-block-requirement
                     :delete-value="deleteValue"
                     :requirement.sync="item"
@@ -193,7 +264,7 @@ import CalendarEvent from "@/models/CalendarEvent";
 import Calendar from "@/models/Calendar";
 import EventComponent from "@/models/EventComponent";
 import EventComponentValue from "@/models/EventComponentValue";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 import { error } from "util";
 import moment from "moment";
 import VueElementLoading from "vue-element-loading";
@@ -281,21 +352,41 @@ export default {
   }),
 
   created() {
-    [...Array(12).keys()].map((x) => (x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined));
-    [...Array(12).keys()].map((x) => (x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`)));
-    [...Array(8).keys()].map((x) => (x === 0 ? this.hoursArray.push(`12:00 AM`) : this.hoursArray.push(`${x}:00 AM`)));
+    [...Array(12).keys()].map((x) =>
+      x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined,
+    );
+    [...Array(12).keys()].map((x) =>
+      x === 0
+        ? this.hoursArray.push(`12:00 PM`)
+        : this.hoursArray.push(`${x}:00 PM`),
+    );
+    [...Array(8).keys()].map((x) =>
+      x === 0
+        ? this.hoursArray.push(`12:00 AM`)
+        : this.hoursArray.push(`${x}:00 AM`),
+    );
 
     this.hoursArray.push();
 
     this.eventData.date = new Date(this.event.eventStartMillis);
-    this.eventData.time = moment(new Date(this.event.eventStartMillis).getTime()).format("H:mm A");
-    this.eventData.duration = (this.event.eventEndMillis - this.event.eventStartMillis) / 1000 / 60 / 60;
+    this.eventData.time = moment(
+      new Date(this.event.eventStartMillis).getTime(),
+    ).format("H:mm A");
+    this.eventData.duration =
+      (this.event.eventEndMillis - this.event.eventStartMillis) /
+      1000 /
+      60 /
+      60;
 
-    if (this.selectedBlock.allocatedBudget && this.selectedBlock.numberOfParticipants) {
+    if (
+      this.selectedBlock.allocatedBudget &&
+      this.selectedBlock.numberOfParticipants
+    ) {
       this.$set(
         this.selectedBlock,
         "budgetPerPerson",
-        this.selectedBlock.allocatedBudget / this.selectedBlock.numberOfParticipants,
+        this.selectedBlock.allocatedBudget /
+          this.selectedBlock.numberOfParticipants,
       );
     }
 
@@ -316,7 +407,8 @@ export default {
       if (
         this.selectedBlock.values === null ||
         this.selectedBlock.values === undefined ||
-        (this.selectedBlock.values && this.selectedBlock.valuesCount !== this.selectedBlock.values.length)
+        (this.selectedBlock.values &&
+          this.selectedBlock.valuesCount !== this.selectedBlock.values.length)
       ) {
         let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
         let event = new CalendarEvent({ id: this.event.id });
@@ -329,7 +421,10 @@ export default {
             this.selectedBlock.values = values;
             this.eventBlockRequirements = values || [];
             this.filteredEventBlockRequirements = this.eventBlockRequirements;
-            this.$root.$emit("refreshRequirementsLength", this.eventBlockRequirements.length);
+            this.$root.$emit(
+              "refreshRequirementsLength",
+              this.eventBlockRequirements.length,
+            );
 
             if (newValueId) {
               let newValue = _.findWhere(this.eventBlockRequirements, {
@@ -341,9 +436,14 @@ export default {
             this.isLoading = false;
           });
       } else {
-        this.eventBlockRequirements = this.selectedBlock.values ? this.selectedBlock.values : [];
+        this.eventBlockRequirements = this.selectedBlock.values
+          ? this.selectedBlock.values
+          : [];
         this.filteredEventBlockRequirements = this.eventBlockRequirements;
-        this.$root.$emit("refreshRequirementsLength", this.eventBlockRequirements.length);
+        this.$root.$emit(
+          "refreshRequirementsLength",
+          this.eventBlockRequirements.length,
+        );
         if (newValueId) {
           let newValue = _.findWhere(this.eventBlockRequirements, {
             id: newValueId,
@@ -424,7 +524,7 @@ export default {
         });
     },
     deleteValue(valueId) {
-      Swal.fire({
+      swal({
         title: "Are you sure?",
         text: `You won't be able to revert this!`,
         showCancelButton: true,
@@ -553,9 +653,17 @@ export default {
       }
     },
     filterRequirements() {
-      this.filteredEventBlockRequirements = _.filter(this.eventBlockRequirements, (v) => {
-        return v.title.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
-      });
+      this.filteredEventBlockRequirements = _.filter(
+        this.eventBlockRequirements,
+        (v) => {
+          return (
+            v.title
+              .toString()
+              .toLowerCase()
+              .indexOf(this.searchQuery.toLowerCase()) > -1
+          );
+        },
+      );
     },
     getRequirementProperties(item) {
       let object = null;
@@ -571,7 +679,8 @@ export default {
       this.$set(
         this.selectedBlock,
         "budgetPerPerson",
-        this.selectedBlock.allocatedBudget / this.selectedBlock.numberOfParticipants,
+        this.selectedBlock.allocatedBudget /
+          this.selectedBlock.numberOfParticipants,
       );
       this.$forceUpdate();
 
@@ -581,7 +690,9 @@ export default {
 
       selected_block.numberOfParticipants = this.selectedBlock.numberOfParticipants;
       selected_block.allocatedBudget = this.selectedBlock.allocatedBudget;
-      selected_block.budgetPerPerson = this.selectedBlock.allocatedBudget / this.selectedBlock.numberOfParticipants;
+      selected_block.budgetPerPerson =
+        this.selectedBlock.allocatedBudget /
+        this.selectedBlock.numberOfParticipants;
 
       selected_block
         .for(calendar, event)

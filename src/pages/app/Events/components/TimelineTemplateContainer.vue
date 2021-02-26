@@ -87,7 +87,7 @@ export default {
       return this.$store.state.event.eventData;
     },
     hasTemplate() {
-      return this.event.timeline && this.event.timeline.mode === "template";
+      return this.event.timeline.mode === "template";
     },
     hoverStyle() {
       if (!this.isHover) {

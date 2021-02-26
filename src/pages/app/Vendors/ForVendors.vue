@@ -372,7 +372,7 @@ import VendorBudgetList from "./components/VendorBudgetList.vue";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import { FunctionalCalendar } from "vue-functional-calendar";
 import { Modal } from "@/components";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 
 export default {
   components: {
@@ -478,7 +478,7 @@ export default {
         })
         .then((res) => {
           console.log(res);
-          Swal.fire({
+          swal({
             title: "Thank you for your referring! ",
             html: `We will send proposal request to this vendor`,
             showCancelButton: true,
@@ -490,7 +490,7 @@ export default {
           });
         })
         .catch((err) => {
-          Swal.fire({
+          swal({
             title: "Please check information! ",
             html: `You may try to refer the existing vendor on our system`,
             showCancelButton: false,
@@ -578,7 +578,7 @@ export default {
     declineRequest() {
       new ProposalRequest({ id: this.proposalRequest.id, declineMessage: "I don't want it" }).save().then((res) => {
         console.log(res);
-        Swal.fire({
+        swal({
           title: "Thank you! ",
           html: `We hope to see you next time.`,
           showCancelButton: true,

@@ -1,4 +1,3 @@
-import vendorRoutes from "./vendor"
 import DashboardLayout from "@/pages/Dashboard/Layout/DashboardLayout.vue";
 import AuthLayout from "@/pages/Dashboard/Pages/AuthLayout.vue";
 import CreateEvent from "@/pages/Dashboard/Layout/CreateEvent.vue";
@@ -31,12 +30,12 @@ const ChooseWorkspace = () => import("@/pages/Dashboard/Pages/ChooseWorkspace");
 // New Vendor Pages
 const ForVendorLayout = () => import("@/pages/Dashboard/Layout/ForVendorLayout.vue");
 const ForProposalsLayout = () => import("@/pages/Dashboard/Layout/ForProposalsLayout.vue");
+const VendorSignupLayout = () => import("@/pages/Dashboard/Layout/VendorSignupLayout.vue");
 const ForVendors = () => import("@/pages/app/Vendors/ForVendors.vue");
 const ForProposals = () => import("@/pages/app/Vendors/ForProposals.vue");
+const VendorSignup = () => import("@/pages/app/Vendors/VendorSignup.vue");
 const ProposalFinalStep = () => import("@/pages/app/Vendors/ProposalFinalStep.vue");
 const CalendarSync = () => import("@/pages/app/CalendarSync.vue");
-
-
 // OnBoardingPages
 const EventWizardStart = () => import("@/pages/app/CreateEvent/EventWizardStart.vue");
 const EventWizardDay = () => import("@/pages/app/CreateEvent/EventWizardDay.vue");
@@ -225,6 +224,33 @@ let forProposals = {
     ],
 };
 
+let vendorSignup = {
+    path: "/",
+    component: VendorSignupLayout,
+    name: "VendorSignupLayout",
+    children: [
+        {
+            path: "/vendor-signup",
+            name: "VendorSignup",
+            component: VendorSignup,
+            meta: {
+                auth: false,
+                title: "Vendor Signup",
+                gtm: "VendorSignup",
+            },
+        },
+        {
+            path: "/vendor-signup/edit/:id",
+            name: "VendorSignup",
+            component: VendorSignup,
+            meta: {
+                auth: false,
+                title: "Vendor Signup",
+                gtm: "VendorSignup",
+            },
+        },
+    ],
+};
 
 let appPages = {
     path: "/app",
@@ -587,8 +613,6 @@ let welcomeEventPage = {
         gtm: "welcom event",
     },
 };
-
-
 const rememberMe = authService.getCookie("rememberMe");
 const homeLink = rememberMe === "true" ? "/events" : "/signin";
 const routes = [
@@ -616,6 +640,7 @@ const routes = [
     PublicCreateEvent,
     HomePages,
     forProposals,
+    vendorSignup,
     ProfilePages,
     EventPages,
     landingPages,
@@ -624,7 +649,6 @@ const routes = [
     welcomeEventPage,
     others,
     calendarSyncPage,
-    ...vendorRoutes,
 ];
 
 export default routes;

@@ -190,7 +190,7 @@ import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
 import EventTimelineItem from "@/models/EventTimelineItem";
 import moment from "moment";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 import InputMask from "vue-input-mask";
 import BookingEventRequirement from "./BookingEventRequirement.vue";
 
@@ -247,8 +247,10 @@ export default {
     ...mapActions("comment", ["getCommentComponents"]),
     getAllRequirements: async function () {
       this.allRequirements = this.storedRequirements[this.event.id];
+      console.log('getAllRequirements', this.allRequirements);
       if (!this.allRequirements) {
         this.allRequirements = await this.$http.get(`${process.env.SERVER_URL}/1/vendor/property/${this.event.id}`);
+        console.log('getAllRequirements.result', this.allRequirements);
         // set default value by conditionSript
         let event = this.$store.state.event.eventData;
 

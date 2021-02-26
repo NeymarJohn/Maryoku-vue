@@ -28,7 +28,7 @@
               {{ event.concept ? event.concept.name : event.title }}
             </li>
             <li>
-              <img alt="" v-if="event.owner.companyLogo" :src="`${event.owner.companyLogo}`" />
+              <img class="company-logo" alt="" v-if="event.owner.companyLogo" :src="`${event.owner.companyLogo}`" />
               {{ event.owner.company }}
             </li>
           </ul>
@@ -182,29 +182,6 @@
         </div>
       </template>
     </modal>
-    <!-- <modal v-if="submittedModal" class="saved-it-modal" container-class="modal-container sl">
-      <template slot="header">
-        <div class="saved-it-modal__header">
-          <h3><img :src="`${proposalIconsUrl}Asset 588.svg`" />Saved It!</h3>
-          <div class="header-description text-center">You can return to it till the deadline!</div>
-        </div>
-        <button class="close" @click="hideModal()">
-          <img :src="`${proposalIconsUrl}Group 3671 (2).svg`" />
-        </button>
-      </template>
-      <template slot="body">
-        <div class="saved-it-modal__body">
-          <div class="time-cont">
-            <vendor-bid-time-counter :days="4" :hours="0" :minutes="0" :seconds="0" />
-          </div>
-        </div>
-      </template>
-      <template slot="footer">
-        <div class="saved-it-modal__footer">
-          <button class="cool" @click="completeProposal()">Cool, Thanks</button>
-        </div>
-      </template>
-    </modal> -->
     <modal v-if="submittedModal" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="saved-it-modal__header">
@@ -289,7 +266,7 @@ import Vendor from "@/models/Vendors";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import { Modal } from "@/components";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 import TopNavbar from "./TopNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
 import MobileMenu from "./Extra/MobileMenu.vue";
@@ -410,7 +387,7 @@ export default {
       proposal.save().then((res) => {
         if (type === "submit") this.submittedModal = true;
         else {
-          Swal.fire({
+          swal({
             title: `You saved the current proposal. You can edit anytime later!`,
             buttonsStyling: false,
             type: "success",
@@ -429,15 +406,6 @@ export default {
         const requestId = this.$route.params.id;
         this.$router.push(`/vendors/${vendorId}/proposal-request/${requestId}`);
       }
-      // this.$root.$emit("prev-step-vendor-proposal");
-      // this.$root.$emit("clear-slide-pos");
-
-      // if (this.step == 2) {
-      //   this.step = 0;
-      // } else if (this.step > 0 && this.step != 2) {
-      //   this.step = this.step - 1;
-      // } else {
-      // }
 
       this.scrollToTop();
     },
@@ -604,6 +572,10 @@ export default {
             }
             &:not(:last-child) {
               border-right: solid 1px white;
+            }
+            .company-logo {
+              max-height: 30px;
+              max-width: 30px;
             }
           }
         }

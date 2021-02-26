@@ -1,31 +1,53 @@
 <template>
   <div class="md-layout">
-    <div class="md-layout-item md-size-100" style="justify-content: space-between">
+    <div
+      class="md-layout-item md-size-100"
+      style="justify-content: space-between"
+    >
       <div class="md-group" style="">
         <md-button
           class="md-xs md-icon-button"
-          :class="[{ 'md-white': view === 'list' }, { 'md-info': view === 'grid' }]"
+          :class="[
+            { 'md-white': view === 'list' },
+            { 'md-info': view === 'grid' },
+          ]"
           @click.prevent="changeView('grid')"
         >
           <md-icon>view_module</md-icon>
         </md-button>
         <md-button
           class="md-xs md-icon-button"
-          :class="[{ 'md-white': view === 'grid' }, { 'md-info': view === 'list' }]"
+          :class="[
+            { 'md-white': view === 'grid' },
+            { 'md-info': view === 'list' },
+          ]"
           @click.prevent="changeView('list')"
         >
           <md-icon>view_list</md-icon>
         </md-button>
       </div>
       <div class="pull-right" style="margin: 0 1px">
-        <md-button style="display: inline-block" class="md-info md-sm" @click="addNewVendor">Add Vendor</md-button>
-        <md-button style="display: inline-block" class="md-purple md-sm" @click="openUploadModal"
+        <md-button
+          style="display: inline-block"
+          class="md-info md-sm"
+          @click="addNewVendor"
+          >Add Vendor</md-button
+        >
+        <md-button
+          style="display: inline-block"
+          class="md-purple md-sm"
+          @click="openUploadModal"
           >Import Vendors From Spreadsheet</md-button
         >
       </div>
     </div>
     <div class="md-layout-item md-size-100 clear-margins">
-      <vue-element-loading :active="working" spinner="ring" color="#FF547C" background-color="transparent" />
+      <vue-element-loading
+        :active="working"
+        spinner="ring"
+        color="#FF547C"
+        background-color="transparent"
+      />
       <vendors-grid
         v-if="view === 'grid'"
         :buildingBlocksList="buildingBlocksList"
@@ -48,7 +70,7 @@
 </template>
 <script>
 import VueElementLoading from "vue-element-loading";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 import companyForm from "./Form/companyForm.vue";
 import UploadModal from "./ImportVendors";
 import VendorsGrid from "./VendorsGrid";
@@ -112,11 +134,11 @@ export default {
       this.view = view;
     },
     showDeleteAlert(vendor) {
-      Swal.fire({
+      swal({
         title: "Are you sure?",
         text: `You won't be able to revert this!`,
         showCancelButton: true,
-        icon: "warning",
+        type: "warning",
         showCancelButton: true,
         confirmButtonClass: "md-button md-success confirm-btn-bg ",
         cancelButtonClass: "md-button md-danger cancel-btn-bg",

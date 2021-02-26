@@ -506,7 +506,7 @@ export default {
             message,
             horizontalAlign: "center",
             verticalAlign: "top",
-            icon: "warning",
+            type: "warning",
           });
           this.isDragOver = false;
           return;
@@ -552,7 +552,7 @@ export default {
           message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
           horizontalAlign: "center",
           verticalAlign: "top",
-          icon: "warning",
+          type: "warning",
         });
       }
     },

@@ -310,7 +310,7 @@ export default {
         });
 
         if (this.docTag == "image") {
-          Swal.fire({
+          swal({
             title: `You've Uploaded an Image named ${file.name}`,
             text: "",
             type: "success",

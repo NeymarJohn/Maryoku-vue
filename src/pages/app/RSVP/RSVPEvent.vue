@@ -36,7 +36,6 @@
                 :editable="false"
                 :zoomLink="campaign.additionalData.zoomlink"
                 :startTime="eventStartTime"
-                v-if="!isLoading"
               ></rsvp-event-info-panel>
             </div>
           </div>
@@ -315,7 +314,7 @@ import RsvpVenueCarousel from "./RSVPVenueCarousel";
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
 import SocialSharingModal from "@/components/Modals/SocialSharingModal";
 import { mapActions, mapGetters } from "vuex";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 import Modal from "../../../components/Modal.vue";
 import MoreInfoItem from "./mobile/MoreInfoItem.vue";
 import { Model } from "vue-api-query";
@@ -382,7 +381,6 @@ export default {
       window.addEventListener("resize", this.onResize);
     });
 
-    this.isLoading = true;
     console.log("isMobile", this.isMobile);
     RsvpRequest.find(rsvpRequestId)
       .then((rsvpRequest) => {
@@ -500,7 +498,7 @@ export default {
     },
     reject() {
       new RsvpRequest({ id: this.rsvpRequest.id, status: "REJECTED" }).save().then((res) => {
-        // Swal.fire({
+        // swal({
         //   title: `Sorry to hear that. Hope to see you on next event! `,
         //   buttonsStyling: false,
         //   confirmButtonClass: "md-button md-success",

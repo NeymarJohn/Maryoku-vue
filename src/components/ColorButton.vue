@@ -3,16 +3,11 @@
     <div class="color-select-button-mask" @click="toggleColorPane()" v-if="showColorPane"></div>
     <md-button
       class="md-just-icon"
-      :style="`background-color: ${bgc} !important; opacity:${alpha}; width:${size}px; height:${size}px`"
+      :style="`background-color: ${bgc} !important; opacity:${alpha}`"
       @click="toggleColorPane()"
       v-if="bgc"
     ></md-button>
-    <md-button
-      class="add-button md-just-icon md-white"
-      @click="toggleColorPane()"
-      v-else
-      :style="`width:${size}px; height:${size}px`"
-    >
+    <md-button class="add-button md-just-icon md-white" @click="toggleColorPane()" v-else>
       <img :src="`${$iconURL}Concept/Asset 488.svg`" width="20" />
     </md-button>
 
@@ -23,7 +18,6 @@
       picker="chrome"
       v-if="showColorPane"
     />
-    <img :src="icon" @click="toggleColorPane()" v-if="icon" class="icon-img" />
   </div>
 </template>
 <script>
@@ -65,19 +59,6 @@ export default {
     value: {
       type: [Object, String],
     },
-    size: {
-      type: Number,
-      default: 54,
-    },
-
-    icon: {
-      type: String,
-      default: "",
-    },
-    type: {
-      type: String,
-      default: "",
-    },
   },
   data: () => ({
     showColorPane: false,
@@ -110,9 +91,6 @@ export default {
     toggleColorPane: function () {
       document.getElementsByClassName("vc-chrome");
       this.showColorPane = !this.showColorPane;
-      if (!this.showColorPane) {
-        this.$emit("closed");
-      }
     },
   },
   created() {
@@ -138,46 +116,35 @@ export default {
     top: 0px;
     z-index: 30;
   }
-  .md-button {
-    width: 54px;
-    height: 54px;
-    border-radius: 50%;
-    margin: 0px;
-    // &.add-button {}
-  }
-  .add-button {
-    -webkit-box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-    background-color: #ffffff;
-    border: dashed 1.5px #f51355;
-    background-color: #ffffff;
-    border-radius: 50%;
-  }
-  .vc-chrome {
-    left: 65px;
-    top: 0px;
+}
+.md-button {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  margin: 0px;
+  // &.add-button {}
+}
+.add-button {
+  -webkit-box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  background-color: #ffffff;
+  border: dashed 1.5px #f51355;
+  background-color: #ffffff;
+  border-radius: 50%;
+}
+.vc-chrome {
+  left: 65px;
+  top: 0px;
+  &:before {
+    content: "";
+    width: 10px;
+    height: 10px;
     position: absolute;
-    z-index: 100;
-    &:before {
-      content: "";
-      width: 10px;
-      height: 10px;
-      position: absolute;
-      border: 1px solid #989898;
-      -webkit-transform: rotate(45deg);
-      transform: rotate(45deg);
-      left: -6px;
-      top: 22px;
-    }
-  }
-  .icon-img {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 25px;
-    height: 25px;
-    transform: translate(-50%, -50%);
-    cursor: pointer;
+    border: 1px solid #989898;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    left: -6px;
+    top: 22px;
   }
 }
 </style>

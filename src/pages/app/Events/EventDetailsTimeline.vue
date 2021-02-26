@@ -16,7 +16,7 @@
           that your invitees will know what to expect!
         </div>
       </div>
-      <header-actions @toggleCommentMode="toggleCommentMode" @export="exportToPdf"></header-actions>
+      <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
     </div>
     <div class="md-layout">
       <div
@@ -126,7 +126,7 @@ import EventComponent from "@/models/EventComponent";
 import EventTimelineItem from "@/models/EventTimelineItem";
 import moment from "moment";
 import { extendMoment } from "moment-range";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 import { SlideYDownTransition } from "vue2-transitions";
 import InputMask from "vue-input-mask";
 import { Modal, LabelEdit, LocationInput } from "@/components";
@@ -369,7 +369,7 @@ export default {
           message: "From time, To time and ( Title or Description ) id Required",
           horizontalAlign: "center",
           verticalAlign: "top",
-          icon: "warning",
+          type: "warning",
         });
 
         this.setItemLoading(item, false, true);
@@ -508,7 +508,7 @@ export default {
           }
         }
         if (isLargeFile) {
-          Swal.fire({
+          swal({
             title: "This file is larger than 10MB",
             showCloseButton: true,
             text: "Please choose another file",
@@ -616,7 +616,7 @@ export default {
       await getReq(`/1/events/${this.eventData.id}/timelineDates/clear`);
     },
     async revert() {
-      Swal.fire({
+      swal({
         title: "Do you really want to revert all?",
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",
@@ -647,7 +647,7 @@ export default {
       });
     },
     async startFromScratch() {
-      Swal.fire({
+      swal({
         title: "Do you really want to start from scratch?",
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",
@@ -684,7 +684,7 @@ export default {
       this.$store
         .dispatch("event/saveEventAction", new CalendarEvent({ id: this.eventData.id, timelineProgress: 0 }))
         .then((event) => {
-          Swal.fire({
+          swal({
             title: "Good Job! ",
             text: "Your working timeline is saved successfully! You can change it anytime!",
             showCancelButton: false,
@@ -711,7 +711,7 @@ export default {
         });
         this.$store.dispatch("event/saveEventAction", newEvent).then((event) => {
           this.isEditMode = false;
-          // Swal.fire({
+          // swal({
           //   title: "Good Job! ",
           //   text: "You finalise timeline and your event will be processed according your timelines!",
           //   showCancelButton: false,
@@ -751,7 +751,7 @@ export default {
         });
       });
       if (templates.length > 0) {
-        Swal.fire({
+        swal({
           title: "Sorry, there is a still template ",
           showCancelButton: false,
           confirmButtonClass: "md-button md-success",
@@ -784,9 +784,6 @@ export default {
       // }
       return true;
     },
-    exportToPdf() {
-      this.$refs.html2Pdf.generatePdf();
-    },
   },
   created() {
     [...Array(12).keys()].map((x) => (x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined));
@@ -805,6 +802,9 @@ export default {
       }
       this.isLoading = false;
     }
+    this.$root.$on("pageExport", () => {
+      this.$refs.html2Pdf.generatePdf();
+    });
   },
   mounted() {
     this.isLoading = true;
@@ -821,7 +821,7 @@ export default {
         nextItem.status !== "template" &&
         nextItem.startTime - prevItem.endTime < 1000
       ) {
-        Swal.fire({
+        swal({
           title: "Sorry, there is no time gap! ",
           showCancelButton: false,
           confirmButtonClass: "md-button md-success",

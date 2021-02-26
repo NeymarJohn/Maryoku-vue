@@ -6,7 +6,7 @@
           Get everyone to RSVP
         </div>
         <div class="cover-preview">
-          <img :src="campaignData.coverImage || campaignData.defaultCoverImage" class="mr-10" />
+          <img :src="campaignData.coverImage" class="mr-10" />
           <label for="cover">
             <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="chooseFiles">
               <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
@@ -203,7 +203,7 @@ import TitleEditor from "./components/TitleEditor";
 import RsvpTimelinePanel from "@/pages/app/RSVP/RSVPTimelinePanel.vue";
 import HideSwitch from "@/components/HideSwitch";
 import { getBase64 } from "@/utils/file.util";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 import CalendarEvent from "@/models/CalendarEvent";
 export default {
   components: {
@@ -288,8 +288,12 @@ export default {
         });
       }
       let coverImage = this.editingContent.coverImage;
-      if (!coverImage && this.event.concept) {
-        coverImage = this.event.concept.images[0].url;
+      console.log(coverImage);
+      if (coverImage.indexOf("RSVP2-middle") >= 0) {
+        // if coverImage is default
+        coverImage = this.event.concept
+          ? this.event.concept.images[0].url
+          : `${this.$storageURL}Campaign Images/RSVP2-middle.png`;
         this.$store.commit("campaign/setAttribute", {
           name: "RSVP",
           key: "coverImage",
@@ -318,6 +322,7 @@ export default {
   },
   computed: {
     event() {
+      console.log(this.$store.state.event.eventData);
       return this.$store.state.event.eventData;
     },
     user() {
@@ -370,7 +375,7 @@ export default {
       });
     },
     setDefault() {
-      Swal.fire({
+      swal({
         title: "Are you sure?",
         text: `You won't be able to revert this!`,
         showCancelButton: true,
