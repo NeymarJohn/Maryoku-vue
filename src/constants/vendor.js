@@ -582,13 +582,13 @@ export const businessCategories = [
                 name: 'cuisine specialty',
                 type: Array,
                 value: [],
-                available: ['italian', 'french', 'spanish', 'german', 'belgian', 'american', 'south american', 'chinese', 'japanese', 'mexican', 'indian', 'farm-to-table']
+                available: ['italian', 'french', 'spanish', 'german', 'belgian', 'american', 'Colombian', 'chinese', 'japanese', 'mexican', 'indian', 'farm-to-table', 'Peruvian', 'Argentine', 'Thai', 'Cuban', 'Greek']
               },
               {
                 name: 'food specialties',
                 type: Array,
                 value: [],
-                available: ['raw seafood bar', 'sushi station', 'ethnics food', 'special desserts', 'food truck', 'ice cream truck', 'salad stations', 'crudite stations', 'barbeque', 'brickoven station']
+                available: ['raw seafood bar', 'sushi station', 'special desserts', 'food truck', 'ice cream truck', 'salad stations', 'crudite stations', 'barbeque', 'brickoven station']
               },
               {
                 name: 'food preparation location',
@@ -596,11 +596,6 @@ export const businessCategories = [
                 value: [],
                 available: ['on premisses', 'off premises'],
                 hasComment: true
-              },
-              {
-                name: 'after party entertainment food',
-                type: Boolean,
-                value: false,
               },
               {
                 name: 'caterer type',
@@ -617,7 +612,7 @@ export const businessCategories = [
                 name: 'specialty liquor stations',
                 type: Array,
                 value: [],
-                available: ['beer', 'wine', 'tequila', 'cocktail', 'mixology', 'martini', 'bourbon', 'whiskey']
+                available: ['beer', 'wine', 'tequila', 'cocktail', 'mixology', 'martini', 'bourbon', 'whiskey', 'Vodka', 'Rum', 'Margaritas', 'Champagne']
               },
               {
                 name: 'specialty bar services',
@@ -651,7 +646,7 @@ export const businessCategories = [
                 name: 'appetizers',
                 type: Boolean,
                 value: false,
-                available: ['appetizers', 'passed hors doeuvres', 'stations', 'buffet', 'plated', 'sushi station', 'grazing service']
+                available: ['appetizers', 'passed hors doeuvres', 'stations', 'buffet', 'plated']
               },
             ]
           },
@@ -672,6 +667,12 @@ export const businessCategories = [
               },
               {
                 name: 'dinner',
+                type: Boolean,
+                value: false,
+                xIncluded: true,
+              },
+              {
+                name: 'snacks',
                 type: Boolean,
                 value: false,
                 xIncluded: true,
@@ -748,7 +749,7 @@ export const businessCategories = [
                 value: false
               },
               {
-                name: 'silverware',
+                name: 'Utensils',
                 type: Boolean,
                 value: false
               },
@@ -758,7 +759,7 @@ export const businessCategories = [
                 value: false
               },
               {
-                name: 'china',
+                name: 'Plateware',
                 type: Boolean,
                 value: false
               },
@@ -3834,11 +3835,6 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Cleanup",
-        type: Number,
-        hasComment: true,
-      },
-      {
-        name: "Breakdown",
         type: Number,
         hasComment: true,
       },

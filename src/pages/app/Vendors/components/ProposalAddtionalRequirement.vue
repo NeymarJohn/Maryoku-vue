@@ -40,7 +40,7 @@
           {{ requirement.item || requirement.subCategory }}
         </span>
       </div>
-      <div class="d-flex align-stretch mt-40" v-if="requirement.item == 'Sitting arrangement'" style="flex-flow: wrap">
+      <div class="d-flex align-center mt-40" v-if="requirement.item == 'Sitting arrangement'" style="flex-flow: wrap">
         <div class="d-flex mb-30">
           <template v-for="(sit, index) in requirement.options">
             <div
@@ -48,7 +48,7 @@
               :key="`sitarrangement-${index}`"
               class="d-flex flex-column justify-content-between seat-type"
             >
-              <div class="font-bold">'{{ sit.item }}'</div>
+              <div>'{{ sit.item }}'</div>
               <div><img :src="`${$iconURL}Requirements/${sit.icon}`" /></div>
             </div>
           </template>
@@ -57,22 +57,21 @@
               :key="`sitarrangement-${index}`"
               class="d-flex flex-column justify-content-between seat-type suggested-seat"
             >
-              <div class="font-bold">{{ suggestedSeating }}</div>
+              <div>{{ suggestedSeating }}</div>
             </div>
           </template>
         </div>
-        <div v-if="!editingNewSeating" class="d-flex align-center">
-          <md-button class="md-simple md-outlined md-red maryoku-btn" @click="editingNewSeating = true">
-            Suggest new seating arrangement
-          </md-button>
-        </div>
-        <div v-else class="p-10" style="min-width: 350px">
-          <div class="font-bold mb-10">Suggest new seating arrangement</div>
-          <textarea v-model="newSeatingSuggest" rows="4"></textarea>
-          <div class="text-right">
-            <md-button class="maryoku-btn md-red" @click="saveNewSeating">Save</md-button>
-            <md-button class="md-simple maryoku-btn md-black" @click="editingNewSeating = false">Cancel</md-button>
-          </div>
+        <md-button
+          class="md-simple md-outlined md-red maryoku-btn"
+          @click="editingNewSeating = true"
+          v-if="!editingNewSeating"
+        >
+          Suggest new seating arrangement
+        </md-button>
+        <div v-else>
+          <textarea v-model="newSeatingSuggest"></textarea>
+          <md-button class="maryoku-btn md-red" @click="saveNewSeating">Save</md-button>
+          <md-button class="md-simple maryoku-btn md-black" @click="editingNewSeating = false">Cancel</md-button>
         </div>
       </div>
       <div v-else class="align-center mt-40" :class="{ 'd-none': getSelectedOption(requirement.options).length == 0 }">
@@ -135,7 +134,7 @@ export default {
     padding: 10px;
     &.suggested-seat {
       display: flex;
-      justify-content: start;
+      justify-content: center;
       align-items: center;
     }
     &::after {

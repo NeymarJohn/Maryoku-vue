@@ -183,24 +183,24 @@ $paddings: 0, 5, 10, 15, 20, 30, 40, 50, 60, 70, 100;
   .pr-#{$padding} {
     padding-right: #{$padding}px;
   }
-  
+
   .m-#{$padding} {
-    margin: #{$padding}px;
+    margin: #{$padding}px !important;
   }
   .mt-#{$padding} {
-    margin-top: #{$padding}px;
+    margin-top: #{$padding}px !important;
   }
   .ml-#{$padding} {
-    margin-left: #{$padding}px;
+    margin-left: #{$padding}px !important;
   }
   .mb-#{$padding} {
-    margin-bottom: #{$padding}px;
+    margin-bottom: #{$padding}px !important;
   }
   .mr-#{$padding} {
-    margin-right: #{$padding}px;
+    margin-right: #{$padding}px !important;
   }
   .my-#{$padding} {
-    margin: #{$padding}px 0;
+    margin: #{$padding}px 0 !important;
   }
 }
 .pl-400 {
