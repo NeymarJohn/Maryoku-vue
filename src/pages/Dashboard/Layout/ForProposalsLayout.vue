@@ -384,17 +384,16 @@ export default {
       } else {
         proposal.status = "submit";
       }
-      proposal.save().then((res) => {
-        if (type === "submit") this.submittedModal = true;
-        else {
-          swal({
-            title: `You saved the current proposal. You can edit anytime later!`,
-            buttonsStyling: false,
-            type: "success",
-            confirmButtonClass: "md-button md-success",
-          });
-        }
-      });
+      proposal.save().then((res) => {});
+      if (type === "submit") this.submittedModal = true;
+      else {
+        swal({
+          title: `You saved the current proposal. You can edit anytime later!`,
+          buttonsStyling: false,
+          type: "success",
+          confirmButtonClass: "md-button md-success",
+        });
+      }
     },
 
     back() {
