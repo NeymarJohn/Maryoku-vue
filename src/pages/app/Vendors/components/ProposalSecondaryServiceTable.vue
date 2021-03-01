@@ -826,7 +826,8 @@ export default {
     margin-top: 2rem;
 
     .editable-sub-items-header {
-      border-top: 1px solid #707070;
+      // border-top: 1px solid #707070;
+      border-top: 2px solid #cbcbcb;
       padding: 40px 40px 30px 40px;
       display: grid;
       grid-template-columns: 30% 10% 17.5% 18%;

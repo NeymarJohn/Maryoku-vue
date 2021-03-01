@@ -18,9 +18,15 @@
       </span>
     </div>
     <div class="add-item-cont">
-      <div class="fields-cont">
+      <div class="fields-cont font-bold mb-20">
+        <span>Description</span>
+        <span>QTY</span>
+        <span v-if="serviceType !== 'included'">Price per unit</span>
+        <span v-if="serviceType !== 'included'">Subtotal</span>
+      </div>
+      <hr style="background-color: #b2b2b2; height: 2px" />
+      <div class="fields-cont mt-20">
         <div class="field">
-          <span>Description</span>
           <input
             v-model="serviceItem"
             class="input-value"
@@ -29,26 +35,24 @@
             placeholder="Type name of element here"
           />
         </div>
-        <!-- <div class="field">
-          <span>Size</span>
-          <input v-model="serviceItemSize" :class="{ isFilled: !!serviceItemSize }" />
-        </div> -->
+
         <div class="field">
-          <span>QTY</span>
           <money v-model="qty" v-bind="qtyFormat" :class="{ isFilled: !!qty }" />
         </div>
         <div class="field">
-          <span>Price per unit</span>
-          <money
-            v-model="unit"
-            v-bind="currencyFormat"
-            :class="{ isFilled: !!unit }"
-            :disabled="serviceType !== 'cost'"
-          />
+          <div class="planer-choice-cont" v-if="serviceType === 'included'">
+            <md-checkbox v-model="isComplementary">
+              <span class="mr-10">
+                <img :src="`${$iconURL}common/gift-dark.svg`" class="mr-10" />Complementary Item
+              </span>
+              <!-- <md-icon class="color-red">help_outline</md-icon> -->
+            </md-checkbox>
+          </div>
+          <money v-model="unit" v-bind="currencyFormat" :class="{ isFilled: !!unit }" v-else />
         </div>
         <div class="field">
-          <span>Total</span>
-          <money
+          <!-- <span>Total</span> -->
+          <!-- <money
             :value="subTotal"
             v-bind="currencyFormat"
             v-if="isNumberVisible"
@@ -62,7 +66,13 @@
             class="total"
             :class="{ isFilled: !!unit }"
             :disabled="serviceType !== 'cost'"
-          />
+          /> -->
+          <md-button
+            class="md-red maryoku-btn width-100"
+            :disabled="isDisabledAdd"
+            @click="saveItem(serviceItem, serviceItemSize, qty, unit)"
+            >Add Line
+          </md-button>
         </div>
       </div>
       <!-- <div class="planer-choice-cont" v-if="serviceType === 'cost'">
@@ -134,7 +144,7 @@
         </md-button>
       </div>
       <div class="action-cont">
-        <md-button class="md-simple md-black maryoku-btn" @click="cancel()"><u>Clear</u></md-button>
+        <!-- <md-button class="md-simple md-black maryoku-btn" @click="cancel()"><u>Clear</u></md-button> -->
         <!-- <md-button
           class="md-simple md-black maryoku-btn"
           @click="
@@ -146,12 +156,12 @@
           <img :src="`${$iconURL}common/comment-dark.svg`" class="mr-10" />
           Add comment
         </md-button> -->
-        <md-button
+        <!-- <md-button
           class="md-red maryoku-btn"
           :disabled="isDisabledAdd"
           @click="saveItem(serviceItem, serviceItemSize, qty, unit)"
-          >Add item
-        </md-button>
+          >Add Line
+        </md-button> -->
       </div>
     </div>
   </div>
@@ -505,7 +515,7 @@ export default {
     margin-top: 1rem;
     .fields-cont {
       display: grid;
-      grid-template-columns: 40% 20% 20% 20%;
+      grid-template-columns: 50% 10% 30% 10%;
       .field {
         margin-right: 1em;
         span {

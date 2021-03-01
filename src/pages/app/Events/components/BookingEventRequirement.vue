@@ -6,7 +6,7 @@
         <div>
           <h3>
             <img
-              :src="`${$iconURL}Budget+Elements/${component.icon}`"
+              :src="`${$iconURL}Budget+Elements/${component.componentId}.svg`"
               style="width: 30px; margin-right: 0.5em"
               v-if="component.componentId"
             />

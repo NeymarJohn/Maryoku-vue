@@ -68,8 +68,8 @@
         </div>
         <div v-else class="p-10" style="min-width: 350px">
           <div class="font-bold mb-10">Suggest new seating arrangement</div>
-          <textarea v-model="newSeatingSuggest" rows="4"></textarea>
-          <div class="text-right">
+          <textarea v-model="newSeatingSuggest" rows="4" placeholder="Type your idea here"></textarea>
+          <div class="text-right mt-10">
             <md-button class="maryoku-btn md-red" @click="saveNewSeating">Save</md-button>
             <md-button class="md-simple maryoku-btn md-black" @click="editingNewSeating = false">Cancel</md-button>
           </div>

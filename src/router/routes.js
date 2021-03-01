@@ -33,11 +33,9 @@ const ForProposalsLayout = () => import("@/pages/Dashboard/Layout/ForProposalsLa
 const VendorSignupLayout = () => import("@/pages/Dashboard/Layout/VendorSignupLayout.vue");
 const ForVendors = () => import("@/pages/app/Vendors/ForVendors.vue");
 const ForProposals = () => import("@/pages/app/Vendors/ForProposals.vue");
+const VendorSignup = () => import("@/pages/app/Vendors/VendorSignup.vue");
 const ProposalFinalStep = () => import("@/pages/app/Vendors/ProposalFinalStep.vue");
 const CalendarSync = () => import("@/pages/app/CalendarSync.vue");
-const VendorSignup = () => import("@/pages/app/Vendors/VendorSignup.vue");
-const VendorProfileLayout = () => import("@/pages/app/Vendors/VendorProfileLayout.vue")
-const VendorProfileOverview = () => import("@/pages/app/Vendors/VendorProfileOverview.vue")
 // OnBoardingPages
 const EventWizardStart = () => import("@/pages/app/CreateEvent/EventWizardStart.vue");
 const EventWizardDay = () => import("@/pages/app/CreateEvent/EventWizardDay.vue");
@@ -615,24 +613,6 @@ let welcomeEventPage = {
         gtm: "welcom event",
     },
 };
-let VendorProfilePages = {
-    path: "/",
-    component: VendorProfileLayout,
-    name: "Vendor Profile",
-    children: [
-        {
-            path: "/vendor-profile/:pageName",
-            name: "overview",
-            component: VendorProfileOverview,
-            meta: {
-                auth: false,
-                title: "Profile",
-                gtm: "Profile",
-            },
-        },
-    ],
-};
-
 const rememberMe = authService.getCookie("rememberMe");
 const homeLink = rememberMe === "true" ? "/events" : "/signin";
 const routes = [
@@ -669,7 +649,6 @@ const routes = [
     welcomeEventPage,
     others,
     calendarSyncPage,
-    VendorProfilePages
 ];
 
 export default routes;

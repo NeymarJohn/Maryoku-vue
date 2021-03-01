@@ -45,6 +45,9 @@ const getters = {
     let taxRate = state.taxes[mainService];
     let discount = state.discounts[mainService] || { price: 0, percentage: 0 }
     if (!taxRate) taxRate = 0;
+    if (!discount.price && discount.percentage > 0) {
+      discount.price = Math.round((sumPrice * discount.percentage / 100))
+    }
     let total = sumPrice - discount.price;
     const tax = Math.round((total * taxRate) / 100);
     const result = total + tax

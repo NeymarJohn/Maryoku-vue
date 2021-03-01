@@ -167,26 +167,8 @@
           <input class="input-value" type="number" v-model="item.requirementValue" />
         </template>
       </div>
-      <div class="price-cont editor-wrapper">
-        <template v-if="isEdit">
-          <money
-            v-model="item.price"
-            v-bind="{
-              decimal: '.',
-              thousands: ',',
-              prefix: '$ ',
-              suffix: '',
-              precision: 2,
-              masked: false,
-            }"
-            class="input-value"
-          />
-        </template>
-        <span v-else>${{ item.price }}</span>
-      </div>
-      <div class="total-cont editor-wrapper">
-        <span>${{ subTotal }}</span>
-      </div>
+      <div class="price-cont editor-wrapper"></div>
+      <div class="total-cont editor-wrapper"></div>
       <div class="action-cont editor-wrapper">
         <template v-if="isEdit">
           <a class="cancel" @click="cancel()">Cancel</a>

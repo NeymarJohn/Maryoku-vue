@@ -40,9 +40,7 @@ const defaultCampaignData = {
     RSVP: {
         title: "Event Name",
         description: "",
-        coverImage: "",
-        defaultCoverImage: `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Headers/rsvp${(new Date().getDate() %
-            2) +
+        coverImage: `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Headers/rsvp${(new Date().getDate() % 2) +
             1}.png`,
         campaignStatus: "EDITING",
         allowOnline: false,

@@ -101,6 +101,7 @@ export default {
       const extraServices = [];
       const hiddenValues = ["Discount for large quantities", "Tax rate", "Suggested Gratuity"];
       let taxRate = 0;
+      let discountRate = 0;
       if (this.vendor.pricingPolicies) {
         this.vendor.pricingPolicies.forEach((item) => {
           if (!hiddenValues.includes(item.name)) {
@@ -127,6 +128,12 @@ export default {
           if (item.name === "Tax rate") {
             taxRate = Number(item.value);
           }
+          if (
+            item.name === "Discount for large quantities" &&
+            Number(this.event.numberOfParticipants) >= Number(item.attendees)
+          ) {
+            discountRate = Number(item.value);
+          }
         });
       }
       this.$store.commit("vendorProposal/setCostServices", {
@@ -147,9 +154,16 @@ export default {
         key: "taxes",
         value: { [this.vendor.eventCategory.key]: taxRate },
       });
+      this.$store.commit("vendorProposal/setDiscount", {
+        category: this.vendor.eventCategory.key,
+        discount: { percentage: discountRate, price: 0 },
+      });
     }
   },
   computed: {
+    event() {
+      return this.proposalRequest.eventData;
+    },
     category() {
       return this.vendor.eventCategory.key;
     },

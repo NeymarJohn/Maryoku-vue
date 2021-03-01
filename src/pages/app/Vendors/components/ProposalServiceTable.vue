@@ -4,8 +4,8 @@
       <div class="editable-sub-items-header">
         <span>Description</span>
         <span class="text-center">QTY</span>
-        <span class="text-center">Price per unit</span>
-        <span class="text-center">Subtotal</span>
+        <span class="text-center">{{ tableCategory !== "included" ? "Price per unit" : "" }}</span>
+        <span class="text-center">{{ tableCategory !== "included" ? "Subtotal" : "" }}</span>
       </div>
       <proposal-service-table-item
         v-for="(req, rIndex) in services"
@@ -282,7 +282,7 @@ export default {
     saveDiscount() {
       this.isEditDiscount = false;
       console.log("this.discount", this.discount);
-      this.$store.commit("vendorProposal/setDiscount", { category: this.category, value: this.discount });
+      this.$store.commit("vendorProposal/setDiscount", { category: this.category, discount: this.discount });
       this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {
         category: this.category,
         value: this.discount,
@@ -388,13 +388,16 @@ export default {
     if (this.$refs.servicesCont) {
       this.servicesWidth = this.$refs.servicesCont.clientWidth;
     }
-    this.tax = this.$store.state.vendorProposal.taxes[this.vendor.eventCategory.key];
-    this.discount = this.$store.state.vendorProposal.discounts[this.vendor.eventCategory.key];
+    this.tax = this.$store.state.vendorProposal.taxes[this.category];
+    if (!this.tax) this.tax = 0;
+    this.discount = this.$store.state.vendorProposal.discounts[this.category];
     if (!this.discount) {
       this.discount = {
         percentage: 0,
         price: 0,
       };
+    } else if (!this.discount.price) {
+      this.discount.price = ((this.totalPrice * this.discount.percentage) / 100).toFixed(0);
     }
   },
   filters: {
@@ -549,7 +552,8 @@ export default {
     margin-top: 2rem;
 
     .editable-sub-items-header {
-      border-top: 1px solid #707070;
+      // border-top: 1px solid #707070;
+      border-top: 2px solid #cbcbcb;
       padding: 40px 40px 30px 40px;
       display: grid;
       // grid-template-columns: 30% 10% 10% 12% 15%;
