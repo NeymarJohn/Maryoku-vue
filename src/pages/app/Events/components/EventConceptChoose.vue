@@ -250,7 +250,7 @@ import EventComponent from "@/models/EventComponent";
 import EventConcept from "@/models/EventConcept";
 import EventTimelineItem from "@/models/EventTimelineItem";
 import moment from "moment";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 import { SlideYDownTransition } from "vue2-transitions";
 import InputMask from "vue-input-mask";
 import ColourPicker from "vue-colour-picker";

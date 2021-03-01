@@ -187,7 +187,7 @@ import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
 import EventTimelineItem from "@/models/EventTimelineItem";
 import moment from "moment";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 import { SlideYDownTransition } from "vue2-transitions";
 import InputMask from "vue-input-mask";
 
@@ -294,7 +294,7 @@ export default {
     },
 
     removeItem(item) {
-      Swal.fire({
+      swal({
         title: "Are you sure want to delete this item?",
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",
@@ -378,7 +378,7 @@ export default {
           message: "From time, To time and ( Title or Description ) id Required",
           horizontalAlign: "center",
           verticalAlign: "top",
-          icon: "warning",
+          type: "warning",
         });
 
         this.setItemLoading(item, false, true);
@@ -432,7 +432,7 @@ export default {
           message: "From time, To time and ( Title or Description ) id Required",
           horizontalAlign: "center",
           verticalAlign: "top",
-          icon: "warning",
+          type: "warning",
         });
 
         this.setItemLoading(item, false, true);

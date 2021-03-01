@@ -147,7 +147,7 @@ import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
 import EventConcept from "@/models/EventConcept";
 import ColorButton from "@/components/ColorButton";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 import S3Service from "@/services/s3.service";
 import { getBase64 } from "@/utils/file.util";
 
@@ -240,11 +240,11 @@ export default {
       let files = event.target.files || event.dataTransfer.files;
       if (!files.length) return;
       if (files[0].size > 1024 * 1024 * 5) {
-        Swal.fire({
+        swal({
           title: "File is too big",
           text: `Sorry, this miximum file size is 5M`,
           showCancelButton: false,
-          icon: "warning",
+          type: "warning",
           showCancelButton: true,
           confirmButtonClass: "md-button md-success confirm-btn-bg ",
           cancelButtonClass: "md-button md-danger cancel-btn-bg",

@@ -19,13 +19,13 @@
           <div class="proposal-add-personal-message-wrapper">
             <h3><img :src="`${iconUrl}Asset 611.svg`" />Let's begin with a personal message</h3>
             <h4>Write something nice, we'll add it to the final proposal</h4>
-            <textarea
-              rows="8"
-              placeholder="Type your message here"
+            <maryoku-textarea
+              class="width-100"
+              size="small"
+              rows="6"
               v-model="personalMessage"
               v-if="proposalRequest"
-              @blur="updateProposalRequest()"
-            />
+            ></maryoku-textarea>
             <span>Sincerely,</span>
             <p>{{ vendor.companyName }}</p>
           </div>
@@ -69,7 +69,7 @@
         </div>
       </div>
       <div class="md-layout-item md-size-30 pos-relative">
-        <proposal-requirements-panel class="requirements-panel"></proposal-requirements-panel>
+        <proposal-requirements-panel class="requirements-panel" v-if="step !== 3"></proposal-requirements-panel>
         <proposal-budget-summary
           :bundleDiscount="true"
           :warning="true"
@@ -86,6 +86,8 @@
 <script>
 import moment from "moment";
 import VendorService from "@/services/vendor.service";
+import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
+
 import Vendors from "@/models/Vendors";
 import ProposalRequest from "@/models/ProposalRequest";
 
@@ -120,6 +122,7 @@ export default {
     ProposalAdditionalRequirement,
     ProposalBidContent,
     ProposalRequirementsPanel,
+    MaryokuTextarea,
   },
   data() {
     return {
@@ -162,14 +165,6 @@ export default {
       } else {
         return [];
       }
-    },
-    getIconUrlByCategory(category) {
-      return `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/${
-        this.iconsWithCategory.filter((c) => c.value == category)[0].icon
-      }`;
-    },
-    updateProposalRequest(submitted = null) {
-      if (this.proposalRequest.submitted) return;
     },
   },
   filters: {},

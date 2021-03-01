@@ -31,7 +31,7 @@ import { MaryokuInput } from "@/components";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import CalendarEvent from "@/models/CalendarEvent";
 import Calendar from "@/models/Calendar";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 import eventService from "@/services/event.service";
 export default {
   components: {
@@ -131,6 +131,7 @@ export default {
       });
     },
     createEvent() {
+      // in case that user is signed
       const tenantId = this.$authService.resolveTenantId();
       if (tenantId.toLowerCase() === "default" || !this.tenantUser.tenants.includes(tenantId)) {
         localStorage.setItem("event", JSON.stringify(this.getEventData()));
@@ -148,10 +149,10 @@ export default {
             }
           })
           .catch((err) => {
-            Swal.fire({
+            swal({
               title: `<div style="text-align:center; width:100%;">Sorry, Some informations are invalid. <br/> Please check your information. </div>`,
               buttonsStyling: false,
-              icon: "warning",
+              type: "warning",
               confirmButtonClass: "md-button md-success",
             });
             console.log(err);

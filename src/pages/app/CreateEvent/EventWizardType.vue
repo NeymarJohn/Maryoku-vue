@@ -9,7 +9,7 @@
           <div
             class="type-card"
             @click="selectedType = type"
-            :class="{ selected: selectedType && selectedType.key == type.key }"
+            :class="{ selected: selectedType.key == type.key }"
             v-for="type in eventTypes"
             :key="type.value"
           >
@@ -55,8 +55,6 @@ export default {
       });
     if (this.publicEventData.eventType) {
       this.selectedType = this.eventTypes.find((it) => it.key == this.publicEventData.eventType.key);
-    } else {
-      this.selectedType = {};
     }
   },
   methods: {

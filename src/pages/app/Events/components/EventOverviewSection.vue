@@ -123,7 +123,7 @@ import { FunctionalCalendar } from "vue-functional-calendar";
 import moment from "moment";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import CategorySelector from "@/components/Inputs/CategorySelector";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 import { extendMoment } from "moment-range";
 import { timelineTempates } from "@/constants/event.js";
 
@@ -155,7 +155,7 @@ export default {
         currentDate: null,
         dateRange: {
           start: {
-            date: moment(this.section.started_at).subtract(1, "days").format("YYYY-MM-DD"),
+            date: moment(this.section.started_at).subtract(1, 'days').format("YYYY-MM-DD"),
             // date: null,
             dateTime: false,
             hour: "00",
@@ -296,7 +296,8 @@ export default {
       this.$emit("change", { holiday: e });
     },
     init: async function () {
-      this.holidays = JSON.parse(localStorage.getItem("two62-app.holidays"));
+
+      this.holidays = JSON.parse(localStorage.getItem('two62-app.holidays'));
       // get holidays from server
       if (this.section.key === "event_type" && (!this.holidays || !this.holidays.length)) {
         let res = await this.$http.get(`${process.env.SERVER_URL}/1/holidays`);
@@ -309,13 +310,13 @@ export default {
           holidays.push({ name: rel.name, options });
         });
         this.holidays = holidays;
-        localStorage.setItem("two62-app.holidays", JSON.stringify(this.holidays));
+        localStorage.setItem('two62-app.holidays', JSON.stringify(this.holidays))
       }
 
       this.eventTypes = this.eventTypesList.map((it) => {
         return { name: it.name, value: it.name, icon: `${this.$iconURL}Onboarding/${it.key}.svg` };
       });
-    },
+    }
   },
   filters: {
     formatDate: function (date) {

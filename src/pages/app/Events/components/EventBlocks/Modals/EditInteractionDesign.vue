@@ -1,9 +1,9 @@
 <template>
   <div class="manage-groups-panel">
-    <div class="md-layout" style="max-height: 100vh">
+    <div class="md-layout" style="max-height: 100vh;">
       <div class="md-layout-item md-size-100 preview-section">
         <h4 class="section-title">
-          <b>Edit {{ selectedInteraction.title }} Design</b>
+          <b>Edit {{selectedInteraction.title}} Design</b>
         </h4>
 
         <div
@@ -12,9 +12,9 @@
         >
           <!--<iframe src="https://static-maryoku.s3.amazonaws.com/storage/img/interactions/interaction-1.html"></iframe>-->
 
-          <h2 class="interaction-title">{{ selectedInteraction.line1 }}</h2>
-          <h4 class="interaction-date">{{ selectedInteraction.line2 }}</h4>
-          <p class="interaction-desc">{{ selectedInteraction.line3 }}</p>
+          <h2 class="interaction-title">{{selectedInteraction.line1}}</h2>
+          <h4 class="interaction-date">{{selectedInteraction.line2}}</h4>
+          <p class="interaction-desc">{{selectedInteraction.line3}}</p>
         </div>
 
         <div class="interaction-images md-layout-item md-size-100">
@@ -22,13 +22,13 @@
           <ul class="images-list">
             <li
               class="list-item"
-              v-for="(image, index) in selectedInteraction.options"
+              v-for="(image,index) in selectedInteraction.options"
               @click="selectTemplateImage(image)"
             >
               <div
                 class="image-item"
                 :style="`background-image: url(https://static-maryoku.s3.amazonaws.com/storage/img/interactions/${image}.png)`"
-                :class="{ selected: selectedInteraction.templateImage === image }"
+                :class="{selected : selectedInteraction.templateImage===image }"
               ></div>
             </li>
           </ul>
@@ -50,8 +50,7 @@
           name="event-planner-tab-invitees-management-interaction-save"
           class="event-planner-tab-invitees-management-interaction-save md-success pull-right"
           @click="editInteractionDesign()"
-          >Save</md-button
-        >
+        >Save</md-button>
       </div>
     </div>
   </div>
@@ -69,7 +68,7 @@ import EventInvitee from "@/models/EventInvitee";
 
 import EventInteraction from "@/models/EventInteraction";
 
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 import { error } from "util";
 import moment from "moment";
 import _ from "underscore";

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <event-state-message type="positive" v-if="showMessage" @closeMessage="showMessage = false"></event-state-message>
+    <event-state-message v-if="showMessage" :type="type"  @closeMessage="showMessage = false"></event-state-message>
     <div class="edit-event-details event-details-budget">
       <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
       <!-- Event Header -->
@@ -253,7 +253,7 @@ import { Tabs, Modal } from "@/components";
 
 // import auth from '@/auth';
 import moment from "moment";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
@@ -325,10 +325,11 @@ export default {
       showBudgetModal: false,
       budgetConfirmationModal: false,
       newBudget: null,
+      type: null,
       editBudgetElementsModal: false,
       showHandleMinus: false,
       showCommentEditorPanel: false,
-      showMessage: true,
+      showMessage: false,
     };
   },
   created() {
@@ -381,6 +382,7 @@ export default {
           this.event = event;
           this.eventId = event.id;
           this.calendarEvent = event;
+          this.checkMessageStatus();
           if (event.totalBudget)
             this.newBudget = (event.totalBudget + "").replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           new EventComponent()
@@ -403,6 +405,33 @@ export default {
           );
           this.isLoading = false;
         });
+    },
+    checkMessageStatus(){
+        this.type = null;
+        if (this.event.budgetProgress < 100) {
+            this.type = 'not_approved';
+        }
+        let now = moment();
+        let created_at = moment(this.event.dateCreated);
+        console.log('event.detail.budget', this.event, now.diff(created_at, 'days'));
+        if (!this.type && now.diff(created_at, 'days') < 15) {
+            this.type = 'approved_budget_in_two_weeks';
+        }
+
+        console.log('checkMessage', this.event.approvedBudget, this.event.totalBudget)
+        if (!this.type && this.event.approvedBudget !== 0) {
+            if (this.event.approvedBudget < this.event.totalBudget) {
+                this.type = 'higher_than_average';
+            } else if (this.event.approvedBudget > this.event.totalBudget){
+                this.type = 'lower_than_average';
+            }
+        }
+
+        if (!this.type && this.event.unexpected < this.event.totalBudget * 0.1) {
+            this.type = 'unexpected_budget_less_10';
+        }
+        console.log('budget.detail.event', this.type);
+        this.showMessage = !!this.type;
     },
     selectServices() {
       this.$refs.eventPlannerTabs.$emit("event-planner-nav-switch-panel", 1);
@@ -458,7 +487,7 @@ export default {
         const arrow = `<i data-v-a76b6a56="" style="color:#050505" class="md-icon md-icon-font md-theme-default">arrow_back</i>`;
         const budgetString = `<div class="font-size-40 font-regular color-red" style="margin:20px 0">$ ${this.newBudget}</div>`;
         const description = `<div class="description">Your edits changed the total budget, do you want to change it?</div>`;
-        Swal.fire({
+        swal({
           title: `<div class="text-left">${arrow}${budgetString}<div>Are Your Sure?</div>${description}</div>`,
           showCancelButton: true,
           confirmButtonClass: "md-button md-success",
@@ -505,6 +534,9 @@ export default {
         unexpectedBudget: this.event.unexpectedBudget + (newBudget.totalBudget - this.event.totalBudget),
       });
       this.$store.dispatch("event/saveEventAction", event).then((res) => {
+        console.log('updateTotalBudget.res', res);
+        this.event = res;
+        this.checkMessageStatus();
         this.showBudgetModal = false;
       });
     },

@@ -166,7 +166,7 @@ export default {
       const currentDate = new moment(scheduleDate, "YYYY-MM-DD");
       const newDate = moment(currentDate).add(1, "d");
       if (this.timelineDates.findIndex((item) => item.date === newDate.format("YYYY-MM-DD")) >= 0) {
-        Swal.fire({
+        swal({
           title: `Sorry you have timelins on ${newDate.format("DD/MM/YY")}`,
           showCancelButton: false,
           confirmButtonClass: "md-button md-success",

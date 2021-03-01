@@ -140,7 +140,7 @@ import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import moment from "moment";
 import VueElementLoading from "vue-element-loading";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 import TeamMember from "@/models/TeamMember";
 import _ from "underscore";
 import { backgroundImages, quotes } from "@/constants/loadingBackgrounds";
@@ -235,11 +235,11 @@ export default {
     showDeleteAlert(e, ev) {
       const _this = this;
       e.stopPropagation();
-      Swal.fire({
+      swal({
         title: "Are you sure?",
         text: `You won't be able to revert this!`,
         showCancelButton: true,
-        icon: "warning",
+        type: "warning",
         showCancelButton: true,
         confirmButtonClass: "md-button md-success confirm-btn-bg ",
         cancelButtonClass: "md-button md-danger cancel-btn-bg",

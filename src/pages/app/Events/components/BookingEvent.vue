@@ -190,7 +190,7 @@ import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
 import EventTimelineItem from "@/models/EventTimelineItem";
 import moment from "moment";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 import InputMask from "vue-input-mask";
 import BookingEventRequirement from "./BookingEventRequirement.vue";
 

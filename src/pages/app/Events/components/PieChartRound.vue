@@ -246,12 +246,12 @@ export default {
       var img = document.querySelector("#pie_chart_image");
 
       var xml = new XMLSerializer().serializeToString(svgElement);
-      console.log(xml);
+      // console.log(xml);
       var svg64 = btoa(xml);
       var b64Start = "data:image/svg+xml;base64,";
       this.blobURL = b64Start + svg64;
 
-      console.log(img);
+      // console.log(img);
       setTimeout(() => {
         var canvas = document.querySelector("#pie-chart-canvas");
         const ctx = canvas.getContext("2d");

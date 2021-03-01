@@ -207,7 +207,7 @@ import AddMyVendorModal from "@/components/Modals/AddMyVendorModal";
 
 import EventComponent from "@/models/EventComponent";
 import CalendarEvent from "@/models/CalendarEvent";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 
 export default {
   components: {
@@ -283,7 +283,7 @@ export default {
         });
     },
     showDeleteModal() {
-      Swal.fire({
+      swal({
         title: `<div class="text-left"><div class="font-size-30 cross-line"><img src="${this.$iconURL}Budget Elements/${this.eventCategoryItem.componentId}.svg" width="40"/>${this.eventCategoryItem.title}</div>
                   <div >Are you sure you want to delete this category?
                 </div></div>`,

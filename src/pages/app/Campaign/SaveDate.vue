@@ -101,11 +101,11 @@ import ConceptImageBlock from "@/components/ConceptImageBlock";
 import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 import { getBase64 } from "@/utils/file.util";
 import TitleEditor from "./components/TitleEditor";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 import VueElementLoading from "vue-element-loading";
 import S3Service from "@/services/s3.service";
 import ConceptCanvas from "./components/ConceptCanvas";
-import CalendarEvent from "@/models/CalendarEvent";
+import CalendarEvent from "@/models/CalendarEvent"
 
 const placeHolder =
   "Clear your schedule and get ready to mingle! the greatest event of the year is coming up! more details are yet to come, but we can already promise you it's going to be an event to remember. be sure to mark the date on your calendar. you can do it using this link: (google calendar link). see ya soon";
@@ -186,7 +186,7 @@ export default {
   },
   methods: {
     setDefault() {
-      Swal.fire({
+      swal({
         title: "Are you sure?",
         text: `You won't be able to revert this!`,
         showCancelButton: true,

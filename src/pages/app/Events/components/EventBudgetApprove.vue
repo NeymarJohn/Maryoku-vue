@@ -164,6 +164,7 @@
 import PieChartRound from "./PieChartRound.vue";
 import { Tabs, Modal } from "@/components";
 import EventComponent from "@/models/EventComponent";
+import Event from "@/models/Event";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import EventBudgetComponent from "./EventBudgetComponent";
@@ -240,9 +241,10 @@ export default {
       this.$store.dispatch("event/saveEventAction", event).then((res) => {});
     },
     deleteCategory(category) {
+      const event = new Event({id: this.event.id})
       const deletingCategory = new EventComponent({ id: category.id });
       deletingCategory
-        .for(this.event)
+        .for(event)
         .delete()
         .then((resp) => {
           this.isLoading = false;
@@ -259,9 +261,10 @@ export default {
         });
     },
     updateCategory({ category, offset }) {
+      const event = new Event({id: this.event.id})
       const eventComponent = new EventComponent(category);
       eventComponent
-        .for(this.event)
+        .for(event)
         .save()
         .then((res) => {
           this.selectedComponents = res.eventComponents.sort((a, b) => a.eventCategory.order - b.eventCategory.order);

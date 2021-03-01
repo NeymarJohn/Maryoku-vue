@@ -73,7 +73,7 @@
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 import moment from "moment";
-import Swal from "sweetalert2";
+import swal from "sweetalert2";
 import { SlideYDownTransition } from "vue2-transitions";
 import InputMask from "vue-input-mask";
 import VueElementLoading from "vue-element-loading";
