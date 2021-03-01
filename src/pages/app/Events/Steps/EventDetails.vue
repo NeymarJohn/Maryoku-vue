@@ -5,7 +5,7 @@
       <div class="md-card-content">
         <div class="md-layout">
           <div class="md-layout-item md-size-55">
-            <md-field class="required" :class="[{'md-error': errors.has('title')}]">
+            <md-field class="required" :class="[{ 'md-error': errors.has('title') }]">
               <label>Event Title</label>
               <md-input
                 v-model="eventData.title"
@@ -17,7 +17,7 @@
             </md-field>
           </div>
           <div class="md-layout-item md-size-15">
-            <md-field class="required" :class="[{'md-error': errors.has('numberOfParticipants')}]">
+            <md-field class="required" :class="[{ 'md-error': errors.has('numberOfParticipants') }]">
               <label>Guest Count</label>
               <md-input
                 v-model="eventData.numberOfParticipants"
@@ -27,14 +27,13 @@
                 type="number"
                 @change="calculateBudgetPerGuest()"
               ></md-input>
-              <span
-                class="md-error"
-                v-if="errors.has('numberOfParticipants')"
-              >The Guest Count is required and should be a number</span>
+              <span class="md-error" v-if="errors.has('numberOfParticipants')"
+                >The Guest Count is required and should be a number</span
+              >
             </md-field>
           </div>
           <div class="md-layout-item md-size-15">
-            <md-field class="required" :class="[{'md-error': errors.has('budget')}]">
+            <md-field class="required" :class="[{ 'md-error': errors.has('budget') }]">
               <label>Budget</label>
               <md-input
                 v-model="eventData.totalBudget"
@@ -44,10 +43,7 @@
                 type="number"
                 @change="calculateBudgetPerGuest()"
               ></md-input>
-              <span
-                class="md-error"
-                v-if="errors.has('budget')"
-              >The Budget is required and should be a number</span>
+              <span class="md-error" v-if="errors.has('budget')">The Budget is required and should be a number</span>
             </md-field>
           </div>
           <div class="md-layout-item md-size-15">
@@ -59,21 +55,16 @@
         </div>
         <!-- Event Types list-->
         <div class="md-layout event-types-list mt-1">
-          <div
-            class="md-layout-item md-size-40 required"
-            :class="{'has-error': !eventType && validating }"
-          >
+          <div class="md-layout-item md-size-40 required" :class="{ 'has-error': !eventType && validating }">
             <label class="bold">Select Event Type</label>
             <br />
             <span class="md-error" v-if="!eventType && validating">The Event Type Is Required</span>
             <div class="list-container">
               <md-field class="mt-0 mb-2">
                 <md-select v-model="eventType">
-                  <md-option
-                    v-for="(type,index) in eventTypes"
-                    :key="index"
-                    :value="type.id"
-                  >{{ type.name }}</md-option>
+                  <md-option v-for="(type, index) in eventTypes" :key="index" :value="type.id">{{
+                    type.name
+                  }}</md-option>
                 </md-select>
               </md-field>
             </div>
@@ -90,7 +81,7 @@
               :md-options="occasionsList"
               @md-opened="mdOpened"
               class="change-icon-order select-with-icon mb16"
-              :class="[{'md-error': errors.has('occasion')}]"
+              :class="[{ 'md-error': errors.has('occasion') }]"
               value
             >
               <label>Occasion</label>
@@ -107,7 +98,12 @@
         <div class="md-layout">
           <div class="md-layout-item md-size-50 required">
             <md-datepicker
-              :class="[{'md-error': (eventData.date && $refs.datePicker && !$refs.datePicker.$el.classList.contains('md-has-value') )}]"
+              :class="[
+                {
+                  'md-error':
+                    eventData.date && $refs.datePicker && !$refs.datePicker.$el.classList.contains('md-has-value'),
+                },
+              ]"
               v-model="eventData.date"
               data-vv-name="date"
               ref="datePicker"
@@ -116,29 +112,23 @@
             >
               <label>Date</label>
             </md-datepicker>
-            <md-checkbox
-              v-model="flexibleDate"
-              @change="switchDateRequired"
-            >I'm flexible around the selected date</md-checkbox>
+            <md-checkbox v-model="flexibleDate" @change="switchDateRequired"
+              >I'm flexible around the selected date</md-checkbox
+            >
           </div>
         </div>
         <div class="md-layout hide">
           <div class="md-layout-item md-size-25">
-            <md-field class="required" :class="[{'md-error': errors.has('time')}]">
+            <md-field class="required" :class="[{ 'md-error': errors.has('time') }]">
               <label>Start Time</label>
-              <md-select
-                v-model="eventData.time"
-                v-validate="modelValidations.time"
-                data-vv-name="time"
-                required
-              >
+              <md-select v-model="eventData.time" v-validate="modelValidations.time" data-vv-name="time" required>
                 <md-option v-for="hour in hoursArray" :key="hour" :value="hour">{{ hour }}</md-option>
               </md-select>
               <span class="md-error" v-if="errors.has('time')">The start time is required</span>
             </md-field>
           </div>
           <div class="md-layout-item md-size-25">
-            <md-field class="required" :class="[{'md-error': errors.has('duration')}]">
+            <md-field class="required" :class="[{ 'md-error': errors.has('duration') }]">
               <label>Duration</label>
               <md-select
                 v-model="eventData.duration"
@@ -146,11 +136,7 @@
                 data-vv-name="duration"
                 required
               >
-                <md-option
-                  v-for="hour in durationArray"
-                  :key="hour"
-                  :value="hour"
-                >{{ hour + ' hours' }}</md-option>
+                <md-option v-for="hour in durationArray" :key="hour" :value="hour">{{ hour + " hours" }}</md-option>
               </md-select>
               <span class="md-error" v-if="errors.has('duration')">The duration is required</span>
             </md-field>
@@ -161,7 +147,7 @@
           <div class="md-layout-item md-size-100 text-right">
             <br />
             <md-button class="md-default" @click="cancel">Cancel</md-button>
-            <md-button class="md-primary" @click="validateAndSubmit">{{submitButtonLabel}}</md-button>
+            <md-button class="md-primary" @click="validateAndSubmit">{{ submitButtonLabel }}</md-button>
           </div>
         </div>
       </div>
@@ -181,7 +167,7 @@ import AnnualPlannerVuexModule from "../../AnnualPlanner/AnnualPlanner.vuex";
 import moment from "moment";
 import numeral from "numeral";
 import _ from "underscore";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 
 export default {
   name: "get-started-step",
@@ -190,16 +176,11 @@ export default {
     VueElementLoading,
   },
   methods: {
-    ...mapMutations("AnnualPlannerVuex", [
-      "resetForm",
-      "setEventModal",
-      "setEventProperty",
-    ]),
+    ...mapMutations("AnnualPlannerVuex", ["resetForm", "setEventModal", "setEventProperty"]),
     calculateBudgetPerGuest() {
       if (this.eventData.totalBudget && this.eventData.numberOfParticipants) {
         this.eventData.budgetPerPerson = (
-          parseInt(this.eventData.totalBudget) /
-          this.eventData.numberOfParticipants
+          parseInt(this.eventData.totalBudget) / this.eventData.numberOfParticipants
         ).toFixed(2);
       }
     },
@@ -257,10 +238,7 @@ export default {
     },
     mdOpened: function () {
       this.eventData.occasion += " ";
-      this.eventData.occasion = this.eventData.occasion.substring(
-        0,
-        this.eventData.occasion.length - 1,
-      );
+      this.eventData.occasion = this.eventData.occasion.substring(0, this.eventData.occasion.length - 1);
     },
     showNotify() {
       this.$notify({
@@ -278,9 +256,7 @@ export default {
         }
         let eventStartTime =
           new Date(this.eventData.date).getTime() +
-          this.convertHoursToMillis(
-            moment(this.eventData.time, "HH:mm a").format("H"),
-          );
+          this.convertHoursToMillis(moment(this.eventData.time, "HH:mm a").format("H"));
         return eventStartTime;
       }
     },
@@ -289,9 +265,7 @@ export default {
         if (!this.eventData.duration) {
           this.eventData.duration = 1;
         }
-        let eventEndTime =
-          this.getEventStartInMillis() +
-          this.convertDurationToMillis(this.eventData.duration);
+        let eventEndTime = this.getEventStartInMillis() + this.convertDurationToMillis(this.eventData.duration);
         return eventEndTime;
       }
     },
@@ -311,10 +285,7 @@ export default {
           id: calendarId,
         });
 
-        let catObject = _.find(
-          this.occasionsForCategory,
-          (el) => el.value === this.eventData.occasion,
-        ) || {
+        let catObject = _.find(this.occasionsForCategory, (el) => el.value === this.eventData.occasion) || {
           category: "CompanyDays",
         };
         this.category = catObject.category;
@@ -383,10 +354,9 @@ export default {
         let editedEvent = new CalendarEvent(eventData);
         editedEvent.eventStartMillis = this.getEventStartInMillis();
         editedEvent.eventEndMillis = this.getEventEndInMillis();
-        let catObject = _.find(
-          this.occasionsForCategory,
-          (el) => el.value === editedEvent.occasion,
-        ) || { category: "CompanyDays" };
+        let catObject = _.find(this.occasionsForCategory, (el) => el.value === editedEvent.occasion) || {
+          category: "CompanyDays",
+        };
 
         this.eventData.category = catObject.category;
         editedEvent.category = catObject.category;
@@ -427,11 +397,8 @@ export default {
             // this.$set(this,'guestType',event.participantsType)
 
             this.eventData.date = new Date(event.eventStartMillis);
-            this.eventData.time = moment(
-              new Date(event.eventStartMillis).getTime(),
-            ).format("H:mm A");
-            this.eventData.duration =
-              (event.eventEndMillis - event.eventStartMillis) / 1000 / 60 / 60;
+            this.eventData.time = moment(new Date(event.eventStartMillis).getTime()).format("H:mm A");
+            this.eventData.duration = (event.eventEndMillis - event.eventStartMillis) / 1000 / 60 / 60;
 
             this.eventId = event.id;
             this.event = event;
@@ -486,27 +453,19 @@ export default {
       calendar: null,
       eventType: null,
       category: "",
-      InviteeTypes: [
-        "Guests Only",
-        "Guests and spouse",
-        "Guests and families",
-        "Guests siblings",
-      ],
+      InviteeTypes: ["Guests Only", "Guests and spouse", "Guests and families", "Guests siblings"],
       InviteeTypes2: [
         {
           title: "Corporate Guests",
-          icon:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/guest_type_corporate.png",
+          icon: "https://static-maryoku.s3.amazonaws.com/storage/img/guest_type_corporate.png",
         },
         {
           title: "Children",
-          icon:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/guest_type_children.png",
+          icon: "https://static-maryoku.s3.amazonaws.com/storage/img/guest_type_children.png",
         },
         {
           title: "Social Event Invitees",
-          icon:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/guest_type_social.png",
+          icon: "https://static-maryoku.s3.amazonaws.com/storage/img/guest_type_social.png",
         },
       ],
       guestType: null,
@@ -570,19 +529,9 @@ export default {
       ctx: this,
     });
 
-    [...Array(12).keys()].map((x) =>
-      x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined,
-    );
-    [...Array(12).keys()].map((x) =>
-      x === 0
-        ? this.hoursArray.push(`12:00 PM`)
-        : this.hoursArray.push(`${x}:00 PM`),
-    );
-    [...Array(8).keys()].map((x) =>
-      x === 0
-        ? this.hoursArray.push(`12:00 AM`)
-        : this.hoursArray.push(`${x}:00 AM`),
-    );
+    [...Array(12).keys()].map((x) => (x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined));
+    [...Array(12).keys()].map((x) => (x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`)));
+    [...Array(8).keys()].map((x) => (x === 0 ? this.hoursArray.push(`12:00 AM`) : this.hoursArray.push(`${x}:00 AM`)));
 
     this.hoursArray.push();
 

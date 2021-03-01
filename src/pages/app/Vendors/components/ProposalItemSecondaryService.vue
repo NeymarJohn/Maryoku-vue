@@ -257,7 +257,7 @@ export default {
           message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
           horizontalAlign: "center",
           verticalAlign: "top",
-          type: "warning",
+          icon: "warning",
         });
       }
     },
@@ -274,7 +274,7 @@ export default {
         });
 
         if (this.docTag == "image") {
-          swal({
+          Swal.fire({
             title: `You've Uploaded an Image named ${file.name}`,
             text: "",
             type: "success",

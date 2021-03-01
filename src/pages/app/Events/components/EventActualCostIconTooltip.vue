@@ -43,37 +43,37 @@ export default {
         let event = new CalendarEvent({ id: this.event.id })
         let selected_block = new EventComponent({ id: item.id })
 
-        // new EventComponentVendor()
-        //   .for(calendar, event, selected_block)
-        //   .get()
-        //   .then(response => {
-        //     this.isLoading = false
-        //     item.vendors = response
-        //     item.vendorsCount = response.length
-        //
-        //     let vendorsWithProposals = _.filter(response, function (item) {
-        //       return item.proposals && item.proposals.length
-        //     })
-        //
-        //     let proposals = []
-        //
-        //     _.each(vendorsWithProposals, v => {
-        //       // if ( v.proposals[0].accepted ) {
-        //       this.showIcon = v.proposals[0].accepted
-        //
-        //       if (v.proposals[0].downPaymentStatus === 'paid') {
-        //         proposals = v.proposals
-        //
-        //         _.each(proposals, p => {
-        //           this.paidAmount += p.cost
-        //           this.paidDate = this.getDateAsString(p.lastUpdated)
-        //         })
-        //       }
-        //     })
-        //   })
-        //   .catch(error => {
-        //     this.isLoading = false
-        //   })
+        new EventComponentVendor()
+          .for(calendar, event, selected_block)
+          .get()
+          .then(response => {
+            this.isLoading = false
+            item.vendors = response
+            item.vendorsCount = response.length
+
+            let vendorsWithProposals = _.filter(response, function (item) {
+              return item.proposals && item.proposals.length
+            })
+
+            let proposals = []
+
+            _.each(vendorsWithProposals, v => {
+              // if ( v.proposals[0].accepted ) {
+              this.showIcon = v.proposals[0].accepted
+
+              if (v.proposals[0].downPaymentStatus === 'paid') {
+                proposals = v.proposals
+
+                _.each(proposals, p => {
+                  this.paidAmount += p.cost
+                  this.paidDate = this.getDateAsString(p.lastUpdated)
+                })
+              }
+            })
+          })
+          .catch(error => {
+            this.isLoading = false
+          })
       }
     },
     getDateAsString (paidMillis) {

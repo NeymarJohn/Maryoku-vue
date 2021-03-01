@@ -57,7 +57,7 @@
 </template>
 <script>
 import ProfileInfoField from "./components/ProfileInfoField.vue";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 export default {
   components: {
     ProfileInfoField,
@@ -79,11 +79,11 @@ export default {
       this.$store.dispatch("auth/updateProfile", { [profileData.name]: profileData.value, id: this.userData.id });
     },
     deleteProfile() {
-      swal({
+      Swal.fire({
         title: "<div style='text-align:center'>Are you sure?</div>",
         text: `You won't be able to login with current credetials!`,
         showCancelButton: true,
-        type: "warning",
+        icon: "warning",
         confirmButtonClass: "md-button md-success confirm-btn-bg ",
         cancelButtonClass: "md-button md-danger cancel-btn-bg",
         confirmButtonText: "Yes, I'll delete my profile!",

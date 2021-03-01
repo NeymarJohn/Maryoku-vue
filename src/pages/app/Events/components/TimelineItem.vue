@@ -168,7 +168,7 @@ import MaryokuInput from "@/components/Inputs/MaryokuInput";
 import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 import moment from "moment";
 import Multiselect from "vue-multiselect";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import EventTimelineItem from "@/models/EventTimelineItem";
 import EventTimelineDate from "@/models/EventTimelineDate";
 
@@ -315,7 +315,7 @@ export default {
       this.$set(this.editingContent, "mode", "edit");
     },
     removeItem() {
-      swal({
+      Swal.fire({
         title: "Are you sure want to delete this item?",
         showCancelButton: true,
         cancelButtonClass: "md-button md-danger",

@@ -1,7 +1,7 @@
 <template>
   <div class="card-section align-center">
-    <input type="hidden" :value="month">
-    <input type="hidden" :value="year">
+    <input type="hidden" :value="month" />
+    <input type="hidden" :value="year" />
     <div class="left">
       <img class="mr-30" :src="section.img_src" />
       <div class="mr-30" style="width: 30%">
@@ -36,8 +36,6 @@
           <md-checkbox v-model="section.more_one_day" value="more_one_day"> More than one day event </md-checkbox>
         </div>
       </div>
-
-
     </div>
     <div class="right">
       <md-button class="md-simple" @click="isEdit = !isEdit">
@@ -59,7 +57,7 @@ import { FunctionalCalendar } from "vue-functional-calendar";
 import moment from "moment";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import CategorySelector from "@/components/Inputs/CategorySelector";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import { extendMoment } from "moment-range";
 import { timelineTempates } from "@/constants/event.js";
 
@@ -80,21 +78,21 @@ export default {
       iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
       additional: true,
       markedDates: {
-          start: '9/2/2021',
-          end: '19/2/2021',
+        start: "9/2/2021",
+        end: "19/2/2021",
       },
       dateData: {
         currentDate: null,
         dateRange: {
           start: {
-            date: '',
+            date: "",
             // date: null,
             dateTime: false,
             hour: "00",
             mintue: "00",
           },
           end: {
-            date: '',
+            date: "",
             // date: null,
             dateTime: false,
             hour: "00",
@@ -117,21 +115,21 @@ export default {
     };
   },
   methods: {
-    changeMonth(e){
-        this.month = moment(e).month();
-        this.year = moment(e).year()
-        this.resetCalendar();
+    changeMonth(e) {
+      this.month = moment(e).month();
+      this.year = moment(e).year();
+      this.resetCalendar();
     },
-    changeYear(e){
-        this.month = moment(e).month();
-        this.year = moment(e).year()
+    changeYear(e) {
+      this.month = moment(e).month();
+      this.year = moment(e).year();
     },
     changeDate(e) {
       console.log("changeDate", e, this.dateData);
       this.dateClick = !this.dateClick;
 
       if (this.dateClick) {
-        this.started_at = moment(e.date, 'D/M/YYYY').format('YYYY-MM-DD');
+        this.started_at = moment(e.date, "D/M/YYYY").format("YYYY-MM-DD");
         this.day = e.day;
         this.resetCalendar();
         this.$forceUpdate();
@@ -139,10 +137,10 @@ export default {
       }
 
       if (!this.dateClick) {
-        this.ended_at = moment(e.date, 'D/M/YYYY').format('YYYY-MM-DD') ;
+        this.ended_at = moment(e.date, "D/M/YYYY").format("YYYY-MM-DD");
         if (this.day > e.day) {
-            this.ended_at = this.started_at;
-            this.started_at = moment(e.date, 'D/M/YYYY').format('YYYY-MM-DD');
+          this.ended_at = this.started_at;
+          this.started_at = moment(e.date, "D/M/YYYY").format("YYYY-MM-DD");
         }
 
         const extendedMoment = extendMoment(moment);
@@ -171,21 +169,21 @@ export default {
         });
       }
     },
-      resetCalendar(){
-          $(".vfc-day").each(function (index, day) {
-              $(day).find("div.vfc-base-start").remove();
-              $(day).find("div.vfc-base-end").remove();
-              $(day).find("span.vfc-span-day").removeClass('vfc-marked vfc-start-marked vfc-end-marked');
-          })
-      },
+    resetCalendar() {
+      $(".vfc-day").each(function (index, day) {
+        $(day).find("div.vfc-base-start").remove();
+        $(day).find("div.vfc-base-end").remove();
+        $(day).find("span.vfc-span-day").removeClass("vfc-marked vfc-start-marked vfc-end-marked");
+      });
+    },
     init: function () {
-        if (this.section.started_at && this.section.ended_at) {
-          this.markedDates = {
-            start: moment(this.section.started_at).format("D/M/YYYY"),
-            end: moment(this.section.ended_at).format("D/M/YYYY"),
-          };
-        }
-        console.log('init', this.markedDates);
+      if (this.section.started_at && this.section.ended_at) {
+        this.markedDates = {
+          start: moment(this.section.started_at).format("D/M/YYYY"),
+          end: moment(this.section.ended_at).format("D/M/YYYY"),
+        };
+      }
+      console.log("init", this.markedDates);
     },
   },
   filters: {
@@ -197,20 +195,19 @@ export default {
     this.init();
   },
   updated() {
-      let year = moment(this.section.started_at).year()
-      let month = moment(this.section.started_at).month()
-      if (year !== this.year || month !== this.month){
-          // this.resetCalendar();
-      }
-
+    let year = moment(this.section.started_at).year();
+    let month = moment(this.section.started_at).month();
+    if (year !== this.year || month !== this.month) {
+      // this.resetCalendar();
+    }
   },
   watch: {
-  section: {
-    handler(newVal) {
-      if (newVal) this.init();
+    section: {
+      handler(newVal) {
+        if (newVal) this.init();
+      },
+      deep: true,
     },
-    deep: true,
-},
   },
 };
 </script>

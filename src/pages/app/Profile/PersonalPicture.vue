@@ -3,11 +3,7 @@
     <div class="picture-container">
       <div class="picture">
         <div v-if="!imageUrl">
-          <img
-            class="avatar"
-            title
-            src="https://static-maryoku.s3.amazonaws.com/storage/img/profile-picture.png"
-          />
+          <img class="avatar" title src="https://static-maryoku.s3.amazonaws.com/storage/img/profile-picture.png" />
         </div>
         <div v-else>
           <img v-model="imageUrl" class="avatar" :src="imageUrl" />
@@ -63,7 +59,7 @@
 import { LabelEdit } from "@/components";
 import Me from "@/models/Me";
 import UserFile from "@/models/UserFile";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 export default {
   components: {
     Me,
@@ -98,7 +94,7 @@ export default {
       }
     },
     clearImg() {
-      swal({
+      Swal.fire({
         title: "Are you sure you want remove it?",
         text: ``,
         showCancelButton: true,
@@ -149,7 +145,7 @@ export default {
               message: "profile Picture is not uploaded, please try again",
               horizontalAlign: "center",
               verticalAlign: "top",
-              type: "warning",
+              icon: "warning",
             });
 
             console.log(error);
@@ -160,7 +156,7 @@ export default {
 
     removeImage: function (type) {
       // sremoveImagehowRemoveConfirmDialog()
-      swal({
+      Swal.fire({
         title: "Are you sure?",
         text: `You won't be able to revert this!`,
         showCancelButton: true,

@@ -211,7 +211,7 @@ import AddMyVendorModal from "@/components/Modals/AddMyVendorModal";
 import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 import EventComponentVendorItem from "./EventComponentVendorItem";
 import AddNewCategoryModal from "@/components/Modals/AddNewCategoryModal";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import EventBudgetVendorsItem from "./EventBudgetVendorsItem";
 export default {
   name: "event-budget-vendors",
@@ -471,9 +471,7 @@ export default {
       } else if (changedMoney.selectedOption === "unexpected") {
         event.unexpectedBudget = this.event.unexpectedBudget - changedMoney.offset;
       }
-      this.$store.dispatch("event/saveEventAction", event).then((res) => {
-          this.$emit("change");
-      });
+      this.$store.dispatch("event/saveEventAction", event).then((res) => {});
     },
 
     blockBudgetChanged(val, index) {
@@ -536,10 +534,10 @@ export default {
 
     addRequirements(item) {
       if (item.proposalsCount) {
-        swal({
+        Swal.fire({
           text: `You have offers based on these requirements, after changing them you will need to request updated proposal. Would you like to proceed?`,
           showCancelButton: true,
-          type: "warning",
+          icon: "warning",
           confirmButtonClass: "md-button md-success confirm-btn-bg ",
           cancelButtonClass: "md-button md-danger cancel-btn-bg",
           confirmButtonText: "Yes!",
@@ -642,7 +640,7 @@ export default {
       const arrow = `<i data-v-a76b6a56="" style="color:#050505" class="md-icon md-icon-font md-theme-default">arrow_back</i>`;
       const budgetString = `<div class="font-size-40 font-regular color-red" style="margin:20px 0">$ ${this.newBudget}</div>`;
       const description = `<div class="description">Your edits changed the total budget, do you want to change it?</div>`;
-      swal({
+      Swal.fire({
         title: `<div class="text-left">${arrow}${budgetString}<div>Are You Sure?</div>${description}</div>`,
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",
@@ -674,7 +672,7 @@ export default {
         case "add":
           const budgetString = `<div class="font-size-40 font-regular color-red" style="margin-bottom:20px">+$${formattedValue}</div>`;
           const description = `<div class="description">Your edits changed the total budget, do you want to change it?</div>`;
-          swal({
+          Swal.fire({
             title: `<div class="text-left">${budgetString}<div>Would you like to add extra $${formattedValue} to your budget?</div>${description}</div>`,
             showCancelButton: true,
             confirmButtonClass: "md-button md-success",

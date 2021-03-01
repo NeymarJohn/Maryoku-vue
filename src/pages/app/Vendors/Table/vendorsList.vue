@@ -14,12 +14,9 @@
                 name="select"
               >
                 <md-option value>all</md-option>
-                <md-option
-                  v-for="(cat, index) in buildingBlocksList"
-                  :key="index"
-                  :value="cat.id"
-                  v-model="cat.id"
-                >{{cat.value}}</md-option>
+                <md-option v-for="(cat, index) in buildingBlocksList" :key="index" :value="cat.id" v-model="cat.id">{{
+                  cat.value
+                }}</md-option>
               </md-select>
             </md-field>
           </md-table-cell>
@@ -27,16 +24,15 @@
         </md-table-row>
 
         <md-table-row
-          v-for="(vendor,index ) in vendorsList"
+          v-for="(vendor, index) in vendorsList"
           :key="index"
           @click="selectVendor(vendor)"
-          style="cursor: pointer;"
+          style="cursor: pointer"
         >
           <md-table-cell md-label="Vendor Name">{{ vendor.vendorDisplayName }}</md-table-cell>
-          <md-table-cell
-            md-label="Category"
-            md-sort-by="vendorCategory"
-          >{{ categoryTitle(vendor.vendorCategory) }}</md-table-cell>
+          <md-table-cell md-label="Category" md-sort-by="vendorCategory">{{
+            categoryTitle(vendor.vendorCategory)
+          }}</md-table-cell>
           <md-table-cell md-label="Rank">
             <!-- <vue-stars
                             :name="item.id"
@@ -55,14 +51,14 @@
                 class="star-rating__star"
                 v-for="(rating, ratingIndex) in ratings"
                 :key="ratingIndex"
-                :class="{'is-selected' : ((vendor.rank >= rating) && vendor.rank != null)}"
+                :class="{ 'is-selected': vendor.rank >= rating && vendor.rank != null }"
               >
                 <input
                   class="star-rating star-rating__checkbox"
-                  @click="setRanking(vendor.id,rating)"
+                  @click="setRanking(vendor.id, rating)"
                   type="radio"
                   :value="rating"
-                  :name="`market_ranking_`+vendor.id"
+                  :name="`market_ranking_` + vendor.id"
                   v-model="vendor.rank"
                 />★
               </label>
@@ -106,19 +102,19 @@
 </template>
 
 <script>
-import { Modal, SimpleWizard, WizardTab } from '@/components'
-import swal from 'sweetalert2'
-import Vendors from '@/models/Vendors'
-import RankingModal from './RankingModal'
-import TagsModal from './TagsModal'
-import ClickOutside from 'vue-click-outside'
+import { Modal, SimpleWizard, WizardTab } from "@/components";
+import Swal from "sweetalert2";
+import Vendors from "@/models/Vendors";
+import RankingModal from "./RankingModal";
+import TagsModal from "./TagsModal";
+import ClickOutside from "vue-click-outside";
 // import auth from '@/auth';
 
-import Calendar from '@/models/Calendar'
-import CalendarEvent from '@/models/CalendarEvent'
-import EventComponent from '@/models/EventComponent'
-import EventComponentVendor from '@/models/EventComponentVendor'
-import _ from 'underscore'
+import Calendar from "@/models/Calendar";
+import CalendarEvent from "@/models/CalendarEvent";
+import EventComponent from "@/models/EventComponent";
+import EventComponentVendor from "@/models/EventComponentVendor";
+import _ from "underscore";
 
 export default {
   components: {
@@ -127,182 +123,181 @@ export default {
     WizardTab,
     TagsModal,
     RankingModal,
-    ClickOutside
+    ClickOutside,
   },
   props: {
     vendorsList: {
       type: Array,
       default: () => {
-        return []
-      }
+        return [];
+      },
     },
     buildingBlocksList: {
       type: Array,
       default: () => {
-        return []
-      }
+        return [];
+      },
     },
     tooltipModels: {
       type: Array,
       default: () => {
-        return {}
-      }
+        return {};
+      },
     },
     fetchVendors: {
-      type: Function
+      type: Function,
     },
     item: {
       type: Object,
       default: () => {
-        return {}
-      }
+        return {};
+      },
     },
     mode: String,
     selectedBlock: {
       type: Object,
-      default: null
+      default: null,
     },
     event: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
-  created () {
+  created() {
     if (this.event && this.selectedBlock) {
-      this.getBlockVendors()
+      this.getBlockVendors();
     }
   },
-  data () {
+  data() {
     return {
       /* auth : auth, */
       tagsModalOpen: false,
       openPopup: false,
       openPopupTags: false,
       tags: [],
-      tag: ' ',
-      name: 'Direction',
+      tag: " ",
+      name: "Direction",
       ratings: [1, 2, 3, 4, 5],
       index: 0,
       selectedVendor: undefined,
-      blockVendors: []
-    }
+      blockVendors: [],
+    };
   },
-  mounted () {
-    this.getBlockVendors()
+  mounted() {
+    this.getBlockVendors();
   },
   methods: {
-    async setRanking (id, ranking) {
-      console.log('sss')
-      let vendor = await Vendors.find(id)
-      vendor.rank = ranking
-      vendor.save()
+    async setRanking(id, ranking) {
+      console.log("sss");
+      let vendor = await Vendors.find(id);
+      vendor.rank = ranking;
+      vendor.save();
 
       this.$notify({
-        message: 'Vendor Ranked successfully!',
-        horizontalAlign: 'center',
-        verticalAlign: 'top',
-        type: 'success'
-      })
+        message: "Vendor Ranked successfully!",
+        horizontalAlign: "center",
+        verticalAlign: "top",
+        type: "success",
+      });
     },
-    closeModal () {
-      this.openPopup = false
+    closeModal() {
+      this.openPopup = false;
     },
-    openPopover (index) {
-      this.tooltipModels[index].value =
-        !this.tooltipModels[index].value && (this.openPopup = true)
+    openPopover(index) {
+      this.tooltipModels[index].value = !this.tooltipModels[index].value && (this.openPopup = true);
 
       this.tooltipModels.map((item, itemIndex) => {
         if (index !== itemIndex) {
-          this.tooltipModels[itemIndex].value = false
+          this.tooltipModels[itemIndex].value = false;
         }
-      })
+      });
     },
-    categoryTitle (categoryId) {
-      let category = _.findWhere(this.buildingBlocksList, { id: categoryId })
-      return category ? category.value : categoryId
+    categoryTitle(categoryId) {
+      let category = _.findWhere(this.buildingBlocksList, { id: categoryId });
+      return category ? category.value : categoryId;
       const buildingBlock = _.findWhere(this.buildingBlocksList, {
-        id: categoryId
-      })
-      return buildingBlock ? buildingBlock.value : ''
+        id: categoryId,
+      });
+      return buildingBlock ? buildingBlock.value : "";
     },
-    deleteVendor (id) {
-      swal({
-        title: 'Are you sure you want to delete this vendor?',
+    deleteVendor(id) {
+      Swal.fire({
+        title: "Are you sure you want to delete this vendor?",
         text: "You won't be able to revert this!",
-        type: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonClass: 'md-button md-success confirm-btn-bg btn-fill',
-        cancelButtonClass: 'md-button md-danger cancel-btn-bg btn-fill',
-        confirmButtonText: 'Yes, delete it!'
-      }).then(async result => {
+        confirmButtonClass: "md-button md-success confirm-btn-bg btn-fill",
+        cancelButtonClass: "md-button md-danger cancel-btn-bg btn-fill",
+        confirmButtonText: "Yes, delete it!",
+      }).then(async (result) => {
         if (result.value) {
-          let vendor = await Vendors.find(id)
-          vendor.delete()
+          let vendor = await Vendors.find(id);
+          vendor.delete();
 
-          let vendorIndex = this.vendorsList.findIndex(obj => obj.id === id)
+          let vendorIndex = this.vendorsList.findIndex((obj) => obj.id === id);
 
-          this.vendorsList.splice(vendorIndex, 1)
+          this.vendorsList.splice(vendorIndex, 1);
           this.$notify({
-            message: 'Vendor deleted successfully!',
-            horizontalAlign: 'center',
-            verticalAlign: 'top',
-            type: 'success'
-          })
+            message: "Vendor deleted successfully!",
+            horizontalAlign: "center",
+            verticalAlign: "top",
+            type: "success",
+          });
 
           if (this.selectedVendor === id) {
-            this.$set(this, 'selectedVendor', undefined)
-            this.$emit('close-vendor', {})
+            this.$set(this, "selectedVendor", undefined);
+            this.$emit("close-vendor", {});
           }
         }
-      })
+      });
     },
-    selectVendor (item) {
-      let _self = this
+    selectVendor(item) {
+      let _self = this;
 
       if (_self.selectedVendor != item.id) {
-        _self.$set(_self, 'selectedVendor', item.id)
-        _self.$emit('select-vendor', item)
+        _self.$set(_self, "selectedVendor", item.id);
+        _self.$emit("select-vendor", item);
       } else {
-        _self.$set(_self, 'selectedVendor', undefined)
-        _self.$emit('close-vendor', {})
+        _self.$set(_self, "selectedVendor", undefined);
+        _self.$emit("close-vendor", {});
       }
     },
-    resetSelectedVendor (data) {
-      this.$set(this, 'selectedVendor', data)
+    resetSelectedVendor(data) {
+      this.$set(this, "selectedVendor", data);
     },
-    addVendor (data) {
-      this.$emit('add-vendor', data)
-      this.getBlockVendors()
+    addVendor(data) {
+      this.$emit("add-vendor", data);
+      this.getBlockVendors();
     },
-    removeVendor (data) {
-      this.$emit('remove-vendor', data)
-      this.getBlockVendors()
+    removeVendor(data) {
+      this.$emit("remove-vendor", data);
+      this.getBlockVendors();
     },
-    getBlockVendors () {
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
+    getBlockVendors() {
+      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
       if (this.event) {
-        let event = new CalendarEvent({ id: this.event.id })
-        let selected_block = new EventComponent({ id: this.selectedBlock.id })
+        let event = new CalendarEvent({ id: this.event.id });
+        let selected_block = new EventComponent({ id: this.selectedBlock.id });
 
         new EventComponentVendor()
           .for(calendar, event, selected_block)
           .get()
-          .then(resp => {
-            this.blockVendors = resp
+          .then((resp) => {
+            this.blockVendors = resp;
           })
-          .catch(error => {
-            console.log('error =>', error)
-          })
+          .catch((error) => {
+            console.log("error =>", error);
+          });
       }
     },
-    isSelected (vendorId) {
+    isSelected(vendorId) {
       let isSelected = _.find(this.blockVendors, function (vendor) {
-        return vendor.vendorId === vendorId
-      })
-      return !!isSelected
-    }
-  }
-}
+        return vendor.vendorId === vendorId;
+      });
+      return !!isSelected;
+    },
+  },
+};
 </script>
 <style lang="scss">
 .md-table-cell-container {
@@ -338,8 +333,7 @@ export default {
   color: #555555 !important;
 }
 .border-field {
-  box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14),
-    0 7px 12px -5px rgba(153, 153, 153, 0.46);
+  box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 12px -5px rgba(153, 153, 153, 0.46);
   font-size: 13px;
 }
 .label-right {

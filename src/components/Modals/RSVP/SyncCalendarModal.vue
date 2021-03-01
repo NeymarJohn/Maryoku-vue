@@ -162,7 +162,7 @@ export default {
         request.execute(function (event) {
           // appendPre("Event created: " + event.htmlLink);
           console.log(event.htmlLink);
-          swal({
+          Swal.fire({
             title: "Thank you for your attending!",
             text: `See you there!`,
             showCancelButton: false,

@@ -6,29 +6,20 @@
           <div class="md-layout d-flex items-left">
             <h4>Select Header Image</h4>
           </div>
-          <md-button
-            class="md-simple md-just-icon md-round modal-default-button"
-            @click="closeModal"
-          >
+          <md-button class="md-simple md-just-icon md-round modal-default-button" @click="closeModal">
             <md-icon>clear</md-icon>
           </md-button>
         </template>
         <template slot="body" v-if="headerImages">
           <vue-element-loading :active="working" spinner="ring" color="#FF547C" is-full-screen />
           <div class="header-images-list md-layout">
-            <div
-              class="header-images-list_item md-layout-item md-size-33"
-              v-for="(image,index) in headerImages"
-            >
+            <div class="header-images-list_item md-layout-item md-size-33" v-for="(image, index) in headerImages">
               <img
                 :src="`https://static-maryoku.s3.amazonaws.com/storage/img/page-headers/${image.fullFileName}`"
-                :class="{selected : selectedImage===image.cutFileName}"
+                :class="{ selected: selectedImage === image.cutFileName }"
                 @click="selectImage(image.cutFileName)"
               />
-              <md-button
-                class="md-simple md-just-icon md-round"
-                @click="previewImage(image.cutFileName)"
-              >
+              <md-button class="md-simple md-just-icon md-round" @click="previewImage(image.cutFileName)">
                 <md-icon>visibility</md-icon>
                 <md-tooltip>Preview</md-tooltip>
               </md-button>
@@ -45,9 +36,7 @@
       <md-button class="md-simple md-just-icon md-round" @click="closePreviewModal">
         <md-icon>clear</md-icon>
       </md-button>
-      <img
-        :src="`https://static-maryoku.s3.amazonaws.com/storage/img/page-headers/${imagePreview}`"
-      />
+      <img :src="`https://static-maryoku.s3.amazonaws.com/storage/img/page-headers/${imagePreview}`" />
     </div>
   </div>
 </template>
@@ -60,7 +49,7 @@ import { Modal } from "@/components";
 import Calendar from "@/models/Calendar";
 import EventComponent from "@/models/EventComponent";
 
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import { error } from "util";
 import moment from "moment";
 

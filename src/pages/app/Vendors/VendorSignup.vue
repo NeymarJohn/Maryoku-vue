@@ -34,7 +34,7 @@ import VendorSignupStep3 from "./components/VendorSignupStep3.vue";
 import VendorSignupStep4 from "./components/VendorSignupStep4.vue";
 import VendorSignupStep5 from "./components/VendorSignupStep5.vue";
 import VendorSignupFinalForm from "./components/VendorSignupFinalForm.vue";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 
 import { businessCategories, generalInfos, companyServices } from "@/constants/vendor";
 
@@ -116,7 +116,7 @@ export default {
           vendor[field][value.index] = value.data;
         }
       } else if (field == "removeImage") {
-        console.log('removeImage', vendor.images, vendor.vendorImages);
+        console.log("removeImage", vendor.images, vendor.vendorImages);
         // vendor.images = vendor.images.filter((i) => i != value);
         // vendor.vendorImages = vendor.vendorImages.filter((i) => i != value);
         let images = vendor.images.filter((i) => i != value);

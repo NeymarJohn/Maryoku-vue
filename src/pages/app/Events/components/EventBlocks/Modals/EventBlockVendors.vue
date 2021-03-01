@@ -3,10 +3,7 @@
     <div class="md-layout">
       <div class="md-layout-item md-size-100">
         <h4 class="md-title" style="margin-bottom: 0; line-height: 51px">
-          <md-button
-            @click="closePanel"
-            class="md-button md-theme-default md-simple md-just-icon"
-          >
+          <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
             <md-icon>arrow_back</md-icon>
           </md-button>
           {{ categoryTitle }}'s Vendors List
@@ -22,28 +19,12 @@
         </h4>
 
         <div class="md-layout">
-          <div
-            class="md-layout-item md-size-100"
-            style="padding-left: 42px; min-height: 240px"
-          >
-            <vue-element-loading
-              :active="isLoading"
-              spinner="ring"
-              color="#FF547C"
-            />
-            <div style="padding-left: 6px">
-              Send vendors of your choice a request for proposal
-            </div>
-            <md-card
-              v-show="blockVendors.length && !isLoading"
-              class="md-card-plain clear-margins"
-            >
+          <div class="md-layout-item md-size-100" style="padding-left: 42px; min-height: 240px">
+            <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
+            <div style="padding-left: 6px">Send vendors of your choice a request for proposal</div>
+            <md-card v-show="blockVendors.length && !isLoading" class="md-card-plain clear-margins">
               <md-card-content>
-                <md-table
-                  v-model="filteredBlockVendors"
-                  table-header-color="orange"
-                  class="vendors-table"
-                >
+                <md-table v-model="filteredBlockVendors" table-header-color="orange" class="vendors-table">
                   <md-table-toolbar>
                     <div class="md-toolbar-section-start">
                       <md-field>
@@ -70,15 +51,9 @@
                     :key="blockVendors.indexOf(item)"
                   >
                     <md-table-cell md-label="Vendor Name">
-                      <a
-                        href="javascript: void(null);"
-                        @click="vendorDetails(item.vendor)"
-                        >{{
-                          item.vendor
-                            ? item.vendor.vendorDisplayName
-                            : item.vendor.vendorMainEmail
-                        }}</a
-                      >
+                      <a href="javascript: void(null);" @click="vendorDetails(item.vendor)">{{
+                        item.vendor ? item.vendor.vendorDisplayName : item.vendor.vendorMainEmail
+                      }}</a>
                     </md-table-cell>
                     <md-table-cell md-label="Rank">
                       <vue-stars
@@ -96,33 +71,18 @@
                       />
                     </md-table-cell>
                     <md-table-cell md-label="Inquiry Status">
-                      <template
-                        v-if="
-                          item.rfpStatus === 'Ready to send' ||
-                          item.rfpStatus === null
-                        "
-                        >{{ `Ready` }}</template
-                      >
+                      <template v-if="item.rfpStatus === 'Ready to send' || item.rfpStatus === null">{{
+                        `Ready`
+                      }}</template>
                       <template v-else-if="item.rfpStatus === 'Sent'"
-                        >{{ `Request sent ` }}
-                        {{ getVendorDate(item.rfpSentMillis) }}</template
+                        >{{ `Request sent ` }} {{ getVendorDate(item.rfpSentMillis) }}</template
                       >
-                      <template v-else-if="item.rfpStatus === ''"
-                        >Ready</template
-                      >
+                      <template v-else-if="item.rfpStatus === ''">Ready</template>
                     </md-table-cell>
                     <md-table-cell class="vendors-table_item-actions">
-                      <vue-element-loading
-                        :active="sendingRfp"
-                        spinner="ring"
-                        color="#FF547C"
-                      ></vue-element-loading>
+                      <vue-element-loading :active="sendingRfp" spinner="ring" color="#FF547C"></vue-element-loading>
                       <md-button
-                        v-if="
-                          !sendingRfp &&
-                          (item.rfpStatus === 'Ready to send' ||
-                            item.rfpStatus === null)
-                        "
+                        v-if="!sendingRfp && (item.rfpStatus === 'Ready to send' || item.rfpStatus === null)"
                         class="md-primary md-just-icon md-round"
                         style="font-size: 20px"
                         @click="sendVendor(item)"
@@ -146,20 +106,12 @@
 
             </template>-->
 
-            <md-card
-              class="md-card-plain"
-              v-if="!blockVendors.length && !isLoading"
-            >
+            <md-card class="md-card-plain" v-if="!blockVendors.length && !isLoading">
               <md-card-content>
                 <div class="text-center">
-                  <img
-                    src="https://static-maryoku.s3.amazonaws.com/storage/img/paperandpen.png"
-                    style="width: 120px"
-                  />
+                  <img src="https://static-maryoku.s3.amazonaws.com/storage/img/paperandpen.png" style="width: 120px" />
                   <h4>No vendors found that match '{{ categoryTitle }}'</h4>
-                  <md-button class="md-purple md-sm" @click="manageVendors"
-                    >Manage Vendors Pool</md-button
-                  >
+                  <md-button class="md-purple md-sm" @click="manageVendors">Manage Vendors Pool</md-button>
                 </div>
               </md-card-content>
             </md-card>
@@ -172,7 +124,7 @@
   </div>
 </template>
 <script>
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
@@ -380,9 +332,7 @@ export default {
         props: {},
       });
 
-      let slideoutPanelBg = document.getElementsByClassName(
-        "slideout-panel-bg",
-      );
+      let slideoutPanelBg = document.getElementsByClassName("slideout-panel-bg");
       if (slideoutPanelBg && slideoutPanelBg.length > 0) {
         slideoutPanelBg[0].style = "z-index: 101";
       }
@@ -394,12 +344,7 @@ export default {
     },
     filterVendors() {
       this.filteredBlockVendors = _.filter(this.blockVendors, (v) => {
-        return (
-          v.vendor.vendorDisplayName
-            .toString()
-            .toLowerCase()
-            .indexOf(this.searchQuery.toLowerCase()) > -1
-        );
+        return v.vendor.vendorDisplayName.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
       });
     },
     vendorDetails(vendor) {
@@ -415,9 +360,7 @@ export default {
         },
       });
 
-      let slideoutPanelBg = document.getElementsByClassName(
-        "slideout-panel-bg",
-      );
+      let slideoutPanelBg = document.getElementsByClassName("slideout-panel-bg");
       if (slideoutPanelBg && slideoutPanelBg.length > 0) {
         slideoutPanelBg[0].style = "z-index: 101";
       }

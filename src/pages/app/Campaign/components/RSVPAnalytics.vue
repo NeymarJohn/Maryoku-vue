@@ -220,7 +220,7 @@ export default {
         })
         .then((response) => response.data)
         .then((json) => {
-          swal({
+          Swal.fire({
             title: `We sent reminder emails to guests who didn't reply yet.`,
             buttonsStyling: false,
             type: "success",

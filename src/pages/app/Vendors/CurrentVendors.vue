@@ -56,17 +56,13 @@
               {{ vendor.avgScore }}
             </div>
             <br class="hidden-lg hidden-md" />
-            <a class="favorite">
-              <md-icon>favorite_border</md-icon>add to favorites
-            </a>
+            <a class="favorite"> <md-icon>favorite_border</md-icon>add to favorites </a>
           </div>
         </div>
       </div>
       <div class="md-layout-item button-group text-right">
         <md-button class="md-success md-lg">Contact Vendor</md-button>
-        <md-button class="md-danger md-lg" @click="goToProposal()"
-          >Create Brief Ask for Proposal</md-button
-        >
+        <md-button class="md-danger md-lg" @click="goToProposal()">Create Brief Ask for Proposal</md-button>
         <h4>Avg. Response Time: {{ vendor.rank }}</h4>
       </div>
     </div>
@@ -79,12 +75,9 @@
           </div>
           <div class="banner-description-body">
             <p>
-              <template
-                v-if="vendor.vendorPropertyValues && vendorDescription"
-                >{{
-                  vendor.vendorPropertyValues[vendorDescription.id]
-                }}</template
-              >
+              <template v-if="vendor.vendorPropertyValues && vendorDescription">{{
+                vendor.vendorPropertyValues[vendorDescription.id]
+              }}</template>
             </p>
           </div>
         </div>
@@ -126,12 +119,7 @@
               </div>
               <div class="tab-item-content-body">
                 <template v-if="vendorCapacities.length > 0">
-                  <div
-                    class="icon-text-vertical"
-                    v-for="(item, index) in vendorCapacities"
-                    :value="item"
-                    :key="index"
-                  >
+                  <div class="icon-text-vertical" v-for="(item, index) in vendorCapacities" :value="item" :key="index">
                     <md-icon>airline_seat_recline_extra</md-icon>
                     <h5>{{ vendor.vendorPropertyValues[item.id] }}</h5>
                     <span>{{ item.name }}</span>
@@ -147,37 +135,20 @@
                 <h4>Services Offered by This Vendor</h4>
               </div>
               <div class="tab-item-content-body">
-                <template
-                  v-if="
-                    vendorServicesList.length > 0 ||
-                    vendorRestrictions.length > 0
-                  "
-                >
+                <template v-if="vendorServicesList.length > 0 || vendorRestrictions.length > 0">
                   <ul class="check-list">
                     <li>
                       <md-icon>restaurant</md-icon>
-                      <strong class="capitalize">{{
-                        vendor.vendorCategory
-                      }}</strong>
+                      <strong class="capitalize">{{ vendor.vendorCategory }}</strong>
                     </li>
                     <li>
                       <br />
                     </li>
-                    <li
-                      class="normal"
-                      v-for="(item, i) of vendorServicesList"
-                      :key="'S' + i"
-                      :value="item"
-                    >
+                    <li class="normal" v-for="(item, i) of vendorServicesList" :key="'S' + i" :value="item">
                       <md-icon>check</md-icon>
                       {{ item.name }}
                     </li>
-                    <li
-                      class="disabled"
-                      v-for="(item, i) of vendorRestrictions"
-                      :key="'R' + i"
-                      :value="item"
-                    >
+                    <li class="disabled" v-for="(item, i) of vendorRestrictions" :key="'R' + i" :value="item">
                       <md-icon></md-icon>
                       <span>{{ item.name }}</span>
                     </li>
@@ -189,12 +160,7 @@
                     <h4>Attachment</h4>
                   </div>
                   <div class="notes-body">
-                    <div
-                      class="note-item"
-                      v-for="(item, index) in attachments"
-                      :key="index"
-                      :value="item"
-                    >
+                    <div class="note-item" v-for="(item, index) in attachments" :key="index" :value="item">
                       <a
                         v-if="item.vendorsFileContentType === 'application/pdf'"
                         target="_blank"
@@ -224,15 +190,8 @@
               </div>
               <div class="tab-item-content-body">
                 <template v-if="vendorPricesAndRules.length > 0">
-                  <div
-                    class="text-vertical"
-                    v-for="(item, index) of vendorPricesAndRules"
-                    :key="index"
-                    :value="item"
-                  >
-                    <h5>
-                      ${{ item.defaultValue === null ? 0 : item.defaultValue }}
-                    </h5>
+                  <div class="text-vertical" v-for="(item, index) of vendorPricesAndRules" :key="index" :value="item">
+                    <h5>${{ item.defaultValue === null ? 0 : item.defaultValue }}</h5>
                     <span>{{ item.name }}</span>
                   </div>
                 </template>
@@ -243,10 +202,9 @@
                   </div>
                   <div class="notes-body">
                     <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                      ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                      labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                      nisi ut aliquip ex ea commodo consequat.
                     </p>
                   </div>
                 </div>
@@ -259,10 +217,7 @@
                 <h4>Similar Proposals Made by Vendor</h4>
               </div>
               <div class="tab-item-content-body">
-                <vendor-similar-proposals
-                  :proposals="proposals"
-                  :ratings="ratings"
-                ></vendor-similar-proposals>
+                <vendor-similar-proposals :proposals="proposals" :ratings="ratings"></vendor-similar-proposals>
               </div>
             </div>
             <md-divider></md-divider>
@@ -281,10 +236,7 @@
                 </h4>
               </div>
               <div class="tab-item-content-body">
-                <vendor-feedbacks
-                  :feedbacks="feedbacks"
-                  :ratings="ratings"
-                ></vendor-feedbacks>
+                <vendor-feedbacks :feedbacks="feedbacks" :ratings="ratings"></vendor-feedbacks>
               </div>
             </div>
             <md-divider></md-divider>
@@ -295,12 +247,9 @@
               </div>
               <div class="tab-item-content-body">
                 <p>
-                  <template
-                    v-if="vendor.vendorPropertyValues && vendorPaymentPolicy"
-                    >{{
-                      vendor.vendorPropertyValues[vendorPaymentPolicy.id]
-                    }}</template
-                  >
+                  <template v-if="vendor.vendorPropertyValues && vendorPaymentPolicy">{{
+                    vendor.vendorPropertyValues[vendorPaymentPolicy.id]
+                  }}</template>
                 </p>
               </div>
             </div>
@@ -312,14 +261,9 @@
               </div>
               <div class="tab-item-content-body">
                 <p>
-                  <template
-                    v-if="
-                      vendor.vendorPropertyValues && vendorCancellationPolicy
-                    "
-                    >{{
-                      vendor.vendorPropertyValues[vendorCancellationPolicy.id]
-                    }}</template
-                  >
+                  <template v-if="vendor.vendorPropertyValues && vendorCancellationPolicy">{{
+                    vendor.vendorPropertyValues[vendorCancellationPolicy.id]
+                  }}</template>
                 </p>
               </div>
             </div>
@@ -330,10 +274,7 @@
                 <h4>Similar Vendors</h4>
               </div>
               <div class="tab-item-content-body">
-                <vendor-similar-item
-                  :similarItems="similarItems"
-                  :ratings="ratings"
-                ></vendor-similar-item>
+                <vendor-similar-item :similarItems="similarItems" :ratings="ratings"></vendor-similar-item>
               </div>
             </div>
           </div>
@@ -386,30 +327,26 @@ export default {
       proposals: [],
       bgImages: [],
       vendorPropertiesItems: [],
-      defaultImg:
-        "https://static-maryoku.s3.amazonaws.com/storage/img/lock.jpg",
+      defaultImg: "https://static-maryoku.s3.amazonaws.com/storage/img/lock.jpg",
       pricesAndRules: [],
       checkListItems: [],
       feedbacks: [
         {
-          image:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
+          image: "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
           username: "Jane Bloom, Facebook",
           date: "2017/12/29",
           score: "5",
           message: "A 50% deposit will be due on or before 18/1/20.",
         },
         {
-          image:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
+          image: "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
           username: "Leonard Parker",
           date: "2017/12/29",
           score: "4",
           message: "A 50% deposit will be due on or before 18/1/20.",
         },
         {
-          image:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
+          image: "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
           username: "Alex Marlon",
           date: "2017/12/29",
           score: "3",
@@ -418,15 +355,13 @@ export default {
       ],
       similarItems: [
         {
-          image:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
+          image: "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
           thumbnail: "thumbnail",
           score: "5",
           title: "title",
         },
         {
-          image:
-            "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
+          image: "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_289440710.png",
           thumbnail: "thumbnail",
           score: "5",
           title: "title",
@@ -479,9 +414,7 @@ export default {
         .proposalRequests()
         .first()
         .then((proposals) => {
-          this.proposals = proposals.vendorProposals.filter(
-            (proposal) => proposal.bidRange != null,
-          );
+          this.proposals = proposals.vendorProposals.filter((proposal) => proposal.bidRange != null);
           console.log(this.proposals);
           this.proposals.forEach((proposal) => {
             proposal.attachments.forEach((attachment) => {
@@ -514,24 +447,20 @@ export default {
     },
     goToProposal() {
       if (this.proposals.length > 0) {
-        this.goTo(
-          `/vendors/${this.vendor.id}/proposal-request/${this.proposals[0].id}`,
-        );
+        this.goTo(`/vendors/${this.vendor.id}/proposal-request/${this.proposals[0].id}`);
       } else {
         let proposalRequest = new ProposalRequest({
           id: this.$route.params.id,
         });
         proposalRequest.vendorId = this.vendor.id;
-        this.goTo(
-          `/vendors/${this.vendor.id}/proposal-request/${proposalRequest.id}`,
-        );
+        this.goTo(`/vendors/${this.vendor.id}/proposal-request/${proposalRequest.id}`);
         // 500 error
         // proposalRequest
         //   .save()
         //   .then(res => {
         //     console.log('saved ', res)
 
-        //     swal({
+        //     Swal.fire({
         //       title: 'Proposal Submitted',
         //       text: 'Thank you for submitting your proposal.',
         //       type: 'success',
@@ -559,14 +488,8 @@ export default {
         return null;
       } else {
         const titleWords = this.vendor.vendorDisplayName.split(" ");
-        if (
-          titleWords.length > 1 &&
-          titleWords[titleWords.length - 1].length > 0
-        ) {
-          return (
-            titleWords[0].charAt(0) +
-            titleWords[titleWords.length - 1].charAt(0)
-          );
+        if (titleWords.length > 1 && titleWords[titleWords.length - 1].length > 0) {
+          return titleWords[0].charAt(0) + titleWords[titleWords.length - 1].charAt(0);
         } else {
           return titleWords[0].charAt(0);
         }
@@ -574,41 +497,29 @@ export default {
     },
     vendorCapacities: function () {
       if (this.vendorPropertiesItems) {
-        console.log(
-          this.vendorPropertiesItems.filter(
-            (item) => item.categoryTitle === "Capacity",
-          ),
-        );
-        return this.vendorPropertiesItems.filter(
-          (item) => item.categoryTitle === "Capacity",
-        );
+        console.log(this.vendorPropertiesItems.filter((item) => item.categoryTitle === "Capacity"));
+        return this.vendorPropertiesItems.filter((item) => item.categoryTitle === "Capacity");
       } else {
         return {};
       }
     },
     vendorDescription: function () {
       if (this.vendorPropertiesItems) {
-        return this.vendorPropertiesItems.filter(
-          (item) => item.name === "Description",
-        )[0];
+        return this.vendorPropertiesItems.filter((item) => item.name === "Description")[0];
       } else {
         return {};
       }
     },
     vendorPaymentPolicy: function () {
       if (this.vendorPropertiesItems) {
-        return this.vendorPropertiesItems.filter(
-          (item) => item.name === "Payment Policy",
-        )[0];
+        return this.vendorPropertiesItems.filter((item) => item.name === "Payment Policy")[0];
       } else {
         return {};
       }
     },
     vendorCancellationPolicy: function () {
       if (this.vendorPropertiesItems) {
-        return this.vendorPropertiesItems.filter(
-          (item) => item.name === "Cancellation policy",
-        )[0];
+        return this.vendorPropertiesItems.filter((item) => item.name === "Cancellation policy")[0];
       } else {
         return {};
       }
@@ -617,27 +528,21 @@ export default {
     // "Number events per year"
     vendorLogoImage: function () {
       if (this.vendor.vendorPropertiesItems) {
-        return this.vendor.vendorPropertiesItems.filter(
-          (item) => item.name === "Logo" && item.type === "image",
-        );
+        return this.vendor.vendorPropertiesItems.filter((item) => item.name === "Logo" && item.type === "image");
       } else {
         return {};
       }
     },
     vendorExtraImage: function () {
       if (this.vendor.vendorProperties) {
-        return this.vendor.vendorProperties.filter(
-          (item) => item.name != "Logo" && item.type === "image",
-        );
+        return this.vendor.vendorProperties.filter((item) => item.name != "Logo" && item.type === "image");
       } else {
         return [];
       }
     },
     vendorPricesAndRules: function () {
       if (this.vendor.vendorProperties) {
-        return this.vendor.vendorProperties.filter(
-          (item) => item.categoryTitle === "Cost Elements",
-        );
+        return this.vendor.vendorProperties.filter((item) => item.categoryTitle === "Cost Elements");
       } else {
         return [];
       }
@@ -645,9 +550,7 @@ export default {
     vendorServicesList: function () {
       if (this.vendor.vendorProperties) {
         return this.vendor.vendorProperties.filter(
-          (item) =>
-            item.categoryTitle === "Services" ||
-            item.categoryTitle === "Included services and amenities",
+          (item) => item.categoryTitle === "Services" || item.categoryTitle === "Included services and amenities",
         );
       } else {
         return [];
@@ -655,9 +558,7 @@ export default {
     },
     vendorRestrictions: function () {
       if (this.vendor.vendorProperties) {
-        return this.vendor.vendorProperties.filter(
-          (item) => item.categoryTitle === "Restrictions",
-        );
+        return this.vendor.vendorProperties.filter((item) => item.categoryTitle === "Restrictions");
       } else {
         return [];
       }
