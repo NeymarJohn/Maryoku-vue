@@ -131,19 +131,6 @@ export default {
       });
     },
     createEvent() {
-      Swal.fire({
-        title: `<div style="text-align:center; width:100%;">Sorry, Some informations are invalid. <br/> Please check your information. </div>`,
-        buttonsStyling: false,
-        icon: "warning",
-        confirmButtonClass: "md-button md-success ok-button",
-        customClass: [
-          {
-            container: "button-align-center",
-          },
-        ],
-      });
-      return;
-      // in case that user is signed
       const tenantId = this.$authService.resolveTenantId();
       if (tenantId.toLowerCase() === "default" || !this.tenantUser.tenants.includes(tenantId)) {
         localStorage.setItem("event", JSON.stringify(this.getEventData()));

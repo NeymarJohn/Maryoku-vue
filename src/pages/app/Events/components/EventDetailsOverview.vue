@@ -186,6 +186,7 @@ export default {
         this.event.guestType = e.guestType;
       } else if (e.hasOwnProperty("eventType")) {
         let eventType = this.eventTypeList.find((it) => it.name === e.eventType);
+        if (!this.event.eventType) this.event.eventType = {};
         this.event.eventType.name = eventType.name;
         this.event.eventType.key = eventType.key;
         this.event.eventType.id = eventType.id;
@@ -236,7 +237,7 @@ export default {
           key: "event_type",
           img_src: `${this.$secondIconURL}Event Page/Group 10495.svg`,
           warning: null,
-          eventType: this.event.eventType.name,
+          eventType: this.event.eventType ? this.event.eventType.name : "",
           occasion: this.event.occasion ? this.event.occasion : "",
           holiday: this.event.holiday ? this.event.holiday : "",
         },

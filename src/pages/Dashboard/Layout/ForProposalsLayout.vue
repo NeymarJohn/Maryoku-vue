@@ -9,7 +9,10 @@
             class="concept-color"
             :style="`background: ${color.color || '#EDEDED'}`"
           >
-            <img class="concept-image" :src="`${event.concept.images[index].thumb_url}`" />
+            <img
+              class="concept-image"
+              :src="`${event.concept.images[index].thumb_url || event.concept.images[index].url}`"
+            />
           </div>
           <div
             v-for="(color, index) in event.concept.colors"
@@ -17,7 +20,10 @@
             class="concept-color"
             :style="`background: ${color.color || '#EDEDED'}`"
           >
-            <img class="concept-image" :src="`${event.concept.images[index].thumb_url}`" />
+            <img
+              class="concept-image"
+              :src="`${event.concept.images[index].thumb_url || event.concept.images[index].url}`"
+            />
           </div>
         </div>
       </div>
