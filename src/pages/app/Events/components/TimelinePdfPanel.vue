@@ -1,7 +1,7 @@
 <template>
   <div class="timeline-items-list">
     <div class="timeline-items-header">
-      <img src="/static/icons/timeline-title.png" /><span class="font-size-24">Timeline</span>
+      <img src="/static/icons/timeline/timeline-title.png" /><span class="font-size-24">Timeline</span>
     </div>
     <section
       class="timeline-items-list__item"

@@ -1,65 +1,32 @@
 <template>
-  <div
-    class="adding-building-blocks-panel"
-    style="min-height: 240px; background: white; border-radius: 5px"
-  >
-    <vue-element-loading
-      :active="isLoading"
-      spinner="ring"
-      color="#FF547C"
-      background-color="#eee"
-    />
+  <div class="adding-building-blocks-panel" style="min-height: 240px; background: white; border-radius: 5px">
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" background-color="#eee" />
     <template v-if="!isLoading && acceptedBlockVendors.length">
-      <div
-        class="manage-proposals_proposals-list"
-        v-for="(list, index) in acceptedBlockVendors"
-        :key="index"
-      >
+      <div class="manage-proposals_proposals-list" v-for="(list, index) in acceptedBlockVendors" :key="index">
         <template v-if="list.list.length">
           <div class="md-toolbar-section-start acceptance-list">
-            <div class="proposals-name">
-              {{ list.title }} ({{ list.list.length }})
-            </div>
+            <div class="proposals-name">{{ list.title }} ({{ list.list.length }})</div>
           </div>
           <div class="proposals-list_items">
-            <div
-              class="proposals-list_item"
-              v-for="(item, indx) in list.list"
-              :key="indx"
-            >
+            <div class="proposals-list_item" v-for="(item, indx) in list.list" :key="indx">
               <div class="vendor-avatar">
                 <md-avatar class="md-avatar-icon">
                   <md-icon>people</md-icon>
                 </md-avatar>
               </div>
-              <div
-                class="proposal-info text-left"
-                style="width: 70% !important"
-              >
-                <div
-                  class="proposal-title-reviews"
-                  @click="showVendorDetail(item.vendor)"
-                >
-                  {{
-                    item.vendor
-                      ? item.vendor.vendorDisplayName
-                      : "No Vendor Title"
-                  }}
+              <div class="proposal-info text-left" style="width: 70% !important">
+                <div class="proposal-title-reviews" @click="showVendorDetail(item.vendor)">
+                  {{ item.vendor ? item.vendor.vendorDisplayName : "No Vendor Title" }}
                   <div class="star-rating">
                     <label
                       class="star-rating__star"
                       v-for="(rating, rIndex) in ratings"
                       :key="rIndex"
                       :class="{
-                        'is-selected':
-                          item.vendor.rank >= rating &&
-                          item.vendor.rank != null,
+                        'is-selected': item.vendor.rank >= rating && item.vendor.rank != null,
                       }"
                     >
-                      <input
-                        class="star-rating star-rating__checkbox"
-                        type="radio"
-                      />★</label
+                      <input class="star-rating star-rating__checkbox" type="radio" />★</label
                     >
                   </div>
                 </div>
@@ -71,15 +38,9 @@
                     </li>
                   </ul>
                 </div>
-                <div
-                  class="proposal-benefits-list"
-                  v-if="item.proposals && item.proposals[0]"
-                >
+                <div class="proposal-benefits-list" v-if="item.proposals && item.proposals[0]">
                   <ul class="list-items">
-                    <li
-                      v-for="(pro, pIndex) in item.proposals[0].pros"
-                      :key="pIndex"
-                    >
+                    <li v-for="(pro, pIndex) in item.proposals[0].pros" :key="pIndex">
                       {{ pro }}
                     </li>
                   </ul>
@@ -88,9 +49,7 @@
               <div class="proposal-actions text-right">
                 <template v-if="item.proposals && item.proposals[0]">
                   <div class="cost">${{ item.proposals[0].cost }}</div>
-                  <md-button
-                    class="md-rose md-sm md-simple"
-                    @click="viewProposal(item.proposals[0])"
+                  <md-button class="md-rose md-sm md-simple" @click="viewProposal(item.proposals[0])"
                     >view contract</md-button
                   >
                   <md-button
@@ -106,25 +65,19 @@
         </template>
       </div>
     </template>
-    <md-card
-      class="md-card-plain"
-      v-if="!filteredBlockVendors.length && !isLoading"
-    >
+    <md-card class="md-card-plain" v-if="!filteredBlockVendors.length && !isLoading">
       <md-card-content>
         <div class="text-center">
           <h4>Accept proposals to see them here</h4>
         </div>
       </md-card-content>
     </md-card>
-    <manage-proposals-vendors
-      :building-block.sync="selectedBlock"
-      :event.sync="event"
-    ></manage-proposals-vendors>
+    <manage-proposals-vendors :building-block.sync="selectedBlock" :event.sync="event"></manage-proposals-vendors>
   </div>
 </template>
 
 <script>
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
@@ -207,9 +160,7 @@ export default {
             this.selectedBlock.vendorsCount = resp.length;
             this.blockVendors = resp;
 
-            let vendorsWithProposals = _.filter(this.blockVendors, function (
-              item,
-            ) {
+            let vendorsWithProposals = _.filter(this.blockVendors, function (item) {
               return item.proposals && item.proposals.length;
             });
 
@@ -222,10 +173,7 @@ export default {
               let accepted = v.proposals[0].accepted;
 
               if (accepted) {
-                if (
-                  downPaymentStatus === null ||
-                  downPaymentStatus === "pending"
-                ) {
+                if (downPaymentStatus === null || downPaymentStatus === "pending") {
                   downPaymentPaid.push(v);
                 } else if (downPaymentStatus === "paid") {
                   fullyPaid.push(v);
@@ -256,20 +204,14 @@ export default {
         let vendorsWithProposals = _.filter(this.blockVendors, function (item) {
           return item.proposals && item.proposals.length;
         });
-        let vendorsWithSentStatus = _.filter(this.blockVendors, function (
-          item,
-        ) {
+        let vendorsWithSentStatus = _.filter(this.blockVendors, function (item) {
           return item.proposals && !item.proposals.length;
         });
         let vendorsWithNoStatus = _.filter(this.blockVendors, function (item) {
           return !item.proposals;
         });
 
-        this.filteredBlockVendors = _.union(
-          vendorsWithProposals,
-          vendorsWithSentStatus,
-          vendorsWithNoStatus,
-        );
+        this.filteredBlockVendors = _.union(vendorsWithProposals, vendorsWithSentStatus, vendorsWithNoStatus);
         this.isLoading = false;
       }
 
@@ -327,19 +269,10 @@ export default {
         return !item.proposals;
       });
 
-      let mergedArr = _.union(
-        vendorsWithProposals,
-        vendorsWithSentStatus,
-        vendorsWithNoStatus,
-      );
+      let mergedArr = _.union(vendorsWithProposals, vendorsWithSentStatus, vendorsWithNoStatus);
 
       this.filteredBlockVendors = _.filter(mergedArr, (v) => {
-        return (
-          v.vendor.vendorDisplayName
-            .toString()
-            .toLowerCase()
-            .indexOf(this.searchQuery.toLowerCase()) > -1
-        );
+        return v.vendor.vendorDisplayName.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
       });
     },
     viewProposal(proposal) {
@@ -441,9 +374,7 @@ export default {
         props: {},
       });
 
-      let slideoutPanelBg = document.getElementsByClassName(
-        "slideout-panel-bg",
-      );
+      let slideoutPanelBg = document.getElementsByClassName("slideout-panel-bg");
       if (slideoutPanelBg && slideoutPanelBg.length > 0) {
         slideoutPanelBg[0].style = "z-index: 101";
       }

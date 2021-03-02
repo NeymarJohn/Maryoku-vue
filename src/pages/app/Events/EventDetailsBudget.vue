@@ -1,6 +1,6 @@
 <template>
   <div>
-    <event-state-message type="positive" v-if="showMessage" @closeMessage="showMessage = false"></event-state-message>
+    <event-state-message v-if="showMessage" :type="type"  @closeMessage="showMessage = false"></event-state-message>
     <div class="edit-event-details event-details-budget">
       <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
       <!-- Event Header -->
@@ -11,7 +11,7 @@
             Budget
           </h3>
         </div>
-        <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
+        <header-actions @toggleCommentMode="toggleCommentMode" @export="exportToPdf"></header-actions>
       </div>
       <div class="md-layout justify-content-between">
         <div class="md-layout-item md-size-40">
@@ -83,6 +83,89 @@
           </div>
         </div>
       </div>
+      <vue-html2pdf
+        :show-layout="false"
+        :float-layout="true"
+        :enable-download="true"
+        :preview-modal="false"
+        :paginate-elements-by-height="1400"
+        :filename="`budget-${event.id}`"
+        :pdf-quality="2"
+        :manual-pagination="false"
+        pdf-format="a4"
+        pdf-orientation="portrait"
+        pdf-content-width="800px"
+        ref="html2Pdf"
+      >
+        <section slot="pdf-content">
+          <div class="p-20 pdf-content">
+            <h3 class="font-bold-extra font-size-30">
+              <img :src="`/static/icons/budget/budget.png`" width="15" />
+              Budget
+            </h3>
+            <div class="card-section card-overview" style="border: solid 2px #dbdbdb !important">
+              <div class="section-header" style="border-bottom: solid 2px #dbdbdb !important">Overview</div>
+              <div class="budget-list d-flex justify-content-between">
+                <div class="budget-list__item">
+                  <div class="label-title">Budget</div>
+                  <div class="budget-value">${{ budgetStatistics.total | withComma }}</div>
+                  <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="showBudgetModal = true"
+                    >Edit</md-button
+                  >
+                </div>
+                <div class="budget-list__item">
+                  <div class="label-title">Allocated</div>
+                  <div class="budget-value">${{ budgetStatistics.allocated | withComma }}</div>
+                  <div class="percent">{{ budgetStatistics.allocatedPercentage }} %</div>
+                </div>
+                <div class="budget-list__item">
+                  <div class="label-title">Booked</div>
+                  <div class="budget-value">${{ budgetStatistics.booked | withComma }}</div>
+                  <div class="percent">{{ budgetStatistics.bookedPercentage }}%</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-section card-overview-saved text-center">
+              <span>So far you saved :</span>
+              <md-icon class="card-overview-saved-icon" style="color: #167c3a" v-if="budgetStatistics.saved >= 0"
+                >add_circle_outline</md-icon
+              >
+              <md-icon class="card-overview-saved-icon color-red" v-else>remove_circle_outline</md-icon>
+              <span class="card-overview-saved-amount">$ {{ budgetStatistics.saved | withComma }}</span>
+            </div>
+            <div class="card-section card-expense" style="border: solid 2px #dbdbdb !important">
+              <div class="section-header" style="border-bottom: solid 2px #dbdbdb !important">Expenses</div>
+              <div>
+                <pie-chart-round :event.sync="event" :items="pieChartData" :showImage="true"></pie-chart-round>
+              </div>
+            </div>
+          </div>
+          <div class="html2pdf__page-break"></div>
+          <div class="p-20 event-blocks-table">
+            <label class="font-size-26 font-bold">Total</label>
+            <event-budget-vendors
+              :event.sync="event"
+              :event-components="selectedComponents"
+              :editingMode="false"
+              type="total"
+              @change="onChangeComponent"
+              @add="onAddMoreBudget"
+            ></event-budget-vendors>
+          </div>
+          <div class="html2pdf__page-break"></div>
+          <div class="p-20 event-blocks-table">
+            <label class="font-size-26 font-bold">Per Guest</label>
+            <event-budget-vendors
+              :event.sync="event"
+              :event-components="selectedComponents"
+              :editingMode="false"
+              type="perGuest"
+              @change="onChangeComponent"
+              @add="onAddMoreBudget"
+            ></event-budget-vendors>
+          </div>
+        </section>
+      </vue-html2pdf>
       <upload-vendors-modal ref="uploadModal"></upload-vendors-modal>
       <budget-edit-modal
         v-if="showBudgetModal"
@@ -170,7 +253,7 @@ import { Tabs, Modal } from "@/components";
 
 // import auth from '@/auth';
 import moment from "moment";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
@@ -192,6 +275,7 @@ import CommentEditorPanel from "./components/CommentEditorPanel";
 
 import BudgetEditModal from "@/components/Modals/BudgetEditModal";
 import AddNewCategoryModal from "@/components/Modals/AddNewCategoryModal";
+const VueHtml2pdf = () => import("vue-html2pdf");
 
 export default {
   components: {
@@ -208,6 +292,7 @@ export default {
     EventStateMessage,
     BudgetEditModal,
     AddNewCategoryModal,
+    VueHtml2pdf,
   },
 
   data() {
@@ -240,10 +325,11 @@ export default {
       showBudgetModal: false,
       budgetConfirmationModal: false,
       newBudget: null,
+      type: null,
       editBudgetElementsModal: false,
       showHandleMinus: false,
       showCommentEditorPanel: false,
-      showMessage: true,
+      showMessage: false,
     };
   },
   created() {
@@ -296,6 +382,7 @@ export default {
           this.event = event;
           this.eventId = event.id;
           this.calendarEvent = event;
+          this.checkMessageStatus();
           if (event.totalBudget)
             this.newBudget = (event.totalBudget + "").replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           new EventComponent()
@@ -318,6 +405,33 @@ export default {
           );
           this.isLoading = false;
         });
+    },
+    checkMessageStatus(){
+        this.type = null;
+        if (this.event.budgetProgress < 100) {
+            this.type = 'not_approved';
+        }
+        let now = moment();
+        let created_at = moment(this.event.dateCreated);
+        console.log('event.detail.budget', this.event, now.diff(created_at, 'days'));
+        if (!this.type && now.diff(created_at, 'days') < 15) {
+            this.type = 'approved_budget_in_two_weeks';
+        }
+
+        console.log('checkMessage', this.event.approvedBudget, this.event.totalBudget)
+        if (!this.type && this.event.approvedBudget !== 0) {
+            if (this.event.approvedBudget < this.event.totalBudget) {
+                this.type = 'higher_than_average';
+            } else if (this.event.approvedBudget > this.event.totalBudget){
+                this.type = 'lower_than_average';
+            }
+        }
+
+        if (!this.type && this.event.unexpected < this.event.totalBudget * 0.1) {
+            this.type = 'unexpected_budget_less_10';
+        }
+        console.log('budget.detail.event', this.type);
+        this.showMessage = !!this.type;
     },
     selectServices() {
       this.$refs.eventPlannerTabs.$emit("event-planner-nav-switch-panel", 1);
@@ -373,7 +487,7 @@ export default {
         const arrow = `<i data-v-a76b6a56="" style="color:#050505" class="md-icon md-icon-font md-theme-default">arrow_back</i>`;
         const budgetString = `<div class="font-size-40 font-regular color-red" style="margin:20px 0">$ ${this.newBudget}</div>`;
         const description = `<div class="description">Your edits changed the total budget, do you want to change it?</div>`;
-        swal({
+        Swal.fire({
           title: `<div class="text-left">${arrow}${budgetString}<div>Are Your Sure?</div>${description}</div>`,
           showCancelButton: true,
           confirmButtonClass: "md-button md-success",
@@ -420,6 +534,9 @@ export default {
         unexpectedBudget: this.event.unexpectedBudget + (newBudget.totalBudget - this.event.totalBudget),
       });
       this.$store.dispatch("event/saveEventAction", event).then((res) => {
+        console.log('updateTotalBudget.res', res);
+        this.event = res;
+        this.checkMessageStatus();
         this.showBudgetModal = false;
       });
     },
@@ -432,6 +549,9 @@ export default {
     },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
+    },
+    exportToPdf() {
+      this.$refs.html2Pdf.generatePdf();
     },
   },
   computed: {

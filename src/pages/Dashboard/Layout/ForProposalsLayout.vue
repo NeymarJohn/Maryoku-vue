@@ -266,7 +266,7 @@ import Vendor from "@/models/Vendors";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import { Modal } from "@/components";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import TopNavbar from "./TopNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
 import MobileMenu from "./Extra/MobileMenu.vue";

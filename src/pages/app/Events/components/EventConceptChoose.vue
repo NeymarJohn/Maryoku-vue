@@ -136,7 +136,7 @@
           <h3>Great Choice!</h3>
           <p>This theme will inspire us when planning our next steps.</p>
         </div>
-        <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
+        <header-actions @toggleCommentMode="toggleCommentMode" @export="exportToPdf"></header-actions>
       </div>
 
       <div class="booking-header d-flex justify-content-between md-layout-item md-size-100">
@@ -172,6 +172,50 @@
           </div>
           <concept-box :concept="selectedConcept"></concept-box>
         </div>
+        <vue-html2pdf
+          :show-layout="false"
+          :float-layout="true"
+          :enable-download="true"
+          :preview-modal="false"
+          :paginate-elements-by-height="1400"
+          :filename="`concept-${eventData.id}`"
+          :pdf-quality="2"
+          :manual-pagination="false"
+          pdf-format="a4"
+          pdf-orientation="portrait"
+          pdf-content-width="800px"
+          ref="html2Pdf"
+        >
+          <section slot="pdf-content">
+            <!-- PDF Content Here -->
+            <div class="concepts-list__item d-flex justify-content-start expanded">
+              <div>
+                <a
+                  class="concept-compete-link"
+                  style="padding-top: 4px"
+                  href="https://www.maryoku.com/contest-compete"
+                  target="_blank"
+                  >Compete with my brilliant concept?</a
+                >
+                <span>
+                  <img
+                    src="https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/light.svg"
+                    alt="Avatar"
+                    width="20px"
+                  />
+                  <md-tooltip md-direction="bottom">
+                    <strong class="font-size-16">A chance to win $1,000!</strong>
+                    <div class="font-size-16">
+                      Don't miss this chance
+                      <br />to submit your concept <br />and compete for a grand <br />prize and recogintion.
+                    </div>
+                  </md-tooltip>
+                </span>
+              </div>
+              <concept-box :concept="selectedConcept" :scale="0.77"></concept-box>
+            </div>
+          </section>
+        </vue-html2pdf>
       </div>
       <div class="concepts-list md-layout-item md-size-100" v-else>
         <div class="concepts-list__item d-flex justify-content-start expanded">
@@ -206,7 +250,7 @@ import EventComponent from "@/models/EventComponent";
 import EventConcept from "@/models/EventConcept";
 import EventTimelineItem from "@/models/EventTimelineItem";
 import moment from "moment";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import { SlideYDownTransition } from "vue2-transitions";
 import InputMask from "vue-input-mask";
 import ColourPicker from "vue-colour-picker";
@@ -229,6 +273,8 @@ import CommentEditorPanel from "./CommentEditorPanel";
 import ConceptImageBlock from "@/components/ConceptImageBlock";
 import ConceptBox from "../../../../components/ConceptBox.vue";
 
+const VueHtml2pdf = () => import("vue-html2pdf");
+
 export default {
   name: "event-concept-choose",
   components: {
@@ -246,6 +292,7 @@ export default {
     CommentEditorPanel,
     ConceptImageBlock,
     ConceptBox,
+    VueHtml2pdf,
   },
   props: {},
   computed: {
@@ -482,6 +529,9 @@ export default {
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
     },
+    exportToPdf() {
+      this.$refs.html2Pdf.generatePdf();
+    },
   },
   async created() {
     if (this.eventData.id) {
@@ -495,80 +545,87 @@ export default {
       } else {
         this.loadingConceptOptions = true;
         try {
-            let suggestions = JSON.parse(localStorage.getItem('concept.suggestions'));
-            if(!suggestions || !suggestions.length) {
-                let res = await this.$http.get(`${process.env.SERVER_URL}/1/concepts/${this.eventData.id}/suggestions`)
-                suggestions = res.data;
-                localStorage.setItem('concept.suggestions', JSON.stringify(suggestions));
+          let suggestions = JSON.parse(localStorage.getItem("concept.suggestions"));
+          if (!suggestions || !suggestions.length) {
+            let res = await this.$http.get(`${process.env.SERVER_URL}/1/concepts/${this.eventData.id}/suggestions`);
+            suggestions = res.data;
+            localStorage.setItem("concept.suggestions", JSON.stringify(suggestions));
+          }
+
+          suggestions.map((concept) => {
+            let weight = "";
+            // filter by event places
+            if (this.eventData.places && this.eventData.places.length) {
+              let tags = concept.tags.map((tag) => tag.name);
+              let isContain = tags.some((tag) => this.eventData.places.includes(tag.toUpperCase()));
+
+              weight += isContain ? "1" : "0";
+            } else {
+              weight += "0";
             }
 
-            suggestions.map(concept => {
-                let weight = "";
-                // filter by event places
-                if (this.eventData.places && this.eventData.places.length) {
-                    let tags = concept.tags.map(tag => tag.name);
-                    let isContain = tags.some(tag => this.eventData.places.includes(tag.toUpperCase()));
+            // filter by event song
+            if (this.eventData.eventSong && this.eventData.eventSong.tags && this.eventData.eventSong.tags.length) {
+              let isContain = this.eventData.eventSong.tags.every((songTag) => {
+                return concept.tags.some((conceptTag) => {
+                  conceptTag.name.toLowerCase() === songTag.toLowerCase();
+                });
+              });
+              weight += isContain ? "1" : "0";
+            } else {
+              weight += "0";
+            }
 
-                    weight += isContain ? "1" : "0";
-                } else {
-                    weight += "0";
-                }
+            // filter by event occasion
+            if (this.eventData.occasion && concept.occasion && concept.occasion.length) {
+              let isContain = concept.occasion.some((it) => it.value === this.eventData.occasion);
+              weight += isContain ? "1" : "0";
+            } else {
+              weight += "0";
+            }
 
-                // filter by event song
-                if (this.eventData.eventSong && this.eventData.eventSong.tags && this.eventData.eventSong.tags.length) {
-                    let isContain = this.eventData.eventSong.tags.every(songTag => {
-                        return concept.tags.some(conceptTag => {
-                            conceptTag.name.toLowerCase() === songTag.toLowerCase()
-                        })
-                    })
-                    weight += isContain ? "1" : "0";
-                } else {
-                    weight += "0";
-                }
+            // filter by event month
+            if (this.eventData.eventStartMillis) {
+              let startDate = new Date(this.eventData.eventStartMillis);
+              let eventMonth = startDate.toLocaleString("default", { month: "long" });
+              weight += eventMonth === concept.eventMonthName ? "1" : "0";
+            } else {
+              weight += "0";
+            }
 
-                // filter by event occasion
-                if (this.eventData.occasion && concept.occasion && concept.occasion.length) {
-                    let isContain = concept.occasion.some(it => it.value === this.eventData.occasion);
-                    weight += isContain ? "1" : "0";
-                } else {
-                    weight += "0";
-                }
+            // filter by range of cost per person
+            if (concept.rangeOfCostPerPerson) {
+              let cost = this.eventData.totalBudget / this.eventData.numberOfParticipants;
+              weight +=
+                parseInt(concept.rangeOfCostPerPerson.min) <= cost <= parseInt(concept.rangeOfCostPerPerson.max)
+                  ? "1"
+                  : "0";
+            } else {
+              weight += "0";
+            }
 
-                // filter by event month
-                if (this.eventData.eventStartMillis) {
-                    let startDate = new Date(this.eventData.eventStartMillis);
-                    let eventMonth = startDate.toLocaleString('default', {month: 'long'});
-                    weight += eventMonth === concept.eventMonthName ? '1' : '0';
-                } else {
-                    weight += "0";
-                }
+            // filter by guests number
+            if (concept.rangeOfGuests) {
+              weight +=
+                parseInt(concept.rangeOfGuests.min) <=
+                this.eventData.numberOfParticipants <=
+                parseInt(concept.rangeOfGuests.max)
+                  ? "1"
+                  : "0";
+            } else {
+              weight += "0";
+            }
+            this.$set(concept, "weight", weight);
+          });
 
-                // filter by range of cost per person
-                if (concept.rangeOfCostPerPerson) {
-                    let cost = this.eventData.totalBudget / this.eventData.numberOfParticipants;
-                    weight += parseInt(concept.rangeOfCostPerPerson.min) <= cost <= parseInt(concept.rangeOfCostPerPerson.max) ? '1' : '0'
-                } else {
-                    weight += "0";
-                }
+          suggestions.sort((a, b) => (a.weight < b.weight ? 1 : a.weight > b.weight ? -1 : 0));
 
-                // filter by guests number
-                if (concept.rangeOfGuests) {
-                    weight += parseInt(concept.rangeOfGuests.min) <= this.eventData.numberOfParticipants <= parseInt(concept.rangeOfGuests.max) ? '1' : '0'
-                } else {
-                    weight += "0";
-                }
-                this.$set(concept, 'weight', weight);
-            })
-
-            suggestions.sort((a, b) => a.weight < b.weight ? 1 : a.weight > b.weight ? -1 : 0);
-
-
-            this.conceptOptions = suggestions.slice(0, 3);
-            this.showConceptList = true;
-            this.loadingConceptOptions = false;
+          this.conceptOptions = suggestions.slice(0, 3);
+          this.showConceptList = true;
+          this.loadingConceptOptions = false;
         } catch (e) {
-            console.log('filter.error', e);
-            this.loadingConceptOptions = false;
+          console.log("filter.error", e);
+          this.loadingConceptOptions = false;
         }
       }
       this.isLoading = false;

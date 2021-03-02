@@ -71,7 +71,7 @@ import VSignupSteps from "./Extra/VSignupSteps.vue";
 import { Modal } from "@/components";
 import moment from "moment";
 import Vendors from "@/models/Vendors";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import { mapMutations, mapGetters } from "vuex";
 
 export default {
@@ -142,13 +142,13 @@ export default {
               console.log(JSON.stringify(error));
 
               if (error.message.indexOf("companyName")) {
-                swal({
+                Swal.fire({
                   title: `Sorry, Company Name is duplicated. Please choose another.`,
                   buttonsStyling: false,
                   confirmButtonClass: "md-button md-success",
                 }).then(() => {});
               } else {
-                swal({
+                Swal.fire({
                   title: `Sorry, The information is not valid. Check your information and try again.`,
                   buttonsStyling: false,
                   confirmButtonClass: "md-button md-success",
@@ -163,9 +163,7 @@ export default {
     next() {
       if (this.step < 6) {
         this.setStep(this.step + 1);
-
       } else {
-
         if (this.vendor.password == this.vendor.confirmPassword) {
           this.savedItModal = true;
           this.setStep(this.step + 1);
@@ -201,39 +199,38 @@ export default {
       let title = null;
 
       if (this.step === 7) {
-        title = 'Thank you for your sign up!';
+        title = "Thank you for your sign up!";
       } else {
-        title = 'Success to save for later!';
+        title = "Success to save for later!";
       }
       new Vendors({ ...this.vendor, isEditing: false })
-              .save()
-              .then((res) => {
-                console.log("*** Save vendor - done: ");
-                console.log(JSON.stringify(res));
-                // this.setStep(this.step + 1);
-                this.isCompletedWizard = true;
-                swal({
-                  title,
-                  buttonsStyling: false,
-                  confirmButtonClass: "md-button md-success",
-                }).then(() => {
-                  const proposalRequest = this.$route.query.proposalRequest;
-                  if (this.step === 7) {
-                    this.setVendor({});
-                    this.setEditing(false);
-                    this.setStep(0);
+        .save()
+        .then((res) => {
+          console.log("*** Save vendor - done: ");
+          console.log(JSON.stringify(res));
+          // this.setStep(this.step + 1);
+          this.isCompletedWizard = true;
+          Swal.fire({
+            title,
+            buttonsStyling: false,
+            confirmButtonClass: "md-button md-success",
+          }).then(() => {
+            const proposalRequest = this.$route.query.proposalRequest;
+            if (this.step === 7) {
+              this.setVendor({});
+              this.setEditing(false);
+              this.setStep(0);
 
-                    this.isCompletedWizard = false;
-                    if (proposalRequest) this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
-                    else this.$router.push("/vendor-signup");
-                  }
-
-                });
-              })
-              .catch((error) => {
-                console.log("*** Save vendor - failed: ");
-                console.log(JSON.stringify(error));
-              });
+              this.isCompletedWizard = false;
+              if (proposalRequest) this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
+              else this.$router.push("/vendor-signup");
+            }
+          });
+        })
+        .catch((error) => {
+          console.log("*** Save vendor - failed: ");
+          console.log(JSON.stringify(error));
+        });
     },
   },
   created() {},

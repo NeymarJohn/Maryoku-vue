@@ -107,7 +107,7 @@ import SharingButtonGroup from "@/pages/app/Campaign/components/SharingButtonGro
 import FeedbackQuestion from "@/pages/app/Campaign/components/FeedbackQuestion";
 import TitleEditor from "@/pages/app/Campaign/components/TitleEditor";
 import HideSwitch from "@/components/HideSwitch";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import { mapActions, mapGetters } from "vuex";
 import S3Service from "@/services/s3.service";
 
@@ -159,7 +159,7 @@ export default {
       window.scrollTo(0, 0);
     },
     setDefault() {
-      swal({
+      Swal.fire({
         title: "Are you sure?",
         text: `You won't be able to revert this feedback!`,
         showCancelButton: true,
@@ -214,7 +214,7 @@ export default {
       })
         .save()
         .then((res) => {
-          swal({
+          Swal.fire({
             title: "",
             text: "Thank you for your feedback!",
             type: "success",
@@ -223,7 +223,7 @@ export default {
           });
         })
         .catch((e) => {
-          swal({
+          Swal.fire({
             title: "Invalid information",
             text: "Could you please check if you input all information on given form?",
             type: "error",

@@ -426,7 +426,6 @@ export default {
         /* DO SOMETHING WITH workbook HERE */
         let worksheet = workbook.Sheets[sheetName];
         const arrayOfRecords = XLSX.utils.sheet_to_json(worksheet);
-        console.log("arrayOfRecords", arrayOfRecords);
         const key = Object.keys(arrayOfRecords[0])[0];
         const values = [];
 
@@ -500,7 +499,6 @@ export default {
       }
     },
     currentCampaign() {
-      console.log(this.campaign.name);
       const currentCampaign = this.$store.state.campaign[this.campaign.name];
       if (!currentCampaign) return {};
       return currentCampaign;

@@ -17,7 +17,7 @@
                           type="file"
                           id="company-avatar-upload"
                           @change="onFileChange($event)"
-                          style="display:none"
+                          style="display: none"
                         />
                       </md-icon>
                     </div>
@@ -28,27 +28,19 @@
                 </div>
               </div>
               <div class="company-name-block">
-                <h4 class="title text-gray" style="font-weight: 500;">{{customer.name}}</h4>
+                <h4 class="title text-gray" style="font-weight: 500">{{ customer.name }}</h4>
               </div>
             </div>
             <div class="md-layout-item md-size-100">
-              <div class="fc-divider" style="margin: 15px;"></div>
+              <div class="fc-divider" style="margin: 15px"></div>
             </div>
-            <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
-              <div style="display:flex;align-items:center;justify-content: space-between;">
-                <p
-                  style="width:100%; display:flex;align-items:center;justify-content: space-between;"
-                >
+            <div class="md-layout-item md-size-100 hover-block" style="text-align: left">
+              <div style="display: flex; align-items: center; justify-content: space-between">
+                <p style="width: 100%; display: flex; align-items: center; justify-content: space-between">
                   <span>Number of Guests</span>
-                  <span class="value">{{customer.numberOfEmployees}}</span>
+                  <span class="value">{{ customer.numberOfEmployees }}</span>
                 </p>
-                <v-popover
-                  offset="16"
-                  :disabled="!isEnabled"
-                  :auto-hide="false"
-                  placement="right"
-                  open-group="group1"
-                >
+                <v-popover offset="16" :disabled="!isEnabled" :auto-hide="false" placement="right" open-group="group1">
                   <md-button
                     class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default"
                     @click="inputFocus = true"
@@ -76,21 +68,13 @@
               </div>
             </div>
 
-            <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
-              <div style="display:flex;align-items:center;justify-content: space-between;">
-                <p
-                  style="width:100%; display:flex;align-items:center;justify-content: space-between;"
-                >
+            <div class="md-layout-item md-size-100 hover-block" style="text-align: left">
+              <div style="display: flex; align-items: center; justify-content: space-between">
+                <p style="width: 100%; display: flex; align-items: center; justify-content: space-between">
                   <span>Industry</span>
-                  <span class="value" :title="customer.industry">{{customer.industry}}</span>
+                  <span class="value" :title="customer.industry">{{ customer.industry }}</span>
                 </p>
-                <v-popover
-                  offset="16"
-                  :disabled="!isEnabled"
-                  :auto-hide="false"
-                  placement="right"
-                  open-group="group2"
-                >
+                <v-popover offset="16" :disabled="!isEnabled" :auto-hide="false" placement="right" open-group="group2">
                   <md-button
                     class="tooltip-target onhover-block b3 md-button md-icon-button md-simple md-theme-default"
                   >
@@ -104,7 +88,7 @@
                       :list="industryList"
                       name="industry"
                       :onChange="onChange"
-                      :valueName="['title','title']"
+                      :valueName="['title', 'title']"
                       editebleMode
                       :isEditable="isEnabled"
                       :actionFunc="saveInfoFromForm"
@@ -118,18 +102,18 @@
             </div>
 
             <div class="md-layout-item md-size-100">
-              <div class="fc-divider" style="margin: 15px;"></div>
+              <div class="fc-divider" style="margin: 15px"></div>
             </div>
             <div>
               <div class="header text-bold text-gray">Contact Information</div>
               <div v-if="customer.mainAddress" class="md-layout">
-                <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
-                  <div style="display:flex;align-items:center;justify-content: space-between;">
+                <div class="md-layout-item md-size-100 hover-block" style="text-align: left">
+                  <div style="display: flex; align-items: center; justify-content: space-between">
                     <p>
                       <span class="icon-container">
                         <i class="fa fa-map-marker-alt"></i>
                       </span>
-                      <span>{{customer.mainAddress.onelineAddress}}</span>
+                      <span>{{ customer.mainAddress.onelineAddress }}</span>
                     </p>
                     <v-popover
                       offset="16"
@@ -165,13 +149,13 @@
                     </v-popover>
                   </div>
                 </div>
-                <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
-                  <div style="display:flex;align-items:center;justify-content: space-between;">
+                <div class="md-layout-item md-size-100 hover-block" style="text-align: left">
+                  <div style="display: flex; align-items: center; justify-content: space-between">
                     <p>
                       <span class="icon-container">
                         <i class="fa fa-phone-volume"></i>
                       </span>
-                      <span>{{String(user.phoneNumber)||""}}</span>
+                      <span>{{ String(user.phoneNumber) || "" }}</span>
                     </p>
                     <v-popover
                       offset="16"
@@ -192,7 +176,7 @@
                           labelStyle="company_label_input"
                           label="Phone"
                           name="phoneNumber"
-                          :value="String(user.phoneNumber)||''"
+                          :value="String(user.phoneNumber) || ''"
                           :onChange="onChange"
                           editebleMode
                           :focus="inputFocus"
@@ -206,13 +190,13 @@
                     </v-popover>
                   </div>
                 </div>
-                <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
-                  <div style="display:flex;align-items:center;justify-content: space-between;">
+                <div class="md-layout-item md-size-100 hover-block" style="text-align: left">
+                  <div style="display: flex; align-items: center; justify-content: space-between">
                     <p>
                       <span class="icon-container">
                         <i class="fa fa-envelope"></i>
                       </span>
-                      <span>{{customer.workspaceDomain}}</span>
+                      <span>{{ customer.workspaceDomain }}</span>
                     </p>
                     <v-popover
                       offset="16"
@@ -247,13 +231,13 @@
                     </v-popover>
                   </div>
                 </div>
-                <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
-                  <div style="display:flex;align-items:center;justify-content: space-between;">
+                <div class="md-layout-item md-size-100 hover-block" style="text-align: left">
+                  <div style="display: flex; align-items: center; justify-content: space-between">
                     <p>
                       <span class="icon-container">
                         <i class="fa fa-globe"></i>
                       </span>
-                      <span>{{customer.website}}</span>
+                      <span>{{ customer.website }}</span>
                     </p>
                     <v-popover
                       offset="16"
@@ -291,13 +275,13 @@
               </div>
             </div>
             <div class="md-layout-item md-size-100">
-              <div class="fc-divider" style="margin: 15px;"></div>
+              <div class="fc-divider" style="margin: 15px"></div>
             </div>
-            <div class="md-layout-item md-size-100" style="padding:0;">
+            <div class="md-layout-item md-size-100" style="padding: 0">
               <div class="company-branch_block">
-                <div class="md-layout-item md-size-100" style="text-align:left;">
-                  <div style="display:flex;align-items:center;justify-content: space-between;">
-                    <div class="header text-bold text-gray" style="margin:0;">Branches</div>
+                <div class="md-layout-item md-size-100" style="text-align: left">
+                  <div style="display: flex; align-items: center; justify-content: space-between">
+                    <div class="header text-bold text-gray" style="margin: 0">Branches</div>
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
@@ -340,15 +324,16 @@
                 <div v-if="customer.branches" class="md-layout-item md-size-100">
                   <div v-for="(branch, index) of customer.branches || []" :key="index">
                     <div
-                      style="text-align: left;  display: flex; align-items: center;align-items: center; justify-content: space-between;"
+                      style="
+                        text-align: left;
+                        display: flex;
+                        align-items: center;
+                        align-items: center;
+                        justify-content: space-between;
+                      "
                     >
-                      <p>{{branch.onelineAddress}}</p>
-                      <v-popover
-                        offset="16"
-                        :disabled="!isEnabled"
-                        hideOnTargetClick
-                        placement="right"
-                      >
+                      <p>{{ branch.onelineAddress }}</p>
+                      <v-popover offset="16" :disabled="!isEnabled" hideOnTargetClick placement="right">
                         <md-button
                           class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default"
                           @click="branchFocus(index)"
@@ -387,7 +372,7 @@
             </div>
 
             <div class="md-layout-item md-size-100">
-              <div class="fc-divider" style="margin: 15px;"></div>
+              <div class="fc-divider" style="margin: 15px"></div>
             </div>
             <div>
               <div class="header text-bold text-gray">Customer Infromation</div>
@@ -400,7 +385,7 @@
       <div class="chart-box">
         <div class="logo-block">
           <LineChart
-            v-if="!isMonthly&&getChartNumberOfEventsPerYear"
+            v-if="!isMonthly && getChartNumberOfEventsPerYear"
             key="username-input"
             classStyle="max-height: 150px;  border-radius: 5px; box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31); background-image: linear-gradient(322deg, #4d9b51, #62b766);"
             id="number_of_events_chart"
@@ -485,8 +470,8 @@
             </div>
           </div>
           <div>
-            <span class="info-chat-value">{{numberOfEvents}}</span>
-            <span class="info-chart">{{`This year of ${currentYear}`}}</span>
+            <span class="info-chat-value">{{ numberOfEvents }}</span>
+            <span class="info-chart">{{ `This year of ${currentYear}` }}</span>
           </div>
         </md-card-content>
       </div>
@@ -499,16 +484,13 @@
         <md-card-content>
           <div class="title text-bold">Average number of participants per event</div>
           <div>
-            <ControlPanel
-              :onClick="getMonthControlRate"
-              controlBlockStyle="control-panel-block-participants"
-            />
+            <ControlPanel :onClick="getMonthControlRate" controlBlockStyle="control-panel-block-participants" />
           </div>
           <div>
             <LineIndicator
               v-if="participantsList"
               v-for="item in participantsList"
-              :key="item.total+item.typeEvent"
+              :key="item.total + item.typeEvent"
               leftIndicatorStyle="left-side-indicator-participants"
               rightIndicatorStyle="right-side-indicator"
               :total="item.total"
@@ -546,22 +528,19 @@
         <md-card-content>
           <div class="title text-bold">Attendants satisfaction rate</div>
           <div>
-            <ControlPanel
-              :onClick="getMonthFromControl"
-              controlBlockStyle="control-panel-block-rate"
-            />
+            <ControlPanel :onClick="getMonthFromControl" controlBlockStyle="control-panel-block-rate" />
             <div class="rate-mean-block">
-              <span class="indicator-event-info-mean-value">{{`${Math.floor(getMeanValue)}%`}}</span>
-              <span
-                class="indicator-event-type-title-rate"
-              >{{`Average attendants satisfaction in ${new Date().getFullYear()}`}}</span>
+              <span class="indicator-event-info-mean-value">{{ `${Math.floor(getMeanValue)}%` }}</span>
+              <span class="indicator-event-type-title-rate">{{
+                `Average attendants satisfaction in ${new Date().getFullYear()}`
+              }}</span>
             </div>
           </div>
           <div>
             <LineIndicator
               v-if="ratesList"
               v-for="item in ratesList"
-              :key="item.total+item.typeEvent"
+              :key="item.total + item.typeEvent"
               leftIndicatorStyle="left-side-indicator-rate"
               rightIndicatorStyle="right-side-indicator"
               :total="item.total"
@@ -598,7 +577,7 @@
 import { mapGetters, mapMutations, mapState } from "vuex";
 
 // import auth from '@/auth';
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 
 // COMPONENTS
 import { Tabs, NavTabsCard } from "@/components";
@@ -813,9 +792,7 @@ export default {
       }
     },
     isMonthly() {
-      return Boolean(
-        this.from && this.to && this.startPeriod && this.finishPeriod,
-      );
+      return Boolean(this.from && this.to && this.startPeriod && this.finishPeriod);
     },
     getDuration() {
       if (this.from && this.to && this.startPerion && this.finishPerion) {
@@ -876,13 +853,7 @@ export default {
       }
 
       if (this.from && this.to && this.startPeriod && this.finishPeriod) {
-        const period = filter(
-          this.startPeriod,
-          this.from,
-          this.finishPeriod,
-          this.to,
-          duration,
-        );
+        const period = filter(this.startPeriod, this.from, this.finishPeriod, this.to, duration);
         const dataArray = period.map((item) => Math.ceil(Math.random() * 100));
         return {
           labels: period,
@@ -982,7 +953,7 @@ export default {
       this.showFilter = !this.showFilter;
     },
     deleteBranch(branchIndex) {
-      swal({
+      Swal.fire({
         title: "Are you sure want to delete this branch?",
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",
@@ -1081,7 +1052,7 @@ export default {
       document.getElementById("company-avatar-upload").click();
     },
     deleteAvatar(id) {
-      swal({
+      Swal.fire({
         title: "Are you sure want to delete company logo?",
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",

@@ -31,7 +31,7 @@ import { MaryokuInput } from "@/components";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import CalendarEvent from "@/models/CalendarEvent";
 import Calendar from "@/models/Calendar";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import eventService from "@/services/event.service";
 export default {
   components: {
@@ -52,7 +52,7 @@ export default {
           if (newEvent.isFirstEvent) {
             this.$router.push({ path: `/welcome/event` });
           } else {
-              this.$router.push({path: `/events/${newEvent.id}/booking/concept`});
+            this.$router.push({ path: `/events/${newEvent.id}/booking/concept` });
           }
         })
         .catch((err) => {});
@@ -131,6 +131,18 @@ export default {
       });
     },
     createEvent() {
+      Swal.fire({
+        title: `<div style="text-align:center; width:100%;">Sorry, Some informations are invalid. <br/> Please check your information. </div>`,
+        buttonsStyling: false,
+        icon: "warning",
+        confirmButtonClass: "md-button md-success ok-button",
+        customClass: [
+          {
+            container: "button-align-center",
+          },
+        ],
+      });
+      return;
       // in case that user is signed
       const tenantId = this.$authService.resolveTenantId();
       if (tenantId.toLowerCase() === "default" || !this.tenantUser.tenants.includes(tenantId)) {
@@ -149,10 +161,10 @@ export default {
             }
           })
           .catch((err) => {
-            swal({
+            Swal.fire({
               title: `<div style="text-align:center; width:100%;">Sorry, Some informations are invalid. <br/> Please check your information. </div>`,
               buttonsStyling: false,
-              type: "warning",
+              icon: "warning",
               confirmButtonClass: "md-button md-success",
             });
             console.log(err);

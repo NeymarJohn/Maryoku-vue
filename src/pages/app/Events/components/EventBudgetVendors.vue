@@ -20,16 +20,22 @@
       :eventCategoryItem="block"
       :key="block.id"
       :type="type"
+      :editingMode="editingMode"
       @update="updateCategoryBudget"
       @delete="deleteCategory"
       @addVendor="addMyVendor"
     ></event-budget-vendors-item>
 
-    <table class="event-blocks__table event-block-table" :style="`border-left: 10px solid #80B93D;color:#80B93D`">
+    <table
+      class="event-blocks__table event-block-table"
+      :style="editingMode ? `border-left: 10px solid #80B93D;color:#80B93D` : `border: 2px solid #80B93D;color:#80B93D`"
+    >
       <tbody>
         <tr class="unexpected-budget">
           <td width="40%" class="event-block-element unexpected">
-            <img :src="`${$iconURL}Budget Elements/unexpected.svg`" />
+            <img
+              :src="editingMode ? `${$iconURL}Budget Elements/unexpected.svg` : `/static/icons/budget/unexpected.png`"
+            />
             Unexpected
           </td>
           <td width="20%" class="planned unexpected">$ {{ event.unexpectedBudget | withComma }}</td>
@@ -39,11 +45,16 @@
         </tr>
       </tbody>
     </table>
-    <table class="event-blocks__table event-block-table" :style="`border-left: 10px solid #818080`">
+    <table
+      class="event-blocks__table event-block-table"
+      :style="editingMode ? `border-left: 10px solid #818080;color:#818080` : `border: 2px solid #818080;color:#80B93D`"
+    >
       <tbody>
         <tr class="extra">
           <td width="40%" class="event-block-element extra">
-            <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget screen/SVG/extra-gray.svg" />
+            <img
+              :src="editingMode ? `${$iconURL}budget screen/SVG/extra-gray.svg` : `/static/icons/budget/extra-gray.png`"
+            />
             Extras
           </td>
           <td width="20%" class="planned">$ {{ (event.allocatedTips + event.allocatedFees) | withComma }}</td>
@@ -58,7 +69,10 @@
         <template v-if="showTips">
           <tr class="extra">
             <td width="40%" class="event-block-element extra">
-              <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget screen/SVG/tips-gray.svg" />
+              <img
+                :src="editingMode ? `${$iconURL}budget screen/SVG/tips-gray.png` : `/static/icons/budget/tips-gray.png`"
+              />
+
               Tips 12%
             </td>
             <td width="20%" class="planned">
@@ -101,7 +115,10 @@
           </tr>
           <tr class="extra">
             <td width="40%" class="event-block-element extra">
-              <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget screen/SVG/fees-gray.svg" />
+              <img
+                :src="editingMode ? `${$iconURL}budget screen/SVG/fees-gray.svg` : `/static/icons/budget/fees-gray.png`"
+              />
+
               Fees 3%
             </td>
             <td width="20%" class="planned">$ {{ event.allocatedFees | withComma }}</td>
@@ -112,11 +129,16 @@
         </template>
       </tbody>
     </table>
-    <table class="event-blocks__table event-block-table" :style="`border-left: 10px solid #0047cc`">
+    <table
+      class="event-blocks__table event-block-table"
+      :style="editingMode ? `border-left: 10px solid #0047cc` : `border: 1px solid #0047cc`"
+    >
       <tbody>
         <tr class="unused-budget">
           <td width="40%" class="event-block-element unused-budget">
-            <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget screen/SVG/Asset 487.svg" />
+            <img
+              :src="editingMode ? `${$iconURL}budget+screen/SVG/Asset+487.svg` : `/static/icons/budget/unused.png`"
+            />
             Unused
           </td>
           <td width="20%" class="planned">$ {{ unusedBudget | withComma }}</td>
@@ -136,7 +158,7 @@
           <td width="15%" class="total-value">${{ bookedTotal | withComma }}</td>
           <td colspan="2"></td>
         </tr>
-        <tr class="add-category" v-if="canEdit">
+        <tr class="add-category" v-if="canEdit && editingMode">
           <td colspan="5">
             <md-button class="md-simple add-category-btn" @click="showCategoryModal = true">
               <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2019.svg" />
@@ -189,7 +211,7 @@ import AddMyVendorModal from "@/components/Modals/AddMyVendorModal";
 import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 import EventComponentVendorItem from "./EventComponentVendorItem";
 import AddNewCategoryModal from "@/components/Modals/AddNewCategoryModal";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import EventBudgetVendorsItem from "./EventBudgetVendorsItem";
 export default {
   name: "event-budget-vendors",
@@ -213,6 +235,10 @@ export default {
     type: {
       type: String,
       default: "total",
+    },
+    editingMode: {
+      type: Boolean,
+      default: true,
     },
   },
   data: () => ({
@@ -289,7 +315,7 @@ export default {
       return this.event.totalBudget - this.bookedTotal;
     },
     eventCategoryList() {
-      console.log('eventCategoryList', this.event.components);
+      console.log("eventCategoryList", this.event.components);
       return this.event.components;
     },
   },
@@ -445,7 +471,9 @@ export default {
       } else if (changedMoney.selectedOption === "unexpected") {
         event.unexpectedBudget = this.event.unexpectedBudget - changedMoney.offset;
       }
-      this.$store.dispatch("event/saveEventAction", event).then((res) => {});
+      this.$store.dispatch("event/saveEventAction", event).then((res) => {
+          this.$emit("change");
+      });
     },
 
     blockBudgetChanged(val, index) {
@@ -508,10 +536,10 @@ export default {
 
     addRequirements(item) {
       if (item.proposalsCount) {
-        swal({
+        Swal.fire({
           text: `You have offers based on these requirements, after changing them you will need to request updated proposal. Would you like to proceed?`,
           showCancelButton: true,
-          type: "warning",
+          icon: "warning",
           confirmButtonClass: "md-button md-success confirm-btn-bg ",
           cancelButtonClass: "md-button md-danger cancel-btn-bg",
           confirmButtonText: "Yes!",
@@ -614,7 +642,7 @@ export default {
       const arrow = `<i data-v-a76b6a56="" style="color:#050505" class="md-icon md-icon-font md-theme-default">arrow_back</i>`;
       const budgetString = `<div class="font-size-40 font-regular color-red" style="margin:20px 0">$ ${this.newBudget}</div>`;
       const description = `<div class="description">Your edits changed the total budget, do you want to change it?</div>`;
-      swal({
+      Swal.fire({
         title: `<div class="text-left">${arrow}${budgetString}<div>Are You Sure?</div>${description}</div>`,
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",
@@ -646,7 +674,7 @@ export default {
         case "add":
           const budgetString = `<div class="font-size-40 font-regular color-red" style="margin-bottom:20px">+$${formattedValue}</div>`;
           const description = `<div class="description">Your edits changed the total budget, do you want to change it?</div>`;
-          swal({
+          Swal.fire({
             title: `<div class="text-left">${budgetString}<div>Would you like to add extra $${formattedValue} to your budget?</div>${description}</div>`,
             showCancelButton: true,
             confirmButtonClass: "md-button md-success",

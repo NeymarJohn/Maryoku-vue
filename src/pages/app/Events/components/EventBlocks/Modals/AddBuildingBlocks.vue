@@ -1,25 +1,23 @@
 <template>
   <div class="adding-building-blocks-panel">
-    <div class="md-layout" style="max-height: 50vh;">
-      <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
+    <div class="md-layout" style="max-height: 50vh">
+      <div class="md-layout-item md-size-5" style="padding: 0; margin: 0">
         <h4 class="md-title">
           <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
             <md-icon>arrow_back</md-icon>
           </md-button>
         </h4>
       </div>
-      <div class="md-layout-item md-size-95" style="max-height: 50vh;">
-        <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
-          <b>Back to table</b> / Add Building Block
-        </h4>
+      <div class="md-layout-item md-size-95" style="max-height: 50vh">
+        <h4 class="md-title" style="margin-bottom: 0; line-height: 51px"><b>Back to table</b> / Add Building Block</h4>
         <p>Drag & Drop building blocks to your working panel to add new services or products to your event</p>
-        <div class="md-layout" style="overflow: auto; max-height: 80vh;">
+        <div class="md-layout" style="overflow: auto; max-height: 80vh">
           <md-field>
             <md-icon>search</md-icon>
             <md-input placeholder="Search for event element" v-model="searchQuery"></md-input>
           </md-field>
           <div
-            v-for="(item,index) in filteredEventBlocks"
+            v-for="(item, index) in filteredEventBlocks"
             :key="index"
             class="md-layout-item md-size-100 mx-auto event-element-item"
             @click="addBlock(item)"
@@ -30,7 +28,7 @@
               v-if="!item.childComponents"
             >
               <!--<md-icon>{{item.icon}}</md-icon>-->
-              {{item.title}}
+              {{ item.title }}
             </drag>
           </div>
         </div>
@@ -42,10 +40,10 @@
         <img
           src="https://static-maryoku.s3.amazonaws.com/storage/img/drag_drop_white.png"
           alt="drag and drop"
-          style="width: 52px;"
+          style="width: 52px"
         />
       </p>
-      <p style="font-size : 20px; margin: 0;">Drag building blocks here</p>
+      <p style="font-size: 20px; margin: 0">Drag building blocks here</p>
     </drop>
   </div>
 </template>
@@ -58,7 +56,7 @@ import { Modal } from "@/components";
 import Calendar from "@/models/Calendar";
 import EventComponent from "@/models/EventComponent";
 
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import { error } from "util";
 import moment from "moment";
 import draggable from "vuedraggable";
@@ -159,12 +157,7 @@ export default {
     },
     filterEventElements() {
       this.filteredEventBlocks = _.filter(this.categoryBuildingBlocks, (v) => {
-        return (
-          v.title
-            .toString()
-            .toLowerCase()
-            .indexOf(this.searchQuery.toLowerCase()) > -1
-        );
+        return v.title.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
       });
     },
   },

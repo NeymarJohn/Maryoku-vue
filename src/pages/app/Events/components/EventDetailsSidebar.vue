@@ -6,10 +6,7 @@
       </div>-->
       <h4 class="title profile-title title-summary">
         Event Summary
-        <md-button
-          class="md-sm md-simple md-just-icon pull-right clear-margins"
-          @click="openEventModal()"
-        >
+        <md-button class="md-sm md-simple md-just-icon pull-right clear-margins" @click="openEventModal()">
           <md-icon class="company-logo">create</md-icon>
         </md-button>
       </h4>
@@ -22,10 +19,9 @@
               <i class="fa fa-calendar"></i>
             </div>
             <div class="md-layout-item">
-              {{calendarEvent.eventStartMillis | formatDate}},
-              {{calendarEvent.eventStartMillis | formatTime}}
-              ({{calendarEvent.eventStartMillis |
-              formatDuration(calendarEvent.eventEndMillis)}}h)
+              {{ calendarEvent.eventStartMillis | formatDate }},
+              {{ calendarEvent.eventStartMillis | formatTime }}
+              ({{ calendarEvent.eventStartMillis | formatDuration(calendarEvent.eventEndMillis) }}h)
             </div>
           </div>
 
@@ -33,15 +29,13 @@
             <div class="md-layout-item title-text">
               <i class="fa fa-map-marker-alt"></i>
             </div>
-            <div class="md-layout-item">{{calendarEvent.location}}</div>
+            <div class="md-layout-item">{{ calendarEvent.location }}</div>
           </div>
           <div class="md-layout-item summary-item">
             <div class="md-layout-item title-text">
               <i class="fa fa-user"></i>
             </div>
-            <div
-              class="md-layout-item"
-            >{{calendarEvent.numberOfParticipants}} {{inviteeType(calendarEvent)}}</div>
+            <div class="md-layout-item">{{ calendarEvent.numberOfParticipants }} {{ inviteeType(calendarEvent) }}</div>
           </div>
           <md-card class="event-extra-info-card">
             <md-card-expand>
@@ -51,7 +45,7 @@
                     <div class="md-layout-item title-text">
                       <md-icon>wb_sunny</md-icon>
                     </div>
-                    <div class="md-layout-item text-capitalize">{{calendarEvent.eventDayPart}}</div>
+                    <div class="md-layout-item text-capitalize">{{ calendarEvent.eventDayPart }}</div>
                   </div>
                   <div class="md-layout-item summary-item">
                     <div class="md-layout-item title-text">
@@ -74,28 +68,25 @@
                     </div>
                     <div class="md-layout-item text-capitalize">Internal company event</div>
                   </div>
-                  <div
-                    class="md-layout-item summary-item"
-                    v-if="calendarEvent.expectedAttendacePercent"
-                  >
+                  <div class="md-layout-item summary-item" v-if="calendarEvent.expectedAttendacePercent">
                     <div class="md-layout-item title-text">
                       <i class="fa fa-percent"></i>
                     </div>
-                    <div
-                      class="md-layout-item text-capitalize"
-                    >({{calendarEvent.expectedAttendacePercent}}) people you're expecting to show up</div>
+                    <div class="md-layout-item text-capitalize">
+                      ({{ calendarEvent.expectedAttendacePercent }}) people you're expecting to show up
+                    </div>
                   </div>
                   <div class="md-layout-item summary-item" v-if="calendarEvent.eventSongId">
                     <div class="md-layout-item title-text">
                       <md-icon>audiotrack</md-icon>
                     </div>
-                    <div class="md-layout-item text-capitalize">{{calendarEvent.eventSongId}}</div>
+                    <div class="md-layout-item text-capitalize">{{ calendarEvent.eventSongId }}</div>
                   </div>
                   <div class="md-layout-item summary-item" v-if="calendarEvent.eventMovieId">
                     <div class="md-layout-item title-text">
                       <md-icon>videocam</md-icon>
                     </div>
-                    <div class="md-layout-item text-capitalize">{{calendarEvent.eventMovieId}}</div>
+                    <div class="md-layout-item text-capitalize">{{ calendarEvent.eventMovieId }}</div>
                   </div>
                   <div class="md-layout-item summary-item">
                     <div class="md-layout-item title-text">
@@ -104,85 +95,85 @@
                     <div class="md-layout-item text-capitalize">Decision Factors</div>
                   </div>
                   <div class="md-layout-item">
-                    <ul class="m-0 p-0" style="padding-left: 39px; margin: 0;">
+                    <ul class="m-0 p-0" style="padding-left: 39px; margin: 0">
                       <template v-if="calendarEvent.eventDecisionFactor1 >= 50">
                         <li>
                           Authenticity & experience
-                          <b>({{calendarEvent.eventDecisionFactor1}})</b>
+                          <b>({{ calendarEvent.eventDecisionFactor1 }})</b>
                         </li>
                         <li>
                           Convenience & Accessibility
-                          <b>({{100 - calendarEvent.eventDecisionFactor1}})</b>
+                          <b>({{ 100 - calendarEvent.eventDecisionFactor1 }})</b>
                         </li>
                       </template>
                       <template v-else>
                         <li>
                           Authenticity & experience
-                          <b>({{100 - calendarEvent.eventDecisionFactor1}})</b>
+                          <b>({{ 100 - calendarEvent.eventDecisionFactor1 }})</b>
                         </li>
                         <li>
                           Convenience & Accessibility
-                          <b>({{calendarEvent.eventDecisionFactor1}})</b>
+                          <b>({{ calendarEvent.eventDecisionFactor1 }})</b>
                         </li>
                       </template>
                       <template v-if="calendarEvent.eventDecisionFactor2 >= 50">
                         <li>
                           New and edgy
-                          <b>({{calendarEvent.eventDecisionFactor2}})</b>
+                          <b>({{ calendarEvent.eventDecisionFactor2 }})</b>
                         </li>
                         <li>
                           Familiar & trusted
-                          <b>({{100 - calendarEvent.eventDecisionFactor2}})</b>
+                          <b>({{ 100 - calendarEvent.eventDecisionFactor2 }})</b>
                         </li>
                       </template>
                       <template v-else>
                         <li>
                           New and edgy
-                          <b>({{100 - calendarEvent.eventDecisionFactor2}})</b>
+                          <b>({{ 100 - calendarEvent.eventDecisionFactor2 }})</b>
                         </li>
                         <li>
                           Familiar & trusted
-                          <b>({{calendarEvent.eventDecisionFactor2}})</b>
+                          <b>({{ calendarEvent.eventDecisionFactor2 }})</b>
                         </li>
                       </template>
                       <template v-if="calendarEvent.eventDecisionFactor3 >= 50">
                         <li>
                           Hight Value for Money
-                          <b>({{calendarEvent.eventDecisionFactor3}})</b>
+                          <b>({{ calendarEvent.eventDecisionFactor3 }})</b>
                         </li>
                         <li>
                           Within budget
-                          <b>({{100 - calendarEvent.eventDecisionFactor3}})</b>
+                          <b>({{ 100 - calendarEvent.eventDecisionFactor3 }})</b>
                         </li>
                       </template>
                       <template v-else>
                         <li>
                           Hight Value for Money
-                          <b>({{100 - calendarEvent.eventDecisionFactor3}})</b>
+                          <b>({{ 100 - calendarEvent.eventDecisionFactor3 }})</b>
                         </li>
                         <li>
                           Within budget
-                          <b>({{calendarEvent.eventDecisionFactor3}})</b>
+                          <b>({{ calendarEvent.eventDecisionFactor3 }})</b>
                         </li>
                       </template>
                       <template v-if="calendarEvent.eventDecisionFactor4 >= 50">
                         <li>
                           Social & Green
-                          <b>({{calendarEvent.eventDecisionFactor4}})</b>
+                          <b>({{ calendarEvent.eventDecisionFactor4 }})</b>
                         </li>
                         <li>
                           Meets Requirements
-                          <b>({{100 - calendarEvent.eventDecisionFactor4}})</b>
+                          <b>({{ 100 - calendarEvent.eventDecisionFactor4 }})</b>
                         </li>
                       </template>
                       <template v-else>
                         <li>
                           Social & Green
-                          <b>({{100 - calendarEvent.eventDecisionFactor4}})</b>
+                          <b>({{ 100 - calendarEvent.eventDecisionFactor4 }})</b>
                         </li>
                         <li>
                           Meets Requirements
-                          <b>({{calendarEvent.eventDecisionFactor4}})</b>
+                          <b>({{ calendarEvent.eventDecisionFactor4 }})</b>
                         </li>
                       </template>
                     </ul>
@@ -194,11 +185,8 @@
                     <div class="md-layout-item text-capitalize">Event Needed Services</div>
                   </div>
                   <div class="md-layout-item">
-                    <ul class="m-0 p-0" style="padding-left: 39px; margin: 0;">
-                      <li
-                        v-for="(item,i,index) in calendarEvent.eventNeededServices"
-                        :key="index"
-                      >{{i}}</li>
+                    <ul class="m-0 p-0" style="padding-left: 39px; margin: 0">
+                      <li v-for="(item, i, index) in calendarEvent.eventNeededServices" :key="index">{{ i }}</li>
                     </ul>
                   </div>
                   <!-- NOTE: just hiding it -->
@@ -232,7 +220,7 @@
             <h4 class="title budget">
               <div
                 class="title"
-                :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]"
+                :class="[{ 'title-budget-prise': percentage > 0, 'title-budget-prise-negative': percentage <= 0 }]"
                 v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants"
               >
                 <animated-number
@@ -240,10 +228,7 @@
                   :value="getTotalRemainingBudget"
                   prefix="$"
                 ></animated-number>
-                <small class="total-event-budget">
-                  /
-                  ${{ getTotalAmountByGuestType | withComma }}
-                </small>
+                <small class="total-event-budget"> / ${{ getTotalAmountByGuestType | withComma }} </small>
               </div>
             </h4>
 
@@ -251,7 +236,7 @@
             <h4 class="title budget">
               <div
                 class="title"
-                :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]"
+                :class="[{ 'title-budget-prise': percentage > 0, 'title-budget-prise-negative': percentage <= 0 }]"
                 v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants"
               >
                 <animated-number
@@ -259,7 +244,7 @@
                   :value="getRemainingBudgetPerEmployee"
                   prefix="$"
                 ></animated-number>
-                <small class="total-event-budget">/ ${{calendarEvent.budgetPerPerson}}</small>
+                <small class="total-event-budget">/ ${{ calendarEvent.budgetPerPerson }}</small>
               </div>
             </h4>
 
@@ -268,7 +253,7 @@
                 :chart-data="pieChart.data"
                 :chart-options="pieChart.options"
                 chart-type="Pie"
-                style="grid-column: 1; grid-row: 1; color:red"
+                style="grid-column: 1; grid-row: 1; color: red"
               />
               <animated-number
                 class="percentage"
@@ -303,7 +288,7 @@
             <!-- TODO Need calculate with components -->
             <div
               class="md-caption title-text"
-              :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]"
+              :class="[{ 'title-budget-prise': percentage > 0, 'title-budget-prise-negative': percentage <= 0 }]"
             >
               <animated-number
                 ref="budgetPerPersonNumber"
@@ -316,7 +301,7 @@
             <div class="md-caption title-text">Budget per participant</div>
             <div
               class="md-caption title-text"
-              :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]"
+              :class="[{ 'title-budget-prise': percentage > 0, 'title-budget-prise-negative': percentage <= 0 }]"
             >
               <animated-number
                 ref="budgetPerPersonNumber"
@@ -341,27 +326,27 @@
   </md-card>
 </template>
 <script>
-import EventModal from '../EventModal/'
-import EventPlannerVuexModule from '../EventPlanner.vuex'
-import moment from 'moment'
+import EventModal from "../EventModal/";
+import EventPlannerVuexModule from "../EventPlanner.vuex";
+import moment from "moment";
 
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import swal from 'sweetalert2'
-import Calendar from '@/models/Calendar'
-import CalendarEvent from '@/models/CalendarEvent'
-import EventComponent from '@/models/EventComponent'
-import EventComponentVendor from '@/models/EventComponentVendor'
-import CalendarEventStatistics from '@/models/CalendarEventStatistics'
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import Swal from "sweetalert2";
+import Calendar from "@/models/Calendar";
+import CalendarEvent from "@/models/CalendarEvent";
+import EventComponent from "@/models/EventComponent";
+import EventComponentVendor from "@/models/EventComponentVendor";
+import CalendarEventStatistics from "@/models/CalendarEventStatistics";
 
 // import auth from '@/auth'
-import ChartComponent from '@/components/Cards/ChartComponent'
-import _ from 'underscore'
-import { LabelEdit, AnimatedNumber, StatsCard, ChartCard } from '@/components'
-import EventSidePanel from '../EventSidePanel.vue'
-import EventPaidTotalAmounts from '../components/EventPaidTotalAmounts.vue'
+import ChartComponent from "@/components/Cards/ChartComponent";
+import _ from "underscore";
+import { LabelEdit, AnimatedNumber, StatsCard, ChartCard } from "@/components";
+import EventSidePanel from "../EventSidePanel.vue";
+import EventPaidTotalAmounts from "../components/EventPaidTotalAmounts.vue";
 
 export default {
-  name: 'event-details-sidebar',
+  name: "event-details-sidebar",
   components: {
     LabelEdit,
     AnimatedNumber,
@@ -369,15 +354,15 @@ export default {
     ChartCard,
     ChartComponent,
     CalendarEventStatistics,
-    EventPaidTotalAmounts
+    EventPaidTotalAmounts,
   },
   props: {
     event: {
       type: Object,
       default: () => {
-        return { statistics: {} }
-      }
-    }
+        return { statistics: {} };
+      },
+    },
   },
   data: () => ({
     calendarEvent: {},
@@ -392,132 +377,123 @@ export default {
     budgetPerEmployee: 0,
     acceptedProposals: [],
     paidProposals: [],
-    eventInfoCardExpanded: false
+    eventInfoCardExpanded: false,
   }),
   methods: {
-    ...mapMutations('EventPlannerVuex', [
-      'setEventModal',
-      'setEditMode',
-      'setModalSubmitTitle',
-      'setEventModalAndEventData',
-      'setNumberOfParticipants',
-      'setEventData'
+    ...mapMutations("EventPlannerVuex", [
+      "setEventModal",
+      "setEditMode",
+      "setModalSubmitTitle",
+      "setEventModalAndEventData",
+      "setNumberOfParticipants",
+      "setEventData",
     ]),
-    inviteeType (calendarEvent) {
+    inviteeType(calendarEvent) {
       // "Employees Only","Employees and spouse","Employees and families", "Employees children"
-      let typeText = ''
-      let participantsType = calendarEvent.participantsType
+      let typeText = "";
+      let participantsType = calendarEvent.participantsType;
 
-      if (participantsType === 'Guests and spouse') {
-        typeText = '+ spouses'
-      } else if (participantsType === 'Guests and families') {
-        typeText = '+ families'
-      } else if (participantsType === 'Guests siblings') {
-        typeText = '+ siblings'
+      if (participantsType === "Guests and spouse") {
+        typeText = "+ spouses";
+      } else if (participantsType === "Guests and families") {
+        typeText = "+ families";
+      } else if (participantsType === "Guests siblings") {
+        typeText = "+ siblings";
       } else {
-        typeText = participantsType
+        typeText = participantsType;
       }
 
-      return typeText
+      return typeText;
     },
-    getEvent () {
+    getEvent() {
       this.$auth.currentUser(this, true, () => {
         if (!this.event) {
           let _calendar = new Calendar({
-            id: this.$auth.user.defaultCalendarId
-          })
+            id: this.$auth.user.defaultCalendarId,
+          });
 
           _calendar
             .calendarEvents()
             .find(this.$route.params.id)
-            .then(event => {
+            .then((event) => {
               // this.event = event
-              this.eventId = event.id
-              this.calendarEvent = event
-              this.selectedComponents = event.components
+              this.eventId = event.id;
+              this.calendarEvent = event;
+              this.selectedComponents = event.components;
 
-              this.getCalendarEventStatistics(event)
+              this.getCalendarEventStatistics(event);
 
               this.$root.$emit(
-                'set-title',
+                "set-title",
                 this.event,
-                this.routeName === 'EditBuildingBlocks',
-                this.routeName === 'InviteesManagement' ||
-                  this.routeName === 'EventInvitees'
-              )
-            })
+                this.routeName === "EditBuildingBlocks",
+                this.routeName === "InviteesManagement" || this.routeName === "EventInvitees",
+              );
+            });
         } else {
-          this.eventId = this.event.id
-          this.calendarEvent = this.event
-          this.selectedComponents = this.event.components
+          this.eventId = this.event.id;
+          this.calendarEvent = this.event;
+          this.selectedComponents = this.event.components;
 
           if (this.eventId) {
-            this.getCalendarEventStatistics(this.event)
+            this.getCalendarEventStatistics(this.event);
           }
 
           this.$root.$emit(
-            'set-title',
+            "set-title",
             this.event,
-            this.routeName === 'EditBuildingBlocks',
-            this.routeName === 'InviteesManagement' ||
-              this.routeName === 'EventInvitees'
-          )
+            this.routeName === "EditBuildingBlocks",
+            this.routeName === "InviteesManagement" || this.routeName === "EventInvitees",
+          );
         }
-      })
+      });
     },
-    getCalendarEventStatistics (evt) {
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
-      let event = new CalendarEvent({ id: evt.id })
+    getCalendarEventStatistics(evt) {
+      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
+      let event = new CalendarEvent({ id: evt.id });
 
       if (!evt.id) {
-        return
+        return;
       }
 
       new CalendarEventStatistics()
         .for(calendar, event)
         .get()
-        .then(resp => {
+        .then((resp) => {
           // this.totalRemainingBudget = (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget
-          this.totalRemainingBudget =
-            evt.totalBudget - resp[0].totalAllocatedBudget
-          this.remainingBudgetPerEmployee =
-            this.totalRemainingBudget / evt.numberOfParticipants // evt.totalBudget - resp[0].totalAllocatedBudget
+          this.totalRemainingBudget = evt.totalBudget - resp[0].totalAllocatedBudget;
+          this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants; // evt.totalBudget - resp[0].totalAllocatedBudget
           this.percentage =
-            100 -
-            (
-              (resp[0].totalAllocatedBudget /
-                (evt.budgetPerPerson * evt.numberOfParticipants)) *
-              100
-            ).toFixed(2)
+            100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2);
 
           if (this.percentage > 0) {
             this.seriesData = [
               {
                 value: 100 - this.percentage,
-                className: 'budget-chart-slice-a-positive'
+                className: "budget-chart-slice-a-positive",
               },
               {
                 value: this.percentage,
-                className: 'budget-chart-slice-b-positive'
-              }
-            ]
+                className: "budget-chart-slice-b-positive",
+              },
+            ];
           } else {
             this.seriesData = [
-              { value: 0.01, className: 'budget-chart-slice-a-negative' },
-              { value: 99.99, className: 'budget-chart-slice-b-negative' }
-            ]
+              { value: 0.01, className: "budget-chart-slice-a-negative" },
+              { value: 99.99, className: "budget-chart-slice-b-negative" },
+            ];
           }
 
-          this.budgetPerEmployee = evt.budgetPerPerson // this.totalRemainingBudget / evt.numberOfParticipants
-          this.allocatedBudget = resp.totalAllocatedBudget
-          this.event.statistics['allocatedBudget'] = this.allocatedBudget
+          this.budgetPerEmployee = evt.budgetPerPerson; // this.totalRemainingBudget / evt.numberOfParticipants
+          this.allocatedBudget = resp.totalAllocatedBudget;
+          this.event.statistics["allocatedBudget"] = this.allocatedBudget;
         })
-        .catch(error => {
-          console.log(error)
-        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
-    openEventModal () {
-      this.$router.push({ path: `/event/` + this.event.id + '/edit' })
+    openEventModal() {
+      this.$router.push({ path: `/event/` + this.event.id + "/edit" });
 
       //   window.currentPanel = this.$showPanel({
       //   component: EventSidePanel,
@@ -537,206 +513,187 @@ export default {
       // this.setModalSubmitTitle('Save')
       // this.setEditMode({editMode: true})
     },
-    getAcceptedAndPaidProposals (calendar, event, eventComponents) {
-      if (
-        calendar !== null &&
-        event !== null &&
-        eventComponents !== undefined
-      ) {
-        eventComponents.forEach(evtComponent => {
-          let selected_block = new EventComponent({ id: evtComponent.id })
+    getAcceptedAndPaidProposals(calendar, event, eventComponents) {
+      if (calendar !== null && event !== null && eventComponents !== undefined) {
+        eventComponents.forEach((evtComponent) => {
+          let selected_block = new EventComponent({ id: evtComponent.id });
           new EventComponentVendor()
             .for(calendar, event, selected_block)
             .get()
-            .then(ec => {
-              ec.forEach(e => {
+            .then((ec) => {
+              ec.forEach((e) => {
                 e.proposals
-                  .filter(item => item.downPaymentStatus === 'paid')
-                  .forEach(proposal => {
-                    if (
-                      this.paidProposals.filter(
-                        p => p.proposalId === proposal.id
-                      ).length === 0
-                    ) {
+                  .filter((item) => item.downPaymentStatus === "paid")
+                  .forEach((proposal) => {
+                    if (this.paidProposals.filter((p) => p.proposalId === proposal.id).length === 0) {
                       this.paidProposals.push({
                         proposalId: proposal.id,
-                        proposalCost: proposal.cost
-                      })
+                        proposalCost: proposal.cost,
+                      });
                     }
-                  })
+                  });
                 e.proposals
-                  .filter(item => item.accepted === true)
-                  .forEach(proposal => {
-                    if (
-                      this.acceptedProposals.filter(
-                        p => p.proposalId === proposal.id
-                      ).length === 0
-                    ) {
+                  .filter((item) => item.accepted === true)
+                  .forEach((proposal) => {
+                    if (this.acceptedProposals.filter((p) => p.proposalId === proposal.id).length === 0) {
                       this.acceptedProposals.push({
                         proposalId: proposal.id,
-                        proposalCost: proposal.cost
-                      })
+                        proposalCost: proposal.cost,
+                      });
                     }
-                  })
-              })
+                  });
+              });
             })
-            .catch(error => {
-              console.log('EventComponentVendor error =>', error)
-            })
-        })
+            .catch((error) => {
+              console.log("EventComponentVendor error =>", error);
+            });
+        });
       }
-    }
+    },
   },
-  created () {
-    this.$store.registerModule('EventPlannerVuex', EventPlannerVuexModule)
+  created() {
+    this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
 
-    this.routeName = this.$route.name
+    this.routeName = this.$route.name;
   },
-  mounted () {
-    let _self = this
+  mounted() {
+    let _self = this;
     if (!this.event) {
-      this.getEvent()
+      this.getEvent();
     }
 
-    this.$root.$on('RefreshStatistics', function () {
-      _self.getCalendarEventStatistics(_self.event)
-    })
+    this.$root.$on("RefreshStatistics", function () {
+      _self.getCalendarEventStatistics(_self.event);
+    });
 
-    this.$root.$on('calendar-refresh-events', () => {
-      this.getEvent()
-    })
+    this.$root.$on("calendar-refresh-events", () => {
+      this.getEvent();
+    });
 
-    this.getEvent()
+    this.getEvent();
 
-    this.getAcceptedAndPaidProposals()
+    this.getAcceptedAndPaidProposals();
   },
   computed: {
     ...mapGetters({
-      components: 'event/getComponentsList'
+      components: "event/getComponentsList",
     }),
-    getPaidAmount () {
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
-      let event = new CalendarEvent({ id: this.event.id })
-      let eventComponents = this.event.components
-      let paidAmount = 0
-      this.getAcceptedAndPaidProposals(calendar, event, eventComponents)
+    getPaidAmount() {
+      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
+      let event = new CalendarEvent({ id: this.event.id });
+      let eventComponents = this.event.components;
+      let paidAmount = 0;
+      this.getAcceptedAndPaidProposals(calendar, event, eventComponents);
 
       if (this.paidProposals.length > 0) {
-        return this.paidProposals.reduce((p, item) => p + item.proposalCost, 0)
+        return this.paidProposals.reduce((p, item) => p + item.proposalCost, 0);
       } else {
-        return 0
+        return 0;
       }
     },
-    getToBePaidAmount () {
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
-      let event = new CalendarEvent({ id: this.event.id })
-      let eventComponents = this.event.components
-      let toBePaidAmount = 0
-      this.getAcceptedAndPaidProposals(calendar, event, eventComponents)
+    getToBePaidAmount() {
+      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
+      let event = new CalendarEvent({ id: this.event.id });
+      let eventComponents = this.event.components;
+      let toBePaidAmount = 0;
+      this.getAcceptedAndPaidProposals(calendar, event, eventComponents);
 
       if (this.acceptedProposals.length > 0) {
-        return this.acceptedProposals.reduce(
-          (p, item) => p + item.proposalCost,
-          0
-        )
+        return this.acceptedProposals.reduce((p, item) => p + item.proposalCost, 0);
       } else {
-        return 0
+        return 0;
       }
     },
-    getTotalAmountByGuestType () {
-      if (this.calendarEvent.participantsType === 'Guests and spouse') {
+    getTotalAmountByGuestType() {
+      if (this.calendarEvent.participantsType === "Guests and spouse") {
         // return parseInt(this.event.numberOfParticipants * this.event.budgetPerPerson  * 2)
-        return parseInt(this.event.totalBudget) * 2
+        return parseInt(this.event.totalBudget) * 2;
       } else {
         // return parseInt(this.event.numberOfParticipants * this.event.budgetPerPerson)
-        return parseInt(this.event.totalBudget)
+        return parseInt(this.event.totalBudget);
       }
     },
-    getTotalRemainingBudget () {
-      return this.totalRemainingBudget
+    getTotalRemainingBudget() {
+      return this.totalRemainingBudget;
     },
-    getRemainingBudgetPerEmployee () {
+    getRemainingBudgetPerEmployee() {
       if (this.event.budgetPerPerson === 0) {
-        return 0
+        return 0;
       } else {
-        if (this.calendarEvent.participantsType === 'Guests and spouse') {
-          return (
-            this.getTotalRemainingBudget / this.event.numberOfParticipants / 2
-          )
+        if (this.calendarEvent.participantsType === "Guests and spouse") {
+          return this.getTotalRemainingBudget / this.event.numberOfParticipants / 2;
         } else {
-          return this.getTotalRemainingBudget / this.event.numberOfParticipants
+          return this.getTotalRemainingBudget / this.event.numberOfParticipants;
         }
       }
     },
-    getPercentage () {
+    getPercentage() {
       if (this.event.budgetPerPerson === 0) {
-        return 0
+        return 0;
       } else {
-        return (
-          (this.getTotalRemainingBudget / this.getTotalAmountByGuestType) * 100
-        )
+        return (this.getTotalRemainingBudget / this.getTotalAmountByGuestType) * 100;
       }
     },
-    getSeriesData () {
+    getSeriesData() {
       if (this.getTotalRemainingBudget > 0) {
         return [
           {
             value: 100 - this.getPercentage,
-            className: 'budget-chart-slice-a-positive'
+            className: "budget-chart-slice-a-positive",
           },
           {
             value: this.getPercentage,
-            className: 'budget-chart-slice-b-positive'
-          }
-        ]
+            className: "budget-chart-slice-b-positive",
+          },
+        ];
       } else {
         return [
           {
             value: 0.01,
-            className: 'budget-chart-slice-a-negative'
+            className: "budget-chart-slice-a-negative",
           },
           {
             value: 99.99,
-            className: 'budget-chart-slice-b-negative'
-          }
-        ]
+            className: "budget-chart-slice-b-negative",
+          },
+        ];
       }
     },
-    pieChart () {
+    pieChart() {
       return {
         data: {
-          labels: [' ', ' '], // should be empty to remove text from chart
-          series: this.getSeriesData
+          labels: [" ", " "], // should be empty to remove text from chart
+          series: this.getSeriesData,
         },
         options: {
           padding: 0,
           height: 156,
           donut: true,
-          donutWidth: 8
-        }
-      }
-    }
+          donutWidth: 8,
+        },
+      };
+    },
   },
   filters: {
     formatDate: function (date) {
-      return moment(date).format('MMM Do YYYY')
+      return moment(date).format("MMM Do YYYY");
     },
     formatTime: function (date) {
-      return moment(date).format('h:00 A')
+      return moment(date).format("h:00 A");
     },
     formatDuration: function (startDate, endDate) {
-      return moment(endDate).diff(startDate, 'hours')
+      return moment(endDate).diff(startDate, "hours");
     },
-    withComma (amount) {
-      return amount ? amount.toLocaleString() : 0
-    }
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
+    },
   },
   watch: {
-    event (newVal, oldVal) {
-      this.getEvent()
-    }
-  }
-}
+    event(newVal, oldVal) {
+      this.getEvent();
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 @import "@/assets/scss/md/_colors.scss";

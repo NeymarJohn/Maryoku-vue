@@ -596,7 +596,7 @@ import EventTimelineItem from "@/models/EventTimelineItem";
 import CalendarEventStatistics from "@/models/CalendarEventStatistics";
 
 import moment from "moment";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import { SlideYDownTransition } from "vue2-transitions";
 import InputMask from "vue-input-mask";
 
@@ -845,7 +845,7 @@ export default {
           this.editEvent.location != this.event.location ||
           this.editEvent.eventStartMillis != this.event.eventStartMillis)
       ) {
-        swal({
+        Swal.fire({
           title: "Do you want to update the budget accordingly?",
           text: ``,
           showCancelButton: true,

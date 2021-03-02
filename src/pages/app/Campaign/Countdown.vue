@@ -62,7 +62,7 @@ import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel";
 import TitleEditor from "./components/TitleEditor";
 import HideSwitch from "@/components/HideSwitch";
 import { getBase64 } from "@/utils/file.util";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 
 export default {
   components: {
@@ -131,7 +131,7 @@ export default {
       });
     },
     setDefault() {
-      swal({
+      Swal.fire({
         title: "Are you sure?",
         text: `You won't be able to revert this!`,
         showCancelButton: true,

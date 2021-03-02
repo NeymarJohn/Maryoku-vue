@@ -86,7 +86,7 @@ import SharingButtonGroup from "./components/SharingButtonGroup";
 import FeedbackQuestion from "./components/FeedbackQuestion";
 import TitleEditor from "./components/TitleEditor";
 import HideSwitch from "@/components/HideSwitch";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 
 export default {
   components: {
@@ -169,7 +169,7 @@ export default {
   },
   methods: {
     setDefault() {
-      swal({
+      Swal.fire({
         title: "Are you sure?",
         text: `You won't be able to revert this feedback!`,
         showCancelButton: true,

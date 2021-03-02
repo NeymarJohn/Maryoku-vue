@@ -6,16 +6,13 @@
           <div class="md-layout d-flex text-center">
             <h2>Click on the relevant dietary constraints</h2>
           </div>
-          <md-button
-            class="md-simple md-just-icon md-round modal-default-button"
-            @click="closeModal"
-          >
+          <md-button class="md-simple md-just-icon md-round modal-default-button" @click="closeModal">
             <md-icon>clear</md-icon>
           </md-button>
         </template>
         <template slot="body">
-          <div class="md-layout" style="margin-top:5%">
-            <div class="md-layout-item dietary-item" v-for="(item,index) in dietaryIconOnFirstList">
+          <div class="md-layout" style="margin-top: 5%">
+            <div class="md-layout-item dietary-item" v-for="(item, index) in dietaryIconOnFirstList">
               <img
                 :src="`https://static-maryoku.s3.amazonaws.com/storage/img/dietary/${item.on}.png`"
                 @click="toggleFlagFirstList(index)"
@@ -29,11 +26,8 @@
             </div>
           </div>
 
-          <div class="md-layout" style="margin-top:5%">
-            <div
-              class="md-layout-item dietary-item"
-              v-for="(item,index) in dietaryIconOnSecondList"
-            >
+          <div class="md-layout" style="margin-top: 5%">
+            <div class="md-layout-item dietary-item" v-for="(item, index) in dietaryIconOnSecondList">
               <img
                 :src="`https://static-maryoku.s3.amazonaws.com/storage/img/dietary/${item.on}.png`"
                 @click="toggleFlagSecondList(index)"
@@ -61,7 +55,7 @@ import { Modal } from "@/components";
 import Calendar from "@/models/Calendar";
 import EventComponent from "@/models/EventComponent";
 
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 import { error } from "util";
 import moment from "moment";
 
@@ -122,14 +116,11 @@ export default {
       this.setDietaryConstraintsModal({ showModal: false });
     },
     toggleFlagFirstList(index) {
-      this.dietaryIconOnFirstList[index].flagOn = !this.dietaryIconOnFirstList[
-        index
-      ].flagOn;
+      this.dietaryIconOnFirstList[index].flagOn = !this.dietaryIconOnFirstList[index].flagOn;
     },
 
     toggleFlagSecondList(index) {
-      this.dietaryIconOnSecondList[index].flagOn = !this
-        .dietaryIconOnSecondList[index].flagOn;
+      this.dietaryIconOnSecondList[index].flagOn = !this.dietaryIconOnSecondList[index].flagOn;
     },
     send() {
       this.closeModal();

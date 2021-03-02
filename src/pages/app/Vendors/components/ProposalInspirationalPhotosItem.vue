@@ -39,7 +39,7 @@
 import carousel from "vue-owl-carousel";
 import S3Service from "@/services/s3.service";
 import { getBase64 } from "@/utils/file.util";
-import swal from "sweetalert2";
+import Swal from "sweetalert2";
 export default {
   components: {
     carousel,
@@ -87,7 +87,7 @@ export default {
       if (!event.target.files[0]) return;
       console.log(event.target.files[0].size);
       if (event.target.files[0].size > 1024 * 1024 * 5) {
-        swal({
+        Swal.fire({
           title: `The size of file that you selected is ${Math.floor(
             event.target.files[0].size / 1024 / 1024,
           )}MB. This file should be under 5MB`,
