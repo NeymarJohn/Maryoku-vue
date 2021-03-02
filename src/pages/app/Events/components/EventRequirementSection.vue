@@ -88,12 +88,12 @@
           </td>
           <td class="width-30">
             <div class="condition">
-              <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="service.mustHave" :value="true"
-                >Must Have</md-checkbox
-              >
-              <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="service.mustHave" :value="false"
-                >Nice To Have</md-checkbox
-              >
+              <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="service.mustHave" :value="true">
+                Must Have
+              </md-checkbox>
+              <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="service.mustHave" :value="false">
+                Nice To Have
+              </md-checkbox>
             </div>
           </td>
         </tr>
