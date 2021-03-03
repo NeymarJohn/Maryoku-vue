@@ -38,9 +38,9 @@
         </template>
       </div>
       <div class="total-cont editor-wrapper">
-        <template v-if="!isEdit"
-          >$ {{ item.priceUnit == "total" ? item.price : (item.price * item.requirementValue) | withComma }}</template
-        >
+        <template v-if="!isEdit">
+          $ {{ item.priceUnit == "total" ? item.price : (item.price * item.requirementValue) | withComma }}
+        </template>
         <template v-else>
           <!-- <input class="input-value" v-model="item.price" type="number" /> -->
           <money
@@ -313,7 +313,7 @@ export default {
   },
   computed: {
     subTotal() {
-      return this.item.price * this.item.requirementValue;
+      return (this.item.price * this.item.requirementValue).toFixed(2);
     },
   },
   methods: {
@@ -357,8 +357,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .proposal-service-table-item {
-  padding: 46px 40px;
-  border: 2px solid #d5d5d5;
+  padding: 30px 40px;
+  border-top: 1px solid #d5d5d5;
   border-bottom: none;
   font-family: "Manrope-Regular", sans-serif;
   font-size: 16px;

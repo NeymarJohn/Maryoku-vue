@@ -1,81 +1,66 @@
 <template>
-    <div>
-        <div
-            v-if="component.title !== 'Total'"
-            class="event-budget-component d-flex"
-            :class="{ editable: editable }"
-            :style="`border-left: 10px solid ${component.color}; color: ${fontColor}`"
-        >
-            <div class="font-size-20 font-bold name">
-                <img class="icon" :src="`${$iconURL}Budget Elements/${component.icon}`" />
-                {{ component.title }}
-                <span v-if="component.eventCategory">
+  <div
+    v-if="component.title !== 'Total'"
+    class="event-budget-component d-flex"
+    :class="{ editable: editable }"
+    :style="`border-left: 10px solid ${component.color}; color: ${fontColor}`"
+  >
+    <div class="font-size-20 font-bold name">
+      <img class="icon" :src="`${$iconURL}Budget Elements/${component.icon}`" />
+      {{ component.title }}
+      <span v-if="component.eventCategory">
         <img :src="`${$iconURL}Campaign/Group 9087.svg`" class="label-icon" />
         <md-tooltip>
           <div class="font-size-14 tab-tooltip">{{ component.eventCategory.tooltipText }}</div>
         </md-tooltip>
       </span>
-            </div>
-
-            <template v-if="!isEditing">
-                <div class="text-right font-size-20 flex-1 budget" v-if="type == 'perguest'">
-                    ${{ (component.allocatedBudget / participants).toFixed(0) | withComma }}
-                </div>
-                <div class="text-right font-size-20 flex-1 budget" v-else>${{ component.allocatedBudget | withComma }}</div>
-                <div class="actions">
-                    <md-button class="edit-btn md-simple" @click="editBudget">
-                        <img :src="`${$iconURL}Event%20Page/edit-dark.svg`" />
-                    </md-button>
-                    <md-button class="edit-btn md-simple" @click="deleteComponent">
-                        <img class="trash" :src="`${$iconURL}Timeline-New/Trash.svg`" />
-                    </md-button>
-                </div>
-            </template>
-            <template v-if="isEditing">
-                <div class="text-right font-size-20 flex-1 budget d-flex">
-                    <maryoku-input inputStyle="budget" v-model="newBudget"></maryoku-input>
-                    <md-button class="normal-btn md-simple md-red" @click="isEditing = false"> Cancel </md-button>
-                    <md-button class="normal-btn md-red" @click="updateComponent"> Save </md-button>
-                </div>
-            </template>
-        </div>
-        <div v-else class="event-budget-component d-flex total">
-            <div class="font-size-20 font-bold name">
-                {{ component.title }}
-            </div>
-            <div class="text-right font-size-20 flex-1" v-if="type == 'perguest'">
-                ${{ (component.allocatedBudget / participants) | withComma }}
-            </div>
-            <div class="text-right font-size-20 flex-1" v-else>${{ component.allocatedBudget | withComma }}</div>
-            <div class="actions"></div>
-        </div>
-        <budget-resize-modal
-            v-if="showBudgetResizeModal"
-            :newValue="newBudget"
-            :value="component.allocatedBudget"
-            :categoryName="component.fullTitle"
-            @select="resizeBudget"
-            @cancel="resizeModalOpened = false"
-        ></budget-resize-modal>
     </div>
+
+    <template v-if="!isEditing">
+      <div class="text-right font-size-20 flex-1 budget" v-if="type == 'perguest'">
+        ${{ (component.allocatedBudget / participants).toFixed(0) | withComma }}
+      </div>
+      <div class="text-right font-size-20 flex-1 budget" v-else>${{ component.allocatedBudget | withComma }}</div>
+      <div class="actions">
+        <md-button class="edit-btn md-simple" @click="editBudget">
+          <img :src="`${$iconURL}Event%20Page/edit-dark.svg`" />
+        </md-button>
+        <md-button class="edit-btn md-simple" @click="deleteComponent">
+          <img class="trash" :src="`${$iconURL}Timeline-New/Trash.svg`" />
+        </md-button>
+      </div>
+    </template>
+    <template v-if="isEditing">
+      <div class="text-right font-size-20 flex-1 budget d-flex">
+        <maryoku-input inputStyle="budget" v-model="newBudget"></maryoku-input>
+        <md-button class="normal-btn md-simple md-red" @click="isEditing = false"> Cancel </md-button>
+        <md-button class="normal-btn md-red" @click="updateComponent"> Save </md-button>
+      </div>
+    </template>
+  </div>
+  <div v-else class="event-budget-component d-flex total">
+    <div class="font-size-20 font-bold name">
+      {{ component.title }}
+    </div>
+    <div class="text-right font-size-20 flex-1" v-if="type == 'perguest'">
+      ${{ (component.allocatedBudget / participants) | withComma }}
+    </div>
+    <div class="text-right font-size-20 flex-1" v-else>${{ component.allocatedBudget | withComma }}</div>
+    <div class="actions"></div>
+  </div>
 </template>
 <script>
 import Swal from "sweetalert2";
 import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
-import BudgetResizeModal from "@/components/Modals/BudgetResizeModal";
-import EventComponent from "@/models/EventComponent";
-import CalendarEvent from "@/models/CalendarEvent";
 export default {
   components: {
-      BudgetResizeModal,
-      MaryokuInput
+    MaryokuInput,
   },
   data() {
     return {
       isEditing: false,
       newBudget: "",
       prevBudget: 0,
-      showBudgetResizeModal: false,
     };
   },
   props: {
@@ -98,7 +83,7 @@ export default {
   },
   created() {
     // console.log(this.component);
-    this.newBudget = this.component.allocatedBudget;
+    this.newBudget = `${this.component.allocatedBudget}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     this.prevBudget = this.component.allocatedBudget;
   },
   methods: {
@@ -123,21 +108,13 @@ export default {
       });
     },
     updateComponent() {
-      console.log('update.component', this.newBudget)
-      this.showBudgetResizeModal = true;
+      this.component.allocatedBudget = this.newBudget;
+      this.isEditing = false;
+      this.$emit("updateCategory", {
+        category: this.component,
+        offset: Number(this.component.allocatedBudget) - Number(this.prevBudget),
+      });
     },
-    resizeBudget(selectedOption){
-        this.showBudgetResizeModal = false;
-        let selected_block = new EventComponent({ id: this.component.id, allocatedBudget: this.newBudget });
-        selected_block
-            .for(new CalendarEvent({ id: this.component.calendarEvent.id }))
-            .save()
-            .then((res) => {
-                this.isEditing = false;
-                this.$emit("updateCategory", selectedOption);
-        });
-    }
-
   },
   computed: {
     fontColor() {

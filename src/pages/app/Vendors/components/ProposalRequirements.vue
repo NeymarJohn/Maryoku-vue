@@ -9,8 +9,11 @@
           </h3>
         </div>
         <div class="action">
-          <md-icon style="color: #a0a0a0; font-size: 30px !important" v-if="isExpanded">keyboard_arrow_right</md-icon>
-          <md-icon style="color: #a0a0a0; font-size: 30px !important" v-else>keyboard_arrow_down</md-icon>
+          <img
+            :src="`${$iconURL}NewSubmitPorposal/Component 36 (2).svg`"
+            class="arrow-img"
+            :class="{ isExpanded: isExpanded }"
+          />
         </div>
       </div>
       <div>
@@ -170,6 +173,12 @@ export default {
       transform: translateY(-50%);
       .icon {
         font-size: 35px !important;
+      }
+    }
+    .arrow-img {
+      width: 12px;
+      &.isExpanded {
+        transform: rotate(90deg);
       }
     }
   }

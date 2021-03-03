@@ -111,10 +111,10 @@
               @mouseover="considerUpdate = true"
               @mouseleave="considerUpdate = false"
             />
-            Consider update
+            Maryoku Standard Policy
           </p>
           <div class="consider-update" v-if="considerUpdate">
-            <h3>Consider Update!</h3>
+            <h3>Maryoku Standard Policy!</h3>
             <p>
               If the addiiontal services you've added require additional policy changes-this is the tame to add those!
             </p>
