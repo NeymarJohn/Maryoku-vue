@@ -26,7 +26,7 @@
             </md-button>
             <!-- <template v-if="$auth.user.a
                 uthenticated === false">
-                    
+
                 </template>
 
                 <template v-else-if="$auth.user.authenticated === true">
@@ -162,7 +162,7 @@ export default {
               .then(
                 () => {
                   this.setSingupModal({ showModal: false });
-                  this.redirectPage();
+                  // this.redirectPage();
                 },
                 (error) => {
                   this.loading = false;

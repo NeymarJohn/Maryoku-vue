@@ -14,11 +14,11 @@
       <div
         class="bundle-discount mt-20"
         @click="isBundleDiscount = !isBundleDiscount"
-        v-if="additionalServices.length > 0 && step === 2"
+        v-if="additionalServices.length > 0"
       >
         <img :src="`${iconUrl}Asset 579.svg`" />
         <span>
-          Add Bundle Discount {{ step }}
+          Add Bundle Discount
           <md-icon v-if="!isBundleDiscount">keyboard_arrow_right</md-icon>
           <md-icon v-else>keyboard_arrow_down</md-icon>
         </span>

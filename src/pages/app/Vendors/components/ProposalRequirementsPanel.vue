@@ -33,7 +33,7 @@
             <div class="requirement-grid">
               <div
                 class="d-flex requirement-item"
-                v-for="requirementItem in requirementsData[requirementCategory].filter((item) => item.isSelected)"
+                v-for="requirementItem in requirementsData[requirementCategory]"
                 :key="requirementItem.item"
               >
                 <div class="checkmark"></div>
