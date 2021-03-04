@@ -1,6 +1,6 @@
 <template>
   <div>
-    <event-state-message v-if="showMessage" :type="type"  @closeMessage="showMessage = false"></event-state-message>
+    <event-state-message v-if="showMessage" :state="budgetState"  @closeMessage="showMessage = false"></event-state-message>
     <div class="edit-event-details event-details-budget">
       <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
       <!-- Event Header -->
@@ -325,7 +325,7 @@ export default {
       showBudgetModal: false,
       budgetConfirmationModal: false,
       newBudget: null,
-      type: null,
+      budgetState: null,
       editBudgetElementsModal: false,
       showHandleMinus: false,
       showCommentEditorPanel: false,
@@ -390,10 +390,10 @@ export default {
             .get()
             .then((components) => {
               components.sort((a, b) => a.order - b.order);
-              console.log(components);
+              // console.log(components);
               this.event.components = components;
               this.selectedComponents = components;
-              console.log(this.selectedComponents);
+              // console.log(this.selectedComponents);
               this.seriesData = components;
             });
 
@@ -407,31 +407,31 @@ export default {
         });
     },
     checkMessageStatus(){
-        this.type = null;
+        this.budgetState = {key: null, percent: null};
         if (this.event.budgetProgress < 100) {
-            this.type = 'not_approved';
+            this.budgetState.key = 'not_approved';
         }
         let now = moment();
         let created_at = moment(this.event.dateCreated);
-        console.log('event.detail.budget', this.event, now.diff(created_at, 'days'));
-        if (!this.type && now.diff(created_at, 'days') < 15) {
-            this.type = 'approved_budget_in_two_weeks';
+
+        if (!this.budgetState.key && now.diff(created_at, 'days') < 15) {
+            this.budgetState.key = 'approved_budget_in_two_weeks';
         }
 
-        console.log('checkMessage', this.event.approvedBudget, this.event.totalBudget)
-        if (!this.type && this.event.approvedBudget !== 0) {
+        if (!this.budgetState.key && this.event.approvedBudget !== 0) {
             if (this.event.approvedBudget < this.event.totalBudget) {
-                this.type = 'higher_than_average';
+                this.budgetState.key = 'higher_than_average';
+                this.budgetState.percent = ((this.event.totalBudget - this.event.approvedBudget) / this.event.totalBudget).toFixed(2) * 100;
             } else if (this.event.approvedBudget > this.event.totalBudget){
-                this.type = 'lower_than_average';
+                this.budgetState.key = 'lower_than_average';
             }
         }
 
-        if (!this.type && this.event.unexpected < this.event.totalBudget * 0.1) {
-            this.type = 'unexpected_budget_less_10';
+        if (!this.budgetState.key && this.event.unexpected < this.event.totalBudget * 0.1) {
+            this.budgetState.key = 'unexpected_budget_less_10';
         }
-        console.log('budget.detail.event', this.type);
-        this.showMessage = !!this.type;
+
+        this.showMessage = !!this.budgetState.key;
     },
     selectServices() {
       this.$refs.eventPlannerTabs.$emit("event-planner-nav-switch-panel", 1);

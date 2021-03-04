@@ -614,7 +614,7 @@ const routes = [
     appPages,
     publicPages,
     PublicCreateEvent,
-    HomePages,
+    // HomePages,
     forProposals,
     ProfilePages,
     EventPages,

@@ -278,13 +278,16 @@ export default {
         id: this.blockId,
       });
       if (this.selectedBlock && this.selectedBlock.vendorRequirements && this.selectedBlock.vendorRequirements[0]) {
-        this.showCounterPage = true;
-        this.showProposals = true;
+        // this.currentRequirement = this.selectedBlock.vendorRequirements[0];
+        // this.showCounterPage = true;
+        // this.showProposals = true;
+          this.showCounterPage = false;
+          this.showProposals = false;
       } else {
         this.showCounterPage = false;
         this.showProposals = false;
-        this.isLoading = false;
       }
+      this.isLoading = false;
     },
     getRequirements() {
       getReq(`/1/events/${this.event.id}/components/${this.blockId}/requirements`)

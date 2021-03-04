@@ -18,7 +18,7 @@
         @save="updateItem"
         @remove="removeItem"
       />
-      <div class="tax-discount-wrapper" v-if="tableCategory === 'cost'">
+      <!-- <div class="tax-discount-wrapper" v-if="tableCategory === 'cost'">
         <div class="row grid-tax-row">
           <div class="item-cont">
             <div class="plabel">
@@ -106,11 +106,14 @@
             <a class="save" v-if="isEditTax" @click="saveTax">Save</a>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="editable-sub-items-footer" v-if="tableCategory === 'cost'">
-        <span>Total</span>
-        <span class="font-regular text-center">Approx</span>
-        <span class="text-center">${{ calculatedTotal | withComma }} </span>
+        <span class="text-right">Total</span>
+        <span> </span>
+        <span class="text-right">
+          <span class="font-regular text-center font-size-16 mr-20">Approx</span>
+          ${{ totalPrice | withComma }}
+        </span>
       </div>
     </div>
   </div>
@@ -655,10 +658,10 @@ export default {
       }
     }
     .editable-sub-items-footer {
-      box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-      background-color: #d5d5d5;
-      padding: 21px 40px;
-      border: 2px solid #d5d5d5;
+      // box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+      // background-color: #d5d5d5;
+      padding: 30px 40px;
+      border-top: 1px solid #d5d5d5;
       border-bottom: none;
       display: grid;
       grid-template-columns: 55% 15% 15%;
