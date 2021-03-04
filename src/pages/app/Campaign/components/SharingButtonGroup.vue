@@ -4,19 +4,8 @@
       <li @click="shareSocial('linkedin')" data-social="linkedin">
         <img :src="`${$iconURL}Campaign/Image+170.png`" />
       </li>
-      <li>
-        <!--  -->
-        <a
-          :href="`http://www.pinterest.com/pin/create/button/?url=${encodeURI(sharingData.pageUrl)}&media=${encodeURI(
-            sharingData.mediaUrl,
-          )}&description=test`"
-          target="_blank"
-          class="pinterest-anchor pinterest-hidden"
-        >
-          <img :src="`${$iconURL}Campaign/Image+169.png`" />
-          <!-- <div class="pinterest-logo"></div> -->
-        </a>
-        <!-- <img src="<picture url>" data-pin="pinIt" alt="tess" /> -->
+      <li @click="shareSocial('pinterest')" data-social="pinterest">
+        <img :src="`${$iconURL}Campaign/Image+169.png`" />
       </li>
       <li @click="shareSocial('gmail')" data-social="gamil"><img :src="`${$iconURL}Campaign/Image+75.png`" /></li>
       <li @click="shareSocial('whatsapp')" data-social="whatsapp"><img :src="`${$iconURL}Campaign/Image+74.png`" /></li>
@@ -37,10 +26,6 @@ export default {
       type: Boolean,
       default: true,
     },
-    sharingData: {
-      type: Object,
-      default: () => {},
-    },
   },
   data() {
     return {
@@ -56,22 +41,8 @@ export default {
   },
   methods: {
     shareSocial(socialType) {
-      if (socialType === "linkedin") {
-        var title = "Maryoku RSVP";
-        var text = "Replace this with your share copy.";
-        window.open(
-          `http://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(
-            sharingData.pageUrl,
-          )}&title=${title}`,
-          "",
-          "left=0,top=0,width=650,height=420,personalbar=0,toolbar=0,scrollbars=0,resizable=0",
-        );
-      } else if (socialType === "whatsapp") {
-        window.open(`whatsapp://send?text=${this.sharingData.pageUrl}`);
-      } else {
-        var win = window.open(this.socialLinks[socialType], "_blank");
-        win.focus();
-      }
+      var win = window.open(this.socialLinks[socialType], "_blank");
+      win.focus();
     },
   },
 };

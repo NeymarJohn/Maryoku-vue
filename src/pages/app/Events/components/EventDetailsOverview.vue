@@ -37,7 +37,7 @@
         ></event-overview-section>
       </div>
     </div>
-    <div class="event-footer-container" id="footer-panel">
+    <div class="footer-container" id="footer-panel">
       <div class="ml-20">
         <md-button class="md-bold add-category-btn md-black md-simple"> <md-icon>arrow_back</md-icon>Back </md-button>
         <md-button class="md-simple md-just-icon md-black">

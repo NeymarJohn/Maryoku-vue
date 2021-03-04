@@ -17,14 +17,6 @@ const state = {
   proposalExtraServices: {},
   discounts: {},
   taxes: {},
-  totalTax: {
-    percentage: 0,
-    price: 0
-  },
-  totalDiscount: {
-    percentage: 0,
-    price: 0
-  },
   legalDocs: {},
   wizardStep: 0,
   initStep: 0,

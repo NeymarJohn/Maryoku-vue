@@ -474,7 +474,7 @@ export default {
       align-items: center;
       cursor: pointer;
       &.opened {
-        border-bottom: solid 1px #d7d7d7;
+        border-bottom: solid 1px #050505;
       }
       .left-side {
         width: 100%;
@@ -543,13 +543,13 @@ export default {
     }
   }
   .additional-service:not(:last-child) {
-    border-bottom: solid 1px #d7d7d7;
+    border-bottom: solid 2px #828282;
   }
   .additional-photos-wrapper {
     margin-left: -34px;
     margin-right: -34px;
     padding: 60px 0 10px 0;
-    border-top: 1px solid #d7d7d7;
+    border-top: 1px solid #707070;
 
     .title-cont {
       display: flex;

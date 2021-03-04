@@ -2,7 +2,7 @@
   <div class="profile-container">
     <tabs :tab-name="['Account Details', 'Notifications', 'Permissions']" color-button="info">
       <template slot="tab-pane-1">
-        <profile-details></profile-details>
+        <vendor-profile-detail></vendor-profile-detail>
       </template>
       <template slot="tab-pane-2"> <div class="p-40"></div> </template>
       <template slot="tab-pane-3"> <div class="p-40"></div> </template>
@@ -13,7 +13,7 @@
 <script>
 import VueElementLoading from "vue-element-loading";
 import { LabelEdit, Tabs } from "@/components";
-// import ProfileDetails from "./ProfileDetails";
+import VendorProfileDetail from "./Profile/VendorProfileDetail";
 // import Permissions from "./Permissions";
 // import auth from '@/auth';
 import { mapGetters } from "vuex";
@@ -23,6 +23,7 @@ export default {
     VueElementLoading,
     LabelEdit,
     Tabs,
+    VendorProfileDetail,
     // ProfileDetails,
     // Permissions,
   },
@@ -37,10 +38,6 @@ export default {
   computed: {},
   mounted() {
     this.isLoading = true;
-    new Me().get().then((me) => {
-      this.userInfo = me[0];
-      this.isLoading = false;
-    });
   },
   methods: {
     closePanel() {

@@ -164,7 +164,6 @@
 import PieChartRound from "./PieChartRound.vue";
 import { Tabs, Modal } from "@/components";
 import EventComponent from "@/models/EventComponent";
-import Event from "@/models/Event";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import EventBudgetComponent from "./EventBudgetComponent";
@@ -241,10 +240,9 @@ export default {
       this.$store.dispatch("event/saveEventAction", event).then((res) => {});
     },
     deleteCategory(category) {
-      const event = new Event({id: this.event.id})
       const deletingCategory = new EventComponent({ id: category.id });
       deletingCategory
-        .for(event)
+        .for(this.event)
         .delete()
         .then((resp) => {
           this.isLoading = false;
@@ -260,18 +258,26 @@ export default {
           console.log(error);
         });
     },
-    updateCategory(changedMoney) {
-        const event = new CalendarEvent({
+    updateCategory({ category, offset }) {
+      const eventComponent = new EventComponent(category);
+      eventComponent
+        .for(this.event)
+        .save()
+        .then((res) => {
+          this.selectedComponents = res.eventComponents.sort((a, b) => a.eventCategory.order - b.eventCategory.order);
+          const totalAllocatedBudget = this.selectedComponents.reduce((s, item) => {
+            return s + item.allocatedBudget;
+          }, 0);
+          const event = new CalendarEvent({
             id: this.event.id,
-            allocatedBudget: this.event.allocatedBudget + changedMoney.offset,
-        });
-        if (changedMoney.selectedOption === "total") {
-            event.totalBudget = this.event.totalBudget + changedMoney.offset;
-        } else if (changedMoney.selectedOption === "unexpected") {
-            event.unexpectedBudget = this.event.unexpectedBudget - changedMoney.offset;
-        }
-        this.$store.dispatch("event/saveEventAction", event).then((res) => {
-            this.$emit("change");
+            unexpectedBudget:
+              this.event.totalBudget - totalAllocatedBudget - this.event.allocatedTips - this.event.allocatedFees,
+            calendar: new Calendar({ id: this.event.calendar.id }),
+          });
+          this.$store.dispatch("event/saveEventAction", event).then((res) => {
+            this.showBudgetModal = false;
+          });
+          this.$forceUpdate();
         });
     },
   },

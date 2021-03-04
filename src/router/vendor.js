@@ -21,7 +21,7 @@ export default [{
     },
     {
       path: "edit/:id",
-      name: "Vendor Edit",
+      name: "VendorSignup",
       component: VendorSignup,
       meta: {
         auth: false,
@@ -35,12 +35,12 @@ export default [{
   name: "Vendor Signin",
   component: VendorSignin,
 }, {
-  path: "/",
+  path: "/vendor",
   component: VendorMainLayout,
   name: "Vendor Profile",
   children: [
     {
-      path: "/profile/:pageName",
+      path: "profile/:pageName",
       name: "overview",
       component: VendorProfileOverview,
       meta: {

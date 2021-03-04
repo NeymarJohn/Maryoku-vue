@@ -28,15 +28,12 @@
               </div>
             </div>
           </template>
-          <div
-            v-else-if="requirementsData[requirementCategory].filter((item) => item.isSelected).length > 0"
-            class="category-section"
-          >
+          <div v-else class="category-section">
             <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
             <div class="requirement-grid">
               <div
                 class="d-flex requirement-item"
-                v-for="requirementItem in requirementsData[requirementCategory].filter((item) => item.isSelected)"
+                v-for="requirementItem in requirementsData[requirementCategory]"
                 :key="requirementItem.item"
               >
                 <div class="checkmark"></div>
@@ -44,7 +41,6 @@
               </div>
             </div>
           </div>
-          <!-- <div v-else></div> -->
         </div>
         <div class="addtional-requests">
           <div class="font-bold">Addtional Requests</div>

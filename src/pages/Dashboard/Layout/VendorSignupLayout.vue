@@ -29,7 +29,7 @@
             <img :src="`${iconsUrl}Asset 610.svg`" class="label-icon mr-10" />
             Save for later
           </md-button>
-          <md-button class="approve md-vendor-signup md-red" @click="next()">{{ nextLabel }}</md-button>
+          <md-button class="approve md-vendor-signup md-red" @click="next">{{ nextLabel }}</md-button>
         </div>
       </section>
       <section class="footer-wrapper" v-else>
@@ -73,7 +73,7 @@ import moment from "moment";
 import Vendors from "@/models/Vendors";
 import Swal from "sweetalert2";
 import { mapMutations, mapGetters } from "vuex";
-
+import TenantUser from "@/models/TenantUser";
 export default {
   components: {
     VSignupSteps,
@@ -203,6 +203,55 @@ export default {
       } else {
         title = "Success to save for later!";
       }
+      const tenantUser = {
+        company: this.vendor.companyName,
+        email: this.vendor.vendorMainEmail,
+        name: this.vendor.vendorDisplayName,
+        password: this.vendor.password,
+        role: "vendor",
+        tenant: "DEFAULT",
+      };
+
+      this.$store.dispatch("auth/register", tenantUser).then(
+        (res) => {
+          if (res.status !== "exists") {
+            new Vendors({ ...this.vendor, tenantUser: { id: res.id }, isEditing: false })
+              .save()
+              .then((res) => {
+                console.log("*** Save vendor - done: ");
+                console.log(JSON.stringify(res));
+                // this.setStep(this.step + 1);
+                this.isCompletedWizard = true;
+                Swal.fire({
+                  title,
+                  buttonsStyling: false,
+                  confirmButtonClass: "md-button md-success",
+                }).then(() => {
+                  const proposalRequest = this.$route.query.proposalRequest;
+                  if (this.step === 7) {
+                    this.setVendor({});
+                    this.setEditing(false);
+                    this.setStep(0);
+
+                    this.isCompletedWizard = false;
+                    if (proposalRequest) this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
+                    else this.$router.push("/vendor/signin");
+                  }
+                });
+              })
+              .catch((error) => {
+                console.log("*** Save vendor - failed: ");
+                console.log(JSON.stringify(error));
+              });
+          } else {
+            this.error = res.field;
+          }
+        },
+        (error) => {
+          this.loading = false;
+          this.error = "failed";
+        },
+      );
       new Vendors({ ...this.vendor, isEditing: false })
         .save()
         .then((res) => {

@@ -26,7 +26,7 @@
         >
           <div class="social-line text-center">
             <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
-              <img :src="`${$iconURL}Signup/google-icon.jpg`" />
+              <img :src="`${$iconURL}Signup/google-icon.jpg`" class="mr-20" />
               <span>Sign in with Google</span>
             </md-button>
           </div>
@@ -54,7 +54,12 @@
             <div>{{ error }}</div>
           </div>
           <div class="form-buttons">
-            <md-button @click="signIn" class="md-default md-red md-maryoku mt-30">Login</md-button>
+            <md-button
+              @click="signIn"
+              class="md-default md-red md-maryoku mt-30"
+              :disabled="!user.password || !user.email"
+              >Login</md-button
+            >
             <div class="text-center mt-30 mb-30">Or</div>
             <md-button @click="toSingUp" class="md-black md-maryoku md-red"> Sign Up </md-button>
           </div>
@@ -130,7 +135,7 @@ export default {
       this.$router.push({ path: "/forgot-password" });
     },
     redirectPage() {
-      this.$router.push({ path: "/vendor/profile" });
+      this.$router.push({ path: "/vendor/profile/overview" });
     },
   },
   data() {
@@ -147,7 +152,7 @@ export default {
         },
         password: {
           required: true,
-          min: 8,
+          min: 6,
         },
       },
       forgotPasswordValidations: {

@@ -14,7 +14,7 @@
       <div
         class="bundle-discount mt-20"
         @click="isBundleDiscount = !isBundleDiscount"
-        v-if="additionalServices.length > 0 && step === 2"
+        v-if="additionalServices.length > 0"
       >
         <img :src="`${iconUrl}Asset 579.svg`" />
         <span>
@@ -26,65 +26,57 @@
       </div>
     </div>
     <div class="items-cont">
-      <div class="item">
-        <div class="service-item" :class="{ 'with-check': isBundleDiscount }">
-          <md-checkbox
-            v-if="isBundleDiscount"
-            class="no-margin"
-            :value="vendor.eventCategory.key"
-            v-model="bundleDiscountServices"
-          />
-          <ul class="flex-1">
-            <li>
-              <img :src="`${iconUrl}Asset 614.svg`" />
-              {{ vendor.eventCategory.title }}
-            </li>
-            <li>
-              <a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
-            </li>
-            <li>
-              <span>Your proposal</span>
-              <span>${{ ((mainTotalPrice * (100 - bundleDiscountPercentage)) / 100) | withComma }}</span>
-            </li>
-            <li :style="`margin: ${discountBlock[vendor.eventCategory.key] ? '' : '0'}`">
-              <template v-if="discountBlock[vendor.eventCategory.key]">
-                <div class="left">
-                  <span>Before discount</span>
-                </div>
-                <div class="right">
-                  <span>{{ `(${bundleDiscountPercentage}% off)` }}</span>
-                  <span>${{ pricesByCategory[vendor.vendorCategory] | withComma }}</span>
-                </div>
-              </template>
-            </li>
-            <li
-              v-if="
-                calculatedTotal(getRequirementsByCategory('venuerental')) -
-                  newProposalRequest.eventData.allocatedBudget >
-                0
-              "
-            >
-              <md-icon>error</md-icon>
-              <span
-                >Your proposal is ${{
-                  (calculatedTotal(getRequirementsByCategory("venuerental")) -
-                    newProposalRequest.eventData.allocatedBudget)
-                    | withComma
-                }}
-                more than the budget
-              </span>
-            </li>
-          </ul>
-        </div>
+      <div class="item" :class="{ 'with-check': isBundleDiscount }">
+        <md-checkbox
+          v-if="isBundleDiscount"
+          class="no-margin"
+          :value="vendor.eventCategory.key"
+          v-model="bundleDiscountServices"
+        />
+        <ul>
+          <li>
+            <img :src="`${iconUrl}Asset 614.svg`" />
+            {{ vendor.eventCategory.title }}
+          </li>
+          <li>
+            <a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
+          </li>
+          <li>
+            <span>Your proposal</span>
+            <span>${{ ((mainTotalPrice * (100 - bundleDiscountPercentage)) / 100) | withComma }}</span>
+          </li>
+          <li :style="`margin: ${discountBlock[vendor.eventCategory.key] ? '' : '0'}`">
+            <template v-if="discountBlock[vendor.eventCategory.key]">
+              <div class="left">
+                <span>Before discount</span>
+              </div>
+              <div class="right">
+                <span>{{ `(${bundleDiscountPercentage}% off)` }}</span>
+                <span>${{ pricesByCategory[vendor.vendorCategory] | withComma }}</span>
+              </div>
+            </template>
+          </li>
+          <li
+            v-if="
+              calculatedTotal(getRequirementsByCategory('venuerental')) - newProposalRequest.eventData.allocatedBudget >
+              0
+            "
+          >
+            <md-icon>error</md-icon>
+            <span
+              >Your proposal is ${{
+                (calculatedTotal(getRequirementsByCategory("venuerental")) -
+                  newProposalRequest.eventData.allocatedBudget)
+                  | withComma
+              }}
+              more than the budget
+            </span>
+          </li>
+        </ul>
       </div>
       <div class="item additional" v-if="step > 1 && additionalServices.length > 0">
-        <div
-          class="service-item"
-          :class="{ 'with-check': isBundleDiscount }"
-          v-for="(a, aIndex) in additionalServices"
-          :key="aIndex"
-        >
-          <h3 class="width-100" v-if="aIndex === 0">Additional Services</h3>
+        <h3>Additional Services</h3>
+        <div :class="{ 'with-check': isBundleDiscount }" v-for="(a, aIndex) in additionalServices" :key="aIndex">
           <md-checkbox v-if="isBundleDiscount" class="no-margin" v-model="bundleDiscountServices" :value="a" />
           <ul>
             <li>
@@ -113,51 +105,6 @@
               >
             </li>
           </ul>
-        </div>
-      </div>
-      <div class="item tax font-bold">
-        <div class="service-item">
-          <div class="flex-1">
-            <img :src="`${iconUrl}Asset 612.svg`" style="width: 20px" class="mr-10" />
-            <span>Discount</span>
-          </div>
-          <div class="text-right">{{ discount.percentage }}%</div>
-          <div class="text-right">{{ discount.price }}%</div>
-          <div class="text-right">
-            <md-button class="md-simple edit-btn">
-              <img :src="`${$iconURL}common/edit-dark.svg`" style="width: 20px; height: 20px"
-            /></md-button>
-          </div>
-        </div>
-        <div class="service-item">
-          <div class="flex-1">
-            <img :src="`${iconUrl}Asset 613.svg`" style="width: 20px" class="mr-10" />
-            <span>Taxes</span>
-          </div>
-          <div class="text-right">
-            <money
-              v-if="isTaxEditing"
-              v-model="tax"
-              v-bind="{
-                decimal: '.',
-                thousands: ',',
-                prefix: '$ ',
-                suffix: '',
-                precision: 2,
-                masked: false,
-              }"
-              class="bundle-discount-input"
-              @keyup.native="setPercentage"
-              @click.native="discoutOption = 'amount'"
-            />
-            <span v-else>{{ tax }}%</span>
-          </div>
-          <div class="text-right">{{}}</div>
-          <div class="text-right">
-            <md-button class="md-simple edit-btn">
-              <img :src="`${$iconURL}common/edit-dark.svg`" style="width: 20px; height: 20px"
-            /></md-button>
-          </div>
         </div>
       </div>
       <div class="item bundle" v-if="isBundleDiscount">
@@ -280,11 +227,6 @@ export default {
       bundleDiscountPercentage: 0,
       bundleDiscountAmount: 0,
       discoutOption: "",
-      tax: 0,
-      discount: {
-        percentage: 0,
-        price: 10,
-      },
     };
   },
   methods: {
@@ -404,17 +346,6 @@ export default {
     });
 
     this.$forceUpdate();
-    this.tax = this.$store.state.vendorProposal.taxes[this.vendor.eventCategory.key];
-    if (!this.tax) this.tax = 0;
-    this.discount = this.$store.state.vendorProposal.discounts[this.vendor.eventCategory.key];
-    if (!this.discount) {
-      this.discount = {
-        percentage: 0,
-        price: 0,
-      };
-    } else if (!this.discount.price) {
-      this.discount.price = ((this.totalPrice * this.discount.percentage) / 100).toFixed(0);
-    }
   },
   computed: {
     proposalRequest() {
@@ -469,14 +400,6 @@ export default {
       });
       return result;
     },
-    // tax: {
-    //   get: function () {
-    //     return this.$store.state.vendorProposal.taxes[this.vendor.eventCategory.key];
-    //   },
-    //   set: function (newTax) {
-    //     return this.$store.commit("vendorProposal/setTax", { category: this.category, tax: this.tax });
-    //   },
-    // },
   },
   watch: {},
 };
@@ -546,6 +469,8 @@ export default {
   }
   .items-cont {
     .item {
+      padding: 33px 0;
+      border-top: 0.5px solid #707070;
       h3 {
         margin-top: 0;
         margin-bottom: 23px;
@@ -553,104 +478,91 @@ export default {
         font-size: 20px;
         font-weight: 800;
       }
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        border-bottom: 1px solid #707070;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
 
-      &.tax {
-        color: #818080;
-        .service-item {
-          display: grid;
-          grid-template-columns: 30% 30% 30% 10%;
-        }
-      }
-      .service-item {
-        border-top: solid 1px #d3d3d3;
-        padding: 30px 0;
-        ul {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-          margin-bottom: 1rem;
-          padding-bottom: 1rem;
-          flex-grow: 1;
+        li {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 14px;
 
-          li {
+          &:first-child {
+            display: block;
+            font: 800 16px "Manrope-Regular", sans-serif;
+            img {
+              width: 28px;
+              height: 28px;
+              margin-right: 0.5rem;
+            }
+          }
+          &:nth-child(2) {
+            font-size: 14px;
+            font-weight: 800;
+            text-decoration: underline;
+          }
+          &:nth-child(3) {
+            font-size: 14px;
+            color: #050505;
+            span {
+              &:last-child {
+                font-size: 20px;
+                font-weight: 800;
+              }
+            }
+          }
+          &:nth-child(4) {
+            color: #818080;
+            margin-bottom: 15px;
+            font-size: 14px;
             display: flex;
             justify-content: space-between;
-            margin-bottom: 14px;
 
-            &:first-child {
-              display: block;
-              font: 800 16px "Manrope-Regular", sans-serif;
-              img {
-                width: 28px;
-                height: 28px;
-                margin-right: 0.5rem;
-              }
-            }
-            &:nth-child(2) {
-              font-size: 14px;
-              font-weight: 800;
-              text-decoration: underline;
-            }
-            &:nth-child(3) {
-              font-size: 14px;
-              color: #050505;
-              span {
-                &:last-child {
-                  font-size: 20px;
-                  font-weight: 800;
-                }
-              }
-            }
-            &:nth-child(4) {
-              color: #818080;
-              margin-bottom: 15px;
-              font-size: 14px;
-              display: flex;
-              justify-content: space-between;
-
-              .left {
-                flex: 1;
-                text-align: left;
-              }
-              .right {
-                flex: 1;
-                text-align: right;
-                span {
-                  color: #707070;
-                  &:last-child {
-                    text-decoration: line-through;
-                  }
-                }
-              }
-            }
-            &:last-child {
-              justify-content: flex-start;
+            .left {
+              flex: 1;
               text-align: left;
-              margin-bottom: 0;
-
-              i {
-                color: #ffe5ec;
-                margin: 0;
-                margin-right: 8px;
-              }
+            }
+            .right {
+              flex: 1;
+              text-align: right;
               span {
-                font-size: 14px;
+                color: #707070;
+                &:last-child {
+                  text-decoration: line-through;
+                }
               }
             }
           }
-
           &:last-child {
-            margin: 0;
-            padding: 0;
+            justify-content: flex-start;
+            text-align: left;
+            margin-bottom: 0;
+
+            i {
+              color: #ffe5ec;
+              margin: 0;
+              margin-right: 8px;
+            }
+            span {
+              font-size: 14px;
+            }
           }
         }
-      }
-      // &.additional {
-      //   // margin: 0 -25px;
-      //   border-top: solid 1px #d3d3d3;
-      //   padding: 30px 0;
-      // }
 
+        &:last-child {
+          margin: 0;
+          padding: 0;
+          border: none;
+        }
+      }
+      &.additional {
+        margin: 0 -25px;
+        padding: 33px 25px;
+      }
       &.bundle {
         margin: 0 -25px;
         padding: 33px 25px;
@@ -692,11 +604,11 @@ export default {
       }
     }
     .with-check {
-      display: flex;
+      display: grid;
+      grid-template-columns: 10% 90%;
       margin-bottom: 20px;
-      flex-wrap: wrap;
       .no-margin {
-        margin: 0 10px 0 0 !important;
+        margin: 0 !important;
       }
     }
   }
