@@ -20,8 +20,8 @@ export default [{
       },
     },
     {
-      path: "/edit/:id",
-      name: "VendorSignup",
+      path: "edit/:id",
+      name: "Vendor Edit",
       component: VendorSignup,
       meta: {
         auth: false,

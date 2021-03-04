@@ -4,8 +4,19 @@
       <li @click="shareSocial('linkedin')" data-social="linkedin">
         <img :src="`${$iconURL}Campaign/Image+170.png`" />
       </li>
-      <li @click="shareSocial('pinterest')" data-social="pinterest">
-        <img :src="`${$iconURL}Campaign/Image+169.png`" />
+      <li>
+        <!--  -->
+        <a
+          :href="`http://www.pinterest.com/pin/create/button/?url=${encodeURI(sharingData.pageUrl)}&media=${encodeURI(
+            sharingData.mediaUrl,
+          )}&description=test`"
+          target="_blank"
+          class="pinterest-anchor pinterest-hidden"
+        >
+          <img :src="`${$iconURL}Campaign/Image+169.png`" />
+          <!-- <div class="pinterest-logo"></div> -->
+        </a>
+        <!-- <img src="<picture url>" data-pin="pinIt" alt="tess" /> -->
       </li>
       <li @click="shareSocial('gmail')" data-social="gamil"><img :src="`${$iconURL}Campaign/Image+75.png`" /></li>
       <li @click="shareSocial('whatsapp')" data-social="whatsapp"><img :src="`${$iconURL}Campaign/Image+74.png`" /></li>
@@ -25,6 +36,10 @@ export default {
     copyLink: {
       type: Boolean,
       default: true,
+    },
+    sharingData: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {

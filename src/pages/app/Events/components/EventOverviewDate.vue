@@ -32,7 +32,8 @@
             @changedMonth="changeMonth($event)"
             @changedYear="changeYear($event)"
             v-model="dateData"
-          ></functional-calendar>
+          >
+          </functional-calendar>
           <md-checkbox v-model="section.more_one_day" value="more_one_day"> More than one day event </md-checkbox>
         </div>
       </div>
@@ -78,21 +79,21 @@ export default {
       iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
       additional: true,
       markedDates: {
-        start: "9/2/2021",
-        end: "19/2/2021",
+        start: null,
+        end: null,
       },
       dateData: {
         currentDate: null,
         dateRange: {
           start: {
-            date: "",
+            date:  moment(this.section.started_at).format("D/M/YYYY"),
             // date: null,
             dateTime: false,
             hour: "00",
             mintue: "00",
           },
           end: {
-            date: "",
+            date:  moment(this.section.ended_at).format("D/M/YYYY"),
             // date: null,
             dateTime: false,
             hour: "00",
@@ -118,7 +119,7 @@ export default {
     changeMonth(e) {
       this.month = moment(e).month();
       this.year = moment(e).year();
-      this.resetCalendar();
+      this.markedDates = {start: null, end: null}
     },
     changeYear(e) {
       this.month = moment(e).month();
@@ -131,8 +132,6 @@ export default {
       if (this.dateClick) {
         this.started_at = moment(e.date, "D/M/YYYY").format("YYYY-MM-DD");
         this.day = e.day;
-        this.resetCalendar();
-        this.$forceUpdate();
         return;
       }
 
@@ -169,21 +168,7 @@ export default {
         });
       }
     },
-    resetCalendar() {
-      $(".vfc-day").each(function (index, day) {
-        $(day).find("div.vfc-base-start").remove();
-        $(day).find("div.vfc-base-end").remove();
-        $(day).find("span.vfc-span-day").removeClass("vfc-marked vfc-start-marked vfc-end-marked");
-      });
-    },
     init: function () {
-      if (this.section.started_at && this.section.ended_at) {
-        this.markedDates = {
-          start: moment(this.section.started_at).format("D/M/YYYY"),
-          end: moment(this.section.ended_at).format("D/M/YYYY"),
-        };
-      }
-      console.log("init", this.markedDates);
     },
   },
   filters: {
@@ -195,11 +180,6 @@ export default {
     this.init();
   },
   updated() {
-    let year = moment(this.section.started_at).year();
-    let month = moment(this.section.started_at).month();
-    if (year !== this.year || month !== this.month) {
-      // this.resetCalendar();
-    }
   },
   watch: {
     section: {

@@ -16,8 +16,8 @@
         <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ index + 1 }}</md-table-cell>
         <md-table-cell md-label="Company Name" md-sort-by="companyName">{{ item.companyName }} </md-table-cell>
         <md-table-cell md-label="User Name" md-sort-by="vendorDisplayName">
-          <a :href="`${currentPath}/#/vendor-signup/edit/${item.id}`" target="_blank">{{
-            `${currentPath}/#/vendor-signup/edit/${item.id}`
+          <a :href="`${currentPath}/#/vendor/edit/${item.id}`" target="_blank">{{
+            `${currentPath}/#/vendor/edit/${item.id}`
           }}</a>
           &emsp;<md-button
             class="md-simple md-red edit-btn md-just-icon"
