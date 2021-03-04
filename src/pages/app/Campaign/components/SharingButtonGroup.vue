@@ -57,8 +57,7 @@ export default {
   methods: {
     shareSocial(socialType) {
       if (socialType === "linkedin") {
-        var url = "http://google.com";
-        var title = "Replace this with a title.";
+        var title = "Maryoku RSVP";
         var text = "Replace this with your share copy.";
         window.open(
           `http://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(
@@ -67,6 +66,8 @@ export default {
           "",
           "left=0,top=0,width=650,height=420,personalbar=0,toolbar=0,scrollbars=0,resizable=0",
         );
+      } else if (socialType === "whatsapp") {
+        window.open(`whatsapp://send?text=${this.sharingData.pageUrl}`);
       } else {
         var win = window.open(this.socialLinks[socialType], "_blank");
         win.focus();
