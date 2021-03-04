@@ -13,7 +13,7 @@
       <div class="message-action">
         <div class="message-action-content">{{data.action}}</div>
         <div class="message-action-button">
-          <md-button class="md-bold add-category-btn md-black md-simple" @click="closeMessage()">Cancel</md-button>
+          <md-button class="md-bold add-category-btn md-black md-simple">Cancel</md-button>
           <md-button class="md-red md-bold add-category-btn">Send</md-button>
         </div>
       </div>
@@ -24,7 +24,9 @@
       <div class="message-action">
         <div class="message-action-content">{{data.action}}</div>
         <div class="message-action-button">
-          <md-button class="md-bold add-category-btn md-black md-simple" @click="closeMessage()">Cancel</md-button>
+          <md-button
+            class="md-bold add-category-btn md-black md-simple"
+          >Cancel</md-button>
           <md-button class="md-red md-bold add-category-btn">Send</md-button>
         </div>
       </div>
@@ -94,9 +96,9 @@ import { BUDGET_MESSAGES } from "@/constants/messages";
 export default {
   name: "event-state-message",
   props: {
-    state: {
-      type: Object,
-      required: true,
+    type: {
+      type: String,
+      default: 'not_approved'
     },
   },
   data() {
@@ -106,12 +108,8 @@ export default {
   },
   methods: {
     init(){
-      // console.log('event.state.message', this.state);
-      this.data = BUDGET_MESSAGES.find(m => m.key === this.state.key)
-      if (this.state.key === 'higher_than_average') {
-        let {message} = this.data;
-        this.$set(this.data, 'message', message.replace('X%', `${this.state.percent}%`));
-      }
+      console.log('event.state.message', this.type);
+      this.data = BUDGET_MESSAGES.find(m => m.key === this.type)
     },
     closeMessage() {
       this.$emit("closeMessage");

@@ -109,7 +109,7 @@ export default {
         this.event.components.sort((a, b) => a.order - b.order);
         this.event.components.forEach((item) => {
           if (item.componentId !== "unexpected") {
-
+            // let icon = item.componentId === 'giveaways' ? 'swags' : item.componentId;
             elements.push({
               title: item.bookTitle,
               status: "not-complete",

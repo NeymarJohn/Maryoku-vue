@@ -14,7 +14,6 @@ export default {
     VueElementLoading,
   },
   created() {
-    console.log('event.wizard.create')
     const editingEvent = JSON.parse(localStorage.getItem("event"));
     const calendar = new Calendar({ id: this.$store.state.auth.user.profile.defaultCalendarId });
     let newEvent = new CalendarEvent({
@@ -36,19 +35,13 @@ export default {
       .save()
       .then((response) => {
         localStorage.removeItem("event");
-        if (this.$route.query.callback) {
-            const signedLink = atob(this.$route.query.callback);
-
-            const callback =
-                // this.$router.push({path:"events"})
-                (document.location.href = `${signedLink}&redirectURL=`);
-        } else {
-            this.$router.push({ path: `/events/${response.item.id}/booking/concept` });
-        }
+        const signedLink = atob(this.$route.query.callback);
+        const callback =
+          // this.$router.push({path:"events"})
+          (document.location.href = `${signedLink}&redirectURL=`);
       })
       .catch((error) => {
-          console.log('error', error);
-        // this.$router.push({ path: "events" });
+        this.$router.push({ path: "events" });
       });
   },
 };
