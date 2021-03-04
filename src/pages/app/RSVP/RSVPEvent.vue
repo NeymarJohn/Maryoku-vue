@@ -282,9 +282,6 @@
       v-if="showSharingModal"
       @cancel="showSharingModal = false"
       class="rsvp-modal"
-      :defaultSharingData="{
-        mediaUrl: headerImage,
-      }"
     ></social-sharing-modal>
     <modal v-if="showRejectConformModal" class="rsvp-modal reject-modal">
       <template slot="header">
