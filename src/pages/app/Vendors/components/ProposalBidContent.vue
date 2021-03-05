@@ -2,7 +2,7 @@
   <div class="propsal-bid-content">
     <proposal-requirements
       class="white-card card"
-      label="Cost Requirements"
+      label="Cost Items"
       key="cost"
       tableCategory="cost"
       icon="Group+10662.svg"

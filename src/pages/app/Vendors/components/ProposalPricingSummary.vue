@@ -25,7 +25,7 @@
     <template v-if="isChecked">
       <proposal-requirements
         class="additional-service"
-        label="Cost Requirements"
+        label="Cost Items"
         key="cost"
         tableCategory="cost"
         icon="Group+10662.svg"

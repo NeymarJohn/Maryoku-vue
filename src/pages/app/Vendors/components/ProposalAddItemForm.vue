@@ -40,15 +40,20 @@
           <money v-model="qty" v-bind="qtyFormat" :class="{ isFilled: !!qty }" />
         </div>
         <div class="field">
-          <div class="planer-choice-cont" v-if="serviceType === 'included'">
+          <!-- <div class="planer-choice-cont" v-if="serviceType === 'included'">
             <md-checkbox v-model="isComplementary">
               <span class="mr-10">
                 <img :src="`${$iconURL}common/gift-dark.svg`" class="mr-10" />Complementary Item
               </span>
               <!-- <md-icon class="color-red">help_outline</md-icon> -->
-            </md-checkbox>
-          </div>
-          <money v-model="unit" v-bind="currencyFormat" :class="{ isFilled: !!unit }" v-else />
+          <!-- </md-checkbox> -->
+          <!-- </div> -->
+          <money
+            v-model="unit"
+            v-bind="currencyFormat"
+            :class="{ isFilled: !!unit }"
+            v-if="serviceType !== 'included'"
+          />
         </div>
         <div class="field">
           <!-- <span>Total</span> -->

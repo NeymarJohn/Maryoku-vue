@@ -25,20 +25,20 @@
     <template v-if="isChecked">
       <proposal-requirements
         class="additional-service"
+        label="Cost Items"
+        key="cost"
+        tableCategory="cost"
+        icon="Group+10662.svg"
+        description="Mandatory elements to involve in proposals are in the table, you can add more here:"
+        :vendorCategory="service.componentId"
+      />
+      <proposal-requirements
+        class="additional-service"
         tableCategory="included"
         label="Included in Price"
         icon="includedPrice.png"
         description="(from your “included in price” items)"
         key="included"
-        :vendorCategory="service.componentId"
-      />
-      <proposal-requirements
-        class="additional-service"
-        label="Cost Requirements"
-        key="cost"
-        tableCategory="cost"
-        icon="Group+10662.svg"
-        description="Mandatory elements to involve in proposals are in the table, you can add more here:"
         :vendorCategory="service.componentId"
       />
       <proposal-requirements
