@@ -10,19 +10,17 @@
     <template slot="body">
       <div class="md-layout maryoku-modal-body">
         <div class="md-layout-item md-size-100 form-group maryoku-field mb-30">
-          <sharing-button-group class="sharing-button-group-wrapper" :copyLink="false"></sharing-button-group>
+          <sharing-button-group
+            class="sharing-button-group-wrapper"
+            :copyLink="false"
+            :sharingData="sharingData"
+          ></sharing-button-group>
           <maryoku-input inputStyle="sharing" v-model="shareLink" readonly class="sharelink"></maryoku-input>
         </div>
       </div>
     </template>
     <template slot="footer">
-      <template v-if="emails.length > 0">
-        <md-button class="md-button md-black md-simple add-category-btn" @click="onCancel()">Cancel</md-button>
-        <md-button class="md-red md-bold add-category-btn" @click="sendEmail">Send</md-button>
-      </template>
-      <template v-else>
-        <md-button class="md-red md-bold add-category-btn" @click="onCancel()">Done</md-button>
-      </template>
+      <md-button class="md-red md-bold add-category-btn" @click="onCancel()">Done</md-button>
     </template>
   </modal>
 </template>
@@ -45,47 +43,23 @@ export default {
   props: {
     show: [Boolean],
     value: [Number],
+    defaultSharingData: Object,
   },
   data: () => {
     return {
-      selectedOption: "keep",
-      location: "",
-      currentAttachments: [],
-      emails: [],
-      message: "",
-      isLoading: false,
-      showLinkRoleEditor: false,
-      showEmailRoleEditor: false,
-      isSendingMessage: false,
-      shareLink: "",
-      role: "view",
-      editingVendor: {
-        vendorDisplayName: "",
-        cost: "",
-        vendorAddressLine1: "",
-        vendorMainPhoneNumber: "",
-        vendorMainEmail: "",
-        attachedProposal: "",
-        attachment: null,
-      },
       statusMessage: "",
+      sharingData: {},
     };
   },
   created() {
     this.generateShareLink();
+    this.sharingData = { ...this.defaultSharingData, pageUrl: this.generateShareLink() };
   },
   methods: {
     generateShareLink() {
       this.shareLink = window.location.href;
       return this.shareLink;
     },
-    selectOption() {
-      this.$emit("select", this.selectedOption, this.value);
-    },
-    remindLater() {
-      this.$emit("remindLater");
-    },
-    removeSelectedAttachment(index) {},
     sendEmail() {
       this.$emit("sendEmail", this.editingVendor);
       this.$http
@@ -110,11 +84,6 @@ export default {
 
     onCancel: function (e) {
       this.$emit("cancel");
-    },
-    setRole(role) {
-      this.role = role;
-      this.showLinkRoleEditor = false;
-      this.generateShareLink();
     },
   },
 };

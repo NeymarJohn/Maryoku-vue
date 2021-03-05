@@ -1,28 +1,25 @@
 <template>
-  <component
-    :is="baseComponent"
-    :to="link.path ? link.path : '/'"
-    :class="{ active: isActive, disable: disabled }"
-    tag="li"
-  >
-    <a
-      v-if="isMenu"
-      href="#"
-      class="nav-link sidebar-menu-item"
-      :aria-expanded="!collapsed"
-      data-toggle="collapse"
-      @click.prevent="collapseMenu"
-    >
-      <md-icon class="font-size-30">{{ link.icon }}</md-icon>
+  <component :is="baseComponent"
+             :to="link.path ? link.path : '/'"
+             :class="{active : isActive, disable: disabled}"
+             tag="li">
+    <a v-if="isMenu"
+       href="#"
+       class="nav-link sidebar-menu-item"
+       :aria-expanded="!collapsed"
+       data-toggle="collapse"
+       @click.prevent="collapseMenu">
+      <md-icon class="font-size-30">{{link.icon}}</md-icon>
       <p>
-        {{ link.name }}
+        {{link.name}}
         <b class="caret"></b>
       </p>
+
     </a>
 
     <collapse-transition>
       <div v-if="$slots.default || this.isMenu" v-show="!collapsed">
-        <ul class="nav">
+        <ul class="nav" >
           <slot></slot>
         </ul>
       </div>
@@ -30,156 +27,158 @@
 
     <slot name="title" v-if="children.length === 0 && !$slots.default && link.path">
       <component
-        :to="disabled ? '' : link.path"
+        :to="disabled?'':link.path"
         @click.native="linkClick"
         :is="elementType(link, false)"
-        :class="{ active: link.active }"
+        :class="{active: link.active}"
         class="nav-link"
         :target="link.target"
-        :href="disabled ? '' : link.path"
-      >
+        :href="disabled?'':link.path">
         <template v-if="addLink">
-          <md-icon class="font-size-30" v-if="link.icon">{{ link.icon }}</md-icon>
-          <span class="sidebar-mini" v-else>{{ linkPrefix }}</span>
+          <md-icon class="font-size-30" v-if="link.icon">{{link.icon}}</md-icon>
+          <span class="sidebar-mini" v-else>{{linkPrefix}}</span>
         </template>
         <template v-else>
-          <md-icon v-if="link.icon" class="font-size-30" :style="{ color: disabled ? '#a0a0a0 !important' : '#000' }">
-            {{ link.icon }}
-          </md-icon>
-          <img v-else :src="`${$iconURL}Profile/settings-dark.svg`" />
+          <md-icon class="font-size-30" :style="{color: disabled?'#a0a0a0 !important':'#000'}" >{{link.icon}}</md-icon>
         </template>
       </component>
     </slot>
   </component>
 </template>
 <script>
-import { CollapseTransition } from "vue2-transitions";
+import { CollapseTransition } from 'vue2-transitions'
 
 export default {
-  name: "sidebar-item",
+  name: 'sidebar-item',
   components: {
-    CollapseTransition,
+    CollapseTransition
   },
   props: {
     menu: {
       type: Boolean,
-      default: false,
+      default: false
     },
     link: {
       type: Object,
       default: () => {
         return {
-          name: "",
-          path: "",
-          children: [],
-        };
-      },
+          name: '',
+          path: '',
+          children: []
+        }
+      }
     },
     disabled: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
-  provide() {
+  provide () {
     return {
       addLink: this.addChild,
-      removeLink: this.removeChild,
-    };
+      removeLink: this.removeChild
+    }
   },
   inject: {
     addLink: { default: null },
     removeLink: { default: null },
     autoClose: {
-      default: true,
-    },
+      default: true
+    }
   },
-  data() {
+  data () {
     return {
       children: [],
-      collapsed: true,
-    };
+      collapsed: true
+    }
   },
   computed: {
-    baseComponent() {
-      return this.isMenu || this.link.isRoute ? "li" : "router-link";
+    baseComponent () {
+      return this.isMenu || this.link.isRoute ? 'li' : 'router-link'
     },
-    linkPrefix() {
+    linkPrefix () {
       if (this.link.name) {
-        let words = this.link.name.split(" ");
-        return words.map((word) => word.substring(0, 1)).join("");
+        let words = this.link.name.split(' ')
+        return words.map(word => word.substring(0, 1)).join('')
       }
     },
-    isMenu() {
-      return this.children.length > 0 || this.menu === true;
+    isMenu () {
+      return this.children.length > 0 || this.menu === true
     },
-    isActive() {
+    isActive () {
       if (this.$route.path.startsWith(this.link.startLink)) {
-        this.link.active = true;
-        return true;
+        this.link.active = true
+        return true
       }
 
       if (this.$route && this.$route.path) {
-        let matchingRoute = this.children.find((c) => this.$route.path.startsWith(c.link.startLink));
+        let matchingRoute = this.children.find(c =>
+          this.$route.path.startsWith(c.link.startLink)
+        )
         if (matchingRoute !== undefined) {
-          return true;
+          return true
         }
       }
-      return false;
-    },
+      return false
+    }
   },
   methods: {
-    addChild(item) {
-      const index = this.$slots.default.indexOf(item.$vnode);
-      this.children.splice(index, 0, item);
+    addChild (item) {
+      const index = this.$slots.default.indexOf(item.$vnode)
+      this.children.splice(index, 0, item)
     },
-    removeChild(item) {
-      const tabs = this.children;
-      const index = tabs.indexOf(item);
-      tabs.splice(index, 1);
+    removeChild (item) {
+      const tabs = this.children
+      const index = tabs.indexOf(item)
+      tabs.splice(index, 1)
     },
-    elementType(link, isParent = true) {
+    elementType (link, isParent = true) {
       if (link.isRoute === false) {
-        return isParent ? "li" : "a";
+        return isParent ? 'li' : 'a'
       } else {
-        return "router-link";
+        return 'router-link'
       }
     },
-    linkAbbreviation(name) {
-      const matches = name.match(/\b(\w)/g);
-      return matches.join("");
+    linkAbbreviation (name) {
+      const matches = name.match(/\b(\w)/g)
+      return matches.join('')
     },
-    linkClick() {
-      if (this.autoClose && this.$sidebar && this.$sidebar.showSidebar === true) {
-        this.$sidebar.displaySidebar(false);
+    linkClick () {
+      if (
+        this.autoClose &&
+        this.$sidebar &&
+        this.$sidebar.showSidebar === true
+      ) {
+        this.$sidebar.displaySidebar(false)
       }
     },
-    collapseMenu() {
-      this.collapsed = !this.collapsed;
+    collapseMenu () {
+      this.collapsed = !this.collapsed
     },
-    collapseSubMenu(link) {
-      link.collapsed = !link.collapsed;
-    },
+    collapseSubMenu (link) {
+      link.collapsed = !link.collapsed
+    }
   },
-  mounted() {
+  mounted () {
     if (this.addLink) {
-      this.addLink(this);
+      this.addLink(this)
     }
     if (this.link.collapsed !== undefined) {
-      this.collapsed = this.link.collapsed;
+      this.collapsed = this.link.collapsed
     }
     if (this.isActive && this.isMenu) {
-      this.collapsed = false;
+      this.collapsed = false
     }
   },
-  destroyed() {
+  destroyed () {
     if (this.$el && this.$el.parentNode) {
-      this.$el.parentNode.removeChild(this.$el);
+      this.$el.parentNode.removeChild(this.$el)
     }
     if (this.removeLink) {
-      this.removeLink(this);
+      this.removeLink(this)
     }
-  },
-};
+  }
+}
 </script>
 <style>
 .sidebar-menu-item {

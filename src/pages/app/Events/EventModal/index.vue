@@ -175,7 +175,6 @@ import { Modal } from "@/components";
 import Calendar from "@/models/Calendar";
 import Occasion from "@/models/Occasion";
 import Swal from "sweetalert2";
-import { error } from "util";
 import moment from "moment";
 
 export default {

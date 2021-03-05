@@ -1,9 +1,6 @@
 <template>
   <div class="md-layout p-20 planner-profile">
-    <div class="md-layout-item md-size-100 font-size-22 font-bold mb-30 mt-30">
-      <img :src="`${$iconURL}Profile/settings-dark.svg`" class="mr-20" />
-      PROFILE & SETTINGS
-    </div>
+    <div class="md-layout-item md-size-100">PROFILE & SETTINGS</div>
     <div class="md-layout-item md-size-25">
       <div class="left-sidebar white-card">
         <div class="profile">
@@ -74,7 +71,7 @@
       </div>
     </div>
     <div class="md-layout-item md-size-70">
-      <vendor-account-settings v-if="pageName === 'settings'"></vendor-account-settings>
+      <profile-settings v-if="pageName === 'settings'"></profile-settings>
       <!-- <profile-settings v-if="pageName === 'settings'"></profile-settings>
       <my-events v-if="pageName === 'events'"></my-events>
       <inspirations v-if="pageName === 'inspirations'"></inspirations> -->
@@ -91,7 +88,7 @@ import MySpecialDates from "@/pages/app/Profile/MySpecialDates.vue";
 import HolidaysCelebrate from "@/pages/app/Profile/HolidaysCelebrate.vue";
 import { LabelEdit, Tabs } from "@/components";
 import { EditProfileForm, UserCard } from "@/pages";
-import VendorAccountSettings from "@/pages/app/Vendors/VendorAccountSettings";
+import ProfileSettings from "@/pages/app/Vendors/VendorAccountSettings";
 import MyEvents from "@/pages/app/Profile/MyEvents.vue";
 // import auth from '@/auth';
 import { mapGetters, mapActions, mapState } from "vuex";
@@ -111,7 +108,7 @@ export default {
     UserCard,
     CompanyDashboardInfo,
     LabelEdit,
-    VendorAccountSettings,
+    ProfileSettings,
     MyEvents,
     Inspirations,
     UserAvatar,
@@ -209,7 +206,7 @@ export default {
         });
     },
     goTo(pageName) {
-      this.$router.push(`/vendor/profile/${pageName}`);
+      this.$router.push(`/profile/${pageName}`);
     },
     logout() {
       this.$router.push("/signout");

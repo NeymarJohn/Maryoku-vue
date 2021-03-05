@@ -4,22 +4,22 @@
       <label
         ><img :src="icon" class="label-icon" /><span>{{ fieldLabel }}</span></label
       >
-      <md-button class="md-simple edit-btn" :class="`${theme}`" @click="edit"> Edit</md-button>
+      <md-button class="md-simple edit-btn" @click="edit"> Edit</md-button>
     </div>
     <div class="profile-field-value" v-if="isEditing">
       <template v-if="fieldName === 'password'">
         <input type="password" style="width: 100%" v-model="content" placeholder="New password" />
         <input type="password" style="width: 100%; margin-top: 20px" v-model="passwordConfirm" placeholder="Confirm " />
         <div class="text-right mt-10">
-          <md-button class="md-simple maryoku-btn" :class="`${theme}`" @click="cancelEdit">Cancel</md-button>
-          <md-button class="maryoku-btn" :class="`${theme}`" :disabled="!canSave" @click="saveField">Save</md-button>
+          <md-button class="md-simple maryoku-btn" @click="cancelEdit">Cancel</md-button>
+          <md-button class="maryoku-btn md-red" :disabled="!canSave" @click="saveField">Save</md-button>
         </div>
       </template>
       <template v-else>
         <input type="text" style="width: 100%" v-model="content" />
         <div class="text-right mt-10">
-          <md-button class="md-simple maryoku-btn" :class="`${theme}`" @click="cancelEdit">Cancel</md-button>
-          <md-button class="maryoku-btn" :class="`${theme}`" :disabled="!canSave" @click="saveField">Save</md-button>
+          <md-button class="md-simple maryoku-btn" @click="cancelEdit">Cancel</md-button>
+          <md-button class="maryoku-btn md-red" :disabled="!canSave" @click="saveField">Save</md-button>
         </div>
       </template>
     </div>
@@ -44,10 +44,6 @@ export default {
     icon: {
       type: String,
       default: "",
-    },
-    theme: {
-      type: String,
-      default: "md-red",
     },
   },
   data() {

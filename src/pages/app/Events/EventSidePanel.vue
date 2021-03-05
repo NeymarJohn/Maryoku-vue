@@ -196,7 +196,6 @@ import CalendarEvent from "@/models/CalendarEvent";
 import Calendar from "@/models/Calendar";
 import Occasion from "@/models/Occasion";
 import Swal from "sweetalert2";
-import { error } from "util";
 import moment from "moment";
 import _ from "underscore";
 import AnnualPlannerVuexModule from "../AnnualPlanner/AnnualPlanner.vuex";
