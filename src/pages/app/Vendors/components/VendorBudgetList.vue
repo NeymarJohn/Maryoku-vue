@@ -66,8 +66,6 @@ export default {
       return this.$store.state.vendorProposal.proposalRequest.eventData.allocatedBudget;
     },
     validRequirements() {
-      console.log(this.requirements);
-      console.log(this.vendor);
       return this.requirements.filter(
         (item) =>
           item.componentId === this.vendor.vendorCategory ||

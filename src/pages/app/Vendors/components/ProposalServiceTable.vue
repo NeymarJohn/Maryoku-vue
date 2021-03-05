@@ -1,5 +1,5 @@
 <template>
-  <div class="proposal-service-table-wrapper">
+  <div class="proposal-service-table-wrapper" v-if="services.length > 0">
     <div class="editable-sub-items-cont">
       <div class="editable-sub-items-header">
         <span>Description</span>
@@ -110,10 +110,7 @@
       <div class="editable-sub-items-footer" v-if="tableCategory === 'cost'">
         <span class="text-right">Total</span>
         <span> </span>
-        <span class="text-right">
-          <span class="font-regular text-center font-size-16 mr-20">Approx</span>
-          ${{ totalPrice | withComma }}
-        </span>
+        <span class="text-right"> ${{ totalPrice | withComma }} </span>
       </div>
     </div>
   </div>
@@ -557,7 +554,7 @@ export default {
     .editable-sub-items-header {
       // border-top: 1px solid #707070;
       border-top: 2px solid #cbcbcb;
-      padding: 40px 40px 30px 40px;
+      padding: 40px 0px 30px 0px;
       display: grid;
       // grid-template-columns: 30% 10% 10% 12% 15%;
       grid-template-columns: 40% 15% 15% 15% 15%;
@@ -660,7 +657,7 @@ export default {
     .editable-sub-items-footer {
       // box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
       // background-color: #d5d5d5;
-      padding: 30px 40px;
+      padding: 30px 0px;
       border-top: 1px solid #d5d5d5;
       border-bottom: none;
       display: grid;

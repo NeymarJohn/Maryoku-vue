@@ -1,4 +1,4 @@
-import vendorRoutes from "./vendor"
+import vendorRoutes from "./vendor";
 import DashboardLayout from "@/pages/Dashboard/Layout/DashboardLayout.vue";
 import AuthLayout from "@/pages/Dashboard/Pages/AuthLayout.vue";
 import CreateEvent from "@/pages/Dashboard/Layout/CreateEvent.vue";
@@ -35,7 +35,6 @@ const ForVendors = () => import("@/pages/app/Vendors/ForVendors.vue");
 const ForProposals = () => import("@/pages/app/Vendors/ForProposals.vue");
 const ProposalFinalStep = () => import("@/pages/app/Vendors/ProposalFinalStep.vue");
 const CalendarSync = () => import("@/pages/app/CalendarSync.vue");
-
 
 // OnBoardingPages
 const EventWizardStart = () => import("@/pages/app/CreateEvent/EventWizardStart.vue");
@@ -224,7 +223,6 @@ let forProposals = {
         },
     ],
 };
-
 
 let appPages = {
     path: "/app",
@@ -588,7 +586,6 @@ let welcomeEventPage = {
     },
 };
 
-
 const rememberMe = authService.getCookie("rememberMe");
 const homeLink = rememberMe === "true" ? "/events" : "/signin";
 const routes = [
@@ -614,7 +611,7 @@ const routes = [
     appPages,
     publicPages,
     PublicCreateEvent,
-    // HomePages,
+    HomePages,
     forProposals,
     ProfilePages,
     EventPages,

@@ -46,6 +46,13 @@
               <span>Your proposal</span>
               <span>${{ ((mainTotalPrice * (100 - bundleDiscountPercentage)) / 100) | withComma }}</span>
             </li>
+            <li v-if="mainTotalPrice - getAllocatedBudget(vendor.eventCategory.key) > 0" class="color-black">
+              <span>
+                <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
+                Your proposal is ${{ (mainTotalPrice - getAllocatedBudget(vendor.eventCategory.key)) | withComma }} more
+                than budget
+              </span>
+            </li>
             <li :style="`margin: ${discountBlock[vendor.eventCategory.key] ? '' : '0'}`">
               <template v-if="discountBlock[vendor.eventCategory.key]">
                 <div class="left">
@@ -387,6 +394,12 @@ export default {
     getServiceCategory(category) {
       return this.serviceCategories.find((item) => item.key === category);
     },
+    getAllocatedBudget(category) {
+      const allocatedBudgetItem = this.proposalRequest.eventData.components.find(
+        (item) => item.componentId === category,
+      );
+      return allocatedBudgetItem.allocatedBudget;
+    },
   },
   created() {
     window.addEventListener("scroll", this.handleScroll);
@@ -469,14 +482,6 @@ export default {
       });
       return result;
     },
-    // tax: {
-    //   get: function () {
-    //     return this.$store.state.vendorProposal.taxes[this.vendor.eventCategory.key];
-    //   },
-    //   set: function (newTax) {
-    //     return this.$store.commit("vendorProposal/setTax", { category: this.category, tax: this.tax });
-    //   },
-    // },
   },
   watch: {},
 };

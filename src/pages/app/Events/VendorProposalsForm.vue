@@ -83,12 +83,12 @@
                       ({{ proposalRequest.requirements.length }})
                     </div>
                     <div class="md-layout-item md-size-35 md-small-size-100 text-right item-cost-desc">
-                      <span
-                        >Per guest ${{
+                      <span>
+                        Per guest ${{
                           (proposalRequest.requirementsCategoryCost / proposalRequest.eventData.numberOfParticipants)
                             | withComma
-                        }}</span
-                      >
+                        }}
+                      </span>
                       <md-field class="with-bg">
                         <span class="md-prefix">$</span>
                         <md-input
@@ -518,9 +518,13 @@
               </div>
             </div>
             <div class="update-checkbox">
-              <md-checkbox class="md-success" v-model="proposalRequest.updateOnOutbid" @change="updateProposalRequest()"
-                >Update me if someone outbids my offer</md-checkbox
+              <md-checkbox
+                class="md-success"
+                v-model="proposalRequest.updateOnOutbid"
+                @change="updateProposalRequest()"
               >
+                Update me if someone outbids my offer
+              </md-checkbox>
             </div>
             <div class="offer-value">
               <div class="value-section upgrades-section">

@@ -357,7 +357,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .proposal-service-table-item {
-  padding: 30px 40px;
+  padding: 30px 0;
   border-top: 1px solid #d5d5d5;
   border-bottom: none;
   font-family: "Manrope-Regular", sans-serif;
