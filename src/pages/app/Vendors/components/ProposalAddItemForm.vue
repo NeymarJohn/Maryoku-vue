@@ -280,6 +280,7 @@ export default {
         requirementSize: size,
         requirementValue: `${qty}`,
         isComplementary: this.isComplementary,
+        isComplimentary: false,
         plannerOptions: this.plannerChoices.filter((item) => item.description && item.price),
       };
       this.$emit("addItem", editingService);

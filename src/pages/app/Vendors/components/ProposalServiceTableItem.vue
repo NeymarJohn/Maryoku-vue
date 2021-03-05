@@ -4,6 +4,12 @@
       <div class="item-cont">
         {{ item.requirementTitle }}
         <span class="madatory-badge" v-if="item.isMandatory">Mandatory</span>
+        <span class="complementary-badge" v-if="item.isComplimentary">
+          Complimentary
+          <md-button class="md-simple md-black remove-button edit-btn" @click="setValue('isComplimentary', false)">
+            <md-icon>close</md-icon>
+          </md-button>
+        </span>
         <div class="comment-area" v-if="!isEdit">{{ item.comment }}</div>
         <textarea class="mt-20" v-else v-model="item.comment"></textarea>
       </div>
@@ -13,7 +19,7 @@
           <input class="input-value" type="number" v-model="item.requirementValue" />
         </template>
       </div>
-      <div class="price-cont editor-wrapper">
+      <div class="price-cont editor-wrapper" :class="{ complimentary: item.isComplimentary }">
         <template v-if="!isEdit">
           $
           {{
@@ -37,7 +43,7 @@
           />
         </template>
       </div>
-      <div class="total-cont editor-wrapper">
+      <div class="total-cont editor-wrapper" :class="{ complimentary: item.isComplimentary }">
         <template v-if="!isEdit">
           $ {{ item.priceUnit == "total" ? item.price : (item.price * item.requirementValue) | withComma }}
         </template>
@@ -84,7 +90,7 @@
                 Add an alternative
               </span>
             </md-menu-item>
-            <md-menu-item @click="isEdit = true">
+            <md-menu-item @click="setValue('isComplimentary', true)">
               <span>
                 <img :src="`${$iconURL}common/gift-dark.svg`" class="label-icon mr-10" />
                 Mark as complimentary
@@ -157,6 +163,7 @@
             <md-icon>close</md-icon>
           </md-button>
         </span>
+
         <br />
         <div class="mt-20 comment-area" v-if="!isEdit">{{ item.comment }}</div>
         <textarea class="mt-20" v-else v-model="item.comment"></textarea>
@@ -210,8 +217,9 @@
             </md-menu-item>
             <md-menu-item @click="setValue('isComplementary', true)" v-if="!item.isComplementary">
               <span>
-                <img :src="`${$iconURL}common/gift-dark.svg`" class="label-icon mr-10" />Mark as complementary</span
-              >
+                <img :src="`${$iconURL}common/gift-dark.svg`" class="label-icon mr-10" />
+                Mark as complementary
+              </span>
             </md-menu-item>
             <md-menu-item @click="isEdit = true">
               <span>
@@ -333,7 +341,8 @@ export default {
     },
     setValue(key, value) {
       const item = this.item;
-      item[key] = value;
+      // item[key] = value;
+      this.$set(item, key, value);
       this.$emit("save", { index: this.index, item });
     },
     cancel() {
@@ -533,6 +542,16 @@ export default {
     padding: 20px 0;
     &:last-child {
       border-bottom: none;
+    }
+  }
+  .total-cont {
+    &.complimentary {
+      text-decoration: line-through;
+    }
+  }
+  .price-cont {
+    &.complimentary {
+      text-decoration: line-through;
     }
   }
 }

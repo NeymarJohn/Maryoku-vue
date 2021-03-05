@@ -452,7 +452,7 @@ export default {
         return 0;
       }
       const sumPrice = this.services.reduce((s, item) => {
-        return s + item.requirementValue * item.price;
+        return s + item.isComplimentary ? 0 : item.requirementValue * item.price;
       }, 0);
       return sumPrice;
     },

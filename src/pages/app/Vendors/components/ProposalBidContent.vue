@@ -77,6 +77,7 @@ export default {
           plannerOptions: [],
           isMandatory: true,
           isComplementary: false,
+          isComplimentary: false,
         };
 
         if (
