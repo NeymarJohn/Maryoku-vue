@@ -107,6 +107,7 @@
 
       <div class="next-cont">
         <span>You can return to it till the deadline!</span>
+        <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`" /> Discard </a>
         <a class="save" @click="saveProposal('save')">
           <img :src="`${proposalIconsUrl}Asset 610.svg`" /> Save for later
         </a>
@@ -393,7 +394,7 @@ export default {
       proposal.save().then((res) => {});
       if (type === "submit") this.submittedModal = true;
       else {
-        swal({
+        Swal.fire({
           title: `You saved the current proposal. You can edit anytime later!`,
           buttonsStyling: false,
           type: "success",
@@ -422,6 +423,22 @@ export default {
     },
     goToProcessingGuid() {
       this.$router.push({ path: `/completed-bidding` });
+    },
+    discard() {
+      Swal.fire({
+        title: "Are you sure?",
+        text: `You won't be able to revert this!`,
+        showCancelButton: true,
+        confirmButtonClass: "md-button md-success btn-fill",
+        cancelButtonClass: "md-button md-danger btn-fill",
+        confirmButtonText: "Yes, discard it!",
+        buttonsStyling: false,
+      }).then((result) => {
+        if (result.value) {
+          this.$store.commit("vendorProposal/initState");
+          this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}`);
+        }
+      });
     },
   },
 
@@ -770,14 +787,22 @@ export default {
         font-size: 20px;
         font-weight: 800;
         display: inline-block;
-        min-width: 268px;
+        min-width: 250px;
         text-align: center;
-
+        &.discard {
+          color: #050505;
+          margin-right: 41px;
+          min-width: 100px;
+          padding: 18px 0px;
+          img {
+            width: 25px;
+            margin-right: 12px;
+          }
+        }
         &.save {
           border: 1px solid #f51355;
           color: #f51355;
           margin-right: 41px;
-
           img {
             width: 25px;
             margin-right: 12px;

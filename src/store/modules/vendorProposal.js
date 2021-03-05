@@ -148,6 +148,25 @@ const mutations = {
     setInspirationalPhoto: (state, { index, photo }) => {
         Vue.set(state.inspirationalPhotos, index, photo);
     },
+    initState(state) {
+        Vue.set(state, "proposalCostServices", {});
+        Vue.set(state, "proposalIncludedServices", {});
+        Vue.set(state, "proposalExtraServices", {});
+        Vue.set(state, "discounts", {});
+        Vue.set(state, "taxes", {});
+        Vue.set(state, "totalTax", { percentage: 0, price: 0 });
+        Vue.set(state, "legalDocs", {});
+        Vue.set(state, "wizardStep", 0);
+        Vue.set(state, "initStep", 0);
+        Vue.set(state, "initialized", false);
+        Vue.set(state, "attachments", {});
+        Vue.set(state, "bundleDiscount", {
+            isApplied: false,
+            services: [],
+            discountPercentage: 0,
+            discountAmount: 0,
+        });
+    },
 };
 const actions = {
     getProposal: ({ commit, state }, proposalRequestId) => {},

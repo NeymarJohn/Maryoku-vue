@@ -274,6 +274,7 @@ export default {
     return {
       isBundleDiscount: false,
       isEdit: false,
+      isTaxEditing: false,
       warning: false,
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       newProposalRequest: {
