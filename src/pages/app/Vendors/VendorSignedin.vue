@@ -59,7 +59,7 @@ export default {
           value: this.$store.state.auth.user.email,
           noninteraction: false, // Optional
         });
-        this.$router.push("/vendor/profile/overview");
+        this.$router.push("/vendor/profile/settings");
       },
       (error) => {
         this.loading = false;
