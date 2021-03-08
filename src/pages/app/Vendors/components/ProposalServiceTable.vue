@@ -4,8 +4,8 @@
       <div class="editable-sub-items-header">
         <span>Description</span>
         <span class="text-center">QTY</span>
-        <span class="text-center">{{ tableCategory !== "included" ? "Price per unit" : "" }}</span>
-        <span class="text-center">{{ tableCategory !== "included" ? "Subtotal" : "" }}</span>
+        <span class="text-right">{{ tableCategory !== "included" ? "Price per unit" : "" }}</span>
+        <span class="text-right">{{ tableCategory !== "included" ? "Subtotal" : "" }}</span>
       </div>
       <proposal-service-table-item
         v-for="(req, rIndex) in services"
@@ -452,7 +452,7 @@ export default {
         return 0;
       }
       const sumPrice = this.services.reduce((s, item) => {
-        return s + item.isComplimentary ? 0 : item.requirementValue * item.price;
+        return s + (item.isComplimentary ? 0 : item.requirementValue * item.price);
       }, 0);
       return sumPrice;
     },
