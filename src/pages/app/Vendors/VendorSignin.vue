@@ -26,7 +26,7 @@
         >
           <div class="social-line text-center">
             <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
-              <img :src="`${$iconURL}Signup/google-icon.jpg`" />
+              <img :src="`${$iconURL}Signup/google-icon.jpg`" class="mr-20" />
               <span>Sign in with Google</span>
             </md-button>
           </div>
@@ -54,7 +54,13 @@
             <div>{{ error }}</div>
           </div>
           <div class="form-buttons">
-            <md-button @click="signIn" class="md-default md-red md-maryoku mt-30">Login</md-button>
+            <md-button
+              @click="signIn"
+              class="md-default md-red md-maryoku mt-30"
+              :disabled="!user.password || !user.email"
+            >
+              Login
+            </md-button>
             <div class="text-center mt-30 mb-30">Or</div>
             <md-button @click="toSingUp" class="md-black md-maryoku md-red"> Sign Up </md-button>
           </div>
@@ -87,12 +93,12 @@ export default {
       let tenantId = this.$authService.resolveTenantId();
 
       let callback = btoa(
-        `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`,
+        `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/vendor/signedin?token=`,
       );
 
       if (action) {
         callback = btoa(
-          `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?action=${action}&token=`,
+          `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/vendor/signedin?action=${action}&token=`,
         );
       }
 
@@ -130,7 +136,7 @@ export default {
       this.$router.push({ path: "/forgot-password" });
     },
     redirectPage() {
-      this.$router.push({ path: "/vendor/profile" });
+      this.$router.push({ path: "/vendor/profile/overview" });
     },
   },
   data() {
@@ -147,7 +153,7 @@ export default {
         },
         password: {
           required: true,
-          min: 8,
+          min: 6,
         },
       },
       forgotPasswordValidations: {
@@ -172,7 +178,8 @@ export default {
 <style lang="scss" scoped>
 .vendor-signin {
   max-width: 1100px;
-  margin: 40px auto;
+  margin: 0px auto;
+  padding: 40px;
   overflow: hidden;
   .left-section {
     background-color: #fdf0f4;

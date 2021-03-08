@@ -13,14 +13,21 @@
         <div class="comment-area" v-if="!isEdit">{{ item.comment }}</div>
         <textarea class="mt-20" v-else v-model="item.comment"></textarea>
       </div>
-      <div class="qty-cont editor-wrapper text-center">
+      <div class="qty-cont editor-wrapper">
         <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue }}</template>
         <template v-else>
           <input class="input-value" type="number" v-model="item.requirementValue" />
         </template>
       </div>
-      <div class="price-cont editor-wrapper text-right" :class="{ complimentary: item.isComplimentary }">
-        <template v-if="!isEdit"> $ {{ item.price | withComma }} </template>
+      <div class="price-cont editor-wrapper" :class="{ complimentary: item.isComplimentary }">
+        <template v-if="!isEdit">
+          $
+          {{
+            item.priceUnit == "total"
+              ? parseFloat(String(item.price).replace(/,/g, "")) / item.requirementValue
+              : item.price | withComma
+          }}
+        </template>
         <template v-else>
           <money
             v-model="item.price"
@@ -36,7 +43,7 @@
           />
         </template>
       </div>
-      <div class="total-cont editor-wrapper text-right" :class="{ complimentary: item.isComplimentary }">
+      <div class="total-cont editor-wrapper" :class="{ complimentary: item.isComplimentary }">
         <template v-if="!isEdit">
           $ {{ item.priceUnit == "total" ? item.price : (item.price * item.requirementValue) | withComma }}
         </template>
@@ -55,7 +62,7 @@
             }"
             class="input-value"
           />
-          <div class="text-left">$ {{ subTotal | withComma }}</div>
+          <div>$ {{ subTotal }}</div>
         </template>
       </div>
       <div class="action-cont editor-wrapper">
@@ -486,6 +493,7 @@ export default {
     }
     .editor-wrapper {
       margin: 0 5px;
+      text-align: center;
       .input-value {
         border: 1px solid #dddddd;
         text-align: center;
