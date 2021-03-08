@@ -1,8 +1,8 @@
 <template>
-  <div class="vendor-profile-detail">
+  <div class="vendor-profile-detail" v-if="companyData">
     <profile-info-field
       class="profile-detail-info"
-      :defaultValue="userData.name"
+      :defaultValue="companyData.about.company"
       :icon="`${$iconURL}common/user-dark.svg`"
       fieldName="name"
       fieldLabel="About your company"
@@ -11,7 +11,7 @@
     ></profile-info-field>
     <profile-info-field
       class="profile-detail-info"
-      :defaultValue="userData.email || userData.username"
+      :defaultValue="companyData.personalMessage"
       :icon="`${$iconURL}common/email-dark.svg`"
       fieldName="email"
       fieldLabel="Personal messsage to your clients"
@@ -20,7 +20,7 @@
     ></profile-info-field>
     <profile-info-field
       class="profile-detail-info"
-      :defaultValue="userData.email || userData.username"
+      :defaultValue="companyData.companyName"
       fieldName="email"
       fieldLabel="Company Name"
       @save="saveProfileField"
@@ -28,7 +28,7 @@
     ></profile-info-field>
     <profile-info-field
       class="profile-detail-info"
-      :defaultValue="userData.email || userData.username"
+      :defaultValue="companyData.vendorMainEmail"
       :icon="`${$iconURL}common/email-dark.svg`"
       fieldName="email"
       fieldLabel="Business Email Address"
@@ -37,7 +37,7 @@
     ></profile-info-field>
     <profile-info-field
       class="profile-detail-info"
-      :defaultValue="userData.email || userData.username"
+      :defaultValue="companyData.vendorMainPhoneNumber"
       :icon="`${$iconURL}common/email-dark.svg`"
       fieldName="email"
       fieldLabel="Business Phone Number"
@@ -46,17 +46,28 @@
     ></profile-info-field>
     <profile-info-field
       class="profile-detail-info"
-      :defaultValue="userData.email || userData.username"
+      :defaultValue="companyData.vendorAddressLine1"
       :icon="`${$iconURL}common/email-dark.svg`"
       fieldName="email"
       fieldLabel="Business Location"
       @save="saveProfileField"
       theme="md-vendor"
     ></profile-info-field>
+    <profile-info-field
+      class="profile-detail-info"
+      :defaultValue="companyData.vendorAddressLine1"
+      :icon="`${$iconURL}common/email-dark.svg`"
+      fieldName="email"
+      fieldLabel="Shipping Address"
+      @save="saveProfileField"
+      theme="md-vendor"
+    ></profile-info-field>
   </div>
+  <div v-else></div>
 </template>
 <script>
 import ProfileInfoField from "@/components/ProfileInfoField.vue";
+import Vendors from "@/models/Vendors";
 import Swal from "sweetalert2";
 export default {
   components: {
@@ -64,6 +75,7 @@ export default {
   },
   data() {
     return {
+      companyData: null,
       editingFieldName: "",
       fullName: "",
       email: "",
@@ -76,7 +88,7 @@ export default {
   },
   methods: {
     saveProfileField(profileData) {
-      this.$store.dispatch("auth/updateProfile", { [profileData.name]: profileData.value, id: this.userData.id });
+      this.$store.dispatch("auth/updateProfile", { [profileData.name]: profileData.value, id: this.companyData.id });
     },
     deleteProfile() {
       Swal.fire({
@@ -100,10 +112,9 @@ export default {
     },
   },
   created() {
-    this.fullName = this.userData.name;
-    this.email = this.userData.email || this.userData.username;
-    this.phoneNumber = this.userData.phoneNumber;
-    this.companyName = this.userData.company;
+    Vendors.find("me").then((res) => {
+      this.companyData = res;
+    });
   },
   computed: {
     userData() {
