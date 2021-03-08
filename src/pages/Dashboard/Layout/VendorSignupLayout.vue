@@ -232,10 +232,20 @@ export default {
                     this.setVendor({});
                     this.setEditing(false);
                     this.setStep(0);
-
                     this.isCompletedWizard = false;
-                    if (proposalRequest) this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
-                    else this.$router.push("/vendor/signin");
+                    if (proposalRequest) {
+                      this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
+                    } else {
+                      this.$store.dispatch("auth/login", tenantUser).then(
+                        () => {
+                          this.$router.push(`/vendor/profile/settings`);
+                        },
+                        (error) => {
+                          this.loading = false;
+                          this.error = "failed";
+                        },
+                      );
+                    }
                   }
                 });
               })

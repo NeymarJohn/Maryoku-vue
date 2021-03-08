@@ -30,15 +30,11 @@
             </label>
           </md-list-item>
 
-          <md-list-item
-            class="mb-30"
-            @click="goTo('inspirations')"
-            :class="{ 'font-bold-extra': pageName === 'inspirations' }"
-          >
+          <md-list-item class="mb-30" @click="goTo('details')" :class="{ 'font-bold-extra': pageName === 'details' }">
             <label
               ><img
                 :src="
-                  pageName === 'inspirations'
+                  pageName === 'details'
                     ? `${$iconURL}Profile/inspirations-dark.svg`
                     : `${$iconURL}Profile/inspirations-gray.svg`
                 "
@@ -75,9 +71,7 @@
     </div>
     <div class="md-layout-item md-size-70">
       <vendor-account-settings v-if="pageName === 'settings'"></vendor-account-settings>
-      <!-- <profile-settings v-if="pageName === 'settings'"></profile-settings>
-      <my-events v-if="pageName === 'events'"></my-events>
-      <inspirations v-if="pageName === 'inspirations'"></inspirations> -->
+      <company-details v-if="pageName === 'details'"></company-details>
     </div>
   </div>
 </template>
@@ -85,13 +79,13 @@
 <script>
 import VueElementLoading from "vue-element-loading";
 import PersonalInformation from "@/pages/app/Profile/PersonalInformation.vue";
-import CompanyDashboardInfo from "../CompanyDashboard/CompanyDashboardInfo.vue";
+import CompanyDashboardInfo from "../../CompanyDashboard/CompanyDashboardInfo.vue";
 import DietaryConstraints from "@/pages/app/Profile/DietaryConstraints.vue";
 import MySpecialDates from "@/pages/app/Profile/MySpecialDates.vue";
 import HolidaysCelebrate from "@/pages/app/Profile/HolidaysCelebrate.vue";
 import { LabelEdit, Tabs } from "@/components";
 import { EditProfileForm, UserCard } from "@/pages";
-import VendorAccountSettings from "@/pages/app/Vendors/VendorAccountSettings";
+
 import MyEvents from "@/pages/app/Profile/MyEvents.vue";
 // import auth from '@/auth';
 import { mapGetters, mapActions, mapState } from "vuex";
@@ -99,6 +93,8 @@ import Inspirations from "@/pages/app/Profile/Inspirations.vue";
 import UserAvatar from "@/pages/app/Profile/components/UserAvatar.vue";
 import CompanyLogo from "@/pages/app/Profile/components/CompanyLogo.vue";
 
+import VendorAccountSettings from "./Account";
+import CompanyDetails from "./CompanyDetails";
 export default {
   components: {
     VueElementLoading,
@@ -116,6 +112,7 @@ export default {
     Inspirations,
     UserAvatar,
     CompanyLogo,
+    CompanyDetails,
   },
   data() {
     return {
