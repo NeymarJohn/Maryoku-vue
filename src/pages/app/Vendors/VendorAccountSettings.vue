@@ -1,8 +1,8 @@
 <template>
-  <div class="company-details-container">
-    <tabs :tab-name="['Company Details', 'Payment Setting', 'Invoices']" color-button="info">
+  <div class="profile-container">
+    <tabs :tab-name="['Account Details', 'Notifications', 'Permissions']" color-button="info">
       <template slot="tab-pane-1">
-        <vendor-company-detail></vendor-company-detail>
+        <profile-details></profile-details>
       </template>
       <template slot="tab-pane-2"> <div class="p-40"></div> </template>
       <template slot="tab-pane-3"> <div class="p-40"></div> </template>
@@ -13,7 +13,7 @@
 <script>
 import VueElementLoading from "vue-element-loading";
 import { LabelEdit, Tabs } from "@/components";
-import VendorCompanyDetail from "./VendorCompanyDetail";
+// import ProfileDetails from "./ProfileDetails";
 // import Permissions from "./Permissions";
 // import auth from '@/auth';
 import { mapGetters } from "vuex";
@@ -23,7 +23,6 @@ export default {
     VueElementLoading,
     LabelEdit,
     Tabs,
-    VendorCompanyDetail,
     // ProfileDetails,
     // Permissions,
   },
@@ -38,6 +37,10 @@ export default {
   computed: {},
   mounted() {
     this.isLoading = true;
+    new Me().get().then((me) => {
+      this.userInfo = me[0];
+      this.isLoading = false;
+    });
   },
   methods: {
     closePanel() {
@@ -47,7 +50,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.company-details-container {
+.profile-container {
   height: 100%;
   /deep/ .md-card {
     .md-list {

@@ -56,7 +56,7 @@
   </div>
 </template>
 <script>
-import ProfileInfoField from "@/components/ProfileInfoField.vue";
+import ProfileInfoField from "./components/ProfileInfoField.vue";
 import Swal from "sweetalert2";
 export default {
   components: {

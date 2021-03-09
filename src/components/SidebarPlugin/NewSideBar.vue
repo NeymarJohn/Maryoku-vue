@@ -27,9 +27,9 @@
             <img :src="`${menuIconsURL}Asset 118.svg`" />
           </div>
         </div>
-        <!--        <div class="sidebar-menu__item">-->
-        <!--          <div class="item-route" @click="goTo('/events')"><img :src="`${menuIconsURL}Asset 114.svg`" /> My Events</div>-->
-        <!--        </div>-->
+<!--        <div class="sidebar-menu__item">-->
+<!--          <div class="item-route" @click="goTo('/events')"><img :src="`${menuIconsURL}Asset 114.svg`" /> My Events</div>-->
+<!--        </div>-->
         <div class="sidebar-menu__item" @click="goTo(`/events/${event.id}/booking/overview?walkWithMe=true`)">
           <div class="item-route"><img :src="`${menuIconsURL}Asset 116.svg`" /> Product tour</div>
         </div>
@@ -221,70 +221,6 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-.new-event-side-bar {
-  display: block;
-  font-weight: 200;
-  z-index: 9999;
-  width: 80px;
-  box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12),
-    0 8px 10px -5px rgba(0, 0, 0, 0.2);
-  background-size: cover;
-  background-position: 50%;
-  background: #fff;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-
-  .sidebar-wrapper {
-    /deep/ .md-list {
-      li {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.13);
-        border-left: 7px solid rgba(0, 0, 0, 0);
-
-        a {
-          display: block;
-          text-align: center;
-          padding: 1em 0.6em;
-
-          .md-icon.md-theme-default.md-icon-font {
-            color: #000 !important;
-          }
-        }
-
-        &.active {
-          border-left: 7px solid #fbc02d;
-
-          a.nav-link {
-            background: none;
-            box-shadow: none;
-            border-radius: 0;
-
-            .md-icon.md-theme-default.md-icon-font {
-              color: #fbc02d !important;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  .logo-mini {
-    display: block !important;
-    position: fixed;
-    bottom: 2em;
-    left: 0.6em;
-  }
-
-  .logo-img {
-    text-align: center;
-    img {
-      width: 40px;
-    }
-  }
-}
-</style>
 <style>
 .menu-button {
   border-radius: 30px;

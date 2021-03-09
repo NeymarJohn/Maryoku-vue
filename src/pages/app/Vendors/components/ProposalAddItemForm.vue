@@ -26,78 +26,57 @@
       </div>
       <hr style="background-color: #b2b2b2; height: 2px" />
       <div class="fields-cont mt-20">
-        <div class="field">
+        <div class="field description-field">
+          <input
+            v-if="filteredSuggestItems[selectedSuggestItemIndex] && serviceItem"
+            class="suggested-place-holder"
+            :value="filteredSuggestItems[selectedSuggestItemIndex].description"
+          />
           <input
             v-model="serviceItem"
-            class="input-value"
+            class="input-value description-input"
             :class="{ isFilled: !!serviceItem }"
             type="text"
             placeholder="Type name of element here"
+            @keypress="startSearch"
+            @blur="stopSearch"
           />
+          <div class="auto-complete-panel" v-if="showAutoCompletePanel && filteredSuggestItems.length > 0">
+            <div
+              class="suggest-item font-bold"
+              v-for="(item, index) in filteredSuggestItems"
+              :key="item.description"
+              @mouseenter="hoverSuggestItem(index)"
+              @click="selectSuggestItem(index)"
+            >
+              <div>{{ item.description }}</div>
+              <div>{{ item.qty }}</div>
+              <div>${{ item.price | withComma }}</div>
+            </div>
+          </div>
         </div>
-
         <div class="field">
-          <money v-model="qty" v-bind="qtyFormat" :class="{ isFilled: !!qty }" />
+          <money v-model="qty" v-bind="qtyFormat" :class="{ isFilled: !!qty, isSuggeted: isAutoCompletedValue }" />
         </div>
         <div class="field">
-          <!-- <div class="planer-choice-cont" v-if="serviceType === 'included'">
-            <md-checkbox v-model="isComplementary">
-              <span class="mr-10">
-                <img :src="`${$iconURL}common/gift-dark.svg`" class="mr-10" />Complementary Item
-              </span>
-              <!-- <md-icon class="color-red">help_outline</md-icon> -->
-          <!-- </md-checkbox> -->
-          <!-- </div> -->
           <money
             v-model="unit"
             v-bind="currencyFormat"
-            :class="{ isFilled: !!unit }"
+            :class="{ isFilled: !!unit, isSuggeted: isAutoCompletedValue }"
             v-if="serviceType !== 'included'"
           />
         </div>
         <div class="field">
-          <!-- <span>Total</span> -->
-          <!-- <money
-            :value="subTotal"
-            v-bind="currencyFormat"
-            v-if="isNumberVisible"
-            class="total"
-            :disabled="serviceType !== 'cost'"
-          />
-          <money
-            v-model="unit"
-            v-bind="currencyFormat"
-            v-else
-            class="total"
-            :class="{ isFilled: !!unit }"
-            :disabled="serviceType !== 'cost'"
-          /> -->
           <md-button
             class="md-red maryoku-btn width-100"
             :disabled="isDisabledAdd"
             @click="saveItem(serviceItem, serviceItemSize, qty, unit)"
-            >Add Line
+          >
+            Add Line
           </md-button>
         </div>
       </div>
-      <!-- <div class="planer-choice-cont" v-if="serviceType === 'cost'">
-        <md-checkbox v-model="isRequiredPlannerChoice">
-          <span class="mr-10">
-            <md-icon class="color-black" style="font-size: 30px !important; margin-right: 10px; font-weight: normal">
-              add_circle_outline
-            </md-icon>
-            Add alternative
-          </span>
-          <md-icon class="color-black">keyboard_arrow_downz </md-icon>
-          <md-icon class="color-gray" style="font-size: 35px !important; font-weight: normal">help_outline</md-icon>
-        </md-checkbox>
-      </div> -->
-      <!-- <div class="planer-choice-cont" v-if="serviceType === 'included'">
-        <md-checkbox v-model="isComplementary">
-          <span class="mr-10"><img :src="`${$iconURL}common/gift-dark.svg`" class="mr-10" />Mark as complementary</span>
-          <md-icon class="color-red">help_outline</md-icon>
-        </md-checkbox>
-      </div> -->
+
       <div v-if="isRequiredPlannerChoice" class="d-flex align-start mt-20">
         <img :src="`${$iconURL}Onboarding/enter-gray.svg`" style="margin-right: 10px" />
         <div>
@@ -148,26 +127,6 @@
           Cancel
         </md-button>
       </div>
-      <div class="action-cont">
-        <!-- <md-button class="md-simple md-black maryoku-btn" @click="cancel()"><u>Clear</u></md-button> -->
-        <!-- <md-button
-          class="md-simple md-black maryoku-btn"
-          @click="
-            isEditingComment = true;
-            comment = '';
-          "
-          :disabled="isEditingComment"
-        >
-          <img :src="`${$iconURL}common/comment-dark.svg`" class="mr-10" />
-          Add comment
-        </md-button> -->
-        <!-- <md-button
-          class="md-red maryoku-btn"
-          :disabled="isDisabledAdd"
-          @click="saveItem(serviceItem, serviceItemSize, qty, unit)"
-          >Add Line
-        </md-button> -->
-      </div>
     </div>
   </div>
 </template>
@@ -186,6 +145,10 @@ export default {
     serviceType: {
       type: String,
       default: "cost",
+    },
+    vendorServices: {
+      type: Array,
+      default: () => [],
     },
   },
   data() {
@@ -228,6 +191,13 @@ export default {
         masked: false,
       },
       isEditingComment: false,
+      // suggestedItems: [
+      //   { description: "Test1", qty: "12", price: "1231" },
+      //   { description: "Test2", qty: "12", price: "1231" },
+      //   { description: "Test4", qty: "12", price: "1231" },
+      // ],
+      selectedSuggestItemIndex: -1,
+      showAutoCompletePanel: false,
     };
   },
   created() {
@@ -236,6 +206,28 @@ export default {
     });
   },
   methods: {
+    hoverSuggestItem(index) {
+      this.selectedSuggestItemIndex = index;
+      this.qty = this.filteredSuggestItems[index].qty;
+      this.unit = this.filteredSuggestItems[index].price;
+    },
+    selectSuggestItem(index) {
+      this.qty = this.filteredSuggestItems[index].qty;
+      this.unit = this.filteredSuggestItems[index].price;
+      this.serviceItem = this.filteredSuggestItems[index].description;
+      this.selectedSuggestItemIndex = -1;
+      this.showAutoCompletePanel = false;
+    },
+    startSearch() {
+      this.showAutoCompletePanel = true;
+      console.log("start Serach");
+    },
+    stopSearch() {
+      setTimeout(() => {
+        this.showAutoCompletePanel = false;
+        this.selectedSuggestItemIndex = -1;
+      }, 500);
+    },
     addNewChoice() {
       this.plannerChoices.push({ description: "", price: 0 });
     },
@@ -319,6 +311,32 @@ export default {
     proposalRequest() {
       return this.$store.state.vendorProposal.proposalRequest;
     },
+    filteredSuggestItems() {
+      if (!this.serviceItem) return [];
+      return this.suggestedItems.filter((item) => item.description.startsWith(this.serviceItem));
+    },
+    isAutoCompletedValue() {
+      return this.selectedSuggestItemIndex >= 0;
+    },
+    suggestedItems() {
+      console.log("teasetasetaes");
+      console.log("vendor Srvice", this.vendorServices);
+      const items = [];
+      this.vendorServices.forEach((category) => {
+        category.subCategories.forEach((subCat) => {
+          subCat.items.forEach((item) => {
+            const capitalized = item.name.charAt(0).toUpperCase() + item.name.slice(1);
+            items.push({
+              description: capitalized,
+              qty: item.value,
+              price: 0,
+            });
+          });
+        });
+      });
+      console.log(items);
+      return items;
+    },
   },
 };
 </script>
@@ -333,23 +351,40 @@ export default {
     font: normal 16px "Manrope-Regular", sans-serif;
     color: #050505;
     &.isFilled {
-      border: 1px solid #828282;
+      border: 1px solid #b7b7b7;
     }
     &:disabled {
       color: #828282;
     }
-  }
-
-  input {
-    font-size: 16px;
+    position: absolute;
     width: 100%;
-    padding: 1.5rem 1rem;
-    border: 1px solid #b7b7b7;
-    box-shadow: none;
-    font: normal 16px "Manrope-Regular", sans-serif;
-    color: #050505;
-    &.isFilled {
-      border: 1px solid #b7b7b7;
+  }
+  .suggested-place-holder,
+  .isSuggeted {
+    color: #e8ae03;
+  }
+  .description-input {
+    background-color: transparent;
+  }
+  .description-field {
+    position: relative;
+    .auto-complete-panel {
+      padding: 30px 0;
+      border-radius: 3px;
+      box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+      background-color: #ffffff;
+      position: absolute;
+      width: 100%;
+      margin-top: 53px;
+      .suggest-item {
+        display: grid;
+        grid-template-columns: 60% 15% 25%;
+        padding: 10px 30px;
+        cursor: pointer;
+        &:hover {
+          background-color: #ffedb7;
+        }
+      }
     }
   }
   .sub-items-cont {
@@ -438,83 +473,6 @@ export default {
         font-weight: 800;
       }
     }
-
-    &.dropdown {
-      padding: 8px 8px 42px 0px;
-      display: grid;
-      grid-template-columns: 50% 50%;
-      align-items: center;
-      cursor: pointer;
-
-      .left-side {
-        width: 100%;
-        display: grid;
-        grid-template-columns: 10% 90%;
-        align-items: center;
-
-        .check-cont {
-          img {
-            width: 33px;
-          }
-        }
-        h3 {
-          display: grid;
-          align-items: center;
-          grid-template-columns: 10% 90%;
-          margin: 0;
-          font-size: 30px;
-          font-weight: 800;
-
-          img {
-            width: 34px;
-            height: 34px;
-          }
-        }
-      }
-      .right-side {
-        display: flex;
-        width: 100%;
-        justify-content: space-between;
-        align-items: center;
-
-        .budget-cont {
-          margin-left: 4em;
-          span {
-            color: #818080;
-            &:first-child {
-              font-size: 14px;
-              margin-right: 1rem;
-            }
-            &:nth-child(2) {
-              font-size: 20px;
-              font-weight: 800;
-            }
-          }
-        }
-        .proposal-range-cont {
-          text-align: right;
-          margin-left: 65px;
-          p {
-            margin-top: 0;
-            font-size: 14px;
-          }
-          span {
-            font-size: 14px;
-            &.grey {
-              color: #818080;
-            }
-            &:last-child {
-              color: #050505;
-              font-weight: 800;
-            }
-          }
-        }
-        img {
-          width: 12px;
-          margin-left: 50px;
-        }
-      }
-    }
   }
 
   .add-item-cont {
@@ -524,6 +482,7 @@ export default {
       grid-template-columns: 50% 10% 30% 10%;
       .field {
         margin-right: 1em;
+        position: relative;
         span {
           margin-bottom: 0.5rem;
           display: inline-block;

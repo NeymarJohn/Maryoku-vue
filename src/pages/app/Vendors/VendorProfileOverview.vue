@@ -1,9 +1,6 @@
 <template>
   <div class="md-layout p-20 planner-profile">
-    <div class="md-layout-item md-size-100 font-size-22 font-bold mb-30 mt-30">
-      <img :src="`${$iconURL}Profile/settings-dark.svg`" class="mr-20" />
-      PROFILE & SETTINGS
-    </div>
+    <div class="md-layout-item md-size-100">PROFILE & SETTINGS</div>
     <div class="md-layout-item md-size-25">
       <div class="left-sidebar white-card">
         <div class="profile">
@@ -30,11 +27,15 @@
             </label>
           </md-list-item>
 
-          <md-list-item class="mb-30" @click="goTo('details')" :class="{ 'font-bold-extra': pageName === 'details' }">
+          <md-list-item
+            class="mb-30"
+            @click="goTo('inspirations')"
+            :class="{ 'font-bold-extra': pageName === 'inspirations' }"
+          >
             <label
               ><img
                 :src="
-                  pageName === 'details'
+                  pageName === 'inspirations'
                     ? `${$iconURL}Profile/inspirations-dark.svg`
                     : `${$iconURL}Profile/inspirations-gray.svg`
                 "
@@ -70,8 +71,10 @@
       </div>
     </div>
     <div class="md-layout-item md-size-70">
-      <vendor-account-settings v-if="pageName === 'settings'"></vendor-account-settings>
-      <company-details v-if="pageName === 'details'"></company-details>
+      <profile-settings v-if="pageName === 'settings'"></profile-settings>
+      <!-- <profile-settings v-if="pageName === 'settings'"></profile-settings>
+      <my-events v-if="pageName === 'events'"></my-events>
+      <inspirations v-if="pageName === 'inspirations'"></inspirations> -->
     </div>
   </div>
 </template>
@@ -79,13 +82,13 @@
 <script>
 import VueElementLoading from "vue-element-loading";
 import PersonalInformation from "@/pages/app/Profile/PersonalInformation.vue";
-import CompanyDashboardInfo from "../../CompanyDashboard/CompanyDashboardInfo.vue";
+import CompanyDashboardInfo from "../CompanyDashboard/CompanyDashboardInfo.vue";
 import DietaryConstraints from "@/pages/app/Profile/DietaryConstraints.vue";
 import MySpecialDates from "@/pages/app/Profile/MySpecialDates.vue";
 import HolidaysCelebrate from "@/pages/app/Profile/HolidaysCelebrate.vue";
 import { LabelEdit, Tabs } from "@/components";
 import { EditProfileForm, UserCard } from "@/pages";
-
+import ProfileSettings from "@/pages/app/Vendors/VendorAccountSettings";
 import MyEvents from "@/pages/app/Profile/MyEvents.vue";
 // import auth from '@/auth';
 import { mapGetters, mapActions, mapState } from "vuex";
@@ -93,8 +96,6 @@ import Inspirations from "@/pages/app/Profile/Inspirations.vue";
 import UserAvatar from "@/pages/app/Profile/components/UserAvatar.vue";
 import CompanyLogo from "@/pages/app/Profile/components/CompanyLogo.vue";
 
-import VendorAccountSettings from "./Account";
-import CompanyDetails from "./CompanyDetails";
 export default {
   components: {
     VueElementLoading,
@@ -107,12 +108,11 @@ export default {
     UserCard,
     CompanyDashboardInfo,
     LabelEdit,
-    VendorAccountSettings,
+    ProfileSettings,
     MyEvents,
     Inspirations,
     UserAvatar,
     CompanyLogo,
-    CompanyDetails,
   },
   data() {
     return {
@@ -206,7 +206,7 @@ export default {
         });
     },
     goTo(pageName) {
-      this.$router.push(`/vendor/profile/${pageName}`);
+      this.$router.push(`/profile/${pageName}`);
     },
     logout() {
       this.$router.push("/signout");

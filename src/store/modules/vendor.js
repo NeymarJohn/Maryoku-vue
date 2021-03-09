@@ -1,5 +1,5 @@
 import { postReq, getReq } from "@/utils/token";
-import Vendors from "@/models/Vendors";
+
 const state = {
     isEditing: false,
     step: 0,
@@ -11,14 +11,13 @@ const state = {
     vendors: [],
     allProperties: [],
     properties: {},
-    profile: {}
 };
 
 const getters = {
     getAllProperties: state => {
         return state.allProperties;
     },
-    getPropertiesByCategory: state => category => { },
+    getPropertiesByCategory: state => category => {},
     getStatus: state => state.status,
 
     getRoading: state => state.loading,
@@ -66,16 +65,6 @@ const actions = {
         if (!state[categoryName]) {
         }
     },
-    getProfile: ({ commit, state }) => {
-        Vendors.find("me").then(res => {
-            commit('setProfile', res);
-        })
-    },
-    updateProfile: ({ commit, state }, profileData) => {
-        new Vendors(profileData).save().then(res => {
-            commit('setProfile', res.item);
-        })
-    }
 };
 
 const mutations = {
@@ -109,9 +98,6 @@ const mutations = {
     RESET(state) {
         state.status = null;
     },
-    setProfile(state, vendorProfile) {
-        state.profile = vendorProfile
-    }
 };
 
 export default {

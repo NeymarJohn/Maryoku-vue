@@ -14,7 +14,7 @@
       </div>
       <div class="percentage">
         <ul>
-          <li class="green-label">{{`${(warming / elements.length).toFixed(2) * 100}%`}}</li>
+          <li class="green-label">{{(warming / elements.length).toFixed(2) * 100}} %</li>
           <li class>{{warming}} of {{elements.length}}</li>
         </ul>
       </div>
@@ -126,7 +126,7 @@ export default {
     //   eventData: (state) => state.eventData,
     // }),
     warming(){
-        let value = this.elements.filter(it => it.progress == 100);
+        let value = this.elements.filter(it => it.progress != 0);
         return value ? value.length : 0
     }
   },

@@ -25,6 +25,7 @@
         v-if="canAdd"
         :optionalRequirements="optionalRequirements"
         :serviceType="tableCategory"
+        :vendorServices="vendorServices"
         @addItem="addItem"
       ></proposal-add-item-form>
       <proposal-service-table :category="vendorCategory" :tableCategory="tableCategory"></proposal-service-table>
@@ -34,6 +35,7 @@
 <script>
 import ProposalAddItemForm from "./ProposalAddItemForm.vue";
 import ProposalServiceTable from "./ProposalServiceTable";
+import { businessCategories, generalInfos, companyServices } from "@/constants/vendor";
 
 export default {
   props: {
@@ -124,6 +126,15 @@ export default {
         optionalRequirements = optionalRequirements.concat(selectedOptions);
       });
       return optionalRequirements;
+    },
+    vendorServices() {
+      console.log(businessCategories);
+      const vendorCategoryService = businessCategories.find((item) => item.name === this.vendorCategory);
+      console.log(vendorCategoryService);
+      if (vendorCategoryService) {
+        return vendorCategoryService.categories;
+      }
+      return [];
     },
     services: {
       get: function () {

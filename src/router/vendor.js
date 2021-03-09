@@ -1,10 +1,9 @@
 const VendorSignupLayout = () => import("@/pages/Dashboard/Layout/VendorSignupLayout.vue");
 const VendorMainLayout = () => import("@/pages/app/Vendors/VendorMainLayout.vue")
 
-const VendorProfileOverview = () => import("@/pages/app/Vendors/Profile")
+const VendorProfileOverview = () => import("@/pages/app/Vendors/VendorProfileOverview.vue")
 const VendorSignup = () => import("@/pages/app/Vendors/VendorSignup.vue");
 const VendorSignin = () => import("@/pages/app/Vendors/VendorSignin.vue")
-const VendorSignedin = () => import("@/pages/app/Vendors/VendorSignedin.vue")
 export default [{
   path: "/vendor",
   name: "Vendor",
@@ -22,7 +21,7 @@ export default [{
     },
     {
       path: "edit/:id",
-      name: "VendorSignup",
+      name: "Vendor Edit",
       component: VendorSignup,
       meta: {
         auth: false,
@@ -36,16 +35,12 @@ export default [{
   name: "Vendor Signin",
   component: VendorSignin,
 }, {
-  path: "/vendor/signedin",
-  name: "Vendor Signed In",
-  component: VendorSignedin,
-}, {
-  path: "/vendor",
+  path: "/",
   component: VendorMainLayout,
   name: "Vendor Profile",
   children: [
     {
-      path: "profile/:pageName",
+      path: "/profile/:pageName",
       name: "overview",
       component: VendorProfileOverview,
       meta: {
