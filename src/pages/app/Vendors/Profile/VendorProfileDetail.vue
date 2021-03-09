@@ -1,52 +1,34 @@
 <template>
-  <div class="profile-detail">
+  <div class="vendor-profile-detail">
     <profile-info-field
       class="profile-detail-info"
       :defaultValue="userData.name"
-      fieldName="name"
       :icon="`${$iconURL}common/user-dark.svg`"
+      fieldName="name"
       fieldLabel="Full Name"
       @save="saveProfileField"
+      theme="md-vendor"
     ></profile-info-field>
     <profile-info-field
       class="profile-detail-info"
       :defaultValue="userData.email || userData.username"
-      fieldName="email"
       :icon="`${$iconURL}common/email-dark.svg`"
+      fieldName="email"
       fieldLabel="Email Address"
       @save="saveProfileField"
+      theme="md-vendor"
     ></profile-info-field>
     <profile-info-field
       class="profile-detail-info"
       :defaultValue="userData.password"
-      fieldName="password"
       :icon="`${$iconURL}common/password-dark.svg`"
+      fieldName="password"
       fieldLabel="Password"
       @save="saveProfileField"
+      theme="md-vendor"
     ></profile-info-field>
-    <profile-info-field
-      class="profile-detail-info"
-      :defaultValue="userData.phoneNumber"
-      fieldName="phoneNumber"
-      :icon="`${$iconURL}common/phone-dark.svg`"
-      fieldLabel="Phone Number"
-      @save="saveProfileField"
-    ></profile-info-field>
-    <profile-info-field
-      class="profile-detail-info"
-      :defaultValue="userData.company"
-      fieldName="company"
-      :icon="`${$iconURL}common/company-dark.svg`"
-      fieldLabel="Company Name"
-      @save="saveProfileField"
-    ></profile-info-field>
-    <div class="profile-detail-info mt-30">
-      <div class="d-flex justify-content-between">About your company</div>
-      <div>Lorem ipsum dolor sit amet, consetetur sadipscing</div>
-      <textarea class="mb-30" placeholder="Write description here" v-model="companyDescription"></textarea>
-    </div>
     <div class="mt-30 pb-50">
-      <md-button class="md-simple edit-btn" @click="deleteProfile">Delete My Profile</md-button>
+      <md-button class="md-simple edit-btn md-vendor" @click="deleteProfile">Delete My Profile</md-button>
       <div>You will receive an email to confirm your decision.</div>
       <div>
         Please note, that all events you have created will be permanently erased. You may want to save backups of these
@@ -113,7 +95,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.profile-detail {
+.vendor-profile-detail {
   text-align: left;
   max-width: 800px;
   font-size: 16px;

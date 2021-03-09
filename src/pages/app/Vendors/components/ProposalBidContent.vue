@@ -137,12 +137,6 @@ export default {
           }
         });
       }
-      this.$store.commit("vendorProposal/setValue", { key: "vendorCostServices", value: costVendorServices });
-      this.$store.commit("vendorProposal/setValue", {
-        key: "vendorIncludedServices",
-        value: includedVendorServices || [],
-      });
-
       this.$store.commit("vendorProposal/setCostServices", {
         category: this.vendor.eventCategory.key,
         services: costServices,

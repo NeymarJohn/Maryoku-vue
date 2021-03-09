@@ -46,15 +46,6 @@
               <span>Your proposal</span>
               <span>${{ ((mainTotalPrice * (100 - bundleDiscountPercentage)) / 100) | withComma }}</span>
             </li>
-            <li>
-              <span>Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
-              <span>
-                ${{
-                  event.components.find((item) => item.componentId == vendor.eventCategory.key).allocatedBudget
-                    | withComma
-                }}</span
-              >
-            </li>
             <li v-if="mainTotalPrice - getAllocatedBudget(vendor.eventCategory.key) > 0" class="color-black">
               <span>
                 <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />

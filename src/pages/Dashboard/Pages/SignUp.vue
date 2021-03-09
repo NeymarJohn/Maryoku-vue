@@ -85,7 +85,7 @@
             <div><md-button @click="signup" class="md-default md-red md-maryoku mt-4">Sign Up</md-button></div>
             <div>
               <md-button @click="toSignin" class="md-black md-maryoku mt-4 md-simple mt-4">
-                Already Registered?
+                Already a User?
               </md-button>
             </div>
           </div>
