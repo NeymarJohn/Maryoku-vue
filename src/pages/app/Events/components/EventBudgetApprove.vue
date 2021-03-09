@@ -36,8 +36,7 @@
                 @updateCategory="updateCategory"
               ></event-budget-component>
               <event-budget-component
-                v-if="event.unexpectedBudget"
-                :editable="canEdit"
+                :editable="false"
                 :component="{
                   title: 'Unexpected',
                   color: '#80B93D',
@@ -45,11 +44,8 @@
                   icon: 'unexpected.svg',
                   allocatedBudget: event.unexpectedBudget,
                 }"
-                @delete="deleteCategory"
-                @updateCategory="updateCategory"
               ></event-budget-component>
               <event-budget-component
-                v-if="event.allocatedFees + event.allocatedTips"
                 :editable="canEdit"
                 :component="{
                   title: 'Extra',
@@ -58,8 +54,6 @@
                   icon: 'extra.svg',
                   allocatedBudget: event.allocatedFees + event.allocatedTips,
                 }"
-                @delete="deleteCategory"
-                @updateCategory="updateCategory"
               ></event-budget-component>
               <event-budget-component
                 :editable="false"
@@ -95,8 +89,7 @@
                 :key="index"
               ></event-budget-component>
               <event-budget-component
-                v-if="event.unexpectedBudget"
-                :editable="canEdit"
+                :editable="false"
                 :component="{
                   title: 'Unexpected',
                   color: '#80B93D',
@@ -106,11 +99,8 @@
                 }"
                 type="perguest"
                 :participants="event.numberOfParticipants"
-                @delete="deleteCategory"
-                @updateCategory="updateCategory"
               ></event-budget-component>
               <event-budget-component
-                v-if="event.allocatedFees + event.allocatedTips"
                 :editable="canEdit"
                 :component="{
                   title: 'Extra',
@@ -121,8 +111,6 @@
                 }"
                 type="perguest"
                 :participants="event.numberOfParticipants"
-                @delete="deleteCategory"
-                @updateCategory="updateCategory"
               ></event-budget-component>
               <event-budget-component
                 :editable="canEdit"
@@ -252,39 +240,33 @@ export default {
       this.showAddNewCategory = false;
       this.$store.dispatch("event/saveEventAction", event).then((res) => {});
     },
-    deleteCategory(changedMoney) {
-        const event = new CalendarEvent({
+    deleteCategory(category) {
+      const event = new Event({id: this.event.id})
+      const deletingCategory = new EventComponent({ id: category.id });
+      deletingCategory
+        .for(event)
+        .delete()
+        .then((resp) => {
+          this.isLoading = false;
+          const event = new CalendarEvent({
             id: this.event.id,
-            allocatedBudget: this.event.allocatedBudget - changedMoney.offset,
+            unexpectedBudget: this.event.unexpectedBudget + category.allocatedBudget,
+            calendar: new Calendar({ id: this.event.calendar.id }),
+          });
+          this.$store.dispatch("event/saveEventAction", event).then((res) => {});
+          this.$emit("change");
+        })
+        .catch((error) => {
+          console.log(error);
         });
-        if (changedMoney.selectedOption === "total") {
-            event.totalBudget = this.event.totalBudget - changedMoney.offset;
-            if (changedMoney.hasOwnProperty('title') && changedMoney.title) {
-                if (changedMoney.title === 'Unexpected') event.unexpectedBudget = 0
-                if (changedMoney.title === 'Extra') {
-                    event.allocatedTips = 0;
-                    event.allocatedFees = 0;
-                }
-            }
-        } else if (changedMoney.selectedOption === "unexpected") {
-            event.unexpectedBudget = this.event.unexpectedBudget + changedMoney.offset;
-        }
-        this.$store.dispatch("event/saveEventAction", event).then((res) => {});
     },
     updateCategory(changedMoney) {
         const event = new CalendarEvent({
             id: this.event.id,
             allocatedBudget: this.event.allocatedBudget + changedMoney.offset,
         });
-
         if (changedMoney.selectedOption === "total") {
             event.totalBudget = this.event.totalBudget + changedMoney.offset;
-            if (changedMoney.hasOwnProperty('title') && changedMoney.title) {
-                if (changedMoney.title === 'Unexpected') event.unexpectedBudget = this.event.unexpectedBudget + changedMoney.offset
-                if (changedMoney.title === 'Extra') {
-                    event.allocatedTips = this.event.allocatedTips + changedMoney.offset;
-                }
-            }
         } else if (changedMoney.selectedOption === "unexpected") {
             event.unexpectedBudget = this.event.unexpectedBudget - changedMoney.offset;
         }

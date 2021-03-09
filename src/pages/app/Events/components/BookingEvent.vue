@@ -335,19 +335,11 @@ export default {
     },
   },
   created() {
-    console.log('bookingEvent');
     this.isLoading = true;
     this.calendar = new Calendar({
       id: this.$store.state.auth.user.profile.defaultCalendarId,
     });
     this.fetchData();
-
-    this.$root.$on('clearVendorRequirement', event => {
-          console.log('clearVendorRequirement')
-          let requirements = this.storedRequirements;
-          if (requirements[event.id]) requirements[event.id] = null;
-          this.setBookingRequirements(requirements);
-    })
   },
   watch: {
     event(newVal, oldVal) {

@@ -3,9 +3,6 @@
     class="md-card-tabs"
     :class="[{ 'flex-column': flexColumn }, { 'nav-pills-icons': navPillsIcons }, { 'md-card-plain': plain }]"
   >
-    <!--<md-card-header>
-      <slot name="header-title"></slot>
-      </md-card-header>-->
     <md-card-content>
       <md-list class="nav-tabs md-card">
         <md-list-item

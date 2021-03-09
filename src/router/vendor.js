@@ -1,7 +1,7 @@
 const VendorSignupLayout = () => import("@/pages/Dashboard/Layout/VendorSignupLayout.vue");
 const VendorMainLayout = () => import("@/pages/app/Vendors/VendorMainLayout.vue")
 
-const VendorProfileOverview = () => import("@/pages/app/Vendors/VendorProfileOverview.vue")
+const VendorProfileOverview = () => import("@/pages/app/Vendors/Profile")
 const VendorSignup = () => import("@/pages/app/Vendors/VendorSignup.vue");
 const VendorSignin = () => import("@/pages/app/Vendors/VendorSignin.vue")
 const VendorSignedin = () => import("@/pages/app/Vendors/VendorSignedin.vue")

@@ -50,7 +50,8 @@
           class="left-menu-events-list"
           :link="{
             name: 'Event Details',
-            icon: 'outlined_flag',
+            iconUrl: '/static/icons/vendor/dashboard.svg',
+            iconActiveUrl: '/static/icons/vendor/dashboard-active.svg',
             path: `/vendor/dashboard`,
             startLink: `/vendor/dashboard`,
           }"
@@ -60,7 +61,8 @@
           class="left-menu-events-list"
           :link="{
             name: 'Events Lists',
-            icon: 'check_circle_outline',
+            iconUrl: '/static/icons/vendor/proposal.svg',
+            iconActiveUrl: '/static/icons/vendor/proposal-active.svg',
             path: `/vendor/dashboard`,
             startLink: `/vendor/dashboard`,
           }"
@@ -70,7 +72,8 @@
           class="left-menu-yearly-plan"
           :link="{
             name: 'Event Budget',
-            iconImage: 'attach_money',
+            iconUrl: '/static/icons/vendor/profile.svg',
+            iconActiveUrl: '/static/icons/vendor/profile-active.svg',
             path: `/vendor/profile/settings`,
             startLink: `/vendor/profile/`,
           }"
@@ -80,7 +83,8 @@
           class="left-menu-yearly-plan"
           :link="{
             name: 'Event Budget',
-            icon: 'attach_money',
+            iconUrl: '/static/icons/vendor/revenue.svg',
+            iconActiveUrl: '/static/icons/vendor/revenue-active.svg',
             path: `/vendor/dashboard`,
             startLink: `/vendor/dashboard`,
           }"
@@ -90,7 +94,8 @@
           class="left-menu-yearly-plan"
           :link="{
             name: 'Event Budget',
-            icon: 'attach_money',
+            iconUrl: '/static/icons/vendor/message.svg',
+            iconActiveUrl: '/static/icons/vendor/message-active.svg',
             path: `/vendor/dashboard`,
             startLink: `/vendor/dashboard`,
           }"
@@ -100,7 +105,7 @@
     <div class="logo">
       <a href="/" class="simple-text logo-mini visible-on-sidebar-mini">
         <div class="logo-img">
-          <img :src="logo" />
+          <img :src="`${$iconURL}VendorDashboard/maryoku-logo-dark.png`" />
           <!--<md-icon>calendar_today</md-icon>-->
         </div>
       </a>
@@ -149,14 +154,6 @@ export default {
         let acceptedValues = ["", "black", "white", "red"];
         return acceptedValues.indexOf(value) !== -1;
       },
-    },
-    logo: {
-      type: String,
-      default: "https://static-maryoku.s3.amazonaws.com/storage/maryoku+-+logo+square+dark%402x.png",
-    },
-    fullLogo: {
-      type: String,
-      default: "https://static-maryoku.s3.amazonaws.com/storage/maryoku+-+logo+dark%402x.png",
     },
     sidebarLinks: {
       type: Array,
@@ -235,6 +232,74 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.new-event-side-bar {
+  display: block;
+  font-weight: 200;
+  z-index: 9999;
+  width: 80px;
+  box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12),
+    0 8px 10px -5px rgba(0, 0, 0, 0.2);
+  background-size: cover;
+  background-position: 50%;
+  background: #fff;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  .sidebar-wrapper {
+    /deep/ .md-list {
+      li {
+        &:first-child {
+          border-top: 1px solid rgba(0, 0, 0, 0.13);
+        }
+        border-bottom: 1px solid rgba(0, 0, 0, 0.13);
+
+        a {
+          display: block;
+          text-align: center;
+          padding: 1.5em 0.6em;
+
+          .md-icon.md-theme-default.md-icon-font {
+            color: #000 !important;
+          }
+        }
+
+        &.active {
+          border-left: 10px solid #641856;
+
+          a.nav-link {
+            background: none;
+            box-shadow: none;
+            border-radius: 0;
+            .md-icon.md-theme-default.md-icon-font {
+              color: #641856 !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .logo-mini {
+    display: block !important;
+    position: fixed;
+    bottom: 2em;
+    left: 0.6em;
+    width: 60px;
+  }
+
+  .logo-img {
+    text-align: center;
+    overflow: hidden;
+    max-width: 40px;
+    margin: auto;
+    img {
+      max-width: unset;
+    }
+  }
+}
+</style>
 <style>
 .menu-button {
   border-radius: 30px;

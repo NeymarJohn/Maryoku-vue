@@ -11,18 +11,18 @@
             <!-- <user-avatar :user="userData" @set="setAvatar"></user-avatar> -->
             <company-logo :user="userData" @set="setLogo"></company-logo>
           </div>
-          <h3 class="name font-bold text-center">{{ userData.profile.displayName }}</h3>
+          <h3 class="name font-bold text-center">{{ vendorData.companyName }}</h3>
           <div class="text-center">
             <span class="font-size-20"><md-icon style="color: #ffc001">start</md-icon>4.6</span>
             <span class="color-gray">(12 Reviews)</span>
           </div>
         </div>
         <md-list>
-          <md-list-item @click="goTo('events')" :class="{ 'font-bold-extra': pageName === 'events' }">
+          <md-list-item @click="goTo('services')" :class="{ 'font-bold-extra': pageName === 'services' }">
             <label>
               <img
                 :src="
-                  pageName === 'events' ? `${$iconURL}Profile/events-dark.svg` : `${$iconURL}Profile/events-gray.svg`
+                  pageName === 'services' ? `${$iconURL}Profile/events-dark.svg` : `${$iconURL}Profile/events-gray.svg`
                 "
                 class="page-icon"
               />
@@ -30,15 +30,11 @@
             </label>
           </md-list-item>
 
-          <md-list-item
-            class="mb-30"
-            @click="goTo('inspirations')"
-            :class="{ 'font-bold-extra': pageName === 'inspirations' }"
-          >
+          <md-list-item class="mb-30" @click="goTo('details')" :class="{ 'font-bold-extra': pageName === 'details' }">
             <label
               ><img
                 :src="
-                  pageName === 'inspirations'
+                  pageName === 'details'
                     ? `${$iconURL}Profile/inspirations-dark.svg`
                     : `${$iconURL}Profile/inspirations-gray.svg`
                 "
@@ -75,9 +71,8 @@
     </div>
     <div class="md-layout-item md-size-70">
       <vendor-account-settings v-if="pageName === 'settings'"></vendor-account-settings>
-      <!-- <profile-settings v-if="pageName === 'settings'"></profile-settings>
-      <my-events v-if="pageName === 'events'"></my-events>
-      <inspirations v-if="pageName === 'inspirations'"></inspirations> -->
+      <company-details v-if="pageName === 'details'"></company-details>
+      <my-services v-if="pageName === 'services'"></my-services>
     </div>
   </div>
 </template>
@@ -85,13 +80,13 @@
 <script>
 import VueElementLoading from "vue-element-loading";
 import PersonalInformation from "@/pages/app/Profile/PersonalInformation.vue";
-import CompanyDashboardInfo from "../CompanyDashboard/CompanyDashboardInfo.vue";
+import CompanyDashboardInfo from "../../CompanyDashboard/CompanyDashboardInfo.vue";
 import DietaryConstraints from "@/pages/app/Profile/DietaryConstraints.vue";
 import MySpecialDates from "@/pages/app/Profile/MySpecialDates.vue";
 import HolidaysCelebrate from "@/pages/app/Profile/HolidaysCelebrate.vue";
 import { LabelEdit, Tabs } from "@/components";
 import { EditProfileForm, UserCard } from "@/pages";
-import VendorAccountSettings from "@/pages/app/Vendors/VendorAccountSettings";
+
 import MyEvents from "@/pages/app/Profile/MyEvents.vue";
 // import auth from '@/auth';
 import { mapGetters, mapActions, mapState } from "vuex";
@@ -99,6 +94,9 @@ import Inspirations from "@/pages/app/Profile/Inspirations.vue";
 import UserAvatar from "@/pages/app/Profile/components/UserAvatar.vue";
 import CompanyLogo from "@/pages/app/Profile/components/CompanyLogo.vue";
 
+import VendorAccountSettings from "./Account";
+import CompanyDetails from "./CompanyDetails";
+import MyServices from "./MyServices";
 export default {
   components: {
     VueElementLoading,
@@ -116,6 +114,8 @@ export default {
     Inspirations,
     UserAvatar,
     CompanyLogo,
+    CompanyDetails,
+    MyServices,
   },
   data() {
     return {
@@ -135,6 +135,9 @@ export default {
     userData() {
       return this.$store.state.auth.user;
     },
+    vendorData() {
+      return this.$store.state.vendor.profile;
+    },
   },
   mounted() {
     // TODO : user state should be reviewed
@@ -144,6 +147,7 @@ export default {
       .dispatch("auth/checkToken")
       .then(() => {
         this.user = this.$auth.user;
+        this.$store.dispatch("vendor/getProfile");
       })
       .catch(() => {
         this.$router.push({ path: `/signin` });

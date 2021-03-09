@@ -626,8 +626,6 @@ export default {
 
     addBuildingBlock() {
       this.showCategoryModal = false;
-      console.log('addBuildingBlock')
-      this.$root.$emit('clearVendorRequirement', this.event);
       this.$emit("change");
     },
     getCategoryBlocks() {

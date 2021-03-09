@@ -83,11 +83,6 @@
             </li>
           </ul>
         </div>
-        <discount-form
-          :totalPrice="totalPriceMainCategory"
-          @saveDiscount="saveDiscount(vendor.eventCategory.key, ...arguments)"
-          @saveTax="saveTax(vendor.eventCategory.key, ...arguments)"
-        ></discount-form>
       </div>
       <div class="item additional" v-if="step > 1 && additionalServices.length > 0">
         <div
@@ -124,12 +119,52 @@
                 more than the budget</span
               >
             </li>
-            <discount-form
-              :totalPrice="totalPriceByCategory[a]"
-              @saveDiscount="saveDiscount(a, ...arguments)"
-              @saveTax="saveTax(a, ...arguments)"
-            ></discount-form>
           </ul>
+        </div>
+      </div>
+      <div class="item tax font-bold">
+        <div class="service-item">
+          <div class="flex-1">
+            <img :src="`${iconUrl}Asset 612.svg`" style="width: 20px" class="mr-10" />
+            <span>Discount</span>
+          </div>
+          <div class="text-right">{{ discount.percentage }}%</div>
+          <div class="text-right">{{ discount.price }}%</div>
+          <div class="text-right">
+            <md-button class="md-simple edit-btn">
+              <img :src="`${$iconURL}common/edit-dark.svg`" style="width: 20px; height: 20px"
+            /></md-button>
+          </div>
+        </div>
+        <div class="service-item">
+          <div class="flex-1">
+            <img :src="`${iconUrl}Asset 613.svg`" style="width: 20px" class="mr-10" />
+            <span>Taxes</span>
+          </div>
+          <div class="text-right">
+            <money
+              v-if="isTaxEditing"
+              v-model="tax"
+              v-bind="{
+                decimal: '.',
+                thousands: ',',
+                prefix: '$ ',
+                suffix: '',
+                precision: 2,
+                masked: false,
+              }"
+              class="bundle-discount-input"
+              @keyup.native="setPercentage"
+              @click.native="discoutOption = 'amount'"
+            />
+            <span v-else>{{ tax }}%</span>
+          </div>
+          <div class="text-right">{{}}</div>
+          <div class="text-right">
+            <md-button class="md-simple edit-btn">
+              <img :src="`${$iconURL}common/edit-dark.svg`" style="width: 20px; height: 20px"
+            /></md-button>
+          </div>
         </div>
       </div>
       <div class="item bundle" v-if="isBundleDiscount">
@@ -220,14 +255,12 @@ import VendorService from "@/services/vendor.service";
 import InputProposalSubItem from "@/components/Inputs/InputProposalSubItem.vue";
 import { Money } from "v-money";
 import { mapGetters } from "vuex";
-import DiscountForm from "./DiscountForm.vue";
 
 export default {
   name: "proposal-budget-summary",
   components: {
     InputProposalSubItem,
     Money,
-    DiscountForm,
   },
   props: {
     // bundleDiscount: Boolean,
@@ -255,6 +288,11 @@ export default {
       bundleDiscountPercentage: 0,
       bundleDiscountAmount: 0,
       discoutOption: "",
+      tax: 0,
+      discount: {
+        percentage: 0,
+        price: 10,
+      },
     };
   },
   methods: {
@@ -363,12 +401,6 @@ export default {
       );
       return allocatedBudgetItem.allocatedBudget;
     },
-    saveDiscount(categoryKey, discount) {
-      this.$store.commit("vendorProposal/setDiscount", { category: categoryKey, discount: discount });
-    },
-    saveTax(categoryKey, tax) {
-      this.$store.commit("vendorProposal/setTax", { category: categoryKey, tax: tax });
-    },
   },
   created() {
     window.addEventListener("scroll", this.handleScroll);
@@ -423,12 +455,7 @@ export default {
     serviceCategories() {
       return this.$store.state.common.serviceCategories;
     },
-    ...mapGetters("vendorProposal", [
-      "mainTotalPrice",
-      "pricesByCategory",
-      "totalPriceMainCategory",
-      "totalPriceByCategory",
-    ]),
+    ...mapGetters("vendorProposal", ["mainTotalPrice", "pricesByCategory"]),
     totalPrice() {
       let s = 0;
       Object.keys(this.pricesByCategory).forEach((category) => {
@@ -456,21 +483,8 @@ export default {
       });
       return result;
     },
-    defaultTax() {
-      return this.$store.state.vendorProposal.taxes[this.vendor.eventCategory.key];
-    },
-    defaultDiscount() {
-      return (this.discount = this.$store.state.vendorProposal.discounts[this.vendor.eventCategory.key]);
-    },
   },
-  watch: {
-    defaultTax(newValue) {
-      this.tax = newValue;
-    },
-    defaultDiscount(newValue) {
-      this.discount = newValue;
-    },
-  },
+  watch: {},
 };
 </script>
 <style lang="scss" scoped>

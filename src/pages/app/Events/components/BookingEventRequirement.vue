@@ -169,65 +169,65 @@ export default {
           }
         });
       }
-      // console.log("checkCondition", requirements);
+      console.log("checkCondition", requirements);
     },
-    _saveRequirementsInStore(event, action = null) {
+    _saveRequirementsInStore(action = null) {
       let requirements = this.storedRequirements;
 
       if ( action === 'clear' ) {
         let initRequirements = this.$store.state.event.initBookingRequirements;
-        // console.log('clear.initRequirement', initRequirements);
-        requirements[event.id][this.blockId].requirements = JSON.parse(JSON.stringify(initRequirements[event.id][this.blockId].requirements));
-        requirements[event.id][this.blockId].anythingElse = null;
+        console.log('clear.initRequirement', initRequirements);
+        requirements[this.event.id][this.blockId].requirements = JSON.parse(JSON.stringify(initRequirements[this.event.id][this.blockId].requirements));
+        requirements[this.event.id][this.blockId].anythingElse = null;
       } else {
-        requirements[event.id][this.blockId].requirements = JSON.parse(JSON.stringify(this.requirementProperties));
-        requirements[event.id][this.blockId].anythingElse = this.anythingElse;
+        requirements[this.event.id][this.blockId].requirements = JSON.parse(JSON.stringify(this.requirementProperties));
+        requirements[this.event.id][this.blockId].anythingElse = this.anythingElse;
       }
-      // console.log('updatedRequirement', requirements[this.event.id][this.blockId].requirements);
+      console.log('updatedRequirement', requirements[this.event.id][this.blockId].requirements);
       this.setBookingRequirements(requirements);
     },
     addRequirement(category, property) {
       const index = this.requirementProperties[category].findIndex((it) => it.item == property.item);
       this.requirementProperties[category][index].isSelected = true;
       this.requirementProperties = { ...this.requirementProperties };
-      this._saveRequirementsInStore(this.event);
+      this._saveRequirementsInStore();
       // this.$forceUpdate();
     },
     removeRequirement(category, property) {
       const index = this.requirementProperties[category].findIndex((it) => it.item == property.item);
       this.requirementProperties[category][index].isSelected = false;
       this.requirementProperties = { ...this.requirementProperties };
-      this._saveRequirementsInStore(this.event);
+      this._saveRequirementsInStore();
       // this.$forceUpdate();
     },
     handleMultiSelectChange() {
       this.$forceUpdate();
       this._checkConditionScript(this.requirementProperties);
-      this._saveRequirementsInStore(this.event);
+      this._saveRequirementsInStore();
     },
     handleSingleSelectChange(e) {
       this.requirementProperties["radio"].map((it) => {
         if (it.subCategory == e.subCategory) it = e;
       });
 
-      this._saveRequirementsInStore(this.event);
+      this._saveRequirementsInStore();
     },
     handleSpecialChange(e) {
       if (e && e.hasOwnProperty("note")) {
         this.anythingElse = e.note;
       }
 
-      this._saveRequirementsInStore(this.event);
+      this._saveRequirementsInStore();
     },
     handlePropertyChange(requirement) {
       this.requirementProperties = requirement;
       this.$forceUpdate();
 
       // this._checkConditionScript(this.requirementProperties);
-      this._saveRequirementsInStore(this.event);
+      this._saveRequirementsInStore();
     },
     handleNoteChange(e) {
-      this._saveRequirementsInStore(this.event);
+      this._saveRequirementsInStore();
     },
 
     toggleCommentMode(mode) {
@@ -239,7 +239,7 @@ export default {
     fetchData: async function () {
       this.requirementProperties = {};
 
-      // console.log("fetchData", this.component, this.component.componentId, this.storedRequirements);
+      console.log("fetchData", this.component, this.component.componentId, this.storedRequirements);
       this.blockId = this.component.componentId; //this.$route.params.blockId
       this.event = this.$store.state.event.eventData;
 
@@ -262,7 +262,7 @@ export default {
       }
     },
     revertToOriginal: async function () {
-      this._saveRequirementsInStore(this.event,"clear");
+      this._saveRequirementsInStore("clear");
       await this.fetchData();
       this.scrollToTop();
       this.$root.$emit("revertRequirements");

@@ -22,11 +22,11 @@
                     ${{ (component.allocatedBudget / participants).toFixed(0) | withComma }}
                 </div>
                 <div class="text-right font-size-20 flex-1 budget" v-else>${{ component.allocatedBudget | withComma }}</div>
-                <div class="actions" v-if="component">
-                    <md-button class="edit-btn md-simple" @click="editBudget" :disabled="component.title === 'Unused'">
+                <div class="actions">
+                    <md-button class="edit-btn md-simple" @click="editBudget">
                         <img :src="`${$iconURL}Event%20Page/edit-dark.svg`" />
                     </md-button>
-                    <md-button class="edit-btn md-simple" @click="deleteComponent" :disabled="component.title === 'Unused'">
+                    <md-button class="edit-btn md-simple" @click="deleteComponent">
                         <img class="trash" :src="`${$iconURL}Timeline-New/Trash.svg`" />
                     </md-button>
                 </div>
@@ -55,14 +55,8 @@
             :value="component.allocatedBudget"
             :categoryName="component.fullTitle"
             @select="resizeBudget"
-            @cancel="showBudgetResizeModal = false"
+            @cancel="resizeModalOpened = false"
         ></budget-resize-modal>
-        <category-delete-modal
-            v-if="showCategoryDeleteModal"
-            :category="component"
-            @select="deleteItem"
-            @cancel="showCategoryDeleteModal = false"
-        ></category-delete-modal>
     </div>
 </template>
 <script>
@@ -71,11 +65,9 @@ import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 import BudgetResizeModal from "@/components/Modals/BudgetResizeModal";
 import EventComponent from "@/models/EventComponent";
 import CalendarEvent from "@/models/CalendarEvent";
-import CategoryDeleteModal from "@/components/Modals/CategoryDeleteModal";
 export default {
   components: {
       BudgetResizeModal,
-      CategoryDeleteModal,
       MaryokuInput
   },
   data() {
@@ -84,7 +76,6 @@ export default {
       newBudget: "",
       prevBudget: 0,
       showBudgetResizeModal: false,
-      showCategoryDeleteModal: false,
     };
   },
   props: {
@@ -111,15 +102,12 @@ export default {
     this.prevBudget = this.component.allocatedBudget;
   },
   methods: {
-    withComma(amount) {
-      return amount ? amount.toLocaleString() : 0;
-    },
     editBudget() {
       this.isEditing = true;
     },
     deleteComponent() {
       Swal.fire({
-        title: `<div class="text-left"><div class="d-flex align-center font-size-30 cross-line"><img class="mr-5" src="${this.$iconURL}Budget Elements/${this.component.icon}" width="30"/>${this.component.title}</div>
+        title: `<div class="text-left"><div class="font-size-30 cross-line"><img src="${this.$iconURL}Budget Elements/${this.component.componentId}.svg" width="40"/>${this.component.title}</div>
                   <div >Are You Sure You Want To <br/>Delete This Category?
                   </div></div>`,
         showCancelButton: true,
@@ -130,39 +118,13 @@ export default {
         buttonsStyling: false,
       }).then((result) => {
         if (result.value) {
-          let offset = this.component.allocatedBudget;
-          if (this.component.title === 'Unexpected' || this.component.title === 'Extra') {
-            this.$emit('delete', {selectedOption: 'total', offset, title: this.component.title})
-          } else {
-            this.showCategoryDeleteModal = true;
-          }
+          this.$emit("delete", this.component);
         }
       });
     },
     updateComponent() {
-      let offset = this.newBudget - this.component.allocatedBudget;
-      if (this.component.title === 'Unexpected' || this.component.title === 'Extra') {
-          Swal.fire({
-              title: `<div class="text-left">
-                  <div class="color-red">$${this.withComma(this.component.allocatedBudget)} -> $${this.withComma(this.newBudget)}</div>
-                  <div class="font-size-20">You have ${offset > 0 ? 'increased':'decreased'} the budget of "${this.component.title}". It will ${offset > 0? 'increase' : 'decrease'} the total budget.
-                  </div></div>`,
-              showCancelButton: true,
-              confirmButtonClass: "md-button md-success",
-              cancelButtonClass: "md-button md-danger",
-              confirmButtonText: "Okay",
-              cancelButtonText: "Cancel",
-              buttonsStyling: false,
-          }).then((result) => {
-              if (result.value) {
-                  this.isEditing = false
-                  this.$emit('updateCategory', {selectedOption: 'total', offset: offset, title: this.component.title})
-              }
-          });
-      } else {
-          this.showBudgetResizeModal = true;
-      }
-
+      console.log('update.component', this.newBudget)
+      this.showBudgetResizeModal = true;
     },
     resizeBudget(selectedOption){
         this.showBudgetResizeModal = false;
@@ -174,17 +136,8 @@ export default {
                 this.isEditing = false;
                 this.$emit("updateCategory", selectedOption);
         });
-    },
-    deleteItem(selectedOption) {
-          let selected_block = new EventComponent({ id: this.component.id, allocatedBudget: this.newBudget });
-          selected_block
-              .for(new CalendarEvent({ id: this.component.calendarEvent.id }))
-              .delete()
-              .then((res) => {
-                  this.isEditing = false;
-                  this.$emit("delete", selectedOption);
-              });
-      },
+    }
+
   },
   computed: {
     fontColor() {

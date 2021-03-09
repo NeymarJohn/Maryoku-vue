@@ -53,12 +53,7 @@
               <span class="next" @click="next()" v-if="imageSlidePos >= 0">
                 <md-icon>keyboard_arrow_right</md-icon>
               </span>
-              <LightBox
-                v-if="medias.length"
-                :media="medias"
-                ref="lightbox"
-                :show-light-box="false"
-              />
+              <LightBox v-if="medias.length" :media="medias" ref="lightbox" :show-light-box="false" />
             </div>
             <div class="contact-us" id="Contact">
               <h4>CONTACT US</h4>
@@ -133,10 +128,10 @@
               <div class="citems">
                 <div class="citem">
                   <vendor-extra-pay-item
-                          v-for="(cs, csIndex) in getExtraPayItems()"
-                          :key="csIndex"
-                          :item="cs"
-                          @change="changeServiceItem"
+                    v-for="(cs, csIndex) in getExtraPayItems()"
+                    :key="csIndex"
+                    :item="cs"
+                    @change="changeServiceItem"
                   />
                 </div>
               </div>
@@ -149,7 +144,9 @@
                 <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
                   <div class="item">{{ policy.name }}</div>
                   <div class="item" v-if="policy.type === 'MultiSelection'">
-                    <span class="mr-10" v-for="(v, vIndex) in policy.value" >{{ `${v}${vIndex == policy.value.length - 1 ? '':','}` }}</span>
+                    <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
+                      `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
+                    }}</span>
                   </div>
                   <div class="item" v-else-if="policy.type === 'Including'">
                     <span class="mr-10" v-if="policy.value"> Yes </span>
@@ -161,8 +158,8 @@
                     <span v-else>{{ policy.value }}</span>
                     <span v-if="policy.isPercentage">%</span>
                     <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
-                  {{ policy.attendees }} attendees
-                  </span>
+                      {{ policy.attendees }} attendees
+                    </span>
                   </div>
                 </div>
               </div>
@@ -197,7 +194,9 @@
               <div class="rule" v-for="(policy, yIndex) in validPricingPolicy" :key="yIndex">
                 <div class="item">{{ policy.name }}</div>
                 <div class="item" v-if="policy.type === 'MultiSelection'">
-                  <span class="mr-10" v-for="(v, vIndex) in policy.value" >{{ `${v}${vIndex == policy.value.length - 1 ? '':','}` }}</span>
+                  <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
+                    `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
+                  }}</span>
                 </div>
                 <div class="item" v-else-if="policy.type === 'Including'">
                   <span class="mr-10" v-if="policy.value"> Yes </span>
@@ -214,7 +213,7 @@
                   <span v-else>{{ policy.value }}</span>
                   <span v-if="policy.isPercentage">%</span>
                   <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
-                  {{ policy.attendees }} attendees
+                    {{ policy.attendees }} attendees
                   </span>
                 </div>
               </div>
@@ -429,8 +428,8 @@ export default {
   },
   created() {},
   mounted() {
-    console.log('vendorSignup.step4', this.vendor);
-    if (this.vendor.hasOwnProperty('vendorImages') && this.vendor.vendorImages.length) {
+    console.log("vendorSignup.step4", this.vendor);
+    if (this.vendor.hasOwnProperty("vendorImages") && this.vendor.vendorImages.length) {
       this.vendor.images.forEach((item) => {
         this.medias.push({
           thumb: item,
@@ -451,20 +450,20 @@ export default {
       return !isBlank;
     },
     getExtraPayItems() {
-      console.log('getExtraPayItems')
+      console.log("getExtraPayItems");
       let extraPayItems = [];
       _.each(this.vendor.services, (item) => {
-        if (item.checked && item.hasOwnProperty('included') && !item.included) {
+        if (item.checked && item.hasOwnProperty("included") && !item.included) {
           extraPayItems.push(item);
         }
       });
       return extraPayItems;
     },
     getStartingFeeItems() {
-      console.log('getStartingFeeItems')
+      console.log("getStartingFeeItems");
       let startingFeeItems = [];
       _.each(this.vendor.services, (item) => {
-        if (item.checked && item.hasOwnProperty('included') && item.included) {
+        if (item.checked && item.hasOwnProperty("included") && item.included) {
           startingFeeItems.push(item);
         }
       });
@@ -541,35 +540,37 @@ export default {
         this.$refs.lightbox.showImage(0);
       }
     },
-    changeServiceItem(item){
-        console.log('changeServiceItem', item);
-        _.each(this.vendor.services, s => {
-            if ( s.label === item.label ) {
-                this.vendor.services[s] = item;
-            }
-        });
+    changeServiceItem(item) {
+      console.log("changeServiceItem", item);
+      _.each(this.vendor.services, (s) => {
+        if (s.label === item.label) {
+          this.vendor.services[s] = item;
+        }
+      });
 
-        this.$root.$emit("update-vendor-value", "services", this.vendor.services);
-    }
+      this.$root.$emit("update-vendor-value", "services", this.vendor.services);
+    },
   },
   computed: {
     validPricingPolicy() {
-      if (this.vendor.pricingPolicies) return this.vendor.pricingPolicies.filter((item) => item.value || item.type === 'Including' && item.cost);
+      if (this.vendor.pricingPolicies)
+        return this.vendor.pricingPolicies.filter((item) => item.value || (item.type === "Including" && item.cost));
       return null;
     },
-    validPolicy(){
-      if (this.vendor.policies) return this.vendor.policies.filter((item) => item.value || item.type === 'Including' && item.cost);
+    validPolicy() {
+      if (this.vendor.policies)
+        return this.vendor.policies.filter((item) => item.value || (item.type === "Including" && item.cost));
       return null;
-    }
+    },
   },
   filters: {},
   watch: {
-      vendor:{
-          handler: function (newVal) {
-              console.log('handler', newVal)
-          },
-          deep: true,
-      }
+    vendor: {
+      handler: function (newVal) {
+        console.log("handler", newVal);
+      },
+      deep: true,
+    },
   },
 };
 </script>

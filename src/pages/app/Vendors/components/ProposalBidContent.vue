@@ -153,7 +153,7 @@ export default {
       this.$store.commit("vendorProposal/setValue", { key: "initialized", value: true });
       this.$store.commit("vendorProposal/setValue", {
         key: "taxes",
-        value: { [this.vendor.eventCategory.key]: { percentage: taxRate, price: 0 } },
+        value: { [this.vendor.eventCategory.key]: taxRate },
       });
       this.$store.commit("vendorProposal/setDiscount", {
         category: this.vendor.eventCategory.key,

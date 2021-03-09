@@ -46,7 +46,7 @@
           <md-icon v-if="link.icon" class="font-size-30" :style="{ color: disabled ? '#a0a0a0 !important' : '#000' }">
             {{ link.icon }}
           </md-icon>
-          <img v-else :src="`${$iconURL}Profile/settings-dark.svg`" />
+          <img v-else :src="isActive ? link.iconActiveUrl : link.iconUrl" />
         </template>
       </component>
     </slot>
