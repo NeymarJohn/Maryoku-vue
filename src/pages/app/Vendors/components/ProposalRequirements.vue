@@ -11,8 +11,8 @@
         <div class="action">
           <img
             :src="`${$iconURL}NewSubmitPorposal/Component 36 (2).svg`"
-            class="arrow-img"
             :class="{ isExpanded: isExpanded }"
+            class="arrow-img"
           />
         </div>
       </div>
