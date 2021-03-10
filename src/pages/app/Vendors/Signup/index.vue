@@ -106,7 +106,6 @@ export default {
       console.log("update-vendor-value", field, value);
       let vendor = JSON.parse(JSON.stringify(this.vendor));
       if (field == "images" || field == "vendorImages") {
-        alert(value.index);
         console.log(Object.keys(vendor[field]));
         if (!Object.keys(vendor[field]).includes(`${value.index}`)) {
           console.log("!update.vendor.image", value);
