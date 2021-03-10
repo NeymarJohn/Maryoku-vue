@@ -32,6 +32,32 @@ export default [{
     },
   ],
 }, {
+  path: "/",
+  name: "Vendor",
+  component: VendorSignupLayout,
+  children: [
+    {
+      path: "/vendor-signup",
+      name: "VendorSignup",
+      component: VendorSignup,
+      meta: {
+        auth: false,
+        title: "Vendor Signup",
+        gtm: "VendorSignup",
+      },
+    },
+    {
+      path: "/vendor-signup/edit/:id",
+      name: "VendorSignup",
+      component: VendorSignup,
+      meta: {
+        auth: false,
+        title: "Vendor Signup",
+        gtm: "VendorSignup",
+      },
+    },
+  ],
+}, {
   path: "/vendor/signin",
   name: "Vendor Signin",
   component: VendorSignin,

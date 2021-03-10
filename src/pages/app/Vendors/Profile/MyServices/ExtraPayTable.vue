@@ -6,26 +6,14 @@
         Elements With Extra Pay
       </div>
     </template>
-    <template slot="content">
-      <div class="pr-50 pl-50 pb-50">
-        <vendor-extra-pay-item v-for="(cs, csIndex) in items" :key="csIndex" :item="cs" @change="changeServiceItem" />
-      </div>
-    </template>
+    <template slot="content"> sdfsd </template>
   </collapse-panel>
 </template>
 <style></style>
 <script>
 import CollapsePanel from "./CollapsePanel.vue";
-import VendorExtraPayItem from "../../components/VendorExtraPayItem.vue";
-
 export default {
-  components: { CollapsePanel, VendorExtraPayItem },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-  },
+  components: { CollapsePanel },
 };
 </script>
 <style lang="scss" scoped>

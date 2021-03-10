@@ -136,7 +136,7 @@ export default {
       this.$router.push({ path: "/forgot-password" });
     },
     redirectPage() {
-      this.$router.push({ path: "/vendor/profile/settings" });
+      this.$router.push({ path: "/vendor/profile/overview" });
     },
   },
   data() {
