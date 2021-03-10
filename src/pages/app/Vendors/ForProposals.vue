@@ -93,19 +93,19 @@ import ProposalRequest from "@/models/ProposalRequest";
 
 //COMPONENTS
 import Icon from "@/components/Icon/Icon.vue";
-import ProposalBudgetSummary from "./components/ProposalBudgetSummary.vue";
-import ProposalRequirementsPanel from "./components/ProposalRequirementsPanel";
-import ProposalSteps from "./components/ProposalSteps.vue";
-import ProposalItem from "./components/ProposalItem.vue";
-import ProposalEventVision from "./components/ProposalEventVision.vue";
-import ProposalBidContent from "./components/ProposalBidContent.vue";
-import ProposalAddFiles from "./components/ProposalAddFiles.vue";
-import ProposalTitleWithIcon from "./components/ProposalTitleWithIcon.vue";
+import ProposalBudgetSummary from "./Proposal/ProposalBudgetSummary.vue";
+import ProposalRequirementsPanel from "./Proposal/ProposalRequirementsPanel";
+import ProposalSteps from "./Proposal/ProposalSteps.vue";
+import ProposalItem from "./Proposal/ProposalItem.vue";
+import ProposalEventVision from "./Proposal/ProposalEventVision.vue";
+import ProposalBidContent from "./Proposal/ProposalBidContent.vue";
+import ProposalAddFiles from "./Proposal/ProposalAddFiles.vue";
+import ProposalTitleWithIcon from "./Proposal/ProposalTitleWithIcon.vue";
 import ReferNewVendor from "./components/ReferNewVendor.vue";
-import ProposalEventSummary from "./components/ProposalEventSummary.vue";
+import ProposalEventSummary from "./Proposal/ProposalEventSummary.vue";
 import VueElementLoading from "vue-element-loading";
-import ProposalItemSecondaryService from "./components/ProposalItemSecondaryService";
-import ProposalAdditionalRequirement from "./components/ProposalAddtionalRequirement";
+import ProposalItemSecondaryService from "./Proposal/ProposalItemSecondaryService";
+import ProposalAdditionalRequirement from "./Proposal/ProposalAddtionalRequirement";
 import S3Service from "@/services/s3.service";
 export default {
   components: {
