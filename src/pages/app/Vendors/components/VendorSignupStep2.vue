@@ -13,7 +13,7 @@
       <div class="right-side">
         <div class="description">
           <h5>
-            <img :src="getCategoryIconByValue(vendor.vendorCategories[0])" width="40" />
+            <img :src="getCategoryIconByValue(vendor.vendorCategories[0])" width="40"/>
             {{ getCategoryNameByValue(vendor.vendorCategories[0]) }} Amenities
           </h5>
           <p>
@@ -22,7 +22,8 @@
           </p>
         </div>
         <vendor-service-item
-          v-for="(c, cIndex) in categories.find((category) => category.name == vendor.vendorCategory).categories"
+          v-for="(c, cIndex) in categories.find((category) => category.name == vendor.vendorCategory)
+            .categories"
           :key="cIndex"
           :serviceItem="c"
           :vendor="vendor"
@@ -39,7 +40,7 @@ import Vendors from "@/models/Vendors";
 
 //COMPONENTS
 import Icon from "@/components/Icon/Icon.vue";
-import VendorServiceItem from "../components/VendorServiceItem.vue";
+import VendorServiceItem from "./VendorServiceItem.vue";
 import { VendorCategories } from "@/constants/vendor";
 
 export default {
@@ -62,7 +63,7 @@ export default {
   },
   created() {},
   mounted() {
-    console.log("vendor.signup.step2.mounted", this.vendor);
+    console.log("vendor.signup.step2.mounted", this.vendor)
   },
   methods: {
     getCategoryNameByValue(value) {

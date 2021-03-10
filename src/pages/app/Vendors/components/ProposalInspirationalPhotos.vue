@@ -1,11 +1,12 @@
 <template>
   <div class="proposal-inpirational-photos">
     <carousel :items="3" :margin="20" :dots="false" :nav="false" class="photos-carousel" :number="3">
-      <template slot="prev">
-        <md-button class="md-simple md-black handle-btn prev-btn md-icon-button edit-btn">
+      <template slot="prev"
+        ><md-button class="md-simple md-black handle-btn prev-btn md-icon-button edit-btn">
           <md-icon class="font-bold">keyboard_arrow_left</md-icon>
-        </md-button>
-      </template>
+        </md-button></template
+      >
+
       <proposal-inspirational-photos-item
         class="photo-item"
         v-for="(photo, index) in inspirationalPhotos"
@@ -17,11 +18,11 @@
         @remove="removePhoto"
       >
       </proposal-inspirational-photos-item>
-      <template slot="next">
-        <md-button class="md-simple md-black handle-btn next-btn md-icon-button edit-btn">
+      <template slot="next"
+        ><md-button class="md-simple md-black handle-btn next-btn md-icon-button edit-btn">
           <md-icon class="font-bold">keyboard_arrow_right</md-icon>
-        </md-button>
-      </template>
+        </md-button></template
+      >
     </carousel>
     <modal class="add-caption-modal" v-if="captionModal.isOpen">
       <template slot="header">

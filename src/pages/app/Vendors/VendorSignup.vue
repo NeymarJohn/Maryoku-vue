@@ -25,14 +25,16 @@ import Vendors from "@/models/Vendors";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 //COMPONENTS
+import Icon from "@/components/Icon/Icon.vue";
 import VSignupEditableField from "@/components/Inputs/VSignupEditableField.vue";
-import VendorBasicInfoForm from "./VendorBasicInfoForm.vue";
-import VendorSignupStep1 from "./VendorSignupStep1.vue";
-import VendorSignupStep2 from "./VendorSignupStep2.vue";
-import VendorSignupStep3 from "./VendorSignupStep3.vue";
-import VendorSignupStep4 from "./VendorSignupStep4.vue";
-import VendorSignupStep5 from "./VendorSignupStep5.vue";
-import VendorSignupFinalForm from "./VendorSignupFinalForm.vue";
+import VendorBasicInfoForm from "./components/VendorBasicInfoForm.vue";
+import VendorSignupStep1 from "./components/VendorSignupStep1.vue";
+import VendorSignupStep2 from "./components/VendorSignupStep2.vue";
+import VendorSignupStep3 from "./components/VendorSignupStep3.vue";
+import VendorSignupStep4 from "./components/VendorSignupStep4.vue";
+import VendorSignupStep5 from "./components/VendorSignupStep5.vue";
+import VendorSignupFinalForm from "./components/VendorSignupFinalForm.vue";
+import Swal from "sweetalert2";
 
 import { businessCategories, generalInfos, companyServices } from "@/constants/vendor";
 
@@ -69,8 +71,8 @@ export default {
         if (!vendor.about) this.$set(vendor, "about", {});
         if (!vendor.capacity) this.$set(vendor, "capacity", {});
         if (!vendor.social) this.$set(vendor, "social", {});
-        if (!vendor.images) this.$set(vendor, "images", new Array(15));
-        if (!vendor.vendorImages) this.$set(vendor, "vendorImages", new Array(15));
+        if (!vendor.images) this.$set(vendor, "images", []);
+        if (!vendor.vendorImages) this.$set(vendor, "vendorImages", []);
         if (!vendor.hasOwnProperty("yesRules")) this.$set(vendor, "yesRules", []);
         if (!vendor.hasOwnProperty("noRules")) this.$set(vendor, "noRules", []);
         if (!vendor.hasOwnProperty("notAllowed")) this.$set(vendor, "notAllowed", []);
@@ -106,8 +108,7 @@ export default {
       console.log("update-vendor-value", field, value);
       let vendor = JSON.parse(JSON.stringify(this.vendor));
       if (field == "images" || field == "vendorImages") {
-        console.log(Object.keys(vendor[field]));
-        if (!Object.keys(vendor[field]).includes(`${value.index}`)) {
+        if (!vendor[field][value.index]) {
           console.log("!update.vendor.image", value);
           vendor[field].push(value.data);
         } else {

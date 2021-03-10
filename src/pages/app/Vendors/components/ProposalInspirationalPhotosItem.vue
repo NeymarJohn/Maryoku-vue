@@ -37,6 +37,7 @@
 </template>
 <script>
 import carousel from "vue-owl-carousel";
+import S3Service from "@/services/s3.service";
 import { getBase64 } from "@/utils/file.util";
 import Swal from "sweetalert2";
 export default {
@@ -101,6 +102,7 @@ export default {
         });
         return;
       }
+      // this.isLoading = true;
       const extension = event.target.files[0].type.split("/")[1];
       if (!this.photo) this.photo = {};
       const photoData = await getBase64(event.target.files[0]);
@@ -111,6 +113,23 @@ export default {
         link: `proposal/inspirationalPhotos/${this.proposalRequest.id}`,
         url: `https://maryoku.s3.amazonaws.com/proposal/inspirationalPhotos/${this.proposalRequest.id}/photo-${this.index}.${extension}`,
       });
+      // S3Service.fileUpload(
+      //   event.target.files[0],
+      //   `photo-${this.currentPhotoIndex}`,
+      //   `proposal/inspirationalPhotos/${this.proposalRequest.id}`,
+      // )
+      //   .then((res) => {
+      //     this.isLoading = false;
+      //     this.$emit("change", {
+      //       url: `https://maryoku.s3.amazonaws.com/proposal/inspirationalPhotos/${this.proposalRequest.id}/photo-${this.currentPhotoIndex}.${extension}`,
+      //       caption: "",
+      //     });
+      //   })
+      //   .catch((event) => {
+      //     this.isLoading = false;
+      //   });
+
+      // this.$forceUpdate();
     },
     handleAddPhoto() {
       document.getElementById(`proposal-inspiration-file-${this.index}`).click();
