@@ -48,7 +48,7 @@ import Vendors from "@/models/Vendors";
 
 //COMPONENTS
 import Icon from "@/components/Icon/Icon.vue";
-import VendorServiceItem from "./VendorServiceItem.vue";
+import VendorServiceItem from "../components/VendorServiceItem.vue";
 
 export default {
   name: "vendor-signup-final-form",

@@ -99,7 +99,7 @@
           v-for="(c, cIndex) in categories"
           :key="cIndex"
         />
-        <proposal-pricing-item :iconUrl="iconUrl" :itemType="`bundle`" />
+        <proposal-pricing-item :iconUrl="iconUrl" :itemType="`bundle`" v-if="bundleDiscount.isApplied" />
         <proposal-pricing-item :iconUrl="iconUrl" :itemType="`total`" :requirements="proposalRequest.requirements" />
       </div>
       <div class="policy-cont">
@@ -455,6 +455,9 @@ export default {
       set(value) {
         this.$store.commit("vendorProposal/setValue", { key: "coverImage", value });
       },
+    },
+    bundleDiscount() {
+      return this.$store.state.vendorProposal.bundleDiscount;
     },
   },
   watch: {},

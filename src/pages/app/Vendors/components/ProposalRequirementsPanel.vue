@@ -23,6 +23,7 @@
                   :key="requirementItem.item"
                 >
                   <div class="checkmark"></div>
+
                   <div class="d-inline-block">{{ requirementItem.item || requirementItem.subCategory }}</div>
                 </div>
               </div>
@@ -40,7 +41,11 @@
                 :key="requirementItem.item"
               >
                 <div class="checkmark"></div>
-                <div class="d-inline-block">{{ requirementItem.item || requirementItem.subCategory }}</div>
+                <!-- {{ requirementItem }} -->
+                <div class="d-inline-block">
+                  {{ requirementItem.item || requirementItem.subCategory }}
+                  <span v-if="requirementItem.defaultQty">(X{{ requirementItem.defaultQty }})</span>
+                </div>
               </div>
             </div>
           </div>
@@ -101,12 +106,15 @@ export default {
     padding: 30px 0;
     border-top: solid 1px #a0a0a0;
     .requirement-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 33.33%);
+      display: flex;
+      flex-wrap: wrap;
+      box-sizing: border-box;
       .requirement-item {
         margin-top: 20px;
         text-transform: capitalize;
         padding-right: 15px;
+        width: 30%;
+        flex-grow: 1;
       }
     }
     .checkmark {

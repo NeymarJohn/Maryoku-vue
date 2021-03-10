@@ -21,8 +21,8 @@
           }}</a>
           &emsp;<md-button
             class="md-simple md-red edit-btn md-just-icon"
-            @click="copyUrl(`${currentPath}/#/vendor-signup/edit/${item.id}`)"
-            v-clipboard:copy="`${currentPath}/#/vendor-signup/edit/${item.id}`"
+            @click="copyUrl(`${currentPath}/#/vendor/edit/${item.id}`)"
+            v-clipboard:copy="`${currentPath}/#/vendor/edit/${item.id}`"
             v-clipboard:success="onCopy"
             v-clipboard:error="onCopyError"
             ><md-icon>content_copy</md-icon></md-button
@@ -58,7 +58,7 @@ export default {
     // });
 
     new Vendors().get().then((vendors) => {
-      console.log('vendors', vendors);
+      console.log("vendors", vendors);
       this.vendors = vendors[0].results;
     });
   },

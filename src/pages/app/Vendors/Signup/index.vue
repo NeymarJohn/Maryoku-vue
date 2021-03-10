@@ -25,16 +25,14 @@ import Vendors from "@/models/Vendors";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 //COMPONENTS
-import Icon from "@/components/Icon/Icon.vue";
 import VSignupEditableField from "@/components/Inputs/VSignupEditableField.vue";
-import VendorBasicInfoForm from "./components/VendorBasicInfoForm.vue";
-import VendorSignupStep1 from "./components/VendorSignupStep1.vue";
-import VendorSignupStep2 from "./components/VendorSignupStep2.vue";
-import VendorSignupStep3 from "./components/VendorSignupStep3.vue";
-import VendorSignupStep4 from "./components/VendorSignupStep4.vue";
-import VendorSignupStep5 from "./components/VendorSignupStep5.vue";
-import VendorSignupFinalForm from "./components/VendorSignupFinalForm.vue";
-import Swal from "sweetalert2";
+import VendorBasicInfoForm from "./VendorBasicInfoForm.vue";
+import VendorSignupStep1 from "./VendorSignupStep1.vue";
+import VendorSignupStep2 from "./VendorSignupStep2.vue";
+import VendorSignupStep3 from "./VendorSignupStep3.vue";
+import VendorSignupStep4 from "./VendorSignupStep4.vue";
+import VendorSignupStep5 from "./VendorSignupStep5.vue";
+import VendorSignupFinalForm from "./VendorSignupFinalForm.vue";
 
 import { businessCategories, generalInfos, companyServices } from "@/constants/vendor";
 

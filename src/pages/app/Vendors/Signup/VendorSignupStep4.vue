@@ -248,11 +248,11 @@ import Vendors from "@/models/Vendors";
 
 //COMPONENTS
 import Icon from "@/components/Icon/Icon.vue";
-import VendorServiceItem from "./VendorServiceItem.vue";
+import VendorServiceItem from "../components/VendorServiceItem.vue";
 import LightBox from "vue-image-lightbox";
 import carousel from "vue-owl-carousel";
-import VendorStartingFeeItem from "./VendorStartingFeeItem.vue";
-import VendorExtraPayItem from "./VendorExtraPayItem.vue";
+import VendorStartingFeeItem from "../components/VendorStartingFeeItem.vue";
+import VendorExtraPayItem from "../components/VendorExtraPayItem.vue";
 import _ from "underscore";
 
 export default {
