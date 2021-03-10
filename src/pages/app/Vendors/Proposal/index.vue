@@ -88,24 +88,21 @@ import moment from "moment";
 import VendorService from "@/services/vendor.service";
 import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 
-import Vendors from "@/models/Vendors";
-import ProposalRequest from "@/models/ProposalRequest";
-
 //COMPONENTS
 import Icon from "@/components/Icon/Icon.vue";
-import ProposalBudgetSummary from "./Proposal/ProposalBudgetSummary.vue";
-import ProposalRequirementsPanel from "./Proposal/ProposalRequirementsPanel";
-import ProposalSteps from "./Proposal/ProposalSteps.vue";
-import ProposalItem from "./Proposal/ProposalItem.vue";
-import ProposalEventVision from "./Proposal/ProposalEventVision.vue";
-import ProposalBidContent from "./Proposal/ProposalBidContent.vue";
-import ProposalAddFiles from "./Proposal/ProposalAddFiles.vue";
-import ProposalTitleWithIcon from "./Proposal/ProposalTitleWithIcon.vue";
-import ReferNewVendor from "./components/ReferNewVendor.vue";
-import ProposalEventSummary from "./Proposal/ProposalEventSummary.vue";
+import ProposalBudgetSummary from "./ProposalBudgetSummary.vue";
+import ProposalRequirementsPanel from "./ProposalRequirementsPanel";
+import ProposalSteps from "./ProposalSteps.vue";
+import ProposalItem from "./ProposalItem.vue";
+import ProposalEventVision from "./ProposalEventVision.vue";
+import ProposalBidContent from "./ProposalBidContent.vue";
+import ProposalAddFiles from "./ProposalAddFiles.vue";
+import ProposalTitleWithIcon from "./ProposalTitleWithIcon.vue";
+import ReferNewVendor from "../components/ReferNewVendor.vue";
+import ProposalEventSummary from "./ProposalEventSummary.vue";
 import VueElementLoading from "vue-element-loading";
-import ProposalItemSecondaryService from "./Proposal/ProposalItemSecondaryService";
-import ProposalAdditionalRequirement from "./Proposal/ProposalAddtionalRequirement";
+import ProposalItemSecondaryService from "./ProposalItemSecondaryService";
+import ProposalAdditionalRequirement from "./ProposalAddtionalRequirement";
 import S3Service from "@/services/s3.service";
 export default {
   components: {

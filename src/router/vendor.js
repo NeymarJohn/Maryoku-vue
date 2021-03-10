@@ -8,9 +8,9 @@ const VendorSignedin = () => import("@/pages/app/Vendors/VendorSignedin.vue");
 
 // New Vendor Pages
 const ForVendorLayout = () => import("@/pages/Dashboard/Layout/ForVendorLayout.vue");
-const ForProposalsLayout = () => import("@/pages/Dashboard/Layout/ForProposalsLayout.vue");
+const ProposalLayout = () => import("@/pages/app/Vendors/Proposal/ProposalLayout.vue");
 const ForVendors = () => import("@/pages/app/Vendors/ForVendors.vue");
-const ForProposals = () => import("@/pages/app/Vendors/ForProposals.vue");
+const ProposalContent = () => import("@/pages/app/Vendors/Proposal");
 
 export default [
     {
@@ -86,13 +86,13 @@ export default [
     },
     {
         path: "/",
-        component: ForProposalsLayout,
-        name: "ForProposalsLayout",
+        component: ProposalLayout,
+        name: "ProposalLayout",
         children: [
             {
                 path: "/vendors/:vendorId/proposal-request/:id/form",
                 name: "ForProposals",
-                component: ForProposals,
+                component: ProposalContent,
                 meta: {
                     auth: false,
                     title: "For Proposals",
@@ -102,7 +102,7 @@ export default [
             {
                 path: "/proposal-request/:id/form",
                 name: "ForProposals",
-                component: ForProposals,
+                component: ProposalContent,
                 meta: {
                     auth: false,
                     title: "For Proposals",
@@ -112,7 +112,7 @@ export default [
             {
                 path: "/vendors/:vendorId/events/:eventId/proposal-request/:id/form",
                 name: "ForProposals",
-                component: ForProposals,
+                component: ProposalContent,
                 meta: {
                     auth: false,
                     title: "For Proposals",
