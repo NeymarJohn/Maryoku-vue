@@ -114,7 +114,7 @@ export default {
                   eventService
                     .saveEventFromStorage(res.defaultCalendar)
                     .then((event) => {
-                      callback = btoa(`events/${event.id}/booking/concept`);
+                      callback = btoa(`events/${event.id}/booking/overview`);
                       document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
                     })
                     .catch((err) => {
@@ -126,7 +126,7 @@ export default {
                   eventService
                     .saveEventFromStorage(res.defaultCalendar)
                     .then((event) => {
-                      callback = btoa(`events/${event.id}/booking/concept`);
+                      callback = btoa(`events/${event.id}/booking/overview`);
                       document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
                     })
                     .catch((err) => {

@@ -6,14 +6,17 @@
         OUR PRICING POLICY
       </div>
     </template>
-    <template slot="content"> sdfsd </template>
+    <template slot="content">
+      <pricing-policy-section class="pl-50 pr-50 pb-50"></pricing-policy-section>
+    </template>
   </collapse-panel>
 </template>
 <style></style>
 <script>
+import PricingPolicySection from "../../components/PricingPolicySection.vue";
 import CollapsePanel from "./CollapsePanel.vue";
 export default {
-  components: { CollapsePanel },
+  components: { CollapsePanel, PricingPolicySection },
 };
 </script>
 <style lang="scss" scoped>

@@ -14,7 +14,7 @@
         <div class="message-action-content">{{data.action}}</div>
         <div class="message-action-button">
           <md-button class="md-bold add-category-btn md-black md-simple" @click="closeMessage()">Cancel</md-button>
-<!--          <md-button class="md-red md-bold add-category-btn">Send</md-button>-->
+          <md-button class="md-red md-bold add-category-btn">Send</md-button>
         </div>
       </div>
     </div>

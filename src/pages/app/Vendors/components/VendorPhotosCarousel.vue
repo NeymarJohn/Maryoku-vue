@@ -6,9 +6,9 @@
           <md-icon class="font-bold">keyboard_arrow_left</md-icon>
         </md-button>
       </template>
-      <proposal-inspirational-photos-item
+      <vendor-photos-carousel-item
         class="photo-item"
-        v-for="(photo, index) in inspirationalPhotos"
+        v-for="(photo, index) in images"
         :key="`photo-${index}`"
         :index="index"
         :defaultPhoto="photo"
@@ -16,7 +16,7 @@
         @addCaption="addCaption(index, ...arguments)"
         @remove="removePhoto"
       >
-      </proposal-inspirational-photos-item>
+      </vendor-photos-carousel-item>
       <template slot="next">
         <md-button class="md-simple md-black handle-btn next-btn md-icon-button edit-btn">
           <md-icon class="font-bold">keyboard_arrow_right</md-icon>
@@ -57,15 +57,20 @@
   </div>
 </template>
 <script>
-import { Modal, MaryokuInput, LocationInput } from "@/components";
+import { Modal } from "@/components";
 import carousel from "vue-owl-carousel";
-import S3Service from "@/services/s3.service";
-import ProposalInspirationalPhotosItem from "./ProposalInspirationalPhotosItem.vue";
+import VendorPhotosCarouselItem from "./VendorPhotosCarouselItem.vue";
 export default {
   components: {
     carousel,
-    ProposalInspirationalPhotosItem,
+    VendorPhotosCarouselItem,
     Modal,
+  },
+  props: {
+    images: {
+      type: Array,
+      default: () => new Array(15),
+    },
   },
   data() {
     return {
@@ -79,23 +84,9 @@ export default {
       },
     };
   },
-  computed: {
-    proposalRequest() {
-      return this.$store.state.vendorProposal.proposalRequest;
-    },
-    inspirationalPhotos: {
-      get() {
-        return this.$store.state.vendorProposal.inspirationalPhotos;
-      },
-      set(value) {
-        this.$store.commit("vendorProposal/setValue", { key: "inspirationalPhotos", value });
-      },
-    },
-  },
   methods: {
     setPhoto(index, photoData) {
-      this.inspirationalPhotos[index] = photoData;
-      this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: photoData });
+      this.$emit("setPhoto", { index, photo: photoData });
     },
     addCaption(index, photoData) {
       this.captionModal.isOpen = true;

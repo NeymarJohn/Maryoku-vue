@@ -120,7 +120,7 @@ export default {
               console.log(JSON.stringify(res));
               this.$set(res.item, "about", {});
               this.$set(res.item, "capacity", {});
-              this.$set(res.item, "images", []);
+              this.$set(res.item, "images", new Array(15));
               this.$set(res.item, "social", {});
               this.$set(res.item, "services", {});
               this.$set(res.item, "yesRules", []);
@@ -214,82 +214,50 @@ export default {
 
       this.$store.dispatch("auth/register", tenantUser).then(
         (res) => {
-          if (res.status !== "exists") {
-            new Vendors({ ...this.vendor, tenantUser: { id: res.id }, isEditing: false })
-              .save()
-              .then((res) => {
-                console.log("*** Save vendor - done: ");
-                console.log(JSON.stringify(res));
-                // this.setStep(this.step + 1);
-                this.isCompletedWizard = true;
-                Swal.fire({
-                  title,
-                  buttonsStyling: false,
-                  confirmButtonClass: "md-button md-success",
-                }).then(() => {
-                  const proposalRequest = this.$route.query.proposalRequest;
-                  if (this.step === 7) {
-                    this.setVendor({});
-                    this.setEditing(false);
-                    this.setStep(0);
-                    this.isCompletedWizard = false;
-                    if (proposalRequest) {
-                      this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
-                    } else {
-                      this.$store.dispatch("auth/login", tenantUser).then(
-                        () => {
-                          this.$router.push(`/vendor/profile/settings`);
-                        },
-                        (error) => {
-                          this.loading = false;
-                          this.error = "failed";
-                        },
-                      );
-                    }
+          new Vendors({ ...this.vendor, tenantUser: { id: res.id }, isEditing: false })
+            .save()
+            .then((res) => {
+              console.log("*** Save vendor - done: ");
+              console.log(JSON.stringify(res));
+              // this.setStep(this.step + 1);
+              this.isCompletedWizard = true;
+              Swal.fire({
+                title,
+                buttonsStyling: false,
+                confirmButtonClass: "md-button md-success",
+              }).then(() => {
+                const proposalRequest = this.$route.query.proposalRequest;
+                if (this.step === 7) {
+                  this.setVendor({});
+                  this.setEditing(false);
+                  this.setStep(0);
+                  this.isCompletedWizard = false;
+                  if (proposalRequest) {
+                    this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
+                  } else {
+                    this.$store.dispatch("auth/login", tenantUser).then(
+                      () => {
+                        this.$router.push(`/vendor/profile/settings`);
+                      },
+                      (error) => {
+                        this.loading = false;
+                        this.error = "failed";
+                      },
+                    );
                   }
-                });
-              })
-              .catch((error) => {
-                console.log("*** Save vendor - failed: ");
-                console.log(JSON.stringify(error));
+                }
               });
-          } else {
-            this.error = res.field;
-          }
+            })
+            .catch((error) => {
+              console.log("*** Save vendor - failed: ");
+              console.log(JSON.stringify(error));
+            });
         },
         (error) => {
           this.loading = false;
           this.error = "failed";
         },
       );
-      new Vendors({ ...this.vendor, isEditing: false })
-        .save()
-        .then((res) => {
-          console.log("*** Save vendor - done: ");
-          console.log(JSON.stringify(res));
-          // this.setStep(this.step + 1);
-          this.isCompletedWizard = true;
-          Swal.fire({
-            title,
-            buttonsStyling: false,
-            confirmButtonClass: "md-button md-success",
-          }).then(() => {
-            const proposalRequest = this.$route.query.proposalRequest;
-            if (this.step === 7) {
-              this.setVendor({});
-              this.setEditing(false);
-              this.setStep(0);
-
-              this.isCompletedWizard = false;
-              if (proposalRequest) this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
-              else this.$router.push("/vendor-signup");
-            }
-          });
-        })
-        .catch((error) => {
-          console.log("*** Save vendor - failed: ");
-          console.log(JSON.stringify(error));
-        });
     },
   },
   created() {},

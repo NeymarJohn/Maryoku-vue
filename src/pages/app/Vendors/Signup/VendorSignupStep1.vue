@@ -1,7 +1,7 @@
 <template>
   <div class="vendor-signup-step1-wrapper">
-    <div class="inside-container">
-      <div class="left-side">
+    <div class="md-layout inside-container">
+      <div class="md-layout-item md-size-25 left-side">
         <img :src="`${iconUrl}Group 5219 (2).svg`" />
         <h2>
           ABOUT YOUR
@@ -10,7 +10,7 @@
         <p>This your chance to Impress! All information will appear on your business page</p>
         <h2>1/5</h2>
       </div>
-      <div class="right-side">
+      <div class="md-layout-item md-size-75 right-side">
         <div class="about-wrapper">
           <div class="title-cont">
             <div class="left">
@@ -105,19 +105,6 @@
                 </div>
               </div>
             </div>
-            <!-- <div class="field">
-              <div class="title-cont">
-                <div class="top">
-                  <h5><img :src="`${iconUrl}Group 1471 (2).svg`"/> about your catering</h5>
-                </div>
-                <div class="bottom">
-                  <p>include genre, flexibility's catering </p>
-                </div>
-              </div>
-              <div class="main-cont">
-                <textarea placeholder="Type 'About your cuisine' here" rows="5"/>
-              </div>
-            </div>-->
           </div>
         </div>
         <div class="my-30">
@@ -140,7 +127,7 @@
             </div>
           </div>
         </div>
-        <div class="upload-wrapper" :class="{ 'mi-margin': vendor.images && vendor.images.length > 0 }">
+        <div class="upload-wrapper">
           <div class="title-cont">
             <div class="left">
               <h5><img :src="`${iconUrl}art (2).svg`" /> Upload your best images</h5>
@@ -149,105 +136,14 @@
               <p>(15 photos top, under 5MB)</p>
             </div>
           </div>
-          <template v-if="!vendor.images || !vendor.images.length">
-            <Drop
-              @drop="handleDrop"
-              @dragenter="handleDragEnter"
-              @dragleave="handleDragLeave"
-              style="height: 100%"
-              :class="{ 'drag-over': isDragOver, 'red-border': !isDragOver }"
-              class="card d-flex justify-content-center align-center"
-            >
-              <div class="upload-cont" v-if="!isDragOver">
-                <a class @click="uploadVendorImage"> <img :src="`${iconUrl}Asset 559.svg`" /> Choose File </a>
-                <div class="or">Or</div>
-                <span>Drag and drop photos</span>
-                <input
-                  type="file"
-                  class="hide"
-                  ref="imageFile"
-                  accept="image/gif, image/jpg, image/png"
-                  @change="onVendorImageFilePicked"
-                />
-              </div>
-              <span class="font-size-30 drop-cont" v-else>Drop Here</span>
-            </Drop>
-          </template>
-          <template v-else>
-            <!-- <img :src="img" v-for="(img, index) in vendor.images" :key="index"> -->
-            <div class="images-wrapper">
-              <div
-                class="box item2"
-                :style="`
-                  background-image: url(${vendor.images[0]});
-                  background-size: cover;
-                  background-size: 100% 100%;`"
-              >
-                <div class="trash" v-if="vendor.images[0]" @click="removeVendorImage(vendor.images[0])">
-                  <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg" />
-                </div>
-              </div>
-              <div
-                class="box item"
-                :class="{ 'no-image': !vendor.images[1] }"
-                :style="`
-                  background-image: url(${vendor.images[1]});
-                  background-size: cover;
-                  background-size: 100% 100%;`"
-              >
-                <div class="trash" v-if="vendor.images[1]" @click="removeVendorImage(vendor.images[1])">
-                  <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg" />
-                </div>
-              </div>
-              <div
-                class="box item"
-                :class="{ 'no-image': !vendor.images[2] }"
-                :style="`
-                  background-image: url(${vendor.images[2]});
-                  background-size: cover;
-                  background-size: 100% 100%;`"
-              >
-                <div class="trash" v-if="vendor.images[2]" @click="removeVendorImage(vendor.images[2])">
-                  <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg" />
-                </div>
-              </div>
-              <div
-                class="box item"
-                :class="{ 'no-image': !vendor.images[3] }"
-                :style="`
-                  background-image: url(${vendor.images[3]});
-                  background-size: cover;
-                  background-size: 100% 100%;`"
-              >
-                <div class="trash" v-if="vendor.images[3]" @click="removeVendorImage(vendor.images[3])">
-                  <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg" />
-                </div>
-              </div>
-              <Drop
-                @drop="handleDrop"
-                @dragenter="handleDragEnter"
-                @dragleave="handleDragLeave"
-                :class="{ 'drag-over': isDragOver }"
-                class="box item add-more d-flex justify-content-center align-center"
-              >
-                <div v-if="!isDragOver">
-                  <img :src="`${iconUrl}Group 6501.svg`" @click="uploadVendorImage" />
-                  <br />
-                  <span>Add more</span>
-                  <input
-                    type="file"
-                    class="hide"
-                    ref="imageFile"
-                    accept="image/gif, image/jpg, image/png"
-                    @change="onVendorImageFilePicked"
-                  />
-                </div>
-                <span class="font-size-16 drop-cont" v-else>Drop Here</span>
-              </Drop>
-            </div>
-          </template>
+          <div class="white-card p-60">
+            <vendor-photos-carousel
+              :images="vendor.images.length > 0 ? vendor.images : new Array(15)"
+              @setPhoto="updateVendorImage"
+            ></vendor-photos-carousel>
+          </div>
         </div>
-        <div class="signature-wrapper">
+        <div class="signature-wrapper mt-40">
           <div class="title-cont">
             <div class="top">
               <h5>add signature</h5>
@@ -371,19 +267,16 @@
 </template>
 
 <script>
-import moment from "moment";
 import VueElementLoading from "vue-element-loading";
-import Vendors from "@/models/Vendors";
 import { Drop } from "vue-drag-drop";
 
 //COMPONENTS
-import Icon from "@/components/Icon/Icon.vue";
-import VendorServiceItem from "./VendorServiceItem.vue";
-import VendorCheckbox from "./VendorCheckbox.vue";
+import VendorServiceItem from "../components/VendorServiceItem.vue";
+import VendorCheckbox from "../components/VendorCheckbox.vue";
 import vueSignature from "vue-signature";
 import S3Service from "@/services/s3.service";
 import { makeid } from "@/utils/helperFunction";
-
+import VendorPhotosCarousel from "../components/VendorPhotosCarousel.vue";
 export default {
   name: "vendor-signup-step1",
   props: {
@@ -398,6 +291,7 @@ export default {
     VendorCheckbox,
     VendorServiceItem,
     vueSignature,
+    VendorPhotosCarousel,
   },
   data() {
     return {
@@ -556,6 +450,16 @@ export default {
         });
       }
     },
+    updateVendorImage({ index, photo }) {
+      const fileId = `${new Date().getTime()}_${makeid()}`;
+      S3Service.fileUpload(photo, fileId, "vendor/cover-images").then((uploadedName) => {
+        console.log("createImage", uploadedName);
+        this.$root.$emit("update-vendor-value", "images", {
+          index,
+          data: `https://maryoku.s3.amazonaws.com/vendor/cover-images/${uploadedName}`,
+        });
+      });
+    },
     createImage(file, type) {
       let reader = new FileReader();
       let vm = this;
@@ -643,9 +547,6 @@ export default {
     color: #050505;
 
     .left-side {
-      flex: 1;
-      margin-right: 122px;
-
       img {
         width: 92.5px;
       }
@@ -834,12 +735,6 @@ export default {
   }
   .mb-50 {
     margin-bottom: 3rem !important;
-  }
-  .mi-margin {
-    margin: 0 -1rem;
-    .title-cont {
-      margin: 0 1rem;
-    }
   }
   .images-wrapper {
     margin: 0 0 20px 0;

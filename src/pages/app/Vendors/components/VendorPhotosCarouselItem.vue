@@ -10,12 +10,12 @@
     </div>
     <template v-else>
       <div class="active-item">
-        <img class="photo-image" :src="photo.url" @click="handleAddPhoto(index)" />
+        <img class="photo-image" :src="photo.url || photo" @click="handleAddPhoto(index)" />
         <md-button class="remove-btn md-icon-button md-raised" @click="removePhoto">
           <img :src="`${$iconURL}common/trash-dark.svg`" style="width: 20px" />
         </md-button>
       </div>
-      <div class="photo-caption" v-if="photo.caption">
+      <!-- <div class="photo-caption" v-if="photo.caption">
         {{ photo.caption }}&nbsp;&nbsp;
         <md-button class="edit-btn md-black md-simple" @click="addCaption">
           <u>Edit</u>
@@ -23,7 +23,7 @@
       </div>
       <div class="photo-caption" v-else>
         <md-button class="md-simple edit-btn md-black" @click="addCaption"><u>Add caption</u></md-button>
-      </div>
+      </div> -->
     </template>
     <input
       style="display: none"
@@ -45,7 +45,7 @@ export default {
   },
   props: {
     defaultPhoto: {
-      type: Object,
+      type: [Object, String],
       default: () => null,
     },
     index: {
@@ -67,19 +67,6 @@ export default {
         this.$set(this.photo, "caption", captionData.caption);
       }
     });
-  },
-  computed: {
-    proposalRequest() {
-      return this.$store.state.vendorProposal.proposalRequest;
-    },
-    inspirationalPhotos: {
-      get() {
-        return this.$store.state.vendorProposal.inspirationalPhotos;
-      },
-      set(value) {
-        this.$store.commit("vendorProposal/setValue", { key: "inspirationalPhotos", value });
-      },
-    },
   },
   methods: {
     async onFileChange(event) {
@@ -105,12 +92,7 @@ export default {
       if (!this.photo) this.photo = {};
       const photoData = await getBase64(event.target.files[0]);
       this.$set(this.photo, "url", photoData);
-      this.$root.$emit("update-inspirational-photo", {
-        file: event.target.files[0],
-        index: this.index,
-        link: `proposal/inspirationalPhotos/${this.proposalRequest.id}`,
-        url: `https://maryoku.s3.amazonaws.com/proposal/inspirationalPhotos/${this.proposalRequest.id}/photo-${this.index}.${extension}`,
-      });
+      this.$emit("change", event.target.files[0]);
     },
     handleAddPhoto() {
       document.getElementById(`proposal-inspiration-file-${this.index}`).click();
