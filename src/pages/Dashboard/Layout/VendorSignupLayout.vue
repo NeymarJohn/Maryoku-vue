@@ -120,7 +120,7 @@ export default {
               console.log(JSON.stringify(res));
               this.$set(res.item, "about", {});
               this.$set(res.item, "capacity", {});
-              this.$set(res.item, "images", []);
+              this.$set(res.item, "images", new Array(15));
               this.$set(res.item, "social", {});
               this.$set(res.item, "services", {});
               this.$set(res.item, "yesRules", []);

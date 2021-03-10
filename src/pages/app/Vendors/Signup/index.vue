@@ -69,8 +69,8 @@ export default {
         if (!vendor.about) this.$set(vendor, "about", {});
         if (!vendor.capacity) this.$set(vendor, "capacity", {});
         if (!vendor.social) this.$set(vendor, "social", {});
-        if (!vendor.images) this.$set(vendor, "images", []);
-        if (!vendor.vendorImages) this.$set(vendor, "vendorImages", []);
+        if (!vendor.images) this.$set(vendor, "images", new Array(15));
+        if (!vendor.vendorImages) this.$set(vendor, "vendorImages", new Array(15));
         if (!vendor.hasOwnProperty("yesRules")) this.$set(vendor, "yesRules", []);
         if (!vendor.hasOwnProperty("noRules")) this.$set(vendor, "noRules", []);
         if (!vendor.hasOwnProperty("notAllowed")) this.$set(vendor, "notAllowed", []);
@@ -106,7 +106,9 @@ export default {
       console.log("update-vendor-value", field, value);
       let vendor = JSON.parse(JSON.stringify(this.vendor));
       if (field == "images" || field == "vendorImages") {
-        if (!vendor[field][value.index]) {
+        alert(value.index);
+        console.log(Object.keys(vendor[field]));
+        if (!Object.keys(vendor[field]).includes(`${value.index}`)) {
           console.log("!update.vendor.image", value);
           vendor[field].push(value.data);
         } else {

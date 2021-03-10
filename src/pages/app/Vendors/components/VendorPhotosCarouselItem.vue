@@ -10,7 +10,7 @@
     </div>
     <template v-else>
       <div class="active-item">
-        <img class="photo-image" :src="photo.url" @click="handleAddPhoto(index)" />
+        <img class="photo-image" :src="photo.url || photo" @click="handleAddPhoto(index)" />
         <md-button class="remove-btn md-icon-button md-raised" @click="removePhoto">
           <img :src="`${$iconURL}common/trash-dark.svg`" style="width: 20px" />
         </md-button>
@@ -45,7 +45,7 @@ export default {
   },
   props: {
     defaultPhoto: {
-      type: Object,
+      type: [Object, String],
       default: () => null,
     },
     index: {

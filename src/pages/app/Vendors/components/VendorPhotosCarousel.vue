@@ -8,7 +8,7 @@
       </template>
       <vendor-photos-carousel-item
         class="photo-item"
-        v-for="(photo, index) in photos"
+        v-for="(photo, index) in images"
         :key="`photo-${index}`"
         :index="index"
         :defaultPhoto="photo"
@@ -65,6 +65,12 @@ export default {
     carousel,
     VendorPhotosCarouselItem,
     Modal,
+  },
+  props: {
+    images: {
+      type: Array,
+      default: () => new Array(15),
+    },
   },
   data() {
     return {

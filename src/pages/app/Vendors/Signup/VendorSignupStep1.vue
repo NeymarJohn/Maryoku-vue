@@ -127,7 +127,7 @@
             </div>
           </div>
         </div>
-        <div class="upload-wrapper" :class="{ 'mi-margin': vendor.images && vendor.images.length > 0 }">
+        <div class="upload-wrapper">
           <div class="title-cont">
             <div class="left">
               <h5><img :src="`${iconUrl}art (2).svg`" /> Upload your best images</h5>
@@ -137,7 +137,10 @@
             </div>
           </div>
           <div class="white-card p-60">
-            <vendor-photos-carousel @setPhoto="updateVendorImage"></vendor-photos-carousel>
+            <vendor-photos-carousel
+              :images="vendor.images.length > 0 ? vendor.images : new Array(15)"
+              @setPhoto="updateVendorImage"
+            ></vendor-photos-carousel>
           </div>
         </div>
         <div class="signature-wrapper mt-40">
@@ -732,12 +735,6 @@ export default {
   }
   .mb-50 {
     margin-bottom: 3rem !important;
-  }
-  .mi-margin {
-    margin: 0 -1rem;
-    .title-cont {
-      margin: 0 1rem;
-    }
   }
   .images-wrapper {
     margin: 0 0 20px 0;
