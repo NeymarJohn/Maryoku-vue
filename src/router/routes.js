@@ -28,6 +28,14 @@ const EventProposalDetails = () => import("@/pages/app/Events/components/EventPr
 const CreateWorkspace = () => import("@/pages/Dashboard/Pages/CreateWorkspace");
 const ChooseWorkspace = () => import("@/pages/Dashboard/Pages/ChooseWorkspace");
 
+// New Vendor Pages
+const ForVendorLayout = () => import("@/pages/Dashboard/Layout/ForVendorLayout.vue");
+const ForProposalsLayout = () => import("@/pages/Dashboard/Layout/ForProposalsLayout.vue");
+const ForVendors = () => import("@/pages/app/Vendors/ForVendors.vue");
+const ForProposals = () => import("@/pages/app/Vendors/ForProposals.vue");
+const ProposalFinalStep = () => import("@/pages/app/Vendors/ProposalFinalStep.vue");
+const CalendarSync = () => import("@/pages/app/CalendarSync.vue");
+
 // OnBoardingPages
 const EventWizardStart = () => import("@/pages/app/CreateEvent/EventWizardStart.vue");
 const EventWizardDay = () => import("@/pages/app/CreateEvent/EventWizardDay.vue");
@@ -59,10 +67,6 @@ const Invited = () => import("@/pages/Dashboard/Pages/Invited.vue");
 const Vendors = () => import("@/pages/Dashboard/Pages/VendorsList.vue");
 const WelcomeEventPage = () => import("@/pages/Dashboard/Pages/WelcomeEvent.vue");
 const ConceptDetail = () => import("@/pages/Dashboard/Pages/ConceptDetail.vue");
-
-const ProposalFinalStep = () => import("@/pages/app/Vendors/ProposalFinalStep.vue");
-const CalendarSync = () => import("@/pages/app/CalendarSync.vue");
-
 let authPages = {
     path: "/",
     component: AuthLayout,
@@ -160,6 +164,61 @@ let workspacePages = {
                 auth: false,
                 title: "Choose Workspace",
                 gtm: "ChooseWorkspace",
+            },
+        },
+    ],
+};
+let publicPages = {
+    path: "/",
+    component: ForVendorLayout,
+    name: "ForVendors",
+    children: [
+        {
+            path: "/vendors/:vendorId/proposal-request/:rfpId",
+            name: "VendorProposal",
+            component: ForVendors,
+            meta: {
+                auth: false,
+                title: "For Vendors",
+                gtm: "ForVendors",
+            },
+        },
+    ],
+};
+
+let forProposals = {
+    path: "/",
+    component: ForProposalsLayout,
+    name: "ForProposalsLayout",
+    children: [
+        {
+            path: "/vendors/:vendorId/proposal-request/:id/form",
+            name: "ForProposals",
+            component: ForProposals,
+            meta: {
+                auth: false,
+                title: "For Proposals",
+                gtm: "ForProposals",
+            },
+        },
+        {
+            path: "/proposal-request/:id/form",
+            name: "ForProposals",
+            component: ForProposals,
+            meta: {
+                auth: false,
+                title: "For Proposals",
+                gtm: "ForProposals",
+            },
+        },
+        {
+            path: "/vendors/:vendorId/events/:eventId/proposal-request/:id/form",
+            name: "ForProposals",
+            component: ForProposals,
+            meta: {
+                auth: false,
+                title: "For Proposals",
+                gtm: "ForProposals",
             },
         },
     ],
@@ -550,8 +609,10 @@ const routes = [
     authPages,
     workspacePages,
     appPages,
+    publicPages,
     PublicCreateEvent,
     HomePages,
+    forProposals,
     ProfilePages,
     EventPages,
     landingPages,

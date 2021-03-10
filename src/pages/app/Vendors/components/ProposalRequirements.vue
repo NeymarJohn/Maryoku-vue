@@ -33,7 +33,7 @@
   </div>
 </template>
 <script>
-import ProposalAddItemForm from "./ProposalAddItemForm";
+import ProposalAddItemForm from "./ProposalAddItemForm.vue";
 import ProposalServiceTable from "./ProposalServiceTable";
 import { businessCategories, generalInfos, companyServices } from "@/constants/vendor";
 

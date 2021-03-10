@@ -229,7 +229,7 @@ import VendorService from "@/services/vendor.service";
 import InputProposalSubItem from "@/components/Inputs/InputProposalSubItem.vue";
 import { Money } from "v-money";
 import { mapGetters } from "vuex";
-import DiscountForm from "../components/DiscountForm.vue";
+import DiscountForm from "./DiscountForm.vue";
 
 export default {
   name: "proposal-budget-summary",
