@@ -138,8 +138,10 @@
           </div>
           <div class="white-card p-60">
             <vendor-photos-carousel
-              :images="vendor.images.length > 0 ? vendor.images : new Array(15)"
+              :images="vendor.images"
+              @addImage="addVendorImage"
               @setPhoto="updateVendorImage"
+              @removeImage="removeVendorImage"
             ></vendor-photos-carousel>
           </div>
         </div>
@@ -374,10 +376,6 @@ export default {
       },
     };
   },
-  created() {},
-  mounted() {
-    console.log("step1.mounted", this.vendor);
-  },
   methods: {
     handleDrop(data, event) {
       event.preventDefault();
@@ -460,6 +458,7 @@ export default {
         });
       });
     },
+
     createImage(file, type) {
       let reader = new FileReader();
       let vm = this;
@@ -510,8 +509,8 @@ export default {
       }
     },
     updateVendor(event, fieldName) {
-      // console.log('updateVendor', fieldName);
-      this.$root.$emit("update-vendor-value", fieldName, event.target.value);
+      // this.$root.$emit("update-vendor-value", fieldName, event.target.value);
+      this.$store.commit("vendorSignup/setField", { field: fieldName, value: event.target.value });
     },
     save() {
       let _this = this;
@@ -528,14 +527,15 @@ export default {
     removeSignature() {
       this.$root.$emit("update-vendor-value", "signature", null);
     },
+    addVendorImage(file) {
+      this.$store.dispatch("vendorSignup/uploadImage", { index: this.vendor.images.length, file });
+    },
+    removeVendorImage(index) {
+      this.$store.commit("vendorSignup/removeImage", index);
+    },
   },
   computed: {},
   filters: {},
-  watch: {
-    vendor() {
-      console.log("step.watch.vendor", this.vendor);
-    },
-  },
 };
 </script>
 <style lang="scss" scoped>

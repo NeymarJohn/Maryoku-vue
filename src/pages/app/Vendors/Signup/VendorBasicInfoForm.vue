@@ -24,7 +24,7 @@
             :defaultVal="vendor.companyName"
             :borderBottom="true"
             :required="true"
-            @update-focus-value="onUpdateFocus"
+            @save="saveValue"
           />
           <v-signup-category-selector
             :title="'Business Category'"
@@ -33,7 +33,7 @@
             :value="vendor.vendorCategories || ['']"
             :borderBottom="true"
             :required="true"
-            @update-focus-value="onUpdateFocus"
+            @save="saveValue"
           />
           <v-signup-category-selector
             :title="'Address'"
@@ -42,7 +42,7 @@
             :value="vendor.vendorAddresses || ['']"
             :borderBottom="true"
             :required="true"
-            @update-focus-value="onUpdateFocus"
+            @save="saveValue"
           />
           <v-signup-editable-field
             :title="'Phone'"
@@ -50,7 +50,7 @@
             :img="`${iconUrl}Asset 548.svg`"
             :defaultVal="vendor.vendorMainPhoneNumber"
             :borderBottom="true"
-            @update-focus-value="onUpdateFocus"
+            @save="saveValue"
           />
           <v-signup-editable-field
             :title="'Email'"
@@ -59,7 +59,7 @@
             :defaultVal="vendor.vendorMainEmail"
             :borderBottom="true"
             :required="true"
-            @update-focus-value="onUpdateFocus"
+            @save="saveValue"
           />
           <v-signup-editable-field
             :title="'Contact Person\'s Name'"
@@ -67,12 +67,8 @@
             :field="'contactPerson'"
             :defaultVal="vendor.contactPerson"
             :borderBottom="false"
-            @update-focus-value="onUpdateFocus"
+            @save="saveValue"
           />
-          <!-- <div class="action-cont">
-            <a class="cancel">Cancel</a>
-            <a class="save" @click="save()">Save</a>
-          </div>-->
         </div>
       </div>
     </div>
@@ -80,12 +76,7 @@
 </template>
 
 <script>
-import moment from "moment";
 import VueElementLoading from "vue-element-loading";
-import Vendors from "@/models/Vendors";
-
-//COMPONENTS
-import Icon from "@/components/Icon/Icon.vue";
 import VSignupEditableField from "@/components/Inputs/VSignupEditableField.vue";
 import VSignupCategorySelector from "@/components/Inputs/VSignupCategorySelector.vue";
 
@@ -105,20 +96,15 @@ export default {
       secondUrl: `${this.$iconURL}VendorSignup/`,
     };
   },
-  created() {},
-  mounted() {
-    // console.log("basic.info.vendor", this.vendor);
-  },
   methods: {
-    save() {},
     onUpdateFocus(newValue) {},
-  },
-  computed: {},
-  filters: {},
-  watch: {
-    vendor(newVal) {
-      // console.log("vendor.basicInfo.watch.vendor", newVal);
+    saveValue({ field, value }) {
+      // this.$root.$emit("update-vendor-value", field, value);
+      this.$store.commit("vendorSignup/setField", { field, value });
     },
+  },
+  watch: {
+    vendor(newVal) {},
   },
 };
 </script>

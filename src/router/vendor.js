@@ -1,4 +1,4 @@
-const VendorSignupLayout = () => import("@/pages/Dashboard/Layout/VendorSignupLayout.vue");
+const VendorSignupLayout = () => import("@/pages/app/Vendors/Signup/Layout.vue");
 const VendorMainLayout = () => import("@/pages/app/Vendors/VendorMainLayout.vue")
 
 const VendorProfileOverview = () => import("@/pages/app/Vendors/Profile")

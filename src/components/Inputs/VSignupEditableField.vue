@@ -29,8 +29,8 @@
           </div>
         </div>
       </div>
-      <div class="action-cont" :class="{ 'width-66': field === 'vendorCategories' }" v-if="isEdit">
-        <a class="cancel" @click="isEdit = false">Cancel</a>
+      <div class="action-cont" v-if="isEdit" :class="{ 'width-66': field === 'vendorCategories' }">
+        <a class="cancel" @click="cancel">Cancel</a>
         <a class="save" @click="save()">Save</a>
       </div>
     </div>
@@ -55,7 +55,10 @@ export default {
     title: String,
     field: String,
     img: String,
-    defaultVal: [String, Array],
+    defaultVal: {
+      type: [String, Array],
+      defaultValue: () => null,
+    },
     borderBottom: Boolean,
     required: {
       type: Boolean,
@@ -85,7 +88,11 @@ export default {
   methods: {
     save() {
       this.isEdit = false;
-      this.$root.$emit("update-vendor-value", this.field, this.value);
+      this.$emit("save", { field: this.field, value: this.value });
+    },
+    cancel() {
+      this.isEdit = false;
+      this.value = this.defaultVal;
     },
     updateCategory(category) {
       this.selectedCategory = category;
@@ -104,9 +111,6 @@ export default {
         this.$refs.address.focus();
       }
     },
-  },
-  beforeDestroy() {
-    //this.$root.$off('update-vendor-value');
   },
 };
 </script>

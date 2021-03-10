@@ -11,7 +11,7 @@
             :categories="vendorCategories"
             column="2"
             trackBy="name"
-            class="my-10 w-max-450"
+            class="my-10"
             @change="updateCategory(index, ...arguments)"
           >
           </category-selector>
@@ -25,17 +25,13 @@
           />
           <img
             class="ml-10"
-            src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg"
+            :src="`${$iconURL}Requirements/delete-dark.svg`"
             v-if="selectedValue.length > 1"
             @click="removeValue(index)"
           />
         </div>
         <div class="d-flex align-center py-10 color-red font-bold cursor-pointer" @click="addNewValue">
-          <img
-            class="mr-10"
-            src="https://static-maryoku.s3.amazonaws.com/storage/icons/VendorSignup/Group%209632.svg"
-          />
-
+          <img class="mr-10" :src="`${$iconURL}VendorSignup/Group%209632.svg`" />
           <span v-if="field === 'vendorAddresses'">Add another address</span>
           <span v-else>Add another category</span>
         </div>
@@ -53,8 +49,8 @@
           </div>
         </template>
       </div>
-      <div class="action-cont" :class="{ 'width-66': field === 'vendorCategories' }" v-if="isEdit">
-        <a class="cancel" @click="isEdit = false">Cancel</a>
+      <div class="action-cont" v-if="isEdit">
+        <a class="cancel" @click="cancel">Cancel</a>
         <a class="save" @click="save">Save</a>
       </div>
     </div>
@@ -86,7 +82,10 @@ export default {
       type: Boolean,
       default: false,
     },
-    value: [String, Array],
+    value: {
+      type: [String, Array],
+      defaultValue: () => null,
+    },
   },
   data: () => ({
     isEdit: false,
@@ -116,21 +115,25 @@ export default {
       } else {
         selectedValue = this.selectedValue;
       }
-
-      this.$root.$emit("update-vendor-value", this.field, selectedValue);
+      // this.$root.$emit("update-vendor-value", this.field, selectedValue);
+      this.$emit("save", { field: this.field, value: selectedValue });
+    },
+    cancel() {
+      this.isEdit = false;
+      this.init();
     },
     addNewValue() {
       this.selectedValue.push("");
-      this.$root.$emit("update-vendor-value", this.field, this.selectedValue);
     },
     removeValue(index) {
-      this.$root.$emit(
-        "update-vendor-value",
-        this.field,
-        this.selectedValue.filter((s, sIdx) => index !== sIdx),
-      );
+      this.selectedValue.splice(index, 1);
+      // this.$root.$emit(
+      //   "update-vendor-value",
+      //   this.field,
+      //   this.selectedValue.filter((s, sIdx) => index !== sIdx),
+      // );
     },
-    getAddressData: function (index, addressData, placeResultData, id) {
+    getAddressData(index, addressData, placeResultData, id) {
       this.selectedValue[
         index
       ] = `${addressData.route}, ${addressData.administrative_area_level_1}, ${addressData.country}`;
@@ -144,7 +147,7 @@ export default {
           this.selectedValue.push(item ? item["name"] : "");
         });
       } else {
-        this.selectedValue = this.value;
+        this.selectedValue = this.value.map((item) => item);
       }
     },
   },

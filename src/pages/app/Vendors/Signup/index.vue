@@ -147,7 +147,7 @@ export default {
     });
   },
   methods: {
-    ...mapMutations("vendor", ["setVendor", "setStep", "setEditing"]),
+    ...mapMutations("vendorSignup", ["setVendor", "setStep", "setEditing"]),
     camelize(str) {
       let temp = str.replace(/\W+(.)/g, function (match, chr) {
         return chr.toUpperCase();
@@ -157,19 +157,11 @@ export default {
   },
   computed: {
     ...mapGetters({
-      vendor: "vendor/getVendor",
-      step: "vendor/getStep",
+      vendor: "vendorSignup/getVendor",
+      step: "vendorSignup/getStep",
     }),
   },
   filters: {},
-  watch: {
-    vendor(newVal) {
-      // console.log("vendor.signup.watch.vendor", newVal);
-    },
-    step(newVal) {
-      console.log("vendor.signup.watch.step", newVal);
-    },
-  },
 };
 </script>
 <style lang="scss" scoped>

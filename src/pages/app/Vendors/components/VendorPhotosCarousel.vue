@@ -1,28 +1,43 @@
 <template>
   <div class="proposal-inpirational-photos">
-    <carousel :items="3" :margin="20" :dots="false" :nav="false" class="photos-carousel" :number="3">
+    <!-- <carousel :items="3" :margin="20" :dots="false" :nav="false" class="photos-carousel" :number="3">
       <template slot="prev">
         <md-button class="md-simple md-black handle-btn prev-btn md-icon-button edit-btn">
           <md-icon class="font-bold">keyboard_arrow_left</md-icon>
         </md-button>
-      </template>
-      <vendor-photos-carousel-item
-        class="photo-item"
-        v-for="(photo, index) in images"
-        :key="`photo-${index}`"
-        :index="index"
-        :defaultPhoto="photo"
-        @change="setPhoto(index, ...arguments)"
-        @addCaption="addCaption(index, ...arguments)"
-        @remove="removePhoto"
-      >
-      </vendor-photos-carousel-item>
-      <template slot="next">
+      </template> -->
+    <vendor-photos-carousel-item
+      class="photo-item"
+      v-for="(photo, index) in images"
+      :key="`photo-${index}`"
+      :index="index"
+      :defaultPhoto="photo"
+      @change="setPhoto(index, ...arguments)"
+      @addCaption="addCaption(index, ...arguments)"
+      @remove="removePhoto"
+    >
+    </vendor-photos-carousel-item>
+    <div class="add-image-item d-flex align-center justify-content-center text-center">
+      <label class="photo-add-label color-red font-bold" @click="handleAddImage">
+        <md-icon class="color-red">add</md-icon>
+        <br />
+        Add image
+      </label>
+      <input
+        style="display: none"
+        :id="`input-add-photo`"
+        name="attachment"
+        type="file"
+        multiple="multiple"
+        @change="onFileChange"
+      />
+    </div>
+    <!-- <template slot="next">
         <md-button class="md-simple md-black handle-btn next-btn md-icon-button edit-btn">
           <md-icon class="font-bold">keyboard_arrow_right</md-icon>
         </md-button>
       </template>
-    </carousel>
+    </carousel> -->
     <modal class="add-caption-modal" v-if="captionModal.isOpen">
       <template slot="header">
         <div class="maryoku-modal-header">
@@ -60,6 +75,7 @@
 import { Modal } from "@/components";
 import carousel from "vue-owl-carousel";
 import VendorPhotosCarouselItem from "./VendorPhotosCarouselItem.vue";
+import Swal from "sweetalert2";
 export default {
   components: {
     carousel,
@@ -69,7 +85,7 @@ export default {
   props: {
     images: {
       type: Array,
-      default: () => new Array(15),
+      default: () => [],
     },
   },
   data() {
@@ -88,6 +104,9 @@ export default {
     setPhoto(index, photoData) {
       this.$emit("setPhoto", { index, photo: photoData });
     },
+    addNewPhoto(photoData) {
+      this.$emit("addImage", photoData);
+    },
     addCaption(index, photoData) {
       this.captionModal.isOpen = true;
       this.captionModal.photoUrl = photoData.url;
@@ -95,7 +114,8 @@ export default {
       this.captionModal.currentIndex = index;
     },
     removePhoto(index) {
-      this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: null });
+      // this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: null });
+      this.$emit("removeImage", index);
     },
     saveCaption() {
       this.$root.$emit("saveCaption", this.captionModal);
@@ -108,6 +128,29 @@ export default {
       });
       this.captionModal.isOpen = false;
     },
+    handleAddImage() {
+      document.getElementById(`input-add-photo`).click();
+    },
+    async onFileChange(event) {
+      if (!event.target.files[0]) return;
+      if (event.target.files[0].size > 1024 * 1024 * 5) {
+        Swal.fire({
+          title: `The size of file that you selected is ${Math.floor(
+            event.target.files[0].size / 1024 / 1024,
+          )}MB. This file should be under 5MB`,
+          showCancelButton: false,
+          confirmButtonClass: "md-button md-success",
+          cancelButtonClass: "md-button md-danger",
+          confirmButtonText: "I got it",
+          buttonsStyling: false,
+        }).then((result) => {
+          if (result.value) {
+          }
+        });
+        return;
+      }
+      this.addNewPhoto(event.target.files[0]);
+    },
   },
 };
 </script>
@@ -117,6 +160,9 @@ export default {
   width: 100%;
   overflow: hidden;
   position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 30%);
+  gap: 10px 5%;
   .handle-btn {
     background-color: white !important;
     height: 25px;
@@ -134,6 +180,10 @@ export default {
   }
   /deep/ .modal-container {
     max-width: 1200px !important;
+  }
+  .add-image-item {
+    height: 220px;
+    border: dashed 1px #f51355;
   }
 }
 </style>

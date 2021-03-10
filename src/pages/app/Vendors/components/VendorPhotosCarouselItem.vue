@@ -52,6 +52,10 @@ export default {
       type: Number,
       default: 0,
     },
+    empty: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -91,7 +95,7 @@ export default {
       const extension = event.target.files[0].type.split("/")[1];
       if (!this.photo) this.photo = {};
       const photoData = await getBase64(event.target.files[0]);
-      this.$set(this.photo, "url", photoData);
+      // this.$set(this.photo, "url", photoData);
       this.$emit("change", event.target.files[0]);
     },
     handleAddPhoto() {

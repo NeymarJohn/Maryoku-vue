@@ -89,13 +89,13 @@ export default {
         }
       } else {
         if (this.trackBy) {
-          this.selectedCategory = this.categories.find(it => it[this.trackBy] === this.value);
+          this.selectedCategory = this.categories.find((it) => it[this.trackBy] === this.value);
         } else {
-          this.selectedCategory = this.categories.find(it => it.value === this.value);
+          this.selectedCategory = this.categories.find((it) => it.value === this.value);
         }
       }
     } else {
-      if ( this.multiple ) this.selectedCategory = [];
+      if (this.multiple) this.selectedCategory = [];
     }
   },
   computed: {
@@ -174,6 +174,7 @@ export default {
 <style lang="scss" scoped>
 .selector-wrapper {
   min-width: 350px;
+  width: 100%;
   font: normal 16px Manrope-Regular, sans-serif;
   .droplist {
     position: relative;

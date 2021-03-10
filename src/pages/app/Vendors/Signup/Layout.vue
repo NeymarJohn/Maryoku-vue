@@ -36,7 +36,7 @@
         <md-button
           class="approve md-vendor-signup md-red"
           @click="approve()"
-          :class="{ disabled: !validateBasicFields() }"
+          :class="{ disabled: !validateBasicFields }"
           >Approve & Begin</md-button
         >
       </section>
@@ -67,13 +67,12 @@
   </div>
 </template>
 <script>
-import VSignupSteps from "./Extra/VSignupSteps.vue";
+import VSignupSteps from "./VSignupSteps.vue";
 import { Modal } from "@/components";
-import moment from "moment";
 import Vendors from "@/models/Vendors";
 import Swal from "sweetalert2";
 import { mapMutations, mapGetters } from "vuex";
-import TenantUser from "@/models/TenantUser";
+import VendorSignupState from "./state";
 export default {
   components: {
     VSignupSteps,
@@ -81,66 +80,31 @@ export default {
   },
   data() {
     return {
-      reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
       savedItModal: false,
       iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
     };
   },
   methods: {
-    ...mapMutations("vendor", ["setVendor", "setEditing", "setStep"]),
+    ...mapMutations("vendorSignup", ["setVendor", "setEditing", "setStep"]),
     goTo(router) {
       this.$router.push(router);
     },
-    validateBasicFields() {
-      const isValid =
-        this.vendor.vendorMainEmail &&
-        this.reg.test(this.vendor.vendorMainEmail) &&
-        this.vendor.companyName &&
-        this.vendor.vendorCategories &&
-        this.vendor.vendorCategories.length > 0 &&
-        this.vendor.vendorAddresses &&
-        this.vendor.vendorAddresses.length > 0;
-      return isValid;
-    },
-
     approve() {
       if (this.$store.state.vendor.isEditing) {
         this.setStep(1);
       } else {
-        if (this.validateBasicFields()) {
-          // console.log("approve.vendor", this.vendor);
+        if (this.validateBasicFields) {
           this.$set(this.vendor, "vendorCategory", this.vendor.vendorCategories[0]);
           this.$set(this.vendor, "vendorAddressLine1", this.vendor.vendorAddresses[0]);
           this.$set(this.vendor, "isEditing", true);
-          new Vendors(this.vendor)
-            .save()
+          this.$store
+            .dispatch("vendorSignup/saveVendor", this.vendor)
             .then((res) => {
-              console.log("*** Save vendor - done: ");
-              console.log(JSON.stringify(res));
-              this.$set(res.item, "about", {});
-              this.$set(res.item, "capacity", {});
-              this.$set(res.item, "images", new Array(15));
-              this.$set(res.item, "social", {});
-              this.$set(res.item, "services", {});
-              this.$set(res.item, "yesRules", []);
-              this.$set(res.item, "noRules", []);
-              this.$set(res.item, "notAllowed", []);
-              this.$set(res.item, "exDonts", []);
-              this.$set(res.item, "yesPolicies", []);
-              this.$set(res.item, "noPolicies", []);
-              this.$set(res.item, "selectedWeekdays", []);
-              this.setVendor(res.item);
               this.setEditing(true);
-
-              // save vendor in store
-
               this.setStep(1);
             })
             .catch((error) => {
-              console.log("*** Save vendor - failed: ");
-              console.log(JSON.stringify(error));
-
               if (error.message.indexOf("companyName")) {
                 Swal.fire({
                   title: `Sorry, Company Name is duplicated. Please choose another.`,
@@ -187,7 +151,7 @@ export default {
       this.addVendor();
     },
     hideModal() {
-      this.$store.dispatch("vendor/resetStatus");
+      this.$store.dispatch("vendorSignup/resetStatus");
     },
     camelize(str) {
       let temp = str.replace(/\W+(.)/g, function (match, chr) {
@@ -214,92 +178,60 @@ export default {
 
       this.$store.dispatch("auth/register", tenantUser).then(
         (res) => {
-          if (res.status !== "exists") {
-            new Vendors({ ...this.vendor, tenantUser: { id: res.id }, isEditing: false })
-              .save()
-              .then((res) => {
-                console.log("*** Save vendor - done: ");
-                console.log(JSON.stringify(res));
-                // this.setStep(this.step + 1);
-                this.isCompletedWizard = true;
-                Swal.fire({
-                  title,
-                  buttonsStyling: false,
-                  confirmButtonClass: "md-button md-success",
-                }).then(() => {
-                  const proposalRequest = this.$route.query.proposalRequest;
-                  if (this.step === 7) {
-                    this.setVendor({});
-                    this.setEditing(false);
-                    this.setStep(0);
-                    this.isCompletedWizard = false;
-                    if (proposalRequest) {
-                      this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
-                    } else {
-                      this.$store.dispatch("auth/login", tenantUser).then(
-                        () => {
-                          this.$router.push(`/vendor/profile/settings`);
-                        },
-                        (error) => {
-                          this.loading = false;
-                          this.error = "failed";
-                        },
-                      );
-                    }
+          new Vendors({ ...this.vendor, tenantUser: { id: res.id }, isEditing: false })
+            .save()
+            .then((res) => {
+              this.isCompletedWizard = true;
+              Swal.fire({
+                title,
+                buttonsStyling: false,
+                confirmButtonClass: "md-button md-success",
+              }).then(() => {
+                const proposalRequest = this.$route.query.proposalRequest;
+                if (this.step === 7) {
+                  this.setVendor({});
+                  this.setEditing(false);
+                  this.setStep(0);
+                  this.isCompletedWizard = false;
+                  if (proposalRequest) {
+                    this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
+                  } else {
+                    // this.$store.dispatch("auth/login", tenantUser).then(
+                    //   () => {
+                    //     this.$router.push(`/vendor/profile/settings`);
+                    //   },
+                    //   (error) => {
+                    //     this.loading = false;
+                    //     this.error = "failed";
+                    //   },
+                    // );
                   }
-                });
-              })
-              .catch((error) => {
-                console.log("*** Save vendor - failed: ");
-                console.log(JSON.stringify(error));
+                }
               });
-          } else {
-            this.error = res.field;
-          }
+            })
+            .catch((error) => {});
         },
         (error) => {
           this.loading = false;
           this.error = "failed";
         },
       );
-      new Vendors({ ...this.vendor, isEditing: false })
-        .save()
-        .then((res) => {
-          console.log("*** Save vendor - done: ");
-          console.log(JSON.stringify(res));
-          // this.setStep(this.step + 1);
-          this.isCompletedWizard = true;
-          Swal.fire({
-            title,
-            buttonsStyling: false,
-            confirmButtonClass: "md-button md-success",
-          }).then(() => {
-            const proposalRequest = this.$route.query.proposalRequest;
-            if (this.step === 7) {
-              this.setVendor({});
-              this.setEditing(false);
-              this.setStep(0);
-
-              this.isCompletedWizard = false;
-              if (proposalRequest) this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
-              else this.$router.push("/vendor-signup");
-            }
-          });
-        })
-        .catch((error) => {
-          console.log("*** Save vendor - failed: ");
-          console.log(JSON.stringify(error));
-        });
     },
   },
-  created() {},
-  mounted() {
-    // console.log("vendor.signup.layout.vendor", this.vendor, this.step);
+  beforeCreate() {
+    if (this.$store.registerModule("vendorSignup", VendorSignupState) === false) {
+      this.$store.unregisterModule("vendorSignup");
+      this.$store.registerModule("vendorSignup", myModule);
+    }
+  },
+  beforeDestroy() {
+    this.$store.unregisterModule("vendorSignup");
   },
   computed: {
     ...mapGetters({
-      vendor: "vendor/getVendor",
-      step: "vendor/getStep",
+      vendor: "vendorSignup/getVendor",
+      step: "vendorSignup/getStep",
+      validateBasicFields: "vendorSignup/validateBasicFields",
     }),
     nextLabel() {
       if (this.step == 6) {
@@ -313,12 +245,11 @@ export default {
       }
     },
     status() {
-      return this.$store.getters["vendor/getStatus"];
+      return this.$store.getters["vendorSignup/getStatus"];
     },
   },
   watch: {
     step(newVal) {
-      // console.log("signup.layout.wathc.step", newVal);
       if (this.step === 7) this.addVendor();
     },
   },
