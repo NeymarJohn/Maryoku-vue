@@ -132,7 +132,7 @@
 </template>
 
 <script>
-import SelectProposalSubItem from "../components/SelectProposalSubItem.vue";
+import SelectProposalSubItem from "./SelectProposalSubItem.vue";
 
 export default {
   components: { SelectProposalSubItem },

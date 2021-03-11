@@ -4,8 +4,9 @@
       <template slot="tab-pane-1">
         <vendor-account-detail></vendor-account-detail>
       </template>
-      <template slot="tab-pane-2"> <notifications></notifications> </template>
-      <template slot="tab-pane-3"> <permissions></permissions> </template>
+      <template slot="tab-pane-2"> <div class="p-40"></div> </template>
+      <template slot="tab-pane-3"> <div class="p-40"></div> </template>
+      <template slot="tab-pane-4"> <permissions></permissions> </template>
     </tabs>
   </div>
 </template>
@@ -13,10 +14,9 @@
 import VueElementLoading from "vue-element-loading";
 import { LabelEdit, Tabs } from "@/components";
 import VendorAccountDetail from "./VendorAccountDetail";
-import Permissions from "./Permissions";
+// import Permissions from "./Permissions";
 // import auth from '@/auth';
 import { mapGetters } from "vuex";
-import Notifications from "./Notifications.vue";
 
 export default {
   components: {
@@ -24,8 +24,8 @@ export default {
     LabelEdit,
     Tabs,
     VendorAccountDetail,
-    Notifications,
-    Permissions,
+    // ProfileDetails,
+    // Permissions,
   },
   data() {
     return {
