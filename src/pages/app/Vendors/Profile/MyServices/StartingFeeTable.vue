@@ -7,7 +7,7 @@
       </div>
     </template>
     <template slot="content">
-      <div class="pr-50 pl-50 pb-50">
+      <div class="pr-50 pl-50 pb-50 starting-fee-table-content">
         <vendor-starting-fee-item v-for="(fv, fvIndex) in items" :key="fvIndex" :item="fv" />
       </div>
     </template>
@@ -29,5 +29,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .starting-fee-table {
+  .starting-fee-table-content {
+    max-width: 900px;
+  }
 }
 </style>

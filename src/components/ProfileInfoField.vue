@@ -57,8 +57,12 @@
     <div v-else class="profile-field-value">
       <template v-if="editor === 'social'">
         <div class="social-value d-flex align-center">
-          <div class="item mr-20" v-for="(s, sIndex) in socialMediaBlocks" :key="sIndex">
-            <a v-if="defaultValue[s.name]" :href="defaultValue[s.name]" target="_blank">
+          <div
+            class="item mr-20"
+            v-for="(s, sIndex) in socialMediaBlocks.filter((item) => defaultValue[item.name])"
+            :key="sIndex"
+          >
+            <a :href="defaultValue[s.name]" target="_blank">
               <img :src="`${$iconURL}Vendor Signup/${s.icon}`" />
             </a>
           </div>

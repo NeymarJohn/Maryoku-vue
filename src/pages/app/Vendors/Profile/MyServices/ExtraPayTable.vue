@@ -7,7 +7,7 @@
       </div>
     </template>
     <template slot="content">
-      <div class="pr-50 pl-50 pb-50">
+      <div class="pr-50 pl-50 pb-50 cost-service-content">
         <vendor-extra-pay-item v-for="(cs, csIndex) in items" :key="csIndex" :item="cs" @change="changeServiceItem" />
       </div>
     </template>
@@ -26,9 +26,21 @@ export default {
       default: () => [],
     },
   },
+  methods: {
+    changeServiceItem(item) {
+      _.each(items, (s) => {
+        if (s.label === item.label) {
+          items[s] = item;
+        }
+      });
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
 .cost-service-table {
+  .cost-service-content {
+    max-width: 900px;
+  }
 }
 </style>
