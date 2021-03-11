@@ -1,44 +1,26 @@
 <template>
-  <div class="proposal-item-wrapper">
-    <div class="title-cont default" :class="[{ 'pb-40': isVCollapsed }]" v-if="step <= 1">
-      <div class="with-subtitle" @click="isVCollapsed = !isVCollapsed">
-        <div class="text-cont">
-          <h3 class="title">
-            <img :src="img" />
-            {{ category }}
-          </h3>
-          <h5 v-if="!isVCollapsed">{{ subTitle }}</h5>
-        </div>
-        <div class="action">
-          <img v-if="!isVCollapsed" :src="`${iconUrl}Group 3671 (2).svg`" />
-          <img v-else :src="`${iconUrl}Asset 567.svg`" />
-        </div>
+  <div class="proposal-service-table-wrapper">
+    <div class="title-cont default">
+      <div>
+        Mandatory elements to involve in proposals are in the table, we recommend adding these elements as well:
       </div>
-      <p v-if="!isVCollapsed">
-        Which element would you like to involve in your
-        <strong>{{ category }}</strong> proposal?
-      </p>
-      <div class="sub-items-cont" v-if="!isVCollapsed">
+      <div class="sub-items-cont">
         <span class="prev" @click="prev()" v-if="serviceSlidePos < 0">
           <md-icon>keyboard_arrow_left</md-icon>
         </span>
         <div class="sub-items" :style="{ left: `${serviceSlidePos}px` }" ref="servicesCont">
           <select-proposal-sub-item
-            :selected="isSelectedQuickButton(s)"
+            :selected="isSelectedQuickButton('')"
             :item="requirement.item ? requirement.item : requirement.subCategory"
             v-for="(requirement, sIndex) in optionalRequirements"
             :key="sIndex"
           />
         </div>
-        <span
-          class="next"
-          @click="next()"
-          v-if="serviceSlidePos >= 0 || this.servicesWidth + this.serviceSlidePos - 200 > 0"
-        >
+        <span class="next" @click="next()">
           <md-icon>keyboard_arrow_right</md-icon>
         </span>
       </div>
-      <div class="add-item-cont" v-if="step == 0 && !isVCollapsed">
+      <div class="add-item-cont">
         <div class="fields-cont">
           <div class="field">
             <span>Description</span>
@@ -60,84 +42,13 @@
         </div>
         <div class="action-cont">
           <a class="cancel" @click="cancel()">Clear</a>
-          <a class="save" :class="{ isDisabled: isDisabledAdd }" @click="saveItem(serviceItem, qty, subTotal, category)"
+          <a class="save" :class="{ isDisabled: isDisabledAdd }" @click="saveItem(serviceItem, qty, unit, category)"
             >Add This</a
           >
         </div>
       </div>
     </div>
-    <div class="title-cont dropdown" v-if="step == 2" @click="clickItem(category)">
-      <div class="left-side">
-        <div class="check-cont">
-          <img v-if="isChecked" :src="`${iconUrl}Group 6258 (2).svg`" />
-          <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`" />
-        </div>
-        <h3 class="title">
-          <img :src="img" />
-          <span>{{ category }}</span>
-        </h3>
-      </div>
-      <div class="right-side">
-        <div class="budget-cont">
-          <span>Budget</span>
-          <span>${{ service.allocatedBudget | withComma }}</span>
-        </div>
-        <div class="proposal-range-cont">
-          <p>You're the First bidder</p>
-          <span class="grey" v-if="proposalRange">Proposals range</span>
-          <span v-if="proposalRange">{{
-            `$${newProposalRequest.bidRange.low} - $${newProposalRequest.bidRange.high}`
-          }}</span>
-        </div>
-        <img :src="`${iconUrl}Component 36 (2).svg`" :style="`transform: ${isChecked ? 'rotate(90deg)' : ''}`" />
-      </div>
-    </div>
-    <div class="sub-items-cont" v-if="step == 2 && isChecked">
-      <h3>Which elements would you like to involve in your proposal?</h3>
-      <div class="sub-items-cont" v-if="step == 2 && isChecked">
-        <span class="prev" @click="prev()" v-if="serviceSlidePos < 0">
-          <md-icon>keyboard_arrow_left</md-icon>
-        </span>
-        <div class="sub-items" :style="{ left: `${serviceSlidePos}px` }" ref="servicesCont">
-          <select-proposal-sub-item :active="true" :item="s" v-for="(s, sIndex) in services" :key="sIndex" />
-        </div>
-        <span
-          class="next"
-          @click="next()"
-          v-if="serviceSlidePos >= 0 || this.servicesWidth + this.serviceSlidePos - 200 > 0"
-        >
-          <md-icon>keyboard_arrow_right</md-icon>
-        </span>
-      </div>
-    </div>
-    <div class="add-item-cont" v-if="step == 2 && isChecked">
-      <div class="fields-cont">
-        <div class="field">
-          <span>Description</span>
-          <input v-model="serviceItem" readonly class="description" />
-        </div>
-        <div class="field">
-          <span>QTY</span>
-          <money v-model="qty" v-bind="qtyFormat" @keyup.native="calculateSubTotal()" />
-        </div>
-        <div class="field">
-          <span>Price per unit</span>
-          <money v-model="unit" v-bind="currencyFormat" @keyup.native="calculateSubTotal()" />
-        </div>
-        <div class="field">
-          <span>Total</span>
-          <money v-model="subTotal" v-bind="currencyFormat" v-if="isNumberVisible" class="total" />
-          <money v-model="unit" v-bind="currencyFormat" v-else class="total" />
-        </div>
-      </div>
-      <div class="action-cont">
-        <a class="cancel" @click="cancel()">Clear</a>
-        <a class="save" :class="{ isDisabled: isDisabledAdd }" @click="saveItem(serviceItem, qty, subTotal, category)"
-          >Add This</a
-        >
-      </div>
-    </div>
-    <div class="editable-sub-items-cont" v-if="(step <= 1 && !isVCollapsed) || (step == 2 && isChecked)">
+    <div class="editable-sub-items-cont">
       <div class="editable-sub-items-header">
         <span>Description</span>
         <span class="text-center">QTY</span>
@@ -145,12 +56,14 @@
         <span class="text-center">Subtotal</span>
       </div>
       <editable-proposal-sub-item
-        v-for="(req, rIndex) in newProposalRequest.requirements"
+        v-for="(req, rIndex) in services"
         :key="rIndex"
         :index="rIndex"
-        :item="getObject(req)"
+        :item="req"
         :active="true"
         :step="1"
+        @save="updateItem"
+        @remove="removeItem"
       />
       <div class="tax-discount-wrapper">
         <div class="row grid-tax-row">
@@ -244,12 +157,12 @@
       </div>
       <div class="editable-sub-items-footer">
         <span>Total</span>
-        <span>${{ calculatedTotal() | withComma }}</span>
+        <span>${{ calculatedTotal | withComma }}</span>
       </div>
     </div>
-    <!-- <div class="upload-files-wrapper" v-if="(step <= 1 && !isVCollapsed) || (step == 2 && isChecked)">
+    <!-- <div class="upload-files-wrapper">
       <div class="title-cont">
-        <h3><img :src="`${iconUrl}Asset 608.svg`" />Upload These Files:</h3>
+        <h3><img :src="`${$iconURL}NewSubmitPorposal/Asset 608.svg`" />Upload These Files:</h3>
         <h5>And add additional if you want</h5>
       </div>
       <div class="files-cont">
@@ -259,40 +172,35 @@
             <span class="req">Required</span>
           </div>
           <div class="right" @click="uploadDocument(legalDoc)" v-if="getFileByTag(legalDoc) == null">
-            <img :src="`${iconUrl}Asset 609.svg`" />Upload
+            <img :src="`${$iconURL}NewSubmitPorposal/Asset 609.svg`" />Upload
           </div>
           <div class="right" v-else>
             <span class="filename">{{ getFileByTag(legalDoc) }}</span>
-            <img class="check" :src="`${iconUrl}Group 3599 (2).svg`" />
-            <img class="remove" :src="`${iconUrl}Group 3671 (2).svg`" @click="removeFileByTag(legalDoc)" />
+            <img class="check" :src="`${$iconURL}NewSubmitPorposal/Group 3599 (2).svg`" />
+            <img
+              class="remove"
+              :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`"
+              @click="removeFileByTag(legalDoc)"
+            />
           </div>
         </div>
         <input
           type="file"
-          class="hide"
+          class="d-none"
           ref="legalDocument"
           accept="application/text, application/pdf"
           @change="onFilePicked"
         />
-        <div class="item">
-          <div class="left">
-            <span class="filename">Legal Requirements</span>
-            <span class="req">Required</span>
-          </div>
-          <div class="right">
-            <img :src="`${iconUrl}Asset 609.svg`"/>Upload
-          </div>
-        </div>
         <div class="option">
           <div class="left">
             <span class="filename">Other</span>
             <span class="req">*Optional</span>
           </div>
           <div class="right" @click="uploadDocument('option')" v-if="getFileByTag('option') == null">
-            <img :src="`${iconUrl}Asset 609.svg`" />Upload
+            <img :src="`${$iconURL}NewSubmitPorposal/Asset 609.svg`" />Upload
             <input
               type="file"
-              class="hide"
+              class="d-none"
               ref="optionDocument"
               accept="application/text, application/pdf"
               @change="onFilePicked"
@@ -300,32 +208,16 @@
           </div>
           <div class="right" v-else>
             <span class="filename">{{ getFileByTag("option") }}</span>
-            <img class="check" :src="`${iconUrl}Group 3599 (2).svg`" />
-            <img class="remove" :src="`${iconUrl}Group 3671 (2).svg`" @click="removeFileByTag('option')" />
+            <img class="check" :src="`${$iconURL}NewSubmitPorposal/Group 3599 (2).svg`" />
+            <img
+              class="remove"
+              :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`"
+              @click="removeFileByTag('option')"
+            />
           </div>
         </div>
       </div>
     </div> -->
-    <div class="additional-photos-wrapper" v-if="step == 2 && isChecked">
-      <div class="title-cont">
-        <h3><img :src="`${iconUrl}Asset 605.svg`" />Upload Additional Photos</h3>
-        <h5>(15 photos top, under 20KB)</h5>
-      </div>
-      <vue-dropzone
-        id="dropzone"
-        :options="dropzoneOptions"
-        :useCustomSlot="true"
-        class="dropdown-zone"
-        @vdropzone-file-added="imageSelected"
-      >
-        <span class="color-red font-bold cho">
-          <img :src="`${$iconURL}Campaign/Group 9241.svg`" class="mr-10" />Choose File
-        </span>
-        <br />Or
-        <br />
-        <span class="color-dark-gray">Drag your file here</span>
-      </vue-dropzone>
-    </div>
   </div>
 </template>
 <script>
@@ -333,14 +225,14 @@ import ProposalRequest from "@/models/ProposalRequest";
 import ProposalRequestFile from "@/models/ProposalRequestFile";
 
 import InputProposalSubItem from "@/components/Inputs/InputProposalSubItem.vue";
-import SelectProposalSubItem from "./SelectProposalSubItem.vue";
-import EditableProposalSubItem from "./EditableProposalSubItem.vue";
+import SelectProposalSubItem from "../components/SelectProposalSubItem.vue";
+import EditableProposalSubItem from "../components/EditableProposalSubItem.vue";
 import { Money } from "v-money";
 
 import vue2Dropzone from "vue2-dropzone";
 import S3Service from "@/services/s3.service";
 export default {
-  name: "proposal-item",
+  name: "proposal-service-table",
   components: {
     InputProposalSubItem,
     SelectProposalSubItem,
@@ -355,10 +247,6 @@ export default {
     proposalRange: Boolean,
     subTitle: String,
     img: String,
-    step: Number,
-    services: Array,
-    proposalRequest: Object,
-    vendor: Object,
     service: Object,
   },
   data() {
@@ -381,7 +269,6 @@ export default {
       inputType: "text",
       temp: null,
       isNumberVisible: true,
-      newProposalRequest: {},
       files: [],
       docTag: null,
       serviceSlidePos: 0,
@@ -416,6 +303,7 @@ export default {
         thumbnailWidth: 150,
         maxFilesize: 10,
       },
+      proposalData: {},
     };
   },
   methods: {
@@ -457,7 +345,7 @@ export default {
       this.discount_by_amount = null;
     },
     saveItem(serviceItem, qty, price, category) {
-      this.newProposalRequest.requirements.push({
+      this.services.unshift({
         comments: [],
         dateCreated: "",
         includedInPrice: true,
@@ -474,8 +362,16 @@ export default {
         requirementValue: `${qty}`,
       });
       this.$forceUpdate();
-      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
+      this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
       this.cancel();
+    },
+    updateItem({ index, item }) {
+      this.services[index] = item;
+      this.services = this.services;
+    },
+    removeItem(index) {
+      this.services.splice(index, 1);
+      this.services = this.services;
     },
     calculateSubTotal() {
       this.subTotal = this.qty * this.unit;
@@ -483,7 +379,8 @@ export default {
     },
     saveDiscount() {
       this.isEditDiscount = false;
-      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {
+      this.$store.state.commit("vendorProposal/setDiscount", { category: this.category, value: this.discount });
+      this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {
         category: this.category,
         value: this.discount,
       });
@@ -561,9 +458,9 @@ export default {
       let total = 0;
       let vm = this;
       let requirements = [];
-      console.log("total.requirements", this.newProposalRequest);
-      if (this.newProposalRequest.requirements.length) {
-        requirements = this.newProposalRequest.requirements.filter((r) => r.hasOwnProperty("requirementTitle"));
+      console.log("total.requirements", this.proposalRequest);
+      if (this.proposalRequest.requirements.length) {
+        requirements = this.proposalRequest.requirements.filter((r) => r.hasOwnProperty("requirementTitle"));
       }
 
       requirements.map(function (item) {
@@ -571,7 +468,7 @@ export default {
           if (item.priceUnit === "total") {
             total += parseFloat(String(item.price).replace(/,/g, ""));
           } else {
-            if (vm.newProposalRequest != undefined) {
+            if (vm.proposalRequest != undefined) {
               total += parseFloat(String(item.price).replace(/,/g, "")) * parseInt(item.requirementValue);
             }
           }
@@ -580,17 +477,17 @@ export default {
 
       return total;
     },
-    calculatedTotal() {
-      let total = this.totalOffer();
+    // calculatedTotal() {
+    //   let total = this.totalOffer();
 
-      total = total - (total * this.discount) / 100;
-      if (total > 0) {
-        total = total - this.discount_by_amount;
-      }
-      total += (total * this.tax) / 100;
-      console.log("calculateTotal", total);
-      return total;
-    },
+    //   total = total - (total * this.discount) / 100;
+    //   if (total > 0) {
+    //     total = total - this.discount_by_amount;
+    //   }
+    //   total += (total * this.tax) / 100;
+    //   console.log("calculateTotal", total);
+    //   return total;
+    // },
     prev() {
       if (this.$refs.servicesCont) {
         this.servicesWidth = this.$refs.servicesCont.clientWidth;
@@ -612,11 +509,7 @@ export default {
       this.discount_by_amount = 0;
     },
     isSelectedQuickButton(item) {
-      const selectedServices = this.newProposalRequest.requirements.filter((r) =>
-        this.services.includes(r.requirementTitle),
-      );
-      const selectedService = selectedServices.find((it) => it.requirementTitle === item);
-      return selectedService || item == this.selectedQuickButton;
+      return false;
     },
     async imageSelected(file) {
       const imageData = await getBase64(file);
@@ -627,38 +520,36 @@ export default {
     },
   },
   created() {
-    this.isVCollapsed = this.isCollapsed;
-    this.newProposalRequest = this.proposalRequest;
-    this.mandatoryRequirements.forEach((item) => {
-      // if (
-      //   this.newProposalRequest.requirements.length == 0 ||
-      //   this.newProposalRequest.requirements.findIndex((requirement) => requirement.requirementTitle !== item.item) < 0
-      // )
-      this.newProposalRequest.requirements.push({
-        comments: [],
-        dateCreated: "",
-        includedInPrice: true,
-        itemNotAvailable: false,
-        price: 0,
-        priceUnit: "qty",
-        proposalRequest: { id: this.proposalRequest.id },
-        requirementComment: null,
-        requirementId: "",
-        requirementMandatory: false,
-        requirementPriority: null,
-        requirementTitle: item.item,
-        requirementsCategory: item.category,
-        requirementValue: 1,
+    if (!this.services || this.services.length == 0) {
+      const defaultServices = [];
+      this.mandatoryRequirements.forEach((item) => {
+        defaultServices.push({
+          comments: [],
+          dateCreated: "",
+          includedInPrice: true,
+          itemNotAvailable: false,
+          price: 0,
+          priceUnit: "qty",
+          proposalRequest: { id: this.proposalRequest.id },
+          requirementComment: null,
+          requirementId: "",
+          requirementMandatory: false,
+          requirementPriority: null,
+          requirementTitle: item.item,
+          requirementsCategory: item.category,
+          requirementValue: 1,
+        });
       });
-    });
+      this.services = defaultServices;
+    }
 
     this.$forceUpdate();
-    this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
+    this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
     this.$root.$on("remove-proposal-requirement", (item) => {
-      this.newProposalRequest.requirements = this.newProposalRequest.requirements.filter(
+      this.proposalRequest.requirements = this.proposalRequest.requirements.filter(
         (req) => req.requirementTitle != item.requirementTitle,
       );
-      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
+      this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
       this.$forceUpdate();
       this.cancel();
     });
@@ -672,8 +563,8 @@ export default {
 
     this.$root.$on("save-proposal-requirement", ({ index, item }) => {
       this.proposalRequest.requirements[index] = item;
-      this.newProposalRequest.requirements[index] = item;
-      this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
+      this.proposalRequest.requirements[index] = item;
+      this.$root.$emit("update-proposal-budget-summary", this.proposalRequest, {});
       this.$forceUpdate();
     });
 
@@ -695,26 +586,59 @@ export default {
       return !this.qty || !this.unit || !this.subTotal || this.subTotal == 0 || !this.serviceItem;
     },
     optionalRequirements() {
+      console.log(this.proposalRequest);
       return this.proposalRequest.requirements.filter((item) => !item.mustHave && item.type !== "multi-selection");
     },
     mandatoryRequirements() {
       if (!this.proposalRequest) return [];
       return this.proposalRequest.requirements.filter((item) => item.mustHave);
     },
+    proposalRequest() {
+      console.log(this.$store.state.vendorProposal.proposalRequest);
+      return this.$store.state.vendorProposal.proposalRequest;
+    },
+    vendor() {
+      return this.$store.state.vendorProposal.vendor;
+    },
+    services: {
+      get: function () {
+        return this.$store.state.vendorProposal.proposalServices[this.category];
+      },
+      set: function (newServices) {
+        this.$store.commit("vendorProposal/setServices", { category: this.category, services: newServices });
+      },
+    },
+
+    calculatedTotal() {
+      let taxRate = this.$store.state.vendorProposal.taxes[this.categroy];
+      if (!taxRate) taxRate = 0;
+      let total = this.totalPrice - (this.totalPrice * this.discount) / 100;
+      const tax = (total * taxRate) / 100;
+      return total - tax;
+    },
+    totalPrice() {
+      const sumPrice = this.services.reduce((s, item) => {
+        return s + item.requirementValue * item.price;
+      }, 0);
+      return sumPrice;
+    },
+    legalDocs: {
+      get: function () {
+        return this.$store.state.vendorProposal.legalDocs[this.category];
+      },
+      set: function (files) {
+        this.$store.commit("vendorProposal/setLegalDocs", files);
+      },
+    },
   },
   watch: {},
 };
 </script>
 <style lang="scss" scoped>
-.proposal-item-wrapper {
-  border-radius: 3px;
-  box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-  background-color: #ffffff;
-  padding: 40px 34px 0px 34px;
+.proposal-service-table-wrapper {
+  padding: 0px;
   font-family: "Manrope-Regular", sans-serif;
   color: #050505;
-  margin: 50px 0 30px 0;
-
   .dropdown-zone {
     margin: 30px;
   }
@@ -866,51 +790,6 @@ export default {
     }
   }
 
-  .sub-items-cont {
-    padding: 1rem 0;
-    overflow: hidden;
-    position: relative;
-
-    h3 {
-      font-size: 30px;
-      font-weight: 800;
-      padding-bottom: 2rem;
-      margin: 0;
-    }
-    .sub-items {
-      // display: flex;
-      display: block;
-      position: relative;
-      white-space: nowrap;
-      width: calc(100% - 2rem);
-      // overflow-x: auto;
-    }
-    .prev {
-      position: absolute;
-      cursor: pointer;
-      z-index: 99;
-      left: 0;
-      background: #fff;
-      padding: 1.5rem 0;
-      top: 0;
-      i {
-        color: #f51355 !important;
-      }
-    }
-    .next {
-      z-index: 99;
-      position: absolute;
-      cursor: pointer;
-      right: 0;
-      background: #fff;
-      padding: 1.5rem 0;
-      top: 0;
-      i {
-        color: #f51355 !important;
-      }
-    }
-  }
-
   .add-attributes-cont {
     display: flex;
   }
@@ -947,6 +826,7 @@ export default {
     margin-top: 2rem;
 
     .editable-sub-items-header {
+      // border-top: 1px solid #707070;
       border-top: 2px solid #cbcbcb;
       padding: 40px 40px 30px 40px;
       display: grid;

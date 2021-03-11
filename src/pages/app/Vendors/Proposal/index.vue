@@ -88,24 +88,21 @@ import moment from "moment";
 import VendorService from "@/services/vendor.service";
 import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 
-import Vendors from "@/models/Vendors";
-import ProposalRequest from "@/models/ProposalRequest";
-
 //COMPONENTS
 import Icon from "@/components/Icon/Icon.vue";
-import ProposalBudgetSummary from "./components/ProposalBudgetSummary.vue";
-import ProposalRequirementsPanel from "./components/ProposalRequirementsPanel";
-import ProposalSteps from "./components/ProposalSteps.vue";
-import ProposalItem from "./components/ProposalItem.vue";
-import ProposalEventVision from "./components/ProposalEventVision.vue";
-import ProposalBidContent from "./components/ProposalBidContent.vue";
-import ProposalAddFiles from "./components/ProposalAddFiles.vue";
-import ProposalTitleWithIcon from "./components/ProposalTitleWithIcon.vue";
-import ReferNewVendor from "./components/ReferNewVendor.vue";
-import ProposalEventSummary from "./components/ProposalEventSummary.vue";
+import ProposalBudgetSummary from "./ProposalBudgetSummary.vue";
+import ProposalRequirementsPanel from "./ProposalRequirementsPanel";
+import ProposalSteps from "./ProposalSteps.vue";
+import ProposalItem from "./ProposalItem.vue";
+import ProposalEventVision from "./ProposalEventVision.vue";
+import ProposalBidContent from "./ProposalBidContent.vue";
+import ProposalAddFiles from "./ProposalAddFiles.vue";
+import ProposalTitleWithIcon from "./ProposalTitleWithIcon.vue";
+import ReferNewVendor from "../components/ReferNewVendor.vue";
+import ProposalEventSummary from "./ProposalEventSummary.vue";
 import VueElementLoading from "vue-element-loading";
-import ProposalItemSecondaryService from "./components/ProposalItemSecondaryService";
-import ProposalAdditionalRequirement from "./components/ProposalAddtionalRequirement";
+import ProposalItemSecondaryService from "./ProposalItemSecondaryService";
+import ProposalAdditionalRequirement from "./ProposalAddtionalRequirement";
 import S3Service from "@/services/s3.service";
 export default {
   components: {

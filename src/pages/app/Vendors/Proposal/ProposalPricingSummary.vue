@@ -2,10 +2,10 @@
   <div class="proposal-item-secondary-service">
     <div class="title-cont dropdown" @click="clickItem(service.componentId)" :class="{ opened: isChecked }">
       <div class="left-side">
-        <div class="check-cont">
+        <!-- <div class="check-cont">
           <img v-if="isChecked" :src="`${iconUrl}Group 6258 (2).svg`" />
           <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`" />
-        </div>
+        </div> -->
         <h3 class="title">
           <img :src="img" />
           <span>{{ category }}</span>
@@ -50,7 +50,7 @@
         key="extra"
         :vendorCategory="service.componentId"
       />
-      <!-- <proposal-upload-legal></proposal-upload-legal> -->
+      <proposal-upload-legal></proposal-upload-legal>
     </template>
   </div>
 </template>
@@ -59,7 +59,7 @@ import ProposalRequest from "@/models/ProposalRequest";
 import ProposalRequestFile from "@/models/ProposalRequestFile";
 
 import InputProposalSubItem from "@/components/Inputs/InputProposalSubItem.vue";
-import SelectProposalSubItem from "./SelectProposalSubItem.vue";
+import SelectProposalSubItem from "../components/SelectProposalSubItem.vue";
 import EditableProposalSubItem from "./EditableProposalSubItem.vue";
 import { Money } from "v-money";
 
@@ -449,6 +449,15 @@ export default {
         return this.$store.commit("vendorProposal/setAddtionalService", newValue);
       },
     },
+    costedServices() {
+      return this.$store.state.vendorProposal.proposalCostServices[this.category];
+    },
+    includedServices() {
+      return this.$store.state.vendorProposal.proposalIncludedServices[this.category];
+    },
+    extraServices() {
+      return this.$store.state.vendorProposal.proposalExtraServices[this.category];
+    },
   },
   watch: {},
 };
@@ -474,13 +483,13 @@ export default {
       align-items: center;
       cursor: pointer;
       &.opened {
-        border-bottom: solid 1px #d7d7d7;
+        border-bottom: solid 1px #050505;
       }
       .left-side {
         width: 100%;
-        display: grid;
-        grid-template-columns: 10% 90%;
-        align-items: center;
+        // display: grid;
+        // grid-template-columns: 10% 90%;
+        // align-items: center;
 
         .check-cont {
           img {
@@ -542,14 +551,14 @@ export default {
       }
     }
   }
-  .additional-service:not(:last-child) {
-    border-bottom: solid 1px #d7d7d7;
+  .additional-service {
+    border-bottom: solid 2px #828282;
   }
   .additional-photos-wrapper {
     margin-left: -34px;
     margin-right: -34px;
     padding: 60px 0 10px 0;
-    border-top: 1px solid #d7d7d7;
+    border-top: 1px solid #707070;
 
     .title-cont {
       display: flex;

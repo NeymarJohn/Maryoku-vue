@@ -137,7 +137,7 @@
 </template>
 <script>
 import EditableProposalSubItem from "./EditableProposalSubItem.vue";
-import CheckListItem from "./CheckListItem.vue";
+import CheckListItem from "../components/CheckListItem.vue";
 import VendorService from "@/services/vendor.service";
 import { mapGetters } from "vuex";
 import ProposalRequirements from "./ProposalRequirements.vue";
