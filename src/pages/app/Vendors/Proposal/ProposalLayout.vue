@@ -1,6 +1,6 @@
 <template>
   <div class="for-proposals-layout-wrapper">
-    <proposal-header v-if="event" :event="event" :proposalRequest="proposalRequest"></proposal-header>
+    <proposal-header :event="event" :proposalRequest="proposalRequest"></proposal-header>
     <div class="main-cont">
       <router-view></router-view>
     </div>
@@ -140,7 +140,7 @@ export default {
       proposals: [],
       proposalRequest: null,
       vendorCategory: null,
-      event: null,
+      event: "",
       openedModal: "",
       showCloseProposalModal: false,
     };

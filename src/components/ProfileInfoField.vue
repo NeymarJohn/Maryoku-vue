@@ -30,7 +30,22 @@
         </div>
       </div>
       <div class="signature-editor" v-else-if="editor == 'signature'">
-        <signature-editor></signature-editor>
+        <md-button class="md-outlined maryoku-btn md-simple md-vendor" @click="uploadSignatureFile">
+          Choose File
+        </md-button>
+        <div class="or">Or</div>
+        <div class="sign-here">
+          <vueSignature ref="signature" :sigOption="option" :w="'100%'" :h="'100%'" />
+          <md-button class="md-simple md-vendor edit-btn" @click="clear">Clear</md-button>
+        </div>
+        <input
+          type="file"
+          class="d-none"
+          ref="signatureFile"
+          name="vendorSignature"
+          accept="image/gif, image/jpg, image/png"
+          @change="onSignatureFilePicked"
+        />
       </div>
       <input v-else-if="editor === 'input'" type="text" style="width: 100%" v-model="content" />
       <textarea v-else style="width: 100%" v-model="content" rows="6"></textarea>
@@ -42,8 +57,12 @@
     <div v-else class="profile-field-value">
       <template v-if="editor === 'social'">
         <div class="social-value d-flex align-center">
-          <div class="item mr-20" v-for="(s, sIndex) in socialMediaBlocks" :key="sIndex">
-            <a v-if="defaultValue[s.name]" :href="defaultValue[s.name]" target="_blank">
+          <div
+            class="item mr-20"
+            v-for="(s, sIndex) in socialMediaBlocks.filter((item) => defaultValue[item.name])"
+            :key="sIndex"
+          >
+            <a :href="defaultValue[s.name]" target="_blank">
               <img :src="`${$iconURL}Vendor Signup/${s.icon}`" />
             </a>
           </div>
@@ -70,12 +89,13 @@
 </template>
 <script>
 import VueGoogleAutocomplete from "vue-google-autocomplete";
+import vueSignature from "vue-signature";
+import { getBase64 } from "@/utils/file.util";
 
-import SignatureEditor from "./SignatureEditor.vue";
 export default {
   components: {
     VueGoogleAutocomplete,
-    SignatureEditor,
+    vueSignature,
   },
   props: {
     fieldName: {
@@ -169,10 +189,26 @@ export default {
     },
     saveField() {
       this.isEditing = false;
-      this.$emit("save", { name: this.fieldName, value: this.content });
+      if (this.fieldName === "signature") {
+        let jpeg = this.$refs.signature.save("image/jpeg");
+        this.content = jpeg;
+        this.$emit("save", { name: this.fieldName, value: jpeg });
+      } else {
+        this.$emit("save", { name: this.fieldName, value: this.content });
+      }
     },
     getAddressData: function (addressData, placeResultData, id) {
       this.content = `${addressData.route}, ${addressData.administrative_area_level_1}, ${addressData.country}`;
+    },
+    uploadSignatureFile() {
+      this.$refs.signatureFile.click();
+    },
+    clear() {
+      this.$refs.signature.clear();
+    },
+    async onSignatureFilePicked(e) {
+      const imageData = await getBase64(e.target.files[0]);
+      this.$refs.signature.fromDataURL(imageData);
     },
   },
   computed: {
@@ -219,6 +255,12 @@ export default {
       .label {
         width: 150px;
       }
+    }
+  }
+  .signature-editor {
+    text-align: center;
+    .sign-here {
+      border: dashed 1px #f51355;
     }
   }
 }

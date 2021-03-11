@@ -6,7 +6,7 @@
       fieldLabel="About your company"
       theme="md-vendor"
       editor="textarea"
-      :defaultValue="companyData.about.company"
+      :defaultValue="companyData.about ? companyData.about.company : ''"
       :icon="`${$iconURL}common/user-dark.svg`"
       @save="saveProfileField"
     ></profile-info-field>

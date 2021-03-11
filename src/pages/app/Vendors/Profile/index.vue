@@ -9,7 +9,7 @@
         <div class="profile">
           <div class="avatar" style="">
             <!-- <user-avatar :user="userData" @set="setAvatar"></user-avatar> -->
-            <company-logo :user="userData" @set="setLogo"></company-logo>
+            <company-logo :defaultImage="vendorData.vendorLogoImage" :user="vendorData" @set="setLogo"></company-logo>
           </div>
           <h3 class="name font-bold text-center">{{ vendorData.companyName }}</h3>
           <div class="text-center">
@@ -159,7 +159,7 @@ export default {
       this.$store.dispatch("auth/updateProfile", { avatar, id: this.userData.id });
     },
     setLogo(companyLogo) {
-      this.$store.dispatch("auth/updateProfile", { companyLogo, id: this.userData.id });
+      this.$store.dispatch("vendor/updateProfile", { vendorLogoImage: companyLogo, id: this.vendorData.id });
     },
     getPageName() {
       this.pageName = this.$route.params.pageName ? this.$route.params.pageName : "timeline";

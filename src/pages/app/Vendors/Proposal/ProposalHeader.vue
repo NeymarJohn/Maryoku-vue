@@ -33,13 +33,8 @@
             {{ event.concept ? event.concept.name : event.title }}
           </li>
           <li>
-            <img
-              class="company-logo"
-              alt=""
-              v-if="event.owner && event.owner.companyLogo"
-              :src="`${event.owner.companyLogo}`"
-            />
-            {{ event.owner ? event.owner.company : "" }}
+            <img class="company-logo" alt="" v-if="event.owner.companyLogo" :src="`${event.owner.companyLogo}`" />
+            {{ event.owner.company }}
           </li>
         </ul>
       </div>
@@ -195,9 +190,6 @@ export default {
     };
   },
   computed: {
-    vendor() {
-      return this.$store.state.vendorProposal.proposalRequest.vendor;
-    },
     eventDate() {
       const suggestionDate = this.$store.state.vendorProposal.suggestionDate;
       if (!this.event) return "-";

@@ -30,7 +30,6 @@ export default {
     };
   },
 
-  computed: {},
   mounted() {
     this.isLoading = true;
   },
