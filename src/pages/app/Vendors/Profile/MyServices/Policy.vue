@@ -6,14 +6,22 @@
         OUR POLICY
       </div>
     </template>
-    <template slot="content"> sdfsd </template>
+    <template slot="content">
+      <policy-section class="pr-50 pl-50 pb-40" :vendor="vendorData"></policy-section>
+    </template>
   </collapse-panel>
 </template>
 <style></style>
 <script>
+import PolicySection from "../../components/PolicySection.vue";
 import CollapsePanel from "./CollapsePanel.vue";
 export default {
-  components: { CollapsePanel },
+  components: { CollapsePanel, PolicySection },
+  computed: {
+    vendorData() {
+      return this.$store.state.vendor.profile;
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

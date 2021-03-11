@@ -1517,18 +1517,7 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
 }
 
-.md-switch-rose {
-    &.md-checked {
-        .md-switch-thumb {
-            border: 1px solid $pink-300 !important;
-        }
 
-        .md-switch-container {
-            background-color: $pink-300 !important;
-            margin: auto;
-        }
-    }
-}
 
 /**
  * Event TimeLine

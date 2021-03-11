@@ -411,20 +411,20 @@ export default {
         if (this.event.budgetProgress < 100) {
             this.budgetState.key = 'not_approved';
         }
+        if (!this.budgetState.key && this.event.standardBudget !== 0) {
+            if (this.event.standardBudget < this.event.totalBudget) {
+                this.budgetState.key = 'higher_than_average';
+                this.budgetState.percent = ((this.event.totalBudget - this.event.standardBudget) / this.event.totalBudget).toFixed(2) * 100;
+            } else if (this.event.standardBudget > this.event.totalBudget){
+                this.budgetState.key = 'lower_than_average';
+            }
+        }
+
         let now = moment();
         let created_at = moment(this.event.dateCreated);
 
         if (!this.budgetState.key && now.diff(created_at, 'days') < 15) {
             this.budgetState.key = 'approved_budget_in_two_weeks';
-        }
-
-        if (!this.budgetState.key && this.event.approvedBudget !== 0) {
-            if (this.event.approvedBudget < this.event.totalBudget) {
-                this.budgetState.key = 'higher_than_average';
-                this.budgetState.percent = ((this.event.totalBudget - this.event.approvedBudget) / this.event.totalBudget).toFixed(2) * 100;
-            } else if (this.event.approvedBudget > this.event.totalBudget){
-                this.budgetState.key = 'lower_than_average';
-            }
         }
 
         if (!this.budgetState.key && this.event.unexpected < this.event.totalBudget * 0.1) {

@@ -120,7 +120,7 @@ import ProposalRequest from "@/models/ProposalRequest";
 import ProposalRequestFile from "@/models/ProposalRequestFile";
 
 import InputProposalSubItem from "@/components/Inputs/InputProposalSubItem.vue";
-import SelectProposalSubItem from "./SelectProposalSubItem.vue";
+import SelectProposalSubItem from "../components/SelectProposalSubItem.vue";
 import ProposalServiceTableItem from "./ProposalServiceTableItem.vue";
 import { Money } from "v-money";
 
