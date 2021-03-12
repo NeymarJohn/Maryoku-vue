@@ -33,9 +33,9 @@
           item.eventCategory ? item.eventCategory.title : ""
         }}</md-table-cell>
         <md-table-cell md-label="Main Email" md-sort-by="vendorMainEmail">{{ item.vendorMainEmail }}</md-table-cell>
-
-        <md-table-cell md-label="Address" md-sort-by="vendorAddresses">{{ item.vendorAddresses && item.vendorAddresses.length ? item.vendorAddresses[0] : ''}}</md-table-cell>
-
+        <md-table-cell md-label="Address" md-sort-by="vendorAddresses">
+          {{ item.vendorAddresses ? item.vendorAddresses[0] : "" }}
+        </md-table-cell>
       </md-table-row>
     </md-table>
     <md-dialog-alert :md-active.sync="showAlert" md-content="Copied vendor link!" md-confirm-text="Cool!" />

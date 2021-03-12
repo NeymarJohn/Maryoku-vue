@@ -293,7 +293,7 @@
     .open > &.dropdown-toggle:focus,
     .open > &.dropdown-toggle:hover {
       background-color: $btn-color !important;
-      border-color: $btn-color;
+
       @if $btn-color==$white-color {
         &,
         i{

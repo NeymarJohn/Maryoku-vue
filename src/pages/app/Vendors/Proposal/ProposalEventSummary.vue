@@ -40,7 +40,9 @@
         </div>
         <div class="event-summary-body">
           <div class="cover-letter font-bold-extra mb-50">
-            <h4 class="font-bold-extra text-transform-uppercase">Dear {{ event.owner.displayName }},</h4>
+            <h4 class="font-bold-extra text-transform-uppercase">
+              Dear {{ event.owner ? event.owner.displayName : "Planner" }},
+            </h4>
             <textarea v-model="personalMessage"> </textarea>
           </div>
 

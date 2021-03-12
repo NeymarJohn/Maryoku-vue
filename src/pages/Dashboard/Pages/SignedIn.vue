@@ -20,7 +20,6 @@ import SockJS from "sockjs-client"; // NEW: SockJS & Stomp instead of socket.io
 import Stomp from "stompjs";
 import Model from "@/models/Model";
 import eventService from "@/services/event.service";
-import CalendarEvent from "@/models/CalendarEvent";
 export default {
   components: {},
   methods: {
@@ -93,11 +92,7 @@ export default {
             redirectURL = atob(redirectURL);
             this.$router.push({ path: `${redirectURL}` });
           } else {
-            CalendarEvent.get().then((events) => {
-                if (events.length > 0) this.$router.push({ path: `/events/${events[0].id}/booking/concept` });
-                else this.$router.push({ path: `/create-event-wizard` });
-            })
-
+            this.$router.push({ path: "/events" });
           }
         }
       },

@@ -130,10 +130,9 @@ router.beforeEach((to, from, next) => {
     store
         .dispatch("auth/checkToken")
         .then(res => {
-            console.log('main.checkToken', res);
             if (to.path == "/signin") {
                 if (res.currentTenant && res.tenants.indexOf(res.currentTenant) >= 0) {
-                    next("/signedIn");
+                    next("/events");
                 } else if (res.tenants.length === 0) {
                     next("/create-event-wizard");
                 } else if (res.tenants.length > 0) {
@@ -148,7 +147,6 @@ router.beforeEach((to, from, next) => {
             }
         })
         .catch(error => {
-            console.log('beforeRoute', error);
             if (isAuthenticatedLink) {
                 next("signin");
             } else {
