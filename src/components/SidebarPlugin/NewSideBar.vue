@@ -1,17 +1,10 @@
 <template>
   <div class="new-event-side-bar" :data-color="activeColor" :data-background-color="backgroundColor">
     <div class="sidebar-menu">
-      <md-button
-        v-if="toggleMenu === false"
-        class="md-round md-simple md-just-icon md-transparent menu-button"
-        @click="toggleMenu = true"
-      >
-        <img :src="`${menuIconsURL}Group 2763.svg`" width="30" style="width: 30px !important" />
+      <md-button class="md-round md-simple md-just-icon md-transparent menu-button" @click="toggleMenu = !toggleMenu">
+        <img v-if="toggleMenu === false" :src="`${menuIconsURL}Group 2763.svg`" />
+        <img v-else :src="`${menuIconsURL}Group 2763 (2).svg`" />
       </md-button>
-      <md-button v-else class="md-round md-simple md-just-icon md-transparent" @click="toggleMenu = false">
-        <img :src="`${menuIconsURL}Group 2763 (2).svg`" width="20" style="width: 20px !important" />
-      </md-button>
-
       <div class="sidebar-menu__list" v-if="toggleMenu">
         <!-- <div class="sidebar-menu__item">
           <div class="item-route">
@@ -27,9 +20,9 @@
             <img :src="`${menuIconsURL}Asset 118.svg`" />
           </div>
         </div>
-        <!--        <div class="sidebar-menu__item">-->
-        <!--          <div class="item-route" @click="goTo('/events')"><img :src="`${menuIconsURL}Asset 114.svg`" /> My Events</div>-->
-        <!--        </div>-->
+        <div class="sidebar-menu__item">
+          <div class="item-route" @click="goTo('/events')"><img :src="`${menuIconsURL}Asset 114.svg`" /> My Events</div>
+        </div>
         <div class="sidebar-menu__item" @click="goTo(`/events/${event.id}/booking/overview?walkWithMe=true`)">
           <div class="item-route"><img :src="`${menuIconsURL}Asset 116.svg`" /> Product tour</div>
         </div>
@@ -236,7 +229,20 @@ export default {
   top: 0;
   bottom: 0;
   left: 0;
-
+  .menu-button {
+    border-radius: 30px;
+    width: calc(100% - 0.5em) !important;
+    margin: 30px 0px !important;
+    img {
+      width: 30px;
+    }
+  }
+  @media (min-width: 992px) {
+    .navbar-search-form-mobile,
+    .nav-mobile-menu {
+      display: none;
+    }
+  }
   .sidebar-wrapper {
     /deep/ .md-list {
       li {
@@ -282,19 +288,6 @@ export default {
     img {
       width: 40px;
     }
-  }
-}
-</style>
-<style>
-.menu-button {
-  border-radius: 30px;
-  width: calc(100% - 0.5em) !important;
-  margin: 30px 0px !important;
-}
-@media (min-width: 992px) {
-  .navbar-search-form-mobile,
-  .nav-mobile-menu {
-    display: none;
   }
 }
 </style>

@@ -460,7 +460,6 @@ export default {
       return extraPayItems;
     },
     getStartingFeeItems() {
-      console.log("getStartingFeeItems");
       let startingFeeItems = [];
       _.each(this.vendor.services, (item) => {
         if (item.checked && item.hasOwnProperty("included") && item.included) {

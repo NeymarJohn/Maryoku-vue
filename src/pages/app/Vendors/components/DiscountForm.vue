@@ -6,7 +6,7 @@
         <span>Discount</span>
       </div>
       <div class="text-right">{{ discount.percentage }}%</div>
-      <div class="text-right">${{ discount.price || withComma }}</div>
+      <div class="text-right">{{ discount.price }}$</div>
       <div class="text-right">
         <md-button class="md-simple edit-btn" @click="isDiscountEditing = true">
           <img :src="`${$iconURL}common/edit-dark.svg`" style="width: 20px; height: 20px" />

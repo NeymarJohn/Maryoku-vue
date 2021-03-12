@@ -1,6 +1,6 @@
 <template>
   <div class="collapse-panel">
-    <div class="collapse-panel-header font-bold-extra text-transform-uppercase">
+    <div class="collapse-panel-header font-bold-extra text-transform-uppercase" @click="toggle">
       <slot name="header"></slot>
       <md-button @click="toggle" class="md-icon-button md-simple collapse-button mr-50">
         <md-icon class="icon" v-if="isExpanded">keyboard_arrow_down</md-icon>
@@ -43,6 +43,7 @@ export default {
     font-size: 30px;
     font-weight: bolder;
     border-top: solid 1px #050505;
+    cursor: pointer;
     .collapse-button {
       position: absolute;
       right: 0;

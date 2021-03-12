@@ -1,23 +1,11 @@
 <template>
   <div class="new-event-side-bar" :data-color="activeColor" :data-background-color="backgroundColor">
     <div class="sidebar-menu">
-      <md-button
-        v-if="toggleMenu === false"
-        class="md-round md-simple md-just-icon md-transparent menu-button"
-        @click="toggleMenu = true"
-      >
-        <img :src="`${menuIconsURL}Group 2763.svg`" width="30" style="width: 30px !important" />
+      <md-button class="md-round md-simple md-just-icon md-transparent menu-button" @click="toggleMenu = !toggleMenu">
+        <img v-if="toggleMenu === false" :src="`${menuIconsURL}Group 2763.svg`" />
+        <img v-else :src="`${menuIconsURL}Group 2763 (2).svg`" />
       </md-button>
-      <md-button v-else class="md-round md-simple md-just-icon md-transparent" @click="toggleMenu = false">
-        <img :src="`${menuIconsURL}Group 2763 (2).svg`" width="20" style="width: 20px !important" />
-      </md-button>
-
-      <div class="sidebar-menu__list" v-if="toggleMenu">
-        <!-- <div class="sidebar-menu__item">
-          <div class="item-route">
-            <img :src="`${menuIconsURL}Asset 115.svg`" /> Search
-          </div>
-        </div> -->
+      <div class="sidebar-menu__list" v-show="toggleMenu">
         <div class="sidebar-menu__item">
           <div class="item-route" @click="goTo('/profile/settings')">
             <img :src="`${menuIconsURL}Asset 117.svg`" /> Profile
@@ -247,6 +235,14 @@ export default {
   top: 0;
   bottom: 0;
   left: 0;
+  .menu-button {
+    border-radius: 30px;
+    width: calc(100% - 0.5em) !important;
+    margin: 30px 0px !important;
+    img {
+      width: 30px;
+    }
+  }
   .sidebar-wrapper {
     /deep/ .md-list {
       li {
@@ -299,13 +295,7 @@ export default {
     }
   }
 }
-</style>
-<style>
-.menu-button {
-  border-radius: 30px;
-  width: calc(100% - 0.5em) !important;
-  margin: 30px 0px !important;
-}
+
 @media (min-width: 992px) {
   .navbar-search-form-mobile,
   .nav-mobile-menu {

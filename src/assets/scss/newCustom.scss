@@ -1483,19 +1483,16 @@
 .sidebar-menu {
     margin-left: 0.5em;
     position: relative;
-
-    #minimizeSidebar {
-    }
-
     .sidebar-menu {
         &__list {
             position: absolute;
-            left: 47px;
+            left: 60px;
             top: 0;
             width: 373px;
             background: #fff;
             box-shadow: 0 0 17px 0 rgba(0, 0, 0, 0.16);
-            z-index: 99999999;
+            z-index: 999999;
+            transition: all 0.5s;
         }
 
         &__item {

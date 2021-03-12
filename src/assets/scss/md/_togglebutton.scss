@@ -63,17 +63,29 @@
     }
   }
 
-  &.md-checked {
-    .md-switch-thumb {
-      border: none;
-
-      .md-ripple .md-ripple-wave{
-        background-color: #f51355 !important;
-      }
+  // &.md-checked {
+  //   .md-switch-thumb {
+  //     border: none;
+  //     .md-ripple .md-ripple-wave{
+  //       background-color: $rose !important;
+  //     }
+  //   }
+  //   .md-switch-container {
+  //     background-color: $rose !important;
+  //   }
+  // }
+  &.md-switch-rose {
+    &.md-checked {
+        .md-switch-container {
+            background-color: $rose !important;
+        }
     }
-
-    .md-switch-container {
-      background-color: #f51355 !important;
+  }
+  &.md-switch-vendor {
+    &.md-checked {
+        .md-switch-container {
+            background-color: $vendorColor !important;
+        }
     }
   }
 }

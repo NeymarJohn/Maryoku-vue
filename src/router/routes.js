@@ -10,12 +10,12 @@ import MainLayoutWithBottomLogo from "@/pages/Dashboard/Layout/MainLayoutWithBot
 
 import authService from "@/services/auth.service";
 
+const NotFound = () => import("@/pages/NotFound");
 const Events = () => import("@/pages/app/Events/Events.vue");
 const EventProposal = () => import("@/pages/app/Events/EventProposal.vue");
 const VendorDetail = () => import("@/pages/app/Vendors/VendorDetail.vue");
 const AddEditVendor = () => import("@/pages/app/Vendors/AddEditVendor.vue");
 const VendorsPoolNew = () => import("@/pages/app/Vendors/VendorsPoolNew.vue");
-
 // Profile Pages
 import Profile from "@/pages/app/Profile/Layout.vue";
 const ProfileOverview = () => import("@/pages/app/Profile/index.vue");
@@ -561,6 +561,11 @@ const routes = [
     others,
     calendarSyncPage,
     ...vendorRoutes,
+    {
+        path: '*',
+        name: 'Not Found',
+        component: NotFound
+    }
 ];
 
 export default routes;

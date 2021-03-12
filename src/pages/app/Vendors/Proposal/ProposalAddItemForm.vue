@@ -50,8 +50,8 @@
               @click="selectSuggestItem(index)"
             >
               <div>{{ item.description }}</div>
-              <div>{{ item.qty ? item.qty : "" }}</div>
-              <div class="text-right">${{ item.price | withComma }}</div>
+              <div>{{ item.qty }}</div>
+              <div>${{ item.price | withComma }}</div>
             </div>
           </div>
         </div>
@@ -150,10 +150,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    profileServices: {
-      type: Object,
-      default: () => {},
-    },
   },
   data() {
     return {
@@ -224,6 +220,7 @@ export default {
     },
     startSearch() {
       this.showAutoCompletePanel = true;
+      console.log("start Serach");
     },
     stopSearch() {
       setTimeout(() => {
@@ -254,6 +251,7 @@ export default {
       return false;
     },
     fillFormWithSelected(item) {
+      console.log(item);
       this.serviceItem = item.name;
       this.size = "";
       this.qty = 1;
@@ -299,17 +297,11 @@ export default {
         { description: "", price: 0 },
       ];
     },
-    camelize(str) {
-      let temp = str.replace(/\W+(.)/g, function (match, chr) {
-        return chr.toUpperCase();
-      });
-      return temp.charAt(0).toLowerCase() + temp.slice(1);
-    },
   },
   computed: {
     isDisabledAdd() {
       if (this.serviceType === "cost") {
-        return !this.qty || !this.unit || !this.serviceItem;
+        return !this.qty || !this.unit || !this.subTotal || this.subTotal == 0 || !this.serviceItem;
       }
       return !this.qty || !this.serviceItem;
     },
@@ -327,20 +319,22 @@ export default {
       return this.selectedSuggestItemIndex >= 0;
     },
     suggestedItems() {
+      console.log("teasetasetaes");
+      console.log("vendor Srvice", this.vendorServices);
       const items = [];
       this.vendorServices.forEach((category) => {
         category.subCategories.forEach((subCat) => {
           subCat.items.forEach((item) => {
             const capitalized = item.name.charAt(0).toUpperCase() + item.name.slice(1);
-            const profileService = this.profileServices[this.camelize(capitalized)];
             items.push({
               description: capitalized,
-              qty: item.value ? item.value : 1,
-              price: profileService ? Number(profileService.value) : "",
+              qty: item.value,
+              price: 0,
             });
           });
         });
       });
+      console.log(items);
       return items;
     },
   },
@@ -375,7 +369,6 @@ export default {
   .description-field {
     position: relative;
     .auto-complete-panel {
-      z-index: 10;
       padding: 30px 0;
       border-radius: 3px;
       box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
