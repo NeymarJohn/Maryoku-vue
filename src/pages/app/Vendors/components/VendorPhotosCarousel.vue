@@ -1,15 +1,9 @@
 <template>
   <div class="proposal-inpirational-photos">
-    <!-- <carousel :items="3" :margin="20" :dots="false" :nav="false" class="photos-carousel" :number="3">
-      <template slot="prev">
-        <md-button class="md-simple md-black handle-btn prev-btn md-icon-button edit-btn">
-          <md-icon class="font-bold">keyboard_arrow_left</md-icon>
-        </md-button>
-      </template> -->
     <vendor-photos-carousel-item
       class="photo-item"
       v-for="(photo, index) in images"
-      :key="`photo-${index}`"
+      :key="photo"
       :index="index"
       :defaultPhoto="photo"
       @change="setPhoto(index, ...arguments)"

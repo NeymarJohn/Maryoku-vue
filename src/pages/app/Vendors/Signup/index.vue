@@ -85,6 +85,7 @@ export default {
         if (!vendor.hasOwnProperty("services")) this.$set(vendor, "services", {});
         this.setVendor(vendor);
         this.setEditing(true);
+        // check if image is uploaded to S3
       });
     }
     this.$root.$on("approve-vendor-basic-info", (vendor) => {

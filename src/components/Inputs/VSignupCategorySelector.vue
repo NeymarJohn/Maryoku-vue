@@ -3,7 +3,7 @@
     <div class="left" :class="[{ 'full-width': isEdit }]">
       <div class="title">{{ title }}<span v-if="required"> *</span></div>
       <div v-if="isEdit">
-        <div class="d-flex position-relative" v-for="(item, index) of selectedValue" :key="index">
+        <div class="d-flex position-relative" v-for="(item, index) of selectedValue" :key="item || index + 1">
           <img class="inside-img" :src="img" v-if="img != '' && field !== 'vendorCategories'" />
           <category-selector
             v-if="field === 'vendorCategories'"
@@ -24,7 +24,7 @@
             v-on:placechanged="getAddressData(index, ...arguments)"
           />
           <img
-            class="ml-10"
+            class="ml-10 close-btn"
             :src="`${$iconURL}Requirements/delete-dark.svg`"
             v-if="selectedValue.length > 1"
             @click="removeValue(index)"
@@ -175,7 +175,9 @@ export default {
     padding-bottom: 35px;
     border-bottom: 1px solid #dddddd;
   }
-
+  .close-btn {
+    cursor: pointer;
+  }
   .left {
     width: 75%;
 

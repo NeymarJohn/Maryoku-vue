@@ -26,6 +26,7 @@ const state = {
   vendor_categories: [],
   allProperties: [],
   properties: {},
+  images: {}
 };
 
 const getters = {
@@ -46,6 +47,11 @@ const getters = {
       state.vendor.vendorCategories.length > 0 &&
       state.vendor.vendorAddresses &&
       state.vendor.vendorAddresses.length > 0;
+
+    if (!state.vendor.vendorCategories || state.vendor.vendorCategories.some(category => !category))
+      return false
+    if (!state.vendor.vendorAddresses || state.vendor.vendorAddresses.some(address => !address))
+      return false
     return isValid;
   }
 };
@@ -103,10 +109,16 @@ const actions = {
     })
 
   },
-  uploadImage: async ({ commit, state }, { index, file }) => {
+  uploadImage: async ({ commit, state, dispatch }, { index, file }) => {
     const fileId = `${new Date().getTime()}_${makeid()}`;
+    const isAllImageUploaded = () => {
+      return !state.vendor.images.some(img => img.indexOf("base64") >= 0)
+    }
     S3Service.fileUpload(file, fileId, "vendor/cover-images").then((uploadedName) => {
       commit("replaceImage", { index, image: `https://maryoku.s3.amazonaws.com/vendor/cover-images/${uploadedName}` })
+      if (isAllImageUploaded()) {
+        new Vendors({ id: state.vendor.id, images: state.vendor.images }).save()
+      }
     });
 
     const imageData = await getBase64(file);
@@ -115,8 +127,18 @@ const actions = {
     } else {
       commit("replaceImage", { index, image: imageData })
     }
+  },
+  checkImages({ commit, state, dispatch }) {
+    const fileId = `${new Date().getTime()}_${makeid()}`;
+    if (!state.vendor.images) return
+    state.vendor.images.forEach((imageData, index) => {
+      if (imageData && imageData.indexOf("base64") >= 0) {
+        const file = S3Service.dataURLtoFile(imageData, fileId);
+        dispatch("uploadImage", { index, file })
+      }
+    })
+  },
 
-  }
 
 };
 

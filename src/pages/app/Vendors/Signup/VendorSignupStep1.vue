@@ -536,6 +536,9 @@ export default {
   },
   computed: {},
   filters: {},
+  created() {
+    this.$store.dispatch("vendorSignup/checkImages");
+  },
 };
 </script>
 <style lang="scss" scoped>
