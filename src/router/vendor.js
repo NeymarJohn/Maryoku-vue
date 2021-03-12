@@ -2,6 +2,7 @@ const VendorSignupLayout = () => import("@/pages/app/Vendors/Signup/Layout.vue")
 const VendorMainLayout = () => import("@/pages/app/Vendors/VendorMainLayout.vue");
 
 const VendorProfileOverview = () => import("@/pages/app/Vendors/Profile");
+const VendorProposalBoard = () => import("@/pages/app/Vendors/ProposalBoard");
 const VendorSignup = () => import("@/pages/app/Vendors/Signup");
 const VendorSignin = () => import("@/pages/app/Vendors/VendorSignin.vue");
 const VendorSignedin = () => import("@/pages/app/Vendors/VendorSignedin.vue");
@@ -80,7 +81,7 @@ export default [
     {
         path: "/vendor",
         component: VendorMainLayout,
-        name: "Vendor Profile",
+        name: "Vendor",
         children: [
             {
                 path: "profile/:pageName",
@@ -90,6 +91,16 @@ export default [
                     auth: false,
                     title: "Profile",
                     gtm: "Profile",
+                },
+            },
+            {
+                path: "proposals",
+                name: "proposals",
+                component: VendorProposalBoard,
+                meta: {
+                    auth: false,
+                    title: "Proposal Board",
+                    gtm: "Proposal Board",
                 },
             },
         ],

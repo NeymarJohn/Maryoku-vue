@@ -51,8 +51,8 @@
             name: 'Events Lists',
             iconUrl: '/static/icons/vendor/proposal.svg',
             iconActiveUrl: '/static/icons/vendor/proposal-active.svg',
-            path: `/vendor/dashboard`,
-            startLink: `/vendor/dashboard`,
+            path: `/vendor/proposals`,
+            startLink: `/vendor/proposals`,
           }"
         ></sidebar-item>
         <sidebar-item

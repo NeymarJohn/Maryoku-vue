@@ -23,4 +23,11 @@
   &.md-warning{
     @include md-progress-bar($brand-warning);
   }
+  &.md-thin {
+    height: 8px;
+    margin-bottom: 0;
+  }
+  &.md-theme-default.md-determinate.md-vendor .md-progress-bar-fill{
+    background-color: $vendorColor;
+  }
 }
