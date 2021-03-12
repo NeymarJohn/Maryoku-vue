@@ -43,18 +43,7 @@
               </div>
               <div class="desc">{{ vendor.about.category }}</div>
             </div>
-            <div class="images">
-              <span class="prev" @click="prev()" v-if="imageSlidePos < 0">
-                <md-icon>keyboard_arrow_left</md-icon>
-              </span>
-              <div class="cont" :style="{ left: `${imageSlidePos}px` }" ref="imagesCont">
-                <img :src="img" v-for="(img, ind) in vendor.images" :key="ind" @click="view()" />
-              </div>
-              <span class="next" @click="next()" v-if="imageSlidePos >= 0">
-                <md-icon>keyboard_arrow_right</md-icon>
-              </span>
-              <LightBox v-if="medias.length" :media="medias" ref="lightbox" :show-light-box="false" />
-            </div>
+            <vendor-images-list :images="vendor.images" class="images"></vendor-images-list>
             <div class="contact-us" id="Contact">
               <h4>CONTACT US</h4>
               <div class="items">
@@ -254,6 +243,7 @@ import carousel from "vue-owl-carousel";
 import VendorStartingFeeItem from "../components/VendorStartingFeeItem.vue";
 import VendorExtraPayItem from "../components/VendorExtraPayItem.vue";
 import _ from "underscore";
+import VendorImagesList from "../components/VendorImagesList.vue";
 
 export default {
   name: "vendor-signup-step4",
@@ -269,6 +259,7 @@ export default {
     carousel,
     VendorStartingFeeItem,
     VendorExtraPayItem,
+    VendorImagesList,
   },
   data() {
     return {
@@ -681,43 +672,8 @@ export default {
             }
           }
           .images {
-            display: block;
-            overflow: hidden;
-            padding: 2rem 0;
-            white-space: nowrap;
-            position: relative;
             margin-right: -60px;
-
-            span {
-              cursor: pointer;
-              position: absolute;
-              width: 28px;
-              height: 28px;
-              background-color: #ffffff;
-              box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-              border-radius: 50%;
-              text-align: center;
-              font-weight: 800;
-              z-index: 99;
-              top: 50%;
-              transform: translateY(-50%);
-
-              &.prev {
-                left: 0;
-              }
-              &.next {
-                right: 60px;
-              }
-            }
-            .cont {
-              position: relative;
-              img {
-                width: 300px;
-                height: 177px;
-                margin-right: 2rem;
-                cursor: zoom-in;
-              }
-            }
+            margin-left: -60px;
           }
           .contact-us {
             padding: 2rem 0;
