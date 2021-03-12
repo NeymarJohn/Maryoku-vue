@@ -1,5 +1,5 @@
 <template>
-  <collapse-panel class="policy">
+  <collapse-panel class="cost-service-table">
     <template slot="header">
       <div class="d-flex align-center">
         <img :src="`${$iconURL}Vendor Signup/Asset 560.svg`" style="width: 25px" class="mr-10" />
@@ -7,7 +7,7 @@
       </div>
     </template>
     <template slot="content">
-      <policy-section class="pr-50 pl-50 pb-40 policy-content" :vendor="vendorData"></policy-section>
+      <policy-section class="pr-50 pl-50 pb-40" :vendor="vendorData"></policy-section>
     </template>
   </collapse-panel>
 </template>
@@ -25,9 +25,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.policy {
-  .policy-content {
-    max-width: 900px;
-  }
+.cost-service-table {
 }
 </style>

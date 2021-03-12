@@ -35,10 +35,6 @@ export default {
       type: Object,
       default: {},
     },
-    defaultImage: {
-      type: String,
-      default: "",
-    },
   },
   data() {
     return {
@@ -47,7 +43,7 @@ export default {
     };
   },
   created() {
-    this.companyLogo = this.defaultImage || this.user.companyLogo;
+    this.companyLogo = this.user.companyLogo;
   },
   methods: {
     onClickAvtar() {
@@ -68,16 +64,6 @@ export default {
 
         this.$emit("set", imageUrl);
       });
-    },
-  },
-  computed: {
-    defaultAvatar() {
-      return this.defaultImage || this.user.companyLogo;
-    },
-  },
-  watch: {
-    defaultAvatar(newValue, oldValue) {
-      this.companyLogo = newValue;
     },
   },
 };

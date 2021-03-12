@@ -5,7 +5,8 @@
         <vendor-company-detail></vendor-company-detail>
       </template>
       <template slot="tab-pane-2"> <div class="p-40"></div> </template>
-      <template slot="tab-pane-3"> <invoices></invoices> </template>
+      <template slot="tab-pane-3"> <div class="p-40"></div> </template>
+      <template slot="tab-pane-4"> <permissions></permissions> </template>
     </tabs>
   </div>
 </template>
@@ -13,7 +14,7 @@
 import VueElementLoading from "vue-element-loading";
 import { LabelEdit, Tabs } from "@/components";
 import VendorCompanyDetail from "./VendorCompanyDetail";
-import Invoices from "./Invoices";
+// import Permissions from "./Permissions";
 // import auth from '@/auth';
 import { mapGetters } from "vuex";
 
@@ -23,7 +24,6 @@ export default {
     LabelEdit,
     Tabs,
     VendorCompanyDetail,
-    Invoices,
     // ProfileDetails,
     // Permissions,
   },

@@ -1,6 +1,6 @@
 <template>
   <div class="service-content">
-    <div><img class="service-image" :src="vendorData.images[0]" /></div>
+    <div><img class="service-image" :src="vendorData.vendorImages[0]" /></div>
     <div class="p-50">
       <div class="font-size-16 font-bold">About Our Venue</div>
       <div class="mt-20 about-service">{{ vendorData.about.category }}</div>
@@ -14,8 +14,7 @@
         class="attachment"
       ></attachment-item>
     </div>
-    <vendor-images-list :images="vendorData.images"></vendor-images-list>
-    <starting-fee-table class="mt-30" :items="startingFeeItems"></starting-fee-table>
+    <starting-fee-table :items="startingFeeItems"></starting-fee-table>
     <extra-pay-table :items="extraPayItems"></extra-pay-table>
     <policy></policy>
     <price-policy></price-policy>
@@ -23,7 +22,6 @@
 </template>
 <script>
 import AttachmentItem from "../../components/AttachmentItem.vue";
-import VendorImagesList from "../../components/VendorImagesList.vue";
 import StartingFeeTable from "./StartingFeeTable.vue";
 import ExtraPayTable from "./ExtraPayTable.vue";
 import Policy from "./Policy.vue";
@@ -36,7 +34,6 @@ export default {
     Policy,
     PricePolicy,
     AttachmentItem,
-    VendorImagesList,
   },
   computed: {
     vendorData() {
@@ -76,7 +73,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .service-content {
-  overflow: hidden;
   .service-image {
     max-height: 360px;
     object-fit: cover;
