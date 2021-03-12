@@ -25,6 +25,7 @@
         v-if="canAdd"
         :optionalRequirements="optionalRequirements"
         :serviceType="tableCategory"
+        :profileServices="vendorProfileServices"
         :vendorServices="vendorServices"
         @addItem="addItem"
       ></proposal-add-item-form>
@@ -127,14 +128,17 @@ export default {
       });
       return optionalRequirements;
     },
+    //all services that this kind of vendor can provide
     vendorServices() {
-      console.log(businessCategories);
       const vendorCategoryService = businessCategories.find((item) => item.name === this.vendorCategory);
-      console.log(vendorCategoryService);
       if (vendorCategoryService) {
         return vendorCategoryService.categories;
       }
       return [];
+    },
+    // services which vendor provides
+    vendorProfileServices() {
+      return this.vendor.services;
     },
     services: {
       get: function () {
