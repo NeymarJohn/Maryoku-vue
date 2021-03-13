@@ -169,16 +169,16 @@ export default {
       }
       const tenantUser = {
         company: this.vendor.companyName,
-        email: this.vendor.vendorMainEmail,
-        name: this.vendor.vendorDisplayName,
+        name: this.vendor.email,
+        email: this.vendor.email,
         password: this.vendor.password,
         role: "vendor",
         tenant: "DEFAULT",
       };
 
       this.$store.dispatch("auth/register", tenantUser).then(
-        (res) => {
-          new Vendors({ ...this.vendor, tenantUser: { id: res.id }, isEditing: false })
+        (registeredUser) => {
+          new Vendors({ ...this.vendor, tenantUser: { id: registeredUser.id }, isEditing: false })
             .save()
             .then((res) => {
               this.isCompletedWizard = true;
@@ -196,15 +196,14 @@ export default {
                   if (proposalRequest) {
                     this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
                   } else {
-                    // this.$store.dispatch("auth/login", tenantUser).then(
-                    //   () => {
-                    //     this.$router.push(`/vendor/profile/settings`);
-                    //   },
-                    //   (error) => {
-                    //     this.loading = false;
-                    //     this.error = "failed";
-                    //   },
-                    // );
+                    this.$store.dispatch("auth/login", tenantUser).then(
+                      () => {
+                        this.$router.push(`/vendor/profile/settings`);
+                      },
+                      (error) => {
+                        this.$router.push(`/vendor/signin`);
+                      },
+                    );
                   }
                 }
               });
