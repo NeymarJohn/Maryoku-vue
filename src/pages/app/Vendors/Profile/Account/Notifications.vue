@@ -9,7 +9,7 @@
       ></notification-setting-item>
     </div>
     <div class="p-60">
-      <phone-box></phone-box>
+      <phone-box :phoneNumer="vendorData.vendorMainPhoneNumber"></phone-box>
     </div>
   </div>
 </template>
@@ -67,6 +67,11 @@ export default {
         },
       ],
     };
+  },
+  computed: {
+    vendorData() {
+      return this.$store.state.vendor.profile;
+    },
   },
 };
 </script>

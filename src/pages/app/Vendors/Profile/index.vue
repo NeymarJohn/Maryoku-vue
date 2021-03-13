@@ -137,6 +137,7 @@ export default {
     // TODO : user state should be reviewed
     console.log("profile", this.$auth.user);
     this.getPageName();
+    this.$store.dispatch("common/fetchAllCategories");
     this.$store
       .dispatch("auth/checkToken")
       .then(() => {
