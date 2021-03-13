@@ -16,13 +16,34 @@
         <img src="/static/icons/vendor/proposalBoard/see-proposal.svg" class="mr-10" />See Proposal</span
       >
     </div>
-    <div></div>
+    <div class="text-right">
+      <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu">
+        <md-button md-menu-trigger class="edit-btn md-simple" style="height: 40px">
+          <md-icon style="font-size: 40px !important">more_vert</md-icon>
+        </md-button>
+        <md-menu-content>
+          <md-menu-item @click="edit" class="md-purple">
+            <span> <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />Make Changes</span>
+          </md-menu-item>
+          <md-menu-item @click="edit" class="md-purple">
+            <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Download</span>
+          </md-menu-item>
+          <md-menu-item @click="edit" class="md-purple">
+            <span> <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />Duplicate</span>
+          </md-menu-item>
+          <md-menu-item @click="edit" class="md-purple">
+            <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Cancel Evnet</span>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+    </div>
   </div>
 </template>
 <script>
 export default {
   methods: {
     openProposal() {},
+    edit() {},
   },
 };
 </script>

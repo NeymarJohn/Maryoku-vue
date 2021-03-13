@@ -65,7 +65,17 @@
             </div>
           </div>
           <div class="md-layout-item md-size-25">
-            <div class="white-card" style="height: 100%"></div>
+            <div class="white-card p-50" style="height: 100%">
+              <div class="color-brown d-flex align-center">
+                <span class="mr-20" style="font-size: 56px">30%</span>
+                <span class="font-size-22">Winning rate</span>
+              </div>
+              <div class="font-size-20 mt-50">
+                You won <span class="font-bold">40 of 120</span> Proposals you applied to
+              </div>
+              <hr class="mt-50 mb-50" />
+              <div></div>
+            </div>
           </div>
         </div>
       </div>
