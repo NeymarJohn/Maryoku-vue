@@ -12,10 +12,10 @@
             <company-logo :defaultImage="vendorData.vendorLogoImage" :user="vendorData" @set="setLogo"></company-logo>
           </div>
           <h3 class="name font-bold text-center">{{ vendorData.companyName }}</h3>
-          <div class="text-center">
+          <!-- <div class="text-center">
             <span class="font-size-20"><md-icon style="color: #ffc001">start</md-icon>4.6</span>
             <span class="color-gray">(12 Reviews)</span>
-          </div>
+          </div> -->
         </div>
         <md-list>
           <md-list-item @click="goTo('services')" :class="{ 'font-bold-extra': pageName === 'services' }">
