@@ -111,7 +111,11 @@ export default {
       this.$validator.validateAll().then((isValid) => {
         if (isValid) {
           if (this.user.email && this.user.password) {
-            this.$store.dispatch("auth/login", this.user).then(
+            const userData = {
+              email: `${this.user.email}/vendor`,
+              password: this.user.password,
+            };
+            this.$store.dispatch("auth/login", userData).then(
               () => {
                 this.redirectPage();
               },
