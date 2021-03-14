@@ -181,7 +181,10 @@
             <div class="title"><img :src="`${iconUrl}Asset 560.svg`" /> OUR PRICING POLICY</div>
             <div class="rules">
               <div class="rule" v-for="(policy, yIndex) in validPricingPolicy" :key="yIndex">
-                <div class="item">{{ policy.name }}</div>
+                <div class="item">
+                  <div>{{ policy.name }}</div>
+                  <div class="mt-10 color-gray">{{ policy.desc }}</div>
+                </div>
                 <div class="item" v-if="policy.type === 'MultiSelection'">
                   <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
                     `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
@@ -203,6 +206,9 @@
                   <span v-if="policy.isPercentage">%</span>
                   <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
                     {{ policy.attendees }} attendees
+                  </span>
+                  <span class="ml-50" v-if="policy.unit">
+                    {{ policy.unit }}
                   </span>
                 </div>
               </div>
@@ -544,7 +550,9 @@ export default {
   computed: {
     validPricingPolicy() {
       if (this.vendor.pricingPolicies)
-        return this.vendor.pricingPolicies.filter((item) => item.value || (item.type === "Including" && item.cost));
+        return this.vendor.pricingPolicies.filter(
+          (item) => item.value || item.desc || (item.type === "Including" && item.cost),
+        );
       return null;
     },
     validPolicy() {

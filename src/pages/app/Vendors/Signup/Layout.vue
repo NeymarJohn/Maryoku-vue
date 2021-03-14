@@ -105,7 +105,7 @@ export default {
               this.setStep(1);
             })
             .catch((error) => {
-              if (error.message.indexOf("companyName")) {
+              if (error.message.indexOf("companyName") >= 0) {
                 Swal.fire({
                   title: `Sorry, Company Name is duplicated. Please choose another.`,
                   buttonsStyling: false,
@@ -169,16 +169,16 @@ export default {
       }
       const tenantUser = {
         company: this.vendor.companyName,
-        name: this.vendor.email,
-        email: this.vendor.email,
+        email: this.vendor.vendorMainEmail,
+        name: this.vendor.vendorDisplayName,
         password: this.vendor.password,
         role: "vendor",
         tenant: "DEFAULT",
       };
 
       this.$store.dispatch("auth/register", tenantUser).then(
-        (registeredUser) => {
-          new Vendors({ ...this.vendor, tenantUser: { id: registeredUser.id }, isEditing: false })
+        (res) => {
+          new Vendors({ ...this.vendor, tenantUser: { id: res.id }, isEditing: false })
             .save()
             .then((res) => {
               this.isCompletedWizard = true;
@@ -196,14 +196,15 @@ export default {
                   if (proposalRequest) {
                     this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
                   } else {
-                    this.$store.dispatch("auth/login", tenantUser).then(
-                      () => {
-                        this.$router.push(`/vendor/profile/settings`);
-                      },
-                      (error) => {
-                        this.$router.push(`/vendor/signin`);
-                      },
-                    );
+                    // this.$store.dispatch("auth/login", tenantUser).then(
+                    //   () => {
+                    //     this.$router.push(`/vendor/profile/settings`);
+                    //   },
+                    //   (error) => {
+                    //     this.loading = false;
+                    //     this.error = "failed";
+                    //   },
+                    // );
                   }
                 }
               });

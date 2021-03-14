@@ -2,10 +2,7 @@
   <div class="service-content">
     <div><img class="service-image" :src="vendorData.images[0]" /></div>
     <div class="p-50">
-      <div class="font-size-16 font-bold">
-        <img :src="`${$iconURL}Budget Elements/${serviceCategory.icon}`" class="page-icon mr-10" />
-        About Our {{ serviceCategory.title }}
-      </div>
+      <div class="font-size-16 font-bold">About Our Venue</div>
       <div class="mt-20 about-service">{{ vendorData.about.category }}</div>
     </div>
     <div class="pr-50 pl-50">
@@ -40,12 +37,6 @@ export default {
     PricePolicy,
     AttachmentItem,
     VendorImagesList,
-  },
-  props: {
-    serviceCategory: {
-      type: Object,
-      default: () => {},
-    },
   },
   computed: {
     vendorData() {

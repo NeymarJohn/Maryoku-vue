@@ -36,7 +36,6 @@
         <sidebar-item
           name="left-menu-events-list"
           class="left-menu-events-list"
-          :disabled="true"
           :link="{
             name: 'Event Details',
             iconUrl: '/static/icons/vendor/dashboard.svg',
@@ -58,7 +57,7 @@
         ></sidebar-item>
         <sidebar-item
           name="left-menu-yearly-plan"
-          class="left-menu-events-list"
+          class="left-menu-yearly-plan"
           :link="{
             name: 'Event Budget',
             iconUrl: '/static/icons/vendor/profile.svg',
@@ -68,8 +67,8 @@
           }"
         ></sidebar-item>
         <sidebar-item
-          class="left-menu-events-list"
-          :disabled="true"
+          name="left-menu-yearly-plan"
+          class="left-menu-yearly-plan"
           :link="{
             name: 'Event Budget',
             iconUrl: '/static/icons/vendor/revenue.svg',
@@ -80,8 +79,7 @@
         ></sidebar-item>
         <sidebar-item
           name="left-menu-yearly-plan"
-          class="left-menu-events-list"
-          :disabled="true"
+          class="left-menu-yearly-plan"
           :link="{
             name: 'Event Budget',
             iconUrl: '/static/icons/vendor/message.svg',
@@ -237,9 +235,6 @@ export default {
   top: 0;
   bottom: 0;
   left: 0;
-  .left-menu-events-list.disable {
-    opacity: 0.5 !important;
-  }
   .menu-button {
     border-radius: 30px;
     width: calc(100% - 0.5em) !important;

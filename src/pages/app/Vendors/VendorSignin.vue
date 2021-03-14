@@ -9,7 +9,7 @@
         >
           <div>Before we move on...</div>
           <div class="description-content text-center flex-1 pt-50 pb-50">
-            <img style="width: 100px" :src="`${$iconURL}common/signin-logo-purple.svg`" />
+            <img style="width: 100px" :src="`${$iconURL}Vendor Signup/Group 5213 (2).svg`" />
             <div class="social-line mt-40">
               <span class="font-size-40 font-bold line-height-15"> DID YOU SIGN YOUR BUSINESS YET? </span>
             </div>
@@ -17,7 +17,7 @@
               Before starting to create your proposal, please sign up with 5 simple steps - it will save you a lot of
               time in the future.
             </div>
-            <img class="mt-60" :src="`${$iconURL}common/maryoku-logo-purple-1.png`" style="width: 180px" />
+            <img class="mt-60" :src="`${$iconURL}Onboarding/maryoku-logo-dark%402x%403x.png`" style="width: 180px" />
           </div>
         </div>
         <div
@@ -56,13 +56,13 @@
           <div class="form-buttons">
             <md-button
               @click="signIn"
-              class="md-default md-red md-maryoku mt-30 md-vendor"
+              class="md-default md-red md-maryoku mt-30"
               :disabled="!user.password || !user.email"
             >
               Login
             </md-button>
             <div class="text-center mt-30 mb-30">Or</div>
-            <md-button @click="toSingUp" class="md-black md-maryoku md-red md-vendor"> Sign Up </md-button>
+            <md-button @click="toSingUp" class="md-black md-maryoku md-red"> Sign Up </md-button>
           </div>
         </div>
       </signup-card>
@@ -182,7 +182,7 @@ export default {
   padding: 40px;
   overflow: hidden;
   .left-section {
-    background-color: #64185608;
+    background-color: #fdf0f4;
     flex-direction: column;
     display: flex;
     .description-content {

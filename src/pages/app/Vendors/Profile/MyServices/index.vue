@@ -1,21 +1,11 @@
 <template>
   <div class="my-service white-card">
     <div class="services-header">
-      <div class="service-tab-item active">
-        <img
-          :src="`${$iconURL}Budget Elements/${getServiceCategory(vendorData.vendorCategories[0]).icon}`"
-          class="page-icon mr-10"
-        />
-        {{ getServiceCategory(vendorData.vendorCategories[0]).title }}
-      </div>
-      <div class="service-tab-item font-size-16">
-        <md-button class="maryoku-btn md-simple md-vendor">
-          <md-icon class="color-purple font-size-30 mr-5">add</md-icon>
-          Sign new service</md-button
-        >
-      </div>
+      <div class="service-tab-item active">Venue</div>
+      <div class="service-tab-item">Catering</div>
+      <div class="service-tab-item">Sign new service</div>
     </div>
-    <service-content :serviceCategory="getServiceCategory(vendorData.vendorCategories[0])"></service-content>
+    <service-content></service-content>
   </div>
 </template>
 <script>
@@ -47,17 +37,6 @@ export default {
     closePanel() {
       this.$emit("closePanel");
     },
-    getServiceCategory(category) {
-      return this.serviceCategories.find((item) => item.key === category) || {};
-    },
-  },
-  computed: {
-    vendorData() {
-      return this.$store.state.vendor.profile;
-    },
-    serviceCategories() {
-      return this.$store.state.common.serviceCategories;
-    },
   },
 };
 </script>
@@ -67,7 +46,7 @@ export default {
     height: 90px;
     display: flex;
     .service-tab-item {
-      min-width: 300px;
+      width: 250px;
       font-size: 20px;
       display: flex;
       align-items: center;

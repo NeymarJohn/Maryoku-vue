@@ -1089,7 +1089,7 @@ export default {
     this.renderCalendar();
   },
   beforeDestroy() {
-    this.$root.$off("update-vendor-value");
+    // this.$root.$off("update-vendor-value");
   },
   watch: {
     vendor: {

@@ -244,7 +244,6 @@ export default {
   .social-value {
     img {
       width: 25px;
-      max-height: 30px;
     }
   }
   .social-editor {
@@ -252,7 +251,6 @@ export default {
       margin-top: 10px;
       img {
         width: 20px;
-        max-height: 25px;
       }
       .label {
         width: 150px;
