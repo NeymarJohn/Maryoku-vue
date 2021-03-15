@@ -105,7 +105,7 @@ export default {
               this.setStep(1);
             })
             .catch((error) => {
-              if (error.message.indexOf("companyName")) {
+              if (error.message.indexOf("companyName") >= 0) {
                 Swal.fire({
                   title: `Sorry, Company Name is duplicated. Please choose another.`,
                   buttonsStyling: false,

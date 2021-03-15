@@ -50,8 +50,8 @@
         </template>
       </div>
       <div class="action-cont" v-if="isEdit">
-        <a class="cancel" @click="cancel">Cancel</a>
-        <a class="save" @click="save">Save</a>
+        <md-button class="md-black maryoku-btn md-simple" @click="cancel">Cancel</md-button>
+        <md-button class="md-red maryoku-btn" :disabled="!isInputValid" @click="save">Save</md-button>
       </div>
     </div>
     <div class="right" v-if="!isEdit">
@@ -101,6 +101,7 @@ export default {
     updateCategory(index, data) {
       // console.log('updateCategory', index, data);
       this.selectedValue[index] = data;
+      this.selectedValue = [...this.selectedValue];
     },
     save() {
       this.isEdit = false;
@@ -137,6 +138,7 @@ export default {
       this.selectedValue[
         index
       ] = `${addressData.route}, ${addressData.administrative_area_level_1}, ${addressData.country}`;
+      this.selectedValue = [...this.selectedValue];
     },
     init() {
       // console.log('init', this.value);
@@ -158,6 +160,13 @@ export default {
     value(newValue) {
       // console.log("signup.category.selector.watch", newValue, this.field);
       this.init();
+    },
+  },
+  computed: {
+    isInputValid() {
+      console.log(this.selectedValue);
+      if (!this.selectedValue) return false;
+      return this.selectedValue.length > 0 && this.selectedValue.every((item) => item);
     },
   },
 };
@@ -207,7 +216,7 @@ export default {
     }
 
     .action-cont {
-      margin-top: 30px;
+      margin-top: 10px;
       text-align: right;
 
       a {

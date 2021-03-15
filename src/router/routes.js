@@ -73,7 +73,7 @@ let authPages = {
             name: "SignIn",
             component: SignInSignUp,
             meta: {
-                auth: false,
+                requiresAuth: false,
                 gtm: "SignIn",
             },
         },
@@ -82,7 +82,7 @@ let authPages = {
             name: "SignUp",
             component: SignUp,
             meta: {
-                auth: false,
+                requiresAuth: false,
                 gtm: "SignUp",
             },
         },
@@ -91,7 +91,7 @@ let authPages = {
             name: "ForgotPassword",
             component: ForgotPassword,
             meta: {
-                auth: false,
+                requiresAuth: false,
                 gtm: "ForgotPassword",
             },
         },
@@ -100,7 +100,7 @@ let authPages = {
             name: "ResetPassword",
             component: ResetPassword,
             meta: {
-                auth: false,
+                requiresAuth: false,
                 gtm: "ResetPassword",
             },
         },
@@ -109,7 +109,7 @@ let authPages = {
             name: "SignOut",
             component: SignOut,
             meta: {
-                auth: false,
+                requiresAuth: false,
                 title: "Sign Out",
                 gtm: "SignOut",
             },
@@ -119,7 +119,7 @@ let authPages = {
             name: "SignedIn",
             component: SignedIn,
             meta: {
-                auth: false,
+                requiresAuth: false,
                 title: "Signed In",
                 gtm: "SignedIn",
             },
@@ -129,7 +129,7 @@ let authPages = {
             name: "Invited",
             component: Invited,
             meta: {
-                auth: false,
+                requiresAuth: false,
                 title: "Invited",
                 gtm: "Invited",
             },
@@ -147,7 +147,7 @@ let workspacePages = {
             name: "CreateWorkspace",
             component: CreateWorkspace,
             meta: {
-                auth: false,
+                requiresAuth: false,
                 title: "Create Workspace",
                 gtm: "CreateWorkspace",
             },
@@ -157,7 +157,7 @@ let workspacePages = {
             name: "ChooseWorkspace",
             component: ChooseWorkspace,
             meta: {
-                auth: false,
+                requiresAuth: false,
                 title: "Choose Workspace",
                 gtm: "ChooseWorkspace",
             },
@@ -210,7 +210,7 @@ let ProfilePages = {
             name: "overview",
             component: ProfileOverview,
             meta: {
-                auth: false,
+                requiresAuth: false,
                 title: "Profile",
                 gtm: "Profile",
             },
@@ -286,7 +286,7 @@ let PublicCreateEvent = {
     component: CreateEvent,
     name: "CreateEvent",
     meta: {
-        auth: false,
+        requiresAuth: false,
     },
     children: [
         {
@@ -296,7 +296,7 @@ let PublicCreateEvent = {
             meta: {
                 title: "Event Wizard",
                 gtm: "Event Wizard",
-                auth: false,
+                requiresAuth: false,
             },
         },
         {
@@ -306,7 +306,7 @@ let PublicCreateEvent = {
             meta: {
                 title: "Event Day",
                 gtm: "Event Day",
-                auth: false,
+                requiresAuth: false,
             },
         },
         {
@@ -316,7 +316,7 @@ let PublicCreateEvent = {
             meta: {
                 title: "Event Day Flexibility",
                 gtm: "Event Day Flexibility",
-                auth: false,
+                requiresAuth: false,
             },
         },
         {
@@ -326,7 +326,7 @@ let PublicCreateEvent = {
             meta: {
                 title: "Event Guests",
                 gtm: "Event Guests",
-                auth: false,
+                requiresAuth: false,
             },
         },
         {
@@ -336,7 +336,7 @@ let PublicCreateEvent = {
             meta: {
                 title: "Event Guests Type",
                 gtm: "Event Guests",
-                auth: false,
+                requiresAuth: false,
             },
         },
         {
@@ -346,7 +346,7 @@ let PublicCreateEvent = {
             meta: {
                 title: "Event  Location",
                 gtm: "Event Location",
-                auth: false,
+                requiresAuth: false,
             },
         },
         {
@@ -356,7 +356,7 @@ let PublicCreateEvent = {
             meta: {
                 title: "Event Building",
                 gtm: "Event Building",
-                auth: false,
+                requiresAuth: false,
             },
         },
         {
@@ -366,7 +366,7 @@ let PublicCreateEvent = {
             meta: {
                 title: "Event  Type",
                 gtm: "Event Type",
-                auth: false,
+                requiresAuth: false,
             },
         },
         {
@@ -376,7 +376,7 @@ let PublicCreateEvent = {
             meta: {
                 title: "Event celebrating",
                 gtm: "Event celebrating",
-                auth: false,
+                requiresAuth: false,
             },
         },
         {
@@ -386,7 +386,7 @@ let PublicCreateEvent = {
             meta: {
                 title: "Event Guests Religion",
                 gtm: "Event Religion",
-                auth: false,
+                requiresAuth: false,
             },
         },
         {
@@ -396,7 +396,7 @@ let PublicCreateEvent = {
             meta: {
                 title: "Event Guests Religion",
                 gtm: "Event Religion",
-                auth: false,
+                requiresAuth: false,
             },
         },
         {
@@ -489,7 +489,7 @@ let others = {
             name: "What's next?",
             component: ProposalFinalStep,
             meta: {
-                auth: false,
+                requiresAuth: false,
                 title: "ProposalFinalStep",
                 gtm: "ProposalFinalStep",
             },
@@ -530,14 +530,14 @@ let welcomeEventPage = {
 const rememberMe = authService.getCookie("rememberMe");
 const homeLink = rememberMe === "true" ? "/events" : "/signin";
 const routes = [
-    {
-        path: "/",
-        redirect: "/signin",
-        name: "Root",
-        meta: {
-            gtm: "Root",
-        },
-    },
+    // {
+    //     path: "/",
+    //     redirect: "/signin",
+    //     name: "Root",
+    //     meta: {
+    //         gtm: "Root",
+    //     },
+    // },
     {
         path: "/concepts/:conceptId",
         name: "Concept Detail",

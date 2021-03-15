@@ -4144,7 +4144,7 @@ export const VendorPricingPolicy = [
       {
         name: 'Large group discounts',
         subCategory: "discount",
-        type: "Discount",
+        type: Number,
         hasUnit: true,
         units: ["Per guest", "Total"],
       },

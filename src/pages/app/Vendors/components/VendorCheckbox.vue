@@ -3,8 +3,8 @@
     <template v-if="item.type == Boolean">
       <div class="main">
         <div class="check-cont flex" @click="updateCheck()">
-          <img v-if="checked" class="mr-20" :src="iconUrl + 'Group 6258.svg'" width="27">
-          <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27">
+          <img v-if="checked" class="mr-20" :src="iconUrl + 'Group 6258.svg'" width="27" />
+          <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27" />
           <div class="text">{{ label }}</div>
         </div>
         <div class="included-cont" v-if="checked && !item.xIncluded">
@@ -25,13 +25,19 @@
           <div class="extra-field">
             Basic cost
             <div class="field">
-              <input type="number" class="mt-20" placeholder="00.00" v-model="currentItem.value" @input="updateValue"/>
+              <!-- <input type="number" class="mt-20" placeholder="00.00" v-model="currentItem.value" /> -->
+              <money v-model="currentItem.value" v-bind="currencyFormat" class="mt-20" @change="updateValue" />
             </div>
           </div>
         </div>
       </div>
       <div class="sub-cont" v-if="checked" :class="{ 'mt-m3': !included }">
-        <textarea class="text" v-model="currentItem.desc" :placeholder="`Add additional information`" @input="updateValue"/>
+        <textarea
+          class="text"
+          v-model="currentItem.desc"
+          :placeholder="`Add additional information`"
+          @input="updateValue"
+        />
       </div>
       <div class="main mt-10" v-if="checked && item.hasOwnProperty('dry')">
         <div class="check-cont" style="padding-left: 3rem">
@@ -57,14 +63,14 @@
       <div class="main">
         <div class="check-cont">
           <div class="flex" @click="updateCheck()">
-            <img v-if="checked" class="mr-20" :src="iconUrl + 'Group 6258.svg'" width="27">
-            <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27">
+            <img v-if="checked" class="mr-20" :src="iconUrl + 'Group 6258.svg'" width="27" />
+            <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27" />
             {{ label }}
           </div>
         </div>
         <div class="how-many mr-10" v-if="checked && included">
           How Many?
-          <input type="number" placeholder="QTY" v-model="currentItem.value" @input="updateValue"/>
+          <input type="number" placeholder="QTY" v-model="currentItem.value" @input="updateValue" />
         </div>
         <div class="included-cont mt-10" v-if="checked && !item.xIncluded">
           <div class="included mr-20" :class="{ active: included }" @click="updateIncluded()">
@@ -83,31 +89,37 @@
         <div class="included-cont mt-10" v-if="checked && !included">
           <div class="extra-field">
             Basic cost
-            <input type="number" class="mt-20" placeholder="00.00" v-model="currentItem.value" @input="updateValue"/>
+            <!-- <input type="number" class="mt-20" placeholder="00.00" v-model="currentItem.value" @input="updateValue" /> -->
+            <money class="mt-20" v-model="currentItem.value" v-bind="currencyFormat" @change="updateValue" />
           </div>
         </div>
       </div>
       <div class="sub-cont" v-if="item.hasComment && checked" :class="{ 'mt-m3': !included }">
-        <textarea class="text" v-model="currentItem.desc" :placeholder="`Add additional information`" @input="updateValue"/>
+        <textarea
+          class="text"
+          v-model="currentItem.desc"
+          :placeholder="`Add additional information`"
+          @input="updateValue"
+        />
       </div>
     </template>
     <template v-if="item.type == Array">
       <div class="main">
-        <div class="check-cont" >
+        <div class="check-cont">
           <div class="flex" @click="updateCheck()">
-            <img v-if="checked" class="mr-20" :src="iconUrl + 'Group 6258.svg'" width="27">
-            <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27">
+            <img v-if="checked" class="mr-20" :src="iconUrl + 'Group 6258.svg'" width="27" />
+            <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27" />
             {{ label }}
           </div>
           <category-selector
-                  v-if="checked"
-                  :value="currentItem.value || ''"
-                  :categories="item.available"
-                  :column="columnCount"
-                  :multiple="true"
-                  @change="updateExChecked"
-                  class="mt-20 service"
-                  style="margin-left: 47px"
+            v-if="checked"
+            :value="currentItem.value || ''"
+            :categories="item.available"
+            :column="columnCount"
+            :multiple="true"
+            @change="updateExChecked"
+            class="mt-20 service"
+            style="margin-left: 47px"
           ></category-selector>
         </div>
       </div>
@@ -118,10 +130,9 @@
     <template v-if="item.type == 'Cost'">
       <div class="main">
         <div class="check-cont">
-          <div class="flex"@click="updateCheck()">
-
-            <img v-if="checked" class="mr-20" :src="iconUrl + 'Group 6258.svg'" width="27">
-            <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27">
+          <div class="flex" @click="updateCheck()">
+            <img v-if="checked" class="mr-20" :src="iconUrl + 'Group 6258.svg'" width="27" />
+            <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27" />
             {{ label }}
           </div>
         </div>
@@ -142,24 +153,33 @@
         <div class="included-cont" v-if="checked && !included">
           <div class="extra-field">
             Extra payment
-            <input type="number" class="mt-20" placeholder="00.00" v-model="currentItem.value" @input="updateValue"/>
+            <input type="number" class="mt-20" placeholder="00.00" v-model="currentItem.value" @input="updateValue" />
           </div>
         </div>
-
       </div>
     </template>
     <template v-if="category == 'staff' && checked">
       <div class="main mt-10">
         <div class="check-cont">
-          <div class="flex mt-10 ml-40">
-            Staff : guest ratio
-          </div>
+          <div class="flex mt-10 ml-40">Staff : guest ratio</div>
         </div>
         <div>
           <div class="d-flex align-center">
-            <input class="mr-10 w-max-120" type="number" placeholder="Staff" v-model="currentItem.staff" @input="updateValue"/>
+            <input
+              class="mr-10 w-max-120"
+              type="number"
+              placeholder="Staff"
+              v-model="currentItem.staff"
+              @input="updateValue"
+            />
             <div class="font-size-30">:</div>
-            <input class="ml-10 w-max-120" type="number" placeholder="Guest" v-model="currentItem.quest" @input="updateValue"/>
+            <input
+              class="ml-10 w-max-120"
+              type="number"
+              placeholder="Guest"
+              v-model="currentItem.quest"
+              @input="updateValue"
+            />
           </div>
         </div>
       </div>
@@ -203,6 +223,14 @@ export default {
         dry: null,
       },
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      currencyFormat: {
+        decimal: ".",
+        thousands: ",",
+        prefix: "$",
+        suffix: "",
+        precision: 2,
+        masked: false,
+      },
     };
   },
   created() {},
@@ -211,20 +239,19 @@ export default {
       let item = this.vendor.services[this.camelize(this.label)];
       console.log("vendor.check.box", this.item, item);
       if (item) {
-        console.log('vendor.checkbox', item.label, item);
-        this.included = item.hasOwnProperty('included') ? item.included : this.item.included;
-        this.checked = item.hasOwnProperty('checked') ? item.checked : this.item.checked;
+        console.log("vendor.checkbox", item.label, item);
+        this.included = item.hasOwnProperty("included") ? item.included : this.item.included;
+        this.checked = item.hasOwnProperty("checked") ? item.checked : this.item.checked;
         this.currentItem.included = this.included;
         this.currentItem.checked = this.checked;
-        this.currentItem.value = item.hasOwnProperty('value') ? item.value : this.item.value;
-        this.currentItem.desc = item.hasOwnProperty('desc') ? item.desc : this.item.desc;
-        this.currentItem.dry = item.hasOwnProperty('dry') ? item.dry : this.item.dry;
+        this.currentItem.value = item.hasOwnProperty("value") ? item.value : this.item.value;
+        this.currentItem.desc = item.hasOwnProperty("desc") ? item.desc : this.item.desc;
+        this.currentItem.dry = item.hasOwnProperty("dry") ? item.dry : this.item.dry;
       }
     }
   },
   methods: {
     updateExChecked(items) {
-
       this.currentItem.value = items;
       this.$root.$emit("update-vendor-value", `services.${this.camelize(this.label)}`, this.currentItem);
     },
@@ -233,8 +260,9 @@ export default {
       this.currentItem.checked = this.checked;
       this.$root.$emit("update-vendor-value", `services.${this.camelize(this.label)}`, this.currentItem);
     },
-    updateValue(field, value){
-      if ( field ) {
+    updateValue(field, value) {
+      console.log(this.currentItem);
+      if (field & (typeof value !== "undefined")) {
         this.currentItem[field] = value;
       }
       this.$root.$emit("update-vendor-value", `services.${this.camelize(this.label)}`, this.currentItem);
@@ -252,13 +280,13 @@ export default {
     },
   },
   computed: {
-    columnCount(){
-      return this.item.available.length > 8 ? "2" : "1"
-    }
+    columnCount() {
+      return this.item.available.length > 8 ? "2" : "1";
+    },
   },
   filters: {},
   watch: {},
-  beforeDestroy(){
+  beforeDestroy() {
     // this.$root.$off('update-vendor-value')
   },
 };
@@ -391,12 +419,12 @@ export default {
         display: block;
         .field {
           display: inline-block;
-          &:before {
-            content: "$";
-            position: absolute;
-            margin-top: 30px;
-            margin-left: 4rem;
-          }
+          // &:before {
+          //   content: "$";
+          //   position: absolute;
+          //   margin-top: 30px;
+          //   margin-left: 4rem;
+          // }
         }
         input {
           text-align: center;
