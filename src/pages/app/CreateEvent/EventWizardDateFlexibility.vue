@@ -4,15 +4,15 @@
       <div class="title">1/5</div>
       <selected-value :value="formattedDate" property="calendar"></selected-value>
       <div class="event-flexibility event-basic-info">
+          <div class="mt-4rem setting-title">Between a camel yoga pose and plywood</div>
+          <div class="mt-1 font-size-20">
+              How flexible is this date?
+          </div>
         <div class="mt-4rem slider-wrapper">
           <img :src="`${$iconURL}Onboarding/block-red.svg`" />
           <range-slider class="slider" min="0" max="10" step="1" v-model="flexibility"> </range-slider>
           <img :src="`${$iconURL}Onboarding/excersie-red.svg`" />
         </div>
-          <div class="mt-4rem setting-title">Between a camel yoga pose and plywood</div>
-          <div class="mt-1 font-size-20">
-              How flexible is this date?
-          </div>
       </div>
     </div>
     <wizard-status-bar :currentStep="1" @next="goToNext" @skip="skip" @back="back"></wizard-status-bar>

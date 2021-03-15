@@ -15,32 +15,32 @@
       <div class="font-bold">Your proposal:</div>
       <div class="filter-bar mt-30">
         <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
-          <span class="color-black-middle">
-            <img src="/static/icons/vendor/proposalBoard/filter-all.svg" />All Proposal
-          </span>
+          <span class="color-black-middle"
+            ><img src="/static/icons/vendor/proposalBoard/filter-all.svg" />All Proposal</span
+          >
         </md-button>
         <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
           <span class="color-black-middle"><img src="/static/icons/vendor/proposalBoard/filter-won.svg" />I won</span>
         </md-button>
         <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
-          <span class="color-black-middle">
-            <img src="/static/icons/vendor/proposalBoard/filter-draft.svg" />Drafts
-          </span>
+          <span class="color-black-middle"
+            ><img src="/static/icons/vendor/proposalBoard/filter-draft.svg" />Drafts</span
+          >
         </md-button>
         <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
-          <span class="color-black-middle">
-            <img src="/static/icons/vendor/proposalBoard/filter-pending.svg" />Pending
-          </span>
+          <span class="color-black-middle"
+            ><img src="/static/icons/vendor/proposalBoard/filter-pending.svg" />Pending</span
+          >
         </md-button>
         <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
-          <span class="color-black-middle">
-            <img src="/static/icons/vendor/proposalBoard/filter-top3.svg" />Got to Top3
-          </span>
+          <span class="color-black-middle"
+            ><img src="/static/icons/vendor/proposalBoard/filter-top3.svg" />Got to Top3</span
+          >
         </md-button>
         <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
-          <span class="color-black-middle">
-            <img src="/static/icons/vendor/proposalBoard/filter-reject.svg" />Didn't get
-          </span>
+          <span class="color-black-middle"
+            ><img src="/static/icons/vendor/proposalBoard/filter-reject.svg" />Didn't get</span
+          >
         </md-button>
       </div>
       <div class="sort-bar mt-30">

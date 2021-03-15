@@ -215,8 +215,6 @@ export default {
     canSave() {
       if (this.fieldName === "password") {
         return this.content && this.content === this.passwordConfirm;
-      } else if (this.editor === "signature") {
-        return true;
       } else {
         return this.content;
       }

@@ -505,6 +505,11 @@ hr {
 .label-icon-1 {
     width: 25px !important;
 }
+
+.label-capitalize{
+    text-transform: capitalize;
+}
+
 .form-control {
     min-height: 60px;
     border-radius: 3px;

@@ -13,7 +13,7 @@
 </template>
 <style></style>
 <script>
-import PolicySection from "./PolicySection.vue";
+import PolicySection from "../../components/PolicySection.vue";
 import CollapsePanel from "./CollapsePanel.vue";
 export default {
   components: { CollapsePanel, PolicySection },
