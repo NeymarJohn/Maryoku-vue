@@ -132,7 +132,6 @@ export default {
       fullDetailsModal: false,
       proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       landingIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
-
       selectedServices: [],
       submittedModal: false,
       isTimeUp: false,

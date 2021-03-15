@@ -4,9 +4,10 @@
   padding: .5rem .75rem;
   margin-left: 0;
   line-height: 1.25;
-  color: #2196f3;
+  color: $vendorColor;
   background-color: transparent;
   border: 0 solid #dee2e6;
+  
 }
 
 .no-arrows{
@@ -20,20 +21,20 @@
   border-radius: .25rem;
 
     > .page-item > .page-link,
-    > .page-item > span{
+    > .page-item:not(.page-handler) > span{
         border: 0;
-        border-radius: 30px !important;
+        border-radius: 5px !important;
         transition: all .3s;
         margin: 0 3px;
         padding: 0;
-        min-width: 30px;
-        height: 30px;
-        line-height: 30px;
-        color: $gray-color;
+        min-width: 40px;
+        height: 40px;
+        line-height: 40px;
+        color: #050505;
         font-weight: $font-weight-default;
-        font-size: $mdb-btn-font-size-base;
+        font-size: 16px;
         text-transform: uppercase;
-        background: transparent;
+        background: white;
         text-align: center;
         cursor: pointer;
 
@@ -43,19 +44,24 @@
         }
     }
 
-    > .page-item.active > a,
-    > .page-item.active > span{
-        color: $gray-color;
+    
+    // Colors
+    &.pagination-vendor{
+        > .page-item.active > a,
+        > .page-item.active > span{
+            color: $gray-color;
+            background-color: white ;
 
-        &,
-        &:focus,
-        &:hover{
-            background-color: $brand-primary;
-            border-color: $brand-primary;
-            color: $white-color !important;
-            @include shadow-4dp-color($brand-primary);
+            &,
+            &:focus,
+            &:hover{
+                background-color: $vendorColor;
+                border-color: $vendorColor;
+                color: $white-color !important;
+                @include shadow-4dp-color($vendorColor);
+            }
+
         }
-
     }
 
     // Colors

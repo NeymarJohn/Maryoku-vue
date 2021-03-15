@@ -92,11 +92,6 @@
             </li>
           </ul>
         </div>
-        <discount-form
-          :totalPrice="totalPriceMainCategory"
-          @saveDiscount="saveDiscount(vendor.eventCategory.key, ...arguments)"
-          @saveTax="saveTax(vendor.eventCategory.key, ...arguments)"
-        ></discount-form>
       </div>
       <div class="item additional" v-if="step > 1 && additionalServices.length > 0">
         <div
@@ -133,14 +128,14 @@
                 more than the budget</span
               >
             </li>
-            <discount-form
-              :totalPrice="totalPriceByCategory[a]"
-              @saveDiscount="saveDiscount(a, ...arguments)"
-              @saveTax="saveTax(a, ...arguments)"
-            ></discount-form>
           </ul>
         </div>
       </div>
+      <discount-form
+        :totalPrice="totalPriceMainCategory"
+        @saveDiscount="saveDiscount(vendor.eventCategory.key, ...arguments)"
+        @saveTax="saveTax(vendor.eventCategory.key, ...arguments)"
+      ></discount-form>
       <div class="item bundle" v-if="isBundleDiscount">
         <div class="element">
           <label class="">

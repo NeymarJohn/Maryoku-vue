@@ -12,17 +12,17 @@
             <company-logo :defaultImage="vendorData.vendorLogoImage" :user="vendorData" @set="setLogo"></company-logo>
           </div>
           <h3 class="name font-bold text-center">{{ vendorData.companyName }}</h3>
-          <div class="text-center">
+          <!-- <div class="text-center">
             <span class="font-size-20"><md-icon style="color: #ffc001">start</md-icon>4.6</span>
             <span class="color-gray">(12 Reviews)</span>
-          </div>
+          </div> -->
         </div>
         <md-list>
           <md-list-item @click="goTo('services')" :class="{ 'font-bold-extra': pageName === 'services' }">
             <label>
               <img
                 :src="
-                  pageName === 'services' ? `${$iconURL}Profile/events-dark.svg` : `${$iconURL}Profile/events-gray.svg`
+                  pageName === 'services' ? `${$iconURL}common/company-dark.svg` : `${$iconURL}common/company-gray.svg`
                 "
                 class="page-icon"
               />
@@ -34,9 +34,7 @@
             <label
               ><img
                 :src="
-                  pageName === 'details'
-                    ? `${$iconURL}Profile/inspirations-dark.svg`
-                    : `${$iconURL}Profile/inspirations-gray.svg`
+                  pageName === 'details' ? `${$iconURL}common/setting-dark.svg` : `${$iconURL}common/setting-gray.svg`
                 "
                 class="page-icon"
               />
@@ -46,11 +44,7 @@
           <md-list-item @click="goTo('settings')" :class="{ 'font-bold-extra': pageName === 'settings' }">
             <label>
               <img
-                :src="
-                  pageName === 'settings'
-                    ? `${$iconURL}Profile/settings-dark.svg`
-                    : `${$iconURL}Profile/settings-gray.svg`
-                "
+                :src="pageName === 'settings' ? `${$iconURL}common/user-dark.svg` : `${$iconURL}common/user-gray.svg`"
                 class="page-icon"
               />
               <span class="pl-20 font-size-20">Account</span>
@@ -143,6 +137,7 @@ export default {
     // TODO : user state should be reviewed
     console.log("profile", this.$auth.user);
     this.getPageName();
+    this.$store.dispatch("common/fetchAllCategories");
     this.$store
       .dispatch("auth/checkToken")
       .then(() => {
@@ -229,6 +224,9 @@ export default {
   align-items: stretch;
 }
 .left-sidebar {
+  .page-icon {
+    max-height: 30px;
+  }
   /deep/ .md-list-item-button {
     &:hover {
       background-color: transparent !important;
