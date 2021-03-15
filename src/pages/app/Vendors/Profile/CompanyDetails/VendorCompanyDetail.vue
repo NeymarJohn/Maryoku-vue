@@ -7,7 +7,7 @@
       theme="md-vendor"
       editor="textarea"
       :defaultValue="companyData.about ? companyData.about.company : ''"
-      :icon="`${$iconURL}common/user-dark.svg`"
+      :icon="`${$iconURL}common/info-gray.svg`"
       @save="saveProfileField"
     ></profile-info-field>
     <profile-info-field
@@ -19,7 +19,7 @@
       editor="textarea"
       description="(Will be added automatically to future proposals)"
       :defaultValue="companyData.personalMessage"
-      :icon="`/static/icons/vendor/message.svg`"
+      :icon="`${$iconURL}common/message-gray.svg`"
     ></profile-info-field>
     <profile-info-field
       class="profile-detail-info"
@@ -32,7 +32,7 @@
     <profile-info-field
       class="profile-detail-info"
       :defaultValue="companyData.vendorMainEmail"
-      :icon="`${$iconURL}common/email-dark.svg`"
+      :icon="`${$iconURL}common/email-gray.svg`"
       fieldName="vendorMainEmail"
       fieldLabel="Business Email Address"
       @save="saveProfileField"
@@ -41,7 +41,7 @@
     <profile-info-field
       class="profile-detail-info"
       :defaultValue="companyData.vendorMainPhoneNumber"
-      :icon="`${$iconURL}common/email-dark.svg`"
+      :icon="`${$iconURL}common/phone-gray.svg`"
       fieldName="vendorMainPhoneNumber"
       fieldLabel="Business Phone Number"
       @save="saveProfileField"
@@ -50,7 +50,7 @@
     <profile-info-field
       class="profile-detail-info"
       :defaultValue="companyData.vendorAddressLine1"
-      :icon="`${$iconURL}common/email-dark.svg`"
+      :icon="`${$iconURL}common/location-gray.svg`"
       fieldName="vendorAddressLine1"
       fieldLabel="Business Location"
       @save="saveProfileField"
@@ -60,7 +60,7 @@
     <profile-info-field
       class="profile-detail-info"
       :defaultValue="companyData.vendorAddressLine1"
-      :icon="`${$iconURL}common/email-dark.svg`"
+      :icon="`${$iconURL}common/sender-gray.svg`"
       fieldName="vendorAddressLine1"
       fieldLabel="Shipping Address"
       @save="saveProfileField"
@@ -154,6 +154,9 @@ export default {
   font-size: 16px;
   .profile-detail-info {
     border-bottom: solid 1px #e0e0e0;
+    /deep/ img.label-icon {
+      width: 28px !important;
+    }
   }
 }
 </style>

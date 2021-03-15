@@ -8,14 +8,21 @@
     <div>
       <div class="mt-40">Phone Number</div>
       <div class="number-box mt-10">
-        <img :src="`${$iconURL}Choose+vendor+and+Proposal/phone-dark.svg`" />894-9948838
+        <img :src="`${$iconURL}Choose+vendor+and+Proposal/phone-dark.svg`" />{{ phoneNumer }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    phoneNumer: {
+      type: String,
+      default: "",
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 .phone-box {

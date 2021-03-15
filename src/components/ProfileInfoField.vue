@@ -215,6 +215,8 @@ export default {
     canSave() {
       if (this.fieldName === "password") {
         return this.content && this.content === this.passwordConfirm;
+      } else if (this.editor === "signature") {
+        return true;
       } else {
         return this.content;
       }
@@ -244,6 +246,7 @@ export default {
   .social-value {
     img {
       width: 25px;
+      max-height: 30px;
     }
   }
   .social-editor {
@@ -251,6 +254,7 @@ export default {
       margin-top: 10px;
       img {
         width: 20px;
+        max-height: 25px;
       }
       .label {
         width: 150px;

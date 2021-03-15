@@ -101,6 +101,9 @@ $fontSizes: 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 40, 50, 60;
 .color-plus {
     color: #167c3a !important;
 }
+.color-brown {
+    color: #0fac4c !important;
+}
 
 .color-minus {
     color: #9f0000 !important;
@@ -112,6 +115,9 @@ $fontSizes: 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 40, 50, 60;
     color: #ffffff;
 }
 .color-vendor {
+    color: $vendorColor;
+}
+.color-purple {
     color: $vendorColor;
 }
 .color-yellow-dark {
@@ -499,11 +505,6 @@ hr {
 .label-icon-1 {
     width: 25px !important;
 }
-
-.label-capitalize{
-    text-transform: capitalize;
-}
-
 .form-control {
     min-height: 60px;
     border-radius: 3px;

@@ -11,13 +11,8 @@
         </div>
       </div>
       <div class="card">
-        <p>Username</p>
-        <input
-          class="field"
-          placeholder="Type your email here"
-          v-model="vendor.vendorDisplayName"
-          @input="updateVendor('vendorDisplayName')"
-        />
+        <p>Email</p>
+        <input class="field" placeholder="Type your email here" v-model="vendor.email" @input="updateVendor('email')" />
         <p>Set Password</p>
         <input
           class="field"
