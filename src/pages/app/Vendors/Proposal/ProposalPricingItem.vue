@@ -203,7 +203,6 @@ export default {
     this.iconsWithCategory = VendorService.categoryNameWithIcons();
   },
   computed: {
-    ...mapGetters("vendorProposal", ["mainTotalPrice", "pricesByCategory"]),
     serviceCategories() {
       return this.$store.state.common.serviceCategories;
     },

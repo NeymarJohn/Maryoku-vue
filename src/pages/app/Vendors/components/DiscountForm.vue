@@ -6,7 +6,7 @@
         <span>Discount</span>
       </div>
       <div class="text-right">{{ discount.percentage }}%</div>
-      <div class="text-right">${{ discount.price || withComma }}</div>
+      <div class="text-right">${{ discount.price || calcedDiscont | withComma | withComma }}</div>
       <div class="text-right">
         <md-button class="md-simple edit-btn" @click="isDiscountEditing = true">
           <img :src="`${$iconURL}common/edit-dark.svg`" style="width: 20px; height: 20px" />
@@ -57,7 +57,7 @@
       <div class="text-right">
         <span>{{ tax.percentage }}%</span>
       </div>
-      <div class="text-right">{{ tax.price }}$</div>
+      <div class="text-right">{{ tax.price || Math.round((totalPrice * tax.percentage) / 100) | withComma }}$</div>
       <div class="text-right">
         <md-button class="md-simple edit-btn" @click="isTaxEditing = true">
           <img :src="`${$iconURL}common/edit-dark.svg`" style="width: 20px; height: 20px" />
@@ -110,8 +110,8 @@ export default {
       default: () => {},
     },
     defaultTax: {
-      type: Number,
-      default: 0,
+      type: Object,
+      default: () => {},
     },
     totalPrice: {
       type: Number,
@@ -131,6 +131,10 @@ export default {
       isTaxEditing: false,
       isDiscountEditing: false,
     };
+  },
+  created() {
+    if (this.defaultTax) this.tax = this.defaultTax;
+    if (this.defaultDiscount) this.discount = this.defaultTax;
   },
   methods: {
     saveDiscount() {
@@ -177,6 +181,23 @@ export default {
       } else {
         this.discount.price = ((this.totalPrice * val) / 100).toFixed(0);
       }
+    },
+  },
+  watch: {
+    defaultTax(newValue, oldValue) {
+      this.tax = this.defaultTax;
+    },
+    defaultDiscount(newValue, oldValue) {
+      this.discount = newValue;
+    },
+  },
+  computed: {
+    calcedTax() {
+      return Math.round(((this.totalPrice - this.calcedDiscont) * this.tax.percentage) / 100);
+    },
+    calcedDiscont() {
+      if (this.discount.price) return this.discount.price;
+      return Math.round((this.totalPrice * this.discount.percentage) / 100);
     },
   },
 };

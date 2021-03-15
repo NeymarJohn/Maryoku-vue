@@ -44,7 +44,7 @@
             </li>
             <li>
               <span>Your proposal</span>
-              <span>${{ ((mainTotalPrice * (100 - bundleDiscountPercentage)) / 100) | withComma }}</span>
+              <span>${{ ((finalPriceOfMainCategory * (100 - bundleDiscountPercentage)) / 100) | withComma }}</span>
             </li>
             <li>
               <span>Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
@@ -55,11 +55,13 @@
                 }}</span
               >
             </li>
-            <li v-if="mainTotalPrice - getAllocatedBudget(vendor.eventCategory.key) > 0" class="color-black">
+            <li v-if="finalPriceOfMainCategory - getAllocatedBudget(vendor.eventCategory.key) > 0" class="color-black">
               <span>
                 <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
-                Your proposal is ${{ (mainTotalPrice - getAllocatedBudget(vendor.eventCategory.key)) | withComma }} more
-                than budget
+                Your proposal is ${{
+                  (finalPriceOfMainCategory - getAllocatedBudget(vendor.eventCategory.key)) | withComma
+                }}
+                more than budget
               </span>
             </li>
             <li :style="`margin: ${discountBlock[vendor.eventCategory.key] ? '' : '0'}`">
@@ -132,7 +134,9 @@
         </div>
       </div>
       <discount-form
-        :totalPrice="totalPriceMainCategory"
+        :totalPrice="originalPriceOfMainCategory"
+        :defaultTax="$store.state.vendorProposal.taxes[vendor.eventCategory.key]"
+        :defaultDiscount="$store.state.vendorProposal.discounts[vendor.eventCategory.key]"
         @saveDiscount="saveDiscount(vendor.eventCategory.key, ...arguments)"
         @saveTax="saveTax(vendor.eventCategory.key, ...arguments)"
       ></discount-form>
@@ -428,9 +432,9 @@ export default {
       return this.$store.state.common.serviceCategories;
     },
     ...mapGetters("vendorProposal", [
-      "mainTotalPrice",
+      "finalPriceOfMainCategory",
       "pricesByCategory",
-      "totalPriceMainCategory",
+      "originalPriceOfMainCategory",
       "totalPriceByCategory",
     ]),
     totalPrice() {
