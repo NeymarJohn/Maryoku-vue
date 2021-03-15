@@ -1,38 +1,33 @@
 <template>
   <div class="vendor-extra-pay-item-wrapper">
     <div class="collapsed" @click="expand()">
-      <div class="col label">
-        {{ item.label }}
-        <img
-          v-if="item.hasOwnProperty('desc') && item.desc"
-          class="ml-20"
-          :class="{ 'rotate-90': expanded }"
-          :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"
-        />
+      <div class="col label">{{item.label}}
+          <img
+                  v-if="item.hasOwnProperty('desc') && item.desc"
+                  class="ml-20"
+                  :class="{'rotate-90': expanded}"
+                  :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"
+          />
       </div>
-      <div class="col" v-if="!isEditable">{{ getQty() }}</div>
+      <div class="col" v-if="!isEditable">{{getQty()}}</div>
       <div class="col" v-else>
         <div>
-          <input v-model="item.qty" @input="changeItem()" />
+          <input v-model="item.qty" @input="changeItem()"/>
         </div>
       </div>
-      <div class="col" v-if="!isEditable">{{ getPrice() }}</div>
+      <div class="col" v-if="!isEditable">{{getPrice()}}</div>
       <div class="col" v-else>
         <div class="field">
-          <input v-model="item.value" @input="changeItem()" />
+          <input v-model="item.value" @input="changeItem()"/>
         </div>
       </div>
       <div class="col action">
-        <img
-          class="mr-20 ml-auto"
-          src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/edit-dark.svg"
-          @click="edit"
-        />
-        <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg" @click="remove" />
+        <img class="mr-20 ml-auto" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/edit-dark.svg" @click="edit">
+        <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg" @click="remove">
       </div>
     </div>
     <div class="expanded" v-if="expanded">
-      <span v-if="!isEditable">{{ item.desc }}</span>
+      <span v-if="!isEditable">{{item.desc}}</span>
       <textarea v-else v-model="item.desc"></textarea>
     </div>
   </div>
@@ -51,7 +46,8 @@ export default {
     return {
       expanded: false,
       isEditable: false,
-      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      iconUrl:
+        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
   },
   created() {},
@@ -75,8 +71,7 @@ export default {
     },
     getPrice() {
       if (this.item.value) {
-        if (this.item.value) {
-          ///.constructor.name == "String"
+        if (this.item.value.constructor.name == "String") {
           return `+$${this.item.value}`;
         } else {
           return null;
@@ -85,17 +80,17 @@ export default {
         return null;
       }
     },
-    changeItem() {
-      this.$emit("change", this.item);
+    changeItem(){
+      this.$emit('change', this.item);
     },
-    edit() {
+    edit(){
       this.isEditable = true;
     },
-    remove() {
+    remove(){
       this.item.checked = false;
-      console.log("remvoe", this.item);
-      this.$emit("change", this.item);
-    },
+      console.log('remvoe', this.item);
+      this.$emit('change', this.item);
+    }
   },
   computed: {},
   filters: {},
@@ -132,7 +127,7 @@ export default {
         text-align: right;
       }
 
-      input {
+      input{
         text-align: center;
         border-radius: 3px;
         border: 1px solid #818080;
@@ -141,11 +136,11 @@ export default {
         color: #050505;
       }
 
-      .field {
+      .field{
         display: inline-block;
       }
 
-      .field:before {
+      .field:before{
         content: "$";
         position: absolute;
         margin-top: 15px;
@@ -157,7 +152,7 @@ export default {
       opacity: 0;
     }
 
-    &:hover {
+    &:hover{
       .action {
         opacity: 1;
       }
@@ -168,7 +163,7 @@ export default {
     font: normal 14px Manrope-Regular, sans-serif;
     padding-bottom: 1rem;
 
-    textarea {
+    textarea{
       min-width: 300px;
     }
   }

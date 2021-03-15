@@ -50,7 +50,7 @@
               @click="selectSuggestItem(index)"
             >
               <div>{{ item.description }}</div>
-              <div>{{ item.included ? "Included" : "" }}</div>
+              <div>{{ item.qty ? item.qty : "" }}</div>
               <div class="text-right">${{ item.price | withComma }}</div>
             </div>
           </div>
@@ -195,6 +195,11 @@ export default {
         masked: false,
       },
       isEditingComment: false,
+      // suggestedItems: [
+      //   { description: "Test1", qty: "12", price: "1231" },
+      //   { description: "Test2", qty: "12", price: "1231" },
+      //   { description: "Test4", qty: "12", price: "1231" },
+      // ],
       selectedSuggestItemIndex: -1,
       showAutoCompletePanel: false,
     };
@@ -316,9 +321,7 @@ export default {
     },
     filteredSuggestItems() {
       if (!this.serviceItem) return [];
-      return this.suggestedItems.filter((item) =>
-        item.description.toLowerCase().startsWith(this.serviceItem.toLowerCase()),
-      );
+      return this.suggestedItems.filter((item) => item.description.startsWith(this.serviceItem));
     },
     isAutoCompletedValue() {
       return this.selectedSuggestItemIndex >= 0;
@@ -333,7 +336,6 @@ export default {
             items.push({
               description: capitalized,
               qty: item.value ? item.value : 1,
-              included: profileService && profileService.included,
               price: profileService ? Number(profileService.value) : "",
             });
           });

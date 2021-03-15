@@ -305,10 +305,6 @@ export default {
           cancellationFee: "Down payment will not be refunded",
         },
       ],
-      option: {
-        penColor: "rgb(0, 0, 0)",
-        backgroundColor: "rgb(255,255,255)",
-      },
     };
   },
   methods: {

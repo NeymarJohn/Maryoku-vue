@@ -99,11 +99,7 @@ export default {
         console.log(this.$validator);
         if (isValid) {
           if (this.user.email && this.user.password) {
-            const userData = {
-              email: `${this.user.email}/planner`,
-              password: this.user.password,
-            };
-            this.$store.dispatch("auth/login", userData).then(
+            this.$store.dispatch("auth/login", this.user).then(
               () => {
                 console.log("after.signin");
                 if (this.keepMe) {

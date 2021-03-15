@@ -1,22 +1,19 @@
 <template>
   <div class="vendor-service-item-wrapper">
-    <div class="title-cont" @click="collapsed = !collapsed">
-      <div class="title">{{ serviceItem.name }}</div>
+    <div class="title-cont">
+      <div class="title" @click="collapsed = !collapsed">{{ serviceItem.name }}</div>
       <div class="help d-flex justify-content-end align-center mr-20" v-if="!collapsed">
-        <div v-if="serviceItem.name !== 'Sustainability, Inclusion and Diversity'">
-          Check all of the services that are included in your initial offer.
-        </div>
-        <img
-          v-tooltip="{
-            html: true,
-            content: getTooltip(serviceItem),
-            delay: { show: 200, hide: 100 },
-            trigger: 'hover',
-            placement: 'bottom',
-            classes: 'vendor-tooltip-theme',
-          }"
-          :src="`${iconUrl}Group 5522 (2).svg`"
-        />
+        <div v-if="serviceItem.name !== 'Sustainability, Inclusion and Diversity'">Check all of the services that are included in your initial offer.</div>
+          <img
+            v-tooltip="{
+              html: true,
+              content: getTooltip(serviceItem),
+              delay: {show: 200, hide:100},
+              trigger: 'hover',
+              placement: 'bottom',
+              classes: 'vendor-tooltip-theme',
+            }"
+            :src="`${iconUrl}Group 5522 (2).svg`"/>
       </div>
       <div class="arrow" :class="{ expanded: !collapsed }" @click="collapsed = !collapsed">
         <img class="mt-5" :src="`${iconUrl}Asset 519.svg`" />
@@ -27,12 +24,11 @@
         <div class="sub-category-title">{{ sub.name }}</div>
         <div class="checklist" v-for="(item, index) in sub.items" :key="index">
           <vendor-checkbox
-            :category="serviceItem.name"
-            :item="item"
-            :label="item.name"
-            :vendor="vendor"
-            v-model="item.value"
-          />
+                  :category="serviceItem.name"
+                  :item="item"
+                  :label="item.name"
+                  :vendor="vendor"
+                  v-model="item.value" />
         </div>
       </div>
     </div>
@@ -72,12 +68,12 @@ export default {
   },
   methods: {
     getTooltip(item) {
-      if (item.name === "Sustainability, Inclusion and Diversity") {
-        return "<p>Do you comply with global policies to maintain green, inclusive and diversified environment?</p>";
+      if ( item.name === 'Sustainability, Inclusion and Diversity' ) {
+        return '<p>Do you comply with global policies to maintain green, inclusive and diversified environment?</p>';
       } else {
-        return "<p>if not included in the starting offer, but offered by your team, select “not included” and input the estimated additional cost of the feature, that way we can better match you with planners</p>";
+        return '<p>if not included in the starting offer, but offered by your team, select “not included” and input the estimated additional cost of the feature, that way we can better match you with planners</p>';
       }
-    },
+    }
   },
   computed: {},
   filters: {},
@@ -90,13 +86,14 @@ export default {
   color: #050505;
   background: #ffffff;
   box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+  padding: 60px;
   margin-bottom: 30px;
   .title-cont {
     display: flex;
     justify-content: space-between;
-    padding: 60px;
-    cursor: pointer;
+
     .title {
+      cursor: pointer;
       text-transform: capitalize;
       font: 800 22px Manrope-Regular, sans-serif;
       flex: 1;
@@ -159,7 +156,8 @@ export default {
     }
   }
   .items-cont {
-    padding: 0px 60px 60px;
+    margin-top: 70px;
+
     .items {
       margin-bottom: 30px;
       .sub-category-title {
@@ -176,8 +174,8 @@ export default {
     }
   }
 
-  .tooltip-theme {
-    .tooltip-inner {
+  .tooltip-theme{
+    .tooltip-inner{
       max-width: 400px;
     }
   }

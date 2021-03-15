@@ -11,12 +11,11 @@
           <div class="description-content text-center flex-1 pt-50 pb-50">
             <img style="width: 100px" :src="`${$iconURL}common/signin-logo-purple.svg`" />
             <div class="social-line mt-40">
-              <span class="font-size-40 font-bold line-height-15"> DID YOU SIGN YOUR BUSINESS YET? </span>
+              <span class="font-size-40 font-bold line-height-15 text-transform-uppercase">
+                Stop looking at your watch
+              </span>
             </div>
-            <div>
-              Before starting to create your proposal, please sign up with 5 simple steps - it will save you a lot of
-              time in the future.
-            </div>
+            <div>You already know it's time for business.</div>
             <img class="mt-60" :src="`${$iconURL}common/maryoku-logo-purple-1.png`" style="width: 180px" />
           </div>
         </div>
@@ -111,11 +110,7 @@ export default {
       this.$validator.validateAll().then((isValid) => {
         if (isValid) {
           if (this.user.email && this.user.password) {
-            const userData = {
-              email: `${this.user.email}/vendor`,
-              password: this.user.password,
-            };
-            this.$store.dispatch("auth/login", userData).then(
+            this.$store.dispatch("auth/login", this.user).then(
               () => {
                 this.redirectPage();
               },

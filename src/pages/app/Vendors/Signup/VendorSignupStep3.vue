@@ -658,7 +658,7 @@ export default {
       },
       rulesDesc: {
         title: "additional rules",
-        placeholder: "Event must be / Suitable for children (2-12 years)",
+        placeholder: "Event muse end before.. / Suitable for children (2-12 years)",
       },
       policyDesc: {
         title: "Add steps to your cancellation approch:",
@@ -1089,7 +1089,7 @@ export default {
     this.renderCalendar();
   },
   beforeDestroy() {
-    // this.$root.$off("update-vendor-value");
+    this.$root.$off("update-vendor-value");
   },
   watch: {
     vendor: {

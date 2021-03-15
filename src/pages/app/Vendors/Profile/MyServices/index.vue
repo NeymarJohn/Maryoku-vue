@@ -79,6 +79,7 @@ export default {
       &.active {
         border-bottom: solid 5px #641856;
         font-weight: bold;
+        padding: 10px 20px;
       }
     }
   }

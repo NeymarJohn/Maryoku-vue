@@ -30,8 +30,8 @@
         </div>
       </div>
       <div class="action-cont" v-if="isEdit" :class="{ 'width-66': field === 'vendorCategories' }">
-        <md-button class="maryoku-btn md-simple md-black" @click="cancel">Cancel</md-button>
-        <md-button class="maryoku-btn md-red" :disabled="!isValidValue" @click="save()">Save</md-button>
+        <a class="cancel" @click="cancel">Cancel</a>
+        <a class="save" @click="save()">Save</a>
       </div>
     </div>
     <div class="right" v-if="!isEdit">
@@ -110,14 +110,6 @@ export default {
       if (this.field == "vendorAddressLine1" || this.field == "vendorAddressLine2") {
         this.$refs.address.focus();
       }
-    },
-  },
-  computed: {
-    isValidValue() {
-      const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/;
-      if (this.field.indexOf("mail") >= 0) {
-        return this.value && reg.test(this.value);
-      } else return this.value;
     },
   },
 };
@@ -223,7 +215,7 @@ export default {
       }
     }
     .action-cont {
-      margin-top: 10px;
+      margin-top: 30px;
       text-align: right;
 
       a {

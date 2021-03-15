@@ -97,105 +97,64 @@ router.beforeEach((to, from, next) => {
         window.currentPanel.hide();
         window.currentPanel = null;
     }
-    const currentToken = localStorage.getItem("manage_id_token");
+    let tenantId = document.location.hostname.replace(".maryoku.com", "");
+    let isPrimeTenant = tenantId === "dev" || tenantId === "app" || tenantId === "local";
+    const unAuthenticatedLinks = [
+        "/signout",
+        "/signin",
+        "/signup",
+        "/signedin",
+        "/create-workspace",
+        "/choose-workspace",
+        "/forgot-password",
+        "/create-event-wizard",
+        "/event-wizard-day",
+        "/event-wizard-flexibility",
+        "/event-wizard-guests",
+        "/event-wizard-guests-type",
+        "/event-wizard-location",
+        "/event-wizard-building",
+        "/event-wizard-type",
+        "/event-wizard-celebrating",
+        "/event-wizard-religion",
+        "/event-wizard-vibes",
+        "/rsvp",
+    ];
 
-    // check home router
-    if (to.path === '/' && currentToken) {
-        const user = JSON.parse(localStorage.getItem("user"));
-        if (user.currentUserType === "vendor") {
-            next('/vendor/profile/settings')
-        } else {
-            if (user.currentTenant && user.tenants.indexOf(user.currentTenant) >= 0) {
-                next("/signedIn");
-            } else if (user.tenants.length === 0) {
-                next("/create-event-wizard");
-            } else if (user.tenants.length > 0) {
+    const authenticatedLinks = ["/events", "/choose-workspace"];
+    const isAuthenticatedLink = authenticatedLinks.findIndex(link => to.path.indexOf(link) >= 0) >= 0;
+    if (to.path === "/signedin" || to.path.indexOf("/event-wizard") >= 0 || to.path === "/signout") {
+        next();
+        return;
+    }
+    store
+        .dispatch("auth/checkToken")
+        .then(res => {
+            console.log('main.checkToken', res);
+            if (to.path == "/signin") {
+                if (res.currentTenant && res.tenants.indexOf(res.currentTenant) >= 0) {
+                    next("/signedIn");
+                } else if (res.tenants.length === 0) {
+                    next("/create-event-wizard");
+                } else if (res.tenants.length > 0) {
+                    next("/choose-workspace");
+                } else {
+                    next("/error");
+                }
+            } else if (to.path.startsWith("/events") && res.tenants.indexOf(res.currentTenant) < 0) {
                 next("/choose-workspace");
             } else {
-                next("/error");
+                next();
             }
-        }
-
-    } else if (to.path === '/' && !currentToken) {
-        next("/signin")
-    } else if (to.path === '/vendor' && !currentToken) {
-        next("/vendor/sigin")
-    }
-    if (to.meta.requiresAuth && !currentToken) {
-        if (to.meta.isVendor || to.path.startsWith("/vendor")) {
-            next("/vendor/signin")
-        } else {
-            next("/signin")
-        }
-    } else {
-        next()
-    }
-    // let tenantId = document.location.hostname.replace(".maryoku.com", "");
-    // let isPrimeTenant = tenantId === "dev" || tenantId === "app" || tenantId === "local";
-    // const unAuthenticatedLinks = [
-    //     "/signout",
-    //     "/signin",
-    //     "/signup",
-    //     "/signedin",
-    //     "/create-workspace",
-    //     "/choose-workspace",
-    //     "/forgot-password",
-    //     "/create-event-wizard",
-    //     "/event-wizard-day",
-    //     "/event-wizard-flexibility",
-    //     "/event-wizard-guests",
-    //     "/event-wizard-guests-type",
-    //     "/event-wizard-location",
-    //     "/event-wizard-building",
-    //     "/event-wizard-type",
-    //     "/event-wizard-celebrating",
-    //     "/event-wizard-religion",
-    //     "/event-wizard-vibes",
-    //     "/rsvp",
-    // ];
-
-    // const authenticatedLinks = ["/events", "/choose-workspace"];
-    // const isAuthenticatedLink = authenticatedLinks.findIndex(link => to.path.indexOf(link) >= 0) >= 0;
-    // if (to.path === "/signedin" || to.path.indexOf("/event-wizard") >= 0 || to.path === "/signout") {
-    //     next();
-    //     return;
-    // }
-    // store
-    //     .dispatch("auth/checkToken")
-    //     .then(res => {
-    //         console.log('main.checkToken', res);
-    //         if (res.currentUserType === 'vendor') {
-    //             if (to.path == "/") {
-    //                 console.log("////")
-    //                 next("/vendor/profile/settings");
-    //             }
-    //         } else {
-    //             if (to.path == "/signin") {
-    //                 if (res.currentTenant && res.tenants.indexOf(res.currentTenant) >= 0) {
-    //                     next("/signedIn");
-    //                 } else if (res.tenants.length === 0) {
-    //                     next("/create-event-wizard");
-    //                 } else if (res.tenants.length > 0) {
-    //                     next("/choose-workspace");
-    //                 } else {
-    //                     next("/error");
-    //                 }
-    //             } else if (to.path.startsWith("/events") && res.tenants.indexOf(res.currentTenant) < 0) {
-    //                 next("/choose-workspace");
-    //             } else {
-    //                 next();
-    //             }
-    //         }
-
-    //     })
-    //     .catch(error => {
-    //         console.log('beforeRoute', error);
-    //         if (isAuthenticatedLink) {
-    //             next("signin");
-    //         } else {
-    //             next();
-    //         }
-    //     });
+        })
+        .catch(error => {
+            console.log('beforeRoute', error);
+            if (isAuthenticatedLink) {
+                next("signin");
+            } else {
+                next();
+            }
+        });
 
     // // if ((isPrimeTenant && unAuthenticatedLinks.indexOf(to.path) < 0 ) || (to.meta.auth && !auth.user.authenticated)) {
     // //   next('signin')

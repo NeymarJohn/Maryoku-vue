@@ -24,7 +24,7 @@ export default [
                 name: "VendorSignup",
                 component: VendorSignup,
                 meta: {
-                    requiresAuth: false,
+                    auth: false,
                     title: "Vendor Signup",
                     gtm: "VendorSignup",
                 },
@@ -34,7 +34,7 @@ export default [
                 name: "VendorSignup",
                 component: VendorSignup,
                 meta: {
-                    requiresAuth: false,
+                    auth: false,
                     title: "Vendor Signup",
                     gtm: "VendorSignup",
                 },
@@ -51,7 +51,7 @@ export default [
                 name: "VendorSignup",
                 component: VendorSignup,
                 meta: {
-                    requiresAuth: false,
+                    auth: false,
                     title: "Vendor Signup",
                     gtm: "VendorSignup",
                 },
@@ -61,7 +61,7 @@ export default [
                 name: "VendorSignup",
                 component: VendorSignup,
                 meta: {
-                    requiresAuth: false,
+                    auth: false,
                     title: "Vendor Signup",
                     gtm: "VendorSignup",
                 },
@@ -72,21 +72,11 @@ export default [
         path: "/vendor/signin",
         name: "Vendor Signin",
         component: VendorSignin,
-        meta: {
-            requiresAuth: false,
-            title: "Vendor Signin",
-            gtm: "Vendor Signin",
-        },
     },
     {
         path: "/vendor/signedin",
         name: "Vendor Signed In",
         component: VendorSignedin,
-        meta: {
-            requiresAuth: true,
-            title: "Vendor Signed in",
-            gtm: "Vendor Signed in",
-        },
     },
     {
         path: "/vendor",
@@ -98,7 +88,7 @@ export default [
                 name: "overview",
                 component: VendorProfileOverview,
                 meta: {
-                    requiresAuth: true,
+                    auth: false,
                     title: "Profile",
                     gtm: "Profile",
                 },
@@ -108,7 +98,7 @@ export default [
                 name: "proposals",
                 component: VendorProposalBoard,
                 meta: {
-                    requiresAuth: true,
+                    auth: false,
                     title: "Proposal Board",
                     gtm: "Proposal Board",
                 },
@@ -125,7 +115,7 @@ export default [
                 name: "VendorProposal",
                 component: ForVendors,
                 meta: {
-                    requiresAuth: false,
+                    auth: false,
                     title: "For Vendors",
                     gtm: "ForVendors",
                 },
@@ -143,7 +133,7 @@ export default [
                 name: "ForProposals",
                 component: ProposalContent,
                 meta: {
-                    requiresAuth: false,
+                    auth: false,
                     title: "For Proposals",
                     gtm: "ForProposals",
                 },
@@ -153,7 +143,7 @@ export default [
                 name: "ForProposals",
                 component: ProposalContent,
                 meta: {
-                    requiresAuth: false,
+                    auth: false,
                     title: "For Proposals",
                     gtm: "ForProposals",
                 },
@@ -163,7 +153,7 @@ export default [
                 name: "ForProposals",
                 component: ProposalContent,
                 meta: {
-                    requiresAuth: false,
+                    auth: false,
                     title: "For Proposals",
                     gtm: "ForProposals",
                 },

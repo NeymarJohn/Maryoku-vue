@@ -83,10 +83,10 @@
                 Add an alternative
               </span>
             </md-menu-item>
-            <md-menu-item @click="setValue('isComplimentary', !item.isComplimentary)">
+            <md-menu-item @click="setValue('isComplimentary', true)">
               <span>
                 <img :src="`${$iconURL}common/gift-dark.svg`" class="label-icon mr-10" />
-                {{ !item.isComplimentary ? "Mark as complimentary" : "Remove complimentary" }}
+                Mark as complimentary
               </span>
             </md-menu-item>
           </md-menu-content>
