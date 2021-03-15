@@ -20,8 +20,7 @@ export default {
     };
   },
   methods: {
-    toggle(event) {
-      event.stopPropagation();
+    toggle() {
       this.isExpanded = !this.isExpanded;
     },
   },

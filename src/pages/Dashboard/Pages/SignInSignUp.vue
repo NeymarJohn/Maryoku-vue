@@ -64,6 +64,7 @@ import VueElementLoading from "vue-element-loading";
 import Tenant from "@/models/Tenant";
 import TenantUser from "@/models/TenantUser";
 import CalendarEvent from "@/models/CalendarEvent";
+import eventService from "@/services/event.service";
 export default {
   name: "SignIn",
   components: {
@@ -149,7 +150,8 @@ export default {
             // Gettin last event
             CalendarEvent.get().then((events) => {
               if (events.length > 0) {
-                this.$router.push({ path: `/events/${events[0].id}/booking/concept` });
+                const gotoLink = eventService.getFirstTaskLink(events[0]);
+                this.$router.push({ path: gotoLink });
               } else this.$router.push({ path: `/create-event-wizard` });
             });
           } else if (this.currentUser.tenants.length === 0) {
