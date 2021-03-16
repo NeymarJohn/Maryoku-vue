@@ -230,6 +230,21 @@ export const businessCategories = [
               },
             ]
           },
+          {
+            name: 'entertainment',
+            items: [
+                {
+                    name: 'stage',
+                    type: Boolean,
+                    value: false
+                },
+                {
+                    name: 'dance floor',
+                    type: Boolean,
+                    value: false
+                },
+            ]
+          },
         ]
       },
       {
@@ -248,11 +263,11 @@ export const businessCategories = [
           {
             name: 'cleaning',
             items: [
-              // {
-              //   name: 'cleaning services during the event',
-              //   type: Boolean,
-              //   value: false
-              // },
+              {
+                name: 'cleaning services during the event',
+                type: Boolean,
+                value: false
+              },
             ]
           },
         ]
@@ -282,21 +297,6 @@ export const businessCategories = [
       {
         name: 'equipment',
         subCategories: [
-          {
-            name: 'entertainment',
-            items: [
-              {
-                name: 'stage',
-                type: Boolean,
-                value: false
-              },
-              {
-                name: 'dance floor',
-                type: Boolean,
-                value: false
-              },
-            ]
-          },
           {
             name: 'furniture',
             items: [
