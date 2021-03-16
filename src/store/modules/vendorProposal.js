@@ -56,10 +56,10 @@ const getters = {
                 prices[service] = sumPrice;
             }
         });
-        prices[state.vendor.eventCategory.key] = getters.finalPriceOfMainCategory;
+        prices[state.vendor.eventCategory.key] = getters.mainTotalPrice;
         return prices;
     },
-    originalPriceOfMainCategory(state) {
+    totalPriceMainCategory(state) {
         const mainService = state.vendor.eventCategory.key;
         if (!state.proposalCostServices[mainService]) return 0;
         const sumPrice = state.proposalCostServices[mainService].reduce((s, item) => {
@@ -67,10 +67,12 @@ const getters = {
         }, 0);
         return sumPrice;
     },
-    finalPriceOfMainCategory(state, getters) {
+    mainTotalPrice(state) {
         const mainService = state.vendor.eventCategory.key;
         if (!state.proposalCostServices[mainService]) return 0;
-        const sumPrice = getters.originalPriceOfMainCategory;
+        const sumPrice = state.proposalCostServices[mainService].reduce((s, item) => {
+            return s + item.requirementValue * item.price;
+        }, 0);
         let tax = state.taxes[mainService] || { price: 0, percentage: 0 };
         let discount = state.discounts[mainService] || { price: 0, percentage: 0 };
 
@@ -100,7 +102,7 @@ const getters = {
                 prices[service] = total + tax;
             }
         });
-        prices[state.vendor.eventCategory.key] = getters.finalPriceOfMainCategory;
+        prices[state.vendor.eventCategory.key] = getters.mainTotalPrice;
         console.log("prices", prices);
         return prices;
     },

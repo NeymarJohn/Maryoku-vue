@@ -658,7 +658,7 @@ export default {
       },
       rulesDesc: {
         title: "additional rules",
-        placeholder: "Event must be / Suitable for children (2-12 years)",
+        placeholder: "Event muse end before.. / Suitable for children (2-12 years)",
       },
       policyDesc: {
         title: "Add steps to your cancellation approch:",

@@ -1,6 +1,6 @@
 import Model from './Model'
 
-export default class Occasion extends Model {
+export default class Proposal extends Model {
   resource() {
     return 'proposals'
   }

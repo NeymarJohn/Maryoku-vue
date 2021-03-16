@@ -86,13 +86,13 @@
               <div class="cheader">
                 <div class="first-column">
                   <div>
-                    <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategories[0])}`" />
+                    <img :src="`${iconUrl}Asset 543.svg`" />
                     {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
                   </div>
-                  <!-- <span>QTY</span> -->
+                  <span>QTY</span>
                 </div>
                 <div class="second-column">
-                  <!-- <span>QTY</span> -->
+                  <span>QTY</span>
                 </div>
               </div>
               <div class="citems">
@@ -761,7 +761,7 @@ export default {
 
               .first-column {
                 display: grid;
-                grid-template-columns: 70% 30%;
+                grid-template-columns: 50% 50%;
                 align-items: center;
               }
               .second-column {

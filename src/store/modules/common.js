@@ -1,30 +1,29 @@
-import { postReq, getReq } from "@/utils/token";
+import { postReq, getReq } from '@/utils/token'
+
 const state = {
-    serviceCategories: [],
-};
+  serviceCategories: []
+}
 const mutations = {
-    setCategories: (state, categories) => {
-        state.serviceCategories = categories;
-    },
-};
+  setCategories: (state, categories) => {
+    state.serviceCategories = categories
+  },
+}
 const actions = {
-    fetchAllCategories: ({ commit, state }) => {
-        return new Promise((resolve, reject) => {
-            // getting from API
-            getReq(`/1/components`, true)
-                .then(res => {
-                    commit("setCategories", res.data);
-                    resolve(res.data);
-                })
-                .catch(err => {
-                    reject(err);
-                });
-        });
-    },
-};
+  fetchAllCategories: ({ commit, state }) => {
+    return new Promise((resolve, reject) => {
+      // getting from API
+      getReq(`/1/components`).then(res => {
+        commit('setCategories', res.data)
+        resolve(res.data);
+      }).catch(err => {
+        reject(err)
+      })
+    })
+  },
+}
 export default {
-    namespaced: true,
-    state,
-    actions,
-    mutations,
-};
+  namespaced: true,
+  state,
+  actions,
+  mutations
+}

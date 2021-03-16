@@ -10,7 +10,7 @@ import ChartistTooltipPlugin from "chartist-plugin-tooltip";
 import vSelectMenu from "v-selectmenu";
 import vueNumeralFilterInstaller from "vue-numeral-filter";
 import VueGmaps from "vue-gmaps";
-import VueLazyLoad from "vue-lazyload";
+import VueLazyLoad from 'vue-lazyload'
 // import VuePhoneNumberInput from "vue-phone-number-input";
 // import "vue-phone-number-input/dist/vue-phone-number-input.css";
 import VTooltip from "v-tooltip";
@@ -47,7 +47,7 @@ import authService from "@/services/auth.service";
 
 import "./assets/scss/main.scss";
 import dateUtil from "./utils/date.util";
-import VueYoutube from "vue-youtube";
+import VueYoutube from 'vue-youtube'
 
 import helper from "@/utils/helperFunction";
 
@@ -67,7 +67,7 @@ Vue.use(VueGmaps, {
     libraries: ["places"],
 });
 Vue.use(VueScrollTo);
-Vue.use(VueYoutube);
+Vue.use(VueYoutube)
 VueClipboard.config.autoSetContainer = true;
 Vue.use(VueClipboard);
 
@@ -97,19 +97,13 @@ router.beforeEach((to, from, next) => {
         window.currentPanel.hide();
         window.currentPanel = null;
     }
-
-    if (to.meta.authRequires) {
-        axios.defaults.headers.common.Authorization = authHeader().Authorization;
-    } else {
-        axios.defaults.headers.common.Authorization = "";
-    }
     const currentToken = localStorage.getItem("manage_id_token");
 
     // check home router
-    if (to.path === "/" && currentToken) {
+    if (to.path === '/' && currentToken) {
         const user = JSON.parse(localStorage.getItem("user"));
         if (user.currentUserType === "vendor") {
-            next("/vendor/profile/settings");
+            next('/vendor/profile/settings')
         } else {
             if (user.currentTenant && user.tenants.indexOf(user.currentTenant) >= 0) {
                 next("/signedIn");
@@ -121,19 +115,20 @@ router.beforeEach((to, from, next) => {
                 next("/error");
             }
         }
-    } else if (to.path === "/" && !currentToken) {
-        next("/signin");
-    } else if (to.path === "/vendor" && !currentToken) {
-        next("/vendor/sigin");
+
+    } else if (to.path === '/' && !currentToken) {
+        next("/signin")
+    } else if (to.path === '/vendor' && !currentToken) {
+        next("/vendor/sigin")
     }
     if (to.meta.requiresAuth && !currentToken) {
         if (to.meta.isVendor || to.path.startsWith("/vendor")) {
-            next("/vendor/signin");
+            next("/vendor/signin")
         } else {
-            next("/signin");
+            next("/signin")
         }
     } else {
-        next();
+        next()
     }
     // let tenantId = document.location.hostname.replace(".maryoku.com", "");
     // let isPrimeTenant = tenantId === "dev" || tenantId === "app" || tenantId === "local";
@@ -276,13 +271,13 @@ if (process.env.NODE_ENV === "production") {
 Vue.use(VueCookies);
 
 Vue.directive("focus", {
-    inserted: function(el) {
+    inserted: function (el) {
         el.focus();
     },
 });
 
 Vue.directive("select-all", {
-    inserted: function(el) {
+    inserted: function (el) {
         el.setSelectionRange(el.value.length, el.value.length);
     },
 });
@@ -301,7 +296,7 @@ Vue.directive("select-all", {
 //   stopProp(event) { event.stopPropagation() }
 // })
 
-Vue.filter("withComma", function(value) {
+Vue.filter("withComma", function (value) {
     return value ? value.toLocaleString() : 0;
 });
 
@@ -316,7 +311,7 @@ axios.defaults.headers.common["gorm-tenantid"] = authService.resolveTenantId();
 axios.defaults.headers.common.gorm_tenantid = authService.resolveTenantId();
 Model.$http = axios;
 
-Number.prototype.padStart = function(size, theChar) {
+Number.prototype.padStart = function (size, theChar) {
     var s = String(this);
     while (s.length < (size || 2)) {
         s = "0" + s;
@@ -324,7 +319,7 @@ Number.prototype.padStart = function(size, theChar) {
     return s;
 };
 
-String.prototype.padStart = function(size, theChar) {
+String.prototype.padStart = function (size, theChar) {
     var s = String(this);
     while (s.length < (size || 2)) {
         s = theChar + s;
@@ -353,6 +348,7 @@ Object.defineProperty(Vue.prototype, "$authHeader", {
     },
 });
 
+store.dispatch("common/fetchAllCategories");
 Vue.mixin({
     data: () => ({
         windowWidth: 0,
