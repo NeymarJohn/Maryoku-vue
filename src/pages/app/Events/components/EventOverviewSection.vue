@@ -296,21 +296,21 @@ export default {
       this.$emit("change", { holiday: e });
     },
     init: async function () {
-      let religions = JSON.parse(localStorage.getItem("two62-app.holidays"));
+      this.holidays = JSON.parse(localStorage.getItem("two62-app.holidays"));
       // get holidays from server
       if (this.section.key === "event_type" && (!this.holidays || !this.holidays.length)) {
         let res = await this.$http.get(`${process.env.SERVER_URL}/1/holidays`);
-        localStorage.setItem("two62-app.holidays", JSON.stringify(res.data));
-        religions = res.data;
-      }
-
-        religions.map((rel) => {
-            let holidays = [];
-            rel.holidays.map((h) => {
-                holidays.push(h.holiday);
-            });
-            this.holidays.push({ name: rel.name, holidays });
+        let holidays = [];
+        res.data.map((rel) => {
+          let options = [];
+          rel.holidays.map((h) => {
+            options.push(h.holiday);
+          });
+          holidays.push({ name: rel.name, options });
         });
+        this.holidays = holidays;
+        localStorage.setItem("two62-app.holidays", JSON.stringify(this.holidays));
+      }
 
       this.eventTypes = this.eventTypesList.map((it) => {
         return { name: it.name, value: it.name, icon: `${this.$iconURL}Onboarding/${it.key}.svg` };
