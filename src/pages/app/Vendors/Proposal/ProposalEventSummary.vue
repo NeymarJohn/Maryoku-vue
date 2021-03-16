@@ -187,6 +187,66 @@
                 </div>
               </div>
             </div>
+            <div class="not-allowed" v-if="vendor.vendorCategories[0] == 'venuerental'">
+              <h5>We don't allow these 3rd party vendor:</h5>
+              <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
+            </div>
+            <div class="dont-work mt-20">
+              <h5>We don't work on:</h5>
+              <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
+                <img :src="`${iconUrl}Group 5489 (4).svg`" />
+                {{ mergeStringItems(vendor.selectedWeekdays) }}
+              </div>
+              <div class="item" v-for="(d, dIndex) in vendor.exDonts" :key="dIndex">
+                <img :src="`${iconUrl}Group 5489 (4).svg`" />
+                {{ d.holiday }}
+              </div>
+              <div class="item" v-if="vendor.dontWorkDays">
+                <img :src="`${iconUrl}Group 5489 (4).svg`" />
+                {{ dontWorkDays() }}
+              </div>
+              <div class="item" v-if="vendor.dontWorkTime">
+                <img :src="`${iconUrl}Group 5489 (4).svg`" />
+                {{ dontWorkTime() }}
+              </div>
+            </div>
+          </div>
+          <div class="cancellation pricing-policy-cont" id="Rules">
+            <h5 class="subtitle">OUR PRICING POLICY</h5>
+            <div class="rules">
+              <div class="rule" v-for="(policy, yIndex) in validPricingPolicy" :key="yIndex">
+                <div class="item">
+                  <div>{{ policy.name }}</div>
+                  <div class="mt-10 color-gray">{{ policy.desc }}</div>
+                </div>
+                <div class="item" v-if="policy.type === 'MultiSelection'">
+                  <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
+                    `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
+                  }}</span>
+                </div>
+                <div class="item" v-else-if="policy.type === 'Including'">
+                  <span class="mr-10" v-if="policy.value"> Yes </span>
+                  <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
+                </div>
+                <div class="item" v-else-if="policy.type === Boolean && policy.value && policy.discount">
+                  <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '$'"> $ </span>
+                  <span class="mr-10" v-if="policy.discount"> {{ policy.discount }} </span>
+                  <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '%'"> % </span>
+                </div>
+                <div class="item" v-else>
+                  <span v-if="policy.type === Number && !policy.isPercentage">$</span>
+                  <span v-if="policy.value === true">Yes</span>
+                  <span v-else>{{ policy.value }}</span>
+                  <span v-if="policy.isPercentage">%</span>
+                  <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
+                    {{ policy.attendees }} attendees
+                  </span>
+                  <span class="ml-50" v-if="policy.unit">
+                    {{ policy.unit }}
+                  </span>
+                </div>
+              </div>
+            </div>
 
             <div class="signature-wrapper">
               <div class="half-side">
@@ -257,6 +317,7 @@ import vueSignature from "vue-signature";
 import ProposalInspirationalPhotos from "./ProposalInspirationalPhotos.vue";
 import ProposalPricingSummary from "./ProposalPricingSummary.vue";
 import { getBase64 } from "@/utils/file.util";
+import _ from "underscore";
 export default {
   name: "proposal-event-summary",
   components: {
@@ -305,6 +366,10 @@ export default {
           cancellationFee: "Down payment will not be refunded",
         },
       ],
+      option: {
+        penColor: "rgb(0, 0, 0)",
+        backgroundColor: "rgb(255,255,255)",
+      },
     };
   },
   methods: {
@@ -442,6 +507,13 @@ export default {
     validPolicy() {
       if (this.vendor.policies)
         return this.vendor.policies.filter((item) => item.value || (item.type === "Including" && item.cost));
+      return null;
+    },
+    validPricingPolicy() {
+      if (this.vendor.pricingPolicies)
+        return this.vendor.pricingPolicies.filter(
+          (item) => item.value || item.desc || (item.type === "Including" && item.cost),
+        );
       return null;
     },
     headerBackgroundImage() {
