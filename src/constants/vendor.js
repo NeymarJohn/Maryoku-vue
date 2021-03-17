@@ -335,16 +335,16 @@ export const businessCategories = [
           {
             name: 'power',
             items: [
-              // {
-              //   name: 'power supply',
-              //   type: Boolean,
-              //   value: false
-              // },
-              // {
-              //   name: 'generator',
-              //   type: Boolean,
-              //   value: false
-              // },
+              {
+                name: 'power supply',
+                type: Boolean,
+                value: false
+              },
+              {
+                name: 'generator',
+                type: Boolean,
+                value: false
+              },
             ]
           },
           {

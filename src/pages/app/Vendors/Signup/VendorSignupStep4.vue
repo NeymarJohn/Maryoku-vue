@@ -68,7 +68,7 @@
                   class="item"
                   v-for="(s, sIndex) in socialMediaBlocks"
                   :key="sIndex"
-                  :class="{ 'mr-1': vendor.social[s.name] }"
+                  :class="{ 'mr-20': vendor.social[s.name] }"
                 >
                   <a v-if="vendor.social[s.name]" :href="vendor.social[s.name]" target="_blank">
                     <img :src="`${iconUrl}${s.icon}`" />
@@ -86,13 +86,13 @@
               <div class="cheader">
                 <div class="first-column">
                   <div>
-                    <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategories[0])}`" />
+                    <img :src="`${iconUrl}Asset 543.svg`" />
                     {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
                   </div>
-                  <!-- <span>QTY</span> -->
+                  <span>QTY</span>
                 </div>
                 <div class="second-column">
-                  <!-- <span>QTY</span> -->
+                  <span>QTY</span>
                 </div>
               </div>
               <div class="citems">
@@ -143,7 +143,7 @@
                   </div>
                   <div class="item" v-else>
                     <span v-if="policy.type === Number && !policy.isPercentage">$</span>
-                    <span v-if="policy.value === true">Yes</span>
+                    <span v-if="policy.type === Boolean">{{policy.value === true ? "Yes" : "No"}}</span>
                     <span v-else>{{ policy.value }}</span>
                     <span v-if="policy.isPercentage">%</span>
                     <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
@@ -250,7 +250,7 @@ import VendorStartingFeeItem from "../components/VendorStartingFeeItem.vue";
 import VendorExtraPayItem from "../components/VendorExtraPayItem.vue";
 import _ from "underscore";
 import VendorImagesList from "../components/VendorImagesList.vue";
-import { capitalize } from "@/utils/string.util";
+
 export default {
   name: "vendor-signup-step4",
   props: {
@@ -507,9 +507,9 @@ export default {
       let naItems = "";
       _.each(items, (n) => {
         if (n.constructor.name == "Object") {
-          naItems += `${capitalize(n.name)}s, `;
+          naItems += `${this.capitalize(n.name)}s, `;
         } else {
-          naItems += `${capitalize(n)}s, `;
+          naItems += `${this.capitalize(n)}s, `;
         }
       });
       naItems = naItems.substring(0, naItems.length - 2);
@@ -526,7 +526,11 @@ export default {
     dontWorkTime() {
       return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.amPack.start} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.amPack.end}`;
     },
-
+    capitalize: function (value) {
+      if (!value) return "";
+      value = value.toString();
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    },
     view() {
       if (this.$refs.lightbox) {
         this.$refs.lightbox.showImage(0);
@@ -553,7 +557,7 @@ export default {
     },
     validPolicy() {
       if (this.vendor.policies)
-        return this.vendor.policies.filter((item) => item.value || (item.type === "Including" && item.cost));
+        return this.vendor.policies.filter((item) => item.hasOwnProperty('value') || (item.type === "Including" && item.cost));
       return null;
     },
   },
@@ -708,7 +712,8 @@ export default {
             border-top: 1px solid #dddddd;
 
             .items {
-              display: block;
+              display: flex;
+              flex-wrap: wrap;
               margin-top: 2rem;
 
               .item {
@@ -757,7 +762,7 @@ export default {
 
               .first-column {
                 display: grid;
-                grid-template-columns: 70% 30%;
+                grid-template-columns: 50% 50%;
                 align-items: center;
               }
               .second-column {

@@ -117,8 +117,7 @@ export default {
         selectedValue = this.selectedValue;
       }
       // this.$root.$emit("update-vendor-value", this.field, selectedValue);
-      const validValues = selectedValue.filter((item) => !!item);
-      this.$emit("save", { field: this.field, value: validValues });
+      this.$emit("save", { field: this.field, value: selectedValue });
     },
     cancel() {
       this.isEdit = false;

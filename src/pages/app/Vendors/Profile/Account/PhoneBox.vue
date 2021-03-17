@@ -7,33 +7,19 @@
     </div>
     <div>
       <div class="mt-40">Phone Number</div>
-      <maryoku-input inputStyle="phone" :value="phoneNumer" @input="inputPhone"></maryoku-input>
+      <div class="number-box mt-10">
+        <img :src="`${$iconURL}Choose+vendor+and+Proposal/phone-dark.svg`" />{{ phoneNumer }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { MaryokuInput } from "@/components";
-import _ from "underscore";
 export default {
-  components: {
-    MaryokuInput,
-  },
   props: {
     phoneNumer: {
       type: String,
       default: "",
-    },
-  },
-  methods: {
-    inputPhone: _.debounce(function (value) {
-      const updateData = { contactPhoneNumber: value, id: this.companyData.id };
-      this.$store.dispatch("vendor/updateProfile", updateData);
-    }, 500),
-  },
-  computed: {
-    companyData() {
-      return this.$store.state.vendor.profile;
     },
   },
 };

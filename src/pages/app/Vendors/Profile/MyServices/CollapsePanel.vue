@@ -23,7 +23,6 @@ export default {
     toggle(event) {
       event.stopPropagation();
       this.isExpanded = !this.isExpanded;
-      this.$emit("toggle", this.isExpanded);
     },
   },
   created() {
