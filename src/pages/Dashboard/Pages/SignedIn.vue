@@ -94,7 +94,10 @@ export default {
             this.$router.push({ path: `${redirectURL}` });
           } else {
             CalendarEvent.get().then((events) => {
-                if (events.length > 0) this.$router.push({ path: `/events/${events[0].id}/booking/concept` });
+                if (events.length > 0) {
+                    const gotoLink = eventService.getFirstTaskLink(events[0]);
+                    this.$router.push({ path: gotoLink });
+                }
                 else this.$router.push({ path: `/create-event-wizard` });
             })
 

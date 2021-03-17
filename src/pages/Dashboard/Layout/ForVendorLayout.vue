@@ -181,7 +181,7 @@ export default {
   computed: {
     backgroundImage() {
       if (this.event && this.event.concept) {
-        return this.event.concept.images[new Date().getTime() % 4].url;
+        return this.event.concept.images[new Date().getTime() % this.event.concept.images.length].url;
       }
       return "";
     },

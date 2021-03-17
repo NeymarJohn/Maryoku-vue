@@ -22,7 +22,7 @@
       <tbody>
         <tr class="requirement-item" v-for="(service, index) in properties.filter((sv) => sv.isSelected)" :key="index">
           <td class="width-30">
-            <div class="py-10">
+            <div class="py-10 label-capitalize">
               {{ service.item }}
               <div class="mt-10" v-if="service.type === 'single-selection'">
                 <category-selector
@@ -35,12 +35,12 @@
                   @change="handleChangeCategorySelector(service, ...arguments)"
                 ></category-selector>
               </div>
-              <requirement-item-comment
-                v-if="service.notable"
-                :property="service"
-                @save="saveComment"
-              ></requirement-item-comment>
-              <span v-if="service.hint" class="ml-10">
+<!--              <requirement-item-comment-->
+<!--                v-if="service.notable"-->
+<!--                :property="service"-->
+<!--                @save="saveComment"-->
+<!--              ></requirement-item-comment>-->
+              <span v-if="service.item === 'Table setup and preparations' && service.hint" class="ml-10">
                 <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
                 <md-tooltip md-direction="bottom">{{ service.hint }}</md-tooltip>
               </span>

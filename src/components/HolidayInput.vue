@@ -5,7 +5,7 @@
             :options="options"
             :close-on-select="true"
             :clear-on-select="true"
-            group-values="options"
+            group-values="holidays"
             group-label="name"
             placeholder="Please select holiday"
             class="multiple-selection small-selector mt-20"

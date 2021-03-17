@@ -4,16 +4,12 @@
       <div class="add-rule-cont">
         <h4>{{ title.title }}</h4>
         <div class="field" :class="{ suffix: focusedRule != '' }">
-          <input
-            :placeholder="title.placeholder"
-            ref="additionalRule"
-            v-model="focusedRule"
-          />
+          <input :placeholder="title.placeholder" ref="additionalRule" v-model="focusedRule" />
           <a :disabled="true" @click="addRule()">Add</a>
         </div>
         <div class="rules-cont" v-if="rules.length > 0">
           <div class="rule" v-for="(r, rIndex) in rules" :key="rIndex">
-            <span>{{ r }}</span>
+            <span>Event must be {{ r }}</span>
             <div class="actions">
               <img :src="`${iconUrl}Asset 527.svg`" @click="editRule(r)" />
               <img :src="`${iconUrl}Asset 529.svg`" @click="removeRule(r)" />
@@ -36,11 +32,7 @@
                 {{ title.labels.if }}
               </span>
             </div>
-            <input
-              :placeholder="title.placeholder.if"
-              ref="ifPolicy"
-              v-model="focusedCancelPolicy.if"
-            />
+            <input :placeholder="title.placeholder.if" ref="ifPolicy" v-model="focusedCancelPolicy.if" />
           </div>
           <div class="arrow">
             <img :src="`${iconUrl}Group 4585 (2).svg`" />
@@ -52,11 +44,7 @@
                 {{ title.labels.than }}
               </span>
             </div>
-            <input
-              :placeholder="title.placeholder.than"
-              ref="thanPolicy"
-              v-model="focusedCancelPolicy.than"
-            />
+            <input :placeholder="title.placeholder.than" ref="thanPolicy" v-model="focusedCancelPolicy.than" />
           </div>
           <div class="action">
             <a :disabled="true" @click="addCancelPolicy()">Add</a>
@@ -73,14 +61,8 @@
               {{ p.than }}
             </div>
             <div class="actions">
-              <img
-                :src="`${iconUrl}Asset 527.svg`"
-                @click="editCancelPolicy(p)"
-              />
-              <img
-                :src="`${iconUrl}Asset 529.svg`"
-                @click="removeCancelPolicy(p)"
-              />
+              <img :src="`${iconUrl}Asset 527.svg`" @click="editCancelPolicy(p)" />
+              <img :src="`${iconUrl}Asset 529.svg`" @click="removeCancelPolicy(p)" />
             </div>
           </div>
         </div>
@@ -109,8 +91,7 @@ export default {
         if: null,
         than: null,
       },
-      iconUrl:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
   },
   mounted() {},
@@ -128,9 +109,7 @@ export default {
       };
     },
     editCancelPolicy(p) {
-      this.focusedCancelPolicy = this.policies.filter(
-        (policy) => policy == p,
-      )[0];
+      this.focusedCancelPolicy = this.policies.filter((policy) => policy == p)[0];
       this.policies = this.policies.filter((policy) => policy != p);
     },
     removeCancelPolicy(p) {

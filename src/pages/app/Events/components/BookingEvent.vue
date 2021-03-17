@@ -18,22 +18,22 @@
       <template v-if="!showCounterPage">
         <div class="booking-header md-layout-item md-size-100">
           <div class="header-title w-100">
-            <h4>Hi Rachel</h4>
+            <div class="font-size-22 mb-20">Hey {{ $store.state.auth.user.name }}</div>
           </div>
           <div class="d-flex justify-content-between">
             <div>
-              We found the top {{ selectedBlock.proposalsCount }} proposals for your event, <br />Book now before it’s
-              too late
+              We found the top {{ proposals.length }} proposals for your event, <br />
+              Book now before it’s too late
             </div>
             <div class="header-actions">
               <md-button class="md-simple normal-btn md-red">
-                <md-icon>keyboard_arrow_right</md-icon>
+                <md-icon>bar_chart</md-icon>
                 Compare Proposals
               </md-button>
-              <span></span>
+              <span class="seperator"></span>
               <md-button class="md-simple normal-btn md-red">
-                <md-icon>keyboard_arrow_right</md-icon>
-                Change Venue Requirements
+                <md-icon>edit</md-icon>
+                Change {{ selectedBlock.title }} Requirements
               </md-button>
             </div>
           </div>
@@ -41,35 +41,22 @@
 
         <!-- Event Booking Items -->
         <div class="md-layout events-booking-items" v-if="proposals.length">
-          <div class="md-layout-item md-size-33" v-for="(proposal, index) in proposals" :key="index">
-            <div class="booking-item">
-              <div class="event-image" style="background: url(https://bit.ly/2Q77CBI) center center no-repeat"></div>
-              <div class="price">
-                <span class="price-value">${{ proposal.proposals[0].cost | withComma }}</span>
-                <small>For 3 hours</small>
-              </div>
-              <h4 class="event-title">{{ proposal.vendor.vendorDisplayName }}</h4>
-              <div class="probability">Probability 92%</div>
-              <ul class="event-info">
-                <li class="event-info__item">{{ proposal.vendor.vendorAddressLine1 }}</li>
-                <li class="event-info__item">{{ proposal.vendor.vendorCity }}</li>
-              </ul>
-              <p class="event-desc">{{ proposal.proposals[0].aboutUsMessage }}</p>
-
-              <div class="item-actions text-right">
-                <md-button class="md-rose details-btn" @click="proposalDetails(proposal)">Details & Booking </md-button>
-              </div>
-            </div>
-          </div>
+          <proposal-card
+            v-for="(proposal, index) in proposals.slice(0, 3)"
+            :key="index"
+            :proposal="proposal"
+            @goDetail="goDetailPage"
+          ></proposal-card>
         </div>
         <!-- ./Event Booking Items -->
 
         <div class="booking-section__actions">
-          <md-button class="md-simple md-black normal-btn" @click="showShareVendorModal = true"
-            >I already have a venue for my event
+          <md-button class="md-simple md-black normal-btn" @click="showShareVendorModal = true">
+            I already have a venue for my event
           </md-button>
-          <md-button class="md-simple md-black normal-btn" @click="showSomethingModal = true"
-            >I want something different
+          <span class="seperator"></span>
+          <md-button class="md-simple md-black normal-btn" @click="showSomethingModal = true">
+            I want something different
           </md-button>
         </div>
 
@@ -197,10 +184,12 @@ import BookingEventRequirement from "./BookingEventRequirement.vue";
 import VueElementLoading from "vue-element-loading";
 // import auth from '@/auth';
 import EventBlocks from "../components/NewEventBlocks";
+import ProposalCard from "./ProposalCard";
 import _ from "underscore";
 import { Modal } from "@/components";
 import EventComponentVendor from "@/models/EventComponentVendor";
 import EventComponentProperty from "@/models/EventComponentProperty";
+import Proposal from "@/models/Proposal";
 import EventCategoryRequirement from "@/models/EventCategoryRequirement";
 import PendingForVendors from "../components/PendingForVendors";
 
@@ -221,6 +210,7 @@ export default {
     CommentEditorPanel,
     BookingEventRequirement,
     PendingForVendors,
+    ProposalCard,
   },
   props: {},
   data: () => ({
@@ -281,8 +271,8 @@ export default {
         // this.currentRequirement = this.selectedBlock.vendorRequirements[0];
         // this.showCounterPage = true;
         // this.showProposals = true;
-          this.showCounterPage = false;
-          this.showProposals = false;
+        this.showCounterPage = false;
+        this.showProposals = false;
       } else {
         this.showCounterPage = false;
         this.showProposals = false;
@@ -306,12 +296,20 @@ export default {
     fetchData: async function () {
       this.blockId = this.$route.params.blockId;
       this.event = this.$store.state.event.eventData;
+      this.getSelectedBlock();
+      new Proposal()
+        .for(new EventComponent({ id: this.blockId }))
+        .get()
+        .then((result) => {
+          this.proposals = result;
+          if (result.length > 0) this.showProposals = true;
+        });
 
       // todo check if commentComponent is used
       // this.getCommentComponents(this.blockId);
 
       await this.getAllRequirements();
-      this.getSelectedBlock();
+
       // this.getRequirements();
     },
     setRequirements(requirementContent) {
@@ -333,21 +331,22 @@ export default {
           this.currentRequirement = Object.assign({}, res.item);
         });
     },
+    goDetailPage(proposal) {},
   },
   created() {
-    console.log('bookingEvent');
+    console.log("bookingEvent");
     this.isLoading = true;
     this.calendar = new Calendar({
       id: this.$store.state.auth.user.profile.defaultCalendarId,
     });
     this.fetchData();
 
-    this.$root.$on('clearVendorRequirement', event => {
-          console.log('clearVendorRequirement')
-          let requirements = this.storedRequirements;
-          if (requirements[event.id]) requirements[event.id] = null;
-          this.setBookingRequirements(requirements);
-    })
+    this.$root.$on("clearVendorRequirement", (event) => {
+      console.log("clearVendorRequirement");
+      let requirements = this.storedRequirements;
+      if (requirements[event.id]) requirements[event.id] = null;
+      this.setBookingRequirements(requirements);
+    });
   },
   watch: {
     event(newVal, oldVal) {
@@ -382,27 +381,42 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-.booking-section__actions {
-  width: 100%;
-  text-align: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  padding: 0 1.9em;
-  margin-bottom: 1em;
-}
-
-.footer-container {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  padding-left: 500px;
-  width: 100%;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  background: white;
-  font-family: "Manrope-Regular", sans-serif;
+<style lang="scss" scoped>
+.booking-section {
+  .header-actions {
+    display: flex;
+    height: max-content;
+  }
+  .seperator {
+    border-left: solid 1px #050505;
+  }
+  .events-booking-items {
+    padding: 0 2em;
+    margin-bottom: 1em;
+    align-items: stretch;
+  }
+  .booking-section__actions {
+    width: 100%;
+    text-align: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: 25px 1.9em;
+    background: white;
+  }
+  .footer-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding-left: 500px;
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    background: white;
+    font-family: "Manrope-Regular", sans-serif;
+  }
 }
 </style>

@@ -132,7 +132,6 @@ export default {
       fullDetailsModal: false,
       proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       landingIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
-
       selectedServices: [],
       submittedModal: false,
       isTimeUp: false,
@@ -209,14 +208,21 @@ export default {
         id: vendorProposal.id,
         personalMessage: vendorProposal.personalMessage,
         inspirationalPhotos: vendorProposal.inspirationalPhotos,
-        proposalRequest: new ProposalRequest({ id: vendorProposal.proposalRequest.id }),
+        proposalRequestId: vendorProposal.proposalRequest.id,
         eventVision: vendorProposal.vision,
-        eventComponentInstance: vendorProposal.proposalRequest.eventComponentInstance,
-        vendor: new Vendor({ id: vendorProposal.vendor.id }),
+        // eventComponentInstance: vendorProposal.proposalRequest.eventComponentInstance,
+        eventComponentId: vendorProposal.proposalRequest.eventComponentInstance.id,
+        // vendor: new Vendor({ id: vendorProposal.vendor.id }),
+        vendorId: vendorProposal.vendor.id,
         costServices: vendorProposal.proposalCostServices,
         includedServices: vendorProposal.proposalIncludedServices,
         extraServices: vendorProposal.proposalExtraServices,
         coverImage: coverImageUrl,
+        discounts: vendorProposal.discount,
+        taxes: vendorProposal.taxes,
+        cost: this.$store.getters["vendorProposal/mainTotalPrice"],
+        pricesByCategory: this.$store.getters["vendorProposal/pricesByCategory"],
+        bundleDiscount: vendorProposal.bundleDiscount,
       });
       if (type === "save") {
         proposal.status = "save";
