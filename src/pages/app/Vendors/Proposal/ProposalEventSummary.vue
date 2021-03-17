@@ -257,6 +257,7 @@ import vueSignature from "vue-signature";
 import ProposalInspirationalPhotos from "./ProposalInspirationalPhotos.vue";
 import ProposalPricingSummary from "./ProposalPricingSummary.vue";
 import { getBase64 } from "@/utils/file.util";
+import { capitalize } from "@/utils/string.util";
 export default {
   name: "proposal-event-summary",
   components: {
@@ -368,19 +369,14 @@ export default {
       let naItems = "";
       _.each(items, (n) => {
         if (n.constructor.name == "Object") {
-          naItems += `${this.capitalize(n.name)}s, `;
+          naItems += `${capitalize(n.name)}s, `;
         } else {
-          naItems += `${this.capitalize(n)}s, `;
+          naItems += `${capitalize(n)}s, `;
         }
       });
       naItems = naItems.substring(0, naItems.length - 2);
       if (naItems) return "All " + naItems;
       return "";
-    },
-    capitalize: function (value) {
-      if (!value) return "";
-      value = value.toString();
-      return value.charAt(0).toUpperCase() + value.slice(1);
     },
     dontWorkDays() {
       let selectedDates = "";

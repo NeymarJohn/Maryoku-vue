@@ -250,7 +250,7 @@ import VendorStartingFeeItem from "../components/VendorStartingFeeItem.vue";
 import VendorExtraPayItem from "../components/VendorExtraPayItem.vue";
 import _ from "underscore";
 import VendorImagesList from "../components/VendorImagesList.vue";
-
+import { capitalize } from "@/utils/string.util";
 export default {
   name: "vendor-signup-step4",
   props: {
@@ -507,9 +507,9 @@ export default {
       let naItems = "";
       _.each(items, (n) => {
         if (n.constructor.name == "Object") {
-          naItems += `${this.capitalize(n.name)}s, `;
+          naItems += `${capitalize(n.name)}s, `;
         } else {
-          naItems += `${this.capitalize(n)}s, `;
+          naItems += `${capitalize(n)}s, `;
         }
       });
       naItems = naItems.substring(0, naItems.length - 2);
@@ -526,11 +526,7 @@ export default {
     dontWorkTime() {
       return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.amPack.start} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.amPack.end}`;
     },
-    capitalize: function (value) {
-      if (!value) return "";
-      value = value.toString();
-      return value.charAt(0).toUpperCase() + value.slice(1);
-    },
+
     view() {
       if (this.$refs.lightbox) {
         this.$refs.lightbox.showImage(0);

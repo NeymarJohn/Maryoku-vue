@@ -621,7 +621,7 @@ import TimePicker from "@/components/Inputs/TimePicker";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import { FunctionalCalendar } from "vue-functional-calendar";
 import { VendorPolicy, VendorPricingPolicy } from "@/constants/vendor";
-
+import { capitalize } from "@/utils/string.util";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
 const christanHolidaysAPI =
   "https://www.googleapis.com/calendar/v3/calendars/en.christian%23holiday%40group.v.calendar.google.com/events?key=AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8";
@@ -865,15 +865,10 @@ export default {
 
       if (weekDays) {
         weekDays.forEach((wd) => {
-          res.push(wds[(wds.indexOf(this.capitalize(wd.slice(0, 2))) + 6) % 7]);
+          res.push(wds[(wds.indexOf(capitalize(wd.slice(0, 2))) + 6) % 7]);
         });
       }
       return res;
-    },
-    capitalize: function (value) {
-      if (!value) return "";
-      value = value.toString();
-      return value.charAt(0).toUpperCase() + value.slice(1);
     },
     setPricePolicy(e, type, name, value) {
       // console.log('setPricePolicy', value);

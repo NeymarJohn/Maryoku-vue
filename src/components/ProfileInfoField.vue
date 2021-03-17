@@ -174,6 +174,11 @@ export default {
           icon: "socialmedia/Tiktok.svg",
         },
       ],
+      option: {
+        penColor: "rgb(0, 0, 0)",
+        backgroundColor: "rgb(255,255,255)",
+        maxWidth: "300px",
+      },
     };
   },
   created() {
