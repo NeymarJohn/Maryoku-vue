@@ -15,8 +15,8 @@
         @remove="removePhoto"
       >
       </vendor-photos-carousel-item>
-      <div class="add-image-item d-flex align-center justify-content-center text-center" @click="handleAddImage">
-        <label class="photo-add-label color-red font-bold" @click="handleAddImage">
+      <div class="add-image-item photo-inpirational-item d-flex align-center justify-content-center text-center">
+        <label class="photo-add-label color-red font-bold cursor-pointer" @click="handleAddImage">
           <md-icon class="color-red">add</md-icon>
           <br />
           Add image
@@ -208,6 +208,9 @@ export default {
     border: dashed 1px #f51355;
     min-width: 340px;
     cursor: pointer;
+  }
+  .photo-inpirational-item:first-child {
+    margin-left: 60px;
   }
   span {
     cursor: pointer;
