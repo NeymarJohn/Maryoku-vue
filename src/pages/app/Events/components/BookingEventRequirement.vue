@@ -155,7 +155,6 @@ export default {
     ...mapActions("comment", ["getCommentComponents"]),
     ...mapActions("vendor", ["fetchAllProperties"]),
     _checkConditionScript(requirements) {
-
       let event = this.event;
 
       for (let cat in requirements) {
@@ -174,10 +173,12 @@ export default {
     _saveRequirementsInStore(event, action = null) {
       let requirements = this.storedRequirements;
 
-      if ( action === 'clear' ) {
+      if (action === "clear") {
         let initRequirements = this.$store.state.event.initBookingRequirements;
         // console.log('clear.initRequirement', initRequirements);
-        requirements[event.id][this.blockId].requirements = JSON.parse(JSON.stringify(initRequirements[event.id][this.blockId].requirements));
+        requirements[event.id][this.blockId].requirements = JSON.parse(
+          JSON.stringify(initRequirements[event.id][this.blockId].requirements),
+        );
         requirements[event.id][this.blockId].anythingElse = null;
       } else {
         requirements[event.id][this.blockId].requirements = JSON.parse(JSON.stringify(this.requirementProperties));
@@ -262,7 +263,7 @@ export default {
       }
     },
     revertToOriginal: async function () {
-      this._saveRequirementsInStore(this.event,"clear");
+      this._saveRequirementsInStore(this.event, "clear");
       await this.fetchData();
       this.scrollToTop();
       this.$root.$emit("revertRequirements");
@@ -336,6 +337,9 @@ export default {
   .section-title {
     font-size: 22px;
     font-family: "Manrope-ExtraBold";
+  }
+  .events-booking-items {
+    padding: 0 2em;
   }
   .requirement-item {
     .requirement-action {

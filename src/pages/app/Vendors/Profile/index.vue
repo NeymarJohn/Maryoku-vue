@@ -12,10 +12,17 @@
             <company-logo :defaultImage="vendorData.vendorLogoImage" :user="vendorData" @set="setLogo"></company-logo>
           </div>
           <h3 class="name font-bold text-center">{{ vendorData.companyName }}</h3>
-          <!-- <div class="text-center">
-            <span class="font-size-20"><md-icon style="color: #ffc001">start</md-icon>4.6</span>
-            <span class="color-gray">(12 Reviews)</span>
-          </div> -->
+          <div class="text-center">
+            <!-- <span class="font-size-20"><md-icon style="color: #ffc001">start</md-icon>4.6</span> -->
+            <span class="color-gray">(No Review)</span>
+            <star-rating
+              class="justify-content-center"
+              :border-width="0"
+              :star-size="25"
+              :show-rating="false"
+              :disabled="true"
+            ></star-rating>
+          </div>
         </div>
         <md-list>
           <md-list-item @click="goTo('services')" :class="{ 'font-bold-extra': pageName === 'services' }">
@@ -73,6 +80,7 @@
 
 <script>
 import VueElementLoading from "vue-element-loading";
+import StarRating from "vue-star-rating";
 import PersonalInformation from "@/pages/app/Profile/PersonalInformation.vue";
 import CompanyDashboardInfo from "../../CompanyDashboard/CompanyDashboardInfo.vue";
 import DietaryConstraints from "@/pages/app/Profile/DietaryConstraints.vue";
@@ -110,6 +118,7 @@ export default {
     CompanyLogo,
     CompanyDetails,
     MyServices,
+    StarRating,
   },
   data() {
     return {

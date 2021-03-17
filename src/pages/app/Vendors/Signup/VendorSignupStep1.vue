@@ -136,7 +136,7 @@
               <p>(15 photos top, under 5MB)</p>
             </div>
           </div>
-          <div class="white-card p-60">
+          <div class="white-card pt-60 pb-60">
             <vendor-photos-carousel
               :images="vendor.images"
               @addImage="addVendorImage"

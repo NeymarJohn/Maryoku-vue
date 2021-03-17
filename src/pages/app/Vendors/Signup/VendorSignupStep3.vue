@@ -27,7 +27,7 @@
           <div class="card">
             <div class="rules">
               <vendor-policy-item
-                v-for="(r, rIndex) in vendorPolicies.items" :key="rIndex + 'component'"
+                v-for="(r, rIndex) in vendorPolicies.items" :key="rIndex"
                 :item="r"
                 @update="setPolicy($event, rIndex)"
               ></vendor-policy-item>
@@ -47,7 +47,7 @@
           <div class="card">
             <div class="rules">
               <vendor-pricing-policy-item
-                v-for="(p, pIndex) in vendorPricingPolicies.items" :key="pIndex + 'component'"
+                v-for="(p, pIndex) in vendorPricingPolicies.items" :key="pIndex"
                 :item="p"
                 @update="setPricePolicy($event, pIndex)"
               ></vendor-pricing-policy-item>
@@ -357,7 +357,7 @@ export default {
       },
       rulesDesc: {
         title: "additional rules",
-        placeholder: "Event muse end before.. / Suitable for children (2-12 years)",
+        placeholder: "Event must be / Suitable for children (2-12 years)",
       },
       policyDesc: {
         title: "Add steps to your cancellation approch:",
@@ -636,18 +636,10 @@ export default {
         this.vendorPricingPolicies.items.map((it, idx) => {
           if (vendorPricingPolicies.items[idx] && vendorPricingPolicies.items[idx].type) {
             this.$set(it, "type", vendorPricingPolicies.items[idx].type);
-            if (it.type == Boolean && !it.hasOwnProperty('value')) {
-              this.$set(it, "value", false);
-            }
           }
         });
       } else {
         this.vendorPricingPolicies = vendorPricingPolicies;
-        this.vendorPricingPolicies.items.map(it => {
-          if (it.type == Boolean) {
-              this.$set(it, "value", false);
-          }
-        })
       }
       // console.log("vendor.price.policy", this.vendorPricingPolicies);
 
@@ -659,17 +651,9 @@ export default {
         this.$set(this.vendorPolicies, "items", this.vendor.policies);
         this.vendorPolicies.items.map((it, idx) => {
           this.$set(it, "type", vendorPolicies.items[idx].type);
-          if (it.type == Boolean && !it.hasOwnProperty('value')) {
-              this.$set(it, "value", false);
-          }
         });
       } else {
         this.vendorPolicies = vendorPolicies;
-        this.vendorPolicies.items.map(it => {
-            if (it.type == Boolean) {
-                this.$set(it, "value", false);
-            }
-        })
       }
 
       // set selectedReligion from saved vendor
