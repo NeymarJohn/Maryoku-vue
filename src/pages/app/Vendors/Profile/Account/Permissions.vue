@@ -19,11 +19,11 @@
       <div class="input-wrapper">
         <multiselect
           v-model="newColleague.invitedEvent"
-          :options="myEvents"
+          :options="myServices"
           :close-on-select="true"
           :clear-on-select="true"
           tag-placeholder="Add this as new tag"
-          placeholder="Type to search event"
+          placeholder="Type to search service"
           label="title"
           track-by="id"
         ></multiselect>
@@ -75,31 +75,25 @@ export default {
         role: { id: "edit", title: "Can Edit" },
         invitedEvent: "",
       },
-      myEvents: [],
     };
   },
   created() {
     let filters = {
       filters: {
-        myEvents: true,
+        myServices: true,
       },
     };
     this.getCollaborators();
-    this.$http
-      .get(`${process.env.SERVER_URL}/1/events`, {
-        params: filters,
-      })
-      .then((response) => {
-        this.myEvents = response.data;
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   },
   computed: {
     userData() {
       return this.$store.state.auth.user;
+    },
+    vendorData() {
+      return this.$store.state.vendor.profile;
+    },
+    myServices() {
+      return [this.vendorData.eventCategory];
     },
   },
   methods: {
