@@ -236,9 +236,9 @@
 
 <script>
 // import auth from '@/auth';
-import ProfileSettings from "@/pages/app/Profile/ProfileSettings";
+import ProfileSettings from "@/pages/app/Planner/Profile/ProfileSettings";
 import Team from "../../app/Team/Team";
-import MyCompany from "../../app/Profile/MyCompany";
+// import MyCompany from "@/app/Planner/Profile/MyCompany";
 
 import Popper from "vue-popperjs";
 import "vue-popperjs/dist/vue-popper.css";
@@ -326,14 +326,14 @@ export default {
         props: {},
       });
     },
-    openAccountSettings() {
-      window.currentPanel = this.$showPanel({
-        component: MyCompany,
-        cssClass: "md-layout-item md-size-65 transition36  bg-grey",
-        openOn: "right",
-        props: {},
-      });
-    },
+    // openAccountSettings() {
+    //   window.currentPanel = this.$showPanel({
+    //     component: MyCompany,
+    //     cssClass: "md-layout-item md-size-65 transition36  bg-grey",
+    //     openOn: "right",
+    //     props: {},
+    //   });
+    // },
     openTeam() {
       const panelInstance = this.$showPanel({
         component: Team,

@@ -17,8 +17,8 @@ const VendorDetail = () => import("@/pages/app/Vendors/VendorDetail.vue");
 const AddEditVendor = () => import("@/pages/app/Vendors/AddEditVendor.vue");
 const VendorsPoolNew = () => import("@/pages/app/Vendors/VendorsPoolNew.vue");
 // Profile Pages
-import Profile from "@/pages/app/Profile/Layout.vue";
-const ProfileOverview = () => import("@/pages/app/Profile/index.vue");
+import Profile from "@/pages/app/Planner/Profile/Layout.vue";
+const ProfileOverview = () => import("@/pages/app/Planner/Profile");
 
 // Event Pages
 const EventDetailsBudget = () => import("@/pages/app/Events/EventDetailsBudget.vue");
@@ -48,12 +48,12 @@ const EventCreatePage = () => import("@/pages/app/CreateEvent/EventWizardCreate.
 
 const FeedbackLandingPage = () => import("@/pages/app/Events/FeedbackLandingPage.vue");
 // User authentication pages
-const SignInSignUp = () => import("@/pages/Dashboard/Pages/SignInSignUp.vue");
-const SignUp = () => import("@/pages/Dashboard/Pages/SignUp.vue");
-const ForgotPassword = () => import("@/pages/Dashboard/Pages/ForgotPassword.vue");
-const ResetPassword = () => import("@/pages/Dashboard/Pages/ResetPassword.vue");
-const SignOut = () => import("@/pages/Dashboard/Pages/SignOut.vue");
-const SignedIn = () => import("@/pages/Dashboard/Pages/SignedIn.vue");
+const SignInSignUp = () => import("@/pages/app/Planner/SignInSignUp.vue");
+const SignUp = () => import("@/pages/app/Planner/SignUp.vue");
+const ForgotPassword = () => import("@/pages/app/Planner/ForgotPassword.vue");
+const ResetPassword = () => import("@/pages/app/Planner/ResetPassword.vue");
+const SignOut = () => import("@/pages/app/Planner/SignOut.vue");
+const SignedIn = () => import("@/pages/app/Planner/SignedIn.vue");
 const Invited = () => import("@/pages/Dashboard/Pages/Invited.vue");
 
 const Vendors = () => import("@/pages/Dashboard/Pages/VendorsList.vue");

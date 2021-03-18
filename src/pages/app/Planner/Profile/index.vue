@@ -83,7 +83,6 @@
 <script>
 import VueElementLoading from "vue-element-loading";
 import PersonalInformation from "./PersonalInformation.vue";
-import CompanyDashboardInfo from "../CompanyDashboard/CompanyDashboardInfo.vue";
 import DietaryConstraints from "./DietaryConstraints.vue";
 import MySpecialDates from "./MySpecialDates.vue";
 import HolidaysCelebrate from "./HolidaysCelebrate.vue";
@@ -94,8 +93,8 @@ import MyEvents from "./MyEvents.vue";
 // import auth from '@/auth';
 import { mapGetters, mapActions, mapState } from "vuex";
 import Inspirations from "./Inspirations.vue";
-import UserAvatar from "./components/UserAvatar.vue";
-import CompanyLogo from "./components/CompanyLogo.vue";
+import UserAvatar from "@/components/UserAvatar.vue";
+import CompanyLogo from "@/components/CompanyLogo.vue";
 
 export default {
   components: {
@@ -107,7 +106,6 @@ export default {
     Tabs,
     EditProfileForm,
     UserCard,
-    CompanyDashboardInfo,
     LabelEdit,
     ProfileSettings,
     MyEvents,

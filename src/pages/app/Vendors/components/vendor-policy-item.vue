@@ -2,14 +2,6 @@
     <div class="rule">
         <div class="left v-grid-with-desc">
             {{ item.name }}
-            <textarea
-                v-if="item.hasComment && notable"
-                class="desc"
-                rows="3"
-                v-model="item.desc"
-                :placeholder="item.placeholder ? item.placeholder : `Add additional information`"
-                @input="setPolicy"
-            />
         </div>
         <div class="right">
             <div class="d-flex align-center">
@@ -127,9 +119,19 @@
                     </template>
                 </div>
                 <div class="bottom mt-0 ml-40" v-if="item.hasComment">
-                    <div class="item color-red cursor-pointer d-flex align-center" @click="notable = !notable">
-                        <md-icon class="mr-10 icon color-red">{{ notable ? 'remove_circle_outline' : 'add_circle_outline'}} </md-icon>
-                        {{ notable ? 'Show' : 'Add'}} Note
+                    <div class="item" @click="notable = true">
+                        <div v-if="!notable" class="color-red cursor-pointer d-flex align-center">
+                            <img class="mr-10" :src="`${iconUrl}${'Group 5489.svg'}`" v-if="!notable"/>
+                            Add Note
+                        </div>
+                        <textarea
+                            v-if="item.hasComment && notable"
+                            class="desc"
+                            rows="3"
+                            v-model="item.desc"
+                            :placeholder="item.placeholder ? item.placeholder : `Except from the parking area`"
+                            @input="setPolicy"
+                        />
                     </div>
                 </div>
             </div>
@@ -297,18 +299,6 @@
                     border-radius: 0;
                 }
             }
-        }
-    }
-    textarea {
-        resize: none;
-        width: 75%;
-        padding: 1.5rem 2rem;
-        font-size: 16px;
-
-        &.desc {
-            display: block;
-            margin-top: 1rem;
-            padding: 0.5rem 1rem;
         }
     }
     .flex-1 {

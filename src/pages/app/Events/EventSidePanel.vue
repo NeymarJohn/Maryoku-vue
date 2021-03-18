@@ -198,7 +198,6 @@ import Occasion from "@/models/Occasion";
 import Swal from "sweetalert2";
 import moment from "moment";
 import _ from "underscore";
-import AnnualPlannerVuexModule from "../AnnualPlanner/AnnualPlanner.vuex";
 import VueElementLoading from "vue-element-loading";
 
 export default {

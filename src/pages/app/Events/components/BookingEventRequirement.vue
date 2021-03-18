@@ -278,6 +278,7 @@ export default {
         settingsJsonData: JSON.stringify(this.requirementProperties),
         note: this.anythingElse,
         eventComponentInstance: new EventComponent({ id: this.component.id }),
+        event: new CalendarEvent({ id: this.eventData.id }),
       }).then((res) => {
         this.$emit("setRequirements", res.data.item);
         this.$store.dispatch("event/getEventAction", { eventId: this.eventData.id });

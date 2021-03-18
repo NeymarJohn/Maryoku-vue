@@ -163,7 +163,6 @@ import Calendar from "@/models/Calendar";
 import CalendarEventStatistics from "@/models/CalendarEventStatistics";
 import VueElementLoading from "vue-element-loading";
 import Occasion from "@/models/Occasion";
-import AnnualPlannerVuexModule from "../../AnnualPlanner/AnnualPlanner.vuex";
 import moment from "moment";
 import numeral from "numeral";
 import _ from "underscore";
