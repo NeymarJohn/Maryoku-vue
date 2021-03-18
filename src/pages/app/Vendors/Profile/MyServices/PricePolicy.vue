@@ -13,7 +13,7 @@
 </template>
 <style></style>
 <script>
-import PricingPolicySection from "./PricingPolicySection.vue";
+import PricingPolicySection from "../../components/PricingPolicySection.vue";
 import CollapsePanel from "./CollapsePanel.vue";
 export default {
   components: { CollapsePanel, PricingPolicySection },

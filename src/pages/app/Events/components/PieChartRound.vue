@@ -3,8 +3,8 @@
     <svg
       id="pie_chart"
       ref="pie_chart"
-      width="300"
-      height="300"
+      width="100%"
+      height="100%"
       v-if="sortedData"
       :class="{ 'd-none': showImage, 'd-block': !showImage }"
     >

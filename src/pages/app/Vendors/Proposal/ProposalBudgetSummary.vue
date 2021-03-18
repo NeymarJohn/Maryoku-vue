@@ -348,7 +348,6 @@ export default {
         services: this.bundleDiscountServices,
         discountPercentage: this.bundleDiscountPercentage,
         discountAmount: this.bundleDiscountAmount,
-        isApplied: true,
       });
     },
     cancelBundle() {

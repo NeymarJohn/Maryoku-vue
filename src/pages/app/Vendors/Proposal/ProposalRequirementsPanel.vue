@@ -7,7 +7,7 @@
       </div>
     </template>
     <template slot="content">
-      <div class="savedate-analytics-content p-30 pt-0-i">
+      <div class="requirements-content p-30 pt-0-i" v-if="step === 1">
         <div
           v-for="(requirementCategory, index) in Object.keys(requirementsData)"
           :key="`requirement-category-${index}`"
@@ -57,6 +57,71 @@
             {{ proposalRequest.requirement.note }}
           </div>
         </div>
+      </div>
+      <div v-else>
+        <div
+          class="requirements-content p-30 pt-0-i"
+          v-for="requirement in allRequirements"
+          :key="requirement.category"
+        >
+          <div class="font-size-20 font-bold mb-20">{{ requirement.categoryData.fullTitle }}</div>
+          <div
+            v-for="(requirementCategory, index) in Object.keys(requirement.requirements)"
+            :key="`requirement-category-${index}`"
+          >
+            <template v-if="requirementCategory === 'multi-selection'"> </template>
+            <template v-else-if="requirementCategory.toLowerCase() === 'special'">
+              <div
+                class="category-section"
+                v-if="selectedOptions(requirement.requirements[requirementCategory]).length > 0"
+              >
+                <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
+                <div class="requirement-grid">
+                  <div
+                    class="d-flex requirement-item"
+                    v-for="requirementItem in selectedOptions(requirement.requirements[requirementCategory])"
+                    :key="requirementItem.item"
+                  >
+                    <div class="checkmark"></div>
+
+                    <div class="d-inline-block">{{ requirementItem.item || requirementItem.subCategory }}</div>
+                  </div>
+                </div>
+              </div>
+            </template>
+            <div
+              v-else-if="requirement.requirements[requirementCategory].filter((item) => item.isSelected).length > 0"
+              class="category-section"
+            >
+              <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
+              <div class="requirement-grid">
+                <div
+                  class="d-flex requirement-item"
+                  v-for="requirementItem in requirement.requirements[requirementCategory].filter(
+                    (item) => item.isSelected,
+                  )"
+                  :key="requirementItem.item"
+                >
+                  <div class="checkmark"></div>
+                  <!-- {{ requirementItem }} -->
+                  <div class="d-inline-block">
+                    {{ requirementItem.item || requirementItem.subCategory }}
+                    <span v-if="requirementItem.defaultQty">(X{{ requirementItem.defaultQty }})</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div v-else></div> -->
+          </div>
+          <div class="addtional-requests">
+            <div class="font-bold">Addtional Requests</div>
+            <div>
+              {{ proposalRequest.requirement.note }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-30">
         <md-button class="md-outlined md-red md-simple maryoku-btn width-100">
           <img src="/static/icons/chart-red.svg" class="page-icon mr-10" />
           Questions? Send a question to planner
@@ -67,12 +132,28 @@
 </template>
 <script>
 import CollapsePanel from "../../Campaign/CollapsePanel.vue";
+import CalendarEvent from "@/models/CalendarEvent";
+import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
 export default {
   components: { CollapsePanel },
+  data() {
+    return {
+      additionalServiceRequirements: [],
+    };
+  },
   methods: {
     selectedOptions(specialRequirements) {
       return specialRequirements.filter((item) => item.options.findIndex((option) => option.selected) > 0);
     },
+  },
+  created() {
+    new ProposalRequestRequirement()
+      .for(new CalendarEvent({ id: this.proposalRequest.eventData.id }))
+      .get()
+      .then((res) => {
+        console.log(res);
+        this.additionalServiceRequirements = res;
+      });
   },
   computed: {
     requirementsData() {
@@ -82,6 +163,18 @@ export default {
         return [];
       }
     },
+    allRequirements() {
+      const allCategories = this.$store.state.common.serviceCategories;
+      const allData = this.additionalServiceRequirements.map((requirementData) => {
+        console.log(allCategories.find((c) => c.key == requirementData.vendorCategory));
+        return {
+          category: requirementData.vendorCategory,
+          categoryData: allCategories.find((c) => c.key == requirementData.vendorCategory),
+          requirements: JSON.parse(requirementData.settingsJsonData),
+        };
+      });
+      return allData;
+    },
     proposalRequest() {
       return this.$store.state.vendorProposal.proposalRequest;
     },
@@ -90,6 +183,13 @@ export default {
         return this.$store.state.vendorProposal.proposalRequest.requirement.note;
       } catch (e) {
         return "";
+      }
+    },
+    step() {
+      try {
+        return this.$store.state.vendorProposal.wizardStep;
+      } catch (e) {
+        return 0;
       }
     },
   },

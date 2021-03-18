@@ -1,27 +1,13 @@
 <template>
-  <collapse-panel
-    class="cost-service-table"
-    @toggle="
-      (value) => {
-        isExpanded = value;
-      }
-    "
-  >
+  <collapse-panel class="cost-service-table">
     <template slot="header">
-      <div class="header-content">
-        <div>
-          <img :src="`${$iconURL}Vendor Signup/Asset 526.svg`" style="width: 20px" class="mr-10" />
-          With Extra Pay
-        </div>
-        <template v-if="isExpanded">
-          <div class="font-size-16 font-regular text-transform-capitalize">QTY</div>
-          <div class="font-size-16 font-regular text-transform-capitalize">Price</div>
-        </template>
+      <div class="d-flex align-center">
+        <img :src="`${$iconURL}Vendor Signup/Asset 526.svg`" style="width: 20px" class="mr-10" />
+        Elements With Extra Pay
       </div>
     </template>
     <template slot="content">
       <div class="pr-50 pl-50 pb-50 cost-service-content">
-        <hr />
         <vendor-extra-pay-item v-for="(cs, csIndex) in items" :key="csIndex" :item="cs" @change="changeServiceItem" />
       </div>
     </template>
@@ -40,11 +26,6 @@ export default {
       default: () => [],
     },
   },
-  data() {
-    return {
-      isExpanded: false,
-    };
-  },
   methods: {
     changeServiceItem(item) {
       _.each(items, (s) => {
@@ -58,12 +39,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .cost-service-table {
-  .header-content {
-    display: grid;
-    grid-template-columns: 40% 20% 20% 20%;
-    max-width: 900px;
-    align-items: flex-end;
-  }
   .cost-service-content {
     max-width: 900px;
   }
