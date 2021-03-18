@@ -52,7 +52,7 @@
           <div class="card-section card-expense">
             <div class="section-header">Expenses</div>
             <div>
-              <pie-chart-round :event.sync="event" :items="pieChartData"></pie-chart-round>
+              <pie-chart-round :event.sync="$store.state.event.eventData" :items="pieChartData"></pie-chart-round>
             </div>
           </div>
         </div>
@@ -279,7 +279,6 @@ import CommentEditorPanel from "./components/CommentEditorPanel";
 
 import BudgetEditModal from "@/components/Modals/BudgetEditModal";
 import AddNewCategoryModal from "@/components/Modals/AddNewCategoryModal";
-import axios from "axios";
 const VueHtml2pdf = () => import("vue-html2pdf");
 
 export default {
@@ -377,8 +376,6 @@ export default {
     ]),
     getEvent() {
       console.log("current User --- ", this.currentUser);
-      const currentUser = this.$store.state.auth.user;
-      axios.defaults.headers.common.Authorization = `Bearer ${currentUser.access_token}`;
       let _calendar = new Calendar({
         id: this.currentUser.profile.defaultCalendarId,
       });

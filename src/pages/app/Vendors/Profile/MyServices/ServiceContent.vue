@@ -14,8 +14,12 @@
         v-for="attachment in attachments"
         :key="attachment.name"
         :attachment="attachment"
+        :vendor="vendorData"
         class="attachment"
-      ></attachment-item>
+        @uploaded="setAttachment"
+        @remove="removeAttachment"
+      >
+      </attachment-item>
     </div>
     <vendor-images-list :images="vendorData.images"></vendor-images-list>
     <starting-fee-table class="mt-30" :items="startingFeeItems"></starting-fee-table>
@@ -65,21 +69,54 @@ export default {
       let extraPayItems = [];
       _.each(this.vendorData.services, (item) => {
         if (item.checked && item.hasOwnProperty("included") && !item.included) {
+          item.value = Number(item.value);
           extraPayItems.push(item);
         }
       });
       return extraPayItems;
     },
+    attachments() {
+      if (this.vendorData.attachments && this.vendorData.attachments.length > 0) return this.vendorData.attachments;
+      if (this.vendorData.eventCategory.legalDocuments) {
+        return this.vendorData.eventCategory.legalDocuments.map((legal) => {
+          return {
+            name: legal,
+            isRequired:
+              this.vendorData.eventCategory.mandatoryLegalDocs &&
+              this.vendorData.eventCategory.mandatoryLegalDocs.findIndex((item) => item === legal) >= 0,
+            fileName: "",
+          };
+        });
+      }
+      return [];
+    },
   },
   data() {
     return {
-      attachments: [
-        { name: "Kosher Certitifcate", isRequired: true, fileName: "Kosher_certificate.pdf" },
-        { name: "Legal Requirements", isRequired: true, fileName: "Legal_certificate.pdf" },
-        { name: "Menu", isRequired: true, fileName: "Menu_2020.pdf" },
-        { name: "Other", isRequired: false, fileName: "" },
-      ],
+      // attachments: [
+      //   { name: "Kosher Certitifcate", isRequired: true, fileName: "Kosher_certificate.pdf" },
+      //   { name: "Legal Requirements", isRequired: true, fileName: "Legal_certificate.pdf" },
+      //   { name: "Menu", isRequired: true, fileName: "Menu_2020.pdf" },
+      //   { name: "Other", isRequired: false, fileName: "" },
+      // ],
     };
+  },
+  methods: {
+    setAttachment(attachment) {
+      const defaultAttachments = this.attachments;
+      const currentIndex = defaultAttachments.findIndex((a) => a.name === attachment.name);
+      defaultAttachments[currentIndex] = attachment;
+      let updateData = { attachments: defaultAttachments, id: this.vendorData.id };
+      this.$store.dispatch("vendor/updateProfile", updateData);
+    },
+    removeAttachment(attachment) {
+      const defaultAttachments = this.attachments;
+      const currentIndex = defaultAttachments.findIndex((a) => a.name === attachment.name);
+      defaultAttachments[currentIndex].fileName = "";
+      defaultAttachments[currentIndex].url = "";
+      let updateData = { attachments: defaultAttachments, id: this.vendorData.id };
+      this.$store.dispatch("vendor/updateProfile", updateData);
+    },
   },
 };
 </script>

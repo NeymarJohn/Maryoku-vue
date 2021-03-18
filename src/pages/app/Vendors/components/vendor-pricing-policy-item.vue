@@ -2,6 +2,13 @@
     <div class="rule">
       <div class="left">
       {{ item.name }}
+      <textarea
+        v-if="item.hasComment && notable"
+        class="desc"
+        rows="3"
+        v-model="item.desc"
+        :placeholder="item.placeholder ? item.placeholder : `Add additional information`"
+      />
       <div v-if="item.yesOption && item.value" class="mt-10 ml-10">
         <label>How many hours are included?</label><br />
         <input type="number" class="text-center number-field" placeholder="" v-model="item.yesOption.value" />
@@ -174,22 +181,12 @@
             </select>
           </span>
         </div>
-        <div class="bottom mt-0 ml-40" v-if="item.hasComment">
-          <div class="item" @click="notable = true">
-              <div v-if="!notable" class="color-red cursor-pointer d-flex align-center">
-                  <img class="mr-10" :src="`${iconUrl}${'Group 5489.svg'}`" v-if="!notable"/>
-                  Add Note
+          <div class="bottom mt-0 ml-40" v-if="item.hasComment">
+              <div class="item color-red cursor-pointer d-flex align-center" @click="notable = !notable">
+                  <md-icon class="mr-10 icon color-red">{{ notable ? 'remove_circle_outline' : 'add_circle_outline'}} </md-icon>
+                  {{ notable ? 'Show' : 'Add'}} Note
               </div>
-              <textarea
-                  v-if="item.hasComment && notable"
-                  class="desc"
-                  rows="3"
-                  v-model="item.desc"
-                  :placeholder="item.placeholder ? item.placeholder : `Except from the parking area`"
-                  @input="setPolicy"
-              />
           </div>
-        </div>
       </div>
     </div>
     </div>

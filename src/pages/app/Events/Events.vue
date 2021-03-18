@@ -147,7 +147,6 @@ import TeamMember from "@/models/TeamMember";
 import _ from "underscore";
 import { backgroundImages, quotes } from "@/constants/loadingBackgrounds";
 import eventService from "@/services/event.service";
-import axios from "axios";
 
 const imageIndex = new Date().getTime() % backgroundImages.length;
 const quoteIndex = new Date().getTime() % quotes.length;
@@ -170,7 +169,6 @@ export default {
       let _calendar = new Calendar({
         id: currentUser.profile.defaultCalendarId,
       });
-      axios.defaults.headers.common.Authorization = `Bearer ${currentUser.access_token}`;
       let m = new CalendarEvent().get();
       m.then((allEvents) => {
         this.upcomingEvents = allEvents;

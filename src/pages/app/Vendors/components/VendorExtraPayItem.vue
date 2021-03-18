@@ -10,7 +10,7 @@
           :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"
         />
       </div>
-      <div class="col" v-if="!isEditable">{{ getQty() }}</div>
+      <div class="col" v-if="!isEditable">{{ getQty() || "-" }}</div>
       <div class="col" v-else>
         <div>
           <input v-model="item.qty" @input="changeItem()" />
@@ -18,7 +18,19 @@
       </div>
       <div class="col" v-if="!isEditable">{{ getPrice() }}</div>
       <div class="col" v-else>
-        <input v-model="item.value" @input="changeItem()" />
+        <money
+          v-model="item.value"
+          v-bind="{
+            decimal: '.',
+            thousands: ',',
+            prefix: '$ ',
+            suffix: '',
+            precision: 2,
+            masked: false,
+          }"
+          class="input-value"
+          @input="changeItem()"
+        />
       </div>
       <div class="col action" v-if="!isEditable">
         <img class="mr-20 ml-auto" :src="`${$iconURL}Requirements/edit-dark.svg`" @click="edit" />
@@ -37,14 +49,15 @@
 </template>
 
 <script>
-import moment from "moment";
-
+import { Money } from "v-money";
 export default {
   name: "vendor-extra-pay-item",
   props: {
     item: Object,
   },
-  components: {},
+  components: {
+    Money,
+  },
   data() {
     return {
       expanded: false,
@@ -81,6 +94,9 @@ export default {
       } else {
         return null;
       }
+    },
+    changePrice(value) {
+      console.log(value);
     },
     changeItem() {
       this.$emit("change", this.item);
@@ -163,6 +179,7 @@ export default {
       opacity: 0;
       display: flex;
       flex-flow: nowrap;
+      cursor: pointer;
     }
 
     &:hover {

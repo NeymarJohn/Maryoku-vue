@@ -298,26 +298,6 @@
             </div>
           </div>
         </div>
-        <div class="health-policy-wrapper">
-            <div class="title-cont">
-                <div class="top">
-                    <h5><img :src="`${iconUrl}Union 12.svg`" />Health Policy</h5>
-                </div>
-            </div>
-            <div class="card">
-                <div class="title-cont">
-                    <div class="top">COVID 19 - Exceptional Policy</div>
-                    <div class="bottom mb-10">
-                        <p>Please indicate any policy related to Corona - observing and complying with rules within your own venue
-                            or an exceptional policy for this period
-                        </p>
-                    </div>
-                </div>
-                <div class="main-cont">
-                    <textarea v-model="vendor.healthPolicy"></textarea>
-                </div>
-            </div>
-        </div>
       </div>
     </div>
   </div>
@@ -1449,16 +1429,14 @@ export default {
   }
   textarea {
     resize: none;
-    width: 100%;
+    width: 75%;
     padding: 1.5rem 2rem;
-    font-size: 15px;
-     border: 1px solid #dddddd;
+    font-size: 16px;
 
     &.desc {
       display: block;
       margin-top: 1rem;
       padding: 0.5rem 1rem;
-      min-width: 250px !important;
     }
   }
   .flex-1 {
