@@ -353,6 +353,7 @@ Object.defineProperty(Vue.prototype, "$authHeader", {
     },
 });
 
+store.dispatch("common/fetchAllCategories");
 Vue.mixin({
     data: () => ({
         windowWidth: 0,

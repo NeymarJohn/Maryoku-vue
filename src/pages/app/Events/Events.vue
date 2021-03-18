@@ -36,7 +36,7 @@
                 item.eventType ? item.eventType.name : item.eventType
               }}</md-table-cell>
               <md-table-cell md-label="Date">{{ item.eventStartMillis | moment }}</md-table-cell>
-              <md-table-cell md-label="Customer Name">{{ item.owner ? item.owner.department : null}}</md-table-cell>
+              <md-table-cell md-label="Customer Name">{{ item.owner ? item.owner.department : null }}</md-table-cell>
               <md-table-cell
                 md-label="Created By"
                 style="text-transform: capitalize"
@@ -47,7 +47,9 @@
               </md-table-cell>
               <md-table-cell md-label="Created By" v-else>
                 You
-                <span class="small text-primary" style="display: block">{{ item.owner ? item.owner.emailAddress : null}}</span>
+                <span class="small text-primary" style="display: block">{{
+                  item.owner ? item.owner.emailAddress : null
+                }}</span>
               </md-table-cell>
               <md-table-cell md-label="# Participants">{{ item.numberOfParticipants }}</md-table-cell>
               <md-table-cell md-label="Budget Per Participant">$ {{ item.budgetPerPerson }}</md-table-cell>
@@ -145,6 +147,7 @@ import TeamMember from "@/models/TeamMember";
 import _ from "underscore";
 import { backgroundImages, quotes } from "@/constants/loadingBackgrounds";
 import eventService from "@/services/event.service";
+import axios from "axios";
 
 const imageIndex = new Date().getTime() % backgroundImages.length;
 const quoteIndex = new Date().getTime() % quotes.length;
@@ -159,10 +162,15 @@ export default {
   },
   created() {
     const currentUser = this.$store.state.auth.user;
+    if (!currentUser) {
+      this.$store.dispatch("auth/logout");
+      this.$router.push("/signin");
+    }
     if (currentUser.currentTenant && currentUser.profile.defaultCalendarId) {
       let _calendar = new Calendar({
         id: currentUser.profile.defaultCalendarId,
       });
+      axios.defaults.headers.common.Authorization = `Bearer ${currentUser.access_token}`;
       let m = new CalendarEvent().get();
       m.then((allEvents) => {
         this.upcomingEvents = allEvents;
@@ -341,10 +349,10 @@ export default {
     getExtraFields(allEvents) {
       allEvents.forEach((item) => {
         if (item.owner) {
-            TeamMember.find(item.owner.id).then((owner) => {
-                Vue.set(item, "customerName", owner.customer.name);
-                Vue.set(item, "plannerEmail", owner.emailAddress);
-            });
+          TeamMember.find(item.owner.id).then((owner) => {
+            Vue.set(item, "customerName", owner.customer.name);
+            Vue.set(item, "plannerEmail", owner.emailAddress);
+          });
         }
       });
       return allEvents;

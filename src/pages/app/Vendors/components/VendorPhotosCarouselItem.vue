@@ -115,6 +115,9 @@ export default {
 .photo-inpirational-item {
   width: 100%;
   min-height: 250px;
+  min-width: 340px;
+  width: 340px;
+  margin-right: 20px;
   display: inline-block;
   overflow: hidden;
   .empty-item {

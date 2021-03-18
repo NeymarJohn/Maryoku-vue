@@ -1,31 +1,40 @@
 <template>
   <div class="proposal-inpirational-photos">
-    <vendor-photos-carousel-item
-      class="photo-item"
-      v-for="(photo, index) in images"
-      :key="photo"
-      :index="index"
-      :defaultPhoto="photo"
-      @change="setPhoto(index, ...arguments)"
-      @addCaption="addCaption(index, ...arguments)"
-      @remove="removePhoto"
-    >
-    </vendor-photos-carousel-item>
-    <div class="add-image-item d-flex align-center justify-content-center text-center">
-      <label class="photo-add-label color-red font-bold" @click="handleAddImage">
-        <md-icon class="color-red">add</md-icon>
-        <br />
-        Add image
-      </label>
-      <input
-        style="display: none"
-        :id="`input-add-photo`"
-        name="attachment"
-        type="file"
-        multiple="multiple"
-        @change="onFileChange"
-      />
+    <span class="prev" @click="prev()" v-if="startIndex > 0">
+      <md-icon>keyboard_arrow_left</md-icon>
+    </span>
+    <div class="cont" :style="{ left: `${imageSlidePos}px` }" ref="imagesCont">
+      <vendor-photos-carousel-item
+        class="photo-item"
+        v-for="(photo, index) in images"
+        :key="photo"
+        :index="index"
+        :defaultPhoto="photo"
+        @change="setPhoto(index, ...arguments)"
+        @addCaption="addCaption(index, ...arguments)"
+        @remove="removePhoto"
+      >
+      </vendor-photos-carousel-item>
+      <div class="add-image-item photo-inpirational-item d-flex align-center justify-content-center text-center">
+        <label class="photo-add-label color-red font-bold cursor-pointer" @click="handleAddImage">
+          <md-icon class="color-red">add</md-icon>
+          <br />
+          Add image
+        </label>
+        <input
+          style="display: none"
+          :id="`input-add-photo`"
+          name="attachment"
+          type="file"
+          multiple="multiple"
+          @change="onFileChange"
+        />
+      </div>
     </div>
+
+    <span class="next" @click="next()" v-if="startIndex < images.length - 2">
+      <md-icon>keyboard_arrow_right</md-icon>
+    </span>
     <!-- <template slot="next">
         <md-button class="md-simple md-black handle-btn next-btn md-icon-button edit-btn">
           <md-icon class="font-bold">keyboard_arrow_right</md-icon>
@@ -92,6 +101,8 @@ export default {
         caption: "",
         currentIndex: -1,
       },
+      imageSlidePos: 0,
+      startIndex: 0,
     };
   },
   methods: {
@@ -145,18 +156,35 @@ export default {
       }
       this.addNewPhoto(event.target.files[0]);
     },
+    prev() {
+      if (this.startIndex - 1 === 0) {
+        this.imageSlidePos = 0;
+      } else
+        this.imageSlidePos = -document.getElementsByClassName("photo-inpirational-item")[this.startIndex - 1]
+          .offsetLeft;
+
+      this.startIndex -= 1;
+    },
+    next() {
+      this.imageSlidePos = -document.getElementsByClassName("photo-inpirational-item")[this.startIndex + 1].offsetLeft;
+      this.startIndex += 1;
+      console.log(document.getElementsByClassName("photo-inpirational-item")[this.startIndex].offsetLeft);
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
 .proposal-inpirational-photos {
-  white-space: nowrap;
   width: 100%;
   overflow: hidden;
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(3, 30%);
-  gap: 10px 5%;
+
+  .cont {
+    position: relative;
+    transition: all 0.5s;
+    white-space: nowrap;
+    display: flex;
+  }
   .handle-btn {
     background-color: white !important;
     height: 25px;
@@ -178,6 +206,33 @@ export default {
   .add-image-item {
     height: 220px;
     border: dashed 1px #f51355;
+    min-width: 340px;
+    cursor: pointer;
+  }
+  .photo-inpirational-item:first-child {
+    margin-left: 60px;
+  }
+  span {
+    cursor: pointer;
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    background-color: #ffffff;
+    box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+    border-radius: 50%;
+    text-align: center;
+    font-weight: 800;
+    z-index: 99;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    &.prev {
+      left: 50px;
+    }
+    &.next {
+      right: 50px;
+    }
   }
 }
 </style>

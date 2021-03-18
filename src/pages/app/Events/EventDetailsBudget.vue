@@ -1,6 +1,10 @@
 <template>
   <div>
-    <event-state-message v-if="showMessage" :state="budgetState"  @closeMessage="showMessage = false"></event-state-message>
+    <event-state-message
+      v-if="showMessage"
+      :state="budgetState"
+      @closeMessage="showMessage = false"
+    ></event-state-message>
     <div class="edit-event-details event-details-budget">
       <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
       <!-- Event Header -->
@@ -275,6 +279,7 @@ import CommentEditorPanel from "./components/CommentEditorPanel";
 
 import BudgetEditModal from "@/components/Modals/BudgetEditModal";
 import AddNewCategoryModal from "@/components/Modals/AddNewCategoryModal";
+import axios from "axios";
 const VueHtml2pdf = () => import("vue-html2pdf");
 
 export default {
@@ -372,6 +377,8 @@ export default {
     ]),
     getEvent() {
       console.log("current User --- ", this.currentUser);
+      const currentUser = this.$store.state.auth.user;
+      axios.defaults.headers.common.Authorization = `Bearer ${currentUser.access_token}`;
       let _calendar = new Calendar({
         id: this.currentUser.profile.defaultCalendarId,
       });
@@ -406,32 +413,33 @@ export default {
           this.isLoading = false;
         });
     },
-    checkMessageStatus(){
-        this.budgetState = {key: null, percent: null};
-        if (this.event.budgetProgress < 100) {
-            this.budgetState.key = 'not_approved';
+    checkMessageStatus() {
+      this.budgetState = { key: null, percent: null };
+      if (this.event.budgetProgress < 100) {
+        this.budgetState.key = "not_approved";
+      }
+      if (!this.budgetState.key && this.event.standardBudget !== 0) {
+        if (this.event.standardBudget < this.event.totalBudget) {
+          this.budgetState.key = "higher_than_average";
+          this.budgetState.percent =
+            ((this.event.totalBudget - this.event.standardBudget) / this.event.totalBudget).toFixed(2) * 100;
+        } else if (this.event.standardBudget > this.event.totalBudget) {
+          this.budgetState.key = "lower_than_average";
         }
-        if (!this.budgetState.key && this.event.standardBudget !== 0) {
-            if (this.event.standardBudget < this.event.totalBudget) {
-                this.budgetState.key = 'higher_than_average';
-                this.budgetState.percent = ((this.event.totalBudget - this.event.standardBudget) / this.event.totalBudget).toFixed(2) * 100;
-            } else if (this.event.standardBudget > this.event.totalBudget){
-                this.budgetState.key = 'lower_than_average';
-            }
-        }
+      }
 
-        let now = moment();
-        let created_at = moment(this.event.dateCreated);
+      let now = moment();
+      let created_at = moment(this.event.dateCreated);
 
-        if (!this.budgetState.key && now.diff(created_at, 'days') < 15) {
-            this.budgetState.key = 'approved_budget_in_two_weeks';
-        }
+      if (!this.budgetState.key && now.diff(created_at, "days") < 15) {
+        this.budgetState.key = "approved_budget_in_two_weeks";
+      }
 
-        if (!this.budgetState.key && this.event.unexpected < this.event.totalBudget * 0.1) {
-            this.budgetState.key = 'unexpected_budget_less_10';
-        }
+      if (!this.budgetState.key && this.event.unexpected < this.event.totalBudget * 0.1) {
+        this.budgetState.key = "unexpected_budget_less_10";
+      }
 
-        this.showMessage = !!this.budgetState.key;
+      this.showMessage = !!this.budgetState.key;
     },
     selectServices() {
       this.$refs.eventPlannerTabs.$emit("event-planner-nav-switch-panel", 1);
@@ -534,7 +542,7 @@ export default {
         unexpectedBudget: this.event.unexpectedBudget + (newBudget.totalBudget - this.event.totalBudget),
       });
       this.$store.dispatch("event/saveEventAction", event).then((res) => {
-        console.log('updateTotalBudget.res', res);
+        console.log("updateTotalBudget.res", res);
         this.event = res;
         this.checkMessageStatus();
         this.showBudgetModal = false;

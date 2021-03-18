@@ -1344,7 +1344,7 @@
     min-height: 400px;
 
     .booking-header {
-        padding: 0 2.5em 0 2.8em;
+        padding: 0 3em;
         margin-bottom: 1em;
         margin-top: 1em;
 
@@ -1374,107 +1374,6 @@
                 .md-icon {
                     color: #000 !important;
                 }
-            }
-        }
-    }
-}
-
-.events-booking-items {
-    padding: 0 1.2em;
-    margin-bottom: 1em;
-
-    .booking-item {
-        border-radius: 3px;
-        box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-        background-color: #ffffff;
-        padding: 1.5em;
-
-        .event-image {
-            background-size: cover !important;
-            height: 200px;
-            position: relative;
-
-            .event-labels {
-                padding: 0;
-                margin: 0;
-                list-style: none;
-                position: absolute;
-                left: 0;
-                bottom: 0;
-
-                .label-item {
-                    background: #fff;
-                    padding: 6px 17px;
-                    font-size: 12px;
-                    font-weight: bold;
-                    color: #050505;
-                    width: auto;
-                    float: left;
-                    clear: both;
-
-                    &.rose-label {
-                        color: #f51355;
-                    }
-
-                    &.special-offer {
-                        background: #ffc001;
-                        color: #fff;
-                    }
-                }
-            }
-        }
-
-        .price {
-            margin: 2em 0 0.8em;
-
-            small {
-                font-size: 14px;
-                color: #050505;
-            }
-        }
-        .price-value {
-            font-size: 25px;
-            font-weight: bold;
-            color: #050505;
-            margin-right: 0.2em;
-        }
-
-        .event-title {
-            font-size: 18px;
-            font-weight: 800;
-            color: #050505;
-            margin: 0;
-            height: 52px;
-        }
-
-        .probability {
-            font-size: 13px;
-            font-weight: 800;
-            color: #0fac4c;
-            margin: 0.5em 0 1em;
-        }
-
-        .event-info {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-
-            &__item {
-                font-size: 12px;
-                color: #818080;
-            }
-        }
-        .event-desc {
-            font-size: 12px;
-            color: #050505;
-        }
-
-        .details-btn {
-            .md-ripple {
-                // background-color: #f51355;
-                text-transform: capitalize;
-                font-weight: bold;
-                letter-spacing: 1px;
             }
         }
     }

@@ -339,6 +339,9 @@ export default {
     font-size: 22px;
     font-family: "Manrope-ExtraBold";
   }
+  .events-booking-items {
+    padding: 0 2em;
+  }
   .requirement-item {
     .requirement-action {
       opacity: 0;

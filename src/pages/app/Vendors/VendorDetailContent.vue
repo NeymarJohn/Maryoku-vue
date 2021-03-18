@@ -136,7 +136,7 @@
                 {{ mergeStringItems(vendor.selectedWeekdays) }}
               </div>
               <div v-for="(r, rIndex) in vendor.exDonts" :key="rIndex">
-                <div class="item" v-for="(d, dIndex) in r.holidays.filter(d => d.selected)" :key="dIndex">
+                <div class="item" v-for="(d, dIndex) in r.holidays.filter((d) => d.selected)" :key="dIndex">
                   <img :src="`${iconUrl}Group 5489 (4).svg`" />
                   {{ d.holiday }}
                 </div>
@@ -160,7 +160,7 @@
                   {{ policy.value }}
 
                   <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
-                  {{ policy.attendees }} attendees
+                    {{ policy.attendees }} attendees
                   </span>
                 </div>
               </div>
@@ -194,6 +194,7 @@ import moment from "moment";
 import VueElementLoading from "vue-element-loading";
 import Vendors from "@/models/Vendors";
 import VendorDetailReviews from "./components/VendorDetailReviews";
+import { capitalize } from "@/utils/string.util";
 //COMPONENTS
 import Icon from "@/components/Icon/Icon.vue";
 import VendorServiceItem from "./components/VendorServiceItem.vue";
@@ -393,9 +394,9 @@ export default {
       let naItems = "";
       _.each(items, (n) => {
         if (n.constructor.name == "Object") {
-          naItems += `${this.capitalize(n.name)}, `;
+          naItems += `${capitalize(n.name)}, `;
         } else {
-          naItems += `${this.capitalize(n)}, `;
+          naItems += `${capitalize(n)}, `;
         }
       });
       naItems = naItems.substring(0, naItems.length - 2);
@@ -411,11 +412,6 @@ export default {
     },
     dontWorkTime() {
       return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.amPack.start} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.amPack.end}`;
-    },
-    capitalize: function (value) {
-      if (!value) return "";
-      value = value.toString();
-      return value.charAt(0).toUpperCase() + value.slice(1);
     },
     getGalleryImages: function () {
       let temp = [];
