@@ -64,6 +64,7 @@
 </template>
 <script>
 import _ from "underscore";
+import { capitalize } from "@/utils/string.util";
 export default {
   props: {
     vendor: {
@@ -102,9 +103,9 @@ export default {
       let naItems = "";
       _.each(items, (n) => {
         if (n.constructor.name == "Object") {
-          naItems += `${this.capitalize(n.name)}s, `;
+          naItems += `${capitalize(n.name)}s, `;
         } else {
-          naItems += `${this.capitalize(n)}s, `;
+          naItems += `${capitalize(n)}s, `;
         }
       });
       naItems = naItems.substring(0, naItems.length - 2);

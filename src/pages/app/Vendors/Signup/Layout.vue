@@ -91,7 +91,7 @@ export default {
       this.$router.push(router);
     },
     approve() {
-      if (this.$store.state.vendor.isEditing) {
+      if (this.$store.state.vendorSignup.isEditing) {
         this.setStep(1);
       } else {
         if (this.validateBasicFields) {

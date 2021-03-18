@@ -35,7 +35,8 @@
         </md-button>
         <div class="or">Or</div>
         <div class="sign-here">
-          <vueSignature ref="signature" :sigOption="option" :w="'100%'" :h="'100%'" />
+          <img v-if="signatureData" :src="`${signatureData}`" />
+          <vueSignature v-else ref="signature" :sigOption="option" :w="'100%'" :h="'100%'" />
           <md-button class="md-simple md-vendor edit-btn" @click="clear">Clear</md-button>
         </div>
         <input
@@ -72,6 +73,7 @@
         <div
           class="sign"
           v-if="defaultValue"
+          style="max-width: 300px"
           :style="`
                   background-image: url(${defaultValue});
                   width: 100%;
@@ -91,7 +93,7 @@
 import VueGoogleAutocomplete from "vue-google-autocomplete";
 import vueSignature from "vue-signature";
 import { getBase64 } from "@/utils/file.util";
-
+import S3Service from "@/services/s3.service";
 export default {
   components: {
     VueGoogleAutocomplete,
@@ -131,6 +133,7 @@ export default {
     return {
       isEditing: false,
       content: "",
+      signatureData: "",
       passwordConfirm: "",
       socialMediaBlocks: [
         {
@@ -174,6 +177,10 @@ export default {
           icon: "socialmedia/Tiktok.svg",
         },
       ],
+      option: {
+        penColor: "rgb(0, 0, 0)",
+        backgroundColor: "rgb(255,255,255)",
+      },
     };
   },
   created() {
@@ -190,9 +197,13 @@ export default {
     saveField() {
       this.isEditing = false;
       if (this.fieldName === "signature") {
-        let jpeg = this.$refs.signature.save("image/jpeg");
-        this.content = jpeg;
-        this.$emit("save", { name: this.fieldName, value: jpeg });
+        if (!this.signatureData) {
+          let jpeg = this.$refs.signature.save("image/jpeg");
+          this.content = jpeg;
+          this.$emit("save", { name: this.fieldName, value: jpeg });
+        } else {
+          this.$emit("save", { name: this.fieldName, value: this.content });
+        }
       } else {
         this.$emit("save", { name: this.fieldName, value: this.content });
       }
@@ -204,11 +215,19 @@ export default {
       this.$refs.signatureFile.click();
     },
     clear() {
+      this.signatureData = "";
       this.$refs.signature.clear();
     },
     async onSignatureFilePicked(e) {
-      const imageData = await getBase64(e.target.files[0]);
-      this.$refs.signature.fromDataURL(imageData);
+      const file = e.target.files[0];
+      const extension = file.type.split("/")[1];
+      const fileId = `${new Date().getTime()}`;
+      S3Service.fileUpload(file, fileId, "vendor/signatures").then(async (uploadedName) => {
+        this.content = `https://maryoku.s3.amazonaws.com/vendor/signatures/${fileId}.${extension}`;
+        this.signatureData = await getBase64(file);
+      });
+
+      // this.$refs.signature.fromDataURL(imageData);
     },
   },
   computed: {
@@ -265,6 +284,10 @@ export default {
     text-align: center;
     .sign-here {
       border: dashed 1px #f51355;
+      img {
+        max-height: 300px;
+        object-fit: contain;
+      }
     }
   }
 }

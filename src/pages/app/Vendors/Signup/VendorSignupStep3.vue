@@ -27,7 +27,8 @@
           <div class="card">
             <div class="rules">
               <vendor-policy-item
-                v-for="(r, rIndex) in vendorPolicies.items" :key="rIndex"
+                v-for="(r, rIndex) in vendorPolicies.items"
+                :key="rIndex + 'component'"
                 :item="r"
                 @update="setPolicy($event, rIndex)"
               ></vendor-policy-item>
@@ -47,7 +48,8 @@
           <div class="card">
             <div class="rules">
               <vendor-pricing-policy-item
-                v-for="(p, pIndex) in vendorPricingPolicies.items" :key="pIndex"
+                v-for="(p, pIndex) in vendorPricingPolicies.items"
+                :key="pIndex + 'component'"
                 :item="p"
                 @update="setPricePolicy($event, pIndex)"
               ></vendor-pricing-policy-item>
@@ -317,7 +319,7 @@ import TimePicker from "@/components/Inputs/TimePicker";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import { FunctionalCalendar } from "vue-functional-calendar";
 import { VendorPolicy, VendorPricingPolicy } from "@/constants/vendor";
-
+import { capitalize } from "@/utils/string.util";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
 import VendorPolicyItem from "../components/vendor-policy-item";
 import VendorPricingPolicyItem from "../components/vendor-pricing-policy-item";
@@ -564,24 +566,26 @@ export default {
 
       if (weekDays) {
         weekDays.forEach((wd) => {
-          res.push(wds[(wds.indexOf(this.capitalize(wd.slice(0, 2))) + 6) % 7]);
+          res.push(wds[(wds.indexOf(capitalize(wd.slice(0, 2))) + 6) % 7]);
         });
       }
       return res;
     },
-    capitalize: function (value) {
-      if (!value) return "";
-      value = value.toString();
-      return value.charAt(0).toUpperCase() + value.slice(1);
+    setPricePolicy(e, type, name, value) {
+      // console.log('setPricePolicy', value);
+      if ((type === "option" || type === "Including") && name) {
+        let p = this.vendorPricingPolicies.items.find((it) => it.name === name);
+        p.value = value;
+      }
     },
     setPricePolicy(e, index) {
-      console.log('setPricePolicy', e);
+      console.log("setPricePolicy", e);
       this.vendorPricingPolicies.items[index] = e;
 
       this.$root.$emit("update-vendor-value", "pricingPolicies", this.vendorPricingPolicies.items);
     },
     setPolicy(e, index) {
-      console.log('setPolicy', e);
+      console.log("setPolicy", e);
       this.vendorPolicies.items[index] = e;
       this.$root.$emit("update-vendor-value", "policies", this.vendorPolicies.items);
     },
@@ -636,10 +640,18 @@ export default {
         this.vendorPricingPolicies.items.map((it, idx) => {
           if (vendorPricingPolicies.items[idx] && vendorPricingPolicies.items[idx].type) {
             this.$set(it, "type", vendorPricingPolicies.items[idx].type);
+            if (it.type == Boolean && !it.hasOwnProperty("value")) {
+              this.$set(it, "value", false);
+            }
           }
         });
       } else {
         this.vendorPricingPolicies = vendorPricingPolicies;
+        this.vendorPricingPolicies.items.map((it) => {
+          if (it.type == Boolean) {
+            this.$set(it, "value", false);
+          }
+        });
       }
       // console.log("vendor.price.policy", this.vendorPricingPolicies);
 
@@ -651,9 +663,17 @@ export default {
         this.$set(this.vendorPolicies, "items", this.vendor.policies);
         this.vendorPolicies.items.map((it, idx) => {
           this.$set(it, "type", vendorPolicies.items[idx].type);
+          if (it.type == Boolean && !it.hasOwnProperty("value")) {
+            this.$set(it, "value", false);
+          }
         });
       } else {
         this.vendorPolicies = vendorPolicies;
+        this.vendorPolicies.items.map((it) => {
+          if (it.type == Boolean) {
+            this.$set(it, "value", false);
+          }
+        });
       }
 
       // set selectedReligion from saved vendor

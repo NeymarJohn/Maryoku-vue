@@ -10,7 +10,7 @@
       ></notification-setting-item>
     </div>
     <div class="p-60">
-      <phone-box :phoneNumer="vendorData.vendorMainPhoneNumber"></phone-box>
+      <phone-box :phoneNumer="vendorData.contactPhoneNumber"></phone-box>
     </div>
   </div>
 </template>

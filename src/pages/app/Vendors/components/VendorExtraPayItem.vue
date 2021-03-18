@@ -18,17 +18,15 @@
       </div>
       <div class="col" v-if="!isEditable">{{ getPrice() }}</div>
       <div class="col" v-else>
-        <div class="field">
-          <input v-model="item.value" @input="changeItem()" />
-        </div>
+        <input v-model="item.value" @input="changeItem()" />
       </div>
-      <div class="col action">
-        <img
-          class="mr-20 ml-auto"
-          src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/edit-dark.svg"
-          @click="edit"
-        />
-        <img src="https://static-maryoku.s3.amazonaws.com/storage/icons/Requirements/delete-dark.svg" @click="remove" />
+      <div class="col action" v-if="!isEditable">
+        <img class="mr-20 ml-auto" :src="`${$iconURL}Requirements/edit-dark.svg`" @click="edit" />
+        <img :src="`${$iconURL}Requirements/delete-dark.svg`" @click="remove" />
+      </div>
+      <div class="col action" v-else>
+        <md-button class="md-simple md-black maryoku-btn" @click="cancel">Cancel</md-button>
+        <md-button class="md-red maryoku-btn" @click="save">Save</md-button>
       </div>
     </div>
     <div class="expanded" v-if="expanded">
@@ -51,7 +49,6 @@ export default {
     return {
       expanded: false,
       isEditable: false,
-      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
   },
   created() {},
@@ -96,6 +93,12 @@ export default {
       console.log("remvoe", this.item);
       this.$emit("change", this.item);
     },
+    cancel() {
+      this.isEditable = false;
+    },
+    save() {
+      this.isEditable = false;
+    },
   },
   computed: {},
   filters: {},
@@ -109,15 +112,18 @@ export default {
   border-bottom: 1px solid #dddddd;
 
   .collapsed {
-    display: flex;
+    display: grid;
+    grid-template-columns: 40% 20% 20% 20%;
     padding: 2rem 0;
-
+    grid-gap: 5px;
     .col {
       flex: 1;
-      width: 20px;
       display: flex;
       align-items: center;
-
+      padding: 10px 20px 10px 0;
+      &:not(:first-child) {
+        justify-content: center;
+      }
       img {
         width: 20px;
       }
@@ -155,6 +161,8 @@ export default {
 
     .action {
       opacity: 0;
+      display: flex;
+      flex-flow: nowrap;
     }
 
     &:hover {
