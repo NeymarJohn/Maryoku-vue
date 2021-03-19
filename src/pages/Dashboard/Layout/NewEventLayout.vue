@@ -1,6 +1,5 @@
 <template>
   <div :class="[{ 'nav-open': $sidebar.showSidebar }, { rtl: $route.meta.rtlActive }]">
-    <notifications></notifications>
     <div class="main-panel" style="height: 50%">
       <div
         :class="{ content: !$route.meta.hideContent }"
