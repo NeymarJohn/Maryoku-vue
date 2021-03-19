@@ -1,11 +1,10 @@
 <template>
   <div>
-<!--    <event-state-message-->
-<!--      v-if="showMessage"-->
-<!--      :state="budgetState"-->
-<!--      @closeMessage="showMessage = false"-->
-<!--    ></event-state-message>-->
-    <budget-notifications></budget-notifications>
+    <event-state-message
+      v-if="showMessage"
+      :state="budgetState"
+      @closeMessage="showMessage = false"
+    ></event-state-message>
     <div class="edit-event-details event-details-budget">
       <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
       <!-- Event Header -->
@@ -262,9 +261,9 @@ import Swal from "sweetalert2";
 
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
+import CalendarEventStatistics from "@/models/CalendarEventStatistics";
 import EventComponent from "@/models/EventComponent";
 import EventStateMessage from "./components/EventStateMessage";
-import { BUDGET_MESSAGES } from "@/constants/messages";
 import { mapState, mapMutations, mapGetters } from "vuex";
 
 import EventBudgetVendors from "./components/EventBudgetVendors";
@@ -415,49 +414,32 @@ export default {
         });
     },
     checkMessageStatus() {
-      this.budgetStates = [];
+      this.budgetState = { key: null, percent: null };
       if (this.event.budgetProgress < 100) {
-        this.budgetStates.push({key: "not_approved"});
+        this.budgetState.key = "not_approved";
       }
-      if (this.event.standardBudget !== 0) {
+      if (!this.budgetState.key && this.event.standardBudget !== 0) {
         if (this.event.standardBudget < this.event.totalBudget) {
-            this.budgetStates.push({
-                key: "not_approved",
-                percent: ((this.event.totalBudget - this.event.standardBudget) / this.event.totalBudget).toFixed(2) * 100});
+          this.budgetState.key = "higher_than_average";
+          this.budgetState.percent =
+            ((this.event.totalBudget - this.event.standardBudget) / this.event.totalBudget).toFixed(2) * 100;
         } else if (this.event.standardBudget > this.event.totalBudget) {
-          this.budgetStates.push({key: "lower_than_average"});
+          this.budgetState.key = "lower_than_average";
         }
       }
 
       let now = moment();
       let created_at = moment(this.event.dateCreated);
 
-      if (now.diff(created_at, "days") < 15) {
-        this.budgetStates.push({key: "approved_budget_in_two_weeks"});
+      if (!this.budgetState.key && now.diff(created_at, "days") < 15) {
+        this.budgetState.key = "approved_budget_in_two_weeks";
       }
 
-      if (this.event.unexpected < this.event.totalBudget * 0.1) {
-        this.budgetStates.push({key: "unexpected_budget_less_10"});
+      if (!this.budgetState.key && this.event.unexpected < this.event.totalBudget * 0.1) {
+        this.budgetState.key = "unexpected_budget_less_10";
       }
 
-      console.log('states', this.budgetStates);
-      if (this.budgetStates.length) {
-          this.budgetStates.map(it => {
-              let message_item = BUDGET_MESSAGES.find(m => m.key == it.key);
-              this.$notify({
-                  message: {
-                      title: message_item.title,
-                      content: message_item.message,
-                      action: message_item.action,
-                  },
-                  icon: `${this.$iconURL}messages/${message_item.icon}`,
-                  horizontalAlign: "right",
-                  verticalAlign: "top",
-                  type: message_item.type,
-                  timeout: 5000,
-              });
-          })
-      }
+      this.showMessage = !!this.budgetState.key;
     },
     selectServices() {
       this.$refs.eventPlannerTabs.$emit("event-planner-nav-switch-panel", 1);

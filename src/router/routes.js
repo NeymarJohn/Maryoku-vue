@@ -16,6 +16,7 @@ const EventProposal = () => import("@/pages/app/Events/EventProposal.vue");
 const VendorDetail = () => import("@/pages/app/Vendors/VendorDetail.vue");
 const AddEditVendor = () => import("@/pages/app/Vendors/AddEditVendor.vue");
 const VendorsPoolNew = () => import("@/pages/app/Vendors/VendorsPoolNew.vue");
+
 // Profile Pages
 import Profile from "@/pages/app/Planner/Profile/Layout.vue";
 const ProfileOverview = () => import("@/pages/app/Planner/Profile");
@@ -23,7 +24,13 @@ const ProfileOverview = () => import("@/pages/app/Planner/Profile");
 // Event Pages
 const EventDetailsBudget = () => import("@/pages/app/Events/EventDetailsBudget.vue");
 const EventPlan = () => import("@/pages/app/Events/EventPlan.vue");
+const EventDetailsOverview = () => import("@/pages/app/Events/components/EventDetailsOverview");
 const EventProposalDetails = () => import("@/pages/app/Events/components/EventProposalDetails.vue");
+const EventDetailsTimeline = () => import("@/pages/app/Events/EventDetailsTimeline");
+const EventConceptChoose = () => import("@/pages/app/Events/components/EventConceptChoose");
+const BookingEvent = () => import("@/pages/app/Events/components/BookingEvent");
+const EventBudgetRequirement = () => import("@/pages/app/Events/components/EventBudgetRequirement.vue");
+const EventCampaign = () => import("@/pages/app/Campaign/CampaignMainLayout.vue");
 
 const CreateWorkspace = () => import("@/pages/Dashboard/Pages/CreateWorkspace");
 const ChooseWorkspace = () => import("@/pages/Dashboard/Pages/ChooseWorkspace");
@@ -219,12 +226,12 @@ let ProfilePages = {
 };
 
 let EventPages = {
-    path: "/app2",
+    path: "/events",
     component: NewEventLayout,
-    name: "App2",
+    name: "Events",
     children: [
         {
-            path: "/events/proposal",
+            path: "proposal",
             name: "EventProposal",
             component: EventProposal,
             meta: {
@@ -232,7 +239,7 @@ let EventPages = {
             },
         },
         {
-            path: "/events/:id/edit/budget",
+            path: ":id/edit/budget",
             name: "EventDetailsBudget",
             component: EventDetailsBudget,
             meta: {
@@ -253,32 +260,82 @@ let EventPages = {
         },
         {
             path: "/events/:id/booking",
-            redirect: "/events/:id/booking/timeline",
-            name: "Timeline",
-            meta: {
-                gtm: "Timeline",
-            },
-        },
-        {
-            path: "/events/:id/booking/:blockId",
-            name: "EventPlan",
+            name: "Plan Event",
             component: EventPlan,
-            meta: {
-                title: "Plan Event",
-                gtm: "Plan Event",
-                opaque: false,
-            },
+            children: [
+                {
+                    path: "overview",
+                    name: "EventPlan",
+                    component: EventDetailsOverview,
+                    meta: {
+                        title: "Event Details",
+                        gtm: "Event Details",
+                        opaque: false,
+                    },
+                },
+                {
+                    path: "concept",
+                    name: "EventPlan",
+                    component: EventConceptChoose,
+                    meta: {
+                        title: "Event Concept",
+                        gtm: "Event Concept",
+                        opaque: false,
+                    },
+                },
+                {
+                    path: "budget",
+                    name: "EventPlan",
+                    component: EventBudgetRequirement,
+                    meta: {
+                        title: "Event Concept",
+                        gtm: "Event Concept",
+                        opaque: false,
+                    },
+                },
+                {
+                    path: "campaign",
+                    name: "Campaign",
+                    component: EventCampaign,
+                    meta: {
+                        title: "Event Campaign",
+                        gtm: "Event Campaign",
+                        opaque: false,
+                    },
+                },
+                {
+                    path: "timeline",
+                    name: "Timeline",
+                    component: EventDetailsTimeline,
+                    meta: {
+                        title: "Event Timeline",
+                        gtm: "Event Timeline",
+                        opaque: false,
+                    },
+                },
+                {
+                    path: ":blockId",
+                    name: "EventPlan",
+                    component: BookingEvent,
+                    meta: {
+                        title: "Plan Event",
+                        gtm: "Plan Event",
+                        opaque: false,
+                    },
+                },
+                {
+                    path: ":blockId/proposals/:proposalId",
+                    name: "EventProposalDetails",
+                    component: EventProposalDetails,
+                    meta: {
+                        title: "EventProposalDetails",
+                        gtm: "Event Proposal Details",
+                        opaque: false,
+                    },
+                },
+            ]
         },
-        {
-            path: "/events/:id/proposal-details/:vendorId/:proposalId",
-            name: "EventProposalDetails",
-            component: EventProposalDetails,
-            meta: {
-                title: "EventProposalDetails",
-                gtm: "Event Proposal Details",
-                opaque: false,
-            },
-        },
+
     ],
 };
 let PublicCreateEvent = {

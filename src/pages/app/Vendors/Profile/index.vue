@@ -82,7 +82,6 @@
 import VueElementLoading from "vue-element-loading";
 import StarRating from "vue-star-rating";
 import { LabelEdit, Tabs } from "@/components";
-import { EditProfileForm, UserCard } from "@/pages";
 
 // import auth from '@/auth';
 import { mapGetters, mapActions, mapState } from "vuex";
@@ -100,9 +99,6 @@ export default {
     MySpecialDates,
     HolidaysCelebrate,
     Tabs,
-    EditProfileForm,
-    UserCard,
-    CompanyDashboardInfo,
     LabelEdit,
     VendorAccountSettings,
     MyEvents,
