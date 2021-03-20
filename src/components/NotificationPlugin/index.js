@@ -1,4 +1,5 @@
 import Notifications from './Notifications.vue'
+import BudgetNotifications from './BudgetNotifications.vue'
 
 const NotificationStore = {
   state: [], // here the notifications will be added
@@ -52,6 +53,7 @@ var NotificationsPlugin = {
       }
     })
     Vue.component('Notifications', Notifications)
+    Vue.component('BudgetNotifications', BudgetNotifications)
   }
 }
 

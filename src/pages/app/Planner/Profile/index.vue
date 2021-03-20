@@ -87,6 +87,7 @@ import DietaryConstraints from "./DietaryConstraints.vue";
 import MySpecialDates from "./MySpecialDates.vue";
 import HolidaysCelebrate from "./HolidaysCelebrate.vue";
 import { LabelEdit, Tabs } from "@/components";
+import { EditProfileForm, UserCard } from "@/pages";
 import ProfileSettings from "./ProfileSettings";
 import MyEvents from "./MyEvents.vue";
 // import auth from '@/auth';
@@ -103,6 +104,8 @@ export default {
     MySpecialDates,
     HolidaysCelebrate,
     Tabs,
+    EditProfileForm,
+    UserCard,
     LabelEdit,
     ProfileSettings,
     MyEvents,

@@ -1,5 +1,9 @@
 <template>
   <div class="proposal-page_details with-progress-bar">
+    <side-bar :event="calendarEvent"></side-bar>
+
+    <progress-sidebar></progress-sidebar>
+    <!-- Event Header -->
     <div class="event-page-header with-bg d-flex justify-content-between">
       <div class="header-main-actions">
         <md-button class="md-rose">Book This Vendor</md-button>
