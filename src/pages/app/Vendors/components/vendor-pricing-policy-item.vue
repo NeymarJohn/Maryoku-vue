@@ -143,7 +143,9 @@
           class="bottom mt-30"
           v-if="item.hasOwnProperty('attendees') && ((item.type == Boolean && item.value) || item.type == Number)"
         >
-          <span :class="{ 'd-block': item.type != Boolean, 'mr-10': item.type == Boolean }">How many</span>
+          <span :class="{ 'd-block': item.type != Boolean, 'mr-10': item.type == Boolean }">
+            {{ item.labelForValue || "How many" }}
+          </span>
 
           <input
             type="number"
