@@ -188,7 +188,7 @@
             rows="3"
             v-model="item.desc"
             :placeholder="item.placeholder ? item.placeholder : `Except from the parking area`"
-            @input="setPricePolicy"
+            @input="setNote"
           />
         </div>
       </div>
@@ -220,6 +220,9 @@ export default {
         this.item.value = e.target.value;
       }
 
+      this.$emit("update", this.item);
+    },
+    setNote() {
       this.$emit("update", this.item);
     },
     changeCategorySelector(value) {
