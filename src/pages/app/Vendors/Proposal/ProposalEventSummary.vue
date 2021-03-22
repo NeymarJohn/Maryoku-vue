@@ -201,7 +201,7 @@
                 <img :src="`${iconUrl}Group 5489 (4).svg`" />
                 {{ d.holiday }}
               </div>
-              <div class="item" v-if="vendor.dontWorkDays">
+              <div class="item" v-if="vendor.dontWorkDays && vendor.dontWorkDays.length > 0">
                 <img :src="`${iconUrl}Group 5489 (4).svg`" />
                 {{ dontWorkDays() }}
               </div>

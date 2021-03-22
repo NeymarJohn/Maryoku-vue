@@ -224,9 +224,13 @@ export default {
       this.contactPersonName = "";
       this.email = "";
     },
+    formValid() {
+      return this.companyName && this.contactPersonName && this.email;
+    },
     addAnotherRecommendation() {
       let recommendations = this.$store.state.vendorSignup.vendor.recommendations;
       if (!recommendations) recommendations = [];
+      if (!this.formValid()) return;
       recommendations.push({
         companyName: this.companyName,
         contactPersonName: this.contactPersonName,
@@ -235,7 +239,6 @@ export default {
       this.clear();
       const newRecomendations = Object.assign(recommendations, []);
       this.$store.commit("vendorSignup/setField", { field: "recommendations", value: newRecomendations });
-      console.log("test");
     },
     deleteRecommendation(index) {
       this.recommendations.splice(index, 1);

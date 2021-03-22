@@ -172,7 +172,7 @@
           </div>
         </div>
       </div>
-      <div class="bottom mt-0 ml-40 flex-1" v-if="item.hasComment">
+      <div class="bottom mt-0 ml-40 flex-1 add-not-section" v-if="item.hasComment">
         <div class="item">
           <div class="color-red cursor-pointer align-center" @click="notable = !notable">
             <template v-if="notable">
@@ -261,6 +261,7 @@ export default {
   }
   .right {
     flex: 1;
+    justify-content: space-between;
     .top {
       display: flex;
       align-items: start;
@@ -355,6 +356,9 @@ export default {
         border: 1px solid #dddddd;
         border-radius: 0;
       }
+    }
+    .add-not-section {
+      max-width: 50%;
     }
   }
 }
