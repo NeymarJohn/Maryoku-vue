@@ -4,12 +4,33 @@
       <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> PROPOSALS BOARD
     </div>
     <div class="font-bold mt-40 mb-20">New opportunities:</div>
-    <div class="proposal-requests">
-      <proposal-request-card></proposal-request-card>
-      <proposal-request-card></proposal-request-card>
-      <proposal-request-card></proposal-request-card>
-      <proposal-request-card></proposal-request-card>
-    </div>
+    <carousel
+      :items="4"
+      :margin="25"
+      :dots="false"
+      :number="2"
+      :nav="false"
+      v-if="proposalRequests.length > 0"
+      class="proposal-requests"
+    >
+      <template slot="prev">
+        <md-button class="edit-btn md-round nav-left nav-btn md-raised md-white">
+          <md-icon class="color-vendor">arrow_back</md-icon>
+        </md-button>
+      </template>
+      <proposal-request-card
+        class="carousel-item"
+        v-for="proposalRequest in proposalRequests"
+        :key="proposalRequest.id"
+        :proposalRequest="proposalRequest"
+      >
+      </proposal-request-card>
+      <template slot="next">
+        <md-button class="edit-btn md-round nav-right nav-btn md-raised md-white">
+          <md-icon class="color-vendor">arrow_forward</md-icon>
+        </md-button>
+      </template>
+    </carousel>
     <hr class="m-60" />
     <div class="proposals-table">
       <div class="font-bold">Your proposal:</div>
@@ -94,11 +115,33 @@
 import TablePagination from "../../../../components/TablePagination.vue";
 import ProposalListItem from "../components/ProposalListItem.vue";
 import ProposalRequestCard from "../components/ProposalRequestCard";
+import ProposalRequest from "@/models/ProposalRequest";
+import Vendor from "@/models/Vendors";
+import carousel from "vue-owl-carousel";
 export default {
   components: {
     ProposalRequestCard,
     ProposalListItem,
     TablePagination,
+    carousel,
+  },
+  data() {
+    return {
+      proposalRequests: [],
+    };
+  },
+  created() {
+    new ProposalRequest()
+      .for(new Vendor({ id: this.vendorData.id }))
+      .get()
+      .then((proposalRequests) => {
+        this.proposalRequests = proposalRequests;
+      });
+  },
+  computed: {
+    vendorData() {
+      return this.$store.state.vendor.profile;
+    },
   },
 };
 </script>
@@ -106,6 +149,13 @@ export default {
 .vendor-proposal-board {
   .proposal-requests {
     display: flex;
+    position: relative;
+    margin: 0 -30px;
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translate(0, -50%);
+    }
   }
   .filter-button {
     .color-black-middle {
