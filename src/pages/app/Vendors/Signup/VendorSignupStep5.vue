@@ -26,19 +26,7 @@
               <p>Details of the customer you’d like to get a recommendation from</p>
             </div>
           </div>
-          <div
-            class="recommendations"
-            v-for="(recommendation, rIndex) in recommendations"
-            :key="recommendation.contactPersonName"
-          >
-            <span>{{ recommendation.companyName }}</span>
-            <span>{{ recommendation.contactPersonName }}</span>
-            <span>{{ recommendation.email }}</span>
-            <div>
-              <md-button @click="deleteRecommendation(rIndex)" class="md-simple edit-btn md-red">Delete</md-button>
-            </div>
-          </div>
-          <div class="mt-30">
+          <div>
             <div class="mb-50">
               <label class="font-bold">Company Name</label>
               <maryoku-input
@@ -69,10 +57,10 @@
             </div>
           </div>
           <div>
-            <md-button class="edit-btn md-simple md-red" @click="addAnotherRecommendation">
+            <md-button class="edit-btn md-simple md-red">
               <md-icon class="color-red font-size-24">add_circle_outline</md-icon>
-              Add Another Recommendation
-            </md-button>
+              Add Another Recommendation</md-button
+            >
           </div>
         </div>
         <div class="card">
@@ -83,9 +71,7 @@
               <div class="color-red font-size-16 mt-10">This is what your recommender will get in our email</div>
             </div>
             <a @click="open">
-              <md-icon class="color-red font-size-40">
-                {{ opened ? "keyboard_arrow_down" : "keyboard_arrow_right" }}
-              </md-icon>
+              <md-icon class="color-red font-size-40">{{ opened ? 'keyboard_arrow_down' : 'keyboard_arrow_right' }} </md-icon>
             </a>
           </div>
           <div v-if="opened" class="card-content">
@@ -95,14 +81,12 @@
             <h5 class="pt-20 font-size-18">How are you?</h5>
             <h5 class="font-size-18">I hope this email finds you well & happy!</h5>
             <p class="pt-20 font-size-18">
-              I'm writing to let you know I recently started working with maryoku –an awesome web platform for
-              non-professional event planners, helping them plan events like pros. These days, I’m looking for people
-              who can speak positively about my services and help me gain credibility as a business.
+              I'm writing to let you know I recently started working with maryoku –an awesome web platform for non-professional event planners, helping them plan events like pros. These days, I’m looking for people who can speak positively about my services and help me gain credibility as a business.</p>
+            <p class="font-size-18"> Hope you can spare some time.
             </p>
-            <p class="font-size-18">Hope you can spare some time.</p>
             <md-button class="my-30 md-vendor-review md-simple md-outlined">Write A Review</md-button>
             <h5 class="font-size-18">Many thanks</h5>
-            <h5 class="font-size-18">{{ vendor.companyName }}</h5>
+            <h5 class="font-size-18">{{vendor.companyName}}</h5>
           </div>
         </div>
       </div>
@@ -112,12 +96,7 @@
 <style lang="scss" scoped>
 .vendor-signup-step5-wrapper {
   font-family: Manrope-Regular, sans-serif;
-  .recommendations {
-    padding: 15px 0;
-    display: grid;
-    grid-template-columns: repeat(4, 25%);
-    width: 80%;
-  }
+
   .inside-container {
     display: flex;
     color: #050505;
@@ -156,13 +135,13 @@
         background-color: #ffffff;
         box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
 
-        .card-content {
+        .card-content{
           padding: 40px 50px;
           margin-top: 30px;
           border: solid 1px #707070;
           background-color: #f7f7f7;
 
-          h2.person-name {
+          h2.person-name{
             font-family: Georgia, "Times New Roman", Times, serif;
             font-size: 30px;
             font-weight: 600;
@@ -170,13 +149,13 @@
             line-height: 1.23;
             color: #707070;
 
-            span {
+            span{
               font-style: italic;
               font-size: 22px;
             }
           }
 
-          h5 {
+          h5{
             font-size: 16px;
             font-weight: 600;
             margin: 0;
@@ -184,7 +163,7 @@
             font-family: Georgia, "Times New Roman", Times, serif;
           }
 
-          p {
+          p{
             font-size: 14px;
             margin: 0;
             color: #707070;
@@ -203,11 +182,11 @@ export default {
   components: {
     MaryokuInput,
   },
-  props: {
-    vendor: {
+  props:{
+    vendor:{
       type: Object,
       required: true,
-    },
+    }
   },
   data() {
     return {
@@ -218,42 +197,11 @@ export default {
       opened: false,
     };
   },
-  methods: {
-    clear() {
-      this.companyName = "";
-      this.contactPersonName = "";
-      this.email = "";
-    },
-    formValid() {
-      return this.companyName && this.contactPersonName && this.email;
-    },
-    addAnotherRecommendation() {
-      let recommendations = this.$store.state.vendorSignup.vendor.recommendations;
-      if (!recommendations) recommendations = [];
-      if (!this.formValid()) return;
-      recommendations.push({
-        companyName: this.companyName,
-        contactPersonName: this.contactPersonName,
-        email: this.email,
-      });
-      this.clear();
-      const newRecomendations = Object.assign(recommendations, []);
-      this.$store.commit("vendorSignup/setField", { field: "recommendations", value: newRecomendations });
-    },
-    deleteRecommendation(index) {
-      this.recommendations.splice(index, 1);
-      const newRecommendations = Object.assign(this.recommendations, []);
-      this.$store.commit("vendorSignup/setField", { field: "recommendations", value: newRecommendations });
-    },
-    open() {
-      console.log("open");
+  methods:{
+    open(){
+      console.log('open');
       this.opened = !this.opened;
-    },
-  },
-  computed: {
-    recommendations() {
-      return this.$store.state.vendorSignup.vendor.recommendations;
-    },
-  },
+    }
+  }
 };
 </script>

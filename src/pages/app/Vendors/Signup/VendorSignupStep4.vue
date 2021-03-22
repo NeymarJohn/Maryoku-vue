@@ -143,7 +143,7 @@
                   </div>
                   <div class="item" v-else>
                     <span v-if="policy.type === Number && !policy.isPercentage">$</span>
-                    <span v-if="policy.type === Boolean">{{ policy.value === true ? "Yes" : "No" }}</span>
+                    <span v-if="policy.type === Boolean">{{policy.value === true ? "Yes" : "No"}}</span>
                     <span v-else>{{ policy.value }}</span>
                     <span v-if="policy.isPercentage">%</span>
                     <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
@@ -300,7 +300,7 @@ export default {
           icon: "socialmedia/Pinterest.svg",
         },
         {
-          name: "foursquare",
+          name: "foursuare",
           icon: "socialmedia/foursquare.svg",
         },
         {
@@ -553,9 +553,7 @@ export default {
     },
     validPolicy() {
       if (this.vendor.policies)
-        return this.vendor.policies.filter(
-          (item) => item.hasOwnProperty("value") || (item.type === "Including" && item.cost),
-        );
+        return this.vendor.policies.filter((item) => item.hasOwnProperty('value') || (item.type === "Including" && item.cost));
       return null;
     },
   },

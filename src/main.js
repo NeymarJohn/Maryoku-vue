@@ -63,8 +63,8 @@ Vue.use(VueTour);
 Vue.use(VueSwal);
 Vue.use(VueLazyLoad);
 Vue.use(VueGmaps, {
-  key: process.env.GOOGLE_API_KEY || "AIzaSyAelc-zmvKBlcW78yPFeW9xrbnrJaT-MfA",
-  libraries: ["places"],
+    key: process.env.GOOGLE_API_KEY || "AIzaSyAelc-zmvKBlcW78yPFeW9xrbnrJaT-MfA",
+    libraries: ["places"],
 });
 Vue.use(VueScrollTo);
 Vue.use(VueYoutube);
@@ -72,12 +72,12 @@ VueClipboard.config.autoSetContainer = true;
 Vue.use(VueClipboard);
 
 Vue.use(VueTimeago, {
-  name: "Timeago", // Component name, `Timeago` by default
-  locale: "en", // Default locale
-  locales: {
-    "zh-CN": require("date-fns/locale/zh_cn"),
-    ja: require("date-fns/locale/ja"),
-  },
+    name: "Timeago", // Component name, `Timeago` by default
+    locale: "en", // Default locale
+    locales: {
+        "zh-CN": require("date-fns/locale/zh_cn"),
+        ja: require("date-fns/locale/ja"),
+    },
 });
 Vue.use(VueTimepicker);
 Vue.use(vueSignature);
@@ -85,154 +85,154 @@ Vue.use(money, { precision: 4 });
 Vue.use(VueInputAutowidth);
 // configure router
 const router = new VueRouter({
-  routes, // short for routes: routes
-  linkExactActiveClass: "nav-item active",
-  scrollBehavior(to, from, savedPosition) {
-    return { x: 0, y: 0 };
-  },
+    routes, // short for routes: routes
+    linkExactActiveClass: "nav-item active",
+    scrollBehavior(to, from, savedPosition) {
+        return { x: 0, y: 0 };
+    },
 });
 
 router.beforeEach((to, from, next) => {
-  if (window.currentPanel) {
-    window.currentPanel.hide();
-    window.currentPanel = null;
-  }
-
-  if (!to.meta.authRequires) {
-    axios.defaults.headers.common.Authorization = "";
-  } else {
-    axios.defaults.headers.common.Authorization = authHeader().Authorization;
-  }
-  const currentToken = localStorage.getItem("manage_id_token");
-
-  // check home router
-  if (to.path === "/" && currentToken) {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user.currentUserType === "vendor") {
-      next("/vendor/profile/settings");
-    } else {
-      if (user.currentTenant && user.tenants.indexOf(user.currentTenant) >= 0) {
-        next("/signedIn");
-      } else if (user.tenants.length === 0) {
-        next("/create-event-wizard");
-      } else if (user.tenants.length > 0) {
-        next("/choose-workspace");
-      } else {
-        next("/error");
-      }
+    if (window.currentPanel) {
+        window.currentPanel.hide();
+        window.currentPanel = null;
     }
-  } else if (to.path === "/" && !currentToken) {
-    next("/signin");
-  } else if (to.path === "/vendor" && !currentToken) {
-    next("/vendor/sigin");
-  }
-  if (to.meta.requiresAuth && !currentToken) {
-    if (to.meta.isVendor || to.path.startsWith("/vendor")) {
-      next("/vendor/signin");
+
+    if (to.meta.authRequires) {
+        axios.defaults.headers.common.Authorization = authHeader().Authorization;
     } else {
-      next("/signin");
+        axios.defaults.headers.common.Authorization = "";
     }
-  } else {
-    next();
-  }
-  // let tenantId = document.location.hostname.replace(".maryoku.com", "");
-  // let isPrimeTenant = tenantId === "dev" || tenantId === "app" || tenantId === "local";
-  // const unAuthenticatedLinks = [
-  //     "/signout",
-  //     "/signin",
-  //     "/signup",
-  //     "/signedin",
-  //     "/create-workspace",
-  //     "/choose-workspace",
-  //     "/forgot-password",
-  //     "/create-event-wizard",
-  //     "/event-wizard-day",
-  //     "/event-wizard-flexibility",
-  //     "/event-wizard-guests",
-  //     "/event-wizard-guests-type",
-  //     "/event-wizard-location",
-  //     "/event-wizard-building",
-  //     "/event-wizard-type",
-  //     "/event-wizard-celebrating",
-  //     "/event-wizard-religion",
-  //     "/event-wizard-vibes",
-  //     "/rsvp",
-  // ];
+    const currentToken = localStorage.getItem("manage_id_token");
 
-  // const authenticatedLinks = ["/events", "/choose-workspace"];
-  // const isAuthenticatedLink = authenticatedLinks.findIndex(link => to.path.indexOf(link) >= 0) >= 0;
-  // if (to.path === "/signedin" || to.path.indexOf("/event-wizard") >= 0 || to.path === "/signout") {
-  //     next();
-  //     return;
-  // }
-  // store
-  //     .dispatch("auth/checkToken")
-  //     .then(res => {
-  //         console.log('main.checkToken', res);
-  //         if (res.currentUserType === 'vendor') {
-  //             if (to.path == "/") {
-  //                 console.log("////")
-  //                 next("/vendor/profile/settings");
-  //             }
-  //         } else {
-  //             if (to.path == "/signin") {
-  //                 if (res.currentTenant && res.tenants.indexOf(res.currentTenant) >= 0) {
-  //                     next("/signedIn");
-  //                 } else if (res.tenants.length === 0) {
-  //                     next("/create-event-wizard");
-  //                 } else if (res.tenants.length > 0) {
-  //                     next("/choose-workspace");
-  //                 } else {
-  //                     next("/error");
-  //                 }
-  //             } else if (to.path.startsWith("/events") && res.tenants.indexOf(res.currentTenant) < 0) {
-  //                 next("/choose-workspace");
-  //             } else {
-  //                 next();
-  //             }
-  //         }
+    // check home router
+    if (to.path === "/" && currentToken) {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (user.currentUserType === "vendor") {
+            next("/vendor/profile/settings");
+        } else {
+            if (user.currentTenant && user.tenants.indexOf(user.currentTenant) >= 0) {
+                next("/signedIn");
+            } else if (user.tenants.length === 0) {
+                next("/create-event-wizard");
+            } else if (user.tenants.length > 0) {
+                next("/choose-workspace");
+            } else {
+                next("/error");
+            }
+        }
+    } else if (to.path === "/" && !currentToken) {
+        next("/signin");
+    } else if (to.path === "/vendor" && !currentToken) {
+        next("/vendor/sigin");
+    }
+    if (to.meta.requiresAuth && !currentToken) {
+        if (to.meta.isVendor || to.path.startsWith("/vendor")) {
+            next("/vendor/signin");
+        } else {
+            next("/signin");
+        }
+    } else {
+        next();
+    }
+    // let tenantId = document.location.hostname.replace(".maryoku.com", "");
+    // let isPrimeTenant = tenantId === "dev" || tenantId === "app" || tenantId === "local";
+    // const unAuthenticatedLinks = [
+    //     "/signout",
+    //     "/signin",
+    //     "/signup",
+    //     "/signedin",
+    //     "/create-workspace",
+    //     "/choose-workspace",
+    //     "/forgot-password",
+    //     "/create-event-wizard",
+    //     "/event-wizard-day",
+    //     "/event-wizard-flexibility",
+    //     "/event-wizard-guests",
+    //     "/event-wizard-guests-type",
+    //     "/event-wizard-location",
+    //     "/event-wizard-building",
+    //     "/event-wizard-type",
+    //     "/event-wizard-celebrating",
+    //     "/event-wizard-religion",
+    //     "/event-wizard-vibes",
+    //     "/rsvp",
+    // ];
 
-  //     })
-  //     .catch(error => {
-  //         console.log('beforeRoute', error);
-  //         if (isAuthenticatedLink) {
-  //             next("signin");
-  //         } else {
-  //             next();
-  //         }
-  //     });
+    // const authenticatedLinks = ["/events", "/choose-workspace"];
+    // const isAuthenticatedLink = authenticatedLinks.findIndex(link => to.path.indexOf(link) >= 0) >= 0;
+    // if (to.path === "/signedin" || to.path.indexOf("/event-wizard") >= 0 || to.path === "/signout") {
+    //     next();
+    //     return;
+    // }
+    // store
+    //     .dispatch("auth/checkToken")
+    //     .then(res => {
+    //         console.log('main.checkToken', res);
+    //         if (res.currentUserType === 'vendor') {
+    //             if (to.path == "/") {
+    //                 console.log("////")
+    //                 next("/vendor/profile/settings");
+    //             }
+    //         } else {
+    //             if (to.path == "/signin") {
+    //                 if (res.currentTenant && res.tenants.indexOf(res.currentTenant) >= 0) {
+    //                     next("/signedIn");
+    //                 } else if (res.tenants.length === 0) {
+    //                     next("/create-event-wizard");
+    //                 } else if (res.tenants.length > 0) {
+    //                     next("/choose-workspace");
+    //                 } else {
+    //                     next("/error");
+    //                 }
+    //             } else if (to.path.startsWith("/events") && res.tenants.indexOf(res.currentTenant) < 0) {
+    //                 next("/choose-workspace");
+    //             } else {
+    //                 next();
+    //             }
+    //         }
 
-  // // if ((isPrimeTenant && unAuthenticatedLinks.indexOf(to.path) < 0 ) || (to.meta.auth && !auth.user.authenticated)) {
-  // //   next('signin')
-  // // } else {
-  // //   if (to.name !== 'ShowEvent' && to.path !== '/signout' && auth.user.role === 'guest' && to.path !== '/my-events') {
-  // //     next('my-events')
-  // //     return
-  // //   }
+    //     })
+    //     .catch(error => {
+    //         console.log('beforeRoute', error);
+    //         if (isAuthenticatedLink) {
+    //             next("signin");
+    //         } else {
+    //             next();
+    //         }
+    //     });
 
-  // //   next()
-  // // }
-  // next()
-  // // router.app.$root.$emit("set-title",null);
-  // router.app.$root.$emit('set-title', null, false, false)
+    // // if ((isPrimeTenant && unAuthenticatedLinks.indexOf(to.path) < 0 ) || (to.meta.auth && !auth.user.authenticated)) {
+    // //   next('signin')
+    // // } else {
+    // //   if (to.name !== 'ShowEvent' && to.path !== '/signout' && auth.user.role === 'guest' && to.path !== '/my-events') {
+    // //     next('my-events')
+    // //     return
+    // //   }
+
+    // //   next()
+    // // }
+    // next()
+    // // router.app.$root.$emit("set-title",null);
+    // router.app.$root.$emit('set-title', null, false, false)
 });
 
 router.afterEach((to, from) => {
-  window.document.title = `${to.meta.title ? to.meta.title : to.name} @ maryoku`;
+    window.document.title = `${to.meta.title ? to.meta.title : to.name} @ maryoku`;
 });
 
 // global library setup
 Object.defineProperty(Vue.prototype, "$Chartist", {
-  get() {
-    return this.$root.Chartist;
-  },
+    get() {
+        return this.$root.Chartist;
+    },
 });
 
 // global library setup
 Object.defineProperty(Vue.prototype, "$authService", {
-  get() {
-    return authService;
-  },
+    get() {
+        return authService;
+    },
 });
 
 /* axios.interceptors.response.use(function (response) {
@@ -257,34 +257,34 @@ Vue.component("vue-element-loading", VueElementLoading);
 Vue.component("multiselect", Multiselect);
 
 Vue.use(VueGtm, {
-  id: "GTM-5FH68TF", // Your GTM ID
-  enabled: process.env.NODE_ENV === "production", // defaults to true. Plugin can be disabled by setting this to false for Ex: enabled: !!GDPR_Cookie (optional)
-  debug: process.env.NODE_ENV !== "production", // Whether or not display console logs debugs (optional)
-  vueRouter: router, // Pass the router instance to automatically sync with router (optional)
-  ignoredViews: [], // If router, you can exclude some routes name (case insensitive) (optional)
+    id: "GTM-5FH68TF", // Your GTM ID
+    enabled: process.env.NODE_ENV === "production", // defaults to true. Plugin can be disabled by setting this to false for Ex: enabled: !!GDPR_Cookie (optional)
+    debug: process.env.NODE_ENV !== "production", // Whether or not display console logs debugs (optional)
+    vueRouter: router, // Pass the router instance to automatically sync with router (optional)
+    ignoredViews: [], // If router, you can exclude some routes name (case insensitive) (optional)
 });
 
 Vue.use(VueSlideoutPanel);
 
 if (process.env.NODE_ENV === "production") {
-  Vue.use(Tawk, {
-    tawkSrc: "https://embed.tawk.to/5cd93e082846b90c57ae3644/default",
-    enabled: true,
-  });
+    Vue.use(Tawk, {
+        tawkSrc: "https://embed.tawk.to/5cd93e082846b90c57ae3644/default",
+        enabled: true,
+    });
 }
 
 Vue.use(VueCookies);
 
 Vue.directive("focus", {
-  inserted: function(el) {
-    el.focus();
-  },
+    inserted: function(el) {
+        el.focus();
+    },
 });
 
 Vue.directive("select-all", {
-  inserted: function(el) {
-    el.setSelectionRange(el.value.length, el.value.length);
-  },
+    inserted: function(el) {
+        el.setSelectionRange(el.value.length, el.value.length);
+    },
 });
 
 // Vue.directive('click-outside', {
@@ -302,7 +302,7 @@ Vue.directive("select-all", {
 // })
 
 Vue.filter("withComma", function(value) {
-  return value ? value.toLocaleString() : 0;
+    return value ? value.toLocaleString() : 0;
 });
 
 Vue.prototype.$resourceURL = ResourceURL;
@@ -317,69 +317,69 @@ axios.defaults.headers.common.gorm_tenantid = authService.resolveTenantId();
 Model.$http = axios;
 
 Number.prototype.padStart = function(size, theChar) {
-  var s = String(this);
-  while (s.length < (size || 2)) {
-    s = "0" + s;
-  }
-  return s;
+    var s = String(this);
+    while (s.length < (size || 2)) {
+        s = "0" + s;
+    }
+    return s;
 };
 
 String.prototype.padStart = function(size, theChar) {
-  var s = String(this);
-  while (s.length < (size || 2)) {
-    s = theChar + s;
-  }
-  return s;
+    var s = String(this);
+    while (s.length < (size || 2)) {
+        s = theChar + s;
+    }
+    return s;
 };
 
 Object.defineProperty(Vue.prototype, "$auth", {
-  get() {
-    return auth;
-  },
+    get() {
+        return auth;
+    },
 });
 Object.defineProperty(Vue.prototype, "$dateUtil", {
-  get() {
-    return dateUtil;
-  },
+    get() {
+        return dateUtil;
+    },
 });
 Object.defineProperty(Vue.prototype, "$helper", {
-  get() {
-    return helper;
-  },
+    get() {
+        return helper;
+    },
 });
 Object.defineProperty(Vue.prototype, "$authHeader", {
-  get() {
-    return authHeader().Authorization;
-  },
+    get() {
+        return authHeader().Authorization;
+    },
 });
 
 store.dispatch("common/fetchAllCategories");
 Vue.mixin({
-  data: () => ({
-    windowWidth: 0,
-    windowHeight: 0,
-  }),
-  created() {
-    window.addEventListener("resize", this.handleResize);
-    this.handleResize();
-  },
-  destroyed() {
-    window.removeEventListener("resize", this.handleResize);
-  },
-  methods: {
-    handleResize() {
-      this.windowWidth = window.innerWidth;
-      this.windowHeight = window.innerHeight;
+    data: () => ({
+        windowWidth: 0,
+        windowHeight: 0,
+    }),
+    created() {
+        window.addEventListener("resize", this.handleResize);
+        this.handleResize();
     },
-  },
+    destroyed() {
+        window.removeEventListener("resize", this.handleResize);
+    },
+    methods: {
+        handleResize() {
+            this.windowWidth = window.innerWidth;
+            this.windowHeight = window.innerHeight;
+        },
+    },
 });
 
 new Vue({
-  el: "#app",
-  render: h => h(App),
-  router,
-  store,
-  data: () => ({
-    Chartist: Chartist,
-  }),
+    el: "#app",
+    render: h => h(App),
+    router,
+    store,
+    data: () => ({
+        Chartist: Chartist,
+    }),
 });

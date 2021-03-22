@@ -1,21 +1,10 @@
 <template>
   <div class="event-plan">
     <progress-sidebar :elements="barItems" page="plan" @change="changeCheckList"></progress-sidebar>
-    <event-details-overview v-if="pageId == 'overview'"></event-details-overview>
-    <event-details-timeline v-else-if="pageId == 'timeline'"></event-details-timeline>
-    <event-concept-choose v-else-if="pageId == 'concept'"></event-concept-choose>
-    <event-budget-requirement v-else-if="pageId == 'budget'"></event-budget-requirement>
-    <event-campaign v-else-if="pageId == 'campaign'"></event-campaign>
-    <booking-event v-else></booking-event>
+    <router-view></router-view>
   </div>
 </template>
 <script>
-const EventDetailsTimeline = () => import("./EventDetailsTimeline");
-const EventConceptChoose = () => import("./components/EventConceptChoose");
-const BookingEvent = () => import("./components/BookingEvent");
-const EventBudgetRequirement = () => import("./components/EventBudgetRequirement.vue");
-const EventDetailsOverview = () => import("./components/EventDetailsOverview");
-const EventCampaign = () => import("@/pages/app/Campaign/CampaignMainLayout.vue");
 import ProgressSidebar from "./components/progressSidebarForEvent";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import Calendar from "@/models/Calendar";
@@ -23,13 +12,7 @@ import CalendarEvent from "@/models/CalendarEvent";
 
 export default {
   components: {
-    EventDetailsTimeline,
-    EventConceptChoose,
-    BookingEvent,
     ProgressSidebar,
-    EventDetailsOverview,
-    EventBudgetRequirement,
-    EventCampaign,
   },
   data() {
     return {
@@ -109,7 +92,6 @@ export default {
         this.event.components.sort((a, b) => a.order - b.order);
         this.event.components.forEach((item) => {
           if (item.componentId !== "unexpected") {
-
             elements.push({
               title: item.bookTitle,
               status: "not-complete",

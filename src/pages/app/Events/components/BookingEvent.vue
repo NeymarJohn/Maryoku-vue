@@ -331,7 +331,9 @@ export default {
           this.currentRequirement = Object.assign({}, res.item);
         });
     },
-    goDetailPage(proposal) {},
+    goDetailPage(proposal) {
+      this.$router.push(`/events/${this.event.id}/booking/${this.blockId}/proposals/${proposal.id}`);
+    },
   },
   created() {
     console.log("bookingEvent");

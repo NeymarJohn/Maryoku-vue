@@ -62,10 +62,10 @@ export const VendorCategories = [
 ];
 export const businessCategories = [
   {
-    name: "venuerental",
+    name: 'venuerental',
     categories: [
       {
-        name: "amenities",
+        name: 'amenities',
         subCategories: [
           // {
           //   name: 'around the space',
@@ -91,16 +91,16 @@ export const businessCategories = [
           //   ]
           // },
           {
-            name: "the space",
+            name: 'the space',
             items: [
               {
-                name: "number of function spaces",
+                name: 'number of function spaces',
                 type: Number,
                 value: 1,
                 xIncluded: true,
               },
               {
-                name: "number of meeting rooms",
+                name: 'number of meeting rooms',
                 type: Number,
                 value: 1,
                 xIncluded: true,
@@ -118,31 +118,31 @@ export const businessCategories = [
               //   xIncluded: true,
               // },
               {
-                name: "Raw Event space",
+                name: 'Raw Event space',
                 type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
-                name: "Furnished Event space",
+                name: 'Furnished Event space',
                 type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
-                name: "smoking section",
+                name: 'smoking section',
                 type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
-                name: "separate cocktail hour space",
+                name: 'separate cocktail hour space',
                 type: Boolean,
                 value: true,
                 xIncluded: false,
               },
               {
-                name: "outside area for guests",
+                name: 'outside area for guests',
                 type: Boolean,
                 value: true,
                 xIncluded: false,
@@ -154,36 +154,36 @@ export const businessCategories = [
               //   xIncluded: false,
               // },
               {
-                name: "available bathrooms",
+                name: 'available bathrooms',
                 type: Number,
                 value: 1,
                 xIncluded: true,
               },
               {
-                name: "coat check",
+                name: 'coat check',
                 type: Boolean,
                 value: null,
                 xIncluded: false,
                 comment: true,
-              },
-            ],
+              }
+            ]
           },
           {
-            name: "parking",
+            name: 'parking',
             items: [
               {
-                name: "on site parking",
+                name: 'on site parking',
                 type: Boolean,
                 value: false,
                 xIncluded: false,
               },
               {
-                name: "on street parking",
+                name: 'on street parking',
                 type: Boolean,
                 value: false,
                 xIncluded: true,
               },
-            ],
+            ]
           },
           // {
           //   name: 'lighting',
@@ -216,7 +216,7 @@ export const businessCategories = [
           //   ]
           // },
           {
-            name: "network",
+            name: 'network',
             items: [
               // {
               //   name: 'fast reliable Wifi for guests',
@@ -224,188 +224,188 @@ export const businessCategories = [
               //   value: false
               // },
               {
-                name: "venue bandwidth (for video streaming or meeting content)",
+                name: 'venue bandwidth (for video streaming or meeting content)',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "entertainment",
+            name: 'entertainment',
             items: [
-              {
-                name: "stage",
-                type: Boolean,
-                value: false,
-              },
-              {
-                name: "dance floor",
-                type: Boolean,
-                value: false,
-              },
-            ],
+                {
+                    name: 'stage',
+                    type: Boolean,
+                    value: false
+                },
+                {
+                    name: 'dance floor',
+                    type: Boolean,
+                    value: false
+                },
+            ]
           },
-        ],
+        ]
       },
       {
-        name: "services",
+        name: 'services',
         subCategories: [
           {
-            name: "parking",
+            name: 'parking',
             items: [
               {
-                name: "valet services",
+                name: 'valet services',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "cleaning",
+            name: 'cleaning',
             items: [
               {
-                name: "cleaning services during the event",
+                name: 'cleaning services during the event',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
-        ],
+        ]
       },
       {
-        name: "accessibility",
+        name: 'accessibility',
         subCategories: [
           {
-            name: " ",
+            name: ' ',
             items: [
               {
-                name: "accessbility for people with disabilities",
+                name: 'accessbility for people with disabilities',
                 type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
-                name: "accessible bathrooms",
+                name: 'accessible bathrooms',
                 type: Number,
                 value: 1,
                 xIncluded: true,
               },
-            ],
+            ]
           },
-        ],
+        ]
       },
       {
-        name: "equipment",
+        name: 'equipment',
         subCategories: [
           {
-            name: "furniture",
+            name: 'furniture',
             items: [
               {
-                name: "chairs",
+                name: 'chairs',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "outdoor chairs",
+                name: 'outdoor chairs',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "high chairs",
+                name: 'high chairs',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "tables",
+                name: 'tables',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "outdoor tables",
+                name: 'outdoor tables',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "high tables",
+                name: 'high tables',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "power",
+            name: 'power',
             items: [
               {
-                name: "power supply",
+                name: 'power supply',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "generator",
+                name: 'generator',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "AV",
+            name: 'AV',
             items: [
               {
-                name: "microphones",
+                name: 'microphones',
                 type: Boolean,
                 value: false,
                 dry: null,
               },
               {
-                name: "projector",
+                name: 'projector',
                 type: Boolean,
                 value: false,
                 dry: null,
               },
               {
-                name: "sound system",
+                name: 'sound system',
                 type: Boolean,
                 value: false,
                 dry: null,
               },
               {
-                name: "LCD displays",
+                name: 'LCD displays',
                 type: Boolean,
                 value: false,
                 dry: null,
               },
               {
-                name: "monitor",
+                name: 'monitor',
                 type: Boolean,
                 value: false,
                 dry: null,
               },
               {
-                name: "Built in Screen",
+                name: 'Built in Screen',
                 type: Boolean,
                 value: false,
                 dry: null,
               },
               {
-                name: "Clickers",
+                name: 'Clickers',
                 type: Boolean,
                 value: false,
                 dry: null,
               },
               {
-                name: "Teleprompter",
+                name: 'Teleprompter',
                 type: Boolean,
                 value: false,
                 dry: null,
               },
               {
-                name: "Riser",
+                name: 'Riser',
                 type: Boolean,
                 value: false,
                 dry: null,
               },
               {
-                name: "Switcher",
+                name: 'Switcher',
                 type: Boolean,
                 value: false,
                 dry: null,
@@ -416,18 +416,18 @@ export const businessCategories = [
               //   value: false,
               //   dry: null,
               // },
-            ],
+            ]
           },
-        ],
+        ]
       },
       {
-        name: "staff",
+        name: 'staff',
         subCategories: [
           {
-            name: " ",
+            name: ' ',
             items: [
               {
-                name: "event coordinator",
+                name: 'event coordinator',
                 type: Boolean,
                 value: false,
                 staff: null,
@@ -441,14 +441,14 @@ export const businessCategories = [
               //   quest: null,
               // },
               {
-                name: "Catering and Waite Staff",
+                name: 'Catering and Waite Staff',
                 type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
-                name: "security",
+                name: 'security',
                 type: Boolean,
                 value: false,
                 staff: null,
@@ -462,7 +462,7 @@ export const businessCategories = [
               //   quest: null,
               // },
               {
-                name: "technical support",
+                name: 'technical support',
                 type: Boolean,
                 value: false,
                 staff: null,
@@ -475,190 +475,149 @@ export const businessCategories = [
               //   staff: null,
               //   quest: null,
               // },
-            ],
-          },
-        ],
+            ]
+          }
+        ]
       },
       {
-        name: "Sustainability, Inclusion and Diversity",
+        name: 'Sustainability, Inclusion and Diversity',
         subCategories: [
           {
-            name: "Sustainability",
+            name: 'Sustainability',
             items: [
               {
-                name: "green policy applied",
+                name: 'green policy applied',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Water saving protocols in place",
+                name: 'Water saving protocols in place',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "We use Green power and energy efficient",
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Waste recycle procedures",
+                name: 'Waste recycle procedures',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Non toxic products",
+                name: 'Non toxic products',
                 type: Boolean,
-                value: false,
-              },
-            ],
+                value: false
+              }
+            ]
           },
           {
-            name: "Inclusion",
+            name: 'Inclusion',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "Diversity",
+            name: 'Diversity',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
-      },
-    ],
+            ]
+          }
+        ]
+      }
+    ]
   },
   {
-    name: "foodandbeverage",
+    name: 'foodandbeverage',
     categories: [
       {
-        name: "what we serve",
+        name: 'what we serve',
         subCategories: [
           {
-            name: "food",
+            name: 'food',
             items: [
               {
-                name: "cuisine specialty",
+                name: 'cuisine specialty',
                 type: Array,
                 value: [],
-                available: [
-                  "italian",
-                  "french",
-                  "spanish",
-                  "german",
-                  "belgian",
-                  "american",
-                  "Colombian",
-                  "chinese",
-                  "japanese",
-                  "mexican",
-                  "indian",
-                  "farm-to-table",
-                  "Peruvian",
-                  "Argentine",
-                  "Thai",
-                  "Cuban",
-                  "Greek",
-                ],
+                available: ['italian', 'french', 'spanish', 'german', 'belgian', 'american', 'Colombian', 'chinese', 'japanese', 'mexican', 'indian', 'farm-to-table', 'Peruvian', 'Argentine', 'Thai', 'Cuban', 'Greek']
               },
               {
-                name: "food specialties",
+                name: 'food specialties',
                 type: Array,
                 value: [],
-                available: [
-                  "raw seafood bar",
-                  "sushi station",
-                  "special desserts",
-                  "food truck",
-                  "ice cream truck",
-                  "salad stations",
-                  "crudite stations",
-                  "barbeque",
-                  "brickoven station",
-                ],
+                available: ['raw seafood bar', 'sushi station', 'special desserts', 'food truck', 'ice cream truck', 'salad stations', 'crudite stations', 'barbeque', 'brickoven station']
               },
               {
-                name: "food preparation location",
+                name: 'food preparation location',
                 type: Array,
                 value: [],
-                available: ["on premisses", "off premises"],
-                hasComment: true,
+                available: ['on premisses', 'off premises'],
+                hasComment: true
               },
               {
-                name: "caterer type",
+                name: 'caterer type',
                 type: Array,
                 value: [],
-                available: ["full service", "drop-off service"],
+                available: ['full service', 'drop-off service']
               },
-            ],
+            ]
           },
           {
-            name: "beverage",
+            name: 'beverage',
             items: [
               {
-                name: "specialty liquor stations",
+                name: 'specialty liquor stations',
                 type: Array,
                 value: [],
-                available: [
-                  "beer",
-                  "wine",
-                  "tequila",
-                  "cocktail",
-                  "mixology",
-                  "martini",
-                  "bourbon",
-                  "whiskey",
-                  "Vodka",
-                  "Rum",
-                  "Margaritas",
-                  "Champagne",
-                ],
+                available: ['beer', 'wine', 'tequila', 'cocktail', 'mixology', 'martini', 'bourbon', 'whiskey', 'Vodka', 'Rum', 'Margaritas', 'Champagne']
               },
               {
-                name: "specialty bar services",
+                name: 'specialty bar services',
                 type: Boolean,
-                value: false,
+                value: false
               },
               // {
               //   name: 'non alcoholic specials',
@@ -667,1845 +626,1816 @@ export const businessCategories = [
               //   available: ['smoothies & juices', 'hawaiian', 'coffee', 'tea', 'power drinks']
               // },
               {
-                name: "non alcoholic specials",
+                name: 'non alcoholic specials',
                 type: Number,
                 value: 0,
                 // xIncluded: true,
                 // available: ['smoothies & juices', 'hawaiian', 'coffee', 'tea', 'power drinks']
               },
-            ],
-          },
-        ],
+            ]
+          }
+        ]
       },
       {
-        name: "services",
+        name: 'services',
         subCategories: [
           {
-            name: "serving styles",
+            name: 'serving styles',
             items: [
               {
-                name: "appetizers",
+                name: 'appetizers',
                 type: Boolean,
                 value: false,
-                available: ["appetizers", "passed hors doeuvres", "stations", "buffet", "plated"],
+                available: ['appetizers', 'passed hors doeuvres', 'stations', 'buffet', 'plated']
               },
-            ],
+            ]
           },
           {
-            name: "meal type",
+            name: 'meal type',
             items: [
               {
-                name: "breakfast",
+                name: 'breakfast',
                 type: Array,
                 value: [],
-                available: [
-                  "egg station",
-                  "bread station",
-                  "avocado station",
-                  "cereal station",
-                  "health drinks",
-                  "fresh fruit",
-                  "yogurt bar",
-                  "pancake/waffle station",
-                ],
+                available: ['egg station', 'bread station', 'avocado station', 'cereal station', 'health drinks', 'fresh fruit', 'yogurt bar', 'pancake/waffle station']
               },
               {
-                name: "lunch",
+                name: 'lunch',
                 type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
-                name: "dinner",
+                name: 'dinner',
                 type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
-                name: "snacks",
+                name: 'snacks',
                 type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
-                name: "desserts",
+                name: 'desserts',
                 type: Boolean,
                 value: false,
                 xIncluded: true,
               },
-            ],
+            ]
           },
           {
-            name: "other",
+            name: 'other',
             items: [
               {
-                name: "table setup and preparations",
+                name: 'table setup and preparations',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "interactive stations",
+                name: 'interactive stations',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "set up centerpieces, name cards, favors, etc",
+                name: 'set up centerpieces, name cards, favors, etc',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "cleaning",
+            name: 'cleaning',
             items: [
               {
-                name: "breakdown, cleaning and pickup",
+                name: 'breakdown, cleaning and pickup',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
-        ],
+        ]
       },
       {
-        name: "equipment",
+        name: 'equipment',
         subCategories: [
           {
-            name: "furniture",
+            name: 'furniture',
             items: [
               {
-                name: "chairs",
+                name: 'chairs',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "tables",
+                name: 'tables',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "tableware",
+            name: 'tableware',
             items: [
               {
-                name: "linens & tablecloth",
+                name: 'linens & tablecloth',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "glassware",
+                name: 'glassware',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Utensils",
+                name: 'Utensils',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "disposables",
+                name: 'disposables',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Plateware",
+                name: 'Plateware',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "customized items",
+                name: 'customized items',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "table decor",
+                name: 'table decor',
                 type: Array,
                 value: [],
-                available: ["candles", "flower arrangement", "napkins", "napkin huggers", "other"],
+                available: ['candles', 'flower arrangement', 'napkins', 'napkin huggers', 'other'],
                 hasComment: true,
-              },
-            ],
-          },
-        ],
+              }
+            ]
+          }
+        ]
       },
       {
-        name: "staff",
+        name: 'staff',
         subCategories: [
           {
-            name: "onsite managers",
+            name: 'onsite managers',
             items: [
               {
-                name: "captain",
+                name: 'captain',
                 type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
-                name: "maltre d",
+                name: 'maltre d',
                 type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
-            ],
+            ]
           },
           {
-            name: "chefs and cooks",
+            name: 'chefs and cooks',
             items: [
               {
-                name: "chef",
+                name: 'chef',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "specialty chef",
+                name: 'specialty chef',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "other",
+            name: 'other',
             items: [
               {
-                name: "servers",
+                name: 'servers',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "busboys",
+                name: 'busboys',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "cleanup crew",
+                name: 'cleanup crew',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "waitstaff",
+            name: 'waitstaff',
             items: [
               {
-                name: "waitstaff",
+                name: 'waitstaff',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "number of waitstaff",
+                name: 'number of waitstaff',
                 hasComment: true,
                 type: Number,
                 value: 0,
                 xIncluded: true,
               },
               {
-                name: "attire of waitstaff",
+                name: 'attire of waitstaff',
                 type: Array,
                 value: [],
-                available: ["suits/tux", "customized color", "branded"],
+                available: ['suits/tux', 'customized color', 'branded']
               },
-            ],
+            ]
           },
-        ],
+
+        ]
       },
       {
-        name: "Sustainability, Inclusion and Diversity",
+        name: 'Sustainability, Inclusion and Diversity',
         subCategories: [
           {
-            name: "Sustainability",
+            name: 'Sustainability',
             items: [
               {
-                name: "green policy applied",
+                name: 'green policy applied',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Water saving protocols in place",
+                name: 'Water saving protocols in place',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "We use Green power and energy efficient",
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Waste recycle procedures",
+                name: 'Waste recycle procedures',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Non toxic products",
+                name: 'Non toxic products',
                 type: Boolean,
                 value: false,
                 xIncluded: true,
-              },
-            ],
+              }
+            ]
           },
           {
-            name: "Inclusion",
+            name: 'Inclusion',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "vegetarian",
+                name: 'vegetarian',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "vegan",
+                name: 'vegan',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "gluten - free",
+                name: 'gluten - free',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "egg free",
+                name: 'egg free',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "kosher",
+                name: 'kosher',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "halal",
+                name: 'halal',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "Diversity",
+            name: 'Diversity',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
-      },
-    ],
+            ]
+          }
+        ]
+      }
+    ]
   },
   {
-    name: "decor",
+    name: 'decor',
     categories: [
       {
-        name: "services",
+        name: 'services',
         subCategories: [
           {
-            name: "setup, cleanup and delivery",
+            name: 'setup, cleanup and delivery',
             items: [
               {
-                name: "customer pickup",
+                name: 'customer pickup',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "deliveries",
+                name: 'deliveries',
                 type: Number,
-                value: 0,
+                value: 0
               },
               {
-                name: "onsite setup",
+                name: 'onsite setup',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "cleanup",
+                name: 'cleanup',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "specialties",
+            name: 'specialties',
             items: [
               {
-                name: "digital decor",
+                name: 'digital decor',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "holiday decor",
+                name: 'holiday decor',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "decor in motion",
+                name: 'decor in motion',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "live decor",
+                name: 'live decor',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "lighting decor",
+                name: 'lighting decor',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "specialized theme designs",
+                name: 'specialized theme designs',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "flower decor",
+                name: 'flower decor',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "designs serivces",
+                name: 'designs serivces',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
-        ],
+        ]
       },
       {
-        name: "amenities",
+        name: 'amenities',
         subCategories: [
           {
-            name: "floral",
+            name: 'floral',
             items: [
               {
-                name: "Plants",
+                name: 'Plants',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Extra flowers for caterer (boufet decor)",
+                name: 'Extra flowers for caterer (boufet decor)',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Refrigerated Truck",
+                name: 'Refrigerated Truck',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Permanent botanical arrangements",
+                name: 'Permanent botanical arrangements',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "other",
+            name: 'other',
             items: [
               {
-                name: "special effects (pyrotechnic, waterfall, baloon, explosion, etc)",
+                name: 'special effects (pyrotechnic, waterfall, baloon, explosion, etc)',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "props",
+                name: 'props',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
+            ]
+          }
+        ]
       },
       {
-        name: "Sustainability, Inclusion and Diversity",
+        name: 'Sustainability, Inclusion and Diversity',
         subCategories: [
           {
-            name: "Sustainability",
+            name: 'Sustainability',
             items: [
               {
-                name: "green policy applied",
+                name: 'green policy applied',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Water saving protocols in place",
+                name: 'Water saving protocols in place',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "We use Green power and energy efficient",
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Waste recycle procedures",
+                name: 'Waste recycle procedures',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Non toxic products",
+                name: 'Non toxic products',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
-              },
-            ],
+                value: false
+              }
+            ]
           },
           {
-            name: "Inclusion",
+            name: 'Inclusion',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "hypoallergenic flowers",
+                name: 'hypoallergenic flowers',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "non scented flowers",
+                name: 'non scented flowers',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "Diversity",
+            name: 'Diversity',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
-      },
-    ],
+            ]
+          }
+        ]
+      }
+    ]
   },
   {
-    name: "corporatesocialresponsibility",
+    name: 'corporatesocialresponsibility',
     categories: [
       {
-        name: "services",
+        name: 'services',
         subCategories: [
           {
-            name: "staffing",
+            name: 'staffing',
             items: [
               {
-                name: "event staffing",
+                name: 'event staffing',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "transportation host",
+                name: 'transportation host',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "models",
+                name: 'models',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "staffing services",
+                name: 'staffing services',
                 type: Array,
                 value: [],
-                available: ["tour guide", "wait staff", "event registration"],
+                available: ['tour guide', 'wait staff', 'event registration']
               },
               {
-                name: "hospitality professional",
+                name: 'hospitality professional',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "guest services",
+            name: 'guest services',
             items: [
               {
-                name: "general guest services",
+                name: 'general guest services',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "consierge services",
+                name: 'consierge services',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "VIP services",
+                name: 'VIP services',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "day-of coordination",
+                name: 'day-of coordination',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "hosting",
+                name: 'hosting',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "tours & sightseeing",
+                name: 'tours & sightseeing',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "visiting guest services support",
+                name: 'visiting guest services support',
                 type: Array,
                 value: [],
-                available: ["laudry", "wellness", "entertainment"],
+                available: ['laudry', 'wellness', 'entertainment']
               },
               {
-                name: "last minute onsite fitting (tux, suits)",
+                name: 'last minute onsite fitting (tux, suits)',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
-        ],
+        ]
       },
       {
-        name: "amenities",
+        name: 'amenities',
         subCategories: [
           {
-            name: " ",
+            name: ' ',
             items: [
               {
-                name: "suit / tuxido rentals",
+                name: 'suit / tuxido rentals',
                 type: Boolean,
-                value: false,
-              },
-            ],
-          },
-        ],
+                value: false
+              }
+            ]
+          }
+        ]
       },
       {
-        name: "Sustainability, Inclusion and Diversity",
+        name: 'Sustainability, Inclusion and Diversity',
         subCategories: [
           {
-            name: "Sustainability",
+            name: 'Sustainability',
             items: [
               {
-                name: "green policy applied",
+                name: 'green policy applied',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Water saving protocols in place",
+                name: 'Water saving protocols in place',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "We use Green power and energy efficient",
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Waste recycle procedures",
+                name: 'Waste recycle procedures',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Non toxic products",
+                name: 'Non toxic products',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
-              },
-            ],
+                value: false
+              }
+            ]
           },
           {
-            name: "Inclusion",
+            name: 'Inclusion',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "Diversity",
+            name: 'Diversity',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
-      },
-    ],
+            ]
+          }
+        ]
+      }
+    ]
   },
   {
-    name: "videographyandphotography",
+    name: 'videographyandphotography',
     categories: [
       {
-        name: "services",
+        name: 'services',
         subCategories: [
           {
-            name: "style",
+            name: 'style',
             items: [
               {
-                name: "journalistic",
+                name: 'journalistic',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "studio",
+                name: 'studio',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "traditiontal",
+                name: 'traditiontal',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "candid",
+                name: 'candid',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "editing",
+            name: 'editing',
             items: [
               {
-                name: "video",
+                name: 'video',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "audio",
+                name: 'audio',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "photo",
+                name: 'photo',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "photo invitations / thank you",
+                name: 'photo invitations / thank you',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "format of delivery",
+            name: 'format of delivery',
             items: [
               {
-                name: "physical proof/print",
+                name: 'physical proof/print',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "flash drive",
+                name: 'flash drive',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "digital download",
+                name: 'digital download',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "setup & breakdown",
+            name: 'setup & breakdown',
             items: [
               {
-                name: "adapt equipment mobility to program",
+                name: 'adapt equipment mobility to program',
                 type: Number,
-                value: 0,
+                value: 0
               },
               {
-                name: "setup & breakdown",
+                name: 'setup & breakdown',
                 type: Boolean,
-                value: 0,
+                value: 0
               },
-            ],
+            ]
           },
-        ],
+        ]
       },
       {
-        name: "amenities",
+        name: 'amenities',
         subCategories: [
           {
-            name: "specialties",
+            name: 'specialties',
             items: [
               {
-                name: "drone and remote photo/video",
+                name: 'drone and remote photo/video',
                 type: "Cost",
-                value: 0,
+                value: 0
               },
               {
-                name: "crane",
+                name: 'crane',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "simulacasting/live streaming",
+                name: 'simulacasting/live streaming',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
+            ]
+          }
+        ]
       },
       {
-        name: "Sustainability, Inclusion and Diversity",
+        name: 'Sustainability, Inclusion and Diversity',
         subCategories: [
           {
-            name: "Sustainability",
+            name: 'Sustainability',
             items: [
               {
-                name: "green policy applied",
+                name: 'green policy applied',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Water saving protocols in place",
+                name: 'Water saving protocols in place',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "We use Green power and energy efficient",
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Waste recycle procedures",
+                name: 'Waste recycle procedures',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Non toxic products",
+                name: 'Non toxic products',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
-              },
-            ],
+                value: false
+              }
+            ]
           },
           {
-            name: "Inclusion",
+            name: 'Inclusion',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "Diversity",
+            name: 'Diversity',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
-      },
-    ],
+            ]
+          }
+        ]
+      }
+    ]
   },
   {
-    name: "signageprinting",
+    name: 'signageprinting',
     categories: [
       {
-        name: "services",
+        name: 'services',
         subCategories: [
           {
-            name: "PR",
+            name: 'PR',
             items: [
               {
-                name: "speech writing",
+                name: 'speech writing',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "press releases",
+                name: 'press releases',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "high profile sourcing",
+                name: 'high profile sourcing',
                 type: Array,
                 value: [],
-                available: ["politicians", "celebrities", "influencers", "artists"],
+                available: ['politicians', 'celebrities', 'influencers', 'artists']
               },
               {
-                name: "social media promotion",
+                name: 'social media promotion',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "media pitch",
+                name: 'media pitch',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "marketing",
+            name: 'marketing',
             items: [
               {
-                name: "branding strategy",
+                name: 'branding strategy',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "event registration tracking",
+                name: 'event registration tracking',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "consultation",
+                name: 'consultation',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "open communication",
+                name: 'open communication',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "graphics",
+            name: 'graphics',
             items: [
               {
-                name: "graphic design services",
+                name: 'graphic design services',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "administrative",
+            name: 'administrative',
             items: [
               {
-                name: "guest lists",
+                name: 'guest lists',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "translation",
+                name: 'translation',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "transcription",
+                name: 'transcription',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
-        ],
+        ]
       },
       {
-        name: "amenities",
+        name: 'amenities',
         subCategories: [
           {
-            name: "printing",
+            name: 'printing',
             items: [
               {
-                name: "printing method",
+                name: 'printing method',
                 type: Array,
                 value: [],
-                available: [
-                  "digital printing",
-                  "screen printing",
-                  "flexography printing",
-                  "litho printing",
-                  "transfer printing",
-                  "engraving",
-                  "embossing",
-                  "embrolder printing",
-                ],
+                available: ['digital printing', 'screen printing', 'flexography printing', 'litho printing', 'transfer printing', 'engraving', 'embossing', 'embrolder printing']
               },
               {
-                name: "printing material",
+                name: 'printing material',
                 type: Array,
                 value: [],
-                available: [
-                  "business cards",
-                  "brochures",
-                  "flyers",
-                  "one-sheets",
-                  "infographics",
-                  "instructions",
-                  "posters",
-                  "tickets",
-                  "banners",
-                  "menues",
-                  "place cards",
-                  "other",
-                ],
+                available: ['business cards', 'brochures', 'flyers', 'one-sheets', 'infographics', 'instructions', 'posters', 'tickets', 'banners', 'menues', 'place cards', 'other']
               },
-            ],
+            ]
           },
           {
-            name: "specialty",
+            name: 'specialty',
             items: [
               {
-                name: "custom prints",
+                name: 'custom prints',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "branded lighting effect",
+                name: 'branded lighting effect',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
+            ]
+          }
+        ]
       },
       {
-        name: "Sustainability, Inclusion and Diversity",
+        name: 'Sustainability, Inclusion and Diversity',
         subCategories: [
           {
-            name: "Sustainability",
+            name: 'Sustainability',
             items: [
               {
-                name: "green policy applied",
+                name: 'green policy applied',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Water saving protocols in place",
+                name: 'Water saving protocols in place',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "We use Green power and energy efficient",
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Waste recycle procedures",
+                name: 'Waste recycle procedures',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Non toxic products",
+                name: 'Non toxic products',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
-              },
-            ],
+                value: false
+              }
+            ]
           },
           {
-            name: "Inclusion",
+            name: 'Inclusion',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "Diversity",
+            name: 'Diversity',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
-      },
-    ],
+            ]
+          }
+        ]
+      }
+    ]
   },
   {
-    name: "transportation",
+    name: 'transportation',
     categories: [
       {
-        name: "services",
+        name: 'services',
         subCategories: [
           {
-            name: " ",
+            name: ' ',
             items: [
               {
-                name: "taxi",
+                name: 'taxi',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "airport pickup/drop off",
+                name: 'airport pickup/drop off',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "round trip",
+                name: 'round trip',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "one way",
+                name: 'one way',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "tours",
+                name: 'tours',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
+            ]
+          }
+        ]
       },
       {
-        name: "staff",
+        name: 'staff',
         subCategories: [
           {
-            name: " ",
+            name: ' ',
             items: [
               {
-                name: "uniformed drivers",
+                name: 'uniformed drivers',
                 type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
-                name: "transportation coordinator",
+                name: 'transportation coordinator',
                 type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
-                name: "uniform style",
+                name: 'uniform style',
                 type: Boolean,
-                value: "",
+                value: '',
                 staff: null,
                 quest: null,
               },
-            ],
-          },
-        ],
+            ]
+          }
+        ]
       },
       {
-        name: "amenities",
+        name: 'amenities',
         subCategories: [
           {
-            name: " ",
+            name: ' ',
             items: [
               {
-                name: "wifi",
+                name: 'wifi',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "bar",
+                name: 'bar',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "luggage",
+                name: 'luggage',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "food",
+                name: 'food',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "TV/Cable TV",
+                name: 'TV/Cable TV',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "restrooms",
+                name: 'restrooms',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
+            ]
+          }
+        ]
       },
       {
-        name: "Sustainability, Inclusion and Diversity",
+        name: 'Sustainability, Inclusion and Diversity',
         subCategories: [
           {
-            name: "Sustainability",
+            name: 'Sustainability',
             items: [
               {
-                name: "green policy applied",
+                name: 'green policy applied',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Water saving protocols in place",
+                name: 'Water saving protocols in place',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "We use Green power and energy efficient",
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Waste recycle procedures",
+                name: 'Waste recycle procedures',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Non toxic products",
+                name: 'Non toxic products',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
-              },
-            ],
+                value: false
+              }
+            ]
           },
           {
-            name: "Inclusion",
+            name: 'Inclusion',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "Diversity",
+            name: 'Diversity',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
-      },
-    ],
+            ]
+          }
+        ]
+      }
+    ]
   },
   {
-    name: "entertainment",
+    name: 'entertainment',
     categories: [
       {
-        name: "services",
+        name: 'services',
         subCategories: [
           {
-            name: "DJ services",
+            name: 'DJ services',
             items: [
               {
-                name: "DJ",
+                name: 'DJ',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "instrument",
+                name: 'instrument',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "vocalist",
+                name: 'vocalist',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "motivators",
+                name: 'motivators',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "specialty DJ(ethnic music)",
+                name: 'specialty DJ(ethnic music)',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Act as MC",
+                name: 'Act as MC',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "band",
+            name: 'band',
             items: [
               {
-                name: "one man instrument",
+                name: 'one man instrument',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "trio",
+                name: 'trio',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "quartet",
+                name: 'quartet',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "vocalist",
+                name: 'vocalist',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "orchestra",
+                name: 'orchestra',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "nine pieces and plus",
+                name: 'nine pieces and plus',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "specialty band (ethnic music, rock and roll etc)",
+                name: 'specialty band (ethnic music, rock and roll etc)',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "type of entertainment",
+            name: 'type of entertainment',
             items: [
               {
-                name: "interactive",
+                name: 'interactive',
                 type: Array,
                 value: [],
-                available: ["photo booth", "casino games", "sport games", "make your own"],
+                available: ['photo booth', 'casino games', 'sport games', 'make your own']
               },
               {
-                name: "singers",
+                name: 'singers',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "keynote speaker / special MC",
+                name: 'keynote speaker / special MC',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "theme entertainment ( dancers, shows, illusionist etc )",
+                name: 'theme entertainment ( dancers, shows, illusionist etc )',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "activities",
+            name: 'activities',
             items: [
               {
-                name: "team building",
+                name: 'team building',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "events and shows",
+                name: 'events and shows',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "museum & art gallery visits",
+                name: 'museum & art gallery visits',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "classes",
+                name: 'classes',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "sport",
+                name: 'sport',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "other",
+                name: 'other',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "family activities",
+                name: 'family activities',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "children activities",
+                name: 'children activities',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "food",
+                name: 'food',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "wine/beer/bourbon/etc",
+                name: 'wine/beer/bourbon/etc',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "sightseeing",
+                name: 'sightseeing',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "setup, guidance & cleanup",
+            name: 'setup, guidance & cleanup',
             items: [
               {
-                name: "onsite coordinatores, instructors, guides",
+                name: 'onsite coordinatores, instructors, guides',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "setup/breakdown hours included",
+                name: 'setup/breakdown hours included',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
+            ]
+          }
+        ]
       },
       {
-        name: "amenities",
+        name: 'amenities',
         subCategories: [
           {
-            name: " ",
+            name: ' ',
             items: [
               {
-                name: "audio equipment",
+                name: 'audio equipment',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "stage light",
+                name: 'stage light',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "dance floor give aways",
+                name: 'dance floor give aways',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
+            ]
+          }
+        ]
       },
       {
-        name: "accessibility",
+        name: 'accessibility',
         subCategories: [
           {
-            name: " ",
+            name: ' ',
             items: [
               {
-                name: "acitivy is suitable for people with disabilities",
+                name: 'acitivy is suitable for people with disabilities',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
+            ]
+          }
+        ]
       },
       {
-        name: "Sustainability, Inclusion and Diversity",
+        name: 'Sustainability, Inclusion and Diversity',
         subCategories: [
           {
-            name: "Sustainability",
+            name: 'Sustainability',
             items: [
               {
-                name: "green policy applied",
+                name: 'green policy applied',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Water saving protocols in place",
+                name: 'Water saving protocols in place',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "We use Green power and energy efficient",
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Waste recycle procedures",
+                name: 'Waste recycle procedures',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Non toxic products",
+                name: 'Non toxic products',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
-              },
-            ],
+                value: false
+              }
+            ]
           },
           {
-            name: "Inclusion",
+            name: 'Inclusion',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "Diversity",
+            name: 'Diversity',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
-      },
-    ],
+            ]
+          }
+        ]
+      }
+    ]
   },
   {
-    name: "securityservices",
+    name: 'securityservices',
     categories: [
       {
-        name: "services",
+        name: 'services',
         subCategories: [
           {
-            name: "other",
+            name: 'other',
             items: [
               {
-                name: "risk assessment",
+                name: 'risk assessment',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "VIP security",
+                name: 'VIP security',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: " ",
+            name: ' ',
             items: [
               {
-                name: "parameter security",
+                name: 'parameter security',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+
+            ]
           },
           {
-            name: "staff",
+            name: 'staff',
             items: [
               {
-                name: "chaperones",
+                name: 'chaperones',
                 type: Boolean,
                 value: false,
                 // xIncluded: true,
@@ -2513,945 +2443,930 @@ export const businessCategories = [
                 quest: null,
               },
               {
-                name: "patrolling officers",
+                name: 'patrolling officers',
                 type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
-                name: "bouncers",
+                name: 'bouncers',
                 type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
-                name: "body guards",
+                name: 'body guards',
                 type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
-                name: "armed security officers",
+                name: 'armed security officers',
                 type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
-                name: "unarmed security",
+                name: 'unarmed security',
                 type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
-                name: "undercover",
+                name: 'undercover',
                 type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
-                name: "crowd control",
+                name: 'crowd control',
                 type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
-            ],
-          },
-        ],
+            ]
+          }
+        ]
       },
       {
-        name: "amenities",
+        name: 'amenities',
         subCategories: [
           {
-            name: " ",
+            name: ' ',
             items: [
               {
-                name: "special equipment",
+                name: 'special equipment',
                 type: Number,
-                value: 0,
+                value: 0
               },
-            ],
-          },
-        ],
+            ]
+          }
+        ]
       },
       {
-        name: "Sustainability, Inclusion and Diversity",
+        name: 'Sustainability, Inclusion and Diversity',
         subCategories: [
           {
-            name: "Sustainability",
+            name: 'Sustainability',
             items: [
               {
-                name: "green policy applied",
+                name: 'green policy applied',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Water saving protocols in place",
+                name: 'Water saving protocols in place',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "We use Green power and energy efficient",
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Waste recycle procedures",
+                name: 'Waste recycle procedures',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Non toxic products",
+                name: 'Non toxic products',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
-              },
-            ],
+                value: false
+              }
+            ]
           },
           {
-            name: "Inclusion",
+            name: 'Inclusion',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "Diversity",
+            name: 'Diversity',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
-      },
-    ],
+            ]
+          }
+        ]
+      }
+    ]
   },
   {
-    name: "audiovisualstagingservices",
+    name: 'audiovisualstagingservices',
     categories: [
       {
-        name: "amenities",
+        name: 'amenities',
         subCategories: [
           {
-            name: "audio",
+            name: 'audio',
             items: [
               {
-                name: "sound system",
+                name: 'sound system',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "rigging",
+                name: 'rigging',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "programmer",
+                name: 'programmer',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "visual",
+            name: 'visual',
             items: [
               {
-                name: "screens",
+                name: 'screens',
                 type: Array,
                 value: [],
-                available: ["projectors(rear or font)", "plasma/LED tv", "LED wall", "show and go screen"],
+                available: ['projectors(rear or font)', 'plasma/LED tv', 'LED wall', 'show and go screen']
               },
               {
-                name: "ZAP shots",
+                name: 'ZAP shots',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "cranes",
+                name: 'cranes',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "other",
+            name: 'other',
             items: [
               {
-                name: "special effects",
+                name: 'special effects',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "special equipment",
+                name: 'special equipment',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "simulcasting",
+                name: 'simulcasting',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "cordless mics",
+                name: 'cordless mics',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
+            ]
+          }
+        ]
       },
       {
-        name: "services",
+        name: 'services',
         subCategories: [
           {
-            name: "staff",
+            name: 'staff',
             items: [
               {
-                name: "sound/visual engineer",
+                name: 'sound/visual engineer',
                 type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
-                name: "setup crew",
+                name: 'setup crew',
                 type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
-                name: "programmer",
+                name: 'programmer',
                 type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
-                name: "event manager",
+                name: 'event manager',
                 type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
-                name: "rigging",
+                name: 'rigging',
                 type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
-              },
-            ],
-          },
-        ],
+              }
+            ]
+          }
+        ]
       },
       {
-        name: "Sustainability, Inclusion and Diversity",
+        name: 'Sustainability, Inclusion and Diversity',
         subCategories: [
           {
-            name: "Sustainability",
+            name: 'Sustainability',
             items: [
               {
-                name: "green policy applied",
+                name: 'green policy applied',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Water saving protocols in place",
+                name: 'Water saving protocols in place',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "We use Green power and energy efficient",
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Waste recycle procedures",
+                name: 'Waste recycle procedures',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Non toxic products",
+                name: 'Non toxic products',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
-              },
-            ],
+                value: false
+              }
+            ]
           },
           {
-            name: "Inclusion",
+            name: 'Inclusion',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "Diversity",
+            name: 'Diversity',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
-      },
-    ],
+            ]
+          }
+        ]
+      }
+    ]
   },
   {
-    name: "giveaways",
+    name: 'giveaways',
     categories: [
       {
-        name: "amenities",
+        name: 'amenities',
         subCategories: [
           {
-            name: "variety of inventory",
+            name: 'variety of inventory',
             items: [
               {
-                name: "ceremonial items",
+                name: 'ceremonial items',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "specialty food & liquor",
+                name: 'specialty food & liquor',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "tech items",
+                name: 'tech items',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "apparel",
+                name: 'apparel',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "drinkware",
+                name: 'drinkware',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "bags",
+                name: 'bags',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "wellness",
+                name: 'wellness',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "fitness",
+                name: 'fitness',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "office",
+                name: 'office',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "other",
+                name: 'other',
                 type: String,
-                value: "",
+                value: ''
               },
-            ],
+            ]
           },
-        ],
+        ]
       },
       {
-        name: "services",
+        name: 'services',
         subCategories: [
           {
-            name: " ",
+            name: ' ',
             items: [
               {
-                name: "ability to handle rushed orders",
+                name: 'ability to handle rushed orders',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "graphic design",
+                name: 'graphic design',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "ability to handle special requests",
+                name: 'ability to handle special requests',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "printing",
+                name: 'printing',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "stuffing and packaging",
+                name: 'stuffing and packaging',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "customization",
+                name: 'customization',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
+            ]
+          }
+        ]
       },
       {
-        name: "Sustainability, Inclusion and Diversity",
+        name: 'Sustainability, Inclusion and Diversity',
         subCategories: [
           {
-            name: "Sustainability",
+            name: 'Sustainability',
             items: [
               {
-                name: "green policy applied",
+                name: 'green policy applied',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Water saving protocols in place",
+                name: 'Water saving protocols in place',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "We use Green power and energy efficient",
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Waste recycle procedures",
+                name: 'Waste recycle procedures',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Non toxic products",
+                name: 'Non toxic products',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
-              },
-            ],
+                value: false
+              }
+            ]
           },
           {
-            name: "Inclusion",
+            name: 'Inclusion',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "provide sample",
+                name: 'provide sample',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "proof",
+                name: 'proof',
                 type: Array,
                 value: [],
-                available: ["digital", "real", "sample"],
+                available: ['digital', 'real', 'sample']
               },
-            ],
+            ]
           },
           {
-            name: "Diversity",
+            name: 'Diversity',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
+            ]
+          }
+        ]
       },
-    ],
+    ]
   },
   {
-    name: "equipmentrentals",
+    name: 'equipmentrentals',
     categories: [
       {
-        name: "services",
+        name: 'services',
         subCategories: [
           {
-            name: " ",
+            name: ' ',
             items: [
               {
-                name: "onsite supervisors during event",
+                name: 'onsite supervisors during event',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "special delivery and pickup",
+                name: 'special delivery and pickup',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "pre-inspection",
+                name: 'pre-inspection',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
+            ]
+          }
+        ]
       },
       {
-        name: "amenities",
+        name: 'amenities',
         subCategories: [
           {
-            name: "furniture",
+            name: 'furniture',
             items: [
               {
-                name: "chairs",
+                name: 'chairs',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "tables",
+                name: 'tables',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "tableware",
+                name: 'tableware',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "special catering rental equipment",
+                name: 'special catering rental equipment',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "furniture / props",
+                name: 'furniture / props',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "tech equipment",
+            name: 'tech equipment',
             items: [
               {
-                name: "screens",
+                name: 'screens',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "projections",
+                name: 'projections',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "recordings",
+                name: 'recordings',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "video conferencing",
+                name: 'video conferencing',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "tents",
+            name: 'tents',
             items: [
               {
-                name: "tents",
+                name: 'tents',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "air conditioning",
+                name: 'air conditioning',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "generator",
+                name: 'generator',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "tent lighting",
+                name: 'tent lighting',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "flooring and carpeting",
+                name: 'flooring and carpeting',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "portable bathrooms",
+                name: 'portable bathrooms',
                 type: Boolean,
-                value: false,
+                value: false
               },
               {
-                name: "liners",
+                name: 'liners',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "other",
+            name: 'other',
             items: [
               {
-                name: "staging, podiums, registration areas",
+                name: 'staging, podiums, registration areas',
                 type: Boolean,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
+            ]
+          }
+        ]
       },
       {
-        name: "Sustainability, Inclusion and Diversity",
+        name: 'Sustainability, Inclusion and Diversity',
         subCategories: [
           {
-            name: "Sustainability",
+            name: 'Sustainability',
             items: [
               {
-                name: "green policy applied",
+                name: 'green policy applied',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Water saving protocols in place",
+                name: 'Water saving protocols in place',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "We use Green power and energy efficient",
+                name: 'We use Green power and energy efficient',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Waste recycle procedures",
+                name: 'Waste recycle procedures',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Non toxic products",
+                name: 'Non toxic products',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
-              },
-            ],
+                value: false
+              }
+            ]
           },
           {
-            name: "Inclusion",
+            name: 'Inclusion',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
-            ],
+            ]
           },
           {
-            name: "Diversity",
+            name: 'Diversity',
             items: [
               {
-                name: "Prioritizing diversity and inclution",
+                name: 'Prioritizing diversity and inclution',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Women on senior staff",
+                name: 'Women on senior staff',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Strict sexual harrasment policy",
+                name: 'Strict sexual harrasment policy',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
               {
-                name: "Acknowledge all religious and cultural holidays",
+                name: 'Acknowledge all religious and cultural holidays',
                 type: Boolean,
                 xIncluded: true,
-                value: false,
+                value: false
               },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-];
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
 export const generalInfos = [
   {
-    name: "venuerental",
+    name: 'venuerental',
     items: [
       {
-        name: "recently renovated (up to 3 years)",
+        name: 'recently renovated (up to 3 years)',
         type: Boolean,
-        value: false,
-      },
-    ],
+        value: false
+      }
+    ]
   },
   {
-    name: "foodandbeverage",
+    name: 'foodandbeverage',
     items: [
       {
-        name: "seasonal menu update (at least twice anual)",
+        name: 'seasonal menu update (at least twice anual)',
         type: Boolean,
-        value: false,
-      },
-    ],
+        value: false
+      }
+    ]
   },
   {
-    name: "transportation",
+    name: 'transportation',
     items: [
       {
-        name: "years new cars are kept in inventory",
+        name: 'years new cars are kept in inventory',
         type: Array,
         value: [],
-        available: ["1-2 years", "3-4 years", "5+ years"],
-      },
-    ],
+        available: ['1-2 years', '3-4 years', '5+ years']
+      }
+    ]
   },
   {
-    name: "entertainment",
+    name: 'entertainment',
     items: [
       {
-        name: "amount of yearly corporate events out of total events",
+        name: 'amount of yearly corporate events out of total events',
         type: Number,
-        value: 0,
+        value: 0
       },
       {
-        name: "perform at more than one vent per day?",
+        name: 'perform at more than one vent per day?',
         type: Boolean,
-        value: false,
-      },
-    ],
+        value: false
+      }
+    ]
   },
   {
-    name: "equipmentrentals",
+    name: 'equipmentrentals',
     items: [
       {
-        name: "inventory update-rate",
+        name: 'inventory update-rate',
         type: String,
-        value: "",
-      },
-    ],
-  },
-];
+        value: ''
+      }
+    ]
+  }
+]
 export const companyServices = [
   {
-    name: "venuerental",
+    name: 'venuerental',
     type: Array,
     value: [],
-    available: [
-      "ballroom",
-      "gallery",
-      "park or field or garden",
-      "historic establishment",
-      "bar or pub or club",
-      "restaurant",
-      "Meeting Room",
-      "Theatre",
-      "business center",
-      "community center",
-      "sport venue",
-      "academic venue",
-      "stately home",
-      "stadium or arena",
-    ],
+    available: ['ballroom', 'gallery', 'park or field or garden', 'historic establishment', 'bar or pub or club', 'restaurant', 'Meeting Room', 'Theatre', 'business center', 'community center', 'sport venue', 'academic venue', 'stately home', 'stadium or arena'],
   },
   {
-    name: "foodandbeverage",
+    name: 'foodandbeverage',
     type: Array,
     value: [],
-    available: ["Food catering", "Beverage"],
+    available: ['Food catering', 'Beverage'],
   },
   {
-    name: "decor",
+    name: 'decor',
     type: Array,
     value: [],
-    available: ["floral", "lighting", "interior design"],
+    available: ['floral', 'lighting', 'interior design'],
   },
   {
-    name: "corporatesocialresponsibility",
+    name: 'corporatesocialresponsibility',
     type: Array,
     value: [],
-    available: ["staffing", "guest services", "on-day coodination", "concierge"],
+    available: ['staffing', 'guest services', 'on-day coodination', 'concierge'],
   },
   {
-    name: "signageprinting",
+    name: 'signageprinting',
     type: Array,
     value: [],
-    available: ["PR", "marketing", "printing", "graphic design"],
+    available: ['PR', 'marketing', 'printing', 'graphic design'],
   },
   // {
   //   name: 'advertising-promotion',
@@ -3466,42 +3381,42 @@ export const companyServices = [
   //   available: [],
   // },
   {
-    name: "audiovisualstagingservices",
+    name: 'audiovisualstagingservices',
     type: Array,
     value: [],
-    available: ["audio", "visual"],
+    available: ['audio', 'visual'],
   },
   {
-    name: "giveaways",
+    name: 'giveaways',
     type: Array,
     value: [],
-    available: ["favors", "promotional"],
+    available: ['favors', 'promotional'],
   },
   {
-    name: "entertainment",
+    name: 'entertainment',
     type: Array,
     value: [],
-    available: ["DJ services", "band", "indoor activities", "outdoor activities", "family activities", "entertainment"],
+    available: ['DJ services', 'band', 'indoor activities', 'outdoor activities', 'family activities', 'entertainment'],
   },
   {
-    name: "securityservices",
+    name: 'securityservices',
     type: Array,
     value: [],
-    available: ["day-of security", "security consultation", "perosnal security"],
+    available: ['day-of security', 'security consultation', 'perosnal security'],
   },
   {
-    name: "videographyandphotography",
+    name: 'videographyandphotography',
     type: Array,
     value: [],
-    available: ["photography", "videography"],
+    available: ['photography', 'videography'],
   },
   {
-    name: "equipmentrentals",
+    name: 'equipmentrentals',
     type: Array,
     value: [],
-    available: ["tents", "technical equipment", "furniture", "constumes", "props & decor"],
-  },
-];
+    available: ['tents', 'technical equipment', 'furniture', 'constumes', 'props & decor'],
+  }
+]
 export const VendorPolicy = [
   {
     category: "venuerental",
@@ -3561,12 +3476,12 @@ export const VendorPolicy = [
     category: "decor",
     items: [
       {
-        name: "Room temperature constraints(for flowers)",
-        type: Boolean,
+        name: "Room temperature constraints",
+        type: String,
       },
       {
         name: "Flexible time requirement for setup",
-        type: Boolean,
+        type: String,
       },
     ],
   },
@@ -3631,7 +3546,7 @@ export const VendorPolicy = [
         type: Number,
         noSuffix: true,
         hasComment: true,
-      },
+      }
     ],
   },
   {
@@ -3673,28 +3588,26 @@ export const VendorPolicy = [
     category: "transportation",
     items: [
       {
-        name: "Hourly Reservation Minimum",
+        name: 'Hourly Reservation Minimum',
         type: Boolean,
         hasComment: true,
       },
       {
-        name: "Airports Pickup Delays",
+        name: 'Airports Pickup Delays',
         hasComment: true,
-        placeholder:
-          "Company monitors all commercial airline arrivals to ensure on-time airport pickups. A forty-five (45) minute grace period is allowed on all domestic arrivals and seventy-five (75) minutes on all international arrivals. Waiting time charges will apply after the grace period and are accrued in quarter-hour increments, based on the vehicle’s hourly rate.",
+        placeholder: 'Company monitors all commercial airline arrivals to ensure on-time airport pickups. A forty-five (45) minute grace period is allowed on all domestic arrivals and seventy-five (75) minutes on all international arrivals. Waiting time charges will apply after the grace period and are accrued in quarter-hour increments, based on the vehicle’s hourly rate.'
       },
       {
-        name: "Non-Airport Pickup Delays",
+        name: 'Non-Airport Pickup Delays',
         hasComment: true,
-        placeholder:
-          "Customers are granted a window of time to greet their chauffeurs at the requested pick-up time and location before incurring waiting time charges. Standard grace period is (15) minutes before charges are incurred. ",
+        placeholder: 'Customers are granted a window of time to greet their chauffeurs at the requested pick-up time and location before incurring waiting time charges. Standard grace period is (15) minutes before charges are incurred. ',
       },
       {
-        name: "No show",
+        name: 'No show',
         hasComment: true,
-        placeholder:
-          "A reservation is considered a “No Show” if the passenger cannot be located or contacted within (a) one (1) hour for airport pickups (time begins when passenger’s plane lands) or (b) thirty (30) minutes at other pickup locations. For all No-Shows, the full trip fare, including a twenty (20) percent gratuity, will be charged. ",
+        placeholder: 'A reservation is considered a “No Show” if the passenger cannot be located or contacted within (a) one (1) hour for airport pickups (time begins when passenger’s plane lands) or (b) thirty (30) minutes at other pickup locations. For all No-Shows, the full trip fare, including a twenty (20) percent gratuity, will be charged. '
       },
+
     ],
   },
   {
@@ -3736,7 +3649,7 @@ export const VendorPolicy = [
       },
       {
         name: "Minimum Setup time required",
-        subCategory: "charge",
+        subCategory: 'charge',
         type: Number,
         value: 0,
         noSuffix: true,
@@ -3744,7 +3657,7 @@ export const VendorPolicy = [
       {
         name: "Number of breaks",
         type: Number,
-        subCategory: "charge",
+        subCategory: 'charge',
         value: 0,
         noSuffix: true,
       },
@@ -3768,9 +3681,9 @@ export const VendorPolicy = [
       },
       {
         name: "Arrival onsite before the event",
-        type: "Including",
+        type: 'Including',
         value: true,
-        cost: "0.00",
+        cost: '0.00'
       },
       {
         name: "Handles Losgistics",
@@ -3846,20 +3759,20 @@ export const VendorPricingPolicy = [
         name: "Minimum amount of hours",
         type: Number,
         noSuffix: true,
-        label: "Number of hours",
+        label: 'Number of hours',
         hasComment: true,
       },
       {
         name: "Hours included in rental",
         type: Number,
         noSuffix: true,
-        label: "Number of hours",
+        label: 'Number of hours',
         hasComment: true,
       },
       {
         name: "Setup hours included in rental",
         type: Number,
-        label: "Number of hours",
+        label: 'Number of hours',
         noSuffix: true,
         hasComment: true,
       },
@@ -3897,13 +3810,13 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
       {
         name: "Suggested Gratuity",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
     ],
   },
@@ -3942,13 +3855,13 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
       {
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
     ],
   },
@@ -3971,28 +3884,21 @@ export const VendorPricingPolicy = [
         hasComment: true,
       },
       {
-        name: "Discount for large quantities",
+        name: "Discounts for large quantities",
         type: Boolean,
         attendees: null,
-        labelForValue: "How much",
       },
       {
         name: "Tax rate",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
       {
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
-        hideOnProposal: true,
-      },
-      {
-        name: "Service charges",
-        type: Number,
-        hasComment: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
     ],
   },
@@ -4026,13 +3932,13 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
       {
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
     ],
   },
@@ -4061,13 +3967,13 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
       {
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
     ],
   },
@@ -4079,67 +3985,67 @@ export const VendorPricingPolicy = [
     category: "equipmentrentals",
     items: [
       {
-        name: "Tent permit",
+        name: 'Tent permit',
         type: Number,
         hasComment: true,
       },
       {
-        name: "Extra setup and breakdown charge",
+        name: 'Extra setup and breakdown charge',
         type: Number,
         hasComment: true,
       },
       {
-        name: "Late charge for returned items",
+        name: 'Late charge for returned items',
         type: Number,
         hasComment: true,
       },
       {
-        name: "Damage to equipment",
+        name: 'Damage to equipment',
         type: Number,
         hasComment: true,
       },
       {
-        name: "Large quantity discount",
+        name: 'Large quantity discount',
         type: Number,
         isPercentage: true,
         hasComment: true,
         attendees: null,
       },
       {
-        name: "Off-season discount",
+        name: 'Off-season discount',
         type: Boolean,
-        label: "Discount rate",
+        label: 'Discount rate',
         discount: null,
         hasUnit: true,
-        units: ["%", "$"],
+        units: ['%', '$'],
       },
       {
-        name: "Quantity discount",
+        name: 'Quantity discount',
         type: Boolean,
-        label: "Discount rage",
+        label: 'Discount rage',
         discount: null,
         hasUnit: true,
-        units: ["%", "$"],
+        units: ['%', '$'],
       },
       {
-        name: "Tax rate",
+        name: 'Tax rate',
         type: Number,
         isPercentage: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
       {
-        name: "Large group discounts",
+        name: 'Large group discounts',
         subCategory: "discount",
         type: "Discount",
         hasUnit: true,
         units: ["Per guest", "Total"],
       },
       {
-        name: "Suggested Gratuity",
+        name: 'Suggested Gratuity',
         type: Number,
         hasComment: true,
-        hideOnProposal: true,
-      },
+        hideOnProposal: true
+      }
     ],
   },
   {
@@ -4159,7 +4065,7 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
       {
         name: "Discounts",
@@ -4170,7 +4076,7 @@ export const VendorPricingPolicy = [
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
     ],
   },
@@ -4206,7 +4112,7 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
       {
         name: "Discount for large quantites",
@@ -4218,7 +4124,7 @@ export const VendorPricingPolicy = [
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
     ],
   },
@@ -4233,41 +4139,41 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
       {
-        name: "Large group discounts",
+        name: 'Large group discounts',
         subCategory: "discount",
         type: Number,
         hasUnit: true,
         units: ["Per guest", "Total"],
       },
       {
-        name: "Road tolls",
+        name: 'Road tolls',
         hasComment: true,
-        placeholder: "TBD fee to be charged for all tolls that cars pass through.",
+        placeholder: 'TBD fee to be charged for all tolls that cars pass through.',
       },
       {
-        name: "Packing fees",
+        name: 'Packing fees',
         hasComment: true,
-        placeholder: "TBD fee to be charged for all parking that a car incurs.",
+        placeholder: 'TBD fee to be charged for all parking that a car incurs.',
       },
       {
-        name: "Service fee",
+        name: 'Service fee',
         hasComment: true,
       },
       {
-        name: "Administration fee",
+        name: 'Administration fee',
         cost: null,
         hasComment: true,
       },
       {
-        name: "Additional Stops",
+        name: 'Additional Stops',
         cost: null,
         hasComment: true,
       },
       {
-        name: "Meet & Greet fee",
+        name: 'Meet & Greet fee',
         cost: null,
         hasComment: true,
       },
@@ -4275,7 +4181,7 @@ export const VendorPricingPolicy = [
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
     ],
   },
@@ -4338,7 +4244,7 @@ export const VendorPricingPolicy = [
         name: "Suggested Gratuity",
         subCategory: "tips",
         type: Number,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
     ],
   },
@@ -4373,7 +4279,7 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
       {
         name: "Large group discounts",
@@ -4384,7 +4290,7 @@ export const VendorPricingPolicy = [
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
     ],
   },
@@ -4422,13 +4328,13 @@ export const VendorPricingPolicy = [
         name: "Tax rate",
         type: Number,
         isPercentage: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
       {
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
-        hideOnProposal: true,
+        hideOnProposal: true
       },
     ],
   },
