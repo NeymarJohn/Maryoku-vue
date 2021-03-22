@@ -311,11 +311,11 @@ export default {
       return addedBudget; //+ this.event.allocatedTips + this.event.allocatedFees;
     },
     unusedBudget() {
-      console.log("allocatedBUdgtet", this.bookedTotal);
+      // console.log("allocatedBUdgtet", this.bookedTotal);
       return this.event.totalBudget - this.bookedTotal;
     },
     eventCategoryList() {
-      console.log("eventCategoryList", this.event.components);
+      // console.log("eventCategoryList", this.event.components);
       return this.event.components;
     },
   },
