@@ -140,10 +140,18 @@
                   <span class="mr-10" v-if="policy.value"> Yes </span>
                   <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
                 </div>
-                <div class="item" v-else>
+                <div class="item text-right" v-else>
                   <span v-if="policy.type === Number && !policy.isPercentage">$</span>
-                  <span v-if="policy.type === Boolean">{{ policy.value === true ? "Yes" : "No" }}</span>
-                  <span v-else>{{ policy.value }}</span>
+                  <span v-if="policy.type === Boolean">
+                    <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
+                    <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
+                    <!-- {{ policy.value === true ? "Yes" : "No" }} -->
+                  </span>
+                  <span v-else>
+                    <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
+                    <img v-else-if="policy.value === false" :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
+                    <span v-else>{{ policy.value }}</span>
+                  </span>
                   <span v-if="policy.isPercentage">%</span>
                   <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
                     {{ policy.attendees }} attendees
@@ -855,7 +863,7 @@ export default {
               font: 600 16px Manrope-Regular, sans-serif;
               display: flex;
               align-items: center;
-
+              max-width: 900px;
               .item {
                 flex: 1;
 

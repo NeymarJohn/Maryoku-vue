@@ -4120,6 +4120,7 @@ export const VendorPricingPolicy = [
         isPercentage: true,
         hasComment: true,
         attendees: null,
+        labelForValue: "How much",
       },
       {
         name: "Tax rate",
@@ -4165,6 +4166,7 @@ export const VendorPricingPolicy = [
         isPercentage: true,
         hasComment: true,
         attendees: null,
+        labelForValue: "How much",
       },
       {
         name: "Tax rate",
@@ -4249,6 +4251,7 @@ export const VendorPricingPolicy = [
         isPercentage: true,
         hasComment: true,
         attendees: null,
+        labelForValue: "How much",
       },
       {
         name: "Tax rate",
@@ -4284,6 +4287,7 @@ export const VendorPricingPolicy = [
         isPercentage: true,
         hasComment: true,
         attendees: null,
+        labelForValue: "How much",
       },
       {
         name: "Tax rate",
@@ -4441,6 +4445,7 @@ export const VendorPricingPolicy = [
         type: Number,
         hideOnProposal: true,
         hasComment: true,
+        labelForValue: "How much",
       },
       {
         name: "Suggested Gratuity",
@@ -4645,6 +4650,7 @@ export const VendorPricingPolicy = [
         type: Boolean,
         attendees: null,
         hideOnProposal: true,
+        labelForValue: "How much",
       },
       {
         name: "Tax rate",
