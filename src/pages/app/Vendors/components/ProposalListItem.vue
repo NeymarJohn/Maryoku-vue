@@ -32,7 +32,7 @@
             <span> <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />Duplicate</span>
           </md-menu-item>
           <md-menu-item @click="edit" class="md-purple">
-            <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Cancel Evnet</span>
+            <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Cancel Event</span>
           </md-menu-item>
         </md-menu-content>
       </md-menu>
