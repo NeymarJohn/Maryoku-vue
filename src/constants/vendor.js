@@ -2800,6 +2800,16 @@ export const businessCategories = [
                 value: false,
               },
               {
+                name: "production",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Backdrop/Scenic & Decor",
+                type: Boolean,
+                value: false,
+              },
+              {
                 name: "rigging",
                 type: Boolean,
                 value: false,
@@ -2827,6 +2837,21 @@ export const businessCategories = [
               },
               {
                 name: "cranes",
+                type: Boolean,
+                value: false,
+              },
+            ],
+          },
+          {
+            name: "Show Management",
+            items: [
+              {
+                name: "Event Services",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Outdoor Staging & Tents",
                 type: Boolean,
                 value: false,
               },
@@ -3574,7 +3599,7 @@ export const companyServices = [
     name: "audiovisualstagingservices",
     type: Array,
     value: [],
-    available: ["audio", "visual"],
+    available: ["audio", "visual", "staging options"],
   },
   {
     name: "giveaways",
