@@ -1758,17 +1758,102 @@ export const businessCategories = [
                 value: false,
               },
               {
-                name: "event registration tracking",
-                type: Boolean,
-                value: false,
-              },
-              {
                 name: "consultation",
                 type: Boolean,
                 value: false,
               },
               {
-                name: "open communication",
+                name: "Website Development",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Digital Newsletter",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "e-Marketing Strategies",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Catalog (Digital & Print)",
+                type: Boolean,
+                value: false,
+              },
+            ],
+          },
+          {
+            name: "print services",
+            items: [
+              {
+                name: "Invitations",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Menus",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Place cards",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Tent cards",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Post Cards",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Business Cards",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Large Print Items (Blueprints, CAD Drawings)",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Binding & Laminating",
+                type: Boolean,
+                value: false,
+              },
+            ],
+          },
+          {
+            name: "Signage",
+            items: [
+              {
+                name: "Posters",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Banners",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Presentation Boards",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Window Graphics",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Outdoor Signage",
                 type: Boolean,
                 value: false,
               },
