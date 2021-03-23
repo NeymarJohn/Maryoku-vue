@@ -85,7 +85,7 @@
 
 <script>
 import moment from "moment";
-import { businessCategories, categoryNameWithIcons } from "@/constants/vendor";
+import VendorService from "@/services/vendor.service";
 import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 
 //COMPONENTS
@@ -132,8 +132,8 @@ export default {
   },
   created() {},
   mounted() {
-    this.services = Object.assign([], businessCategories);
-    this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
+    this.services = VendorService.businessCategories();
+    this.iconsWithCategory = VendorService.categoryNameWithIcons();
     this.$store.dispatch("common/fetchAllCategories");
 
     // handling uploading photo backhand process

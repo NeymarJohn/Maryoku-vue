@@ -111,5 +111,24 @@
         display: none;
       }
     }
+    &--selected{
+      &.multiselect__option--highlight {
+        background: #F51355;
+        color: #fff;
+
+      }
+    }
+  }
+  &.md-purple {
+    .multiselect__option {
+      &--highlight {
+        background: #641856;
+      }
+    }
+    .multiselect__tag{
+      &-icon {
+        background: #641856;
+      }
+    }
   }
 }

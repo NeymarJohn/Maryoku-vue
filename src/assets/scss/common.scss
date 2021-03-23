@@ -1,86 +1,86 @@
 @font-face {
-  font-family: "Manrope-Bold";
-  src: url("../fonts/manrope/fonts/otf/Manrope-Bold.otf") format("opentype"),
-    url("../fonts/manrope/fonts/web/Manrope-Bold.woff2") format("woff2"),
-    url("../fonts/manrope/fonts/ttf/Manrope-Bold.ttf") format("truetype");
-  font-style: normal;
-  font-stretch: normal;
+    font-family: "Manrope-Bold";
+    src: url("../fonts/manrope/fonts/otf/Manrope-Bold.otf") format("opentype"),
+        url("../fonts/manrope/fonts/web/Manrope-Bold.woff2") format("woff2"),
+        url("../fonts/manrope/fonts/ttf/Manrope-Bold.ttf") format("truetype");
+    font-style: normal;
+    font-stretch: normal;
 }
 
 @font-face {
-  font-family: "Manrope-ExtraBold";
-  src: url("../fonts/manrope/fonts/otf/Manrope-ExtraBold.otf") format("opentype"),
-    url("../fonts/manrope/fonts/web/Manrope-ExtraBold.woff2") format("woff2"),
-    url("../fonts/manrope/fonts/ttf/Manrope-ExtraBold.ttf") format("truetype");
-  font-style: normal;
-  font-stretch: normal;
+    font-family: "Manrope-ExtraBold";
+    src: url("../fonts/manrope/fonts/otf/Manrope-ExtraBold.otf") format("opentype"),
+        url("../fonts/manrope/fonts/web/Manrope-ExtraBold.woff2") format("woff2"),
+        url("../fonts/manrope/fonts/ttf/Manrope-ExtraBold.ttf") format("truetype");
+    font-style: normal;
+    font-stretch: normal;
 }
 
 @font-face {
-  font-family: "Manrope-Regular";
-  src: url("../fonts/manrope/fonts/otf/Manrope-Regular.otf") format("opentype"),
-    url("../fonts/manrope/fonts/web/Manrope-Regular.woff2") format("woff2"),
-    url("../fonts/manrope/fonts/ttf/Manrope-Regular.ttf") format("truetype");
-  font-style: normal;
-  font-stretch: normal;
+    font-family: "Manrope-Regular";
+    src: url("../fonts/manrope/fonts/otf/Manrope-Regular.otf") format("opentype"),
+        url("../fonts/manrope/fonts/web/Manrope-Regular.woff2") format("woff2"),
+        url("../fonts/manrope/fonts/ttf/Manrope-Regular.ttf") format("truetype");
+    font-style: normal;
+    font-stretch: normal;
 }
 
 @font-face {
-  font-family: "Cooperative-Regular";
-  src: url("../fonts/cooperative/fonts/otf/Cooperative-Regular.otf") format("opentype"),
-    url("../fonts/cooperative/fonts/web/Cooperative-Regular.woff") format("woff2"),
-    url("../fonts/cooperative/fonts/ttf/Cooperative-Regular.ttf") format("truetype");
-  font-style: normal;
-  font-stretch: normal;
+    font-family: "Cooperative-Regular";
+    src: url("../fonts/cooperative/fonts/otf/Cooperative-Regular.otf") format("opentype"),
+        url("../fonts/cooperative/fonts/web/Cooperative-Regular.woff") format("woff2"),
+        url("../fonts/cooperative/fonts/ttf/Cooperative-Regular.ttf") format("truetype");
+    font-style: normal;
+    font-stretch: normal;
 }
 // body {
 //   overflow: hidden;
 // }
 html {
-  background-color: #f5f5f5 !important;
+    background-color: #f5f5f5 !important;
 }
 h1,
 h2,
 h3,
 h4,
 h5 {
-  font-family: "Manrope-Regular";
+    font-family: "Manrope-Regular";
 }
 textarea {
-  font-family: "Manrope-Regular";
-  font-size: 16px;
-  resize: none;
-  padding: 20px;
-  width: 100%;
-  border: solid 1px #b7b7b7;
-  border-radius: 3px;
+    font-family: "Manrope-Regular";
+    font-size: 16px;
+    resize: none;
+    padding: 20px;
+    width: 100%;
+    border: solid 1px #b7b7b7;
+    border-radius: 3px;
 }
 input,
 select {
-  padding: 10px 12px;
-  border-radius: 3px;
-  border: solid 1px #656565;
-  font-size: 20px;
-  min-height: 50px;
-  &:active {
-    border: solid 1px #050505;
-  }
+    padding: 10px 12px;
+    border-radius: 3px;
+    border: solid 1px #656565;
+    font-size: 20px;
+    min-height: 50px;
+    &:active {
+        border: solid 1px #050505;
+    }
 }
 input[type="text"] {
-  font-size: 16px;
+    font-size: 16px;
 }
 .font-regular {
-  font-family: "Manrope-Regular";
-  font-weight: 400 !important;
+    font-family: "Manrope-Regular";
+    font-weight: 400 !important;
 }
 
 .font-bold-extra {
-  font-family: "Manrope-ExtraBold" !important;
+    font-family: "Manrope-ExtraBold" !important;
 }
 
 .font-bold {
-  // font-family: "Manrope-Bold";
-  font-weight: bold;
+    // font-family: "Manrope-Bold";
+    font-weight: bold;
 }
 
 $fontSizes: 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 40, 50, 60;
@@ -92,92 +92,92 @@ $fontSizes: 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 40, 50, 60;
 }
 
 .flex-1 {
-  flex-grow: 1;
+    flex-grow: 1;
 }
 .color-red {
-  color: #f51355 !important;
+    color: #f51355 !important;
 }
 
 .color-plus {
-  color: #167c3a !important;
+    color: #167c3a !important;
 }
 .color-brown {
-  color: #0fac4c !important;
+    color: #0fac4c !important;
 }
 
 .color-minus {
-  color: #9f0000 !important;
+    color: #9f0000 !important;
 }
 .color-black {
-  color: #050505 !important;
+    color: #050505 !important;
 }
 .color-white {
-  color: #ffffff;
+    color: #ffffff;
 }
 .color-vendor {
-  color: $vendorColor;
+    color: $vendorColor;
 }
 .color-purple {
-  color: $vendorColor;
+    color: $vendorColor;
 }
 .color-yellow-dark {
-  color: $darkYellow;
+    color :$darkYellow
 }
 .color-black-middle {
-  color: #707070;
+    color :#707070;
 }
 
 .whitspace-nowrap {
-  white-space: nowrap;
+    white-space: nowrap;
 }
 
-.mt-10 {
-  margin-top: 10px !important;
+.mt-10{
+    margin-top: 10px !important;
 }
 .mt-70 {
-  margin-top: 70px;
+    margin-top: 70px;
 }
 .mt-100 {
-  margin-top: 100px;
+    margin-top: 100px;
 }
 
 .mt-1 {
-  margin-top: 1rem;
+    margin-top: 1rem;
 }
 
 .mb-0 {
-  margin-bottom: 0 !important;
+    margin-bottom: 0 !important;
 }
 
 .mb-1 {
-  margin-bottom: 1rem;
+    margin-bottom: 1rem;
 }
 .mt-2 {
-  margin-top: 2rem;
+    margin-top: 2rem;
 }
 .mt-3 {
-  margin-top: 2rem;
+    margin-top: 2rem;
 }
 .mt-4rem {
-  margin-top: 4rem;
+    margin-top: 4rem;
 }
 .mt-5 {
-  margin-top: 5rem;
+    margin-top: 5rem;
 }
 
 .mb-2 {
-  margin-bottom: 2rem;
+    margin-bottom: 2rem;
 }
 
 .mr-0 {
-  margin-right: 0;
+    margin-right: 0;
 }
 .ml-400 {
-  margin-left: 400px !important;
+    margin-left: 400px !important;
 }
 
 .mx-auto {
-  margin: 0 auto;
+    margin: 0 auto;
 }
 
 $paddings: 0, 5, 10, 15, 20, 30, 40, 50, 60, 70, 100;
@@ -222,339 +222,336 @@ $paddings: 0, 5, 10, 15, 20, 30, 40, 50, 60, 70, 100;
   }
 }
 .pl-400 {
-  padding-left: 400px;
+    padding-left: 400px;
 }
 .py-5 {
-  padding: 5px 0 !important;
+    padding: 5px 0 !important;
 }
 
 .py-10 {
-  padding: 10px 0;
+    padding: 10px 0;
 }
 .py-20 {
-  padding: 20px 0;
+    padding: 20px 0;
 }
 .color-dark-gray {
-  color: #818080;
+    color: #818080;
 }
 .color-gray {
-  color: #a0a0a0;
+    color: #a0a0a0;
 }
 .white-card {
-  box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-  background-color: #ffffff;
+    box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+    background-color: #ffffff;
 }
 .width-10 {
-  width: 10%;
+    width: 10%;
 }
 .width-20 {
-  width: 20%;
+    width: 20%;
 }
 .width-30 {
-  width: 30%;
+    width: 30%;
 }
 .width-40 {
-  width: 40%;
+    width: 40%;
 }
 .width-50 {
-  width: 50%;
+    width: 50%;
 }
 .width-60 {
-  width: 60%;
+    width: 60%;
 }
 .width-66 {
-  width: 66%;
+    width: 66%;
 }
 .width-100 {
-  width: 100% !important;
+    width: 100% !important;
 }
 .w-max-80 {
-  max-width: 80px;
+    max-width: 80px;
 }
 .w-max-120 {
-  max-width: 120px;
+    max-width: 120px;
 }
 .w-max-450 {
-  max-width: 450px;
+    max-width: 450px;
 }
 .height-100vh {
-  height: 100vh;
+    height: 100vh;
 }
 .line-height-1 {
-  line-height: 1em;
+    line-height: 1em;
 }
 .line-height-15 {
-  line-height: 1.5em;
+    line-height: 1.5em;
 }
 .line-height-2 {
-  line-height: 2em;
+    line-height: 2em;
 }
 .f-left {
-  float: left;
+    float: left;
 }
 .md-radio {
-  .md-radio-container {
-    min-width: 30px;
-    height: 30px;
-    top: -5px;
-    border-color: #f51355 !important;
-  }
-  &.md-theme-default.md-checked {
     .md-radio-container {
-      border-color: #f51355 !important;
+        min-width: 30px;
+        height: 30px;
+        top: -5px;
+        border-color: #f51355 !important;
     }
-  }
-  &.md-checked {
-    .md-radio-container:after {
-      background-color: #f51355 !important;
-      right: 4px;
-      bottom: 4px;
-      top: 4px;
-      left: 4px;
+    &.md-theme-default.md-checked {
+        .md-radio-container {
+            border-color: #f51355 !important;
+        }
     }
-  }
+    &.md-checked {
+        .md-radio-container:after {
+            background-color: #f51355 !important;
+            right: 4px;
+            bottom: 4px;
+            top: 4px;
+            left: 4px;
+        }
+    }
 }
 
 .md-datepicker-dialog {
-  .md-datepicker-header {
-    display: none;
-  }
+    .md-datepicker-header {
+        display: none;
+    }
 }
 .edit-btn {
-  margin: 0px !important;
-  min-width: auto;
-  .md-ripple {
-    padding: 0px !important;
-    text-align: left;
-    justify-content: start;
-    text-transform: none;
-    .md-button-content {
-      font-family: "Manrope-ExtraBold", sans-serif;
-      font-size: 16px;
+    margin: 0px !important;
+    min-width: auto;
+    .md-ripple {
+        padding: 0px !important;
+        text-align: left;
+        justify-content: start;
+        text-transform: none;
+        .md-button-content {
+            font-family: "Manrope-ExtraBold", sans-serif;
+            font-size: 16px;
+        }
     }
-  }
 }
 .maryoku-btn {
-  margin: 0px;
-  min-width: auto;
-  .md-ripple {
-    text-transform: none;
-    .md-button-content {
-      font-family: "Manrope-ExtraBold", sans-serif;
-      font-size: 16px;
+    margin: 0px;
+    min-width: auto;
+    .md-ripple {
+        text-transform: none;
+        .md-button-content {
+            font-family: "Manrope-ExtraBold", sans-serif;
+            font-size: 16px;
+        }
     }
-  }
 }
 .normal-btn {
-  min-width: auto;
-  margin-top: 0px;
-  margin-bottom: 0px;
-  .md-ripple {
-    text-transform: none;
-    padding: 7px 25px !important;
-    .md-button-content {
-      font-family: "Manrope-ExtraBold", sans-serif;
-      font-size: 16px !important;
-      // text-transform: capitalize;
+    min-width: auto;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    .md-ripple {
+        text-transform: none;
+        padding: 7px 25px !important;
+        .md-button-content {
+            font-family: "Manrope-ExtraBold", sans-serif;
+            font-size: 16px !important;
+            // text-transform: capitalize;
+        }
     }
-  }
 }
 .inline-input {
-  height: 40px;
-  padding: 10px 12px;
-  color: #32325d;
-  background-color: white;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  border-radius: 3px;
-  border: solid 1px #050505;
-  text-align: center;
-  font-size: 18px;
-  color: #050505;
-  width: 140px;
+    height: 40px;
+    padding: 10px 12px;
+    color: #32325d;
+    background-color: white;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    border-radius: 3px;
+    border: solid 1px #050505;
+    text-align: center;
+    font-size: 18px;
+    color: #050505;
+    width: 140px;
 }
 .edit-btn-1 {
-  margin: 0px !important;
-  min-width: auto;
-  .md-ripple {
-    padding: 7px 2px !important;
-    text-align: left;
-    justify-content: start;
-    text-transform: none;
-    .md-button-content {
-      font-family: "Manrope-ExtraBold", sans-serif;
-      font-size: 16px;
+    margin: 0px !important;
+    min-width: auto;
+    .md-ripple {
+        padding: 7px 2px !important;
+        text-align: left;
+        justify-content: start;
+        text-transform: none;
+        .md-button-content {
+            font-family: "Manrope-ExtraBold", sans-serif;
+            font-size: 16px;
+        }
     }
-  }
 }
 .button-split {
-  display: inline-block;
-  padding: 0 5px;
-  &:after {
-    border-left: solid 2px #dbdbdb;
-    height: 1em;
-    content: " ";
-    position: absolute;
-    top: 1.5em;
-    padding: 14px;
-  }
+    display: inline-block;
+    padding: 0 5px;
+    &:after {
+        border-left: solid 2px #dbdbdb;
+        height: 1em;
+        content: " ";
+        position: absolute;
+        top: 1.5em;
+        padding: 14px;
+    }
 }
 .lastDroppingCard {
-  padding-bottom: 300px;
+    padding-bottom: 300px;
 }
 
 hr {
-  height: 1px;
-  border: none;
-  background: #b7b7b7;
+    height: 1px;
+    border: none;
+    background: #b7b7b7;
 }
 .md-checkbox-label {
-  // padding-top: 4px;
-  color: #050505 !important;
-  line-height: 27px !important;
-  height: 27px !important;
+    // padding-top: 4px;
+    color: #050505 !important;
+    line-height: 27px !important;
+    height: 27px !important;
 }
 .text-transform-capitalize {
-  text-transform: capitalize;
+    text-transform: capitalize;
 }
 .text-transform-uppercase {
-  text-transform: uppercase;
+    text-transform: uppercase;
 }
 
 .vertical-line {
-  display: inline-block;
-  border-left: solid 1px #a0a0a0;
-  height: 2rem;
-  margin: 0 2rem;
+    display: inline-block;
+    border-left: solid 1px #a0a0a0;
+    height: 2rem;
+    margin: 0 2rem;
 }
 .crosslinedText {
-  text-decoration: line-through;
+    text-decoration: line-through;
 }
 .vertical-center {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 }
 .align-center {
-  align-items: center;
+    align-items: center;
 }
 .align-baseline {
-  align-items: baseline;
+    align-items: baseline;
 }
 
 .align-start {
-  align-items: flex-start;
+    align-items: flex-start;
 }
 .align-end {
-  align-items: flex-end;
+    align-items: flex-end;
 }
 .position-relative {
-  position: relative;
+    position: relative;
 }
 .border-gray-1 {
-  border: solid 1px #a0a0a0;
+    border: solid 1px #a0a0a0;
 }
 .text-underline {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 .d-flex {
-  display: flex;
+    display: flex;
 }
 .flex-column {
-  flex-direction: column;
+    flex-direction: column;
 }
 .d-inline-block {
-  display: inline-block;
+    display: inline-block;
 }
 .justify-content {
-  &-between {
-    justify-content: space-between;
-  }
-  &-around {
-    justify-content: space-around;
-  }
-  &-start {
-    justify-content: flex-start;
-  }
-  &-end {
-    justify-content: flex-end;
-  }
-  &-center {
-    justify-content: center;
-  }
+    &-between {
+        justify-content: space-between;
+    }
+    &-around {
+        justify-content: space-around;
+    }
+    &-start {
+        justify-content: flex-start;
+    }
+    &-end {
+        justify-content: flex-end;
+    }
+    &-center {
+        justify-content: center;
+    }
 }
 
 .d-none {
-  display: none;
+    display: none;
 }
 
 .d-block {
-  display: block !important;
+    display: block !important;
 }
 
 .transparent {
-  opacity: 0;
+    opacity: 0;
 }
 .page-icon {
-  width: 30px !important;
+    width: 30px !important;
 }
 .label-icon {
-  width: 20px !important;
+    width: 20px !important;
 }
 .label-icon-1 {
-  width: 25px !important;
+    width: 25px !important;
 }
 
-.label-capitalize {
-  text-transform: capitalize;
+.label-capitalize{
+    text-transform: capitalize;
 }
 
 .form-control {
-  min-height: 60px;
-  border-radius: 3px;
-  border: solid 0.5px #bcbcbc;
-  background: #ffffff;
-  width: 100%;
-  padding: 0 1.5em;
-  font-size: 15px;
-  color: #050505;
-  font-family: "Manrope-Regular", sans-serif;
+    min-height: 60px;
+    border-radius: 3px;
+    border: solid 0.5px #bcbcbc;
+    background: #ffffff;
+    width: 100%;
+    padding: 0 1.5em;
+    font-size: 15px;
+    color: #050505;
+    font-family: "Manrope-Regular", sans-serif;
 }
 
 .swal-button {
-  background-color: #f51355;
-  color: #fff;
-  &:not([disabled]):hover,
-  &:hover {
     background-color: #f51355;
-  }
+    color: #fff;
+    &:not([disabled]):hover,
+    &:hover {
+        background-color: #f51355;
+    }
 }
 .text-ellipse {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .word-break {
-  word-break: break-word;
+    word-break: break-word;
 }
 .text-center {
-  text-align: center;
-}
-.text-right {
-  text-align: right;
+    text-align: center;
 }
 
 .cursor-pointer {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 @media only screen and (max-width: 959px) {
-  .font-size-20 {
-    font-size: 16px !important;
-  }
+    .font-size-20 {
+        font-size: 16px !important;
+    }
 
-  .font-size-25 {
-    font-size: 20px !important;
-  }
+    .font-size-25 {
+        font-size: 20px !important;
+    }
 }

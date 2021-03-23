@@ -59,7 +59,7 @@
           </md-list-item>
           <md-divider></md-divider>
           <md-list-item>
-            <md-button class="maryoku-btn md-vendor width-100">Create Your Landing Page</md-button>
+            <md-button class="maryoku-btn md-vendor width-100" :disabled="true">Create Your Landing Page</md-button>
           </md-list-item>
           <md-list-item @click="logout">
             <label>

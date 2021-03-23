@@ -12,6 +12,7 @@
           :class="[
             { active: isActivePanel(tabName[index]) },
             { [getColorButton(colorButton)]: isActivePanel(tabName[index]) },
+            { [theme]: true },
           ]"
         >
           <div v-html="tabName[index]"></div>
@@ -54,6 +55,10 @@ export default {
     activeTab: {
       type: Number,
       default: 0,
+    },
+    theme: {
+      type: String,
+      default: "red",
     },
   },
   data() {
@@ -143,10 +148,23 @@ export default {
           // margin-right: 50px;
           font-weight: normal;
         }
+        &.red {
+          &.active {
+            .md-list-item-button {
+              border-bottom-color: #f51355;
+            }
+          }
+        }
+        &.purple {
+          &.active {
+            .md-list-item-button {
+              border-bottom-color: #641856;
+            }
+          }
+        }
         &.active {
           .md-list-item-button {
             background: none !important;
-            border-bottom-color: #f51355;
             box-shadow: none;
             border-radius: 0;
             color: #000 !important;

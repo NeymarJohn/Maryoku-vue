@@ -224,7 +224,7 @@
   </div>
 </template>
 <script>
-import { categoryNameWithIcons } from "@/constants/vendor";
+import VendorService from "@/services/vendor.service";
 import InputProposalSubItem from "@/components/Inputs/InputProposalSubItem.vue";
 import { Money } from "v-money";
 import { mapGetters } from "vuex";
@@ -387,7 +387,7 @@ export default {
   },
   mounted() {
     this.newProposalRequest = this.proposalRequest;
-    this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
+    this.iconsWithCategory = VendorService.categoryNameWithIcons();
 
     this.$root.$on("update-proposal-budget-summary", (newProposalRequest, discountBlock) => {
       this.newProposalRequest = newProposalRequest;

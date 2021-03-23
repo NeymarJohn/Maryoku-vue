@@ -18,7 +18,7 @@
           </h5>
           <p>
             Mark all the services you can support and will be included in your proposal. If needed please add a
-            description or amount.
+            decsription or amount.
           </p>
         </div>
         <vendor-service-item

@@ -1,6 +1,6 @@
 <template>
   <div class="company-details-container">
-    <tabs :tab-name="['Company Details', 'Payment Setting', 'Invoices']" color-button="info">
+    <tabs :tab-name="['Company Details', 'Payment Setting', 'Invoices']" color-button="info" theme="purple">
       <template slot="tab-pane-1">
         <vendor-company-detail></vendor-company-detail>
       </template>

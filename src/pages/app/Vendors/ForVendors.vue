@@ -357,6 +357,7 @@
 
 <script>
 import moment from "moment";
+import VendorService from "@/services/vendor.service";
 import VueElementLoading from "vue-element-loading";
 import Vendors from "@/models/Vendors";
 import ProposalRequest from "@/models/ProposalRequest";

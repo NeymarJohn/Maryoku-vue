@@ -81,10 +81,6 @@ export default {
   props: {
     comType: String,
     title: Object,
-    defaultRules: {
-      type: Array,
-      default: () => [],
-    },
   },
   data: () => {
     return {
@@ -98,9 +94,7 @@ export default {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
   },
-  mounted() {
-    this.rules = this.defaultRules;
-  },
+  mounted() {},
   methods: {
     addCancelPolicy() {
       this.policies.push({
@@ -126,7 +120,6 @@ export default {
       this.rules.push(this.$refs.additionalRule.value);
       this.$refs.additionalRule.value = null;
       this.focusedRule = null;
-      this.$store.commit("vendorSignup/setField", { field: "additionalRules", value: this.rules });
     },
     editRule(r) {
       this.focusedRule = this.rules.filter((rule) => rule == r)[0];
