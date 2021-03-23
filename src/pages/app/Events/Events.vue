@@ -1,12 +1,12 @@
 <template>
   <div class="md-layout events-list">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen>
-<!--      <div :style="`background-image:url(/static/img/load_${imageIndex}.jpg)`" class="loading-background">-->
-<!--        <div :class="`quote quote_${imageIndex}`">-->
-<!--          <span>{{ quote.description }}</span>-->
-<!--          <span class="author">{{ quote.author }}</span>-->
-<!--        </div>-->
-<!--      </div>-->
+      <div :style="`background-image:url(/static/img/load_${imageIndex}.jpg)`" class="loading-background">
+        <div :class="`quote quote_${imageIndex}`">
+          <span>{{ quote.description }}</span>
+          <span class="author">{{ quote.author }}</span>
+        </div>
+      </div>
     </vue-element-loading>
     <div class="md-layout-item md-size-100">
       <md-card v-if="upcomingEvents.length">

@@ -94,9 +94,15 @@ import MyServices from "./MyServices";
 export default {
   components: {
     VueElementLoading,
+    PersonalInformation,
+    DietaryConstraints,
+    MySpecialDates,
+    HolidaysCelebrate,
     Tabs,
     LabelEdit,
     VendorAccountSettings,
+    MyEvents,
+    Inspirations,
     UserAvatar,
     CompanyLogo,
     CompanyDetails,
