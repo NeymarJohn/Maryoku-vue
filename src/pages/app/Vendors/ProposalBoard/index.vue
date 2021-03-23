@@ -107,12 +107,12 @@
                 You won <span class="font-bold">40 of 120</span> Proposals you applied to
               </div>
               <hr class="mt-50 mb-50" />
-              <div>
-                <div class="d-flex mb-30">
+              <div class="tips">
+                <div class="d-flex mb-30 align-center">
                   <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
                   <div class="ml-10">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</div>
                 </div>
-                <div class="d-flex">
+                <div class="d-flex align-center">
                   <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
                   <div class="ml-10">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</div>
                 </div>
@@ -124,7 +124,7 @@
       <div class="md-layout">
         <div class="md-layout-item md-size-75">
           <div class="text-center">
-            <table-pagination :pageCount="12"></table-pagination>
+            <table-pagination class="mt-30" :pageCount="12"></table-pagination>
           </div>
         </div>
         <div class="md-layout-item md-size-25"></div>
@@ -206,6 +206,11 @@ export default {
     display: grid;
     align-items: center;
     grid-template-columns: 150px 20% 20% 15% 20% 20% 30px;
+  }
+  .tips {
+    img {
+      height: 20px;
+    }
   }
 }
 </style>
