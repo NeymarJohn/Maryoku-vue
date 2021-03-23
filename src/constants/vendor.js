@@ -2437,6 +2437,7 @@ export const businessCategories = [
                 name: "setup/breakdown hours included",
                 type: Boolean,
                 value: false,
+                unit: "hour",
               },
             ],
           },
@@ -3968,6 +3969,7 @@ export const VendorPolicy = [
         type: Number,
         value: 0,
         noSuffix: true,
+        unit: "hour",
       },
       {
         name: "Number of breaks",
@@ -4022,11 +4024,13 @@ export const VendorPolicy = [
         name: "Minimum hours of service",
         type: Number,
         noSuffix: true,
+        unit: "hour",
       },
       {
         name: "Max hours per shift",
         type: Number,
         noSuffix: true,
+        unit: "hour",
       },
       {
         name: "Dress code",
@@ -4050,6 +4054,7 @@ export const VendorPolicy = [
         name: "Minimum amount of hours",
         type: Number,
         noSuffix: true,
+        unit: "hour",
       },
       {
         name: "Need to control room lighting",
@@ -4076,6 +4081,7 @@ export const VendorPricingPolicy = [
         noSuffix: true,
         label: "Number of hours",
         hasComment: true,
+        unit: "hour",
       },
       {
         name: "Hours included in rental",
@@ -4083,6 +4089,7 @@ export const VendorPricingPolicy = [
         noSuffix: true,
         label: "Number of hours",
         hasComment: true,
+        unit: "hour",
       },
       {
         name: "Setup hours included in rental",
@@ -4090,6 +4097,7 @@ export const VendorPricingPolicy = [
         label: "Number of hours",
         noSuffix: true,
         hasComment: true,
+        unit: "hour",
       },
       {
         name: "Minimum Spend",
@@ -4520,6 +4528,7 @@ export const VendorPricingPolicy = [
         subCategory: "charge",
         type: Number,
         hasComment: true,
+        unit: "hour",
       },
       {
         name: "Rushed setup",
@@ -4591,6 +4600,7 @@ export const VendorPricingPolicy = [
         name: "Number of hours",
         type: Number,
         hasComment: true,
+        unit: "hour",
       },
       {
         name: "Level of security training/certification",
