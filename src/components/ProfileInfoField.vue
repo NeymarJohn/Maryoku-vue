@@ -165,7 +165,7 @@ export default {
           icon: "socialmedia/Pinterest.svg",
         },
         {
-          name: "foursuare",
+          name: "foursquare",
           icon: "socialmedia/foursquare.svg",
         },
         {

@@ -194,19 +194,19 @@
             <div class="dont-work mt-20">
               <h5>We don't work on:</h5>
               <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
-                <img :src="`${iconUrl}Group 5489 (4).svg`" />
+                <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
                 {{ mergeStringItems(vendor.selectedWeekdays) }}
               </div>
               <div class="item" v-for="(d, dIndex) in vendor.exDonts" :key="dIndex">
-                <img :src="`${iconUrl}Group 5489 (4).svg`" />
+                <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
                 {{ d.holiday }}
               </div>
-              <div class="item" v-if="vendor.dontWorkDays">
-                <img :src="`${iconUrl}Group 5489 (4).svg`" />
+              <div class="item" v-if="vendor.dontWorkDays && vendor.dontWorkDays.length > 0">
+                <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
                 {{ dontWorkDays() }}
               </div>
               <div class="item" v-if="vendor.dontWorkTime">
-                <img :src="`${iconUrl}Group 5489 (4).svg`" />
+                <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
                 {{ dontWorkTime() }}
               </div>
             </div>

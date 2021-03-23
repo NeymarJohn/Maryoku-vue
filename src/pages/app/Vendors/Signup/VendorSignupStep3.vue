@@ -31,9 +31,10 @@
                 :key="rIndex + 'component'"
                 :item="r"
                 @update="setPolicy($event, rIndex)"
-              ></vendor-policy-item>
+              >
+              </vendor-policy-item>
             </div>
-            <v-signup-add-rules :comType="`rule`" :title="rulesDesc" />
+            <v-signup-add-rules :comType="`rule`" :title="rulesDesc" :defaultRules="additionalRules" />
           </div>
         </div>
         <div class="pricing-policy-wrapper mb-50">
@@ -299,24 +300,25 @@
           </div>
         </div>
         <div class="health-policy-wrapper">
+          <div class="title-cont">
+            <div class="top">
+              <h5><img :src="`${iconUrl}Union 12.svg`" />Health Policy</h5>
+            </div>
+          </div>
+          <div class="card">
             <div class="title-cont">
-                <div class="top">
-                    <h5><img :src="`${iconUrl}Union 12.svg`" />Health Policy</h5>
-                </div>
+              <div class="top">COVID 19 - Exceptional Policy</div>
+              <div class="bottom mb-10">
+                <p>
+                  Please indicate any policy related to Corona - observing and complying with rules within your own
+                  venue or an exceptional policy for this period
+                </p>
+              </div>
             </div>
-            <div class="card">
-                <div class="title-cont">
-                    <div class="top">COVID 19 - Exceptional Policy</div>
-                    <div class="bottom mb-10">
-                        <p>Please indicate any policy related to Corona - observing and complying with rules within your own venue
-                            or an exceptional policy for this period
-                        </p>
-                    </div>
-                </div>
-                <div class="main-cont">
-                    <textarea v-model="vendor.healthPolicy"></textarea>
-                </div>
+            <div class="main-cont">
+              <textarea v-model="vendor.healthPolicy"></textarea>
             </div>
+          </div>
         </div>
       </div>
     </div>
@@ -813,7 +815,11 @@ export default {
       });
     },
   },
-  computed: {},
+  computed: {
+    additionalRules() {
+      return this.$store.state.vendorSignup.vendor.additionalRules;
+    },
+  },
   filters: {},
   mounted() {
     this.init();
@@ -1452,7 +1458,7 @@ export default {
     width: 100%;
     padding: 1.5rem 2rem;
     font-size: 15px;
-     border: 1px solid #dddddd;
+    border: 1px solid #dddddd;
 
     &.desc {
       display: block;

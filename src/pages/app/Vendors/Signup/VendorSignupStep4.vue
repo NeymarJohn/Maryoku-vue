@@ -129,28 +129,32 @@
           <div class="policy-cont" id="Policy">
             <div class="title"><img :src="`${iconUrl}Group 1471 (2).svg`" /> OUR POLICY</div>
             <div class="rules">
-              <div class="rules">
-                <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
-                  <div class="item">{{ policy.name }}</div>
-                  <div class="item" v-if="policy.type === 'MultiSelection'">
-                    <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
-                      `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
-                    }}</span>
-                  </div>
-                  <div class="item" v-else-if="policy.type === 'Including'">
-                    <span class="mr-10" v-if="policy.value"> Yes </span>
-                    <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
-                  </div>
-                  <div class="item" v-else>
-                    <span v-if="policy.type === Number && !policy.isPercentage">$</span>
-                    <span v-if="policy.type === Boolean">{{policy.value === true ? "Yes" : "No"}}</span>
-                    <span v-else>{{ policy.value }}</span>
-                    <span v-if="policy.isPercentage">%</span>
-                    <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
-                      {{ policy.attendees }} attendees
-                    </span>
-                  </div>
+              <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
+                <div class="item">{{ policy.name }}</div>
+                <div class="item" v-if="policy.type === 'MultiSelection'">
+                  <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
+                    `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
+                  }}</span>
                 </div>
+                <div class="item" v-else-if="policy.type === 'Including'">
+                  <span class="mr-10" v-if="policy.value"> Yes </span>
+                  <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
+                </div>
+                <div class="item" v-else>
+                  <span v-if="policy.type === Number && !policy.isPercentage">$</span>
+                  <span v-if="policy.type === Boolean">{{ policy.value === true ? "Yes" : "No" }}</span>
+                  <span v-else>{{ policy.value }}</span>
+                  <span v-if="policy.isPercentage">%</span>
+                  <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
+                    {{ policy.attendees }} attendees
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="rules">
+              <h5 class="font-bold font-size-20">Additional Rules</h5>
+              <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
+                <div class="item">Event must be {{ policy }}</div>
               </div>
             </div>
             <div class="not-allowed" v-if="vendor.vendorCategories[0] == 'venuerental'">
@@ -300,7 +304,7 @@ export default {
           icon: "socialmedia/Pinterest.svg",
         },
         {
-          name: "foursuare",
+          name: "foursquare",
           icon: "socialmedia/foursquare.svg",
         },
         {
@@ -544,6 +548,9 @@ export default {
     },
   },
   computed: {
+    additionalRules() {
+      return this.$store.state.vendorSignup.vendor.additionalRules;
+    },
     validPricingPolicy() {
       if (this.vendor.pricingPolicies)
         return this.vendor.pricingPolicies.filter(
@@ -553,7 +560,9 @@ export default {
     },
     validPolicy() {
       if (this.vendor.policies)
-        return this.vendor.policies.filter((item) => item.hasOwnProperty('value') || (item.type === "Including" && item.cost));
+        return this.vendor.policies.filter(
+          (item) => item.hasOwnProperty("value") || (item.type === "Including" && item.cost),
+        );
       return null;
     },
   },

@@ -299,7 +299,7 @@ export default {
     return {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
       socialMedia: [],
-      defSocialMedia: ["youtube", "linkedin", "google", "pinterest", "foursuare", "reddit", "tiktok"],
+      defSocialMedia: ["youtube", "linkedin", "google", "pinterest", "foursquare", "reddit", "tiktok"],
       reg: /^(ftp|http|https):\/\/[^ "]+$/,
       min: Number,
       max: Number,

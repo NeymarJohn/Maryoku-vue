@@ -154,7 +154,7 @@
         <feedback-list class="mt-20" v-if="campaignIssued['FEEDBACK']"> </feedback-list>
       </template>
     </div>
-    <div class="campaign-footer">
+    <div class="campaign-footer white-card">
       <div class="campaign-footer-content d-flex">
         <div>
           <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
@@ -595,6 +595,7 @@ export default {
 <style lang="scss" scoped>
 .campaign-content {
   padding: 0 3em;
+  margin-bottom: 150px;
   &-tab {
     height: 140px;
     line-height: 140px;
@@ -621,11 +622,14 @@ export default {
 
 .event-campaign-section {
   .campaign-footer {
-    height: 128px;
+    height: 100px;
     background-color: white;
-    width: 100%;
     margin-top: 100px;
-    padding: 10px 50px;
+    padding: 0px 50px;
+    width: calc(100% - 480px);
+    position: fixed;
+    bottom: 0;
+    z-index: 100;
     &-content {
       max-width: 1520px;
       margin: auto;

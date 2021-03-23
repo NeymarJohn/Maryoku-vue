@@ -67,9 +67,7 @@ export default {
     };
   },
   created() {},
-  mounted() {
-    // console.log("vendor.service.item", this.serviceItem)
-  },
+  mounted() {},
   methods: {
     getTooltip(item) {
       if (item.name === "Sustainability, Inclusion and Diversity") {

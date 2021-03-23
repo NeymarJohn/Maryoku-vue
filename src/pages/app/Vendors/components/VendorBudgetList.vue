@@ -31,7 +31,6 @@
 </template>
 <script>
 import VueElementLoading from "vue-element-loading";
-import VendorService from "@/services/vendor.service";
 
 export default {
   name: "vendor-budget-list",

@@ -138,7 +138,7 @@
 <script>
 import EditableProposalSubItem from "./EditableProposalSubItem.vue";
 import CheckListItem from "../components/CheckListItem.vue";
-import VendorService from "@/services/vendor.service";
+import { categoryNameWithIcons } from "@/constants/vendor";
 import { mapGetters } from "vuex";
 import ProposalRequirements from "./ProposalRequirements.vue";
 
@@ -200,7 +200,7 @@ export default {
   },
   created() {},
   mounted() {
-    this.iconsWithCategory = VendorService.categoryNameWithIcons();
+    this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
   },
   computed: {
     ...mapGetters({
