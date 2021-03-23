@@ -168,14 +168,12 @@ export default {
           }
         });
       }
-      // console.log("checkCondition", requirements);
     },
     _saveRequirementsInStore(event, action = null) {
       let requirements = this.storedRequirements;
 
       if (action === "clear") {
         let initRequirements = this.$store.state.event.initBookingRequirements;
-        // console.log('clear.initRequirement', initRequirements);
         requirements[event.id][this.blockId].requirements = JSON.parse(
           JSON.stringify(initRequirements[event.id][this.blockId].requirements),
         );
@@ -184,7 +182,6 @@ export default {
         requirements[event.id][this.blockId].requirements = JSON.parse(JSON.stringify(this.requirementProperties));
         requirements[event.id][this.blockId].anythingElse = this.anythingElse;
       }
-      // console.log('updatedRequirement', requirements[this.event.id][this.blockId].requirements);
       this.setBookingRequirements(requirements);
     },
     addRequirement(category, property) {
@@ -192,14 +189,12 @@ export default {
       this.requirementProperties[category][index].isSelected = true;
       this.requirementProperties = { ...this.requirementProperties };
       this._saveRequirementsInStore(this.event);
-      // this.$forceUpdate();
     },
     removeRequirement(category, property) {
       const index = this.requirementProperties[category].findIndex((it) => it.item == property.item);
       this.requirementProperties[category][index].isSelected = false;
       this.requirementProperties = { ...this.requirementProperties };
       this._saveRequirementsInStore(this.event);
-      // this.$forceUpdate();
     },
     handleMultiSelectChange() {
       this.$forceUpdate();
@@ -239,14 +234,8 @@ export default {
     },
     fetchData: async function () {
       this.requirementProperties = {};
-
-      // console.log("fetchData", this.component, this.component.componentId, this.storedRequirements);
       this.blockId = this.component.componentId; //this.$route.params.blockId
       this.event = this.$store.state.event.eventData;
-
-      // todo check if commentComponent is used
-      //this.getCommentComponents(this.blockId);
-
       if (
         this.storedRequirements[this.event.id] &&
         this.storedRequirements[this.event.id][this.blockId] &&
@@ -294,6 +283,7 @@ export default {
     this.isLoading = true;
 
     if (this.eventData.id) {
+      console.log(this.eventData.id);
       this.fetchData();
     }
   },
@@ -308,7 +298,17 @@ export default {
         this.fetchData();
       }
     },
-    // '$route': 'fetchData'
+    storedRequirements(newVal, oldVal) {
+      if (
+        newVal[this.event.id] &&
+        newVal[this.event.id][this.blockId] &&
+        newVal[this.event.id][this.blockId].requirements
+      ) {
+        this.requirementProperties = JSON.parse(JSON.stringify(newVal[this.event.id][this.blockId].requirements));
+        this.anythingElse = JSON.parse(JSON.stringify(newVal[this.event.id][this.blockId].anythingElse));
+        this.isLoading = false;
+      }
+    },
   },
   filters: {
     formatDate: function (date) {

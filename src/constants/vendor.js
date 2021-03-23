@@ -1522,7 +1522,7 @@ export const businessCategories = [
                 value: false,
               },
               {
-                name: "traditiontal",
+                name: "traditional",
                 type: Boolean,
                 value: false,
               },
@@ -2107,6 +2107,13 @@ export const businessCategories = [
                 staff: null,
                 quest: null,
               },
+              {
+                name: "certified safe drive",
+                type: Boolean,
+                value: false,
+                staff: null,
+                quest: null,
+              },
             ],
           },
         ],
@@ -2452,7 +2459,17 @@ export const businessCategories = [
                 value: false,
               },
               {
-                name: "dance floor give aways",
+                name: "dance floor",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "specialty lighting (pinpoint, strobe)",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "theatrical staging",
                 type: Boolean,
                 value: false,
               },
@@ -2467,7 +2484,7 @@ export const businessCategories = [
             name: " ",
             items: [
               {
-                name: "acitivy is suitable for people with disabilities",
+                name: "activity is suitable for people with disabilities",
                 type: Boolean,
                 value: false,
               },
@@ -2594,6 +2611,41 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
               },
+              {
+                name: "executive protection",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "disaster security team",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "active shooter",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "training",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "firearms training",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "K9 detection services",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "licensed to carry fire arms",
+                type: Boolean,
+                value: false,
+              },
             ],
           },
           {
@@ -2661,6 +2713,13 @@ export const businessCategories = [
               },
               {
                 name: "crowd control",
+                type: Boolean,
+                value: false,
+                staff: null,
+                quest: null,
+              },
+              {
+                name: "certified security personnel ",
                 type: Boolean,
                 value: false,
                 staff: null,
@@ -3652,7 +3711,7 @@ export const companyServices = [
     name: "securityservices",
     type: Array,
     value: [],
-    available: ["day-of security", "security consultation", "perosnal security"],
+    available: ["day-of security", "security consultation", "personal security"],
   },
   {
     name: "videographyandphotography",
