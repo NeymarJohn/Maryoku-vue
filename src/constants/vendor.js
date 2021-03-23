@@ -3080,6 +3080,31 @@ export const businessCategories = [
                 value: false,
               },
               {
+                name: "travel",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "outdoor/leisure",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "stationary",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "wellness",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "safety",
+                type: Boolean,
+                value: false,
+              },
+              {
                 name: "other",
                 type: String,
                 value: "",
@@ -3264,6 +3289,11 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
               },
+              {
+                name: "set-up & tear-Down",
+                type: Boolean,
+                value: false,
+              },
             ],
           },
         ],
@@ -3291,6 +3321,11 @@ export const businessCategories = [
               },
               {
                 name: "special catering rental equipment",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "table coverings",
                 type: Boolean,
                 value: false,
               },
@@ -3605,7 +3640,7 @@ export const companyServices = [
     name: "giveaways",
     type: Array,
     value: [],
-    available: ["favors", "promotional"],
+    available: ["favors", "promotional", "marketing/promotional Items"],
   },
   {
     name: "entertainment",
