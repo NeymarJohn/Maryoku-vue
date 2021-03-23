@@ -1322,6 +1322,21 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
               },
+              {
+                name: "Food Server",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Administrative Duties",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Accounting",
+                type: Boolean,
+                value: false,
+              },
             ],
           },
           {
@@ -3588,6 +3603,10 @@ export const VendorPolicy = [
         name: "Max guest to staff ratio",
         type: Number,
         isPercentage: true,
+      },
+      {
+        name: "Work with Unions",
+        type: Boolean,
       },
     ],
   },
