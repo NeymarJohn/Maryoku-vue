@@ -48,37 +48,6 @@
           </p>
 
           <md-button class="md-rose md-raised md-outline">More About Us</md-button>
-
-          <!--                    <div class="loading" v-if="vendorProposal.attachements.length && !fetchingAllAttachments">-->
-          <!--                        Loading ...-->
-          <!--                    </div>-->
-
-          <!--                    <carousel :items="3" :margin="25" :dots="false" :nav="false" class="proposal-images" v-if="fetchingAllAttachments">-->
-
-          <!--                        <template slot="prev"><span class="prev"> <md-icon>keyboard_arrow_left</md-icon> </span></template>-->
-
-          <!--                        <div class="item"-->
-          <!--                             v-for="(item,index) in images" :key="index"-->
-          <!--                             :style="`background: url(${item.src}) center center no-repeat; `">-->
-
-          <!--                        </div>-->
-
-          <!--                        <template slot="next"><span class="next"> <md-icon>keyboard_arrow_right</md-icon> </span></template>-->
-
-          <!--                    </carousel>-->
-
-          <!--                    <div class="proposal-includes">-->
-
-          <!--                        <div class="proposal-includes__title">-->
-          <!--                            What Do We Include In This Proposal?-->
-          <!--                        </div>-->
-          <!--                        <template v-if="vendorProposal.included.length">-->
-          <!--                            <div class="proposal-includes__item" v-for="(item,index) in vendorProposal.included" :key="index">-->
-          <!--                                <img :src="`${submitProposalIcon}Group 4781.svg`"> {{item.requirementTitle}}-->
-          <!--                            </div>-->
-          <!--                        </template>-->
-
-          <!--                    </div>-->
         </div>
 
         <div class="proposal-section contact-section">
@@ -129,7 +98,7 @@
                 </div>
               </div>
               <div class="item-pricing d-flex justify-content-end align-center">
-                <div class="element-value">
+                <div class="element-value" v-if="!expand">
                   <div class="element-price">${{ totalPrice | withComma }}</div>
                   <div class="discount-details">
                     ({{ discount.percentage }}% off)
@@ -201,11 +170,7 @@
                       <td>{{ service.requirementValue }}</td>
                       <td>${{ service.price | withComma }}</td>
                       <td>${{ (service.requirementValue * service.price) | withComma }}</td>
-                      <td class="element-actions">
-                        <md-button class="md-simple md-just-icon">
-                          <img :src="`${submitProposalIcon}Asset 311.svg`" />
-                        </md-button>
-                      </td>
+                      <td class="element-actions"></td>
                     </tr>
                   </tbody>
                 </table>
@@ -275,8 +240,13 @@
                   What Do We Include In This Proposal?
                 </div>
                 <template v-if="includedServices.length">
-                  <div class="proposal-includes__item" v-for="(item, index) in includedServices" :key="index">
-                    <div class="d-flex justify-content-between align-center">
+                  <included-service-item
+                    class="proposal-includes__item"
+                    v-for="(item, index) in includedServices"
+                    :item="item"
+                    :key="index"
+                  >
+                    <!-- <div class="d-flex justify-content-between align-center">
                       <div class="item-title">
                         <img :src="`${submitProposalIcon}Group 4781.svg`" />
                         {{ item.requirementTitle }}
@@ -291,8 +261,8 @@
 
                     <div class="item-description" v-if="item.expanded">
                       {{ item.description }}
-                    </div>
-                  </div>
+                    </div> -->
+                  </included-service-item>
                 </template>
               </div>
 
@@ -308,42 +278,12 @@
                   <span>Wold you like to upgrade & add one of those?</span>
                 </div>
                 <div class="extras-section__list">
-                  <div class="extras-section__item" v-for="(item, index) in extraServices" :key="index">
-                    <div class="d-flex justify-content-between align-center">
-                      <div class="item-title">
-                        {{ item.requirementTitle }}
-                        <!-- <span v-if="item.isComplimentary">complementary</span> -->
-                      </div>
-                      <div class="item-qty text-center">
-                        <input v-model="item.requirementValue" placeholder="QTY" />
-                      </div>
-                      <div class="item-price text-center">
-                        ${{ item.price }}
-                        {{ item.unit }}
-                      </div>
-                      <div class="item-added text-center">
-                        <template v-if="item.added">
-                          <div class="added-label">
-                            <img :src="`${$iconURL}/budget+screen/png/Asset+31.png`" width="20" />
-                            added
-                          </div>
-                        </template>
-                        <md-button v-else class="md-rose md-sm"> <md-icon>add_circle_outline</md-icon>add </md-button>
-                      </div>
-                      <div class="item-actions" :class="{ expanded: item.expand }">
-                        <md-button
-                          class="md-small md-simple md-just-icon expand-extra-item"
-                          @click="expandExtra(item, index)"
-                        >
-                          <img :src="`${submitProposalIcon}Component 36.svg`" />
-                        </md-button>
-                      </div>
-                    </div>
-
-                    <div class="item-description" v-if="item.expanded">
-                      {{ item.description }}
-                    </div>
-                  </div>
+                  <extra-service-item
+                    class="extras-section__item"
+                    v-for="(item, index) in extraServices"
+                    :key="`extra-service-item-${index}`"
+                    :item="item"
+                  ></extra-service-item>
                 </div>
               </div>
 
@@ -509,10 +449,8 @@ import { ChartCard } from "@/components";
 // import auth from '@/auth';
 import moment from "moment";
 import VueElementLoading from "vue-element-loading";
-import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import CalendarEventStatistics from "@/models/CalendarEventStatistics";
-import EventComponent from "@/models/EventComponent";
 import ProposalRequest from "@/models/ProposalRequest";
 import Vendors from "@/models/Vendors";
 import _ from "underscore";
@@ -523,18 +461,20 @@ import { mapState, mapMutations, mapGetters, mapActions } from "vuex";
 
 import { Tabs, Modal } from "@/components";
 
-import EventBudgetVendors from "./EventBudgetVendors";
-import EditEventBlocksBudget from "./EditEventBlocksBudget";
+import EventBudgetVendors from "../components/EventBudgetVendors";
+import EditEventBlocksBudget from "../components/EditEventBlocksBudget";
 import EventComponentVendor from "@/models/EventComponentVendor";
 //COMPONENTS
 
-import SideBar from "../../../../components/SidebarPlugin/NewSideBar";
-import SidebarItem from "../../../../components/SidebarPlugin/NewSidebarItem.vue";
-import ProgressSidebar from "./progressSidebar";
+import SideBar from "@/components/SidebarPlugin/NewSideBar";
+import SidebarItem from "@/components/SidebarPlugin/NewSidebarItem.vue";
+import ProgressSidebar from "../components/progressSidebar";
 
 import HeaderActions from "@/components/HeaderActions";
-import CommentEditorPanel from "./CommentEditorPanel";
+import CommentEditorPanel from "../components/CommentEditorPanel";
 import Proposal from "@/models/Proposal";
+import ExtraServiceItem from "./ExtraServiceItem";
+import IncludedServiceItem from "./IncludedServiceItem.vue";
 export default {
   components: {
     Tabs,
@@ -550,6 +490,8 @@ export default {
     HeaderActions,
     CommentEditorPanel,
     CancellationPolicy,
+    ExtraServiceItem,
+    IncludedServiceItem,
   },
 
   data() {
@@ -849,6 +791,7 @@ export default {
 
         .proposal-includes {
           margin: 3em 0;
+          padding-right: 20%;
           &__title {
             margin-bottom: 1em;
           }
@@ -925,7 +868,6 @@ export default {
           //}
 
           .element-block {
-            font-weight: 800;
             color: #050505;
             border-radius: 3px 3px 0 0;
             box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
@@ -1101,6 +1043,7 @@ export default {
               margin-top: 1em;
 
               .proposal-includes {
+                padding-right: 20%;
                 &__title {
                   font-size: 20px;
                   font-weight: 800;
@@ -1109,36 +1052,14 @@ export default {
                 }
 
                 &__item {
-                  font-size: 14px;
-                  color: #050505;
-                  display: inline-block;
-                  width: 43%;
-                  border-bottom: 1px solid #cccccc;
-                  padding-bottom: 0.5em;
-
-                  &:nth-child(odd) {
+                  &:not(:last-child) {
+                    border-bottom: 1px solid #cccccc;
                   }
-
-                  &:nth-child(even) {
-                    margin-right: 14%;
-                  }
-
                   img {
                     width: 20px;
                     margin-right: 1em;
                   }
-
                   .item-actions {
-                    input {
-                      box-shadow: none;
-                      border-radius: 0;
-                      width: 30px;
-                      padding: 0;
-                      font-size: 14px;
-                      margin-right: 1.4em;
-                      text-align: center;
-                    }
-
                     img {
                       width: 6px;
                       margin: auto;
@@ -1184,77 +1105,8 @@ export default {
                   }
                 }
 
-                &__list {
-                }
-
                 &__item {
-                  font-size: 14px;
                   border-bottom: 1px solid #ccc;
-                  padding: 0.2em;
-
-                  .item {
-                    &-title {
-                      width: 40%;
-                    }
-
-                    $cellsWidth: 70px;
-                    &-qty {
-                      width: $cellsWidth;
-                      input {
-                        box-shadow: none;
-                        border-radius: 0;
-                        width: 30px;
-                        padding: 0;
-                        font-size: 14px;
-                        margin-right: 1.4em;
-                        text-align: center;
-                      }
-                    }
-                    &-price {
-                      font-weight: normal;
-                      width: $cellsWidth;
-                    }
-                    &-added {
-                      width: $cellsWidth;
-
-                      .added-label {
-                        font-weight: normal;
-                        text-transform: capitalize;
-                        img {
-                          margin-right: 0.4em;
-                        }
-                      }
-
-                      .md-rose {
-                        .md-ripple {
-                          background: $rose !important;
-                          text-transform: capitalize;
-                          font-size: 14px;
-                          font-weight: bold;
-                        }
-                      }
-                    }
-                    &-actions {
-                      width: 30px;
-
-                      img {
-                        width: 6px;
-                      }
-
-                      &.expanded {
-                        img {
-                          transform: rotate(90deg);
-                        }
-                      }
-                    }
-
-                    &-description {
-                      font-weight: normal;
-                      font-size: 12px;
-                      width: 40%;
-                      margin-bottom: 0.5em;
-                    }
-                  }
                 }
               }
             }

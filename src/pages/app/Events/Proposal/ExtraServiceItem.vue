@@ -1,0 +1,66 @@
+<template>
+  <div>
+    <div class="align-center extra-service-item">
+      <div class="item-title font-bold">
+        {{ item.requirementTitle }}
+      </div>
+      <div class="item-qty text-center">
+        {{ item.requirementValue }}
+      </div>
+      <div class="item-price text-center">
+        ${{ item.price }}
+        {{ item.unit }}
+      </div>
+      <div class="item-added text-center">
+        <template v-if="item.added">
+          <div class="added-label">
+            <img :src="`${$iconURL}budget+screen/png/Asset+31.png`" width="20" />
+            added
+          </div>
+        </template>
+        <md-button v-else class="md-red md-sm normal-btn">
+          <md-icon class="mr-10">add_circle_outline</md-icon>Add
+        </md-button>
+      </div>
+      <div class="item-actions" :class="{ expanded: expanded }" v-if="item.description">
+        <md-button
+          class="md-sm normal-btn md-simple md-just-icon expand-extra-item color-black"
+          @click="expanded = !expanded"
+        >
+          <span class="color-black"><md-icon v-if="!expanded" class="color-black"> keyboard_arrow_right</md-icon></span>
+          <span class="color-black"><md-icon v-if="expanded" class="color-black"> keyboard_arrow_down</md-icon></span>
+        </md-button>
+      </div>
+    </div>
+    <div class="item-description" v-if="expanded">
+      {{ item.description }}
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  props: {
+    item: {
+      type: Object,
+      default: () => {},
+    },
+  },
+  data() {
+    return {
+      expanded: false,
+    };
+  },
+};
+</script>
+<style lang="scss" scoped>
+.extra-service-item {
+  display: grid;
+  grid-template-columns: 50% 15% 15% 15% 5%;
+  padding: 1em 0;
+  .expand-extra-item {
+    i {
+      color: #050505 !important;
+    }
+  }
+}
+</style>
