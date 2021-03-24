@@ -26,13 +26,13 @@
             <span> <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />Make Changes</span>
           </md-menu-item>
           <md-menu-item @click="edit" class="md-purple">
-            <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Download</span>
+            <span> <img :src="`${$iconURL}common/download.svg`" class="label-icon mr-10" />Download</span>
           </md-menu-item>
           <md-menu-item @click="edit" class="md-purple">
-            <span> <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />Duplicate</span>
+            <span> <img :src="`${$iconURL}common/duplicate.svg`" class="label-icon mr-10" />Duplicate</span>
           </md-menu-item>
           <md-menu-item @click="edit" class="md-purple">
-            <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Cancel Evnet</span>
+            <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Cancel Event</span>
           </md-menu-item>
         </md-menu-content>
       </md-menu>

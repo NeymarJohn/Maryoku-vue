@@ -14,7 +14,7 @@
             <div class="mb-30">All pages</div>
             <div class="mb-30">Specific pages</div>
             <multiselect
-              class="mb-30"
+              class="mb-30 md-purple"
               v-model="permittedPages"
               :options="availablePages"
               :close-on-select="true"

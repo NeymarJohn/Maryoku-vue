@@ -1,17 +1,14 @@
 <template>
   <ul class="pagination" :class="paginationClass">
-    <li class="page-item prev-page" :class="{'disabled': value === 1, 'no-arrows': noArrows}">
+    <li class="page-item prev-page" :class="{ disabled: value === 1, 'no-arrows': noArrows }">
       <a name="pagination-page-prev" class="page-link" aria-label="Previous" @click="prevPage">
-        <i class="fas fa-angle-double-left"></i>
+        <i class="fas fa-angle-double-left color-purple"></i>
       </a>
     </li>
-    <li class="page-item"
-        v-for="item in range(minPage, maxPage)"
-        :key="item"
-        :class="{active: value === item}">
-      <a :name="`pagination-page-${item}`" class="page-link" @click="changePage(item)">{{item}}</a>
+    <li class="page-item" v-for="item in range(minPage, maxPage)" :key="item" :class="{ active: value === item }">
+      <a :name="`pagination-page-${item}`" class="page-link" @click="changePage(item)">{{ item }}</a>
     </li>
-    <li class="page-item page-pre next-page" :class="{ 'disabled': value === totalPages, 'no-arrows': noArrows}">
+    <li class="page-item page-pre next-page" :class="{ disabled: value === totalPages, 'no-arrows': noArrows }">
       <a name="pagination-page-next" class="page-link" aria-label="Next" @click="nextPage">
         <i class="fas fa-angle-double-right"></i>
       </a>
@@ -20,118 +17,110 @@
 </template>
 <script>
 export default {
-  name: 'pagination',
+  name: "pagination",
   props: {
     type: {
       type: String,
-      default: 'primary',
-      validator: value => {
-        return [
-          'default',
-          'primary',
-          'danger',
-          'success',
-          'warning',
-          'info',
-          'rose'
-        ].includes(value)
-      }
+      default: "primary",
+      validator: (value) => {
+        return ["default", "primary", "danger", "success", "warning", "info", "rose"].includes(value);
+      },
     },
     noArrows: Boolean,
     pageCount: {
       type: Number,
-      default: 0
+      default: 0,
     },
     perPage: {
       type: Number,
-      default: 10
+      default: 10,
     },
     total: {
       type: Number,
-      default: 0
+      default: 0,
     },
     value: {
       type: Number,
-      default: 1
-    }
+      default: 1,
+    },
   },
   computed: {
-    paginationClass () {
-      return `pagination-${this.type}`
+    paginationClass() {
+      return `pagination-${this.type}`;
     },
-    totalPages () {
-      if (this.pageCount > 0) return this.pageCount
+    totalPages() {
+      if (this.pageCount > 0) return this.pageCount;
       if (this.total > 0) {
-        return Math.ceil(this.total / this.perPage)
+        return Math.ceil(this.total / this.perPage);
       }
-      return 1
+      return 1;
     },
-    pagesToDisplay () {
+    pagesToDisplay() {
       if (this.totalPages > 0 && this.totalPages < this.defaultPagesToDisplay) {
-        return this.totalPages
+        return this.totalPages;
       }
-      return this.defaultPagesToDisplay
+      return this.defaultPagesToDisplay;
     },
-    minPage () {
+    minPage() {
       if (this.value >= this.pagesToDisplay) {
-        const pagesToAdd = Math.floor(this.pagesToDisplay / 2)
-        const newMaxPage = pagesToAdd + this.value
+        const pagesToAdd = Math.floor(this.pagesToDisplay / 2);
+        const newMaxPage = pagesToAdd + this.value;
         if (newMaxPage > this.totalPages) {
-          return this.totalPages - this.pagesToDisplay + 1
+          return this.totalPages - this.pagesToDisplay + 1;
         }
-        return this.value - pagesToAdd
+        return this.value - pagesToAdd;
       } else {
-        return 1
+        return 1;
       }
     },
-    maxPage () {
+    maxPage() {
       if (this.value >= this.pagesToDisplay) {
-        const pagesToAdd = Math.floor(this.pagesToDisplay / 2)
-        const newMaxPage = pagesToAdd + this.value
+        const pagesToAdd = Math.floor(this.pagesToDisplay / 2);
+        const newMaxPage = pagesToAdd + this.value;
         if (newMaxPage < this.totalPages) {
-          return newMaxPage
+          return newMaxPage;
         } else {
-          return this.totalPages
+          return this.totalPages;
         }
       } else {
-        return this.pagesToDisplay
+        return this.pagesToDisplay;
       }
-    }
+    },
   },
-  data () {
+  data() {
     return {
-      defaultPagesToDisplay: 5
-    }
+      defaultPagesToDisplay: 5,
+    };
   },
   methods: {
-    range (min, max) {
-      let arr = []
+    range(min, max) {
+      let arr = [];
       for (let i = min; i <= max; i++) {
-        arr.push(i)
+        arr.push(i);
       }
-      return arr
+      return arr;
     },
-    changePage (item) {
-      this.$emit('input', item)
+    changePage(item) {
+      this.$emit("input", item);
     },
-    nextPage () {
+    nextPage() {
       if (this.value < this.totalPages) {
-        this.$emit('input', this.value + 1)
+        this.$emit("input", this.value + 1);
       }
     },
-    prevPage () {
+    prevPage() {
       if (this.value > 1) {
-        this.$emit('input', this.value - 1)
+        this.$emit("input", this.value - 1);
       }
-    }
+    },
   },
   watch: {
-    perPage () {
-      this.$emit('input', 1)
+    perPage() {
+      this.$emit("input", 1);
     },
-    total () {
-      this.$emit('input', 1)
-    }
-  }
-}
+    total() {
+      this.$emit("input", 1);
+    },
+  },
+};
 </script>

@@ -20,12 +20,7 @@
         <a class="save" @click="saveProposal('save')">
           <img :src="`${proposalIconsUrl}Asset 610.svg`" /> Save for later
         </a>
-        <a
-          class="next active"
-          @click="step = step + 1"
-          :class="[{ active: selectedServices.length > 0 }]"
-          v-if="step < 3"
-        >
+        <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
           Next
         </a>
         <a class="next active" @click="saveProposal('submit')" v-else>Submit Proposal</a>
@@ -172,6 +167,10 @@ export default {
   },
   methods: {
     ...mapActions("vendorProposal", ["getVendor", "getProposalRequest"]),
+    gotoNext() {
+      this.scrollToTop();
+      this.step = this.step + 1;
+    },
     getVendorCategory() {
       this.$auth.currentUser(
         this,

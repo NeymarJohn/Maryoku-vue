@@ -6,6 +6,7 @@
       <maryoku-input v-model="newColleague.email" inputStyle="email"></maryoku-input>
       <div class="input-wrapper">
         <multiselect
+          class="md-purple"
           v-model="newColleague.role"
           :options="roles"
           :close-on-select="true"
@@ -18,6 +19,7 @@
       </div>
       <div class="input-wrapper">
         <multiselect
+          class="md-purple"
           v-model="newColleague.invitedEvent"
           :options="myServices"
           :close-on-select="true"

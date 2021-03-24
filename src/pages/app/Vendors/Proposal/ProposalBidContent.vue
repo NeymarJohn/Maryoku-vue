@@ -131,7 +131,9 @@ export default {
           }
           if (
             item.name === "Discount for large quantities" &&
-            Number(this.event.numberOfParticipants) >= Number(item.attendees)
+            Number(this.event.numberOfParticipants) >= Number(item.attendees) &&
+            item.attendees &&
+            item.value
           ) {
             discountRate = Number(item.value);
           }

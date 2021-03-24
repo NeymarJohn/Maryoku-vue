@@ -87,6 +87,18 @@
           </div>
           <div class="md-layout-item md-size-25">
             <div class="white-card p-50" style="height: 100%">
+              <div style="margin: 0 -15px">
+                <pie-chart
+                  :chartData="chartData"
+                  :columns="1"
+                  :options="{
+                    width: 150,
+                    height: 200,
+                    strokWidth: 40,
+                    direction: 'row',
+                  }"
+                ></pie-chart>
+              </div>
               <div class="color-brown d-flex align-center">
                 <span class="mr-20" style="font-size: 56px">30%</span>
                 <span class="font-size-22">Winning rate</span>
@@ -95,7 +107,16 @@
                 You won <span class="font-bold">40 of 120</span> Proposals you applied to
               </div>
               <hr class="mt-50 mb-50" />
-              <div></div>
+              <div class="tips">
+                <div class="d-flex mb-30 align-center">
+                  <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
+                  <div class="ml-10">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</div>
+                </div>
+                <div class="d-flex align-center">
+                  <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
+                  <div class="ml-10">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -103,7 +124,7 @@
       <div class="md-layout">
         <div class="md-layout-item md-size-75">
           <div class="text-center">
-            <table-pagination :pageCount="12"></table-pagination>
+            <table-pagination class="mt-30" :pageCount="12"></table-pagination>
           </div>
         </div>
         <div class="md-layout-item md-size-25"></div>
@@ -112,22 +133,28 @@
   </div>
 </template>
 <script>
-import TablePagination from "../../../../components/TablePagination.vue";
+import TablePagination from "@/components/TablePagination.vue";
 import ProposalListItem from "../components/ProposalListItem.vue";
 import ProposalRequestCard from "../components/ProposalRequestCard";
 import ProposalRequest from "@/models/ProposalRequest";
 import Vendor from "@/models/Vendors";
 import carousel from "vue-owl-carousel";
+import PieChart from "@/components/Chart/PieChart.vue";
 export default {
   components: {
     ProposalRequestCard,
     ProposalListItem,
     TablePagination,
     carousel,
+    PieChart,
   },
   data() {
     return {
       proposalRequests: [],
+      chartData: [
+        { title: "Application", value: 12, color: "#b7b5b5" },
+        { title: "Winning", value: 3, color: "#2cde6b" },
+      ],
     };
   },
   created() {
@@ -179,6 +206,11 @@ export default {
     display: grid;
     align-items: center;
     grid-template-columns: 150px 20% 20% 15% 20% 20% 30px;
+  }
+  .tips {
+    img {
+      height: 20px;
+    }
   }
 }
 </style>
