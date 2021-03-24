@@ -148,7 +148,18 @@ export default {
     },
     saveDraft() {
       // this.savedItModal = true;
-      this.addVendor();
+      // this.addVendor();
+      const title = "Success to save for later!";
+      new Vendors({ ...this.vendor, isEditing: true })
+        .save()
+        .then((res) => {
+          Swal.fire({
+            title,
+            buttonsStyling: false,
+            confirmButtonClass: "md-button md-success",
+          }).then(() => {});
+        })
+        .catch((error) => {});
     },
     hideModal() {
       this.$store.dispatch("vendorSignup/resetStatus");

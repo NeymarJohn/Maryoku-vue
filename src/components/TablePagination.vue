@@ -2,7 +2,7 @@
   <ul class="pagination pagination-vendor" :class="paginationClass">
     <li class="page-handler prev-page" :class="{ disabled: value === 1, 'no-arrows': noArrows }">
       <a name="pagination-page-prev" class="page-link" aria-label="Previous" @click="prevPage">
-        <i class="fas fa-angle-left font-size-24 color-purple"></i>
+        <i class="fas fa-angle-left font-size-24"></i>
       </a>
     </li>
     <li class="page-item" v-for="item in range(minPage, maxPage)" :key="item" :class="{ active: value === item }">
@@ -10,7 +10,7 @@
     </li>
     <li class="page-handler next-page" :class="{ disabled: value === totalPages, 'no-arrows': noArrows }">
       <a name="pagination-page-next" class="page-link" aria-label="Next" @click="nextPage">
-        <i class="fas fa-angle-right font-size-24 color-purple"></i>
+        <i class="fas fa-angle-right font-size-24"></i>
       </a>
     </li>
   </ul>
@@ -124,9 +124,3 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-.pagination {
-  width: max-content;
-  margin: auto;
-}
-</style>

@@ -1076,6 +1076,11 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
               },
+              {
+                name: "Installation & Removal of Old items",
+                type: Boolean,
+                value: false,
+              },
             ],
           },
           {
@@ -1317,6 +1322,21 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
               },
+              {
+                name: "Food Server",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Administrative Duties",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Accounting",
+                type: Boolean,
+                value: false,
+              },
             ],
           },
           {
@@ -1502,7 +1522,7 @@ export const businessCategories = [
                 value: false,
               },
               {
-                name: "traditiontal",
+                name: "traditional",
                 type: Boolean,
                 value: false,
               },
@@ -1738,17 +1758,102 @@ export const businessCategories = [
                 value: false,
               },
               {
-                name: "event registration tracking",
-                type: Boolean,
-                value: false,
-              },
-              {
                 name: "consultation",
                 type: Boolean,
                 value: false,
               },
               {
-                name: "open communication",
+                name: "Website Development",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Digital Newsletter",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "e-Marketing Strategies",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Catalog (Digital & Print)",
+                type: Boolean,
+                value: false,
+              },
+            ],
+          },
+          {
+            name: "print services",
+            items: [
+              {
+                name: "Invitations",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Menus",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Place cards",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Tent cards",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Post Cards",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Business Cards",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Large Print Items (Blueprints, CAD Drawings)",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Binding & Laminating",
+                type: Boolean,
+                value: false,
+              },
+            ],
+          },
+          {
+            name: "Signage",
+            items: [
+              {
+                name: "Posters",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Banners",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Presentation Boards",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Window Graphics",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Outdoor Signage",
                 type: Boolean,
                 value: false,
               },
@@ -1999,6 +2104,13 @@ export const businessCategories = [
                 name: "uniform style",
                 type: Boolean,
                 value: "",
+                staff: null,
+                quest: null,
+              },
+              {
+                name: "certified safe drive",
+                type: Boolean,
+                value: false,
                 staff: null,
                 quest: null,
               },
@@ -2325,6 +2437,7 @@ export const businessCategories = [
                 name: "setup/breakdown hours included",
                 type: Boolean,
                 value: false,
+                unit: "hour",
               },
             ],
           },
@@ -2347,7 +2460,17 @@ export const businessCategories = [
                 value: false,
               },
               {
-                name: "dance floor give aways",
+                name: "dance floor",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "specialty lighting (pinpoint, strobe)",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "theatrical staging",
                 type: Boolean,
                 value: false,
               },
@@ -2362,7 +2485,7 @@ export const businessCategories = [
             name: " ",
             items: [
               {
-                name: "acitivy is suitable for people with disabilities",
+                name: "activity is suitable for people with disabilities",
                 type: Boolean,
                 value: false,
               },
@@ -2489,6 +2612,41 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
               },
+              {
+                name: "executive protection",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "disaster security team",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "active shooter",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "training",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "firearms training",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "K9 detection services",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "licensed to carry fire arms",
+                type: Boolean,
+                value: false,
+              },
             ],
           },
           {
@@ -2556,6 +2714,13 @@ export const businessCategories = [
               },
               {
                 name: "crowd control",
+                type: Boolean,
+                value: false,
+                staff: null,
+                quest: null,
+              },
+              {
+                name: "certified security personnel ",
                 type: Boolean,
                 value: false,
                 staff: null,
@@ -2695,6 +2860,16 @@ export const businessCategories = [
                 value: false,
               },
               {
+                name: "production",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Backdrop/Scenic & Decor",
+                type: Boolean,
+                value: false,
+              },
+              {
                 name: "rigging",
                 type: Boolean,
                 value: false,
@@ -2722,6 +2897,21 @@ export const businessCategories = [
               },
               {
                 name: "cranes",
+                type: Boolean,
+                value: false,
+              },
+            ],
+          },
+          {
+            name: "Show Management",
+            items: [
+              {
+                name: "Event Services",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Outdoor Staging & Tents",
                 type: Boolean,
                 value: false,
               },
@@ -2950,6 +3140,31 @@ export const businessCategories = [
                 value: false,
               },
               {
+                name: "travel",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "outdoor/leisure",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "stationary",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "wellness",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "safety",
+                type: Boolean,
+                value: false,
+              },
+              {
                 name: "other",
                 type: String,
                 value: "",
@@ -3134,6 +3349,11 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
               },
+              {
+                name: "set-up & tear-Down",
+                type: Boolean,
+                value: false,
+              },
             ],
           },
         ],
@@ -3161,6 +3381,11 @@ export const businessCategories = [
               },
               {
                 name: "special catering rental equipment",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "table coverings",
                 type: Boolean,
                 value: false,
               },
@@ -3469,13 +3694,13 @@ export const companyServices = [
     name: "audiovisualstagingservices",
     type: Array,
     value: [],
-    available: ["audio", "visual"],
+    available: ["audio", "visual", "staging options"],
   },
   {
     name: "giveaways",
     type: Array,
     value: [],
-    available: ["favors", "promotional"],
+    available: ["favors", "promotional", "marketing/promotional Items"],
   },
   {
     name: "entertainment",
@@ -3487,7 +3712,7 @@ export const companyServices = [
     name: "securityservices",
     type: Array,
     value: [],
-    available: ["day-of security", "security consultation", "perosnal security"],
+    available: ["day-of security", "security consultation", "personal security"],
   },
   {
     name: "videographyandphotography",
@@ -3583,6 +3808,10 @@ export const VendorPolicy = [
         name: "Max guest to staff ratio",
         type: Number,
         isPercentage: true,
+      },
+      {
+        name: "Work with Unions",
+        type: Boolean,
       },
     ],
   },
@@ -3740,6 +3969,7 @@ export const VendorPolicy = [
         type: Number,
         value: 0,
         noSuffix: true,
+        unit: "hour",
       },
       {
         name: "Number of breaks",
@@ -3794,11 +4024,13 @@ export const VendorPolicy = [
         name: "Minimum hours of service",
         type: Number,
         noSuffix: true,
+        unit: "hour",
       },
       {
         name: "Max hours per shift",
         type: Number,
         noSuffix: true,
+        unit: "hour",
       },
       {
         name: "Dress code",
@@ -3822,6 +4054,7 @@ export const VendorPolicy = [
         name: "Minimum amount of hours",
         type: Number,
         noSuffix: true,
+        unit: "hour",
       },
       {
         name: "Need to control room lighting",
@@ -3848,6 +4081,7 @@ export const VendorPricingPolicy = [
         noSuffix: true,
         label: "Number of hours",
         hasComment: true,
+        unit: "hour",
       },
       {
         name: "Hours included in rental",
@@ -3855,6 +4089,7 @@ export const VendorPricingPolicy = [
         noSuffix: true,
         label: "Number of hours",
         hasComment: true,
+        unit: "hour",
       },
       {
         name: "Setup hours included in rental",
@@ -3862,6 +4097,7 @@ export const VendorPricingPolicy = [
         label: "Number of hours",
         noSuffix: true,
         hasComment: true,
+        unit: "hour",
       },
       {
         name: "Minimum Spend",
@@ -3892,6 +4128,7 @@ export const VendorPricingPolicy = [
         isPercentage: true,
         hasComment: true,
         attendees: null,
+        labelForValue: "How much",
       },
       {
         name: "Tax rate",
@@ -3937,6 +4174,7 @@ export const VendorPricingPolicy = [
         isPercentage: true,
         hasComment: true,
         attendees: null,
+        labelForValue: "How much",
       },
       {
         name: "Tax rate",
@@ -4021,6 +4259,7 @@ export const VendorPricingPolicy = [
         isPercentage: true,
         hasComment: true,
         attendees: null,
+        labelForValue: "How much",
       },
       {
         name: "Tax rate",
@@ -4056,6 +4295,7 @@ export const VendorPricingPolicy = [
         isPercentage: true,
         hasComment: true,
         attendees: null,
+        labelForValue: "How much",
       },
       {
         name: "Tax rate",
@@ -4213,6 +4453,7 @@ export const VendorPricingPolicy = [
         type: Number,
         hideOnProposal: true,
         hasComment: true,
+        labelForValue: "How much",
       },
       {
         name: "Suggested Gratuity",
@@ -4287,6 +4528,7 @@ export const VendorPricingPolicy = [
         subCategory: "charge",
         type: Number,
         hasComment: true,
+        unit: "hour",
       },
       {
         name: "Rushed setup",
@@ -4358,6 +4600,7 @@ export const VendorPricingPolicy = [
         name: "Number of hours",
         type: Number,
         hasComment: true,
+        unit: "hour",
       },
       {
         name: "Level of security training/certification",
@@ -4417,6 +4660,7 @@ export const VendorPricingPolicy = [
         type: Boolean,
         attendees: null,
         hideOnProposal: true,
+        labelForValue: "How much",
       },
       {
         name: "Tax rate",
@@ -4431,5 +4675,87 @@ export const VendorPricingPolicy = [
         hideOnProposal: true,
       },
     ],
+  },
+];
+export const categoryNameWithIcons = [
+  {
+    name: "Venue Rental",
+    value: "venuerental",
+    icon: "venuerental.svg",
+  },
+  {
+    name: "Food & Beverage",
+    value: "foodandbeverage",
+    icon: "foodandbeverage.svg",
+  },
+  {
+    name: "Design and Decor",
+    value: "decor",
+    icon: "decor.svg",
+  },
+  {
+    name: "Guest Services & Staffing",
+    value: "corporatesocialresponsibility",
+    icon: "corporatesocialresponsibility.svg",
+  },
+  {
+    name: "Signage / Printing",
+    value: "signageprinting",
+    icon: "signageprinting.svg",
+  },
+  // {
+  //   name: 'Advertising and Promotion',
+  //   value: 'advertising-promotion',
+  //   icon: 'advertising-promotion.svg'
+  // },
+  {
+    name: "AV / Staging",
+    value: "audiovisualstagingservices",
+    icon: "audiovisualstagingservices.svg",
+  },
+  {
+    name: "giveaways",
+    value: "giveaways",
+    icon: "swags.svg",
+  },
+  // {
+  //   name: 'Shipping',
+  //   value: 'shipping',
+  //   icon: 'shipping.svg'
+  // },
+  {
+    name: "Transportation & Tour operator",
+    value: "transportation",
+    icon: "transportation.svg",
+  },
+  {
+    name: "Entertainment",
+    value: "entertainment",
+    icon: "entertainment.svg",
+  },
+  // {
+  //   name: 'Administration',
+  //   value: 'administration',
+  //   icon: 'administration.svg'
+  // },
+  {
+    name: "Security",
+    value: "securityservices",
+    icon: "securityservices.svg",
+  },
+  // {
+  //   name: 'Technology',
+  //   value: 'technologyservices',
+  //   icon: 'technologyservices.svg'
+  // },
+  {
+    name: "Videography and Photography",
+    value: "videographyandphotography",
+    icon: "videographyandphotography.svg",
+  },
+  {
+    name: "Equipment Rentals",
+    value: "equipmentrentals",
+    icon: "equipmentrentals.svg",
   },
 ];

@@ -1,6 +1,6 @@
 <template>
   <div class="profile-container">
-    <tabs :tab-name="['Account Details', 'Notifications', 'Permissions']" color-button="info" theme="purple">
+    <tabs :tab-name="['Account Details', 'Notifications', 'Permissions']" color-button="info">
       <template slot="tab-pane-1">
         <vendor-account-detail></vendor-account-detail>
       </template>

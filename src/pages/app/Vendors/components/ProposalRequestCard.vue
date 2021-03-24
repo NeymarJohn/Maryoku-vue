@@ -3,9 +3,7 @@
     <div class="d-flex justify-content-between">
       <div class="font-size-20 font-bold">
         <div>{{ proposalRequest.eventData.concept.name || proposalRequest.eventData.title }}</div>
-        <div class="font-size-16">
-          {{ $dateUtil.formatScheduleDay(proposalRequest.eventData.eventStartMillis, "MM/DD/YY") }}
-        </div>
+        <div class="font-size-16">{{ proposalRequest.eventData.eventStartMillis }}</div>
       </div>
 
       <div class="color-yellow-dark font-bold d-flex align-start">

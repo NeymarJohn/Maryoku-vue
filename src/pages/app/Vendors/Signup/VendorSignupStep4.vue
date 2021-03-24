@@ -129,28 +129,41 @@
           <div class="policy-cont" id="Policy">
             <div class="title"><img :src="`${iconUrl}Group 1471 (2).svg`" /> OUR POLICY</div>
             <div class="rules">
-              <div class="rules">
-                <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
-                  <div class="item">{{ policy.name }}</div>
-                  <div class="item" v-if="policy.type === 'MultiSelection'">
-                    <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
-                      `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
-                    }}</span>
-                  </div>
-                  <div class="item" v-else-if="policy.type === 'Including'">
-                    <span class="mr-10" v-if="policy.value"> Yes </span>
-                    <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
-                  </div>
-                  <div class="item" v-else>
-                    <span v-if="policy.type === Number && !policy.isPercentage">$</span>
-                    <span v-if="policy.type === Boolean">{{ policy.value === true ? "Yes" : "No" }}</span>
-                    <span v-else>{{ policy.value }}</span>
-                    <span v-if="policy.isPercentage">%</span>
-                    <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
-                      {{ policy.attendees }} attendees
-                    </span>
-                  </div>
+              <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
+                <div class="item">{{ policy.name }}</div>
+                <div class="item" v-if="policy.type === 'MultiSelection'">
+                  <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
+                    `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
+                  }}</span>
                 </div>
+                <div class="item" v-else-if="policy.type === 'Including'">
+                  <span class="mr-10" v-if="policy.value"> Yes </span>
+                  <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
+                </div>
+                <div class="item text-right" v-else>
+                  <span v-if="policy.type === Number && !policy.isPercentage && policy.unit !== 'hour'">$</span>
+                  <span v-if="policy.type === Boolean">
+                    <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
+                    <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
+                    <!-- {{ policy.value === true ? "Yes" : "No" }} -->
+                  </span>
+                  <span v-else>
+                    <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
+                    <img v-else-if="policy.value === false" :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
+                    <span v-else>{{ policy.value }}</span>
+                  </span>
+                  <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
+                  <span v-if="policy.isPercentage">%</span>
+                  <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
+                    {{ policy.attendees }} attendees
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="rules">
+              <h5 class="font-bold font-size-20">Additional Rules</h5>
+              <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
+                <div class="item">Event must be {{ policy }}</div>
               </div>
             </div>
             <div class="not-allowed" v-if="vendor.vendorCategories[0] == 'venuerental'">
@@ -192,7 +205,8 @@
                 </div>
                 <div class="item" v-else-if="policy.type === 'Including'">
                   <span class="mr-10" v-if="policy.value"> Yes </span>
-                  <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
+                  <span class="mr-10" v-if="!policy.value && policy.cost && policy.unit === '$'"> $ </span>
+                  <span>{{ policy.cost }}</span>
                 </div>
                 <div class="item" v-else-if="policy.type === Boolean && policy.value && policy.discount">
                   <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '$'"> $ </span>
@@ -200,14 +214,14 @@
                   <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '%'"> % </span>
                 </div>
                 <div class="item" v-else>
-                  <span v-if="policy.type === Number && !policy.isPercentage">$</span>
+                  <span v-if="policy.type === Number && !policy.isPercentage && policy.unit !== 'hour'">$</span>
                   <span v-if="policy.value === true">Yes</span>
                   <span v-else>{{ policy.value }}</span>
                   <span v-if="policy.isPercentage">%</span>
                   <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
                     {{ policy.attendees }} attendees
                   </span>
-                  <span class="ml-50" v-if="policy.unit">
+                  <span class="ml-50 text-transform-capitalize" v-if="policy.unit">
                     {{ policy.unit }}
                   </span>
                 </div>
@@ -544,6 +558,9 @@ export default {
     },
   },
   computed: {
+    additionalRules() {
+      return this.$store.state.vendorSignup.vendor.additionalRules;
+    },
     validPricingPolicy() {
       if (this.vendor.pricingPolicies)
         return this.vendor.pricingPolicies.filter(
@@ -848,7 +865,7 @@ export default {
               font: 600 16px Manrope-Regular, sans-serif;
               display: flex;
               align-items: center;
-
+              max-width: 900px;
               .item {
                 flex: 1;
 
