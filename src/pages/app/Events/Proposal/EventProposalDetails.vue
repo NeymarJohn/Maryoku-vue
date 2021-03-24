@@ -280,9 +280,10 @@
                 <div class="extras-section__list">
                   <extra-service-item
                     class="extras-section__item"
-                    v-for="(item, index) in extraServices"
+                    v-for="(item, index) in extraServices.filter((item) => item.price)"
                     :key="`extra-service-item-${index}`"
                     :item="item"
+                    @add="addExtraService(item)"
                   ></extra-service-item>
                 </div>
               </div>
@@ -304,7 +305,7 @@
           </div>
         </div>
 
-        <table class="pricing-section__table">
+        <!-- <table class="pricing-section__table">
           <tbody>
             <template v-if="extraMissingRequirements.length">
               <tr class="element-block" v-for="(item, index) in extraMissingRequirements" :key="index">
@@ -344,7 +345,7 @@
               <td></td>
             </tr>
           </tbody>
-        </table>
+        </table> -->
       </div>
 
       <div class="proposal-section policy-section">
@@ -401,8 +402,8 @@
 
     <div class="book-proposal-form">
       <div class="form-title">
-        Would you like to book
-        <a href>{{ this.vendorProposal.vendor.companyName }}</a
+        Would You Like To Book
+        <a href class="font-bold-extra"> {{ this.vendorProposal.vendor.companyName }}</a
         >?
       </div>
       <div class="agree-checkbox">
@@ -519,6 +520,7 @@ export default {
       fetchingAllAttachments: false,
       acceptNewTimes: false,
       expand: true,
+      extraServices: [],
     };
   },
   created() {
@@ -526,6 +528,7 @@ export default {
     console.log(proposalId);
     Proposal.find(proposalId).then((proposal) => {
       this.vendorProposal = proposal;
+      this.extraServices = this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
     });
   },
 
@@ -538,6 +541,15 @@ export default {
       "setNumberOfParticipants",
       "setEventData",
     ]),
+    addExtraService(extraService) {
+      const itemIndex = this.extraServices.findIndex((item) => item.requirementTitle === extraService.requirementTitle);
+      console.log(itemIndex);
+      if (itemIndex >= 0) {
+        this.$set(this.extraServices[itemIndex], "added", true);
+      }
+      this.extraServices = [...this.extraServices];
+      this.$forceUpdate();
+    },
     back() {
       this.$router.go(-1);
     },
@@ -584,24 +596,6 @@ export default {
         });
       });
     },
-    expandIncludedItem(item, index) {
-      if (this.includedServices[index].expanded) {
-        this.$set(this.includedServices[index], "expanded", false);
-      } else {
-        this.$set(this.includedServices[index], "expanded", true);
-      }
-
-      this.$forceUpdate();
-    },
-    expandExtra(item, index) {
-      if (this.extraServices[index].expanded) {
-        this.extraServices[index].expanded = false;
-      } else {
-        this.extraServices[index].expanded = true;
-      }
-
-      this.$forceUpdate();
-    },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
     },
@@ -644,9 +638,7 @@ export default {
     includedServices() {
       return this.vendorProposal.includedServices[this.vendorProposal.vendor.eventCategory.key];
     },
-    extraServices() {
-      return this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
-    },
+
     priceOfCostservices() {
       if (this.costServices.length === 0) return 0;
       return this.costServices.reduce((s, item) => {
@@ -655,6 +647,11 @@ export default {
     },
     totalPrice() {
       return this.priceOfCostservices - this.discount.price + this.tax.price;
+    },
+    extraServicePrice() {
+      return this.extraServices.reduce((s, item) => {
+        return s + item.requirementValue * item.price;
+      }, 0);
     },
   },
   filters: {
@@ -1105,7 +1102,7 @@ export default {
                   }
                 }
 
-                &__item {
+                &__item:not(:last-child) {
                   border-bottom: 1px solid #ccc;
                 }
               }
@@ -1428,12 +1425,11 @@ export default {
 
       .form-title {
         font-size: 28px;
-        font-weight: 800;
         color: #050505;
         margin-bottom: 1em;
 
         a {
-          color: #f51355;
+          color: #050505;
           text-decoration: underline;
 
           &:hover {

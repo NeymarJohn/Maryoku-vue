@@ -15,10 +15,10 @@
         <template v-if="item.added">
           <div class="added-label">
             <img :src="`${$iconURL}budget+screen/png/Asset+31.png`" width="20" />
-            added
+            Added
           </div>
         </template>
-        <md-button v-else class="md-red md-sm normal-btn">
+        <md-button v-else class="md-red md-sm normal-btn" @click="addService">
           <md-icon class="mr-10">add_circle_outline</md-icon>Add
         </md-button>
       </div>
@@ -50,6 +50,11 @@ export default {
       expanded: false,
     };
   },
+  methods: {
+    addService() {
+      this.$emit("add", this.item);
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -57,6 +62,9 @@ export default {
   display: grid;
   grid-template-columns: 50% 15% 15% 15% 5%;
   padding: 1em 0;
+  .added-label {
+    min-height: 35px;
+  }
   .expand-extra-item {
     i {
       color: #050505 !important;
