@@ -161,15 +161,15 @@
         <div class="mt-20 comment-area" v-if="!isEdit">{{ item.comment }}</div>
         <textarea class="mt-20" v-else v-model="item.comment"></textarea>
       </div>
-      <div class="qty-cont editor-wrapper text-center">
+      <div class="qty-cont editor-wrapper">
         <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue }}</template>
         <template v-else>
           <input class="input-value" type="number" v-model="item.requirementValue" />
         </template>
       </div>
-      <div class="price-cont editor-wrapper text-right"></div>
-      <div class="total-cont editor-wrapper text-right"></div>
-      <div class="action-cont editor-wrapper text-right">
+      <div class="price-cont editor-wrapper"></div>
+      <div class="total-cont editor-wrapper"></div>
+      <div class="action-cont editor-wrapper">
         <template v-if="isEdit">
           <a class="cancel" @click="cancel()">Cancel</a>
           <a class="save" @click="save(item)">Save</a>
@@ -232,13 +232,13 @@
         <br />
         <div v-if="isExpanded"></div>
       </div>
-      <div class="qty-cont editor-wrapper text-center">
+      <div class="qty-cont editor-wrapper">
         <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue }}</template>
         <template v-else>
           <input class="input-value" type="number" v-model="item.requirementValue" />
         </template>
       </div>
-      <div class="price-cont editor-wrapper text-right">
+      <div class="price-cont editor-wrapper">
         <template v-if="!isEdit">+${{ !Number.isNaN(item.price) ? item.price : 0 }} </template>
         <template v-else>
           <money
@@ -255,7 +255,7 @@
           />
         </template>
       </div>
-      <div class="total-cont editor-wrapper text-right">${{ subTotal | withComma }}</div>
+      <div class="total-cont editor-wrapper">${{ subTotal | withComma }}</div>
       <div class="action-cont editor-wrapper">
         <template v-if="isEdit">
           <a class="cancel" @click="cancel()">Cancel</a>

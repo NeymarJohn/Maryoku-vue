@@ -122,10 +122,6 @@
           <div class="pricing-section__item element-block p-60 pt-40">
             <div class="d-flex justify-content-between align-center">
               <div class="item-info d-flex justify-content-start align-center">
-                <!-- <div class="select-item">
-                  <input class="styled-checkbox" :id="`checkbox-1`" type="checkbox" />
-                  <label :for="`checkbox-1`"></label>
-                </div> -->
                 <div class="element-title">
                   <img :src="`${$iconURL}Budget+Elements/${vendorProposal.vendor.eventCategory.icon}`" />
                   {{ vendorProposal.vendor.eventCategory.fullTitle }}
@@ -134,10 +130,10 @@
               </div>
               <div class="item-pricing d-flex justify-content-end align-center">
                 <div class="element-value">
-                  <div class="element-price">${{ 800 | withComma }}</div>
+                  <div class="element-price">${{ totalPrice | withComma }}</div>
                   <div class="discount-details">
-                    (10% off)
-                    <span>${{ 1100 | withComma }}</span>
+                    ({{ discount.percentage }}% off)
+                    <span>${{ totalPrice | withComma }}</span>
                   </div>
                 </div>
                 <div class="view-element">
@@ -200,33 +196,11 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Tables and chairs</td>
-                      <td>300</td>
-                      <td>$40.00</td>
-                      <td>$120.00</td>
-                      <td class="element-actions">
-                        <md-button class="md-simple md-just-icon">
-                          <img :src="`${submitProposalIcon}Asset 311.svg`" />
-                        </md-button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Dance floor</td>
-                      <td>2</td>
-                      <td>$100.00</td>
-                      <td>$120.00</td>
-                      <td class="element-actions">
-                        <md-button class="md-simple md-just-icon">
-                          <img :src="`${submitProposalIcon}Asset 311.svg`" />
-                        </md-button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Plateware</td>
-                      <td>2</td>
-                      <td>$100.00</td>
-                      <td class="last-value">$120.00</td>
+                    <tr v-for="(service, index) in costServices" :key="`cost-service-${index}`">
+                      <td>{{ service.requirementTitle }}</td>
+                      <td>{{ service.requirementValue }}</td>
+                      <td>${{ service.price | withComma }}</td>
+                      <td>${{ (service.requirementValue * service.price) | withComma }}</td>
                       <td class="element-actions">
                         <md-button class="md-simple md-just-icon">
                           <img :src="`${submitProposalIcon}Asset 311.svg`" />
@@ -242,9 +216,9 @@
                     <tr>
                       <td colspan="3">
                         <span class="taxes-title">Discount</span>
-                        <span class="taxes-percentage">10%</span>
+                        <span class="taxes-percentage">{{ discount.percentage }}%</span>
                       </td>
-                      <td>-$160.00</td>
+                      <td>-${{ discount.price }}</td>
                       <td class="element-actions">
                         <md-button class="md-simple md-just-icon">
                           <img :src="`${submitProposalIcon}Asset 311.svg`" />
@@ -254,9 +228,9 @@
                     <tr>
                       <td colspan="3">
                         <span class="taxes-title">Taxes</span>
-                        <span class="taxes-percentage">18%</span>
+                        <span class="taxes-percentage">{{ tax.percentage }}%</span>
                       </td>
-                      <td>$200.00</td>
+                      <td>${{ tax.price }}</td>
                       <td class="element-actions">
                         <md-button class="md-simple md-just-icon">
                           <img :src="`${submitProposalIcon}Asset 311.svg`" />
@@ -275,10 +249,10 @@
                         <div class="font-size-14">Before discount</div>
                       </td>
                       <td class="element-value">
-                        <div class="element-price">${{ 2800 | withComma }}</div>
+                        <div class="element-price">${{ totalPrice | withComma }}</div>
                         <div class="discount-details">
-                          (10% off)
-                          <span>${{ 2900 | withComma }}</span>
+                          ({{ discount.percentage }}% off)
+                          <span>${{ totalPrice | withComma }}</span>
                         </div>
                       </td>
                       <td class="element-actions">
@@ -300,15 +274,15 @@
                   />
                   What Do We Include In This Proposal?
                 </div>
-                <template v-if="dummyIncluded.length">
-                  <div class="proposal-includes__item" v-for="(item, index) in dummyIncluded" :key="index">
+                <template v-if="includedServices.length">
+                  <div class="proposal-includes__item" v-for="(item, index) in includedServices" :key="index">
                     <div class="d-flex justify-content-between align-center">
                       <div class="item-title">
                         <img :src="`${submitProposalIcon}Group 4781.svg`" />
-                        {{ item.title }}
+                        {{ item.requirementTitle }}
                       </div>
                       <div class="item-actions d-flex justify-content-end align-center">
-                        <input v-model="item.qty" placeholder="QTY" />
+                        {{ item.requirementValue }}
                         <md-button class="md-simple md-just-icon" @click="expandIncludedItem(item, index)">
                           <img :src="`${submitProposalIcon}Component 36.svg`" />
                         </md-button>
@@ -322,34 +296,35 @@
                 </template>
               </div>
 
-              <div class="extras-section" v-if="dummyExtras.length">
+              <div class="extras-section" v-if="extraServices.length">
                 <div class="extras-section__title">
-                  <h3>
+                  <h3 class="font-size-22">
                     <img
                       src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2010.svg"
                       width="12"
                     />
                     Extras
                   </h3>
-                  <small>Wold you like to upgrade & add one of those?</small>
+                  <span>Wold you like to upgrade & add one of those?</span>
                 </div>
                 <div class="extras-section__list">
-                  <div class="extras-section__item" v-for="(item, index) in dummyExtras" :key="index">
+                  <div class="extras-section__item" v-for="(item, index) in extraServices" :key="index">
                     <div class="d-flex justify-content-between align-center">
-                      <div class="item-title">{{ item.title }}</div>
+                      <div class="item-title">
+                        {{ item.requirementTitle }}
+                        <!-- <span v-if="item.isComplimentary">complementary</span> -->
+                      </div>
                       <div class="item-qty text-center">
-                        <input v-model="item.qty" placeholder="QTY" />
+                        <input v-model="item.requirementValue" placeholder="QTY" />
                       </div>
                       <div class="item-price text-center">
-                        {{ item.price }}
+                        ${{ item.price }}
+                        {{ item.unit }}
                       </div>
                       <div class="item-added text-center">
                         <template v-if="item.added">
                           <div class="added-label">
-                            <img
-                              src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/png/Asset+31.png"
-                              width="20"
-                            />
+                            <img :src="`${$iconURL}/budget+screen/png/Asset+31.png`" width="20" />
                             added
                           </div>
                         </template>
@@ -415,22 +390,17 @@
                 </td>
               </tr>
             </template>
-            <!--                        <tr class="element-block bundle-offer">-->
-            <!--                            <td class="element-title">Bundle Offer <span class="discount-percentage">15%</span> <span class="bundle-title">Venue + Catering</span> </td>-->
-            <!--                            <td class="element-value"><div class="original-price">$1,200.00</div><div class="new-price">$1,100.00</div></td>-->
-            <!--                            <td class="view-element"></td>-->
-            <!--                        </tr>-->
             <tr class="taxes">
               <td colspan="2">
                 Taxes
-                <span class="taxes-value">18%</span>
+                <span class="taxes-value">{{ tax.percentage }}%</span>
               </td>
-              <td>${{ (extraTotal * 0.18) | withComma }}</td>
+              <td>${{ tax.price | withComma }}</td>
               <td></td>
             </tr>
             <tr class="total">
               <td colspan="2">Total</td>
-              <td>${{ (extraTotal + extraTotal * 0.18) | withComma }}</td>
+              <td>${{ totalPrice | withComma }}</td>
               <td></td>
             </tr>
           </tbody>
@@ -448,6 +418,17 @@
             <div class="desc">50% of the total event</div>
           </div>
 
+          <div class="policy mb-50">
+            <div class="mb-10" v-for="(policy, index) in vendorProposal.vendor.yesRules" :key="`yespolicy-${index}`">
+              <span class="font-bold" style="width: 50%; display: inline-block">{{ policy.name }}</span>
+              <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" class="label-icon" />
+            </div>
+            <div class="mb-10" v-for="(policy, index) in vendorProposal.vendor.noRules" :key="`nopolicy-${index}`">
+              <span class="font-bold" style="min-width: 50%; display: inline-block">{{ policy.name }}</span>
+              <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" class="label-icon" />
+            </div>
+          </div>
+
           <div class="side-label">
             <div class="label-value">Our cancellation approach</div>
           </div>
@@ -457,14 +438,7 @@
             <div class="desc">30 days before the event</div>
           </div>
 
-          <div class="policies-list">
-            <div class="policies-list__item"><b>If</b> the client cancel the event after 3 weeks before the event</div>
-            <div class="policies-list__item"><b>Then</b> the client will pay full deposit</div>
-            <div class="policies-list__item">
-              <b>If</b> the client cancel the event after two weeks before the event
-            </div>
-            <div class="policies-list__item"><b>Then</b> the client will pay full price</div>
-          </div>
+          <cancellation-policy></cancellation-policy>
 
           <div class="additional-info">
             <div class="additional-info__title">Additional</div>
@@ -478,7 +452,7 @@
               {{ vendorProposal.vendor.vendorDisplayName }}
             </div>
             <div class="signature-section__image">
-              <img src="https://bit.ly/3doZIxt" />
+              <img :src="vendorProposal.vendor.signature" />
             </div>
           </div>
         </div>
@@ -488,7 +462,8 @@
     <div class="book-proposal-form">
       <div class="form-title">
         Would you like to book
-        <a href>Relish caterers & venues</a>?
+        <a href>{{ this.vendorProposal.vendor.companyName }}</a
+        >?
       </div>
       <div class="agree-checkbox">
         <md-checkbox v-model="acceptNewTimes">I agree to the new time of this proposal</md-checkbox>
@@ -528,7 +503,7 @@
 <script>
 //MAIN MODULES
 import ChartComponent from "@/components/Cards/ChartComponent";
-
+import CancellationPolicy from "@/components/CancellationPolicy";
 import { ChartCard } from "@/components";
 
 // import auth from '@/auth';
@@ -574,6 +549,7 @@ export default {
     ProgressSidebar,
     HeaderActions,
     CommentEditorPanel,
+    CancellationPolicy,
   },
 
   data() {
@@ -601,80 +577,6 @@ export default {
       fetchingAllAttachments: false,
       acceptNewTimes: false,
       expand: true,
-      dummyIncluded: [
-        {
-          title: "Set up",
-          qty: null,
-          description:
-            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo",
-        },
-        {
-          title: "In-house bar services",
-          qty: null,
-          description:
-            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo",
-        },
-        {
-          title: "In-house bar services",
-          qty: null,
-          description:
-            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo",
-        },
-        {
-          title: "Glassware",
-          qty: null,
-          description:
-            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo",
-        },
-        {
-          title: "Linens",
-          qty: null,
-          description:
-            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo",
-        },
-      ],
-      dummyExtras: [
-        {
-          title: "Sound equipment",
-          qty: null,
-          price: 100,
-          description:
-            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo",
-          added: false,
-        },
-        {
-          title: "Lorem ipsum dolor sit amet",
-          qty: null,
-          price: 100,
-          description:
-            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo",
-          added: false,
-        },
-        {
-          title: "Lorem ipsum dolor sit amet",
-          qty: null,
-          price: 100,
-          description:
-            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo",
-          added: false,
-        },
-        {
-          title: "Lorem ipsum dolor sit amet",
-          qty: null,
-          price: 100,
-          description:
-            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo",
-          added: true,
-        },
-        {
-          title: "Lorem ipsum dolor sit amet",
-          qty: null,
-          price: 100,
-          description:
-            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo",
-          added: true,
-        },
-      ],
     };
   },
   created() {
@@ -741,19 +643,19 @@ export default {
       });
     },
     expandIncludedItem(item, index) {
-      if (this.dummyIncluded[index].expanded) {
-        this.dummyIncluded[index].expanded = false;
+      if (this.includedServices[index].expanded) {
+        this.$set(this.includedServices[index], "expanded", false);
       } else {
-        this.dummyIncluded[index].expanded = true;
+        this.$set(this.includedServices[index], "expanded", true);
       }
 
       this.$forceUpdate();
     },
     expandExtra(item, index) {
-      if (this.dummyExtras[index].expanded) {
-        this.dummyExtras[index].expanded = false;
+      if (this.extraServices[index].expanded) {
+        this.extraServices[index].expanded = false;
       } else {
-        this.dummyExtras[index].expanded = true;
+        this.extraServices[index].expanded = true;
       }
 
       this.$forceUpdate();
@@ -781,6 +683,36 @@ export default {
       if (this.vendorProposal.vendor.vendorImages && this.vendorProposal.vendor.vendorImages[0])
         return this.vendorProposal.vendor.vendorImages[0];
       return "";
+    },
+    discount() {
+      if (!this.vendorProposal.discounts) return { percentage: 0, price: 0 };
+      const discount = this.vendorProposal.discounts[this.vendorProposal.vendor.eventCategory.key];
+      console.log("discount", discount);
+      return discount;
+    },
+    tax() {
+      if (!this.vendorProposal.taxes) return { percentage: 0, price: 0 };
+      const tax = this.vendorProposal.taxes[this.vendorProposal.vendor.eventCategory.key];
+      if (!tax.price) tax.price = Math.round((this.priceOfCostservices * tax.percentage) / 100);
+      return tax;
+    },
+    costServices() {
+      return this.vendorProposal.costServices[this.vendorProposal.vendor.eventCategory.key];
+    },
+    includedServices() {
+      return this.vendorProposal.includedServices[this.vendorProposal.vendor.eventCategory.key];
+    },
+    extraServices() {
+      return this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
+    },
+    priceOfCostservices() {
+      if (this.costServices.length === 0) return 0;
+      return this.costServices.reduce((s, item) => {
+        return s + item.requirementValue * item.price;
+      }, 0);
+    },
+    totalPrice() {
+      return this.priceOfCostservices - this.discount.price + this.tax.price;
     },
   },
   filters: {

@@ -1,5 +1,5 @@
 <template>
-  <collapse-panel class="white-card proposal-requirements-panel" :spacing="20">
+  <collapse-panel class="white-card proposal-requirements-panel">
     <template slot="header">
       <div class="d-flex align-center p-30">
         <img :src="`${$iconURL}Requirements/special-request-red.svg`" />

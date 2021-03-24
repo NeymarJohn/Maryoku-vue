@@ -1,6 +1,6 @@
 <template>
   <div class="title-cont default add-item-form">
-    <!-- <div class="sub-items-cont" v-if="serviceType === 'cost'">
+    <div class="sub-items-cont" v-if="serviceType === 'cost'">
       <span class="prev" @click="prev()" v-if="serviceSlidePos < 0">
         <md-icon>keyboard_arrow_left</md-icon>
       </span>
@@ -16,7 +16,7 @@
       <span class="next" @click="next()">
         <md-icon>keyboard_arrow_right</md-icon>
       </span>
-    </div> -->
+    </div>
     <div class="add-item-cont">
       <div class="fields-cont font-bold mb-20">
         <span>Description</span>

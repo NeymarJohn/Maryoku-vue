@@ -77,7 +77,6 @@
           :isEdit="true"
           :step="step"
           :services="services"
-          v-if="step >= 1"
         />
       </div>
     </div>

@@ -2,7 +2,7 @@
   <div class="collapse-panel">
     <div class="collapse-panel-header">
       <slot name="header"></slot>
-      <md-button @click="toggle" class="md-icon-button md-simple collapse-button" :class="`mr-${spacing}`">
+      <md-button @click="toggle" class="md-icon-button md-simple collapse-button mr-50">
         <md-icon class="icon" v-if="isExpanded">keyboard_arrow_down</md-icon>
         <md-icon class="icon" v-if="!isExpanded">keyboard_arrow_right</md-icon>
       </md-button>
@@ -31,10 +31,6 @@ export default {
     defaultStatus: {
       type: Boolean,
       default: true,
-    },
-    spacing: {
-      type: Number,
-      default: 50,
     },
   },
 };
