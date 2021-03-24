@@ -126,7 +126,7 @@ export default {
               isMandatory: true,
             });
           }
-          if (item.name === "Tax rate") {
+          if (item.name === "Tax rate" && item.value) {
             taxRate = Number(item.value);
           }
           if (

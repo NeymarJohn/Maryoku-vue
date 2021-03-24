@@ -6,8 +6,8 @@
     </div>
     <section class="footer-wrapper">
       <div calss>
-        <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()"
-          ><img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back</md-button
+        <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()">
+          <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back</md-button
         >
         <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
           <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
