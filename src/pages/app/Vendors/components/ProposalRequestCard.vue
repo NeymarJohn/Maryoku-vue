@@ -18,7 +18,7 @@
         <div class="mb-10"><span class="font-bold color-vendor">60%</span> completed</div>
         <md-progress-bar class="md-thin md-vendor mr-50" md-mode="determinate" :md-value="60"></md-progress-bar>
       </div>
-      <md-button class="md-simple md-outlined md-vendor maryoku-btn">Finish</md-button>
+      <md-button class="md-simple md-outlined md-vendor maryoku-btn" @click="gotoProposalRequest">Finish</md-button>
     </div>
   </div>
 </template>
@@ -28,6 +28,21 @@ export default {
     proposalRequest: {
       type: Object,
       default: () => {},
+    },
+  },
+  methods: {
+    gotoProposalRequest() {
+      const tenantId = this.$authService.resolveTenantId();
+      let link = "";
+      if (tenantId === "DEFAULT") {
+        link = `${this.proposalRequest.tenant}.${document.location.host}/#/vendors/${this.proposalRequest.vendorId}/proposal-request/${this.proposalRequest.id}`;
+      } else {
+        link = `${this.proposalRequest.tenant}.${document.location.host.replace(`${tenantId}.`, "")}/#/vendros/${
+          this.proposalRequest.vendor.id
+        }/proposal-request/${this.proposalRequest.id}`;
+      }
+      var win = window.open(`${document.location.protocol}//${link}`, "_blank");
+      win.focus();
     },
   },
 };

@@ -65,11 +65,29 @@
         </md-button>
       </div>
       <div class="sort-bar mt-30">
-        <span class="font-size-20 font-bold color-red" style="color: #0fac4c">23 Proposals:</span>
-        <span>Date of event</span>
-        <span>Date of modify</span>
-        <span>Status</span>
-        <span>Update</span>
+        <span class="font-size-20 font-bold color-red" style="color: #0fac4c">{{ pagination.total }} Proposals:</span>
+        <span class="sort-item" :class="{ selected: this.sortFields['dateOfEvent'] }" @click="sort('dateOfEvent')"
+          >Date of event
+          <md-icon class="color-black" v-if="this.sortFields['dateOfEvent'] === 'desc'">keyboard_arrow_down</md-icon>
+          <md-icon class="color-black" v-if="this.sortFields['dateOfEvent'] === 'asc'">keyboard_arrow_up</md-icon>
+        </span>
+        <span class="sort-item" :class="{ selected: this.sortFields['dateOfModify'] }" @click="sort('dateOfModify')"
+          >Date of modify
+          <md-icon class="color-black" v-if="this.sortFields['dateOfModify'] === 'desc'">keyboard_arrow_down</md-icon>
+          <md-icon class="color-black" v-if="this.sortFields['dateOfModify'] === 'asc'"
+            >keyboard_arrow_up</md-icon
+          ></span
+        >
+        <span class="sort-item" :class="{ selected: this.sortFields['status'] }" @click="sort('status')"
+          >Status
+          <md-icon class="color-black" v-if="this.sortFields['status'] === 'desc'">keyboard_arrow_down</md-icon>
+          <md-icon class="color-black" v-if="this.sortFields['status'] === 'asc'">keyboard_arrow_up</md-icon>
+        </span>
+        <span class="sort-item" :class="{ selected: this.sortFields['update'] }" @click="sort('update')"
+          >Update
+          <md-icon class="color-black" v-if="this.sortFields['update'] === 'desc'">keyboard_arrow_down</md-icon>
+          <md-icon class="color-black" v-if="this.sortFields['update'] === 'asc'">keyboard_arrow_up</md-icon>
+        </span>
         <span></span>
         <span></span>
       </div>
@@ -77,12 +95,7 @@
         <div class="md-layout">
           <div class="md-layout-item md-size-75">
             <div class="white-card md-20 proposal-list">
-              <proposal-list-item class="row"></proposal-list-item>
-              <proposal-list-item class="row"></proposal-list-item>
-              <proposal-list-item class="row"></proposal-list-item>
-              <proposal-list-item class="row"></proposal-list-item>
-              <proposal-list-item class="row"></proposal-list-item>
-              <proposal-list-item class="row"></proposal-list-item>
+              <proposal-list-item class="row" v-for="proposal in proposals" :key="proposal.id"></proposal-list-item>
             </div>
           </div>
           <div class="md-layout-item md-size-25">
@@ -124,7 +137,12 @@
       <div class="md-layout">
         <div class="md-layout-item md-size-75">
           <div class="text-center">
-            <table-pagination class="mt-30" :pageCount="12"></table-pagination>
+            <table-pagination
+              v-if="pagination.pageCount"
+              class="mt-30"
+              :pageCount="pagination.pageCount"
+              :clickHandler="gotoPage"
+            ></table-pagination>
           </div>
         </div>
         <div class="md-layout-item md-size-25"></div>
@@ -137,6 +155,7 @@ import TablePagination from "@/components/TablePagination.vue";
 import ProposalListItem from "../components/ProposalListItem.vue";
 import ProposalRequestCard from "../components/ProposalRequestCard";
 import ProposalRequest from "@/models/ProposalRequest";
+import Proposal from "@/models/Proposal";
 import Vendor from "@/models/Vendors";
 import carousel from "vue-owl-carousel";
 import PieChart from "@/components/Chart/PieChart.vue";
@@ -151,23 +170,68 @@ export default {
   data() {
     return {
       proposalRequests: [],
+      proposals: [],
       chartData: [
         { title: "Application", value: 12, color: "#b7b5b5" },
         { title: "Winning", value: 3, color: "#2cde6b" },
       ],
+      pagination: {
+        total: 0,
+        pageCount: 0,
+        page: 0,
+        limit: 5,
+      },
+      sortFields: {},
     };
   },
   created() {
-    new ProposalRequest()
-      .for(new Vendor({ id: this.vendorData.id }))
-      .get()
-      .then((proposalRequests) => {
-        this.proposalRequests = proposalRequests;
-      });
+    this.getData();
+    this.getProposal();
+  },
+  methods: {
+    getData() {
+      new ProposalRequest()
+        .for(new Vendor({ id: this.vendorData.id }))
+        .get()
+        .then((proposalRequests) => {
+          this.proposalRequests = proposalRequests;
+        });
+    },
+    getProposal() {
+      const { pagination } = this;
+      new Proposal()
+        .for(new Vendor({ id: this.vendorData.id }))
+        .page(pagination.page)
+        .limit(pagination.limit)
+        .get()
+        .then((res) => {
+          const data = res[0];
+          this.proposals = data.items;
+          this.pagination.total = data.total;
+          this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
+        });
+    },
+    gotoPage(selectedPage) {
+      console.log(selectedPage);
+      this.pagination.page = selectedPage;
+      this.getProposal();
+    },
+    sort(sortField) {
+      if (!this.sortFields[sortField]) {
+        this.$set(this.sortFields, sortField, "desc");
+      } else {
+        this.sortFields[sortField] = this.sortFields[sortField] === "desc" ? "asc" : "desc";
+      }
+    },
   },
   computed: {
     vendorData() {
       return this.$store.state.vendor.profile;
+    },
+  },
+  watch: {
+    vendorData(newValue, oldValue) {
+      this.getData();
     },
   },
 };
@@ -220,6 +284,14 @@ export default {
     display: grid;
     align-items: center;
     grid-template-columns: 150px 20% 20% 15% 20% 20% 30px;
+    .sort-item {
+      cursor: pointer;
+      color: #707070;
+      &.selected {
+        color: #050505;
+        font-weight: bold;
+      }
+    }
   }
   .tips {
     img {
