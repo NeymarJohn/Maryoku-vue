@@ -7,7 +7,7 @@
       </div>
     </template>
     <template slot="content">
-      <div class="requirements-content p-30 pt-0-i" v-if="step === 1">
+      <div class="requirements-content p-30 pt-0-i" v-if="step <= 1">
         <div
           v-for="(requirementCategory, index) in Object.keys(requirementsData)"
           :key="`requirement-category-${index}`"

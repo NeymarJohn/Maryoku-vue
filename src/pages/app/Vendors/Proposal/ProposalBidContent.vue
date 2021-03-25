@@ -147,7 +147,7 @@ export default {
 
       this.$store.commit("vendorProposal/setCostServices", {
         category: this.vendor.eventCategory.key,
-        services: costServices,
+        services: [],
       });
       this.$store.commit("vendorProposal/setIncludedServices", {
         category: this.vendor.eventCategory.key,
