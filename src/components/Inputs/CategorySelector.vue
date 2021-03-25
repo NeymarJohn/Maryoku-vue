@@ -21,7 +21,7 @@
           <div class="d-flex align-center">
             <img class="mr-10" :src="`${iconUrl}Group 5479 (2).svg`" v-if="_includes(selectedCategory, category)" />
             <span class="unchecked" v-else></span>
-            <span>{{ _option(category) }}</span>
+            <span class="text-transform-capitalize">{{ _option(category) }}</span>
           </div>
         </template>
         <template v-else>
@@ -161,7 +161,7 @@ export default {
       }
     },
     _option(option) {
-      return capitalize(this.trackBy ? option[this.trackBy] : option);
+      return this.trackBy ? option[this.trackBy] : option;
     },
     input() {
       this.$emit("input", this.additionalValue);
