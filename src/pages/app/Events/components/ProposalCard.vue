@@ -23,7 +23,7 @@
         </ul>
       </template>
 
-      <p class="event-desc">{{ proposal.vendor.about ? proposal.vendor.about.company : "" }}</p>
+      <p class="event-desc">{{ proposal.vendor.about ? proposal.vendor.about.company : "sdf" }}</p>
 
       <div class="item-actions text-right">
         <md-button class="md-red maryoku-btn" @click="proposalDetails">Details & Booking </md-button>
@@ -172,12 +172,6 @@ export default {
     font-size: 14px;
     color: #050505;
     height: 100px;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .details-btn {

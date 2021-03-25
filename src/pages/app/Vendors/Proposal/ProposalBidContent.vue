@@ -126,12 +126,14 @@ export default {
               isMandatory: true,
             });
           }
-          if (item.name === "Tax rate") {
+          if (item.name === "Tax rate" && item.value) {
             taxRate = Number(item.value);
           }
           if (
             item.name === "Discount for large quantities" &&
-            Number(this.event.numberOfParticipants) >= Number(item.attendees)
+            Number(this.event.numberOfParticipants) >= Number(item.attendees) &&
+            item.attendees &&
+            item.value
           ) {
             discountRate = Number(item.value);
           }

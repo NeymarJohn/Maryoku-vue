@@ -39,6 +39,7 @@
   </div>
 </template>
 <script>
+import { capitalize } from "@/utils/string.util";
 export default {
   name: "category-selector",
   props: {
@@ -160,7 +161,7 @@ export default {
       }
     },
     _option(option) {
-      return this.trackBy ? option[this.trackBy] : option;
+      return capitalize(this.trackBy ? option[this.trackBy] : option);
     },
     input() {
       this.$emit("input", this.additionalValue);
@@ -193,6 +194,7 @@ export default {
       cursor: pointer;
       width: 100%;
       border: solid 0.5px #bcbcbc;
+      text-transform: capitalize;
     }
     .dropdown {
       position: absolute;
