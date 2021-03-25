@@ -3,21 +3,18 @@
     <div class="collapsed" @click="expand()">
       <div class="with-check">
         <img :src="`${iconUrl}Group 5479 (2).svg`" />
-        <span class="value label">{{item.label}}</span>
+        <span class="value label">{{ item.label }}</span>
       </div>
       <div class="with-qty">
-        <span class="qty">{{getQty()}}</span>
+        <span class="qty">{{ getQty() }}</span>
         <img
           v-if="item.desc"
           :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"
         />
-        <img
-          v-else
-          :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 528.svg`"
-        />
+        <img v-else :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 528.svg`" />
       </div>
     </div>
-    <div class="expanded" v-if="expanded">{{item.desc}}</div>
+    <div class="expanded" v-if="expanded">{{ item.desc }}</div>
   </div>
 </template>
 
@@ -33,8 +30,7 @@ export default {
   data() {
     return {
       expanded: false,
-      iconUrl:
-        "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
   },
   created() {},
@@ -48,7 +44,7 @@ export default {
     getQty() {
       if (this.item.value) {
         if (this.item.value.constructor.name == "Array") {
-          return this.item.value.length;
+          return this.item.value.join(",");
         } else if (this.item.value.constructor.name == "String") {
           return this.item.value;
         } else {
