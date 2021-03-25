@@ -25,7 +25,7 @@ const ProfileOverview = () => import("@/pages/app/Planner/Profile");
 const EventDetailsBudget = () => import("@/pages/app/Events/EventDetailsBudget.vue");
 const EventPlan = () => import("@/pages/app/Events/EventPlan.vue");
 const EventDetailsOverview = () => import("@/pages/app/Events/components/EventDetailsOverview");
-const EventProposalDetails = () => import("@/pages/app/Events/components/EventProposalDetails.vue");
+const EventProposalDetails = () => import("@/pages/app/Events/Proposal/EventProposalDetails.vue");
 const EventDetailsTimeline = () => import("@/pages/app/Events/EventDetailsTimeline");
 const EventConceptChoose = () => import("@/pages/app/Events/components/EventConceptChoose");
 const BookingEvent = () => import("@/pages/app/Events/components/BookingEvent");

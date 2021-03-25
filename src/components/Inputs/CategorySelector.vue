@@ -21,7 +21,7 @@
           <div class="d-flex align-center">
             <img class="mr-10" :src="`${iconUrl}Group 5479 (2).svg`" v-if="_includes(selectedCategory, category)" />
             <span class="unchecked" v-else></span>
-            <span class="text-transform-capitalize">{{ _option(category) }}</span>
+            <span>{{ _option(category) }}</span>
           </div>
         </template>
         <template v-else>
@@ -39,7 +39,6 @@
   </div>
 </template>
 <script>
-import { capitalize } from "@/utils/string.util";
 export default {
   name: "category-selector",
   props: {
@@ -194,7 +193,6 @@ export default {
       cursor: pointer;
       width: 100%;
       border: solid 0.5px #bcbcbc;
-      text-transform: capitalize;
     }
     .dropdown {
       position: absolute;

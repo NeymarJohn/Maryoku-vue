@@ -58,19 +58,17 @@
               </div>
             </div>
             <div class="field mb-50">
-              <!-- <vendor-checkbox
-                :item="{ value: vendor.companyServices || [] }"
+              <vendor-checkbox
+                v-if="
+                  vendor.vendorCategories &&
+                  companyServices.filter((cs) => cs.name == vendor.vendorCategories[0]) &&
+                  companyServices.filter((cs) => cs.name == vendor.vendorCategories[0]).length > 0
+                "
+                :item="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0])[0]"
                 :label="`Company Services`"
                 :vendor="vendor"
-                v-model="vendor.companyServices"
-              /> -->
-              <label>Company Services</label>
-              <company-service-selector
-                :options="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0])[0]"
-                :defaultValue="vendor.companyServices"
-                @change="updateCompanyServices"
-                class="mt-10"
-              ></company-service-selector>
+                v-model="companyServices.filter((cs) => cs.name == vendor.vendorCategories[0])[0].value"
+              />
             </div>
             <div class="field mb-50">
               <div class="title-cont">
@@ -281,13 +279,13 @@ import vueSignature from "vue-signature";
 import S3Service from "@/services/s3.service";
 import { makeid } from "@/utils/helperFunction";
 import VendorPhotosCarousel from "../components/VendorPhotosCarousel.vue";
-import CompanyServiceSelector from "../components/CompanyServiceSelector.vue";
 export default {
   name: "vendor-signup-step1",
   props: {
     categories: Array,
     generalInfos: Array,
     companyServices: Array,
+    vendor: Object,
   },
   components: {
     Drop,
@@ -296,7 +294,6 @@ export default {
     VendorServiceItem,
     vueSignature,
     VendorPhotosCarousel,
-    CompanyServiceSelector,
   },
   data() {
     return {
@@ -426,9 +423,6 @@ export default {
     uploadVendorImage(imageId = null, attachmentType = null) {
       this.$refs.imageFile.click();
     },
-    updateCompanyServices(services) {
-      this.$root.$emit("update-vendor-value", "companyServices", services);
-    },
     uploadVendorSignature(imageId = null, attachmentType = null) {
       this.$refs.signatureFile.click();
     },
@@ -540,25 +534,10 @@ export default {
       this.$store.commit("vendorSignup/removeImage", index);
     },
   },
-  computed: {
-    vendor() {
-      return this.$store.state.vendorSignup.vendor;
-    },
-  },
+  computed: {},
   filters: {},
   created() {
     this.$store.dispatch("vendorSignup/checkImages");
-    // refactoring vendor data in vuex
-    const vendorData = Object.assign({}, this.vendor);
-    try {
-      const companyServices = vendorData.services.companyServices;
-      if (companyServices) {
-        this.$set(vendorData, "companyServices", companyServices.value);
-      }
-      delete vendorData.services.companyServices;
-      delete vendorData.services.companySerivces;
-    } catch (e) {}
-    this.$store.commit("vendorSignup/setVendor", vendorData);
   },
 };
 </script>

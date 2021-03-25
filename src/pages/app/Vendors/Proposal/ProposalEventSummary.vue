@@ -61,7 +61,7 @@
             About us
             <md-icon>navigate_next</md-icon>
           </md-button>
-          <div class="about-company">
+          <div>
             {{ vendor.about.company }}
           </div>
           <div class="contact-cont">
@@ -542,9 +542,6 @@ export default {
   margin-top: 20px;
   color: #050505;
 
-  .about-company {
-    word-break: break-word;
-  }
   .change-cover-btn {
     margin: 10% 50%;
     transform: translateX(-50%);

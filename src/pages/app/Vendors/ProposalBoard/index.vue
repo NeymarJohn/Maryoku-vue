@@ -14,9 +14,9 @@
       class="proposal-requests"
     >
       <template slot="prev">
-        <md-button class="edit-btn md-round nav-left nav-btn md-raised md-white">
-          <md-icon class="color-vendor">arrow_back</md-icon>
-        </md-button>
+        <button class="nav-left nav-btn">
+          <span><md-icon class="color-vendor">arrow_back</md-icon></span>
+        </button>
       </template>
       <proposal-request-card
         class="carousel-item"
@@ -26,9 +26,9 @@
       >
       </proposal-request-card>
       <template slot="next">
-        <md-button class="edit-btn md-round nav-right nav-btn md-raised md-white">
+        <button class="nav-right nav-btn">
           <md-icon class="color-vendor">arrow_forward</md-icon>
-        </md-button>
+        </button>
       </template>
     </carousel>
     <hr class="m-60" />
@@ -177,11 +177,25 @@ export default {
   .proposal-requests {
     display: flex;
     position: relative;
-    margin: 0 -30px;
+    margin: 0 -50px;
     .nav-btn {
       position: absolute;
       top: 50%;
       transform: translate(0, -50%);
+      z-index: 10;
+      width: 33px;
+      height: 33px;
+      background-color: white;
+      border: none;
+      border-radius: 50%;
+      box-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.16);
+      cursor: pointer;
+      &.nav-left {
+        left: 10px;
+      }
+      &.nav-right {
+        right: 10px;
+      }
     }
   }
   .filter-button {
