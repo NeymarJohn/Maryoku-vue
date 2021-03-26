@@ -327,6 +327,12 @@ export default {
       const items = [];
       this.vendorServices.forEach((category) => {
         category.subCategories.forEach((subCat) => {
+          if (
+            subCat.name.toLowerCase() === "inclusion" ||
+            subCat.name.toLowerCase() === "sustainability" ||
+            subCat.name.toLowerCase() === "diversity"
+          )
+            return;
           subCat.items.forEach((item) => {
             const capitalized = item.name.charAt(0).toUpperCase() + item.name.slice(1);
             const profileService = this.profileServices[this.camelize(capitalized)];
