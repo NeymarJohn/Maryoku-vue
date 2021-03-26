@@ -4,7 +4,9 @@
     <div class="event-header d-flex justify-content-between">
       <div class="proposal-page_header text-transform-uppercase">
         <img :src="`${$iconURL}Budget+Elements/${vendorProposal.vendor.eventCategory.icon}`" />
-        <a href="javascript:void(0)">{{ vendorProposal.vendor.vendorDisplayName }}</a>
+        <a :href="`/#/vendors/${vendorProposal.vendor.id}/detail`" target="_blank">
+          {{ vendorProposal.vendor.companyName }}
+        </a>
         Proposal
       </div>
       <header-actions @toggleCommentMode="toggleCommentMode" @export="exportToPdf"></header-actions>
@@ -15,7 +17,9 @@
           <div class="event-info">
             <div class="section-header d-flex justify-content-start">
               <h3>Event Information & Details</h3>
-              <div class="alert alert-danger">This proposal is 2 days before your original date</div>
+              <div class="alert alert-danger" v-if="vendorProposal.suggestedTime">
+                This proposal is 2 days before your original date
+              </div>
             </div>
             <ul class="event-details">
               <li class="event-details__item">
@@ -39,41 +43,69 @@
         </div>
 
         <div class="proposal-body">
-          <h1>Dear Rachel,</h1>
+          <h1 class="font-size-30">Dear {{ vendorProposal.vendor.vendorDisplayName }},</h1>
           <p>
             {{ vendorProposal.personalMessage }}
-            <br />
-            <br />Sincerely,
-            <span class="proposal-title">{{ vendorProposal.vendor.vendorDisplayName }}</span>
+
+            <!-- <br />Sincerely,
+            <span class="proposal-title">{{ vendorProposal.vendor.vendorDisplayName }}</span> -->
           </p>
+          <div class="vision mt-30 font-size-22 mb-40">
+            <div class="font-bold-extra">
+              <img :src="`${$iconURL}Vendor+Landing+Page/Asset+491.svg`" />
+              Our vision for your event
+            </div>
+            <div>{{ vendorProposal.eventVision }}</div>
+          </div>
+          <div class="proposal-images mb-40">
+            <div class="font-bold mb-10">Some references to the experience you will get from us</div>
+            <carousel :items="4" :margin="25" :dots="false" :nav="false" class="proposal-images-carousel">
+              <template slot="prev">
+                <span class="prev handle-btn">
+                  <md-icon>keyboard_arrow_left</md-icon>
+                </span>
+              </template>
 
-          <md-button class="md-rose md-raised md-outline">More About Us</md-button>
-        </div>
-
-        <div class="proposal-section contact-section">
-          <div class="proposal-section__title">Contact Us</div>
-
-          <ul class="contact-list_items d-flex justify-content-start">
-            <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainEmail">
-              <a href>
-                <img :src="`${submitProposalIcon}Asset 286.svg`" />
-                {{ vendorProposal.vendor.vendorMainEmail }}
-              </a>
-            </li>
-            <li class="contact-list_item" v-if="vendorProposal.vendor.vendorAddressLine1">
-              <a href>
-                <img :src="`${submitProposalIcon}Asset 285.svg`" />
-                {{ vendorProposal.vendor.vendorAddressLine1 }}
-                {{ vendorProposal.vendor.vendorAddressLine2 }}
-              </a>
-            </li>
-            <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainPhoneNumber">
-              <a href>
-                <img :src="`${submitProposalIcon}Asset 284.svg`" />
-                {{ vendorProposal.vendor.vendorMainPhoneNumber }}
-              </a>
-            </li>
-          </ul>
+              <img
+                class="item"
+                v-for="(item, index) in vendorProposal.inspirationalPhotos.filter((item) => !!item)"
+                :key="item.url"
+                :src="item.url"
+              />
+              <template slot="next">
+                <span class="next handle-btn">
+                  <md-icon>keyboard_arrow_right</md-icon>
+                </span>
+              </template>
+            </carousel>
+          </div>
+          <div class="about-us mb-40">
+            <div class="color-red font-bold">About Us <md-icon class="color-red">keyboard_arrow_right</md-icon></div>
+          </div>
+          <div class="contact-section mb-40">
+            <div class="proposal-section__title font-size-22 font-bold-extra">Contact Us</div>
+            <ul class="contact-list_items d-flex justify-content-start">
+              <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainEmail">
+                <a href>
+                  <img :src="`${submitProposalIcon}Asset 286.svg`" />
+                  {{ vendorProposal.vendor.vendorMainEmail }}
+                </a>
+              </li>
+              <li class="contact-list_item" v-if="vendorProposal.vendor.vendorAddressLine1">
+                <a href>
+                  <img :src="`${submitProposalIcon}Asset 285.svg`" />
+                  {{ vendorProposal.vendor.vendorAddressLine1 }}
+                  {{ vendorProposal.vendor.vendorAddressLine2 }}
+                </a>
+              </li>
+              <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainPhoneNumber">
+                <a href>
+                  <img :src="`${submitProposalIcon}Asset 284.svg`" />
+                  {{ vendorProposal.vendor.vendorMainPhoneNumber }}
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
 
@@ -124,34 +156,6 @@
               >
                 Loading ...
               </div>
-
-              <carousel
-                :items="3"
-                :margin="25"
-                :dots="false"
-                :nav="false"
-                class="proposal-images"
-                v-if="fetchingAllAttachments"
-              >
-                <template slot="prev">
-                  <span class="prev">
-                    <md-icon>keyboard_arrow_left</md-icon>
-                  </span>
-                </template>
-
-                <div
-                  class="item"
-                  v-for="(item, index) in images"
-                  :key="index"
-                  :style="`background: url(${item.src}) center center no-repeat; `"
-                ></div>
-
-                <template slot="next">
-                  <span class="next">
-                    <md-icon>keyboard_arrow_right</md-icon>
-                  </span>
-                </template>
-              </carousel>
 
               <div class="element-pricing-table elements-list">
                 <table>
@@ -354,11 +358,6 @@
         </div>
 
         <div class="policy-content">
-          <div class="proposal-section__subtitle">
-            <div class="subtitle">Are deposit is:</div>
-            <div class="desc">50% of the total event</div>
-          </div>
-
           <div class="policy mb-50">
             <div class="mb-10" v-for="(policy, index) in vendorProposal.vendor.yesRules" :key="`yespolicy-${index}`">
               <span class="font-bold" style="width: 50%; display: inline-block">{{ policy.name }}</span>
@@ -403,10 +402,10 @@
     <div class="book-proposal-form">
       <div class="form-title">
         Would You Like To Book
-        <a href class="font-bold-extra"> {{ this.vendorProposal.vendor.companyName }}</a
+        <a href class="font-bold-extra"> {{ vendorProposal.vendor.companyName }}</a
         >?
       </div>
-      <div class="agree-checkbox">
+      <div class="agree-checkbox" v-if="this.vendorProposal.suggestedTime">
         <md-checkbox v-model="acceptNewTimes">I agree to the new time of this proposal</md-checkbox>
         <div class="alert alert-danger">Please indicate that you accept the new time of this proposal</div>
       </div>
@@ -435,7 +434,12 @@
             </md-menu-item>
           </md-menu-content>
         </md-menu>
-        <md-button class="md-red maryoku-btn" @click="bookVendor">Book this vendor</md-button>
+        <md-button
+          class="md-red maryoku-btn"
+          @click="bookVendor"
+          :disabled="this.vendorProposal.suggestedTime && !acceptNewTimes"
+          >Book this vendor</md-button
+        >
       </div>
     </div>
   </div>
@@ -870,40 +874,6 @@ export default {
             box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
             background-color: #ffffff;
             margin-bottom: 1em;
-
-            .proposal-images {
-              position: relative;
-
-              margin: 1em 0;
-
-              .owl-carousel {
-                .item {
-                  height: 177px;
-                  border-radius: 3px;
-                  background-size: cover !important;
-                }
-              }
-
-              .prev,
-              .next {
-                width: 28px;
-                height: 28px;
-                background-color: #ffffff;
-                position: absolute;
-                top: 40%;
-                z-index: 99999999;
-                border-radius: 50%;
-                text-align: center;
-              }
-
-              .prev {
-                left: 1em;
-              }
-
-              .next {
-                right: 1em;
-              }
-            }
 
             &.bundle-offer {
               background-color: #ffedb7;
@@ -1385,19 +1355,14 @@ export default {
           margin: 1em 0 0;
           list-style: none;
         }
-
         &_item {
           margin-right: 3em;
-
           a {
-            font-size: 14px;
             color: #050505;
             text-decoration: underline;
-
             &:hover {
               color: #000;
             }
-
             img {
               width: 20px;
               margin-right: 1em;
@@ -1410,7 +1375,40 @@ export default {
       text-align: center;
       padding: 40px;
     }
+    .vision {
+      img {
+        width: 25px;
+        margin-right: 10px;
+      }
+    }
 
+    .proposal-images {
+      &-carousel {
+        position: relative;
+        .handle-btn {
+          background-color: white !important;
+          height: 25px;
+          width: 25px;
+          border-radius: 50%;
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: 10;
+          &.next {
+            right: 20px;
+          }
+          &.prev {
+            left: 20px;
+          }
+        }
+        .item {
+          max-height: 200px;
+          object-fit: cover;
+          border-radius: 5px;
+          overflow: hidden;
+        }
+      }
+    }
     .back-btn {
       .md-ripple {
         color: #000;

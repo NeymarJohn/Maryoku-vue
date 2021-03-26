@@ -132,9 +132,9 @@
       </div>
       <div class="action-cont">
         <a class="cancel" @click="cancel()">Clear</a>
-        <a class="save" :class="{ isDisabled: isDisabledAdd }" @click="saveItem(serviceItem, qty, subTotal, category)">
-          Add This
-        </a>
+        <a class="save" :class="{ isDisabled: isDisabledAdd }" @click="saveItem(serviceItem, qty, subTotal, category)"
+          >Add This</a
+        >
       </div>
     </div>
     <div class="editable-sub-items-cont" v-if="(step <= 1 && !isVCollapsed) || (step == 2 && isChecked)">

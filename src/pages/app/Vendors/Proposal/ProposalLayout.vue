@@ -6,8 +6,8 @@
     </div>
     <section class="footer-wrapper">
       <div calss>
-        <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()">
-          <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back</md-button
+        <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()"
+          ><img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back</md-button
         >
         <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
           <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
@@ -20,7 +20,12 @@
         <a class="save" @click="saveProposal('save')">
           <img :src="`${proposalIconsUrl}Asset 610.svg`" /> Save for later
         </a>
-        <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
+        <a
+          class="next active"
+          @click="step = step + 1"
+          :class="[{ active: selectedServices.length > 0 }]"
+          v-if="step < 3"
+        >
           Next
         </a>
         <a class="next active" @click="saveProposal('submit')" v-else>Submit Proposal</a>
@@ -167,10 +172,6 @@ export default {
   },
   methods: {
     ...mapActions("vendorProposal", ["getVendor", "getProposalRequest"]),
-    gotoNext() {
-      this.scrollToTop();
-      this.step = this.step + 1;
-    },
     getVendorCategory() {
       this.$auth.currentUser(
         this,
