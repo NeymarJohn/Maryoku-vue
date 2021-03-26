@@ -255,7 +255,9 @@
           />
         </template>
       </div>
-      <div class="total-cont editor-wrapper text-right">${{ subTotal | withComma }}</div>
+      <div class="total-cont editor-wrapper pl-10" :class="{ 'text-right': !isEdit, 'text-left': isEdit }">
+        ${{ subTotal | withComma }}
+      </div>
       <div class="action-cont editor-wrapper">
         <template v-if="isEdit">
           <a class="cancel" @click="cancel()">Cancel</a>

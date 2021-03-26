@@ -106,6 +106,7 @@ export default {
       if (this.vendor.pricingPolicies) {
         this.vendor.pricingPolicies.forEach((item) => {
           if (!hiddenValues.includes(item.name)) {
+            if (!item.value) return;
             extraServices.push({
               comments: [],
               dateCreated: "",

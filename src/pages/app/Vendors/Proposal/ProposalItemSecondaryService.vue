@@ -1,9 +1,13 @@
 <template>
   <div class="proposal-item-secondary-service">
-    <div class="title-cont dropdown" @click="clickItem(service.componentId)" :class="{ opened: isChecked }">
+    <div
+      class="title-cont dropdown"
+      @click="clickItem(service.componentId)"
+      :class="{ opened: isAdded(service.componentId) }"
+    >
       <div class="left-side">
         <div class="check-cont">
-          <img v-if="isChecked" :src="`${iconUrl}Group 6258 (2).svg`" />
+          <img v-if="isAdded(service.componentId)" :src="`${iconUrl}Group 6258 (2).svg`" />
           <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`" />
         </div>
         <h3 class="title">
@@ -19,10 +23,13 @@
         <div class="proposal-range-cont">
           <span>You're the First bidder</span>
         </div>
-        <img :src="`${iconUrl}Component 36 (2).svg`" :style="`transform: ${isChecked ? 'rotate(90deg)' : ''}`" />
+        <img
+          :src="`${iconUrl}Component 36 (2).svg`"
+          :style="`transform: ${isAdded(service.componentId) ? 'rotate(90deg)' : ''}`"
+        />
       </div>
     </div>
-    <template v-if="isChecked">
+    <template v-if="isAdded(service.componentId)">
       <proposal-requirements
         class="additional-service"
         label="Cost Items"
@@ -154,9 +161,12 @@ export default {
     getObject(item) {
       return JSON.parse(JSON.stringify(item));
     },
+    isAdded(category) {
+      return this.additionalServices.includes(category);
+    },
     clickItem(category) {
-      this.isChecked = !this.isChecked;
-      if (this.isChecked) {
+      // this.isChecked = !this.isChecked;
+      if (!this.isAdded(category)) {
         this.additionalServices.push(category);
       } else {
         this.$store.commit("vendorProposal/removeCategoryFromAdditional");
