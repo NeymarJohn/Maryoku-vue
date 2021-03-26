@@ -6,6 +6,12 @@ export default {
     return {
       publicEventData: {
         id: null,
+        dateData: {},
+        numberOfParticipants: 0,
+        guestType: "",
+        location: "",
+        locationId: "",
+        places: [],
         occasion: '',
         occasionCache: '',
         title: '',
@@ -13,7 +19,6 @@ export default {
         theme: '',
         time: '',
         duration: '',
-        numberOfParticipants: '',
         status: 'draft',
         totalBudget: '',
         currency: '',

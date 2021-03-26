@@ -25,7 +25,7 @@ const ProfileOverview = () => import("@/pages/app/Planner/Profile");
 const EventDetailsBudget = () => import("@/pages/app/Events/EventDetailsBudget.vue");
 const EventPlan = () => import("@/pages/app/Events/EventPlan.vue");
 const EventDetailsOverview = () => import("@/pages/app/Events/components/EventDetailsOverview");
-const EventProposalDetails = () => import("@/pages/app/Events/components/EventProposalDetails.vue");
+const EventProposalDetails = () => import("@/pages/app/Events/Proposal/EventProposalDetails.vue");
 const EventDetailsTimeline = () => import("@/pages/app/Events/EventDetailsTimeline");
 const EventConceptChoose = () => import("@/pages/app/Events/components/EventConceptChoose");
 const BookingEvent = () => import("@/pages/app/Events/components/BookingEvent");
@@ -183,6 +183,7 @@ let appPages = {
             component: VendorsPoolNew,
             meta: {
                 gtm: "VendorsPoolNew",
+                requiresAuth: true,
             },
         },
         {
@@ -193,6 +194,7 @@ let appPages = {
                 title: "Vendor Page",
                 gtm: "Vendor Details",
                 opaque: false,
+                requiresAuth: true,
             },
         },
         {
@@ -202,6 +204,7 @@ let appPages = {
             meta: {
                 title: "Edit Vendor Details",
                 gtm: "Edit Vendor Details",
+                requiresAuth: true,
             },
         },
     ],
@@ -217,7 +220,7 @@ let ProfilePages = {
             name: "overview",
             component: ProfileOverview,
             meta: {
-                requiresAuth: false,
+                requiresAuth: true,
                 title: "Profile",
                 gtm: "Profile",
             },
@@ -235,6 +238,7 @@ let EventPages = {
             name: "EventProposal",
             component: EventProposal,
             meta: {
+                requiresAuth: true,
                 title: "Event Proposal",
             },
         },
@@ -246,6 +250,7 @@ let EventPages = {
                 title: "Event Details",
                 gtm: "Event Edit",
                 opaque: false,
+                requiresAuth: true,
             },
         },
         {
@@ -256,6 +261,7 @@ let EventPages = {
                 title: "Event Details",
                 gtm: "Event Edit",
                 opaque: false,
+                requiresAuth: true,
             },
         },
         {
@@ -271,6 +277,7 @@ let EventPages = {
                         title: "Event Details",
                         gtm: "Event Details",
                         opaque: false,
+                        requiresAuth: true,
                     },
                 },
                 {
@@ -281,6 +288,7 @@ let EventPages = {
                         title: "Event Concept",
                         gtm: "Event Concept",
                         opaque: false,
+                        requiresAuth: true,
                     },
                 },
                 {
@@ -291,6 +299,7 @@ let EventPages = {
                         title: "Event Concept",
                         gtm: "Event Concept",
                         opaque: false,
+                        requiresAuth: true,
                     },
                 },
                 {
@@ -301,6 +310,7 @@ let EventPages = {
                         title: "Event Campaign",
                         gtm: "Event Campaign",
                         opaque: false,
+                        requiresAuth: true,
                     },
                 },
                 {
@@ -311,6 +321,7 @@ let EventPages = {
                         title: "Event Timeline",
                         gtm: "Event Timeline",
                         opaque: false,
+                        requiresAuth: true,
                     },
                 },
                 {
@@ -321,6 +332,7 @@ let EventPages = {
                         title: "Plan Event",
                         gtm: "Plan Event",
                         opaque: false,
+                        requiresAuth: true,
                     },
                 },
                 {
@@ -331,6 +343,7 @@ let EventPages = {
                         title: "EventProposalDetails",
                         gtm: "Event Proposal Details",
                         opaque: false,
+                        requiresAuth: true,
                     },
                 },
             ]
@@ -481,6 +494,7 @@ let HomePages = {
             meta: {
                 title: "Our Events",
                 gtm: "Events",
+                requiresAuth: true,
             },
         },
     ],
@@ -498,6 +512,7 @@ let landingPages = {
             meta: {
                 title: "Our Events",
                 gtm: "Events",
+                requiresAuth: false,
             },
             // path: "/rsvp/:rsvpRequestId",
             // name: "RSVP",

@@ -81,49 +81,27 @@
           <template slot="body">
             <div class="md-layout">
               <div class="md-layout-item md-size-100">
-                <div class="form-group">
-                  <label>Name</label>
-                  <input type="text" class="form-control" />
-                </div>
+                <label>Name</label>
+                <maryoku-input inputStyle="name" type="text" />
               </div>
-              <div class="md-layout-item md-size-100 margin-bottom">
-                <div class="form-group with-icon">
-                  <label>Price of the service</label>
-                  <div class="input-icon">
-                    <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5" />
-                  </div>
-                  <input type="text" class="form-control" placeholder="Type number here" />
-                </div>
+              <div class="md-layout-item md-size-100 mt-20">
+                <label>Price of the service</label>
+                <maryoku-input inputStyle="budget" type="text" />
               </div>
-              <div class="md-layout-item md-size-100 margin-bottom">
-                <div class="form-group with-icon">
-                  <label>Location</label>
-                  <div class="input-icon">
-                    <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5" />
-                  </div>
-                  <input type="text" class="form-control" placeholder />
-                </div>
+              <div class="md-layout-item md-size-100 mt-20">
+                <label>Location</label>
+                <maryoku-input inputStyle="location" type="text" />
               </div>
-              <div class="md-layout-item md-size-100 margin-bottom">
-                <div class="form-group with-icon">
-                  <label>Phone</label>
-                  <div class="input-icon">
-                    <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5" />
-                  </div>
-                  <input type="text" class="form-control" placeholder="Type number here" />
-                </div>
+              <div class="md-layout-item md-size-100 mt-20">
+                <label>Phone</label>
+                <maryoku-input inputStyle="phone" type="text" />
               </div>
-              <div class="md-layout-item md-size-100 margin-bottom">
-                <div class="form-group with-icon">
-                  <label>Email</label>
-                  <div class="input-icon">
-                    <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5" />
-                  </div>
-                  <input type="text" class="form-control" placeholder="Type email address here" />
-                </div>
+              <div class="md-layout-item md-size-100 mt-20">
+                <label>Email</label>
+                <maryoku-input inputStyle="email" type="text" />
               </div>
 
-              <div class="md-layout-item md-size-100 margin-bottom">
+              <div class="md-layout-item md-size-100 mt-20">
                 <div class="form-group">
                   <label>Attach Proposal</label>
                   <label class="upload-section" for="file">
@@ -131,7 +109,6 @@
                     <div>Or</div>
                     <div class="note">Drag your file here</div>
                   </label>
-
                   <input style="display: none" id="file" name="attachment" type="file" @change />
                 </div>
               </div>
@@ -186,7 +163,7 @@ import VueElementLoading from "vue-element-loading";
 import EventBlocks from "../components/NewEventBlocks";
 import ProposalCard from "./ProposalCard";
 import _ from "underscore";
-import { Modal } from "@/components";
+import { Modal, MaryokuInput } from "@/components";
 import EventComponentVendor from "@/models/EventComponentVendor";
 import EventComponentProperty from "@/models/EventComponentProperty";
 import Proposal from "@/models/Proposal";
@@ -211,6 +188,7 @@ export default {
     BookingEventRequirement,
     PendingForVendors,
     ProposalCard,
+    MaryokuInput,
   },
   props: {},
   data: () => ({

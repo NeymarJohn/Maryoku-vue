@@ -2,7 +2,6 @@ import Vue from "vue";
 import { postReq, getReq } from "@/utils/token";
 import Vendors from "@/models/Vendors";
 import ProposalRequest from "@/models/ProposalRequest";
-import Proposal from "@/models/Proposal";
 import { reject, resolve } from "promise-polyfill";
 import EventTimelineDate from "@/models/EventTimelineDate";
 import CalendarEvent from "@/models/CalendarEvent";
@@ -116,7 +115,6 @@ const mutations = {
   },
   setProposal: (state, proposal) => {
     state.id = proposal.id;
-    state.eventVision = proposal.eventVision;
     state.proposalCostServices = proposal.costServices;
     state.proposalIncludedServices = proposal.includedServices;
     state.proposalExtraServices = proposal.proposalExtraServices;
@@ -196,20 +194,7 @@ const mutations = {
   },
 };
 const actions = {
-  getProposalByRequestId: ({ commit, state }, proposalRequestId) => {
-    return new Promise((resolve, reject) => {
-      new Proposal()
-        .for(new ProposalRequest({ id: proposalRequestId }))
-        .get()
-        .then(res => {
-          const proposal = res[0];
-          commit("setProposal", proposal);
-        })
-        .catch(e => {
-          reject(e);
-        });
-    });
-  },
+  getProposal: ({ commit, state }, proposalRequestId) => {},
   getVendor: ({ commit, state }, vendorId) => {
     return new Promise((resolve, reject) => {
       Vendors.find(vendorId)
@@ -241,40 +226,6 @@ const actions = {
         .get()
         .then(res => {
           commit("setValue", "timelineDates", res);
-        });
-    });
-  },
-  saveProposal: ({ commit, state, getters }, status) => {
-    return new Promise((resolve, reject) => {
-      const proposal = new Proposal({
-        id: state.id,
-        personalMessage: state.personalMessage,
-        inspirationalPhotos: state.inspirationalPhotos,
-        proposalRequestId: state.proposalRequest.id,
-        eventVision: state.eventVision,
-        // eventComponentInstance: state.proposalRequest.eventComponentInstance,
-        eventComponentId: state.proposalRequest.eventComponentInstance.id,
-        // vendor: new Vendor({ id: state.vendor.id }),
-        vendorId: state.vendor.id,
-        costServices: state.proposalCostServices,
-        includedServices: state.proposalIncludedServices,
-        extraServices: state.proposalExtraServices,
-        // coverImage: coverImageUrl,
-        discounts: state.discount,
-        taxes: state.taxes,
-        cost: getters.finalPriceOfMainCategory,
-        pricesByCategory: getters.pricesByCategory,
-        bundleDiscount: state.bundleDiscount,
-        status,
-      });
-      proposal
-        .save()
-        .then(res => {
-          commit("setProposal", res);
-          resolve(res);
-        })
-        .catch(e => {
-          reject(e);
         });
     });
   },
