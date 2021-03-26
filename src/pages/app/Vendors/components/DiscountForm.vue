@@ -6,7 +6,7 @@
         <span>Discount</span>
       </div>
       <div class="text-right">{{ discount.percentage }}%</div>
-      <div class="text-right">${{ discount.price || calcedDiscont | withComma | withComma }}</div>
+      <div class="text-right">-${{ discount.price || calcedDiscont | withComma | withComma }}</div>
       <div class="text-right">
         <md-button class="md-simple edit-btn" @click="isDiscountEditing = true">
           <img :src="`${$iconURL}common/edit-dark.svg`" style="width: 20px; height: 20px" />
@@ -57,7 +57,7 @@
       <div class="text-right">
         <span>{{ tax.percentage }}%</span>
       </div>
-      <div class="text-right">{{ tax.price || Math.round((totalPrice * tax.percentage) / 100) | withComma }}$</div>
+      <div class="text-right">${{ calcedTax | withComma }}</div>
       <div class="text-right">
         <md-button class="md-simple edit-btn" @click="isTaxEditing = true">
           <img :src="`${$iconURL}common/edit-dark.svg`" style="width: 20px; height: 20px" />
@@ -134,7 +134,7 @@ export default {
   },
   created() {
     if (this.defaultTax) this.tax = this.defaultTax;
-    if (this.defaultDiscount) this.discount = this.defaultTax;
+    if (this.defaultDiscount) this.discount = this.defaultDiscount;
   },
   methods: {
     saveDiscount() {
@@ -185,7 +185,7 @@ export default {
   },
   watch: {
     defaultTax(newValue, oldValue) {
-      this.tax = this.defaultTax;
+      this.tax = newValue;
     },
     defaultDiscount(newValue, oldValue) {
       this.discount = newValue;
@@ -193,6 +193,7 @@ export default {
   },
   computed: {
     calcedTax() {
+      if (this.tax.price) return this.tax.price;
       return Math.round(((this.totalPrice - this.calcedDiscont) * this.tax.percentage) / 100);
     },
     calcedDiscont() {

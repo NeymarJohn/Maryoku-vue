@@ -77,6 +77,21 @@
                 </div>
               </div>
             </div>
+            <div class="attachments">
+              <div class="mb-30">Attachments</div>
+              <attachment-tag-list
+                :defaultValue="vendor.attachments"
+                @add="addNewAttachment"
+                @remove="removeAttachment"
+              ></attachment-tag-list>
+            </div>
+            <div class="personal-message mt-40" v-if="vendor.personalMessage">
+              <div class="font-bold mb-20">
+                <img :src="`${$iconURL}common/message-dark.svg`" />
+                Personal message to your clients
+              </div>
+              <div class="content">{{ vendor.personalMessage }}</div>
+            </div>
           </div>
           <div class="fee-cont" id="Pricing">
             <div class="title">
@@ -265,6 +280,9 @@ import VendorExtraPayItem from "../components/VendorExtraPayItem.vue";
 import _ from "underscore";
 import VendorImagesList from "../components/VendorImagesList.vue";
 import { capitalize } from "@/utils/string.util";
+import AttachmentTagList from "../components/AttachmentTagList.vue";
+import S3Service from "@/services/s3.service";
+
 export default {
   name: "vendor-signup-step4",
   props: {
@@ -280,6 +298,7 @@ export default {
     VendorStartingFeeItem,
     VendorExtraPayItem,
     VendorImagesList,
+    AttachmentTagList,
   },
   data() {
     return {
@@ -451,6 +470,23 @@ export default {
     }
   },
   methods: {
+    addNewAttachment(file) {
+      S3Service.fileUpload(file, file.name, `vendors/attachments/${this.vendor.id}`).then((res) => {
+        const attachments = this.vendor.attachments ? [...this.vendor.attachments] : [];
+        attachments.push({
+          name: file.name,
+          isRequired: false,
+          fileName: file.name,
+          url: `${process.env.S3_URL}vendors/attachments/${this.vendor.id}/${res}`,
+        });
+        this.$store.commit("vendorSignup/setField", { field: "attachments", value: attachments });
+      });
+    },
+    removeAttachment(item, index) {
+      const attachments = this.vendor.attachments ? [...this.vendor.attachments] : [];
+      attachments.splice(index, 1);
+      this.$store.commit("vendorSignup/setField", { field: "attachments", value: attachments });
+    },
     isSocial() {
       let isBlank = true;
 
@@ -698,6 +734,14 @@ export default {
             margin-right: -60px;
             margin-left: -60px;
           }
+          .personal-message {
+            .content {
+              background-color: #f2f2f2;
+              border-radius: 5px;
+              max-width: 850px;
+              padding: 30px 20% 30px 30px;
+            }
+          }
           .contact-us {
             padding: 2rem 0;
 
@@ -729,7 +773,7 @@ export default {
             .items {
               display: flex;
               flex-wrap: wrap;
-              margin-top: 2rem;
+              margin-top: 1rem;
 
               .item {
                 font: bold 16px Manrope-Regular, sans-serif;

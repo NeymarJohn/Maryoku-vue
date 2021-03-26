@@ -1,5 +1,5 @@
 <template>
-  <collapse-panel class="white-card proposal-requirements-panel">
+  <collapse-panel class="white-card proposal-requirements-panel" :spacing="20">
     <template slot="header">
       <div class="d-flex align-center p-30">
         <img :src="`${$iconURL}Requirements/special-request-red.svg`" />
@@ -7,7 +7,7 @@
       </div>
     </template>
     <template slot="content">
-      <div class="requirements-content p-30 pt-0-i" v-if="step === 1">
+      <div class="requirements-content p-30 pt-0-i" v-if="step <= 1">
         <div
           v-for="(requirementCategory, index) in Object.keys(requirementsData)"
           :key="`requirement-category-${index}`"
