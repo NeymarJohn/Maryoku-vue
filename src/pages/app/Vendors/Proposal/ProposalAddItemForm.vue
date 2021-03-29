@@ -169,7 +169,7 @@ export default {
       serviceSlidePos: 0,
       serviceItem: "",
       serviceItemSize: "",
-      qty: "",
+      qty: 1,
       unit: "",
       isRequiredPlannerChoice: false,
       isComplementary: false,
@@ -291,7 +291,7 @@ export default {
     },
     cancel() {
       this.serviceItemSize = "";
-      this.qty = 0;
+      this.qty = 1;
       this.unit = 0;
       this.serviceItem = "";
       this.isRequiredPlannerChoice = false;
