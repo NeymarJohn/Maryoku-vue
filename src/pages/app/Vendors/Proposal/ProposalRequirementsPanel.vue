@@ -61,7 +61,9 @@
       <div v-else>
         <div
           class="requirements-content p-30 pt-0-i"
-          v-for="requirement in allRequirements"
+          v-for="requirement in allRequirements.filter(
+            (item) => item.category === $store.state.vendorProposal.currentSecondaryService,
+          )"
           :key="requirement.category"
         >
           <div class="font-size-20 font-bold mb-20">{{ requirement.categoryData.fullTitle }}</div>
@@ -122,10 +124,11 @@
         </div>
       </div>
       <div class="p-30">
-        <md-button class="md-outlined md-red md-simple maryoku-btn width-100">
+        <md-button class="md-outlined md-red md-simple maryoku-btn width-100" @click="showQuestionModal = true">
           <img src="/static/icons/chart-red.svg" class="page-icon mr-10" />
           Questions? Send a question to planner
         </md-button>
+        <question-modal v-if="showQuestionModal" @cancel="showQuestionModal = false"></question-modal>
       </div>
     </template>
   </collapse-panel>
@@ -134,11 +137,13 @@
 import CollapsePanel from "../../Campaign/CollapsePanel.vue";
 import CalendarEvent from "@/models/CalendarEvent";
 import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
+import QuestionModal from "./Modals/QuestionModal.vue";
 export default {
-  components: { CollapsePanel },
+  components: { CollapsePanel, QuestionModal },
   data() {
     return {
       additionalServiceRequirements: [],
+      showQuestionModal: false,
     };
   },
   methods: {

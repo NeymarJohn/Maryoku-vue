@@ -20,9 +20,9 @@
     <div class="add-item-cont">
       <div class="fields-cont font-bold mb-20">
         <span>Description</span>
-        <span>QTY</span>
-        <span v-if="serviceType !== 'included'">Price per unit</span>
-        <span v-if="serviceType !== 'included'">Subtotal</span>
+        <span class="text-center">QTY</span>
+        <span v-if="serviceType !== 'included'" class="text-right">Price per unit</span>
+        <span v-if="serviceType !== 'included'" class="text-right">Subtotal</span>
       </div>
       <hr style="background-color: #b2b2b2; height: 2px" />
       <div class="fields-cont mt-20">
@@ -64,6 +64,15 @@
             v-bind="currencyFormat"
             :class="{ isFilled: !!unit, isSuggeted: isAutoCompletedValue }"
             v-if="serviceType !== 'included'"
+          />
+        </div>
+        <div class="field">
+          <money
+            :value="qty * unit"
+            v-bind="currencyFormat"
+            :class="{ isFilled: !!unit, isSuggeted: isAutoCompletedValue }"
+            v-if="serviceType !== 'included'"
+            readonly
           />
         </div>
         <div class="field">
@@ -160,7 +169,7 @@ export default {
       serviceSlidePos: 0,
       serviceItem: "",
       serviceItemSize: "",
-      qty: "",
+      qty: 1,
       unit: "",
       isRequiredPlannerChoice: false,
       isComplementary: false,
@@ -282,7 +291,7 @@ export default {
     },
     cancel() {
       this.serviceItemSize = "";
-      this.qty = 0;
+      this.qty = 1;
       this.unit = 0;
       this.serviceItem = "";
       this.isRequiredPlannerChoice = false;
@@ -327,6 +336,12 @@ export default {
       const items = [];
       this.vendorServices.forEach((category) => {
         category.subCategories.forEach((subCat) => {
+          if (
+            subCat.name.toLowerCase() === "inclusion" ||
+            subCat.name.toLowerCase() === "sustainability" ||
+            subCat.name.toLowerCase() === "diversity"
+          )
+            return;
           subCat.items.forEach((item) => {
             const capitalized = item.name.charAt(0).toUpperCase() + item.name.slice(1);
             const profileService = this.profileServices[this.camelize(capitalized)];
@@ -484,9 +499,10 @@ export default {
     margin-top: 1rem;
     .fields-cont {
       display: grid;
-      grid-template-columns: 50% 10% 30% 10%;
+      grid-template-columns: 40% 14% 14% 14% 14%; // 40% 10% 20% 20% 10%;
+      gap: 1%;
       .field {
-        margin-right: 1em;
+        // margin-right: 1em;
         position: relative;
         span {
           margin-bottom: 0.5rem;

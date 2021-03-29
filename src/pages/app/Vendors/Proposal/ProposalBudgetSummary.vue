@@ -67,7 +67,7 @@
               </li>
               <li>
                 <span>Your proposal</span>
-                <span>${{ ((finalPriceOfMainCategory * (100 - bundleDiscountPercentage)) / 100) | withComma }}</span>
+                <span>${{ originalPriceOfMainCategory | withComma }}</span>
               </li>
               <li>
                 <span>Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
@@ -508,6 +508,11 @@ export default {
     },
     defaultDiscount(newValue) {
       this.discount = newValue;
+    },
+    step(newValue, oldValue) {
+      if (newValue === 3) {
+        this.expanded = true;
+      }
     },
   },
 };

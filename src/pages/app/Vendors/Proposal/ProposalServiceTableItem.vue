@@ -3,7 +3,7 @@
     <div class="proposal-service-item-wrapper">
       <div class="item-cont">
         {{ item.requirementTitle }}
-        <span class="madatory-badge" v-if="item.isMandatory">Mandatory</span>
+        <!-- <span class="madatory-badge" v-if="item.isMandatory">Mandatory</span> -->
         <span class="complementary-badge" v-if="item.isComplimentary">
           Complimentary
           <md-button class="md-simple md-black remove-button edit-btn" @click="setValue('isComplimentary', false)">
@@ -55,7 +55,20 @@
             }"
             class="input-value"
           />
-          <div class="text-left">$ {{ subTotal | withComma }}</div>
+          <!-- <div class="text-left">$ {{ subTotal | withComma }}</div> -->
+          <money
+            :value="subTotal"
+            v-bind="{
+              decimal: '.',
+              thousands: ',',
+              prefix: '$ ',
+              suffix: '',
+              precision: 2,
+              masked: false,
+            }"
+            readonly
+            class="input-value mr-10"
+          />
         </template>
       </div>
       <div class="action-cont editor-wrapper">
@@ -63,7 +76,7 @@
           <a class="cancel" @click="cancel()">Cancel</a>
           <a class="save" @click="save(item)">Save</a>
         </template>
-        <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu">
+        <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu" v-if="!isEdit">
           <md-button md-menu-trigger class="edit-btn md-simple" style="height: 40px">
             <md-icon style="font-size: 40px !important">more_vert</md-icon>
           </md-button>
@@ -149,7 +162,7 @@
     <div class="proposal-service-item-wrapper">
       <div class="item-cont">
         {{ item.requirementTitle }}
-        <span class="madatory-badge" v-if="item.isMandatory">Mandatory</span>
+        <!-- <span class="madatory-badge" v-if="item.isMandatory">Mandatory</span> -->
         <span class="complementary-badge" v-if="item.isComplementary">
           Complementary
           <md-button class="md-simple md-black remove-button edit-btn" @click="setValue('isComplementary', false)">
@@ -178,7 +191,7 @@
           <md-icon class="color-dark" v-if="isExpanded">keyboard_arrow_down</md-icon>
           <md-icon class="color-dark" v-else>keyboard_arrow_right</md-icon>
         </md-button>
-        <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu">
+        <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu" v-if="!isEdit">
           <md-button md-menu-trigger class="edit-btn md-simple" style="height: 40px">
             <md-icon style="font-size: 40px !important">more_vert</md-icon>
           </md-button>
@@ -255,7 +268,9 @@
           />
         </template>
       </div>
-      <div class="total-cont editor-wrapper text-right">${{ subTotal | withComma }}</div>
+      <div class="total-cont editor-wrapper pl-10" :class="{ 'text-right': !isEdit, 'text-left': isEdit }">
+        ${{ subTotal | withComma }}
+      </div>
       <div class="action-cont editor-wrapper">
         <template v-if="isEdit">
           <a class="cancel" @click="cancel()">Cancel</a>
@@ -265,7 +280,7 @@
           <md-icon class="color-dark" v-if="isExpanded">keyboard_arrow_down</md-icon>
           <md-icon class="color-dark" v-else>keyboard_arrow_right</md-icon>
         </md-button>
-        <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu">
+        <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu" v-if="!isEdit">
           <md-button md-menu-trigger class="edit-btn md-simple" style="height: 40px">
             <md-icon style="font-size: 40px !important">more_vert</md-icon>
           </md-button>
@@ -374,7 +389,8 @@ export default {
   }
   .proposal-service-item-wrapper {
     display: grid;
-    grid-template-columns: 40% 15% 15% 15% 15%;
+    grid-template-columns: 40% 14% 14% 14% 14%;
+    gap: 1%;
     align-items: center;
     input {
       font-size: 16px;
@@ -485,7 +501,7 @@ export default {
       }
     }
     .editor-wrapper {
-      margin: 0 5px;
+      // margin: 0 5px;
       .input-value {
         border: 1px solid #dddddd;
         text-align: center;
@@ -495,7 +511,7 @@ export default {
 
     a {
       cursor: pointer;
-      padding: 8px 26px;
+      padding: 8px 20px;
 
       &.cancel {
         font: 800 16px "Manrope-Regular", sans-serif;

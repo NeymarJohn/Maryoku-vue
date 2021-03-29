@@ -55,7 +55,7 @@
               <img :src="`${$iconURL}Vendor+Landing+Page/Asset+491.svg`" />
               Our vision for your event
             </div>
-            <div>{{ vendorProposal.eventVision }}</div>
+            <p class="mt-10">{{ vendorProposal.eventVision }}</p>
           </div>
           <div class="proposal-images mb-40">
             <div class="font-bold mb-10">Some references to the experience you will get from us</div>
