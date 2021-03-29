@@ -46,6 +46,7 @@
             :key="index"
             :proposal="proposal"
             @goDetail="goDetailPage"
+            :probability="getProbability(index)"
           ></proposal-card>
         </div>
         <!-- ./Event Booking Items -->
@@ -311,6 +312,9 @@ export default {
     },
     goDetailPage(proposal) {
       this.$router.push(`/events/${this.event.id}/booking/${this.blockId}/proposals/${proposal.id}`);
+    },
+    getProbability(index) {
+      return 100 - 10 * (index + 1) + Math.round(10 * Math.random());
     },
   },
   created() {

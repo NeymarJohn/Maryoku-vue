@@ -16,7 +16,7 @@
       </div>
       <template v-if="proposal.vendor">
         <h4 class="event-title">{{ proposal.vendor.companyName }}</h4>
-        <div class="probability">Probability 92%</div>
+        <div class="probability">Probability {{ probability }}%</div>
         <ul class="event-info">
           <li class="event-info__item">{{ proposal.vendor.vendorAddresses[0] }}</li>
           <li class="event-info__item">{{ proposal.vendor.vendorCity }}</li>
@@ -37,6 +37,10 @@ export default {
     proposal: {
       type: Object,
       default: () => {},
+    },
+    probability: {
+      type: Number,
+      default: 0,
     },
   },
   methods: {

@@ -21,7 +21,6 @@ const state = {
         yesPolicies: [],
         noPolicies: [],
         selectedWeekdays: [],
-        vendorImages: [],
         recommendations: [],
     },
     vendor_categories: [],
@@ -34,7 +33,7 @@ const getters = {
     getAllProperties: state => {
         return state.allProperties;
     },
-    getPropertiesByCategory: state => category => {},
+    getPropertiesByCategory: state => category => { },
     getStatus: state => state.status,
     getVendor: state => state.vendor,
     getStep: state => state.step,

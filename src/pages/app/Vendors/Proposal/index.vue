@@ -52,7 +52,6 @@
             :img="`${$iconURL}Budget Elements/${service.icon}`"
             :proposalRequest="proposalRequest"
             :service="service"
-            @click="selectSecondCategory(service.componentId)"
           />
 
           <refer-new-vendor :event="event" :vendor="vendor" />
@@ -148,9 +147,6 @@ export default {
     });
   },
   methods: {
-    selectSecondCategory(serviceCategory) {
-      this.$store.commit("vendorProposal/setValue", { key: "currentSecondaryService", value: serviceCategory });
-    },
     flatDeep(arr, d = 1) {
       return d > 0
         ? arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? this.flatDeep(val, d - 1) : val), [])

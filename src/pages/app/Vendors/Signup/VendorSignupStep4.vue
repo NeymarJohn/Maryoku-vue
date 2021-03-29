@@ -459,7 +459,7 @@ export default {
   created() {},
   mounted() {
     console.log("vendorSignup.step4", this.vendor);
-    if (this.vendor.hasOwnProperty("vendorImages") && this.vendor.vendorImages.length) {
+    if (this.vendor.hasOwnProperty("images") && this.vendor.images.length) {
       this.vendor.images.forEach((item) => {
         this.medias.push({
           thumb: item,
@@ -842,7 +842,7 @@ export default {
               width: calc(100% - 7rem);
               display: grid;
               grid-column-gap: 3rem;
-              // grid-template-columns: 50% 50%;
+              grid-template-columns: 50% 50%;
               align-items: center;
             }
           }

@@ -17,13 +17,13 @@
       <div class="next-cont">
         <span>You can return to it till the deadline!</span>
         <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`" /> Discard </a>
-        <a class="save" @click="uploadProposal('save')">
+        <a class="save" @click="saveProposal('save')">
           <img :src="`${proposalIconsUrl}Asset 610.svg`" /> Save for later
         </a>
         <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
           Next
         </a>
-        <a class="next active" @click="uploadProposal('submit')" v-else>Submit Proposal</a>
+        <a class="next active" @click="saveProposal('submit')" v-else>Submit Proposal</a>
       </div>
     </section>
 
@@ -166,10 +166,10 @@ export default {
     });
   },
   methods: {
-    ...mapActions("vendorProposal", ["getVendor", "getProposalRequest", "saveProposal"]),
+    ...mapActions("vendorProposal", ["getVendor", "getProposalRequest"]),
     gotoNext() {
-      this.step = this.step + 1;
       this.scrollToTop();
+      this.step = this.step + 1;
     },
     getVendorCategory() {
       this.$auth.currentUser(
@@ -187,7 +187,7 @@ export default {
       this.submittedModal = false;
       this.openedModal = "";
     },
-    uploadProposal(type) {
+    saveProposal(type) {
       this.$root.$emit("clear-slide-pos");
       this.scrollToTop();
       const vendorProposal = this.$store.state.vendorProposal;
@@ -203,17 +203,41 @@ export default {
         coverImageUrl = `https://maryoku.s3.amazonaws.com/campaigns/cover-images/${this.event.id}-${vendorProposal.vendor.id}.${extenstion}`;
       }
 
-      this.saveProposal(type).then((proposal) => {
-        if (type === "submit") this.submittedModal = true;
-        else {
-          Swal.fire({
-            title: `You saved the current proposal. You can edit anytime later!`,
-            buttonsStyling: false,
-            type: "success",
-            confirmButtonClass: "md-button md-success",
-          });
-        }
+      const proposal = new Proposal({
+        id: vendorProposal.id,
+        personalMessage: vendorProposal.personalMessage,
+        inspirationalPhotos: vendorProposal.inspirationalPhotos,
+        proposalRequestId: vendorProposal.proposalRequest.id,
+        eventVision: vendorProposal.vision,
+        // eventComponentInstance: vendorProposal.proposalRequest.eventComponentInstance,
+        eventComponentId: vendorProposal.proposalRequest.eventComponentInstance.id,
+        // vendor: new Vendor({ id: vendorProposal.vendor.id }),
+        vendorId: vendorProposal.vendor.id,
+        costServices: vendorProposal.proposalCostServices,
+        includedServices: vendorProposal.proposalIncludedServices,
+        extraServices: vendorProposal.proposalExtraServices,
+        coverImage: coverImageUrl,
+        discounts: vendorProposal.discount,
+        taxes: vendorProposal.taxes,
+        cost: this.$store.getters["vendorProposal/mainTotalPrice"],
+        pricesByCategory: this.$store.getters["vendorProposal/pricesByCategory"],
+        bundleDiscount: vendorProposal.bundleDiscount,
       });
+      if (type === "save") {
+        proposal.status = "save";
+      } else {
+        proposal.status = "submit";
+      }
+      proposal.save().then((res) => {});
+      if (type === "submit") this.submittedModal = true;
+      else {
+        Swal.fire({
+          title: `You saved the current proposal. You can edit anytime later!`,
+          buttonsStyling: false,
+          type: "success",
+          confirmButtonClass: "md-button md-success",
+        });
+      }
     },
 
     back() {
@@ -229,9 +253,7 @@ export default {
       this.scrollToTop();
     },
     scrollToTop() {
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 100);
+      window.scrollTo(0, 0);
     },
     getEvent() {
       this.$store.dispatch("event/getEventById", this.$route.params.eventId);

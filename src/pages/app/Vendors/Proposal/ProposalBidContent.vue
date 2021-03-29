@@ -44,45 +44,18 @@ export default {
     if (!this.$store.state.vendorProposal.initialized) {
       let includedVendorServices = [];
       let costVendorServices = [];
-
-      const includedSevices = [];
-      const costServices = [];
-
       if (this.vendor.services) {
         _.each(this.vendor.services, (vendorService) => {
-          // Set included services from vendor profile
           if (vendorService.included) {
             includedVendorServices.push(vendorService);
-            const service = {
-              comments: [],
-              dateCreated: "",
-              includedInPrice: true,
-              itemNotAvailable: false,
-              price: 0,
-              priceUnit: "qty",
-              proposalRequest: { id: this.proposalRequest.id },
-              requirementComment: null,
-              requirementId: "",
-              requirementMandatory: false,
-              requirementPriority: null,
-              requirementTitle: vendorService.label,
-              requirementsCategory: vendorService.category,
-              requirementValue: vendorService.defaultQty ? vendorService.defaultQty : 1,
-              requirementSize: vendorService.defaultSize ? vendorService.defaultSize : "",
-              requirementNote: vendorService.desc,
-              plannerOptions: [],
-              isMandatory: true,
-              isComplementary: false,
-              isComplimentary: false,
-            };
-            includedSevices.push(service);
           } else if (!vendorService.included) {
             costVendorServices.push(vendorService);
           }
         });
       }
 
-      // add default cost services from vendor profile and requirement
+      const includedSevices = [];
+      const costServices = [];
       this.requirementsFromPlanner.forEach((item) => {
         const service = {
           comments: [],
@@ -117,13 +90,13 @@ export default {
           }).value;
           costServices.push(service);
         }
-        // if (
-        //   includedVendorServices.findIndex((vendorService) => {
-        //     return item.item && vendorService.label.toLowerCase() == item.item.toLowerCase();
-        //   }) >= 0
-        // ) {
-        //   includedSevices.push(service);
-        // }
+        if (
+          includedVendorServices.findIndex((vendorService) => {
+            return item.item && vendorService.label.toLowerCase() == item.item.toLowerCase();
+          }) >= 0
+        ) {
+          includedSevices.push(service);
+        }
       });
 
       const extraServices = [];
@@ -133,7 +106,6 @@ export default {
       if (this.vendor.pricingPolicies) {
         this.vendor.pricingPolicies.forEach((item) => {
           if (!hiddenValues.includes(item.name)) {
-            if (!item.value) return;
             extraServices.push({
               comments: [],
               dateCreated: "",

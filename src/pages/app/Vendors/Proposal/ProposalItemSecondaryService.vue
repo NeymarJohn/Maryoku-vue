@@ -1,9 +1,9 @@
 <template>
   <div class="proposal-item-secondary-service">
-    <div class="title-cont dropdown" :class="{ opened: isExpanded }" @click="toggle($event)">
+    <div class="title-cont dropdown" @click="clickItem(service.componentId)" :class="{ opened: isChecked }">
       <div class="left-side">
-        <div class="check-cont" @click="clickItem($event, service.componentId)">
-          <img v-if="isAdded(service.componentId)" :src="`${iconUrl}Group 6258 (2).svg`" />
+        <div class="check-cont">
+          <img v-if="isChecked" :src="`${iconUrl}Group 6258 (2).svg`" />
           <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`" />
         </div>
         <h3 class="title">
@@ -19,14 +19,10 @@
         <div class="proposal-range-cont">
           <span>You're the First bidder</span>
         </div>
-        <img
-          @click="toggle($event)"
-          :src="`${iconUrl}Component 36 (2).svg`"
-          :style="`transform: ${isExpanded ? 'rotate(90deg)' : ''}`"
-        />
+        <img :src="`${iconUrl}Component 36 (2).svg`" :style="`transform: ${isChecked ? 'rotate(90deg)' : ''}`" />
       </div>
     </div>
-    <template v-if="isExpanded">
+    <template v-if="isChecked">
       <proposal-requirements
         class="additional-service"
         label="Cost Items"
@@ -122,7 +118,6 @@ export default {
       docTag: null,
       serviceSlidePos: 0,
       servicesWidth: 0,
-      isExpanded: false,
       currencyFormat: {
         decimal: ".",
         thousands: ",",
@@ -159,33 +154,12 @@ export default {
     getObject(item) {
       return JSON.parse(JSON.stringify(item));
     },
-    isAdded(category) {
-      return this.additionalServices.includes(category);
-    },
-    toggle(event) {
-      event.stopPropagation();
-      this.isExpanded = !this.isExpanded;
-      if (this.isExpanded) {
-        this.$store.commit("vendorProposal/setValue", {
-          key: "currentSecondaryService",
-          value: this.service.componentId,
-        });
-      }
-    },
-    clickItem(event, category) {
-      // this.isChecked = !this.isChecked;
-      event.stopPropagation();
-
-      if (!this.isAdded(category)) {
+    clickItem(category) {
+      this.isChecked = !this.isChecked;
+      if (this.isChecked) {
         this.additionalServices.push(category);
-        this.isExpanded = true;
-        this.$store.commit("vendorProposal/setValue", {
-          key: "currentSecondaryService",
-          value: this.service.componentId,
-        });
       } else {
         this.$store.commit("vendorProposal/removeCategoryFromAdditional");
-        this.isExpanded = false;
       }
       console.log(this.additionalServices);
 
