@@ -6,7 +6,7 @@
         <span class="value label">{{ item.label }}</span>
       </div>
       <div class="with-qty">
-        <span class="qty">{{ getQty() }}</span>
+        <div class="qty text-transform-capitalize" v-html="getQty()"></div>
         <img
           v-if="item.desc"
           :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"
@@ -44,7 +44,7 @@ export default {
     getQty() {
       if (this.item.value) {
         if (this.item.value.constructor.name == "Array") {
-          return this.item.value.join(",");
+          return this.item.value.join("<br/>");
         } else if (this.item.value.constructor.name == "String") {
           return this.item.value;
         } else {
@@ -72,7 +72,7 @@ export default {
     padding: 2rem 0;
     display: grid;
     grid-template-columns: 50% 50%;
-    align-items: center;
+    align-items: flex-start;
 
     .with-check {
       display: flex;

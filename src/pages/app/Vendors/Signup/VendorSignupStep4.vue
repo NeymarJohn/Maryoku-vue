@@ -842,7 +842,7 @@ export default {
               width: calc(100% - 7rem);
               display: grid;
               grid-column-gap: 3rem;
-              grid-template-columns: 50% 50%;
+              // grid-template-columns: 50% 50%;
               align-items: center;
             }
           }
