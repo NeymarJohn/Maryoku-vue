@@ -376,7 +376,8 @@ export default {
   }
   .proposal-service-item-wrapper {
     display: grid;
-    grid-template-columns: 40% 15% 15% 15% 15%;
+    grid-template-columns: 40% 14% 14% 14% 14%;
+    gap: 1%;
     align-items: center;
     input {
       font-size: 16px;

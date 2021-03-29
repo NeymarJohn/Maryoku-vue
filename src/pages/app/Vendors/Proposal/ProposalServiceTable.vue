@@ -557,7 +557,8 @@ export default {
       padding: 40px 0px 30px 0px;
       display: grid;
       // grid-template-columns: 30% 10% 10% 12% 15%;
-      grid-template-columns: 40% 15% 15% 15% 15%;
+      grid-template-columns: 40% 14% 14% 14% 14%;
+      gap: 1%;
 
       span {
         display: inline-block;
