@@ -509,6 +509,11 @@ export default {
     defaultDiscount(newValue) {
       this.discount = newValue;
     },
+    step(newValue, oldValue) {
+      if (newValue === 3) {
+        this.expanded = true;
+      }
+    },
   },
 };
 </script>
