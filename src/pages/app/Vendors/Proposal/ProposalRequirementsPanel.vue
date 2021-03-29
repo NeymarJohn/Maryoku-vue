@@ -61,7 +61,9 @@
       <div v-else>
         <div
           class="requirements-content p-30 pt-0-i"
-          v-for="requirement in allRequirements"
+          v-for="requirement in allRequirements.filter(
+            (item) => item.category === $store.state.vendorProposal.currentSecondaryService,
+          )"
           :key="requirement.category"
         >
           <div class="font-size-20 font-bold mb-20">{{ requirement.categoryData.fullTitle }}</div>
