@@ -55,7 +55,20 @@
             }"
             class="input-value"
           />
-          <div class="text-left">$ {{ subTotal | withComma }}</div>
+          <!-- <div class="text-left">$ {{ subTotal | withComma }}</div> -->
+          <money
+            :value="subTotal"
+            v-bind="{
+              decimal: '.',
+              thousands: ',',
+              prefix: '$ ',
+              suffix: '',
+              precision: 2,
+              masked: false,
+            }"
+            readonly
+            class="input-value mr-10"
+          />
         </template>
       </div>
       <div class="action-cont editor-wrapper">
@@ -63,7 +76,7 @@
           <a class="cancel" @click="cancel()">Cancel</a>
           <a class="save" @click="save(item)">Save</a>
         </template>
-        <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu">
+        <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu" v-if="!isEdit">
           <md-button md-menu-trigger class="edit-btn md-simple" style="height: 40px">
             <md-icon style="font-size: 40px !important">more_vert</md-icon>
           </md-button>
@@ -178,7 +191,7 @@
           <md-icon class="color-dark" v-if="isExpanded">keyboard_arrow_down</md-icon>
           <md-icon class="color-dark" v-else>keyboard_arrow_right</md-icon>
         </md-button>
-        <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu">
+        <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu" v-if="!isEdit">
           <md-button md-menu-trigger class="edit-btn md-simple" style="height: 40px">
             <md-icon style="font-size: 40px !important">more_vert</md-icon>
           </md-button>
@@ -267,7 +280,7 @@
           <md-icon class="color-dark" v-if="isExpanded">keyboard_arrow_down</md-icon>
           <md-icon class="color-dark" v-else>keyboard_arrow_right</md-icon>
         </md-button>
-        <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu">
+        <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu" v-if="!isEdit">
           <md-button md-menu-trigger class="edit-btn md-simple" style="height: 40px">
             <md-icon style="font-size: 40px !important">more_vert</md-icon>
           </md-button>
@@ -488,7 +501,7 @@ export default {
       }
     }
     .editor-wrapper {
-      margin: 0 5px;
+      // margin: 0 5px;
       .input-value {
         border: 1px solid #dddddd;
         text-align: center;
@@ -498,7 +511,7 @@ export default {
 
     a {
       cursor: pointer;
-      padding: 8px 26px;
+      padding: 8px 20px;
 
       &.cancel {
         font: 800 16px "Manrope-Regular", sans-serif;
