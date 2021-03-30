@@ -4071,7 +4071,7 @@ export const VendorPricingPolicy = [
     category: "venuerental",
     items: [
       {
-        name: "Minimum amount of hours",
+        name: "Minimum amount of rental hours required",
         type: Number,
         noSuffix: true,
         label: "Number of hours",
@@ -4100,21 +4100,44 @@ export const VendorPricingPolicy = [
         hasComment: true,
       },
       {
-        name: "Cost Extra Guest (beyond agreed upon)",
+        name: "Cost Per Extra Guest (beyond agreed upon qty)",
         type: Number,
         hasComment: true,
+        labelForValue: "Cost",
+        isExtraService: true,
+        extraService: {
+          label: "Cost Per Extra Guest (beyond agreed upon qty)"
+        }
       },
       {
-        name: "Overtime Cost",
+        name: "Overtime Cost(Rental)",
         type: Number,
         units: ["Per hour", "All togeter"],
         hasComment: true,
+        isExtraService: true,
+        extraService: {
+          label: "Overtime Cost(Rental)"
+        }
       },
       {
-        name: "Cost Late Night Fee",
+        name: "Additional Set-up Hours",
+        type: Number,
+        units: ["Per hour", "All togeter"],
+        hasComment: true,
+        isExtraService: true,
+        extraService: {
+          label: "Additional Set-up Hours"
+        }
+      },
+      {
+        name: "Late Night Fee",
         type: Number,
         hasUnit: true,
         units: ["Per person", "All together"],
+        isExtraService: true,
+        extraService: {
+          label: "Late Night Fee"
+        }
       },
       {
         name: "Discount for large quantities",

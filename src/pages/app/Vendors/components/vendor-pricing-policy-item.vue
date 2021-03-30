@@ -79,7 +79,7 @@
           </template>
           <template v-else>
             <span v-if="item.isPercentage">Rate (%)</span>
-            <span v-else>How much extra</span>
+            <span v-else>{{ item.labelForValue || "How much extra" }}</span>
             <br />
             <div class="suffix percentage" v-if="item.isPercentage">
               <input type="number" class placeholder="00.00" v-model="item.value" @input="setPricePolicy" />
