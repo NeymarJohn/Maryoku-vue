@@ -70,7 +70,6 @@ export default {
         if (!vendor.capacity) this.$set(vendor, "capacity", {});
         if (!vendor.social) this.$set(vendor, "social", {});
         if (!vendor.images) this.$set(vendor, "images", new Array(15));
-        if (!vendor.vendorImages) this.$set(vendor, "vendorImages", new Array(15));
         if (!vendor.hasOwnProperty("yesRules")) this.$set(vendor, "yesRules", []);
         if (!vendor.hasOwnProperty("noRules")) this.$set(vendor, "noRules", []);
         if (!vendor.hasOwnProperty("notAllowed")) this.$set(vendor, "notAllowed", []);
@@ -106,8 +105,7 @@ export default {
     this.$root.$on("update-vendor-value", (field, value) => {
       console.log("update-vendor-value", field, value);
       let vendor = JSON.parse(JSON.stringify(this.vendor));
-      if (field == "images" || field == "vendorImages") {
-        console.log(Object.keys(vendor[field]));
+      if (field == "images") {
         if (!Object.keys(vendor[field]).includes(`${value.index}`)) {
           console.log("!update.vendor.image", value);
           vendor[field].push(value.data);
@@ -116,14 +114,8 @@ export default {
           vendor[field][value.index] = value.data;
         }
       } else if (field == "removeImage") {
-        console.log("removeImage", vendor.images, vendor.vendorImages);
-        // vendor.images = vendor.images.filter((i) => i != value);
-        // vendor.vendorImages = vendor.vendorImages.filter((i) => i != value);
         let images = vendor.images.filter((i) => i != value);
-        let vendorImages = vendor.vendorImages.filter((i) => i != value);
-
         this.$set(vendor, "images", images);
-        this.$set(vendor, "vendorImages", vendorImages);
       } else if (field == "vendorCategories") {
         this.$set(vendor, this.camelize(field), value);
         this.$set(vendor, "vendorCategory", value[0]);

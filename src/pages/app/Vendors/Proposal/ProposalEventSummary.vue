@@ -589,8 +589,6 @@ export default {
     .with-bkimg {
       background-image: url("https://static-maryoku.s3.amazonaws.com/storage/img/sidebar-2.jpg");
       min-height: 540px;
-      background-size: cover;
-      background-repeat: no-repeat;
 
       .summary-cont {
         padding: 60px;
