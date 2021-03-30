@@ -66,7 +66,7 @@
         </div>
         <div class="bottom no-margin" v-if="item.type == Number">
           <template v-if="item.noSuffix">
-            <span v-if="item.label">{{ item.label }}</span>
+            <span v-if="item.labelForValue">{{ item.labelForValue }}</span>
             <div>
               <input
                 type="number"
@@ -156,7 +156,7 @@
           />
         </div>
         <div class="bottom mt-30" v-if="item.hasOwnProperty('discount') && item.type == Boolean && item.value">
-          <span class="d-block">{{ item.hasOwnProperty("label") ? item.label : "How many" }}</span>
+          <span class="d-block">{{ item.hasOwnProperty("labelForValue") ? item.labelForValue : "How many" }}</span>
           <input
             type="number"
             class="text-center number-field w-max-120"

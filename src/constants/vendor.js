@@ -4074,7 +4074,7 @@ export const VendorPricingPolicy = [
         name: "Minimum amount of rental hours required",
         type: Number,
         noSuffix: true,
-        label: "Number of hours",
+        labelForValue: "Number of hours",
         hasComment: true,
         unit: "hour",
       },
@@ -4082,14 +4082,14 @@ export const VendorPricingPolicy = [
         name: "Hours included in rental",
         type: Number,
         noSuffix: true,
-        label: "Number of hours",
+        labelForValue: "Number of hours",
         hasComment: true,
         unit: "hour",
       },
       {
         name: "Setup hours included in rental",
         type: Number,
-        label: "Number of hours",
+        labelForValue: "Number of hours",
         noSuffix: true,
         hasComment: true,
         unit: "hour",
@@ -4568,6 +4568,8 @@ export const VendorPricingPolicy = [
         subCategory: "charge",
         type: Number,
         hasComment: true,
+        labelForValue: "Number of hours",
+        noSuffix: true,
         unit: "hour",
       },
       {
@@ -4575,12 +4577,20 @@ export const VendorPricingPolicy = [
         subCategory: "charge",
         type: Number,
         hasComment: true,
+        isExtraService: true,
+        extraService: {
+          label: "Rushed setup"
+        }
       },
       {
-        name: "Rehersal time for the band (for special requests)",
+        name: "Rehearsal time for the band (for special requests)",
         subCategory: "charge",
         type: Number,
         hasComment: true,
+        isExtraService: true,
+        extraService: {
+          label: "Rehearsal time for the band (for special requests)"
+        }
       },
       {
         name: "Special operating time",
@@ -4588,12 +4598,17 @@ export const VendorPricingPolicy = [
         type: "MultiSelection",
         options: ["Morning", "Afternoon", "Evening", "Night"],
         value: [],
+
       },
       {
         name: "Extra for prizes",
         subCategory: "charge",
         type: Number,
         hasComment: true,
+        isExtraService: true,
+        extraService: {
+          label: "Extra for prizes"
+        }
       },
       {
         name: "Overtime charges",
@@ -4601,6 +4616,7 @@ export const VendorPricingPolicy = [
         type: "Cost",
         value: "",
         unit: "hour",
+
       },
       {
         name: "Tax rate",
@@ -4618,8 +4634,8 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Suggested Gratuity",
-        subCategory: "tips",
         type: Number,
+        isPercentage: true,
         hideOnProposal: true,
       },
     ],
