@@ -4111,7 +4111,7 @@ export const VendorPricingPolicy = [
         hasComment: true,
       },
       {
-        name: "Cost Late Night Fares",
+        name: "Cost Late Night Fee",
         type: Number,
         hasUnit: true,
         units: ["Per person", "All together"],
@@ -4151,16 +4151,38 @@ export const VendorPricingPolicy = [
         name: "Pickup",
         type: Number,
         hasComment: true,
+        isExtraService: true,
+        extraService: {
+          label: "Pickup"
+        }
+
       },
       {
         name: "Cleanup",
         type: Number,
         hasComment: true,
+        isExtraService: true,
+        extraService: {
+          label: "Cleanup"
+        }
       },
       {
-        name: "Cost Late Night Fares",
+        name: "Cost Late Night Fee",
         type: Number,
         hasComment: true,
+        isExtraService: true,
+        extraService: {
+          label: "Late Night Fee"
+        }
+      },
+      {
+        name: "Breakdown",
+        type: Number,
+        hasComment: true,
+        isExtraService: true,
+        extraService: {
+          label: "Breakdown"
+        }
       },
       {
         name: "Discount for large quantities",
