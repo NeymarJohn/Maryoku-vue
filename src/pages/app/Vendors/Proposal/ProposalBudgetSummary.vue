@@ -147,12 +147,12 @@
                 <span> ${{ event.components.find((item) => item.componentId == a).allocatedBudget | withComma }}</span>
               </li>
               <li
-                v-if="calculatedTotal(getRequirementsByCategory(a)) - newProposalRequest.eventData.allocatedBudget > 0"
+                v-if="pricesByCategory[a] - event.components.find((item) => item.componentId == a).allocatedBudget > 0"
               >
                 <md-icon>error</md-icon>
                 <span
                   >Your proposal is ${{
-                    (calculatedTotal(getRequirementsByCategory(a.value)) - newProposalRequest.eventData.allocatedBudget)
+                    (pricesByCategory[a] - event.components.find((item) => item.componentId == a).allocatedBudget)
                       | withComma
                   }}
                   more than the budget</span
