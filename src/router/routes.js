@@ -26,7 +26,6 @@ const EventDetailsBudget = () => import("@/pages/app/Events/EventDetailsBudget.v
 const EventPlan = () => import("@/pages/app/Events/EventPlan.vue");
 const EventDetailsOverview = () => import("@/pages/app/Events/components/EventDetailsOverview");
 const EventProposalDetails = () => import("@/pages/app/Events/Proposal/EventProposalDetails.vue");
-const EventProposalCompare = () => import("@/pages/app/Events/Proposal/ProposalCompare.vue")
 const EventDetailsTimeline = () => import("@/pages/app/Events/EventDetailsTimeline");
 const EventConceptChoose = () => import("@/pages/app/Events/components/EventConceptChoose");
 const BookingEvent = () => import("@/pages/app/Events/components/BookingEvent");
@@ -332,17 +331,6 @@ let EventPages = {
                     meta: {
                         title: "Plan Event",
                         gtm: "Plan Event",
-                        opaque: false,
-                        requiresAuth: true,
-                    },
-                },
-                {
-                    path: ":blockId/proposals/compare",
-                    name: "EventProposalCompare",
-                    component: EventProposalCompare,
-                    meta: {
-                        title: "EventProposalCompare",
-                        gtm: "Event Proposal Compare",
                         opaque: false,
                         requiresAuth: true,
                     },

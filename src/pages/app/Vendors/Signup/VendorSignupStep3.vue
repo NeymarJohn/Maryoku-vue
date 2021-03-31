@@ -593,17 +593,18 @@ export default {
       }
       return res;
     },
-    setPricePolicy(e, type, name, value) {
-      // console.log('setPricePolicy', value);
-      if ((type === "option" || type === "Including") && name) {
-        let p = this.vendorPricingPolicies.items.find((it) => it.name === name);
-        p.value = value;
-      }
-    },
+    // setPricePolicy(e, type, name, value) {
+    //   alert("xx");
+    //   // console.log('setPricePolicy', value);
+    //   if ((type === "option" || type === "Including") && name) {
+    //     let p = this.vendorPricingPolicies.items.find((it) => it.name === name);
+    //     p.value = value;
+    //   }
+    // },
     setPricePolicy(e, index) {
+      console.log(e);
       console.log("setPricePolicy", e);
       this.vendorPricingPolicies.items[index] = e;
-
       this.$root.$emit("update-vendor-value", "pricingPolicies", this.vendorPricingPolicies.items);
     },
     setPolicy(e, index) {
@@ -662,6 +663,11 @@ export default {
         this.vendorPricingPolicies.items.map((it, idx) => {
           if (vendorPricingPolicies.items[idx] && vendorPricingPolicies.items[idx].type) {
             this.$set(it, "type", vendorPricingPolicies.items[idx].type);
+            this.$set(it, "name", vendorPricingPolicies.items[idx].name);
+            if (vendorPricingPolicies.items[idx].isExtraService) {
+              this.$set(it, "isExtraService", vendorPricingPolicies.items[idx].isExtraService);
+              this.$set(it, "extraService", vendorPricingPolicies.items[idx].extraService);
+            }
             if (it.type == Boolean && !it.hasOwnProperty("value")) {
               this.$set(it, "value", false);
             }

@@ -117,13 +117,6 @@ export default {
           }).value;
           costServices.push(service);
         }
-        // if (
-        //   includedVendorServices.findIndex((vendorService) => {
-        //     return item.item && vendorService.label.toLowerCase() == item.item.toLowerCase();
-        //   }) >= 0
-        // ) {
-        //   includedSevices.push(service);
-        // }
       });
 
       const extraServices = [];
@@ -132,8 +125,8 @@ export default {
       let discountRate = 0;
       if (this.vendor.pricingPolicies) {
         this.vendor.pricingPolicies.forEach((item) => {
-          if (!hiddenValues.includes(item.name)) {
-            if (!item.value) return;
+          if (item.isExtraService) {
+            console.log("extra SErvce", item.extraService);
             extraServices.push({
               comments: [],
               dateCreated: "",
@@ -146,7 +139,7 @@ export default {
               requirementId: "",
               requirementMandatory: false,
               requirementPriority: null,
-              requirementTitle: item.name,
+              requirementTitle: item.extraService.label,
               requirementsCategory: item.category,
               requirementValue: item.defaultQty ? item.defaultQty : 1,
               requirementSize: item.defaultSize ? item.defaultSize : "",

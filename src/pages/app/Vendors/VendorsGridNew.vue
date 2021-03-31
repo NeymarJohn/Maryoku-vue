@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout md-gutter vendors-pool-grid">
+  <div class="md-layout md-gutter">
     <div class="md-layout-item md-size-100 vendors-list-header d-flex justify-content-start align-center">
       <div class="form-group">
         <label>Sort by</label>
@@ -20,7 +20,7 @@
           :style="`background : url(${vendorMainImage(vendor)}) center center no-repeat;`"
         ></div>
         <div class="vendor-info">
-          <div class="category font-size-16" v-if="vendor.eventCategory">
+          <div class="category font-size-16">
             <img :src="`${$iconURL}Budget+Elements/${vendor.eventCategory.icon}`" class="label-icon" />
             {{ categoryTitle(vendor.vendorCategory, buildingBlocksList) }}
           </div>
@@ -178,9 +178,7 @@ export default {
       this.$router.push({ name: "VendorDetails", params: { id: vendorId } });
     },
     vendorMainImage(vendor) {
-      if (vendor.images && vendor.images.length > 0) {
-        return vendor.images[0];
-      } else if (vendor.vendorImages && vendor.vendorImages.length > 0) {
+      if (vendor.vendorImages && vendor.vendorImages.length > 0) {
         return vendor.vendorImages[0];
       } else {
         const rndInt = Math.floor(Math.random() * this.bgImages.length);
@@ -218,11 +216,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.vendors-pool-grid {
-  .about-vendor {
-    word-break: break-word;
-  }
-}
 .md-card-header-image {
   > img {
     max-height: 25vmin;

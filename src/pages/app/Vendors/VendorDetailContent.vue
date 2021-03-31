@@ -18,6 +18,7 @@
       <div class="right-side">
         <div class="card">
           <div class="banner">
+            <!-- <img :src="vendor.vendorImages[0]" v-if="vendor.vendorImages && vendor.vendorImages.length > 0" /> -->
             <div class="images">
               <span class="prev" @click="prev()" v-if="imageSlidePos < 0">
                 <md-icon>keyboard_arrow_left</md-icon>

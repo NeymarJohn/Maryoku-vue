@@ -459,7 +459,7 @@ export default {
   created() {},
   mounted() {
     console.log("vendorSignup.step4", this.vendor);
-    if (this.vendor.hasOwnProperty("images") && this.vendor.images.length) {
+    if (this.vendor.hasOwnProperty("vendorImages") && this.vendor.vendorImages.length) {
       this.vendor.images.forEach((item) => {
         this.medias.push({
           thumb: item,

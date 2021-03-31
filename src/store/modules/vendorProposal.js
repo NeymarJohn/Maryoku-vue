@@ -260,7 +260,7 @@ const actions = {
         includedServices: state.proposalIncludedServices,
         extraServices: state.proposalExtraServices,
         // coverImage: coverImageUrl,
-        discounts: state.discounts,
+        discounts: state.discount,
         taxes: state.taxes,
         cost: getters.finalPriceOfMainCategory,
         pricesByCategory: getters.pricesByCategory,
