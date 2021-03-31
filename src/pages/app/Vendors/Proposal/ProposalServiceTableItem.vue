@@ -112,40 +112,55 @@
         style="margin-right: 10px; position: absolute; margin-top: 30px"
       />
       <div v-for="(plannerOption, index) in item.plannerOptions" :key="`planner-${index}`" class="planner-options-item">
-        <div>
-          <div class="font-size-14 font-regular color-gray">Option {{ ("0" + (index + 1)).slice(-2) }}</div>
-          <input
-            v-model="plannerOption.description"
-            style="width: 500px"
+        <div class="font-size-14 font-regular color-gray">Option {{ ("0" + (index + 1)).slice(-2) }}</div>
+        <div class="planner-options-item-row" v-if="plannerOption.isEdit">
+          <div>
+            <input
+              v-model="plannerOption.description"
+              style="width: 500px"
+              class="input-value"
+              type="text"
+              :placeholder="`Type option here`"
+              :class="{ isFilled: !!plannerOption.description }"
+            />
+          </div>
+          <money
+            v-model="plannerOption.price"
+            v-bind="{
+              decimal: '.',
+              thousands: ',',
+              prefix: '$ ',
+              suffix: '',
+              precision: 2,
+              masked: false,
+            }"
             class="input-value"
-            type="text"
-            :placeholder="`Type option here`"
-            :class="{ isFilled: !!plannerOption.description }"
           />
+          <div class="font-size-16 font-regular color-gray text-center" style="padding: 12px">
+            $ {{ (plannerOption.price * item.requirementValue) | withComma }}
+          </div>
+          <div class="d-flex align-center">
+            <md-button class="md-simple normal-btn md-black" @click="cancelAlternative(index)"> Cancel </md-button>
+            <md-button class="normal-btn md-red" @click="saveAlternative(index)"> Save </md-button>
+          </div>
         </div>
-        <money
-          v-model="plannerOption.price"
-          v-bind="{
-            decimal: '.',
-            thousands: ',',
-            prefix: '$ ',
-            suffix: '',
-            precision: 2,
-            masked: false,
-          }"
-          class="input-value"
-        />
-        <div class="font-size-16 font-regular color-gray text-center" style="padding: 12px">
-          $ {{ (plannerOption.price * item.requirementValue) | withComma }}
-        </div>
-        <div>
-          <md-button
-            class="md-simple edit-btn"
-            style="margin-bottom: 12px !important"
-            @click="removeAlternative(index)"
-          >
-            <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />
-          </md-button>
+        <div class="planner-options-item-row" v-else>
+          <div>
+            {{ plannerOption.description }}
+          </div>
+          <div>{{ plannerOption.price }}</div>
+          <div class="font-size-16 font-regular color-gray text-center" style="padding: 12px">
+            $ {{ (plannerOption.price * item.requirementValue) | withComma }}
+          </div>
+          <div>
+            <md-button class="md-simple edit-btn" @click="editAlternative(index)">
+              <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />
+            </md-button>
+
+            <md-button class="md-simple edit-btn" @click="removeAlternative(index)">
+              <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />
+            </md-button>
+          </div>
         </div>
       </div>
       <div class="planner-options-item">
@@ -318,7 +333,7 @@ export default {
   props: {
     defaultItem: {
       type: Object,
-      default: {},
+      default: () => {},
     },
     active: Boolean,
     step: Number,
@@ -357,11 +372,6 @@ export default {
       this.$root.$emit("save-proposal-requirement", { index: this.index, item });
       this.$emit("save", { index: this.index, item });
     },
-    addAlternative() {
-      this.item.plannerOptions.push({ description: "", price: this.item.price });
-      this.$root.$emit("save-proposal-requirement", { index: this.index, item });
-      this.$emit("save", { index: this.index, item });
-    },
     setValue(key, value) {
       const item = this.item;
       // item[key] = value;
@@ -372,10 +382,29 @@ export default {
       this.item = Object.assign({}, this.defaultItem);
       this.isEdit = false;
     },
+    addAlternative() {
+      this.item.plannerOptions.push({ description: "", price: this.item.price, isEdit: true });
+    },
     removeAlternative(index) {
       this.item.plannerOptions.splice(index, 1);
       this.$root.$emit("save-proposal-requirement", { index: this.index, item });
       this.$emit("save", { index: this.index, item });
+    },
+    editAlternative(index) {
+      this.$set(this.item.plannerOptions[index], "isEdit", true);
+      // this.$root.$emit("save-proposal-requirement", { index: this.index, item });
+      // this.$emit("save", { index: this.index, item });
+    },
+    saveAlternative(index) {
+      this.$set(this.item.plannerOptions[index], "isEdit", false);
+      this.$root.$emit("save-proposal-requirement", { index, item: this.item });
+      this.$emit("save", { index, item: this.item });
+    },
+    cancelAlternative(index) {
+      this.$set(this.item, "plannerOptions", Object.assign([], this.defaultItem.plannerOptions));
+      this.$set(this.item.plannerOptions[index], "isEdit", false);
+      console.log(this.item);
+      // this.item.plannerOptions = Object.assign([], this.defaultItem.plannerOptions);
     },
   },
   filters: {
@@ -555,15 +584,17 @@ export default {
   }
   .planner-options-item {
     border-bottom: solid 2px #dadada;
-    display: grid;
-    grid-template-columns: 55% 15% 15% 15%;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: flex-end;
     margin: 0 20px 0 50px;
     padding: 20px 0;
     &:last-child {
       border-bottom: none;
+    }
+    &-row {
+      display: grid;
+      grid-template-columns: 55% 15% 15% 15%;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
     }
   }
   .total-cont {
