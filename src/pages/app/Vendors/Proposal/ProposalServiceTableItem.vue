@@ -231,8 +231,6 @@
     <div class="proposal-service-item-wrapper">
       <div class="item-cont">
         {{ item.requirementTitle }}
-        <br />
-        <div v-if="isExpanded"></div>
       </div>
       <div class="qty-cont editor-wrapper text-center">
         <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue }}</template>
@@ -257,9 +255,21 @@
           />
         </template>
       </div>
-      <div class="total-cont editor-wrapper pl-10" :class="{ 'text-right': !isEdit, 'text-left': isEdit }">
-        ${{ subTotal | withComma }}
-      </div>
+      <div class="total-cont editor-wrapper pl-10 text-right" v-if="!isEdit">${{ subTotal | withComma }}</div>
+      <money
+        v-else
+        :value="subTotal"
+        v-bind="{
+          decimal: '.',
+          thousands: ',',
+          prefix: '$ ',
+          suffix: '',
+          precision: 2,
+          masked: false,
+        }"
+        readonly
+        class="input-value mr-10 text-center"
+      />
       <div class="action-cont editor-wrapper">
         <template v-if="isEdit">
           <a class="cancel" @click="cancel()">Cancel</a>
@@ -287,6 +297,14 @@
         </md-menu>
       </div>
     </div>
+    <div class="comment-section">
+      <div v-if="isEdit" class="comment">
+        <textarea v-model="item.requirementComment"></textarea>
+      </div>
+      <div class="font-regular font-size-14" v-else>
+        {{ item.requirementComment }}
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -298,7 +316,10 @@ export default {
     Money,
   },
   props: {
-    item: Object,
+    defaultItem: {
+      type: Object,
+      default: {},
+    },
     active: Boolean,
     step: Number,
     index: Number,
@@ -311,10 +332,15 @@ export default {
     return {
       isHover: false,
       isEdit: false,
+      // isEdit: false,
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       isExpanded: false,
       isAddingAlternative: false,
+      item: {},
     };
+  },
+  created() {
+    this.item = Object.assign({}, this.defaultItem);
   },
   computed: {
     subTotal() {
@@ -343,6 +369,7 @@ export default {
       this.$emit("save", { index: this.index, item });
     },
     cancel() {
+      this.item = Object.assign({}, this.defaultItem);
       this.isEdit = false;
     },
     removeAlternative(index) {
@@ -351,8 +378,6 @@ export default {
       this.$emit("save", { index: this.index, item });
     },
   },
-  created() {},
-  mounted() {},
   filters: {
     withComma(amount) {
       return amount ? amount.toLocaleString() : 0;
@@ -550,6 +575,9 @@ export default {
     &.complimentary {
       text-decoration: line-through;
     }
+  }
+  .comment-section {
+    width: 30%;
   }
 }
 .md-menu-content {
