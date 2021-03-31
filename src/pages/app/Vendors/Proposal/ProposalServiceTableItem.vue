@@ -221,17 +221,6 @@
             <md-menu-item @click="isEdit = true">
               <span> <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />Add comment</span>
             </md-menu-item>
-            <md-menu-item @click="setValue('isComplementary', true)" v-if="!item.isComplementary">
-              <span>
-                <img :src="`${$iconURL}common/gift-dark.svg`" class="label-icon mr-10" />
-                Mark as complementary
-              </span>
-            </md-menu-item>
-            <md-menu-item @click="isEdit = true">
-              <span>
-                <img :src="`${$iconURL}common/replace-dark.svg`" class="label-icon mr-10" />Suggest alternatives
-              </span>
-            </md-menu-item>
           </md-menu-content>
         </md-menu>
       </div>
