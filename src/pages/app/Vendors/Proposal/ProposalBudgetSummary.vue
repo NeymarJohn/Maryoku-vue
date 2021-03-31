@@ -147,12 +147,12 @@
                 <span> ${{ event.components.find((item) => item.componentId == a).allocatedBudget | withComma }}</span>
               </li>
               <li
-                v-if="pricesByCategory[a] - event.components.find((item) => item.componentId == a).allocatedBudget > 0"
+                v-if="calculatedTotal(getRequirementsByCategory(a)) - newProposalRequest.eventData.allocatedBudget > 0"
               >
                 <md-icon>error</md-icon>
                 <span
                   >Your proposal is ${{
-                    (pricesByCategory[a] - event.components.find((item) => item.componentId == a).allocatedBudget)
+                    (calculatedTotal(getRequirementsByCategory(a.value)) - newProposalRequest.eventData.allocatedBudget)
                       | withComma
                   }}
                   more than the budget</span
@@ -162,7 +162,7 @@
           </div>
         </div>
         <discount-form
-          :totalPrice="totalPriceBeforeDiscount"
+          :totalPrice="originalPriceOfMainCategory"
           :defaultTax="$store.state.vendorProposal.taxes[vendor.eventCategory.key]"
           :defaultDiscount="$store.state.vendorProposal.discounts[vendor.eventCategory.key]"
           @saveDiscount="saveDiscount(vendor.eventCategory.key, ...arguments)"
@@ -472,13 +472,6 @@ export default {
       let s = 0;
       Object.keys(this.pricesByCategory).forEach((category) => {
         s += this.pricesByCategory[category];
-      });
-      return s;
-    },
-    totalPriceBeforeDiscount() {
-      let s = 0;
-      Object.keys(this.totalPriceByCategory).forEach((category) => {
-        s += this.totalPriceByCategory[category];
       });
       return s;
     },

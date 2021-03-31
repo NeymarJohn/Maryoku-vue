@@ -1,14 +1,14 @@
 <template>
   <div class="vendor-signup-wrapper">
-    <vendor-basic-info-form v-if="step == 0" :vendor="vendor" />
-    <vendor-signup-step1
+    <vendor-basic-info-form v-if="step == 1" :vendor="vendor" />
+    <!-- <vendor-signup-step1
       :categories="businessCategories"
       :generalInfos="generalInfos"
       :companyServices="companyServices"
       :icon="`${iconUrl}`"
       :vendor="vendor"
       v-if="step == 1"
-    />
+    /> -->
     <vendor-signup-step2 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 2" />
     <vendor-signup-step3 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 3" />
     <vendor-signup-step4 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 4" />
@@ -140,7 +140,7 @@ export default {
     });
   },
   methods: {
-    ...mapMutations("vendorSignup", ["setVendor", "setStep", "setEditing"]),
+    ...mapMutations("vendorService", ["setVendor", "setStep", "setEditing"]),
     camelize(str) {
       let temp = str.replace(/\W+(.)/g, function (match, chr) {
         return chr.toUpperCase();
@@ -150,8 +150,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      vendor: "vendorSignup/getVendor",
-      step: "vendorSignup/getStep",
+      vendor: "vendorService/getVendor",
+      step: "vendorService/getStep",
     }),
   },
   filters: {},

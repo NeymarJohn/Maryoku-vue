@@ -51,11 +51,11 @@
             <span class="proposal-title">{{ vendorProposal.vendor.vendorDisplayName }}</span> -->
           </p>
           <div class="vision mt-30 font-size-22 mb-40">
-            <div class="font-bold-extra">
+            <div class="font-bold">
               <img :src="`${$iconURL}Vendor+Landing+Page/Asset+491.svg`" />
               Our vision for your event
             </div>
-            <div>{{ vendorProposal.eventVision }}</div>
+            <p class="mt-10">{{ vendorProposal.eventVision }}</p>
           </div>
           <div class="proposal-images mb-40">
             <div class="font-bold mb-10">Some references to the experience you will get from us</div>
@@ -66,12 +66,10 @@
                 </span>
               </template>
 
-              <img
-                class="item"
-                v-for="(item, index) in vendorProposal.inspirationalPhotos.filter((item) => !!item)"
-                :key="item.url"
-                :src="item.url"
-              />
+              <div v-for="item in vendorProposal.inspirationalPhotos.filter((item) => !!item)" :key="item.url">
+                <img class="item" :src="item.url" />
+                <div class="mt-5">{{ item.caption }}</div>
+              </div>
               <template slot="next">
                 <span class="next handle-btn">
                   <md-icon>keyboard_arrow_right</md-icon>
@@ -80,7 +78,12 @@
             </carousel>
           </div>
           <div class="about-us mb-40">
-            <div class="color-red font-bold">About Us <md-icon class="color-red">keyboard_arrow_right</md-icon></div>
+            <md-button class="md-red edit-btn md-simple" @click="showAboutUs = !showAboutUs">
+              <span class="color-red font-bold">
+                About Us <md-icon class="color-red">keyboard_arrow_right</md-icon>
+              </span>
+            </md-button>
+            <div class="about-content mt-10" v-if="showAboutUs">{{ vendorProposal.vendor.about.company }}</div>
           </div>
           <div class="contact-section mb-40">
             <div class="proposal-section__title font-size-22 font-bold-extra">Contact Us</div>
@@ -132,7 +135,7 @@
               <div class="item-pricing d-flex justify-content-end align-center">
                 <div class="element-value" v-if="!expand">
                   <div class="element-price">${{ totalPrice | withComma }}</div>
-                  <div class="discount-details">
+                  <div class="discount-details" v-if="discount.percentage">
                     ({{ discount.percentage }}% off)
                     <span>${{ totalPrice | withComma }}</span>
                   </div>
@@ -176,6 +179,17 @@
                       <td>${{ (service.requirementValue * service.price) | withComma }}</td>
                       <td class="element-actions"></td>
                     </tr>
+                    <tr v-for="(service, index) in addedServices" :key="`added-service-${index}`">
+                      <td><md-icon class="color-red">add_circle_outline</md-icon>{{ service.requirementTitle }}</td>
+                      <td>{{ service.requirementValue }}</td>
+                      <td>${{ service.price | withComma }}</td>
+                      <td>${{ (service.requirementValue * service.price) | withComma }}</td>
+                      <td class="element-actions">
+                        <md-button class="md-simple edit-btn" @click="removeService(service)">
+                          <img :src="`${$iconURL}common/trash-dark.svg`"
+                        /></md-button>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -215,11 +229,11 @@
                     <tr>
                       <td colspan="3">
                         <b class="font-size-22">Total</b>
-                        <div class="font-size-14">Before discount</div>
+                        <div class="font-size-14" v-if="discount.percentage">Before discount</div>
                       </td>
                       <td class="element-value">
                         <div class="element-price">${{ totalPrice | withComma }}</div>
-                        <div class="discount-details">
+                        <div class="discount-details" v-if="discount.percentage">
                           ({{ discount.percentage }}% off)
                           <span>${{ totalPrice | withComma }}</span>
                         </div>
@@ -279,7 +293,11 @@
                     />
                     Extras
                   </h3>
-                  <span>Wold you like to upgrade & add one of those?</span>
+                  <div class="extras-section__header">
+                    <span>Would you like to upgrade & add one of these?</span>
+                    <div class="text-center">QTY</div>
+                    <div class="text-center">Price per unit</div>
+                  </div>
                 </div>
                 <div class="extras-section__list">
                   <extra-service-item
@@ -358,17 +376,51 @@
         </div>
 
         <div class="policy-content">
-          <div class="policy mb-50">
-            <div class="mb-10" v-for="(policy, index) in vendorProposal.vendor.yesRules" :key="`yespolicy-${index}`">
-              <span class="font-bold" style="width: 50%; display: inline-block">{{ policy.name }}</span>
-              <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" class="label-icon" />
-            </div>
-            <div class="mb-10" v-for="(policy, index) in vendorProposal.vendor.noRules" :key="`nopolicy-${index}`">
-              <span class="font-bold" style="min-width: 50%; display: inline-block">{{ policy.name }}</span>
-              <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" class="label-icon" />
+          <div class="side-label">
+            <div class="label-value">Our Policy</div>
+          </div>
+          <div class="rules">
+            <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
+              <div class="item">{{ policy.name }}</div>
+              <div class="item" v-if="policy.type === 'MultiSelection'">
+                <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
+                  `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
+                }}</span>
+              </div>
+              <div class="item" v-else-if="policy.type === 'Including'">
+                <span class="mr-10" v-if="policy.value"> Yes </span>
+                <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
+              </div>
+              <div class="item text-right" v-else>
+                <span v-if="policy.type === Number && !policy.isPercentage && policy.unit !== 'hour'">$</span>
+                <span v-if="policy.type === Boolean">
+                  <img
+                    v-if="policy.value === true"
+                    :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"
+                    class="page-icon"
+                  />
+                  <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" class="page-icon" />
+                  <!-- {{ policy.value === true ? "Yes" : "No" }} -->
+                </span>
+                <span v-else>
+                  <img
+                    class="page-icon"
+                    v-if="policy.value === true"
+                    :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"
+                  />
+                  <img
+                    class="page-icon"
+                    v-else-if="policy.value === false"
+                    :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`"
+                  />
+                  <span v-else>{{ policy.value }}</span>
+                </span>
+                <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
+                <span v-if="policy.isPercentage">%</span>
+                <span class="ml-50" v-if="policy.hasOwnProperty('attendees')"> {{ policy.attendees }} attendees </span>
+              </div>
             </div>
           </div>
-
           <div class="side-label">
             <div class="label-value">Our cancellation approach</div>
           </div>
@@ -402,7 +454,8 @@
     <div class="book-proposal-form">
       <div class="form-title">
         Would You Like To Book
-        <a href class="font-bold-extra"> {{ vendorProposal.vendor.companyName }}</a
+        <a href class="font-bold-extra">
+          {{ vendorProposal.vendor.companyName }} </a
         >?
       </div>
       <div class="agree-checkbox" v-if="this.vendorProposal.suggestedTime">
@@ -525,6 +578,8 @@ export default {
       acceptNewTimes: false,
       expand: true,
       extraServices: [],
+      showAboutUs: false,
+      addedServices: [],
     };
   },
   created() {
@@ -550,6 +605,20 @@ export default {
       console.log(itemIndex);
       if (itemIndex >= 0) {
         this.$set(this.extraServices[itemIndex], "added", true);
+        this.addedServices.push(extraService);
+      }
+      this.extraServices = [...this.extraServices];
+      this.$forceUpdate();
+    },
+    removeService(extraService) {
+      const itemIndex = this.extraServices.findIndex((item) => item.requirementTitle === extraService.requirementTitle);
+      const addedIndex = this.addedServices.findIndex(
+        (item) => item.requirementTitle === extraService.requirementTitle,
+      );
+      console.log(itemIndex);
+      if (itemIndex >= 0) {
+        this.$set(this.extraServices[itemIndex], "added", false);
+        this.addedServices.splice(addedIndex, 1);
       }
       this.extraServices = [...this.extraServices];
       this.$forceUpdate();
@@ -626,14 +695,20 @@ export default {
     },
     discount() {
       if (!this.vendorProposal.discounts) return { percentage: 0, price: 0 };
-      const discount = this.vendorProposal.discounts[this.vendorProposal.vendor.eventCategory.key];
+      let discount = this.vendorProposal.discounts[this.vendorProposal.vendor.eventCategory.key];
+      if (!discount) {
+        discount = { price: 0, percentage: 0 };
+      }
       console.log("discount", discount);
       return discount;
     },
     tax() {
       if (!this.vendorProposal.taxes) return { percentage: 0, price: 0 };
-      const tax = this.vendorProposal.taxes[this.vendorProposal.vendor.eventCategory.key];
-      if (!tax.price) tax.price = Math.round((this.priceOfCostservices * tax.percentage) / 100);
+      let tax = this.vendorProposal.taxes[this.vendorProposal.vendor.eventCategory.key];
+      if (!tax) {
+        tax = { price: 0, percentage: 0 };
+      }
+      tax.price = Math.round((this.priceOfCostservices * tax.percentage) / 100);
       return tax;
     },
     costServices() {
@@ -645,9 +720,14 @@ export default {
 
     priceOfCostservices() {
       if (this.costServices.length === 0) return 0;
-      return this.costServices.reduce((s, item) => {
-        return s + item.requirementValue * item.price;
-      }, 0);
+      return (
+        this.costServices.reduce((s, item) => {
+          return s + item.requirementValue * item.price;
+        }, 0) +
+        this.addedServices.reduce((s, item) => {
+          return s + item.requirementValue * item.price;
+        }, 0)
+      );
     },
     totalPrice() {
       return this.priceOfCostservices - this.discount.price + this.tax.price;
@@ -656,6 +736,13 @@ export default {
       return this.extraServices.reduce((s, item) => {
         return s + item.requirementValue * item.price;
       }, 0);
+    },
+    validPolicy() {
+      if (this.vendorProposal.vendor.policies)
+        return this.vendorProposal.vendor.policies.filter(
+          (item) => item.hasOwnProperty("value") || (item.type === "Including" && item.cost),
+        );
+      return null;
     },
   },
   filters: {
@@ -1059,6 +1146,10 @@ export default {
                   height: 1px;
                 }
 
+                &__header {
+                  display: grid;
+                  grid-template-columns: 50% 15% 15% 15% 5%;
+                }
                 &__title {
                   margin-bottom: 1em;
                   h3 {

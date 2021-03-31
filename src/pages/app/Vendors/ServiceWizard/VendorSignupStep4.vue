@@ -1,45 +1,32 @@
 <template>
-  <div class="vendor-detail-summary">
+  <div class="vendor-signup-step4-wrapper">
     <div class="inside-container">
       <div class="left-side">
-        <div class="tabs">
-          <div
-            class="tab"
-            :class="{ active: t == activeTab }"
-            v-for="(t, tIndex) in tabs"
-            :key="`tab-${tIndex}`"
-            @click="goToSection(t)"
-          >
-            <span class="point"></span>
-            {{ t }}
-          </div>
-        </div>
+        <img :src="`${iconUrl}step-4.svg`" />
+        <h2>SUMMARY</h2>
+        <p>This is a summary of your company's info which we'll use in future proposal creating</p>
+        <h2>3/4</h2>
       </div>
       <div class="right-side">
         <div class="card">
-          <div class="banner">
-            <div class="images">
-              <span class="prev" @click="prev()" v-if="imageSlidePos < 0">
-                <md-icon>keyboard_arrow_left</md-icon>
-              </span>
-              <div class="cont" :style="{ left: `${imageSlidePos}px` }" ref="imagesCont">
-                <img :src="img" v-for="(img, ind) in vendor.vendorImages" :key="`image-${ind}`" @click="view()" />
-              </div>
-              <span class="next" @click="next()" v-if="imageSlidePos >= 0">
-                <md-icon>keyboard_arrow_right</md-icon>
-              </span>
-              <LightBox
-                v-if="getGalleryImages().length > 0"
-                :images="getGalleryImages()"
-                ref="lightbox"
-                :show-light-box="false"
-              />
+          <div class="tabs">
+            <div
+              class="tab"
+              :class="{ active: t == activeTab }"
+              v-for="(t, tIndex) in tabs"
+              :key="tIndex"
+              @click="goToSection(t)"
+            >
+              {{ t }}
             </div>
           </div>
-          <div class="about-cont profile-section" id="About">
+          <div class="banner">
+            <img :src="vendor.images[0]" v-if="vendor.hasOwnProperty('images') && vendor.images.length > 0" />
+          </div>
+          <div class="about-cont" id="About">
             <div class="block">
               <span class="capacity"> <img :src="`${iconUrl}Asset 545.svg`" />Capacity </span>
-              <span class="number" v-if="vendor.capacity">
+              <span class="number">
                 {{ vendor.capacity.low }}
                 <img :src="`${iconUrl}Group 4585 (2).svg`" />
                 {{ vendor.capacity.high }}
@@ -47,17 +34,66 @@
             </div>
             <div class="block">
               <div class="title lg"><img :src="`${iconUrl}Asset 563.svg`" /> ABOUT</div>
-              <div class="desc" v-if="vendor.about">{{ vendor.about.company }}</div>
+              <div class="desc">{{ vendor.about.company }}</div>
             </div>
-            <div class="block" v-if="vendor.about">
+            <div class="block">
               <div class="title">
-                <img :src="`${$iconURL}Budget Elements/${vendor.eventCategory.icon}`" />
-                <span> About Our {{ vendor.eventCategory.fullTitle }} </span>
+                <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategories[0])}`" />
+                About Our {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
               </div>
               <div class="desc">{{ vendor.about.category }}</div>
             </div>
+            <vendor-images-list :images="vendor.images" class="images"></vendor-images-list>
+            <div class="contact-us" id="Contact">
+              <h4>CONTACT US</h4>
+              <div class="items">
+                <div class="item">
+                  <img :src="`${iconUrl}Asset 547.svg`" />
+                  {{ vendor.vendorMainEmail }}
+                </div>
+                <div class="item">
+                  <img :src="`${iconUrl}Asset 550.svg`" />
+                  {{ vendor.vendorAddressLine1 }}
+                </div>
+                <div class="item">
+                  <img :src="`${iconUrl}Asset 548.svg`" />
+                  {{ vendor.vendorMainPhoneNumber }}
+                </div>
+              </div>
+            </div>
+            <div class="social" v-if="isSocial()">
+              Website & social
+              <div class="items">
+                <div
+                  class="item"
+                  v-for="(s, sIndex) in socialMediaBlocks"
+                  :key="sIndex"
+                  :class="{ 'mr-20': vendor.social[s.name] }"
+                >
+                  <a v-if="vendor.social[s.name]" :href="vendor.social[s.name]" target="_blank">
+                    <img :src="`${iconUrl}${s.icon}`" />
+                    {{ vendor.social[s.name] }}
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="attachments">
+              <div class="mb-30">Attachments</div>
+              <attachment-tag-list
+                :defaultValue="vendor.attachments"
+                @add="addNewAttachment"
+                @remove="removeAttachment"
+              ></attachment-tag-list>
+            </div>
+            <div class="personal-message mt-40" v-if="vendor.personalMessage">
+              <div class="font-bold mb-20">
+                <img :src="`${$iconURL}common/message-dark.svg`" />
+                Personal message to your clients
+              </div>
+              <div class="content">{{ vendor.personalMessage }}</div>
+            </div>
           </div>
-          <div class="fee-cont profile-section" id="What's Included?">
+          <div class="fee-cont" id="Pricing">
             <div class="title">
               <h3><img :src="`${iconUrl}Asset 562.svg`" /> ELEMENTS IN STARTING FEE</h3>
             </div>
@@ -65,25 +101,21 @@
               <div class="cheader">
                 <div class="first-column">
                   <div>
-                    <img :src="`${iconUrl}Asset 543.svg`" />
-                    {{ vendor.eventCategory.fullTitle }}
+                    <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategories[0])}`" />
+                    {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
                   </div>
-                  <span>QTY</span>
+                  <!-- <span>QTY</span> -->
                 </div>
                 <div class="second-column">
-                  <span>QTY</span>
+                  <!-- <span>QTY</span> -->
                 </div>
               </div>
               <div class="citems">
-                <vendor-starting-fee-item
-                  v-for="(fv, fvIndex) in getStartingFeeItems()"
-                  :key="`vendor-starting-fee-${fvIndex}`"
-                  :item="fv"
-                />
+                <vendor-starting-fee-item v-for="(fv, fvIndex) in getStartingFeeItems()" :key="fvIndex" :item="fv" />
               </div>
             </div>
           </div>
-          <div class="extra-cont profile-section" id="Extras">
+          <div class="extra-cont" id="Pricing">
             <div class="title">
               <h3><img :src="`${iconUrl}Asset 526.svg`" />WITH EXTRA PAY</h3>
             </div>
@@ -91,54 +123,77 @@
               <div class="cheader">
                 <div>
                   <img :src="`${iconUrl}Asset 543.svg`" />
-                  {{ vendor.eventCategory.fullTitle }}
+                  {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
                 </div>
                 <span>QTY</span>
                 <span>Price</span>
+                <span></span>
               </div>
               <div class="citems">
                 <div class="citem">
-                  <vendor-extra-pay-item v-for="(cs, index) in getExtraPayItems()" :key="`extra-${index}`" :item="cs" />
+                  <vendor-extra-pay-item
+                    v-for="(cs, csIndex) in getExtraPayItems()"
+                    :key="csIndex"
+                    :item="cs"
+                    @change="changeServiceItem"
+                  />
                 </div>
               </div>
             </div>
           </div>
-          <div class="policy-cont profile-section" id="Policy">
+          <div class="policy-cont" id="Policy">
             <div class="title"><img :src="`${iconUrl}Group 1471 (2).svg`" /> OUR POLICY</div>
             <div class="rules">
-              <div class="rule" v-for="(y, yIndex) in vendor.yesRules" :key="`yes-${yIndex}`">
-                <div class="item">{{ y.name }}</div>
-                <div class="item">
-                  <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="vendor.yesRules.includes(y)" />
+              <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
+                <div class="item">{{ policy.name }}</div>
+                <div class="item" v-if="policy.type === 'MultiSelection'">
+                  <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
+                    `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
+                  }}</span>
                 </div>
-              </div>
-              <div class="rule" v-for="(n, nIndex) in vendor.noRules" :key="`rule-${nIndex}`">
-                <div class="item">{{ n.name }}</div>
-                <div class="item">
-                  <img :src="`${iconUrl}Group 5489 (4).svg`" v-if="vendor.noRules.includes(n)" />
+                <div class="item" v-else-if="policy.type === 'Including'">
+                  <span class="mr-10" v-if="policy.value"> Yes </span>
+                  <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
+                </div>
+                <div class="item text-right" v-else>
+                  <span v-if="policy.type === Number && !policy.isPercentage && policy.unit !== 'hour'">$</span>
+                  <span v-if="policy.type === Boolean">
+                    <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
+                    <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
+                    <!-- {{ policy.value === true ? "Yes" : "No" }} -->
+                  </span>
+                  <span v-else>
+                    <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
+                    <img v-else-if="policy.value === false" :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
+                    <span v-else>{{ policy.value }}</span>
+                  </span>
+                  <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
+                  <span v-if="policy.isPercentage">%</span>
+                  <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
+                    {{ policy.attendees }} attendees
+                  </span>
                 </div>
               </div>
             </div>
-            <div class="not-allowed" v-if="vendor.eventCategory.key == 'venuerental'">
+            <div class="rules">
+              <h5 class="font-bold font-size-20">Additional Rules</h5>
+              <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
+                <div class="item">Event must be {{ policy }}</div>
+              </div>
+            </div>
+            <div class="not-allowed" v-if="vendor.vendorCategories[0] == 'venuerental'">
               <h5>We don't allow these 3rd party vendor:</h5>
               <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
             </div>
-            <div
-              class="dont-work"
-              v-if="
-                vendor.selectedWeekdays && vendor.exDonts && vendor.selectedWeekdays.length && vendor.exDonts.length
-              "
-            >
+            <div class="dont-work">
               <h5>We don't work on:</h5>
               <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
                 <img :src="`${iconUrl}Group 5489 (4).svg`" />
                 {{ mergeStringItems(vendor.selectedWeekdays) }}
               </div>
-              <div v-for="(r, rIndex) in vendor.exDonts" :key="rIndex">
-                <div class="item" v-for="(d, dIndex) in r.holidays.filter((d) => d.selected)" :key="dIndex">
-                  <img :src="`${iconUrl}Group 5489 (4).svg`" />
-                  {{ d.holiday }}
-                </div>
+              <div class="item" v-for="(d, dIndex) in vendor.exDonts" :key="dIndex">
+                <img :src="`${iconUrl}Group 5489 (4).svg`" />
+                {{ d.holiday }}
               </div>
               <div class="item" v-if="vendor.dontWorkDays">
                 <img :src="`${iconUrl}Group 5489 (4).svg`" />
@@ -150,16 +205,39 @@
               </div>
             </div>
           </div>
-          <div class="pricing-policy-cont profile-section" id="Pricing Policy">
+          <div class="pricing-policy-cont" id="Rules">
             <div class="title"><img :src="`${iconUrl}Asset 560.svg`" /> OUR PRICING POLICY</div>
             <div class="rules">
               <div class="rule" v-for="(policy, yIndex) in validPricingPolicy" :key="yIndex">
-                <div class="item">{{ policy.name }}</div>
                 <div class="item">
-                  {{ policy.value }}
-
+                  <div>{{ policy.name }}</div>
+                  <div class="mt-10 color-gray">{{ policy.desc }}</div>
+                </div>
+                <div class="item" v-if="policy.type === 'MultiSelection'">
+                  <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
+                    `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
+                  }}</span>
+                </div>
+                <div class="item" v-else-if="policy.type === 'Including'">
+                  <span class="mr-10" v-if="policy.value"> Yes </span>
+                  <span class="mr-10" v-if="!policy.value && policy.cost && policy.unit === '$'"> $ </span>
+                  <span>{{ policy.cost }}</span>
+                </div>
+                <div class="item" v-else-if="policy.type === Boolean && policy.value && policy.discount">
+                  <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '$'"> $ </span>
+                  <span class="mr-10" v-if="policy.discount"> {{ policy.discount }} </span>
+                  <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '%'"> % </span>
+                </div>
+                <div class="item" v-else>
+                  <span v-if="policy.type === Number && !policy.isPercentage && policy.unit !== 'hour'">$</span>
+                  <span v-if="policy.value === true">Yes</span>
+                  <span v-else>{{ policy.value }}</span>
+                  <span v-if="policy.isPercentage">%</span>
                   <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
                     {{ policy.attendees }} attendees
+                  </span>
+                  <span class="ml-50 text-transform-capitalize" v-if="policy.unit">
+                    {{ policy.unit }}
                   </span>
                 </div>
               </div>
@@ -181,7 +259,6 @@
               />
             </div>
           </div>
-          <vendor-detail-reviews></vendor-detail-reviews>
         </div>
       </div>
     </div>
@@ -192,16 +269,19 @@
 import moment from "moment";
 import VueElementLoading from "vue-element-loading";
 import Vendors from "@/models/Vendors";
-import VendorDetailReviews from "./components/VendorDetailReviews";
-import { capitalize } from "@/utils/string.util";
+
 //COMPONENTS
 import Icon from "@/components/Icon/Icon.vue";
-import VendorServiceItem from "./components/VendorServiceItem.vue";
+import VendorServiceItem from "../components/VendorServiceItem.vue";
 import LightBox from "vue-image-lightbox";
 import carousel from "vue-owl-carousel";
-import VendorStartingFeeItem from "./components/VendorStartingFeeItem.vue";
-import VendorExtraPayItem from "./components/VendorExtraPayItem.vue";
+import VendorStartingFeeItem from "../components/VendorStartingFeeItem.vue";
+import VendorExtraPayItem from "../components/VendorExtraPayItem.vue";
 import _ from "underscore";
+import VendorImagesList from "../components/VendorImagesList.vue";
+import { capitalize } from "@/utils/string.util";
+import AttachmentTagList from "../components/AttachmentTagList.vue";
+import S3Service from "@/services/s3.service";
 
 export default {
   name: "vendor-signup-step4",
@@ -217,12 +297,54 @@ export default {
     carousel,
     VendorStartingFeeItem,
     VendorExtraPayItem,
-    VendorDetailReviews,
+    VendorImagesList,
+    AttachmentTagList,
   },
   data() {
     return {
-      tabs: ["About", "What's Included?", "Extras", "Policy", "Pricing Policy", "Reviews"],
-
+      tabs: ["About", "Pricing", "Rules", "Policy", "Contact"],
+      socialMediaBlocks: [
+        {
+          name: "website",
+          icon: "Asset 539.svg",
+        },
+        {
+          name: "facebook",
+          icon: "Asset 540.svg",
+        },
+        {
+          name: "instagram",
+          icon: "Group 4569 (2).svg",
+        },
+        {
+          name: "youtube",
+          icon: "socialmedia/Youtube.svg",
+        },
+        {
+          name: "linkedin",
+          icon: "socialmedia/Linkdin.svg",
+        },
+        {
+          name: "google",
+          icon: "socialmedia/GooglePlus.svg",
+        },
+        {
+          name: "pinterest",
+          icon: "socialmedia/Pinterest.svg",
+        },
+        {
+          name: "foursquare",
+          icon: "socialmedia/foursquare.svg",
+        },
+        {
+          name: "reddit",
+          icon: "socialmedia/Twitter.svg",
+        },
+        {
+          name: "tiktok",
+          icon: "socialmedia/Tiktok.svg",
+        },
+      ],
       activeTab: "About",
       feeVenues: [
         {
@@ -246,6 +368,9 @@ export default {
       ],
       imageSlidePos: 0,
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      defRules: "Suitable for pets, Smoking allowed, Suitable for infants(Under 2 years), Dress code, Overtime Cost",
+      defNa:
+        "Catering, Dj, Photographer, Show / Performance, Flowers, Transporation, Decoration, Rentals, Favours & Gifts, Other",
       categoryNames: [
         {
           name: "Venue Rental",
@@ -328,15 +453,54 @@ export default {
           icon: "equipmentrentals.svg",
         },
       ],
+      medias: [],
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    console.log("vendorService.step4", this.vendor);
+    if (this.vendor.hasOwnProperty("images") && this.vendor.images.length) {
+      this.vendor.images.forEach((item) => {
+        this.medias.push({
+          thumb: item,
+          src: item,
+          caption: "test",
+        });
+      });
+    }
+  },
   methods: {
+    addNewAttachment(file) {
+      S3Service.fileUpload(file, file.name, `vendors/attachments/${this.vendor.id}`).then((res) => {
+        const attachments = this.vendor.attachments ? [...this.vendor.attachments] : [];
+        attachments.push({
+          name: file.name,
+          isRequired: false,
+          fileName: file.name,
+          url: `${process.env.S3_URL}vendors/attachments/${this.vendor.id}/${res}`,
+        });
+        this.$store.commit("vendorService/setField", { field: "attachments", value: attachments });
+      });
+    },
+    removeAttachment(item, index) {
+      const attachments = this.vendor.attachments ? [...this.vendor.attachments] : [];
+      attachments.splice(index, 1);
+      this.$store.commit("vendorService/setField", { field: "attachments", value: attachments });
+    },
+    isSocial() {
+      let isBlank = true;
+
+      _.each(this.vendor.social, (s) => {
+        isBlank &= s === null;
+      });
+
+      return !isBlank;
+    },
     getExtraPayItems() {
+      console.log("getExtraPayItems");
       let extraPayItems = [];
       _.each(this.vendor.services, (item) => {
-        if (!item.included) {
+        if (item.checked && item.hasOwnProperty("included") && !item.included) {
           extraPayItems.push(item);
         }
       });
@@ -345,17 +509,17 @@ export default {
     getStartingFeeItems() {
       let startingFeeItems = [];
       _.each(this.vendor.services, (item) => {
-        if (item.included) {
+        if (item.checked && item.hasOwnProperty("included") && item.included) {
           startingFeeItems.push(item);
         }
       });
       return startingFeeItems;
     },
     prev() {
-      const ww = this.vendor.vendorImages.length * 700;
+      const ww = this.vendor.images.length * 320;
       const sw = this.$refs.imagesCont.clientWidth;
       if (ww / sw > 2) {
-        this.imageSlidePos += 700 * 4;
+        this.imageSlidePos += 320 * 4;
       } else if (ww / sw > 1) {
         this.imageSlidePos += (ww % sw) + 60;
       } else {
@@ -363,10 +527,10 @@ export default {
       }
     },
     next() {
-      const ww = this.vendor.vendorImages.length * 700;
+      const ww = this.vendor.images.length * 320;
       const sw = this.$refs.imagesCont.clientWidth;
       if (ww / sw > 2) {
-        this.imageSlidePos -= 700 * 4;
+        this.imageSlidePos -= 320 * 4;
       } else if (ww / sw > 1) {
         this.imageSlidePos -= (ww % sw) + 60;
       } else {
@@ -393,17 +557,17 @@ export default {
       let naItems = "";
       _.each(items, (n) => {
         if (n.constructor.name == "Object") {
-          naItems += `${capitalize(n.name)}, `;
+          naItems += `${capitalize(n.name)}s, `;
         } else {
-          naItems += `${capitalize(n)}, `;
+          naItems += `${capitalize(n)}s, `;
         }
       });
       naItems = naItems.substring(0, naItems.length - 2);
-      return naItems;
+      return "All " + naItems;
     },
     dontWorkDays() {
       let selectedDates = "";
-      _.each(this.vendor.dontWorkDays.selectedDates, (s) => {
+      _.each(this.vendor.dontWorkDays, (s) => {
         selectedDates += `${s.date}, `;
       });
       selectedDates = selectedDates.substring(0, selectedDates.length - 2);
@@ -412,136 +576,116 @@ export default {
     dontWorkTime() {
       return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.amPack.start} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.amPack.end}`;
     },
-    getGalleryImages: function () {
-      let temp = [];
-      if (!this.vendor.vendorImages) return [];
-      if (this.vendor.vendorImages.length > 0) {
-        this.vendor.vendorImages.forEach((item, index) => {
-          temp.push({
-            thumb: item,
-            src: item,
-            caption: index,
-          });
-        });
-        console.log(temp);
-        return temp;
-      } else {
-        return [];
-      }
-    },
+
     view() {
       if (this.$refs.lightbox) {
         this.$refs.lightbox.showImage(0);
       }
     },
+    changeServiceItem(item) {
+      console.log("changeServiceItem", item);
+      _.each(this.vendor.services, (s) => {
+        if (s.label === item.label) {
+          this.vendor.services[s] = item;
+        }
+      });
+
+      this.$root.$emit("update-vendor-value", "services", this.vendor.services);
+    },
   },
   computed: {
+    additionalRules() {
+      return this.$store.state.vendorService.vendor.additionalRules;
+    },
     validPricingPolicy() {
-      if (this.vendor.pricingPolicies) return this.vendor.pricingPolicies.filter((item) => item.value);
+      if (this.vendor.pricingPolicies)
+        return this.vendor.pricingPolicies.filter(
+          (item) => item.value || item.desc || (item.type === "Including" && item.cost),
+        );
+      return null;
+    },
+    validPolicy() {
+      if (this.vendor.policies)
+        return this.vendor.policies.filter(
+          (item) => item.hasOwnProperty("value") || (item.type === "Including" && item.cost),
+        );
       return null;
     },
   },
   filters: {},
-  watch: {},
+  watch: {
+    vendor: {
+      handler: function (newVal) {
+        console.log("handler", newVal);
+      },
+      deep: true,
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
-.vendor-detail-summary {
+.vendor-signup-step4-wrapper {
   font-family: Manrope-Regular, sans-serif;
-  padding: 60px 120px;
+
   .inside-container {
     display: flex;
     color: #050505;
 
     .left-side {
       flex: 1;
-      .tabs {
-        display: flex;
-        flex-direction: column;
-        .tab {
-          padding: 1rem 0rem;
-          cursor: pointer;
-          position: relative;
-          &.active {
-            font: bold 16px Manrope-Regular, sans-serif;
-            .point {
-              background-color: #f51355;
-            }
-          }
-          .point {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            display: inline-block;
-            background-color: #818080;
-            margin-right: 30px;
-          }
-          &:not(:last-child)::after {
-            content: "";
-            position: absolute;
-            border-left: dashed 1px #050505;
-            height: 50px;
-            left: 5px;
-            top: 33px;
-          }
-        }
+      margin-right: 122px;
+
+      img {
+        width: 92.5px;
+      }
+      h4 {
+        margin: 36px 0 11px 0;
+        font: 800 20px Manrope-Regular, sans-serif;
+      }
+      p {
+        margin: 0;
+        padding: 0;
+        font: normal 16px Manrope-Regular, sans-serif;
+      }
+      h2 {
+        margin: 30px 0;
+        font: 800 40px Manrope-Regular, sans-serif;
+      }
+      h3 {
+        margin: 0;
+        color: #f51355;
+        font: bold 20px Manrope-Regular, sans-serif;
       }
     }
     .right-side {
-      flex: 5;
+      flex: 3;
 
       .card {
-        padding: 0px 60px 60px 60px;
+        padding: 30px 60px 60px 60px;
         background-color: #ffffff;
         box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
 
+        .tabs {
+          display: flex;
+          margin: -30px -60px;
+          .tab {
+            padding: 1rem 2rem;
+            border-right: 1px solid #818080;
+            cursor: pointer;
+
+            &.active {
+              border-top: 5px solid #f51355;
+              font: bold 16px Manrope-Regular, sans-serif;
+            }
+          }
+        }
         .banner {
           margin: 30px -60px calc(30px - 2rem) -60px;
           padding-bottom: 2rem;
-          overflow: hidden;
-          .images {
-            display: block;
-            overflow: hidden;
-            padding: 0;
-            white-space: nowrap;
-            position: relative;
-            margin-right: -60px;
-
-            span {
-              cursor: pointer;
-              position: absolute;
-              width: 28px;
-              height: 28px;
-              background-color: #ffffff;
-              box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-              border-radius: 50%;
-              text-align: center;
-              font-weight: 800;
-              z-index: 99;
-              top: 50%;
-              transform: translateY(-50%);
-
-              &.prev {
-                left: 0;
-              }
-              &.next {
-                right: 60px;
-              }
-            }
-            .cont {
-              position: relative;
-              img {
-                width: 700px;
-                height: 500px;
-                margin-right: 2rem;
-                cursor: zoom-in;
-                object-fit: cover;
-              }
-            }
-          }
           img {
             width: 100%;
             height: 460px;
+            object-fit: cover;
           }
         }
         .about-cont {
@@ -586,7 +730,18 @@ export default {
               width: 60%;
             }
           }
-
+          .images {
+            margin-right: -60px;
+            margin-left: -60px;
+          }
+          .personal-message {
+            .content {
+              background-color: #f2f2f2;
+              border-radius: 5px;
+              max-width: 850px;
+              padding: 30px 20% 30px 30px;
+            }
+          }
           .contact-us {
             padding: 2rem 0;
 
@@ -617,11 +772,13 @@ export default {
 
             .items {
               display: flex;
-              white-space: nowrap;
-              margin-top: 2rem;
+              flex-wrap: wrap;
+              margin-top: 1rem;
 
               .item {
                 font: bold 16px Manrope-Regular, sans-serif;
+                display: block;
+                margin: 20px 0;
                 a {
                   color: #050505;
                   text-decoration: underline;
@@ -629,7 +786,7 @@ export default {
                 img {
                   width: 24px;
                   height: 24px;
-                  // margin-right: 1rem;
+                  margin-right: 10px;
                 }
               }
             }
@@ -664,7 +821,7 @@ export default {
 
               .first-column {
                 display: grid;
-                grid-template-columns: 50% 50%;
+                grid-template-columns: 70% 30%;
                 align-items: center;
               }
               .second-column {
@@ -685,7 +842,7 @@ export default {
               width: calc(100% - 7rem);
               display: grid;
               grid-column-gap: 3rem;
-              grid-template-columns: 50% 50%;
+              // grid-template-columns: 50% 50%;
               align-items: center;
             }
           }
@@ -710,7 +867,7 @@ export default {
           .cblock {
             .cheader {
               display: grid;
-              grid-template-columns: 40% 20% 40%;
+              grid-template-columns: 40% 20% 20% 20%;
               padding: 1rem 0 1rem 60px;
               background: #ededed;
               margin: 0 -60px;
@@ -752,7 +909,7 @@ export default {
               font: 600 16px Manrope-Regular, sans-serif;
               display: flex;
               align-items: center;
-
+              max-width: 900px;
               .item {
                 flex: 1;
 
@@ -790,7 +947,6 @@ export default {
         .pricing-policy-cont {
           padding: 60px 60px 0 60px;
           margin: 0 -60px;
-          border-bottom: 2px solid #818080;
           .title {
             margin-bottom: 2rem;
             img {
@@ -857,23 +1013,6 @@ export default {
           .signatures {
             display: grid;
             grid-template-columns: 50% 50%;
-          }
-        }
-        .review-cont {
-          padding: 60px 0 0 0;
-          .review-list {
-            .review-list-item {
-              padding: 30px 0px;
-              border-bottom: solid 1px #b7b7b7;
-            }
-          }
-        }
-        .profile-section {
-          .title {
-            img {
-              width: 30px;
-              margin-right: 1rem;
-            }
           }
         }
       }

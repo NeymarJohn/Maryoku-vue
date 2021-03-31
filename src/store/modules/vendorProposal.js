@@ -44,15 +44,6 @@ const state = {
   suggestedNewSeatings: [],
 };
 const getters = {
-  originalPriceOfMainCategory(state) {
-    const mainService = state.vendor.eventCategory.key;
-    if (!state.proposalCostServices[mainService]) return 0;
-    const sumPrice = state.proposalCostServices[mainService].reduce((s, item) => {
-      if (item.isComplimentary) return s;
-      return s + item.requirementValue * item.price;
-    }, 0);
-    return sumPrice;
-  },
   totalPriceByCategory(state, getters) {
     const prices = {};
     state.additionalServices.forEach(service => {
@@ -67,10 +58,18 @@ const getters = {
         prices[service] = sumPrice;
       }
     });
-    prices[state.vendor.eventCategory.key] = getters.originalPriceOfMainCategory;
+    prices[state.vendor.eventCategory.key] = getters.finalPriceOfMainCategory;
     return prices;
   },
-
+  originalPriceOfMainCategory(state) {
+    const mainService = state.vendor.eventCategory.key;
+    if (!state.proposalCostServices[mainService]) return 0;
+    const sumPrice = state.proposalCostServices[mainService].reduce((s, item) => {
+      if (item.isComplimentary) return s;
+      return s + item.requirementValue * item.price;
+    }, 0);
+    return sumPrice;
+  },
   finalPriceOfMainCategory(state, getters) {
     const mainService = state.vendor.eventCategory.key;
     if (!state.proposalCostServices[mainService]) return 0;
@@ -261,7 +260,7 @@ const actions = {
         includedServices: state.proposalIncludedServices,
         extraServices: state.proposalExtraServices,
         // coverImage: coverImageUrl,
-        discounts: state.discount,
+        discounts: state.discounts,
         taxes: state.taxes,
         cost: getters.finalPriceOfMainCategory,
         pricesByCategory: getters.pricesByCategory,

@@ -66,7 +66,7 @@
         </div>
         <div class="bottom no-margin" v-if="item.type == Number">
           <template v-if="item.noSuffix">
-            <span v-if="item.labelForValue">{{ item.labelForValue }}</span>
+            <span v-if="item.label">{{ item.label }}</span>
             <div>
               <input
                 type="number"
@@ -79,7 +79,7 @@
           </template>
           <template v-else>
             <span v-if="item.isPercentage">Rate (%)</span>
-            <span v-else>{{ item.labelForValue || "How much extra" }}</span>
+            <span v-else>How much extra</span>
             <br />
             <div class="suffix percentage" v-if="item.isPercentage">
               <input type="number" class placeholder="00.00" v-model="item.value" @input="setPricePolicy" />
@@ -156,7 +156,7 @@
           />
         </div>
         <div class="bottom mt-30" v-if="item.hasOwnProperty('discount') && item.type == Boolean && item.value">
-          <span class="d-block">{{ item.hasOwnProperty("labelForValue") ? item.labelForValue : "How many" }}</span>
+          <span class="d-block">{{ item.hasOwnProperty("label") ? item.label : "How many" }}</span>
           <input
             type="number"
             class="text-center number-field w-max-120"

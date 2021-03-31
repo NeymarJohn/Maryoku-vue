@@ -6,7 +6,7 @@ import { makeid } from "@/utils/helperFunction";
 import { getBase64 } from "@/utils/file.util";
 const state = {
     isEditing: false,
-    step: 0,
+    step: 1,
     status: null,
     vendor: {
         about: {},

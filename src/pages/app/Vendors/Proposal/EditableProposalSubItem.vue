@@ -7,7 +7,7 @@
     <div class="item-cont">
       {{ item.requirementTitle }}
       <span class="madatory-badge" v-if="item.isMandatory">Mandatory</span>
-      <span class="complementary-badge" v-if="item.isComplimentary">Complementary</span>
+      <span class="complementary-badge" v-else>Complementary</span>
     </div>
     <div class="qty-cont editor-wrapper">
       <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue }}</template>
