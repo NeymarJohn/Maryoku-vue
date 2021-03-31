@@ -162,7 +162,7 @@
           </div>
         </div>
         <discount-form
-          :totalPrice="originalPriceOfMainCategory"
+          :totalPrice="totalPriceBeforeDiscount"
           :defaultTax="$store.state.vendorProposal.taxes[vendor.eventCategory.key]"
           :defaultDiscount="$store.state.vendorProposal.discounts[vendor.eventCategory.key]"
           @saveDiscount="saveDiscount(vendor.eventCategory.key, ...arguments)"
@@ -472,6 +472,13 @@ export default {
       let s = 0;
       Object.keys(this.pricesByCategory).forEach((category) => {
         s += this.pricesByCategory[category];
+      });
+      return s;
+    },
+    totalPriceBeforeDiscount() {
+      let s = 0;
+      Object.keys(this.totalPriceByCategory).forEach((category) => {
+        s += this.totalPriceByCategory[category];
       });
       return s;
     },
