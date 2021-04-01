@@ -13,9 +13,6 @@ const ProposalLayout = () => import("@/pages/app/Vendors/Proposal/ProposalLayout
 const ForVendors = () => import("@/pages/app/Vendors/ForVendors.vue");
 const ProposalContent = () => import("@/pages/app/Vendors/Proposal");
 
-const ServiceWizardLayout = () => import("@/pages/app/Vendors/ServiceWizard/Layout.vue");
-const ServiceWizard = () => import("@/pages/app/Vendors/ServiceWizard")
-
 export default [
     {
         path: "/vendor",
@@ -32,7 +29,6 @@ export default [
                     gtm: "VendorSignup",
                 },
             },
-
             {
                 path: "edit/:id",
                 name: "VendorSignup",
@@ -45,24 +41,6 @@ export default [
             },
         ],
     },
-    {
-        path: "/vendor",
-        name: "Vendor",
-        component: ServiceWizardLayout,
-        children: [
-            {
-                path: ":id/service/add",
-                name: "Add New Service",
-                component: ServiceWizard,
-                meta: {
-                    requiresAuth: false,
-                    title: "Add New Service",
-                    gtm: "VendorSignup",
-                },
-            },
-        ],
-    },
-
     {
         path: "/",
         name: "Vendor",

@@ -81,6 +81,12 @@
               </li>
             </ul>
           </div>
+          <attachment-tag-list
+            class="mt-40"
+            :defaultValue="attachments"
+            @add="addNewAttachment"
+            @remove="removeAttachment"
+          ></attachment-tag-list>
         </div>
       </div>
 
@@ -187,11 +193,11 @@
                 </div>
               </div>
             </div>
-            <div class="not-allowed" v-if="vendor.vendorCategories[0] == 'venuerental'">
+            <div class="not-allowed mb-30" v-if="vendor.vendorCategories[0] == 'venuerental'">
               <h5>We don't allow these 3rd party vendor:</h5>
               <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
             </div>
-            <div class="dont-work mt-20">
+            <!-- <div class="dont-work mt-20">
               <h5>We don't work on:</h5>
               <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
                 <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
@@ -209,7 +215,7 @@
                 <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
                 {{ dontWorkTime() }}
               </div>
-            </div>
+            </div> -->
           </div>
           <div class="cancellation pricing-policy-cont" id="Rules">
             <h5 class="subtitle">OUR PRICING POLICY</h5>
@@ -319,6 +325,10 @@ import ProposalPricingSummary from "./ProposalPricingSummary.vue";
 import { getBase64 } from "@/utils/file.util";
 import { capitalize } from "@/utils/string.util";
 import _ from "underscore";
+import AttachmentTagList from "../components/AttachmentTagList.vue";
+import { PROPOSAL_DIRECTORY } from "@/constants/s3Directories";
+import S3Service from "@/services/s3.service";
+
 export default {
   name: "proposal-event-summary",
   components: {
@@ -326,6 +336,7 @@ export default {
     ProposalInspirationalPhotos,
     vueSignature,
     ProposalPricingSummary,
+    AttachmentTagList,
   },
   props: {
     title: String,
@@ -457,9 +468,28 @@ export default {
     async onFileChange(event) {
       this.coverImage = await getBase64(event.target.files[0]);
     },
+    addNewAttachment(file) {
+      S3Service.fileUpload(file, file.name, `${PROPOSAL_DIRECTORY}/attachments/${this.vendor.id}`).then((res) => {
+        const attachments = this.attachments ? [...this.attachments] : [];
+        attachments.push({
+          name: file.name,
+          isRequired: false,
+          fileName: file.name,
+          url: `${process.env.S3_URL}${PROPOSAL_DIRECTORY}/attachments/${this.vendor.id}/${res}`,
+        });
+        this.$store.commit("vendorProposal/setValue", { key: "attachments", value: attachments });
+      });
+    },
+    removeAttachment(index) {
+      const attachments = this.attachments ? [...this.attachments] : [];
+      attachments.splice(index, 1);
+      this.$store.commit("vendorProposal/setValue", { key: "attachments", value: attachments });
+    },
   },
   created() {
     console.log(this.vendor);
+    //Get attachments from vendor profile,
+    this.$store.commit("vendorProposal/setValue", { key: "attachments", value: this.vendor.attachments });
   },
   mounted() {
     this.savedItModal = false;
@@ -476,6 +506,14 @@ export default {
       },
       set(value) {
         this.$store.commit("vendorProposal/setValue", { key: "personalMessage", value });
+      },
+    },
+    attachments: {
+      get() {
+        return this.$store.state.vendorProposal.attachments;
+      },
+      set(value) {
+        this.$store.commit("vendorProposal/setValue", { key: "attachments", value });
       },
     },
     eventVision() {

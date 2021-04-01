@@ -93,7 +93,7 @@
               <li :style="`margin: ${discountBlock[vendor.eventCategory.key] ? '' : '0'}`">
                 <template v-if="discountBlock[vendor.eventCategory.key]">
                   <div class="left">
-                    <span>Before discount</span>
+                    <span>After discount</span>
                   </div>
                   <div class="right">
                     <span>{{ `(${bundleDiscountPercentage}% off)` }}</span>
@@ -147,12 +147,12 @@
                 <span> ${{ event.components.find((item) => item.componentId == a).allocatedBudget | withComma }}</span>
               </li>
               <li
-                v-if="calculatedTotal(getRequirementsByCategory(a)) - newProposalRequest.eventData.allocatedBudget > 0"
+                v-if="pricesByCategory[a] - event.components.find((item) => item.componentId == a).allocatedBudget > 0"
               >
                 <md-icon>error</md-icon>
                 <span
                   >Your proposal is ${{
-                    (calculatedTotal(getRequirementsByCategory(a.value)) - newProposalRequest.eventData.allocatedBudget)
+                    (pricesByCategory[a] - event.components.find((item) => item.componentId == a).allocatedBudget)
                       | withComma
                   }}
                   more than the budget</span
@@ -162,9 +162,9 @@
           </div>
         </div>
         <discount-form
-          :totalPrice="originalPriceOfMainCategory"
-          :defaultTax="$store.state.vendorProposal.taxes[vendor.eventCategory.key]"
-          :defaultDiscount="$store.state.vendorProposal.discounts[vendor.eventCategory.key]"
+          :totalPrice="totalPriceBeforeDiscount"
+          :defaultTax="defaultTax"
+          :defaultDiscount="defaultDiscount"
           @saveDiscount="saveDiscount(vendor.eventCategory.key, ...arguments)"
           @saveTax="saveTax(vendor.eventCategory.key, ...arguments)"
         ></discount-form>
@@ -403,10 +403,10 @@ export default {
       return allocatedBudgetItem.allocatedBudget;
     },
     saveDiscount(categoryKey, discount) {
-      this.$store.commit("vendorProposal/setDiscount", { category: categoryKey, discount: discount });
+      this.$store.commit("vendorProposal/setDiscount", { category: "total", discount: discount });
     },
     saveTax(categoryKey, tax) {
-      this.$store.commit("vendorProposal/setTax", { category: categoryKey, tax: tax });
+      this.$store.commit("vendorProposal/setTax", { category: "total", tax: tax });
     },
   },
   created() {
@@ -469,9 +469,12 @@ export default {
       "totalPriceByCategory",
     ]),
     totalPrice() {
+      return this.totalPriceBeforeDiscount - this.defaultDiscount.price + this.defaultTax.price;
+    },
+    totalPriceBeforeDiscount() {
       let s = 0;
-      Object.keys(this.pricesByCategory).forEach((category) => {
-        s += this.pricesByCategory[category];
+      Object.keys(this.totalPriceByCategory).forEach((category) => {
+        s += this.totalPriceByCategory[category];
       });
       return s;
     },
@@ -496,10 +499,10 @@ export default {
       return result;
     },
     defaultTax() {
-      return this.$store.state.vendorProposal.taxes[this.vendor.eventCategory.key];
+      return this.$store.state.vendorProposal.taxes["total"];
     },
     defaultDiscount() {
-      return (this.discount = this.$store.state.vendorProposal.discounts[this.vendor.eventCategory.key]);
+      return (this.discount = this.$store.state.vendorProposal.discounts["total"]);
     },
   },
   watch: {

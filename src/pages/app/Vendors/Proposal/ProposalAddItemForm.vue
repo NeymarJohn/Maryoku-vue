@@ -335,24 +335,26 @@ export default {
     suggestedItems() {
       const items = [];
       this.vendorServices.forEach((category) => {
-        category.subCategories.forEach((subCat) => {
-          if (
-            subCat.name.toLowerCase() === "inclusion" ||
-            subCat.name.toLowerCase() === "sustainability" ||
-            subCat.name.toLowerCase() === "diversity"
-          )
-            return;
-          subCat.items.forEach((item) => {
-            const capitalized = item.name.charAt(0).toUpperCase() + item.name.slice(1);
-            const profileService = this.profileServices[this.camelize(capitalized)];
-            items.push({
-              description: capitalized,
-              qty: item.value ? item.value : 1,
-              included: profileService && profileService.included,
-              price: profileService ? Number(profileService.value) : "",
+        if (category.name !== "accessibility") {
+          category.subCategories.forEach((subCat) => {
+            if (
+              subCat.name.toLowerCase() === "inclusion" ||
+              subCat.name.toLowerCase() === "sustainability" ||
+              subCat.name.toLowerCase() === "diversity"
+            )
+              return;
+            subCat.items.forEach((item) => {
+              const capitalized = item.name.charAt(0).toUpperCase() + item.name.slice(1);
+              const profileService = this.profileServices[this.camelize(capitalized)];
+              items.push({
+                description: capitalized,
+                qty: item.value ? item.value : 1,
+                included: profileService && profileService.included,
+                price: profileService ? Number(profileService.value) : "",
+              });
             });
           });
-        });
+        }
       });
       return items;
     },

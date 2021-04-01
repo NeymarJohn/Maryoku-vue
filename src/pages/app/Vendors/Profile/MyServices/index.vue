@@ -9,7 +9,7 @@
         {{ getServiceCategory(vendorData.vendorCategories[0]).title }}
       </div>
       <div class="service-tab-item font-size-16">
-        <md-button class="maryoku-btn md-simple md-vendor" @click="startAddNewService">
+        <md-button class="maryoku-btn md-simple md-vendor">
           <md-icon class="color-purple font-size-30 mr-5">add</md-icon>
           Sign new service</md-button
         >
@@ -49,9 +49,6 @@ export default {
     },
     getServiceCategory(category) {
       return this.serviceCategories.find((item) => item.key === category) || {};
-    },
-    startAddNewService() {
-      return this.$router.push(`/vendor/${this.vendorData.id}/service/add`);
     },
   },
   computed: {
