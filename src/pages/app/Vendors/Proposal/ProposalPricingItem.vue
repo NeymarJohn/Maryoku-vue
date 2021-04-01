@@ -120,6 +120,7 @@
           icon="cost-requirements.png"
           description="(Asking the client) Wold you like to upgrade & add one of those?"
           key="extra"
+          :canAdd="false"
           :vendorCategory="category"
         />
         <div class="attachments-cont">

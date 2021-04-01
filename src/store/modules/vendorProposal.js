@@ -35,8 +35,8 @@ const state = {
   bundleDiscount: {
     isApplied: false,
     services: [],
-    discountPercentage: 0,
-    discountAmount: 0,
+    percentage: 0,
+    price: 0,
   },
   suggestionDate: null,
   timelineDates: [],
