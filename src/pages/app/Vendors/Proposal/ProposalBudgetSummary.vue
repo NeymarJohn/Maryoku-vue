@@ -93,7 +93,7 @@
               <li :style="`margin: ${discountBlock[vendor.eventCategory.key] ? '' : '0'}`">
                 <template v-if="discountBlock[vendor.eventCategory.key]">
                   <div class="left">
-                    <span>After discount</span>
+                    <span>Before discount</span>
                   </div>
                   <div class="right">
                     <span>{{ `(${bundleDiscountPercentage}% off)` }}</span>
@@ -108,8 +108,7 @@
                   0
                 "
               >
-                <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
-                Event Page/warning-circle-gray.svg"
+                <md-icon>error</md-icon>
                 <span
                   >Your proposal is ${{
                     (calculatedTotal(getRequirementsByCategory("venuerental")) -
@@ -148,25 +147,24 @@
                 <span> ${{ event.components.find((item) => item.componentId == a).allocatedBudget | withComma }}</span>
               </li>
               <li
-                v-if="pricesByCategory[a] - event.components.find((item) => item.componentId == a).allocatedBudget > 0"
+                v-if="calculatedTotal(getRequirementsByCategory(a)) - newProposalRequest.eventData.allocatedBudget > 0"
               >
-                <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
-
-                <span>
-                  Your proposal is ${{
-                    (pricesByCategory[a] - event.components.find((item) => item.componentId == a).allocatedBudget)
+                <md-icon>error</md-icon>
+                <span
+                  >Your proposal is ${{
+                    (calculatedTotal(getRequirementsByCategory(a.value)) - newProposalRequest.eventData.allocatedBudget)
                       | withComma
                   }}
-                  more than the budget
-                </span>
+                  more than the budget</span
+                >
               </li>
             </ul>
           </div>
         </div>
         <discount-form
-          :totalPrice="totalPriceBeforeDiscount"
-          :defaultTax="defaultTax"
-          :defaultDiscount="defaultDiscount"
+          :totalPrice="originalPriceOfMainCategory"
+          :defaultTax="$store.state.vendorProposal.taxes[vendor.eventCategory.key]"
+          :defaultDiscount="$store.state.vendorProposal.discounts[vendor.eventCategory.key]"
           @saveDiscount="saveDiscount(vendor.eventCategory.key, ...arguments)"
           @saveTax="saveTax(vendor.eventCategory.key, ...arguments)"
         ></discount-form>
@@ -217,34 +215,38 @@
           </div>
         </div>
       </div>
-      <div class="bundle-information" v-if="bundleDiscount && bundleDiscount.percentage">
+      <div class="bundle-information" v-if="bundleDiscount && bundleDiscount.discountPercentage">
         <div>
           <span>{{ bundledServicesString }}</span>
         </div>
         <div class="font-bold d-flex justify-content-between">
-          <span>Total Bundle</span><span class="font-bold font-size-22">${{ bundleDiscount.price | withComma }}</span>
+          <span>Total Bundle</span><spanB class="font-bold font-size-22">${{ bundleDiscount.discountAmount }}</spanB>
         </div>
       </div>
-      <div class="total-cont">
+      <div class="total-cont isEdit" v-if="isEdit">
         <div class="title">
           Total
           <br />
-          <span v-if="bundleDiscount.isApplied">Before bundle discount</span>
-          <br />
-          <span v-if="defaultDiscount.percentage">Before discount</span>
+          <span>Before discount</span>
         </div>
         <div class="price">
-          <strong>${{ totalPrice | withComma }}</strong>
+          <strong>$800</strong>
+          <br />$1100
+          <span>(10% off)</span>
+          <span>$1100</span>
+        </div>
+      </div>
+      <div class="total-cont" v-else>
+        <div class="title">
+          Total
           <br />
-          <div v-if="bundleDiscount && bundleDiscount.isApplied">
-            <span>{{ `(${bundleDiscount.percentage}% off)` }}</span>
-            <span>${{ totalPriceBeforeBundle | withComma }}</span>
-          </div>
+          <span v-if="discountBlock.value">Before discount</span>
+        </div>
+        <div class="price">
+          <strong>${{ (totalPrice - bundleDiscountAmount) | withComma }}</strong>
           <br />
-          <div v-if="defaultDiscount.percentage">
-            <span>{{ `(${defaultDiscount.percentage}% off)` }}</span>
-            <span>${{ totalPriceBeforeDiscount | withComma }}</span>
-          </div>
+          <span v-if="bundleDiscountPercentage">{{ `(${bundleDiscountPercentage}% off)` }}</span>
+          <span v-if="bundleDiscountAmount">${{ totalPrice | withComma }}</span>
         </div>
       </div>
     </template>
@@ -374,8 +376,8 @@ export default {
       this.isBundleDiscount = false;
       this.$store.commit("vendorProposal/setBundleDiscount", {
         services: this.bundleDiscountServices,
-        percentage: this.bundleDiscountPercentage,
-        price: this.bundleDiscountAmount,
+        discountPercentage: this.bundleDiscountPercentage,
+        discountAmount: this.bundleDiscountAmount,
         isApplied: true,
       });
     },
@@ -401,10 +403,10 @@ export default {
       return allocatedBudgetItem.allocatedBudget;
     },
     saveDiscount(categoryKey, discount) {
-      this.$store.commit("vendorProposal/setDiscount", { category: "total", discount: discount });
+      this.$store.commit("vendorProposal/setDiscount", { category: categoryKey, discount: discount });
     },
     saveTax(categoryKey, tax) {
-      this.$store.commit("vendorProposal/setTax", { category: "total", tax: tax });
+      this.$store.commit("vendorProposal/setTax", { category: categoryKey, tax: tax });
     },
   },
   created() {
@@ -436,12 +438,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters("vendorProposal", [
-      "finalPriceOfMainCategory",
-      "pricesByCategory",
-      "originalPriceOfMainCategory",
-      "totalPriceByCategory",
-    ]),
     proposalRequest() {
       return this.$store.state.vendorProposal.proposalRequest;
     },
@@ -466,26 +462,16 @@ export default {
     serviceCategories() {
       return this.$store.state.common.serviceCategories;
     },
-
+    ...mapGetters("vendorProposal", [
+      "finalPriceOfMainCategory",
+      "pricesByCategory",
+      "originalPriceOfMainCategory",
+      "totalPriceByCategory",
+    ]),
     totalPrice() {
-      return (
-        this.totalPriceBeforeDiscount -
-        (this.defaultDiscount ? this.defaultDiscount.price : 0) +
-        (this.defaultTax ? this.defaultTax.price : 0) -
-        (this.bundleDiscount.isApplied ? this.bundleDiscount.price : 0)
-      );
-    },
-    totalPriceBeforeBundle() {
-      return (
-        this.totalPriceBeforeDiscount -
-        (this.defaultDiscount ? this.defaultDiscount.price : 0) +
-        (this.defaultTax ? this.defaultTax.price : 0)
-      );
-    },
-    totalPriceBeforeDiscount() {
       let s = 0;
-      Object.keys(this.totalPriceByCategory).forEach((category) => {
-        s += this.totalPriceByCategory[category];
+      Object.keys(this.pricesByCategory).forEach((category) => {
+        s += this.pricesByCategory[category];
       });
       return s;
     },
@@ -510,10 +496,10 @@ export default {
       return result;
     },
     defaultTax() {
-      return this.$store.state.vendorProposal.taxes["total"] || { percentage: 0, price: 0 };
+      return this.$store.state.vendorProposal.taxes[this.vendor.eventCategory.key];
     },
     defaultDiscount() {
-      return this.$store.state.vendorProposal.discounts["total"] || { percentage: 0, price: 0 };
+      return (this.discount = this.$store.state.vendorProposal.discounts[this.vendor.eventCategory.key]);
     },
   },
   watch: {

@@ -217,7 +217,7 @@ export default {
       .requirement-item {
         margin-top: 20px;
         text-transform: capitalize;
-        padding-right: 10px;
+        padding-right: 15px;
         width: 30%;
         flex-grow: 1;
       }

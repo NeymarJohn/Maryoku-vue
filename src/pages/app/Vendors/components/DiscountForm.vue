@@ -153,16 +153,14 @@ export default {
         this.discount.price = (this.totalPrice * (value / 100)).toFixed(2);
       } else if (type === "tax") {
         this.tax.percentage = value;
-        this.tax.price = ((this.totalPrice - this.discount.price) * (value / 100)).toFixed(2);
+        this.tax.price = (this.totalPrice * (value / 100)).toFixed(2);
       }
     },
     setPriceRange(val, type) {
       if (type === "discount") {
-        console.log("value", val);
-        console.log("totalPRice", this.totalPrice);
         this.discount.percentage = ((val / this.totalPrice) * 100).toFixed(2);
       } else if (type === "tax") {
-        this.tax.percentage = ((val / (this.totalPrice - this.discount.price)) * 100).toFixed(2);
+        this.tax.percentage = ((val / this.totalPrice) * 100).toFixed(2);
       }
     },
     setRange(value, type) {
@@ -191,14 +189,6 @@ export default {
     },
     defaultDiscount(newValue, oldValue) {
       this.discount = newValue;
-    },
-    totalPrice(newValue, oldValue) {
-      console.log(newValue);
-      console.log(oldValue);
-      if (newValue !== oldValue) {
-        this.tax.price = (newValue * this.tax.percentage) / 100;
-        this.discount.price = (newValue * this.discount.percentage) / 100;
-      }
     },
   },
   computed: {

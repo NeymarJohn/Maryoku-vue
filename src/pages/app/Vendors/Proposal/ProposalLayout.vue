@@ -23,7 +23,7 @@
         <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
           Next
         </a>
-        <a class="next active" @click="uploadProposal('submit')" v-else :disabled="isUpdating">Submit Proposal</a>
+        <a class="next active" @click="uploadProposal('submit')" v-else>Submit Proposal</a>
       </div>
     </section>
 
@@ -137,7 +137,6 @@ export default {
       event: null,
       openedModal: "",
       showCloseProposalModal: false,
-      isUpdating: false,
     };
   },
   created() {
@@ -194,7 +193,6 @@ export default {
       const vendorProposal = this.$store.state.vendorProposal;
 
       let coverImageUrl = "";
-      this.isUpdating = true;
       if (vendorProposal.coverImage && vendorProposal.coverImage.indexOf("base64") >= 0) {
         const fileObject = S3Service.dataURLtoFile(
           vendorProposal.coverImage,
@@ -206,7 +204,6 @@ export default {
       }
 
       this.saveProposal(type).then((proposal) => {
-        this.isUpdating = false;
         if (type === "submit") this.submittedModal = true;
         else {
           Swal.fire({
