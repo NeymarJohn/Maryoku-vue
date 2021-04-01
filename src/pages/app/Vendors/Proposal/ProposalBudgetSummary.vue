@@ -509,10 +509,10 @@ export default {
       return result;
     },
     defaultTax() {
-      return this.$store.state.vendorProposal.taxes["total"];
+      return this.$store.state.vendorProposal.taxes["total"] || { percentage: 0, price: 0 };
     },
     defaultDiscount() {
-      return (this.discount = this.$store.state.vendorProposal.discounts["total"]);
+      return this.$store.state.vendorProposal.discounts["total"] || { percentage: 0, price: 0 };
     },
   },
   watch: {
