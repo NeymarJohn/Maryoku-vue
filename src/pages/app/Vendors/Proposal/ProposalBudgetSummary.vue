@@ -436,6 +436,12 @@ export default {
     }
   },
   computed: {
+    ...mapGetters("vendorProposal", [
+      "finalPriceOfMainCategory",
+      "pricesByCategory",
+      "originalPriceOfMainCategory",
+      "totalPriceByCategory",
+    ]),
     proposalRequest() {
       return this.$store.state.vendorProposal.proposalRequest;
     },
@@ -460,12 +466,7 @@ export default {
     serviceCategories() {
       return this.$store.state.common.serviceCategories;
     },
-    ...mapGetters("vendorProposal", [
-      "finalPriceOfMainCategory",
-      "pricesByCategory",
-      "originalPriceOfMainCategory",
-      "totalPriceByCategory",
-    ]),
+
     totalPrice() {
       return (
         this.totalPriceBeforeDiscount -

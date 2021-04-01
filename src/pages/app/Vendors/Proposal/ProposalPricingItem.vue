@@ -82,25 +82,25 @@
           <div class="item">
             <div class="left">
               <span>Discount</span>
-              <span>0%</span>
+              <span>{{ defaultDiscount.percentage }}%</span>
             </div>
             <div class="right">
-              <span>-$0</span>
+              <span> -${{ getDiscountedPrice(category) | withComma }} </span>
             </div>
           </div>
           <div class="item">
             <div class="left">
               <span>Taxes</span>
-              <span>0%</span>
+              <span>{{ defaultTax.percentage }}%</span>
             </div>
             <div class="right">
-              <span>$0</span>
+              <span> -${{ getTaxPrice(category) | withComma }} </span>
             </div>
           </div>
         </div>
         <div class="editable-sub-items-footer">
           <span>Total</span>
-          <span>${{ getOrgPrice() | withComma }}</span>
+          <span>${{ getTotalPrice(category) | withComma }}</span>
         </div>
 
         <proposal-requirements
@@ -198,15 +198,27 @@ export default {
     getServiceCategory(category) {
       return this.serviceCategories.find((item) => item.key === category);
     },
+    getDiscountedPrice(category) {
+      return ((this.pricesByCategory[category] * this.defaultDiscount.percentage) / 100).toFixed(2);
+    },
+    getTaxPrice(category) {
+      return ((Number(this.getDiscountedPrice(category)) * this.defaultTax.percentage) / 100).toFixed(2);
+    },
+    getTotalPrice(category) {
+      return this.getDiscountedPrice(category) - this.getTaxPrice(category);
+    },
   },
   created() {},
   mounted() {
     this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
   },
   computed: {
-    ...mapGetters({
-      pricesByCategory: "vendorProposal/pricesByCategory",
-    }),
+    ...mapGetters("vendorProposal", [
+      "finalPriceOfMainCategory",
+      "pricesByCategory",
+      "originalPriceOfMainCategory",
+      "totalPriceByCategory",
+    ]),
     serviceCategories() {
       return this.$store.state.common.serviceCategories;
     },
@@ -217,7 +229,7 @@ export default {
       return this.$store.state.vendorProposal.proposalServices;
     },
     proposalAttachments() {
-      return this.$store.state.vendorProposal.attachments;
+      return this.$store.state.vendorProposal.attachments || {};
     },
     totalPrice() {
       let s = 0;
@@ -261,6 +273,12 @@ export default {
             services: newServices,
           });
       },
+    },
+    defaultTax() {
+      return this.$store.state.vendorProposal.taxes["total"] || { percentage: 0, price: 0 };
+    },
+    defaultDiscount() {
+      return this.$store.state.vendorProposal.discounts["total"] || { percentage: 0, price: 0 };
     },
   },
   filters: {
