@@ -112,17 +112,19 @@
         style="margin-right: 10px; position: absolute; margin-top: 30px"
       />
       <div v-for="(plannerOption, index) in item.plannerOptions" :key="`planner-${index}`" class="planner-options-item">
-        <div class="font-size-14 font-regular color-gray">Option {{ ("0" + (index + 1)).slice(-2) }}</div>
+        <div class="font-size-14 font-regular color-gray pl-50">Option {{ ("0" + (index + 1)).slice(-2) }}</div>
         <div class="planner-options-item-row" v-if="plannerOption.isEdit">
-          <div>
+          <div class="ml-50">
             <input
               v-model="plannerOption.description"
-              style="width: 500px"
               class="input-value"
               type="text"
               :placeholder="`Type option here`"
               :class="{ isFilled: !!plannerOption.description }"
             />
+          </div>
+          <div>
+            <input v-model="plannerOption.qty" class="input-value" type="text" :placeholder="`Type qty here`" />
           </div>
           <money
             v-model="plannerOption.price"
@@ -145,14 +147,15 @@
           </div>
         </div>
         <div class="planner-options-item-row" v-else>
-          <div>
+          <div class="pl-50">
             {{ plannerOption.description }}
           </div>
-          <div>{{ plannerOption.price }}</div>
-          <div class="font-size-16 font-regular color-gray text-center" style="padding: 12px">
+          <div class="text-center">{{ plannerOption.qty }}</div>
+          <div class="text-right">${{ plannerOption.price | withComma }}</div>
+          <div class="font-size-16 font-regular color-gray text-right">
             $ {{ (plannerOption.price * item.requirementValue) | withComma }}
           </div>
-          <div>
+          <div class="text-right">
             <md-button class="md-simple edit-btn" @click="editAlternative(index)">
               <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />
             </md-button>
@@ -164,7 +167,7 @@
         </div>
       </div>
       <div class="planner-options-item">
-        <div>
+        <div class="ml-50">
           <md-button class="md-simple edit-btn md-red" @click="addAlternative">
             <md-icon>add_circle_outline</md-icon>
             Add option {{ ("0" + (item.plannerOptions.length + 1)).slice(-2) }}
@@ -583,18 +586,29 @@ export default {
     }
   }
   .planner-options-item {
-    border-bottom: solid 2px #dadada;
-    margin: 0 20px 0 50px;
-    padding: 20px 0;
-    &:last-child {
+    // border-bottom: solid 2px #dadada;
+    padding: 20px 0 0;
+    &::after {
+      content: "";
+      border-bottom: solid 1px #dadada;
+      height: 1px;
+      display: block;
+      margin-left: 50px;
+      margin-top: 20px;
+    }
+    &:last-child::after {
       border-bottom: none;
     }
     &-row {
       display: grid;
-      grid-template-columns: 55% 15% 15% 15%;
+      grid-template-columns: 40% 14% 14% 14% 14%;
+      gap: 1%;
       -webkit-box-align: center;
       -ms-flex-align: center;
       align-items: center;
+      input {
+        width: 100%;
+      }
     }
   }
   .total-cont {
