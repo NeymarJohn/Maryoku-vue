@@ -112,44 +112,62 @@
         style="margin-right: 10px; position: absolute; margin-top: 30px"
       />
       <div v-for="(plannerOption, index) in item.plannerOptions" :key="`planner-${index}`" class="planner-options-item">
-        <div>
-          <div class="font-size-14 font-regular color-gray">Option {{ ("0" + (index + 1)).slice(-2) }}</div>
-          <input
-            v-model="plannerOption.description"
-            style="width: 500px"
+        <div class="font-size-14 font-regular color-gray pl-50">Option {{ ("0" + (index + 1)).slice(-2) }}</div>
+        <div class="planner-options-item-row" v-if="plannerOption.isEdit">
+          <div class="ml-50">
+            <input
+              v-model="plannerOption.description"
+              class="input-value"
+              type="text"
+              :placeholder="`Type option here`"
+              :class="{ isFilled: !!plannerOption.description }"
+            />
+          </div>
+          <div>
+            <input v-model="plannerOption.qty" class="input-value" type="text" :placeholder="`Type qty here`" />
+          </div>
+          <money
+            v-model="plannerOption.price"
+            v-bind="{
+              decimal: '.',
+              thousands: ',',
+              prefix: '$ ',
+              suffix: '',
+              precision: 2,
+              masked: false,
+            }"
             class="input-value"
-            type="text"
-            :placeholder="`Type option here`"
-            :class="{ isFilled: !!plannerOption.description }"
           />
+          <div class="font-size-16 font-regular color-gray text-center" style="padding: 12px">
+            $ {{ (plannerOption.price * item.requirementValue) | withComma }}
+          </div>
+          <div class="d-flex align-center">
+            <md-button class="md-simple normal-btn md-black" @click="cancelAlternative(index)"> Cancel </md-button>
+            <md-button class="normal-btn md-red" @click="saveAlternative(index)"> Save </md-button>
+          </div>
         </div>
-        <money
-          v-model="plannerOption.price"
-          v-bind="{
-            decimal: '.',
-            thousands: ',',
-            prefix: '$ ',
-            suffix: '',
-            precision: 2,
-            masked: false,
-          }"
-          class="input-value"
-        />
-        <div class="font-size-16 font-regular color-gray text-center" style="padding: 12px">
-          $ {{ (plannerOption.price * item.requirementValue) | withComma }}
-        </div>
-        <div>
-          <md-button
-            class="md-simple edit-btn"
-            style="margin-bottom: 12px !important"
-            @click="removeAlternative(index)"
-          >
-            <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />
-          </md-button>
+        <div class="planner-options-item-row" v-else>
+          <div class="pl-50">
+            {{ plannerOption.description }}
+          </div>
+          <div class="text-center">{{ plannerOption.qty }}</div>
+          <div class="text-right">${{ plannerOption.price | withComma }}</div>
+          <div class="font-size-16 font-regular color-gray text-right">
+            $ {{ (plannerOption.price * item.requirementValue) | withComma }}
+          </div>
+          <div class="text-right">
+            <md-button class="md-simple edit-btn" @click="editAlternative(index)">
+              <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />
+            </md-button>
+
+            <md-button class="md-simple edit-btn" @click="removeAlternative(index)">
+              <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />
+            </md-button>
+          </div>
         </div>
       </div>
       <div class="planner-options-item">
-        <div>
+        <div class="ml-50">
           <md-button class="md-simple edit-btn md-red" @click="addAlternative">
             <md-icon>add_circle_outline</md-icon>
             Add option {{ ("0" + (item.plannerOptions.length + 1)).slice(-2) }}
@@ -221,17 +239,6 @@
             <md-menu-item @click="isEdit = true">
               <span> <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />Add comment</span>
             </md-menu-item>
-            <md-menu-item @click="setValue('isComplementary', true)" v-if="!item.isComplementary">
-              <span>
-                <img :src="`${$iconURL}common/gift-dark.svg`" class="label-icon mr-10" />
-                Mark as complementary
-              </span>
-            </md-menu-item>
-            <md-menu-item @click="isEdit = true">
-              <span>
-                <img :src="`${$iconURL}common/replace-dark.svg`" class="label-icon mr-10" />Suggest alternatives
-              </span>
-            </md-menu-item>
           </md-menu-content>
         </md-menu>
       </div>
@@ -242,8 +249,6 @@
     <div class="proposal-service-item-wrapper">
       <div class="item-cont">
         {{ item.requirementTitle }}
-        <br />
-        <div v-if="isExpanded"></div>
       </div>
       <div class="qty-cont editor-wrapper text-center">
         <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue }}</template>
@@ -268,9 +273,21 @@
           />
         </template>
       </div>
-      <div class="total-cont editor-wrapper pl-10" :class="{ 'text-right': !isEdit, 'text-left': isEdit }">
-        ${{ subTotal | withComma }}
-      </div>
+      <div class="total-cont editor-wrapper pl-10 text-right" v-if="!isEdit">${{ subTotal | withComma }}</div>
+      <money
+        v-else
+        :value="subTotal"
+        v-bind="{
+          decimal: '.',
+          thousands: ',',
+          prefix: '$ ',
+          suffix: '',
+          precision: 2,
+          masked: false,
+        }"
+        readonly
+        class="input-value mr-10 text-center"
+      />
       <div class="action-cont editor-wrapper">
         <template v-if="isEdit">
           <a class="cancel" @click="cancel()">Cancel</a>
@@ -298,6 +315,14 @@
         </md-menu>
       </div>
     </div>
+    <div class="comment-section">
+      <div v-if="isEdit" class="comment">
+        <textarea v-model="item.requirementComment"></textarea>
+      </div>
+      <div class="font-regular font-size-14" v-else>
+        {{ item.requirementComment }}
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -309,7 +334,10 @@ export default {
     Money,
   },
   props: {
-    item: Object,
+    defaultItem: {
+      type: Object,
+      default: () => {},
+    },
     active: Boolean,
     step: Number,
     index: Number,
@@ -322,10 +350,15 @@ export default {
     return {
       isHover: false,
       isEdit: false,
+      // isEdit: false,
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       isExpanded: false,
       isAddingAlternative: false,
+      item: {},
     };
+  },
+  created() {
+    this.item = Object.assign({}, this.defaultItem);
   },
   computed: {
     subTotal() {
@@ -342,11 +375,6 @@ export default {
       this.$root.$emit("save-proposal-requirement", { index: this.index, item });
       this.$emit("save", { index: this.index, item });
     },
-    addAlternative() {
-      this.item.plannerOptions.push({ description: "", price: this.item.price });
-      this.$root.$emit("save-proposal-requirement", { index: this.index, item });
-      this.$emit("save", { index: this.index, item });
-    },
     setValue(key, value) {
       const item = this.item;
       // item[key] = value;
@@ -354,16 +382,34 @@ export default {
       this.$emit("save", { index: this.index, item });
     },
     cancel() {
+      this.item = Object.assign({}, this.defaultItem);
       this.isEdit = false;
+    },
+    addAlternative() {
+      this.item.plannerOptions.push({ description: "", price: this.item.price, isEdit: true });
     },
     removeAlternative(index) {
       this.item.plannerOptions.splice(index, 1);
       this.$root.$emit("save-proposal-requirement", { index: this.index, item });
       this.$emit("save", { index: this.index, item });
     },
+    editAlternative(index) {
+      this.$set(this.item.plannerOptions[index], "isEdit", true);
+      // this.$root.$emit("save-proposal-requirement", { index: this.index, item });
+      // this.$emit("save", { index: this.index, item });
+    },
+    saveAlternative(index) {
+      this.$set(this.item.plannerOptions[index], "isEdit", false);
+      this.$root.$emit("save-proposal-requirement", { index, item: this.item });
+      this.$emit("save", { index, item: this.item });
+    },
+    cancelAlternative(index) {
+      this.$set(this.item, "plannerOptions", Object.assign([], this.defaultItem.plannerOptions));
+      this.$set(this.item.plannerOptions[index], "isEdit", false);
+      console.log(this.item);
+      // this.item.plannerOptions = Object.assign([], this.defaultItem.plannerOptions);
+    },
   },
-  created() {},
-  mounted() {},
   filters: {
     withComma(amount) {
       return amount ? amount.toLocaleString() : 0;
@@ -540,16 +586,29 @@ export default {
     }
   }
   .planner-options-item {
-    border-bottom: solid 2px #dadada;
-    display: grid;
-    grid-template-columns: 55% 15% 15% 15%;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: flex-end;
-    margin: 0 20px 0 50px;
-    padding: 20px 0;
-    &:last-child {
+    // border-bottom: solid 2px #dadada;
+    padding: 20px 0 0;
+    &::after {
+      content: "";
+      border-bottom: solid 1px #dadada;
+      height: 1px;
+      display: block;
+      margin-left: 50px;
+      margin-top: 20px;
+    }
+    &:last-child::after {
       border-bottom: none;
+    }
+    &-row {
+      display: grid;
+      grid-template-columns: 40% 14% 14% 14% 14%;
+      gap: 1%;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      input {
+        width: 100%;
+      }
     }
   }
   .total-cont {
@@ -561,6 +620,9 @@ export default {
     &.complimentary {
       text-decoration: line-through;
     }
+  }
+  .comment-section {
+    width: 30%;
   }
 }
 .md-menu-content {

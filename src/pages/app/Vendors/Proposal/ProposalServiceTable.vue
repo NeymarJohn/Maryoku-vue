@@ -12,7 +12,7 @@
         :serviceType="tableCategory"
         :key="rIndex"
         :index="rIndex"
-        :item="req"
+        :defaultItem="req"
         :active="true"
         :step="1"
         @save="updateItem"

@@ -18,12 +18,11 @@
               <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
               <div class="requirement-grid">
                 <div
-                  class="d-flex requirement-item"
+                  class="requirement-item"
                   v-for="requirementItem in selectedOptions(requirementsData[requirementCategory])"
                   :key="requirementItem.item"
                 >
                   <div class="checkmark"></div>
-
                   <div class="d-inline-block">{{ requirementItem.item || requirementItem.subCategory }}</div>
                 </div>
               </div>
@@ -36,7 +35,7 @@
             <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
             <div class="requirement-grid">
               <div
-                class="d-flex requirement-item"
+                class="requirement-item"
                 v-for="requirementItem in requirementsData[requirementCategory].filter((item) => item.isSelected)"
                 :key="requirementItem.item"
               >
@@ -80,7 +79,7 @@
                 <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
                 <div class="requirement-grid">
                   <div
-                    class="d-flex requirement-item"
+                    class="requirement-item"
                     v-for="requirementItem in selectedOptions(requirement.requirements[requirementCategory])"
                     :key="requirementItem.item"
                   >
@@ -98,7 +97,7 @@
               <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
               <div class="requirement-grid">
                 <div
-                  class="d-flex requirement-item"
+                  class="requirement-item"
                   v-for="requirementItem in requirement.requirements[requirementCategory].filter(
                     (item) => item.isSelected,
                   )"
@@ -218,8 +217,8 @@ export default {
         margin-top: 20px;
         text-transform: capitalize;
         padding-right: 15px;
-        width: 30%;
-        flex-grow: 1;
+        min-width: 30%;
+        display: inline-block;
       }
     }
     .checkmark {

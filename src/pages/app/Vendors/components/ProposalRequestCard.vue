@@ -9,7 +9,8 @@
       </div>
 
       <div class="color-yellow-dark font-bold d-flex align-start">
-        <img src="/static/icons/vendor/timer-yellow.svg" class="mr-10" style="width: 20px" />6 Days Left
+        <img src="/static/icons/vendor/timer-yellow.svg" class="mr-10" style="width: 20px" />{{ getLeftDays() }} Days
+        Left
       </div>
     </div>
     <div class="mt-20">${{ proposalRequest.componentInstance.allocatedBudget | withComma }}</div>
@@ -43,6 +44,12 @@ export default {
       }
       var win = window.open(`${document.location.protocol}//${link}`, "_blank");
       win.focus();
+    },
+    getLeftDays() {
+      let diffSeconds = (this.proposalRequest.expiredTime - new Date().getTime()) / 1000;
+      const hours = diffSeconds / 3600;
+      const days = Math.round(hours / 24);
+      return days;
     },
   },
 };

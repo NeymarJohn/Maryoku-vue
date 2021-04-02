@@ -2,7 +2,7 @@
   <div class="attachment-tag-list">
     <div class="attachment-tag" v-for="(attachment, index) in attachments" :key="index">
       <img :src="`${$iconURL}common/pin-red.svg`" />
-      {{ attachment.name }}
+      <a class="color-red" :href="attachment.url" target="_blank">{{ attachment.name }}</a>
       <md-button class="md-simple md-white edit-btn" @click="remove(attachment, index)">
         <img :src="`${$iconURL}common/trash-dark.svg`" />
       </md-button>
@@ -34,7 +34,7 @@ export default {
     };
   },
   created() {
-    this.attachments = this.defaultValue || [];
+    this.attachments = Object.assign([], this.defaultValue);
   },
   methods: {
     addNew() {
@@ -57,8 +57,8 @@ export default {
     },
   },
   watch: {
-    attachments(newValue, oldValue) {
-      this.attachments = newValue;
+    defaultValue(newValue, oldValue) {
+      this.attachments = Object.assign([], newValue);
     },
   },
 };

@@ -31,6 +31,7 @@
             :item="item"
             :label="item.name"
             :vendor="vendor"
+            :service="service"
             v-model="item.value"
           />
         </div>
@@ -54,6 +55,7 @@ export default {
     serviceItem: Object,
     vendorCategory: String,
     vendor: Object,
+    service: Object,
   },
   components: {
     VueElementLoading,
