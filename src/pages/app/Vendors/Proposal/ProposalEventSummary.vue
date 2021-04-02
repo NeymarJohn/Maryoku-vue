@@ -119,7 +119,10 @@
           </div>
           <div class="d-flex justify-content-between" v-if="defaultDiscount.percentage">
             <div class="font-size-16">Befor Discount</div>
-            <div class="font-size-16 crosslinedText">${{ Number(totalBeforeDiscount) | withComma }}</div>
+            <div class="font-size-16">
+              ({{ defaultDiscount.percentage }}% off)
+              <span class="crosslinedText"> ${{ Number(totalBeforeDiscount) | withComma }} </span>
+            </div>
           </div>
         </div>
       </div>
