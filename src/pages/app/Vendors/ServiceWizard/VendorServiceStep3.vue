@@ -21,7 +21,7 @@
               <h5><img :src="`${iconUrl}Asset 560.svg`" /> Policy</h5>
             </div>
             <div class="bottom">
-              <p>Set venue rules for your guests</p>
+              <p>Set {{ getCategoryNameByValue(currentService.serviceCategory) }} rules for your guests</p>
             </div>
           </div>
           <div class="card">
@@ -76,7 +76,7 @@
             </div>-->
           </div>
         </div>
-        <div class="3rd-party-vendor-wrapper mb-50" v-if="vendor.vendorCategories[0] == 'venuerental'">
+        <div class="3rd-party-vendor-wrapper mb-50" v-if="currentService.serviceCategory == 'venuerental'">
           <div class="title-cont">
             <div class="top">
               <h5>3rd party vendor</h5>
@@ -116,13 +116,15 @@
                     <img
                       :src="`${iconUrl}Group 5489 (4).svg`"
                       @click="updateNa(n)"
-                      v-if="vendor.notAllowed.filter((nt) => nt.value == n.value).length > 0"
+                      v-if="currentService.notAllowed.filter((nt) => nt.value == n.value).length > 0"
                     />
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else @click="updateNa(n)" />
                     <span @click="updateNa(n)">{{ n.name }}</span>
                     <div
                       style="margin-top: 10px"
-                      v-if="vendor.notAllowed.filter((nt) => nt.value == 'Other').length > 0 && n.value == 'Other'"
+                      v-if="
+                        currentService.notAllowed.filter((nt) => nt.value == 'Other').length > 0 && n.value == 'Other'
+                      "
                     >
                       <input type="text" placeholder="Type vendor category..." />
                     </div>
@@ -149,7 +151,7 @@
               </div>
             </div>
             <div class="main-cont">
-              <textarea v-model="vendor.healthPolicy"></textarea>
+              <textarea v-model="currentService.healthPolicy"></textarea>
             </div>
           </div>
         </div>
@@ -173,26 +175,17 @@ import TimePicker from "@/components/Inputs/TimePicker";
 // import VSignupTimeSelect from '@/components/Inputs/VSignupTimeSelect.vue'
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import { FunctionalCalendar } from "vue-functional-calendar";
-import { VendorPolicy, VendorPricingPolicy } from "@/constants/vendor";
+import { VendorPolicy, VendorPricingPolicy, VendorCategories } from "@/constants/vendor";
 import { capitalize } from "@/utils/string.util";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
 import VendorPolicyItem from "../components/vendor-policy-item";
 import VendorPricingPolicyItem from "../components/vendor-pricing-policy-item";
-const christanHolidaysAPI =
-  "https://www.googleapis.com/calendar/v3/calendars/en.christian%23holiday%40group.v.calendar.google.com/events?key=AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8";
-const jewishHolidaysAPI =
-  "https://www.googleapis.com/calendar/v3/calendars/en.jewish%23holiday%40group.v.calendar.google.com/events?key=AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8";
-const muslimHolidaysAPI =
-  "https://www.googleapis.com/calendar/v3/calendars/en.islamic%23holiday%40group.v.calendar.google.com/events?key=AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8";
-const hinduHolidaysAPI =
-  "https://www.googleapis.com/calendar/v3/calendars/en.islamic%23holiday%40group.v.calendar.google.com/events?key=AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8";
 
 export default {
   name: "vendor-signup-step3",
   props: {
     categories: Array,
     icon: String,
-    vendor: Object,
   },
   components: {
     VendorPricingPolicyItem,
@@ -310,6 +303,9 @@ export default {
     };
   },
   methods: {
+    getCategoryNameByValue(value) {
+      return VendorCategories.filter((c) => c.value == value)[0].name;
+    },
     updateExDonts(religion, holiday) {
       console.log("updateExDonts", holiday);
       holiday.selected = !holiday.selected;
@@ -325,10 +321,10 @@ export default {
         this.markedDates.push(date);
       }
 
-      if (this.vendor.exDonts.find((h) => h.holiday === holiday.holiday)) {
-        this.vendor.exDonts.filter((h) => h.holiday !== holiday.holiday);
+      if (this.currentService.exDonts.find((h) => h.holiday === holiday.holiday)) {
+        this.currentService.exDonts.filter((h) => h.holiday !== holiday.holiday);
       } else {
-        this.vendor.exDonts.push({
+        this.currentService.exDonts.push({
           date: holiday.start,
           holiday: holiday.holiday,
           religion: religion.name,
@@ -336,7 +332,7 @@ export default {
       }
       console.log("updateExDonts.markedDates", date, this.markedDates);
 
-      this.$root.$emit("update-vendor-value", "exDonts", this.vendor.exDonts);
+      this.$root.$emit("update-vendor-value", "exDonts", this.currentService.exDonts);
     },
     updateNa(item) {
       if (this.notAllowed.includes(item)) {
@@ -426,14 +422,6 @@ export default {
       }
       return res;
     },
-    // setPricePolicy(e, type, name, value) {
-    //   alert("xx");
-    //   // console.log('setPricePolicy', value);
-    //   if ((type === "option" || type === "Including") && name) {
-    //     let p = this.vendorPricingPolicies.items.find((it) => it.name === name);
-    //     p.value = value;
-    //   }
-    // },
     setPricePolicy(e, index) {
       console.log(e);
       console.log("setPricePolicy", e);
@@ -458,7 +446,7 @@ export default {
     updateAllExDonts(data) {
       let value = !this.isAllHolidays(data);
 
-      this.vendor.exDonts.filter((h) => h.religion !== data.name);
+      this.currentService.exDonts.filter((h) => h.religion !== data.name);
       data.holidays.map((it) => {
         it.selected = value;
         let day = moment(it.start).date();
@@ -471,28 +459,29 @@ export default {
         }
 
         if (value) {
-          this.vendor.exDonts.push({
+          this.currentService.exDonts.push({
             date: it.start,
             holiday: it.holiday,
             religion: data.name,
           });
         } else {
-          this.vendor.exDonts = this.vendor.exDonts.filter((e) => e.holiday !== it.holiday);
+          this.currentService.exDonts = this.currentService.exDonts.filter((e) => e.holiday !== it.holiday);
         }
       });
       console.log("updateAllExDonts", this.markedDates);
-      this.$root.$emit("update-vendor-value", "exDonts", this.vendor.exDonts);
+      this.$root.$emit("update-vendor-value", "exDonts", this.currentService.exDonts);
     },
     isAllHolidays(data) {
       return data.holidays.every((it) => it.selected);
     },
     init: async function () {
       // set vendorPricingPolicies from initial pricing policies
-      let vendorPricingPolicies = this.pricingPolicies.find((p) => p.category === this.vendor.vendorCategory);
+      let vendorPricingPolicies = this.pricingPolicies.find((p) => p.category === this.currentService.serviceCategory);
 
+      console.log("vendorPricingPolicies", vendorPricingPolicies);
       // replace vendorPricingPolicies with saved vendor
-      if (this.vendor.pricingPolicies && this.vendor.pricingPolicies.length) {
-        this.$set(this.vendorPricingPolicies, "items", this.vendor.pricingPolicies);
+      if (this.currentService.pricingPolicies && this.currentService.pricingPolicies.length) {
+        this.$set(this.vendorPricingPolicies, "items", this.currentService.pricingPolicies);
         this.vendorPricingPolicies.items.map((it, idx) => {
           if (vendorPricingPolicies.items[idx] && vendorPricingPolicies.items[idx].type) {
             this.$set(it, "type", vendorPricingPolicies.items[idx].type);
@@ -508,20 +497,16 @@ export default {
         });
       } else {
         this.vendorPricingPolicies = vendorPricingPolicies;
+        console.log(vendorPricingPolicies);
         this.vendorPricingPolicies.items.map((it) => {
           if (it.type == Boolean) {
             this.$set(it, "value", false);
           }
         });
       }
-      // console.log("vendor.price.policy", this.vendorPricingPolicies);
-
-      // set vendorPolicies from initial policies
-      let vendorPolicies = this.policies.find((p) => p.category === this.vendor.vendorCategory);
-
-      // replace vendorPolices with saved vendor
-      if (this.vendor.policies && this.vendor.policies.length) {
-        this.$set(this.vendorPolicies, "items", this.vendor.policies);
+      let vendorPolicies = this.policies.find((p) => p.category === this.currentService.serviceCategory);
+      if (this.currentService.policies && this.currentService.policies.length) {
+        this.$set(this.vendorPolicies, "items", this.currentService.policies);
         this.vendorPolicies.items.map((it, idx) => {
           this.$set(it, "type", vendorPolicies.items[idx].type);
           if (it.type == Boolean && !it.hasOwnProperty("value")) {
@@ -538,8 +523,8 @@ export default {
       }
 
       // set selectedReligion from saved vendor
-      if (this.vendor.selectedReligion && this.vendor.selectedReligion.length) {
-        this.selectedReligion = this.vendor.selectedReligion;
+      if (this.currentService.selectedReligion && this.currentService.selectedReligion.length) {
+        this.selectedReligion = this.currentService.selectedReligion;
         this.isReligion = true;
         this.exDont = true;
       }
@@ -553,33 +538,33 @@ export default {
         localStorage.setItem("two62-app.holidays", JSON.stringify(this.religions));
       }
       // console.log('holidays', this.religions);
-      if (this.vendor.exDonts && this.vendor.exDonts.length) {
+      if (this.currentService.exDonts && this.currentService.exDonts.length) {
         this.religions.map((r) => {
           r.holidays.map((h) => {
-            h.selected = this.vendor.exDonts.findIndex((e) => e.holiday === h.holiday) !== -1;
+            h.selected = this.currentService.exDonts.findIndex((e) => e.holiday === h.holiday) !== -1;
           });
         });
       }
 
       // set selectedWeekdays from saved vendor
-      if (this.vendor.selectedWeekdays && this.vendor.selectedWeekdays.length) {
-        this.selectedWeekdays = this.vendor.selectedWeekdays;
+      if (this.currentService.selectedWeekdays && this.currentService.selectedWeekdays.length) {
+        this.selectedWeekdays = this.currentService.selectedWeekdays;
       }
 
       // set dontWorkSays from saved vendor
-      if (this.vendor.dontWorkDays) {
-        this.$set(this.date, "selectedDates", this.vendor.dontWorkDays);
-        if (this.vendor.dontWorkDays.length > 0) {
+      if (this.currentService.dontWorkDays) {
+        this.$set(this.date, "selectedDates", this.currentService.dontWorkDays);
+        if (this.currentService.dontWorkDays.length > 0) {
           this.markedDates = [];
-          _.each(this.vendor.dontWorkDays, (sd) => {
+          _.each(this.currentService.dontWorkDays, (sd) => {
             this.markedDates.push(sd.date);
           });
         }
       }
 
       //
-      if (this.vendor.exDonts && this.vendor.exDonts.length) {
-        this.vendor.exDonts.map((h) => {
+      if (this.currentService.exDonts && this.currentService.exDonts.length) {
+        this.currentService.exDonts.map((h) => {
           // console.log("exdonts", moment(h.date).format("YYYY-M-D"));
           this.markedDates.push(moment(h.date).format("YYYY-M-D"));
         });
@@ -656,7 +641,13 @@ export default {
   },
   computed: {
     additionalRules() {
-      return this.$store.state.vendorService.vendor.additionalRules;
+      return this.$store.state.vendorService.service.additionalRules;
+    },
+    vendor() {
+      return this.$store.state.vendorService.vendor;
+    },
+    currentService() {
+      return this.$store.state.vendorService.service;
     },
   },
   filters: {},

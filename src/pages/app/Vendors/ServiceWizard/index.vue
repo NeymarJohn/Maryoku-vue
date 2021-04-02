@@ -1,21 +1,15 @@
 <template>
   <div class="vendor-signup-wrapper">
-    <vendor-basic-info-form v-if="step == 1" :vendor="vendor" />
-    <!-- <vendor-signup-step1
-      :categories="businessCategories"
-      :generalInfos="generalInfos"
-      :companyServices="companyServices"
-      :icon="`${iconUrl}`"
-      :vendor="vendor"
-      v-if="step == 1"
-    /> -->
-    <vendor-signup-step2 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 2" />
-    <vendor-signup-step3 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 3" />
-    <vendor-signup-step4 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 4" />
+    <template v-if="!isLoading">
+      <vendor-service-step1 v-if="step == 1" />
+      <vendor-service-step2 :categories="businessCategories" :icon="`${iconUrl}`" v-if="step == 2" />
+      <vendor-service-step3 :categories="businessCategories" :icon="`${iconUrl}`" v-if="step == 3" />
+      <vendor-service-step4 :categories="businessCategories" :icon="`${iconUrl}`" v-if="step == 4" />
 
-    <vendor-signup-step5 :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 5" />
-    <vendor-signup-final-form :categories="businessCategories" :icon="`${iconUrl}`" :vendor="vendor" v-if="step == 6" />
-    <div v-if="isCompletedWizard" class="final-section">Thank you for your signup!</div>
+      <vendor-service-step5 :categories="businessCategories" :icon="`${iconUrl}`" v-if="step == 5" />
+      <vendor-service-final-form :categories="businessCategories" :icon="`${iconUrl}`" v-if="step == 6" />
+      <div v-if="isCompletedWizard" class="final-section">Thank you for your signup!</div>
+    </template>
   </div>
 </template>
 
@@ -25,28 +19,26 @@ import Vendors from "@/models/Vendors";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 //COMPONENTS
-import VSignupEditableField from "@/components/Inputs/VSignupEditableField.vue";
-import VendorBasicInfoForm from "./VendorBasicInfoForm.vue";
-import VendorSignupStep1 from "./VendorSignupStep1.vue";
-import VendorSignupStep2 from "./VendorSignupStep2.vue";
-import VendorSignupStep3 from "./VendorSignupStep3.vue";
-import VendorSignupStep4 from "./VendorSignupStep4.vue";
-import VendorSignupStep5 from "./VendorSignupStep5.vue";
-import VendorSignupFinalForm from "./VendorSignupFinalForm.vue";
+import VServiceEditableField from "@/components/Inputs/VSignupEditableField.vue";
+import VendorServiceStep1 from "./VendorServiceStep1.vue";
+import VendorServiceStep2 from "./VendorServiceStep2.vue";
+import VendorServiceStep3 from "./VendorServiceStep3.vue";
+import VendorServiceStep4 from "./VendorServiceStep4.vue";
+import VendorServiceStep5 from "./VendorServiceStep5.vue";
+import VendorServiceFinalForm from "./VendorServiceFinalForm.vue";
 
 import { businessCategories, generalInfos, companyServices } from "@/constants/vendor";
 
 export default {
   components: {
     VueElementLoading,
-    VSignupEditableField,
-    VendorBasicInfoForm,
-    VendorSignupStep1,
-    VendorSignupStep2,
-    VendorSignupStep3,
-    VendorSignupStep4,
-    VendorSignupStep5,
-    VendorSignupFinalForm,
+    VServiceEditableField,
+    VendorServiceStep1,
+    VendorServiceStep2,
+    VendorServiceStep3,
+    VendorServiceStep4,
+    VendorServiceStep5,
+    VendorServiceFinalForm,
   },
   data() {
     return {
@@ -54,6 +46,7 @@ export default {
       //   type: Object,
       //   default: {}
       // },
+      isLoading: false,
       isApproved: false,
       isCompletedWizard: false,
       businessCategories: businessCategories,
@@ -104,43 +97,47 @@ export default {
     });
     this.$root.$on("update-vendor-value", (field, value) => {
       console.log("update-vendor-value", field, value);
-      let vendor = JSON.parse(JSON.stringify(this.vendor));
+      let service = JSON.parse(JSON.stringify(this.service));
       if (field == "images") {
-        if (!Object.keys(vendor[field]).includes(`${value.index}`)) {
-          console.log("!update.vendor.image", value);
-          vendor[field].push(value.data);
+        if (!Object.keys(service[field]).includes(`${value.index}`)) {
+          console.log("!update.service.image", value);
+          service[field].push(value.data);
         } else {
-          console.log("update.vendor.image", value);
-          vendor[field][value.index] = value.data;
+          console.log("update.service.image", value);
+          service[field][value.index] = value.data;
         }
       } else if (field == "removeImage") {
-        let images = vendor.images.filter((i) => i != value);
-        this.$set(vendor, "images", images);
-      } else if (field == "vendorCategories") {
-        this.$set(vendor, this.camelize(field), value);
-        this.$set(vendor, "vendorCategory", value[0]);
-        this.$set(vendor, "yesRules", []);
-        this.$set(vendor, "noRules", []);
-        this.$set(vendor, "notAllowed", []);
-        this.$set(vendor, "exDonts", []);
-        this.$set(vendor, "pricingPolicies", []);
-        this.$set(vendor, "policies", []);
-        this.$set(vendor, "yesPolicies", []);
-        this.$set(vendor, "noPolicies", []);
-        this.$set(vendor, "selectedWeekdays", []);
-        this.$set(vendor, "dontWorkDays", []);
-        this.$set(vendor, "dontWorkTime", null);
-        this.$set(vendor, "services", {});
+        let images = service.images.filter((i) => i != value);
+        this.$set(service, "images", images);
+      } else if (field == "serviceCategories") {
+        this.$set(service, this.camelize(field), value);
+        this.$set(service, "serviceCategory", value[0]);
+        this.$set(service, "yesRules", []);
+        this.$set(service, "noRules", []);
+        this.$set(service, "notAllowed", []);
+        this.$set(service, "exDonts", []);
+        this.$set(service, "pricingPolicies", []);
+        this.$set(service, "policies", []);
+        this.$set(service, "yesPolicies", []);
+        this.$set(service, "noPolicies", []);
+        this.$set(service, "selectedWeekdays", []);
+        this.$set(service, "dontWorkDays", []);
+        this.$set(service, "dontWorkTime", null);
+        this.$set(service, "services", {});
       } else if (field.indexOf(".") > -1) {
-        this.$set(vendor[field.split(".")[0]], field.split(".")[1], value);
+        const serviceField = field.split(".")[0];
+        if (!service[serviceField]) this.$set(service, serviceField, {});
+        console.log(service[serviceField]);
+        this.$set(service[serviceField], field.split(".")[1], value);
       } else {
-        this.$set(vendor, this.camelize(field), value);
+        this.$set(service, this.camelize(field), value);
       }
-      this.setVendor(vendor);
+      console.log(service);
+      this.setService(service);
     });
   },
   methods: {
-    ...mapMutations("vendorService", ["setVendor", "setStep", "setEditing"]),
+    ...mapMutations("vendorService", ["setVendor", "setStep", "setEditing", "setService"]),
     camelize(str) {
       let temp = str.replace(/\W+(.)/g, function (match, chr) {
         return chr.toUpperCase();
@@ -153,6 +150,9 @@ export default {
       vendor: "vendorService/getVendor",
       step: "vendorService/getStep",
     }),
+    service() {
+      return this.$store.state.vendorService.service;
+    },
   },
   filters: {},
 };

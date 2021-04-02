@@ -8,25 +8,10 @@ const state = {
     isEditing: false,
     step: 1,
     status: null,
-    vendor: {
-        about: {},
-        capacity: {},
-        images: [],
-        social: {},
-        services: {},
-        yesRules: [],
-        noRules: [],
-        notAllowed: [],
-        exDonts: [],
-        yesPolicies: [],
-        noPolicies: [],
-        selectedWeekdays: [],
-        recommendations: [],
-    },
-    vendor_categories: [],
-    allProperties: [],
-    properties: {},
-    images: {},
+    vendor: {},
+    service: {
+        services: {}
+    }
 };
 
 const getters = {
@@ -109,7 +94,7 @@ const actions = {
     uploadImage: async ({ commit, state, dispatch }, { index, file }) => {
         const fileId = `${new Date().getTime()}_${makeid()}`;
         const isAllImageUploaded = () => {
-            return !state.vendor.images.some(img => img.indexOf("base64") >= 0);
+            return !state.service.images.some(img => img.indexOf("base64") >= 0);
         };
         S3Service.fileUpload(file, fileId, "vendor/cover-images").then(uploadedName => {
             commit("replaceImage", {
@@ -122,7 +107,7 @@ const actions = {
         });
 
         const imageData = await getBase64(file);
-        if (state.vendor.images.length == index) {
+        if (state.service.images.length == index) {
             commit("addImage", imageData);
         } else {
             commit("replaceImage", { index, image: imageData });
@@ -130,8 +115,8 @@ const actions = {
     },
     checkImages({ commit, state, dispatch }) {
         const fileId = `${new Date().getTime()}_${makeid()}`;
-        if (!state.vendor.images) return;
-        state.vendor.images.forEach((imageData, index) => {
+        if (!state.service.images) return;
+        state.service.images.forEach((imageData, index) => {
             if (imageData && imageData.indexOf("base64") >= 0) {
                 const file = S3Service.dataURLtoFile(imageData, fileId);
                 dispatch("uploadImage", { index, file });
@@ -153,25 +138,26 @@ const mutations = {
     setVendor(state, vendor) {
         state.vendor = vendor;
     },
-    RESET(state) {
-        state.status = null;
+    setService(state, service) {
+        state.service = service;
     },
+
     setField(state, { field, value }) {
-        Vue.set(state.vendor, field, value);
+        Vue.set(state.service, field, value);
     },
     addImage(state, image) {
-        if (!state.vendor.images) {
-            Vue.set(state.vendor, "images", []);
+        if (!state.service.images) {
+            Vue.set(state.service, "images", []);
         }
-        state.vendor.images.push(image);
+        state.service.images.push(image);
     },
     removeImage(state, index) {
-        state.vendor.images.splice(index, 1);
+        state.service.images.splice(index, 1);
     },
     replaceImage(state, { index, image }) {
-        const oldImages = [...state.vendor.images];
+        const oldImages = [...state.service.images];
         oldImages[index] = image;
-        Vue.set(state.vendor, "images", oldImages);
+        Vue.set(state.service, "images", oldImages);
     },
 };
 

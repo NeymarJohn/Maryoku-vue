@@ -16,23 +16,20 @@
         <div class="card">
           <label>Business Category</label>
           <category-selector
-            :value="item || ''"
-            :categories="vendor.vendorCategories"
+            :value="selectedCategoryName || ''"
+            :categories="serviceCategories"
             column="2"
             trackBy="name"
             class="my-10"
             @change="updateCategory"
           ></category-selector>
-          <div class="upload-wrapper">
+          <div class="upload-wrapper mt-30">
             <div class="title-cont">
-              <div class="left">
-                <h5><img :src="`${iconUrl}art (2).svg`" class="page-icon" /> Upload your best images</h5>
-              </div>
-              <div class="right">
-                <p>(15 photos top, under 5MB)</p>
-              </div>
+              <span><img :src="`${iconUrl}art (2).svg`" class="page-icon" /> Upload your best images</span>
+              <span>(15 photos top, under 5MB)</span>
             </div>
             <vendor-photos-carousel
+              class="service-photos"
               :images="vendor.images"
               @addImage="addVendorImage"
               @setPhoto="updateVendorImage"
@@ -51,6 +48,7 @@ import VSignupEditableField from "@/components/Inputs/VSignupEditableField.vue";
 import VSignupCategorySelector from "@/components/Inputs/VSignupCategorySelector.vue";
 import CategorySelector from "@/components/Inputs/CategorySelector";
 import VendorPhotosCarousel from "../components/VendorPhotosCarousel.vue";
+import { VendorCategories } from "@/constants/vendor";
 
 export default {
   name: "vendor-basic-info-form",
@@ -60,9 +58,6 @@ export default {
     VSignupCategorySelector,
     CategorySelector,
     VendorPhotosCarousel,
-  },
-  props: {
-    vendor: Object,
   },
   data() {
     return {
@@ -76,14 +71,45 @@ export default {
       // this.$root.$emit("update-vendor-value", field, value);
       this.$store.commit("vendorService/setField", { field, value });
     },
-    updateCategory(index, data) {
-      // console.log('updateCategory', index, data);
-      this.selectedValue[index] = data;
-      this.selectedValue = [...this.selectedValue];
+    updateCategory(category) {
+      console.log(category);
+      const categoryData = VendorCategories.find((item) => item.name == category);
+      this.$store.commit("vendorService/setField", { field: "serviceCategory", value: categoryData.value });
+    },
+    addVendorImage(file) {
+      this.$store.dispatch("vendorService/uploadImage", { index: this.vendor.images.length, file });
+    },
+    removeVendorImage(index) {
+      this.$store.commit("vendorService/removeImage", index);
+    },
+    updateVendorImage({ index, photo }) {
+      const fileId = `${new Date().getTime()}_${makeid()}`;
+      S3Service.fileUpload(photo, fileId, "vendor/cover-images").then((uploadedName) => {
+        console.log("createImage", uploadedName);
+        this.$root.$emit("update-vendor-value", "images", {
+          index,
+          data: `https://maryoku.s3.amazonaws.com/vendor/cover-images/${uploadedName}`,
+        });
+      });
     },
   },
   watch: {
     vendor(newVal) {},
+  },
+  computed: {
+    serviceCategories() {
+      return VendorCategories;
+    },
+    vendor() {
+      return this.$store.state.vendorService.vendor;
+    },
+    service() {
+      return this.$store.state.vendorService.service;
+    },
+    selectedCategoryName() {
+      if (!this.service.serviceCategory) return "";
+      return VendorCategories.find((item) => item.value === this.service.serviceCategory).name;
+    },
   },
 };
 </script>
@@ -160,6 +186,9 @@ export default {
         }
       }
     }
+  }
+  .service-photos {
+    margin: 10px -60px;
   }
 }
 </style>

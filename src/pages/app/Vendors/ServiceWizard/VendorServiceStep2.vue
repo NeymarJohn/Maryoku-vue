@@ -13,8 +13,8 @@
       <div class="right-side">
         <div class="description">
           <h5>
-            <img :src="getCategoryIconByValue(vendor.vendorCategories[0])" width="40" />
-            {{ getCategoryNameByValue(vendor.vendorCategories[0]) }} Amenities
+            <img :src="getCategoryIconByValue(currentService.serviceCategory)" width="40" />
+            {{ getCategoryNameByValue(currentService.serviceCategory) }} Amenities
           </h5>
           <p>
             Mark all the services you can support and will be included in your proposal. If needed please add a
@@ -22,10 +22,12 @@
           </p>
         </div>
         <vendor-service-item
-          v-for="(c, cIndex) in categories.find((category) => category.name == vendor.vendorCategory).categories"
+          v-for="(c, cIndex) in categories.find((category) => category.name == currentService.serviceCategory)
+            .categories"
           :key="cIndex"
           :serviceItem="c"
           :vendor="vendor"
+          :service="currentService"
         />
       </div>
     </div>
@@ -47,7 +49,6 @@ export default {
   props: {
     categories: Array,
     icon: String,
-    vendor: Object,
   },
   components: {
     VueElementLoading,
@@ -72,7 +73,14 @@ export default {
       return this.vendorCategories.filter((c) => c.value == value)[0].icon;
     },
   },
-  computed: {},
+  computed: {
+    vendor() {
+      return this.$store.state.vendorService.vendor;
+    },
+    currentService() {
+      return this.$store.state.vendorService.service;
+    },
+  },
   filters: {},
   watch: {},
 };

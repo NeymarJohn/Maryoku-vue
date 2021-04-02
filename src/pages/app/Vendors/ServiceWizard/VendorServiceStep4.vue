@@ -9,7 +9,7 @@
       </div>
       <div class="right-side">
         <div class="card">
-          <div class="tabs">
+          <!-- <div class="tabs">
             <div
               class="tab"
               :class="{ active: t == activeTab }"
@@ -19,12 +19,12 @@
             >
               {{ t }}
             </div>
-          </div>
-          <div class="banner">
+          </div> -->
+          <!-- <div class="banner">
             <img :src="vendor.images[0]" v-if="vendor.hasOwnProperty('images') && vendor.images.length > 0" />
-          </div>
+          </div> -->
           <div class="about-cont" id="About">
-            <div class="block">
+            <!-- <div class="block">
               <span class="capacity"> <img :src="`${iconUrl}Asset 545.svg`" />Capacity </span>
               <span class="number">
                 {{ vendor.capacity.low }}
@@ -35,11 +35,11 @@
             <div class="block">
               <div class="title lg"><img :src="`${iconUrl}Asset 563.svg`" /> ABOUT</div>
               <div class="desc">{{ vendor.about.company }}</div>
-            </div>
+            </div> -->
             <div class="block">
               <div class="title">
-                <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategories[0])}`" />
-                About Our {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
+                <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(currentService.serviceCategory)}`" />
+                About Our {{ getCategoryNameByValue(currentService.serviceCategory) }}
               </div>
               <div class="desc">{{ vendor.about.category }}</div>
             </div>
@@ -61,7 +61,7 @@
                 </div>
               </div>
             </div>
-            <div class="social" v-if="isSocial()">
+            <!-- <div class="social" v-if="isSocial()">
               Website & social
               <div class="items">
                 <div
@@ -76,7 +76,7 @@
                   </a>
                 </div>
               </div>
-            </div>
+            </div> -->
             <div class="attachments">
               <div class="mb-30">Attachments</div>
               <attachment-tag-list
@@ -85,13 +85,13 @@
                 @remove="removeAttachment"
               ></attachment-tag-list>
             </div>
-            <div class="personal-message mt-40" v-if="vendor.personalMessage">
+            <!-- <div class="personal-message mt-40" v-if="vendor.personalMessage">
               <div class="font-bold mb-20">
                 <img :src="`${$iconURL}common/message-dark.svg`" />
                 Personal message to your clients
               </div>
               <div class="content">{{ vendor.personalMessage }}</div>
-            </div>
+            </div> -->
           </div>
           <div class="fee-cont" id="Pricing">
             <div class="title">
@@ -101,14 +101,13 @@
               <div class="cheader">
                 <div class="first-column">
                   <div>
-                    <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategories[0])}`" />
-                    {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
+                    <img
+                      :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(currentService.serviceCategory)}`"
+                    />
+                    {{ getCategoryNameByValue(currentService.serviceCategory) }}
                   </div>
-                  <!-- <span>QTY</span> -->
                 </div>
-                <div class="second-column">
-                  <!-- <span>QTY</span> -->
-                </div>
+                <div class="second-column"></div>
               </div>
               <div class="citems">
                 <vendor-starting-fee-item v-for="(fv, fvIndex) in getStartingFeeItems()" :key="fvIndex" :item="fv" />
@@ -288,7 +287,6 @@ export default {
   props: {
     categories: Array,
     icon: String,
-    vendor: Object,
   },
   components: {
     VueElementLoading,
@@ -508,7 +506,7 @@ export default {
     },
     getStartingFeeItems() {
       let startingFeeItems = [];
-      _.each(this.vendor.services, (item) => {
+      _.each(this.currentService.services, (item) => {
         if (item.checked && item.hasOwnProperty("included") && item.included) {
           startingFeeItems.push(item);
         }
@@ -516,7 +514,7 @@ export default {
       return startingFeeItems;
     },
     prev() {
-      const ww = this.vendor.images.length * 320;
+      const ww = this.currentService.images.length * 320;
       const sw = this.$refs.imagesCont.clientWidth;
       if (ww / sw > 2) {
         this.imageSlidePos += 320 * 4;
@@ -527,7 +525,7 @@ export default {
       }
     },
     next() {
-      const ww = this.vendor.images.length * 320;
+      const ww = this.currentService.images.length * 320;
       const sw = this.$refs.imagesCont.clientWidth;
       if (ww / sw > 2) {
         this.imageSlidePos -= 320 * 4;
@@ -574,7 +572,7 @@ export default {
       return selectedDates;
     },
     dontWorkTime() {
-      return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.amPack.start} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.amPack.end}`;
+      return `${this.currentService.dontWorkTime.startTime.hh}:${this.currentService.dontWorkTime.startTime.mm}:${this.currentService.dontWorkTime.amPack.start} ~ ${this.currentService.dontWorkTime.endTime.hh}:${this.currentService.dontWorkTime.endTime.mm}:${this.currentService.dontWorkTime.amPack.end}`;
     },
 
     view() {
@@ -584,9 +582,9 @@ export default {
     },
     changeServiceItem(item) {
       console.log("changeServiceItem", item);
-      _.each(this.vendor.services, (s) => {
+      _.each(this.currentService.services, (s) => {
         if (s.label === item.label) {
-          this.vendor.services[s] = item;
+          this.currentService.services[s] = item;
         }
       });
 
@@ -598,18 +596,24 @@ export default {
       return this.$store.state.vendorService.vendor.additionalRules;
     },
     validPricingPolicy() {
-      if (this.vendor.pricingPolicies)
-        return this.vendor.pricingPolicies.filter(
+      if (this.currentService.pricingPolicies)
+        return this.currentService.pricingPolicies.filter(
           (item) => item.value || item.desc || (item.type === "Including" && item.cost),
         );
       return null;
     },
     validPolicy() {
-      if (this.vendor.policies)
-        return this.vendor.policies.filter(
+      if (this.currentService.policies)
+        return this.currentService.policies.filter(
           (item) => item.hasOwnProperty("value") || (item.type === "Including" && item.cost),
         );
       return null;
+    },
+    vendor() {
+      return this.$store.state.vendorService.vendor;
+    },
+    currentService() {
+      return this.$store.state.vendorService.service;
     },
   },
   filters: {},
