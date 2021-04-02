@@ -109,8 +109,18 @@
         />
         <proposal-pricing-item :iconUrl="iconUrl" :itemType="`bundle`" v-if="bundleDiscount.isApplied" />
         <div class="total-proposal-price">
-          <div class="font-size-22 font-bold">Total</div>
-          <div class="font-size-20 font-bold">${{ totalPriceOfProposal | withComma }}</div>
+          <div class="d-flex justify-content-between">
+            <div class="font-size-22 font-bold">Total</div>
+            <div class="font-size-20 font-bold">${{ Number(totalPriceOfProposal) | withComma }}</div>
+          </div>
+          <div class="d-flex justify-content-between" v-if="bundleDiscount && bundleDiscount.isApplied">
+            <div class="font-size-16">Befor Bundle Offer</div>
+            <div class="font-size-16 crosslinedText">${{ Number(totalBeforeBundle) | withComma }}</div>
+          </div>
+          <div class="d-flex justify-content-between" v-if="defaultDiscount.percentage">
+            <div class="font-size-16">Befor Discount</div>
+            <div class="font-size-16 crosslinedText">${{ Number(totalBeforeDiscount) | withComma }}</div>
+          </div>
         </div>
       </div>
       <div class="policy-cont">
@@ -505,7 +515,7 @@ export default {
     });
   },
   computed: {
-    ...mapGetters("vendorProposal", ["totalPriceOfProposal"]),
+    ...mapGetters("vendorProposal", ["totalPriceOfProposal", "totalBeforeDiscount", "totalBeforeBundle"]),
     personalMessage: {
       get() {
         return this.$store.state.vendorProposal.personalMessage;
@@ -572,6 +582,12 @@ export default {
     },
     bundleDiscount() {
       return this.$store.state.vendorProposal.bundleDiscount;
+    },
+    defaultTax() {
+      return this.$store.state.vendorProposal.taxes["total"] || { percentage: 0, price: 0 };
+    },
+    defaultDiscount() {
+      return this.$store.state.vendorProposal.discounts["total"] || { percentage: 0, price: 0 };
     },
   },
   watch: {},
@@ -1116,8 +1132,6 @@ export default {
     display: none !important;
   }
   .total-proposal-price {
-    display: flex;
-    justify-content: space-between;
     background-color: #404040;
     color: #ffffff;
     padding: 46px 50px 48px 60px;

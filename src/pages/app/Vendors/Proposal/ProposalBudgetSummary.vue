@@ -228,20 +228,20 @@
       <div class="total-cont">
         <div class="price-row">
           <span class="title">Total</span>
-          <strong>${{ totalPrice | withComma }}</strong>
+          <strong>${{ Number(totalPrice) | withComma }}</strong>
         </div>
         <div v-if="bundleDiscount.isApplied" class="price-row">
           <span>Before bundle discount</span>
           <div>
             <span>{{ `(${bundleDiscount.percentage}% off)` }}</span>
-            <span class="crosslinedText">${{ totalPriceBeforeBundle | withComma }}</span>
+            <span class="crosslinedText">${{ Number(totalBeforeBundle) | withComma }}</span>
           </div>
         </div>
         <div v-if="defaultDiscount.percentage" class="price-row">
           <span>Before discount</span>
           <div>
             <span>{{ `(${defaultDiscount.percentage}% off)` }}</span>
-            <span class="crosslinedText">${{ totalPriceBeforeDiscount | withComma }}</span>
+            <span class="crosslinedText">${{ Number(totalBeforeDiscount) | withComma }}</span>
           </div>
         </div>
       </div>
@@ -439,6 +439,9 @@ export default {
       "pricesByCategory",
       "originalPriceOfMainCategory",
       "totalPriceByCategory",
+      "totalPriceOfProposal",
+      "totalBeforeDiscount",
+      "totalBeforeBundle",
     ]),
     proposalRequest() {
       return this.$store.state.vendorProposal.proposalRequest;

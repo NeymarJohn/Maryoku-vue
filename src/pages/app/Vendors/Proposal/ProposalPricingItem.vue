@@ -26,10 +26,10 @@
           <div class="price-cont" v-if="!isExpanded">
             <template v-if="itemType == 'price'">
               <span class="org-price">${{ getTotalPrice(category) | withComma }}</span>
-              <div class="off-cont" v-if="bundleDiscount && bundleDiscount.services.includes(category)">
+              <!-- <div class="off-cont" v-if="bundleDiscount && bundleDiscount.services.includes(category)">
                 ({{ bundleDiscount.percentage }}% off)
                 <span>${{ getDiscountedPrice(category) | withComma }}</span>
-              </div>
+              </div> -->
               <div class="off-cont" v-if="defaultDiscount.percentage > 0">
                 ({{ defaultDiscount.percentage }}% off)
                 <span>${{ pricesByCategory[category] | withComma }}</span>
@@ -49,6 +49,10 @@
               <template v-else>
                 <span class="org-price">${{ getTotalPrice(category) | withComma }}</span>
               </template>
+            </template>
+            <template v-if="itemType == 'bundle'">
+              <!-- <span class="org-price">${{ totalPrice | withComma }}</span> -->
+              <span class="org-price"> -${{ bundleDiscount.price | withComma }} </span>
             </template>
           </div>
           <img
