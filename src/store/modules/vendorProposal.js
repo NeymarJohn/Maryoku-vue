@@ -300,6 +300,7 @@ const actions = {
       const proposal = new Proposal({
         id: state.id,
         personalMessage: state.personalMessage,
+        additionalServices: state.additionalServices,
         inspirationalPhotos: state.inspirationalPhotos,
         proposalRequestId: state.proposalRequest.id,
         eventVision: state.eventVision,

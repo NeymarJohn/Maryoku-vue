@@ -139,7 +139,7 @@
             class="input-value"
           />
           <div class="font-size-16 font-regular color-gray text-center" style="padding: 12px">
-            $ {{ (plannerOption.price * item.requirementValue) | withComma }}
+            $ {{ (plannerOption.price * plannerOption.qty) | withComma }}
           </div>
           <div class="d-flex align-center">
             <md-button class="md-simple normal-btn md-black" @click="cancelAlternative(index)"> Cancel </md-button>
@@ -153,7 +153,7 @@
           <div class="text-center">{{ plannerOption.qty }}</div>
           <div class="text-right">${{ plannerOption.price | withComma }}</div>
           <div class="font-size-16 font-regular color-gray text-right">
-            $ {{ (plannerOption.price * item.requirementValue) | withComma }}
+            $ {{ (plannerOption.price * plannerOption.qty) | withComma }}
           </div>
           <div class="text-right">
             <md-button class="md-simple edit-btn" @click="editAlternative(index)">

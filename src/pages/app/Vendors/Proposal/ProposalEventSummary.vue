@@ -234,7 +234,7 @@
             </div> -->
           </div>
           <div class="cancellation pricing-policy-cont" id="Rules">
-            <h5 class="subtitle">OUR PRICING POLICY</h5>
+            <!-- <h5 class="subtitle">OUR PRICING POLICY</h5>
             <div class="rules">
               <div class="rule" v-for="(policy, yIndex) in validPricingPolicy" :key="yIndex">
                 <div class="item">
@@ -268,7 +268,7 @@
                   </span>
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <div class="signature-wrapper">
               <div class="half-side">

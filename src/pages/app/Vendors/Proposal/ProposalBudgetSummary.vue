@@ -24,16 +24,6 @@
     </template>
     <template v-if="expanded">
       <div class="summary-cont">
-        <!-- <h3>
-          You're the {{ newProposalRequest.bidderRank | numeral("Oo") }}
-          <span class="text-transform-lowercase">{{ vendor.eventCategory.title }}</span> bidder
-        </h3>
-        <p v-if="newProposalRequest.bidderRank > 1">
-          Proposals range:
-          <strong>
-            ${{ newProposalRequest.bidRange.low | withComma }} - ${{ newProposalRequest.bidRange.high | withComma }}
-          </strong>
-        </p> -->
         <div
           class="bundle-discount mt-20"
           @click="isBundleDiscount = !isBundleDiscount"
