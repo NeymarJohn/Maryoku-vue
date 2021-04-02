@@ -1,22 +1,19 @@
 <template>
   <div class="vendor-starting-fee-item-wrapper">
     <div class="collapsed" @click="expand()">
-      <div class="d-flex justify-content-between w-100">
-        <div>
-          <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
-          <span class="value label">{{ item.label }}</span>
-        </div>
-        <div class="qty text-transform-capitalize">
-          <span v-if="this.item.value.constructor.name !== 'Array'">{{ getQty() }}</span>
-          <img v-if="item.desc" :src="`${$iconURL}NewSubmitPorposal/Group 4770 (2).svg`" />
-          <img v-else :src="`${$iconURL}Vendor Signup/Asset 528.svg`" />
-        </div>
+      <div class="with-check">
+        <img :src="`${iconUrl}Group 5479 (2).svg`" />
+        <span class="value label">{{ item.label }}</span>
       </div>
-      <div class="text-transform-capitalize pl-40" v-if="this.item.value.constructor.name == 'Array'">
-        {{ getQty() }}
+      <div class="with-qty">
+        <div class="qty text-transform-capitalize" v-html="getQty()"></div>
+        <img
+          v-if="item.desc"
+          :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"
+        />
+        <img v-else :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 528.svg`" />
       </div>
     </div>
-
     <div class="expanded" v-if="expanded">{{ item.desc }}</div>
   </div>
 </template>
@@ -33,6 +30,7 @@ export default {
   data() {
     return {
       expanded: false,
+      iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
   },
   created() {},
@@ -46,7 +44,7 @@ export default {
     getQty() {
       if (this.item.value) {
         if (this.item.value.constructor.name == "Array") {
-          return this.item.value.join(", ");
+          return this.item.value.join("<br/>");
         } else if (this.item.value.constructor.name == "String") {
           return this.item.value;
         } else {
@@ -72,6 +70,14 @@ export default {
   .collapsed {
     width: 100%;
     padding: 2rem 0;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    align-items: flex-start;
+
+    .with-check {
+      display: flex;
+      align-items: center;
+    }
     .with-qty {
       text-align: right;
       span {

@@ -109,6 +109,26 @@
               </li>
             </ul>
           </div>
+          <div class="social-section" v-if="isSocial()">
+            Website & social
+            <div class="items">
+              <div
+                class="item"
+                v-for="(s, sIndex) in socialMediaBlocks"
+                :key="sIndex"
+                :class="{ 'mr-20': vendorProposal.vendor.social[s.name] }"
+              >
+                <a
+                  v-if="vendorProposal.vendor.social[s.name]"
+                  :href="vendorProposal.vendor.social[s.name]"
+                  target="_blank"
+                >
+                  <img :src="`${$iconURL}Vendor Signup/${s.icon}`" class="page-icon" />
+                  {{ vendorProposal.vendor.social[s.name] }}
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -421,6 +441,12 @@
               </div>
             </div>
           </div>
+          <div class="rules">
+            <h5 class="font-bold font-size-20">Additional Rules</h5>
+            <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
+              <div class="item">Event must be {{ policy }}</div>
+            </div>
+          </div>
           <div class="side-label">
             <div class="label-value">Our cancellation approach</div>
           </div>
@@ -454,8 +480,7 @@
     <div class="book-proposal-form">
       <div class="form-title">
         Would You Like To Book
-        <a href class="font-bold-extra">
-          {{ vendorProposal.vendor.companyName }} </a
+        <a href class="font-bold-extra"> {{ vendorProposal.vendor.companyName }}</a
         >?
       </div>
       <div class="agree-checkbox" v-if="this.vendorProposal.suggestedTime">
@@ -503,6 +528,7 @@
 import ChartComponent from "@/components/Cards/ChartComponent";
 import CancellationPolicy from "@/components/CancellationPolicy";
 import { ChartCard } from "@/components";
+import _ from "underscore";
 
 // import auth from '@/auth';
 import moment from "moment";
@@ -511,7 +537,6 @@ import CalendarEvent from "@/models/CalendarEvent";
 import CalendarEventStatistics from "@/models/CalendarEventStatistics";
 import ProposalRequest from "@/models/ProposalRequest";
 import Vendors from "@/models/Vendors";
-import _ from "underscore";
 
 import carousel from "vue-owl-carousel";
 
@@ -533,6 +558,7 @@ import CommentEditorPanel from "../components/CommentEditorPanel";
 import Proposal from "@/models/Proposal";
 import ExtraServiceItem from "./ExtraServiceItem";
 import IncludedServiceItem from "./IncludedServiceItem.vue";
+import { socialMediaBlocks } from "@/constants/vendor";
 export default {
   components: {
     Tabs,
@@ -580,6 +606,7 @@ export default {
       extraServices: [],
       showAboutUs: false,
       addedServices: [],
+      socialMediaBlocks,
     };
   },
   created() {
@@ -675,6 +702,14 @@ export default {
     exportToPdf() {
       this.$refs.html2Pdf.generatePdf();
     },
+    isSocial() {
+      let isBlank = true;
+      _.each(this.vendorProposal.vendor.social, (s) => {
+        isBlank &= s === null;
+      });
+
+      return !isBlank;
+    },
   },
   computed: {
     ...mapState("event", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode"]),
@@ -743,6 +778,9 @@ export default {
           (item) => item.hasOwnProperty("value") || (item.type === "Including" && item.cost),
         );
       return null;
+    },
+    additionalRules() {
+      return this.vendorProposal.vendor.additionalRules;
     },
   },
   filters: {
@@ -918,7 +956,21 @@ export default {
           padding: 2em 2.5em;
         }
       }
-
+      .social-section {
+        .items {
+          display: flex;
+          align-content: center;
+          .item {
+            a {
+              color: black;
+            }
+            img {
+              width: 20px !important;
+              height: 20px;
+            }
+          }
+        }
+      }
       .pricing-section {
         margin-top: 4em;
 
@@ -1391,6 +1443,10 @@ export default {
           background: #fff;
           box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
           padding: 2em 2.5em;
+          .rules {
+            width: 80%;
+            padding-right: 20%;
+          }
         }
       }
 

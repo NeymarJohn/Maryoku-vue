@@ -4111,7 +4111,7 @@ export const VendorPricingPolicy = [
         hasComment: true,
       },
       {
-        name: "Cost Late Night Fee",
+        name: "Cost Late Night Fares",
         type: Number,
         hasUnit: true,
         units: ["Per person", "All together"],
@@ -4151,38 +4151,16 @@ export const VendorPricingPolicy = [
         name: "Pickup",
         type: Number,
         hasComment: true,
-        isExtraService: true,
-        extraService: {
-          label: "Pickup"
-        }
-
       },
       {
         name: "Cleanup",
         type: Number,
         hasComment: true,
-        isExtraService: true,
-        extraService: {
-          label: "Cleanup"
-        }
       },
       {
-        name: "Cost Late Night Fee",
+        name: "Cost Late Night Fares",
         type: Number,
         hasComment: true,
-        isExtraService: true,
-        extraService: {
-          label: "Late Night Fee"
-        }
-      },
-      {
-        name: "Breakdown",
-        type: Number,
-        hasComment: true,
-        isExtraService: true,
-        extraService: {
-          label: "Breakdown"
-        }
       },
       {
         name: "Discount for large quantities",
@@ -4798,3 +4776,45 @@ export const cancellationPolicyData = [
     cancellationFee: "Down payment will not be refunded",
   },
 ];
+export const socialMediaBlocks = [
+  {
+    name: "website",
+    icon: "Asset 539.svg",
+  },
+  {
+    name: "facebook",
+    icon: "Asset 540.svg",
+  },
+  {
+    name: "instagram",
+    icon: "Group 4569 (2).svg",
+  },
+  {
+    name: "youtube",
+    icon: "socialmedia/Youtube.svg",
+  },
+  {
+    name: "linkedin",
+    icon: "socialmedia/Linkdin.svg",
+  },
+  {
+    name: "google",
+    icon: "socialmedia/GooglePlus.svg",
+  },
+  {
+    name: "pinterest",
+    icon: "socialmedia/Pinterest.svg",
+  },
+  {
+    name: "foursquare",
+    icon: "socialmedia/foursquare.svg",
+  },
+  {
+    name: "reddit",
+    icon: "socialmedia/Twitter.svg",
+  },
+  {
+    name: "tiktok",
+    icon: "socialmedia/Tiktok.svg",
+  },
+]

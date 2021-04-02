@@ -204,7 +204,6 @@ export default {
     label: String,
     item: Object,
     vendor: Object,
-    service: Object,
   },
   components: {
     CategorySelector,
@@ -236,20 +235,7 @@ export default {
   },
   created() {},
   mounted() {
-    if (this.service) {
-      let item = this.service.services[this.camelize(this.label)];
-      console.log("service.check.box", this.item, item);
-      if (item) {
-        console.log("service.checkbox", item.label, item);
-        this.included = item.hasOwnProperty("included") ? item.included : this.item.included;
-        this.checked = item.hasOwnProperty("checked") ? item.checked : this.item.checked;
-        this.currentItem.included = this.included;
-        this.currentItem.checked = this.checked;
-        this.currentItem.value = item.hasOwnProperty("value") ? item.value : this.item.value;
-        this.currentItem.desc = item.hasOwnProperty("desc") ? item.desc : this.item.desc;
-        this.currentItem.dry = item.hasOwnProperty("dry") ? item.dry : this.item.dry;
-      }
-    } else if (this.vendor) {
+    if (this.vendor) {
       let item = this.vendor.services[this.camelize(this.label)];
       console.log("vendor.check.box", this.item, item);
       if (item) {

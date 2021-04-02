@@ -1,33 +1,21 @@
 <template>
   <div class="my-service white-card">
     <div class="services-header">
-      <div class="service-tab-item" :class="{ active: selectedIndex === 0 }" @click="selectService(0)">
+      <div class="service-tab-item active">
         <img
           :src="`${$iconURL}Budget Elements/${getServiceCategory(vendorData.vendorCategories[0]).icon}`"
           class="page-icon mr-10"
         />
         {{ getServiceCategory(vendorData.vendorCategories[0]).title }}
       </div>
-      <div
-        class="service-tab-item"
-        v-for="(service, index) in vendorData.secondaryServices"
-        :class="{ active: selectedIndex === index + 1 }"
-        @click="selectService(index + 1)"
-      >
-        <img
-          :src="`${$iconURL}Budget Elements/${getServiceCategory(service.vendorCategory).icon}`"
-          class="page-icon mr-10"
-        />
-        {{ getServiceCategory(service.vendorCategory).title }}
-      </div>
       <div class="service-tab-item font-size-16">
-        <md-button class="maryoku-btn md-simple md-vendor" @click="startAddNewService">
+        <md-button class="maryoku-btn md-simple md-vendor">
           <md-icon class="color-purple font-size-30 mr-5">add</md-icon>
           Sign new service</md-button
         >
       </div>
     </div>
-    <service-content :serviceCategory="getSelectedServiceCategory()"></service-content>
+    <service-content :serviceCategory="getServiceCategory(vendorData.vendorCategories[0])"></service-content>
   </div>
 </template>
 <script>
@@ -49,7 +37,6 @@ export default {
       // auth: auth,
       userInfo: { role: "guest" },
       isLoading: false,
-      selectedIndex: 0,
     };
   },
 
@@ -62,19 +49,6 @@ export default {
     },
     getServiceCategory(category) {
       return this.serviceCategories.find((item) => item.key === category) || {};
-    },
-    startAddNewService() {
-      return this.$router.push(`/vendor/${this.vendorData.id}/service/add`);
-    },
-    selectService(index) {
-      this.selectedIndex = index;
-    },
-    getSelectedServiceCategory(index) {
-      if (this.selectedIndex === 0) {
-        return this.getServiceCategory(this.vendorData.vendorCategories[0]);
-      } else {
-        return this.getServiceCategory(this.vendorData.secondaryServices[this.selectedIndex - 1].vendorCategory);
-      }
     },
   },
   computed: {

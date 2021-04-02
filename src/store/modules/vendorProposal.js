@@ -6,7 +6,6 @@ import Proposal from "@/models/Proposal";
 import { reject, resolve } from "promise-polyfill";
 import EventTimelineDate from "@/models/EventTimelineDate";
 import CalendarEvent from "@/models/CalendarEvent";
-import authService from "@/services/auth.service";
 
 const state = {
   vendor: null,
@@ -43,7 +42,6 @@ const state = {
   timelineDates: [],
   personalMessage: "",
   suggestedNewSeatings: [],
-  tenantId: authService.resolveTenantId()
 };
 const getters = {
   totalPriceByCategory(state, getters) {
@@ -268,7 +266,6 @@ const actions = {
         pricesByCategory: getters.pricesByCategory,
         bundleDiscount: state.bundleDiscount,
         status,
-        tenantId: state.tenantId
       });
       proposal
         .save()

@@ -45,6 +45,7 @@
             v-for="(proposal, index) in proposals.slice(0, 3)"
             :key="index"
             :proposal="proposal"
+            :component="selectedBlock"
             @goDetail="goDetailPage"
             :probability="getProbability(index)"
           ></proposal-card>
