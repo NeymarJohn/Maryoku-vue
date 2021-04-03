@@ -43,12 +43,18 @@
           </template>
           <template v-if="item.type == 'Including'">
             <div class="item" @click="setPolicy(null, 'Including', item.name, true)">
-              <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="item.value" />
+              <img
+                :src="theme === 'red' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
+                v-if="item.value"
+              />
               <span class="unchecked" v-else></span>
               Included
             </div>
             <div class="item" @click="setPolicy(null, 'Including', item.name, false)">
-              <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!item.value" />
+              <img
+                :src="theme === 'red' ? `${iconUrl}Group 5489 (3).svg` : `${$iconURL}common/close-circle-purple.svg`"
+                v-if="!item.value"
+              />
               <span class="unchecked" v-else></span>
               Not Included
             </div>
