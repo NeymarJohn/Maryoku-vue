@@ -111,6 +111,54 @@ const getters = {
     console.log("prices", prices);
     return prices;
   },
+  totalBeforeDiscount(state, getter) {
+    let sum = 0;
+    Object.keys(getter.totalPriceByCategory).forEach(category => {
+      sum += Number(getter.totalPriceByCategory[category])
+    })
+    // check tax
+    let tax = state.taxes['total'] || { price: 0, percentage: 0 };
+    sum = sum + sum * tax.percentage / 100;
+    return sum.toFixed(2);
+  },
+  totalBeforeBundle(state, getter) {
+    let sum = 0;
+    Object.keys(getter.totalPriceByCategory).forEach(category => {
+      sum += Number(getter.totalPriceByCategory[category])
+    })
+
+    // check discount
+    let discount = state.discounts['total'] || { price: 0, percentage: 0 };
+    sum = sum - sum * discount.percentage / 100;
+
+    // check tax
+    let tax = state.taxes['total'] || { price: 0, percentage: 0 };
+    sum = sum + sum * tax.percentage / 100;
+
+    return sum.toFixed(2)
+
+  },
+  totalPriceOfProposal(state, getter) {
+    let sum = 0;
+    Object.keys(getter.totalPriceByCategory).forEach(category => {
+      sum += Number(getter.totalPriceByCategory[category])
+    })
+
+    // check discount
+    let discount = state.discounts['total'] || { price: 0, percentage: 0 };
+    sum = sum - sum * discount.percentage / 100;
+
+    // check tax
+    let tax = state.taxes['total'] || { price: 0, percentage: 0 };
+    sum = sum + sum * tax.percentage / 100;
+    // check bundle discount 
+
+    if (state.bundleDiscount && state.bundleDiscount.isApplied) {
+      sum -= state.bundleDiscount.price
+    }
+
+    return sum.toFixed(2)
+  }
 };
 const mutations = {
   setVendor: (state, vendor) => {
@@ -119,6 +167,7 @@ const mutations = {
   },
   setProposal: (state, proposal) => {
     state.id = proposal.id;
+    state.additionalServices = proposal.additionalServices;
     state.eventVision = proposal.eventVision;
     state.proposalCostServices = proposal.costServices;
     state.proposalIncludedServices = proposal.includedServices;
@@ -252,6 +301,7 @@ const actions = {
       const proposal = new Proposal({
         id: state.id,
         personalMessage: state.personalMessage,
+        additionalServices: state.additionalServices,
         inspirationalPhotos: state.inspirationalPhotos,
         proposalRequestId: state.proposalRequest.id,
         eventVision: state.eventVision,

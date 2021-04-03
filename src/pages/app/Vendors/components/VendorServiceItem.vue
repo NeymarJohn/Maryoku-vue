@@ -19,10 +19,7 @@
         />
       </div>
       <div class="arrow" :class="{ expanded: !collapsed }" @click="collapsed = !collapsed">
-        <img
-          class="mt-5"
-          :src="theme === 'red' ? `${iconUrl}Asset 519.svg` : `${$iconURL}common/arrow-right-purple.svg`"
-        />
+        <img class="mt-5" :src="`${iconUrl}Asset 519.svg`" />
       </div>
     </div>
     <div class="items-cont" v-if="!collapsed">
@@ -35,7 +32,6 @@
             :label="item.name"
             :vendor="vendor"
             :service="service"
-            theme="purple"
             v-model="item.value"
           />
         </div>
@@ -60,10 +56,6 @@ export default {
     vendorCategory: String,
     vendor: Object,
     service: Object,
-    theme: {
-      type: String,
-      default: "red",
-    },
   },
   components: {
     VueElementLoading,

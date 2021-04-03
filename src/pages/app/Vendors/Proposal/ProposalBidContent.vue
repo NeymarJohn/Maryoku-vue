@@ -125,7 +125,7 @@ export default {
       let discountRate = 0;
       if (this.vendor.pricingPolicies) {
         this.vendor.pricingPolicies.forEach((item) => {
-          if (item.isExtraService) {
+          if (item.isExtraService || !item.hideOnProposal) {
             console.log("extra SErvce", item.extraService);
             extraServices.push({
               comments: [],
@@ -139,7 +139,7 @@ export default {
               requirementId: "",
               requirementMandatory: false,
               requirementPriority: null,
-              requirementTitle: item.extraService.label,
+              requirementTitle: item.extraService ? item.extraService.label : item.name,
               requirementsCategory: item.category,
               requirementValue: item.defaultQty ? item.defaultQty : 1,
               requirementSize: item.defaultSize ? item.defaultSize : "",

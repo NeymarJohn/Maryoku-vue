@@ -23,7 +23,7 @@
               </div>
             </div>
             <div class="bottom">
-              <p>From which you would like to request a recommendation</p>
+              <p>Details of the customer you’d like to get a recommendation from</p>
             </div>
           </div>
           <div
@@ -69,23 +69,21 @@
             </div>
           </div>
           <div>
-            <md-button class="edit-btn md-simple md-vendor" @click="addAnotherRecommendation">
-              <md-icon class="color-purple font-size-24">add_circle_outline</md-icon>
+            <md-button class="edit-btn md-simple md-red" @click="addAnotherRecommendation">
+              <md-icon class="color-red font-size-24">add_circle_outline</md-icon>
               Add Another Recommendation
             </md-button>
           </div>
         </div>
         <div class="card">
           <div class="d-flex align-center">
-            <img :src="`${$iconURL}Vendor+Signup/preview-recommendation-purple.png`" class="mr-20" />
+            <img :src="`${$iconURL}Vendor+Signup/priview-recommedation.png`" class="mr-20" />
             <div class="flex-1">
-              <div class="color-purple font-size-22 font-bold">
-                PREVIEW THE EMAIL WE'RE ABOUT TO SEND TO YOUR CUSTOMER
-              </div>
-              <div class="color-purple font-size-16 mt-10">This is what your recommender will get in our email</div>
+              <div class="color-red font-size-22 font-bold">PREVIEW THE EMAIL WE'RE ABOUT TO SEND TO YOUR CUSTOMER</div>
+              <div class="color-red font-size-16 mt-10">This is what your recommender will get in our email</div>
             </div>
             <a @click="open">
-              <md-icon class="color-purple font-size-40">
+              <md-icon class="color-red font-size-40">
                 {{ opened ? "keyboard_arrow_down" : "keyboard_arrow_right" }}
               </md-icon>
             </a>

@@ -10,8 +10,7 @@ const state = {
     status: null,
     vendor: {},
     service: {
-        services: {},
-        images: []
+        services: {}
     }
 };
 

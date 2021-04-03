@@ -24,16 +24,6 @@
     </template>
     <template v-if="expanded">
       <div class="summary-cont">
-        <!-- <h3>
-          You're the {{ newProposalRequest.bidderRank | numeral("Oo") }}
-          <span class="text-transform-lowercase">{{ vendor.eventCategory.title }}</span> bidder
-        </h3>
-        <p v-if="newProposalRequest.bidderRank > 1">
-          Proposals range:
-          <strong>
-            ${{ newProposalRequest.bidRange.low | withComma }} - ${{ newProposalRequest.bidRange.high | withComma }}
-          </strong>
-        </p> -->
         <div
           class="bundle-discount mt-20"
           @click="isBundleDiscount = !isBundleDiscount"
@@ -226,24 +216,22 @@
         </div>
       </div>
       <div class="total-cont">
-        <div class="title">
-          Total
-          <br />
-          <span v-if="bundleDiscount.isApplied">Before bundle discount</span>
-          <br />
-          <span v-if="defaultDiscount.percentage">Before discount</span>
+        <div class="price-row">
+          <span class="title">Total</span>
+          <strong>${{ Number(totalPrice) | withComma }}</strong>
         </div>
-        <div class="price">
-          <strong>${{ totalPrice | withComma }}</strong>
-          <br />
-          <div v-if="bundleDiscount && bundleDiscount.isApplied">
+        <div v-if="bundleDiscount.isApplied" class="price-row">
+          <span>Before bundle discount</span>
+          <div>
             <span>{{ `(${bundleDiscount.percentage}% off)` }}</span>
-            <span>${{ totalPriceBeforeBundle | withComma }}</span>
+            <span class="crosslinedText">${{ Number(totalBeforeBundle) | withComma }}</span>
           </div>
-          <br />
-          <div v-if="defaultDiscount.percentage">
+        </div>
+        <div v-if="defaultDiscount.percentage" class="price-row">
+          <span>Before discount</span>
+          <div>
             <span>{{ `(${defaultDiscount.percentage}% off)` }}</span>
-            <span>${{ totalPriceBeforeDiscount | withComma }}</span>
+            <span class="crosslinedText">${{ Number(totalBeforeDiscount) | withComma }}</span>
           </div>
         </div>
       </div>
@@ -441,6 +429,9 @@ export default {
       "pricesByCategory",
       "originalPriceOfMainCategory",
       "totalPriceByCategory",
+      "totalPriceOfProposal",
+      "totalBeforeDiscount",
+      "totalBeforeBundle",
     ]),
     proposalRequest() {
       return this.$store.state.vendorProposal.proposalRequest;
@@ -764,31 +755,34 @@ export default {
     background: #404040;
     margin: auto -25px;
     color: #ffffff;
-    display: flex;
-    justify-content: space-between;
 
-    .title {
-      color: #ffffff;
-      font: 800 22px "Manrope-Regular", sans-serif;
-
-      span {
-        font: normal 14px "Manrope-Regular", sans-serif;
-      }
-    }
-    .price {
-      text-align: right;
-      font: normal 14px "Manrope-Regular", sans-serif;
-      strong {
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      .title {
+        color: #ffffff;
         font: 800 22px "Manrope-Regular", sans-serif;
-        margin-bottom: 6px;
-        display: inline-block;
+
+        span {
+          font: normal 14px "Manrope-Regular", sans-serif;
+        }
       }
-      span {
-        &:last-child {
-          text-decoration: line-through;
+      .price {
+        text-align: right;
+        font: normal 14px "Manrope-Regular", sans-serif;
+        strong {
+          font: 800 22px "Manrope-Regular", sans-serif;
+          margin-bottom: 6px;
+          display: inline-block;
+        }
+        span {
+          &:last-child {
+            text-decoration: line-through;
+          }
         }
       }
     }
+
     &.isEdit {
       background-color: #ffedb7;
       color: #050505;

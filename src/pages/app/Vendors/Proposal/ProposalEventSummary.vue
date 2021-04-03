@@ -108,7 +108,23 @@
           :key="cIndex"
         />
         <proposal-pricing-item :iconUrl="iconUrl" :itemType="`bundle`" v-if="bundleDiscount.isApplied" />
-        <proposal-pricing-item :iconUrl="iconUrl" :itemType="`total`" :requirements="proposalRequest.requirements" />
+        <div class="total-proposal-price">
+          <div class="d-flex justify-content-between">
+            <div class="font-size-22 font-bold">Total</div>
+            <div class="font-size-20 font-bold">${{ Number(totalPriceOfProposal) | withComma }}</div>
+          </div>
+          <div class="d-flex justify-content-between" v-if="bundleDiscount && bundleDiscount.isApplied">
+            <div class="font-size-16">Befor Bundle Offer</div>
+            <div class="font-size-16 crosslinedText">${{ Number(totalBeforeBundle) | withComma }}</div>
+          </div>
+          <div class="d-flex justify-content-between" v-if="defaultDiscount.percentage">
+            <div class="font-size-16">Befor Discount</div>
+            <div class="font-size-16">
+              ({{ defaultDiscount.percentage }}% off)
+              <span class="crosslinedText"> ${{ Number(totalBeforeDiscount) | withComma }} </span>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="policy-cont">
         <div class="title">
@@ -218,7 +234,7 @@
             </div> -->
           </div>
           <div class="cancellation pricing-policy-cont" id="Rules">
-            <h5 class="subtitle">OUR PRICING POLICY</h5>
+            <!-- <h5 class="subtitle">OUR PRICING POLICY</h5>
             <div class="rules">
               <div class="rule" v-for="(policy, yIndex) in validPricingPolicy" :key="yIndex">
                 <div class="item">
@@ -252,7 +268,7 @@
                   </span>
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <div class="signature-wrapper">
               <div class="half-side">
@@ -317,6 +333,8 @@
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
+
 import ProposalPricingItem from "./ProposalPricingItem.vue";
 import Vendors from "@/models/Vendors";
 import vueSignature from "vue-signature";
@@ -500,6 +518,7 @@ export default {
     });
   },
   computed: {
+    ...mapGetters("vendorProposal", ["totalPriceOfProposal", "totalBeforeDiscount", "totalBeforeBundle"]),
     personalMessage: {
       get() {
         return this.$store.state.vendorProposal.personalMessage;
@@ -566,6 +585,12 @@ export default {
     },
     bundleDiscount() {
       return this.$store.state.vendorProposal.bundleDiscount;
+    },
+    defaultTax() {
+      return this.$store.state.vendorProposal.taxes["total"] || { percentage: 0, price: 0 };
+    },
+    defaultDiscount() {
+      return this.$store.state.vendorProposal.discounts["total"] || { percentage: 0, price: 0 };
     },
   },
   watch: {},
@@ -1108,6 +1133,13 @@ export default {
   }
   .hide {
     display: none !important;
+  }
+  .total-proposal-price {
+    background-color: #404040;
+    color: #ffffff;
+    padding: 46px 50px 48px 60px;
+    // box-shadow: 0 3px 41px 0 rgb(0 0 0 / 8%);
+    border-radius: 3px;
   }
 }
 </style>

@@ -71,10 +71,6 @@ export default {
       type: Object,
       default: () => {},
     },
-    service: {
-      type: Object,
-      default: () => {},
-    },
   },
   data() {
     return {
@@ -129,8 +125,8 @@ export default {
   },
   computed: {
     validPolicy() {
-      if (this.service.policies)
-        return this.service.policies.filter((item) => item.value || (item.type === "Including" && item.cost));
+      if (this.vendor.policies)
+        return this.vendor.policies.filter((item) => item.value || (item.type === "Including" && item.cost));
       return null;
     },
   },

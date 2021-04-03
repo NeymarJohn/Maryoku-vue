@@ -23,8 +23,8 @@
         v-bind="{
           decimal: '.',
           thousands: ',',
-          prefix: '% ',
-          suffix: '',
+          prefix: '',
+          suffix: ' %',
           precision: 2,
           masked: false,
         }"
@@ -44,10 +44,10 @@
         class="bundle-discount-input"
         @keyup.native="setPriceRange(discount.price, 'discount')"
       />
-      <div class="d-flex justify-content-between ml-10">
-        <md-button class="md-simple edit-btn md-red" @click="isDiscountEditing = false">Cancel</md-button>
-        <md-button class="md-simple edit-btn md-red" @click="saveDiscount">Save</md-button>
-      </div>
+    </div>
+    <div class="text-right mb-10" v-if="isDiscountEditing">
+      <md-button class="md-simple normal-btn md-red" @click="isDiscountEditing = false">Cancel</md-button>
+      <md-button class="normal-btn md-red" @click="saveDiscount">Save</md-button>
     </div>
     <div class="service-item" v-if="!isTaxEditing">
       <div class="flex-1">
@@ -74,8 +74,8 @@
         v-bind="{
           decimal: '.',
           thousands: ',',
-          prefix: '% ',
-          suffix: '',
+          prefix: '',
+          suffix: ' %',
           precision: 2,
           masked: false,
         }"
@@ -95,10 +95,10 @@
         class="bundle-discount-input"
         @keyup.native="setPriceRange(tax.price, 'tax')"
       />
-      <div class="d-flex justify-content-between ml-10">
-        <md-button class="md-simple edit-btn md-red" @click="isTaxEditing = false">Cancel</md-button>
-        <md-button class="md-simple edit-btn md-red" @click="saveTax">Save</md-button>
-      </div>
+    </div>
+    <div class="text-right mb-10" v-if="isTaxEditing">
+      <md-button class="md-simple normal-btn md-red" @click="isTaxEditing = false">Cancel</md-button>
+      <md-button class="normal-btn md-red" @click="saveTax">Save</md-button>
     </div>
   </div>
 </template>
@@ -224,7 +224,7 @@ export default {
     font-weight: bold;
     align-items: center;
     &.is-edit {
-      grid-template-columns: 25% 25% 25% 25%;
+      grid-template-columns: 40% 30% 30%;
     }
     input {
       font-size: 16px;

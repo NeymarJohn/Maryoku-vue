@@ -31,11 +31,10 @@
                 :key="rIndex + 'component'"
                 :item="r"
                 @update="setPolicy($event, rIndex)"
-                theme="purple"
               >
               </vendor-policy-item>
             </div>
-            <v-signup-add-rules :comType="`rule`" :title="rulesDesc" :defaultRules="additionalRules" theme="purple" />
+            <v-signup-add-rules :comType="`rule`" :title="rulesDesc" :defaultRules="additionalRules" />
           </div>
         </div>
         <div class="pricing-policy-wrapper mb-50">
@@ -44,43 +43,93 @@
               <h5><img :src="`${iconUrl}Asset 536.svg`" /> pricing policy</h5>
             </div>
             <div class="bottom">
-              <p>Use the suggested element or add your own itmes to your disclaimer</p>
-              <md-switch v-model="setAsMainPolicy" class="ml-10 md-switch large-switch md-switch-vendor align-center">
-                <span class="color-purple font-bold font-size-16">Same as Catering</span>
-              </md-switch>
+              <p>use the suggested element or add your own itmes to your disclaimer</p>
             </div>
           </div>
           <div class="card">
-            <div>
-              <div class="font-bold">How much deposit do you charge?</div>
-              <div><maryoku-input></maryoku-input></div>
-            </div>
-            <div class="side-label">
-              <div class="label-value">Our cancellation approach</div>
-            </div>
-
-            <div class="proposal-section__subtitle">
-              <div class="subtitle">We allow free cancellation until:</div>
-              <div class="desc">30 days before the event</div>
-            </div>
-            <cancellation-policy></cancellation-policy>
-
-            <div class="side-label">
-              <div class="label-value">Extra Fees</div>
-            </div>
             <div class="rules">
               <vendor-pricing-policy-item
                 v-for="(p, pIndex) in vendorPricingPolicies.items"
                 :key="pIndex + 'component'"
                 :item="p"
                 @update="setPricePolicy($event, pIndex)"
-                theme="purple"
               ></vendor-pricing-policy-item>
             </div>
-            <div class="additional-disclaimer">
-              <div><span class="font-bold"> Additional Disclaimer</span> <span>* Suggested</span></div>
-              <div class="mt-10">
-                <textarea></textarea>
+            <!-- <div class="field mb-50">
+              <v-signup-add-rules
+                :comType="'rule'"
+                :title="policyDesc"
+              />
+            </div>
+            <div class="field mb-50">
+              <div class="label">
+                <div class="title-cont">
+                  <div class="left m-0">
+                    <h5>additional disclaimer</h5>
+                  </div>
+                  <div class="right">
+                    <p>*suggested</p>
+                  </div>
+                </div>
+              </div>
+              <textarea placeholder="For example : A 50% deposite will be due on or befor eThe remaining balance will be collected a week prior to the event" rows="5"/>
+            </div>-->
+          </div>
+        </div>
+        <div class="3rd-party-vendor-wrapper mb-50" v-if="currentService.serviceCategory == 'venuerental'">
+          <div class="title-cont">
+            <div class="top">
+              <h5>3rd party vendor</h5>
+            </div>
+          </div>
+          <div class="card">
+            <div class="title-cont">
+              <div class="left">
+                <h5>do you allow 3rd party vendor?</h5>
+              </div>
+              <div class="right">
+                <p>(this question is for venues only)</p>
+              </div>
+            </div>
+            <div class="checks-cont">
+              <div class="check-item" @click="allowThirdVendor = 0">
+                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="allowThirdVendor == 0" />
+                <span class="unchecked" v-else></span>
+                <span>Yes</span>
+              </div>
+              <div class="check-item" @click="allowThirdVendor = 1">
+                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="allowThirdVendor == 1" />
+                <span class="unchecked" v-else></span>
+                <span>No</span>
+              </div>
+              <div class="check-item" @click="allowThirdVendor = 2">
+                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="allowThirdVendor == 2" />
+                <span class="unchecked" v-else></span>
+                <span>Some</span>
+              </div>
+            </div>
+            <div class="not-allow-cont" v-if="allowThirdVendor == 2">
+              <h4>Which of the vendors do you not allow to work in your venue?</h4>
+              <div class="na-check-list">
+                <ul>
+                  <li v-for="(n, nIndex) in defNa" :key="nIndex">
+                    <img
+                      :src="`${iconUrl}Group 5489 (4).svg`"
+                      @click="updateNa(n)"
+                      v-if="currentService.notAllowed.filter((nt) => nt.value == n.value).length > 0"
+                    />
+                    <img :src="`${iconUrl}Rectangle 1245.svg`" v-else @click="updateNa(n)" />
+                    <span @click="updateNa(n)">{{ n.name }}</span>
+                    <div
+                      style="margin-top: 10px"
+                      v-if="
+                        currentService.notAllowed.filter((nt) => nt.value == 'Other').length > 0 && n.value == 'Other'
+                      "
+                    >
+                      <input type="text" placeholder="Type vendor category..." />
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
@@ -131,8 +180,6 @@ import { capitalize } from "@/utils/string.util";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
 import VendorPolicyItem from "../components/vendor-policy-item";
 import VendorPricingPolicyItem from "../components/vendor-pricing-policy-item";
-import CancellationPolicy from "@/components/CancellationPolicy.vue";
-import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 
 export default {
   name: "vendor-signup-step3",
@@ -149,8 +196,6 @@ export default {
     FunctionalCalendar,
     VueTimepicker,
     Multiselect,
-    CancellationPolicy,
-    MaryokuInput,
   },
   data() {
     return {
@@ -255,7 +300,6 @@ export default {
       pricingPolicies: VendorPricingPolicy,
       vendorPolicies: {},
       vendorPricingPolicies: {},
-      setAsMainPolicy: false,
     };
   },
   methods: {
@@ -630,28 +674,6 @@ export default {
 .vendor-signup-step3-wrapper {
   font-family: Manrope-Regular, sans-serif;
 
-  .side-label {
-    font-size: 18px;
-    font-weight: 800;
-    color: #050505;
-    margin: 3em 0 1.5em;
-    position: relative;
-
-    &:before {
-      content: " ";
-      position: absolute;
-      background-color: #ededed;
-      width: 80%;
-      height: 53px;
-      top: -15px;
-      left: -3.5em;
-    }
-
-    .label-value {
-      position: relative;
-      z-index: 999;
-    }
-  }
   .inside-container {
     display: flex;
     color: #050505;
