@@ -8,12 +8,18 @@
         <div class="top">
           <template v-if="item.type == Boolean">
             <div class="item" @click="setPolicy(null, 'option', item.name, true)">
-              <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="item.value" />
+              <img
+                :src="theme === 'red' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
+                v-if="item.value"
+              />
               <span class="unchecked" v-else></span>
               Yes
             </div>
             <div class="item" @click="setPolicy(null, 'option', item.name, false)">
-              <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!item.value" />
+              <img
+                :src="theme === 'red' ? `${iconUrl}Group 5489 (3).svg` : `${$iconURL}common/close-circle-purple.svg`"
+                v-if="!item.value"
+              />
               <span class="unchecked" v-else></span>
               No
             </div>
@@ -121,13 +127,17 @@
       </div>
       <div class="mt-0 ml-40 add-note" v-if="item.hasComment">
         <div class="item">
-          <div class="color-red cursor-pointer" @click="notable = !notable">
+          <div
+            class="cursor-pointer"
+            @click="notable = !notable"
+            :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }"
+          >
             <template v-if="!notable">
-              <md-icon class="color-red"> add </md-icon>
+              <md-icon :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }"> add </md-icon>
               Add Note
             </template>
             <template v-else>
-              <md-icon class="color-red"> remove </md-icon>
+              <md-icon :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }"> remove </md-icon>
               Add Note
             </template>
           </div>
@@ -153,6 +163,10 @@ export default {
     item: {
       type: Object,
       required: true,
+    },
+    theme: {
+      type: String,
+      default: "red",
     },
   },
   data() {

@@ -19,13 +19,14 @@
           class="md-button md-button md-simple md-just-icon md-theme-default scroll-top-button md-theme-default"
         >
           <span>
-            <img :src="`${iconsUrl}Asset 602.svg`" />
+            <img :src="`${$iconURL}common/arrow-right-purple.svg`" class="upward-button" />
           </span>
         </md-button>
       </div>
+      <div v-else></div>
       <div class="right">
         <md-button class="save md-vendor-signup md-simple md-vendor md-outlined" @click="saveDraft()">
-          <img :src="`${iconsUrl}Asset 610.svg`" class="label-icon mr-10" />
+          <img :src="`${$iconURL}common/save-purple.svg`" class="label-icon mr-10" />
           Save for later
         </md-button>
         <md-button class="approve md-vendor-signup md-vendor" @click="next">{{ nextLabel }}</md-button>
@@ -246,12 +247,13 @@ export default {
   section.footer-wrapper {
     z-index: 9999;
     width: 100%;
-    padding: 33px 168px;
+    padding: 33px 124px;
     background-color: #ffffff;
     border-radius: 3px;
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     text-align: right;
-
+    display: flex;
+    justify-content: space-between;
     a {
       display: inline-block;
       padding: 17px 55px;
@@ -278,6 +280,11 @@ export default {
           color: #dddddd !important;
         }
       }
+    }
+    .upward-button {
+      width: 20px;
+      height: 15px;
+      transform: rotate(-90deg);
     }
     &.approved {
       display: flex;

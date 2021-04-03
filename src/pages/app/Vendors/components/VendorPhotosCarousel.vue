@@ -90,7 +90,6 @@
     </span>
     <br />Or
     <br />
-    {{ images }}
     <span class="color-dark-gray">Drag your file here</span>
   </vue-dropzone>
 </template>
@@ -269,9 +268,9 @@ export default {
   }
 }
 .file-drop-zone.vue-dropzone {
-  border: dashed 1px #f51355;
-  margin-left: auto;
-  margin-right: auto;
+  border: dashed 1px #641856;
+  margin-left: 60px;
+  margin-right: 60px;
   text-align: center;
   padding: 30px;
   & .file-upload-btn {

@@ -3,19 +3,31 @@
     <template v-if="item.type == Boolean">
       <div class="main">
         <div class="check-cont flex" @click="updateCheck()">
-          <img v-if="checked" class="mr-20" :src="iconUrl + 'Group 6258.svg'" width="27" />
+          <img
+            v-if="checked"
+            class="mr-20"
+            :src="theme === 'red' ? `${iconUrl}Group 6258.svg` : `${$iconURL}common/checked-box-purple.svg`"
+            width="27"
+          />
           <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27" />
           <div class="text">{{ label }}</div>
         </div>
         <div class="included-cont" v-if="checked && !item.xIncluded">
           <div class="included mr-20" :class="{ active: included }" @click="updateIncluded()">
-            <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="included" />
+            <img
+              :src="theme === 'red' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
+              v-if="included"
+            />
+
             <span class="unchecked" v-else></span>
             <span>Included</span>
           </div>
           <div class="flex-1 mr-m1">
             <div class="included mr-20" :class="{ active: !included }" @click="updateIncluded()">
-              <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!included" />
+              <img
+                :src="theme === 'red' ? `${iconUrl}Group 5479 (3).svg` : `${$iconURL}common/close-circle-purple.svg`"
+                v-if="!included"
+              />
               <span class="unchecked" v-else></span>
               <span>Not included</span>
             </div>

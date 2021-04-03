@@ -31,10 +31,11 @@
                 :key="rIndex + 'component'"
                 :item="r"
                 @update="setPolicy($event, rIndex)"
+                theme="purple"
               >
               </vendor-policy-item>
             </div>
-            <v-signup-add-rules :comType="`rule`" :title="rulesDesc" :defaultRules="additionalRules" />
+            <v-signup-add-rules :comType="`rule`" :title="rulesDesc" :defaultRules="additionalRules" theme="purple" />
           </div>
         </div>
         <div class="pricing-policy-wrapper mb-50">
@@ -53,6 +54,7 @@
                 :key="pIndex + 'component'"
                 :item="p"
                 @update="setPricePolicy($event, pIndex)"
+                theme="purple"
               ></vendor-pricing-policy-item>
             </div>
             <!-- <div class="field mb-50">

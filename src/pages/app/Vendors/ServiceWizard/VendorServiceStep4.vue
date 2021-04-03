@@ -83,6 +83,7 @@
                 :defaultValue="vendor.attachments"
                 @add="addNewAttachment"
                 @remove="removeAttachment"
+                theme="purple"
               ></attachment-tag-list>
             </div>
             <!-- <div class="personal-message mt-40" v-if="vendor.personalMessage">
@@ -157,13 +158,16 @@
                 <div class="item text-right" v-else>
                   <span v-if="policy.type === Number && !policy.isPercentage && policy.unit !== 'hour'">$</span>
                   <span v-if="policy.type === Boolean">
-                    <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
-                    <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
+                    <img v-if="policy.value === true" :src="`${$iconURL}common/checked-circle-purple.svg`" />
+                    <img v-else :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
                     <!-- {{ policy.value === true ? "Yes" : "No" }} -->
                   </span>
                   <span v-else>
-                    <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
-                    <img v-else-if="policy.value === false" :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
+                    <img v-if="policy.value === true" :src="`${$iconURL}common/checked-circle-purple.svg`" />
+                    <img
+                      v-else-if="policy.value === false"
+                      :src="`${$iconURL}common/close-circle-outline-purple.svg`"
+                    />
                     <span v-else>{{ policy.value }}</span>
                   </span>
                   <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
@@ -187,19 +191,19 @@
             <div class="dont-work">
               <h5>We don't work on:</h5>
               <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
-                <img :src="`${iconUrl}Group 5489 (4).svg`" />
+                <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
                 {{ mergeStringItems(vendor.selectedWeekdays) }}
               </div>
               <div class="item" v-for="(d, dIndex) in vendor.exDonts" :key="dIndex">
-                <img :src="`${iconUrl}Group 5489 (4).svg`" />
+                <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
                 {{ d.holiday }}
               </div>
               <div class="item" v-if="vendor.dontWorkDays">
-                <img :src="`${iconUrl}Group 5489 (4).svg`" />
+                <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
                 {{ dontWorkDays() }}
               </div>
               <div class="item" v-if="vendor.dontWorkTime">
-                <img :src="`${iconUrl}Group 5489 (4).svg`" />
+                <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
                 {{ dontWorkTime() }}
               </div>
             </div>
