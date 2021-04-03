@@ -43,7 +43,15 @@
               </div>
               <div class="desc">{{ vendor.about.category }}</div>
             </div>
-            <vendor-images-list :images="vendor.images" class="images"></vendor-images-list>
+            <div class="block mt-50">
+              <span class="capacity"> <img :src="`${iconUrl}Asset 545.svg`" />Capacity </span>
+              <span class="number">
+                {{ vendor.capacity.low }}
+                <img :src="`${iconUrl}Group 4585 (2).svg`" />
+                {{ vendor.capacity.high }}
+              </span>
+            </div>
+            <vendor-images-list :images="currentService.images" class="images"></vendor-images-list>
             <div class="contact-us" id="Contact">
               <h4>CONTACT US</h4>
               <div class="items">
@@ -719,12 +727,12 @@ export default {
               }
             }
             .title {
+              font: 800 30px Manrope-Regular, sans-serif;
               margin: 2rem 0 1rem 0;
               img {
-                width: 20px;
+                width: 30px;
                 margin-right: 1rem;
               }
-              font: 800 16px Manrope-Regular, sans-serif;
               &.lg {
                 img {
                   width: 50px;
