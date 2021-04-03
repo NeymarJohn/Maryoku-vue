@@ -30,7 +30,7 @@
             </div>
             <vendor-photos-carousel
               class="service-photos"
-              :images="vendor.images"
+              :images="service.images"
               @addImage="addVendorImage"
               @setPhoto="updateVendorImage"
               @removeImage="removeVendorImage"
@@ -49,10 +49,12 @@ import VSignupCategorySelector from "@/components/Inputs/VSignupCategorySelector
 import CategorySelector from "@/components/Inputs/CategorySelector";
 import VendorPhotosCarousel from "../components/VendorPhotosCarousel.vue";
 import { VendorCategories } from "@/constants/vendor";
+import vue2Dropzone from "vue2-dropzone";
 
 export default {
   name: "vendor-basic-info-form",
   components: {
+    vueDropzone: vue2Dropzone,
     VueElementLoading,
     VSignupEditableField,
     VSignupCategorySelector,
@@ -188,7 +190,7 @@ export default {
     }
   }
   .service-photos {
-    margin: 10px -60px;
+    margin: 20px -60px;
   }
 }
 </style>

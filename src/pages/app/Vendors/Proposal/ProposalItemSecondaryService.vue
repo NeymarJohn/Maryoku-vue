@@ -472,7 +472,7 @@ export default {
         return this.$store.state.vendorProposal.additionalServices;
       },
       set: function (newValue) {
-        return this.$store.commit("vendorProposal/setAdditionalServices", newValue);
+        return this.$store.commit("vendorProposal/setAddtionalService", newValue);
       },
     },
   },
