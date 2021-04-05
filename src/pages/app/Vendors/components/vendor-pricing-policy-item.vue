@@ -16,19 +16,27 @@
         <div class="top">
           <template v-if="item.type == Boolean">
             <div class="item" @click="setPricePolicy(null, 'option', item.name, true)">
-              <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="item.value" />
+              <img
+                :src="theme === 'red' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
+                v-if="item.value"
+              />
               <span class="unchecked" v-else></span>
               Yes
             </div>
             <div class="item" @click="setPricePolicy(null, 'option', item.name, false)">
-              <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!item.value" />
+              <img
+                :src="theme === 'red' ? `${iconUrl}Group 5489 (3).svg` : `${$iconURL}common/close-circle-purple.svg`"
+                v-if="!item.value"
+              />
               <span class="unchecked" v-else></span>
               No
             </div>
           </template>
           <template v-if="item.type == String">
             <div class="item" v-if="!noteRules.includes(p)" @click="noteRule(p)">
-              <a class="note">+ Add Note</a>
+              <a class="note" :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }"
+                >+ Add Note
+              </a>
             </div>
             <div class="item noflex" v-else>
               <textarea placeholder="Except from the parking area" rows="3" />
@@ -174,13 +182,17 @@
       </div>
       <div class="bottom mt-0 ml-40 flex-1 add-not-section" v-if="item.hasComment">
         <div class="item">
-          <div class="color-red cursor-pointer align-center" @click="notable = !notable">
+          <div
+            class="cursor-pointer align-center"
+            :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }"
+            @click="notable = !notable"
+          >
             <template v-if="notable">
-              <md-icon class="color-red">remove</md-icon>
+              <md-icon :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }">remove</md-icon>
               Cancel Note
             </template>
             <template v-else>
-              <md-icon class="color-red">add</md-icon>
+              <md-icon :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }">add</md-icon>
               Add Note
             </template>
           </div>
@@ -206,6 +218,10 @@ export default {
     item: {
       type: Object,
       required: true,
+    },
+    theme: {
+      type: String,
+      default: "red",
     },
   },
   data() {
@@ -296,9 +312,6 @@ export default {
         a {
           font: 800 16px Manrope-Regular, sans-serif;
           cursor: pointer;
-          &.note {
-            color: #f51355;
-          }
           &.cancel {
             color: #050505;
           }

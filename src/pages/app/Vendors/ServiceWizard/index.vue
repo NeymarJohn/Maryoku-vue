@@ -7,7 +7,6 @@
       <vendor-service-step4 :categories="businessCategories" :icon="`${iconUrl}`" v-if="step == 4" />
 
       <vendor-service-step5 :categories="businessCategories" :icon="`${iconUrl}`" v-if="step == 5" />
-      <vendor-service-final-form :categories="businessCategories" :icon="`${iconUrl}`" v-if="step == 6" />
       <div v-if="isCompletedWizard" class="final-section">Thank you for your signup!</div>
     </template>
   </div>
@@ -54,6 +53,11 @@ export default {
       companyServices: companyServices,
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
     };
+  },
+  created() {
+    if (this.step === 6) {
+      this.$store.commit("vendorService/setStep", 1);
+    }
   },
   mounted() {
     //if this is edit page

@@ -1,14 +1,14 @@
 <template>
   <div class="vendor-basic-info-form-wrapper">
-    <div class="inside-container">
-      <div class="left-side">
+    <div class="md-layout inside-container">
+      <div class="md-layout-item md-size-25 left-side">
         <img :src="`${iconUrl}step-1.svg`" />
         <h4>Hi,{{ vendor.companyName }}</h4>
         <p>Choose the category & upload photos to appear in your fussiness card & future proposals</p>
         <h2>0/4</h2>
         <h3>Only 5 simple steps & you're signed!</h3>
       </div>
-      <div class="right-side">
+      <div class="md-layout-item md-size-75 right-side">
         <h2>
           Before we begin,
           <br />What type of service would you like to sign?
@@ -28,13 +28,16 @@
               <span><img :src="`${iconUrl}art (2).svg`" class="page-icon" /> Upload your best images</span>
               <span>(15 photos top, under 5MB)</span>
             </div>
-            <vendor-photos-carousel
-              class="service-photos"
-              :images="vendor.images"
-              @addImage="addVendorImage"
-              @setPhoto="updateVendorImage"
-              @removeImage="removeVendorImage"
-            ></vendor-photos-carousel>
+            <div class="carousel">
+              <vendor-photos-carousel
+                class="service-photos"
+                theme="purple"
+                :images="service.images"
+                @addImage="addVendorImage"
+                @setPhoto="updateVendorImage"
+                @removeImage="removeVendorImage"
+              ></vendor-photos-carousel>
+            </div>
           </div>
         </div>
       </div>
@@ -49,10 +52,12 @@ import VSignupCategorySelector from "@/components/Inputs/VSignupCategorySelector
 import CategorySelector from "@/components/Inputs/CategorySelector";
 import VendorPhotosCarousel from "../components/VendorPhotosCarousel.vue";
 import { VendorCategories } from "@/constants/vendor";
+import vue2Dropzone from "vue2-dropzone";
 
 export default {
   name: "vendor-basic-info-form",
   components: {
+    vueDropzone: vue2Dropzone,
     VueElementLoading,
     VSignupEditableField,
     VSignupCategorySelector,
@@ -77,7 +82,7 @@ export default {
       this.$store.commit("vendorService/setField", { field: "serviceCategory", value: categoryData.value });
     },
     addVendorImage(file) {
-      this.$store.dispatch("vendorService/uploadImage", { index: this.vendor.images.length, file });
+      this.$store.dispatch("vendorService/uploadImage", { index: this.service.images.length, file });
     },
     removeVendorImage(index) {
       this.$store.commit("vendorService/removeImage", index);
@@ -127,9 +132,6 @@ export default {
     color: #050505;
 
     .left-side {
-      flex: 1;
-      margin-right: 122px;
-
       img {
         width: 92.5px;
       }
@@ -153,8 +155,6 @@ export default {
       }
     }
     .right-side {
-      flex: 3;
-
       h2 {
         margin: 0;
         margin-bottom: 40px;
@@ -187,8 +187,14 @@ export default {
       }
     }
   }
-  .service-photos {
-    margin: 10px -60px;
+
+  .upload-wrapper {
+    .carousel {
+      margin: 20px -60px;
+
+      .service-photos {
+      }
+    }
   }
 }
 </style>

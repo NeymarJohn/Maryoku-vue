@@ -28,6 +28,7 @@
           :serviceItem="c"
           :vendor="vendor"
           :service="currentService"
+          theme="purple"
         />
       </div>
     </div>

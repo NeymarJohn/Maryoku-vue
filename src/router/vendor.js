@@ -30,6 +30,7 @@ export default [
                     requiresAuth: false,
                     title: "Vendor Signup",
                     gtm: "VendorSignup",
+                    isVendor: true
                 },
             },
 
@@ -41,6 +42,7 @@ export default [
                     requiresAuth: false,
                     title: "Vendor Signup",
                     gtm: "VendorSignup",
+                    isVendor: true
                 },
             },
         ],
@@ -55,9 +57,10 @@ export default [
                 name: "Add New Service",
                 component: ServiceWizard,
                 meta: {
-                    requiresAuth: false,
+                    requiresAuth: true,
                     title: "Add New Service",
                     gtm: "VendorSignup",
+                    isVendor: true
                 },
             },
         ],
@@ -76,6 +79,7 @@ export default [
                     requiresAuth: false,
                     title: "Vendor Signup",
                     gtm: "VendorSignup",
+                    isVendor: true
                 },
             },
             {
@@ -86,6 +90,7 @@ export default [
                     requiresAuth: false,
                     title: "Vendor Signup",
                     gtm: "VendorSignup",
+                    isVendor: true
                 },
             },
         ],
@@ -98,6 +103,7 @@ export default [
             requiresAuth: false,
             title: "Vendor Signin",
             gtm: "Vendor Signin",
+            isVendor: true
         },
     },
     {
@@ -108,6 +114,7 @@ export default [
             requiresAuth: true,
             title: "Vendor Signed in",
             gtm: "Vendor Signed in",
+            isVendor: true
         },
     },
     {
@@ -123,6 +130,7 @@ export default [
                     requiresAuth: true,
                     title: "Profile",
                     gtm: "Profile",
+                    isVendor: true
                 },
             },
             {
@@ -133,6 +141,7 @@ export default [
                     requiresAuth: true,
                     title: "Proposal Board",
                     gtm: "Proposal Board",
+                    isVendor: true
                 },
             },
         ],
@@ -150,6 +159,7 @@ export default [
                     requiresAuth: false,
                     title: "For Vendors",
                     gtm: "ForVendors",
+                    isVendor: true
                 },
             },
         ],
@@ -168,6 +178,7 @@ export default [
                     requiresAuth: false,
                     title: "For Proposals",
                     gtm: "ForProposals",
+                    isVendor: true
                 },
             },
             {
@@ -178,6 +189,7 @@ export default [
                     requiresAuth: false,
                     title: "For Proposals",
                     gtm: "ForProposals",
+                    isVendor: true
                 },
             },
             {
@@ -188,6 +200,7 @@ export default [
                     requiresAuth: false,
                     title: "For Proposals",
                     gtm: "ForProposals",
+                    isVendor: true
                 },
             },
         ],

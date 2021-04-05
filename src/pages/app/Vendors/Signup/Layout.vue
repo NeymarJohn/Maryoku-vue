@@ -231,7 +231,7 @@ export default {
   beforeCreate() {
     if (this.$store.registerModule("vendorSignup", VendorSignupState) === false) {
       this.$store.unregisterModule("vendorSignup");
-      this.$store.registerModule("vendorSignup", myModule);
+      this.$store.registerModule("vendorSignup", VendorSignupState);
     }
   },
   beforeDestroy() {
