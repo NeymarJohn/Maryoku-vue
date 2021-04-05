@@ -14,36 +14,20 @@
         >
           <template v-if="requirementCategory === 'multi-selection'"> </template>
           <template v-else-if="requirementCategory.toLowerCase() === 'special'">
-            <div
-              class="category-section"
-              v-for="subCategory in selectedOptions(requirementsData[requirementCategory])"
-              :key="subCategory.subCategory"
-            >
-              <div class="color-dark-gray text-transform-capitalize">{{ subCategory.subCategory }}</div>
-              <div class="requirement-grid">
-                <div
-                  class="requirement-item"
-                  v-for="requirementItem in subCategory.options.filter((item) => item.selected)"
-                  :key="requirementItem.name"
-                >
-                  <div class="checkmark"></div>
-                  <div class="d-inline-block">{{ requirementItem.name }}</div>
-                </div>
-              </div>
-            </div>
-            <!-- <div class="category-section" v-if="selectedOptions(requirementsData[requirementCategory]).length > 0">
+            <div class="category-section" v-if="selectedOptions(requirementsData[requirementCategory]).length > 0">
               <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
               <div class="requirement-grid">
                 <div
-                  class="requirement-item"
+                  class="d-flex requirement-item"
                   v-for="requirementItem in selectedOptions(requirementsData[requirementCategory])"
                   :key="requirementItem.item"
                 >
                   <div class="checkmark"></div>
+
                   <div class="d-inline-block">{{ requirementItem.item || requirementItem.subCategory }}</div>
                 </div>
               </div>
-            </div> -->
+            </div>
           </template>
           <div
             v-else-if="requirementsData[requirementCategory].filter((item) => item.isSelected).length > 0"
@@ -52,7 +36,7 @@
             <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
             <div class="requirement-grid">
               <div
-                class="requirement-item"
+                class="d-flex requirement-item"
                 v-for="requirementItem in requirementsData[requirementCategory].filter((item) => item.isSelected)"
                 :key="requirementItem.item"
               >
@@ -96,7 +80,7 @@
                 <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
                 <div class="requirement-grid">
                   <div
-                    class="requirement-item"
+                    class="d-flex requirement-item"
                     v-for="requirementItem in selectedOptions(requirement.requirements[requirementCategory])"
                     :key="requirementItem.item"
                   >
@@ -114,7 +98,7 @@
               <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
               <div class="requirement-grid">
                 <div
-                  class="requirement-item"
+                  class="d-flex requirement-item"
                   v-for="requirementItem in requirement.requirements[requirementCategory].filter(
                     (item) => item.isSelected,
                   )"
@@ -164,7 +148,7 @@ export default {
   },
   methods: {
     selectedOptions(specialRequirements) {
-      return specialRequirements.filter((item) => item.options.some((option) => option.selected));
+      return specialRequirements.filter((item) => item.options.findIndex((option) => option.selected) > 0);
     },
   },
   created() {
@@ -234,8 +218,8 @@ export default {
         margin-top: 20px;
         text-transform: capitalize;
         padding-right: 15px;
-        min-width: 30%;
-        display: inline-block;
+        width: 30%;
+        flex-grow: 1;
       }
     }
     .checkmark {

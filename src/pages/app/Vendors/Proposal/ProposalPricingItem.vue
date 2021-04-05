@@ -16,43 +16,44 @@
           </div>
           <span v-if="itemType == 'price'">For Whole Event</span>
           <div class="bundle-desc" v-if="itemType == 'bundle'">
-            <h4>{{ bundleDiscount.percentage }}%</h4>
-            <span v-for="(service, index) in bundleDiscount.services" :key="index" style="padding: 0 2px">
-              {{ getServiceCategory(service).title }},
+            <h4>{{ bundleDiscount.discountPercentage }}%</h4>
+            <span v-for="(service, index) in bundleDiscount.services" :key="index" style="padding: 0 2px"
+              >{{ getServiceCategory(service).title }},
             </span>
           </div>
         </div>
         <div class="right">
           <div class="price-cont" v-if="!isExpanded">
             <template v-if="itemType == 'price'">
-              <span class="org-price">${{ getTotalPrice(category) | withComma }}</span>
-              <!-- <div class="off-cont" v-if="bundleDiscount && bundleDiscount.services.includes(category)">
-                ({{ bundleDiscount.percentage }}% off)
-                <span>${{ getDiscountedPrice(category) | withComma }}</span>
-              </div> -->
-              <div class="off-cont" v-if="defaultDiscount.percentage > 0">
-                ({{ defaultDiscount.percentage }}% off)
-                <span>${{ pricesByCategory[category] | withComma }}</span>
-              </div>
-            </template>
-            <template v-if="itemType == 'total'">
-              <!-- <span class="org-price">${{ totalPrice | withComma }}</span> -->
-              <template v-if="bundleDiscount && bundleDiscount.isApplied">
+              <template v-if="bundleDiscount.services.includes(category)">
                 <span class="org-price"
-                  >${{ ((getTotalPrice(category) * (100 - bundleDiscount.percentage)) / 100) | withComma }}</span
+                  >${{
+                    ((pricesByCategory[category] * (100 - bundleDiscount.discountPercentage)) / 100) | withComma
+                  }}</span
                 >
                 <div class="off-cont">
-                  ({{ bundleDiscount.percentage }}% off)
-                  <span>${{ getTotalPrice(category) | withComma }}</span>
+                  ({{ bundleDiscount.discountPercentage }}% off)
+                  <span>${{ pricesByCategory[category] | withComma }}</span>
                 </div>
               </template>
               <template v-else>
-                <span class="org-price">${{ getTotalPrice(category) | withComma }}</span>
+                <span class="org-price">${{ pricesByCategory[category] | withComma }}</span>
               </template>
             </template>
-            <template v-if="itemType == 'bundle'">
+            <template v-if="itemType == 'total'">
               <!-- <span class="org-price">${{ totalPrice | withComma }}</span> -->
-              <span class="org-price"> -${{ bundleDiscount.price | withComma }} </span>
+              <template v-if="bundleDiscount.isApplied">
+                <span class="org-price"
+                  >${{ ((totalPrice * (100 - bundleDiscount.discountPercentage)) / 100) | withComma }}</span
+                >
+                <div class="off-cont">
+                  ({{ bundleDiscount.discountPercentage }}% off)
+                  <span>${{ totalPrice | withComma }}</span>
+                </div>
+              </template>
+              <template v-else>
+                <span class="org-price">${{ totalPrice | withComma }}</span>
+              </template>
             </template>
           </div>
           <img
@@ -80,32 +81,26 @@
         <div class="discount-tax-wrapper">
           <div class="item">
             <div class="left">
-              <span class="pr-10">Discount</span>
+              <span>Discount</span>
+              <span>0%</span>
             </div>
-            <div class="text-center">
-              <span>{{ defaultDiscount.percentage }}%</span>
-            </div>
-            <div></div>
-            <div class="right text-center">
-              <span> -${{ getDiscount(category) | withComma }} </span>
+            <div class="right">
+              <span>-$0</span>
             </div>
           </div>
           <div class="item">
             <div class="left">
-              <span class="pr-10">Taxes</span>
+              <span>Taxes</span>
+              <span>0%</span>
             </div>
-            <div class="text-center">
-              <span>{{ defaultTax.percentage }}%</span>
-            </div>
-            <div></div>
-            <div class="right text-center">
-              <span> ${{ getTaxPrice(category) | withComma }} </span>
+            <div class="right">
+              <span>$0</span>
             </div>
           </div>
         </div>
         <div class="editable-sub-items-footer">
           <span>Total</span>
-          <span>${{ getTotalPrice(category) | withComma }}</span>
+          <span>${{ getOrgPrice() | withComma }}</span>
         </div>
 
         <proposal-requirements
@@ -125,7 +120,6 @@
           icon="cost-requirements.png"
           description="(Asking the client) Wold you like to upgrade & add one of those?"
           key="extra"
-          :canAdd="false"
           :vendorCategory="category"
         />
         <div class="attachments-cont">
@@ -203,33 +197,15 @@ export default {
     getServiceCategory(category) {
       return this.serviceCategories.find((item) => item.key === category);
     },
-    getDiscount(category) {
-      console.log("this.defaultDiscount.percentage", this.defaultDiscount.percentage);
-      return ((this.pricesByCategory[category] * this.defaultDiscount.percentage) / 100).toFixed(2);
-    },
-    getDiscountedPrice(category) {
-      console.log("this.getDiscount()", this.getDiscount(category));
-      console.log("this.pricesByCategory[category]", this.pricesByCategory[category]);
-      return (this.pricesByCategory[category] - Number(this.getDiscount(category))).toFixed(2);
-    },
-    getTaxPrice(category) {
-      return ((Number(this.getDiscountedPrice(category)) * this.defaultTax.percentage) / 100).toFixed(2);
-    },
-    getTotalPrice(category) {
-      return Number(this.getDiscountedPrice(category)) + Number(this.getTaxPrice(category));
-    },
   },
   created() {},
   mounted() {
     this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
   },
   computed: {
-    ...mapGetters("vendorProposal", [
-      "finalPriceOfMainCategory",
-      "pricesByCategory",
-      "originalPriceOfMainCategory",
-      "totalPriceByCategory",
-    ]),
+    ...mapGetters({
+      pricesByCategory: "vendorProposal/pricesByCategory",
+    }),
     serviceCategories() {
       return this.$store.state.common.serviceCategories;
     },
@@ -240,7 +216,7 @@ export default {
       return this.$store.state.vendorProposal.proposalServices;
     },
     proposalAttachments() {
-      return this.$store.state.vendorProposal.attachments || {};
+      return this.$store.state.vendorProposal.attachments;
     },
     totalPrice() {
       let s = 0;
@@ -284,12 +260,6 @@ export default {
             services: newServices,
           });
       },
-    },
-    defaultTax() {
-      return this.$store.state.vendorProposal.taxes["total"] || { percentage: 0, price: 0 };
-    },
-    defaultDiscount() {
-      return this.$store.state.vendorProposal.discounts["total"] || { percentage: 0, price: 0 };
     },
   },
   filters: {
@@ -445,15 +415,14 @@ export default {
 
         .item {
           display: grid;
-          grid-template-columns: 40% 15% 15% 15% 15%;
-
+          grid-template-columns: 70% 30%;
           font-size: 16px;
           font-weight: 800;
           color: #818080;
           padding: 24px 0;
           .left {
             display: grid;
-            grid-template-columns: 30% 0%;
+            grid-template-columns: 15% 0%;
           }
           .right {
           }

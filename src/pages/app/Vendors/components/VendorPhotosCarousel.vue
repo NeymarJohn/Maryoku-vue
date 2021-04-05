@@ -1,5 +1,5 @@
 <template>
-  <div class="proposal-inpirational-photos" v-if="images.length > 0">
+  <div class="proposal-inpirational-photos">
     <span class="prev" @click="prev()" v-if="startIndex > 0">
       <md-icon>keyboard_arrow_left</md-icon>
     </span>
@@ -17,14 +17,10 @@
       </vendor-photos-carousel-item>
       <div
         class="add-image-item photo-inpirational-item d-flex align-center justify-content-center text-center"
-        :class="theme"
         @click="handleAddImage"
       >
-        <label
-          class="photo-add-label font-bold cursor-pointer"
-          :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }"
-        >
-          <md-icon :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }">add</md-icon>
+        <label class="photo-add-label color-red font-bold cursor-pointer">
+          <md-icon class="color-red">add</md-icon>
           <br />
           Add image
         </label>
@@ -42,7 +38,12 @@
     <span class="next" @click="next()" v-if="startIndex < images.length - 2">
       <md-icon>keyboard_arrow_right</md-icon>
     </span>
-
+    <!-- <template slot="next">
+        <md-button class="md-simple md-black handle-btn next-btn md-icon-button edit-btn">
+          <md-icon class="font-bold">keyboard_arrow_right</md-icon>
+        </md-button>
+      </template>
+    </carousel> -->
     <modal class="add-caption-modal" v-if="captionModal.isOpen">
       <template slot="header">
         <div class="maryoku-modal-header">
@@ -75,34 +76,14 @@
       </template>
     </modal>
   </div>
-  <vue-dropzone
-    v-else
-    ref="myVueDropzone"
-    id="dropzone"
-    :options="dropzoneOptions"
-    :useCustomSlot="true"
-    @vdropzone-file-added="fileAdded"
-    class="file-drop-zone"
-  >
-    <span class="color-purple font-bold choose file-upload-btn">
-      <img :src="`${$iconURL}common/pin-dark.svg`" class="mr-10" />Choose File
-    </span>
-    <br />Or
-    <br />
-    <span class="color-dark-gray">Drag your file here</span>
-  </vue-dropzone>
 </template>
 <script>
 import { Modal } from "@/components";
 import carousel from "vue-owl-carousel";
 import VendorPhotosCarouselItem from "./VendorPhotosCarouselItem.vue";
 import Swal from "sweetalert2";
-import vue2Dropzone from "vue2-dropzone";
-import { getBase64 } from "@/utils/file.util";
-
 export default {
   components: {
-    vueDropzone: vue2Dropzone,
     carousel,
     VendorPhotosCarouselItem,
     Modal,
@@ -111,10 +92,6 @@ export default {
     images: {
       type: Array,
       default: () => [],
-    },
-    theme: {
-      type: String,
-      default: "red",
     },
   },
   data() {
@@ -129,12 +106,6 @@ export default {
       },
       imageSlidePos: 0,
       startIndex: 0,
-      dropzoneOptions: {
-        url: "https://httpbin.org/post",
-        thumbnailWidth: 150,
-        maxFilesize: 5,
-        headers: { "My-Awesome-Header": "header value" },
-      },
     };
   },
   methods: {
@@ -202,9 +173,6 @@ export default {
       this.startIndex += 1;
       console.log(document.getElementsByClassName("photo-inpirational-item")[this.startIndex].offsetLeft);
     },
-    async fileAdded(file) {
-      this.addNewPhoto(file);
-    },
   },
 };
 </script>
@@ -240,14 +208,9 @@ export default {
   }
   .add-image-item {
     height: 220px;
+    border: dashed 1px #f51355;
     min-width: 340px;
     cursor: pointer;
-    &.red {
-      border: dashed 1px #f51355;
-    }
-    &.purple {
-      border: dashed 1px #641856;
-    }
   }
   .photo-inpirational-item:first-child {
     margin-left: 60px;
@@ -273,21 +236,6 @@ export default {
     &.next {
       right: 50px;
     }
-  }
-}
-.file-drop-zone.vue-dropzone {
-  border: dashed 1px #641856;
-  margin-left: 60px;
-  margin-right: 60px;
-  text-align: center;
-  padding: 30px;
-  & .file-upload-btn {
-    border: solid 1px #641856;
-    padding: 10px 20px;
-    border-radius: 2px;
-    display: block;
-    max-width: 200px;
-    margin: 0px auto;
   }
 }
 </style>

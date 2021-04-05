@@ -12,7 +12,7 @@
         :serviceType="tableCategory"
         :key="rIndex"
         :index="rIndex"
-        :defaultItem="req"
+        :item="req"
         :active="true"
         :step="1"
         @save="updateItem"
@@ -262,14 +262,12 @@ export default {
       this.cancel();
     },
     updateItem({ index, item }) {
-      const serviceIndex = this.services.findIndex((it) => item.requirementTitle === it.requirementTitle);
-
       if (this.tableCategory === "included" && item.price > 0) {
         //if item in included has price, then move to cost table
-        this.services.splice(serviceIndex, 1);
+        this.services.splice(index, 1);
         this.$store.state.vendorProposal.proposalCostServices[this.category].push(item);
       } else {
-        this.services[serviceIndex] = item;
+        this.services[index] = item;
         this.services = Object.assign([], this.services);
       }
     },

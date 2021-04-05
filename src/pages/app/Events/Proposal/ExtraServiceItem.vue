@@ -5,8 +5,7 @@
         {{ item.requirementTitle }}
       </div>
       <div class="item-qty text-center">
-        <input v-model="item.requirementValue" v-if="!item.added" />
-        <template v-else>{{ item.requirementValue }}</template>
+        {{ item.requirementValue }}
       </div>
       <div class="item-price text-center">
         ${{ item.price }}
@@ -65,13 +64,6 @@ export default {
   padding: 1em 0;
   .added-label {
     min-height: 35px;
-  }
-  .item-qty {
-    position: relative;
-    input {
-      width: 100%;
-      text-align: center;
-    }
   }
   .expand-extra-item {
     i {

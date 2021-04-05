@@ -21,11 +21,11 @@
       >
       </attachment-item>
     </div>
-    <vendor-images-list :images="serviceData.images"></vendor-images-list>
+    <vendor-images-list :images="vendorData.images"></vendor-images-list>
     <starting-fee-table class="mt-30" :items="startingFeeItems"></starting-fee-table>
     <extra-pay-table :items="extraPayItems"></extra-pay-table>
-    <policy :serviceCategory="serviceData.vendorCategory"></policy>
-    <price-policy :serviceCategory="serviceData.vendorCategory"></price-policy>
+    <policy></policy>
+    <price-policy></price-policy>
   </div>
 </template>
 <script>
@@ -55,17 +55,10 @@ export default {
     vendorData() {
       return this.$store.state.vendor.profile;
     },
-    serviceData() {
-      if (this.serviceCategory.key === this.vendorData.vendorCategory) {
-        return this.vendorData;
-      } else {
-        return this.vendorData.secondaryServices.find((service) => service.vendorCategory === this.serviceCategory.key);
-      }
-    },
     startingFeeItems() {
       let startingFeeItems = [];
-      console.log(this.serviceData.services);
-      _.each(this.serviceData.services, (item) => {
+      console.log(this.vendorData.services);
+      _.each(this.vendorData.services, (item) => {
         if (item.checked && item.hasOwnProperty("included") && item.included) {
           startingFeeItems.push(item);
         }
@@ -74,7 +67,7 @@ export default {
     },
     extraPayItems() {
       let extraPayItems = [];
-      _.each(this.serviceData.services, (item) => {
+      _.each(this.vendorData.services, (item) => {
         if (item.checked && item.hasOwnProperty("included") && !item.included) {
           item.value = Number(item.value);
           extraPayItems.push(item);
@@ -83,7 +76,7 @@ export default {
       return extraPayItems;
     },
     attachments() {
-      if (this.serviceData.attachments && this.serviceData.attachments.length > 0) return this.serviceData.attachments;
+      if (this.vendorData.attachments && this.vendorData.attachments.length > 0) return this.vendorData.attachments;
       if (this.vendorData.eventCategory.legalDocuments) {
         return this.vendorData.eventCategory.legalDocuments.map((legal) => {
           return {

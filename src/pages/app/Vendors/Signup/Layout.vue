@@ -209,7 +209,8 @@ export default {
                   } else {
                     this.$store.dispatch("auth/login", tenantUser).then(
                       () => {
-                        this.$router.push(`/vendor/profile/settings`);
+                        // this.$router.push(`/vendor/profile/settings`);
+                        this.$router.push(`/vendor/edit/${res.id}`);
                       },
                       (error) => {
                         this.$router.push(`/vendor/signin`);
@@ -231,7 +232,7 @@ export default {
   beforeCreate() {
     if (this.$store.registerModule("vendorSignup", VendorSignupState) === false) {
       this.$store.unregisterModule("vendorSignup");
-      this.$store.registerModule("vendorSignup", VendorSignupState);
+      this.$store.registerModule("vendorSignup", myModule);
     }
   },
   beforeDestroy() {

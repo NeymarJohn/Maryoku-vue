@@ -23,8 +23,8 @@
         v-bind="{
           decimal: '.',
           thousands: ',',
-          prefix: '',
-          suffix: ' %',
+          prefix: '% ',
+          suffix: '',
           precision: 2,
           masked: false,
         }"
@@ -44,10 +44,10 @@
         class="bundle-discount-input"
         @keyup.native="setPriceRange(discount.price, 'discount')"
       />
-    </div>
-    <div class="text-right mb-10" v-if="isDiscountEditing">
-      <md-button class="md-simple normal-btn md-red" @click="isDiscountEditing = false">Cancel</md-button>
-      <md-button class="normal-btn md-red" @click="saveDiscount">Save</md-button>
+      <div class="d-flex justify-content-between ml-10">
+        <md-button class="md-simple edit-btn md-red" @click="isDiscountEditing = false">Cancel</md-button>
+        <md-button class="md-simple edit-btn md-red" @click="saveDiscount">Save</md-button>
+      </div>
     </div>
     <div class="service-item" v-if="!isTaxEditing">
       <div class="flex-1">
@@ -74,8 +74,8 @@
         v-bind="{
           decimal: '.',
           thousands: ',',
-          prefix: '',
-          suffix: ' %',
+          prefix: '% ',
+          suffix: '',
           precision: 2,
           masked: false,
         }"
@@ -95,10 +95,10 @@
         class="bundle-discount-input"
         @keyup.native="setPriceRange(tax.price, 'tax')"
       />
-    </div>
-    <div class="text-right mb-10" v-if="isTaxEditing">
-      <md-button class="md-simple normal-btn md-red" @click="isTaxEditing = false">Cancel</md-button>
-      <md-button class="normal-btn md-red" @click="saveTax">Save</md-button>
+      <div class="d-flex justify-content-between ml-10">
+        <md-button class="md-simple edit-btn md-red" @click="isTaxEditing = false">Cancel</md-button>
+        <md-button class="md-simple edit-btn md-red" @click="saveTax">Save</md-button>
+      </div>
     </div>
   </div>
 </template>
@@ -153,16 +153,14 @@ export default {
         this.discount.price = (this.totalPrice * (value / 100)).toFixed(2);
       } else if (type === "tax") {
         this.tax.percentage = value;
-        this.tax.price = ((this.totalPrice - this.discount.price) * (value / 100)).toFixed(2);
+        this.tax.price = (this.totalPrice * (value / 100)).toFixed(2);
       }
     },
     setPriceRange(val, type) {
       if (type === "discount") {
-        console.log("value", val);
-        console.log("totalPRice", this.totalPrice);
         this.discount.percentage = ((val / this.totalPrice) * 100).toFixed(2);
       } else if (type === "tax") {
-        this.tax.percentage = ((val / (this.totalPrice - this.discount.price)) * 100).toFixed(2);
+        this.tax.percentage = ((val / this.totalPrice) * 100).toFixed(2);
       }
     },
     setRange(value, type) {
@@ -192,14 +190,6 @@ export default {
     defaultDiscount(newValue, oldValue) {
       this.discount = newValue;
     },
-    totalPrice(newValue, oldValue) {
-      console.log(newValue);
-      console.log(oldValue);
-      if (newValue !== oldValue) {
-        this.tax.price = (newValue * this.tax.percentage) / 100;
-        this.discount.price = (newValue * this.discount.percentage) / 100;
-      }
-    },
   },
   computed: {
     calcedTax() {
@@ -224,7 +214,7 @@ export default {
     font-weight: bold;
     align-items: center;
     &.is-edit {
-      grid-template-columns: 40% 30% 30%;
+      grid-template-columns: 25% 25% 25% 25%;
     }
     input {
       font-size: 16px;

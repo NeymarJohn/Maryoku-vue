@@ -5,7 +5,7 @@
         <h4>{{ title.title }}</h4>
         <div class="field" :class="{ suffix: focusedRule != '' }">
           <input :placeholder="title.placeholder" ref="additionalRule" v-model="focusedRule" />
-          <a :disabled="true" @click="addRule()" :class="`${theme}`">Add</a>
+          <a :disabled="true" @click="addRule()">Add</a>
         </div>
         <div class="rules-cont" v-if="rules.length > 0">
           <div class="rule" v-for="(r, rIndex) in rules" :key="rIndex">
@@ -84,10 +84,6 @@ export default {
     defaultRules: {
       type: Array,
       default: () => [],
-    },
-    theme: {
-      type: String,
-      default: "red",
     },
   },
   data: () => {
@@ -170,16 +166,11 @@ export default {
       a {
         font: 800 16px Manrope-Regular, sans-serif;
         color: #ffffff;
+        background-color: #f51355;
         border-radius: 3px;
         padding: 13px 2rem;
         cursor: pointer;
 
-        &.red {
-          background-color: #f51355;
-        }
-        &.purple {
-          background-color: #641856;
-        }
         &:hover {
           color: #dddddd !important;
         }

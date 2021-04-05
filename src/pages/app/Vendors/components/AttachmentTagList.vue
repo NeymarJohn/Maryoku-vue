@@ -1,19 +1,14 @@
 <template>
   <div class="attachment-tag-list">
-    <div class="attachment-tag" v-for="(attachment, index) in attachments" :key="index" :class="theme">
-      <img :src="theme === 'red' ? `${$iconURL}common/pin-red.svg` : `${$iconURL}common/pin-purple.svg`" />
-      <a
-        :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }"
-        :href="attachment.url"
-        target="_blank"
-        >{{ attachment.name }}</a
-      >
+    <div class="attachment-tag" v-for="(attachment, index) in attachments" :key="index">
+      <img :src="`${$iconURL}common/pin-red.svg`" />
+      {{ attachment.name }}
       <md-button class="md-simple md-white edit-btn" @click="remove(attachment, index)">
         <img :src="`${$iconURL}common/trash-dark.svg`" />
       </md-button>
     </div>
-    <div class="attachment-tag add" @click="addNew" :class="theme">
-      <md-icon :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }">add</md-icon>
+    <div class="attachment-tag add" @click="addNew">
+      <md-icon class="color-red">add</md-icon>
       Add Another
     </div>
     <input
@@ -32,10 +27,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    theme: {
-      type: String,
-      default: "red",
-    },
   },
   data() {
     return {
@@ -43,7 +34,7 @@ export default {
     };
   },
   created() {
-    this.attachments = Object.assign([], this.defaultValue);
+    this.attachments = this.defaultValue || [];
   },
   methods: {
     addNew() {
@@ -66,8 +57,8 @@ export default {
     },
   },
   watch: {
-    defaultValue(newValue, oldValue) {
-      this.attachments = Object.assign([], newValue);
+    attachments(newValue, oldValue) {
+      this.attachments = newValue;
     },
   },
 };
@@ -77,19 +68,12 @@ export default {
   .attachment-tag {
     padding: 17px 27.3px 18px 29px;
     border-radius: 3px;
-
+    border: solid 1px #f51355;
+    color: #f51355;
     background-color: #ffffff;
     margin-right: 40px;
     margin-bottom: 20px;
     display: inline-block;
-    &.red {
-      border: solid 1px #f51355;
-      color: #f51355;
-    }
-    &.purple {
-      border: solid 1px #641856;
-      color: #641856;
-    }
     button {
       opacity: 0;
       img {
@@ -103,15 +87,8 @@ export default {
       }
     }
     &.add {
+      border: dashed 1px #f51355;
       cursor: pointer;
-      &.red {
-        border: dashed 1px #f51355;
-        color: #f51355;
-      }
-      &.purple {
-        border: dashed 1px #641856;
-        color: #641856;
-      }
     }
   }
 }
