@@ -1,38 +1,43 @@
 <template>
   <div class="rule">
     <div class="left">
-      {{ item.name }}
-      <div v-if="item.yesOption && item.value" class="mt-10 ml-10">
+      {{ editingItem.name }}
+      <div v-if="editingItem.yesOption && editingItem.value" class="mt-10 ml-10">
         <label>How many hours are included?</label><br />
-        <input type="number" class="text-center number-field" placeholder="" v-model="item.yesOption.value" />
+        <input type="number" class="text-center number-field" placeholder="" v-model="editingItem.yesOption.value" />
       </div>
-      <div v-if="item.noOption && !item.value" class="mt-10 ml-10">
+      <div v-if="editingItem.noOption && !editingItem.value" class="mt-10 ml-10">
         <label>How much is hourly rate?</label><br />
-        <input type="number" class="text-center number-field" placeholder="00.00" v-model="item.noOption.value" />
+        <input
+          type="number"
+          class="text-center number-field"
+          placeholder="00.00"
+          v-model="editingItem.noOption.value"
+        />
       </div>
     </div>
     <div class="right d-flex">
       <div class="align-center">
         <div class="top">
-          <template v-if="item.type == Boolean">
-            <div class="item" @click="setPricePolicy(null, 'option', item.name, true)">
+          <template v-if="editingItem.type == Boolean">
+            <div class="item" @click="setPricePolicy(null, 'option', editingItem.name, true)">
               <img
                 :src="theme === 'red' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
-                v-if="item.value"
+                v-if="editingItem.value"
               />
               <span class="unchecked" v-else></span>
               Yes
             </div>
-            <div class="item" @click="setPricePolicy(null, 'option', item.name, false)">
+            <div class="item" @click="setPricePolicy(null, 'option', editingItem.name, false)">
               <img
                 :src="theme === 'red' ? `${iconUrl}Group 5489 (3).svg` : `${$iconURL}common/close-circle-purple.svg`"
-                v-if="!item.value"
+                v-if="!editingItem.value"
               />
               <span class="unchecked" v-else></span>
               No
             </div>
           </template>
-          <template v-if="item.type == String">
+          <template v-if="editingItem.type == String">
             <div class="item" v-if="!noteRules.includes(p)" @click="noteRule(p)">
               <a class="note" :class="{ 'color-red': theme === 'red', 'color-purple': theme === 'purple' }">
                 + Add Note
@@ -44,165 +49,192 @@
               <a class="cancel" @click="noteRule(p)">Cancel</a>
             </div>
           </template>
-          <template v-if="item.type == 'Including'">
-            <div class="item" @click="setPricePolicy(null, 'Including', item.name, true)">
-              <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="item.value" />
+          <template v-if="editingItem.type == 'Including'">
+            <div class="item" @click="setPricePolicy(null, 'Including', editingItem.name, true)">
+              <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="editingItem.value" />
               <span class="unchecked" v-else></span>
               Include
             </div>
-            <div class="item" @click="setPricePolicy(null, 'Including', item.name, false)">
-              <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!item.value" />
+            <div class="item" @click="setPricePolicy(null, 'Including', editingItem.name, false)">
+              <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!editingItem.value" />
               <span class="unchecked" v-else></span>
               Not Include
             </div>
           </template>
-          <template v-if="item.type == 'Selection'">
-            <select class="unit-select" v-model="item.value" @change="setPricePolicy">
-              <option v-for="(option, index) in item.options" :key="index" :value="option">
+          <template v-if="editingItem.type == 'Selection'">
+            <select class="unit-select" v-model="editingItem.value">
+              <option v-for="(option, index) in editingItem.options" :key="index" :value="option">
                 {{ option }}
               </option>
             </select>
           </template>
-          <template v-if="item.type == 'MultiSelection'">
+          <template v-if="editingItem.type == 'MultiSelection'">
             <category-selector
-              :value="item.value"
-              :categories="item.options"
+              :value="editingItem.value"
+              :categories="editingItem.options"
               :multiple="true"
               @change="changeCategorySelector(...arguments)"
             ></category-selector>
           </template>
-        </div>
-        <div class="bottom no-margin" v-if="item.type == Number">
-          <template v-if="item.noSuffix">
-            <span v-if="item.labelForValue">{{ item.labelForValue }}</span>
-            <div>
-              <input
-                type="number"
-                class="text-center number-field"
-                placeholder=""
-                v-model="item.value"
-                @input="setPricePolicy"
+          <template v-if="editingItem.type == 'DiscountForLarge'">
+            <div class="item" @click="editingItem.isSelected = true">
+              <img
+                :src="theme === 'red' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
+                v-if="editingItem.isSelected"
               />
+              <span class="unchecked" v-else></span>
+              Yes
+            </div>
+            <div class="item" @click="editingItem.isSelected = false">
+              <img
+                :src="theme === 'red' ? `${iconUrl}Group 5489 (3).svg` : `${$iconURL}common/close-circle-purple.svg`"
+                v-if="!editingItem.isSelected"
+              />
+              <span class="unchecked" v-else></span>
+              No
+            </div>
+          </template>
+        </div>
+        <div class="bottom no-margin" v-if="editingItem.type == Number">
+          <template v-if="editingItem.noSuffix">
+            <span v-if="editingItem.labelForValue">{{ editingItem.labelForValue }}</span>
+            <div>
+              <input type="number" class="text-center number-field" placeholder="" v-model="editingItem.value" />
             </div>
           </template>
           <template v-else>
-            <span v-if="item.isPercentage">Rate (%)</span>
-            <span v-else>{{ item.labelForValue || "How much extra" }}</span>
+            <span v-if="editingItem.isPercentage">Rate (%)</span>
+            <span v-else>{{ editingItem.labelForValue || "How much extra" }}</span>
             <br />
-            <div class="suffix percentage" v-if="item.isPercentage">
-              <input type="number" class placeholder="00.00" v-model="item.value" @input="setPricePolicy" />
+            <div class="percentage" v-if="editingItem.isPercentage">
+              <!-- <input type="number" class placeholder="00.00" v-model="editingItem.value" @input="setPricePolicy" /> -->
+              <money class="text-center number-field" v-model="editingItem.value" v-bind="rateFormat" />
             </div>
-            <div class="suffix" v-else>
-              <input type="number" class placeholder="00.00" v-model="item.value" @input="setPricePolicy" />
-              <div v-if="item.units">
-                <select class="unit-select mt-20" v-model="item.unit">
-                  <option v-for="(unit, index) in item.units" :key="index" :value="unit">{{ unit }}</option>
+            <div class="" v-else>
+              <!-- <input type="number" class placeholder="00.00" v-model="editingItem.value" @input="setPricePolicy" /> -->
+              <money class="text-center number-field" v-model="editingItem.value" v-bind="currencyFormat" />
+              <div v-if="editingItem.units">
+                <select class="unit-select mt-20" v-model="editingItem.unit">
+                  <option v-for="(unit, index) in editingItem.units" :key="index" :value="unit">{{ unit }}</option>
                 </select>
               </div>
             </div>
           </template>
         </div>
-        <div class="bottom mt-30" v-if="item.type == 'Including' && !item.value">
+        <div class="bottom mt-30" v-if="editingItem.type == 'Including' && !editingItem.value">
           <span>Extra Payment</span>
           <br />
           <div class="suffix">
-            <input
-              type="number"
-              class="text-center number-field"
-              placeholder="00.00"
-              v-model="item.cost"
-              @change="setPricePolicy"
-            />
+            <input type="number" class="text-center number-field" placeholder="00.00" v-model="editingItem.cost" />
           </div>
         </div>
-        <div class="bottom mt-0 no-margin" v-if="item.type == 'Cost'">
+        <div class="bottom mt-0 no-margin" v-if="editingItem.type == 'Cost'">
           <span>Cost</span>
           <br />
-          <div class="suffix">
-            <input
+          <div class="">
+            <!-- <input
               type="number"
               class="text-center number-field"
               placeholder="00.00"
-              v-model="item.value"
+              v-model="editingItem.value"
               @input="setPricePolicy"
-            />
-            <span class="ml-10" v-if="item.unit">per {{ item.unit }}</span>
+            /> -->
+            <money class="text-center number-field" v-model="editingItem.value" v-bind="currencyFormat" />
+            <span class="ml-10" v-if="editingItem.qtyUnit">per {{ editingItem.qtyUnit }}</span>
           </div>
         </div>
-        <div class="bottom mt-0 no-margin" v-if="item.type == 'Discount'">
+        <div class="bottom mt-0 no-margin" v-if="editingItem.type == 'Discount'">
           <span>Discount</span>
           <br />
-          <div class="suffix d-flex">
-            <input
+          <div class="d-flex">
+            <!-- <input
               type="number"
               class="text-center number-field"
               placeholder="00.00"
-              v-model="item.value"
+              v-model="editingItem.value"
               @change="setPricePolicy"
-            />
-            <div v-if="item.units">
-              <select class="unit-select ml-10" v-model="item.unit">
-                <option v-for="(unit, index) in item.units" :key="index" :value="unit">{{ unit }}</option>
+            /> -->
+            <money class="text-center number-field" v-model="editingItem.value" v-bind="rateFormat" />
+            <div v-if="editingItem.units">
+              <select class="unit-select ml-10" v-model="editingItem.unit">
+                <option v-for="(unit, index) in editingItem.units" :key="index" :value="unit">{{ unit }}</option>
               </select>
             </div>
           </div>
         </div>
+        <div class="bottom mt-10 no-margin" v-if="editingItem.type == 'DiscountForLarge' && editingItem.isSelected">
+          <div>
+            <span class="d-block">
+              {{ editingItem.labelForAttendees || "How many" }}
+            </span>
+            <input
+              type="number"
+              class="text-center number-field"
+              placeholder="Attendees"
+              v-model="editingItem.attendees"
+            />
+          </div>
+          <br />
+          <div>
+            <span class="d-block">
+              {{ editingItem.labelForValue || "How many" }}
+            </span>
+            <money class="text-center number-field" v-bind="rateFormat" v-model="editingItem.value"></money>
+          </div>
+        </div>
         <div
           class="bottom mt-30"
-          v-if="item.hasOwnProperty('attendees') && ((item.type == Boolean && item.value) || item.type == Number)"
+          v-if="
+            editingItem.hasOwnProperty('attendees') &&
+            ((editingItem.type == Boolean && editingItem.value) || editingItem.type == Number)
+          "
         >
-          <span :class="{ 'd-block': item.type != Boolean, 'mr-10': item.type == Boolean }">
-            {{ item.labelForValue || "How many" }}
+          <span :class="{ 'd-block': editingItem.type != Boolean, 'mr-10': editingItem.type == Boolean }">
+            {{ editingItem.labelForValue || "How many" }}
           </span>
 
           <input
             type="number"
             class="text-center number-field"
             placeholder="Attendees"
-            v-model="item.attendees"
+            v-model="editingItem.attendees"
             @input="setPricePolicy()"
           />
         </div>
-        <div class="bottom mt-30" v-if="item.hasOwnProperty('discount') && item.type == Boolean && item.value">
-          <span class="d-block">{{ item.hasOwnProperty("labelForValue") ? item.labelForValue : "How many" }}</span>
+        <div
+          class="bottom mt-30"
+          v-if="editingItem.hasOwnProperty('discount') && editingItem.type == Boolean && editingItem.value"
+        >
+          <span class="d-block">{{
+            editingItem.hasOwnProperty("labelForValue") ? editingItem.labelForValue : "How many"
+          }}</span>
           <input
             type="number"
             class="text-center number-field w-max-120"
             placeholder=""
-            v-model="item.discount"
+            v-model="editingItem.discount"
             @input="setPricePolicy()"
           />
           <br />
-          <div class="ml-10" v-if="item.hasUnit">
-            <select class="unit-select ml-10" v-model="item.unit">
-              <option v-for="(unit, index) in item.units" :key="index" :value="unit">{{ unit }}</option>
+          <div class="ml-10" v-if="editingItem.hasUnit">
+            <select class="unit-select ml-10" v-model="editingItem.unit">
+              <option v-for="(unit, index) in editingItem.units" :key="index" :value="unit">{{ unit }}</option>
             </select>
           </div>
         </div>
-        <div class="bottom no-margin" v-if="item.type == 'CostAndQty'">
-          <span v-if="item.labelForValue">{{ item.labelForValue }}</span>
+        <div class="bottom no-margin" v-if="editingItem.type == 'CostAndQty'">
+          <span v-if="editingItem.labelForDefaultQty">{{ editingItem.labelForDefaultQty }}</span>
           <div>
-            <input
-              type="number"
-              class="text-center number-field"
-              placeholder=""
-              v-model="item.value"
-              @input="setPricePolicy"
-            />
+            <input type="number" class="text-center number-field" placeholder="" v-model="editingItem.defaultQty" />
           </div>
           <br />
-          <span v-if="item.labelForDefaultQty">{{ item.labelForDefaultQty }}</span>
+          <span v-if="editingItem.labelForValue">{{ editingItem.labelForValue }}</span>
           <div>
-            <money
-              class="text-center number-field"
-              v-model="item.defaultQty"
-              v-bind="currencyFormat"
-              @input="setPricePolicy"
-            />
+            <money class="text-center number-field" v-model="editingItem.value" v-bind="currencyFormat" />
           </div>
         </div>
       </div>
-      <div class="bottom mt-0 ml-40 flex-1 add-not-section" v-if="item.hasComment">
+      <div class="bottom mt-0 ml-40 flex-1 add-not-section" v-if="editingItem.hasComment">
         <div class="item">
           <div
             class="cursor-pointer align-center"
@@ -219,11 +251,11 @@
             </template>
           </div>
           <textarea
-            v-if="item.hasComment && notable"
+            v-if="editingItem.hasComment && notable"
             class="desc width-100"
             rows="3"
-            v-model="item.desc"
-            :placeholder="item.placeholder ? item.placeholder : `Except from the parking area`"
+            v-model="editingItem.desc"
+            :placeholder="editingItem.placeholder ? editingItem.placeholder : `Except from the parking area`"
             @input="setNote"
           />
         </div>
@@ -258,30 +290,53 @@ export default {
         precision: 2,
         masked: false,
       },
+      rateFormat: {
+        decimal: ".",
+        thousands: ",",
+        prefix: "",
+        suffix: " %",
+        precision: 2,
+        masked: false,
+      },
+      editingItem: null,
     };
+  },
+  created() {
+    this.editingItem = Object.assign({}, this.item);
   },
   methods: {
     setPricePolicy(e, type, name, value) {
       if ((type === "option" || type === "Including") && name) {
-        this.item.value = value;
+        this.editingItem.value = value;
       } else {
-        this.item.value = e.target.value;
+        if (e.target) {
+          this.editingItem.value = e.target.value;
+        } else {
+          console.log("test", e);
+          this.editingItem.value = e;
+        }
       }
-
-      this.$emit("update", this.item);
+      // this.$emit("update", this.item);
+    },
+    setPricePolicyWithValue(value) {
+      if (editingItem.value != value) {
+      }
+      // this.$emit("update", this.item);
     },
     setNote() {
       this.$emit("update", this.item);
     },
     changeCategorySelector(value) {
       // console.log(type, item, value);
-      this.item.value = value;
+      this.editingItem.value = value;
       this.$emit("update", this.item);
     },
   },
   watch: {
-    item: {
-      handler() {},
+    editingItem: {
+      handler(newValue, oldValue) {
+        this.$emit("update", newValue);
+      },
       deep: true,
     },
   },
