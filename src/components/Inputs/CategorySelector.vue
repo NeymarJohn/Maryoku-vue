@@ -19,7 +19,11 @@
       >
         <template v-if="multiple">
           <div class="d-flex align-center">
-            <img class="mr-10" :src="`${iconUrl}Group 5479 (2).svg`" v-if="_includes(selectedCategory, category)" />
+            <img
+              class="mr-10"
+              :src="theme === 'red' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
+              v-if="_includes(selectedCategory, category)"
+            />
             <span class="unchecked" v-else></span>
             <span class="text-transform-capitalize">{{ _option(category) }}</span>
           </div>
@@ -70,6 +74,10 @@ export default {
     },
     customClass: {
       type: String,
+    },
+    theme: {
+      type: String,
+      default: "red",
     },
   },
   data: () => ({

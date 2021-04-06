@@ -7,7 +7,11 @@
       </div>
     </template>
     <template slot="content">
-      <policy-section class="pr-50 pl-50 pb-40 policy-content" :vendor="vendorData"></policy-section>
+      <policy-section
+        class="pr-50 pl-50 pb-40 policy-content"
+        :vendor="vendorData"
+        :service="serviceData"
+      ></policy-section>
     </template>
   </collapse-panel>
 </template>
@@ -16,10 +20,23 @@
 import PolicySection from "./PolicySection.vue";
 import CollapsePanel from "./CollapsePanel.vue";
 export default {
+  props: {
+    serviceCategory: {
+      type: String,
+      default: "",
+    },
+  },
   components: { CollapsePanel, PolicySection },
   computed: {
     vendorData() {
       return this.$store.state.vendor.profile;
+    },
+    serviceData() {
+      if (this.serviceCategory === this.vendorData.vendorCategory) {
+        return this.vendorData;
+      } else {
+        return this.vendorData.secondaryServices.find((service) => service.vendorCategory === this.serviceCategory);
+      }
     },
   },
 };

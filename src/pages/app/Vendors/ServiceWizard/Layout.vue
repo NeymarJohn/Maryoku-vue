@@ -7,40 +7,30 @@
       <v-signup-steps :step="step"></v-signup-steps>
     </section>
     <router-view></router-view>
-    <template v-if="step < 7">
-      <section class="footer-wrapper" :class="{ approved: step > 0 }" v-if="step > 0">
-        <div class="left d-flex align-center">
-          <md-button class="md-vendor-signup md-simple md-red" @click="prev()">
-            <md-icon class="color-red font-size-30">keyboard_arrow_left</md-icon>
-            Back
-          </md-button>
-          <md-button
-            v-if="step != 6"
-            @click="scrollToTop()"
-            class="md-button md-button md-simple md-just-icon md-theme-default scroll-top-button md-theme-default"
-          >
-            <span>
-              <img :src="`${iconsUrl}Asset 602.svg`" />
-            </span>
-          </md-button>
-        </div>
-        <div class="right">
-          <md-button class="save md-vendor-signup md-simple md-red md-outlined" @click="saveDraft()">
-            <img :src="`${iconsUrl}Asset 610.svg`" class="label-icon mr-10" />
-            Save for later
-          </md-button>
-          <md-button class="approve md-vendor-signup md-red" @click="next">{{ nextLabel }}</md-button>
-        </div>
-      </section>
-      <section class="footer-wrapper" v-else>
+    <section class="footer-wrapper">
+      <div class="left d-flex align-center">
+        <md-button class="md-vendor-signup md-simple md-vendor" @click="prev()">
+          <md-icon class="color-red font-size-30">keyboard_arrow_left</md-icon>
+          Back
+        </md-button>
         <md-button
-          class="approve md-vendor-signup md-red"
-          @click="approve()"
-          :class="{ disabled: !validateBasicFields }"
-          >Approve & Begin</md-button
+          v-if="step != 6"
+          @click="scrollToTop()"
+          class="md-button md-button md-simple md-just-icon md-theme-default scroll-top-button md-theme-default"
         >
-      </section>
-    </template>
+          <span>
+            <img :src="`${$iconURL}common/arrow-right-purple.svg`" class="upward-button" />
+          </span>
+        </md-button>
+      </div>
+      <div class="right">
+        <md-button class="save md-vendor-signup md-simple md-vendor md-outlined" @click="saveDraft()">
+          <img :src="`${$iconURL}common/save-purple.svg`" class="label-icon mr-10" />
+          Save for later
+        </md-button>
+        <md-button class="approve md-vendor-signup md-vendor" @click="next">{{ nextLabel }}</md-button>
+      </div>
+    </section>
     <modal v-if="status" class="saved-it-modal" container-class="modal-container sm">
       <template slot="header">
         <div class="saved-it-modal__header">
@@ -70,9 +60,10 @@
 import VSignupSteps from "./VSignupSteps.vue";
 import { Modal } from "@/components";
 import Vendors from "@/models/Vendors";
+import VendorService from "@/models/VendorService";
 import Swal from "sweetalert2";
 import { mapMutations, mapGetters } from "vuex";
-import VendorSignupState from "./state";
+import vendorServiceModule from "./state";
 export default {
   components: {
     VSignupSteps,
@@ -86,12 +77,12 @@ export default {
     };
   },
   methods: {
-    ...mapMutations("vendorSignup", ["setVendor", "setEditing", "setStep"]),
+    ...mapMutations("vendorService", ["setVendor", "setEditing", "setStep"]),
     goTo(router) {
       this.$router.push(router);
     },
     approve() {
-      if (this.$store.state.vendorSignup.isEditing) {
+      if (this.$store.state.vendorService.isEditing) {
         this.setStep(1);
       } else {
         if (this.validateBasicFields) {
@@ -99,7 +90,7 @@ export default {
           this.$set(this.vendor, "vendorAddressLine1", this.vendor.vendorAddresses[0]);
           this.$set(this.vendor, "isEditing", true);
           this.$store
-            .dispatch("vendorSignup/saveVendor", this.vendor)
+            .dispatch("vendorService/saveVendor", this.vendor)
             .then((res) => {
               this.setEditing(true);
               this.setStep(1);
@@ -126,6 +117,9 @@ export default {
     },
     next() {
       if (this.step < 6) {
+        if (this.step === 5) {
+          this.addService();
+        }
         this.setStep(this.step + 1);
       } else {
         if (this.vendor.password == this.vendor.confirmPassword) {
@@ -137,8 +131,10 @@ export default {
       this.scrollToTop();
     },
     prev() {
-      if (this.step > 0) {
+      if (this.step > 1) {
         this.setStep(this.step - 1);
+      } else {
+        this.$router.push("/vendor/profile/services");
       }
 
       this.scrollToTop();
@@ -148,7 +144,7 @@ export default {
     },
     saveDraft() {
       // this.savedItModal = true;
-      // this.addVendor();
+      // this.addService();
       const title = "Success to save for later!";
       new Vendors({ ...this.vendor, isEditing: true })
         .save()
@@ -162,7 +158,7 @@ export default {
         .catch((error) => {});
     },
     hideModal() {
-      this.$store.dispatch("vendorSignup/resetStatus");
+      this.$store.dispatch("vendorService/resetStatus");
     },
     camelize(str) {
       let temp = str.replace(/\W+(.)/g, function (match, chr) {
@@ -170,7 +166,7 @@ export default {
       });
       return temp.charAt(0).toLowerCase() + temp.slice(1);
     },
-    async addVendor() {
+    async addService() {
       let title = null;
 
       if (this.step === 7) {
@@ -178,89 +174,51 @@ export default {
       } else {
         title = "Success to save for later!";
       }
-      const tenantUser = {
-        company: this.vendor.companyName,
-        name: this.vendor.email,
-        email: this.vendor.email,
-        password: this.vendor.password,
-        role: "vendor",
-        tenant: "DEFAULT",
-      };
 
-      this.$store.dispatch("auth/register", tenantUser).then(
-        (registeredUser) => {
-          new Vendors({ ...this.vendor, tenantUser: { id: registeredUser.id }, isEditing: false })
-            .save()
-            .then((res) => {
-              this.isCompletedWizard = true;
-              Swal.fire({
-                title,
-                buttonsStyling: false,
-                confirmButtonClass: "md-button md-success",
-              }).then(() => {
-                const proposalRequest = this.$route.query.proposalRequest;
-                if (this.step === 7) {
-                  this.setVendor({});
-                  this.setEditing(false);
-                  this.setStep(0);
-                  this.isCompletedWizard = false;
-                  if (proposalRequest) {
-                    this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
-                  } else {
-                    this.$store.dispatch("auth/login", tenantUser).then(
-                      () => {
-                        this.$router.push(`/vendor/profile/settings`);
-                      },
-                      (error) => {
-                        this.$router.push(`/vendor/signin`);
-                      },
-                    );
-                  }
-                }
-              });
-            })
-            .catch((error) => {});
-        },
-        (error) => {
-          this.loading = false;
-          this.error = "failed";
-        },
-      );
+      new VendorService({
+        ...this.service,
+        vendorCategory: this.service.serviceCategory,
+        vendor: { id: this.vendor.id },
+      })
+        .for(new Vendors({ id: this.vendor.id }))
+        .save()
+        .then((res) => {
+          this.$router.push(`/vendor/profile/services`);
+        });
     },
   },
   beforeCreate() {
-    if (this.$store.registerModule("vendorSignup", VendorSignupState) === false) {
-      this.$store.unregisterModule("vendorSignup");
-      this.$store.registerModule("vendorSignup", VendorSignupState);
-    }
+    this.$store.registerModule("vendorService", vendorServiceModule);
   },
   beforeDestroy() {
-    this.$store.unregisterModule("vendorSignup");
+    this.$store.unregisterModule("vendorService");
   },
   computed: {
     ...mapGetters({
-      vendor: "vendorSignup/getVendor",
-      step: "vendorSignup/getStep",
-      validateBasicFields: "vendorSignup/validateBasicFields",
+      vendor: "vendorService/getVendor",
+      step: "vendorService/getStep",
+      validateBasicFields: "vendorService/validateBasicFields",
     }),
     nextLabel() {
-      if (this.step == 6) {
+      if (this.step == 5) {
         return "Sign Up";
-      } else if (this.step == 5) {
-        return "Finish";
-      } else if (this.step == 3) {
-        return " Check out your new profile!";
       } else {
         return "Next";
       }
     },
     status() {
-      return this.$store.getters["vendorSignup/getStatus"];
+      return this.$store.getters["vendorService/getStatus"];
+    },
+    vendor() {
+      return this.$store.state.vendorService.vendor;
+    },
+    service() {
+      return this.$store.state.vendorService.service;
     },
   },
   watch: {
     step(newVal) {
-      if (this.step === 7) this.addVendor();
+      if (this.step === 7) this.addService();
     },
   },
 };
@@ -287,12 +245,13 @@ export default {
   section.footer-wrapper {
     z-index: 9999;
     width: 100%;
-    padding: 33px 168px;
+    padding: 33px 124px;
     background-color: #ffffff;
     border-radius: 3px;
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     text-align: right;
-
+    display: flex;
+    justify-content: space-between;
     a {
       display: inline-block;
       padding: 17px 55px;
@@ -319,6 +278,11 @@ export default {
           color: #dddddd !important;
         }
       }
+    }
+    .upward-button {
+      width: 20px;
+      height: 15px;
+      transform: rotate(-90deg);
     }
     &.approved {
       display: flex;

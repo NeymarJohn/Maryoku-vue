@@ -13,6 +13,9 @@ const ProposalLayout = () => import("@/pages/app/Vendors/Proposal/ProposalLayout
 const ForVendors = () => import("@/pages/app/Vendors/ForVendors.vue");
 const ProposalContent = () => import("@/pages/app/Vendors/Proposal");
 
+const ServiceWizardLayout = () => import("@/pages/app/Vendors/ServiceWizard/Layout.vue");
+const ServiceWizard = () => import("@/pages/app/Vendors/ServiceWizard")
+
 export default [
     {
         path: "/vendor",
@@ -27,8 +30,10 @@ export default [
                     requiresAuth: false,
                     title: "Vendor Signup",
                     gtm: "VendorSignup",
+                    isVendor: true
                 },
             },
+
             {
                 path: "edit/:id",
                 name: "VendorSignup",
@@ -37,10 +42,30 @@ export default [
                     requiresAuth: false,
                     title: "Vendor Signup",
                     gtm: "VendorSignup",
+                    isVendor: true
                 },
             },
         ],
     },
+    {
+        path: "/vendor",
+        name: "Vendor",
+        component: ServiceWizardLayout,
+        children: [
+            {
+                path: ":id/service/add",
+                name: "Add New Service",
+                component: ServiceWizard,
+                meta: {
+                    requiresAuth: true,
+                    title: "Add New Service",
+                    gtm: "VendorSignup",
+                    isVendor: true
+                },
+            },
+        ],
+    },
+
     {
         path: "/",
         name: "Vendor",
@@ -54,6 +79,7 @@ export default [
                     requiresAuth: false,
                     title: "Vendor Signup",
                     gtm: "VendorSignup",
+                    isVendor: true
                 },
             },
             {
@@ -64,6 +90,7 @@ export default [
                     requiresAuth: false,
                     title: "Vendor Signup",
                     gtm: "VendorSignup",
+                    isVendor: true
                 },
             },
         ],
@@ -76,6 +103,7 @@ export default [
             requiresAuth: false,
             title: "Vendor Signin",
             gtm: "Vendor Signin",
+            isVendor: true
         },
     },
     {
@@ -86,6 +114,7 @@ export default [
             requiresAuth: true,
             title: "Vendor Signed in",
             gtm: "Vendor Signed in",
+            isVendor: true
         },
     },
     {
@@ -101,6 +130,7 @@ export default [
                     requiresAuth: true,
                     title: "Profile",
                     gtm: "Profile",
+                    isVendor: true
                 },
             },
             {
@@ -111,6 +141,7 @@ export default [
                     requiresAuth: true,
                     title: "Proposal Board",
                     gtm: "Proposal Board",
+                    isVendor: true
                 },
             },
         ],
@@ -128,6 +159,7 @@ export default [
                     requiresAuth: false,
                     title: "For Vendors",
                     gtm: "ForVendors",
+                    isVendor: true
                 },
             },
         ],
@@ -146,6 +178,7 @@ export default [
                     requiresAuth: false,
                     title: "For Proposals",
                     gtm: "ForProposals",
+                    isVendor: true
                 },
             },
             {
@@ -156,6 +189,7 @@ export default [
                     requiresAuth: false,
                     title: "For Proposals",
                     gtm: "ForProposals",
+                    isVendor: true
                 },
             },
             {
@@ -166,6 +200,7 @@ export default [
                     requiresAuth: false,
                     title: "For Proposals",
                     gtm: "ForProposals",
+                    isVendor: true
                 },
             },
         ],

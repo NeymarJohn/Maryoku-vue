@@ -4071,10 +4071,10 @@ export const VendorPricingPolicy = [
     category: "venuerental",
     items: [
       {
-        name: "Minimum amount of hours",
+        name: "Minimum amount of rental hours required",
         type: Number,
         noSuffix: true,
-        label: "Number of hours",
+        labelForValue: "Number of hours",
         hasComment: true,
         unit: "hour",
       },
@@ -4082,14 +4082,14 @@ export const VendorPricingPolicy = [
         name: "Hours included in rental",
         type: Number,
         noSuffix: true,
-        label: "Number of hours",
+        labelForValue: "Number of hours",
         hasComment: true,
         unit: "hour",
       },
       {
         name: "Setup hours included in rental",
         type: Number,
-        label: "Number of hours",
+        labelForValue: "Number of hours",
         noSuffix: true,
         hasComment: true,
         unit: "hour",
@@ -4100,21 +4100,44 @@ export const VendorPricingPolicy = [
         hasComment: true,
       },
       {
-        name: "Cost Extra Guest (beyond agreed upon)",
+        name: "Cost Per Extra Guest (beyond agreed upon qty)",
         type: Number,
         hasComment: true,
+        labelForValue: "Cost",
+        isExtraService: true,
+        extraService: {
+          label: "Cost Per Extra Guest (beyond agreed upon qty)"
+        }
       },
       {
-        name: "Overtime Cost",
+        name: "Overtime Cost(Rental)",
         type: Number,
         units: ["Per hour", "All togeter"],
         hasComment: true,
+        isExtraService: true,
+        extraService: {
+          label: "Overtime Cost(Rental)"
+        }
       },
       {
-        name: "Cost Late Night Fares",
+        name: "Additional Set-up Hours",
+        type: Number,
+        units: ["Per hour", "All togeter"],
+        hasComment: true,
+        isExtraService: true,
+        extraService: {
+          label: "Additional Set-up Hours"
+        }
+      },
+      {
+        name: "Late Night Fee",
         type: Number,
         hasUnit: true,
         units: ["Per person", "All together"],
+        isExtraService: true,
+        extraService: {
+          label: "Late Night Fee"
+        }
       },
       {
         name: "Discount for large quantities",
@@ -4151,16 +4174,38 @@ export const VendorPricingPolicy = [
         name: "Pickup",
         type: Number,
         hasComment: true,
+        isExtraService: true,
+        extraService: {
+          label: "Pickup"
+        }
+
       },
       {
         name: "Cleanup",
         type: Number,
         hasComment: true,
+        isExtraService: true,
+        extraService: {
+          label: "Cleanup"
+        }
       },
       {
-        name: "Cost Late Night Fares",
+        name: "Cost Late Night Fee",
         type: Number,
         hasComment: true,
+        isExtraService: true,
+        extraService: {
+          label: "Late Night Fee"
+        }
+      },
+      {
+        name: "Breakdown",
+        type: Number,
+        hasComment: true,
+        isExtraService: true,
+        extraService: {
+          label: "Breakdown"
+        }
       },
       {
         name: "Discount for large quantities",
@@ -4523,6 +4568,8 @@ export const VendorPricingPolicy = [
         subCategory: "charge",
         type: Number,
         hasComment: true,
+        labelForValue: "Number of hours",
+        noSuffix: true,
         unit: "hour",
       },
       {
@@ -4530,12 +4577,24 @@ export const VendorPricingPolicy = [
         subCategory: "charge",
         type: Number,
         hasComment: true,
+        isExtraService: true,
+        extraService: {
+          label: "Rushed setup"
+        }
       },
       {
-        name: "Rehersal time for the band (for special requests)",
+        name: "Rehearsal time for the band (for special requests)",
         subCategory: "charge",
-        type: Number,
+        type: "CostAndQty",
         hasComment: true,
+        isExtraService: true,
+        value: "",
+        defaultQty: "",
+        labelForValue: "Minimum hours",
+        labelForDefaultQty: "Price per hour",
+        extraService: {
+          label: "Rehearsal time for the band (for special requests)"
+        }
       },
       {
         name: "Special operating time",
@@ -4549,6 +4608,10 @@ export const VendorPricingPolicy = [
         subCategory: "charge",
         type: Number,
         hasComment: true,
+        isExtraService: true,
+        extraService: {
+          label: "Extra for prizes"
+        }
       },
       {
         name: "Overtime charges",
@@ -4556,6 +4619,7 @@ export const VendorPricingPolicy = [
         type: "Cost",
         value: "",
         unit: "hour",
+
       },
       {
         name: "Tax rate",
@@ -4573,8 +4637,8 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Suggested Gratuity",
-        subCategory: "tips",
         type: Number,
+        isPercentage: true,
         hideOnProposal: true,
       },
     ],
@@ -4641,17 +4705,17 @@ export const VendorPricingPolicy = [
         unit: "hour",
       },
       {
-        name: "Travel to multiple location",
+        name: "Travel to multiple locations",
         type: Number,
         hasComment: true,
       },
       {
-        name: "Over number of pictures taken",
+        name: "Additional Pictures (more than in package purchased)",
         type: Number,
         hasComment: true,
       },
       {
-        name: "Discount for large discounts",
+        name: "Discount for large quantity",
         type: Boolean,
         attendees: null,
         hideOnProposal: true,
@@ -4668,6 +4732,7 @@ export const VendorPricingPolicy = [
         type: Number,
         hasComment: true,
         hideOnProposal: true,
+        isPercentage: true,
       },
     ],
   },
@@ -4776,3 +4841,45 @@ export const cancellationPolicyData = [
     cancellationFee: "Down payment will not be refunded",
   },
 ];
+export const socialMediaBlocks = [
+  {
+    name: "website",
+    icon: "Asset 539.svg",
+  },
+  {
+    name: "facebook",
+    icon: "Asset 540.svg",
+  },
+  {
+    name: "instagram",
+    icon: "Group 4569 (2).svg",
+  },
+  {
+    name: "youtube",
+    icon: "socialmedia/Youtube.svg",
+  },
+  {
+    name: "linkedin",
+    icon: "socialmedia/Linkdin.svg",
+  },
+  {
+    name: "google",
+    icon: "socialmedia/GooglePlus.svg",
+  },
+  {
+    name: "pinterest",
+    icon: "socialmedia/Pinterest.svg",
+  },
+  {
+    name: "foursquare",
+    icon: "socialmedia/foursquare.svg",
+  },
+  {
+    name: "reddit",
+    icon: "socialmedia/Twitter.svg",
+  },
+  {
+    name: "tiktok",
+    icon: "socialmedia/Tiktok.svg",
+  },
+]

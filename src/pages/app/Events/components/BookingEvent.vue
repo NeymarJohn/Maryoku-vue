@@ -26,7 +26,7 @@
               Book now before it’s too late
             </div>
             <div class="header-actions">
-              <md-button class="md-simple normal-btn md-red">
+              <md-button class="md-simple normal-btn md-red" @click="compareProposal">
                 <md-icon>bar_chart</md-icon>
                 Compare Proposals
               </md-button>
@@ -45,6 +45,7 @@
             v-for="(proposal, index) in proposals.slice(0, 3)"
             :key="index"
             :proposal="proposal"
+            :component="selectedBlock"
             @goDetail="goDetailPage"
             :probability="getProbability(index)"
           ></proposal-card>
@@ -247,9 +248,6 @@ export default {
         id: this.blockId,
       });
       if (this.selectedBlock && this.selectedBlock.vendorRequirements && this.selectedBlock.vendorRequirements[0]) {
-        // this.currentRequirement = this.selectedBlock.vendorRequirements[0];
-        // this.showCounterPage = true;
-        // this.showProposals = true;
         this.showCounterPage = false;
         this.showProposals = false;
       } else {
@@ -315,6 +313,9 @@ export default {
     },
     getProbability(index) {
       return 100 - 10 * (index + 1) + Math.round(10 * Math.random());
+    },
+    compareProposal() {
+      this.$router.push(`/events/${this.event.id}/booking/${this.blockId}/proposals/compare`);
     },
   },
   created() {

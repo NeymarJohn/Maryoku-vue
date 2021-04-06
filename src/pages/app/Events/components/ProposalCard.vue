@@ -14,6 +14,11 @@
         <span class="price-value">${{ proposal.cost | withComma }}</span>
         <small>For 3 hours</small>
       </div>
+      <div v-if="component.allocatedBudget < proposal.cost" class="font-size-14 color-dark-gray mb-10">
+        <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" class="label-icon" />
+        ${{ (proposal.cost - component.allocatedBudget) | withComma }}
+        more than budget
+      </div>
       <template v-if="proposal.vendor">
         <h4 class="event-title">{{ proposal.vendor.companyName }}</h4>
         <div class="probability">Alignement to requirements {{ probability }}%</div>
@@ -41,6 +46,10 @@ export default {
     probability: {
       type: Number,
       default: 0,
+    },
+    component: {
+      type: Object,
+      default: () => {},
     },
   },
   methods: {
