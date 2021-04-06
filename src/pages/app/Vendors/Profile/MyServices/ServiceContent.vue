@@ -1,6 +1,6 @@
 <template>
   <div class="service-content">
-    <div><img class="service-image" :src="vendorData.images[0]" /></div>
+    <div><img class="service-image" :src="serviceData.images[0] || vendorData.images[0]" /></div>
     <div class="p-50">
       <div class="font-size-16 font-bold">
         <img :src="`${$iconURL}Budget Elements/${serviceCategory.icon}`" class="page-icon mr-10" />

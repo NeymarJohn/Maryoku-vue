@@ -13,7 +13,7 @@
           <div class="text">{{ label }}</div>
         </div>
         <div class="included-cont" v-if="checked && !item.xIncluded">
-          <div class="included" :class="{ active: included }" @click="updateIncluded()">
+          <div class="included mr-20" :class="{ active: included }" @click="updateIncluded()">
             <img
               :src="theme === 'red' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
               v-if="included"
@@ -22,10 +22,10 @@
             <span class="unchecked" v-else></span>
             <span>Included</span>
           </div>
-          <div class="flex-1 ml-20">
-            <div class="included" :class="{ active: !included }" @click="updateIncluded()">
+          <div class="flex-1 mr-m1">
+            <div class="included mr-20" :class="{ active: !included }" @click="updateIncluded()">
               <img
-                :src="theme === 'red' ? `${iconUrl}Group 5489 (3).svg` : `${$iconURL}common/close-circle-purple.svg`"
+                :src="theme === 'red' ? `${iconUrl}Group 5479 (3).svg` : `${$iconURL}common/close-circle-purple.svg`"
                 v-if="!included"
               />
               <span class="unchecked" v-else></span>
@@ -63,7 +63,7 @@
               <span class="unchecked" v-else></span>
               <span>Yes</span>
             </div>
-            <div class="flex-1 ml-20">
+            <div class="flex-1 mr-m1">
               <div class="included" :class="{ active: currentItem.dry === false }" @click="updateValue('dry', false)">
                 <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="currentItem.dry === false" />
                 <span class="unchecked" v-else></span>
@@ -93,7 +93,7 @@
           <input type="number" placeholder="QTY" v-model="currentItem.value" @input="updateValue" />
         </div>
         <div class="included-cont mt-10" v-if="checked && !item.xIncluded">
-          <div class="included" :class="{ active: included }" @click="updateIncluded()">
+          <div class="included mr-20" :class="{ active: included }" @click="updateIncluded()">
             <img
               :src="theme === 'red' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
               v-if="included"
@@ -101,7 +101,7 @@
             <span class="unchecked" v-else></span>
             <span>Included</span>
           </div>
-          <div class="flex-1 ml-20">
+          <div class="flex-1 mr-m1">
             <div class="included" :class="{ active: !included }" @click="updateIncluded()">
               <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!included" />
               <span class="unchecked" v-else></span>
@@ -179,7 +179,7 @@
             <span class="unchecked" v-else></span>
             <span>Included</span>
           </div>
-          <div class="flex-1 ml-20">
+          <div class="flex-1 mr-m1">
             <div class="included" :class="{ active: !included }" @click="updateIncluded()">
               <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!included" />
               <span class="unchecked" v-else></span>
@@ -190,8 +190,7 @@
         <div class="included-cont" v-if="checked && !included">
           <div class="extra-field">
             Extra payment
-            <!-- <input type="number" class="mt-20" placeholder="00.00" v-model="currentItem.value" @input="updateValue" /> -->
-            <money v-model="currentItem.value" v-bind="currencyFormat" class="mt-20" @change="updateValue" />
+            <input type="number" class="mt-20" placeholder="00.00" v-model="currentItem.value" @input="updateValue" />
           </div>
         </div>
       </div>
@@ -269,7 +268,7 @@ export default {
       currencyFormat: {
         decimal: ".",
         thousands: ",",
-        prefix: "$ ",
+        prefix: "$",
         suffix: "",
         precision: 2,
         masked: false,

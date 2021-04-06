@@ -25,7 +25,6 @@
             </div>
           </template>
           <template v-if="item.type == String">
-            <input class="text-center string-field" v-model="item.value" @input="setPolicy" />
             <!--<div class="item" v-if="!noteRules.includes(r)" @click="noteRule(r)">-->
             <!--<a class="note">+ Add Note</a>-->
             <!--</div>-->
@@ -324,15 +323,6 @@ export default {
     }
     .add-note {
       width: 50%;
-    }
-    .string-field {
-      text-align: left;
-      font-size: 16px;
-      padding: 22px 30px;
-      /* width: 40%; */
-      width: 12rem;
-      border: 1px solid #dddddd;
-      border-radius: 0;
     }
   }
 }

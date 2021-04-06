@@ -7,12 +7,15 @@
           <span class="value label">{{ item.label }}</span>
         </div>
         <div class="qty text-transform-capitalize">
-          <span v-if="this.item.value.constructor.name !== 'Array'">{{ getQty() }}</span>
+          <span v-if="this.item.value && this.item.value.constructor.name !== 'Array'">{{ getQty() }}</span>
           <img v-if="item.desc" :src="`${$iconURL}NewSubmitPorposal/Group 4770 (2).svg`" />
           <img v-else :src="`${$iconURL}Vendor Signup/Asset 528.svg`" />
         </div>
       </div>
-      <div class="text-transform-capitalize pl-40" v-if="this.item.value.constructor.name == 'Array'">
+      <div
+        class="text-transform-capitalize pl-40"
+        v-if="this.item.value && this.item.value.constructor.name == 'Array'"
+      >
         {{ getQty() }}
       </div>
     </div>

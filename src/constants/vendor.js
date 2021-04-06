@@ -3788,10 +3788,6 @@ export const VendorPolicy = [
         name: "Flexible time requirement for setup",
         type: Boolean,
       },
-      {
-        name: "Working with unions",
-        type: Boolean,
-      },
     ],
   },
   {
@@ -4061,7 +4057,7 @@ export const VendorPolicy = [
       },
       {
         name: "Minimum internet bandwidth (Simulticasting, Streaming)",
-        type: String,
+        type: Number,
       },
       {
         name: "Flexibility to operate with additional Photo / Video companies during the event",
@@ -4081,7 +4077,6 @@ export const VendorPricingPolicy = [
         labelForValue: "Number of hours",
         hasComment: true,
         unit: "hour",
-        value: ""
       },
       {
         name: "Hours included in rental",
@@ -4090,7 +4085,6 @@ export const VendorPricingPolicy = [
         labelForValue: "Number of hours",
         hasComment: true,
         unit: "hour",
-        value: ""
       },
       {
         name: "Setup hours included in rental",
@@ -4250,16 +4244,15 @@ export const VendorPricingPolicy = [
         hasComment: true,
       },
       {
-        name: "Discount for large quantities",
-        type: "DiscountForLarge",
-        labelForAttendees: "How many",
-        labelForValue: "Rate",
-        isSelected: false,
-        value: 0,
-        attendees: null,
+        name: "Working with unions",
+        type: Boolean,
         hasComment: true,
-        hideOnProposal: true,
-        unit: "%"
+      },
+      {
+        name: "Discount for large quantities",
+        type: Boolean,
+        attendees: null,
+        labelForValue: "How much",
       },
       {
         name: "Tax rate",
@@ -4271,7 +4264,6 @@ export const VendorPricingPolicy = [
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
-        isPercentage: true,
         hideOnProposal: true,
       },
       {
@@ -4420,7 +4412,6 @@ export const VendorPricingPolicy = [
         subCategory: "discount",
         type: "Discount",
         hasUnit: true,
-        unit: "%",
         units: ["Per guest", "Total"],
       },
       {
@@ -4435,7 +4426,7 @@ export const VendorPricingPolicy = [
     category: "audiovisualstagingservices",
     items: [
       {
-        name: "Rush job",
+        name: "Rushed job",
         type: Number,
         hasComment: true,
       },
@@ -4453,15 +4444,12 @@ export const VendorPricingPolicy = [
       {
         name: "Discounts",
         type: Number,
-        isPercentage: true,
         hasComment: true,
-        hideOnProposal: true,
       },
       {
         name: "Suggested Gratuity",
         type: Number,
         hasComment: true,
-        isPercentage: true,
         hideOnProposal: true,
       },
     ],
@@ -4534,7 +4522,6 @@ export const VendorPricingPolicy = [
         type: Number,
         hasUnit: true,
         units: ["Per guest", "Total"],
-        unit: "%"
       },
       {
         name: "Road tolls",
@@ -4598,17 +4585,12 @@ export const VendorPricingPolicy = [
       {
         name: "Rehearsal time for the band (for special requests)",
         subCategory: "charge",
-        type: "CostAndQty",
+        type: Number,
         hasComment: true,
         isExtraService: true,
-        value: "",
-        defaultQty: "",
-        labelForDefaultQty: "Minimum hours",
-        labelForValue: "Price per hour",
         extraService: {
           label: "Rehearsal time for the band (for special requests)"
-        },
-        qtyUnit: "hour"
+        }
       },
       {
         name: "Special operating time",
@@ -4616,6 +4598,7 @@ export const VendorPricingPolicy = [
         type: "MultiSelection",
         options: ["Morning", "Afternoon", "Evening", "Night"],
         value: [],
+
       },
       {
         name: "Extra for prizes",
@@ -4632,8 +4615,7 @@ export const VendorPricingPolicy = [
         subCategory: "charge",
         type: "Cost",
         value: "",
-        unit: "$",
-        qtyUnit: "hour"
+        unit: "hour",
 
       },
       {
@@ -4648,8 +4630,6 @@ export const VendorPricingPolicy = [
         subCategory: "discount",
         type: "Discount",
         hasUnit: true,
-        isPercentage: true,
-        unit: "%",
         units: ["Per guest", "Total"],
       },
       {
@@ -4697,7 +4677,6 @@ export const VendorPricingPolicy = [
       {
         name: "Large group discounts",
         type: "Discount",
-        unit: "%",
         units: ["per guest", "total"],
       },
       {
@@ -4720,20 +4699,17 @@ export const VendorPricingPolicy = [
         subCategory: "charge",
         type: "Cost",
         value: "",
-        unit: "$",
-        qtyUnit: "hour"
+        unit: "hour",
       },
       {
-        name: "Travel to multiple locations",
+        name: "Travel to multiple location",
         type: Number,
         hasComment: true,
-        value: ""
       },
       {
         name: "Additional Pictures (more than in package purchased)",
         type: Number,
         hasComment: true,
-        value: ""
       },
       {
         name: "Discount for large quantity",
@@ -4741,14 +4717,12 @@ export const VendorPricingPolicy = [
         attendees: null,
         hideOnProposal: true,
         labelForValue: "How much",
-        value: ""
       },
       {
         name: "Tax rate",
         type: Number,
         isPercentage: true,
         hideOnProposal: true,
-        value: ""
       },
       {
         name: "Suggested Gratuity",
@@ -4756,7 +4730,6 @@ export const VendorPricingPolicy = [
         hasComment: true,
         hideOnProposal: true,
         isPercentage: true,
-        value: ""
       },
     ],
   },
