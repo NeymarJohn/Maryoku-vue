@@ -13,8 +13,8 @@
       <div class="right-side">
         <div class="description">
           <h5>
-            <img :src="getCategoryIconByValue(currentService.serviceCategory)" width="40" />
-            {{ getCategoryNameByValue(currentService.serviceCategory) }} Amenities
+            <img :src="getCategoryIconByValue(currentService.vendorCategory)" width="40" />
+            {{ getCategoryNameByValue(currentService.vendorCategory) }} Amenities
           </h5>
           <p>
             Mark all the services you can support and will be included in your proposal. If needed please add a
@@ -22,7 +22,7 @@
           </p>
         </div>
         <vendor-service-item
-          v-for="(c, cIndex) in categories.find((category) => category.name == currentService.serviceCategory)
+          v-for="(c, cIndex) in categories.find((category) => category.name == currentService.vendorCategory)
             .categories"
           :key="cIndex"
           :serviceItem="c"

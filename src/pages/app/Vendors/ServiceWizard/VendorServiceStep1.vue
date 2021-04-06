@@ -112,8 +112,8 @@ export default {
       return this.$store.state.vendorService.service;
     },
     selectedCategoryName() {
-      if (!this.service.serviceCategory) return "";
-      return VendorCategories.find((item) => item.value === this.service.serviceCategory).name;
+      if (!this.service.vendorCategory) return "";
+      return VendorCategories.find((item) => item.value === this.service.vendorCategory).name;
     },
   },
 };

@@ -80,6 +80,9 @@ export default {
         if (!vendor.hasOwnProperty("dontWorkTime")) this.$set(vendor, "dontWorkTime", null);
         if (!vendor.hasOwnProperty("services")) this.$set(vendor, "services", {});
         this.setVendor(vendor);
+        if (this.$route.params.serviceId) {
+          this.setService(vendor.secondaryServices.find((service) => service.id === this.$route.params.serviceId));
+        }
         this.setEditing(true);
         // check if image is uploaded to S3
       });

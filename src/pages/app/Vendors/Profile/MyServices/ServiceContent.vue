@@ -2,9 +2,12 @@
   <div class="service-content">
     <div><img class="service-image" :src="serviceData.images[0] || vendorData.images[0]" /></div>
     <div class="p-50">
-      <div class="font-size-16 font-bold">
-        <img :src="`${$iconURL}Budget Elements/${serviceCategory.icon}`" class="page-icon mr-10" />
-        About Our {{ serviceCategory.title }}
+      <div class="font-size-16 font-bold d-flex justify-content-between align-center">
+        <div>
+          <img :src="`${$iconURL}Budget Elements/${serviceCategory.icon}`" class="page-icon mr-10" />
+          About Our {{ serviceCategory.title }}
+        </div>
+        <md-button class="md-vendor maryoku-btn" @click="gotoEditingService">Edit Service</md-button>
       </div>
       <div class="mt-20 about-service">{{ vendorData.about.category }}</div>
     </div>
@@ -123,6 +126,13 @@ export default {
       defaultAttachments[currentIndex].url = "";
       let updateData = { attachments: defaultAttachments, id: this.vendorData.id };
       this.$store.dispatch("vendor/updateProfile", updateData);
+    },
+    gotoEditingService() {
+      if (this.serviceCategory.key === this.vendorData.vendorCategory) {
+        this.$router.push(`/vendor/edit/${this.vendorData.id}`);
+      } else {
+        this.$router.push(`/vendor/${this.vendorData.id}/service/edit/${this.serviceData.id}`);
+      }
     },
   },
 };

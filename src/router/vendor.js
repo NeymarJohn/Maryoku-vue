@@ -63,6 +63,17 @@ export default [
                     isVendor: true
                 },
             },
+            {
+                path: ":id/service/edit/:serviceId",
+                name: "Add New Service",
+                component: ServiceWizard,
+                meta: {
+                    requiresAuth: true,
+                    title: "Edit Service",
+                    gtm: "VendorSignup",
+                    isVendor: true
+                },
+            },
         ],
     },
 

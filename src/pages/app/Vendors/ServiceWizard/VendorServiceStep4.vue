@@ -38,8 +38,8 @@
             </div> -->
             <div class="block">
               <div class="title">
-                <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(currentService.serviceCategory)}`" />
-                About Our {{ getCategoryNameByValue(currentService.serviceCategory) }}
+                <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(currentService.vendorCategory)}`" />
+                About Our {{ getCategoryNameByValue(currentService.vendorCategory) }}
               </div>
               <div class="desc">{{ vendor.about.category }}</div>
             </div>
@@ -110,10 +110,8 @@
               <div class="cheader">
                 <div class="first-column">
                   <div>
-                    <img
-                      :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(currentService.serviceCategory)}`"
-                    />
-                    {{ getCategoryNameByValue(currentService.serviceCategory) }}
+                    <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(currentService.vendorCategory)}`" />
+                    {{ getCategoryNameByValue(currentService.vendorCategory) }}
                   </div>
                 </div>
                 <div class="second-column"></div>

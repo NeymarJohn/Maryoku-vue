@@ -187,6 +187,9 @@ export default {
         });
     },
   },
+  created() {
+    this.$store.commit("vendorService/setStep", 1);
+  },
   beforeCreate() {
     this.$store.registerModule("vendorService", vendorServiceModule);
   },

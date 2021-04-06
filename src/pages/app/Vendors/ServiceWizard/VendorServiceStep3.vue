@@ -21,7 +21,7 @@
               <h5><img :src="`${iconUrl}Asset 560.svg`" /> Policy</h5>
             </div>
             <div class="bottom">
-              <p>Set {{ getCategoryNameByValue(currentService.serviceCategory) }} rules for your guests</p>
+              <p>Set {{ getCategoryNameByValue(currentService.vendorCategory) }} rules for your guests</p>
             </div>
             <div class="bottom">
               <p>Use the suggested element or add your own itmes to your disclaimer</p>
@@ -428,7 +428,7 @@ export default {
     },
     init: async function () {
       // set vendorPricingPolicies from initial pricing policies
-      let vendorPricingPolicies = this.pricingPolicies.find((p) => p.category === this.currentService.serviceCategory);
+      let vendorPricingPolicies = this.pricingPolicies.find((p) => p.category === this.currentService.vendorCategory);
 
       console.log("vendorPricingPolicies", vendorPricingPolicies);
       // replace vendorPricingPolicies with saved vendor
@@ -456,7 +456,7 @@ export default {
           }
         });
       }
-      let vendorPolicies = this.policies.find((p) => p.category === this.currentService.serviceCategory);
+      let vendorPolicies = this.policies.find((p) => p.category === this.currentService.vendorCategory);
       if (this.currentService.policies && this.currentService.policies.length) {
         this.$set(this.vendorPolicies, "items", this.currentService.policies);
         this.vendorPolicies.items.map((it, idx) => {
