@@ -37,7 +37,6 @@
       <div class="permission-row">
         <div><img :src="userData.avatar" class="user-icon" /></div>
         <div>{{ userData.name }}</div>
-        <div></div>
         <div class="color-gray">Owner</div>
         <div></div>
       </div>
@@ -159,7 +158,7 @@ export default {
   .permision-list {
     .permission-row {
       display: grid;
-      grid-template-columns: 80px 25% 25% 25% auto;
+      grid-template-columns: 80px 30% 30% auto;
       padding: 20px 0;
       font-size: 16px;
       align-items: center;
