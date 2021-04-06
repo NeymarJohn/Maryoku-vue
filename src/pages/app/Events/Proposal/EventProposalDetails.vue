@@ -109,9 +109,9 @@
               </li>
             </ul>
           </div>
-          <div class="social-section" v-if="isSocial()">
-            Website & social
-            <div class="items">
+          <div class="social-section mb-30" v-if="isSocial()">
+            <div>Website & social</div>
+            <div class="items mt-10">
               <div
                 class="item"
                 v-for="(s, sIndex) in socialMediaBlocks"
@@ -126,6 +126,14 @@
                   <img :src="`${$iconURL}Vendor Signup/${s.icon}`" class="page-icon" />
                   {{ vendorProposal.vendor.social[s.name] }}
                 </a>
+              </div>
+            </div>
+          </div>
+          <div class="attachment-section mb-30" v-if="attachments && attachments.length > 0">
+            <div class="attachment-tag-list">
+              <div class="attachment-tag" v-for="(attachment, index) in attachments" :key="index" :class="theme">
+                <img :src="`${$iconURL}common/pin-red.svg`" />
+                <a class="color-red" :href="attachment.url" target="_blank">{{ attachment.name }}</a>
               </div>
             </div>
           </div>
@@ -389,7 +397,17 @@
           </tbody>
         </table> -->
       </div>
-
+      <div
+        class="bundle-section d-flex justify-content-between align-center"
+        v-if="vendorProposal.bundleDiscount && vendorProposal.bundleDiscount.isApplied"
+      >
+        <div>
+          <span class="font-size-30 font-bold">Bundle offer</span>
+          <span>{{ vendorProposal.bundleDiscount.percentage }}%</span>
+          <span>{{ getBundleServices(vendorProposal.bundleDiscount.services) }}</span>
+        </div>
+        <div class="font-size-30 font-bold">-${{ vendorProposal.bundleDiscount.price | withComma }}</div>
+      </div>
       <div class="proposal-section policy-section">
         <div class="proposal-section__title">
           <img :src="`${submitProposalIcon}Asset 287.svg`" width="20" /> Our Policy
@@ -441,7 +459,7 @@
               </div>
             </div>
           </div>
-          <div class="rules">
+          <div class="rules" v-if="additionalRules && additionalRules.length > 0">
             <h5 class="font-bold font-size-20">Additional Rules</h5>
             <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
               <div class="item">Event must be {{ policy }}</div>
@@ -480,9 +498,7 @@
     <div class="book-proposal-form">
       <div class="form-title">
         Would You Like To Book
-        <a href class="font-bold-extra">
-          {{ vendorProposal.vendor.companyName }} </a
-        >?
+        <a href class="font-bold-extra"> {{ vendorProposal.vendor.companyName }} </a>?
       </div>
       <div class="agree-checkbox" v-if="this.vendorProposal.suggestedTime">
         <md-checkbox v-model="acceptNewTimes">I agree to the new time of this proposal</md-checkbox>
@@ -628,6 +644,15 @@ export default {
       "setNumberOfParticipants",
       "setEventData",
     ]),
+    getBundleServices(bundleServices) {
+      const serviceNames = bundleServices.map((service) => {
+        return this.getCategory(service).title;
+      });
+      return serviceNames.join(" + ");
+    },
+    getCategory(key) {
+      return this.categories.find((item) => item.key === key);
+    },
     addExtraService(extraService) {
       const itemIndex = this.extraServices.findIndex((item) => item.requirementTitle === extraService.requirementTitle);
       console.log(itemIndex);
@@ -731,7 +756,7 @@ export default {
     },
     discount() {
       if (!this.vendorProposal.discounts) return { percentage: 0, price: 0 };
-      let discount = this.vendorProposal.discounts[this.vendorProposal.vendor.eventCategory.key];
+      let discount = this.vendorProposal.discounts["total"];
       if (!discount) {
         discount = { price: 0, percentage: 0 };
       }
@@ -740,12 +765,19 @@ export default {
     },
     tax() {
       if (!this.vendorProposal.taxes) return { percentage: 0, price: 0 };
-      let tax = this.vendorProposal.taxes[this.vendorProposal.vendor.eventCategory.key];
+      let tax = this.vendorProposal.taxes["total"];
       if (!tax) {
         tax = { price: 0, percentage: 0 };
       }
       tax.price = Math.round((this.priceOfCostservices * tax.percentage) / 100);
       return tax;
+    },
+    attachments() {
+      if (this.vendorProposal.attachments && this.vendorProposal.attachments.length > 0)
+        return this.vendorProposal.attachments;
+      if (this.vendorProposal.vendor.attachments && this.vendorProposal.vendor.attachments.length > 0)
+        return this.vendorProposal.vendor.attachments;
+      return [];
     },
     costServices() {
       return this.vendorProposal.costServices[this.vendorProposal.vendor.eventCategory.key];
@@ -782,6 +814,9 @@ export default {
     },
     additionalRules() {
       return this.vendorProposal.vendor.additionalRules;
+    },
+    categories() {
+      return this.$store.state.common.serviceCategories;
     },
   },
   filters: {
@@ -970,6 +1005,15 @@ export default {
               height: 20px;
             }
           }
+        }
+      }
+      .attachment-section {
+        .attachment-tag {
+          border: solid 1px #f51355;
+          display: inline-block;
+          padding: 15px;
+          border-radius: 3px;
+          margin-right: 10px;
         }
       }
       .pricing-section {
@@ -1399,6 +1443,12 @@ export default {
         }
       }
 
+      .bundle-section {
+        padding: 46px 50px 48px 60px;
+        background-color: #ffedb7;
+        box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+        border-radius: 3px;
+      }
       .policy-section {
         margin-top: 4em;
 
@@ -1447,6 +1497,17 @@ export default {
           .rules {
             width: 80%;
             padding-right: 20%;
+            .rule {
+              border-top: solid 1px #ddd;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              padding: 15px 0px;
+              padding-right: 50%;
+              &:last-child {
+                border-bottom: solid 1px #ddd;
+              }
+            }
           }
         }
       }

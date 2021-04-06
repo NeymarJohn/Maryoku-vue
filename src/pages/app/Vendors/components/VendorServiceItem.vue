@@ -35,7 +35,7 @@
             :label="item.name"
             :vendor="vendor"
             :service="service"
-            theme="purple"
+            :theme="theme"
             v-model="item.value"
           />
         </div>

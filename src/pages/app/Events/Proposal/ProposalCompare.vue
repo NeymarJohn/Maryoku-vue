@@ -36,7 +36,11 @@
       <div class="grid-row">
         <div class="grid-cell comparing-name font-bold-extra">A comparision of the the three venus</div>
         <div class="grid-cell" v-for="proposal in proposals" :key="`name-${proposal.id}`">
-          <div><img :src="proposal.vendor.images[0]" /></div>
+          <div>
+            <img
+              :src="proposal.inspirationalPhotos[0] ? proposal.inspirationalPhotos[0].url : proposal.vendor.images[0]"
+            />
+          </div>
           <div class="font-size-20 font-bold mt-20 mb-20">{{ proposal.vendor.companyName }}</div>
           <md-button class="md-red maryoku-btn width-100">Details & Booking</md-button>
         </div>
@@ -45,7 +49,12 @@
         <div class="grid-cell comparing-name font-bold-extra">Price</div>
         <div class="grid-cell text-center" v-for="proposal in proposals" :key="`name-${proposal.id}`">
           <div>${{ proposal.cost | withComma }}</div>
-          <div>${{ selectedBlock.allocatedBudget - proposal.cost }} Less than original budget</div>
+          <div v-if="selectedBlock.allocatedBudget - proposal.cost > 0">
+            ${{ selectedBlock.allocatedBudget - proposal.cost }} Less than original budget
+          </div>
+          <div v-if="selectedBlock.allocatedBudget - proposal.cost < 0">
+            ${{ proposal.cost - selectedBlock.allocatedBudget }} More than original budget
+          </div>
         </div>
       </div>
       <div class="grid-row">

@@ -228,6 +228,12 @@
                   <span class="mr-10" v-if="policy.discount"> {{ policy.discount }} </span>
                   <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '%'"> % </span>
                 </div>
+                <div class="item" v-else-if="policy.type === 'CostAndQty'">
+                  ${{ policy.value | withComma }} per {{ policy.qtyUnit }}({{ policy.defaultQty }}{{ policy.qtyUnit }}s)
+                </div>
+                <div class="item" v-else-if="policy.type === 'Cost'">
+                  ${{ policy.value | withComma }} per {{ policy.qtyUnit }}
+                </div>
                 <div class="item" v-else>
                   <span v-if="policy.type === Number && !policy.isPercentage && policy.unit !== 'hour'">$</span>
                   <span v-if="policy.value === true">Yes</span>

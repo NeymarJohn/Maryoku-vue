@@ -6,7 +6,7 @@
           <img :src="`${$iconURL}common/bell-white.svg`" /> Bundle Offer
           <md-tooltip md-direction="top" class="p-30 color-black">
             <div class="font-size-20 font-bold mb-10">{{ getBundleToolTipText(proposal.bundleDiscount.services) }}</div>
-            <div class="font-size-16">{{ proposal.bundleDiscount.discountPercentage }}% Off for the whole package</div>
+            <div class="font-size-16">{{ proposal.bundleDiscount.percentage }}% Off for the whole package</div>
           </md-tooltip>
         </div>
       </div>
