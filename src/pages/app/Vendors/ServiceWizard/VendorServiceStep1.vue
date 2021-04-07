@@ -113,6 +113,7 @@ export default {
     },
     selectedCategoryName() {
       if (!this.service.vendorCategory) return "";
+      alert(this.service.vendorCategory);
       return VendorCategories.find((item) => item.value === this.service.vendorCategory).name;
     },
   },
