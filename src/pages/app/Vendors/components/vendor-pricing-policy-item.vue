@@ -438,7 +438,7 @@ export default {
         input {
           text-align: center;
           font-size: 16px;
-          padding: 22px 30px;
+          padding: 12px 20px;
           /*width: 40%;*/
           width: 12rem;
           border: 1px solid #dddddd;
@@ -448,7 +448,7 @@ export default {
       .number-field {
         text-align: center;
         font-size: 16px;
-        padding: 22px 30px;
+        padding: 12px 20px;
         /*width: 40%;*/
         width: 12rem;
         border: 1px solid #dddddd;
@@ -458,6 +458,12 @@ export default {
     .add-not-section {
       max-width: 50%;
     }
+  }
+  select {
+    line-height: 1.5em;
+    border: 1px solid #dddddd;
+    box-shadow: 0 1px 3px 0 #e6ebf1;
+    color: #050505;
   }
 }
 textarea {

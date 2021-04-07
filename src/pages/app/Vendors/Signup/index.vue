@@ -65,27 +65,7 @@ export default {
   mounted() {
     //if this is edit page
     if (this.$route.params.id) {
-      Vendors.find(this.$route.params.id).then((vendor) => {
-        if (!vendor.about) this.$set(vendor, "about", {});
-        if (!vendor.capacity) this.$set(vendor, "capacity", {});
-        if (!vendor.social) this.$set(vendor, "social", {});
-        if (!vendor.images) this.$set(vendor, "images", new Array(15));
-        if (!vendor.hasOwnProperty("yesRules")) this.$set(vendor, "yesRules", []);
-        if (!vendor.hasOwnProperty("noRules")) this.$set(vendor, "noRules", []);
-        if (!vendor.hasOwnProperty("notAllowed")) this.$set(vendor, "notAllowed", []);
-        if (!vendor.hasOwnProperty("exDonts")) this.$set(vendor, "exDonts", []);
-        if (!vendor.hasOwnProperty("pricingPolicies")) this.$set(vendor, "pricingPolicies", []);
-        if (!vendor.hasOwnProperty("policies")) this.$set(vendor, "policies", []);
-        if (!vendor.hasOwnProperty("yesPolicies")) this.$set(vendor, "yesPolicies", []);
-        if (!vendor.hasOwnProperty("noPolicies")) this.$set(vendor, "noPolicies", []);
-        if (!vendor.hasOwnProperty("selectedWeekdays")) this.$set(vendor, "selectedWeekdays", []);
-        if (!vendor.hasOwnProperty("dontWorkDays")) this.$set(vendor, "dontWorkDays", []);
-        if (!vendor.hasOwnProperty("dontWorkTime")) this.$set(vendor, "dontWorkTime", null);
-        if (!vendor.hasOwnProperty("services")) this.$set(vendor, "services", {});
-        this.setVendor(vendor);
-        this.setEditing(true);
-        // check if image is uploaded to S3
-      });
+      this.$store.dispatch("vendorSignup/getVendor", this.$route.params.id);
     }
     this.$root.$on("approve-vendor-basic-info", (vendor) => {
       if (vendor) this.vendor = { ...this.vendor, ...vendor };

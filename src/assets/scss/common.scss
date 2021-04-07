@@ -61,13 +61,36 @@ select {
   border-radius: 3px;
   border: solid 1px #656565;
   font-size: 16px;
+  -moz-appearance:none;
   min-height: 50px;
   &:active {
     border: solid 1px #050505;
   }
 }
+// input,
+// .StripeElement {
+//     height: 40px;
+//     padding: 10px 12px;
+
+//     background-color: white;
+//     border: 1px solid transparent;
+//     border-radius: 4px;
+
+//     box-shadow: 0 1px 3px 0 #e6ebf1;
+//     -webkit-transition: box-shadow 150ms ease;
+//     transition: box-shadow 150ms ease;
+// }
 input[type="text"] {
   font-size: 16px;
+}
+input[type="number"] {
+  -moz-appearance: textfield; /*For FireFox*/
+
+  &::-webkit-inner-spin-button {
+      /*For Webkits like Chrome and Safari*/
+      -webkit-appearance: none;
+      margin: 0;
+  }
 }
 .font-regular {
   font-family: "Manrope-Regular";

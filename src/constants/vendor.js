@@ -4200,7 +4200,7 @@ export const VendorPricingPolicy = [
         }
       },
       {
-        name: "Cost Late Night Fee",
+        name: "Late Night Fee",
         type: Number,
         hasComment: true,
         isExtraService: true,
@@ -4701,8 +4701,12 @@ export const VendorPricingPolicy = [
       {
         name: "Large group discounts",
         type: "Discount",
+        value: 0,
+        defaultQty: 0,
         unit: "%",
-        units: ["per guest", "total"],
+        labelForValue: "Discount",
+        labelForDefaultQty: "How many"
+        // units: ["per guest", "total"],
       },
       {
         name: "Suggested Gratuity",

@@ -620,7 +620,7 @@ export default {
           }
           input {
             font-size: 16px;
-            padding: 22px 30px;
+            padding: 12px 20px;
             min-width: 75%;
             border: 1px solid #707070;
             border-radius: 0;
