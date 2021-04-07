@@ -1,6 +1,10 @@
 <template>
   <div class="md-layout">
     <vue-element-loading :active="loading" spinner="ring" color="#FF547C" isFullScreen />
+    <video autoplay muted loop class="background-video">
+      <source :src="`/static/videos/signinBackground.mov`" type="video/mp4" />
+      Your browser does not support HTML5 video.
+    </video>
     <div class="md-layout-item">
       <signup-card>
         <div
@@ -211,6 +215,14 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.background-video {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+}
 p.description {
   font-size: 16px;
 }
