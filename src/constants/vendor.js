@@ -4081,7 +4081,8 @@ export const VendorPricingPolicy = [
         labelForValue: "Number of hours",
         hasComment: true,
         unit: "hour",
-        value: ""
+        value: "",
+        hideOnProposal: true
       },
       {
         name: "Hours included in rental",
@@ -4090,7 +4091,8 @@ export const VendorPricingPolicy = [
         labelForValue: "Number of hours",
         hasComment: true,
         unit: "hour",
-        value: ""
+        value: "",
+        hideOnProposal: true
       },
       {
         name: "Setup hours included in rental",
@@ -4099,11 +4101,13 @@ export const VendorPricingPolicy = [
         noSuffix: true,
         hasComment: true,
         unit: "hour",
+        hideOnProposal: true
       },
       {
         name: "Minimum Spend",
         type: Number,
         hasComment: true,
+        hideOnProposal: true
       },
       {
         name: "Cost Per Extra Guest (beyond agreed upon qty)",
