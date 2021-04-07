@@ -177,7 +177,6 @@ export default {
 
       new VendorService({
         ...this.service,
-        vendorCategory: this.service.serviceCategory,
         vendor: { id: this.vendor.id },
       })
         .for(new Vendors({ id: this.vendor.id }))

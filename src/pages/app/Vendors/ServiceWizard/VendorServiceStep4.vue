@@ -117,7 +117,12 @@
                 <div class="second-column"></div>
               </div>
               <div class="citems">
-                <vendor-starting-fee-item v-for="(fv, fvIndex) in getStartingFeeItems()" :key="fvIndex" :item="fv" />
+                <vendor-starting-fee-item
+                  v-for="(fv, fvIndex) in getStartingFeeItems()"
+                  :key="fvIndex"
+                  :item="fv"
+                  theme="purple"
+                />
               </div>
             </div>
           </div>

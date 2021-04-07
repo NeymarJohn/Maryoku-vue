@@ -366,6 +366,7 @@ export default {
   input {
     font-size: 16px;
     width: 100%;
+    padding: 1.5rem 1rem;
     border: 1px solid #b7b7b7;
     box-shadow: none;
     font: normal 16px "Manrope-Regular", sans-serif;

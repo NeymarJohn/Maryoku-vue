@@ -18,7 +18,23 @@
       <div class="right-side">
         <div class="card">
           <div class="banner">
-            <vendor-images-list :images="vendor.images" class="images mt-30"></vendor-images-list>
+            <div class="images">
+              <span class="prev" @click="prev()" v-if="imageSlidePos < 0">
+                <md-icon>keyboard_arrow_left</md-icon>
+              </span>
+              <div class="cont" :style="{ left: `${imageSlidePos}px` }" ref="imagesCont">
+                <img :src="img" v-for="(img, ind) in vendor.vendorImages" :key="`image-${ind}`" @click="view()" />
+              </div>
+              <span class="next" @click="next()" v-if="imageSlidePos >= 0">
+                <md-icon>keyboard_arrow_right</md-icon>
+              </span>
+              <LightBox
+                v-if="getGalleryImages().length > 0"
+                :images="getGalleryImages()"
+                ref="lightbox"
+                :show-light-box="false"
+              />
+            </div>
           </div>
           <div class="about-cont profile-section" id="About">
             <div class="block">
@@ -181,11 +197,11 @@ import { capitalize } from "@/utils/string.util";
 //COMPONENTS
 import Icon from "@/components/Icon/Icon.vue";
 import VendorServiceItem from "./components/VendorServiceItem.vue";
+import LightBox from "vue-image-lightbox";
 import carousel from "vue-owl-carousel";
 import VendorStartingFeeItem from "./components/VendorStartingFeeItem.vue";
 import VendorExtraPayItem from "./components/VendorExtraPayItem.vue";
 import _ from "underscore";
-import VendorImagesList from "./components/VendorImagesList.vue";
 
 export default {
   name: "vendor-signup-step4",
@@ -197,11 +213,11 @@ export default {
   components: {
     VueElementLoading,
     VendorServiceItem,
+    LightBox,
     carousel,
     VendorStartingFeeItem,
     VendorExtraPayItem,
     VendorDetailReviews,
-    VendorImagesList,
   },
   data() {
     return {

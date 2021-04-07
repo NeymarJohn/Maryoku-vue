@@ -3,7 +3,13 @@
     <div class="collapsed" @click="expand()">
       <div class="d-flex justify-content-between w-100">
         <div>
-          <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
+          <img
+            :src="
+              theme === 'red'
+                ? `${$iconURL}Vendor Signup/Group 5479 (2).svg`
+                : `${$iconURL}common/checked-circle-purple.svg`
+            "
+          />
           <span class="value label">{{ item.label }}</span>
         </div>
         <div class="qty text-transform-capitalize">
@@ -31,6 +37,10 @@ export default {
   name: "vendor-starting-fee-item",
   props: {
     item: Object,
+    theme: {
+      type: String,
+      default: "red",
+    },
   },
   components: {},
   data() {

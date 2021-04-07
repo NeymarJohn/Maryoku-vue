@@ -79,7 +79,7 @@ export default {
     updateCategory(category) {
       console.log(category);
       const categoryData = VendorCategories.find((item) => item.name == category);
-      this.$store.commit("vendorService/setField", { field: "serviceCategory", value: categoryData.value });
+      this.$store.commit("vendorService/setField", { field: "vendorCategory", value: categoryData.value });
     },
     addVendorImage(file) {
       this.$store.dispatch("vendorService/uploadImage", { index: this.service.images.length, file });
