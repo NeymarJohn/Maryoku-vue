@@ -2735,6 +2735,7 @@ export const businessCategories = [
                 name: "special equipment",
                 type: Number,
                 value: 0,
+                hideLabelForValue: true
               },
             ],
           },
