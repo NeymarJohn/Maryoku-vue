@@ -243,7 +243,8 @@
                     {{ policy.attendees }} attendees
                   </span>
                   <span class="ml-50 text-transform-capitalize" v-if="policy.unit">
-                    {{ policy.unit }}
+                    <!-- {{ policy.unit }}{{ policy.value > 1 ? "s" : "" }} -->
+                    {{ getUnit(policy) }}
                   </span>
                 </div>
               </div>
@@ -597,6 +598,12 @@ export default {
       });
 
       this.$root.$emit("update-vendor-value", "services", this.vendor.services);
+    },
+    getUnit(policy) {
+      if (policy.unit !== "%" || policy.unit !== "$") {
+        return `${policy.unit}${policy.value > 1 ? "s" : ""}`;
+      }
+      return policy.unit;
     },
   },
   computed: {
