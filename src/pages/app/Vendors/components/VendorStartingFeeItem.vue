@@ -3,14 +3,18 @@
     <div class="collapsed" @click="expand()">
       <div class="d-flex justify-content-between w-100">
         <div>
-          <img
-            :src="
-              theme === 'red'
-                ? `${$iconURL}Vendor Signup/Group 5479 (2).svg`
-                : `${$iconURL}common/checked-circle-purple.svg`
-            "
-          />
-          <span class="value label">{{ item.label }}</span>
+          <div>
+            <img
+              :src="
+                theme === 'red'
+                  ? `${$iconURL}Vendor Signup/Group 5479 (2).svg`
+                  : `${$iconURL}common/checked-circle-purple.svg`
+              "
+            />
+            <span class="value label">{{ item.label }}</span>
+          </div>
+          <div v-if="item.dry === true" class="mt-5">Allowed Dry Run</div>
+          <div v-if="item.dry === false" class="mt-5">Not Allowed Dry Run</div>
         </div>
         <div class="qty text-transform-capitalize">
           <span v-if="this.item.value && this.item.value.constructor.name !== 'Array'">{{ getQty() }}</span>

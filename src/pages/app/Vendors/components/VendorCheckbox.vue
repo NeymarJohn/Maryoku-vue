@@ -317,8 +317,7 @@ export default {
       this.$root.$emit("update-vendor-value", `services.${this.camelize(this.label)}`, this.currentItem);
     },
     updateValue(field, value) {
-      console.log(this.currentItem);
-      if (field & (typeof value !== "undefined")) {
+      if (field && typeof value !== "undefined") {
         this.currentItem[field] = value;
       }
       this.$root.$emit("update-vendor-value", `services.${this.camelize(this.label)}`, this.currentItem);
