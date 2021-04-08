@@ -1,12 +1,12 @@
 <template>
-  <div class="venodr-images-list">
+  <div class="header-image-carousel">
     <span class="prev" @click="prev()" v-show="startIndex > 0">
       <md-icon>keyboard_arrow_left</md-icon>
     </span>
     <div class="cont" :style="{ left: `${imageSlidePos}px` }" ref="imagesCont">
-      <img :src="img" v-for="(img, ind) in images" :key="ind" @click="view(ind)" class="image-item" />
+      <img :src="img" v-for="(img, ind) in carouselImages" :key="ind" @click="view(ind)" class="image-item" />
     </div>
-    <span class="next" @click="next()" v-show="startIndex < images.length - 3">
+    <span class="next" @click="next()" v-show="startIndex < images.length - 1">
       <md-icon>keyboard_arrow_right</md-icon>
     </span>
     <LightBox v-if="medias.length" :media="medias" ref="lightbox" :show-light-box="false" />
@@ -30,10 +30,22 @@ export default {
   components: {
     LightBox,
   },
+  created() {
+    // init first location
+    this.setTimeout(() => {
+      this.imageSlidePos = -document.getElementsByClassName("image-item")[1].offsetLeft;
+    }, 1000);
+  },
   methods: {
     view(index) {
       if (this.$refs.lightbox) {
-        this.$refs.lightbox.showImage(index);
+        if (index === 0) {
+          this.$refs.lightbox.showImage(this.images.length - 1);
+        } else if (index > this.images.length) {
+          this.$refs.lightbox.showImage(0);
+        } else {
+          this.$refs.lightbox.showImage(index - 1);
+        }
       }
     },
     prev() {
@@ -78,11 +90,14 @@ export default {
         };
       });
     },
+    carouselImages() {
+      return [this.images[this.images.length - 1], ...this.images, this.images[0]];
+    },
   },
 };
 </script>
 <style scoped lang="scss">
-.venodr-images-list {
+.header-image-carousel {
   display: block;
   overflow: hidden;
   padding: 2rem 0;
@@ -114,17 +129,18 @@ export default {
     position: relative;
     transition: all 0.5s;
     img {
-      width: 300px;
-      height: 177px;
+      width: 60%;
+      height: 500px;
       margin-right: 2rem;
-      border-radius: 5px;
+      border-radius: 0px;
       object-fit: cover;
       cursor: zoom-in;
+      transform: translateX(-67%);
       &:first-child {
-        margin-left: 50px;
+        // margin-left: 50px;
       }
       &:last-child {
-        margin-right: 50px;
+        // margin-right: 50px;
       }
     }
   }
