@@ -4614,13 +4614,13 @@ export const VendorPricingPolicy = [
         },
         qtyUnit: "hour"
       },
-      {
-        name: "Special operating time",
-        subCategory: "charge",
-        type: "MultiSelection",
-        options: ["Morning", "Afternoon", "Evening", "Night"],
-        value: [],
-      },
+      // {
+      //   name: "Special operating time",
+      //   subCategory: "charge",
+      //   type: "MultiSelection",
+      //   options: ["Morning", "Afternoon", "Evening", "Night"],
+      //   value: [],
+      // },
       {
         name: "Extra for prizes",
         subCategory: "charge",
