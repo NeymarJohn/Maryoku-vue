@@ -190,6 +190,26 @@
             <money class="text-center number-field" v-bind="rateFormat" v-model="editingItem.value"></money>
           </div>
         </div>
+        <div class="bottom mt-10 no-margin" v-if="editingItem.type == 'GroupDiscount'">
+          <div>
+            <span class="d-block">
+              {{ editingItem.labelForValue || "How many" }}
+            </span>
+            <money class="text-center number-field" v-bind="rateFormat" v-model="editingItem.value"></money>
+          </div>
+          <br />
+          <div>
+            <span class="d-block">
+              {{ editingItem.labelForGroupSize || "How many" }}
+            </span>
+            <input
+              type="number"
+              class="text-center number-field"
+              placeholder="Group Size"
+              v-model="editingItem.groupSize"
+            />
+          </div>
+        </div>
         <div
           class="bottom mt-30"
           v-if="

@@ -600,10 +600,13 @@ export default {
       this.$root.$emit("update-vendor-value", "services", this.vendor.services);
     },
     getUnit(policy) {
-      if (policy.unit !== "%" || policy.unit !== "$") {
+      if (policy.unit !== "%" && policy.unit !== "$") {
         return `${policy.unit}${policy.value > 1 ? "s" : ""}`;
       }
-      return policy.unit;
+      if (policy.type === "GroupDiscount") {
+        return `For ${policy.groupSize}`;
+      }
+      return "";
     },
   },
   computed: {
