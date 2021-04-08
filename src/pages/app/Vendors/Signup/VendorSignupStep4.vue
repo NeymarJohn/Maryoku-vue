@@ -175,10 +175,10 @@
                 </div>
               </div>
             </div>
-            <div class="rules">
+            <div class="rules" v-if="additionalRules && additionalRules.length">
               <h5 class="font-bold font-size-20">Additional Rules</h5>
               <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
-                <div class="item">Event must be {{ policy }}</div>
+                <div class="item font-regular">Event must be {{ policy }}</div>
               </div>
             </div>
             <div class="not-allowed" v-if="vendor.vendorCategories[0] == 'venuerental'">

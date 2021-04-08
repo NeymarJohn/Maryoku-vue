@@ -135,9 +135,11 @@ export default {
     editRule(r) {
       this.focusedRule = this.rules.filter((rule) => rule == r)[0];
       this.rules = this.rules.filter((rule) => rule != r);
+      this.$store.commit("vendorSignup/setField", { field: "additionalRules", value: this.rules });
     },
     removeRule(r) {
       this.rules = this.rules.filter((rule) => rule != r);
+      this.$store.commit("vendorSignup/setField", { field: "additionalRules", value: this.rules });
     },
   },
 };
