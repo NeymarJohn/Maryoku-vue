@@ -125,8 +125,8 @@
                   <img :src="`${iconUrl}Asset 543.svg`" />
                   {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
                 </div>
-                <span>QTY</span>
-                <span>Price</span>
+                <span class="text-center">QTY</span>
+                <span class="text-center">Price</span>
                 <span></span>
               </div>
               <div class="citems">

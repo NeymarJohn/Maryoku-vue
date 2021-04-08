@@ -1,6 +1,8 @@
 import Vue from "vue";
 import { postReq, getReq } from "@/utils/token";
 import Vendors from "@/models/Vendors";
+import { VendorPolicy, VendorPricingPolicy } from "@/constants/vendor";
+
 import S3Service from "@/services/s3.service";
 import { makeid } from "@/utils/helperFunction";
 import { getBase64 } from "@/utils/file.util";
@@ -55,6 +57,54 @@ const getters = {
 };
 
 const actions = {
+    getVendor: ({ commit, state }, vendorId) => {
+        Vendors.find(vendorId).then((vendor) => {
+            if (!vendor.about) Vue.set(vendor, "about", {});
+            if (!vendor.capacity) Vue.set(vendor, "capacity", {});
+            if (!vendor.social) Vue.set(vendor, "social", {});
+            if (!vendor.images) Vue.set(vendor, "images", new Array(15));
+            if (!vendor.hasOwnProperty("yesRules")) Vue.set(vendor, "yesRules", []);
+            if (!vendor.hasOwnProperty("noRules")) Vue.set(vendor, "noRules", []);
+            if (!vendor.hasOwnProperty("notAllowed")) Vue.set(vendor, "notAllowed", []);
+            if (!vendor.hasOwnProperty("exDonts")) Vue.set(vendor, "exDonts", []);
+            if (!vendor.hasOwnProperty("pricingPolicies")) Vue.set(vendor, "pricingPolicies", []);
+            else {
+                // check default policies and saved data on profile
+                const vendorPricingPolicies = vendor.pricingPolicies;
+                const defultPricingPolicies = VendorPricingPolicy.find(item => item.category === vendor.vendorCategory)
+                const newPricingPolicies = []
+                defultPricingPolicies.items.forEach((policyItem, index) => {
+                    const appliedItem = vendorPricingPolicies.find(it => it.name === policyItem.name)
+                    if (appliedItem) {
+                        if (appliedItem.value)
+                            policyItem.value = appliedItem.value
+                        if (appliedItem.attendees)
+                            policyItem.attendees = appliedItem.attendees
+                        if (appliedItem.defaultQty)
+                            policyItem.defaultQty = appliedItem.defaultQty
+                        // appliedItem.hideOnProposal = policyItem.hideOnProposal
+                        // appliedItem.labelForValue = policyItem.labelForValue
+                        // appliedItem.isPercentage = policyItem.isPercentage
+                        newPricingPolicies.push({ ...appliedItem, ...policyItem })
+                    } else {
+                        newPricingPolicies.push(policyItem)
+                    }
+                })
+                console.log(newPricingPolicies)
+                Vue.set(vendor, "pricingPolicies", newPricingPolicies);
+            }
+            if (!vendor.hasOwnProperty("policies")) Vue.set(vendor, "policies", []);
+            if (!vendor.hasOwnProperty("yesPolicies")) Vue.set(vendor, "yesPolicies", []);
+            if (!vendor.hasOwnProperty("noPolicies")) Vue.set(vendor, "noPolicies", []);
+            if (!vendor.hasOwnProperty("selectedWeekdays")) Vue.set(vendor, "selectedWeekdays", []);
+            if (!vendor.hasOwnProperty("dontWorkDays")) Vue.set(vendor, "dontWorkDays", []);
+            if (!vendor.hasOwnProperty("dontWorkTime")) Vue.set(vendor, "dontWorkTime", null);
+            if (!vendor.hasOwnProperty("services")) Vue.set(vendor, "services", {});
+            commit("setVendor", vendor)
+            commit("setEditing", true)
+            // check if image is uploaded to S3
+        });
+    },
     fetchAllProperties: ({ commit, state }, categoryName) => {
         return new Promise((resolve, reject) => {
             // getting from store

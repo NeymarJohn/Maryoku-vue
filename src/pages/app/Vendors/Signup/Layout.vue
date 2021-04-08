@@ -181,13 +181,7 @@ export default {
       return temp.charAt(0).toLowerCase() + temp.slice(1);
     },
     async addVendor() {
-      let title = null;
-
-      if (this.step === 7) {
-        title = "Thank you for your sign up!";
-      } else {
-        title = "Success to save for later!";
-      }
+      let title = "Thank you for your sign up!";
       const tenantUser = {
         company: this.vendor.companyName,
         name: this.vendor.email,

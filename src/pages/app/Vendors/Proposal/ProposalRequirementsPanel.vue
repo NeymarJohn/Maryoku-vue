@@ -31,19 +31,6 @@
                 </div>
               </div>
             </div>
-            <!-- <div class="category-section" v-if="selectedOptions(requirementsData[requirementCategory]).length > 0">
-              <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
-              <div class="requirement-grid">
-                <div
-                  class="requirement-item"
-                  v-for="requirementItem in selectedOptions(requirementsData[requirementCategory])"
-                  :key="requirementItem.item"
-                >
-                  <div class="checkmark"></div>
-                  <div class="d-inline-block">{{ requirementItem.item || requirementItem.subCategory }}</div>
-                </div>
-              </div>
-            </div> -->
           </template>
           <div
             v-else-if="requirementsData[requirementCategory].filter((item) => item.isSelected).length > 0"
@@ -91,18 +78,18 @@
             <template v-else-if="requirementCategory.toLowerCase() === 'special'">
               <div
                 class="category-section"
-                v-if="selectedOptions(requirement.requirements[requirementCategory]).length > 0"
+                v-for="subCategory in selectedOptions(requirementsData[requirementCategory])"
+                :key="subCategory.subCategory"
               >
-                <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
+                <div class="color-dark-gray text-transform-capitalize">{{ subCategory.subCategory }}</div>
                 <div class="requirement-grid">
                   <div
                     class="requirement-item"
-                    v-for="requirementItem in selectedOptions(requirement.requirements[requirementCategory])"
-                    :key="requirementItem.item"
+                    v-for="requirementItem in subCategory.options.filter((item) => item.selected)"
+                    :key="requirementItem.name"
                   >
                     <div class="checkmark"></div>
-
-                    <div class="d-inline-block">{{ requirementItem.item || requirementItem.subCategory }}</div>
+                    <div class="d-inline-block">{{ requirementItem.name }}</div>
                   </div>
                 </div>
               </div>
@@ -164,7 +151,10 @@ export default {
   },
   methods: {
     selectedOptions(specialRequirements) {
-      return specialRequirements.filter((item) => item.options.some((option) => option.selected));
+      return specialRequirements.filter(
+        (item) =>
+          item.subCategory.toLowerCase() !== "sitting arrangement" && item.options.some((option) => option.selected),
+      );
     },
   },
   created() {

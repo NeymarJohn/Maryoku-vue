@@ -157,10 +157,8 @@ export default {
     .field {
       display: flex;
       align-items: center;
-
       input {
         font-size: 16px;
-        padding: 22px 30px;
         width: 100%;
         border: 1px solid #707070;
         border-radius: 0;
