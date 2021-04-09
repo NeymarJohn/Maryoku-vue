@@ -1,6 +1,6 @@
 <template>
   <div class="white-card mt-20 additional-requirements" v-if="hasSittingArrangement">
-    <div class="p-40">
+    <!-- <div class="p-40">
       <div>
         <img :src="`${$iconURL}Submit+Proposal/Group+8840.svg`" />
         <span class="font-size-30 font-bold">Additional requests from the client</span>
@@ -8,10 +8,10 @@
       <div>
         {{ this.proposalRequest.requirement.note }}
       </div>
-    </div>
+    </div> -->
     <!-- <hr /> -->
     <div
-      class="pb-40 pr-40 pl-40"
+      class="p-40"
       v-for="requirement in specialRequirements"
       :key="requirement.item"
       :class="{ 'd-none': getSelectedOption(requirement.options).length == 0 }"
@@ -34,7 +34,10 @@
             <div class="font-size-22 ml-10">people</div>
           </div>
         </div>
-        <hr style="background-color: #ececec" />
+        <hr
+          style="background-color: #ececec"
+          v-if="requirement.groupSizes && requirement.groupSizes.findIndex((item) => item.selected) >= 0"
+        />
         <div class="mt-30">
           <img :src="`${$iconURL}Submit+Proposal/request arrangement.png`" />
           <span class="font-size-30 font-bold">
@@ -57,14 +60,13 @@
                 <div><img :src="`${$iconURL}Requirements/${sit.icon}`" /></div>
               </div>
             </template>
-            <template v-for="suggestedSeating in suggestedNewSeatings">
-              <div
-                :key="`sitarrangement-${index}`"
-                class="d-flex flex-column justify-content-between seat-type suggested-seat"
-              >
-                <div class="font-bold">{{ suggestedSeating }}</div>
-              </div>
-            </template>
+            <div v-if="requirement.hasOtherOption" class="d-flex flex-column seat-type">
+              <div class="font-bold">'Other'</div>
+              <div class="mt-20">{{ requirement.otherOptionContent }}</div>
+            </div>
+            <div class="d-flex flex-column justify-content-between seat-type suggested-seat">
+              <div class="font-bold">'{{ suggestedNewSeatings }}'</div>
+            </div>
           </div>
           <div v-if="!editingNewSeating" class="d-flex align-center">
             <md-button class="md-simple md-outlined md-red maryoku-btn" @click="editingNewSeating = true">
@@ -106,7 +108,9 @@ export default {
       editingNewSeating: false,
     };
   },
-  created() {},
+  created() {
+    this.newSeatingSuggest = this.$store.state.vendorProposal.suggestedNewSeatings;
+  },
   methods: {
     getSelectedOption(options) {
       return options.filter((it) => it.selected);
@@ -114,11 +118,11 @@ export default {
     saveNewSeating() {
       if (this.newSeatingSuggest.trim()) {
         let suggestedNewSeatings = this.$store.state.vendorProposal.suggestedNewSeatings;
-        if (!suggestedNewSeatings) suggestedNewSeatings = [];
-        suggestedNewSeatings.push(this.newSeatingSuggest);
+        if (!suggestedNewSeatings) suggestedNewSeatings = "";
+        suggestedNewSeatings = this.newSeatingSuggest;
         this.$store.commit("vendorProposal/setValue", { key: "suggestedNewSeatings", value: suggestedNewSeatings });
         this.editingNewSeating = false;
-        this.newSeatingSuggest = "";
+        // this.newSeatingSuggest = "";
       }
     },
   },

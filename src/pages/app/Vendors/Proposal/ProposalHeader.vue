@@ -25,6 +25,7 @@
           />
         </div>
       </div>
+      <img v-else :src="defaultImage" class="default-image" />
     </div>
     <div class="proposal-banner">
       <div class="header-content">
@@ -53,24 +54,24 @@
             <img :src="`${$iconURL}common/clock-white.svg`" />
             {{ eventTime }}
           </li>
-          <li
-            :class="[{ 'with-help': dateTooltip && suggestionDate }]"
-            @mouseover="dateTooltip = true"
-            @mouseleave="dateTooltip = false"
-          >
+          <li>
             <img :src="`${$iconURL}common/calendar-white.svg`" />
             {{ eventDate }}
-            <img
-              v-if="dateTooltip && suggestionDate"
-              class="question"
-              :src="`${$iconURL}NewSubmitPorposal/Asset 582.svg`"
-            />
-            <div class="date-tooltip" v-if="dateTooltip && suggestionDate">
-              <h3>Your Time Suggestion</h3>
-              <p>
-                Client will get this proposal with
-                <br />your new suggested date
-              </p>
+            <!-- <img v-if="suggestionDate" class="question" :src="`${$iconURL}NewSubmitPorposal/Asset 582.svg`" /> -->
+            <div
+              class="suggest-date-help"
+              v-if="suggestionDate"
+              @mouseover="dateTooltip = true"
+              @mouseleave="dateTooltip = false"
+            >
+              ?
+              <div class="date-tooltip" v-show="dateTooltip">
+                <h3>Your Time Suggestion</h3>
+                <p>
+                  Client will get this proposal with
+                  <br />your new suggested date
+                </p>
+              </div>
             </div>
           </li>
 
@@ -192,12 +193,14 @@ export default {
     return {
       showModal: false,
       dateTooltip: false,
+      defaultImage: "https://maryoku.s3.amazonaws.com/proposal/background-default.jpg",
     };
   },
   computed: {
     vendor() {
       return this.$store.state.vendorProposal.proposalRequest.vendor;
     },
+
     eventDate() {
       const suggestionDate = this.$store.state.vendorProposal.suggestionDate;
       if (!this.event) return "-";
@@ -263,12 +266,65 @@ section.proposal-header {
   -webkit-box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
   box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
   height: 200px;
+  .suggest-date-help {
+    width: 25px;
+    height: 25px;
+    background-color: #ffc001;
+    border-radius: 50%;
+    text-align: center;
+    font-weight: 800;
+    margin-left: 20px;
+    position: relative;
+
+    .date-tooltip {
+      position: absolute;
+      display: inline-block;
+      width: 300px;
+      padding: 24px 32px;
+      color: #050505;
+      font-size: 14px;
+      left: 50%;
+      top: 100%;
+      text-align: center;
+      background-color: #ffedbc;
+      transform: translate(-53px, 20px);
+      cursor: pointer;
+      h3 {
+        font-size: 20px;
+        font-weight: 800;
+        margin-top: 0;
+        margin-bottom: 17px;
+      }
+      p {
+        font-size: 16px;
+        max-width: 100% !important;
+        margin: 0;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 0;
+        top: 4px;
+        left: 70px;
+        box-sizing: border-box;
+
+        border: 12px solid black;
+        border-color: transparent transparent #ffedb7 #ffedb7;
+
+        transform-origin: 0 0;
+        transform: rotate(135deg);
+      }
+    }
+  }
   .background-image {
     width: 100%;
     height: 100%;
     left: 0;
     top: 0;
     position: absolute;
+    overflow: hidden;
     &::after {
       position: absolute;
       width: 100%;
@@ -278,6 +334,11 @@ section.proposal-header {
       left: 0;
       background-color: #000;
       opacity: 0.6;
+    }
+    .default-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     .concept-color {
       width: 250px;
@@ -345,6 +406,7 @@ section.proposal-header {
           display: flex;
           margin-right: 0px;
           border-right: solid 1px white;
+          position: relative;
           &:first-child {
             padding-left: 0px;
           }
@@ -370,47 +432,6 @@ section.proposal-header {
               &.question {
                 margin-left: 12px;
                 margin-right: 0;
-              }
-            }
-
-            .date-tooltip {
-              position: absolute;
-              display: inline-block;
-              width: 300px;
-              background-color: #ffedb7;
-              padding: 24px 32px;
-              color: #050505;
-              font-size: 14px;
-              left: 2rem;
-              top: 3.5rem;
-              text-align: center;
-
-              h3 {
-                font-size: 20px;
-                font-weight: 800;
-                margin-top: 0;
-                margin-bottom: 17px;
-              }
-              p {
-                font-size: 16px;
-                max-width: 100% !important;
-                margin: 0;
-              }
-
-              &::after {
-                content: "";
-                position: absolute;
-                width: 0;
-                height: 0;
-                top: 4px;
-                left: 70px;
-                box-sizing: border-box;
-
-                border: 12px solid black;
-                border-color: transparent transparent #ffedb7 #ffedb7;
-
-                transform-origin: 0 0;
-                transform: rotate(135deg);
               }
             }
           }
