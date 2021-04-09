@@ -89,7 +89,23 @@ export default {
   }),
   mounted() {
     // console.log("category-selector.mounted", this.value);
-    this.getSelectedCategory(this.value);
+    if (this.value) {
+      if (this.multiple) {
+        if (this.value.length) {
+          this.selectedCategory = this.categories.filter((it) => this._includes(this.value, it));
+        } else {
+          this.selectedCategory = [];
+        }
+      } else {
+        if (this.trackBy) {
+          this.selectedCategory = this.categories.find((it) => it[this.trackBy] === this.value);
+        } else {
+          this.selectedCategory = this.categories.find((it) => it.value === this.value);
+        }
+      }
+    } else {
+      if (this.multiple) this.selectedCategory = [];
+    }
   },
   computed: {
     _value() {
@@ -160,30 +176,6 @@ export default {
     },
     close() {
       this.expanded = false;
-    },
-    getSelectedCategory(value) {
-      if (value) {
-        if (this.multiple) {
-          if (value.length) {
-            this.selectedCategory = this.categories.filter((it) => this._includes(value, it));
-          } else {
-            this.selectedCategory = [];
-          }
-        } else {
-          if (this.trackBy) {
-            this.selectedCategory = this.categories.find((it) => it[this.trackBy] === value);
-          } else {
-            this.selectedCategory = this.categories.find((it) => it.value === value);
-          }
-        }
-      } else {
-        if (this.multiple) this.selectedCategory = [];
-      }
-    },
-  },
-  watch: {
-    value(newValue, oldValue) {
-      this.getSelectedCategory(newValue);
     },
   },
 };

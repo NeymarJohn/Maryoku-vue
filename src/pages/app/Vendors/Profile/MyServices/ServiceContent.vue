@@ -1,10 +1,6 @@
 <template>
   <div class="service-content">
-    <div class="service-header">
-      <img class="service-image" :src="coverImage || serviceData.images[0] || vendorData.images[0]" />
-      <md-button class="md-vendor md-maryoku btn-change-cover" @click="openFileBrowser">Change Image</md-button>
-      <input type="file" @change="changeCoverImage" class="d-none" id="coverImageFile" />
-    </div>
+    <div><img class="service-image" :src="serviceData.images[0] || vendorData.images[0]" /></div>
     <div class="p-50">
       <div class="font-size-16 font-bold d-flex justify-content-between align-center">
         <div>
@@ -28,19 +24,11 @@
       >
       </attachment-item>
     </div>
-    <!-- <vendor-images-list :images="serviceData.images"></vendor-images-list> -->
-    <vendor-photos-carousel
-      class="service-photos"
-      theme="purple"
-      :images="images"
-      @addImage="addServiceImage"
-      @setPhoto="updateServiceImage"
-      @removeImage="removeServiceImage"
-    ></vendor-photos-carousel>
+    <vendor-images-list :images="serviceData.images"></vendor-images-list>
     <starting-fee-table class="mt-30" :items="startingFeeItems"></starting-fee-table>
     <extra-pay-table :items="extraPayItems"></extra-pay-table>
-    <policy :serviceCategory="serviceData.vendorCategory" :serviceData="serviceData"></policy>
-    <price-policy :serviceCategory="serviceData.vendorCategory" :serviceData="serviceData"></price-policy>
+    <policy :serviceCategory="serviceData.vendorCategory"></policy>
+    <price-policy :serviceCategory="serviceData.vendorCategory"></price-policy>
   </div>
 </template>
 <script>
@@ -50,11 +38,6 @@ import StartingFeeTable from "./StartingFeeTable.vue";
 import ExtraPayTable from "./ExtraPayTable.vue";
 import Policy from "./Policy.vue";
 import PricePolicy from "./PricePolicy.vue";
-import VendorPhotosCarousel from "../../components/VendorPhotosCarousel.vue";
-import S3Service from "@/services/s3.service";
-import { makeid } from "@/utils/helperFunction";
-import { getBase64 } from "@/utils/file.util";
-import Vendors from "@/models/Vendors";
 import _ from "underscore";
 export default {
   components: {
@@ -64,7 +47,6 @@ export default {
     PricePolicy,
     AttachmentItem,
     VendorImagesList,
-    VendorPhotosCarousel,
   },
   props: {
     serviceCategory: {
@@ -82,9 +64,6 @@ export default {
       } else {
         return this.vendorData.secondaryServices.find((service) => service.vendorCategory === this.serviceCategory.key);
       }
-    },
-    isMainService() {
-      return this.serviceCategory.key === this.vendorData.vendorCategory;
     },
     startingFeeItems() {
       let startingFeeItems = [];
@@ -124,13 +103,13 @@ export default {
   },
   data() {
     return {
-      images: [],
-      coverImage: "",
+      // attachments: [
+      //   { name: "Kosher Certitifcate", isRequired: true, fileName: "Kosher_certificate.pdf" },
+      //   { name: "Legal Requirements", isRequired: true, fileName: "Legal_certificate.pdf" },
+      //   { name: "Menu", isRequired: true, fileName: "Menu_2020.pdf" },
+      //   { name: "Other", isRequired: false, fileName: "" },
+      // ],
     };
-  },
-  created() {
-    this.images = [...this.serviceData.images];
-    this.coverImage = this.serviceData.images[0] || this.vendorData.images[0];
   },
   methods: {
     setAttachment(attachment) {
@@ -155,68 +134,12 @@ export default {
         this.$router.push(`/vendor/${this.vendorData.id}/service/edit/${this.serviceData.id}`);
       }
     },
-    isAllImageUploaded: () => {
-      return !this.images.some((img) => img.indexOf("base64") >= 0);
-    },
-    async addServiceImage(file) {
-      const data = { vendorId: this.vendorData.id, file, images: this.images };
-      if (!this.isMainService) {
-        data["serviceId"] = this.serviceData.id;
-      }
-      this.$store.dispatch("vendor/addServiceImage", data).then((images) => {
-        this.images = images;
-      });
-
-      const imageData = await getBase64(file);
-      this.images.push(imageData);
-    },
-    async updateServiceImage({ index, photo }) {
-      const data = { vendorId: this.vendorData.id, index, file: photo, images: this.images };
-      if (!this.isMainService) {
-        data["serviceId"] = this.serviceData.id;
-      }
-      this.$store.dispatch("vendor/updateServiceImage", data).then((images) => {
-        this.images = images;
-      });
-      const imageData = await getBase64(photo);
-      this.images.splice(index, 1, imageData);
-    },
-    removeServiceImage(index) {
-      const data = { vendorId: this.vendorData.id, index, images: this.images };
-      if (!this.isMainService) {
-        data["serviceId"] = this.serviceData.id;
-      }
-      this.$store.dispatch("vendor/removeServiceImage", data).then((images) => {});
-
-      // this.images.splice(index, 1);
-    },
-    openFileBrowser() {
-      document.getElementById("coverImageFile").click();
-    },
-    async changeCoverImage(e) {
-      const data = { vendorId: this.vendorData.id, file: e.target.files[0], images: this.images };
-      if (!this.isMainService) {
-        data["serviceId"] = this.serviceData.id;
-      }
-      this.$store.dispatch("vendor/updateCoverImage", data).then((images) => {});
-
-      this.coverImage = await getBase64(e.target.files[0]);
-    },
   },
 };
 </script>
 <style lang="scss" scoped>
 .service-content {
   overflow: hidden;
-  .service-header {
-    position: relative;
-    .btn-change-cover {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-    }
-  }
   .service-image {
     max-height: 360px;
     object-fit: cover;
@@ -227,9 +150,6 @@ export default {
   }
   .attachment:not(:last-child) {
     border-bottom: solid 2px #dbdbdb;
-  }
-  .service-photos {
-    margin-left: -10px;
   }
 }
 </style>

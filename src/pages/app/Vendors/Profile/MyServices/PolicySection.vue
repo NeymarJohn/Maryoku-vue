@@ -23,32 +23,26 @@
         </div>
       </div>
     </div>
-    <div class="rules" v-if="additionalRules && additionalRules.length">
-      <h5 class="font-bold font-size-20">Additional Rules</h5>
-      <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
-        <div class="item">Event must be {{ policy }}</div>
-      </div>
-    </div>
-    <div class="not-allowed" v-if="service.vendorCategory == 'venuerental'">
+    <div class="not-allowed" v-if="vendor.vendorCategories[0] == 'venuerental'">
       <h5>We don't allow these 3rd party vendor:</h5>
-      <p>{{ mergeStringItems(service.notAllowed) }}</p>
+      <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
     </div>
     <div class="dont-work">
       <h5>We don't work on:</h5>
       <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
-        <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
+        <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
         {{ mergeStringItems(vendor.selectedWeekdays) }}
       </div>
       <div class="item" v-for="(d, dIndex) in vendor.exDonts" :key="dIndex">
-        <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
+        <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
         {{ d.holiday }}
       </div>
       <div class="item" v-if="vendor.dontWorkDays && vendor.dontWorkDays.length > 0">
-        <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
+        <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
         {{ dontWorkDays() }}
       </div>
       <div class="item" v-if="vendor.dontWorkTime">
-        <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
+        <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
         {{ dontWorkTime() }}
       </div>
     </div>
@@ -123,14 +117,14 @@ export default {
     },
     dontWorkDays() {
       let selectedDates = "";
-      _.each(this.service.dontWorkDays, (s) => {
+      _.each(this.vendor.dontWorkDays, (s) => {
         selectedDates += `${s.date}, `;
       });
       selectedDates = selectedDates.substring(0, selectedDates.length - 2);
       return selectedDates;
     },
     dontWorkTime() {
-      return `${this.service.dontWorkTime.startTime.hh}:${this.service.dontWorkTime.startTime.mm}:${this.service.dontWorkTime.amPack.start} ~ ${this.service.dontWorkTime.endTime.hh}:${this.service.dontWorkTime.endTime.mm}:${this.service.dontWorkTime.amPack.end}`;
+      return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.amPack.start} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.amPack.end}`;
     },
   },
   computed: {
@@ -138,9 +132,6 @@ export default {
       if (this.service.policies)
         return this.service.policies.filter((item) => item.value || (item.type === "Including" && item.cost));
       return null;
-    },
-    additionalRules() {
-      return this.service.additionalRules;
     },
   },
 };

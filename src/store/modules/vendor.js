@@ -1,10 +1,5 @@
 import { postReq, getReq } from "@/utils/token";
 import Vendors from "@/models/Vendors";
-import VendorService from "@/models/VendorService";
-import S3Service from "@/services/s3.service";
-import { makeid } from "@/utils/helperFunction";
-import { getBase64 } from "@/utils/file.util";
-import { reject } from "promise-polyfill";
 const state = {
     isEditing: false,
     step: 0,
@@ -80,93 +75,6 @@ const actions = {
         new Vendors(profileData).save().then(res => {
             commit('setProfile', res.item);
         })
-    },
-    addServiceImage: async ({ commit, state, dispatch }, { vendorId, file, images, serviceId }) => {
-        return new Promise((resolve, reject) => {
-            const fileId = `${new Date().getTime()}_${makeid()}`;
-            const index = images.length;
-            const isAllImageUploaded = () => {
-                return !images.some((img) => img.indexOf("base64") >= 0);
-            }
-            S3Service.fileUpload(file, fileId, "vendor/cover-images").then((uploadedName) => {
-                images[index] = `https://maryoku.s3.amazonaws.com/vendor/cover-images/${uploadedName}`;
-                if (isAllImageUploaded()) {
-                    if (!serviceId) {
-                        new Vendors({ id: vendorId, images: images }).save().then(res => {
-                            resolve(res.item.images)
-                            dispatch("getProfile")
-                        });
-                    } else {
-                        new VendorService({ id: serviceId, images: images }).for(new Vendors({ id: vendorId })).save().then(res => {
-                            resolve(res.item.images)
-                            dispatch("getProfile")
-                        });
-                    }
-                }
-            });
-        })
-
-    },
-    updateServiceImage: async ({ commit, state, dispatch }, { vendorId, index, file, images, serviceId }) => {
-        return new Promise((resolve, reject) => {
-            const fileId = `${new Date().getTime()}_${makeid()}`;
-            console.log(file)
-            const isAllImageUploaded = () => {
-                return !images.some((img) => img.indexOf("base64") >= 0);
-            }
-            S3Service.fileUpload(file, fileId, "vendor/cover-images").then((uploadedName) => {
-                console.log("createImage", uploadedName);
-                images[index] = `https://maryoku.s3.amazonaws.com/vendor/cover-images/${uploadedName}`;
-                if (isAllImageUploaded()) {
-                    if (!serviceId) {
-                        new Vendors({ id: vendorId, images }).save().then(res => {
-                            resolve(res.item.images)
-                            dispatch("getProfile")
-                        });
-                    } else {
-                        new VendorService({ id: serviceId, images: images }).for(new Vendors({ id: vendorId })).save().then(res => {
-                            resolve(res.item.images)
-                            dispatch("getProfile")
-                        });
-                    }
-                }
-            });
-        })
-
-    },
-    removeServiceImage: async ({ commit, state, dispatch }, { vendorId, index, images, serviceId }) => {
-        new Promise((resolve, reject) => {
-            images.splice(index, 1)
-            if (!serviceId) {
-                new Vendors({ id: vendorId, images }).save().then(res => {
-                    resolve(res.item.images)
-                    dispatch("getProfile")
-                });
-            } else {
-                new VendorService({ id: serviceId, images: images }).for(new Vendors({ id: vendorId })).save().then(res => {
-                    resolve(res.item.images)
-                    dispatch("getProfile")
-                });
-            }
-        })
-    },
-    updateCoverImage: async ({ commit, state, dispatch }, { vendorId, serviceId, file }) => {
-        const fileId = `${new Date().getTime()}_${makeid()}`;
-        new Promise((resovle, reject) => {
-            S3Service.fileUpload(file, fileId, "vendor/cover-images").then((uploadedName) => {
-                const coverImage = `https://maryoku.s3.amazonaws.com/vendor/cover-images/${uploadedName}`;
-                if (!serviceId) {
-                    new Vendors({ id: vendorId, coverImage }).save().then(res => {
-                        dispatch("getProfile")
-                    });
-                } else {
-                    new VendorService({ id: serviceId, coverImage }).for(new Vendors({ id: vendorId })).save().then(res => {
-                        dispatch("getProfile")
-                    });
-                }
-            });
-        })
-
     }
 };
 

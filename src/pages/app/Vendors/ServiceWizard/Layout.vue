@@ -177,6 +177,7 @@ export default {
 
       new VendorService({
         ...this.service,
+        vendorCategory: this.service.serviceCategory,
         vendor: { id: this.vendor.id },
       })
         .for(new Vendors({ id: this.vendor.id }))
@@ -188,7 +189,6 @@ export default {
   },
   created() {
     this.$store.commit("vendorService/setStep", 1);
-    this.$store.commit("vendorService/initState");
   },
   beforeCreate() {
     this.$store.registerModule("vendorService", vendorServiceModule);

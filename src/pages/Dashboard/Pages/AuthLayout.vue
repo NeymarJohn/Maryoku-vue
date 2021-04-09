@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'nav-open': $sidebar.showSidebar }">
+  <div :class="{'nav-open': $sidebar.showSidebar}">
     <!-- <md-toolbar md-elevation="0" class="md-transparent md-toolbar-absolute radius-bk">
       <div class="md-toolbar-row md-offset">
         <div class="md-toolbar-section-start">
@@ -16,12 +16,13 @@
       </div>
     </md-toolbar>-->
     <div class="wrapper wrapper-full-page" @click="toggleSidebarPage">
-      <div class="page-header header-filter" :class="setPageClass" filter-color="black" :style="setBgImage">
+      <div
+        class="page-header header-filter"
+        :class="setPageClass"
+        filter-color="black"
+        :style="setBgImage"
+      >
         <div class="container md-offset">
-          <video autoplay muted loop class="background-video">
-            <source :src="`/static/videos/signinBackground.mov`" type="video/mp4" />
-            Your browser does not support HTML5 video.
-          </video>
           <zoom-center-transition :duration="pageTransitionDuration" mode="out-in">
             <router-view></router-view>
           </zoom-center-transition>
@@ -90,13 +91,20 @@ export default {
   computed: {
     setBgImage() {
       let images = {
-        Pricing: "https://static-maryoku.s3.amazonaws.com/storage/img/bg-pricing.jpg",
-        Login: "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_495639391.png",
-        Register: "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_495639391.png",
-        CreateWorkspace1: "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_495639391.png",
-        ForgotPassword1: "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_732491308.png",
-        SignIn1: "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_732491308.png",
-        SignUp1: "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_495639391.png",
+        Pricing:
+          "https://static-maryoku.s3.amazonaws.com/storage/img/bg-pricing.jpg",
+        Login:
+          "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_495639391.png",
+        Register:
+          "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_495639391.png",
+        CreateWorkspace1:
+          "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_495639391.png",
+        ForgotPassword1:
+          "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_732491308.png",
+        SignIn1:
+          "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_732491308.png",
+        SignUp1:
+          "https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_495639391.png",
         // SignOut: 'https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_732491308.png',
         // GetStarted: 'https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_732491308.png',
         // SignedIn: 'https://static-maryoku.s3.amazonaws.com/storage/img/shutterstock_732491308.png',
@@ -122,7 +130,11 @@ export default {
       }
     },
     linkClick() {
-      if (this.autoClose && this.$sidebar && this.$sidebar.showSidebar === true) {
+      if (
+        this.autoClose &&
+        this.$sidebar &&
+        this.$sidebar.showSidebar === true
+      ) {
         this.$sidebar.displaySidebar(false);
       }
     },
@@ -225,14 +237,6 @@ $zoomOutEnd: 0.46;
 }
 .page-header::before {
   background: transparent;
-}
-.background-video {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  min-width: 100%;
-  min-height: 100%;
-  object-fit: cover;
 }
 @media screen and (max-width: 500px) {
   .container {

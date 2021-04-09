@@ -305,7 +305,7 @@ export default {
         input {
           text-align: center;
           font-size: 16px;
-          // padding: 12px 30px;
+          padding: 22px 30px;
           /*width: 40%;*/
           width: 12rem;
           border: 1px solid #dddddd;
@@ -315,11 +315,11 @@ export default {
       .number-field {
         text-align: center;
         font-size: 16px;
-        // padding: 22px 30px;
+        padding: 22px 30px;
         /*width: 40%;*/
         width: 12rem;
         border: 1px solid #dddddd;
-        // border-radius: 0;
+        border-radius: 0;
       }
     }
     .add-note {
@@ -328,8 +328,11 @@ export default {
     .string-field {
       text-align: left;
       font-size: 16px;
+      padding: 22px 30px;
+      /* width: 40%; */
       width: 12rem;
       border: 1px solid #dddddd;
+      border-radius: 0;
     }
   }
 }

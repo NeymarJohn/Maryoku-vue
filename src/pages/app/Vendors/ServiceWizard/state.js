@@ -127,15 +127,6 @@ const actions = {
 };
 
 const mutations = {
-    initState(state) {
-        state.isEditing = false;
-        state.step = 1;
-        state.service = {
-            services: {},
-            images: []
-        }
-        state.vendor = {}
-    },
     setAllProperties(state, data) {
         state.allProperties = data;
     },

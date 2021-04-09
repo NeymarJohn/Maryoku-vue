@@ -255,9 +255,12 @@
               <input
                 type="text"
                 placeholder="Paste link here"
+                :class="{ 'red-border': vendor.social[s] == null || !reg.test(vendor.social[s]) }"
                 v-model="vendor.social[s]"
                 v-if="socialMedia.includes(s) || vendor.social[s]"
+                v-on:blur="checkBlank"
                 @change="updateVendor($event, `social.${s}`)"
+                @keyup="checkBlank"
               />
             </div>
           </div>
@@ -619,8 +622,8 @@ export default {
             font-size: 16px;
             padding: 12px 20px;
             min-width: 75%;
-            // border: 1px solid #707070;
-            // border-radius: 0;
+            border: 1px solid #707070;
+            border-radius: 0;
           }
           .main-cont {
             display: flex;
@@ -671,10 +674,10 @@ export default {
           input {
             margin: 1rem 0 0 3rem;
             font-size: 16px;
-            // padding: 22px 30px;
+            padding: 22px 30px;
             min-width: calc(75% - 3rem);
-            // border: 1px solid #707070;
-            // border-radius: 0;
+            border: 1px solid #707070;
+            border-radius: 0;
           }
         }
         h5 {

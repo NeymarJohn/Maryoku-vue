@@ -8,7 +8,7 @@
     </template>
     <template slot="content">
       <div class="pr-50 pl-50 pb-50 starting-fee-table-content">
-        <vendor-starting-fee-item v-for="(fv, fvIndex) in items" :key="fvIndex" :item="fv" theme="purple" />
+        <vendor-starting-fee-item v-for="(fv, fvIndex) in items" :key="fvIndex" :item="fv" />
       </div>
     </template>
   </collapse-panel>

@@ -123,7 +123,7 @@ export default {
       }
       .field {
         margin-bottom: 30px;
-        // padding: 22px 28px;
+        padding: 22px 28px;
         width: 100%;
         max-width: 500px;
         font: normal 16px Manrope-Regular, sans-serif;

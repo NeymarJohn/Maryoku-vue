@@ -41,13 +41,7 @@
               >
               </vendor-policy-item>
             </div>
-            <v-signup-add-rules
-              :comType="`rule`"
-              :title="rulesDesc"
-              :defaultRules="additionalRules"
-              theme="purple"
-              :isMainService="false"
-            />
+            <v-signup-add-rules :comType="`rule`" :title="rulesDesc" :defaultRules="additionalRules" theme="purple" />
           </div>
         </div>
         <div class="pricing-policy-wrapper mb-50">
