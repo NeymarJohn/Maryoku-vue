@@ -2,46 +2,6 @@
   <div class="permission-row">
     <div><avartar :name="user.email" :color="palette[index]"></avartar></div>
     <div>{{ user.email }}</div>
-    <!-- <div>
-      {{ user.eventList[0].concept ? user.eventList[0].concept.name : user.eventList[0].title
-      }}<md-icon class="schedule-menu-btn-icon">keyboard_arrow_down</md-icon>
-    </div> -->
-    <!-- <div>
-      <popper trigger="click" :options="{ placement: 'bottom' }">
-        <div class="popper white-card permit-page">
-          <div class="font-size-22 popper-header"></div>
-          <div>
-            <div class="mb-30">All pages</div>
-            <div class="mb-30">Specific pages</div>
-            <multiselect
-              class="mb-30 md-purple"
-              v-model="permittedPages"
-              :options="availablePages"
-              :close-on-select="true"
-              :clear-on-select="true"
-              tag-placeholder="Add this as new tag"
-              placeholder="Choose pages"
-              label="title"
-              track-by="id"
-              @select="selectPage"
-            ></multiselect>
-            <div class="page-tags">
-              <div class="page-tag" v-for="(page, index) in selectedPages" :key="page.id">
-                {{ page.title }}
-                <md-button class="md-simple edit-btn md-red" @click="removeSelectedPage(index)">
-                  <md-icon>close</md-icon>
-                </md-button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <md-button class="md-simple maryoku-btn md-black" slot="reference">
-          <span class="font-regular">All pages</span
-          ><md-icon class="schedule-menu-btn-icon">keyboard_arrow_down</md-icon>
-        </md-button>
-      </popper>
-    </div> -->
     <div>
       <md-menu md-size="big" md-align-trigger class="schedule-menu">
         <md-button md-menu-trigger class="md-simple md-black schedule-menu-btn maryoku-btn">
@@ -49,14 +9,14 @@
           <md-icon class="schedule-menu-btn-icon">keyboard_arrow_down</md-icon>
         </md-button>
         <md-menu-content class="permit-user-role">
-          <md-menu-item class="text-center" @click="selectRole('view')">
+          <md-menu-item class="text-center md-purple" @click="selectRole('view')">
             <span class="font-size-16" :class="{ 'font-bold-extra': permittedRole === 'view' }"> Can view </span>
           </md-menu-item>
-          <md-menu-item class="text-center" @click="selectRole('edit')">
+          <md-menu-item class="text-center md-purple" @click="selectRole('edit')">
             <span class="font-size-16" :class="{ 'font-bold-extra': permittedRole === 'edit' }"> Can edit </span>
           </md-menu-item>
           <md-divider></md-divider>
-          <md-menu-item class="text-center" @click="removeUser">
+          <md-menu-item class="text-center md-purple" @click="removeUser">
             <span class="font-size-16" :class="{ 'font-bold-extra': false }"> Remove </span>
           </md-menu-item>
         </md-menu-content>
