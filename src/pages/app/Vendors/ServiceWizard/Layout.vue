@@ -188,6 +188,7 @@ export default {
   },
   created() {
     this.$store.commit("vendorService/setStep", 1);
+    this.$store.commit("vendorService/initState");
   },
   beforeCreate() {
     this.$store.registerModule("vendorService", vendorServiceModule);

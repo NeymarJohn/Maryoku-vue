@@ -89,6 +89,10 @@ export default {
       type: String,
       default: "red",
     },
+    isMainService: {
+      type: Boolean,
+      default: true,
+    },
   },
   data: () => {
     return {
@@ -130,7 +134,9 @@ export default {
       this.rules.push(this.$refs.additionalRule.value);
       this.$refs.additionalRule.value = null;
       this.focusedRule = null;
-      this.$store.commit("vendorSignup/setField", { field: "additionalRules", value: this.rules });
+      if (this.isMainService)
+        this.$store.commit("vendorSignup/setField", { field: "additionalRules", value: this.rules });
+      else this.$store.commit("vendorService/setField", { field: "additionalRules", value: this.rules });
     },
     editRule(r) {
       this.focusedRule = this.rules.filter((rule) => rule == r)[0];
@@ -138,6 +144,9 @@ export default {
     },
     removeRule(r) {
       this.rules = this.rules.filter((rule) => rule != r);
+      if (this.isMainService)
+        this.$store.commit("vendorSignup/setField", { field: "additionalRules", value: this.rules });
+      else this.$store.commit("vendorService/setField", { field: "additionalRules", value: this.rules });
     },
   },
 };

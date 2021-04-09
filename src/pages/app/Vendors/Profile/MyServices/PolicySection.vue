@@ -23,25 +23,31 @@
         </div>
       </div>
     </div>
-    <div class="not-allowed" v-if="service.vendorCategories[0] == 'venuerental'">
+    <div class="rules" v-if="additionalRules && additionalRules.length">
+      <h5 class="font-bold font-size-20">Additional Rules</h5>
+      <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
+        <div class="item">Event must be {{ policy }}</div>
+      </div>
+    </div>
+    <div class="not-allowed" v-if="service.vendorCategory == 'venuerental'">
       <h5>We don't allow these 3rd party vendor:</h5>
       <p>{{ mergeStringItems(service.notAllowed) }}</p>
     </div>
     <div class="dont-work">
       <h5>We don't work on:</h5>
-      <div class="item" v-if="mergeStringItems(service.selectedWeekdays)">
+      <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
         <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
-        {{ mergeStringItems(service.selectedWeekdays) }}
+        {{ mergeStringItems(vendor.selectedWeekdays) }}
       </div>
-      <div class="item" v-for="(d, dIndex) in service.exDonts" :key="dIndex">
+      <div class="item" v-for="(d, dIndex) in vendor.exDonts" :key="dIndex">
         <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
         {{ d.holiday }}
       </div>
-      <div class="item" v-if="service.dontWorkDays && service.dontWorkDays.length > 0">
+      <div class="item" v-if="vendor.dontWorkDays && vendor.dontWorkDays.length > 0">
         <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
         {{ dontWorkDays() }}
       </div>
-      <div class="item" v-if="service.dontWorkTime">
+      <div class="item" v-if="vendor.dontWorkTime">
         <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
         {{ dontWorkTime() }}
       </div>
@@ -132,6 +138,9 @@ export default {
       if (this.service.policies)
         return this.service.policies.filter((item) => item.value || (item.type === "Including" && item.cost));
       return null;
+    },
+    additionalRules() {
+      return this.service.additionalRules;
     },
   },
 };

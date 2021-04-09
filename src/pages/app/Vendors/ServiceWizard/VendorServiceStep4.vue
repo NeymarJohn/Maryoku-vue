@@ -134,10 +134,10 @@
               <div class="cheader">
                 <div>
                   <img :src="`${iconUrl}Asset 543.svg`" />
-                  {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
+                  {{ getCategoryNameByValue(currentService.vendorCategory) }}
                 </div>
-                <span>QTY</span>
-                <span>Price</span>
+                <span class="text-center">QTY</span>
+                <span class="text-center">Price</span>
                 <span></span>
               </div>
               <div class="citems">
@@ -209,7 +209,7 @@
                 <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
                 {{ d.holiday }}
               </div>
-              <div class="item" v-if="vendor.dontWorkDays">
+              <div class="item" v-if="vendor.dontWorkDays && vendor.dontWorkDays.length">
                 <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
                 {{ dontWorkDays() }}
               </div>
@@ -251,7 +251,7 @@
                     {{ policy.attendees }} attendees
                   </span>
                   <span class="ml-50 text-transform-capitalize" v-if="policy.unit">
-                    {{ policy.unit }}
+                    {{ getUnit(policy) }}
                   </span>
                 </div>
               </div>
@@ -472,8 +472,8 @@ export default {
   created() {},
   mounted() {
     console.log("vendorService.step4", this.vendor);
-    if (this.vendor.hasOwnProperty("images") && this.vendor.images.length) {
-      this.vendor.images.forEach((item) => {
+    if (this.currentService.hasOwnProperty("images") && this.currentService.images.length) {
+      this.currentService.images.forEach((item) => {
         this.medias.push({
           thumb: item,
           src: item,
@@ -512,7 +512,7 @@ export default {
     getExtraPayItems() {
       console.log("getExtraPayItems");
       let extraPayItems = [];
-      _.each(this.vendor.services, (item) => {
+      _.each(this.currentService.services, (item) => {
         if (item.checked && item.hasOwnProperty("included") && !item.included) {
           extraPayItems.push(item);
         }
@@ -603,7 +603,16 @@ export default {
         }
       });
 
-      this.$root.$emit("update-vendor-value", "services", this.vendor.services);
+      this.$root.$emit("update-vendor-value", "services", this.currentService.services);
+    },
+    getUnit(policy) {
+      if (policy.unit !== "%" && policy.unit !== "$") {
+        return `${policy.unit}${policy.value > 1 ? "s" : ""}`;
+      }
+      if (policy.type === "GroupDiscount") {
+        return `For ${policy.groupSize}`;
+      }
+      return "";
     },
   },
   computed: {
