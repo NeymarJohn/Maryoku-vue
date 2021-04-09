@@ -27,7 +27,10 @@
         >
       </div>
     </div>
-    <service-content :serviceCategory="getSelectedServiceCategory()"></service-content>
+    <service-content
+      :serviceCategory="getSelectedServiceCategory()"
+      :key="getSelectedServiceCategory().key"
+    ></service-content>
   </div>
 </template>
 <script>

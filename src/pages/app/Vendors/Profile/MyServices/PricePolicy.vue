@@ -7,7 +7,10 @@
       </div>
     </template>
     <template slot="content">
-      <pricing-policy-section class="pl-50 pr-50 pb-50 pricing-policy-content"></pricing-policy-section>
+      <pricing-policy-section
+        class="pl-50 pr-50 pb-50 pricing-policy-content"
+        :serviceData="serviceData"
+      ></pricing-policy-section>
     </template>
   </collapse-panel>
 </template>
@@ -17,6 +20,12 @@ import PricingPolicySection from "./PricingPolicySection.vue";
 import CollapsePanel from "./CollapsePanel.vue";
 export default {
   components: { CollapsePanel, PricingPolicySection },
+  props: {
+    serviceData: {
+      type: Object,
+      default: () => {},
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

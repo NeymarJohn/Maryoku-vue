@@ -153,7 +153,7 @@
                 </div>
                 <div class="item" v-else-if="policy.type === 'Including'">
                   <span class="mr-10" v-if="policy.value"> Yes </span>
-                  <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
+                  <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost | withComma}` }} </span>
                 </div>
                 <div class="item text-right" v-else>
                   <span v-if="policy.type === Number && !policy.isPercentage && policy.unit !== 'hour'">$</span>
@@ -165,7 +165,7 @@
                   <span v-else>
                     <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
                     <img v-else-if="policy.value === false" :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
-                    <span v-else>{{ policy.value }}</span>
+                    <span v-else>{{ policy.value | withComma }}</span>
                   </span>
                   <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
                   <span v-if="policy.isPercentage">%</span>
@@ -175,10 +175,10 @@
                 </div>
               </div>
             </div>
-            <div class="rules" v-if="additionalRules && additionalRules.length">
+            <div class="rules">
               <h5 class="font-bold font-size-20">Additional Rules</h5>
               <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
-                <div class="item font-regular">Event must be {{ policy }}</div>
+                <div class="item">Event must be {{ policy }}</div>
               </div>
             </div>
             <div class="not-allowed" v-if="vendor.vendorCategories[0] == 'venuerental'">
@@ -221,7 +221,7 @@
                 <div class="item" v-else-if="policy.type === 'Including'">
                   <span class="mr-10" v-if="policy.value"> Yes </span>
                   <span class="mr-10" v-if="!policy.value && policy.cost && policy.unit === '$'"> $ </span>
-                  <span>{{ policy.cost }}</span>
+                  <span>{{ Number(policy.cost) | withComma }}</span>
                 </div>
                 <div class="item" v-else-if="policy.type === Boolean && policy.value && policy.discount">
                   <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '$'"> $ </span>
@@ -237,14 +237,13 @@
                 <div class="item" v-else>
                   <span v-if="policy.type === Number && !policy.isPercentage && policy.unit !== 'hour'">$</span>
                   <span v-if="policy.value === true">Yes</span>
-                  <span v-else>{{ policy.value }}</span>
+                  <span v-else>{{ policy.value | withComma }}</span>
                   <span v-if="policy.isPercentage">%</span>
                   <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
                     {{ policy.attendees }} attendees
                   </span>
                   <span class="ml-50 text-transform-capitalize" v-if="policy.unit">
-                    <!-- {{ policy.unit }}{{ policy.value > 1 ? "s" : "" }} -->
-                    {{ getUnit(policy) }}
+                    {{ policy.unit }}
                   </span>
                 </div>
               </div>
@@ -598,15 +597,6 @@ export default {
       });
 
       this.$root.$emit("update-vendor-value", "services", this.vendor.services);
-    },
-    getUnit(policy) {
-      if (policy.unit !== "%" && policy.unit !== "$") {
-        return `${policy.unit}${policy.value > 1 ? "s" : ""}`;
-      }
-      if (policy.type === "GroupDiscount") {
-        return `For ${policy.groupSize}`;
-      }
-      return "";
     },
   },
   computed: {

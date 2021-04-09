@@ -33,13 +33,21 @@ export default {
   data() {
     return {};
   },
+  props: {
+    serviceData: {
+      type: Object,
+      default: () => {},
+    },
+  },
   computed: {
     vendor() {
       return this.$store.state.vendor.profile;
     },
     validPricingPolicy() {
-      if (this.vendor.pricingPolicies)
-        return this.vendor.pricingPolicies.filter((item) => item.value || (item.type === "Including" && item.cost));
+      if (this.serviceData.pricingPolicies)
+        return this.serviceData.pricingPolicies.filter(
+          (item) => item.value || (item.type === "Including" && item.cost),
+        );
       return null;
     },
   },

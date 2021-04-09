@@ -18,8 +18,7 @@
       <div class="right-side">
         <div class="card">
           <div class="banner">
-            <!-- <vendor-images-list :images="vendor.images" class="images mt-30"></vendor-images-list> -->
-            <header-image-carousel :images="vendor.images" class="images"></header-image-carousel>
+            <vendor-images-list :images="vendor.images" class="images mt-30"></vendor-images-list>
           </div>
           <div class="about-cont profile-section" id="About">
             <div class="block">
@@ -187,7 +186,7 @@ import VendorStartingFeeItem from "./components/VendorStartingFeeItem.vue";
 import VendorExtraPayItem from "./components/VendorExtraPayItem.vue";
 import _ from "underscore";
 import VendorImagesList from "./components/VendorImagesList.vue";
-import HeaderImageCarousel from "@/components/HeaderImageCarousel";
+
 export default {
   name: "vendor-signup-step4",
   props: {
@@ -203,7 +202,6 @@ export default {
     VendorExtraPayItem,
     VendorDetailReviews,
     VendorImagesList,
-    HeaderImageCarousel,
   },
   data() {
     return {
@@ -491,6 +489,8 @@ export default {
             padding: 0;
             white-space: nowrap;
             position: relative;
+            margin-right: -60px;
+
             span {
               cursor: pointer;
               position: absolute;

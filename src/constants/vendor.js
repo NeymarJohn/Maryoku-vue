@@ -2735,7 +2735,6 @@ export const businessCategories = [
                 name: "special equipment",
                 type: Number,
                 value: 0,
-                hideLabelForValue: true
               },
             ],
           },
@@ -4422,15 +4421,11 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Large group discounts",
-        type: "GroupDiscount",
-        labelForGroupSize: "How many",
-        labelForValue: "Discount",
-        isSelected: false,
-        value: 0,
-        groupSize: null,
-        hideOnProposal: true,
-        isPercentage: true,
-        unit: "%"
+        subCategory: "discount",
+        type: "Discount",
+        hasUnit: true,
+        unit: "%",
+        units: ["Per guest", "Total"],
       },
       {
         name: "Suggested Gratuity",
@@ -4539,14 +4534,10 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Large group discounts",
-        type: "GroupDiscount",
-        labelForGroupSize: "How many",
-        labelForValue: "Discount",
-        isSelected: false,
-        value: 0,
-        groupSize: null,
-        hideOnProposal: true,
-        isPercentage: true,
+        subCategory: "discount",
+        type: Number,
+        hasUnit: true,
+        units: ["Per guest", "Total"],
         unit: "%"
       },
       {
@@ -4623,13 +4614,13 @@ export const VendorPricingPolicy = [
         },
         qtyUnit: "hour"
       },
-      // {
-      //   name: "Special operating time",
-      //   subCategory: "charge",
-      //   type: "MultiSelection",
-      //   options: ["Morning", "Afternoon", "Evening", "Night"],
-      //   value: [],
-      // },
+      {
+        name: "Special operating time",
+        subCategory: "charge",
+        type: "MultiSelection",
+        options: ["Morning", "Afternoon", "Evening", "Night"],
+        value: [],
+      },
       {
         name: "Extra for prizes",
         subCategory: "charge",
@@ -4658,15 +4649,12 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Large group discounts",
-        type: "GroupDiscount",
-        labelForGroupSize: "How many",
-        labelForValue: "Discount",
-        isSelected: false,
-        value: 0,
-        groupSize: null,
-        hideOnProposal: true,
+        subCategory: "discount",
+        type: "Discount",
+        hasUnit: true,
         isPercentage: true,
-        unit: "%"
+        unit: "%",
+        units: ["Per guest", "Total"],
       },
       {
         name: "Suggested Gratuity",
@@ -4710,18 +4698,15 @@ export const VendorPricingPolicy = [
         isPercentage: true,
         hideOnProposal: true,
       },
-
       {
         name: "Large group discounts",
-        type: "GroupDiscount",
-        labelForGroupSize: "How many",
-        labelForValue: "Discount",
-        isSelected: false,
+        type: "Discount",
         value: 0,
-        groupSize: null,
-        hideOnProposal: true,
-        isPercentage: true,
-        unit: "%"
+        defaultQty: 0,
+        unit: "%",
+        labelForValue: "Discount",
+        labelForDefaultQty: "How many"
+        // units: ["per guest", "total"],
       },
       {
         name: "Suggested Gratuity",

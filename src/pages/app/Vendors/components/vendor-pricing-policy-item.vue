@@ -1,5 +1,5 @@
 <template>
-  <div class="vendor-pricing-policy-item">
+  <div class="rule">
     <div class="left">
       {{ editingItem.name }}
       <div v-if="editingItem.yesOption && editingItem.value" class="mt-10 ml-10">
@@ -114,13 +114,9 @@
               <!-- <input type="number" class placeholder="00.00" v-model="editingItem.value" @input="setPricePolicy" /> -->
               <money class="text-center number-field" v-model="editingItem.value" v-bind="currencyFormat" />
               <div v-if="editingItem.units">
-                <multiselect
-                  class="mt-20 unit-select"
-                  :class="{ ' md-red': theme === 'red', 'md-purple': theme === 'purple' }"
-                  v-model="editingItem.unit"
-                  :options="editingItem.units"
-                  :searchable="false"
-                ></multiselect>
+                <select class="unit-select mt-20" v-model="editingItem.unit">
+                  <option v-for="(unit, index) in editingItem.units" :key="index" :value="unit">{{ unit }}</option>
+                </select>
               </div>
             </div>
           </template>
@@ -160,13 +156,9 @@
             /> -->
             <money class="text-center number-field" v-model="editingItem.value" v-bind="rateFormat" />
             <div v-if="editingItem.units">
-              <multiselect
-                class="mt-20 unit-select"
-                :class="{ ' md-red': theme === 'red', 'md-purple': theme === 'purple' }"
-                v-model="editingItem.unit"
-                :options="editingItem.units"
-                :searchable="false"
-              ></multiselect>
+              <select class="unit-select ml-10" v-model="editingItem.unit">
+                <option v-for="(unit, index) in editingItem.units" :key="index" :value="unit">{{ unit }}</option>
+              </select>
             </div>
           </div>
         </div>
@@ -188,26 +180,6 @@
               {{ editingItem.labelForValue || "How many" }}
             </span>
             <money class="text-center number-field" v-bind="rateFormat" v-model="editingItem.value"></money>
-          </div>
-        </div>
-        <div class="bottom mt-10 no-margin" v-if="editingItem.type == 'GroupDiscount'">
-          <div>
-            <span class="d-block">
-              {{ editingItem.labelForValue || "How many" }}
-            </span>
-            <money class="text-center number-field" v-bind="rateFormat" v-model="editingItem.value"></money>
-          </div>
-          <br />
-          <div>
-            <span class="d-block">
-              {{ editingItem.labelForGroupSize || "How many" }}
-            </span>
-            <input
-              type="number"
-              class="text-center number-field"
-              placeholder="Group Size"
-              v-model="editingItem.groupSize"
-            />
           </div>
         </div>
         <div
@@ -245,13 +217,9 @@
           />
           <br />
           <div class="ml-10" v-if="editingItem.hasUnit">
-            <multiselect
-              class="mt-20 unit-select"
-              :class="{ ' md-red': theme === 'red', 'md-purple': theme === 'purple' }"
-              v-model="editingItem.unit"
-              :options="editingItem.units"
-              :searchable="false"
-            ></multiselect>
+            <select class="unit-select ml-10" v-model="editingItem.unit">
+              <option v-for="(unit, index) in editingItem.units" :key="index" :value="unit">{{ unit }}</option>
+            </select>
           </div>
         </div>
         <div class="bottom no-margin" v-if="editingItem.type == 'CostAndQty'">
@@ -375,7 +343,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.vendor-pricing-policy-item {
+.rule {
   padding: 2rem 0;
   border-bottom: 1px solid #dddddd;
   font: 600 16px Manrope-Regular, sans-serif;
@@ -496,49 +464,6 @@ export default {
     border: 1px solid #dddddd;
     box-shadow: 0 1px 3px 0 #e6ebf1;
     color: #050505;
-  }
-  /deep/ .multiselect {
-    font-weight: normal;
-    .multiselect__tags {
-      min-height: 1em;
-      padding: 16px 50px 16px 12px;
-    }
-    .multiselect__placeholder {
-      font-size: 16px;
-      padding: 0px 0;
-      margin: 0;
-      line-height: 1em;
-    }
-
-    .multiselect__select {
-      top: 50%;
-      width: 20px;
-      height: 20px;
-      right: 20px;
-      padding: 4px 4px;
-      transform: translateY(-50%);
-    }
-    &--active {
-      .multiselect__select {
-        transform: translateY(-50%) rotate(180deg);
-      }
-      .multiselect__placeholder {
-        display: inline-block;
-      }
-    }
-    .multiselect__input {
-      margin: 0;
-    }
-    .multiselect__single {
-      line-height: 1em;
-      min-height: 1em;
-      margin: 0;
-      vertical-align: middle;
-    }
-    .multiselect__option--selected {
-      background: transparent;
-      color: #050505;
-    }
   }
 }
 textarea {

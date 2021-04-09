@@ -203,7 +203,7 @@ export default {
                 confirmButtonClass: "md-button md-success",
               }).then(() => {
                 const proposalRequest = this.$route.query.proposalRequest;
-                if (this.step === 6) {
+                if (this.step === 7) {
                   this.setVendor({});
                   this.setEditing(false);
                   this.setStep(0);

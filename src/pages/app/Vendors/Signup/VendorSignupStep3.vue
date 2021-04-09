@@ -196,7 +196,7 @@
                     <span>Select Day</span>
                     <img :src="`${iconUrl}Asset 519.svg`" />
                   </div>
-                  <div class="cdropdown-cont" v-if="isWeekday && exEvery" style="margin-left: 30px">
+                  <div class="cdropdown-cont" v-if="isWeekday && exEvery" style="margin-left: 3rem">
                     <div class="weekdays" v-for="(w, wIndex) in weekdays" :key="wIndex" @click="updateWeekdays(w)">
                       <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="selectedWeekdays.includes(w)" />
                       <span class="unchecked" v-else></span>
@@ -210,11 +210,11 @@
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
                     <span :class="{ checked: exDont }">I don't work on these holidays:</span>
                   </div>
-                  <div class="cdropdown" v-if="exDont" @click="isReligion = !isReligion" style="margin-left: 30px">
+                  <div class="cdropdown" v-if="exDont" @click="isReligion = !isReligion" style="margin-left: 3rem">
                     <span>Religion</span>
                     <img :src="`${iconUrl}Asset 519.svg`" />
                   </div>
-                  <div class="cdropdown-cont" v-if="isReligion && exDont" style="margin-left: 30px">
+                  <div class="cdropdown-cont" v-if="isReligion && exDont" style="margin-left: 3rem">
                     <div class="weekdays" v-for="(r, rIndex) in religions" :key="rIndex" @click="updateReligion(r)">
                       <img
                         :src="`${iconUrl}Group 5479 (2).svg`"
@@ -409,7 +409,7 @@ export default {
       componentKey: 0,
       allowedCategoryFor3rd: ["venuerental", "foodandbeverage", "decor", "entertainment"],
       weekdays: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-      selectedWeekdays: [],
+      selectedWeekdays: ["Saturday", "Sunday"],
       selectedReligion: [],
       isWeekday: false,
       exEvery: false,
@@ -586,7 +586,6 @@ export default {
       let res = [];
       const wds = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 
-      console.log("weekDays", weekDays);
       if (weekDays) {
         weekDays.forEach((wd) => {
           res.push(wds[(wds.indexOf(capitalize(wd.slice(0, 2))) + 6) % 7]);
@@ -731,8 +730,7 @@ export default {
 
       // set selectedWeekdays from saved vendor
       if (this.vendor.selectedWeekdays && this.vendor.selectedWeekdays.length) {
-        this.selectedWeekdays = this.vendor.selectedWeekdays.map((item) => capitalize(item));
-        this.exEvery = true;
+        this.selectedWeekdays = this.vendor.selectedWeekdays;
       }
 
       // set dontWorkSays from saved vendor
@@ -1258,7 +1256,7 @@ export default {
           .select-time-cont {
             display: flex;
             align-items: center;
-            margin: 1rem 0 0 30px;
+            margin: 1rem 0 0 3rem;
 
             img {
               width: 18px;
