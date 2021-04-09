@@ -25,8 +25,12 @@
           </div>
         </div>
         <md-list>
-          <md-list-item @click="goTo('services')" :class="{ 'font-bold-extra': pageName === 'services' }">
-            <label>
+          <md-list-item
+            :md-ripple="false"
+            @click="goTo('services')"
+            :class="{ 'font-bold-extra': pageName === 'services' }"
+          >
+            <label class="menu-label">
               <img
                 :src="
                   pageName === 'services' ? `${$iconURL}common/company-dark.svg` : `${$iconURL}common/company-gray.svg`
@@ -37,8 +41,13 @@
             </label>
           </md-list-item>
 
-          <md-list-item class="mb-30" @click="goTo('details')" :class="{ 'font-bold-extra': pageName === 'details' }">
-            <label
+          <md-list-item
+            :md-ripple="false"
+            class="mb-30"
+            @click="goTo('details')"
+            :class="{ 'font-bold-extra': pageName === 'details' }"
+          >
+            <label class="menu-label"
               ><img
                 :src="
                   pageName === 'details' ? `${$iconURL}common/setting-dark.svg` : `${$iconURL}common/setting-gray.svg`
@@ -48,8 +57,12 @@
               <span class="pl-20 font-size-20">Company Details</span>
             </label>
           </md-list-item>
-          <md-list-item @click="goTo('settings')" :class="{ 'font-bold-extra': pageName === 'settings' }">
-            <label>
+          <md-list-item
+            :md-ripple="false"
+            @click="goTo('settings')"
+            :class="{ 'font-bold-extra': pageName === 'settings' }"
+          >
+            <label class="menu-label">
               <img
                 :src="pageName === 'settings' ? `${$iconURL}common/user-dark.svg` : `${$iconURL}common/user-gray.svg`"
                 class="page-icon"
@@ -58,11 +71,11 @@
             </label>
           </md-list-item>
           <md-divider></md-divider>
-          <md-list-item>
+          <md-list-item :md-ripple="false">
             <md-button class="maryoku-btn md-vendor width-100" :disabled="true">Create Your Landing Page</md-button>
           </md-list-item>
-          <md-list-item @click="logout">
-            <label>
+          <md-list-item :md-ripple="false" @click="logout">
+            <label class="menu-label">
               <img :src="`${$iconURL}menu _ checklist/SVG/Asset 118.svg`" class="page-icon" />
               <span class="pl-20 font-size-20"> Log Out </span>
             </label>
@@ -254,6 +267,9 @@ export default {
     padding: 10px 25px;
     font-size: 16px;
     font-weight: 400;
+  }
+  .menu-label {
+    cursor: pointer;
   }
 }
 </style>

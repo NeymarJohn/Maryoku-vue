@@ -14,8 +14,8 @@
           With Extra Pay
         </div>
         <template v-if="isExpanded">
-          <div class="font-size-16 font-regular text-transform-capitalize">QTY</div>
-          <div class="font-size-16 font-regular text-transform-capitalize">Price</div>
+          <div class="font-size-16 font-regular text-transform-capitalize text-center">QTY</div>
+          <div class="font-size-16 font-regular text-transform-capitalize text-center">Price</div>
         </template>
       </div>
     </template>
@@ -63,6 +63,8 @@ export default {
     grid-template-columns: 40% 20% 20% 20%;
     max-width: 900px;
     align-items: flex-end;
+    max-width: 80%;
+    padding-right: 50px;
   }
   .cost-service-content {
     max-width: 900px;

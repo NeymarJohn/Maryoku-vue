@@ -24,7 +24,7 @@ export default {
       settings: [
         {
           name: "Messages",
-          description: "Receive messages from on new proposals requests",
+          description: "Receive messages from Maryoku on new proposals requests",
           settingName: "messages",
           options: [
             { name: "Email", enabled: true, field: "email" },

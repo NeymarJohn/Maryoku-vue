@@ -101,6 +101,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 10px;
       cursor: pointer;
       &:not(:last-child) {
         border-right: 1px solid #050505;
