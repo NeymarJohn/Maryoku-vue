@@ -89,7 +89,7 @@
           </div>
         </div>
         <div class="how-many mr-10" v-if="checked && included">
-          How Many?
+          <span v-if="!currentItem.hideLabelForValue">How Many?</span>
           <input type="number" placeholder="QTY" v-model="currentItem.value" @input="updateValue" />
         </div>
         <div class="included-cont mt-10" v-if="checked && !item.xIncluded">
@@ -264,6 +264,7 @@ export default {
         value: null,
         desc: null,
         dry: null,
+        hideLabelForValue: false,
       },
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
       currencyFormat: {
@@ -276,34 +277,25 @@ export default {
       },
     };
   },
-  created() {},
   mounted() {
+    let item = null;
     if (this.service) {
-      let item = this.service.services[this.camelize(this.label)];
-      console.log("service.check.box", this.item, item);
-      if (item) {
-        console.log("service.checkbox", item.label, item);
-        this.included = item.hasOwnProperty("included") ? item.included : this.item.included;
-        this.checked = item.hasOwnProperty("checked") ? item.checked : this.item.checked;
-        this.currentItem.included = this.included;
-        this.currentItem.checked = this.checked;
-        this.currentItem.value = item.hasOwnProperty("value") ? item.value : this.item.value;
-        this.currentItem.desc = item.hasOwnProperty("desc") ? item.desc : this.item.desc;
-        this.currentItem.dry = item.hasOwnProperty("dry") ? item.dry : this.item.dry;
-      }
+      item = this.service.services[this.camelize(this.label)];
     } else if (this.vendor) {
-      let item = this.vendor.services[this.camelize(this.label)];
-      console.log("vendor.check.box", this.item, item);
-      if (item) {
-        console.log("vendor.checkbox", item.label, item);
-        this.included = item.hasOwnProperty("included") ? item.included : this.item.included;
-        this.checked = item.hasOwnProperty("checked") ? item.checked : this.item.checked;
-        this.currentItem.included = this.included;
-        this.currentItem.checked = this.checked;
-        this.currentItem.value = item.hasOwnProperty("value") ? item.value : this.item.value;
-        this.currentItem.desc = item.hasOwnProperty("desc") ? item.desc : this.item.desc;
-        this.currentItem.dry = item.hasOwnProperty("dry") ? item.dry : this.item.dry;
-      }
+      item = this.vendor.services[this.camelize(this.label)];
+    }
+
+    console.log("service.check.box", this.item, item);
+    if (item) {
+      console.log("service.checkbox", item.label, item);
+      this.included = item.hasOwnProperty("included") ? item.included : this.item.included;
+      this.checked = item.hasOwnProperty("checked") ? item.checked : this.item.checked;
+      this.currentItem.included = this.included;
+      this.currentItem.checked = this.checked;
+      this.currentItem.value = item.hasOwnProperty("value") ? item.value : this.item.value;
+      this.currentItem.desc = item.hasOwnProperty("desc") ? item.desc : this.item.desc;
+      this.currentItem.dry = item.hasOwnProperty("dry") ? item.dry : this.item.dry;
+      this.currentItem.hideLabelForValue = this.item.hideLabelForValue;
     }
   },
   methods: {
@@ -317,8 +309,7 @@ export default {
       this.$root.$emit("update-vendor-value", `services.${this.camelize(this.label)}`, this.currentItem);
     },
     updateValue(field, value) {
-      console.log(this.currentItem);
-      if (field & (typeof value !== "undefined")) {
+      if (field && typeof value !== "undefined") {
         this.currentItem[field] = value;
       }
       this.$root.$emit("update-vendor-value", `services.${this.camelize(this.label)}`, this.currentItem);

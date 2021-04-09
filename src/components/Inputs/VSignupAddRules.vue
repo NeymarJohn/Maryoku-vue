@@ -89,6 +89,10 @@ export default {
       type: String,
       default: "red",
     },
+    isMainService: {
+      type: Boolean,
+      default: true,
+    },
   },
   data: () => {
     return {
@@ -130,14 +134,20 @@ export default {
       this.rules.push(this.$refs.additionalRule.value);
       this.$refs.additionalRule.value = null;
       this.focusedRule = null;
-      this.$store.commit("vendorSignup/setField", { field: "additionalRules", value: this.rules });
+      if (this.isMainService)
+        this.$store.commit("vendorSignup/setField", { field: "additionalRules", value: this.rules });
+      else this.$store.commit("vendorService/setField", { field: "additionalRules", value: this.rules });
     },
     editRule(r) {
       this.focusedRule = this.rules.filter((rule) => rule == r)[0];
       this.rules = this.rules.filter((rule) => rule != r);
+      this.$store.commit("vendorSignup/setField", { field: "additionalRules", value: this.rules });
     },
     removeRule(r) {
       this.rules = this.rules.filter((rule) => rule != r);
+      if (this.isMainService)
+        this.$store.commit("vendorSignup/setField", { field: "additionalRules", value: this.rules });
+      else this.$store.commit("vendorService/setField", { field: "additionalRules", value: this.rules });
     },
   },
 };
@@ -157,10 +167,8 @@ export default {
     .field {
       display: flex;
       align-items: center;
-
       input {
         font-size: 16px;
-        padding: 22px 30px;
         width: 100%;
         border: 1px solid #707070;
         border-radius: 0;

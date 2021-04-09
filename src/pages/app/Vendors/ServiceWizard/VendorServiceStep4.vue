@@ -117,7 +117,12 @@
                 <div class="second-column"></div>
               </div>
               <div class="citems">
-                <vendor-starting-fee-item v-for="(fv, fvIndex) in getStartingFeeItems()" :key="fvIndex" :item="fv" />
+                <vendor-starting-fee-item
+                  v-for="(fv, fvIndex) in getStartingFeeItems()"
+                  :key="fvIndex"
+                  :item="fv"
+                  theme="purple"
+                />
               </div>
             </div>
           </div>
@@ -129,10 +134,10 @@
               <div class="cheader">
                 <div>
                   <img :src="`${iconUrl}Asset 543.svg`" />
-                  {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
+                  {{ getCategoryNameByValue(currentService.vendorCategory) }}
                 </div>
-                <span>QTY</span>
-                <span>Price</span>
+                <span class="text-center">QTY</span>
+                <span class="text-center">Price</span>
                 <span></span>
               </div>
               <div class="citems">
@@ -184,7 +189,7 @@
                 </div>
               </div>
             </div>
-            <div class="rules">
+            <div class="rules" v-if="additionalRules && additionalRules.length">
               <h5 class="font-bold font-size-20">Additional Rules</h5>
               <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
                 <div class="item">Event must be {{ policy }}</div>
@@ -204,7 +209,7 @@
                 <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
                 {{ d.holiday }}
               </div>
-              <div class="item" v-if="vendor.dontWorkDays">
+              <div class="item" v-if="vendor.dontWorkDays && vendor.dontWorkDays.length">
                 <img :src="`${$iconURL}common/close-circle-outlined-purple.svg`" />
                 {{ dontWorkDays() }}
               </div>
@@ -223,14 +228,14 @@
                   <div class="mt-10 color-gray">{{ policy.desc }}</div>
                 </div>
                 <div class="item" v-if="policy.type === 'MultiSelection'">
-                  <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
-                    `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
-                  }}</span>
+                  <span class="mr-10" v-for="(v, vIndex) in policy.value">
+                    {{ `${v}${vIndex == policy.value.length - 1 ? "" : ","}` }}
+                  </span>
                 </div>
                 <div class="item" v-else-if="policy.type === 'Including'">
                   <span class="mr-10" v-if="policy.value"> Yes </span>
                   <span class="mr-10" v-if="!policy.value && policy.cost && policy.unit === '$'"> $ </span>
-                  <span>{{ policy.cost }}</span>
+                  <span>{{ policy.cost | withComma }}</span>
                 </div>
                 <div class="item" v-else-if="policy.type === Boolean && policy.value && policy.discount">
                   <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '$'"> $ </span>
@@ -240,13 +245,13 @@
                 <div class="item" v-else>
                   <span v-if="policy.type === Number && !policy.isPercentage && policy.unit !== 'hour'">$</span>
                   <span v-if="policy.value === true">Yes</span>
-                  <span v-else>{{ policy.value }}</span>
+                  <span v-else>{{ policy.value | withComma }}</span>
                   <span v-if="policy.isPercentage">%</span>
                   <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
                     {{ policy.attendees }} attendees
                   </span>
                   <span class="ml-50 text-transform-capitalize" v-if="policy.unit">
-                    {{ policy.unit }}
+                    {{ getUnit(policy) }}
                   </span>
                 </div>
               </div>
@@ -467,8 +472,8 @@ export default {
   created() {},
   mounted() {
     console.log("vendorService.step4", this.vendor);
-    if (this.vendor.hasOwnProperty("images") && this.vendor.images.length) {
-      this.vendor.images.forEach((item) => {
+    if (this.currentService.hasOwnProperty("images") && this.currentService.images.length) {
+      this.currentService.images.forEach((item) => {
         this.medias.push({
           thumb: item,
           src: item,
@@ -507,7 +512,7 @@ export default {
     getExtraPayItems() {
       console.log("getExtraPayItems");
       let extraPayItems = [];
-      _.each(this.vendor.services, (item) => {
+      _.each(this.currentService.services, (item) => {
         if (item.checked && item.hasOwnProperty("included") && !item.included) {
           extraPayItems.push(item);
         }
@@ -598,12 +603,21 @@ export default {
         }
       });
 
-      this.$root.$emit("update-vendor-value", "services", this.vendor.services);
+      this.$root.$emit("update-vendor-value", "services", this.currentService.services);
+    },
+    getUnit(policy) {
+      if (policy.unit !== "%" && policy.unit !== "$") {
+        return `${policy.unit}${policy.value > 1 ? "s" : ""}`;
+      }
+      if (policy.type === "GroupDiscount") {
+        return `For ${policy.groupSize}`;
+      }
+      return "";
     },
   },
   computed: {
     additionalRules() {
-      return this.$store.state.vendorService.vendor.additionalRules;
+      return this.currentService.additionalRules;
     },
     validPricingPolicy() {
       if (this.currentService.pricingPolicies)

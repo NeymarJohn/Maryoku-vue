@@ -101,7 +101,7 @@ export default {
     },
     isEmailValid: function () {
       // return (this.value == "")? "" : (this.reg.test(this.value)) ? 'has-success' : 'has-error';
-      return this.reg.test(this.value) ? "has-success" : "has-error";
+      return this.reg.test(this.value) ? "" : "";
     },
   },
   watch: {
@@ -149,9 +149,7 @@ export default {
         position: relative;
       }
       .default {
-        padding: 22px 20px;
         border: 1px solid #dddddd;
-        border-radius: 0;
         font: normal 16px Manrope-Regular, sans-serif;
 
         &.with-img {

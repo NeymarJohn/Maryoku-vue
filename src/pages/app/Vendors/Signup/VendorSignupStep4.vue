@@ -79,11 +79,20 @@
             </div>
             <div class="attachments">
               <div class="mb-30">Attachments</div>
-              <attachment-tag-list
+              <!-- <attachment-tag-list
                 :defaultValue="vendor.attachments"
                 @add="addNewAttachment"
                 @remove="removeAttachment"
-              ></attachment-tag-list>
+              ></attachment-tag-list> -->
+              <attachment-item
+                v-for="attachment in attachments"
+                :key="attachment.name"
+                :attachment="attachment"
+                :vendor="vendor"
+                class="attachment"
+                @uploaded="setAttachment"
+                @remove="removeAttachment"
+              ></attachment-item>
             </div>
             <div class="personal-message mt-40" v-if="vendor.personalMessage">
               <div class="font-bold mb-20">
@@ -125,8 +134,8 @@
                   <img :src="`${iconUrl}Asset 543.svg`" />
                   {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
                 </div>
-                <span>QTY</span>
-                <span>Price</span>
+                <span class="text-center">QTY</span>
+                <span class="text-center">Price</span>
                 <span></span>
               </div>
               <div class="citems">
@@ -153,7 +162,7 @@
                 </div>
                 <div class="item" v-else-if="policy.type === 'Including'">
                   <span class="mr-10" v-if="policy.value"> Yes </span>
-                  <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
+                  <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost | withComma}` }} </span>
                 </div>
                 <div class="item text-right" v-else>
                   <span v-if="policy.type === Number && !policy.isPercentage && policy.unit !== 'hour'">$</span>
@@ -165,7 +174,7 @@
                   <span v-else>
                     <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
                     <img v-else-if="policy.value === false" :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
-                    <span v-else>{{ policy.value }}</span>
+                    <span v-else>{{ policy.value | withComma }}</span>
                   </span>
                   <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
                   <span v-if="policy.isPercentage">%</span>
@@ -175,10 +184,10 @@
                 </div>
               </div>
             </div>
-            <div class="rules">
+            <div class="rules" v-if="additionalRules && additionalRules.length">
               <h5 class="font-bold font-size-20">Additional Rules</h5>
               <div class="rule" v-for="(policy, yIndex) in additionalRules" :key="yIndex">
-                <div class="item">Event must be {{ policy }}</div>
+                <div class="item font-regular">Event must be {{ policy }}</div>
               </div>
             </div>
             <div class="not-allowed" v-if="vendor.vendorCategories[0] == 'venuerental'">
@@ -221,7 +230,7 @@
                 <div class="item" v-else-if="policy.type === 'Including'">
                   <span class="mr-10" v-if="policy.value"> Yes </span>
                   <span class="mr-10" v-if="!policy.value && policy.cost && policy.unit === '$'"> $ </span>
-                  <span>{{ policy.cost }}</span>
+                  <span>{{ Number(policy.cost) | withComma }}</span>
                 </div>
                 <div class="item" v-else-if="policy.type === Boolean && policy.value && policy.discount">
                   <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '$'"> $ </span>
@@ -237,13 +246,14 @@
                 <div class="item" v-else>
                   <span v-if="policy.type === Number && !policy.isPercentage && policy.unit !== 'hour'">$</span>
                   <span v-if="policy.value === true">Yes</span>
-                  <span v-else>{{ policy.value }}</span>
+                  <span v-else>{{ policy.value | withComma }}</span>
                   <span v-if="policy.isPercentage">%</span>
                   <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
                     {{ policy.attendees }} attendees
                   </span>
                   <span class="ml-50 text-transform-capitalize" v-if="policy.unit">
-                    {{ policy.unit }}
+                    <!-- {{ policy.unit }}{{ policy.value > 1 ? "s" : "" }} -->
+                    {{ getUnit(policy) }}
                   </span>
                 </div>
               </div>
@@ -288,6 +298,7 @@ import VendorImagesList from "../components/VendorImagesList.vue";
 import { capitalize } from "@/utils/string.util";
 import AttachmentTagList from "../components/AttachmentTagList.vue";
 import S3Service from "@/services/s3.service";
+import AttachmentItem from "../components/AttachmentItem.vue";
 
 export default {
   name: "vendor-signup-step4",
@@ -305,6 +316,7 @@ export default {
     VendorExtraPayItem,
     VendorImagesList,
     AttachmentTagList,
+    AttachmentItem,
   },
   data() {
     return {
@@ -476,6 +488,14 @@ export default {
     }
   },
   methods: {
+    setAttachment(attachment) {
+      const defaultAttachments = Object.assign([], this.attachments);
+      const currentIndex = defaultAttachments.findIndex((a) => a.name === attachment.name);
+      defaultAttachments[currentIndex] = attachment;
+      this.$store.commit("vendorSignup/setField", { field: "attachments", value: defaultAttachments });
+      // let updateData = { attachments: defaultAttachments, id: this.vendorData.id };
+      // this.$store.dispatch("vendor/updateProfile", updateData);
+    },
     addNewAttachment(file) {
       S3Service.fileUpload(file, file.name, `vendors/attachments/${this.vendor.id}`).then((res) => {
         const attachments = this.vendor.attachments ? [...this.vendor.attachments] : [];
@@ -488,11 +508,19 @@ export default {
         this.$store.commit("vendorSignup/setField", { field: "attachments", value: attachments });
       });
     },
-    removeAttachment(item, index) {
-      const attachments = this.vendor.attachments ? [...this.vendor.attachments] : [];
-      attachments.splice(index, 1);
-      this.$store.commit("vendorSignup/setField", { field: "attachments", value: attachments });
+    removeAttachment(attachment) {
+      const defaultAttachments = this.attachments;
+      const currentIndex = defaultAttachments.findIndex((a) => a.name === attachment.name);
+      defaultAttachments[currentIndex].fileName = "";
+      defaultAttachments[currentIndex].url = "";
+      let updateData = { attachments: defaultAttachments, id: this.vendorData.id };
+      this.$store.dispatch("vendor/updateProfile", updateData);
     },
+    // removeAttachment(item, index) {
+    //   const attachments = this.vendor.attachments ? [...this.vendor.attachments] : [];
+    //   attachments.splice(index, 1);
+    //   this.$store.commit("vendorSignup/setField", { field: "attachments", value: attachments });
+    // },
     isSocial() {
       let isBlank = true;
 
@@ -598,6 +626,15 @@ export default {
 
       this.$root.$emit("update-vendor-value", "services", this.vendor.services);
     },
+    getUnit(policy) {
+      if (policy.unit !== "%" && policy.unit !== "$") {
+        return `${policy.unit}${policy.value > 1 ? "s" : ""}`;
+      }
+      if (policy.type === "GroupDiscount") {
+        return `For ${policy.groupSize}`;
+      }
+      return "";
+    },
   },
   computed: {
     additionalRules() {
@@ -616,6 +653,21 @@ export default {
           (item) => item.hasOwnProperty("value") || (item.type === "Including" && item.cost),
         );
       return null;
+    },
+    attachments() {
+      if (this.vendor.attachments && this.vendor.attachments.length > 0) return this.vendor.attachments;
+      if (this.vendor.eventCategory.legalDocuments) {
+        return this.vendor.eventCategory.legalDocuments.map((legal) => {
+          return {
+            name: legal,
+            isRequired:
+              this.vendor.eventCategory.mandatoryLegalDocs &&
+              this.vendor.eventCategory.mandatoryLegalDocs.findIndex((item) => item === legal) >= 0,
+            fileName: "",
+          };
+        });
+      }
+      return [];
     },
   },
   filters: {},
@@ -1026,6 +1078,9 @@ export default {
   }
   .mr-1 {
     margin-right: 1rem;
+  }
+  .attachment:not(:last-child) {
+    border-bottom: solid 1px #dbdbdb;
   }
 }
 </style>

@@ -6,7 +6,7 @@
       {{ user.eventList[0].concept ? user.eventList[0].concept.name : user.eventList[0].title
       }}<md-icon class="schedule-menu-btn-icon">keyboard_arrow_down</md-icon>
     </div> -->
-    <div>
+    <!-- <div>
       <popper trigger="click" :options="{ placement: 'bottom' }">
         <div class="popper white-card permit-page">
           <div class="font-size-22 popper-header"></div>
@@ -41,7 +41,7 @@
           ><md-icon class="schedule-menu-btn-icon">keyboard_arrow_down</md-icon>
         </md-button>
       </popper>
-    </div>
+    </div> -->
     <div>
       <md-menu md-size="big" md-align-trigger class="schedule-menu">
         <md-button md-menu-trigger class="md-simple md-black schedule-menu-btn maryoku-btn">
@@ -54,9 +54,6 @@
           </md-menu-item>
           <md-menu-item class="text-center" @click="selectRole('edit')">
             <span class="font-size-16" :class="{ 'font-bold-extra': permittedRole === 'edit' }"> Can edit </span>
-          </md-menu-item>
-          <md-menu-item class="text-center" @click="selectRole('comment')">
-            <span class="font-size-16" :class="{ 'font-bold-extra': permittedRole === 'comment' }"> Can comment </span>
           </md-menu-item>
           <md-divider></md-divider>
           <md-menu-item class="text-center" @click="removeUser">
@@ -193,10 +190,7 @@ export default {
   .md-list {
     padding: 30px 0;
     .md-list-item {
-      margin: 15px 0px;
-      &:not(:last-child) {
-        margin-bottom: 15px !important;
-      }
+      margin: 5px 0 !important;
       /deep/ .md-list-item-button {
         padding-left: 30px;
         padding-right: 30px;

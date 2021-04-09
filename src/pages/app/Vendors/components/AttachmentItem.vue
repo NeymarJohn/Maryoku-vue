@@ -82,7 +82,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .attachment-item {
-  padding: 30px 0;
+  padding: 20px 0;
   .file-name {
     text-decoration: underline;
   }

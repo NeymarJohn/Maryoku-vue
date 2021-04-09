@@ -10,7 +10,7 @@
         </div>
         <div class="item" v-else-if="policy.type === 'Including'">
           <span class="mr-10" v-if="policy.value"> Yes </span>
-          <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
+          <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost | withComma}` }} </span>
         </div>
         <div class="item" v-else-if="policy.type === Boolean && policy.value && policy.discount">
           <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '$'"> $ </span>
@@ -18,9 +18,9 @@
           <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '%'"> % </span>
         </div>
         <div class="item" v-else>
-          <span v-if="policy.type === Number && !policy.isPercentage">$</span>
+          <span v-if="!policy.isPercentage">$</span>
           <span v-if="policy.value === true">Yes</span>
-          <span v-else>{{ policy.value }}</span>
+          <span v-else>{{ Number(policy.value) | withComma }}</span>
           <span v-if="policy.isPercentage">%</span>
           <span class="ml-50" v-if="policy.hasOwnProperty('attendees')"> {{ policy.attendees }} attendees </span>
         </div>
@@ -33,13 +33,21 @@ export default {
   data() {
     return {};
   },
+  props: {
+    serviceData: {
+      type: Object,
+      default: () => {},
+    },
+  },
   computed: {
     vendor() {
       return this.$store.state.vendor.profile;
     },
     validPricingPolicy() {
-      if (this.vendor.pricingPolicies)
-        return this.vendor.pricingPolicies.filter((item) => item.value || (item.type === "Including" && item.cost));
+      if (this.serviceData.pricingPolicies)
+        return this.serviceData.pricingPolicies.filter(
+          (item) => item.value || (item.type === "Including" && item.cost),
+        );
       return null;
     },
   },

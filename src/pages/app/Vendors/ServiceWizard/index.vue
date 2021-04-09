@@ -118,7 +118,8 @@ export default {
         this.$set(service, "images", images);
       } else if (field == "serviceCategories") {
         this.$set(service, this.camelize(field), value);
-        this.$set(service, "serviceCategory", value[0]);
+        // this.$set(service, "serviceCategory", value[0]);
+        this.$set(service, "vendorCategory", value[0]);
         this.$set(service, "yesRules", []);
         this.$set(service, "noRules", []);
         this.$set(service, "notAllowed", []);

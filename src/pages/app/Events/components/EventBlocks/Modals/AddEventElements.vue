@@ -4,9 +4,9 @@
       <div class="md-layout-item md-size-95" style="max-height: 50vh">
         <div class="md-title">
           <h4>Add Event Elements</h4>
-          <md-button v-if="selectedItems.length > 0" class="md-danger no-padding" @click="addSelectedElements()"
-            >Add {{ selectedItems.length }} Elements</md-button
-          >
+          <md-button v-if="selectedItems.length > 0" class="md-danger no-padding" @click="addSelectedElements()">
+            Add {{ selectedItems.length }} Elements
+          </md-button>
         </div>
         <div class="md-layout" style="overflow: auto; max-height: 80vh">
           <div

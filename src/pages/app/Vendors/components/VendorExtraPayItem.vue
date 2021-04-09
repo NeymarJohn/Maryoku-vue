@@ -16,7 +16,7 @@
           <input v-model="item.qty" @input="changeItem()" />
         </div>
       </div>
-      <div class="col" v-if="!isEditable">{{ getPrice() }}</div>
+      <div class="col" v-if="!isEditable">+${{ getPrice() | withComma }}</div>
       <div class="col" v-else>
         <money
           v-model="item.value"
@@ -87,7 +87,7 @@ export default {
       if (this.item.value) {
         if (this.item.value) {
           ///.constructor.name == "String"
-          return `+$${this.item.value}`;
+          return Number(this.item.value);
         } else {
           return null;
         }

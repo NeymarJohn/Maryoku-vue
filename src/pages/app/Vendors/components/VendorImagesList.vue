@@ -1,12 +1,12 @@
 <template>
   <div class="venodr-images-list">
-    <span class="prev" @click="prev()" v-if="startIndex > 0">
+    <span class="prev" @click="prev()" v-show="startIndex > 0">
       <md-icon>keyboard_arrow_left</md-icon>
     </span>
     <div class="cont" :style="{ left: `${imageSlidePos}px` }" ref="imagesCont">
       <img :src="img" v-for="(img, ind) in images" :key="ind" @click="view(ind)" class="image-item" />
     </div>
-    <span class="next" @click="next()" v-if="startIndex < images.length - 3">
+    <span class="next" @click="next()" v-show="startIndex < images.length - 3">
       <md-icon>keyboard_arrow_right</md-icon>
     </span>
     <LightBox v-if="medias.length" :media="medias" ref="lightbox" :show-light-box="false" />

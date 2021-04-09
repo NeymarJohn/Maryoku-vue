@@ -37,7 +37,7 @@
       <div class="permission-row">
         <div><img :src="userData.avatar" class="user-icon" /></div>
         <div>{{ userData.name }}</div>
-        <div class="color-gray">Owner</div>
+        <div class="color-gray ml-30">Owner</div>
         <div></div>
       </div>
       <permitted-user-row

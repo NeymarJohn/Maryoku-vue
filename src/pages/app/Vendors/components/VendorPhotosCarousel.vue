@@ -1,6 +1,6 @@
 <template>
   <div class="proposal-inpirational-photos" v-if="images.length > 0">
-    <span class="prev" @click="prev()" v-if="startIndex > 0">
+    <span class="prev" @click="prev()" v-show="startIndex > 0">
       <md-icon>keyboard_arrow_left</md-icon>
     </span>
     <div class="cont" :style="{ left: `${imageSlidePos}px` }" ref="imagesCont">
@@ -39,7 +39,7 @@
       </div>
     </div>
 
-    <span class="next" @click="next()" v-if="startIndex < images.length - 2">
+    <span class="next" @click="next()" v-show="startIndex < images.length - 2">
       <md-icon>keyboard_arrow_right</md-icon>
     </span>
 
@@ -219,6 +219,7 @@ export default {
     transition: all 0.5s;
     white-space: nowrap;
     display: flex;
+    transition: all 0.5s;
   }
   .handle-btn {
     background-color: white !important;

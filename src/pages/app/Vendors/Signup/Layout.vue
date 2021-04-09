@@ -125,14 +125,24 @@ export default {
       }
     },
     next() {
-      if (this.step < 6) {
-        this.setStep(this.step + 1);
+      if (this.step === 6) {
+        this.addVendor();
+      } else if (this.step === 5 && this.vendor.tenantUser) {
+        const title = "Success to update!";
+        new Vendors({ ...this.vendor, isEditing: false })
+          .save()
+          .then((res) => {
+            Swal.fire({
+              title,
+              buttonsStyling: false,
+              confirmButtonClass: "md-button md-success",
+            }).then(() => {
+              this.$router.push("/vendor/profile/services");
+            });
+          })
+          .catch((error) => {});
       } else {
-        if (this.vendor.password == this.vendor.confirmPassword) {
-          this.savedItModal = true;
-          this.setStep(this.step + 1);
-        } else {
-        }
+        this.setStep(this.step + 1);
       }
       this.scrollToTop();
     },
@@ -171,13 +181,7 @@ export default {
       return temp.charAt(0).toLowerCase() + temp.slice(1);
     },
     async addVendor() {
-      let title = null;
-
-      if (this.step === 7) {
-        title = "Thank you for your sign up!";
-      } else {
-        title = "Success to save for later!";
-      }
+      let title = "Thank you for your sign up!";
       const tenantUser = {
         company: this.vendor.companyName,
         name: this.vendor.email,
@@ -199,7 +203,7 @@ export default {
                 confirmButtonClass: "md-button md-success",
               }).then(() => {
                 const proposalRequest = this.$route.query.proposalRequest;
-                if (this.step === 7) {
+                if (this.step === 6) {
                   this.setVendor({});
                   this.setEditing(false);
                   this.setStep(0);
@@ -247,6 +251,9 @@ export default {
       if (this.step == 6) {
         return "Sign Up";
       } else if (this.step == 5) {
+        if (this.vendor.tenantUser) {
+          return "Update";
+        }
         return "Finish";
       } else if (this.step == 3) {
         return " Check out your new profile!";
