@@ -68,18 +68,50 @@
         </div>
       </div>
       <div class="section-header comparing-name font-bold-extra">All 3 Proposals Include:</div>
-      <div
-        class="grid-row"
-        v-for="service in commonIncludedServices"
-        :key="`common-service-${service.requirementTitle}`"
-      >
-        <div class="grid-cell comparing-name">{{ service.requirementTitle }}</div>
+      <div class="grid-row" v-for="service in commonIncludedServices" :key="`common-service-${service.name}`">
+        <div class="grid-cell comparing-name">{{ service.name }}</div>
         <div
           class="grid-cell color-red text-center font-size-30 font-bold"
           v-for="proposal in proposals"
           :key="`check-${proposal.id}`"
         >
           <div class="grid-cell"><img src="/static/icons/vendor/proposalBoard/filter-won.svg" /></div>
+        </div>
+      </div>
+      <template v-for="section in comparedServices">
+        <div class="section-header comparing-name font-bold-extra text-transform-capitalize">{{ section.name }}</div>
+        <div class="grid-row" v-for="item in section.items" :key="`common-item-${item.name}`">
+          <div class="grid-cell comparing-name text-transform-capitalize">{{ item.name }}</div>
+          <div
+            class="grid-cell color-red text-center font-size-30 font-bold"
+            v-for="(proposal, index) in item.proposalServices"
+            :key="`check-${item.name}-${index}`"
+          >
+            <!-- {{ proposal }} -->
+            <div class="grid-cell" v-if="!proposal">
+              <img class="check-icon" :src="`${$iconURL}Vendor Signup/Group 5489 (3).svg`" />
+            </div>
+            <div class="grid-cell" v-else-if="proposal.included">
+              <img class="check-icon" src="/static/icons/vendor/proposalBoard/filter-won.svg" />
+            </div>
+            <div class="grid-cell font-bold color-black font-size-16" v-else>+${{ proposal.price | withComma }}</div>
+          </div>
+        </div>
+      </template>
+      <div class="section-header comparing-name font-bold-extra">Policy</div>
+      <div class="grid-row" v-for="policy in comparedPolicies" :key="`policy-${policy.name}`">
+        <div class="grid-cell comparing-name">{{ policy.name }}</div>
+        <div
+          class="grid-cell color-red text-center font-size-30 font-bold"
+          v-for="proposal in proposals"
+          :key="`policy-${proposal.id}`"
+        >
+          <div class="grid-cell" v-if="policy.value">
+            <img src="/static/icons/vendor/proposalBoard/filter-won.svg" />
+          </div>
+          <div class="grid-cell" v-else>
+            <img class="check-icon" :src="`${$iconURL}Vendor Signup/Group 5489 (3).svg`" />
+          </div>
         </div>
       </div>
     </div>
@@ -92,6 +124,8 @@ import VueElementLoading from "vue-element-loading";
 import _ from "underscore";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "../components/CommentEditorPanel";
+import { businessCategories, VendorPolicy } from "@/constants/vendor";
+import { camelize } from "@/utils/string.util";
 export default {
   name: "event-block-comparison",
   components: {
@@ -106,6 +140,7 @@ export default {
       proposals: [],
       selectedBlock: null,
       commonIncludedServices: [],
+      comparedPolicies: [],
     };
   },
   created() {
@@ -116,32 +151,77 @@ export default {
       .for(new EventComponent({ id: this.$route.params.blockId }))
       .get()
       .then((result) => {
-        this.proposals = result;
+        this.proposals = result.slice(0, 3);
         this.commonIncludedServices = [];
-        this.proposals[0].includedServices[this.selectedBlock.componentId].forEach((service) => {
-          console.log("service", service);
-          console.log(
-            "object",
-            this.proposals.every((proposal) => {
-              return (
-                proposal.includedServices[this.selectedBlock.componentId].findIndex(
-                  (item) => item.requirementTitle == service.requirementTitle,
-                ) >= 0
-              );
-            }),
-          );
-          if (
-            this.proposals.every((proposal) => {
-              return (
-                proposal.includedServices[this.selectedBlock.componentId].findIndex(
-                  (item) => item.requirementTitle == service.requirementTitle,
-                ) >= 0
-              );
-            })
-          ) {
-            this.commonIncludedServices.push(service);
-          }
+        const currentServiceCategory = businessCategories.find((item) => item.name === this.selectedBlock.componentId);
+        console.log("currentServiceCategory", currentServiceCategory);
+
+        // compare proposals
+        const comparedServices = [];
+        currentServiceCategory.categories.forEach((section) => {
+          const comparedSection = { name: section.name, items: [] };
+          section.subCategories.forEach((subCategory) => {
+            subCategory.items.forEach((item) => {
+              if (
+                this.proposals.every((proposal) => {
+                  console.log(proposal.includedServices[this.selectedBlock.componentId]);
+                  return (
+                    proposal.includedServices[this.selectedBlock.componentId].findIndex(
+                      (service) => item.name == service.requirementTitle,
+                    ) >= 0
+                  );
+                })
+              ) {
+                /// getting services included in all 3 proposals
+                this.commonIncludedServices.push(item);
+              } else {
+                // if this item is not common for 3 proposals
+
+                //getting items for getting
+                const comparedItems = { name: item.name, proposalServices: [] };
+                this.proposals.forEach((proposal) => {
+                  if (
+                    proposal.includedServices[this.selectedBlock.componentId].findIndex(
+                      (service) => item.name == service.requirementTitle,
+                    ) >= 0
+                  ) {
+                    // checkgin included service?
+                    // if proposal have
+                    comparedItems.proposalServices.push({ ...item, included: true });
+                  } else if (proposal.vendor.services[camelize(item.name)]) {
+                    // checking extra servcie
+                    console.log("object", proposal.vendor.services[camelize(item.name)]);
+                    const service = proposal.vendor.services[camelize(item.name)];
+                    comparedItems.proposalServices.push({
+                      ...item,
+                      price: service.value,
+                      qty: service.qty,
+                      included: false,
+                    });
+                  } else {
+                    comparedItems.proposalServices.push(null);
+                  }
+                });
+                comparedSection.items.push(comparedItems); ///
+              }
+            });
+          });
+
+          comparedServices.push(comparedSection);
         });
+        this.comparedServices = comparedServices;
+
+        // checking policy
+        const categoryPolicy = VendorPolicy.find((item) => item.category === this.selectedBlock.componentId);
+        if (categoryPolicy) {
+          categoryPolicy.items.forEach((policyItem) => {
+            this.proposals.forEach((proposal) => {
+              const vendorPolicy = proposal.vendor.policies.find((it) => it.name === policyItem.name);
+              if (vendorPolicy) this.comparedPolicies.push(vendorPolicy);
+            });
+          });
+        }
+        console.log("comparedServices", comparedServices);
       });
   },
   methods: {
@@ -175,6 +255,9 @@ export default {
         &.comparing-name {
           font-size: 20px;
           padding: 30px 50px;
+        }
+        .check-icon {
+          width: 25px;
         }
       }
     }

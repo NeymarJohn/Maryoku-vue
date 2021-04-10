@@ -21,8 +21,7 @@
             </div>
           </div>
           <div class="banner">
-            <!-- <img :src="vendor.images[0]" v-if="vendor.hasOwnProperty('images') && vendor.images.length > 0" /> -->
-            <header-image-carousel :images="vendor.images" class="images"></header-image-carousel>
+            <img :src="vendor.images[0]" v-if="vendor.hasOwnProperty('images') && vendor.images.length > 0" />
           </div>
           <div class="about-cont" id="About">
             <div class="block">
@@ -296,7 +295,6 @@ import VendorStartingFeeItem from "../components/VendorStartingFeeItem.vue";
 import VendorExtraPayItem from "../components/VendorExtraPayItem.vue";
 import _ from "underscore";
 import VendorImagesList from "../components/VendorImagesList.vue";
-import HeaderImageCarousel from "@/components/HeaderImageCarousel.vue";
 import { capitalize } from "@/utils/string.util";
 import AttachmentTagList from "../components/AttachmentTagList.vue";
 import S3Service from "@/services/s3.service";
@@ -319,7 +317,6 @@ export default {
     VendorImagesList,
     AttachmentTagList,
     AttachmentItem,
-    HeaderImageCarousel,
   },
   data() {
     return {

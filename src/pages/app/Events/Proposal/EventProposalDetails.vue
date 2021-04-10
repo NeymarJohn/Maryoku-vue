@@ -24,7 +24,9 @@
             <ul class="event-details">
               <li class="event-details__item">
                 <label>Name</label>
-                <div class="info-text">{{ eventData.title || eventData.concept.title }}</div>
+                <div class="info-text">
+                  {{ eventData.title || eventData.concept ? eventData.concept.title : "Untitled event" }}
+                </div>
               </li>
               <li class="event-details__item">
                 <label>Date</label>
@@ -498,7 +500,9 @@
     <div class="book-proposal-form">
       <div class="form-title">
         Would You Like To Book
-        <a href class="font-bold-extra"> {{ vendorProposal.vendor.companyName }} </a>?
+        <a :href="`/#/vendors/${this.vendorProposal.vendor.id}/detail`" target="_blank" class="font-bold-extra">
+          {{ vendorProposal.vendor.companyName }} </a
+        >?
       </div>
       <div class="agree-checkbox" v-if="this.vendorProposal.suggestedTime">
         <md-checkbox v-model="acceptNewTimes">I agree to the new time of this proposal</md-checkbox>
