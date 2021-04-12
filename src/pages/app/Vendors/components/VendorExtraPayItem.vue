@@ -7,7 +7,7 @@
           v-if="editingData.hasOwnProperty('desc') && editingData.desc"
           class="ml-20"
           :class="{ 'rotate-90': expanded }"
-          :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"
+          :src="`${$iconURL}NewSubmitPorposal/Group 4770 (2).svg`"
         />
       </div>
       <div class="col" v-if="!isEditable">

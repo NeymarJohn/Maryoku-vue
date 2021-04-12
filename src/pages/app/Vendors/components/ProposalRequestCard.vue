@@ -19,7 +19,7 @@
         <div class="mb-10"><span class="font-bold color-vendor">60%</span> completed</div>
         <md-progress-bar class="md-thin md-vendor mr-50" md-mode="determinate" :md-value="60"></md-progress-bar>
       </div>
-      <md-button class="md-simple md-outlined md-vendor maryoku-btn" @click="gotoProposalRequest">Finish</md-button>
+      <md-button class="md-simple md-outlined md-vendor maryoku-btn" @click="gotoProposalRequest">Complete</md-button>
     </div>
   </div>
 </template>
