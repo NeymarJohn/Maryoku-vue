@@ -1,13 +1,13 @@
 <template>
   <div class="vendor-signup-step4-wrapper">
-    <div class="md-layout inside-container">
-      <div class="left-side md-layout-item md-size-25">
+    <div class="inside-container">
+      <div class="left-side">
         <img :src="`${iconUrl}Group 5225 (2).svg`" />
         <h2>SUMMARY</h2>
         <p>This is a summary of your company's info which we'll use in future proposal creating</p>
         <h2>4/5</h2>
       </div>
-      <div class="right-side md-layout-item md-size-75">
+      <div class="right-side">
         <div class="card">
           <div class="tabs">
             <div
@@ -21,31 +21,8 @@
             </div>
           </div>
           <div class="banner">
-            <carousel
-              :items="1"
-              :margin="0"
-              :dots="false"
-              :nav="false"
-              class="header-carousel"
-              :key="`carousel-${vendor.images.length}`"
-            >
-              <template slot="prev">
-                <span class="prev handle-btn">
-                  <md-icon>keyboard_arrow_left</md-icon>
-                </span>
-              </template>
-              <img
-                :src="item"
-                v-for="(item, index) in vendor.images"
-                :key="`carousel-item-${index}`"
-                class="carousel-image"
-              />
-              <template slot="next">
-                <span class="next handle-btn">
-                  <md-icon>keyboard_arrow_right</md-icon>
-                </span>
-              </template>
-            </carousel>
+            <!-- <img :src="vendor.images[0]" v-if="vendor.hasOwnProperty('images') && vendor.images.length > 0" /> -->
+            <header-image-carousel :images="vendor.images" class="images"></header-image-carousel>
           </div>
           <div class="about-cont" id="About">
             <div class="block">
@@ -67,7 +44,7 @@
               </div>
               <div class="desc">{{ vendor.about.category }}</div>
             </div>
-            <vendor-images-list :images="[...vendor.images, ...vendor.images]" class="images"></vendor-images-list>
+            <vendor-images-list :images="vendor.images" class="images"></vendor-images-list>
             <div class="contact-us" id="Contact">
               <h4>CONTACT US</h4>
               <div class="items">
@@ -101,15 +78,7 @@
                 </div>
               </div>
             </div>
-
-            <div class="personal-message mt-40" v-if="vendor.personalMessage">
-              <div class="font-bold mb-20">
-                <img :src="`${$iconURL}common/message-dark.svg`" />
-                Personal message to your clients
-              </div>
-              <div class="content">{{ vendor.personalMessage }}</div>
-            </div>
-            <div class="attachments mt-50">
+            <div class="attachments">
               <div class="mb-30">Attachments</div>
               <!-- <attachment-tag-list
                 :defaultValue="vendor.attachments"
@@ -125,6 +94,13 @@
                 @uploaded="setAttachment"
                 @remove="removeAttachment"
               ></attachment-item>
+            </div>
+            <div class="personal-message mt-40" v-if="vendor.personalMessage">
+              <div class="font-bold mb-20">
+                <img :src="`${$iconURL}common/message-dark.svg`" />
+                Personal message to your clients
+              </div>
+              <div class="content">{{ vendor.personalMessage }}</div>
             </div>
           </div>
           <div class="fee-cont" id="Pricing">
@@ -325,6 +301,7 @@ import { capitalize } from "@/utils/string.util";
 import AttachmentTagList from "../components/AttachmentTagList.vue";
 import S3Service from "@/services/s3.service";
 import AttachmentItem from "../components/AttachmentItem.vue";
+
 export default {
   name: "vendor-signup-step4",
   props: {
@@ -716,6 +693,9 @@ export default {
     color: #050505;
 
     .left-side {
+      flex: 1;
+      margin-right: 122px;
+
       img {
         width: 92.5px;
       }
@@ -740,44 +720,15 @@ export default {
     }
     .right-side {
       flex: 3;
-      width: 75%;
-      .header-carousel {
-        width: 100%;
-        position: relative;
-        .handle-btn {
-          background-color: white !important;
-          height: 25px;
-          width: 25px;
-          border-radius: 50%;
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          z-index: 10;
-          i {
-            color: #050505;
-          }
-          &.next {
-            right: 50px;
-          }
-          &.prev {
-            left: 50px;
-          }
-        }
-        .item {
-          max-height: 200px;
-          object-fit: cover;
-          border-radius: 5px;
-          overflow: hidden;
-        }
-      }
+
       .card {
-        padding: 30px 0px 50px 0px;
+        padding: 30px 60px 60px 60px;
         background-color: #ffffff;
         box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
 
         .tabs {
           display: flex;
-          margin: -30px 0 0;
+          margin: -30px -60px;
           .tab {
             padding: 1rem 2rem;
             border-right: 1px solid #818080;
@@ -790,17 +741,18 @@ export default {
           }
         }
         .banner {
-          width: 100%;
-          margin: 0px 0px;
+          margin: 30px -60px calc(30px - 2rem) -60px;
+          padding-bottom: 2rem;
           img {
+            width: 100%;
             height: 460px;
             object-fit: cover;
           }
         }
         .about-cont {
-          padding: 2rem 0 50px 0;
+          padding: 2rem 0 60px 0;
           // border-bottom: 1px solid #dddddd;
-          padding: 50px 50px;
+
           .block {
             span {
               &.capacity {
@@ -840,8 +792,8 @@ export default {
             }
           }
           .images {
-            margin-right: -50px;
-            margin-left: -50px;
+            margin-right: -60px;
+            margin-left: -60px;
           }
           .personal-message {
             .content {
@@ -876,7 +828,7 @@ export default {
             }
           }
           .social {
-            padding: 2rem 0 0;
+            padding: 2rem 0;
             border-top: 1px solid #dddddd;
 
             .items {
@@ -903,7 +855,9 @@ export default {
         }
         .fee-cont {
           border-top: 2px solid #818080;
-          padding: 30px 50px 50px 50px;
+          margin-left: -60px;
+          margin-right: -60px;
+          padding: 30px 60px 60px 60px;
           .title {
             margin: 2rem 0;
             h3 {
@@ -920,8 +874,9 @@ export default {
               display: grid;
               grid-template-columns: 50% 50%;
               grid-gap: 3rem;
-              padding: 1rem 0 1rem 50px;
+              padding: 1rem 0 1rem 60px;
               background: #ededed;
+              margin: 0 -60px;
               width: 100%;
               font: bold 16px Manrope-Regular, sans-serif;
 
@@ -955,7 +910,9 @@ export default {
         }
         .extra-cont {
           border-top: 2px solid #818080;
-          padding: 30px 50px 50px 50px;
+          margin-left: -60px;
+          margin-right: -60px;
+          padding: 30px 60px 60px 60px;
 
           .title {
             margin: 2rem 0;
@@ -972,8 +929,9 @@ export default {
             .cheader {
               display: grid;
               grid-template-columns: 40% 20% 20% 20%;
-              padding: 1rem 0 1rem 50px;
+              padding: 1rem 0 1rem 60px;
               background: #ededed;
+              margin: 0 -60px;
               width: calc(100% - 5rem);
               font: bold 16px Manrope-Regular, sans-serif;
 
@@ -984,7 +942,7 @@ export default {
             }
             .citems {
               .citem {
-                width: calc(100% - 5rem - 50px);
+                width: calc(100% - 5rem - 60px);
                 border-bottom: 1px solid #dddddd;
                 cursor: pointer;
               }
@@ -994,7 +952,8 @@ export default {
         .policy-cont {
           border-top: 2px solid #818080;
           border-bottom: 2px solid #818080;
-          padding: 50px;
+          padding: 60px;
+          margin: auto -60px;
 
           .title {
             img {
@@ -1047,7 +1006,8 @@ export default {
           }
         }
         .pricing-policy-cont {
-          padding: 50px 50px 0 50px;
+          padding: 60px 60px 0 60px;
+          margin: 0 -60px;
           .title {
             margin-bottom: 2rem;
             img {
@@ -1106,8 +1066,8 @@ export default {
             }
             &.lb {
               background-color: #ededed;
-              margin: 2rem 0 1rem 0px;
-              padding-left: 50px;
+              margin: 2rem 0 1rem -60px;
+              padding-left: 60px;
               width: 80%;
             }
           }

@@ -2,56 +2,6 @@
   <div class="vendor-checkbox-wrapper" :class="{ checked: checked }">
     <template v-if="item.type == Boolean">
       <div class="main">
-        <div class="check-box" @click="updateCheck()">
-          <img
-            v-if="checked"
-            class="mr-20"
-            :src="theme === 'red' ? `${iconUrl}Group 6258.svg` : `${$iconURL}common/checked-box-purple.svg`"
-            width="27"
-          />
-          <img v-else class="mr-20" :src="iconUrl + 'Rectangle 1245.svg'" width="27" />
-        </div>
-        <div class="text label-box">
-          <div @click="updateCheck()" :class="{ 'font-bold': checked }">{{ label }}</div>
-          <textarea
-            class="text mt-20"
-            v-if="checked"
-            v-model="currentItem.desc"
-            :placeholder="`Add additional information`"
-            @input="updateValue"
-          />
-        </div>
-        <div>
-          <div class="included-cont" v-if="checked && !item.xIncluded">
-            <div class="included" :class="{ active: included }" @click="updateIncluded()">
-              <img
-                :src="theme === 'red' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
-                v-if="included"
-              />
-
-              <span class="unchecked" v-else></span>
-              <span>Included</span>
-            </div>
-            <div class="flex-1 ml-20">
-              <div class="included" :class="{ active: !included }" @click="updateIncluded()">
-                <img
-                  :src="theme === 'red' ? `${iconUrl}Group 5489 (3).svg` : `${$iconURL}common/close-circle-purple.svg`"
-                  v-if="!included"
-                />
-                <span class="unchecked" v-else></span>
-                <span>Not included</span>
-              </div>
-            </div>
-          </div>
-          <div class="included-cont mt-10" v-if="checked && !included">
-            <div class="extra-field">
-              <span class="pr-10">Basic cost</span>
-              <money v-model="currentItem.value" v-bind="currencyFormat" class="field mt-10" @change="updateValue" />
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- <div class="main">
         <div class="check-cont flex" @click="updateCheck()">
           <img
             v-if="checked"
@@ -87,6 +37,7 @@
           <div class="extra-field">
             Basic cost
             <div class="field">
+              <!-- <input type="number" class="mt-20" placeholder="00.00" v-model="currentItem.value" /> -->
               <money v-model="currentItem.value" v-bind="currencyFormat" class="mt-20" @change="updateValue" />
             </div>
           </div>
@@ -99,7 +50,7 @@
           :placeholder="`Add additional information`"
           @input="updateValue"
         />
-      </div> -->
+      </div>
       <div class="main mt-10" v-if="checked && item.hasOwnProperty('dry')">
         <div class="check-cont" style="padding-left: 3rem">
           Allow dry run
@@ -339,13 +290,13 @@ export default {
       console.log("service.checkbox", item.label, item);
       this.included = item.hasOwnProperty("included") ? item.included : this.item.included;
       this.checked = item.hasOwnProperty("checked") ? item.checked : this.item.checked;
+      this.currentItem.included = this.included;
+      this.currentItem.checked = this.checked;
       this.currentItem.value = item.hasOwnProperty("value") ? item.value : this.item.value;
       this.currentItem.desc = item.hasOwnProperty("desc") ? item.desc : this.item.desc;
       this.currentItem.dry = item.hasOwnProperty("dry") ? item.dry : this.item.dry;
+      this.currentItem.hideLabelForValue = this.item.hideLabelForValue;
     }
-    this.currentItem.included = this.included;
-    this.currentItem.checked = this.checked;
-    this.currentItem.hideLabelForValue = this.item.hideLabelForValue;
   },
   methods: {
     updateExChecked(items) {
@@ -399,16 +350,7 @@ export default {
 
   .main {
     display: flex;
-    .check-box {
-      width: 30px;
-      min-width: 30px;
-      margin-right: 20px;
-    }
-    .label-box {
-      min-width: 40%;
-      max-width: 40%;
-      margin-right: 20px;
-    }
+
     .check-cont {
       margin-right: 1rem;
       align-items: flex-start;

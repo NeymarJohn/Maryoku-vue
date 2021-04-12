@@ -167,7 +167,12 @@ const actions = {
             });
         })
 
-    }
+    },
+    updateService: ({ commit, state }, { vendorId, serviceData }) => {
+        new VendorService(serviceData).for(new Vendors({ id: vendorId })).save().then(res => {
+
+        });
+    },
 };
 
 const mutations = {

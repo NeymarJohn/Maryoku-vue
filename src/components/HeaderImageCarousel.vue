@@ -32,9 +32,9 @@ export default {
   },
   created() {
     // init first location
-    setTimeout(() => {
+    this.setTimeout(() => {
       this.imageSlidePos = -document.getElementsByClassName("image-item")[1].offsetLeft;
-    }, 0);
+    }, 1000);
   },
   methods: {
     view(index) {

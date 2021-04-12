@@ -1,7 +1,7 @@
 <template>
   <div class="vendor-signup-step3-wrapper">
-    <div class="inside-container md-layout">
-      <div class="left-side md-layout-item md-size-25">
+    <div class="inside-container">
+      <div class="left-side">
         <img :src="`${iconUrl}Group 5224 (2).svg`" />
         <h2>
           DISCLAMER &
@@ -14,7 +14,7 @@
         <h2>3/5</h2>
         <p class="color-red font-bold">Good job, you're almost done!</p>
       </div>
-      <div class="right-side md-layout-item md-size-75">
+      <div class="right-side">
         <div class="policy-wrapper mb-50">
           <div class="title-cont">
             <div class="top">
@@ -857,6 +857,9 @@ export default {
     color: #050505;
 
     .left-side {
+      flex: 1;
+      margin-right: 122px;
+
       img {
         width: 92.5px;
       }

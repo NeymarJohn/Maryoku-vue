@@ -14,7 +14,7 @@
         <textarea class="mt-20" v-else v-model="item.comment"></textarea>
       </div>
       <div class="qty-cont editor-wrapper text-center">
-        <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue | formatQty }}</template>
+        <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue }}</template>
         <template v-else>
           <input class="input-value" type="number" v-model="item.requirementValue" />
         </template>
@@ -150,7 +150,7 @@
           <div class="pl-50">
             {{ plannerOption.description }}
           </div>
-          <div class="text-center">{{ plannerOption.qty | formatQty }}</div>
+          <div class="text-center">{{ plannerOption.qty }}</div>
           <div class="text-right">${{ plannerOption.price | withComma }}</div>
           <div class="font-size-16 font-regular color-gray text-right">
             $ {{ (plannerOption.price * plannerOption.qty) | withComma }}
@@ -193,7 +193,7 @@
         <textarea class="mt-20" v-else v-model="item.comment"></textarea>
       </div>
       <div class="qty-cont editor-wrapper text-center">
-        <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue | formatQty }}</template>
+        <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue }}</template>
         <template v-else>
           <input class="input-value" type="number" v-model="item.requirementValue" />
         </template>
@@ -251,13 +251,13 @@
         {{ item.requirementTitle }}
       </div>
       <div class="qty-cont editor-wrapper text-center">
-        <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue | formatQty }}</template>
+        <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue }}</template>
         <template v-else>
           <input class="input-value" type="number" v-model="item.requirementValue" />
         </template>
       </div>
       <div class="price-cont editor-wrapper text-right">
-        <template v-if="!isEdit">+${{ item.price | withComma }} </template>
+        <template v-if="!isEdit">+${{ !Number.isNaN(item.price) ? item.price : 0 }} </template>
         <template v-else>
           <money
             v-model="item.price"
@@ -362,7 +362,7 @@ export default {
   },
   computed: {
     subTotal() {
-      return Math.round(this.item.price * this.item.requirementValue * 100) / 100;
+      return (this.item.price * this.item.requirementValue).toFixed(2);
     },
   },
   methods: {
@@ -408,6 +408,11 @@ export default {
       this.$set(this.item.plannerOptions[index], "isEdit", false);
       console.log(this.item);
       // this.item.plannerOptions = Object.assign([], this.defaultItem.plannerOptions);
+    },
+  },
+  filters: {
+    withComma(amount) {
+      return amount ? amount.toLocaleString() : 0;
     },
   },
   watch: {},

@@ -25,9 +25,9 @@
             <div class="block">
               <span class="capacity"> <img :src="`${iconUrl}Asset 545.svg`" />Capacity </span>
               <span class="number" v-if="vendor.capacity">
-                {{ vendor.capacity.low | formatQty }}
+                {{ vendor.capacity.low }}
                 <img :src="`${iconUrl}Group 4585 (2).svg`" />
-                {{ vendor.capacity.high | formatQty }}
+                {{ vendor.capacity.high }}
               </span>
             </div>
             <div class="block">
@@ -78,8 +78,8 @@
                   <img :src="`${iconUrl}Asset 543.svg`" />
                   {{ vendor.eventCategory.fullTitle }}
                 </div>
-                <span class="text-center">QTY</span>
-                <span class="text-center">Price</span>
+                <span>QTY</span>
+                <span>Price</span>
               </div>
               <div class="citems">
                 <div class="citem">
@@ -119,11 +119,13 @@
                 <img :src="`${iconUrl}Group 5489 (4).svg`" />
                 {{ mergeStringItems(vendor.selectedWeekdays) }}
               </div>
-              <div class="item" v-for="(r, rIndex) in vendor.exDonts" :key="rIndex">
-                <img :src="`${iconUrl}Group 5489 (4).svg`" />
-                {{ r.holiday }}
+              <div v-for="(r, rIndex) in vendor.exDonts" :key="rIndex">
+                <div class="item" v-for="(d, dIndex) in r.holidays.filter((d) => d.selected)" :key="dIndex">
+                  <img :src="`${iconUrl}Group 5489 (4).svg`" />
+                  {{ d.holiday }}
+                </div>
               </div>
-              <div class="item" v-if="vendor.dontWorkDays && vendor.dontWorkDays.length > 0">
+              <div class="item" v-if="vendor.dontWorkDays">
                 <img :src="`${iconUrl}Group 5489 (4).svg`" />
                 {{ dontWorkDays() }}
               </div>
@@ -139,9 +141,8 @@
               <div class="rule" v-for="(policy, yIndex) in validPricingPolicy" :key="yIndex">
                 <div class="item">{{ policy.name }}</div>
                 <div class="item">
-                  <span v-if="!policy.isPercentage || policy.unit === '$'">$</span>
-                  <span>{{ policy.value | withComma }}</span>
-                  <span v-if="policy.isPercentage">%</span>
+                  {{ policy.value }}
+
                   <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
                     {{ policy.attendees }} attendees
                   </span>
@@ -693,7 +694,7 @@ export default {
           .cblock {
             .cheader {
               display: grid;
-              grid-template-columns: 40% 20% 20% 20%;
+              grid-template-columns: 40% 20% 40%;
               padding: 1rem 0 1rem 60px;
               background: #ededed;
               margin: 0 -60px;

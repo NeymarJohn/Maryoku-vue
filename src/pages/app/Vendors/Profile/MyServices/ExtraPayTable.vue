@@ -31,13 +31,18 @@
 <script>
 import CollapsePanel from "./CollapsePanel.vue";
 import VendorExtraPayItem from "../../components/VendorExtraPayItem.vue";
-
+import { camelize } from "@/utils/string.util";
+import _ from "underscore";
 export default {
   components: { CollapsePanel, VendorExtraPayItem },
   props: {
     items: {
       type: Array,
       default: () => [],
+    },
+    serviceCategory: {
+      type: String,
+      default: "",
     },
   },
   data() {
@@ -47,11 +52,32 @@ export default {
   },
   methods: {
     changeServiceItem(item) {
-      _.each(items, (s) => {
-        if (s.label === item.label) {
-          items[s] = item;
-        }
-      });
+      console.log("item", item);
+      if (this.isMainService) {
+        const vendor = { id: this.vendorData.id, services: this.vendorData.services };
+        vendor.services[camelize(item.label)] = item;
+        this.$store.dispatch("vendor/updateProfile", vendor);
+      } else {
+        const service = { id: this.serviceData.id, services: this.serviceData.services };
+        service.services[camelize(item.label)] = item;
+        this.$store.dispatch("vendor/updateService", { vendorId: this.vendorData.id, serviceData: service });
+      }
+    },
+  },
+
+  computed: {
+    serviceData() {
+      if (this.isMainService) {
+        return this.vendorData;
+      } else {
+        return this.vendorData.secondaryServices.find((service) => service.vendorCategory === this.serviceCategory);
+      }
+    },
+    vendorData() {
+      return this.$store.state.vendor.profile;
+    },
+    isMainService() {
+      return this.serviceCategory === this.vendorData.vendorCategory;
     },
   },
 };
