@@ -309,6 +309,7 @@ Vue.filter("withComma", function (value) {
 
 });
 Vue.filter("formatQty", function (value) {
+  if (!value) return ""
   if (typeof value == 'string') {
     value = Number(value)
   }

@@ -67,7 +67,7 @@
               </div>
               <div class="desc">{{ vendor.about.category }}</div>
             </div>
-            <vendor-images-list :images="vendor.images" class="images"></vendor-images-list>
+            <vendor-images-list :images="[...vendor.images, ...vendor.images]" class="images"></vendor-images-list>
             <div class="contact-us" id="Contact">
               <h4>CONTACT US</h4>
               <div class="items">
@@ -101,7 +101,15 @@
                 </div>
               </div>
             </div>
-            <div class="attachments">
+
+            <div class="personal-message mt-40" v-if="vendor.personalMessage">
+              <div class="font-bold mb-20">
+                <img :src="`${$iconURL}common/message-dark.svg`" />
+                Personal message to your clients
+              </div>
+              <div class="content">{{ vendor.personalMessage }}</div>
+            </div>
+            <div class="attachments mt-50">
               <div class="mb-30">Attachments</div>
               <!-- <attachment-tag-list
                 :defaultValue="vendor.attachments"
@@ -117,13 +125,6 @@
                 @uploaded="setAttachment"
                 @remove="removeAttachment"
               ></attachment-item>
-            </div>
-            <div class="personal-message mt-40" v-if="vendor.personalMessage">
-              <div class="font-bold mb-20">
-                <img :src="`${$iconURL}common/message-dark.svg`" />
-                Personal message to your clients
-              </div>
-              <div class="content">{{ vendor.personalMessage }}</div>
             </div>
           </div>
           <div class="fee-cont" id="Pricing">
@@ -875,7 +876,7 @@ export default {
             }
           }
           .social {
-            padding: 2rem 0;
+            padding: 2rem 0 0;
             border-top: 1px solid #dddddd;
 
             .items {

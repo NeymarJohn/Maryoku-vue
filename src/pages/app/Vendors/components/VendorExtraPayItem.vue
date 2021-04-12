@@ -10,7 +10,7 @@
           :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"
         />
       </div>
-      <div class="col" v-if="!isEditable">{{ getQty() || "-" }}</div>
+      <div class="col" v-if="!isEditable">{{ getQty() || "-" | formatQty }}</div>
       <div class="col" v-else>
         <div>
           <input v-model="editingData.qty" />
