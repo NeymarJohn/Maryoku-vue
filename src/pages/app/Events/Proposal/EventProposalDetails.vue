@@ -17,7 +17,7 @@
           <div class="event-info">
             <div class="section-header d-flex justify-content-start">
               <h3>Event Information & Details</h3>
-              <div class="alert alert-danger" v-if="vendorProposal.suggestedTime">
+              <div class="alert alert-danger" v-if="vendorProposal.suggestionDate">
                 This proposal is 2 days before your original date
               </div>
             </div>
@@ -133,7 +133,12 @@
           </div>
           <div class="attachment-section mb-30" v-if="attachments && attachments.length > 0">
             <div class="attachment-tag-list">
-              <div class="attachment-tag" v-for="(attachment, index) in attachments" :key="index" :class="theme">
+              <div
+                class="attachment-tag"
+                v-for="(attachment, index) in attachments.filter((attachement) => attachement.url)"
+                :key="index"
+                :class="theme"
+              >
                 <img :src="`${$iconURL}common/pin-red.svg`" />
                 <a class="color-red" :href="attachment.url" target="_blank">{{ attachment.name }}</a>
               </div>
@@ -152,7 +157,11 @@
           <span class="font-regular font-size-16">*We work only with our catering</span>
         </div>
         <div class="mt-20">What would you like to take from our suggested services?</div>
-        <div class="pricing-section__list">
+        <div
+          class="pricing-section__list"
+          v-for="service in this.vendorProposal.additionalServices"
+          :key="`${service}-section`"
+        >
           <div class="pricing-section__item element-block p-60 pt-40">
             <div class="d-flex justify-content-between align-center">
               <div class="item-info d-flex justify-content-start align-center">
@@ -504,7 +513,7 @@
           {{ vendorProposal.vendor.companyName }} </a
         >?
       </div>
-      <div class="agree-checkbox" v-if="this.vendorProposal.suggestedTime">
+      <div class="agree-checkbox" v-if="this.vendorProposal.suggestionDate">
         <md-checkbox v-model="acceptNewTimes">I agree to the new time of this proposal</md-checkbox>
         <div class="alert alert-danger">Please indicate that you accept the new time of this proposal</div>
       </div>
@@ -536,7 +545,7 @@
         <md-button
           class="md-red maryoku-btn"
           @click="bookVendor"
-          :disabled="this.vendorProposal.suggestedTime && !acceptNewTimes"
+          :disabled="this.vendorProposal.suggestionDate && !acceptNewTimes"
           >Book this vendor</md-button
         >
       </div>
