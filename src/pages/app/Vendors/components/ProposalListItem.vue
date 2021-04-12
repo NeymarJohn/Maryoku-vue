@@ -44,8 +44,8 @@
             <span>
               <img v-if="hoveredMenu !== 'download'" :src="`${$iconURL}common/download.svg`" class="label-icon mr-10" />
               <img v-else :src="`${$iconURL}common/download-white.svg`" class="label-icon mr-10" />
-              Download</span
-            >
+              Download
+            </span>
           </md-menu-item>
           <md-menu-item
             @click="edit"

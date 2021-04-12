@@ -94,9 +94,11 @@ export default {
       return this.$store.state.vendor.profile;
     },
     myServices() {
-      const secondaryServices = this.vendorData.secondaryServices.map((service) => {
-        return this.$store.state.common.serviceCategories.find((item) => item.key === service.vendorCategory);
-      });
+      const secondaryServices = this.vendorData.secondaryServices
+        ? this.vendorData.secondaryServices.map((service) => {
+            return this.$store.state.common.serviceCategories.find((item) => item.key === service.vendorCategory);
+          })
+        : [];
       return [this.vendorData.eventCategory, ...secondaryServices];
     },
   },
