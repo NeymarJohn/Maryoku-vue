@@ -146,6 +146,7 @@
                     v-for="(cs, csIndex) in getExtraPayItems()"
                     :key="csIndex"
                     :item="cs"
+                    theme="purple"
                     @change="changeServiceItem"
                   />
                 </div>
@@ -597,9 +598,9 @@ export default {
     },
     changeServiceItem(item) {
       console.log("changeServiceItem", item);
-      _.each(this.currentService.services, (s) => {
+      _.each(this.currentService.services, (s, key) => {
         if (s.label === item.label) {
-          this.currentService.services[s] = item;
+          this.currentService.services[key] = item;
         }
       });
 

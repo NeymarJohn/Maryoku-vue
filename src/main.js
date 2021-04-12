@@ -302,7 +302,18 @@ Vue.directive("select-all", {
 // })
 
 Vue.filter("withComma", function (value) {
+  if (typeof value == 'string') {
+    value = Number(value)
+  }
+  return value ? value.toLocaleString(undefined, { minimumFractionDigits: 2 }) : 0;
+
+});
+Vue.filter("formatQty", function (value) {
+  if (typeof value == 'string') {
+    value = Number(value)
+  }
   return value ? value.toLocaleString() : 0;
+
 });
 
 Vue.prototype.$resourceURL = ResourceURL;

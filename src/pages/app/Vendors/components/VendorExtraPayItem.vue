@@ -2,9 +2,9 @@
   <div class="vendor-extra-pay-item-wrapper">
     <div class="collapsed" @click="expand()">
       <div class="col label">
-        {{ item.label }}
+        {{ editingData.label }}
         <img
-          v-if="item.hasOwnProperty('desc') && item.desc"
+          v-if="editingData.hasOwnProperty('desc') && editingData.desc"
           class="ml-20"
           :class="{ 'rotate-90': expanded }"
           :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"
@@ -13,13 +13,13 @@
       <div class="col" v-if="!isEditable">{{ getQty() || "-" }}</div>
       <div class="col" v-else>
         <div>
-          <input v-model="item.qty" @input="changeItem()" />
+          <input v-model="editingData.qty" />
         </div>
       </div>
       <div class="col" v-if="!isEditable">+${{ getPrice() | withComma }}</div>
       <div class="col" v-else>
         <money
-          v-model="item.value"
+          v-model="editingData.value"
           v-bind="{
             decimal: '.',
             thousands: ',',
@@ -29,21 +29,25 @@
             masked: false,
           }"
           class="input-value"
-          @input="changeItem()"
         />
       </div>
       <div class="col action" v-if="!isEditable">
         <img class="mr-20 ml-auto" :src="`${$iconURL}Requirements/edit-dark.svg`" @click="edit" />
         <img :src="`${$iconURL}Requirements/delete-dark.svg`" @click="remove" />
       </div>
-      <div class="col action" v-else>
+      <div class="col" v-else>
         <md-button class="md-simple md-black maryoku-btn" @click="cancel">Cancel</md-button>
-        <md-button class="md-red maryoku-btn" @click="save">Save</md-button>
+        <md-button
+          class="md-red maryoku-btn"
+          :class="{ 'md-red': theme === 'red', 'md-vendor': (theme = 'purple') }"
+          @click="save"
+          >Save
+        </md-button>
       </div>
     </div>
     <div class="expanded" v-if="expanded">
-      <span v-if="!isEditable">{{ item.desc }}</span>
-      <textarea v-else v-model="item.desc"></textarea>
+      <span v-if="!isEditable">{{ editingData.desc }}</span>
+      <textarea v-else v-model="editingData.desc"></textarea>
     </div>
   </div>
 </template>
@@ -54,6 +58,10 @@ export default {
   name: "vendor-extra-pay-item",
   props: {
     item: Object,
+    theme: {
+      type: String,
+      default: "red",
+    },
   },
   components: {
     Money,
@@ -62,10 +70,13 @@ export default {
     return {
       expanded: false,
       isEditable: false,
+      editingData: {},
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.editingData = Object.assign({}, this.item);
+  },
   methods: {
     expand() {
       if (this.item.desc) {
@@ -73,15 +84,7 @@ export default {
       }
     },
     getQty() {
-      if (this.item.value) {
-        if (this.item.value.constructor.name == "Array") {
-          return this.item.value.length;
-        } else {
-          return null;
-        }
-      } else {
-        return null;
-      }
+      return this.item.qty;
     },
     getPrice() {
       if (this.item.value) {
@@ -99,7 +102,7 @@ export default {
       console.log(value);
     },
     changeItem() {
-      this.$emit("change", this.item);
+      this.$emit("change", this.editingData);
     },
     edit() {
       this.isEditable = true;
@@ -110,10 +113,12 @@ export default {
       this.$emit("change", this.item);
     },
     cancel() {
+      this.editingItem = Object.assign({}, this.item);
       this.isEditable = false;
     },
     save() {
       this.isEditable = false;
+      this.changeItem();
     },
   },
   computed: {},

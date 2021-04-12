@@ -20,7 +20,7 @@
       <div class="input-wrapper">
         <multiselect
           class="md-purple"
-          v-model="newColleague.invitedEvent"
+          v-model="newColleague.invitedService"
           :options="myServices"
           :close-on-select="true"
           :clear-on-select="true"
@@ -74,7 +74,7 @@ export default {
       newColleague: {
         email: "",
         role: { id: "edit", title: "Can Edit" },
-        invitedEvent: "",
+        invitedService: "",
       },
     };
   },
@@ -94,7 +94,10 @@ export default {
       return this.$store.state.vendor.profile;
     },
     myServices() {
-      return [this.vendorData.eventCategory];
+      const secondaryServices = this.vendorData.secondaryServices.map((service) => {
+        return this.$store.state.common.serviceCategories.find((item) => item.key === service.vendorCategory);
+      });
+      return [this.vendorData.eventCategory, ...secondaryServices];
     },
   },
   methods: {
@@ -102,7 +105,7 @@ export default {
       new Collaborator({
         email: this.newColleague.email,
         role: this.newColleague.role.id,
-        eventList: [new CalendarEvent({ id: this.newColleague.invitedEvent.id })],
+        eventList: [new CalendarEvent({ id: this.newColleague.invitedService.id })],
       })
         .save()
         .then((res) => {
@@ -110,7 +113,7 @@ export default {
           this.newColleague = {
             email: "",
             role: "edit",
-            invitedEvent: null,
+            invitedService: null,
           };
         });
     },
@@ -124,9 +127,14 @@ export default {
       }, 300);
     },
     getCollaborators() {
-      new Collaborator().get().then((res) => {
-        this.permittedUsers = res;
-      });
+      new Collaborator()
+        .get()
+        .then((res) => {
+          this.permittedUsers = res;
+        })
+        .catch((e) => {
+          this.permittedUsers = [];
+        });
     },
   },
 };

@@ -2394,11 +2394,6 @@ export const businessCategories = [
                 value: false,
               },
               {
-                name: "other",
-                type: Boolean,
-                value: false,
-              },
-              {
                 name: "family activities",
                 type: Boolean,
                 value: false,
@@ -4597,6 +4592,7 @@ export const VendorPricingPolicy = [
         labelForValue: "Number of hours",
         noSuffix: true,
         unit: "hour",
+        hideOnProposal: true,
       },
       {
         name: "Rushed setup",
