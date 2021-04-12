@@ -857,9 +857,6 @@ export default {
     color: #050505;
 
     .left-side {
-      flex: 1;
-      margin-right: 122px;
-
       img {
         width: 92.5px;
       }
