@@ -22,7 +22,13 @@
     <template slot="content">
       <div class="pr-50 pl-50 pb-50 cost-service-content">
         <hr />
-        <vendor-extra-pay-item v-for="(cs, csIndex) in items" :key="csIndex" :item="cs" @change="changeServiceItem" />
+        <vendor-extra-pay-item
+          v-for="(cs, csIndex) in items"
+          :key="csIndex"
+          :item="cs"
+          @change="changeServiceItem"
+          theme="purple"
+        />
       </div>
     </template>
   </collapse-panel>

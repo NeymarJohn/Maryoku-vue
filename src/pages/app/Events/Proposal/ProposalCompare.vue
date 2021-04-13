@@ -50,10 +50,10 @@
         <div class="grid-cell text-center" v-for="proposal in proposals" :key="`name-${proposal.id}`">
           <div>${{ proposal.cost | withComma }}</div>
           <div v-if="selectedBlock.allocatedBudget - proposal.cost > 0">
-            ${{ (selectedBlock.allocatedBudget - proposal.cost) | withComma }} Less than original budget
+            ${{ selectedBlock.allocatedBudget - proposal.cost }} Less than original budget
           </div>
           <div v-if="selectedBlock.allocatedBudget - proposal.cost < 0">
-            ${{ (proposal.cost - selectedBlock.allocatedBudget) | withComma }} More than original budget
+            ${{ proposal.cost - selectedBlock.allocatedBudget }} More than original budget
           </div>
         </div>
       </div>
