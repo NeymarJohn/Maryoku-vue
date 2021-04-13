@@ -559,7 +559,8 @@ export default {
       padding: 40px 0px 30px 0px;
       display: grid;
       // grid-template-columns: 30% 10% 10% 12% 15%;
-      grid-template-columns: 40% 14% 14% 14% 14%;
+      // grid-template-columns: 40% 14% 14% 14% 14%;
+      grid-template-columns: 50% 10% 12% 14% 10%; // 40% 10% 20% 20% 10%;
       gap: 1%;
 
       span {

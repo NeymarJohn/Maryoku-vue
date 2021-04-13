@@ -20,12 +20,7 @@
         :md-diameter="30"
         md-mode="indeterminate"
       ></md-progress-spinner>
-      <md-button
-        v-else
-        class="md-simple edit-btn"
-        :class="{ 'md-red': theme === 'red', 'md-vendor': theme === 'purple' }"
-        @click="upload"
-      >
+      <md-button v-else class="md-simple md-red edit-btn" @click="upload">
         <md-icon class="font-size-18 font-bold">north</md-icon>
         Upload
       </md-button>
@@ -50,10 +45,6 @@ export default {
     vendor: {
       type: Object,
       default: () => {},
-    },
-    theme: {
-      type: String,
-      default: "red",
     },
   },
   data() {

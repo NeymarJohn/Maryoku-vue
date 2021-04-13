@@ -339,7 +339,7 @@ export default {
       console.log("service.checkbox", item.label, item);
       this.included = item.hasOwnProperty("included") ? item.included : this.item.included;
       this.checked = item.hasOwnProperty("checked") ? item.checked : this.item.checked;
-      this.currentItem.value = item.hasOwnProperty("value") ? item.value : this.item.value;
+      this.currentItem.value = Number(item.hasOwnProperty("value") ? item.value : this.item.value);
       this.currentItem.desc = item.hasOwnProperty("desc") ? item.desc : this.item.desc;
       this.currentItem.dry = item.hasOwnProperty("dry") ? item.dry : this.item.dry;
     }
@@ -381,7 +381,14 @@ export default {
     },
   },
   filters: {},
-  watch: {},
+  watch: {
+    currentItem: {
+      deep: true,
+      handler: function (newValue, oldValue) {
+        this.$root.$emit("update-vendor-value", `services.${this.camelize(this.label)}`, newValue);
+      },
+    },
+  },
   beforeDestroy() {
     // this.$root.$off('update-vendor-value')
   },

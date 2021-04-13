@@ -42,7 +42,7 @@ const state = {
   suggestionDate: null,
   timelineDates: [],
   personalMessage: "",
-  suggestedNewSeatings: [],
+  suggestedNewSeatings: null,
   tenantId: authService.resolveTenantId()
 };
 const getters = {
@@ -110,6 +110,13 @@ const getters = {
     prices[state.vendor.eventCategory.key] = getters.finalPriceOfMainCategory;
     console.log("prices", prices);
     return prices;
+  },
+  sumOfPrices(state, getters) {
+    let s = 0;
+    Object.keys(getters.totalPriceByCategory).forEach((category) => {
+      s += getters.totalPriceByCategory[category];
+    });
+    return s;
   },
   totalBeforeDiscount(state, getter) {
     let sum = 0;

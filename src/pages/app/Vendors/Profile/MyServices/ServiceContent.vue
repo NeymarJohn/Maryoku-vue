@@ -22,7 +22,6 @@
         :key="attachment.name"
         :attachment="attachment"
         :vendor="vendorData"
-        theme="purple"
         class="attachment"
         @uploaded="setAttachment"
         @remove="removeAttachment"
@@ -39,7 +38,7 @@
       @removeImage="removeServiceImage"
     ></vendor-photos-carousel>
     <starting-fee-table class="mt-30" :items="startingFeeItems"></starting-fee-table>
-    <extra-pay-table :serviceCategory="serviceData.vendorCategory" :items="extraPayItems"></extra-pay-table>
+    <extra-pay-table :items="extraPayItems"></extra-pay-table>
     <policy :serviceCategory="serviceData.vendorCategory" :serviceData="serviceData"></policy>
     <price-policy :serviceCategory="serviceData.vendorCategory" :serviceData="serviceData"></price-policy>
   </div>

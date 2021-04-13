@@ -50,7 +50,8 @@
               @click="selectSuggestItem(index)"
             >
               <div>{{ item.description }}</div>
-              <div>{{ item.included ? "Included" : "" }}</div>
+              <!-- <div>{{ item.included ? "Included" : "" }}</div> -->
+              <div class="color-red font-regular">{{ item.requestedByPlanner ? "PLANNER REQUEST" : "" }}</div>
               <div class="text-right">${{ item.price | withComma }}</div>
             </div>
           </div>
@@ -218,6 +219,7 @@ export default {
       this.selectedSuggestItemIndex = index;
       this.qty = this.filteredSuggestItems[index].qty;
       this.unit = this.filteredSuggestItems[index].price;
+      this.serviceItem = this.filteredSuggestItems[index].description.slice(0, this.serviceItem.length);
     },
     selectSuggestItem(index) {
       this.qty = this.filteredSuggestItems[index].qty;
@@ -346,11 +348,17 @@ export default {
             subCat.items.forEach((item) => {
               const capitalized = item.name.charAt(0).toUpperCase() + item.name.slice(1);
               const profileService = this.profileServices[this.camelize(capitalized)];
+              const requestItemByPlanner = this.proposalRequest.requirements.find((requestItem) => {
+                console.log(requestItem);
+                return requestItem.item && requestItem.item.toLowerCase() === item.name.toLowerCase();
+              });
+              console.log("requestItemByPlanner", requestItemByPlanner);
               items.push({
                 description: capitalized,
                 qty: item.value ? item.value : 1,
                 included: profileService && profileService.included,
                 price: profileService ? Number(profileService.value) : "",
+                requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
               });
             });
           });
@@ -399,8 +407,8 @@ export default {
       margin-top: 53px;
       .suggest-item {
         display: grid;
-        grid-template-columns: 60% 15% 25%;
-        padding: 10px 30px;
+        grid-template-columns: 50% 35% 15%;
+        padding: 10px 20px;
         cursor: pointer;
         &:hover {
           background-color: #ffedb7;
@@ -500,7 +508,8 @@ export default {
     margin-top: 1rem;
     .fields-cont {
       display: grid;
-      grid-template-columns: 40% 14% 14% 14% 14%; // 40% 10% 20% 20% 10%;
+      // grid-template-columns: 40% 14% 14% 14% 14%; // 40% 10% 20% 20% 10%;
+      grid-template-columns: 50% 10% 12% 14% 10%; // 40% 10% 20% 20% 10%;
       gap: 1%;
       .field {
         // margin-right: 1em;

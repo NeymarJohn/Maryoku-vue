@@ -10,8 +10,8 @@
       .md-list-item-button {
         &:hover {
           background-color: $vendorColor !important;
-          color: #FFF !important;
           @include shadow-big-color($vendorColor);
+          color: #FFF !important;
         }
       }
       

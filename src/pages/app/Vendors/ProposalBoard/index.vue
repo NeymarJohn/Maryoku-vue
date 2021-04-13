@@ -1,7 +1,7 @@
 <template>
   <div class="vendor-proposal-board p-60">
-    <div class="font-size-22 font-bold">
-      <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposal Dashboard
+    <div class="text-transform-uppercase font-size-22 font-bold">
+      <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> PROPOSALS BOARD
     </div>
     <div class="font-bold mt-40 mb-20">New opportunities:</div>
     <carousel
@@ -33,7 +33,7 @@
     </carousel>
     <hr class="m-60" />
     <div class="proposals-table">
-      <div class="font-bold">All my proposals:</div>
+      <div class="font-bold">Your proposal:</div>
       <div class="filter-bar mt-30">
         <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
           <span class="color-black-middle">
@@ -55,12 +55,12 @@
         </md-button>
         <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
           <span class="color-black-middle">
-            <img src="/static/icons/vendor/proposalBoard/filter-top3.svg" />Made Top 3
+            <img src="/static/icons/vendor/proposalBoard/filter-top3.svg" />Got to Top3
           </span>
         </md-button>
         <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
           <span class="color-black-middle">
-            <img src="/static/icons/vendor/proposalBoard/filter-reject.svg" />Lost Bids
+            <img src="/static/icons/vendor/proposalBoard/filter-reject.svg" />Didn't get
           </span>
         </md-button>
       </div>
@@ -170,7 +170,7 @@ export default {
   data() {
     return {
       proposalRequests: [],
-      proposals: [1, 2, 3, 4],
+      proposals: [],
       chartData: [
         { title: "Application", value: 12, color: "#b7b5b5" },
         { title: "Winning", value: 3, color: "#2cde6b" },
@@ -199,18 +199,17 @@ export default {
     },
     getProposal() {
       const { pagination } = this;
-      this.proposals = [1, 2, 2, 3];
-      // new Proposal()
-      //   .for(new Vendor({ id: this.vendorData.id }))
-      //   .page(pagination.page)
-      //   .limit(pagination.limit)
-      //   .get()
-      //   .then((res) => {
-      //     const data = res[0];
-      //     // this.proposals = data.items;
-      //     // this.pagination.total = data.total;
-      //     // this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
-      //   });
+      new Proposal()
+        .for(new Vendor({ id: this.vendorData.id }))
+        .page(pagination.page)
+        .limit(pagination.limit)
+        .get()
+        .then((res) => {
+          const data = res[0];
+          this.proposals = data.items;
+          this.pagination.total = data.total;
+          this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
+        });
     },
     gotoPage(selectedPage) {
       console.log(selectedPage);
