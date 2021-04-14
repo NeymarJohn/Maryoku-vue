@@ -2728,7 +2728,7 @@ export const businessCategories = [
             items: [
               {
                 name: "special equipment",
-                type: Number,
+                type: Boolean,
                 value: 0,
                 hideLabelForValue: true
               },
@@ -3865,10 +3865,7 @@ export const VendorPolicy = [
         name: "Accept staff attire request",
         type: Boolean,
       },
-      {
-        name: "Simulcasting bandwidth requirements",
-        type: Number,
-      },
+
       {
         name: "Union crew restrictions",
         type: Boolean,
@@ -4447,6 +4444,10 @@ export const VendorPricingPolicy = [
         name: "Overtime",
         type: Number,
         hasComment: true,
+      },
+      {
+        name: "Simulcasting bandwidth requirements",
+        type: Number,
       },
       {
         name: "Tax rate",

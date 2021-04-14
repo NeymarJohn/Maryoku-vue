@@ -156,7 +156,7 @@
             <div class="cblock">
               <div class="cheader">
                 <div>
-                  <img :src="`${iconUrl}Asset 543.svg`" />
+                  <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategories[0])}`" />
                   {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
                 </div>
                 <span class="text-center">QTY</span>
@@ -925,6 +925,7 @@ export default {
               width: 100%;
               font: bold 16px Manrope-Regular, sans-serif;
 
+              margin-left: -50px;
               .first-column {
                 display: grid;
                 grid-template-columns: 70% 30%;
@@ -976,7 +977,7 @@ export default {
               background: #ededed;
               width: calc(100% - 5rem);
               font: bold 16px Manrope-Regular, sans-serif;
-
+              margin-left: -50px;
               img {
                 width: 24px;
                 margin-right: 1rem;
