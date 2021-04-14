@@ -50,8 +50,8 @@
               @click="selectSuggestItem(index)"
             >
               <div>{{ item.description }}</div>
-              <!-- <div>{{ item.included ? "Included" : "" }}</div> -->
               <div class="color-red font-regular">{{ item.requestedByPlanner ? "PLANNER REQUEST" : "" }}</div>
+              <div>{{ item.included ? "Included" : "" }}</div>
               <div class="text-right">${{ item.price | withComma }}</div>
             </div>
           </div>
@@ -353,13 +353,15 @@ export default {
                 return requestItem.item && requestItem.item.toLowerCase() === item.name.toLowerCase();
               });
               console.log("requestItemByPlanner", requestItemByPlanner);
-              items.push({
-                description: capitalized,
-                qty: item.value ? item.value : 1,
-                included: profileService && profileService.included,
-                price: profileService ? Number(profileService.value) : "",
-                requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
-              });
+              if (items.findIndex((it) => it.description === capitalized) < 0) {
+                items.push({
+                  description: capitalized,
+                  qty: item.value ? item.value : 1,
+                  included: profileService && profileService.included,
+                  price: profileService ? Number(profileService.value) : "",
+                  requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
+                });
+              }
             });
           });
         }
@@ -407,7 +409,7 @@ export default {
       margin-top: 53px;
       .suggest-item {
         display: grid;
-        grid-template-columns: 50% 35% 15%;
+        grid-template-columns: 45% 30% 15% 10%;
         padding: 10px 20px;
         cursor: pointer;
         &:hover {
