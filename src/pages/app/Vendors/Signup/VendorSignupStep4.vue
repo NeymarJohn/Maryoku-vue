@@ -40,7 +40,7 @@
                 :key="`carousel-item-${index}`"
                 class="carousel-image"
               />
-              <template slot="next">
+              <template slot="next" v-if="vendor.images.length > 1">
                 <span class="next handle-btn">
                   <md-icon>keyboard_arrow_right</md-icon>
                 </span>
