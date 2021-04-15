@@ -7,10 +7,13 @@
           v-if="editingData.hasOwnProperty('desc') && editingData.desc"
           class="ml-20"
           :class="{ 'rotate-90': expanded }"
-          :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"
+          :src="`${$iconURL}NewSubmitPorposal/Group 4770 (2).svg`"
         />
       </div>
-      <div class="col" v-if="!isEditable">{{ getQty() || "-" | formatQty }}</div>
+      <div class="col" v-if="!isEditable">
+        <span v-if="getQty()">{{ getQty() | formatQty }}</span>
+        <span v-else>-</span>
+      </div>
       <div class="col" v-else>
         <div>
           <input v-model="editingData.qty" />
@@ -39,7 +42,7 @@
         <md-button class="md-simple md-black maryoku-btn" @click="cancel">Cancel</md-button>
         <md-button
           class="md-red maryoku-btn"
-          :class="{ 'md-red': theme === 'red', 'md-vendor': (theme = 'purple') }"
+          :class="{ 'md-red': theme === 'red', 'md-vendor': theme === 'purple' }"
           @click="save"
           >Save
         </md-button>

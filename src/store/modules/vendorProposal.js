@@ -42,7 +42,7 @@ const state = {
   suggestionDate: null,
   timelineDates: [],
   personalMessage: "",
-  suggestedNewSeatings: null,
+  suggestedNewSeatings: [],
   tenantId: authService.resolveTenantId()
 };
 const getters = {
@@ -111,13 +111,6 @@ const getters = {
     console.log("prices", prices);
     return prices;
   },
-  sumOfPrices(state, getters) {
-    let s = 0;
-    Object.keys(getters.totalPriceByCategory).forEach((category) => {
-      s += getters.totalPriceByCategory[category];
-    });
-    return s;
-  },
   totalBeforeDiscount(state, getter) {
     let sum = 0;
     Object.keys(getter.totalPriceByCategory).forEach(category => {
@@ -164,7 +157,7 @@ const getters = {
       sum -= state.bundleDiscount.price
     }
 
-    return sum.toFixed(2)
+    return sum
   }
 };
 const mutations = {
@@ -322,7 +315,7 @@ const actions = {
         // coverImage: coverImageUrl,
         discounts: state.discounts,
         taxes: state.taxes,
-        cost: getters.finalPriceOfMainCategory,
+        cost: getters.totalPriceOfProposal,
         pricesByCategory: getters.pricesByCategory,
         bundleDiscount: state.bundleDiscount,
         attachments: state.attachments,

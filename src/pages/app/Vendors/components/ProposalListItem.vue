@@ -13,26 +13,65 @@
     <div></div>
     <div>
       <span class="color-vendor font-bold cursor-pointer" @click="openProposal">
-        <img src="/static/icons/vendor/proposalBoard/see-proposal.svg" class="mr-10" />See Proposal</span
-      >
+        <img src="/static/icons/vendor/proposalBoard/see-proposal.svg" class="mr-10" />
+        View Proposal
+      </span>
     </div>
     <div class="text-right">
-      <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu">
+      <md-menu md-size="medium" class="action-menu" :md-offset-x="240" :md-offset-y="-36" @closed="hoveredMenu = ''">
         <md-button md-menu-trigger class="edit-btn md-simple" style="height: 40px">
           <md-icon style="font-size: 40px !important">more_vert</md-icon>
         </md-button>
         <md-menu-content>
-          <md-menu-item @click="edit" class="md-purple">
-            <span> <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />Make Changes</span>
+          <md-menu-item
+            @click="edit"
+            class="md-purple"
+            @mouseenter="hoveredMenu = 'edit'"
+            @mouseleave="hoveredMenu = ''"
+          >
+            <span>
+              <img v-if="hoveredMenu !== 'edit'" :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />
+              <img v-else :src="`${$iconURL}common/edit-white.svg`" class="label-icon mr-10" />
+              Edit</span
+            >
           </md-menu-item>
-          <md-menu-item @click="edit" class="md-purple">
-            <span> <img :src="`${$iconURL}common/download.svg`" class="label-icon mr-10" />Download</span>
+          <md-menu-item
+            @click="edit"
+            class="md-purple"
+            @mouseenter="hoveredMenu = 'download'"
+            @mouseleave="hoveredMenu = ''"
+          >
+            <span>
+              <img v-if="hoveredMenu !== 'download'" :src="`${$iconURL}common/download.svg`" class="label-icon mr-10" />
+              <img v-else :src="`${$iconURL}common/download-white.svg`" class="label-icon mr-10" />
+              Download
+            </span>
           </md-menu-item>
-          <md-menu-item @click="edit" class="md-purple">
-            <span> <img :src="`${$iconURL}common/duplicate.svg`" class="label-icon mr-10" />Duplicate</span>
+          <md-menu-item
+            @click="edit"
+            class="md-purple"
+            @mouseenter="hoveredMenu = 'duplicate'"
+            @mouseleave="hoveredMenu = ''"
+          >
+            <span>
+              <img
+                v-if="hoveredMenu !== 'duplicate'"
+                :src="`${$iconURL}common/duplicate.svg`"
+                class="label-icon mr-10"
+              />
+              <img v-else :src="`${$iconURL}common/duplicate-white.svg`" class="label-icon mr-10" />Duplicate</span
+            >
           </md-menu-item>
-          <md-menu-item @click="edit" class="md-purple">
-            <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Cancel Event</span>
+          <md-menu-item
+            @click="edit"
+            class="md-purple"
+            @mouseenter="hoveredMenu = 'cancel'"
+            @mouseleave="hoveredMenu = ''"
+          >
+            <span>
+              <img v-if="hoveredMenu !== 'cancel'" :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />
+              <img v-else :src="`${$iconURL}common/trash-white.svg`" class="label-icon mr-10" />Cancel Event</span
+            >
           </md-menu-item>
         </md-menu-content>
       </md-menu>
@@ -41,6 +80,11 @@
 </template>
 <script>
 export default {
+  data() {
+    return {
+      hoveredMenu: "",
+    };
+  },
   methods: {
     openProposal() {},
     edit() {},

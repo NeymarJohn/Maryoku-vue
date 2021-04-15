@@ -98,14 +98,12 @@ export const businessCategories = [
                 type: Number,
                 value: 1,
                 xIncluded: true,
-                hideOnAutoComplete: true
               },
               {
                 name: "number of meeting rooms",
                 type: Number,
                 value: 1,
                 xIncluded: true,
-                hideOnAutoComplete: true
               },
               // {
               //   name: 'indoor event space',
@@ -124,35 +122,30 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
                 xIncluded: true,
-                hideOnAutoComplete: true
               },
               {
                 name: "Furnished Event space",
                 type: Boolean,
                 value: false,
                 xIncluded: true,
-                hideOnAutoComplete: true
               },
               {
                 name: "smoking section",
                 type: Boolean,
                 value: false,
                 xIncluded: true,
-                hideOnAutoComplete: true
               },
               {
                 name: "separate cocktail hour space",
                 type: Boolean,
                 value: true,
                 xIncluded: false,
-                hideOnAutoComplete: true
               },
               {
                 name: "outside area for guests",
                 type: Boolean,
                 value: true,
                 xIncluded: false,
-                hideOnAutoComplete: true
               },
               // {
               //   name: 'kitchen for outside caterers',
@@ -165,7 +158,6 @@ export const businessCategories = [
                 type: Number,
                 value: 1,
                 xIncluded: true,
-                hideOnAutoComplete: true
               },
               {
                 name: "coat check",
@@ -190,7 +182,6 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
                 xIncluded: true,
-                hideOnAutoComplete: true
               },
             ],
           },
@@ -227,16 +218,15 @@ export const businessCategories = [
           {
             name: "network",
             items: [
-              {
-                name: 'fast reliable Wifi for guests',
-                type: Boolean,
-                value: false
-              },
+              // {
+              //   name: 'fast reliable Wifi for guests',
+              //   type: Boolean,
+              //   value: false
+              // },
               {
                 name: "venue bandwidth (for video streaming or meeting content)",
                 type: Boolean,
                 value: false,
-                hideOnAutoComplete: true
               },
             ],
           },
@@ -247,13 +237,11 @@ export const businessCategories = [
                 name: "stage",
                 type: Boolean,
                 value: false,
-                hideOnAutoComplete: true
               },
               {
                 name: "dance floor",
                 type: Boolean,
                 value: false,
-                hideOnAutoComplete: true
               },
             ],
           },
@@ -351,13 +339,11 @@ export const businessCategories = [
                 name: "power supply",
                 type: Boolean,
                 value: false,
-                hideOnAutoComplete: true
               },
               {
                 name: "generator",
                 type: Boolean,
                 value: false,
-                hideOnAutoComplete: true
               },
             ],
           },
@@ -381,7 +367,6 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
                 dry: null,
-                hideOnAutoComplete: true
               },
               {
                 name: "LCD displays",
@@ -455,13 +440,13 @@ export const businessCategories = [
               //   staff: null,
               //   quest: null,
               // },
-              // {
-              //   name: "Catering and Waite Staff",
-              //   type: Boolean,
-              //   value: false,
-              //   staff: null,
-              //   quest: null,
-              // },
+              {
+                name: "Catering and Waite Staff",
+                type: Boolean,
+                value: false,
+                staff: null,
+                quest: null,
+              },
               {
                 name: "security",
                 type: Boolean,
@@ -616,7 +601,6 @@ export const businessCategories = [
                   "Cuban",
                   "Greek",
                 ],
-                hideOnAutoComplete: true
               },
               {
                 name: "food specialties",
@@ -640,14 +624,12 @@ export const businessCategories = [
                 value: [],
                 available: ["on premisses", "off premises"],
                 hasComment: true,
-                hideOnAutoComplete: true
               },
               {
                 name: "caterer type",
                 type: Array,
                 value: [],
                 available: ["full service", "drop-off service"],
-                hideOnAutoComplete: true
               },
             ],
           },
@@ -726,21 +708,18 @@ export const businessCategories = [
                   "yogurt bar",
                   "pancake/waffle station",
                 ],
-                hideOnAutoComplete: true
               },
               {
                 name: "lunch",
                 type: Boolean,
                 value: false,
                 xIncluded: true,
-                hideOnAutoComplete: true
               },
               {
                 name: "dinner",
                 type: Boolean,
                 value: false,
                 xIncluded: true,
-                hideOnAutoComplete: true
               },
               {
                 name: "snacks",
@@ -862,7 +841,6 @@ export const businessCategories = [
                 value: false,
                 staff: null,
                 quest: null,
-                hideOnAutoComplete: true
               },
               {
                 name: "maltre d",
@@ -870,7 +848,6 @@ export const businessCategories = [
                 value: false,
                 staff: null,
                 quest: null,
-                hideOnAutoComplete: true
               },
             ],
           },
@@ -881,7 +858,6 @@ export const businessCategories = [
                 name: "chef",
                 type: Boolean,
                 value: false,
-                hideOnAutoComplete: true
               },
               {
                 name: "specialty chef",
@@ -907,7 +883,6 @@ export const businessCategories = [
                 name: "cleanup crew",
                 type: Boolean,
                 value: false,
-                hideOnAutoComplete: true
               },
             ],
           },
@@ -925,7 +900,6 @@ export const businessCategories = [
                 type: Number,
                 value: 0,
                 xIncluded: true,
-                hideOnAutoComplete: true
               },
               {
                 name: "attire of waitstaff",
@@ -1086,7 +1060,6 @@ export const businessCategories = [
                 name: "customer pickup",
                 type: Boolean,
                 value: false,
-                hideOnAutoComplete: true
               },
               {
                 name: "deliveries",
@@ -1542,25 +1515,21 @@ export const businessCategories = [
                 name: "journalistic",
                 type: Boolean,
                 value: false,
-                hideOnAutoComplete: true
               },
               {
                 name: "studio",
                 type: Boolean,
                 value: false,
-                hideOnAutoComplete: true
               },
               {
                 name: "traditional",
                 type: Boolean,
                 value: false,
-                hideOnAutoComplete: true
               },
               {
                 name: "candid",
                 type: Boolean,
                 value: false,
-                hideOnAutoComplete: true
               },
             ],
           },
@@ -1572,11 +1541,11 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
               },
-              // {
-              //   name: "audio",
-              //   type: Boolean,
-              //   value: false,
-              // },
+              {
+                name: "audio",
+                type: Boolean,
+                value: false,
+              },
               {
                 name: "photo",
                 type: Boolean,
@@ -1616,7 +1585,6 @@ export const businessCategories = [
                 name: "adapt equipment mobility to program",
                 type: Number,
                 value: 0,
-                hideOnAutoComplete: true
               },
               {
                 name: "setup & breakdown",
@@ -1642,13 +1610,12 @@ export const businessCategories = [
                 name: "crane",
                 type: Boolean,
                 value: false,
-                hideOnAutoComplete: true
               },
-              // {
-              //   name: "simulacasting/live streaming",
-              //   type: Boolean,
-              //   value: false,
-              // },
+              {
+                name: "simulacasting/live streaming",
+                type: Boolean,
+                value: false,
+              },
             ],
           },
         ],
@@ -1754,27 +1721,27 @@ export const businessCategories = [
           {
             name: "PR",
             items: [
-              // {
-              //   name: "speech writing",
-              //   type: Boolean,
-              //   value: false,
-              // },
-              // {
-              //   name: "press releases",
-              //   type: Boolean,
-              //   value: false,
-              // },
-              // {
-              //   name: "high profile sourcing",
-              //   type: Array,
-              //   value: [],
-              //   available: ["politicians", "celebrities", "influencers", "artists"],
-              // },
-              // {
-              //   name: "social media promotion",
-              //   type: Boolean,
-              //   value: false,
-              // },
+              {
+                name: "speech writing",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "press releases",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "high profile sourcing",
+                type: Array,
+                value: [],
+                available: ["politicians", "celebrities", "influencers", "artists"],
+              },
+              {
+                name: "social media promotion",
+                type: Boolean,
+                value: false,
+              },
               {
                 name: "media pitch",
                 type: Boolean,
@@ -1915,11 +1882,11 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
               },
-              // {
-              //   name: "transcription",
-              //   type: Boolean,
-              //   value: false,
-              // },
+              {
+                name: "transcription",
+                type: Boolean,
+                value: false,
+              },
             ],
           },
         ],
@@ -2168,7 +2135,7 @@ export const businessCategories = [
                 value: false,
               },
               {
-                name: "luggage pickup",
+                name: "luggage",
                 type: Boolean,
                 value: false,
               },
@@ -2309,13 +2276,11 @@ export const businessCategories = [
                 name: "instrument",
                 type: Boolean,
                 value: false,
-                hideOnAutoComplete: true
               },
               {
                 name: "vocalist",
                 type: Boolean,
                 value: false,
-                hideOnAutoComplete: true
               },
               {
                 name: "motivators",
@@ -2382,7 +2347,6 @@ export const businessCategories = [
                 type: Array,
                 value: [],
                 available: ["photo booth", "casino games", "sport games", "make your own"],
-                hideOnAutoComplete: true
               },
               {
                 name: "singers",
@@ -2443,13 +2407,11 @@ export const businessCategories = [
                 name: "food",
                 type: Boolean,
                 value: false,
-                hideOnAutoComplete: true
               },
               {
                 name: "wine/beer/bourbon/etc",
                 type: Boolean,
                 value: false,
-                hideOnAutoComplete: true
               },
               {
                 name: "sightseeing",
@@ -2521,7 +2483,6 @@ export const businessCategories = [
                 name: "activity is suitable for people with disabilities",
                 type: Boolean,
                 value: false,
-                hideOnAutoComplete: true
               },
             ],
           },
@@ -2767,7 +2728,7 @@ export const businessCategories = [
             items: [
               {
                 name: "special equipment",
-                type: Boolean,
+                type: Number,
                 value: 0,
                 hideLabelForValue: true
               },
@@ -2889,16 +2850,16 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
               },
-              // {
-              //   name: "production",
-              //   type: Boolean,
-              //   value: false,
-              // },
-              // {
-              //   name: "Backdrop/Scenic & Decor",
-              //   type: Boolean,
-              //   value: false,
-              // },
+              {
+                name: "production",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "Backdrop/Scenic & Decor",
+                type: Boolean,
+                value: false,
+              },
               {
                 name: "rigging",
                 type: Boolean,
@@ -2920,11 +2881,11 @@ export const businessCategories = [
                 value: [],
                 available: ["projectors(rear or font)", "plasma/LED tv", "LED wall", "show and go screen"],
               },
-              // {
-              //   name: "ZAP shots",
-              //   type: Boolean,
-              //   value: false,
-              // },
+              {
+                name: "ZAP shots",
+                type: Boolean,
+                value: false,
+              },
               {
                 name: "cranes",
                 type: Boolean,
@@ -2935,11 +2896,11 @@ export const businessCategories = [
           {
             name: "Show Management",
             items: [
-              // {
-              //   name: "Event Services",
-              //   type: Boolean,
-              //   value: false,
-              // },
+              {
+                name: "Event Services",
+                type: Boolean,
+                value: false,
+              },
               {
                 name: "Outdoor Staging & Tents",
                 type: Boolean,
@@ -2994,20 +2955,20 @@ export const businessCategories = [
                 staff: null,
                 quest: null,
               },
-              // {
-              //   name: "programmer",
-              //   type: Boolean,
-              //   value: false,
-              //   staff: null,
-              //   quest: null,
-              // },
-              // {
-              //   name: "event manager",
-              //   type: Boolean,
-              //   value: false,
-              //   staff: null,
-              //   quest: null,
-              // },
+              {
+                name: "programmer",
+                type: Boolean,
+                value: false,
+                staff: null,
+                quest: null,
+              },
+              {
+                name: "event manager",
+                type: Boolean,
+                value: false,
+                staff: null,
+                quest: null,
+              },
               {
                 name: "rigging",
                 type: Boolean,
@@ -3170,7 +3131,7 @@ export const businessCategories = [
                 value: false,
               },
               {
-                name: "travel items",
+                name: "travel",
                 type: Boolean,
                 value: false,
               },
@@ -3429,26 +3390,26 @@ export const businessCategories = [
           {
             name: "tech equipment",
             items: [
-              // {
-              //   name: "screens",
-              //   type: Boolean,
-              //   value: false,
-              // },
+              {
+                name: "screens",
+                type: Boolean,
+                value: false,
+              },
               {
                 name: "projections",
                 type: Boolean,
                 value: false,
               },
-              // {
-              //   name: "recordings",
-              //   type: Boolean,
-              //   value: false,
-              // },
-              // {
-              //   name: "video conferencing",
-              //   type: Boolean,
-              //   value: false,
-              // },
+              {
+                name: "recordings",
+                type: Boolean,
+                value: false,
+              },
+              {
+                name: "video conferencing",
+                type: Boolean,
+                value: false,
+              },
             ],
           },
           {
@@ -3904,7 +3865,10 @@ export const VendorPolicy = [
         name: "Accept staff attire request",
         type: Boolean,
       },
-
+      {
+        name: "Simulcasting bandwidth requirements",
+        type: Number,
+      },
       {
         name: "Union crew restrictions",
         type: Boolean,
@@ -4483,10 +4447,6 @@ export const VendorPricingPolicy = [
         name: "Overtime",
         type: Number,
         hasComment: true,
-      },
-      {
-        name: "Simulcasting bandwidth requirements",
-        type: Number,
       },
       {
         name: "Tax rate",

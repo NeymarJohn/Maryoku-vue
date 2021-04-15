@@ -40,7 +40,7 @@
                 :key="`carousel-item-${index}`"
                 class="carousel-image"
               />
-              <template slot="next" v-if="vendor.images.length > 1">
+              <template slot="next">
                 <span class="next handle-btn">
                   <md-icon>keyboard_arrow_right</md-icon>
                 </span>
@@ -156,7 +156,7 @@
             <div class="cblock">
               <div class="cheader">
                 <div>
-                  <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategories[0])}`" />
+                  <img :src="`${iconUrl}Asset 543.svg`" />
                   {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
                 </div>
                 <span class="text-center">QTY</span>
@@ -925,7 +925,6 @@ export default {
               width: 100%;
               font: bold 16px Manrope-Regular, sans-serif;
 
-              margin-left: -50px;
               .first-column {
                 display: grid;
                 grid-template-columns: 70% 30%;
@@ -977,7 +976,7 @@ export default {
               background: #ededed;
               width: calc(100% - 5rem);
               font: bold 16px Manrope-Regular, sans-serif;
-              margin-left: -50px;
+
               img {
                 width: 24px;
                 margin-right: 1rem;

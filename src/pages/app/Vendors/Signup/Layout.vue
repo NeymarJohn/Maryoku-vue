@@ -137,15 +137,7 @@ export default {
               buttonsStyling: false,
               confirmButtonClass: "md-button md-success",
             }).then(() => {
-              const proposalRequest = this.$route.query.proposalRequest;
-              this.setVendor({});
-              this.setEditing(false);
-              this.setStep(0);
-              if (proposalRequest) {
-                this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
-              } else {
-                this.$router.push(`/vendor/signin`);
-              }
+              this.$router.push("/vendor/profile/services");
             });
           })
           .catch((error) => {});
@@ -264,7 +256,7 @@ export default {
         }
         return "Finish";
       } else if (this.step == 3) {
-        return "Check out your new profile!";
+        return " Check out your new profile!";
       } else {
         return "Next";
       }

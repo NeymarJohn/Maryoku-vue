@@ -430,8 +430,7 @@ export default {
   }
   .proposal-service-item-wrapper {
     display: grid;
-    // grid-template-columns: 40% 14% 14% 14% 14%;
-    grid-template-columns: 50% 10% 12% 14% 10%; // 40% 10% 20% 20% 10%;
+    grid-template-columns: 40% 14% 14% 14% 14%;
     gap: 1%;
     align-items: center;
     input {

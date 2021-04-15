@@ -1,6 +1,8 @@
 <template>
   <div class="proposal-page_details with-progress-bar">
     <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
+
     <div class="event-header d-flex justify-content-between">
       <div class="proposal-page_header text-transform-uppercase">
         <img :src="`${$iconURL}Budget+Elements/${vendorProposal.vendor.eventCategory.icon}`" />
@@ -11,13 +13,13 @@
       </div>
       <header-actions @toggleCommentMode="toggleCommentMode" @export="exportToPdf"></header-actions>
     </div>
-    <div class="proposal-content">
+    <div class="proposal-content" v-if="!isLoading">
       <div class="proposal-info">
         <div class="proposal-header" :style="`background: url('${headerBackgroundImage}') center center no-repeat`">
           <div class="event-info">
             <div class="section-header d-flex justify-content-start">
               <h3>Event Information & Details</h3>
-              <div class="alert alert-danger" v-if="vendorProposal.suggestedTime">
+              <div class="alert alert-danger" v-if="vendorProposal.suggestionDate">
                 This proposal is 2 days before your original date
               </div>
             </div>
@@ -133,7 +135,12 @@
           </div>
           <div class="attachment-section mb-30" v-if="attachments && attachments.length > 0">
             <div class="attachment-tag-list">
-              <div class="attachment-tag" v-for="(attachment, index) in attachments" :key="index" :class="theme">
+              <div
+                class="attachment-tag"
+                v-for="(attachment, index) in attachments.filter((attachement) => attachement.url)"
+                :key="index"
+                :class="theme"
+              >
                 <img :src="`${$iconURL}common/pin-red.svg`" />
                 <a class="color-red" :href="attachment.url" target="_blank">{{ attachment.name }}</a>
               </div>
@@ -152,7 +159,19 @@
           <span class="font-regular font-size-16">*We work only with our catering</span>
         </div>
         <div class="mt-20">What would you like to take from our suggested services?</div>
-        <div class="pricing-section__list">
+        <event-proposal-price
+          :proposalData="vendorProposal"
+          :serviceCategory="vendorProposal.vendor.vendorCategory"
+          :key="`${vendorProposal.vendor.vendorCategory}-section`"
+        ></event-proposal-price>
+        <event-proposal-price
+          v-for="service in this.vendorProposal.additionalServices"
+          :proposalData="vendorProposal"
+          :serviceCategory="service"
+          :key="`${service}-section`"
+        ></event-proposal-price>
+        <div></div>
+        <!-- <div class="pricing-section__list" v-for="service in this.vendorProposal.additionalServices">
           <div class="pricing-section__item element-block p-60 pt-40">
             <div class="d-flex justify-content-between align-center">
               <div class="item-info d-flex justify-content-start align-center">
@@ -181,7 +200,6 @@
                 </div>
               </div>
             </div>
-            <!-- Expanded Section -->
             <div class="expanded-section" v-if="expand">
               <div
                 class="loading"
@@ -294,22 +312,6 @@
                     :item="item"
                     :key="index"
                   >
-                    <!-- <div class="d-flex justify-content-between align-center">
-                      <div class="item-title">
-                        <img :src="`${submitProposalIcon}Group 4781.svg`" />
-                        {{ item.requirementTitle }}
-                      </div>
-                      <div class="item-actions d-flex justify-content-end align-center">
-                        {{ item.requirementValue }}
-                        <md-button class="md-simple md-just-icon" @click="expandIncludedItem(item, index)">
-                          <img :src="`${submitProposalIcon}Component 36.svg`" />
-                        </md-button>
-                      </div>
-                    </div>
-
-                    <div class="item-description" v-if="item.expanded">
-                      {{ item.description }}
-                    </div> -->
                   </included-service-item>
                 </template>
               </div>
@@ -353,51 +355,8 @@
                 </ul>
               </div>
             </div>
-            <!-- ./Expanded Section -->
           </div>
-        </div>
-
-        <!-- <table class="pricing-section__table">
-          <tbody>
-            <template v-if="extraMissingRequirements.length">
-              <tr class="element-block" v-for="(item, index) in extraMissingRequirements" :key="index">
-                <td class="select-item">
-                  <input class="styled-checkbox" :id="`checkbox-${index}`" type="checkbox" :value="item.id" />
-                  <label :for="`checkbox-${index}`"></label>
-                </td>
-                <td class="element-title">
-                  {{ item.requirementTitle }}
-                  <span class="element-duration">For Whole Event</span>
-                </td>
-                <td class="element-value">
-                  <div class="element-price">${{ item.price | withComma }}</div>
-                  <div class="discount-details">
-                    (10% off)
-                    <span>${{ item.price | withComma }}</span>
-                  </div>
-                </td>
-                <td class="view-element">
-                  <md-button class="md-just-icon md-red md-outline">
-                    <img :src="`${submitProposalIcon}Component 36.svg`" />
-                  </md-button>
-                </td>
-              </tr>
-            </template>
-            <tr class="taxes">
-              <td colspan="2">
-                Taxes
-                <span class="taxes-value">{{ tax.percentage }}%</span>
-              </td>
-              <td>${{ tax.price | withComma }}</td>
-              <td></td>
-            </tr>
-            <tr class="total">
-              <td colspan="2">Total</td>
-              <td>${{ totalPrice | withComma }}</td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table> -->
+        </div> -->
       </div>
       <div
         class="bundle-section d-flex justify-content-between align-center"
@@ -504,7 +463,7 @@
           {{ vendorProposal.vendor.companyName }} </a
         >?
       </div>
-      <div class="agree-checkbox" v-if="this.vendorProposal.suggestedTime">
+      <div class="agree-checkbox" v-if="this.vendorProposal.suggestionDate">
         <md-checkbox v-model="acceptNewTimes">I agree to the new time of this proposal</md-checkbox>
         <div class="alert alert-danger">Please indicate that you accept the new time of this proposal</div>
       </div>
@@ -536,7 +495,7 @@
         <md-button
           class="md-red maryoku-btn"
           @click="bookVendor"
-          :disabled="this.vendorProposal.suggestedTime && !acceptNewTimes"
+          :disabled="this.vendorProposal.suggestionDate && !acceptNewTimes"
           >Book this vendor</md-button
         >
       </div>
@@ -580,6 +539,8 @@ import Proposal from "@/models/Proposal";
 import ExtraServiceItem from "./ExtraServiceItem";
 import IncludedServiceItem from "./IncludedServiceItem.vue";
 import { socialMediaBlocks } from "@/constants/vendor";
+import EventProposalPrice from "./EventProposalPrice.vue";
+
 export default {
   components: {
     Tabs,
@@ -597,6 +558,8 @@ export default {
     CancellationPolicy,
     ExtraServiceItem,
     IncludedServiceItem,
+    EventProposalPrice,
+    VueElementLoading,
   },
 
   data() {
@@ -633,7 +596,9 @@ export default {
   created() {
     const proposalId = this.$route.params.proposalId;
     console.log(proposalId);
+    this.isLoading = true;
     Proposal.find(proposalId).then((proposal) => {
+      this.isLoading = false;
       this.vendorProposal = proposal;
       this.extraServices = this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
     });

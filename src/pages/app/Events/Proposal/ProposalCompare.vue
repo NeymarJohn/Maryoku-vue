@@ -35,9 +35,10 @@
     <div class="compare-content white-card">
       <div class="grid-row">
         <div class="grid-cell comparing-name font-bold-extra">A comparision of the the three venus</div>
-        <div class="grid-cell" v-for="proposal in proposals" :key="`name-${proposal.id}`">
+        <div class="grid-cell proposal-card" v-for="proposal in proposals" :key="`name-${proposal.id}`">
           <div>
             <img
+              class="proposal-card-image"
               :src="proposal.inspirationalPhotos[0] ? proposal.inspirationalPhotos[0].url : proposal.vendor.images[0]"
             />
           </div>
@@ -50,10 +51,10 @@
         <div class="grid-cell text-center" v-for="proposal in proposals" :key="`name-${proposal.id}`">
           <div>${{ proposal.cost | withComma }}</div>
           <div v-if="selectedBlock.allocatedBudget - proposal.cost > 0">
-            ${{ selectedBlock.allocatedBudget - proposal.cost }} Less than original budget
+            ${{ (selectedBlock.allocatedBudget - proposal.cost) | withComma }} Less than original budget
           </div>
           <div v-if="selectedBlock.allocatedBudget - proposal.cost < 0">
-            ${{ proposal.cost - selectedBlock.allocatedBudget }} More than original budget
+            ${{ (proposal.cost - selectedBlock.allocatedBudget) | withComma }} More than original budget
           </div>
         </div>
       </div>
@@ -99,14 +100,17 @@
         </div>
       </template>
       <div class="section-header comparing-name font-bold-extra">Policy</div>
-      <div class="grid-row" v-for="policy in comparedPolicies" :key="`policy-${policy.name}`">
-        <div class="grid-cell comparing-name">{{ policy.name }}</div>
+      <div class="grid-row" v-for="comparedPolicy in comparedPolicies" :key="`comparedPolicy-${comparedPolicy.name}`">
+        <div class="grid-cell comparing-name">{{ comparedPolicy.name }}</div>
         <div
           class="grid-cell color-red text-center font-size-30 font-bold"
-          v-for="proposal in proposals"
-          :key="`policy-${proposal.id}`"
+          v-for="(proposal, index) in proposals"
+          :key="`comparedPolicy-${proposal.id}`"
         >
-          <div class="grid-cell" v-if="policy.value">
+          <div
+            class="grid-cell"
+            v-if="comparedPolicy.proposalPolicies[index] && comparedPolicy.proposalPolicies[index].value"
+          >
             <img src="/static/icons/vendor/proposalBoard/filter-won.svg" />
           </div>
           <div class="grid-cell" v-else>
@@ -164,7 +168,6 @@ export default {
             subCategory.items.forEach((item) => {
               if (
                 this.proposals.every((proposal) => {
-                  console.log(proposal.includedServices[this.selectedBlock.componentId]);
                   return (
                     proposal.includedServices[this.selectedBlock.componentId].findIndex(
                       (service) => item.name == service.requirementTitle,
@@ -212,16 +215,25 @@ export default {
         this.comparedServices = comparedServices;
 
         // checking policy
+        this.comparedPolicies = [];
         const categoryPolicy = VendorPolicy.find((item) => item.category === this.selectedBlock.componentId);
+        console.log(categoryPolicy);
         if (categoryPolicy) {
           categoryPolicy.items.forEach((policyItem) => {
+            const proposalPolicies = [];
             this.proposals.forEach((proposal) => {
-              const vendorPolicy = proposal.vendor.policies.find((it) => it.name === policyItem.name);
-              if (vendorPolicy) this.comparedPolicies.push(vendorPolicy);
+              const vendorPolicy = proposal.vendor.policies.find((policy) => policy.name === policyItem.name);
+              console.log(vendorPolicy);
+              if (vendorPolicy) {
+                proposalPolicies.push(vendorPolicy);
+              } else {
+                proposalPolicies.push(null);
+              }
             });
+            this.comparedPolicies.push({ name: policyItem.name, proposalPolicies });
           });
         }
-        console.log("comparedServices", comparedServices);
+        console.log("comparedServices", this.comparedPolicies);
       });
   },
   methods: {
@@ -243,6 +255,13 @@ export default {
 .event-proposal-comparison-panel {
   .compare-content {
     margin: 0 3rem;
+    .proposal-card {
+      .proposal-card-image {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+      }
+    }
     .grid-row {
       display: grid;
       grid-template-columns: auto repeat(3, 27%);

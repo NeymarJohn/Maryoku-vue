@@ -184,16 +184,8 @@ export default {
         key: "taxes",
         value: { [this.vendor.eventCategory.key]: { percentage: taxRate, price: 0 } },
       });
-      this.$store.commit("vendorProposal/setValue", {
-        key: "taxes",
-        value: { total: { percentage: taxRate, price: 0 } },
-      });
       this.$store.commit("vendorProposal/setDiscount", {
         category: this.vendor.eventCategory.key,
-        discount: { percentage: discountRate, price: 0 },
-      });
-      this.$store.commit("vendorProposal/setDiscount", {
-        category: "total",
         discount: { percentage: discountRate, price: 0 },
       });
     }
