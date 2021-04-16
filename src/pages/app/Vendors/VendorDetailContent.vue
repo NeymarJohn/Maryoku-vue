@@ -19,153 +19,184 @@
         <div class="card">
           <div class="banner">
             <!-- <vendor-images-list :images="vendor.images" class="images mt-30"></vendor-images-list> -->
-            <header-image-carousel :images="vendor.images" class="images"></header-image-carousel>
+            <!-- <header-image-carousel :images="vendor.images" class="images"></header-image-carousel> -->
+            <carousel
+              :items="1"
+              :margin="0"
+              :dots="false"
+              :nav="false"
+              class="header-carousel"
+              :key="`carousel-${vendor.images.length}`"
+            >
+              <template slot="prev">
+                <span class="prev handle-btn">
+                  <md-icon>keyboard_arrow_left</md-icon>
+                </span>
+              </template>
+              <img
+                :src="item"
+                v-for="(item, index) in vendor.images"
+                :key="`carousel-item-${index}`"
+                class="carousel-image"
+              />
+              <template slot="next">
+                <span class="next handle-btn">
+                  <md-icon>keyboard_arrow_right</md-icon>
+                </span>
+              </template>
+            </carousel>
           </div>
-          <div class="about-cont profile-section" id="About">
-            <div class="block">
-              <span class="capacity"> <img :src="`${iconUrl}Asset 545.svg`" />Capacity </span>
-              <span class="number" v-if="vendor.capacity">
-                {{ vendor.capacity.low | formatQty }}
-                <img :src="`${iconUrl}Group 4585 (2).svg`" />
-                {{ vendor.capacity.high | formatQty }}
-              </span>
-            </div>
-            <div class="block">
-              <div class="title lg"><img :src="`${iconUrl}Asset 563.svg`" /> ABOUT</div>
-              <div class="desc" v-if="vendor.about">{{ vendor.about.company }}</div>
-            </div>
-            <div class="block" v-if="vendor.about">
-              <div class="title">
-                <img :src="`${$iconURL}Budget Elements/${vendor.eventCategory.icon}`" />
-                <span> About Our {{ vendor.eventCategory.fullTitle }} </span>
+          <div class="p-60">
+            <div class="about-cont profile-section" id="About">
+              <div class="block">
+                <span class="capacity"> <img :src="`${iconUrl}Asset 545.svg`" />Capacity </span>
+                <span class="number" v-if="vendor.capacity">
+                  {{ vendor.capacity.low | formatQty }}
+                  <img :src="`${iconUrl}Group 4585 (2).svg`" />
+                  {{ vendor.capacity.high | formatQty }}
+                </span>
               </div>
-              <div class="desc">{{ vendor.about.category }}</div>
+              <div class="block">
+                <div class="title lg"><img :src="`${iconUrl}Asset 563.svg`" /> ABOUT</div>
+                <div class="desc" v-if="vendor.about">{{ vendor.about.company }}</div>
+              </div>
+              <div class="block" v-if="vendor.about">
+                <div class="title">
+                  <img :src="`${$iconURL}Budget Elements/${vendor.eventCategory.icon}`" />
+                  <span> About Our {{ vendor.eventCategory.fullTitle }} </span>
+                </div>
+                <div class="desc">{{ vendor.about.category }}</div>
+              </div>
             </div>
-          </div>
-          <div class="fee-cont profile-section" id="What's Included?">
-            <div class="title">
-              <h3><img :src="`${iconUrl}Asset 562.svg`" /> ELEMENTS IN STARTING FEE</h3>
+            <div class="fee-cont profile-section" id="What's Included?">
+              <div class="title">
+                <h3><img :src="`${iconUrl}Asset 562.svg`" /> ELEMENTS IN STARTING FEE</h3>
+              </div>
+              <div class="cblock">
+                <div class="cheader">
+                  <div class="first-column">
+                    <div>
+                      <img :src="`${iconUrl}Asset 543.svg`" />
+                      {{ vendor.eventCategory.fullTitle }}
+                    </div>
+                    <span>QTY</span>
+                  </div>
+                  <div class="second-column">
+                    <span>QTY</span>
+                  </div>
+                </div>
+                <div class="citems">
+                  <vendor-starting-fee-item
+                    v-for="(fv, fvIndex) in getStartingFeeItems()"
+                    :key="`vendor-starting-fee-${fvIndex}`"
+                    :item="fv"
+                  />
+                </div>
+              </div>
             </div>
-            <div class="cblock">
-              <div class="cheader">
-                <div class="first-column">
+            <div class="extra-cont profile-section" id="Extras">
+              <div class="title">
+                <h3><img :src="`${iconUrl}Asset 526.svg`" />WITH EXTRA PAY</h3>
+              </div>
+              <div class="cblock">
+                <div class="cheader">
                   <div>
                     <img :src="`${iconUrl}Asset 543.svg`" />
                     {{ vendor.eventCategory.fullTitle }}
                   </div>
-                  <span>QTY</span>
+                  <span class="text-center">QTY</span>
+                  <span class="text-center">Price</span>
                 </div>
-                <div class="second-column">
-                  <span>QTY</span>
-                </div>
-              </div>
-              <div class="citems">
-                <vendor-starting-fee-item
-                  v-for="(fv, fvIndex) in getStartingFeeItems()"
-                  :key="`vendor-starting-fee-${fvIndex}`"
-                  :item="fv"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="extra-cont profile-section" id="Extras">
-            <div class="title">
-              <h3><img :src="`${iconUrl}Asset 526.svg`" />WITH EXTRA PAY</h3>
-            </div>
-            <div class="cblock">
-              <div class="cheader">
-                <div>
-                  <img :src="`${iconUrl}Asset 543.svg`" />
-                  {{ vendor.eventCategory.fullTitle }}
-                </div>
-                <span class="text-center">QTY</span>
-                <span class="text-center">Price</span>
-              </div>
-              <div class="citems">
-                <div class="citem">
-                  <vendor-extra-pay-item v-for="(cs, index) in getExtraPayItems()" :key="`extra-${index}`" :item="cs" />
+                <div class="citems">
+                  <div class="citem">
+                    <vendor-extra-pay-item
+                      v-for="(cs, index) in getExtraPayItems()"
+                      :key="`extra-${index}`"
+                      :item="cs"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="policy-cont profile-section" id="Policy">
-            <div class="title"><img :src="`${iconUrl}Group 1471 (2).svg`" /> OUR POLICY</div>
-            <div class="rules">
-              <div class="rule" v-for="(y, yIndex) in vendor.yesRules" :key="`yes-${yIndex}`">
-                <div class="item">{{ y.name }}</div>
-                <div class="item">
-                  <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="vendor.yesRules.includes(y)" />
+            <div class="policy-cont profile-section" id="Policy">
+              <div class="title"><img :src="`${iconUrl}Group 1471 (2).svg`" /> OUR POLICY</div>
+              <div class="rules">
+                <div class="rule" v-for="(y, yIndex) in vendor.yesRules" :key="`yes-${yIndex}`">
+                  <div class="item">{{ y.name }}</div>
+                  <div class="item">
+                    <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="vendor.yesRules.includes(y)" />
+                  </div>
+                </div>
+                <div class="rule" v-for="(n, nIndex) in vendor.noRules" :key="`rule-${nIndex}`">
+                  <div class="item">{{ n.name }}</div>
+                  <div class="item">
+                    <img :src="`${iconUrl}Group 5489 (4).svg`" v-if="vendor.noRules.includes(n)" />
+                  </div>
                 </div>
               </div>
-              <div class="rule" v-for="(n, nIndex) in vendor.noRules" :key="`rule-${nIndex}`">
-                <div class="item">{{ n.name }}</div>
-                <div class="item">
-                  <img :src="`${iconUrl}Group 5489 (4).svg`" v-if="vendor.noRules.includes(n)" />
-                </div>
+              <div class="not-allowed" v-if="vendor.eventCategory.key == 'venuerental'">
+                <h5>We don't allow these 3rd party vendor:</h5>
+                <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
               </div>
-            </div>
-            <div class="not-allowed" v-if="vendor.eventCategory.key == 'venuerental'">
-              <h5>We don't allow these 3rd party vendor:</h5>
-              <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
-            </div>
-            <div
-              class="dont-work"
-              v-if="
-                vendor.selectedWeekdays && vendor.exDonts && vendor.selectedWeekdays.length && vendor.exDonts.length
-              "
-            >
-              <h5>We don't work on:</h5>
-              <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
-                <img :src="`${iconUrl}Group 5489 (4).svg`" />
-                {{ mergeStringItems(vendor.selectedWeekdays) }}
-              </div>
-              <div class="item" v-for="(r, rIndex) in vendor.exDonts" :key="rIndex">
-                <img :src="`${iconUrl}Group 5489 (4).svg`" />
-                {{ r.holiday }}
-              </div>
-              <div class="item" v-if="vendor.dontWorkDays && vendor.dontWorkDays.length > 0">
-                <img :src="`${iconUrl}Group 5489 (4).svg`" />
-                {{ dontWorkDays() }}
-              </div>
-              <div class="item" v-if="vendor.dontWorkTime">
-                <img :src="`${iconUrl}Group 5489 (4).svg`" />
-                {{ dontWorkTime() }}
-              </div>
-            </div>
-          </div>
-          <div class="pricing-policy-cont profile-section" id="Pricing Policy">
-            <div class="title"><img :src="`${iconUrl}Asset 560.svg`" /> OUR PRICING POLICY</div>
-            <div class="rules">
-              <div class="rule" v-for="(policy, yIndex) in validPricingPolicy" :key="yIndex">
-                <div class="item">{{ policy.name }}</div>
-                <div class="item">
-                  <span v-if="!policy.isPercentage || policy.unit === '$'">$</span>
-                  <span>{{ policy.value | withComma }}</span>
-                  <span v-if="policy.isPercentage">%</span>
-                  <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
-                    {{ policy.attendees }} attendees
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <!-- <h6 class="underline">Relish caterers & venues:</h6> -->
-            </div>
-            <div class="signatures">
               <div
-                class="sign"
-                v-if="vendor.signature"
-                :style="`
+                class="dont-work"
+                v-if="
+                  vendor.selectedWeekdays && vendor.exDonts && vendor.selectedWeekdays.length && vendor.exDonts.length
+                "
+              >
+                <h5>We don't work on:</h5>
+                <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
+                  <img :src="`${iconUrl}Group 5489 (4).svg`" />
+                  {{ mergeStringItems(vendor.selectedWeekdays) }}
+                </div>
+                <div class="item" v-for="(r, rIndex) in vendor.exDonts" :key="rIndex">
+                  <img :src="`${iconUrl}Group 5489 (4).svg`" />
+                  {{ r.holiday }}
+                </div>
+                <div class="item" v-if="vendor.dontWorkDays && vendor.dontWorkDays.length > 0">
+                  <img :src="`${iconUrl}Group 5489 (4).svg`" />
+                  {{ dontWorkDays() }}
+                </div>
+                <div class="item" v-if="vendor.dontWorkTime">
+                  <img :src="`${iconUrl}Group 5489 (4).svg`" />
+                  {{ dontWorkTime() }}
+                </div>
+              </div>
+            </div>
+            <div class="pricing-policy-cont profile-section" id="Pricing Policy">
+              <div class="title"><img :src="`${iconUrl}Asset 560.svg`" /> OUR PRICING POLICY</div>
+              <div class="rules">
+                <div class="rule" v-for="(policy, yIndex) in validPricingPolicy" :key="yIndex">
+                  <div class="item">{{ policy.name }}</div>
+                  <div class="item">
+                    <span v-if="!policy.isPercentage || policy.unit === '$'">$</span>
+                    <span>{{ policy.value | withComma }}</span>
+                    <span v-if="policy.isPercentage">%</span>
+                    <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
+                      {{ policy.attendees }} attendees
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="item">
+                <!-- <h6 class="underline">Relish caterers & venues:</h6> -->
+              </div>
+              <div class="signatures">
+                <div
+                  class="sign"
+                  v-if="vendor.signature"
+                  :style="`
                   background-image: url(${vendor.signature});
                   width: 100%;
                   background-repeat: no-repeat;
                   height: 162px;
                   background-size: contain;
                 `"
-              />
+                />
+              </div>
             </div>
+            <vendor-detail-reviews></vendor-detail-reviews>
           </div>
-          <vendor-detail-reviews></vendor-detail-reviews>
         </div>
       </div>
     </div>
@@ -474,63 +505,42 @@ export default {
     }
     .right-side {
       flex: 5;
-
+      max-width: 80%;
       .card {
-        padding: 0px 60px 60px 60px;
         background-color: #ffffff;
         box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-
         .banner {
-          margin: 30px -60px calc(30px - 2rem) -60px;
-          padding-bottom: 2rem;
           overflow: hidden;
-          .images {
-            display: block;
-            overflow: hidden;
-            padding: 0;
-            white-space: nowrap;
-            position: relative;
-            span {
-              cursor: pointer;
-              position: absolute;
-              width: 28px;
-              height: 28px;
-              background-color: #ffffff;
-              box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+          width: 100%;
+          position: relative;
+          .header-carousel {
+            .carousel-image {
+              height: 500px;
+              object-fit: cover;
+            }
+            .handle-btn {
+              background-color: white !important;
+              height: 25px;
+              width: 25px;
               border-radius: 50%;
-              text-align: center;
-              font-weight: 800;
-              z-index: 99;
+              position: absolute;
               top: 50%;
               transform: translateY(-50%);
-
-              &.prev {
-                left: 0;
+              z-index: 10;
+              i {
+                color: #050505;
               }
               &.next {
-                right: 60px;
+                right: 50px;
+              }
+              &.prev {
+                left: 50px;
               }
             }
-            .cont {
-              position: relative;
-              img {
-                width: 700px;
-                height: 500px;
-                margin-right: 2rem;
-                cursor: zoom-in;
-                object-fit: cover;
-              }
-            }
-          }
-          img {
-            width: 100%;
-            height: 460px;
           }
         }
         .about-cont {
-          padding: 2rem 0 60px 0;
-          // border-bottom: 1px solid #dddddd;
-
+          padding-bottom: 60px;
           .block {
             span {
               &.capacity {
@@ -637,22 +647,23 @@ export default {
           .cblock {
             .cheader {
               display: grid;
-              grid-template-columns: 50% 50%;
-              grid-gap: 3rem;
+              grid-template-columns: 48% 48%;
+              grid-gap: 4%;
               padding: 1rem 0 1rem 60px;
               background: #ededed;
-              margin: 0 -60px;
-              width: 100%;
+              margin-left: -60px;
+              // width: 100%;
               font: bold 16px Manrope-Regular, sans-serif;
 
               .first-column {
                 display: grid;
-                grid-template-columns: 50% 50%;
+                grid-template-columns: 70% 30%;
                 align-items: center;
+                margin-right: 1rem;
               }
               .second-column {
                 text-align: right;
-                margin-right: 1.5rem;
+                margin-right: 1rem;
               }
 
               img {
@@ -661,15 +672,15 @@ export default {
               }
               span {
                 text-align: right;
-                margin-right: 5rem;
+                // margin-right: 5rem;
               }
             }
             .citems {
-              width: calc(100% - 7rem);
+              width: 100%;
               display: grid;
-              grid-column-gap: 3rem;
-              grid-template-columns: 50% 50%;
               align-items: center;
+              grid-column-gap: 4%;
+              grid-template-columns: 48% 48%;
             }
           }
         }

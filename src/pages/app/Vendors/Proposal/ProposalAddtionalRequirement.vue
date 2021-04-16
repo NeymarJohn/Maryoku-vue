@@ -17,7 +17,7 @@
       :class="{ 'd-none': getSelectedOption(requirement.options).length == 0 }"
     >
       <template v-if="requirement.item == 'Sitting arrangement'">
-        <div
+        <!-- <div
           class="d-flex align-center"
           v-if="requirement.groupSizes && requirement.groupSizes.findIndex((item) => item.selected) >= 0"
         >
@@ -37,8 +37,8 @@
         <hr
           style="background-color: #ececec"
           v-if="requirement.groupSizes && requirement.groupSizes.findIndex((item) => item.selected) >= 0"
-        />
-        <div class="mt-30">
+        /> -->
+        <div>
           <img :src="`${$iconURL}Submit+Proposal/request arrangement.png`" />
           <span class="font-size-30 font-bold">
             {{ requirement.item || requirement.subCategory }}
@@ -64,9 +64,9 @@
               <div class="font-bold">'Other'</div>
               <div class="mt-20">{{ requirement.otherOptionContent }}</div>
             </div>
-            <div class="d-flex flex-column justify-content-between seat-type suggested-seat">
+            <!-- <div class="d-flex flex-column justify-content-between seat-type suggested-seat">
               <div class="font-bold">'{{ suggestedNewSeatings }}'</div>
-            </div>
+            </div> -->
           </div>
           <div v-if="!editingNewSeating" class="d-flex align-center">
             <md-button class="md-simple md-outlined md-red maryoku-btn" @click="editingNewSeating = true">
@@ -75,11 +75,11 @@
           </div>
           <div v-else class="p-10" style="min-width: 350px">
             <div class="font-bold mb-10">Suggest new seating arrangement</div>
-            <textarea v-model="newSeatingSuggest" rows="4" placeholder="Type your idea here"></textarea>
-            <div class="text-right mt-10">
+            <textarea v-model="suggestedNewSeatings" rows="4" placeholder="Type your idea here"></textarea>
+            <!-- <div class="text-right mt-10">
               <md-button class="maryoku-btn md-red" @click="saveNewSeating">Save</md-button>
               <md-button class="md-simple maryoku-btn md-black" @click="editingNewSeating = false">Cancel</md-button>
-            </div>
+            </div> -->
           </div>
         </div>
         <div
@@ -139,8 +139,16 @@ export default {
         (item) => item.category == "special" && item.isSelected,
       );
     },
-    suggestedNewSeatings() {
-      return this.$store.state.vendorProposal.suggestedNewSeatings;
+    suggestedNewSeatings: {
+      get: function () {
+        return this.$store.state.vendorProposal.suggestedNewSeatings;
+      },
+      set: function (value) {
+        if (!value) {
+          this.editingNewSeating = false;
+        }
+        return this.$store.commit("vendorProposal/setValue", { key: "suggestedNewSeatings", value });
+      },
     },
   },
 };

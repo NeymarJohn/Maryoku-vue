@@ -31,7 +31,6 @@
       >
         Loading ...
       </div>
-
       <div class="element-pricing-table elements-list">
         <table>
           <thead>
@@ -119,7 +118,6 @@
           </tbody>
         </table>
       </div>
-
       <div class="proposal-includes">
         <div class="proposal-includes__title font-size-22">
           <img data-v-5af98ad9="" :src="`${$iconURL}NewSubmitPorposal/includedPrice.png`" class="page-icon mr-10" />
@@ -135,7 +133,6 @@
           </included-service-item>
         </template>
       </div>
-
       <div class="extras-section" v-if="extraServices.length">
         <div class="extras-section__title">
           <h3 class="font-size-22">
@@ -161,7 +158,6 @@
           ></extra-service-item>
         </div>
       </div>
-
       <div class="proposal-section attachments-section" v-if="attachedFiles.length">
         <div class="proposal-section__title">Attachments</div>
 

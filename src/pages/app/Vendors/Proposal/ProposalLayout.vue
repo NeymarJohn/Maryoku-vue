@@ -41,10 +41,12 @@
       <template slot="body">
         <div class="saved-it-modal__body">
           <div>
-            <md-button class="md-simple maryoku-btn md-red" @click="goToProcessingGuid"
-              >How does our bidding process work?</md-button
+            <md-button class="md-simple maryoku-btn md-red" @click="goToProcessingGuid">
+              How does our bidding process work?
+            </md-button>
+            <md-button class="md-simple maryoku-btn md-red md-outlined" @click="goToVendorProfile"
+              >Go to my Dashboard</md-button
             >
-            <md-button class="md-simple maryoku-btn md-red md-outlined">Go to my Dashboard</md-button>
           </div>
         </div>
       </template>
@@ -241,6 +243,9 @@ export default {
     },
     goToProcessingGuid() {
       this.$router.push({ path: `/completed-bidding` });
+    },
+    goToVendorProfile() {
+      this.$router.push({ path: `/vendor/signin` });
     },
     discard() {
       Swal.fire({

@@ -71,7 +71,7 @@
         </p>
         <div class="white-card sharing-form">
           <div class="upoad-photo">
-            <img :src="imageData" v-if="imageData"/>
+            <img :src="imageData" v-if="imageData" class="uploaded-image"/>
             <md-button v-else class="md-simple maryoku-btn md-red" @click="openPhotoDialog"><md-icon>add</md-icon><br/><div>Add Photo</div></md-button>
             <input type="file" id="fileSelector" class="d-none" @change="onFileChange"/>
           </div>
@@ -172,6 +172,9 @@ export default {
         align-items: center;
         justify-content: center;
         overflow: hidden;
+        .uploaded-image {
+          width: 100%;
+        }
       }
     }
   }
