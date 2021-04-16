@@ -198,7 +198,22 @@
           <input class="input-value" type="number" v-model="item.requirementValue" />
         </template>
       </div>
-      <div class="price-cont editor-wrapper text-right"></div>
+      <div class="price-cont editor-wrapper text-right">
+        <template v-if="isEdit && isAddingPrice">
+          <money
+            v-model="item.price"
+            v-bind="{
+              decimal: '.',
+              thousands: ',',
+              prefix: '$ ',
+              suffix: '',
+              precision: 2,
+              masked: false,
+            }"
+            class="input-value"
+          />
+        </template>
+      </div>
       <div class="total-cont editor-wrapper text-right"></div>
       <div class="action-cont editor-wrapper text-right">
         <template v-if="isEdit">
@@ -220,7 +235,7 @@
             <md-menu-item @click="removeRequirement(item)">
               <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Delete</span>
             </md-menu-item>
-            <md-menu-item @click="isEdit = true">
+            <md-menu-item @click="addPriceToIncludeItem">
               <span>
                 <img
                   :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"
@@ -355,6 +370,7 @@ export default {
       isExpanded: false,
       isAddingAlternative: false,
       item: {},
+      isAddingPrice: false,
     };
   },
   created() {
@@ -370,10 +386,18 @@ export default {
       this.$root.$emit("remove-proposal-requirement", item);
       this.$emit("remove", this.index);
     },
+    addPriceToIncludeItem(item) {
+      this.isAddingPrice = true;
+      this.isEdit = true;
+      // this.$store.dispatch("vendorProposal/addPrice");
+    },
     save(item) {
       this.isEdit = false;
       this.$root.$emit("save-proposal-requirement", { index: this.index, item });
       this.$emit("save", { index: this.index, item });
+      // if (isAddingPrice) {
+      //   this.$store.dispatch("vendorProposal/addPrice", {category})
+      // }
     },
     setValue(key, value) {
       const item = this.item;

@@ -83,6 +83,7 @@ export default {
       savedItModal: false,
       iconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
+      isLoading: false,
     };
   },
   methods: {
@@ -190,6 +191,7 @@ export default {
     },
     async addVendor() {
       let title = "Thank you for your sign up!";
+      this.isLoading = true;
       const tenantUser = {
         company: this.vendor.companyName,
         name: this.vendor.email,

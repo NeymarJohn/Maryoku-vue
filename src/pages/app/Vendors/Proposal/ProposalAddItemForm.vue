@@ -51,8 +51,8 @@
             >
               <div>{{ item.description }}</div>
               <div class="color-red font-regular">{{ item.requestedByPlanner ? "PLANNER REQUEST" : "" }}</div>
-              <div>{{ item.included ? "Included" : "" }}</div>
-              <div class="text-right">${{ item.price | withComma }}</div>
+              <div v-if="item.included" class="text-right">{{ "Included" }}</div>
+              <div v-else class="text-right">${{ item.price | withComma }}</div>
             </div>
           </div>
         </div>
@@ -424,7 +424,7 @@ export default {
       margin-top: 53px;
       .suggest-item {
         display: grid;
-        grid-template-columns: 45% 30% 15% 10%;
+        grid-template-columns: 50% 30% 20%;
         padding: 10px 20px;
         cursor: pointer;
         &:hover {

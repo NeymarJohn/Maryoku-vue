@@ -255,6 +255,15 @@ const mutations = {
   },
 };
 const actions = {
+  addPrice({ commit, state, dispatch }, { category, selectedItem }) {
+    const proposalIncludedServices = state.proposalIncludedServices[category];
+    const includedIndex = proposalIncludedServices.findIndex(item => item.requirementTitle == selectedItem.requirementTitle)
+    proposalIncludedServices.splice(includedIndex, 1)
+    commit("setIncludedServices", { category, services: [...proposalIncludedServices] })
+    const costServices = state.proposalCostServices[category];
+    costServices.push(selectedItem);
+    commit("setCostServices", { category, services: costServices })
+  },
   getProposalByRequestId: ({ commit, state }, proposalRequestId) => {
     return new Promise((resolve, reject) => {
       new Proposal()

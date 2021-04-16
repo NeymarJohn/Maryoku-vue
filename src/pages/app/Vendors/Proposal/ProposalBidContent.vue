@@ -158,6 +158,17 @@ export default {
           ) {
             discountRate = Number(item.value);
           }
+          if (item.name === "Discounts" && item.value) {
+            discountRate = Number(item.value);
+          }
+          if (
+            item.name === "Large group discounts" &&
+            Number(this.event.numberOfParticipants) >= Number(item.attendees) &&
+            item.attendees &&
+            item.value
+          ) {
+            discountRate = Number(item.value);
+          }
         });
       }
       this.$store.commit("vendorProposal/setValue", { key: "vendorCostServices", value: costVendorServices });

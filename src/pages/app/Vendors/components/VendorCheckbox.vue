@@ -139,7 +139,7 @@
         </div>
         <div class="how-many mr-10" v-if="checked && included">
           <span v-if="!currentItem.hideLabelForValue">How Many?</span>
-          <input type="number" placeholder="QTY" v-model="currentItem.value" @input="updateValue" />
+          <input type="number" placeholder="QTY" v-model="currentItem.defaultQty" @input="updateValue" />
         </div>
         <div class="included-cont mt-10" v-if="checked && !item.xIncluded">
           <div class="included" :class="{ active: included }" @click="updateIncluded()">
