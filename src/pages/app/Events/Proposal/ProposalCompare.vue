@@ -34,7 +34,13 @@
     </div>
     <div class="compare-content white-card">
       <div class="grid-row">
-        <div class="grid-cell comparing-name font-bold-extra">A comparision of the the three venus</div>
+        <div class="grid-cell comparing-name font-bold-extra">
+          <img
+            :src="`${$iconURL}Budget+Elements/${selectedBlock.componentId}.svg`"
+            style="width: 30px; margin-right: 0.5em"
+          />
+          A comparision of the the three venus
+        </div>
         <div class="grid-cell proposal-card" v-for="proposal in proposals" :key="`name-${proposal.id}`">
           <div>
             <img
@@ -267,13 +273,13 @@ export default {
       grid-template-columns: auto repeat(3, 27%);
       border-bottom: solid 1px #cfcfcf;
       .grid-cell {
-        padding: 15px 25px;
+        padding: 15px 20px;
         &:not(:last-child) {
           border-right: solid 1px #cfcfcf;
         }
         &.comparing-name {
           font-size: 20px;
-          padding: 30px 50px;
+          padding: 30px 40px;
         }
         .check-icon {
           width: 25px;

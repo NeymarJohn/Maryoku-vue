@@ -1,5 +1,7 @@
 <template>
   <div class="for-proposals-layout-wrapper">
+    <!-- <vue-element-loading :active="isLoading" color="#FF547C"></vue-element-loading> -->
+
     <proposal-header v-if="event" :event="event" :proposalRequest="proposalRequest"></proposal-header>
     <div class="main-cont">
       <router-view></router-view>
@@ -115,17 +117,21 @@ import Swal from "sweetalert2";
 import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
 import S3Service from "@/services/s3.service";
 import ProposalHeader from "./ProposalHeader";
+import VueElementLoading from "vue-element-loading";
+
 export default {
   components: {
     VendorBidTimeCounter,
     Modal,
     ProposalHeader,
+    VueElementLoading,
   },
   props: {
     newProposalRequest: Object,
   },
   data() {
     return {
+      isLoading: false,
       fullDetailsModal: false,
       proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       landingIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewLandingPage/",
@@ -207,18 +213,22 @@ export default {
         coverImageUrl = `https://maryoku.s3.amazonaws.com/campaigns/cover-images/${this.event.id}-${vendorProposal.vendor.id}.${extenstion}`;
       }
 
-      this.saveProposal(type).then((proposal) => {
-        this.isUpdating = false;
-        if (type === "submit") this.submittedModal = true;
-        else {
-          Swal.fire({
-            title: `You saved the current proposal. You can edit anytime later!`,
-            buttonsStyling: false,
-            type: "success",
-            confirmButtonClass: "md-button md-success",
-          });
-        }
-      });
+      if (!this.isLoading) {
+        this.isLoading = true;
+        this.saveProposal(type).then((proposal) => {
+          this.isUpdating = false;
+          this.isLoading = false;
+          if (type === "submit") this.submittedModal = true;
+          else {
+            Swal.fire({
+              title: `You saved the current proposal. You can edit anytime later!`,
+              buttonsStyling: false,
+              type: "success",
+              confirmButtonClass: "md-button md-success",
+            });
+          }
+        });
+      }
     },
 
     back() {

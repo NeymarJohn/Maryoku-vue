@@ -36,6 +36,7 @@
         <sidebar-item
           name="left-menu-events-list"
           class="left-menu-events-list"
+          :disabled="true"
           :link="{
             name: 'Event Details',
             iconUrl: '/static/icons/vendor/dashboard.svg',

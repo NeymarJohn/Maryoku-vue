@@ -3,7 +3,6 @@ const VendorMainLayout = () => import("@/pages/app/Vendors/VendorMainLayout.vue"
 
 const VendorProfileOverview = () => import("@/pages/app/Vendors/Profile");
 const VendorProposalBoard = () => import("@/pages/app/Vendors/ProposalBoard");
-const VendorDashboard = () => import("@/pages/app/Vendors/VendorDashboard")
 const VendorSignup = () => import("@/pages/app/Vendors/Signup");
 const VendorSignin = () => import("@/pages/app/Vendors/VendorSignin.vue");
 const VendorSignedin = () => import("@/pages/app/Vendors/VendorSignedin.vue");
@@ -153,17 +152,6 @@ export default [
                     requiresAuth: true,
                     title: "Proposal Board",
                     gtm: "Proposal Board",
-                    isVendor: true
-                },
-            },
-            {
-                path: "dashboard",
-                name: "proposals",
-                component: VendorDashboard,
-                meta: {
-                    requiresAuth: true,
-                    title: "Dashboard",
-                    gtm: "Dashboard",
                     isVendor: true
                 },
             },

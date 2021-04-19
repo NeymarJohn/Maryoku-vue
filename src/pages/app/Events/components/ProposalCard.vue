@@ -14,7 +14,10 @@
         <span class="price-value">${{ proposal.cost | withComma }}</span>
         <small>For 3 hours</small>
       </div>
-      <div v-if="component.allocatedBudget < proposal.cost" class="font-size-14 color-dark-gray mb-10">
+      <div
+        class="font-size-14 color-dark-gray mb-10"
+        :class="{ invisible: component.allocatedBudget >= proposal.cost }"
+      >
         <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" class="label-icon" />
         ${{ (proposal.cost - component.allocatedBudget) | withComma }}
         more than budget

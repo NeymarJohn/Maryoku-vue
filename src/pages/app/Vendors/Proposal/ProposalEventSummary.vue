@@ -93,8 +93,13 @@
       <div class="pricing-cont">
         <div class="title">
           <h4><img :src="`${iconUrl}Asset 576.svg`" />Pricing & Details</h4>
-          <p v-if="categories.length === 1 && vendor.vendorCategory === 'venuerental'">
-            *Work only with our {{ vendor.eventCategory.fullTitle }}
+          <p v-if="vendor.vendorCategory === 'venuerental'">
+            <template v-if="vendor.notAllowedThirdParty === 1">
+              *Work only with our {{ vendor.eventCategory.fullTitle }}
+            </template>
+            <template v-if="vendor.notAllowedThirdParty === 2">
+              *We don't work with these third party venodrs: {{ mergeStringItems(vendor.notAllowed) }}
+            </template>
           </p>
         </div>
         <p>What would you like to take from our suggested services?</p>

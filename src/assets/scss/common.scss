@@ -574,6 +574,9 @@ hr {
 .cursor-pointer {
   cursor: pointer;
 }
+.invisible {
+  visibility: hidden;
+}
 
 @media only screen and (max-width: 959px) {
   .font-size-20 {

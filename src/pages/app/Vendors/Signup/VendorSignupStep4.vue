@@ -216,8 +216,16 @@
               </div>
             </div>
             <div class="not-allowed" v-if="vendor.vendorCategories[0] == 'venuerental'">
-              <h5>We don't allow these 3rd party vendor:</h5>
-              <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
+              <template v-if="vendor.notAllowedThirdParty === 2">
+                <h5>We don't allow these 3rd party vendor:</h5>
+                <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
+              </template>
+              <template v-if="vendor.notAllowedThirdParty === 0">
+                <h5>We allow all 3rd party vendors</h5>
+              </template>
+              <template v-if="vendor.notAllowedThirdParty === 1">
+                <h5>We work only for our venue rental</h5>
+              </template>
             </div>
             <div class="dont-work">
               <h5>We don't work on:</h5>
