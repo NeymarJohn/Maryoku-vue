@@ -1,25 +1,81 @@
 <template>
   <div class="proposal-service-table-item" v-if="serviceType == 'cost'">
-    <div class="proposal-service-item-wrapper align-start" v-if="!isEdit">
+    <div class="proposal-service-item-wrapper">
       <div class="item-cont">
         {{ item.requirementTitle }}
+        <!-- <span class="madatory-badge" v-if="item.isMandatory">Mandatory</span> -->
         <span class="complementary-badge" v-if="item.isComplimentary">
           Complimentary
           <md-button class="md-simple md-black remove-button edit-btn" @click="setValue('isComplimentary', false)">
             <md-icon>close</md-icon>
           </md-button>
         </span>
+        <div class="comment-area" v-if="!isEdit">{{ item.comment }}</div>
+        <textarea class="mt-20" v-else v-model="item.comment"></textarea>
       </div>
       <div class="qty-cont editor-wrapper text-center">
-        {{ item.priceUnit === "total" ? 1 : item.requirementValue | formatQty }}
+        <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue | formatQty }}</template>
+        <template v-else>
+          <input class="input-value" type="number" v-model="item.requirementValue" />
+        </template>
       </div>
       <div class="price-cont editor-wrapper text-right" :class="{ complimentary: item.isComplimentary }">
-        $ {{ item.price | withComma }}
+        <template v-if="!isEdit"> $ {{ item.price | withComma }} </template>
+        <template v-else>
+          <money
+            v-model="item.price"
+            v-bind="{
+              decimal: '.',
+              thousands: ',',
+              prefix: '$ ',
+              suffix: '',
+              precision: 2,
+              masked: false,
+            }"
+            class="input-value"
+          />
+        </template>
       </div>
       <div class="total-cont editor-wrapper text-right" :class="{ complimentary: item.isComplimentary }">
-        $ {{ item.priceUnit == "total" ? item.price : (item.price * item.requirementValue) | withComma }}
+        <template v-if="!isEdit">
+          $ {{ item.priceUnit == "total" ? item.price : (item.price * item.requirementValue) | withComma }}
+        </template>
+        <template v-else>
+          <!-- <input class="input-value" v-model="item.price" type="number" /> -->
+          <money
+            v-if="item.priceUnit == 'total'"
+            v-model="item.price"
+            v-bind="{
+              decimal: '.',
+              thousands: ',',
+              prefix: '$ ',
+              suffix: '',
+              precision: 2,
+              masked: false,
+            }"
+            class="input-value"
+          />
+          <!-- <div class="text-left">$ {{ subTotal | withComma }}</div> -->
+          <money
+            :value="subTotal"
+            v-bind="{
+              decimal: '.',
+              thousands: ',',
+              prefix: '$ ',
+              suffix: '',
+              precision: 2,
+              masked: false,
+            }"
+            readonly
+            class="input-value mr-10"
+          />
+        </template>
       </div>
       <div class="action-cont editor-wrapper">
+        <template v-if="isEdit">
+          <a class="cancel" @click="cancel()">Cancel</a>
+          <a class="save" @click="save(item)">Save</a>
+        </template>
         <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu" v-if="!isEdit">
           <md-button md-menu-trigger class="edit-btn md-simple" style="height: 40px">
             <md-icon style="font-size: 40px !important">more_vert</md-icon>
@@ -31,12 +87,8 @@
             <md-menu-item @click="removeRequirement(item)">
               <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Delete</span>
             </md-menu-item>
-            <md-menu-item @click="editingComment = true">
-              <span>
-                <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />{{
-                  item.comment ? `Edit Comment` : `Add comment`
-                }}</span
-              >
+            <md-menu-item @click="isEdit = true">
+              <span> <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />Add comment</span>
             </md-menu-item>
             <md-menu-item @click="addAlternative">
               <span>
@@ -53,73 +105,6 @@
           </md-menu-content>
         </md-menu>
       </div>
-    </div>
-    <div class="proposal-service-item-wrapper" v-else>
-      <div class="item-cont">
-        <input v-model="item.requirementTitle" />
-      </div>
-      <div class="qty-cont editor-wrapper text-center">
-        <input class="input-value" type="number" v-model="item.requirementValue" />
-      </div>
-      <div class="price-cont editor-wrapper text-right" :class="{ complimentary: item.isComplimentary }">
-        <money
-          v-model="item.price"
-          v-bind="{
-            decimal: '.',
-            thousands: ',',
-            prefix: '$ ',
-            suffix: '',
-            precision: 2,
-            masked: false,
-          }"
-          class="input-value"
-        />
-      </div>
-      <div class="total-cont editor-wrapper text-right" :class="{ complimentary: item.isComplimentary }">
-        <!-- <input class="input-value" v-model="item.price" type="number" /> -->
-        <money
-          v-if="item.priceUnit == 'total'"
-          v-model="item.price"
-          v-bind="{
-            decimal: '.',
-            thousands: ',',
-            prefix: '$ ',
-            suffix: '',
-            precision: 2,
-            masked: false,
-          }"
-          class="input-value"
-        />
-        <!-- <div class="text-left">$ {{ subTotal | withComma }}</div> -->
-        <money
-          :value="subTotal"
-          v-bind="{
-            decimal: '.',
-            thousands: ',',
-            prefix: '$ ',
-            suffix: '',
-            precision: 2,
-            masked: false,
-          }"
-          readonly
-          class="input-value mr-10"
-        />
-      </div>
-      <div class="action-cont editor-wrapper"></div>
-    </div>
-    <div class="proposal-service-item-wrapper">
-      <div class="comment-area font-regular" v-if="!editingComment">{{ item.comment }}</div>
-      <div class="text-right" v-else>
-        <textarea class="mt-20" v-model="item.comment"></textarea>
-        <div>
-          <md-button class="md-black md-simple maryoku-btn" @click="editingComment = false">Cancel</md-button>
-          <md-button class="md-red maryoku-btn" @click="save(item)">Save</md-button>
-        </div>
-      </div>
-    </div>
-    <div v-if="isEdit" class="text-right save-button mt-10">
-      <md-button class="md-black maryoku-btn md-simple cancel" @click="cancel()">Cancel</md-button>
-      <md-button class="md-red maryoku-btn save" @click="save(item)">Save</md-button>
     </div>
     <div class="planner-options" v-if="item.plannerOptions.length > 0">
       <img
@@ -202,6 +187,10 @@
             <md-icon>close</md-icon>
           </md-button>
         </span>
+
+        <br />
+        <div class="mt-20 comment-area" v-if="!isEdit">{{ item.comment }}</div>
+        <textarea class="mt-20" v-else v-model="item.comment"></textarea>
       </div>
       <div class="qty-cont editor-wrapper text-center">
         <template v-if="!isEdit">{{ item.priceUnit === "total" ? 1 : item.requirementValue | formatQty }}</template>
@@ -209,22 +198,7 @@
           <input class="input-value" type="number" v-model="item.requirementValue" />
         </template>
       </div>
-      <div class="price-cont editor-wrapper text-right">
-        <template v-if="isEdit && isAddingPrice">
-          <money
-            v-model="item.price"
-            v-bind="{
-              decimal: '.',
-              thousands: ',',
-              prefix: '$ ',
-              suffix: '',
-              precision: 2,
-              masked: false,
-            }"
-            class="input-value"
-          />
-        </template>
-      </div>
+      <div class="price-cont editor-wrapper text-right"></div>
       <div class="total-cont editor-wrapper text-right"></div>
       <div class="action-cont editor-wrapper text-right">
         <template v-if="isEdit">
@@ -246,7 +220,7 @@
             <md-menu-item @click="removeRequirement(item)">
               <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Delete</span>
             </md-menu-item>
-            <md-menu-item @click="addPriceToIncludeItem">
+            <md-menu-item @click="isEdit = true">
               <span>
                 <img
                   :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"
@@ -262,24 +236,11 @@
                 </span>
               </span>
             </md-menu-item>
-            <md-menu-item @click="editingComment = true">
-              <span>
-                <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />
-                {{ item.comment ? `Edit Comment` : `Add comment` }}
-              </span>
+            <md-menu-item @click="isEdit = true">
+              <span> <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />Add comment</span>
             </md-menu-item>
           </md-menu-content>
         </md-menu>
-      </div>
-    </div>
-    <div class="proposal-service-item-wrapper">
-      <div class="comment-area font-regular" v-if="!editingComment">{{ item.comment }}</div>
-      <div class="text-right" v-else>
-        <textarea class="mt-20" v-model="item.comment"></textarea>
-        <div>
-          <md-button class="md-black md-simple maryoku-btn" @click="editingComment = false">Cancel</md-button>
-          <md-button class="md-red maryoku-btn" @click="save(item)">Save</md-button>
-        </div>
       </div>
     </div>
   </div>
@@ -328,6 +289,10 @@
         class="input-value mr-10 text-center"
       />
       <div class="action-cont editor-wrapper">
+        <template v-if="isEdit">
+          <a class="cancel" @click="cancel()">Cancel</a>
+          <a class="save" @click="save(item)">Save</a>
+        </template>
         <md-button class="md-simple edit-btn md-dark" @click="isExpanded = !isExpanded">
           <md-icon class="color-dark" v-if="isExpanded">keyboard_arrow_down</md-icon>
           <md-icon class="color-dark" v-else>keyboard_arrow_right</md-icon>
@@ -343,30 +308,20 @@
             <md-menu-item @click="removeRequirement(item)">
               <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Delete</span>
             </md-menu-item>
-            <md-menu-item @click="editingComment = true">
-              <span>
-                <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />{{
-                  item.comment ? `Edit Comment` : `Add comment`
-                }}</span
-              >
+            <md-menu-item @click="isEdit = true">
+              <span> <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />Add comment</span>
             </md-menu-item>
           </md-menu-content>
         </md-menu>
       </div>
     </div>
-    <div class="proposal-service-item-wrapper">
-      <div class="comment-area font-regular" v-if="!editingComment">{{ item.comment }}</div>
-      <div class="text-right" v-else>
-        <textarea class="mt-20" v-model="item.comment"></textarea>
-        <div>
-          <md-button class="md-black md-simple maryoku-btn" @click="editingComment = false">Cancel</md-button>
-          <md-button class="md-red maryoku-btn" @click="save(item)">Save</md-button>
-        </div>
+    <div class="comment-section">
+      <div v-if="isEdit" class="comment">
+        <textarea v-model="item.requirementComment"></textarea>
       </div>
-    </div>
-    <div v-if="isEdit" class="text-right save-button mt-10">
-      <md-button class="md-black maryoku-btn md-simple cancel" @click="cancel()">Cancel</md-button>
-      <md-button class="md-red maryoku-btn save" @click="save(item)">Save</md-button>
+      <div class="font-regular font-size-14" v-else>
+        {{ item.requirementComment }}
+      </div>
     </div>
   </div>
 </template>
@@ -395,13 +350,11 @@ export default {
     return {
       isHover: false,
       isEdit: false,
-      editingComment: false,
       // isEdit: false,
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
       isExpanded: false,
       isAddingAlternative: false,
       item: {},
-      isAddingPrice: false,
     };
   },
   created() {
@@ -417,19 +370,10 @@ export default {
       this.$root.$emit("remove-proposal-requirement", item);
       this.$emit("remove", this.index);
     },
-    addPriceToIncludeItem(item) {
-      this.isAddingPrice = true;
-      this.isEdit = true;
-      // this.$store.dispatch("vendorProposal/addPrice");
-    },
     save(item) {
       this.isEdit = false;
-      this.editingComment = false;
       this.$root.$emit("save-proposal-requirement", { index: this.index, item });
       this.$emit("save", { index: this.index, item });
-      // if (isAddingPrice) {
-      //   this.$store.dispatch("vendorProposal/addPrice", {category})
-      // }
     },
     setValue(key, value) {
       const item = this.item;
@@ -652,7 +596,7 @@ export default {
     }
     &-row {
       display: grid;
-      grid-template-columns: 50% 10% 12% 14% 10%;
+      grid-template-columns: 40% 14% 14% 14% 14%;
       gap: 1%;
       -webkit-box-align: center;
       -ms-flex-align: center;

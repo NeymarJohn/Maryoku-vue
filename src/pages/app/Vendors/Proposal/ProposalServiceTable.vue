@@ -10,7 +10,7 @@
       <proposal-service-table-item
         v-for="(req, rIndex) in services"
         :serviceType="tableCategory"
-        :key="req.requirementTitle"
+        :key="rIndex"
         :index="rIndex"
         :defaultItem="req"
         :active="true"
@@ -109,7 +109,6 @@
       </div> -->
       <div class="editable-sub-items-footer" v-if="tableCategory === 'cost'">
         <span class="text-right">Total</span>
-        <span> </span>
         <span> </span>
         <span class="text-right"> ${{ totalPrice | withComma }} </span>
       </div>
@@ -267,9 +266,8 @@ export default {
 
       if (this.tableCategory === "included" && item.price > 0) {
         //if item in included has price, then move to cost table
-        // this.services.splice(serviceIndex, 1);
-        // this.$store.state.vendorProposal.proposalCostServices[this.category].push(item);
-        this.$store.dispatch("vendorProposal/addPrice", { category: this.category, selectedItem: item });
+        this.services.splice(serviceIndex, 1);
+        this.$store.state.vendorProposal.proposalCostServices[this.category].push(item);
       } else {
         this.services[serviceIndex] = item;
         this.services = Object.assign([], this.services);
@@ -431,10 +429,9 @@ export default {
     services: {
       get: function () {
         if (this.tableCategory === "cost") return this.$store.state.vendorProposal.proposalCostServices[this.category];
-        else if (this.tableCategory === "included") {
-          console.log("object", this.$store.state.vendorProposal.proposalIncludedServices[this.category]);
+        else if (this.tableCategory === "included")
           return this.$store.state.vendorProposal.proposalIncludedServices[this.category];
-        } else if (this.tableCategory === "extra")
+        else if (this.tableCategory === "extra")
           return this.$store.state.vendorProposal.proposalExtraServices[this.category];
       },
       set: function (newServices) {
@@ -668,9 +665,7 @@ export default {
       border-top: 1px solid #d5d5d5;
       border-bottom: none;
       display: grid;
-      // grid-template-columns: 55% 15% 15%;
-      grid-template-columns: 50% 10% 12% 14% 10%;
-      gap: 1%;
+      grid-template-columns: 55% 15% 15%;
       span {
         font-size: 20px;
         font-weight: 800;

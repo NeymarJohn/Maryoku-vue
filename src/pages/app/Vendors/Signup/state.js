@@ -24,7 +24,6 @@ const state = {
         noPolicies: [],
         selectedWeekdays: [],
         recommendations: [],
-        notAllowedThirdParty: 0
     },
     vendor_categories: [],
     allProperties: [],

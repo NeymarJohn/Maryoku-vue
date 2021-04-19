@@ -92,23 +92,23 @@
               </div>
             </div>
             <div class="checks-cont">
-              <div class="check-item" @click="setDontAllowThirdParty(0)">
-                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="currentVendorData.notAllowedThirdParty == 0" />
+              <div class="check-item" @click="allowThirdVendor = 0">
+                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="allowThirdVendor == 0" />
                 <span class="unchecked" v-else></span>
                 <span>Yes</span>
               </div>
-              <div class="check-item" @click="setDontAllowThirdParty(1)">
-                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="currentVendorData.notAllowedThirdParty == 1" />
+              <div class="check-item" @click="allowThirdVendor = 1">
+                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="allowThirdVendor == 1" />
                 <span class="unchecked" v-else></span>
                 <span>No</span>
               </div>
-              <div class="check-item" @click="setDontAllowThirdParty(2)">
-                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="currentVendorData.notAllowedThirdParty == 2" />
+              <div class="check-item" @click="allowThirdVendor = 2">
+                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="allowThirdVendor == 2" />
                 <span class="unchecked" v-else></span>
                 <span>Some</span>
               </div>
             </div>
-            <div class="not-allow-cont" v-if="currentVendorData.notAllowedThirdParty == 2">
+            <div class="not-allow-cont" v-if="allowThirdVendor == 2">
               <h4>Which of the vendors do you not allow to work in your venue?</h4>
               <div class="na-check-list">
                 <ul>
@@ -116,17 +116,13 @@
                     <img
                       :src="`${iconUrl}Group 5489 (4).svg`"
                       @click="updateNa(n)"
-                      v-if="vendor.notAllowed && vendor.notAllowed.filter((nt) => nt.value == n.value).length > 0"
+                      v-if="vendor.notAllowed.filter((nt) => nt.value == n.value).length > 0"
                     />
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else @click="updateNa(n)" />
                     <span @click="updateNa(n)">{{ n.name }}</span>
                     <div
                       style="margin-top: 10px"
-                      v-if="
-                        vendor.notAllowed &&
-                        vendor.notAllowed.filter((nt) => nt.value == 'Other').length > 0 &&
-                        n.value == 'Other'
-                      "
+                      v-if="vendor.notAllowed.filter((nt) => nt.value == 'Other').length > 0 && n.value == 'Other'"
                     >
                       <input type="text" placeholder="Type vendor category..." />
                     </div>
@@ -509,11 +505,7 @@ export default {
 
       this.$root.$emit("update-vendor-value", "exDonts", this.vendor.exDonts);
     },
-    setDontAllowThirdParty(status) {
-      this.$root.$emit("update-vendor-value", "notAllowedThirdParty", status);
-    },
     updateNa(item) {
-      if (!this.notAllowed) this.notAllowed = [];
       if (this.notAllowed.includes(item)) {
         this.notAllowed = this.notAllowed.filter((n) => n != item);
       } else {
@@ -834,9 +826,6 @@ export default {
   computed: {
     additionalRules() {
       return this.$store.state.vendorSignup.vendor.additionalRules;
-    },
-    currentVendorData() {
-      return this.$store.state.vendorSignup.vendor;
     },
   },
   filters: {},
