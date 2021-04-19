@@ -41,6 +41,35 @@ export default {
     ProposalRequirements,
   },
   created() {
+    let taxRate = 0;
+    let discountRate = 0;
+    if (this.vendor.pricingPolicies) {
+      this.vendor.pricingPolicies.forEach((item) => {
+        if (item.name === "Tax rate" && item.value) {
+          taxRate = Number(item.value);
+        }
+        if (
+          item.name === "Discount for large quantities" &&
+          Number(this.event.numberOfParticipants) >= Number(item.attendees) &&
+          item.attendees &&
+          item.value
+        ) {
+          discountRate = Number(item.value);
+        }
+        if (item.name === "Discounts" && item.value) {
+          discountRate = Number(item.value);
+        }
+        if (
+          item.name === "Large group discounts" &&
+          Number(this.event.numberOfParticipants) >= Number(item.attendees) &&
+          item.attendees &&
+          item.value
+        ) {
+          discountRate = Number(item.value);
+        }
+      });
+    }
+
     if (!this.$store.state.vendorProposal.initialized) {
       let includedVendorServices = [];
       let costVendorServices = [];
@@ -121,8 +150,7 @@ export default {
 
       const extraServices = [];
       const hiddenValues = ["Discount for large quantities", "Tax rate", "Suggested Gratuity"];
-      let taxRate = 0;
-      let discountRate = 0;
+
       if (this.vendor.pricingPolicies) {
         this.vendor.pricingPolicies.forEach((item) => {
           if (item.isExtraService || !item.hideOnProposal) {
@@ -147,28 +175,6 @@ export default {
               isMandatory: true,
             });
           }
-          if (item.name === "Tax rate" && item.value) {
-            taxRate = Number(item.value);
-          }
-          if (
-            item.name === "Discount for large quantities" &&
-            Number(this.event.numberOfParticipants) >= Number(item.attendees) &&
-            item.attendees &&
-            item.value
-          ) {
-            discountRate = Number(item.value);
-          }
-          if (item.name === "Discounts" && item.value) {
-            discountRate = Number(item.value);
-          }
-          if (
-            item.name === "Large group discounts" &&
-            Number(this.event.numberOfParticipants) >= Number(item.attendees) &&
-            item.attendees &&
-            item.value
-          ) {
-            discountRate = Number(item.value);
-          }
         });
       }
       this.$store.commit("vendorProposal/setValue", { key: "vendorCostServices", value: costVendorServices });
@@ -191,6 +197,9 @@ export default {
         services: extraServices,
       });
       this.$store.commit("vendorProposal/setValue", { key: "initialized", value: true });
+    }
+
+    if (Object.keys(this.$store.state.vendorProposal.taxes).length === 0) {
       this.$store.commit("vendorProposal/setValue", {
         key: "taxes",
         value: { [this.vendor.eventCategory.key]: { percentage: taxRate, price: 0 } },
@@ -199,6 +208,8 @@ export default {
         key: "taxes",
         value: { total: { percentage: taxRate, price: 0 } },
       });
+    }
+    if (Object.keys(this.$store.state.vendorProposal.discounts).length === 0) {
       this.$store.commit("vendorProposal/setDiscount", {
         category: this.vendor.eventCategory.key,
         discount: { percentage: discountRate, price: 0 },
