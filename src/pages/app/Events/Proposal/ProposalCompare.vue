@@ -125,17 +125,6 @@
         </div>
       </div>
     </div>
-    <div class="proposal-footer white-card d-flex justify-content-between">
-      <div>
-        <md-button @click="back" class="md-simple maryoku-btn md-black">
-          <md-icon>arrow_back</md-icon>
-          Back
-        </md-button>
-        <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
-          <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
-        </md-button>
-      </div>
-    </div>
   </div>
 </template>
 <script>
@@ -257,12 +246,6 @@ export default {
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
     },
-    scrollToTop() {
-      window.scrollTo(0, 0);
-    },
-    back() {
-      this.$router.go(-1);
-    },
   },
   computed: {
     categoryList() {
@@ -309,10 +292,6 @@ export default {
       padding: 30px 50px;
       font-size: 20px;
     }
-  }
-  .proposal-footer {
-    margin-top: 20px;
-    padding: 20px;
   }
 }
 </style>

@@ -336,8 +336,7 @@ const actions = {
         bundleDiscount: state.bundleDiscount,
         attachments: state.attachments,
         status,
-        tenantId: state.tenantId,
-        suggestionDate: state.suggestionDate
+        tenantId: state.tenantId
       });
       proposal
         .save()
