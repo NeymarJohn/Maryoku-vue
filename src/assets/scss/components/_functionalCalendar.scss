@@ -109,32 +109,3 @@ span.vfc-span-day.vfc-hide {
 .vfc-week .vfc-day span.vfc-span-day.vfc-disabled {
   color: rgba(0, 0, 0, 0.2) !important;
 }
-
-.vendor-dashboard-calendar{
-   display: flex;
-   justify-content: center;
-  .vfc-main-container{
-
-    .vfc-separately-navigation-buttons div{
-        color: $vendorColor !important;
-        border-color: $vendorColor !important;
-
-        &.vfc-cursor-pointer{
-            margin: -20px 30px 20px 30px !important;
-        }
-    }
-  }
-  .vfc-top-date {
-      margin-top: 18px!important;
-      a{
-          color: black !important;
-          font-weight: 700!important;
-      }
-  }
-
-  span.vfc-span-day{
-      width: 50px!important;
-      height: 50px !important;
-  }
-}
-

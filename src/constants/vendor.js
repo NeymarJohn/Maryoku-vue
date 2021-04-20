@@ -753,6 +753,7 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
                 xIncluded: true,
+                hideOnAutoComplete: true
               },
             ],
           },
@@ -2084,11 +2085,11 @@ export const businessCategories = [
           {
             name: " ",
             items: [
-              {
-                name: "taxi",
-                type: Boolean,
-                value: false,
-              },
+              // {
+              //   name: "taxi",
+              //   type: Boolean,
+              //   value: false,
+              // },
               {
                 name: "airport pickup/drop off",
                 type: Boolean,
@@ -2140,13 +2141,13 @@ export const businessCategories = [
                 staff: null,
                 quest: null,
               },
-              {
-                name: "certified safe drive",
-                type: Boolean,
-                value: false,
-                staff: null,
-                quest: null,
-              },
+              // {
+              //   name: "certified safe drive",
+              //   type: Boolean,
+              //   value: false,
+              //   staff: null,
+              //   quest: null,
+              // },
             ],
           },
         ],
@@ -2352,11 +2353,11 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
               },
-              {
-                name: "vocalist",
-                type: Boolean,
-                value: false,
-              },
+              // {
+              //   name: "vocalist",
+              //   type: Boolean,
+              //   value: false,
+              // },
               {
                 name: "orchestra",
                 type: Boolean,
@@ -2904,11 +2905,11 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
               },
-              {
-                name: "programmer",
-                type: Boolean,
-                value: false,
-              },
+              // {
+              //   name: "programmer",
+              //   type: Boolean,
+              //   value: false,
+              // },
             ],
           },
           {
@@ -3160,12 +3161,12 @@ export const businessCategories = [
                 value: false,
               },
               {
-                name: "fitness",
+                name: "fitness items",
                 type: Boolean,
                 value: false,
               },
               {
-                name: "office",
+                name: "office items",
                 type: Boolean,
                 value: false,
               },
@@ -3175,17 +3176,12 @@ export const businessCategories = [
                 value: false,
               },
               {
-                name: "outdoor/leisure",
+                name: "outdoor & leisure items",
                 type: Boolean,
                 value: false,
               },
               {
                 name: "stationary",
-                type: Boolean,
-                value: false,
-              },
-              {
-                name: "wellness",
                 type: Boolean,
                 value: false,
               },
@@ -3210,7 +3206,7 @@ export const businessCategories = [
             name: " ",
             items: [
               {
-                name: "ability to handle rushed orders",
+                name: "rushed orders",
                 type: Boolean,
                 value: false,
               },
@@ -3220,7 +3216,7 @@ export const businessCategories = [
                 value: false,
               },
               {
-                name: "ability to handle special requests",
+                name: "special requests",
                 type: Boolean,
                 value: false,
               },

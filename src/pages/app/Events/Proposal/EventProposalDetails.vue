@@ -20,7 +20,12 @@
             <div class="section-header d-flex justify-content-start">
               <h3>Event Information & Details</h3>
               <div class="alert alert-danger" v-if="vendorProposal.suggestionDate">
-                This proposal is 2 days before your original date
+                <span v-if="getDiffDaysFromOriginal() < 0" class="whitspace-nowrap">
+                  This proposal is {{ -getDiffDaysFromOriginal() }}days before your original date
+                </span>
+                <span v-else class="whitspace-nowrap">
+                  This proposal is {{ getDiffDaysFromOriginal() }}days later your original date
+                </span>
               </div>
             </div>
             <ul class="event-details">
@@ -32,8 +37,12 @@
               </li>
               <li class="event-details__item">
                 <label>Date</label>
-                <div class="info-text">
+                <div class="info-text" v-if="!vendorProposal.suggestionDate">
                   {{ eventData.eventStartMillis | formatDate }}
+                </div>
+                <div v-else>
+                  {{ eventDate() }}
+                  <!-- {{ new Date(vendorProposal.suggestionDate[0].date).getTime() | formatTime }} -->
                 </div>
               </li>
               <li class="event-details__item">
@@ -158,17 +167,18 @@
           Pricing & Details
           <span class="font-regular font-size-16">*We work only with our catering</span>
         </div>
-        <div class="mt-20">What would you like to take from our suggested services?</div>
+        <div class="mt-20 mb-10">What would you like to take from our suggested services?</div>
         <event-proposal-price
           :proposalData="vendorProposal"
           :serviceCategory="vendorProposal.vendor.vendorCategory"
           :key="`${vendorProposal.vendor.vendorCategory}-section`"
+          @changeAddedServices="updateAddedServices"
         ></event-proposal-price>
         <event-proposal-price
           v-for="service in this.vendorProposal.additionalServices"
           :proposalData="vendorProposal"
           :serviceCategory="service"
-          :key="`${service}-section`"
+          :key="`secondary-${service}-section`"
         ></event-proposal-price>
         <div
           class="bundle-section d-flex justify-content-between align-center"
@@ -179,14 +189,14 @@
             <span>{{ vendorProposal.bundleDiscount.percentage }}%</span>
             <span>{{ getBundleServices(vendorProposal.bundleDiscount.services) }}</span>
           </div>
-          <div class="font-size-30 font-bold">-${{ vendorProposal.bundleDiscount.price | withComma }}</div>
+          <div class="font-size-30 font-bold">-${{ bundledDiscountPrice | withComma }}</div>
         </div>
         <div class="total-section d-flex justify-content-between mt-15">
           <div>
-            <span class="font-bold-extra font-size-22">Total</span>
+            <span class="font-bold-extra font-size-30">Total</span>
           </div>
           <div>
-            <span class="font-bold-extra font-size-22">${{ vendorProposal.cost | withComma }}</span>
+            <span class="font-bold-extra font-size-30">${{ discounedAndTaxedPrice | withComma }}</span>
           </div>
         </div>
       </div>
@@ -259,11 +269,20 @@
 
           <cancellation-policy></cancellation-policy>
 
-          <div class="additional-info">
+          <!-- <div class="additional-info">
             <div class="additional-info__title">Additional</div>
             <div class="additional-info__content">
               {{ vendorProposal.candellationPolicy }}
             </div>
+          </div> -->
+          <div class="side-label">
+            <div class="label-value">Act of God</div>
+          </div>
+          <div class="rules">
+            <span class="font-bold"> {{ vendorProposal.vendor.companyName }}</span>
+            is not liable for any acts of God, dangerous incident to the sea, fires, acts of government or other
+            authorities, wars, acts of terrorism, civil unrest, strikes, riots, thefts, pilferage, epidemics,
+            quarantines, other diseases, climatic aberrations, or from any other cause beyond company’s control.
           </div>
 
           <div class="signature-section">
@@ -411,7 +430,7 @@ export default {
       expand: true,
       extraServices: [],
       showAboutUs: false,
-      addedServices: [],
+      addedServices: {},
       socialMediaBlocks,
     };
   },
@@ -444,29 +463,6 @@ export default {
     getCategory(key) {
       return this.categories.find((item) => item.key === key);
     },
-    addExtraService(extraService) {
-      const itemIndex = this.extraServices.findIndex((item) => item.requirementTitle === extraService.requirementTitle);
-      console.log(itemIndex);
-      if (itemIndex >= 0) {
-        this.$set(this.extraServices[itemIndex], "added", true);
-        this.addedServices.push(extraService);
-      }
-      this.extraServices = [...this.extraServices];
-      this.$forceUpdate();
-    },
-    removeService(extraService) {
-      const itemIndex = this.extraServices.findIndex((item) => item.requirementTitle === extraService.requirementTitle);
-      const addedIndex = this.addedServices.findIndex(
-        (item) => item.requirementTitle === extraService.requirementTitle,
-      );
-      console.log(itemIndex);
-      if (itemIndex >= 0) {
-        this.$set(this.extraServices[itemIndex], "added", false);
-        this.addedServices.splice(addedIndex, 1);
-      }
-      this.extraServices = [...this.extraServices];
-      this.$forceUpdate();
-    },
     back() {
       this.$router.go(-1);
     },
@@ -476,6 +472,31 @@ export default {
     getEvent() {},
     scrollToTop() {
       window.scrollTo(0, 0);
+    },
+    eventDate() {
+      const suggestionDate = this.vendorProposal.suggestionDate;
+      if (!this.eventData) return "-";
+
+      let startDate = new Date(this.eventData.eventStartMillis);
+      let endDate = new Date(this.eventData.eventEndMillis);
+      if (suggestionDate && suggestionDate.length > 0) {
+        return `${moment(suggestionDate[0].date, "DD/MM/YYYY").format("MMM D, YYYY")} - ${moment(
+          suggestionDate[suggestionDate.length - 1].date,
+          "DD/MM/YYYY",
+        ).format("MMM D, YYYY")}`;
+      }
+      return `${moment(startDate).format("MMM D, YYYY")} - ${moment(endDate).format("MMM D, YYYY")}`;
+    },
+    getDiffDaysFromOriginal() {
+      const suggestionDate = this.vendorProposal.suggestionDate;
+      if (!this.eventData) return "-";
+
+      let orignStartDate = moment(new Date(this.eventData.eventStartMillis));
+      if (suggestionDate && suggestionDate.length > 0) {
+        let suggestedDate = moment(suggestionDate[0].date, "DD/MM/YYYY");
+        return suggestedDate.diff(orignStartDate, "days");
+      }
+      return 0;
     },
     getImages() {
       let vm = this;
@@ -527,6 +548,10 @@ export default {
 
       return !isBlank;
     },
+    updateAddedServices({ category, services }) {
+      this.addedServices[category] = services;
+      this.addedServices = { ...this.addedServices };
+    },
   },
   computed: {
     ...mapState("event", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode"]),
@@ -545,6 +570,15 @@ export default {
         return this.vendorProposal.vendor.vendorImages[0];
       return "";
     },
+    tax() {
+      if (!this.vendorProposal.taxes) return { percentage: 0, price: 0 };
+      let tax = this.vendorProposal.taxes["total"];
+      if (!tax) {
+        tax = { price: 0, percentage: 0 };
+      }
+      console.log("tax", tax);
+      return tax;
+    },
     discount() {
       if (!this.vendorProposal.discounts) return { percentage: 0, price: 0 };
       let discount = this.vendorProposal.discounts["total"];
@@ -554,14 +588,27 @@ export default {
       console.log("discount", discount);
       return discount;
     },
-    tax() {
-      if (!this.vendorProposal.taxes) return { percentage: 0, price: 0 };
-      let tax = this.vendorProposal.taxes["total"];
-      if (!tax) {
-        tax = { price: 0, percentage: 0 };
-      }
-      tax.price = Math.round((this.priceOfCostservices * tax.percentage) / 100);
-      return tax;
+    bundledDiscountPrice() {
+      let bundledServicePrice = 0;
+      this.vendorProposal.bundleDiscount.services.forEach((serviceCategory) => {
+        const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
+          if (service.isComplimentary) {
+            return 0;
+          }
+          return s + service.requirementValue * service.price;
+        }, 0);
+        bundledServicePrice += sumOfService;
+        if (this.addedServices[serviceCategory]) {
+          const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
+            if (service.isComplimentary) {
+              return 0;
+            }
+            return s + service.requirementValue * service.price;
+          }, 0);
+          bundledServicePrice += sumOfService;
+        }
+      });
+      return (bundledServicePrice * this.vendorProposal.bundleDiscount.percentage) / 100;
     },
     attachments() {
       if (this.vendorProposal.attachments && this.vendorProposal.attachments.length > 0)
@@ -569,32 +616,6 @@ export default {
       if (this.vendorProposal.vendor.attachments && this.vendorProposal.vendor.attachments.length > 0)
         return this.vendorProposal.vendor.attachments;
       return [];
-    },
-    costServices() {
-      return this.vendorProposal.costServices[this.vendorProposal.vendor.eventCategory.key];
-    },
-    includedServices() {
-      return this.vendorProposal.includedServices[this.vendorProposal.vendor.eventCategory.key];
-    },
-
-    priceOfCostservices() {
-      if (this.costServices.length === 0) return 0;
-      return (
-        this.costServices.reduce((s, item) => {
-          return s + item.requirementValue * item.price;
-        }, 0) +
-        this.addedServices.reduce((s, item) => {
-          return s + item.requirementValue * item.price;
-        }, 0)
-      );
-    },
-    totalPrice() {
-      return this.priceOfCostservices - this.discount.price + this.tax.price;
-    },
-    extraServicePrice() {
-      return this.extraServices.reduce((s, item) => {
-        return s + item.requirementValue * item.price;
-      }, 0);
     },
     validPolicy() {
       if (this.vendorProposal.vendor.policies)
@@ -608,6 +629,37 @@ export default {
     },
     categories() {
       return this.$store.state.common.serviceCategories;
+    },
+    totalPriceOfProposal() {
+      let totalPrice = 0;
+      Object.keys(this.vendorProposal.costServices).forEach((serviceCategory) => {
+        const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
+          if (service.isComplimentary) {
+            return 0;
+          }
+          return s + service.requirementValue * service.price;
+        }, 0);
+        console.log("sumOFserive", sumOfService);
+        totalPrice += sumOfService;
+      });
+
+      console.log(this.addedServices);
+      // added service item price
+      Object.keys(this.addedServices).forEach((serviceCategory) => {
+        const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
+          return s + service.requirementValue * service.price;
+        }, 0);
+        console.log("sumOFserive", sumOfService);
+        totalPrice += sumOfService;
+      });
+      return totalPrice;
+    },
+    discounedAndTaxedPrice() {
+      const discounted =
+        this.totalPriceOfProposal -
+        (this.totalPriceOfProposal * this.discount.percentage) / 100 -
+        this.bundledDiscountPrice;
+      return discounted + (discounted * this.tax.percentage) / 100;
     },
   },
   filters: {
@@ -1005,7 +1057,7 @@ export default {
       }
 
       .bundle-section {
-        padding: 46px 50px 48px 60px;
+        padding: 40px 60px;
         background-color: #ffedb7;
         box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
         border-radius: 3px;
@@ -1178,7 +1230,7 @@ export default {
           }
         }
         .item {
-          max-height: 200px;
+          height: 200px;
           object-fit: cover;
           border-radius: 5px;
           overflow: hidden;
