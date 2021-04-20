@@ -6,7 +6,7 @@
       </div>
       <div class="item-qty text-center">
         <input v-model="item.requirementValue" v-if="!item.added" />
-        <template v-else>{{ item.requirementValue }}</template>
+        <span v-else class="pb-15 pt-15 d-inline-block">{{ item.requirementValue }}</span>
       </div>
       <div class="item-price text-center">
         ${{ item.price }}
@@ -14,10 +14,8 @@
       </div>
       <div class="item-added text-center">
         <template v-if="item.added">
-          <div class="added-label">
-            <img :src="`${$iconURL}budget+screen/png/Asset+31.png`" width="20" />
-            Added
-          </div>
+          <img :src="`${$iconURL}budget+screen/png/Asset+31.png`" width="20" />
+          Added
         </template>
         <md-button v-else class="md-red md-sm normal-btn" @click="addService">
           <md-icon class="mr-10">add_circle_outline</md-icon>Add

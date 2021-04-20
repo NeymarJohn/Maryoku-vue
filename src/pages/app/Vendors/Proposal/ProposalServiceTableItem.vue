@@ -196,9 +196,9 @@
       <div class="item-cont">
         {{ item.requirementTitle }}
         <!-- <span class="madatory-badge" v-if="item.isMandatory">Mandatory</span> -->
-        <span class="complementary-badge" v-if="item.isComplementary">
+        <span class="complementary-badge" v-if="item.isComplimentary">
           Complementary
-          <md-button class="md-simple md-black remove-button edit-btn" @click="setValue('isComplementary', false)">
+          <md-button class="md-simple md-black remove-button edit-btn" @click="setValue('isComplimentary', false)">
             <md-icon>close</md-icon>
           </md-button>
         </span>

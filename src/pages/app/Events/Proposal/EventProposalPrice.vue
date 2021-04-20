@@ -13,7 +13,7 @@
           <div class="element-price">${{ totalPrice | withComma }}</div>
           <div class="discount-details" v-if="discount.percentage">
             ({{ discount.percentage }}% off)
-            <span>${{ totalPrice | withComma }}</span>
+            <span>${{ priceBeforeDiscount | withComma }}</span>
           </div>
         </div>
         <div class="view-element">
@@ -44,10 +44,15 @@
           </thead>
           <tbody>
             <tr v-for="(service, index) in costServices" :key="`cost-service-${index}`">
-              <td>{{ service.requirementTitle }}</td>
+              <td>
+                {{ service.requirementTitle
+                }}<span class="complimentary-tag" v-if="service.isComplimentary">Complimentary</span>
+              </td>
               <td>{{ service.requirementValue }}</td>
-              <td>${{ service.price | withComma }}</td>
-              <td>${{ (service.requirementValue * service.price) | withComma }}</td>
+              <td :class="{ crosslinedText: service.isComplimentary }">${{ service.price | withComma }}</td>
+              <td :class="{ crosslinedText: service.isComplimentary }">
+                ${{ (service.requirementValue * service.price) | withComma }}
+              </td>
               <td class="element-actions"></td>
             </tr>
             <tr v-for="(service, index) in addedServices" :key="`added-service-${index}`">
@@ -72,7 +77,7 @@
                 <span class="taxes-title">Discount</span>
                 <span class="taxes-percentage">{{ discount.percentage }}%</span>
               </td>
-              <td>-${{ discount.price }}</td>
+              <td>-${{ discount.price | withComma }}</td>
               <td class="element-actions">
                 <md-button class="md-simple md-just-icon">
                   <img :src="`${$iconURL}Submit%20Proposal/Asset 311.svg`" />
@@ -84,7 +89,7 @@
                 <span class="taxes-title">Taxes</span>
                 <span class="taxes-percentage">{{ tax.percentage }}%</span>
               </td>
-              <td>${{ tax.price }}</td>
+              <td>${{ tax.price | withComma }}</td>
               <td class="element-actions">
                 <md-button class="md-simple md-just-icon">
                   <img :src="`${$iconURL}Submit%20Proposal/Asset 311.svg`" />
@@ -106,7 +111,7 @@
                 <div class="element-price">${{ totalPrice | withComma }}</div>
                 <div class="discount-details" v-if="discount.percentage">
                   ({{ discount.percentage }}% off)
-                  <span>${{ totalPrice | withComma }}</span>
+                  <span>${{ priceBeforeDiscount | withComma }}</span>
                 </div>
               </td>
               <td class="element-actions">
@@ -202,7 +207,7 @@ export default {
     };
   },
   created() {
-    this.extraServices = this.vendorProposal.extraServices[this.serviceCategory];
+    this.extraServices = this.proposalData.extraServices[this.serviceCategory].filter((item) => !item.hideOnProposal);
   },
   methods: {
     addExtraService(extraService) {
@@ -213,6 +218,21 @@ export default {
         this.addedServices.push(extraService);
       }
       this.extraServices = [...this.extraServices];
+      this.$emit("changeAddedServices", { category: this.serviceCategory, services: this.addedServices });
+      this.$forceUpdate();
+    },
+    removeService(extraService) {
+      const itemIndex = this.extraServices.findIndex((item) => item.requirementTitle === extraService.requirementTitle);
+      const addedIndex = this.addedServices.findIndex(
+        (item) => item.requirementTitle === extraService.requirementTitle,
+      );
+      console.log(itemIndex);
+      if (itemIndex >= 0) {
+        this.$set(this.extraServices[itemIndex], "added", false);
+        this.addedServices.splice(addedIndex, 1);
+      }
+      this.extraServices = [...this.extraServices];
+      this.$emit("changeAddedServices", { category: this.serviceCategory, services: this.addedServices });
       this.$forceUpdate();
     },
   },
@@ -235,20 +255,23 @@ export default {
     },
     discount() {
       if (!this.proposalData.discounts) return { percentage: 0, price: 0 };
-      let discount = this.proposalData.discounts["total"];
+      let discount = { ...this.proposalData.discounts["total"] };
       if (!discount) {
         discount = { price: 0, percentage: 0 };
       }
-      console.log("discount", discount);
+      discount.price = (this.priceOfCostservices * discount.percentage) / 100;
       return discount;
     },
     tax() {
       if (!this.proposalData.taxes) return { percentage: 0, price: 0 };
-      let tax = this.proposalData.taxes["total"];
+      let tax = { ...this.proposalData.taxes["total"] };
       if (!tax) {
         tax = { price: 0, percentage: 0 };
       }
-      tax.price = Math.round((this.priceOfCostservices * tax.percentage) / 100);
+      console.log(this.serviceCategory, this.priceOfCostservices);
+      console.log(this.serviceCategory, this.discount.price);
+      tax.price = Math.round(((this.priceOfCostservices - this.discount.price) * tax.percentage) / 100);
+      console.log(this.serviceCategory, tax);
       return tax;
     },
     costServices() {
@@ -262,12 +285,16 @@ export default {
       if (!this.costServices || this.costServices.length === 0) return 0;
       return (
         this.costServices.reduce((s, item) => {
-          return s + item.requirementValue * item.price;
+          if (!item.isComplimentary) return s + item.requirementValue * item.price;
+          else return 0;
         }, 0) +
         this.addedServices.reduce((s, item) => {
           return s + item.requirementValue * item.price;
         }, 0)
       );
+    },
+    priceBeforeDiscount() {
+      return this.priceOfCostservices - (this.priceOfCostservices * this.tax.percentage) / 100;
     },
     totalPrice() {
       return this.priceOfCostservices - this.discount.price + this.tax.price;
@@ -304,6 +331,18 @@ export default {
   background-color: #ffffff;
   margin-bottom: 1em;
 
+  .complimentary-tag {
+    color: #ba8d05;
+    font-weight: normal;
+    font-size: 11px;
+    display: inline-block;
+    border: solid 1px #ba8d05;
+    padding: 4px 8px;
+    border-radius: 30px;
+    margin-left: 0.5em;
+    line-height: 1em;
+    position: relative;
+  }
   &.bundle-offer {
     background-color: #ffedb7;
 
