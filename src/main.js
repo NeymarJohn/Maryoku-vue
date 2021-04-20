@@ -305,7 +305,7 @@ Vue.filter("withComma", function (value) {
   if (typeof value == 'string') {
     value = Number(value)
   }
-  return value ? value.toLocaleString(undefined, { minimumFractionDigits: 2 }) : 0;
+  return value ? value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 0;
 
 });
 Vue.filter("formatQty", function (value) {
