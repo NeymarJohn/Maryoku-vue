@@ -20,7 +20,12 @@
             <div class="section-header d-flex justify-content-start">
               <h3>Event Information & Details</h3>
               <div class="alert alert-danger" v-if="vendorProposal.suggestionDate">
-                This proposal is 2 days before your original date
+                <span v-if="getDiffDaysFromOriginal() < 0" class="whitspace-nowrap">
+                  This proposal is {{ -getDiffDaysFromOriginal() }}days before your original date
+                </span>
+                <span v-else class="whitspace-nowrap">
+                  This proposal is {{ getDiffDaysFromOriginal() }}days later your original date
+                </span>
               </div>
             </div>
             <ul class="event-details">
@@ -32,8 +37,12 @@
               </li>
               <li class="event-details__item">
                 <label>Date</label>
-                <div class="info-text">
+                <div class="info-text" v-if="!vendorProposal.suggestionDate">
                   {{ eventData.eventStartMillis | formatDate }}
+                </div>
+                <div v-else>
+                  {{ eventDate() }}
+                  <!-- {{ new Date(vendorProposal.suggestionDate[0].date).getTime() | formatTime }} -->
                 </div>
               </li>
               <li class="event-details__item">
@@ -463,6 +472,31 @@ export default {
     getEvent() {},
     scrollToTop() {
       window.scrollTo(0, 0);
+    },
+    eventDate() {
+      const suggestionDate = this.vendorProposal.suggestionDate;
+      if (!this.eventData) return "-";
+
+      let startDate = new Date(this.eventData.eventStartMillis);
+      let endDate = new Date(this.eventData.eventEndMillis);
+      if (suggestionDate && suggestionDate.length > 0) {
+        return `${moment(suggestionDate[0].date, "DD/MM/YYYY").format("MMM D, YYYY")} - ${moment(
+          suggestionDate[suggestionDate.length - 1].date,
+          "DD/MM/YYYY",
+        ).format("MMM D, YYYY")}`;
+      }
+      return `${moment(startDate).format("MMM D, YYYY")} - ${moment(endDate).format("MMM D, YYYY")}`;
+    },
+    getDiffDaysFromOriginal() {
+      const suggestionDate = this.vendorProposal.suggestionDate;
+      if (!this.eventData) return "-";
+
+      let orignStartDate = moment(new Date(this.eventData.eventStartMillis));
+      if (suggestionDate && suggestionDate.length > 0) {
+        let suggestedDate = moment(suggestionDate[0].date, "DD/MM/YYYY");
+        return suggestedDate.diff(orignStartDate, "days");
+      }
+      return 0;
     },
     getImages() {
       let vm = this;
