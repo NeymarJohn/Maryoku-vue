@@ -4,20 +4,20 @@ export const timelineBlockItems = [
             id: 1,
             buildingBlockType: "setup",
             eventCategory: [
-                'venuerental'
-                // 'equipmentrentals',
-                // 'securityservices',
-                // 'giveaways',
-                // 'videographyandphotography',
-                // 'advertising-promotion',
-                // 'audiovisualstagingservices',
-                // 'signageprinting',
-                // 'corporatesocialresponsibility',
-                // 'meetingorganizationfees',
-                // 'technologyservices',
-                // 'decor',
-                // 'shipping',
-                // 'administration'
+                'venuerental',
+                'equipmentrentals',
+                'securityservices',
+                'giveaways',
+                'videographyandphotography',
+                'advertising-promotion',
+                'audiovisualstagingservices',
+                'signageprinting',
+                'corporatesocialresponsibility',
+                'meetingorganizationfees',
+                'technologyservices',
+                'decor',
+                'shipping',
+                'administration'
             ],
             icon: "Setup",
             color: "#ffc001",
@@ -51,7 +51,7 @@ export const timelineBlockItems = [
             buildingBlockType: "Speaker / Keynote",
             icon: "speaker",
             color: "#641956",
-            eventCategory: ['entertainment'],
+            eventCategory: ['venuerental'],
         },
 
         {
