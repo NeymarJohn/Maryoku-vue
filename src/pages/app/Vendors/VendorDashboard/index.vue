@@ -86,7 +86,7 @@
                     <div class="md-layout-item md-size-50">
                         <FunctionalCalendar class="vendor-dashboard-calendar"></FunctionalCalendar>
                         <div class="d-flex align-center">
-                            <md-switch class="md-switch-vendor" v-model="backOutDays">Backout Days</md-switch>
+                            <md-switch class="md-switch-vendor" v-model="backOutDays" style="margin-left: 20px">Backout Days</md-switch>
                             <md-button class="md-simple ml-auto md-vendor">Sync With Calendar</md-button>
                         </div>
                     </div>
