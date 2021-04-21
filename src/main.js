@@ -47,6 +47,7 @@ import authService from "@/services/auth.service";
 
 import "./assets/scss/main.scss";
 import dateUtil from "./utils/date.util";
+import stringUtil from "./utils/string.util"
 import VueYoutube from "vue-youtube";
 
 import helper from "@/utils/helperFunction";
@@ -353,6 +354,11 @@ Object.defineProperty(Vue.prototype, "$dateUtil", {
   get() {
     return dateUtil;
   },
+});
+Object.defineProperty(Vue.prototype, "$stringUtil", {
+  get() {
+    return stringUtil;
+  }
 });
 Object.defineProperty(Vue.prototype, "$helper", {
   get() {

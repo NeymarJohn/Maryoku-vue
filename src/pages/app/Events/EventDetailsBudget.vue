@@ -1,10 +1,10 @@
 <template>
   <div>
-<!--    <event-state-message-->
-<!--      v-if="showMessage"-->
-<!--      :state="budgetState"-->
-<!--      @closeMessage="showMessage = false"-->
-<!--    ></event-state-message>-->
+    <!--    <event-state-message-->
+    <!--      v-if="showMessage"-->
+    <!--      :state="budgetState"-->
+    <!--      @closeMessage="showMessage = false"-->
+    <!--    ></event-state-message>-->
     <budget-notifications></budget-notifications>
     <div class="edit-event-details event-details-budget">
       <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
@@ -26,9 +26,9 @@
               <div class="budget-list__item">
                 <div class="label-title">Budget</div>
                 <div class="budget-value">${{ budgetStatistics.total | withComma }}</div>
-                <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="showBudgetModal = true"
-                  >Edit</md-button
-                >
+                <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="showBudgetModal = true">
+                  Edit
+                </md-button>
               </div>
               <div class="budget-list__item">
                 <div class="label-title">Allocated</div>
@@ -417,15 +417,16 @@ export default {
     checkMessageStatus() {
       this.budgetStates = [];
       if (this.event.budgetProgress < 100) {
-        this.budgetStates.push({key: "not_approved"});
+        this.budgetStates.push({ key: "not_approved" });
       }
       if (this.event.standardBudget !== 0) {
         if (this.event.standardBudget < this.event.totalBudget) {
-            this.budgetStates.push({
-                key: "not_approved",
-                percent: ((this.event.totalBudget - this.event.standardBudget) / this.event.totalBudget).toFixed(2) * 100});
+          this.budgetStates.push({
+            key: "not_approved",
+            percent: ((this.event.totalBudget - this.event.standardBudget) / this.event.totalBudget).toFixed(2) * 100,
+          });
         } else if (this.event.standardBudget > this.event.totalBudget) {
-          this.budgetStates.push({key: "lower_than_average"});
+          this.budgetStates.push({ key: "lower_than_average" });
         }
       }
 
@@ -433,30 +434,30 @@ export default {
       let created_at = moment(this.event.dateCreated);
 
       if (now.diff(created_at, "days") < 15) {
-        this.budgetStates.push({key: "approved_budget_in_two_weeks"});
+        this.budgetStates.push({ key: "approved_budget_in_two_weeks" });
       }
 
       if (this.event.unexpected < this.event.totalBudget * 0.1) {
-        this.budgetStates.push({key: "unexpected_budget_less_10"});
+        this.budgetStates.push({ key: "unexpected_budget_less_10" });
       }
 
-      console.log('states', this.budgetStates);
+      console.log("states", this.budgetStates);
       if (this.budgetStates.length) {
-          this.budgetStates.map(it => {
-              let message_item = BUDGET_MESSAGES.find(m => m.key == it.key);
-              this.$notify({
-                  message: {
-                      title: message_item.title,
-                      content: message_item.message,
-                      action: message_item.action,
-                  },
-                  icon: `${this.$iconURL}messages/${message_item.icon}`,
-                  horizontalAlign: "right",
-                  verticalAlign: "top",
-                  type: message_item.type,
-                  timeout: 5000,
-              });
-          })
+        this.budgetStates.map((it) => {
+          let message_item = BUDGET_MESSAGES.find((m) => m.key == it.key);
+          this.$notify({
+            message: {
+              title: message_item.title,
+              content: message_item.message,
+              action: message_item.action,
+            },
+            icon: `${this.$iconURL}messages/${message_item.icon}`,
+            horizontalAlign: "right",
+            verticalAlign: "top",
+            type: message_item.type,
+            timeout: 5000,
+          });
+        });
       }
     },
     selectServices() {
