@@ -78,15 +78,6 @@ export default {
         componentId: "campaign",
         id: "campaign-item",
       };
-      const planningBoard = {
-        title: "Plan Your Event",
-        status: this.event.campaignProgress === 100 ? "completed" : "not-complete",
-        route: "booking/planningboard",
-        icon: `${this.$iconURL}Campaign/Group 8857.svg`,
-        progress: this.event.campaignProgress,
-        componentId: "planningboard",
-        id: "planningboard-item",
-      };
       const elements = [];
       elements.push(overview);
       // if (this.event.eventType.hasConcept) {
@@ -95,7 +86,7 @@ export default {
       elements.push(budget);
       elements.push(timeline);
       elements.push(campaign);
-      elements.push(planningBoard);
+
       // show when you approve budget
       if (this.event.budgetProgress == 100) {
         this.event.components.sort((a, b) => a.order - b.order);

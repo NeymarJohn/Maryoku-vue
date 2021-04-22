@@ -56,7 +56,7 @@
               <td class="element-actions"></td>
             </tr>
             <tr v-for="(service, index) in addedServices" :key="`added-service-${index}`">
-              <td><md-icon class="color-red">add_circle_outline</md-icon>{{ service.requirementTitle }}</td>
+              <td><md-icon class="color-red mr-5">add_circle_outline</md-icon>{{ service.requirementTitle }}</td>
               <td>{{ service.requirementValue }}</td>
               <td>${{ service.price | withComma }}</td>
               <td>${{ (service.requirementValue * service.price) | withComma }}</td>
