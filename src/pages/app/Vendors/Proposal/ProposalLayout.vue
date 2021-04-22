@@ -172,12 +172,6 @@ export default {
       this.event = proposalRequest.eventData;
       this.$store.commit("vendorProposal/setWizardStep", 0);
       this.$store.commit("vendorProposal/setInitStep", 0);
-      if (proposalRequest.proposal) {
-        this.$store.commit("vendorProposal/setValue", {
-          key: "suggestionDate",
-          value: proposalRequest.proposal.suggestionDate,
-        });
-      }
     });
   },
   methods: {

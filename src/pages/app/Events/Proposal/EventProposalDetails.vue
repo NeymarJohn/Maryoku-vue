@@ -19,7 +19,7 @@
           <div class="event-info">
             <div class="section-header d-flex justify-content-start">
               <h3>Event Information & Details</h3>
-              <div class="alert alert-danger mb-0" v-if="vendorProposal.suggestionDate">
+              <div class="alert alert-danger" v-if="vendorProposal.suggestionDate">
                 <span v-if="getDiffDaysFromOriginal() < 0" class="whitspace-nowrap">
                   This proposal is {{ -getDiffDaysFromOriginal() }}days before your original date
                 </span>
@@ -28,11 +28,11 @@
                 </span>
               </div>
             </div>
-            <ul class="event-details mt-20">
+            <ul class="event-details">
               <li class="event-details__item">
                 <label>Name</label>
                 <div class="info-text">
-                  {{ eventData.title || (eventData.concept ? eventData.concept.title : "Untitled event") }}
+                  {{ eventData.title || eventData.concept ? eventData.concept.title : "Untitled event" }}
                 </div>
               </li>
               <li class="event-details__item">
@@ -732,15 +732,16 @@ export default {
 
           &__item {
             font-size: 14px;
-            padding-bottom: 10px;
+
             &:not(:last-child) {
               border-right: 1px solid #818080;
-              padding-right: 80px;
-              margin-right: 80px;
+              padding-right: 60px;
+              margin-right: 60px;
             }
 
             label {
               font-weight: 800;
+              color: #818080;
               margin-bottom: 1em;
             }
             .info-text {
