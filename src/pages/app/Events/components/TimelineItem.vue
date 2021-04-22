@@ -82,12 +82,14 @@
             <label class="font-size-16 font-bold pb-10">Assign vendor to slot</label>
             <multiselect
               v-model="vendor"
-              :options="['vendor1', 'vendor2']"
+              :options="serviceCategories"
               :close-on-select="true"
               :clear-on-select="true"
               tag-placeholder="Add this as new tag"
               placeholder="Please select vendors"
               class="multiple-selection small-selector mt-10"
+              label="title"
+              track-by="key"
             ></multiselect>
           </div>
         </div>
@@ -110,7 +112,7 @@
         <md-button
           :disabled="editingContent.isItemLoading"
           name="event-planner-tab-timeline-item-edit"
-          class="event-planner-tab-timeline-item-edit md-red"
+          class="event-planner-tab-timeline-item-edit maryoku-btn md-red"
           v-else
           @click="updateTimelineItem"
           >Save</md-button
@@ -215,6 +217,9 @@ export default {
   },
   mounted() {
     this.editingContent = { ...this.item };
+    this.vendor = this.serviceCategories.find(
+      (item) => this.editingContent.eventCategory && item.key == this.editingContent.eventCategory[0],
+    );
     // this.$root.$on("apply-template", ({ item, block, index }) => {
     //   // this.timelineItems[item.date][index] = {};
     //   this.applyToTemplate(index, { ...item, action: "edited" }, block);
@@ -227,6 +232,9 @@ export default {
     event() {
       return this.$store.state.event.eventData;
     },
+    serviceCategories() {
+      return this.$store.state.common.serviceCategories;
+    },
   },
   methods: {
     getBorderStyle(color) {
@@ -235,6 +243,7 @@ export default {
     },
     saveTimelineItem() {
       this.$set(this.editingContent, "mode", "saved");
+      this.$set(this.editingContent, "eventCategory", [this.vendor.key]);
       new EventTimelineItem(this.editingContent)
         .for(new EventTimelineDate({ id: this.timelineDate.id }))
         .save()
@@ -245,6 +254,7 @@ export default {
     },
     updateTimelineItem() {
       this.$set(this.editingContent, "mode", "saved");
+      this.$set(this.editingContent, "eventCategory", [this.vendor.key]);
       new EventTimelineItem(this.editingContent)
         .for(new EventTimelineDate({ id: this.timelineDate.id }))
         .save()

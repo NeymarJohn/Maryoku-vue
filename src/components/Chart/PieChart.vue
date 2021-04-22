@@ -81,9 +81,10 @@
     <div class="items-cont">
       <ul class="items-list">
         <li v-for="(item, index) in sortedData" :key="index" :class="`columns-${columns}`">
-          <div class="d-flex">
+          <div class="d-flex align-center">
             <span :style="`background-color: ${item.color};`" class="icon"></span>
-            <span class="text">{{ item.category }}</span>
+            <img class="pie_svg_img ml-5" v-if="item.image" :src="item.image" width="14"/>
+            <span class="ml-10 text" :style="{color: item.color}">{{ item.category }}</span>
           </div>
         </li>
       </ul>
@@ -213,6 +214,7 @@ export default {
           category: item.title,
           value: item.value,
           color: item.color,
+          image: item.image,
           strikeDash: `${budgetValue} ${this.circleLength - budgetValue} ${this.circleLength}`,
           rotate: (startValue / this.circleLength) * 360,
         });
@@ -332,7 +334,7 @@ export default {
   height: 300px;
   width: 100%;
   &:hover {
-    g::last-child {
+    &:last-child {
       visibility: visible;
     }
   }
@@ -379,5 +381,8 @@ export default {
       display: inline-block;
     }
   }
+}
+.pie_svg_img path{
+    fill: white;
 }
 </style>
