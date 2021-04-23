@@ -84,15 +84,21 @@
           <div class="md-layout mt-20">
             <div class="white-card md-layout p-30">
                 <div class="md-layout-item md-size-50">
-                    <FunctionalCalendar
-                        class="vendor-dashboard-calendar"
-                        :is-multiple-date-picker="true"
-                        :sundayStart="true"
-                        :minSelDays="1"
-                        :marked-dates="markedDates"
-                        :date-format="'yyyy-mm-dd'"
-                        v-model="date"
-                    ></FunctionalCalendar>
+                    <template>
+                        <FunctionalCalendar
+                            class="vendor-dashboard-calendar"
+                            :is-multiple-date-picker="true"
+                            :sundayStart="true"
+                            :minSelDays="1"
+                            :marked-dates="markedDates"
+                            :date-format="'yyyy-mm-dd'"
+                            v-model="date"
+                            @changedMonth="changeMonth"
+                            @changedYear="changeYear"
+                        ></FunctionalCalendar>
+                        <!-- todo update page when month change -->
+                        <div style="display: none">{{ this.month }}</div>
+                    </template>
                     <div class="d-flex align-center">
                         <md-switch class="md-switch-vendor" v-model="backOutDays" style="margin-left: 20px">Backout Days</md-switch>
                         <md-button class="md-simple ml-auto md-vendor">Sync With Calendar</md-button>
@@ -147,6 +153,7 @@ export default {
       categoryColors: [{
 
       }],
+      month: null,
       date: {
         selectedDates: [],
       },
@@ -156,6 +163,14 @@ export default {
       console.log('vendor.dashboard.mount', this.vendorData);
   },
   methods:{
+      changeMonth(e) {
+          // console.log("changeMonth", this.markedDates, this.date);
+          this.month = moment(e).month();
+      },
+      changeYear(e) {
+          // console.log("changeYear", e);
+          this.month = moment(e).month();
+      },
       addNewService() {
           return this.$router.push(`/vendor/${this.vendorData.id}/service/add`);
       },
@@ -232,6 +247,7 @@ export default {
   },
   updated() {
       this.renderCalendar();
+      console.log('updated');
   },
   computed:{
       vendorData() {
