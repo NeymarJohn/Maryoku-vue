@@ -109,3 +109,54 @@ span.vfc-span-day.vfc-hide {
 .vfc-week .vfc-day span.vfc-span-day.vfc-disabled {
   color: rgba(0, 0, 0, 0.2) !important;
 }
+
+.vendor-dashboard-calendar{
+   display: flex;
+   justify-content: center;
+  .vfc-main-container{
+
+    .vfc-separately-navigation-buttons div{
+        color: $vendorColor !important;
+        border-color: $vendorColor !important;
+
+        &.vfc-cursor-pointer{
+            margin: -20px 30px 20px 30px !important;
+        }
+    }
+  }
+  .vfc-top-date {
+      margin-top: 22px!important;
+      a{
+          color: black !important;
+          font-family: "Manrope-Bold";
+          font-weight: 700!important;
+      }
+  }
+
+  span.vfc-span-day{
+      width: 50px!important;
+      height: 50px !important;
+      line-height: 50px !important;
+      background-color: white !important;
+      &.vfc-today{
+          color: $vendorColor !important;
+          background-color: white !important;
+          font-family: "Manrope-Bold";
+          box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.15);
+      }
+  }
+    .vfc-day .vfc-base-start,
+    .vfc-base-end {
+        background-color: $vendorColor !important;
+    }
+
+    span.vfc-span-day.vfc-marked,
+    .vfc-today.vfc-marked {
+        color: white !important;
+
+        &:not(.vfc-start-marked):not(.vfc-end-marked):before {
+            background-color: $vendorColor !important;
+        }
+    }
+}
+

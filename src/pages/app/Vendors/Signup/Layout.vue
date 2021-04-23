@@ -223,7 +223,8 @@ export default {
                   } else {
                     this.$store.dispatch("auth/login", tenantUser).then(
                       () => {
-                        this.$router.push(`/vendor/profile/settings`);
+                        // this.$router.push(`/vendor/profile/settings`);
+                        this.$router.push(`/vendor/edit/${res.id}`);
                       },
                       (error) => {
                         this.$router.push(`/vendor/signin`);
