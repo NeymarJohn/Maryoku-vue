@@ -1,9 +1,8 @@
 <template>
-  <div class="my-service white-card" v-if="vendorData">
+  <div class="my-service white-card">
     <div class="services-header">
       <div class="service-tab-item" :class="{ active: selectedIndex === 0 }" @click="selectService(0)">
         <img
-          v-if="vendorData.vendorCategories"
           :src="`${$iconURL}Budget Elements/${getServiceCategory(vendorData.vendorCategories[0]).icon}`"
           class="page-icon mr-10"
         />
@@ -56,6 +55,7 @@ export default {
       selectedIndex: 0,
     };
   },
+
   mounted() {
     this.isLoading = true;
   },
@@ -73,7 +73,6 @@ export default {
       this.selectedIndex = index;
     },
     getSelectedServiceCategory(index) {
-      if (!this.vendorData.vendorCategories || !this.vendorData.vendorCategories.length) return {};
       if (this.selectedIndex === 0) {
         return this.getServiceCategory(this.vendorData.vendorCategories[0]);
       } else {

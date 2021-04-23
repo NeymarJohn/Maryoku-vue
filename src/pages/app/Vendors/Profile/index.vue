@@ -1,15 +1,12 @@
 <template>
   <div class="md-layout p-20 planner-profile">
-      <vue-element-loading :active="loading" color="#FF547C" is-full-screen>
-          <img src="/static/img/maryoku-loader.gif"/>
-      </vue-element-loading>
     <div class="md-layout-item md-size-100 font-size-22 font-bold mb-30 mt-30">
       <img :src="`${$iconURL}Profile/settings-dark.svg`" class="mr-20" />
       PROFILE & SETTINGS
     </div>
     <div class="md-layout-item md-size-25">
       <div class="left-sidebar white-card">
-        <div class="profile" v-if="vendorData">
+        <div class="profile">
           <div class="avatar" style="">
             <!-- <user-avatar :user="userData" @set="setAvatar"></user-avatar> -->
             <company-logo :defaultImage="vendorData.vendorLogoImage" :user="vendorData" @set="setLogo"></company-logo>
@@ -100,7 +97,7 @@ import StarRating from "vue-star-rating";
 import { LabelEdit, Tabs } from "@/components";
 
 // import auth from '@/auth';
-import {mapGetters, mapActions, mapState, mapMutations} from "vuex";
+import { mapGetters, mapActions, mapState } from "vuex";
 import UserAvatar from "@/components/UserAvatar.vue";
 import CompanyLogo from "@/components/CompanyLogo.vue";
 
@@ -122,7 +119,6 @@ export default {
   data() {
     return {
       // auth: auth,
-      loading: false,
       chips: [],
       user: null,
       pageName: "",
@@ -144,10 +140,7 @@ export default {
   },
   mounted() {
     // TODO : user state should be reviewed
-    console.log("vendor", this.$store.state.vendor);
-    console.log("profile", this.vendorData);
-    this.loading = true;
-    console.log('loading.start')
+    console.log("profile", this.$auth.user);
     this.getPageName();
     this.$store.dispatch("common/fetchAllCategories");
     this.$store
@@ -155,14 +148,13 @@ export default {
       .then(() => {
         this.user = this.$auth.user;
         this.$store.dispatch("vendor/getProfile");
-        this.loading = false;
-          console.log('loading.end')
       })
       .catch(() => {
         this.$router.push({ path: `/signin` });
       });
   },
   methods: {
+    ...mapActions("event", ["getEventAction"]),
     setAvatar(avatar) {
       this.$store.dispatch("auth/updateProfile", { avatar, id: this.userData.id });
     },

@@ -13,7 +13,7 @@
             <span style="padding-bottom: 5px">Anyone with this link </span>
             <div class="sharing-role">
               <md-button class="md-simple md-red edit-btn" @click="showLinkRoleEditor = !showLinkRoleEditor">
-                Can {{role}}
+                Can {{ role }}
                 <md-icon v-if="showLinkRoleEditor">keyboard_arrow_down</md-icon>
                 <md-icon v-else>keyboard_arrow_right</md-icon>
               </md-button>
@@ -30,40 +30,38 @@
             <!-- <maryoku-input class="flex-1" inputStyle="email" type="email" v-model="editingVendor.vendorMainEmail"></maryoku-input> -->
             <input-tag v-model="emails" class="flex-1"></input-tag>
             <div class="email-role-button">
-              <md-button class="md-simple md-red role-editor" @click="showEmailRoleEditor = !showEmailRoleEditor" :disabled="emails.length==0">
-                <img data-v-a76b6a56="" :src="`${this.$iconURL}Share/edit-red.svg`" width="20" >
+              <md-button
+                class="md-simple md-red role-editor"
+                @click="showEmailRoleEditor = !showEmailRoleEditor"
+                :disabled="emails.length == 0"
+              >
+                <img data-v-a76b6a56="" :src="`${this.$iconURL}Share/edit-red.svg`" width="20" />
                 <md-icon v-if="showEmailRoleEditor">keyboard_arrow_down</md-icon>
                 <md-icon v-else>keyboard_arrow_right</md-icon>
               </md-button>
               <sharing-role-options v-if="showEmailRoleEditor" align="right"></sharing-role-options>
             </div>
           </div>
-          <div v-if="emails.length > 0" >
-             <div class="form-group mt-4">
-              <textarea
-                rows="8"
-                class="form-control"
-                placeholder="Add message"
-                v-model="message"
-              ></textarea>
+          <div v-if="emails.length > 0">
+            <div class="form-group mt-4">
+              <textarea rows="8" class="form-control" placeholder="Add message" v-model="message"></textarea>
             </div>
             <div class="d-flex align-center justify-content-between">
-              <div> <strong>Shared with: </strong> <span v-for="email in emails" :key="email">{{email}}, </span></div>
+              <div>
+                <strong>Shared with: </strong> <span v-for="email in emails" :key="email">{{ email }}, </span>
+              </div>
               <div class="checkbox-wrapper"><md-checkbox v-model="isSendingMessage">Send message</md-checkbox></div>
             </div>
           </div>
           <div>
-            {{statusMessage}}
+            {{ statusMessage }}
           </div>
         </div>
       </div>
     </template>
     <template slot="footer">
-      <template v-if="emails.length>0">
-        <md-button
-          class="md-button md-black md-simple add-category-btn"
-          @click="onCancel()"
-        >Cancel</md-button>
+      <template v-if="emails.length > 0">
+        <md-button class="md-button md-black md-simple add-category-btn" @click="onCancel()">Cancel</md-button>
         <md-button class="md-red md-bold add-category-btn" @click="sendEmail">Send</md-button>
       </template>
       <template v-else>
@@ -75,8 +73,8 @@
 
 <script>
 import { Modal, MaryokuInput } from "@/components";
-import SharingRoleOptions from "@/components/SharingRoleOptions"
-import InputTag from 'vue-input-tag'
+import SharingRoleOptions from "@/components/SharingRoleOptions";
+import InputTag from "vue-input-tag";
 
 export default {
   name: "sharing-modal",
@@ -84,7 +82,7 @@ export default {
     Modal,
     MaryokuInput,
     SharingRoleOptions,
-    InputTag
+    InputTag,
   },
   props: {
     show: [Boolean],
@@ -95,14 +93,14 @@ export default {
       selectedOption: "keep",
       location: "",
       currentAttachments: [],
-      emails:[],
+      emails: [],
       message: "",
       isLoading: false,
       showLinkRoleEditor: false,
       showEmailRoleEditor: false,
       isSendingMessage: false,
-      shareLink : "",
-      role:"view",
+      shareLink: "",
+      role: "view",
       editingVendor: {
         vendorDisplayName: "",
         cost: "",
@@ -110,19 +108,21 @@ export default {
         vendorMainPhoneNumber: "",
         vendorMainEmail: "",
         attachedProposal: "",
-        attachment: null
+        attachment: null,
       },
-      statusMessage: ""
+      statusMessage: "",
     };
   },
-  created () {
+  created() {
     this.generateShareLink();
   },
   methods: {
     generateShareLink() {
-      const tenantId = this.$authService.resolveTenantId()
-      this.shareLink = `${this.$authService.getAppUrl(tenantId)}/#/signup?invite=true&role=${this.role}&event=${this.$route.params.id}`;
-      return this.shareLink
+      const tenantId = this.$authService.resolveTenantId();
+      this.shareLink = `${this.$authService.getAppUrl(tenantId)}/#/signup?invite=true&role=${this.role}&event=${
+        this.$route.params.id
+      }`;
+      return this.shareLink;
     },
     selectOption() {
       this.$emit("select", this.selectedOption, this.value);
@@ -133,32 +133,35 @@ export default {
     removeSelectedAttachment(index) {},
     sendEmail() {
       this.$emit("sendEmail", this.editingVendor);
-      this.$http.post(`${process.env.SERVER_URL}/1/eventShare`, 
-        { 
-          emails: this.emails,
-          message: this.message,
-          link: this.generateShareLink(),
-          eventId: this.$route.params.id
-        }
-      , { headers: this.$auth.getAuthHeader() })
-      .then(res=>{
-        if (res.data.status) {
-          this.statusMessage = "We have sent an email to the invited users."
-        } else {
-          this.statusMessage = "Something is wrong. Please try again later."
-        }
-      })
+      this.$http
+        .post(
+          `${process.env.SERVER_URL}/1/eventShare`,
+          {
+            emails: this.emails,
+            message: this.message,
+            link: this.generateShareLink(),
+            eventId: this.$route.params.id,
+          },
+          { headers: this.$auth.getAuthHeader() },
+        )
+        .then((res) => {
+          if (res.data.status) {
+            this.statusMessage = "We have sent an email to the invited users.";
+          } else {
+            this.statusMessage = "Something is wrong. Please try again later.";
+          }
+        });
     },
-   
-    onCancel: function(e) {
-      this.$emit("cancel")
+
+    onCancel: function (e) {
+      this.$emit("cancel");
     },
     setRole(role) {
-      this.role = role
-      this.showLinkRoleEditor = false
-      this.generateShareLink()
-    }
-  }
+      this.role = role;
+      this.showLinkRoleEditor = false;
+      this.generateShareLink();
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -173,17 +176,17 @@ export default {
   align-items: center;
 }
 .email-role-button {
-  border: solid 1px #FFA4BC;
+  border: solid 1px #ffa4bc;
   margin-left: 15px;
   border-radius: 3px;
   max-height: 56px;
 }
 .spacer {
-  border-bottom: solid 1px #DDDDDD;
+  border-bottom: solid 1px #dddddd;
   width: 100%;
   margin: 30px 15px;
 }
-.vue-input-tag-wrapper  {
+.vue-input-tag-wrapper {
   .new-tag {
     box-shadow: none !important;
   }
