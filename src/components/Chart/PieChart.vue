@@ -83,7 +83,7 @@
         <li v-for="(item, index) in sortedData" :key="index" :class="`columns-${columns}`">
           <div class="d-flex align-center">
             <span :style="`background-color: ${item.color};`" class="icon"></span>
-            <img class="pie_svg_img ml-5" v-if="item.image" :src="item.image" width="14"/>
+            <img class="pie_svg_img ml-5" v-if="item.image" :src="item.image" width="24"/>
             <span class="ml-10 text" :style="{color: item.color}">{{ item.category }}</span>
           </div>
         </li>
@@ -156,9 +156,6 @@ export default {
       ],
       defaultColor: "#641956",
     };
-  },
-  created() {
-    console.log(this.chartData);
   },
   methods: {
     setTooltipPos: function (event, item) {
@@ -381,8 +378,5 @@ export default {
       display: inline-block;
     }
   }
-}
-.pie_svg_img path{
-    fill: white;
 }
 </style>

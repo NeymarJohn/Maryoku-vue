@@ -32,7 +32,7 @@ const EventConceptChoose = () => import("@/pages/app/Events/components/EventConc
 const BookingEvent = () => import("@/pages/app/Events/components/BookingEvent");
 const EventBudgetRequirement = () => import("@/pages/app/Events/components/EventBudgetRequirement.vue");
 const EventCampaign = () => import("@/pages/app/Campaign/CampaignMainLayout.vue");
-const PlanningBoard = () => import("@/pages/app/Events/PlanningBoard/PlanningBoardLayout.vue");
+
 const CreateWorkspace = () => import("@/pages/Dashboard/Pages/CreateWorkspace");
 const ChooseWorkspace = () => import("@/pages/Dashboard/Pages/ChooseWorkspace");
 
@@ -70,8 +70,6 @@ const ConceptDetail = () => import("@/pages/Dashboard/Pages/ConceptDetail.vue");
 
 const ProposalFinalStep = () => import("@/pages/app/Vendors/ProposalFinalStep.vue");
 const CalendarSync = () => import("@/pages/app/CalendarSync.vue");
-
-const Checkout = () => import("@/pages/app/Events/Checkout/Checkout.vue")
 
 let authPages = {
     path: "/",
@@ -328,17 +326,6 @@ let EventPages = {
                     },
                 },
                 {
-                    path: "planningboard",
-                    name: "Plan Event",
-                    component: PlanningBoard,
-                    meta: {
-                        title: "Plan Event",
-                        gtm: "Plan Event",
-                        opaque: false,
-                        requiresAuth: true,
-                    },
-                },
-                {
                     path: ":blockId",
                     name: "EventPlan",
                     component: BookingEvent,
@@ -371,7 +358,6 @@ let EventPages = {
                         requiresAuth: true,
                     },
                 },
-
             ]
         },
 
@@ -604,17 +590,6 @@ let vendorListPage = {
         gtm: "Vendors",
     },
 };
-let checkoutPage = {
-    path: "/checkout/:vendorId/:proposalId",
-    name: "Checkout",
-    component: Checkout,
-    meta: {
-        title: "Plan Event",
-        gtm: "Plan Event",
-        opaque: false,
-        requiresAuth: true,
-    },
-}
 
 let calendarSyncPage = {
     path: "/calendar/sync/:calendarName",
@@ -669,7 +644,6 @@ const routes = [
     welcomeEventPage,
     others,
     calendarSyncPage,
-    checkoutPage,
     ...vendorRoutes,
     {
         path: '*',

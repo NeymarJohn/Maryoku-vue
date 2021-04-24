@@ -9,12 +9,3 @@ export const camelize = (str) => {
   });
   return temp.charAt(0).toLowerCase() + temp.slice(1);
 }
-
-export const getTwoDigits = (index) => {
-  return ("0" + index).slice(-2)
-}
-export default {
-  capitalize,
-  camelize,
-  getTwoDigits
-}

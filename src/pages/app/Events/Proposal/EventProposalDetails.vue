@@ -19,7 +19,7 @@
           <div class="event-info">
             <div class="section-header d-flex justify-content-start">
               <h3>Event Information & Details</h3>
-              <div class="alert alert-danger mb-0" v-if="vendorProposal.suggestionDate">
+              <div class="alert alert-danger" v-if="vendorProposal.suggestionDate">
                 <span v-if="getDiffDaysFromOriginal() < 0" class="whitspace-nowrap">
                   This proposal is {{ -getDiffDaysFromOriginal() }}days before your original date
                 </span>
@@ -28,11 +28,11 @@
                 </span>
               </div>
             </div>
-            <ul class="event-details mt-20">
+            <ul class="event-details">
               <li class="event-details__item">
                 <label>Name</label>
                 <div class="info-text">
-                  {{ eventData.title || (eventData.concept ? eventData.concept.title : "Untitled event") }}
+                  {{ eventData.title || eventData.concept ? eventData.concept.title : "Untitled event" }}
                 </div>
               </li>
               <li class="event-details__item">
@@ -468,9 +468,7 @@ export default {
     },
     negotiate() {},
     askQuestion() {},
-    bookVendor() {
-      this.$router.push(`/checkout/${this.vendorProposal.vendor.id}/${this.vendorProposal.id}`);
-    },
+    bookVendor() {},
     getEvent() {},
     scrollToTop() {
       window.scrollTo(0, 0);
@@ -572,26 +570,6 @@ export default {
         return this.vendorProposal.vendor.vendorImages[0];
       return "";
     },
-    attachments() {
-      if (this.vendorProposal.attachments && this.vendorProposal.attachments.length > 0)
-        return this.vendorProposal.attachments;
-      if (this.vendorProposal.vendor.attachments && this.vendorProposal.vendor.attachments.length > 0)
-        return this.vendorProposal.vendor.attachments;
-      return [];
-    },
-    validPolicy() {
-      if (this.vendorProposal.vendor.policies)
-        return this.vendorProposal.vendor.policies.filter(
-          (item) => item.hasOwnProperty("value") || (item.type === "Including" && item.cost),
-        );
-      return null;
-    },
-    additionalRules() {
-      return this.vendorProposal.vendor.additionalRules;
-    },
-    categories() {
-      return this.$store.state.common.serviceCategories;
-    },
     tax() {
       if (!this.vendorProposal.taxes) return { percentage: 0, price: 0 };
       let tax = this.vendorProposal.taxes["total"];
@@ -632,7 +610,26 @@ export default {
       });
       return (bundledServicePrice * this.vendorProposal.bundleDiscount.percentage) / 100;
     },
-
+    attachments() {
+      if (this.vendorProposal.attachments && this.vendorProposal.attachments.length > 0)
+        return this.vendorProposal.attachments;
+      if (this.vendorProposal.vendor.attachments && this.vendorProposal.vendor.attachments.length > 0)
+        return this.vendorProposal.vendor.attachments;
+      return [];
+    },
+    validPolicy() {
+      if (this.vendorProposal.vendor.policies)
+        return this.vendorProposal.vendor.policies.filter(
+          (item) => item.hasOwnProperty("value") || (item.type === "Including" && item.cost),
+        );
+      return null;
+    },
+    additionalRules() {
+      return this.vendorProposal.vendor.additionalRules;
+    },
+    categories() {
+      return this.$store.state.common.serviceCategories;
+    },
     totalPriceOfProposal() {
       let totalPrice = 0;
       Object.keys(this.vendorProposal.costServices).forEach((serviceCategory) => {
@@ -735,15 +732,16 @@ export default {
 
           &__item {
             font-size: 14px;
-            padding-bottom: 10px;
+
             &:not(:last-child) {
               border-right: 1px solid #818080;
-              padding-right: 80px;
-              margin-right: 80px;
+              padding-right: 60px;
+              margin-right: 60px;
             }
 
             label {
               font-weight: 800;
+              color: #818080;
               margin-bottom: 1em;
             }
             .info-text {

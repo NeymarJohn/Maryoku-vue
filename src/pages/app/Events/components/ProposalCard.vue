@@ -10,15 +10,6 @@
           </md-tooltip>
         </div>
       </div>
-      <div class="mt-20 d-flex" v-show="proposal.suggestionDate">
-        <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" class="label-icon mr-5" />
-        <span v-if="getDiffDaysFromOriginal() < 0" class="whitspace-nowrap">
-          This proposal is {{ -getDiffDaysFromOriginal() }}days before your original date
-        </span>
-        <span v-else class="whitspace-nowrap">
-          This proposal is {{ getDiffDaysFromOriginal() }}days later your original date
-        </span>
-      </div>
       <div class="price">
         <span class="price-value">${{ proposal.cost | withComma }}</span>
         <small>For 3 hours</small>
@@ -49,7 +40,6 @@
   </div>
 </template>
 <script>
-import moment from "moment";
 export default {
   props: {
     proposal: {
@@ -78,17 +68,6 @@ export default {
     proposalDetails() {
       this.$emit("goDetail", this.proposal);
     },
-    getDiffDaysFromOriginal() {
-      const suggestionDate = this.proposal.suggestionDate;
-      if (!this.eventData) return "-";
-
-      let orignStartDate = moment(new Date(this.eventData.eventStartMillis));
-      if (suggestionDate && suggestionDate.length > 0) {
-        let suggestedDate = moment(suggestionDate[0].date, "DD/MM/YYYY");
-        return suggestedDate.diff(orignStartDate, "days");
-      }
-      return 0;
-    },
   },
   computed: {
     backgroundImage() {
@@ -102,9 +81,6 @@ export default {
     },
     categories() {
       return this.$store.state.common.serviceCategories;
-    },
-    eventData() {
-      return this.$store.state.event.eventData;
     },
   },
 };

@@ -13,6 +13,7 @@
           <div class="md-layout my-20">
             <div class="md-layout-item md-size-40 pl-0">
               <div class="font-size-50 total-revenue">$0</div>
+
             </div>
             <div class="md-layout-item md-size-60">
                 <div>
@@ -68,14 +69,16 @@
                       <div style="border-bottom:  2px solid #c8c8c8">
                           <div class="pt-10 d-flex align-center justify-content-center font-bold">
                               <md-button class="md-button md-theme-default md-simple md-just-icon"><md-icon>chevron_left</md-icon></md-button>
-                              <span class="font-size-20 mr-10"> 0/0 </span>
-                              PROPOSALS FOR REQUEST
+<!--                              <span class="font-size-20 mr-10"> 0/0 </span>-->
+<!--                              PROPOSALS FOR REQUEST-->
+                                  THE PLANNER DIDN"T WANT ANY CHANGES
                               <md-button class="md-button md-theme-default md-simple md-just-icon"><md-icon>chevron_right</md-icon></md-button>
                           </div>
                       </div>
 
                       <div class="d-flex flex-column align-center p-70">
-                          <img class="mb-20" :src="`${iconUrl}vendordashboard/group-17115.png`">
+<!--                          <img class="mb-20" :src="`${iconUrl}vendordashboard/group-17115.png`">-->
+                          <img class="mb-15" :src="`${iconUrl}vendordashboard/group-16558.svg`">
                           <div class="color-vendor font-bold font-size-14">NO REQUEST FOR CHANGES</div>
                       </div>
                   </div>
@@ -101,7 +104,8 @@
                     </template>
                     <div class="d-flex align-center">
                         <md-switch class="md-switch-vendor" v-model="backOutDays" style="margin-left: 20px">Backout Days</md-switch>
-                        <md-button class="md-simple ml-auto md-vendor">Sync With Calendar</md-button>
+                        <md-button class="md-simple ml-auto md-vendor">
+                            Sync With Calendar</md-button>
                     </div>
                 </div>
                 <div class="md-layout-item md-size-50">
@@ -109,13 +113,14 @@
                     <div class="d-flex flex-column align-center justify-content-center p-50">
                         <img class="mt-50 mb-20" :src="`${iconUrl}vendordashboard/group-16600.png`">
                         <div class="mb-20 color-vendor font-bold font-size-14">NO UPCOMING EVENTS</div>
-                        <md-button class="md-simple md-outlined md-vendor maryoku-btn" @click="createNewEvent">Create New Event</md-button>
+                        <md-button class="md-simple md-outlined md-vendor maryoku-btn" @click="showVendorCreateModal = true">Create New Event</md-button>
                     </div>
                 </div>
             </div>
           </div>
       </div>
     </div>
+    <vendor-create-event-modal v-if="showVendorCreateModal" @cancel="showVendorCreateModal = false"></vendor-create-event-modal>
   </div>
 </template>
 <script>
@@ -125,16 +130,20 @@ import { FunctionalCalendar } from "vue-functional-calendar";
 import IncomeChart from "./IncomeChart";
 import moment from "moment";
 import _ from "underscore";
+import VendorCreateEventModal from "@/components/Modals/VendorCreateEvent";
+
 export default {
   components: {
      IncomeChart,
      FunctionalCalendar,
      PieChart,
      IncomeBarChart,
+     VendorCreateEventModal,
   },
   data() {
     return {
       iconUrl: `${this.$resourceURL}storage/icons/`,
+      showVendorCreateModal: false,
       backOutDays: false,
       incomeChartData: [
         { label: "Jan", value: 200, future: true },
@@ -150,25 +159,38 @@ export default {
         { label: "Nov", value: 100, future: true },
         { label: "Dec", value: 70, future: true },
       ],
-      categoryColors: [{
-
-      }],
       month: null,
       date: {
         selectedDates: [],
       },
+      markedDates: [],
     };
   },
   mounted() {
-      console.log('vendor.dashboard.mount', this.vendorData);
+      this.getMarkedDates();
   },
   methods:{
+      getMarkedDates(){
+          console.log('getMarkedDates', this.backOutDays);
+          // this.markedDates = [];
+          if (this.backOutDays) {
+              if (this.vendorData.dontWorkDays && this.vendorData.dontWorkDays.length) {
+                  _.each(this.vendorData.dontWorkDays, (sd) => {
+                      this.markedDates.push(sd.date);
+                  });
+              }
+              if (this.vendorData.exDonts && this.vendorData.exDonts.length) {
+                  this.vendorData.exDonts.map((h) => {
+                      this.markedDates.push(moment(h.date).format("YYYY-M-D"));
+                  });
+              }
+          }
+          console.log('markedDates', this.markedDates);
+      },
       changeMonth(e) {
-          // console.log("changeMonth", this.markedDates, this.date);
           this.month = moment(e).month();
       },
       changeYear(e) {
-          // console.log("changeYear", e);
           this.month = moment(e).month();
       },
       addNewService() {
@@ -222,7 +244,6 @@ export default {
                       ($(day).prev().find("span.vfc-span-day").hasClass("vfc-marked") ||
                           $(day).prev().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed"))
                   ) {
-                      // console.log('vfc-end-mark', day)
                       $(day).find("span.vfc-span-day").addClass("vfc-end-marked");
                       if (!$(day).find("div.vfc-base-end").length) $(day).prepend("<div class='vfc-base-end'></div>");
                   }
@@ -233,7 +254,6 @@ export default {
                       !$(day).next().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed") &&
                       !$(day).prev().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed")
                   ) {
-                      // console.log("alone", day);
                       $(day).find("span.vfc-span-day").addClass("vfc-end-marked");
                       $(day).find("div.vfc-base-start").remove();
                       $(day).find("div.vfc-base-end").remove();
@@ -243,7 +263,7 @@ export default {
                   $(day).find("div.vfc-base-end").remove();
               }
           });
-      }
+      },
   },
   updated() {
       this.renderCalendar();
@@ -261,40 +281,20 @@ export default {
           let services = [this.vendorData.vendorCategories[0]];
           this.vendorData.secondaryServices.map(s => {
               services.push(s.vendorCategory);
-          })
+          });
           return  services.map(vc => {
               let cat = this.serviceCategories.find(c => c.key == vc);
               return  {
                   title: cat.title,
                   value: 12 / this.vendorData.vendorCategories.length,
-                  color: '#a3809d',
-                  image: `/static/icons/vendor/vendor_categories/venuerental.svg`};
+                  color: cat.color,
+                  image: `/static/icons/vendor/vendor_categories/${cat.icon}`};
           })
       },
-      markedDates(){
-          let dates = []
-          if (!this.vendorData) return dates;
-          if (this.vendorData.dontWorkDays) {
-              this.$set(this.date, "selectedDates", this.vendorData.dontWorkDays);
-              if (this.vendorData.dontWorkDays.length > 0) {
-                  _.each(this.vendorData.dontWorkDays, (sd) => {
-                      dates.push(sd.date);
-                  });
-              }
-          }
-          if (this.vendorData.exDonts && this.vendorData.exDonts.length) {
-              this.vendorData.exDonts.map((h) => {
-                  dates.push(moment(h.date).format("YYYY-M-D"));
-              });
-          }
-          console.log('marked', dates);
-          return dates;
-      }
   },
   watch:{
       backOutDays(newVal){
-        console.log('back', newVal)
-        this.$forceUpdate();
+        this.getMarkedDates();
       }
   }
 };
