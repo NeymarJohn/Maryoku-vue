@@ -36,6 +36,9 @@
 // body {
 //   overflow: hidden;
 // }
+* {
+  letter-spacing: 0.2px;
+}
 html {
   background-color: #f5f5f5 !important;
 }
@@ -94,6 +97,12 @@ input[type="number"] {
       margin: 0;
   }
 }
+// custom switch label
+.md-switch-label{
+    margin-top: 5px;
+    padding-left: 5px;
+}
+
 .font-regular {
   font-family: "Manrope-Regular";
   font-weight: 400 !important;
@@ -579,11 +588,22 @@ hr {
 }
 
 @media only screen and (max-width: 959px) {
+  .font-size-14 {
+      font-size: 14px !important;
+      font-family: "Manrope-Regular";
+  }
   .font-size-20 {
-    font-size: 16px !important;
+      font-size: 16px !important;
+      font-family: "Manrope-Regular";
   }
 
   .font-size-25 {
-    font-size: 20px !important;
+      font-size: 20px !important;
+      font-family: "Manrope-Regular";
+  }
+
+  .font-size-25 {
+      font-size: 20px !important;
+      font-family: "Manrope-Regular";
   }
 }

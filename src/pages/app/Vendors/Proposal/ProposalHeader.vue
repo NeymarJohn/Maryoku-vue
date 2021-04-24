@@ -279,8 +279,8 @@ section.proposal-header {
     .date-tooltip {
       position: absolute;
       display: inline-block;
-      width: 300px;
-      padding: 24px 32px;
+      width: 350px;
+      padding: 24px 30px;
       color: #050505;
       font-size: 14px;
       left: 50%;
@@ -288,6 +288,7 @@ section.proposal-header {
       text-align: center;
       background-color: #ffedbc;
       transform: translate(-53px, 20px);
+      z-index: 2;
       cursor: pointer;
       h3 {
         font-size: 20px;
@@ -298,7 +299,7 @@ section.proposal-header {
       p {
         font-size: 16px;
         max-width: 100% !important;
-        margin: 0;
+        margin: 0 !important;
       }
 
       &::after {

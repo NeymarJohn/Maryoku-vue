@@ -16,7 +16,7 @@ const state = {
     vendors: [],
     allProperties: [],
     properties: {},
-    profile: {}
+    profile: null,
 };
 
 const getters = {
@@ -208,6 +208,7 @@ const mutations = {
     },
     setProfile(state, vendorProfile) {
         state.profile = vendorProfile
+
     }
 };
 

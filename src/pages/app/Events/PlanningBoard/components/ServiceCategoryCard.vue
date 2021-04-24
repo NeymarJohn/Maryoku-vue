@@ -8,7 +8,7 @@
       <img v-if="!selected" :src="`${$iconURL}comments/SVG/heart-dark.svg`" />
       <img v-if="selected" :src="`${$iconURL}common/heart-red.svg`" />
     </md-button>
-    <carousel :items="1" :margin="0" :nav="false" :loop="true" class="header-carousel">
+    <carousel :items="1" :margin="0" :nav="false" class="header-carousel">
       <template slot="prev">
         <span class="prev handle-btn">
           <md-icon>keyboard_arrow_left</md-icon>
@@ -17,7 +17,7 @@
       <img
         class="carousel-image"
         v-for="image in serviceCategory.images"
-        :src="`${$storageURL}RequirementsImages/thumbnails/${image}`"
+        :src="`${$storageURL}RequirementsImages/${image}`"
         :key="image"
       />
       <template slot="next">
@@ -26,10 +26,7 @@
         </span>
       </template>
     </carousel>
-    <div class="p-20 font-bold d-flex align-center justify-content-between">
-      <span>{{ serviceCategory.name }}</span>
-      <md-button class="md-red maryoku-btn">Add Specific</md-button>
-    </div>
+    <div class="p-20 font-bold">{{ serviceCategory.fullTitle }}</div>
   </div>
 </template>
 <script>

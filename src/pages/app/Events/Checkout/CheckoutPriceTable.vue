@@ -1,0 +1,117 @@
+<template>
+  <collapse-panel :defaultStatus="false" class="checkout-price-table">
+    <template slot="header">
+      <div class="price-header">
+        <div class="d-flex align-center">
+          <img :src="`${$iconURL}Budget+Elements/${vendorCategory.icon}`" class="mr-10" />
+          {{ vendorCategory.fullTitle }}
+        </div>
+        <div>
+          <div class="element-price">${{ totalPrice | withComma }}</div>
+          <div class="discount-details" v-if="discount.percentage">
+            ({{ discount.percentage }}% off)
+            <span>${{ priceBeforeDiscount | withComma }}</span>
+          </div>
+        </div>
+      </div>
+    </template>
+    <template slot="content">
+      <div class="price-table-content">
+        <div v-for="service in costServices" class="d-flex justify-content-between price-item">
+          <span>
+            {{ service.requirementTitle }} <span class="pl-20">X{{ service.requirementValue }}</span>
+          </span>
+          <span>${{ (service.price * service.requirementValue) | withComma }}</span>
+        </div>
+      </div>
+    </template>
+  </collapse-panel>
+</template>
+<script>
+import CollapsePanel from "@/components/CollapsePanel.vue";
+export default {
+  components: { CollapsePanel },
+  props: {
+    proposal: {
+      type: Object,
+      default: () => {},
+    },
+    serviceCategory: {
+      type: String,
+      default: "",
+    },
+  },
+  computed: {
+    categories() {
+      return this.$store.state.common.serviceCategories;
+    },
+    vendorCategory() {
+      return this.categories.find((item) => item.key === this.serviceCategory) || {};
+    },
+    discount() {
+      if (!this.proposal.discounts) return { percentage: 0, price: 0 };
+      let discount = { ...this.proposal.discounts["total"] };
+      if (!discount) {
+        discount = { price: 0, percentage: 0 };
+      }
+      discount.price = (this.priceOfCostservices * discount.percentage) / 100;
+      return discount;
+    },
+    tax() {
+      if (!this.proposal.taxes) return { percentage: 0, price: 0 };
+      let tax = { ...this.proposal.taxes["total"] };
+      if (!tax) {
+        tax = { price: 0, percentage: 0 };
+      }
+      console.log(this.serviceCategory, this.priceOfCostservices);
+      console.log(this.serviceCategory, this.discount.price);
+      tax.price = Math.round(((this.priceOfCostservices - this.discount.price) * tax.percentage) / 100);
+      console.log(this.serviceCategory, tax);
+      return tax;
+    },
+    costServices() {
+      return this.proposal.costServices[this.serviceCategory] || [];
+    },
+    includedServices() {
+      return this.proposal.includedServices[this.serviceCategory] || [];
+    },
+
+    priceOfCostservices() {
+      if (!this.costServices || this.costServices.length === 0) return 0;
+      return this.costServices.reduce((s, item) => {
+        if (!item.isComplimentary) return s + item.requirementValue * item.price;
+        else return 0;
+      }, 0);
+    },
+    priceBeforeDiscount() {
+      return this.priceOfCostservices - (this.priceOfCostservices * this.tax.percentage) / 100;
+    },
+    totalPrice() {
+      return this.priceOfCostservices - this.discount.price + this.tax.price;
+    },
+  },
+};
+</script>
+<style lang="scss" scoped>
+.checkout-price-table {
+  .price-header {
+    padding: 30px;
+    font-weight: 900;
+    font-size: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 100px;
+    img {
+      width: 30px;
+    }
+  }
+  .price-table-content {
+    padding: 0 30px;
+    .price-item {
+      padding: 30px 100px 30px 0;
+      border-top: solid 2px #e0e0e0;
+    }
+  }
+}
+</style>

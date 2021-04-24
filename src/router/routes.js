@@ -71,6 +71,8 @@ const ConceptDetail = () => import("@/pages/Dashboard/Pages/ConceptDetail.vue");
 const ProposalFinalStep = () => import("@/pages/app/Vendors/ProposalFinalStep.vue");
 const CalendarSync = () => import("@/pages/app/CalendarSync.vue");
 
+const Checkout = () => import("@/pages/app/Events/Checkout/Checkout.vue")
+
 let authPages = {
     path: "/",
     component: AuthLayout,
@@ -602,6 +604,17 @@ let vendorListPage = {
         gtm: "Vendors",
     },
 };
+let checkoutPage = {
+    path: "/checkout/:vendorId/:proposalId",
+    name: "Checkout",
+    component: Checkout,
+    meta: {
+        title: "Plan Event",
+        gtm: "Plan Event",
+        opaque: false,
+        requiresAuth: true,
+    },
+}
 
 let calendarSyncPage = {
     path: "/calendar/sync/:calendarName",
@@ -656,6 +669,7 @@ const routes = [
     welcomeEventPage,
     others,
     calendarSyncPage,
+    checkoutPage,
     ...vendorRoutes,
     {
         path: '*',
