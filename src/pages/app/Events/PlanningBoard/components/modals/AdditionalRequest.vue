@@ -1,5 +1,5 @@
 <template>
-  <modal class="planning-board-additioal-modal">
+  <modal class="planning-board-additioal-modal" :containerClass="`modal-container lg`">
     <template slot="header">
       <div class="maryoku-modal-header text-center">
         <img :src="`${$iconURL}Requirements/Group+16281.svg`" />

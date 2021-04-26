@@ -720,7 +720,7 @@
     }
 
     .event-elements {
-        position: relative;
+        //padding-top: 7.9em;
         padding-top: 180px;
         height: 100%;
         overflow: auto;
@@ -804,16 +804,6 @@
                     //text-decoration-line: line-through;
                 }
             }
-        }
-        .refresh{
-            position: absolute;
-            top: 50%;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            background-color: white;
-            border-radius: 100%;
-            box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.15);
         }
     }
 }

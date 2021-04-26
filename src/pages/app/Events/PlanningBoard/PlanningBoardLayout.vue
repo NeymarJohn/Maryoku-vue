@@ -24,6 +24,7 @@
             :serviceCategory="service"
             :key="service.name"
             :isLong="(serviceIndex + groupIndex) % 2 === 1"
+            :hasBudget="hasBudget(service.serviceCategory)"
           ></service-category-card>
         </div>
       </div>
@@ -39,6 +40,7 @@
             :serviceCategory="service"
             :key="service.name"
             :isLong="(serviceIndex + groupIndex) % 2 === 1"
+            :hasBudget="hasBudget(service.serviceCategory)"
           ></service-category-card>
         </div>
       </div>
@@ -63,7 +65,7 @@
         <md-button class="md-red maryoku-btn" v-if="step === 2" @click="findVendors"> Find Me Vendors </md-button>
       </div>
     </div>
-    <additional-request-modal v-if="isOpenedAdditionalModal"></additional-request-modal>
+    <additional-request-modal class="lg" v-if="isOpenedAdditionalModal"></additional-request-modal>
   </div>
 </template>
 <script>
@@ -205,7 +207,7 @@ export default {
           },
           {
             name: "AV",
-            serviceCategory: "swag",
+            serviceCategory: "audiovisualstagingservices",
             images: ["Outdoor Activities/Day trip_option 3_Canva..png", "Outdoor Activities/Sport Event 1.png"],
           },
         ],
@@ -276,10 +278,16 @@ export default {
       });
       return services;
     },
+    event() {
+      return this.$store.state.event.eventData;
+    },
   },
   methods: {
     findVendors() {
       this.isOpenedAdditionalModal = true;
+    },
+    hasBudget(categoryKey) {
+      return this.event.components.find((item) => item.componentId == categoryKey);
     },
   },
 };
