@@ -45,7 +45,7 @@
     </div>
 
     <div ref="timePickerElements" v-if="showDatePicker">
-      <div class="date-picker picker-panel" ref="timePickerPanel">
+      <div class="date-picker picker-panel" ref="timePickerPanel" style="z-index: 200!important;">
         <div class="d-flex pl-10">
           <img :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px" />
           <!-- {{dateData && dateData.selectedDate}} -->
@@ -67,6 +67,7 @@
         </div>
       </div>
       <div class="time-picker-mask" @click="showDatePicker = false" ref="timePickerMask" v-if="showDatePicker"></div>
+      <div class="time-picker-mask" @click="clickMask" ref="timePickerMask" v-if="showDatePicker"></div>
     </div>
   </div>
 </template>
@@ -152,16 +153,21 @@ export default {
         this.showDatePicker = true;
       }
       if (this.inputStyle == "time" || this.inputStyle == "date") {
-        setTimeout(() => {
-          const pos = this.cumulativeOffset(this.$refs.input);
-          this.$refs.timePickerPanel.style.left = `${pos.left}px`;
-          this.$refs.timePickerPanel.style.top = `${window.scrollY + pos.top}px`;
-          this.$refs.timePickerPanel.style.display = "block";
-          this.$refs.timePickerPanel.style.position = "absolute";
-          document.getElementsByTagName("body")[0].appendChild(this.$refs.timePickerElements);
-          window.addEventListener("scroll", this.handleScroll);
-        }, 100);
+        // setTimeout(() => {
+        //   const pos = this.cumulativeOffset(this.$refs.input);
+        //   console.log('pos', pos);
+        //   this.$refs.timePickerPanel.style.left = `${pos.left}px`;
+        //   this.$refs.timePickerPanel.style.top = `${80 + pos.top}px`;
+        //   this.$refs.timePickerPanel.style.display = "block";
+        //   this.$refs.timePickerPanel.style.position = "absolute";
+        //   document.getElementsByTagName("body")[0].appendChild(this.$refs.timePickerElements);
+        //   window.addEventListener("scroll", this.handleScroll);
+        // }, 100);
       }
+    },
+    clickMask(){
+      console.log('clickMast');
+      this.showDatePicker = false;
     },
     setDate() {
       this.content = moment(new Date(this.dateData.selectedDate)).format("DD.MM.YYYY");

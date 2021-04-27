@@ -1,6 +1,6 @@
 <template>
   <div
-    @click="close()"
+    @click="close"
     data-notify="container"
     class="alert open event-state-message alert-plain"
     role="alert"
@@ -16,8 +16,8 @@
           <div class="message-action">
               <div class="message-action-content">{{message.action}}</div>
               <div class="message-action-button">
-                  <md-button class="md-bold add-category-btn md-black md-simple" @click="close()">Cancel</md-button>
-                  <md-button v-if="type !== 'positive'" class="md-red md-bold add-category-btn">Send</md-button>
+                  <md-button class="md-bold add-category-btn md-black md-simple" @click="close">Cancel</md-button>
+                  <md-button v-if="type !== 'positive'" class="md-red md-bold add-category-btn" @click="send">Send</md-button>
               </div>
           </div>
       </div>
@@ -93,14 +93,13 @@ export default {
   methods: {
     close () {
       this.$emit('on-close', this.timestamp)
+    },
+    send(){
+      this.$emit('on-send', this.message.title);
     }
   },
   mounted () {
-    console.log('notification', this.$props);
     this.elmHeight = this.$el.clientHeight
-    // if (this.timeout) {
-    //   setTimeout(this.close, this.timeout)
-    // }
   }
 }
 </script>

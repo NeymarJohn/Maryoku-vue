@@ -268,6 +268,7 @@ export default {
         });
     },
     toggleCommentMode(mode) {
+      console.log('toggle.comment', mode);
       this.showCommentEditorPanel = mode;
     },
     fetchData: async function () {

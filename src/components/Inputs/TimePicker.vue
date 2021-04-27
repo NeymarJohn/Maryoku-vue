@@ -59,7 +59,6 @@ export default {
       border-radius: 3px;
       font: normal 18px Manrope-Regular, sans-serif;
       border: 1px solid #707070;
-      text-align: center;
       font-size: 20px;
     }
   }
