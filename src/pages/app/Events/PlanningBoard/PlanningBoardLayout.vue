@@ -65,7 +65,11 @@
         <md-button class="md-red maryoku-btn" v-if="step === 2" @click="findVendors"> Find Me Vendors </md-button>
       </div>
     </div>
-    <additional-request-modal class="lg" v-if="isOpenedAdditionalModal"></additional-request-modal>
+    <additional-request-modal
+      class="lg"
+      v-if="isOpenedAdditionalModal"
+      @cancel="isOpenedAdditionalModal = false"
+    ></additional-request-modal>
   </div>
 </template>
 <script>
@@ -101,6 +105,20 @@ export default {
               "Venue+Type/Stadium_Shutterstock.jpg",
               "Venue+Type/Stately Home_Option 1_Shutterstock.jpg",
             ],
+            imageTitles: [
+              "Academic Venue Shutterstock",
+              "Bar or Pub or Club Sutterstock",
+              "Community Center Shutterstock",
+              "Gallery Option 1 Canva Free",
+              "Garden Option 1 Shutterstock",
+              "Historic Establishment Canva Pro",
+              "Meeting Room Sutterstock",
+              "Restaurant Shutterstock",
+              "Sports Club Shutterstock",
+              "Stadium Shutterstock",
+              "Stately Home Option 1 Shutterstock",
+            ],
+            icon: "NewRequirements/Group 18008.svg",
           },
           {
             name: "Decor",
@@ -110,6 +128,8 @@ export default {
               "Decor/Interior Design_Canva Free.png",
               "Decor/Lighting_Canva Pro.png",
             ],
+            imageTitles: ["Florals Option 1 Canva", "Interior Design Canva Free", "Lighting Canva Pro"],
+            icon: "NewRequirements/Group 18012.svg",
           },
         ],
         [
@@ -134,6 +154,25 @@ export default {
               "Cuisine/Spanish Food_Canva.png",
               "Cuisine/Thai Food.jpg",
             ],
+            imageTitles: [
+              "American Food Canva",
+              "Argentine Food Canva",
+              "Chinese Food",
+              "Colombian Food Canva",
+              "Cuban Food.jpg",
+              "French Food_Canva.png",
+              "German Food Option 1",
+              "German Food Option 2",
+              "Greek Food Canva Option 1",
+              "Indian Food Canva",
+              "Italian Food Canva",
+              "Japanese Food Canva",
+              "Mexican Food Canva",
+              "Peruvian Food Option 1",
+              "Spanish Food Canva",
+              "Thai Food",
+            ],
+            icon: "NewRequirements/Group 18012.svg",
           },
           {
             name: "Liquor Stations",
@@ -157,6 +196,26 @@ export default {
               "Beverage/Whiskey_Canva Pro.png",
               "Beverage/Wine_Canva Pro.png",
             ],
+            imageTitles: [
+              "Beer Canva Pro",
+              "Bourbon Canva Pro",
+              "Champagne Canva Pro",
+              "Cocktail Canva Pro",
+              "Coffee   Dream Canva Pro",
+              "Margarita Canva Pro",
+              "Martini Canva Pro",
+              "Mixology Canva Pro",
+              "Rum Canva Pro",
+              "Soft Drinks Option 1 Canva Pro",
+              "Soft Drinks Option 2 Canva Pro",
+              "Sparkling Water Canva Pro",
+              "Still Water Canva Pro",
+              "Tequila Canva Pro",
+              "Vodka Canva Pro",
+              "Whiskey Canva Pro",
+              "Wine Canva Pro",
+            ],
+            icon: "NewRequirements/Group 18017.svg",
           },
         ],
         [
@@ -171,6 +230,8 @@ export default {
               "Photography+_+Videography/Drone.jpg",
               "Photography+_+Videography/Portrait.jpg",
             ],
+            imageTitles: ["Black White", "Buisness", "Candid", "Commercial", "Drone", "Portrait"],
+            icon: "NewRequirements/Group 18009.svg",
           },
           {
             name: "Music",
@@ -183,6 +244,8 @@ export default {
               "Photography+_+Videography/Drone.jpg",
               "Photography+_+Videography/Portrait.jpg",
             ],
+            imageTitles: ["Black White", "Buisness", "Candid", "Commercial", "Drone", "Portrait"],
+            icon: "NewRequirements/Group 18013.svg",
           },
         ],
       ],
@@ -192,11 +255,15 @@ export default {
             name: "Swag",
             serviceCategory: "swag",
             images: ["Outdoor Activities/Day trip_option 3_Canva..png", "Outdoor Activities/Sport Event 1.png"],
+            imageTitles: ["Day Trip Option Canva", "Sport Event"],
+            icon: "NewRequirements/Group 18012.svg",
           },
           {
             name: "Special Requirment",
             serviceCategory: "speicalrequirements",
             images: ["Outdoor Activities/Day trip_option 3_Canva..png", "Outdoor Activities/Sport Event 1.png"],
+            imageTitles: ["Day Trip Option Canva", "Sport Event"],
+            icon: "NewRequirements/Group 18012.svg",
           },
         ],
         [
@@ -204,11 +271,15 @@ export default {
             name: "Activities",
             serviceCategory: "swag",
             images: ["Outdoor Activities/Day trip_option 3_Canva..png", "Outdoor Activities/Sport Event 1.png"],
+            imageTitles: ["Day Trip Option 3 Canva", "Sport Event 1"],
+            icon: "NewRequirements/Group 18027.svg",
           },
           {
             name: "AV",
             serviceCategory: "audiovisualstagingservices",
             images: ["Outdoor Activities/Day trip_option 3_Canva..png", "Outdoor Activities/Sport Event 1.png"],
+            imageTitles: ["Day Trip Option 3 Canva", "Sport Event 1"],
+            icon: "NewRequirements/Group 18012.svg",
           },
         ],
         [
@@ -224,6 +295,16 @@ export default {
               "Staff/Transportation Host.png",
               "Staff/Wait Staff 1.png",
             ],
+            imageTitles: [
+              "Concierge 2",
+              "Day Of Coordinator Option 2",
+              "Event Model 1",
+              "Event Registration 1",
+              "Shutterstock",
+              "Transportation Host",
+              "Wait Staff 1",
+            ],
+            icon: "NewRequirements/Group 18026.svg",
           },
           {
             name: "Transportation",
@@ -239,6 +320,18 @@ export default {
               "Transportation/Private Black Car.jpg",
               "Transportation/Van_Canva Pro.png",
             ],
+            imageTitles: [
+              "Air Services Canva Pro",
+              "ATV Canva Pro",
+              "Bicycle Canva Pro",
+              "Boat Canva Pro",
+              "Bus Canva Pro",
+              "Ferry Canva Pro",
+              "Gold Carts Canva Pro",
+              "Private Black Car",
+              "Van Canva Pro",
+            ],
+            icon: "NewRequirements/Group 18016.svg",
           },
         ],
       ],
