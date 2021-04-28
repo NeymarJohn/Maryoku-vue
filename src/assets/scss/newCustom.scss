@@ -720,7 +720,7 @@
     }
 
     .event-elements {
-        position: relative;
+        //padding-top: 7.9em;
         padding-top: 180px;
         height: 100%;
         overflow: auto;
@@ -804,11 +804,6 @@
                     //text-decoration-line: line-through;
                 }
             }
-        }
-        .refresh{
-            position: absolute;
-            top:  calc(50% - 20px);
-            right: -20px;
         }
     }
 }

@@ -24,7 +24,6 @@
   </div>
   <div v-else class="md-layout event-budget-section booking-section">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
-    <budget-notifications></budget-notifications>
     <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <div class="event-page-header">
       <div class="md-layout-item md-size-100 event-header d-flex justify-content-between">
@@ -111,11 +110,9 @@ import EventBudgetRequirementStep1 from "./EventBudgetRequirementStep1";
 import EventBudgetRequirementStep2 from "./EventBudgetRequirementStep2";
 import EventBudgetApprove from "./EventBudgetApprove.vue";
 
-import { BUDGET_MESSAGES } from "@/constants/messages";
 import EventComponent from "@/models/EventComponent";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
-import moment from "moment";
 
 export default {
   components: {
@@ -140,13 +137,8 @@ export default {
       completedProgressValue: 0,
     };
   },
-  mounted() {
+  created() {
     this.currentStep = this.event.budgetProgress >= 50 ? 3 : 1;
-    this.checkMessageStatus();
-    this.$root.$on('budget_notification_action', message => {
-        let obj = BUDGET_MESSAGES.find(m => m.title = message);
-        if (obj.key === 'not_approved') this.next();
-    })
   },
   methods: {
     toggleCommentMode(mode) {
@@ -208,33 +200,6 @@ export default {
       this.budgetInfo2 = eventInfo;
       this.editingEvent.eventMovieId = eventInfo.label;
     },
-      checkMessageStatus() {
-        console.log('checkMessageStatus')
-          this.budgetStates = [];
-          let now = moment();
-          let created_at = moment(this.event.dateCreated);
-          if (this.event.budgetProgress === 50 && now.diff(created_at, "days") < 15) {
-              this.budgetStates.push({ key: "not_approved" });
-          }
-
-          if (this.budgetStates.length) {
-              this.budgetStates.map((it) => {
-                  let message_item = BUDGET_MESSAGES.find((m) => m.key == it.key);
-                  this.$notify({
-                      message: {
-                          title: message_item.title,
-                          content: message_item.message,
-                          action: message_item.action,
-                      },
-                      icon: `${this.$iconURL}messages/${message_item.icon}`,
-                      horizontalAlign: "right",
-                      verticalAlign: "top",
-                      type: message_item.type,
-                      timeout: 5000,
-                  });
-              });
-          }
-      },
   },
   computed: {
     event() {

@@ -4,6 +4,7 @@
       class="md-simple md-icon-button md-raised save-btn"
       :class="{ isSelected: selected }"
       @click="selected = !selected"
+      v-show="hasBudget"
     >
       <img v-if="!selected" :src="`${$iconURL}comments/SVG/heart-dark.svg`" />
       <img v-if="selected" :src="`${$iconURL}common/heart-red.svg`" />
@@ -14,12 +15,11 @@
           <md-icon>keyboard_arrow_left</md-icon>
         </span>
       </template>
-      <img
-        class="carousel-image"
-        v-for="image in serviceCategory.images"
-        :src="`${$storageURL}RequirementsImages/thumbnails/${image}`"
-        :key="image"
-      />
+      <div v-for="(image, index) in serviceCategory.images" :key="image" class="carousel-item">
+        <img class="carousel-image" :src="`${$storageURL}RequirementsImages/thumbnails/${image}`" />
+        <label>{{ serviceCategory.imageTitles[index] }}</label>
+      </div>
+
       <template slot="next">
         <span class="next handle-btn">
           <md-icon>keyboard_arrow_right</md-icon>
@@ -28,19 +28,62 @@
     </carousel>
     <div class="p-20 font-bold d-flex align-center justify-content-between">
       <span>{{ serviceCategory.name }}</span>
-      <md-button class="md-red maryoku-btn">Add Specific</md-button>
+      <md-button v-if="hasBudget" class="md-red maryoku-btn">Get Specific</md-button>
+      <template v-else>
+        <popper trigger="click" :options="{ placement: 'top', gpuAcceleration: false }">
+          <div class="popper white-card popper-content">
+            <div class="font-size-20 popper-header font-bold">
+              <div class="d-flex align-center">
+                <img :src="`${$iconURL}${serviceCategory.icon}`" class="mr-10" />
+                <div>Would you like to add the {{ serviceCategory.name }} category to your budget?</div>
+              </div>
+            </div>
+            <div class="font-size-16 mt-20">
+              Looks like you didn’t allocate money for this service, it’s not a problem at all! You could do it whenever
+              you want, just add it to your budget
+            </div>
+            <div class="mt-20">Adding categories to budget is mandatory in order to get proposals</div>
+            <div class="popper-footer d-flex mt-50">
+              <md-button class="md-simple md-black maryoku-btn">
+                Don't Add {{ serviceCategory.name }} To Budget
+              </md-button>
+              <md-button class="md-red maryoku-btn">Add {{ serviceCategory.name }} To Budget</md-button>
+            </div>
+          </div>
+          <md-button class="md-simple maryoku-btn md-red" slot="reference">Add To Budget</md-button>
+        </popper>
+      </template>
     </div>
   </div>
 </template>
 <script>
 import carousel from "vue-owl-carousel";
+import Popper from "vue-popperjs";
+import "vue-popperjs/dist/vue-popper.css";
 export default {
   components: {
     carousel,
+    Popper,
   },
   data() {
     return {
       selected: false,
+      popperIcons: {
+        venuerental: "NewRequirements/Group 18008.svg",
+        decor: "NewRequirements/Group 18012.svg",
+        foodandbeverage: "NewRequirements/Group 18008.svg",
+        entertainment: "NewRequirements/Group 18015.svg",
+        swag: "NewRequirements/Group 18008.svg",
+        audiovisualstagingservices: "NewRequirements/Group 18008.svg",
+        corporatesocialresponsibility: "NewRequirements/Group 18008.svg",
+        transportation: "NewRequirements/Group 18016.svg",
+        giveaways: "NewRequirements/Group 18008.svg",
+        meetingorganizationfees: "NewRequirements/Group 18008.svg",
+        shipping: "NewRequirements/Group 18008.svg",
+        signageprinting: "NewRequirements/Group 18008.svg",
+        securityservices: "NewRequirements/Group 18008.svg",
+        videographyandphotography: "NewRequirements/Group 18009.svg",
+      },
     };
   },
   props: {
@@ -49,6 +92,10 @@ export default {
       default: () => {},
     },
     isLong: {
+      type: Boolean,
+      default: false,
+    },
+    hasBudget: {
       type: Boolean,
       default: false,
     },
@@ -62,7 +109,6 @@ export default {
 <style lang="scss" scoped>
 .plannig-service-category-card {
   border-radius: 3px;
-  overflow: hidden;
   position: relative;
   &.longer-card {
     img.carousel-image {
@@ -73,6 +119,28 @@ export default {
   img.carousel-image {
     height: 280px;
     object-fit: cover;
+  }
+  .carousel-item {
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      opacity: 0.4;
+    }
+    label {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      color: white;
+      font-weight: bold;
+      line-height: 1.2em;
+      transform: translate(-50%, -50%);
+      font-size: 30px;
+      text-align: center;
+    }
   }
   .save-btn {
     position: absolute;
@@ -97,6 +165,9 @@ export default {
   }
   .header-carousel {
     position: relative;
+    /deep/ span[id*="carousel_prev_"] {
+      display: block !important;
+    }
     /deep/ .owl-dots {
       position: absolute;
       margin-top: -40px;
@@ -124,6 +195,7 @@ export default {
       top: 50%;
       transform: translateY(-50%);
       z-index: 10;
+      cursor: pointer;
       i {
         color: #050505;
       }
@@ -134,6 +206,11 @@ export default {
         left: 20px;
       }
     }
+  }
+  .popper-content {
+    padding: 40px;
+    box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.26);
+    text-align: left;
   }
 }
 </style>
