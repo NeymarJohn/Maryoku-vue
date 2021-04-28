@@ -10,7 +10,7 @@
     }
   }
   &.md-theme-default.md-checkbox-narrow {
-    margin: 0 16px 0 0 !important; 
+    margin: 0 16px 0 0 !important;
   }
   &.md-theme-default.md-checkbox-circle {
     .md-checkbox-container{
@@ -19,7 +19,7 @@
     &.md-checked  .md-checkbox-container{
       background-color: #2cde6b !important;
       border-color: #2cde6b !important;
-      
+
       &:after {
         border-color: white !important;
       }
@@ -29,6 +29,13 @@
       border-color: #f51355 !important;
       &:after {
         border-color: white !important;
+      }
+    }
+    &.md-vendor.md-checked  .md-checkbox-container{
+      background-color: $vendorColor !important;
+      border-color: $vendorColor !important;
+      &:after {
+          border-color: white !important;
       }
     }
   }

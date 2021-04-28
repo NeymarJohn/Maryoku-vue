@@ -9,6 +9,7 @@
                     :timestamp="notification.timestamp"
                     :vertical-align="notification.verticalAlign"
                     :horizontal-align="notification.horizontalAlign"
+                    @on-send="action"
                     @on-close="removeNotification">
       </budget-notification>
     </transition-group>
@@ -29,8 +30,14 @@ export default {
   methods: {
     removeNotification (timestamp) {
       this.$notifications.removeNotification(timestamp)
+    },
+    action(message) {
+      this.$root.$emit('budget_notification_action', message);
     }
   },
+    beforeDestroy() {
+        this.$root.$off("budget_notification_action");
+    },
 }
 </script>
 <style lang="scss">

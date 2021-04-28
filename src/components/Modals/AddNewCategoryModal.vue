@@ -87,21 +87,19 @@ export default {
       default: [],
     },
   },
-  created() {
-    EventComponent.get()
-      .then((components) => {
-        const availableComponents = [];
-        components.forEach((item) => {
-          const index = this.components.findIndex((comp) => item.key == comp.componentId);
-          if (index < 0) {
+  created: async function() {
+    const availableComponents = JSON.parse(localStorage.getItem('budget_categories')) || [];
+    if (!availableComponents.length) {
+      let components = await EventComponent.get();
+      components.forEach((item) => {
+        const index = this.components.findIndex((comp) => item.key == comp.componentId);
+        if (index < 0) {
             availableComponents.push(item);
-          }
-        });
-        this.filteredEventBlocks = availableComponents;
-      })
-      .catch((error) => {
-        console.log("Error ", error);
+        }
       });
+      localStorage.setItem('budget_categories', JSON.stringify(availableComponents));
+    }
+    this.filteredEventBlocks = availableComponents;
   },
   data() {
     return {

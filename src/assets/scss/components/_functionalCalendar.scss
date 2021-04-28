@@ -157,6 +157,12 @@ span.vfc-span-day.vfc-hide {
         &:not(.vfc-start-marked):not(.vfc-end-marked):before {
             background-color: $vendorColor !important;
         }
-    }
+  }
+  .vfc-cursor-pointer {
+      z-index: 30 !important;
+  }
+  .vfc-content{
+      z-index: 20 !important;
+  }
 }
 
