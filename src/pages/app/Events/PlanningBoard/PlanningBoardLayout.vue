@@ -25,6 +25,7 @@
             :key="service.name"
             :isLong="(serviceIndex + groupIndex) % 2 === 1"
             :hasBudget="hasBudget(service.serviceCategory)"
+            :musicPlayer="service.musicPlayer"
           ></service-category-card>
         </div>
       </div>
@@ -212,7 +213,7 @@ export default {
         ],
         [
           {
-            name: "Photography Style",
+            name: "Photography  Videography/",
             serviceCategory: "entertainment",
             images: [
               "Photography+_+Videography/Black_White.jpg",
@@ -228,6 +229,37 @@ export default {
           {
             name: "Music",
             serviceCategory: "entertainment",
+            musicPlayer: true,
+            clips: [
+              "Music Clips/Asian-india-Bensound.mp3",
+              "Music Clips/Blues-hipjazz-Bensound.mp3",
+              "Music Clips/Classical_Wake_Up_CC Sound.mp3",
+              "Music Clips/Country_Country Boy Song-Bensound.mp3",
+              "Music Clips/Electronic_ERF-Bensound.mp3",
+              "Music Clips/Folk_Hey-Bensound.mp3",
+              "Music Clips/Hip Hop-groovyhiphop-Bensound.mp3",
+              "Music Clips/Jazz-thejazzpiano-Bensound.mp3",
+              "Music Clips/Latin_Latin Beat_CC Hound.mp3",
+              "Music Clips/pop_Funday-Bensound.mp3",
+              "Music Clips/RB_Heart_CC Sound.mp3",
+              "Music Clips/Rock-rumble-Bensound.mp3",
+              "Music Clips/Soul-retrosoul-Bensound.mp3",
+            ],
+            clipTitles: [
+              "Asian-india-Bensound",
+              "Blues-hipjazz-Bensound",
+              "Classical_Wake_Up_CC Sound",
+              "Country_Country Boy Song-Bensound",
+              "Electronic_ERF-Bensound",
+              "Folk_Hey-Bensound",
+              "Hip Hop-groovyhiphop-Bensound",
+              "Jazz-thejazzpiano-Bensound",
+              "Latin_Latin Beat_CC Hound",
+              "pop_Funday-Bensound",
+              "RB_Heart_CC Sound",
+              "Rock-rumble-Bensound",
+              "Soul-retrosoul-Bensound",
+            ],
             images: [
               "Photography+_+Videography/Black_White.jpg",
               "Photography+_+Videography/Buisness.jpg",
@@ -244,24 +276,51 @@ export default {
       serviceCards2: [
         [
           {
-            name: "Swag",
+            name: "Giveaways",
             serviceCategory: "swag",
-            images: ["Outdoor Activities/Day trip_option..png", "Outdoor Activities/Sport Event.png"],
-            imageTitles: ["Day Trip Option", "Sport Event"],
+            images: [
+              "Giveaways/Apparel.png",
+              "Giveaways/Ceremonial Items.png",
+              "Giveaways/Drinkware.jpeg",
+              "Giveaways/Fitness.jpeg",
+              "Giveaways/Gadgets.jpeg",
+              "Giveaways/Office Items.png",
+              "Giveaways/Specialty Food and Liquor.png",
+              "Giveaways/Tote Bags.png",
+              "Giveaways/Travel Accessories.jpg",
+              "Giveaways/Wellness.png",
+            ],
+            imageTitles: [
+              "Apparel",
+              "Ceremonial Items",
+              "Drinkware",
+              "Fitness",
+              "Gadgets",
+              "Office Items",
+              "Specialty Food and Liquor",
+              "Tote Bags",
+              "Travel Accessories",
+              "Wellness",
+            ],
             icon: "NewRequirements/Group 18012.svg",
           },
           {
-            name: "Special Requirment",
-            serviceCategory: "speicalrequirements",
-            images: ["Outdoor Activities/Day trip_option..png", "Outdoor Activities/Sport Event.png"],
-            imageTitles: ["Day Trip Option", "Sport Event"],
+            name: "Indoor Activities",
+            serviceCategory: "entertainment",
+            images: [
+              "Indoor Activities/Casino Games.png",
+              "Indoor Activities/Indoor Sport.png",
+              "Indoor Activities/Make Your Own.png",
+              "Indoor Activities/Photo Booth.png",
+            ],
+            imageTitles: ["Casino Games", "Indoor Sport", "Make Your Own", "Photo Booth"],
             icon: "NewRequirements/Group 18012.svg",
           },
         ],
         [
           {
-            name: "Activities",
-            serviceCategory: "swag",
+            name: "Outdoor Activities",
+            serviceCategory: "entertainment",
             images: ["Outdoor Activities/Day trip_option..png", "Outdoor Activities/Sport Event.png"],
             imageTitles: ["Day Trip Option", "Sport Event"],
             icon: "NewRequirements/Group 18027.svg",
@@ -269,8 +328,8 @@ export default {
           {
             name: "AV",
             serviceCategory: "audiovisualstagingservices",
-            images: ["Outdoor Activities/Day trip_option..png", "Outdoor Activities/Sport Event.png"],
-            imageTitles: ["Day Trip Option", "Sport Event"],
+            images: ["A-V/Lighting.jpg", "A-V/Plasma TV.jpeg", "A-V/Projector.jpg"],
+            imageTitles: ["Lighting", "Plasma TV", "Projector"],
             icon: "NewRequirements/Group 18012.svg",
           },
         ],

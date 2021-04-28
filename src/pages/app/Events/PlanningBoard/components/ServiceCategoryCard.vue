@@ -6,10 +6,10 @@
       @click="selected = !selected"
       v-show="hasBudget"
     >
-      <img v-if="!selected" :src="`${$iconURL}comments/SVG/heart-dark.svg`" />
-      <img v-if="selected" :src="`${$iconURL}common/heart-red.svg`" />
+      <img v-if="!selected" class="non-selected" :src="`${$iconURL}comments/SVG/heart-dark.svg`" />
+      <img v-if="selected" :src="`${$iconURL}Requirements/Group+16153.svg`" />
     </md-button>
-    <carousel :items="1" :margin="0" :nav="false" :loop="true" class="header-carousel">
+    <carousel v-if="!musicPlayer" :items="1" :margin="0" :nav="false" :loop="true" class="header-carousel">
       <template slot="prev">
         <span class="prev handle-btn">
           <md-icon>keyboard_arrow_left</md-icon>
@@ -22,6 +22,32 @@
 
       <template slot="next">
         <span class="next handle-btn">
+          <md-icon>keyboard_arrow_right</md-icon>
+        </span>
+      </template>
+    </carousel>
+    <carousel v-else :items="1" :margin="0" :nav="false" :loop="true" class="header-carousel">
+      <template slot="prev">
+        <span class="prev handle-btn d-none" ref="prevButton">
+          <md-icon>keyboard_arrow_left</md-icon>
+        </span>
+      </template>
+      <div v-for="(clip, index) in serviceCategory.clips" :key="clip" class="carousel-item">
+        <img
+          class="carousel-image"
+          :src="`${$storageURL}RequirementsImages/thumbnails/Photography+_+Videography/Candid.jpg`"
+        />
+        <music-player
+          class="player"
+          :title="serviceCategory.clipTitles[index]"
+          :src="`${$storageURL}RequirementsImages/thumbnails/${clip}`"
+          @next="next"
+          @prev="prev"
+        ></music-player>
+      </div>
+
+      <template slot="next">
+        <span class="next handle-btn d-none" ref="nextButton">
           <md-icon>keyboard_arrow_right</md-icon>
         </span>
       </template>
@@ -60,10 +86,12 @@
 import carousel from "vue-owl-carousel";
 import Popper from "vue-popperjs";
 import "vue-popperjs/dist/vue-popper.css";
+import MusicPlayer from "./MusicPlayer.vue";
 export default {
   components: {
     carousel,
     Popper,
+    MusicPlayer,
   },
   data() {
     return {
@@ -99,10 +127,20 @@ export default {
       type: Boolean,
       default: false,
     },
+    musicPlayer: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   methods: {
     selectSave() {},
+    prev() {
+      this.$refs.prevButton.click();
+    },
+    next() {
+      this.$refs.nextButton.click();
+    },
   },
 };
 </script>
@@ -130,7 +168,8 @@ export default {
       background-color: black;
       opacity: 0.4;
     }
-    label {
+    label,
+    .player {
       position: absolute;
       left: 50%;
       top: 50%;
@@ -140,6 +179,10 @@ export default {
       transform: translate(-50%, -50%);
       font-size: 30px;
       text-align: center;
+    }
+    .player {
+      width: 100%;
+      padding: 50px;
     }
   }
   .save-btn {
@@ -152,11 +195,18 @@ export default {
     background: white !important;
     border-radius: 50%;
     &.isSelected {
-      background: rgba(255, 255, 255, 0.5) !important;
-      border: solid 1px #f51355;
+      background-color: transparent !important;
+      padding: 0;
+      // /deep/ .md-ripple {
+      //   padding: 0 !important;
+      // }
+      // border: solid 1px #f51355;
     }
     /deep/ .md-ripple {
-      padding: 5px;
+      padding: 0px;
+    }
+    img.non-selected {
+      padding: 3px;
     }
     img {
       width: 50px;
