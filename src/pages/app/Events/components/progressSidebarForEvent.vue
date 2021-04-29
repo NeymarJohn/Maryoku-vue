@@ -75,10 +75,6 @@
             </div>
           </div>
         </draggable>
-          <md-button class="md-simple refresh"
-                     :style="{bottom: `${56 * (elements.length % 2 == 0 ? elements.length / 2 : (elements.length - 1) / 2 + 1)}px`}"
-                     @click="changeItem('refresh')">
-                <img :src="`${$iconURL}Budget Requirements/group-9602@3x.png`" width="80"></md-button>
       </div>
     </div>
   </div>
@@ -149,9 +145,8 @@ export default {
     fetchUrl() {
       this.currentUrl = this.$router.history.current.path;
     },
-    changeItem(option = null){
-      let params = option == 'refresh' ? null : this.elements;
-      this.$emit('change', params);
+    changeItem(){
+      this.$emit('change', this.elements);
     }
   },
   created() {

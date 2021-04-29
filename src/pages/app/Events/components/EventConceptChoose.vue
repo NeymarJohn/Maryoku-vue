@@ -38,7 +38,6 @@
             >
             <span v-if="item.name == selectedConcept.name" class="font-size-16">You already selected this concept</span>
           </div>
-
           <div :class="`images-list option-${index + 1}`">
             <div class="image-backgrounds">
               <div
@@ -62,7 +61,7 @@
           <div class="concept-details">
             <small>Option 0{{ index + 1 }}</small>
             <div class="concept-name">
-              <h3 class="mb-5" :style="`font-family:${item.fontFamily}`" v-html="item.name"></h3>
+              <h3 :style="`font-family:${item.fontFamily}`" v-html="item.name"></h3>
               <ul class="features-list" v-if="item.tags">
                 <li class="features-list__item" v-for="(tag, featureIndex) in item.tags" :key="featureIndex">
                   {{ tag.name }}

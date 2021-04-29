@@ -38,7 +38,7 @@
         <div class="pt-30">
           <label>Income From Past And Future Events</label>
           <p class="d-flex align-center text-gray font-size-14">
-              <span class="d-inline-block mr-10" style="width: 14px;height: 14px;border-radius: 50%;background: rgb(159 107 144)"></span>
+              <span class="d-inline-block mr-10" style="width: 14px;height: 14px;border-radius: 50%;background: white"></span>
               No event incomes</p>
           <div>
             <income-bar-chart :chartData="incomeChartData"></income-bar-chart>
@@ -69,8 +69,9 @@
                       <div style="border-bottom:  2px solid #c8c8c8">
                           <div class="pt-10 d-flex align-center justify-content-center font-bold">
                               <md-button class="md-button md-theme-default md-simple md-just-icon"><md-icon>chevron_left</md-icon></md-button>
-                              <span class="font-size-20 mr-10"> 0/0 </span>
-                              PROPOSALS FOR REQUEST
+<!--                              <span class="font-size-20 mr-10"> 0/0 </span>-->
+<!--                              PROPOSALS FOR REQUEST-->
+                                  THE PLANNER DIDN"T WANT ANY CHANGES
                               <md-button class="md-button md-theme-default md-simple md-just-icon"><md-icon>chevron_right</md-icon></md-button>
                           </div>
                       </div>
@@ -86,22 +87,21 @@
           <div class="md-layout mt-20">
             <div class="white-card md-layout p-30">
                 <div class="md-layout-item md-size-50">
-                    <FunctionalCalendar
-                        class="vendor-dashboard-calendar"
-                        :is-multiple-date-picker="true"
-                        :sundayStart="true"
-                        :minSelDays="1"
-                        :marked-dates="markedDates"
-                        :date-format="'yyyy-mm-dd'"
-                        v-model="date"
-                        @changedMonth="changeMonth"
-                        @changedYear="changeYear"
-                        v-on:dayClicked="selectDay($event)"
-                        v-on:daychoseDay="selectDay($event)"
-                    ></FunctionalCalendar>
-                    <!-- todo update page when month change -->
-                    <div v-if="markedDates.length" style="display: none">{{ this.month }}</div>
-
+                    <template>
+                        <FunctionalCalendar
+                            class="vendor-dashboard-calendar"
+                            :is-multiple-date-picker="true"
+                            :sundayStart="true"
+                            :minSelDays="1"
+                            :marked-dates="markedDates"
+                            :date-format="'yyyy-mm-dd'"
+                            v-model="date"
+                            @changedMonth="changeMonth"
+                            @changedYear="changeYear"
+                        ></FunctionalCalendar>
+                        <!-- todo update page when month change -->
+                        <div style="display: none">{{ this.month }}</div>
+                    </template>
                     <div class="d-flex align-center">
                         <md-switch class="md-switch-vendor" v-model="backOutDays" style="margin-left: 20px">Backout Days</md-switch>
                         <md-button class="md-simple ml-auto md-vendor">
@@ -159,11 +159,6 @@ export default {
         { label: "Nov", value: 100, future: true },
         { label: "Dec", value: 70, future: true },
       ],
-      categoryColors: [
-        'rgb(159 107 144)',
-        '#4e0841',
-        '#641856',
-      ],
       month: null,
       date: {
         selectedDates: [],
@@ -176,23 +171,21 @@ export default {
   },
   methods:{
       getMarkedDates(){
-          let markedDates = [];
+          console.log('getMarkedDates', this.backOutDays);
+          // this.markedDates = [];
           if (this.backOutDays) {
-              console.log('getMarkedDates', this.backOutDays);
               if (this.vendorData.dontWorkDays && this.vendorData.dontWorkDays.length) {
                   _.each(this.vendorData.dontWorkDays, (sd) => {
-                      markedDates.push(sd.date);
+                      this.markedDates.push(sd.date);
                   });
               }
               if (this.vendorData.exDonts && this.vendorData.exDonts.length) {
                   this.vendorData.exDonts.map((h) => {
-                      markedDates.push(moment(h.date).format("YYYY-M-D"));
+                      this.markedDates.push(moment(h.date).format("YYYY-M-D"));
                   });
               }
           }
-          this.markedDates = markedDates;
           console.log('markedDates', this.markedDates);
-          this.$forceUpdate();
       },
       changeMonth(e) {
           this.month = moment(e).month();
@@ -271,21 +264,6 @@ export default {
               }
           });
       },
-      selectDay(e) {
-          let day = moment(e.date).date();
-          let date = moment(e.date).format("YYYY-M-D");
-          let selectedDates = this.date.selectedDates;
-          console.log('selectDay', selectedDates, date);
-          if (this.date.selectedDates.find((m) => m.date === date)) {
-              console.log('selectDay', date);
-              selectedDates = this.date.selectedDates.filter((s) => s.date !== e.date);
-              this.markedDates = this.markedDates.filter((m) => m !== date);
-              $("span.vfc-span-day:contains(" + day + ")").removeClass("vfc-marked vfc-start-marked vfc-end-marked");
-              $("span.vfc-span-day:contains(" + day + ")").css('background-color', '');
-
-          }
-          this.$forceUpdate();
-      },
   },
   updated() {
       this.renderCalendar();
@@ -304,20 +282,20 @@ export default {
           this.vendorData.secondaryServices.map(s => {
               services.push(s.vendorCategory);
           });
-          return  services.map((vc, idx) => {
+          return  services.map(vc => {
               let cat = this.serviceCategories.find(c => c.key == vc);
               return  {
                   title: cat.title,
                   value: 12 / this.vendorData.vendorCategories.length,
-                  color: this.categoryColors[idx],
+                  color: cat.color,
                   image: `/static/icons/vendor/vendor_categories/${cat.icon}`};
           })
       },
   },
   watch:{
       backOutDays(newVal){
-        // this.getMarkedDates();
-      },
+        this.getMarkedDates();
+      }
   }
 };
 </script>

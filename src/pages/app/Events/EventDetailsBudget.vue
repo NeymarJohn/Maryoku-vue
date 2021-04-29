@@ -1,5 +1,10 @@
 <template>
   <div>
+    <!--    <event-state-message-->
+    <!--      v-if="showMessage"-->
+    <!--      :state="budgetState"-->
+    <!--      @closeMessage="showMessage = false"-->
+    <!--    ></event-state-message>-->
     <budget-notifications></budget-notifications>
     <div class="edit-event-details event-details-budget">
       <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
@@ -299,7 +304,6 @@ export default {
   data() {
     return {
       // auth: auth,
-      event: {},
       calendarEvent: {},
       selectedComponents: [],
       statistics: {
@@ -308,11 +312,16 @@ export default {
         booked: 0,
       },
       currentTab: "blocks",
+      eventId: null,
       percentage: 0,
       totalRemainingBudget: 0,
       usedBudget: 0,
       remainingBudgetPerEmployee: 0,
+      seriesData: [],
       isLoading: false,
+      event: {
+        statistics: {},
+      },
       routeName: null,
       budgetPerEmployee: 0,
       activeTab: 0,
@@ -333,7 +342,8 @@ export default {
     this.routeName = this.$route.name;
   },
   mounted() {
-    this.loadEventData('init');
+    this.isLoading = true;
+    this.getEvent();
     const tab = this.$route.query.t || 0;
     if (this.$refs.eventPlannerTabs) {
       this.$refs.eventPlannerTabs.$emit("event-planner-nav-switch-panel", tab);
@@ -354,7 +364,7 @@ export default {
     }
 
     this.$root.$on("calendar-refresh-events", () => {
-      this.loadEventData('update');
+      this.getEvent();
     });
   },
   methods: {
@@ -365,99 +375,90 @@ export default {
       "setEventModalAndEventData",
       "setNumberOfParticipants",
       "setEventData",
-      "setBudgetNotification",
     ]),
-    getCalendar(){
-        return new Calendar({id: this.currentUser.profile.defaultCalendarId});
-    },
-    getEvent: async function(_calendar) {
-      let event = await _calendar.calendarEvents().find(this.$route.params.id);
-      this.event = event;
-    },
-    getEventComponents: async function(_calendar){
-        let event = new CalendarEvent({id: this.event.id});
-        let eventComponent = new EventComponent().for(_calendar, event);
-        let components = await eventComponent.get();
-        console.log('getEventComponents', components);
-        components.sort((a, b) => a.order - b.order);
-        // console.log(components);
-        this.event.components = components;
-        this.selectedComponents = components;
-    },
-    loadEventData : async function (type = 'init'){
-        this.isLoading = true;
-        if (type === 'init') {
-          this.event = this.$store.state.event.eventData;
-        } else {
-          axios.defaults.headers.common.Authorization = `Bearer ${this.currentUser.access_token}`;
-          let calendar = this.getCalendar();
-          await this.getEvent(calendar);
-          await this.getEventComponents(calendar);
-          this.setBudgetNotification(false);
-        }
-
-        // notify budget states
-        if (!this.showBudgetNotification) {
-            this.notifyStates();
-            this.setBudgetNotification(true);
-        }
-        this.calendarEvent = this.event;
-        if (this.event.totalBudget)
-            this.newBudget = (this.event.totalBudget + "").replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-        if (type === 'update'){
-            this.$root.$emit(
-                "set-title",
-                this.event,
-                this.routeName === "EditBuildingBlocks",
-                this.routeName === "InviteesManagement" || this.routeName === "EventInvitees",
-            );
-        }
-    },
-    notifyStates() {
-        this.budgetStates = [];
-        let now = moment();
-        let created_at = moment(this.event.dateCreated);
-        if (this.event.budgetProgress < 100 && now.diff(created_at, "days") < 15) {
-            this.budgetStates.push({ key: "not_approved" });
-        } else {
-            if (this.event.standardBudget !== 0) {
-                if (this.event.standardBudget < this.event.totalBudget) {
-                    this.budgetStates.push({
-                        key: "not_approved",
-                        percent: ((this.event.totalBudget - this.event.standardBudget) / this.event.totalBudget).toFixed(2) * 100,
-                    });
-                } else if (this.event.standardBudget > this.event.totalBudget) {
-                    this.budgetStates.push({ key: "lower_than_average" });
-                }
-            }
-
-            if (now.diff(created_at, "days") < 15) {
-                this.budgetStates.push({ key: "approved_budget_in_two_weeks" });
-            }
-
-            if (this.event.unexpected < this.event.totalBudget * 0.1) {
-                this.budgetStates.push({ key: "unexpected_budget_less_10" });
-            }
-        }
-
-        if (this.budgetStates.length) {
-            this.budgetStates.map((it) => {
-                let message_item = BUDGET_MESSAGES.find((m) => m.key == it.key);
-                this.$notify({
-                    message: {
-                        title: message_item.title,
-                        content: message_item.message,
-                        action: message_item.action,
-                    },
-                    icon: `${this.$iconURL}messages/${message_item.icon}`,
-                    horizontalAlign: "right",
-                    verticalAlign: "top",
-                    type: message_item.type,
-                    timeout: 5000,
-                });
+    getEvent() {
+      console.log("current User --- ", this.currentUser);
+      const currentUser = this.$store.state.auth.user;
+      axios.defaults.headers.common.Authorization = `Bearer ${currentUser.access_token}`;
+      let _calendar = new Calendar({
+        id: this.currentUser.profile.defaultCalendarId,
+      });
+      _calendar
+        .calendarEvents()
+        .find(this.$route.params.id)
+        .then((event) => {
+          this.event = event;
+          this.eventId = event.id;
+          this.calendarEvent = event;
+          this.checkMessageStatus();
+          if (event.totalBudget)
+            this.newBudget = (event.totalBudget + "").replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          new EventComponent()
+            .for(_calendar, event)
+            .get()
+            .then((components) => {
+              components.sort((a, b) => a.order - b.order);
+              // console.log(components);
+              this.event.components = components;
+              this.selectedComponents = components;
+              // console.log(this.selectedComponents);
+              this.seriesData = components;
             });
+
+          this.$root.$emit(
+            "set-title",
+            this.event,
+            this.routeName === "EditBuildingBlocks",
+            this.routeName === "InviteesManagement" || this.routeName === "EventInvitees",
+          );
+          this.isLoading = false;
+        });
+    },
+    checkMessageStatus() {
+      this.budgetStates = [];
+      if (this.event.budgetProgress < 100) {
+        this.budgetStates.push({ key: "not_approved" });
+      }
+      if (this.event.standardBudget !== 0) {
+        if (this.event.standardBudget < this.event.totalBudget) {
+          this.budgetStates.push({
+            key: "not_approved",
+            percent: ((this.event.totalBudget - this.event.standardBudget) / this.event.totalBudget).toFixed(2) * 100,
+          });
+        } else if (this.event.standardBudget > this.event.totalBudget) {
+          this.budgetStates.push({ key: "lower_than_average" });
         }
+      }
+
+      let now = moment();
+      let created_at = moment(this.event.dateCreated);
+
+      if (now.diff(created_at, "days") < 15) {
+        this.budgetStates.push({ key: "approved_budget_in_two_weeks" });
+      }
+
+      if (this.event.unexpected < this.event.totalBudget * 0.1) {
+        this.budgetStates.push({ key: "unexpected_budget_less_10" });
+      }
+
+      console.log("states", this.budgetStates);
+      if (this.budgetStates.length) {
+        this.budgetStates.map((it) => {
+          let message_item = BUDGET_MESSAGES.find((m) => m.key == it.key);
+          this.$notify({
+            message: {
+              title: message_item.title,
+              content: message_item.message,
+              action: message_item.action,
+            },
+            icon: `${this.$iconURL}messages/${message_item.icon}`,
+            horizontalAlign: "right",
+            verticalAlign: "top",
+            type: message_item.type,
+            timeout: 5000,
+          });
+        });
+      }
     },
     selectServices() {
       this.$refs.eventPlannerTabs.$emit("event-planner-nav-switch-panel", 1);
@@ -530,7 +531,7 @@ export default {
               .save()
               .then((response) => {
                 this.showBudgetModal = false;
-                this.loadEventData('update');
+                this.getEvent();
               })
               .catch((error) => {
                 console.log(error);
@@ -544,7 +545,7 @@ export default {
           .save()
           .then((response) => {
             this.showBudgetModal = false;
-            this.loadEventData('update');
+            this.getEvent();
           })
           .catch((error) => {
             console.log(error);
@@ -567,7 +568,7 @@ export default {
       });
     },
     onChangeComponent(event) {
-      this.loadEventData('update');
+      this.getEvent();
     },
     onAddMoreBudget(value) {
       this.newBudget = `${this.event.totalBudget + value}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -581,15 +582,12 @@ export default {
     },
   },
   computed: {
-    ...mapState("EventPlannerVuex", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode", "showBudgetNotification"]),
+    ...mapState("EventPlannerVuex", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode"]),
     ...mapGetters({
       budgetStatistics: "event/budgetStatistics",
       components: "event/getComponentsList",
       currentUser: "auth/currentUser",
     }),
-    showNotification() {
-        return this.$store.state.event.showBudgetNotification;
-    },
     pieChartData() {
       return this.$store.state.event.eventData.components;
     },
@@ -635,6 +633,7 @@ export default {
   },
   watch: {
     newBudget: function (newValue) {
+      console.log("change", newValue);
       const result = newValue.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       this.newBudget = result;
     },

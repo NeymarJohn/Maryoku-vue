@@ -24,6 +24,9 @@
             :serviceCategory="service"
             :key="service.name"
             :isLong="(serviceIndex + groupIndex) % 2 === 1"
+            :hasBudget="hasBudget(service.serviceCategory)"
+            :musicPlayer="service.musicPlayer"
+            @showSpecific="getSpecification"
           ></service-category-card>
         </div>
       </div>
@@ -39,6 +42,8 @@
             :serviceCategory="service"
             :key="service.name"
             :isLong="(serviceIndex + groupIndex) % 2 === 1"
+            :hasBudget="hasBudget(service.serviceCategory)"
+            @showSpecific="getSpecification"
           ></service-category-card>
         </div>
       </div>
@@ -63,7 +68,12 @@
         <md-button class="md-red maryoku-btn" v-if="step === 2" @click="findVendors"> Find Me Vendors </md-button>
       </div>
     </div>
-    <additional-request-modal v-if="isOpenedAdditionalModal"></additional-request-modal>
+    <additional-request-modal
+      class="lg"
+      v-if="isOpenedAdditionalModal"
+      :subCategory="subCategory"
+      @cancel="isOpenedAdditionalModal = false"
+    ></additional-request-modal>
   </div>
 </template>
 <script>
@@ -71,6 +81,8 @@ import PlanningBoardState from "./state";
 import ServiceCategoryCard from "./components/ServiceCategoryCard";
 import { serviceCategoryImages } from "@/constants/event.js";
 import ProgressRadialBar from "./components/ProgressRadialBar.vue";
+import { mapState, mapGetters } from "vuex";
+import _ from "underscore";
 
 import AdditionalRequestModal from "./components/modals/AdditionalRequest.vue";
 export default {
@@ -81,33 +93,47 @@ export default {
   },
   data() {
     return {
+      allRequirements: null,
+      subCategory: null,
       serviceCards1: [
         [
           {
             name: "Venue Type",
             serviceCategory: "venuerental",
             images: [
-              "Venue+Type/Academic Venue_Shutterstock.jpg",
-              "Venue+Type/Bar or Pub or Club_Shutterstock.jpg",
-              "Venue+Type/Community Center_Shutterstock.jpg",
-              "Venue+Type/Gallery_Option 1_Canva Free.png",
-              "Venue+Type/Garden_Option 1_Shutterstock.jpg",
-              "Venue+Type/Historic Establishment_Canva Pro.png",
-              "Venue+Type/Meeting Room_Shutterstock.jpg",
-              "Venue+Type/Restaurant_Shutterstock.jpg",
-              "Venue+Type/Sports Club_Shutterstock.jpg",
-              "Venue+Type/Stadium_Shutterstock.jpg",
-              "Venue+Type/Stately Home_Option 1_Shutterstock.jpg",
+              "Venue+Type/Academic Venue.jpg",
+              "Venue+Type/Bar or Pub or Club.jpg",
+              "Venue+Type/Community Center.jpg",
+              "Venue+Type/Gallery_Option.png",
+              "Venue+Type/Garden.jpg",
+              "Venue+Type/Historic Establishment.png",
+              "Venue+Type/Meeting Room.jpg",
+              "Venue+Type/Restaurant.jpg",
+              "Venue+Type/Sports Club.jpg",
+              "Venue+Type/Stadium.jpg",
+              "Venue+Type/Stately Home.jpg",
             ],
+            imageTitles: [
+              "Academic Venue",
+              "Bar or Pub or Club",
+              "Community Center",
+              "Gallery Option",
+              "Garden",
+              "Historic Establishmen",
+              "Meeting Room",
+              "Restaurant",
+              "Sports Club",
+              "Stadium",
+              "Stately Home Option",
+            ],
+            icon: "NewRequirements/Group 18008.svg",
           },
           {
             name: "Decor",
             serviceCategory: "decor",
-            images: [
-              "Decor/Florals_Option 1_Canva Pro.png",
-              "Decor/Interior Design_Canva Free.png",
-              "Decor/Lighting_Canva Pro.png",
-            ],
+            images: ["Decor/Florals.png", "Decor/Interior Design.png", "Decor/Lighting.png"],
+            imageTitles: ["Florals", "Interior Design", "Lighting"],
+            icon: "NewRequirements/Group 18012.svg",
           },
         ],
         [
@@ -115,51 +141,86 @@ export default {
             name: "Cuisne Speciality",
             serviceCategory: "foodandbeverage",
             images: [
-              "Cuisine/American Food_Canva.png",
-              "Cuisine/Argentine Food_Canva.png",
+              "Cuisine/American Food.png",
+              "Cuisine/Argentine Food.png",
               "Cuisine/Chinese Food.jpg",
-              "Cuisine/Colombian Food_Canva.png",
+              "Cuisine/Colombian Food.png",
               "Cuisine/Cuban Food.jpg",
-              "Cuisine/French Food_Canva.png",
-              "Cuisine/German Food_Option 1.png",
-              "Cuisine/German Food_Option 2.png",
-              "Cuisine/Greek Food_Canva_Option 1.png",
-              "Cuisine/Indiian Food_Canva.png",
-              "Cuisine/Itlalian Food_Canva.png",
-              "Cuisine/Japanese Food_Canva.png",
-              "Cuisine/Mexican Food_Canva.png",
-              "Cuisine/Peruvian Food_Option 1.png",
-              "Cuisine/Spanish Food_Canva.png",
+              "Cuisine/French Food.png",
+              "Cuisine/German Food.png",
+              "Cuisine/Greek Food.png",
+              "Cuisine/Indian Food.png",
+              "Cuisine/Italian Food.png",
+              "Cuisine/Japanese Food.png",
+              "Cuisine/Mexican Food.png",
+              "Cuisine/Peruvian Food.png",
+              "Cuisine/Spanish Food.png",
               "Cuisine/Thai Food.jpg",
             ],
+            imageTitles: [
+              "American Food",
+              "Argentine Food",
+              "Chinese Food",
+              "Colombian Food",
+              "Cuban Food",
+              "French Food",
+              "German Food",
+              "Greek Food",
+              "Indian Food",
+              "Italian Food",
+              "Japanese Food",
+              "Mexican Food",
+              "Peruvian Food",
+              "Spanish Food",
+              "Thai Food",
+            ],
+            icon: "NewRequirements/Group 18012.svg",
           },
           {
             name: "Liquor Stations",
             serviceCategory: "foodandbeverage",
             images: [
-              "Beverage/Beer_Canva Pro.png",
-              "Beverage/Bourbon_Canva Pro.png",
-              "Beverage/Champagne_Canva Pro.png",
-              "Beverage/Cocktail_Canva Pro.png",
-              "Beverage/Coffee _ Dream_Canva Pro.png",
-              "Beverage/Margarita_Canva Pro.png",
-              "Beverage/Martini_Canva Pro.png",
-              "Beverage/Mixology_Canva Pro.png",
-              "Beverage/Rum_Canva Pro.png",
-              "Beverage/Soft Drinks_Option 1_Canva Pro.png",
-              "Beverage/Soft Drinks_Option 2_Canva Pro.png",
-              "Beverage/Sparkling Water_Canva Pro.png",
-              "Beverage/Still Water_Canva Pro.png",
-              "Beverage/Tequila_Canva Pro.png",
-              "Beverage/Vodka_Canva Pro.png",
-              "Beverage/Whiskey_Canva Pro.png",
-              "Beverage/Wine_Canva Pro.png",
+              "Beverage/Beer.png",
+              "Beverage/Bourbon.png",
+              "Beverage/Champagne.png",
+              "Beverage/Cocktail.png",
+              "Beverage/Coffee and Tea.png",
+              "Beverage/Margarita.png",
+              "Beverage/Martini.png",
+              "Beverage/Mixology.png",
+              "Beverage/Rum.png",
+              "Beverage/Soft Drinks.png",
+              "Beverage/Sparkling Water.png",
+              "Beverage/Still Water.png",
+              "Beverage/Tequila.png",
+              "Beverage/Vodka.png",
+              "Beverage/Whiskey.png",
+              "Beverage/Wine.png",
             ],
+            imageTitles: [
+              "Beer",
+              "Bourbon",
+              "Champagne",
+              "Cocktail",
+              "Coffee   Dream",
+              "Margarita",
+              "Martini",
+              "Mixology",
+              "Rum",
+              "Soft Drinks",
+              "Sparkling Water",
+              "Still Water",
+              "Tequila",
+              "Vodka",
+              "Whiskey",
+              "Wine",
+            ],
+            icon: "NewRequirements/Group 18017.svg",
           },
         ],
         [
           {
-            name: "Photography Style",
+            name: "Photography  Videography/",
             serviceCategory: "entertainment",
             images: [
               "Photography+_+Videography/Black_White.jpg",
@@ -169,10 +230,43 @@ export default {
               "Photography+_+Videography/Drone.jpg",
               "Photography+_+Videography/Portrait.jpg",
             ],
+            imageTitles: ["Black White", "Buisness", "Candid", "Commercial", "Drone", "Portrait"],
+            icon: "NewRequirements/Group 18009.svg",
           },
           {
             name: "Music",
             serviceCategory: "entertainment",
+            musicPlayer: true,
+            clips: [
+              "Music Clips/Asian-india-Bensound.mp3",
+              "Music Clips/Blues-hipjazz-Bensound.mp3",
+              "Music Clips/Classical_Wake_Up_CC Sound.mp3",
+              "Music Clips/Country_Country Boy Song-Bensound.mp3",
+              "Music Clips/Electronic_ERF-Bensound.mp3",
+              "Music Clips/Folk_Hey-Bensound.mp3",
+              "Music Clips/Hip Hop-groovyhiphop-Bensound.mp3",
+              "Music Clips/Jazz-thejazzpiano-Bensound.mp3",
+              "Music Clips/Latin_Latin Beat_CC Hound.mp3",
+              "Music Clips/pop_Funday-Bensound.mp3",
+              "Music Clips/RB_Heart_CC Sound.mp3",
+              "Music Clips/Rock-rumble-Bensound.mp3",
+              "Music Clips/Soul-retrosoul-Bensound.mp3",
+            ],
+            clipTitles: [
+              "Asian-india-Bensound",
+              "Blues-hipjazz-Bensound",
+              "Classical_Wake_Up_CC Sound",
+              "Country_Country Boy Song-Bensound",
+              "Electronic_ERF-Bensound",
+              "Folk_Hey-Bensound",
+              "Hip Hop-groovyhiphop-Bensound",
+              "Jazz-thejazzpiano-Bensound",
+              "Latin_Latin Beat_CC Hound",
+              "pop_Funday-Bensound",
+              "RB_Heart_CC Sound",
+              "Rock-rumble-Bensound",
+              "Soul-retrosoul-Bensound",
+            ],
             images: [
               "Photography+_+Videography/Black_White.jpg",
               "Photography+_+Videography/Buisness.jpg",
@@ -181,32 +275,69 @@ export default {
               "Photography+_+Videography/Drone.jpg",
               "Photography+_+Videography/Portrait.jpg",
             ],
+            imageTitles: ["Black White", "Buisness", "Candid", "Commercial", "Drone", "Portrait"],
+            icon: "NewRequirements/Group 18013.svg",
           },
         ],
       ],
       serviceCards2: [
         [
           {
-            name: "Swag",
+            name: "Giveaways",
             serviceCategory: "swag",
-            images: ["Outdoor Activities/Day trip_option 3_Canva..png", "Outdoor Activities/Sport Event 1.png"],
+            images: [
+              "Giveaways/Apparel.png",
+              "Giveaways/Ceremonial Items.png",
+              "Giveaways/Drinkware.jpeg",
+              "Giveaways/Fitness.jpeg",
+              "Giveaways/Gadgets.jpeg",
+              "Giveaways/Office Items.png",
+              "Giveaways/Specialty Food and Liquor.png",
+              "Giveaways/Tote Bags.png",
+              "Giveaways/Travel Accessories.jpg",
+              "Giveaways/Wellness.png",
+            ],
+            imageTitles: [
+              "Apparel",
+              "Ceremonial Items",
+              "Drinkware",
+              "Fitness",
+              "Gadgets",
+              "Office Items",
+              "Specialty Food and Liquor",
+              "Tote Bags",
+              "Travel Accessories",
+              "Wellness",
+            ],
+            icon: "NewRequirements/Group 18012.svg",
           },
           {
-            name: "Special Requirment",
-            serviceCategory: "speicalrequirements",
-            images: ["Outdoor Activities/Day trip_option 3_Canva..png", "Outdoor Activities/Sport Event 1.png"],
+            name: "Indoor Activities",
+            serviceCategory: "entertainment",
+            images: [
+              "Indoor Activities/Casino Games.png",
+              "Indoor Activities/Indoor Sport.png",
+              "Indoor Activities/Make Your Own.png",
+              "Indoor Activities/Photo Booth.png",
+            ],
+            imageTitles: ["Casino Games", "Indoor Sport", "Make Your Own", "Photo Booth"],
+            icon: "NewRequirements/Group 18012.svg",
           },
         ],
         [
           {
-            name: "Activities",
-            serviceCategory: "swag",
-            images: ["Outdoor Activities/Day trip_option 3_Canva..png", "Outdoor Activities/Sport Event 1.png"],
+            name: "Outdoor Activities",
+            serviceCategory: "entertainment",
+            images: ["Outdoor Activities/Day trip_option..png", "Outdoor Activities/Sport Event.png"],
+            imageTitles: ["Day Trip Option", "Sport Event"],
+            icon: "NewRequirements/Group 18027.svg",
           },
           {
             name: "AV",
-            serviceCategory: "swag",
-            images: ["Outdoor Activities/Day trip_option 3_Canva..png", "Outdoor Activities/Sport Event 1.png"],
+            serviceCategory: "audiovisualstagingservices",
+            images: ["A-V/Lighting.jpg", "A-V/Plasma TV.jpeg", "A-V/Projector.jpg"],
+            imageTitles: ["Lighting", "Plasma TV", "Projector"],
+            icon: "NewRequirements/Group 18012.svg",
           },
         ],
         [
@@ -214,36 +345,87 @@ export default {
             name: "Guest Serivces & Staffing",
             serviceCategory: "corporatesocialresponsibility",
             images: [
-              "Staff/Concierge 2.png",
-              "Staff/Day Of Coordinator Option 2.jpg",
-              "Staff/Event Model 1.png",
-              "Staff/Event Registration 1.png",
-              "Staff/shutterstock_72321160.jpg",
+              "Staff/Concierge.png",
+              "Staff/Day Of Coordinator.jpg",
+              "Staff/Event Model.png",
+              "Staff/Event Registration.png",
+              "Staff/Tour Guide.jpg",
               "Staff/Transportation Host.png",
-              "Staff/Wait Staff 1.png",
+              "Staff/Wait Staff.png",
             ],
+            imageTitles: [
+              "Concierge",
+              "Day Of Coordinator",
+              "Event Model",
+              "Event Registration",
+              "Tour Guide",
+              "Transportation Host",
+              "Wait Staff",
+            ],
+            icon: "NewRequirements/Group 18026.svg",
           },
           {
             name: "Transportation",
             serviceCategory: "transportation",
             images: [
-              "Transportation/Air Services_Canva Pro.png",
-              "Transportation/ATV_Canva Pro.png",
-              "Transportation/Bicycle_Canva Pro.png",
-              "Transportation/Boat_Canva Pro.png",
-              "Transportation/Bus_Canva Pro.png",
-              "Transportation/Ferry_Canva Pro.png",
-              "Transportation/Gold Carts_Canva Pro.png",
+              "Transportation/Air Services.png",
+              "Transportation/ATV.png",
+              "Transportation/Bicycle.png",
+              "Transportation/Boat.png",
+              "Transportation/Bus.png",
+              "Transportation/Ferry.png",
+              "Transportation/Gold Carts.png",
               "Transportation/Private Black Car.jpg",
-              "Transportation/Van_Canva Pro.png",
+              "Transportation/Van.png",
             ],
+            imageTitles: [
+              "Air Services",
+              "ATV",
+              "Bicycle",
+              "Boat",
+              "Bus",
+              "Ferry",
+              "Gold Carts",
+              "Private Black Car",
+              "Van",
+            ],
+            icon: "NewRequirements/Group 18016.svg",
           },
         ],
       ],
       isOpenedAdditionalModal: false,
     };
   },
-  created() {},
+  created() {
+    if (!this.allRequirements) {
+      this.$http.get(`${process.env.SERVER_URL}/1/vendor/property/${this.event.id}`).then((res) => {
+        console.log("res", res);
+        this.allRequirements = res.data;
+      });
+      // // set default value by conditionSript
+      // let event = this.$store.state.event.eventData;
+
+      // _.each(this.allRequirements.data, (it) => {
+      //   let requirements = it.requirements;
+      //   _.each(requirements, (requirement) => {
+      //     requirement.map((ms) => {
+      //       if (ms.conditionScript) ms.visible = eval(ms.conditionScript);
+      //       if (ms.conditionScript) ms.isSelected = eval(ms.conditionScript);
+      //       if (ms.defaultQtyScript) ms.defaultQty = Math.ceil(eval(ms.defaultQtyScript));
+
+      //       if (this.blockId === "giveaways" && (ms.item === "Apparel" || ms.item === "Tech items")) {
+      //         ms.mustHave = false;
+      //       }
+      //     });
+      //   });
+      // });
+
+      // let updatedRequirements = this.storedRequirements;
+      // updatedRequirements[this.event.id] = this.allRequirements.data;
+      // this.setBookingRequirements(JSON.parse(JSON.stringify(updatedRequirements)));
+      // this.setInitBookingRequirements(JSON.parse(JSON.stringify(updatedRequirements)));
+    }
+  },
   beforeCreate() {
     if (this.$store.registerModule("planningBoard", PlanningBoardState) === false) {
       this.$store.unregisterModule("planningBoard");
@@ -276,10 +458,22 @@ export default {
       });
       return services;
     },
+    event() {
+      return this.$store.state.event.eventData;
+    },
   },
   methods: {
     findVendors() {
       this.isOpenedAdditionalModal = true;
+    },
+    hasBudget(categoryKey) {
+      return this.event.components.find((item) => item.componentId == categoryKey);
+    },
+    getSpecification({ category, services }) {
+      this.isOpenedAdditionalModal = true;
+      // console.log("storedRequirements", this.storedRequirements);
+      console.log(this.allRequirements[category]);
+      this.subCategory = this.allRequirements[category];
     },
   },
 };
