@@ -299,6 +299,7 @@ export default {
   data() {
     return {
       // auth: auth,
+      event: {},
       calendarEvent: {},
       selectedComponents: [],
       statistics: {
@@ -307,16 +308,11 @@ export default {
         booked: 0,
       },
       currentTab: "blocks",
-      eventId: null,
       percentage: 0,
       totalRemainingBudget: 0,
       usedBudget: 0,
       remainingBudgetPerEmployee: 0,
-      seriesData: [],
       isLoading: false,
-      event: {
-        statistics: {},
-      },
       routeName: null,
       budgetPerEmployee: 0,
       activeTab: 0,
@@ -337,8 +333,7 @@ export default {
     this.routeName = this.$route.name;
   },
   mounted() {
-    this.isLoading = true;
-    this.getEvent();
+    this.loadEventData('init');
     const tab = this.$route.query.t || 0;
     if (this.$refs.eventPlannerTabs) {
       this.$refs.eventPlannerTabs.$emit("event-planner-nav-switch-panel", tab);
@@ -359,7 +354,7 @@ export default {
     }
 
     this.$root.$on("calendar-refresh-events", () => {
-      this.getEvent();
+      this.loadEventData('update');
     });
   },
   methods: {
@@ -370,47 +365,56 @@ export default {
       "setEventModalAndEventData",
       "setNumberOfParticipants",
       "setEventData",
+      "setBudgetNotification",
     ]),
-    getEvent() {
-      console.log("current User --- ", this.currentUser);
-      const currentUser = this.$store.state.auth.user;
-      axios.defaults.headers.common.Authorization = `Bearer ${currentUser.access_token}`;
-      let _calendar = new Calendar({
-        id: this.currentUser.profile.defaultCalendarId,
-      });
-      _calendar
-        .calendarEvents()
-        .find(this.$route.params.id)
-        .then((event) => {
-          this.event = event;
-          this.eventId = event.id;
-          this.calendarEvent = event;
-          this.checkMessageStatus();
-          if (event.totalBudget)
-            this.newBudget = (event.totalBudget + "").replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-          new EventComponent()
-            .for(_calendar, event)
-            .get()
-            .then((components) => {
-              components.sort((a, b) => a.order - b.order);
-              // console.log(components);
-              this.event.components = components;
-              this.selectedComponents = components;
-              // console.log(this.selectedComponents);
-              this.seriesData = components;
-            });
-
-          this.$root.$emit(
-            "set-title",
-            this.event,
-            this.routeName === "EditBuildingBlocks",
-            this.routeName === "InviteesManagement" || this.routeName === "EventInvitees",
-          );
-          this.isLoading = false;
-        });
+    getCalendar(){
+        return new Calendar({id: this.currentUser.profile.defaultCalendarId});
     },
-    checkMessageStatus() {
-        console.log('checkMessageStatus')
+    getEvent: async function(_calendar) {
+      let event = await _calendar.calendarEvents().find(this.$route.params.id);
+      this.event = event;
+    },
+    getEventComponents: async function(_calendar){
+        let event = new CalendarEvent({id: this.event.id});
+        let eventComponent = new EventComponent().for(_calendar, event);
+        let components = await eventComponent.get();
+        console.log('getEventComponents', components);
+        components.sort((a, b) => a.order - b.order);
+        // console.log(components);
+        this.event.components = components;
+        this.selectedComponents = components;
+    },
+    loadEventData : async function (type = 'init'){
+        this.isLoading = true;
+        if (type === 'init') {
+          this.event = this.$store.state.event.eventData;
+        } else {
+          axios.defaults.headers.common.Authorization = `Bearer ${this.currentUser.access_token}`;
+          let calendar = this.getCalendar();
+          await this.getEvent(calendar);
+          await this.getEventComponents(calendar);
+          this.setBudgetNotification(false);
+        }
+
+        // notify budget states
+        if (!this.showBudgetNotification) {
+            this.notifyStates();
+            this.setBudgetNotification(true);
+        }
+        this.calendarEvent = this.event;
+        if (this.event.totalBudget)
+            this.newBudget = (this.event.totalBudget + "").replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        if (type === 'update'){
+            this.$root.$emit(
+                "set-title",
+                this.event,
+                this.routeName === "EditBuildingBlocks",
+                this.routeName === "InviteesManagement" || this.routeName === "EventInvitees",
+            );
+        }
+    },
+    notifyStates() {
         this.budgetStates = [];
         let now = moment();
         let created_at = moment(this.event.dateCreated);
@@ -437,7 +441,6 @@ export default {
             }
         }
 
-        console.log("states", this.budgetStates);
         if (this.budgetStates.length) {
             this.budgetStates.map((it) => {
                 let message_item = BUDGET_MESSAGES.find((m) => m.key == it.key);
@@ -527,7 +530,7 @@ export default {
               .save()
               .then((response) => {
                 this.showBudgetModal = false;
-                this.getEvent();
+                this.loadEventData('update');
               })
               .catch((error) => {
                 console.log(error);
@@ -541,7 +544,7 @@ export default {
           .save()
           .then((response) => {
             this.showBudgetModal = false;
-            this.getEvent();
+            this.loadEventData('update');
           })
           .catch((error) => {
             console.log(error);
@@ -564,7 +567,7 @@ export default {
       });
     },
     onChangeComponent(event) {
-      this.getEvent();
+      this.loadEventData('update');
     },
     onAddMoreBudget(value) {
       this.newBudget = `${this.event.totalBudget + value}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -578,12 +581,15 @@ export default {
     },
   },
   computed: {
-    ...mapState("EventPlannerVuex", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode"]),
+    ...mapState("EventPlannerVuex", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode", "showBudgetNotification"]),
     ...mapGetters({
       budgetStatistics: "event/budgetStatistics",
       components: "event/getComponentsList",
       currentUser: "auth/currentUser",
     }),
+    showNotification() {
+        return this.$store.state.event.showBudgetNotification;
+    },
     pieChartData() {
       return this.$store.state.event.eventData.components;
     },

@@ -144,14 +144,14 @@
           </div>
         </div>
         <div class="mt-40">
-          <md-checkbox class="m-0" v-model="agreedCancellationPolicy">I agree to the Cancellation policy</md-checkbox>
+          <md-checkbox class="m-0">I agree to the Cancellation policy</md-checkbox>
           <div>You will be transferred to a secured Payoneer payment</div>
         </div>
       </div>
     </div>
     <div class="checkout-footer white-card p-30 mt-30 d-flex justify-content-between">
       <md-button class="maryoku-btn md-simple md-black">Back</md-button>
-      <md-button class="maryoku-btn md-red" :disabled="!agreedCancellationPolicy">Submit Payment </md-button>
+      <md-button class="maryoku-btn md-red">Submit Payment </md-button>
     </div>
   </div>
 </template>
@@ -167,7 +167,6 @@ export default {
       vendor: null,
       proposal: null,
       loading: true,
-      agreedCancellationPolicy: false,
     };
   },
   created() {

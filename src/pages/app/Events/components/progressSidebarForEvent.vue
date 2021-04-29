@@ -75,8 +75,10 @@
             </div>
           </div>
         </draggable>
-          <md-button class="md-simple refresh" @click="changeItem('refresh')">
-              <img :src="`${$iconURL}Budget Requirements/group-9602@3x.png`" width="80"></md-button>
+          <md-button class="md-simple refresh"
+                     :style="{bottom: `${56 * (elements.length % 2 == 0 ? elements.length / 2 : (elements.length - 1) / 2 + 1)}px`}"
+                     @click="changeItem('refresh')">
+                <img :src="`${$iconURL}Budget Requirements/group-9602@3x.png`" width="80"></md-button>
       </div>
     </div>
   </div>

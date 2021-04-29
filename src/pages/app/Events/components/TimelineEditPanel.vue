@@ -142,7 +142,10 @@ export default {
       default: "template",
     },
   },
-  methods: {
+  mounted() {
+    console.log('timeline.edit.panel', this.timelineDates);
+  },
+    methods: {
     formatDate() {},
     numberToWord(num) {
       return numberToWord(num);
