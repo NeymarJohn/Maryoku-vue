@@ -720,11 +720,12 @@
     }
 
     .event-elements {
-        //padding-top: 7.9em;
+        position: relative;
         padding-top: 180px;
         height: 100%;
         overflow: auto;
         width: 400px;
+        overflow: hidden;
 
         &__item {
             box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.12);
@@ -804,6 +805,10 @@
                     //text-decoration-line: line-through;
                 }
             }
+        }
+        .refresh{
+            position: absolute;
+            right: -20px;
         }
     }
 }
@@ -1493,10 +1498,12 @@
         margin-bottom: 2em;
         min-height: 213px;
         position: relative;
+        padding: 16px;
 
         .images-list {
             position: relative;
             min-width: 572px;
+            min-height: 213px;
 
             &__item {
                 position: absolute;
@@ -2237,7 +2244,18 @@
                 }
             }
         }
+
+        @media (max-width: 1600px) {
+            flex-direction: column-reverse;
+            justify-content: flex-end;
+            padding: 2em 3em;
+
+            .concept-details{
+                padding: 0 16px;
+            }
+        }
     }
+
 }
 
 .btn-rose {
@@ -2612,7 +2630,12 @@
 }
 
 .tab-tooltip {
-    max-width: 300px !important;
-    white-space: break-spaces;
     text-align: left;
+    word-wrap: break-spaces;
+    display: table;
+
+    p{
+        display: table-cell;
+        white-space: normal !important;
+    }
 }

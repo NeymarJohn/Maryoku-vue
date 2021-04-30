@@ -1,16 +1,16 @@
 <template>
-  <modal class="planning-board-additioal-modal" :containerClass="`modal-container lg`">
+  <modal class="planning-board-additioal-modal">
     <template slot="header">
-      <!-- <div class="maryoku-modal-header text-center">
+      <div class="maryoku-modal-header text-center">
         <img :src="`${$iconURL}Requirements/Group+16281.svg`" />
         <div class="font-size-30 font-bold color-red mt-20">ALMOST DONE!</div>
-      </div> -->
+      </div>
     </template>
     <template slot="body">
       <div class="md-layout maryoku-modal-body"></div>
       <div>
-        <div class="font-bold font-size-22">Any Additional Requests?</div>
-        <div class="mt-20">Would you like to add one of those items?</div>
+        <div class="font-bold font-size-22">Anyting else?</div>
+        <div class="mt-20">Would you like to add any of those categories?</div>
         <div class="tags mt-30">
           <tag-item
             @click="addTag(tag)"
@@ -19,17 +19,6 @@
             :isSelected="selectedTags.includes(tag)"
             v-for="tag in tags"
           ></tag-item>
-        </div>
-      </div>
-      <div>
-        <div v-for="section in selectedTags" :key="section" class="text-left sub-category">
-          <div class="font-bold-extra">{{ section }}</div>
-          <div class="requirement-item text-left">
-            <!-- {{ subCategory.requirements[section] }} -->
-            <div v-for="item in subCategory.requirements[section]">
-              <md-checkbox v-model="item.selected">{{ item.item }}</md-checkbox>
-            </div>
-          </div>
         </div>
       </div>
     </template>
@@ -57,28 +46,13 @@ export default {
       selectedTags: [],
     };
   },
-  props: {
-    subCategory: {
-      type: Object,
-      default: () => {},
-    },
-  },
-  created() {
-    this.tags = Object.keys(this.subCategory.requirements);
-    this.tags = this.tags.filter((item) => item !== "multi-selection" && item !== "special");
-  },
   methods: {
     onCancel: function (e) {
       this.$emit("cancel");
     },
     save: function () {},
     addTag(tag) {
-      const tagIndex = this.selectedTags.findIndex((item) => item === tag);
-      if (tagIndex < 0) {
-        this.selectedTags.push(tag);
-      } else {
-        this.selectedTags.splice(tagIndex, 1);
-      }
+      this.selectedTags.push(tag);
     },
   },
 };
@@ -86,19 +60,11 @@ export default {
 <style lang="scss" scoped>
 .planning-board-additioal-modal {
   /deep/ .modal-header {
+    background-color: #f3f7fd !important;
     .maryoku-modal-header {
       width: 100%;
       padding-bottom: 50px;
     }
-  }
-  .requirement-item {
-    display: grid;
-    grid-template-columns: repeat(4, 25%);
-  }
-  .sub-category {
-    border-top: solid 1px #dbdbdb;
-    margin-top: 30px;
-    padding-top: 30px;
   }
 }
 </style>

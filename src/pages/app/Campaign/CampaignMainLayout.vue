@@ -23,9 +23,9 @@
           <span :class="{ completedCampaign: campaignIssued['SAVING_DATE'] }">Save The Date</span>
           <span>
             <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
-            <md-tooltip>
+            <md-tooltip class="w-max-350">
               <div class="font-size-14 tab-tooltip">
-                {{ campaignTabs[1].tooltip }}
+                  <p>{{ campaignTabs[1].tooltip }}</p>
               </div>
             </md-tooltip>
           </span>
@@ -39,9 +39,9 @@
           <span :class="{ completedCampaign: campaignIssued['RSVP'] }">RSVP</span>
           <span>
             <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
-            <md-tooltip>
+            <md-tooltip class="w-max-350">
               <div class="font-size-14 tab-tooltip">
-                {{ campaignTabs[2].tooltip }}
+                  <p>{{ campaignTabs[2].tooltip }}</p>
               </div>
             </md-tooltip>
           </span>
@@ -55,9 +55,9 @@
           <span :class="{ completedCampaign: campaignIssued['COMING_SOON'] }">Coming Soon</span>
           <span>
             <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
-            <md-tooltip>
+            <md-tooltip class="w-max-350">
               <div class="font-size-14 tab-tooltip">
-                {{ campaignTabs[3].tooltip }}
+                  <p>{{ campaignTabs[3].tooltip }}</p>
               </div>
             </md-tooltip>
           </span>
@@ -71,9 +71,9 @@
           <span :class="{ completedCampaign: campaignIssued['FEEDBACK'] }">Feedback</span>
           <span>
             <img class="ml-20" :src="`${$iconURL}Campaign/Group 9087.svg`" />
-            <md-tooltip>
+            <md-tooltip class="w-max-350">
               <div class="font-size-14 tab-tooltip">
-                {{ campaignTabs[4].tooltip }}
+                  <p>{{ campaignTabs[4].tooltip }}</p>
               </div>
             </md-tooltip>
           </span>

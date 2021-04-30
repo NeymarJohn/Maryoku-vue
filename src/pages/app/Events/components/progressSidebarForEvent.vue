@@ -14,7 +14,7 @@
       </div>
       <div class="percentage">
         <ul>
-          <li class="green-label">{{`${(warming / elements.length).toFixed(2) * 100}%`}}</li>
+          <li class="green-label">{{`${(warming / elements.length).toFixed(2) * 10000 / 100}%`}}</li>
           <li class>{{warming}} of {{elements.length}}</li>
         </ul>
       </div>
@@ -75,6 +75,10 @@
             </div>
           </div>
         </draggable>
+          <md-button class="md-simple refresh"
+                     :style="{bottom: `${56 * (elements.length % 2 == 0 ? elements.length / 2 : (elements.length - 1) / 2 + 1)}px`}"
+                     @click="changeItem('refresh')">
+                <img :src="`${$iconURL}Budget Requirements/group-9602@3x.png`" width="80"></md-button>
       </div>
     </div>
   </div>
@@ -145,8 +149,9 @@ export default {
     fetchUrl() {
       this.currentUrl = this.$router.history.current.path;
     },
-    changeItem(){
-      this.$emit('change', this.elements);
+    changeItem(option = null){
+      let params = option == 'refresh' ? null : this.elements;
+      this.$emit('change', params);
     }
   },
   created() {
