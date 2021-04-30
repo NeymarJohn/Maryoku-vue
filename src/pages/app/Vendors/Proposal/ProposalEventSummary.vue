@@ -26,8 +26,9 @@
               </li>
             </ul>
           </div>
-          <md-button class="md-button md-red maryoku-btn md-theme-default change-cover-btn" @click="chooseFiles">
-            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />Change Cover
+          <md-button class="md-red maryoku-btn change-cover-btn" @click="chooseFiles">
+            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
+            <span>Change Cover</span>
           </md-button>
           <input
             style="display: none"
@@ -625,8 +626,10 @@ export default {
     word-break: break-word;
   }
   .change-cover-btn {
-    margin: 10% 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
+    position: absolute;
+    left: 50%;
+    top: 70%;
   }
   .tabs-cont {
     display: flex;
@@ -670,7 +673,7 @@ export default {
       min-height: 540px;
       background-size: cover;
       background-repeat: no-repeat;
-
+      position: relative;
       .summary-cont {
         padding: 60px;
         background: rgba(255, 255, 255, 0.7);

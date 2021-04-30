@@ -139,7 +139,12 @@
             />
           </div>
           <div>
-            <input v-model="plannerOption.qty" class="input-value" type="text" :placeholder="`Type qty here`" />
+            <input
+              v-model="plannerOption.qty"
+              class="input-value text-center"
+              type="text"
+              :placeholder="`Type qty here`"
+            />
           </div>
           <money
             v-model="plannerOption.price"
@@ -151,14 +156,14 @@
               precision: 2,
               masked: false,
             }"
-            class="input-value"
+            class="input-value text-center"
           />
           <div class="font-size-16 font-regular color-gray text-center" style="padding: 12px">
             $ {{ (plannerOption.price * plannerOption.qty) | withComma }}
           </div>
           <div class="d-flex align-center">
-            <md-button class="md-simple normal-btn md-black" @click="cancelAlternative(index)"> Cancel </md-button>
-            <md-button class="normal-btn md-red" @click="saveAlternative(index)"> Save </md-button>
+            <!-- <md-button class="md-simple maryoku-btn md-black" @click="cancelAlternative(index)"> Cancel </md-button>
+            <md-button class="maryoku-btn md-red" @click="saveAlternative(index)"> Save </md-button> -->
           </div>
         </div>
         <div class="planner-options-item-row" v-else>
@@ -179,6 +184,10 @@
               <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />
             </md-button>
           </div>
+        </div>
+        <div class="text-right pt-10" v-if="plannerOption.isEdit">
+          <md-button class="md-simple maryoku-btn md-black" @click="cancelAlternative(index)"> Cancel </md-button>
+          <md-button class="maryoku-btn md-red" @click="saveAlternative(index)"> Save </md-button>
         </div>
       </div>
       <div class="planner-options-item">

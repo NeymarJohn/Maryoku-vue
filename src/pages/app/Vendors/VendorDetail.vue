@@ -48,7 +48,7 @@
       <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
         <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
       </md-button>
-      <md-button class="md-simple maryoku-btn md-black" @click="$router.push(('/vendors-pool'))">
+      <md-button class="md-simple maryoku-btn md-black">
         <md-icon>keyboard_backspace</md-icon>
         Back</md-button
       >

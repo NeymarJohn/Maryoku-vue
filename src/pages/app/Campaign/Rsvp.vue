@@ -76,7 +76,7 @@
           v-if="event.concept && event.concept.colors[0]"
           :style="`background-color:${event.concept.colors[0].color}`"
         ></div>
-        <div v-else class="rsvp-event-guid-background" :style="`background-color:#D5FCF3;opacity:1;`"></div>
+        <div class="rsvp-event-guid-background" v-else :style="`background-color:#D5FCF3;opacity:1;`"></div>
         <div class="rsvp-event-guid md-layout">
           <div class="md-layout-item md-size-50 md-small-size-50">
             <div class="font-size-30 font-bold-extra mb-30 d-flex" v-if="!isEditingWearing" style="height: 52px">

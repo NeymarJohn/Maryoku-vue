@@ -14,7 +14,7 @@
       </div>
       <div class="percentage">
         <ul>
-          <li class="green-label">{{`${(warming / elements.length).toFixed(2) * 10000 / 100}%`}}</li>
+          <li class="green-label">{{`${(warming / elements.length).toFixed(2) * 100}%`}}</li>
           <li class>{{warming}} of {{elements.length}}</li>
         </ul>
       </div>

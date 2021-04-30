@@ -1,8 +1,8 @@
 <template>
-  <md-switch class="below-label large-switch md-switch-rose" v-model="data">
+  <md-switch class="below-label large-switch" v-model="data">
     <template v-if="label">
-      <span v-if="data">Show {{label}}</span>
-      <span v-if="!data">Hide {{label}}</span>
+      <span v-if="data">Hide {{label}}</span>
+      <span v-if="!data">Show {{label}}</span>
     </template>
   </md-switch>
 </template>

@@ -2630,12 +2630,7 @@
 }
 
 .tab-tooltip {
+    max-width: 300px !important;
+    white-space: break-spaces;
     text-align: left;
-    word-wrap: break-spaces;
-    display: table;
-
-    p{
-        display: table-cell;
-        white-space: normal !important;
-    }
 }
