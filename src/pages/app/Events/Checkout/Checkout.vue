@@ -210,15 +210,15 @@ export default {
           return s + service.requirementValue * service.price;
         }, 0);
         bundledServicePrice += sumOfService;
-        if (this.addedServices[serviceCategory]) {
-          const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
-            if (service.isComplimentary) {
-              return 0;
-            }
-            return s + service.requirementValue * service.price;
-          }, 0);
-          bundledServicePrice += sumOfService;
-        }
+        // if (this.addedServices[serviceCategory]) {
+        //   const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
+        //     if (service.isComplimentary) {
+        //       return 0;
+        //     }
+        //     return s + service.requirementValue * service.price;
+        //   }, 0);
+        //   bundledServicePrice += sumOfService;
+        // }
       });
       return (bundledServicePrice * this.proposal.bundleDiscount.percentage) / 100;
     },
