@@ -123,22 +123,21 @@ export default {
       this.resetPlayer();
     },
     prev() {
+      this.resetPlayer();
       this.$emit("prev");
     },
     next() {
+      this.resetPlayer();
       this.$emit("next");
     },
     resetPlayer() {
       this.barWidth = 0;
       this.circleLeft = 0;
       this.audio.currentTime = 0;
-      this.audio.src = this.currentTrack.source;
+      this.audio.src = this.src;
       setTimeout(() => {
-        if (this.isTimerPlaying) {
-          this.audio.play();
-        } else {
-          this.audio.pause();
-        }
+        this.isTimerPlaying = false;
+        this.audio.pause();
       }, 300);
     },
   },
