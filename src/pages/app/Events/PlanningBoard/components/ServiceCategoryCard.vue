@@ -1,14 +1,5 @@
 <template>
   <div class="plannig-service-category-card white-card" :class="{ 'longer-card': isLong }">
-    <md-button
-      class="md-simple md-icon-button md-raised save-btn"
-      :class="{ isSelected: selected }"
-      @click="selected = !selected"
-      v-show="hasBudget"
-    >
-      <img v-if="!selected" class="non-selected" :src="`${$iconURL}comments/SVG/heart-dark.svg`" />
-      <img v-if="selected" :src="`${$iconURL}Requirements/Group+16153.svg`" />
-    </md-button>
     <carousel v-if="!musicPlayer" :items="1" :margin="0" :nav="false" :loop="true" class="header-carousel">
       <template slot="prev">
         <span class="prev handle-btn">
@@ -16,6 +7,19 @@
         </span>
       </template>
       <div v-for="(image, index) in serviceCategory.images" :key="image" class="carousel-item">
+        <md-button
+          class="md-simple md-icon-button md-raised save-btn"
+          :class="{ isSelected: selectedSerivces.includes(serviceCategory.imageTitles[index]) }"
+          @click="addService(serviceCategory.imageTitles[index])"
+          v-show="hasBudget"
+        >
+          <img
+            v-if="!selectedSerivces.includes(serviceCategory.imageTitles[index])"
+            class="non-selected"
+            :src="`${$iconURL}comments/SVG/heart-dark.svg`"
+          />
+          <img v-else :src="`${$iconURL}Requirements/Group+16153.svg`" />
+        </md-button>
         <img class="carousel-image" :src="`${$storageURL}RequirementsImages/thumbnails/${image}`" />
         <label>{{ serviceCategory.imageTitles[index] }}</label>
       </div>
@@ -53,8 +57,12 @@
       </template>
     </carousel>
     <div class="p-20 font-bold d-flex align-center justify-content-between">
-      <span>{{ serviceCategory.name }}</span>
-      <md-button v-if="hasBudget" class="md-red maryoku-btn">Get Specific</md-button>
+      <span class="service-name">{{ serviceCategory.name }}</span>
+      <template v-if="hasBudget">
+        <md-button v-show="selectedSerivces.length > 0" class="md-red maryoku-btn" @click="getSpecification">
+          Get Specific
+        </md-button>
+      </template>
       <template v-else>
         <popper trigger="click" :options="{ placement: 'top', gpuAcceleration: false }">
           <div class="popper white-card popper-content">
@@ -93,9 +101,16 @@ export default {
     Popper,
     MusicPlayer,
   },
+  props: {
+    subCategory: {
+      type: Object,
+      default: () => {},
+    },
+  },
   data() {
     return {
       selected: false,
+      selectedSerivces: [],
       popperIcons: {
         venuerental: "NewRequirements/Group 18008.svg",
         decor: "NewRequirements/Group 18012.svg",
@@ -141,6 +156,17 @@ export default {
     next() {
       this.$refs.nextButton.click();
     },
+    getSpecification() {
+      this.$emit("showSpecific", { category: this.serviceCategory.serviceCategory, services: this.selectedSerivces });
+    },
+    addService(serviceName) {
+      const serviceIndex = this.selectedSerivces.findIndex((item) => item === serviceName);
+      if (serviceIndex < 0) {
+        this.selectedSerivces.push(serviceName);
+      } else {
+        this.selectedSerivces.splice(serviceIndex, 1);
+      }
+    },
   },
 };
 </script>
@@ -148,6 +174,10 @@ export default {
 .plannig-service-category-card {
   border-radius: 3px;
   position: relative;
+  .service-name {
+    display: inline-block;
+    line-height: 46px;
+  }
   &.longer-card {
     img.carousel-image {
       height: 540px;

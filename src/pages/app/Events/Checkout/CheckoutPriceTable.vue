@@ -8,9 +8,9 @@
         </div>
         <div>
           <div class="element-price">${{ totalPrice | withComma }}</div>
-          <div class="discount-details font-size-16 font-regular" v-if="discount.percentage">
+          <div class="discount-details" v-if="discount.percentage">
             ({{ discount.percentage }}% off)
-            <span class="crosslinedText">${{ priceBeforeDiscount | withComma }}</span>
+            <span>${{ priceBeforeDiscount | withComma }}</span>
           </div>
         </div>
       </div>

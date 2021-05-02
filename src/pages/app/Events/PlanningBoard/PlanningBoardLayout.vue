@@ -26,6 +26,7 @@
             :isLong="(serviceIndex + groupIndex) % 2 === 1"
             :hasBudget="hasBudget(service.serviceCategory)"
             :musicPlayer="service.musicPlayer"
+            @showSpecific="getSpecification"
           ></service-category-card>
         </div>
       </div>
@@ -42,6 +43,7 @@
             :key="service.name"
             :isLong="(serviceIndex + groupIndex) % 2 === 1"
             :hasBudget="hasBudget(service.serviceCategory)"
+            @showSpecific="getSpecification"
           ></service-category-card>
         </div>
       </div>
@@ -69,7 +71,10 @@
     <additional-request-modal
       class="lg"
       v-if="isOpenedAdditionalModal"
+      :subCategory="subCategory"
+      :selectedCategory="selectedCategory"
       @cancel="isOpenedAdditionalModal = false"
+      @close="isOpenedAdditionalModal = false"
     ></additional-request-modal>
   </div>
 </template>
@@ -78,6 +83,8 @@ import PlanningBoardState from "./state";
 import ServiceCategoryCard from "./components/ServiceCategoryCard";
 import { serviceCategoryImages } from "@/constants/event.js";
 import ProgressRadialBar from "./components/ProgressRadialBar.vue";
+import { mapState, mapGetters } from "vuex";
+import _ from "underscore";
 
 import AdditionalRequestModal from "./components/modals/AdditionalRequest.vue";
 export default {
@@ -88,6 +95,8 @@ export default {
   },
   data() {
     return {
+      allRequirements: null,
+      subCategory: null,
       serviceCards1: [
         [
           {
@@ -387,9 +396,39 @@ export default {
         ],
       ],
       isOpenedAdditionalModal: false,
+      selectedCategory: null,
     };
   },
-  created() {},
+  created() {
+    if (!this.allRequirements) {
+      this.$http.get(`${process.env.SERVER_URL}/1/vendor/property/${this.event.id}`).then((res) => {
+        console.log("res", res);
+        this.allRequirements = res.data;
+      });
+      // // set default value by conditionSript
+      // let event = this.$store.state.event.eventData;
+
+      // _.each(this.allRequirements.data, (it) => {
+      //   let requirements = it.requirements;
+      //   _.each(requirements, (requirement) => {
+      //     requirement.map((ms) => {
+      //       if (ms.conditionScript) ms.visible = eval(ms.conditionScript);
+      //       if (ms.conditionScript) ms.isSelected = eval(ms.conditionScript);
+      //       if (ms.defaultQtyScript) ms.defaultQty = Math.ceil(eval(ms.defaultQtyScript));
+
+      //       if (this.blockId === "giveaways" && (ms.item === "Apparel" || ms.item === "Tech items")) {
+      //         ms.mustHave = false;
+      //       }
+      //     });
+      //   });
+      // });
+
+      // let updatedRequirements = this.storedRequirements;
+      // updatedRequirements[this.event.id] = this.allRequirements.data;
+      // this.setBookingRequirements(JSON.parse(JSON.stringify(updatedRequirements)));
+      // this.setInitBookingRequirements(JSON.parse(JSON.stringify(updatedRequirements)));
+    }
+  },
   beforeCreate() {
     if (this.$store.registerModule("planningBoard", PlanningBoardState) === false) {
       this.$store.unregisterModule("planningBoard");
@@ -432,6 +471,16 @@ export default {
     },
     hasBudget(categoryKey) {
       return this.event.components.find((item) => item.componentId == categoryKey);
+    },
+    getSpecification({ category, services }) {
+      this.isOpenedAdditionalModal = true;
+      // console.log("storedRequirements", this.storedRequirements);
+      console.log(this.allRequirements[category]);
+      this.subCategory = this.allRequirements[category];
+
+      console.log(this.$store.state.common.serviceCategories);
+      this.selectedCategory = this.$store.state.common.serviceCategories.find((item) => item.key === category);
+      console.log(this.selectedCategory);
     },
   },
 };

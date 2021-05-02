@@ -84,9 +84,9 @@
         </collapse-panel>
         <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
-            <div class="price-header d-flex align-center disabled">
-              <md-checkbox class="m-0 mr-10" :disabeld="true"></md-checkbox>
-              Event Insurance (Coming Soon)
+            <div class="price-header d-flex align-center">
+              <md-checkbox class="m-0 mr-10"></md-checkbox>
+              Event Insurance
             </div>
           </template>
           <template slot="content">
@@ -110,10 +110,10 @@
         </collapse-panel>
         <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
-            <div class="price-header d-flex align-center disabled">
+            <div class="price-header d-flex align-center">
               <md-checkbox class="m-0 mr-10"></md-checkbox>
               <img :src="`${$iconURL}common/reward.svg`" class="mr-10 ml-10" />
-              Use your rewards with this event (Coming Soon)
+              Use your rewards with this event
             </div>
           </template>
           <template slot="content">
@@ -144,14 +144,14 @@
           </div>
         </div>
         <div class="mt-40">
-          <md-checkbox class="m-0" v-model="agreedCancellationPolicy">I agree to the Cancellation policy</md-checkbox>
+          <md-checkbox class="m-0">I agree to the Cancellation policy</md-checkbox>
           <div>You will be transferred to a secured Payoneer payment</div>
         </div>
       </div>
     </div>
     <div class="checkout-footer white-card p-30 mt-30 d-flex justify-content-between">
       <md-button class="maryoku-btn md-simple md-black">Back</md-button>
-      <md-button class="maryoku-btn md-red" :disabled="!agreedCancellationPolicy">Submit Payment </md-button>
+      <md-button class="maryoku-btn md-red">Submit Payment </md-button>
     </div>
   </div>
 </template>
@@ -167,7 +167,6 @@ export default {
       vendor: null,
       proposal: null,
       loading: true,
-      agreedCancellationPolicy: false,
     };
   },
   created() {
@@ -210,15 +209,15 @@ export default {
           return s + service.requirementValue * service.price;
         }, 0);
         bundledServicePrice += sumOfService;
-        // if (this.addedServices[serviceCategory]) {
-        //   const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
-        //     if (service.isComplimentary) {
-        //       return 0;
-        //     }
-        //     return s + service.requirementValue * service.price;
-        //   }, 0);
-        //   bundledServicePrice += sumOfService;
-        // }
+        if (this.addedServices[serviceCategory]) {
+          const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
+            if (service.isComplimentary) {
+              return 0;
+            }
+            return s + service.requirementValue * service.price;
+          }, 0);
+          bundledServicePrice += sumOfService;
+        }
       });
       return (bundledServicePrice * this.proposal.bundleDiscount.percentage) / 100;
     },
@@ -259,9 +258,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .event-vendor-checkout {
-  .disabled {
-    opacity: 0.5;
-  }
   .checkout-content {
     margin: auto;
     max-width: 1600px;
