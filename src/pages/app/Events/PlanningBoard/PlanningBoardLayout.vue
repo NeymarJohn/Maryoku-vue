@@ -470,7 +470,7 @@ export default {
       this.isOpenedAdditionalModal = true;
     },
     hasBudget(categoryKey) {
-      return this.event.components.find((item) => item.componentId == categoryKey);
+      return !!this.event.components.find((item) => item.componentId == categoryKey);
     },
     getSpecification({ category, services }) {
       this.isOpenedAdditionalModal = true;
