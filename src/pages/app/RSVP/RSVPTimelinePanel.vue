@@ -4,8 +4,8 @@
       <span class="text-transform-uppercase font-size-30 font-bold-extra" :class="{ 'color-gray': !isDisplayed }">
         A glimpse at the agenda
       </span>
-      <md-switch v-if="canHide" v-model="isDisplayed" class="ml-10 md-switch-rose below-label large-switch">
-        <span class="color-black font-regular">{{`${isDisplayed ? 'Show' : 'Hide'} Agenda`}}</span>
+      <md-switch v-if="canHide" v-model="isDisplayed" class="ml-10 md-switch below-label large-switch">
+        <span class="color-black font-regular">Hide Agenda</span>
       </md-switch>
     </div>
     <template v-if="isDisplayed">
