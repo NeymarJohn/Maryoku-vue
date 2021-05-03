@@ -34,12 +34,13 @@ export default {
   methods: {
     gotoProposalRequest() {
       const tenantId = this.$authService.resolveTenantId();
+      console.log('proposal.request', this.proposalRequest);
       let link = "";
       if (tenantId === "DEFAULT") {
         link = `${this.proposalRequest.tenant}.${document.location.host}/#/vendors/${this.proposalRequest.vendorId}/proposal-request/${this.proposalRequest.id}`;
       } else {
-        link = `${this.proposalRequest.tenant}.${document.location.host.replace(`${tenantId}.`, "")}/#/vendros/${
-          this.proposalRequest.vendor.id
+        link = `${this.proposalRequest.tenant}.${document.location.host.replace(`${tenantId}.`, "")}/#/vendors/${
+          this.proposalRequest.vendorId
         }/proposal-request/${this.proposalRequest.id}`;
       }
       var win = window.open(`${document.location.protocol}//${link}`, "_blank");

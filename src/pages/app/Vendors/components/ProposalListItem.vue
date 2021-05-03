@@ -9,8 +9,10 @@
       <div class="font-bold font-size-22 mt-5">23/12/20</div>
     </div>
     <div>23/12/20</div>
+    <div>$2800</div>
+    <div>23/12/20</div>
     <div><img src="/static/icons/vendor/proposalBoard/filter-won.svg" /></div>
-    <div></div>
+    <div>Tom</div>
     <div>
       <span class="color-vendor font-bold cursor-pointer" @click="openProposal">
         <img src="/static/icons/vendor/proposalBoard/see-proposal.svg" class="mr-10" />
@@ -97,6 +99,6 @@ export default {
   padding: 30px 40px;
   display: grid;
   align-items: center;
-  grid-template-columns: 100px 20% 20% auto 20% 15% 50px;
+  grid-template-columns: 5% 20% 10% 15% 10% 10% 10% 15% 5%;
 }
 </style>

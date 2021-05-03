@@ -64,74 +64,55 @@
           </span>
         </md-button>
       </div>
-      <div class="sort-bar mt-30">
-        <span class="font-size-20 font-bold color-red" style="color: #0fac4c">{{ pagination.total }} Proposals:</span>
-        <span class="sort-item" :class="{ selected: this.sortFields['dateOfEvent'] }" @click="sort('dateOfEvent')"
-          >Date of event
-          <md-icon class="color-black" v-if="this.sortFields['dateOfEvent'] === 'desc'">keyboard_arrow_down</md-icon>
-          <md-icon class="color-black" v-if="this.sortFields['dateOfEvent'] === 'asc'">keyboard_arrow_up</md-icon>
-        </span>
-        <span class="sort-item" :class="{ selected: this.sortFields['dateOfModify'] }" @click="sort('dateOfModify')"
-          >Date of modify
-          <md-icon class="color-black" v-if="this.sortFields['dateOfModify'] === 'desc'">keyboard_arrow_down</md-icon>
-          <md-icon class="color-black" v-if="this.sortFields['dateOfModify'] === 'asc'"
-            >keyboard_arrow_up</md-icon
-          ></span
-        >
-        <span class="sort-item" :class="{ selected: this.sortFields['status'] }" @click="sort('status')"
-          >Status
-          <md-icon class="color-black" v-if="this.sortFields['status'] === 'desc'">keyboard_arrow_down</md-icon>
-          <md-icon class="color-black" v-if="this.sortFields['status'] === 'asc'">keyboard_arrow_up</md-icon>
-        </span>
-        <span class="sort-item" :class="{ selected: this.sortFields['update'] }" @click="sort('update')"
-          >Update
-          <md-icon class="color-black" v-if="this.sortFields['update'] === 'desc'">keyboard_arrow_down</md-icon>
-          <md-icon class="color-black" v-if="this.sortFields['update'] === 'asc'">keyboard_arrow_up</md-icon>
-        </span>
-        <span></span>
-        <span></span>
-      </div>
-      <div class="propsoals-list mt-30">
-        <div class="md-layout">
-          <div class="md-layout-item md-size-75">
+      <div class="mt-20"><span class="font-size-16 font-bold color-red" style="color: #0fac4c">{{ pagination.total }} Proposals:</span></div>
+      <div class="md-layout">
+        <div class="md-layout-item md-size-75">
+          <div class="sort-bar mt-20">
+            <span v-for="it in proposalHeaders" class="sort-item" :class="{selected: it.key && sortFields[it.key]}" @click="sort(it.key)">
+              {{it.title}}
+              <md-icon v-if="sortFields[it.key] === 'desc'" class="color-black">keyboard_arrow_down</md-icon>
+              <md-icon v-if="sortFields[it.key] === 'asc'" class="color-black">keyboard_arrow_up</md-icon>
+            </span>
+          </div>
+          <div class="propsoals-list mt-10">
             <div class="white-card md-20 proposal-list">
-              <proposal-list-item class="row" v-for="proposal in proposals" :key="proposal.id"></proposal-list-item>
+                <proposal-list-item class="row" v-for="proposal in proposals" :key="proposal.id"></proposal-list-item>
             </div>
           </div>
-          <div class="md-layout-item md-size-25">
+        </div>
+        <div class="md-layout-item md-size-25 mt-50">
             <div class="white-card p-50" style="height: 100%">
-              <div style="margin: 0 -15px">
-                <pie-chart
-                  :chartData="chartData"
-                  :columns="1"
-                  :options="{
-                    width: 150,
-                    height: 200,
-                    strokWidth: 40,
-                    direction: 'row',
-                  }"
-                ></pie-chart>
-              </div>
-              <div class="color-brown d-flex align-center">
-                <span class="mr-20" style="font-size: 56px">30%</span>
-                <span class="font-size-22">Winning rate</span>
-              </div>
-              <div class="font-size-20 mt-50">
-                You won <span class="font-bold">40 of 120</span> Proposals you applied to
-              </div>
-              <hr class="mt-50 mb-50" />
-              <div class="tips">
-                <div class="d-flex mb-30 align-center">
-                  <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
-                  <div class="ml-10">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</div>
+                <div style="margin: 0 -15px">
+                    <pie-chart
+                        :chartData="chartData"
+                        :columns="1"
+                        :options="{
+                width: 150,
+                height: 200,
+                strokWidth: 40,
+                direction: 'row',
+              }"
+                    ></pie-chart>
                 </div>
-                <div class="d-flex align-center">
-                  <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
-                  <div class="ml-10">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</div>
+                <div class="color-brown d-flex align-center">
+                    <span class="mr-20" style="font-size: 56px">30%</span>
+                    <span class="font-size-22">Winning rate</span>
                 </div>
-              </div>
+                <div class="font-size-20 mt-50">
+                    You won <span class="font-bold">40 of 120</span> Proposals you applied to
+                </div>
+                <hr class="mt-50 mb-50" />
+                <div class="tips">
+                    <div class="d-flex mb-30 align-center">
+                        <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
+                        <div class="ml-10">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</div>
+                    </div>
+                    <div class="d-flex align-center">
+                        <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
+                        <div class="ml-10">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
       </div>
       <div class="md-layout">
@@ -170,6 +151,17 @@ export default {
   data() {
     return {
       proposalRequests: [],
+      proposalHeaders: [
+          {key: '', title: ''},
+          {key: 'name', title: 'Name'},
+          {key: 'Date', title: 'Date'},
+          {key: 'proposalValue', title: 'Proposal Value'},
+          {key: 'modified', title: 'Modified'},
+          {key: 'status', title: 'Status'},
+          {key: 'owner', title: 'Owner'},
+          {key: 'update', title: 'Update'},
+          {key: '', title: ''},
+      ],
       proposals: [1, 2, 3, 4],
       chartData: [
         { title: "Application", value: 12, color: "#b7b5b5" },
@@ -194,23 +186,26 @@ export default {
         .for(new Vendor({ id: this.vendorData.id }))
         .get()
         .then((proposalRequests) => {
+          console.log('request', proposalRequests);
           this.proposalRequests = proposalRequests;
         });
     },
     getProposal() {
       const { pagination } = this;
       this.proposals = [1, 2, 2, 3];
-      // new Proposal()
-      //   .for(new Vendor({ id: this.vendorData.id }))
-      //   .page(pagination.page)
-      //   .limit(pagination.limit)
-      //   .get()
-      //   .then((res) => {
-      //     const data = res[0];
-      //     // this.proposals = data.items;
-      //     // this.pagination.total = data.total;
-      //     // this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
-      //   });
+      new Proposal()
+        // .for(new Vendor({ id: this.vendorData.id }))
+        .for(new Vendor({ id: '5fb50750cfefec7cb434ac7d' }))
+        .page(pagination.page)
+        .limit(pagination.limit)
+        .get()
+        .then((res) => {
+          const data = res[0];
+          console.log('proposals', res)
+          // this.proposals = data.items;
+          // this.pagination.total = data.total;
+          // this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
+        });
     },
     gotoPage(selectedPage) {
       console.log(selectedPage);
@@ -280,14 +275,14 @@ export default {
     }
   }
   .sort-bar {
-    width: 75%;
-    padding-right: 120px;
+    padding: 0 20px;
     display: grid;
     align-items: center;
-    grid-template-columns: 150px 20% 20% 15% 20% 20% 30px;
+    grid-template-columns: 5% 20% 10% 15% 10% 10% 10% 15% 5%;
     .sort-item {
       cursor: pointer;
       color: #707070;
+      font-size: 14px;
       &.selected {
         color: #050505;
         font-weight: bold;
