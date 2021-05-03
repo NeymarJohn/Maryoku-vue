@@ -11,16 +11,16 @@
     </template>
     <template slot="body">
       <div class="md-layout maryoku-modal-body"></div>
-      <div v-if="selectedCategory.key === 'venuerental'">
+      <div>
         <div class="font-bold font-size-22">Any Additional Requests?</div>
         <div class="mt-20">Would you like to add one of those items?</div>
-        <div class="tags mt-30">
+        <div class="tags mt-30" v-if="selectedCategory.key === 'venuerental'">
           <tag-item
-            @click="tag.isSelected = !tag.isSelected"
-            :tagLabel="tag.subCategory"
-            :key="tag.subCategory"
-            :isSelected="tag.isSelected"
-            v-for="tag in specialTags"
+            @click="addTag(tag)"
+            :tagLabel="tag"
+            :key="tag"
+            :isSelected="selectedTags.includes(tag)"
+            v-for="tag in tags"
           ></tag-item>
         </div>
       </div>
@@ -31,19 +31,6 @@
             <!-- {{ subCategory.requirements[section] }} -->
             <div v-for="item in subCategory.requirements[section]">
               <md-checkbox v-model="item.selected">{{ item.item }}</md-checkbox>
-            </div>
-          </div>
-        </div>
-        <div
-          v-for="specialSection in specialTags.filter((item) => item.isSelected)"
-          :key="specialSection.subCategory"
-          class="text-left sub-category"
-        >
-          <div class="font-bold-extra">{{ specialSection.subCategory }}</div>
-          <div class="requirement-item text-left">
-            <!-- {{ subCategory.requirements[section] }} -->
-            <div v-for="item in specialSection.options">
-              <md-checkbox v-model="item.selected">{{ item.name }}</md-checkbox>
             </div>
           </div>
         </div>
@@ -69,7 +56,7 @@ export default {
   },
   data() {
     return {
-      specialTags: [],
+      tags: ["Sitting arrangement", "Around the venue", "Accessibility"],
       selectedTags: [],
       subCategorySections: [],
     };
@@ -89,9 +76,6 @@ export default {
     this.subCategorySections = this.subCategorySections.filter(
       (item) => item !== "multi-selection" && item !== "special",
     );
-    this.specialTags = this.subCategory.requirements["special"].map((item) => {
-      return { ...item, selected: false };
-    });
   },
   methods: {
     close: function () {
