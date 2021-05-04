@@ -103,9 +103,9 @@
     </template>
     <template slot="footer">
       <md-button class="md-button md-black md-simple md-theme-default" @click="remindLater">Remind Me Later</md-button>
-      <md-button class="md-red md-bold add-category-btn" :disabled="errors.all().length > 0" @click="updateMyVendor">
-        Update Vendor
-      </md-button>
+      <md-button class="md-red md-bold add-category-btn" :disabled="errors.all().length > 0" @click="updateMyVendor"
+        >Update Vendor</md-button
+      >
     </template>
   </modal>
 </template>

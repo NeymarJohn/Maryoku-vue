@@ -42,8 +42,6 @@ const state = {
     eventThemes: [],
     calendarId: null,
     timelineDates: [],
-    requirements: null,
-    requirementsForVendor: {}
 };
 
 const getters = {
@@ -246,23 +244,6 @@ const actions = {
                 });
         });
     },
-
-    getRequirements({ commit, state }) {
-        const eventId = state.eventData.id
-        return new Promise((resolve, reject) => {
-            if (state.requirements) {
-                resolve(state.requirements)
-            } else {
-                getReq(`/1/vendor/property/${eventId}`).then((res) => {
-                    commit("setRequirements", res.data)
-                    resolve(res.data)
-                }).catch(e => {
-                    reject(e)
-                });
-            }
-        })
-
-    }
 };
 
 const mutations = {
@@ -324,25 +305,6 @@ const mutations = {
         state.timelineDates = data;
         Vue.set(state.eventData, "timelineDates", data);
     },
-    setRequirements(state, data) {
-        state.requirements = data
-    },
-    setRequirementsForVendor(state, data) {
-        Vue.set(state.requirementsForVendor, data.category, data.requirements)
-    },
-    setSubCategory(state, data) {
-        Vue.set(state.requirementsForVendor[data.category], data.subCategory, data.items)
-    },
-    setRequirementTypes(state, data) {
-        if (!state.requirementsForVendor[data.category]) {
-            Vue.set(state.requirementsForVendor, data.category, {})
-        }
-        if (!state.requirementsForVendor[data.category].types) {
-            Vue.set(state.requirementsForVendor[data.category], 'types', {})
-        }
-        Vue.set(state.requirementsForVendor[data.category].types, data.type, data.services)
-    }
-
 };
 
 export default {

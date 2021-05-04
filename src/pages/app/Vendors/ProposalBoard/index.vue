@@ -1,9 +1,10 @@
 <template>
-  <div class="vendor-proposal-board p-60">
+  <div class="vendor-proposal-board px-40 pt-60">
+    <vue-element-loading :active="loading" spinner="ring" color="#FF547C"></vue-element-loading>
     <div class="font-size-22 font-bold">
       <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposal Dashboard
     </div>
-    <div class="font-bold mt-40 mb-20">New opportunities:</div>
+    <div class="font-bold text-uppercase mt-30 mb-15">Pending Proposals</div>
     <carousel
       :items="4"
       :margin="25"
@@ -31,52 +32,39 @@
         </button>
       </template>
     </carousel>
-    <hr class="m-60" />
+    <hr class="my-40 color-vendor" />
     <div class="proposals-table">
-      <div class="font-bold">All my proposals:</div>
+      <div class="font-bold">All proposals:</div>
       <div class="filter-bar mt-30">
-        <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
-          <span class="color-black-middle">
-            <img src="/static/icons/vendor/proposalBoard/filter-all.svg" />All Proposal
-          </span>
-        </md-button>
-        <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
-          <span class="color-black-middle"><img src="/static/icons/vendor/proposalBoard/filter-won.svg" />I won</span>
-        </md-button>
-        <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
-          <span class="color-black-middle">
-            <img src="/static/icons/vendor/proposalBoard/filter-draft.svg" />Drafts
-          </span>
-        </md-button>
-        <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
-          <span class="color-black-middle">
-            <img src="/static/icons/vendor/proposalBoard/filter-pending.svg" />Pending
-          </span>
-        </md-button>
-        <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
-          <span class="color-black-middle">
-            <img src="/static/icons/vendor/proposalBoard/filter-top3.svg" />Made Top 3
-          </span>
-        </md-button>
-        <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
-          <span class="color-black-middle">
-            <img src="/static/icons/vendor/proposalBoard/filter-reject.svg" />Lost Bids
-          </span>
+        <md-button v-for="tab in proposalTabs"
+                   :key="tab.key"
+                   class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20"
+                   @click="selectTab(tab.key)"
+        >
+          <div class="d-flex align-center px-20 py-10 font-size-16" :class="tab.class">
+            <img class="mr-10" :src="`/static/icons/vendor/proposalBoard/${tab.icon}`" style="width: 20px; height: 20px"/>
+            {{tab.title}}
+            <span v-if="proposals.length && getProposalNumber(tab.key)" class="ml-5" :class="tab.class">({{getProposalNumber(tab.key)}})</span>
+          </div>
         </md-button>
       </div>
-      <div class="mt-20"><span class="font-size-16 font-bold color-red" style="color: #0fac4c">{{ pagination.total }} Proposals:</span></div>
+      <div class="mt-20">
+          <span class="font-size-16 font-bold"
+                :class="!proposals.length ? 'color-minus' : 'color-won'"
+          >
+              {{ pagination.total }} Proposals:</span></div>
       <div class="md-layout">
-        <div class="md-layout-item md-size-75">
-          <div class="sort-bar mt-20">
+        <div class="md-layout-item md-size-75 p-0">
+          <div class="sort-bar px-40 mt-20">
             <span v-for="it in proposalHeaders" class="sort-item" :class="{selected: it.key && sortFields[it.key]}" @click="sort(it.key)">
               {{it.title}}
               <md-icon v-if="sortFields[it.key] === 'desc'" class="color-black">keyboard_arrow_down</md-icon>
               <md-icon v-if="sortFields[it.key] === 'asc'" class="color-black">keyboard_arrow_up</md-icon>
             </span>
           </div>
-          <div class="propsoals-list mt-10">
+          <div v-if="!loading" class="propsoals-list mt-10">
             <div class="white-card md-20 proposal-list">
-                <proposal-list-item class="row" v-for="proposal in proposals" :key="proposal.id"></proposal-list-item>
+                <proposal-list-item class="row" v-for="proposal in proposals" :proposal="proposal" :key="proposal.id"></proposal-list-item>
             </div>
           </div>
         </div>
@@ -140,6 +128,7 @@ import Proposal from "@/models/Proposal";
 import Vendor from "@/models/Vendors";
 import carousel from "vue-owl-carousel";
 import PieChart from "@/components/Chart/PieChart.vue";
+import VueElementLoading from 'vue-element-loading'
 export default {
   components: {
     ProposalRequestCard,
@@ -147,10 +136,20 @@ export default {
     TablePagination,
     carousel,
     PieChart,
+    VueElementLoading,
   },
   data() {
     return {
+      loading: true,
       proposalRequests: [],
+      proposalTabs: [
+          {key: 'all', title: 'All Proposal', icon: 'proposal-active.svg', class: 'color-vendor'},
+          {key: 'won', title: 'I won', icon: 'filter-won.svg', class: 'color-won'},
+          {key: 'draft', title: 'Drafts', icon: 'filter-draft.svg'},
+          {key: 'pending', title: 'Pending', icon: 'filter-pending.svg'},
+          {key: 'top', title: 'Made Top3', icon: 'filter-top3.svg'},
+          {key: 'lost', title: 'Lost Bids', icon: 'filter-reject.svg'},
+      ],
       proposalHeaders: [
           {key: '', title: ''},
           {key: 'name', title: 'Name'},
@@ -162,7 +161,7 @@ export default {
           {key: 'update', title: 'Update'},
           {key: '', title: ''},
       ],
-      proposals: [1, 2, 3, 4],
+      proposals: [],
       chartData: [
         { title: "Application", value: 12, color: "#b7b5b5" },
         { title: "Winning", value: 3, color: "#2cde6b" },
@@ -176,41 +175,38 @@ export default {
       sortFields: {},
     };
   },
-  created() {
-    this.getData();
-    this.getProposal();
+  async mounted() {
+    console.log('mounted', this.vendorData);
+    await this.getData();
+    await this.getProposal();
+    this.loading = false;
   },
   methods: {
-    getData() {
-      new ProposalRequest()
-        .for(new Vendor({ id: this.vendorData.id }))
-        .get()
-        .then((proposalRequests) => {
-          console.log('request', proposalRequests);
-          this.proposalRequests = proposalRequests;
-        });
+    async getData() {
+        this.proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
     },
-    getProposal() {
+    async getProposal() {
       const { pagination } = this;
-      this.proposals = [1, 2, 2, 3];
-      new Proposal()
+
+      const res = await new Proposal()
         // .for(new Vendor({ id: this.vendorData.id }))
         .for(new Vendor({ id: '5fb50750cfefec7cb434ac7d' }))
         .page(pagination.page)
         .limit(pagination.limit)
-        .get()
-        .then((res) => {
-          const data = res[0];
-          console.log('proposals', res)
-          // this.proposals = data.items;
-          // this.pagination.total = data.total;
-          // this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
-        });
+        .get();
+      const data = res[0];
+      console.log('proposals', res)
+      this.proposals = data.items;
+      this.pagination.total = data.total;
+      this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
     },
     gotoPage(selectedPage) {
       console.log(selectedPage);
       this.pagination.page = selectedPage;
       this.getProposal();
+    },
+    selectTab(tab){
+      console.log('select.tab', tab);
     },
     sort(sortField) {
       if (!this.sortFields[sortField]) {
@@ -219,6 +215,12 @@ export default {
         this.sortFields[sortField] = this.sortFields[sortField] === "desc" ? "asc" : "desc";
       }
     },
+    getProposalNumber(key){
+      if (key == 'all') {
+        return this.proposals.length;
+      }
+      return null;
+    }
   },
   computed: {
     vendorData() {
@@ -237,7 +239,6 @@ export default {
   .proposal-requests {
     display: flex;
     position: relative;
-    margin: 0 -50px;
     .nav-btn {
       position: absolute;
       top: 50%;
@@ -258,24 +259,12 @@ export default {
       }
     }
   }
-  .filter-button {
-    .color-black-middle {
-      display: flex;
-      align-items: center;
-      padding: 4px 15px;
-      img {
-        margin-right: 10px;
-      }
-    }
-  }
   .proposal-list {
-    margin-left: -15px;
     .proposal-list-item:not(:last-child) {
       border-bottom: solid 1px #dbdbdb;
     }
   }
   .sort-bar {
-    padding: 0 20px;
     display: grid;
     align-items: center;
     grid-template-columns: 5% 20% 10% 15% 10% 10% 10% 15% 5%;
