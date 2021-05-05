@@ -4,13 +4,12 @@
       <img style="width: 40px" src="https://maryoku.s3.amazonaws.com/company/logos/5e0ae1d2cfefec4b68f5d8a1.png" />
     </div>
     <div>
-      <div class="font-bold font-size-16">{{proposal.proposalRequest.eventData.title}}</div>
-<!--      <div class="font-bold font-size-16">{{'March Madness'}}</div>-->
+      <div class="font-bold font-size-16">March Madness</div>
     </div>
-    <div class="font-size-14 color-black-middle">{{proposal.dateCreated | date('DD/MM/YYYY')}}</div>
+    <div class="font-size-14 color-black-middle">{{getDateFormat(proposal.dateCreated)}}</div>
     <div class="font-size-14 color-black-middle">${{proposal.cost}}</div>
-    <div class="font-size-14 color-black-middle">{{proposal.lastUpdated | date('DD/MM/YYYY')}}</div>
-    <div><img class="ml-15" :src="getStatusIcon(proposal.status)" /></div>
+    <div class="font-size-14 color-black-middle">{{getDateFormat(proposal.lastUpdated)}}</div>
+    <div><img class="ml-15" src="/static/icons/vendor/proposalBoard/filter-won.svg" /></div>
     <div class="font-size-14 color-black-middle">Tom</div>
 
    <span class="color-vendor font-size-14 font-bold cursor-pointer" @click="openProposal">
@@ -97,17 +96,8 @@ export default {
     };
   },
   methods: {
-    getStatusIcon(status){
-        let path = '/static/icons/vendor/proposalBoard/';
-        if (status == 'submit') {
-            return `${path}filter-pending.svg`;
-        } else if (status == 'top') {
-            return `${path}filter-top3.svg`;
-        } else if (status == 'lost') {
-            return `${path}filter-reject.svg`;
-        } else {
-            return `${path}filter-${status}.svg`;
-        }
+    getDateFormat(date) {
+      return moment(date).format('DD/MM/YYYY');
     },
     openProposal() {},
     edit() {},

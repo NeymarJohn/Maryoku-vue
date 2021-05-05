@@ -4,9 +4,9 @@
       <thead>
         <tr>
           <th width="40%">Vendor</th>
-          <th width="25%">Planned</th>
+          <th width="20%">Planned</th>
           <th width="15%">Booked</th>
-          <th width="10%">Status</th>
+          <th width="15%">Status</th>
           <th></th>
         </tr>
       </thead>

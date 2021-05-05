@@ -44,8 +44,7 @@
           <div class="d-flex align-center px-20 py-10 font-size-16" :class="tab.class">
             <img class="mr-10" :src="`/static/icons/vendor/proposalBoard/${tab.icon}`" style="width: 20px; height: 20px"/>
             {{tab.title}}
-            <span v-if="tab.key == 'all'" class="ml-5" :class="tab.class">({{pagination.total}})</span>
-            <span else class="ml-5" :class="tab.class">({{pagination[tab.key]}})</span>
+            <span v-if="proposals.length && getProposalNumber(tab.key)" class="ml-5" :class="tab.class">({{getProposalNumber(tab.key)}})</span>
           </div>
         </md-button>
       </div>
@@ -53,17 +52,14 @@
           <span class="font-size-16 font-bold"
                 :class="!proposals.length ? 'color-minus' : 'color-won'"
           >
-              {{ proposals.length }} Proposals:</span></div>
+              {{ pagination.total }} Proposals:</span></div>
       <div class="md-layout">
         <div class="md-layout-item md-size-75 p-0">
           <div class="sort-bar px-40 mt-20">
-            <span v-for="it in proposalHeaders"
-                  class="sort-item"
-                  :class="{selected: it.key && sortFields['sort'] == it.key}"
-                  @click="selectSort(it.key)">
+            <span v-for="it in proposalHeaders" class="sort-item" :class="{selected: it.key && sortFields[it.key]}" @click="sort(it.key)">
               {{it.title}}
-              <md-icon v-if="it.key && sortFields['sort'] == it.key" class="color-black">
-                  {{sortFields['order'] == 'asc' ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}} </md-icon>
+              <md-icon v-if="sortFields[it.key] === 'desc'" class="color-black">keyboard_arrow_down</md-icon>
+              <md-icon v-if="sortFields[it.key] === 'asc'" class="color-black">keyboard_arrow_up</md-icon>
             </span>
           </div>
           <div v-if="!loading" class="propsoals-list mt-10">
@@ -157,8 +153,8 @@ export default {
       proposalHeaders: [
           {key: '', title: ''},
           {key: 'name', title: 'Name'},
-          {key: 'date', title: 'Date'},
-          {key: 'cost', title: 'Proposal Value'},
+          {key: 'Date', title: 'Date'},
+          {key: 'proposalValue', title: 'Proposal Value'},
           {key: 'modified', title: 'Modified'},
           {key: 'status', title: 'Status'},
           {key: 'owner', title: 'Owner'},
@@ -170,19 +166,13 @@ export default {
         { title: "Application", value: 12, color: "#b7b5b5" },
         { title: "Winning", value: 3, color: "#2cde6b" },
       ],
-      tab: 'all',
       pagination: {
         total: 0,
-        won: 0,
-        draft: 0,
-        pending: 0,
-        top: 0,
-        lost: 0,
         pageCount: 0,
         page: 0,
         limit: 5,
       },
-      sortFields: {sort: '', order: ''},
+      sortFields: {},
     };
   },
   async mounted() {
@@ -197,21 +187,17 @@ export default {
     },
     async getProposal() {
       const { pagination } = this;
-      const params = {status: this.tab, ...this.sortFields};
+
       const res = await new Proposal()
         // .for(new Vendor({ id: this.vendorData.id }))
-        .for(new Vendor({ id: '60462793cfefec258a35e874' }))
+        .for(new Vendor({ id: '5fb50750cfefec7cb434ac7d' }))
         .page(pagination.page)
         .limit(pagination.limit)
-        .params(params)
         .get();
       const data = res[0];
       console.log('proposals', res)
       this.proposals = data.items;
       this.pagination.total = data.total;
-      this.proposalTabs.map(t => {
-        if (data.hasOwnProperty(t.key)) this.pagination[t.key] = data[t.key];
-      })
       this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
     },
     gotoPage(selectedPage) {
@@ -219,24 +205,22 @@ export default {
       this.pagination.page = selectedPage;
       this.getProposal();
     },
-    async selectTab(tab){
+    selectTab(tab){
       console.log('select.tab', tab);
-      this.loading = true;
-      this.tab = tab;
-      await this.getProposal();
-      this.loading = false;
     },
-    async selectSort(sortField) {
-        this.loading = true;
-      if (this.sortFields.sort !== sortField) {
-        this.$set(this.sortFields, 'sort', sortField);
-          this.$set(this.sortFields, 'order', 'asc');
+    sort(sortField) {
+      if (!this.sortFields[sortField]) {
+        this.$set(this.sortFields, sortField, "desc");
       } else {
-        this.sortFields['order'] = this.sortFields['order'] === "desc" ? "asc" : "desc";
+        this.sortFields[sortField] = this.sortFields[sortField] === "desc" ? "asc" : "desc";
       }
-      await this.getProposal();
-      this.loading = false;
     },
+    getProposalNumber(key){
+      if (key == 'all') {
+        return this.proposals.length;
+      }
+      return null;
+    }
   },
   computed: {
     vendorData() {

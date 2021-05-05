@@ -51,7 +51,6 @@ import stringUtil from "./utils/string.util"
 import VueYoutube from "vue-youtube";
 
 import helper from "@/utils/helperFunction";
-import moment from "moment";
 
 require("vue-tour/dist/vue-tour.css");
 
@@ -318,11 +317,6 @@ Vue.filter("formatQty", function (value) {
   return value ? value.toLocaleString() : 0;
 
 });
-Vue.filter('date', function (value, format) {
-    if (!value) return ""
-
-    return moment(value).format(format);
-})
 
 Vue.prototype.$resourceURL = ResourceURL;
 Vue.prototype.$storageURL = StorageURL;

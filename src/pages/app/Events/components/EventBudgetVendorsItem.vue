@@ -43,7 +43,7 @@
               />
             </td>
             <template v-if="!isEditing">
-              <td class="actual red-label" width="15%">
+              <td class="actual red-label" width="10%">
                 <template v-if="eventCategoryItem.allocatedBudget">
                   <template v-if="eventCategoryItem.winningProposalId">
                     <template v-if="eventCategoryItem.allocatedBudget < eventCategoryItem.winingProposal.cost">
