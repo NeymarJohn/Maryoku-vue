@@ -470,7 +470,7 @@ export default {
       this.isOpenedAdditionalModal = true;
     },
     hasBudget(categoryKey) {
-      return this.event.components.find((item) => item.componentId == categoryKey);
+      return !!this.event.components.find((item) => item.componentId == categoryKey);
     },
     getSpecification({ category, services }) {
       this.isOpenedAdditionalModal = true;
@@ -478,6 +478,7 @@ export default {
       console.log(this.allRequirements[category]);
       this.subCategory = this.allRequirements[category];
 
+      console.log(this.subCategory);
       console.log(this.$store.state.common.serviceCategories);
       this.selectedCategory = this.$store.state.common.serviceCategories.find((item) => item.key === category);
       console.log(this.selectedCategory);

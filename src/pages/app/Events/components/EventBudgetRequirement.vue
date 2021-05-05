@@ -116,6 +116,7 @@ import EventComponent from "@/models/EventComponent";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import moment from "moment";
+import {mapMutations, mapState} from "vuex";
 
 export default {
   components: {
@@ -142,13 +143,18 @@ export default {
   },
   mounted() {
     this.currentStep = this.event.budgetProgress >= 50 ? 3 : 1;
-    this.checkMessageStatus();
+      // notify budget states
+      if (!this.showBudgetNotification) {
+          this.notifyStates();
+          this.setBudgetNotification(true);
+      }
     this.$root.$on('budget_notification_action', message => {
         let obj = BUDGET_MESSAGES.find(m => m.title = message);
         if (obj.key === 'not_approved') this.next();
     })
   },
   methods: {
+    ...mapMutations("EventPlannerVuex", ["setBudgetNotification",]),
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
     },
@@ -208,7 +214,7 @@ export default {
       this.budgetInfo2 = eventInfo;
       this.editingEvent.eventMovieId = eventInfo.label;
     },
-      checkMessageStatus() {
+      notifyStates() {
         console.log('checkMessageStatus')
           this.budgetStates = [];
           let now = moment();
@@ -237,6 +243,7 @@ export default {
       },
   },
   computed: {
+    ...mapState("EventPlannerVuex", ["showBudgetNotification"]),
     event() {
       return this.$store.state.event.eventData;
     },

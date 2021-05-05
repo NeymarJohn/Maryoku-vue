@@ -1,7 +1,7 @@
 <template>
   <div :class="[{ 'nav-open': $sidebar.showSidebar }, { rtl: $route.meta.rtlActive }]">
     <notifications></notifications>
-    <side-bar></side-bar>
+    <side-bar :event="eventData"></side-bar>
     <div class="main-panel" style="height: 50%">
       <!-- <top-navbar></top-navbar> -->
 
@@ -126,7 +126,9 @@ export default {
     //   }
     // });
   },
-  computed: {},
+  computed: {
+      ...mapState("event", ["eventData"]),
+  },
 };
 </script>
 <style lang="scss" scoped>

@@ -1,9 +1,10 @@
 <template>
-  <div class="vendor-proposal-board p-60">
+  <div class="vendor-proposal-board px-40 pt-60">
+    <vue-element-loading :active="loading" spinner="ring" color="#FF547C"></vue-element-loading>
     <div class="font-size-22 font-bold">
       <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposal Dashboard
     </div>
-    <div class="font-bold mt-40 mb-20">New opportunities:</div>
+    <div class="font-bold text-uppercase mt-30 mb-15">Pending Proposals</div>
     <carousel
       :items="4"
       :margin="25"
@@ -31,107 +32,79 @@
         </button>
       </template>
     </carousel>
-    <hr class="m-60" />
+    <hr class="my-40 color-vendor" />
     <div class="proposals-table">
-      <div class="font-bold">All my proposals:</div>
+      <div class="font-bold">All proposals:</div>
       <div class="filter-bar mt-30">
-        <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
-          <span class="color-black-middle">
-            <img src="/static/icons/vendor/proposalBoard/filter-all.svg" />All Proposal
-          </span>
-        </md-button>
-        <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
-          <span class="color-black-middle"><img src="/static/icons/vendor/proposalBoard/filter-won.svg" />I won</span>
-        </md-button>
-        <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
-          <span class="color-black-middle">
-            <img src="/static/icons/vendor/proposalBoard/filter-draft.svg" />Drafts
-          </span>
-        </md-button>
-        <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
-          <span class="color-black-middle">
-            <img src="/static/icons/vendor/proposalBoard/filter-pending.svg" />Pending
-          </span>
-        </md-button>
-        <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
-          <span class="color-black-middle">
-            <img src="/static/icons/vendor/proposalBoard/filter-top3.svg" />Made Top 3
-          </span>
-        </md-button>
-        <md-button class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20">
-          <span class="color-black-middle">
-            <img src="/static/icons/vendor/proposalBoard/filter-reject.svg" />Lost Bids
-          </span>
-        </md-button>
-      </div>
-      <div class="sort-bar mt-30">
-        <span class="font-size-20 font-bold color-red" style="color: #0fac4c">{{ pagination.total }} Proposals:</span>
-        <span class="sort-item" :class="{ selected: this.sortFields['dateOfEvent'] }" @click="sort('dateOfEvent')"
-          >Date of event
-          <md-icon class="color-black" v-if="this.sortFields['dateOfEvent'] === 'desc'">keyboard_arrow_down</md-icon>
-          <md-icon class="color-black" v-if="this.sortFields['dateOfEvent'] === 'asc'">keyboard_arrow_up</md-icon>
-        </span>
-        <span class="sort-item" :class="{ selected: this.sortFields['dateOfModify'] }" @click="sort('dateOfModify')"
-          >Date of modify
-          <md-icon class="color-black" v-if="this.sortFields['dateOfModify'] === 'desc'">keyboard_arrow_down</md-icon>
-          <md-icon class="color-black" v-if="this.sortFields['dateOfModify'] === 'asc'"
-            >keyboard_arrow_up</md-icon
-          ></span
+        <md-button v-for="tab in proposalTabs"
+                   :key="tab.key"
+                   class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20"
+                   @click="selectTab(tab.key)"
         >
-        <span class="sort-item" :class="{ selected: this.sortFields['status'] }" @click="sort('status')"
-          >Status
-          <md-icon class="color-black" v-if="this.sortFields['status'] === 'desc'">keyboard_arrow_down</md-icon>
-          <md-icon class="color-black" v-if="this.sortFields['status'] === 'asc'">keyboard_arrow_up</md-icon>
-        </span>
-        <span class="sort-item" :class="{ selected: this.sortFields['update'] }" @click="sort('update')"
-          >Update
-          <md-icon class="color-black" v-if="this.sortFields['update'] === 'desc'">keyboard_arrow_down</md-icon>
-          <md-icon class="color-black" v-if="this.sortFields['update'] === 'asc'">keyboard_arrow_up</md-icon>
-        </span>
-        <span></span>
-        <span></span>
+          <div class="d-flex align-center px-20 py-10 font-size-16" :class="tab.class">
+            <img class="mr-10" :src="`/static/icons/vendor/proposalBoard/${tab.icon}`" style="width: 20px; height: 20px"/>
+            {{tab.title}}
+            <span v-if="tab.key == 'all'" class="ml-5" :class="tab.class">({{pagination.total}})</span>
+            <span else class="ml-5" :class="tab.class">({{pagination[tab.key]}})</span>
+          </div>
+        </md-button>
       </div>
-      <div class="propsoals-list mt-30">
-        <div class="md-layout">
-          <div class="md-layout-item md-size-75">
+      <div class="mt-20">
+          <span class="font-size-16 font-bold"
+                :class="!proposals.length ? 'color-minus' : 'color-won'"
+          >
+              {{ proposals.length }} Proposals:</span></div>
+      <div class="md-layout">
+        <div class="md-layout-item md-size-75 p-0">
+          <div class="sort-bar px-40 mt-20">
+            <span v-for="it in proposalHeaders"
+                  class="sort-item"
+                  :class="{selected: it.key && sortFields['sort'] == it.key}"
+                  @click="selectSort(it.key)">
+              {{it.title}}
+              <md-icon v-if="it.key && sortFields['sort'] == it.key" class="color-black">
+                  {{sortFields['order'] == 'asc' ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}} </md-icon>
+            </span>
+          </div>
+          <div v-if="!loading" class="propsoals-list mt-10">
             <div class="white-card md-20 proposal-list">
-              <proposal-list-item class="row" v-for="proposal in proposals" :key="proposal.id"></proposal-list-item>
+                <proposal-list-item class="row" v-for="proposal in proposals" :proposal="proposal" :key="proposal.id"></proposal-list-item>
             </div>
           </div>
-          <div class="md-layout-item md-size-25">
+        </div>
+        <div class="md-layout-item md-size-25 mt-50">
             <div class="white-card p-50" style="height: 100%">
-              <div style="margin: 0 -15px">
-                <pie-chart
-                  :chartData="chartData"
-                  :columns="1"
-                  :options="{
-                    width: 150,
-                    height: 200,
-                    strokWidth: 40,
-                    direction: 'row',
-                  }"
-                ></pie-chart>
-              </div>
-              <div class="color-brown d-flex align-center">
-                <span class="mr-20" style="font-size: 56px">30%</span>
-                <span class="font-size-22">Winning rate</span>
-              </div>
-              <div class="font-size-20 mt-50">
-                You won <span class="font-bold">40 of 120</span> Proposals you applied to
-              </div>
-              <hr class="mt-50 mb-50" />
-              <div class="tips">
-                <div class="d-flex mb-30 align-center">
-                  <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
-                  <div class="ml-10">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</div>
+                <div style="margin: 0 -15px">
+                    <pie-chart
+                        :chartData="chartData"
+                        :columns="1"
+                        :options="{
+                width: 150,
+                height: 200,
+                strokWidth: 40,
+                direction: 'row',
+              }"
+                    ></pie-chart>
                 </div>
-                <div class="d-flex align-center">
-                  <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
-                  <div class="ml-10">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</div>
+                <div class="color-brown d-flex align-center">
+                    <span class="mr-20" style="font-size: 56px">30%</span>
+                    <span class="font-size-22">Winning rate</span>
                 </div>
-              </div>
+                <div class="font-size-20 mt-50">
+                    You won <span class="font-bold">40 of 120</span> Proposals you applied to
+                </div>
+                <hr class="mt-50 mb-50" />
+                <div class="tips">
+                    <div class="d-flex mb-30 align-center">
+                        <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
+                        <div class="ml-10">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</div>
+                    </div>
+                    <div class="d-flex align-center">
+                        <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
+                        <div class="ml-10">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
       </div>
       <div class="md-layout">
@@ -159,6 +132,7 @@ import Proposal from "@/models/Proposal";
 import Vendor from "@/models/Vendors";
 import carousel from "vue-owl-carousel";
 import PieChart from "@/components/Chart/PieChart.vue";
+import VueElementLoading from 'vue-element-loading'
 export default {
   components: {
     ProposalRequestCard,
@@ -166,63 +140,102 @@ export default {
     TablePagination,
     carousel,
     PieChart,
+    VueElementLoading,
   },
   data() {
     return {
+      loading: true,
       proposalRequests: [],
-      proposals: [1, 2, 3, 4],
+      proposalTabs: [
+          {key: 'all', title: 'All Proposal', icon: 'proposal-active.svg', class: 'color-vendor'},
+          {key: 'won', title: 'I won', icon: 'filter-won.svg', class: 'color-won'},
+          {key: 'draft', title: 'Drafts', icon: 'filter-draft.svg'},
+          {key: 'pending', title: 'Pending', icon: 'filter-pending.svg'},
+          {key: 'top', title: 'Made Top3', icon: 'filter-top3.svg'},
+          {key: 'lost', title: 'Lost Bids', icon: 'filter-reject.svg'},
+      ],
+      proposalHeaders: [
+          {key: '', title: ''},
+          {key: 'name', title: 'Name'},
+          {key: 'date', title: 'Date'},
+          {key: 'cost', title: 'Proposal Value'},
+          {key: 'modified', title: 'Modified'},
+          {key: 'status', title: 'Status'},
+          {key: 'owner', title: 'Owner'},
+          {key: 'update', title: 'Update'},
+          {key: '', title: ''},
+      ],
+      proposals: [],
       chartData: [
         { title: "Application", value: 12, color: "#b7b5b5" },
         { title: "Winning", value: 3, color: "#2cde6b" },
       ],
+      tab: 'all',
       pagination: {
         total: 0,
+        won: 0,
+        draft: 0,
+        pending: 0,
+        top: 0,
+        lost: 0,
         pageCount: 0,
         page: 0,
         limit: 5,
       },
-      sortFields: {},
+      sortFields: {sort: '', order: ''},
     };
   },
-  created() {
-    this.getData();
-    this.getProposal();
+  async mounted() {
+    console.log('mounted', this.vendorData);
+    await this.getData();
+    await this.getProposal();
+    this.loading = false;
   },
   methods: {
-    getData() {
-      new ProposalRequest()
-        .for(new Vendor({ id: this.vendorData.id }))
-        .get()
-        .then((proposalRequests) => {
-          this.proposalRequests = proposalRequests;
-        });
+    async getData() {
+        // this.proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
     },
-    getProposal() {
+    async getProposal() {
       const { pagination } = this;
-      this.proposals = [1, 2, 2, 3];
-      // new Proposal()
-      //   .for(new Vendor({ id: this.vendorData.id }))
-      //   .page(pagination.page)
-      //   .limit(pagination.limit)
-      //   .get()
-      //   .then((res) => {
-      //     const data = res[0];
-      //     // this.proposals = data.items;
-      //     // this.pagination.total = data.total;
-      //     // this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
-      //   });
+      const params = {status: this.tab, ...this.sortFields};
+      const res = await new Proposal()
+        // .for(new Vendor({ id: this.vendorData.id }))
+        .for(new Vendor({ id: '60462793cfefec258a35e874' }))
+        .page(pagination.page)
+        .limit(pagination.limit)
+        .params(params)
+        .get();
+      const data = res[0];
+      console.log('proposals', res)
+      this.proposals = data.items;
+      this.pagination.total = data.total;
+      this.proposalTabs.map(t => {
+        if (data.hasOwnProperty(t.key)) this.pagination[t.key] = data[t.key];
+      })
+      this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
     },
     gotoPage(selectedPage) {
       console.log(selectedPage);
       this.pagination.page = selectedPage;
       this.getProposal();
     },
-    sort(sortField) {
-      if (!this.sortFields[sortField]) {
-        this.$set(this.sortFields, sortField, "desc");
+    async selectTab(tab){
+      console.log('select.tab', tab);
+      this.loading = true;
+      this.tab = tab;
+      await this.getProposal();
+      this.loading = false;
+    },
+    async selectSort(sortField) {
+        this.loading = true;
+      if (this.sortFields.sort !== sortField) {
+        this.$set(this.sortFields, 'sort', sortField);
+          this.$set(this.sortFields, 'order', 'asc');
       } else {
-        this.sortFields[sortField] = this.sortFields[sortField] === "desc" ? "asc" : "desc";
+        this.sortFields['order'] = this.sortFields['order'] === "desc" ? "asc" : "desc";
       }
+      await this.getProposal();
+      this.loading = false;
     },
   },
   computed: {
@@ -242,7 +255,6 @@ export default {
   .proposal-requests {
     display: flex;
     position: relative;
-    margin: 0 -50px;
     .nav-btn {
       position: absolute;
       top: 50%;
@@ -263,31 +275,19 @@ export default {
       }
     }
   }
-  .filter-button {
-    .color-black-middle {
-      display: flex;
-      align-items: center;
-      padding: 4px 15px;
-      img {
-        margin-right: 10px;
-      }
-    }
-  }
   .proposal-list {
-    margin-left: -15px;
     .proposal-list-item:not(:last-child) {
       border-bottom: solid 1px #dbdbdb;
     }
   }
   .sort-bar {
-    width: 75%;
-    padding-right: 120px;
     display: grid;
     align-items: center;
-    grid-template-columns: 150px 20% 20% 15% 20% 20% 30px;
+    grid-template-columns: 5% 20% 10% 15% 10% 10% 10% 15% 5%;
     .sort-item {
       cursor: pointer;
       color: #707070;
+      font-size: 14px;
       &.selected {
         color: #050505;
         font-weight: bold;

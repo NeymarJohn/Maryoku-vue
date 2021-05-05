@@ -4,22 +4,23 @@
       <img style="width: 40px" src="https://maryoku.s3.amazonaws.com/company/logos/5e0ae1d2cfefec4b68f5d8a1.png" />
     </div>
     <div>
-      <div>Microsoft</div>
-      <div class="font-bold font-size-20 mt-5">March Madness</div>
-      <div class="font-bold font-size-22 mt-5">23/12/20</div>
+      <div class="font-bold font-size-16">{{proposal.proposalRequest.eventData.title}}</div>
+<!--      <div class="font-bold font-size-16">{{'March Madness'}}</div>-->
     </div>
-    <div>23/12/20</div>
-    <div><img src="/static/icons/vendor/proposalBoard/filter-won.svg" /></div>
-    <div></div>
-    <div>
-      <span class="color-vendor font-bold cursor-pointer" @click="openProposal">
-        <img src="/static/icons/vendor/proposalBoard/see-proposal.svg" class="mr-10" />
-        View Proposal
-      </span>
-    </div>
+    <div class="font-size-14 color-black-middle">{{proposal.dateCreated | date('DD/MM/YYYY')}}</div>
+    <div class="font-size-14 color-black-middle">${{proposal.cost}}</div>
+    <div class="font-size-14 color-black-middle">{{proposal.lastUpdated | date('DD/MM/YYYY')}}</div>
+    <div><img class="ml-15" :src="getStatusIcon(proposal.status)" /></div>
+    <div class="font-size-14 color-black-middle">Tom</div>
+
+   <span class="color-vendor font-size-14 font-bold cursor-pointer" @click="openProposal">
+    <img src="/static/icons/vendor/proposalBoard/see-proposal.svg" class="mr-10" style="width: 20px"/>
+    View Proposal
+   </span>
+
     <div class="text-right">
       <md-menu md-size="medium" class="action-menu" :md-offset-x="240" :md-offset-y="-36" @closed="hoveredMenu = ''">
-        <md-button md-menu-trigger class="edit-btn md-simple" style="height: 40px">
+        <md-button md-menu-trigger class="edit-btn md-simple" style="height: 30px">
           <md-icon style="font-size: 40px !important">more_vert</md-icon>
         </md-button>
         <md-menu-content>
@@ -79,13 +80,35 @@
   </div>
 </template>
 <script>
+import moment from "moment";
+import Button from "../../../../components/Button/ButtonDiv";
+
 export default {
+    components: {Button},
+    props:{
+    proposal: {
+      type: Object,
+      required: true,
+    }
+  },
   data() {
     return {
       hoveredMenu: "",
     };
   },
   methods: {
+    getStatusIcon(status){
+        let path = '/static/icons/vendor/proposalBoard/';
+        if (status == 'submit') {
+            return `${path}filter-pending.svg`;
+        } else if (status == 'top') {
+            return `${path}filter-top3.svg`;
+        } else if (status == 'lost') {
+            return `${path}filter-reject.svg`;
+        } else {
+            return `${path}filter-${status}.svg`;
+        }
+    },
     openProposal() {},
     edit() {},
   },
@@ -93,10 +116,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .proposal-list-item {
-  display: flex;
   padding: 30px 40px;
   display: grid;
   align-items: center;
-  grid-template-columns: 100px 20% 20% auto 20% 15% 50px;
+  grid-template-columns: 5% 20% 10% 15% 10% 10% 10% 15% 5%;
 }
 </style>

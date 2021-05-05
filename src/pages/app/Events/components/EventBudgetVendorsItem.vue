@@ -13,22 +13,24 @@
         <template>
           <tr>
             <td width="40%" class="event-block-element">
-              <img
-                :src="
+              <div class="d-flex align-center">
+                  <img
+                      :src="
                   editingMode
                     ? `${$iconURL}Budget Elements/${eventCategoryItem.icon}`
                     : `/static/icons/budget/${eventCategoryItem.icon.replace('svg', 'png')}`
                 "
-              />
-              {{ eventCategoryItem.title }}
-              <span v-if="eventCategoryItem.eventCategory">
-                <img :src="`${$iconURL}Campaign/Group 9087.svg`" class="label-icon" />
+                  />
+                  <span>{{ eventCategoryItem.title }}</span>
+                  <span v-if="eventCategoryItem.eventCategory">
+                <img :src="`${$iconURL}Campaign/Group 9087.svg`" class="label-icon ml-5" />
                 <md-tooltip>
                   <div class="font-size-14 tab-tooltip">{{ eventCategoryItem.eventCategory.tooltipText }}</div>
                 </md-tooltip>
               </span>
+              </div>
             </td>
-            <td class="planned" width="20%" style="white-space: nowrap">
+            <td class="planned" width="25%" style="white-space: nowrap">
               <span v-if="type === 'total'">$ {{ eventCategoryItem.allocatedBudget | withComma }}</span>
               <span v-else>$ {{ (eventCategoryItem.allocatedBudget / event.numberOfParticipants).toFixed(0) }}</span>
               <md-button class="md-rose md-sm md-simple edit-btn" v-if="isEditable && editingMode" @click="switchEdit"
@@ -94,8 +96,8 @@
                   </span>
                 </span>
               </td>
-              <td class="status" width="15%">
-                <div class="text-center">
+              <td class="status" width="10%">
+                <div class="text-left">
                   <md-button
                     class="book-btn md-sm"
                     :class="{
@@ -108,7 +110,7 @@
                       !eventCategoryItem.bookedBudget &&
                       editingMode
                     "
-                    >Book Vendors</md-button
+                    >Book</md-button
                   >
                   <img
                     :src="`${$iconURL}common/check-circle-green.svg`"
