@@ -193,7 +193,7 @@ export default {
   },
   methods: {
     async getData() {
-        // this.proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
+        this.proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
     },
     async getProposal() {
       const { pagination } = this;
