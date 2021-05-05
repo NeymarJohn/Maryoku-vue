@@ -1,9 +1,7 @@
 <template>
   <div>
     <budget-notifications></budget-notifications>
-    <!-- todo show event checklist temp-->
-    <progress-sidebar :elements="barItems" page="plan"></progress-sidebar>
-    <div class="edit-event-details event-details-budget" style="padding: 0 20px 0 420px !important;">
+    <div class="edit-event-details event-details-budget">
       <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
       <!-- Event Header -->
       <div class="event-header d-flex justify-content-between">
@@ -19,22 +17,20 @@
         <div class="md-layout-item md-size-40">
           <div class="card-section card-overview">
             <div class="section-header">Overview</div>
-            <div class="budget-list d-flex justify-content-center">
-              <div class="budget-list__item width-66 d-flex align-center" style="border-bottom: 1px solid #B7B7B7">
-                  <div class="label-title mb-0">Budget</div>
-                  <div class="budget-value">${{ budgetStatistics.total | withComma }}</div>
-                  <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="showBudgetModal = true">
-                      Edit
-                  </md-button>
-              </div>
-            </div>
             <div class="budget-list d-flex justify-content-between">
-              <div class="budget-list__item width-50">
+              <div class="budget-list__item">
+                <div class="label-title">Budget</div>
+                <div class="budget-value">${{ budgetStatistics.total | withComma }}</div>
+                <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="showBudgetModal = true">
+                  Edit
+                </md-button>
+              </div>
+              <div class="budget-list__item">
                 <div class="label-title">Allocated</div>
                 <div class="budget-value">${{ budgetStatistics.allocated | withComma }}</div>
                 <div class="percent">{{ budgetStatistics.allocatedPercentage }} %</div>
               </div>
-              <div class="budget-list__item width-50">
+              <div class="budget-list__item">
                 <div class="label-title">Booked</div>
                 <div class="budget-value">${{ budgetStatistics.booked | withComma }}</div>
                 <div class="percent">{{ budgetStatistics.bookedPercentage }}%</div>
@@ -269,7 +265,6 @@ import { mapState, mapMutations, mapGetters } from "vuex";
 import EventBudgetVendors from "./components/EventBudgetVendors";
 import EditEventBlocksBudget from "./components/EditEventBlocksBudget";
 import EventBudgetActivityPanel from "./components/EventBudgetActivityPanel";
-import ProgressSidebar from "./components/progressSidebarForEvent";
 
 // COMPONENTS
 import UploadVendorsModal from "../Vendors/ImportVendors";
@@ -285,7 +280,6 @@ const VueHtml2pdf = () => import("vue-html2pdf");
 
 export default {
   components: {
-    ProgressSidebar,
     Tabs,
     EventBudgetVendors,
     UploadVendorsModal,
@@ -593,93 +587,9 @@ export default {
       components: "event/getComponentsList",
       currentUser: "auth/currentUser",
     }),
-    barItems() {
-          if (!this.event.checkList) {
-              const overview = {
-                  title: "Create an event to remember",
-                  status: "completed",
-                  route: "overview",
-                  // icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-                  progress: 100,
-                  componentId: "overview",
-                  id: "overview-item",
-              };
-              const concept = {
-                  title: "Inspiration Board",
-                  status: this.event.concept && this.event.conceptProgress === 100 ? "completed" : "not-complete",
-                  route: "booking/concept",
-                  icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-                  progress: this.event.concept ? this.event.conceptProgress : 0,
-                  componentId: "concept",
-                  id: "concept-item",
-              };
-              const budget = {
-                  title: "Budget Wizard",
-                  status: "not-complete",
-                  route: this.event.budgetProgress == 100 ? "edit/budget" : "booking/budget",
-                  icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
-                  progress: this.event.budgetProgress,
-                  componentId: "budget",
-                  id: "budget-item",
-              };
-              const timeline = {
-                  title: "Event Scheduler",
-                  status: this.event.timelineProgress === 100 ? "completed" : "not-complete",
-                  route: "booking/timeline",
-                  icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-                  progress: this.event.timelineProgress,
-                  componentId: "timeline",
-                  id: "timeline-item",
-              };
-              const campaign = {
-                  title: "Guests Communicator",
-                  status: this.event.campaignProgress === 100 ? "completed" : "not-complete",
-                  route: "booking/campaign",
-                  icon: `${this.$iconURL}Campaign/Group 8857.svg`,
-                  progress: this.event.campaignProgress,
-                  componentId: "campaign",
-                  id: "campaign-item",
-              };
-              const planningBoard = {
-                  title: "Plan Your Event",
-                  status: this.event.campaignProgress === 100 ? "completed" : "not-complete",
-                  route: "booking/planningboard",
-                  icon: `${this.$iconURL}Campaign/Group 8857.svg`,
-                  progress: this.event.campaignProgress,
-                  componentId: "planningboard",
-                  id: "planningboard-item",
-              };
-              const elements = [];
-              elements.push(overview);
-              // if (this.event.eventType.hasConcept) {
-              elements.push(concept);
-              // }
-              elements.push(budget);
-              elements.push(timeline);
-              elements.push(campaign);
-              elements.push(planningBoard);
-              // show when you approve budget
-              if (this.event.budgetProgress == 100) {
-                  this.event.components.sort((a, b) => a.order - b.order);
-                  this.event.components.forEach((item) => {
-                      if (item.componentId !== "unexpected") {
-                          elements.push({
-                              title: item.bookTitle,
-                              status: "not-complete",
-                              route: "booking/" + item.id,
-                              icon: `${this.$iconURL}Budget+Elements/${item.icon}`,
-                              progress: item.progress ? item.progress : 0,
-                              id: item.id,
-                          });
-                      }
-                  });
-              }
-
-              return elements;
-          } else {
-              return this.event.checkList;
-          }
-      },
+    showNotification() {
+        return this.$store.state.event.showBudgetNotification;
+    },
     pieChartData() {
       return this.$store.state.event.eventData.components;
     },

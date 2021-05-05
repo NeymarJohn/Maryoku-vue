@@ -73,7 +73,10 @@
         </div>
         <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
-            <div class="price-header">On Day Cordinator</div>
+            <div class="price-header">
+              <img :src="`${$iconURL}PaymentPage/Group 9556.svg`" class="mr-10 ml-10" />
+              On Day Cordinator
+            </div>
           </template>
           <template slot="content">
             <div class="price-table-content">
@@ -100,7 +103,7 @@
           <template slot="header">
             <div class="price-header d-flex align-center">
               <md-checkbox class="m-0 mr-10"></md-checkbox>
-              <img :src="`${$iconURL}common/reward.svg`" class="mr-10 ml-10" />
+              <img :src="`${$iconURL}PaymentPage/Group 9791.svg`" class="mr-10 ml-10" />
               Give Back
             </div>
           </template>
@@ -144,7 +147,34 @@
           </div>
         </div>
         <div class="mt-40">
-          <md-checkbox class="m-0" v-model="agreedCancellationPolicy">I agree to the Cancellation policy</md-checkbox>
+          <md-checkbox class="m-0" v-model="agreedCancellationPolicy">
+            <span class="font-regular">I agree to the</span>
+            <a href="#" class="font-bold color-black text-underline">Cancellation policy</a>
+          </md-checkbox>
+          <div class="d-flex align-center payment-methods">
+            <md-button
+              class="md-simple payment-method"
+              @click="paymentMethod = 'payoneer'"
+              :class="{ selected: paymentMethod === 'payoneer' }"
+            >
+              <img :src="`${$iconURL}PaymentPage/payoneer.png`" />
+            </md-button>
+            <md-button
+              class="md-simple payment-method"
+              @click="paymentMethod = 'paypal'"
+              :class="{ selected: paymentMethod === 'paypal' }"
+            >
+              <img :src="`${$iconURL}PaymentPage/pay pal.png`" />
+            </md-button>
+            <md-button
+              class="md-simple payment-method"
+              @click="paymentMethod = 'stripe'"
+              :class="{ selected: paymentMethod === 'stripe' }"
+            >
+              <img :src="`${$iconURL}PaymentPage/Stripe.png`" />
+            </md-button>
+          </div>
+
           <div>You will be transferred to a secured Payoneer payment</div>
         </div>
       </div>
@@ -168,6 +198,7 @@ export default {
       proposal: null,
       loading: true,
       agreedCancellationPolicy: false,
+      paymentMethod: "",
     };
   },
   created() {
@@ -313,6 +344,15 @@ export default {
           background-color: #404040;
           padding: 30px;
         }
+      }
+    }
+  }
+  .payment-methods {
+    .payment-method {
+      padding: 10px;
+      height: 60px;
+      &.selected {
+        background-color: #ddd !important;
       }
     }
   }
