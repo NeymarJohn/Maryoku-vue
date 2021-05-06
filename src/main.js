@@ -51,6 +51,7 @@ import stringUtil from "./utils/string.util"
 import VueYoutube from "vue-youtube";
 
 import helper from "@/utils/helperFunction";
+import moment from "moment";
 
 require("vue-tour/dist/vue-tour.css");
 
@@ -302,11 +303,11 @@ Vue.directive("select-all", {
 //   stopProp(event) { event.stopPropagation() }
 // })
 
-Vue.filter("withComma", function (value) {
+Vue.filter("withComma", function (value, type= null) {
   if (typeof value == 'string') {
     value = Number(value)
   }
-  return value ? value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 0;
+  return value ? type != Number ? value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : value : 0;
 
 });
 Vue.filter("formatQty", function (value) {
@@ -317,6 +318,11 @@ Vue.filter("formatQty", function (value) {
   return value ? value.toLocaleString() : 0;
 
 });
+Vue.filter('date', function (value, format) {
+    if (!value) return ""
+
+    return moment(value).format(format);
+})
 
 Vue.prototype.$resourceURL = ResourceURL;
 Vue.prototype.$storageURL = StorageURL;

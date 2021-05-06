@@ -1,7 +1,6 @@
 <template>
   <div class="booking-section planning-board-layout">
-    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
-    <div class="p-50" v-if="!showCounterPage">
+    <div class="p-50">
       <div class="d-flex justify-content-between">
         <div>
           <div class="font-size-30 font-bold text-transform-uppercase">
@@ -27,9 +26,7 @@
             :isLong="(serviceIndex + groupIndex) % 2 === 1"
             :hasBudget="hasBudget(service.serviceCategory)"
             :musicPlayer="service.musicPlayer"
-            :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
             @showSpecific="getSpecification"
-            @update="setServiceStyles"
           ></service-category-card>
         </div>
       </div>
@@ -46,15 +43,11 @@
             :key="service.name"
             :isLong="(serviceIndex + groupIndex) % 2 === 1"
             :hasBudget="hasBudget(service.serviceCategory)"
-            :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
             @showSpecific="getSpecification"
           ></service-category-card>
         </div>
       </div>
     </div>
-    <template v-else>
-      <pending-for-vendors :expiredTime="expiredTime"></pending-for-vendors>
-    </template>
     <div class="proposal-footer white-card d-flex justify-content-between">
       <div>
         <md-button v-if="step === 2" @click="step = step - 1" class="md-simple maryoku-btn md-black">
@@ -80,18 +73,9 @@
       v-if="isOpenedAdditionalModal"
       :subCategory="subCategory"
       :selectedCategory="selectedCategory"
-      :defaultData="mainRequirements[selectedCategory.key] || {}"
-      @save="saveAdditionalRequest"
       @cancel="isOpenedAdditionalModal = false"
       @close="isOpenedAdditionalModal = false"
     ></additional-request-modal>
-    <special-requirement-modal
-      v-if="isOpenedFinalModal"
-      :defaultData="specialRequirements"
-      @cancel="isOpenedFinalModal = false"
-      @save="saveSpecialRequirements"
-    >
-    </special-requirement-modal>
   </div>
 </template>
 <script>
@@ -99,26 +83,15 @@ import PlanningBoardState from "./state";
 import ServiceCategoryCard from "./components/ServiceCategoryCard";
 import { serviceCategoryImages } from "@/constants/event.js";
 import ProgressRadialBar from "./components/ProgressRadialBar.vue";
-import { mapState, mapGetters, mapMutations } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import _ from "underscore";
 
 import AdditionalRequestModal from "./components/modals/AdditionalRequest.vue";
-import SpecialRequirementModal from "./components/modals/SpecialRequirement.vue";
-import VueElementLoading from "vue-element-loading";
-import { camelize } from "@/utils/string.util";
-import CalendarEvent from "@/models/CalendarEvent";
-import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
-import PendingForVendors from "../components/PendingForVendors.vue";
-import moment from "moment";
-
 export default {
   components: {
     ServiceCategoryCard,
     ProgressRadialBar,
     AdditionalRequestModal,
-    VueElementLoading,
-    SpecialRequirementModal,
-    PendingForVendors,
   },
   data() {
     return {
@@ -423,23 +396,37 @@ export default {
         ],
       ],
       isOpenedAdditionalModal: false,
-      isOpenedFinalModal: false,
       selectedCategory: null,
-      isLoading: false,
-      showCounterPage: false,
-      expiredTime: 0,
     };
   },
   created() {
     if (!this.allRequirements) {
-      this.isLoading = true;
-      this.$store.dispatch("event/getRequirements").then((requirements) => {
-        this.allRequirements = requirements;
-        this.isLoading = false;
+      this.$http.get(`${process.env.SERVER_URL}/1/vendor/property/${this.event.id}`).then((res) => {
+        console.log("res", res);
+        this.allRequirements = res.data;
       });
-      this.$store.dispatch("planningBoard/getRequirements", this.event.id).then((requirements) => {
-        console.log(requirements);
-      });
+      // // set default value by conditionSript
+      // let event = this.$store.state.event.eventData;
+
+      // _.each(this.allRequirements.data, (it) => {
+      //   let requirements = it.requirements;
+      //   _.each(requirements, (requirement) => {
+      //     requirement.map((ms) => {
+      //       if (ms.conditionScript) ms.visible = eval(ms.conditionScript);
+      //       if (ms.conditionScript) ms.isSelected = eval(ms.conditionScript);
+      //       if (ms.defaultQtyScript) ms.defaultQty = Math.ceil(eval(ms.defaultQtyScript));
+
+      //       if (this.blockId === "giveaways" && (ms.item === "Apparel" || ms.item === "Tech items")) {
+      //         ms.mustHave = false;
+      //       }
+      //     });
+      //   });
+      // });
+
+      // let updatedRequirements = this.storedRequirements;
+      // updatedRequirements[this.event.id] = this.allRequirements.data;
+      // this.setBookingRequirements(JSON.parse(JSON.stringify(updatedRequirements)));
+      // this.setInitBookingRequirements(JSON.parse(JSON.stringify(updatedRequirements)));
     }
   },
   beforeCreate() {
@@ -448,12 +435,10 @@ export default {
       this.$store.registerModule("planningBoard", PlanningBoardState);
     }
   },
+  // beforeDestroy() {
+  //   this.$store.unregisterModule("planningBoard");
+  // },
   computed: {
-    ...mapState("planningBoard", {
-      types: (state) => state.types,
-      mainRequirements: (state) => state.mainRequirements,
-      specialRequirements: (state) => state.specialRequirements,
-    }),
     step: {
       get() {
         return this.$store.state.planningBoard.step;
@@ -481,55 +466,22 @@ export default {
     },
   },
   methods: {
-    ...mapMutations("event", ["setRequirementTypes", "setRequirementsForVendor", "setSubCategory"]),
-    ...mapMutations("planningBoard", ["setData", "setMainRequirements", "setTypes", "setSpecialRequirements"]),
     findVendors() {
-      this.isOpenedFinalModal = true;
+      this.isOpenedAdditionalModal = true;
     },
     hasBudget(categoryKey) {
       return !!this.event.components.find((item) => item.componentId == categoryKey);
     },
     getSpecification({ category, services }) {
-      this.selectedCategory = this.$store.state.common.serviceCategories.find((item) => item.key === category);
       this.isOpenedAdditionalModal = true;
+      // console.log("storedRequirements", this.storedRequirements);
+      console.log(this.allRequirements[category]);
       this.subCategory = this.allRequirements[category];
-    },
-    getDefaultTypes(category, name) {
-      if (!this.types[category]) return [];
-      if (!this.types[category][camelize(name)]) return [];
-      return this.types[category][camelize(name)];
-    },
-    setServiceStyles({ category, services, type }) {
-      this.setTypes({ category: category.serviceCategory, data: services, type });
-    },
-    saveAdditionalRequest({ category, requirements }) {
-      this.isOpenedAdditionalModal = false;
-      this.setMainRequirements({ category: category, data: requirements });
-    },
-    saveSpecialRequirements(data) {
-      this.isOpenedFinalModal = false;
-      this.setSpecialRequirements(data);
-      this.expiredTime = moment(new Date()).add(3, "days").valueOf();
-      const requestRequirement = {
-        types: this.types,
-        mainRequirements: this.mainRequirements,
-        specialRequirements: data,
-        event: { id: this.event.id },
-        issuedTime: new Date().getTime(),
-        expiredBusinessTime: this.expiredTime,
-      };
-      if (this.$store.state.planningBoard.id) {
-        requestRequirement.id = this.$store.state.planningBoard.id;
-      }
-      new ProposalRequestRequirement(requestRequirement)
-        .for(new CalendarEvent({ id: this.event.id }))
-        .save()
-        .then((res) => {
-          console.log(res);
-          this.$store.commit("planningBoard/setData", { key: "id", value: res.item.id });
-          this.showCounterPage = true;
-          // this.additionalServiceRequirements = res;
-        });
+
+      console.log(this.subCategory);
+      console.log(this.$store.state.common.serviceCategories);
+      this.selectedCategory = this.$store.state.common.serviceCategories.find((item) => item.key === category);
+      console.log(this.selectedCategory);
     },
   },
 };

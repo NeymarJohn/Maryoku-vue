@@ -252,8 +252,10 @@ export default {
       // console.log(img);
       setTimeout(() => {
         var canvas = document.querySelector("#pie-chart-canvas");
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
+        if (canvas) {
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0);
+        }
       });
       this.$forceUpdate();
     },

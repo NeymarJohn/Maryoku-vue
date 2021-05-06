@@ -17,14 +17,9 @@
     </template>
     <template slot="content">
       <div class="price-table-content">
-        <div
-          v-for="service in costServices"
-          class="d-flex justify-content-between price-item"
-          :key="service.requirementTitle"
-        >
+        <div v-for="service in costServices" class="d-flex justify-content-between price-item">
           <span>
-            {{ service.requirementTitle }}
-            <span class="pl-20">X{{ service.requirementValue }}</span>
+            {{ service.requirementTitle }} <span class="pl-20">X{{ service.requirementValue }}</span>
           </span>
           <span>${{ (service.price * service.requirementValue) | withComma }}</span>
         </div>

@@ -57,7 +57,7 @@
         <div class="addtional-requests">
           <div class="font-bold">Addtional Requests</div>
           <div>
-            {{ additionalNote }}
+            {{ proposalRequest.requirement.note }}
           </div>
         </div>
       </div>
@@ -121,7 +121,7 @@
           <div class="addtional-requests">
             <div class="font-bold">Addtional Requests</div>
             <div>
-              {{ additionalNote }}
+              {{ proposalRequest.requirement.note }}
             </div>
           </div>
         </div>
@@ -167,9 +167,6 @@ export default {
       });
   },
   computed: {
-    vendor() {
-      return this.$store.vendorProposal.vendor;
-    },
     requirementsData() {
       try {
         return JSON.parse(this.$store.state.vendorProposal.proposalRequest.requirement.settingsJsonData);
@@ -194,7 +191,7 @@ export default {
     },
     additionalNote() {
       try {
-        return this.proposalRequest.plannerRequirement[this.vendor.eventCategory.key].additionalRequest;
+        return this.$store.state.vendorProposal.proposalRequest.requirement.note;
       } catch (e) {
         return "";
       }

@@ -21,16 +21,7 @@
           ></tag-item>
         </div>
       </div>
-      <div>
-        <div v-for="section in selectedTags" :key="section" class="text-left sub-category">
-          <div class="font-bold-extra">{{ section }}</div>
-          <div class="requirement-row text-left">
-            <div v-for="item in speicalRequirements[section]" class="requirement-item">
-              <md-checkbox v-model="item.selected">{{ item.name }}</md-checkbox>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div></div>
     </template>
     <template slot="footer">
       <md-button class="md-button md-black md-simple add-category-btn" @click="onCancel()">
@@ -45,7 +36,7 @@
 import { Modal, MaryokuInput } from "@/components";
 import TagItem from "../TagItem.vue";
 export default {
-  name: "SpecialRequirementModal",
+  name: "Additional Request Modal",
   components: {
     Modal,
     TagItem,
@@ -54,21 +45,6 @@ export default {
     return {
       tags: ["Sustainability", "Inclusion", "Security", "Other", "Covid-19"],
       selectedTags: [],
-      speicalRequirements: {
-        Sustainability: [
-          { name: "Green policy", selected: false },
-          { name: "Water saving protocols", selected: false },
-          { name: "Green power and energy efficient", selected: false },
-          { name: "Waste recycle procedures", selected: false },
-          { name: "Non toxic products", selected: false },
-        ],
-        Inclusion: [
-          { name: "Prioritizing diversity and inclution", selected: false },
-          { name: "Women on senior staff", selected: false },
-          { name: "Strict sexual harrasment policy", selected: false },
-          { name: "Acknowledge all religious and cultural holidays", selected: false },
-        ],
-      },
     };
   },
   props: {
@@ -76,30 +52,18 @@ export default {
       type: Object,
       default: () => {},
     },
-    defaultData: {
-      type: Object,
-      default: () => {},
-    },
   },
   created() {
-    console.log("this.defaultData", this.defaultData);
-    this.selectedTags = Object.keys(this.defaultData);
-    this.speicalRequirements = { ...this.speicalRequirements, ...this.defaultData };
+    this.tags = Object.keys(this.subCategory.requirements);
+    this.tags = this.tags.filter((item) => item !== "multi-selection" && item !== "special");
   },
   methods: {
     onCancel: function (e) {
       this.$emit("cancel");
     },
-    save: function () {
-      this.$emit("save", this.speicalRequirements);
-    },
+    save: function () {},
     addTag(tag) {
-      const tagIndex = this.selectedTags.findIndex((item) => item === tag);
-      if (tagIndex < 0) {
-        this.selectedTags.push(tag);
-      } else {
-        this.selectedTags.splice(tagIndex, 1);
-      }
+      this.selectedTags.push(tag);
     },
   },
 };
@@ -111,19 +75,6 @@ export default {
     .maryoku-modal-header {
       width: 100%;
       padding-bottom: 50px;
-    }
-  }
-  .sub-category {
-    border-top: solid 1px #dbdbdb;
-    margin-top: 30px;
-    padding-top: 30px;
-  }
-  .requirement-row {
-    .requirement-item {
-      display: inline-block;
-      min-width: 25%;
-      // display: grid;
-      // grid-template-columns: repeat(4, 25%);
     }
   }
 }
