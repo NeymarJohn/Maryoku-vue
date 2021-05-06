@@ -29,8 +29,25 @@
           <div class="font-bold-extra">{{ section }}</div>
           <div class="requirement-row text-left">
             <!-- {{ subCategory.requirements[section] }} -->
-            <div v-for="item in subCategory.requirements[section]" class="requirement-item">
-              <md-checkbox v-model="item.selected">{{ item.item }}</md-checkbox>
+            <div
+              v-for="item in subCategory.requirements[section].filter((item) => item.type !== 'single-selection')"
+              class="requirement-item"
+            >
+              <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">{{ item.item }}</md-checkbox>
+            </div>
+            <div
+              v-for="item in subCategory.requirements[section].filter((item) => item.type === 'single-selection')"
+              class="requirement-item-tags mt-10"
+            >
+              <div class="mb-10">{{ item.item }}:</div>
+              <tag-item
+                @click="tag.selected = !tag.selected"
+                :tagLabel="tag.name"
+                :key="tag.name"
+                :isSelected="tag.selected"
+                :theme="`red`"
+                v-for="tag in item.options"
+              ></tag-item>
             </div>
           </div>
         </div>
@@ -106,8 +123,8 @@
         </div>
       </div>
       <div class="anything-else-section text-left mt-30">
-        <label class="font-bold">Additional {{ selectedCategory.fullTitle }} Requests?</label>
-        <div class="mt-10">Tell us what else you would love to receive in the proposals we’ll send you</div>
+        <label class="font-bold">Get me a pink unicorn please</label>
+        <div class="mt-10">We love a good challenge! Tell us whatever you need, and we’ll add it to your proposal.</div>
         <div class="anything-else-section-options mt-10">
           <textarea
             placeholder="Type name of element here..."

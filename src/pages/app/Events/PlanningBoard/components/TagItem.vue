@@ -1,5 +1,5 @@
 <template>
-  <div class="planningboard-tag-item" :class="{ selected: isSelected }" @click="handleClick">
+  <div class="planningboard-tag-item" :class="{ selected: isSelected, red: theme === 'red' }" @click="handleClick">
     <span>{{ tagLabel }}</span>
     <md-icon class="icon">add_circle</md-icon>
   </div>
@@ -15,6 +15,10 @@ export default {
       type: String,
       default: "",
     },
+    theme: {
+      type: String,
+      default: "gray",
+    },
   },
   methods: {
     handleClick() {
@@ -25,7 +29,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .planningboard-tag-item {
-  margin-left: 20px;
+  margin-right: 20px;
   margin-bottom: 10px;
   border: solid 1px #f51355;
   // height: 50px;
@@ -46,6 +50,16 @@ export default {
     color: #a0a0a0 !important;
     .icon {
       color: #a0a0a0 !important;
+      -webkit-transform: rotate(45deg);
+      transform: rotate(45deg);
+    }
+  }
+  &.red.selected {
+    border: solid 1px #f51355;
+    color: white !important;
+    background-color: #f51355;
+    .icon {
+      color: white !important;
       -webkit-transform: rotate(45deg);
       transform: rotate(45deg);
     }
