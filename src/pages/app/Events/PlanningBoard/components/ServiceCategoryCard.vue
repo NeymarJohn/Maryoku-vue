@@ -9,12 +9,12 @@
       <div v-for="(image, index) in serviceCategory.images" :key="image" class="carousel-item">
         <md-button
           class="md-simple md-icon-button md-raised save-btn"
-          :class="{ isSelected: selectedSerivces.includes(serviceCategory.imageTitles[index]) }"
+          :class="{ isSelected: selectedServices.includes(serviceCategory.imageTitles[index]) }"
           @click="addService(serviceCategory.imageTitles[index])"
           v-show="hasBudget"
         >
           <img
-            v-if="!selectedSerivces.includes(serviceCategory.imageTitles[index])"
+            v-if="!selectedServices.includes(serviceCategory.imageTitles[index])"
             class="non-selected"
             :src="`${$iconURL}comments/SVG/heart-dark.svg`"
           />
@@ -37,6 +37,19 @@
         </span>
       </template>
       <div v-for="(clip, index) in serviceCategory.clips" :key="clip" class="carousel-item">
+        <md-button
+          class="md-simple md-icon-button md-raised save-btn"
+          :class="{ isSelected: selectedServices.includes(serviceCategory.imageTitles[index]) }"
+          @click="addService(serviceCategory.imageTitles[index])"
+          v-show="hasBudget"
+        >
+          <img
+            v-if="!selectedServices.includes(serviceCategory.imageTitles[index])"
+            class="non-selected"
+            :src="`${$iconURL}comments/SVG/heart-dark.svg`"
+          />
+          <img v-else :src="`${$iconURL}Requirements/Group+16153.svg`" />
+        </md-button>
         <img
           class="carousel-image"
           :src="`${$storageURL}RequirementsImages/thumbnails/Photography+_+Videography/Candid.jpg`"
@@ -59,7 +72,7 @@
     <div class="p-20 font-bold d-flex align-center justify-content-between">
       <span class="service-name">{{ serviceCategory.name }}</span>
       <template v-if="hasBudget">
-        <md-button v-show="selectedSerivces.length > 0" class="md-red maryoku-btn" @click="getSpecification">
+        <md-button v-show="selectedServices.length > 0" class="md-red maryoku-btn" @click="getSpecification">
           Get Specific
         </md-button>
       </template>
@@ -95,22 +108,18 @@ import carousel from "vue-owl-carousel";
 import Popper from "vue-popperjs";
 import "vue-popperjs/dist/vue-popper.css";
 import MusicPlayer from "./MusicPlayer.vue";
+import { camelize } from "@/utils/string.util";
+
 export default {
   components: {
     carousel,
     Popper,
     MusicPlayer,
   },
-  props: {
-    subCategory: {
-      type: Object,
-      default: () => {},
-    },
-  },
   data() {
     return {
       selected: false,
-      selectedSerivces: [],
+      selectedServices: [],
       popperIcons: {
         venuerental: "NewRequirements/Group 18008.svg",
         decor: "NewRequirements/Group 18012.svg",
@@ -146,8 +155,15 @@ export default {
       type: Boolean,
       default: false,
     },
+    defaultData: {
+      type: Array,
+      default: () => [],
+    },
   },
-
+  created() {
+    console.log(this.defaultData);
+    this.selectedServices = [...this.defaultData];
+  },
   methods: {
     selectSave() {},
     prev() {
@@ -157,15 +173,20 @@ export default {
       this.$refs.nextButton.click();
     },
     getSpecification() {
-      this.$emit("showSpecific", { category: this.serviceCategory.serviceCategory, services: this.selectedSerivces });
+      this.$emit("showSpecific", { category: this.serviceCategory.serviceCategory, services: this.selectedServices });
     },
     addService(serviceName) {
-      const serviceIndex = this.selectedSerivces.findIndex((item) => item === serviceName);
+      const serviceIndex = this.selectedServices.findIndex((item) => item === serviceName);
       if (serviceIndex < 0) {
-        this.selectedSerivces.push(serviceName);
+        this.selectedServices.push(serviceName);
       } else {
-        this.selectedSerivces.splice(serviceIndex, 1);
+        this.selectedServices.splice(serviceIndex, 1);
       }
+      this.$emit("update", {
+        category: this.serviceCategory,
+        services: this.selectedServices,
+        type: camelize(this.serviceCategory.name),
+      });
     },
   },
 };

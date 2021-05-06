@@ -105,6 +105,18 @@
           </template>
         </div>
       </div>
+      <div class="anything-else-section text-left mt-30">
+        <label class="font-bold">Additional {{ selectedCategory.fullTitle }} Requests?</label>
+        <div class="mt-10">Tell us what else you would love to receive in the proposals we’ll send you</div>
+        <div class="anything-else-section-options mt-10">
+          <textarea
+            placeholder="Type name of element here..."
+            rows="5"
+            v-model="anythingElse"
+            @input="handleNoteChange"
+          ></textarea>
+        </div>
+      </div>
     </template>
     <template slot="footer">
       <md-button class="md-button md-black md-simple add-category-btn" @click="onCancel()">
@@ -119,7 +131,7 @@
 import { Modal, MaryokuInput } from "@/components";
 import TagItem from "../TagItem.vue";
 export default {
-  name: "Additional Request Modal",
+  name: "AdditionalRequestModal",
   components: {
     Modal,
     TagItem,
@@ -132,6 +144,7 @@ export default {
       subCategorySections: [],
       isGroup: false,
       groupSize: null,
+      anythingElse: "",
     };
   },
   props: {
@@ -140,6 +153,10 @@ export default {
       default: () => {},
     },
     selectedCategory: {
+      type: Object,
+      default: () => {},
+    },
+    defaultData: {
       type: Object,
       default: () => {},
     },
@@ -152,6 +169,10 @@ export default {
     this.specialTags = this.subCategory.requirements["special"].map((item) => {
       return { ...item, selected: false };
     });
+    this.specialTags = this.specialTags.filter(
+      (item) => item.subCategory !== "Inclusion" && item.subCategory !== "Sustainability",
+    );
+    this.anythingElse = this.defaultData.additionalRequest;
   },
   methods: {
     close: function () {
@@ -160,7 +181,12 @@ export default {
     onCancel: function (e) {
       this.$emit("cancel");
     },
-    save: function () {},
+    save: function () {
+      this.$emit("save", {
+        category: this.selectedCategory.key,
+        requirements: { ...this.subCategory.requirements, additionalRequest: this.anythingElse },
+      });
+    },
     addTag(tag) {
       const tagIndex = this.selectedTags.findIndex((item) => item === tag);
       if (tagIndex < 0) {
@@ -168,6 +194,9 @@ export default {
       } else {
         this.selectedTags.splice(tagIndex, 1);
       }
+    },
+    handleNoteChange(e) {
+      // this._saveRequirementsInStore(this.event);
     },
   },
 };

@@ -42,7 +42,7 @@
           <div class="p-30">
             <div>Would you like to upgrade & add one of those?</div>
             <div>You have $ 180 left over from the budget you reserved</div>
-            <collapse-panel :defaultStatus="false" class="pt-10 pb-10 mt-30 disabled">
+            <collapse-panel :defaultStatus="false" class="pt-10 pb-10 mt-30">
               <template slot="header">
                 <div class="price-header d-flex align-center">
                   <md-checkbox class="m-0 mr-10"></md-checkbox>
@@ -50,20 +50,20 @@
                 </div>
               </template>
               <template slot="content">
-                <div class="price-table-content mt-20">
+                <div class="price-table-content">
                   Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
                   labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
                 </div>
               </template>
             </collapse-panel>
-            <collapse-panel :defaultStatus="false" class="pt-10 pb-10 disabled">
+            <collapse-panel :defaultStatus="false" class="pt-10 pb-10">
               <template slot="header">
                 <div class="price-header d-flex align-center">
                   <md-checkbox class="m-0 mr-10"></md-checkbox>Babysitting service X3
                 </div>
               </template>
               <template slot="content">
-                <div class="price-table-content mt-20">
+                <div class="price-table-content">
                   Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
                   labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
                 </div>
@@ -102,38 +102,13 @@
         <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
             <div class="price-header d-flex align-center">
-              <md-checkbox class="m-0 mr-10" v-model="checkedGiveBack"></md-checkbox>
+              <md-checkbox class="m-0 mr-10"></md-checkbox>
               <img :src="`${$iconURL}PaymentPage/Group 9791.svg`" class="mr-10 ml-10" />
               Give Back
             </div>
           </template>
           <template slot="content">
-            <div class="price-table-content give-back-seciont">
-              <div class="mb-20 mt-20">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
-              </div>
-              <md-button class="md-simple edit-btn md-red color-red mt-20">
-                Read More <md-icon>keyboard_arrow_right</md-icon>
-              </md-button>
-              <hr class="mt-20 mb-20" />
-              <div>
-                <md-checkbox class="md-red md-simple" v-model="isCheckedFoodDonate">
-                  Donate your food leftovers
-                </md-checkbox>
-              </div>
-              <div class="mb-20 d-flex">
-                <img :src="`${$iconURL}PaymentPage/Image 211.png`" />
-                <div class="ml-10">
-                  This charity organisation would really appreciate your food leftovers…diam nonumy eirmod tempor
-                  invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
-                </div>
-              </div>
-              <md-button class="md-simple md-red edit-btn mt-20">
-                Read more about this organisation
-                <md-icon>keyboard_arrow_right</md-icon>
-              </md-button>
-            </div>
+            <div class="price-table-content">123123</div>
           </template>
         </collapse-panel>
         <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
@@ -200,7 +175,7 @@
             </md-button>
           </div>
 
-          <div>You will be transferred to a secured {{ paymentMethod }} payment</div>
+          <div>You will be transferred to a secured Payoneer payment</div>
         </div>
       </div>
     </div>
@@ -224,8 +199,6 @@ export default {
       loading: true,
       agreedCancellationPolicy: false,
       paymentMethod: "",
-      checkedGiveBack: false,
-      isCheckedFoodDonate: false,
     };
   },
   created() {
