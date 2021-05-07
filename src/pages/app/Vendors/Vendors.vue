@@ -25,7 +25,7 @@
           My vendors
         </md-switch>
         <md-card-content style="min-height: 60px">
-          <vue-element-loading :active="loadingData" spinner="ring" color="#FF547C" />
+          <Loader :active="loadingData"/>
           <vendors-table
             v-if="vendorsList"
             :tooltipModels="tooltipModels"
@@ -78,11 +78,10 @@ import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import VendorsTable from "./Table/vendorsList";
 import companyForm from "./Form/companyForm.vue";
 import UploadModal from "./ImportVendors";
-import { Pagination } from "@/components";
+import { Loader, Pagination } from "@/components";
 import Vendors from "@/models/Vendors";
 import EventComponent from "@/models/EventComponent";
 import VendorCategories from "@/models/VendorCategories";
-import VueElementLoading from "vue-element-loading";
 // import auth from '@/auth';
 import { paginationMixin } from "@/mixins/pagination";
 
@@ -90,7 +89,7 @@ export default {
   components: {
     CreateModal,
     "vendors-table": VendorsTable,
-    VueElementLoading,
+    Loader,
     UploadModal,
     Pagination,
     companyForm,

@@ -1,7 +1,7 @@
 <template>
   <div class="booking-section planning-board-layout">
-    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
     <div class="p-50" v-if="!showCounterPage">
+      <loader :active="isLoading"/>
       <div class="d-flex justify-content-between">
         <div>
           <div class="font-size-30 font-bold text-transform-uppercase">
@@ -46,13 +46,13 @@
             :key="service.name"
             :isLong="(serviceIndex + groupIndex) % 2 === 1"
             :hasBudget="hasBudget(service.serviceCategory)"
-            :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
             @showSpecific="getSpecification"
           ></service-category-card>
         </div>
       </div>
     </div>
     <template v-else>
+      <loader :active="isLoading"/>
       <pending-for-vendors :expiredTime="expiredTime"></pending-for-vendors>
     </template>
     <div class="proposal-footer white-card d-flex justify-content-between">
@@ -104,11 +104,11 @@ import _ from "underscore";
 
 import AdditionalRequestModal from "./components/modals/AdditionalRequest.vue";
 import SpecialRequirementModal from "./components/modals/SpecialRequirement.vue";
-import VueElementLoading from "vue-element-loading";
 import { camelize } from "@/utils/string.util";
 import CalendarEvent from "@/models/CalendarEvent";
 import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
 import PendingForVendors from "../components/PendingForVendors.vue";
+import {Loader} from "@/components"
 import moment from "moment";
 
 export default {
@@ -116,9 +116,9 @@ export default {
     ServiceCategoryCard,
     ProgressRadialBar,
     AdditionalRequestModal,
-    VueElementLoading,
     SpecialRequirementModal,
     PendingForVendors,
+    Loader,
   },
   data() {
     return {
@@ -437,9 +437,6 @@ export default {
         this.allRequirements = requirements;
         this.isLoading = false;
       });
-      this.$store.dispatch("planningBoard/getRequirements", this.event.id).then((requirements) => {
-        console.log(requirements);
-      });
     }
   },
   beforeCreate() {
@@ -490,9 +487,9 @@ export default {
       return !!this.event.components.find((item) => item.componentId == categoryKey);
     },
     getSpecification({ category, services }) {
-      this.selectedCategory = this.$store.state.common.serviceCategories.find((item) => item.key === category);
       this.isOpenedAdditionalModal = true;
       this.subCategory = this.allRequirements[category];
+      this.selectedCategory = this.$store.state.common.serviceCategories.find((item) => item.key === category);
     },
     getDefaultTypes(category, name) {
       if (!this.types[category]) return [];
@@ -518,15 +515,11 @@ export default {
         issuedTime: new Date().getTime(),
         expiredBusinessTime: this.expiredTime,
       };
-      if (this.$store.state.planningBoard.id) {
-        requestRequirement.id = this.$store.state.planningBoard.id;
-      }
       new ProposalRequestRequirement(requestRequirement)
         .for(new CalendarEvent({ id: this.event.id }))
         .save()
         .then((res) => {
           console.log(res);
-          this.$store.commit("planningBoard/setData", { key: "id", value: res.item.id });
           this.showCounterPage = true;
           // this.additionalServiceRequirements = res;
         });

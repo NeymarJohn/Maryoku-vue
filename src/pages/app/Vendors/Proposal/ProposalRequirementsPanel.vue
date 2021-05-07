@@ -57,14 +57,16 @@
         <div class="addtional-requests">
           <div class="font-bold">Addtional Requests</div>
           <div>
-            {{ additionalNote }}
+            {{ proposalRequest.requirement.note }}
           </div>
         </div>
       </div>
       <div v-else>
         <div
           class="requirements-content p-30 pt-0-i"
-          v-for="requirement in allRequirements[$store.state.vendorProposal.currentSecondaryService]"
+          v-for="requirement in allRequirements.filter(
+            (item) => item.category === $store.state.vendorProposal.currentSecondaryService,
+          )"
           :key="requirement.category"
         >
           <div class="font-size-20 font-bold mb-20">{{ requirement.categoryData.fullTitle }}</div>
@@ -114,11 +116,12 @@
                 </div>
               </div>
             </div>
+            <!-- <div v-else></div> -->
           </div>
           <div class="addtional-requests">
             <div class="font-bold">Addtional Requests</div>
             <div>
-              {{ additionalNote }}
+              {{ proposalRequest.requirement.note }}
             </div>
           </div>
         </div>
@@ -144,7 +147,6 @@ export default {
     return {
       additionalServiceRequirements: [],
       showQuestionModal: false,
-      additionalNote: "",
     };
   },
   methods: {
@@ -165,45 +167,35 @@ export default {
       });
   },
   computed: {
-    vendor() {
-      return this.$store.state.vendorProposal.vendor;
-    },
     requirementsData() {
-      // try {
-      //   return JSON.parse(this.$store.state.vendorProposal.proposalRequest.requirement.settingsJsonData);
-      // } catch (e) {
-      //   return [];
-      // }
-      console.log(
-        "this.allRequirements[this.vendor.eventCategory.key]",
-        this.allRequirements[this.vendor.eventCategory.key],
-      );
-      this.additionalNote = this.allRequirements[this.vendor.eventCategory.key].additionalRequest;
-      delete this.allRequirements[this.vendor.eventCategory.key].additionalRequest;
-      return this.allRequirements[this.vendor.eventCategory.key];
+      try {
+        return JSON.parse(this.$store.state.vendorProposal.proposalRequest.requirement.settingsJsonData);
+      } catch (e) {
+        return [];
+      }
     },
     allRequirements() {
-      // const allCategories = this.$store.state.common.serviceCategories;
-      // const allData = this.additionalServiceRequirements.map((requirementData) => {
-      //   console.log(allCategories.find((c) => c.key == requirementData.vendorCategory));
-      //   return {
-      //     category: requirementData.vendorCategory,
-      //     categoryData: allCategories.find((c) => c.key == requirementData.vendorCategory),
-      //     requirements: JSON.parse(requirementData.settingsJsonData),
-      //   };
-      // });
-      return this.$store.state.vendorProposal.proposalRequest.plannerRequirement.mainRequirements;
+      const allCategories = this.$store.state.common.serviceCategories;
+      const allData = this.additionalServiceRequirements.map((requirementData) => {
+        console.log(allCategories.find((c) => c.key == requirementData.vendorCategory));
+        return {
+          category: requirementData.vendorCategory,
+          categoryData: allCategories.find((c) => c.key == requirementData.vendorCategory),
+          requirements: JSON.parse(requirementData.settingsJsonData),
+        };
+      });
+      return allData;
     },
     proposalRequest() {
       return this.$store.state.vendorProposal.proposalRequest;
     },
-    // additionalNote() {
-    //   try {
-    //     return this.proposalRequest.plannerRequirement[this.vendor.eventCategory.key].additionalRequest;
-    //   } catch (e) {
-    //     return "";
-    //   }
-    // },
+    additionalNote() {
+      try {
+        return this.$store.state.vendorProposal.proposalRequest.requirement.note;
+      } catch (e) {
+        return "";
+      }
+    },
     step() {
       try {
         return this.$store.state.vendorProposal.wizardStep;

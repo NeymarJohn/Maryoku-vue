@@ -1,6 +1,5 @@
 <template>
-  <div class="md-layout booking-section">
-    <vue-element-loading class="ml-400 height-100vh" :active="isLoading" spinner="ring" color="#FF547C" />
+  <div class="md-layout booking-section position-relative">
     <template v-if="showProposals">
       <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
       <div class="event-page-header md-layout-item md-size-100">
@@ -160,14 +159,11 @@ import Swal from "sweetalert2";
 import InputMask from "vue-input-mask";
 import BookingEventRequirement from "./BookingEventRequirement.vue";
 
-import VueElementLoading from "vue-element-loading";
 // import auth from '@/auth';
 import EventBlocks from "../components/NewEventBlocks";
 import ProposalCard from "./ProposalCard";
 import _ from "underscore";
-import { Modal, MaryokuInput } from "@/components";
-import EventComponentVendor from "@/models/EventComponentVendor";
-import EventComponentProperty from "@/models/EventComponentProperty";
+import { Modal, MaryokuInput, Loader } from "@/components";
 import Proposal from "@/models/Proposal";
 import EventCategoryRequirement from "@/models/EventCategoryRequirement";
 import PendingForVendors from "../components/PendingForVendors";
@@ -180,7 +176,7 @@ import { postReq, getReq } from "@/utils/token";
 export default {
   name: "event-booking",
   components: {
-    VueElementLoading,
+    Loader,
     EventBlocks,
     InputMask,
     Modal,

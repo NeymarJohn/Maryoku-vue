@@ -1,11 +1,7 @@
 import Vue from "vue";
 import { postReq, getReq } from "@/utils/token";
 import { VendorPolicy, VendorPricingPolicy } from "@/constants/vendor";
-import CalendarEvent from "@/models/CalendarEvent";
-import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
-
 const state = {
-  id: null,
   step: 1,
   types: {},
   mainRequirements: {},
@@ -15,24 +11,6 @@ const getters = {
 
 }
 const actions = {
-  getRequirements({ commit, state }, eventId) {
-    return new Promise((resolve, reject) => {
-      new ProposalRequestRequirement()
-        .for(new CalendarEvent({ id: eventId }))
-        .get()
-        .then((res) => {
-          const currentRequirement = res[0]
-          commit("setData", { key: "id", value: currentRequirement.id })
-          commit("setData", { key: "types", value: currentRequirement.types })
-          commit("setData", { key: "mainRequirements", value: currentRequirement.mainRequirements })
-          commit("setData", { key: "specialRequirements", value: currentRequirement.specialRequirements })
-          resolve(currentRequirement)
-        })
-        .catch(err => {
-          reject(err)
-        });
-    });
-  }
 
 }
 const mutations = {

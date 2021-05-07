@@ -1,6 +1,6 @@
 <template>
   <div class="campaign-save-date">
-    <vue-element-loading :active="!campaignData" spinner="ring" color="#FF547C" />
+    <loader :active="!campaignData"/>
     <div class v-if="campaignData">
       <div
         class="font-size-30 font-bold-extra text-transform-capitalize p-50"
@@ -106,6 +106,7 @@ import VueElementLoading from "vue-element-loading";
 import S3Service from "@/services/s3.service";
 import ConceptCanvas from "./components/ConceptCanvas";
 import CalendarEvent from "@/models/CalendarEvent";
+import { Loader } from "@/components";
 
 const placeHolder =
   "Clear your schedule and get ready to mingle! the greatest event of the year is coming up! more details are yet to come, but we can already promise you it's going to be an event to remember. be sure to mark the date on your calendar. you can do it using this link: (google calendar link). see ya soon";
@@ -117,6 +118,7 @@ export default {
     TitleEditor,
     VueElementLoading,
     ConceptCanvas,
+    Loader,
   },
   props: {
     info: {

@@ -1,6 +1,6 @@
 <template>
-  <div class="vendor-proposal-board px-40 pt-60">
-    <vue-element-loading :active="loading" spinner="ring" color="#FF547C"></vue-element-loading>
+  <div class="vendor-proposal-board p-40">
+    <loader :active="loading"/>
     <div class="font-size-22 font-bold">
       <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposal Dashboard
     </div>
@@ -24,6 +24,7 @@
         v-for="proposalRequest in proposalRequests"
         :key="proposalRequest.id"
         :proposalRequest="proposalRequest"
+        @dismiss="dismiss"
       >
       </proposal-request-card>
       <template slot="next">
@@ -45,64 +46,70 @@
             <img class="mr-10" :src="`/static/icons/vendor/proposalBoard/${tab.icon}`" style="width: 20px; height: 20px"/>
             {{tab.title}}
             <span v-if="tab.key == 'all'" class="ml-5" :class="tab.class">({{pagination.total}})</span>
-            <span else class="ml-5" :class="tab.class">({{pagination[tab.key]}})</span>
+            <span v-else class="ml-5" :class="tab.class">({{pagination[tab.key]}})</span>
           </div>
         </md-button>
       </div>
-      <div class="mt-20">
+      <div class="mt-30">
           <span class="font-size-16 font-bold"
                 :class="!proposals.length ? 'color-minus' : 'color-won'"
           >
               {{ proposals.length }} Proposals:</span></div>
-      <div class="md-layout">
+      <div class="md-layout mt-10">
         <div class="md-layout-item md-size-75 p-0">
-          <div class="sort-bar px-40 mt-20">
+          <div class="sort-bar px-40">
             <span v-for="it in proposalHeaders"
                   class="sort-item"
-                  :class="{selected: it.key && sortFields['sort'] == it.key}"
+                  :class="{selected: it.key && sortFields['sort'] == it.key, 'text-center': it.key == 'update'}"
                   @click="selectSort(it.key)">
               {{it.title}}
-              <md-icon v-if="it.key && sortFields['sort'] == it.key" class="color-black">
+              <md-icon v-if="it.key && it.key != 'update' && sortFields['sort'] == it.key" class="color-black">
                   {{sortFields['order'] == 'asc' ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}} </md-icon>
             </span>
           </div>
-          <div v-if="!loading" class="propsoals-list mt-10">
+          <div v-if="!loading" class="propsoals-list">
             <div class="white-card md-20 proposal-list">
                 <proposal-list-item class="row" v-for="proposal in proposals" :proposal="proposal" :key="proposal.id"></proposal-list-item>
             </div>
           </div>
         </div>
         <div class="md-layout-item md-size-25 mt-50">
-            <div class="white-card p-50" style="height: 100%">
+            <div class="white-card p-30">
                 <div style="margin: 0 -15px">
                     <pie-chart
                         :chartData="chartData"
                         :columns="1"
                         :options="{
-                width: 150,
-                height: 200,
-                strokWidth: 40,
+                width: 130,
+                height: 180,
+                strokWidth: 30,
                 direction: 'row',
               }"
                     ></pie-chart>
                 </div>
-                <div class="color-brown d-flex align-center">
-                    <span class="mr-20" style="font-size: 56px">30%</span>
-                    <span class="font-size-22">Winning rate</span>
-                </div>
-                <div class="font-size-20 mt-50">
-                    You won <span class="font-bold">40 of 120</span> Proposals you applied to
-                </div>
-                <hr class="mt-50 mb-50" />
-                <div class="tips">
-                    <div class="d-flex mb-30 align-center">
-                        <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
-                        <div class="ml-10">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</div>
+                <div class="px-30">
+                    <div class="color-won d-flex align-center">
+                        <span class="mr-20 font-size-50">30%</span>
+                        <span class="font-size-18">Winning rate</span>
                     </div>
-                    <div class="d-flex align-center">
-                        <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
-                        <div class="ml-10">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</div>
+                    <div class="font-size-16 mt-50">
+                        You won <span class="font-bold">40 of 120</span> Proposals you applied to
                     </div>
+                    <hr class="mt-50 mb-50" />
+                    <div class="tips">
+                        <div class="d-flex mb-30 align-center">
+                            <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
+                            <div class="ml-10">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</div>
+                        </div>
+                        <div class="d-flex align-center">
+                            <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
+                            <div class="ml-10">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</div>
+                        </div>
+                    </div>
+                    <md-button class="mt-10 md-simple md-vendor px-0">
+                        More Insights
+                        <md-icon class="color-vendor">keyboard_arrow_down</md-icon>
+                    </md-button>
                 </div>
             </div>
         </div>
@@ -124,15 +131,13 @@
   </div>
 </template>
 <script>
-import TablePagination from "@/components/TablePagination.vue";
 import ProposalListItem from "../components/ProposalListItem.vue";
 import ProposalRequestCard from "../components/ProposalRequestCard";
 import ProposalRequest from "@/models/ProposalRequest";
 import Proposal from "@/models/Proposal";
 import Vendor from "@/models/Vendors";
 import carousel from "vue-owl-carousel";
-import PieChart from "@/components/Chart/PieChart.vue";
-import VueElementLoading from 'vue-element-loading'
+import {Loader, TablePagination, PieChart} from "@/components";
 export default {
   components: {
     ProposalRequestCard,
@@ -140,7 +145,7 @@ export default {
     TablePagination,
     carousel,
     PieChart,
-    VueElementLoading,
+    Loader,
   },
   data() {
     return {
@@ -162,7 +167,7 @@ export default {
           {key: 'modified', title: 'Modified'},
           {key: 'status', title: 'Status'},
           {key: 'owner', title: 'Owner'},
-          {key: 'update', title: 'Update'},
+          {key: 'update', title: 'Update', class: 'text-center'},
           {key: '', title: ''},
       ],
       proposals: [],
@@ -193,7 +198,9 @@ export default {
   },
   methods: {
     async getData() {
-        this.proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
+        // this.proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
+        let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '60758222cfefec2676a0853d' })).get();
+        this.proposalRequests = proposalRequests.filter(p => p.remainingTime);
     },
     async getProposal() {
       const { pagination } = this;
@@ -220,14 +227,15 @@ export default {
       this.getProposal();
     },
     async selectTab(tab){
-      console.log('select.tab', tab);
       this.loading = true;
       this.tab = tab;
       await this.getProposal();
       this.loading = false;
     },
     async selectSort(sortField) {
-        this.loading = true;
+      console.log(sortField);
+      if (!sortField || sortField == 'update') return;
+      this.loading = true;
       if (this.sortFields.sort !== sortField) {
         this.$set(this.sortFields, 'sort', sortField);
           this.$set(this.sortFields, 'order', 'asc');
@@ -237,6 +245,14 @@ export default {
       await this.getProposal();
       this.loading = false;
     },
+    dismiss(id){
+      console.log('dismiss', id);
+      this.proposalRequests = this.proposalRequests.filter(p => {
+          return p.id !== id;
+      });
+
+      this.$forceUpdate();
+    }
   },
   computed: {
     vendorData() {
@@ -281,6 +297,7 @@ export default {
     }
   }
   .sort-bar {
+    height: 50px;
     display: grid;
     align-items: center;
     grid-template-columns: 5% 20% 10% 15% 10% 10% 10% 15% 5%;

@@ -1,18 +1,7 @@
 <template>
   <div class="md-layout edit-event-details">
-      <vue-element-loading :active="isLoading" color="#FF547C" is-full-screen>
-          <img src="/static/img/maryoku-loader.gif"/>
-      </vue-element-loading>
+    <loader :active="isLoading"/>
     <div class="event-details-tabs">
-      <!--<div class="md-layout">
-        <div class="md-layout-item md-size-20 no-padding">
-          <event-details-sidebar :event.sync="event" :event-statistics.sync="event.statistics"></event-details-sidebar>
-        </div>
-        <div class="md-layout-item md-size-80 no-padding">
-          <event-building-blocks :event.sync="event" :event-components="selectedComponents"
-                                  @go-to-building-blocks="resetTab"></event-building-blocks>
-        </div>
-      </div>-->
        <tabs
         :tab-name="['BUDGET & PROPOSALS','TIMELINE', 'INVITEES']"
         color-button="rose"
@@ -193,7 +182,7 @@ import EventDetails from './EventDetails'
 import EventPageRoutes from './components/EventPageRoutes.vue'
 import MdCardContent
   from '../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue'
-import {Tabs} from '@/components'
+import {Tabs, Loader} from '@/components'
 import UploadVendorsModal from '../Vendors/ImportVendors'
 
 export default {
@@ -216,7 +205,8 @@ export default {
     Tabs,
     EventDetailsSidebar,
     EventDetails,
-    UploadVendorsModal
+    UploadVendorsModal,
+    Loader,
   },
 
   data () {

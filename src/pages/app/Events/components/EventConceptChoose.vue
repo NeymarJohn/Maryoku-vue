@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout event-concept-section booking-section">
-    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
+    <loader :active="isLoading"/>
     <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <div class="concept-content" v-if="showConceptList && !isLoading">
       <div class="event-page-header md-layout-item md-size-100">
@@ -247,25 +247,16 @@
 import { mapMutations, mapState } from "vuex";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
-import EventComponent from "@/models/EventComponent";
-import EventConcept from "@/models/EventConcept";
-import EventTimelineItem from "@/models/EventTimelineItem";
 import moment from "moment";
 import Swal from "sweetalert2";
 import { SlideYDownTransition } from "vue2-transitions";
 import InputMask from "vue-input-mask";
-import ColourPicker from "vue-colour-picker";
-import { Chrome } from "vue-color";
 
-import VueElementLoading from "vue-element-loading";
 // import auth from '@/auth';
 import EventBlocks from "../components/NewEventBlocks";
 import draggable from "vuedraggable";
 import { Drag, Drop } from "vue-drag-drop";
-import _ from "underscore";
-import { Modal } from "@/components";
-import EventComponentVendor from "@/models/EventComponentVendor";
-import EventComponentProperty from "@/models/EventComponentProperty";
+import { Modal, Loader } from "@/components";
 
 import ColorButton from "../../../../components/ColorButton";
 import EventConceptEditForm from "./EventConceptEditForm";
@@ -279,7 +270,7 @@ const VueHtml2pdf = () => import("vue-html2pdf");
 export default {
   name: "event-concept-choose",
   components: {
-    VueElementLoading,
+    Loader,
     EventBlocks,
     draggable,
     Drag,
