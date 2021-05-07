@@ -13,19 +13,19 @@
     <div><img class="ml-15" :src="getStatusIcon(proposal.status)" /></div>
     <div class="font-size-14 color-black-middle">Tom</div>
 
-    <md-button class="md-simple md-vendor" @click="openProposal">
-      <img src="/static/icons/vendor/proposalBoard/see-proposal.svg" class="mr-5" style="width: 20px"/>
-      View Proposal
-    </md-button>
+   <span class="color-vendor font-size-14 font-bold cursor-pointer" @click="openProposal">
+    <img src="/static/icons/vendor/proposalBoard/see-proposal.svg" class="mr-10" style="width: 20px"/>
+    View Proposal
+   </span>
 
     <div class="text-right">
       <md-menu md-size="medium" class="action-menu" :md-offset-x="240" :md-offset-y="-36" @closed="hoveredMenu = ''">
         <md-button md-menu-trigger class="edit-btn md-simple" style="height: 30px">
-          <md-icon style="font-size: 30px !important">more_vert</md-icon>
+          <md-icon style="font-size: 40px !important">more_vert</md-icon>
         </md-button>
         <md-menu-content>
           <md-menu-item
-            @click="edit('edit')"
+            @click="edit"
             class="md-purple"
             @mouseenter="hoveredMenu = 'edit'"
             @mouseleave="hoveredMenu = ''"
@@ -37,7 +37,7 @@
             >
           </md-menu-item>
           <md-menu-item
-            @click="edit('download')"
+            @click="edit"
             class="md-purple"
             @mouseenter="hoveredMenu = 'download'"
             @mouseleave="hoveredMenu = ''"
@@ -49,7 +49,7 @@
             </span>
           </md-menu-item>
           <md-menu-item
-            @click="edit('duplicate')"
+            @click="edit"
             class="md-purple"
             @mouseenter="hoveredMenu = 'duplicate'"
             @mouseleave="hoveredMenu = ''"
@@ -64,7 +64,7 @@
             >
           </md-menu-item>
           <md-menu-item
-            @click="edit('cancel')"
+            @click="edit"
             class="md-purple"
             @mouseenter="hoveredMenu = 'cancel'"
             @mouseleave="hoveredMenu = ''"
@@ -110,15 +110,7 @@ export default {
         }
     },
     openProposal() {},
-    edit(item) {
-      console.log('edit', item);
-      if(item === 'edit') {
-        this.$router.push(`/vendors/${this.proposal.vendor.id}/proposal-request/${this.proposal.proposalRequest.id}/form`);
-      }
-    },
-    leave(item){
-      console.log('leave', item);
-    }
+    edit() {},
   },
 };
 </script>
@@ -128,8 +120,5 @@ export default {
   display: grid;
   align-items: center;
   grid-template-columns: 5% 20% 10% 15% 10% 10% 10% 15% 5%;
-}
-/deep/ .md-menu-content .md-list{
-    padding: 0 !important;
 }
 </style>

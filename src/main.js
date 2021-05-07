@@ -303,11 +303,11 @@ Vue.directive("select-all", {
 //   stopProp(event) { event.stopPropagation() }
 // })
 
-Vue.filter("withComma", function (value, type= null) {
+Vue.filter("withComma", function (value) {
   if (typeof value == 'string') {
     value = Number(value)
   }
-  return value ? type != Number ? value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : value : 0;
+  return value ? value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 0;
 
 });
 Vue.filter("formatQty", function (value) {

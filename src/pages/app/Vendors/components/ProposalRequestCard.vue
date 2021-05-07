@@ -2,8 +2,7 @@
   <div class="proposal-request-card white-card p-20">
     <div class="d-flex align-center">
       <div class="font-size-14 font-bold py-10 mr-10">
-        <template v-if="proposalRequest.eventData.concept">{{ proposalRequest.eventData.concept.name }}</template>
-        <template v-else-if="proposalRequest.eventData">{{ proposalRequest.eventData.title }}</template>
+        {{ proposalRequest.eventData.concept.name || proposalRequest.eventData.title }}
       </div>
       <div class="font-size-14">
         {{ $dateUtil.formatScheduleDay(proposalRequest.eventData.eventStartMillis, "MM/DD/YY") }}
@@ -13,27 +12,25 @@
         Left
       </span>
     </div>
-    <div class="d-flex align-center justify-content-start font-size-14">$ {{ proposalRequest.componentInstance.allocatedBudget | withComma }}
+    <div class="d-flex align-center justify-content-start mt-5 font-size-14">$ {{ proposalRequest.componentInstance.allocatedBudget | withComma }}
         <md-icon class="color-black ml-5">keyboard_arrow_down</md-icon>
     </div>
-    <div class="d-flex align-end">
-      <md-button class="font-size-12 md-simple font-bold md-vendor" style="margin-left: -15px;width: 20px; height: 30px" @click="dismiss(proposalRequest.id)">
+    <div class="mt-20 d-flex align-end">
+      <span class="font-size-14 color-vendor font-bold">
           Dismiss
-      </md-button>
+      </span>
       <div class="ml-auto">
           <div class="font-size-14"><span class="font-bold color-vendor">60%</span> completed</div>
           <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="60"></md-progress-bar>
-          <md-button class="md-vendor" @click="gotoProposalRequest" style="width: 100px; height: 30px">Apply</md-button>
+          <md-button class="md-simple md-outlined md-vendor" @click="gotoProposalRequest">Complete</md-button>
       </div>
 
     </div>
   </div>
 </template>
 <script>
-import TimelineEmpty from "../../Events/components/TimelineEmpty";
 export default {
-    components: {TimelineEmpty},
-    props: {
+  props: {
     proposalRequest: {
       type: Object,
       default: () => {},
@@ -60,9 +57,6 @@ export default {
       const days = Math.round(hours / 24);
       return days;
     },
-    dismiss(id){
-      this.$emit('dismiss', id);
-    }
   },
 };
 </script>

@@ -2,11 +2,11 @@ import Model from './Model'
 import ProposalRequestComment from './ProposalRequestComment'
 
 export default class ProposalRequestRequirement extends Model {
-  resource () {
+  resource() {
     return 'requirements'
   }
 
-  comments () {
+  comments() {
     return this.hasMany(ProposalRequestComment)
   }
 }
