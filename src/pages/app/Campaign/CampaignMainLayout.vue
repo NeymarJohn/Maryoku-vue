@@ -12,7 +12,7 @@
       <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
     </div>
     <div class="campaign-content md-layout-item md-size-100 mt-30">
-      <loader :active="isLoading"/>
+      <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
       <div class="campaign-content-tab d-flex mb-40">
         <div
           class="campaign-content-tab-item flex-1 font-size-22 font-bold-extra text-center"
@@ -313,7 +313,6 @@ import ComingsoonAnalytics from "./components/ComingSoonAnalytics";
 import FeedbackAnalytics from "./components/FeedbackAnalytics";
 import FeedbackList from "./components/FeedbackList";
 import VueElementLoading from "vue-element-loading";
-import {Loader} from "@/components";
 const defaultSettings = {
   phone: {
     selected: false,
@@ -337,7 +336,6 @@ const defaultSettings = {
 };
 export default {
   components: {
-    Loader,
     VueElementLoading,
     Tabs,
     HeaderActions,

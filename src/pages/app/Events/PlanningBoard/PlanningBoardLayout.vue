@@ -1,58 +1,63 @@
 <template>
   <div class="booking-section planning-board-layout">
+    <vue-element-loading :active="isLoading || isLoadingStoredData" spinner="ring" color="#FF547C" />
     <div class="p-50" v-if="!showCounterPage">
-      <loader :active="isLoading"/>
-      <div class="d-flex justify-content-between">
-        <div>
-          <div class="font-size-30 font-bold text-transform-uppercase">
-            {{ $stringUtil.getTwoDigits(step) }}.
-            <span v-if="step === 1">We'd love to know your style</span>
-            <span v-if="step === 2">What kind of services would you like us to find you?</span>
+      <template v-if="!isLoading && !isLoadingStoredData">
+        <div class="d-flex justify-content-between">
+          <div>
+            <div class="font-size-30 font-bold text-transform-uppercase">
+              {{ $stringUtil.getTwoDigits(step) }}.
+              <span v-if="step === 1">We'd love to know your style</span>
+              <span v-if="step === 2">What kind of services would you like us to find you?</span>
+            </div>
+            <div class="mt-20">
+              Mark the services you need. Each category has more than one, so feel free to navigate
+            </div>
           </div>
-          <div class="mt-20">Mark the services you need. Each category has more than one, so feel free to navigate</div>
+          <progress-radial-bar></progress-radial-bar>
         </div>
-        <progress-radial-bar></progress-radial-bar>
-      </div>
-      <div class="md-layout md-gutter mt-40" v-if="step === 1">
-        <div
-          class="md-layout-item md-size-33 md-medium-size-33 md-small-size-50 md-xsmall-size-100"
-          v-for="(serviceGroup, groupIndex) in serviceCards1"
-          :key="`serviceGroup-${groupIndex}`"
-        >
-          <service-category-card
-            v-for="(service, serviceIndex) in serviceGroup"
-            class="mb-40"
-            :serviceCategory="service"
-            :key="service.name"
-            :isLong="(serviceIndex + groupIndex) % 2 === 1"
-            :hasBudget="hasBudget(service.serviceCategory)"
-            :musicPlayer="service.musicPlayer"
-            :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-            @showSpecific="getSpecification"
-            @update="setServiceStyles"
-          ></service-category-card>
+        <div class="md-layout md-gutter mt-40" v-if="step === 1">
+          <div
+            class="md-layout-item md-size-33 md-medium-size-33 md-small-size-50 md-xsmall-size-100"
+            v-for="(serviceGroup, groupIndex) in serviceCards1"
+            :key="`serviceGroup-${groupIndex}`"
+          >
+            <service-category-card
+              v-for="(service, serviceIndex) in serviceGroup"
+              class="mb-40"
+              :serviceCategory="service"
+              :key="service.name"
+              :isLong="(serviceIndex + groupIndex) % 2 === 1"
+              :hasBudget="hasBudget(service.serviceCategory)"
+              :musicPlayer="service.musicPlayer"
+              :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
+              @showSpecific="getSpecification"
+              @update="setServiceStyles"
+            ></service-category-card>
+          </div>
         </div>
-      </div>
-      <div class="md-layout md-gutter mt-40" v-if="step === 2">
-        <div
-          class="md-layout-item md-size-33 md-medium-size-33 md-small-size-50 md-xsmall-size-100"
-          v-for="(serviceGroup, groupIndex) in serviceCards2"
-          :key="`serviceGroup-${groupIndex}`"
-        >
-          <service-category-card
-            v-for="(service, serviceIndex) in serviceGroup"
-            class="mb-40"
-            :serviceCategory="service"
-            :key="service.name"
-            :isLong="(serviceIndex + groupIndex) % 2 === 1"
-            :hasBudget="hasBudget(service.serviceCategory)"
-            @showSpecific="getSpecification"
-          ></service-category-card>
+        <div class="md-layout md-gutter mt-40" v-if="step === 2">
+          <div
+            class="md-layout-item md-size-33 md-medium-size-33 md-small-size-50 md-xsmall-size-100"
+            v-for="(serviceGroup, groupIndex) in serviceCards2"
+            :key="`serviceGroup-${groupIndex}`"
+          >
+            <service-category-card
+              v-for="(service, serviceIndex) in serviceGroup"
+              class="mb-40"
+              :serviceCategory="service"
+              :key="`${service.name}-${getDefaultTypes(service.serviceCategory, service.name)}`"
+              :isLong="(serviceIndex + groupIndex) % 2 === 1"
+              :hasBudget="hasBudget(service.serviceCategory)"
+              :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
+              @showSpecific="getSpecification"
+            ></service-category-card>
+          </div>
         </div>
-      </div>
+      </template>
+      <div v-else class="loading-screen"></div>
     </div>
     <template v-else>
-      <loader :active="isLoading"/>
       <pending-for-vendors :expiredTime="expiredTime"></pending-for-vendors>
     </template>
     <div class="proposal-footer white-card d-flex justify-content-between">
@@ -104,11 +109,11 @@ import _ from "underscore";
 
 import AdditionalRequestModal from "./components/modals/AdditionalRequest.vue";
 import SpecialRequirementModal from "./components/modals/SpecialRequirement.vue";
+import VueElementLoading from "vue-element-loading";
 import { camelize } from "@/utils/string.util";
 import CalendarEvent from "@/models/CalendarEvent";
 import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
 import PendingForVendors from "../components/PendingForVendors.vue";
-import {Loader} from "@/components"
 import moment from "moment";
 
 export default {
@@ -116,9 +121,9 @@ export default {
     ServiceCategoryCard,
     ProgressRadialBar,
     AdditionalRequestModal,
+    VueElementLoading,
     SpecialRequirementModal,
     PendingForVendors,
-    Loader,
   },
   data() {
     return {
@@ -250,7 +255,7 @@ export default {
         [
           {
             name: "Photography  Videography/",
-            serviceCategory: "entertainment",
+            serviceCategory: "videographyandphotography",
             images: [
               "Photography+_+Videography/Black_White.jpg",
               "Photography+_+Videography/Buisness.jpg",
@@ -426,6 +431,7 @@ export default {
       isOpenedFinalModal: false,
       selectedCategory: null,
       isLoading: false,
+      isLoadingStoredData: false,
       showCounterPage: false,
       expiredTime: 0,
     };
@@ -436,6 +442,11 @@ export default {
       this.$store.dispatch("event/getRequirements").then((requirements) => {
         this.allRequirements = requirements;
         this.isLoading = false;
+      });
+      this.isLoadingStoredData = true;
+      this.$store.dispatch("planningBoard/getRequirements", this.event.id).then((requirements) => {
+        console.log(requirements);
+        this.isLoadingStoredData = false;
       });
     }
   },
@@ -487,9 +498,9 @@ export default {
       return !!this.event.components.find((item) => item.componentId == categoryKey);
     },
     getSpecification({ category, services }) {
+      this.selectedCategory = this.$store.state.common.serviceCategories.find((item) => item.key === category);
       this.isOpenedAdditionalModal = true;
       this.subCategory = this.allRequirements[category];
-      this.selectedCategory = this.$store.state.common.serviceCategories.find((item) => item.key === category);
     },
     getDefaultTypes(category, name) {
       if (!this.types[category]) return [];
@@ -515,11 +526,15 @@ export default {
         issuedTime: new Date().getTime(),
         expiredBusinessTime: this.expiredTime,
       };
+      if (this.$store.state.planningBoard.id) {
+        requestRequirement.id = this.$store.state.planningBoard.id;
+      }
       new ProposalRequestRequirement(requestRequirement)
         .for(new CalendarEvent({ id: this.event.id }))
         .save()
         .then((res) => {
           console.log(res);
+          this.$store.commit("planningBoard/setData", { key: "id", value: res.item.id });
           this.showCounterPage = true;
           // this.additionalServiceRequirements = res;
         });
@@ -529,6 +544,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .planning-board-layout {
+  .loading-screen {
+    height: 100vh;
+  }
   .proposal-footer {
     padding: 40px 50px;
     button {
@@ -541,4 +559,4 @@ export default {
     }
   }
 }
-</style>>
+</style>

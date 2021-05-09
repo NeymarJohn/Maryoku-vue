@@ -52,7 +52,7 @@ export default {
   },
   data() {
     return {
-      lookingFor: {},
+      lookingFor: [],
     };
   },
   methods: {
@@ -62,7 +62,13 @@ export default {
   },
   created() {},
   mounted() {
-    this.lookingFor = this.proposalRequest.requirements.find((item) => item.category == "multi-selection");
+    const types = this.proposalRequest.plannerRequirement.types[this.vendor.eventCategory.key];
+    let selectedTypes = [];
+    for (let key in types) {
+      selectedTypes = [...selectedTypes, ...types[key]];
+    }
+    this.lookingFor = selectedTypes;
+    console.log("this.lookingFor", this.lookingFor);
   },
   computed: {
     step() {
@@ -70,16 +76,18 @@ export default {
     },
     selectedServices() {
       let str = "";
-      if (this.lookingFor.options) {
-        const services = [];
-        this.lookingFor.options.forEach((item) => {
-          if (item.selected) {
-            return services.push(item.name);
-          }
-        });
-        str = services.join(", ");
-      }
-      return str;
+      // if (this.lookingFor.options) {
+      //   const services = [];
+      //   this.lookingFor.options.forEach((item) => {
+      //     if (item.selected) {
+      //       return services.push(item.name);
+      //     }
+      //   });
+      //   str = services.join(", ");
+      // }
+      // return "";
+      console.log(typeof this.lookingFor);
+      return this.lookingFor.join(", ");
     },
     serviceTime() {
       let serviceTimeString = "";

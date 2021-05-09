@@ -1,6 +1,6 @@
 <template>
   <div class="vendor-proposal-board p-40">
-    <loader :active="loading"/>
+    <vue-element-loading :active="loading" spinner="ring" color="#FF547C"></vue-element-loading>
     <div class="font-size-22 font-bold">
       <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposal Dashboard
     </div>
@@ -131,13 +131,15 @@
   </div>
 </template>
 <script>
+import TablePagination from "@/components/TablePagination.vue";
 import ProposalListItem from "../components/ProposalListItem.vue";
 import ProposalRequestCard from "../components/ProposalRequestCard";
 import ProposalRequest from "@/models/ProposalRequest";
 import Proposal from "@/models/Proposal";
 import Vendor from "@/models/Vendors";
 import carousel from "vue-owl-carousel";
-import {Loader, TablePagination, PieChart} from "@/components";
+import PieChart from "@/components/Chart/PieChart.vue";
+import VueElementLoading from 'vue-element-loading'
 export default {
   components: {
     ProposalRequestCard,
@@ -145,7 +147,7 @@ export default {
     TablePagination,
     carousel,
     PieChart,
-    Loader,
+    VueElementLoading,
   },
   data() {
     return {

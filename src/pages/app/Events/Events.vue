@@ -1,6 +1,13 @@
 <template>
   <div class="md-layout events-list">
-    <loader :active="isLoading"/>
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen>
+<!--      <div :style="`background-image:url(/static/img/load_${imageIndex}.jpg)`" class="loading-background">-->
+<!--        <div :class="`quote quote_${imageIndex}`">-->
+<!--          <span>{{ quote.description }}</span>-->
+<!--          <span class="author">{{ quote.author }}</span>-->
+<!--        </div>-->
+<!--      </div>-->
+    </vue-element-loading>
     <div class="md-layout-item md-size-100">
       <md-card v-if="upcomingEvents.length">
         <md-card-header class="md-card-header-icon md-card-header-rose">
@@ -10,6 +17,7 @@
           <h4 class="title">Upcoming Events</h4>
         </md-card-header>
         <md-card-content>
+          <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
           <md-table
             v-model="upcomingEvents"
             table-header-color="rose"
@@ -140,7 +148,6 @@ import _ from "underscore";
 import { backgroundImages, quotes } from "@/constants/loadingBackgrounds";
 import eventService from "@/services/event.service";
 import axios from "axios";
-import Loader from "../../../components/loader/index";
 
 const imageIndex = new Date().getTime() % backgroundImages.length;
 const quoteIndex = new Date().getTime() % quotes.length;
@@ -148,7 +155,6 @@ const quote = quotes[quoteIndex];
 
 export default {
   components: {
-      Loader,
     Tabs,
     ProductCard,
     VueElementLoading,

@@ -16,7 +16,7 @@
         <div class="mt-20">Would you like to add one of those items?</div>
         <div class="tags mt-30">
           <tag-item
-            @click="tag.isSelected = !tag.isSelected"
+            @click="selectTag(tag)"
             :tagLabel="tag.subCategory"
             :key="tag.subCategory"
             :isSelected="tag.isSelected"
@@ -29,8 +29,25 @@
           <div class="font-bold-extra">{{ section }}</div>
           <div class="requirement-row text-left">
             <!-- {{ subCategory.requirements[section] }} -->
-            <div v-for="item in subCategory.requirements[section]" class="requirement-item">
-              <md-checkbox v-model="item.selected">{{ item.item }}</md-checkbox>
+            <div
+              v-for="item in subCategory.requirements[section].filter((item) => item.type !== 'single-selection')"
+              class="requirement-item"
+            >
+              <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">{{ item.item }}</md-checkbox>
+            </div>
+            <div
+              v-for="item in subCategory.requirements[section].filter((item) => item.type === 'single-selection')"
+              class="requirement-item-tags mt-10"
+            >
+              <div class="mb-10">{{ item.item }}:</div>
+              <tag-item
+                @click="tag.selected = !tag.selected"
+                :tagLabel="tag.name"
+                :key="tag.name"
+                :isSelected="tag.selected"
+                :theme="`red`"
+                v-for="tag in item.options"
+              ></tag-item>
             </div>
           </div>
         </div>
@@ -38,6 +55,7 @@
           v-for="specialSection in specialTags.filter((item) => item.isSelected)"
           :key="specialSection.subCategory"
           class="text-left sub-category"
+          :id="specialSection.subCategory"
         >
           <div class="font-bold-extra">{{ specialSection.subCategory }}</div>
           <div class="requirement-row text-left" v-if="specialSection.subCategory !== 'Sitting arrangement'">
@@ -106,8 +124,15 @@
         </div>
       </div>
       <div class="anything-else-section text-left mt-30">
-        <label class="font-bold">Additional {{ selectedCategory.fullTitle }} Requests?</label>
-        <div class="mt-10">Tell us what else you would love to receive in the proposals we’ll send you</div>
+        <div class="d-flex align-center mb-20" style="min-width: 300px">
+          <img :src="`${$iconURL}Requirements/special-request-red.svg`" class="mr-20" />
+          <div class="title">
+            <div class="font-size-22 font-bold">Special Requests</div>
+            <div class="mt-10">Would you like to add one of those items?</div>
+          </div>
+        </div>
+        <label class="font-bold">Get me a pink unicorn please</label>
+        <div class="mt-10">We love a good challenge! Tell us whatever you need, and we’ll add it to your proposal.</div>
         <div class="anything-else-section-options mt-10">
           <textarea
             placeholder="Type name of element here..."
@@ -167,8 +192,9 @@ export default {
       (item) => item !== "multi-selection" && item !== "special",
     );
     this.specialTags = this.subCategory.requirements["special"].map((item) => {
-      return { ...item, selected: false };
+      return { ...item };
     });
+    console.log("speicalTags", this.specialTags);
     this.specialTags = this.specialTags.filter(
       (item) => item.subCategory !== "Inclusion" && item.subCategory !== "Sustainability",
     );
@@ -182,10 +208,34 @@ export default {
       this.$emit("cancel");
     },
     save: function () {
+      const requirements = { ...this.subCategory.requirements, additionalRequest: this.anythingElse };
+      requirements.special = [];
+      for (let item of this.specialTags) {
+        requirements.special.push(item);
+      }
       this.$emit("save", {
         category: this.selectedCategory.key,
-        requirements: { ...this.subCategory.requirements, additionalRequest: this.anythingElse },
+        requirements,
       });
+    },
+    selectTag(tag) {
+      tag.isSelected = !tag.isSelected;
+      setTimeout(() => {
+        this.goToSelectedTag(tag.subCategory);
+      }, 100);
+    },
+    goToSelectedTag(item) {
+      const theElement = document.getElementById(item);
+      if (!theElement) return;
+      const y = theElement.getBoundingClientRect().top + window.pageYOffset;
+      const yOffset = -50;
+      const modalWrapper = document.getElementsByClassName("modal-wrapper")[0];
+      if (modalWrapper) {
+        modalWrapper.scrollTo({
+          top: y + yOffset,
+          behavior: "smooth",
+        });
+      }
     },
     addTag(tag) {
       const tagIndex = this.selectedTags.findIndex((item) => item === tag);

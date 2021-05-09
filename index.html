@@ -217,15 +217,19 @@
             id="initial-message"
             style="top: 50%;left: 50%;transform: translate(-50%,-50%);position: absolute;text-align: center;"
         >
-            <img id="maryoku_loader" src="/static/img/maryoku-loader.gif" width="150"/>
+            <img src="/static/img/maryoku-loader.gif" />
         </span>
 
         <script>
-            const loaders = [
-                '/static/icons/loader/Bus.gif',
-                '/static/icons/loader/Dish.gif',
-                '/static/icons/loader/Screen.gif',
-                '/static/icons/loader/Venue.gif',
+            const backgroundImages = [
+                "load_0.jpg",
+                "load_1.jpg",
+                "load_2.jpg",
+                "load_3.jpg",
+                "load_4.jpg",
+                "load_5.jpg",
+                "load_6.jpg",
+                "load_7.jpg",
             ];
             const quotes = [
                 { description: "“The power of imagination makes us infinite.”", author: " - John Muir" },
@@ -321,9 +325,6 @@
             // qutoDescription.classList.add("quote");
             // qutoDescription.classList.add("quote_" + imageIndex);
             // document.getElementById("loading-background").appendChild(qutoDescription)
-
-            var img = document.getElementById('maryoku_loader');
-            img.src = loaders[Math.ceil(Math.random() * 10) % 4];
         </script>
 
         <script async defer src="https://apis.google.com/js/api.js"></script>

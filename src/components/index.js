@@ -44,9 +44,6 @@ import HolidayInput from './HolidayInput';
 import SidebarItem from './SidebarPlugin/NewSidebarItem.vue'
 import SideBar from './SidebarPlugin/NewSideBar.vue'
 import TimeInput from './TimeInput'
-import Loader from './loader';
-import TablePagination from './TablePagination'
-import PieChart  from "./Chart/PieChart.vue";
 export {
     IconCheckbox,
     InputText,
@@ -66,7 +63,6 @@ export {
     NavTabsCard,
     ProductCard,
     DropDown,
-    Loader,
     SidebarPlugin,
     Tabs,
     NavTabs,
@@ -86,7 +82,5 @@ export {
     HolidayInput,
     SidebarItem,
     SideBar,
-    TimeInput,
-    TablePagination,
-    PieChart,
+    TimeInput
 };

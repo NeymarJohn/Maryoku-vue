@@ -1,6 +1,8 @@
 <template>
   <div class="md-layout p-20 planner-profile">
-    <loader :active="loading"/>
+      <vue-element-loading :active="loading" color="#FF547C" is-full-screen>
+          <img src="/static/img/maryoku-loader.gif"/>
+      </vue-element-loading>
     <div class="md-layout-item md-size-100 font-size-22 font-bold mb-30 mt-30">
       <img :src="`${$iconURL}Profile/settings-dark.svg`" class="mr-20" />
       PROFILE & SETTINGS
@@ -95,7 +97,7 @@
 <script>
 import VueElementLoading from "vue-element-loading";
 import StarRating from "vue-star-rating";
-import { LabelEdit, Tabs, Loader } from "@/components";
+import { LabelEdit, Tabs } from "@/components";
 
 // import auth from '@/auth';
 import {mapGetters, mapActions, mapState, mapMutations} from "vuex";
@@ -116,7 +118,6 @@ export default {
     CompanyDetails,
     MyServices,
     StarRating,
-    Loader
   },
   data() {
     return {

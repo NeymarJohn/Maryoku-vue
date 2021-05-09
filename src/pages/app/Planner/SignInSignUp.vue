@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout">
-    <loader :active="loading"/>
+    <vue-element-loading :active="loading" spinner="ring" color="#FF547C" isFullScreen />
     <div class="md-layout-item">
       <signup-card>
         <div
@@ -58,8 +58,10 @@
 </template>
 
 <script>
-import { SignupCard, MaryokuInput, Modal, Loader } from "@/components";
+import { SignupCard, MaryokuInput, Modal } from "@/components";
 import InputText from "@/components/Inputs/InputText.vue";
+import VueElementLoading from "vue-element-loading";
+import Tenant from "@/models/Tenant";
 import TenantUser from "@/models/TenantUser";
 import CalendarEvent from "@/models/CalendarEvent";
 import eventService from "@/services/event.service";
@@ -69,7 +71,7 @@ export default {
     SignupCard,
     Modal,
     InputText,
-    Loader,
+    VueElementLoading,
     MaryokuInput,
   },
   methods: {

@@ -120,7 +120,7 @@
       <div class="filters-section__reset" @click="resetFilters"><md-icon>refresh</md-icon>Reset Filters</div>
     </div>
     <div class="md-layout-item md-size-100 clear-margins" style="padding: 0 1em 0 3em !important">
-      <loader :active="working" :isFullScreen="true"/>
+      <vue-element-loading :active="working" spinner="ring" color="#FF547C" background-color="transparent" />
       <vendors-grid
         v-if="view === 'grid'"
         :buildingBlocksList="buildingBlocksList"
@@ -161,7 +161,7 @@ import VendorsGrid from "./VendorsGridNew";
 import VendorsList from "./VendorsList";
 
 import SideBar from "../../../components/SidebarPlugin/NewSideBar";
-import { Modal, Loader } from "@/components";
+import { Modal } from "@/components";
 import Vendors from "@/models/Vendors";
 import _ from "underscore";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
@@ -175,7 +175,6 @@ export default {
     VendorsGrid,
     VendorsList,
     SideBar,
-    Loader,
     VueGoogleAutocomplete,
   },
   props: {
