@@ -103,6 +103,12 @@
         </popper>
       </template>
     </div>
+    <add-budget-modal
+      v-if="showAddNewCategory"
+      :serviceCategory="serviceCategory"
+      @cancel="showAddNewCategory = false"
+      @save="saveBudget"
+    ></add-budget-modal>
   </div>
 </template>
 <script>
@@ -111,15 +117,18 @@ import Popper from "vue-popperjs";
 import "vue-popperjs/dist/vue-popper.css";
 import MusicPlayer from "./MusicPlayer.vue";
 import { camelize } from "@/utils/string.util";
-
+import AddBudgetModal from "./modals/AddBudget.vue";
 export default {
   components: {
     carousel,
     Popper,
     MusicPlayer,
+    AddBudgetModal,
   },
   data() {
     return {
+      showAddNewCategory: false,
+
       selected: false,
       selectedServices: [],
       popperIcons: {
@@ -163,7 +172,6 @@ export default {
     },
   },
   created() {
-    console.log(this.defaultData);
     this.selectedServices = [...this.defaultData];
   },
   methods: {
@@ -191,8 +199,11 @@ export default {
       });
     },
     addBudget() {
-      this.$emit("addBudget");
       document.body.click();
+      this.showAddNewCategory = true;
+    },
+    saveBudget() {
+      this.showAddNewCategory = false;
     },
   },
 };

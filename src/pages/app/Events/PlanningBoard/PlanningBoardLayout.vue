@@ -33,7 +33,6 @@
               :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
               @showSpecific="getSpecification"
               @update="setServiceStyles"
-              @addBudget="showAddNewCategory = true"
             ></service-category-card>
           </div>
         </div>
@@ -53,7 +52,6 @@
               :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
               @showSpecific="getSpecification"
               @update="setServiceStyles"
-              @addBudget="showAddNewCategory = true"
             ></service-category-card>
           </div>
         </div>
@@ -101,13 +99,6 @@
       @save="saveSpecialRequirements"
     >
     </special-requirement-modal>
-    <add-budget-modal
-      v-if="showAddNewCategory"
-      :event="event"
-      :components="categoryList"
-      @cancel="showAddNewCategory = false"
-      @save="addNewCategory"
-    ></add-budget-modal>
   </div>
 </template>
 <script>
@@ -117,7 +108,6 @@ import { serviceCategoryImages } from "@/constants/event.js";
 import ProgressRadialBar from "./components/ProgressRadialBar.vue";
 import { mapState, mapGetters, mapMutations } from "vuex";
 import _ from "underscore";
-import AddBudgetModal from "./components/modals/AddBudget.vue";
 import AdditionalRequestModal from "./components/modals/AdditionalRequest.vue";
 import SpecialRequirementModal from "./components/modals/SpecialRequirement.vue";
 import { camelize } from "@/utils/string.util";
@@ -135,11 +125,9 @@ export default {
     SpecialRequirementModal,
     PendingForVendors,
     Loader,
-    AddBudgetModal,
   },
   data() {
     return {
-      showAddNewCategory: false,
       allRequirements: null,
       subCategory: null,
       serviceCards1: [
@@ -331,7 +319,7 @@ export default {
         [
           {
             name: "Giveaways",
-            serviceCategory: "swag",
+            serviceCategory: "giveaways",
             images: [
               "Giveaways/Apparel.png",
               "Giveaways/Ceremonial Items.png",
@@ -562,7 +550,8 @@ export default {
           // this.additionalServiceRequirements = res;
         });
     },
-    async addNewCategory(newCategory) {
+    async addNewCategory(category) {
+      this.selectedCategory = this.$store.state.common.serviceCategories.find((item) => item.key === category);
       // const event = new CalendarEvent({
       //   id: this.event.id,
       //   unexpectedBudget: this.event.unexpectedBudget - newCategory.allocatedBudget,
