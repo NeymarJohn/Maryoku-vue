@@ -1,5 +1,5 @@
 <template>
-  <modal class="add-category-model">
+  <modal class="add-budget-modal">
     <template slot="header">
       <div class="add-category-model__header">
         <h2 class="font-size-30 font-bold-extra">
@@ -177,4 +177,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.add-budget-modal {
+  text-align: left;
+}
 </style>

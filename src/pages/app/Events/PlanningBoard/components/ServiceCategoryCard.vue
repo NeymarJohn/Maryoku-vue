@@ -72,7 +72,7 @@
     <div class="p-20 font-bold d-flex align-center justify-content-between">
       <span class="service-name">{{ serviceCategory.name }}</span>
       <template v-if="hasBudget">
-        <md-button v-show="selectedServices.length > 0" class="md-red maryoku-btn" @click="getSpecification">
+        <md-button v-show="selectedServices.length > 0" class="md-simple md-red edit-btn" @click="getSpecification">
           Get Specific
         </md-button>
       </template>
@@ -94,10 +94,12 @@
               <md-button class="md-simple md-black maryoku-btn">
                 Don't Add {{ serviceCategory.name }} To Budget
               </md-button>
-              <md-button class="md-red maryoku-btn">Add {{ serviceCategory.name }} To Budget</md-button>
+              <md-button class="md-red maryoku-btn" @click="addBudget">
+                Add {{ serviceCategory.name }} To Budget
+              </md-button>
             </div>
           </div>
-          <md-button class="md-simple maryoku-btn md-red" slot="reference">Add To Budget</md-button>
+          <md-button class="md-simple edit-btn md-red" slot="reference">Add To Budget</md-button>
         </popper>
       </template>
     </div>
@@ -187,6 +189,10 @@ export default {
         services: this.selectedServices,
         type: camelize(this.serviceCategory.name),
       });
+    },
+    addBudget() {
+      this.$emit("addBudget");
+      document.body.click();
     },
   },
 };

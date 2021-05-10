@@ -33,6 +33,7 @@
               :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
               @showSpecific="getSpecification"
               @update="setServiceStyles"
+              @addBudget="showAddNewCategory = true"
             ></service-category-card>
           </div>
         </div>
@@ -51,6 +52,8 @@
               :hasBudget="hasBudget(service.serviceCategory)"
               :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
               @showSpecific="getSpecification"
+              @update="setServiceStyles"
+              @addBudget="showAddNewCategory = true"
             ></service-category-card>
           </div>
         </div>
@@ -63,7 +66,7 @@
     </template>
     <div class="proposal-footer white-card d-flex justify-content-between">
       <div>
-        <md-button v-if="step === 2" @click="step = step - 1" class="md-simple maryoku-btn md-black">
+        <md-button v-if="step === 2" @click="step = step - 1" class="md-simple edit-btn md-black">
           <md-icon>arrow_back</md-icon>
           Back
         </md-button>
@@ -98,6 +101,13 @@
       @save="saveSpecialRequirements"
     >
     </special-requirement-modal>
+    <add-budget-modal
+      v-if="showAddNewCategory"
+      :event="event"
+      :components="categoryList"
+      @cancel="showAddNewCategory = false"
+      @save="addNewCategory"
+    ></add-budget-modal>
   </div>
 </template>
 <script>
@@ -107,7 +117,7 @@ import { serviceCategoryImages } from "@/constants/event.js";
 import ProgressRadialBar from "./components/ProgressRadialBar.vue";
 import { mapState, mapGetters, mapMutations } from "vuex";
 import _ from "underscore";
-
+import AddBudgetModal from "./components/modals/AddBudget.vue";
 import AdditionalRequestModal from "./components/modals/AdditionalRequest.vue";
 import SpecialRequirementModal from "./components/modals/SpecialRequirement.vue";
 import { camelize } from "@/utils/string.util";
@@ -125,9 +135,11 @@ export default {
     SpecialRequirementModal,
     PendingForVendors,
     Loader,
+    AddBudgetModal,
   },
   data() {
     return {
+      showAddNewCategory: false,
       allRequirements: null,
       subCategory: null,
       serviceCards1: [
@@ -344,7 +356,7 @@ export default {
               "Travel Accessories",
               "Wellness",
             ],
-            icon: "NewRequirements/Group 18012.svg",
+            icon: "NewRequirements/Group 18014.svg",
           },
           {
             name: "Indoor Activities",
@@ -365,14 +377,14 @@ export default {
             serviceCategory: "entertainment",
             images: ["Outdoor Activities/Day trip_option..png", "Outdoor Activities/Sport Event.png"],
             imageTitles: ["Day Trip Option", "Sport Event"],
-            icon: "NewRequirements/Group 18027.svg",
+            icon: "NewRequirements/Group 18010.svg",
           },
           {
             name: "AV",
             serviceCategory: "audiovisualstagingservices",
             images: ["A-V/Lighting.jpg", "A-V/Plasma TV.jpeg", "A-V/Projector.jpg"],
             imageTitles: ["Lighting", "Plasma TV", "Projector"],
-            icon: "NewRequirements/Group 18012.svg",
+            icon: "NewRequirements/Group 18073.svg",
           },
         ],
         [
@@ -549,6 +561,15 @@ export default {
           this.showCounterPage = true;
           // this.additionalServiceRequirements = res;
         });
+    },
+    async addNewCategory(newCategory) {
+      // const event = new CalendarEvent({
+      //   id: this.event.id,
+      //   unexpectedBudget: this.event.unexpectedBudget - newCategory.allocatedBudget,
+      //   calendar: new Calendar({ id: this.event.calendar.id }),
+      // });
+      // this.showAddNewCategory = false;
+      // this.$store.dispatch("event/saveEventAction", event).then((res) => {});
     },
   },
 };
