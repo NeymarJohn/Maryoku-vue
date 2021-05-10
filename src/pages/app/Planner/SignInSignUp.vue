@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout">
-    <loader :active="loading"/>
+    <loader :active="loading" :isFullScreen="true"/>
     <div class="md-layout-item">
       <signup-card>
         <div
