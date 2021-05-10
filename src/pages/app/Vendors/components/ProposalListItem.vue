@@ -13,8 +13,8 @@
     <div><img class="ml-15" :src="getStatusIcon(proposal.status)" /></div>
     <div class="font-size-14 color-black-middle">Tom</div>
 
-    <md-button class="md-simple md-vendor" @click="edit('show')">
-      <img src="/static/icons/vendor/proposalBoard/see-proposal.svg" class="mr-5" style="width: 20px" />
+    <md-button class="md-simple md-vendor" @click="openProposal">
+      <img src="/static/icons/vendor/proposalBoard/see-proposal.svg" class="mr-5" style="width: 20px"/>
       View Proposal
     </md-button>
 
@@ -109,10 +109,10 @@ export default {
             return `${path}filter-${status}.svg`;
         }
     },
-    edit(action) {
-      if (action === 'show' || action === 'download' || action === 'duplicate' || action === 'cancel') {
-        this.$emit('action', action, this.proposal.id);
-      } else if (action === 'edit') {
+    openProposal() {},
+    edit(item) {
+      console.log('edit', item);
+      if(item === 'edit') {
         this.$router.push(`/vendors/${this.proposal.vendor.id}/proposal-request/${this.proposal.proposalRequest.id}/form`);
       }
     },

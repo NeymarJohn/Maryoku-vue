@@ -71,7 +71,7 @@ const ConceptDetail = () => import("@/pages/Dashboard/Pages/ConceptDetail.vue");
 const ProposalFinalStep = () => import("@/pages/app/Vendors/ProposalFinalStep.vue");
 const CalendarSync = () => import("@/pages/app/CalendarSync.vue");
 
-const Checkout = () => import("@/pages/app/Events/Checkout/Checkout.vue")
+const Checkout = () => import("@/pages/app/Events/Proposal/Checkout")
 
 let authPages = {
     path: "/",

@@ -13,8 +13,7 @@
         Left
       </span>
     </div>
-    <div class="d-flex align-center justify-content-start font-size-14"
-    >$ {{ (proposalRequest.componentInstance ? proposalRequest.componentInstance.allocatedBudget : '') | withComma }}
+    <div class="d-flex align-center justify-content-start font-size-14">$ {{ proposalRequest.componentInstance.allocatedBudget | withComma }}
         <md-icon class="color-black ml-5">keyboard_arrow_down</md-icon>
     </div>
     <div class="d-flex align-end">

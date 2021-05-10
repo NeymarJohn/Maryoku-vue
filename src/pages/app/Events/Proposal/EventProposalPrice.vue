@@ -45,6 +45,7 @@
           <tbody>
             <tr v-for="(service, index) in costServices" :key="`cost-service-${index}`">
               <td>
+                <md-icon class="color-red mr-5" v-if="service.isExtra">add_circle_outline</md-icon>
                 {{ service.requirementTitle
                 }}<span class="complimentary-tag" v-if="service.isComplimentary">Complimentary</span>
               </td>
@@ -53,19 +54,19 @@
               <td :class="{ crosslinedText: service.isComplimentary }">
                 ${{ (service.requirementValue * service.price) | withComma }}
               </td>
-              <td class="element-actions"></td>
+              <td class="element-actions">
+                <md-button class="md-simple edit-btn" @click="removeService(service)" v-if="service.isExtra">
+                  <img :src="`${$iconURL}common/trash-dark.svg`" />
+                </md-button>
+              </td>
             </tr>
-            <tr v-for="(service, index) in addedServices" :key="`added-service-${index}`">
+            <!-- <tr v-for="(service, index) in addedServices" :key="`added-service-${index}`">
               <td><md-icon class="color-red mr-5">add_circle_outline</md-icon>{{ service.requirementTitle }}</td>
               <td>{{ service.requirementValue }}</td>
               <td>${{ service.price | withComma }}</td>
               <td>${{ (service.requirementValue * service.price) | withComma }}</td>
-              <td class="element-actions">
-                <md-button class="md-simple edit-btn" @click="removeService(service)">
-                  <img :src="`${$iconURL}common/trash-dark.svg`"
-                /></md-button>
-              </td>
-            </tr>
+              <td class="element-actions"></td>
+            </tr> -->
           </tbody>
         </table>
       </div>
@@ -215,24 +216,30 @@ export default {
       console.log(itemIndex);
       if (itemIndex >= 0) {
         this.$set(this.extraServices[itemIndex], "added", true);
-        this.addedServices.push(extraService);
+        extraService.isExtra = true;
+        this.costServices.push(extraService);
       }
       this.extraServices = [...this.extraServices];
-      this.$emit("changeAddedServices", { category: this.serviceCategory, services: this.addedServices });
+      this.$emit("changeAddedServices", {
+        category: this.serviceCategory,
+        costServices,
+        extraSerivces: this.extraServices,
+      });
       this.$forceUpdate();
     },
     removeService(extraService) {
       const itemIndex = this.extraServices.findIndex((item) => item.requirementTitle === extraService.requirementTitle);
-      const addedIndex = this.addedServices.findIndex(
-        (item) => item.requirementTitle === extraService.requirementTitle,
-      );
-      console.log(itemIndex);
+      const addedIndex = this.costServices.findIndex((item) => item.requirementTitle === extraService.requirementTitle);
       if (itemIndex >= 0) {
         this.$set(this.extraServices[itemIndex], "added", false);
-        this.addedServices.splice(addedIndex, 1);
+        this.costServices.splice(addedIndex, 1);
       }
       this.extraServices = [...this.extraServices];
-      this.$emit("changeAddedServices", { category: this.serviceCategory, services: this.addedServices });
+      this.$emit("changeAddedServices", {
+        category: this.serviceCategory,
+        costServices,
+        extraSerivces: this.extraServices,
+      });
       this.$forceUpdate();
     },
   },

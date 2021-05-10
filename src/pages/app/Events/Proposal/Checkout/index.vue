@@ -41,25 +41,22 @@
           ></checkout-price-table>
           <div class="p-30">
             <div>Would you like to upgrade & add one of those?</div>
-            <div>You have $ 180 left over from the budget you reserved</div>
-            <collapse-panel :defaultStatus="false" class="pt-10 pb-10 mt-30 disabled">
+            <div class="mb-30">
+              You have $ {{ proposal.serviceCategory.allocatedBudget - proposal.cost }} left over from the budget you
+              reserved
+            </div>
+            <collapse-panel
+              :defaultStatus="false"
+              class="pt-10 pb-10"
+              v-for="service in this.proposal.extraServices[this.vendor.eventCategory.key].filter(
+                (item) => !item.added && item.price,
+              )"
+              :key="service.subCategory"
+            >
               <template slot="header">
                 <div class="price-header d-flex align-center">
-                  <md-checkbox class="m-0 mr-10"></md-checkbox>
-                  <span>Valet service</span>
-                </div>
-              </template>
-              <template slot="content">
-                <div class="price-table-content mt-20">
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                  labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
-                </div>
-              </template>
-            </collapse-panel>
-            <collapse-panel :defaultStatus="false" class="pt-10 pb-10 disabled">
-              <template slot="header">
-                <div class="price-header d-flex align-center">
-                  <md-checkbox class="m-0 mr-10"></md-checkbox>Babysitting service X3
+                  <md-checkbox class="m-0 mr-10" v-model="service.addedOnProposal"></md-checkbox>
+                  <span>{{ service.requirementTitle }}</span>
                 </div>
               </template>
               <template slot="content">
