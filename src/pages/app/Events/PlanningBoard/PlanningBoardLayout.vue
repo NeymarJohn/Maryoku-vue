@@ -58,6 +58,7 @@
       <div v-else class="loading-screen"></div>
     </div>
     <template v-else>
+      <loader :active="isLoading" />
       <pending-for-vendors :expiredTime="expiredTime"></pending-for-vendors>
     </template>
     <div class="proposal-footer white-card d-flex justify-content-between">
@@ -109,11 +110,11 @@ import _ from "underscore";
 
 import AdditionalRequestModal from "./components/modals/AdditionalRequest.vue";
 import SpecialRequirementModal from "./components/modals/SpecialRequirement.vue";
-import VueElementLoading from "vue-element-loading";
 import { camelize } from "@/utils/string.util";
 import CalendarEvent from "@/models/CalendarEvent";
 import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
 import PendingForVendors from "../components/PendingForVendors.vue";
+import { Loader } from "@/components";
 import moment from "moment";
 
 export default {
@@ -121,9 +122,9 @@ export default {
     ServiceCategoryCard,
     ProgressRadialBar,
     AdditionalRequestModal,
-    VueElementLoading,
     SpecialRequirementModal,
     PendingForVendors,
+    Loader,
   },
   data() {
     return {
@@ -439,15 +440,25 @@ export default {
   created() {
     if (!this.allRequirements) {
       this.isLoading = true;
-      this.$store.dispatch("event/getRequirements").then((requirements) => {
-        this.allRequirements = requirements;
-        this.isLoading = false;
-      });
+      this.$store
+        .dispatch("event/getRequirements")
+        .then((requirements) => {
+          this.allRequirements = requirements;
+          this.isLoading = false;
+        })
+        .catch((e) => {
+          this.isLoading = false;
+        });
       this.isLoadingStoredData = true;
-      this.$store.dispatch("planningBoard/getRequirements", this.event.id).then((requirements) => {
-        console.log(requirements);
-        this.isLoadingStoredData = false;
-      });
+      this.$store
+        .dispatch("planningBoard/getRequirements", this.event.id)
+        .then((requirements) => {
+          console.log(requirements);
+          this.isLoadingStoredData = false;
+        })
+        .catch((e) => {
+          this.isLoadingStoredData = false;
+        });
     }
   },
   beforeCreate() {

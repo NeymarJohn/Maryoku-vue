@@ -20,8 +20,8 @@
     </div>
 
     <!-- Event Booking Items -->
-    <div class="md-layout events-booking-items">
-      <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
+    <div class="md-layout events-booking-items position-relative">
+      <loader :active="isLoading"/>
       <div class="md-layout-item md-size-100">
         <div v-for="(category, index) in Object.keys(requirementProperties)" :key="index">
           <template v-if="category == 'multi-selection'">
@@ -86,14 +86,13 @@
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import moment from "moment";
 import InputMask from "vue-input-mask";
-import VueElementLoading from "vue-element-loading";
 import _ from "underscore";
 import Multiselect from "vue-multiselect";
 import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
 import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea.vue";
 
 import { postReq, getReq } from "@/utils/token";
-import { Modal } from "@/components";
+import { Modal, Loader } from "@/components";
 import EventChangeProposalModal from "@/components/Modals/EventChangeProposalModal";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
@@ -101,7 +100,6 @@ import CommentEditorPanel from "./CommentEditorPanel";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
-import EventCategoryRequirement from "@/models/EventCategoryRequirement";
 import VendorRequirementMultiselectPanel from "./VendorRequirementMultiselectPanel";
 import VendorRequirementSingleselectPanel from "./VendorRequirementSingleselectPanel";
 import SpecialRequirementSection from "./SpecialRequirementSection";
@@ -110,7 +108,7 @@ import EventRequirementSection from "./EventRequirementSection";
 export default {
   name: "booking-event-requirement",
   components: {
-    VueElementLoading,
+    Loader,
     InputMask,
     Modal,
     EventChangeProposalModal,

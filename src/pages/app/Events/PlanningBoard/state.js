@@ -22,11 +22,15 @@ const actions = {
         .get()
         .then((res) => {
           const currentRequirement = res[0]
-          commit("setData", { key: "id", value: currentRequirement.id })
-          commit("setData", { key: "types", value: currentRequirement.types })
-          commit("setData", { key: "mainRequirements", value: currentRequirement.mainRequirements })
-          commit("setData", { key: "specialRequirements", value: currentRequirement.specialRequirements })
-          resolve(currentRequirement)
+          if (currentRequirement) {
+            commit("setData", { key: "id", value: currentRequirement.id })
+            commit("setData", { key: "types", value: currentRequirement.types })
+            commit("setData", { key: "mainRequirements", value: currentRequirement.mainRequirements })
+            commit("setData", { key: "specialRequirements", value: currentRequirement.specialRequirements })
+            resolve(currentRequirement)
+          } else {
+            resolve({})
+          }
         })
         .catch(err => {
           reject(err)

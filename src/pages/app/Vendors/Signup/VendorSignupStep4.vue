@@ -316,7 +316,6 @@
 
 <script>
 import moment from "moment";
-import VueElementLoading from "vue-element-loading";
 import Vendors from "@/models/Vendors";
 
 //COMPONENTS
@@ -341,7 +340,6 @@ export default {
     vendor: Object,
   },
   components: {
-    VueElementLoading,
     VendorServiceItem,
     LightBox,
     carousel,
