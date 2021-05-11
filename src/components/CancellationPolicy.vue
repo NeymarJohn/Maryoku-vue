@@ -12,6 +12,7 @@
 <script>
 import { cancellationPolicyData } from "@/constants/vendor";
 export default {
+  name: 'cancellation-policy',
   data() {
     return {
       cancellationData: cancellationPolicyData,

@@ -185,6 +185,7 @@ import { mapState, mapMutations, mapGetters, mapActions } from "vuex";
 import ExtraServiceItem from "./ExtraServiceItem";
 import IncludedServiceItem from "./IncludedServiceItem.vue";
 export default {
+  name: 'event-proposal-price',
   components: {
     ExtraServiceItem,
     IncludedServiceItem,
