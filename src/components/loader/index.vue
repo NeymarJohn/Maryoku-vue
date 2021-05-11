@@ -1,6 +1,6 @@
 <template>
-    <vue-element-loading :active="active" :isFullScreen="isFullScreen" style="height: 100vh">
-      <img :src="`${imgUrl}`" width="150">
+    <vue-element-loading :active="active" :isFullScreen="isFullScreen" :style="{height: height, backGroundColor: backGroundColor}">
+      <img :src="`${imgUrl}`" :width="width">
     </vue-element-loading>
 </template>
 <script>
@@ -19,6 +19,21 @@ export default {
       type: Boolean,
       required: false,
       default: false,
+    },
+    height:{
+      type: String,
+      required: false,
+      default: '100vh',
+    },
+    width: {
+      type:Number,
+      required: false,
+      default: 250,
+    },
+    backGroundColor: {
+      type: String,
+      required: false,
+      default: 'white',
     }
   },
   data(){

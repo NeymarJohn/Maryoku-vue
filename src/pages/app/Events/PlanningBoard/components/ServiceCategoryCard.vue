@@ -72,7 +72,7 @@
     <div class="p-20 font-bold d-flex align-center justify-content-between">
       <span class="service-name">{{ serviceCategory.name }}</span>
       <template v-if="hasBudget">
-        <md-button v-show="selectedServices.length > 0" class="md-red maryoku-btn" @click="getSpecification">
+        <md-button v-show="selectedServices.length > 0" class="md-simple md-red edit-btn" @click="getSpecification">
           Get Specific
         </md-button>
       </template>
@@ -94,13 +94,21 @@
               <md-button class="md-simple md-black maryoku-btn">
                 Don't Add {{ serviceCategory.name }} To Budget
               </md-button>
-              <md-button class="md-red maryoku-btn">Add {{ serviceCategory.name }} To Budget</md-button>
+              <md-button class="md-red maryoku-btn" @click="addBudget">
+                Add {{ serviceCategory.name }} To Budget
+              </md-button>
             </div>
           </div>
-          <md-button class="md-simple maryoku-btn md-red" slot="reference">Add To Budget</md-button>
+          <md-button class="md-simple edit-btn md-red" slot="reference">Add To Budget</md-button>
         </popper>
       </template>
     </div>
+    <add-budget-modal
+      v-if="showAddNewCategory"
+      :serviceCategory="serviceCategory"
+      @cancel="showAddNewCategory = false"
+      @save="saveBudget"
+    ></add-budget-modal>
   </div>
 </template>
 <script>
@@ -109,15 +117,18 @@ import Popper from "vue-popperjs";
 import "vue-popperjs/dist/vue-popper.css";
 import MusicPlayer from "./MusicPlayer.vue";
 import { camelize } from "@/utils/string.util";
-
+import AddBudgetModal from "./modals/AddBudget.vue";
 export default {
   components: {
     carousel,
     Popper,
     MusicPlayer,
+    AddBudgetModal,
   },
   data() {
     return {
+      showAddNewCategory: false,
+
       selected: false,
       selectedServices: [],
       popperIcons: {
@@ -161,7 +172,6 @@ export default {
     },
   },
   created() {
-    console.log(this.defaultData);
     this.selectedServices = [...this.defaultData];
   },
   methods: {
@@ -187,6 +197,13 @@ export default {
         services: this.selectedServices,
         type: camelize(this.serviceCategory.name),
       });
+    },
+    addBudget() {
+      document.body.click();
+      this.showAddNewCategory = true;
+    },
+    saveBudget() {
+      this.showAddNewCategory = false;
     },
   },
 };

@@ -1,6 +1,6 @@
 <template>
   <div class="vendor-proposal-board p-40">
-    <loader :active="loading"/>
+    <loader :active="loading" height="100%"/>
     <div class="font-size-22 font-bold">
       <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposal Dashboard
     </div>
@@ -64,12 +64,21 @@
                   @click="selectSort(it.key)">
               {{it.title}}
               <md-icon v-if="it.key && it.key != 'update' && sortFields['sort'] == it.key" class="color-black">
-                  {{sortFields['order'] == 'asc' ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}} </md-icon>
+                  {{ sortFields['order'] == 'asc' ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</md-icon>
+              <md-icon v-if="it.key && it.key != 'update' && sortFields['sort'] != it.key" class="color-black-middle">
+                  keyboard_arrow_down
+              </md-icon>
             </span>
           </div>
           <div v-if="!loading" class="propsoals-list">
             <div class="white-card md-20 proposal-list">
-                <proposal-list-item class="row" v-for="proposal in proposals" :proposal="proposal" :key="proposal.id"></proposal-list-item>
+                <proposal-list-item
+                    v-for="proposal in proposals"
+                    :proposal="proposal"
+                    :key="proposal.id"
+                    class="row"
+                    @action="handleProposal"
+                ></proposal-list-item>
             </div>
           </div>
         </div>
@@ -128,6 +137,11 @@
         <div class="md-layout-item md-size-25"></div>
       </div>
     </div>
+    <modal v-if="showProposalDetail" container-class="modal-container-wizard lg" @close="showProposalDetail=false">
+        <template slot="body">
+            <proposal-content :vendorProposal="selectedProposal" />
+        </template>
+    </modal>
   </div>
 </template>
 <script>
@@ -137,7 +151,8 @@ import ProposalRequest from "@/models/ProposalRequest";
 import Proposal from "@/models/Proposal";
 import Vendor from "@/models/Vendors";
 import carousel from "vue-owl-carousel";
-import {Loader, TablePagination, PieChart} from "@/components";
+import {Loader, TablePagination, PieChart, Modal} from "@/components";
+import ProposalContent from "./detail";
 export default {
   components: {
     ProposalRequestCard,
@@ -146,6 +161,8 @@ export default {
     carousel,
     PieChart,
     Loader,
+    Modal,
+    ProposalContent,
   },
   data() {
     return {
@@ -176,6 +193,8 @@ export default {
         { title: "Winning", value: 3, color: "#2cde6b" },
       ],
       tab: 'all',
+      showProposalDetail: false,
+      selectedProposal: null,
       pagination: {
         total: 0,
         won: 0,
@@ -246,12 +265,22 @@ export default {
       this.loading = false;
     },
     dismiss(id){
-      console.log('dismiss', id);
-      this.proposalRequests = this.proposalRequests.filter(p => {
+      let proposalRequests = this.proposalRequests.filter(p => {
           return p.id !== id;
       });
+      this.proposalRequests = proposalRequests;
+      // setTimeout(_ => {
+      //     this.proposalRequests = proposalRequests;
+      // }, 5)
 
       this.$forceUpdate();
+    },
+    handleProposal(action, id){
+      console.log('proposal.handle', action, id);
+      if (action === 'show') {
+          this.selectedProposal = this.proposals.find(it => it.id == id);
+          this.showProposalDetail = true;
+      }
     }
   },
   computed: {
@@ -264,6 +293,12 @@ export default {
       this.getData();
     },
   },
+  updated(){
+    // remove empty item in proposal-request carousel
+    $('.owl-item').each(function (el) {
+      if($(this).text().length === 0) $(this).remove();
+    })
+  }
 };
 </script>
 <style lang="scss" scoped>

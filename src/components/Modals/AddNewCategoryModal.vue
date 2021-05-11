@@ -59,9 +59,9 @@
     </template>
     <template slot="footer">
       <md-button class="md-default md-simple cancel-btn md-bold" @click="close">Cancel</md-button>
-      <md-button :disabled="!isAvailable" class="md-red add-category-btn md-bold" @click="addNewCategory"
-        >Add Category</md-button
-      >
+      <md-button :disabled="!isAvailable" class="md-red add-category-btn md-bold" @click="addNewCategory">
+        Add Category
+      </md-button>
     </template>
   </modal>
 </template>
@@ -87,17 +87,17 @@ export default {
       default: [],
     },
   },
-  created: async function() {
-    const availableComponents = JSON.parse(localStorage.getItem('budget_categories')) || [];
+  created: async function () {
+    const availableComponents = JSON.parse(localStorage.getItem("budget_categories")) || [];
     if (!availableComponents.length) {
       let components = await EventComponent.get();
       components.forEach((item) => {
         const index = this.components.findIndex((comp) => item.key == comp.componentId);
         if (index < 0) {
-            availableComponents.push(item);
+          availableComponents.push(item);
         }
       });
-      localStorage.setItem('budget_categories', JSON.stringify(availableComponents));
+      localStorage.setItem("budget_categories", JSON.stringify(availableComponents));
     }
     this.filteredEventBlocks = availableComponents;
   },
@@ -144,8 +144,7 @@ export default {
 
       let event = new CalendarEvent({
         id: this.event.id,
-      })
-
+      });
 
       new EventComponent(newBlock)
         .for(event)
