@@ -137,14 +137,9 @@
         <div class="md-layout-item md-size-25"></div>
       </div>
     </div>
-    <modal v-if="showProposalDetail" container-class="modal-container-wizard lg">
-        <template slot="header">
-            <md-button class="md-simple md-just-icon md-round modal-default-button" @click="showProposalDetail = false">
-                <md-icon>clear</md-icon>
-            </md-button>
-        </template>
+    <modal v-if="showProposalDetail" container-class="modal-container-wizard lg" @close="showProposalDetail=false">
         <template slot="body">
-            <proposal-content :vendorProposal="selectedProposal" :download="download"/>
+            <proposal-content :vendorProposal="selectedProposal" />
         </template>
     </modal>
   </div>
@@ -158,18 +153,16 @@ import Vendor from "@/models/Vendors";
 import carousel from "vue-owl-carousel";
 import {Loader, TablePagination, PieChart, Modal} from "@/components";
 import ProposalContent from "./detail";
-
-// import ProposalContent from "./detail";
 export default {
   components: {
     ProposalRequestCard,
     ProposalListItem,
     TablePagination,
-    ProposalContent,
     carousel,
     PieChart,
     Loader,
     Modal,
+    ProposalContent,
   },
   data() {
     return {
@@ -214,7 +207,6 @@ export default {
         limit: 5,
       },
       sortFields: {sort: '', order: ''},
-      download: false,
     };
   },
   async mounted() {
@@ -285,13 +277,9 @@ export default {
     },
     handleProposal(action, id){
       console.log('proposal.handle', action, id);
-      this.selectedProposal = this.proposals.find(it => it.id == id);
       if (action === 'show') {
+          this.selectedProposal = this.proposals.find(it => it.id == id);
           this.showProposalDetail = true;
-      } else if (action === 'download') {
-          setTimeout(_ => {
-              this.download = true
-          }, 100);
       }
     }
   },
