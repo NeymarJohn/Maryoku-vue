@@ -4,11 +4,11 @@
       <img style="width: 40px" src="https://maryoku.s3.amazonaws.com/company/logos/5e0ae1d2cfefec4b68f5d8a1.png" />
     </div>
     <div>
-      <div class="font-bold font-size-16">{{proposal.proposalRequest.eventData.title}}</div>
-<!--      <div class="font-bold font-size-16">{{'March Madness'}}</div>-->
+      <div class="font-bold font-size-16" v-if="proposal.proposalRequest.eventData.title">{{proposal.proposalRequest.eventData.title}}</div>
+      <div class="font-bold font-size-16" v-else>New Event</div>
     </div>
     <div class="font-size-14 color-black-middle">{{proposal.dateCreated | date('DD/MM/YYYY')}}</div>
-    <div class="font-size-14 color-black-middle">${{proposal.cost}}</div>
+    <div class="font-size-14 color-black-middle">${{proposal.cost | withComma}}</div>
     <div class="font-size-14 color-black-middle">{{proposal.lastUpdated | date('DD/MM/YYYY')}}</div>
     <div><img class="ml-15" :src="getStatusIcon(proposal.status)" /></div>
     <div class="font-size-14 color-black-middle">Tom</div>

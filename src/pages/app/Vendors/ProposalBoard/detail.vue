@@ -1,193 +1,193 @@
 <template>
    <div class="proposal-content">
-      <div class="proposal-info">
-            <div class="proposal-header" :style="`background: url('${headerBackgroundImage}') center center no-repeat`">
-                <div class="event-info">
-                    <div class="section-header d-flex justify-content-start">
-                        <h3>Event Information & Details</h3>
-                        <div class="alert alert-danger mb-0" v-if="vendorProposal.suggestionDate">
+         <div class="proposal-info">
+           <div class="proposal-header" :style="`background: url('${headerBackgroundImage}') center center no-repeat`">
+               <div class="event-info">
+                   <div class="section-header d-flex justify-content-start">
+                       <h3>Event Information & Details</h3>
+                       <div class="alert alert-danger mb-0" v-if="vendorProposal.suggestionDate">
             <span v-if="getDiffDaysFromOriginal() < 0" class="whitspace-nowrap">
               This proposal is {{ -getDiffDaysFromOriginal() }}days before your original date
             </span>
-                            <span v-else class="whitspace-nowrap">
+                           <span v-else class="whitspace-nowrap">
               This proposal is {{ getDiffDaysFromOriginal() }}days later your original date
             </span>
-                        </div>
-                    </div>
-                    <ul class="event-details mt-20">
-                        <li class="event-details__item">
-                            <label>Name</label>
-                            <div class="info-text">
-                                {{ eventData.title || (eventData.concept ? eventData.concept.title : "Untitled event") }}
-                            </div>
-                        </li>
-                        <li class="event-details__item">
-                            <label>Date</label>
-                            <div class="info-text" v-if="!vendorProposal.suggestionDate">
-                                {{ eventData.eventStartMillis | date('MMM Do YYYY')}}
-                            </div>
-                            <div v-else>
-                                {{ eventDate() }}
-                                <!-- {{ new Date(vendorProposal.suggestionDate[0].date).getTime() | formatTime }} -->
-                            </div>
-                        </li>
-                        <li class="event-details__item">
-                            <label>Guest Arrival Time</label>
-                            <div class="info-text">
-                                {{ eventData.eventStartMillis | date('MMM Do YYYY') }}
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+                       </div>
+                   </div>
+                   <ul class="event-details mt-20">
+                       <li class="event-details__item">
+                           <label>Name</label>
+                           <div class="info-text">
+                               {{ eventData.title || (eventData.concept ? eventData.concept.title : "Untitled event") }}
+                           </div>
+                       </li>
+                       <li class="event-details__item">
+                           <label>Date</label>
+                           <div class="info-text" v-if="!vendorProposal.suggestionDate">
+                               {{ eventData.eventStartMillis | date('MMM Do YYYY')}}
+                           </div>
+                           <div v-else>
+                               {{ eventDate() }}
+                               <!-- {{ new Date(vendorProposal.suggestionDate[0].date).getTime() | formatTime }} -->
+                           </div>
+                       </li>
+                       <li class="event-details__item">
+                           <label>Guest Arrival Time</label>
+                           <div class="info-text">
+                               {{ eventData.eventStartMillis | date('MMM Do YYYY') }}
+                           </div>
+                       </li>
+                   </ul>
+               </div>
+           </div>
 
-            <div class="proposal-body">
-                <h1 class="font-size-30">Dear {{ vendorProposal.vendor.vendorDisplayName }},</h1>
-                <p>
-                    {{ vendorProposal.personalMessage }}
+           <div class="proposal-body">
+               <h1 class="font-size-30">Dear {{ vendorProposal.vendor.vendorDisplayName }},</h1>
+               <p>
+                   {{ vendorProposal.personalMessage }}
 
-                    <!-- <br />Sincerely,
-                    <span class="proposal-title">{{ vendorProposal.vendor.vendorDisplayName }}</span> -->
-                </p>
-                <div class="vision mt-30 font-size-22 mb-40">
-                    <div class="font-bold">
-                        <img :src="`${$iconURL}Vendor+Landing+Page/Asset+491.svg`" />
-                        Our vision for your event
-                    </div>
-                    <p class="mt-10">{{ vendorProposal.eventVision }}</p>
-                </div>
-                <div class="proposal-images mb-40">
-                    <div class="font-bold mb-10">Some references to the experience you will get from us</div>
-<!--                    <carousel :items="4" :margin="25" :dots="false" :nav="false" class="proposal-images-carousel">-->
-<!--                        <template slot="prev">-->
-<!--            <span class="prev handle-btn">-->
-<!--              <md-icon>keyboard_arrow_left</md-icon>-->
-<!--            </span>-->
-<!--                        </template>-->
+                   <!-- <br />Sincerely,
+                   <span class="proposal-title">{{ vendorProposal.vendor.vendorDisplayName }}</span> -->
+               </p>
+               <div class="vision mt-30 font-size-22 mb-40">
+                   <div class="font-bold">
+                       <img :src="`${$iconURL}Vendor+Landing+Page/Asset+491.svg`"/>
+                       Our vision for your event
+                   </div>
+                   <p class="mt-10">{{ vendorProposal.eventVision }}</p>
+               </div>
+               <div class="proposal-images mb-40">
+                   <div class="font-bold mb-10">Some references to the experience you will get from us</div>
+                   <carousel :items="4" :margin="25" :dots="false" :nav="false" class="proposal-images-carousel">
+                       <template slot="prev">
+                               <span class="prev handle-btn">
+                                 <md-icon>keyboard_arrow_left</md-icon>
+                               </span>
+                       </template>
 
-<!--                        <div v-for="item in vendorProposal.inspirationalPhotos.filter((item) => !!item)" :key="item.url">-->
-<!--                            <img class="item" :src="item.url" />-->
-<!--                            <div class="mt-5">{{ item.caption }}</div>-->
-<!--                        </div>-->
-<!--                        <template slot="next">-->
-<!--            <span class="next handle-btn">-->
-<!--              <md-icon>keyboard_arrow_right</md-icon>-->
-<!--            </span>-->
-<!--                        </template>-->
-<!--                    </carousel>-->
-                </div>
-                <div class="about-us mb-40">
-                    <md-button class="md-red edit-btn md-simple" @click="showAboutUs = !showAboutUs">
+                       <div v-for="item in vendorProposal.inspirationalPhotos.filter((item) => !!item)" :key="item.url">
+                           <img class="item" :src="item.url"/>
+                           <div class="mt-5">{{ item.caption }}</div>
+                       </div>
+                       <template slot="next">
+                               <span class="next handle-btn">
+                                 <md-icon>keyboard_arrow_right</md-icon>
+                               </span>
+                       </template>
+                   </carousel>
+               </div>
+               <div class="about-us mb-40">
+                   <md-button class="md-red edit-btn md-simple" @click="showAboutUs = !showAboutUs">
           <span class="color-red font-bold">
             About Us <md-icon class="color-red">keyboard_arrow_right</md-icon>
           </span>
-                    </md-button>
-                    <div class="about-content mt-10" v-if="showAboutUs">{{ vendorProposal.vendor.about.company }}</div>
-                </div>
-                <div class="contact-section mb-40">
-                    <div class="proposal-section__title font-size-22 font-bold-extra">Contact Us</div>
-                    <ul class="contact-list_items d-flex justify-content-start">
-                        <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainEmail">
-                            <a href>
-                                <img :src="`${submitProposalIcon}Asset 286.svg`" />
-                                {{ vendorProposal.vendor.vendorMainEmail }}
-                            </a>
-                        </li>
-                        <li class="contact-list_item" v-if="vendorProposal.vendor.vendorAddressLine1">
-                            <a href>
-                                <img :src="`${submitProposalIcon}Asset 285.svg`" />
-                                {{ vendorProposal.vendor.vendorAddressLine1 }}
-                                {{ vendorProposal.vendor.vendorAddressLine2 }}
-                            </a>
-                        </li>
-                        <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainPhoneNumber">
-                            <a href>
-                                <img :src="`${submitProposalIcon}Asset 284.svg`" />
-                                {{ vendorProposal.vendor.vendorMainPhoneNumber }}
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="social-section mb-30" v-if="isSocial()">
-                    <div>Website & social</div>
-                    <div class="items mt-10">
-                        <div
-                            class="item"
-                            v-for="(s, sIndex) in socialMediaBlocks"
-                            :key="sIndex"
-                            :class="{ 'mr-20': vendorProposal.vendor.social[s.name] }"
-                        >
-                            <a
-                                v-if="vendorProposal.vendor.social[s.name]"
-                                :href="vendorProposal.vendor.social[s.name]"
-                                target="_blank"
-                            >
-                                <img :src="`${$iconURL}Vendor Signup/${s.icon}`" class="page-icon" />
-                                {{ vendorProposal.vendor.social[s.name] }}
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="attachment-section mb-30" v-if="attachments && attachments.length > 0">
-                    <div class="attachment-tag-list">
-                        <div
-                            class="attachment-tag"
-                            v-for="(attachment, index) in attachments.filter((attachement) => attachement.url)"
-                            :key="index"
-                        >
-                            <img :src="`${$iconURL}common/pin-red.svg`" />
-                            <a class="color-red" :href="attachment.url" target="_blank">{{ attachment.name }}</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                   </md-button>
+                   <div class="about-content mt-10" v-if="showAboutUs">{{ vendorProposal.vendor.about.company }}</div>
+               </div>
+               <div class="contact-section mb-40">
+                   <div class="proposal-section__title font-size-22 font-bold-extra">Contact Us</div>
+                   <ul class="contact-list_items d-flex justify-content-start">
+                       <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainEmail">
+                           <a href>
+                               <img :src="`${submitProposalIcon}Asset 286.svg`"/>
+                               {{ vendorProposal.vendor.vendorMainEmail }}
+                           </a>
+                       </li>
+                       <li class="contact-list_item" v-if="vendorProposal.vendor.vendorAddressLine1">
+                           <a href>
+                               <img :src="`${submitProposalIcon}Asset 285.svg`"/>
+                               {{ vendorProposal.vendor.vendorAddressLine1 }}
+                               {{ vendorProposal.vendor.vendorAddressLine2 }}
+                           </a>
+                       </li>
+                       <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainPhoneNumber">
+                           <a href>
+                               <img :src="`${submitProposalIcon}Asset 284.svg`"/>
+                               {{ vendorProposal.vendor.vendorMainPhoneNumber }}
+                           </a>
+                       </li>
+                   </ul>
+               </div>
+               <div class="social-section mb-30" v-if="isSocial()">
+                   <div>Website & social</div>
+                   <div class="items mt-10">
+                       <div
+                           class="item"
+                           v-for="(s, sIndex) in socialMediaBlocks"
+                           :key="sIndex"
+                           :class="{ 'mr-20': vendorProposal.vendor.social[s.name] }"
+                       >
+                           <a
+                               v-if="vendorProposal.vendor.social[s.name]"
+                               :href="vendorProposal.vendor.social[s.name]"
+                               target="_blank"
+                           >
+                               <img :src="`${$iconURL}Vendor Signup/${s.icon}`" class="page-icon"/>
+                               {{ vendorProposal.vendor.social[s.name] }}
+                           </a>
+                       </div>
+                   </div>
+               </div>
+               <div class="attachment-section mb-30" v-if="attachments && attachments.length > 0">
+                   <div class="attachment-tag-list">
+                       <div
+                           class="attachment-tag"
+                           v-for="(attachment, index) in attachments.filter((attachement) => attachement.url)"
+                           :key="index"
+                       >
+                           <img :src="`${$iconURL}common/pin-red.svg`"/>
+                           <a class="color-red" :href="attachment.url" target="_blank">{{ attachment.name }}</a>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
 
-      <div class="proposal-section pricing-section">
-            <div class="proposal-section__title font-size-22 font-bold-extra">
-                <img
-                    src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2010.svg"
-                    width="15"
-                />
-                Pricing & Details
-                <span class="font-regular font-size-16">*We work only with our catering</span>
-            </div>
-            <div class="mt-20 mb-10">What would you like to take from our suggested services?</div>
-            <event-proposal-price
-                :proposalData="vendorProposal"
-                :serviceCategory="vendorProposal.vendor.vendorCategory"
-                :key="`${vendorProposal.vendor.vendorCategory}-section`"
-                @changeAddedServices="updateAddedServices"
-            ></event-proposal-price>
-            <event-proposal-price
-                v-for="service in this.vendorProposal.additionalServices"
-                :proposalData="vendorProposal"
-                :serviceCategory="service"
-                :key="`secondary-${service}-section`"
-            ></event-proposal-price>
-            <div
-                class="bundle-section d-flex justify-content-between align-center"
-                v-if="vendorProposal.bundleDiscount && vendorProposal.bundleDiscount.isApplied"
-            >
-                <div>
-                    <span class="font-size-30 font-bold">Bundle offer</span>
-                    <span>{{ vendorProposal.bundleDiscount.percentage }}%</span>
-                    <span>{{ getBundleServices(vendorProposal.bundleDiscount.services) }}</span>
-                </div>
-                <div class="font-size-30 font-bold">-${{ bundledDiscountPrice | withComma }}</div>
-            </div>
-            <div class="total-section d-flex justify-content-between mt-15">
-                <div>
-                    <span class="font-bold-extra font-size-30">Total</span>
-                </div>
-                <div>
-                    <span class="font-bold-extra font-size-30">${{ discounedAndTaxedPrice | withComma }}</span>
-                </div>
-            </div>
-        </div>
+         <div class="proposal-section pricing-section">
+           <div class="proposal-section__title font-size-22 font-bold-extra px-40">
+               <img
+                   src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2010.svg"
+                   width="15"
+               />
+               Pricing & Details
+               <span class="font-regular font-size-16">*We work only with our catering</span>
+           </div>
+           <div class="px-40 mt-20 mb-10">What would you like to take from our suggested services?</div>
+               <event-proposal-price
+                   :proposalData="vendorProposal"
+                   :serviceCategory="vendorProposal.vendor.vendorCategory"
+                   :key="`${vendorProposal.vendor.vendorCategory}-section`"
+                   @changeAddedServices="updateAddedServices"
+               ></event-proposal-price>
+               <event-proposal-price
+                   v-for="service in this.vendorProposal.additionalServices"
+                   :proposalData="vendorProposal"
+                   :serviceCategory="service"
+                   :key="`secondary-${service}-section`"
+               ></event-proposal-price>
+           <div
+               class="bundle-section d-flex justify-content-between align-center"
+               v-if="vendorProposal.bundleDiscount && vendorProposal.bundleDiscount.isApplied"
+           >
+               <div>
+                   <span class="font-size-30 font-bold">Bundle offer</span>
+                   <span>{{ vendorProposal.bundleDiscount.percentage }}%</span>
+                   <span>{{ getBundleServices(vendorProposal.bundleDiscount.services) }}</span>
+               </div>
+               <div class="font-size-30 font-bold">-${{ bundledDiscountPrice | withComma }}</div>
+           </div>
+           <div class="total-section d-flex justify-content-between mt-15">
+               <div>
+                   <span class="font-bold-extra font-size-30">Total</span>
+               </div>
+               <div>
+                   <span class="font-bold-extra font-size-30">${{ discounedAndTaxedPrice | withComma }}</span>
+               </div>
+           </div>
+       </div>
 
-      <div class="proposal-section policy-section">
-            <div class="proposal-section__title">
+         <div class="proposal-section policy-section">
+            <div class="proposal-section__title px-40">
                 <img :src="`${submitProposalIcon}Asset 287.svg`" width="20" /> Our Policy
             </div>
 
@@ -283,25 +283,30 @@
    </div>
 </template>
 <script>
-import {Modal} from "@/components";
+
 import moment from "moment"
-import { socialMediaBlocks } from "@/constants/vendor";;
+import { socialMediaBlocks } from "@/constants/vendor";
 import _ from "underscore";
 import EventProposalPrice from "../../Events/Proposal/EventProposalPrice.vue";
 import carousel from "vue-owl-carousel";
 import CancellationPolicy from "@/components/CancellationPolicy";
+
 export default {
-  components: [
-    Modal,
-    carousel,
-    EventProposalPrice,
-    CancellationPolicy
-  ],
+  components: {
+      carousel,
+      EventProposalPrice,
+      CancellationPolicy,
+  },
   props:{
       vendorProposal: {
-      type: Object,
-      required: true,
-    },
+        type: Object,
+        required: true,
+      },
+      download:{
+        type: Boolean,
+        required: false,
+        default: false,
+      }
   },
   data() {
       return {
@@ -311,42 +316,26 @@ export default {
           eventData: this.vendorProposal.proposalRequest.eventData,
           showAboutUs: false,
           socialMediaBlocks,
+          addedServices: {},
       }
   },
-  methods: {
-    headerBackgroundImage() {
-      if (this.vendorProposal.inspirationalPhotos && this.vendorProposal.inspirationalPhotos[0])
-          return this.vendorProposal.inspirationalPhotos[0].url;
-      if (this.vendorProposal.vendor.images && this.vendorProposal.vendor.images[0])
-          return this.vendorProposal.vendor.images[0];
-      if (this.vendorProposal.vendor.vendorImages && this.vendorProposal.vendor.vendorImages[0])
-          return this.vendorProposal.vendor.vendorImages[0];
-      return "";
-    },
-      getDiffDaysFromOriginal() {
-          const suggestionDate = this.vendorProposal.suggestionDate;
-          if (!this.eventData) return "-";
-
-          let orignStartDate = moment(new Date(this.eventData.eventStartMillis));
-          if (suggestionDate && suggestionDate.length > 0) {
-              let suggestedDate = moment(suggestionDate[0].date, "DD/MM/YYYY");
-              return suggestedDate.diff(orignStartDate, "days");
-          }
-          return 0;
+  mounted() {
+    console.log('detail.mounted');
+    this.eventData = this.vendorProposal ? this.vendorProposal.proposalRequest.eventData : null;
+  },
+  computed: {
+      extraMissingRequirements() {
+          return _.union(this.vendorProposal.extras, this.vendorProposal.missing);
       },
-      eventDate() {
-          const suggestionDate = this.vendorProposal.suggestionDate;
-          if (!this.eventData) return "-";
+      headerBackgroundImage() {
+          if (this.vendorProposal.inspirationalPhotos && this.vendorProposal.inspirationalPhotos[0])
+              return this.vendorProposal.inspirationalPhotos[0].url;
+          if (this.vendorProposal.vendor.images && this.vendorProposal.vendor.images[0])
+              return this.vendorProposal.vendor.images[0];
+          if (this.vendorProposal.vendor.vendorImages && this.vendorProposal.vendor.vendorImages[0])
+              return this.vendorProposal.vendor.vendorImages[0];
 
-          let startDate = new Date(this.eventData.eventStartMillis);
-          let endDate = new Date(this.eventData.eventEndMillis);
-          if (suggestionDate && suggestionDate.length > 0) {
-              return `${moment(suggestionDate[0].date, "DD/MM/YYYY").format("MMM D, YYYY")} - ${moment(
-                  suggestionDate[suggestionDate.length - 1].date,
-                  "DD/MM/YYYY",
-              ).format("MMM D, YYYY")}`;
-          }
-          return `${moment(startDate).format("MMM D, YYYY")} - ${moment(endDate).format("MMM D, YYYY")}`;
+          return "";
       },
       attachments() {
           if (this.vendorProposal.attachments && this.vendorProposal.attachments.length > 0)
@@ -362,17 +351,8 @@ export default {
               );
           return null;
       },
-      getBundleServices(bundleServices) {
-          const serviceNames = bundleServices.map((service) => {
-              return this.getCategory(service).title;
-          });
-          return serviceNames.join(" + ");
-      },
       additionalRules() {
           return this.vendorProposal.vendor.additionalRules;
-      },
-      getCategory(key) {
-          return this.categories.find((item) => item.key === key);
       },
       categories() {
           return this.$store.state.common.serviceCategories;
@@ -449,6 +429,42 @@ export default {
               this.bundledDiscountPrice;
           return discounted + (discounted * this.tax.percentage) / 100;
       },
+  },
+  methods: {
+      getDiffDaysFromOriginal() {
+          const suggestionDate = this.vendorProposal.suggestionDate;
+          if (!this.eventData) return "-";
+
+          let orignStartDate = moment(new Date(this.eventData.eventStartMillis));
+          if (suggestionDate && suggestionDate.length > 0) {
+              let suggestedDate = moment(suggestionDate[0].date, "DD/MM/YYYY");
+              return suggestedDate.diff(orignStartDate, "days");
+          }
+          return 0;
+      },
+      eventDate() {
+          const suggestionDate = this.vendorProposal.suggestionDate;
+          if (!this.eventData) return "-";
+
+          let startDate = new Date(this.eventData.eventStartMillis);
+          let endDate = new Date(this.eventData.eventEndMillis);
+          if (suggestionDate && suggestionDate.length > 0) {
+              return `${moment(suggestionDate[0].date, "DD/MM/YYYY").format("MMM D, YYYY")} - ${moment(
+                  suggestionDate[suggestionDate.length - 1].date,
+                  "DD/MM/YYYY",
+              ).format("MMM D, YYYY")}`;
+          }
+          return `${moment(startDate).format("MMM D, YYYY")} - ${moment(endDate).format("MMM D, YYYY")}`;
+      },
+      getBundleServices(bundleServices) {
+          const serviceNames = bundleServices.map((service) => {
+              return this.getCategory(service).title;
+          });
+          return serviceNames.join(" + ");
+      },
+      getCategory(key) {
+          return this.categories.find((item) => item.key === key);
+      },
       isSocial() {
           let isBlank = true;
           _.each(this.vendorProposal.vendor.social, (s) => {
@@ -461,286 +477,274 @@ export default {
           this.addedServices[category] = services;
           this.addedServices = { ...this.addedServices };
       },
+  },
+  watch: {
+      vendorProposal(newVal, oldVal){
+          console.log('download', this.vendorProposal);
+          this.eventData = this.vendorProposal ? this.vendorProposal.proposalRequest.eventData : null;
+      },
   }
 }
 </script>
 <style lang="scss" scoped>
-    .proposal-content {
-        .proposal-info {
-            background: #fff;
-            box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-        }
+  .proposal-content {
+    text-align: left!important;
+    background-color: white;
 
-        .proposal-header {
-            background-size: cover !important;
-            height: 500px;
+    .proposal-info {
+        background: #fff;
+        box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+    }
 
-            .event-info {
-                background: rgba(255, 255, 255, 0.76);
-                align-items: center;
-                padding: 2.5em;
+    .proposal-header {
+        background-size: cover !important;
+        height: 500px;
 
-                h3 {
-                    margin: 0;
-                    font-size: 20px;
-                    font-weight: 800;
-                    color: #050505;
-                }
-            }
-            .event-details {
-                list-style: none;
-                display: flex;
-                flex-direction: row;
+        .event-info {
+            background: rgba(255, 255, 255, 0.76);
+            align-items: center;
+            padding: 2.5em;
+
+            h3 {
                 margin: 0;
-                padding: 0;
-
-                &__item {
-                    font-size: 14px;
-                    padding-bottom: 10px;
-                    &:not(:last-child) {
-                        border-right: 1px solid #818080;
-                        padding-right: 80px;
-                        margin-right: 80px;
-                    }
-
-                    label {
-                        font-weight: 800;
-                        margin-bottom: 1em;
-                    }
-                    .info-text {
-                        color: #050505;
-                    }
-                }
-            }
-        }
-
-        .md-rose {
-            &.md-outline {
-                background: none !important;
-                border: none;
-                box-shadow: none;
-                min-width: auto;
-
-                .md-ripple {
-                    color: #f51355;
-                    font-size: 14px;
-                    font-weight: 800;
-                    padding: 0 !important;
-                    text-transform: capitalize;
-
-                    .md-icon {
-                        color: #f51355 !important;
-                    }
-                }
-            }
-        }
-
-        .proposal-body {
-            padding: 1em 2.5em;
-
-            h1 {
-                margin: 1em 0 0;
-                font-size: 28px;
-                font-weight: 800;
-                color: #050505;
-            }
-
-            p {
-                font-size: 14px;
-                color: #050505;
-                .proposal-title {
-                    font-weight: 800;
-                    display: block;
-                }
-            }
-
-            .proposal-includes {
-                margin: 3em 0;
-                padding-right: 20%;
-                &__title {
-                    margin-bottom: 1em;
-                }
-                &__item {
-                    display: inline-block;
-                    width: 29%;
-                    margin-bottom: 1.5em;
-
-                    img {
-                        width: 20px;
-                        margin-right: 1em;
-                    }
-                }
-            }
-        }
-
-        .proposal-section {
-            &__title {
                 font-size: 20px;
                 font-weight: 800;
                 color: #050505;
-                img {
-                    margin-right: 0.2em;
+            }
+        }
+        .event-details {
+            list-style: none;
+            display: flex;
+            flex-direction: row;
+            margin: 0;
+            padding: 0;
+
+            &__item {
+                font-size: 14px;
+                padding-bottom: 10px;
+                &:not(:last-child) {
+                    border-right: 1px solid #818080;
+                    padding-right: 80px;
+                    margin-right: 80px;
                 }
 
-                small {
-                    margin-top: 0.5em;
-                    font-size: 14px;
+                label {
+                    font-weight: 800;
+                    margin-bottom: 1em;
+                }
+                .info-text {
                     color: #050505;
-                    display: block;
                 }
             }
+        }
+    }
 
-            &.contact-section {
-                border-top: 1px solid #808181;
-                padding: 2em 2.5em;
-            }
-        }
-        .social-section {
-            .items {
-                display: flex;
-                align-content: center;
-                .item {
-                    a {
-                        color: black;
-                    }
-                    img {
-                        width: 20px !important;
-                        height: 20px;
-                    }
+    .md-rose {
+        &.md-outline {
+            background: none !important;
+            border: none;
+            box-shadow: none;
+            min-width: auto;
+
+            .md-ripple {
+                color: #f51355;
+                font-size: 14px;
+                font-weight: 800;
+                padding: 0 !important;
+                text-transform: capitalize;
+
+                .md-icon {
+                    color: #f51355 !important;
                 }
             }
         }
-        .attachment-section {
-            .attachment-tag {
-                border: solid 1px #f51355;
+    }
+
+    .proposal-body {
+        padding: 1em 2.5em;
+
+        h1 {
+            margin: 1em 0 0;
+            font-size: 28px;
+            font-weight: 800;
+            color: #050505;
+        }
+
+        p {
+            font-size: 14px;
+            color: #050505;
+            .proposal-title {
+                font-weight: 800;
+                display: block;
+            }
+        }
+
+        .proposal-includes {
+            margin: 3em 0;
+            padding-right: 20%;
+            &__title {
+                margin-bottom: 1em;
+            }
+            &__item {
                 display: inline-block;
-                padding: 15px;
-                border-radius: 3px;
-                margin-right: 10px;
+                width: 29%;
+                margin-bottom: 1.5em;
+
+                img {
+                    width: 20px;
+                    margin-right: 1em;
+                }
             }
         }
-        .pricing-section {
-            margin-top: 4em;
+    }
 
-            &__table,
-            &__list {
-                width: 100%;
-                border-collapse: separate;
-                border-spacing: 0 1em;
+    .proposal-section {
+        &__title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #050505;
+            img {
+                margin-right: 0.2em;
+            }
 
-                margin-top: 1em;
+            small {
+                margin-top: 0.5em;
+                font-size: 14px;
+                color: #050505;
+                display: block;
+            }
+        }
 
-                > tbody {
+        &.contact-section {
+            border-top: 1px solid #808181;
+            padding: 2em 2.5em;
+        }
+    }
+    .social-section {
+        .items {
+            display: flex;
+            align-content: center;
+            .item {
+                a {
+                    color: black;
+                }
+                img {
+                    width: 20px !important;
+                    height: 20px;
+                }
+            }
+        }
+    }
+    .attachment-section {
+        .attachment-tag {
+            border: solid 1px #f51355;
+            display: inline-block;
+            padding: 15px;
+            border-radius: 3px;
+            margin-right: 10px;
+        }
+    }
+    .pricing-section {
+        margin-top: 4em;
+
+        &__table,
+        &__list {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 1em;
+
+            margin-top: 1em;
+
+            > tbody {
+                tr {
+                    height: 90px !important;
+
+                    td {
+                        padding: 20px 25px;
+
+                        &:nth-child(3) {
+                            text-align: right;
+                        }
+                    }
+                }
+            }
+            .taxes {
+                background-color: #e0e0e0;
+                color: #818080;
+                font-size: 14px;
+            }
+
+            .total {
+                color: #fff;
+                background-color: #424242;
+                font-size: 18px;
+                font-weight: bold;
+            }
+
+            .element-pricing-table {
+                padding: 1.5em;
+                font-family: "Manrope-Regular", sans-serif;
+
+                &.elements-list {
+                    background: #f7f7f7;
+                    margin-bottom: -21px;
+
+                    th,
+                    td {
+                        font-size: 16px;
+                    }
+                    th {
+                        font-family: "Manrope-ExtraBold", sans-serif;
+                        padding-bottom: 15px;
+                    }
+
                     tr {
-                        height: 90px !important;
-
                         td {
-                            padding: 20px 25px;
+                            font-weight: normal;
+                            border-top: 1px solid #ddd;
+                            padding: 21px 0;
 
-                            &:nth-child(3) {
-                                text-align: right;
+                            &.element-actions {
+                                .md-button {
+                                    visibility: hidden;
+                                }
+                            }
+                        }
+
+                        &:hover {
+                            td {
+                                font-weight: bold;
+
+                                &.element-actions {
+                                    .md-button {
+                                        visibility: visible;
+                                    }
+                                }
                             }
                         }
                     }
                 }
-                .taxes {
-                    background-color: #e0e0e0;
+
+                &.taxes-list {
+                    background: #ededed;
                     color: #818080;
-                    font-size: 14px;
-                }
-
-                .total {
-                    color: #fff;
-                    background-color: #424242;
-                    font-size: 18px;
-                    font-weight: bold;
-                }
-
-                .element-pricing-table {
-                    padding: 1.5em;
-                    font-family: "Manrope-Regular", sans-serif;
-
-                    &.elements-list {
-                        background: #f7f7f7;
-                        margin-bottom: -21px;
-
-                        th,
-                        td {
-                            font-size: 16px;
-                        }
-                        th {
-                            font-family: "Manrope-ExtraBold", sans-serif;
-                            padding-bottom: 15px;
-                        }
-
-                        tr {
+                    padding: 0.6em 1.5em;
+                    border-top: 1px solid;
+                    tr {
+                        &:first-child {
                             td {
-                                font-weight: normal;
-                                border-top: 1px solid #ddd;
-                                padding: 21px 0;
-
-                                &.element-actions {
-                                    .md-button {
-                                        visibility: hidden;
-                                    }
-                                }
-                            }
-
-                            &:hover {
-                                td {
-                                    font-weight: bold;
-
-                                    &.element-actions {
-                                        .md-button {
-                                            visibility: visible;
-                                        }
-                                    }
-                                }
+                                border-bottom: 1px solid;
                             }
                         }
-                    }
-
-                    &.taxes-list {
-                        background: #ededed;
-                        color: #818080;
-                        padding: 0.6em 1.5em;
-                        border-top: 1px solid;
-                        tr {
-                            &:first-child {
-                                td {
-                                    border-bottom: 1px solid;
-                                }
-                            }
-                            td {
-                                .taxes-title {
-                                    display: inline-block;
-                                    width: 90px;
-                                }
-                                .taxes-percentage {
-                                    margin-left: 1em;
-                                }
-
-                                &.element-actions {
-                                    .md-button {
-                                        visibility: hidden;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    &.total-list {
-                        background: #404040;
-                        color: #fff;
-                        margin-bottom: 3em;
-
                         td {
-                            .discount-details {
-                                color: #fff !important;
+                            .taxes-title {
+                                display: inline-block;
+                                width: 90px;
                             }
-                            small {
-                                display: block;
+                            .taxes-percentage {
+                                margin-left: 1em;
                             }
+
                             &.element-actions {
                                 .md-button {
                                     visibility: hidden;
@@ -748,212 +752,277 @@ export default {
                             }
                         }
                     }
+                }
 
-                    table {
-                        width: 100%;
-                        border-collapse: collapse;
-                        thead {
-                            text-align: left;
+                &.total-list {
+                    background: #404040;
+                    color: #fff;
+                    margin-bottom: 3em;
+
+                    td {
+                        .discount-details {
+                            color: #fff !important;
                         }
-
-                        td,
-                        th {
-                            &:nth-last-child(2):not(:first-child),
-                            &:nth-last-child(3):not(:first-child),
-                            &:nth-last-child(4):not(:first-child) {
-                                width: 150px;
-                                text-align: center;
-                            }
+                        small {
+                            display: block;
+                        }
+                        &.element-actions {
                             .md-button {
-                                img {
-                                    width: 15px;
-                                }
-                            }
-
-                            &.element-actions {
-                                width: 20px;
-                            }
-
-                            &.element-value {
-                                text-align: right !important;
-                                padding-right: 44px;
+                                visibility: hidden;
                             }
                         }
                     }
                 }
-            }
 
-            &__item {
-                padding: 40px 60px;
-            }
-        }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    thead {
+                        text-align: left;
+                    }
 
-        .attachments-list {
-            &_items {
-                list-style: none;
-                padding: 0;
-                margin: 1.5em 0 0;
-            }
-            &_item {
-                display: inline-block;
-                &:not(:last-child) {
-                    margin-right: 1em;
-                }
+                    td,
+                    th {
+                        &:nth-last-child(2):not(:first-child),
+                        &:nth-last-child(3):not(:first-child),
+                        &:nth-last-child(4):not(:first-child) {
+                            width: 150px;
+                            text-align: center;
+                        }
+                        .md-button {
+                            img {
+                                width: 15px;
+                            }
+                        }
 
-                a {
-                    border-radius: 3px;
-                    border: solid 1px #f51355;
-                    text-align: center;
-                    font-size: 14px;
-                    color: #f51355;
-                    display: inline-block;
-                    padding: 8px 20px;
-                    font-weight: 400;
-                    text-transform: capitalize;
+                        &.element-actions {
+                            width: 20px;
+                        }
 
-                    .md-icon {
-                        color: #f51355 !important;
-                        font-size: 18px !important;
+                        &.element-value {
+                            text-align: right !important;
+                            padding-right: 44px;
+                        }
                     }
                 }
             }
         }
 
-        .bundle-section {
+        &__item {
             padding: 40px 60px;
-            background-color: #ffedb7;
-            box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-            border-radius: 3px;
         }
-        .policy-section {
-            margin-top: 4em;
+    }
 
-            .proposal-section__subtitle {
-                color: #050505;
-                margin: 1em auto;
-
-                .subtitle {
-                    font-size: 18px;
-                    font-weight: 800;
-                }
-
-                .desc {
-                    font-size: 14px;
-                }
+    .attachments-list {
+        &_items {
+            list-style: none;
+            padding: 0;
+            margin: 1.5em 0 0;
+        }
+        &_item {
+            display: inline-block;
+            &:not(:last-child) {
+                margin-right: 1em;
             }
 
-            .side-label {
+            a {
+                border-radius: 3px;
+                border: solid 1px #f51355;
+                text-align: center;
+                font-size: 14px;
+                color: #f51355;
+                display: inline-block;
+                padding: 8px 20px;
+                font-weight: 400;
+                text-transform: capitalize;
+
+                .md-icon {
+                    color: #f51355 !important;
+                    font-size: 18px !important;
+                }
+            }
+        }
+    }
+
+    .bundle-section {
+        padding: 40px 60px;
+        background-color: #ffedb7;
+        box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+        border-radius: 3px;
+    }
+    .policy-section {
+        margin-top: 4em;
+
+        .proposal-section__subtitle {
+            color: #050505;
+            margin: 1em auto;
+
+            .subtitle {
                 font-size: 18px;
                 font-weight: 800;
-                color: #050505;
-                margin: 3em 0 1.5em;
-                position: relative;
-
-                &:before {
-                    content: " ";
-                    position: absolute;
-                    background-color: #ededed;
-                    width: 288px;
-                    height: 53px;
-                    top: -15px;
-                    left: -2.5em;
-                }
-
-                .label-value {
-                    position: relative;
-                    z-index: 999;
-                }
             }
 
-            .policy-content {
-                margin-top: 1.5em;
-                background: #fff;
-                box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-                padding: 2em 2.5em;
-                .rules {
-                    width: 80%;
-                    padding-right: 20%;
-                    .rule {
-                        border-top: solid 1px #ddd;
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        padding: 15px 0px;
-                        padding-right: 50%;
-                        &:last-child {
-                            border-bottom: solid 1px #ddd;
-                        }
-                    }
-                }
-            }
-        }
-
-        .policies-list {
-            font-size: 14px;
-            color: #050505;
-            &__item {
-                width: 42%;
-                display: inline-block;
-                margin-bottom: 1em;
-
-                b {
-                    font-size: 18px;
-                    font-weight: 800;
-                }
-            }
-        }
-
-        .additional-info {
-            margin-top: 1em;
-            font-size: 14px;
-            color: #050505;
-
-            &__title {
-                font-weight: 800;
-                margin-bottom: 0.5em;
-            }
-
-            &__content {
-                width: 59%;
-            }
-        }
-
-        .signature-section {
-            margin-top: 3em;
-
-            &__vendor {
+            .desc {
                 font-size: 14px;
-                font-weight: 800;
-                color: #050505;
-                text-decoration: underline;
-            }
-            &__image {
-                img {
-                    width: 200px;
-                }
             }
         }
 
-        .contact-list {
-            &_items {
-                padding: 0;
-                margin: 1em 0 0;
-                list-style: none;
+        .side-label {
+            font-size: 18px;
+            font-weight: 800;
+            color: #050505;
+            margin: 3em 0 1.5em;
+            position: relative;
+
+            &:before {
+                content: " ";
+                position: absolute;
+                background-color: #ededed;
+                width: 288px;
+                height: 53px;
+                top: -15px;
+                left: -2.5em;
             }
-            &_item {
-                margin-right: 3em;
-                a {
-                    color: #050505;
-                    text-decoration: underline;
-                    &:hover {
-                        color: #000;
-                    }
-                    img {
-                        width: 20px;
-                        margin-right: 1em;
+
+            .label-value {
+                position: relative;
+                z-index: 999;
+            }
+        }
+
+        .policy-content {
+            margin-top: 1.5em;
+            background: #fff;
+            box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+            padding: 2em 2.5em;
+            .rules {
+                width: 80%;
+                padding-right: 20%;
+                .rule {
+                    border-top: solid 1px #ddd;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 15px 0px;
+                    padding-right: 50%;
+                    &:last-child {
+                        border-bottom: solid 1px #ddd;
                     }
                 }
             }
         }
     }
+
+    .policies-list {
+        font-size: 14px;
+        color: #050505;
+        &__item {
+            width: 42%;
+            display: inline-block;
+            margin-bottom: 1em;
+
+            b {
+                font-size: 18px;
+                font-weight: 800;
+            }
+        }
+    }
+
+    .additional-info {
+        margin-top: 1em;
+        font-size: 14px;
+        color: #050505;
+
+        &__title {
+            font-weight: 800;
+            margin-bottom: 0.5em;
+        }
+
+        &__content {
+            width: 59%;
+        }
+    }
+
+    .signature-section {
+        margin-top: 3em;
+
+        &__vendor {
+            font-size: 14px;
+            font-weight: 800;
+            color: #050505;
+            text-decoration: underline;
+        }
+        &__image {
+            img {
+                width: 200px;
+            }
+        }
+    }
+
+    .contact-list {
+        &_items {
+            padding: 0;
+            margin: 1em 0 0;
+            list-style: none;
+        }
+        &_item {
+            margin-right: 3em;
+            a {
+                color: #050505;
+                text-decoration: underline;
+                &:hover {
+                    color: #000;
+                }
+                img {
+                    width: 20px;
+                    margin-right: 1em;
+                }
+            }
+        }
+    }
+    }
+  .total-section {
+      color: white;
+      background-color: #404040;
+      padding: 40px 60px;
+      border-radius: 3px;
+  }
+  .proposal-footer {
+      text-align: center;
+      padding: 40px;
+  }
+  .vision {
+      img {
+          width: 25px;
+          margin-right: 10px;
+      }
+  }
+
+  .proposal-images {
+      &-carousel {
+          position: relative;
+          .handle-btn {
+              background-color: white !important;
+              height: 25px;
+              width: 25px;
+              border-radius: 50%;
+              position: absolute;
+              top: 50%;
+              transform: translateY(-50%);
+              z-index: 10;
+              &.next {
+                  right: 20px;
+              }
+              &.prev {
+                  left: 20px;
+              }
+          }
+          .item {
+              height: 200px;
+              object-fit: cover;
+              border-radius: 5px;
+              overflow: hidden;
+          }
+      }
+  }
 </style>

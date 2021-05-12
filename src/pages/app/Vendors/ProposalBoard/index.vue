@@ -1,5 +1,26 @@
 <template>
   <div class="vendor-proposal-board p-40">
+      <vue-html2pdf
+          :show-layout="false"
+          :float-layout="true"
+          :enable-download="true"
+          :preview-modal="true"
+          :paginate-elements-by-height="1400"
+          :filename="`proposal-${selectedProposal ? selectedProposal.id : ''}`"
+          :pdf-quality="2"
+          :enableLinks="true"
+          :image="{type: 'jpeg', quality: 0.98}"
+          :html2canvas="{scale: 1, useCORS: true}"
+          :manual-pagination="false"
+          pdf-format="a2"
+          pdf-orientation="portrait"
+          pdf-content-width="1400px"
+          ref="html2Pdf"
+      >
+          <section slot="pdf-content">
+              <proposal-content v-if="selectedProposal" :vendorProposal="selectedProposal" :download="true"/>
+          </section>
+      </vue-html2pdf>
     <loader :active="loading" height="100%"/>
     <div class="font-size-22 font-bold">
       <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposal Dashboard
@@ -137,9 +158,14 @@
         <div class="md-layout-item md-size-25"></div>
       </div>
     </div>
-    <modal v-if="showProposalDetail" container-class="modal-container-wizard lg" @close="showProposalDetail=false">
+    <modal v-if="showProposalDetail" container-class="modal-container-wizard lg">
+        <template slot="header">
+            <md-button class="md-simple md-just-icon md-round modal-default-button" @click="showProposalDetail = false">
+                <md-icon>clear</md-icon>
+            </md-button>
+        </template>
         <template slot="body">
-            <proposal-content :vendorProposal="selectedProposal" />
+            <proposal-content :vendorProposal="selectedProposal"/>
         </template>
     </modal>
   </div>
@@ -153,16 +179,19 @@ import Vendor from "@/models/Vendors";
 import carousel from "vue-owl-carousel";
 import {Loader, TablePagination, PieChart, Modal} from "@/components";
 import ProposalContent from "./detail";
+const VueHtml2pdf = () => import("vue-html2pdf");
+// import ProposalContent from "./detail";
 export default {
   components: {
     ProposalRequestCard,
     ProposalListItem,
     TablePagination,
+    ProposalContent,
     carousel,
     PieChart,
     Loader,
     Modal,
-    ProposalContent,
+    VueHtml2pdf
   },
   data() {
     return {
@@ -207,6 +236,7 @@ export default {
         limit: 5,
       },
       sortFields: {sort: '', order: ''},
+      download: false,
     };
   },
   async mounted() {
@@ -277,9 +307,14 @@ export default {
     },
     handleProposal(action, id){
       console.log('proposal.handle', action, id);
+      this.selectedProposal = this.proposals.find(it => it.id == id);
       if (action === 'show') {
-          this.selectedProposal = this.proposals.find(it => it.id == id);
           this.showProposalDetail = true;
+      } else if (action === 'download') {
+          setTimeout(_ => {
+              this.$refs.html2Pdf.generatePdf();
+          }, 100)
+
       }
     }
   },

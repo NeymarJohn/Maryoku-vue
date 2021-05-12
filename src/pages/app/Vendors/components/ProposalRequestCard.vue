@@ -1,7 +1,7 @@
 <template>
   <div class="proposal-request-card white-card p-20">
     <div class="d-flex align-center">
-      <div class="font-size-14 font-bold py-10 mr-10">
+      <div class="font-size-14 font-bold py-10 mr-10" style="min-height: 44px">
         <template v-if="proposalRequest.eventData.concept">{{ proposalRequest.eventData.concept.name }}</template>
         <template v-else-if="proposalRequest.eventData">{{ proposalRequest.eventData.title }}</template>
       </div>

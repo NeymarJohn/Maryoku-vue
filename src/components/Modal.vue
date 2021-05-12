@@ -39,12 +39,6 @@ export default {
       default: true,
     },
   },
-  beforeCreate() {
-    document.body.style.overflow = "hidden";
-  },
-  destroyed() {
-    document.body.style.overflow = "auto";
-  },
   methods: {
     closeModal: function () {
       if (this.allowClickOutside) {

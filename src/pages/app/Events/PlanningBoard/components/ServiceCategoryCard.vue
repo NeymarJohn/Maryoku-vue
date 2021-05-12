@@ -72,7 +72,7 @@
     <div class="p-20 font-bold d-flex align-center justify-content-between">
       <span class="service-name">{{ serviceCategory.name }}</span>
       <template v-if="hasBudget">
-        <md-button v-show="selectedServices.length > 0" class="md-red maryoku-btn" @click="getSpecification">
+        <md-button v-show="selectedServices.length > 0" class="md-simple md-red edit-btn" @click="getSpecification">
           Get Specific
         </md-button>
       </template>

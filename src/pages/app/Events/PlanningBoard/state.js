@@ -21,67 +21,23 @@ const actions = {
         .for(new CalendarEvent({ id: eventId }))
         .get()
         .then((res) => {
-          res.forEach(requirements => {
-            commit("setCategoryRequirements", { category: requirements.category, requirements })
-          })
-          resolve(requirements)
-        })
-        .catch(err => {
-          reject(err)
-        });
-    });
-  },
-  saveTypes({ commit, state }, { event, category, types }) {
-    let requirements = state[category];
-    if (!requirements) requirements = { event: { id: event.id }, category };
-    requirements.types = { ...requirements.types, ...types };
-    return new Promise((resolve, reject) => {
-      new ProposalRequestRequirement(requirements)
-        .for(new CalendarEvent({ id: event.id }))
-        .save()
-        .then((res) => {
-          commit("setCategoryRequirements", { category, requirements: res })
-          resolve(res)
-        })
-        .catch(err => {
-          reject(err)
-        });
-    });
-  },
-  saveRequiementSheet({ commit, state }, { event, category, requirements }) {
-    let originalRequirements = state[category];
-    if (!originalRequirements) originalRequirements = { event: { id: event.id }, category };
-    originalRequirements = { ...originalRequirements, ...requirements }
-    return new Promise((resolve, reject) => {
-      new ProposalRequestRequirement(originalRequirements)
-        .for(new CalendarEvent({ id: event.id }))
-        .save()
-        .then((res) => {
-          commit("setCategoryRequirements", { category, requirements: res })
-          resolve(res)
-        })
-        .catch(err => {
-          reject(err)
-        });
-    });
-  },
-  saveMainRequirements({ commit, state }, { event, category, requirements }) {
-    let originalRequirements = state[category];
-    if (!originalRequirements) originalRequirements = { event: { id: event.id }, category };
-    originalRequirements.mainRequirements = requirements
-    return new Promise((resolve, reject) => {
-      new ProposalRequestRequirement(originalRequirements)
-        .for(new CalendarEvent({ id: event.id }))
-        .save()
-        .then((res) => {
-          commit("setCategoryRequirements", { category, requirements: res })
-          resolve(res)
+          const currentRequirement = res[0]
+          if (currentRequirement) {
+            commit("setData", { key: "id", value: currentRequirement.id })
+            commit("setData", { key: "types", value: currentRequirement.types })
+            commit("setData", { key: "mainRequirements", value: currentRequirement.mainRequirements })
+            commit("setData", { key: "specialRequirements", value: currentRequirement.specialRequirements })
+            resolve(currentRequirement)
+          } else {
+            resolve({})
+          }
         })
         .catch(err => {
           reject(err)
         });
     });
   }
+
 }
 const mutations = {
   setStep(state, step) {
@@ -90,14 +46,8 @@ const mutations = {
   setData(state, { key, value }) {
     Vue.set(state, key, value)
   },
-  setCategoryRequirements(state, { category, requirements }) {
-    Vue.set(state, category, requirements)
-  },
   setMainRequirements(state, { category, data }) {
     Vue.set(state.mainRequirements, category, data)
-  },
-  setCategoryTypes(state, { category, types }) {
-    Vue.set(state.types, category, types)
   },
   setTypes(state, { category, type, data }) {
     if (!state.types[category])
