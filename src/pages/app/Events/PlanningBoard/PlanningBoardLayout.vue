@@ -89,7 +89,7 @@
       v-if="isOpenedAdditionalModal"
       :subCategory="subCategory"
       :selectedCategory="selectedCategory"
-      :defaultData="mainRequirements[selectedCategory.key] || {}"
+      :defaultData="getRequirements(selectedCategory.key) || {}"
       @save="saveAdditionalRequest"
       @cancel="isOpenedAdditionalModal = false"
       @close="isOpenedAdditionalModal = false"
@@ -109,7 +109,7 @@ import PlanningBoardState from "./state";
 import ServiceCategoryCard from "./components/ServiceCategoryCard";
 import { serviceCategoryImages } from "@/constants/event.js";
 import ProgressRadialBar from "./components/ProgressRadialBar.vue";
-import { mapState, mapGetters, mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import _ from "underscore";
 import AdditionalRequestModal from "./components/modals/AdditionalRequest.vue";
 import SpecialRequirementModal from "./components/modals/SpecialRequirement.vue";
@@ -474,6 +474,7 @@ export default {
   },
   computed: {
     ...mapState("planningBoard", {
+      requirements: (state) => state,
       types: (state) => state.types,
       mainRequirements: (state) => state.mainRequirements,
       specialRequirements: (state) => state.specialRequirements,
@@ -520,6 +521,7 @@ export default {
   methods: {
     ...mapMutations("event", ["setRequirementTypes", "setRequirementsForVendor", "setSubCategory"]),
     ...mapMutations("planningBoard", ["setData", "setMainRequirements", "setTypes", "setSpecialRequirements"]),
+    ...mapActions("planningBoard", ["saveMainRequirements", "saveRequiementSheet", "saveTypes"]),
     findVendors() {
       this.isOpenedFinalModal = true;
     },
@@ -532,16 +534,16 @@ export default {
       this.subCategory = this.allRequirements[category];
     },
     getDefaultTypes(category, name) {
-      if (!this.types[category]) return [];
-      if (!this.types[category][camelize(name)]) return [];
-      return this.types[category][camelize(name)];
+      return _.property([category, "types", camelize(name)])(this.requirements);
     },
     setServiceStyles({ category, services, type }) {
-      this.setTypes({ category: category.serviceCategory, data: services, type });
+      // this.setTypes({ category: category.serviceCategory, data: services, type });
+      this.saveTypes({ category: category.serviceCategory, event: this.event, types: { [type]: services } });
     },
     saveAdditionalRequest({ category, requirements }) {
       this.isOpenedAdditionalModal = false;
-      this.setMainRequirements({ category: category, data: requirements });
+      // this.setMainRequirements({ category: category, data: requirements });
+      this.saveMainRequirements({ category, event: this.event, requirements });
     },
     saveSpecialRequirements(data) {
       this.isOpenedFinalModal = false;
@@ -577,6 +579,10 @@ export default {
       // });
       // this.showAddNewCategory = false;
       // this.$store.dispatch("event/saveEventAction", event).then((res) => {});
+    },
+    getRequirements(category) {
+      if (!this.$store.state[category]) return {};
+      return this.$store.state[category].mainRequirements;
     },
   },
 };
