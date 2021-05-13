@@ -1,130 +1,41 @@
 <template>
   <div class="md-layout booking-section position-relative">
-    <template v-if="showProposals">
-      <div class="event-page-header md-layout-item md-size-100">
-        <div class="header-title">
-          <h3>
-            <img
-              :src="`${$iconURL}Budget+Elements/${selectedBlock.componentId}.svg`"
-              style="width: 30px; margin-right: 0.5em"
-            />
-            {{ selectedBlock.bookTitle }}
-          </h3>
-        </div>
-        <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
+    <div class="choose-vendor-board">
+      <div>
+        <resizable-toggle-button
+          class="mr-20 mb-10"
+          :key="component.componentId"
+          :label="component.eventCategory.fullTitle"
+          :icon="`${$iconURL}Budget+Elements/${component.eventCategory.icon}`"
+          :defaultStatus="selectedCategory && component.componentId === selectedCategory.componentId"
+          v-for="component in event.components"
+          @click="selectCategory(component)"
+        ></resizable-toggle-button>
       </div>
-      <template v-if="!showCounterPage">
-        <div class="booking-header md-layout-item md-size-100">
-          <div class="header-title w-100">
-            <div class="font-size-22 mb-20">Hey {{ $store.state.auth.user.name }}</div>
-          </div>
-          <div class="d-flex justify-content-between">
-            <div>
-              We found the top {{ proposals.length }} proposals for your event, <br />
-              Book now before it’s too late
-            </div>
-            <div class="header-actions">
-              <md-button class="md-simple normal-btn md-red" @click="compareProposal">
-                <md-icon>bar_chart</md-icon>
-                Compare Proposals
-              </md-button>
-              <span class="seperator"></span>
-              <md-button class="md-simple normal-btn md-red">
-                <md-icon>edit</md-icon>
-                Change {{ selectedBlock.title }} Requirements
-              </md-button>
-            </div>
+      <div class="booking-proposals" v-if="selectedCategory">
+        <div class="font-size-30 font-bold-extra category-title mt-30 mb-30">
+          <img :src="`${$iconURL}Budget+Elements/${selectedCategory.eventCategory.icon}`" />
+          {{ selectedCategory.fullTitle }}
+        </div>
+        <div class="d-flex justify-content-between">
+          <div>We found the top {{ proposals.length }} proposals for your event, Book now before it’s too late</div>
+          <div class="header-actions">
+            <md-button class="md-simple normal-btn md-red" @click="compareProposal">
+              <md-icon>bar_chart</md-icon>
+              Compare Proposals
+            </md-button>
+            <span class="seperator"></span>
+            <md-button class="md-simple normal-btn md-red">
+              <md-icon>edit</md-icon>
+              I Want Something Different
+            </md-button>
           </div>
         </div>
-
-        <!-- Event Booking Items -->
-        <div class="md-layout events-booking-items" v-if="proposals.length">
-          <proposal-card
-            v-for="(proposal, index) in proposals.slice(0, 3)"
-            :key="index"
-            :proposal="proposal"
-            :component="selectedBlock"
-            @goDetail="goDetailPage"
-            :probability="getProbability(index)"
-          ></proposal-card>
+        <div>
+          <loader :active="isLoadingProposal" />
         </div>
-        <!-- ./Event Booking Items -->
-
-        <div class="booking-section__actions">
-          <md-button class="md-simple md-black normal-btn" @click="showShareVendorModal = true">
-            I already have a venue for my event
-          </md-button>
-          <span class="seperator"></span>
-          <md-button class="md-simple md-black normal-btn" @click="showSomethingModal = true">
-            I want something different
-          </md-button>
-        </div>
-
-        <event-change-proposal-modal
-          v-if="showSomethingModal"
-          @close="showSomethingModal = false"
-        ></event-change-proposal-modal>
-
-        <modal v-if="showShareVendorModal" class="add-category-model something-modal">
-          <template slot="header">
-            <div class="add-category-model__header">
-              <h2>Share your vendor info</h2>
-              <div class="header-description">Share your vendor info</div>
-            </div>
-            <md-button
-              class="md-simple md-just-icon md-round modal-default-button"
-              @click="showShareVendorModal = false"
-            >
-              <md-icon>clear</md-icon>
-            </md-button>
-          </template>
-          <template slot="body">
-            <div class="md-layout">
-              <div class="md-layout-item md-size-100">
-                <label>Name</label>
-                <maryoku-input inputStyle="name" type="text" />
-              </div>
-              <div class="md-layout-item md-size-100 mt-20">
-                <label>Price of the service</label>
-                <maryoku-input inputStyle="budget" type="text" />
-              </div>
-              <div class="md-layout-item md-size-100 mt-20">
-                <label>Location</label>
-                <maryoku-input inputStyle="location" type="text" />
-              </div>
-              <div class="md-layout-item md-size-100 mt-20">
-                <label>Phone</label>
-                <maryoku-input inputStyle="phone" type="text" />
-              </div>
-              <div class="md-layout-item md-size-100 mt-20">
-                <label>Email</label>
-                <maryoku-input inputStyle="email" type="text" />
-              </div>
-
-              <div class="md-layout-item md-size-100 mt-20">
-                <div class="form-group">
-                  <label>Attach Proposal</label>
-                  <label class="upload-section" for="file">
-                    <md-button class="md-rose md-outline md-simple md-sm">Choose file</md-button>
-                    <div>Or</div>
-                    <div class="note">Drag your file here</div>
-                  </label>
-                  <input style="display: none" id="file" name="attachment" type="file" @change />
-                </div>
-              </div>
-            </div>
-          </template>
-          <template slot="footer">
-            <md-button class="md-default md-simple cancel-btn" @click="showShareVendorModal = false"
-              >Remind Me Later
-            </md-button>
-            <md-button class="md-rose add-category-btn" :class="{ disabled: !somethingMessage }"
-              >Update Vendor
-            </md-button>
-          </template>
-        </modal>
-      </template>
-    </template>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -145,6 +56,8 @@ import EventCategoryRequirement from "@/models/EventCategoryRequirement";
 import EventChangeProposalModal from "@/components/Modals/EventChangeProposalModal";
 import HeaderActions from "@/components/HeaderActions";
 import { postReq, getReq } from "@/utils/token";
+import ResizableToggleButton from "@/components/Button/ResizableToggleButton.vue";
+
 export default {
   name: "event-booking",
   components: {
@@ -156,14 +69,16 @@ export default {
     HeaderActions,
     ProposalCard,
     MaryokuInput,
+    ResizableToggleButton,
   },
   props: {},
   data: () => ({
     // auth: auth,
+    selectedCategory: null,
     calender: null,
     isLoading: true,
+    isLoadingProposal: false,
     somethingMessage: null,
-    event: {},
     iconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/",
     showSomethingModal: false,
     showShareVendorModal: false,
@@ -180,33 +95,16 @@ export default {
   methods: {
     ...mapMutations("event", ["setEventData", "setBookingRequirements", "setInitBookingRequirements"]),
     ...mapActions("comment", ["getCommentComponents"]),
-    getAllRequirements: async function () {
-      this.allRequirements = this.storedRequirements[this.event.id];
-      if (!this.allRequirements) {
-        this.allRequirements = await this.$http.get(`${process.env.SERVER_URL}/1/vendor/property/${this.event.id}`);
-        // set default value by conditionSript
-        let event = this.$store.state.event.eventData;
-
-        _.each(this.allRequirements.data, (it) => {
-          let requirements = it.requirements;
-          _.each(requirements, (requirement) => {
-            requirement.map((ms) => {
-              if (ms.conditionScript) ms.visible = eval(ms.conditionScript);
-              if (ms.conditionScript) ms.isSelected = eval(ms.conditionScript);
-              if (ms.defaultQtyScript) ms.defaultQty = Math.ceil(eval(ms.defaultQtyScript));
-
-              if (this.blockId === "giveaways" && (ms.item === "Apparel" || ms.item === "Tech items")) {
-                ms.mustHave = false;
-              }
-            });
-          });
+    selectCategory(category, clicked) {
+      this.selectedCategory = category;
+      this.loadingProposal = true;
+      new Proposal()
+        .for(new EventComponent({ id: this.selectedCategory.componentId }))
+        .get()
+        .then((result) => {
+          this.proposals = result;
+          this.isLoadingProposal = false;
         });
-
-        let updatedRequirements = this.storedRequirements;
-        updatedRequirements[this.event.id] = this.allRequirements.data;
-        this.setBookingRequirements(JSON.parse(JSON.stringify(updatedRequirements)));
-        this.setInitBookingRequirements(JSON.parse(JSON.stringify(updatedRequirements)));
-      }
     },
     getSelectedBlock() {
       this.selectedBlock = _.findWhere(this.categoryList, {
@@ -241,7 +139,7 @@ export default {
       this.event = this.$store.state.event.eventData;
       this.getSelectedBlock();
       new Proposal()
-        .for(new EventComponent({ id: this.blockId }))
+        .for(new EventComponent({ id: this.selectedCategory.componentId }))
         .get()
         .then((result) => {
           this.proposals = result;
@@ -281,7 +179,16 @@ export default {
       return 100 - 10 * (index + 1) + Math.round(10 * Math.random());
     },
     compareProposal() {
-      this.$router.push(`/events/${this.event.id}/booking/${this.blockId}/proposals/compare`);
+      this.$router.push(`/events/${this.event.id}/booking/${this.selectedCategory.id}/proposals/compare`);
+    },
+    fetchProposals() {
+      new Proposal()
+        .for(new EventComponent({ id: this.blockId }))
+        .get()
+        .then((result) => {
+          this.proposals = result;
+          if (result.length > 0) this.showProposals = true;
+        });
     },
   },
   created() {
@@ -290,7 +197,6 @@ export default {
     this.calendar = new Calendar({
       id: this.$store.state.auth.user.profile.defaultCalendarId,
     });
-    this.fetchData();
 
     this.$root.$on("clearVendorRequirement", (event) => {
       console.log("clearVendorRequirement");
@@ -329,11 +235,26 @@ export default {
     expiredTime() {
       return this.currentRequirement.expiredBusinessTime;
     },
+    event() {
+      return this.$store.state.event.eventData;
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
 .booking-section {
+  .choose-vendor-board {
+    width: 100%;
+    padding: 3rem;
+  }
+  .category-title {
+    img {
+      width: 30px;
+    }
+  }
+  .header {
+    max-height: max-content;
+  }
   .header-actions {
     display: flex;
     height: max-content;

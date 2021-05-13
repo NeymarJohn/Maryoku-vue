@@ -342,7 +342,7 @@ let EventPages = {
                 {
                     path: "choose-vendor",
                     name: "Choose Vendor",
-                    component: PlanningBoard,
+                    component: ChooseVendor,
                     meta: {
                         title: "Choose Vendor",
                         gtm: "Choose Vendor",

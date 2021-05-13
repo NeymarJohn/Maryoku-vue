@@ -90,7 +90,7 @@ export default {
         const chooseVendor = {
           title: "Booking",
           status: "not-complete",
-          route: "booking/chooseVendor",
+          route: "booking/choose-vendor",
           icon: `${this.$iconURL}Campaign/Group 8857.svg`,
           progress: this.event.campaignProgress,
           componentId: "chooseVendor",
