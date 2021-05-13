@@ -1,7 +1,7 @@
 <template>
-    <section class="proposal-content">
-        <section class="proposal-info">
-            <section class="proposal-header" :style="`background: url('${headerBackgroundImage}') center center no-repeat`">
+    <div class="pdf-content">
+        <div class="proposal-info">
+            <div class="proposal-header" :style="`background: url('${headerBackgroundImage}') center center no-repeat`">
                 <div class="event-info">
                     <div class="section-header d-flex justify-content-start">
                         <h3>Event Information & Details</h3>
@@ -9,7 +9,7 @@
                             <span v-if="getDiffDaysFromOriginal() < 0" class="whitspace-nowrap">
                               This proposal is {{ -getDiffDaysFromOriginal() }}days before your original date
                             </span>
-                                            <span v-else class="whitspace-nowrap">
+                            <span v-else class="whitspace-nowrap">
                               This proposal is {{ getDiffDaysFromOriginal() }}days later your original date
                             </span>
                         </div>
@@ -40,9 +40,9 @@
                         </li>
                     </ul>
                 </div>
-            </section>
+            </div>
 
-            <section class="proposal-body">
+            <div class="proposal-body">
                 <h1 class="font-size-30">Dear {{ vendorProposal.vendor.vendorDisplayName }},</h1>
                 <p>
                     {{ vendorProposal.personalMessage }}
@@ -142,10 +142,10 @@
                         </div>
                     </div>
                 </div>
-            </section>
-        </section>
+            </div>
+        </div>
 
-        <section class="proposal-section pricing-section">
+        <div class="proposal-section pricing-section">
             <div class="proposal-section__title font-size-22 font-bold-extra px-40">
                 <img
                     src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2010.svg"
@@ -186,9 +186,9 @@
                     <span class="font-bold-extra font-size-30">${{ discounedAndTaxedPrice | withComma }}</span>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <section class="proposal-section policy-section">
+        <div class="proposal-section policy-section">
             <div class="proposal-section__title px-40">
                 <img :src="`${submitProposalIcon}Asset 287.svg`" width="20"/> Our Policy
             </div>
@@ -282,8 +282,8 @@
                     </div>
                 </div>
             </div>
-        </section>
-    </section>
+        </div>
+    </div>
 </template>
 <script>
 
@@ -490,13 +490,12 @@
     }
 </script>
 <style lang="scss" scoped>
-    .proposal-content {
-        text-align: left !important;
+    .pdf-content {
         background-color: white;
+        max-width: 800px;
 
         .proposal-info {
             background: #fff;
-            box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
         }
 
         .proposal-header {
@@ -660,8 +659,6 @@
         }
 
         .pricing-section {
-            margin-top: 4em;
-
             &__table,
             &__list {
                 width: 100%;
@@ -873,7 +870,6 @@
         .bundle-section {
             padding: 40px 60px;
             background-color: #ffedb7;
-            box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
             border-radius: 3px;
         }
 
@@ -920,7 +916,7 @@
             .policy-content {
                 margin-top: 1.5em;
                 background: #fff;
-                box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+
                 padding: 2em 2.5em;
 
                 .rules {

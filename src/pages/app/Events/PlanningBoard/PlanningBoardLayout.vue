@@ -1,6 +1,6 @@
 <template>
   <div class="booking-section planning-board-layout">
-    <vue-element-loading :active="isLoading || isLoadingStoredData" spinner="ring" color="#FF547C" />
+      <loader :active="isLoading || isLoadingStoredData"/>
     <div class="p-50" v-if="!showCounterPage">
       <template v-if="!isLoading && !isLoadingStoredData">
         <div class="d-flex justify-content-between">
