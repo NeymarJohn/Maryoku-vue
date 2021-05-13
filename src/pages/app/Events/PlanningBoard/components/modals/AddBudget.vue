@@ -96,7 +96,7 @@ export default {
             "event/saveEventAction",
             new CalendarEvent({
               id: this.event.id,
-              unexpectedBudget: this.event.unexpectedBudget - Number(this.newBuildingBlock.budget),
+              unexpectedBudget: this.event.unexpectedBudget - Number(this.budget),
             }),
           );
           this.$emit("save", res.item);
