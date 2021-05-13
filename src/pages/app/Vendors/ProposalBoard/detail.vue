@@ -1,5 +1,19 @@
 <template>
    <div class="proposal-content">
+<!--       <vue-html2pdf-->
+<!--           :show-layout="false"-->
+<!--           :float-layout="true"-->
+<!--           :enable-download="true"-->
+<!--           :preview-modal="false"-->
+<!--           :paginate-elements-by-height="1400"-->
+<!--           :filename="`proposal-${'sd234123'}`"-->
+<!--           :pdf-quality="2"-->
+<!--           :manual-pagination="false"-->
+<!--           pdf-format="a4"-->
+<!--           pdf-orientation="portrait"-->
+<!--           pdf-content-width="800px"-->
+<!--           ref="html2Pdf"-->
+<!--       >-->
          <div class="proposal-info">
            <div class="proposal-header" :style="`background: url('${headerBackgroundImage}') center center no-repeat`">
                <div class="event-info">
@@ -142,7 +156,7 @@
                </div>
            </div>
        </div>
-
+         <div class="html2pdf__page-break"></div>
          <div class="proposal-section pricing-section">
            <div class="proposal-section__title font-size-22 font-bold-extra px-40">
                <img
@@ -185,7 +199,7 @@
                </div>
            </div>
        </div>
-
+         <div class="html2pdf__page-break"></div>
          <div class="proposal-section policy-section">
             <div class="proposal-section__title px-40">
                 <img :src="`${submitProposalIcon}Asset 287.svg`" width="20" /> Our Policy
@@ -280,6 +294,7 @@
                 </div>
             </div>
         </div>
+<!--       </vue-html2pdf>-->
    </div>
 </template>
 <script>
@@ -290,22 +305,23 @@ import _ from "underscore";
 import EventProposalPrice from "../../Events/Proposal/EventProposalPrice.vue";
 import carousel from "vue-owl-carousel";
 import CancellationPolicy from "@/components/CancellationPolicy";
+const VueHtml2pdf = () => import("vue-html2pdf");
 
 export default {
   components: {
       carousel,
       EventProposalPrice,
       CancellationPolicy,
+      VueHtml2pdf
   },
   props:{
       vendorProposal: {
         type: Object,
         required: true,
       },
-      download:{
+      download: {
         type: Boolean,
-        required: false,
-        default: false,
+        required: true,
       }
   },
   data() {
@@ -334,7 +350,6 @@ export default {
               return this.vendorProposal.vendor.images[0];
           if (this.vendorProposal.vendor.vendorImages && this.vendorProposal.vendor.vendorImages[0])
               return this.vendorProposal.vendor.vendorImages[0];
-
           return "";
       },
       attachments() {
@@ -477,12 +492,19 @@ export default {
           this.addedServices[category] = services;
           this.addedServices = { ...this.addedServices };
       },
+      downloadPDF() {
+          console.log('downloadPDF');
+          this.$refs.html2Pdf.generatePdf();
+      }
   },
   watch: {
       vendorProposal(newVal, oldVal){
-          console.log('download', this.vendorProposal);
+          console.log('')
           this.eventData = this.vendorProposal ? this.vendorProposal.proposalRequest.eventData : null;
       },
+      download(newVal, oldVal){
+        this.downloadPDF();
+      }
   }
 }
 </script>

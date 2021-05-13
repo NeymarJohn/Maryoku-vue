@@ -11,8 +11,8 @@
                 :src="`${$iconURL}Budget+Elements/${vendor.eventCategory.icon}`"
                 style="width: 30px; margin-right: 0.5em"
               />
-              Book {{ vendor.eventCategory.fullTitle }}</span
-            >
+              Book {{ vendor.eventCategory.fullTitle }}
+            </span>
             CHECKOUT
           </div>
           <div class="mt-20">

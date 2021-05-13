@@ -1,26 +1,5 @@
 <template>
   <div class="vendor-proposal-board p-40">
-      <vue-html2pdf
-          :show-layout="false"
-          :float-layout="true"
-          :enable-download="true"
-          :preview-modal="true"
-          :paginate-elements-by-height="1400"
-          :filename="`proposal-${selectedProposal ? selectedProposal.id : ''}`"
-          :pdf-quality="2"
-          :enableLinks="true"
-          :image="{type: 'jpeg', quality: 0.98}"
-          :html2canvas="{scale: 1, useCORS: true}"
-          :manual-pagination="false"
-          pdf-format="a2"
-          pdf-orientation="portrait"
-          pdf-content-width="1400px"
-          ref="html2Pdf"
-      >
-          <section slot="pdf-content">
-              <proposal-content v-if="selectedProposal" :vendorProposal="selectedProposal" :download="true"/>
-          </section>
-      </vue-html2pdf>
     <loader :active="loading" height="100%"/>
     <div class="font-size-22 font-bold">
       <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposal Dashboard
@@ -165,7 +144,7 @@
             </md-button>
         </template>
         <template slot="body">
-            <proposal-content :vendorProposal="selectedProposal"/>
+            <proposal-content :vendorProposal="selectedProposal" :download="download"/>
         </template>
     </modal>
   </div>
@@ -179,7 +158,7 @@ import Vendor from "@/models/Vendors";
 import carousel from "vue-owl-carousel";
 import {Loader, TablePagination, PieChart, Modal} from "@/components";
 import ProposalContent from "./detail";
-const VueHtml2pdf = () => import("vue-html2pdf");
+
 // import ProposalContent from "./detail";
 export default {
   components: {
@@ -191,7 +170,6 @@ export default {
     PieChart,
     Loader,
     Modal,
-    VueHtml2pdf
   },
   data() {
     return {
@@ -312,9 +290,8 @@ export default {
           this.showProposalDetail = true;
       } else if (action === 'download') {
           setTimeout(_ => {
-              this.$refs.html2Pdf.generatePdf();
-          }, 100)
-
+              this.download = true
+          }, 100);
       }
     }
   },
