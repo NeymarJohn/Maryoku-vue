@@ -322,6 +322,11 @@ export default {
               ],
               imageTitles: ["Black White", "Buisness", "Candid", "Commercial", "Drone", "Portrait"],
               icon: "NewRequirements/Group 18013.svg",
+              script: ` 
+                  requirements['multi-selection'][0]['options'].forEach(item=>item.selected = false)
+                  requirements['multi-selection'][0]['options'][0]['selected'] = true;
+                  requirements['multi-selection'][0]['options'][1]['selected'] = true;
+                `,
             },
           ],
         ],
@@ -367,6 +372,10 @@ export default {
               ],
               imageTitles: ["Casino Games", "Indoor Sport", "Make Your Own", "Photo Booth"],
               icon: "NewRequirements/Group 18012.svg",
+              script: ` 
+                  requirements['multi-selection'][0]['options'].forEach(item=>item.selected = false)
+                  requirements['multi-selection'][0]['options'][2]['selected'] = true;
+                `,
             },
           ],
           [
@@ -376,6 +385,10 @@ export default {
               images: ["Outdoor Activities/Day trip_option..png", "Outdoor Activities/Sport Event.png"],
               imageTitles: ["Day Trip Option", "Sport Event"],
               icon: "NewRequirements/Group 18010.svg",
+              script: ` 
+                  requirements['multi-selection'][0]['options'].forEach(item=>item.selected = false)
+                  requirements['multi-selection'][0]['options'][3]['selected'] = true;
+                `,
             },
             {
               name: "AV",
