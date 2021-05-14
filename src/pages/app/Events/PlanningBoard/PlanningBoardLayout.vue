@@ -569,8 +569,9 @@ export default {
         (item) => item.key === category.serviceCategory,
       );
       this.isOpenedAdditionalModal = true;
-      const requirements = this.allRequirements[category.serviceCategory].requirements;
-
+      let requirements = this.allRequirements[category.serviceCategory].requirements;
+      const storedRequirements = this.requirements[category.serviceCategory].mainRequirements;
+      requirements = { ...requirements, ...storedRequirements };
       if (category.script) eval(category.script); //select relevant options using script
       console.log(requirements);
       for (let subCategory of Object.keys(requirements)) {
