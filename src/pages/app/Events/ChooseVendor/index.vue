@@ -33,6 +33,19 @@
         </div>
         <div>
           <loader :active="isLoadingProposal" />
+          <div>
+            <!-- Event Booking Items -->
+            <div class="md-layout events-booking-items" v-if="proposals.length">
+              <proposal-card
+                v-for="(proposal, index) in proposals.slice(0, 3)"
+                :key="index"
+                :proposal="proposal"
+                :component="selectedCategory"
+                @goDetail="goDetailPage"
+                :probability="getProbability(index)"
+              ></proposal-card>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -99,7 +112,7 @@ export default {
       this.selectedCategory = category;
       this.loadingProposal = true;
       new Proposal()
-        .for(new EventComponent({ id: this.selectedCategory.componentId }))
+        .for(new EventComponent({ id: this.selectedCategory.id }))
         .get()
         .then((result) => {
           this.proposals = result;
@@ -139,7 +152,7 @@ export default {
       this.event = this.$store.state.event.eventData;
       this.getSelectedBlock();
       new Proposal()
-        .for(new EventComponent({ id: this.selectedCategory.componentId }))
+        .for(new EventComponent({ id: this.selectedCategory.id }))
         .get()
         .then((result) => {
           this.proposals = result;
@@ -173,7 +186,7 @@ export default {
         });
     },
     goDetailPage(proposal) {
-      this.$router.push(`/events/${this.event.id}/booking/${this.blockId}/proposals/${proposal.id}`);
+      this.$router.push(`/events/${this.event.id}/booking/${this.selectedCategory.id}/proposals/${proposal.id}`);
     },
     getProbability(index) {
       return 100 - 10 * (index + 1) + Math.round(10 * Math.random());

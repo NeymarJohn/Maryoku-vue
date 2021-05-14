@@ -9,7 +9,7 @@
           class="concept-color"
           :style="`background: ${color.color || '#EDEDED'}`"
         >
-          <img class="concept-image" :src="`${event.concept.images[index].url}`" />
+          <img class="concept-image" v-if="event.concept.images[index]" :src="`${event.concept.images[index].url}`" />
         </div>
       </div>
       <div class="concept-description mt-30 mb-30">
