@@ -4,24 +4,21 @@
           :show-layout="false"
           :float-layout="true"
           :enable-download="true"
-          :preview-modal="true"
+          :preview-modal="false"
+
           :paginate-elements-by-height="1400"
           :filename="`proposal-${selectedProposal ? selectedProposal.id : ''}`"
           :pdf-quality="2"
-          :enableLinks="true"
-          :image="{type: 'jpeg', quality: 0.98}"
-          :html2canvas="{scale: 1, useCORS: true}"
           :manual-pagination="false"
-          pdf-format="a2"
+          pdf-format="a4"
           pdf-orientation="portrait"
-          pdf-content-width="1400px"
+          pdf-content-width="800px"
+          :html-to-pdf-options="htmlToPdfOptions"
           ref="html2Pdf"
       >
-          <section slot="pdf-content">
-              <proposal-content v-if="selectedProposal" :vendorProposal="selectedProposal" :download="true"/>
-          </section>
+          <pdf-content slot="pdf-content" v-if="selectedProposal && download" :vendorProposal="selectedProposal" />
       </vue-html2pdf>
-    <loader :active="loading" height="100%"/>
+    <loader :active="loading" :isFullScreen="true"/>
     <div class="font-size-22 font-bold">
       <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposal Dashboard
     </div>
@@ -179,8 +176,9 @@ import Vendor from "@/models/Vendors";
 import carousel from "vue-owl-carousel";
 import {Loader, TablePagination, PieChart, Modal} from "@/components";
 import ProposalContent from "./detail";
+import PdfContent from "./pdfContent";
 const VueHtml2pdf = () => import("vue-html2pdf");
-// import ProposalContent from "./detail";
+
 export default {
   components: {
     ProposalRequestCard,
@@ -191,7 +189,8 @@ export default {
     PieChart,
     Loader,
     Modal,
-    VueHtml2pdf
+    VueHtml2pdf,
+    PdfContent
   },
   data() {
     return {
@@ -248,7 +247,7 @@ export default {
   methods: {
     async getData() {
         // this.proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
-        let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '60758222cfefec2676a0853d' })).get();
+        let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '606b9d71cfefec306c439c3f' })).get();
         this.proposalRequests = proposalRequests.filter(p => p.remainingTime);
     },
     async getProposal() {
@@ -256,7 +255,7 @@ export default {
       const params = {status: this.tab, ...this.sortFields};
       const res = await new Proposal()
         // .for(new Vendor({ id: this.vendorData.id }))
-        .for(new Vendor({ id: '60462793cfefec258a35e874' }))
+        .for(new Vendor({ id: '60758222cfefec2676a0853d' }))
         .page(pagination.page)
         .limit(pagination.limit)
         .params(params)
@@ -299,9 +298,7 @@ export default {
           return p.id !== id;
       });
       this.proposalRequests = proposalRequests;
-      // setTimeout(_ => {
-      //     this.proposalRequests = proposalRequests;
-      // }, 5)
+
 
       this.$forceUpdate();
     },
@@ -310,10 +307,20 @@ export default {
       this.selectedProposal = this.proposals.find(it => it.id == id);
       if (action === 'show') {
           this.showProposalDetail = true;
+
+      } else if (action === 'edit') {
+          this.$router.push(`/vendors/${this.selectedProposal.vendor.id}/proposal-request/${this.selectedProposal.proposalRequest.id}/form/edit`);
+
+      } else if (action === 'duplicate') {
+          this.$router.push(`/vendors/${this.selectedProposal.vendor.id}/proposal-request/${this.selectedProposal.proposalRequest.id}/form/duplicate`);
+
       } else if (action === 'download') {
+          this.download = true;
           setTimeout(_ => {
               this.$refs.html2Pdf.generatePdf();
-          }, 100)
+          }, 40)
+
+
 
       }
     }
@@ -321,6 +328,29 @@ export default {
   computed: {
     vendorData() {
       return this.$store.state.vendor.profile;
+    },
+    htmlToPdfOptions () {
+      console.log('html.pdf.options');
+      return {
+        margin: 0,
+        image: {
+            type: "jpeg",
+            quality: 0.98,
+        },
+        filename: `proposal-${this.selectedProposal ? this.selectedProposal.id : ''}`,
+        enableLinks: true,
+
+        html2canvas: {
+            scale: 1,
+            useCORS: true,
+        },
+
+        jsPDF: {
+            unit: "in",
+            format: 'a4',
+            orientation: 'portrait',
+        },
+      }
     },
   },
   watch: {
@@ -386,5 +416,9 @@ export default {
       height: 20px;
     }
   }
+}
+.pdf-content {
+    width: 100%;
+    background: #fff;
 }
 </style>

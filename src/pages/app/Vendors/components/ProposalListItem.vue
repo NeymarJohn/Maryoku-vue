@@ -63,17 +63,17 @@
               <img v-else :src="`${$iconURL}common/duplicate-white.svg`" class="label-icon mr-10" />Duplicate</span
             >
           </md-menu-item>
-          <md-menu-item
-            @click="edit('cancel')"
-            class="md-purple"
-            @mouseenter="hoveredMenu = 'cancel'"
-            @mouseleave="hoveredMenu = ''"
-          >
-            <span>
-              <img v-if="hoveredMenu !== 'cancel'" :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />
-              <img v-else :src="`${$iconURL}common/trash-white.svg`" class="label-icon mr-10" />Cancel Event</span
-            >
-          </md-menu-item>
+<!--          <md-menu-item-->
+<!--            @click="edit('cancel')"-->
+<!--            class="md-purple"-->
+<!--            @mouseenter="hoveredMenu = 'cancel'"-->
+<!--            @mouseleave="hoveredMenu = ''"-->
+<!--          >-->
+<!--            <span>-->
+<!--              <img v-if="hoveredMenu !== 'cancel'" :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />-->
+<!--              <img v-else :src="`${$iconURL}common/trash-white.svg`" class="label-icon mr-10" />Cancel Event</span-->
+<!--            >-->
+<!--          </md-menu-item>-->
         </md-menu-content>
       </md-menu>
     </div>
@@ -110,11 +110,9 @@ export default {
         }
     },
     edit(action) {
-      if (action === 'show' || action === 'download' || action === 'duplicate' || action === 'cancel') {
-        this.$emit('action', action, this.proposal.id);
-      } else if (action === 'edit') {
-        this.$router.push(`/vendors/${this.proposal.vendor.id}/proposal-request/${this.proposal.proposalRequest.id}/form`);
-      }
+
+      this.$emit('action', action, this.proposal.id);
+
     },
     leave(item){
       console.log('leave', item);

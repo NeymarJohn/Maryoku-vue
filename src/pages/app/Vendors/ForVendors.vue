@@ -440,7 +440,7 @@ export default {
     console.log(this.markedDataRange);
     this.$root.$on("go-to-proposal-form", () => {
       if (this.isAgreed) {
-        this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
+        this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form/submit`);
       } else {
         window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
         this.conditionTooltip = true;
@@ -502,7 +502,7 @@ export default {
     },
     goToForm() {
       if (this.isAgreed) {
-        this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
+        this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form/submit`);
         // if (this.proposalRequest) {
         //   this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`);
         // } else {

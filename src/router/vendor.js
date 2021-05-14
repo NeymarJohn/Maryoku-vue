@@ -194,7 +194,7 @@ export default [
         name: "ProposalLayout",
         children: [
             {
-                path: "/vendors/:vendorId/proposal-request/:id/form",
+                path: "/vendors/:vendorId/proposal-request/:id/form/:type",
                 name: "ForProposals",
                 component: ProposalContent,
                 meta: {

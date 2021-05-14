@@ -25,7 +25,7 @@
         <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
           Next
         </a>
-        <a class="next active" @click="uploadProposal('submit')" v-else :disabled="isUpdating">Submit Proposal</a>
+        <a class="next active" @click="uploadProposal(option)" v-else :disabled="isUpdating">Submit Proposal</a>
       </div>
     </section>
 
@@ -146,6 +146,7 @@ export default {
       openedModal: "",
       showCloseProposalModal: false,
       isUpdating: false,
+      option: 'submit',             // 'submit', 'duplicate'
     };
   },
   created() {
@@ -155,6 +156,10 @@ export default {
 
     if (this.$route.params.eventId) {
       this.getEvent();
+    }
+
+    if (this.$route.params.type && this.$route.params.type == 'duplicate') {
+        this.option = 'duplicate';
     }
 
     this.fullDetailsModal = false;
@@ -183,6 +188,7 @@ export default {
   methods: {
     ...mapActions("vendorProposal", ["getVendor", "getProposalRequest", "saveProposal"]),
     gotoNext() {
+      console.log('proposal', this.$store.state.vendorProposal);
       this.step = this.step + 1;
       this.scrollToTop();
     },
@@ -221,6 +227,7 @@ export default {
 
       if (!this.isLoading) {
         this.isLoading = true;
+        console.log('upload.proposal');
         this.saveProposal(type).then((proposal) => {
           this.isUpdating = false;
           this.isLoading = false;

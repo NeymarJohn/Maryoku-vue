@@ -1,5 +1,5 @@
 <template>
-  <collapse-panel class="white-card proposal-requirements-panel" :spacing="20" v-if="!isLoading">
+  <collapse-panel class="white-card proposal-requirements-panel" :spacing="20">
     <template slot="header">
       <div class="d-flex align-center p-30">
         <img :src="`${$iconURL}Requirements/special-request-red.svg`" />
@@ -8,54 +8,52 @@
     </template>
     <template slot="content">
       <div class="requirements-content p-30 pt-0-i" v-if="step <= 1">
-        <template v-if="requirementsData.mainRequirements">
-          <div
-            v-for="(requirementCategory, index) in Object.keys(requirementsData.mainRequirements)"
-            :key="`requirement-category-${index}`"
-          >
-            <template v-if="requirementCategory.toLowerCase() === 'special'">
-              <div
-                class="category-section"
-                v-for="subCategory in selectedOptions(requirementsData[requirementCategory])"
-                :key="subCategory.subCategory"
-              >
-                <div class="color-dark-gray text-transform-capitalize">{{ subCategory.subCategory }}</div>
-                <div class="requirement-grid">
-                  <div
-                    class="requirement-item"
-                    v-for="requirementItem in subCategory.options.filter((item) => item.selected)"
-                    :key="requirementItem.name"
-                  >
-                    <div class="checkmark"></div>
-                    <div class="d-inline-block">{{ requirementItem.name }}</div>
-                  </div>
-                </div>
-              </div>
-            </template>
+        <div
+          v-for="(requirementCategory, index) in Object.keys(requirementsData)"
+          :key="`requirement-category-${index}`"
+        >
+          <template v-if="requirementCategory === 'multi-selection'"> </template>
+          <template v-else-if="requirementCategory.toLowerCase() === 'special'">
             <div
-              v-else-if="requirementsData[requirementCategory].filter((item) => item.isSelected).length > 0"
               class="category-section"
+              v-for="subCategory in selectedOptions(requirementsData[requirementCategory])"
+              :key="subCategory.subCategory"
             >
-              <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
+              <div class="color-dark-gray text-transform-capitalize">{{ subCategory.subCategory }}</div>
               <div class="requirement-grid">
                 <div
                   class="requirement-item"
-                  v-for="requirementItem in requirementsData[requirementCategory].filter((item) => item.isSelected)"
-                  :key="requirementItem.item"
+                  v-for="requirementItem in subCategory.options.filter((item) => item.selected)"
+                  :key="requirementItem.name"
                 >
                   <div class="checkmark"></div>
-                  <!-- {{ requirementItem }} -->
-                  <div class="d-inline-block">
-                    {{ requirementItem.item || requirementItem.subCategory }}
-                    <span v-if="requirementItem.defaultQty">(X{{ requirementItem.defaultQty }})</span>
-                  </div>
+                  <div class="d-inline-block">{{ requirementItem.name }}</div>
                 </div>
               </div>
             </div>
-            <!-- <div v-else></div> -->
+          </template>
+          <div
+            v-else-if="requirementsData[requirementCategory].filter((item) => item.isSelected).length > 0"
+            class="category-section"
+          >
+            <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
+            <div class="requirement-grid">
+              <div
+                class="requirement-item"
+                v-for="requirementItem in requirementsData[requirementCategory].filter((item) => item.isSelected)"
+                :key="requirementItem.item"
+              >
+                <div class="checkmark"></div>
+                <!-- {{ requirementItem }} -->
+                <div class="d-inline-block">
+                  {{ requirementItem.item || requirementItem.subCategory }}
+                  <span v-if="requirementItem.defaultQty">(X{{ requirementItem.defaultQty }})</span>
+                </div>
+              </div>
+            </div>
           </div>
-        </template>
-
+          <!-- <div v-else></div> -->
+        </div>
         <div class="addtional-requests">
           <div class="font-bold">Addtional Requests</div>
           <div>
@@ -134,7 +132,6 @@
       </div>
     </template>
   </collapse-panel>
-  <div v-else></div>
 </template>
 <script>
 import CollapsePanel from "../../Campaign/CollapsePanel.vue";
@@ -148,7 +145,6 @@ export default {
       additionalServiceRequirements: [],
       showQuestionModal: false,
       additionalNote: "",
-      isLoading: true,
     };
   },
   methods: {
@@ -165,7 +161,6 @@ export default {
       .get()
       .then((res) => {
         console.log(res);
-        this.isLoading = false;
         this.additionalServiceRequirements = res;
       });
   },
@@ -174,19 +169,30 @@ export default {
       return this.$store.state.vendorProposal.vendor;
     },
     requirementsData() {
-      console.log(this.allRequirements[this.vendor.eventCategory.key]);
-      return this.allRequirements[this.vendor.eventCategory.key] || {};
+      // try {
+      //   return JSON.parse(this.$store.state.vendorProposal.proposalRequest.requirement.settingsJsonData);
+      // } catch (e) {
+      //   return [];
+      // }
+      console.log(
+        "this.allRequirements[this.vendor.eventCategory.key]",
+        this.allRequirements[this.vendor.eventCategory.key],
+      );
+      this.additionalNote = this.allRequirements[this.vendor.eventCategory.key].additionalRequest;
+      delete this.allRequirements[this.vendor.eventCategory.key].additionalRequest;
+      return this.allRequirements[this.vendor.eventCategory.key];
     },
     allRequirements() {
-      if (this.additionalServiceRequirements.length > 0) {
-        const requirementsMap = this.additionalServiceRequirements.reduce((mapData, requirement, index) => {
-          mapData[requirement.category] = requirement;
-          return mapData;
-        }, {});
-        console.log("requiremetnsMap", requirementsMap);
-        return requirementsMap;
-      }
-      return {};
+      // const allCategories = this.$store.state.common.serviceCategories;
+      // const allData = this.additionalServiceRequirements.map((requirementData) => {
+      //   console.log(allCategories.find((c) => c.key == requirementData.vendorCategory));
+      //   return {
+      //     category: requirementData.vendorCategory,
+      //     categoryData: allCategories.find((c) => c.key == requirementData.vendorCategory),
+      //     requirements: JSON.parse(requirementData.settingsJsonData),
+      //   };
+      // });
+      return this.$store.state.vendorProposal.proposalRequest.plannerRequirement.mainRequirements;
     },
     proposalRequest() {
       return this.$store.state.vendorProposal.proposalRequest;

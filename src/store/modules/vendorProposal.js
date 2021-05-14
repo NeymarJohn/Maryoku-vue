@@ -158,7 +158,7 @@ const getters = {
     // check tax
     let tax = state.taxes['total'] || { price: 0, percentage: 0 };
     sum = sum + sum * tax.percentage / 100;
-    // check bundle discount 
+    // check bundle discount
 
     if (state.bundleDiscount && state.bundleDiscount.isApplied) {
       sum -= state.bundleDiscount.price
@@ -314,8 +314,9 @@ const actions = {
   },
   saveProposal: ({ commit, state, getters }, status) => {
     return new Promise((resolve, reject) => {
+      console.log('saveProposal', state);
       const proposal = new Proposal({
-        id: state.id,
+        id: status == 'duplicate' ? undefined : state.id,
         personalMessage: state.personalMessage,
         additionalServices: state.additionalServices,
         inspirationalPhotos: state.inspirationalPhotos,
