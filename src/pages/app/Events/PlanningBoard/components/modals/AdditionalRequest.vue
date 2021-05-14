@@ -31,6 +31,7 @@
             <!-- {{ subCategory.requirements[section] }} -->
             <div
               v-for="item in subCategory[section].filter((item) => item.type !== 'single-selection' && item.visible)"
+              :key="item.item"
               class="requirement-item"
             >
               <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">{{ item.item }}</md-checkbox>
@@ -38,6 +39,7 @@
             <div
               v-for="item in subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)"
               class="requirement-item-tags mt-10"
+              :key="item.item"
             >
               <div class="mb-10">{{ item.item }}:</div>
               <tag-item
@@ -60,7 +62,7 @@
           <div class="font-bold-extra">{{ specialSection.subCategory }}</div>
           <div class="requirement-row text-left" v-if="specialSection.subCategory !== 'Sitting arrangement'">
             <!-- {{ subCategory.requirements[section] }} -->
-            <div v-for="item in specialSection.options" class="requirement-item">
+            <div v-for="item in specialSection.options" class="requirement-item" :key="item.name">
               <md-checkbox v-model="item.selected">
                 <div class="checkbox-label-wrapper">
                   <img class="special-icon" :src="getIcon(specialSection.subCategory, item.name)" />
