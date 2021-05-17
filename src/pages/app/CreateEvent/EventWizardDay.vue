@@ -32,6 +32,7 @@ import WizardStatusBar from "./componenets/WizardStatusBar";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 import Vue from "vue";
+import vSelect from "vue-select";
 import { FunctionalCalendar } from "vue-functional-calendar";
 import moment from "moment";
 import { extendMoment } from "moment-range";
