@@ -349,10 +349,11 @@ export default {
               if (item.hideOnAutoComplete) return;
               const capitalized = item.name.charAt(0).toUpperCase() + item.name.slice(1);
               const profileService = this.profileServices[this.camelize(capitalized)];
-              const requestItemByPlanner = this.proposalRequest.requirements.find((requestItem) => {
-                console.log(requestItem);
-                return requestItem.item && requestItem.item.toLowerCase() === item.name.toLowerCase();
-              });
+              // const requestItemByPlanner = this.proposalRequest.requirements.find((requestItem) => {
+              //   console.log(requestItem);
+              //   return requestItem.item && requestItem.item.toLowerCase() === item.name.toLowerCase();
+              // });
+              const requestItemByPlanner = null;
               console.log("requestItemByPlanner", requestItemByPlanner);
               if (item.available) {
                 item.available.forEach((availableItem) => {
