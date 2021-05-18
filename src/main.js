@@ -52,7 +52,10 @@ import VueYoutube from "vue-youtube";
 
 import helper from "@/utils/helperFunction";
 import moment from "moment";
+import vSelect from 'vue-select';
+import 'vue-select/dist/vue-select.css';
 
+Vue.component('v-select', vSelect)
 require("vue-tour/dist/vue-tour.css");
 
 const VueScrollTo = require("vue-scrollto");
@@ -303,7 +306,7 @@ Vue.directive("select-all", {
 //   stopProp(event) { event.stopPropagation() }
 // })
 
-Vue.filter("withComma", function (value, type= null) {
+Vue.filter("withComma", function (value, type = null) {
   if (typeof value == 'string') {
     value = Number(value)
   }
@@ -319,9 +322,9 @@ Vue.filter("formatQty", function (value) {
 
 });
 Vue.filter('date', function (value, format) {
-    if (!value) return ""
+  if (!value) return ""
 
-    return moment(value).format(format);
+  return moment(value).format(format);
 })
 
 Vue.prototype.$resourceURL = ResourceURL;

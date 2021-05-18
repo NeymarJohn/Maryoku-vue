@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout booking-section position-relative">
+  <div class="md-layout booking-section position-relative booking-proposals">
     <div class="choose-vendor-board">
       <div>
         <resizable-toggle-button
@@ -47,6 +47,16 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="proposals-footer white-card">
+      <div>
+        <md-button class="md-simple maryoku-btn md-black">I already have a venue for my event</md-button>
+        <md-button class="md-simple maryoku-btn md-black">Chanage Venue Requirements</md-button>
+      </div>
+      <div>
+        <md-button class="md-simple md-outlined md-red maryoku-btn">Book Now</md-button>
+        <md-button class="md-red maryoku-btn">Add To Cart</md-button>
       </div>
     </div>
   </div>
@@ -255,7 +265,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.booking-section {
+.booking-section.booking-proposals {
   .choose-vendor-board {
     width: 100%;
     padding: 3rem;
@@ -276,7 +286,7 @@ export default {
     border-left: solid 1px #050505;
   }
   .events-booking-items {
-    padding: 0 2em;
+    padding: 0 0em;
     margin-bottom: 1em;
     align-items: stretch;
   }
@@ -302,6 +312,14 @@ export default {
     align-items: center;
     background: white;
     font-family: "Manrope-Regular", sans-serif;
+  }
+  .proposals-footer {
+    position: fixed;
+    bottom: 0;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    width: calc(100% - 490px);
   }
 }
 </style>

@@ -247,7 +247,7 @@ export default {
                 "Bourbon",
                 "Champagne",
                 "Cocktail",
-                "Coffee   Dream",
+                "Coffee Dream",
                 "Margarita",
                 "Martini",
                 "Mixology",
@@ -298,19 +298,19 @@ export default {
                 "Music Clips/Soul-retrosoul-Bensound.mp3",
               ],
               clipTitles: [
-                "Asian-india-Bensound",
-                "Blues-hipjazz-Bensound",
-                "Classical_Wake_Up_CC Sound",
-                "Country_Country Boy Song-Bensound",
-                "Electronic_ERF-Bensound",
-                "Folk_Hey-Bensound",
-                "Hip Hop-groovyhiphop-Bensound",
-                "Jazz-thejazzpiano-Bensound",
-                "Latin_Latin Beat_CC Hound",
-                "pop_Funday-Bensound",
-                "RB_Heart_CC Sound",
-                "Rock-rumble-Bensound",
-                "Soul-retrosoul-Bensound",
+                "Asian-india",
+                "Blues",
+                "Classical Wake Up",
+                "Country Country Boy Song",
+                "Electronic ERF",
+                "Folk Hey",
+                "Hip Hop-groovyhiphop",
+                "Jazz-thejazzpiano",
+                "Latin Beat",
+                "Pop Funday",
+                "RB Heart",
+                "Rock-rumble",
+                "Soul-retrosoul",
               ],
               images: [
                 "Photography+_+Videography/Black_White.jpg",
@@ -467,6 +467,7 @@ export default {
       this.$store
         .dispatch("event/getRequirements")
         .then((requirements) => {
+          console.log("requirements", requirements);
           this.allRequirements = requirements;
           this.isLoading = false;
         })
@@ -569,8 +570,10 @@ export default {
         (item) => item.key === category.serviceCategory,
       );
       this.isOpenedAdditionalModal = true;
+      console.log(category.serviceCategory);
       let requirements = this.allRequirements[category.serviceCategory].requirements;
       const storedRequirements = this.requirements[category.serviceCategory].mainRequirements;
+      console.log(requirements);
       requirements = { ...requirements, ...storedRequirements };
       if (category.script) eval(category.script); //select relevant options using script
       console.log(requirements);
@@ -582,8 +585,6 @@ export default {
           } catch (e) {}
         });
       }
-      console.log(requirements);
-      console.log(requirements.Services[0].visible);
       this.subCategory = requirements;
     },
     getDefaultTypes(category, name) {

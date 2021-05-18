@@ -194,13 +194,18 @@ export default {
     },
   },
   created() {
+    console.log(this.subCategory);
     this.subCategorySections = Object.keys(this.subCategory);
     this.subCategorySections = this.subCategorySections.filter(
       (item) => item !== "multi-selection" && item !== "special",
     );
-    this.specialTags = this.subCategory["special"].map((item) => {
-      return { ...item };
-    });
+    if (this.subCategory["special"]) {
+      this.specialTags = this.subCategory["special"].map((item) => {
+        return { ...item };
+      });
+    } else {
+      this.specialTags = [];
+    }
     console.log("speicalTags", this.specialTags);
     this.specialTags = this.specialTags.filter(
       (item) => item.subCategory !== "Inclusion" && item.subCategory !== "Sustainability",
