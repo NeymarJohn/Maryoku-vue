@@ -21,7 +21,7 @@
 
     <!-- Event Booking Items -->
     <div class="md-layout events-booking-items position-relative">
-      <loader :active="isLoading" />
+      <loader :active="isLoading"/>
       <div class="md-layout-item md-size-100">
         <div v-for="(category, index) in Object.keys(requirementProperties)" :key="index">
           <template v-if="category == 'multi-selection'">
@@ -74,9 +74,9 @@
         </md-button>
       </div>
       <div>
-        <md-button class="md-bold add-category-btn md-black md-simple" @click="revertToOriginal">
-          Revert To Original
-        </md-button>
+        <md-button class="md-bold add-category-btn md-black md-simple" @click="revertToOriginal"
+          >Revert To Original</md-button
+        >
         <md-button class="md-red md-bold add-category-btn" @click="findVendors">Find my perfect vendor</md-button>
       </div>
     </div>

@@ -88,8 +88,8 @@ export default {
     sittingArrangement() {
       const plannerRequirements = this.proposalRequest.plannerRequirement;
       if (!plannerRequirements) return null;
-      if (!plannerRequirements.mainRequirements) return null;
-      return plannerRequirements.mainRequirements.special.find((item) => {
+
+      return plannerRequirements.mainRequirements[this.vendor.eventCategory.key].special.find((item) => {
         return item.subCategory === "Sitting arrangement";
       });
     },

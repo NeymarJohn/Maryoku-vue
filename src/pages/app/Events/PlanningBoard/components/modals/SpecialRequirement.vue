@@ -25,11 +25,8 @@
         <div v-for="section in selectedTags" :key="section" class="text-left sub-category">
           <div class="font-bold-extra">{{ section }}</div>
           <div class="requirement-row text-left">
-            <div v-for="item in speicalRequirements[section]" class="requirement-item" :key="item.item">
-              <md-checkbox v-model="item.selected" class="checkbox-label-wrapper">
-                <img class="special-icon" :src="getIcon(item.subCategory, item.name)" />
-                {{ item.name }}
-              </md-checkbox>
+            <div v-for="item in speicalRequirements[section]" class="requirement-item">
+              <md-checkbox v-model="item.selected">{{ item.name }}</md-checkbox>
             </div>
           </div>
         </div>
@@ -55,7 +52,7 @@ export default {
   },
   data() {
     return {
-      tags: ["Sustainability", "Inclusion", "Security", "Covid-19"],
+      tags: ["Sustainability", "Inclusion", "Security", "Other", "Covid-19"],
       selectedTags: [],
       speicalRequirements: {
         Sustainability: [
@@ -104,51 +101,6 @@ export default {
         this.selectedTags.splice(tagIndex, 1);
       }
     },
-    getIcon(subCategory, name) {
-      let icon = null;
-      if (name === "All Indoor") {
-        icon = "All indoor";
-      } else if (name === "Pregnant women") {
-        icon = "pregnant-women-dark";
-      } else if (name === "All Outdoor") {
-        icon = "All outdoor";
-      } else if (name === "Accessible Bathrooms") {
-        icon = "Accessible bathroom";
-      } else if (name === "Accessibility for people with disabilities") {
-        icon = "Accessible for people with disabilities";
-      } else if (name === "Hotel accommodations within walking distance") {
-        icon = "Hotel";
-      } else if (name === "Shopping centers") {
-        icon = "Shopping center";
-      } else if (name === "Dining options within walking distance") {
-        icon = "Food2";
-      } else if (name === "Water saving protocols") {
-        icon = "Water saving";
-      } else if (name === "Green power and energy efficient") {
-        icon = "Green power";
-      } else if (name === "Waste recycle procedures") {
-        icon = "Waste recycle";
-      } else if (name === "Non toxic products") {
-        icon = "Non toxic";
-      } else if (name === "Prioritizing diversity and inclution") {
-        icon = "Diversity";
-      } else if (name === "Women on senior staff") {
-        icon = "Women on senior";
-      } else if (name === "Strict sexual harrasment policy") {
-        icon = "sexual harassment";
-      } else if (name === "Acknowledge all religious and cultural holidays") {
-        icon = "All religious";
-      } else {
-        icon = `${name}`;
-      }
-      if (subCategory === "Accessibility") {
-        return `${this.$iconURL}Requirements/${icon}.svg`;
-      } else if (subCategory === "Around the space" && name === "Dining options within walking distance") {
-        return `${this.$iconURL}Requirements/${icon}.svg`;
-      } else {
-        return `${this.$secondIconURL}Requirements/Accessibility+Sustainability+and+Inclusion/${icon}.svg`;
-      }
-    },
   },
 };
 </script>
@@ -172,15 +124,6 @@ export default {
       min-width: 25%;
       // display: grid;
       // grid-template-columns: repeat(4, 25%);
-    }
-  }
-  .checkbox-label-wrapper {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    img {
-      width: 25px;
-      margin: 0 5px;
     }
   }
 }

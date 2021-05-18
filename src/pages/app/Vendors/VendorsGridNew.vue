@@ -1,9 +1,11 @@
 <template>
   <div class="md-layout md-gutter vendors-pool-grid">
     <div class="md-layout-item md-size-100 vendors-list-header d-flex justify-content-start align-center">
-      <div class="form-group d-flex align-center">
+      <div class="form-group">
         <label>Sort by</label>
-        <v-select class="sort-by-list" v-model="sortField" :options="sortOptions" :clearable="false"> </v-select>
+        <select class="sort-by-list">
+          <option>Popularity</option>
+        </select>
       </div>
       <div class="vendors-number">Vendors:{{ pagingData.total }}</div>
     </div>
@@ -134,8 +136,6 @@ export default {
     return {
       searchQuery: "",
       filteredVendorsList: [],
-      sortField: "Popularity",
-      sortOptions: ["Popularity", "Newest"],
       modelValidations: {
         vendorWebsite: {
           url: { require_protocol: true },
@@ -221,10 +221,6 @@ export default {
 .vendors-pool-grid {
   .about-vendor {
     word-break: break-word;
-  }
-  .sort-by-list {
-    min-height: max-content;
-    width: 150px;
   }
 }
 .md-card-header-image {
@@ -326,19 +322,5 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.style-chooser .vs__search::placeholder,
-.style-chooser .vs__dropdown-toggle,
-.style-chooser .vs__dropdown-menu {
-  background: #dfe5fb;
-  border: none;
-  color: #394066;
-  text-transform: lowercase;
-  font-variant: small-caps;
-}
-
-.style-chooser .vs__clear,
-.style-chooser .vs__open-indicator {
-  fill: #394066;
 }
 </style>

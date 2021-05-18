@@ -1,10 +1,6 @@
 <template>
   <div class="md-layout-item md-size-33 proposal-card">
     <div class="booking-item">
-      <div class="d-flex align-center">
-        <timer></timer>
-        <div class="font-size-12 font-bold">Until teh offer expires</div>
-      </div>
       <div class="event-image" :style="`background: url(${backgroundImage}) center center no-repeat`">
         <div class="bundle-offer" v-if="proposal.bundleDiscount && proposal.bundleDiscount.isApplied">
           <img :src="`${$iconURL}common/bell-white.svg`" /> Bundle Offer
@@ -54,9 +50,7 @@
 </template>
 <script>
 import moment from "moment";
-import Timer from "@/components/Timer.vue";
 export default {
-  components: { Timer },
   props: {
     proposal: {
       type: Object,
