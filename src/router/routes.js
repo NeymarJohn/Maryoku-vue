@@ -33,6 +33,7 @@ const BookingEvent = () => import("@/pages/app/Events/components/BookingEvent");
 const EventBudgetRequirement = () => import("@/pages/app/Events/components/EventBudgetRequirement.vue");
 const EventCampaign = () => import("@/pages/app/Campaign/CampaignMainLayout.vue");
 const PlanningBoard = () => import("@/pages/app/Events/PlanningBoard/PlanningBoardLayout.vue");
+const ChooseVendor = () => import("@/pages/app/Events/ChooseVendor");
 const CreateWorkspace = () => import("@/pages/Dashboard/Pages/CreateWorkspace");
 const ChooseWorkspace = () => import("@/pages/Dashboard/Pages/ChooseWorkspace");
 
@@ -334,6 +335,17 @@ let EventPages = {
                     meta: {
                         title: "Plan Event",
                         gtm: "Plan Event",
+                        opaque: false,
+                        requiresAuth: true,
+                    },
+                },
+                {
+                    path: "choose-vendor",
+                    name: "Choose Vendor",
+                    component: ChooseVendor,
+                    meta: {
+                        title: "Choose Vendor",
+                        gtm: "Choose Vendor",
                         opaque: false,
                         requiresAuth: true,
                     },

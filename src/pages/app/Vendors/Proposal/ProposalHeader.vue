@@ -10,6 +10,7 @@
         >
           <img
             class="concept-image"
+            v-if="event.concept.images[index]"
             :src="`${event.concept.images[index].thumb_url || event.concept.images[index].url}`"
           />
         </div>
@@ -21,6 +22,7 @@
         >
           <img
             class="concept-image"
+            v-if="event.concept.images[index]"
             :src="`${event.concept.images[index].thumb_url || event.concept.images[index].url}`"
           />
         </div>

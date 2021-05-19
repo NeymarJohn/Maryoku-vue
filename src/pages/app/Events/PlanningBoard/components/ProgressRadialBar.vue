@@ -4,10 +4,10 @@
     startColor="#f51355"
     stopColor="#f51355"
     :strokeWidth="8"
-    :completed-steps="30"
+    :completed-steps="value"
     :diameter="80"
-    :total-steps="100"
-    :animateSpeed="5000"
+    :total-steps="total"
+    :animateSpeed="100"
     :isClockwise="false"
   >
     <div class="loading-budget-image">
@@ -18,6 +18,16 @@
 <script>
 import RadialProgressBar from "vue-radial-progress";
 export default {
+  props: {
+    value: {
+      type: Number,
+      default: 0,
+    },
+    total: {
+      type: Number,
+      default: 100,
+    },
+  },
   components: {
     RadialProgressBar,
   },

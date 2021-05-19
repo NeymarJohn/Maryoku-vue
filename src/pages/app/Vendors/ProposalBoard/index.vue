@@ -1,27 +1,27 @@
 <template>
   <div class="vendor-proposal-board p-40">
-<!--      <vue-html2pdf-->
-<!--          :show-layout="false"-->
-<!--          :float-layout="true"-->
-<!--          :enable-download="false"-->
-<!--          :preview-modal="true"-->
-<!--          :paginate-elements-by-height="1400"-->
-<!--          :filename="`proposal-${selectedProposal ? selectedProposal.id : ''}`"-->
-<!--          :pdf-quality="2"-->
-<!--          :manual-pagination="false"-->
-<!--          pdf-format="a4"-->
-<!--          pdf-orientation="portrait"-->
-<!--          pdf-content-width="800px"-->
-<!--          :html-to-pdf-options="htmlToPdfOptions"-->
-<!--          ref="html2Pdf"-->
-<!--      >-->
-<!--          <pdf-content slot="pdf-content" v-if="selectedProposal" :vendorProposal="selectedProposal" />-->
-<!--      </vue-html2pdf>-->
+      <vue-html2pdf
+          :show-layout="false"
+          :float-layout="true"
+          :enable-download="true"
+          :preview-modal="true"
+          :paginate-elements-by-height="1400"
+          :filename="`proposal-${selectedProposal ? selectedProposal.id : ''}`"
+          :pdf-quality="2"
+          :manual-pagination="false"
+          pdf-format="a4"
+          pdf-orientation="portrait"
+          pdf-content-width="800px"
+          :html-to-pdf-options="htmlToPdfOptions"
+          ref="html2Pdf"
+      >
+          <pdf-content slot="pdf-content" v-if="selectedProposal" :vendorProposal="selectedProposal" />
+      </vue-html2pdf>
     <loader :active="loading" :isFullScreen="true"/>
     <div class="font-size-22 font-bold">
       <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposal Dashboard
     </div>
-    <div class="font-bold text-uppercase mt-30 mb-15">Pending Proposals</div>
+    <div class="font-bold text-uppercase mt-30 mb-15">Opportunities</div>
     <carousel
       :items="4"
       :margin="25"
@@ -314,7 +314,11 @@ export default {
           this.$router.push(`/vendors/${this.selectedProposal.vendor.id}/proposal-request/${this.selectedProposal.proposalRequest.id}/form/duplicate`);
 
       } else if (action === 'download') {
-        this.downloadProposal(`http://localhost:8080/1/proposal/${this.selectedProposal.id}/download`);
+          // setTimeout(_ => {
+          //     this.$refs.html2Pdf.generatePdf()
+          // }, 50)
+
+        this.downloadProposal(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
       }
     },
     downloadProposal(link){
