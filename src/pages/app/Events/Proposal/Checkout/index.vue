@@ -11,8 +11,8 @@
                 :src="`${$iconURL}Budget+Elements/${vendor.eventCategory.icon}`"
                 style="width: 30px; margin-right: 0.5em"
               />
-              Book {{ vendor.eventCategory.fullTitle }}
-            </span>
+              Book {{ vendor.eventCategory.fullTitle }}</span
+            >
             CHECKOUT
           </div>
           <div class="mt-20">
@@ -42,8 +42,8 @@
           <div class="p-30">
             <div>Would you like to upgrade & add one of those?</div>
             <div class="mb-30">
-              You have $ {{ (proposal.serviceCategory.allocatedBudget - proposal.cost) | withComma }} left over from the
-              budget you reserved
+              You have $ {{ proposal.serviceCategory.allocatedBudget - proposal.cost }} left over from the budget you
+              reserved
             </div>
             <collapse-panel
               :defaultStatus="false"

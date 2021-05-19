@@ -58,18 +58,22 @@
         </div>
         <div class="md-layout mt-30">
           <div class="md-layout-item md-size-50 p-0 text-left">
-            <md-checkbox class="md-simple md-checkbox-circle md-vendor" v-model="isRegisteredCustomer" :value="true">
+            <md-checkbox class="md-simple md-checkbox-circle md-vendor" v-model="selectedOption" value="customer_list">
               Selection from the customer list
             </md-checkbox>
           </div>
           <div class="md-layout-item md-size-50 p-0 text-left">
-            <md-checkbox class="md-simple md-checkbox-circle md-vendor" v-model="isRegisteredCustomer" :value="false">
+            <md-checkbox
+              class="md-simple md-checkbox-circle md-vendor"
+              v-model="selectedOption"
+              value="unregister_customer"
+            >
               Unregistered customer
             </md-checkbox>
           </div>
         </div>
-        <div class="mt-30 text-left" v-if="isRegisteredCustomer">
-          <label class="font-bold">Company / Customer Name</label>
+        <div class="mt-30 text-left">
+          <label>Company / Customer Name</label>
           <multiselect
             v-model="company"
             :options="['microsoft', 'amazon', 'google', 'stripe']"
@@ -79,23 +83,8 @@
             class="width-50 mt-5 md-purple medium-selector"
           ></multiselect>
         </div>
-        <div v-else class="text-left">
-          <div class="mt-30 text-left">
-            <label class="font-bold">Company Name</label>
-            <maryoku-input inputStyle="users" class="width-50 mt-5 form-input" v-model="company"></maryoku-input>
-          </div>
-          <div class="mt-30 text-left">
-            <label class="font-bold">Customer Name</label>
-            <maryoku-input inputStyle="username" class="width-50 mt-5 form-input" v-model="customer"></maryoku-input>
-          </div>
-          <div class="mt-30 text-left">
-            <label class="font-bold">Email</label>
-            <maryoku-input inputStyle="email" class="width-50 mt-5 form-input" v-model="email"></maryoku-input>
-          </div>
-          <md-checkbox v-model="addToCustomerList">Add this customer to your regular customer list</md-checkbox>
-        </div>
         <div class="text-left mt-30">
-          <label class="font-bold">Number of Guests</label>
+          <label>Number of Guests</label>
           <maryoku-input
             class="width-50 mt-5 form-input"
             v-model="guests"
@@ -104,15 +93,15 @@
           ></maryoku-input>
         </div>
         <div class="text-left mt-30">
-          <label class="font-bold">Event Location</label>
+          <label>Event Location</label>
           <location-input
             v-model="location"
             class="width-50 mt-5"
             placeholder="Type city / region or specific address here…"
           ></location-input>
         </div>
-        <div class="form-group text-left mt-30" v-if="isRegisteredCustomer">
-          <label class="font-bold">Link Proposal</label>
+        <div class="form-group text-left mt-30">
+          <label>Link Proposal</label>
           <multiselect
             v-model="link_proposal"
             :options="['microsoft', 'amazon', 'google', 'stripe']"
@@ -126,9 +115,13 @@
           <label>Upload proposal</label>
           <label class="upload-section mt-5" for="file">
             <md-button class="md-outlined md-simple md-vendor md-sm">
-              <img class="mr-5" :src="`${$iconURL}common/pin-dark.svg`" width="15" />
-              Attach file
-            </md-button>
+              <img
+                class="mr-5"
+                src="https://static-maryoku.s3.amazonaws.com/storage/icons/common/pin-dark.svg"
+                width="15"
+              />
+              Attach file</md-button
+            >
             <div>Or</div>
             <div class="note">Drag your file here</div>
           </label>
@@ -169,13 +162,12 @@ export default {
         start: "AM",
         end: "AM",
       },
-      isRegisteredCustomer: true,
+      selectedOption: "customer_list",
       company: null,
       guests: null,
       location: null,
       link_proposal: null,
       attachment: null,
-      addToCustomerList: false,
     };
   },
   methods: {

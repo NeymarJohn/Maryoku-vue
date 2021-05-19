@@ -1,16 +1,19 @@
 <template>
   <div class="booking-section planning-board-layout">
-
-    <div class="p-50" v-if="!showCounterPage">
-      <loader :active="isLoading || isLoadingStoredData"/>
-      <template v-if="!isLoading && !isLoadingStoredData">
-        <div class="d-flex justify-content-between">
-          <div>
-            <div class="font-size-30 font-bold text-transform-uppercase">
-              {{ $stringUtil.getTwoDigits(step) }}.
-              <span v-if="step === 1">We'd love to know your style</span>
-              <span v-if="step === 2">What kind of services would you like us to find you?</span>
-
+    <div>
+      <loader :active="isLoading || isLoadingStoredData" />
+      <div class="p-50" v-if="!showCounterPage">
+        <template v-if="!isLoading && !isLoadingStoredData">
+          <div class="d-flex justify-content-between">
+            <div>
+              <div class="font-size-30 font-bold text-transform-uppercase">
+                {{ $stringUtil.getTwoDigits(step) }}.
+                <span v-if="step === 1">We'd love to know your style</span>
+                <span v-if="step === 2">What kind of services would you like us to find you?</span>
+              </div>
+              <div class="mt-20">
+                Mark the services you need. Each category has more than one, so feel free to navigate
+              </div>
             </div>
             <progress-radial-bar :value="percentOfBudgetCategories" :total="12"></progress-radial-bar>
           </div>
@@ -79,34 +82,6 @@
           <md-button class="md-red maryoku-btn" v-if="step === 1" @click="step = step + 1"> Next </md-button>
           <md-button class="md-red maryoku-btn" v-if="step === 2" @click="findVendors"> Find Me Vendors </md-button>
         </div>
-<<<<<<< HEAD
-      </template>
-      <div v-else class="loading-screen"></div>
-    </div>
-    <template v-else>
-<!--      <loader :active="isLoading || isLoadingStoredData"/>-->
-      <pending-for-vendors :expiredTime="expiredTime"></pending-for-vendors>
-    </template>
-    <div class="proposal-footer white-card d-flex justify-content-between">
-      <div>
-        <md-button v-if="step === 2" @click="step = step - 1" class="md-simple edit-btn md-black">
-          <md-icon>arrow_back</md-icon>
-          Back
-        </md-button>
-      </div>
-      <div>
-        <md-button class="md-simple md-black maryoku-btn">
-          <img :src="`${$iconURL}Campaign/Group 8871.svg`" />
-          Clear Choices
-        </md-button>
-        <md-button class="md-simple md-outlined md-red maryoku-btn">
-          <img :src="`${$iconURL}common/save-red.svg`" />
-          Save Draft
-        </md-button>
-        <md-button class="md-red maryoku-btn" v-if="step === 1" @click="step = step + 1"> Next </md-button>
-        <md-button class="md-red maryoku-btn" v-if="step === 2" @click="findVendors"> Find Me Vendors </md-button>
-=======
->>>>>>> e0e5076dce2edb7536e42b6bb61cb7af38dafe63
       </div>
     </div>
     <additional-request-modal
@@ -272,7 +247,7 @@ export default {
                 "Bourbon",
                 "Champagne",
                 "Cocktail",
-                "Coffee   Dream",
+                "Coffee Dream",
                 "Margarita",
                 "Martini",
                 "Mixology",
@@ -323,19 +298,19 @@ export default {
                 "Music Clips/Soul-retrosoul-Bensound.mp3",
               ],
               clipTitles: [
-                "Asian-india",
+                "Asian",
                 "Blues",
                 "Classical Wake Up",
                 "Country Country Boy Song",
                 "Electronic ERF",
                 "Folk Hey",
-                "Hip Hop-groovyhiphop",
-                "Jazz-thejazzpiano",
+                "Hip Hop",
+                "Jazz",
                 "Latin Beat",
                 "Pop Funday",
                 "RB Heart",
-                "Rock-rumble",
-                "Soul-retrosoul",
+                "Rock",
+                "Soul",
               ],
               images: [
                 "Photography+_+Videography/Black_White.jpg",
@@ -347,7 +322,7 @@ export default {
               ],
               imageTitles: ["Black White", "Buisness", "Candid", "Commercial", "Drone", "Portrait"],
               icon: "NewRequirements/Group 18013.svg",
-              script: `
+              script: ` 
                   requirements['multi-selection'][0]['options'].forEach(item=>item.selected = false)
                   requirements['multi-selection'][0]['options'][0]['selected'] = true;
                   requirements['multi-selection'][0]['options'][1]['selected'] = true;
@@ -397,7 +372,7 @@ export default {
               ],
               imageTitles: ["Casino Games", "Indoor Sport", "Make Your Own", "Photo Booth"],
               icon: "NewRequirements/Group 18012.svg",
-              script: `
+              script: ` 
                   requirements['multi-selection'][0]['options'].forEach(item=>item.selected = false)
                   requirements['multi-selection'][0]['options'][2]['selected'] = true;
                 `,
@@ -410,7 +385,7 @@ export default {
               images: ["Outdoor Activities/Day trip_option..png", "Outdoor Activities/Sport Event.png"],
               imageTitles: ["Day Trip Option", "Sport Event"],
               icon: "NewRequirements/Group 18010.svg",
-              script: `
+              script: ` 
                   requirements['multi-selection'][0]['options'].forEach(item=>item.selected = false)
                   requirements['multi-selection'][0]['options'][3]['selected'] = true;
                 `,

@@ -4,7 +4,8 @@
           :show-layout="false"
           :float-layout="true"
           :enable-download="true"
-          :preview-modal="true"
+          :preview-modal="false"
+
           :paginate-elements-by-height="1400"
           :filename="`proposal-${selectedProposal ? selectedProposal.id : ''}`"
           :pdf-quality="2"
@@ -15,13 +16,13 @@
           :html-to-pdf-options="htmlToPdfOptions"
           ref="html2Pdf"
       >
-          <pdf-content slot="pdf-content" v-if="selectedProposal" :vendorProposal="selectedProposal" />
+          <pdf-content slot="pdf-content" v-if="selectedProposal && download" :vendorProposal="selectedProposal" />
       </vue-html2pdf>
     <loader :active="loading" :isFullScreen="true"/>
     <div class="font-size-22 font-bold">
       <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposal Dashboard
     </div>
-    <div class="font-bold text-uppercase mt-30 mb-15">Opportunities</div>
+    <div class="font-bold text-uppercase mt-30 mb-15">Pending Proposals</div>
     <carousel
       :items="4"
       :margin="25"
@@ -164,7 +165,6 @@
             <proposal-content :vendorProposal="selectedProposal"/>
         </template>
     </modal>
-
   </div>
 </template>
 <script>
@@ -235,6 +235,7 @@ export default {
         limit: 5,
       },
       sortFields: {sort: '', order: ''},
+      download: false,
     };
   },
   async mounted() {
@@ -254,7 +255,7 @@ export default {
       const params = {status: this.tab, ...this.sortFields};
       const res = await new Proposal()
         // .for(new Vendor({ id: this.vendorData.id }))
-        .for(new Vendor({ id: '60144eafcfefec6372985c6d' }))
+        .for(new Vendor({ id: '60758222cfefec2676a0853d' }))
         .page(pagination.page)
         .limit(pagination.limit)
         .params(params)
@@ -314,18 +315,14 @@ export default {
           this.$router.push(`/vendors/${this.selectedProposal.vendor.id}/proposal-request/${this.selectedProposal.proposalRequest.id}/form/duplicate`);
 
       } else if (action === 'download') {
-          // setTimeout(_ => {
-          //     this.$refs.html2Pdf.generatePdf()
-          // }, 50)
+          this.download = true;
+          setTimeout(_ => {
+              this.$refs.html2Pdf.generatePdf();
+          }, 40)
 
-        this.downloadProposal(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
+
+
       }
-    },
-    downloadProposal(link){
-        window.open(
-            link,
-            '_blank',
-        )
     }
   },
   computed: {
@@ -333,6 +330,7 @@ export default {
       return this.$store.state.vendor.profile;
     },
     htmlToPdfOptions () {
+      console.log('html.pdf.options');
       return {
         margin: 0,
         image: {
@@ -419,7 +417,6 @@ export default {
     }
   }
 }
-
 .pdf-content {
     width: 100%;
     background: #fff;
