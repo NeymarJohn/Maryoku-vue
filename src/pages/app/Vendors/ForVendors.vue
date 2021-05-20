@@ -658,6 +658,13 @@ export default {
           "MMM DD, YYYY",
         )}`;
       }
+      if (this.proposalRequest.plannerRequirement.isEntireEvent) {
+        serviceTimeString = "For Whole Event";
+      } else if (this.proposalRequest.plannerRequirement.period) {
+        const period = this.proposalRequest.plannerRequirement.period;
+        serviceTimeString = `${period.startTime.time.hh}:${period.startTime.time.mm}:${period.startTime.ampm}`;
+        serviceTimeString = `${serviceTimeString} - ${period.endTime.time.hh}:${period.endTime.time.mm}:${period.endTime.ampm}`;
+      }
       return {
         time: serviceTimeString,
         date: serviceDate,
