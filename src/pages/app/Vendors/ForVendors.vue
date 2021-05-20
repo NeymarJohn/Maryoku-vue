@@ -601,6 +601,13 @@ export default {
       return this.$store.state.vendorProposal.vendor;
     },
     proposalRequest() {
+      try {
+        if (this.$store.state.vendorProposal.proposalRequest.plannerRequirement.period) {
+          this.startTime = this.$store.state.vendorProposal.proposalRequest.plannerRequirement.period.startTime.time;
+          this.amPack.start = this.$store.state.vendorProposal.proposalRequest.plannerRequirement.period.startTime.ampm;
+        }
+      } catch (e) {}
+
       return this.$store.state.vendorProposal.proposalRequest;
     },
     timelineDates() {
