@@ -10,7 +10,18 @@
       </md-button>
     </template>
     <template slot="body">
-      <div class="md-layout maryoku-modal-body"></div>
+      <div class="md-layout maryoku-modal-body">
+        <div class="text-left mb-40">
+          <div class="font-size-20">Time Slot:</div>
+          <div>
+            <md-checkbox class="md-checkbox-circle md-red" v-model="isEntire" :value="true">Entire Event</md-checkbox>
+          </div>
+          <div class="d-flex">
+            <md-checkbox class="md-checkbox-circle md-red" v-model="isEntire" :value="false"></md-checkbox>
+            <time-slot class="time-slot-wrapper" @change="setTime"></time-slot>
+          </div>
+        </div>
+      </div>
       <div v-if="selectedCategory.key === 'venuerental'">
         <div class="font-bold font-size-22">Any Additional Requests?</div>
         <div class="mt-20">Would you like to add one of those items?</div>
@@ -130,6 +141,7 @@
           </template>
         </div>
       </div>
+
       <div class="anything-else-section text-left mt-30">
         <div class="d-flex align-center mb-20" style="min-width: 300px">
           <img :src="`${$iconURL}Requirements/special-request-red.svg`" class="mr-20" />
@@ -162,21 +174,25 @@
 <script>
 import { Modal, MaryokuInput } from "@/components";
 import TagItem from "../TagItem.vue";
+import TimeSlot from "../TimeSlot.vue";
 export default {
   name: "AdditionalRequestModal",
   components: {
     Modal,
     TagItem,
     MaryokuInput,
+    TimeSlot,
   },
   data() {
     return {
+      isEntire: false,
       specialTags: [],
       selectedTags: [],
       subCategorySections: [],
       isGroup: false,
       groupSize: null,
       anythingElse: "",
+      period: null,
     };
   },
   props: {
@@ -227,7 +243,11 @@ export default {
       }
       this.$emit("save", {
         category: this.selectedCategory.key,
-        requirements,
+        requirements: {
+          mainRequirements: requirements,
+          isEntireEvent: this.isEntire,
+          period: this.period,
+        },
       });
     },
     selectTag(tag) {
@@ -305,6 +325,10 @@ export default {
         return `${this.$secondIconURL}Requirements/Accessibility+Sustainability+and+Inclusion/${icon}.svg`;
       }
     },
+    setTime(time) {
+      console.log("newTIme", time);
+      this.period = time;
+    },
   },
 };
 </script>
@@ -323,7 +347,8 @@ export default {
   .requirement-row {
     .requirement-item {
       display: inline-block;
-      min-width: 25%;
+      margin-right: 40px;
+      // min-width: 25%;
       // display: grid;
       // grid-template-columns: repeat(4, 25%);
     }
@@ -341,6 +366,9 @@ export default {
       width: 25px;
       margin: 0 5px;
     }
+  }
+  .time-slot-wrapper {
+    margin-top: 16px;
   }
 }
 </style>

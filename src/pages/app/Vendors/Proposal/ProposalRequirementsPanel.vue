@@ -16,7 +16,7 @@
             <template v-if="requirementCategory.toLowerCase() === 'special'">
               <div
                 class="category-section"
-                v-for="subCategory in selectedOptions(requirementsData[requirementCategory])"
+                v-for="subCategory in selectedOptions(requirementsData.mainRequirements[requirementCategory])"
                 :key="subCategory.subCategory"
               >
                 <div class="color-dark-gray text-transform-capitalize">{{ subCategory.subCategory }}</div>
@@ -33,14 +33,18 @@
               </div>
             </template>
             <div
-              v-else-if="requirementsData[requirementCategory].filter((item) => item.isSelected).length > 0"
+              v-else-if="
+                requirementsData.mainRequirements[requirementCategory].filter((item) => item.isSelected).length > 0
+              "
               class="category-section"
             >
               <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
               <div class="requirement-grid">
                 <div
                   class="requirement-item"
-                  v-for="requirementItem in requirementsData[requirementCategory].filter((item) => item.isSelected)"
+                  v-for="requirementItem in requirementsData.mainRequirements[requirementCategory].filter(
+                    (item) => item.isSelected,
+                  )"
                   :key="requirementItem.item"
                 >
                   <div class="checkmark"></div>
@@ -64,21 +68,19 @@
         </div>
       </div>
       <div v-else>
-        <div
-          class="requirements-content p-30 pt-0-i"
-          v-for="requirement in allRequirements[$store.state.vendorProposal.currentSecondaryService]"
-          :key="requirement.category"
-        >
-          <div class="font-size-20 font-bold mb-20">{{ requirement.categoryData.fullTitle }}</div>
+        <div class="requirements-content p-30 pt-0-i">
+          <div class="font-size-20 font-bold mb-20">
+            {{ getCategoryFromId(secondaryRequirement.category).fullTitle }}
+          </div>
           <div
-            v-for="(requirementCategory, index) in Object.keys(requirement.requirements)"
+            v-for="(requirementCategory, index) in Object.keys(secondaryRequirement.mainRequirements)"
             :key="`requirement-category-${index}`"
           >
             <template v-if="requirementCategory === 'multi-selection'"> </template>
             <template v-else-if="requirementCategory.toLowerCase() === 'special'">
               <div
                 class="category-section"
-                v-for="subCategory in selectedOptions(requirementsData[requirementCategory])"
+                v-for="subCategory in selectedOptions(secondaryRequirement.mainRequirements[requirementCategory])"
                 :key="subCategory.subCategory"
               >
                 <div class="color-dark-gray text-transform-capitalize">{{ subCategory.subCategory }}</div>
@@ -95,14 +97,16 @@
               </div>
             </template>
             <div
-              v-else-if="requirement.requirements[requirementCategory].filter((item) => item.isSelected).length > 0"
+              v-else-if="
+                secondaryRequirement.mainRequirements[requirementCategory].filter((item) => item.isSelected).length > 0
+              "
               class="category-section"
             >
               <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
               <div class="requirement-grid">
                 <div
                   class="requirement-item"
-                  v-for="requirementItem in requirement.requirements[requirementCategory].filter(
+                  v-for="requirementItem in secondaryRequirement.mainRequirements[requirementCategory].filter(
                     (item) => item.isSelected,
                   )"
                   :key="requirementItem.item"
@@ -153,10 +157,14 @@ export default {
   },
   methods: {
     selectedOptions(specialRequirements) {
+      if (!specialRequirements) return [];
       return specialRequirements.filter(
         (item) =>
           item.subCategory.toLowerCase() !== "sitting arrangement" && item.options.some((option) => option.selected),
       );
+    },
+    getCategoryFromId(category) {
+      return this.$store.state.common.serviceCategories.find((item) => item.key === category);
     },
   },
   created() {
@@ -174,8 +182,12 @@ export default {
       return this.$store.state.vendorProposal.vendor;
     },
     requirementsData() {
-      console.log(this.allRequirements[this.vendor.eventCategory.key]);
+      // console.log(this.allRequirements[this.vendor.eventCategory.key]);
       return this.allRequirements[this.vendor.eventCategory.key] || {};
+      // return this.allRequirements;
+    },
+    secondaryRequirement() {
+      return this.allRequirements[this.$store.state.vendorProposal.currentSecondaryService] || {};
     },
     allRequirements() {
       if (this.additionalServiceRequirements.length > 0) {
