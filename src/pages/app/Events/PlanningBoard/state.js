@@ -82,7 +82,22 @@ const actions = {
           reject(err)
         });
     });
+  },
+  updateRequirements({ commit, state }, requirements) {
+    return new Promise((resolve, reject) => {
+      new ProposalRequestRequirement(requirements)
+        .for(new CalendarEvent({ id: requirements.event.id }))
+        .save()
+        .then((res) => {
+          commit("setCategoryRequirements", { category: res.category, requirements: res })
+          resolve(res)
+        })
+        .catch(err => {
+          reject(err)
+        });
+    });
   }
+
 }
 const mutations = {
   setStep(state, step) {

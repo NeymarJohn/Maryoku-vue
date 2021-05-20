@@ -532,7 +532,7 @@ export default {
   methods: {
     ...mapMutations("event", ["setRequirementTypes", "setRequirementsForVendor", "setSubCategory"]),
     ...mapMutations("planningBoard", ["setData", "setMainRequirements", "setTypes", "setSpecialRequirements"]),
-    ...mapActions("planningBoard", ["saveMainRequirements", "saveRequiementSheet", "saveTypes"]),
+    ...mapActions("planningBoard", ["saveMainRequirements", "saveRequiementSheet", "saveTypes", "updateRequirements"]),
     findVendors() {
       this.isOpenedFinalModal = true;
     },
@@ -541,17 +541,13 @@ export default {
       this.setSpecialRequirements(data);
       this.expiredTime = moment(new Date()).add(3, "days").valueOf();
       const requestRequirement = {
-        types: this.types,
-        mainRequirements: this.mainRequirements,
-        specialRequirements: data,
-        event: { id: this.event.id },
         issuedTime: new Date().getTime(),
         expiredBusinessTime: this.expiredTime,
       };
-      if (this.$store.state.planningBoard.id) {
-        requestRequirement.id = this.$store.state.planningBoard.id;
-      }
-      postReq(`/1/events/${this.event.id}/find-vendors`).then((res) => {});
+      postReq(`/1/events/${this.event.id}/find-vendors`, {
+        issuedTime: new Date().getTime(),
+        expiredBusinessTime: this.expiredTime,
+      }).then((res) => {});
     },
     hasBudget(categoryKey) {
       return !!this.event.components.find((item) => item.componentId == categoryKey);
