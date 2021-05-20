@@ -292,7 +292,7 @@ export default {
                 "Asian",
                 "Blues",
                 "Classical Wake Up",
-                "Country Country Boy Song",
+                "Country",
                 "Electronic ERF",
                 "Folk Hey",
                 "Hip Hop",
