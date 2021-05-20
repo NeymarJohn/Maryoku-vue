@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout booking-section position-relative booking-proposals">
+  <div class="md-layout booking-section position-relative">
     <div class="choose-vendor-board">
       <div>
         <resizable-toggle-button
@@ -13,55 +13,40 @@
         ></resizable-toggle-button>
       </div>
       <div class="booking-proposals" v-if="selectedCategory">
-        <template v-if="proposals.length > 0">
-          <div class="font-size-30 font-bold-extra category-title mt-30 mb-30">
-            <img :src="`${$iconURL}Budget+Elements/${selectedCategory.eventCategory.icon}`" />
-            {{ selectedCategory.fullTitle }}
+        <div class="font-size-30 font-bold-extra category-title mt-30 mb-30">
+          <img :src="`${$iconURL}Budget+Elements/${selectedCategory.eventCategory.icon}`" />
+          {{ selectedCategory.fullTitle }}
+        </div>
+        <div class="d-flex justify-content-between">
+          <div>We found the top {{ proposals.length }} proposals for your event, Book now before it’s too late</div>
+          <div class="header-actions">
+            <md-button class="md-simple normal-btn md-red" @click="compareProposal">
+              <md-icon>bar_chart</md-icon>
+              Compare Proposals
+            </md-button>
+            <span class="seperator"></span>
+            <md-button class="md-simple normal-btn md-red">
+              <md-icon>edit</md-icon>
+              I Want Something Different
+            </md-button>
           </div>
-          <div class="d-flex justify-content-between">
-            <div>We found the top {{ proposals.length }} proposals for your event, Book now before it’s too late</div>
-            <div class="header-actions">
-              <md-button class="md-simple normal-btn md-red" @click="compareProposal">
-                <md-icon>bar_chart</md-icon>
-                Compare Proposals
-              </md-button>
-              <span class="seperator"></span>
-              <md-button class="md-simple normal-btn md-red">
-                <md-icon>edit</md-icon>
-                I Want Something Different
-              </md-button>
-            </div>
-          </div>
+        </div>
+        <div>
+          <loader :active="isLoadingProposal" />
           <div>
-            <loader :active="isLoadingProposal" />
-            <div>
-              <!-- Event Booking Items -->
-              <div class="md-layout events-booking-items" v-if="proposals.length">
-                <proposal-card
-                  v-for="(proposal, index) in proposals.slice(0, 3)"
-                  :key="index"
-                  :proposal="proposal"
-                  :component="selectedCategory"
-                  @goDetail="goDetailPage"
-                  :probability="getProbability(index)"
-                ></proposal-card>
-              </div>
+            <!-- Event Booking Items -->
+            <div class="md-layout events-booking-items" v-if="proposals.length">
+              <proposal-card
+                v-for="(proposal, index) in proposals.slice(0, 3)"
+                :key="index"
+                :proposal="proposal"
+                :component="selectedCategory"
+                @goDetail="goDetailPage"
+                :probability="getProbability(index)"
+              ></proposal-card>
             </div>
           </div>
-        </template>
-        <pending-for-vendors v-else :expiredTime="expiredTime"></pending-for-vendors>
-      </div>
-    </div>
-    <div class="proposals-footer white-card">
-      <div>
-        <md-button class="md-simple maryoku-btn md-black">I already have a venue for my event</md-button>
-        <md-button class="md-simple maryoku-btn md-black">Chanage Venue Requirements</md-button>
-      </div>
-      <div>
-        <md-button class="md-simple md-outlined md-red maryoku-btn" :disabled="proposals.length === 0">
-          Book Now
-        </md-button>
-        <md-button class="md-red maryoku-btn" :disabled="proposals.length === 0">Add To Cart</md-button>
+        </div>
       </div>
     </div>
   </div>
@@ -85,7 +70,6 @@ import EventChangeProposalModal from "@/components/Modals/EventChangeProposalMod
 import HeaderActions from "@/components/HeaderActions";
 import { postReq, getReq } from "@/utils/token";
 import ResizableToggleButton from "@/components/Button/ResizableToggleButton.vue";
-import PendingForVendors from "../components/PendingForVendors.vue";
 
 export default {
   name: "event-booking",
@@ -99,7 +83,6 @@ export default {
     ProposalCard,
     MaryokuInput,
     ResizableToggleButton,
-    PendingForVendors,
   },
   props: {},
   data: () => ({
@@ -135,7 +118,6 @@ export default {
           this.proposals = result;
           this.isLoadingProposal = false;
         });
-      this.getRequirements();
     },
     getSelectedBlock() {
       this.selectedBlock = _.findWhere(this.categoryList, {
@@ -151,9 +133,11 @@ export default {
       this.isLoading = false;
     },
     getRequirements() {
-      getReq(`/1/events/${this.event.id}/components/${this.selectedCategory.id}/requirements`)
+      getReq(`/1/events/${this.event.id}/components/${this.blockId}/requirements`)
         .then((res) => {
           this.currentRequirement = res.data.item;
+          this.showProposals = true;
+          this.showCounterPage = true;
         })
         .catch((e) => {
           this.showCounterPage = false;
@@ -262,8 +246,7 @@ export default {
       return this.$store.state.event.eventData.components;
     },
     expiredTime() {
-      if (this.currentRequirement) return this.currentRequirement.expiredBusinessTime;
-      return 0;
+      return this.currentRequirement.expiredBusinessTime;
     },
     event() {
       return this.$store.state.event.eventData;
@@ -272,11 +255,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.booking-section.booking-proposals {
+.booking-section {
   .choose-vendor-board {
     width: 100%;
     padding: 3rem;
-    padding-bottom: 150px;
   }
   .category-title {
     img {
@@ -294,7 +276,7 @@ export default {
     border-left: solid 1px #050505;
   }
   .events-booking-items {
-    padding: 0 0em;
+    padding: 0 2em;
     margin-bottom: 1em;
     align-items: stretch;
   }
@@ -320,14 +302,6 @@ export default {
     align-items: center;
     background: white;
     font-family: "Manrope-Regular", sans-serif;
-  }
-  .proposals-footer {
-    position: fixed;
-    bottom: 0;
-    padding: 20px 40px;
-    display: flex;
-    justify-content: space-between;
-    width: calc(100% - 490px);
   }
 }
 </style>

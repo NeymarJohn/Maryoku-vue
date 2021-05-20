@@ -1,58 +1,90 @@
 <template>
   <div class="booking-section planning-board-layout">
+
     <div class="p-50" v-if="!showCounterPage">
-      <loader :active="isLoading || isLoadingStoredData" />
+      <loader :active="isLoading || isLoadingStoredData"/>
       <template v-if="!isLoading && !isLoadingStoredData">
         <div class="d-flex justify-content-between">
-          <div class="font-size-30 font-bold text-transform-uppercase">
-            {{ $stringUtil.getTwoDigits(step) }}.
-            <span v-if="step === 1">We'd love to know your style</span>
-            <span v-if="step === 2">What kind of services would you like us to find you?</span>
+          <div>
+            <div class="font-size-30 font-bold text-transform-uppercase">
+              {{ $stringUtil.getTwoDigits(step) }}.
+              <span v-if="step === 1">We'd love to know your style</span>
+              <span v-if="step === 2">What kind of services would you like us to find you?</span>
+
+            </div>
+            <progress-radial-bar :value="percentOfBudgetCategories" :total="12"></progress-radial-bar>
           </div>
-          <progress-radial-bar :value="percentOfBudgetCategories" :total="12"></progress-radial-bar>
-        </div>
-        <div class="md-layout md-gutter mt-40" v-if="step === 1">
-          <div
-            class="md-layout-item md-size-33 md-medium-size-33 md-small-size-50 md-xsmall-size-100"
-            v-for="(serviceGroup, groupIndex) in serviceCards[step - 1]"
-            :key="`serviceGroup-${groupIndex}`"
-          >
-            <service-category-card
-              v-for="(service, serviceIndex) in serviceGroup"
-              class="mb-40"
-              :serviceCategory="service"
-              :key="service.name"
-              :isLong="(serviceIndex + groupIndex) % 2 === 1"
-              :hasBudget="hasBudget(service.serviceCategory)"
-              :musicPlayer="service.musicPlayer"
-              :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-              @showSpecific="getSpecification"
-              @update="setServiceStyles"
-            ></service-category-card>
+          <div class="md-layout md-gutter mt-40" v-if="step === 1">
+            <div
+              class="md-layout-item md-size-33 md-medium-size-33 md-small-size-50 md-xsmall-size-100"
+              v-for="(serviceGroup, groupIndex) in serviceCards[step - 1]"
+              :key="`serviceGroup-${groupIndex}`"
+            >
+              <service-category-card
+                v-for="(service, serviceIndex) in serviceGroup"
+                class="mb-40"
+                :serviceCategory="service"
+                :key="service.name"
+                :isLong="(serviceIndex + groupIndex) % 2 === 1"
+                :hasBudget="hasBudget(service.serviceCategory)"
+                :musicPlayer="service.musicPlayer"
+                :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
+                @showSpecific="getSpecification"
+                @update="setServiceStyles"
+              ></service-category-card>
+            </div>
           </div>
-        </div>
-        <div class="md-layout md-gutter mt-40" v-if="step === 2">
-          <div
-            class="md-layout-item md-size-33 md-medium-size-33 md-small-size-50 md-xsmall-size-100"
-            v-for="(serviceGroup, groupIndex) in serviceCards[step - 1]"
-            :key="`serviceGroup-${groupIndex}`"
-          >
-            <service-category-card
-              v-for="(service, serviceIndex) in serviceGroup"
-              class="mb-40"
-              :serviceCategory="service"
-              :key="`${service.name}-${getDefaultTypes(service.serviceCategory, service.name)}`"
-              :isLong="(serviceIndex + groupIndex) % 2 === 1"
-              :hasBudget="hasBudget(service.serviceCategory)"
-              :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
-              @showSpecific="getSpecification"
-              @update="setServiceStyles"
-            ></service-category-card>
+          <div class="md-layout md-gutter mt-40" v-if="step === 2">
+            <div
+              class="md-layout-item md-size-33 md-medium-size-33 md-small-size-50 md-xsmall-size-100"
+              v-for="(serviceGroup, groupIndex) in serviceCards[step - 1]"
+              :key="`serviceGroup-${groupIndex}`"
+            >
+              <service-category-card
+                v-for="(service, serviceIndex) in serviceGroup"
+                class="mb-40"
+                :serviceCategory="service"
+                :key="`${service.name}-${getDefaultTypes(service.serviceCategory, service.name)}`"
+                :isLong="(serviceIndex + groupIndex) % 2 === 1"
+                :hasBudget="hasBudget(service.serviceCategory)"
+                :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
+                @showSpecific="getSpecification"
+                @update="setServiceStyles"
+              ></service-category-card>
+            </div>
           </div>
-        </div>
+        </template>
+        <div v-else class="loading-screen"></div>
+      </div>
+      <template v-else>
+        <loader :active="isLoading" />
+        <pending-for-vendors :expiredTime="expiredTime"></pending-for-vendors>
       </template>
+      <div class="proposal-footer white-card d-flex justify-content-between">
+        <div>
+          <md-button v-if="step === 2" @click="step = step - 1" class="md-simple edit-btn md-black">
+            <md-icon>arrow_back</md-icon>
+            Back
+          </md-button>
+        </div>
+        <div>
+          <md-button class="md-simple md-black maryoku-btn">
+            <img :src="`${$iconURL}Campaign/Group 8871.svg`" />
+            Clear Choices
+          </md-button>
+          <md-button class="md-simple md-outlined md-red maryoku-btn">
+            <img :src="`${$iconURL}common/save-red.svg`" />
+            Save Draft
+          </md-button>
+          <md-button class="md-red maryoku-btn" v-if="step === 1" @click="step = step + 1"> Next </md-button>
+          <md-button class="md-red maryoku-btn" v-if="step === 2" @click="findVendors"> Find Me Vendors </md-button>
+        </div>
+<<<<<<< HEAD
+      </template>
+      <div v-else class="loading-screen"></div>
     </div>
     <template v-else>
+<!--      <loader :active="isLoading || isLoadingStoredData"/>-->
       <pending-for-vendors :expiredTime="expiredTime"></pending-for-vendors>
     </template>
     <div class="proposal-footer white-card d-flex justify-content-between">
@@ -73,6 +105,8 @@
         </md-button>
         <md-button class="md-red maryoku-btn" v-if="step === 1" @click="step = step + 1"> Next </md-button>
         <md-button class="md-red maryoku-btn" v-if="step === 2" @click="findVendors"> Find Me Vendors </md-button>
+=======
+>>>>>>> e0e5076dce2edb7536e42b6bb61cb7af38dafe63
       </div>
     </div>
     <additional-request-modal
@@ -238,7 +272,7 @@ export default {
                 "Bourbon",
                 "Champagne",
                 "Cocktail",
-                "Coffee Dream",
+                "Coffee   Dream",
                 "Margarita",
                 "Martini",
                 "Mixology",
@@ -289,19 +323,19 @@ export default {
                 "Music Clips/Soul-retrosoul-Bensound.mp3",
               ],
               clipTitles: [
-                "Asian",
+                "Asian-india",
                 "Blues",
                 "Classical Wake Up",
-                "Country",
+                "Country Country Boy Song",
                 "Electronic ERF",
                 "Folk Hey",
-                "Hip Hop",
-                "Jazz",
+                "Hip Hop-groovyhiphop",
+                "Jazz-thejazzpiano",
                 "Latin Beat",
                 "Pop Funday",
                 "RB Heart",
-                "Rock",
-                "Soul",
+                "Rock-rumble",
+                "Soul-retrosoul",
               ],
               images: [
                 "Photography+_+Videography/Black_White.jpg",
@@ -532,7 +566,7 @@ export default {
   methods: {
     ...mapMutations("event", ["setRequirementTypes", "setRequirementsForVendor", "setSubCategory"]),
     ...mapMutations("planningBoard", ["setData", "setMainRequirements", "setTypes", "setSpecialRequirements"]),
-    ...mapActions("planningBoard", ["saveMainRequirements", "saveRequiementSheet", "saveTypes", "updateRequirements"]),
+    ...mapActions("planningBoard", ["saveMainRequirements", "saveRequiementSheet", "saveTypes"]),
     findVendors() {
       this.isOpenedFinalModal = true;
     },
@@ -541,13 +575,17 @@ export default {
       this.setSpecialRequirements(data);
       this.expiredTime = moment(new Date()).add(3, "days").valueOf();
       const requestRequirement = {
+        types: this.types,
+        mainRequirements: this.mainRequirements,
+        specialRequirements: data,
+        event: { id: this.event.id },
         issuedTime: new Date().getTime(),
         expiredBusinessTime: this.expiredTime,
       };
-      postReq(`/1/events/${this.event.id}/find-vendors`, {
-        issuedTime: new Date().getTime(),
-        expiredBusinessTime: this.expiredTime,
-      }).then((res) => {});
+      if (this.$store.state.planningBoard.id) {
+        requestRequirement.id = this.$store.state.planningBoard.id;
+      }
+      postReq(`/1/events/${this.event.id}/find-vendors`).then((res) => {});
     },
     hasBudget(categoryKey) {
       return !!this.event.components.find((item) => item.componentId == categoryKey);
