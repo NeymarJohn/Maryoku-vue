@@ -38,7 +38,7 @@
             />
             Unexpected
           </td>
-          <td width="20%" class="planned unexpected">$ {{ event.unexpectedBudget | withComma }}</td>
+          <td width="20%" class="planned unexpected">$ {{ event.unexpectedBudget | withComma(Number) }}</td>
           <td width="15%" class="actual red-label"></td>
           <td width="15%" class="status"></td>
           <td class="expand"></td>
@@ -57,7 +57,7 @@
             />
             Extras
           </td>
-          <td width="20%" class="planned">$ {{ (event.allocatedTips + event.allocatedFees) | withComma }}</td>
+          <td width="20%" class="planned">$ {{ (event.allocatedTips + event.allocatedFees) | withComma(Number) }}</td>
           <td width="15%" class="actual red-label"></td>
           <td width="15%" class="status"></td>
           <td class="expand">
@@ -76,7 +76,7 @@
               Tips 12%
             </td>
             <td width="20%" class="planned">
-              $ {{ event.allocatedTips | withComma }}
+              $ {{ event.allocatedTips | withComma(Number) }}
               <md-button class="md-rose md-sm md-simple edit-btn" @click="showEditElementBudget()" v-if="!editTips"
                 >Edit</md-button
               >
@@ -121,7 +121,7 @@
 
               Fees 3%
             </td>
-            <td width="20%" class="planned">$ {{ event.allocatedFees | withComma }}</td>
+            <td width="20%" class="planned">$ {{ event.allocatedFees | withComma(Number) }}</td>
             <td width="15%" class="actual red-label"></td>
             <td width="15%" class="status"></td>
             <td class="expand"></td>
@@ -141,7 +141,7 @@
             />
             Unused
           </td>
-          <td width="20%" class="planned">$ {{ unusedBudget | withComma }}</td>
+          <td width="20%" class="planned">$ {{ unusedBudget | withComma(Number) }}</td>
           <td width="15%" class="actual red-label"></td>
           <td width="15%" class="status"></td>
           <td class="expand"></td>
@@ -154,8 +154,8 @@
       <tbody>
         <tr class="total">
           <td class="total-title" width="40%">Total</td>
-          <td width="20%" class="total-value">${{ Math.round(event.totalBudget) | roundNumber | withComma }}</td>
-          <td width="15%" class="total-value">${{ bookedTotal | withComma }}</td>
+          <td width="20%" class="total-value">${{ Math.round(event.totalBudget) | roundNumber | withComma(Number) }}</td>
+          <td width="15%" class="total-value">${{ bookedTotal | withComma(Number) }}</td>
           <td colspan="2"></td>
         </tr>
         <tr class="add-category" v-if="canEdit && editingMode">

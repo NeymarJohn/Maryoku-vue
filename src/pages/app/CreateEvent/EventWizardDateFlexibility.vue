@@ -63,11 +63,11 @@ export default {
       if (!this.publicEventData.eventStartMillis) {
         return "Not Sure";
       } else if (this.publicEventData.eventStartMillis !== this.publicEventData.eventEndMillis) {
-        return `${moment(new Date(this.publicEventData.eventStartMillis)).format("DD.MM.YY")} ~ ${moment(
+        return `${moment(new Date(this.publicEventData.eventStartMillis)).format("MM.DD.YY")} ~ ${moment(
           new Date(this.publicEventData.eventEndMillis),
-        ).format("DD.MM.YY")}`;
+        ).format("MM.DD.YY")}`;
       } else if (this.publicEventData.eventStartMillis === this.publicEventData.eventEndMillis) {
-        return `${moment(new Date(this.publicEventData.eventStartMillis)).format("DD.MM.YY")}`;
+        return `${moment(new Date(this.publicEventData.eventStartMillis)).format("MM.DD.YY")}`;
       }
     },
   },
