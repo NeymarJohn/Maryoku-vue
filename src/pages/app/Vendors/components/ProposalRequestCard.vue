@@ -18,13 +18,25 @@
         <md-icon class="color-black ml-5">keyboard_arrow_down</md-icon>
     </div>
     <div class="d-flex align-end">
-      <md-button class="font-size-12 md-simple font-bold md-vendor" style="margin-left: -15px;width: 20px; height: 30px" @click="dismiss(proposalRequest.id)">
+      <md-button class="md-simple md-vendor md-vendor-text" style="margin-left: -15px;width: 20px; height: 30px" @click="dismiss(proposalRequest.id)">
           Dismiss
       </md-button>
       <div class="ml-auto">
-          <div class="font-size-14"><span class="font-bold color-vendor">60%</span> completed</div>
-          <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="60"></md-progress-bar>
-          <md-button class="md-vendor" @click="gotoProposalRequest" style="width: 100px; height: 30px">Apply</md-button>
+          <div v-if="proposal">
+              <div v-if="proposal.status === 'save'">
+                  <div class="font-size-14"><span class="font-bold color-vendor">60%</span> completed</div>
+                  <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="60"></md-progress-bar>
+              </div>
+              <div v-if="proposal.status === 'submit'">
+                  <a class="color-red text-decoration-none cursor-pointer font-size-14">Negotiation Request</a>
+              </div>
+          </div>
+          <div v-else class="new color-vendor font-size-14 ml-auto">
+              New
+          </div>
+          <md-button class="md-vendor" @click="gotoProposalRequest" style="height: 30px">
+              {{!proposal ? 'Apply' : proposal.status === 'save' ? 'Finish' : 'Make Changes'}}
+          </md-button>
       </div>
 
     </div>
@@ -39,6 +51,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    proposal: {
+      type: Object,
+      default: null,
+    }
   },
   methods: {
     gotoProposalRequest() {
@@ -71,5 +87,12 @@ export default {
 .proposal-request-card {
   display: inline-block;
   width: 100%;
+}
+.new {
+    padding: 0px 10px;
+    border: 1px solid rgba(125, 40, 109, 0.62);
+    border-radius: 30px;
+    background-color: #d7c4d4;
+    width: fit-content;
 }
 </style>

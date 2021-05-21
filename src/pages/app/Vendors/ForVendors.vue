@@ -601,13 +601,6 @@ export default {
       return this.$store.state.vendorProposal.vendor;
     },
     proposalRequest() {
-      try {
-        if (this.$store.state.vendorProposal.proposalRequest.plannerRequirement.period) {
-          this.startTime = this.$store.state.vendorProposal.proposalRequest.plannerRequirement.period.startTime.time;
-          this.amPack.start = this.$store.state.vendorProposal.proposalRequest.plannerRequirement.period.startTime.ampm;
-        }
-      } catch (e) {}
-
       return this.$store.state.vendorProposal.proposalRequest;
     },
     timelineDates() {
@@ -657,13 +650,6 @@ export default {
           Number(this.proposalRequest.eventData.eventStartMillis),
           "MMM DD, YYYY",
         )}`;
-      }
-      if (this.proposalRequest.plannerRequirement.isEntireEvent) {
-        serviceTimeString = "For Whole Event";
-      } else if (this.proposalRequest.plannerRequirement.period) {
-        const period = this.proposalRequest.plannerRequirement.period;
-        serviceTimeString = `${period.startTime.time.hh}:${period.startTime.time.mm}:${period.startTime.ampm}`;
-        serviceTimeString = `${serviceTimeString} - ${period.endTime.time.hh}:${period.endTime.time.mm}:${period.endTime.ampm}`;
       }
       return {
         time: serviceTimeString,

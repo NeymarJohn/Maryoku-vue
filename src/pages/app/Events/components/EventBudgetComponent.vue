@@ -19,9 +19,9 @@
 
             <template v-if="!isEditing">
                 <div class="text-right font-size-20 flex-1 budget" v-if="type == 'perguest'">
-                    ${{ (component.allocatedBudget / participants).toFixed(0) | withComma }}
+                    ${{ (component.allocatedBudget / participants).toFixed(2) | withComma }}
                 </div>
-                <div class="text-right font-size-20 flex-1 budget" v-else>${{ component.allocatedBudget | withComma }}</div>
+                <div class="text-right font-size-20 flex-1 budget" v-else>${{ component.allocatedBudget | withComma(Number) }}</div>
                 <div class="actions" v-if="component">
                     <md-button class="edit-btn md-simple" @click="editBudget" :disabled="component.title === 'Unused'">
                         <img :src="`${$iconURL}Event%20Page/edit-dark.svg`" />

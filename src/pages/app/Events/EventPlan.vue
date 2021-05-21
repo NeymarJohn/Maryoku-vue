@@ -87,15 +87,15 @@ export default {
           componentId: "planningboard",
           id: "planningboard-item",
         };
-        // const chooseVendor = {
-        //   title: "Booking",
-        //   status: "not-complete",
-        //   route: "booking/choose-vendor",
-        //   icon: `${this.$iconURL}Campaign/Group 8857.svg`,
-        //   progress: this.event.campaignProgress,
-        //   componentId: "chooseVendor",
-        //   id: "bookingboard-item",
-        // };
+        const chooseVendor = {
+          title: "Booking",
+          status: "not-complete",
+          route: "booking/choose-vendor",
+          icon: `${this.$iconURL}Campaign/Group 8857.svg`,
+          progress: this.event.campaignProgress,
+          componentId: "chooseVendor",
+          id: "bookingboard-item",
+        };
         const elements = [];
         elements.push(overview);
         // if (this.event.eventType.hasConcept) {
@@ -105,7 +105,7 @@ export default {
         elements.push(timeline);
         elements.push(campaign);
         elements.push(planningBoard);
-        // elements.push(chooseVendor);
+        elements.push(chooseVendor);
         // show when you approve budget
         if (this.event.budgetProgress == 100) {
           this.event.components.sort((a, b) => a.order - b.order);
