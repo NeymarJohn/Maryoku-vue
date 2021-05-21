@@ -112,19 +112,19 @@
               <div class="budget-list d-flex justify-content-between">
                 <div class="budget-list__item">
                   <div class="label-title">Budget</div>
-                  <div class="budget-value">${{ budgetStatistics.total | withComma }}</div>
+                  <div class="budget-value">${{ budgetStatistics.total | withComma(Number) }}</div>
                   <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="showBudgetModal = true"
                     >Edit</md-button
                   >
                 </div>
                 <div class="budget-list__item">
                   <div class="label-title">Allocated</div>
-                  <div class="budget-value">${{ budgetStatistics.allocated | withComma }}</div>
+                  <div class="budget-value">${{ budgetStatistics.allocated | withComma(Number) }}</div>
                   <div class="percent">{{ budgetStatistics.allocatedPercentage }} %</div>
                 </div>
                 <div class="budget-list__item">
                   <div class="label-title">Booked</div>
-                  <div class="budget-value">${{ budgetStatistics.booked | withComma }}</div>
+                  <div class="budget-value">${{ budgetStatistics.booked | withComma(Number) }}</div>
                   <div class="percent">{{ budgetStatistics.bookedPercentage }}%</div>
                 </div>
               </div>
@@ -135,7 +135,7 @@
                 >add_circle_outline</md-icon
               >
               <md-icon class="card-overview-saved-icon color-red" v-else>remove_circle_outline</md-icon>
-              <span class="card-overview-saved-amount">$ {{ budgetStatistics.saved | withComma }}</span>
+              <span class="card-overview-saved-amount">$ {{ budgetStatistics.saved | withComma(Number) }}</span>
             </div>
             <div class="card-section card-expense" style="border: solid 2px #dbdbdb !important">
               <div class="section-header" style="border-bottom: solid 2px #dbdbdb !important">Expenses</div>

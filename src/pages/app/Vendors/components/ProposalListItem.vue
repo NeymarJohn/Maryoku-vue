@@ -6,6 +6,10 @@
     <div>
       <div class="font-bold font-size-16" v-if="proposal.proposalRequest.eventData.title">{{proposal.proposalRequest.eventData.title}}</div>
       <div class="font-bold font-size-16" v-else>New Event</div>
+      <md-button class="preview md-simple md-vendor-text md-vendor px-0">
+          Got 4 previous versions
+        <md-icon class="color-vendor">keyboard_arrow_down</md-icon>
+      </md-button>
     </div>
     <div class="font-size-14 color-black-middle">{{proposal.dateCreated | date('DD/MM/YYYY')}}</div>
     <div class="font-size-14 color-black-middle">${{proposal.cost | withComma}}</div>
@@ -13,7 +17,14 @@
     <div><img class="ml-15" :src="getStatusIcon(proposal.status)" /></div>
     <div class="font-size-14 color-black-middle">Tom</div>
 
-    <md-button class="md-simple md-vendor" @click="edit('show')">
+    <div v-if="proposal.status === 'submit'">
+        <md-button  class="md-vendor" @click="edit('show')">
+            <img src="/static/icons/vendor/proposalBoard/change-proposal.svg" class="mr-5" style="width: 20px" />
+            Make Changes
+        </md-button>
+        <md-button class="md-simple md-red md-vendor-text">Negotiation Request</md-button>
+    </div>
+    <md-button v-else class="md-simple md-vendor" @click="edit('show')">
       <img src="/static/icons/vendor/proposalBoard/see-proposal.svg" class="mr-5" style="width: 20px" />
       View Proposal
     </md-button>
