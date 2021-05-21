@@ -41,7 +41,7 @@
               v-for="(service, serviceIndex) in serviceGroup"
               class="mb-40"
               :serviceCategory="service"
-              :key="`${service.name}`"
+              :key="`${service.name}-${getDefaultTypes(service.serviceCategory, service.name)}`"
               :isLong="(serviceIndex + groupIndex) % 2 === 1"
               :hasBudget="hasBudget(service.serviceCategory)"
               :defaultData="getDefaultTypes(service.serviceCategory, service.name)"

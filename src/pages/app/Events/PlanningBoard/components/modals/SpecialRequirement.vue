@@ -47,7 +47,7 @@
         No, Skip
         <md-icon>keyboard_arrow_right</md-icon>
       </md-button>
-      <md-button class="md-red md-bold add-category-btn" @click="save">Find Me Vendors</md-button>
+      <md-button class="md-red md-bold add-category-btn" @click="save">Save & Finish</md-button>
     </template>
   </modal>
 </template>

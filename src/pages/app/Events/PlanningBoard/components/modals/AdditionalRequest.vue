@@ -14,7 +14,7 @@
         <div class="text-left mb-40">
           <div class="font-size-20">Time Slot:</div>
           <div>
-            <md-checkbox class="md-checkbox-circle md-red" v-model="isEntire" :value="true">Entire Day</md-checkbox>
+            <md-checkbox class="md-checkbox-circle md-red" v-model="isEntire" :value="true">Entire Event</md-checkbox>
           </div>
           <div class="d-flex">
             <md-checkbox class="md-checkbox-circle md-red" v-model="isEntire" :value="false"></md-checkbox>
@@ -142,7 +142,7 @@
         </div>
       </div>
 
-      <div class="anything-else-section text-left mt-50 mb-20">
+      <div class="anything-else-section text-left mt-30">
         <div class="d-flex align-center mb-20" style="min-width: 300px">
           <img :src="`${$iconURL}Requirements/special-request-red.svg`" class="mr-20" />
           <div class="title">
