@@ -99,7 +99,8 @@
         <div class="md-layout mt-20">
           <div class="white-card md-layout p-30">
             <div class="md-layout-item md-size-50">
-              <FunctionalCalendar
+              <event-calendar></event-calendar>
+              <!-- <FunctionalCalendar
                 class="vendor-dashboard-calendar"
                 :is-multiple-date-picker="true"
                 :sundayStart="true"
@@ -111,7 +112,7 @@
                 @changedYear="changeYear"
                 v-on:dayClicked="selectDay($event)"
                 v-on:daychoseDay="selectDay($event)"
-              ></FunctionalCalendar>
+              ></FunctionalCalendar> -->
               <!-- todo update page when month change -->
               <div v-if="markedDates.length" style="display: none">{{ this.month }}</div>
 
