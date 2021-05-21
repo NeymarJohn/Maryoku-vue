@@ -41,7 +41,7 @@
                     </ul>
                 </div>
             </div>
-            <img :src="headerBackgroundImage"/>
+
             <div class="proposal-body">
                 <h1 class="font-size-30">Dear {{ vendorProposal.vendor.vendorDisplayName }},</h1>
                 <p>
