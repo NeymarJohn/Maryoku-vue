@@ -41,7 +41,7 @@
               v-for="(service, serviceIndex) in serviceGroup"
               class="mb-40"
               :serviceCategory="service"
-              :key="`${service.name}-${getDefaultTypes(service.serviceCategory, service.name)}`"
+              :key="`${service.name}`"
               :isLong="(serviceIndex + groupIndex) % 2 === 1"
               :hasBudget="hasBudget(service.serviceCategory)"
               :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
@@ -478,10 +478,10 @@ export default {
     }
   },
   beforeCreate() {
-    if (this.$store.registerModule("planningBoard", PlanningBoardState) === false) {
-      this.$store.unregisterModule("planningBoard");
-      this.$store.registerModule("planningBoard", PlanningBoardState);
-    }
+    this.$store.registerModule("planningBoard", PlanningBoardState);
+  },
+  beforeDestroy() {
+    this.$store.unregisterModule("planningBoard");
   },
   computed: {
     ...mapState("planningBoard", {
@@ -547,7 +547,9 @@ export default {
       postReq(`/1/events/${this.event.id}/find-vendors`, {
         issuedTime: new Date().getTime(),
         expiredBusinessTime: this.expiredTime,
-      }).then((res) => {});
+      }).then((res) => {
+        this.$router.push(`/events/${this.event.id}/booking/choose-vendor`);
+      });
     },
     hasBudget(categoryKey) {
       return !!this.event.components.find((item) => item.componentId == categoryKey);
