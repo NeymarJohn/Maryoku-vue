@@ -2,28 +2,26 @@
   <div class>
     <div class="container">
       <div class="title">
-        <span class="step">1/5</span>
+        <span class="">1/5</span>
         <br />WHEN IS THE BIG DAY?
       </div>
       <div class="event-date event-basic-info">
+        <md-checkbox v-model="multiple">More than one day event</md-checkbox>
         <div class="date-picker picker-panel">
           <div class="d-flex pl-10 justify-content-center">
             <img :src="`${$iconURL}Event Page/calendar-dark.svg`" width="21px" />
             <span class="date-string">{{ getFormattedDate }}</span>
           </div>
           <div>
-            <functional-calendar
-              :is-date-range="true"
-              :change-month-function="true"
-              :change-year-function="true"
-              dateFormat="yyyy-mm-dd"
-              v-model="dateData"
-            ></functional-calendar>
+            <calendar
+                :multiple="multiple"
+                @select="selectDay"
+            ></calendar>
           </div>
         </div>
       </div>
     </div>
-    <wizard-status-bar :currentStep="1" @next="goToNext" @skip="skip" @back="back"></wizard-status-bar>
+    <wizard-status-bar class="mt-10" :currentStep="1" @next="goToNext" @skip="skip" @back="back"></wizard-status-bar>
   </div>
 </template>
 
@@ -31,33 +29,47 @@
 import WizardStatusBar from "./componenets/WizardStatusBar";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
-import Vue from "vue";
-import { FunctionalCalendar } from "vue-functional-calendar";
 import moment from "moment";
 import { extendMoment } from "moment-range";
 import { timelineTempates } from "@/constants/event.js";
+import { Calendar } from "@/components";
 export default {
   components: {
     WizardStatusBar,
-    FunctionalCalendar,
+    Calendar,
+  },
+  data() {
+    return {
+        multiple: false,
+        dateData: {selectedDate: moment().format('YYYY-M-D')},
+    };
   },
   methods: {
     ...mapMutations("PublicEventPlanner", ["setEventProperty", "setCurrentStep"]),
     goToNext() {
-      if (this.dateData.dateRange.start.date) {
-        console.log(this.dateData);
-        this.setEventProperty({
-          key: "eventStartMillis",
-          actualValue: new Date(this.dateData.dateRange.start.date).getTime(),
-        });
-        this.setEventProperty({
-          key: "eventEndMillis",
-          actualValue: new Date(this.dateData.dateRange.end.date).getTime(),
-        });
-
+      if (!this.dateData || !Object.keys(this.dateData).length) return "";
+      if (this.multiple) {
+          this.setEventProperty({
+              key: "eventStartMillis",
+              actualValue: new Date(this.dateData.dateRange.start.date).getTime(),
+          });
+          this.setEventProperty({
+              key: "eventEndMillis",
+              actualValue: new Date(this.dateData.dateRange.end.date).getTime(),
+          });
+      } else {
+          this.setEventProperty({
+              key: "eventStartMillis",
+              actualValue: new Date(this.dateData.selectedDate).getTime(),
+          });
+          this.setEventProperty({
+              key: "eventEndMillis",
+              actualValue: new Date(this.dateData.selectedDate).getTime(),
+          });
+      }
         const extendedMoment = extendMoment(moment);
-        const start = new Date(this.dateData.dateRange.start.date);
-        const end = new Date(this.dateData.dateRange.end.date);
+        const start = this.multiple ? new Date(this.dateData.dateRange.start.date) : new Date(this.dateData.selectedDate);
+        const end = this.multiple ?new Date(this.dateData.dateRange.end.date) : new Date(this.dateData.selectedDate);
         const range = extendedMoment.range(moment(start), moment(end));
 
         const dateList = Array.from(range.by("day")).map((m) => m.format("YYYY-MM-DD"));
@@ -84,7 +96,7 @@ export default {
         });
         this.setEventProperty({ key: "dateData", actualValue: this.dateData });
         this.$router.push({ path: `/event-wizard-flexibility` });
-      }
+
     },
     skip() {
       this.setEventProperty({
@@ -97,46 +109,33 @@ export default {
       });
       this.$router.push({ path: `/event-wizard-flexibility` });
     },
+    selectDay(e){
+      this.dateData = e;
+    },
     back() {
       this.$router.push({ path: `/create-event-wizard` });
     },
   },
-  data() {
-    return {
-      dateData: {
-        currentDate: new Date(),
-        dateRange: {
-          start: { date: false, dateTime: false, hour: "00", mintue: "00" },
-          end: { date: false, dateTime: false, hour: "00", mintue: "00" },
-        },
-        selectedDate: new Date(),
-        selectedDatesItem: "",
-        selectedHour: "00",
-        selectedMinute: "00",
-        selectedDates: [],
-      },
-    };
-  },
+
   created() {
-    if (this.publicEventData.dateData) {
-      this.dateData = this.publicEventData.dateData;
-    }
+
     // if (this.publicEventData.eventStartMillis) {
     //   this.dateData.selectedDate =  new Date(this.publicEventData.eventStartMillis)
     // }
+
   },
   computed: {
     ...mapState("PublicEventPlanner", ["publicEventData"]),
     getFormattedDate() {
-      console.log("object");
-      if (!this.dateData.selectedDate) return "";
-      return moment(new Date(this.dateData.selectedDate)).format("dddd, MMM DD, YYYY");
+      return moment().format("dddd, MMM DD, YYYY");
     },
   },
   watch: {
     dateData(newValue, oldValue) {
-      console.log(newValue);
     },
+    multiple(newVal, oldVal){
+      this.dateData = null;
+    }
   },
 };
 </script>
@@ -144,65 +143,19 @@ export default {
 .event-date.event-basic-info {
   width: 450px;
   max-width: 100%;
-  margin: 20px auto 0;
+  margin: 20px auto 10px;
   padding: 0;
   min-height: 500px;
   position: relative;
-  padding-top: 30px;
+
   .vfc-calendar .vfc-content {
     width: 330px;
     margin: auto;
   }
-  .vfc-space-between {
-    margin-top: 10px !important;
-  }
-  .vfc-separately-navigation-buttons div {
-    // margin: 20px 50px !important;
-  }
-  .vfc-navigation-buttons div .vfc-arrow-left,
-  .vfc-separately-navigation-buttons div .vfc-arrow-left {
-    width: 11px !important;
-    height: 11px !important;
-    border-top: 3px solid !important;
-    border-left: 3px solid !important;
-    border-radius: 1px;
-  }
-  .vfc-navigation-buttons div .vfc-arrow-right,
-  .vfc-separately-navigation-buttons div .vfc-arrow-right {
-    width: 11px !important;
-    height: 11px !important;
-    border-top: 3px solid !important;
-    border-right: 3px solid !important;
-    border-radius: 1px;
-  }
-  .vfc-day .vfc-base-start,
-  .vfc-base-end {
-    background-color: #f51355 !important;
-  }
-  span.vfc-span-day {
-    color: #43425d !important;
-    width: 36px !important;
-    line-height: 36px !important;
-    &.vfc-today {
-      color: #f51355 !important;
-    }
-  }
-  span.vfc-span-day.vfc-marked,
-  .vfc-today.vfc-marked {
-    color: white !important;
-
-    &:not(.vfc-start-marked):not(.vfc-end-marked):before {
-      background-color: #f51355 !important;
-    }
-  }
-
-  span.vfc-span-day.vfc-hide {
-    color: white !important;
-  }
   .picker-panel {
     display: block;
     position: relative;
-    padding: 40px 10px 0px;
+    padding: 40px 10px;
     border: solid 1px #bec0c2;
     border-radius: 3px;
     margin: auto;
@@ -217,6 +170,7 @@ export default {
   }
   .date-string {
     padding-left: 10px;
+    white-space: break-spaces;
   }
   .vfc-main-container {
     margin: auto;

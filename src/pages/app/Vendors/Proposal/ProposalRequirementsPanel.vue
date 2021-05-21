@@ -61,7 +61,7 @@
         </template>
 
         <div class="addtional-requests">
-          <div class="font-bold">Additional Requests</div>
+          <div class="font-bold">Addtional Requests</div>
           <div>
             {{ additionalNote }}
           </div>
@@ -151,6 +151,7 @@ export default {
     return {
       additionalServiceRequirements: [],
       showQuestionModal: false,
+      additionalNote: "",
       isLoading: true,
     };
   },
@@ -202,13 +203,13 @@ export default {
     proposalRequest() {
       return this.$store.state.vendorProposal.proposalRequest;
     },
-    additionalNote() {
-      try {
-        return this.proposalRequest.plannerRequirement.additionalDescription;
-      } catch (e) {
-        return "";
-      }
-    },
+    // additionalNote() {
+    //   try {
+    //     return this.proposalRequest.plannerRequirement[this.vendor.eventCategory.key].additionalRequest;
+    //   } catch (e) {
+    //     return "";
+    //   }
+    // },
     step() {
       try {
         return this.$store.state.vendorProposal.wizardStep;

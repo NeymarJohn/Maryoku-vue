@@ -5,7 +5,7 @@
         <div class="card-section card-overview">
           <div class="budget-card">
             <div class="font-size-22">Budget</div>
-            <div class="font-size-50 font-bold value">${{ event.totalBudget | withComma }}</div>
+            <div class="font-size-50 font-bold value">${{ event.totalBudget | withComma(Number) }}</div>
             <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-btn" @click="showBudgetModal = true"
               >Edit</md-button
             >

@@ -120,11 +120,11 @@
             <div class="font-size-20 font-bold">${{ Number(totalPriceOfProposal) | withComma }}</div>
           </div>
           <div class="d-flex justify-content-between" v-if="bundleDiscount && bundleDiscount.isApplied">
-            <div class="font-size-16">Befor Bundle Offer</div>
+            <div class="font-size-16">Before Bundle Offer</div>
             <div class="font-size-16 crosslinedText">${{ Number(totalBeforeBundle) | withComma }}</div>
           </div>
           <div class="d-flex justify-content-between" v-if="defaultDiscount.percentage">
-            <div class="font-size-16">Befor Discount</div>
+            <div class="font-size-16">Before Discount</div>
             <div class="font-size-16">
               ({{ defaultDiscount.percentage }}% off)
               <span class="crosslinedText"> ${{ Number(totalBeforeDiscount) | withComma }} </span>
