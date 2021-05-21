@@ -2,7 +2,7 @@
   <modal class="planning-board-additioal-modal" :containerClass="`modal-container lg`">
     <template slot="header">
       <div class="maryoku-modal-header text-center">
-        <img :src="`${$iconURL}Requirements/Group+16281.svg`" />
+        <img :src="`${$iconURL}NewRequirements/group-16281.svg`" />
         <div class="font-size-30 font-bold color-red mt-20">ALMOST DONE!</div>
       </div>
     </template>

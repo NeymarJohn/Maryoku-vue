@@ -5,8 +5,8 @@
         <resizable-toggle-button
           class="mr-20 mb-10"
           :key="component.componentId"
-          :label="component.eventCategory.fullTitle"
-          :icon="`${$iconURL}Budget+Elements/${component.eventCategory.icon}`"
+          :label="component.eventCategory ? component.eventCategory.fullTitle : ''"
+          :icon="`${$iconURL}Budget+Elements/${component.eventCategory ? component.eventCategory.icon : ''}`"
           :selectedIcon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
           :defaultStatus="selectedCategory && component.componentId === selectedCategory.componentId"
           v-for="component in event.components"
