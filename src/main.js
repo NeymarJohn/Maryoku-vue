@@ -310,8 +310,7 @@ Vue.filter("withComma", function (value, type = null) {
   if (typeof value == 'string') {
     value = Number(value)
   }
-  return value ? type != Number ? value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) :
-      value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0;
+  return value ? type != Number ? value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : value : 0;
 
 });
 Vue.filter("formatQty", function (value) {

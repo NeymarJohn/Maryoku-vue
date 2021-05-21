@@ -3,7 +3,7 @@
     <div class="booking-item">
       <div class="d-flex align-center">
         <timer></timer>
-        <div class="font-size-12 font-bold">Until teh offer expires</div>
+        <div class="font-size-12 font-bold">Until the offer expires</div>
       </div>
       <div class="event-image" :style="`background: url(${backgroundImage}) center center no-repeat`">
         <div class="bundle-offer" v-if="proposal.bundleDiscount && proposal.bundleDiscount.isApplied">

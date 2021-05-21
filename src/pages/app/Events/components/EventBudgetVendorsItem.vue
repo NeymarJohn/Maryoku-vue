@@ -32,7 +32,7 @@
             </td>
             <td class="planned" width="25%" style="white-space: nowrap">
               <span v-if="type === 'total'">$ {{ eventCategoryItem.allocatedBudget | withComma(Number) }}</span>
-              <span v-else>$ {{ (eventCategoryItem.allocatedBudget / event.numberOfParticipants).toFixed(2) | withComma}}</span>
+              <span v-else>$ {{ (eventCategoryItem.allocatedBudget / event.numberOfParticipants).toFixed(0) }}</span>
               <md-button class="md-rose md-sm md-simple edit-btn" v-if="isEditable && editingMode" @click="switchEdit"
                 >Edit</md-button
               >
