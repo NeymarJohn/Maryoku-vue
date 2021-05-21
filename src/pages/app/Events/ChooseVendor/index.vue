@@ -296,6 +296,8 @@ export default {
     padding: 0 0em;
     margin-bottom: 1em;
     align-items: stretch;
+    margin-top: 30px;
+    justify-content: space-between;
   }
   .booking-section__actions {
     width: 100%;

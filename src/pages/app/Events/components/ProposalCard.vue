@@ -1,53 +1,50 @@
 <template>
-  <div class="md-layout-item md-size-33 proposal-card">
+  <div class="proposal-card">
     <div class="booking-item">
-      <div class="d-flex align-center">
-        <timer></timer>
-        <div class="font-size-12 font-bold">Until the offer expires</div>
-      </div>
       <div class="event-image" :style="`background: url(${backgroundImage}) center center no-repeat`">
         <div class="bundle-offer" v-if="proposal.bundleDiscount && proposal.bundleDiscount.isApplied">
-          <img :src="`${$iconURL}common/bell-white.svg`" /> Bundle Offer
+          <img :src="`${$iconURL}common/bell-white.svg`" />
+          Bundle Offer
           <md-tooltip md-direction="top" class="p-30 color-black">
             <div class="font-size-20 font-bold mb-10">{{ getBundleToolTipText(proposal.bundleDiscount.services) }}</div>
             <div class="font-size-16">{{ proposal.bundleDiscount.percentage }}% Off for the whole package</div>
           </md-tooltip>
         </div>
       </div>
-      <div class="mt-20 d-flex" v-show="proposal.suggestionDate">
-        <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" class="label-icon mr-5" />
-        <span v-if="getDiffDaysFromOriginal() < 0" class="whitspace-nowrap">
-          This proposal is {{ -getDiffDaysFromOriginal() }}days before your original date
-        </span>
-        <span v-else class="whitspace-nowrap">
-          This proposal is {{ getDiffDaysFromOriginal() }}days later your original date
-        </span>
-      </div>
-      <div class="price">
-        <span class="price-value">${{ proposal.cost | withComma }}</span>
-        <small>For 3 hours</small>
-      </div>
-      <div
-        class="font-size-14 color-dark-gray mb-10"
-        :class="{ invisible: component.allocatedBudget >= proposal.cost }"
-      >
-        <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" class="label-icon" />
-        ${{ (proposal.cost - component.allocatedBudget) | withComma }}
-        more than budget
-      </div>
-      <template v-if="proposal.vendor">
-        <h4 class="event-title">{{ proposal.vendor.companyName }}</h4>
-        <div class="probability">Alignement to requirements {{ probability }}%</div>
-        <ul class="event-info">
-          <li class="event-info__item">{{ proposal.vendor.vendorAddresses[0] }}</li>
-          <li class="event-info__item">{{ proposal.vendor.vendorCity }}</li>
-        </ul>
-      </template>
-
-      <p class="event-desc">{{ proposal.vendor.about ? proposal.vendor.about.company : "" }}</p>
-
-      <div class="item-actions text-right">
-        <md-button class="md-red maryoku-btn" @click="proposalDetails">Details & Booking </md-button>
+      <div class="card-content">
+        <div class="mt-20 d-flex" v-show="proposal.suggestionDate">
+          <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" class="label-icon mr-5" />
+          <span v-if="getDiffDaysFromOriginal() < 0" class="whitspace-nowrap">
+            This proposal is {{ -getDiffDaysFromOriginal() }}days before your original date
+          </span>
+          <span v-else class="whitspace-nowrap">
+            This proposal is {{ getDiffDaysFromOriginal() }}days later your original date
+          </span>
+        </div>
+        <div class="price">
+          <span class="price-value">${{ proposal.cost | withComma }}</span>
+          <small>For 3 hours</small>
+        </div>
+        <div
+          class="font-size-14 color-dark-gray mb-10"
+          :class="{ invisible: component.allocatedBudget >= proposal.cost }"
+        >
+          <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" class="label-icon" />
+          ${{ (proposal.cost - component.allocatedBudget) | withComma }}
+          more than budget
+        </div>
+        <template v-if="proposal.vendor">
+          <h4 class="event-title">{{ proposal.vendor.companyName }}</h4>
+          <div class="probability">Alignement to requirements {{ probability }}%</div>
+          <ul class="event-info">
+            <li class="event-info__item">{{ proposal.vendor.vendorAddresses[0] }}</li>
+            <li class="event-info__item">{{ proposal.vendor.vendorCity }}</li>
+          </ul>
+        </template>
+        <p class="event-desc">{{ proposal.vendor.about ? proposal.vendor.about.company : "" }}</p>
+        <div class="item-actions text-right">
+          <md-button class="md-red maryoku-btn" @click="proposalDetails">Details & Booking </md-button>
+        </div>
       </div>
     </div>
   </div>
@@ -120,7 +117,6 @@ export default {
   border-radius: 3px;
   box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
   background-color: #ffffff;
-  padding: 1.5em;
   height: 100%;
 
   .event-image {
@@ -172,6 +168,9 @@ export default {
         }
       }
     }
+  }
+  .card-content {
+    padding: 1.5em;
   }
 
   .price {
