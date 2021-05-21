@@ -22,14 +22,21 @@
         </div>
       </div>
       <div>
-        <div v-for="section in selectedTags" :key="section" class="text-left sub-category">
+        <div v-for="section in selectedTags" :key="section" class="text-left sub-category" :id="section">
           <div class="font-bold-extra">{{ section }}</div>
           <div class="requirement-row text-left">
-            <div v-for="item in speicalRequirements[section]" class="requirement-item" :key="item.item">
-              <md-checkbox v-model="item.selected" class="checkbox-label-wrapper">
-                <img class="special-icon" :src="getIcon(item.subCategory, item.name)" />
-                {{ item.name }}
-              </md-checkbox>
+            <div v-for="subCategory in speicalRequirements[section]" :key="subCategory.subCategory" class="mt-30">
+              <div v-if="subCategory.subCategory" class="font-bold color-gray">{{ subCategory.subCategory }}:</div>
+              <div v-for="item in subCategory.items" :key="item.name" class="requirement-item">
+                <md-checkbox v-model="item.selected" class="checkbox-label-wrapper">
+                  <img
+                    class="special-icon"
+                    :src="getIcon(item.subCategory, item.name)"
+                    v-if="getIcon(item.subCategory, item.name)"
+                  />
+                  {{ item.name }}
+                </md-checkbox>
+              </div>
             </div>
           </div>
         </div>
@@ -59,17 +66,66 @@ export default {
       selectedTags: [],
       speicalRequirements: {
         Sustainability: [
-          { name: "Green policy", selected: false },
-          { name: "Water saving protocols", selected: false },
-          { name: "Green power and energy efficient", selected: false },
-          { name: "Waste recycle procedures", selected: false },
-          { name: "Non toxic products", selected: false },
+          {
+            subCategory: "",
+            items: [
+              { name: "Green policy", selected: false },
+              { name: "Water saving protocols", selected: false },
+              { name: "Green power and energy efficient", selected: false },
+              { name: "Waste recycle procedures", selected: false },
+              { name: "Non toxic products", selected: false },
+            ],
+          },
         ],
         Inclusion: [
-          { name: "Prioritizing diversity and inclution", selected: false },
-          { name: "Women on senior staff", selected: false },
-          { name: "Strict sexual harrasment policy", selected: false },
-          { name: "Acknowledge all religious and cultural holidays", selected: false },
+          {
+            subCategory: "",
+            items: [
+              { name: "Prioritizing diversity and inclution", selected: false },
+              { name: "Women on senior staff", selected: false },
+              { name: "Strict sexual harrasment policy", selected: false },
+              { name: "Acknowledge all religious and cultural holidays", selected: false },
+            ],
+          },
+        ],
+        Security: [
+          {
+            subCategory: "Services",
+            items: [
+              { name: "Day of security", selected: false },
+              { name: "Security consultation", selected: false },
+              { name: "Personal security", selected: false },
+              { name: "VIP security", selected: false },
+              { name: "Parameter security", selected: false },
+              { name: "Risk assessment", selected: false },
+              { name: "Crowd control", selected: false },
+            ],
+          },
+          {
+            subCategory: "Staff",
+            items: [
+              { name: "Patrolling officers", selected: false },
+              { name: "Bouncers", selected: false },
+              { name: "Unarmed security", selected: false },
+              { name: "Undercover", selected: false },
+              { name: "Chaperones", selected: false },
+              { name: "Body guards", selected: false },
+              { name: "Armed security offices", selected: false },
+              { name: "Paramedic", selected: false },
+            ],
+          },
+        ],
+        "Covid-19": [
+          {
+            subCategory: "Requests for all stuff members",
+            items: [
+              { name: "Mask wearing", selected: false },
+              { name: "Enhanced cleaning", selected: false },
+              { name: "Cancellation in mitigating circumstances Policy", selected: false },
+              { name: "Social distancing", selected: false },
+              { name: "Vaccination Certificate", selected: false },
+            ],
+          },
         ],
       },
     };
@@ -88,6 +144,7 @@ export default {
     console.log("this.defaultData", this.defaultData);
     this.selectedTags = Object.keys(this.defaultData);
     this.speicalRequirements = { ...this.speicalRequirements, ...this.defaultData };
+    console.log(this.speicalRequirements);
   },
   methods: {
     onCancel: function (e) {
@@ -103,6 +160,9 @@ export default {
       } else {
         this.selectedTags.splice(tagIndex, 1);
       }
+      setTimeout(() => {
+        this.goToSelectedTag(tag);
+      }, 100);
     },
     getIcon(subCategory, name) {
       let icon = null;
@@ -138,15 +198,27 @@ export default {
         icon = "sexual harassment";
       } else if (name === "Acknowledge all religious and cultural holidays") {
         icon = "All religious";
-      } else {
-        icon = `${name}`;
       }
       if (subCategory === "Accessibility") {
         return `${this.$iconURL}Requirements/${icon}.svg`;
       } else if (subCategory === "Around the space" && name === "Dining options within walking distance") {
         return `${this.$iconURL}Requirements/${icon}.svg`;
-      } else {
+      } else if (icon) {
         return `${this.$secondIconURL}Requirements/Accessibility+Sustainability+and+Inclusion/${icon}.svg`;
+      }
+      return null;
+    },
+    goToSelectedTag(item) {
+      const theElement = document.getElementById(item);
+      if (!theElement) return;
+      const y = theElement.getBoundingClientRect().top + window.pageYOffset;
+      const yOffset = -50;
+      const modalWrapper = document.getElementsByClassName("modal-wrapper")[0];
+      if (modalWrapper) {
+        modalWrapper.scrollTo({
+          top: y + yOffset,
+          behavior: "smooth",
+        });
       }
     },
   },
