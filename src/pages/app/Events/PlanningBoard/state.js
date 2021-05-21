@@ -68,7 +68,8 @@ const actions = {
   saveMainRequirements({ commit, state }, { event, category, requirements }) {
     let originalRequirements = state[category];
     if (!originalRequirements) originalRequirements = { event: { id: event.id }, category };
-    originalRequirements.mainRequirements = requirements
+    // originalRequirements.mainRequirements = requirements
+    originalRequirements = { ...originalRequirements, ...requirements }
     return new Promise((resolve, reject) => {
       new ProposalRequestRequirement(originalRequirements)
         .for(new CalendarEvent({ id: event.id }))
@@ -81,7 +82,22 @@ const actions = {
           reject(err)
         });
     });
+  },
+  updateRequirements({ commit, state }, requirements) {
+    return new Promise((resolve, reject) => {
+      new ProposalRequestRequirement(requirements)
+        .for(new CalendarEvent({ id: requirements.event.id }))
+        .save()
+        .then((res) => {
+          commit("setCategoryRequirements", { category: res.category, requirements: res })
+          resolve(res)
+        })
+        .catch(err => {
+          reject(err)
+        });
+    });
   }
+
 }
 const mutations = {
   setStep(state, step) {

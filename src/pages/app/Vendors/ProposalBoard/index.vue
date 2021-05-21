@@ -1,26 +1,25 @@
 <template>
   <div class="vendor-proposal-board p-40">
-      <vue-html2pdf
-          :show-layout="false"
-          :float-layout="true"
-          :enable-download="true"
-          :preview-modal="true"
-          :paginate-elements-by-height="1400"
-          :filename="`proposal-${selectedProposal ? selectedProposal.id : ''}`"
-          :pdf-quality="2"
-          :manual-pagination="false"
-          pdf-format="a4"
-          pdf-orientation="portrait"
-          pdf-content-width="800px"
-          :html-to-pdf-options="htmlToPdfOptions"
-          ref="html2Pdf"
-      >
-          <pdf-content slot="pdf-content" v-if="selectedProposal" :vendorProposal="selectedProposal" />
-      </vue-html2pdf>
+<!--      <vue-html2pdf-->
+<!--          :show-layout="false"-->
+<!--          :float-layout="true"-->
+<!--          :enable-download="false"-->
+<!--          :preview-modal="true"-->
+<!--          :paginate-elements-by-height="1400"-->
+<!--          :filename="`proposal-${selectedProposal ? selectedProposal.id : ''}`"-->
+<!--          :pdf-quality="2"-->
+<!--          :manual-pagination="false"-->
+<!--          pdf-format="a4"-->
+<!--          pdf-orientation="portrait"-->
+<!--          pdf-content-width="800px"-->
+<!--          :html-to-pdf-options="htmlToPdfOptions"-->
+<!--          ref="html2Pdf"-->
+<!--      >-->
+<!--          <pdf-content slot="pdf-content" v-if="selectedProposal" :vendorProposal="selectedProposal" />-->
+<!--      </vue-html2pdf>-->
     <loader :active="loading" :isFullScreen="true"/>
-    <div class="font-size-22 font-bold d-flex align-center">
-      <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposal Board
-      <md-button class="ml-auto md-vendor md-maryoku mr-15">Create New Proposal</md-button>
+    <div class="font-size-22 font-bold">
+      <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposal Dashboard
     </div>
     <div class="font-bold text-uppercase mt-30 mb-15">Opportunities</div>
     <carousel
@@ -42,18 +41,9 @@
         v-for="proposalRequest in proposalRequests"
         :key="proposalRequest.id"
         :proposalRequest="proposalRequest"
-        :proposal="getProposalWithRequestId(proposalRequest.id)"
         @dismiss="dismiss"
       >
       </proposal-request-card>
-      <div v-if="proposalRequests.length < 2" class="white-card p-20 d-flex">
-          <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" style="width: 55px;height: 55px">
-          <div class="ml-15">
-              <div class="font-size-18 font-bold text-uppercase color-vendor">No More Pending Proposals</div>
-              <p class="my-10 font-size-14">You can increase your exposure to planners in a few simple steps</p>
-              <div class="d-flex"><md-button class="md-simple ml-auto md-vendor md-outlined" style="height: 30px">Learn More</md-button></div>
-          </div>
-      </div>
       <template slot="next">
         <button class="nav-right nav-btn">
           <md-icon class="color-vendor">arrow_forward</md-icon>
@@ -83,7 +73,7 @@
           >
               {{ proposals.length }} Proposals:</span></div>
       <div class="md-layout mt-10">
-        <div class="md-layout-item md-size-75 p-0 d-flex flex-column">
+        <div class="md-layout-item md-size-75 p-0">
           <div class="sort-bar px-40">
             <span v-for="it in proposalHeaders"
                   class="sort-item"
@@ -107,11 +97,6 @@
                     @action="handleProposal"
                 ></proposal-list-item>
             </div>
-          </div>
-          <div v-if="proposals.length < 2" class="my-auto d-flex flex-column align-center">
-              <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`">
-              <p class="text-transform-uppercase font-size-14">No More Proposal To Show</p>
-              <md-button class="md-vendor">Create New Proposal</md-button>
           </div>
         </div>
         <div class="md-layout-item md-size-25 mt-50">
@@ -147,7 +132,7 @@
                             <div class="ml-10">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</div>
                         </div>
                     </div>
-                    <md-button class="mt-10 md-simple md-vendor-text md-vendor px-0">
+                    <md-button class="mt-10 md-simple md-vendor px-0">
                         More Insights
                         <md-icon class="color-vendor">keyboard_arrow_down</md-icon>
                     </md-button>
@@ -210,7 +195,6 @@ export default {
   data() {
     return {
       loading: true,
-      iconUrl: `${this.$resourceURL}storage/icons/`,
       proposalRequests: [],
       proposalTabs: [
           {key: 'all', title: 'All Proposal', icon: 'proposal-active.svg', class: 'color-vendor'},
@@ -254,24 +238,23 @@ export default {
     };
   },
   async mounted() {
-    console.log('mounted', this.vendorData.id);
+    console.log('mounted', this.vendorData);
     await this.getData();
     await this.getProposal();
     this.loading = false;
   },
   methods: {
     async getData() {
-        let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
-        // let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '604cd2fecfefec0b87aff7bf' })).get();
+        // this.proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
+        let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '606b9d71cfefec306c439c3f' })).get();
         this.proposalRequests = proposalRequests.filter(p => p.remainingTime);
-        this.proposalRequests.map(it => console.log('proposal.request', it.id));
     },
     async getProposal() {
       const { pagination } = this;
       const params = {status: this.tab, ...this.sortFields};
       const res = await new Proposal()
-        .for(new Vendor({ id: this.vendorData.id }))
-        // .for(new Vendor({ id: '604cd2fecfefec0b87aff7bf' }))
+        // .for(new Vendor({ id: this.vendorData.id }))
+        .for(new Vendor({ id: '60144eafcfefec6372985c6d' }))
         .page(pagination.page)
         .limit(pagination.limit)
         .params(params)
@@ -279,16 +262,11 @@ export default {
       const data = res[0];
       console.log('proposals', res)
       this.proposals = data.items;
-      this.proposals.map(it => console.log('proposal', it.proposalRequestId));
       this.pagination.total = data.total;
       this.proposalTabs.map(t => {
         if (data.hasOwnProperty(t.key)) this.pagination[t.key] = data[t.key];
       })
       this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
-    },
-    getProposalWithRequestId(requestId){
-        if (!this.proposals.length) return null;
-        return this.proposals.find(p => p.proposalRequestId === requestId)
     },
     gotoPage(selectedPage) {
       console.log(selectedPage);
@@ -319,7 +297,9 @@ export default {
           return p.id !== id;
       });
       this.proposalRequests = proposalRequests;
-      console.log('porposal.request', this.proposalRequests)
+
+
+      this.$forceUpdate();
     },
     handleProposal(action, id){
       console.log('proposal.handle', action, id);
@@ -334,11 +314,7 @@ export default {
           this.$router.push(`/vendors/${this.selectedProposal.vendor.id}/proposal-request/${this.selectedProposal.proposalRequest.id}/form/duplicate`);
 
       } else if (action === 'download') {
-          // setTimeout(_ => {
-          //     this.$refs.html2Pdf.generatePdf()
-          // }, 50)
-
-        this.downloadProposal(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
+        this.downloadProposal(`http://localhost:8080/1/proposal/${this.selectedProposal.id}/download`);
       }
     },
     downloadProposal(link){

@@ -181,9 +181,11 @@ export default {
   computed: {
     backgroundImage() {
       const defaultImage = "https://maryoku.s3.amazonaws.com/proposal/background-default.jpg";
-      if (this.event && this.event.concept) {
-        return this.event.concept.images[new Date().getTime() % this.event.concept.images.length].url || defaultImage;
-      }
+      try {
+        if (this.event && this.event.concept) {
+          return this.event.concept.images[new Date().getTime() % this.event.concept.images.length].url || defaultImage;
+        }
+      } catch (e) {}
       return defaultImage;
     },
     getRemainingTime() {

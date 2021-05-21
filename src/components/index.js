@@ -47,7 +47,6 @@ import TimeInput from './TimeInput'
 import Loader from './loader';
 import TablePagination from './TablePagination'
 import PieChart  from "./Chart/PieChart.vue";
-import Calendar from './Calendar';
 export {
     IconCheckbox,
     InputText,
@@ -55,7 +54,6 @@ export {
     Modal,
     Pagination,
     GlobalSalesTable,
-    Calendar,
     LockCard,
     PricingCard,
     SignupCard,
