@@ -125,14 +125,17 @@
             <div class="md-layout-item md-size-50">
               <div class="p-5 font-bold text-center">UPCOMING EVENTS:</div>
               <div class="d-flex flex-column align-center justify-content-center p-50 upcoming-events">
-                <upcoming-event :events="upcomingEvents"></upcoming-event>
-                <!-- <template>
+                <upcoming-event
+                  v-if="upcomingEvents && upcomingEvents.length > 0"
+                  :events="upcomingEvents"
+                ></upcoming-event>
+                <template v-else>
                   <img class="mt-50 mb-20" :src="`${iconUrl}vendordashboard/group-16600.png`" />
                   <div class="mb-20 color-vendor font-bold font-size-14">NO UPCOMING EVENTS</div>
                   <md-button class="md-simple md-outlined md-vendor maryoku-btn" @click="showVendorCreateModal = true">
                     Create New Event
                   </md-button>
-                </template> -->
+                </template>
               </div>
             </div>
           </div>
