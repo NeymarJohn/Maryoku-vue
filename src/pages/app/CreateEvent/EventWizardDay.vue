@@ -41,7 +41,7 @@ export default {
   data() {
     return {
         multiple: false,
-        dateData: null,
+        dateData: {selectedDate: moment().format('YYYY-M-D')},
     };
   },
   methods: {
@@ -118,17 +118,16 @@ export default {
   },
 
   created() {
-    if (this.publicEventData.dateData) {
-      this.dateData = this.publicEventData.dateData;
-    }
+
     // if (this.publicEventData.eventStartMillis) {
     //   this.dateData.selectedDate =  new Date(this.publicEventData.eventStartMillis)
     // }
+
   },
   computed: {
     ...mapState("PublicEventPlanner", ["publicEventData"]),
     getFormattedDate() {
-
+        console.log('getFormattedDate', this.dateData);
       if (!this.dateData || !Object.keys(this.dateData).length) return "";
       if (this.multiple) {
           return moment(new Date(this.dateData.dateRange.start.date)).format("dddd, MMM DD, YYYY") + '    ' + moment(new Date(this.dateData.dateRange.end.date)).format("dddd, MMM DD, YYYY");

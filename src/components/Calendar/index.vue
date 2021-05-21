@@ -12,6 +12,7 @@
     ></functional-calendar>
 </template>
 <script>
+    import moment from "moment";
     import { FunctionalCalendar } from "vue-functional-calendar";
     export default {
         name: 'maryoku-calendar',
@@ -41,7 +42,7 @@
                         start: { date: false, dateTime: false, hour: "00", mintue: "00" },
                         end: { date: false, dateTime: false, hour: "00", mintue: "00" },
                     },
-                    selectedDate: new Date(),
+                    selectedDate: moment().format('YYYY-M-D'),
                     selectedDatesItem: "",
                     selectedHour: "00",
                     selectedMinute: "00",

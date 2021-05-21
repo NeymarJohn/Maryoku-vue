@@ -13,7 +13,8 @@
       <div class="carousel-item" v-for="(item, index) in images" :key="index">
         <vue-element-loading :active="item.loading" spinner="ring" color="#FF547C" />
         <img :src="item.src" class="carousel-image" :class="{ whiteBlack: item.default }" />
-        <div class="carousel-item-actions" v-if="editable">
+<!--        <div class="carousel-item-actions" v-if="editable">-->
+                  <div class="carousel-item-actions" >
           <div class="color-white mb-20 font-bold font-size-16 button" @click="deleteImage(index)">
             <img :src="`${$iconURL}RSVP/Group 4854.svg`" class="mr-10" /> Delete
           </div>
@@ -181,6 +182,7 @@ export default {
       width: 100%;
       height: 170px;
       object-fit: cover;
+      display: flex;
       &.whiteBlack {
         filter: grayscale(1);
       }
@@ -194,8 +196,8 @@ export default {
       .carousel-item-actions {
         display: block;
         position: absolute;
-        left: 50%;
-        top: 50%;
+        left: 45%;
+        top: 40%;
         height: max-content;
         width: max-content;
         transform: translate(-50%, -50%);

@@ -46,7 +46,7 @@
             <div class="text-right font-size-20 flex-1" v-if="type == 'perguest'">
                 ${{ (component.allocatedBudget / participants) | withComma }}
             </div>
-            <div class="text-right font-size-20 flex-1" v-else>${{ component.allocatedBudget | withComma }}</div>
+            <div class="text-right font-size-20 flex-1" v-else>${{ component.allocatedBudget | withComma(Number) }}</div>
             <div class="actions"></div>
         </div>
         <budget-resize-modal
