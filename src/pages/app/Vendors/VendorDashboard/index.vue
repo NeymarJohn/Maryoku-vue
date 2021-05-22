@@ -28,9 +28,9 @@
                 ></pie-chart>
               </div>
               <div class="d-flex">
-                <md-button class="md-simple ml-auto md-outlined md-white maryoku-btn" @click="addNewService"
-                  >Add A New Service</md-button
-                >
+                <md-button class="md-simple ml-auto md-outlined md-white maryoku-btn" @click="addNewService">
+                  Add A New Service
+                </md-button>
               </div>
             </div>
           </div>
@@ -118,7 +118,7 @@
 
               <div class="d-flex align-center">
                 <md-switch class="md-switch-vendor" v-model="backOutDays" style="margin-left: 20px">
-                  Backout Days
+                  Blackout Days
                 </md-switch>
                 <md-button class="md-simple ml-auto md-vendor"> Sync With Calendar</md-button>
               </div>

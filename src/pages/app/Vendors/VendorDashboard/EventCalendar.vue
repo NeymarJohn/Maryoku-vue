@@ -19,10 +19,16 @@
           <a
             href="javascript:;"
             class="calendar__item"
-            :class="{ 'is-today': item.today === true, current: item.current === true }"
+            :class="{
+              'is-today': item.today === true,
+              current: item.current === true,
+              'has-event': item.number === '12',
+            }"
             @click.prevent="getDateData(item)"
-            >{{ item.number }}</a
           >
+            {{ item.number }}
+            <div class="event-add-badge" v-if="item.number === '12'"><span>+</span></div>
+          </a>
         </li>
       </ul>
     </div>
@@ -164,7 +170,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-$color-black: #4a4a4a;
+$color-black: #641856;
 $color-white: #ffffff;
 $color-gray: #f2f2f2;
 $color-gray-default: #e5e5e5;
@@ -212,6 +218,8 @@ $color-gray-dark: #929292;
     flex-wrap: wrap;
     > li {
       width: 14.285%;
+      text-align: center;
+      min-height: 50px;
     }
   }
 
@@ -226,12 +234,45 @@ $color-gray-dark: #929292;
     border-radius: 3px;
     transition: all 0.3s;
     color: $color-black;
+    display: inline-block;
+    border-radius: 50%;
     &.current {
-      background-color: $color-gray-default;
+      width: 46.3px;
+      height: 46.3px;
+      background-color: #d5d5d5;
+      font-weight: bold;
     }
     &.is-today {
+      width: 46.3px;
+      height: 46.3px;
       background-color: $color-black;
       color: $color-white;
+    }
+    &.has-event {
+      width: 46.3px;
+      height: 46.3px;
+      box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.42);
+      background-color: #ffffff;
+      border-radius: 50%;
+      position: relative;
+      font-weight: bolder;
+      font-weight: bold;
+      .event-add-badge {
+        width: 22px;
+        height: 22px;
+        background-color: #641856;
+        border-radius: 50%;
+        color: white;
+        font-size: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1em;
+        position: absolute;
+        right: 0;
+        top: 0;
+        transform: translate(30%, -30%);
+      }
     }
   }
 
@@ -239,7 +280,7 @@ $color-gray-dark: #929292;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 10px;
+    padding: 15px 50px;
     // background-color: $color-gray-default;
     .arrow-btn {
       display: flex;
@@ -252,12 +293,20 @@ $color-gray-dark: #929292;
         border-style: solid;
       }
       &.btn-prevmonth::before {
-        border-width: 10px 13px 10px 0;
-        border-color: transparent $color-black transparent transparent;
+        border-width: 4px 0 0 4px;
+        width: 15px;
+        height: 15px;
+        border-color: $color-black;
+        border-radius: 3px;
+        transform: rotate(-45deg) translateY(50%);
       }
       &.btn-nextmonth::before {
-        border-width: 10px 0 10px 13px;
-        border-color: transparent transparent transparent $color-black;
+        border-width: 4px 4px 0 0;
+        width: 15px;
+        height: 15px;
+        border-color: $color-black;
+        border-radius: 3px;
+        transform: rotate(45deg) translateY(50%);
       }
     }
   }
