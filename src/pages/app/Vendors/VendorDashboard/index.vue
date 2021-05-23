@@ -117,8 +117,8 @@
               <div v-if="markedDates.length" style="display: none">{{ this.month }}</div>
 
               <div class="d-flex align-center">
-                <md-switch class="md-switch-vendor" v-model="backOutDays" style="margin-left: 20px">
-                  Blackout Days
+                <md-switch class="md-switch-vendor large-switch" v-model="backOutDays" style="margin-left: 20px">
+                  <span class="color-black font-size-14px">Blackout Days</span>
                 </md-switch>
                 <md-button class="md-simple ml-auto md-vendor"> Sync With Calendar</md-button>
               </div>
@@ -133,10 +133,10 @@
                 <template v-else>
                   <img class="mt-50 mb-20" :src="`${iconUrl}vendordashboard/group-16600.png`" />
                   <div class="mb-20 color-vendor font-bold font-size-14">NO UPCOMING EVENTS</div>
-                  <md-button class="md-simple md-outlined md-vendor maryoku-btn" @click="showVendorCreateModal = true">
-                    Create New Event
-                  </md-button>
                 </template>
+                <md-button class="md-simple md-outlined md-vendor maryoku-btn" @click="showVendorCreateModal = true">
+                  Create New Event
+                </md-button>
               </div>
             </div>
           </div>
@@ -146,6 +146,7 @@
     <vendor-create-event-modal
       v-if="showVendorCreateModal"
       @cancel="showVendorCreateModal = false"
+      @save="handleSaveEvent"
     ></vendor-create-event-modal>
   </div>
 </template>
@@ -204,6 +205,10 @@ export default {
     this.getComingEvents();
   },
   methods: {
+    handleSaveEvent(savedEvent) {
+      this.upcomingEvents.push(savedEvent);
+      this.showVendorCreateModal = false;
+    },
     getMarkedDates() {
       let markedDates = [];
       if (this.backOutDays) {

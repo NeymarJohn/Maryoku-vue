@@ -217,7 +217,7 @@ export default {
         location: this.location,
       };
       new UserEvent(userEvent).save().then((res) => {
-        this.close();
+        this.$emit("save", res);
       });
     },
   },

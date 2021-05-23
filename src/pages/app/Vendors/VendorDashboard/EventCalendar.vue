@@ -27,7 +27,9 @@
             @click.prevent="getDateData(item)"
           >
             {{ item.number }}
-            <div class="event-add-badge" v-if="item.number === '12'"><span>+</span></div>
+            <div class="event-add-badge" v-if="item.number === '12'">
+              <span class=""><md-icon>add</md-icon></span>
+            </div>
           </a>
         </li>
       </ul>
@@ -211,6 +213,9 @@ $color-gray-dark: #929292;
     border-radius: 7px;
   }
 
+  .calendar__body {
+    border-bottom: solid 1px #d5d5d5;
+  }
   .calendar__heading,
   .calendar__content {
     width: 100%;
@@ -272,6 +277,11 @@ $color-gray-dark: #929292;
         right: 0;
         top: 0;
         transform: translate(30%, -30%);
+        padding: 5px;
+        i {
+          color: white !important;
+          font-size: 1rem !important;
+        }
       }
     }
   }
