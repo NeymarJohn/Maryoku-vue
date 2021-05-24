@@ -118,6 +118,8 @@ export default {
       return this.$store.state.event.eventData;
     },
     selectedCategory() {
+      console.log(this.serviceCategory);
+      console.log("this.$store.state.common.serviceCategories", this.$store.state.common.serviceCategories);
       return this.$store.state.common.serviceCategories.find(
         (item) => item.key === this.serviceCategory.serviceCategory,
       );

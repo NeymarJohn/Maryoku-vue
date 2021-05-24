@@ -1,7 +1,7 @@
 <template>
   <button class="resizable-toggle-button" :class="{ clicked: clicked }" @click="handleClick">
     <img :src="selectedIcon" v-if="clicked && selectedIcon" />
-    <img :src="icon" :style="iconStyle" v-else />
+    <img :src="icon" v-else />
     <span class="label-text">{{ label }}</span>
   </button>
 </template>
@@ -23,10 +23,6 @@ export default {
     defaultStatus: {
       type: Boolean,
       default: false,
-    },
-    iconStyle: {
-      type: [Object, String],
-      default: "",
     },
   },
   data() {
@@ -69,7 +65,7 @@ export default {
     padding: 10px;
   }
   &.clicked {
-    background-color: #f51355;
+    background-color: red;
     transition: 0.3s ease-in;
     color: white;
     max-width: 500px;
