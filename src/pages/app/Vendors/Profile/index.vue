@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout p-20 planner-profile">
-    <loader :active="loading" />
+    <loader :active="loading"/>
     <div class="md-layout-item md-size-100 font-size-22 font-bold mb-30 mt-30">
       <img :src="`${$iconURL}Profile/settings-dark.svg`" class="mr-20" />
       PROFILE & SETTINGS
@@ -98,7 +98,7 @@ import StarRating from "vue-star-rating";
 import { LabelEdit, Tabs, Loader } from "@/components";
 
 // import auth from '@/auth';
-import { mapGetters, mapActions, mapState, mapMutations } from "vuex";
+import {mapGetters, mapActions, mapState, mapMutations} from "vuex";
 import UserAvatar from "@/components/UserAvatar.vue";
 import CompanyLogo from "@/components/CompanyLogo.vue";
 
@@ -116,7 +116,7 @@ export default {
     CompanyDetails,
     MyServices,
     StarRating,
-    Loader,
+    Loader
   },
   data() {
     return {
@@ -143,14 +143,19 @@ export default {
   },
   mounted() {
     // TODO : user state should be reviewed
+    console.log("vendor", this.$store.state.vendor);
+    console.log("profile", this.vendorData);
     this.loading = true;
+    console.log('loading.start')
     this.getPageName();
     this.$store.dispatch("common/fetchAllCategories");
     this.$store
       .dispatch("auth/checkToken")
       .then(() => {
         this.user = this.$auth.user;
+        this.$store.dispatch("vendor/getProfile");
         this.loading = false;
+          console.log('loading.end')
       })
       .catch(() => {
         this.$router.push({ path: `/signin` });

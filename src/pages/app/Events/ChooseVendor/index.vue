@@ -9,11 +9,12 @@
           :icon="`${$iconURL}Budget+Elements/${component.eventCategory ? component.eventCategory.icon : ''}`"
           :selectedIcon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
           :defaultStatus="selectedCategory && component.componentId === selectedCategory.componentId"
-          v-for="component in event.components"
+          v-for="component in categories"
           @click="selectCategory(component)"
         ></resizable-toggle-button>
       </div>
       <div class="booking-proposals" v-if="selectedCategory">
+        <loader :active="isLoadingProposal" />
         <template v-if="proposals.length > 0">
           <div class="font-size-30 font-bold-extra category-title mt-30 mb-30">
             <img :src="`${$iconURL}Budget+Elements/${selectedCategory.eventCategory.icon}`" />
@@ -34,19 +35,28 @@
             </div>
           </div>
           <div>
-            <loader :active="isLoadingProposal" />
             <div>
               <!-- Event Booking Items -->
-              <div class="md-layout events-booking-items" v-if="proposals.length">
+              <div class="events-booking-items" v-if="proposals.length && !showDetails">
                 <proposal-card
+                  @goDetail="goDetailPage"
                   v-for="(proposal, index) in proposals.slice(0, 3)"
                   :key="index"
                   :proposal="proposal"
                   :component="selectedCategory"
-                  @goDetail="goDetailPage"
                   :probability="getProbability(index)"
-                ></proposal-card>
+                >
+                </proposal-card>
               </div>
+              <template v-if="showDetails">
+                <proposals-bar
+                  @goDetail="goDetailPage"
+                  class="mt-40"
+                  :proposals="proposals"
+                  :selectedId="selectedProposal.id"
+                ></proposals-bar>
+                <event-proposal-details class="mt-20" :vendorProposal="selectedProposal"></event-proposal-details>
+              </template>
             </div>
           </div>
         </template>
@@ -87,6 +97,8 @@ import HeaderActions from "@/components/HeaderActions";
 import { postReq, getReq } from "@/utils/token";
 import ResizableToggleButton from "@/components/Button/ResizableToggleButton.vue";
 import PendingForVendors from "../components/PendingForVendors.vue";
+import EventProposalDetails from "../Proposal/EventProposalDetails.vue";
+import ProposalsBar from "./ProposalsBar.vue";
 
 export default {
   name: "event-booking",
@@ -101,34 +113,38 @@ export default {
     MaryokuInput,
     ResizableToggleButton,
     PendingForVendors,
+    EventProposalDetails,
+    ProposalsBar,
   },
   props: {},
   data: () => ({
     // auth: auth,
     selectedCategory: null,
     calender: null,
-    isLoading: true,
-    isLoadingProposal: false,
     somethingMessage: null,
     iconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/",
-    showSomethingModal: false,
-    showShareVendorModal: false,
     blockVendors: null,
     allRequirements: null,
     selectedBlock: null,
     proposals: [],
-    showCommentEditorPanel: false,
     blockId: "",
+    currentRequirement: null,
+    isLoading: true,
+    isLoadingProposal: false,
     showProposals: false,
     showCounterPage: false,
-    currentRequirement: null,
+    showSomethingModal: false,
+    showShareVendorModal: false,
+    showCommentEditorPanel: false,
+    showDetails: false,
+    selectedProposal: null,
   }),
   methods: {
     ...mapMutations("event", ["setEventData", "setBookingRequirements", "setInitBookingRequirements"]),
     ...mapActions("comment", ["getCommentComponents"]),
     selectCategory(category, clicked) {
       this.selectedCategory = category;
-      this.loadingProposal = true;
+      this.isLoadingProposal = true;
       new Proposal()
         .for(new EventComponent({ id: this.selectedCategory.id }))
         .get()
@@ -202,7 +218,9 @@ export default {
         });
     },
     goDetailPage(proposal) {
-      this.$router.push(`/events/${this.event.id}/booking/${this.selectedCategory.id}/proposals/${proposal.id}`);
+      // this.$router.push(`/events/${this.event.id}/booking/${this.selectedCategory.id}/proposals/${proposal.id}`);
+      this.showDetails = true;
+      this.selectedProposal = proposal;
     },
     getProbability(index) {
       return 100 - 10 * (index + 1) + Math.round(10 * Math.random());
@@ -267,6 +285,11 @@ export default {
     event() {
       return this.$store.state.event.eventData;
     },
+    categories() {
+      const categories = this.event.components;
+      categories.sort((a, b) => a.order - b.order);
+      return categories;
+    },
   },
 };
 </script>
@@ -297,7 +320,9 @@ export default {
     margin-bottom: 1em;
     align-items: stretch;
     margin-top: 30px;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
   }
   .booking-section__actions {
     width: 100%;

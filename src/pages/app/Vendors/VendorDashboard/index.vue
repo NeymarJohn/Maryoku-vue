@@ -100,6 +100,28 @@
           <div class="white-card md-layout p-30">
             <div class="md-layout-item md-size-50">
               <event-calendar></event-calendar>
+              <!-- <FunctionalCalendar
+                class="vendor-dashboard-calendar"
+                :is-multiple-date-picker="true"
+                :sundayStart="true"
+                :minSelDays="1"
+                :marked-dates="markedDates"
+                :date-format="'yyyy-mm-dd'"
+                v-model="date"
+                @changedMonth="changeMonth"
+                @changedYear="changeYear"
+                v-on:dayClicked="selectDay($event)"
+                v-on:daychoseDay="selectDay($event)"
+              ></FunctionalCalendar> -->
+              <!-- todo update page when month change -->
+              <div v-if="markedDates.length" style="display: none">{{ this.month }}</div>
+
+              <div class="d-flex align-center">
+                <md-switch class="md-switch-vendor large-switch" v-model="backOutDays" style="margin-left: 20px">
+                  <span class="color-black font-size-14px">Blackout Days</span>
+                </md-switch>
+                <md-button class="md-simple ml-auto md-vendor"> Sync With Calendar</md-button>
+              </div>
             </div>
             <div class="md-layout-item md-size-50">
               <div class="p-5 font-bold text-center">UPCOMING EVENTS:</div>

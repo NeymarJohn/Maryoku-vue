@@ -146,7 +146,6 @@
 import { Modal, MaryokuInput, LocationInput } from "@/components";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import UserEvent from "@/models/UserEvent";
-import moment from "moment";
 export default {
   components: {
     Modal,
@@ -198,6 +197,7 @@ export default {
       }
     },
     changeDate(date) {
+      alert();
       console.log("date", date);
       console.log("changeDate");
     },
@@ -205,10 +205,9 @@ export default {
       this.$emit("cancel");
     },
     createEvent() {
-      const otherFormatDate = moment(this.date, "DD.MM.YYYY").format("YYYY-MM-DD");
       const userEvent = {
         company: this.company,
-        date: otherFormatDate,
+        date: this.date,
         startTime: `${this.startTime.hh}:${this.startTime.mm} ${this.amPack.start}`,
         endTime: `${this.endTime.hh}:${this.endTime.mm} ${this.amPack.start}`,
         companyName: this.company,
