@@ -62,12 +62,12 @@ export default {
       selectedVideoId: "",
       openPlayer: false,
       videos: [
-        { title: "Guest Communicator", id: "Kgb4RrDsB3w" },
-        { title: "Inspiration Board", id: "os-XRfWUkC4" },
-        { title: "Budget Wizard", id: "QIDa2Og0L1Q" },
-        { title: "Booking Engine", id: "TTohnW1tfy8" },
-        { title: "Event Scheduler", id: "XihWhW8eadE" },
-        { title: "Control Panel", id: "nXQ2EwlI3jM" },
+        { title: "BUDGET", id: "pELHFctXOcQ" },
+        { title: "VENDORS LIST", id: "pELHFctXOcQ" },
+        { title: "PERSONALISED PROPOSALS", id: "pELHFctXOcQ" },
+        { title: "GUEST MANAGEMENT", id: "pELHFctXOcQ" },
+        { title: "VENDORS COMMUNICATION", id: "pELHFctXOcQ" },
+        { title: "TIMELINE", id: "pELHFctXOcQ" },
       ],
       event: {},
     };

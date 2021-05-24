@@ -3,7 +3,7 @@
     <budget-notifications></budget-notifications>
     <!-- todo show event checklist temp-->
     <progress-sidebar :elements="barItems" page="plan"></progress-sidebar>
-    <div class="edit-event-details event-details-budget" style="padding: 0 20px 0 420px !important;">
+    <div class="edit-event-details event-details-budget" style="padding: 0 20px 0 420px !important">
       <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
       <!-- Event Header -->
       <div class="event-header d-flex justify-content-between">
@@ -20,12 +20,12 @@
           <div class="card-section card-overview">
             <div class="section-header">Overview</div>
             <div class="budget-list d-flex justify-content-center">
-              <div class="budget-list__item width-66 d-flex align-center" style="border-bottom: 1px solid #B7B7B7">
-                  <div class="label-title mb-0">Budget</div>
-                  <div class="budget-value">${{ budgetStatistics.total | withComma }}</div>
-                  <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="showBudgetModal = true">
-                      Edit
-                  </md-button>
+              <div class="budget-list__item width-66 d-flex align-center" style="border-bottom: 1px solid #b7b7b7">
+                <div class="label-title mb-0">Budget</div>
+                <div class="budget-value">${{ budgetStatistics.total | withComma }}</div>
+                <md-button v-if="canEdit" class="md-rose md-simple md-sm edit-budget" @click="showBudgetModal = true">
+                  Edit
+                </md-button>
               </div>
             </div>
             <div class="budget-list d-flex justify-content-between">
@@ -339,7 +339,7 @@ export default {
     this.routeName = this.$route.name;
   },
   mounted() {
-    this.loadEventData('init');
+    this.loadEventData("init");
     const tab = this.$route.query.t || 0;
     if (this.$refs.eventPlannerTabs) {
       this.$refs.eventPlannerTabs.$emit("event-planner-nav-switch-panel", tab);
@@ -360,7 +360,7 @@ export default {
     }
 
     this.$root.$on("calendar-refresh-events", () => {
-      this.loadEventData('update');
+      this.loadEventData("update");
     });
   },
   methods: {
@@ -373,97 +373,97 @@ export default {
       "setEventData",
       "setBudgetNotification",
     ]),
-    getCalendar(){
-        return new Calendar({id: this.currentUser.profile.defaultCalendarId});
+    getCalendar() {
+      return new Calendar({ id: this.currentUser.profile.defaultCalendarId });
     },
-    getEvent: async function(_calendar) {
+    getEvent: async function (_calendar) {
       let event = await _calendar.calendarEvents().find(this.$route.params.id);
       this.event = event;
     },
-    getEventComponents: async function(_calendar){
-        let event = new CalendarEvent({id: this.event.id});
-        let eventComponent = new EventComponent().for(_calendar, event);
-        let components = await eventComponent.get();
-        console.log('getEventComponents', components);
-        components.sort((a, b) => a.order - b.order);
-        // console.log(components);
-        this.event.components = components;
-        this.selectedComponents = components;
+    getEventComponents: async function (_calendar) {
+      let event = new CalendarEvent({ id: this.event.id });
+      let eventComponent = new EventComponent().for(_calendar, event);
+      let components = await eventComponent.get();
+      console.log("getEventComponents", components);
+      components.sort((a, b) => a.order - b.order);
+      // console.log(components);
+      this.event.components = components;
+      this.selectedComponents = components;
     },
-    loadEventData : async function (type = 'init'){
-        this.isLoading = true;
-        if (type === 'init') {
-          this.event = this.$store.state.event.eventData;
-        } else {
-          axios.defaults.headers.common.Authorization = `Bearer ${this.currentUser.access_token}`;
-          let calendar = this.getCalendar();
-          await this.getEvent(calendar);
-          await this.getEventComponents(calendar);
-          this.setBudgetNotification(false);
-        }
+    loadEventData: async function (type = "init") {
+      this.isLoading = true;
+      if (type === "init") {
+        this.event = this.$store.state.event.eventData;
+      } else {
+        axios.defaults.headers.common.Authorization = `Bearer ${this.currentUser.access_token}`;
+        let calendar = this.getCalendar();
+        await this.getEvent(calendar);
+        await this.getEventComponents(calendar);
+        this.setBudgetNotification(false);
+      }
 
-        // notify budget states
-        if (!this.showBudgetNotification) {
-            this.notifyStates();
-            this.setBudgetNotification(true);
-        }
-        this.calendarEvent = this.event;
-        if (this.event.totalBudget)
-            this.newBudget = (this.event.totalBudget + "").replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      // notify budget states
+      if (!this.showBudgetNotification) {
+        this.notifyStates();
+        this.setBudgetNotification(true);
+      }
+      this.calendarEvent = this.event;
+      if (this.event.totalBudget)
+        this.newBudget = (this.event.totalBudget + "").replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-        if (type === 'update'){
-            this.$root.$emit(
-                "set-title",
-                this.event,
-                this.routeName === "EditBuildingBlocks",
-                this.routeName === "InviteesManagement" || this.routeName === "EventInvitees",
-            );
-        }
+      if (type === "update") {
+        this.$root.$emit(
+          "set-title",
+          this.event,
+          this.routeName === "EditBuildingBlocks",
+          this.routeName === "InviteesManagement" || this.routeName === "EventInvitees",
+        );
+      }
     },
     notifyStates() {
-        this.budgetStates = [];
-        let now = moment();
-        let created_at = moment(this.event.dateCreated);
-        if (this.event.budgetProgress < 100 && now.diff(created_at, "days") < 15) {
-            this.budgetStates.push({ key: "not_approved" });
-        } else {
-            if (this.event.standardBudget !== 0) {
-                if (this.event.standardBudget < this.event.totalBudget) {
-                    this.budgetStates.push({
-                        key: "not_approved",
-                        percent: ((this.event.totalBudget - this.event.standardBudget) / this.event.totalBudget).toFixed(2) * 100,
-                    });
-                } else if (this.event.standardBudget > this.event.totalBudget) {
-                    this.budgetStates.push({ key: "lower_than_average" });
-                }
-            }
-
-            if (now.diff(created_at, "days") < 15) {
-                this.budgetStates.push({ key: "approved_budget_in_two_weeks" });
-            }
-
-            if (this.event.unexpected < this.event.totalBudget * 0.1) {
-                this.budgetStates.push({ key: "unexpected_budget_less_10" });
-            }
-        }
-
-        if (this.budgetStates.length) {
-            this.budgetStates.map((it) => {
-                let message_item = BUDGET_MESSAGES.find((m) => m.key == it.key);
-                this.$notify({
-                    message: {
-                        title: message_item.title,
-                        content: message_item.message,
-                        action: message_item.action,
-                    },
-                    icon: `${this.$iconURL}messages/${message_item.icon}`,
-                    horizontalAlign: "right",
-                    verticalAlign: "top",
-                    type: message_item.type,
-                    timeout: 5000,
-                });
+      this.budgetStates = [];
+      let now = moment();
+      let created_at = moment(this.event.dateCreated);
+      if (this.event.budgetProgress < 100 && now.diff(created_at, "days") < 15) {
+        this.budgetStates.push({ key: "not_approved" });
+      } else {
+        if (this.event.standardBudget !== 0) {
+          if (this.event.standardBudget < this.event.totalBudget) {
+            this.budgetStates.push({
+              key: "not_approved",
+              percent: ((this.event.totalBudget - this.event.standardBudget) / this.event.totalBudget).toFixed(2) * 100,
             });
+          } else if (this.event.standardBudget > this.event.totalBudget) {
+            this.budgetStates.push({ key: "lower_than_average" });
+          }
         }
+
+        if (now.diff(created_at, "days") < 15) {
+          this.budgetStates.push({ key: "approved_budget_in_two_weeks" });
+        }
+
+        if (this.event.unexpected < this.event.totalBudget * 0.1) {
+          this.budgetStates.push({ key: "unexpected_budget_less_10" });
+        }
+      }
+
+      if (this.budgetStates.length) {
+        this.budgetStates.map((it) => {
+          let message_item = BUDGET_MESSAGES.find((m) => m.key == it.key);
+          this.$notify({
+            message: {
+              title: message_item.title,
+              content: message_item.message,
+              action: message_item.action,
+            },
+            icon: `${this.$iconURL}messages/${message_item.icon}`,
+            horizontalAlign: "right",
+            verticalAlign: "top",
+            type: message_item.type,
+            timeout: 5000,
+          });
+        });
+      }
     },
     selectServices() {
       this.$refs.eventPlannerTabs.$emit("event-planner-nav-switch-panel", 1);
@@ -536,7 +536,7 @@ export default {
               .save()
               .then((response) => {
                 this.showBudgetModal = false;
-                this.loadEventData('update');
+                this.loadEventData("update");
               })
               .catch((error) => {
                 console.log(error);
@@ -550,7 +550,7 @@ export default {
           .save()
           .then((response) => {
             this.showBudgetModal = false;
-            this.loadEventData('update');
+            this.loadEventData("update");
           })
           .catch((error) => {
             console.log(error);
@@ -573,7 +573,7 @@ export default {
       });
     },
     onChangeComponent(event) {
-      this.loadEventData('update');
+      this.loadEventData("update");
     },
     onAddMoreBudget(value) {
       this.newBudget = `${this.event.totalBudget + value}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -587,99 +587,106 @@ export default {
     },
   },
   computed: {
-    ...mapState("EventPlannerVuex", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode", "showBudgetNotification"]),
+    ...mapState("EventPlannerVuex", [
+      "eventData",
+      "eventModalOpen",
+      "modalTitle",
+      "modalSubmitTitle",
+      "editMode",
+      "showBudgetNotification",
+    ]),
     ...mapGetters({
       budgetStatistics: "event/budgetStatistics",
       components: "event/getComponentsList",
       currentUser: "auth/currentUser",
     }),
     barItems() {
-          if (!this.event.checkList) {
-              const overview = {
-                  title: "Create an event to remember",
-                  status: "completed",
-                  route: "overview",
-                  // icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-                  progress: 100,
-                  componentId: "overview",
-                  id: "overview-item",
-              };
-              const concept = {
-                  title: "Inspiration Board",
-                  status: this.event.concept && this.event.conceptProgress === 100 ? "completed" : "not-complete",
-                  route: "booking/concept",
-                  icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-                  progress: this.event.concept ? this.event.conceptProgress : 0,
-                  componentId: "concept",
-                  id: "concept-item",
-              };
-              const budget = {
-                  title: "Budget Wizard",
-                  status: "not-complete",
-                  route: this.event.budgetProgress == 100 ? "edit/budget" : "booking/budget",
-                  icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
-                  progress: this.event.budgetProgress,
-                  componentId: "budget",
-                  id: "budget-item",
-              };
-              const timeline = {
-                  title: "Event Scheduler",
-                  status: this.event.timelineProgress === 100 ? "completed" : "not-complete",
-                  route: "booking/timeline",
-                  icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-                  progress: this.event.timelineProgress,
-                  componentId: "timeline",
-                  id: "timeline-item",
-              };
-              const campaign = {
-                  title: "Guests Communicator",
-                  status: this.event.campaignProgress === 100 ? "completed" : "not-complete",
-                  route: "booking/campaign",
-                  icon: `${this.$iconURL}Campaign/Group 8857.svg`,
-                  progress: this.event.campaignProgress,
-                  componentId: "campaign",
-                  id: "campaign-item",
-              };
-              const planningBoard = {
-                  title: "Plan Your Event",
-                  status: this.event.campaignProgress === 100 ? "completed" : "not-complete",
-                  route: "booking/planningboard",
-                  icon: `${this.$iconURL}Campaign/Group 8857.svg`,
-                  progress: this.event.campaignProgress,
-                  componentId: "planningboard",
-                  id: "planningboard-item",
-              };
-              const elements = [];
-              elements.push(overview);
-              // if (this.event.eventType.hasConcept) {
-              elements.push(concept);
-              // }
-              elements.push(budget);
-              elements.push(timeline);
-              elements.push(campaign);
-              elements.push(planningBoard);
-              // show when you approve budget
-              if (this.event.budgetProgress == 100) {
-                  this.event.components.sort((a, b) => a.order - b.order);
-                  this.event.components.forEach((item) => {
-                      if (item.componentId !== "unexpected") {
-                          elements.push({
-                              title: item.bookTitle,
-                              status: "not-complete",
-                              route: "booking/" + item.id,
-                              icon: `${this.$iconURL}Budget+Elements/${item.icon}`,
-                              progress: item.progress ? item.progress : 0,
-                              id: item.id,
-                          });
-                      }
-                  });
-              }
+      if (!this.event.checkList) {
+        const overview = {
+          title: "Create an event to remember",
+          status: "completed",
+          route: "overview",
+          // icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
+          progress: 100,
+          componentId: "overview",
+          id: "overview-item",
+        };
+        const concept = {
+          title: "Inspiration Board",
+          status: this.event.concept && this.event.conceptProgress === 100 ? "completed" : "not-complete",
+          route: "booking/concept",
+          icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
+          progress: this.event.concept ? this.event.conceptProgress : 0,
+          componentId: "concept",
+          id: "concept-item",
+        };
+        const budget = {
+          title: "Budget Wizard",
+          status: "not-complete",
+          route: this.event.budgetProgress == 100 ? "edit/budget" : "booking/budget",
+          icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
+          progress: this.event.budgetProgress,
+          componentId: "budget",
+          id: "budget-item",
+        };
+        const timeline = {
+          title: "Event Scheduler",
+          status: this.event.timelineProgress === 100 ? "completed" : "not-complete",
+          route: "booking/timeline",
+          icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
+          progress: this.event.timelineProgress,
+          componentId: "timeline",
+          id: "timeline-item",
+        };
+        const campaign = {
+          title: "Guests Communicator",
+          status: this.event.campaignProgress === 100 ? "completed" : "not-complete",
+          route: "booking/campaign",
+          icon: `${this.$iconURL}Campaign/Group 8857.svg`,
+          progress: this.event.campaignProgress,
+          componentId: "campaign",
+          id: "campaign-item",
+        };
+        const planningBoard = {
+          title: "Plan Your Event",
+          status: this.event.campaignProgress === 100 ? "completed" : "not-complete",
+          route: "booking/planningboard",
+          icon: `${this.$iconURL}Campaign/Group 8857.svg`,
+          progress: this.event.campaignProgress,
+          componentId: "planningboard",
+          id: "planningboard-item",
+        };
+        const elements = [];
+        elements.push(overview);
+        // if (this.event.eventType.hasConcept) {
+        elements.push(concept);
+        // }
+        elements.push(budget);
+        elements.push(timeline);
+        elements.push(campaign);
+        elements.push(planningBoard);
+        // show when you approve budget
+        // if (this.event.budgetProgress == 100) {
+        //     this.event.components.sort((a, b) => a.order - b.order);
+        //     this.event.components.forEach((item) => {
+        //         if (item.componentId !== "unexpected") {
+        //             elements.push({
+        //                 title: item.bookTitle,
+        //                 status: "not-complete",
+        //                 route: "booking/" + item.id,
+        //                 icon: `${this.$iconURL}Budget+Elements/${item.icon}`,
+        //                 progress: item.progress ? item.progress : 0,
+        //                 id: item.id,
+        //             });
+        //         }
+        //     });
+        // }
 
-              return elements;
-          } else {
-              return this.event.checkList;
-          }
-      },
+        return elements;
+      } else {
+        return this.event.checkList;
+      }
+    },
     pieChartData() {
       return this.$store.state.event.eventData.components;
     },

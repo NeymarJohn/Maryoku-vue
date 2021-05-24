@@ -92,18 +92,6 @@
         <p>Drag the photos to the empty frames or click on each one of them to create your photos board</p>
       </div>
 
-      <div class="form-group">
-          <label>You can easily Design with canva</label>
-          <span>
-            <img class="ml-10" :src="`${$iconURL}Campaign/Group 9087.svg`" />
-            <md-tooltip class="w-max-350">
-              <div class="font-size-14 tab-tooltip">
-                  <p>{{ canvaTooltip }}</p>
-              </div>
-            </md-tooltip>
-          </span>
-      </div>
-
       <div class="images-list new-concept">
         <div class="image-backgrounds">
           <div
@@ -122,13 +110,11 @@
               <img class="concept-image" v-if="uploadImageData[indx - 1]" :src="`${uploadImageData[indx - 1]}`" />
               <label class="image-selector" :for="`file-${indx}`" style="cursor: pointer">
                 <div v-if="!uploadImageData[indx - 1]">
-<!--                  <img :src="`${$iconURL}Concept/Asset 488.svg`" style="width: 24px" />-->
-                    <span data-design-type="A4Document" data-button-size="default" data-button-theme="default" data-api-key="VkYm_cazun7sI5t0gkrrCDQV"
-                          class="canva-design-button" style="display:none;color:#050505;background:white;border:1px solid #050505;padding: 5px 5px">Design on Canva</span>
-                    <div class="font-size-14">Or</div>
-                    <div class="color-black-middle font-size-14">
-                      Upload Photo
-                    </div>
+                  <img :src="`${$iconURL}Concept/Asset 488.svg`" style="width: 24px" />
+                  <br />
+                  <div style="margin-top: 5px">
+                    <img :src="`${$iconURL}Concept/image-dark.svg`" style="width: 16px" /> Add Photo
+                  </div>
                 </div>
               </label>
               <input
@@ -239,7 +225,6 @@ export default {
       3: false,
       4: false,
     },
-    canvaTooltip: 'Easy-to-use design app that loerem ipsum dolor sitamet, consetetur sadipscing elitr, sed diam noumy',
   }),
   methods: {
     addTag(newTag, tagIndex) {
@@ -328,8 +313,6 @@ export default {
         this.taggingOptions[index].selected = true;
       }
     });
-    (function(c,a,n){var w=c.createElement(a),s=c.getElementsByTagName(a)[0];
-          w.src=n;s.parentNode.insertBefore(w,s);})(document,'script','https://sdk.canva.com/designbutton/v2/api.js');
   },
   computed: {
     canSave() {
