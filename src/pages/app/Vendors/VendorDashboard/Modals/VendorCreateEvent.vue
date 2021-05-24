@@ -17,7 +17,7 @@
             class="form-input width-50"
             placeholder="Choose date…..."
             inputStyle="date"
-            @change="changeDate"
+            v-model="date"
           ></maryoku-input>
         </div>
         <div class="md-layout mt-30">
@@ -82,7 +82,7 @@
         <div v-else class="text-left">
           <div class="mt-30 text-left">
             <label class="font-bold">Company Name</label>
-            <maryoku-input inputStyle="users" class="width-50 mt-5 form-input" v-model="company"></maryoku-input>
+            <maryoku-input inputStyle="company" class="width-50 mt-5 form-input" v-model="company"></maryoku-input>
           </div>
           <div class="mt-30 text-left">
             <label class="font-bold">Customer Name</label>
@@ -138,13 +138,15 @@
     </template>
     <template slot="footer">
       <md-button class="md-default md-simple cancel-btn md-bold" @click="close">Cancel</md-button>
-      <md-button class="md-vendor add-category-btn md-bold">Done</md-button>
+      <md-button class="md-vendor add-category-btn md-bold" @click="createEvent">Done</md-button>
     </template>
   </modal>
 </template>
 <script>
 import { Modal, MaryokuInput, LocationInput } from "@/components";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
+import UserEvent from "@/models/UserEvent";
+import moment from "moment";
 export default {
   components: {
     Modal,
@@ -171,6 +173,8 @@ export default {
       },
       isRegisteredCustomer: true,
       company: null,
+      customer: null,
+      email: null,
       guests: null,
       location: null,
       link_proposal: null,
@@ -193,11 +197,29 @@ export default {
         this.amPack.end = "AM";
       }
     },
-    changeDate() {
+    changeDate(date) {
+      console.log("date", date);
       console.log("changeDate");
     },
     close() {
       this.$emit("cancel");
+    },
+    createEvent() {
+      const otherFormatDate = moment(this.date, "DD.MM.YYYY").format("YYYY-MM-DD");
+      const userEvent = {
+        company: this.company,
+        date: otherFormatDate,
+        startTime: `${this.startTime.hh}:${this.startTime.mm} ${this.amPack.start}`,
+        endTime: `${this.endTime.hh}:${this.endTime.mm} ${this.amPack.start}`,
+        companyName: this.company,
+        customerName: this.customer,
+        email: this.email,
+        guests: this.guests,
+        location: this.location,
+      };
+      new UserEvent(userEvent).save().then((res) => {
+        this.$emit("save", res);
+      });
     },
   },
   computed: {},

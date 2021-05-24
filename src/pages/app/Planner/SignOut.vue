@@ -1,9 +1,9 @@
 <template>
   <div class="md-layout">
-    <div class="md-layout-item" style="text-align: center;">
+    <div class="md-layout-item" style="text-align: center">
       <!-- <img src="https://static-maryoku.s3.amazonaws.com/storage/img/calendar-loader-3.gif" class="text-center" style="width: 64px;"/> -->
       <img src="/static/img/maryoku-loader.gif" />
-      <h2 class="title text-center" slot="title" style="text-align: center;">One moment please ...</h2>
+      <h2 class="title text-center" slot="title" style="text-align: center">One moment please ...</h2>
     </div>
   </div>
 </template>
@@ -14,7 +14,11 @@ export default {
   created() {
     const that = this;
     this.$store.dispatch("auth/logout").then(() => {
-      this.$router.push({ path: "/signin" });
+      if (this.$route.meta.isVendor) {
+        this.$router.push({ path: "/vendor/signin" });
+      } else {
+        this.$router.push({ path: "/signin" });
+      }
       if (process.env.NODE_ENV === "production") {
         try {
           window.heap.resetIdentity();

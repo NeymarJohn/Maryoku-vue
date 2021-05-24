@@ -123,6 +123,19 @@ let authPages = {
                 requiresAuth: false,
                 title: "Sign Out",
                 gtm: "SignOut",
+                isVendor: false
+            },
+
+        },
+        {
+            path: "/vendor/signout",
+            name: "Vendor SignOut",
+            component: SignOut,
+            meta: {
+                requiresAuth: false,
+                title: "Sign Out",
+                gtm: "SignOut",
+                isVendor: true
             },
         },
         {
