@@ -1,16 +1,19 @@
 <template>
-  <div class="booking-item">
-    <div class="event-image" :style="`background: url(${backgroundImage}) center center no-repeat`">
-      <div class="bundle-offer" v-if="proposal.bundleDiscount && proposal.bundleDiscount.isApplied">
-        <img :src="`${$iconURL}common/bell-white.svg`" />
-        Bundle Offer
-        <md-tooltip md-direction="top" class="p-30 color-black">
-          <div class="font-size-20 font-bold mb-10">{{ getBundleToolTipText(proposal.bundleDiscount.services) }}</div>
-          <div class="font-size-16">{{ proposal.bundleDiscount.percentage }}% Off for the whole package</div>
-        </md-tooltip>
+  <div class="md-layout-item md-size-33 proposal-card">
+    <div class="booking-item">
+      <div class="d-flex align-center">
+        <timer></timer>
+        <div class="font-size-12 font-bold">Until teh offer expires</div>
       </div>
-    </div>
-    <div class="card-content">
+      <div class="event-image" :style="`background: url(${backgroundImage}) center center no-repeat`">
+        <div class="bundle-offer" v-if="proposal.bundleDiscount && proposal.bundleDiscount.isApplied">
+          <img :src="`${$iconURL}common/bell-white.svg`" /> Bundle Offer
+          <md-tooltip md-direction="top" class="p-30 color-black">
+            <div class="font-size-20 font-bold mb-10">{{ getBundleToolTipText(proposal.bundleDiscount.services) }}</div>
+            <div class="font-size-16">{{ proposal.bundleDiscount.percentage }}% Off for the whole package</div>
+          </md-tooltip>
+        </div>
+      </div>
       <div class="mt-20 d-flex" v-show="proposal.suggestionDate">
         <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" class="label-icon mr-5" />
         <span v-if="getDiffDaysFromOriginal() < 0" class="whitspace-nowrap">
@@ -40,7 +43,9 @@
           <li class="event-info__item">{{ proposal.vendor.vendorCity }}</li>
         </ul>
       </template>
+
       <p class="event-desc">{{ proposal.vendor.about ? proposal.vendor.about.company : "" }}</p>
+
       <div class="item-actions text-right">
         <md-button class="md-red maryoku-btn" @click="proposalDetails">Details & Booking </md-button>
       </div>
@@ -115,12 +120,12 @@ export default {
   border-radius: 3px;
   box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
   background-color: #ffffff;
+  padding: 1.5em;
   height: 100%;
-  border-radius: 5px;
-  overflow: hidden;
+
   .event-image {
     background-size: cover !important;
-    height: 250px;
+    height: 200px;
     position: relative;
 
     .bundle-offer {
@@ -167,9 +172,6 @@ export default {
         }
       }
     }
-  }
-  .card-content {
-    padding: 1.5em;
   }
 
   .price {

@@ -35,11 +35,11 @@
                   @change="handleChangeCategorySelector(service, ...arguments)"
                 ></category-selector>
               </div>
-              <!--              <requirement-item-comment-->
-              <!--                v-if="service.notable"-->
-              <!--                :property="service"-->
-              <!--                @save="saveComment"-->
-              <!--              ></requirement-item-comment>-->
+<!--              <requirement-item-comment-->
+<!--                v-if="service.notable"-->
+<!--                :property="service"-->
+<!--                @save="saveComment"-->
+<!--              ></requirement-item-comment>-->
               <span v-if="service.item === 'Table setup and preparations' && service.hint" class="ml-10">
                 <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
                 <md-tooltip md-direction="bottom">{{ service.hint }}</md-tooltip>
@@ -159,6 +159,7 @@ export default {
   },
   methods: {
     getProperties() {
+      console.log("getProperties", this.category);
       this.properties = [];
       let requirements = this.requirements;
       let event = (this.event = this.$store.state.event.eventData);

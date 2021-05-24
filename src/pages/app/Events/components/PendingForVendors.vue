@@ -166,7 +166,6 @@ export default {
   methods: {
     setCounter(targetTime) {
       let durationSeconds = Math.floor((targetTime - new Date().getTime()) / 1000);
-      if (durationSeconds < 0) durationSeconds = 0;
       this.days = Math.floor(durationSeconds / 24 / 3600);
       durationSeconds -= this.days * 24 * 3600;
       this.hours = Math.floor(durationSeconds / 3600);
