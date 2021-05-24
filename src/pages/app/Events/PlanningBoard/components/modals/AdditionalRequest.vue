@@ -210,7 +210,6 @@ export default {
     },
   },
   created() {
-    console.log(this.subCategory);
     this.subCategorySections = Object.keys(this.subCategory);
     this.subCategorySections = this.subCategorySections.filter(
       (item) => item !== "multi-selection" && item !== "special",
@@ -222,7 +221,6 @@ export default {
     } else {
       this.specialTags = [];
     }
-    console.log("speicalTags", this.specialTags);
     this.specialTags = this.specialTags.filter(
       (item) => item.subCategory !== "Inclusion" && item.subCategory !== "Sustainability",
     );
@@ -236,7 +234,7 @@ export default {
       this.$emit("cancel");
     },
     save: function () {
-      const requirements = { ...this.subCategory, additionalRequest: this.anythingElse };
+      const requirements = { ...this.subCategory };
       requirements.special = [];
       for (let item of this.specialTags) {
         requirements.special.push(item);
@@ -247,6 +245,7 @@ export default {
           mainRequirements: requirements,
           isEntireEvent: this.isEntire,
           period: this.period,
+          additionalDescription: this.anythingElse,
         },
       });
     },

@@ -1,38 +1,47 @@
 <template>
-  <div class="event-calendar">
-    <div class="calendar__header">
-      <a href="javascript:;" class="arrow-btn btn-prevmonth" @click.prevent="changeMonth(false)">Prev</a>
-      <div class="calendar__title" @click.prevent="backToToday()">
-        <span class="caption-month">{{ convertMonthName }}</span>
-        <span class="caption-year">{{ current.year }}</span>
+  <div>
+    <div class="event-calendar">
+      <div class="calendar__header">
+        <a href="javascript:;" class="arrow-btn btn-prevmonth" @click.prevent="changeMonth(false)">Prev</a>
+        <div class="calendar__title" @click.prevent="backToToday()">
+          <span class="caption-month">{{ convertMonthName }}</span>
+          <span class="caption-year">{{ current.year }}</span>
+        </div>
+        <a href="javascript:;" class="arrow-btn btn-nextmonth" @click.prevent="changeMonth(true)">Next</a>
       </div>
-      <a href="javascript:;" class="arrow-btn btn-nextmonth" @click.prevent="changeMonth(true)">Next</a>
+      <div class="calendar__body">
+        <ul class="calendar__heading">
+          <li v-for="item in heading">
+            <div class="calendar__item">{{ item }}</div>
+          </li>
+        </ul>
+        <ul class="calendar__content">
+          <li v-for="item in buildCalendar">
+            <a
+              href="javascript:;"
+              class="calendar__item"
+              :class="{
+                'is-today': item.today === true,
+                current: item.current === true,
+                'has-event': item.number === '12',
+                'is-blackout': isBlackoutDay(item),
+              }"
+              @click.prevent="getDateData(item)"
+            >
+              {{ item.number }}
+              <div class="event-add-badge" v-if="item.number === '12'">
+                <span class=""><md-icon>add</md-icon></span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
-    <div class="calendar__body">
-      <ul class="calendar__heading">
-        <li v-for="item in heading">
-          <div class="calendar__item">{{ item }}</div>
-        </li>
-      </ul>
-      <ul class="calendar__content">
-        <li v-for="item in buildCalendar">
-          <a
-            href="javascript:;"
-            class="calendar__item"
-            :class="{
-              'is-today': item.today === true,
-              current: item.current === true,
-              'has-event': item.number === '12',
-            }"
-            @click.prevent="getDateData(item)"
-          >
-            {{ item.number }}
-            <div class="event-add-badge" v-if="item.number === '12'">
-              <span class=""><md-icon>add</md-icon></span>
-            </div>
-          </a>
-        </li>
-      </ul>
+    <div class="d-flex align-center">
+      <md-switch class="md-switch-vendor large-switch" v-model="showBlackoutDays">
+        <span class="color-black font-size-14px">Blackout Days</span>
+      </md-switch>
+      <md-button class="md-simple ml-auto md-vendor"> Sync With Calendar</md-button>
     </div>
   </div>
 </template>
@@ -52,9 +61,16 @@ export default {
         date: 0,
       },
       heading: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+      showBlackoutDays: false,
     };
   },
   methods: {
+    isBlackoutDay(item) {
+      return (
+        this.showBlackoutDays &&
+        this.blackoutDays[`${item.years}-${this.$stringUtil.getTwoDigits(item.month)}-${item.number}`]
+      );
+    },
     changeMonth(isNext) {
       let month = this.current.month;
       isNext === true ? (month = month + 1) : (month = month - 1);
@@ -163,6 +179,19 @@ export default {
     convertMonthName() {
       return moment(this.convertTwoDigits, "MM").format("MMMM");
     },
+    profile() {
+      console.log(this.$store.state.vendor);
+      return this.$store.state.vendor.profile;
+    },
+    blackoutDays() {
+      const data = {};
+      if (this.profile && this.profile.exDonts) {
+        for (const d of this.profile.exDonts) {
+          data[d.date] = d;
+        }
+      }
+      return data;
+    },
   },
   created() {
     this.getToday();
@@ -248,6 +277,10 @@ $color-gray-dark: #929292;
       font-weight: bold;
     }
     &.is-today {
+      font-weight: bold;
+      font-family: "Manrope-ExtraBold";
+    }
+    &.is-blackout {
       width: 46.3px;
       height: 46.3px;
       background-color: $color-black;

@@ -36,7 +36,7 @@ export default {
     ...mapState("event", ["eventData"]),
   },
   mounted() {
-    console.log("profile.mounted");
+    this.$store.dispatch("vendor/getProfile");
   },
 };
 </script>
