@@ -91,7 +91,7 @@
                   :key="index"
                 >
                   <div>
-                    <md-checkbox class="md-simple md-red" v-model="option.selected" @change="changeItem">
+                    <md-checkbox class="md-simple md-red" v-model="option.selected">
                       <span class="text-transform-capitalize">{{ option.item }}</span>
                     </md-checkbox>
                     <div class="ml-30">
@@ -105,7 +105,7 @@
                 </div>
                 <div class="md-layout-item md-size-50 md-small-size-100 pt-50 pl-0">
                   <div class="d-flex">
-                    <md-checkbox class="md-simple md-red" @change="changeItem" v-model="specialSection.hasOtherOption">
+                    <md-checkbox class="md-simple md-red" v-model="specialSection.hasOtherOption">
                       <span class="font-bold">Other:</span>
                     </md-checkbox>
                     <maryoku-input class="flex-1" v-model="specialSection.otherOptionContent"></maryoku-input>
