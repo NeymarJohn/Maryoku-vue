@@ -24,7 +24,7 @@ const actions = {
           res.forEach(requirements => {
             commit("setCategoryRequirements", { category: requirements.category, requirements })
           })
-          resolve(res)
+          resolve(requirements)
         })
         .catch(err => {
           reject(err)
