@@ -494,9 +494,9 @@ export default {
           this.isLoadingStoredData = false;
         });
     }
-    // if (this.event.processingStatus === "accept-proposal") {
-    //   this.$router.push(`/events/${this.event.id}/booking/choose-vendor`);
-    // }
+    if (this.event.processingStatus === "accept-proposal") {
+      this.$router.push(`/events/${this.event.id}/booking/choose-vendor`);
+    }
   },
   beforeCreate() {
     this.$store.registerModule("planningBoard", PlanningBoardState);

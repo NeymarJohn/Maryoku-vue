@@ -1,5 +1,5 @@
 <template>
-  <button class="resizable-toggle-button" :class="{ clicked: clicked, disabled }" @click="handleClick">
+  <button class="resizable-toggle-button" :class="{ clicked: clicked }" @click="handleClick">
     <img :src="selectedIcon" v-if="clicked && selectedIcon" />
     <img :src="icon" :style="iconStyle" v-else />
     <span class="label-text">{{ label }}</span>
@@ -28,10 +28,6 @@ export default {
       type: [Object, String],
       default: "",
     },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
@@ -43,8 +39,7 @@ export default {
   },
   methods: {
     handleClick() {
-      if (this.disabled) return;
-      this.clicked = true;
+      this.clicked = !this.clicked;
       this.$emit("click", this.clicked);
     },
   },
@@ -78,10 +73,6 @@ export default {
     transition: 0.3s ease-in;
     color: white;
     max-width: 500px;
-  }
-  &.disabled {
-    opacity: 0.5;
-    background-color: #dfdfdf;
   }
   img {
     height: 100%;
