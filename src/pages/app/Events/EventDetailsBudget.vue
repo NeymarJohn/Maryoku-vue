@@ -371,8 +371,8 @@ export default {
       "setEventModalAndEventData",
       "setNumberOfParticipants",
       "setEventData",
+      "setBudgetNotification",
     ]),
-    ...mapMutations('event', ["setBudgetNotification"]),
     getCalendar() {
       return new Calendar({ id: this.currentUser.profile.defaultCalendarId });
     },
@@ -392,16 +392,20 @@ export default {
     },
     loadEventData: async function (type = "init") {
       this.isLoading = true;
+      if (type === "init") {
+        this.event = this.$store.state.event.eventData;
+      } else {
+        axios.defaults.headers.common.Authorization = `Bearer ${this.currentUser.access_token}`;
+        let calendar = this.getCalendar();
+        await this.getEvent(calendar);
+        await this.getEventComponents(calendar);
+        this.setBudgetNotification(false);
+      }
 
-      axios.defaults.headers.common.Authorization = `Bearer ${this.currentUser.access_token}`;
-      let calendar = this.getCalendar();
-      await this.getEvent(calendar);
-      await this.getEventComponents(calendar);
-      console.log('showBudgetNotification', this.event.id, this.showBudgetNotification, this.showBudgetNotification.indexOf(this.event.id) === -1);
       // notify budget states
-      if (this.showBudgetNotification.indexOf(this.event.id) === -1) {
+      if (!this.showBudgetNotification) {
         this.notifyStates();
-        this.setBudgetNotification(this.event.id);
+        this.setBudgetNotification(true);
       }
       this.calendarEvent = this.event;
       if (this.event.totalBudget)
@@ -417,7 +421,6 @@ export default {
       }
     },
     notifyStates() {
-
       this.budgetStates = [];
       let now = moment();
       let created_at = moment(this.event.dateCreated);
@@ -433,6 +436,10 @@ export default {
           } else if (this.event.standardBudget > this.event.totalBudget) {
             this.budgetStates.push({ key: "lower_than_average" });
           }
+        }
+
+        if (now.diff(created_at, "days") < 15) {
+          this.budgetStates.push({ key: "approved_budget_in_two_weeks" });
         }
 
         if (now.diff(created_at, "days") < 15) {
@@ -590,11 +597,11 @@ export default {
       "modalTitle",
       "modalSubmitTitle",
       "editMode",
+      "showBudgetNotification",
     ]),
     ...mapGetters({
       budgetStatistics: "event/budgetStatistics",
       components: "event/getComponentsList",
-      showBudgetNotification: "event/showBudgetNotification",
       currentUser: "auth/currentUser",
     }),
     barItems() {

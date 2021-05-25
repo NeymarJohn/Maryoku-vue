@@ -64,39 +64,9 @@ const getTimeZoneNameFromPlaceId = async placeId => {
 
 //   })
 // }
-
-const isToday = (someDate) => {
-    const today = new Date();
-    return (
-        someDate.getDate() == today.getDate() &&
-        someDate.getMonth() == today.getMonth() &&
-        someDate.getFullYear() == today.getFullYear()
-    );
-};
-const isTomorrow = (someDate) => {
-    const today = new Date();
-    return (
-        someDate.getDate() == today.getDate() &&
-        someDate.getMonth() == today.getMonth() &&
-        someDate.getFullYear() == today.getFullYear()
-    );
-};
-const isThisWeek = (someDate) => {
-    var now = moment();
-    var input = moment(someDate);
-    return (now.isoWeek() == input.isoWeek())
-}
-const getLeftDays = (date) => {
-    const today = new Date();
-    return Math.ceil((date.getTime() - today.getTime()) / 1000 / 3600 / 24);
-}
 export default {
     formatScheduleTime,
     formatScheduleDay,
     getLocationFromPlaceId,
     getTimeZoneNameFromPlaceId,
-    isToday,
-    isTomorrow,
-    isThisWeek,
-    getLeftDays
 };
