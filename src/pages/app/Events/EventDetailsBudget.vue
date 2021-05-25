@@ -391,6 +391,7 @@ export default {
       this.selectedComponents = components;
     },
     loadEventData: async function (type = "init") {
+
       this.isLoading = true;
       if (type === "init") {
         this.event = this.$store.state.event.eventData;
@@ -399,12 +400,12 @@ export default {
         let calendar = this.getCalendar();
         await this.getEvent(calendar);
         await this.getEventComponents(calendar);
-        this.setBudgetNotification(false);
+        // this.setBudgetNotification(false);
       }
 
       // notify budget states
       if (!this.showBudgetNotification) {
-        this.notifyStates();
+        // this.notifyStates();
         this.setBudgetNotification(true);
       }
       this.calendarEvent = this.event;
@@ -421,26 +422,23 @@ export default {
       }
     },
     notifyStates() {
-        this.budgetStates = [];
-        let now = moment();
-        let created_at = moment(this.event.dateCreated);
-        if (this.event.budgetProgress < 100 && now.diff(created_at, "days") < 15) {
-            this.budgetStates.push({ key: "not_approved" });
-        } else {
-            if (this.event.standardBudget !== 0) {
-                if (this.event.standardBudget < this.event.totalBudget) {
-                    this.budgetStates.push({
-                        key: "higher_than_average",
-                        percent: ((this.event.totalBudget - this.event.standardBudget) / this.event.totalBudget).toFixed(2) * 100,
-                    });
-                } else if (this.event.standardBudget > this.event.totalBudget) {
-                    this.budgetStates.push({ key: "lower_than_average" });
-                }
-            }
 
-            if (now.diff(created_at, "days") < 15) {
-                this.budgetStates.push({ key: "approved_budget_in_two_weeks" });
-            }
+      this.budgetStates = [];
+      let now = moment();
+      let created_at = moment(this.event.dateCreated);
+      if (this.event.budgetProgress < 100 && now.diff(created_at, "days") < 15) {
+        this.budgetStates.push({ key: "not_approved" });
+      } else {
+        if (this.event.standardBudget !== 0) {
+          if (this.event.standardBudget < this.event.totalBudget) {
+            this.budgetStates.push({
+              key: "higher_than_average",
+              percent: ((this.event.totalBudget - this.event.standardBudget) / this.event.totalBudget).toFixed(2) * 100,
+            });
+          } else if (this.event.standardBudget > this.event.totalBudget) {
+            this.budgetStates.push({ key: "lower_than_average" });
+          }
+        }
 
         if (now.diff(created_at, "days") < 15) {
           this.budgetStates.push({ key: "approved_budget_in_two_weeks" });

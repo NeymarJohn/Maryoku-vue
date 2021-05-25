@@ -9,6 +9,7 @@
           :icon="`${$iconURL}Budget+Elements/${component.eventCategory ? component.eventCategory.icon : ''}`"
           :selectedIcon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
           :defaultStatus="selectedCategory && component.componentId === selectedCategory.componentId"
+          iconStyle="opacity:0.7"
           v-for="component in categories"
           @click="selectCategory(component)"
         ></resizable-toggle-button>
