@@ -261,8 +261,8 @@ export default {
   },
   methods: {
     async getData() {
-        let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
-        // let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '604cd2fecfefec0b87aff7bf' })).get();
+        // let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
+        let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '60144eafcfefec6372985c6d' })).get();
         this.proposalRequests = proposalRequests.filter(p => p.remainingTime);
         this.proposalRequests.map(it => console.log('proposal.request', it.id));
     },
@@ -270,8 +270,8 @@ export default {
       const { pagination } = this;
       const params = {status: this.tab, ...this.sortFields};
       const res = await new Proposal()
-        .for(new Vendor({ id: this.vendorData.id }))
-        // .for(new Vendor({ id: '604cd2fecfefec0b87aff7bf' }))
+        // .for(new Vendor({ id: this.vendorData.id }))
+        .for(new Vendor({ id: '60144eafcfefec6372985c6d' }))
         .page(pagination.page)
         .limit(pagination.limit)
         .params(params)
