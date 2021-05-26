@@ -298,14 +298,10 @@ export default {
       this.$forceUpdate();
     },
     getComingEvents() {
-      UserEvent.params({
-        startTime: new Date(),
-      })
-        .get()
-        .then((events) => {
-          console.log(events);
-          this.upcomingEvents = events;
-        });
+      UserEvent.get().then((events) => {
+        console.log(events);
+        this.upcomingEvents = events;
+      });
     },
   },
   updated() {

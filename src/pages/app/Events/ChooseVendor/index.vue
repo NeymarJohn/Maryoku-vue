@@ -58,7 +58,13 @@
                   :proposals="proposals"
                   :selectedId="selectedProposal.id"
                 ></proposals-bar>
-                <event-proposal-details class="mt-20" :vendorProposal="selectedProposal"></event-proposal-details>
+                <transition name="component-fade" mode="out-in">
+                  <event-proposal-details
+                    class="mt-20"
+                    :vendorProposal="selectedProposal"
+                    :key="selectedProposal.id"
+                  ></event-proposal-details>
+                </transition>
               </template>
             </div>
           </div>
@@ -407,6 +413,14 @@ export default {
     i {
       font-size: 40px !important;
     }
+  }
+  .component-fade-enter-active,
+  .component-fade-leave-active {
+    transition: opacity 0.3s ease;
+  }
+  .component-fade-enter, .component-fade-leave-to
+/* .component-fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
   }
 }
 </style>
