@@ -145,7 +145,7 @@ export default {
     this.currentStep = this.event.budgetProgress >= 50 ? 3 : 1;
       // notify budget states
       if (this.showBudgetNotification.indexOf(this.event.id) === -1) {
-          this.notifyStates();
+          // this.notifyStates();
           this.setBudgetNotification(this.event.id);
       }
     this.$root.$on('budget_notification_action', message => {

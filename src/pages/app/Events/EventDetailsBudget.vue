@@ -400,7 +400,7 @@ export default {
       console.log('showBudgetNotification', this.event.id, this.showBudgetNotification, this.showBudgetNotification.indexOf(this.event.id) === -1);
       // notify budget states
       if (this.showBudgetNotification.indexOf(this.event.id) === -1) {
-        this.notifyStates();
+        // this.notifyStates();
         this.setBudgetNotification(this.event.id);
       }
       this.calendarEvent = this.event;

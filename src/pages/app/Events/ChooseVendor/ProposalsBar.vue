@@ -9,8 +9,10 @@
       :style="`background: url('${headerBackgroundImage(proposal)}') center center no-repeat 100%`"
     >
       <img :src="`${headerBackgroundImage(proposal)}`" />
-      <div class="font-size-30 font-bold-extra">${{ proposal.cost | withComma }}</div>
-      <div class="font-size-22 font-bold-extra mt-30">{{ proposal.vendor.companyName }}</div>
+      <div class="proposal-content">
+        <div class="font-size-30 font-bold-extra">${{ proposal.cost | withComma }}</div>
+        <div class="font-size-22 font-bold-extra mt-30">{{ proposal.vendor.companyName }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -52,8 +54,29 @@ export default {
   .proposal-item {
     color: white;
     overflow: hidden;
+    position: relative;
+    &::after {
+      content: "";
+      position: absolute;
+      background-color: black;
+      opacity: 0.4;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
     img {
       width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      object-fit: cover;
+    }
+    .proposal-content {
+      position: absolute;
+      z-index: 1;
+      padding: 30px;
     }
     &:not(:last-child) {
       border-right: solid 1px #707070;
