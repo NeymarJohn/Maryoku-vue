@@ -10,10 +10,8 @@
     >
       <img :src="`${headerBackgroundImage(proposal)}`" />
       <div class="proposal-content">
-        <div class="font-size-30">${{ proposal.cost | withComma }}</div>
-        <div class="font-size-22 mt-30" :class="{ 'font-bold-extra': proposal.id === selectedId }">
-          {{ proposal.vendor.companyName }}
-        </div>
+        <div class="font-size-30 font-bold-extra">${{ proposal.cost | withComma }}</div>
+        <div class="font-size-22 font-bold-extra mt-30">{{ proposal.vendor.companyName }}</div>
       </div>
     </div>
   </div>
@@ -35,6 +33,8 @@ export default {
     handleClick(proposal) {
       this.$emit("goDetail", proposal);
     },
+  },
+  methods: {
     headerBackgroundImage(proposal) {
       if (proposal.inspirationalPhotos && proposal.inspirationalPhotos[0]) return proposal.inspirationalPhotos[0].url;
       if (proposal.vendor.images && proposal.vendor.images[0]) return proposal.vendor.images[0];
@@ -79,11 +79,10 @@ export default {
       padding: 30px;
     }
     &:not(:last-child) {
-      margin-right: 3px;
+      border-right: solid 1px #707070;
     }
     &.isActive {
-      font-weight: bold;
-      border-bottom: solid 3px #f51355;
+      border-bottom: solid 2px #f51355;
     }
   }
 }

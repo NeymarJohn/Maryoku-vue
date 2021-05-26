@@ -38,7 +38,7 @@
               <md-icon>play_arrow</md-icon>
             </md-button>
           </div>
-          <img :src="`${$storageURL}thumbnails/budget.png`" />
+          <img :src="video.thumbnail" />
         </div>
       </div>
 
@@ -62,12 +62,12 @@ export default {
       selectedVideoId: "",
       openPlayer: false,
       videos: [
-        { title: "Guest Communicator", id: "Kgb4RrDsB3w" },
-        { title: "Inspiration Board", id: "os-XRfWUkC4" },
-        { title: "Budget Wizard", id: "QIDa2Og0L1Q" },
-        { title: "Booking Engine", id: "TTohnW1tfy8" },
-        { title: "Event Scheduler", id: "XihWhW8eadE" },
-        { title: "Control Panel", id: "nXQ2EwlI3jM" },
+        { title: "Guest Communicator", id: "Kgb4RrDsB3w", thumbnail: `${this.$storageURL}Video%20Thumbnail/Campaign%20-%20Rsvp%205.png` },
+        { title: "Inspiration Board", id: "os-XRfWUkC4", thumbnail: `${this.$storageURL}Video%20Thumbnail/Concept5-1.png`  },
+        { title: "Budget Wizard", id: "QIDa2Og0L1Q", thumbnail: `${this.$storageURL}thumbnails/budget.png` },
+        { title: "Booking Engine", id: "TTohnW1tfy8", thumbnail: `${this.$storageURL}Video%20Thumbnail/Planning board 2.png`  },
+        { title: "Event Scheduler", id: "XihWhW8eadE", thumbnail: `${this.$storageURL}Video%20Thumbnail/timeline.png`  },
+        { title: "Control Panel", id: "nXQ2EwlI3jM", thumbnail: `${this.$storageURL}Video%20Thumbnail/Coose Vendor1.png`},
       ],
       event: {},
     };
