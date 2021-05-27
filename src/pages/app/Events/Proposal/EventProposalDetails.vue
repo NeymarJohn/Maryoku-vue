@@ -828,7 +828,9 @@ export default {
         .items {
           display: flex;
           align-content: center;
+          flex-flow: wrap;
           .item {
+            padding: 5px;
             a {
               color: black;
             }

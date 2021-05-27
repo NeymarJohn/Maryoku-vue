@@ -41,35 +41,35 @@
             </div>
           </div>
           <div>
-            <div>
-              <!-- Event Booking Items -->
-              <div class="events-booking-items" v-if="proposals.length && !showDetails">
-                <proposal-card
-                  @goDetail="goDetailPage"
-                  v-for="(proposal, index) in proposals.slice(0, 3)"
-                  :key="index"
-                  :proposal="proposal"
-                  :component="selectedCategory"
-                  :probability="getProbability(index)"
-                >
-                </proposal-card>
-              </div>
-              <template v-if="showDetails">
-                <proposals-bar
-                  @goDetail="goDetailPage"
-                  class="mt-40"
-                  :proposals="proposals"
-                  :selectedId="selectedProposal.id"
-                ></proposals-bar>
-                <transition name="component-fade" mode="out-in">
-                  <event-proposal-details
-                    class="mt-20"
-                    :vendorProposal="selectedProposal"
-                    :key="selectedProposal.id"
-                  ></event-proposal-details>
-                </transition>
-              </template>
+            <!-- Event Booking Items -->
+            <div class="events-booking-items" v-if="proposals.length">
+              <proposal-card
+                @goDetail="goDetailPage"
+                v-for="(proposal, index) in proposals.slice(0, 3)"
+                :key="index"
+                :proposal="proposal"
+                :component="selectedCategory"
+                :probability="getProbability(index)"
+                :isCollapsed="showDetails"
+                :isSelected="selectedProposal && selectedProposal.id === proposal.id"
+              >
+              </proposal-card>
             </div>
+            <template v-if="showDetails">
+              <!-- <proposals-bar
+                @goDetail="goDetailPage"
+                class="mt-40"
+                :proposals="proposals"
+                :selectedId="selectedProposal.id"
+              ></proposals-bar> -->
+              <transition name="component-fade" mode="out-in">
+                <event-proposal-details
+                  class="mt-20"
+                  :vendorProposal="selectedProposal"
+                  :key="selectedProposal.id"
+                ></event-proposal-details>
+              </transition>
+            </template>
           </div>
         </template>
         <pending-for-vendors v-else :expiredTime="expiredTime"></pending-for-vendors>
@@ -423,6 +423,7 @@ export default {
     display: flex;
     justify-content: space-between;
     width: calc(100% - 490px);
+    z-index: 10;
   }
   .add-category-button {
     border: none;
