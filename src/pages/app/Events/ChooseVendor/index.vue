@@ -10,6 +10,9 @@
           :selectedIcon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
           :defaultStatus="selectedCategory && component.componentId === selectedCategory.componentId"
           :disabled="!eventRequirements[component.componentId]"
+          :hasBadge="
+            proposalsByCategory[component.componentId] && proposalsByCategory[component.componentId].length > 0
+          "
           iconStyle="opacity:0.8"
           v-for="component in categories"
           @click="selectCategory(component)"
@@ -112,6 +115,7 @@ import InputMask from "vue-input-mask";
 import { postReq, getReq } from "@/utils/token";
 
 import Proposal from "@/models/Proposal";
+import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
 import EventCategoryRequirement from "@/models/EventCategoryRequirement";
 
@@ -151,9 +155,10 @@ export default {
     blockVendors: null,
     allRequirements: null,
     selectedBlock: null,
-    proposals: [],
+    // proposals: [],
     blockId: "",
     currentRequirement: null,
+    proposalsByCategory: {},
 
     isOpenedAdditionalModal: false,
     isLoading: true,
@@ -172,15 +177,15 @@ export default {
     ...mapActions("planningBoard", ["saveMainRequirements", "getRequirements", "saveTypes", "updateRequirements"]),
     selectCategory(category, clicked) {
       this.selectedCategory = category;
-      this.isLoadingProposal = true;
-      new Proposal()
-        .for(new EventComponent({ id: this.selectedCategory.id }))
-        .get()
-        .then((result) => {
-          this.proposals = result;
-          this.isLoadingProposal = false;
-        });
-      this.getCategoryRequirements();
+      // this.isLoadingProposal = true;
+      // new Proposal()
+      //   .for(new EventComponent({ id: this.selectedCategory.id }))
+      //   .get()
+      //   .then((result) => {
+      //     this.proposals = result;
+      //     this.isLoadingProposal = false;
+      //   });
+      // this.getCategoryRequirements();
     },
     addRequirements() {
       this.$router.push(`/events/${this.event.id}/booking/planningboard`);
@@ -287,8 +292,20 @@ export default {
       if (requirements[event.id]) requirements[event.id] = null;
       this.setBookingRequirements(requirements);
     });
-    this.selectCategory(this.event.components[0]);
+
     this.getRequirements(this.event.id);
+    this.categories.forEach((category, index) => {
+      new Proposal()
+        .for(new EventComponent({ id: category.id }))
+        .get()
+        .then((result) => {
+          if (!this.selectedCategory && result.length > 0) {
+            this.selectCategory(category);
+          }
+          this.$set(this.proposalsByCategory, category.componentId, result);
+          this.isLoadingProposal = false;
+        });
+    });
   },
   beforeCreate() {
     if (!this.$store.state.planningBoard) {
@@ -336,6 +353,11 @@ export default {
       const categories = this.event.components;
       categories.sort((a, b) => a.order - b.order);
       return categories;
+    },
+    proposals() {
+      if (!this.selectedCategory) return [];
+      console.log(this.proposalsByCategory);
+      return this.proposalsByCategory[this.selectedCategory.componentId];
     },
   },
 };
