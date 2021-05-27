@@ -119,12 +119,12 @@
           <div :class="`images-list__item`" v-for="indx in 5" :key="indx">
             <vue-element-loading :active="uploadingStatus[indx - 1]" spinner="ring" color="#FF547C" />
             <div class="image-section d-flex justify-content-center align-center text-center" :for="`file-${indx}`">
-              <span v-if="!uploadImageData[indx - 1]" data-design-type="A4Document" data-button-size="default" data-button-theme="default" data-api-key="VkYm_cazun7sI5t0gkrrCDQV"
+              <span v-if="!uploadImageData[indx - 1]" data-design-type="A4Document" data-button-size="default" data-button-theme="default" data-api-key="m4vTmRFQjWHHavapunMUGwzM"
                     class="canva-design-button"
-                    style="display:none;position: absolute;left:0;right:0;width: 180px;margin:0 auto;top: 30px;color:#050505;background: white;border: 1px solid #050505;z-index: 10">Design on Canva</span>
-              <img class="concept-image" v-if="uploadImageData[indx - 1]" :src="`${uploadImageData[indx - 1]}`" />
-              <div v-else class="image-selector" style="cursor: pointer" @click="uploadPhoto(indx)">
-                <div class="mt-2">
+                    style="display:none;position: absolute;left:0;right:0;width: 180px;margin:0 auto;top: 15%;color:#050505;background: white;border: 1px solid #050505;z-index: 10">Design on Canva</span>
+              <img class="concept-image" v-if="uploadImageData[indx - 1]" :src="`${uploadImageData[indx - 1]}`" @click="uploadPhoto(indx)"/>
+              <div v-else class="image-selector" @click="uploadPhoto(indx)">
+                <div :class="indx === 2 || indx === 5 ? 'mt-2' : 'mt-1'">
                   <div class="font-size-14">Or</div>
                   <div class="color-black-middle font-size-14">
                    Upload Photo
