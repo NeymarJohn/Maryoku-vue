@@ -44,7 +44,6 @@ export default {
       DietaryConstraintsModal: false,
       is_going_to_event: '',
       CreateCustomElementModal: false,
-      showBudgetNotification: false,
     }
   },
 
@@ -90,9 +89,6 @@ export default {
     },
     setNumberOfParticipants (state, data) {
       state.eventData['numberOfParticipants'] = data.numberOfParticipants
-    },
-    setBudgetNotification(state, val){
-      state.showBudgetNotification = val;
     },
     setEventData (state, data) {
       state.eventData['id'] = data.id

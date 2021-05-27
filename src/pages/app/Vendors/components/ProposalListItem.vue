@@ -19,7 +19,7 @@
 
     <div v-if="proposal.status === 'submit'">
         <md-button  class="md-vendor" @click="edit('show')">
-            <img src="/static/icons/vendor/proposalBoard/change-proposal.svg" class="mr-5" style="width: 20px" />
+<!--            <img src="/static/icons/vendor/proposalBoard/change-proposal.svg" class="mr-5" style="width: 20px" />-->
             Make Changes
         </md-button>
         <md-button class="md-simple md-red md-vendor-text">Negotiation Request</md-button>
