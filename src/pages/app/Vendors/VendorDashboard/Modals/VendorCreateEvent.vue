@@ -155,7 +155,6 @@ export default {
     LocationInput,
   },
   props: {},
-  created() {},
   data() {
     return {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
@@ -206,27 +205,17 @@ export default {
       this.$emit("cancel");
     },
     createEvent() {
-      const startDate = moment(
-        `${this.date} ${this.startTime.hh}:${this.startTime.mm} ${this.amPack.start}`,
-        "DD.MM.YYYY hh:mm a",
-      );
-      const endDate = moment(
-        `${this.date} ${this.endTime.hh}:${this.endTime.mm} ${this.amPack.end}`,
-        "DD.MM.YYYY hh:mm a",
-      );
-      var dt = new Date();
-      var tz = dt.getTimezoneOffset();
+      const otherFormatDate = moment(this.date, "DD.MM.YYYY").format("YYYY-MM-DD");
       const userEvent = {
         company: this.company,
-        date: endDate.format("YYYY-MM-DD"),
-        startTime: startDate,
-        endTime: endDate,
+        date: otherFormatDate,
+        startTime: `${this.startTime.hh}:${this.startTime.mm} ${this.amPack.start}`,
+        endTime: `${this.endTime.hh}:${this.endTime.mm} ${this.amPack.start}`,
         companyName: this.company,
         customerName: this.customer,
         email: this.email,
         guests: this.guests,
         location: this.location,
-        timezone: tz,
       };
       new UserEvent(userEvent).save().then((res) => {
         this.$emit("save", res);

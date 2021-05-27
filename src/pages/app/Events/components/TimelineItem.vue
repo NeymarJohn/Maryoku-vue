@@ -10,7 +10,7 @@
       <img
         width="60"
         height="60"
-        :src="`${this.$resourceURL}storage/icons/Timeline-New/${editingContent.icon.toLowerCase()}-circle.svg`"
+        :src="`/static/icons/timeline/${editingContent.icon.toLowerCase()}-circle.png`"
         v-if="editingContent.icon"
       />
     </div>
@@ -77,7 +77,7 @@
             ></time-input>
           </div>
         </div>
-        <div class="md-layout-item md-size-100 mt-50">
+        <!-- <div class="md-layout-item md-size-100 mt-50">
           <div class="form-group">
             <label class="font-size-16 font-bold pb-10">Assign vendor to slot</label>
             <multiselect
@@ -92,7 +92,7 @@
               track-by="key"
             ></multiselect>
           </div>
-        </div>
+        </div> -->
       </md-card-content>
       <md-card-actions md-alignment="right" style="border: none" class="edit-timeline-footer">
         <md-button

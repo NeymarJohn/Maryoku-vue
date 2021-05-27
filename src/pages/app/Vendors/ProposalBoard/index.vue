@@ -83,8 +83,8 @@
           >
               {{ proposals.length }} Proposals:</span></div>
       <div class="md-layout mt-10">
-        <div class="md-layout-item md-size-75 p-0 d-flex flex-column" style="background: rgba(255, 255, 255, 0.46)">
-          <div class="sort-bar px-40" style="background: #f3f7fd">
+        <div class="md-layout-item md-size-75 p-0 d-flex flex-column">
+          <div class="sort-bar px-40">
             <span v-for="it in proposalHeaders"
                   class="sort-item"
                   :class="{selected: it.key && sortFields['sort'] == it.key, 'text-center': it.key == 'update'}"
@@ -108,7 +108,7 @@
                 ></proposal-list-item>
             </div>
           </div>
-          <div v-if="pagination.total < 2" class="my-auto d-flex flex-column align-center">
+          <div v-if="proposals.length < 2" class="my-auto d-flex flex-column align-center">
               <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`">
               <p class="text-transform-uppercase font-size-14">No More Proposal To Show</p>
               <md-button class="md-vendor">Create New Proposal</md-button>
@@ -264,6 +264,7 @@ export default {
         // let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
         let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '60144eafcfefec6372985c6d' })).get();
         this.proposalRequests = proposalRequests.filter(p => p.remainingTime);
+        this.proposalRequests.map(it => console.log('proposal.request', it.id));
     },
     async getProposal() {
       const { pagination } = this;
@@ -276,6 +277,7 @@ export default {
         .params(params)
         .get();
       const data = res[0];
+      console.log('proposals', res)
       this.proposals = data.items;
       this.proposals.map(it => console.log('proposal', it.proposalRequestId));
       this.pagination.total = data.total;

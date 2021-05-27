@@ -10,6 +10,9 @@
           :selectedIcon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
           :defaultStatus="selectedCategory && component.componentId === selectedCategory.componentId"
           :disabled="!eventRequirements[component.componentId]"
+          :hasBadge="
+            proposalsByCategory[component.componentId] && proposalsByCategory[component.componentId].length > 0
+          "
           iconStyle="opacity:0.8"
           v-for="component in categories"
           @click="selectCategory(component)"
@@ -38,35 +41,35 @@
             </div>
           </div>
           <div>
-            <div>
-              <!-- Event Booking Items -->
-              <div class="events-booking-items" v-if="proposals.length && !showDetails">
-                <proposal-card
-                  @goDetail="goDetailPage"
-                  v-for="(proposal, index) in proposals.slice(0, 3)"
-                  :key="index"
-                  :proposal="proposal"
-                  :component="selectedCategory"
-                  :probability="getProbability(index)"
-                >
-                </proposal-card>
-              </div>
-              <template v-if="showDetails">
-                <proposals-bar
-                  @goDetail="goDetailPage"
-                  class="mt-40"
-                  :proposals="proposals"
-                  :selectedId="selectedProposal.id"
-                ></proposals-bar>
-                <transition name="component-fade" mode="out-in">
-                  <event-proposal-details
-                    class="mt-20"
-                    :vendorProposal="selectedProposal"
-                    :key="selectedProposal.id"
-                  ></event-proposal-details>
-                </transition>
-              </template>
+            <!-- Event Booking Items -->
+            <div class="events-booking-items" v-if="proposals.length">
+              <proposal-card
+                @goDetail="goDetailPage"
+                v-for="(proposal, index) in proposals.slice(0, 3)"
+                :key="index"
+                :proposal="proposal"
+                :component="selectedCategory"
+                :probability="getProbability(index)"
+                :isCollapsed="showDetails"
+                :isSelected="selectedProposal && selectedProposal.id === proposal.id"
+              >
+              </proposal-card>
             </div>
+            <template v-if="showDetails">
+              <!-- <proposals-bar
+                @goDetail="goDetailPage"
+                class="mt-40"
+                :proposals="proposals"
+                :selectedId="selectedProposal.id"
+              ></proposals-bar> -->
+              <transition name="component-fade" mode="out-in">
+                <event-proposal-details
+                  class="mt-20"
+                  :vendorProposal="selectedProposal"
+                  :key="selectedProposal.id"
+                ></event-proposal-details>
+              </transition>
+            </template>
           </div>
         </template>
         <pending-for-vendors v-else :expiredTime="expiredTime"></pending-for-vendors>
@@ -75,13 +78,13 @@
     <div class="proposals-footer white-card">
       <div>
         <md-button class="md-simple maryoku-btn md-black">
-          <span class="text-transform-capitalize">I already have a {{ selectedCategory.fullTitle }} for my event</span>
+          <span class="text-transform-capitalize">I already have a vendor</span>
         </md-button>
         <md-button
           class="md-simple maryoku-btn md-black text-transform-capitalize"
           @click="isOpenedAdditionalModal = true"
         >
-          <span class="text-transform-capitalize">Chanage {{ selectedCategory.fullTitle }} requirements</span>
+          <span class="text-transform-capitalize">Chanage requirements</span>
         </md-button>
       </div>
       <div>
@@ -112,6 +115,7 @@ import InputMask from "vue-input-mask";
 import { postReq, getReq } from "@/utils/token";
 
 import Proposal from "@/models/Proposal";
+import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
 import EventCategoryRequirement from "@/models/EventCategoryRequirement";
 
@@ -151,9 +155,10 @@ export default {
     blockVendors: null,
     allRequirements: null,
     selectedBlock: null,
-    proposals: [],
+    // proposals: [],
     blockId: "",
     currentRequirement: null,
+    proposalsByCategory: {},
 
     isOpenedAdditionalModal: false,
     isLoading: true,
@@ -172,15 +177,15 @@ export default {
     ...mapActions("planningBoard", ["saveMainRequirements", "getRequirements", "saveTypes", "updateRequirements"]),
     selectCategory(category, clicked) {
       this.selectedCategory = category;
-      this.isLoadingProposal = true;
-      new Proposal()
-        .for(new EventComponent({ id: this.selectedCategory.id }))
-        .get()
-        .then((result) => {
-          this.proposals = result;
-          this.isLoadingProposal = false;
-        });
-      this.getCategoryRequirements();
+      // this.isLoadingProposal = true;
+      // new Proposal()
+      //   .for(new EventComponent({ id: this.selectedCategory.id }))
+      //   .get()
+      //   .then((result) => {
+      //     this.proposals = result;
+      //     this.isLoadingProposal = false;
+      //   });
+      // this.getCategoryRequirements();
     },
     addRequirements() {
       this.$router.push(`/events/${this.event.id}/booking/planningboard`);
@@ -287,8 +292,20 @@ export default {
       if (requirements[event.id]) requirements[event.id] = null;
       this.setBookingRequirements(requirements);
     });
-    this.selectCategory(this.event.components[0]);
+
     this.getRequirements(this.event.id);
+    this.categories.forEach((category, index) => {
+      new Proposal()
+        .for(new EventComponent({ id: category.id }))
+        .get()
+        .then((result) => {
+          if (!this.selectedCategory && result.length > 0) {
+            this.selectCategory(category);
+          }
+          this.$set(this.proposalsByCategory, category.componentId, result);
+          this.isLoadingProposal = false;
+        });
+    });
   },
   beforeCreate() {
     if (!this.$store.state.planningBoard) {
@@ -320,7 +337,7 @@ export default {
       storedRequirements: "event/getBookingRequirements",
     }),
     ...mapState({
-      eventRequirements: (state) => state.planningBoard,
+      eventRequirements: (state) => state.planningBoard || {},
     }),
     categoryList() {
       return this.$store.state.event.eventData.components;
@@ -336,6 +353,11 @@ export default {
       const categories = this.event.components;
       categories.sort((a, b) => a.order - b.order);
       return categories;
+    },
+    proposals() {
+      if (!this.selectedCategory) return [];
+      console.log(this.proposalsByCategory);
+      return this.proposalsByCategory[this.selectedCategory.componentId];
     },
   },
 };
@@ -401,6 +423,7 @@ export default {
     display: flex;
     justify-content: space-between;
     width: calc(100% - 490px);
+    z-index: 10;
   }
   .add-category-button {
     border: none;
@@ -410,6 +433,7 @@ export default {
     border-radius: 50%;
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     background-color: #ffffff;
+    cursor: pointer;
     i {
       font-size: 40px !important;
     }
