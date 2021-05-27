@@ -43,8 +43,7 @@ const state = {
     calendarId: null,
     timelineDates: [],
     requirements: null,
-    requirementsForVendor: {},
-    budgetNotification: [],
+    requirementsForVendor: {}
 };
 
 const getters = {
@@ -88,9 +87,6 @@ const getters = {
             bookedPercentage: ((bookedBudget * 100) / state.eventData.totalBudget).toFixed(1),
             saved: savedBudget,
         };
-    },
-    showBudgetNotification: state => {
-        return state.budgetNotification;
     },
 };
 const actions = {
@@ -345,10 +341,8 @@ const mutations = {
             Vue.set(state.requirementsForVendor[data.category], 'types', {})
         }
         Vue.set(state.requirementsForVendor[data.category].types, data.type, data.services)
-    },
-    setBudgetNotification(state, event_id){
-        state.budgetNotification.push(event_id);
-    },
+    }
+
 };
 
 export default {

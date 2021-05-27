@@ -75,13 +75,13 @@
     <div class="proposals-footer white-card">
       <div>
         <md-button class="md-simple maryoku-btn md-black">
-          <span class="text-transform-capitalize">I already have a {{ selectedCategory.fullTitle }} for my event</span>
+          <span class="text-transform-capitalize">I already have a vendor</span>
         </md-button>
         <md-button
           class="md-simple maryoku-btn md-black text-transform-capitalize"
           @click="isOpenedAdditionalModal = true"
         >
-          <span class="text-transform-capitalize">Chanage {{ selectedCategory.fullTitle }} requirements</span>
+          <span class="text-transform-capitalize">Chanage requirements</span>
         </md-button>
       </div>
       <div>
@@ -320,7 +320,7 @@ export default {
       storedRequirements: "event/getBookingRequirements",
     }),
     ...mapState({
-      eventRequirements: (state) => state.planningBoard,
+      eventRequirements: (state) => state.planningBoard || {},
     }),
     categoryList() {
       return this.$store.state.event.eventData.components;
@@ -410,6 +410,7 @@ export default {
     border-radius: 50%;
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     background-color: #ffffff;
+    cursor: pointer;
     i {
       font-size: 40px !important;
     }

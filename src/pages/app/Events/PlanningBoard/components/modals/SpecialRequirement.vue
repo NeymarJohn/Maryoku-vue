@@ -43,7 +43,7 @@
       </div>
     </template>
     <template slot="footer">
-      <md-button class="md-button md-black md-simple add-category-btn" @click="onCancel()">
+      <md-button class="md-button md-black md-simple add-category-btn" @click="skip">
         No, Skip
         <md-icon>keyboard_arrow_right</md-icon>
       </md-button>
@@ -149,6 +149,9 @@ export default {
   methods: {
     onCancel: function (e) {
       this.$emit("cancel");
+    },
+    skip: function () {
+      this.$emit("save", {});
     },
     save: function () {
       this.$emit("save", this.speicalRequirements);

@@ -249,7 +249,6 @@ export default {
     };
   },
   created() {
-    console.log('budget.vendor.item', this.eventCategoryItem);
     this.$root.$on("expandBudgetCategoryItem", (category) => {
       if (category.id != this.eventCategoryItem.id) {
         this.isExpanded = false;
