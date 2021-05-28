@@ -116,7 +116,7 @@ import EventComponent from "@/models/EventComponent";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import moment from "moment";
-import {mapMutations, mapState} from "vuex";
+import {mapMutations, mapGetters} from "vuex";
 
 export default {
   components: {
@@ -144,9 +144,9 @@ export default {
   mounted() {
     this.currentStep = this.event.budgetProgress >= 50 ? 3 : 1;
       // notify budget states
-      if (!this.showBudgetNotification) {
-          this.notifyStates();
-          this.setBudgetNotification(true);
+      if (this.showBudgetNotification.indexOf(this.event.id) === -1) {
+          // this.notifyStates();
+          this.setBudgetNotification(this.event.id);
       }
     this.$root.$on('budget_notification_action', message => {
         let obj = BUDGET_MESSAGES.find(m => m.title = message);
@@ -154,7 +154,7 @@ export default {
     })
   },
   methods: {
-    ...mapMutations("EventPlannerVuex", ["setBudgetNotification",]),
+    ...mapMutations("event", ["setBudgetNotification",]),
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
     },
@@ -219,7 +219,7 @@ export default {
           this.budgetStates = [];
           let now = moment();
           let created_at = moment(this.event.dateCreated);
-          if (this.event.budgetProgress === 50 && now.diff(created_at, "days") < 15) {
+          if (this.event.budgetProgress === 50 && now.diff(created_at, "days") > 15) {
               this.budgetStates.push({ key: "not_approved" });
           }
 
@@ -243,7 +243,9 @@ export default {
       },
   },
   computed: {
-    ...mapState("EventPlannerVuex", ["showBudgetNotification"]),
+    ...mapGetters({
+        showBudgetNotification: "event/showBudgetNotification",
+    }),
     event() {
       return this.$store.state.event.eventData;
     },

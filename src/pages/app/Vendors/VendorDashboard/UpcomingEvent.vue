@@ -3,7 +3,7 @@
     <div class="upcoming-event" v-for="event in events" :key="event.id">
       <div class="event-logo"></div>
       <div class="event-detail flex-1">
-        <div class="color-gray font-size-14">Today</div>
+        <div class="color-gray font-size-14">{{ getUpcomingPeriod(event.startTime) }}</div>
         <div class="font-bold mb-10">{{ event.customerName }}</div>
         <div>{{ event.companyName }} | $55,678</div>
       </div>
@@ -17,6 +17,20 @@ export default {
     events: {
       type: Array,
       default: [],
+    },
+  },
+  methods: {
+    getUpcomingPeriod(dateString) {
+      const d = new Date(dateString);
+      if (this.$dateUtil.isToday(d)) {
+        return "Today";
+      } else if (this.$dateUtil.isTomorrow(d)) {
+        return "Tomorrow";
+      } else if (this.$dateUtil.isThisWeek(d)) {
+        return "This Week";
+      }
+      const days = this.$dateUtil.getLeftDays(d);
+      return `Within ${days}days`;
     },
   },
 };

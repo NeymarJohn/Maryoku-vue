@@ -43,7 +43,7 @@
       </div>
     </template>
     <template slot="footer">
-      <md-button class="md-button md-black md-simple add-category-btn" @click="skip">
+      <md-button class="md-button md-black md-simple add-category-btn" @click="onCancel()">
         No, Skip
         <md-icon>keyboard_arrow_right</md-icon>
       </md-button>
@@ -150,9 +150,6 @@ export default {
     onCancel: function (e) {
       this.$emit("cancel");
     },
-    skip: function () {
-      this.$emit("save", {});
-    },
     save: function () {
       this.$emit("save", this.speicalRequirements);
     },
@@ -201,8 +198,6 @@ export default {
         icon = "sexual harassment";
       } else if (name === "Acknowledge all religious and cultural holidays") {
         icon = "All religious";
-      } else if (name === "Green policy") {
-        icon = "Green policy";
       }
       if (subCategory === "Accessibility") {
         return `${this.$iconURL}Requirements/${icon}.svg`;
