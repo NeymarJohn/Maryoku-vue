@@ -7,6 +7,7 @@ import { reject, resolve } from "promise-polyfill";
 import EventTimelineDate from "@/models/EventTimelineDate";
 import CalendarEvent from "@/models/CalendarEvent";
 import authService from "@/services/auth.service";
+import moment from "moment";
 
 const state = {
   vendor: null,
@@ -322,14 +323,11 @@ const actions = {
         inspirationalPhotos: state.inspirationalPhotos,
         proposalRequestId: state.proposalRequest.id,
         eventVision: state.eventVision,
-        // eventComponentInstance: state.proposalRequest.eventComponentInstance,
         eventComponentId: state.proposalRequest.eventComponentInstance.id,
-        // vendor: new Vendor({ id: state.vendor.id }),
         vendorId: state.vendor.id,
         costServices: state.proposalCostServices,
         includedServices: state.proposalIncludedServices,
         extraServices: state.proposalExtraServices,
-        // coverImage: coverImageUrl,
         discounts: state.discounts,
         taxes: state.taxes,
         cost: getters.totalPriceOfProposal,
@@ -338,7 +336,8 @@ const actions = {
         attachments: state.attachments,
         status,
         tenantId: state.tenantId,
-        suggestionDate: state.suggestionDate
+        suggestionDate: state.suggestionDate,
+        expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate()
       });
       proposal
         .save()

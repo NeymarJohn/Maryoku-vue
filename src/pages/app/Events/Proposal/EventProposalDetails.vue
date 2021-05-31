@@ -43,7 +43,7 @@
               </li>
             </ul>
           </div>
-          <timer-panel class="time-counter"></timer-panel>
+          <timer-panel class="time-counter" :target="vendorProposal.expiredDate"></timer-panel>
         </div>
 
         <div class="proposal-body">

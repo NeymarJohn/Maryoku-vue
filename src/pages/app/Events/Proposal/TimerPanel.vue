@@ -2,7 +2,7 @@
   <div class="proposal-time-counter">
     <div class="font-bold">This offer will expire in</div>
     <hr />
-    <timer size="big"></timer>
+    <timer size="big" :target="target"></timer>
     <div>
       <md-button class="maryoku-btn md-simple md-red mt-10">Ask for more time</md-button>
     </div>
@@ -12,7 +12,15 @@
 import Timer from "../../../../components/Timer.vue";
 import TimeCounter from "../components/TimeCounter.vue";
 
-export default { components: { TimeCounter, Timer } };
+export default {
+  components: { TimeCounter, Timer },
+  props: {
+    target: {
+      type: [Date, Number],
+      default: new Date(),
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 .proposal-time-counter {
