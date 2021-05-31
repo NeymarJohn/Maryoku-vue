@@ -24,7 +24,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .proposal-time-counter {
-  max-width: 300px;
+  width: 300px;
   background-color: #f51355;
   color: white;
   text-align: center;
