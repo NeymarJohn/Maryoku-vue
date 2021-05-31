@@ -1,22 +1,22 @@
 <template>
-  <div class="down-timer" :class="`${size}`">
+  <div class="down-timer">
     <div class="count-item">
-      <div class="number">{{ $stringUtil.getTwoDigits(days) }}</div>
+      <div class="number">{{ days }}</div>
       <div class="count-label">Days</div>
     </div>
     <div class="count-item divider">:</div>
     <div class="count-item">
-      <div class="number">{{ $stringUtil.getTwoDigits(hours) }}</div>
+      <div class="number">{{ hours }}</div>
       <div class="count-label">Hours</div>
     </div>
     <div class="count-item divider">:</div>
     <div class="count-item">
-      <div class="number">{{ $stringUtil.getTwoDigits(mins) }}</div>
+      <div class="number">{{ mins }}</div>
       <div class="count-label">Min</div>
     </div>
     <div class="count-item divider">:</div>
     <div class="count-item">
-      <div class="number">{{ $stringUtil.getTwoDigits(secs) }}</div>
+      <div class="number">{{ mins }}</div>
       <div class="count-label">Sec</div>
     </div>
   </div>
@@ -29,10 +29,6 @@ export default {
     target: {
       type: [Number, Date],
     },
-    size: {
-      type: String,
-      default: "",
-    },
   },
   data() {
     return {
@@ -40,22 +36,20 @@ export default {
       hours: "00",
       mins: "00",
       secs: "00",
-      intervalId: null,
     };
   },
   methods: {
     updateTime() {
-      if (typeof this.target === "object") {
+      if (typeof this.target === "date") {
         const targetNumber = this.target.getTime();
         let diff = (targetNumber - new Date().getTime()) / 1000;
-        this.days = Math.floor(diff / (24 * 3600));
+        this.days = diff / (24 * 3600);
         diff = diff - this.days * 24 * 3600;
-        this.hours = Math.floor(diff / 3600);
-        diff = diff - this.hours * 3600;
-        this.mins = Math.floor(diff / 60);
-        diff -= this.mins * 60;
-        this.secs = `${Math.floor(diff)}`;
-        console.log(this.secs);
+        this.hours = diff / 3600;
+        diff -= this.horus * 3600;
+        this.mins = diff / 60;
+        diff -= this.this.mins * 60;
+        this.secs = `${diff}`;
       } else {
         const diff = moment.utc(moment(this.target).diff(new Date().getTime())).format("DD:HH:mm:ss");
         const targetNumber = this.target;
@@ -74,13 +68,12 @@ export default {
   },
   created() {
     this.updateTime();
-    this.intervalId = setInterval(() => {
-      console.log("xxx");
+  },
+  mounted() {
+    this.updateTime();
+    setInterval(() => {
       this.updateTime();
     }, 1000);
-  },
-  beforeDestroy() {
-    clearInterval(this.intervalId);
   },
   watch: {
     target: function () {
@@ -97,8 +90,6 @@ export default {
   justify-content: space-between;
   padding: 0.5em 1em;
   max-height: 82.1px;
-  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-
   .count-item {
     text-align: center;
     &.divider {
@@ -109,26 +100,9 @@ export default {
       font-size: 14px;
       font-weight: 600;
       font-family: "Manrope-Bold", sans-serif;
-      &.big {
-        font-size: 30px;
-      }
     }
     .count-label {
       font-size: 9px;
-    }
-  }
-  &.big {
-    .count-item {
-      &.divider {
-        font-size: 30px;
-        margin: 0 0.2em;
-      }
-      .number {
-        font-size: 30px;
-      }
-      .count-label {
-        font-size: 14px;
-      }
     }
   }
 }

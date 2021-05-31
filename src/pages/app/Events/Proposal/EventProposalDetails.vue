@@ -1,9 +1,6 @@
 <template>
   <div class="proposal-page_details">
     <div class="proposal-content">
-      <md-button class="close-btn md-simple maryoku-btn md-black md-icon-button" @click="closeDetail">
-        <md-icon>close</md-icon>
-      </md-button>
       <div class="proposal-info">
         <div class="proposal-header" :style="`background: url('${headerBackgroundImage}') center center no-repeat`">
           <div class="event-info">
@@ -43,7 +40,6 @@
               </li>
             </ul>
           </div>
-          <timer-panel class="time-counter" :target="new Date(vendorProposal.expiredDate)"></timer-panel>
         </div>
 
         <div class="proposal-body">
@@ -365,7 +361,6 @@ import ExtraServiceItem from "./ExtraServiceItem";
 import IncludedServiceItem from "./IncludedServiceItem.vue";
 import { socialMediaBlocks } from "@/constants/vendor";
 import EventProposalPrice from "./EventProposalPrice.vue";
-import TimerPanel from "./TimerPanel.vue";
 
 export default {
   props: {
@@ -392,7 +387,6 @@ export default {
     IncludedServiceItem,
     EventProposalPrice,
     Loader,
-    TimerPanel,
   },
 
   data() {
@@ -446,7 +440,6 @@ export default {
       "setNumberOfParticipants",
       "setEventData",
     ]),
-
     getBundleServices(bundleServices) {
       const serviceNames = bundleServices.map((service) => {
         return this.getCategory(service).title;
@@ -550,9 +543,6 @@ export default {
       // this.addedServices = { ...this.addedServices };
       this.vendorProposal.costServices[category] = costServices;
       this.vendorProposal.extraServices[category] = extraServices;
-    },
-    closeDetail() {
-      this.$emit("close");
     },
   },
   computed: {
@@ -689,11 +679,7 @@ export default {
 .tab-content {
   background-color: transparent !important;
 }
-.time-counter {
-  position: absolute;
-  right: 30px;
-  top: 60px;
-}
+
 .proposal-page {
   &_details {
     .alert-danger {
@@ -708,16 +694,7 @@ export default {
 
     .proposal-content {
       // margin: 0 2em;
-      position: relative;
-      .close-btn {
-        position: absolute;
-        right: 20px;
-        top: 30px;
-        font-size: 40px !important;
-        i {
-          font-size: 28px;
-        }
-      }
+
       .proposal-info {
         background: #fff;
         box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
@@ -726,7 +703,7 @@ export default {
       .proposal-header {
         background-size: cover !important;
         height: 500px;
-        position: relative;
+
         .event-info {
           background: rgba(255, 255, 255, 0.76);
           align-items: center;
@@ -851,9 +828,7 @@ export default {
         .items {
           display: flex;
           align-content: center;
-          flex-flow: wrap;
           .item {
-            padding: 5px;
             a {
               color: black;
             }
