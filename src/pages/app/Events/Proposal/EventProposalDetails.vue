@@ -1,6 +1,9 @@
 <template>
   <div class="proposal-page_details">
     <div class="proposal-content">
+      <md-button class="close-btn md-simple maryoku-btn md-black md-icon-button" @click="closeDetail">
+        <md-icon>close</md-icon>
+      </md-button>
       <div class="proposal-info">
         <div class="proposal-header" :style="`background: url('${headerBackgroundImage}') center center no-repeat`">
           <div class="event-info">
@@ -440,6 +443,7 @@ export default {
       "setNumberOfParticipants",
       "setEventData",
     ]),
+
     getBundleServices(bundleServices) {
       const serviceNames = bundleServices.map((service) => {
         return this.getCategory(service).title;
@@ -543,6 +547,9 @@ export default {
       // this.addedServices = { ...this.addedServices };
       this.vendorProposal.costServices[category] = costServices;
       this.vendorProposal.extraServices[category] = extraServices;
+    },
+    closeDetail() {
+      this.$emit("close");
     },
   },
   computed: {
@@ -694,7 +701,16 @@ export default {
 
     .proposal-content {
       // margin: 0 2em;
-
+      position: relative;
+      .close-btn {
+        position: absolute;
+        right: 20px;
+        top: 30px;
+        font-size: 40px !important;
+        i {
+          font-size: 28px;
+        }
+      }
       .proposal-info {
         background: #fff;
         box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
@@ -828,7 +844,9 @@ export default {
         .items {
           display: flex;
           align-content: center;
+          flex-flow: wrap;
           .item {
+            padding: 5px;
             a {
               color: black;
             }
