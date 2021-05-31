@@ -172,15 +172,6 @@ export default {
     ...mapActions("planningBoard", ["saveMainRequirements", "getRequirements", "saveTypes", "updateRequirements"]),
     selectCategory(category, clicked) {
       this.selectedCategory = category;
-      // this.isLoadingProposal = true;
-      // new Proposal()
-      //   .for(new EventComponent({ id: this.selectedCategory.id }))
-      //   .get()
-      //   .then((result) => {
-      //     this.proposals = result;
-      //     this.isLoadingProposal = false;
-      //   });
-      // this.getCategoryRequirements();
     },
     addRequirements() {
       this.$router.push(`/events/${this.event.id}/booking/planningboard`);
@@ -223,12 +214,7 @@ export default {
           if (result.length > 0) this.showProposals = true;
         });
 
-      // todo check if commentComponent is used
-      // this.getCommentComponents(this.blockId);
-
       await this.getAllRequirements();
-
-      // this.getRequirements();
     },
     setRequirements(requirementContent) {
       this.currentRequirement = requirementContent;

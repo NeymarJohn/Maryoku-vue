@@ -34,7 +34,7 @@
             </template>
             <div
               v-else-if="
-                requirementsData.mainRequirements[requirementCategory].filter((item) => item.isSelected).length > 0
+                requirementsData.mainRequirements[requirementCategory].filter((item) => item.selected).length > 0
               "
               class="category-section"
             >
@@ -43,7 +43,7 @@
                 <div
                   class="requirement-item"
                   v-for="requirementItem in requirementsData.mainRequirements[requirementCategory].filter(
-                    (item) => item.isSelected,
+                    (item) => item.selected,
                   )"
                   :key="requirementItem.item"
                 >
@@ -98,7 +98,7 @@
             </template>
             <div
               v-else-if="
-                secondaryRequirement.mainRequirements[requirementCategory].filter((item) => item.isSelected).length > 0
+                secondaryRequirement.mainRequirements[requirementCategory].filter((item) => item.selected).length > 0
               "
               class="category-section"
             >
@@ -107,7 +107,7 @@
                 <div
                   class="requirement-item"
                   v-for="requirementItem in secondaryRequirement.mainRequirements[requirementCategory].filter(
-                    (item) => item.isSelected,
+                    (item) => item.selected,
                   )"
                   :key="requirementItem.item"
                 >

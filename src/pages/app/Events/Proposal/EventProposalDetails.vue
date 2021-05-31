@@ -43,6 +43,7 @@
               </li>
             </ul>
           </div>
+          <timer-panel class="time-counter"></timer-panel>
         </div>
 
         <div class="proposal-body">
@@ -364,6 +365,7 @@ import ExtraServiceItem from "./ExtraServiceItem";
 import IncludedServiceItem from "./IncludedServiceItem.vue";
 import { socialMediaBlocks } from "@/constants/vendor";
 import EventProposalPrice from "./EventProposalPrice.vue";
+import TimerPanel from "./TimerPanel.vue";
 
 export default {
   props: {
@@ -390,6 +392,7 @@ export default {
     IncludedServiceItem,
     EventProposalPrice,
     Loader,
+    TimerPanel,
   },
 
   data() {
@@ -686,7 +689,11 @@ export default {
 .tab-content {
   background-color: transparent !important;
 }
-
+.time-counter {
+  position: absolute;
+  right: 30px;
+  top: 60px;
+}
 .proposal-page {
   &_details {
     .alert-danger {
@@ -719,7 +726,7 @@ export default {
       .proposal-header {
         background-size: cover !important;
         height: 500px;
-
+        position: relative;
         .event-info {
           background: rgba(255, 255, 255, 0.76);
           align-items: center;

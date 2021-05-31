@@ -1,5 +1,5 @@
 <template>
-  <div class="down-timer">
+  <div class="down-timer" :class="`${size}`">
     <div class="count-item">
       <div class="number">{{ days }}</div>
       <div class="count-label">Days</div>
@@ -28,6 +28,10 @@ export default {
   props: {
     target: {
       type: [Number, Date],
+    },
+    size: {
+      type: String,
+      default: "",
     },
   },
   data() {
@@ -90,6 +94,8 @@ export default {
   justify-content: space-between;
   padding: 0.5em 1em;
   max-height: 82.1px;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+
   .count-item {
     text-align: center;
     &.divider {
@@ -100,9 +106,26 @@ export default {
       font-size: 14px;
       font-weight: 600;
       font-family: "Manrope-Bold", sans-serif;
+      &.big {
+        font-size: 30px;
+      }
     }
     .count-label {
       font-size: 9px;
+    }
+  }
+  &.big {
+    .count-item {
+      &.divider {
+        font-size: 30px;
+        margin: 0 0.2em;
+      }
+      .number {
+        font-size: 30px;
+      }
+      .count-label {
+        font-size: 14px;
+      }
     }
   }
 }
