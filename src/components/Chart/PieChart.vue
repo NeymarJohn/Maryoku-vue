@@ -83,7 +83,7 @@
         <li v-for="(item, index) in sortedData" :key="index" :class="`columns-${columns}`">
           <div class="d-flex align-center">
             <span :style="`background-color: ${item.color};`" class="icon"></span>
-            <img class="pie_svg_img ml-5" v-if="item.image" :src="item.image" width="24"/>
+            <img class="pie_svg_img ml-5" v-if="item.image" :src="item.image" width="24" />
             <span class="ml-10 text-gray">{{ item.category }}</span>
           </div>
         </li>
@@ -308,6 +308,9 @@ export default {
       this.drawChart();
     },
     items(newVal, oldVal) {
+      this.drawChart();
+    },
+    chartData() {
       this.drawChart();
     },
   },

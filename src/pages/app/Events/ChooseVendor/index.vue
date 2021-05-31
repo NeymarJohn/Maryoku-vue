@@ -9,15 +9,11 @@
           :icon="`${$iconURL}Budget+Elements/${component.eventCategory ? component.eventCategory.icon : ''}`"
           :selectedIcon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
           :defaultStatus="selectedCategory && component.componentId === selectedCategory.componentId"
-          :disabled="!eventRequirements[component.componentId]"
-          iconStyle="opacity:0.8"
-          v-for="component in categories"
+          v-for="component in event.components"
           @click="selectCategory(component)"
         ></resizable-toggle-button>
-        <button class="add-category-button mb-10" @click="addRequirements"><md-icon>add</md-icon></button>
       </div>
       <div class="booking-proposals" v-if="selectedCategory">
-        <loader :active="isLoadingProposal" />
         <template v-if="proposals.length > 0">
           <div class="font-size-30 font-bold-extra category-title mt-30 mb-30">
             <img :src="`${$iconURL}Budget+Elements/${selectedCategory.eventCategory.icon}`" />
@@ -38,34 +34,19 @@
             </div>
           </div>
           <div>
+            <loader :active="isLoadingProposal" />
             <div>
               <!-- Event Booking Items -->
-              <div class="events-booking-items" v-if="proposals.length && !showDetails">
+              <div class="md-layout events-booking-items" v-if="proposals.length">
                 <proposal-card
-                  @goDetail="goDetailPage"
                   v-for="(proposal, index) in proposals.slice(0, 3)"
                   :key="index"
                   :proposal="proposal"
                   :component="selectedCategory"
-                  :probability="getProbability(index)"
-                >
-                </proposal-card>
-              </div>
-              <template v-if="showDetails">
-                <proposals-bar
                   @goDetail="goDetailPage"
-                  class="mt-40"
-                  :proposals="proposals"
-                  :selectedId="selectedProposal.id"
-                ></proposals-bar>
-                <transition name="component-fade" mode="out-in">
-                  <event-proposal-details
-                    class="mt-20"
-                    :vendorProposal="selectedProposal"
-                    :key="selectedProposal.id"
-                  ></event-proposal-details>
-                </transition>
-              </template>
+                  :probability="getProbability(index)"
+                ></proposal-card>
+              </div>
             </div>
           </div>
         </template>
@@ -74,15 +55,8 @@
     </div>
     <div class="proposals-footer white-card">
       <div>
-        <md-button class="md-simple maryoku-btn md-black">
-          <span class="text-transform-capitalize">I already have a {{ selectedCategory.fullTitle }} for my event</span>
-        </md-button>
-        <md-button
-          class="md-simple maryoku-btn md-black text-transform-capitalize"
-          @click="isOpenedAdditionalModal = true"
-        >
-          <span class="text-transform-capitalize">Chanage {{ selectedCategory.fullTitle }} requirements</span>
-        </md-button>
+        <md-button class="md-simple maryoku-btn md-black">I already have a venue for my event</md-button>
+        <md-button class="md-simple maryoku-btn md-black">Chanage Venue Requirements</md-button>
       </div>
       <div>
         <md-button class="md-simple md-outlined md-red maryoku-btn" :disabled="proposals.length === 0">
@@ -91,88 +65,70 @@
         <md-button class="md-red maryoku-btn" :disabled="proposals.length === 0">Add To Cart</md-button>
       </div>
     </div>
-    <additional-request-modal
-      class="lg"
-      v-if="isOpenedAdditionalModal"
-      :subCategory="currentRequirement.mainRequirements"
-      :selectedCategory="selectedCategory"
-      :defaultData="getRequirementsFormStore(selectedCategory.key) || {}"
-      @save="saveAdditionalRequest"
-      @cancel="isOpenedAdditionalModal = false"
-      @close="isOpenedAdditionalModal = false"
-    ></additional-request-modal>
   </div>
 </template>
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import _ from "underscore";
 import moment from "moment";
+import Swal from "sweetalert2";
 import InputMask from "vue-input-mask";
 
-import { postReq, getReq } from "@/utils/token";
-
-import Proposal from "@/models/Proposal";
+import Calendar from "@/models/Calendar";
 import EventComponent from "@/models/EventComponent";
-import EventCategoryRequirement from "@/models/EventCategoryRequirement";
 
-import { Modal, MaryokuInput, Loader } from "@/components";
-import ResizableToggleButton from "@/components/Button/ResizableToggleButton.vue";
-import EventChangeProposalModal from "@/components/Modals/EventChangeProposalModal";
+import EventBlocks from "../components/NewEventBlocks";
 import ProposalCard from "../components/ProposalCard";
+import _ from "underscore";
+import { Modal, MaryokuInput, Loader } from "@/components";
+import Proposal from "@/models/Proposal";
+import EventCategoryRequirement from "@/models/EventCategoryRequirement";
+import EventChangeProposalModal from "@/components/Modals/EventChangeProposalModal";
+import HeaderActions from "@/components/HeaderActions";
+import { postReq, getReq } from "@/utils/token";
+import ResizableToggleButton from "@/components/Button/ResizableToggleButton.vue";
 import PendingForVendors from "../components/PendingForVendors.vue";
-import EventProposalDetails from "../Proposal/EventProposalDetails.vue";
-import ProposalsBar from "./ProposalsBar.vue";
-import AdditionalRequestModal from "../PlanningBoard/components/modals/AdditionalRequest.vue";
 
-import PlanningBoardState from "../PlanningBoard/state.js";
 export default {
   name: "event-booking",
   components: {
     Loader,
+    EventBlocks,
     InputMask,
     Modal,
     EventChangeProposalModal,
+    HeaderActions,
     ProposalCard,
     MaryokuInput,
     ResizableToggleButton,
     PendingForVendors,
-    EventProposalDetails,
-    ProposalsBar,
-    AdditionalRequestModal,
   },
   props: {},
   data: () => ({
     // auth: auth,
-
     selectedCategory: null,
     calender: null,
+    isLoading: true,
+    isLoadingProposal: false,
     somethingMessage: null,
     iconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/",
+    showSomethingModal: false,
+    showShareVendorModal: false,
     blockVendors: null,
     allRequirements: null,
     selectedBlock: null,
     proposals: [],
+    showCommentEditorPanel: false,
     blockId: "",
-    currentRequirement: null,
-
-    isOpenedAdditionalModal: false,
-    isLoading: true,
-    isLoadingProposal: false,
     showProposals: false,
     showCounterPage: false,
-    showSomethingModal: false,
-    showShareVendorModal: false,
-    showCommentEditorPanel: false,
-    showDetails: false,
-    selectedProposal: null,
+    currentRequirement: null,
   }),
   methods: {
     ...mapMutations("event", ["setEventData", "setBookingRequirements", "setInitBookingRequirements"]),
     ...mapActions("comment", ["getCommentComponents"]),
-    ...mapActions("planningBoard", ["saveMainRequirements", "getRequirements", "saveTypes", "updateRequirements"]),
     selectCategory(category, clicked) {
       this.selectedCategory = category;
-      this.isLoadingProposal = true;
+      this.loadingProposal = true;
       new Proposal()
         .for(new EventComponent({ id: this.selectedCategory.id }))
         .get()
@@ -180,10 +136,7 @@ export default {
           this.proposals = result;
           this.isLoadingProposal = false;
         });
-      this.getCategoryRequirements();
-    },
-    addRequirements() {
-      this.$router.push(`/events/${this.event.id}/booking/planningboard`);
+      this.getRequirements();
     },
     getSelectedBlock() {
       this.selectedBlock = _.findWhere(this.categoryList, {
@@ -198,13 +151,12 @@ export default {
       }
       this.isLoading = false;
     },
-    getCategoryRequirements() {
+    getRequirements() {
       getReq(`/1/events/${this.event.id}/components/${this.selectedCategory.id}/requirements`)
         .then((res) => {
           this.currentRequirement = res.data.item;
         })
         .catch((e) => {
-          this.currentRequirement = {};
           this.showCounterPage = false;
         });
     },
@@ -250,9 +202,7 @@ export default {
         });
     },
     goDetailPage(proposal) {
-      // this.$router.push(`/events/${this.event.id}/booking/${this.selectedCategory.id}/proposals/${proposal.id}`);
-      this.showDetails = true;
-      this.selectedProposal = proposal;
+      this.$router.push(`/events/${this.event.id}/booking/${this.selectedCategory.id}/proposals/${proposal.id}`);
     },
     getProbability(index) {
       return 100 - 10 * (index + 1) + Math.round(10 * Math.random());
@@ -269,31 +219,19 @@ export default {
           if (result.length > 0) this.showProposals = true;
         });
     },
-
-    saveAdditionalRequest({ category, requirements }) {
-      this.isOpenedAdditionalModal = false;
-      requirements.id = this.currentRequirement.id;
-      this.saveMainRequirements({ category: this.selectedCategory.componentId, event: this.event, requirements });
-    },
-    getRequirementsFormStore(category) {
-      if (!this.$store.state[category]) return {};
-      return this.$store.state[category].mainRequirements;
-    },
   },
   created() {
     this.isLoading = true;
+    this.calendar = new Calendar({
+      id: this.$store.state.auth.user.profile.defaultCalendarId,
+    });
+
     this.$root.$on("clearVendorRequirement", (event) => {
       let requirements = this.storedRequirements;
       if (requirements[event.id]) requirements[event.id] = null;
       this.setBookingRequirements(requirements);
     });
     this.selectCategory(this.event.components[0]);
-    this.getRequirements(this.event.id);
-  },
-  beforeCreate() {
-    if (!this.$store.state.planningBoard) {
-      this.$store.registerModule("planningBoard", PlanningBoardState);
-    }
   },
   watch: {
     event(newVal, oldVal) {
@@ -319,9 +257,6 @@ export default {
     ...mapGetters({
       storedRequirements: "event/getBookingRequirements",
     }),
-    ...mapState({
-      eventRequirements: (state) => state.planningBoard,
-    }),
     categoryList() {
       return this.$store.state.event.eventData.components;
     },
@@ -331,11 +266,6 @@ export default {
     },
     event() {
       return this.$store.state.event.eventData;
-    },
-    categories() {
-      const categories = this.event.components;
-      categories.sort((a, b) => a.order - b.order);
-      return categories;
     },
   },
 };
@@ -367,9 +297,7 @@ export default {
     margin-bottom: 1em;
     align-items: stretch;
     margin-top: 30px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
+    justify-content: space-between;
   }
   .booking-section__actions {
     width: 100%;
@@ -401,26 +329,6 @@ export default {
     display: flex;
     justify-content: space-between;
     width: calc(100% - 490px);
-  }
-  .add-category-button {
-    border: none;
-    width: 60px;
-    height: 60px;
-    display: inline-block;
-    border-radius: 50%;
-    box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-    background-color: #ffffff;
-    i {
-      font-size: 40px !important;
-    }
-  }
-  .component-fade-enter-active,
-  .component-fade-leave-active {
-    transition: opacity 0.3s ease;
-  }
-  .component-fade-enter, .component-fade-leave-to
-/* .component-fade-leave-active below version 2.1.8 */ {
-    opacity: 0;
   }
 }
 </style>

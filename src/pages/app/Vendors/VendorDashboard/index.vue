@@ -139,7 +139,7 @@ import VendorCreateEventModal from "./Modals/VendorCreateEvent";
 import UserEvent from "@/models/UserEvent";
 import UpcomingEvent from "./UpcomingEvent.vue";
 import EventCalendar from "./EventCalendar.vue";
-
+import state from "./state";
 export default {
   components: {
     IncomeChart,
@@ -178,9 +178,15 @@ export default {
       upcomingEvents: [],
     };
   },
+  beforeCreate() {
+    if (!this.$store.state.vendorDashboard) {
+      this.$store.registerModule("vendorDashboard", state);
+    }
+  },
   mounted() {
     this.getMarkedDates();
     this.getComingEvents();
+    this.$store.dispatch("common/fetchAllCategories");
   },
   methods: {
     handleSaveEvent(savedEvent) {
@@ -218,71 +224,7 @@ export default {
     createNewEvent() {
       return this.$router.push(`/create-event-wizard`);
     },
-    renderCalendar() {
-      $(".vfc-span-day.vfc-today").each(function () {
-        $(this).attr("style", "background-color: white !important;z-index:10");
-      });
-      $(".vfc-span-day.vfc-marked").each(function () {
-        $(this).attr("style", "background-color: #641856 !important;z-index:10");
-      });
-      $(".vfc-day").each(function (index, day) {
-        if (
-          $(day).find("span.vfc-span-day").hasClass("vfc-marked") ||
-          $(day).find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed")
-        ) {
-          if (
-            ($(day).next().find("span.vfc-span-day").hasClass("vfc-marked") &&
-              $(day).prev().find("span.vfc-span-day").hasClass("vfc-marked")) ||
-            ($(day).next().find("span.vfc-span-day").hasClass("vfc-marked") &&
-              $(day).prev().find("span.vfc-cursor-not-allowed").hasClass("vfc-cursor-not-allowed")) ||
-            ($(day).next().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed") &&
-              $(day).prev().find("span.vfc-span-day").hasClass("vfc-marked")) ||
-            ($(day).next().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed") &&
-              $(day).prev().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed"))
-          ) {
-            $(day).find("span.vfc-span-day").removeClass("vfc-end-marked");
-            $(day).find("span.vfc-span-day").removeClass("vfc-start-marked");
-            $(day).find("div.vfc-base-start").remove();
-            $(day).find("div.vfc-base-end").remove();
-            $(day).find("span.vfc-span-day").addClass("selected");
-          }
 
-          if (
-            ($(day).next().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed") ||
-              $(day).next().find("span.vfc-span-day").hasClass("vfc-marked")) &&
-            !$(day).prev().find("span.vfc-span-day").hasClass("vfc-marked") &&
-            !$(day).prev().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed")
-          ) {
-            $(day).find("span.vfc-span-day").addClass("vfc-start-marked");
-            if (!$(day).find("div.vfc-base-start").length) $(day).prepend("<div class='vfc-base-start'></div>");
-          }
-
-          if (
-            !$(day).next().find("span.vfc-span-day").hasClass("vfc-marked") &&
-            !$(day).next().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed") &&
-            ($(day).prev().find("span.vfc-span-day").hasClass("vfc-marked") ||
-              $(day).prev().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed"))
-          ) {
-            $(day).find("span.vfc-span-day").addClass("vfc-end-marked");
-            if (!$(day).find("div.vfc-base-end").length) $(day).prepend("<div class='vfc-base-end'></div>");
-          }
-
-          if (
-            !$(day).next().find("span.vfc-span-day").hasClass("vfc-marked") &&
-            !$(day).prev().find("span.vfc-span-day").hasClass("vfc-marked") &&
-            !$(day).next().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed") &&
-            !$(day).prev().find("span.vfc-span-day").hasClass("vfc-cursor-not-allowed")
-          ) {
-            $(day).find("span.vfc-span-day").addClass("vfc-end-marked");
-            $(day).find("div.vfc-base-start").remove();
-            $(day).find("div.vfc-base-end").remove();
-          }
-        } else {
-          $(day).find("div.vfc-base-start").remove();
-          $(day).find("div.vfc-base-end").remove();
-        }
-      });
-    },
     selectDay(e) {
       let day = moment(e.date).date();
       let date = moment(e.date).format("YYYY-M-D");
@@ -308,10 +250,6 @@ export default {
         });
     },
   },
-  updated() {
-    this.renderCalendar();
-    console.log("updated");
-  },
   computed: {
     vendorData() {
       return this.$store.state.vendor.profile;
@@ -320,7 +258,8 @@ export default {
       return this.$store.state.common.serviceCategories;
     },
     serviceChart() {
-      if (!this.vendorData || !this.serviceCategories.length) return null;
+      console.log("this.vendor", this.vendorData);
+      if (!this.vendorData || !this.serviceCategories.length) return [];
       let services = [this.vendorData.vendorCategories[0]];
       this.vendorData.secondaryServices.map((s) => {
         services.push(s.vendorCategory);

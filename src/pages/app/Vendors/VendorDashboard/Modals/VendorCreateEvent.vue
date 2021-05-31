@@ -70,14 +70,11 @@
         </div>
         <div class="mt-30 text-left" v-if="isRegisteredCustomer">
           <label class="font-bold">Company / Customer Name</label>
-          <multiselect
-            v-model="company"
-            :options="['microsoft', 'amazon', 'google', 'stripe']"
-            :close-on-select="true"
-            :clear-on-select="true"
-            placeholder=""
+          <autocomplete
             class="width-50 mt-5 md-purple medium-selector"
-          ></multiselect>
+            placeholder="Type name of customer here..."
+            :options="[{ label: 'AAA' }, { label: 'BBB' }]"
+          ></autocomplete>
         </div>
         <div v-else class="text-left">
           <div class="mt-30 text-left">
@@ -147,12 +144,14 @@ import { Modal, MaryokuInput, LocationInput } from "@/components";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import UserEvent from "@/models/UserEvent";
 import moment from "moment";
+import Autocomplete from "@/components/Autocomplete";
 export default {
   components: {
     Modal,
     MaryokuInput,
     VueTimepicker,
     LocationInput,
+    Autocomplete,
   },
   props: {},
   created() {},

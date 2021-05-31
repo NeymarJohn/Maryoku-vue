@@ -1,39 +1,21 @@
 <template>
   <div class="proposal-request-card white-card p-20">
     <div class="d-flex align-center">
-      <div class="font-size-14 font-bold py-10" style="min-height: 44px">
+      <div class="font-size-14 font-bold py-10 mr-10" style="min-height: 44px">
         <template v-if="proposalRequest.eventData.concept">{{ proposalRequest.eventData.concept.name }}</template>
         <template v-else-if="proposalRequest.eventData">{{ proposalRequest.eventData.title }}</template>
       </div>
-      <md-button class="md-icon-button md-simple" @click="expanded = !expanded">
-          <md-icon class="color-black ml-5">keyboard_arrow_right</md-icon></md-button>
+      <div class="font-size-14">
+        {{ $dateUtil.formatScheduleDay(proposalRequest.eventData.eventStartMillis, "MM/DD/YY") }}
+      </div>
       <span class="color-yellow-dark d-flex align-center font-size-12 ml-auto">
-        <img :src="`${iconUrl}VendorsProposalPage/Group 6370.svg`" class="mr-10" style="width: 20px"/>{{ getLeftDays() }} Days
+        <img src="/static/icons/vendor/timer-yellow.svg" class="mr-10" style="width: 20px"/>{{ getLeftDays() }} Days
         Left
       </span>
     </div>
-    <div class="d-flex align-center justify-content-start font-size-14">
-        <div class="font-size-14 pr-10 mr-10" style="border-right: 1px solid rgba(0, 0, 0, 0.2);">
-            {{ $dateUtil.formatScheduleDay(proposalRequest.eventData.eventStartMillis, "MM/DD/YY") }}
-        </div>
-        $ {{ (proposalRequest.componentInstance ? proposalRequest.componentInstance.allocatedBudget : '') | withComma }}
-    </div>
-    <div v-if="expanded" class="font-size-14">
-        <div class="d-flex align-center mt-1">
-            <div class="width-50 d-flex align-center">
-                <img class="mr-10" :src="`${iconUrl}Onboarding/Group%204458.svg`" style="width: 18px">
-                {{proposalRequest.eventData.dateCreated | date("MM/DD/YY")}}</div>
-            <div class="width-50 d-flex align-center">
-                <img class="mr-10" :src="`${iconUrl}VendorsProposalPage/group-4341.svg`" style="width: 18px">
-                {{proposalRequest.eventData.location}}</div>
-        </div>
-        <div class="d-flex align-center mt-1 mb-1">
-            <div class="width-50 d-flex align-center">
-                <img class="mr-10" :src="`${iconUrl}VendorsProposalPage/group-4392.svg`" style="width: 18px"> 11:00 AM ~ 4:00PM</div>
-            <div class="width-50 d-flex align-center">
-                <img class="mr-10" :src="`${iconUrl}VendorsProposalPage/group-3485.svg`" style="width: 18px">
-                {{proposalRequest.eventData.numberOfParticipants | withComma(Number)}}</div>
-        </div>
+    <div class="d-flex align-center justify-content-start font-size-14"
+    >$ {{ (proposalRequest.componentInstance ? proposalRequest.componentInstance.allocatedBudget : '') | withComma }}
+        <md-icon class="color-black ml-5">keyboard_arrow_down</md-icon>
     </div>
     <div class="d-flex align-end">
       <md-button class="md-simple md-vendor md-vendor-text" style="margin-left: -15px;width: 20px; height: 30px" @click="dismiss(proposalRequest.id)">
@@ -74,12 +56,6 @@ export default {
       default: null,
     }
   },
-  data(){
-    return {
-        iconUrl: `${this.$iconURL}`,
-        expanded: false,
-    }
-  },
   methods: {
     gotoProposalRequest() {
       const tenantId = this.$authService.resolveTenantId();
@@ -105,9 +81,6 @@ export default {
       this.$emit('dismiss', id);
     }
   },
-  mounted() {
-    console.log('proposal.card', this.vendor);
-  }
 };
 </script>
 <style lang="scss" scoped>
