@@ -46,7 +46,7 @@
         @dismiss="dismiss"
       >
       </proposal-request-card>
-      <div v-if="proposalRequests.length < 2" class="white-card p-20 d-flex">
+      <div v-if="proposalRequests.length < 4" class="white-card p-20 d-flex">
           <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" style="width: 55px;height: 55px">
           <div class="ml-15">
               <div class="font-size-18 font-bold text-uppercase color-vendor">No More Pending Proposals</div>
@@ -108,7 +108,7 @@
                 ></proposal-list-item>
             </div>
           </div>
-          <div v-if="pagination.total < 2" class="my-auto d-flex flex-column align-center">
+          <div v-if="pagination.total < 4" class="my-auto d-flex flex-column align-center">
               <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`">
               <p class="text-transform-uppercase font-size-14">No More Proposal To Show</p>
               <md-button class="md-vendor">Create New Proposal</md-button>
@@ -262,16 +262,16 @@ export default {
   },
   methods: {
     async getData() {
-        // let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
-        let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '60758222cfefec2676a0853d' })).get();
+        let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
+        // let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '60758222cfefec2676a0853d' })).get();
         this.proposalRequests = proposalRequests.filter(p => p.remainingTime);
     },
     async getProposal() {
       const { pagination } = this;
       const params = {status: this.tab, ...this.sortFields};
       const res = await new Proposal()
-        // .for(new Vendor({ id: this.vendorData.id }))
-        .for(new Vendor({ id: '60758222cfefec2676a0853d' }))
+        .for(new Vendor({ id: this.vendorData.id }))
+        // .for(new Vendor({ id: '60758222cfefec2676a0853d' }))
         .page(pagination.page)
         .limit(pagination.limit)
         .params(params)
