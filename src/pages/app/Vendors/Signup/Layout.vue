@@ -37,8 +37,8 @@
           class="approve md-vendor-signup md-red"
           @click="approve()"
           :class="{ disabled: !validateBasicFields }"
-          >Approve & Begin</md-button
-        >
+          >Approve & Begin
+        </md-button>
       </section>
     </template>
     <modal v-if="status" class="saved-it-modal" container-class="modal-container sm">
@@ -244,13 +244,16 @@ export default {
     },
   },
   beforeCreate() {
-    if (this.$store.registerModule("vendorSignup", VendorSignupState) === false) {
+    if (this.$store.vendorSignup) {
       this.$store.unregisterModule("vendorSignup");
-      this.$store.registerModule("vendorSignup", VendorSignupState);
     }
+    this.$store.registerModule("vendorSignup", VendorSignupState);
   },
   beforeDestroy() {
     this.$store.unregisterModule("vendorSignup");
+  },
+  created() {
+    this.$store.commit("vendorSignup/setInitialState");
   },
   computed: {
     ...mapGetters({
@@ -335,6 +338,7 @@ export default {
         }
         &:hover {
           color: #dddddd !important;
+          text-decoration: none !important;
         }
       }
     }
