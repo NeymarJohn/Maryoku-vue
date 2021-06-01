@@ -1,3 +1,5 @@
+import Vue from "vue";
+
 import { postReq, getReq } from "@/utils/token";
 import Vendors from "@/models/Vendors";
 import VendorService from "@/models/VendorService";
@@ -207,8 +209,7 @@ const mutations = {
         state.status = null;
     },
     setProfile(state, vendorProfile) {
-        state.profile = vendorProfile
-
+        Vue.set(state, "profile", vendorProfile)
     }
 };
 

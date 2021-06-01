@@ -19,10 +19,10 @@
 
     <div v-if="proposal.status === 'submit'">
         <md-button  class="md-vendor" @click="edit('show')">
-            <img src="/static/icons/vendor/proposalBoard/change-proposal.svg" class="mr-5" style="width: 20px" />
-            Make Changes
+            <img :src="`${$iconURL}common/edit-white.svg`" class="label-icon mr-10" style="width: 13px!important;"/> Make Changes
         </md-button>
-        <md-button class="md-simple md-red md-vendor-text">Negotiation Request</md-button>
+        <md-button class="md-simple md-red md-vendor-text">
+            <img :src="`${iconUrl}Group%2014277_2.svg`" class="mr-10" style="width: 15px" /> Negotiation Request</md-button>
     </div>
     <md-button v-else class="md-simple md-vendor" @click="edit('show')">
       <img src="/static/icons/vendor/proposalBoard/see-proposal.svg" class="mr-5" style="width: 20px" />
@@ -30,7 +30,7 @@
     </md-button>
 
     <div class="text-right">
-      <md-menu md-size="medium" class="action-menu" :md-offset-x="240" :md-offset-y="-36" @closed="hoveredMenu = ''">
+      <md-menu md-size="medium" class="action-menu" :md-offset-x="-300" :md-offset-y="-36" @closed="hoveredMenu = ''">
         <md-button md-menu-trigger class="edit-btn md-simple" style="height: 30px">
           <md-icon style="font-size: 30px !important">more_vert</md-icon>
         </md-button>
@@ -74,17 +74,6 @@
               <img v-else :src="`${$iconURL}common/duplicate-white.svg`" class="label-icon mr-10" />Duplicate</span
             >
           </md-menu-item>
-<!--          <md-menu-item-->
-<!--            @click="edit('cancel')"-->
-<!--            class="md-purple"-->
-<!--            @mouseenter="hoveredMenu = 'cancel'"-->
-<!--            @mouseleave="hoveredMenu = ''"-->
-<!--          >-->
-<!--            <span>-->
-<!--              <img v-if="hoveredMenu !== 'cancel'" :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />-->
-<!--              <img v-else :src="`${$iconURL}common/trash-white.svg`" class="label-icon mr-10" />Cancel Event</span-->
-<!--            >-->
-<!--          </md-menu-item>-->
         </md-menu-content>
       </md-menu>
     </div>
@@ -105,6 +94,7 @@ export default {
   data() {
     return {
       hoveredMenu: "",
+      iconUrl: `${this.$iconURL}VendorsProposalPage/`,
     };
   },
   methods: {

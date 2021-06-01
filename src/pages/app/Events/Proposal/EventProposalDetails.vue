@@ -43,7 +43,7 @@
               </li>
             </ul>
           </div>
-          <timer-panel class="time-counter" :target="targetTime"></timer-panel>
+          <timer-panel class="time-counter" :target="new Date(vendorProposal.expiredDate)"></timer-panel>
         </div>
 
         <div class="proposal-body">
@@ -560,12 +560,6 @@ export default {
     ...mapGetters({
       components: "event/getComponentsList",
     }),
-    targetTime() {
-      if (this.vendorProposal.expiredDate) {
-        return new Date(this.vendorProposal.expiredDate);
-      }
-      return new Date(this.vendorProposal.dateCreated + 7 * 3600 * 24 * 1000);
-    },
     extraMissingRequirements() {
       return _.union(this.vendorProposal.extras, this.vendorProposal.missing);
     },

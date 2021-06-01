@@ -10,7 +10,7 @@
       <img
         width="60"
         height="60"
-        :src="`/static/icons/timeline/${editingContent.icon.toLowerCase()}-circle.png`"
+        :src="`${this.$resourceURL}storage/icons/Timeline-New/${editingContent.icon.toLowerCase()}-circle.svg`"
         v-if="editingContent.icon"
       />
     </div>
