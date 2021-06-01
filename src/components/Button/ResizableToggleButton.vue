@@ -1,9 +1,12 @@
 <template>
-  <button class="resizable-toggle-button" :class="{ clicked: clicked }" @click="handleClick">
-    <img :src="selectedIcon" v-if="clicked && selectedIcon" />
-    <img :src="icon" v-else />
-    <span class="label-text">{{ label }}</span>
-  </button>
+  <div class="resizable-toggle-wrapper">
+    <button class="resizable-toggle-button" :class="{ clicked: clicked, disabled }" @click="handleClick">
+      <img :src="selectedIcon" v-if="clicked && selectedIcon" />
+      <img :src="icon" :style="iconStyle" v-else />
+      <span class="label-text">{{ label }}</span>
+    </button>
+    <span class="badge-mark" v-if="hasBadge && !clicked"></span>
+  </div>
 </template>
 <script>
 export default {
@@ -24,6 +27,18 @@ export default {
       type: Boolean,
       default: false,
     },
+    iconStyle: {
+      type: [Object, String],
+      default: "",
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    hasBadge: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -35,7 +50,8 @@ export default {
   },
   methods: {
     handleClick() {
-      this.clicked = !this.clicked;
+      if (this.disabled) return;
+      this.clicked = true;
       this.$emit("click", this.clicked);
     },
   },
@@ -47,31 +63,52 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.resizable-toggle-button {
-  max-width: 60px;
-  height: 60px;
-  background-color: white;
-  box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-  border-radius: 30px;
-  border: none;
-  padding: 15px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  overflow: hidden;
-  white-space: nowrap;
-  transition: 0.3s ease;
-  .label-text {
-    padding: 10px;
+.resizable-toggle-wrapper {
+  display: inline-block;
+  position: relative;
+  .resizable-toggle-button {
+    max-width: 60px;
+    height: 60px;
+    background-color: white;
+    box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+    border-radius: 30px;
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: 0.3s ease;
+    position: relative;
+    .label-text {
+      padding: 10px;
+    }
+    &.clicked {
+      background-color: #f51355;
+      transition: 0.3s ease-in;
+      color: white;
+      max-width: 500px;
+    }
+    &.disabled {
+      opacity: 0.8;
+      background-color: #dfdfdf;
+    }
+    img {
+      height: 100%;
+    }
   }
-  &.clicked {
-    background-color: red;
-    transition: 0.3s ease-in;
-    color: white;
-    max-width: 500px;
-  }
-  img {
-    height: 100%;
+  .badge-mark {
+    display: block;
+    width: 12px;
+    height: 12px;
+    background-color: #f51355;
+    border-radius: 50%;
+    z-index: 1;
+    right: 0;
+    top: 0;
+    position: absolute;
+    transform: translate(-50%);
   }
 }
 </style>

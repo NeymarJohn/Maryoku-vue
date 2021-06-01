@@ -3,7 +3,7 @@
     <input
       v-if="filteredSuggestItems[selectedSuggestItemIndex] && searchWord"
       class="suggested-place-holder"
-      :value="filteredSuggestItems[selectedSuggestItemIndex].label"
+      :value="filteredSuggestItems[selectedSuggestItemIndex][label]"
     />
     <input
       v-model="searchWord"
@@ -18,11 +18,11 @@
       <div
         class="suggest-item font-bold"
         v-for="(item, index) in filteredSuggestItems"
-        :key="item.label"
+        :key="item[label]"
         @mouseenter="hoverSuggestItem(index)"
         @click="selectSuggestItem(index)"
       >
-        <div>{{ item.label }}</div>
+        <div>{{ item[label] }}</div>
       </div>
     </div>
   </div>
@@ -47,20 +47,25 @@ export default {
       type: String,
       default: "",
     },
+    label: {
+      type: String,
+      default: "label",
+    },
   },
   methods: {
     hoverSuggestItem(index) {
       this.selectedSuggestItemIndex = index;
       this.qty = this.filteredSuggestItems[index].qty;
       this.unit = this.filteredSuggestItems[index].price;
-      this.searchWord = this.filteredSuggestItems[index].label.slice(0, this.searchWord.length);
+      this.searchWord = this.filteredSuggestItems[index][this.label].slice(0, this.searchWord.length);
     },
     selectSuggestItem(index) {
       this.qty = this.filteredSuggestItems[index].qty;
       this.unit = this.filteredSuggestItems[index].price;
-      this.searchWord = this.filteredSuggestItems[index].label;
+      this.searchWord = this.filteredSuggestItems[index][this.label];
       this.selectedSuggestItemIndex = -1;
       this.showAutoCompletePanel = false;
+      this.$emit("change", this.filteredSuggestItems[index]);
     },
     startSearch() {
       this.showAutoCompletePanel = true;
@@ -75,7 +80,7 @@ export default {
   computed: {
     filteredSuggestItems() {
       if (!this.searchWord) return [];
-      return this.options.filter((item) => item.label.toLowerCase().startsWith(this.searchWord.toLowerCase()));
+      return this.options.filter((item) => item[this.label].toLowerCase().startsWith(this.searchWord.toLowerCase()));
     },
   },
 };

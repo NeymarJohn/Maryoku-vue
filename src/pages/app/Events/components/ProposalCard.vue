@@ -1,52 +1,66 @@
 <template>
-  <div class="proposal-card">
-    <div class="booking-item">
-      <div class="event-image" :style="`background: url(${backgroundImage}) center center no-repeat`">
-        <div class="bundle-offer" v-if="proposal.bundleDiscount && proposal.bundleDiscount.isApplied">
-          <img :src="`${$iconURL}common/bell-white.svg`" />
-          Bundle Offer
-          <md-tooltip md-direction="top" class="p-30 color-black">
-            <div class="font-size-20 font-bold mb-10">{{ getBundleToolTipText(proposal.bundleDiscount.services) }}</div>
-            <div class="font-size-16">{{ proposal.bundleDiscount.percentage }}% Off for the whole package</div>
-          </md-tooltip>
-        </div>
+  <div class="booking-item">
+    <div
+      class="event-image"
+      :style="`background: url(${backgroundImage}) center center no-repeat`"
+      :class="{ isCollapsed, isSelected }"
+    >
+      <div class="bundle-offer" v-if="proposal.bundleDiscount && proposal.bundleDiscount.isApplied">
+        <img :src="`${$iconURL}common/bell-white.svg`" />
+        Bundle Offer
+        <md-tooltip md-direction="top" class="p-30 color-black">
+          <div class="font-size-20 font-bold mb-10">{{ getBundleToolTipText(proposal.bundleDiscount.services) }}</div>
+          <div class="font-size-16">{{ proposal.bundleDiscount.percentage }}% Off for the whole package</div>
+        </md-tooltip>
       </div>
-      <div class="card-content">
-        <div class="mt-20 d-flex" v-show="proposal.suggestionDate">
-          <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" class="label-icon mr-5" />
-          <span v-if="getDiffDaysFromOriginal() < 0" class="whitspace-nowrap">
-            This proposal is {{ -getDiffDaysFromOriginal() }}days before your original date
-          </span>
-          <span v-else class="whitspace-nowrap">
-            This proposal is {{ getDiffDaysFromOriginal() }}days later your original date
-          </span>
-        </div>
-        <div class="price">
-          <span class="price-value">${{ proposal.cost | withComma }}</span>
-          <small>For 3 hours</small>
-        </div>
-        <div
-          class="font-size-14 color-dark-gray mb-10"
-          :class="{ invisible: component.allocatedBudget >= proposal.cost }"
-        >
-          <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" class="label-icon" />
-          ${{ (proposal.cost - component.allocatedBudget) | withComma }}
-          more than budget
-        </div>
-        <template v-if="proposal.vendor">
-          <h4 class="event-title">{{ proposal.vendor.companyName }}</h4>
-          <div class="probability">Alignement to requirements {{ probability }}%</div>
-          <ul class="event-info">
-            <li class="event-info__item">{{ proposal.vendor.vendorAddresses[0] }}</li>
-            <li class="event-info__item">{{ proposal.vendor.vendorCity }}</li>
-          </ul>
-        </template>
-        <p class="event-desc">{{ proposal.vendor.about ? proposal.vendor.about.company : "" }}</p>
-        <div class="item-actions text-right">
-          <md-button class="md-red maryoku-btn" @click="proposalDetails">Details & Booking </md-button>
+      <div v-if="isCollapsed" class="proposal-summary" @click="proposalDetails">
+        <div class="proposal-summary-content">
+          <span class="font-size-30 font-bold-extra">${{ proposal.cost | withComma }}</span>
+          <h4 class="font-size-30 mt-20" :class="{ 'font-bold-extra': isSelected }">
+            {{ proposal.vendor.companyName }}
+          </h4>
         </div>
       </div>
     </div>
+    <transition name="slide">
+      <div v-if="!isCollapsed">
+        <div class="card-content">
+          <div class="mt-20 d-flex" v-show="proposal.suggestionDate">
+            <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" class="label-icon mr-5" />
+            <span v-if="getDiffDaysFromOriginal() < 0" class="whitspace-nowrap">
+              This proposal is {{ -getDiffDaysFromOriginal() }}days before your original date
+            </span>
+            <span v-else class="whitspace-nowrap">
+              This proposal is {{ getDiffDaysFromOriginal() }}days later your original date
+            </span>
+          </div>
+          <div class="price">
+            <span class="price-value">${{ proposal.cost | withComma }}</span>
+            <small>For 3 hours</small>
+          </div>
+          <div
+            class="font-size-14 color-dark-gray mb-10"
+            :class="{ invisible: component.allocatedBudget >= proposal.cost }"
+          >
+            <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" class="label-icon" />
+            ${{ (proposal.cost - component.allocatedBudget) | withComma }}
+            more than budget
+          </div>
+          <template v-if="proposal.vendor">
+            <h4 class="event-title">{{ proposal.vendor.companyName }}</h4>
+            <div class="probability">Alignement to requirements {{ probability }}%</div>
+            <ul class="event-info">
+              <li class="event-info__item">{{ proposal.vendor.vendorAddresses[0] }}</li>
+              <li class="event-info__item">{{ proposal.vendor.vendorCity }}</li>
+            </ul>
+          </template>
+          <p class="event-desc">{{ proposal.vendor.about ? proposal.vendor.about.company : "" }}</p>
+          <div class="item-actions text-right">
+            <md-button class="md-red maryoku-btn" @click="proposalDetails">Details & Booking </md-button>
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 <script>
@@ -66,6 +80,14 @@ export default {
     component: {
       type: Object,
       default: () => {},
+    },
+    isCollapsed: {
+      type: Boolean,
+      default: false,
+    },
+    isSelected: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {
@@ -118,12 +140,45 @@ export default {
   box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
   background-color: #ffffff;
   height: 100%;
-
+  border-radius: 5px;
+  overflow: hidden;
+  transition: ease-out all 0.5s;
   .event-image {
     background-size: cover !important;
-    height: 200px;
+    height: 250px;
     position: relative;
-
+    transition: ease-out all 0.5s;
+    &.isCollapsed {
+      height: 160px;
+      color: white;
+      .proposal-summary {
+        color: white;
+        position: relative;
+        z-index: 1;
+        height: 100%;
+        cursor: pointer;
+        &::before {
+          content: "";
+          background-color: rgba(0, 0, 0, 0.5);
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          left: 0;
+          top: 0;
+        }
+        .proposal-summary-content {
+          padding: 30px;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          left: 0;
+          top: 0;
+        }
+      }
+    }
+    &.isSelected {
+      border-bottom: solid 3px #f51355;
+    }
     .bundle-offer {
       width: 40%;
       background-color: #ffc001;
@@ -171,6 +226,7 @@ export default {
   }
   .card-content {
     padding: 1.5em;
+    box-sizing: border-box;
   }
 
   .price {
@@ -232,6 +288,43 @@ export default {
       font-weight: bold;
       letter-spacing: 1px;
     }
+  }
+  .slide-enter-active {
+    -moz-transition-duration: 0.8s;
+    -webkit-transition-duration: 0.8s;
+    -o-transition-duration: 0.8s;
+    transition-duration: 0.8s;
+    -moz-transition-timing-function: ease-in;
+    -webkit-transition-timing-function: ease-in;
+    -o-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+    box-sizing: border-box;
+  }
+
+  .slide-leave-active {
+    -moz-transition-duration: 0.8s;
+    -webkit-transition-duration: 0.8s;
+    -o-transition-duration: 0.8s;
+    transition-duration: 0.8s;
+    -moz-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    -webkit-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    -o-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    box-sizing: border-box;
+  }
+
+  .slide-enter-to,
+  .slide-leave {
+    max-height: 100px;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .slide-enter,
+  .slide-leave-to {
+    box-sizing: border-box;
+    overflow: hidden;
+    max-height: 0;
   }
 }
 </style>

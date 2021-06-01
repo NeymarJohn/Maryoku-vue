@@ -18,6 +18,7 @@
             placeholder="Choose date…..."
             inputStyle="date"
             v-model="date"
+            theme="purple"
           ></maryoku-input>
         </div>
         <div class="md-layout mt-30">
@@ -73,7 +74,9 @@
           <autocomplete
             class="width-50 mt-5 md-purple medium-selector"
             placeholder="Type name of customer here..."
-            :options="[{ label: 'AAA' }, { label: 'BBB' }]"
+            :options="customers"
+            label="name"
+            @change="selectCustomer"
           ></autocomplete>
         </div>
         <div v-else class="text-left">
@@ -154,7 +157,11 @@ export default {
     Autocomplete,
   },
   props: {},
-  created() {},
+  created() {
+    this.$http.get(`${process.env.SERVER_URL}/1/userEventCustomers`).then((res) => {
+      this.customers = res.data;
+    });
+  },
   data() {
     return {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
@@ -180,9 +187,14 @@ export default {
       link_proposal: null,
       attachment: null,
       addToCustomerList: false,
+      customers: [],
+      selectedCustomer: null,
     };
   },
   methods: {
+    selectCustomer(selectedCustomer) {
+      this.selectedCustomer = selectedCustomer;
+    },
     updateStartA() {
       if (this.amPack.start == "AM") {
         this.amPack.start = "PM";
@@ -226,7 +238,12 @@ export default {
         guests: this.guests,
         location: this.location,
         timezone: tz,
+        isRegisteredCustomer: this.isRegisteredCustomer,
       };
+      if (this.selectedCustomer) {
+        userEvent.customer = { id: this.selectedCustomer.id };
+        userEvent.companyName = this.selectedCustomer.company;
+      }
       new UserEvent(userEvent).save().then((res) => {
         this.$emit("save", res);
       });
