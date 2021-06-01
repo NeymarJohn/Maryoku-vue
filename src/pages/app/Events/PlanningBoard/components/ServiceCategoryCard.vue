@@ -212,18 +212,25 @@ export default {
 .plannig-service-category-card {
   border-radius: 3px;
   position: relative;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  .header-carousel {
+    flex: 1;
+  }
   .service-name {
     display: inline-block;
     line-height: 46px;
   }
   &.longer-card {
+    height: 600px;
     img.carousel-image {
-      height: 540px;
+      height: 100%;
       object-fit: cover;
     }
   }
   img.carousel-image {
-    height: 280px;
+    height: 100%;
     object-fit: cover;
   }
   .carousel-item {
@@ -285,6 +292,14 @@ export default {
     position: relative;
     /deep/ span[id*="carousel_prev_"] {
       display: block !important;
+    }
+
+    /deep/ .carousel-item,
+    /deep/ .owl-item,
+    /deep/ .owl-carousel,
+    /deep/ .owl-stage,
+    /deep/ .owl-stage-outer {
+      height: 100%;
     }
     /deep/ .owl-dots {
       position: absolute;

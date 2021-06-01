@@ -15,7 +15,7 @@
           :html-to-pdf-options="htmlToPdfOptions"
           ref="html2Pdf"
       >
-          <pdf-content slot="pdf-content" v-if="selectedProposal" :vendorProposal="selectedProposal" />
+<!--          <pdf-content slot="pdf-content" v-if="selectedProposal" :vendorProposal="selectedProposal" />-->
       </vue-html2pdf>
     <loader :active="loading" :isFullScreen="true"/>
     <div class="font-size-22 font-bold d-flex align-center">
@@ -254,10 +254,11 @@ export default {
     };
   },
   async mounted() {
-    console.log('mounted', this.vendorData.id);
-    await this.getData();
-    await this.getProposal();
-    this.loading = false;
+    // console.log('mounted', this.vendorData.id);
+    if(this.vendorData){
+        this.init();
+    }
+
   },
   methods: {
     async getData() {
@@ -270,7 +271,7 @@ export default {
       const params = {status: this.tab, ...this.sortFields};
       const res = await new Proposal()
         // .for(new Vendor({ id: this.vendorData.id }))
-        .for(new Vendor({ id: '60144eafcfefec6372985c6d' }))
+        .for(new Vendor({ id: '60758222cfefec2676a0853d' }))
         .page(pagination.page)
         .limit(pagination.limit)
         .params(params)
@@ -324,7 +325,7 @@ export default {
           return p.id !== id;
       });
     },
-    handleProposal(action, id){
+    async handleProposal(action, id){
       this.selectedProposal = this.proposals.find(it => it.id == id);
       if (action === 'show') {
           this.showProposalDetail = true;
@@ -335,8 +336,14 @@ export default {
               vendorId: this.selectedProposal.vendor.id, id: this.selectedProposal.proposalRequest.id, type: 'edit'}});
           window.open(routeData.href, '_blank');
 
-      } else if (action === 'duplicate') {
-          this.$router.push(`/vendors/${this.selectedProposal.vendor.id}/proposal-request/${this.selectedProposal.proposalRequest.id}/form/duplicate`);
+      } else if (action === 'remove') {
+        this.loading = true;
+        const proposal = await Proposal.find(id)
+        proposal.delete();
+        this.proposals = this.proposals.filter(it => it.id !== id);
+
+        this.$forceUpdate();
+        this.loading = false;
 
       } else if (action === 'download') {
 
@@ -348,6 +355,11 @@ export default {
             link,
             '_blank',
         )
+    },
+    async init() {
+        await this.getData();
+        await this.getProposal();
+        this.loading = false;
     }
   },
   computed: {
@@ -379,7 +391,8 @@ export default {
   },
   watch: {
     vendorData(newValue, oldValue) {
-      this.getData();
+      console.log('vendorData', newValue);
+      this.init();
     },
   },
   updated(){

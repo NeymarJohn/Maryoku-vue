@@ -8,6 +8,11 @@
     </template>
     <template slot="content">
       <div class="requirements-content p-30 pt-0-i" v-if="step <= 1">
+        <div>
+          <template v-for="types in requirementsData.types">
+            <span class="type-tag" v-for="type in types" :key="type">{{ type }}</span>
+          </template>
+        </div>
         <template v-if="requirementsData.mainRequirements">
           <div
             v-for="(requirementCategory, index) in Object.keys(requirementsData.mainRequirements)"
@@ -225,6 +230,13 @@ export default {
     padding: 25px;
     background-color: #eaeaea;
     margin-bottom: 20px;
+  }
+  .type-tag {
+    display: inline-block;
+    border: solid 1px #f51355;
+    border-radius: 30px;
+    padding: 5px 20px;
+    margin: 0px 10px 10px 0;
   }
   .category-section {
     padding: 30px 0;
