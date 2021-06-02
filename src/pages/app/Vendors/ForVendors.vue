@@ -634,7 +634,7 @@ export default {
           date: "",
         };
       }
-      let serviceTimeString = this.vendor.eventCategory.key === "venuerental" ? "For Whole Event" : "Not planned yet";
+      let serviceTimeString = this.vendor.eventCategory.key === "venuerental" ? "All Day" : "Not planned yet";
       let serviceDate = "";
       this.timelineDates.forEach((td) => {
         td.timelineItems.forEach((timelineItem) => {
@@ -659,7 +659,7 @@ export default {
         )}`;
       }
       if (this.proposalRequest.plannerRequirement.isEntireEvent) {
-        serviceTimeString = "For Whole Event";
+        serviceTimeString = "All Day";
       } else if (this.proposalRequest.plannerRequirement.period) {
         const period = this.proposalRequest.plannerRequirement.period;
         serviceTimeString = `${period.startTime.time.hh}:${period.startTime.time.mm}:${period.startTime.ampm}`;

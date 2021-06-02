@@ -12,15 +12,14 @@
       </div>
       <div class="card">
         <p>Email</p>
-        <input class="field" placeholder="Type your email here" v-model="vendor.email" @input="updateVendor('email')" />
+        <input class="field" placeholder="Type your email here" v-model="email" />
         <p>Set Password</p>
         <input
           class="field"
           :class="{ 'red-border': password != confirmPassword && confirmPassword }"
           placeholder="Type password here"
           type="password"
-          v-model="vendor.password"
-          @input="updateVendor('password')"
+          v-model="password"
         />
         <p>Confirm Password</p>
         <input
@@ -28,8 +27,7 @@
           :class="{ 'red-border': password != confirmPassword }"
           placeholder="Type password here"
           type="password"
-          v-model="vendor.confirmPassword"
-          @input="updateVendor('confirmPassword')"
+          v-model="confirmPassword"
         />
       </div>
     </div>
@@ -59,8 +57,6 @@ export default {
   data() {
     return {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
-      password: null,
-      confirmPassword: null,
     };
   },
   created() {},
@@ -70,7 +66,32 @@ export default {
       this.$root.$emit("update-vendor-value", fieldName, this.vendor[fieldName]);
     },
   },
-  computed: {},
+  computed: {
+    email: {
+      get() {
+        return this.$store.state.vendorSignup.email;
+      },
+      set(value) {
+        this.$store.commit("vendorSignup/setField", { field: "email", value });
+      },
+    },
+    password: {
+      get() {
+        return this.$store.state.vendorSignup.password;
+      },
+      set(value) {
+        this.$store.commit("vendorSignup/setField", { field: "password", value });
+      },
+    },
+    confirmPassword: {
+      get() {
+        return this.$store.state.vendorSignup.confirmPassword;
+      },
+      set(value) {
+        this.$store.commit("vendorSignup/setField", { field: "confirmPassword", value });
+      },
+    },
+  },
   filters: {},
   watch: {},
 };

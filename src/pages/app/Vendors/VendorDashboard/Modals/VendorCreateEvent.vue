@@ -18,7 +18,6 @@
             placeholder="Choose date…..."
             inputStyle="date"
             v-model="date"
-            theme="purple"
           ></maryoku-input>
         </div>
         <div class="md-layout mt-30">
@@ -71,13 +70,14 @@
         </div>
         <div class="mt-30 text-left" v-if="isRegisteredCustomer">
           <label class="font-bold">Company / Customer Name</label>
-          <autocomplete
+          <multiselect
+            v-model="company"
+            :options="['microsoft', 'amazon', 'google', 'stripe']"
+            :close-on-select="true"
+            :clear-on-select="true"
+            placeholder=""
             class="width-50 mt-5 md-purple medium-selector"
-            placeholder="Type name of customer here..."
-            :options="customers"
-            label="name"
-            @change="selectCustomer"
-          ></autocomplete>
+          ></multiselect>
         </div>
         <div v-else class="text-left">
           <div class="mt-30 text-left">
@@ -92,9 +92,7 @@
             <label class="font-bold">Email</label>
             <maryoku-input inputStyle="email" class="width-50 mt-5 form-input" v-model="email"></maryoku-input>
           </div>
-          <md-checkbox v-model="addToCustomerList" class="md-vendor"
-            >Add this customer to your regular customer list</md-checkbox
-          >
+          <md-checkbox v-model="addToCustomerList">Add this customer to your regular customer list</md-checkbox>
         </div>
         <div class="text-left mt-30">
           <label class="font-bold">Number of Guests</label>
@@ -107,16 +105,11 @@
         </div>
         <div class="text-left mt-30">
           <label class="font-bold">Event Location</label>
-          <div class="width-50 location-input">
-            <img data-v-b6d2ac96="" :src="`${$iconURL}Vendor Signup/Asset 550.svg`" class="inside-img" />
-            <vue-google-autocomplete
-              ref="address"
-              class="my-10 width-100 address"
-              :placeholder="item ? item : 'Enter an an address, zipcode, or location'"
-              v-on:placechanged="getAddressData"
-              id="customer-event-location"
-            />
-          </div>
+          <location-input
+            v-model="location"
+            class="width-50 mt-5"
+            placeholder="Type city / region or specific address here…"
+          ></location-input>
         </div>
         <div class="form-group text-left mt-30" v-if="isRegisteredCustomer">
           <label class="font-bold">Link Proposal</label>
@@ -129,29 +122,17 @@
             class="width-50 mt-5 md-purple medium-selector"
           ></multiselect>
         </div>
-        <div class="form-group text-left mt-30 proposal">
+        <div class="form-group text-left mt-30">
           <label>Upload proposal</label>
-          <vue-dropzone
-            ref="myVueDropzone"
-            id="dropzone"
-            :options="dropzoneOptions"
-            :useCustomSlot="true"
-            @vdropzone-file-added="fileAdded"
-            class="file-drop-zone upload-section text-center"
-            v-if="!fileName"
-          >
+          <label class="upload-section mt-5" for="file">
             <md-button class="md-outlined md-simple md-vendor md-sm">
               <img class="mr-5" :src="`${$iconURL}common/pin-dark.svg`" width="15" />
               Attach file
             </md-button>
             <div>Or</div>
             <div class="note">Drag your file here</div>
-          </vue-dropzone>
-          <div class="form-group text-left mt-30" v-else>
-            <a :href="`${fileUrl}`" class="color-black" target="_blank">
-              <img class="mr-5" :src="`${$iconURL}common/pin-dark.svg`" width="15" />{{ fileName }}</a
-            >
-          </div>
+          </label>
+          <input style="display: none" id="file" name="attachment" type="file" @change />
         </div>
       </div>
     </template>
@@ -162,31 +143,18 @@
   </modal>
 </template>
 <script>
-import VueGoogleAutocomplete from "vue-google-autocomplete";
 import { Modal, MaryokuInput, LocationInput } from "@/components";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import UserEvent from "@/models/UserEvent";
 import moment from "moment";
-import Autocomplete from "@/components/Autocomplete";
-import vue2Dropzone from "vue2-dropzone";
-import S3Service from "@/services/s3.service";
-
 export default {
   components: {
     Modal,
     MaryokuInput,
     VueTimepicker,
     LocationInput,
-    Autocomplete,
-    VueGoogleAutocomplete,
-    vueDropzone: vue2Dropzone,
   },
   props: {},
-  created() {
-    this.$http.get(`${process.env.SERVER_URL}/1/userEventCustomers`).then((res) => {
-      this.customers = res.data;
-    });
-  },
   data() {
     return {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
@@ -203,7 +171,6 @@ export default {
         start: "AM",
         end: "AM",
       },
-      isLoading: false,
       isRegisteredCustomer: true,
       company: null,
       customer: null,
@@ -213,22 +180,9 @@ export default {
       link_proposal: null,
       attachment: null,
       addToCustomerList: false,
-      customers: [],
-      selectedCustomer: null,
-      fileUrl: null,
-      fileName: null,
-      dropzoneOptions: {
-        url: "https://httpbin.org/post",
-        thumbnailWidth: 150,
-        maxFilesize: 5,
-        headers: { "My-Awesome-Header": "header value" },
-      },
     };
   },
   methods: {
-    selectCustomer(selectedCustomer) {
-      this.selectedCustomer = selectedCustomer;
-    },
     updateStartA() {
       if (this.amPack.start == "AM") {
         this.amPack.start = "PM";
@@ -251,52 +205,20 @@ export default {
       this.$emit("cancel");
     },
     createEvent() {
-      const startDate = moment(
-        `${this.date} ${this.startTime.hh}:${this.startTime.mm} ${this.amPack.start}`,
-        "DD.MM.YYYY hh:mm a",
-      );
-      const endDate = moment(
-        `${this.date} ${this.endTime.hh}:${this.endTime.mm} ${this.amPack.end}`,
-        "DD.MM.YYYY hh:mm a",
-      );
-      var dt = new Date();
-      var tz = dt.getTimezoneOffset();
+      const otherFormatDate = moment(this.date, "DD.MM.YYYY").format("YYYY-MM-DD");
       const userEvent = {
         company: this.company,
-        date: endDate.format("YYYY-MM-DD"),
-        startTime: startDate,
-        endTime: endDate,
+        date: otherFormatDate,
+        startTime: `${this.startTime.hh}:${this.startTime.mm} ${this.amPack.start}`,
+        endTime: `${this.endTime.hh}:${this.endTime.mm} ${this.amPack.start}`,
         companyName: this.company,
         customerName: this.customer,
         email: this.email,
         guests: this.guests,
         location: this.location,
-        timezone: tz,
-        isRegisteredCustomer: this.isRegisteredCustomer,
-        fileName: this.fileName,
-        fileUrl: this.fileUrl,
       };
-      if (this.selectedCustomer) {
-        userEvent.customer = { id: this.selectedCustomer.id };
-        userEvent.companyName = this.selectedCustomer.company;
-      }
       new UserEvent(userEvent).save().then((res) => {
         this.$emit("save", res);
-      });
-    },
-    getAddressData(addressData, placeResultData, id) {
-      this.location = `${addressData.route}, ${addressData.administrative_area_level_1}, ${addressData.country}`;
-    },
-    async fileAdded(file) {
-      const extension = file.type.split("/")[1];
-      let fileName = new Date().getTime();
-      console.log(file);
-      this.fileName = file.name;
-      let fileUrl = `https://maryoku.s3.amazonaws.com/events/proposal/${fileName}.${extension}`;
-
-      S3Service.fileUpload(file, `${fileName}`, `events/proposal`).then((res) => {
-        this.isLoading = false;
-        this.fileUrl = fileUrl;
       });
     },
   },
@@ -306,19 +228,6 @@ export default {
 <style lang="scss" scoped>
 .vendor-create-event {
   z-index: 40 !important;
-  .location-input {
-    position: relative;
-    img {
-      width: 20px;
-      position: absolute;
-      top: 50%;
-      left: 20px;
-      transform: translateY(-50%);
-    }
-    input {
-      padding-left: 50px;
-    }
-  }
 }
 .event-time {
   /deep/ .time-picker {

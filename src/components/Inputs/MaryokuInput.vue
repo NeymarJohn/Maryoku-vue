@@ -45,11 +45,11 @@
     </div>
 
     <div ref="timePickerElements" v-if="showDatePicker">
-      <div class="date-picker picker-panel" ref="timePickerPanel" style="z-index: 200 !important">
+      <div class="date-picker picker-panel" ref="timePickerPanel" style="z-index: 200!important;">
         <div class="d-flex pl-10">
-          <img v-if="getFormattedDate" :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px" />
+          <img :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px" />
           <!-- {{dateData && dateData.selectedDate}} -->
-          <span class="p-5">{{ getFormattedDate }}</span>
+          {{ getFormattedDate }}
         </div>
         <!-- <div class="color-gray" style="margin-top: 40px; margin-bottom: 10px;"> Date Range Picker</div> -->
         <div>
@@ -59,14 +59,11 @@
             :change-year-function="true"
             dateFormat="yyyy-mm-dd"
             v-model="dateData"
-            :class="theme"
           ></functional-calendar>
         </div>
         <div class="btn-group">
           <md-button class="md-simple md-black normal-btn" @click="showDatePicker = false">Cancel</md-button>
-          <md-button class="md-default md-rose normal-btn" :class="{ 'md-vendor': theme === 'purple' }" @click="setDate"
-            >Set</md-button
-          >
+          <md-button class="md-default md-rose normal-btn" @click="setDate">Set</md-button>
         </div>
       </div>
       <div class="time-picker-mask" @click="showDatePicker = false" ref="timePickerMask" v-if="showDatePicker"></div>
@@ -112,10 +109,6 @@ export default {
     fieldName: {
       type: String,
       default: "",
-    },
-    theme: {
-      type: String,
-      default: "red",
     },
   },
   beforeDestroy() {
@@ -172,8 +165,8 @@ export default {
         // }, 100);
       }
     },
-    clickMask() {
-      console.log("clickMast");
+    clickMask(){
+      console.log('clickMast');
       this.showDatePicker = false;
     },
     setDate() {

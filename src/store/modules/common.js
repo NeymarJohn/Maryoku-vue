@@ -1,15 +1,11 @@
 import { postReq, getReq } from "@/utils/token";
 const state = {
     serviceCategories: [],
-    companies: []
 };
 const mutations = {
     setCategories: (state, categories) => {
         state.serviceCategories = categories;
     },
-    setCampanies: (state, companies) => {
-        state.companies = companies
-    }
 };
 const actions = {
     fetchAllCategories: ({ commit, state }) => {
@@ -25,18 +21,6 @@ const actions = {
                 });
         });
     },
-    getAllCompanies: ({ commit, state }) => {
-        return new Promise((resolve, reject) => {
-            getReq(`/1/companies`, true)
-                .then(res => {
-                    commit('setCompanies', res.data);
-                    resolve(res.data);
-                })
-                .catch(err => {
-                    reject(err)
-                })
-        })
-    }
 };
 export default {
     namespaced: true,
