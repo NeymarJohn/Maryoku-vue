@@ -99,7 +99,7 @@ export default {
       });
       localStorage.setItem("budget_categories", JSON.stringify(availableComponents));
     }
-    this.filteredEventBlocks = availableComponents;
+    this.filteredEventBlocks = availableComponents.filter(it => !this.event.components.find(c => c.title === it.title));
   },
   data() {
     return {

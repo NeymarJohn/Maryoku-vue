@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="event-calendar">
+    <div class="event-calendar" v-if="!isLoading">
       <div class="calendar__header">
         <a href="javascript:;" class="arrow-btn btn-prevmonth" @click.prevent="changeMonth(false)">Prev</a>
         <div class="calendar__title" @click.prevent="backToToday()">
@@ -22,14 +22,17 @@
               class="calendar__item"
               :class="{
                 'is-today': item.today === true,
-                current: item.current === true,
-                'has-event': item.number === '12',
+                current: eventsForDate[Number(item.number)],
+                'has-event': eventsForDate[Number(item.number)] && eventsForDate[Number(item.number)].length > 1,
                 'is-blackout': isBlackoutDay(item),
               }"
               @click.prevent="getDateData(item)"
             >
               {{ item.number }}
-              <div class="event-add-badge" v-if="item.number === '12'">
+              <div
+                class="event-add-badge"
+                v-if="eventsForDate[Number(item.number)] && eventsForDate[Number(item.number)].length > 1"
+              >
                 <span class=""><md-icon>add</md-icon></span>
               </div>
             </a>
@@ -50,6 +53,7 @@ import moment from "moment";
 export default {
   data() {
     return {
+      isLoading: false,
       current: {
         year: 0,
         month: 0,
@@ -84,6 +88,7 @@ export default {
       }
       this.current.month = month;
       this.current.date = 1;
+      this.getEventsForThisMonth();
     },
     getDateData(data) {
       if (data.none === true) {
@@ -108,8 +113,32 @@ export default {
       this.today.month = moment().month() + 1;
       this.today.date = moment().date();
     },
+    getEventsForThisMonth() {
+      return this.$store.dispatch("vendorDashboard/getCalendarEvents", this.currentMonth);
+    },
+    getEventsForDate(date) {
+      const events = this.eventsForThisMonth.filter((event) => {
+        return new Date(event.startTime).getDate() === Number(date);
+      });
+      return events;
+    },
   },
   computed: {
+    currentMonth() {
+      return `${this.current.year}-${this.convertTwoDigits}`;
+    },
+    eventsForThisMonth() {
+      return this.$store.state.vendorDashboard.calendarEvents[this.currentMonth] || [];
+    },
+    eventsForDate() {
+      const events = {};
+      this.eventsForThisMonth.forEach((event) => {
+        const date = new Date(event.startTime).getDate();
+        if (!events[date]) events[date] = [];
+        events[date].push(event);
+      });
+      return events;
+    },
     buildCalendar() {
       let myYears = this.current.year;
       let myMonth = this.current.month;
@@ -193,10 +222,16 @@ export default {
       return data;
     },
   },
+
   created() {
     this.getToday();
     this.backToToday();
+    this.isLoading = true;
+    this.getEventsForThisMonth().then(() => {
+      this.isLoading = false;
+    });
   },
+  beforeMount() {},
   mounted() {},
 };
 </script>

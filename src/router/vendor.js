@@ -195,7 +195,7 @@ export default [
         children: [
             {
                 path: "/vendors/:vendorId/proposal-request/:id/form/:type",
-                name: "ForProposals",
+                name: "proposalEdit",
                 component: ProposalContent,
                 meta: {
                     requiresAuth: false,

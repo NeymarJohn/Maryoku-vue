@@ -15,7 +15,7 @@
           :html-to-pdf-options="htmlToPdfOptions"
           ref="html2Pdf"
       >
-          <pdf-content slot="pdf-content" v-if="selectedProposal" :vendorProposal="selectedProposal" />
+<!--          <pdf-content slot="pdf-content" v-if="selectedProposal" :vendorProposal="selectedProposal" />-->
       </vue-html2pdf>
     <loader :active="loading" :isFullScreen="true"/>
     <div class="font-size-22 font-bold d-flex align-center">
@@ -29,8 +29,8 @@
       :dots="false"
       :number="2"
       :nav="false"
-      v-if="proposalRequests.length > 0"
       class="proposal-requests"
+      v-if="proposalRequests.length"
     >
       <template slot="prev">
         <button class="nav-left nav-btn">
@@ -46,7 +46,7 @@
         @dismiss="dismiss"
       >
       </proposal-request-card>
-      <div v-if="proposalRequests.length < 2" class="white-card p-20 d-flex">
+      <div v-if="proposalRequests.length < 4" class="white-card p-20 d-flex">
           <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" style="width: 55px;height: 55px">
           <div class="ml-15">
               <div class="font-size-18 font-bold text-uppercase color-vendor">No More Pending Proposals</div>
@@ -83,8 +83,8 @@
           >
               {{ proposals.length }} Proposals:</span></div>
       <div class="md-layout mt-10">
-        <div class="md-layout-item md-size-75 p-0 d-flex flex-column">
-          <div class="sort-bar px-40">
+        <div class="md-layout-item md-size-75 p-0 d-flex flex-column" style="background: rgba(255, 255, 255, 0.46)">
+          <div class="sort-bar px-40" style="background: #f3f7fd">
             <span v-for="it in proposalHeaders"
                   class="sort-item"
                   :class="{selected: it.key && sortFields['sort'] == it.key, 'text-center': it.key == 'update'}"
@@ -108,7 +108,7 @@
                 ></proposal-list-item>
             </div>
           </div>
-          <div v-if="proposals.length < 2" class="my-auto d-flex flex-column align-center">
+          <div v-if="pagination.total < 4" class="my-auto d-flex flex-column align-center">
               <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`">
               <p class="text-transform-uppercase font-size-14">No More Proposal To Show</p>
               <md-button class="md-vendor">Create New Proposal</md-button>
@@ -210,7 +210,7 @@ export default {
   data() {
     return {
       loading: true,
-      iconUrl: `${this.$resourceURL}storage/icons/`,
+      iconUrl: `${this.$iconURL}`,
       proposalRequests: [],
       proposalTabs: [
           {key: 'all', title: 'All Proposal', icon: 'proposal-active.svg', class: 'color-vendor'},
@@ -254,30 +254,29 @@ export default {
     };
   },
   async mounted() {
-    console.log('mounted', this.vendorData.id);
-    await this.getData();
-    await this.getProposal();
-    this.loading = false;
+    // console.log('mounted', this.vendorData.id);
+    if(this.vendorData){
+        this.init();
+    }
+
   },
   methods: {
     async getData() {
-        // let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
-        let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '60144eafcfefec6372985c6d' })).get();
-        this.proposalRequests = proposalRequests.filter(p => p.remainingTime);
-        this.proposalRequests.map(it => console.log('proposal.request', it.id));
+        let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
+        // let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '60b636d7cfefec26397d2a7e' })).get();
+        this.proposalRequests = proposalRequests.filter(p => p.remainingTime > 0 && p.declineMessage !== 'decline');
     },
     async getProposal() {
       const { pagination } = this;
       const params = {status: this.tab, ...this.sortFields};
       const res = await new Proposal()
-        // .for(new Vendor({ id: this.vendorData.id }))
-        .for(new Vendor({ id: '60144eafcfefec6372985c6d' }))
+        .for(new Vendor({ id: this.vendorData.id }))
+        // .for(new Vendor({ id: '60758222cfefec2676a0853d' }))
         .page(pagination.page)
         .limit(pagination.limit)
         .params(params)
         .get();
       const data = res[0];
-      console.log('proposals', res)
       this.proposals = data.items;
       this.proposals.map(it => console.log('proposal', it.proposalRequestId));
       this.pagination.total = data.total;
@@ -314,29 +313,37 @@ export default {
       await this.getProposal();
       this.loading = false;
     },
-    dismiss(id){
-      let proposalRequests = this.proposalRequests.filter(p => {
+    async dismiss(id){
+      const res = await new ProposalRequest({
+          id,
+          declineMessage: 'decline',
+      }).save()
+      console.log('updateReq', res);
+      this.proposalRequests = this.proposalRequests.filter(p => {
           return p.id !== id;
       });
-      this.proposalRequests = proposalRequests;
-      console.log('porposal.request', this.proposalRequests)
     },
-    handleProposal(action, id){
-      console.log('proposal.handle', action, id);
+    async handleProposal(action, id){
       this.selectedProposal = this.proposals.find(it => it.id == id);
       if (action === 'show') {
           this.showProposalDetail = true;
 
       } else if (action === 'edit') {
-          this.$router.push(`/vendors/${this.selectedProposal.vendor.id}/proposal-request/${this.selectedProposal.proposalRequest.id}/form/edit`);
+          // this.$router.push(`/vendors/${this.selectedProposal.vendor.id}/proposal-request/${this.selectedProposal.proposalRequest.id}/form/edit`);
+          let routeData = this.$router.resolve({name: 'proposalEdit', params:{
+              vendorId: this.selectedProposal.vendor.id, id: this.selectedProposal.proposalRequest.id, type: 'edit'}});
+          window.open(routeData.href, '_blank');
 
-      } else if (action === 'duplicate') {
-          this.$router.push(`/vendors/${this.selectedProposal.vendor.id}/proposal-request/${this.selectedProposal.proposalRequest.id}/form/duplicate`);
+      } else if (action === 'remove') {
+        this.loading = true;
+        const proposal = await Proposal.find(id)
+        proposal.delete();
+        this.proposals = this.proposals.filter(it => it.id !== id);
+
+        this.$forceUpdate();
+        this.loading = false;
 
       } else if (action === 'download') {
-          // setTimeout(_ => {
-          //     this.$refs.html2Pdf.generatePdf()
-          // }, 50)
 
         this.downloadProposal(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
       }
@@ -346,6 +353,11 @@ export default {
             link,
             '_blank',
         )
+    },
+    async init() {
+        await this.getData();
+        await this.getProposal();
+        this.loading = false;
     }
   },
   computed: {
@@ -377,8 +389,13 @@ export default {
   },
   watch: {
     vendorData(newValue, oldValue) {
-      this.getData();
+      console.log('vendorData', newValue);
+      this.init();
     },
+    proposalRequests(newVal){
+      console.log('proposalRequests.watch', newVal);
+      this.$forceUpdate();
+    }
   },
   updated(){
     // remove empty item in proposal-request carousel

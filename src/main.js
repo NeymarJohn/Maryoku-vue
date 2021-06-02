@@ -311,7 +311,7 @@ Vue.filter("withComma", function (value, type = null) {
     value = Number(value)
   }
   return value ? type != Number ? value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) :
-      value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0;
+    value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0;
 
 });
 Vue.filter("formatQty", function (value) {
@@ -338,6 +338,16 @@ axios.defaults.headers.common.Authorization = authHeader().Authorization;
 axios.defaults.headers.common["gorm-tenantid"] = authService.resolveTenantId();
 axios.defaults.headers.common.gorm_tenantid = authService.resolveTenantId();
 Model.$http = axios;
+
+axios.interceptors.response.use(function (response) {
+  // Any status code that lie within the range of 2xx cause this function to trigger
+  // Do something with response data
+  // console.log(response)
+  return response;
+}, function (error) {
+  return Promise.reject(error);
+});
+
 
 Number.prototype.padStart = function (size, theChar) {
   var s = String(this);

@@ -18,6 +18,7 @@
             placeholder="Choose date…..."
             inputStyle="date"
             v-model="date"
+            theme="purple"
           ></maryoku-input>
         </div>
         <div class="md-layout mt-30">
@@ -70,14 +71,13 @@
         </div>
         <div class="mt-30 text-left" v-if="isRegisteredCustomer">
           <label class="font-bold">Company / Customer Name</label>
-          <multiselect
-            v-model="company"
-            :options="['microsoft', 'amazon', 'google', 'stripe']"
-            :close-on-select="true"
-            :clear-on-select="true"
-            placeholder=""
+          <autocomplete
             class="width-50 mt-5 md-purple medium-selector"
-          ></multiselect>
+            placeholder="Type name of customer here..."
+            :options="customers"
+            label="name"
+            @change="selectCustomer"
+          ></autocomplete>
         </div>
         <div v-else class="text-left">
           <div class="mt-30 text-left">
@@ -147,14 +147,21 @@ import { Modal, MaryokuInput, LocationInput } from "@/components";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import UserEvent from "@/models/UserEvent";
 import moment from "moment";
+import Autocomplete from "@/components/Autocomplete";
 export default {
   components: {
     Modal,
     MaryokuInput,
     VueTimepicker,
     LocationInput,
+    Autocomplete,
   },
   props: {},
+  created() {
+    this.$http.get(`${process.env.SERVER_URL}/1/userEventCustomers`).then((res) => {
+      this.customers = res.data;
+    });
+  },
   data() {
     return {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
@@ -180,9 +187,14 @@ export default {
       link_proposal: null,
       attachment: null,
       addToCustomerList: false,
+      customers: [],
+      selectedCustomer: null,
     };
   },
   methods: {
+    selectCustomer(selectedCustomer) {
+      this.selectedCustomer = selectedCustomer;
+    },
     updateStartA() {
       if (this.amPack.start == "AM") {
         this.amPack.start = "PM";
@@ -205,18 +217,33 @@ export default {
       this.$emit("cancel");
     },
     createEvent() {
-      const otherFormatDate = moment(this.date, "DD.MM.YYYY").format("YYYY-MM-DD");
+      const startDate = moment(
+        `${this.date} ${this.startTime.hh}:${this.startTime.mm} ${this.amPack.start}`,
+        "DD.MM.YYYY hh:mm a",
+      );
+      const endDate = moment(
+        `${this.date} ${this.endTime.hh}:${this.endTime.mm} ${this.amPack.end}`,
+        "DD.MM.YYYY hh:mm a",
+      );
+      var dt = new Date();
+      var tz = dt.getTimezoneOffset();
       const userEvent = {
         company: this.company,
-        date: otherFormatDate,
-        startTime: `${this.startTime.hh}:${this.startTime.mm} ${this.amPack.start}`,
-        endTime: `${this.endTime.hh}:${this.endTime.mm} ${this.amPack.start}`,
+        date: endDate.format("YYYY-MM-DD"),
+        startTime: startDate,
+        endTime: endDate,
         companyName: this.company,
         customerName: this.customer,
         email: this.email,
         guests: this.guests,
         location: this.location,
+        timezone: tz,
+        isRegisteredCustomer: this.isRegisteredCustomer,
       };
+      if (this.selectedCustomer) {
+        userEvent.customer = { id: this.selectedCustomer.id };
+        userEvent.companyName = this.selectedCustomer.company;
+      }
       new UserEvent(userEvent).save().then((res) => {
         this.$emit("save", res);
       });
