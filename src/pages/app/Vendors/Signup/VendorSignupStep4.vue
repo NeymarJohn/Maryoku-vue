@@ -190,7 +190,7 @@
                   <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost | withComma}` }} </span>
                 </div>
                 <div class="item text-right" v-else>
-                  <span v-if="policy.type === Number && !policy.isPercentage && policy.unit !== 'hour' && policy.unit !== 'none'">$</span>
+                  <span v-if="policy.type === Number && !policy.isPercentage && policy.unit !== 'hour'">$</span>
                   <span v-if="policy.type === Boolean">
                     <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
                     <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
@@ -206,7 +206,6 @@
                   <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
                     {{ policy.attendees }} attendees
                   </span>
-                  <span v-if="policy.unit === 'none'"></span>
                 </div>
               </div>
             </div>

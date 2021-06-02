@@ -6,10 +6,10 @@
     <div>
       <div class="font-bold font-size-16" v-if="proposal.proposalRequest.eventData.title">{{proposal.proposalRequest.eventData.title}}</div>
       <div class="font-bold font-size-16" v-else>New Event</div>
-<!--      <md-button class="preview md-simple md-vendor-text md-vendor px-0">-->
-<!--          Got 4 previous versions-->
-<!--        <md-icon class="color-vendor">keyboard_arrow_down</md-icon>-->
-<!--      </md-button>-->
+      <md-button class="preview md-simple md-vendor-text md-vendor px-0">
+          Got 4 previous versions
+        <md-icon class="color-vendor">keyboard_arrow_down</md-icon>
+      </md-button>
     </div>
     <div class="font-size-14 color-black-middle">{{proposal.dateCreated | date('DD/MM/YYYY')}}</div>
     <div class="font-size-14 color-black-middle">${{proposal.cost | withComma}}</div>
@@ -17,7 +17,7 @@
     <div><img class="ml-15" :src="getStatusIcon(proposal.status)" /></div>
     <div class="font-size-14 color-black-middle">Tom</div>
 
-    <div v-if="proposal.status === 'negotiation'">
+    <div v-if="proposal.status === 'submit'">
         <md-button  class="md-vendor" @click="edit('show')">
             <img :src="`${$iconURL}common/edit-white.svg`" class="label-icon mr-10" style="width: 13px!important;"/> Make Changes
         </md-button>
@@ -60,18 +60,18 @@
             </span>
           </md-menu-item>
           <md-menu-item
-            @click="edit('remove')"
+            @click="edit('duplicate')"
             class="md-purple"
-            @mouseenter="hoveredMenu = 'remove'"
+            @mouseenter="hoveredMenu = 'duplicate'"
             @mouseleave="hoveredMenu = ''"
           >
             <span>
               <img
-                v-if="hoveredMenu !== 'remove'"
-                :src="`${$iconURL}VendorsProposalPage/group-11314.svg`"
+                v-if="hoveredMenu !== 'duplicate'"
+                :src="`${$iconURL}common/duplicate.svg`"
                 class="label-icon mr-10"
               />
-              <img v-else :src="`${$iconURL}common/duplicate-white.svg`" class="label-icon mr-10" />Delete Proposal</span
+              <img v-else :src="`${$iconURL}common/duplicate-white.svg`" class="label-icon mr-10" />Duplicate</span
             >
           </md-menu-item>
         </md-menu-content>

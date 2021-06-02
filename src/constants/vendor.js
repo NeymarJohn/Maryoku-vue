@@ -575,6 +575,12 @@ export const businessCategories = [
                 xIncluded: true,
               },
               {
+                name: "Strict sexual harrasment policy",
+                type: Boolean,
+                value: false,
+                xIncluded: true,
+              },
+              {
                 name: "Acknowledge all religious and cultural holidays",
                 type: Boolean,
                 value: false,
@@ -4088,20 +4094,6 @@ export const VendorPolicy = [
         type: Boolean,
         hasComment: true,
       },
-      {
-        name: "Level of security training/certification",
-        type: Number,
-        noSuffix: true,
-        hasComment: true,
-        unit: "none"
-      },
-      {
-        name: "Special attire requests",
-        type: Number,
-        noSuffix: true,
-        hasComment: true,
-        unit: "none"
-      },
     ],
   },
   {
@@ -4761,11 +4753,18 @@ export const VendorPricingPolicy = [
       {
         name: "Number of hours",
         type: Number,
-        noSuffix: true,
         hasComment: true,
         unit: "hour",
-        labelForValue: "Number of hours",
-        hideOnProposal: true,
+      },
+      {
+        name: "Level of security training/certification",
+        type: Number,
+        hasComment: true,
+      },
+      {
+        name: "Special attire requests",
+        type: Number,
+        hasComment: true,
       },
       {
         name: "Tax rate",

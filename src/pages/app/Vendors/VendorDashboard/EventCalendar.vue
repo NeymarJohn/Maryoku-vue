@@ -44,13 +44,19 @@
       <md-switch class="md-switch-vendor large-switch" v-model="showBlackoutDays">
         <span class="color-black font-size-14px">Blackout Days</span>
       </md-switch>
-      <md-button class="md-simple ml-auto md-vendor"> Sync With Calendar</md-button>
+      <md-button class="md-simple ml-auto md-vendor" @click="showSyncModal = true"> Sync With Calendar</md-button>
     </div>
+    <sync-calendar-modal v-if="showSyncModal" :events="eventsForThisMonth"></sync-calendar-modal>
   </div>
 </template>
 <script>
 import moment from "moment";
+import SyncCalendarModal from "./Modals/SyncCalendar";
+
 export default {
+  components: {
+    SyncCalendarModal,
+  },
   data() {
     return {
       isLoading: false,
@@ -66,6 +72,7 @@ export default {
       },
       heading: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
       showBlackoutDays: false,
+      showSyncModal: false,
     };
   },
   methods: {
@@ -229,6 +236,9 @@ export default {
     this.isLoading = true;
     this.getEventsForThisMonth().then(() => {
       this.isLoading = false;
+    });
+    this.$root.$on("addNewEvent", (newEvent) => {
+      this.getEventsForThisMonth();
     });
   },
   beforeMount() {},

@@ -120,7 +120,7 @@
             <vue-element-loading :active="uploadingStatus[indx - 1]" spinner="ring" color="#FF547C" />
             <div class="image-section d-flex justify-content-center align-center text-center" :for="`file-${indx}`">
 
-              <span v-if="!uploadImageData[indx - 1]" data-design-type="A4Document" data-button-size="default" data-button-theme="default" data-api-key="no5x5PRx6hMNshFZlrRpevKJ"
+              <span v-if="!uploadImageData[indx - 1]" data-design-type="A4Document" data-button-size="default" data-button-theme="default" data-api-key="AhMXYJKc174lmd7GQXc6un_0"
                     class="canva-design-button"
                     style="display:none;position: absolute;left:0;right:0;width: 180px;margin:0 auto;top: 15%;color:#050505;background: white;border: 1px solid #050505;z-index: 10">Design on Canva</span>
               <img class="concept-image" v-if="uploadImageData[indx - 1]" :src="`${uploadImageData[indx - 1]}`" @click="uploadPhoto(indx)"/>

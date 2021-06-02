@@ -6,7 +6,7 @@ import { VendorPolicy, VendorPricingPolicy } from "@/constants/vendor";
 import S3Service from "@/services/s3.service";
 import { makeid } from "@/utils/helperFunction";
 import { getBase64 } from "@/utils/file.util";
-const defaultState = {
+const state = {
     isEditing: false,
     step: 0,
     status: null,
@@ -192,25 +192,6 @@ const actions = {
 };
 
 const mutations = {
-    setInitialState(state, data) {
-        state.step = 0;
-        state.vendor = {
-            about: {},
-            capacity: {},
-            images: [],
-            social: {},
-            services: {},
-            yesRules: [],
-            noRules: [],
-            notAllowed: [],
-            exDonts: [],
-            yesPolicies: [],
-            noPolicies: [],
-            selectedWeekdays: [],
-            recommendations: [],
-            notAllowedThirdParty: 0
-        }
-    },
     setAllProperties(state, data) {
         state.allProperties = data;
     },
@@ -247,7 +228,7 @@ const mutations = {
 
 export default {
     namespaced: true,
-    state: { ...defaultState },
+    state,
     getters,
     actions,
     mutations,

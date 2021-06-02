@@ -3,7 +3,7 @@
     <input
       v-if="filteredSuggestItems[selectedSuggestItemIndex] && searchWord"
       class="suggested-place-holder"
-      :value="filteredSuggestItems[selectedSuggestItemIndex][label]"
+      :value="getOptionLabel(filteredSuggestItems[selectedSuggestItemIndex])"
     />
     <input
       v-model="searchWord"
@@ -18,11 +18,11 @@
       <div
         class="suggest-item font-bold"
         v-for="(item, index) in filteredSuggestItems"
-        :key="item[label]"
+        :key="getOptionLabel(item)"
         @mouseenter="hoverSuggestItem(index)"
         @click="selectSuggestItem(index)"
       >
-        <div>{{ item[label] }}</div>
+        <div>{{ getOptionLabel(item) }}</div>
       </div>
     </div>
   </div>
@@ -48,7 +48,7 @@ export default {
       default: "",
     },
     label: {
-      type: String,
+      type: [String, Array],
       default: "label",
     },
   },
@@ -57,17 +57,19 @@ export default {
       this.selectedSuggestItemIndex = index;
       this.qty = this.filteredSuggestItems[index].qty;
       this.unit = this.filteredSuggestItems[index].price;
-      this.searchWord = this.filteredSuggestItems[index][this.label].slice(0, this.searchWord.length);
+      this.searchWord = this.getOptionLabel(this.filteredSuggestItems[index]).slice(0, this.searchWord.length);
     },
     selectSuggestItem(index) {
       this.qty = this.filteredSuggestItems[index].qty;
       this.unit = this.filteredSuggestItems[index].price;
-      this.searchWord = this.filteredSuggestItems[index][this.label];
+      this.searchWord = this.getOptionLabel(this.filteredSuggestItems[index]);
       this.selectedSuggestItemIndex = -1;
       this.showAutoCompletePanel = false;
       this.$emit("change", this.filteredSuggestItems[index]);
     },
     startSearch() {
+      console.log(this.options);
+      console.log(this.filteredSuggestItems);
       this.showAutoCompletePanel = true;
     },
     stopSearch() {
@@ -76,11 +78,21 @@ export default {
         this.selectedSuggestItemIndex = -1;
       }, 500);
     },
+    getOptionLabel(option) {
+      if (typeof this.label === "string") {
+        return option[this.label];
+      } else {
+        const labels = this.label.map((label) => option[label]);
+        return labels.join(" / ");
+      }
+    },
   },
   computed: {
     filteredSuggestItems() {
       if (!this.searchWord) return [];
-      return this.options.filter((item) => item[this.label].toLowerCase().startsWith(this.searchWord.toLowerCase()));
+      return this.options.filter((item) =>
+        this.getOptionLabel(item).toLowerCase().includes(this.searchWord.toLowerCase()),
+      );
     },
   },
 };

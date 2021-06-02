@@ -4,7 +4,7 @@
       v-model="selectedLocation"
       :md-options="locations"
       class="location"
-      :class="{active: selectedLocation}"
+      :class="{ active: selectedLocation, 'md-purple': theme === 'purple' }"
     ></md-autocomplete>
   </div>
 </template>
@@ -27,6 +27,10 @@ export default {
     disabled: Boolean,
     imgStyle: String,
     inputStyle: String,
+    theme: {
+      type: String,
+      default: "red",
+    },
   },
   data() {
     return {
@@ -88,7 +92,7 @@ export default {
           types: ["geocode"],
           // componentRestrictions: { country: ['us', 'ca'] },
         },
-        this.addressSuggestions
+        this.addressSuggestions,
       );
     },
   },
