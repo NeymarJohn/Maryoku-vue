@@ -439,8 +439,8 @@ export default {
         },
         {
           name: "Guest Services & Staffing",
-          value: "corporatesocialresponsibility",
-          icon: "corporatesocialresponsibility.svg",
+          value: "administration",
+          icon: "administration.svg",
         },
         {
           name: "Signage / Printing",

@@ -16,8 +16,8 @@ export const VendorCategories = [
   },
   {
     name: "Guest Services & Staffing",
-    value: "corporatesocialresponsibility",
-    icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/corporatesocialresponsibility.svg`,
+    value: "administration",
+    icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/administration.svg`,
   },
   {
     name: "Signage / Printing",
@@ -1324,7 +1324,7 @@ export const businessCategories = [
     ],
   },
   {
-    name: "corporatesocialresponsibility",
+    name: "administration",
     categories: [
       {
         name: "services",
@@ -3723,7 +3723,7 @@ export const companyServices = [
     available: ["floral", "lighting", "interior design"],
   },
   {
-    name: "corporatesocialresponsibility",
+    name: "administration",
     type: Array,
     value: [],
     available: ["staffing", "guest services", "on-day coodination", "concierge"],
@@ -3856,7 +3856,7 @@ export const VendorPolicy = [
     ],
   },
   {
-    category: "corporatesocialresponsibility",
+    category: "administration",
     items: [
       {
         name: "Minimum hour of service",
@@ -4065,10 +4065,6 @@ export const VendorPolicy = [
         hasComment: true,
       },
     ],
-  },
-  {
-    category: "administration",
-    items: [],
   },
   {
     category: "securityservices",
@@ -4345,7 +4341,7 @@ export const VendorPricingPolicy = [
     ],
   },
   {
-    category: "corporatesocialresponsibility",
+    category: "administration",
     items: [
       {
         name: "Travel distance to event",
@@ -4864,8 +4860,8 @@ export const categoryNameWithIcons = [
   },
   {
     name: "Guest Services & Staffing",
-    value: "corporatesocialresponsibility",
-    icon: "corporatesocialresponsibility.svg",
+    value: "administration",
+    icon: "administration.svg",
   },
   {
     name: "Signage / Printing",
@@ -4902,21 +4898,11 @@ export const categoryNameWithIcons = [
     value: "entertainment",
     icon: "entertainment.svg",
   },
-  // {
-  //   name: 'Administration',
-  //   value: 'administration',
-  //   icon: 'administration.svg'
-  // },
   {
     name: "Security",
     value: "securityservices",
     icon: "securityservices.svg",
   },
-  // {
-  //   name: 'Technology',
-  //   value: 'technologyservices',
-  //   icon: 'technologyservices.svg'
-  // },
   {
     name: "Videography and Photography",
     value: "videographyandphotography",

@@ -29,7 +29,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .planningboard-tag-item {
-  margin-right: 20px;
   margin-bottom: 10px;
   border: solid 1px #f51355;
   // height: 50px;

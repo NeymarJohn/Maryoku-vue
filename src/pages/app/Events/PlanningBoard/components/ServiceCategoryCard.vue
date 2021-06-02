@@ -138,7 +138,7 @@ export default {
         entertainment: "NewRequirements/Group 18015.svg",
         swag: "NewRequirements/Group 18008.svg",
         audiovisualstagingservices: "NewRequirements/Group 18008.svg",
-        corporatesocialresponsibility: "NewRequirements/Group 18008.svg",
+        administration: "NewRequirements/Group 18008.svg",
         transportation: "NewRequirements/Group 18016.svg",
         giveaways: "NewRequirements/Group 18008.svg",
         meetingorganizationfees: "NewRequirements/Group 18008.svg",
