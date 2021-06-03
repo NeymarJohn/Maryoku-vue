@@ -3,8 +3,8 @@
     <div class="font-bold">This offer will expire in</div>
     <hr />
     <timer size="big" :target="target"></timer>
-    <div>
-      <md-button class="maryoku-btn md-simple md-red mt-10">Ask for more time</md-button>
+    <div class="button-wrapper">
+      <md-button class="maryoku-btn md-simple md-red">Ask for more time</md-button>
     </div>
   </div>
 </template>
@@ -30,8 +30,16 @@ export default {
   text-align: center;
   padding: 20px;
   border-radius: 3px;
-  .md-button {
+  .button-wrapper {
     background-color: white !important;
+    margin: auto;
+    width: max-content;
+    .md-button {
+      background-color: white !important;
+      &:hover {
+        background-color: white !important;
+      }
+    }
   }
   hr {
     background-color: white;

@@ -15,7 +15,7 @@
           :html-to-pdf-options="htmlToPdfOptions"
           ref="html2Pdf"
       >
-          <pdf-content slot="pdf-content" v-if="selectedProposal" :vendorProposal="selectedProposal" />
+<!--          <pdf-content slot="pdf-content" v-if="selectedProposal" :vendorProposal="selectedProposal" />-->
       </vue-html2pdf>
     <loader :active="loading" :isFullScreen="true"/>
     <div class="font-size-22 font-bold d-flex align-center">
@@ -29,8 +29,8 @@
       :dots="false"
       :number="2"
       :nav="false"
-      v-if="proposalRequests.length > 0"
       class="proposal-requests"
+      v-if="proposalRequests.length"
     >
       <template slot="prev">
         <button class="nav-left nav-btn">
@@ -46,7 +46,7 @@
         @dismiss="dismiss"
       >
       </proposal-request-card>
-      <div v-if="proposalRequests.length < 2" class="white-card p-20 d-flex">
+      <div v-if="proposalRequests.length < 4" class="white-card p-20 d-flex">
           <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" style="width: 55px;height: 55px">
           <div class="ml-15">
               <div class="font-size-18 font-bold text-uppercase color-vendor">No More Pending Proposals</div>
@@ -108,7 +108,7 @@
                 ></proposal-list-item>
             </div>
           </div>
-          <div v-if="pagination.total < 2" class="my-auto d-flex flex-column align-center">
+          <div v-if="pagination.total < 4" class="my-auto d-flex flex-column align-center">
               <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`">
               <p class="text-transform-uppercase font-size-14">No More Proposal To Show</p>
               <md-button class="md-vendor">Create New Proposal</md-button>
@@ -254,23 +254,24 @@ export default {
     };
   },
   async mounted() {
-    console.log('mounted', this.vendorData.id);
-    await this.getData();
-    await this.getProposal();
-    this.loading = false;
+    // console.log('mounted', this.vendorData.id);
+    if(this.vendorData){
+        this.init();
+    }
+
   },
   methods: {
     async getData() {
-        // let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
-        let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '60758222cfefec2676a0853d' })).get();
-        this.proposalRequests = proposalRequests.filter(p => p.remainingTime);
+        let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
+        // let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '60b636d7cfefec26397d2a7e' })).get();
+        this.proposalRequests = proposalRequests.filter(p => p.remainingTime > 0 && p.declineMessage !== 'decline');
     },
     async getProposal() {
       const { pagination } = this;
       const params = {status: this.tab, ...this.sortFields};
       const res = await new Proposal()
-        // .for(new Vendor({ id: this.vendorData.id }))
-        .for(new Vendor({ id: '60144eafcfefec6372985c6d' }))
+        .for(new Vendor({ id: this.vendorData.id }))
+        // .for(new Vendor({ id: '60758222cfefec2676a0853d' }))
         .page(pagination.page)
         .limit(pagination.limit)
         .params(params)
@@ -313,18 +314,16 @@ export default {
       this.loading = false;
     },
     async dismiss(id){
-      let proposalReq = this.proposalRequests.find(pr => pr.id === id);
-      // const res = await new ProposalRequest({
-      //     id,
-      //     submitted: true,
-      //     status: 'decline',
-      // }).save()
-      // console.log('updateReq', res);
+      const res = await new ProposalRequest({
+          id,
+          declineMessage: 'decline',
+      }).save()
+      console.log('updateReq', res);
       this.proposalRequests = this.proposalRequests.filter(p => {
           return p.id !== id;
       });
     },
-    handleProposal(action, id){
+    async handleProposal(action, id){
       this.selectedProposal = this.proposals.find(it => it.id == id);
       if (action === 'show') {
           this.showProposalDetail = true;
@@ -335,8 +334,14 @@ export default {
               vendorId: this.selectedProposal.vendor.id, id: this.selectedProposal.proposalRequest.id, type: 'edit'}});
           window.open(routeData.href, '_blank');
 
-      } else if (action === 'duplicate') {
-          this.$router.push(`/vendors/${this.selectedProposal.vendor.id}/proposal-request/${this.selectedProposal.proposalRequest.id}/form/duplicate`);
+      } else if (action === 'remove') {
+        this.loading = true;
+        const proposal = await Proposal.find(id)
+        proposal.delete();
+        this.proposals = this.proposals.filter(it => it.id !== id);
+
+        this.$forceUpdate();
+        this.loading = false;
 
       } else if (action === 'download') {
 
@@ -348,6 +353,11 @@ export default {
             link,
             '_blank',
         )
+    },
+    async init() {
+        await this.getData();
+        await this.getProposal();
+        this.loading = false;
     }
   },
   computed: {
@@ -379,8 +389,13 @@ export default {
   },
   watch: {
     vendorData(newValue, oldValue) {
-      this.getData();
+      console.log('vendorData', newValue);
+      this.init();
     },
+    proposalRequests(newVal){
+      console.log('proposalRequests.watch', newVal);
+      this.$forceUpdate();
+    }
   },
   updated(){
     // remove empty item in proposal-request carousel

@@ -16,8 +16,8 @@ export const VendorCategories = [
   },
   {
     name: "Guest Services & Staffing",
-    value: "corporatesocialresponsibility",
-    icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/corporatesocialresponsibility.svg`,
+    value: "administration",
+    icon: `https://static-maryoku.s3.amazonaws.com/storage/icons/Budget Elements/administration.svg`,
   },
   {
     name: "Signage / Printing",
@@ -570,12 +570,6 @@ export const businessCategories = [
               },
               {
                 name: "Women on senior staff",
-                type: Boolean,
-                value: false,
-                xIncluded: true,
-              },
-              {
-                name: "Strict sexual harrasment policy",
                 type: Boolean,
                 value: false,
                 xIncluded: true,
@@ -1324,7 +1318,7 @@ export const businessCategories = [
     ],
   },
   {
-    name: "corporatesocialresponsibility",
+    name: "administration",
     categories: [
       {
         name: "services",
@@ -3723,7 +3717,7 @@ export const companyServices = [
     available: ["floral", "lighting", "interior design"],
   },
   {
-    name: "corporatesocialresponsibility",
+    name: "administration",
     type: Array,
     value: [],
     available: ["staffing", "guest services", "on-day coodination", "concierge"],
@@ -3856,7 +3850,7 @@ export const VendorPolicy = [
     ],
   },
   {
-    category: "corporatesocialresponsibility",
+    category: "administration",
     items: [
       {
         name: "Minimum hour of service",
@@ -4067,10 +4061,6 @@ export const VendorPolicy = [
     ],
   },
   {
-    category: "administration",
-    items: [],
-  },
-  {
     category: "securityservices",
     items: [
       {
@@ -4093,6 +4083,20 @@ export const VendorPolicy = [
         name: "Dress code",
         type: Boolean,
         hasComment: true,
+      },
+      {
+        name: "Level of security training/certification",
+        type: Number,
+        noSuffix: true,
+        hasComment: true,
+        unit: "none"
+      },
+      {
+        name: "Special attire requests",
+        type: Number,
+        noSuffix: true,
+        hasComment: true,
+        unit: "none"
       },
     ],
   },
@@ -4345,7 +4349,7 @@ export const VendorPricingPolicy = [
     ],
   },
   {
-    category: "corporatesocialresponsibility",
+    category: "administration",
     items: [
       {
         name: "Travel distance to event",
@@ -4753,18 +4757,11 @@ export const VendorPricingPolicy = [
       {
         name: "Number of hours",
         type: Number,
+        noSuffix: true,
         hasComment: true,
         unit: "hour",
-      },
-      {
-        name: "Level of security training/certification",
-        type: Number,
-        hasComment: true,
-      },
-      {
-        name: "Special attire requests",
-        type: Number,
-        hasComment: true,
+        labelForValue: "Number of hours",
+        hideOnProposal: true,
       },
       {
         name: "Tax rate",
@@ -4864,8 +4861,8 @@ export const categoryNameWithIcons = [
   },
   {
     name: "Guest Services & Staffing",
-    value: "corporatesocialresponsibility",
-    icon: "corporatesocialresponsibility.svg",
+    value: "administration",
+    icon: "administration.svg",
   },
   {
     name: "Signage / Printing",
@@ -4902,21 +4899,11 @@ export const categoryNameWithIcons = [
     value: "entertainment",
     icon: "entertainment.svg",
   },
-  // {
-  //   name: 'Administration',
-  //   value: 'administration',
-  //   icon: 'administration.svg'
-  // },
   {
     name: "Security",
     value: "securityservices",
     icon: "securityservices.svg",
   },
-  // {
-  //   name: 'Technology',
-  //   value: 'technologyservices',
-  //   icon: 'technologyservices.svg'
-  // },
   {
     name: "Videography and Photography",
     value: "videographyandphotography",

@@ -1,23 +1,30 @@
 <template>
   <div class="md-layout booking-section position-relative booking-proposals">
     <div class="choose-vendor-board">
-      <div>
-        <resizable-toggle-button
-          class="mr-20 mb-10"
-          :key="component.componentId"
-          :label="component.eventCategory ? component.eventCategory.fullTitle : ''"
-          :icon="`${$iconURL}Budget+Elements/${component.eventCategory ? component.eventCategory.icon : ''}`"
-          :selectedIcon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
-          :defaultStatus="selectedCategory && component.componentId === selectedCategory.componentId"
-          :disabled="!eventRequirements[component.componentId]"
-          :hasBadge="
-            proposalsByCategory[component.componentId] && proposalsByCategory[component.componentId].length > 0
-          "
-          iconStyle="opacity:0.8"
-          v-for="component in categories"
-          @click="selectCategory(component)"
-        ></resizable-toggle-button>
-        <button class="add-category-button mb-10" @click="addRequirements"><md-icon>add</md-icon></button>
+      <div class="d-flex justify-content-between align-center">
+        <div>
+          <resizable-toggle-button
+            class="mr-20 mb-10"
+            :key="component.componentId"
+            :label="component.eventCategory ? component.eventCategory.fullTitle : ''"
+            :icon="`${$iconURL}Budget+Elements/${component.eventCategory ? component.eventCategory.icon : ''}`"
+            :selectedIcon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
+            :defaultStatus="selectedCategory && component.componentId === selectedCategory.componentId"
+            :disabled="!eventRequirements[component.componentId]"
+            :hasBadge="
+              proposalsByCategory[component.componentId] && proposalsByCategory[component.componentId].length > 0
+            "
+            iconStyle="opacity:0.8"
+            v-for="component in categories"
+            @click="selectCategory(component)"
+          ></resizable-toggle-button>
+          <button class="add-category-button mb-10" @click="addRequirements"><md-icon>add</md-icon></button>
+        </div>
+        <progress-radial-bar
+          :value="proposals.length"
+          :total="3"
+          icon="common/checked-calendar-red.svg"
+        ></progress-radial-bar>
       </div>
       <div class="booking-proposals" v-if="selectedCategory">
         <loader :active="isLoadingProposal" />
@@ -124,6 +131,8 @@ import ProposalsBar from "./ProposalsBar.vue";
 import AdditionalRequestModal from "../PlanningBoard/components/modals/AdditionalRequest.vue";
 
 import PlanningBoardState from "../PlanningBoard/state.js";
+import ProgressRadialBar from "../PlanningBoard/components/ProgressRadialBar.vue";
+
 export default {
   name: "event-booking",
   components: {
@@ -138,6 +147,7 @@ export default {
     EventProposalDetails,
     ProposalsBar,
     AdditionalRequestModal,
+    ProgressRadialBar,
   },
   props: {},
   data: () => ({
