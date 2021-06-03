@@ -20,7 +20,6 @@
             :key="tag.subCategory"
             :isSelected="tag.isSelected"
             v-for="tag in specialTags"
-            class="mr-10"
           ></tag-item>
         </div>
       </div>

@@ -30,7 +30,7 @@
       :number="2"
       :nav="false"
       class="proposal-requests"
-      v-if="proposalRequests.length"
+      v-if="renderRender"
     >
       <template slot="prev">
         <button class="nav-left nav-btn">
@@ -251,6 +251,7 @@ export default {
         limit: 5,
       },
       sortFields: {sort: '', order: ''},
+      renderRender: true,
     };
   },
   async mounted() {
@@ -262,16 +263,21 @@ export default {
   },
   methods: {
     async getData() {
+        this.renderRender = false;
         let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
         // let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '60b636d7cfefec26397d2a7e' })).get();
         this.proposalRequests = proposalRequests.filter(p => p.remainingTime > 0 && p.declineMessage !== 'decline');
+
+        this.$nextTick(_ => {
+           this.renderRender = true;
+        });
     },
     async getProposal() {
       const { pagination } = this;
       const params = {status: this.tab, ...this.sortFields};
       const res = await new Proposal()
-        .for(new Vendor({ id: this.vendorData.id }))
-        // .for(new Vendor({ id: '60758222cfefec2676a0853d' }))
+      .for(new Vendor({ id: this.vendorData.id }))
+      //   .for(new Vendor({ id: '60758222cfefec2676a0853d' }))
         .page(pagination.page)
         .limit(pagination.limit)
         .params(params)
@@ -389,11 +395,9 @@ export default {
   },
   watch: {
     vendorData(newValue, oldValue) {
-      console.log('vendorData', newValue);
       this.init();
     },
     proposalRequests(newVal){
-      console.log('proposalRequests.watch', newVal);
       this.$forceUpdate();
     }
   },

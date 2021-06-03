@@ -437,7 +437,7 @@ export default {
     this.markedDataRange.push({ date: moment(new Date()).add(-4, "days").format("DD/MM/YYYY"), class: "marked_end" });
     this.markedDataRange.push({ date: moment(new Date()).add(4, "days").format("DD/MM/YYYY"), class: "marked_start" });
 
-    console.log(this.markedDataRange);
+    console.log('markedDateRange', this.markedDataRange);
     this.$root.$on("go-to-proposal-form", () => {
       if (this.isAgreed) {
         this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form/submit`);
@@ -456,6 +456,7 @@ export default {
         if (serviceCategory.type == "service") this.categories.push(serviceCategory.fullTitle);
       });
     });
+    console.log('forvendor.mounted', this.categories);
   },
   methods: {
     setReferredVendorProperty(property, value) {
@@ -590,6 +591,7 @@ export default {
       });
     },
     findVendorCategoryByTitle(title) {
+      console.log('findVendorCategoryByTitle', this.vendorCategories, title);
       return this.vendorCategories.find((item) => item.fullTitle == title).key;
     },
     findVendorCategoryTitleByKey(key) {
