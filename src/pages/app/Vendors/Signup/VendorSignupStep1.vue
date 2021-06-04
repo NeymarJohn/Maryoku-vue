@@ -318,7 +318,7 @@ export default {
         },
         {
           name: "Guest Services & Staffing",
-          value: "corporatesocialresponsibility",
+          value: "administration",
         },
         {
           name: "Signage / Printing",

@@ -48,14 +48,14 @@
           </div>
           <template v-if="proposal.vendor">
             <h4 class="event-title">{{ proposal.vendor.companyName }}</h4>
-            <div class="probability">Alignement to requirements {{ probability }}%</div>
             <ul class="event-info">
               <li class="event-info__item">{{ proposal.vendor.vendorAddresses[0] }}</li>
               <li class="event-info__item">{{ proposal.vendor.vendorCity }}</li>
             </ul>
+            <div class="probability">Complies with requirements {{ probability }}%</div>
           </template>
-          <p class="event-desc">{{ proposal.vendor.about ? proposal.vendor.about.company : "" }}</p>
-          <div class="item-actions text-right">
+          <!-- <p class="event-desc">{{ proposal.vendor.about ? proposal.vendor.about.company : "" }}</p> -->
+          <div class="item-actions text-right mt-30">
             <md-button class="md-red maryoku-btn" @click="proposalDetails">Details & Booking </md-button>
           </div>
         </div>

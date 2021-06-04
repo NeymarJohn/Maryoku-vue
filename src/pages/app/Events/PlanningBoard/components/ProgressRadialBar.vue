@@ -10,8 +10,8 @@
     :animateSpeed="100"
     :isClockwise="false"
   >
-    <div class="loading-budget-image">
-      <img :src="`${$iconURL}common/heart-red.svg`" />
+    <div class="loading-budget-image" @click="handleClick">
+      <img :src="`${$iconURL}${icon}`" />
     </div>
   </radial-progress-bar>
 </template>
@@ -27,9 +27,18 @@ export default {
       type: Number,
       default: 100,
     },
+    icon: {
+      type: String,
+      default: `common/heart-red.svg`,
+    },
   },
   components: {
     RadialProgressBar,
+  },
+  methods: {
+    handleClick() {
+      this.$emit("click");
+    },
   },
 };
 </script>
