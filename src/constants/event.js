@@ -5,6 +5,19 @@ export const timelineBlockItems = [
             buildingBlockType: "setup",
             eventCategory: [
                 'venuerental'
+                // 'equipmentrentals',
+                // 'securityservices',
+                // 'giveaways',
+                // 'videographyandphotography',
+                // 'advertising-promotion',
+                // 'audiovisualstagingservices',
+                // 'signageprinting',
+                // 'corporatesocialresponsibility',
+                // 'meetingorganizationfees',
+                // 'technologyservices',
+                // 'decor',
+                // 'shipping',
+                // 'administration'
             ],
             icon: "Setup",
             color: "#ffc001",
@@ -190,7 +203,7 @@ export const serviceCategoryImages = {
         "A-V/Plasma TV_Canva Pro.png",
         "A-V/Projector_Shutterstock.jpg",
     ],
-    "administration": [
+    "corporatesocialresponsibility": [
         "A-V/Lighting_Shutterstock.jpg",
         "A-V/Plasma TV_Canva Pro.png",
         "A-V/Projector_Shutterstock.jpg",
