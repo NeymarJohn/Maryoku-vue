@@ -16,7 +16,7 @@
           ref="html2Pdf"
       >
         <section slot="pdf-content">
-          <div class="p-20 pdf-content">
+          <div class="p-20 pdf-content" v-if="selectedProposal">
             <section :style="`position: relative; height: 500px; background: url('${headerBackgroundImage}') no-repeat center; background-size: cover;`">
               <div class="position-absolute bg-custom-transparent" style="background: rgba(255, 255, 255,0.76);position: absolute;padding: 1.5rem !important;top:0;left:0;right:0;height: 200px">
                   <h3 class="font-weight-bold">Event Information  Details</h3>
