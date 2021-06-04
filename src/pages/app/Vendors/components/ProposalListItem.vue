@@ -123,7 +123,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .proposal-list-item {
-  padding: 32px 40px;
+  padding: 30px 40px;
   display: grid;
   align-items: center;
   grid-template-columns: 5% 20% 10% 15% 10% 10% 10% 15% 5%;

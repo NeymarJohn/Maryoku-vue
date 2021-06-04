@@ -410,7 +410,7 @@ export default {
           [
             {
               name: "Guest Serivces & Staffing",
-              serviceCategory: "corporatesocialresponsibility",
+              serviceCategory: "administration",
               images: [
                 "Staff/Concierge.png",
                 "Staff/Day Of Coordinator.jpg",
