@@ -4,8 +4,8 @@
           :show-layout="false"
           :float-layout="true"
           :enable-download="true"
-          :preview-modal="false"
-          :paginate-elements-by-height="1800"
+          :preview-modal="true"
+          :paginate-elements-by-height="1400"
           :filename="`proposal-${selectedProposal ? selectedProposal.id : ''}`"
           :pdf-quality="2"
           :manual-pagination="false"
@@ -16,120 +16,80 @@
           ref="html2Pdf"
       >
         <section slot="pdf-content">
-          <div class="p-20 pdf-content" v-if="selectedProposal">
-            <section :style="`position: relative; height: 500px; background: url('${headerBackgroundImage}') no-repeat center; background-size: cover;`">
-              <div class="position-absolute bg-custom-transparent" style="background: rgba(255, 255, 255,0.76);position: absolute;padding: 1.5rem !important;top:0;left:0;right:0;height: 200px">
+          <div class="p-20 pdf-content">
+            <section style="position: relative;">
+              <img src="https://maryoku.s3.amazonaws.com/proposal/inspirationalPhotos/6071631fcfefec2676a08362/photo-0.png" style="width:100%;height: 500px"/>
+              <div class="p-4 position-absolute bg-custom-transparent" style="background: rgba(255, 255, 255,0.76);position: absolute;padding: 1.5rem !important;top:0;left:0;right:0;height: 100px">
                   <h3 class="font-weight-bold">Event Information  Details</h3>
                   <ul class="event-detail mt-3" style="list-style: none;display: flex;flex-direction: row;margin-top: 1rem !important">
-                      <li class="border-line-end" style="border-right: 1px solid #818080;padding-right: 80px;padding-bottom: 10px;margin-right: 80px;">
+                      <li class="border-line-end" style="border-right: 1px solid #818080;flex: 1;padding-right: 80px;padding-bottom: 10px;margin-right: 80px;">
                           <label class="font-weight-bold">Name</label>
-                          <div>{{ selectedEventData.title || (selectedEventData.concept ? selectedEventData.concept.title : "Untitled event")
-                                }}</div>
+                          <div>Event</div>
                       </li>
-                      <li class="border-line-end" style="border-right: 1px solid #818080;padding-right: 80px;padding-bottom: 10px;margin-right: 80px;">
+                      <li class="border-line-end" style="border-right: 1px solid #818080;flex: 1;padding-right: 80px;padding-bottom: 10px;margin-right: 80px;">
                           <label class="font-weight-bold">Date</label>
-                          <div v-if="!selectedProposal.suggestionDate">
-                                {{ selectedEventData.eventStartMillis | date('MMM Do YYYY')}}
-                          </div>
-                          <div v-else>
-                              {{ eventDate() }}
-                              <!-- {{ new Date(vendorProposal.suggestionDate[0].date).getTime() | formatTime }} -->
-                          </div>
+                          <div>Date</div>
                       </li>
-                      <li class="" style="padding-right: 80px;padding-bottom: 10px;margin-right: 80px;">
+                      <li class="" style="flex: 1;padding-right: 80px;padding-bottom: 10px;margin-right: 80px;">
                           <label class="font-weight-bold">Guest Arrival Time</label>
-                          <div>
-                                {{ selectedEventData.eventStartMillis | date('MMM Do YYYY') }}
-                          </div>
+                          <div>Time</div>
                       </li>
                   </ul>
               </div>
             </section>
-            <section class="px-4 py-2" style="position: relative;padding-right: 1.5rem !important;">
-              <h2 class="font-weight-bold">Dear {{ selectedProposal.vendor.vendorDisplayName }},</h2>
-              <p>
-                {{ selectedProposal.personalMessage }}
+            <section class="px-4 py-2" style="padding-right: 1.5rem !important;padding-top: 0.5rem !important">
+              <h1 class="font-weight-bold">Dear Man,</h1>
+              <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+              The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here,
+              content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text,
+              and a search for 'lorem ipsum' will uncover many web sites still in their infancy.
+              Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
               </p>
               <div class="my-4" style="margin-top: 1.5rem !important">
                 <h3 class="font-weight-bold d-flex align-items-center" style="align-items: center;display: flex;">
-                <img class="mr-2" :src="`/static/img/Asset491.png`" width="30" style="margin-right: 0.5rem !important;"/>
+                <img class="mr-2" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor+Landing+Page/Asset+491.svg" width="30" style="margin-right: 0.5rem !important;"/>
                   Our vision for your event</h3>
-                <p>{{ selectedProposal.eventVision }}</p>
+                <p>nd web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites
+                still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose
+                (injected humour and the like).</p>
               </div>
-              <div class="html2pdf__page-break"></div>
               <div>
                 <div class="font-weight-bold">Some references to the experience you will get from us</div>
-                <ul class="proposal-images" style="list-style: none;display: flex;flex-wrap: wrap;flex-direction: row;margin-top: 1rem !important">
-                    <li style="width: 200px;height: 160px;margin-right: 20px;" v-for="item in selectedProposal.inspirationalPhotos.filter((item) => !!item)"
-                             :key="item.url">
-                            <img class="item" :src="item.url"/>
-                            <div class="mt-5">{{ item.caption }}</div>
+                <ul class="proposal-images" style="list-style: none;display: flex;flex-direction: row;margin-top: 1rem !important">
+                    <li style="flex: 1;width: 200px;height: 160px;margin-right: 20px;">
+                        <img style="width: 100%;height: 100%;" src="https://maryoku.s3.amazonaws.com/proposal/inspirationalPhotos/60757eb2cfefec2676a084fe/photo-0.jpeg"/>
+                    </li>
+                    <li>
+                        <img style="width: 100%;height: 100%;" src="https://maryoku.s3.amazonaws.com/proposal/inspirationalPhotos/60757eb2cfefec2676a084fe/photo-1.png"/>
+                    </li>
+                    <li>
+                        <img style="width: 100%;height: 100%;" src="https://maryoku.s3.amazonaws.com/proposal/inspirationalPhotos/60757eb2cfefec2676a084fe/photo-2.png"/>
                     </li>
                 </ul>
               </div>
               <div class="mt-4" style="margin-top: 1.5rem !important;">
                 <h3 class="font-weight-bold custom-red" style="color: #f51355 !important;">About Us</h3>
                 <p class="mt-2" style="margin-top: 0.5rem !important;">
-                    {{ selectedProposal.vendor.about.company }}
+                    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
                 </p>
               </div>
-              <div class="mt-4" style="margin-top: 1.5rem !important;">
-                <h3 class="font-weight-bold">Contact Us</h3>
-                <ul class="d-flex" style="list-style: none;display: flex;flex-wrap: wrap;flex-direction: row;margin-top: 1rem !important">
-                        <li style="margin-right: 20px;" v-if="selectedProposal.vendor.vendorMainEmail">
-                            <a href>
-                                <img :src="`/static/img/Asset286.png`"/>
-                                {{ selectedProposal.vendor.vendorMainEmail }}
-                            </a>
-                        </li>
-                        <li style="margin-right: 20px;" v-if="selectedProposal.vendor.vendorAddressLine1">
-                            <a href>
-                                <img :src="`/static/img/Asset285.png`"/>
-                                {{ selectedProposal.vendor.vendorAddressLine1 }}
-                                {{ selectedProposal.vendor.vendorAddressLine2 }}
-                            </a>
-                        </li>
-                        <li style="margin-right: 20px;" v-if="selectedProposal.vendor.vendorMainPhoneNumber">
-                            <a href>
-                                <img :src="`/static/img/Asset284.png`"/>
-                                {{ selectedProposal.vendor.vendorMainPhoneNumber }}
-                            </a>
-                        </li>
-                </ul>
-              </div>
-              <div style="margin-top: 1.5rem;" v-if="isSocial()">
-                    <div>Website & social</div>
-                    <div style="margin-top: 1rem;">
-                        <div
-                            class="item"
-                            v-for="(s, sIndex) in socialMediaBlocks"
-                            :key="sIndex"
-                            :class="{ 'mr-20': selectedProposal.vendor.social[s.name] }"
-                        >
-                            <a
-                                v-if="selectedProposal.vendor.social[s.name]"
-                                :href="selectedProposal.vendor.social[s.name]"
-                                target="_blank"
-                            >
-                                <img :src="`${$iconURL}Vendor Signup/${s.icon}`" class="page-icon"/>
-                                {{ selectedProposal.vendor.social[s.name] }}
-                            </a>
-                        </div>
-                    </div>
-              </div>
             </section>
+          </div>
+          <div class="html2pdf__page-break"></div>
+          <div class="p-20 pdf-content">
             <section class="px-4 py-2 mt-4">
               <div class="d-flex align-items-center py-2">
-                <img class="mr-2" :src="`/static/img/Asset287.png`" style="margin-right: 0.5rem !important;width: 30px;height: 26px;"/>
+                <img class="mr-2" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Submit%20Proposal/Asset 287.svg" width="16"/>
                 <h3 class="font-weight-bold m-0">Our Policy</h3>
               </div>
               <p>What would you like to take from our suggested services?</p>
             </section>
             <section class="px-4 py-2">
               <div class="d-flex align-items-center py-2">
-                <img class="mr-2" :src="`/static/img/Asset10.png`" style="margin-right: 0.5rem !important;width: 16px;height: 32px;"/>
-                <h3 class="font-weight-bold m-0">Pricing & Details</h3>
+                <img class="mr-2" src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2010.svg" width="16"/>
+                <h3 class="font-weight-bold m-0">Pricing  Details</h3>
               </div>
+              <p></p>
             </section>
           </div>
         </section>
@@ -300,13 +260,11 @@
   </div>
 </template>
 <script>
-
 import ProposalListItem from "../components/ProposalListItem.vue";
 import ProposalRequestCard from "../components/ProposalRequestCard";
 import ProposalRequest from "@/models/ProposalRequest";
 import Proposal from "@/models/Proposal";
 import Vendor from "@/models/Vendors";
-import {socialMediaBlocks} from "@/constants/vendor";
 import carousel from "vue-owl-carousel";
 import {Loader, TablePagination, PieChart, Modal} from "@/components";
 import ProposalContent from "./detail";
@@ -358,8 +316,6 @@ export default {
       tab: 'all',
       showProposalDetail: false,
       selectedProposal: null,
-      selectedEventData: null,
-      socialMediaBlocks,
       pagination: {
         total: 0,
         won: 0,
@@ -369,7 +325,7 @@ export default {
         lost: 0,
         pageCount: 0,
         page: 0,
-        limit: 5,
+        limit: 6,
       },
       sortFields: {sort: '', order: ''},
       renderRender: true,
@@ -387,7 +343,11 @@ export default {
         this.renderRender = false;
         let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
         // let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '60b636d7cfefec26397d2a7e' })).get();
-        this.proposalRequests = proposalRequests.filter(p => p.remainingTime > 0 && p.declineMessage !== 'decline');
+        this.proposalRequests = proposalRequests.filter(p => {
+            let proposal = this.proposals.find(it => it.proposalRequestId === p.id);
+            return proposal ? p.remainingTime > 0 && p.declineMessage !== 'decline' && proposal.status !== 'submit' :
+                p.remainingTime > 0 && p.declineMessage !== 'decline';
+        });
 
         this.$nextTick(_ => {
            this.renderRender = true;
@@ -398,17 +358,18 @@ export default {
       const params = {status: this.tab, ...this.sortFields};
       const res = await new Proposal()
       .for(new Vendor({ id: this.vendorData.id }))
-      //   .for(new Vendor({ id: '60758222cfefec2676a0853d' }))
+      //   .for(new Vendor({ id: '60462793cfefec258a35e874' }))
         .page(pagination.page)
         .limit(pagination.limit)
         .params(params)
         .get();
       const data = res[0];
+
       this.proposals = data.items;
       this.proposals.map(it => console.log('proposal', it.proposalRequestId));
       this.pagination.total = data.total;
       this.proposalTabs.map(t => {
-        if (data.hasOwnProperty(t.key)) this.pagination[t.key] = data[t.key];
+          if (data.hasOwnProperty(t.key)) this.pagination[t.key] = data[t.key];
       })
       this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
     },
@@ -451,7 +412,7 @@ export default {
       });
     },
     async handleProposal(action, id){
-      this.selectedProposal = await this.proposals.find(it => it.id == id);
+      this.selectedProposal = this.proposals.find(it => it.id == id);
       if (action === 'show') {
           this.showProposalDetail = true;
 
@@ -464,50 +425,27 @@ export default {
       } else if (action === 'remove') {
         this.loading = true;
         const proposal = await Proposal.find(id)
-        proposal.delete();
-        this.proposals = this.proposals.filter(it => it.id !== id);
+        await proposal.delete();
 
-        this.$forceUpdate();
+        await this.getProposal();
+
         this.loading = false;
 
       } else if (action === 'download') {
-        this.selectedEventData = this.selectedProposal ? this.selectedProposal.proposalRequest.eventData : null;
         this.$refs.html2Pdf.generatePdf();
         //this.downloadProposal(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
       }
     },
     downloadProposal(link){
-      
+
         window.open(
             link,
             '_blank',
         )
     },
-    eventDate() {
-        const suggestionDate = this.selectedProposal.suggestionDate;
-        if (!this.selectedEventData) return "-";
-
-        let startDate = new Date(this.selectedEventData.eventStartMillis);
-        let endDate = new Date(this.selectedEventData.eventEndMillis);
-        if (suggestionDate && suggestionDate.length > 0) {
-            return `${moment(suggestionDate[0].date, "DD/MM/YYYY").format("MMM D, YYYY")} - ${moment(
-                suggestionDate[suggestionDate.length - 1].date,
-                "DD/MM/YYYY",
-            ).format("MMM D, YYYY")}`;
-        }
-        return `${moment(startDate).format("MMM D, YYYY")} - ${moment(endDate).format("MMM D, YYYY")}`;
-    },
-    isSocial() {
-                let isBlank = true;
-                _.each(this.selectedProposal.vendor.social, (s) => {
-                    isBlank &= s === null;
-                });
-
-                return !isBlank;
-      },
     async init() {
-        await this.getData();
         await this.getProposal();
+        await this.getData();
         this.loading = false;
     }
   },
@@ -536,18 +474,6 @@ export default {
             orientation: 'portrait',
         },
       }
-    },
-    headerBackgroundImage() {
-      if (!this.selectedProposal)
-        return "";
-                if (this.selectedProposal.inspirationalPhotos && this.selectedProposal.inspirationalPhotos[0])
-                    return this.selectedProposal.inspirationalPhotos[0].url;
-                if (this.selectedProposal.vendor.images && this.selectedProposal.vendor.images[0])
-                    return this.selectedProposal.vendor.images[0];
-                if (this.selectedProposal.vendor.vendorImages && this.selectedProposal.vendor.vendorImages[0])
-                    return this.selectedProposal.vendor.vendorImages[0];
-
-                return "";
     },
   },
   watch: {

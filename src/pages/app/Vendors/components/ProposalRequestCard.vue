@@ -41,19 +41,16 @@
       </md-button>
       <div class="ml-auto">
           <div v-if="proposal">
-              <div v-if="proposal.status === 'save'">
+              <div v-if="proposal.status === 'draft'">
                   <div class="font-size-14"><span class="font-bold color-vendor">60%</span> completed</div>
                   <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="60"></md-progress-bar>
-              </div>
-              <div v-if="proposal.status === 'submit'">
-                  <a class="color-red text-decoration-none cursor-pointer font-size-14">Negotiation Request</a>
               </div>
           </div>
           <div v-else class="new color-vendor font-size-14 ml-auto">
               New
           </div>
           <md-button class="md-vendor" @click="gotoProposalRequest" style="height: 30px">
-              {{!proposal ? 'Apply' : proposal.status === 'save' ? 'Finish' : 'Make Changes'}}
+              {{!proposal ? 'Apply' : proposal.status === 'draft' ? 'Complete' : 'Make Changes'}}
           </md-button>
       </div>
 

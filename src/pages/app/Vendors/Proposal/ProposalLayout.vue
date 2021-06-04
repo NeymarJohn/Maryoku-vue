@@ -19,7 +19,7 @@
       <div class="next-cont">
         <span>You can return to it till the deadline!</span>
         <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`" /> Discard </a>
-        <a class="save" @click="uploadProposal('save')">
+        <a class="save" @click="uploadProposal('draft')">
           <img :src="`${proposalIconsUrl}Asset 610.svg`" /> Save for later
         </a>
         <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
