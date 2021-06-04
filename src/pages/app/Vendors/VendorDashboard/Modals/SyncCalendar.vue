@@ -127,6 +127,8 @@ export default {
       });
     },
     handleMsAuthClick() {
+      const timeZoneName = convertTimezoneName(this.campaign.event.timezone);
+
       this.events.forEach((e) => {
         let newEvent = {
           subject: e.customer.name,

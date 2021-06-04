@@ -46,11 +46,7 @@
       </md-switch>
       <md-button class="md-simple ml-auto md-vendor" @click="showSyncModal = true"> Sync With Calendar</md-button>
     </div>
-    <sync-calendar-modal
-      v-if="showSyncModal"
-      :events="eventsForThisMonth"
-      @close="showSyncModal = false"
-    ></sync-calendar-modal>
+    <sync-calendar-modal v-if="showSyncModal" :events="eventsForThisMonth"></sync-calendar-modal>
   </div>
 </template>
 <script>

@@ -273,14 +273,12 @@ export default {
       });
       return services.map((vc, idx) => {
         let cat = this.serviceCategories.find((c) => c.key == vc);
-        if (cat)
-          return {
-            title: cat.title,
-            value: 12 / this.vendorData.vendorCategories.length,
-            color: this.categoryColors[idx],
-            image: `/static/icons/vendor/vendor_categories/${cat.icon}`,
-          };
-        return null;
+        return {
+          title: cat.title,
+          value: 12 / this.vendorData.vendorCategories.length,
+          color: this.categoryColors[idx],
+          image: `/static/icons/vendor/vendor_categories/${cat.icon}`,
+        };
       });
     },
   },

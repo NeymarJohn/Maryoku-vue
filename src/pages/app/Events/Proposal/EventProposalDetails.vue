@@ -43,7 +43,7 @@
               </li>
             </ul>
           </div>
-          <timer-panel class="time-counter" :target="targetTime" @updateExpireDate="updateExpireDate"></timer-panel>
+          <timer-panel class="time-counter" :target="targetTime"></timer-panel>
         </div>
 
         <div class="proposal-body">
@@ -352,7 +352,6 @@ import { Tabs, Modal, Loader } from "@/components";
 import EventBudgetVendors from "../components/EventBudgetVendors";
 import EditEventBlocksBudget from "../components/EditEventBlocksBudget";
 import EventComponentVendor from "@/models/EventComponentVendor";
-import EventComponentProposal from "@/models/EventComponentProposal";
 //COMPONENTS
 
 import SideBar from "@/components/SidebarPlugin/NewSideBar";
@@ -554,17 +553,6 @@ export default {
     },
     closeDetail() {
       this.$emit("close");
-    },
-    updateExpireDate() {
-      let newExpiredDate = 0;
-      if (this.vendorProposal.expiredDate) {
-        newExpiredDate = new Date(this.vendorProposal.expiredDate).getTime() + 2 * 3600 * 24 * 1000;
-      } else {
-        newExpiredDate = new Date(this.vendorProposal.dateCreated).getTime() + 9 * 3600 * 24 * 1000;
-      }
-      new EventComponentProposal({ id: this.vendorProposal.id, expiredDate: newExpiredDate }).save().then((res) => {
-        this.vendorProposal = res
-      });
     },
   },
   computed: {
