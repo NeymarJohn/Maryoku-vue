@@ -77,14 +77,14 @@
             <div class="white-card">
               <div style="border-bottom: 2px solid #c8c8c8">
                 <div class="pt-10 d-flex align-center justify-content-center font-bold">
-                  <md-button class="md-button md-theme-default md-simple md-just-icon"
-                    ><md-icon>chevron_left</md-icon></md-button
-                  >
+                  <md-button class="md-button md-theme-default md-simple md-just-icon">
+                    <md-icon>chevron_left</md-icon>
+                  </md-button>
                   <span class="font-size-20 mr-10"> 0/0 </span>
-                  PROPOSALS FOR REQUEST
-                  <md-button class="md-button md-theme-default md-simple md-just-icon"
-                    ><md-icon>chevron_right</md-icon></md-button
-                  >
+                  CHANGE REQUESTS
+                  <md-button class="md-button md-theme-default md-simple md-just-icon">
+                    <md-icon>chevron_right</md-icon>
+                  </md-button>
                 </div>
               </div>
 

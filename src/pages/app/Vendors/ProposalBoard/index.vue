@@ -18,8 +18,8 @@
           ref="html2Pdf"
       >
         <section slot="pdf-content" v-if="selectedProposal && selectedEventData">
-          <div class="p-20" style="margin-top: 0;">
-            <section :style="`height: 500px; background: url('${headerBackgroundImage()}') no-repeat center; background-size: cover !important;`">
+          <div class="p-20" style="margin-top: 0px;">
+            <div :style="`height: 500px; background: url('${headerBackgroundImage()}') no-repeat center; background-size: cover !important;`">
               <div class="bg-custom-transparent" style="background: rgba(255, 255, 255,0.76);padding: 1.5rem !important;margin-top: 0;height: 200px">
                   <h3 class="font-weight-bold">Event Information  Details</h3>
                   <ul class="event-detail mt-3" style="list-style: none;display: flex;flex-direction: row;margin-top: 1rem !important">
@@ -46,17 +46,17 @@
                       </li>
                   </ul>
               </div>
-            </section>
-            <section>
+            </div>
+            <div>
               <h2 class="font-weight-bold">Dear {{ selectedProposal.vendor.vendorDisplayName }},</h2>
               <p>
                 {{ selectedProposal.personalMessage }}
               </p>
-            </section>
+            </div>
           </div>
 
           <div class="p-20">
-            <section class="px-4 py-2">
+            <div class="px-4 py-2">
               <div class="my-4" style="margin-top: 1.5rem !important">
                 <h3 class="font-weight-bold d-flex align-items-center" style="align-items: center;display: flex;">
                 <img class="mr-2" :src="`/static/img/Asset491.png`" width="30" style="margin-right: 0.5rem !important;"/>
@@ -149,22 +149,22 @@
                         </div>
                     </div>
               </div>
-            </section>
+            </div>
           </div>
           <div class="p-20">
-            <section class="px-4 py-2 mt-4">
+            <div class="px-4 py-2 mt-4">
               <div class="d-flex align-items-center py-2">
                 <img class="mr-2" :src="`/static/img/Asset287.png`" style="margin-right: 0.5rem !important;width: 30px;height: 26px;"/>
                 <h3 class="font-weight-bold m-0">Our Policy</h3>
               </div>
               <p>What would you like to take from our suggested services?</p>
-            </section>
-            <section class="px-4 py-2">
+            </div>
+            <div class="px-4 py-2">
               <div class="d-flex align-items-center py-2">
                 <img class="mr-2" :src="`/static/img/Asset10.png`" style="margin-right: 0.5rem !important;width: 16px;height: 32px;"/>
                 <h3 class="font-weight-bold m-0">Pricing & Details</h3>
               </div>
-            </section>
+            </div>
           </div>
         </section>
       </vue-html2pdf>

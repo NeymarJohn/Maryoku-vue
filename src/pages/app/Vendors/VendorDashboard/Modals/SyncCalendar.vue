@@ -9,14 +9,14 @@
       <div>
         <div>Choose your email account:</div>
         <div class="mt-30">
-          <md-radio v-model="emailAccount" class="mr-60" value="google">
+          <md-radio v-model="emailAccount" class="mr-60 md-purple" value="google">
             <img :src="`${$iconURL}common/google.svg`" style="margin-top: -10px; width: 40px" />
           </md-radio>
-          <md-radio v-model="emailAccount" value="outlook">
+          <md-radio v-model="emailAccount" value="outlook" class="md-purple">
             <img :src="`${$iconURL}common/outlook.svg`" style="margin-top: -10px; width: 40px" />
           </md-radio>
         </div>
-        <md-button class="md-outlined md-simple md-red mt-20 sync_button" @click="syncCalendar">Sync</md-button>
+        <md-button class="md-outlined md-simple md-vendor mt-20 sync_button" @click="syncCalendar">Sync</md-button>
       </div>
     </template>
     <template slot="footer"> </template>
@@ -163,7 +163,7 @@ export default {
   .sync_button {
     width: 250px;
     height: 50px;
-    border: solid 1px #f51355;
+    border: solid 1px #641856;
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
   }
 }

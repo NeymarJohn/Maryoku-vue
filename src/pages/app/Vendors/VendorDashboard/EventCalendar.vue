@@ -17,16 +17,56 @@
         </ul>
         <ul class="calendar__content">
           <li v-for="item in buildCalendar">
+            <popper trigger="hover" :options="{ placement: 'right' }" v-if="eventsForDate[Number(item.number)]">
+              <div class="popper-content white-card">
+                <div class="font-size-22 popper-header"></div>
+                <div>
+                  <div v-for="event in eventsForDate[Number(item.number)]">
+                    <div>
+                      {{ $dateUtil.formatScheduleDay(event.startTime, "HH:mm") }} -
+                      {{ $dateUtil.formatScheduleDay(event.endTime, "HH:mm") }}
+                    </div>
+                    <div>
+                      <span class="font-bold">{{ event.customerName }}</span>
+                      {{ event.companyName }}
+                    </div>
+                    <hr />
+                  </div>
+                </div>
+              </div>
+              <a
+                href="javascript:;"
+                class="calendar__item"
+                :class="{
+                  'is-today': item.today === true,
+                  current: eventsForDate[Number(item.number)],
+                  'has-event': eventsForDate[Number(item.number)],
+                  'is-blackout': isBlackoutDay(item),
+                }"
+                @click.prevent="getDateData(item)"
+                slot="reference"
+              >
+                {{ item.number }}
+                <div
+                  class="event-add-badge"
+                  v-if="eventsForDate[Number(item.number)] && eventsForDate[Number(item.number)].length > 1"
+                >
+                  <span class=""><md-icon>add</md-icon></span>
+                </div>
+              </a>
+            </popper>
             <a
               href="javascript:;"
               class="calendar__item"
               :class="{
                 'is-today': item.today === true,
                 current: eventsForDate[Number(item.number)],
-                'has-event': eventsForDate[Number(item.number)] && eventsForDate[Number(item.number)].length > 1,
+                'has-event': eventsForDate[Number(item.number)],
                 'is-blackout': isBlackoutDay(item),
               }"
               @click.prevent="getDateData(item)"
+              slot="reference"
+              v-else
             >
               {{ item.number }}
               <div
@@ -36,6 +76,8 @@
                 <span class=""><md-icon>add</md-icon></span>
               </div>
             </a>
+            <!-- 
+            </popper> -->
           </li>
         </ul>
       </div>
@@ -56,10 +98,13 @@
 <script>
 import moment from "moment";
 import SyncCalendarModal from "./Modals/SyncCalendar";
+import Popper from "vue-popperjs";
+import "vue-popperjs/dist/vue-popper.css";
 
 export default {
   components: {
     SyncCalendarModal,
+    Popper,
   },
   data() {
     return {
@@ -319,19 +364,19 @@ $color-gray-dark: #929292;
     color: $color-black;
     display: inline-block;
     border-radius: 50%;
+    width: 46.3px;
+    height: 46.3px;
+    margin: 5px;
     &.current {
-      width: 46.3px;
-      height: 46.3px;
       background-color: #d5d5d5;
       font-weight: bold;
     }
     &.is-today {
       font-weight: bold;
       font-family: "Manrope-ExtraBold";
+      background-color: rgba(100, 24, 86, 0.25);
     }
     &.is-blackout {
-      width: 46.3px;
-      height: 46.3px;
       background-color: $color-black;
       color: $color-white;
     }
@@ -451,6 +496,13 @@ $color-gray-dark: #929292;
   .fade-enter,
   .fade-leave-to {
     opacity: 0;
+  }
+  .popper-content {
+    padding: 20px;
+    box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.26);
+    text-align: left;
+    z-index: 10;
+    border-radius: 5px;
   }
 }
 </style>
