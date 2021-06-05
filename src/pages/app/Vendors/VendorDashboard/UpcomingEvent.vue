@@ -32,7 +32,7 @@ export default {
         return "This Week";
       }
       const days = this.$dateUtil.getLeftDays(d);
-      return `Within ${days} days`;
+      return `Within ${days}days`;
     },
   },
 };

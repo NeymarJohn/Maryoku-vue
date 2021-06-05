@@ -48,12 +48,6 @@
       font-weight: bold;
     }
   }
-  &.md-theme-default.md-purple.md-checked  .md-radio-container{
-    border-color: $vendorColor !important;
-    &:after {
-        background-color: $vendorColor !important;
-    }
-  }
 
   &.md-disabled .md-radio-label,
   &.md-disabled .md-radio-container{

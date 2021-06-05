@@ -1,16 +1,22 @@
 <template>
-  <div class="proposal-time-counter">
+  <div class="proposal-time-counter" v-if="!isExpired">
     <div class="font-bold">This offer will expire in</div>
     <hr />
     <timer size="big" :target="target"></timer>
-    <div>
-      <md-button class="maryoku-btn md-simple md-red mt-10">Ask for more time</md-button>
+    <div class="button-wrapper">
+      <md-button class="maryoku-btn md-simple md-red" @click="updateExpireTime">Ask for more time</md-button>
+    </div>
+  </div>
+  <div class="proposal-time-counter" v-else>
+    <div class="font-bold">
+      This proposal is expired on <br />{{ $dateUtil.formatScheduleDay(target, "MMMM DD, YYYY") }}
     </div>
   </div>
 </template>
 <script>
 import Timer from "../../../../components/Timer.vue";
 import TimeCounter from "../components/TimeCounter.vue";
+import Swal from "sweetalert2";
 
 export default {
   components: { TimeCounter, Timer },
@@ -18,6 +24,28 @@ export default {
     target: {
       type: [Date, Number],
       default: new Date(),
+    },
+  },
+  methods: {
+    updateExpireTime() {
+      Swal.fire({
+        title: "Are you sure?",
+        text: `You'll get more 2 days.`,
+        showCancelButton: true,
+        confirmButtonClass: "md-button md-success btn-fill",
+        cancelButtonClass: "md-button md-danger btn-fill",
+        confirmButtonText: "Yes, I'm sure",
+        buttonsStyling: false,
+      }).then((result) => {
+        if (result.value) {
+          this.$emit("updateExpireDate");
+        }
+      });
+    },
+  },
+  computed: {
+    isExpired() {
+      return new Date(this.target).getTime() - new Date().getTime() < 0;
     },
   },
 };
@@ -30,8 +58,16 @@ export default {
   text-align: center;
   padding: 20px;
   border-radius: 3px;
-  .md-button {
+  .button-wrapper {
     background-color: white !important;
+    margin: auto;
+    width: max-content;
+    .md-button {
+      background-color: white !important;
+      &:hover {
+        background-color: white !important;
+      }
+    }
   }
   hr {
     background-color: white;

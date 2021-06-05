@@ -21,17 +21,17 @@
     <div v-if="expanded" class="font-size-14">
         <div class="d-flex align-center mt-1">
             <div class="width-50 d-flex align-center">
-                <img class="mr-10" :src="`${iconUrl}Vendor Signup/Asset 550.svg`" style="width: 18px">
+                <img class="mr-10" :src="`${iconUrl}Onboarding/Group%204458.svg`" style="width: 18px">
                 {{proposalRequest.eventData.dateCreated | date("MM/DD/YY")}}</div>
             <div class="width-50 d-flex align-center">
-                <img class="mr-10" :src="`${iconUrl}Vendor Signup/Asset 550.svg`" style="width: 18px">
+                <img class="mr-10" :src="`${iconUrl}VendorsProposalPage/group-4341.svg`" style="width: 18px">
                 {{proposalRequest.eventData.location}}</div>
         </div>
         <div class="d-flex align-center mt-1 mb-1">
             <div class="width-50 d-flex align-center">
-                <img class="mr-10" :src="`${iconUrl}Vendor Signup/Asset 550.svg`" style="width: 18px"> 11:00 AM ~ 4:00PM</div>
+                <img class="mr-10" :src="`${iconUrl}VendorsProposalPage/group-4392.svg`" style="width: 18px"> 11:00 AM ~ 4:00PM</div>
             <div class="width-50 d-flex align-center">
-                <img class="mr-10" :src="`${iconUrl}Vendor Signup/Asset 550.svg`" style="width: 18px">
+                <img class="mr-10" :src="`${iconUrl}VendorsProposalPage/group-3485.svg`" style="width: 18px">
                 {{proposalRequest.eventData.numberOfParticipants | withComma(Number)}}</div>
         </div>
     </div>
@@ -41,19 +41,16 @@
       </md-button>
       <div class="ml-auto">
           <div v-if="proposal">
-              <div v-if="proposal.status === 'save'">
+              <div v-if="proposal.status === 'draft'">
                   <div class="font-size-14"><span class="font-bold color-vendor">60%</span> completed</div>
                   <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="60"></md-progress-bar>
-              </div>
-              <div v-if="proposal.status === 'submit'">
-                  <a class="color-red text-decoration-none cursor-pointer font-size-14">Negotiation Request</a>
               </div>
           </div>
           <div v-else class="new color-vendor font-size-14 ml-auto">
               New
           </div>
           <md-button class="md-vendor" @click="gotoProposalRequest" style="height: 30px">
-              {{!proposal ? 'Apply' : proposal.status === 'save' ? 'Finish' : 'Make Changes'}}
+              {{!proposal ? 'Apply' : proposal.status === 'draft' ? 'Complete' : 'Make Changes'}}
           </md-button>
       </div>
 
@@ -105,6 +102,9 @@ export default {
       this.$emit('dismiss', id);
     }
   },
+  mounted() {
+    console.log('proposal.card', this.vendor);
+  }
 };
 </script>
 <style lang="scss" scoped>
