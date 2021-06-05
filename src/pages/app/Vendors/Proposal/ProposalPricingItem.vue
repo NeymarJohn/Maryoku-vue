@@ -305,7 +305,7 @@ export default {
       //     time: "",
       //     date: "",
       //   };
-      let serviceTimeString = this.category === "venuerental" ? "All Day" : "Not planned yet";
+      let serviceTimeString = this.category === "venuerental" ? "For Whole Event" : "Not planned yet";
       let serviceDate = "";
       timelineDates.forEach((td) => {
         td.timelineItems.forEach((timelineItem) => {

@@ -29,8 +29,8 @@
           <div class="popper white-card" v-if="item.category == 'accepted'">
             <div class="font-size-22 popper-header">
               <span :style="`background-color:${item.color}`" class="dot"></span>
-              <span class="font-bold">{{ item.label }}</span
-              >({{ item.list.length }})
+              <span class="font-bold">{{ item.label }}</span>
+              ({{ item.list.length }})
             </div>
             <div class="d-flex">
               <div class="left-column">

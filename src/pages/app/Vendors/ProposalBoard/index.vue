@@ -324,7 +324,7 @@ export default {
           return p.id !== id;
       });
     },
-    async handleProposal(action, id){
+    handleProposal(action, id){
       this.selectedProposal = this.proposals.find(it => it.id == id);
       if (action === 'show') {
           this.showProposalDetail = true;
@@ -335,14 +335,8 @@ export default {
               vendorId: this.selectedProposal.vendor.id, id: this.selectedProposal.proposalRequest.id, type: 'edit'}});
           window.open(routeData.href, '_blank');
 
-      } else if (action === 'remove') {
-        this.loading = true;
-        const proposal = await Proposal.find(id)
-
-        proposal.delete();
-        this.getProposal();
-        this.$forceUpdate();
-        this.loading = false;
+      } else if (action === 'duplicate') {
+          this.$router.push(`/vendors/${this.selectedProposal.vendor.id}/proposal-request/${this.selectedProposal.proposalRequest.id}/form/duplicate`);
 
       } else if (action === 'download') {
 

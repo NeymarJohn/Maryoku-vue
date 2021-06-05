@@ -247,7 +247,6 @@ export default {
       font: 800 16px Manrope-Regular, sans-serif;
       color: #f51355;
       cursor: pointer;
-      text-decoration: none !important;
       i {
         color: #f51355 !important;
         position: relative;

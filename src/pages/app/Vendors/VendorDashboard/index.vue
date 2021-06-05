@@ -77,14 +77,14 @@
             <div class="white-card">
               <div style="border-bottom: 2px solid #c8c8c8">
                 <div class="pt-10 d-flex align-center justify-content-center font-bold">
-                  <md-button class="md-button md-theme-default md-simple md-just-icon"
-                    ><md-icon>chevron_left</md-icon></md-button
-                  >
+                  <md-button class="md-button md-theme-default md-simple md-just-icon">
+                    <md-icon>chevron_left</md-icon>
+                  </md-button>
                   <span class="font-size-20 mr-10"> 0/0 </span>
-                  PROPOSALS FOR REQUEST
-                  <md-button class="md-button md-theme-default md-simple md-just-icon"
-                    ><md-icon>chevron_right</md-icon></md-button
-                  >
+                  CHANGE REQUESTS
+                  <md-button class="md-button md-theme-default md-simple md-just-icon">
+                    <md-icon>chevron_right</md-icon>
+                  </md-button>
                 </div>
               </div>
 
@@ -136,6 +136,7 @@ import IncomeChart from "./IncomeChart";
 import moment from "moment";
 import _ from "underscore";
 import VendorCreateEventModal from "./Modals/VendorCreateEvent";
+import SyncCalendarModal from "./Modals/SyncCalendar";
 import UserEvent from "@/models/UserEvent";
 import UpcomingEvent from "./UpcomingEvent.vue";
 import EventCalendar from "./EventCalendar.vue";
@@ -149,6 +150,7 @@ export default {
     VendorCreateEventModal,
     UpcomingEvent,
     EventCalendar,
+    SyncCalendarModal,
   },
   data() {
     return {
@@ -191,7 +193,12 @@ export default {
   methods: {
     handleSaveEvent(savedEvent) {
       this.upcomingEvents.push(savedEvent);
+      this.upcomingEvents.sort((a, b) => {
+        return a.startTime > b.startTime ? 1 : -1;
+      });
+      this.upcomingEvents = [...this.upcomingEvents.slice(0, 5)];
       this.showVendorCreateModal = false;
+      this.$root.$emit("addNewEvent", savedEvent);
     },
     getMarkedDates() {
       let markedDates = [];
@@ -246,7 +253,7 @@ export default {
         .get()
         .then((events) => {
           console.log(events);
-          this.upcomingEvents = events;
+          this.upcomingEvents = events.slice(0, 5);
         });
     },
   },
@@ -266,12 +273,14 @@ export default {
       });
       return services.map((vc, idx) => {
         let cat = this.serviceCategories.find((c) => c.key == vc);
-        return {
-          title: cat.title,
-          value: 12 / this.vendorData.vendorCategories.length,
-          color: this.categoryColors[idx],
-          image: `/static/icons/vendor/vendor_categories/${cat.icon}`,
-        };
+        if (cat)
+          return {
+            title: cat.title,
+            value: 12 / this.vendorData.vendorCategories.length,
+            color: this.categoryColors[idx],
+            image: `/static/icons/vendor/vendor_categories/${cat.icon}`,
+          };
+        return null;
       });
     },
   },
