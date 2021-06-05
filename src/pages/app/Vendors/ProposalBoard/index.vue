@@ -73,30 +73,6 @@
                             <img class="item" :src="item.url"/>
                             <div class="mt-5">{{ item.caption }}</div>
                   </li>
-                    <!-- <li style="width: 200px;height: 160px;margin-right: 20px;" v-if="selectedProposal.inspirationalPhotos.length > 0 && selectedProposal.inspirationalPhotos[0]">
-                            <img class="item" :src="selectedProposal.inspirationalPhotos[0].url" />
-                            <div class="mt-5">{{ selectedProposal.inspirationalPhotos[0].caption }}</div>
-                    </li>
-                    <li style="width: 200px;height: 160px;margin-right: 20px;" v-if="selectedProposal.inspirationalPhotos.length > 1 && selectedProposal.inspirationalPhotos[1]">
-                            <img class="item" :src="selectedProposal.inspirationalPhotos[1].url" />
-                            <div class="mt-5">{{ selectedProposal.inspirationalPhotos[1].caption }}</div>
-                    </li>
-                    <li style="width: 200px;height: 160px;margin-right: 20px;" v-if="selectedProposal.inspirationalPhotos.length > 2 && selectedProposal.inspirationalPhotos[2]">
-                            <img class="item" :src="selectedProposal.inspirationalPhotos[2].url" />
-                            <div class="mt-5">{{ selectedProposal.inspirationalPhotos[2].caption }}</div>
-                    </li>
-                    <li style="width: 200px;height: 160px;margin-right: 20px;" v-if="selectedProposal.inspirationalPhotos.length > 3 && selectedProposal.inspirationalPhotos[3]">
-                            <img class="item" :src="selectedProposal.inspirationalPhotos[3].url" />
-                            <div class="mt-5">{{ selectedProposal.inspirationalPhotos[3].caption }}</div>
-                    </li>
-                    <li style="width: 200px;height: 160px;margin-right: 20px;" v-if="selectedProposal.inspirationalPhotos.length > 4 && selectedProposal.inspirationalPhotos[4]">
-                            <img class="item" :src="selectedProposal.inspirationalPhotos[4].url" />
-                            <div class="mt-5">{{ selectedProposal.inspirationalPhotos[4].caption }}</div>
-                    </li>
-                    <li style="width: 200px;height: 160px;margin-right: 20px;" v-if="selectedProposal.inspirationalPhotos.length > 5 && selectedProposal.inspirationalPhotos[5]">
-                            <img class="item" :src="selectedProposal.inspirationalPhotos[5].url" />
-                            <div class="mt-5">{{ selectedProposal.inspirationalPhotos[5].caption }}</div>
-                    </li> -->
                 </ul>
               </div>
               <div class="mt-4" style="margin-top: 1.5rem !important;">
