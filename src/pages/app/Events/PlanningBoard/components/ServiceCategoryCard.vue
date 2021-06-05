@@ -69,7 +69,7 @@
         </span>
       </template>
     </carousel>
-    <div class="p-20 font-bold d-flex align-center justify-content-between card-info">
+    <div class="p-20 font-bold d-flex align-center justify-content-between">
       <span class="service-name">{{ serviceCategory.name }}</span>
       <template v-if="hasBudget">
         <md-button v-show="selectedServices.length > 0" class="md-red maryoku-btn" @click="getSpecification">
@@ -138,7 +138,7 @@ export default {
         entertainment: "NewRequirements/Group 18015.svg",
         swag: "NewRequirements/Group 18008.svg",
         audiovisualstagingservices: "NewRequirements/Group 18008.svg",
-        administration: "NewRequirements/Group 18008.svg",
+        corporatesocialresponsibility: "NewRequirements/Group 18008.svg",
         transportation: "NewRequirements/Group 18016.svg",
         giveaways: "NewRequirements/Group 18008.svg",
         meetingorganizationfees: "NewRequirements/Group 18008.svg",
@@ -217,7 +217,6 @@ export default {
   flex-direction: column;
   .header-carousel {
     flex: 1;
-    max-height: calc(100% - 80px);
   }
   .service-name {
     display: inline-block;
@@ -227,9 +226,6 @@ export default {
     height: 600px;
     img.carousel-image {
       height: 100%;
-      width: 100%;
-      max-height: 100%;
-      max-width: 100%;
       object-fit: cover;
     }
   }
@@ -348,9 +344,6 @@ export default {
     padding: 40px;
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.26);
     text-align: left;
-  }
-  .card-info {
-    min-height: 80px;
   }
 }
 </style>

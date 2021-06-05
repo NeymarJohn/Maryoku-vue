@@ -18,7 +18,6 @@
             :key="tag"
             :isSelected="selectedTags.includes(tag)"
             v-for="tag in tags"
-            class="m-5"
           ></tag-item>
         </div>
       </div>
@@ -63,7 +62,7 @@ export default {
   },
   data() {
     return {
-      tags: ["Sustainability", "Inclusion", "Security", "Signage & Printing", "Covid-19"],
+      tags: ["Sustainability", "Inclusion", "Security", "Covid-19"],
       selectedTags: [],
       speicalRequirements: {
         Sustainability: [
@@ -116,25 +115,6 @@ export default {
             ],
           },
         ],
-        "Signage & Printing": [
-          {
-            subCategory: "Services",
-            items: [
-              { name: "Social media promotion", selected: false },
-              { name: "Event registration tracking", selected: false },
-              { name: "Graphic design services", selected: false },
-            ],
-          },
-          {
-            subCategory: "High profile sourcing",
-            items: [
-              { name: "Politicians", selected: false },
-              { name: "Celebrities", selected: false },
-              { name: "Influencers", selected: false },
-              { name: "Artists", selected: false },
-            ],
-          },
-        ],
         "Covid-19": [
           {
             subCategory: "Requests for all stuff members",
@@ -161,8 +141,10 @@ export default {
     },
   },
   created() {
+    console.log("this.defaultData", this.defaultData);
     this.selectedTags = Object.keys(this.defaultData);
     this.speicalRequirements = { ...this.speicalRequirements, ...this.defaultData };
+    console.log(this.speicalRequirements);
   },
   methods: {
     onCancel: function (e) {

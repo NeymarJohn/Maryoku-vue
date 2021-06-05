@@ -53,13 +53,6 @@
       height: 13px;
     }
   }
-  &.md-checked.md-vendor .md-checkbox-container {
-    border: 3px solid $vendorColor !important;
-    &:after{
-      // border-color: $brand-primary !important;
-      border-color: $vendorColor !important;
-    }
-  }
 
   .md-checkbox-label{
     font-weight: 400;

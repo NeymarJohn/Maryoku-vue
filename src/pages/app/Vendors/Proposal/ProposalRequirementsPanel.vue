@@ -234,7 +234,6 @@ export default {
   .type-tag {
     display: inline-block;
     border: solid 1px #f51355;
-    color: #f51355;
     border-radius: 30px;
     padding: 5px 20px;
     margin: 0px 10px 10px 0;

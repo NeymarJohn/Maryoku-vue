@@ -15,84 +15,7 @@
           :html-to-pdf-options="htmlToPdfOptions"
           ref="html2Pdf"
       >
-        <section slot="pdf-content">
-          <div class="p-20 pdf-content">
-            <section style="position: relative;">
-              <img src="https://maryoku.s3.amazonaws.com/proposal/inspirationalPhotos/6071631fcfefec2676a08362/photo-0.png" style="width:100%;height: 500px"/>
-              <div class="p-4 position-absolute bg-custom-transparent" style="background: rgba(255, 255, 255,0.76);position: absolute;padding: 1.5rem !important;top:0;left:0;right:0;height: 100px">
-                  <h3 class="font-weight-bold">Event Information  Details</h3>
-                  <ul class="event-detail mt-3" style="list-style: none;display: flex;flex-direction: row;margin-top: 1rem !important">
-                      <li class="border-line-end" style="border-right: 1px solid #818080;flex: 1;padding-right: 80px;padding-bottom: 10px;margin-right: 80px;">
-                          <label class="font-weight-bold">Name</label>
-                          <div>Event</div>
-                      </li>
-                      <li class="border-line-end" style="border-right: 1px solid #818080;flex: 1;padding-right: 80px;padding-bottom: 10px;margin-right: 80px;">
-                          <label class="font-weight-bold">Date</label>
-                          <div>Date</div>
-                      </li>
-                      <li class="" style="flex: 1;padding-right: 80px;padding-bottom: 10px;margin-right: 80px;">
-                          <label class="font-weight-bold">Guest Arrival Time</label>
-                          <div>Time</div>
-                      </li>
-                  </ul>
-              </div>
-            </section>
-            <section class="px-4 py-2" style="padding-right: 1.5rem !important;padding-top: 0.5rem !important">
-              <h1 class="font-weight-bold">Dear Man,</h1>
-              <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
-              The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here,
-              content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text,
-              and a search for 'lorem ipsum' will uncover many web sites still in their infancy.
-              Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-              </p>
-              <div class="my-4" style="margin-top: 1.5rem !important">
-                <h3 class="font-weight-bold d-flex align-items-center" style="align-items: center;display: flex;">
-                <img class="mr-2" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor+Landing+Page/Asset+491.svg" width="30" style="margin-right: 0.5rem !important;"/>
-                  Our vision for your event</h3>
-                <p>nd web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites
-                still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose
-                (injected humour and the like).</p>
-              </div>
-              <div>
-                <div class="font-weight-bold">Some references to the experience you will get from us</div>
-                <ul class="proposal-images" style="list-style: none;display: flex;flex-direction: row;margin-top: 1rem !important">
-                    <li style="flex: 1;width: 200px;height: 160px;margin-right: 20px;">
-                        <img style="width: 100%;height: 100%;" src="https://maryoku.s3.amazonaws.com/proposal/inspirationalPhotos/60757eb2cfefec2676a084fe/photo-0.jpeg"/>
-                    </li>
-                    <li>
-                        <img style="width: 100%;height: 100%;" src="https://maryoku.s3.amazonaws.com/proposal/inspirationalPhotos/60757eb2cfefec2676a084fe/photo-1.png"/>
-                    </li>
-                    <li>
-                        <img style="width: 100%;height: 100%;" src="https://maryoku.s3.amazonaws.com/proposal/inspirationalPhotos/60757eb2cfefec2676a084fe/photo-2.png"/>
-                    </li>
-                </ul>
-              </div>
-              <div class="mt-4" style="margin-top: 1.5rem !important;">
-                <h3 class="font-weight-bold custom-red" style="color: #f51355 !important;">About Us</h3>
-                <p class="mt-2" style="margin-top: 0.5rem !important;">
-                    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-                </p>
-              </div>
-            </section>
-          </div>
-          <div class="html2pdf__page-break"></div>
-          <div class="p-20 pdf-content">
-            <section class="px-4 py-2 mt-4">
-              <div class="d-flex align-items-center py-2">
-                <img class="mr-2" src="https://static-maryoku.s3.amazonaws.com/storage/icons/Submit%20Proposal/Asset 287.svg" width="16"/>
-                <h3 class="font-weight-bold m-0">Our Policy</h3>
-              </div>
-              <p>What would you like to take from our suggested services?</p>
-            </section>
-            <section class="px-4 py-2">
-              <div class="d-flex align-items-center py-2">
-                <img class="mr-2" src="https://static-maryoku.s3.amazonaws.com/storage/icons/budget+screen/SVG/Asset%2010.svg" width="16"/>
-                <h3 class="font-weight-bold m-0">Pricing  Details</h3>
-              </div>
-              <p></p>
-            </section>
-          </div>
-        </section>
+          <pdf-content slot="pdf-content" v-if="selectedProposal" :vendorProposal="selectedProposal" />
       </vue-html2pdf>
     <loader :active="loading" :isFullScreen="true"/>
     <div class="font-size-22 font-bold d-flex align-center">
@@ -106,8 +29,8 @@
       :dots="false"
       :number="2"
       :nav="false"
+      v-if="proposalRequests.length > 0"
       class="proposal-requests"
-      v-if="renderRender"
     >
       <template slot="prev">
         <button class="nav-left nav-btn">
@@ -123,7 +46,7 @@
         @dismiss="dismiss"
       >
       </proposal-request-card>
-      <div v-if="proposalRequests.length < 4" class="white-card p-20 d-flex">
+      <div v-if="proposalRequests.length < 2" class="white-card p-20 d-flex">
           <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" style="width: 55px;height: 55px">
           <div class="ml-15">
               <div class="font-size-18 font-bold text-uppercase color-vendor">No More Pending Proposals</div>
@@ -185,7 +108,7 @@
                 ></proposal-list-item>
             </div>
           </div>
-          <div v-if="pagination.total < 4" class="my-auto d-flex flex-column align-center">
+          <div v-if="pagination.total < 2" class="my-auto d-flex flex-column align-center">
               <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`">
               <p class="text-transform-uppercase font-size-14">No More Proposal To Show</p>
               <md-button class="md-vendor">Create New Proposal</md-button>
@@ -325,51 +248,39 @@ export default {
         lost: 0,
         pageCount: 0,
         page: 0,
-        limit: 6,
+        limit: 5,
       },
       sortFields: {sort: '', order: ''},
-      renderRender: true,
     };
   },
   async mounted() {
-    // console.log('mounted', this.vendorData.id);
-    if(this.vendorData){
-        this.init();
-    }
-
+    console.log('mounted', this.vendorData.id);
+    await this.getData();
+    await this.getProposal();
+    this.loading = false;
   },
   methods: {
     async getData() {
-        this.renderRender = false;
-        let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
-        // let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '60b636d7cfefec26397d2a7e' })).get();
-        this.proposalRequests = proposalRequests.filter(p => {
-            let proposal = this.proposals.find(it => it.proposalRequestId === p.id);
-            return proposal ? p.remainingTime > 0 && p.declineMessage !== 'decline' && proposal.status !== 'submit' :
-                p.remainingTime > 0 && p.declineMessage !== 'decline';
-        });
-
-        this.$nextTick(_ => {
-           this.renderRender = true;
-        });
+        // let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
+        let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '60758222cfefec2676a0853d' })).get();
+        this.proposalRequests = proposalRequests.filter(p => p.remainingTime);
     },
     async getProposal() {
       const { pagination } = this;
       const params = {status: this.tab, ...this.sortFields};
       const res = await new Proposal()
-      .for(new Vendor({ id: this.vendorData.id }))
-      //   .for(new Vendor({ id: '60462793cfefec258a35e874' }))
+        // .for(new Vendor({ id: this.vendorData.id }))
+        .for(new Vendor({ id: '60144eafcfefec6372985c6d' }))
         .page(pagination.page)
         .limit(pagination.limit)
         .params(params)
         .get();
       const data = res[0];
-
       this.proposals = data.items;
       this.proposals.map(it => console.log('proposal', it.proposalRequestId));
       this.pagination.total = data.total;
       this.proposalTabs.map(t => {
-          if (data.hasOwnProperty(t.key)) this.pagination[t.key] = data[t.key];
+        if (data.hasOwnProperty(t.key)) this.pagination[t.key] = data[t.key];
       })
       this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
     },
@@ -402,11 +313,13 @@ export default {
       this.loading = false;
     },
     async dismiss(id){
-      const res = await new ProposalRequest({
-          id,
-          declineMessage: 'decline',
-      }).save()
-      console.log('updateReq', res);
+      let proposalReq = this.proposalRequests.find(pr => pr.id === id);
+      // const res = await new ProposalRequest({
+      //     id,
+      //     submitted: true,
+      //     status: 'decline',
+      // }).save()
+      // console.log('updateReq', res);
       this.proposalRequests = this.proposalRequests.filter(p => {
           return p.id !== id;
       });
@@ -425,28 +338,22 @@ export default {
       } else if (action === 'remove') {
         this.loading = true;
         const proposal = await Proposal.find(id)
-        await proposal.delete();
 
-        await this.getProposal();
-
+        proposal.delete();
+        this.getProposal();
+        this.$forceUpdate();
         this.loading = false;
 
       } else if (action === 'download') {
-        this.$refs.html2Pdf.generatePdf();
-        //this.downloadProposal(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
+
+        this.downloadProposal(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
       }
     },
     downloadProposal(link){
-
         window.open(
             link,
             '_blank',
         )
-    },
-    async init() {
-        await this.getProposal();
-        await this.getData();
-        this.loading = false;
     }
   },
   computed: {
@@ -478,11 +385,8 @@ export default {
   },
   watch: {
     vendorData(newValue, oldValue) {
-      this.init();
+      this.getData();
     },
-    proposalRequests(newVal){
-      this.$forceUpdate();
-    }
   },
   updated(){
     // remove empty item in proposal-request carousel

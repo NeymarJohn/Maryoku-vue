@@ -25,7 +25,10 @@ const actions = {
     const calendarEvents = state.calendarEvents;
 
     return new Promise((resolve, reject) => {
-
+      if (calendarEvents[month]) {
+        resolve(calendarEvents)
+        return
+      }
       UserEvent.params({
         startTime: startOfMonth,
         endTime: endOfMonth
@@ -33,13 +36,13 @@ const actions = {
         .get()
         .then((events) => {
 
-          // events.forEach(event => {
-          //   if (!calendarEvents[month]) {
-          //     calendarEvents[month] = []
-          //   }
-          //   calendarEvents[month].push(event)
-          // })
-          commit("setCalendarEvents", { month, events })
+          events.forEach(event => {
+            if (!calendarEvents[month]) {
+              calendarEvents[month] = []
+            }
+            calendarEvents[month].push(event)
+          })
+          commit("setCalendarEvents", calendarEvents)
           resolve(calendarEvents)
         });
     })
@@ -48,8 +51,8 @@ const actions = {
 };
 
 const mutations = {
-  setCalendarEvents(state, { month, events }) {
-    Vue.set(state.calendarEvents, month, [...events])
+  setCalendarEvents(state, data) {
+    Vue.set(state, "calendarEvents", data)
   },
 };
 

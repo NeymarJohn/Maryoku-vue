@@ -20,7 +20,6 @@
             :key="tag.subCategory"
             :isSelected="tag.isSelected"
             v-for="tag in specialTags"
-            class="mr-10"
           ></tag-item>
         </div>
       </div>
@@ -348,7 +347,7 @@ export default {
     .requirement-item {
       display: inline-block;
       margin-right: 40px;
-      min-width: 25%;
+      // min-width: 25%;
       // display: grid;
       // grid-template-columns: repeat(4, 25%);
     }

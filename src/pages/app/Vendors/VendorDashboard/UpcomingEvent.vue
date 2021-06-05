@@ -5,9 +5,7 @@
       <div class="event-detail flex-1">
         <div class="color-gray font-size-14">{{ getUpcomingPeriod(event.startTime) }}</div>
         <div class="font-bold mb-10">{{ event.customerName }}</div>
-        <div>
-          {{ event.companyName }} | <a :href="event.fileUrl" class="color-purple" target="_blank">See proposal</a>
-        </div>
+        <div>{{ event.companyName }} | $55,678</div>
       </div>
       <md-icon class="color-black">east</md-icon>
     </div>

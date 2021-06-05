@@ -199,7 +199,6 @@ export default {
         password: this.vendor.password,
         role: "vendor",
         tenant: "DEFAULT",
-        currentUserType: "vendor",
       };
 
       this.$store.dispatch("auth/register", tenantUser).then(

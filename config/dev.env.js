@@ -6,7 +6,7 @@ module.exports = merge(prodEnv, {
     NODE_ENV: '"development"',
     SERVER_URL: '"https://api-dev.maryoku.com"',
     // SERVER_URL: '"http://localhost:8080"',
-    // HOST_URL: '"local.maryoku.com"',
+    HOST_URL: '"local.maryoku.com"',
     GOOGLE_API_KEY: '"AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8"',
     S3_BUCKET_NAME: '"maryoku"',
     AWS_REGION: '"us-east-1"',

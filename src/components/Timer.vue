@@ -48,7 +48,6 @@ export default {
       if (typeof this.target === "object") {
         const targetNumber = this.target.getTime();
         let diff = (targetNumber - new Date().getTime()) / 1000;
-        if (diff < 0) return;
         this.days = Math.floor(diff / (24 * 3600));
         diff = diff - this.days * 24 * 3600;
         this.hours = Math.floor(diff / 3600);
@@ -56,6 +55,7 @@ export default {
         this.mins = Math.floor(diff / 60);
         diff -= this.mins * 60;
         this.secs = `${Math.floor(diff)}`;
+        console.log(this.secs);
       } else {
         const diff = moment.utc(moment(this.target).diff(new Date().getTime())).format("DD:HH:mm:ss");
         const targetNumber = this.target;
@@ -75,6 +75,7 @@ export default {
   created() {
     this.updateTime();
     this.intervalId = setInterval(() => {
+      console.log("xxx");
       this.updateTime();
     }, 1000);
   },
