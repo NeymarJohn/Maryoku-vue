@@ -48,9 +48,7 @@ export default {
       this.$emit("input", this.content);
     },
     addressSuggestions(predictions, status) {
-      console.log(predictions);
       if (status != google.maps.places.PlacesServiceStatus.OK) {
-        console.log(status);
         return;
       }
       this.locations = [];
@@ -58,7 +56,6 @@ export default {
         this.locations.push(item.description);
         this.places.push({ id: item.place_id, name: item.description });
       });
-      console.log("locations", this.locations);
     },
   },
   computed: {
@@ -68,9 +65,7 @@ export default {
   },
   mounted() {
     this.locationService = new google.maps.places.AutocompleteService();
-    console.log(this.locationService);
     this.geocoder = new google.maps.Geocoder();
-    console.log(this.geocoder);
   },
   watch: {
     content: function (newValue) {
@@ -83,7 +78,6 @@ export default {
       }
       this.$emit("input", newValue);
       const locationObject = this.places.find((item) => item.name === newValue);
-      console.log(locationObject);
       this.$emit("change", locationObject);
 
       this.locationService.getPlacePredictions(
