@@ -8,27 +8,25 @@
           :paginate-elements-by-height="1800"
           :filename="`proposal-${selectedProposal ? selectedProposal.id : ''}`"
           :pdf-quality="2"
-          :manual-pagination="true"
+          :manual-pagination="false"
           pdf-format="a4"
           pdf-orientation="portrait"
           pdf-content-width="800px"
           :html-to-pdf-options="htmlToPdfOptions"
-          
-          @hasDownloaded="onPDFDownload($event)"
           ref="html2Pdf"
       >
-        <section slot="pdf-content" v-if="selectedProposal && selectedEventData">
-          <div class="p-20" style="margin-top: 0px;">
-            <div :style="`height: 500px; background: url('${headerBackgroundImage()}') no-repeat center; background-size: cover !important;`">
-              <div class="bg-custom-transparent" style="background: rgba(255, 255, 255,0.76);padding: 1.5rem !important;margin-top: 0;height: 200px">
+        <section slot="pdf-content">
+          <div class="p-20 pdf-content" v-if="selectedProposal">
+            <section :style="`position: relative; height: 500px; background: url('${headerBackgroundImage}') no-repeat center; background-size: cover;`">
+              <div class="position-absolute bg-custom-transparent" style="background: rgba(255, 255, 255,0.76);position: absolute;padding: 1.5rem !important;top:0;left:0;right:0;height: 200px">
                   <h3 class="font-weight-bold">Event Information  Details</h3>
                   <ul class="event-detail mt-3" style="list-style: none;display: flex;flex-direction: row;margin-top: 1rem !important">
-                      <li class="border-line-end" style="border-right: 1px solid #818080;padding-right: 10px;padding-bottom: 10px;margin-right: 20px;">
+                      <li class="border-line-end" style="border-right: 1px solid #818080;padding-right: 80px;padding-bottom: 10px;margin-right: 80px;">
                           <label class="font-weight-bold">Name</label>
-                          <div>{{ selectedEventData.title || (selectedEventData.concept ? selectedEventData.concept.title : "Untitled event")
+                          <div>{{ selectedEventData? (selectedEventData.title || (selectedEventData.concept ? selectedEventData.concept.title : "Untitled event")) : "Untitled event"
                                 }}</div>
                       </li>
-                      <li class="border-line-end" style="border-right: 1px solid #818080;padding-right: 10px;padding-bottom: 10px;margin-right: 20px;">
+                      <li class="border-line-end" style="border-right: 1px solid #818080;padding-right: 80px;padding-bottom: 10px;margin-right: 80px;">
                           <label class="font-weight-bold">Date</label>
                           <div v-if="!selectedProposal.suggestionDate">
                                 {{ selectedEventData.eventStartMillis | date('MMM Do YYYY')}}
@@ -38,7 +36,7 @@
                               <!-- {{ new Date(vendorProposal.suggestionDate[0].date).getTime() | formatTime }} -->
                           </div>
                       </li>
-                      <li class="" style="padding-right: 10px;padding-bottom: 10px;margin-right: 20px;">
+                      <li class="" style="padding-right: 80px;padding-bottom: 10px;margin-right: 80px;">
                           <label class="font-weight-bold">Guest Arrival Time</label>
                           <div>
                                 {{ selectedEventData.eventStartMillis | date('MMM Do YYYY') }}
@@ -46,33 +44,27 @@
                       </li>
                   </ul>
               </div>
-            </div>
-            <div>
+            </section>
+            <section class="px-4 py-2" style="position: relative;padding-right: 1.5rem !important;">
               <h2 class="font-weight-bold">Dear {{ selectedProposal.vendor.vendorDisplayName }},</h2>
               <p>
                 {{ selectedProposal.personalMessage }}
               </p>
-            </div>
-          </div>
-
-          <div class="p-20">
-            <div class="px-4 py-2">
               <div class="my-4" style="margin-top: 1.5rem !important">
                 <h3 class="font-weight-bold d-flex align-items-center" style="align-items: center;display: flex;">
                 <img class="mr-2" :src="`/static/img/Asset491.png`" width="30" style="margin-right: 0.5rem !important;"/>
                   Our vision for your event</h3>
                 <p>{{ selectedProposal.eventVision }}</p>
               </div>
+              <div class="html2pdf__page-break"></div>
               <div>
                 <div class="font-weight-bold">Some references to the experience you will get from us</div>
-                  
                 <ul class="proposal-images" style="list-style: none;display: flex;flex-wrap: wrap;flex-direction: row;margin-top: 1rem !important">
-                  <!-- not rending complex html like v-for -->
-                  <li v-for="(item, index) in selectedProposal.inspirationalPhotos.filter((item) => !!item)"
-                             :key="index" style="width: 200px;height: 160px;margin-right: 20px;">
+                    <li style="width: 200px;height: 160px;margin-right: 20px;" v-for="item in selectedProposal.inspirationalPhotos.filter((item) => !!item)"
+                             :key="item.url">
                             <img class="item" :src="item.url"/>
                             <div class="mt-5">{{ item.caption }}</div>
-                  </li>
+                    </li>
                 </ul>
               </div>
               <div class="mt-4" style="margin-top: 1.5rem !important;">
@@ -125,22 +117,20 @@
                         </div>
                     </div>
               </div>
-            </div>
-          </div>
-          <div class="p-20">
-            <div class="px-4 py-2 mt-4">
+            </section>
+            <section class="px-4 py-2 mt-4">
               <div class="d-flex align-items-center py-2">
                 <img class="mr-2" :src="`/static/img/Asset287.png`" style="margin-right: 0.5rem !important;width: 30px;height: 26px;"/>
                 <h3 class="font-weight-bold m-0">Our Policy</h3>
               </div>
               <p>What would you like to take from our suggested services?</p>
-            </div>
-            <div class="px-4 py-2">
+            </section>
+            <section class="px-4 py-2">
               <div class="d-flex align-items-center py-2">
                 <img class="mr-2" :src="`/static/img/Asset10.png`" style="margin-right: 0.5rem !important;width: 16px;height: 32px;"/>
                 <h3 class="font-weight-bold m-0">Pricing & Details</h3>
               </div>
-            </div>
+            </section>
           </div>
         </section>
       </vue-html2pdf>
@@ -370,7 +360,6 @@ export default {
       showProposalDetail: false,
       selectedProposal: null,
       selectedEventData: null,
-      flagDownloadPdf: false,
       socialMediaBlocks,
       pagination: {
         total: 0,
@@ -468,7 +457,7 @@ export default {
       });
     },
     async handleProposal(action, id){
-      this.selectedProposal = this.proposals.find(it => it.id == id);
+      this.selectedProposal = await this.proposals.find(it => it.id == id);
       if (action === 'show') {
           this.showProposalDetail = true;
 
@@ -488,10 +477,8 @@ export default {
         this.loading = false;
 
       } else if (action === 'download') {
-        this.loading = true;
         this.selectedEventData = this.selectedProposal ? this.selectedProposal.proposalRequest.eventData : null;
-        this.flagDownloadPdf = true;
-        this.$forceUpdate();
+        this.$refs.html2Pdf.generatePdf();
         //this.downloadProposal(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
       }
     },
@@ -524,21 +511,6 @@ export default {
 
                 return !isBlank;
       },
-    headerBackgroundImage() {
-      if (!this.selectedProposal)
-        return "";
-                if (this.selectedProposal.inspirationalPhotos && this.selectedProposal.inspirationalPhotos[0])
-                    return this.selectedProposal.inspirationalPhotos[0].url;
-                if (this.selectedProposal.vendor.images && this.selectedProposal.vendor.images[0])
-                    return this.selectedProposal.vendor.images[0];
-                if (this.selectedProposal.vendor.vendorImages && this.selectedProposal.vendor.vendorImages[0])
-                    return this.selectedProposal.vendor.vendorImages[0];
-
-                return "";
-    },
-    onPDFDownload($event) {
-      this.loading = false;
-    },
     async init() {
         await this.getProposal();
         await this.getData();
@@ -554,7 +526,7 @@ export default {
         margin: 0,
         image: {
             type: "jpeg",
-            quality: 0.9,
+            quality: 0.98,
         },
         filename: `proposal-${this.selectedProposal ? this.selectedProposal.id : ''}`,
         enableLinks: true,
@@ -571,6 +543,18 @@ export default {
         },
       }
     },
+    headerBackgroundImage() {
+      if (!this.selectedProposal)
+        return "";
+      if (this.selectedProposal.inspirationalPhotos && this.selectedProposal.inspirationalPhotos[0])
+          return this.selectedProposal.inspirationalPhotos[0].url;
+      if (this.selectedProposal.vendor.images && this.selectedProposal.vendor.images[0])
+          return this.selectedProposal.vendor.images[0];
+      if (this.selectedProposal.vendor.vendorImages && this.selectedProposal.vendor.vendorImages[0])
+          return this.selectedProposal.vendor.vendorImages[0];
+
+      return "";
+    },
   },
   watch: {
     vendorData(newValue, oldValue) {
@@ -584,14 +568,6 @@ export default {
     // remove empty item in proposal-request carousel
     $('.owl-item').each(function (el) {
       if($(this).text().length === 0) $(this).remove();
-    })
-    this.$nextTick(() => {
-      // Code that will run only after the
-      // entire view has been re-rendered
-      if (this.flagDownloadPdf) {
-        this.flagDownloadPdf = false;
-        this.$refs.html2Pdf.generatePdf();
-      }
     })
   }
 };
