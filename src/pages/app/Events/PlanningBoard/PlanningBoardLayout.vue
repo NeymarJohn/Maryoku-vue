@@ -9,7 +9,7 @@
             <span v-if="step === 1">We'd love to know your style</span>
             <span v-if="step === 2">What kind of services would you like us to find you?</span>
           </div>
-          <progress-radial-bar :value="percentOfBudgetCategories" :total="12"></progress-radial-bar>
+          <progress-radial-bar :value="percentOfBudgetCategories" :total="12" @click="openCart"></progress-radial-bar>
         </div>
         <div class="md-layout md-gutter mt-40" v-if="step === 1">
           <div
@@ -93,6 +93,9 @@
       @save="saveSpecialRequirements"
     >
     </special-requirement-modal>
+    <transition name="slide-fade">
+      <requirements-cart v-if="showCart" @close="showCart = false"></requirements-cart>
+    </transition>
   </div>
 </template>
 <script>
@@ -110,6 +113,7 @@ import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
 import PendingForVendors from "../components/PendingForVendors.vue";
 import { Loader } from "@/components";
 import moment from "moment";
+import RequirementsCart from "./RequirementsCart.vue";
 
 import { postReq, getReq } from "@/utils/token";
 
@@ -121,9 +125,11 @@ export default {
     SpecialRequirementModal,
     PendingForVendors,
     Loader,
+    RequirementsCart,
   },
   data() {
     return {
+      showCart: false,
       allRequirements: null,
       subCategory: null,
       serviceCards: [
@@ -304,12 +310,19 @@ export default {
                 "Soul",
               ],
               images: [
-                "Photography+_+Videography/Black_White.jpg",
-                "Photography+_+Videography/Buisness.jpg",
-                "Photography+_+Videography/Candid.jpg",
-                "Photography+_+Videography/Commercial.jpg",
-                "Photography+_+Videography/Drone.jpg",
-                "Photography+_+Videography/Portrait.jpg",
+                "Asian.jpg",
+                "Blues.jpg",
+                "Classic.jpg",
+                "Country.jpg",
+                "Latin.jpg",
+                "Latin.jpg",
+                "Hip Hop.jpg",
+                "Jazz.jpg",
+                "Latin.jpg",
+                "pop.jpg",
+                "RB.jpg",
+                "Rock.jpg",
+                "SOUL.jpg",
               ],
               imageTitles: ["Black White", "Buisness", "Candid", "Commercial", "Drone", "Portrait"],
               icon: "NewRequirements/Group 18013.svg",
@@ -625,8 +638,11 @@ export default {
       // this.$store.dispatch("event/saveEventAction", event).then((res) => {});
     },
     getRequirements(category) {
-      if (!this.$store.state[category]) return {};
-      return this.$store.state[category].mainRequirements;
+      if (!this.$store.state.planningBoard[category]) return {};
+      return this.$store.state.planningBoard[category].mainRequirements;
+    },
+    openCart() {
+      this.showCart = true;
     },
   },
 };
@@ -646,6 +662,17 @@ export default {
         margin-right: 10px;
       }
     }
+  }
+  .slide-fade-enter-active {
+    transition: all 0.3s ease;
+  }
+  .slide-fade-leave-active {
+    transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+  }
+  .slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+    transform: translateX(10px);
+    opacity: 0;
   }
 }
 </style>

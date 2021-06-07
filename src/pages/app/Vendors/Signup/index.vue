@@ -83,6 +83,7 @@ export default {
       this.setStep(step);
     });
     this.$root.$on("update-vendor-value", (field, value) => {
+      console.log("update-vendor-value", field, value);
       let vendor = JSON.parse(JSON.stringify(this.vendor));
       if (field == "images") {
         if (!Object.keys(vendor[field]).includes(`${value.index}`)) {
