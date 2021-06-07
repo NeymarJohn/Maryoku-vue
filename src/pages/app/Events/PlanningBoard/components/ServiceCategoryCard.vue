@@ -77,7 +77,7 @@
         </md-button>
       </template>
       <template v-else>
-        <!-- <popper trigger="click" :options="{ placement: 'top', gpuAcceleration: false }">
+        <popper trigger="click" :options="{ placement: 'top', gpuAcceleration: false }">
           <div class="popper white-card popper-content">
             <div class="font-size-20 popper-header font-bold">
               <div class="d-flex align-center">
@@ -99,8 +99,8 @@
               </md-button>
             </div>
           </div>
-        </popper> -->
-        <md-button class="md-simple edit-btn md-red" @click="showAddBudgetConfirm = true"> Add To Budget </md-button>
+          <md-button class="md-simple edit-btn md-red" slot="reference">Add To Budget</md-button>
+        </popper>
       </template>
     </div>
     <add-budget-modal
@@ -109,13 +109,6 @@
       @cancel="showAddNewCategory = false"
       @save="saveBudget"
     ></add-budget-modal>
-    <add-budget-confirm-modal
-      v-if="showAddBudgetConfirm"
-      :serviceCategory="serviceCategory"
-      @cancel="showAddBudgetConfirm = false"
-      @addNewBudget="addBudget"
-    >
-    </add-budget-confirm-modal>
   </div>
 </template>
 <script>
@@ -125,19 +118,17 @@ import "vue-popperjs/dist/vue-popper.css";
 import MusicPlayer from "./MusicPlayer.vue";
 import { camelize } from "@/utils/string.util";
 import AddBudgetModal from "./modals/AddBudget.vue";
-import AddBudgetConfirmModal from "./modals/AddBudgetConfirm";
 export default {
   components: {
     carousel,
     Popper,
     MusicPlayer,
     AddBudgetModal,
-    AddBudgetConfirmModal,
   },
   data() {
     return {
       showAddNewCategory: false,
-      showAddBudgetConfirm: false,
+
       selected: false,
       selectedServices: [],
       popperIcons: {
@@ -208,7 +199,7 @@ export default {
       });
     },
     addBudget() {
-      this.showAddBudgetConfirm = false;
+      document.body.click();
       this.showAddNewCategory = true;
     },
     saveBudget() {

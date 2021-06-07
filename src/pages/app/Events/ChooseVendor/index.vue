@@ -24,6 +24,7 @@
           :value="proposals.length"
           :total="3"
           icon="common/checked-calendar-red.svg"
+          @click="openCart"
         ></progress-radial-bar>
       </div>
       <div class="booking-proposals" v-if="selectedCategory">
@@ -106,6 +107,7 @@
       @cancel="isOpenedAdditionalModal = false"
       @close="isOpenedAdditionalModal = false"
     ></additional-request-modal>
+    <requirements-cart v-if="showCart" @close="showCart = false"></requirements-cart>
   </div>
 </template>
 <script>
@@ -177,6 +179,7 @@ export default {
     showCommentEditorPanel: false,
     showDetails: false,
     selectedProposal: null,
+    showCart: false,
   }),
   methods: {
     ...mapMutations("event", ["setEventData", "setBookingRequirements", "setInitBookingRequirements"]),
@@ -280,6 +283,9 @@ export default {
     getRequirementsFormStore(category) {
       if (!this.$store.state[category]) return {};
       return this.$store.state[category].mainRequirements;
+    },
+    openCart() {
+      this.showCart = true;
     },
   },
   created() {
