@@ -59,6 +59,7 @@
                 </div>
                 <div class="proposal-images mb-40">
                     <div class="font-bold mb-10">Some references to the experience you will get from us</div>
+                    <div class="html2pdf__page-break"/>
                     <carousel :items="4" :margin="25" :dots="false" :nav="false" class="proposal-images-carousel">
                         <template slot="prev">
                                <span class="prev handle-btn">
@@ -187,7 +188,7 @@
                 </div>
             </div>
         </section>
-
+        <div class="html2pdf__page-break"/>
         <section class="proposal-section policy-section">
             <div class="proposal-section__title px-40">
                 <img :src="`${submitProposalIcon}Asset 287.svg`" width="20"/> Our Policy

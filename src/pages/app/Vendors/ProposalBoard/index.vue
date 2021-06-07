@@ -1,139 +1,24 @@
 <template>
   <div class="vendor-proposal-board p-40">
-      <vue-html2pdf
-          :show-layout="false"
-          :float-layout="true"
-          :enable-download="true"
-          :preview-modal="false"
-          :paginate-elements-by-height="1800"
-          :filename="`proposal-${selectedProposal ? selectedProposal.id : ''}`"
-          :pdf-quality="2"
-          :manual-pagination="false"
-          pdf-format="a4"
-          pdf-orientation="portrait"
-          pdf-content-width="800px"
-          :html-to-pdf-options="htmlToPdfOptions"
-          ref="html2Pdf"
-      >
-        <section slot="pdf-content">
-          <div class="p-20 pdf-content" v-if="selectedProposal">
-            <section :style="`position: relative; height: 500px; background: url('${headerBackgroundImage}') no-repeat center; background-size: cover;`">
-              <div class="position-absolute bg-custom-transparent" style="background: rgba(255, 255, 255,0.76);position: absolute;padding: 1.5rem !important;top:0;left:0;right:0;height: 200px">
-                  <h3 class="font-weight-bold">Event Information  Details</h3>
-                  <ul class="event-detail mt-3" style="list-style: none;display: flex;flex-direction: row;margin-top: 1rem !important">
-                      <li class="border-line-end" style="border-right: 1px solid #818080;padding-right: 80px;padding-bottom: 10px;margin-right: 80px;">
-                          <label class="font-weight-bold">Name</label>
-                          <div>{{ selectedEventData? (selectedEventData.title || (selectedEventData.concept ? selectedEventData.concept.title : "Untitled event")) : "Untitled event"
-                                }}</div>
-                      </li>
-                      <li class="border-line-end" style="border-right: 1px solid #818080;padding-right: 80px;padding-bottom: 10px;margin-right: 80px;">
-                          <label class="font-weight-bold">Date</label>
-                          <div v-if="!selectedProposal.suggestionDate">
-                                {{ selectedEventData.eventStartMillis | date('MMM Do YYYY')}}
-                          </div>
-                          <div v-else>
-                              {{ eventDate() }}
-                              <!-- {{ new Date(vendorProposal.suggestionDate[0].date).getTime() | formatTime }} -->
-                          </div>
-                      </li>
-                      <li class="" style="padding-right: 80px;padding-bottom: 10px;margin-right: 80px;">
-                          <label class="font-weight-bold">Guest Arrival Time</label>
-                          <div>
-                                {{ selectedEventData.eventStartMillis | date('MMM Do YYYY') }}
-                          </div>
-                      </li>
-                  </ul>
-              </div>
-            </section>
-            <section class="px-4 py-2" style="position: relative;padding-right: 1.5rem !important;">
-              <h2 class="font-weight-bold">Dear {{ selectedProposal.vendor.vendorDisplayName }},</h2>
-              <p>
-                {{ selectedProposal.personalMessage }}
-              </p>
-              <div class="my-4" style="margin-top: 1.5rem !important">
-                <h3 class="font-weight-bold d-flex align-items-center" style="align-items: center;display: flex;">
-                <img class="mr-2" :src="`/static/img/Asset491.png`" width="30" style="margin-right: 0.5rem !important;"/>
-                  Our vision for your event</h3>
-                <p>{{ selectedProposal.eventVision }}</p>
-              </div>
-              <div class="html2pdf__page-break"></div>
-              <div>
-                <div class="font-weight-bold">Some references to the experience you will get from us</div>
-                <ul class="proposal-images" style="list-style: none;display: flex;flex-wrap: wrap;flex-direction: row;margin-top: 1rem !important">
-                    <li style="width: 200px;height: 160px;margin-right: 20px;" v-for="item in selectedProposal.inspirationalPhotos.filter((item) => !!item)"
-                             :key="item.url">
-                            <img class="item" :src="item.url"/>
-                            <div class="mt-5">{{ item.caption }}</div>
-                    </li>
-                </ul>
-              </div>
-              <div class="mt-4" style="margin-top: 1.5rem !important;">
-                <h3 class="font-weight-bold custom-red" style="color: #f51355 !important;">About Us</h3>
-                <p class="mt-2" style="margin-top: 0.5rem !important;">
-                    {{ selectedProposal.vendor.about.company }}
-                </p>
-              </div>
-              <div class="mt-4" style="margin-top: 1.5rem !important;">
-                <h3 class="font-weight-bold">Contact Us</h3>
-                <ul class="d-flex" style="list-style: none;display: flex;flex-wrap: wrap;flex-direction: row;margin-top: 1rem !important">
-                        <li style="margin-right: 20px;" v-if="selectedProposal.vendor.vendorMainEmail">
-                            <a href>
-                                <img :src="`/static/img/Asset286.png`"/>
-                                {{ selectedProposal.vendor.vendorMainEmail }}
-                            </a>
-                        </li>
-                        <li style="margin-right: 20px;" v-if="selectedProposal.vendor.vendorAddressLine1">
-                            <a href>
-                                <img :src="`/static/img/Asset285.png`"/>
-                                {{ selectedProposal.vendor.vendorAddressLine1 }}
-                                {{ selectedProposal.vendor.vendorAddressLine2 }}
-                            </a>
-                        </li>
-                        <li style="margin-right: 20px;" v-if="selectedProposal.vendor.vendorMainPhoneNumber">
-                            <a href>
-                                <img :src="`/static/img/Asset284.png`"/>
-                                {{ selectedProposal.vendor.vendorMainPhoneNumber }}
-                            </a>
-                        </li>
-                </ul>
-              </div>
-              <div style="margin-top: 1.5rem;" v-if="isSocial()">
-                    <div>Website & social</div>
-                    <div style="margin-top: 1rem;">
-                        <div
-                            class="item"
-                            v-for="(s, sIndex) in socialMediaBlocks"
-                            :key="sIndex"
-                            :class="{ 'mr-20': selectedProposal.vendor.social[s.name] }"
-                        >
-                            <a
-                                v-if="selectedProposal.vendor.social[s.name]"
-                                :href="selectedProposal.vendor.social[s.name]"
-                                target="_blank"
-                            >
-                                <img :src="`${$iconURL}Vendor Signup/${s.icon}`" class="page-icon"/>
-                                {{ selectedProposal.vendor.social[s.name] }}
-                            </a>
-                        </div>
-                    </div>
-              </div>
-            </section>
-            <section class="px-4 py-2 mt-4">
-              <div class="d-flex align-items-center py-2">
-                <img class="mr-2" :src="`/static/img/Asset287.png`" style="margin-right: 0.5rem !important;width: 30px;height: 26px;"/>
-                <h3 class="font-weight-bold m-0">Our Policy</h3>
-              </div>
-              <p>What would you like to take from our suggested services?</p>
-            </section>
-            <section class="px-4 py-2">
-              <div class="d-flex align-items-center py-2">
-                <img class="mr-2" :src="`/static/img/Asset10.png`" style="margin-right: 0.5rem !important;width: 16px;height: 32px;"/>
-                <h3 class="font-weight-bold m-0">Pricing & Details</h3>
-              </div>
-            </section>
-          </div>
-        </section>
-      </vue-html2pdf>
+    <vue-html2pdf
+      :show-layout="false"
+      :float-layout="true"
+      :enable-download="true"
+      :preview-modal="false"
+      :paginate-elements-by-height="1800"
+      :filename="`proposal-${selectedProposal ? selectedProposal.id : ''}`"
+      :pdf-quality="2"
+      :manual-pagination="true"
+      pdf-format="letter"
+      pdf-orientation="portrait"
+      pdf-content-width="800px"
+      :html-to-pdf-options="htmlToPdfOptions"
+      
+      @hasDownloaded="onPDFDownload($event)"
+      ref="html2Pdf"
+    >
+      <div ref="pdfContainer" slot="pdf-content" style="margin: 0;" />
+    </vue-html2pdf>
     <loader :active="loading" :isFullScreen="true"/>
     <div class="font-size-22 font-bold d-flex align-center">
       <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposal Board
@@ -291,9 +176,12 @@
             <md-button class="md-simple md-just-icon md-round modal-default-button" @click="showProposalDetail = false">
                 <md-icon>clear</md-icon>
             </md-button>
+            <md-button class="md-simple md-just-icon md-round modal-default-button" style="right: 4rem" @click="downloadPreviewPDF">
+                <md-icon>file_download</md-icon>
+            </md-button>
         </template>
         <template slot="body">
-            <proposal-content :vendorProposal="selectedProposal"/>
+          <proposal-content :vendorProposal="selectedProposal"/>
         </template>
     </modal>
 
@@ -360,6 +248,7 @@ export default {
       showProposalDetail: false,
       selectedProposal: null,
       selectedEventData: null,
+      flagDownloadPdf: false,
       socialMediaBlocks,
       pagination: {
         total: 0,
@@ -457,7 +346,7 @@ export default {
       });
     },
     async handleProposal(action, id){
-      this.selectedProposal = await this.proposals.find(it => it.id == id);
+      this.selectedProposal = this.proposals.find(it => it.id == id);
       if (action === 'show') {
           this.showProposalDetail = true;
 
@@ -477,10 +366,20 @@ export default {
         this.loading = false;
 
       } else if (action === 'download') {
+        this.loading = true;
         this.selectedEventData = this.selectedProposal ? this.selectedProposal.proposalRequest.eventData : null;
-        this.$refs.html2Pdf.generatePdf();
+        this.flagDownloadPdf = true;
+        
+        // this.$forceUpdate();
         //this.downloadProposal(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
       }
+    },
+    downloadPreviewPDF() {
+      console.log("download1");
+      const content = document.querySelector('.proposal-content')
+      this.$refs.pdfContainer.append(content)
+      this.$refs.html2Pdf.generatePdf();
+      this.showProposalDetail = false
     },
     downloadProposal(link){
 
@@ -511,6 +410,21 @@ export default {
 
                 return !isBlank;
       },
+    headerBackgroundImage() {
+      if (!this.selectedProposal)
+        return "";
+                if (this.selectedProposal.inspirationalPhotos && this.selectedProposal.inspirationalPhotos[0])
+                    return this.selectedProposal.inspirationalPhotos[0].url;
+                if (this.selectedProposal.vendor.images && this.selectedProposal.vendor.images[0])
+                    return this.selectedProposal.vendor.images[0];
+                if (this.selectedProposal.vendor.vendorImages && this.selectedProposal.vendor.vendorImages[0])
+                    return this.selectedProposal.vendor.vendorImages[0];
+
+                return "";
+    },
+    onPDFDownload($event) {
+      this.loading = false;
+    },
     async init() {
         await this.getProposal();
         await this.getData();
@@ -526,7 +440,7 @@ export default {
         margin: 0,
         image: {
             type: "jpeg",
-            quality: 0.98,
+            quality: 0.9,
         },
         filename: `proposal-${this.selectedProposal ? this.selectedProposal.id : ''}`,
         enableLinks: true,
@@ -543,18 +457,6 @@ export default {
         },
       }
     },
-    headerBackgroundImage() {
-      if (!this.selectedProposal)
-        return "";
-      if (this.selectedProposal.inspirationalPhotos && this.selectedProposal.inspirationalPhotos[0])
-          return this.selectedProposal.inspirationalPhotos[0].url;
-      if (this.selectedProposal.vendor.images && this.selectedProposal.vendor.images[0])
-          return this.selectedProposal.vendor.images[0];
-      if (this.selectedProposal.vendor.vendorImages && this.selectedProposal.vendor.vendorImages[0])
-          return this.selectedProposal.vendor.vendorImages[0];
-
-      return "";
-    },
   },
   watch: {
     vendorData(newValue, oldValue) {
@@ -568,6 +470,14 @@ export default {
     // remove empty item in proposal-request carousel
     $('.owl-item').each(function (el) {
       if($(this).text().length === 0) $(this).remove();
+    })
+    this.$nextTick(() => {
+      // Code that will run only after the
+      // entire view has been re-rendered
+      if (this.flagDownloadPdf) {
+        this.flagDownloadPdf = false;
+        this.$refs.html2Pdf.generatePdf();
+      }
     })
   }
 };
