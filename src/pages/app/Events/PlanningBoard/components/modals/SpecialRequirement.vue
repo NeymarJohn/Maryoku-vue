@@ -135,6 +135,32 @@ export default {
             ],
           },
         ],
+        Transporation: [
+          {
+            subCategory: "Amenities",
+            items: [
+              { name: "Wifi", selected: false },
+              { name: "Bar", selected: false },
+              { name: "TV/Cable TV", selected: false },
+              { name: "Restrooms", selected: false },
+              { name: "Luggage", selected: false },
+              { name: "Food", selected: false },
+            ],
+          },
+          {
+            subCategory: "Services",
+            items: [
+              { name: "Round trip", selected: false },
+              { name: "One way", selected: false },
+              { name: "Airport pickup/drop off", selected: false },
+              { name: "Tours", selected: false },
+            ],
+          },
+          {
+            subCategory: "Staff",
+            items: [{ name: "Uniformed drivers", selected: false }],
+          },
+        ],
         "Covid-19": [
           {
             subCategory: "Requests for all stuff members",
@@ -147,7 +173,6 @@ export default {
             ],
           },
         ],
-        Transporation: [],
       },
     };
   },
