@@ -8,30 +8,19 @@
           vendors discretion
         </div>
       </div>
-      <progress-radial-bar :value="percentOfBudgetCategories" :total="12" @click="openCart"></progress-radial-bar>
-
       <md-button class="md-simple close-btn" @click="close">
         <md-icon>close</md-icon>
       </md-button>
     </div>
     <div>
       <vsa-list>
-        <vsa-item v-for="item in selectedCategories" :key="item.key">
+        <vsa-item v-for="item in listOfItems" :key="item.id">
           <vsa-heading>
-            <img :src="`${$iconURL}Budget+Elements/${item.icon}`" class="category-icon" />
-            {{ item.fullTitle }}
+            {{ item.heading }}
           </vsa-heading>
+
           <vsa-content>
-            <div class="color-gray">{{ item.fullTitle }} Type</div>
-            <div class="d-flex">
-              <template v-for="typeList in requirements[item.key].types">
-                <requirement-tag-item :label="type" v-for="type in typeList" :key="type"></requirement-tag-item>
-              </template>
-            </div>
-            <div class="mt-20 color-gray">Additional Requests</div>
-            <p>
-              {{ requirements[item.key].additionalDescription }}
-            </p>
+            {{ item.content }}
           </vsa-content>
         </vsa-item>
       </vsa-list>
@@ -41,9 +30,6 @@
 <script>
 import { VsaList, VsaItem, VsaHeading, VsaContent, VsaIcon } from "vue-simple-accordion";
 import "vue-simple-accordion/dist/vue-simple-accordion.css";
-import ProgressRadialBar from "./components/ProgressRadialBar.vue";
-import RequirementTagItem from "./components/RequirementTagItem.vue";
-
 export default {
   components: {
     VsaList,
@@ -51,8 +37,6 @@ export default {
     VsaHeading,
     VsaContent,
     VsaIcon,
-    ProgressRadialBar,
-    RequirementTagItem,
   },
   data() {
     return {
@@ -68,28 +52,6 @@ export default {
       this.$emit("close");
     },
   },
-
-  computed: {
-    selectedCategories() {
-      const categoryKeys = Object.keys(this.$store.state.planningBoard);
-      const selectedData = [];
-      categoryKeys.forEach((categoryKey) => {
-        console.log("his.$store.state.common.serviceCategories", this.$store.state.common.serviceCategories);
-        const category = this.$store.state.common.serviceCategories.find((item) => item.key === categoryKey);
-        if (category) {
-          selectedData.push(category);
-        }
-      });
-      selectedData.sort((a, b) => a.order - b.order);
-      return selectedData;
-    },
-    serviceCategories() {
-      return this.$store.state.common.serviceCategories;
-    },
-    requirements() {
-      return this.$store.state.planningBoard;
-    },
-  },
 };
 </script>
 <style lang="scss" scoped>
@@ -98,17 +60,12 @@ export default {
   width: 600px;
   height: 100vh;
   background-color: white;
-  top: 0;
   right: 0;
   z-index: 10;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  .category-icon {
-    width: 20px;
-  }
+
   &-header {
     padding: 40px;
-    display: flex;
-
     .close-btn {
       position: absolute;
       top: 10px;
@@ -124,7 +81,6 @@ export default {
     }
     /deep/ .vsa-item__heading {
       border: none;
-      cursor: pointer;
       .vsa-item__trigger {
         background-color: white;
         color: black;

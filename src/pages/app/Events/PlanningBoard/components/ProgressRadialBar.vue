@@ -45,6 +45,5 @@ export default {
 <style>
 .loading-budget-image {
   width: 40px;
-  cursor: pointer;
 }
 </style>

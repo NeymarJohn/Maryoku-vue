@@ -2863,35 +2863,6 @@ export const businessCategories = [
               },
             ],
           },
-          {
-            name: "Diversity",
-            items: [
-              {
-                name: "Prioritizing diversity and inclution",
-                type: Boolean,
-                xIncluded: true,
-                value: false,
-              },
-              {
-                name: "Women on senior staff",
-                type: Boolean,
-                xIncluded: true,
-                value: false,
-              },
-              {
-                name: "Strict sexual harrasment policy",
-                type: Boolean,
-                xIncluded: true,
-                value: false,
-              },
-              {
-                name: "Acknowledge all religious and cultural holidays",
-                type: Boolean,
-                xIncluded: true,
-                value: false,
-              },
-            ],
-          },
         ],
       },
     ],
@@ -4086,14 +4057,12 @@ export const VendorPolicy = [
       },
       {
         name: "Level of security training/certification",
-        type: Number,
         noSuffix: true,
         hasComment: true,
         unit: "none"
       },
       {
         name: "Special attire requests",
-        type: Number,
         noSuffix: true,
         hasComment: true,
         unit: "none"
