@@ -63,7 +63,7 @@ export default {
   },
   data() {
     return {
-      tags: ["Sustainability", "Inclusion", "Security", "Signage & Printing", "Covid-19"],
+      tags: ["Sustainability", "Inclusion", "Security", "Signage & Printing", "Covid-19", "Transporation"],
       selectedTags: [],
       speicalRequirements: {
         Sustainability: [
@@ -147,6 +147,7 @@ export default {
             ],
           },
         ],
+        Transporation: [],
       },
     };
   },
