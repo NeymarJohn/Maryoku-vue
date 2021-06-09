@@ -15,9 +15,18 @@ const actions = {
     fetchAllCategories: ({ commit, state }) => {
         return new Promise((resolve, reject) => {
             // getting from API
+            if (localStorage.getItem("serviceCategories")) {
+                const categories = JSON.parse(localStorage.getItem("serviceCategories"))
+                if (categories.length > 0) {
+                    commit("setCategories", categories);
+                    resolve(categories)
+                    return
+                }
+            }
             getReq(`/1/components`, true)
                 .then(res => {
                     commit("setCategories", res.data);
+                    localStorage.setItem("serviceCategories", JSON.stringify(res.data));
                     resolve(res.data);
                 })
                 .catch(err => {
