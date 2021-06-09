@@ -314,7 +314,7 @@ export default {
                 "Blues.jpg",
                 "Classic.jpg",
                 "Country.jpg",
-                "Latin.jpg",
+                "Electronic.jpg",
                 "Folk.jpg",
                 "Hip Hop.jpg",
                 "Jazz.jpg",
