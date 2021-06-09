@@ -61,7 +61,6 @@
                 :isSelected="tag.selected"
                 :theme="`red`"
                 v-for="tag in item.options"
-                class="mr-10"
               ></tag-item>
             </div>
           </div>

@@ -69,7 +69,6 @@ class AuthService {
             role: user.role,
             invited: user.invited,
             permittedEvent: user.permittedEvent,
-            currentUserType: user.currentUserType
         });
     }
 

@@ -1092,11 +1092,6 @@ export const businessCategories = [
                 hideOnAutoComplete: true
               },
               {
-                name: "deliveries",
-                type: Number,
-                value: 0,
-              },
-              {
                 name: "onsite setup",
                 type: Boolean,
                 value: false,
@@ -2797,7 +2792,7 @@ export const businessCategories = [
         ],
       },
       {
-        name: "Sustainability, Inclusion and Diversity",
+        name: "Sustainability and Inclusion",
         subCategories: [
           {
             name: "Sustainability",
@@ -2836,35 +2831,6 @@ export const businessCategories = [
           },
           {
             name: "Inclusion",
-            items: [
-              {
-                name: "Prioritizing diversity and inclution",
-                type: Boolean,
-                xIncluded: true,
-                value: false,
-              },
-              {
-                name: "Women on senior staff",
-                type: Boolean,
-                xIncluded: true,
-                value: false,
-              },
-              {
-                name: "Strict sexual harrasment policy",
-                type: Boolean,
-                xIncluded: true,
-                value: false,
-              },
-              {
-                name: "Acknowledge all religious and cultural holidays",
-                type: Boolean,
-                xIncluded: true,
-                value: false,
-              },
-            ],
-          },
-          {
-            name: "Diversity",
             items: [
               {
                 name: "Prioritizing diversity and inclution",
@@ -3688,20 +3654,17 @@ export const companyServices = [
     type: Array,
     value: [],
     available: [
-      "ballroom",
       "gallery",
-      "park or field or garden",
+      "garden",
       "historic establishment",
       "bar or pub or club",
       "restaurant",
       "Meeting Room",
-      "Theatre",
-      "business center",
       "community center",
-      "sport venue",
+      "sport club",
       "academic venue",
       "stately home",
-      "stadium or arena",
+      "stadium",
     ],
   },
   {
@@ -4086,14 +4049,12 @@ export const VendorPolicy = [
       },
       {
         name: "Level of security training/certification",
-        type: Number,
         noSuffix: true,
         hasComment: true,
         unit: "none"
       },
       {
         name: "Special attire requests",
-        type: Number,
         noSuffix: true,
         hasComment: true,
         unit: "none"

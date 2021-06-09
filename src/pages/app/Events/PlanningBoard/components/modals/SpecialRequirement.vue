@@ -63,7 +63,7 @@ export default {
   },
   data() {
     return {
-      tags: ["Sustainability", "Inclusion", "Security", "Signage & Printing", "Covid-19", "Transporation"],
+      tags: ["Sustainability", "Inclusion", "Security", "Signage & Printing", "Covid-19"],
       selectedTags: [],
       speicalRequirements: {
         Sustainability: [
@@ -133,32 +133,6 @@ export default {
               { name: "Influencers", selected: false },
               { name: "Artists", selected: false },
             ],
-          },
-        ],
-        Transporation: [
-          {
-            subCategory: "Amenities",
-            items: [
-              { name: "Wifi", selected: false },
-              { name: "Bar", selected: false },
-              { name: "TV/Cable TV", selected: false },
-              { name: "Restrooms", selected: false },
-              { name: "Luggage", selected: false },
-              { name: "Food", selected: false },
-            ],
-          },
-          {
-            subCategory: "Services",
-            items: [
-              { name: "Round trip", selected: false },
-              { name: "One way", selected: false },
-              { name: "Airport pickup/drop off", selected: false },
-              { name: "Tours", selected: false },
-            ],
-          },
-          {
-            subCategory: "Staff",
-            items: [{ name: "Uniformed drivers", selected: false }],
           },
         ],
         "Covid-19": [
