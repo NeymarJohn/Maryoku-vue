@@ -4,7 +4,6 @@
       class="location md-vendor"
       v-model="selectedLocation"
       :md-options="locations"
-      :md-theme="black"
       :class="{ active: selectedLocation, 'md-purple': theme === 'purple' }"
     >
     </md-autocomplete>

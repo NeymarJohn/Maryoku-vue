@@ -176,14 +176,21 @@ export default {
     });
     console.log(this.defaultData);
     this.companyName = this.defaultData.company;
+    this.company = this.defaultData.companyName;
     this.location = this.defaultData.location;
     this.isRegisteredCustomer = this.defaultData.isRegisteredCustomer;
     this.guests = this.defaultData.guests;
-    this.email = this.defaultData.customer.event;
-    this.name = this.defaultData.customer.name;
+    this.email = this.defaultData.customer.email;
+    this.customer = this.defaultData.customer.name;
     this.date = moment(this.defaultData.date).format("MM.DD.YYYY");
-    this.startTime = this.defaultData.startTime;
-    this.endTime = this.defaultData.startTime;
+    this.startTime.hh = moment(this.defaultData.startTime).format("hh");
+    this.startTime.mm = moment(this.defaultData.startTime).format("mm");
+    this.amPack.start = moment(this.defaultData.startTime).format("A");
+
+    this.endTime.hh = moment(this.defaultData.endTime).format("hh");
+    this.endTime.mm = moment(this.defaultData.endTime).format("mm");
+    this.amPack.end = moment(this.defaultData.endTime).format("A");
+
     // date: endDate.format("YYYY-MM-DD"),
     // startTime: startDate,
     // endTime: endDate,

@@ -113,7 +113,7 @@
                   <img class="mt-50 mb-20" :src="`${iconUrl}vendordashboard/group-16600.png`" />
                   <div class="mb-20 color-vendor font-bold font-size-14">NO UPCOMING EVENTS</div>
                 </template>
-                <md-button class="md-simple md-outlined md-vendor maryoku-btn" @click="showVendorCreateModal = true">
+                <md-button class="md-simple md-outlined md-vendor maryoku-btn" @click="createNewEvent">
                   Create New Event
                 </md-button>
               </div>
@@ -232,7 +232,9 @@ export default {
       return this.$router.push(`/vendor/${this.vendorData.id}/service/add`);
     },
     createNewEvent() {
-      return this.$router.push(`/create-event-wizard`);
+      // return this.$router.push(`/create-event-wizard`);
+      this.showVendorCreateModal = true;
+      this.defaultEventData = {};
     },
 
     selectDay(e) {
