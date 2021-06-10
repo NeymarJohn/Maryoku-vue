@@ -15,7 +15,7 @@
           <maryoku-input
             :value="date"
             class="form-input width-50"
-            placeholder="Choose date…..."
+            placeholder="Choose date…"
             inputStyle="date"
             v-model="date"
             theme="purple"
@@ -108,26 +108,8 @@
         <div class="text-left mt-30">
           <label class="font-bold">Event Location</label>
           <div class="width-50 location-input">
-            <img data-v-b6d2ac96="" :src="`${$iconURL}Vendor Signup/Asset 550.svg`" class="inside-img" />
-            <vue-google-autocomplete
-              ref="address"
-              class="my-10 width-100 address"
-              :placeholder="location ? location : 'Enter an an address, zipcode, or location'"
-              v-on:placechanged="getAddressData"
-              id="customer-event-location"
-            />
+            <location-input v-model="location"></location-input>
           </div>
-        </div>
-        <div class="form-group text-left mt-30" v-if="isRegisteredCustomer">
-          <label class="font-bold">Link Proposal</label>
-          <multiselect
-            v-model="link_proposal"
-            :options="['microsoft', 'amazon', 'google', 'stripe']"
-            :close-on-select="true"
-            :clear-on-select="true"
-            placeholder=""
-            class="width-50 mt-5 md-purple medium-selector"
-          ></multiselect>
         </div>
         <div class="form-group text-left mt-30 proposal">
           <label>Upload proposal</label>
@@ -163,7 +145,8 @@
 </template>
 <script>
 import VueGoogleAutocomplete from "vue-google-autocomplete";
-import { Modal, MaryokuInput, LocationInput } from "@/components";
+import { Modal, MaryokuInput } from "@/components";
+import LocationInput from "../LocationInput";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import UserEvent from "@/models/UserEvent";
 import moment from "moment";
@@ -181,11 +164,38 @@ export default {
     VueGoogleAutocomplete,
     vueDropzone: vue2Dropzone,
   },
-  props: {},
+  props: {
+    defaultData: {
+      type: Object,
+      default: {},
+    },
+  },
   created() {
     this.$http.get(`${process.env.SERVER_URL}/1/userEventCustomers`).then((res) => {
       this.customers = res.data;
     });
+    console.log(this.defaultData);
+    this.companyName = this.defaultData.company;
+    this.location = this.defaultData.location;
+    this.isRegisteredCustomer = this.defaultData.isRegisteredCustomer;
+    this.guests = this.defaultData.guests;
+    this.email = this.defaultData.customer.event;
+    this.name = this.defaultData.customer.name;
+    this.date = moment(this.defaultData.date).format("MM.DD.YYYY");
+    this.startTime = this.defaultData.startTime;
+    this.endTime = this.defaultData.startTime;
+    // date: endDate.format("YYYY-MM-DD"),
+    // startTime: startDate,
+    // endTime: endDate,
+    // companyName: this.company,
+    // customerName: this.customer,
+    // email: this.email,
+    // guests: this.guests,
+    // location: this.location,
+    // timezone: tz,
+    // isRegisteredCustomer: this.isRegisteredCustomer,
+    // fileName: this.fileName,
+    // fileUrl: this.fileUrl,
   },
   data() {
     return {
@@ -318,6 +328,15 @@ export default {
     input {
       padding-left: 50px;
     }
+  }
+  /deep/ .picker-panel .purple span.vfc-span-day.vfc-today {
+    background-color: transparent !important;
+  }
+  /deep/ .vfc-week .vfc-day span.vfc-span-day.vfc-hover:hover,
+  .vfc-week .vfc-day span.vfc-span-day.vfc-hovered {
+    background-color: #641856 !important;
+    color: white !important;
+    z-index: 100;
   }
 }
 .event-time {

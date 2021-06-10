@@ -21,16 +21,16 @@
               <div class="popper-content white-card">
                 <div class="font-size-22 popper-header"></div>
                 <div>
-                  <div v-for="event in eventsForDate[Number(item.number)]">
-                    <div>
+                  <div v-for="(event, index) in eventsForDate[Number(item.number)]">
+                    <div class="color-gray">
                       {{ $dateUtil.formatScheduleDay(event.startTime, "HH:mm") }} -
                       {{ $dateUtil.formatScheduleDay(event.endTime, "HH:mm") }}
                     </div>
                     <div>
-                      <span class="font-bold">{{ event.customerName }}</span>
+                      <span class="font-bold">{{ event.customerName }}</span> |
                       {{ event.companyName }}
                     </div>
-                    <hr />
+                    <hr v-if="index < eventsForDate[Number(item.number)].length - 1" />
                   </div>
                 </div>
               </div>
@@ -498,10 +498,11 @@ $color-gray-dark: #929292;
     opacity: 0;
   }
   .popper-content {
+    min-width: 250px;
     padding: 20px;
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.26);
     text-align: left;
-    z-index: 10;
+    z-index: 20;
     border-radius: 5px;
   }
 }

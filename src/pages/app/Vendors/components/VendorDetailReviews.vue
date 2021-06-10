@@ -3,11 +3,11 @@
     <div class="title font-size-30 font-bold">
       <img class="icon-label" :src="`${$iconURL}Vendor Signup/Asset 560.svg`" /> REVEIWS
     </div>
-    <div class="review-list" v-if="reviews.length > 0">
+    <div class="review-list">
       <div class="review-list-item font-bold">Customers review on this vendor</div>
       <div
         class="review-list-item d-flex justify-content-between align-center"
-        v-for="(review, index) in reviews"
+        v-for="(review, index) in dummyReviews"
         :key="index"
       >
         <div class="mr-30">{{ review.comment }}</div>
@@ -22,7 +22,6 @@
         <md-button class="md-black maryoku-btn md-simple md-outlined" style="padding: 10px 30px">Load More</md-button>
       </div>
     </div>
-    <div class="font-size-20 font-bold mt-40" v-else>No Reviews For This Vendor</div>
   </div>
 </template>
 <script>
@@ -34,7 +33,6 @@ export default {
   },
   data() {
     return {
-      reviews: [],
       dummyReviews: [
         {
           comment: "Amazing location",
@@ -66,7 +64,7 @@ export default {
   .review-list {
     .review-list-item {
       padding: 30px 0px;
-      border-bottom: solid 1px #b7b7b7;
+      border-bottom: solid 1px #B7B7B7;
     }
   }
 }
