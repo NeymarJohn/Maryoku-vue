@@ -8,19 +8,47 @@
           vendors discretion
         </div>
       </div>
+      <progress-radial-bar :value="percentOfBudgetCategories" :total="12" @click="openCart"></progress-radial-bar>
+
       <md-button class="md-simple close-btn" @click="close">
         <md-icon>close</md-icon>
       </md-button>
     </div>
     <div>
       <vsa-list>
-        <vsa-item v-for="item in listOfItems" :key="item.id">
+        <vsa-item v-for="item in selectedCategories" :key="item.key">
           <vsa-heading>
-            {{ item.heading }}
+            <img :src="`${$iconURL}Budget+Elements/${item.icon}`" class="category-icon" />
+            {{ item.fullTitle }}
           </vsa-heading>
-
           <vsa-content>
-            {{ item.content }}
+            <div class="color-gray">{{ item.fullTitle }} Type</div>
+            <div>
+              <template v-for="typeList in requirements[item.key].types">
+                <requirement-tag-item
+                  class="mb-10"
+                  :label="type"
+                  :key="type"
+                  v-for="type in typeList"
+                  @remove="removeSelectedType(type)"
+                ></requirement-tag-item>
+              </template>
+            </div>
+            <div v-for="(requirement, subCategory) in requirements[item.key].mainRequirements" :key="subCategory">
+              <template v-if="['multi-selection', 'special'].indexOf(subCategory) < 0">
+                <div class="color-gray">{{ subCategory }}</div>
+                <requirement-tag-item
+                  v-for="(item, ind) in requirement"
+                  :key="ind"
+                  class="mb-10"
+                  :label="item.item"
+                ></requirement-tag-item>
+              </template>
+            </div>
+            <div class="mt-20 color-gray">Additional Requests</div>
+            <p>
+              {{ requirements[item.key].additionalDescription }}
+            </p>
           </vsa-content>
         </vsa-item>
       </vsa-list>
@@ -30,6 +58,10 @@
 <script>
 import { VsaList, VsaItem, VsaHeading, VsaContent, VsaIcon } from "vue-simple-accordion";
 import "vue-simple-accordion/dist/vue-simple-accordion.css";
+import ProgressRadialBar from "./components/ProgressRadialBar.vue";
+import RequirementTagItem from "./components/RequirementTagItem.vue";
+import _ from "underscore";
+
 export default {
   components: {
     VsaList,
@@ -37,6 +69,8 @@ export default {
     VsaHeading,
     VsaContent,
     VsaIcon,
+    ProgressRadialBar,
+    RequirementTagItem,
   },
   data() {
     return {
@@ -45,11 +79,43 @@ export default {
         { heading: "Catering", content: "ASFASDFAs" },
         { heading: "Photography", content: "ASFASDFAs" },
       ],
+      subCategorySections: [],
     };
+  },
+  created() {
+    this.subCategorySections = Object.keys(this.subCategory);
+    this.subCategorySections = this.subCategorySections.filter(
+      (item) => item !== "multi-selection" && item !== "special",
+    );
   },
   methods: {
     close() {
       this.$emit("close");
+    },
+    removeSelectedType(type) {
+      console.log(type);
+    },
+  },
+
+  computed: {
+    selectedCategories() {
+      const categoryKeys = Object.keys(this.$store.state.planningBoard);
+      const selectedData = [];
+      categoryKeys.forEach((categoryKey) => {
+        console.log("his.$store.state.common.serviceCategories", this.$store.state.common.serviceCategories);
+        const category = this.$store.state.common.serviceCategories.find((item) => item.key === categoryKey);
+        if (category) {
+          selectedData.push(category);
+        }
+      });
+      selectedData.sort((a, b) => a.order - b.order);
+      return selectedData;
+    },
+    serviceCategories() {
+      return this.$store.state.common.serviceCategories;
+    },
+    requirements() {
+      return this.$store.state.planningBoard;
     },
   },
 };
@@ -60,12 +126,18 @@ export default {
   width: 600px;
   height: 100vh;
   background-color: white;
+  top: 0;
   right: 0;
   z-index: 10;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-
+  overflow: auto;
+  .category-icon {
+    width: 30px;
+  }
   &-header {
     padding: 40px;
+    display: flex;
+
     .close-btn {
       position: absolute;
       top: 10px;
@@ -73,6 +145,8 @@ export default {
     }
   }
   .vsa-list {
+    --vsa-heading-padding: 1rem 2.5rem;
+    --vsa-content-padding: 1rem 2.5rem;
     border: none;
     .vsa-item {
       border: none;
@@ -81,6 +155,7 @@ export default {
     }
     /deep/ .vsa-item__heading {
       border: none;
+      cursor: pointer;
       .vsa-item__trigger {
         background-color: white;
         color: black;

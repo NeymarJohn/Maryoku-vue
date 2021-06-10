@@ -107,7 +107,6 @@
                 <upcoming-event
                   v-if="upcomingEvents && upcomingEvents.length > 0"
                   :events="upcomingEvents"
-                  @showEvent="showEvent"
                 ></upcoming-event>
                 <template v-else>
                   <img class="mt-50 mb-20" :src="`${iconUrl}vendordashboard/group-16600.png`" />
@@ -124,7 +123,6 @@
     </div>
     <vendor-create-event-modal
       v-if="showVendorCreateModal"
-      :defaultData="defaultEventData"
       @cancel="showVendorCreateModal = false"
       @save="handleSaveEvent"
     ></vendor-create-event-modal>
@@ -180,7 +178,6 @@ export default {
       },
       markedDates: [],
       upcomingEvents: [],
-      defaultEventData: {},
     };
   },
   beforeCreate() {
@@ -258,11 +255,6 @@ export default {
           console.log(events);
           this.upcomingEvents = events.slice(0, 5);
         });
-    },
-    showEvent(event) {
-      this.showVendorCreateModal = true;
-      console.log(event);
-      this.defaultEventData = { ...event };
     },
   },
   computed: {
