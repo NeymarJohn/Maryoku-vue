@@ -85,7 +85,7 @@ export default {
   },
   created() {
     this.api = gapi;
-    this.initClient();
+    this.api.load("client:auth2", this.initClient);
   },
   data() {
     return {
