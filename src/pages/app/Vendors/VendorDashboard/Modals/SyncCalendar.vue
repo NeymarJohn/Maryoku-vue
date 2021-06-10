@@ -7,19 +7,49 @@
     </template>
     <template slot="body">
       <div>
-        <div>Choose your email account:</div>
-        <div class="mt-30">
-          <md-radio v-model="emailAccount" class="mr-60 md-purple" value="google">
-            <img :src="`${$iconURL}common/google.svg`" style="margin-top: -10px; width: 40px" />
-          </md-radio>
-          <md-radio v-model="emailAccount" value="outlook" class="md-purple">
-            <img :src="`${$iconURL}common/outlook.svg`" style="margin-top: -10px; width: 40px" />
-          </md-radio>
+        <img :src="`${$iconURL}common/sync-calendar-purple.svg`" />
+        <div class="font-size-30 font-bold mt-20">Calendar Sync</div>
+        <div class="mt-20">Select the calendar you want to sync with</div>
+        <div class="mt-30 d-flex justify-content-center mb-30">
+          <div
+            @click="emailAccount = 'google'"
+            class="calendar-selector mr-40"
+            :class="{ active: emailAccount === 'google' }"
+          >
+            <div>
+              <img :src="`${$iconURL}common/google.svg`" style="margin-top: -10px; width: 40px" />
+              <div class="font-bold mt-20">Google</div>
+            </div>
+          </div>
+          <div
+            @click="emailAccount = 'outlook'"
+            class="calendar-selector"
+            :class="{ active: emailAccount === 'outlook' }"
+          >
+            <div>
+              <img :src="`${$iconURL}common/outlook.svg`" style="margin-top: -10px; width: 40px" />
+              <div class="font-bold mt-20">Outlook</div>
+            </div>
+          </div>
         </div>
-        <md-button class="md-outlined md-simple md-vendor mt-20 sync_button" @click="syncCalendar">Sync</md-button>
+        <div class="text-left tips">
+          <div class="mb-20 d-flex">
+            <img :src="`${$iconURL}common/hint.svg`" class="mr-10" />
+            <div>Sync any changes including adding, updating and deleting from your Calendar to Maryoku Calendar.</div>
+          </div>
+          <div class="d-flex">
+            <img :src="`${$iconURL}common/hint.svg`" class="mr-10" />
+            <div>
+              Sync is one-way - any changes you make to your Marioko calendar will not appear in your other calendars
+            </div>
+          </div>
+        </div>
       </div>
     </template>
-    <template slot="footer"> </template>
+    <template slot="footer">
+      <md-button class="md-simple md-vendor mt-20" @click="close">Cancel</md-button>
+      <md-button class="md-vendor mt-20 sync_button" @click="syncCalendar">Sync</md-button></template
+    >
   </modal>
 </template>
 <script>
@@ -165,6 +195,23 @@ export default {
     height: 50px;
     border: solid 1px #641856;
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  }
+  .tips {
+    max-width: 500px;
+  }
+  .calendar-selector {
+    background-color: #f3f7fd;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    cursor: pointer;
+    &.active {
+      background-color: #641856;
+      color: white;
+    }
   }
 }
 </style>

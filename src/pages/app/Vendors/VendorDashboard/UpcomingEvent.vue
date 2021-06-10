@@ -4,12 +4,14 @@
       <div class="event-logo"></div>
       <div class="event-detail flex-1">
         <div class="color-gray font-size-14">{{ getUpcomingPeriod(event.startTime) }}</div>
-        <div class="font-bold mb-10">{{ event.customerName }}</div>
+        <div class="font-bold mb-10">{{ event.customer.name }} | {{ event.customer.email }}</div>
         <div>
           {{ event.companyName }} | <a :href="event.fileUrl" class="color-purple" target="_blank">See proposal</a>
         </div>
       </div>
-      <md-icon class="color-black">east</md-icon>
+      <md-button class="md-simple md-icon-button" @click="selectEvent(event)">
+        <md-icon class="color-black">east</md-icon>
+      </md-button>
     </div>
   </div>
 </template>
@@ -33,6 +35,9 @@ export default {
       }
       const days = this.$dateUtil.getLeftDays(d);
       return `Within ${days} days`;
+    },
+    selectEvent(event) {
+      this.$emit("showEvent", event);
     },
   },
 };
