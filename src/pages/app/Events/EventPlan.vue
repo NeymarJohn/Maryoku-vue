@@ -43,7 +43,7 @@ export default {
         id: "overview-item",
       };
       const concept = {
-        title: "Inspiration Board",
+        title: "Get Inspired",
         status: this.event.concept && this.event.conceptProgress === 100 ? "completed" : "not-complete",
         route: "booking/concept",
         icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
@@ -52,7 +52,7 @@ export default {
         id: "concept-item",
       };
       const budget = {
-        title: "Budget Wizard",
+        title: "Craft Event Budget",
         status: "not-complete",
         route: this.event.budgetProgress == 100 ? "edit/budget" : "booking/budget",
         icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
@@ -61,7 +61,7 @@ export default {
         id: "budget-item",
       };
       const timeline = {
-        title: "Event Scheduler",
+        title: "Set The Schedule",
         status: this.event.timelineProgress === 100 ? "completed" : "not-complete",
         route: "booking/timeline",
         icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
@@ -70,7 +70,7 @@ export default {
         id: "timeline-item",
       };
       const campaign = {
-        title: "Guests Communicator",
+        title: "Communicate With Guests",
         status: this.event.campaignProgress === 100 ? "completed" : "not-complete",
         route: "booking/campaign",
         icon: `${this.$iconURL}Campaign/Group 8857.svg`,
@@ -79,7 +79,7 @@ export default {
         id: "campaign-item",
       };
       const planningBoard = {
-        title: "Plan Your Event",
+        title: this.event.processingStatus === "accept-proposal" ? "Book Vendors" : "Set Requirements",
         status: "not-complete",
         route: this.event.processingStatus === "accept-proposal" ? "booking/choose-vendor" : "booking/planningboard",
         icon: `${this.$iconURL}Campaign/Group 8857.svg`,
