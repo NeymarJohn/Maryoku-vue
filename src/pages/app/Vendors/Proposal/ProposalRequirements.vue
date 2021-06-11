@@ -128,7 +128,7 @@ export default {
     },
     // services which vendor provides
     vendorProfileServices() {
-      return this.vendor.services;
+      return this.vendor.services || {};
     },
     services: {
       get: function () {

@@ -604,12 +604,14 @@ export const businessCategories = [
                   "french",
                   "spanish",
                   "german",
+                  "belgian",
                   "american",
                   "Colombian",
                   "chinese",
                   "japanese",
                   "mexican",
                   "indian",
+                  "farm-to-table",
                   "Peruvian",
                   "Argentine",
                   "Thai",
@@ -1088,6 +1090,11 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
                 hideOnAutoComplete: true
+              },
+              {
+                name: "deliveries",
+                type: Number,
+                value: 0,
               },
               {
                 name: "onsite setup",
@@ -2790,7 +2797,7 @@ export const businessCategories = [
         ],
       },
       {
-        name: "Sustainability and Inclusion",
+        name: "Sustainability, Inclusion and Diversity",
         subCategories: [
           {
             name: "Sustainability",
@@ -2829,6 +2836,35 @@ export const businessCategories = [
           },
           {
             name: "Inclusion",
+            items: [
+              {
+                name: "Prioritizing diversity and inclution",
+                type: Boolean,
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Women on senior staff",
+                type: Boolean,
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Strict sexual harrasment policy",
+                type: Boolean,
+                xIncluded: true,
+                value: false,
+              },
+              {
+                name: "Acknowledge all religious and cultural holidays",
+                type: Boolean,
+                xIncluded: true,
+                value: false,
+              },
+            ],
+          },
+          {
+            name: "Diversity",
             items: [
               {
                 name: "Prioritizing diversity and inclution",
@@ -3652,17 +3688,20 @@ export const companyServices = [
     type: Array,
     value: [],
     available: [
+      "ballroom",
       "gallery",
-      "garden",
+      "park or field or garden",
       "historic establishment",
       "bar or pub or club",
       "restaurant",
       "Meeting Room",
+      "Theatre",
+      "business center",
       "community center",
-      "sport club",
+      "sport venue",
       "academic venue",
       "stately home",
-      "stadium",
+      "stadium or arena",
     ],
   },
   {
@@ -4047,12 +4086,14 @@ export const VendorPolicy = [
       },
       {
         name: "Level of security training/certification",
+        type: Number,
         noSuffix: true,
         hasComment: true,
         unit: "none"
       },
       {
         name: "Special attire requests",
+        type: Number,
         noSuffix: true,
         hasComment: true,
         unit: "none"

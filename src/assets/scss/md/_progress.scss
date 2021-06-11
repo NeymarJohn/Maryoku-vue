@@ -27,9 +27,6 @@
     height: 8px;
     margin-bottom: 0;
   }
-  &.md-theme-default.md-determinate.md-vendor{
-    background-color: #d5d5d5;
-  }
   &.md-theme-default.md-determinate.md-vendor .md-progress-bar-fill{
     background-color: $vendorColor;
   }
