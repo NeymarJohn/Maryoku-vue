@@ -121,10 +121,6 @@ export default {
         };
       },
     },
-    theme: {
-      type: String,
-      default: "",
-    },
   },
   data() {
     return {

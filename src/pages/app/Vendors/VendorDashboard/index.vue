@@ -25,7 +25,6 @@
                     strokWidth: 30,
                     direction: 'row',
                   }"
-                  theme="white"
                 ></pie-chart>
               </div>
               <div class="d-flex">
@@ -108,13 +107,12 @@
                 <upcoming-event
                   v-if="upcomingEvents && upcomingEvents.length > 0"
                   :events="upcomingEvents"
-                  @showEvent="showEvent"
                 ></upcoming-event>
                 <template v-else>
                   <img class="mt-50 mb-20" :src="`${iconUrl}vendordashboard/group-16600.png`" />
                   <div class="mb-20 color-vendor font-bold font-size-14">NO UPCOMING EVENTS</div>
                 </template>
-                <md-button class="md-simple md-outlined md-vendor maryoku-btn" @click="createNewEvent">
+                <md-button class="md-simple md-outlined md-vendor maryoku-btn" @click="showVendorCreateModal = true">
                   Create New Event
                 </md-button>
               </div>
@@ -125,7 +123,6 @@
     </div>
     <vendor-create-event-modal
       v-if="showVendorCreateModal"
-      :defaultData="defaultEventData"
       @cancel="showVendorCreateModal = false"
       @save="handleSaveEvent"
     ></vendor-create-event-modal>
@@ -181,7 +178,6 @@ export default {
       },
       markedDates: [],
       upcomingEvents: [],
-      defaultEventData: {},
     };
   },
   beforeCreate() {
@@ -233,9 +229,7 @@ export default {
       return this.$router.push(`/vendor/${this.vendorData.id}/service/add`);
     },
     createNewEvent() {
-      // return this.$router.push(`/create-event-wizard`);
-      this.showVendorCreateModal = true;
-      this.defaultEventData = {};
+      return this.$router.push(`/create-event-wizard`);
     },
 
     selectDay(e) {
@@ -262,11 +256,6 @@ export default {
           this.upcomingEvents = events.slice(0, 5);
         });
     },
-    showEvent(event) {
-      this.showVendorCreateModal = true;
-      console.log(event);
-      this.defaultEventData = { ...event };
-    },
   },
   computed: {
     vendorData() {
@@ -289,7 +278,7 @@ export default {
             title: cat.title,
             value: 12 / this.vendorData.vendorCategories.length,
             color: this.categoryColors[idx],
-            image: `${this.$iconURL}Budget+Elements/${cat.key}-white.svg`,
+            image: `/static/icons/vendor/vendor_categories/${cat.icon}`,
           };
         return null;
       });
