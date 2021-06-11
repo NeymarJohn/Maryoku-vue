@@ -1,11 +1,13 @@
 <template>
   <div class="maryoku_input">
     <md-autocomplete
+      class="location md-vendor"
       v-model="selectedLocation"
       :md-options="locations"
-      class="location"
+      :md-theme="black"
       :class="{ active: selectedLocation, 'md-purple': theme === 'purple' }"
-    ></md-autocomplete>
+    >
+    </md-autocomplete>
   </div>
 </template>
 <script>
@@ -64,6 +66,7 @@ export default {
     },
   },
   mounted() {
+    this.selectedLocation = this.value;
     this.locationService = new google.maps.places.AutocompleteService();
     this.geocoder = new google.maps.Geocoder();
   },
@@ -101,5 +104,14 @@ export default {
 }
 .required-logo {
   color: red;
+}
+.md-menu-content:not(.md-select-menu) .md-menu-content-container .md-list {
+  /deep/ .md-list-item {
+    /deep/ .md-list-item-button {
+      &:hover {
+        background-color: #641856 !important;
+      }
+    }
+  }
 }
 </style>
