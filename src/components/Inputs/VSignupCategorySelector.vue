@@ -4,7 +4,7 @@
       <div class="title">{{ title }}<span v-if="required"> *</span></div>
       <div v-if="isEdit">
         <div class="d-flex position-relative" v-for="(item, index) of selectedValue" :key="item || index + 1">
-          <img class="inside-img" :src="img" v-if="img != '' && field !== 'vendorCategories'" />
+          <!-- <img class="inside-img" :src="img" v-if="img != '' && field !== 'vendorCategories'" /> -->
           <category-selector
             v-if="field === 'vendorCategories'"
             :value="item || ''"
@@ -15,14 +15,20 @@
             @change="updateCategory(index, ...arguments)"
           >
           </category-selector>
-          <vue-google-autocomplete
+          <location-input
+            v-else-if="field === 'vendorAddresses'"
+            :value="item"
+            @change="changeAddress(index, ...arguments)"
+            class="my-10 width-100 address"
+          ></location-input>
+          <!-- <vue-google-autocomplete
             v-else-if="field === 'vendorAddresses'"
             :id="`map-${index}`"
             ref="address"
             class="my-10 width-100 address"
             :placeholder="item ? item : 'Enter an an address, zipcode, or location'"
             v-on:placechanged="getAddressData(index, ...arguments)"
-          />
+          /> -->
           <img
             class="ml-10 close-btn"
             :src="`${$iconURL}Requirements/delete-dark.svg`"
@@ -66,12 +72,14 @@
 import VueGoogleAutocomplete from "vue-google-autocomplete";
 import CategorySelector from "@/components/Inputs/CategorySelector";
 import { VendorCategories } from "@/constants/vendor";
+import LocationInput from "../LocationInput.vue";
 
 export default {
   name: "v-signup-editable-field",
   components: {
     VueGoogleAutocomplete,
     CategorySelector,
+    LocationInput,
   },
   props: {
     title: String,
@@ -152,6 +160,11 @@ export default {
       } else {
         this.selectedValue = this.value.map((item) => item);
       }
+    },
+    changeAddress(index, value) {
+      if (!value) return;
+      this.selectedValue[index] = value.name;
+      this.selectedValue = [...this.selectedValue];
     },
   },
   beforeDestroy() {

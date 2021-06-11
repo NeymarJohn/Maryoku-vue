@@ -25,6 +25,18 @@
   position: relative;
 }
 .dropdown-menu {
+  &.md-vendor {
+    li {
+      position: relative;
+      a:hover,
+      a:focus,
+      a:active {
+          background-color: #641856 !important;
+      }
+    }
+  }
+}
+.dropdown-menu {
     border: 0;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
 

@@ -1,27 +1,8 @@
 <template>
   <div class="vendor-proposal-board p-40">
-    <vue-html2pdf
-      :show-layout="false"
-      :float-layout="true"
-      :enable-download="true"
-      :preview-modal="false"
-      :paginate-elements-by-height="1800"
-      :filename="`proposal-${selectedProposal ? selectedProposal.id : ''}`"
-      :pdf-quality="2"
-      :manual-pagination="true"
-      pdf-format="letter"
-      pdf-orientation="portrait"
-      pdf-content-width="800px"
-      :html-to-pdf-options="htmlToPdfOptions"
-      
-      @hasDownloaded="onPDFDownload($event)"
-      ref="html2Pdf"
-    >
-      <div ref="pdfContainer" slot="pdf-content" style="margin: 0;" />
-    </vue-html2pdf>
     <loader :active="loading" :isFullScreen="true"/>
     <div class="font-size-22 font-bold d-flex align-center">
-      <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposal Board
+      <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposals Board
       <md-button class="ml-auto md-vendor md-maryoku mr-15">Create New Proposal</md-button>
     </div>
     <div class="font-bold text-uppercase mt-30 mb-15">Opportunities</div>
@@ -51,9 +32,9 @@
       <div v-if="proposalRequests.length < 4" class="white-card p-20 d-flex">
           <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" style="width: 55px;height: 55px">
           <div class="ml-15">
-              <div class="font-size-18 font-bold text-uppercase color-vendor">No More Pending Proposals</div>
-              <p class="my-10 font-size-14">You can increase your exposure to planners in a few simple steps</p>
-              <div class="d-flex"><md-button class="md-simple ml-auto md-vendor md-outlined" style="height: 30px">Learn More</md-button></div>
+              <div class="font-size-18 font-bold text-uppercase color-vendor">No Open opportunities</div>
+              <p class="my-10 font-size-14">We couldn't find any more opportunities for you at this point. Increase your exposure by improving your profile</p>
+              <div class="d-flex"><md-button class="md-simple ml-auto md-vendor md-outlined" style="height: 30px">Optimize Profile</md-button></div>
           </div>
       </div>
       <template slot="next">
@@ -176,9 +157,6 @@
             <md-button class="md-simple md-just-icon md-round modal-default-button" @click="showProposalDetail = false">
                 <md-icon>clear</md-icon>
             </md-button>
-            <md-button class="md-simple md-just-icon md-round modal-default-button" style="right: 4rem" @click="downloadPreviewPDF">
-                <md-icon>file_download</md-icon>
-            </md-button>
         </template>
         <template slot="body">
           <proposal-content :vendorProposal="selectedProposal"/>
@@ -279,8 +257,10 @@ export default {
         // let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '60b636d7cfefec26397d2a7e' })).get();
         this.proposalRequests = proposalRequests.filter(p => {
             let proposal = this.proposals.find(it => it.proposalRequestId === p.id);
-            return proposal ? p.remainingTime > 0 && p.declineMessage !== 'decline' && proposal.status !== 'submit' :
+            return proposal ? p.declineMessage !== 'decline' && proposal.status !== 'submit' :
                 p.remainingTime > 0 && p.declineMessage !== 'decline';
+
+
         });
 
         this.$nextTick(_ => {
@@ -292,7 +272,7 @@ export default {
       const params = {status: this.tab, ...this.sortFields};
       const res = await new Proposal()
       .for(new Vendor({ id: this.vendorData.id }))
-      //   .for(new Vendor({ id: '60462793cfefec258a35e874' }))
+        // .for(new Vendor({ id: '60462793cfefec258a35e874' }))
         .page(pagination.page)
         .limit(pagination.limit)
         .params(params)
@@ -300,7 +280,7 @@ export default {
       const data = res[0];
 
       this.proposals = data.items;
-      this.proposals.map(it => console.log('proposal', it.proposalRequestId));
+      this.proposals.map(it => console.log('proposal', it));
       this.pagination.total = data.total;
       this.proposalTabs.map(t => {
           if (data.hasOwnProperty(t.key)) this.pagination[t.key] = data[t.key];
@@ -366,12 +346,7 @@ export default {
         this.loading = false;
 
       } else if (action === 'download') {
-        this.loading = true;
-        this.selectedEventData = this.selectedProposal ? this.selectedProposal.proposalRequest.eventData : null;
-        this.flagDownloadPdf = true;
-        
-        // this.$forceUpdate();
-        //this.downloadProposal(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
+        this.downloadProposal(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
       }
     },
     downloadPreviewPDF() {

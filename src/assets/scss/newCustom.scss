@@ -2648,3 +2648,53 @@
         }
     }
 }
+
+.vendor-tooltip-theme{
+    top: 10px !important;
+    &[x-placement^="bottom"] {
+        margin-bottom: 5px;
+
+        .tooltip-arrow {
+            border-width: 0 10px 10px 10px !important;
+            border-right-color: transparent !important;
+            border-top-color: transparent !important;
+            border-left-color: transparent !important;
+            bottom: -5px;
+            left: calc(50% - 5px);
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    }
+
+    .tooltip-arrow {
+        width: 0;
+        height: 0;
+        border-style: solid;
+        position: absolute;
+        top: -5px !important;
+        margin: 5px;
+        border-color: #ffedb7;
+        z-index: 1;
+    }
+
+    .tooltip-inner{
+        margin-top: 5px;
+        max-width: 300px;
+        background-color: #ffedb7;
+        color: #050505;
+        padding: 18px 29px;
+        text-align: center;
+        border: 0;
+        border-radius: 0;
+
+        h5 {
+            margin: 14px 0 0 0;
+            font: 800 16px Manrope-Regular, sans-serif;
+        }
+        p {
+            margin: 14px 0 0 0;
+            padding: 0;
+            font: normal 16px Manrope-Regular, sans-serif;
+        }
+    }
+}
