@@ -25,6 +25,7 @@
                     strokWidth: 30,
                     direction: 'row',
                   }"
+                  theme="white"
                 ></pie-chart>
               </div>
               <div class="d-flex">
@@ -288,7 +289,7 @@ export default {
             title: cat.title,
             value: 12 / this.vendorData.vendorCategories.length,
             color: this.categoryColors[idx],
-            image: `/static/icons/vendor/vendor_categories/${cat.icon}`,
+            image: `${this.$iconURL}Budget+Elements/${cat.key}-white.svg`,
           };
         return null;
       });
