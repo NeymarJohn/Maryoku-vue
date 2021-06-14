@@ -41,7 +41,7 @@
                 Compare Proposals
               </md-button>
               <span class="seperator"></span>
-              <md-button class="md-simple normal-btn md-red">
+              <md-button class="md-simple normal-btn md-red" @click="showDifferentProposals = true">
                 <md-icon>edit</md-icon>
                 I Want Something Different
               </md-button>
@@ -106,6 +106,11 @@
       @cancel="isOpenedAdditionalModal = false"
       @close="isOpenedAdditionalModal = false"
     ></additional-request-modal>
+    <event-change-proposal-modal
+      v-if="showDifferentProposals"
+      @close="showDifferentProposals = false"
+      :proposals="proposals.slice(0, 3)"
+    ></event-change-proposal-modal>
   </div>
 </template>
 <script>
@@ -176,6 +181,7 @@ export default {
     showCommentEditorPanel: false,
     showDetails: false,
     selectedProposal: null,
+    showDifferentProposals: false,
   }),
   methods: {
     ...mapMutations("event", ["setEventData", "setBookingRequirements", "setInitBookingRequirements"]),
