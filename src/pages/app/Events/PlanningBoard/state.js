@@ -5,7 +5,10 @@ import CalendarEvent from "@/models/CalendarEvent";
 import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
 
 const state = {
+  id: null,
   step: 1,
+  types: {},
+  mainRequirements: {},
   specialRequirements: {}
 }
 const getters = {

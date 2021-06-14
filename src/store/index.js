@@ -9,7 +9,6 @@ import PublicEventPlanner from "./modules/PublicEventPlanner";
 import vendor from "./modules/vendor";
 import campaign from "./modules/campaign";
 import vendorProposal from "./modules/vendorProposal"
-import planningBoard from "./modules/planningBoard"
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -22,7 +21,6 @@ export default new Vuex.Store({
         PublicEventPlanner,
         campaign,
         vendorProposal,
-        common,
-        planningBoard
+        common
     },
 });

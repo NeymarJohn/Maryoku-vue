@@ -36,7 +36,7 @@
           </div>
           <div class="price">
             <span class="price-value">${{ proposal.cost | withComma }}</span>
-            <small>{{ period }}</small>
+            <small>For 3 hours</small>
           </div>
           <div
             class="font-size-14 color-dark-gray mb-10"
@@ -130,43 +130,6 @@ export default {
     },
     eventData() {
       return this.$store.state.event.eventData;
-    },
-    period() {
-      try {
-        console.log(this.$store.state.planningBoard);
-        console.log(this.proposal.vendor.vendorCategories[0]);
-        const requirement = this.$store.state.planningBoard[this.proposal.vendor.vendorCategories[0]];
-        const period = requirement.period;
-        if (requirement.isEntireEvent) {
-          return "For Whole Event";
-        }
-        if (!period) return "";
-
-        var startTime = moment(
-          `${period.startTime.time.hh}:${period.startTime.time.mm} ${period.startTime.ampm}`,
-          "HH:mm:ss a",
-        );
-        var endTime = moment(
-          `${period.endTime.time.hh}:${period.endTime.time.mm} ${period.endTime.ampm}`,
-          "HH:mm:ss a",
-        );
-
-        // calculate total duration
-        var duration = moment.duration(endTime.diff(startTime));
-
-        // duration in hours
-        var hours = parseInt(duration.asHours());
-
-        // duration in minutes
-        var minutes = parseInt(duration.asMinutes()) % 60;
-        if (minutes) {
-          return `For ${hours} hours and ${minutes} minutes.`;
-        }
-        return `For ${hours} hours`;
-      } catch (e) {
-        console.error(e);
-        return "";
-      }
     },
   },
 };

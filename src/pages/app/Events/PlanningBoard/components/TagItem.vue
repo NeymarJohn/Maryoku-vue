@@ -35,7 +35,7 @@ export default {
   border-radius: 25px;
   display: inline-block;
   padding: 10px 20px;
-  font-size: 14px;
+  font-size: 16px;
   font-family: "Manrope-Bold";
   color: #f51355 !important;
   cursor: pointer;

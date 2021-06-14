@@ -35,11 +35,7 @@
         </div>
       </div>
       <div>
-        <div
-          v-for="section in subCategorySections.filter((s) => isVisibleSection(selectedCategory.key, s))"
-          :key="section"
-          class="text-left sub-category"
-        >
+        <div v-for="section in subCategorySections" :key="section" class="text-left sub-category">
           <div class="font-bold-extra">{{ section }}</div>
           <div class="requirement-row text-left">
             <!-- {{ subCategory.requirements[section] }} -->
@@ -65,7 +61,6 @@
                 :isSelected="tag.selected"
                 :theme="`red`"
                 v-for="tag in item.options"
-                class="mr-10"
               ></tag-item>
             </div>
           </div>
@@ -214,10 +209,6 @@ export default {
       type: Object,
       default: () => {},
     },
-    selectedTypes: {
-      type: Array,
-      default: () => [],
-    },
   },
   created() {
     this.subCategorySections = Object.keys(this.subCategory);
@@ -288,17 +279,6 @@ export default {
     },
     handleNoteChange(e) {
       // this._saveRequirementsInStore(this.event);
-    },
-    //for decor
-    isVisibleSection(category, section) {
-      if (
-        category === "decor" &&
-        section.toLowerCase() === "amenities" &&
-        this.selectedTypes.indexOf("Interior Design") < 0
-      ) {
-        return false;
-      }
-      return true;
     },
     getIcon(subCategory, name) {
       let icon = null;

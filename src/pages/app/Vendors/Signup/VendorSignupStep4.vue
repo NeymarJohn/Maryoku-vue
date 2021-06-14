@@ -199,7 +199,6 @@
                   <span v-else>
                     <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
                     <img v-else-if="policy.value === false" :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
-                    <span v-else-if="policy.unit === 'none'">{{policy.desc}}</span>
                     <span v-else>{{ policy.value | withComma }}</span>
                   </span>
                   <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
@@ -207,6 +206,7 @@
                   <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
                     {{ policy.attendees }} attendees
                   </span>
+                  <span v-if="policy.unit === 'none'"></span>
                 </div>
               </div>
             </div>
