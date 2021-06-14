@@ -233,7 +233,7 @@ export const businessCategories = [
                 value: false
               },
               {
-                name: "venue bandwidth (for video streaming)",
+                name: "venue bandwidth (for video streaming or meeting content)",
                 type: Boolean,
                 value: false,
                 hideOnAutoComplete: true
@@ -4047,15 +4047,13 @@ export const VendorPolicy = [
       },
       {
         name: "Level of security training/certification",
-        noSuffix: true,
+        type: Boolean,
         hasComment: true,
-        unit: "none"
       },
       {
         name: "Special attire requests",
-        noSuffix: true,
+        type: Boolean,
         hasComment: true,
-        unit: "none"
       },
     ],
   },

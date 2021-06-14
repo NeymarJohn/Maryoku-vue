@@ -50,6 +50,9 @@
           <h1 class="font-size-30">Dear {{ $store.state.auth.user.name }},</h1>
           <p>
             {{ vendorProposal.personalMessage }}
+
+            <!-- <br />Sincerely,
+                        <span class="proposal-title">{{ vendorProposal.vendor.vendorDisplayName }}</span> -->
           </p>
           <div class="vision mt-30 font-size-22 mb-40">
             <div class="font-bold">
