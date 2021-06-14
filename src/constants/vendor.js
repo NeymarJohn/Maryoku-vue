@@ -233,7 +233,7 @@ export const businessCategories = [
                 value: false
               },
               {
-                name: "venue bandwidth (for video streaming or meeting content)",
+                name: "venue bandwidth (for video streaming)",
                 type: Boolean,
                 value: false,
                 hideOnAutoComplete: true
