@@ -182,6 +182,7 @@ export default {
     ...mapActions("comment", ["getCommentComponents"]),
     ...mapActions("planningBoard", ["saveMainRequirements", "getRequirements", "saveTypes", "updateRequirements"]),
     selectCategory(category, clicked) {
+      this.currentRequirement = this.eventRequirements[category.componentId];
       this.selectedCategory = category;
     },
     addRequirements() {
@@ -302,6 +303,9 @@ export default {
           this.isLoadingProposal = false;
         });
     });
+    setTimeout(() => {
+      this.selectCategory(this.categories[0]);
+    }, 500);
   },
   watch: {
     event(newVal, oldVal) {
@@ -334,6 +338,7 @@ export default {
       return this.$store.state.event.eventData.components;
     },
     expiredTime() {
+      console.log(this.currentRequirement);
       if (this.currentRequirement) return this.currentRequirement.expiredBusinessTime;
       return 0;
     },
@@ -347,7 +352,6 @@ export default {
     },
     proposals() {
       if (!this.selectedCategory) return [];
-      console.log(this.proposalsByCategory);
       return this.proposalsByCategory[this.selectedCategory.componentId];
     },
   },

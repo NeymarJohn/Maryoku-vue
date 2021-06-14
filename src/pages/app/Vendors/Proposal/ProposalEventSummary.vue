@@ -326,13 +326,6 @@
                         background-size: contain;
                       `"
                     />
-                    <!-- <img :src="vendor.signature"/> -->
-                    <img
-                      class="remove"
-                      :src="`${iconUrl}Asset 529.svg`"
-                      v-if="vendor.signature"
-                      @click="removeSignature(vendor.signature)"
-                    />
                   </template>
                 </div>
               </div>
