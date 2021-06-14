@@ -130,7 +130,6 @@ import EventProposalDetails from "../Proposal/EventProposalDetails.vue";
 import ProposalsBar from "./ProposalsBar.vue";
 import AdditionalRequestModal from "../PlanningBoard/components/modals/AdditionalRequest.vue";
 
-import PlanningBoardState from "../PlanningBoard/state.js";
 import ProgressRadialBar from "../PlanningBoard/components/ProgressRadialBar.vue";
 import RequirementsCart from "../PlanningBoard/RequirementsCart.vue";
 
@@ -303,11 +302,6 @@ export default {
           this.isLoadingProposal = false;
         });
     });
-  },
-  beforeCreate() {
-    if (!this.$store.state.planningBoard) {
-      this.$store.registerModule("planningBoard", PlanningBoardState);
-    }
   },
   watch: {
     event(newVal, oldVal) {

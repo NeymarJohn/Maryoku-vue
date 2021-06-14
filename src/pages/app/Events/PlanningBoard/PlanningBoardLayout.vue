@@ -99,7 +99,6 @@
   </div>
 </template>
 <script>
-import PlanningBoardState from "./state";
 import ServiceCategoryCard from "./components/ServiceCategoryCard";
 import { serviceCategoryImages } from "@/constants/event.js";
 import ProgressRadialBar from "./components/ProgressRadialBar.vue";
@@ -517,12 +516,6 @@ export default {
     // if (this.event.processingStatus === "accept-proposal") {
     //   this.$router.push(`/events/${this.event.id}/booking/choose-vendor`);
     // }
-  },
-  beforeCreate() {
-    this.$store.registerModule("planningBoard", PlanningBoardState);
-  },
-  beforeDestroy() {
-    this.$store.unregisterModule("planningBoard");
   },
   computed: {
     ...mapState("planningBoard", {
