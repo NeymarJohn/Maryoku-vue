@@ -43,29 +43,28 @@
         </div>
       </div>
     </div>
-    <div class="d-flex align-end">
-      <md-button
+    <div class="d-flex align-center">
+      <!-- <md-button
         class="md-simple md-vendor md-vendor-text"
         style="margin-left: -15px; width: 20px; height: 30px"
         @click="dismiss(proposalRequest.id)"
       >
         Dismiss
-      </md-button>
-      <div class="ml-auto">
-          <div v-if="proposal">
-              <div v-if="proposal.status === 'draft'">
-                  <div class="font-size-14"><span class="font-bold color-vendor">{{progress}} %</span> completed</div>
-                  <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="progress"></md-progress-bar>
-              </div>
-          </div>
-          <div v-else class="new color-vendor font-size-14 ml-auto">
-              New
+      </md-button> -->
+      <div class="mr-auto">
+        <div v-if="proposal">
+          <div v-if="proposal.status === 'draft'">
+            <div class="font-size-14">
+              <span class="font-bold color-vendor">{{ progress }} %</span> completed
+            </div>
+            <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="progress"></md-progress-bar>
           </div>
         </div>
-        <md-button class="md-vendor" @click="gotoProposalRequest" style="height: 30px">
-          {{ !proposal ? "Apply" : proposal.status === "draft" ? "Complete" : "Make Changes" }}
-        </md-button>
+        <div v-else class="new color-vendor font-size-14 ml-auto">New</div>
       </div>
+      <md-button class="md-vendor" @click="gotoProposalRequest" style="height: 30px">
+        {{ !proposal ? "Apply" : proposal.status === "draft" ? "Complete" : "Make Changes" }}
+      </md-button>
     </div>
   </div>
 </template>
