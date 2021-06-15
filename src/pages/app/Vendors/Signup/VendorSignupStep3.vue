@@ -350,13 +350,13 @@ import VueGoogleAutocomplete from "vue-google-autocomplete";
 import VendorPolicyItem from "../components/vendor-policy-item";
 import VendorPricingPolicyItem from "../components/vendor-pricing-policy-item";
 const christanHolidaysAPI =
-  "https://www.googleapis.com/calendar/v3/calendars/en.christian%23holiday%40group.v.calendar.google.com/events?key=AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8";
+  "https://www.googleapis.com/calendar/v3/calendars/en.christian%23holiday%40group.v.calendar.google.com/events?key=AIzaSyCuHr_Quojoaxqw9dWHgbPHItxfsZAYKsY";
 const jewishHolidaysAPI =
-  "https://www.googleapis.com/calendar/v3/calendars/en.jewish%23holiday%40group.v.calendar.google.com/events?key=AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8";
+  "https://www.googleapis.com/calendar/v3/calendars/en.jewish%23holiday%40group.v.calendar.google.com/events?key=AIzaSyCuHr_Quojoaxqw9dWHgbPHItxfsZAYKsY";
 const muslimHolidaysAPI =
-  "https://www.googleapis.com/calendar/v3/calendars/en.islamic%23holiday%40group.v.calendar.google.com/events?key=AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8";
+  "https://www.googleapis.com/calendar/v3/calendars/en.islamic%23holiday%40group.v.calendar.google.com/events?key=AIzaSyCuHr_Quojoaxqw9dWHgbPHItxfsZAYKsY";
 const hinduHolidaysAPI =
-  "https://www.googleapis.com/calendar/v3/calendars/en.islamic%23holiday%40group.v.calendar.google.com/events?key=AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8";
+  "https://www.googleapis.com/calendar/v3/calendars/en.islamic%23holiday%40group.v.calendar.google.com/events?key=AIzaSyCuHr_Quojoaxqw9dWHgbPHItxfsZAYKsY";
 
 export default {
   name: "vendor-signup-step3",

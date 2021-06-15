@@ -47,12 +47,9 @@
         </div>
 
         <div class="proposal-body">
-          <h1 class="font-size-30">Dear {{ vendorProposal.vendor.vendorDisplayName }},</h1>
+          <h1 class="font-size-30">Dear {{ $store.state.auth.user.name }},</h1>
           <p>
             {{ vendorProposal.personalMessage }}
-
-            <!-- <br />Sincerely,
-                        <span class="proposal-title">{{ vendorProposal.vendor.vendorDisplayName }}</span> -->
           </p>
           <div class="vision mt-30 font-size-22 mb-40">
             <div class="font-bold">
@@ -563,7 +560,7 @@ export default {
         newExpiredDate = new Date(this.vendorProposal.dateCreated).getTime() + 9 * 3600 * 24 * 1000;
       }
       new EventComponentProposal({ id: this.vendorProposal.id, expiredDate: newExpiredDate }).save().then((res) => {
-        this.vendorProposal = res
+        this.vendorProposal = res;
       });
     },
   },

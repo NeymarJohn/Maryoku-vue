@@ -24,7 +24,6 @@
           :value="proposals.length"
           :total="3"
           icon="common/checked-calendar-red.svg"
-          @click="openCart"
         ></progress-radial-bar>
       </div>
       <div class="booking-proposals" v-if="selectedCategory">
@@ -42,7 +41,7 @@
                 Compare Proposals
               </md-button>
               <span class="seperator"></span>
-              <md-button class="md-simple normal-btn md-red">
+              <md-button class="md-simple normal-btn md-red" @click="showDifferentProposals = true">
                 <md-icon>edit</md-icon>
                 I Want Something Different
               </md-button>
@@ -107,7 +106,11 @@
       @cancel="isOpenedAdditionalModal = false"
       @close="isOpenedAdditionalModal = false"
     ></additional-request-modal>
-    <requirements-cart v-if="showCart" @close="showCart = false"></requirements-cart>
+    <event-change-proposal-modal
+      v-if="showDifferentProposals"
+      @close="showDifferentProposals = false"
+      :proposals="proposals.slice(0, 3)"
+    ></event-change-proposal-modal>
   </div>
 </template>
 <script>
@@ -132,7 +135,6 @@ import EventProposalDetails from "../Proposal/EventProposalDetails.vue";
 import ProposalsBar from "./ProposalsBar.vue";
 import AdditionalRequestModal from "../PlanningBoard/components/modals/AdditionalRequest.vue";
 
-import PlanningBoardState from "../PlanningBoard/state.js";
 import ProgressRadialBar from "../PlanningBoard/components/ProgressRadialBar.vue";
 import RequirementsCart from "../PlanningBoard/RequirementsCart.vue";
 
@@ -179,13 +181,14 @@ export default {
     showCommentEditorPanel: false,
     showDetails: false,
     selectedProposal: null,
-    showCart: false,
+    showDifferentProposals: false,
   }),
   methods: {
     ...mapMutations("event", ["setEventData", "setBookingRequirements", "setInitBookingRequirements"]),
     ...mapActions("comment", ["getCommentComponents"]),
     ...mapActions("planningBoard", ["saveMainRequirements", "getRequirements", "saveTypes", "updateRequirements"]),
     selectCategory(category, clicked) {
+      this.currentRequirement = this.eventRequirements[category.componentId];
       this.selectedCategory = category;
     },
     addRequirements() {
@@ -284,9 +287,6 @@ export default {
       if (!this.$store.state[category]) return {};
       return this.$store.state[category].mainRequirements;
     },
-    openCart() {
-      this.showCart = true;
-    },
   },
   created() {
     this.isLoading = true;
@@ -309,11 +309,9 @@ export default {
           this.isLoadingProposal = false;
         });
     });
-  },
-  beforeCreate() {
-    if (!this.$store.state.planningBoard) {
-      this.$store.registerModule("planningBoard", PlanningBoardState);
-    }
+    setTimeout(() => {
+      this.selectCategory(this.categories[0]);
+    }, 500);
   },
   watch: {
     event(newVal, oldVal) {
@@ -346,6 +344,7 @@ export default {
       return this.$store.state.event.eventData.components;
     },
     expiredTime() {
+      console.log(this.currentRequirement);
       if (this.currentRequirement) return this.currentRequirement.expiredBusinessTime;
       return 0;
     },
@@ -359,7 +358,6 @@ export default {
     },
     proposals() {
       if (!this.selectedCategory) return [];
-      console.log(this.proposalsByCategory);
       return this.proposalsByCategory[this.selectedCategory.componentId];
     },
   },

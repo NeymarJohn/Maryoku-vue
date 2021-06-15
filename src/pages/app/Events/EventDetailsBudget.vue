@@ -372,7 +372,7 @@ export default {
       "setNumberOfParticipants",
       "setEventData",
     ]),
-    ...mapMutations('event', ["setBudgetNotification"]),
+    ...mapMutations("event", ["setBudgetNotification"]),
     getCalendar() {
       return new Calendar({ id: this.currentUser.profile.defaultCalendarId });
     },
@@ -397,7 +397,12 @@ export default {
       let calendar = this.getCalendar();
       await this.getEvent(calendar);
       await this.getEventComponents(calendar);
-      console.log('showBudgetNotification', this.event.id, this.showBudgetNotification, this.showBudgetNotification.indexOf(this.event.id) === -1);
+      console.log(
+        "showBudgetNotification",
+        this.event.id,
+        this.showBudgetNotification,
+        this.showBudgetNotification.indexOf(this.event.id) === -1,
+      );
       // notify budget states
       if (this.showBudgetNotification.indexOf(this.event.id) === -1) {
         // this.notifyStates();
@@ -417,7 +422,6 @@ export default {
       }
     },
     notifyStates() {
-
       this.budgetStates = [];
       let now = moment();
       let created_at = moment(this.event.dateCreated);
@@ -584,13 +588,7 @@ export default {
     },
   },
   computed: {
-    ...mapState("EventPlannerVuex", [
-      "eventData",
-      "eventModalOpen",
-      "modalTitle",
-      "modalSubmitTitle",
-      "editMode",
-    ]),
+    ...mapState("EventPlannerVuex", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode"]),
     ...mapGetters({
       budgetStatistics: "event/budgetStatistics",
       components: "event/getComponentsList",
@@ -609,7 +607,7 @@ export default {
           id: "overview-item",
         };
         const concept = {
-          title: "Inspiration Board",
+          title: "Get Inspired",
           status: this.event.concept && this.event.conceptProgress === 100 ? "completed" : "not-complete",
           route: "booking/concept",
           icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
@@ -618,7 +616,7 @@ export default {
           id: "concept-item",
         };
         const budget = {
-          title: "Budget Wizard",
+          title: "Craft Event Budget",
           status: "not-complete",
           route: this.event.budgetProgress == 100 ? "edit/budget" : "booking/budget",
           icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
@@ -627,7 +625,7 @@ export default {
           id: "budget-item",
         };
         const timeline = {
-          title: "Event Scheduler",
+          title: "Set The Schedule",
           status: this.event.timelineProgress === 100 ? "completed" : "not-complete",
           route: "booking/timeline",
           icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
@@ -636,7 +634,7 @@ export default {
           id: "timeline-item",
         };
         const campaign = {
-          title: "Guests Communicator",
+          title: "Communicate With Guests",
           status: this.event.campaignProgress === 100 ? "completed" : "not-complete",
           route: "booking/campaign",
           icon: `${this.$iconURL}Campaign/Group 8857.svg`,
@@ -645,13 +643,22 @@ export default {
           id: "campaign-item",
         };
         const planningBoard = {
-          title: "Plan Your Event",
+          title: "Set Requirements",
           status: this.event.campaignProgress === 100 ? "completed" : "not-complete",
           route: "booking/planningboard",
           icon: `${this.$iconURL}Campaign/Group 8857.svg`,
           progress: this.event.campaignProgress,
           componentId: "planningboard",
           id: "planningboard-item",
+        };
+        const chooseVendor = {
+          title: "Booking Vendors",
+          status: "not-complete",
+          route: "booking/choose-vendor",
+          icon: `${this.$iconURL}Campaign/Group 8857.svg`,
+          progress: this.event.campaignProgress,
+          componentId: "chooseVendor",
+          id: "bookingboard-item",
         };
         const elements = [];
         elements.push(overview);
@@ -662,6 +669,9 @@ export default {
         elements.push(timeline);
         elements.push(campaign);
         elements.push(planningBoard);
+        if (this.event.processingStatus === "accept-proposal") {
+          elements.push(chooseVendor);
+        }
         // show when you approve budget
         // if (this.event.budgetProgress == 100) {
         //     this.event.components.sort((a, b) => a.order - b.order);

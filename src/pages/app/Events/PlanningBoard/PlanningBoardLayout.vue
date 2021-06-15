@@ -9,7 +9,7 @@
             <span v-if="step === 1">We'd love to know your style</span>
             <span v-if="step === 2">What kind of services would you like us to find you?</span>
           </div>
-          <progress-radial-bar :value="percentOfBudgetCategories" :total="12"></progress-radial-bar>
+          <progress-radial-bar :value="percentOfBudgetCategories" :total="12" @click="openCart"></progress-radial-bar>
         </div>
         <div class="md-layout md-gutter mt-40" v-if="step === 1">
           <div
@@ -81,11 +81,11 @@
       :subCategory="subCategory"
       :selectedCategory="selectedCategory"
       :defaultData="getRequirements(selectedCategory.key) || {}"
+      :selectedTypes="getSelectedTypes(selectedCategory.key)"
       @save="saveAdditionalRequest"
       @cancel="isOpenedAdditionalModal = false"
       @close="isOpenedAdditionalModal = false"
     ></additional-request-modal>
-
     <special-requirement-modal
       v-if="isOpenedFinalModal"
       :defaultData="specialRequirements"
@@ -93,10 +93,12 @@
       @save="saveSpecialRequirements"
     >
     </special-requirement-modal>
+    <transition name="slide-fade">
+      <requirements-cart v-if="showCart" @close="showCart = false"></requirements-cart>
+    </transition>
   </div>
 </template>
 <script>
-import PlanningBoardState from "./state";
 import ServiceCategoryCard from "./components/ServiceCategoryCard";
 import { serviceCategoryImages } from "@/constants/event.js";
 import ProgressRadialBar from "./components/ProgressRadialBar.vue";
@@ -110,6 +112,7 @@ import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
 import PendingForVendors from "../components/PendingForVendors.vue";
 import { Loader } from "@/components";
 import moment from "moment";
+import RequirementsCart from "./RequirementsCart.vue";
 
 import { postReq, getReq } from "@/utils/token";
 
@@ -121,9 +124,11 @@ export default {
     SpecialRequirementModal,
     PendingForVendors,
     Loader,
+    RequirementsCart,
   },
   data() {
     return {
+      showCart: false,
       allRequirements: null,
       subCategory: null,
       serviceCards: [
@@ -149,14 +154,14 @@ export default {
                 "Academic Venue",
                 "Bar or Pub or Club",
                 "Community Center",
-                "Gallery Option",
+                "Gallery",
                 "Garden",
                 "Historic Establishmen",
                 "Meeting Room",
                 "Restaurant",
                 "Sports Club",
                 "Stadium",
-                "Stately Home Option",
+                "Stately Home",
               ],
               icon: "NewRequirements/Group 18008.svg",
             },
@@ -291,10 +296,10 @@ export default {
               clipTitles: [
                 "Asian",
                 "Blues",
-                "Classical Wake Up",
+                "Classical",
                 "Country",
-                "Electronic ERF",
-                "Folk Hey",
+                "Electronic",
+                "Folk",
                 "Hip Hop",
                 "Jazz",
                 "Latin Beat",
@@ -304,12 +309,19 @@ export default {
                 "Soul",
               ],
               images: [
-                "Photography+_+Videography/Black_White.jpg",
-                "Photography+_+Videography/Buisness.jpg",
-                "Photography+_+Videography/Candid.jpg",
-                "Photography+_+Videography/Commercial.jpg",
-                "Photography+_+Videography/Drone.jpg",
-                "Photography+_+Videography/Portrait.jpg",
+                "Asian.jpg",
+                "Blues.jpg",
+                "Classic.jpg",
+                "Country.jpg",
+                "Electronic.jpg",
+                "Folk.jpg",
+                "Hip Hop.jpg",
+                "Jazz.jpg",
+                "Latin.jpg",
+                "pop.jpg",
+                "RB.jpg",
+                "Rock.jpg",
+                "SOUL.jpg",
               ],
               imageTitles: ["Black White", "Buisness", "Candid", "Commercial", "Drone", "Portrait"],
               icon: "NewRequirements/Group 18013.svg",
@@ -431,31 +443,38 @@ export default {
               ],
               icon: "NewRequirements/Group 18026.svg",
             },
+            //  {
+            //   name: "Transportation",
+            //   serviceCategory: "transportation",
+            //   images: [
+            //     "Transportation/Air Services.png",
+            //     "Transportation/ATV.png",
+            //     "Transportation/Bicycle.png",
+            //     "Transportation/Boat.png",
+            //     "Transportation/Bus.png",
+            //     "Transportation/Ferry.png",
+            //     "Transportation/Gold Carts.png",
+            //     "Transportation/Private Black Car.jpg",
+            //     "Transportation/Van.png",
+            //   ],
+            //   imageTitles: [
+            //     "Air Services",
+            //     "ATV",
+            //     "Bicycle",
+            //     "Boat",
+            //     "Bus",
+            //     "Ferry",
+            //     "Gold Carts",
+            //     "Private Black Car",
+            //     "Van",
+            //   ],
+            //   icon: "NewRequirements/Group 18016.svg",
+            // },
             {
-              name: "Transportation",
-              serviceCategory: "transportation",
-              images: [
-                "Transportation/Air Services.png",
-                "Transportation/ATV.png",
-                "Transportation/Bicycle.png",
-                "Transportation/Boat.png",
-                "Transportation/Bus.png",
-                "Transportation/Ferry.png",
-                "Transportation/Gold Carts.png",
-                "Transportation/Private Black Car.jpg",
-                "Transportation/Van.png",
-              ],
-              imageTitles: [
-                "Air Services",
-                "ATV",
-                "Bicycle",
-                "Boat",
-                "Bus",
-                "Ferry",
-                "Gold Carts",
-                "Private Black Car",
-                "Van",
-              ],
+              name: "Equipment Rentals",
+              serviceCategory: "equipmentrentals",
+              images: ["Rentals/Furniture.jpg", "Rentals/Tech Equpiment.jpg", "Rentals/Tent.jpg"],
+              imageTitles: ["Furniture", "Tech Equipment", "Tent"],
               icon: "NewRequirements/Group 18016.svg",
             },
           ],
@@ -497,12 +516,6 @@ export default {
     // if (this.event.processingStatus === "accept-proposal") {
     //   this.$router.push(`/events/${this.event.id}/booking/choose-vendor`);
     // }
-  },
-  beforeCreate() {
-    this.$store.registerModule("planningBoard", PlanningBoardState);
-  },
-  beforeDestroy() {
-    this.$store.unregisterModule("planningBoard");
   },
   computed: {
     ...mapState("planningBoard", {
@@ -604,6 +617,15 @@ export default {
     getDefaultTypes(category, name) {
       return _.property([category, "types", camelize(name)])(this.requirements);
     },
+    getSelectedTypes(category) {
+      let typesList = [];
+      // this.requirements
+      const types = this.requirements[category].types;
+      for (const t in types) {
+        typesList = [...typesList, ...types[t]];
+      }
+      return typesList;
+    },
     setServiceStyles({ category, services, type }) {
       // this.setTypes({ category: category.serviceCategory, data: services, type });
       this.saveTypes({ category: category.serviceCategory, event: this.event, types: { [type]: services } });
@@ -625,8 +647,11 @@ export default {
       // this.$store.dispatch("event/saveEventAction", event).then((res) => {});
     },
     getRequirements(category) {
-      if (!this.$store.state[category]) return {};
-      return this.$store.state[category].mainRequirements;
+      if (!this.$store.state.planningBoard[category]) return {};
+      return this.$store.state.planningBoard[category].mainRequirements;
+    },
+    openCart() {
+      this.showCart = true;
     },
   },
 };
@@ -646,6 +671,17 @@ export default {
         margin-right: 10px;
       }
     }
+  }
+  .slide-fade-enter-active {
+    transition: all 0.3s ease;
+  }
+  .slide-fade-leave-active {
+    transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+  }
+  .slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+    transform: translateX(10px);
+    opacity: 0;
   }
 }
 </style>

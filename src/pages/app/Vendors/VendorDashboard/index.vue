@@ -55,7 +55,24 @@
       <div class="md-layout-item md-size-55 schedule-section">
         <div class="md-layout">
           <div class="md-layout-item md-size-50 pl-0 pr-10">
-            <proposal-request-section></proposal-request-section>
+            <div class="white-card">
+              <div style="border-bottom: 2px solid #c8c8c8">
+                <div class="pt-10 d-flex align-center justify-content-center font-bold">
+                  <md-button class="md-button md-theme-default md-simple md-just-icon"
+                    ><md-icon>chevron_left</md-icon></md-button
+                  >
+                  <span class="font-size-20 mr-10">0/0</span> REQUEST FOR PROPOSAL
+                  <md-button class="md-button md-theme-default md-simple md-just-icon"
+                    ><md-icon>chevron_right</md-icon></md-button
+                  >
+                </div>
+              </div>
+
+              <div class="d-flex flex-column align-center p-70">
+                <img class="mb-20" :src="`${iconUrl}vendordashboard/group-17116.png`" />
+                <div class="color-vendor font-bold font-size-14">NO REQUEST FOR PROPOSAL</div>
+              </div>
+            </div>
           </div>
           <div class="md-layout-item md-size-50 pr-0 pl-10">
             <div class="white-card">
@@ -127,7 +144,6 @@ import UserEvent from "@/models/UserEvent";
 import UpcomingEvent from "./UpcomingEvent.vue";
 import EventCalendar from "./EventCalendar.vue";
 import state from "./state";
-import ProposalRequestSection from "./Components/ProposalRequestSection.vue";
 export default {
   components: {
     IncomeChart,
@@ -138,7 +154,6 @@ export default {
     UpcomingEvent,
     EventCalendar,
     SyncCalendarModal,
-    ProposalRequestSection,
   },
   data() {
     return {
@@ -178,7 +193,6 @@ export default {
     this.getMarkedDates();
     this.getComingEvents();
     this.$store.dispatch("common/fetchAllCategories");
-    this.$store.dispatch("vendorDashboard/getProposalRequests", this.vendorData.id);
   },
   methods: {
     handleSaveEvent(savedEvent) {
@@ -280,16 +294,10 @@ export default {
         return null;
       });
     },
-    proposalRequests() {
-      return this.$store.state.vendorDashboard.proposalRequests;
-    },
   },
   watch: {
     backOutDays(newVal) {
       // this.getMarkedDates();
-    },
-    vendorData(newVal) {
-      this.$store.dispatch("vendorDashboard/getProposalRequests", newVal.id);
     },
   },
 };

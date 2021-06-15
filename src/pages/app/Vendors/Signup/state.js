@@ -60,6 +60,7 @@ const getters = {
 const actions = {
     getVendor: ({ commit, state }, vendorId) => {
         Vendors.find(vendorId).then((vendor) => {
+            if (!vendor.services) Vue.set(vendor, "services", {});
             if (!vendor.about) Vue.set(vendor, "about", {});
             if (!vendor.capacity) Vue.set(vendor, "capacity", {});
             if (!vendor.social) Vue.set(vendor, "social", {});
