@@ -38,7 +38,7 @@ const getTimeZoneNameFromPlaceId = async placeId => {
     return new Promise((resolve, reject) => {
         var targetDate = new Date(); // Current date/time of user computer
         var apicall = `https://maps.googleapis.com/maps/api/timezone/json?location=${placeInfo.geometry.location.lat()},${placeInfo.geometry.location.lng()}&timestamp=${new Date().getTime() /
-            1000}&key=AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8`;
+            1000}&key=AIzaSyCuHr_Quojoaxqw9dWHgbPHItxfsZAYKsY`;
 
         var xhr = new XMLHttpRequest(); // create new XMLHttpRequest2 object
         xhr.open("GET", apicall); // open GET request

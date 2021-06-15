@@ -1,109 +1,107 @@
 <template>
-  <div>
-    <vue-element-loading v-if="isUpdating" :active="isUpdating" color="#FF547C"></vue-element-loading>
-    <div class="for-proposals-layout-wrapper">
-      <proposal-header v-if="event" :event="event" :proposalRequest="proposalRequest"></proposal-header>
-      <div class="main-cont">
-        <router-view></router-view>
-      </div>
-      <section class="footer-wrapper">
-        <div calss>
-          <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()">
-            <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back</md-button
-          >
-          <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
-            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
-          </md-button>
-        </div>
+  <div class="for-proposals-layout-wrapper">
+    <!-- <vue-element-loading :active="isLoading" color="#FF547C"></vue-element-loading> -->
 
-        <div class="next-cont">
-          <span>You can return to it till the deadline!</span>
-          <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`" /> Discard </a>
-          <a class="save" @click="uploadProposal('draft')">
-            <img :src="`${proposalIconsUrl}Asset 610.svg`" /> Save for later
-          </a>
-          <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
-            Next
-          </a>
-          <a class="next active" @click="uploadProposal(option)" v-else :disabled="isUpdating">Submit Proposal</a>
-        </div>
-      </section>
-
-      <modal v-if="submittedModal" class="saved-it-modal" container-class="modal-container sl">
-        <template slot="header">
-          <div class="saved-it-modal__header">
-            <img :src="`${proposalIconsUrl}thanks-proposal.png`" />
-            <div class="font-size-30 font-bold color-red mt-30">Thank you for submitting a proposal!</div>
-            <div class="text-center font-size-22 mt-40 mb-40">You will get a reply in 4 days</div>
-          </div>
-          <button class="close" @click="hideModal()">
-            <img :src="`${proposalIconsUrl}Group 3671 (2).svg`" />
-          </button>
-        </template>
-        <template slot="body">
-          <div class="saved-it-modal__body">
-            <div>
-              <md-button class="md-simple maryoku-btn md-red" @click="goToProcessingGuid">
-                How does our bidding process work?
-              </md-button>
-              <md-button class="md-simple maryoku-btn md-red md-outlined" @click="goToVendorProfile"
-                >Go to my Dashboard</md-button
-              >
-            </div>
-          </div>
-        </template>
-      </modal>
-      <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
-        <template slot="header">
-          <div class="saved-it-modal__header">
-            <h3><img :src="`${proposalIconsUrl}Asset 587.svg`" /> Time Is Up!</h3>
-            <div class="header-description">
-              The deadline for submitting this prposal has passed. But no worries! We will be with you soon with the
-              next one.
-            </div>
-          </div>
-          <button class="close" @click="hideModal()">
-            <img :src="`${proposalIconsUrl}Group 3671 (2).svg`" />
-          </button>
-        </template>
-        <template slot="body">
-          <div class="saved-it-modal__body">
-            <div class="time-cont">
-              <vendor-bid-time-counter :days="0" :hours="0" :minutes="0" :seconds="0" />
-            </div>
-          </div>
-        </template>
-        <template slot="footer">
-          <div class="saved-it-modal__footer">
-            <md-button class="md-red maryoku-btn" @click="hideModal()">Ok, Thanks</md-button>
-          </div>
-        </template>
-      </modal>
-      <modal v-if="showCloseProposalModal" class="saved-it-modal" container-class="modal-container sl">
-        <template slot="header">
-          <div class="saved-it-modal__header d-flex">
-            <img :src="`${$iconURL}NewSubmitPorposal/closeproposal.png`" />
-            <div class="ml-20">
-              <h3 class="text-left color-black">
-                We are sorry, but someone else got there <br />before you and already won this bid.
-              </h3>
-              <div class="text-left">But no worries! We will be with you soon with the next one</div>
-            </div>
-          </div>
-          <button class="close" @click="showCloseProposalModal = false">
-            <img :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`" />
-          </button>
-        </template>
-        <template slot="body">
-          <div class="saved-it-modal__body"></div>
-        </template>
-        <template slot="footer">
-          <div class="saved-it-modal__footer">
-            <md-button class="md-red maryoku-btn" @click="showCloseProposalModal = false">Ok, Thanks</md-button>
-          </div>
-        </template>
-      </modal>
+    <proposal-header v-if="vendor" :vendor="vendor"></proposal-header>
+    <div class="main-cont">
+      <router-view></router-view>
     </div>
+    <section class="footer-wrapper">
+      <div calss>
+        <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()">
+          <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back</md-button
+        >
+        <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
+          <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
+        </md-button>
+      </div>
+
+      <div class="next-cont">
+        <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`" /> Discard </a>
+        <a class="save" @click="uploadProposal('draft')">
+          <img :src="`${$iconURL}common/save-purple.svg`" /> Save for later
+        </a>
+        <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
+          Next
+        </a>
+        <a class="next active" @click="uploadProposal(option)" v-else :disabled="isUpdating">Submit Proposal</a>
+      </div>
+    </section>
+
+    <modal v-if="submittedModal" class="saved-it-modal" container-class="modal-container sl">
+      <template slot="header">
+        <div class="saved-it-modal__header">
+          <img :src="`${proposalIconsUrl}thanks-proposal.png`" />
+          <div class="font-size-30 font-bold color-red mt-30">Thank you for submitting a proposal!</div>
+          <div class="text-center font-size-22 mt-40 mb-40">You will get a reply in 4 days</div>
+        </div>
+        <button class="close" @click="hideModal()">
+          <img :src="`${proposalIconsUrl}Group 3671 (2).svg`" />
+        </button>
+      </template>
+      <template slot="body">
+        <div class="saved-it-modal__body">
+          <div>
+            <md-button class="md-simple maryoku-btn md-red" @click="goToProcessingGuid">
+              How does our bidding process work?
+            </md-button>
+            <md-button class="md-simple maryoku-btn md-red md-outlined" @click="goToVendorProfile"
+              >Go to my Dashboard</md-button
+            >
+          </div>
+        </div>
+      </template>
+    </modal>
+    <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
+      <template slot="header">
+        <div class="saved-it-modal__header">
+          <h3><img :src="`${proposalIconsUrl}Asset 587.svg`" /> Time Is Up!</h3>
+          <div class="header-description">
+            The deadline for submitting this prposal has passed. But no worries! We will be with you soon with the next
+            one.
+          </div>
+        </div>
+        <button class="close" @click="hideModal()">
+          <img :src="`${proposalIconsUrl}Group 3671 (2).svg`" />
+        </button>
+      </template>
+      <template slot="body">
+        <div class="saved-it-modal__body">
+          <div class="time-cont">
+            <vendor-bid-time-counter :days="0" :hours="0" :minutes="0" :seconds="0" />
+          </div>
+        </div>
+      </template>
+      <template slot="footer">
+        <div class="saved-it-modal__footer">
+          <md-button class="md-red maryoku-btn" @click="hideModal()">Ok, Thanks</md-button>
+        </div>
+      </template>
+    </modal>
+    <modal v-if="showCloseProposalModal" class="saved-it-modal" container-class="modal-container sl">
+      <template slot="header">
+        <div class="saved-it-modal__header d-flex">
+          <img :src="`${$iconURL}NewSubmitPorposal/closeproposal.png`" />
+          <div class="ml-20">
+            <h3 class="text-left color-black">
+              We are sorry, but someone else got there <br />before you and already won this bid.
+            </h3>
+            <div class="text-left">But no worries! We will be with you soon with the next one</div>
+          </div>
+        </div>
+        <button class="close" @click="showCloseProposalModal = false">
+          <img :src="`${$iconURL}NewSubmitPorposal/Group 3671 (2).svg`" />
+        </button>
+      </template>
+      <template slot="body">
+        <div class="saved-it-modal__body"></div>
+      </template>
+      <template slot="footer">
+        <div class="saved-it-modal__footer">
+          <md-button class="md-red maryoku-btn" @click="showCloseProposalModal = false">Ok, Thanks</md-button>
+        </div>
+      </template>
+    </modal>
   </div>
 </template>
 <script>
@@ -132,6 +130,7 @@ export default {
   },
   data() {
     return {
+      vendor: null,
       isLoading: false,
       fullDetailsModal: false,
       proposalIconsUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/NewSubmitPorposal/",
@@ -348,9 +347,9 @@ export default {
         cursor: pointer;
         font-size: 20px;
         font-weight: 800;
-        color: #f51355;
+        color: #641856;
         i {
-          color: #f51355;
+          color: #641856;
         }
       }
     }
@@ -367,12 +366,12 @@ export default {
     width: 100%;
     z-index: 10;
     overflow: hidden;
-
+    position: fixed;
+    bottom: 0;
     .prev-cont {
       font-size: 16px;
       font-weight: 800;
       cursor: pointer;
-
       img {
         width: 20px;
         transform: rotate(180deg);
@@ -404,8 +403,8 @@ export default {
           }
         }
         &.save {
-          border: 1px solid #f51355;
-          color: #f51355;
+          border: 1px solid #641856;
+          color: #641856;
           margin-right: 41px;
           img {
             width: 25px;
@@ -435,7 +434,7 @@ export default {
       h3 {
         font-size: 30px;
         font-weight: bold;
-        color: #f51355;
+        color: #641856;
 
         img {
           width: 55px;
@@ -483,7 +482,7 @@ export default {
   }
 
   .active {
-    background-color: #f51355 !important;
+    background-color: #641856 !important;
 
     i {
       color: #ffffff !important;
@@ -493,7 +492,7 @@ export default {
     font-size: 16px;
     font-weight: bold;
     color: #ffffff;
-    background-color: #f51355;
+    background-color: #641856;
     border-radius: 3px;
     padding: 8px 36px;
     cursor: pointer;
@@ -502,11 +501,11 @@ export default {
   .hide-full {
     font-size: 16px;
     font-weight: 800;
-    color: #f51355;
+    color: #641856;
     cursor: pointer;
 
     i {
-      color: #f51355;
+      color: #641856;
     }
   }
 }
