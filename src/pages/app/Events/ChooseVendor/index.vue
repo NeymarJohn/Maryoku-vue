@@ -41,7 +41,7 @@
                 Compare Proposals
               </md-button>
               <span class="seperator"></span>
-              <md-button class="md-simple normal-btn md-red" @click="showDifferentProposals = true">
+              <md-button class="md-simple normal-btn md-red">
                 <md-icon>edit</md-icon>
                 I Want Something Different
               </md-button>
@@ -106,11 +106,6 @@
       @cancel="isOpenedAdditionalModal = false"
       @close="isOpenedAdditionalModal = false"
     ></additional-request-modal>
-    <event-change-proposal-modal
-      v-if="showDifferentProposals"
-      @close="showDifferentProposals = false"
-      :proposals="proposals.slice(0, 3)"
-    ></event-change-proposal-modal>
   </div>
 </template>
 <script>
@@ -181,14 +176,12 @@ export default {
     showCommentEditorPanel: false,
     showDetails: false,
     selectedProposal: null,
-    showDifferentProposals: false,
   }),
   methods: {
     ...mapMutations("event", ["setEventData", "setBookingRequirements", "setInitBookingRequirements"]),
     ...mapActions("comment", ["getCommentComponents"]),
     ...mapActions("planningBoard", ["saveMainRequirements", "getRequirements", "saveTypes", "updateRequirements"]),
     selectCategory(category, clicked) {
-      this.currentRequirement = this.eventRequirements[category.componentId];
       this.selectedCategory = category;
     },
     addRequirements() {
@@ -309,9 +302,6 @@ export default {
           this.isLoadingProposal = false;
         });
     });
-    setTimeout(() => {
-      this.selectCategory(this.categories[0]);
-    }, 500);
   },
   watch: {
     event(newVal, oldVal) {
@@ -344,7 +334,6 @@ export default {
       return this.$store.state.event.eventData.components;
     },
     expiredTime() {
-      console.log(this.currentRequirement);
       if (this.currentRequirement) return this.currentRequirement.expiredBusinessTime;
       return 0;
     },
@@ -358,6 +347,7 @@ export default {
     },
     proposals() {
       if (!this.selectedCategory) return [];
+      console.log(this.proposalsByCategory);
       return this.proposalsByCategory[this.selectedCategory.componentId];
     },
   },

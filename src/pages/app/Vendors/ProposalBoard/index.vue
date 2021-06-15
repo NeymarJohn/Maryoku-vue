@@ -29,7 +29,7 @@
         @dismiss="dismiss"
       >
       </proposal-request-card>
-      <div v-if="proposalRequests.length < 4" class="white-card p-20 d-flex">
+      <div v-if="proposalRequests.length < 1" class="white-card p-20 d-flex">
           <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" style="width: 55px;height: 55px">
           <div class="ml-15">
               <div class="font-size-18 font-bold text-uppercase color-vendor">No Open opportunities</div>
@@ -347,6 +347,7 @@ export default {
 
       } else if (action === 'download') {
         this.downloadProposal(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
+        // this.downloadProposal(`http://preprod.dev.maryoku.com:8080/1/proposal/${this.selectedProposal.id}/download`);
       }
     },
     downloadPreviewPDF() {

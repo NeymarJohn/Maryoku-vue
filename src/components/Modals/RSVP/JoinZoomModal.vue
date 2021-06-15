@@ -61,7 +61,7 @@
 import { Modal, MaryokuInput } from "@/components";
 import CalendarEvent from "@/models/CalendarEvent";
 const CLIENT_ID = "1016422269325-8bhm78m73gebu9k38nj61nr2246r1a1h.apps.googleusercontent.com";
-const API_KEY = "AIzaSyCuHr_Quojoaxqw9dWHgbPHItxfsZAYKsY";
+const API_KEY = "AIzaSyC4qrUfpIKpm5yZ1p7wGJAxa77PJwlgKD8";
 // Array of API discovery doc URLs for APIs used by the quickstart
 const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
 // Authorization scopes required by the API; multiple scopes can be

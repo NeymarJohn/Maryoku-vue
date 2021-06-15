@@ -42,8 +42,8 @@
       <div class="ml-auto">
           <div v-if="proposal">
               <div v-if="proposal.status === 'draft'">
-                  <div class="font-size-14"><span class="font-bold color-vendor">60%</span> completed</div>
-                  <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="60"></md-progress-bar>
+                  <div class="font-size-14"><span class="font-bold color-vendor">{{progress}} %</span> completed</div>
+                  <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="progress"></md-progress-bar>
               </div>
           </div>
           <div v-else class="new color-vendor font-size-14 ml-auto">
@@ -77,6 +77,12 @@ export default {
         expanded: false,
     }
   },
+  computed:{
+    progress(){
+        if (!this.proposal || !this.proposal.step) return 10;
+        return Math.floor((this.proposal.step - 1) / 3 * 100);
+    }
+  },
   methods: {
     gotoProposalRequest() {
       const tenantId = this.$authService.resolveTenantId();
@@ -103,7 +109,7 @@ export default {
     }
   },
   mounted() {
-    console.log('proposal.card', this.vendor);
+    console.log('proposal.card', this.vendor, this.proposal);
   }
 };
 </script>

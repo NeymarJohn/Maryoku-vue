@@ -37,14 +37,12 @@
             <div v-for="(requirement, subCategory) in requirements[item.key].mainRequirements" :key="subCategory">
               <template v-if="['multi-selection', 'special'].indexOf(subCategory) < 0">
                 <div class="color-gray">{{ subCategory }}</div>
-                <div class="requirement-grid">
-                  <div class="requirement-item" v-for="requirementItem in requirement" :key="requirementItem.item">
-                    <div class="checkmark"></div>
-                    <div class="d-inline-block">
-                      {{ requirementItem.item || requirementItem.subCategory }}
-                    </div>
-                  </div>
-                </div>
+                <requirement-tag-item
+                  v-for="(item, ind) in requirement"
+                  :key="ind"
+                  class="mb-10"
+                  :label="item.item"
+                ></requirement-tag-item>
               </template>
             </div>
             <div class="mt-20 color-gray">Additional Requests</div>
@@ -183,41 +181,6 @@ export default {
       .vsa-item__trigger__icon--is-default {
         transform: rotate(-180deg);
       }
-    }
-  }
-  .requirement-grid {
-    display: flex;
-    flex-wrap: wrap;
-    box-sizing: border-box;
-    .requirement-item {
-      margin-bottom: 20px;
-      text-transform: capitalize;
-      padding-right: 15px;
-      min-width: 30%;
-      padding-right: 20px;
-      display: inline-block;
-    }
-  }
-  .checkmark {
-    display: inline-block;
-    margin-right: 5px;
-    margin-top: 0.4em;
-    &:after {
-      /*Add another block-level blank space*/
-      content: "";
-      display: block;
-
-      /*Make it a small rectangle so the border will create an L-shape*/
-      width: 6px;
-      height: 10px;
-
-      /*Add a white border on the bottom and left, creating that 'L' */
-      border: solid #f51355;
-      border-width: 0 3px 3px 0;
-      border-radius: 1px;
-
-      /*Rotate the L 45 degrees to turn it into a checkmark*/
-      transform: rotate(45deg);
     }
   }
 }
