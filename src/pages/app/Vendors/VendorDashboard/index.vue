@@ -4,7 +4,7 @@
       <div class="font-size-22 font-bold color-purple">
         <img src="/static/icons/vendor/dashboard-active.svg" class="mr-10" /> WELCOME ON BOARD SAM!
       </div>
-      <div><md-button class="md-vendor maryoku-btn" @click="gotoProposalWizard">Create New Proposal</md-button></div>
+      <div><md-button class="md-vendor maryoku-btn">Create New Proposal</md-button></div>
     </div>
     <div class="md-layout pt-30">
       <div class="md-layout-item md-size-45 chart-section pt-30 pl-40 pr-40">
@@ -181,9 +181,6 @@ export default {
     this.$store.dispatch("vendorDashboard/getProposalRequests", this.vendorData.id);
   },
   methods: {
-    gotoProposalWizard() {
-      this.$router.push(`/vendor/${this.vendorData.id}/proposal/non-registered`);
-    },
     handleSaveEvent(savedEvent) {
       this.upcomingEvents.push(savedEvent);
       this.upcomingEvents.sort((a, b) => {

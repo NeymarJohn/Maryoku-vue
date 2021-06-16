@@ -28,11 +28,22 @@
           </span>
         </template>
         <div v-for="(p, index) in proposalRequests" :key="p.id" class="carousel-item">
+          <!-- <div class="d-flex justify-content-between">
+            <span>{{ p.eventData.concept ? p.eventData.concept.name : "Test" }}</span>
+            <span class="">6 Days Left</span>
+          </div>
+          <div>
+            <span>23/12/21 | $ 2200</span>
+          </div>
+          <div class="d-flex">
+            <div>60% completed</div>
+            <md-button class="md-outlined md-vendor md-simple">Finish</md-button>
+          </div> -->
           <proposal-request-card
             :proposalRequest="p"
             :size="2"
             type="dashboard"
-            class="pl-30 pr-30 proposal-request-card"
+            class="pl-30 pr-30"
           ></proposal-request-card>
         </div>
         <template slot="next">
@@ -50,13 +61,7 @@
     width: 100%;
   }
   /deep/ .owl-stage-outer {
-    border-bottom: solid 1px #ffa9a9;
-  }
-  .proposal-request-card {
-    min-height: 242px !important;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    border-bottom: solid 1px #707070;
   }
 }
 </style>

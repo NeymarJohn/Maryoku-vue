@@ -153,13 +153,8 @@
       </div>
     </div>
     <modal v-if="showProposalDetail" container-class="modal-container-wizard lg">
-        <template slot="header">
-            <md-button class="md-simple md-just-icon md-round modal-default-button" @click="showProposalDetail = false">
-                <md-icon>clear</md-icon>
-            </md-button>
-        </template>
         <template slot="body">
-          <proposal-content :vendorProposal="selectedProposal"/>
+          <proposal-content :vendorProposal="selectedProposal" @close="showProposalDetail = false"/>
         </template>
     </modal>
 
@@ -175,10 +170,8 @@ import Vendor from "@/models/Vendors";
 import {socialMediaBlocks} from "@/constants/vendor";
 import carousel from "vue-owl-carousel";
 import {Loader, TablePagination, PieChart, Modal} from "@/components";
-import ProposalContent from "./detail";
-import PdfContent from "./pdfContent";
 import _ from "underscore";
-const VueHtml2pdf = () => import("vue-html2pdf");
+const ProposalContent = () => import("./detail");
 
 export default {
   components: {
@@ -190,8 +183,6 @@ export default {
     PieChart,
     Loader,
     Modal,
-    VueHtml2pdf,
-    PdfContent
   },
   data() {
     return {
