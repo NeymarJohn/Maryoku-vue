@@ -146,6 +146,7 @@
                 </div>
             </section>
         </section>
+
         <section class="proposal-section pricing-section">
             <div class="proposal-section__title font-size-22 font-bold-extra px-40">
                 <img
@@ -188,6 +189,7 @@
                 </div>
             </div>
         </section>
+        <div class="html2pdf__page-break"/>
         <section class="proposal-section policy-section">
             <div class="proposal-section__title px-40">
                 <img :src="`${submitProposalIcon}Asset 287.svg`" width="20"/> Our Policy
@@ -282,9 +284,6 @@
                 </div>
             </div>
         </section>
-        <md-button class="md-simple md-just-icon md-round modal-default-button p-absolute" @click="$emit('close')">
-            <md-icon>clear</md-icon>
-        </md-button>
     </section>
 </template>
 <script>
@@ -493,7 +492,6 @@
 </script>
 <style lang="scss" scoped>
     .proposal-content {
-        position: relative;
         text-align: left !important;
         background-color: white;
 
