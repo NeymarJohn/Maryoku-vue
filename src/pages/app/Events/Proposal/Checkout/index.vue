@@ -42,8 +42,8 @@
           <div class="p-30">
             <div>Would you like to upgrade & add one of those?</div>
             <div class="mb-30">
-              You have $ {{ (proposal.serviceCategory.allocatedBudget - proposal.cost) | withComma }} left over from your original
-                defined budget.
+              You have $ {{ (proposal.serviceCategory.allocatedBudget - proposal.cost) | withComma }} left over from the
+              budget you reserved
             </div>
             <collapse-panel
               :defaultStatus="false"
@@ -61,7 +61,8 @@
               </template>
               <template slot="content">
                 <div class="price-table-content mt-20">
-                    Simply select anything that you would like to add. Please note that any item or service you choose here will be added to the overall vendor cost.
+                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                  labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
                 </div>
               </template>
             </collapse-panel>
@@ -76,7 +77,8 @@
           </template>
           <template slot="content">
             <div class="price-table-content">
-                Simply select anything that you would like to add. Please note that any item or service you choose here will be added to the overall vendor cost.
+              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
+              et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
             </div>
           </template>
         </collapse-panel>
@@ -89,6 +91,8 @@
           </template>
           <template slot="content">
             <div class="price-table-content">
+              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
+              et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
             </div>
           </template>
         </collapse-panel>
@@ -103,7 +107,8 @@
           <template slot="content">
             <div class="price-table-content give-back-seciont">
               <div class="mb-20 mt-20">
-                  Support sustainability and eco-friendly initiatives with a donation to an organization committed to environmental responsibility. Every donation will be matched by Maryoku.
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
               </div>
               <md-button class="md-simple edit-btn md-red color-red mt-20">
                 Read More <md-icon>keyboard_arrow_right</md-icon>
@@ -117,18 +122,8 @@
               <div class="mb-20 d-flex">
                 <img :src="`${$iconURL}PaymentPage/Image 211.png`" />
                 <div class="ml-10">
-                    Don’t let your leftover food go to waste! Maryoku collaborates with food rescue organizations that would really appreciate your contribution, helping the community and the environment.
-                </div>
-              </div>
-              <hr class="mt-20 mb-20" />
-              <div>
-                <md-checkbox class="md-red md-simple" v-model="isCheckedFoodDonate">
-                    Cash in Your Maryoku Points
-                </md-checkbox>
-              </div>
-              <div class="mb-20 d-flex">
-                <div class="ml-10">
-                    If you’ve collected enough Maryoku reward points, why not exchange them for exclusive vendor perks? Simply print out the voucher and enjoy the results!
+                  This charity organisation would really appreciate your food leftovers…diam nonumy eirmod tempor
+                  invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
                 </div>
               </div>
               <md-button class="md-simple md-red edit-btn mt-20">
