@@ -241,7 +241,7 @@
                       <div class="flex-1">
                         <ul>
                           <li>
-                            <div class="check-field" @click="updateAllExDonts(r)">
+                            <div class="check-field" @click="selectAllHolidays(r)">
                               <img :src="`${iconUrl}Group 6258.svg`" v-if="isAllHolidays(r)" />
                               <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
                               <span :class="{ checked: isAllHolidays(r) }">{{ `All ${r.name}` }}</span>
@@ -539,9 +539,10 @@ export default {
       this.$root.$emit("update-vendor-value", "selectedWeekdays", this.selectedWeekdays);
     },
     updateReligion(item) {
-      // console.log("updateReligion", item, this.markedDates, this.date.selectedDates);
+      console.log("updateReligion", item);
       if (this.selectedReligion.length && this.selectedReligion.find((s) => s.name === item.name)) {
         this.selectedReligion = this.selectedReligion.filter((s) => s.name !== item.name);
+        this.updateAllExDonts(item, false);
       } else {
         this.selectedReligion.push(item);
       }
@@ -631,10 +632,11 @@ export default {
         this.$root.$emit("update-vendor-value", "policies", this.vendorPricingPolicies.items);
       }
     },
-    updateAllExDonts(data) {
-      let value = !this.isAllHolidays(data);
+    selectAllHolidays(data){
+      this.updateAllExDonts(data, !this.isAllHolidays(data));
+    },
 
-      this.vendor.exDonts.filter((h) => h.religion !== data.name);
+    updateAllExDonts(data, value) {
       data.holidays.map((it) => {
         it.selected = value;
         let day = moment(it.start).date();
@@ -653,10 +655,11 @@ export default {
             religion: data.name,
           });
         } else {
+          console.log('updateAllExDonts', it.holiday);
           this.vendor.exDonts = this.vendor.exDonts.filter((e) => e.holiday !== it.holiday);
         }
       });
-      console.log("updateAllExDonts", this.markedDates);
+      console.log('updateAllExDonts', this.vendor.exDonts);
       this.$root.$emit("update-vendor-value", "exDonts", this.vendor.exDonts);
     },
     isAllHolidays(data) {

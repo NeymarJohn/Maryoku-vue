@@ -4047,7 +4047,7 @@ export const VendorPolicy = [
       },
       {
         name: "Level of security training/certification",
-        type: Boolean,
+        type: String,
         hasComment: true,
       },
       {

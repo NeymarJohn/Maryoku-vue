@@ -43,15 +43,15 @@
         </div>
       </div>
     </div>
-    <div class="d-flex align-center">
-      <!-- <md-button
+    <div class="d-flex align-end">
+       <md-button
         class="md-simple md-vendor md-vendor-text"
         style="margin-left: -15px; width: 20px; height: 30px"
         @click="dismiss(proposalRequest.id)"
       >
         Dismiss
-      </md-button> -->
-      <div class="mr-auto">
+      </md-button>
+      <div class="ml-auto">
         <div v-if="proposal">
           <div v-if="proposal.status === 'draft'">
             <div class="font-size-14">
@@ -61,10 +61,10 @@
           </div>
         </div>
         <div v-else class="new color-vendor font-size-14 ml-auto">New</div>
+        <md-button class="md-vendor" @click="gotoProposalRequest" style="height: 30px">
+          {{ !proposal ? "Apply" : proposal.status === "draft" ? "Complete" : "Make Changes" }}
+        </md-button>
       </div>
-      <md-button class="md-vendor" @click="gotoProposalRequest" style="height: 30px">
-        {{ !proposal ? "Apply" : proposal.status === "draft" ? "Complete" : "Make Changes" }}
-      </md-button>
     </div>
   </div>
 </template>
