@@ -562,12 +562,13 @@ export default {
       } else {
         newExpiredDate = new Date(this.vendorProposal.dateCreated).getTime() + 9 * 3600 * 24 * 1000;
       }
-      // new EventComponentProposal({ id: this.vendorProposal.id, expiredDate: newExpiredDate }).save().then((res) => {
-      //   this.vendorProposal = res;
-      // });
+      new EventComponentProposal({ id: this.vendorProposal.id, expiredDate: newExpiredDate }).save().then((res) => {
+        this.vendorProposal = res;
+      });
       new ProposalNegotiationRequest({
         eventId: this.eventData.id,
-        proposal: { id: this.vendorProposal.id, expiredDate: newExpiredDate },
+        // proposal: { id: this.vendorProposal.id, expiredDate: newExpiredDate },
+        proposal: new Proposal({ id: this.vendorProposal.id }),
         tenantId: this.$authService.resolveTenantId(),
       })
         .for(new Proposal({ id: this.vendorProposal.id }))
