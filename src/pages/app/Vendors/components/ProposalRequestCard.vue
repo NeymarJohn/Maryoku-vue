@@ -59,11 +59,12 @@
             </div>
             <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="progress"></md-progress-bar>
           </div>
-        </div>
-        <div v-else class="new color-vendor font-size-14 ml-auto">New</div>
+
         <md-button class="md-vendor" @click="gotoProposalRequest" style="height: 30px">
           {{ !proposal ? "Apply" : proposal.status === "draft" ? "Complete" : "Make Changes" }}
         </md-button>
+        </div>
+        <div v-else class="new color-vendor font-size-14 ml-auto">New</div>
       </div>
     </div>
   </div>

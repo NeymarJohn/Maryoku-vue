@@ -2,8 +2,8 @@
   <div class="photo-inpirational-item">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
     <div v-if="!photo" class="empty-item">
-      <label class="photo-add-label color-red font-bold" @click="handleAddPhoto(index)">
-        <md-icon class="color-red">add</md-icon>
+      <label class="photo-add-label color-purple font-bold" @click="handleAddPhoto(index)">
+        <md-icon class="color-purple">add</md-icon>
         <br />
         Add photo
       </label>
@@ -132,7 +132,7 @@ export default {
   display: inline-block;
   overflow: hidden;
   .empty-item {
-    border: dashed #f51355 1px;
+    border: dashed #641856 1px;
     width: 100%;
     height: 220px;
     position: relative;

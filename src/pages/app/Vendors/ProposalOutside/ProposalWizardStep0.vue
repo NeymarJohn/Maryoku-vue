@@ -2,7 +2,7 @@
   <div class="white-card p-40">
     <div class="font-size-30 font-bold">Give us a few details of the event for this proposal</div>
 
-    <div class="md-layout mt-30">
+    <div class="md-layout mt-30 selection-wrapper">
       <div class="md-layout-item md-size-50 p-0 text-left">
         <md-checkbox class="md-simple md-checkbox-circle md-vendor" v-model="isRegisteredCustomer" :value="true">
           Selection from the customer list
@@ -14,7 +14,7 @@
         </md-checkbox>
       </div>
     </div>
-    <div class="mt-30 text-left" v-if="isRegisteredCustomer">
+    <div class="mt-30 text-left">
       <label class="font-bold">Company / Customer Name</label>
       <autocomplete
         class="width-50 mt-5 md-purple medium-selector"
@@ -24,24 +24,8 @@
         @change="selectCustomer"
       ></autocomplete>
     </div>
-    <div v-else class="text-left">
-      <div class="mt-30 text-left">
-        <label class="font-bold">Company Name</label>
-        <maryoku-input inputStyle="company" class="width-50 mt-5 form-input" v-model="company"></maryoku-input>
-      </div>
-      <div class="mt-30 text-left">
-        <label class="font-bold">Customer Name</label>
-        <maryoku-input inputStyle="username" class="width-50 mt-5 form-input" v-model="customer"></maryoku-input>
-      </div>
-      <div class="mt-30 text-left">
-        <label class="font-bold">Email</label>
-        <maryoku-input inputStyle="email" class="width-50 mt-5 form-input" v-model="email"></maryoku-input>
-      </div>
-      <md-checkbox v-model="addToCustomerList" class="md-vendor"
-        >Add this customer to your regular customer list</md-checkbox
-      >
-    </div>
-    <div class="d-flex">
+
+    <div class="d-flex mt-40">
       <selectable-card
         label="Corporation Event"
         value="corporation"
@@ -58,6 +42,15 @@
         @change="eventType = 'social'"
         theme="purple"
       ></selectable-card>
+    </div>
+    <div class="text-left mt-30">
+      <label class="font-bold">Type Of Event:</label>
+      <maryoku-input
+        class="width-50 mt-5 form-input"
+        v-model="guests"
+        inputStyle="users"
+        placeholer="Type the amount of guests here..."
+      ></maryoku-input>
     </div>
     <div class="text-left mt-30">
       <label class="font-bold">Number of Guests</label>
@@ -120,6 +113,7 @@
         </div>
       </div>
     </div>
+    <add-new-customer-modal v-if="showNewCustomerModal" @cancel="showNewCustomerModal = false"></add-new-customer-modal>
   </div>
 </template>
 <script>
@@ -133,6 +127,7 @@ import Autocomplete from "@/components/Autocomplete";
 import vue2Dropzone from "vue2-dropzone";
 import S3Service from "@/services/s3.service";
 import SelectableCard from "@/components/SelectableCard.vue";
+import AddNewCustomerModal from "./Modals/AddNewCustomer";
 
 export default {
   components: {
@@ -143,6 +138,7 @@ export default {
     VueGoogleAutocomplete,
     vueDropzone: vue2Dropzone,
     SelectableCard,
+    AddNewCustomerModal,
   },
   props: {
     defaultData: {
@@ -158,7 +154,6 @@ export default {
     this.companyName = this.defaultData.company;
     this.company = this.defaultData.companyName;
     this.location = this.defaultData.location;
-    this.isRegisteredCustomer = this.defaultData.isRegisteredCustomer;
     this.guests = this.defaultData.guests;
     this.email = this.defaultData.customer.email;
     this.customer = this.defaultData.customer.name;
@@ -170,19 +165,6 @@ export default {
     this.endTime.hh = moment(this.defaultData.endTime).format("hh");
     this.endTime.mm = moment(this.defaultData.endTime).format("mm");
     this.amPack.end = moment(this.defaultData.endTime).format("A");
-
-    // date: endDate.format("YYYY-MM-DD"),
-    // startTime: startDate,
-    // endTime: endDate,
-    // companyName: this.company,
-    // customerName: this.customer,
-    // email: this.email,
-    // guests: this.guests,
-    // location: this.location,
-    // timezone: tz,
-    // isRegisteredCustomer: this.isRegisteredCustomer,
-    // fileName: this.fileName,
-    // fileUrl: this.fileUrl,
   },
   data() {
     return {
@@ -202,14 +184,11 @@ export default {
       },
       isLoading: false,
       isRegisteredCustomer: true,
-      company: null,
-      customer: null,
-      email: null,
+
       guests: null,
       location: null,
       link_proposal: null,
       attachment: null,
-      addToCustomerList: false,
       customers: [],
       selectedCustomer: null,
       fileUrl: null,
@@ -221,6 +200,7 @@ export default {
         headers: { "My-Awesome-Header": "header value" },
       },
       eventType: "corporation",
+      showNewCustomerModal: false,
     };
   },
   methods: {
@@ -299,6 +279,13 @@ export default {
     },
   },
   computed: {},
+  watch: {
+    isRegisteredCustomer(newValue, oldValue) {
+      if (!newValue) {
+        this.showNewCustomerModal = true;
+      }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -326,6 +313,9 @@ export default {
     color: white !important;
     z-index: 100;
   }
+}
+.selection-wrapper {
+  width: 70%;
 }
 .event-time {
   /deep/ .time-picker {
