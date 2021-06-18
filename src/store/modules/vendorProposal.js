@@ -185,13 +185,11 @@ const mutations = {
     state.tax = proposal.tax;
     state.suggestedNewSeatings = proposal.suggestedNewSeatings;
     state.initialized = true;
-    state.wizardStep = proposal.step
   },
   setPropsalRequest: (state, propsoalRequest) => {
     state.proposalRequest = propsoalRequest;
   },
   setWizardStep: (state, step) => {
-    console.log('setWizardStep', step);
     state.wizardStep = step;
   },
   setInitStep: (state, step) => {
@@ -337,7 +335,6 @@ const actions = {
         bundleDiscount: state.bundleDiscount,
         attachments: state.attachments,
         status,
-        step: state.wizardStep,
         tenantId: state.tenantId,
         suggestionDate: state.suggestionDate,
         expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate()

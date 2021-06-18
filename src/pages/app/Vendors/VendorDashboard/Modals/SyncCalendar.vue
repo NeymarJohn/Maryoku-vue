@@ -119,14 +119,8 @@ export default {
     },
 
     handleGoogleAuthClick() {
-      var zone_name = moment.tz.guess();
-      var timezone = moment.tz(zone_name).zoneAbbr();
-      const timeZoneName = convertTimezoneName(timezone);
-      console.log(timeZoneName);
-
       Promise.resolve(this.api.auth2.getAuthInstance().signIn()).then((_) => {
         this.authorized = true;
-
         this.events.forEach((e) => {
           var event = {
             summary: e.customer.name,
@@ -134,11 +128,11 @@ export default {
             description: "",
             start: {
               dateTime: moment(eval.startTime).toDate(),
-              timeZone: timeZoneName,
+              timeZone: "GTM",
             },
             end: {
               dateTime: moment(e.endTime).toDate(),
-              timeZone: timeZoneName,
+              timeZone: "GTM",
             },
             recurrence: ["RRULE:FREQ=DAILY;COUNT=2"],
             reminders: {
