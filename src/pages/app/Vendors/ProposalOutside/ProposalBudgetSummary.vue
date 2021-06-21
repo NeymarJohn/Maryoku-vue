@@ -61,12 +61,12 @@
               </li>
               <li>
                 <span>Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
-                <span>
+                <!-- <span>
                   ${{
                     event.components.find((item) => item.componentId == vendor.eventCategory.key).allocatedBudget
                       | withComma
                   }}</span
-                >
+                > -->
               </li>
               <li
                 v-if="finalPriceOfMainCategory - getAllocatedBudget(vendor.eventCategory.key) > 0"
@@ -373,10 +373,11 @@ export default {
       return this.serviceCategories.find((item) => item.key === category);
     },
     getAllocatedBudget(category) {
-      const allocatedBudgetItem = this.proposalRequest.eventData.components.find(
-        (item) => item.componentId === category,
-      );
-      return allocatedBudgetItem.allocatedBudget;
+      // const allocatedBudgetItem = this.proposalRequest.eventData.components.find(
+      //   (item) => item.componentId === category,
+      // );
+      // return allocatedBudgetItem.allocatedBudget;
+      return 0;
     },
     saveDiscount(categoryKey, discount) {
       this.$store.commit("proposalForNonMaryoku/setDiscount", { category: "total", discount: discount });
