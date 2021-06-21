@@ -54,17 +54,19 @@
       <div class="ml-auto">
         <div v-if="proposal">
           <div v-if="proposal.status === 'draft'">
-            <div class="font-size-14">
               <span class="font-bold color-vendor">{{ progress }} %</span> completed
-            </div>
-            <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="progress"></md-progress-bar>
+              <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="progress"></md-progress-bar>
           </div>
-
-        <md-button class="md-vendor" @click="gotoProposalRequest" style="height: 30px">
-          {{ !proposal ? "Apply" : proposal.status === "draft" ? "Complete" : "Make Changes" }}
-        </md-button>
+          <div v-else-if="proposal.negotiations && proposal.negotiations.length"
+               class="d-flex align-center justify-content-center font-size-12 color-red">
+              <img :src="`${iconUrl}VendorsProposalPage/Group%2014277_2.svg`" class="mr-5" style="width: 15px" />
+              Negotiation Request
+          </div>
         </div>
         <div v-else class="new color-vendor font-size-14 ml-auto">New</div>
+        <md-button class="md-vendor" @click="gotoProposalRequest" style="height: 30px">
+          {{actionName}}
+        </md-button>
       </div>
     </div>
   </div>
@@ -102,6 +104,14 @@ export default {
       if (!this.proposal || !this.proposal.step) return 10;
       return Math.floor(((this.proposal.step - 1) / 3) * 100);
     },
+    actionName(){
+      if (!this.proposal) return 'Apply';
+      if (this.proposal.status === 'draft') {
+          return 'Complete'
+      } else {
+          return this.proposal.negotiations && this.proposal.negotiations.length ? 'Approve Request' : 'Make Changes';
+      }
+    }
   },
   methods: {
     gotoProposalRequest() {

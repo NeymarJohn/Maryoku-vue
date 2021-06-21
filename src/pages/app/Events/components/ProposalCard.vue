@@ -123,6 +123,7 @@ export default {
         link = this.proposal.inspirationalPhotos[0].url;
         return link;
       }
+      if (this.proposal.vendor.images[0]) return this.proposal.vendor.images[0];
       return link;
     },
     categories() {

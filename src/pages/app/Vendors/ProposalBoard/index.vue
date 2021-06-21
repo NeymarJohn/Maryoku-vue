@@ -259,7 +259,8 @@ export default {
       this.proposalRequests = proposalRequests.filter((p) => {
         let proposal = this.proposals.find((it) => it.proposalRequestId === p.id);
         return proposal
-          ? p.declineMessage !== "decline" && proposal.status !== "submit"
+          ? (p.declineMessage !== "decline" && proposal.status !== "submit") ||
+            (proposal.negotiations && proposal.negotiations.length)
           : p.remainingTime > 0 && p.declineMessage !== "decline";
       });
 
@@ -349,8 +350,8 @@ export default {
 
         this.loading = false;
       } else if (action === "download") {
-        this.downloadProposal(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
-        // this.downloadProposal(`http://preprod.dev.maryoku.com:8080/1/proposal/${this.selectedProposal.id}/download`);
+        // this.downloadProposal(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
+        this.downloadProposal(`http://preprod.dev.maryoku.com:8080/1/proposal/${this.selectedProposal.id}/download`);
       }
     },
     downloadPreviewPDF() {
