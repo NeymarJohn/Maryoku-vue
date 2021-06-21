@@ -288,16 +288,6 @@ export default {
         : arr.slice();
     },
     servicesByCategory(category) {
-      // const services = this.services.filter((s) => s.name == category);
-
-      // if (services.length > 0) {
-      //   return this.flatDeep(
-      //     services[0].categories.map((s) => s.subCategories.map((sc) => sc.items.map((dd) => dd.name))),
-      //     Infinity,
-      //   );
-      // } else {
-      //   return [];
-      // }
       return this.$store.state.proposalForNonMaryoku.proposalServices[category] || [];
     },
     getIconUrlByCategory(category) {
