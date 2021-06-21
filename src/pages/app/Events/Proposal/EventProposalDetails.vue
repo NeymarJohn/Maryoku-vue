@@ -296,7 +296,7 @@
         <div class="alert alert-danger">Please indicate that you accept the new time of this proposal</div>
       </div>
     </div>
-     <div class="proposal-footer white-card d-flex justify-content-between">
+    <!-- <div class="proposal-footer white-card d-flex justify-content-between">
       <div>
         <md-button @click="back" class="md-simple maryoku-btn md-black">
           <md-icon>arrow_back</md-icon>
@@ -327,7 +327,7 @@
           >Book this vendor
         </md-button>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -350,9 +350,6 @@ import EventBudgetVendors from "../components/EventBudgetVendors";
 import EditEventBlocksBudget from "../components/EditEventBlocksBudget";
 import EventComponentVendor from "@/models/EventComponentVendor";
 import EventComponentProposal from "@/models/EventComponentProposal";
-import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
-import Proposal from "@/models/Proposal";
-
 //COMPONENTS
 
 import SideBar from "@/components/SidebarPlugin/NewSideBar";
@@ -361,12 +358,12 @@ import ProgressSidebar from "../components/progressSidebar";
 
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "../components/CommentEditorPanel";
+import Proposal from "@/models/Proposal";
 import ExtraServiceItem from "./ExtraServiceItem";
 import IncludedServiceItem from "./IncludedServiceItem.vue";
 import { socialMediaBlocks } from "@/constants/vendor";
 import EventProposalPrice from "./EventProposalPrice.vue";
 import TimerPanel from "./TimerPanel.vue";
-import Swal from "sweetalert2";
 
 export default {
   props: {
@@ -562,28 +559,9 @@ export default {
       } else {
         newExpiredDate = new Date(this.vendorProposal.dateCreated).getTime() + 9 * 3600 * 24 * 1000;
       }
-      // new EventComponentProposal({ id: this.vendorProposal.id, expiredDate: newExpiredDate }).save().then((res) => {
-      //   this.vendorProposal = res;
-      // });
-
-      new ProposalNegotiationRequest({
-        eventId: this.eventData.id,
-        proposal: { id: this.vendorProposal.id, expiredDate: newExpiredDate },
-        tenantId: this.$authService.resolveTenantId(),
-      })
-        .for(new Proposal({ id: this.vendorProposal.id }))
-        .save()
-        .then((res) => {
-          Swal.fire({
-            title: "We received your request!",
-            text: `Vendor will contact you!`,
-            showCancelButton: false,
-            confirmButtonClass: "md-button md-success btn-fill",
-            cancelButtonClass: "md-button md-danger btn-fill",
-            confirmButtonText: "OK",
-            buttonsStyling: false,
-          }).then((result) => {});
-        });
+      new EventComponentProposal({ id: this.vendorProposal.id, expiredDate: newExpiredDate }).save().then((res) => {
+        this.vendorProposal = res;
+      });
     },
   },
   computed: {

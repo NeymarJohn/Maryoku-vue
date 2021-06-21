@@ -259,8 +259,7 @@ export default {
       this.proposalRequests = proposalRequests.filter((p) => {
         let proposal = this.proposals.find((it) => it.proposalRequestId === p.id);
         return proposal
-          ? (p.declineMessage !== "decline" && proposal.status !== "submit") ||
-            (proposal.negotiations && proposal.negotiations.length)
+          ? p.declineMessage !== "decline" && proposal.status !== "submit"
           : p.remainingTime > 0 && p.declineMessage !== "decline";
       });
 

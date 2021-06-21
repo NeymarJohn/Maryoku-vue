@@ -686,8 +686,8 @@ export const businessCategories = [
               // },
               {
                 name: "non alcoholic specials",
-                type: Boolean,
-                value: false,
+                type: Number,
+                value: 0,
                 // xIncluded: true,
                 // available: ['smoothies & juices', 'hawaiian', 'coffee', 'tea', 'power drinks']
               },
@@ -920,14 +920,14 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
               },
-              // {
-              //   name: "number of waitstaff",
-              //   hasComment: true,
-              //   type: Number,
-              //   value: 0,
-              //   xIncluded: true,
-              //   hideOnAutoComplete: true
-              // },
+              {
+                name: "number of waitstaff",
+                hasComment: true,
+                type: Number,
+                value: 0,
+                xIncluded: true,
+                hideOnAutoComplete: true
+              },
               {
                 name: "attire of waitstaff",
                 type: Array,

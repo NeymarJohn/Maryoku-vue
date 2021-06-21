@@ -1,97 +1,107 @@
 <template>
   <div class="plannig-service-category-card white-card" :class="{ 'longer-card': isLong }">
-    <template v-if="!isSentRequest">
-      <carousel v-if="!musicPlayer" :items="1" :margin="0" :nav="false" :loop="true" class="header-carousel">
-        <template slot="prev">
-          <span class="prev handle-btn">
-            <md-icon>keyboard_arrow_left</md-icon>
-          </span>
-        </template>
-        <div v-for="(image, index) in serviceCategory.images" :key="image" class="carousel-item">
-          <md-button
-            class="md-simple md-icon-button md-raised save-btn"
-            :class="{ isSelected: selectedServices.includes(serviceCategory.imageTitles[index]) }"
-            @click="addService(serviceCategory.imageTitles[index])"
-            v-show="hasBudget"
-          >
-            <img
-              v-if="!selectedServices.includes(serviceCategory.imageTitles[index])"
-              class="non-selected"
-              :src="`${$iconURL}comments/SVG/heart-dark.svg`"
-            />
-            <img v-else :src="`${$iconURL}Requirements/Group+16153.svg`" />
-          </md-button>
-          <img class="carousel-image" :src="`${$storageURL}RequirementsImages/thumbnails/${image}`" />
-          <label>{{ serviceCategory.imageTitles[index] }}</label>
-        </div>
-
-        <template slot="next">
-          <span class="next handle-btn">
-            <md-icon>keyboard_arrow_right</md-icon>
-          </span>
-        </template>
-      </carousel>
-      <carousel v-else :items="1" :margin="0" :nav="false" :loop="true" class="header-carousel">
-        <template slot="prev">
-          <span class="prev handle-btn d-none" ref="prevButton">
-            <md-icon>keyboard_arrow_left</md-icon>
-          </span>
-        </template>
-        <div v-for="(clip, index) in serviceCategory.clips" :key="clip" class="carousel-item">
-          <md-button
-            class="md-simple md-icon-button md-raised save-btn"
-            :class="{ isSelected: selectedServices.includes(serviceCategory.imageTitles[index]) }"
-            @click="addService(serviceCategory.imageTitles[index])"
-            v-show="hasBudget"
-          >
-            <img
-              v-if="!selectedServices.includes(serviceCategory.imageTitles[index])"
-              class="non-selected"
-              :src="`${$iconURL}comments/SVG/heart-dark.svg`"
-            />
-            <img v-else :src="`${$iconURL}Requirements/Group+16153.svg`" />
-          </md-button>
+    <carousel v-if="!musicPlayer" :items="1" :margin="0" :nav="false" :loop="true" class="header-carousel">
+      <template slot="prev">
+        <span class="prev handle-btn">
+          <md-icon>keyboard_arrow_left</md-icon>
+        </span>
+      </template>
+      <div v-for="(image, index) in serviceCategory.images" :key="image" class="carousel-item">
+        <md-button
+          class="md-simple md-icon-button md-raised save-btn"
+          :class="{ isSelected: selectedServices.includes(serviceCategory.imageTitles[index]) }"
+          @click="addService(serviceCategory.imageTitles[index])"
+          v-show="hasBudget"
+        >
           <img
-            class="carousel-image"
-            :src="`${$storageURL}RequirementsImages/thumbnails/Music Images/${serviceCategory.images[index]}`"
+            v-if="!selectedServices.includes(serviceCategory.imageTitles[index])"
+            class="non-selected"
+            :src="`${$iconURL}comments/SVG/heart-dark.svg`"
           />
-          <music-player
-            class="player"
-            :title="serviceCategory.clipTitles[index]"
-            :src="`${$storageURL}RequirementsImages/thumbnails/${clip}`"
-            @next="next"
-            @prev="prev"
-          ></music-player>
-        </div>
-
-        <template slot="next">
-          <span class="next handle-btn d-none" ref="nextButton">
-            <md-icon>keyboard_arrow_right</md-icon>
-          </span>
-        </template>
-      </carousel>
-      <div class="p-20 font-bold d-flex align-center justify-content-between card-info">
-        <span class="service-name">{{ serviceCategory.name }}</span>
-        <template v-if="hasBudget">
-          <md-button v-show="selectedServices.length > 0" class="md-red maryoku-btn" @click="getSpecification">
-            Get Specific
-          </md-button>
-        </template>
-        <template v-else>
-          <md-button class="md-simple edit-btn md-red" @click="showAddBudgetConfirm = true"> Add To Budget </md-button>
-        </template>
-      </div>
-    </template>
-    <div class="issued-card flex-1 d-flex" v-else>
-      <div class="flex-1 icon-section d-flex align-center flex-column justify-content-center">
-        <img :src="`${$iconURL}${popperIcons[serviceCategory.serviceCategory]}`" />
-        <div class="service-name color-red font-size-20 font-bold">{{ serviceCategory.name }}</div>
-      </div>
-      <div class="p-20 font-bold d-flex align-center justify-content-center card-info">
-        <md-button v-show="selectedServices.length > 0" class="md-red maryoku-btn md-simple" @click="getSpecification">
-          Change specifications
+          <img v-else :src="`${$iconURL}Requirements/Group+16153.svg`" />
         </md-button>
+        <img class="carousel-image" :src="`${$storageURL}RequirementsImages/thumbnails/${image}`" />
+        <label>{{ serviceCategory.imageTitles[index] }}</label>
       </div>
+
+      <template slot="next">
+        <span class="next handle-btn">
+          <md-icon>keyboard_arrow_right</md-icon>
+        </span>
+      </template>
+    </carousel>
+    <carousel v-else :items="1" :margin="0" :nav="false" :loop="true" class="header-carousel">
+      <template slot="prev">
+        <span class="prev handle-btn d-none" ref="prevButton">
+          <md-icon>keyboard_arrow_left</md-icon>
+        </span>
+      </template>
+      <div v-for="(clip, index) in serviceCategory.clips" :key="clip" class="carousel-item">
+        <md-button
+          class="md-simple md-icon-button md-raised save-btn"
+          :class="{ isSelected: selectedServices.includes(serviceCategory.imageTitles[index]) }"
+          @click="addService(serviceCategory.imageTitles[index])"
+          v-show="hasBudget"
+        >
+          <img
+            v-if="!selectedServices.includes(serviceCategory.imageTitles[index])"
+            class="non-selected"
+            :src="`${$iconURL}comments/SVG/heart-dark.svg`"
+          />
+          <img v-else :src="`${$iconURL}Requirements/Group+16153.svg`" />
+        </md-button>
+        <img
+          class="carousel-image"
+          :src="`${$storageURL}RequirementsImages/thumbnails/Music Images/${serviceCategory.images[index]}`"
+        />
+        <music-player
+          class="player"
+          :title="serviceCategory.clipTitles[index]"
+          :src="`${$storageURL}RequirementsImages/thumbnails/${clip}`"
+          @next="next"
+          @prev="prev"
+        ></music-player>
+      </div>
+
+      <template slot="next">
+        <span class="next handle-btn d-none" ref="nextButton">
+          <md-icon>keyboard_arrow_right</md-icon>
+        </span>
+      </template>
+    </carousel>
+    <div class="p-20 font-bold d-flex align-center justify-content-between card-info">
+      <span class="service-name">{{ serviceCategory.name }}</span>
+      <template v-if="hasBudget">
+        <md-button v-show="selectedServices.length > 0" class="md-red maryoku-btn" @click="getSpecification">
+          Get Specific
+        </md-button>
+      </template>
+      <template v-else>
+        <!-- <popper trigger="click" :options="{ placement: 'top', gpuAcceleration: false }">
+          <div class="popper white-card popper-content">
+            <div class="font-size-20 popper-header font-bold">
+              <div class="d-flex align-center">
+                <img :src="`${$iconURL}${serviceCategory.icon}`" class="mr-10" />
+                <div>Would you like to add the {{ serviceCategory.name }} category to your budget?</div>
+              </div>
+            </div>
+            <div class="font-size-16 mt-20">
+              Looks like you didn’t allocate money for this service, it’s not a problem at all! You could do it whenever
+              you want, just add it to your budget
+            </div>
+            <div class="mt-20">Adding categories to budget is mandatory in order to get proposals</div>
+            <div class="popper-footer d-flex mt-50">
+              <md-button class="md-simple md-black maryoku-btn">
+                Don't Add {{ serviceCategory.name }} To Budget
+              </md-button>
+              <md-button class="md-red maryoku-btn" @click="addBudget">
+                Add {{ serviceCategory.name }} To Budget
+              </md-button>
+            </div>
+          </div>
+        </popper> -->
+        <md-button class="md-simple edit-btn md-red" @click="showAddBudgetConfirm = true"> Add To Budget </md-button>
+      </template>
     </div>
     <add-budget-modal
       v-if="showAddNewCategory"
@@ -131,21 +141,20 @@ export default {
       selected: false,
       selectedServices: [],
       popperIcons: {
-        venuerental: "SentReqIcn/Group 18964.svg",
-        decor: "SentReqIcn/Group 18012.svg",
-        foodandbeverage: "SentReqIcn/Group 18009.svg",
-        entertainment: "SentReqIcn/Group 18967.svg",
-        swag: "SentReqIcn/Group 18008.svg",
-        audiovisualstagingservices: "SentReqIcn/Group 18015.svg",
-        administration: "SentReqIcn/Group 18026.svg",
-        transportation: "SentReqIcn/Group 18016.svg",
-        giveaways: "SentReqIcn/Group 18014.svg",
-        meetingorganizationfees: "SentReqIcn/Group 18008.svg",
-        shipping: "SentReqIcn/Group 18008.svg",
-        signageprinting: "SentReqIcn/Group 19854.svg",
-        securityservices: "SentReqIcn/Group 19857.svg",
-        videographyandphotography: "SentReqIcn/Group 18009.svg",
-        equipmentrental: "SentReqIcn/Group 18010.svg",
+        venuerental: "NewRequirements/Group 18008.svg",
+        decor: "NewRequirements/Group 18012.svg",
+        foodandbeverage: "NewRequirements/Group 18008.svg",
+        entertainment: "NewRequirements/Group 18015.svg",
+        swag: "NewRequirements/Group 18008.svg",
+        audiovisualstagingservices: "NewRequirements/Group 18008.svg",
+        administration: "NewRequirements/Group 18008.svg",
+        transportation: "NewRequirements/Group 18016.svg",
+        giveaways: "NewRequirements/Group 18008.svg",
+        meetingorganizationfees: "NewRequirements/Group 18008.svg",
+        shipping: "NewRequirements/Group 18008.svg",
+        signageprinting: "NewRequirements/Group 18008.svg",
+        securityservices: "NewRequirements/Group 18008.svg",
+        videographyandphotography: "NewRequirements/Group 18009.svg",
       },
     };
   },
@@ -170,14 +179,9 @@ export default {
       type: Array,
       default: () => [],
     },
-    isSentRequest: {
-      type: Boolean,
-      default: false,
-    },
   },
   created() {
     this.selectedServices = [...this.defaultData];
-    console.log(this.selectedServices);
   },
   methods: {
     selectSave() {},
@@ -220,13 +224,6 @@ export default {
   height: 400px;
   display: flex;
   flex-direction: column;
-  .issued-card {
-    flex-direction: column;
-    .icon-section {
-      background-color: #f3f7fd;
-      width: 100%;
-    }
-  }
   .header-carousel {
     flex: 1;
     max-height: calc(100% - 80px);
