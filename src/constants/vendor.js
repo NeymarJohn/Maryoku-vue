@@ -882,7 +882,7 @@ export const businessCategories = [
                 name: "chef",
                 type: Boolean,
                 value: false,
-                hideOnAutoComplete: true
+                // hideOnAutoComplete: true
               },
               {
                 name: "specialty chef",
