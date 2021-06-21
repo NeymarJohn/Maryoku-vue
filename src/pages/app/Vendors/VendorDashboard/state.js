@@ -1,7 +1,6 @@
 import Vue from "vue";
 import { postReq, getReq } from "@/utils/token";
 import Vendors from "@/models/Vendors";
-import ProposalRequest from "@/models/ProposalRequest";
 import { VendorPolicy, VendorPricingPolicy } from "@/constants/vendor";
 
 import S3Service from "@/services/s3.service";
@@ -12,7 +11,6 @@ import moment from "moment";
 
 const state = {
   calendarEvents: {},
-  proposalRequests: null
 };
 
 const getters = {
@@ -46,11 +44,6 @@ const actions = {
         });
     })
 
-  },
-  getProposalRequests({ commit, state }, vendorId) {
-    new ProposalRequest().for(new Vendors({ id: vendorId })).get().then(proposalRequests => {
-      commit("setProposalRequests", proposalRequests)
-    })
   }
 };
 
@@ -58,9 +51,6 @@ const mutations = {
   setCalendarEvents(state, { month, events }) {
     Vue.set(state.calendarEvents, month, [...events])
   },
-  setProposalRequests(state, proposalRequests) {
-    Vue.set(state, "proposalRequests", proposalRequests)
-  }
 };
 
 export default {

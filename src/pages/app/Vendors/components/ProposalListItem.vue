@@ -17,13 +17,12 @@
     <div><img class="ml-15" :src="getStatusIcon(proposal.status)" /></div>
     <div class="font-size-14 color-black-middle">Tom</div>
 
-    <div class="text-center" v-if="proposal.negotiations && proposal.negotiations.length">
+    <div v-if="proposal.status === 'negotiation'">
+        <md-button  class="md-vendor" @click="edit('show')">
+            <img :src="`${$iconURL}common/edit-white.svg`" class="label-icon mr-10" style="width: 13px!important;"/> Make Changes
+        </md-button>
         <md-button class="md-simple md-red md-vendor-text">
-            <img :src="`${iconUrl}Group%2014277_2.svg`" class="negotiation mr-5" style="width: 15px" /> Negotiation Request
-        </md-button>
-        <md-button class="md-vendor" @click="edit('show')">
-            Respond
-        </md-button>
+            <img :src="`${iconUrl}Group%2014277_2.svg`" class="mr-10" style="width: 15px" /> Negotiation Request</md-button>
     </div>
     <md-button v-else class="md-simple md-vendor" @click="edit('show')">
       <img src="/static/icons/vendor/proposalBoard/see-proposal.svg" class="mr-5" style="width: 20px" />
@@ -128,20 +127,6 @@ export default {
   display: grid;
   align-items: center;
   grid-template-columns: 5% 20% 10% 15% 10% 10% 10% 15% 5%;
-}
-img.negotiation{
-    position: relative;
-
-    &:before{
-        content: "\A";
-        position: absolute;
-        left: 0;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: #f51355 !important;
-        display: inline-block;
-    }
 }
 /deep/ .md-menu-content .md-list{
     padding: 0 !important;

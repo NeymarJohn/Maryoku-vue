@@ -1,48 +1,46 @@
 <template>
   <div class="card vendor-list-all">
-    <loader :active="loading" />
-    <h1>All Vendors</h1>
-    <md-button @click="exportXls" class="md-simple md-red maryoku-btn">Export XLSX</md-button>
-    <md-table v-if="vendors && vendors.length > 0" md-sort="companyName" md-sort-order="asc">
-      <md-table-row>
-        <md-table-head md-numeric>No</md-table-head>
-        <md-table-head>Company Name</md-table-head>
-        <md-table-head>Editing Url</md-table-head>
-        <md-table-head>User Name</md-table-head>
-        <md-table-head>Business Catgory</md-table-head>
-        <md-table-head>Email</md-table-head>
-        <md-table-head>Address</md-table-head>
-      </md-table-row>
-      <md-table-row v-for="(item, index) in vendors" :key="item.id">
-        <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ index + 1 }}</md-table-cell>
-        <md-table-cell md-label="Company Name" md-sort-by="companyName">{{ item.companyName }} </md-table-cell>
-        <md-table-cell md-label="User Name" md-sort-by="vendorDisplayName">
-          <a :href="`${currentPath}/#/vendor/edit/${item.id}`" target="_blank">{{
-            `${currentPath}/#/vendor/edit/${item.id}`
-          }}</a>
-          &emsp;<md-button
-            class="md-simple md-red edit-btn md-just-icon"
-            @click="copyUrl(`${currentPath}/#/vendor/edit/${item.id}`)"
-            v-clipboard:copy="`${currentPath}/#/vendor/edit/${item.id}`"
-            v-clipboard:success="onCopy"
-            v-clipboard:error="onCopyError"
-            ><md-icon>content_copy</md-icon></md-button
-          ></md-table-cell
-        >
-        <md-table-cell md-label="User Name" md-sort-by="vendorDisplayName">{{
-          item.tenantUser ? item.tenantUser.username : ""
-        }}</md-table-cell>
-        <md-table-cell md-label="Business Category" md-sort-by="eventCategory.title">{{
-          item.eventCategory ? item.eventCategory.title : ""
-        }}</md-table-cell>
-        <md-table-cell md-label="Main Email" md-sort-by="vendorMainEmail">{{ item.vendorMainEmail }}</md-table-cell>
+      <loader :active="loading"/>
+      <h1>All Vendors</h1>
+      <md-button @click="exportXls" class="md-simple md-red maryoku-btn">Export XLSX</md-button>
+      <md-table v-if="vendors && vendors.length > 0" md-sort="companyName" md-sort-order="asc">
+          <md-table-row>
+              <md-table-head md-numeric>No</md-table-head>
+              <md-table-head>Company Name</md-table-head>
+              <md-table-head>Editing Url</md-table-head>
+              <md-table-head>User Name</md-table-head>
+              <md-table-head>Business Catgory</md-table-head>
+              <md-table-head>Email</md-table-head>
+              <md-table-head>Address</md-table-head>
+          </md-table-row>
+          <md-table-row v-for="(item, index) in vendors" :key="item.id">
+              <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ index + 1 }}</md-table-cell>
+              <md-table-cell md-label="Company Name" md-sort-by="companyName">{{ item.companyName }} </md-table-cell>
+              <md-table-cell md-label="User Name" md-sort-by="vendorDisplayName">
+                  <a :href="`${currentPath}/#/vendor/edit/${item.id}`" target="_blank">{{
+                      `${currentPath}/#/vendor/edit/${item.id}`
+                      }}</a>
+                  &emsp;<md-button
+                  class="md-simple md-red edit-btn md-just-icon"
+                  @click="copyUrl(`${currentPath}/#/vendor/edit/${item.id}`)"
+                  v-clipboard:copy="`${currentPath}/#/vendor/edit/${item.id}`"
+                  v-clipboard:success="onCopy"
+                  v-clipboard:error="onCopyError"
+              ><md-icon>content_copy</md-icon></md-button
+              ></md-table-cell
+              >
+              <md-table-cell md-label="User Name" md-sort-by="vendorDisplayName">{{ item.vendorDisplayName }}</md-table-cell>
+              <md-table-cell md-label="Business Category" md-sort-by="eventCategory.title">{{
+                  item.eventCategory ? item.eventCategory.title : ""
+                  }}</md-table-cell>
+              <md-table-cell md-label="Main Email" md-sort-by="vendorMainEmail">{{ item.vendorMainEmail }}</md-table-cell>
 
-        <md-table-cell md-label="Address" md-sort-by="vendorAddresses">{{
-          item.vendorAddresses && item.vendorAddresses.length ? item.vendorAddresses[0] : ""
-        }}</md-table-cell>
-      </md-table-row>
-    </md-table>
-    <md-dialog-alert :md-active.sync="showAlert" md-content="Copied vendor link!" md-confirm-text="Cool!" />
+              <md-table-cell md-label="Address" md-sort-by="vendorAddresses">{{
+                  item.vendorAddresses && item.vendorAddresses.length ? item.vendorAddresses[0] : ""
+                  }}</md-table-cell>
+          </md-table-row>
+      </md-table>
+      <md-dialog-alert :md-active.sync="showAlert" md-content="Copied vendor link!" md-confirm-text="Cool!" />
   </div>
 </template>
 <script>
