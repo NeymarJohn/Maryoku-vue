@@ -1,6 +1,6 @@
 <template>
   <div class="plannig-service-category-card white-card" :class="{ 'longer-card': isLong }">
-    <template v-if="!isSentRequest">
+    <template v-if="!isSentRequest || selectedServices.length === 0">
       <carousel v-if="!musicPlayer" :items="1" :margin="0" :nav="false" :loop="true" class="header-carousel">
         <template slot="prev">
           <span class="prev handle-btn">
@@ -145,7 +145,7 @@ export default {
         signageprinting: "SentReqIcn/Group 19854.svg",
         securityservices: "SentReqIcn/Group 19857.svg",
         videographyandphotography: "SentReqIcn/Group 18009.svg",
-        equipmentrental: "SentReqIcn/Group 18010.svg",
+        equipmentrentals: "SentReqIcn/Group 18010.svg",
       },
     };
   },
