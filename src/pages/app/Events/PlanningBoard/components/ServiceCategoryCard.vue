@@ -1,6 +1,6 @@
 <template>
   <div class="plannig-service-category-card white-card" :class="{ 'longer-card': isLong }">
-    <template v-if="!isSentRequest || selectedServices.length === 0">
+    <template v-if="!isSentRequest">
       <carousel v-if="!musicPlayer" :items="1" :margin="0" :nav="false" :loop="true" class="header-carousel">
         <template slot="prev">
           <span class="prev handle-btn">
@@ -133,7 +133,7 @@ export default {
       popperIcons: {
         venuerental: "SentReqIcn/Group 18964.svg",
         decor: "SentReqIcn/Group 18012.svg",
-        foodandbeverage: "SentReqIcn/group-18973.svg",
+        foodandbeverage: "SentReqIcn/Group 18009.svg",
         entertainment: "SentReqIcn/Group 18967.svg",
         swag: "SentReqIcn/Group 18008.svg",
         audiovisualstagingservices: "SentReqIcn/Group 18015.svg",
@@ -145,7 +145,7 @@ export default {
         signageprinting: "SentReqIcn/Group 19854.svg",
         securityservices: "SentReqIcn/Group 19857.svg",
         videographyandphotography: "SentReqIcn/Group 18009.svg",
-        equipmentrentals: "SentReqIcn/Group 18010.svg",
+        equipmentrental: "SentReqIcn/Group 18010.svg",
       },
     };
   },

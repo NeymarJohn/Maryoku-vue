@@ -686,8 +686,8 @@ export const businessCategories = [
               // },
               {
                 name: "non alcoholic specials",
-                type: Number,
-                value: 0,
+                type: Boolean,
+                value: false,
                 // xIncluded: true,
                 // available: ['smoothies & juices', 'hawaiian', 'coffee', 'tea', 'power drinks']
               },
@@ -882,7 +882,7 @@ export const businessCategories = [
                 name: "chef",
                 type: Boolean,
                 value: false,
-                // hideOnAutoComplete: true
+                hideOnAutoComplete: true
               },
               {
                 name: "specialty chef",
@@ -920,14 +920,14 @@ export const businessCategories = [
                 type: Boolean,
                 value: false,
               },
-              {
-                name: "number of waitstaff",
-                hasComment: true,
-                type: Number,
-                value: 0,
-                xIncluded: true,
-                hideOnAutoComplete: true
-              },
+              // {
+              //   name: "number of waitstaff",
+              //   hasComment: true,
+              //   type: Number,
+              //   value: 0,
+              //   xIncluded: true,
+              //   hideOnAutoComplete: true
+              // },
               {
                 name: "attire of waitstaff",
                 type: Array,
@@ -4047,15 +4047,18 @@ export const VendorPolicy = [
       },
       {
         name: "Level of security training/certification",
-        noSuffix: true,
+        type: String,
         hasComment: true,
-        unit: "none"
       },
       {
         name: "Special attire requests",
-        noSuffix: true,
+        type: Boolean,
         hasComment: true,
-        unit: "none"
+      },
+      {
+        name: "Pre-selection personal",
+        type: Boolean,
+        hasComment: true,
       },
     ],
   },
@@ -4708,20 +4711,6 @@ export const VendorPricingPolicy = [
   {
     category: "securityservices",
     items: [
-      {
-        name: "Pre-selection personal",
-        type: Number,
-        hasComment: true,
-      },
-      {
-        name: "Number of hours",
-        type: Number,
-        noSuffix: true,
-        hasComment: true,
-        unit: "hour",
-        labelForValue: "Number of hours",
-        hideOnProposal: true,
-      },
       {
         name: "Tax rate",
         type: Number,

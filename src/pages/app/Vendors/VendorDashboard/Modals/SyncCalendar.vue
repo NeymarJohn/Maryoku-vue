@@ -65,7 +65,7 @@ const API_KEY = "AIzaSyCuHr_Quojoaxqw9dWHgbPHItxfsZAYKsY";
 const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
 // Authorization scopes required by the API; multiple scopes can be
 // included, separated by spaces.
-const SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
+const SCOPES = "https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events";
 
 export default {
   components: {
@@ -119,6 +119,11 @@ export default {
     },
 
     handleGoogleAuthClick() {
+      var zone_name = moment.tz.guess();
+      var timezone = moment.tz(zone_name).zoneAbbr();
+      const timeZoneName = convertTimezoneName(timezone);
+      console.log(timeZoneName);
+
       Promise.resolve(this.api.auth2.getAuthInstance().signIn()).then((_) => {
         this.authorized = true;
         this.events.forEach((e) => {
@@ -128,11 +133,11 @@ export default {
             description: "",
             start: {
               dateTime: moment(eval.startTime).toDate(),
-              timeZone: "GTM",
+              timeZone: timeZoneName,
             },
             end: {
               dateTime: moment(e.endTime).toDate(),
-              timeZone: "GTM",
+              timeZone: timeZoneName,
             },
             recurrence: ["RRULE:FREQ=DAILY;COUNT=2"],
             reminders: {

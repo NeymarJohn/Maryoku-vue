@@ -296,7 +296,7 @@
         <div class="alert alert-danger">Please indicate that you accept the new time of this proposal</div>
       </div>
     </div>
-    <!-- <div class="proposal-footer white-card d-flex justify-content-between">
+     <div class="proposal-footer white-card d-flex justify-content-between">
       <div>
         <md-button @click="back" class="md-simple maryoku-btn md-black">
           <md-icon>arrow_back</md-icon>
@@ -327,7 +327,7 @@
           >Book this vendor
         </md-button>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -565,6 +565,7 @@ export default {
       // new EventComponentProposal({ id: this.vendorProposal.id, expiredDate: newExpiredDate }).save().then((res) => {
       //   this.vendorProposal = res;
       // });
+
       new ProposalNegotiationRequest({
         eventId: this.eventData.id,
         proposal: { id: this.vendorProposal.id, expiredDate: newExpiredDate },

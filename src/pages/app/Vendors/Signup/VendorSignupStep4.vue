@@ -67,7 +67,7 @@
               </div>
               <div class="desc">{{ vendor.about.category }}</div>
             </div>
-            <vendor-images-list :images="[...vendor.images, ...vendor.images]" class="images"></vendor-images-list>
+            <vendor-images-list :images="[...vendor.images.filter(it => it != null), ...vendor.images.filter(it => it != null)]" class="images"></vendor-images-list>
             <div class="contact-us" id="Contact">
               <h4>CONTACT US</h4>
               <div class="items">

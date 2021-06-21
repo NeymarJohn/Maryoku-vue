@@ -10,47 +10,23 @@ import authService from "@/services/auth.service";
 import moment from "moment";
 
 const state = {
+  includedServices: {},
+  costServices: {},
+  extraServices: {},
+  event: {},
+  vision: "",
+  images: [],
   vendor: null,
-  initialized: false,
-  proposalRequest: null,
-  proposalServices: {},
-  proposalCostServices: {},
-  proposalIncludedServices: {},
-  proposalExtraServices: {},
-  discounts: {},
-  taxes: {},
-  totalTax: {
-    percentage: 0,
-    price: 0,
-  },
-  totalDiscount: {
-    percentage: 0,
-    price: 0,
-  },
-  legalDocs: {},
   wizardStep: 0,
-  initStep: 0,
   additionalServices: [],
-  attachments: {},
-  inspirationalPhotos: new Array(15),
-  coverImage: "",
-  bundleDiscount: {
-    isApplied: false,
-    services: [],
-    percentage: 0,
-    price: 0,
-  },
-  suggestionDate: null,
-  timelineDates: [],
-  personalMessage: "",
-  suggestedNewSeatings: null,
-  tenantId: authService.resolveTenantId()
+  bundleDiscount: {},
+  discounts: {}
 };
 const getters = {
   originalPriceOfMainCategory(state) {
     const mainService = state.vendor.eventCategory.key;
-    if (!state.proposalCostServices[mainService]) return 0;
-    const sumPrice = state.proposalCostServices[mainService].reduce((s, item) => {
+    if (!state.costServices[mainService]) return 0;
+    const sumPrice = state.costServices[mainService].reduce((s, item) => {
       if (item.isComplimentary) return s;
       return s + item.requirementValue * item.price;
     }, 0);
@@ -59,11 +35,11 @@ const getters = {
   totalPriceByCategory(state, getters) {
     const prices = {};
     state.additionalServices.forEach(service => {
-      if (!state.proposalCostServices[service]) {
+      if (!state.costServices[service]) {
         prices[service] = 0;
       }
-      if (state.proposalCostServices[service]) {
-        const sumPrice = state.proposalCostServices[service].reduce((s, item) => {
+      if (state.costServices[service]) {
+        const sumPrice = state.costServices[service].reduce((s, item) => {
           if (item.isComplimentary) return s;
           return s + item.requirementValue * item.price;
         }, 0);
@@ -76,7 +52,7 @@ const getters = {
 
   finalPriceOfMainCategory(state, getters) {
     const mainService = state.vendor.eventCategory.key;
-    if (!state.proposalCostServices[mainService]) return 0;
+    if (!state.costServices[mainService]) return 0;
     const sumPrice = getters.originalPriceOfMainCategory;
     let tax = state.taxes[mainService] || { price: 0, percentage: 0 };
     let discount = state.discounts[mainService] || { price: 0, percentage: 0 };
@@ -92,11 +68,11 @@ const getters = {
   pricesByCategory(state, getters) {
     const prices = {};
     state.additionalServices.forEach(service => {
-      if (!state.proposalCostServices[service]) {
+      if (!state.costServices[service]) {
         prices[service] = 0;
       }
-      if (state.proposalCostServices[service]) {
-        const sumPrice = state.proposalCostServices[service].reduce((s, item) => {
+      if (state.costServices[service]) {
+        const sumPrice = state.costServices[service].reduce((s, item) => {
           if (item.isComplimentary) return s;
           return s + item.requirementValue * item.price;
         }, 0);
@@ -177,18 +153,15 @@ const mutations = {
     state.id = proposal.id;
     state.additionalServices = proposal.additionalServices;
     state.eventVision = proposal.eventVision;
-    state.proposalCostServices = proposal.costServices;
-    state.proposalIncludedServices = proposal.includedServices;
-    state.proposalExtraServices = proposal.extraServices;
-    state.inspirationalPhotos = proposal.inspirationalPhotos;
+    state.costServices = proposal.costServices;
+    state.includedServices = proposal.includedServices;
+    state.extraServices = proposal.extraServices;
+    state.images = proposal.images;
     state.personalMessage = proposal.personalMessage;
     state.tax = proposal.tax;
     state.suggestedNewSeatings = proposal.suggestedNewSeatings;
     state.initialized = true;
     state.wizardStep = proposal.step
-  },
-  setPropsalRequest: (state, propsoalRequest) => {
-    state.proposalRequest = propsoalRequest;
   },
   setWizardStep: (state, step) => {
     console.log('setWizardStep', step);
@@ -201,13 +174,13 @@ const mutations = {
     Vue.set(state.proposalServices, category, services);
   },
   setCostServices: (state, { category, services }) => {
-    Vue.set(state.proposalCostServices, category, services);
+    Vue.set(state.costServices, category, services);
   },
   setIncludedServices: (state, { category, services }) => {
-    Vue.set(state.proposalIncludedServices, category, services);
+    Vue.set(state.includedServices, category, services);
   },
   setExtraServices: (state, { category, services }) => {
-    Vue.set(state.proposalExtraServices, category, services);
+    Vue.set(state.extraServices, category, services);
   },
   setLegalDocs: (state, { category, files }) => {
     Vue.set(state.legalDocs, category, files);
@@ -235,12 +208,12 @@ const mutations = {
     Vue.set(state, key, value);
   },
   setInspirationalPhoto: (state, { index, photo }) => {
-    Vue.set(state.inspirationalPhotos, index, photo);
+    Vue.set(state.images, index, photo);
   },
   initState(state) {
-    Vue.set(state, "proposalCostServices", {});
-    Vue.set(state, "proposalIncludedServices", {});
-    Vue.set(state, "proposalExtraServices", {});
+    Vue.set(state, "costServices", {});
+    Vue.set(state, "includedServices", {});
+    Vue.set(state, "extraServices", {});
     Vue.set(state, "discounts", {});
     Vue.set(state, "taxes", {});
     Vue.set(state, "totalTax", { percentage: 0, price: 0 });
@@ -259,11 +232,11 @@ const mutations = {
 };
 const actions = {
   addPrice({ commit, state, dispatch }, { category, selectedItem }) {
-    const proposalIncludedServices = state.proposalIncludedServices[category];
-    const includedIndex = proposalIncludedServices.findIndex(item => item.requirementTitle == selectedItem.requirementTitle)
-    proposalIncludedServices.splice(includedIndex, 1)
-    commit("setIncludedServices", { category, services: [...proposalIncludedServices] })
-    const costServices = state.proposalCostServices[category];
+    const includedServices = state.includedServices[category];
+    const includedIndex = includedServices.findIndex(item => item.requirementTitle == selectedItem.requirementTitle)
+    includedServices.splice(includedIndex, 1)
+    commit("setIncludedServices", { category, services: [...includedServices] })
+    const costServices = state.costServices[category];
     costServices.push(selectedItem);
     commit("setCostServices", { category, services: costServices })
   },
@@ -293,18 +266,6 @@ const actions = {
         });
     });
   },
-  getProposalRequest: ({ commit, state, dispatch }, requestId) => {
-    return new Promise((resolve, reject) => {
-      ProposalRequest.find(requestId).then(resp => {
-        commit("setPropsalRequest", resp);
-        dispatch("getTimelineDates", resp.eventData.id);
-        if (resp.proposal) {
-          commit("setProposal", resp.proposal);
-        }
-        resolve(resp);
-      });
-    });
-  },
   getTimelineDates({ commit, state }, eventId) {
     return new Promise((resolve, reject) => {
       new EventTimelineDate()
@@ -322,14 +283,14 @@ const actions = {
         id: status == 'duplicate' ? undefined : state.id,
         personalMessage: state.personalMessage,
         additionalServices: state.additionalServices,
-        inspirationalPhotos: state.inspirationalPhotos,
+        images: state.images,
         proposalRequestId: state.proposalRequest.id,
         eventVision: state.eventVision,
         eventComponentId: state.proposalRequest.eventComponentInstance.id,
         vendorId: state.vendor.id,
-        costServices: state.proposalCostServices,
-        includedServices: state.proposalIncludedServices,
-        extraServices: state.proposalExtraServices,
+        costServices: state.costServices,
+        includedServices: state.includedServices,
+        extraServices: state.extraServices,
         discounts: state.discounts,
         taxes: state.taxes,
         cost: getters.totalPriceOfProposal,

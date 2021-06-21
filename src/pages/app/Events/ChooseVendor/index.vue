@@ -11,7 +11,9 @@
             :selectedIcon="`${$iconURL}Budget+Elements/${component.componentId}-white.svg`"
             :defaultStatus="selectedCategory && component.componentId === selectedCategory.componentId"
             :disabled="!eventRequirements[component.componentId]"
-            :hasBadge="hasBadge(component)"
+            :hasBadge="
+              proposalsByCategory[component.componentId] && proposalsByCategory[component.componentId].length > 0
+            "
             iconStyle="opacity:0.8"
             v-for="component in categories"
             @click="selectCategory(component)"
@@ -188,14 +190,6 @@ export default {
     selectCategory(category, clicked) {
       this.currentRequirement = this.eventRequirements[category.componentId];
       this.selectedCategory = category;
-      const proposals = this.proposalsByCategory[category.componentId];
-      if (this.proposalsByCategory[category.componentId]) {
-        this.proposalsByCategory[category.componentId].forEach((proposal, index) => {
-          new Proposal({ id: proposal.id, viewed: true }).save().then((res) => {
-            this.$set(proposal, "viewed", true);
-          });
-        });
-      }
     },
     addRequirements() {
       this.$router.push(`/events/${this.event.id}/booking/planningboard`);
@@ -292,14 +286,6 @@ export default {
     getRequirementsFormStore(category) {
       if (!this.$store.state[category]) return {};
       return this.$store.state[category].mainRequirements;
-    },
-    hasBadge(component) {
-      if (!this.proposalsByCategory[component.componentId]) return false;
-      if (this.proposalsByCategory[component.componentId].length === 0) return false;
-      const notViewedProposals = this.proposalsByCategory[component.componentId].filter((item) => !item.viewed);
-      if (notViewedProposals.length === 0) return false;
-      console.log(notViewedProposals);
-      return true;
     },
   },
   created() {
