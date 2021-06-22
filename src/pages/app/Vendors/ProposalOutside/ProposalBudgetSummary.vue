@@ -61,12 +61,12 @@
               </li>
               <li>
                 <span>Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
-                <!-- <span>
+                <span>
                   ${{
                     event.components.find((item) => item.componentId == vendor.eventCategory.key).allocatedBudget
                       | withComma
                   }}</span
-                > -->
+                >
               </li>
               <li
                 v-if="finalPriceOfMainCategory - getAllocatedBudget(vendor.eventCategory.key) > 0"
@@ -288,6 +288,16 @@ export default {
         : arr.slice();
     },
     servicesByCategory(category) {
+      // const services = this.services.filter((s) => s.name == category);
+
+      // if (services.length > 0) {
+      //   return this.flatDeep(
+      //     services[0].categories.map((s) => s.subCategories.map((sc) => sc.items.map((dd) => dd.name))),
+      //     Infinity,
+      //   );
+      // } else {
+      //   return [];
+      // }
       return this.$store.state.proposalForNonMaryoku.proposalServices[category] || [];
     },
     getIconUrlByCategory(category) {
@@ -373,11 +383,10 @@ export default {
       return this.serviceCategories.find((item) => item.key === category);
     },
     getAllocatedBudget(category) {
-      // const allocatedBudgetItem = this.proposalRequest.eventData.components.find(
-      //   (item) => item.componentId === category,
-      // );
-      // return allocatedBudgetItem.allocatedBudget;
-      return 0;
+      const allocatedBudgetItem = this.proposalRequest.eventData.components.find(
+        (item) => item.componentId === category,
+      );
+      return allocatedBudgetItem.allocatedBudget;
     },
     saveDiscount(categoryKey, discount) {
       this.$store.commit("proposalForNonMaryoku/setDiscount", { category: "total", discount: discount });

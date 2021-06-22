@@ -203,8 +203,8 @@
                       <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
                     </div>
                     <div class="item" v-else>
-                      <span v-if="policy.type === Number && !policy.isPercentage && policy.unit !== 'hour'">$</span>
-                      <span v-if="policy.type === Boolean">
+                      <span v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour'">$</span>
+                      <span v-if="policy.type === 'Boolean'">
                         <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
                         <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
                         <!-- {{ policy.value === true ? "Yes" : "No" }} -->

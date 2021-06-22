@@ -241,7 +241,7 @@
                       <div class="flex-1">
                         <ul>
                           <li>
-                            <div class="check-field" @click="updateAllExDonts(r)">
+                            <div class="check-field" @click="selectAllHolidays(r)">
                               <img :src="`${iconUrl}Group 6258.svg`" v-if="isAllHolidays(r)" />
                               <img :src="`${iconUrl}Rectangle 1245.svg`" v-else />
                               <span :class="{ checked: isAllHolidays(r) }">{{ `All ${r.name}` }}</span>
@@ -539,9 +539,10 @@ export default {
       this.$root.$emit("update-vendor-value", "selectedWeekdays", this.selectedWeekdays);
     },
     updateReligion(item) {
-      // console.log("updateReligion", item, this.markedDates, this.date.selectedDates);
+      console.log("updateReligion", item);
       if (this.selectedReligion.length && this.selectedReligion.find((s) => s.name === item.name)) {
         this.selectedReligion = this.selectedReligion.filter((s) => s.name !== item.name);
+        this.updateAllExDonts(item, false);
       } else {
         this.selectedReligion.push(item);
       }
@@ -631,10 +632,11 @@ export default {
         this.$root.$emit("update-vendor-value", "policies", this.vendorPricingPolicies.items);
       }
     },
-    updateAllExDonts(data) {
-      let value = !this.isAllHolidays(data);
+    selectAllHolidays(data){
+      this.updateAllExDonts(data, !this.isAllHolidays(data));
+    },
 
-      this.vendor.exDonts.filter((h) => h.religion !== data.name);
+    updateAllExDonts(data, value) {
       data.holidays.map((it) => {
         it.selected = value;
         let day = moment(it.start).date();
@@ -653,10 +655,11 @@ export default {
             religion: data.name,
           });
         } else {
+          console.log('updateAllExDonts', it.holiday);
           this.vendor.exDonts = this.vendor.exDonts.filter((e) => e.holiday !== it.holiday);
         }
       });
-      console.log("updateAllExDonts", this.markedDates);
+      console.log('updateAllExDonts', this.vendor.exDonts);
       this.$root.$emit("update-vendor-value", "exDonts", this.vendor.exDonts);
     },
     isAllHolidays(data) {
@@ -677,7 +680,7 @@ export default {
               this.$set(it, "isExtraService", vendorPricingPolicies.items[idx].isExtraService);
               this.$set(it, "extraService", vendorPricingPolicies.items[idx].extraService);
             }
-            if (it.type == Boolean && !it.hasOwnProperty("value")) {
+            if (it.type == 'Boolean' && !it.hasOwnProperty("value")) {
               this.$set(it, "value", false);
             }
           }
@@ -685,7 +688,7 @@ export default {
       } else {
         this.vendorPricingPolicies = vendorPricingPolicies;
         this.vendorPricingPolicies.items.map((it) => {
-          if (it.type == Boolean) {
+          if (it.type == 'Boolean') {
             this.$set(it, "value", false);
           }
         });
@@ -700,14 +703,14 @@ export default {
         this.$set(this.vendorPolicies, "items", this.vendor.policies);
         this.vendorPolicies.items.map((it, idx) => {
           this.$set(it, "type", vendorPolicies.items[idx].type);
-          if (it.type == Boolean && !it.hasOwnProperty("value")) {
+          if (it.type == 'Boolean' && !it.hasOwnProperty("value")) {
             this.$set(it, "value", false);
           }
         });
       } else {
         this.vendorPolicies = vendorPolicies;
         this.vendorPolicies.items.map((it) => {
-          if (it.type == Boolean) {
+          if (it.type == 'Boolean') {
             this.$set(it, "value", false);
           }
         });

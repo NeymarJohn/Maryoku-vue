@@ -65,7 +65,7 @@ const API_KEY = "AIzaSyCuHr_Quojoaxqw9dWHgbPHItxfsZAYKsY";
 const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
 // Authorization scopes required by the API; multiple scopes can be
 // included, separated by spaces.
-const SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
+const SCOPES = "https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events";
 
 export default {
   components: {
@@ -126,14 +126,13 @@ export default {
 
       Promise.resolve(this.api.auth2.getAuthInstance().signIn()).then((_) => {
         this.authorized = true;
-
         this.events.forEach((e) => {
           var event = {
             summary: e.customer.name,
             location: e.location,
             description: "",
             start: {
-              dateTime: moment(eval.startTime).toDate(),
+              dateTime: moment(e.startTime).toDate(),
               timeZone: timeZoneName,
             },
             end: {

@@ -71,10 +71,10 @@ export default {
   computed: {
     eventVision: {
       get() {
-        return this.$store.state.proposalForNonMaryoku.eventVision;
+        return this.$store.state.vendorProposal.eventVision;
       },
       set(value) {
-        this.$store.commit("proposalForNonMaryoku/setValue", { key: "eventVision", value });
+        this.$store.commit("vendorProposal/setValue", { key: "eventVision", value });
       },
     },
   },

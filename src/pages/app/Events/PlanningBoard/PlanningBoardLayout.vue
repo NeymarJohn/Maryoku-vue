@@ -26,6 +26,10 @@
               :hasBudget="hasBudget(service.serviceCategory)"
               :musicPlayer="service.musicPlayer"
               :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
+              :isSentRequest="
+                $store.state.planningBoard[service.serviceCategory] &&
+                $store.state.planningBoard[service.serviceCategory].id
+              "
               @showSpecific="getSpecification"
               @update="setServiceStyles"
             ></service-category-card>
@@ -45,6 +49,10 @@
               :isLong="(serviceIndex + groupIndex) % 2 === 1"
               :hasBudget="hasBudget(service.serviceCategory)"
               :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
+              :isSentRequest="
+                $store.state.planningBoard[service.serviceCategory] &&
+                $store.state.planningBoard[service.serviceCategory].id
+              "
               @showSpecific="getSpecification"
               @update="setServiceStyles"
             ></service-category-card>
