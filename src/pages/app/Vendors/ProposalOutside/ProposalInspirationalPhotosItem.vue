@@ -70,14 +70,14 @@ export default {
   },
   computed: {
     proposalRequest() {
-      return this.$store.state.vendorProposal.proposalRequest;
+      return this.$store.state.proposalForNonMaryoku.proposalRequest;
     },
     inspirationalPhotos: {
       get() {
-        return this.$store.state.vendorProposal.inspirationalPhotos;
+        return this.$store.state.proposalForNonMaryoku.inspirationalPhotos;
       },
       set(value) {
-        this.$store.commit("vendorProposal/setValue", { key: "inspirationalPhotos", value });
+        this.$store.commit("proposalForNonMaryoku/setValue", { key: "inspirationalPhotos", value });
       },
     },
   },

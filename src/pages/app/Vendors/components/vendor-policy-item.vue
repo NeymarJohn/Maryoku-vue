@@ -6,7 +6,7 @@
     <div class="right d-flex justify-content-between">
       <div class="d-flex align-center">
         <div class="top">
-          <template v-if="item.type == 'Boolean'">
+          <template v-if="item.type == Boolean">
             <div class="item" @click="setPolicy(null, 'option', item.name, true)">
               <img
                 :src="theme === 'red' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
@@ -70,7 +70,7 @@
             ></category-selector>
           </template>
         </div>
-        <div class="bottom no-margin" v-if="item.type == 'Number'">
+        <div class="bottom no-margin" v-if="item.type == Number">
           <template v-if="item.noSuffix">
             <div>
               <input
@@ -107,7 +107,7 @@
             />
           </div>
         </div>
-        <div class="bottom mt-0 ml-40" v-if="item.type == 'Boolean' && item.value && item.hasOwnProperty('cost')">
+        <div class="bottom mt-0 ml-40" v-if="item.type == Boolean && item.value && item.hasOwnProperty('cost')">
           <template v-if="item.noSuffix">
             <div>
               <input

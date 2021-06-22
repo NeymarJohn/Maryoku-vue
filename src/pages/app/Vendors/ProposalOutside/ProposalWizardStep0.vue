@@ -45,12 +45,18 @@
     </div>
     <div class="text-left mt-30">
       <label class="font-bold">Type Of Event:</label>
-      <maryoku-input
-        class="width-50 mt-5 form-input"
-        v-model="guests"
-        inputStyle="users"
-        placeholer="Type the amount of guests here..."
-      ></maryoku-input>
+      <multiselect
+        class="width-50 mt-5 form-input md-purple"
+        v-model="selectedEventType"
+        :options="eventTypes"
+        :close-on-select="true"
+        :clear-on-select="true"
+        tag-placeholder="Add this as new tag"
+        placeholder="Type to search category"
+        label="name"
+        track-by="key"
+        :key="eventTypes.length"
+      ></multiselect>
     </div>
     <div class="text-left mt-30">
       <label class="font-bold">Number of Guests</label>
@@ -79,7 +85,7 @@
         theme="purple"
       ></maryoku-input>
     </div>
-    <div class="md-layout mt-30">
+    <div class="md-layout mt-30 width-50">
       <div class="md-layout-item md-size-50 p-0">
         <p class="mb-5 text-left text-bold"><img :src="`${iconUrl}Asset 522.svg`" class="mr-10" width="16" />From</p>
         <div class="event-time d-flex align-center">
@@ -143,28 +149,28 @@ export default {
   props: {
     defaultData: {
       type: Object,
-      default: {},
+      default: () => {},
     },
   },
   created() {
     this.$http.get(`${process.env.SERVER_URL}/1/userEventCustomers`).then((res) => {
       this.customers = res.data;
     });
-    console.log(this.defaultData);
-    this.companyName = this.defaultData.company;
-    this.company = this.defaultData.companyName;
-    this.location = this.defaultData.location;
-    this.guests = this.defaultData.guests;
-    this.email = this.defaultData.customer.email;
-    this.customer = this.defaultData.customer.name;
-    this.date = moment(this.defaultData.date).format("MM.DD.YYYY");
-    this.startTime.hh = moment(this.defaultData.startTime).format("hh");
-    this.startTime.mm = moment(this.defaultData.startTime).format("mm");
-    this.amPack.start = moment(this.defaultData.startTime).format("A");
+    // this.companyName = this.defaultData.company;
+    // this.company = this.defaultData.companyName;
+    // this.location = this.defaultData.location;
+    // this.guests = this.defaultData.guests;
+    // this.email = this.defaultData.customer ? this.defaultData.customer.email : "";
+    // this.customer = this.defaultData.customer ? this.defaultData.customer.name : "";
+    // this.date = moment(this.defaultData.date).format("MM.DD.YYYY");
+    // this.startTime.hh = moment(this.defaultData.startTime).format("hh");
+    // this.startTime.mm = moment(this.defaultData.startTime).format("mm");
+    // this.amPack.start = moment(this.defaultData.startTime).format("A");
 
-    this.endTime.hh = moment(this.defaultData.endTime).format("hh");
-    this.endTime.mm = moment(this.defaultData.endTime).format("mm");
-    this.amPack.end = moment(this.defaultData.endTime).format("A");
+    // this.endTime.hh = moment(this.defaultData.endTime).format("hh");
+    // this.endTime.mm = moment(this.defaultData.endTime).format("mm");
+    // this.amPack.end = moment(this.defaultData.endTime).format("A");
+    this.$store.dispatch("common/getEventTypes");
   },
   data() {
     return {
@@ -184,7 +190,6 @@ export default {
       },
       isLoading: false,
       isRegisteredCustomer: true,
-
       guests: null,
       location: null,
       link_proposal: null,
@@ -201,6 +206,7 @@ export default {
       },
       eventType: "corporation",
       showNewCustomerModal: false,
+      selectedEventType: null,
     };
   },
   methods: {
@@ -278,7 +284,12 @@ export default {
       });
     },
   },
-  computed: {},
+  computed: {
+    eventTypes() {
+      console.log(this.$store.state.common.eventTypes);
+      return this.$store.state.common.eventTypes;
+    },
+  },
   watch: {
     isRegisteredCustomer(newValue, oldValue) {
       if (!newValue) {
