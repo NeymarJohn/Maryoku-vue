@@ -89,10 +89,10 @@ export default {
     this.$store.dispatch("common/fetchAllCategories");
 
     // handling uploading photo backhand process
-    this.$root.$on("update-inspirational-photo", ({ file, index, link, url }) => {
+    this.$root.$on("update-inspirational-photo", ({ file, index, link, url, fileName }) => {
       const currentPhoto = this.$store.state.proposalForNonMaryoku.inspirationalPhotos[index];
       this.$store.commit("proposalForNonMaryoku/setInspirationalPhoto", { index, photo: { ...currentPhoto, url } });
-      S3Service.fileUpload(file, `photo-${index}`, link)
+      S3Service.fileUpload(file, fileName, link)
         .then((res) => {})
         .catch((event) => {});
     });

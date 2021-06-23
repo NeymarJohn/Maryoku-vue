@@ -159,20 +159,6 @@
     <div class="policy-cont">
       <div class="title">
         <h4><img :src="`${iconUrl}Asset 594.svg`" /> Our Policy</h4>
-        <p>
-          <img
-            :src="`${iconUrl}Group 5280 (5).svg`"
-            @mouseover="considerUpdate = true"
-            @mouseleave="considerUpdate = false"
-          />
-          Maryoku Standard Policy
-        </p>
-        <div class="consider-update" v-if="considerUpdate">
-          <h3>Maryoku Standard Policy!</h3>
-          <p>
-            If the addiiontal services you've added require additional policy changes-this is the tame to add those!
-          </p>
-        </div>
       </div>
       <div class="policy-wrapper">
         <div class="policy mb-50">

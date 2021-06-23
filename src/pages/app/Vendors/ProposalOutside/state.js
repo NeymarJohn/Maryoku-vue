@@ -21,9 +21,9 @@ const state = {
   additionalServices: [],
   bundleDiscount: {},
   discounts: {},
-  inspirationalPhotos: new Array(15),
   taxes: {},
-  proposalServices: {}
+  proposalServices: {},
+  inspirationalPhotos: new Array(15),
 };
 const getters = {
   originalPriceOfMainCategory(state) {
@@ -214,7 +214,7 @@ const mutations = {
     Vue.set(state.event, key, value)
   },
   setInspirationalPhoto: (state, { index, photo }) => {
-    Vue.set(state.images, index, photo);
+    Vue.set(state.inspirationalPhotos, index, photo);
   },
   initState(state) {
     Vue.set(state, "costServices", {});
