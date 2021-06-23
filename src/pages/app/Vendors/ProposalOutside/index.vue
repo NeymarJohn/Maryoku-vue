@@ -9,7 +9,7 @@
         </div>
         <div class="step-wrapper" v-if="step == 1">
           <proposal-event-vision :event="event"></proposal-event-vision>
-          <proposal-additional-requirement></proposal-additional-requirement>
+          <!-- <proposal-additional-requirement></proposal-additional-requirement> -->
         </div>
         <div class="step-wrapper" v-if="step == 2">
           <proposal-wizard-step-2></proposal-wizard-step-2>

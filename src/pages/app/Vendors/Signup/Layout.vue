@@ -145,8 +145,7 @@ export default {
               if (proposalRequest) {
                 this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
               } else {
-                // this.$router.push(`/vendor/signin`);
-                this.$router.push(`/vendor/profile/settings`);
+                this.$router.push(`/vendor/signin`);
               }
             });
           })
@@ -223,10 +222,14 @@ export default {
                   if (proposalRequest) {
                     this.$router.push(`/vendors/${res.id}/proposal-request/${proposalRequest}`);
                   } else {
-                    this.$store.dispatch("auth/login", tenantUser).then(
+                    const userData = {
+                      email: `${tenantUser.email}/vendor`,
+                      password: tenantUser.password,
+                    };
+
+                    this.$store.dispatch("auth/login", userData).then(
                       () => {
                         this.$router.push(`/vendor/profile/settings`);
-                        // this.$router.push(`/vendor/edit/${res.id}`);
                       },
                       (error) => {
                         this.$router.push(`/vendor/signin`);

@@ -22,7 +22,8 @@ const state = {
   bundleDiscount: {},
   discounts: {},
   inspirationalPhotos: new Array(15),
-  taxes: {}
+  taxes: {},
+  proposalServices: {}
 };
 const getters = {
   originalPriceOfMainCategory(state) {

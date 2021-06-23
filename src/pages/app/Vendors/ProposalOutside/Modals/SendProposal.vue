@@ -1,5 +1,5 @@
 <template>
-  <modal class="sync-calendar-modal">
+  <modal class="send-proposal-modal">
     <template slot="header">
       <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
         <md-icon>clear</md-icon>
@@ -8,7 +8,7 @@
     <template slot="body">
       <div>
         <img :src="`${$iconURL}common/sync-calendar-purple.svg`" />
-        <div class="font-size-30 font-bold mt-20">Calendar Sync</div>
+        <div class="font-size-30 font-bold mt-20 color-purple">How would you like to send the Proposal</div>
         <div class="mt-20">Select the calendar you want to sync with</div>
         <div class="mt-30 d-flex justify-content-center mb-30">
           <div
@@ -32,24 +32,12 @@
             </div>
           </div>
         </div>
-        <div class="text-left tips">
-          <div class="mb-20 d-flex">
-            <img :src="`${$iconURL}common/hint.svg`" class="mr-10" />
-            <div>Sync any changes including adding, updating and deleting from your Calendar to Maryoku Calendar.</div>
-          </div>
-          <div class="d-flex">
-            <img :src="`${$iconURL}common/hint.svg`" class="mr-10" />
-            <div>
-              Sync is one-way - any changes you make to your Marioko calendar will not appear in your other calendars
-            </div>
-          </div>
+        <div class="d-flex justify-content-center">
+          <maryoku-input class="width-50" inputStyle="sharing" v-model="sharelink" theme="purple"></maryoku-input>
         </div>
       </div>
     </template>
-    <template slot="footer">
-      <md-button class="md-simple md-vendor mt-20" @click="close">Cancel</md-button>
-      <md-button class="md-vendor mt-20 sync_button" @click="syncCalendar">Sync</md-button></template
-    >
+    <template slot="footer"> </template>
   </modal>
 </template>
 <script>
@@ -93,6 +81,8 @@ export default {
       showCalendar: false,
       emailAccount: "outlook",
       authorized: false,
+      sharelink:
+        "www.design+ux&tbm=isch&ved=2ah…UKEwippdnI8NvnAhWS2eAKHXhkBsAQ2 cCegQIAB AA&oq=share+design+ux&gs_l=img.3..0i8i7i30.296659.296659..296799...0.0..0.120.120.0j1......0....1..gws-wiz-img.mmb8zpyKodI&ei=4kBMXqmsN5Kzgwf4yJmADA&bih=692&biw=1424#imgrc=HJv9MiWofJS5lM",
     };
   },
   methods: {
@@ -191,7 +181,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.sync-calendar-modal {
+.send-proposal-modal {
   .header-text {
     line-height: 1.5em;
   }

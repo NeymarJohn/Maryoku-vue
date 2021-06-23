@@ -12,7 +12,7 @@
         </div>
         <div
           v-for="(color, index) in vendor.images"
-          :key="`header-image-${index * 2}-1`"
+          :key="`header-image-1-${index}-1`"
           class="concept-color"
           :style="`background: ${color.color || '#EDEDED'}`"
         >

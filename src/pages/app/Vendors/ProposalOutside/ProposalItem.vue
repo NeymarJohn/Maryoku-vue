@@ -894,7 +894,7 @@ export default {
       padding: 1.5rem 0;
       top: 0;
       i {
-        color: #f51355 !important;
+        color: #641856 !important;
       }
     }
     .next {
@@ -906,7 +906,7 @@ export default {
       padding: 1.5rem 0;
       top: 0;
       i {
-        color: #f51355 !important;
+        color: #641856 !important;
       }
     }
   }
@@ -936,7 +936,7 @@ export default {
         cursor: pointer;
 
         &.active {
-          background-color: #f51355;
+          background-color: #641856;
           color: #ffffff;
         }
       }
@@ -1117,7 +1117,7 @@ export default {
         }
         .right {
           cursor: pointer;
-          color: #f51355;
+          color: #641856;
           font-size: 16px;
           font-weight: 800;
           img {
@@ -1201,7 +1201,7 @@ export default {
         margin-bottom: 30px;
       }
       .upload {
-        border: 1px dashed #f51355;
+        border: 1px dashed #641856;
         margin: 0 34px;
         padding: 32px;
         cursor: pointer;
@@ -1211,8 +1211,8 @@ export default {
           font-size: 14px;
           font-weight: 800;
           padding: 8px 24px;
-          color: #f51355;
-          border: 1px solid #f51355;
+          color: #641856;
+          border: 1px solid #641856;
           border-radius: 3px;
           display: inline-block;
 
@@ -1246,7 +1246,7 @@ export default {
     &.save {
       font: 800 16px "Manrope-Regular", sans-serif;
       color: white;
-      background: #f51355;
+      background: #641856;
       border-radius: 3px;
 
       &.isDisabled {
