@@ -119,6 +119,7 @@ export default {
     backgroundImage() {
       let link = "";
       if (this.proposal.inspirationalPhotos && this.proposal.inspirationalPhotos[0]) {
+        console.log("object");
         link = this.proposal.inspirationalPhotos[0].url;
         return link;
       }
@@ -133,6 +134,8 @@ export default {
     },
     period() {
       try {
+        console.log(this.$store.state.planningBoard);
+        console.log(this.proposal.vendor.vendorCategories[0]);
         const requirement = this.$store.state.planningBoard[this.proposal.vendor.vendorCategories[0]];
         const period = requirement.period;
         if (requirement.isEntireEvent) {

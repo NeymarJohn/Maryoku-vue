@@ -1,8 +1,7 @@
 import { postReq, getReq } from "@/utils/token";
 const state = {
     serviceCategories: [],
-    companies: [],
-    eventTypes: []
+    companies: []
 };
 const mutations = {
     setCategories: (state, categories) => {
@@ -10,9 +9,6 @@ const mutations = {
     },
     setCampanies: (state, companies) => {
         state.companies = companies
-    },
-    setEventTypes: (state, types) => {
-        state.eventTypes = types;
     }
 };
 const actions = {
@@ -49,22 +45,7 @@ const actions = {
                     reject(err)
                 })
         })
-    },
-    getEventTypes({ commit, state }) {
-        return new Promise((resolve, reject) => {
-            if (state.eventTypes && state.eventTypes.length > 0) {
-                resolve(state.eventTypes);
-            }
-            getReq("/1/eventTypes")
-                .then(res => {
-                    commit("setEventTypes", res.data);
-                    resolve(res.data);
-                })
-                .catch(e => {
-                    commit("setEventTypes", []);
-                });
-        });
-    },
+    }
 };
 export default {
     namespaced: true,

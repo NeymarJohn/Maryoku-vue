@@ -28,7 +28,7 @@
               :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
               :isSentRequest="
                 $store.state.planningBoard[service.serviceCategory] &&
-                $store.state.planningBoard[service.serviceCategory].isIssued
+                $store.state.planningBoard[service.serviceCategory].id
               "
               @showSpecific="getSpecification"
               @update="setServiceStyles"
@@ -51,7 +51,7 @@
               :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
               :isSentRequest="
                 $store.state.planningBoard[service.serviceCategory] &&
-                $store.state.planningBoard[service.serviceCategory].isIssued
+                $store.state.planningBoard[service.serviceCategory].id
               "
               @showSpecific="getSpecification"
               @update="setServiceStyles"

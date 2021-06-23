@@ -20,10 +20,7 @@ const state = {
   wizardStep: 0,
   additionalServices: [],
   bundleDiscount: {},
-  discounts: {},
-  taxes: {},
-  proposalServices: {},
-  inspirationalPhotos: new Array(15),
+  discounts: {}
 };
 const getters = {
   originalPriceOfMainCategory(state) {
@@ -210,11 +207,8 @@ const mutations = {
   setValue: (state, { key, value }) => {
     Vue.set(state, key, value);
   },
-  setEventProperty: (state, { key, value }) => {
-    Vue.set(state.event, key, value)
-  },
   setInspirationalPhoto: (state, { index, photo }) => {
-    Vue.set(state.inspirationalPhotos, index, photo);
+    Vue.set(state.images, index, photo);
   },
   initState(state) {
     Vue.set(state, "costServices", {});
@@ -228,7 +222,6 @@ const mutations = {
     Vue.set(state, "initStep", 0);
     Vue.set(state, "initialized", false);
     Vue.set(state, "attachments", {});
-    Vue.set(state, "event", {});
     Vue.set(state, "bundleDiscount", {
       isApplied: false,
       services: [],

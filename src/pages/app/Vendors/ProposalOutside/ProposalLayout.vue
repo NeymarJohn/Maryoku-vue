@@ -24,7 +24,7 @@
         <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
           Next
         </a>
-        <a class="next active" @click="setProposalLink" v-else :disabled="isUpdating">Submit Proposal</a>
+        <a class="next active" @click="uploadProposal(option)" v-else :disabled="isUpdating">Submit Proposal</a>
       </div>
     </section>
 
@@ -102,12 +102,15 @@
         </div>
       </template>
     </modal>
-    <send-proposal-modal v-if="showSendProposalModal" @close="showSendProposalModal = false"></send-proposal-modal>
   </div>
 </template>
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import moment from "moment";
 import Vendors from "@/models/Vendors";
+import ProposalRequest from "@/models/ProposalRequest";
+import Proposal from "@/models/Proposal";
+import Vendor from "@/models/Vendors";
 import { Modal } from "@/components";
 import Swal from "sweetalert2";
 import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
@@ -115,7 +118,6 @@ import S3Service from "@/services/s3.service";
 import ProposalHeader from "./ProposalHeader";
 import VueElementLoading from "vue-element-loading";
 import state from "./state";
-import SendProposalModal from "./Modals/SendProposal";
 
 export default {
   components: {
@@ -123,7 +125,6 @@ export default {
     Modal,
     ProposalHeader,
     VueElementLoading,
-    SendProposalModal,
   },
   props: {
     newProposalRequest: Object,
@@ -147,7 +148,6 @@ export default {
       showCloseProposalModal: false,
       isUpdating: false,
       option: "submit", // 'submit', 'duplicate'
-      showSendProposalModal: false,
     };
   },
   created() {
@@ -238,7 +238,15 @@ export default {
     },
 
     back() {
-      this.step = this.step - 1;
+      const initStep = this.$store.state.proposalForNonMaryoku.initStep;
+      if (this.step > initStep) {
+        this.step = this.step - 1;
+      } else {
+        const vendorId = this.$route.params.vendorId;
+        const requestId = this.$route.params.id;
+        this.$router.push(`/vendors/${vendorId}/proposal-request/${requestId}`);
+      }
+
       this.scrollToTop();
     },
     scrollToTop() {
@@ -260,7 +268,7 @@ export default {
         title: "Are you sure?",
         text: `You won't be able to revert this!`,
         showCancelButton: true,
-        confirmButtonClass: "md-button maryoku-btn md-vendor btn-fill",
+        confirmButtonClass: "md-button md-success btn-fill",
         cancelButtonClass: "md-button md-danger btn-fill",
         confirmButtonText: "Yes, discard it!",
         buttonsStyling: false,
@@ -270,9 +278,6 @@ export default {
           this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}`);
         }
       });
-    },
-    setProposalLink() {
-      this.showSendProposalModal = true;
     },
   },
 

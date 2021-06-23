@@ -161,6 +161,7 @@ const actions = {
     },
     async getEventTypes({ commit, state }, { data, ctx }) {
         return new Promise((resolve, reject) => {
+            let _calendar = new Calendar({ id: data });
             if (state.eventTypes && state.eventTypes.length > 0) {
                 resolve(state.eventTypes);
             }
@@ -345,7 +346,7 @@ const mutations = {
         }
         Vue.set(state.requirementsForVendor[data.category].types, data.type, data.services)
     },
-    setBudgetNotification(state, event_id) {
+    setBudgetNotification(state, event_id){
         state.budgetNotification.push(event_id);
     },
 };

@@ -69,15 +69,15 @@ export default {
     });
   },
   computed: {
-    vendor() {
-      return this.$store.state.proposalForNonMaryoku.vendor;
+    proposalRequest() {
+      return this.$store.state.vendorProposal.proposalRequest;
     },
     inspirationalPhotos: {
       get() {
-        return this.$store.state.proposalForNonMaryoku.inspirationalPhotos;
+        return this.$store.state.vendorProposal.inspirationalPhotos;
       },
       set(value) {
-        this.$store.commit("proposalForNonMaryoku/setValue", { key: "inspirationalPhotos", value });
+        this.$store.commit("vendorProposal/setValue", { key: "inspirationalPhotos", value });
       },
     },
   },
@@ -105,13 +105,11 @@ export default {
       if (!this.photo) this.photo = {};
       const photoData = await getBase64(event.target.files[0]);
       this.$set(this.photo, "url", photoData);
-      const timeStamp = new Date().getTime();
       this.$root.$emit("update-inspirational-photo", {
         file: event.target.files[0],
         index: this.index,
-        link: `proposal/non-maryoku/inspirationalPhotos/${this.vendor.id}`,
-        url: `https://maryoku.s3.amazonaws.com/proposal/non-maryoku/inspirationalPhotos/${this.vendor.id}/photo-${timeStamp}.${extension}`,
-        fileName: `photo-${timeStamp}`,
+        link: `proposal/inspirationalPhotos/${this.proposalRequest.id}`,
+        url: `https://maryoku.s3.amazonaws.com/proposal/inspirationalPhotos/${this.proposalRequest.id}/photo-${this.index}.${extension}`,
       });
     },
     handleAddPhoto() {

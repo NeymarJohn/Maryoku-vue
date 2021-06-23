@@ -9,7 +9,7 @@
         </div>
         <div class="step-wrapper" v-if="step == 1">
           <proposal-event-vision :event="event"></proposal-event-vision>
-          <!-- <proposal-additional-requirement></proposal-additional-requirement> -->
+          <proposal-additional-requirement></proposal-additional-requirement>
         </div>
         <div class="step-wrapper" v-if="step == 2">
           <proposal-wizard-step-2></proposal-wizard-step-2>
@@ -89,10 +89,10 @@ export default {
     this.$store.dispatch("common/fetchAllCategories");
 
     // handling uploading photo backhand process
-    this.$root.$on("update-inspirational-photo", ({ file, index, link, url, fileName }) => {
+    this.$root.$on("update-inspirational-photo", ({ file, index, link, url }) => {
       const currentPhoto = this.$store.state.proposalForNonMaryoku.inspirationalPhotos[index];
       this.$store.commit("proposalForNonMaryoku/setInspirationalPhoto", { index, photo: { ...currentPhoto, url } });
-      S3Service.fileUpload(file, fileName, link)
+      S3Service.fileUpload(file, `photo-${index}`, link)
         .then((res) => {})
         .catch((event) => {});
     });

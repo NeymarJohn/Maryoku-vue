@@ -348,9 +348,9 @@ export default {
         cursor: pointer;
         font-size: 20px;
         font-weight: 800;
-        color: #f51355;
+        color: #641856;
         i {
-          color: #f51355;
+          color: #641856;
         }
       }
     }
@@ -404,8 +404,8 @@ export default {
           }
         }
         &.save {
-          border: 1px solid #f51355;
-          color: #f51355;
+          border: 1px solid #641856;
+          color: #641856;
           margin-right: 41px;
           img {
             width: 25px;
@@ -435,7 +435,7 @@ export default {
       h3 {
         font-size: 30px;
         font-weight: bold;
-        color: #f51355;
+        color: #641856;
 
         img {
           width: 55px;
@@ -483,7 +483,7 @@ export default {
   }
 
   .active {
-    background-color: #f51355 !important;
+    background-color: #641856 !important;
 
     i {
       color: #ffffff !important;
@@ -493,7 +493,7 @@ export default {
     font-size: 16px;
     font-weight: bold;
     color: #ffffff;
-    background-color: #f51355;
+    background-color: #641856;
     border-radius: 3px;
     padding: 8px 36px;
     cursor: pointer;
@@ -502,11 +502,11 @@ export default {
   .hide-full {
     font-size: 16px;
     font-weight: 800;
-    color: #f51355;
+    color: #641856;
     cursor: pointer;
 
     i {
-      color: #f51355;
+      color: #641856;
     }
   }
 }

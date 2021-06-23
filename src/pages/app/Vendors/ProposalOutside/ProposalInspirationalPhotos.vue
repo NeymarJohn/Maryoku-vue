@@ -81,21 +81,21 @@ export default {
   },
   computed: {
     proposalRequest() {
-      return this.$store.state.proposalForNonMaryoku.proposalRequest;
+      return this.$store.state.vendorProposal.proposalRequest;
     },
     inspirationalPhotos: {
       get() {
-        return this.$store.state.proposalForNonMaryoku.inspirationalPhotos;
+        return this.$store.state.vendorProposal.inspirationalPhotos;
       },
       set(value) {
-        this.$store.commit("proposalForNonMaryoku/setValue", { key: "inspirationalPhotos", value });
+        this.$store.commit("vendorProposal/setValue", { key: "inspirationalPhotos", value });
       },
     },
   },
   methods: {
     setPhoto(index, photoData) {
       this.inspirationalPhotos[index] = photoData;
-      this.$store.commit("proposalForNonMaryoku/setInspirationalPhoto", { index, photo: photoData });
+      this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: photoData });
     },
     addCaption(index, photoData) {
       this.captionModal.isOpen = true;
@@ -104,11 +104,11 @@ export default {
       this.captionModal.currentIndex = index;
     },
     removePhoto(index) {
-      this.$store.commit("proposalForNonMaryoku/setInspirationalPhoto", { index, photo: null });
+      this.$store.commit("vendorProposal/setInspirationalPhoto", { index, photo: null });
     },
     saveCaption() {
       this.$root.$emit("saveCaption", this.captionModal);
-      this.$store.commit("proposalForNonMaryoku/setInspirationalPhoto", {
+      this.$store.commit("vendorProposal/setInspirationalPhoto", {
         index: this.captionModal.currentIndex,
         photo: {
           url: this.captionModal.photoUrl,

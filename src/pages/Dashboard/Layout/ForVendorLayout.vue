@@ -356,7 +356,7 @@ export default {
     .submit {
       font-family: "Manrope-Regular", sans-serif;
       margin-top: 1rem;
-      background-color: #f51355;
+      background-color: #641856;
       box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
       border: none;
       font-size: 20px;

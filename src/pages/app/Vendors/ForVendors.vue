@@ -812,7 +812,7 @@ export default {
                 a {
                   margin-left: 15px;
                   cursor: pointer;
-                  color: #f51355;
+                  color: #641856;
                 }
               }
               span {
@@ -850,6 +850,7 @@ export default {
       align-items: center;
       .check-condition {
         font-size: 20px;
+        color: #641856;
 
         span.regular {
           padding-left: 14px;
@@ -899,7 +900,7 @@ export default {
     padding-top: 130px;
     .no {
       padding: 25px 75px;
-      color: #f51355;
+      color: #641856;
       font-size: 20px;
       font-weight: 800;
       border: none;
@@ -971,7 +972,7 @@ export default {
         border: none;
         border-radius: 3px;
         color: #ffffff;
-        background-color: #f51355;
+        background-color: #641856;
         cursor: pointer;
       }
     }
@@ -1094,7 +1095,7 @@ export default {
             align-items: center;
             .another-date {
               font-size: 16px;
-              color: #f51355;
+              color: #641856;
               font-weight: 800;
               text-decoration: underline;
               cursor: pointer;
@@ -1145,14 +1146,14 @@ export default {
           font-weight: 800;
           text-decoration: underline;
           cursor: pointer;
-          color: #f51355;
+          color: #641856;
         }
       }
       .send {
         font-size: 16px;
         font-weight: 800;
         color: #ffffff;
-        background-color: #f51355;
+        background-color: #641856;
         border-radius: 3px;
         padding: 8px 36px;
         cursor: pointer;
@@ -1177,7 +1178,7 @@ export default {
       .right-side {
         h3 {
           font-size: 30px;
-          color: #f51355;
+          color: #641856;
           font-weight: bold;
           line-height: 1.53;
           margin: 0;
@@ -1221,7 +1222,7 @@ export default {
         font-size: 16px;
         font-weight: 800;
         color: #ffffff;
-        background-color: #f51355;
+        background-color: #641856;
         border-radius: 3px;
         padding: 8px 36px;
         cursor: pointer;
@@ -1315,8 +1316,8 @@ export default {
         /deep/ .vfc-arrow-right {
           width: 10px;
           height: 10px;
-          color: #f51355;
-          border-color: #f51355;
+          color: #641856;
+          border-color: #641856;
           border-top: 2px solid;
           background-color: white !important;
         }
@@ -1431,7 +1432,7 @@ export default {
         font-size: 16px;
         font-weight: 800;
         color: #ffffff;
-        background-color: #f51355;
+        background-color: #641856;
         border-radius: 3px;
         padding: 8px 36px;
         cursor: pointer;
@@ -1443,7 +1444,7 @@ export default {
     font-size: 16px;
     font-weight: 800;
     color: #ffffff;
-    background-color: #f51355;
+    background-color: #641856;
     border-radius: 3px;
     padding: 8px 36px;
     cursor: pointer;

@@ -61,12 +61,12 @@
               </li>
               <li>
                 <span>Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
-                <!-- <span>
+                <span>
                   ${{
                     event.components.find((item) => item.componentId == vendor.eventCategory.key).allocatedBudget
                       | withComma
                   }}</span
-                > -->
+                >
               </li>
               <li
                 v-if="finalPriceOfMainCategory - getAllocatedBudget(vendor.eventCategory.key) > 0"
@@ -91,7 +91,7 @@
                   </div>
                 </template>
               </li>
-              <!-- <li
+              <li
                 v-if="
                   calculatedTotal(getRequirementsByCategory('venuerental')) -
                     newProposalRequest.eventData.allocatedBudget >
@@ -108,7 +108,7 @@
                   }}
                   more than the budget
                 </span>
-              </li> -->
+              </li>
             </ul>
           </div>
         </div>
@@ -288,6 +288,16 @@ export default {
         : arr.slice();
     },
     servicesByCategory(category) {
+      // const services = this.services.filter((s) => s.name == category);
+
+      // if (services.length > 0) {
+      //   return this.flatDeep(
+      //     services[0].categories.map((s) => s.subCategories.map((sc) => sc.items.map((dd) => dd.name))),
+      //     Infinity,
+      //   );
+      // } else {
+      //   return [];
+      // }
       return this.$store.state.proposalForNonMaryoku.proposalServices[category] || [];
     },
     getIconUrlByCategory(category) {
@@ -297,6 +307,27 @@ export default {
     },
     getRequirementsByCategory(category) {
       return this.$store.state.proposalForNonMaryoku.proposalServices[category] || [];
+    },
+    getRequirementsBySelectedCategory() {
+      let selectedCategories = [];
+      let selectedServices = [];
+
+      selectedCategories = this.additionalServices.map((as) => as.value);
+      selectedCategories.push("venuerental");
+
+      this.services
+        .filter((s) => selectedCategories.includes(s.name))
+        .map(function (cs) {
+          cs.categories.map(function (scs) {
+            scs.subCategories.map(function (sscs) {
+              sscs.items.map(function (ssscs) {
+                selectedServices.push(ssscs.name);
+              });
+            });
+          });
+        });
+
+      return this.newProposalRequest.requirements.filter((r) => selectedServices.includes(r.requirementTitle));
     },
     total(requirements, category = null) {
       let total = 0;
@@ -352,11 +383,10 @@ export default {
       return this.serviceCategories.find((item) => item.key === category);
     },
     getAllocatedBudget(category) {
-      // const allocatedBudgetItem = this.proposalRequest.eventData.components.find(
-      //   (item) => item.componentId === category,
-      // );
-      // return allocatedBudgetItem.allocatedBudget;
-      return 0;
+      const allocatedBudgetItem = this.proposalRequest.eventData.components.find(
+        (item) => item.componentId === category,
+      );
+      return allocatedBudgetItem.allocatedBudget;
     },
     saveDiscount(categoryKey, discount) {
       this.$store.commit("proposalForNonMaryoku/setDiscount", { category: "total", discount: discount });
@@ -372,9 +402,11 @@ export default {
     window.removeEventListener("scroll", this.handleScroll);
   },
   mounted() {
+    this.newProposalRequest = this.proposalRequest;
     this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
 
     this.$root.$on("update-proposal-budget-summary", (newProposalRequest, discountBlock) => {
+      this.newProposalRequest = newProposalRequest;
       this.discountBlock = discountBlock;
     });
 
@@ -401,9 +433,12 @@ export default {
       "totalBeforeDiscount",
       "totalBeforeBundle",
     ]),
-
+    proposalRequest() {
+      return this.$store.state.proposalForNonMaryoku.proposalRequest;
+    },
     event() {
-      return this.$store.state.proposalForNonMaryoku.event;
+      if (!this.proposalRequest) return {};
+      return this.proposalRequest.eventData;
     },
     vendor() {
       return this.$store.state.proposalForNonMaryoku.vendor;

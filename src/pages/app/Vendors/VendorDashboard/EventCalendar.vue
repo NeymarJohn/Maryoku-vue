@@ -11,12 +11,12 @@
       </div>
       <div class="calendar__body">
         <ul class="calendar__heading">
-          <li v-for="item in heading" @click="clickDate(item)">
+          <li v-for="item in heading">
             <div class="calendar__item">{{ item }}</div>
           </li>
         </ul>
         <ul class="calendar__content">
-          <li v-for="item in buildCalendar" @click="clickDate(item)">
+          <li v-for="item in buildCalendar">
             <popper trigger="hover" :options="{ placement: 'right' }" v-if="eventsForDate[Number(item.number)]">
               <div class="popper-content white-card">
                 <div class="font-size-22 popper-header"></div>
@@ -177,9 +177,6 @@ export default {
         return new Date(event.startTime).getDate() === Number(date);
       });
       return events;
-    },
-    clickDate(day) {
-      this.$emit("clickDate", day);
     },
   },
   computed: {
