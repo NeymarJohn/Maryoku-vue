@@ -41,11 +41,6 @@ export default {
       default: "",
     },
   },
-  data() {
-    return {
-      selected: false,
-    };
-  },
   methods: {
     change() {
       this.selectedCheckbox = true;

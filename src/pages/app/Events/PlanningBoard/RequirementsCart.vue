@@ -38,7 +38,11 @@
               <template v-if="['multi-selection', 'special'].indexOf(subCategory) < 0">
                 <div class="color-gray">{{ subCategory }}</div>
                 <div class="requirement-grid">
-                  <div class="requirement-item" v-for="requirementItem in requirement" :key="requirementItem.item">
+                  <div
+                    class="requirement-item"
+                    v-for="requirementItem in requirement.filter((it) => it.selected)"
+                    :key="requirementItem.item"
+                  >
                     <div class="checkmark"></div>
                     <div class="d-inline-block">
                       {{ requirementItem.item || requirementItem.subCategory }}

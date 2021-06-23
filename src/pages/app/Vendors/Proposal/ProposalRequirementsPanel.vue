@@ -135,7 +135,7 @@
         </div>
       </div>
       <div class="p-30">
-        <md-button class="md-outlined md-vendor md-simple maryoku-btn width-100" @click="showQuestionModal = true">
+        <md-button class="md-outlined md-red md-simple maryoku-btn width-100" @click="showQuestionModal = true">
           <img src="/static/icons/chart-red.svg" class="page-icon mr-10" />
           Questions? Send a question to planner
         </md-button>
@@ -199,7 +199,6 @@ export default {
           mapData[requirement.category] = requirement;
           return mapData;
         }, {});
-        console.log("requiremetnsMap", requirementsMap);
         return requirementsMap;
       }
       return {};
@@ -233,8 +232,8 @@ export default {
   }
   .type-tag {
     display: inline-block;
-    border: solid 1px #641856;
-    color: #641856;
+    border: solid 1px #f51355;
+    color: #f51355;
     border-radius: 30px;
     padding: 5px 20px;
     margin: 0px 10px 10px 0;
@@ -268,7 +267,7 @@ export default {
         height: 10px;
 
         /*Add a white border on the bottom and left, creating that 'L' */
-        border: solid #641856;
+        border: solid #f51355;
         border-width: 0 3px 3px 0;
         border-radius: 1px;
 

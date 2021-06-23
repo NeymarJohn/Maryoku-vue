@@ -448,7 +448,7 @@ export default {
               this.$set(it, "isExtraService", vendorPricingPolicies.items[idx].isExtraService);
               this.$set(it, "extraService", vendorPricingPolicies.items[idx].extraService);
             }
-            if (it.type == 'Boolean' && !it.hasOwnProperty("value")) {
+            if (it.type == Boolean && !it.hasOwnProperty("value")) {
               this.$set(it, "value", false);
             }
           }
@@ -457,7 +457,7 @@ export default {
         this.vendorPricingPolicies = vendorPricingPolicies;
         console.log(vendorPricingPolicies);
         this.vendorPricingPolicies.items.map((it) => {
-          if (it.type == 'Boolean') {
+          if (it.type == Boolean) {
             this.$set(it, "value", false);
           }
         });
@@ -467,14 +467,14 @@ export default {
         this.$set(this.vendorPolicies, "items", this.currentService.policies);
         this.vendorPolicies.items.map((it, idx) => {
           this.$set(it, "type", vendorPolicies.items[idx].type);
-          if (it.type == 'Boolean' && !it.hasOwnProperty("value")) {
+          if (it.type == Boolean && !it.hasOwnProperty("value")) {
             this.$set(it, "value", false);
           }
         });
       } else {
         this.vendorPolicies = vendorPolicies;
         this.vendorPolicies.items.map((it) => {
-          if (it.type == 'Boolean') {
+          if (it.type == Boolean) {
             this.$set(it, "value", false);
           }
         });

@@ -14,7 +14,7 @@
             <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
           </div>
           <div class="item" v-else>
-            <span v-if="policy.type === 'Number' && !policy.isPercentage">$</span>
+            <span v-if="policy.type === Number && !policy.isPercentage">$</span>
             <span v-if="policy.value === true">Yes</span>
             <span v-else>{{ policy.value }}</span>
             <span v-if="policy.isPercentage">%</span>

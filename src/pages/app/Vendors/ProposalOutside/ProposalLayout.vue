@@ -106,11 +106,7 @@
 </template>
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import moment from "moment";
 import Vendors from "@/models/Vendors";
-import ProposalRequest from "@/models/ProposalRequest";
-import Proposal from "@/models/Proposal";
-import Vendor from "@/models/Vendors";
 import { Modal } from "@/components";
 import Swal from "sweetalert2";
 import VendorBidTimeCounter from "@/components/VendorBidTimeCounter/VendorBidTimeCounter";
@@ -238,15 +234,7 @@ export default {
     },
 
     back() {
-      const initStep = this.$store.state.proposalForNonMaryoku.initStep;
-      if (this.step > initStep) {
-        this.step = this.step - 1;
-      } else {
-        const vendorId = this.$route.params.vendorId;
-        const requestId = this.$route.params.id;
-        this.$router.push(`/vendors/${vendorId}/proposal-request/${requestId}`);
-      }
-
+      this.step = this.step - 1;
       this.scrollToTop();
     },
     scrollToTop() {

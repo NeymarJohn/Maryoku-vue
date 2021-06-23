@@ -132,7 +132,7 @@ export default {
             location: e.location,
             description: "",
             start: {
-              dateTime: moment(e.startTime).toDate(),
+              dateTime: moment(eval.startTime).toDate(),
               timeZone: timeZoneName,
             },
             end: {

@@ -101,9 +101,6 @@ export default {
         return "-";
       }
     },
-    suggestionDate() {
-      return this.$store.state.vendorProposal.suggestionDate;
-    },
   },
 };
 </script>

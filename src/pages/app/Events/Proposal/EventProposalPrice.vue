@@ -43,23 +43,51 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(service, index) in costServices" :key="`cost-service-${index}`">
-              <td>
-                <md-icon class="color-red mr-5" v-if="service.isExtra">add_circle_outline</md-icon>
-                {{ service.requirementTitle
-                }}<span class="complimentary-tag" v-if="service.isComplimentary">Complimentary</span>
-              </td>
-              <td>{{ service.requirementValue }}</td>
-              <td :class="{ crosslinedText: service.isComplimentary }">${{ service.price | withComma }}</td>
-              <td :class="{ crosslinedText: service.isComplimentary }">
-                ${{ (service.requirementValue * service.price) | withComma }}
-              </td>
-              <td class="element-actions">
-                <md-button class="md-simple edit-btn" @click="removeService(service)" v-if="service.isExtra">
-                  <img :src="`${$iconURL}common/trash-dark.svg`" />
-                </md-button>
-              </td>
-            </tr>
+            <template v-for="(service, index) in costServices">
+              <tr :key="`cost-service-${index}`" v-if="service.plannerOptions.length === 0">
+                <td>
+                  <md-icon class="color-red mr-5" v-if="service.isExtra">add_circle_outline</md-icon>
+                  {{ service.requirementTitle }}
+                  <span class="complimentary-tag" v-if="service.isComplimentary">Complimentary</span>
+                </td>
+                <td>{{ service.requirementValue }}</td>
+                <td :class="{ crosslinedText: service.isComplimentary }">${{ service.price | withComma }}</td>
+                <td :class="{ crosslinedText: service.isComplimentary }">
+                  ${{ (service.requirementValue * service.price) | withComma }}
+                </td>
+                <td class="element-actions">
+                  <md-button class="md-simple edit-btn" @click="removeService(service)" v-if="service.isExtra">
+                    <img :src="`${$iconURL}common/trash-dark.svg`" />
+                  </md-button>
+                </td>
+              </tr>
+              <template v-else>
+                <tr>
+                  <td>{{ service.requirementTitle }}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr :key="`planner-option-${index}`" v-for="(option, index) in service.plannerOptions">
+                  <td>
+                    <md-icon class="color-red mr-5" v-if="service.isExtra">add_circle_outline</md-icon>
+                    <md-radio v-model="service.selectedPlannerOption" :value="index"></md-radio>
+                    {{ option.description }}
+                    <span class="complimentary-tag" v-if="service.isComplimentary">Complimentary</span>
+                  </td>
+                  <td>{{ option.qty }}</td>
+                  <td :class="{ crosslinedText: service.isComplimentary }">${{ option.price | withComma }}</td>
+                  <td :class="{ crosslinedText: service.isComplimentary }">
+                    ${{ (option.qty * option.price) | withComma }}
+                  </td>
+                  <td class="element-actions">
+                    <md-button class="md-simple edit-btn" @click="removeService(service)" v-if="service.isExtra">
+                      <img :src="`${$iconURL}common/trash-dark.svg`" />
+                    </md-button>
+                  </td>
+                </tr>
+              </template>
+            </template>
             <!-- <tr v-for="(service, index) in addedServices" :key="`added-service-${index}`">
               <td><md-icon class="color-red mr-5">add_circle_outline</md-icon>{{ service.requirementTitle }}</td>
               <td>{{ service.requirementValue }}</td>
@@ -185,7 +213,7 @@ import { mapState, mapMutations, mapGetters, mapActions } from "vuex";
 import ExtraServiceItem from "./ExtraServiceItem";
 import IncludedServiceItem from "./IncludedServiceItem.vue";
 export default {
-  name: 'event-proposal-price',
+  name: "event-proposal-price",
   components: {
     ExtraServiceItem,
     IncludedServiceItem,

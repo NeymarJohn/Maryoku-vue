@@ -1,3 +1,6 @@
+.multiselect--active .multiselect__select {
+  transform: translateY(-50%) rotate(180deg);
+}
 .multiselect {
   font-size:16px;
   &.small-selector {
@@ -22,8 +25,10 @@
       top: 15px;
     }
   }
+
   &__select{
-    top: 23px;
+    top: 50%;
+    transform: translateY(-50%);
     width: 20px;
     height: 20px;
     right: 30px;
@@ -32,7 +37,7 @@
     &:before {
       position: relative;
       right: 0;
-      top: 15%;
+      top: 0;
       color: #a0a0a0;
       margin-top: 4px;
       border-color: #a0a0a0;
@@ -48,6 +53,8 @@
   }
   &__input {
     box-shadow: none;
+    line-height: 55px;
+    margin-bottom: 0;
     &:focus {
       box-shadow: none;
     }
@@ -56,14 +63,15 @@
     }
   }
   &__single {
-    line-height: 35px;
+    line-height: 55px;
     color: #050505;
+    margin-bottom: 0;
   }
   &__tags {
     border-radius: 3px;
     border: solid 1px #707070;
-    min-height: 65px;
-    padding: 14px 50px 0 8px;
+    min-height: 55px;
+    padding: 0 50px 0 8px;
   }
   &__tag{
     background: white;
@@ -100,7 +108,9 @@
     }
   }
   &__placeholder {
-    padding-top: 6px;
+    line-height: 55px;
+    margin-bottom: 0px;
+    padding-top: 0px;
   }
   &__option {
     span {
@@ -135,4 +145,37 @@
       }
     }
   }
+}
+.multiselect.purple {
+  &__tag{
+    &-icon {
+      background: #641856;
+    }
+  }
+  &__option {
+    &--highlight {
+      background: #641856;
+    }
+    &--selected{
+      &.multiselect__option--highlight {
+        background: #641856;
+      }
+    }
+  }
+  &.md-purple {
+    .multiselect__option {
+      &--highlight {
+        background: #641856;
+      }
+    }
+    .multiselect__tag{
+      &-icon {
+        background: #641856;
+      }
+    }
+  }
+}
+.multiselect__content-wrapper {
+  box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08); 
+  border:none;
 }
