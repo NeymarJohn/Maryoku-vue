@@ -26,7 +26,7 @@
             <div>
               <template v-for="typeList in requirements[item.key].types">
                 <requirement-tag-item
-                  class="mt-10 mb-30"
+                  class="mb-10"
                   :label="type"
                   :key="type"
                   v-for="type in typeList"

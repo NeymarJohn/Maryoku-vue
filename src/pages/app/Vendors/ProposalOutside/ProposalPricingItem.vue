@@ -14,7 +14,7 @@
             <h4>Total</h4>
             <span v-if="bundleDiscount.isApplied">before discount</span>
           </div>
-          <span v-if="itemType == 'price'">{{ serviceTime.time }}</span>
+          <!-- <span v-if="itemType == 'price'">{{ serviceTime.time }}</span> -->
           <div class="bundle-desc" v-if="itemType == 'bundle'">
             <h4>{{ bundleDiscount.percentage }}%</h4>
             <span v-for="(service, index) in bundleDiscount.services" :key="index" style="padding: 0 2px">
@@ -291,49 +291,49 @@ export default {
     defaultDiscount() {
       return this.$store.state.proposalForNonMaryoku.discounts["total"] || { percentage: 0, price: 0 };
     },
-    serviceTime() {
-      // if (!this.proposalRequest) {
-      //   return {
-      //     time: "",
-      //     date: "",
-      //   };
-      // }
-      const proposalRequest = this.$store.state.proposalForNonMaryoku.proposalRequest;
-      const timelineDates = proposalRequest.eventData.timelineDates;
-      // if (!timelineDates)
-      //   return {
-      //     time: "",
-      //     date: "",
-      //   };
-      let serviceTimeString = this.category === "venuerental" ? "All Day" : "Not planned yet";
-      let serviceDate = "";
-      timelineDates.forEach((td) => {
-        td.timelineItems.forEach((timelineItem) => {
-          if (
-            timelineItem &&
-            timelineItem.eventCategory &&
-            timelineItem.eventCategory.includes(this.vendor.eventCategory.key)
-          ) {
-            console.log(timelineItem.eventCategory, this.vendor.eventCategory.key);
-            serviceTimeString = `${this.$dateUtil.formatScheduleDay(
-              Number(timelineItem.startTime),
-              "hh:mm A",
-            )}-${this.$dateUtil.formatScheduleDay(Number(timelineItem.endTime), "hh:mm A")}`;
-            serviceDate = this.$dateUtil.formatScheduleDay(Number(timelineItem.endTime), "MMM DD, YYYY");
-          }
-        });
-      });
-      if (!serviceDate) {
-        serviceDate = `${this.$dateUtil.formatScheduleDay(
-          Number(proposalRequest.eventData.eventStartMillis),
-          "MMM DD, YYYY",
-        )}`;
-      }
-      return {
-        time: serviceTimeString,
-        date: serviceDate,
-      };
-    },
+    // serviceTime() {
+    //   // if (!this.proposalRequest) {
+    //   //   return {
+    //   //     time: "",
+    //   //     date: "",
+    //   //   };
+    //   // }
+    //   const proposalRequest = this.$store.state.proposalForNonMaryoku.proposalRequest;
+    //   const timelineDates = proposalRequest.eventData.timelineDates;
+    //   // if (!timelineDates)
+    //   //   return {
+    //   //     time: "",
+    //   //     date: "",
+    //   //   };
+    //   let serviceTimeString = this.category === "venuerental" ? "All Day" : "Not planned yet";
+    //   let serviceDate = "";
+    //   timelineDates.forEach((td) => {
+    //     td.timelineItems.forEach((timelineItem) => {
+    //       if (
+    //         timelineItem &&
+    //         timelineItem.eventCategory &&
+    //         timelineItem.eventCategory.includes(this.vendor.eventCategory.key)
+    //       ) {
+    //         console.log(timelineItem.eventCategory, this.vendor.eventCategory.key);
+    //         serviceTimeString = `${this.$dateUtil.formatScheduleDay(
+    //           Number(timelineItem.startTime),
+    //           "hh:mm A",
+    //         )}-${this.$dateUtil.formatScheduleDay(Number(timelineItem.endTime), "hh:mm A")}`;
+    //         serviceDate = this.$dateUtil.formatScheduleDay(Number(timelineItem.endTime), "MMM DD, YYYY");
+    //       }
+    //     });
+    //   });
+    //   if (!serviceDate) {
+    //     serviceDate = `${this.$dateUtil.formatScheduleDay(
+    //       Number(proposalRequest.eventData.eventStartMillis),
+    //       "MMM DD, YYYY",
+    //     )}`;
+    //   }
+    //   return {
+    //     time: serviceTimeString,
+    //     date: serviceDate,
+    //   };
+    // },
   },
   filters: {
     withComma(amount) {

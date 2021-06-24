@@ -2,7 +2,7 @@
   <div
     class="editable-proposal-sub-item-wrapper"
     :class="[{ 'step-3': step == 3 }]"
-    v-if="item.plannerOptions.length === 0"
+    v-if="item.requirementTitle != null"
   >
     <div class="item-cont">
       {{ item.requirementTitle }}
@@ -75,80 +75,17 @@
         <a class="save" @click="save(item)">Save</a>
       </template>
     </div>
-  </div>
-  <div class="p-40 alternative-items" v-else>
-    <div>
-      <span class="font-bold pb-10">{{ item.requirementTitle }}</span>
-      <br />
-      <span class="font-size-14">Please choose:</span>
-    </div>
-    <div
-      class="editable-proposal-sub-item-wrapper alternative-option"
-      :class="[{ 'step-3': step == 3 }]"
-      v-for="(option, index) in item.plannerOptions"
-      :key="index"
-    >
-      <div class="item-cont">
-        {{ option.description }}
+    <!-- </template>
+    <template v-else>
+      <span class="grid-cell">{{ item.requirementTitle }}123</span>
+      <span class="grid-cell">{{ item.requirementValue }}</span>
+      <span class="grid-cell">$ {{ (item.price / item.requirementValue) | withComma }}</span>
+      <span class="grid-cell">$ {{ item.price | withComma }}</span>
+      <div class="action-cont">
+        <img class="edit" :src="`${iconUrl}Asset 585.svg`" />
+        <img class="trash" :src="`${iconUrl}Asset 586.svg`" @click="removeRequirement(item.id)" />
       </div>
-      <div class="qty-cont editor-wrapper">
-        <template v-if="!isEdit">{{ option.qty }}</template>
-        <template v-else>
-          <input class="input-value" type="number" v-model="option.qty" />
-        </template>
-      </div>
-      <div class="price-cont editor-wrapper">
-        <template v-if="!isEdit"> $ {{ option.price | withComma }} </template>
-        <template v-else>
-          <money
-            v-model="option.price"
-            v-bind="{
-              decimal: '.',
-              thousands: ',',
-              prefix: '$ ',
-              suffix: '',
-              precision: 2,
-              masked: false,
-            }"
-            class="input-value"
-          />
-        </template>
-      </div>
-      <div class="total-cont editor-wrapper">
-        <template v-if="!isEdit">$ {{ (option.price * option.qty) | withComma }}</template>
-        <template v-else>
-          <!-- <input class="input-value" v-model="item.price" type="number" /> -->
-          <money
-            v-if="item.priceUnit == 'total'"
-            v-model="item.price"
-            v-bind="{
-              decimal: '.',
-              thousands: ',',
-              prefix: '$ ',
-              suffix: '',
-              precision: 2,
-              masked: false,
-            }"
-            class="input-value"
-          />
-          <!-- <div>$ {{ subTotal }}</div> -->
-        </template>
-      </div>
-      <div class="action-cont editor-wrapper">
-        <div v-if="!isEdit" class="editing-buttons">
-          <md-button @click="isEdit = true" class="md-simple edit-btn">
-            <img class="edit" :src="`${iconUrl}Asset 585.svg`" />
-          </md-button>
-          <md-button @click="removeRequirement(item)" class="md-simple edit-btn">
-            <img class="trash" :src="`${iconUrl}Asset 586.svg`" />
-          </md-button>
-        </div>
-        <template v-else>
-          <a class="cancel" @click="cancel()">Cancel</a>
-          <a class="save" @click="save(item)">Save</a>
-        </template>
-      </div>
-    </div>
+    </template> -->
   </div>
 </template>
 <script>
@@ -205,13 +142,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.alternative-items {
-  border-top: 1px solid #818080;
-  padding: 50px 40px 0 40px;
-  .alternative-option {
-    padding: 30px !important;
-  }
-}
 .editable-proposal-sub-item-wrapper {
   padding: 46px 40px;
   border: 2px solid #d5d5d5;

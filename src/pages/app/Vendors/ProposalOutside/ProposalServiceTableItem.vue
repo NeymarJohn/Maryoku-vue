@@ -113,13 +113,13 @@
         <textarea class="mt-20" v-model="item.comment"></textarea>
         <div>
           <md-button class="md-black md-simple maryoku-btn" @click="editingComment = false">Cancel</md-button>
-          <md-button class="md-red maryoku-btn" @click="save(item)">Save</md-button>
+          <md-button class="md-vendor maryoku-btn" @click="save(item)">Save</md-button>
         </div>
       </div>
     </div>
     <div v-if="isEdit" class="text-right save-button mt-10">
       <md-button class="md-black maryoku-btn md-simple cancel" @click="cancel()">Cancel</md-button>
-      <md-button class="md-red maryoku-btn save" @click="save(item)">Save</md-button>
+      <md-button class="md-vendor maryoku-btn save" @click="save(item)">Save</md-button>
     </div>
     <div class="planner-options" v-if="item.plannerOptions.length > 0">
       <img
@@ -163,7 +163,7 @@
           </div>
           <div class="d-flex align-center">
             <!-- <md-button class="md-simple maryoku-btn md-black" @click="cancelAlternative(index)"> Cancel </md-button>
-            <md-button class="maryoku-btn md-red" @click="saveAlternative(index)"> Save </md-button> -->
+            <md-button class="maryoku-btn md-vendor" @click="saveAlternative(index)"> Save </md-button> -->
           </div>
         </div>
         <div class="planner-options-item-row" v-else>
@@ -187,12 +187,12 @@
         </div>
         <div class="text-right pt-10" v-if="plannerOption.isEdit">
           <md-button class="md-simple maryoku-btn md-black" @click="cancelAlternative(index)"> Cancel </md-button>
-          <md-button class="maryoku-btn md-red" @click="saveAlternative(index)"> Save </md-button>
+          <md-button class="maryoku-btn md-vendor" @click="saveAlternative(index)"> Save </md-button>
         </div>
       </div>
       <div class="planner-options-item">
         <div class="ml-50">
-          <md-button class="md-simple edit-btn md-red" @click="addAlternative">
+          <md-button class="md-simple edit-btn md-vendor" @click="addAlternative">
             <md-icon>add_circle_outline</md-icon>
             Add option {{ ("0" + (item.plannerOptions.length + 1)).slice(-2) }}
           </md-button>
@@ -287,7 +287,7 @@
         <textarea class="mt-20" v-model="item.comment"></textarea>
         <div>
           <md-button class="md-black md-simple maryoku-btn" @click="editingComment = false">Cancel</md-button>
-          <md-button class="md-red maryoku-btn" @click="save(item)">Save</md-button>
+          <md-button class="md-vendor maryoku-btn" @click="save(item)">Save</md-button>
         </div>
       </div>
     </div>
@@ -369,13 +369,13 @@
         <textarea class="mt-20" v-model="item.comment"></textarea>
         <div>
           <md-button class="md-black md-simple maryoku-btn" @click="editingComment = false">Cancel</md-button>
-          <md-button class="md-red maryoku-btn" @click="save(item)">Save</md-button>
+          <md-button class="md-vendor maryoku-btn" @click="save(item)">Save</md-button>
         </div>
       </div>
     </div>
     <div v-if="isEdit" class="text-right save-button mt-10">
       <md-button class="md-black maryoku-btn md-simple cancel" @click="cancel()">Cancel</md-button>
-      <md-button class="md-red maryoku-btn save" @click="save(item)">Save</md-button>
+      <md-button class="md-vendor maryoku-btn save" @click="save(item)">Save</md-button>
     </div>
   </div>
 </template>
@@ -528,11 +528,11 @@ export default {
     }
 
     .madatory-badge {
-      color: #f51355;
+      color: #641856;
       font-weight: normal;
       font-size: 11px;
       display: inline-block;
-      border: solid 1px #f51355;
+      border: solid 1px #641856;
       padding: 4px 8px;
       border-radius: 30px;
       margin-left: 0.5em;
@@ -627,7 +627,7 @@ export default {
       &.save {
         font: 800 16px "Manrope-Regular", sans-serif;
         color: white;
-        background: #f51355;
+        background: #641856;
         border-radius: 3px;
       }
       &:hover {

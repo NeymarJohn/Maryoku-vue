@@ -18,7 +18,7 @@
     </template>
     <template slot="footer">
       <md-button class="md-button md-black md-simple add-category-btn" @click="onCancel()">Cancel</md-button>
-      <md-button class="md-red md-bold add-category-btn" @click="sendQuestion">Send</md-button>
+      <md-button class="md-vendor md-bold add-category-btn" @click="sendQuestion">Send</md-button>
     </template>
   </modal>
 </template>

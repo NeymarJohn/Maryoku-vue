@@ -1,6 +1,6 @@
 <template>
   <div class="vendor-checkbox-wrapper" :class="{ checked: checked }">
-    <template v-if="item.type == Boolean">
+    <template v-if="item.type == 'Boolean'">
       <div class="main">
         <div class="check-box" @click="updateCheck()">
           <img
@@ -123,7 +123,7 @@
         </div>
       </div>
     </template>
-    <template v-if="item.type == Number">
+    <template v-if="item.type == 'Number'">
       <div class="main">
         <div class="check-cont">
           <div class="flex" @click="updateCheck()">

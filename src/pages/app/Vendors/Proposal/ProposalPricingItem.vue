@@ -292,8 +292,19 @@ export default {
       return this.$store.state.vendorProposal.discounts["total"] || { percentage: 0, price: 0 };
     },
     serviceTime() {
+      // if (!this.proposalRequest) {
+      //   return {
+      //     time: "",
+      //     date: "",
+      //   };
+      // }
       const proposalRequest = this.$store.state.vendorProposal.proposalRequest;
       const timelineDates = proposalRequest.eventData.timelineDates;
+      // if (!timelineDates)
+      //   return {
+      //     time: "",
+      //     date: "",
+      //   };
       let serviceTimeString = this.category === "venuerental" ? "All Day" : "Not planned yet";
       let serviceDate = "";
       timelineDates.forEach((td) => {

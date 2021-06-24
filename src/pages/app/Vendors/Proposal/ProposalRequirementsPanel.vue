@@ -199,6 +199,7 @@ export default {
           mapData[requirement.category] = requirement;
           return mapData;
         }, {});
+        console.log("requiremetnsMap", requirementsMap);
         return requirementsMap;
       }
       return {};

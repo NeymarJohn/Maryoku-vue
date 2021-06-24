@@ -190,8 +190,8 @@
                   <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost | withComma}` }} </span>
                 </div>
                 <div class="item text-right" v-else>
-                  <span v-if="policy.type === Number && !policy.isPercentage && policy.unit !== 'hour' && policy.unit !== 'none'">$</span>
-                  <span v-if="policy.type === Boolean">
+                  <span v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour' && policy.unit !== 'none'">$</span>
+                  <span v-if="policy.type === 'Boolean'">
                     <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
                     <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
                     <!-- {{ policy.value === true ? "Yes" : "No" }} -->
@@ -266,7 +266,7 @@
                   <span class="mr-10" v-if="!policy.value && policy.cost && policy.unit === '$'"> $ </span>
                   <span>{{ Number(policy.cost) | withComma }}</span>
                 </div>
-                <div class="item" v-else-if="policy.type === Boolean && policy.value && policy.discount">
+                <div class="item" v-else-if="policy.type === 'Boolean' && policy.value && policy.discount">
                   <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '$'"> $ </span>
                   <span class="mr-10" v-if="policy.discount"> {{ policy.discount }} </span>
                   <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '%'"> % </span>
@@ -278,7 +278,7 @@
                   ${{ policy.value | withComma }} per {{ policy.qtyUnit }}
                 </div>
                 <div class="item" v-else>
-                  <span v-if="policy.type === Number && !policy.isPercentage && policy.unit !== 'hour'">$</span>
+                  <span v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour'">$</span>
                   <span v-if="policy.value === true">Yes</span>
                   <span v-else>{{ policy.value | withComma }}</span>
                   <span v-if="policy.isPercentage">%</span>

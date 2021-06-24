@@ -1,9 +1,33 @@
 <template>
-  <div class="proposal-event-summary-wrapper">
-    <template v-if="isEdit"></template>
-    <template v-else>
-      <div class="event-summary-wrapper">
-        <div class="with-bkimg" :style="headerBackgroundImage ? `background-image:url(${headerBackgroundImage})` : ''">
+  <div class="proposal-review">
+    <div class="white-card">
+      <div class="proposal-review-header">
+        <carousel
+          :items="1"
+          :margin="0"
+          :dots="false"
+          :nav="false"
+          class="header-carousel"
+          :key="`carousel-${vendor.images.length}`"
+        >
+          <template slot="prev">
+            <span class="prev handle-btn">
+              <md-icon>keyboard_arrow_left</md-icon>
+            </span>
+          </template>
+          <img
+            :src="item"
+            v-for="(item, index) in vendor.images"
+            :key="`carousel-item-${index}`"
+            class="carousel-image"
+          />
+          <template slot="next" v-if="vendor.images.length > 1">
+            <span class="next handle-btn">
+              <md-icon>keyboard_arrow_right</md-icon>
+            </span>
+          </template>
+        </carousel>
+        <div class="preview-header-content">
           <div class="summary-cont">
             <div class="upper">
               <h3>{{ title }}</h3>
@@ -39,196 +63,197 @@
             @change="onFileChange"
           />
         </div>
-        <div class="event-summary-body">
-          <div class="cover-letter font-bold-extra mb-50">
-            <h4 class="font-bold-extra text-transform-uppercase">
-              Dear {{ event.owner ? event.owner.displayName : "Planner" }},
-            </h4>
-            <textarea v-model="personalMessage"> </textarea>
-          </div>
+      </div>
+      <div class="event-summary-body">
+        <div class="cover-letter font-bold-extra mb-50">
+          <h4 class="font-bold-extra text-transform-uppercase">
+            Dear {{ event.owner ? event.owner.displayName : "Planner" }},
+          </h4>
+          <textarea v-model="personalMessage"> </textarea>
+        </div>
 
-          <div class="vision-section">
-            <div class="font-size-22 font-bold-extra mt-30 mb-20">
-              <img :src="`${$iconURL}Vendor+Landing+Page/Asset+491.svg`" class="page-icon" />
-              Our vision for your event
-            </div>
-            <div>
-              {{ eventVision }}
-            </div>
+        <div class="vision-section">
+          <div class="font-size-22 font-bold-extra mt-30 mb-20">
+            <img :src="`${$iconURL}Vendor+Landing+Page/Asset+491.svg`" class="page-icon" />
+            Our vision for your event
           </div>
-          <div class="font-bold mb-10">Some references to the experience you will get from us</div>
-          <proposal-inspirational-photos class="mb-60"></proposal-inspirational-photos>
-          <md-button class="md-simple edit-btn md-red mb-30" @click="savedItModal = true">
-            About us
-            <md-icon>navigate_next</md-icon>
-          </md-button>
-          <div class="about-company">
-            {{ vendor.about.company }}
+          <div>
+            {{ eventVision }}
           </div>
-          <div class="contact-cont">
-            <h4>Contact Us</h4>
-            <ul>
-              <li>
-                <img :src="`${iconUrl}Asset 593.svg`" />
-                <span>{{ vendor.vendorMainEmail }}</span>
-              </li>
-              <li>
-                <img :src="`${iconUrl}Asset 573.svg`" />
-                <span>{{ vendor.vendorAddressLine1 }}</span>
-              </li>
-              <li v-if="vendor.vendorMainPhoneNumber">
-                <img :src="`${iconUrl}Asset 591.svg`" />
-                <span>{{ vendor.vendorMainPhoneNumber }}</span>
-              </li>
-            </ul>
+        </div>
+        <div class="font-bold mb-10">Some references to the experience you will get from us</div>
+        <proposal-inspirational-photos class="mb-60"></proposal-inspirational-photos>
+        <md-button class="md-simple edit-btn md-red mb-30" @click="savedItModal = true">
+          About us
+          <md-icon>navigate_next</md-icon>
+        </md-button>
+        <div class="about-company">
+          {{ vendor.about.company }}
+        </div>
+        <div class="contact-cont">
+          <h4>Contact Us</h4>
+          <ul>
+            <li>
+              <img :src="`${iconUrl}Asset 593.svg`" />
+              <span>{{ vendor.vendorMainEmail }}</span>
+            </li>
+            <li>
+              <img :src="`${iconUrl}Asset 573.svg`" />
+              <span>{{ vendor.vendorAddressLine1 }}</span>
+            </li>
+            <li v-if="vendor.vendorMainPhoneNumber">
+              <img :src="`${iconUrl}Asset 591.svg`" />
+              <span>{{ vendor.vendorMainPhoneNumber }}</span>
+            </li>
+          </ul>
+        </div>
+        <attachment-tag-list
+          class="mt-40"
+          :defaultValue="attachments"
+          @add="addNewAttachment"
+          @remove="removeAttachment"
+        ></attachment-tag-list>
+      </div>
+    </div>
+
+    <div class="pricing-cont">
+      <div class="title">
+        <h4><img :src="`${iconUrl}Asset 576.svg`" />Pricing & Details</h4>
+        <p v-if="vendor.vendorCategory === 'venuerental'">
+          <template v-if="vendor.notAllowedThirdParty === 1">
+            *Work only with our {{ vendor.eventCategory.fullTitle }}
+          </template>
+          <template v-if="vendor.notAllowedThirdParty === 2">
+            *We don't work with these third party venodrs: {{ mergeStringItems(vendor.notAllowed) }}
+          </template>
+        </p>
+      </div>
+      <p>What would you like to take from our suggested services?</p>
+      <proposal-pricing-item
+        :iconUrl="iconUrl"
+        :categoryIcon="`${iconUrl}Asset 614.svg`"
+        :itemType="`price`"
+        :requirements="proposalRequest.requirements"
+        :category="c"
+        v-for="(c, cIndex) in categories"
+        :key="cIndex"
+      />
+      <proposal-pricing-item :iconUrl="iconUrl" :itemType="`bundle`" v-if="bundleDiscount.isApplied" />
+      <div class="total-proposal-price">
+        <div class="d-flex justify-content-between">
+          <div class="font-size-22 font-bold">Total</div>
+          <div class="font-size-20 font-bold">${{ Number(totalPriceOfProposal) | withComma }}</div>
+        </div>
+        <div class="d-flex justify-content-between" v-if="bundleDiscount && bundleDiscount.isApplied">
+          <div class="font-size-16">Before Bundle Offer</div>
+          <div class="font-size-16 crosslinedText">${{ Number(totalBeforeBundle) | withComma }}</div>
+        </div>
+        <div class="d-flex justify-content-between" v-if="defaultDiscount.percentage">
+          <div class="font-size-16">Before Discount</div>
+          <div class="font-size-16">
+            ({{ defaultDiscount.percentage }}% off)
+            <span class="crosslinedText"> ${{ Number(totalBeforeDiscount) | withComma }} </span>
           </div>
-          <attachment-tag-list
-            class="mt-40"
-            :defaultValue="attachments"
-            @add="addNewAttachment"
-            @remove="removeAttachment"
-          ></attachment-tag-list>
         </div>
       </div>
-
-      <div class="pricing-cont">
-        <div class="title">
-          <h4><img :src="`${iconUrl}Asset 576.svg`" />Pricing & Details</h4>
-          <p v-if="vendor.vendorCategory === 'venuerental'">
-            <template v-if="vendor.notAllowedThirdParty === 1">
-              *Work only with our {{ vendor.eventCategory.fullTitle }}
-            </template>
-            <template v-if="vendor.notAllowedThirdParty === 2">
-              *We don't work with these third party venodrs: {{ mergeStringItems(vendor.notAllowed) }}
-            </template>
-          </p>
-        </div>
-        <p>What would you like to take from our suggested services?</p>
-        <proposal-pricing-item
-          :iconUrl="iconUrl"
-          :categoryIcon="`${iconUrl}Asset 614.svg`"
-          :itemType="`price`"
-          :requirements="proposalRequest.requirements"
-          :category="c"
-          v-for="(c, cIndex) in categories"
-          :key="cIndex"
-        />
-        <proposal-pricing-item :iconUrl="iconUrl" :itemType="`bundle`" v-if="bundleDiscount.isApplied" />
-        <div class="total-proposal-price">
-          <div class="d-flex justify-content-between">
-            <div class="font-size-22 font-bold">Total</div>
-            <div class="font-size-20 font-bold">${{ Number(totalPriceOfProposal) | withComma }}</div>
-          </div>
-          <div class="d-flex justify-content-between" v-if="bundleDiscount && bundleDiscount.isApplied">
-            <div class="font-size-16">Before Bundle Offer</div>
-            <div class="font-size-16 crosslinedText">${{ Number(totalBeforeBundle) | withComma }}</div>
-          </div>
-          <div class="d-flex justify-content-between" v-if="defaultDiscount.percentage">
-            <div class="font-size-16">Before Discount</div>
-            <div class="font-size-16">
-              ({{ defaultDiscount.percentage }}% off)
-              <span class="crosslinedText"> ${{ Number(totalBeforeDiscount) | withComma }} </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="policy-cont">
-        <div class="title">
-          <h4><img :src="`${iconUrl}Asset 594.svg`" /> Our Policy</h4>
+    </div>
+    <div class="policy-cont">
+      <div class="title">
+        <h4><img :src="`${iconUrl}Asset 594.svg`" /> Our Policy</h4>
+        <p>
+          <img
+            :src="`${iconUrl}Group 5280 (5).svg`"
+            @mouseover="considerUpdate = true"
+            @mouseleave="considerUpdate = false"
+          />
+          Maryoku Standard Policy
+        </p>
+        <div class="consider-update" v-if="considerUpdate">
+          <h3>Maryoku Standard Policy!</h3>
           <p>
-            <img
-              :src="`${iconUrl}Group 5280 (5).svg`"
-              @mouseover="considerUpdate = true"
-              @mouseleave="considerUpdate = false"
-            />
-            Maryoku Standard Policy
+            If the addiiontal services you've added require additional policy changes-this is the tame to add those!
           </p>
-          <div class="consider-update" v-if="considerUpdate">
-            <h3>Maryoku Standard Policy!</h3>
-            <p>
-              If the addiiontal services you've added require additional policy changes-this is the tame to add those!
-            </p>
+        </div>
+      </div>
+      <div class="policy-wrapper">
+        <div class="policy mb-50">
+          <div class="mb-10" v-for="(policy, index) in vendor.yesRules" :key="index">
+            <span class="font-bold" style="width: 50%; display: inline-block">{{ policy.name }}</span>
+            <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" class="label-icon" />
+          </div>
+          <div class="mb-10" v-for="(policy, index) in vendor.noRules" :key="index">
+            <span class="font-bold" style="min-width: 50%; display: inline-block">{{ policy.name }}</span>
+            <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" class="label-icon" />
           </div>
         </div>
-        <div class="policy-wrapper">
-          <div class="policy mb-50">
-            <div class="mb-10" v-for="(policy, index) in vendor.yesRules" :key="index">
-              <span class="font-bold" style="width: 50%; display: inline-block">{{ policy.name }}</span>
-              <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" class="label-icon" />
-            </div>
-            <div class="mb-10" v-for="(policy, index) in vendor.noRules" :key="index">
-              <span class="font-bold" style="min-width: 50%; display: inline-block">{{ policy.name }}</span>
-              <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" class="label-icon" />
+        <div class="cancellation">
+          <h5 class="subtitle">Our cancellation approach</h5>
+          <div id="Policy">
+            <div class="rules">
+              <div class="rule" v-for="(policy, yIndex) in cancellationData" :key="yIndex">
+                <div class="item">
+                  <span class="font-bold-extra">If</span> {{ policy.notice }}
+                  <span class="font-bold-extra">Then</span>
+                  {{ policy.vendorPayout }} <span class="font-bold-extra">and</span> {{ policy.cancellationFee }}
+                </div>
+              </div>
             </div>
           </div>
-          <div class="cancellation">
-            <h5 class="subtitle">Our cancellation approach</h5>
-            <div id="Policy">
+        </div>
+        <div class="cancellation">
+          <h5 class="subtitle">Act of God</h5>
+          <div id="Policy">
+            <div class="rules">
+              <span class="font-bold"> {{ vendor.companyName }}</span>
+              is not liable for any acts of God, dangerous incident to the sea, fires, acts of government or other
+              authorities, wars, acts of terrorism, civil unrest, strikes, riots, thefts, pilferage, epidemics,
+              quarantines, other diseases, climatic aberrations, or from any other cause beyond company’s control.
+            </div>
+          </div>
+        </div>
+        <div class="cancellation">
+          <h5 class="subtitle">Our Policy</h5>
+          <div id="Policy">
+            <div class="rules">
               <div class="rules">
-                <div class="rule" v-for="(policy, yIndex) in cancellationData" :key="yIndex">
-                  <div class="item">
-                    <span class="font-bold-extra">If</span> {{ policy.notice }}
-                    <span class="font-bold-extra">Then</span>
-                    {{ policy.vendorPayout }} <span class="font-bold-extra">and</span> {{ policy.cancellationFee }}
+                <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
+                  <div class="item">{{ policy.name }}</div>
+                  <div class="item" v-if="policy.type === 'MultiSelection'">
+                    <span class="mr-10" v-for="(v, vIndex) in policy.value" :key="`policy-${vIndex}`">{{
+                      `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
+                    }}</span>
+                  </div>
+                  <div class="item" v-else-if="policy.type === 'Including'">
+                    <span class="mr-10" v-if="policy.value"> Yes </span>
+                    <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
+                  </div>
+                  <div class="item" v-else>
+                    <span v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour'">$</span>
+                    <span v-if="policy.type === 'Boolean'">
+                      <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
+                      <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
+                      <!-- {{ policy.value === true ? "Yes" : "No" }} -->
+                    </span>
+                    <span v-else>
+                      <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
+                      <img v-else-if="policy.value === false" :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
+                      <span v-else>{{ policy.value | withComma }}</span>
+                    </span>
+                    <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
+                    <span v-if="policy.isPercentage">%</span>
+                    <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
+                      {{ policy.attendees }} attendees
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="cancellation">
-            <h5 class="subtitle">Act of God</h5>
-            <div id="Policy">
-              <div class="rules">
-                <span class="font-bold"> {{ vendor.companyName }}</span>
-                is not liable for any acts of God, dangerous incident to the sea, fires, acts of government or other
-                authorities, wars, acts of terrorism, civil unrest, strikes, riots, thefts, pilferage, epidemics,
-                quarantines, other diseases, climatic aberrations, or from any other cause beyond company’s control.
-              </div>
-            </div>
+          <div class="not-allowed mb-30" v-if="vendor.vendorCategories[0] == 'venuerental'">
+            <h5>We don't allow these 3rd party vendor:</h5>
+            <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
           </div>
-          <div class="cancellation">
-            <h5 class="subtitle">Our Policy</h5>
-            <div id="Policy">
-              <div class="rules">
-                <div class="rules">
-                  <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
-                    <div class="item">{{ policy.name }}</div>
-                    <div class="item" v-if="policy.type === 'MultiSelection'">
-                      <span class="mr-10" v-for="(v, vIndex) in policy.value" :key="`policy-${vIndex}`">{{
-                        `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
-                      }}</span>
-                    </div>
-                    <div class="item" v-else-if="policy.type === 'Including'">
-                      <span class="mr-10" v-if="policy.value"> Yes </span>
-                      <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
-                    </div>
-                    <div class="item" v-else>
-                      <span v-if="policy.type === Number && !policy.isPercentage && policy.unit !== 'hour'">$</span>
-                      <span v-if="policy.type === Boolean">
-                        <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
-                        <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
-                        <!-- {{ policy.value === true ? "Yes" : "No" }} -->
-                      </span>
-                      <span v-else>
-                        <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
-                        <img v-else-if="policy.value === false" :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
-                        <span v-else>{{ policy.value | withComma }}</span>
-                      </span>
-                      <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
-                      <span v-if="policy.isPercentage">%</span>
-                      <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
-                        {{ policy.attendees }} attendees
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="not-allowed mb-30" v-if="vendor.vendorCategories[0] == 'venuerental'">
-              <h5>We don't allow these 3rd party vendor:</h5>
-              <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
-            </div>
-            <!-- <div class="dont-work mt-20">
+          <!-- <div class="dont-work mt-20">
               <h5>We don't work on:</h5>
               <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
                 <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
@@ -247,9 +272,9 @@
                 {{ dontWorkTime() }}
               </div>
             </div> -->
-          </div>
-          <div class="cancellation pricing-policy-cont" id="Rules">
-            <!-- <h5 class="subtitle">OUR PRICING POLICY</h5>
+        </div>
+        <div class="cancellation pricing-policy-cont" id="Rules">
+          <!-- <h5 class="subtitle">OUR PRICING POLICY</h5>
             <div class="rules">
               <div class="rule" v-for="(policy, yIndex) in validPricingPolicy" :key="yIndex">
                 <div class="item">
@@ -285,59 +310,58 @@
               </div>
             </div> -->
 
-            <div class="signature-wrapper">
-              <div class="half-side">
-                <h6>{{ vendor.companyName }}</h6>
-                <div class="signature-client">
-                  <template v-if="vendor.signature == null && !signatureImage">
-                    <div class="card red-border">
-                      <div class="upload-cont">
-                        <a class @click="uploadVendorSignature">
-                          <img
-                            :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 559.svg`"
-                          />
-                          Choose File
-                        </a>
-                        <div class="or">Or</div>
-                        <div class="sign-here">
-                          <vueSignature ref="signature" :sigOption="option" :w="'100%'" :h="'100%'" />
-                          <button class="save" @click="save">Save</button>
-                          <button class="clear" @click="clear">Clear</button>
-                        </div>
-                        <input
-                          type="file"
-                          class="hide"
-                          ref="signatureFile"
-                          name="vendorSignature"
-                          accept="image/gif, image/jpg, image/png"
-                          @change="onUploadVendorSignature"
+          <div class="signature-wrapper">
+            <div class="half-side">
+              <h6>{{ vendor.companyName }}</h6>
+              <div class="signature-client">
+                <template v-if="vendor.signature == null && !signatureImage">
+                  <div class="card red-border">
+                    <div class="upload-cont">
+                      <a class @click="uploadVendorSignature">
+                        <img
+                          :src="`https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/Asset 559.svg`"
                         />
+                        Choose File
+                      </a>
+                      <div class="or">Or</div>
+                      <div class="sign-here">
+                        <vueSignature ref="signature" :sigOption="option" :w="'100%'" :h="'100%'" />
+                        <button class="save" @click="save">Save</button>
+                        <button class="clear" @click="clear">Clear</button>
                       </div>
+                      <input
+                        type="file"
+                        class="hide"
+                        ref="signatureFile"
+                        name="vendorSignature"
+                        accept="image/gif, image/jpg, image/png"
+                        @change="onUploadVendorSignature"
+                      />
                     </div>
-                  </template>
-                  <template v-else>
-                    <div
-                      class
-                      :style="`
+                  </div>
+                </template>
+                <template v-else>
+                  <div
+                    class
+                    :style="`
                         background-image: url(${vendor.signature || signatureImage});width: 100%;
                         background-position: center;
                         background-repeat: no-repeat;
                         height: 162px;
                         background-size: contain;
                       `"
-                    />
-                  </template>
-                </div>
+                  />
+                </template>
               </div>
-              <div class="half-side">
-                <h6>Client</h6>
-                <div class="signature-client signature-bidder"></div>
-              </div>
+            </div>
+            <div class="half-side">
+              <h6>Client</h6>
+              <div class="signature-client signature-bidder"></div>
             </div>
           </div>
         </div>
       </div>
-    </template>
+    </div>
   </div>
 </template>
 <script>
@@ -354,6 +378,7 @@ import _ from "underscore";
 import AttachmentTagList from "../components/AttachmentTagList.vue";
 import { PROPOSAL_DIRECTORY } from "@/constants/s3Directories";
 import S3Service from "@/services/s3.service";
+import carousel from "vue-owl-carousel";
 
 export default {
   name: "proposal-event-summary",
@@ -363,6 +388,7 @@ export default {
     vueSignature,
     ProposalPricingSummary,
     AttachmentTagList,
+    carousel,
   },
   props: {
     title: String,
@@ -607,70 +633,52 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.proposal-event-summary-wrapper {
+.proposal-review {
   border-radius: 3px;
   background-color: #f5f5f5;
   font-family: "Manrope-Regular", sans-serif;
-  padding: 0 60px;
   margin-top: 20px;
   color: #050505;
 
-  .about-company {
-    word-break: break-word;
-  }
-  .change-cover-btn {
-    transform: translate(-50%, -50%);
-    position: absolute;
-    left: 50%;
-    top: 70%;
-  }
-  .tabs-cont {
-    display: flex;
-    justify-content: flex-start;
+  .proposal-review-header {
+    background-color: #ffffff;
+    min-height: 500px;
     position: relative;
-    text-align: center;
-    margin: 0 -60px;
-    border-radius: 3px;
-
-    .tab-item {
-      flex: 1;
-      font-size: 22px;
-      padding: 27px 0 32px 0;
-      border: solid 3px #818080;
-      cursor: pointer;
-
-      span {
-        color: #050505;
-        font-weight: normal;
+    .header-carousel {
+      .carousel-image {
+        height: 500px;
+        object-fit: cover;
       }
-
-      &:first-child {
-        border-right: none;
-      }
-      &.active {
-        border-top: solid 5px #f51355;
-        span {
-          color: #f51355;
-          font-weight: 800;
+      .handle-btn {
+        background-color: white !important;
+        height: 25px;
+        width: 25px;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        i {
+          color: #050505;
+        }
+        &.next {
+          right: 50px;
+        }
+        &.prev {
+          left: 50px;
         }
       }
     }
-  }
-  .event-summary-wrapper {
-    margin: 0 -60px;
-    background-color: #ffffff;
-    box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-
-    .with-bkimg {
-      background-image: url("https://static-maryoku.s3.amazonaws.com/storage/img/sidebar-2.jpg");
-      min-height: 540px;
-      background-size: cover;
-      background-repeat: no-repeat;
-      position: relative;
+    .preview-header-content {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      z-index: 1;
       .summary-cont {
         padding: 60px;
         background: rgba(255, 255, 255, 0.7);
-
         .upper {
           display: flex;
           align-items: center;
@@ -725,137 +733,174 @@ export default {
         }
       }
     }
-    .event-summary-body {
-      padding: 60px;
-      .cover-letter {
-        h4 {
-          font-size: 30px;
-          margin: 0;
-          padding-bottom: 25px;
-        }
-        textarea {
-          height: 170px;
-          padding: 30px;
-        }
-        p {
-          margin: 0;
-          font-size: 14px;
+  }
+  .about-company {
+    word-break: break-word;
+  }
+  .change-cover-btn {
+    transform: translate(-50%, -50%);
+    position: absolute;
+    left: 50%;
+    top: 70%;
+  }
+  .tabs-cont {
+    display: flex;
+    justify-content: flex-start;
+    position: relative;
+    text-align: center;
+    border-radius: 3px;
 
-          strong {
-            text-transform: capitalize;
-            font-weight: 800;
-          }
-        }
+    .tab-item {
+      flex: 1;
+      font-size: 22px;
+      padding: 27px 0 32px 0;
+      border: solid 3px #818080;
+      cursor: pointer;
+
+      span {
+        color: #050505;
+        font-weight: normal;
+      }
+
+      &:first-child {
+        border-right: none;
+      }
+      &.active {
+        border-top: solid 5px #f51355;
         span {
-          display: inline-block;
-          font-weight: 800;
-          padding-top: 36px;
-          padding-bottom: 60px;
-          font-size: 16px;
           color: #f51355;
-          text-transform: capitalize;
-          cursor: pointer;
-          i {
-            color: #f51355;
-          }
-        }
-      }
-      .vision-section {
-        margin-bottom: 50px;
-        word-break: break-word;
-      }
-      .contact-cont {
-        margin-top: 30px;
-        h4 {
-          font-size: 22px;
           font-weight: 800;
-          margin: 0;
-        }
-        ul {
-          display: flex;
-          list-style: none;
-          padding: 0;
-          margin: 0;
-          margin-top: 20px;
-          li {
-            font-size: 16px;
-            margin-right: 55px;
-
-            span {
-              text-decoration: underline;
-            }
-
-            img {
-              width: 26px;
-              height: 26px;
-              margin-right: 14px;
-            }
-
-            &:last-child {
-              margin-right: 0;
-            }
-          }
         }
       }
+    }
+  }
+  .event-summary-body {
+    padding: 60px;
+    .cover-letter {
+      h4 {
+        font-size: 30px;
+        margin: 0;
+        padding-bottom: 25px;
+      }
+      textarea {
+        height: 170px;
+        padding: 30px;
+      }
+      p {
+        margin: 0;
+        font-size: 14px;
 
-      .image-slider {
-        padding-left: 60px;
+        strong {
+          text-transform: capitalize;
+          font-weight: 800;
+        }
+      }
+      span {
+        display: inline-block;
+        font-weight: 800;
+        padding-top: 36px;
+        padding-bottom: 60px;
+        font-size: 16px;
+        color: #f51355;
+        text-transform: capitalize;
+        cursor: pointer;
+        i {
+          color: #f51355;
+        }
+      }
+    }
+    .vision-section {
+      margin-bottom: 50px;
+      word-break: break-word;
+    }
+    .contact-cont {
+      margin-top: 30px;
+      h4 {
+        font-size: 22px;
+        font-weight: 800;
+        margin: 0;
+      }
+      ul {
         display: flex;
-        overflow: hidden;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        margin-top: 20px;
+        li {
+          font-size: 16px;
+          margin-right: 55px;
 
-        .item {
-          margin-right: 30px;
-          width: 300px;
-          min-width: 300px;
-          max-height: 177px;
+          span {
+            text-decoration: underline;
+          }
+
+          img {
+            width: 26px;
+            height: 26px;
+            margin-right: 14px;
+          }
 
           &:last-child {
             margin-right: 0;
           }
         }
-        a.more {
-          cursor: pointer;
-          position: absolute;
-          background: white;
-          border-radius: 20px;
-          margin-top: 75px;
+      }
+    }
+
+    .image-slider {
+      padding-left: 60px;
+      display: flex;
+      overflow: hidden;
+
+      .item {
+        margin-right: 30px;
+        width: 300px;
+        min-width: 300px;
+        max-height: 177px;
+
+        &:last-child {
+          margin-right: 0;
         }
       }
+      a.more {
+        cursor: pointer;
+        position: absolute;
+        background: white;
+        border-radius: 20px;
+        margin-top: 75px;
+      }
+    }
 
-      .check-list-wrapper {
-        padding: 0 60px;
-        h4 {
-          font-size: 22px;
-          font-weight: 800;
-          margin: 0;
-          margin-top: 40px;
-          margin-bottom: 30px;
-          text-transform: capitalize;
-        }
-        ul {
-          padding: 0;
-          list-style: none;
-          -webkit-column-count: 3;
-          -moz-column-count: 3;
-          column-count: 3;
-          li {
-            margin-bottom: 33px;
+    .check-list-wrapper {
+      padding: 0 60px;
+      h4 {
+        font-size: 22px;
+        font-weight: 800;
+        margin: 0;
+        margin-top: 40px;
+        margin-bottom: 30px;
+        text-transform: capitalize;
+      }
+      ul {
+        padding: 0;
+        list-style: none;
+        -webkit-column-count: 3;
+        -moz-column-count: 3;
+        column-count: 3;
+        li {
+          margin-bottom: 33px;
 
-            i {
-              color: #f51355;
-              font-size: 22px;
-              margin-right: 22px;
-            }
+          i {
+            color: #f51355;
+            font-size: 22px;
+            margin-right: 22px;
           }
         }
       }
     }
   }
-
   .pricing-cont {
-    margin: 0 -60px;
     padding: 30px 0;
-
     .title {
       display: flex;
       align-items: flex-end;
@@ -891,8 +936,6 @@ export default {
 
   .policy-cont {
     padding: 20px 0;
-    margin: 0 -60px;
-
     .title {
       img {
         width: 30px;
@@ -1022,7 +1065,6 @@ export default {
         h5.subtitle {
           margin: 0;
           padding: 15px 53px 20px 55px;
-          margin-left: -60px;
           background-color: #ededed;
           display: inline-block;
           font-size: 20px;
