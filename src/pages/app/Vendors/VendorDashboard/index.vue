@@ -83,7 +83,7 @@
         <div class="md-layout mt-20">
           <div class="white-card md-layout p-30">
             <div class="md-layout-item md-size-50">
-              <event-calendar></event-calendar>
+              <event-calendar @clickDate="createEventFromCalendar"></event-calendar>
             </div>
             <div class="md-layout-item md-size-50">
               <div class="p-5 font-bold text-center">UPCOMING EVENTS:</div>
@@ -196,7 +196,6 @@ export default {
     getMarkedDates() {
       let markedDates = [];
       if (this.backOutDays) {
-        console.log("getMarkedDates", this.backOutDays);
         if (this.vendorData.dontWorkDays && this.vendorData.dontWorkDays.length) {
           _.each(this.vendorData.dontWorkDays, (sd) => {
             markedDates.push(sd.date);
@@ -209,7 +208,6 @@ export default {
         }
       }
       this.markedDates = markedDates;
-      console.log("markedDates", this.markedDates);
       this.$forceUpdate();
     },
     changeMonth(e) {
@@ -223,17 +221,15 @@ export default {
     },
     createNewEvent() {
       // return this.$router.push(`/create-event-wizard`);
-      this.showVendorCreateModal = true;
       this.defaultEventData = {};
+      this.showVendorCreateModal = true;
     },
 
     selectDay(e) {
       let day = moment(e.date).date();
       let date = moment(e.date).format("YYYY-M-D");
       let selectedDates = this.date.selectedDates;
-      console.log("selectDay", selectedDates, date);
       if (this.date.selectedDates.find((m) => m.date === date)) {
-        console.log("selectDay", date);
         selectedDates = this.date.selectedDates.filter((s) => s.date !== e.date);
         this.markedDates = this.markedDates.filter((m) => m !== date);
         $("span.vfc-span-day:contains(" + day + ")").removeClass("vfc-marked vfc-start-marked vfc-end-marked");
@@ -247,14 +243,17 @@ export default {
       })
         .get()
         .then((events) => {
-          console.log(events);
           this.upcomingEvents = events.slice(0, 5);
         });
     },
     showEvent(event) {
       this.showVendorCreateModal = true;
-      console.log(event);
       this.defaultEventData = { ...event };
+    },
+    createEventFromCalendar(dateObject) {
+      const date = moment(`${dateObject.years}-${dateObject.month}-${dateObject.date}`, "yyyy-M-D").toDate();
+      this.defaultEventData = { date };
+      this.showVendorCreateModal = true;
     },
   },
   computed: {
@@ -265,7 +264,6 @@ export default {
       return this.$store.state.common.serviceCategories;
     },
     serviceChart() {
-      console.log("this.vendor", this.vendorData);
       if (!this.vendorData || !this.serviceCategories.length) return [];
       let services = [this.vendorData.vendorCategories[0]];
       this.vendorData.secondaryServices.map((s) => {

@@ -26,7 +26,7 @@
               </li>
             </ul>
           </div>
-          <md-button class="md-red maryoku-btn change-cover-btn" @click="chooseFiles">
+          <md-button class="md-vendor maryoku-btn change-cover-btn" @click="chooseFiles">
             <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
             <span>Change Cover</span>
           </md-button>
@@ -58,7 +58,7 @@
           </div>
           <div class="font-bold mb-10">Some references to the experience you will get from us</div>
           <proposal-inspirational-photos class="mb-60"></proposal-inspirational-photos>
-          <md-button class="md-simple edit-btn md-red mb-30" @click="savedItModal = true">
+          <md-button class="md-simple edit-btn md-vendor mb-30" @click="savedItModal = true">
             About us
             <md-icon>navigate_next</md-icon>
           </md-button>
@@ -85,6 +85,7 @@
           <attachment-tag-list
             class="mt-40"
             :defaultValue="attachments"
+            theme="purple"
             @add="addNewAttachment"
             @remove="removeAttachment"
           ></attachment-tag-list>
@@ -154,7 +155,7 @@
           <div class="policy mb-50">
             <div class="mb-10" v-for="(policy, index) in vendor.yesRules" :key="index">
               <span class="font-bold" style="width: 50%; display: inline-block">{{ policy.name }}</span>
-              <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" class="label-icon" />
+              <img :src="`${$storageURL}Vendor Signup/Group 5479 (2).svg`" class="label-icon" />
             </div>
             <div class="mb-10" v-for="(policy, index) in vendor.noRules" :key="index">
               <span class="font-bold" style="min-width: 50%; display: inline-block">{{ policy.name }}</span>
@@ -203,14 +204,14 @@
                       <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
                     </div>
                     <div class="item" v-else>
-                      <span v-if="policy.type === Number && !policy.isPercentage && policy.unit !== 'hour'">$</span>
-                      <span v-if="policy.type === Boolean">
-                        <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
+                      <span v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour'">$</span>
+                      <span v-if="policy.type === 'Boolean'">
+                        <img v-if="policy.value === true" :src="`${$storageURL}ok%20check%20V.svg`" />
                         <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
                         <!-- {{ policy.value === true ? "Yes" : "No" }} -->
                       </span>
                       <span v-else>
-                        <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
+                        <img v-if="policy.value === true" :src="`${$storageURL}ok%20check%20V.svg`" />
                         <img v-else-if="policy.value === false" :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
                         <span v-else>{{ policy.value | withComma }}</span>
                       </span>
@@ -648,9 +649,9 @@ export default {
         border-right: none;
       }
       &.active {
-        border-top: solid 5px #f51355;
+        border-top: solid 5px #641856;
         span {
-          color: #f51355;
+          color: #641856;
           font-weight: 800;
         }
       }
@@ -752,11 +753,11 @@ export default {
           padding-top: 36px;
           padding-bottom: 60px;
           font-size: 16px;
-          color: #f51355;
+          color: #641856;
           text-transform: capitalize;
           cursor: pointer;
           i {
-            color: #f51355;
+            color: #641856;
           }
         }
       }
@@ -842,7 +843,7 @@ export default {
             margin-bottom: 33px;
 
             i {
-              color: #f51355;
+              color: #641856;
               font-size: 22px;
               margin-right: 22px;
             }
@@ -878,7 +879,7 @@ export default {
       p {
         font-size: 16px;
         margin: 0;
-        color: #f51355;
+        color: #641856;
       }
     }
     p {
@@ -1086,7 +1087,7 @@ export default {
               margin-top: 23px;
               min-width: 350px;
               min-height: 270px;
-              border: 1px dashed #f51355 !important;
+              border: 1px dashed #641856 !important;
               border-radius: 3px;
               display: flex;
               align-items: center;
@@ -1104,9 +1105,9 @@ export default {
                 margin: 0.5rem auto;
                 display: inline-block;
                 font: 800 14px Manrope-Regular, sans-serif;
-                border: 1px solid #f51355;
+                border: 1px solid #641856;
                 padding: 0.5rem;
-                color: #f51355;
+                color: #641856;
                 cursor: pointer;
                 img {
                   width: 10px;
@@ -1117,9 +1118,9 @@ export default {
                 .clear {
                   background-color: #ffffff;
                   font: 800 14px Manrope-Regular, sans-serif;
-                  border: 1px solid #f51355;
+                  border: 1px solid #641856;
                   padding: 0.5rem;
-                  color: #f51355;
+                  color: #641856;
                   cursor: pointer;
                   margin-bottom: 0.5rem;
                 }

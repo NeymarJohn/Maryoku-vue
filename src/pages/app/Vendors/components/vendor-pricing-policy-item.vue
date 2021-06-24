@@ -19,7 +19,7 @@
     <div class="right d-flex">
       <div class="align-center">
         <div class="top">
-          <template v-if="editingItem.type == Boolean">
+          <template v-if="editingItem.type == 'Boolean'">
             <div class="item" @click="setPricePolicy(null, 'option', editingItem.name, true)">
               <img
                 :src="theme === 'red' ? `${iconUrl}Group 5479 (2).svg` : `${$iconURL}common/checked-circle-purple.svg`"
@@ -95,7 +95,7 @@
             </div>
           </template>
         </div>
-        <div class="bottom no-margin" v-if="editingItem.type == Number">
+        <div class="bottom no-margin" v-if="editingItem.type == 'Number'">
           <template v-if="editingItem.noSuffix">
             <span v-if="editingItem.labelForValue">{{ editingItem.labelForValue }}</span>
             <div>
@@ -214,10 +214,10 @@
           class="bottom mt-30"
           v-if="
             editingItem.hasOwnProperty('attendees') &&
-            ((editingItem.type == Boolean && editingItem.value) || editingItem.type == Number)
+            ((editingItem.type == 'Boolean' && editingItem.value) || editingItem.type == 'Number')
           "
         >
-          <span :class="{ 'd-block': editingItem.type != Boolean, 'mr-10': editingItem.type == Boolean }">
+          <span :class="{ 'd-block': editingItem.type != 'Boolean', 'mr-10': editingItem.type == 'Boolean' }">
             {{ editingItem.labelForValue || "How many" }}
           </span>
 
@@ -231,7 +231,7 @@
         </div>
         <div
           class="bottom mt-30"
-          v-if="editingItem.hasOwnProperty('discount') && editingItem.type == Boolean && editingItem.value"
+          v-if="editingItem.hasOwnProperty('discount') && editingItem.type == 'Boolean' && editingItem.value"
         >
           <span class="d-block">{{
             editingItem.hasOwnProperty("labelForValue") ? editingItem.labelForValue : "How many"

@@ -16,7 +16,7 @@
     />
     <span class="md-error color-red" v-if="errors.has(validation)">{{ errors.first(validation) }}</span>
 
-    <div class="copy_clip" v-if="inputStyle === 'sharing'">
+    <div class="copy_clip" v-if="inputStyle === 'sharing'" :class="theme">
       <button
         type="button"
         v-clipboard:copy="value"
@@ -286,6 +286,14 @@ export default {
     top: -14px;
     position: absolute;
     right: 30px;
+  }
+}
+.purple {
+  .copied-tooltip {
+    background-color: #641856;
+    &:after {
+      border-bottom: 15px solid #641856;
+    }
   }
 }
 </style>
