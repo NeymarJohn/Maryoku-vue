@@ -25,26 +25,26 @@
             <md-icon style="font-size: 40px !important">more_vert</md-icon>
           </md-button>
           <md-menu-content>
-            <md-menu-item class="md-purple" @click="isEdit = true">
+            <md-menu-item @click="isEdit = true">
               <span> <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />Edit</span>
             </md-menu-item>
-            <md-menu-item class="md-purple" @click="removeRequirement(item)">
+            <md-menu-item @click="removeRequirement(item)">
               <span> <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon mr-10" />Delete</span>
             </md-menu-item>
-            <md-menu-item class="md-purple" @click="editingComment = true">
+            <md-menu-item @click="editingComment = true">
               <span>
                 <img :src="`${$iconURL}common/comment-dark.svg`" class="label-icon mr-10" />{{
                   item.comment ? `Edit Comment` : `Add comment`
                 }}</span
               >
             </md-menu-item>
-            <md-menu-item class="md-purple" @click="addAlternative">
+            <md-menu-item @click="addAlternative">
               <span>
                 <md-icon class="color-black mr-10">add_circle_outline</md-icon>
                 Add an alternative
               </span>
             </md-menu-item>
-            <md-menu-item class="md-purple" @click="setValue('isComplimentary', !item.isComplimentary)">
+            <md-menu-item @click="setValue('isComplimentary', !item.isComplimentary)">
               <span>
                 <img :src="`${$iconURL}common/gift-dark.svg`" class="label-icon mr-10" />
                 {{ !item.isComplimentary ? "Mark as complimentary" : "Remove complimentary" }}
@@ -113,13 +113,13 @@
         <textarea class="mt-20" v-model="item.comment"></textarea>
         <div>
           <md-button class="md-black md-simple maryoku-btn" @click="editingComment = false">Cancel</md-button>
-          <md-button class="md-vendor maryoku-btn" @click="save(item)">Save</md-button>
+          <md-button class="md-red maryoku-btn" @click="save(item)">Save</md-button>
         </div>
       </div>
     </div>
     <div v-if="isEdit" class="text-right save-button mt-10">
       <md-button class="md-black maryoku-btn md-simple cancel" @click="cancel()">Cancel</md-button>
-      <md-button class="md-vendor maryoku-btn save" @click="save(item)">Save</md-button>
+      <md-button class="md-red maryoku-btn save" @click="save(item)">Save</md-button>
     </div>
     <div class="planner-options" v-if="item.plannerOptions.length > 0">
       <img
@@ -187,12 +187,12 @@
         </div>
         <div class="text-right pt-10" v-if="plannerOption.isEdit">
           <md-button class="md-simple maryoku-btn md-black" @click="cancelAlternative(index)"> Cancel </md-button>
-          <md-button class="maryoku-btn md-vendor" @click="saveAlternative(index)"> Save </md-button>
+          <md-button class="maryoku-btn md-red" @click="saveAlternative(index)"> Save </md-button>
         </div>
       </div>
       <div class="planner-options-item">
         <div class="ml-50">
-          <md-button class="md-simple edit-btn md-vendor" @click="addAlternative">
+          <md-button class="md-simple edit-btn md-red" @click="addAlternative">
             <md-icon>add_circle_outline</md-icon>
             Add option {{ ("0" + (item.plannerOptions.length + 1)).slice(-2) }}
           </md-button>
@@ -287,7 +287,7 @@
         <textarea class="mt-20" v-model="item.comment"></textarea>
         <div>
           <md-button class="md-black md-simple maryoku-btn" @click="editingComment = false">Cancel</md-button>
-          <md-button class="md-vendor maryoku-btn" @click="save(item)">Save</md-button>
+          <md-button class="md-red maryoku-btn" @click="save(item)">Save</md-button>
         </div>
       </div>
     </div>
@@ -369,13 +369,13 @@
         <textarea class="mt-20" v-model="item.comment"></textarea>
         <div>
           <md-button class="md-black md-simple maryoku-btn" @click="editingComment = false">Cancel</md-button>
-          <md-button class="md-vendor maryoku-btn" @click="save(item)">Save</md-button>
+          <md-button class="md-red maryoku-btn" @click="save(item)">Save</md-button>
         </div>
       </div>
     </div>
     <div v-if="isEdit" class="text-right save-button mt-10">
       <md-button class="md-black maryoku-btn md-simple cancel" @click="cancel()">Cancel</md-button>
-      <md-button class="md-vendor maryoku-btn save" @click="save(item)">Save</md-button>
+      <md-button class="md-red maryoku-btn save" @click="save(item)">Save</md-button>
     </div>
   </div>
 </template>
@@ -627,7 +627,7 @@ export default {
       &.save {
         font: 800 16px "Manrope-Regular", sans-serif;
         color: white;
-        background: #641856;
+        background: #f51355;
         border-radius: 3px;
       }
       &:hover {
@@ -688,5 +688,4 @@ export default {
 .md-menu-content {
   max-height: max-content !important;
 }
-
 </style>

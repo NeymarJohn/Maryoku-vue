@@ -78,7 +78,7 @@
         </div>
         <div class="field">
           <md-button
-            class="md-vendor maryoku-btn width-100"
+            class="md-red maryoku-btn width-100"
             :disabled="isDisabledAdd"
             @click="saveItem(serviceItem, serviceItemSize, qty, unit)"
           >

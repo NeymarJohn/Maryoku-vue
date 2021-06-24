@@ -509,7 +509,7 @@ export default {
       padding: 1.5rem 0;
       top: 0;
       i {
-        color: #641856 !important;
+        color: #f51355 !important;
       }
     }
     .next {
@@ -521,7 +521,7 @@ export default {
       padding: 1.5rem 0;
       top: 0;
       i {
-        color: #641856 !important;
+        color: #f51355 !important;
       }
     }
   }
@@ -548,7 +548,7 @@ export default {
     &.save {
       font: 800 16px "Manrope-Regular", sans-serif;
       color: white;
-      background: #641856;
+      background: #f51355;
       border-radius: 3px;
 
       &.isDisabled {
@@ -744,7 +744,7 @@ export default {
         margin-bottom: 30px;
       }
       .upload {
-        border: 1px dashed #641856;
+        border: 1px dashed #f51355;
         margin: 0 34px;
         padding: 32px;
         cursor: pointer;
@@ -754,8 +754,8 @@ export default {
           font-size: 14px;
           font-weight: 800;
           padding: 8px 24px;
-          color: #641856;
-          border: 1px solid #641856;
+          color: #f51355;
+          border: 1px solid #f51355;
           border-radius: 3px;
           display: inline-block;
 

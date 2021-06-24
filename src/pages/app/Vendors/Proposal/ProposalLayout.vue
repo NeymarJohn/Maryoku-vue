@@ -33,7 +33,7 @@
         <template slot="header">
           <div class="saved-it-modal__header">
             <img :src="`${proposalIconsUrl}thanks-proposal.png`" />
-            <div class="font-size-30 font-bold color-vendor mt-30">Thank you for submitting a proposal!</div>
+            <div class="font-size-30 font-bold color-red mt-30">Thank you for submitting a proposal!</div>
             <div class="text-center font-size-22 mt-40 mb-40">You will get a reply in 4 days</div>
           </div>
           <button class="close" @click="hideModal()">
@@ -43,10 +43,10 @@
         <template slot="body">
           <div class="saved-it-modal__body">
             <div>
-              <md-button class="md-simple maryoku-btn md-vendor" @click="goToProcessingGuid">
+              <md-button class="md-simple maryoku-btn md-red" @click="goToProcessingGuid">
                 How does our bidding process work?
               </md-button>
-              <md-button class="md-simple maryoku-btn md-vendor md-outlined" @click="goToVendorProfile"
+              <md-button class="md-simple maryoku-btn md-red md-outlined" @click="goToVendorProfile"
                 >Go to my Dashboard</md-button
               >
             </div>
@@ -238,7 +238,7 @@ export default {
               title: `You saved the current proposal. You can edit anytime later!`,
               buttonsStyling: false,
               type: "success",
-              confirmButtonClass: "md-button  md-vendor",
+              confirmButtonClass: "md-button md-success",
             });
           }
         });
@@ -348,9 +348,9 @@ export default {
         cursor: pointer;
         font-size: 20px;
         font-weight: 800;
-        color: #641856;
+        color: #f51355;
         i {
-          color: #641856;
+          color: #f51355;
         }
       }
     }
@@ -404,8 +404,8 @@ export default {
           }
         }
         &.save {
-          border: 1px solid #641856;
-          color: #641856;
+          border: 1px solid #f51355;
+          color: #f51355;
           margin-right: 41px;
           img {
             width: 25px;
@@ -435,7 +435,7 @@ export default {
       h3 {
         font-size: 30px;
         font-weight: bold;
-        color: #641856;
+        color: #f51355;
 
         img {
           width: 55px;
@@ -483,7 +483,7 @@ export default {
   }
 
   .active {
-    background-color: #641856 !important;
+    background-color: #f51355 !important;
 
     i {
       color: #ffffff !important;
@@ -493,7 +493,7 @@ export default {
     font-size: 16px;
     font-weight: bold;
     color: #ffffff;
-    background-color: #641856;
+    background-color: #f51355;
     border-radius: 3px;
     padding: 8px 36px;
     cursor: pointer;
@@ -502,11 +502,11 @@ export default {
   .hide-full {
     font-size: 16px;
     font-weight: 800;
-    color: #641856;
+    color: #f51355;
     cursor: pointer;
 
     i {
-      color: #641856;
+      color: #f51355;
     }
   }
 }

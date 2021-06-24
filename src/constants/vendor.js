@@ -72,19 +72,19 @@ export const businessCategories = [
           //   items: [
           //     {
           //       name: 'hotel acommondations within walking distance',
-          //       type: 'Boolean',
+          //       type: Boolean,
           //       value: false,
           //       xIncluded: true,
           //     },
           //     {
           //       name: 'shopping centers',
-          //       type: 'Boolean',
+          //       type: Boolean,
           //       value: false,
           //       xIncluded: true,
           //     },
           //     {
           //       name: 'dining options within walking distance',
-          //       type: 'Boolean',
+          //       type: Boolean,
           //       value: false,
           //       xIncluded: true,
           //     },
@@ -94,82 +94,82 @@ export const businessCategories = [
             name: "the space",
             items: [
               {
-                name: "Number of function spaces",
-                type: 'Number',
+                name: "number of function spaces",
+                type: Number,
                 value: 1,
                 xIncluded: true,
                 hideOnAutoComplete: true
               },
               {
-                name: "Number of meeting rooms",
-                type: 'Number',
+                name: "number of meeting rooms",
+                type: Number,
                 value: 1,
                 xIncluded: true,
                 hideOnAutoComplete: true
               },
               // {
               //   name: 'indoor event space',
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               //   xIncluded: true,
               // },
               // {
               //   name: 'outdoor event space',
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               //   xIncluded: true,
               // },
               {
                 name: "Raw Event space",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
                 hideOnAutoComplete: true
               },
               {
                 name: "Furnished Event space",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
                 hideOnAutoComplete: true
               },
               {
                 name: "smoking section",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
                 hideOnAutoComplete: true
               },
               {
                 name: "separate cocktail hour space",
-                type: 'Boolean',
+                type: Boolean,
                 value: true,
                 xIncluded: false,
                 hideOnAutoComplete: true
               },
               {
                 name: "outside area for guests",
-                type: 'Boolean',
+                type: Boolean,
                 value: true,
                 xIncluded: false,
                 hideOnAutoComplete: true
               },
               // {
               //   name: 'kitchen for outside caterers',
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: true,
               //   xIncluded: false,
               // },
               {
                 name: "available bathrooms",
-                type: 'Number',
+                type: Number,
                 value: 1,
                 xIncluded: true,
                 hideOnAutoComplete: true
               },
               {
                 name: "coat check",
-                type: 'Boolean',
+                type: Boolean,
                 value: null,
                 xIncluded: false,
                 comment: true,
@@ -181,13 +181,13 @@ export const businessCategories = [
             items: [
               {
                 name: "on site parking",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: false,
               },
               {
                 name: "on street parking",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
                 hideOnAutoComplete: true
@@ -199,25 +199,25 @@ export const businessCategories = [
           //   items: [
           //     {
           //       name: 'artificial lighting',
-          //       type: 'Boolean',
+          //       type: Boolean,
           //       value: false,
           //       xIncluded: true,
           //     },
           //     {
           //       name: 'natural lighting space',
-          //       type: 'Boolean',
+          //       type: Boolean,
           //       value: false,
           //       xIncluded: true,
           //     },
           //     // {
           //     //   name: 'control of lighting during event',
-          //     //   type: 'Boolean',
+          //     //   type: Boolean,
           //     //   value: false,
           //     //   xIncluded: true,
           //     // },
           //     {
           //       name: "light effects",
-          //       type: 'Boolean',
+          //       type: Boolean,
           //       value: false,
           //       xIncluded: false,
           //       comment: true,
@@ -229,12 +229,12 @@ export const businessCategories = [
             items: [
               {
                 name: 'fast reliable Wifi for guests',
-                type: 'Boolean',
+                type: Boolean,
                 value: false
               },
               {
                 name: "venue bandwidth (for video streaming)",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 hideOnAutoComplete: true
               },
@@ -245,13 +245,13 @@ export const businessCategories = [
             items: [
               {
                 name: "stage",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 hideOnAutoComplete: true
               },
               {
                 name: "dance floor",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 hideOnAutoComplete: true
               },
@@ -267,7 +267,7 @@ export const businessCategories = [
             items: [
               {
                 name: "valet services",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -277,7 +277,7 @@ export const businessCategories = [
             items: [
               {
                 name: "cleaning services during the event",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -292,13 +292,13 @@ export const businessCategories = [
             items: [
               {
                 name: "accessbility for people with disabilities",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
                 name: "accessible bathrooms",
-                type: 'Number',
+                type: Number,
                 value: 1,
                 xIncluded: true,
               },
@@ -314,32 +314,32 @@ export const businessCategories = [
             items: [
               {
                 name: "chairs",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "outdoor chairs",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "high chairs",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "tables",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "outdoor tables",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "high tables",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -349,13 +349,13 @@ export const businessCategories = [
             items: [
               {
                 name: "power supply",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 hideOnAutoComplete: true
               },
               {
                 name: "generator",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 hideOnAutoComplete: true
               },
@@ -366,68 +366,68 @@ export const businessCategories = [
             items: [
               {
                 name: "microphones",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 dry: null,
               },
               {
                 name: "projector",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 dry: null,
               },
               {
                 name: "sound system",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 dry: null,
                 hideOnAutoComplete: true
               },
               {
                 name: "LCD displays",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 dry: null,
               },
               {
                 name: "monitor",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 dry: null,
               },
               {
                 name: "Built in Screen",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 dry: null,
               },
               {
                 name: "Clickers",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 dry: null,
               },
               {
                 name: "Teleprompter",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 dry: null,
               },
               {
                 name: "Riser",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 dry: null,
               },
               {
                 name: "Switcher",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 dry: null,
               },
               // {
               //   name: 'speaker / sound system',
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               //   dry: null,
               // },
@@ -443,49 +443,49 @@ export const businessCategories = [
             items: [
               {
                 name: "event coordinator",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               // {
               //   name: 'cleaning staff',
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               //   staff: null,
               //   quest: null,
               // },
               // {
               //   name: "Catering and Waite Staff",
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               //   staff: null,
               //   quest: null,
               // },
               {
                 name: "security",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               // {
               //   name: 'receptionist',
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               //   staff: null,
               //   quest: null,
               // },
               {
                 name: "technical support",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               // {
               //   name: 'bathroom attendant',
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               //   staff: null,
               //   quest: null,
@@ -502,30 +502,30 @@ export const businessCategories = [
             items: [
               {
                 name: "green policy applied",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Water saving protocols in place",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "We use Green power and energy efficient",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Waste recycle procedures",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Non toxic products",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -535,25 +535,25 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -564,19 +564,19 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
@@ -675,7 +675,7 @@ export const businessCategories = [
               },
               {
                 name: "specialty bar services",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               // {
@@ -686,7 +686,7 @@ export const businessCategories = [
               // },
               {
                 name: "non alcoholic specials",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 // xIncluded: true,
                 // available: ['smoothies & juices', 'hawaiian', 'coffee', 'tea', 'power drinks']
@@ -703,7 +703,7 @@ export const businessCategories = [
             items: [
               {
                 name: "appetizers",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 available: ["appetizers", "passed hors doeuvres", "stations", "buffet", "plated"],
               },
@@ -730,27 +730,27 @@ export const businessCategories = [
               },
               {
                 name: "lunch",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
                 hideOnAutoComplete: true
               },
               {
                 name: "dinner",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
                 hideOnAutoComplete: true
               },
               {
                 name: "snacks",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
                 name: "desserts",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
                 hideOnAutoComplete: true
@@ -762,17 +762,17 @@ export const businessCategories = [
             items: [
               {
                 name: "table setup and preparations",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "interactive stations",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "set up centerpieces, name cards, favors, etc",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -782,7 +782,7 @@ export const businessCategories = [
             items: [
               {
                 name: "breakdown, cleaning and pickup",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -797,12 +797,12 @@ export const businessCategories = [
             items: [
               {
                 name: "chairs",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "tables",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -812,32 +812,32 @@ export const businessCategories = [
             items: [
               {
                 name: "linens & tablecloth",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "glassware",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Utensils",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "disposables",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Plateware",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "customized items",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
@@ -859,7 +859,7 @@ export const businessCategories = [
             items: [
               {
                 name: "captain",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
@@ -867,7 +867,7 @@ export const businessCategories = [
               },
               {
                 name: "maltre d",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
@@ -880,13 +880,13 @@ export const businessCategories = [
             items: [
               {
                 name: "chef",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 // hideOnAutoComplete: true
               },
               {
                 name: "specialty chef",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -896,17 +896,17 @@ export const businessCategories = [
             items: [
               {
                 name: "servers",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "busboys",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "cleanup crew",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 hideOnAutoComplete: true
               },
@@ -917,13 +917,13 @@ export const businessCategories = [
             items: [
               {
                 name: "waitstaff",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               // {
-              //   name: "Number of waitstaff",
+              //   name: "number of waitstaff",
               //   hasComment: true,
-              //   type: 'Number',
+              //   type: Number,
               //   value: 0,
               //   xIncluded: true,
               //   hideOnAutoComplete: true
@@ -946,31 +946,31 @@ export const businessCategories = [
             items: [
               {
                 name: "green policy applied",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Water saving protocols in place",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "We use Green power and energy efficient",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Waste recycle procedures",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Non toxic products",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
@@ -981,61 +981,61 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "vegetarian",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "vegan",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "gluten - free",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "egg free",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "kosher",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "halal",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -1046,25 +1046,25 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -1085,23 +1085,23 @@ export const businessCategories = [
             items: [
               {
                 name: "customer pickup",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 hideOnAutoComplete: true
               },
               {
                 name: "onsite setup",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "cleanup",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Installation & Removal of Old items",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -1111,42 +1111,42 @@ export const businessCategories = [
             items: [
               {
                 name: "digital decor",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "holiday decor",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "decor in motion",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "live decor",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "lighting decor",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "specialized theme designs",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "flower decor",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "designs serivces",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -1161,22 +1161,22 @@ export const businessCategories = [
             items: [
               {
                 name: "Plants",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Extra flowers for caterer (boufet decor)",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Refrigerated Truck",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Permanent botanical arrangements",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -1186,12 +1186,12 @@ export const businessCategories = [
             items: [
               {
                 name: "special effects (pyrotechnic, waterfall, baloon, explosion, etc)",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "props",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -1206,31 +1206,31 @@ export const businessCategories = [
             items: [
               {
                 name: "green policy applied",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Water saving protocols in place",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "We use Green power and energy efficient",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Waste recycle procedures",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Non toxic products",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -1241,37 +1241,37 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "hypoallergenic flowers",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "non scented flowers",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -1282,25 +1282,25 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -1321,17 +1321,17 @@ export const businessCategories = [
             items: [
               {
                 name: "event staffing",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "transportation host",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "models",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
@@ -1342,22 +1342,22 @@ export const businessCategories = [
               },
               {
                 name: "hospitality professional",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Food Server",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Administrative Duties",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Accounting",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -1367,32 +1367,32 @@ export const businessCategories = [
             items: [
               {
                 name: "general guest services",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "consierge services",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "VIP services",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "day-of coordination",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "hosting",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "tours & sightseeing",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
@@ -1403,7 +1403,7 @@ export const businessCategories = [
               },
               {
                 name: "last minute onsite fitting (tux, suits)",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -1418,7 +1418,7 @@ export const businessCategories = [
             items: [
               {
                 name: "suit / tuxido rentals",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -1433,31 +1433,31 @@ export const businessCategories = [
             items: [
               {
                 name: "green policy applied",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Water saving protocols in place",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "We use Green power and energy efficient",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Waste recycle procedures",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Non toxic products",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -1468,25 +1468,25 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -1497,25 +1497,25 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -1536,25 +1536,25 @@ export const businessCategories = [
             items: [
               {
                 name: "journalistic",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 hideOnAutoComplete: true
               },
               {
                 name: "studio",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 hideOnAutoComplete: true
               },
               {
                 name: "traditional",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 hideOnAutoComplete: true
               },
               {
                 name: "candid",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 hideOnAutoComplete: true
               },
@@ -1565,22 +1565,22 @@ export const businessCategories = [
             items: [
               {
                 name: "video",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               // {
               //   name: "audio",
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               // },
               {
                 name: "photo",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "photo invitations / thank you",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -1590,17 +1590,17 @@ export const businessCategories = [
             items: [
               {
                 name: "physical proof/print",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "flash drive",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "digital download",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -1610,13 +1610,13 @@ export const businessCategories = [
             items: [
               {
                 name: "adapt equipment mobility to program",
-                type: 'Number',
+                type: Number,
                 value: 0,
                 hideOnAutoComplete: true
               },
               {
                 name: "setup & breakdown",
-                type: 'Boolean',
+                type: Boolean,
                 value: 0,
               },
             ],
@@ -1636,13 +1636,13 @@ export const businessCategories = [
               },
               {
                 name: "crane",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 hideOnAutoComplete: true
               },
               // {
               //   name: "simulacasting/live streaming",
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               // },
             ],
@@ -1657,31 +1657,31 @@ export const businessCategories = [
             items: [
               {
                 name: "green policy applied",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Water saving protocols in place",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "We use Green power and energy efficient",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Waste recycle procedures",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Non toxic products",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -1692,26 +1692,26 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
 
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
 
@@ -1723,25 +1723,25 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
@@ -1762,12 +1762,12 @@ export const businessCategories = [
             items: [
               // {
               //   name: "speech writing",
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               // },
               // {
               //   name: "press releases",
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               // },
               // {
@@ -1778,12 +1778,12 @@ export const businessCategories = [
               // },
               // {
               //   name: "social media promotion",
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               // },
               {
                 name: "media pitch",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -1793,32 +1793,32 @@ export const businessCategories = [
             items: [
               {
                 name: "branding strategy",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "consultation",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Website Development",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Digital Newsletter",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "e-Marketing Strategies",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Catalog (Digital & Print)",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -1828,42 +1828,42 @@ export const businessCategories = [
             items: [
               {
                 name: "Invitations",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Menus",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Place cards",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Tent cards",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Post Cards",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Business Cards",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Large Print Items (Blueprints, CAD Drawings)",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Binding & Laminating",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -1873,27 +1873,27 @@ export const businessCategories = [
             items: [
               {
                 name: "Posters",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Banners",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Presentation Boards",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Window Graphics",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Outdoor Signage",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -1903,7 +1903,7 @@ export const businessCategories = [
             items: [
               {
                 name: "graphic design services",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -1913,17 +1913,17 @@ export const businessCategories = [
             items: [
               {
                 name: "guest lists",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "translation",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               // {
               //   name: "transcription",
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               // },
             ],
@@ -1977,12 +1977,12 @@ export const businessCategories = [
             items: [
               {
                 name: "custom prints",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "branded lighting effect",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -1997,31 +1997,31 @@ export const businessCategories = [
             items: [
               {
                 name: "green policy applied",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Water saving protocols in place",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "We use Green power and energy efficient",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Waste recycle procedures",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Non toxic products",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -2032,25 +2032,25 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
@@ -2061,25 +2061,25 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
@@ -2100,27 +2100,27 @@ export const businessCategories = [
             items: [
               // {
               //   name: "taxi",
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               // },
               {
                 name: "airport pickup/drop off",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "round trip",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "one way",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "tours",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -2135,28 +2135,28 @@ export const businessCategories = [
             items: [
               {
                 name: "uniformed drivers",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
                 name: "transportation coordinator",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
                 name: "uniform style",
-                type: 'Boolean',
+                type: Boolean,
                 value: "",
                 staff: null,
                 quest: null,
               },
               // {
               //   name: "certified safe drive",
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               //   staff: null,
               //   quest: null,
@@ -2173,32 +2173,32 @@ export const businessCategories = [
             items: [
               {
                 name: "wifi",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "bar",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "luggage pickup",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "food",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "TV/Cable TV",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "restrooms",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -2213,31 +2213,31 @@ export const businessCategories = [
             items: [
               {
                 name: "green policy applied",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Water saving protocols in place",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "We use Green power and energy efficient",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Waste recycle procedures",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Non toxic products",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -2248,25 +2248,25 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -2277,25 +2277,25 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -2316,34 +2316,34 @@ export const businessCategories = [
             items: [
               {
                 name: "DJ",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "instrument",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 hideOnAutoComplete: true
               },
               {
                 name: "vocalist",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 hideOnAutoComplete: true
               },
               {
                 name: "motivators",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "specialty DJ(ethnic music)",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "Act as MC",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -2353,37 +2353,37 @@ export const businessCategories = [
             items: [
               {
                 name: "one man instrument",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "trio",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "quartet",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               // {
               //   name: "vocalist",
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               // },
               {
                 name: "orchestra",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "nine pieces and plus",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "specialty band (ethnic music, rock and roll etc)",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -2400,17 +2400,17 @@ export const businessCategories = [
               },
               {
                 name: "singers",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "keynote speaker / special MC",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "theme entertainment ( dancers, shows, illusionist etc )",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -2420,54 +2420,54 @@ export const businessCategories = [
             items: [
               {
                 name: "team building",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "events and shows",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "museum & art gallery visits",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "classes",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "sport",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "family activities",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "children activities",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "food",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 hideOnAutoComplete: true
               },
               {
                 name: "wine/beer/bourbon/etc",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 hideOnAutoComplete: true
               },
               {
                 name: "sightseeing",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -2477,12 +2477,12 @@ export const businessCategories = [
             items: [
               {
                 name: "onsite coordinatores, instructors, guides",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "setup/breakdown hours included",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 unit: "hour",
               },
@@ -2498,27 +2498,27 @@ export const businessCategories = [
             items: [
               {
                 name: "audio equipment",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "stage light",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "dance floor",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "specialty lighting (pinpoint, strobe)",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "theatrical staging",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -2533,7 +2533,7 @@ export const businessCategories = [
             items: [
               {
                 name: "activity is suitable for people with disabilities",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 hideOnAutoComplete: true
               },
@@ -2549,31 +2549,31 @@ export const businessCategories = [
             items: [
               {
                 name: "green policy applied",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Water saving protocols in place",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "We use Green power and energy efficient",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Waste recycle procedures",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Non toxic products",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -2584,25 +2584,25 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -2613,25 +2613,25 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -2652,52 +2652,52 @@ export const businessCategories = [
             items: [
               {
                 name: "risk assessment",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "VIP security",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "executive protection",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "disaster security team",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "active shooter",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "training",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "firearms training",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "K9 detection services",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "licensed to carry fire arms",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "parameter security",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -2707,7 +2707,7 @@ export const businessCategories = [
             items: [
               {
                 name: "chaperones",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 // xIncluded: true,
                 staff: null,
@@ -2715,56 +2715,56 @@ export const businessCategories = [
               },
               {
                 name: "patrolling officers",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
                 name: "bouncers",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
                 name: "body guards",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
                 name: "armed security officers",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
                 name: "unarmed security",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
                 name: "undercover",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
                 name: "crowd control",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
                 name: "certified security personnel ",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
@@ -2781,7 +2781,7 @@ export const businessCategories = [
             items: [
               {
                 name: "special equipment",
-                type: 'Boolean',
+                type: Boolean,
                 value: 0,
                 hideLabelForValue: true
               },
@@ -2797,31 +2797,31 @@ export const businessCategories = [
             items: [
               {
                 name: "green policy applied",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Water saving protocols in place",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "We use Green power and energy efficient",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Waste recycle procedures",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Non toxic products",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -2832,25 +2832,25 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -2871,27 +2871,27 @@ export const businessCategories = [
             items: [
               {
                 name: "sound system",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               // {
               //   name: "production",
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               // },
               // {
               //   name: "Backdrop/Scenic & Decor",
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               // },
               {
                 name: "rigging",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               // {
               //   name: "programmer",
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               // },
             ],
@@ -2907,12 +2907,12 @@ export const businessCategories = [
               },
               // {
               //   name: "ZAP shots",
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               // },
               {
                 name: "cranes",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -2922,12 +2922,12 @@ export const businessCategories = [
             items: [
               // {
               //   name: "Event Services",
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               // },
               {
                 name: "Outdoor Staging & Tents",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -2937,22 +2937,22 @@ export const businessCategories = [
             items: [
               {
                 name: "special effects",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "special equipment",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "simulcasting",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "cordless mics",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -2967,35 +2967,35 @@ export const businessCategories = [
             items: [
               {
                 name: "sound/visual engineer",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               {
                 name: "setup crew",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
               },
               // {
               //   name: "programmer",
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               //   staff: null,
               //   quest: null,
               // },
               // {
               //   name: "event manager",
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               //   staff: null,
               //   quest: null,
               // },
               {
                 name: "rigging",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 staff: null,
                 quest: null,
@@ -3012,31 +3012,31 @@ export const businessCategories = [
             items: [
               {
                 name: "green policy applied",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Water saving protocols in place",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "We use Green power and energy efficient",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Waste recycle procedures",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Non toxic products",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -3047,25 +3047,25 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -3076,25 +3076,25 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
                 xIncluded: true,
               },
@@ -3115,67 +3115,67 @@ export const businessCategories = [
             items: [
               {
                 name: "ceremonial items",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "specialty food & liquor",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "tech items",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "apparel",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "drinkware",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "bags",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "wellness",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "fitness items",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "office items",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "travel items",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "outdoor & leisure items",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "stationary",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "safety",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
@@ -3195,32 +3195,32 @@ export const businessCategories = [
             items: [
               {
                 name: "rushed orders",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "graphic design",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "special requests",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "printing",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "stuffing and packaging",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "customization",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -3235,31 +3235,31 @@ export const businessCategories = [
             items: [
               {
                 name: "green policy applied",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Water saving protocols in place",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "We use Green power and energy efficient",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Waste recycle procedures",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Non toxic products",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -3270,31 +3270,31 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "provide sample",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -3311,25 +3311,25 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -3350,22 +3350,22 @@ export const businessCategories = [
             items: [
               {
                 name: "onsite supervisors during event",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "special delivery and pickup",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "pre-inspection",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "set-up & tear-Down",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -3380,32 +3380,32 @@ export const businessCategories = [
             items: [
               {
                 name: "chairs",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "tables",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "tableware",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "special catering rental equipment",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "table coverings",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "furniture / props",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -3415,22 +3415,22 @@ export const businessCategories = [
             items: [
               // {
               //   name: "screens",
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               // },
               {
                 name: "projections",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               // {
               //   name: "recordings",
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               // },
               // {
               //   name: "video conferencing",
-              //   type: 'Boolean',
+              //   type: Boolean,
               //   value: false,
               // },
             ],
@@ -3440,37 +3440,37 @@ export const businessCategories = [
             items: [
               {
                 name: "tents",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "air conditioning",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "generator",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "tent lighting",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "flooring and carpeting",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "portable bathrooms",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
               {
                 name: "liners",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -3480,7 +3480,7 @@ export const businessCategories = [
             items: [
               {
                 name: "staging, podiums, registration areas",
-                type: 'Boolean',
+                type: Boolean,
                 value: false,
               },
             ],
@@ -3495,31 +3495,31 @@ export const businessCategories = [
             items: [
               {
                 name: "green policy applied",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Water saving protocols in place",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "We use Green power and energy efficient",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Waste recycle procedures",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Non toxic products",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -3530,25 +3530,25 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -3559,25 +3559,25 @@ export const businessCategories = [
             items: [
               {
                 name: "Prioritizing diversity and inclution",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Women on senior staff",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Strict sexual harrasment policy",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
               {
                 name: "Acknowledge all religious and cultural holidays",
-                type: 'Boolean',
+                type: Boolean,
                 xIncluded: true,
                 value: false,
               },
@@ -3594,7 +3594,7 @@ export const generalInfos = [
     items: [
       {
         name: "recently renovated (up to 3 years)",
-        type: 'Boolean',
+        type: Boolean,
         value: false,
       },
     ],
@@ -3604,7 +3604,7 @@ export const generalInfos = [
     items: [
       {
         name: "seasonal menu update (at least twice anual)",
-        type: 'Boolean',
+        type: Boolean,
         value: false,
       },
     ],
@@ -3625,12 +3625,12 @@ export const generalInfos = [
     items: [
       {
         name: "amount of yearly corporate events out of total events",
-        type: 'Number',
+        type: Number,
         value: 0,
       },
       {
         name: "perform at more than one vent per day?",
-        type: 'Boolean',
+        type: Boolean,
         value: false,
       },
     ],
@@ -3744,37 +3744,37 @@ export const VendorPolicy = [
     items: [
       // {
       //   name: 'Allowed use of outside vendors',
-      //   type: 'Boolean',
+      //   type: Boolean,
       // },
 
       {
         name: "Suitable for infants",
-        type: 'Boolean',
+        type: Boolean,
         hasComment: true,
       },
       {
         name: "Audio restrictions",
-        type: 'Boolean',
+        type: Boolean,
         hasComment: true,
       },
       {
         name: "Decor restrictions",
-        type: 'Boolean',
+        type: Boolean,
         hasComment: true,
       },
       {
         name: "Dress code",
-        type: 'Boolean',
+        type: Boolean,
         hasComment: true,
       },
       {
         name: "Dry Hire",
-        type: 'Boolean',
+        type: Boolean,
         hasComment: true,
       },
       {
         name: "Pets",
-        type: 'Boolean',
+        type: Boolean,
         hasComment: true,
       },
     ],
@@ -3784,12 +3784,12 @@ export const VendorPolicy = [
     items: [
       {
         name: "Tastings prior to booking",
-        type: 'Boolean',
+        type: Boolean,
         cost: null,
       },
       {
         name: "Allow customer provided liquor",
-        type: 'Boolean',
+        type: Boolean,
       },
     ],
   },
@@ -3798,15 +3798,15 @@ export const VendorPolicy = [
     items: [
       {
         name: "Room temperature constraints(for flowers)",
-        type: 'Boolean',
+        type: Boolean,
       },
       {
         name: "Flexible time requirement for setup",
-        type: 'Boolean',
+        type: Boolean,
       },
       {
         name: "Working with unions",
-        type: 'Boolean',
+        type: Boolean,
       },
     ],
   },
@@ -3815,18 +3815,18 @@ export const VendorPolicy = [
     items: [
       {
         name: "Minimum hour of service",
-        type: 'Number',
+        type: Number,
         noSuffix: true,
         hasComment: true,
       },
       {
         name: "Max guest to staff ratio",
-        type: 'Number',
+        type: Number,
         isPercentage: true,
       },
       {
         name: "Work with Unions",
-        type: 'Boolean',
+        type: Boolean,
       },
     ],
   },
@@ -3835,23 +3835,23 @@ export const VendorPolicy = [
     items: [
       {
         name: "Must use in house graphics designer",
-        type: 'Boolean',
+        type: Boolean,
         hasComment: true,
       },
       {
         name: "Number of PR drafts",
-        type: 'Number',
+        type: Number,
         noSuffix: true,
         hasComment: true,
       },
       {
         name: "Customizable size of prints",
-        type: 'Boolean',
+        type: Boolean,
         hasComment: true,
       },
       {
-        name: "Minimum Number of prints",
-        type: 'Number',
+        name: "Minimum number of prints",
+        type: Number,
         noSuffix: true,
         hasComment: true,
       },
@@ -3866,13 +3866,13 @@ export const VendorPolicy = [
     items: [
       {
         name: "Minimum time needed for setup",
-        type: 'Number',
+        type: Number,
         noSuffix: true,
         hasComment: true,
       },
       {
         name: "Minimum tent time needed for set up",
-        type: 'Number',
+        type: Number,
         noSuffix: true,
         hasComment: true,
       },
@@ -3883,12 +3883,12 @@ export const VendorPolicy = [
     items: [
       {
         name: "Accept staff attire request",
-        type: 'Boolean',
+        type: Boolean,
       },
 
       {
         name: "Union crew restrictions",
-        type: 'Boolean',
+        type: Boolean,
         hasComment: true,
       },
     ],
@@ -3898,7 +3898,7 @@ export const VendorPolicy = [
     items: [
       {
         name: "Allow pickup",
-        type: 'Boolean',
+        type: Boolean,
       },
       {
         name: "Minimum size order",
@@ -3915,7 +3915,7 @@ export const VendorPolicy = [
     items: [
       {
         name: "Hourly Reservation Minimum",
-        type: 'Boolean',
+        type: Boolean,
         hasComment: true,
       },
       {
@@ -3943,26 +3943,26 @@ export const VendorPolicy = [
     items: [
       {
         name: "Accept requests from guests",
-        type: 'Boolean',
+        type: Boolean,
         hasComment: true,
       },
       {
         name: "Continuous band play time",
-        type: 'Boolean',
+        type: Boolean,
         hasComment: true,
       },
       {
         name: "Max group size",
-        type: 'Number',
+        type: Number,
         noSuffix: true,
       },
       {
         name: "Accessibility of activity",
-        type: 'Boolean',
+        type: Boolean,
       },
       {
         name: "Age restrictions",
-        type: 'Boolean',
+        type: Boolean,
         hasComment: true,
       },
       {
@@ -3973,19 +3973,19 @@ export const VendorPolicy = [
       },
       {
         name: "Performer require a meal",
-        type: 'Boolean',
+        type: Boolean,
       },
       {
         name: "Minimum Setup time required",
         subCategory: "charge",
-        type: 'Number',
+        type: Number,
         value: 0,
         noSuffix: true,
         unit: "hour",
       },
       {
         name: "Number of breaks",
-        type: 'Number',
+        type: Number,
         subCategory: "charge",
         value: 0,
         noSuffix: true,
@@ -4000,12 +4000,12 @@ export const VendorPolicy = [
       // },
       {
         name: "Flexible to different dress codes",
-        type: 'Boolean',
+        type: Boolean,
         hasComment: true,
       },
       {
         name: "Meet before signing contract",
-        type: 'Boolean',
+        type: Boolean,
         hasComment: true,
       },
       {
@@ -4016,7 +4016,7 @@ export const VendorPolicy = [
       },
       {
         name: "Handles Losgistics",
-        type: 'Boolean',
+        type: Boolean,
         hasComment: true,
       },
     ],
@@ -4026,23 +4026,23 @@ export const VendorPolicy = [
     items: [
       {
         name: "Visit the venue in advance",
-        type: 'Boolean',
+        type: Boolean,
       },
       {
         name: "Minimum hours of service",
-        type: 'Number',
+        type: Number,
         noSuffix: true,
         unit: "hour",
       },
       {
         name: "Max hours per shift",
-        type: 'Number',
+        type: Number,
         noSuffix: true,
         unit: "hour",
       },
       {
         name: "Dress code",
-        type: 'Boolean',
+        type: Boolean,
         hasComment: true,
       },
       {
@@ -4052,12 +4052,12 @@ export const VendorPolicy = [
       },
       {
         name: "Special attire requests",
-        type: 'Boolean',
+        type: Boolean,
         hasComment: true,
       },
       {
         name: "Pre-selection personal",
-        type: 'Boolean',
+        type: Boolean,
         hasComment: true,
       },
     ],
@@ -4071,17 +4071,17 @@ export const VendorPolicy = [
     items: [
       {
         name: "Flexible to last minute onsite changes",
-        type: 'Boolean',
+        type: Boolean,
       },
       {
         name: "Minimum amount of hours",
-        type: 'Number',
+        type: Number,
         noSuffix: true,
         unit: "hour",
       },
       {
         name: "Need to control room lighting",
-        type: 'Boolean',
+        type: Boolean,
       },
       {
         name: "Minimum internet bandwidth (Simulticasting, Streaming)",
@@ -4089,7 +4089,7 @@ export const VendorPolicy = [
       },
       {
         name: "Flexibility to operate with additional Photo / Video companies during the event",
-        type: 'Boolean',
+        type: Boolean,
       },
     ],
   },
@@ -4100,7 +4100,7 @@ export const VendorPricingPolicy = [
     items: [
       {
         name: "Minimum amount of rental hours required",
-        type: 'Number',
+        type: Number,
         noSuffix: true,
         labelForValue: "Number of hours",
         hasComment: true,
@@ -4110,7 +4110,7 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Hours included in rental",
-        type: 'Number',
+        type: Number,
         noSuffix: true,
         labelForValue: "Number of hours",
         hasComment: true,
@@ -4120,7 +4120,7 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Setup hours included in rental",
-        type: 'Number',
+        type: Number,
         labelForValue: "Number of hours",
         noSuffix: true,
         hasComment: true,
@@ -4129,13 +4129,13 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Minimum Spend",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         hideOnProposal: true
       },
       {
         name: "Cost Per Extra Guest (beyond agreed upon qty)",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         labelForValue: "Cost",
         isExtraService: true,
@@ -4145,7 +4145,7 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Overtime Cost(Rental)",
-        type: 'Number',
+        type: Number,
         units: ["Per hour", "All togeter"],
         hasComment: true,
         isExtraService: true,
@@ -4155,7 +4155,7 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Additional Set-up Hours",
-        type: 'Number',
+        type: Number,
         units: ["Per hour", "All togeter"],
         hasComment: true,
         isExtraService: true,
@@ -4165,7 +4165,7 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Late Night Fee",
-        type: 'Number',
+        type: Number,
         hasUnit: true,
         units: ["Per person", "All together"],
         isExtraService: true,
@@ -4176,7 +4176,7 @@ export const VendorPricingPolicy = [
       {
         name: "Discount for large quantities",
         hideOnProposal: true,
-        type: 'Number',
+        type: Number,
         isPercentage: true,
         hasComment: true,
         attendees: null,
@@ -4184,13 +4184,13 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Tax rate",
-        type: 'Number',
+        type: Number,
         isPercentage: true,
         hideOnProposal: true,
       },
       {
         name: "Suggested Gratuity",
-        type: 'Number',
+        type: Number,
         isPercentage: true,
         hideOnProposal: true,
       },
@@ -4201,12 +4201,12 @@ export const VendorPricingPolicy = [
     items: [
       {
         name: "Travel cost",
-        type: 'Number',
+        type: Number,
         hasComment: true,
       },
       {
         name: "Pickup",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         isExtraService: true,
         extraService: {
@@ -4216,7 +4216,7 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Cleanup",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         isExtraService: true,
         extraService: {
@@ -4225,7 +4225,7 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Late Night Fee",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         isExtraService: true,
         extraService: {
@@ -4234,7 +4234,7 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Breakdown",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         isExtraService: true,
         extraService: {
@@ -4243,7 +4243,7 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Discount for large quantities",
-        type: 'Number',
+        type: Number,
         hideOnProposal: true,
         isPercentage: true,
         hasComment: true,
@@ -4252,13 +4252,13 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Tax rate",
-        type: 'Number',
+        type: Number,
         isPercentage: true,
         hideOnProposal: true,
       },
       {
         name: "Suggested Gratuity",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         hideOnProposal: true,
       },
@@ -4269,12 +4269,12 @@ export const VendorPricingPolicy = [
     items: [
       {
         name: "Delivery",
-        type: 'Number',
+        type: Number,
         hasComment: true,
       },
       {
         name: "Setup",
-        type: 'Number',
+        type: Number,
         hasComment: true,
       },
       {
@@ -4291,20 +4291,20 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Tax rate",
-        type: 'Number',
+        type: Number,
         isPercentage: true,
         hideOnProposal: true,
       },
       {
         name: "Suggested Gratuity",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         isPercentage: true,
         hideOnProposal: true,
       },
       {
         name: "Service charges",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         hideOnProposal: true,
       },
@@ -4315,22 +4315,22 @@ export const VendorPricingPolicy = [
     items: [
       {
         name: "Travel distance to event",
-        type: 'Number',
+        type: Number,
         hasComment: true,
       },
       {
         name: "Special attire requests",
-        type: 'Number',
+        type: Number,
         hasComment: true,
       },
       {
         name: "Last minute requests",
-        type: 'Number',
+        type: Number,
         hasComment: true,
       },
       {
         name: "Discount for large quantities",
-        type: 'Number',
+        type: Number,
         hideOnProposal: true,
         isPercentage: true,
         hasComment: true,
@@ -4339,13 +4339,13 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Tax rate",
-        type: 'Number',
+        type: Number,
         isPercentage: true,
         hideOnProposal: true,
       },
       {
         name: "Suggested Gratuity",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         hideOnProposal: true,
       },
@@ -4356,17 +4356,17 @@ export const VendorPricingPolicy = [
     items: [
       {
         name: "Minimum package budget",
-        type: 'Number',
+        type: Number,
         hasComment: true,
       },
       {
         name: "Rush order",
-        type: 'Number',
+        type: Number,
         hasComment: true,
       },
       {
         name: "Discount for large quantities",
-        type: 'Number',
+        type: Number,
         hideOnProposal: true,
         isPercentage: true,
         hasComment: true,
@@ -4375,13 +4375,13 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Tax rate",
-        type: 'Number',
+        type: Number,
         isPercentage: true,
         hideOnProposal: true,
       },
       {
         name: "Suggested Gratuity",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         hideOnProposal: true,
       },
@@ -4396,34 +4396,34 @@ export const VendorPricingPolicy = [
     items: [
       {
         name: "Tent permit",
-        type: 'Number',
+        type: Number,
         hasComment: true,
       },
       {
         name: "Extra setup and breakdown charge",
-        type: 'Number',
+        type: Number,
         hasComment: true,
       },
       {
         name: "Late charge for returned items",
-        type: 'Number',
+        type: Number,
         hasComment: true,
       },
       {
         name: "Damage to equipment",
-        type: 'Number',
+        type: Number,
         hasComment: true,
       },
       {
         name: "Large quantity discount",
-        type: 'Number',
+        type: Number,
         isPercentage: true,
         hasComment: true,
         attendees: null,
       },
       {
         name: "Off-season discount",
-        type: 'Boolean',
+        type: Boolean,
         label: "Discount rate",
         discount: null,
         hasUnit: true,
@@ -4431,7 +4431,7 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Quantity discount",
-        type: 'Boolean',
+        type: Boolean,
         label: "Discount rage",
         discount: null,
         hasUnit: true,
@@ -4439,7 +4439,7 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Tax rate",
-        type: 'Number',
+        type: Number,
         isPercentage: true,
         hideOnProposal: true,
       },
@@ -4457,7 +4457,7 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Suggested Gratuity",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         hideOnProposal: true,
       },
@@ -4468,34 +4468,34 @@ export const VendorPricingPolicy = [
     items: [
       {
         name: "Rush job",
-        type: 'Number',
+        type: Number,
         hasComment: true,
       },
       {
         name: "Overtime",
-        type: 'Number',
+        type: Number,
         hasComment: true,
       },
       {
         name: "Simulcasting bandwidth requirements",
-        type: 'Number',
+        type: Number,
       },
       {
         name: "Tax rate",
-        type: 'Number',
+        type: Number,
         isPercentage: true,
         hideOnProposal: true,
       },
       {
         name: "Discounts",
-        type: 'Number',
+        type: Number,
         isPercentage: true,
         hasComment: true,
         hideOnProposal: true,
       },
       {
         name: "Suggested Gratuity",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         isPercentage: true,
         hideOnProposal: true,
@@ -4507,45 +4507,45 @@ export const VendorPricingPolicy = [
     items: [
       {
         name: "Rushed orders",
-        type: 'Number',
+        type: Number,
         hasComment: true,
       },
       {
         name: "Delivery",
-        type: 'Number',
+        type: Number,
         hasComment: true,
       },
       {
         name: "preparing file for printing",
-        type: 'Number',
+        type: Number,
         hasComment: true,
       },
       {
         name: "Multiple print locations",
-        type: 'Number',
+        type: Number,
         hasComment: true,
       },
       {
         name: "Number of different colors",
-        type: 'Number',
+        type: Number,
         hasComment: true,
       },
       {
         name: "Tax rate",
-        type: 'Number',
+        type: Number,
         isPercentage: true,
         hideOnProposal: true,
       },
       {
         name: "Discount for large quantites",
-        type: 'Number',
+        type: Number,
         hideOnProposal: true,
         hasComment: true,
         labelForValue: "How much",
       },
       {
         name: "Suggested Gratuity",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         hideOnProposal: true,
       },
@@ -4560,7 +4560,7 @@ export const VendorPricingPolicy = [
     items: [
       {
         name: "Tax rate",
-        type: 'Number',
+        type: Number,
         isPercentage: true,
         hideOnProposal: true,
       },
@@ -4607,7 +4607,7 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Suggested Gratuity",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         hideOnProposal: true,
       },
@@ -4619,7 +4619,7 @@ export const VendorPricingPolicy = [
       {
         name: "Hours included in service",
         subCategory: "charge",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         labelForValue: "Number of hours",
         noSuffix: true,
@@ -4629,7 +4629,7 @@ export const VendorPricingPolicy = [
       {
         name: "Rushed setup",
         subCategory: "charge",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         isExtraService: true,
         extraService: {
@@ -4661,7 +4661,7 @@ export const VendorPricingPolicy = [
       {
         name: "Extra for prizes",
         subCategory: "charge",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         isExtraService: true,
         extraService: {
@@ -4680,7 +4680,7 @@ export const VendorPricingPolicy = [
       {
         name: "Tax rate",
         subCategory: "tax",
-        type: 'Number',
+        type: Number,
         hideOnProposal: true,
         isPercentage: true,
       },
@@ -4698,7 +4698,7 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Suggested Gratuity",
-        type: 'Number',
+        type: Number,
         isPercentage: true,
         hideOnProposal: true,
       },
@@ -4713,7 +4713,7 @@ export const VendorPricingPolicy = [
     items: [
       {
         name: "Tax rate",
-        type: 'Number',
+        type: Number,
         isPercentage: true,
         hideOnProposal: true,
       },
@@ -4732,7 +4732,7 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Suggested Gratuity",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         hideOnProposal: true,
       },
@@ -4755,19 +4755,19 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Travel to multiple locations",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         value: ""
       },
       {
         name: "Additional Pictures (more than in package purchased)",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         value: ""
       },
       {
         name: "Discount for large quantity",
-        type: 'Boolean',
+        type: Boolean,
         attendees: null,
         hideOnProposal: true,
         labelForValue: "How much",
@@ -4775,14 +4775,14 @@ export const VendorPricingPolicy = [
       },
       {
         name: "Tax rate",
-        type: 'Number',
+        type: Number,
         isPercentage: true,
         hideOnProposal: true,
         value: ""
       },
       {
         name: "Suggested Gratuity",
-        type: 'Number',
+        type: Number,
         hasComment: true,
         hideOnProposal: true,
         isPercentage: true,

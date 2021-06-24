@@ -139,7 +139,7 @@ export default {
       this.$router.push({ path: "/forgot-password" });
     },
     redirectPage() {
-      this.$router.push({ path: "/vendor/dashboard" });
+      this.$router.push({ path: "/vendor/profile/settings" });
     },
   },
   data() {

@@ -102,7 +102,7 @@
             </div>
           </div>
           <div>
-            <md-button class="md-simple md-vendor edit-btn" @click="addNewChoice">
+            <md-button class="md-simple md-red edit-btn" @click="addNewChoice">
               <md-icon>add_circle_outline</md-icon>
               Add option {{ ("0" + (plannerChoices.length + 1)).slice(-2) }}</md-button
             >

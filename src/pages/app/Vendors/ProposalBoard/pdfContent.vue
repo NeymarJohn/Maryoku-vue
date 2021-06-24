@@ -211,8 +211,8 @@
                         </div>
                         <div class="item text-right" v-else>
                             <span
-                                v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour'">$</span>
-                            <span v-if="policy.type === 'Boolean'">
+                                v-if="policy.type === Number && !policy.isPercentage && policy.unit !== 'hour'">$</span>
+                            <span v-if="policy.type === Boolean">
               <img
                   v-if="policy.value === true"
                   :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"

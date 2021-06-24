@@ -91,7 +91,7 @@
                   </div>
                 </template>
               </li>
-              <!-- <li
+              <li
                 v-if="
                   calculatedTotal(getRequirementsByCategory('venuerental')) -
                     newProposalRequest.eventData.allocatedBudget >
@@ -108,7 +108,7 @@
                   }}
                   more than the budget
                 </span>
-              </li> -->
+              </li>
             </ul>
           </div>
         </div>
@@ -298,6 +298,27 @@ export default {
     getRequirementsByCategory(category) {
       return this.$store.state.proposalForNonMaryoku.proposalServices[category] || [];
     },
+    getRequirementsBySelectedCategory() {
+      let selectedCategories = [];
+      let selectedServices = [];
+
+      selectedCategories = this.additionalServices.map((as) => as.value);
+      selectedCategories.push("venuerental");
+
+      this.services
+        .filter((s) => selectedCategories.includes(s.name))
+        .map(function (cs) {
+          cs.categories.map(function (scs) {
+            scs.subCategories.map(function (sscs) {
+              sscs.items.map(function (ssscs) {
+                selectedServices.push(ssscs.name);
+              });
+            });
+          });
+        });
+
+      return this.newProposalRequest.requirements.filter((r) => selectedServices.includes(r.requirementTitle));
+    },
     total(requirements, category = null) {
       let total = 0;
       let vm = this;
@@ -372,9 +393,11 @@ export default {
     window.removeEventListener("scroll", this.handleScroll);
   },
   mounted() {
+    this.newProposalRequest = this.proposalRequest;
     this.iconsWithCategory = Object.assign([], categoryNameWithIcons);
 
     this.$root.$on("update-proposal-budget-summary", (newProposalRequest, discountBlock) => {
+      this.newProposalRequest = newProposalRequest;
       this.discountBlock = discountBlock;
     });
 
@@ -401,9 +424,12 @@ export default {
       "totalBeforeDiscount",
       "totalBeforeBundle",
     ]),
-
+    proposalRequest() {
+      return this.$store.state.proposalForNonMaryoku.proposalRequest;
+    },
     event() {
-      return this.$store.state.proposalForNonMaryoku.event;
+      if (!this.proposalRequest) return {};
+      return this.proposalRequest.eventData;
     },
     vendor() {
       return this.$store.state.proposalForNonMaryoku.vendor;

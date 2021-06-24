@@ -174,13 +174,14 @@ export default {
     this.$http.get(`${process.env.SERVER_URL}/1/userEventCustomers`).then((res) => {
       this.customers = res.data;
     });
+    console.log(this.defaultData);
     this.companyName = this.defaultData.company;
     this.company = this.defaultData.companyName;
     this.location = this.defaultData.location;
     this.isRegisteredCustomer = this.defaultData.isRegisteredCustomer;
     this.guests = this.defaultData.guests;
-    this.email = this.defaultData.customer ? this.defaultData.customer.email : "";
-    this.customer = this.defaultData.customer ? this.defaultData.customer.name : "";
+    this.email = this.defaultData.customer.email;
+    this.customer = this.defaultData.customer.name;
     this.date = moment(this.defaultData.date).format("MM.DD.YYYY");
     this.startTime.hh = moment(this.defaultData.startTime).format("hh");
     this.startTime.mm = moment(this.defaultData.startTime).format("mm");
@@ -259,7 +260,10 @@ export default {
         this.amPack.end = "AM";
       }
     },
-    changeDate(date) {},
+    changeDate(date) {
+      console.log("date", date);
+      console.log("changeDate");
+    },
     close() {
       this.$emit("cancel");
     },
@@ -303,6 +307,7 @@ export default {
     async fileAdded(file) {
       const extension = file.type.split("/")[1];
       let fileName = new Date().getTime();
+      console.log(file);
       this.fileName = file.name;
       let fileUrl = `https://maryoku.s3.amazonaws.com/events/proposal/${fileName}.${extension}`;
 
