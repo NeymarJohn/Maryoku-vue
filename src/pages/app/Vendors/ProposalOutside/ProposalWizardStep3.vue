@@ -50,25 +50,23 @@
               </li>
             </ul>
           </div>
-          <md-button class="md-vendor maryoku-btn change-cover-btn" @click="chooseFiles">
-            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
-            <span>Change Cover</span>
-          </md-button>
-          <input
-            style="display: none"
-            id="coverImage"
-            name="attachment"
-            type="file"
-            multiple="multiple"
-            @change="onFileChange"
-          />
         </div>
+        <md-button class="md-vendor maryoku-btn change-cover-btn" @click="chooseFiles">
+          <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
+          <span>Change Cover</span>
+        </md-button>
+        <input
+          style="display: none"
+          id="coverImage"
+          name="attachment"
+          type="file"
+          multiple="multiple"
+          @change="onFileChange"
+        />
       </div>
       <div class="event-summary-body">
         <div class="cover-letter font-bold-extra mb-50">
-          <h4 class="font-bold-extra text-transform-uppercase">
-            Dear {{ event.owner ? event.owner.displayName : "Planner" }},
-          </h4>
+          <h4 class="font-bold-extra text-transform-uppercase">Dear {{ event.customer.name }},</h4>
           <textarea v-model="personalMessage"> </textarea>
         </div>
 
@@ -560,7 +558,7 @@ export default {
     },
 
     event() {
-      return this.$store.state.proposalForNonMaryoku.vendor;
+      return this.$store.state.proposalForNonMaryoku.event;
     },
     additionalServices() {
       return this.$store.state.proposalForNonMaryoku.additionalServices;
@@ -636,7 +634,7 @@ export default {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        z-index: 10;
+        z-index: 2;
         i {
           color: #050505;
         }
@@ -651,7 +649,6 @@ export default {
     .preview-header-content {
       position: absolute;
       width: 100%;
-      height: 100%;
       left: 0;
       top: 0;
       z-index: 1;
@@ -722,6 +719,7 @@ export default {
     position: absolute;
     left: 50%;
     top: 70%;
+    z-index: 3;
   }
   .tabs-cont {
     display: flex;

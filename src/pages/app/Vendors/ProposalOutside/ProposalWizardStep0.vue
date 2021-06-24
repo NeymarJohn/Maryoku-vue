@@ -21,6 +21,7 @@
         placeholder="Type name of customer here..."
         :options="customers"
         :label="['company', 'name']"
+        :selectedValue="selectedCustomer"
         @change="selectCustomer"
       ></autocomplete>
     </div>
@@ -119,7 +120,11 @@
         </div>
       </div>
     </div>
-    <add-new-customer-modal v-if="showNewCustomerModal" @cancel="showNewCustomerModal = false"></add-new-customer-modal>
+    <add-new-customer-modal
+      v-if="showNewCustomerModal"
+      @cancel="showNewCustomerModal = false"
+      @save="handleSaveCustomer"
+    ></add-new-customer-modal>
   </div>
 </template>
 <script>
@@ -156,20 +161,6 @@ export default {
     this.$http.get(`${process.env.SERVER_URL}/1/userEventCustomers`).then((res) => {
       this.customers = res.data;
     });
-    // this.companyName = this.defaultData.company;
-    // this.company = this.defaultData.companyName;
-    // this.location = this.defaultData.location;
-    // this.guests = this.defaultData.guests;
-    // this.email = this.defaultData.customer ? this.defaultData.customer.email : "";
-    // this.customer = this.defaultData.customer ? this.defaultData.customer.name : "";
-    // this.date = moment(this.defaultData.date).format("MM.DD.YYYY");
-    // this.startTime.hh = moment(this.defaultData.startTime).format("hh");
-    // this.startTime.mm = moment(this.defaultData.startTime).format("mm");
-    // this.amPack.start = moment(this.defaultData.startTime).format("A");
-
-    // this.endTime.hh = moment(this.defaultData.endTime).format("hh");
-    // this.endTime.mm = moment(this.defaultData.endTime).format("mm");
-    // this.amPack.end = moment(this.defaultData.endTime).format("A");
     this.$store.dispatch("common/getEventTypes");
   },
   data() {
@@ -195,7 +186,6 @@ export default {
       link_proposal: null,
       attachment: null,
       customers: [],
-      selectedCustomer: null,
       fileUrl: null,
       fileName: null,
       dropzoneOptions: {
@@ -210,6 +200,11 @@ export default {
     };
   },
   methods: {
+    handleSaveCustomer(customer) {
+      this.customers.push(customer);
+      this.selectCustomer(customer);
+      this.showNewCustomerModal = false;
+    },
     selectCustomer(selectedCustomer) {
       this.selectedCustomer = selectedCustomer;
     },
@@ -288,6 +283,14 @@ export default {
     eventTypes() {
       console.log(this.$store.state.common.eventTypes);
       return this.$store.state.common.eventTypes;
+    },
+    selectedCustomer: {
+      get() {
+        return this.$store.state.proposalForNonMaryoku.event.customer;
+      },
+      set(value) {
+        this.$store.commit("proposalForNonMaryoku/setEventProperty", { key: "customer", value });
+      },
     },
   },
   watch: {

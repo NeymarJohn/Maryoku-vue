@@ -26,14 +26,14 @@
     </template>
     <template slot="footer">
       <md-button class="md-button md-black md-simple add-category-btn" @click="onCancel()">Cancel</md-button>
-      <md-button class="md-vendor md-bold add-category-btn" @click="sendQuestion">Send</md-button>
+      <md-button class="md-vendor md-bold add-category-btn" @click="saveCustomer">Send</md-button>
     </template>
   </modal>
 </template>
 
 <script>
 import { Modal, MaryokuInput } from "@/components";
-
+import UserEventCustomer from "@/models/UserEventCustomer";
 export default {
   name: "sharing-modal",
   components: {
@@ -54,12 +54,24 @@ export default {
   },
   created() {},
   methods: {
-    sendQuestion() {
-      this.$emit("sendEmail", this.editingVendor);
+    saveCustomer() {
+      const customer = {
+        company: this.company,
+        name: this.customer,
+        email: this.email,
+        vendor: { id: this.vendor.id },
+      };
+      new UserEventCustomer(customer).save().then((res) => {});
+      this.$emit("save", customer);
     },
 
     onCancel: function (e) {
       this.$emit("cancel");
+    },
+  },
+  computed: {
+    vendor() {
+      return this.$store.state.proposalForNonMaryoku.vendor;
     },
   },
 };

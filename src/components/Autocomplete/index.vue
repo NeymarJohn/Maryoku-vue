@@ -51,6 +51,10 @@ export default {
       type: [String, Array],
       default: "label",
     },
+    selectedValue: {
+      type: Object,
+      default: () => {},
+    },
   },
   methods: {
     hoverSuggestItem(index) {
@@ -93,6 +97,11 @@ export default {
       return this.options.filter((item) =>
         this.getOptionLabel(item).toLowerCase().includes(this.searchWord.toLowerCase()),
       );
+    },
+  },
+  watch: {
+    selectedValue(newValue, oldValue) {
+      this.searchWord = `${newValue.company} / ${newvalue.name}`;
     },
   },
 };

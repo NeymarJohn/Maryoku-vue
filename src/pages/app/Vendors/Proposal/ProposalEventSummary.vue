@@ -50,19 +50,19 @@
               </li>
             </ul>
           </div>
-          <md-button class="md-red maryoku-btn change-cover-btn" @click="chooseFiles">
-            <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
-            <span>Change Cover</span>
-          </md-button>
-          <input
-            style="display: none"
-            id="coverImage"
-            name="attachment"
-            type="file"
-            multiple="multiple"
-            @change="onFileChange"
-          />
         </div>
+        <md-button class="md-red maryoku-btn change-cover-btn" @click="chooseFiles">
+          <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
+          <span>Change Cover</span>
+        </md-button>
+        <input
+          style="display: none"
+          id="coverImage"
+          name="attachment"
+          type="file"
+          multiple="multiple"
+          @change="onFileChange"
+        />
       </div>
       <div class="event-summary-body">
         <div class="cover-letter font-bold-extra mb-50">
@@ -160,20 +160,6 @@
     <div class="policy-cont">
       <div class="title">
         <h4><img :src="`${iconUrl}Asset 594.svg`" /> Our Policy</h4>
-        <p>
-          <img
-            :src="`${iconUrl}Group 5280 (5).svg`"
-            @mouseover="considerUpdate = true"
-            @mouseleave="considerUpdate = false"
-          />
-          Maryoku Standard Policy
-        </p>
-        <div class="consider-update" v-if="considerUpdate">
-          <h3>Maryoku Standard Policy!</h3>
-          <p>
-            If the addiiontal services you've added require additional policy changes-this is the tame to add those!
-          </p>
-        </div>
       </div>
       <div class="policy-wrapper">
         <div class="policy mb-50">
@@ -253,63 +239,8 @@
             <h5>We don't allow these 3rd party vendor:</h5>
             <p>{{ mergeStringItems(vendor.notAllowed) }}</p>
           </div>
-          <!-- <div class="dont-work mt-20">
-              <h5>We don't work on:</h5>
-              <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
-                <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
-                {{ mergeStringItems(vendor.selectedWeekdays) }}
-              </div>
-              <div class="item" v-for="(d, dIndex) in vendor.exDonts" :key="dIndex">
-                <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
-                {{ d.holiday }}
-              </div>
-              <div class="item" v-if="vendor.dontWorkDays && vendor.dontWorkDays.length > 0">
-                <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
-                {{ dontWorkDays() }}
-              </div>
-              <div class="item" v-if="vendor.dontWorkTime">
-                <img :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
-                {{ dontWorkTime() }}
-              </div>
-            </div> -->
         </div>
         <div class="cancellation pricing-policy-cont" id="Rules">
-          <!-- <h5 class="subtitle">OUR PRICING POLICY</h5>
-            <div class="rules">
-              <div class="rule" v-for="(policy, yIndex) in validPricingPolicy" :key="yIndex">
-                <div class="item">
-                  <div>{{ policy.name }}</div>
-                  <div class="mt-10 color-gray">{{ policy.desc }}</div>
-                </div>
-                <div class="item" v-if="policy.type === 'MultiSelection'">
-                  <span class="mr-10" v-for="(v, vIndex) in policy.value">{{
-                    `${v}${vIndex == policy.value.length - 1 ? "" : ","}`
-                  }}</span>
-                </div>
-                <div class="item" v-else-if="policy.type === 'Including'">
-                  <span class="mr-10" v-if="policy.value"> Yes </span>
-                  <span class="mr-10" v-if="!policy.value && policy.cost"> {{ `$ ${policy.cost}` }} </span>
-                </div>
-                <div class="item" v-else-if="policy.type === Boolean && policy.value && policy.discount">
-                  <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '$'"> $ </span>
-                  <span class="mr-10" v-if="policy.discount"> {{ policy.discount }} </span>
-                  <span class="mr-10" v-if="policy.hasOwnProperty('unit') && policy.unit === '%'"> % </span>
-                </div>
-                <div class="item" v-else>
-                  <span v-if="policy.type === Number && !policy.isPercentage">$</span>
-                  <span v-if="policy.value === true">Yes</span>
-                  <span v-else>{{ policy.value }}</span>
-                  <span v-if="policy.isPercentage">%</span>
-                  <span class="ml-50" v-if="policy.hasOwnProperty('attendees')">
-                    {{ policy.attendees }} attendees
-                  </span>
-                  <span class="ml-50" v-if="policy.unit">
-                    {{ policy.unit }}
-                  </span>
-                </div>
-              </div>
-            </div> -->
-
           <div class="signature-wrapper">
             <div class="half-side">
               <h6>{{ vendor.companyName }}</h6>
@@ -657,7 +588,7 @@ export default {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        z-index: 10;
+        z-index: 2;
         i {
           color: #050505;
         }
@@ -672,7 +603,6 @@ export default {
     .preview-header-content {
       position: absolute;
       width: 100%;
-      height: 100%;
       left: 0;
       top: 0;
       z-index: 1;
@@ -742,6 +672,7 @@ export default {
     position: absolute;
     left: 50%;
     top: 70%;
+    z-index: 2;
   }
   .tabs-cont {
     display: flex;
