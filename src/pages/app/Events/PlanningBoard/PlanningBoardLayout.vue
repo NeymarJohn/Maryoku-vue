@@ -71,6 +71,10 @@
         </md-button>
       </div>
       <div>
+        <md-button class="md-simple md-black maryoku-btn">
+          <img :src="`${$iconURL}Campaign/Group 8871.svg`" />
+          Clear Choices
+        </md-button>
         <md-button class="md-simple md-outlined md-red maryoku-btn">
           <img :src="`${$iconURL}common/save-red.svg`" />
           Save Draft

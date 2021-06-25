@@ -2,7 +2,7 @@
   <collapse-panel class="white-card proposal-requirements-panel" :spacing="20" v-if="!isLoading">
     <template slot="header">
       <div class="d-flex align-center p-30">
-        <img :src="`${$storageURL}Additional%20Requests.svg`" />
+        <img :src="`${$iconURL}Requirements/special-request-red.svg`" />
         <div class="font-size-22 font-bold-extra color-black ml-10">Requirements <br />from the planner</div>
       </div>
     </template>

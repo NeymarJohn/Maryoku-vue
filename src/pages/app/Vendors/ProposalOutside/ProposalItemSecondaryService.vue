@@ -112,7 +112,7 @@ export default {
       docTag: null,
       serviceSlidePos: 0,
       servicesWidth: 0,
-      isExpanded: false,
+      isExpanded: true,
       currencyFormat: {
         decimal: ".",
         thousands: ",",
