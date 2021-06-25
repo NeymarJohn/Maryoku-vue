@@ -52,13 +52,13 @@
         Dismiss
       </md-button>
       <div class="ml-auto">
-        <div v-if="proposal">
-          <div v-if="proposal.status === 'draft'">
+        <div v-if="proposalRequest.proposal">
+          <div v-if="proposalRequest.proposal.status === 'draft'">
             <span class="font-bold color-vendor">{{ progress }} %</span> completed
             <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="progress"></md-progress-bar>
           </div>
           <div
-            v-else-if="proposal.negotiations && proposal.negotiations.length"
+            v-else-if="proposalRequest.proposal.negotiations && proposalRequest.proposal.negotiations.length"
             class="d-flex align-center justify-content-center font-size-12 color-red"
           >
             <img :src="`${iconUrl}VendorsProposalPage/Group%2014277_2.svg`" class="mr-5" style="width: 15px" />
@@ -82,10 +82,6 @@ export default {
       type: Object,
       default: () => {},
     },
-    proposal: {
-      type: Object,
-      default: null,
-    },
     size: {
       type: Number,
       default: 1,
@@ -103,15 +99,15 @@ export default {
   },
   computed: {
     progress() {
-      if (!this.proposal || !this.proposal.step) return 10;
-      return Math.floor(((this.proposal.step - 1) / 3) * 100);
+      if (!this.proposalRequest.proposal || !this.proposalRequest.proposal.step) return 10;
+      return Math.floor((this.proposalRequest.proposal.step / 3) * 100);
     },
     actionName() {
-      if (!this.proposal) return "Apply";
-      if (this.proposal.status === "draft") {
+      if (!this.proposalRequest.proposal) return "Apply";
+      if (this.proposalRequest.proposal.status === "draft") {
         return "Complete";
       } else {
-        return this.proposal.negotiations && this.proposal.negotiations.length ? "Approve Request" : "Make Changes";
+        return this.proposalRequest.proposal.negotiations && this.proposalRequest.proposal.negotiations.length ? "Approve Request" : "Make Changes";
       }
     },
   },

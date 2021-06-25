@@ -188,11 +188,11 @@ export default {
     }
     .left-side {
       padding-right: 36px;
-      border-right: 1px solid #f51355;
+      border-right: 1px solid #641856;
       width: 60%;
 
       h4 {
-        color: #f51355;
+        color: #641856;
         font-size: 30px;
         font-weight: 800;
         text-transform: capitalize;
@@ -218,14 +218,14 @@ export default {
         line-height: 1.55;
       }
       a {
-        color: #f51355;
+        color: #641856;
         font-size: 16px;
         font-weight: 600;
         text-transform: capitalize;
         cursor: pointer;
 
         i {
-          color: #f51355;
+          color: #641856;
         }
       }
     }
@@ -246,7 +246,7 @@ export default {
       }
       h3 {
         font-size: 30px;
-        color: #f51355;
+        color: #641856;
         font-weight: 800;
         margin: 0;
         text-transform: capitalize;
@@ -312,7 +312,7 @@ export default {
         h3 {
           font-size: 30px;
           font-weight: 800;
-          color: #f51355;
+          color: #641856;
           margin: 0;
           margin-bottom: 20px;
         }
@@ -351,7 +351,7 @@ export default {
     font-size: 16px;
     font-weight: 800;
     color: #ffffff;
-    background-color: #f51355;
+    background-color: #641856;
     border-radius: 3px;
     padding: 8px 36px;
     cursor: pointer;

@@ -32,43 +32,78 @@
         Loading ...
       </div>
       <div class="element-pricing-table elements-list">
-        <table>
-          <thead>
-            <tr>
-              <th>Description</th>
-              <th>QTY</th>
-              <th>Price per unit</th>
-              <th>Subtotal</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(service, index) in costServices" :key="`cost-service-${index}`">
-              <td>
+        <div class="element-pricing-table-header">
+          <div>Description</div>
+          <div class="text-right">QTY</div>
+          <div class="text-right">Price per unit</div>
+          <div class="text-right">Subtotal</div>
+          <div></div>
+        </div>
+        <div class="element-pricing-table-body">
+          <template v-for="(service, index) in costServices">
+            <div
+              class="element-pricing-table-body-row"
+              :key="`cost-service-${index}`"
+              v-if="service.plannerOptions.length === 0"
+            >
+              <div>
                 <md-icon class="color-red mr-5" v-if="service.isExtra">add_circle_outline</md-icon>
-                {{ service.requirementTitle
-                }}<span class="complimentary-tag" v-if="service.isComplimentary">Complimentary</span>
-              </td>
-              <td>{{ service.requirementValue }}</td>
-              <td :class="{ crosslinedText: service.isComplimentary }">${{ service.price | withComma }}</td>
-              <td :class="{ crosslinedText: service.isComplimentary }">
+                {{ service.requirementTitle }}
+                <span class="complimentary-tag" v-if="service.isComplimentary">Complimentary</span>
+              </div>
+              <div class="text-right">{{ service.requirementValue }}</div>
+              <div class="text-right" :class="{ crosslinedText: service.isComplimentary }">
+                ${{ service.price | withComma }}
+              </div>
+              <div class="text-right" :class="{ crosslinedText: service.isComplimentary }">
                 ${{ (service.requirementValue * service.price) | withComma }}
-              </td>
-              <td class="element-actions">
+              </div>
+              <div class="element-actions">
                 <md-button class="md-simple edit-btn" @click="removeService(service)" v-if="service.isExtra">
                   <img :src="`${$iconURL}common/trash-dark.svg`" />
                 </md-button>
-              </td>
-            </tr>
-            <!-- <tr v-for="(service, index) in addedServices" :key="`added-service-${index}`">
-              <td><md-icon class="color-red mr-5">add_circle_outline</md-icon>{{ service.requirementTitle }}</td>
-              <td>{{ service.requirementValue }}</td>
-              <td>${{ service.price | withComma }}</td>
-              <td>${{ (service.requirementValue * service.price) | withComma }}</td>
-              <td class="element-actions"></td>
-            </tr> -->
-          </tbody>
-        </table>
+              </div>
+            </div>
+            <template v-else>
+              <div class="element-pricing-table-body-row">
+                <div>
+                  <span class="font-bold">{{ service.requirementTitle }}</span> <br />
+                  <span class="font-size-14">Please Choose:</span>
+                </div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+              <div class="options-list">
+                <img :src="`${$iconURL}common/enter-gray.svg`" />
+                <div
+                  class="option-row"
+                  :class="`${index > 0 ? 'border-top' : ''}`"
+                  :key="`planner-option-${index}`"
+                  v-for="(option, index) in service.plannerOptions"
+                >
+                  <div class="d-flex align-center pl-40">
+                    <md-radio class="m-0" v-model="service.selectedPlannerOption" :value="index">
+                      {{ option.description }}
+                    </md-radio>
+                  </div>
+                  <div class="text-right">{{ option.qty }}</div>
+                  <div class="text-right" :class="{ crosslinedText: service.isComplimentary }">
+                    ${{ option.price | withComma }}
+                  </div>
+                  <div class="text-right" :class="{ crosslinedText: service.isComplimentary }">
+                    ${{ (option.qty * option.price) | withComma }}
+                  </div>
+                  <div class="element-actions">
+                    <md-button class="md-simple edit-btn" @click="removeService(service)" v-if="service.isExtra">
+                      <img :src="`${$iconURL}common/trash-dark.svg`" />
+                    </md-button>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </template>
+        </div>
       </div>
       <div class="element-pricing-table taxes-list">
         <table>
@@ -185,7 +220,7 @@ import { mapState, mapMutations, mapGetters, mapActions } from "vuex";
 import ExtraServiceItem from "./ExtraServiceItem";
 import IncludedServiceItem from "./IncludedServiceItem.vue";
 export default {
-  name: 'event-proposal-price',
+  name: "event-proposal-price",
   components: {
     ExtraServiceItem,
     IncludedServiceItem,
@@ -560,7 +595,33 @@ export default {
   .element-pricing-table {
     padding: 1.5em;
     font-family: "Manrope-Regular", sans-serif;
-
+    &-header {
+      display: grid;
+      grid-template-columns: 30% 20% 20% 20% 10%;
+      font-weight: bold;
+      padding: 1em 0;
+    }
+    &-body {
+      &-row {
+        display: grid;
+        grid-template-columns: 30% 20% 20% 20% 10%;
+        border-top: 1px solid #ddd;
+        padding: 1.5em 0;
+      }
+      .options-list {
+        img {
+          position: absolute;
+        }
+      }
+      .option-row {
+        display: grid;
+        grid-template-columns: 30% 20% 20% 20% 10%;
+        padding: 1em 0;
+        &.border-top {
+          border-top: 1px solid #ddd;
+        }
+      }
+    }
     &.elements-list {
       background: #f7f7f7;
       margin-bottom: -21px;

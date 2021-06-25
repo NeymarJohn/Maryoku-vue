@@ -581,9 +581,9 @@ export default {
       span {
         font-size: 16px;
         font-weight: bold;
-        color: #f51355;
+        color: #641856;
         i {
-          color: #f51355;
+          color: #641856;
           position: relative;
           top: -1px;
         }
@@ -626,6 +626,10 @@ export default {
             display: flex;
             justify-content: space-between;
             margin-bottom: 14px;
+
+            a{
+                color: #641856;
+            }
 
             &:first-child {
               display: block;
@@ -732,7 +736,7 @@ export default {
               margin-right: 1em;
             }
             &.add {
-              background-color: #f51355;
+              background-color: #641856;
               border-radius: 3px;
               padding: 8px 32px;
               color: #ffffff;

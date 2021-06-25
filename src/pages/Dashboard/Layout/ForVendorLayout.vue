@@ -79,7 +79,7 @@
       </template>
       <template slot="footer">
         <div class="saved-it-modal__footer">
-          <md-button class="md-red maryoku-btn" @click="showCloseProposalModal = false">Ok, Thanks</md-button>
+          <md-button class="md-vendor maryoku-btn" @click="showCloseProposalModal = false">Ok, Thanks</md-button>
         </div>
       </template>
     </modal>
@@ -105,7 +105,7 @@
       </template>
       <template slot="footer">
         <div class="saved-it-modal__footer">
-          <md-button class="md-red maryoku-btn" @click="hideModal()">Ok, Thanks</md-button>
+          <md-button class="md-vendor maryoku-btn" @click="hideModal()">Ok, Thanks</md-button>
         </div>
       </template>
     </modal>
@@ -293,7 +293,7 @@ export default {
           }
           span.lt {
             padding: 8px 12px;
-            color: #f51355;
+            color: #641856;
             width: 37px;
             height: 37px;
             font-weight: 900;
@@ -356,7 +356,7 @@ export default {
     .submit {
       font-family: "Manrope-Regular", sans-serif;
       margin-top: 1rem;
-      background-color: #f51355;
+      background-color: #641856;
       box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
       border: none;
       font-size: 20px;
@@ -376,7 +376,7 @@ export default {
       h3 {
         font-size: 30px;
         font-weight: bold;
-        color: #f51355;
+        color: #641856;
 
         img {
           width: 55px;

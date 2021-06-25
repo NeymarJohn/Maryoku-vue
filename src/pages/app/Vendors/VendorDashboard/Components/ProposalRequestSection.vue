@@ -76,7 +76,12 @@ export default {
   },
   computed: {
     proposalRequests() {
-      return this.$store.state.vendorDashboard.proposalRequests;
+      return this.$store.state.vendorDashboard.proposalRequests.filter(p => {
+          console.log('proposal-request', p);
+          p.proposal ? (p.declineMessage !== "decline" && p.proposal.status !== "submit") ||
+          (p.proposal.negotiations && p.proposal.negotiations.length)
+          : p.remainingTime > 0 && p.declineMessage !== "decline";
+      });
     },
   },
   methods: {

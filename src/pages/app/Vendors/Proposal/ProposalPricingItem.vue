@@ -128,15 +128,15 @@
           :canAdd="false"
           :vendorCategory="category"
         />
-        <div class="attachments-cont">
-          <h4>Attachments</h4>
-          <div class="files-cont" v-if="proposalAttachments[category]">
-            <div class="item" v-for="(file, index) in proposalAttachments[category]" :key="index">
-              <img :src="`${iconUrl}Asset 578.svg`" /> Kosher_certificate.pdf
-            </div>
-          </div>
-          <div v-else>No attachment</div>
-        </div>
+<!--        <div class="attachments-cont">-->
+<!--          <h4>Attachments</h4>-->
+<!--          <div class="files-cont" v-if="proposalAttachments[category]">-->
+<!--            <div class="item" v-for="(file, index) in proposalAttachments[category]" :key="index">-->
+<!--              <img :src="`${iconUrl}Asset 578.svg`" /> Kosher_certificate.pdf-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div v-else>No attachment</div>-->
+<!--        </div>-->
       </div>
     </div>
   </div>
@@ -292,19 +292,8 @@ export default {
       return this.$store.state.vendorProposal.discounts["total"] || { percentage: 0, price: 0 };
     },
     serviceTime() {
-      // if (!this.proposalRequest) {
-      //   return {
-      //     time: "",
-      //     date: "",
-      //   };
-      // }
       const proposalRequest = this.$store.state.vendorProposal.proposalRequest;
       const timelineDates = proposalRequest.eventData.timelineDates;
-      // if (!timelineDates)
-      //   return {
-      //     time: "",
-      //     date: "",
-      //   };
       let serviceTimeString = this.category === "venuerental" ? "All Day" : "Not planned yet";
       let serviceDate = "";
       timelineDates.forEach((td) => {
