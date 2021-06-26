@@ -7,7 +7,7 @@
     </template>
     <template slot="body">
       <div>
-        <img :src="`${$iconURL}common/sync-calendar-purple.svg`" />
+        <img :src="`${$iconURL}NewSubmitPorposal/group-16544.svg`" />
         <div class="font-size-30 font-bold mt-20 color-purple">How would you like to send the Proposal</div>
         <div class="mt-20">Select the calendar you want to sync with</div>
         <div class="mt-30 d-flex justify-content-center mb-30">
@@ -37,7 +37,9 @@
         </div>
       </div>
     </template>
-    <template slot="footer"> </template>
+    <template slot="footer">
+      <md-button class="md-vendor maryoku-btn" @click="submitProposal">Done</md-button>
+    </template>
   </modal>
 </template>
 <script>
@@ -170,12 +172,8 @@ export default {
           .catch((error) => {});
       });
     },
-    syncCalendar() {
-      if (this.emailAccount === "google") {
-        this.handleGoogleAuthClick();
-      } else if (this.emailAccount === "outlook") {
-        this.handleMsAuthClick();
-      }
+    submitProposal() {
+      this.$emit("submit");
     },
   },
 };

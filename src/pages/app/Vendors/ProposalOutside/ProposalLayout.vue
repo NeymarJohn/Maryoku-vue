@@ -102,7 +102,15 @@
         </div>
       </template>
     </modal>
-    <send-proposal-modal v-if="showSendProposalModal" @close="showSendProposalModal = false"></send-proposal-modal>
+    <send-proposal-modal
+      v-if="showSendProposalModal"
+      @close="showSendProposalModal = false"
+      @submit="submitProposal"
+    ></send-proposal-modal>
+    <proposal-submitted
+      v-if="showSubmittedProposalModal"
+      @close="showSubmittedProposalModal = false"
+    ></proposal-submitted>
   </div>
 </template>
 <script>
@@ -116,6 +124,7 @@ import ProposalHeader from "./ProposalHeader";
 import VueElementLoading from "vue-element-loading";
 import state from "./state";
 import SendProposalModal from "./Modals/SendProposal";
+import ProposalSubmitted from "../Proposal/Modals/ProposalSubmitted";
 
 export default {
   components: {
@@ -124,6 +133,7 @@ export default {
     ProposalHeader,
     VueElementLoading,
     SendProposalModal,
+    ProposalSubmitted,
   },
   props: {
     newProposalRequest: Object,
@@ -148,6 +158,7 @@ export default {
       isUpdating: false,
       option: "submit", // 'submit', 'duplicate'
       showSendProposalModal: false,
+      showSubmittedProposalModal: false,
     };
   },
   created() {
@@ -273,6 +284,10 @@ export default {
     },
     setProposalLink() {
       this.showSendProposalModal = true;
+    },
+    submitProposal() {
+      this.showSendProposalModal = false;
+      this.showSubmittedProposalModal = true;
     },
   },
 
