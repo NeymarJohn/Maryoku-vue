@@ -9,11 +9,11 @@
     <template slot="body">
       <div>
         <img :src="`${$iconURL}NewSubmitPorposal/group-16544.svg`" />
-        <div class="font-size-30 font-bold mt-20 color-purple">Proposal sent successfully!</div>
+        <div class="font-size-30 font-bold mt-20 color-purple">Hooray! your proposal sent successfully</div>
         <div class="mt-20">To:mayaetti@gmail.com</div>
-        <div class="mt-40">You will receive a copy to your email</div>
+        <div class="mt-40">A copy will be sent to your email</div>
         <div class="mt-20">
-          <md-button class="md-vendor maryoku-btn" @click="close">Cool, Go To Dashboard</md-button>
+          <md-button class="md-vendor maryoku-btn" @click="close">Cool, Back To Dashboard</md-button>
         </div>
       </div>
     </template>

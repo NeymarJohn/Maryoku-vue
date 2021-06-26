@@ -8,28 +8,16 @@
     <template slot="body">
       <div>
         <img :src="`${$iconURL}NewSubmitPorposal/group-16544.svg`" />
-        <div class="font-size-30 font-bold mt-20 color-purple">How would you like to send the Proposal</div>
-        <div class="mt-20">Select the calendar you want to sync with</div>
+        <div class="font-size-30 font-bold mt-20 color-purple">How do you want to send this proposal?</div>
+        <div class="mt-20 font-size-20">
+          <span class="font-bold color-purple">To:</span> {{ event.customer ? event.customer.email : "" }}
+        </div>
         <div class="mt-30 d-flex justify-content-center mb-30">
-          <div
-            @click="emailAccount = 'google'"
-            class="calendar-selector mr-40"
-            :class="{ active: emailAccount === 'google' }"
-          >
-            <div>
-              <img :src="`${$iconURL}common/google.svg`" style="margin-top: -10px; width: 40px" />
-              <div class="font-bold mt-20">Google</div>
-            </div>
+          <div @click="emailAccount = 'email'" class="mr-40 type-button" :class="{ active: emailAccount === 'email' }">
+            <img :src="`${$iconURL}NewSubmitPorposal/Group 16982.svg`" style="margin-top: -10px; width: 40px" />
           </div>
-          <div
-            @click="emailAccount = 'outlook'"
-            class="calendar-selector"
-            :class="{ active: emailAccount === 'outlook' }"
-          >
-            <div>
-              <img :src="`${$iconURL}common/outlook.svg`" style="margin-top: -10px; width: 40px" />
-              <div class="font-bold mt-20">Outlook</div>
-            </div>
+          <div @click="emailAccount = 'whatsapp'" class="type-button" :class="{ active: emailAccount === 'whatsapp' }">
+            <img :src="`${$iconURL}NewSubmitPorposal/Group 16974.svg`" style="margin-top: -10px; width: 40px" />
           </div>
         </div>
         <div class="d-flex justify-content-center">
@@ -38,7 +26,7 @@
       </div>
     </template>
     <template slot="footer">
-      <md-button class="md-vendor maryoku-btn" @click="submitProposal">Done</md-button>
+      <md-button class="md-vendor maryoku-btn" @click="submitProposal">Send</md-button>
     </template>
   </modal>
 </template>
@@ -63,15 +51,10 @@ export default {
     MaryokuInput,
   },
   props: {
-    screen: {
-      type: Number,
-      default: 1,
-    },
-    campaign: {
+    event: {
       type: Object,
       default: () => {},
     },
-    events: [Array],
   },
   created() {
     this.api = gapi;
@@ -192,19 +175,19 @@ export default {
   .tips {
     max-width: 500px;
   }
-  .calendar-selector {
+  .type-button {
     background-color: #f3f7fd;
-    width: 150px;
-    height: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 5px;
     cursor: pointer;
-    &.active {
-      background-color: #641856;
-      color: white;
-    }
+    // width: 50px;
+    // height: 50px;
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
+    // border-radius: 5px;
+    // &.active {
+    //   background-color: #641856;
+    //   color: white;
+    // }
   }
 }
 </style>

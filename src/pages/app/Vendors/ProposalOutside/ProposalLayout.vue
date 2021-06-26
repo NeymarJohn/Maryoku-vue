@@ -106,6 +106,7 @@
       v-if="showSendProposalModal"
       @close="showSendProposalModal = false"
       @submit="submitProposal"
+      :event="event"
     ></send-proposal-modal>
     <proposal-submitted
       v-if="showSubmittedProposalModal"
@@ -152,7 +153,6 @@ export default {
       proposals: [],
       proposalRequest: null,
       vendorCategory: null,
-      event: null,
       openedModal: "",
       showCloseProposalModal: false,
       isUpdating: false,
@@ -165,10 +165,6 @@ export default {
     this.$root.$on("send-event-data", (evtData) => {
       this.evtData = evtData;
     });
-
-    if (this.$route.params.eventId) {
-      this.getEvent();
-    }
 
     if (this.$route.params.type && this.$route.params.type == "duplicate") {
       this.option = "duplicate";
@@ -257,9 +253,6 @@ export default {
         window.scrollTo(0, 0);
       }, 100);
     },
-    getEvent() {
-      this.$store.dispatch("event/getEventById", this.$route.params.eventId);
-    },
     goToProcessingGuid() {
       this.$router.push({ path: `/completed-bidding` });
     },
@@ -309,6 +302,10 @@ export default {
         return this.event.concept.images[new Date().getTime() % 4].url;
       }
       return "";
+    },
+
+    event() {
+      return this.$store.state.proposalForNonMaryoku.event;
     },
 
     step: {
