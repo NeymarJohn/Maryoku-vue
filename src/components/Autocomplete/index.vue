@@ -101,7 +101,7 @@ export default {
   },
   watch: {
     selectedValue(newValue, oldValue) {
-      this.searchWord = `${newValue.company} / ${newValue.name}`;
+      this.searchWord = `${newValue.company} / ${newvalue.name}`;
     },
   },
 };

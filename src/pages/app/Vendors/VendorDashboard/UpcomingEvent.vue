@@ -4,8 +4,7 @@
       <div class="event-logo"></div>
       <div class="event-detail flex-1">
         <div class="color-gray font-size-14">{{ getUpcomingPeriod(event.startTime) }}</div>
-        <div class="font-bold mb-10" v-if="event.customer">{{ event.customer.name }} | {{ event.customer.email }}</div>
-        <div class="font-bold mb-10" v-else>{{ event.customerName }} | {{ event.email }}</div>
+        <div class="font-bold mb-10">{{ event.customer.name }} | {{ event.customer.email }}</div>
         <div>
           {{ event.companyName }} | <a :href="event.fileUrl" class="color-purple" target="_blank">See proposal</a>
         </div>
@@ -65,8 +64,9 @@ export default {
     z-index: 10;
     .event-logo {
       box-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.16);
-      width: 50px;
-      height: 50px;
+      width: 50px !important;
+      height: 50px !important;
+      min-width: 50px;
       border-radius: 50%;
       background-color: white;
     }

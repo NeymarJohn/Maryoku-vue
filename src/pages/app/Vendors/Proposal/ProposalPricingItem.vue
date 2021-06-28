@@ -128,15 +128,15 @@
           :canAdd="false"
           :vendorCategory="category"
         />
-        <div class="attachments-cont">
-          <h4>Attachments</h4>
-          <div class="files-cont" v-if="proposalAttachments[category]">
-            <div class="item" v-for="(file, index) in proposalAttachments[category]" :key="index">
-              <img :src="`${iconUrl}Asset 578.svg`" /> Kosher_certificate.pdf
-            </div>
-          </div>
-          <div v-else>No attachment</div>
-        </div>
+<!--        <div class="attachments-cont">-->
+<!--          <h4>Attachments</h4>-->
+<!--          <div class="files-cont" v-if="proposalAttachments[category]">-->
+<!--            <div class="item" v-for="(file, index) in proposalAttachments[category]" :key="index">-->
+<!--              <img :src="`${iconUrl}Asset 578.svg`" /> Kosher_certificate.pdf-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div v-else>No attachment</div>-->
+<!--        </div>-->
       </div>
     </div>
   </div>

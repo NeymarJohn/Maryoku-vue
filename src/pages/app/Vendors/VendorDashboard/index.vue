@@ -58,26 +58,7 @@
             <proposal-request-section></proposal-request-section>
           </div>
           <div class="md-layout-item md-size-50 pr-0 pl-10">
-            <div class="white-card">
-              <div style="border-bottom: 2px solid #c8c8c8">
-                <div class="pt-10 d-flex align-center justify-content-center font-bold">
-                  <md-button class="md-button md-theme-default md-simple md-just-icon">
-                    <md-icon>chevron_left</md-icon>
-                  </md-button>
-                  <span class="font-size-20 mr-10"> 0/0 </span>
-                  CHANGE REQUESTS
-                  <md-button class="md-button md-theme-default md-simple md-just-icon">
-                    <md-icon>chevron_right</md-icon>
-                  </md-button>
-                </div>
-              </div>
-
-              <div class="d-flex flex-column align-center p-70">
-                <!--                          <img class="mb-20" :src="`${iconUrl}vendordashboard/group-17115.png`">-->
-                <img class="mb-15" :src="`${iconUrl}vendordashboard/group-16558.svg`" />
-                <div class="color-vendor font-bold font-size-14">NO REQUEST FOR CHANGES</div>
-              </div>
-            </div>
+            <proposal-request-section field="negotiation"></proposal-request-section>
           </div>
         </div>
         <div class="md-layout mt-20">
@@ -178,6 +159,7 @@ export default {
     this.getMarkedDates();
     this.getComingEvents();
     this.$store.dispatch("common/fetchAllCategories");
+    this.$store.dispatch("vendorDashboard/getProposalRequests", this.vendorData.id);
   },
   methods: {
     gotoProposalWizard() {

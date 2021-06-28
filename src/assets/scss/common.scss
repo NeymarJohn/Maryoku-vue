@@ -197,28 +197,28 @@ $paddings: 0, 5, 10, 15, 20, 30, 40, 50, 60, 70, 100, 400;
 
 @each $padding in $paddings {
   .p-#{$padding} {
-    padding: #{$padding}px;
+    padding: #{$padding}px !important;
   }
   .pt-#{$padding} {
-    padding-top: #{$padding}px;
+    padding-top: #{$padding}px !important;
   }
   .pt-#{$padding}-i {
     padding-top: #{$padding}px !important;
   }
   .pl-#{$padding} {
-    padding-left: #{$padding}px;
+    padding-left: #{$padding}px !important;
   }
   .pb-#{$padding} {
-    padding-bottom: #{$padding}px;
+    padding-bottom: #{$padding}px !important;
   }
   .pr-#{$padding} {
-    padding-right: #{$padding}px;
+    padding-right: #{$padding}px !important;
   }
   .px-#{$padding} {
-    padding: 0 #{$padding}px;
+    padding: 0 #{$padding}px !important;
   }
   .py-#{$padding} {
-    padding: #{$padding}px 0;
+    padding: #{$padding}px 0 !important;
   }
 
 
