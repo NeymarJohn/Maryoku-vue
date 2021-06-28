@@ -37,7 +37,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch("vendor/getProfile");
-    this.$store.dispatch("common/getAllCompanies");
   },
 };
 </script>

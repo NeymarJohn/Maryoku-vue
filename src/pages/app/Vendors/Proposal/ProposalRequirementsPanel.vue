@@ -136,7 +136,7 @@
       </div>
       <div class="p-30">
         <md-button class="md-outlined md-vendor md-simple maryoku-btn width-100" @click="showQuestionModal = true">
-          <img src="/static/icons/chart-red.svg" class="page-icon mr-10" />
+          <img :src="`${$iconURL}Submit Proposal/group-19162.svg`" class="page-icon mr-10" />
           Questions? Send a question to planner
         </md-button>
         <question-modal v-if="showQuestionModal" @cancel="showQuestionModal = false"></question-modal>

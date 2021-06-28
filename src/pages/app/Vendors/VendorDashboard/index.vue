@@ -159,7 +159,6 @@ export default {
     this.getMarkedDates();
     this.getComingEvents();
     this.$store.dispatch("common/fetchAllCategories");
-    this.$store.dispatch("vendorDashboard/getProposalRequests", this.vendorData.id);
   },
   methods: {
     gotoProposalWizard() {

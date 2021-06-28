@@ -11,16 +11,17 @@
           <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()">
             <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back</md-button
           >
-          <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
-            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
-          </md-button>
+            <img :src="`${$iconURL}Submit%20Proposal/group-7618.svg`" />
+<!--          <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">-->
+<!--            -->
+<!--          </md-button>-->
         </div>
 
         <div class="next-cont">
           <span>You can return to it till the deadline!</span>
           <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`" /> Discard </a>
           <a class="save" @click="uploadProposal('draft')">
-            <img :src="`${proposalIconsUrl}Asset 610.svg`" /> Save for later
+            <img :src="`${$iconURL}Submit%20Proposal/group-3688.svg`" /> Save for later
           </a>
           <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
             Next

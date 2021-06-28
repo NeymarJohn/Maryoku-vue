@@ -102,7 +102,16 @@
         </div>
       </template>
     </modal>
-    <send-proposal-modal v-if="showSendProposalModal" @close="showSendProposalModal = false"></send-proposal-modal>
+    <send-proposal-modal
+      v-if="showSendProposalModal"
+      @close="showSendProposalModal = false"
+      @submit="submitProposal"
+      :event="event"
+    ></send-proposal-modal>
+    <proposal-submitted
+      v-if="showSubmittedProposalModal"
+      @close="showSubmittedProposalModal = false"
+    ></proposal-submitted>
   </div>
 </template>
 <script>
@@ -116,6 +125,7 @@ import ProposalHeader from "./ProposalHeader";
 import VueElementLoading from "vue-element-loading";
 import state from "./state";
 import SendProposalModal from "./Modals/SendProposal";
+import ProposalSubmitted from "../Proposal/Modals/ProposalSubmitted";
 
 export default {
   components: {
@@ -124,6 +134,7 @@ export default {
     ProposalHeader,
     VueElementLoading,
     SendProposalModal,
+    ProposalSubmitted,
   },
   props: {
     newProposalRequest: Object,
@@ -142,22 +153,18 @@ export default {
       proposals: [],
       proposalRequest: null,
       vendorCategory: null,
-      event: null,
       openedModal: "",
       showCloseProposalModal: false,
       isUpdating: false,
       option: "submit", // 'submit', 'duplicate'
       showSendProposalModal: false,
+      showSubmittedProposalModal: false,
     };
   },
   created() {
     this.$root.$on("send-event-data", (evtData) => {
       this.evtData = evtData;
     });
-
-    if (this.$route.params.eventId) {
-      this.getEvent();
-    }
 
     if (this.$route.params.type && this.$route.params.type == "duplicate") {
       this.option = "duplicate";
@@ -246,9 +253,6 @@ export default {
         window.scrollTo(0, 0);
       }, 100);
     },
-    getEvent() {
-      this.$store.dispatch("event/getEventById", this.$route.params.eventId);
-    },
     goToProcessingGuid() {
       this.$router.push({ path: `/completed-bidding` });
     },
@@ -274,6 +278,10 @@ export default {
     setProposalLink() {
       this.showSendProposalModal = true;
     },
+    submitProposal() {
+      this.showSendProposalModal = false;
+      this.showSubmittedProposalModal = true;
+    },
   },
 
   filters: {
@@ -294,6 +302,10 @@ export default {
         return this.event.concept.images[new Date().getTime() % 4].url;
       }
       return "";
+    },
+
+    event() {
+      return this.$store.state.proposalForNonMaryoku.event;
     },
 
     step: {

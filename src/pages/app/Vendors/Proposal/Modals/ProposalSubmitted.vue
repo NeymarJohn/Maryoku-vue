@@ -8,23 +8,12 @@
     </template>
     <template slot="body">
       <div>
-        <img :src="`${$iconURL}common/sync-calendar-purple.svg`" />
-        <div class="font-size-30 font-bold mt-20 color-purple">How would you like to send the Proposal</div>
-        <div class="mt-20">Select the calendar you want to sync with</div>
-        <div class="mt-30 d-flex justify-content-center mb-30">
-          <div @click="sender = 'email'" class="calendar-selector mr-40" :class="{ active: sender === 'email' }">
-            <div>
-              <img :src="`${$iconURL}common/google.svg`" style="margin-top: -10px; width: 40px" />
-            </div>
-          </div>
-          <div @click="sender = 'whatsapp'" class="calendar-selector" :class="{ active: sender === 'whatsapp' }">
-            <div>
-              <img :src="`${$iconURL}common/outlook.svg`" style="margin-top: -10px; width: 40px" />
-            </div>
-          </div>
-        </div>
-        <div>
-          <maryoku-input inputStyle="sharing"></maryoku-input>
+        <img :src="`${$iconURL}NewSubmitPorposal/group-16544.svg`" />
+        <div class="font-size-30 font-bold mt-20 color-purple">Hooray! your proposal sent successfully</div>
+        <div class="mt-20">To:mayaetti@gmail.com</div>
+        <div class="mt-40">A copy will be sent to your email</div>
+        <div class="mt-20">
+          <md-button class="md-vendor maryoku-btn" @click="close">Cool, Back To Dashboard</md-button>
         </div>
       </div>
     </template>
