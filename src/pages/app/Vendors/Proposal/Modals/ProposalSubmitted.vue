@@ -8,7 +8,7 @@
     </template>
     <template slot="body">
       <div>
-        <img :src="`${$iconURL}NewSubmitPorposal/Group 17403.svg`" />
+        <img :src="`${$iconURL}NewSubmitPorposal/group-16544.svg`" />
         <div class="font-size-30 font-bold mt-20 color-purple">Hooray! your proposal sent successfully</div>
         <div class="mt-20">To:mayaetti@gmail.com</div>
         <div class="mt-40">A copy will be sent to your email</div>

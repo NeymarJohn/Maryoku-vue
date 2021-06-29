@@ -29,7 +29,7 @@
           @click="isBundleDiscount = !isBundleDiscount"
           v-if="additionalServices.length > 0 && step === 2"
         >
-          <img :src="`${iconUrl}Asset 579.svg`" />
+          <img class="black" :src="`${iconUrl}Asset 579.svg`" />
           <span>
             Add Bundle Discount
             <md-icon v-if="!isBundleDiscount">keyboard_arrow_right</md-icon>
@@ -577,6 +577,10 @@ export default {
       img {
         width: 30px;
         margin-right: 1em;
+
+        &.black{
+          filter:brightness(0) invert(0)
+        }
       }
       span {
         font-size: 16px;

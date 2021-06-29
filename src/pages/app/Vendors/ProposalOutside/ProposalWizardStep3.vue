@@ -635,7 +635,6 @@ export default {
         top: 50%;
         transform: translateY(-50%);
         z-index: 2;
-        cursor: pointer;
         i {
           color: #050505;
         }

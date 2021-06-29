@@ -1,5 +1,5 @@
 <template>
-  <div class="proposal-request-card white-card p-20" :class="{ 'vendor-dashboard': type === 'dashboard' }">
+  <div class="proposal-request-card white-card p-20">
     <div class="d-flex align-center">
       <div class="font-bold py-10" :class="getFontSize('title')" style="min-height: 44px">
         <template v-if="proposalRequest.eventData.concept">{{ proposalRequest.eventData.concept.name }}</template>
@@ -9,10 +9,7 @@
         <md-icon class="color-black ml-5">keyboard_arrow_right</md-icon></md-button
       >
       <span class="color-yellow-dark d-flex align-center ml-auto whitspace-nowrap" :class="getFontSize('expiredDate')">
-        <img :src="`${iconUrl}VendorsProposalPage/Group 6370.svg`" class="mr-10" style="width: 20px" />{{
-          getLeftDays()
-        }}
-        Days Left
+        <img :src="`${iconUrl}VendorsProposalPage/Group 6370.svg`" class="mr-10" style="width: 20px" />{{`${getLeftDays()} Days Left`}}
       </span>
     </div>
     <div class="d-flex align-center justify-content-start" :class="getFontSize('title')">
@@ -21,7 +18,7 @@
       </div>
       $ {{ (proposalRequest.componentInstance ? proposalRequest.componentInstance.allocatedBudget : "") | withComma }}
     </div>
-    <div v-if="expanded" :class="getFontSize('title')">
+    <div v-if="expanded" :class="getFontSize('subTitle')">
       <div class="d-flex align-center mt-1">
         <div class="width-50 d-flex align-center">
           <img class="mr-10" :src="`${iconUrl}Onboarding/Group%204458.svg`" style="width: 18px" />
@@ -45,28 +42,29 @@
     </div>
     <div class="d-flex align-end">
       <md-button
+        v-if="type == 'proposal'"
         class="md-simple md-vendor md-vendor-text"
         style="margin-left: -15px; width: 20px; height: 30px"
         @click="dismiss(proposalRequest.id)"
       >
         Dismiss
       </md-button>
-      <div class="ml-auto">
-        <div v-if="proposal">
-          <div v-if="proposal.status === 'draft'">
+      <div :class="type == 'proposal' ? 'ml-auto' : 'd-flex align-center width-100'">
+        <div v-if="proposalRequest.proposal">
+          <div v-if="proposalRequest.proposal.status === 'draft'">
             <span class="font-bold color-vendor">{{ progress }} %</span> completed
             <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="progress"></md-progress-bar>
           </div>
           <div
-            v-else-if="proposal.negotiations && proposal.negotiations.length"
+            v-else-if="type === 'proposal' && proposalRequest.proposal.negotiations && proposalRequest.proposal.negotiations.length"
             class="d-flex align-center justify-content-center font-size-12 color-red"
           >
             <img :src="`${iconUrl}VendorsProposalPage/Group%2014277_2.svg`" class="mr-5" style="width: 15px" />
             Negotiation Request
           </div>
         </div>
-        <div v-else class="new color-vendor font-size-14 ml-auto">New</div>
-        <md-button class="md-vendor" @click="gotoProposalRequest" style="height: 30px">
+        <div v-else class="new color-vendor font-size-14" :class="type === 'proposal' ? 'ml-auto': 'medium'">New</div>
+        <md-button class="md-vendor" :class="type === 'proposal' ? 'h-30' : 'ml-auto h-40'" @click="gotoProposalRequest">
           {{ actionName }}
         </md-button>
       </div>
@@ -81,10 +79,6 @@ export default {
     proposalRequest: {
       type: Object,
       default: () => {},
-    },
-    proposal: {
-      type: Object,
-      default: null,
     },
     size: {
       type: Number,
@@ -103,15 +97,17 @@ export default {
   },
   computed: {
     progress() {
-      if (!this.proposal || !this.proposal.step) return 10;
-      return Math.floor(((this.proposal.step - 1) / 3) * 100);
+      if (!this.proposalRequest.proposal || !this.proposalRequest.proposal.step) return 10;
+      return Math.floor((this.proposalRequest.proposal.step / 3) * 100);
     },
     actionName() {
-      if (!this.proposal) return "Apply";
-      if (this.proposal.status === "draft") {
+      if (!this.proposalRequest.proposal) return "Apply";
+      if (this.proposalRequest.proposal.status === "draft") {
         return "Complete";
+      } else if (this.proposalRequest.proposal.negotiations && this.proposalRequest.proposal.negotiations.length) {
+        return this.type === 'proposal' ? "Approve Request" : 'Negotiation Request';
       } else {
-        return this.proposal.negotiations && this.proposal.negotiations.length ? "Approve Request" : "Make Changes";
+        return "Make Changes"
       }
     },
   },
@@ -141,9 +137,12 @@ export default {
     getFontSize(type) {
       if (type === "title") {
         return this.size === 1 ? "font-size-14" : "font-size-20";
+      } else if (type === "subTitle") {
+        return this.size === 1 ? "font-size-12" : "font-size-16";
       } else if (type === "expiredDate") {
         return this.size === 1 ? "font-size-12" : "font-size-16";
       }
+
     },
   },
   mounted() {},
@@ -163,5 +162,11 @@ export default {
   border-radius: 30px;
   background-color: #d7c4d4;
   width: fit-content;
+
+  &.medium{
+    padding: 5px 20px!important;
+  }
 }
+.h-30 { height: 30px }
+.h-40 { height: 40px }
 </style>

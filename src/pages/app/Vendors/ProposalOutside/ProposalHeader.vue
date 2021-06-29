@@ -2,12 +2,21 @@
   <section class="proposal-header">
     <div class="background-image">
       <div class="d-flex concept-image-wrapper" v-if="vendor">
-        <div v-for="(imageIndex, index) in new Array(10)" :key="`header-image-${index}-1`" class="concept-color">
-          <img
-            class="concept-image"
-            v-if="vendor.images[index % vendor.images.length]"
-            :src="`${vendor.images[index % vendor.images.length]}`"
-          />
+        <div
+          v-for="(color, index) in vendor.images"
+          :key="`header-image-${index}-1`"
+          class="concept-color"
+          :style="`background: ${color.color || '#EDEDED'}`"
+        >
+          <img class="concept-image" v-if="vendor.images[index]" :src="`${vendor.images[index]}`" />
+        </div>
+        <div
+          v-for="(color, index) in vendor.images"
+          :key="`header-image-1-${index}-1`"
+          class="concept-color"
+          :style="`background: ${color.color || '#EDEDED'}`"
+        >
+          <img class="concept-image" v-if="vendor.images[index]" :src="`${vendor.images[index]}`" />
         </div>
       </div>
       <img v-else :src="defaultImage" class="default-image" />

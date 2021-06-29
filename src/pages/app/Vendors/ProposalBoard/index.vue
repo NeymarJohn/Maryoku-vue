@@ -25,7 +25,6 @@
         v-for="proposalRequest in proposalRequests"
         :key="proposalRequest.id"
         :proposalRequest="proposalRequest"
-        :proposal="getProposalWithRequestId(proposalRequest.id)"
         @dismiss="dismiss"
       >
       </proposal-request-card>
@@ -257,10 +256,9 @@ export default {
       let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
       // let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '60b636d7cfefec26397d2a7e' })).get();
       this.proposalRequests = proposalRequests.filter((p) => {
-        let proposal = this.proposals.find((it) => it.proposalRequestId === p.id);
-        return proposal
-          ? (p.declineMessage !== "decline" && proposal.status !== "submit") ||
-            (proposal.negotiations && proposal.negotiations.length)
+        return p.proposal
+          ? (p.declineMessage !== "decline" && p.proposal.status !== "submit") ||
+            (p.proposal.negotiations && p.proposal.negotiations.length)
           : p.remainingTime > 0 && p.declineMessage !== "decline";
       });
 
@@ -287,10 +285,6 @@ export default {
         if (data.hasOwnProperty(t.key)) this.pagination[t.key] = data[t.key];
       });
       this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
-    },
-    getProposalWithRequestId(requestId) {
-      if (!this.proposals.length) return null;
-      return this.proposals.find((p) => p.proposalRequestId === requestId);
     },
     gotoPage(selectedPage) {
       console.log(selectedPage);

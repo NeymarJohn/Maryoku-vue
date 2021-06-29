@@ -142,7 +142,7 @@
   </div>
 </template>
 <script>
-import EditableProposalSubItem from "../Proposal/EditableProposalSubItem.vue";
+import EditableProposalSubItem from "./EditableProposalSubItem.vue";
 import CheckListItem from "../components/CheckListItem.vue";
 import { categoryNameWithIcons } from "@/constants/vendor";
 import { mapGetters } from "vuex";
