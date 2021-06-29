@@ -5,7 +5,7 @@
         <md-button class="md-button md-theme-default md-simple md-just-icon md-black" @click="prev"
           ><md-icon class="font-size-30">chevron_left</md-icon></md-button
         >
-        <span class="font-size-30 mr-10 font-bold" v-if="proposalRequests.length">
+        <span class="font-size-30 mr-10 font-bold" v-if="proposalRequests">
           {{ currentIndex + 1 }}/{{ proposalRequests.length }}
         </span>
         <span class="font-size-30 mr-10 font-bold" v-else>0 / 0</span>
@@ -16,17 +16,10 @@
       </div>
     </div>
 
-    <template v-if="!proposalRequests.length">
-        <div v-if="field == 'new'" class="d-flex flex-column align-center p-60">
-            <img class="mb-20" :src="`${$iconURL}vendordashboard/group-17116.png`" />
-            <div class="color-vendor font-bold font-size-14">NO REQUEST FOR PROPOSAL</div>
-        </div>
-        <div v-if="field == 'negotiation'" class="d-flex flex-column align-center p-60">
-            <img class="mb-15" :src="`${$iconURL}vendordashboard/group-16558.svg`" />
-            <div class="color-vendor font-bold font-size-14">NO REQUEST FOR CHANGES</div>
-        </div>
-    </template>
-
+    <div class="d-flex flcoluex-mn align-center p-70" v-if="!proposalRequests">
+      <img class="mb-20" :src="`${$iconURL}vendordashboard/group-17116.png`" />
+      <div class="color-vendor font-bold font-size-14">NO REQUEST FOR PROPOSAL</div>
+    </div>
     <div class="d-flex flex-column align-center" v-else>
       <carousel :items="1" :margin="0" :nav="false" :loop="true" class="header-carousel" @changed="changeSlide">
         <template slot="prev">
@@ -39,7 +32,7 @@
             :proposalRequest="p"
             :size="2"
             type="dashboard"
-            class="pl-30 pr-30 vendor-dashboard"
+            class="pl-30 pr-30 proposal-request-card"
           ></proposal-request-card>
         </div>
         <template slot="next">
@@ -60,7 +53,7 @@
     border-bottom: solid 1px #ffa9a9;
   }
   .proposal-request-card {
-    min-height: 260px !important;
+    min-height: 242px !important;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -72,36 +65,18 @@ import carousel from "vue-owl-carousel";
 import ProposalRequestCard from "../../components/ProposalRequestCard.vue";
 
 export default {
+  data() {
+    return {
+      currentIndex: 0,
+    };
+  },
   components: {
     carousel,
     ProposalRequestCard,
   },
-  props:{
-    field: {
-      type: String,
-      default: 'new',
-    }
-  },
-  data() {
-    return {
-        currentIndex: 0,
-    };
-  },
   computed: {
     proposalRequests() {
-      let proposalRequests = [];
-      if (!this.$store.state.vendorDashboard.proposalRequests) return proposalRequests;
-      if (this.field === 'new') {
-        proposalRequests = this.$store.state.vendorDashboard.proposalRequests.filter(p => {
-          return p.proposal ? p.declineMessage !== "decline" && p.proposal.status !== "submit"
-              : p.remainingTime > 0 && p.declineMessage !== "decline";
-        });
-      } else if (this.field === 'negotiation') {
-        proposalRequests = this.$store.state.vendorDashboard.proposalRequests.filter(p => {
-          return p.proposal && p.proposal.negotiations && p.proposal.negotiations.length
-        });
-      }
-      return proposalRequests;
+      return this.$store.state.vendorDashboard.proposalRequests;
     },
   },
   methods: {

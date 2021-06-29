@@ -50,7 +50,7 @@
       <template slot="footer">
         <div>
           <md-button class="md-simple md-black maryoku-btn" @click="captionModal.isOpen = false">Cancel</md-button>
-          <md-button class="md-vendor maryoku-btn" @click="saveCaption">Save</md-button>
+          <md-button class="md-red maryoku-btn" @click="saveCaption">Save</md-button>
         </div>
       </template>
     </modal>

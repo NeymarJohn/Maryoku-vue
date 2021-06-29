@@ -127,6 +127,12 @@ margin: auto;
   &:hover {
     background: #f51355 !important;
   }
+  &.md-vendor {
+    background: #641856 !important;
+    &:hover {
+      background: #641856 !important;
+    }
+  }
 }
 .swal2-cancel.md-button.md-danger {
   font-family: "Manrope-ExtraBold";
