@@ -11,10 +11,10 @@
         <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()">
           <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back
         </md-button>
-        <img :src="`${$iconURL}Submit%20Proposal/group-7618.svg`" />
-<!--        <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">-->
-<!--          <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />-->
-<!--        </md-button>-->
+
+        <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
+          <img :src="`${$iconURL}common/arrow-right-purple.svg`" width="17" />
+        </md-button>
       </div>
 
       <div class="next-cont">
@@ -265,8 +265,8 @@ export default {
         title: "Are you sure?",
         text: `You won't be able to revert this!`,
         showCancelButton: true,
-        confirmButtonClass: "md-button maryoku-btn md-vendor btn-fill",
-        cancelButtonClass: "md-button md-danger btn-fill",
+        confirmButtonClass: "md-button md-success md-vendor btn-fill",
+        cancelButtonClass: "md-button maryoku-btn md-danger btn-fill",
         confirmButtonText: "Yes, discard it!",
         buttonsStyling: false,
       }).then((result) => {
@@ -507,6 +507,12 @@ export default {
 
     i {
       color: #641856;
+    }
+  }
+  .scroll-top-button {
+    img {
+      height: 20px;
+      transform: rotate(-90deg);
     }
   }
 }

@@ -7,7 +7,7 @@
     </template>
     <template slot="body">
       <div>
-        <img :src="`${$iconURL}NewSubmitPorposal/group-16544.svg`" />
+        <img :src="`${$iconURL}NewSubmitPorposal/Group 17403.svg`" />
         <div class="font-size-30 font-bold mt-20 color-purple">How do you want to send this proposal?</div>
         <div class="mt-20 font-size-20">
           <span class="font-bold color-purple">To:</span> {{ event.customer ? event.customer.email : "" }}

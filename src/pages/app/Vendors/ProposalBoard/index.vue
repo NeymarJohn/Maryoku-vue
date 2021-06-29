@@ -3,7 +3,7 @@
     <loader :active="loading" :isFullScreen="true" />
     <div class="font-size-22 font-bold d-flex align-center">
       <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposals Board
-      <md-button class="ml-auto md-vendor md-maryoku mr-15">Create New Proposal</md-button>
+      <md-button class="ml-auto md-vendor md-maryoku mr-15" @click="createNewProposal">Create New Proposal</md-button>
     </div>
     <div class="font-bold text-uppercase mt-30 mb-15">Opportunities</div>
     <carousel
@@ -257,8 +257,8 @@ export default {
       // let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '60b636d7cfefec26397d2a7e' })).get();
       this.proposalRequests = proposalRequests.filter((p) => {
         return p.proposal
-          ? (p.declineMessage !== "decline" && p.proposal.status !== "submit") ||
-            (p.proposal.negotiations && p.proposal.negotiations.length)
+          ? p.remainingTime > 0 && (p.declineMessage !== "decline" && p.proposal.status !== "submit" ||
+            p.proposal.negotiations && p.proposal.negotiations.length)
           : p.remainingTime > 0 && p.declineMessage !== "decline";
       });
 
@@ -315,7 +315,6 @@ export default {
         id,
         declineMessage: "decline",
       }).save();
-      console.log("updateReq", res);
       this.proposalRequests = this.proposalRequests.filter((p) => {
         return p.id !== id;
       });
@@ -334,7 +333,7 @@ export default {
             type: "edit",
           },
         });
-        window.open(routeData.href, "_blank");
+        this.openNewTab(routeData.href)
       } else if (action === "remove") {
         this.loading = true;
         const proposal = await Proposal.find(id);
@@ -344,18 +343,20 @@ export default {
 
         this.loading = false;
       } else if (action === "download") {
-        this.downloadProposal(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
+        this.openNewTab(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
         // this.downloadProposal(`http://preprod.dev.maryoku.com:8080/1/proposal/${this.selectedProposal.id}/download`);
       }
     },
-    downloadPreviewPDF() {
-      console.log("download1");
-      const content = document.querySelector(".proposal-content");
-      this.$refs.pdfContainer.append(content);
-      this.$refs.html2Pdf.generatePdf();
-      this.showProposalDetail = false;
+    createNewProposal(){
+      let routeData = this.$router.resolve({
+        name: "outsideProposalEdit",
+        params: {
+            vendorId: this.vendorData.id,
+        },
+      });
+      this.openNewTab(routeData.href)
     },
-    downloadProposal(link) {
+    openNewTab(link) {
       window.open(link, "_blank");
     },
     eventDate() {
@@ -403,28 +404,6 @@ export default {
   computed: {
     vendorData() {
       return this.$store.state.vendor.profile;
-    },
-    htmlToPdfOptions() {
-      return {
-        margin: 0,
-        image: {
-          type: "jpeg",
-          quality: 0.9,
-        },
-        filename: `proposal-${this.selectedProposal ? this.selectedProposal.id : ""}`,
-        enableLinks: true,
-
-        html2canvas: {
-          scale: 1,
-          useCORS: true,
-        },
-
-        jsPDF: {
-          unit: "in",
-          format: "a4",
-          orientation: "portrait",
-        },
-      };
     },
   },
   watch: {
