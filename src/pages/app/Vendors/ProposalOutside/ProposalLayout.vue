@@ -7,8 +7,8 @@
       <router-view></router-view>
     </div>
     <section class="footer-wrapper">
-      <div calss>
-        <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()">
+      <div>
+        <md-button v-if="step > 0" class="prev-cont md-simple maryoku-btn md-black" @click="back()">
           <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back
         </md-button>
 
