@@ -238,7 +238,7 @@ export default [
         children: [
             {
                 path: "/vendor/:vendorId/proposal/non-registered",
-                name: "outsideProposalEdit",
+                name: "proposalEdit",
                 component: ProposalForOutsideClientContent,
                 meta: {
                     requiresAuth: false,

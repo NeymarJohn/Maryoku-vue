@@ -705,7 +705,7 @@ export const businessCategories = [
                 name: "appetizers",
                 type: 'Boolean',
                 value: false,
-                available: ["appetizers", "passed hours d'oeuvres", "stations", "buffet", "plated"],
+                available: ["appetizers", "passed hors doeuvres", "stations", "buffet", "plated"],
               },
             ],
           },

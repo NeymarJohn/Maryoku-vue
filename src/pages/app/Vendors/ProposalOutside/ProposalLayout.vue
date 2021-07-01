@@ -7,11 +7,10 @@
       <router-view></router-view>
     </div>
     <section class="footer-wrapper">
-      <div>
-        <md-button v-if="step > 0" class="prev-cont md-simple maryoku-btn md-black" @click="back()">
+      <div calss>
+        <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()">
           <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back
         </md-button>
-
         <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
           <img :src="`${$iconURL}common/arrow-right-purple.svg`" width="17" />
         </md-button>
@@ -272,7 +271,7 @@ export default {
       }).then((result) => {
         if (result.value) {
           this.$store.commit("proposalForNonMaryoku/initState");
-          this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}`);
+          this.$router.push(`/vendor/dashboard`);
         }
       });
     },

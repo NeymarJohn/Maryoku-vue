@@ -13,7 +13,7 @@
         <div class="mt-20">To:mayaetti@gmail.com</div>
         <div class="mt-40">A copy will be sent to your email</div>
         <div class="mt-20">
-          <md-button class="md-vendor maryoku-btn" @click="close">Cool, Back To Dashboard</md-button>
+          <md-button class="md-vendor maryoku-btn" @click="goToDashboard">Cool, Back To Dashboard</md-button>
         </div>
       </div>
     </template>
@@ -154,6 +154,10 @@ export default {
       } else if (this.sender === "outlook") {
         this.handleMsAuthClick();
       }
+    },
+    goToDashboard() {
+      this.close();
+      this.$router.push(`/vendor/dashboard`);
     },
   },
 };
