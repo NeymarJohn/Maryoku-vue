@@ -31,7 +31,7 @@ const state = {
   wizardStep: 0,
   initStep: 0,
   additionalServices: [],
-  attachments: {},
+  attachments: [],
   inspirationalPhotos: new Array(15),
   coverImage: "",
   bundleDiscount: {

@@ -12,7 +12,7 @@
             <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back</md-button
           >
           <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
-            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
+            <img :src="`${$iconURL}common/arrow-right-purple.svg`" width="17" />
           </md-button>
         </div>
 
@@ -20,7 +20,7 @@
           <span>You can return to it till the deadline!</span>
           <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`" /> Discard </a>
           <a class="save" @click="uploadProposal('draft')">
-            <img :src="`${proposalIconsUrl}Asset 610.svg`" /> Save for later
+            <img :src="`${$iconURL}Submit%20Proposal/group-3688.svg`" /> Save for later
           </a>
           <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
             Next
@@ -33,7 +33,7 @@
         <template slot="header">
           <div class="saved-it-modal__header">
             <img :src="`${proposalIconsUrl}thanks-proposal.png`" />
-            <div class="font-size-30 font-bold color-red mt-30">Thank you for submitting a proposal!</div>
+            <div class="font-size-30 font-bold color-vendor mt-30">Thank you for submitting a proposal!</div>
             <div class="text-center font-size-22 mt-40 mb-40">You will get a reply in 4 days</div>
           </div>
           <button class="close" @click="hideModal()">
@@ -43,10 +43,10 @@
         <template slot="body">
           <div class="saved-it-modal__body">
             <div>
-              <md-button class="md-simple maryoku-btn md-red" @click="goToProcessingGuid">
+              <md-button class="md-simple maryoku-btn md-vendor" @click="goToProcessingGuid">
                 How does our bidding process work?
               </md-button>
-              <md-button class="md-simple maryoku-btn md-red md-outlined" @click="goToVendorProfile"
+              <md-button class="md-simple maryoku-btn md-vendor md-outlined" @click="goToVendorProfile"
                 >Go to my Dashboard</md-button
               >
             </div>
@@ -238,7 +238,7 @@ export default {
               title: `You saved the current proposal. You can edit anytime later!`,
               buttonsStyling: false,
               type: "success",
-              confirmButtonClass: "md-button md-success",
+              confirmButtonClass: "md-button  md-vendor",
             });
           }
         });
@@ -507,6 +507,12 @@ export default {
 
     i {
       color: #641856;
+    }
+  }
+  .scroll-top-button {
+    img {
+        height: 20px;
+        transform: rotate(-90deg);
     }
   }
 }

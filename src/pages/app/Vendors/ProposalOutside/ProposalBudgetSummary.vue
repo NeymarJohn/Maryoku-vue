@@ -53,7 +53,7 @@
                 {{ vendor.eventCategory.title }}
               </li>
               <li>
-                <a :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
+                <a class="color-vendor" :href="`/#/vendor-signup/edit/${vendor.id}`" target="_blank">{{ vendor.companyName }}</a>
               </li>
               <li>
                 <span>Your proposal</span>
@@ -546,9 +546,9 @@ export default {
       span {
         font-size: 16px;
         font-weight: bold;
-        color: #f51355;
+        color: #641856;
         i {
-          color: #f51355;
+          color: #641856;
           position: relative;
           top: -1px;
         }
@@ -697,7 +697,7 @@ export default {
               margin-right: 1em;
             }
             &.add {
-              background-color: #f51355;
+              background-color: #641856;
               border-radius: 3px;
               padding: 8px 32px;
               color: #ffffff;

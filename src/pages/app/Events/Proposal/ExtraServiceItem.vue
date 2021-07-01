@@ -9,7 +9,7 @@
         <span v-else class="pb-15 pt-15 d-inline-block">{{ item.requirementValue }}</span>
       </div>
       <div class="item-price text-center">
-        ${{ item.price }}
+        ${{ item.price }}resizable-toggle-button
         {{ item.unit }}
       </div>
       <div class="item-added text-center">
