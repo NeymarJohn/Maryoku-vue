@@ -52,8 +52,8 @@
       <div :class="type == 'proposal' ? 'ml-auto' : 'd-flex align-center width-100'">
         <div v-if="proposalRequest.proposal">
           <div v-if="proposalRequest.proposal.status === 'draft'">
-            <span class="font-bold color-vendor">{{ progress }} %</span> completed
-            <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="progress"></md-progress-bar>
+            <span class="font-bold color-vendor">{{ proposalRequest.proposal.progress }} %</span> completed
+            <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="proposalRequest.proposal.progress"></md-progress-bar>
           </div>
           <div
             v-else-if="type === 'proposal' && proposalRequest.proposal.negotiations && proposalRequest.proposal.negotiations.length"
@@ -96,10 +96,6 @@ export default {
     };
   },
   computed: {
-    progress() {
-      if (!this.proposalRequest.proposal || !this.proposalRequest.proposal.step) return 10;
-      return Math.floor((this.proposalRequest.proposal.step / 3) * 100);
-    },
     actionName() {
       if (!this.proposalRequest.proposal) return "Apply";
       if (this.proposalRequest.proposal.status === "draft") {

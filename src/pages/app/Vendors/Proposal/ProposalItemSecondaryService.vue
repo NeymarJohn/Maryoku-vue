@@ -3,7 +3,7 @@
     <div class="title-cont dropdown" :class="{ opened: isExpanded }" @click="toggle($event)">
       <div class="left-side">
         <div class="check-cont" @click="clickItem($event, service.componentId)">
-          <img v-if="isAdded(service.componentId)" :src="`${iconUrl}Group 6258 (2).svg`" />
+          <img v-if="isAdded(service.componentId)" :src="`${$iconURL}Submit%20Proposal/group-5661.svg`" />
           <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`" />
         </div>
 <!--        <md-checkbox class="check-condition md-vendor"-->

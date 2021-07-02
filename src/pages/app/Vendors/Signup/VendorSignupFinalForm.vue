@@ -11,6 +11,12 @@
         </div>
       </div>
       <div class="card">
+        <div class="text-center my-30">
+          <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
+              <img :src="`${$iconURL}Signup/google-icon.jpg`" class="mr-20"/>
+              <span>Sign up with Google</span>
+          </md-button>
+        </div>
         <p>Email</p>
         <input class="field" placeholder="Type your email here" v-model="email" />
         <p>Set Password</p>
@@ -57,11 +63,23 @@ export default {
   data() {
     return {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
+      serverURL: process.env.SERVER_URL,
     };
   },
   created() {},
   mounted() {},
   methods: {
+    authenticate(provider) {
+      let action = this.$route.query.action;
+      let tenantId = this.$authService.resolveTenantId();
+
+      let callback = btoa(
+          `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/vendor/signedin?vendorId=${this.vendor.id}&token=`,
+      );
+
+      console.log(`${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`);
+      document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
+    },
     updateVendor(fieldName) {
       this.$root.$emit("update-vendor-value", fieldName, this.vendor[fieldName]);
     },
@@ -102,7 +120,7 @@ export default {
 
   .inside-cont {
     width: 50%;
-    max-width: 740px;
+    max-width: 640px;
     margin: 0 auto;
 
     .title-cont {
@@ -136,7 +154,7 @@ export default {
     .card {
       background-color: #ffffff;
       box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-      padding: 60px 60px 30px 60px;
+      padding: 30px 60px;
 
       p {
         margin: 0 0 14px 0;
@@ -146,7 +164,7 @@ export default {
         margin-bottom: 30px;
         // padding: 22px 28px;
         width: 100%;
-        max-width: 500px;
+        /*max-width: 500px;*/
         font: normal 16px Manrope-Regular, sans-serif;
         border: 1px solid #dddddd;
       }

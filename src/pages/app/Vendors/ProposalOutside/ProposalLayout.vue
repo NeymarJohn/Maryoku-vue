@@ -56,7 +56,7 @@
     <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="saved-it-modal__header">
-          <h3><img :src="`${proposalIconsUrl}Asset 587.svg`" /> Time Is Up!</h3>
+            <h3><img :src="`${$iconURL}Submit%20Proposal/group-6223%20(non-optimized).png`" /> Time Is Up!</h3>
           <div class="header-description">
             The deadline for submitting this prposal has passed. But no worries! We will be with you soon with the next
             one.

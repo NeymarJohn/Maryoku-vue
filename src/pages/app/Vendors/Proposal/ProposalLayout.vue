@@ -56,7 +56,7 @@
       <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
         <template slot="header">
           <div class="saved-it-modal__header">
-            <h3><img :src="`${proposalIconsUrl}Asset 587.svg`" /> Time Is Up!</h3>
+            <h3><img :src="`${$iconURL}Submit%20Proposal/group-6223%20(non-optimized).png`" /> Time Is Up!</h3>
             <div class="header-description">
               The deadline for submitting this prposal has passed. But no worries! We will be with you soon with the
               next one.
@@ -150,7 +150,7 @@ export default {
       option: "submit", // 'submit', 'duplicate'
     };
   },
-  created() {
+  async created() {
     this.$root.$on("send-event-data", (evtData) => {
       this.evtData = evtData;
     });
@@ -167,27 +167,25 @@ export default {
     this.submittedModal = false;
     this.isTimeUp = false;
 
-    this.getVendor(this.$route.params.vendorId).then((vendor) => {
-      this.vendor = vendor;
-    });
-    this.getProposalRequest(this.$route.params.id).then((proposalRequest) => {
-      if (proposalRequest.componentInstance.proposalAccepted) {
-        this.showCloseProposalModal = true;
-      }
-      this.$set(this, "proposalRequest", proposalRequest);
-      this.event = proposalRequest.eventData;
-      this.$store.commit("vendorProposal/setWizardStep", 0);
-      this.$store.commit("vendorProposal/setInitStep", 0);
-      if (proposalRequest.proposal) {
-        this.$store.commit("vendorProposal/setValue", {
+    this.vendor = await this.getVendor(this.$route.params.vendorId);
+    console.log('vendor', this.vendor);
+    this.proposalRequest = await this.getProposalRequest(this.$route.params.id)
+    if (this.proposalRequest.componentInstance.proposalAccepted) {
+      this.showCloseProposalModal = true;
+    }
+    // this.$set(this, "proposalRequest", proposalRequest);
+    this.event = this.proposalRequest.eventData;
+    this.$store.commit("vendorProposal/setWizardStep", 0);
+    this.$store.commit("vendorProposal/setInitStep", 0);
+    if (this.proposalRequest.proposal) {
+      this.$store.commit("vendorProposal/setValue", {
           key: "suggestionDate",
-          value: proposalRequest.proposal.suggestionDate,
-        });
-      }
-    });
+          value: this.proposalRequest.proposal.suggestionDate,
+      });
+    }
   },
   methods: {
-    ...mapActions("vendorProposal", ["getVendor", "getProposalRequest", "saveProposal"]),
+    ...mapActions("vendorProposal", ["getVendor", "getProposalRequest", "saveProposal", "setWizardStep"]),
     gotoNext() {
       console.log("proposal", this.$store.state.vendorProposal);
       this.step = this.step + 1;
@@ -225,6 +223,26 @@ export default {
         S3Service.fileUpload(fileObject, `${this.event.id}-${vendorProposal.vendor.id}`, "proposals/cover-images");
         coverImageUrl = `https://maryoku.s3.amazonaws.com/campaigns/cover-images/${this.event.id}-${vendorProposal.vendor.id}.${extenstion}`;
       }
+
+      console.log('vendorProposal', vendorProposal);
+      let progress = 0;
+      // calculate the progress of the proposal
+      if (vendorProposal.hasOwnProperty('eventVision') && vendorProposal.eventVision) {
+        progress += 20;
+      }
+      if (vendorProposal.proposalCostServices[this.vendor.vendorCategory] && vendorProposal.proposalCostServices[this.vendor.vendorCategory].length) {
+        progress += 30;
+      }
+      if (vendorProposal.proposalIncludedServices[this.vendor.vendorCategory] && vendorProposal.proposalIncludedServices[this.vendor.vendorCategory].length) {
+        progress += 10;
+      }
+      if (vendorProposal.proposalExtraServices[this.vendor.vendorCategory] && vendorProposal.proposalExtraServices[this.vendor.vendorCategory].length) {
+        progress += 10;
+      }
+      if (vendorProposal.inspirationalPhotos.some(p => !!p)) {
+        progress += 30;
+      }
+        this.$store.commit("vendorProposal/setProgress", progress);
 
       if (!this.isLoading) {
         this.isLoading = true;
