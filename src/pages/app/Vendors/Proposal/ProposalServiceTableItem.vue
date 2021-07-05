@@ -203,6 +203,7 @@
   <div v-else-if="serviceType == 'included'" class="proposal-service-table-item included-services">
     <div class="proposal-service-item-wrapper">
       <div class="item-cont">
+        <img :src="`${$storageURL}ok%20check%20V.svg`" class="mr-10">
         {{ item.requirementTitle }}
         <!-- <span class="madatory-badge" v-if="item.isMandatory">Mandatory</span> -->
         <span class="complementary-badge" v-if="item.isComplimentary">

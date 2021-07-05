@@ -219,7 +219,7 @@ export default {
 
     let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
     this.proposalRequests = proposalRequests.filter((p) => {
-      return !p.hasOwnProperty('viewed') || !p.viewed
+      return p.remainingTime > 0 && !p.hasOwnProperty('viewed') || !p.viewed
     });
 
     this.$root.$on('proposalTab', _ => {
