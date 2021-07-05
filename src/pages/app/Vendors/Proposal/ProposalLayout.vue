@@ -228,7 +228,7 @@ export default {
       let progress = 0;
       // calculate the progress of the proposal
       if (vendorProposal.hasOwnProperty('eventVision') && vendorProposal.eventVision) {
-        progress += 20;
+        progress += 15;
       }
       if (vendorProposal.proposalCostServices[this.vendor.vendorCategory] && vendorProposal.proposalCostServices[this.vendor.vendorCategory].length) {
         progress += 30;

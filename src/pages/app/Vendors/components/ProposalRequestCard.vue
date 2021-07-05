@@ -16,10 +16,10 @@
       <div class="pr-10 mr-10 font-bold" style="border-right: 1px solid rgba(0, 0, 0, 0.2)">
         {{ $dateUtil.formatScheduleDay(proposalRequest.eventData.eventStartMillis, "MM/DD/YY") }}
       </div>
-      $ {{ (proposalRequest.componentInstance ? proposalRequest.componentInstance.allocatedBudget : "") | withComma }}
+      $ {{ (proposalRequest.proposal ? proposalRequest.proposal.cost : proposalRequest.componentInstance.allocatedBudget) | withComma }}
     </div>
     <div v-if="expanded" :class="getFontSize('subTitle')">
-      <div class="d-flex align-center mt-1">
+      <div class="d-flex align-center mt-1">Group 5479 (2).svg
         <div class="width-50 d-flex align-center">
           <img class="mr-10" :src="`${iconUrl}Onboarding/Group%204458.svg`" style="width: 18px" />
           {{ proposalRequest.eventData.dateCreated | date("MM/DD/YY") }}
