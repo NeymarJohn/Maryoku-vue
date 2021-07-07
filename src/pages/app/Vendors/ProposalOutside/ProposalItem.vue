@@ -151,7 +151,6 @@
         :item="getObject(req)"
         :active="true"
         :step="1"
-        :theme="'purple'"
       />
       <div class="tax-discount-wrapper">
         <div class="row grid-tax-row">

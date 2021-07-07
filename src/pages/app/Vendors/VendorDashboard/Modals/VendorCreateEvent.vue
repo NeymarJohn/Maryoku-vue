@@ -129,10 +129,10 @@
             <div>Or</div>
             <div class="note">Drag your file here</div>
           </vue-dropzone>
-          <div class="form-group text-left mt-30" v-else>
-            <a :href="`${fileUrl}`" class="color-black" target="_blank">
-              <img class="mr-5" :src="`${$iconURL}common/pin-dark.svg`" width="15" />{{ fileName }}</a
-            >
+          <div class="form-group attach-file text-left mt-30" v-else>
+            <img class="mr-5" :src="`${$iconURL}common/pin-dark.svg`" width="15" />
+            <a :href="`${fileUrl}`" class="color-black" target="_blank">{{ fileName }}</a>
+            <span class="attach-trash" @click="fileName = null"><md-icon>close</md-icon></span>
           </div>
         </div>
       </div>
@@ -384,6 +384,23 @@ export default {
     }
   }
 }
+.attach-file{
+    .attach-trash{
+        cursor: pointer;
+        display: none;
+        background-color: white;
+        border-radius: 50%;
+        box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+        padding: 5px;
+        margin-left: 10px;
+    }
+    &:hover{
+        .attach-trash{
+            display: inline;
+        }
+    }
+}
+
 .upload-section {
   border-color: #641856 !important;
 }

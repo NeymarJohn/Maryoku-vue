@@ -7,10 +7,11 @@
       <router-view></router-view>
     </div>
     <section class="footer-wrapper">
-      <div calss>
-        <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()">
+      <div>
+        <md-button v-if="step > 0" class="prev-cont md-simple maryoku-btn md-black" @click="back()">
           <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back
         </md-button>
+
         <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
           <img :src="`${$iconURL}common/arrow-right-purple.svg`" width="17" />
         </md-button>
@@ -55,7 +56,7 @@
     <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="saved-it-modal__header">
-          <h3><img :src="`${proposalIconsUrl}Asset 587.svg`" /> Time Is Up!</h3>
+            <h3><img :src="`${$iconURL}Submit%20Proposal/group-6223%20(non-optimized).png`" /> Time Is Up!</h3>
           <div class="header-description">
             The deadline for submitting this prposal has passed. But no worries! We will be with you soon with the next
             one.
@@ -280,7 +281,6 @@ export default {
     },
     submitProposal() {
       this.showSendProposalModal = false;
-      this.uploadProposal("submit");
       this.showSubmittedProposalModal = true;
     },
   },

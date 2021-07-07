@@ -49,7 +49,7 @@
       </div>
     </div>
     <div class="p-40" style="background-color: #ffd9e4">
-      <md-checkbox v-model="agreeTerms">I read this section & I agree</md-checkbox>
+      <md-checkbox class="md-vendor" v-model="agreeTerms">I read this section & I agree</md-checkbox>
     </div>
   </div>
   <div v-else></div>

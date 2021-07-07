@@ -31,7 +31,12 @@
     </md-button>
 
     <div class="text-right">
-      <md-menu md-size="medium" class="action-menu" :md-offset-x="-300" :md-offset-y="-36" @closed="hoveredMenu = ''">
+      <md-menu
+          md-size="medium"
+          class="action-menu"
+          :md-offset-x="-300"
+          :md-offset-y="-36"
+          @md-opened="isOpened">
         <md-button md-menu-trigger class="edit-btn md-simple" style="height: 30px">
           <md-icon style="font-size: 30px !important">more_vert</md-icon>
         </md-button>
@@ -39,40 +44,31 @@
           <md-menu-item
             @click="edit('edit')"
             class="md-purple"
-            @mouseenter="hoveredMenu = 'edit'"
-            @mouseleave="hoveredMenu = ''"
           >
             <span>
-              <img v-if="hoveredMenu !== 'edit'" :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />
-              <img v-else :src="`${$iconURL}common/edit-white.svg`" class="label-icon mr-10" />
+              <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />
               Edit</span
             >
           </md-menu-item>
           <md-menu-item
             @click="edit('download')"
             class="md-purple"
-            @mouseenter="hoveredMenu = 'download'"
-            @mouseleave="hoveredMenu = ''"
           >
             <span>
-              <img v-if="hoveredMenu !== 'download'" :src="`${$iconURL}common/download.svg`" class="label-icon mr-10" />
-              <img v-else :src="`${$iconURL}common/download-white.svg`" class="label-icon mr-10" />
+              <img :src="`${$iconURL}common/download.svg`" class="label-icon mr-10" />
               Download
             </span>
           </md-menu-item>
           <md-menu-item
             @click="edit('remove')"
             class="md-purple"
-            @mouseenter="hoveredMenu = 'remove'"
-            @mouseleave="hoveredMenu = ''"
           >
             <span>
               <img
-                v-if="hoveredMenu !== 'remove'"
                 :src="`${$iconURL}VendorsProposalPage/group-11314.svg`"
                 class="label-icon mr-10"
-              />
-              <img v-else :src="`${$iconURL}common/duplicate-white.svg`" class="label-icon mr-10" />Delete Proposal</span
+              /> Delete Proposal
+            </span>
             >
           </md-menu-item>
         </md-menu-content>
@@ -94,7 +90,6 @@ export default {
   },
   data() {
     return {
-      hoveredMenu: "",
       iconUrl: `${this.$iconURL}VendorsProposalPage/`,
     };
   },
@@ -112,12 +107,19 @@ export default {
         }
     },
     edit(action) {
-
       this.$emit('action', action, this.proposal.id);
-
     },
     leave(item){
       console.log('leave', item);
+    },
+    isOpened(){
+        setTimeout(_ => {
+            $('li.md-list-item').hover(function(el){
+                $(this).find('img').attr('style', "filter:brightness(0) invert(1)")
+            }, function(){
+                $(this).find('img').attr('style', "filter:brightness(0) invert(0)")
+            })
+        }, 0)
     }
   },
 };
