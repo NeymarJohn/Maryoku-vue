@@ -280,7 +280,7 @@ export default {
     },
     submitProposal() {
       this.showSendProposalModal = false;
-      this.uploadProposal();
+      this.uploadProposal("submit");
       this.showSubmittedProposalModal = true;
     },
   },
