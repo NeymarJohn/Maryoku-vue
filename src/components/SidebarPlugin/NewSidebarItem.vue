@@ -48,7 +48,6 @@
           </md-icon>
           <img v-else :src="isActive ? link.iconActiveUrl : link.iconUrl" />
         </template>
-        <span class="badge-mark" v-if="hasBadge"></span>
       </component>
     </slot>
   </component>
@@ -80,10 +79,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    hasBadge: {
-      type: Boolean,
-      default: false,
-    }
   },
   provide() {
     return {
@@ -175,7 +170,6 @@ export default {
     if (this.isActive && this.isMenu) {
       this.collapsed = false;
     }
-
   },
   destroyed() {
     if (this.$el && this.$el.parentNode) {
@@ -189,19 +183,6 @@ export default {
 </script>
 <style>
 .sidebar-menu-item {
-  position: relative;
   cursor: pointer;
-}
-.badge-mark {
-    display: block;
-    width: 12px;
-    height: 12px;
-    background-color: #f51355;
-    border-radius: 50%;
-    z-index: 1;
-    right: 15px;
-    top: 20px;
-    position: absolute;
-    transform: translate(-50%);
 }
 </style>

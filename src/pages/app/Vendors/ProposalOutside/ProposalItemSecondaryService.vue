@@ -53,7 +53,6 @@ import ProposalRequestFile from "@/models/ProposalRequestFile";
 
 import InputProposalSubItem from "@/components/Inputs/InputProposalSubItem.vue";
 import SelectProposalSubItem from "../components/SelectProposalSubItem.vue";
-import EditableProposalSubItem from "../Proposal/EditableProposalSubItem.vue";
 import { Money } from "v-money";
 
 import vue2Dropzone from "vue2-dropzone";
@@ -66,7 +65,6 @@ export default {
   components: {
     InputProposalSubItem,
     SelectProposalSubItem,
-    EditableProposalSubItem,
     Money,
     vueDropzone: vue2Dropzone,
     ProposalServiceTable,

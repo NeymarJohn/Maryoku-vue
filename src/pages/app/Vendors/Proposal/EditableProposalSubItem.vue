@@ -84,7 +84,11 @@
         :key="index"
       >
         <div class="item-cont">
-          <md-radio v-model="item.selectedOption" :value="index"></md-radio>
+          <md-radio
+            v-model="item.selectedOption"
+            :class="theme === 'red' ? 'md-red' : 'md-purple'"
+            :value="index"
+          ></md-radio>
           {{ option.description }}
         </div>
         <div class="qty-cont editor-wrapper">
@@ -161,6 +165,10 @@ export default {
     active: Boolean,
     step: Number,
     index: Number,
+    theme: {
+      type: String,
+      default: "red",
+    },
   },
   data() {
     return {

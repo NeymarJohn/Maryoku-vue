@@ -20,13 +20,7 @@
         $ {{ item.priceUnit == "total" ? item.price : (item.price * item.requirementValue) | withComma }}
       </div>
       <div class="action-cont editor-wrapper">
-        <md-menu md-size="medium"
-                 :md-offset-x="240"
-                 :md-offset-y="-36"
-                 class="action-menu"
-                 v-if="!isEdit"
-                 @md-opened="isOpened"
-        >
+        <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu" v-if="!isEdit">
           <md-button md-menu-trigger class="edit-btn md-simple" style="height: 40px">
             <md-icon style="font-size: 40px !important">more_vert</md-icon>
           </md-button>
@@ -209,7 +203,6 @@
   <div v-else-if="serviceType == 'included'" class="proposal-service-table-item included-services">
     <div class="proposal-service-item-wrapper">
       <div class="item-cont">
-        <img :src="`${$storageURL}ok%20check%20V.svg`" class="mr-10">
         {{ item.requirementTitle }}
         <!-- <span class="madatory-badge" v-if="item.isMandatory">Mandatory</span> -->
         <span class="complementary-badge" v-if="item.isComplimentary">
@@ -251,13 +244,7 @@
           <md-icon class="color-dark" v-if="isExpanded">keyboard_arrow_down</md-icon>
           <md-icon class="color-dark" v-else>keyboard_arrow_right</md-icon>
         </md-button>
-        <md-menu md-size="medium"
-                 :md-offset-x="240"
-                 :md-offset-y="-36"
-                 class="action-menu"
-                 v-if="!isEdit"
-                 @md-opened="isOpened"
-        >
+        <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu" v-if="!isEdit">
           <md-button md-menu-trigger class="edit-btn md-simple" style="height: 40px">
             <md-icon style="font-size: 40px !important">more_vert</md-icon>
           </md-button>
@@ -354,13 +341,7 @@
           <md-icon class="color-dark" v-if="isExpanded">keyboard_arrow_down</md-icon>
           <md-icon class="color-dark" v-else>keyboard_arrow_right</md-icon>
         </md-button>
-        <md-menu md-size="medium"
-                 :md-offset-x="240"
-                 :md-offset-y="-36"
-                 class="action-menu"
-                 v-if="!isEdit"
-                 @md-opened="isOpened"
-        >
+        <md-menu md-size="medium" :md-offset-x="240" :md-offset-y="-36" class="action-menu" v-if="!isEdit">
           <md-button md-menu-trigger class="edit-btn md-simple" style="height: 40px">
             <md-icon style="font-size: 40px !important">more_vert</md-icon>
           </md-button>
@@ -493,25 +474,6 @@ export default {
       console.log(this.item);
       // this.item.plannerOptions = Object.assign([], this.defaultItem.plannerOptions);
     },
-    isOpened(){
-      setTimeout(_ => {
-          $('li.md-list-item').hover(function(el){
-              if ($(this).find('img').length) {
-                  $(this).find('img').attr('style', "filter:brightness(0) invert(1)")
-              } else if ($(this).find('i')) {
-                  $(this).find('i').addClass("color-white")
-                  $(this).find('i').removeClass("color-black")
-              }
-          }, function(){
-              if ($(this).find('img').length) {
-                  $(this).find('img').attr('style', "filter:brightness(0) invert(0)")
-              } else if ($(this).find('i')) {
-                  $(this).find('i').removeClass("color-white")
-                  $(this).find('i').addClass("color-black")
-              }
-          })
-      }, 0)
-    }
   },
   watch: {},
 };

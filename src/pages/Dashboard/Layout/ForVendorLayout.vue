@@ -79,14 +79,14 @@
       </template>
       <template slot="footer">
         <div class="saved-it-modal__footer">
-          <md-button class="md-vendor maryoku-btn" @click="showCloseProposalModal = false">Ok, Thanks</md-button>
+          <md-button class="md-red maryoku-btn" @click="showCloseProposalModal = false">Ok, Thanks</md-button>
         </div>
       </template>
     </modal>
     <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="saved-it-modal__header">
-            <h3><img :src="`${$iconURL}Submit%20Proposal/group-6223%20(non-optimized).png`" /> Time Is Up!</h3>
+          <h3><img :src="`${$iconURL}NewSubmitPorposal/Asset 587.svg`" /> Time Is Up!</h3>
           <div class="header-description">
             The deadline for submitting this prposal has passed. But no worries! We will be with you soon with the next
             one.
@@ -105,7 +105,7 @@
       </template>
       <template slot="footer">
         <div class="saved-it-modal__footer">
-          <md-button class="md-vendor maryoku-btn" @click="hideModal()">Ok, Thanks</md-button>
+          <md-button class="md-red maryoku-btn" @click="hideModal()">Ok, Thanks</md-button>
         </div>
       </template>
     </modal>
@@ -293,7 +293,7 @@ export default {
           }
           span.lt {
             padding: 8px 12px;
-            color: #641856;
+            color: #f51355;
             width: 37px;
             height: 37px;
             font-weight: 900;
@@ -376,7 +376,7 @@ export default {
       h3 {
         font-size: 30px;
         font-weight: bold;
-        color: #641856;
+        color: #f51355;
 
         img {
           width: 55px;

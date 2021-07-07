@@ -7,7 +7,6 @@ import S3Service from "@/services/s3.service";
 import { makeid } from "@/utils/helperFunction";
 import { getBase64 } from "@/utils/file.util";
 const defaultState = {
-    isLoading: false,
     isEditing: false,
     step: 0,
     status: null,
@@ -148,12 +147,10 @@ const actions = {
     },
     saveVendor: ({ commit, state }, vendor) => {
         return new Promise((resolve, reject) => {
-            state.isLoading = true;
             new Vendors(vendor)
                 .save()
                 .then(res => {
                     commit("setVendor", { ...state.vendor, ...res.item });
-                    state.isLoading = false;
                     resolve(res.item);
                 })
                 .catch(error => {

@@ -3,14 +3,9 @@
     <div class="title-cont dropdown" :class="{ opened: isExpanded }" @click="toggle($event)">
       <div class="left-side">
         <div class="check-cont" @click="clickItem($event, service.componentId)">
-          <img v-if="isAdded(service.componentId)" :src="`${$iconURL}Submit%20Proposal/group-5661.svg`" />
+          <img v-if="isAdded(service.componentId)" :src="`${iconUrl}Group 6258 (2).svg`" />
           <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`" />
         </div>
-<!--        <md-checkbox class="check-condition md-vendor"-->
-<!--                    v-model="this.additionalServices"-->
-<!--                    :value="service.componentId"-->
-<!--                    @change="changeItem($event)"-->
-<!--        ></md-checkbox>-->
         <h3 class="title">
           <img :src="img" />
           <span>{{ category }}</span>
@@ -177,15 +172,11 @@ export default {
         });
       }
     },
-    changeItem(event){
-      console.log('changeItem', this.additionalServices);
-    },
     clickItem(event, category) {
-      console.log('clickItem', this.isChecked);
-      this.isChecked = !this.isChecked;
+      // this.isChecked = !this.isChecked;
       event.stopPropagation();
 
-      if (!this.isChecked) {
+      if (!this.isAdded(category)) {
         this.additionalServices.push(category);
         this.isExpanded = true;
         this.$store.commit("vendorProposal/setValue", {
@@ -426,7 +417,6 @@ export default {
       });
     });
 
-    console.log('additionalServices', this.additionalServices);
     this.$forceUpdate();
     this.$root.$emit("update-proposal-budget-summary", this.newProposalRequest, {});
     this.$root.$on("remove-proposal-requirement", (item) => {

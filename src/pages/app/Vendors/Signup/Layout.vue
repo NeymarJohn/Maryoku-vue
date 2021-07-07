@@ -229,7 +229,7 @@ export default {
 
                     this.$store.dispatch("auth/login", userData).then(
                       () => {
-                        this.$router.push(`/vendor/dashboard`);
+                        this.$router.push(`/vendor/profile/settings`);
                       },
                       (error) => {
                         this.$router.push(`/vendor/signin`);
