@@ -234,12 +234,17 @@ export default {
           this.isLoading = false;
           if (type === "submit") this.submittedModal = true;
           else {
-            Swal.fire({
-              title: `You saved the current proposal. You can edit anytime later!`,
-              buttonsStyling: false,
-              type: "success",
-              confirmButtonClass: "md-button md-success",
-            });
+              Swal.fire({
+                  title: `You’ve saved this current proposal. Come back and edit it at any time!`,
+                  buttonsStyling: false,
+                  type: "success",
+                  confirmButtonClass: "md-button md-vendor",
+                  confirmButtonText: "Back to Dashboard",
+              }).then(res => {
+                  if(res.isConfirmed) {
+                      this.$router.push({path: "/vendor/dashboard"});
+                  }
+              });
           }
         });
       }
