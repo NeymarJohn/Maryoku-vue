@@ -145,13 +145,13 @@ export default {
       expiredTime: 0,
     };
   },
-  created() {
+  async created() {
+    await this.$store.dispatch('planningBoard/resetRequirements');
     if (!this.allRequirements) {
       this.isLoading = true;
       this.$store
         .dispatch("event/getRequirements")
         .then((requirements) => {
-          console.log("requirements", requirements);
           this.allRequirements = requirements;
           this.isLoading = false;
         })
@@ -162,7 +162,6 @@ export default {
       this.$store
         .dispatch("planningBoard/getRequirements", this.event.id)
         .then((requirements) => {
-          console.log(requirements);
           this.isLoadingStoredData = false;
         })
         .catch((e) => {
@@ -175,12 +174,27 @@ export default {
     // }
   },
   computed: {
-    ...mapState("planningBoard", {
-      requirements: (state) => state,
-      types: (state) => state.types,
-      mainRequirements: (state) => state.mainRequirements,
-      specialRequirements: (state) => state.specialRequirements,
-    }),
+    // ...mapState("planningBoard", {
+    //   requirements: (state) => {
+    //     console.log('')
+    //
+    //   },
+    //   types: (state) => state.types,
+    //   mainRequirements: (state) => state.mainRequirements,
+    //   specialRequirements: (state) => state.specialRequirements,
+    // }),
+    requirements(){
+      return this.$store.state.planningBoard.requirements
+    },
+    types(){
+      return this.$store.state.planningBoard.types
+    },
+    mainRequirements(){
+      return this.$store.state.planningBoard.mainRequirements
+    },
+    specialRequirements(){
+      return this.$store.state.planningBoard.specialRequirements
+    },
     step: {
       get() {
         return this.$store.state.planningBoard.step;
@@ -312,6 +326,11 @@ export default {
       this.showCart = true;
     },
   },
+  watch:{
+    requirements(newVal){
+      console.log('requirement.watch', newVal);
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

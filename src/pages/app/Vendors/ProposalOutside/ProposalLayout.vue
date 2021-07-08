@@ -281,6 +281,7 @@ export default {
     },
     submitProposal() {
       this.showSendProposalModal = false;
+      this.uploadProposal("submit");
       this.showSubmittedProposalModal = true;
     },
   },

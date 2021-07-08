@@ -236,22 +236,23 @@
           <span class="d-block">{{
             editingItem.hasOwnProperty("labelForValue") ? editingItem.labelForValue : "How many"
           }}</span>
-          <input
-            type="number"
-            class="text-center number-field w-max-120"
-            placeholder=""
-            v-model="editingItem.discount"
-            @input="setPricePolicy()"
-          />
-          <br />
-          <div class="ml-10" v-if="editingItem.hasUnit">
-            <multiselect
-              class="mt-20 unit-select"
-              :class="{ ' md-red': theme === 'red', 'md-purple': theme === 'purple' }"
-              v-model="editingItem.unit"
-              :options="editingItem.units"
-              :searchable="false"
-            ></multiselect>
+          <div class="d-flex align-center">
+              <input
+                  type="number"
+                  class="text-center number-field w-max-120"
+                  placeholder=""
+                  v-model="editingItem.discount"
+                  @input="setPricePolicy()"
+              />
+              <div class="ml-10" v-if="editingItem.hasUnit">
+                  <multiselect
+                      class="unit-select"
+                      :class="{ ' md-red': theme === 'red', 'md-purple': theme === 'purple' }"
+                      v-model="editingItem.unit"
+                      :options="editingItem.units"
+                      :searchable="false"
+                  ></multiselect>
+              </div>
           </div>
         </div>
         <div class="bottom no-margin" v-if="editingItem.type == 'CostAndQty'">
@@ -501,7 +502,7 @@ export default {
     font-weight: normal;
     .multiselect__tags {
       min-height: 1em;
-      padding: 16px 50px 16px 12px;
+      padding: 12px 50px 12px 12px;
     }
     .multiselect__placeholder {
       font-size: 16px;

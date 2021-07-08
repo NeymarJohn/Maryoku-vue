@@ -288,12 +288,11 @@ const actions = {
       console.log('saveProposal', state);
       const proposal = new Proposal({
         id: status == 'duplicate' ? undefined : state.id,
+        eventData: state.event,
         personalMessage: state.personalMessage,
         additionalServices: state.additionalServices,
         images: state.images,
-        proposalRequestId: state.proposalRequest.id,
         eventVision: state.eventVision,
-        eventComponentId: state.proposalRequest.eventComponentInstance.id,
         vendorId: state.vendor.id,
         costServices: state.costServices,
         includedServices: state.includedServices,
@@ -308,7 +307,8 @@ const actions = {
         step: state.wizardStep,
         tenantId: state.tenantId,
         suggestionDate: state.suggestionDate,
-        expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate()
+        expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
+        nonMaryoku: true
       });
       proposal
         .save()
