@@ -41,32 +41,32 @@
           class="text-left sub-category"
         >
           <div class="font-bold-extra">{{ section }}</div>
-          <div class="md-layout text-left">
+          <div class="requirement-row text-left">
             <!-- {{ subCategory.requirements[section] }} -->
             <div
-                v-for="item in subCategory[section].filter((item) => item.type !== 'single-selection' && item.visible)"
-                :key="item.item"
-                class="md-layout-item md-size-33"
+              v-for="item in subCategory[section].filter((item) => item.type !== 'single-selection' && item.visible)"
+              :key="item.item"
+              class="requirement-item"
             >
-                <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">
-                    <span class="text-transform-capitalize">{{ item.item }}</span>
-                </md-checkbox>
+              <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">
+                <span class="text-transform-capitalize">{{ item.item }}</span>
+              </md-checkbox>
             </div>
             <div
-                v-for="item in subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)"
-                class="requirement-item-tags mt-10"
-                :key="item.item"
+              v-for="item in subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)"
+              class="requirement-item-tags mt-10"
+              :key="item.item"
             >
-                <div class="mb-10">{{ item.item }}:</div>
-                <tag-item
-                    @click="tag.selected = !tag.selected"
-                    :tagLabel="tag.name"
-                    :key="tag.name"
-                    :isSelected="tag.selected"
-                    :theme="`red`"
-                    v-for="tag in item.options"
-                    class="mr-10"
-                ></tag-item>
+              <div class="mb-10">{{ item.item }}:</div>
+              <tag-item
+                @click="tag.selected = !tag.selected"
+                :tagLabel="tag.name"
+                :key="tag.name"
+                :isSelected="tag.selected"
+                :theme="`red`"
+                v-for="tag in item.options"
+                class="mr-10"
+              ></tag-item>
             </div>
           </div>
         </div>
@@ -77,9 +77,9 @@
           :id="specialSection.subCategory"
         >
           <div class="font-bold-extra">{{ specialSection.subCategory }}</div>
-          <div class="md-layout text-left" v-if="specialSection.subCategory !== 'Sitting arrangement'">
+          <div class="requirement-row text-left" v-if="specialSection.subCategory !== 'Sitting arrangement'">
             <!-- {{ subCategory.requirements[section] }} -->
-            <div v-for="item in specialSection.options" class="md-layout-item md-size-33" :key="item.name">
+            <div v-for="item in specialSection.options" class="requirement-item" :key="item.name">
               <md-checkbox v-model="item.selected">
                 <div class="checkbox-label-wrapper">
                   <img class="special-icon" :src="getIcon(specialSection.subCategory, item.name)" />
@@ -364,7 +364,15 @@ export default {
       width: 100%;
     }
   }
-
+  .requirement-row {
+    .requirement-item {
+      display: inline-block;
+      margin-right: 40px;
+      min-width: 25%;
+      // display: grid;
+      // grid-template-columns: repeat(4, 25%);
+    }
+  }
   .sub-category {
     border-top: solid 1px #dbdbdb;
     margin-top: 30px;

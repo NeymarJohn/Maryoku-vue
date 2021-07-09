@@ -4,13 +4,12 @@
         <div class="md-layout-item md-size-35">
             <div class="d-flex flex-column">
                 <img class="mx-auto" :src="`${$iconURL}Vendor%20Signup/Group%2019453.svg`"/>
-                <div v-if="!submitted" class="text-center font-size-30 font-bold color-black my-20">Reset Password</div>
+                <div v-if="!submitted" class="text-center font-size-30 font-bold color-black my-20">Forgot your Password?</div>
                 <div v-else class="text-center font-size-30 font-bold color-black my-20">Check your email</div>
             </div>
             <signup-card>
                 <div class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain" slot="content-right">
-                    <p class="font-size-16 text-center font-bold" v-if="!submitted">Enter the email associated with your account and we’ll send an email
-                        with instructions to reset your password</p>
+                    <p class="font-size-16 text-center font-bold" v-if="!submitted">Please enter the email address you used to create your Maryoku account:</p>
                     <p class="font-size-16 font-bold" v-else>We have sent a temporary password & instructions to your email.</p>
                     <maryoku-input
                         :disabled="submitted"
@@ -28,9 +27,14 @@
                             class="md-default md-vendor md-maryoku mt-4"
                             slot="footer"
                             :disabled="submitted"
-                        >Reset Password</md-button>
+                        >Send</md-button>
                     </div>
-                    <div class="d-flex flex-column" v-if="submitted">
+                    <div v-if="!submitted">
+                        <p class="text-center">
+                          If your email address is in our records, you will receive an email enabling you to create a temporary password that will be valid for 24 hours. Simply sign in using this temporary password and then replace it with a new permanent one.
+                        </p>
+                    </div>
+                    <div class="d-flex flex-column" v-else>
                         <p class="text-center font-size-16 font-bold">Did not receive the email?</p>
                         <span class="text-center font-size-16 font-bold">Check your spam filter, or
                             <a class="color-vendor font-size-18" @click="reset">try another email address</a></span>

@@ -76,6 +76,7 @@
           :active="true"
           :isEdit="true"
           :step="3"
+          theme="vendor"
         />
         <div class="discount-tax-wrapper">
           <div class="item">

@@ -188,6 +188,13 @@ export default {
       location.reload();
       this.toggleMenu = false;
     },
+    async getProposalRequests(){
+      let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
+      this.proposalRequests = proposalRequests.filter((p) => {
+        return p.remainingTime > 0 && !p.viewed
+      });
+      console.log('vendorSideBar.proposalRequests', this.proposalRequests);
+    }
   },
   computed: {
     sidebarStyle() {
@@ -213,17 +220,12 @@ export default {
   components: {
     SidebarItem,
   },
-  async created() {
+  mounted() {
     this.fetchUrl();
     this.taskUrl = eventService.getFirstTaskLink(this.event);
 
-    let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
-    this.proposalRequests = proposalRequests.filter((p) => {
-      return p.remainingTime > 0 && !p.hasOwnProperty('viewed') || !p.viewed
-    });
-
     this.$root.$on('proposalTab', _ => {
-      console.log('proposalTab');
+      console.log('proposalTab', this.proposalRequests);
       this.proposalRequests.map(it => {
           new ProposalRequest({ id:it.id, viewed: true }).save();
       })
@@ -238,6 +240,9 @@ export default {
       },
       deep: true,
     },
+    vendorData(newVal){
+        if(newVal) this.getProposalRequests()
+    }
   },
 };
 </script>

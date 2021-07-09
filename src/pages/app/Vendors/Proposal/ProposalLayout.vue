@@ -224,7 +224,6 @@ export default {
         coverImageUrl = `https://maryoku.s3.amazonaws.com/campaigns/cover-images/${this.event.id}-${vendorProposal.vendor.id}.${extenstion}`;
       }
 
-      console.log('vendorProposal', vendorProposal);
       let progress = 0;
       // calculate the progress of the proposal
       if (vendorProposal.hasOwnProperty('eventVision') && vendorProposal.eventVision) {
@@ -253,10 +252,15 @@ export default {
           if (type === "submit") this.submittedModal = true;
           else {
             Swal.fire({
-              title: `You saved the current proposal. You can edit anytime later!`,
+              title: `You’ve saved this current proposal. Come back and edit it at any time!`,
               buttonsStyling: false,
               type: "success",
-              confirmButtonClass: "md-button  md-vendor",
+              confirmButtonClass: "md-button md-vendor",
+              confirmButtonText: "Back to Dashboard",
+            }).then(res => {
+                if(res.isConfirmed) {
+                    this.$router.push({path: "/vendor/dashboard"});
+                }
             });
           }
         });
