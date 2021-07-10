@@ -219,7 +219,7 @@ export default {
   }
 }
 .editable-proposal-sub-item-wrapper {
-  padding: 26px 20px;
+  padding: 46px 40px;
   border: 2px solid #d5d5d5;
   border-bottom: none;
   font-family: "Manrope-Regular", sans-serif;
@@ -230,11 +230,11 @@ export default {
   align-items: center;
   cursor: pointer;
   .madatory-badge {
-    color: #641856;
+    color: #f51355;
     font-weight: normal;
     font-size: 0.75em;
     display: inline-block;
-    border: solid 1px #641856;
+    border: solid 1px #f51355;
     padding: 4px 8px;
     border-radius: 30px;
     margin-left: 0.5em;
@@ -315,7 +315,7 @@ export default {
     &.save {
       font: 800 16px "Manrope-Regular", sans-serif;
       color: white;
-      background: #641856;
+      background: #f51355;
       border-radius: 3px;
     }
     &:hover {
