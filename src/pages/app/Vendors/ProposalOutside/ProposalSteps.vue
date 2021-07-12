@@ -4,7 +4,7 @@
       <div class="d-flex justify-content-center font-size-30 mb-10">
         <img :src="`${$iconURL}Budget Elements/${eventCategory.icon}`" class="page-icon" />
         <span> {{ vendor.eventCategory.fullTitle }} Proposal &nbsp;</span>
-        <span class="color-vendor font-size-30 font-bold">{{ vendor.companyName }}</span>
+        <span class="color-red font-size-30 font-bold">{{ vendor.companyName }}</span>
       </div>
     </div>
     <div class="steps-cont">

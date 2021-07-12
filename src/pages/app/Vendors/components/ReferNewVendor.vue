@@ -3,7 +3,7 @@
     <h6>If you can't, Maybe someone else you know can?</h6>
     <div class="refer-cont">
       <div class="img-cont">
-          <img :src="`${$iconURL}Submit Proposal/group-17528.svg`" />
+        <img :src="`${iconUrl}Group 5649 (3).svg`" />
       </div>
       <div class="left-side">
         <h4>
@@ -24,7 +24,7 @@
       <template slot="header">
         <div class="refer-vendor-modal__header">
           <div class="title-cont">
-            <img :src="`${$iconURL}Submit Proposal/group-17528.svg`" />
+            <img :src="`${iconUrl}Group 5649 (3).svg`" />
             <h3>
               Refer a new vendor
               <br />and get a commission!!

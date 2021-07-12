@@ -65,9 +65,8 @@ export default {
     z-index: 10;
     .event-logo {
       box-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.16);
-      width: 50px !important;
-      height: 50px !important;
-      min-width: 50px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       background-color: white;
     }

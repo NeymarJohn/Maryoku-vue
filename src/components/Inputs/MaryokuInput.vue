@@ -10,7 +10,7 @@
       :readonly="readonly"
       :disabled="disabled"
       @click="onClickEvent"
-      :ref="refName"
+      ref="input"
       v-validate="getValidateObject"
       :data-vv-name="validation"
     />
@@ -117,11 +117,6 @@ export default {
       type: String,
       default: "red",
     },
-      refName:{
-      type: String,
-      required: false,
-      default: 'input',
-    }
   },
   beforeDestroy() {
     if (this.$refs.timePickerPanel) this.$refs.timePickerPanel.style.display = "none";

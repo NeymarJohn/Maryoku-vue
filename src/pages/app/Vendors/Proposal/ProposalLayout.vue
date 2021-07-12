@@ -12,7 +12,7 @@
             <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back</md-button
           >
           <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
-            <img :src="`${$iconURL}common/arrow-right-purple.svg`" width="17" />
+            <img :src="`${$iconURL}Budget+Requirements/Asset+49.svg`" width="17" />
           </md-button>
         </div>
 
@@ -20,7 +20,7 @@
           <span>You can return to it till the deadline!</span>
           <a class="discard" @click="discard"> <img :src="`${$iconURL}common/trash-dark.svg`" /> Discard </a>
           <a class="save" @click="uploadProposal('draft')">
-            <img :src="`${$iconURL}Submit%20Proposal/group-3688.svg`" /> Save for later
+            <img :src="`${proposalIconsUrl}Asset 610.svg`" /> Save for later
           </a>
           <a class="next active" @click="gotoNext" :class="[{ active: selectedServices.length > 0 }]" v-if="step < 3">
             Next
@@ -33,7 +33,7 @@
         <template slot="header">
           <div class="saved-it-modal__header">
             <img :src="`${proposalIconsUrl}thanks-proposal.png`" />
-            <div class="font-size-30 font-bold color-vendor mt-30">Thank you for submitting a proposal!</div>
+            <div class="font-size-30 font-bold color-red mt-30">Thank you for submitting a proposal!</div>
             <div class="text-center font-size-22 mt-40 mb-40">You will get a reply in 4 days</div>
           </div>
           <button class="close" @click="hideModal()">
@@ -43,10 +43,10 @@
         <template slot="body">
           <div class="saved-it-modal__body">
             <div>
-              <md-button class="md-simple maryoku-btn md-vendor" @click="goToProcessingGuid">
+              <md-button class="md-simple maryoku-btn md-red" @click="goToProcessingGuid">
                 How does our bidding process work?
               </md-button>
-              <md-button class="md-simple maryoku-btn md-vendor md-outlined" @click="goToVendorProfile"
+              <md-button class="md-simple maryoku-btn md-red md-outlined" @click="goToVendorProfile"
                 >Go to my Dashboard</md-button
               >
             </div>
@@ -56,7 +56,7 @@
       <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
         <template slot="header">
           <div class="saved-it-modal__header">
-            <h3><img :src="`${$iconURL}Submit%20Proposal/group-6223%20(non-optimized).png`" /> Time Is Up!</h3>
+            <h3><img :src="`${proposalIconsUrl}Asset 587.svg`" /> Time Is Up!</h3>
             <div class="header-description">
               The deadline for submitting this prposal has passed. But no worries! We will be with you soon with the
               next one.
@@ -150,7 +150,7 @@ export default {
       option: "submit", // 'submit', 'duplicate'
     };
   },
-  async created() {
+  created() {
     this.$root.$on("send-event-data", (evtData) => {
       this.evtData = evtData;
     });
@@ -167,25 +167,27 @@ export default {
     this.submittedModal = false;
     this.isTimeUp = false;
 
-    this.vendor = await this.getVendor(this.$route.params.vendorId);
-    console.log('vendor', this.vendor);
-    this.proposalRequest = await this.getProposalRequest(this.$route.params.id)
-    if (this.proposalRequest.componentInstance.proposalAccepted) {
-      this.showCloseProposalModal = true;
-    }
-    // this.$set(this, "proposalRequest", proposalRequest);
-    this.event = this.proposalRequest.eventData;
-    this.$store.commit("vendorProposal/setWizardStep", 0);
-    this.$store.commit("vendorProposal/setInitStep", 0);
-    if (this.proposalRequest.proposal) {
-      this.$store.commit("vendorProposal/setValue", {
+    this.getVendor(this.$route.params.vendorId).then((vendor) => {
+      this.vendor = vendor;
+    });
+    this.getProposalRequest(this.$route.params.id).then((proposalRequest) => {
+      if (proposalRequest.componentInstance.proposalAccepted) {
+        this.showCloseProposalModal = true;
+      }
+      this.$set(this, "proposalRequest", proposalRequest);
+      this.event = proposalRequest.eventData;
+      this.$store.commit("vendorProposal/setWizardStep", 0);
+      this.$store.commit("vendorProposal/setInitStep", 0);
+      if (proposalRequest.proposal) {
+        this.$store.commit("vendorProposal/setValue", {
           key: "suggestionDate",
-          value: this.proposalRequest.proposal.suggestionDate,
-      });
-    }
+          value: proposalRequest.proposal.suggestionDate,
+        });
+      }
+    });
   },
   methods: {
-    ...mapActions("vendorProposal", ["getVendor", "getProposalRequest", "saveProposal", "setWizardStep"]),
+    ...mapActions("vendorProposal", ["getVendor", "getProposalRequest", "saveProposal"]),
     gotoNext() {
       console.log("proposal", this.$store.state.vendorProposal);
       this.step = this.step + 1;
@@ -224,25 +226,6 @@ export default {
         coverImageUrl = `https://maryoku.s3.amazonaws.com/campaigns/cover-images/${this.event.id}-${vendorProposal.vendor.id}.${extenstion}`;
       }
 
-      let progress = 0;
-      // calculate the progress of the proposal
-      if (vendorProposal.hasOwnProperty('eventVision') && vendorProposal.eventVision) {
-        progress += 15;
-      }
-      if (vendorProposal.proposalCostServices[this.vendor.vendorCategory] && vendorProposal.proposalCostServices[this.vendor.vendorCategory].length) {
-        progress += 30;
-      }
-      if (vendorProposal.proposalIncludedServices[this.vendor.vendorCategory] && vendorProposal.proposalIncludedServices[this.vendor.vendorCategory].length) {
-        progress += 10;
-      }
-      if (vendorProposal.proposalExtraServices[this.vendor.vendorCategory] && vendorProposal.proposalExtraServices[this.vendor.vendorCategory].length) {
-        progress += 10;
-      }
-      if (vendorProposal.inspirationalPhotos.some(p => !!p)) {
-        progress += 30;
-      }
-        this.$store.commit("vendorProposal/setProgress", progress);
-
       if (!this.isLoading) {
         this.isLoading = true;
         console.log("upload.proposal");
@@ -252,15 +235,10 @@ export default {
           if (type === "submit") this.submittedModal = true;
           else {
             Swal.fire({
-              title: `You’ve saved this current proposal. Come back and edit it at any time!`,
+              title: `You saved the current proposal. You can edit anytime later!`,
               buttonsStyling: false,
               type: "success",
-              confirmButtonClass: "md-button md-vendor",
-              confirmButtonText: "Back to Dashboard",
-            }).then(res => {
-                if(res.isConfirmed) {
-                    this.$router.push({path: "/vendor/dashboard"});
-                }
+              confirmButtonClass: "md-button md-success",
             });
           }
         });
@@ -529,12 +507,6 @@ export default {
 
     i {
       color: #641856;
-    }
-  }
-  .scroll-top-button {
-    img {
-        height: 20px;
-        transform: rotate(-90deg);
     }
   }
 }

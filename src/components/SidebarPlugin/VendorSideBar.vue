@@ -47,7 +47,6 @@
         <sidebar-item
           name="left-menu-events-list"
           class="left-menu-events-list"
-          :has-badge="!!proposalRequests.length"
           :link="{
             name: 'Events Lists',
             iconUrl: '/static/icons/vendor/proposal.svg',
@@ -105,8 +104,6 @@
 <script>
 import SidebarItem from "./NewSidebarItem";
 import eventService from "@/services/event.service";
-import Vendor from "@/models/Vendors";
-import ProposalRequest from "@/models/ProposalRequest";
 
 export default {
   name: "sidebar",
@@ -114,7 +111,6 @@ export default {
     return {
       newTimeLineIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/Timeline-New/",
       menuIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/menu _ checklist/SVG/",
-      proposalRequests: [],
       toggleMenu: false,
       currentUrl: "",
     };
@@ -188,13 +184,6 @@ export default {
       location.reload();
       this.toggleMenu = false;
     },
-    async getProposalRequests(){
-      let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
-      this.proposalRequests = proposalRequests.filter((p) => {
-        return p.remainingTime > 0 && !p.viewed
-      });
-      console.log('vendorSideBar.proposalRequests', this.proposalRequests);
-    }
   },
   computed: {
     sidebarStyle() {
@@ -208,9 +197,6 @@ export default {
     isEventPage() {
       return this.$router.history.current.path.indexOf("event") >= 0;
     },
-    vendorData() {
-      return this.$store.state.vendor.profile;
-    },
   },
   beforeDestroy() {
     if (this.$sidebar.showSidebar) {
@@ -220,17 +206,9 @@ export default {
   components: {
     SidebarItem,
   },
-  mounted() {
+  created() {
     this.fetchUrl();
     this.taskUrl = eventService.getFirstTaskLink(this.event);
-
-    this.$root.$on('proposalTab', _ => {
-      console.log('proposalTab', this.proposalRequests);
-      this.proposalRequests.map(it => {
-          new ProposalRequest({ id:it.id, viewed: true }).save();
-      })
-      this.proposalRequests = [];
-    })
   },
   watch: {
     $route: "fetchUrl",
@@ -240,9 +218,6 @@ export default {
       },
       deep: true,
     },
-    vendorData(newVal){
-        if(newVal) this.getProposalRequests()
-    }
   },
 };
 </script>
@@ -281,7 +256,6 @@ export default {
         border-bottom: 1px solid rgba(0, 0, 0, 0.13);
 
         a {
-          position: relative;
           display: block;
           text-align: center;
           padding: 1.5em 0.6em;
@@ -295,7 +269,6 @@ export default {
           border-left: 10px solid #641856;
 
           a.nav-link {
-
             background: none;
             box-shadow: none;
             border-radius: 0;
