@@ -7,23 +7,24 @@
           <div>Would you like to add the {{ serviceCategory.name }} category to your budget?</div>
         </div>
       </div>
-      <md-button class="md-simple md-just-icon md-round modal-default-button p-absolute" @click="$emit('cancel')">
+      <md-button class="md-simple md-just-icon md-round modal-default-button" @click="close">
         <md-icon>clear</md-icon>
       </md-button>
     </template>
     <template slot="body">
       <div class="text-left">
         <div class="font-size-16 mt-20">
-            Looks like you haven’t allocated any money to this service. No problem – simply add it to your budget whenever you’re ready.
+          Looks like you didn’t allocate money for this service, it’s not a problem at all! You could do it whenever you
+          want, just add it to your budget
         </div>
-        <div class="mt-20">Just remember that you’ll only receive proposals for services that appear in your budget.</div>
+        <div class="mt-20">Adding categories to budget is mandatory in order to get proposals</div>
       </div>
     </template>
     <template slot="footer">
-      <md-button class="md-simple md-black maryoku-btn" @click="$emit('cancel')">
-        Not now
+      <md-button class="md-simple md-black maryoku-btn" @click="cancel">
+        Don't Add {{ serviceCategory.name }} To Budget
       </md-button>
-      <md-button class="md-red maryoku-btn" @click="addBudget"> Add To Budget </md-button>
+      <md-button class="md-red maryoku-btn" @click="addBudget"> Add {{ serviceCategory.name }} To Budget </md-button>
     </template>
   </modal>
 </template>
@@ -57,6 +58,9 @@ export default {
     };
   },
   methods: {
+    close() {
+      this.$emit("cancel");
+    },
     addBudget() {
       this.$emit("addNewBudget");
     },

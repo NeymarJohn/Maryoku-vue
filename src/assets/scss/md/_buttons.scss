@@ -65,6 +65,9 @@
     background-color: white !important;
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08) !important;
   }
+  &.md-white-back {
+    background-color: white !important;
+  }
 
 
   &,
@@ -93,6 +96,9 @@
 
   &.md-red {
     @include btn-styles($brand-red);
+    &.md-reverse {
+      @include btn-styles-reverse($brand-red);
+    }
   }
   &.md-vendor {
     @include btn-styles($vendorColor);

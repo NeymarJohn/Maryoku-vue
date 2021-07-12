@@ -29,10 +29,9 @@ const state = {
   },
   legalDocs: {},
   wizardStep: 0,
-  progress: 0,
   initStep: 0,
   additionalServices: [],
-  attachments: [],
+  attachments: {},
   inspirationalPhotos: new Array(15),
   coverImage: "",
   bundleDiscount: {
@@ -192,10 +191,8 @@ const mutations = {
     state.proposalRequest = propsoalRequest;
   },
   setWizardStep: (state, step) => {
+    console.log('setWizardStep', step);
     state.wizardStep = step;
-  },
-  setProgress: (state, progress) => {
-    state.progress = progress;
   },
   setInitStep: (state, step) => {
     state.initStep = step;
@@ -320,7 +317,7 @@ const actions = {
   },
   saveProposal: ({ commit, state, getters }, status) => {
     return new Promise((resolve, reject) => {
-
+      console.log('saveProposal', state);
       const proposal = new Proposal({
         id: status == 'duplicate' ? undefined : state.id,
         personalMessage: state.personalMessage,
@@ -341,7 +338,6 @@ const actions = {
         attachments: state.attachments,
         status,
         step: state.wizardStep,
-        progress: state.progress,
         tenantId: state.tenantId,
         suggestionDate: state.suggestionDate,
         expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate()

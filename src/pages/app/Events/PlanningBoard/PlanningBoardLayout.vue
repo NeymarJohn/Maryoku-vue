@@ -71,6 +71,10 @@
         </md-button>
       </div>
       <div>
+        <md-button class="md-simple md-black maryoku-btn">
+          <img :src="`${$iconURL}Campaign/Group 8871.svg`" />
+          Clear Choices
+        </md-button>
         <md-button class="md-simple md-outlined md-red maryoku-btn">
           <img :src="`${$iconURL}common/save-red.svg`" />
           Save Draft
@@ -104,7 +108,7 @@
 </template>
 <script>
 import ServiceCategoryCard from "./components/ServiceCategoryCard";
-import { serviceCategoryImages, serviceCards } from "@/constants/event.js";
+import { serviceCategoryImages } from "@/constants/event.js";
 import ProgressRadialBar from "./components/ProgressRadialBar.vue";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import _ from "underscore";
@@ -135,7 +139,355 @@ export default {
       showCart: false,
       allRequirements: null,
       subCategory: null,
-      serviceCards: serviceCards,
+      serviceCards: [
+        [
+          [
+            {
+              name: "Venue Type",
+              serviceCategory: "venuerental",
+              images: [
+                "Venue+Type/Academic Venue.jpg",
+                "Venue+Type/Bar or Pub or Club.jpg",
+                "Venue+Type/Community Center.jpg",
+                "Venue+Type/Gallery_Option.png",
+                "Venue+Type/Garden.jpg",
+                "Venue+Type/Historic Establishment.png",
+                "Venue+Type/Meeting Room.jpg",
+                "Venue+Type/Restaurant.jpg",
+                "Venue+Type/Sports Club.jpg",
+                "Venue+Type/Stadium.jpg",
+                "Venue+Type/Stately Home.jpg",
+              ],
+              imageTitles: [
+                "Academic Venue",
+                "Bar or Pub or Club",
+                "Community Center",
+                "Gallery",
+                "Garden",
+                "Historic Establishmen",
+                "Meeting Room",
+                "Restaurant",
+                "Sports Club",
+                "Stadium",
+                "Stately Home",
+              ],
+              icon: "NewRequirements/Group 18008.svg",
+            },
+            {
+              name: "Decor",
+              serviceCategory: "decor",
+              images: ["Decor/Florals.png", "Decor/Interior Design.png", "Decor/Lighting.png"],
+              imageTitles: ["Florals", "Interior Design", "Lighting"],
+              icon: "NewRequirements/Group 18012.svg",
+            },
+          ],
+          [
+            {
+              name: "Cuisne Speciality",
+              serviceCategory: "foodandbeverage",
+              script:
+                "requirements['multi-selection'][0]['options'][0]['selected'] = true;requirements['multi-selection'][0]['options'][1]['selected'] = false",
+              images: [
+                "Cuisine/American Food.png",
+                "Cuisine/Argentine Food.png",
+                "Cuisine/Chinese Food.jpg",
+                "Cuisine/Colombian Food.png",
+                "Cuisine/Cuban Food.jpg",
+                "Cuisine/French Food.png",
+                "Cuisine/German Food.png",
+                "Cuisine/Greek Food.png",
+                "Cuisine/Indian Food.png",
+                "Cuisine/Italian Food.png",
+                "Cuisine/Japanese Food.png",
+                "Cuisine/Mexican Food.png",
+                "Cuisine/Peruvian Food.png",
+                "Cuisine/Spanish Food.png",
+                "Cuisine/Thai Food.jpg",
+              ],
+              imageTitles: [
+                "American Food",
+                "Argentine Food",
+                "Chinese Food",
+                "Colombian Food",
+                "Cuban Food",
+                "French Food",
+                "German Food",
+                "Greek Food",
+                "Indian Food",
+                "Italian Food",
+                "Japanese Food",
+                "Mexican Food",
+                "Peruvian Food",
+                "Spanish Food",
+                "Thai Food",
+              ],
+              icon: "NewRequirements/Group 18012.svg",
+            },
+            {
+              name: "Liquor Stations",
+              serviceCategory: "foodandbeverage",
+              script:
+                "requirements['multi-selection'][0]['options'][0]['selected'] = false;requirements['multi-selection'][0]['options'][1]['selected'] = true",
+              images: [
+                "Beverage/Beer.png",
+                "Beverage/Bourbon.png",
+                "Beverage/Champagne.png",
+                "Beverage/Cocktail.png",
+                "Beverage/Coffee and Tea.png",
+                "Beverage/Margarita.png",
+                "Beverage/Martini.png",
+                "Beverage/Mixology.png",
+                "Beverage/Rum.png",
+                "Beverage/Soft Drinks.png",
+                "Beverage/Sparkling Water.png",
+                "Beverage/Still Water.png",
+                "Beverage/Tequila.png",
+                "Beverage/Vodka.png",
+                "Beverage/Whiskey.png",
+                "Beverage/Wine.png",
+              ],
+              imageTitles: [
+                "Beer",
+                "Bourbon",
+                "Champagne",
+                "Cocktail",
+                "Coffee Dream",
+                "Margarita",
+                "Martini",
+                "Mixology",
+                "Rum",
+                "Soft Drinks",
+                "Sparkling Water",
+                "Still Water",
+                "Tequila",
+                "Vodka",
+                "Whiskey",
+                "Wine",
+              ],
+              icon: "NewRequirements/Group 18017.svg",
+            },
+          ],
+          [
+            {
+              name: "Photography  Videography/",
+              serviceCategory: "videographyandphotography",
+              images: [
+                "Photography+_+Videography/Black_White.jpg",
+                "Photography+_+Videography/Buisness.jpg",
+                "Photography+_+Videography/Candid.jpg",
+                "Photography+_+Videography/Commercial.jpg",
+                "Photography+_+Videography/Drone.jpg",
+                "Photography+_+Videography/Portrait.jpg",
+              ],
+              imageTitles: ["Black White", "Buisness", "Candid", "Commercial", "Drone", "Portrait"],
+              icon: "NewRequirements/Group 18009.svg",
+            },
+            {
+              name: "Music",
+              serviceCategory: "entertainment",
+              musicPlayer: true,
+              clips: [
+                "Music Clips/Asian-india-Bensound.mp3",
+                "Music Clips/Blues-hipjazz-Bensound.mp3",
+                "Music Clips/Classical_Wake_Up_CC Sound.mp3",
+                "Music Clips/Country_Country Boy Song-Bensound.mp3",
+                "Music Clips/Electronic_ERF-Bensound.mp3",
+                "Music Clips/Folk_Hey-Bensound.mp3",
+                "Music Clips/Hip Hop-groovyhiphop-Bensound.mp3",
+                "Music Clips/Jazz-thejazzpiano-Bensound.mp3",
+                "Music Clips/Latin_Latin Beat_CC Hound.mp3",
+                "Music Clips/pop_Funday-Bensound.mp3",
+                "Music Clips/RB_Heart_CC Sound.mp3",
+                "Music Clips/Rock-rumble-Bensound.mp3",
+                "Music Clips/Soul-retrosoul-Bensound.mp3",
+              ],
+              clipTitles: [
+                "Asian",
+                "Blues",
+                "Classical",
+                "Country",
+                "Electronic",
+                "Folk",
+                "Hip Hop",
+                "Jazz",
+                "Latin Beat",
+                "Pop Funday",
+                "RB Heart",
+                "Rock",
+                "Soul",
+              ],
+              images: [
+                "Asian.jpg",
+                "Blues.jpg",
+                "Classic.jpg",
+                "Country.jpg",
+                "Electronic.jpg",
+                "Folk.jpg",
+                "Hip Hop.jpg",
+                "Jazz.jpg",
+                "Latin.jpg",
+                "pop.jpg",
+                "RB.jpg",
+                "Rock.jpg",
+                "SOUL.jpg",
+              ],
+              imageTitles: ["Black White", "Buisness", "Candid", "Commercial", "Drone", "Portrait"],
+              icon: "NewRequirements/Group 18013.svg",
+              script: `
+                  requirements['multi-selection'][0]['options'].forEach(item=>item.selected = false)
+                  requirements['multi-selection'][0]['options'][0]['selected'] = true;
+                  requirements['multi-selection'][0]['options'][1]['selected'] = true;
+                `,
+            },
+          ],
+        ],
+        [
+          [
+            {
+              name: "Giveaways",
+              serviceCategory: "giveaways",
+              images: [
+                "Giveaways/Apparel.png",
+                "Giveaways/Ceremonial Items.png",
+                "Giveaways/Drinkware.jpeg",
+                "Giveaways/Fitness.jpeg",
+                "Giveaways/Gadgets.jpeg",
+                "Giveaways/Office Items.png",
+                "Giveaways/Specialty Food and Liquor.png",
+                "Giveaways/Tote Bags.png",
+                "Giveaways/Travel Accessories.jpg",
+                "Giveaways/Wellness.png",
+              ],
+              imageTitles: [
+                "Apparel",
+                "Ceremonial Items",
+                "Drinkware",
+                "Fitness",
+                "Gadgets",
+                "Office Items",
+                "Specialty Food and Liquor",
+                "Tote Bags",
+                "Travel Accessories",
+                "Wellness",
+              ],
+              icon: "NewRequirements/Group 18014.svg",
+            },
+            {
+              name: "Indoor Activities",
+              serviceCategory: "entertainment",
+              images: [
+                "Indoor Activities/Casino Games.png",
+                "Indoor Activities/Indoor Sport.png",
+                "Indoor Activities/Make Your Own.png",
+                "Indoor Activities/Photo Booth.png",
+              ],
+              imageTitles: ["Casino Games", "Indoor Sport", "Make Your Own", "Photo Booth"],
+              icon: "NewRequirements/Group 18012.svg",
+              script: `
+                  requirements['multi-selection'][0]['options'].forEach(item=>item.selected = false)
+                  requirements['multi-selection'][0]['options'][2]['selected'] = true;
+                `,
+            },
+          ],
+          [
+            {
+              name: "Outdoor Activities",
+              serviceCategory: "entertainment",
+              images: [
+                "Outdoor Activities/class.jpg",
+                "Outdoor Activities/Day trip_option.png",
+                "Outdoor Activities/Museum & Art Gallery Visit.png",
+                "Outdoor Activities/Show.jpg",
+                "Outdoor Activities/Site Seeing.jpg",
+                "Outdoor Activities/Sport Event.png",
+                "Outdoor Activities/Wine Tasting.jpg",
+                "Outdoor Activities/workshop.jpg",
+              ],
+              imageTitles: [
+                "Class",
+                "Day Trip Option",
+                "Museum & Art Gallery Visit",
+                "Show",
+                "Site Seeing",
+                "Sport Event",
+                "Wine Tasting",
+                "Workshop",
+              ],
+              icon: "NewRequirements/Group 18010.svg",
+              script: `
+                  requirements['multi-selection'][0]['options'].forEach(item=>item.selected = false)
+                  requirements['multi-selection'][0]['options'][3]['selected'] = true;
+                `,
+            },
+            {
+              name: "AV",
+              serviceCategory: "audiovisualstagingservices",
+              images: ["A-V/Lighting.jpg", "A-V/Plasma TV.jpeg", "A-V/Projector.jpg"],
+              imageTitles: ["Lighting", "Plasma TV", "Projector"],
+              icon: "NewRequirements/Group 18073.svg",
+            },
+          ],
+          [
+            {
+              name: "Guest Serivces & Staffing",
+              serviceCategory: "administration",
+              images: [
+                "Staff/Concierge.png",
+                "Staff/Day Of Coordinator.jpg",
+                "Staff/Event Model.png",
+                "Staff/Event Registration.png",
+                "Staff/Tour Guide.jpg",
+                "Staff/Transportation Host.png",
+                "Staff/Wait Staff.png",
+              ],
+              imageTitles: [
+                "Concierge",
+                "Day Of Coordinator",
+                "Event Model",
+                "Event Registration",
+                "Tour Guide",
+                "Transportation Host",
+                "Wait Staff",
+              ],
+              icon: "NewRequirements/Group 18026.svg",
+            },
+            //  {
+            //   name: "Transportation",
+            //   serviceCategory: "transportation",
+            //   images: [
+            //     "Transportation/Air Services.png",
+            //     "Transportation/ATV.png",
+            //     "Transportation/Bicycle.png",
+            //     "Transportation/Boat.png",
+            //     "Transportation/Bus.png",
+            //     "Transportation/Ferry.png",
+            //     "Transportation/Gold Carts.png",
+            //     "Transportation/Private Black Car.jpg",
+            //     "Transportation/Van.png",
+            //   ],
+            //   imageTitles: [
+            //     "Air Services",
+            //     "ATV",
+            //     "Bicycle",
+            //     "Boat",
+            //     "Bus",
+            //     "Ferry",
+            //     "Gold Carts",
+            //     "Private Black Car",
+            //     "Van",
+            //   ],
+            //   icon: "NewRequirements/Group 18016.svg",
+            // },
+            {
+              name: "Equipment Rentals",
+              serviceCategory: "equipmentrentals",
+              images: ["Rentals/Furniture.jpg", "Rentals/Tech Equpiment.jpg", "Rentals/Tent.jpg"],
+              imageTitles: ["Furniture", "Tech Equipment", "Tent"],
+              icon: "NewRequirements/Group 18016.svg",
+            },
+          ],
+        ],
+      ],
       isOpenedAdditionalModal: false,
       isOpenedFinalModal: false,
       selectedCategory: null,
@@ -145,13 +497,13 @@ export default {
       expiredTime: 0,
     };
   },
-  async created() {
-    await this.$store.dispatch('planningBoard/resetRequirements');
+  created() {
     if (!this.allRequirements) {
       this.isLoading = true;
       this.$store
         .dispatch("event/getRequirements")
         .then((requirements) => {
+          console.log("requirements", requirements);
           this.allRequirements = requirements;
           this.isLoading = false;
         })
@@ -162,39 +514,24 @@ export default {
       this.$store
         .dispatch("planningBoard/getRequirements", this.event.id)
         .then((requirements) => {
+          console.log(requirements);
           this.isLoadingStoredData = false;
         })
         .catch((e) => {
           this.isLoadingStoredData = false;
         });
     }
-    console.log('planningBoardLayout.created', this.serviceCards);
     // if (this.event.processingStatus === "accept-proposal") {
     //   this.$router.push(`/events/${this.event.id}/booking/choose-vendor`);
     // }
   },
   computed: {
-    // ...mapState("planningBoard", {
-    //   requirements: (state) => {
-    //     console.log('')
-    //
-    //   },
-    //   types: (state) => state.types,
-    //   mainRequirements: (state) => state.mainRequirements,
-    //   specialRequirements: (state) => state.specialRequirements,
-    // }),
-    requirements(){
-      return this.$store.state.planningBoard.requirements
-    },
-    types(){
-      return this.$store.state.planningBoard.types
-    },
-    mainRequirements(){
-      return this.$store.state.planningBoard.mainRequirements
-    },
-    specialRequirements(){
-      return this.$store.state.planningBoard.specialRequirements
-    },
+    ...mapState("planningBoard", {
+      requirements: (state) => state,
+      types: (state) => state.types,
+      mainRequirements: (state) => state.mainRequirements,
+      specialRequirements: (state) => state.specialRequirements,
+    }),
     step: {
       get() {
         return this.$store.state.planningBoard.step;
@@ -231,7 +568,6 @@ export default {
           });
         });
       });
-      console.log('percentOfBudgetCategories', hasBudgetItems);
       return hasBudgetItems;
     },
   },
@@ -326,11 +662,6 @@ export default {
       this.showCart = true;
     },
   },
-  watch:{
-    requirements(newVal){
-      console.log('requirement.watch', newVal);
-    }
-  }
 };
 </script>
 <style lang="scss" scoped>

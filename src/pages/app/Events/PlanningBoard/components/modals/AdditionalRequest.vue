@@ -25,44 +25,14 @@
         </div>
       </div>
       <div class="text-left mb-40">
-        <div class="d-flex align-center">
-          <div class="font-size-18 font-bold">
-            <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10" width="23" />
-            Time Slot</div>
-          <md-switch class="md-switch-red large-switch ml-20" v-model="isEntire">
-            <span class="color-black font-size-14px">Entire Event</span>
-          </md-switch>
+        <div class="font-size-20">Time Slot:</div>
+        <div>
+          <md-checkbox class="md-checkbox-circle md-red" v-model="isEntire" :value="true">Entire Day</md-checkbox>
         </div>
-
-<!--        <div>-->
-<!--          <md-checkbox class="md-checkbox-circle md-red" v-model="isEntire" :value="true">Entire Day</md-checkbox>-->
-<!--        </div>-->
         <div class="d-flex">
-
-           <md-radio v-model="assignTimeline" class="md-checkbox-circle md-red" :value="true">
-             Assign to one of those timeline events
-           </md-radio>
-           <md-radio v-model="assignTimeline" class="md-checkbox-circle md-red" :value="false">
-             Specific Time Slot
-           </md-radio>
-
+          <md-checkbox class="md-checkbox-circle md-red" v-model="isEntire" :value="false"></md-checkbox>
+          <time-slot class="time-slot-wrapper" @change="setTime"></time-slot>
         </div>
-        <template v-if="assignTimeline">
-            <div v-for="(scheduleDate, dateIndex) in event.timelineDates" :key="scheduleDate.date">
-                <div class="d-flex align-center" v-for="(timelineItem, index) in scheduleDate.timelineItems" :key="`timelineItem-${index}`">
-                    <md-checkbox v-model="timeSlotIdx" class="mr-40"></md-checkbox>
-                    <timeline-item
-                        :item="timelineItem"
-                        :index="index"
-                        :timelineDate="scheduleDate"
-                        class="mt-10 mb-10 timeline-group-wrapper"
-                        :editMode="false"
-                        size="medium"
-                    ></timeline-item>
-                </div>
-            </div>
-        </template>
-        <time-slot v-else class="time-slot-wrapper" @change="setTime"></time-slot>
       </div>
       <div>
         <div
@@ -71,32 +41,32 @@
           class="text-left sub-category"
         >
           <div class="font-bold-extra">{{ section }}</div>
-          <div class="md-layout text-left">
+          <div class="requirement-row text-left">
             <!-- {{ subCategory.requirements[section] }} -->
             <div
-                v-for="item in subCategory[section].filter((item) => item.type !== 'single-selection' && item.visible)"
-                :key="item.item"
-                class="md-layout-item md-size-33"
+              v-for="item in subCategory[section].filter((item) => item.type !== 'single-selection' && item.visible)"
+              :key="item.item"
+              class="requirement-item"
             >
-                <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">
-                    <span class="text-transform-capitalize">{{ item.item }}</span>
-                </md-checkbox>
+              <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">
+                <span class="text-transform-capitalize">{{ item.item }}</span>
+              </md-checkbox>
             </div>
             <div
-                v-for="item in subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)"
-                class="requirement-item-tags mt-10"
-                :key="item.item"
+              v-for="item in subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)"
+              class="requirement-item-tags mt-10"
+              :key="item.item"
             >
-                <div class="mb-10">{{ item.item }}:</div>
-                <tag-item
-                    @click="tag.selected = !tag.selected"
-                    :tagLabel="tag.name"
-                    :key="tag.name"
-                    :isSelected="tag.selected"
-                    :theme="`red`"
-                    v-for="tag in item.options"
-                    class="mr-10"
-                ></tag-item>
+              <div class="mb-10">{{ item.item }}:</div>
+              <tag-item
+                @click="tag.selected = !tag.selected"
+                :tagLabel="tag.name"
+                :key="tag.name"
+                :isSelected="tag.selected"
+                :theme="`red`"
+                v-for="tag in item.options"
+                class="mr-10"
+              ></tag-item>
             </div>
           </div>
         </div>
@@ -107,9 +77,9 @@
           :id="specialSection.subCategory"
         >
           <div class="font-bold-extra">{{ specialSection.subCategory }}</div>
-          <div class="md-layout text-left" v-if="specialSection.subCategory !== 'Sitting arrangement'">
+          <div class="requirement-row text-left" v-if="specialSection.subCategory !== 'Sitting arrangement'">
             <!-- {{ subCategory.requirements[section] }} -->
-            <div v-for="item in specialSection.options" class="md-layout-item md-size-33" :key="item.name">
+            <div v-for="item in specialSection.options" class="requirement-item" :key="item.name">
               <md-checkbox v-model="item.selected">
                 <div class="checkbox-label-wrapper">
                   <img class="special-icon" :src="getIcon(specialSection.subCategory, item.name)" />
@@ -211,7 +181,6 @@
 import { Modal, MaryokuInput } from "@/components";
 import TagItem from "../TagItem.vue";
 import TimeSlot from "../TimeSlot.vue";
-import TimelineItem from "../../../components/TimelineItem";
 export default {
   name: "AdditionalRequestModal",
   components: {
@@ -219,7 +188,6 @@ export default {
     TagItem,
     MaryokuInput,
     TimeSlot,
-    TimelineItem,
   },
   data() {
     return {
@@ -231,8 +199,6 @@ export default {
       groupSize: null,
       anythingElse: "",
       period: null,
-      assignTimeline: false,
-      timeSlotIdx: false,
     };
   },
   props: {
@@ -384,11 +350,6 @@ export default {
       this.period = time;
     },
   },
-  computed: {
-    event() {
-      return this.$store.state.event.eventData;
-    },
-  }
 };
 </script>
 <style lang="scss" scoped>
@@ -403,7 +364,15 @@ export default {
       width: 100%;
     }
   }
-
+  .requirement-row {
+    .requirement-item {
+      display: inline-block;
+      margin-right: 40px;
+      min-width: 25%;
+      // display: grid;
+      // grid-template-columns: repeat(4, 25%);
+    }
+  }
   .sub-category {
     border-top: solid 1px #dbdbdb;
     margin-top: 30px;

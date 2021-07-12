@@ -48,9 +48,6 @@
       font-weight: bold;
     }
   }
-  &.md-theme-default.md-purple  .md-radio-container{
-    border-color: $vendorColor !important;
-  }
   &.md-theme-default.md-purple.md-checked  .md-radio-container{
     border-color: $vendorColor !important;
     &:after {

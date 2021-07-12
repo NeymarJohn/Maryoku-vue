@@ -353,7 +353,87 @@
 
 }
 
+@mixin btn-styles-reverse($btn-color) {
 
+  // remove this line if you want black shadows
+  @include shadow-2dp-color(white);
+
+  &.md-raised{
+      @include shadow-2dp-color(white);
+  }
+
+  &,
+  &:hover,
+  &:focus,
+  &:active,
+  &.active,
+  &:active:focus,
+  &:active:hover,
+  &.active:focus,
+  &.active:hover,
+  .open > &.dropdown-toggle,
+  .open > &.dropdown-toggle:focus,
+  .open > &.dropdown-toggle:hover {
+    background-color: white !important;
+    border-color: white;
+    @if $btn-color==$white-color {
+      &,
+      i{
+        color: $gray-light !important;
+      }
+    } @else {
+      &,
+      i{
+        color: $btn-color !important;
+      }
+    }
+  }
+
+  &:focus,
+  &:active,
+  &:hover{
+    // remove this line if you want black shadows
+    @include button-shadow-color(white);
+    background-color: darken(white, 3%) !important;
+  }
+
+  &.disabled,
+  &:disabled,
+  &[disabled],
+  fieldset[disabled] & {
+    &,
+    &:hover,
+    &:focus,
+    &.focus,
+    &:active,
+    &.active {
+        box-shadow: none;
+        opacity: .65;
+        pointer-events: none;
+    }
+  }
+
+  &.md-simple{
+      &,
+      &:hover,
+      &:focus,
+      &:active,
+      &.active,
+      &:active:focus,
+      &:active:hover,
+      &.active:focus,
+      &.active:hover{
+        background-color: transparent !important;
+        color: white !important;
+        box-shadow: none;
+
+        i{
+          color: white !important;
+        }
+      }
+  }
+
+}
 // for social buttons
 @mixin social-buttons-color ($color){
     background-color: $color !important;

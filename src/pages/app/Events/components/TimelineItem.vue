@@ -5,8 +5,8 @@
     :index="index"
     @applyTemplate="applyToTemplate"
   ></timeline-template-item>
-  <div class="timeline-item d-flex" :class="size === 'large' ? '' : 'align-center'"  v-else>
-    <div class="time-line-icon" :class="size === 'large' ? 'mt-20' : ''" :style="`background-color:${editingContent.color}`">
+  <div class="timeline-item" v-else>
+    <div class="time-line-icon" :style="`background-color:${editingContent.color}`">
       <img
         width="60"
         height="60"
@@ -119,9 +119,9 @@
         >
       </md-card-actions>
     </md-card>
-    <md-card class="block-form" :class="size === 'large' ? 'p-20 m-20' : 'p-10 m-10'" :style="getBorderStyle(editingContent.color)" v-else>
+    <md-card class="block-form" :style="getBorderStyle(editingContent.color)" v-else>
       <vue-element-loading :active.sync="editingContent.isItemLoading" spinner="ring" color="#FF547C" />
-      <md-card-content>
+      <md-card-content style="min-height: 80px">
         <div class="timeline-actions" v-if="editMode">
           <md-button class="md-icon-button md-simple" @click="editTimeline">
             <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon" style="height: 30px" />
@@ -130,12 +130,11 @@
             <img :src="`${$iconURL}common/trash-dark.svg`" class="label-icon" style="height: 30px" />
           </md-button>
         </div>
-        <div class="item-title-and-time" :class="size === 'large' ? '' : 'd-flex align-center'">
-          <span class="item-time font-size-20 color-dark-gray" :class="size === 'large' ? '' : 'pr-20 border-right'"
+        <div class="item-title-and-time">
+          <span class="item-time font-size-20 color-dark-gray"
             >{{ formatHour(editingContent.startTime) }} - {{ formatHour(editingContent.endTime) }}</span
           >
-
-          <p :class="size === 'large' ? 'my-15' : 'ml-20 my-0'">
+          <p>
             <span class="font-size-20 font-bold-extra mr-20" v-if="editingContent.title">{{
               editingContent.title
             }}</span>
@@ -207,10 +206,6 @@ export default {
       type: String,
       default: "white",
     },
-    size: {
-      type: String,
-      default: "large",
-    }
   },
   data() {
     return {
@@ -221,7 +216,6 @@ export default {
     };
   },
   mounted() {
-    console.log('timeline-item.mounted', this.size);
     this.editingContent = { ...this.item };
     this.vendor = this.serviceCategories.find(
       (item) => this.editingContent.eventCategory && item.key == this.editingContent.eventCategory[0],
@@ -349,20 +343,21 @@ export default {
         });
     },
   },
-  watch: {
-    size(newVal) {
-        console.log('timelineItem.watch.size');
-    }
-  }
 };
 </script>
 <style lang="scss" scoped>
 .timeline-item {
+  display: flex;
+  align-items: flex-start;
   .block-form {
+    margin: 20px 20px 20px 30px;
+    margin-left: 20px;
+    padding: 20px 20px;
   }
   .time-line-icon {
     min-width: 60px;
     height: 60px;
+    margin-top: 15px;
     border-radius: 50%;
   }
   .divider {
@@ -376,7 +371,6 @@ export default {
   }
   .item-desc {
     word-break: break-all;
-    margin: 0;
   }
   .block-form {
     .timeline-actions {
@@ -390,9 +384,6 @@ export default {
         display: block;
       }
     }
-  }
-  .border-right{
-     border-right: 1px solid rgba(0, 0, 0, 0.5);
   }
 }
 </style>
