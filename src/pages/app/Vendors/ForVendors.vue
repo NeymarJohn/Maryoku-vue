@@ -87,7 +87,7 @@
     <div class="rank-cont">
       <h3>Would you like to submit your bid?</h3>
       <div class="check-cont">
-        <md-checkbox class="check-condition" v-model="isAgreed">
+        <md-checkbox class="check-condition md-vendor" v-model="isAgreed">
           <span class="regular" @mouseover="conditionTooltip = true" @mouseleave="conditionTooltip = false"
             >I accept</span
           >

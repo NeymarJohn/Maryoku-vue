@@ -1,11 +1,7 @@
 <template>
   <div class="proposal-page_details">
     <div class="proposal-content">
-      <md-button
-        v-if="!landingPage"
-        class="close-btn md-simple maryoku-btn md-black md-icon-button"
-        @click="closeDetail"
-      >
+      <md-button class="close-btn md-simple maryoku-btn md-black md-icon-button" @click="closeDetail">
         <md-icon>close</md-icon>
       </md-button>
       <div class="proposal-info">
@@ -47,12 +43,7 @@
               </li>
             </ul>
           </div>
-          <timer-panel
-            v-if="!landingPage"
-            class="time-counter"
-            :target="targetTime"
-            @updateExpireDate="updateExpireDate"
-          ></timer-panel>
+          <timer-panel class="time-counter" :target="targetTime" @updateExpireDate="updateExpireDate"></timer-panel>
         </div>
 
         <div class="proposal-body">
@@ -305,7 +296,7 @@
         <div class="alert alert-danger">Please indicate that you accept the new time of this proposal</div>
       </div>
     </div>
-    <div class="proposal-footer white-card d-flex justify-content-between">
+     <div class="proposal-footer white-card d-flex justify-content-between">
       <div>
         <md-button @click="back" class="md-simple maryoku-btn md-black">
           <md-icon>arrow_back</md-icon>
@@ -382,10 +373,6 @@ export default {
     vendorProposal: {
       type: Object,
       default: () => {},
-    },
-    landingPage: {
-      type: Boolean,
-      default: false,
     },
   },
   components: {

@@ -346,6 +346,7 @@ export default {
     this.currentItem.included = this.included;
     this.currentItem.checked = this.checked;
     this.currentItem.hideLabelForValue = this.item.hideLabelForValue;
+    this.currentItem.xIncluded = this.item.xIncluded;
   },
   methods: {
     updateExChecked(items) {

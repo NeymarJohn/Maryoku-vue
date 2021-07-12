@@ -4,11 +4,10 @@
       <div>
         <span class="text-transform-uppercase font-bold font-size-20">Your Choices</span>
         <div>
-          Our vendors will create proposals based on your choices, Caterogies that are missing those will be open to the
-          vendors discretion
+            Our vendors will create proposals based on your choices below, so be sure to select everything you really want. If you leave a category blank, it means you’re happy leaving it up to the vendor’s discretion (which can lead to more back-and-forth later on).
         </div>
       </div>
-      <progress-radial-bar :value="percentOfBudgetCategories" :total="12" @click="openCart"></progress-radial-bar>
+      <progress-radial-bar :value="percentOfBudgetCategories" :total="12"></progress-radial-bar>
 
       <md-button class="md-simple close-btn" @click="close">
         <md-icon>close</md-icon>
@@ -26,7 +25,7 @@
             <div>
               <template v-for="typeList in requirements[item.key].types">
                 <requirement-tag-item
-                  class="mb-10"
+                  class="mt-10 mb-30"
                   :label="type"
                   :key="type"
                   v-for="type in typeList"
@@ -66,6 +65,7 @@ import { VsaList, VsaItem, VsaHeading, VsaContent, VsaIcon } from "vue-simple-ac
 import "vue-simple-accordion/dist/vue-simple-accordion.css";
 import ProgressRadialBar from "./components/ProgressRadialBar.vue";
 import RequirementTagItem from "./components/RequirementTagItem.vue";
+import { serviceCards } from "@/constants/event.js";
 import _ from "underscore";
 
 export default {
@@ -86,13 +86,14 @@ export default {
         { heading: "Photography", content: "ASFASDFAs" },
       ],
       subCategorySections: [],
+      serviceCards: serviceCards,
     };
   },
   created() {
-    this.subCategorySections = Object.keys(this.subCategory);
-    this.subCategorySections = this.subCategorySections.filter(
-      (item) => item !== "multi-selection" && item !== "special",
-    );
+    // this.subCategorySections = Object.keys(this.subCategory);
+    // this.subCategorySections = this.subCategorySections.filter(
+    //   (item) => item !== "multi-selection" && item !== "special",
+    // );
   },
   methods: {
     close() {
@@ -101,11 +102,18 @@ export default {
     removeSelectedType(type) {
       console.log(type);
     },
+    hasBudget(categoryKey) {
+      return !!this.event.components.find((item) => item.componentId == categoryKey);
+    },
   },
 
   computed: {
+    event() {
+      return this.$store.state.event.eventData;
+    },
     selectedCategories() {
       const categoryKeys = Object.keys(this.$store.state.planningBoard);
+      console.log('requirementCart.categoryKeys', categoryKeys);
       const selectedData = [];
       categoryKeys.forEach((categoryKey) => {
         console.log("his.$store.state.common.serviceCategories", this.$store.state.common.serviceCategories);
@@ -122,6 +130,19 @@ export default {
     },
     requirements() {
       return this.$store.state.planningBoard;
+    },
+    percentOfBudgetCategories() {
+      let hasBudgetItems = 0;
+      this.serviceCards.forEach((stepPanel) => {
+          stepPanel.forEach((group) => {
+              group.forEach((serviceCard) => {
+                  if (this.hasBudget(serviceCard.serviceCategory)) {
+                      hasBudgetItems++;
+                  }
+              });
+          });
+      });
+      return hasBudgetItems;
     },
   },
 };

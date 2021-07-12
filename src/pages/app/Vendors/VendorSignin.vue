@@ -44,13 +44,20 @@
             v-model="user.password"
             placeholder="Type password here..."
           ></maryoku-input>
-          <div class="md-error">
+          <div class="md-error mt-10">
             <div v-if="notFoundUser" class="font-size-16">
               Sorry, we couldn’t find you.
               <br />
               If you are not a user please sign up <span class="signupLink" @click="toSingUp">here</span>.
             </div>
             <div>{{ error }}</div>
+          </div>
+          <div class="d-flex align-center">
+              <md-checkbox class="md-vendor mr-10" v-model="accepted">I accept</md-checkbox>
+              <a target="_blank" href="https://www.maryoku.com/terms" class="color-black font-size-16 font-bold">Maryoku's Terms & Conditions</a>
+          </div>
+          <div class="d-flex justify-content-end">
+              <a class="color-black font-size-16 font-bold" @click="toForgotPassword">Forgot password?</a>
           </div>
           <div class="form-buttons">
             <md-button
@@ -60,7 +67,7 @@
             >
               Login
             </md-button>
-            <div class="text-center mt-30 mb-30">Or</div>
+            <div class="text-center mt-10 mb-10">Or</div>
             <md-button @click="toSingUp" class="md-black md-maryoku md-red md-vendor"> Sign Up </md-button>
           </div>
         </div>
@@ -73,9 +80,7 @@
 import { SignupCard, MaryokuInput, Modal } from "@/components";
 import InputText from "@/components/Inputs/InputText.vue";
 import VueElementLoading from "vue-element-loading";
-import Tenant from "@/models/Tenant";
 import TenantUser from "@/models/TenantUser";
-import CalendarEvent from "@/models/CalendarEvent";
 export default {
   name: "SignIn",
   components: {
@@ -85,6 +90,33 @@ export default {
     VueElementLoading,
     MaryokuInput,
   },
+  data() {
+        return {
+            error: "",
+            loading: false,
+            user: new TenantUser("", ""),
+            keepMe: false,
+            accepted: false,
+            serverURL: process.env.SERVER_URL,
+            modelValidations: {
+                email: {
+                    required: true,
+                    email: true,
+                },
+                password: {
+                    required: true,
+                    min: 6,
+                },
+            },
+            forgotPasswordValidations: {
+                email: {
+                    required: true,
+                    email: true,
+                },
+            },
+            notFoundUser: false,
+        };
+    },
   methods: {
     authenticate(provider) {
       let action = this.$route.query.action;
@@ -100,8 +132,6 @@ export default {
           `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/vendor/signedin?action=${action}&token=`,
         );
       }
-
-      console.log(`${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`);
       document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
     },
     signIn() {
@@ -136,37 +166,11 @@ export default {
       this.$router.push({ path: `/vendor/signup` });
     },
     toForgotPassword() {
-      this.$router.push({ path: "/forgot-password" });
+      this.$router.push({ path: "/vendor/forgot-password" });
     },
     redirectPage() {
-      this.$router.push({ path: "/vendor/profile/settings" });
+      this.$router.push({ path: "/vendor/dashboard" });
     },
-  },
-  data() {
-    return {
-      error: "",
-      loading: false,
-      user: new TenantUser("", ""),
-      keepMe: false,
-      serverURL: process.env.SERVER_URL,
-      modelValidations: {
-        email: {
-          required: true,
-          email: true,
-        },
-        password: {
-          required: true,
-          min: 6,
-        },
-      },
-      forgotPasswordValidations: {
-        email: {
-          required: true,
-          email: true,
-        },
-      },
-      notFoundUser: false,
-    };
   },
   computed: {
     loggedIn() {

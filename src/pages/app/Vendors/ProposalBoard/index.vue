@@ -3,7 +3,7 @@
     <loader :active="loading" :isFullScreen="true" />
     <div class="font-size-22 font-bold d-flex align-center">
       <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposals Board
-      <md-button class="ml-auto md-vendor md-maryoku mr-15">Create New Proposal</md-button>
+      <md-button class="ml-auto md-vendor md-maryoku mr-15" @click="createNewProposal">Create New Proposal</md-button>
     </div>
     <div class="font-bold text-uppercase mt-30 mb-15">Opportunities</div>
     <carousel
@@ -25,7 +25,6 @@
         v-for="proposalRequest in proposalRequests"
         :key="proposalRequest.id"
         :proposalRequest="proposalRequest"
-        :proposal="getProposalWithRequestId(proposalRequest.id)"
         @dismiss="dismiss"
       >
       </proposal-request-card>
@@ -204,7 +203,7 @@ export default {
         { key: "all", title: "All Proposal", icon: "proposal-active.svg", class: "color-vendor" },
         { key: "won", title: "I won", icon: "filter-won.svg", class: "color-won" },
         { key: "draft", title: "Drafts", icon: "filter-draft.svg" },
-        { key: "pending", title: "Pending", icon: "filter-pending.svg" },
+        { key: "submit", title: "Pending", icon: "filter-pending.svg" },
         { key: "top", title: "Made Top3", icon: "filter-top3.svg" },
         { key: "lost", title: "Lost Bids", icon: "filter-reject.svg" },
       ],
@@ -234,7 +233,7 @@ export default {
         total: 0,
         won: 0,
         draft: 0,
-        pending: 0,
+        submit: 0,
         top: 0,
         lost: 0,
         pageCount: 0,
@@ -247,6 +246,7 @@ export default {
   },
   async mounted() {
     // console.log('mounted', this.vendorData.id);
+    this.$root.$emit('proposalTab');
     if (this.vendorData) {
       this.init();
     }
@@ -255,12 +255,10 @@ export default {
     async getData() {
       this.renderRender = false;
       let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
-      // let proposalRequests = await new ProposalRequest().for(new Vendor({ id: '60b636d7cfefec26397d2a7e' })).get();
       this.proposalRequests = proposalRequests.filter((p) => {
-        let proposal = this.proposals.find((it) => it.proposalRequestId === p.id);
-        return proposal
-          ? (p.declineMessage !== "decline" && proposal.status !== "submit") ||
-            (proposal.negotiations && proposal.negotiations.length)
+        return p.proposal
+          ? p.remainingTime > 0 && (p.declineMessage !== "decline" && p.proposal.status !== "submit" ||
+            p.proposal.negotiations && p.proposal.negotiations.length)
           : p.remainingTime > 0 && p.declineMessage !== "decline";
       });
 
@@ -287,10 +285,6 @@ export default {
         if (data.hasOwnProperty(t.key)) this.pagination[t.key] = data[t.key];
       });
       this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
-    },
-    getProposalWithRequestId(requestId) {
-      if (!this.proposals.length) return null;
-      return this.proposals.find((p) => p.proposalRequestId === requestId);
     },
     gotoPage(selectedPage) {
       console.log(selectedPage);
@@ -321,7 +315,6 @@ export default {
         id,
         declineMessage: "decline",
       }).save();
-      console.log("updateReq", res);
       this.proposalRequests = this.proposalRequests.filter((p) => {
         return p.id !== id;
       });
@@ -340,7 +333,7 @@ export default {
             type: "edit",
           },
         });
-        window.open(routeData.href, "_blank");
+        this.openNewTab(routeData.href)
       } else if (action === "remove") {
         this.loading = true;
         const proposal = await Proposal.find(id);
@@ -350,18 +343,20 @@ export default {
 
         this.loading = false;
       } else if (action === "download") {
-        this.downloadProposal(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
+        this.openNewTab(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
         // this.downloadProposal(`http://preprod.dev.maryoku.com:8080/1/proposal/${this.selectedProposal.id}/download`);
       }
     },
-    downloadPreviewPDF() {
-      console.log("download1");
-      const content = document.querySelector(".proposal-content");
-      this.$refs.pdfContainer.append(content);
-      this.$refs.html2Pdf.generatePdf();
-      this.showProposalDetail = false;
+    createNewProposal(){
+      let routeData = this.$router.resolve({
+        name: "outsideProposalEdit",
+        params: {
+            vendorId: this.vendorData.id,
+        },
+      });
+      this.openNewTab(routeData.href)
     },
-    downloadProposal(link) {
+    openNewTab(link) {
       window.open(link, "_blank");
     },
     eventDate() {
@@ -409,28 +404,6 @@ export default {
   computed: {
     vendorData() {
       return this.$store.state.vendor.profile;
-    },
-    htmlToPdfOptions() {
-      return {
-        margin: 0,
-        image: {
-          type: "jpeg",
-          quality: 0.9,
-        },
-        filename: `proposal-${this.selectedProposal ? this.selectedProposal.id : ""}`,
-        enableLinks: true,
-
-        html2canvas: {
-          scale: 1,
-          useCORS: true,
-        },
-
-        jsPDF: {
-          unit: "in",
-          format: "a4",
-          orientation: "portrait",
-        },
-      };
     },
   },
   watch: {
