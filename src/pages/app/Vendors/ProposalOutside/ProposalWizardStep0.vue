@@ -47,7 +47,6 @@
     <div class="text-left mt-30">
       <label class="font-bold">Type Of Event:</label>
       <multiselect
-        v-if="eventType === 'corporation'"
         class="width-50 mt-5 form-input md-purple"
         v-model="selectedEventType"
         :options="eventTypes"
@@ -159,7 +158,8 @@ export default {
     },
   },
   created() {
-    this.$http.get(`${process.env.SERVER_URL}/1/userEventCustomers`).then((res) => {
+    const vendorId = this.$route.params.vendorId;
+    this.$http.get(`${process.env.SERVER_URL}/1/userEventCustomers/${vendorId}`).then((res) => {
       this.customers = res.data;
     });
     this.$store.dispatch("common/getEventTypes");
@@ -270,7 +270,6 @@ export default {
     async fileAdded(file) {
       const extension = file.type.split("/")[1];
       let fileName = new Date().getTime();
-      console.log(file);
       this.fileName = file.name;
       let fileUrl = `https://maryoku.s3.amazonaws.com/events/proposal/${fileName}.${extension}`;
 
@@ -282,7 +281,6 @@ export default {
   },
   computed: {
     eventTypes() {
-      console.log(this.$store.state.common.eventTypes);
       return this.$store.state.common.eventTypes;
     },
     selectedCustomer: {

@@ -96,7 +96,6 @@ const getters = {
 const actions = {
     saveEventAction({ commit, state, dispatch }, event) {
         return new Promise((resolve, reject) => {
-            console.log('saveEventAction', event)
             event
                 // .for(event.calendar)
                 .save()

@@ -7,11 +7,10 @@
       <router-view></router-view>
     </div>
     <section class="footer-wrapper">
-      <div>
-        <md-button v-if="step > 0" class="prev-cont md-simple maryoku-btn md-black" @click="back()">
+      <div calss>
+        <md-button class="prev-cont md-simple maryoku-btn md-black" @click="back()">
           <img :src="`${proposalIconsUrl}Group 4770 (2).svg`" /> Back
         </md-button>
-
         <md-button @click="scrollToTop" class="md-button md-simple md-just-icon md-theme-default scroll-top-button">
           <img :src="`${$iconURL}common/arrow-right-purple.svg`" width="17" />
         </md-button>
@@ -56,7 +55,7 @@
     <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="saved-it-modal__header">
-            <h3><img :src="`${$iconURL}Submit%20Proposal/group-6223%20(non-optimized).png`" /> Time Is Up!</h3>
+          <h3><img :src="`${proposalIconsUrl}Asset 587.svg`" /> Time Is Up!</h3>
           <div class="header-description">
             The deadline for submitting this prposal has passed. But no worries! We will be with you soon with the next
             one.
@@ -108,6 +107,7 @@
       @close="showSendProposalModal = false"
       @submit="submitProposal"
       :event="event"
+      :link="proposalLink"
     ></send-proposal-modal>
     <proposal-submitted
       v-if="showSubmittedProposalModal"
@@ -160,6 +160,7 @@ export default {
       option: "submit", // 'submit', 'duplicate'
       showSendProposalModal: false,
       showSubmittedProposalModal: false,
+      proposalLink: "",
     };
   },
   created() {
@@ -206,48 +207,46 @@ export default {
       this.openedModal = "";
     },
     uploadProposal(type) {
-      this.$root.$emit("clear-slide-pos");
-      this.scrollToTop();
-      const proposalForNonMaryoku = this.$store.state.proposalForNonMaryoku;
+      return new Promise((resolve, reject) => {
+        this.$root.$emit("clear-slide-pos");
+        this.scrollToTop();
+        const proposalForNonMaryoku = this.$store.state.proposalForNonMaryoku;
 
-      let coverImageUrl = "";
-      this.isUpdating = true;
-      if (proposalForNonMaryoku.coverImage && proposalForNonMaryoku.coverImage.indexOf("base64") >= 0) {
-        const fileObject = S3Service.dataURLtoFile(
-          proposalForNonMaryoku.coverImage,
-          `${this.event.id}-${proposalForNonMaryoku.vendor.id}`,
-        );
-        const extenstion = fileObject.type.split("/")[1];
-        S3Service.fileUpload(
-          fileObject,
-          `${this.event.id}-${proposalForNonMaryoku.vendor.id}`,
-          "proposals/cover-images",
-        );
-        coverImageUrl = `https://maryoku.s3.amazonaws.com/campaigns/cover-images/${this.event.id}-${proposalForNonMaryoku.vendor.id}.${extenstion}`;
-      }
+        let coverImageUrl = "";
+        this.isUpdating = true;
+        if (proposalForNonMaryoku.coverImage && proposalForNonMaryoku.coverImage.indexOf("base64") >= 0) {
+          const fileObject = S3Service.dataURLtoFile(
+            proposalForNonMaryoku.coverImage,
+            `${this.event.id}-${proposalForNonMaryoku.vendor.id}`,
+          );
+          const extenstion = fileObject.type.split("/")[1];
+          S3Service.fileUpload(
+            fileObject,
+            `${this.event.id}-${proposalForNonMaryoku.vendor.id}`,
+            "proposals/cover-images",
+          );
+          coverImageUrl = `https://maryoku.s3.amazonaws.com/campaigns/cover-images/${this.event.id}-${proposalForNonMaryoku.vendor.id}.${extenstion}`;
+        }
 
-      if (!this.isLoading) {
-        this.isLoading = true;
-        console.log("upload.proposal");
-        this.saveProposal(type).then((proposal) => {
-          this.isUpdating = false;
-          this.isLoading = false;
-          if (type === "submit") this.submittedModal = true;
-          else {
+        if (!this.isLoading) {
+          this.isLoading = true;
+          console.log("upload.proposal");
+          this.saveProposal(type).then((proposal) => {
+            this.isUpdating = false;
+            this.isLoading = false;
+            if (type === "submit") this.submittedModal = true;
+            else {
               Swal.fire({
-                  title: `You’ve saved this current proposal. Come back and edit it at any time!`,
-                  buttonsStyling: false,
-                  type: "success",
-                  confirmButtonClass: "md-button md-vendor",
-                  confirmButtonText: "Back to Dashboard",
-              }).then(res => {
-                  if(res.isConfirmed) {
-                      this.$router.push({path: "/vendor/dashboard"});
-                  }
+                title: `You saved the current proposal. You can edit anytime later!`,
+                buttonsStyling: false,
+                type: "success",
+                confirmButtonClass: "md-button md-success",
               });
-          }
-        });
-      }
+            }
+            resolve(proposal);
+          });
+        }
+      });
     },
 
     back() {
@@ -282,7 +281,11 @@ export default {
       });
     },
     setProposalLink() {
-      this.showSendProposalModal = true;
+      this.uploadProposal("submit").then((proposal) => {
+        console.log(proposal);
+        this.proposalLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}`;
+        this.showSendProposalModal = true;
+      });
     },
     submitProposal() {
       this.showSendProposalModal = false;

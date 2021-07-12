@@ -4,32 +4,23 @@ import { VendorPolicy, VendorPricingPolicy } from "@/constants/vendor";
 import CalendarEvent from "@/models/CalendarEvent";
 import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
 
-const getDefaultState = () => {
-    return {
-        step: 1,
-        requirements: {},
-        specialRequirements: {}
-    }
+const state = {
+  step: 1,
+  specialRequirements: {}
 }
-const state = getDefaultState();
 const getters = {
 
 }
 const actions = {
-  resetRequirements({commit}){
-    commit('resetRequirements')
-  },
   getRequirements({ commit, state }, eventId) {
     return new Promise((resolve, reject) => {
       new ProposalRequestRequirement()
         .for(new CalendarEvent({ id: eventId }))
         .get()
         .then((res) => {
-          if(res && res.length) {
-            res.forEach(requirements => {
-              commit("setCategoryRequirements", { category: requirements.category, requirements })
-            })
-          }
+          res.forEach(requirements => {
+            commit("setCategoryRequirements", { category: requirements.category, requirements })
+          })
           resolve(res)
         })
         .catch(err => {
@@ -38,7 +29,7 @@ const actions = {
     });
   },
   saveTypes({ commit, state }, { event, category, types }) {
-    let requirements = state.requirements[category];
+    let requirements = state[category];
     if (!requirements) requirements = { event: { id: event.id }, category };
     requirements.types = { ...requirements.types, ...types };
     return new Promise((resolve, reject) => {
@@ -55,7 +46,7 @@ const actions = {
     });
   },
   saveRequiementSheet({ commit, state }, { event, category, requirements }) {
-    let originalRequirements = state.requirements[category];
+    let originalRequirements = state[category];
     if (!originalRequirements) originalRequirements = { event: { id: event.id }, category };
     originalRequirements = { ...originalRequirements, ...requirements }
     return new Promise((resolve, reject) => {
@@ -72,7 +63,7 @@ const actions = {
     });
   },
   saveMainRequirements({ commit, state }, { event, category, requirements }) {
-    let originalRequirements = state.requirements[category];
+    let originalRequirements = state[category];
     if (!originalRequirements) originalRequirements = { event: { id: event.id }, category };
     // originalRequirements.mainRequirements = requirements
     originalRequirements = { ...originalRequirements, ...requirements }
@@ -106,9 +97,6 @@ const actions = {
 
 }
 const mutations = {
-  resetRequirements(state){
-    Vue.set(state, 'requirements', {})
-  },
   setStep(state, step) {
     state.step = step;
   },
@@ -116,7 +104,7 @@ const mutations = {
     Vue.set(state, key, value)
   },
   setCategoryRequirements(state, { category, requirements }) {
-    Vue.set(state.requirements, category, requirements)
+    Vue.set(state, category, requirements)
   },
   setMainRequirements(state, { category, data }) {
     Vue.set(state.mainRequirements, category, data)

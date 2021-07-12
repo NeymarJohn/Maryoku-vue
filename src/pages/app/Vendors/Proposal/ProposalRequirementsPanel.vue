@@ -2,27 +2,17 @@
   <collapse-panel class="white-card proposal-requirements-panel" :spacing="20" v-if="!isLoading">
     <template slot="header">
       <div class="d-flex align-center p-30">
-        <img :src="`${$storageURL}Additional%20Requests.svg`" />
+        <img :src="`${$iconURL}Requirements/special-request-red.svg`" />
         <div class="font-size-22 font-bold-extra color-black ml-10">Requirements <br />from the planner</div>
       </div>
     </template>
     <template slot="content">
       <div class="requirements-content p-30 pt-0-i" v-if="step <= 1">
-<!--        <div>-->
-<!--          <template v-for="types in requirementsData.types">-->
-<!--            <span class="type-tag" v-for="type in types" :key="type">{{ type }}</span>-->
-<!--          </template>-->
-<!--        </div>-->
-        <div class="category-section" v-for="(types, key) in requirementsData.types">
-            <div class="color-dark-gray text-transform-capitalize">{{ key }}</div>
-            <div class="requirement-grid">
-                <div v-for="type in types" class="requirement-item">
-                <div class="checkmark"></div>
-                <div class="d-inline-block">{{type}}</div>
-            </div>
+        <div>
+          <template v-for="types in requirementsData.types">
+            <span class="type-tag" v-for="type in types" :key="type">{{ type }}</span>
+          </template>
         </div>
-        </div>
-
         <template v-if="requirementsData.mainRequirements">
           <div
             v-for="(requirementCategory, index) in Object.keys(requirementsData.mainRequirements)"
@@ -146,7 +136,7 @@
       </div>
       <div class="p-30">
         <md-button class="md-outlined md-vendor md-simple maryoku-btn width-100" @click="showQuestionModal = true">
-          <img :src="`${$iconURL}Submit Proposal/group-19162.svg`" class="page-icon mr-10" />
+          <img src="/static/icons/chart-red.svg" class="page-icon mr-10" />
           Questions? Send a question to planner
         </md-button>
         <question-modal v-if="showQuestionModal" @cancel="showQuestionModal = false"></question-modal>

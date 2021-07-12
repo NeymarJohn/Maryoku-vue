@@ -10,7 +10,7 @@
       :readonly="readonly"
       :disabled="disabled"
       @click="onClickEvent"
-      :ref="refName"
+      ref="input"
       v-validate="getValidateObject"
       :data-vv-name="validation"
     />
@@ -117,11 +117,6 @@ export default {
       type: String,
       default: "red",
     },
-      refName:{
-      type: String,
-      required: false,
-      default: 'input',
-    }
   },
   beforeDestroy() {
     if (this.$refs.timePickerPanel) this.$refs.timePickerPanel.style.display = "none";
@@ -196,7 +191,9 @@ export default {
         this.$refs.timePickerPanel.style.top = `${window.scrollY + this.cumulativeOffset(this.$refs.input).top}px`;
     },
     onCopy: function (e) {
-      // alert('You just copied: ' + e.text)
+      this.$refs.input.focus();
+      this.$refs.input.select();
+      document.execCommand("copy");
       setTimeout(() => {
         this.tooltipActive = true;
       }, 500);

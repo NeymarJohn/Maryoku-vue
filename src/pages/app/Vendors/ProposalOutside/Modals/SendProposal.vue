@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="d-flex justify-content-center">
-          <maryoku-input class="width-50" inputStyle="sharing" v-model="sharelink" theme="purple"></maryoku-input>
+          <maryoku-input class="width-50" inputStyle="sharing" v-model="link" theme="purple"></maryoku-input>
         </div>
       </div>
     </template>
@@ -55,6 +55,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    link: {
+      type: String,
+      default: "",
+    },
   },
   created() {
     this.api = gapi;
@@ -66,8 +70,7 @@ export default {
       showCalendar: false,
       emailAccount: "outlook",
       authorized: false,
-      sharelink:
-        "www.design+ux&tbm=isch&ved=2ah…UKEwippdnI8NvnAhWS2eAKHXhkBsAQ2 cCegQIAB AA&oq=share+design+ux&gs_l=img.3..0i8i7i30.296659.296659..296799...0.0..0.120.120.0j1......0....1..gws-wiz-img.mmb8zpyKodI&ei=4kBMXqmsN5Kzgwf4yJmADA&bih=692&biw=1424#imgrc=HJv9MiWofJS5lM",
+      sharelink: "",
     };
   },
   methods: {

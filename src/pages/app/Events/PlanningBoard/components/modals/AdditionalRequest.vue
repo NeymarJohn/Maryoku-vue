@@ -25,41 +25,14 @@
         </div>
       </div>
       <div class="text-left mb-40">
-        <div class="d-flex align-center">
-          <div class="font-size-18 font-bold">
-            <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10" width="23" />
-            Time Slot</div>
-          <md-switch class="md-switch-rose large-switch ml-20" v-model="isEntire">
-            <span class="color-black font-size-14px">Entire Event</span>
-          </md-switch>
+        <div class="font-size-20">Time Slot:</div>
+        <div>
+          <md-checkbox class="md-checkbox-circle md-red" v-model="isEntire" :value="true">Entire Day</md-checkbox>
         </div>
-        <div class="checks-cont my-10 ml-30">
-          <div class="check-item" @click="assignTimeline = true">
-            <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" v-if="assignTimeline" />
-            <span class="unchecked" v-else></span>
-            <span>Assign to one of those timeline events</span>
-          </div>
-          <div class="check-item" @click="assignTimeline = false">
-            <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" v-if="!assignTimeline" />
-            <span class="unchecked" v-else></span>
-            <span>Specific Time Slot</span>
-          </div>
+        <div class="d-flex">
+          <md-checkbox class="md-checkbox-circle md-red" v-model="isEntire" :value="false"></md-checkbox>
+          <time-slot class="time-slot-wrapper" @change="setTime"></time-slot>
         </div>
-        <template v-if="assignTimeline">
-
-            <div class="d-flex align-center ml-30" v-for="(timelineItem, index) in timeslots" :key="`timelineItem-${index}`">
-              <md-checkbox v-model="timeSlotIdx" class="mr-20" :value="index"></md-checkbox>
-              <timeline-item
-                :item="timelineItem"
-                :index="index"
-                class="my-10 timeline-group-wrapper"
-                :editMode="false"
-                size="medium"
-              ></timeline-item>
-            </div>
-
-        </template>
-        <time-slot v-else class="ml-30 time-slot-wrapper" @change="setTime"></time-slot>
       </div>
       <div>
         <div
@@ -68,32 +41,32 @@
           class="text-left sub-category"
         >
           <div class="font-bold-extra">{{ section }}</div>
-          <div class="md-layout text-left">
+          <div class="requirement-row text-left">
             <!-- {{ subCategory.requirements[section] }} -->
             <div
-                v-for="item in subCategory[section].filter((item) => item.type !== 'single-selection' && item.visible)"
-                :key="item.item"
-                class="md-layout-item md-size-33"
+              v-for="item in subCategory[section].filter((item) => item.type !== 'single-selection' && item.visible)"
+              :key="item.item"
+              class="requirement-item"
             >
-                <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">
-                    <span class="text-transform-capitalize">{{ item.item }}</span>
-                </md-checkbox>
+              <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">
+                <span class="text-transform-capitalize">{{ item.item }}</span>
+              </md-checkbox>
             </div>
             <div
-                v-for="item in subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)"
-                class="requirement-item-tags mt-10"
-                :key="item.item"
+              v-for="item in subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)"
+              class="requirement-item-tags mt-10"
+              :key="item.item"
             >
-                <div class="mb-10">{{ item.item }}:</div>
-                <tag-item
-                    @click="tag.selected = !tag.selected"
-                    :tagLabel="tag.name"
-                    :key="tag.name"
-                    :isSelected="tag.selected"
-                    :theme="`red`"
-                    v-for="tag in item.options"
-                    class="mr-10"
-                ></tag-item>
+              <div class="mb-10">{{ item.item }}:</div>
+              <tag-item
+                @click="tag.selected = !tag.selected"
+                :tagLabel="tag.name"
+                :key="tag.name"
+                :isSelected="tag.selected"
+                :theme="`red`"
+                v-for="tag in item.options"
+                class="mr-10"
+              ></tag-item>
             </div>
           </div>
         </div>
@@ -104,9 +77,9 @@
           :id="specialSection.subCategory"
         >
           <div class="font-bold-extra">{{ specialSection.subCategory }}</div>
-          <div class="md-layout text-left" v-if="specialSection.subCategory !== 'Sitting arrangement'">
+          <div class="requirement-row text-left" v-if="specialSection.subCategory !== 'Sitting arrangement'">
             <!-- {{ subCategory.requirements[section] }} -->
-            <div v-for="item in specialSection.options" class="md-layout-item md-size-33" :key="item.name">
+            <div v-for="item in specialSection.options" class="requirement-item" :key="item.name">
               <md-checkbox v-model="item.selected">
                 <div class="checkbox-label-wrapper">
                   <img class="special-icon" :src="getIcon(specialSection.subCategory, item.name)" />
@@ -208,9 +181,6 @@
 import { Modal, MaryokuInput } from "@/components";
 import TagItem from "../TagItem.vue";
 import TimeSlot from "../TimeSlot.vue";
-import TimelineItem from "../../../components/TimelineItem";
-import moment from "moment";
-
 export default {
   name: "AdditionalRequestModal",
   components: {
@@ -218,7 +188,6 @@ export default {
     TagItem,
     MaryokuInput,
     TimeSlot,
-    TimelineItem,
   },
   data() {
     return {
@@ -230,15 +199,6 @@ export default {
       groupSize: null,
       anythingElse: "",
       period: null,
-      assignTimeline: false,
-      timeSlotsByServiceType: {
-        'venuerental' : ['setup', 'activity', 'Show', 'Speaker / Keynote', 'Discussion', 'Break', 'Relaxation', 'meal'],
-        'transportation' : ['transportation'],
-        'entertainment' : ['activity', 'show', 'Speaker / Keynote', 'Discussion'],
-        'administration' : ['setup', 'activity', 'show', 'Speaker / Keynote', 'meal'],
-        'foodandbeverage' : ['break', 'Relaxation', 'meal'],
-      },
-      timeSlotIdx: false,
     };
   },
   props: {
@@ -283,36 +243,8 @@ export default {
     onCancel: function (e) {
       this.$emit("cancel");
     },
-    getPeriod(timeslot) {
-      console.log('getPeriod', timeslot);
-      let startTime = moment(new Date(Number(timeslot.startTime)));
-      let endTime = moment(new Date(Number(timeslot.endTime)));
-      console.log('getPeriod', startTime);
-      let period = {
-          startTime: {
-              ampm: startTime.format('A'),
-              time: {
-                  hh: startTime.format('hh'),
-                  mm: startTime.format('mm'),
-              }
-          },
-          endTime: {
-              ampm: endTime.format('A'),
-              time: {
-                  hh: endTime.format('hh'),
-                  mm: endTime.format('mm'),
-              }
-          }
-      }
-      console.log('getPeriod', period);
-      return period;
-    },
     save: function () {
       const requirements = { ...this.subCategory };
-
-      if (this.assignTimeline) {
-        this.getPeriod(this.timeslots[this.timeSlotIdx])
-      }
       requirements.special = [];
       for (let item of this.specialTags) {
         requirements.special.push(item);
@@ -418,33 +350,6 @@ export default {
       this.period = time;
     },
   },
-  computed: {
-    event() {
-      return this.$store.state.event.eventData;
-    },
-    timeslots(){
-      let slots = [];
-      // classify and get timeslots by service type
-      this.$store.state.event.eventData.timelineDates.map(date => {
-        date.timelineItems.map(item => {
-          if ((this.selectedCategory.key === 'venuerental' || this.selectedCategory.key === 'decor' ||
-            this.selectedCategory.key === 'equipmentrentals') && this.timeSlotsByServiceType.venuerental.includes(item.buildingBlockType)) {
-            slots.push(item);
-          } else if (this.selectedCategory.key === 'transportation' && this.timeSlotsByServiceType.transportation.includes(item.buildingBlockType)) {
-            slots.push(item);
-          } else if ((this.selectedCategory.key === 'entertainment' || this.selectedCategory.key === 'videographyandphotography' ||
-            this.selectedCategory.key === 'audiovisualstagingservices') && this.timeSlotsByServiceType.entertainment.includes(item.buildingBlockType)) {
-            slots.push(item)
-          } else if (this.selectedCategory.key === 'administration' && this.timeSlotsByServiceType.entertainment.includes(item.buildingBlockType)) {
-            slots.push(item);
-          } else if (this.selectedCategory.key === 'foodandbeverage'&& this.timeSlotsByServiceType.foodandbeverage.includes(item.buildingBlockType)) {
-            slots.push(item);
-          }
-        })
-      })
-      return slots;
-    }
-  }
 };
 </script>
 <style lang="scss" scoped>
@@ -459,7 +364,15 @@ export default {
       width: 100%;
     }
   }
-
+  .requirement-row {
+    .requirement-item {
+      display: inline-block;
+      margin-right: 40px;
+      min-width: 25%;
+      // display: grid;
+      // grid-template-columns: repeat(4, 25%);
+    }
+  }
   .sub-category {
     border-top: solid 1px #dbdbdb;
     margin-top: 30px;
@@ -476,33 +389,6 @@ export default {
   }
   .time-slot-wrapper {
     margin-top: 16px;
-  }
-  .checks-cont {
-    display: flex;
-    justify-content: flex-start;
-    .check-item {
-        display: flex;
-        align-items: center;
-        margin-right: 5rem;
-        cursor: pointer;
-
-        img {
-            width: 30px;
-            height: 30px;
-            margin-right: 14px;
-        }
-    }
-    span {
-        &.unchecked {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            border: 1px solid #707070;
-            border-radius: 50%;
-            background: #ffffff;
-            margin-right: 14px;
-        }
-    }
   }
 }
 </style>
