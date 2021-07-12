@@ -86,9 +86,9 @@ export default {
       }
     },
     addItem(serviceItem) {
-      if (!this.services) this.services = [];
-      this.services.push(serviceItem);
-      this.services = Object.assign([], this.services);
+        if (!this.services) this.services = [];
+        this.services.push(serviceItem);
+        this.services = Object.assign([], this.services);
     },
   },
   components: {

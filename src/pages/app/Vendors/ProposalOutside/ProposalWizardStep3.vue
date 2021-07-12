@@ -66,7 +66,9 @@
       </div>
       <div class="event-summary-body">
         <div class="cover-letter font-bold-extra mb-50">
-          <h4 class="font-bold-extra text-transform-uppercase">Dear {{ event.customer.name }},</h4>
+          <h4 class="font-bold-extra text-transform-uppercase">
+            Dear {{ event.customer ? event.customer.name : "Planner" }},
+          </h4>
           <textarea v-model="personalMessage"> </textarea>
         </div>
 
@@ -213,13 +215,17 @@
                   <div class="item" v-else>
                     <span v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour'">$</span>
                     <span v-if="policy.type === 'Boolean'">
-                      <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
-                      <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
+                      <img v-if="policy.value === true" :src="`${$storageURL}ok%20check%20V.svg`" />
+                      <img class="purple" v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
                       <!-- {{ policy.value === true ? "Yes" : "No" }} -->
                     </span>
                     <span v-else>
-                      <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
-                      <img v-else-if="policy.value === false" :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
+                      <img v-if="policy.value === true" :src="`${$storageURL}ok%20check%20V.svg`" />
+                      <img
+                        class="purple"
+                        v-else-if="policy.value === false"
+                        :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`"
+                      />
                       <span v-else>{{ policy.value | withComma }}</span>
                     </span>
                     <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
@@ -832,13 +838,14 @@ export default {
       overflow: hidden;
 
       .item {
-        margin-right: 30px;
-        width: 300px;
-        min-width: 300px;
-        max-height: 177px;
+        flex: 1;
 
-        &:last-child {
-          margin-right: 0;
+        img {
+          width: 30px;
+
+          &.purple {
+            filter: invert(16%) sepia(49%) saturate(2942%) hue-rotate(286deg) brightness(82%) contrast(97%);
+          }
         }
       }
       a.more {

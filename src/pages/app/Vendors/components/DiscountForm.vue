@@ -46,8 +46,8 @@
       />
     </div>
     <div class="text-right mb-10" v-if="isDiscountEditing">
-      <md-button class="md-simple normal-btn md-red" @click="cancel('discount')">Cancel</md-button>
-      <md-button class="normal-btn md-red" @click="saveDiscount">Save</md-button>
+      <md-button class="md-simple normal-btn md-vendor" @click="cancel('discount')">Cancel</md-button>
+      <md-button class="normal-btn md-vendor" @click="saveDiscount">Save</md-button>
     </div>
     <div class="service-item" v-if="!isTaxEditing">
       <div class="flex-1">
@@ -97,8 +97,8 @@
       />
     </div>
     <div class="text-right mb-10" v-if="isTaxEditing">
-      <md-button class="md-simple normal-btn md-red" @click="cancel('tax')">Cancel</md-button>
-      <md-button class="normal-btn md-red" @click="saveTax">Save</md-button>
+      <md-button class="md-simple normal-btn md-vendor" @click="cancel('tax')">Cancel</md-button>
+      <md-button class="normal-btn md-vendor" @click="saveTax">Save</md-button>
     </div>
   </div>
 </template>

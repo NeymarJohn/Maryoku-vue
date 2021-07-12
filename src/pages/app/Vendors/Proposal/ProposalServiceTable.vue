@@ -432,7 +432,6 @@ export default {
       get: function () {
         if (this.tableCategory === "cost") return this.$store.state.vendorProposal.proposalCostServices[this.category];
         else if (this.tableCategory === "included") {
-          console.log("object", this.$store.state.vendorProposal.proposalIncludedServices[this.category]);
           return this.$store.state.vendorProposal.proposalIncludedServices[this.category];
         } else if (this.tableCategory === "extra")
           return this.$store.state.vendorProposal.proposalExtraServices[this.category];

@@ -22,7 +22,7 @@
               <md-button @click="updatePassword" class="md-default md-red md-maryoku mt-4" slot="footer">Update Password</md-button>
             </div>
           </template>
-          
+
         </div>
         <div v-if="inValidToken" class="text-center md-layout-item md-size-100 md-medium-size-100 md-small-size-100 signin-contain" slot="content-right">
           <div class="font-size-20">
@@ -79,7 +79,7 @@ export default {
             this.error = 'Invalid password. Minimum length is 8 letters.'
           }
         })
-      
+
     },
     toSingUp() {
       this.$router.push({ path: '/signup' })

@@ -17,6 +17,7 @@
           <br />approve your basic info
         </h2>
         <div class="card">
+          <loader :active="loading" height="100%"/>
           <v-signup-editable-field
             :title="'Company Name'"
             :field="'companyName'"
@@ -76,14 +77,14 @@
 </template>
 
 <script>
-import VueElementLoading from "vue-element-loading";
 import VSignupEditableField from "@/components/Inputs/VSignupEditableField.vue";
 import VSignupCategorySelector from "@/components/Inputs/VSignupCategorySelector.vue";
+import { Loader } from "@/components";
 
 export default {
   name: "vendor-basic-info-form",
   components: {
-    VueElementLoading,
+    Loader,
     VSignupEditableField,
     VSignupCategorySelector,
   },
@@ -96,6 +97,11 @@ export default {
       secondUrl: `${this.$iconURL}VendorSignup/`,
     };
   },
+  computed:{
+    loading(){
+      return this.$store.state.vendorSignup.isLoading
+    }
+  },
   methods: {
     onUpdateFocus(newValue) {},
     saveValue({ field, value }) {
@@ -105,6 +111,9 @@ export default {
   },
   watch: {
     vendor(newVal) {},
+    loading(){
+        console.log('loading', this.loading)
+    }
   },
 };
 </script>

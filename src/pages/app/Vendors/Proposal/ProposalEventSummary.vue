@@ -51,7 +51,7 @@
             </ul>
           </div>
         </div>
-        <md-button class="md-red maryoku-btn change-cover-btn" @click="chooseFiles">
+        <md-button class="md-color maryoku-btn change-cover-btn" @click="chooseFiles">
           <img :src="`${$iconURL}Campaign/Group 2344.svg`" class="mr-10" style="width: 20px" />
           <span>Change Cover</span>
         </md-button>
@@ -83,7 +83,7 @@
         </div>
         <div class="font-bold mb-10">Some references to the experience you will get from us</div>
         <proposal-inspirational-photos class="mb-60"></proposal-inspirational-photos>
-        <md-button class="md-simple edit-btn md-red mb-30" @click="savedItModal = true">
+        <md-button class="md-simple edit-btn md-purple mb-30" @click="savedItModal = true">
           About us
           <md-icon>navigate_next</md-icon>
         </md-button>
@@ -110,6 +110,7 @@
         <attachment-tag-list
           class="mt-40"
           :defaultValue="attachments"
+          theme="purple"
           @add="addNewAttachment"
           @remove="removeAttachment"
         ></attachment-tag-list>
@@ -202,6 +203,7 @@
           <div id="Policy">
             <div class="rules">
               <div class="rules">
+
                 <div class="rule" v-for="(policy, yIndex) in validPolicy" :key="yIndex">
                   <div class="item">{{ policy.name }}</div>
                   <div class="item" v-if="policy.type === 'MultiSelection'">
@@ -216,13 +218,13 @@
                   <div class="item" v-else>
                     <span v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour'">$</span>
                     <span v-if="policy.type === 'Boolean'">
-                      <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
-                      <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
+                      <img v-if="policy.value === true" :src="`${$storageURL}ok%20check%20V.svg`" />
+                      <img v-else class="purple" :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
                       <!-- {{ policy.value === true ? "Yes" : "No" }} -->
                     </span>
                     <span v-else>
-                      <img v-if="policy.value === true" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" />
-                      <img v-else-if="policy.value === false" :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
+                      <img v-if="policy.value === true" :src="`${$storageURL}ok%20check%20V.svg`" />
+                      <img v-else-if="policy.value === false" class="purple" :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
                       <span v-else>{{ policy.value | withComma }}</span>
                     </span>
                     <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
@@ -698,9 +700,9 @@ export default {
         border-right: none;
       }
       &.active {
-        border-top: solid 5px #f51355;
+        border-top: solid 5px #641856;
         span {
-          color: #f51355;
+          color: #641856;
           font-weight: 800;
         }
       }
@@ -733,11 +735,11 @@ export default {
         padding-top: 36px;
         padding-bottom: 60px;
         font-size: 16px;
-        color: #f51355;
+        color: #641856;
         text-transform: capitalize;
         cursor: pointer;
         i {
-          color: #f51355;
+          color: #641856;
         }
       }
     }
@@ -823,7 +825,7 @@ export default {
           margin-bottom: 33px;
 
           i {
-            color: #f51355;
+            color: #641856;
             font-size: 22px;
             margin-right: 22px;
           }
@@ -889,6 +891,10 @@ export default {
 
           img {
             width: 30px;
+
+            &.purple{
+              filter: invert(16%) sepia(49%) saturate(2942%) hue-rotate(286deg) brightness(82%) contrast(97%);
+            }
           }
         }
         &:first-child {
