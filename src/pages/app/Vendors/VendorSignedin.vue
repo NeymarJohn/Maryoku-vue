@@ -15,6 +15,7 @@
 </template>
 <script>
 import eventService from "@/services/event.service";
+import Vendors from "@/models/Vendors";
 export default {
   components: {},
   methods: {
@@ -25,13 +26,14 @@ export default {
       this.$router.push({ path: "/choose-workspace" });
     },
   },
-  created() {
+  async created() {
     console.log("signedIn", this.$route.query.token);
     const givenToken = this.$route.query.token;
+    const vendorId = this.$route.query.vendorId;
     this.$store.dispatch("auth/checkToken", givenToken).then(
       (tenantUser) => {
-        console.log(tenantUser);
         const tenantId = this.$authService.resolveTenantId();
+          console.log('vendorSignedIn.vendor', vendorId, tenantUser);
         this.$authService.setTenant(tenantId);
 
         // SET LIVE CHAT INFORMANTION
@@ -49,6 +51,14 @@ export default {
           } catch (e) {
             console.error(e);
           }
+        }
+        // SET VENDOR Tenant
+        if (vendorId) {
+            new Vendors({ id: vendorId, tenantUser: { id: tenantUser.id }, isEditing: false }).save().then(res => {
+                console.log('updateVendor', res);
+                this.$router.push("/vendor/profile/settings");
+            });
+            return;
         }
         /// SET GTM
         this.$gtm.trackEvent({
