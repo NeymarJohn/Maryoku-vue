@@ -16,7 +16,7 @@ const EventProposal = () => import("@/pages/app/Events/EventProposal.vue");
 const VendorDetail = () => import("@/pages/app/Vendors/VendorDetail.vue");
 const AddEditVendor = () => import("@/pages/app/Vendors/AddEditVendor.vue");
 const VendorsPoolNew = () => import("@/pages/app/Vendors/VendorsPoolNew.vue");
-const NonMaryokuProposal = () => import("@/pages/Dashboard/Pages/NonMaryokuProposal");
+
 // Profile Pages
 import Profile from "@/pages/app/Planner/Profile/Layout.vue";
 const ProfileOverview = () => import("@/pages/app/Planner/Profile");
@@ -663,16 +663,6 @@ let welcomeEventPage = {
 
 const rememberMe = authService.getCookie("rememberMe");
 const homeLink = rememberMe === "true" ? "/events" : "/signin";
-const proposalForUnregisterPlanner = {
-    path: "/unregistered/proposals/:proposalId",
-    name: "Non Maryoku proposal",
-    component: NonMaryokuProposal,
-    meta: {
-        title: "Proposal for non maryoku evnt",
-        gtm: "welcom event",
-        requiresAuth: false,
-    },
-};
 const routes = [
     // {
     //     path: "/",
@@ -705,7 +695,6 @@ const routes = [
     others,
     calendarSyncPage,
     checkoutPage,
-    proposalForUnregisterPlanner,
     ...vendorRoutes,
     {
         path: '*',

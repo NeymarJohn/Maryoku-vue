@@ -35,14 +35,20 @@
         <div class="text-left tips">
           <div class="mb-20 d-flex">
             <img :src="`${$iconURL}common/hint.svg`" class="mr-10" />
-            <div>Sync any changes including adding, updating and deleting from your Calendar to Maryoku Calendar.</div>
+            <div>Sync with your regular calendar to keep your Maryoku calendar up to date with all the latest additions & deletions.</div>
           </div>
-          <div class="d-flex">
+          <div class="mb-20 d-flex">
             <img :src="`${$iconURL}common/hint.svg`" class="mr-10" />
             <div>
-              Sync is one-way - any changes you make to your Marioko calendar will not appear in your other calendars
+                This sync is one-way – any changes you make to your Maryoku calendar won’t show up on your regular calendar
             </div>
           </div>
+            <div class="d-flex">
+                <img :src="`${$iconURL}common/hint.svg`" class="mr-10" />
+                <div>
+                    Remember to always check your Maryoku calendar for in-depth event information
+                </div>
+            </div>
         </div>
       </div>
     </template>

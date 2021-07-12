@@ -70,7 +70,7 @@
           </div>
         </div>
         <div class="mt-30 text-left" v-if="isRegisteredCustomer">
-          <label class="font-bold">Company / Customer Name *</label>
+          <label class="font-bold">Company / Customer Name</label>
           <autocomplete
             class="width-50 mt-5 md-purple medium-selector"
             placeholder="Type name of customer here..."
@@ -89,7 +89,7 @@
             <maryoku-input inputStyle="username" class="width-50 mt-5 form-input" v-model="customer"></maryoku-input>
           </div>
           <div class="mt-30 text-left">
-            <label class="font-bold">Email *</label>
+            <label class="font-bold">Email</label>
             <maryoku-input inputStyle="email" class="width-50 mt-5 form-input" v-model="email"></maryoku-input>
           </div>
           <md-checkbox v-model="addToCustomerList" class="md-vendor"
@@ -112,7 +112,7 @@
           </div>
         </div>
         <div class="form-group text-left mt-30 proposal">
-          <label>Upload proposal *</label>
+          <label>Upload proposal</label>
           <vue-dropzone
             ref="myVueDropzone"
             id="dropzone"
@@ -129,18 +129,17 @@
             <div>Or</div>
             <div class="note">Drag your file here</div>
           </vue-dropzone>
-          <div class="form-group text-left mt-30" v-else>
-            <a :href="`${fileUrl}`" class="color-black" target="_blank">
-              <img class="mr-5" :src="`${$iconURL}common/pin-dark.svg`" width="15" />{{ fileName }}</a
-            >
+          <div class="form-group attach-file text-left mt-30" v-else>
+            <img class="mr-5" :src="`${$iconURL}common/pin-dark.svg`" width="15" />
+            <a :href="`${fileUrl}`" class="color-black" target="_blank">{{ fileName }}</a>
+            <span class="attach-trash" @click="fileName = null"><md-icon>close</md-icon></span>
           </div>
         </div>
-        <div v-if="showError" class="md-error">{{ this.errorMessage }}</div>
       </div>
     </template>
     <template slot="footer">
       <md-button class="md-default md-simple cancel-btn md-bold" @click="close">Cancel</md-button>
-      <md-button class="md-vendor add-category-btn md-bold" @click="createEvent" :disabled="!fileName">Done</md-button>
+      <md-button class="md-vendor add-category-btn md-bold" @click="createEvent">Done</md-button>
     </template>
   </modal>
 </template>
@@ -240,8 +239,6 @@ export default {
         maxFilesize: 5,
         headers: { "My-Awesome-Header": "header value" },
       },
-      showError: false,
-      errorMessage: "",
     };
   },
   methods: {
@@ -266,16 +263,7 @@ export default {
     close() {
       this.$emit("cancel");
     },
-    validateValues() {
-      if (!this.fileName) {
-        this.showError = true;
-        this.errorMessage = "You shoud upload proposal";
-        return;
-      }
-    },
     createEvent() {
-      if (!this.fileName) {
-      }
       const startDate = moment(
         `${this.date} ${this.startTime.hh}:${this.startTime.mm} ${this.amPack.start}`,
         "DD.MM.YYYY hh:mm a",
@@ -396,6 +384,23 @@ export default {
     }
   }
 }
+.attach-file{
+    .attach-trash{
+        cursor: pointer;
+        display: none;
+        background-color: white;
+        border-radius: 50%;
+        box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+        padding: 5px;
+        margin-left: 10px;
+    }
+    &:hover{
+        .attach-trash{
+            display: inline;
+        }
+    }
+}
+
 .upload-section {
   border-color: #641856 !important;
 }

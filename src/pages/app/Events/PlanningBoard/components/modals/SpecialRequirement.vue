@@ -5,6 +5,9 @@
         <img :src="`${$iconURL}NewRequirements/group-16281.svg`" />
         <div class="font-size-30 font-bold color-red mt-20">ALMOST DONE!</div>
       </div>
+      <md-button class="md-simple md-just-icon md-round modal-default-button p-absolute" @click="$emit('cancel')">
+        <md-icon>clear</md-icon>
+      </md-button>
     </template>
     <template slot="body">
       <div class="md-layout maryoku-modal-body"></div>

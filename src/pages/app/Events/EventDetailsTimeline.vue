@@ -34,7 +34,7 @@
         v-if="isEditMode"
       >
         <md-card-content class="md-layout time-line-blocks_items mb-60">
-          <div class="text-center width-100 p-10 font-size-16 mb-10">Drag Tim Slots timeline</div>
+          <div class="text-center width-100 p-10 font-size-16 mb-10">Drag Time Slots timeline</div>
 
           <div v-for="(section, index) in blocksList" :key="index" class="md-layout-item md-size-100 mb-30">
             <div v-for="block in section" :key="block.id" class="md-layout-item md-size-100">
