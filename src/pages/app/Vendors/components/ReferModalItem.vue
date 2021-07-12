@@ -2,7 +2,7 @@
   <div class="refer-modal-item-wrapper">
     <div class="title-cont" @click="handleSelection">
       <div class="left-side">
-        <img v-if="isSelected" :src="`${$iconURL}Submit%20Proposal/group-5661.svg`" />
+        <img v-if="isSelected" :src="`${iconUrl}Group 6258 (2).svg`" />
         <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`" />
         <h3 class="title"><img :src="img" />{{ category.title }}</h3>
       </div>

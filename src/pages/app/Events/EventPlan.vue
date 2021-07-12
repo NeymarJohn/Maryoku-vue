@@ -83,7 +83,7 @@ export default {
         status: "not-complete",
         route: "booking/planningboard",
         icon: `${this.$iconURL}Campaign/Group 8857.svg`,
-        progress: this.event.requirementProgress,
+        progress: this.event.campaignProgress,
         componentId: "planningboard",
         id: "planningboard-item",
       };

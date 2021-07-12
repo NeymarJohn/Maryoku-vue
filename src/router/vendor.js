@@ -6,8 +6,6 @@ const VendorProposalBoard = () => import("@/pages/app/Vendors/ProposalBoard");
 const VendorDashboard = () => import("@/pages/app/Vendors/VendorDashboard")
 const VendorSignup = () => import("@/pages/app/Vendors/Signup");
 const VendorSignin = () => import("@/pages/app/Vendors/VendorSignin.vue");
-const ForgotPassword = () => import("@/pages/app/Vendors/VendorForgotPassword.vue");
-const ResetPassword = () => import("@/pages/app/Vendors/VendorResetPassword.vue");
 const VendorSignedin = () => import("@/pages/app/Vendors/VendorSignedin.vue");
 
 // New Vendor Pages
@@ -134,28 +132,6 @@ export default [
         },
     },
     {
-        path: "/vendor/forgot-password",
-        name: "ForgotPassword",
-        component: ForgotPassword,
-        meta: {
-            requiresAuth: false,
-            title: "Vendor Forgot Password",
-            gtm: "ForgotPassword",
-            isVendor: true
-        },
-    },
-    {
-        path: "/vendor/reset-password",
-        name: "ResetPassword",
-        component: ResetPassword,
-        meta: {
-            requiresAuth: false,
-            gtm: "ResetPassword",
-            title: "Vendor Reset Password",
-            isVendor: true,
-        },
-    },
-    {
         path: "/vendor",
         component: VendorMainLayout,
         name: "Vendor",
@@ -262,7 +238,7 @@ export default [
         children: [
             {
                 path: "/vendor/:vendorId/proposal/non-registered",
-                name: "outsideProposalEdit",
+                name: "proposalEdit",
                 component: ProposalForOutsideClientContent,
                 meta: {
                     requiresAuth: false,
