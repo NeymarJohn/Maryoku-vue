@@ -5,8 +5,8 @@
         <div v-for="(imageIndex, index) in new Array(10)" :key="`header-image-${index}-1`" class="concept-color">
           <img
             class="concept-image"
-            v-if="backgroundImages[index % backgroundImages.length]"
-            :src="`${backgroundImages[index % backgroundImages.length]}`"
+            v-if="vendor.images[index % vendor.images.length]"
+            :src="`${vendor.images[index % vendor.images.length]}`"
           />
         </div>
       </div>
@@ -91,9 +91,6 @@ export default {
       } else {
         return "-";
       }
-    },
-    backgroundImages() {
-      return this.vendor.images.filter((image) => image);
     },
   },
 };

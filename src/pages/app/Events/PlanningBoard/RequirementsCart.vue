@@ -112,7 +112,7 @@ export default {
       return this.$store.state.event.eventData;
     },
     selectedCategories() {
-      const categoryKeys = Object.keys(this.$store.state.planningBoard);
+      const categoryKeys = Object.keys(this.$store.state.planningBoard.requirements);
       console.log('requirementCart.categoryKeys', categoryKeys);
       const selectedData = [];
       categoryKeys.forEach((categoryKey) => {
@@ -129,7 +129,7 @@ export default {
       return this.$store.state.common.serviceCategories;
     },
     requirements() {
-      return this.$store.state.planningBoard;
+      return this.$store.state.planningBoard.requirements;
     },
     percentOfBudgetCategories() {
       let hasBudgetItems = 0;

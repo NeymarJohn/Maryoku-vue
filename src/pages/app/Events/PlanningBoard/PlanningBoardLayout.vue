@@ -27,8 +27,8 @@
               :musicPlayer="service.musicPlayer"
               :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
               :isSentRequest="
-                $store.state.planningBoard[service.serviceCategory] &&
-                $store.state.planningBoard[service.serviceCategory].isIssued
+                $store.state.planningBoard.requirements[service.serviceCategory] &&
+                $store.state.planningBoard.requirements[service.serviceCategory].isIssued
               "
               @showSpecific="getSpecification"
               @update="setServiceStyles"
@@ -50,8 +50,8 @@
               :hasBudget="hasBudget(service.serviceCategory)"
               :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
               :isSentRequest="
-                $store.state.planningBoard[service.serviceCategory] &&
-                $store.state.planningBoard[service.serviceCategory].isIssued
+                $store.state.planningBoard.requirements[service.serviceCategory] &&
+                $store.state.planningBoard.requirements[service.serviceCategory].isIssued
               "
               @showSpecific="getSpecification"
               @update="setServiceStyles"
@@ -300,6 +300,7 @@ export default {
     },
     setServiceStyles({ category, services, type }) {
       // this.setTypes({ category: category.serviceCategory, data: services, type });
+      console.log('setServiceStyles', category, services, type);
       this.saveTypes({ category: category.serviceCategory, event: this.event, types: { [type]: services } });
     },
     saveAdditionalRequest({ category, requirements }) {
@@ -319,8 +320,8 @@ export default {
       // this.$store.dispatch("event/saveEventAction", event).then((res) => {});
     },
     getRequirements(category) {
-      if (!this.$store.state.planningBoard[category]) return {};
-      return this.$store.state.planningBoard[category].mainRequirements;
+      if (!this.$store.state.planningBoard.requirements[category]) return {};
+      return this.$store.state.planningBoard.requirements[category].mainRequirements;
     },
     openCart() {
       this.showCart = true;

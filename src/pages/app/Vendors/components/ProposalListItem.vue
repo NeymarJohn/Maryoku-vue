@@ -4,7 +4,7 @@
       <img style="width: 40px" src="https://maryoku.s3.amazonaws.com/company/logos/5e0ae1d2cfefec4b68f5d8a1.png" />
     </div>
     <div>
-      <div class="font-bold font-size-16" v-if="proposal.proposalRequest.eventData.title">{{proposal.proposalRequest.eventData.title}}</div>
+        <div class="font-bold font-size-16" v-if="proposal.proposalRequest && proposal.proposalRequest.eventData.title">{{proposal.proposalRequest.eventData.title}}</div>
       <div class="font-bold font-size-16" v-else>New Event</div>
 <!--      <md-button class="preview md-simple md-vendor-text md-vendor px-0">-->
 <!--          Got 4 previous versions-->

@@ -352,7 +352,7 @@ export default {
       storedRequirements: "event/getBookingRequirements",
     }),
     ...mapState({
-      eventRequirements: (state) => state.planningBoard || {},
+      eventRequirements: (state) => state.planningBoard.requirements || {},
     }),
     categoryList() {
       return this.$store.state.event.eventData.components;

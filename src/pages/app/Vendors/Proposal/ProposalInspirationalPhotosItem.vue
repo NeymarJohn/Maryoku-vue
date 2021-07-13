@@ -91,7 +91,7 @@ export default {
             event.target.files[0].size / 1024 / 1024,
           )}MB. This file should be under 5MB`,
           showCancelButton: false,
-          confirmButtonClass: "md-button md-success",
+          confirmButtonClass: "md-button md-vendor",
           cancelButtonClass: "md-button md-danger",
           confirmButtonText: "I got it",
           buttonsStyling: false,

@@ -317,15 +317,15 @@ export default {
       for (let item of this.specialTags) {
         requirements.special.push(item);
       }
-      // this.$emit("save", {
-      //   category: this.selectedCategory.key,
-      //   requirements: {
-      //     mainRequirements: requirements,
-      //     isEntireEvent: this.isEntire,
-      //     period: this.period,
-      //     additionalDescription: this.anythingElse,
-      //   },
-      // });
+      this.$emit("save", {
+        category: this.selectedCategory.key,
+        requirements: {
+          mainRequirements: requirements,
+          isEntireEvent: this.isEntire,
+          period: this.period,
+          additionalDescription: this.anythingElse,
+        },
+      });
     },
     selectTag(tag) {
       tag.isSelected = !tag.isSelected;

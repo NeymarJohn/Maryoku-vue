@@ -61,15 +61,15 @@ export default {
       this.selectedSuggestItemIndex = index;
       this.qty = this.filteredSuggestItems[index].qty;
       this.unit = this.filteredSuggestItems[index].price;
-      // this.searchWord = this.getOptionLabel(this.filteredSuggestItems[index]).slice(0, this.searchWord.length);
+      this.searchWord = this.getOptionLabel(this.filteredSuggestItems[index]).slice(0, this.searchWord.length);
     },
     selectSuggestItem(index) {
       this.qty = this.filteredSuggestItems[index].qty;
       this.unit = this.filteredSuggestItems[index].price;
-      this.$emit("change", this.filteredSuggestItems[index]);
       this.searchWord = this.getOptionLabel(this.filteredSuggestItems[index]);
       this.selectedSuggestItemIndex = -1;
       this.showAutoCompletePanel = false;
+      this.$emit("change", this.filteredSuggestItems[index]);
     },
     startSearch() {
       console.log(this.options);
@@ -93,6 +93,7 @@ export default {
   },
   computed: {
     filteredSuggestItems() {
+      if (!this.searchWord) return [];
       return this.options.filter((item) =>
         this.getOptionLabel(item).toLowerCase().includes(this.searchWord.toLowerCase()),
       );

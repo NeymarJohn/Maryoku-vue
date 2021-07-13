@@ -581,7 +581,7 @@ export default {
 
       new ProposalNegotiationRequest({
         eventId: this.eventData.id,
-        proposal: { id: this.vendorProposal.id, expiredDate: newExpiredDate },
+        proposal: { id: this.vendorProposal.id},
         tenantId: this.$authService.resolveTenantId(),
       })
         .for(new Proposal({ id: this.vendorProposal.id }))
