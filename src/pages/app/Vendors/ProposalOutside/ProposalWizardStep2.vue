@@ -44,7 +44,7 @@ export default {
       if (this.vendor.services) {
         _.each(this.vendor.services, (vendorService) => {
           // Set included services from vendor profile
-            if (!vendorService.xIncluded && vendorService.checked && vendorService.included) {
+          if (vendorService.included) {
             includedVendorServices.push(vendorService);
             const service = {
               comments: [],
@@ -128,29 +128,6 @@ export default {
     vendor() {
       return this.$store.state.proposalForNonMaryoku.vendor;
     },
-    costServiceItems() {
-      return this.$store.state.proposalForNonMaryoku.costServices[this.vendor.eventCategory.key];
-    },
-    includedServiceItems(){
-      return this.$store.state.proposalForNonMaryoku.includedServices[this.vendor.eventCategory.key];
-    }
   },
-    watch: {
-      // remove costServiceItem already in included section
-      costServiceItems: {
-        handler(newVal) {
-            console.log('handler', this.costServiceItems)
-            let includeItems = this.includedServiceItems;
-            if(newVal.length) {
-                newVal.map(costItem => {
-                    includeItems = includeItems.filter(it => it.requirementTitle.toLowerCase() !== costItem.requirementTitle.toLowerCase());
-                })
-            }
-            console.log('costServiceItems', includeItems);
-            this.$store.commit("proposalForNonMaryoku/setIncludedServices", { category: this.vendor.eventCategory.key, services: includeItems });
-        },
-        deep: true,
-      }
-    }
 };
 </script>

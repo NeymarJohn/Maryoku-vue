@@ -179,7 +179,7 @@ export default {
     this.companyName = this.defaultData.company;
     this.company = this.defaultData.companyName;
     this.location = this.defaultData.location;
-    this.isRegisteredCustomer = this.defaultData.isRegisteredCustomer;
+    this.isRegisteredCustomer = this.defaultData.isRegisteredCustomer === false ? false : true;
     this.guests = this.defaultData.guests;
     this.email = this.defaultData.customer ? this.defaultData.customer.email : "";
     this.customer = this.defaultData.customer ? this.defaultData.customer.name : "";
@@ -397,21 +397,21 @@ export default {
     }
   }
 }
-.attach-file{
-    .attach-trash{
-        cursor: pointer;
-        display: none;
-        background-color: white;
-        border-radius: 50%;
-        box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
-        padding: 5px;
-        margin-left: 10px;
+.attach-file {
+  .attach-trash {
+    cursor: pointer;
+    display: none;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+    padding: 5px;
+    margin-left: 10px;
+  }
+  &:hover {
+    .attach-trash {
+      display: inline;
     }
-    &:hover{
-        .attach-trash{
-            display: inline;
-        }
-    }
+  }
 }
 
 .upload-section {

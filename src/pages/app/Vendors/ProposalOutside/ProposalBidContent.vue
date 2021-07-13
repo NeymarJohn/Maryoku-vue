@@ -80,7 +80,7 @@ export default {
       if (this.vendor.services) {
         _.each(this.vendor.services, (vendorService) => {
           // Set included services from vendor profile
-          if (!vendorService.xIncluded && vendorService.checked && vendorService.included) {
+          if (vendorService.included) {
             includedVendorServices.push(vendorService);
             const service = {
               comments: [],
@@ -244,29 +244,46 @@ export default {
     vendor() {
       return this.$store.state.proposalForNonMaryoku.vendor;
     },
-      costServiceItems() {
-          return this.$store.state.vendorProposal.proposalCostServices[this.category];
+    services: {
+      get: function () {
+        if (this.tableCategory === "cost") return this.$store.state.proposalForNonMaryoku.costServices[this.category];
+        else if (this.tableCategory === "included")
+          return this.$store.state.proposalForNonMaryoku.includedServices[this.category];
+        else if (this.tableCategory === "extra")
+          return this.$store.state.proposalForNonMaryoku.extraServices[this.category];
       },
-      includedServiceItems(){
-          return this.$store.state.vendorProposal.proposalIncludedServices[this.category];
-      }
+      set: function (newServices) {
+        if (this.tableCategory === "cost")
+          this.$store.commit("proposalForNonMaryoku/setCostServices", {
+            category: this.category,
+            services: newServices,
+          });
+        else if (this.tableCategory === "included")
+          this.$store.commit("proposalForNonMaryoku/setIncludedServices", {
+            category: this.category,
+            services: newServices,
+          });
+        else if (this.tableCategory === "extra")
+          this.$store.commit("proposalForNonMaryoku/setExtraServices", {
+            category: this.category,
+            services: newServices,
+          });
+      },
     },
-    watch: {
-        // remove costServiceItem already in included section
-      costServiceItems: {
-        handler(newVal) {
-            let includeItems = this.includedServiceItems;
-            if(newVal.length) {
-                newVal.map(costItem => {
-                    includeItems = includeItems.filter(it => it.requirementTitle.toLowerCase() !== costItem.requirementTitle.toLowerCase());
-                })
-            }
-            console.log('costServiceItems', includeItems);
-            this.$store.commit("vendorProposal/setIncludedServices", { category: this.category, services: includeItems });
-        },
-        deep: true,
-      }
-    }
+    calculatedTotal() {
+      let taxRate = this.$store.state.proposalForNonMaryoku.taxes[this.categroy];
+      if (!taxRate) taxRate = 0;
+      let total = this.totalPrice - (this.totalPrice * this.discount) / 100;
+      const tax = (total * taxRate) / 100;
+      return total - tax;
+    },
+    totalPrice() {
+      const sumPrice = this.services.reduce((s, item) => {
+        return s + item.requirementValue * item.price;
+      }, 0);
+      return sumPrice;
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
