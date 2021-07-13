@@ -140,7 +140,7 @@
     </template>
     <template slot="footer">
       <md-button class="md-default md-simple cancel-btn md-bold" @click="close">Cancel</md-button>
-      <md-button class="md-vendor add-category-btn md-bold" @click="createEvent">Done</md-button>
+      <md-button class="md-vendor add-category-btn md-bold" @click="createEvent" :disabled="!fileName">Done</md-button>
     </template>
   </modal>
 </template>
@@ -172,8 +172,7 @@ export default {
     },
   },
   created() {
-    const vendorId = this.$route.params.vendorId;
-    this.$http.get(`${process.env.SERVER_URL}/1/userEventCustomers/${vendorId}`).then((res) => {
+    this.$http.get(`${process.env.SERVER_URL}/1/userEventCustomers`).then((res) => {
       this.customers = res.data;
     });
     this.companyName = this.defaultData.company;

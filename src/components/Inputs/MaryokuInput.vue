@@ -196,9 +196,7 @@ export default {
         this.$refs.timePickerPanel.style.top = `${window.scrollY + this.cumulativeOffset(this.$refs.input).top}px`;
     },
     onCopy: function (e) {
-      this.$refs.input.focus();
-      this.$refs.input.select();
-      document.execCommand("copy");
+      // alert('You just copied: ' + e.text)
       setTimeout(() => {
         this.tooltipActive = true;
       }, 500);

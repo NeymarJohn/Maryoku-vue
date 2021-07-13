@@ -66,9 +66,7 @@
       </div>
       <div class="event-summary-body">
         <div class="cover-letter font-bold-extra mb-50">
-          <h4 class="font-bold-extra text-transform-uppercase">
-            Dear {{ event.customer ? event.customer.name : "Planner" }},
-          </h4>
+          <h4 class="font-bold-extra text-transform-uppercase">Dear {{ event.customer.name }},</h4>
           <textarea v-model="personalMessage"> </textarea>
         </div>
 
@@ -216,12 +214,12 @@
                     <span v-if="policy.type === 'Number' && !policy.isPercentage && policy.unit !== 'hour'">$</span>
                     <span v-if="policy.type === 'Boolean'">
                       <img v-if="policy.value === true" :src="`${$storageURL}ok%20check%20V.svg`" />
-                      <img v-else :src="`${$iconURL}VendorsProposalPage/group-17076.svg`" />
+                      <img class="purple" v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
                       <!-- {{ policy.value === true ? "Yes" : "No" }} -->
                     </span>
                     <span v-else>
                       <img v-if="policy.value === true" :src="`${$storageURL}ok%20check%20V.svg`" />
-                      <img v-else-if="policy.value === false" :src="`${$iconURL}VendorsProposalPage/group-17076.svg`" />
+                      <img class="purple" v-else-if="policy.value === false" :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" />
                       <span v-else>{{ policy.value | withComma }}</span>
                     </span>
                     <span v-if="policy.unit === 'hour'">Hour{{ policy.value > 1 ? "s" : "" }}</span>
@@ -833,17 +831,17 @@ export default {
       display: flex;
       overflow: hidden;
 
-      .item {
-        flex: 1;
+        .item {
+            flex: 1;
 
-        img {
-          width: 30px;
+            img {
+                width: 30px;
 
-          &.purple {
-            filter: invert(16%) sepia(49%) saturate(2942%) hue-rotate(286deg) brightness(82%) contrast(97%);
-          }
+                &.purple{
+                    filter: invert(16%) sepia(49%) saturate(2942%) hue-rotate(286deg) brightness(82%) contrast(97%);
+                }
+            }
         }
-      }
       a.more {
         cursor: pointer;
         position: absolute;
@@ -939,9 +937,6 @@ export default {
 
           img {
             width: 30px;
-            &.purple{
-              filter: invert(16%) sepia(49%) saturate(2942%) hue-rotate(286deg) brightness(82%) contrast(97%);
-            }
           }
         }
         &:first-child {

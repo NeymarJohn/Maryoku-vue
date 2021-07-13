@@ -15,25 +15,7 @@
                             </span>
                         </div>
                     </div>
-                    <ul class="event-details mt-20" v-if="vendorProposal.nonMaryoku">
-                        <li class="event-details__item">
-                            <label>Name</label>
-                            <div class="info-text">
-                                Untitled event
-                            </div>
-                        </li>
-                        <li class="event-details__item">
-                            <label>Date</label>
-                            <div class="info-text">
-                            </div>
-                        </li>
-                        <li class="event-details__item">
-                            <label>Guest Arrival Time</label>
-                            <div class="info-text">
-                            </div>
-                        </li>
-                    </ul>
-                    <ul class="event-details mt-20" v-else>
+                    <ul class="event-details mt-20">
                         <li class="event-details__item">
                             <label>Name</label>
                             <div class="info-text">
@@ -79,7 +61,7 @@
                 <div class="proposal-images mb-40">
                     <div class="font-bold mb-10">Some references to the experience you will get from us</div>
                     <div class="html2pdf__page-break"/>
-                    <carousel v-if="vendorProposal.inspirationalPhotos" :items="4" :margin="25" :dots="false" :nav="false" class="proposal-images-carousel">
+                    <carousel :items="4" :margin="25" :dots="false" :nav="false" class="proposal-images-carousel">
                         <template slot="prev">
                                <span class="prev handle-btn">
                                  <md-icon>keyboard_arrow_left</md-icon>
@@ -236,18 +218,18 @@
                                       class="page-icon"
                                   />
                                 <img v-else :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`" class="page-icon"/>
-                                <!-- {{ policy.value === true ? "Yes" : "No" }} -->
+                            <!-- {{ policy.value === true ? "Yes" : "No" }} -->
                             </span>
                             <span v-else>
                                 <img
-                                    class="page-icon"
-                                    v-if="policy.value === true"
-                                    :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"
+                                      class="page-icon"
+                                      v-if="policy.value === true"
+                                      :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`"
                                 />
                                 <img
-                                    class="page-icon"
-                                    v-else-if="policy.value === false"
-                                    :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`"
+                                      class="page-icon"
+                                      v-else-if="policy.value === false"
+                                      :src="`${$iconURL}Vendor Signup/Group 5489 (4).svg`"
                                 />
                                 <span v-else>{{ policy.value }}</span>
                             </span>
@@ -336,7 +318,7 @@
                 menuIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/menu%20_%20checklist/SVG/",
                 iconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/Event%20Page/",
                 submitProposalIcon: "https://static-maryoku.s3.amazonaws.com/storage/icons/Submit%20Proposal/",
-                eventData: null,
+                eventData: this.vendorProposal.proposalRequest.eventData,
                 showAboutUs: false,
                 socialMediaBlocks,
                 addedServices: {},
@@ -344,7 +326,7 @@
         },
         mounted() {
             console.log('detail.mounted');
-            this.eventData = !this.vendorProposal.nonMaryoku ? this.vendorProposal.proposalRequest.eventData : this.vendorProposal.eventData;
+            this.eventData = this.vendorProposal ? this.vendorProposal.proposalRequest.eventData : null;
         },
         computed: {
             extraMissingRequirements() {
@@ -399,8 +381,6 @@
                 return discount;
             },
             bundledDiscountPrice() {
-                console.log('bundledDiscountPrice', this.vendorProposal.bundleDiscount.services);
-                if(!this.vendorProposal.bundleDiscount.services) return 0
                 let bundledServicePrice = 0;
                 this.vendorProposal.bundleDiscount.services.forEach((serviceCategory) => {
                     const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
@@ -424,7 +404,6 @@
             },
 
             totalPriceOfProposal() {
-                if(!this.vendorProposal.costServices) return 0;
                 let totalPrice = 0;
                 Object.keys(this.vendorProposal.costServices).forEach((serviceCategory) => {
                     const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
@@ -507,7 +486,7 @@
         watch: {
             vendorProposal(newVal, oldVal) {
                 console.log('download', this.vendorProposal);
-                this.eventData = this.vendorProposal && this.vendorProposal.proposalRequest ? this.vendorProposal.proposalRequest.eventData : null;
+                this.eventData = this.vendorProposal ? this.vendorProposal.proposalRequest.eventData : null;
             },
         }
     }
