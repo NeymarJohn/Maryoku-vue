@@ -66,8 +66,8 @@ export default {
     selectSuggestItem(index) {
       this.qty = this.filteredSuggestItems[index].qty;
       this.unit = this.filteredSuggestItems[index].price;
-      this.searchWord = this.getOptionLabel(this.filteredSuggestItems[index]);
       this.$emit("change", this.filteredSuggestItems[index]);
+      this.searchWord = this.getOptionLabel(this.filteredSuggestItems[index]);
       this.selectedSuggestItemIndex = -1;
       this.showAutoCompletePanel = false;
     },
@@ -93,7 +93,6 @@ export default {
   },
   computed: {
     filteredSuggestItems() {
-      if (!this.searchWord) return [];
       return this.options.filter((item) =>
         this.getOptionLabel(item).toLowerCase().includes(this.searchWord.toLowerCase()),
       );
