@@ -7,7 +7,7 @@
       </div>
     </template>
     <template slot="content">
-      <div class="requirements-content p-30 pt-0-i" v-if="step < 2">
+        <div class="requirements-content p-30 pt-0-i" v-if="step <= 1">
 <!--        <div>-->
 <!--          <template v-for="types in requirementsData.types">-->
 <!--            <span class="type-tag" v-for="type in types" :key="type">{{ type }}</span>-->
@@ -17,10 +17,11 @@
             <div class="color-dark-gray text-transform-capitalize">{{ key }}</div>
             <div class="requirement-grid">
                 <div v-for="type in types" class="requirement-item">
-                  <div class="checkmark"></div>
-                  <div class="d-inline-block">{{type}}</div>
-                </div>
+                <div class="checkmark"></div>
+                <div class="d-inline-block">{{type}}</div>
+
             </div>
+        </div>
         </div>
 
         <template v-if="requirementsData.mainRequirements">
