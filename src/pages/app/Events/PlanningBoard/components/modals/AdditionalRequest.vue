@@ -333,6 +333,11 @@ export default {
         },
       });
     },
+    selectItem(item){
+      console.log('selectItem', item.selected);
+      item.selected = !item.selected;
+      this.$forceUpdate();
+    },
     selectTag(tag) {
       tag.isSelected = !tag.isSelected;
       setTimeout(() => {
