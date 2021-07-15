@@ -13,15 +13,14 @@
                     <p class="font-size-16 font-bold" v-else>We have sent a temporary password & instructions to your email.</p>
                     <maryoku-input
                         :disabled="submitted"
-                        class="form-input mb-10"
+                        class="form-input"
                         v-validate="modelValidations.email"
                         inputStyle="email"
                         v-model="email"
                         @change="changeEmail"
                         placeholder="Email address"
                     ></maryoku-input>
-                    <div v-if="submitted" class="color-red font-size-14">Please check your email</div>
-                    <div v-if="error" class="md-error">{{error}}</div>
+                    <div class="md-error">{{error}}</div>
                     <div class="form-buttons">
                         <md-button
                             @click="forgotPassword"
@@ -62,36 +61,6 @@
             VueElementLoading,
             MaryokuInput
         },
-        data () {
-            return {
-                error: '',
-                loading: false,
-                firstname: null,
-                terms: false,
-                email: null,
-                password: null,
-                isForgot: false,
-                serverURL: process.env.SERVER_URL,
-                // auth: auth,
-                touched: {
-                    email: false,
-                    password: false
-                },
-                modelValidations: {
-                    email: {
-                        required: true,
-                        email: true
-                    }
-                },
-                forgotPasswordValidations: {
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                },
-                submitted:false
-            }
-        },
         methods: {
             forgotPassword () {
                 this.$http.post(`${process.env.SERVER_URL}/1/forgot-password`, { email:this.email }, { 'ContentType': 'application/json' })
@@ -130,6 +99,36 @@
                 this.touched.email = true
             }
         },
+        data () {
+            return {
+                error: '',
+                loading: false,
+                firstname: null,
+                terms: false,
+                email: null,
+                password: null,
+                isForgot: false,
+                serverURL: process.env.SERVER_URL,
+                // auth: auth,
+                touched: {
+                    email: false,
+                    password: false
+                },
+                modelValidations: {
+                    email: {
+                        required: true,
+                        email: true
+                    }
+                },
+                forgotPasswordValidations: {
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                },
+                submitted:false
+            }
+        }
     }
 </script>
 <style lang="scss" scoped>

@@ -9,7 +9,10 @@
             <span v-if="step === 1">We'd love to know your style</span>
             <span v-if="step === 2">What kind of services would you like us to find you?</span>
           </div>
-          <progress-radial-bar :value="percentOfBudgetCategories" :total="12" @click="openCart"></progress-radial-bar>
+          <progress-radial-bar
+              :value="percentOfBudgetCategories"
+              :total="event.components.length"
+              @click="openCart"></progress-radial-bar>
         </div>
         <div class="md-layout md-gutter mt-40" v-if="step === 1">
           <div
@@ -221,18 +224,18 @@ export default {
       return this.$store.state.event.eventData;
     },
     percentOfBudgetCategories() {
-      let hasBudgetItems = 0;
-      this.serviceCards.forEach((stepPanel) => {
-        stepPanel.forEach((group) => {
-          group.forEach((serviceCard) => {
-            if (this.hasBudget(serviceCard.serviceCategory)) {
-              hasBudgetItems++;
-            }
-          });
-        });
-      });
-      console.log('percentOfBudgetCategories', hasBudgetItems);
-      return hasBudgetItems;
+      // let hasBudgetItems = 0;
+      // this.serviceCards.forEach((stepPanel) => {
+      //   stepPanel.forEach((group) => {
+      //     group.forEach((serviceCard) => {
+      //       if (this.hasBudget(serviceCard.serviceCategory)) {
+      //         hasBudgetItems++;
+      //       }
+      //     });
+      //   });
+      // });
+      // console.log('percentOfBudgetCategories', hasBudgetItems);
+      return Object.keys(this.requirements).length;
     },
   },
   methods: {
