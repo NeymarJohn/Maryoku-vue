@@ -29,7 +29,7 @@
       </div>
     </section>
 
-    <modal v-if="submittedModal" class="saved-it-modal" container-class="modal-container sl">
+    <!-- <modal v-if="submittedModal" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="saved-it-modal__header">
           <img :src="`${proposalIconsUrl}thanks-proposal.png`" />
@@ -52,7 +52,7 @@
           </div>
         </div>
       </template>
-    </modal>
+    </modal> -->
     <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="saved-it-modal__header">
