@@ -4,6 +4,7 @@
       <div class="font-bold py-10" :class="getFontSize('title')" style="min-height: 44px">
         <template v-if="proposalRequest.eventData.concept">{{ proposalRequest.eventData.concept.name }}</template>
         <template v-else-if="proposalRequest.eventData">{{ proposalRequest.eventData.title }}</template>
+        <template v-else>New Event</template>
       </div>
       <md-button class="md-icon-button md-simple" @click="expanded = !expanded">
         <md-icon class="color-black ml-5">keyboard_arrow_right</md-icon></md-button

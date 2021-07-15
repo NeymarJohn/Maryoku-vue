@@ -133,7 +133,7 @@ export default {
     },
     period() {
       try {
-        const requirement = this.$store.state.planningBoard[this.proposal.vendor.vendorCategories[0]];
+        const requirement = this.$store.state.planningBoard.requirements[this.proposal.vendor.vendorCategories[0]];
         const period = requirement.period;
         if (requirement.isEntireEvent) {
           return "For Whole Event";

@@ -28,6 +28,31 @@
         <a class="next active" @click="setProposalLink" v-else :disabled="isUpdating">Submit Proposal</a>
       </div>
     </section>
+
+    <modal v-if="submittedModal" class="saved-it-modal" container-class="modal-container sl">
+      <template slot="header">
+        <div class="saved-it-modal__header">
+          <img :src="`${proposalIconsUrl}thanks-proposal.png`" />
+          <div class="font-size-30 font-bold color-red mt-30">Thank you for submitting a proposal!</div>
+          <div class="text-center font-size-22 mt-40 mb-40">You will get a reply in 4 days</div>
+        </div>
+        <button class="close" @click="hideModal()">
+          <img :src="`${proposalIconsUrl}Group 3671 (2).svg`" />
+        </button>
+      </template>
+      <template slot="body">
+        <div class="saved-it-modal__body">
+          <div>
+            <md-button class="md-simple maryoku-btn md-red" @click="goToProcessingGuid">
+              How does our bidding process work?
+            </md-button>
+            <md-button class="md-simple maryoku-btn md-red md-outlined" @click="goToVendorProfile"
+              >Go to my Dashboard</md-button
+            >
+          </div>
+        </div>
+      </template>
+    </modal>
     <modal v-if="openedModal == 'timeIsUp'" class="saved-it-modal" container-class="modal-container sl">
       <template slot="header">
         <div class="saved-it-modal__header">
@@ -158,11 +183,7 @@ export default {
   },
 
   beforeCreate() {
-    if (!this.$store.state.proposalForNonMaryoku) {
-      this.$store.registerModule("proposalForNonMaryoku", state);
-    } else {
-      this.$store.commit("proposalForNonMaryoku/initState");
-    }
+    this.$store.registerModule("proposalForNonMaryoku", state);
   },
   methods: {
     ...mapActions("proposalForNonMaryoku", ["getVendor", "saveProposal"]),
@@ -269,16 +290,7 @@ export default {
     submitProposal() {
       this.showSendProposalModal = false;
       this.uploadProposal("submit");
-      const proposalForNonMaryoku = this.$store.state.proposalForNonMaryoku;
-      this.$http
-        .post(
-          `${process.env.SERVER_URL}/1/proposals/${proposalForNonMaryoku.id}/sendEmail`,
-          {},
-          { headers: this.$auth.getAuthHeader() },
-        )
-        .then((res) => {
-          this.showSubmittedProposalModal = true;
-        });
+      this.showSubmittedProposalModal = true;
     },
   },
 

@@ -71,7 +71,7 @@
       </div>
       <div class="mt-30">
         <span class="font-size-16 font-bold" :class="!proposals.length ? 'color-minus' : 'color-won'">
-          {{ pagination.total }} Proposals:</span
+          {{ proposals.length }} Proposals:</span
         >
       </div>
       <div class="md-layout mt-10">
@@ -103,7 +103,7 @@
               ></proposal-list-item>
             </div>
           </div>
-          <div v-if="pagination.total < 4" class="my-auto d-flex flex-column align-center">
+          <div v-if="this.proposals.length < 4" class="my-auto d-flex flex-column align-center">
             <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" />
             <p class="text-transform-uppercase font-size-14">No More Proposal To Show</p>
             <md-button class="md-vendor">Create New Proposal</md-button>
@@ -246,7 +246,7 @@ export default {
   },
   async mounted() {
     // console.log('mounted', this.vendorData.id);
-    this.$root.$emit("proposalTab");
+    this.$root.$emit('proposalTab');
     if (this.vendorData) {
       this.init();
     }
@@ -257,9 +257,8 @@ export default {
       let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
       this.proposalRequests = proposalRequests.filter((p) => {
         return p.proposal
-          ? p.remainingTime > 0 &&
-              ((p.declineMessage !== "decline" && p.proposal.status !== "submit") ||
-                (p.proposal.negotiations && p.proposal.negotiations.length))
+          ? p.remainingTime > 0 && (p.declineMessage !== "decline" && p.proposal.status !== "submit" ||
+            p.proposal.negotiations && p.proposal.negotiations.length)
           : p.remainingTime > 0 && p.declineMessage !== "decline";
       });
 
@@ -280,7 +279,6 @@ export default {
       const data = res[0];
 
       this.proposals = data.items;
-      this.proposals.map((it) => console.log("proposal", it));
       this.pagination.total = data.total;
       this.proposalTabs.map((t) => {
         if (data.hasOwnProperty(t.key)) this.pagination[t.key] = data[t.key];
@@ -334,7 +332,7 @@ export default {
             type: "edit",
           },
         });
-        this.openNewTab(routeData.href);
+        this.openNewTab(routeData.href)
       } else if (action === "remove") {
         this.loading = true;
         const proposal = await Proposal.find(id);
@@ -348,14 +346,14 @@ export default {
         // this.downloadProposal(`http://preprod.dev.maryoku.com:8080/1/proposal/${this.selectedProposal.id}/download`);
       }
     },
-    createNewProposal() {
+    createNewProposal(){
       let routeData = this.$router.resolve({
         name: "outsideProposalEdit",
         params: {
-          vendorId: this.vendorData.id,
+            vendorId: this.vendorData.id,
         },
       });
-      this.openNewTab(routeData.href);
+      this.openNewTab(routeData.href)
     },
     openNewTab(link) {
       window.open(link, "_blank");

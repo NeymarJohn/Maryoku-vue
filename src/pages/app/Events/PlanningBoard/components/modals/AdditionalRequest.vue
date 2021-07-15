@@ -20,6 +20,7 @@
             :key="tag.subCategory"
             :isSelected="tag.isSelected"
             v-for="tag in specialTags"
+            theme="red"
             class="mr-10"
           ></tag-item>
         </div>
@@ -33,13 +34,13 @@
             <span class="color-black font-size-14px">Entire Event</span>
           </md-switch>
         </div>
-        <div class="checks-cont my-10 ml-30">
-          <div class="check-item" @click="assignTimeline = true">
+        <div class="checks-cont my-10 ml-30" :class="!timeslots.length ? 'disabled' : ''">
+          <div class="check-item" @click="checkTimeline(true)">
             <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" v-if="assignTimeline" />
             <span class="unchecked" v-else></span>
             <span>Assign to one of those timeline events</span>
           </div>
-          <div class="check-item" @click="assignTimeline = false">
+          <div class="check-item" @click="checkTimeline(false)">
             <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" v-if="!assignTimeline" />
             <span class="unchecked" v-else></span>
             <span>Specific Time Slot</span>
@@ -67,18 +68,18 @@
           :key="section"
           class="text-left sub-category"
         >
-          <div class="font-bold-extra">{{ section }}</div>
-          <div class="md-layout text-left">
-            <!-- {{ subCategory.requirements[section] }} -->
-            <div
-                v-for="item in subCategory[section].filter((item) => item.type !== 'single-selection' && item.visible)"
-                :key="item.item"
-                class="md-layout-item md-size-33"
+          <div class="font-bold-extra mb-10">{{ section }}</div>
+          <div class="text-left align-end">
+            <tag-item
+              v-for="item in subCategory[section].filter((item) => item.type !== 'single-selection' && item.visible)"
+              :tagLabel="item.item"
+              :key="item.item"
+              :isSelected="item.selected"
+              :theme="`red`"
+              class="mr-10"
+              @click="selectItem(item)"
             >
-                <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">
-                    <span class="text-transform-capitalize">{{ item.item }}</span>
-                </md-checkbox>
-            </div>
+            </tag-item>
             <div
                 v-for="item in subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)"
                 class="requirement-item-tags mt-10"
@@ -234,8 +235,8 @@ export default {
       timeSlotsByServiceType: {
         'venuerental' : ['setup', 'activity', 'Show', 'Speaker / Keynote', 'Discussion', 'Break', 'Relaxation', 'meal'],
         'transportation' : ['transportation'],
-        'entertainment' : ['activity', 'show', 'Speaker / Keynote', 'Discussion'],
-        'administration' : ['setup', 'activity', 'show', 'Speaker / Keynote', 'meal'],
+        'entertainment' : ['activity', 'Show', 'Speaker / Keynote', 'Discussion'],
+        'administration' : ['setup', 'activity', 'Show', 'Speaker / Keynote', 'meal'],
         'foodandbeverage' : ['break', 'Relaxation', 'meal'],
       },
       timeSlotIdx: false,
@@ -260,6 +261,7 @@ export default {
     },
   },
   created() {
+    console.log('additionalRequests.created', this.subCategorySections);
     this.subCategorySections = Object.keys(this.subCategory);
     this.subCategorySections = this.subCategorySections.filter(
       (item) => item !== "multi-selection" && item !== "special",
@@ -282,6 +284,10 @@ export default {
     },
     onCancel: function (e) {
       this.$emit("cancel");
+    },
+    checkTimeline(value) {
+      if (!this.timeslots.length) return;
+      this.assignTimeline = value;
     },
     getPeriod(timeslot) {
       console.log('getPeriod', timeslot);
@@ -317,15 +323,20 @@ export default {
       for (let item of this.specialTags) {
         requirements.special.push(item);
       }
-      // this.$emit("save", {
-      //   category: this.selectedCategory.key,
-      //   requirements: {
-      //     mainRequirements: requirements,
-      //     isEntireEvent: this.isEntire,
-      //     period: this.period,
-      //     additionalDescription: this.anythingElse,
-      //   },
-      // });
+      this.$emit("save", {
+        category: this.selectedCategory.key,
+        requirements: {
+          mainRequirements: requirements,
+          isEntireEvent: this.isEntire,
+          period: this.period,
+          additionalDescription: this.anythingElse,
+        },
+      });
+    },
+    selectItem(item){
+      console.log('selectItem', item.selected);
+      item.selected = !item.selected;
+      this.$forceUpdate();
     },
     selectTag(tag) {
       tag.isSelected = !tag.isSelected;
@@ -502,6 +513,15 @@ export default {
             background: #ffffff;
             margin-right: 14px;
         }
+    }
+    &.disabled{
+
+      span{
+        color: #d0d0d0;
+        &.unchecked{
+            border: 1px solid #d0d0d0;
+        }
+      }
     }
   }
 }

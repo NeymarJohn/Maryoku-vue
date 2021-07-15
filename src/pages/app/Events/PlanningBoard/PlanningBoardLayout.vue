@@ -9,7 +9,10 @@
             <span v-if="step === 1">We'd love to know your style</span>
             <span v-if="step === 2">What kind of services would you like us to find you?</span>
           </div>
-          <progress-radial-bar :value="percentOfBudgetCategories" :total="12" @click="openCart"></progress-radial-bar>
+          <progress-radial-bar
+              :value="percentOfBudgetCategories"
+              :total="event.components.length"
+              @click="openCart"></progress-radial-bar>
         </div>
         <div class="md-layout md-gutter mt-40" v-if="step === 1">
           <div
@@ -27,8 +30,8 @@
               :musicPlayer="service.musicPlayer"
               :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
               :isSentRequest="
-                $store.state.planningBoard[service.serviceCategory] &&
-                $store.state.planningBoard[service.serviceCategory].isIssued
+                $store.state.planningBoard.requirements[service.serviceCategory] &&
+                $store.state.planningBoard.requirements[service.serviceCategory].isIssued
               "
               @showSpecific="getSpecification"
               @update="setServiceStyles"
@@ -50,8 +53,8 @@
               :hasBudget="hasBudget(service.serviceCategory)"
               :defaultData="getDefaultTypes(service.serviceCategory, service.name)"
               :isSentRequest="
-                $store.state.planningBoard[service.serviceCategory] &&
-                $store.state.planningBoard[service.serviceCategory].isIssued
+                $store.state.planningBoard.requirements[service.serviceCategory] &&
+                $store.state.planningBoard.requirements[service.serviceCategory].isIssued
               "
               @showSpecific="getSpecification"
               @update="setServiceStyles"
@@ -221,18 +224,18 @@ export default {
       return this.$store.state.event.eventData;
     },
     percentOfBudgetCategories() {
-      let hasBudgetItems = 0;
-      this.serviceCards.forEach((stepPanel) => {
-        stepPanel.forEach((group) => {
-          group.forEach((serviceCard) => {
-            if (this.hasBudget(serviceCard.serviceCategory)) {
-              hasBudgetItems++;
-            }
-          });
-        });
-      });
-      console.log('percentOfBudgetCategories', hasBudgetItems);
-      return hasBudgetItems;
+      // let hasBudgetItems = 0;
+      // this.serviceCards.forEach((stepPanel) => {
+      //   stepPanel.forEach((group) => {
+      //     group.forEach((serviceCard) => {
+      //       if (this.hasBudget(serviceCard.serviceCategory)) {
+      //         hasBudgetItems++;
+      //       }
+      //     });
+      //   });
+      // });
+      // console.log('percentOfBudgetCategories', hasBudgetItems);
+      return Object.keys(this.requirements).length;
     },
   },
   methods: {
@@ -300,6 +303,7 @@ export default {
     },
     setServiceStyles({ category, services, type }) {
       // this.setTypes({ category: category.serviceCategory, data: services, type });
+      console.log('setServiceStyles', category, services, type);
       this.saveTypes({ category: category.serviceCategory, event: this.event, types: { [type]: services } });
     },
     saveAdditionalRequest({ category, requirements }) {
@@ -319,8 +323,8 @@ export default {
       // this.$store.dispatch("event/saveEventAction", event).then((res) => {});
     },
     getRequirements(category) {
-      if (!this.$store.state.planningBoard[category]) return {};
-      return this.$store.state.planningBoard[category].mainRequirements;
+      if (!this.$store.state.planningBoard.requirements[category]) return {};
+      return this.$store.state.planningBoard.requirements[category].mainRequirements;
     },
     openCart() {
       this.showCart = true;

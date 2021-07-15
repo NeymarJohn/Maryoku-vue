@@ -337,7 +337,7 @@ export default {
                     items.push({
                       description,
                       qty: item.value ? item.value : 1,
-                      included: profileService && profileService.included,
+                      included: profileService && profileService.checked && !profileService.xIncluded && profileService.included,
                       price: profileService ? Number(profileService.value) : "",
                       requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
                     });
@@ -348,7 +348,7 @@ export default {
                 items.push({
                   description: capitalized,
                   qty: item.value ? item.value : 1,
-                  included: profileService && profileService.included,
+                  included: profileService && profileService.checked && !profileService.xIncluded && profileService.included,
                   price: profileService ? Number(profileService.value) : "",
                   requestedByPlanner: requestItemByPlanner ? requestItemByPlanner.isSelected : false,
                 });
