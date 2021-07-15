@@ -4,13 +4,14 @@
       v-model="content"
       :name="name"
       :type="type"
+      @input="handleInput"
       :placeholder="placeholder"
       :class="inputClass"
       :readonly="readonly"
       :disabled="disabled"
       @click="onClickEvent"
-      @input="handleInput"
       :ref="refName"
+      v-validate="getValidateObject"
       :data-vv-name="validation"
     />
     <span class="md-error color-red" v-if="errors.has(validation)">{{ errors.first(validation) }}</span>
@@ -116,11 +117,11 @@ export default {
       type: String,
       default: "red",
     },
-    refName:{
+      refName:{
       type: String,
       required: false,
       default: 'input',
-    },
+    }
   },
   beforeDestroy() {
     if (this.$refs.timePickerPanel) this.$refs.timePickerPanel.style.display = "none";

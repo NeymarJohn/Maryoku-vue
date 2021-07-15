@@ -27,14 +27,14 @@
       </div>
       <div class="text-left mb-40">
         <div class="d-flex align-center">
-          <div class="font-size-18 font-bold">
-            <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10" width="23" />
+          <div class="font-size-20 font-bold">
+            <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10" width="28" />
             Time Slot</div>
-          <md-switch class="md-switch-rose large-switch ml-20" v-model="isEntire">
-            <span class="color-black font-size-14px">Entire Event</span>
+          <md-switch class="md-switch-rose large-switch ml-100" v-model="isEntire">
+            <span class="color-black font-bold font-size-16">Entire Event</span>
           </md-switch>
         </div>
-        <div class="checks-cont my-10 ml-30" :class="!timeslots.length ? 'disabled' : ''">
+        <div class="checks-cont my-20 ml-50" :class="!timeslots.length ? 'disabled' : ''">
           <div class="check-item" @click="checkTimeline(true)">
             <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" v-if="assignTimeline" />
             <span class="unchecked" v-else></span>
@@ -48,8 +48,8 @@
         </div>
         <template v-if="assignTimeline">
 
-            <div class="d-flex align-center ml-30" v-for="(timelineItem, index) in timeslots" :key="`timelineItem-${index}`">
-              <md-checkbox v-model="timeSlotIdx" class="mr-20" :value="index"></md-checkbox>
+            <div class="d-flex align-center ml-50" v-for="(timelineItem, index) in timeslots" :key="`timelineItem-${index}`">
+              <md-checkbox v-model="timeSlotIdx" class="mr-40" :value="index"></md-checkbox>
               <timeline-item
                 :item="timelineItem"
                 :index="index"
@@ -60,7 +60,7 @@
             </div>
 
         </template>
-        <time-slot v-else class="ml-30 time-slot-wrapper" @change="setTime"></time-slot>
+        <time-slot v-else class="ml-50 mt-40 time-slot-wrapper" @change="setTime"></time-slot>
       </div>
       <div>
         <div
@@ -68,18 +68,17 @@
           :key="section"
           class="text-left sub-category"
         >
-          <div class="font-bold-extra mb-10">{{ section }}</div>
-          <div class="text-left align-end">
-            <tag-item
-              v-for="item in subCategory[section].filter((item) => item.type !== 'single-selection' && item.visible)"
-              :tagLabel="item.item"
-              :key="item.item"
-              :isSelected="item.selected"
-              :theme="`red`"
-              class="mr-10"
-              @click="selectItem(item)"
-            >
-            </tag-item>
+            <div class="font-bold-extra">{{ section }}</div>
+            <div class="md-layout text-left">
+                <!-- {{ subCategory.requirements[section] }} -->
+                <div
+                    v-for="item in subCategory[section].filter((item) => item.type !== 'single-selection' && item.visible)"
+                    :key="item.item"
+                    class="md-layout-item md-size-33">
+                    <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">
+                        <span class="text-transform-capitalize">{{ item.item }}</span>
+                    </md-checkbox>
+                </div>
             <div
                 v-for="item in subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)"
                 class="requirement-item-tags mt-10"

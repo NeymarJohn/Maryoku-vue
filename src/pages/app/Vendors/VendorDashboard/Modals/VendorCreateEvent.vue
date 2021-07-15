@@ -183,7 +183,7 @@ export default {
     this.guests = this.defaultData.guests;
     this.email = this.defaultData.customer ? this.defaultData.customer.email : "";
     this.customer = this.defaultData.customer ? this.defaultData.customer.name : "";
-    this.date = moment(this.defaultData.date).format("MM.DD.YYYY");
+    this.date = moment(this.defaultData.date || new Date()).format("MM.DD.YYYY");
     this.startTime.hh = moment(this.defaultData.startTime).format("hh");
     this.startTime.mm = moment(this.defaultData.startTime).format("mm");
     this.amPack.start = moment(this.defaultData.startTime).format("A");
@@ -279,17 +279,17 @@ export default {
       }
       const startDate = moment(
         `${this.date} ${this.startTime.hh}:${this.startTime.mm} ${this.amPack.start}`,
-        "DD.MM.YYYY hh:mm a",
+        "MM.DD.YYYY hh:mm a",
       );
       const endDate = moment(
         `${this.date} ${this.endTime.hh}:${this.endTime.mm} ${this.amPack.end}`,
-        "DD.MM.YYYY hh:mm a",
+        "MM.DD.YYYY hh:mm a",
       );
       var dt = new Date();
       var tz = dt.getTimezoneOffset();
       const userEvent = {
         company: this.company,
-        date: endDate.format("YYYY-MM-DD"),
+        date: moment(this.date, "MM.DD.YYYY").format("YYYY-MM-DD"),
         startTime: startDate,
         endTime: endDate,
         companyName: this.company,
