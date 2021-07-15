@@ -44,9 +44,10 @@
         theme="purple"
       ></selectable-card>
     </div>
-    <div v-if="eventType === 'corporation'" class="text-left mt-30">
+    <div class="text-left mt-30">
       <label class="font-bold">Type Of Event:</label>
       <multiselect
+        v-if="eventType === 'corporation'"
         class="width-50 mt-5 form-input md-purple"
         v-model="selectedEventType"
         :options="eventTypes"

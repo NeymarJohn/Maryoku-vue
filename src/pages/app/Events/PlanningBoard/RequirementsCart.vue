@@ -7,7 +7,7 @@
             Our vendors will create proposals based on your choices below, so be sure to select everything you really want. If you leave a category blank, it means you’re happy leaving it up to the vendor’s discretion (which can lead to more back-and-forth later on).
         </div>
       </div>
-      <progress-radial-bar :value="percentOfBudgetCategories" :total="event.components.length"></progress-radial-bar>
+      <progress-radial-bar :value="percentOfBudgetCategories" :total="12"></progress-radial-bar>
 
       <md-button class="md-simple close-btn" @click="close">
         <md-icon>close</md-icon>
@@ -112,7 +112,7 @@ export default {
       return this.$store.state.event.eventData;
     },
     selectedCategories() {
-      const categoryKeys = Object.keys(this.$store.state.planningBoard.requirements);
+      const categoryKeys = Object.keys(this.$store.state.planningBoard);
       console.log('requirementCart.categoryKeys', categoryKeys);
       const selectedData = [];
       categoryKeys.forEach((categoryKey) => {
@@ -129,10 +129,20 @@ export default {
       return this.$store.state.common.serviceCategories;
     },
     requirements() {
-      return this.$store.state.planningBoard.requirements;
+      return this.$store.state.planningBoard;
     },
     percentOfBudgetCategories() {
-      return Object.keys(this.requirements).length;
+      let hasBudgetItems = 0;
+      this.serviceCards.forEach((stepPanel) => {
+          stepPanel.forEach((group) => {
+              group.forEach((serviceCard) => {
+                  if (this.hasBudget(serviceCard.serviceCategory)) {
+                      hasBudgetItems++;
+                  }
+              });
+          });
+      });
+      return hasBudgetItems;
     },
   },
 };

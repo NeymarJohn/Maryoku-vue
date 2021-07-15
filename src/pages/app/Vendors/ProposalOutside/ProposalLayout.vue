@@ -183,7 +183,11 @@ export default {
   },
 
   beforeCreate() {
-    this.$store.registerModule("proposalForNonMaryoku", state);
+    if (!this.$store.state.proposalForNonMaryoku) {
+      this.$store.registerModule("proposalForNonMaryoku", state);
+    } else {
+      this.$store.commit("proposalForNonMaryoku/initState");
+    }
   },
   methods: {
     ...mapActions("proposalForNonMaryoku", ["getVendor", "saveProposal"]),
@@ -290,7 +294,16 @@ export default {
     submitProposal() {
       this.showSendProposalModal = false;
       this.uploadProposal("submit");
-      this.showSubmittedProposalModal = true;
+      const proposalForNonMaryoku = this.$store.state.proposalForNonMaryoku;
+      this.$http
+        .post(
+          `${process.env.SERVER_URL}/1/proposals/${proposalForNonMaryoku.id}/sendEmail`,
+          {},
+          { headers: this.$auth.getAuthHeader() },
+        )
+        .then((res) => {
+          this.showSubmittedProposalModal = true;
+        });
     },
   },
 

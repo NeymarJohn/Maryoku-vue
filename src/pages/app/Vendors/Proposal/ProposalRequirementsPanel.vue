@@ -7,22 +7,12 @@
       </div>
     </template>
     <template slot="content">
-      <div class="requirements-content p-30 pt-0-i" v-if="step < 2">
-<!--        <div>-->
-<!--          <template v-for="types in requirementsData.types">-->
-<!--            <span class="type-tag" v-for="type in types" :key="type">{{ type }}</span>-->
-<!--          </template>-->
-<!--        </div>-->
-        <div class="category-section" v-for="(types, key) in requirementsData.types">
-            <div class="color-dark-gray text-transform-capitalize">{{ key }}</div>
-            <div class="requirement-grid">
-                <div v-for="type in types" class="requirement-item">
-                  <div class="checkmark"></div>
-                  <div class="d-inline-block">{{type}}</div>
-                </div>
-            </div>
+      <div class="requirements-content p-30 pt-0-i" v-if="step <= 1">
+        <div>
+          <template v-for="types in requirementsData.types">
+            <span class="type-tag" v-for="type in types" :key="type">{{ type }}</span>
+          </template>
         </div>
-
         <template v-if="requirementsData.mainRequirements">
           <div
             v-for="(requirementCategory, index) in Object.keys(requirementsData.mainRequirements)"
@@ -87,70 +77,59 @@
           <div class="font-size-20 font-bold mb-20">
             {{ getCategoryFromId(secondaryRequirement.category).fullTitle }}
           </div>
-          <div class="category-section" v-for="(types, key) in secondaryRequirement.types">
-            <div class="color-dark-gray text-transform-capitalize">{{ key }}</div>
-            <div class="requirement-grid">
-                <div v-for="type in types" class="requirement-item">
-                    <div class="checkmark"></div>
-                    <div class="d-inline-block">{{type}}</div>
-                </div>
-            </div>
-          </div>
-          <template v-if="secondaryRequirement.mainRequirements">
+          <div
+            v-for="(requirementCategory, index) in Object.keys(secondaryRequirement.mainRequirements)"
+            :key="`requirement-category-${index}`"
+          >
+            <template v-if="requirementCategory === 'multi-selection'"> </template>
+            <template v-else-if="requirementCategory.toLowerCase() === 'special'">
               <div
-                  v-for="(requirementCategory, index) in Object.keys(secondaryRequirement.mainRequirements)"
-                  :key="`requirement-category-${index}`"
+                class="category-section"
+                v-for="subCategory in selectedOptions(secondaryRequirement.mainRequirements[requirementCategory])"
+                :key="subCategory.subCategory"
               >
-                  <template v-if="requirementCategory === 'multi-selection'"> </template>
-                  <template v-else-if="requirementCategory.toLowerCase() === 'special'">
-                      <div
-                          class="category-section"
-                          v-for="subCategory in selectedOptions(secondaryRequirement.mainRequirements[requirementCategory])"
-                          :key="subCategory.subCategory"
-                      >
-                          <div class="color-dark-gray text-transform-capitalize">{{ subCategory.subCategory }}</div>
-                          <div class="requirement-grid">
-                              <div
-                                  class="requirement-item"
-                                  v-for="requirementItem in subCategory.options.filter((item) => item.selected)"
-                                  :key="requirementItem.name"
-                              >
-                                  <div class="checkmark"></div>
-                                  <div class="d-inline-block">{{ requirementItem.name }}</div>
-                              </div>
-                          </div>
-                      </div>
-                  </template>
+                <div class="color-dark-gray text-transform-capitalize">{{ subCategory.subCategory }}</div>
+                <div class="requirement-grid">
                   <div
-                      v-else-if="
+                    class="requirement-item"
+                    v-for="requirementItem in subCategory.options.filter((item) => item.selected)"
+                    :key="requirementItem.name"
+                  >
+                    <div class="checkmark"></div>
+                    <div class="d-inline-block">{{ requirementItem.name }}</div>
+                  </div>
+                </div>
+              </div>
+            </template>
+            <div
+              v-else-if="
                 secondaryRequirement.mainRequirements[requirementCategory].filter((item) => item.selected).length > 0
               "
-                      class="category-section"
-                  >
-                      <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
-                      <div class="requirement-grid">
-                          <div
-                              class="requirement-item"
-                              v-for="requirementItem in secondaryRequirement.mainRequirements[requirementCategory].filter(
+              class="category-section"
+            >
+              <div class="color-dark-gray text-transform-capitalize">{{ requirementCategory }}</div>
+              <div class="requirement-grid">
+                <div
+                  class="requirement-item"
+                  v-for="requirementItem in secondaryRequirement.mainRequirements[requirementCategory].filter(
                     (item) => item.selected,
                   )"
-                              :key="requirementItem.item"
-                          >
-                              <div class="checkmark"></div>
-                              <!-- {{ requirementItem }} -->
-                              <div class="d-inline-block">
-                                  {{ requirementItem.item || requirementItem.subCategory }}
-                                  <span v-if="requirementItem.defaultQty">(X{{ requirementItem.defaultQty }})</span>
-                              </div>
-                          </div>
-                      </div>
+                  :key="requirementItem.item"
+                >
+                  <div class="checkmark"></div>
+                  <!-- {{ requirementItem }} -->
+                  <div class="d-inline-block">
+                    {{ requirementItem.item || requirementItem.subCategory }}
+                    <span v-if="requirementItem.defaultQty">(X{{ requirementItem.defaultQty }})</span>
                   </div>
+                </div>
               </div>
-          </template>
+            </div>
+          </div>
           <div class="addtional-requests">
             <div class="font-bold">Addtional Requests</div>
             <div>
-                {{ additionalNote }}
+              {{ additionalNote }}
             </div>
           </div>
         </div>
@@ -189,7 +168,6 @@ export default {
       );
     },
     getCategoryFromId(category) {
-      if (!category) return {};
       return this.$store.state.common.serviceCategories.find((item) => item.key === category);
     },
   },
@@ -213,7 +191,6 @@ export default {
       // return this.allRequirements;
     },
     secondaryRequirement() {
-      console.log(this.allRequirements[this.$store.state.vendorProposal.currentSecondaryService])
       return this.allRequirements[this.$store.state.vendorProposal.currentSecondaryService] || {};
     },
     allRequirements() {
@@ -244,11 +221,6 @@ export default {
       }
     },
   },
-  watch:{
-    step(newVal){
-        console.log('step', this.step);
-    }
-  }
 };
 </script>
 <style lang="scss" scoped>

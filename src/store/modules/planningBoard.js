@@ -26,9 +26,11 @@ const actions = {
         .get()
         .then((res) => {
           if(res && res.length) {
+            console.log('state.setCategoryRequirements', res);
             res.forEach(requirements => {
               commit("setCategoryRequirements", { category: requirements.category, requirements })
             })
+            console.log('state.setCategoryRequirements', state);
           }
           resolve(res)
         })
@@ -38,7 +40,7 @@ const actions = {
     });
   },
   saveTypes({ commit, state }, { event, category, types }) {
-    let requirements = state.requirements[category];
+    let requirements = state[category];
     if (!requirements) requirements = { event: { id: event.id }, category };
     requirements.types = { ...requirements.types, ...types };
     return new Promise((resolve, reject) => {
@@ -55,7 +57,7 @@ const actions = {
     });
   },
   saveRequiementSheet({ commit, state }, { event, category, requirements }) {
-    let originalRequirements = state.requirements[category];
+    let originalRequirements = state[category];
     if (!originalRequirements) originalRequirements = { event: { id: event.id }, category };
     originalRequirements = { ...originalRequirements, ...requirements }
     return new Promise((resolve, reject) => {
@@ -72,7 +74,7 @@ const actions = {
     });
   },
   saveMainRequirements({ commit, state }, { event, category, requirements }) {
-    let originalRequirements = state.requirements[category];
+    let originalRequirements = state[category];
     if (!originalRequirements) originalRequirements = { event: { id: event.id }, category };
     // originalRequirements.mainRequirements = requirements
     originalRequirements = { ...originalRequirements, ...requirements }
