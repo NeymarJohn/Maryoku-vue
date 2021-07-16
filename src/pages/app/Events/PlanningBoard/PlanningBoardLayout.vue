@@ -234,7 +234,7 @@ export default {
       //     });
       //   });
       // });
-      console.log('percentOfBudgetCategories', Object.keys(this.requirements).length, this.event.components.length);
+      // console.log('percentOfBudgetCategories', hasBudgetItems);
       return Object.keys(this.requirements).length;
     },
   },
