@@ -94,7 +94,7 @@
         },
         methods: {
             forgotPassword () {
-                this.$http.post(`${process.env.SERVER_URL}/1/forgot-password`, { email:this.email, field:'vendor' }, { 'ContentType': 'application/json' })
+                this.$http.post(`${process.env.SERVER_URL}/1/forgot-password`, { email:this.email }, { 'ContentType': 'application/json' })
                     .then((resp) => {
                         console.log(resp)
                         this.loading = false

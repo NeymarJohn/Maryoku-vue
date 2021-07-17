@@ -303,7 +303,9 @@ export default {
     },
     setServiceStyles({ category, services, type }) {
       // this.setTypes({ category: category.serviceCategory, data: services, type });
-      console.log('setServiceStyles', category, services, type);
+      this.$store.commit("event/setEventData", {
+        requirementProgress: this.percentOfBudgetCategories / this.event.components.length * 100,
+      });
       this.saveTypes({ category: category.serviceCategory, event: this.event, types: { [type]: services } });
     },
     saveAdditionalRequest({ category, requirements }) {

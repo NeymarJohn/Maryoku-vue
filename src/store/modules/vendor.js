@@ -6,7 +6,6 @@ import VendorService from "@/models/VendorService";
 import S3Service from "@/services/s3.service";
 import { makeid } from "@/utils/helperFunction";
 import { getBase64 } from "@/utils/file.util";
-import ProposalRequest from "@/models/ProposalRequest";
 import { reject } from "promise-polyfill";
 const state = {
     isEditing: false,
@@ -20,7 +19,6 @@ const state = {
     allProperties: [],
     properties: {},
     profile: null,
-    proposalRequests: [],
 };
 
 const getters = {
@@ -177,11 +175,6 @@ const actions = {
 
         });
     },
-    getProposalRequests({ commit, state }) {
-        new ProposalRequest().for(new Vendors({ id: state.profile.id })).get().then(proposalRequests => {
-            commit("setProposalRequests", proposalRequests)
-        })
-    }
 };
 
 const mutations = {
@@ -217,9 +210,6 @@ const mutations = {
     },
     setProfile(state, vendorProfile) {
         Vue.set(state, "profile", vendorProfile)
-    },
-    setProposalRequests(state, proposalRequests) {
-        Vue.set(state, "proposalRequests", proposalRequests)
     }
 };
 
