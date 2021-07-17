@@ -118,5 +118,8 @@ export default {
       border-top: solid 2px #e0e0e0;
     }
   }
+  .element-price {
+    text-align: right;
+  }
 }
 </style>

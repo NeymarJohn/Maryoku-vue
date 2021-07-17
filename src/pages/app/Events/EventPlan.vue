@@ -80,7 +80,7 @@ export default {
       };
       const planningBoard = {
         title: "Set Requirements",
-        status: this.event.requirementProgresss === 100 ? "completed" : "not-complete",
+        status: "not-complete",
         route: "booking/planningboard",
         icon: `${this.$iconURL}Campaign/Group 8857.svg`,
         progress: this.event.requirementProgress,
@@ -165,7 +165,6 @@ export default {
     },
     fetchData() {
       this.pageId = this.$route.params.blockId ? this.$route.params.blockId : "timeline";
-      console.log('eventPlan', this.event);
     },
     changeCheckList(e) {
       console.log("changeCheckList", e);

@@ -644,10 +644,10 @@ export default {
         };
         const planningBoard = {
           title: "Set Requirements",
-          status: this.event.requirementProgress === 100 ? "completed" : "not-complete",
+          status: this.event.campaignProgress === 100 ? "completed" : "not-complete",
           route: "booking/planningboard",
           icon: `${this.$iconURL}Campaign/Group 8857.svg`,
-          progress: this.event.requirementProgress,
+          progress: this.event.campaignProgress,
           componentId: "planningboard",
           id: "planningboard-item",
         };
