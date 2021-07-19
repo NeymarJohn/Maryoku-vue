@@ -46,11 +46,6 @@
             @click="goToRoute(item, index)"
             :class="{
               current: isActiveRoute(item),
-              progress_100: item.progress === 100,
-              progress_25: item.progress === 25,
-              progress_30: item.progress === 30,
-              progress_50: item.progress === 50,
-              progress_75: item.progress === 75,
             }"
             v-for="(item, index) in elements"
             :key="index"
@@ -127,6 +122,10 @@ export default {
     currentUrl: "",
     event: {},
   }),
+  created() {
+    this.fetchUrl();
+    this.event = this.$store.state.event.eventData;
+  },
   computed: {
     // ...mapState("event", {
     //   eventData: (state) => state.eventData,
@@ -156,11 +155,16 @@ export default {
       this.$emit("change", params);
     },
   },
-  created() {
-    this.fetchUrl();
-    this.event = this.$store.state.event.eventData;
+  updated(){
+      let self = this;
+      $('.event-elements__item').each(function (idx, el) {
+        let progress = self.elements.find(it => it.id === $(el).attr('id')).progress
+        $(el).css("--width", `${progress}%`)
+      })
   },
-  mounted() {},
+  mounted() {
+    console.log('progressbar.mounted', this.elements);
+  },
   watch: {
     $route: "fetchUrl",
     elements(newValue) {},

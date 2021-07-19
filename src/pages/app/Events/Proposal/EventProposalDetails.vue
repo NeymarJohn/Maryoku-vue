@@ -477,8 +477,7 @@ export default {
     askQuestion() {},
     bookVendor() {
       new Proposal({ ...this.vendorProposal }).save().then((proposal) => {
-        // this.$router.push(`/checkout/${this.vendorProposal.vendor.id}/${this.vendorProposal.id}`);
-        window.open(`/#/checkout/${this.vendorProposal.vendor.id}/${this.vendorProposal.id}`, "_blank");
+        this.$router.push(`/checkout/${this.vendorProposal.vendor.id}/${this.vendorProposal.id}`);
       });
     },
     getEvent() {},
@@ -683,7 +682,7 @@ export default {
           bundledServicePrice += sumOfService;
         }
       });
-      return (bundledServicePrice * this.vendorProposal.bundleDiscount.percentage) / 100 || 0;
+      return (bundledServicePrice * this.vendorProposal.bundleDiscount.percentage) / 100;
     },
 
     totalPriceOfProposal() {
@@ -715,7 +714,6 @@ export default {
         this.totalPriceOfProposal -
         (this.totalPriceOfProposal * this.discount.percentage) / 100 -
         this.bundledDiscountPrice;
-
       return discounted + (discounted * this.tax.percentage) / 100;
     },
   },
