@@ -6,7 +6,7 @@
           <img :src="`${$iconURL}Budget+Elements/${vendorCategory.icon}`" class="mr-10" />
           {{ vendorCategory.fullTitle }}
         </div>
-        <div>
+        <div class="ml-auto">
           <div class="element-price">${{ totalPrice | withComma }}</div>
           <div class="discount-details font-size-16 font-regular" v-if="discount.percentage">
             ({{ discount.percentage }}% off)
@@ -104,11 +104,14 @@ export default {
     font-weight: 900;
     font-size: 22px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding-right: 100px;
     img {
       width: 30px;
+    }
+    .element-price{
+      text-align: left;
+      width: 120px;
     }
   }
   .price-table-content {

@@ -477,7 +477,14 @@ export default {
     askQuestion() {},
     bookVendor() {
       new Proposal({ ...this.vendorProposal }).save().then((proposal) => {
-        this.$router.push(`/checkout/${this.vendorProposal.vendor.id}/${this.vendorProposal.id}`);
+          let routeData = this.$router.resolve({
+              name: "Checkout",
+              params: {
+                  vendorId: this.vendorProposal.vendor.id,
+                  proposalId: this.vendorProposal.id
+              },
+          });
+          window.open(routeData.href, '_blank')
       });
     },
     getEvent() {},

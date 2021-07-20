@@ -371,7 +371,7 @@ export default {
       return categories;
     },
     proposals() {
-      if (!this.selectedCategory || !this.proposalsByCategory.hasOwnProperty(this.selectedCategory.componentId)) return [];
+      if (!this.selectedCategory) return [];
       return this.proposalsByCategory[this.selectedCategory.componentId];
     },
   },

@@ -3,7 +3,10 @@
     <vue-element-loading :active="loading" spinner="ring" color="#FF547C" />
     <div class="checkout-content md-layout" v-if="!loading">
       <div class="md-layout-item md-size-45 left-panel">
-        <div class="background-section" :style="`background: url(${vendor.images[0]}) `"></div>
+<!--        <div class="background-section" :style="`background: url(${vendor.images[0]}) `"></div>-->
+        <div class="background-section"
+             :style="`background: url('https://static-maryoku.s3.amazonaws.com/storage/shutterstock_1801541476.jpg') center center no-repeat;
+              background-size: cover;`"></div>
         <div class="content p-50">
           <div class="font-size-30">
             <span class="font-bold">

@@ -163,7 +163,7 @@ export default {
     proposalRange: Boolean,
     iconUrl: String,
     itemType: String,
-    // requirements: Array,
+    requirements: Array,
   },
   data() {
     return {
