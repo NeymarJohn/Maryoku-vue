@@ -436,6 +436,9 @@ export default {
     proposalRequest() {
       return this.$store.state.vendorProposal.proposalRequest;
     },
+    proposal() {
+      return this.$store.state.vendorProposal;
+    },
     event() {
       if (!this.proposalRequest) return {};
       return this.proposalRequest.eventData;

@@ -68,18 +68,18 @@
                   }}</span
                 > -->
               </li>
-              <li
-                v-if="finalPriceOfMainCategory - getAllocatedBudget(vendor.eventCategory.key) > 0"
-                class="color-black"
-              >
-                <span>
-                  <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
-                  Your proposal is ${{
-                    (finalPriceOfMainCategory - getAllocatedBudget(vendor.eventCategory.key)) | withComma
-                  }}
-                  more than budget
-                </span>
-              </li>
+<!--              <li-->
+<!--                v-if="finalPriceOfMainCategory - getAllocatedBudget(vendor.eventCategory.key) > 0"-->
+<!--                class="color-black"-->
+<!--              >-->
+<!--                <span>-->
+<!--                  <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />-->
+<!--                  Your proposal is ${{-->
+<!--                    (finalPriceOfMainCategory - getAllocatedBudget(vendor.eventCategory.key)) | withComma-->
+<!--                  }}-->
+<!--                  more than budget-->
+<!--                </span>-->
+<!--              </li>-->
               <li :style="`margin: ${discountBlock[vendor.eventCategory.key] ? '' : '0'}`">
                 <template v-if="discountBlock[vendor.eventCategory.key]">
                   <div class="left">

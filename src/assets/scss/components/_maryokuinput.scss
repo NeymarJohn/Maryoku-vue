@@ -276,12 +276,15 @@
       color: #641856 !important;
     }
     .vfc-main-container {
+      .vfc-week .vfc-day span.vfc-span-day.vfc-today{
+        background-color: #ae84bb !important;
+      }
       .vfc-week .vfc-day span.vfc-span-day.vfc-marked {
         &:not(.vfc-start-marked):not(.vfc-end-marked):before{
-          background-color: #641856 !important;
+          background-color: #641856!important;
         }
       }
-  
+
       .vfc-day .vfc-base-start, .vfc-base-end{
         background-color: #641856 !important;
       }

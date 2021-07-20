@@ -25,7 +25,7 @@
           ></tag-item>
         </div>
       </div>
-      <div class="text-left p-20" style="background-color: #f3f7fd;">
+      <div class="text-left mb-40">
         <div class="d-flex align-center">
           <div class="font-size-20 font-bold">
             <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10" width="28" />
@@ -71,31 +71,29 @@
             <div class="font-bold-extra">{{ section }}</div>
             <div class="md-layout text-left">
                 <!-- {{ subCategory.requirements[section] }} -->
-            <div
-                v-for="item in subCategory[section].filter((item) => item.type !== 'single-selection' && item.visible)"
-                :key="item.item"
-                class="md-layout-item md-size-33">
-                <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">
-                    <span class="text-transform-capitalize">{{ item.item }}</span>
-                </md-checkbox>
-            </div>
-            <div v-if="subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)">
                 <div
-                    v-for="item in subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)"
-                    class="requirement-item-tags  mt-10"
+                    v-for="item in subCategory[section].filter((item) => item.type !== 'single-selection' && item.visible)"
                     :key="item.item"
-                >
-                    <div class="mb-10">{{ item.item }}:</div>
-                    <tag-item
-                        @click="tag.selected = !tag.selected"
-                        :tagLabel="tag.name"
-                        :key="tag.name"
-                        :isSelected="tag.selected"
-                        :theme="`red`"
-                        v-for="tag in item.options"
-                        class="mr-10"
-                    ></tag-item>
+                    class="md-layout-item md-size-33">
+                    <md-checkbox v-if="item.type !== 'single-selection'" v-model="item.selected">
+                        <span class="text-transform-capitalize">{{ item.item }}</span>
+                    </md-checkbox>
                 </div>
+            <div
+                v-for="item in subCategory[section].filter((item) => item.type === 'single-selection' && item.visible)"
+                class="requirement-item-tags mt-10"
+                :key="item.item"
+            >
+                <div class="mb-10">{{ item.item }}:</div>
+                <tag-item
+                    @click="tag.selected = !tag.selected"
+                    :tagLabel="tag.name"
+                    :key="tag.name"
+                    :isSelected="tag.selected"
+                    :theme="`red`"
+                    v-for="tag in item.options"
+                    class="mr-10"
+                ></tag-item>
             </div>
           </div>
         </div>
@@ -207,7 +205,6 @@
   </modal>
 </template>
 <script>
-import Vue from 'vue'
 import { Modal, MaryokuInput } from "@/components";
 import TagItem from "../TagItem.vue";
 import TimeSlot from "../TimeSlot.vue";
@@ -232,7 +229,7 @@ export default {
       isGroup: false,
       groupSize: null,
       anythingElse: "",
-      period: [],
+      period: null,
       assignTimeline: false,
       timeSlotsByServiceType: {
         'venuerental' : ['setup', 'activity', 'Show', 'Speaker / Keynote', 'Discussion', 'Break', 'Relaxation', 'meal'],
@@ -241,7 +238,7 @@ export default {
         'administration' : ['setup', 'activity', 'Show', 'Speaker / Keynote', 'meal'],
         'foodandbeverage' : ['break', 'Relaxation', 'meal'],
       },
-      timeSlotIdx: [],
+      timeSlotIdx: false,
     };
   },
   props: {
@@ -263,7 +260,7 @@ export default {
     },
   },
   created() {
-    console.log('additionalRequests.created', this.timeslots, this.defaultData);
+    console.log('additionalRequests.created', this.subCategorySections);
     this.subCategorySections = Object.keys(this.subCategory);
     this.subCategorySections = this.subCategorySections.filter(
       (item) => item !== "multi-selection" && item !== "special",
@@ -278,21 +275,9 @@ export default {
     this.specialTags = this.specialTags.filter(
       (item) => item.subCategory !== "Inclusion" && item.subCategory !== "Sustainability",
     );
-    this.anythingElse = this.defaultData.mainRequirement ? this.defaultData.mainRequirement.additionalRequest : null;
+    this.anythingElse = this.defaultData.additionalRequest;
   },
   methods: {
-    setTimeSlot(){
-      console.log('setTimeSlot', this.assignTimeline, this.timeslots, this.defaultData);
-
-      if(this.assignTimeline && this.timeslots.length && this.defaultData.period && this.defaultData.period.length) {
-        this.timeslots.map((timeslot, idx) => {
-          if(this.defaultData.period.find(it => it.startTime == timeslot.startTime && it.endTime == timeslot.endTime)) {
-            this.timeSlotIdx.push(idx);
-          }
-
-        })
-      }
-    },
     close: function () {
       this.$emit("close");
     },
@@ -300,55 +285,43 @@ export default {
       this.$emit("cancel");
     },
     checkTimeline(value) {
-      console.log('checkTimeline', this.timeslots);
       if (!this.timeslots.length) return;
       this.assignTimeline = value;
-      this.setTimeSlot();
     },
-    getPeriod(timeslots, idxs) {
-      console.log('getPeriod', timeslots);
-      let duration = [];
-
-      // timeslots.map(timeslot => {
-      //     let startTime = moment(new Date(Number(timeslot.startTime)));
-      //     let endTime = moment(new Date(Number(timeslot.endTime)));
-      //     duration.push({
-      //         startTime: {
-      //             ampm: startTime.format('A'),
-      //             time: {
-      //                 hh: startTime.format('hh'),
-      //                 mm: startTime.format('mm'),
-      //             }
-      //         },
-      //         endTime: {
-      //             ampm: endTime.format('A'),
-      //             time: {
-      //                 hh: endTime.format('hh'),
-      //                 mm: endTime.format('mm'),
-      //             }
-      //         }
-      //     })
-      // })
-
-      return duration;
+    getPeriod(timeslot) {
+      console.log('getPeriod', timeslot);
+      let startTime = moment(new Date(Number(timeslot.startTime)));
+      let endTime = moment(new Date(Number(timeslot.endTime)));
+      console.log('getPeriod', startTime);
+      let period = {
+          startTime: {
+              ampm: startTime.format('A'),
+              time: {
+                  hh: startTime.format('hh'),
+                  mm: startTime.format('mm'),
+              }
+          },
+          endTime: {
+              ampm: endTime.format('A'),
+              time: {
+                  hh: endTime.format('hh'),
+                  mm: endTime.format('mm'),
+              }
+          }
+      }
+      console.log('getPeriod', period);
+      return period;
     },
     save: function () {
       const requirements = { ...this.subCategory };
 
       if (this.assignTimeline) {
-        // this.period = this.getPeriod(this.timeslots, this.timeSlotIdx)
-          this.period = this.timeSlotIdx.map(idx => {
-              return {
-                  startTime: this.timeslots[idx].startTime,
-                  endTime: this.timeslots[idx].endTime
-              }
-          })
+        this.getPeriod(this.timeslots[this.timeSlotIdx])
       }
       requirements.special = [];
       for (let item of this.specialTags) {
         requirements.special.push(item);
       }
-      console.log('save', this.period);
       this.$emit("save", {
         category: this.selectedCategory.key,
         requirements: {
@@ -450,18 +423,9 @@ export default {
         return `${this.$secondIconURL}Requirements/Accessibility+Sustainability+and+Inclusion/${icon}.svg`;
       }
     },
-    getTimeStampFromFormat(time, format){
-      return moment(time, format).unix() * 1000;
-    },
     setTime(time) {
-      console.log('setTime', this.event, time);
-      this.period = [];
-      let eventDate = moment(this.event.eventStartMillis).format('YYYY-MM-DD');
-      Vue.set(this.period, 0, {
-          startTime: this.getTimeStampFromFormat (`${eventDate} ${time.startTime.time.hh}:${time.startTime.time.mm} ${time.startTime.ampm}`, 'YYYY-MM-DD hh:mm A').toString(),
-          endTime: this.getTimeStampFromFormat(`${eventDate} ${time.endTime.time.hh}:${time.endTime.time.mm} ${time.endTime.ampm}`, 'YYYY-MM-DD hh:mm A').toString(),
-      })
-      console.log('setTime', this.period);
+      console.log("newTIme", time);
+      this.period = time;
     },
   },
   computed: {

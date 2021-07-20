@@ -326,7 +326,7 @@ export default {
     },
     getRequirements(category) {
       if (!this.$store.state.planningBoard.requirements[category]) return {};
-      return this.$store.state.planningBoard.requirements[category];
+      return this.$store.state.planningBoard.requirements[category].mainRequirements;
     },
     openCart() {
       this.showCart = true;
