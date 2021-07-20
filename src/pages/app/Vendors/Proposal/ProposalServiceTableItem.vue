@@ -473,8 +473,8 @@ export default {
     removeAlternative(index) {
       this.item.plannerOptions.splice(index, 1);
       if(this.item.plannerOptions.length === 1) this.item.plannerOptions = [];
-      this.$root.$emit("save-proposal-requirement", { index: this.index, item });
-      this.$emit("save", { index: this.index, item });
+      this.$root.$emit("save-proposal-requirement", { index: this.index, item: this.item });
+      this.$emit("save", { index: this.index, item: this.item });
     },
     editAlternative(index) {
       this.$set(this.item.plannerOptions[index], "isEdit", true);
