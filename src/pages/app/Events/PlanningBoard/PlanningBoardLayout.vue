@@ -234,7 +234,7 @@ export default {
       //     });
       //   });
       // });
-      // console.log('percentOfBudgetCategories', hasBudgetItems);
+      console.log('percentOfBudgetCategories', Object.keys(this.requirements).length, this.event.components.length);
       return Object.keys(this.requirements).length;
     },
   },
@@ -303,7 +303,9 @@ export default {
     },
     setServiceStyles({ category, services, type }) {
       // this.setTypes({ category: category.serviceCategory, data: services, type });
-      console.log('setServiceStyles', category, services, type);
+      this.$store.commit("event/setEventData", {
+        requirementProgress: this.percentOfBudgetCategories / this.event.components.length * 100,
+      });
       this.saveTypes({ category: category.serviceCategory, event: this.event, types: { [type]: services } });
     },
     saveAdditionalRequest({ category, requirements }) {
@@ -324,7 +326,7 @@ export default {
     },
     getRequirements(category) {
       if (!this.$store.state.planningBoard.requirements[category]) return {};
-      return this.$store.state.planningBoard.requirements[category].mainRequirements;
+      return this.$store.state.planningBoard.requirements[category];
     },
     openCart() {
       this.showCart = true;

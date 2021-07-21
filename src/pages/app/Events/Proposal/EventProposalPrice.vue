@@ -302,7 +302,7 @@ export default {
       if (!discount) {
         discount = { price: 0, percentage: 0 };
       }
-      discount.price = (this.priceOfCostservices * discount.percentage || 0) / 100;
+      discount.price = (this.priceOfCostservices * discount.percentage) / 100;
       return discount;
     },
     tax() {
@@ -313,7 +313,7 @@ export default {
       }
       console.log(this.serviceCategory, this.priceOfCostservices);
       console.log(this.serviceCategory, this.discount.price);
-      tax.price = Math.round(((this.priceOfCostservices - this.discount.price) * (tax.percentage || 0)) / 100);
+      tax.price = Math.round(((this.priceOfCostservices - this.discount.price) * tax.percentage) / 100);
       console.log(this.serviceCategory, tax);
       return tax;
     },

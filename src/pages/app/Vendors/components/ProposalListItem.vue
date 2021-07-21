@@ -1,17 +1,17 @@
 <template>
   <div class="proposal-list-item">
     <div>
-      <img style="width: 40px" src="https://maryoku.s3.amazonaws.com/company/logos/5e0ae1d2cfefec4b68f5d8a1.png" />
+      <img v-if="proposal.nonMaryoku" :src="`${$storageURL}maryoku - logo square white@2x.png`" width="50">
+      <img v-else src="https://maryoku.s3.amazonaws.com/company/logos/5e0ae1d2cfefec4b68f5d8a1.png" width="40"/>
     </div>
     <div>
-      <div class="font-bold font-size-16" v-if="proposal.proposalRequest && proposal.proposalRequest.eventData.title">
+      <div class="font-bold font-size-16" v-if="proposal.nonMaryoku">
+        {{ proposal.vendor.companyName }}
+      </div>
+      <div class="font-bold font-size-16" v-else-if="proposal.proposalRequest && proposal.proposalRequest.eventData.title">
         {{ proposal.proposalRequest.eventData.title }}
       </div>
       <div class="font-bold font-size-16" v-else>New Event</div>
-      <!--      <md-button class="preview md-simple md-vendor-text md-vendor px-0">-->
-      <!--          Got 4 previous versions-->
-      <!--        <md-icon class="color-vendor">keyboard_arrow_down</md-icon>-->
-      <!--      </md-button>-->
     </div>
     <div class="font-size-14 color-black-middle">{{ proposal.dateCreated | date("DD/MM/YYYY") }}</div>
     <div class="font-size-14 color-black-middle">${{ proposal.cost | withComma }}</div>

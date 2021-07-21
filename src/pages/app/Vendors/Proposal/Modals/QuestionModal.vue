@@ -12,7 +12,7 @@
     <template slot="body">
       <div class="md-layout maryoku-modal-body">
         <div class="md-layout-item md-size-100 form-group maryoku-field mb-30">
-          <textarea v-mode="message" placeholder="Type your message here..." rows="10"></textarea>
+          <textarea v-model="message" placeholder="Type your message here..." rows="10"></textarea>
         </div>
       </div>
     </template>
@@ -27,7 +27,7 @@
 import { Modal, MaryokuInput } from "@/components";
 
 export default {
-  name: "sharing-modal",
+  name: "question-modal",
   components: {
     Modal,
   },
@@ -43,25 +43,7 @@ export default {
   created() {},
   methods: {
     sendQuestion() {
-      this.$emit("sendEmail", this.editingVendor);
-      // this.$http
-      //   .post(
-      //     `${process.env.SERVER_URL}/1/eventShare`,
-      //     {
-      //       emails: this.emails,
-      //       message: this.message,
-      //       link: this.generateShareLink(),
-      //       eventId: this.$route.params.id,
-      //     },
-      //     { headers: this.$auth.getAuthHeader() },
-      //   )
-      //   .then((res) => {
-      //     if (res.data.status) {
-      //       this.statusMessage = "We have sent an email to the invited users.";
-      //     } else {
-      //       this.statusMessage = "Something is wrong. Please try again later.";
-      //     }
-      //   });
+      this.$emit("send", this.message);
     },
 
     onCancel: function (e) {

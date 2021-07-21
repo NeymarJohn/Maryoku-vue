@@ -34,12 +34,10 @@
 </template>
 
 <script>
-import moment from "moment";
 import { businessCategories, categoryNameWithIcons } from "@/constants/vendor";
 import MaryokuTextarea from "@/components/Inputs/MaryokuTextarea";
 
 //COMPONENTS
-import Icon from "@/components/Icon/Icon.vue";
 import ProposalBudgetSummary from "./ProposalBudgetSummary.vue";
 import ProposalRequirementsPanel from "./ProposalRequirementsPanel";
 import ProposalSteps from "./ProposalSteps.vue";

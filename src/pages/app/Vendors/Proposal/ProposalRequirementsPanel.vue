@@ -7,7 +7,7 @@
       </div>
     </template>
     <template slot="content">
-      <div class="requirements-content p-30 pt-0-i" v-if="step < 2">
+      <div class="requirements-content pt-0-i" v-if="step < 2" style="padding: 30px 30px 0">
 <!--        <div>-->
 <!--          <template v-for="types in requirementsData.types">-->
 <!--            <span class="type-tag" v-for="type in types" :key="type">{{ type }}</span>-->
@@ -83,7 +83,7 @@
         </div>
       </div>
       <div v-else>
-        <div class="requirements-content p-30 pt-0-i">
+        <div class="requirements-content pt-0-i" style="padding: 30px 30px 0">
           <div class="font-size-20 font-bold mb-20">
             {{ getCategoryFromId(secondaryRequirement.category).fullTitle }}
           </div>
@@ -155,12 +155,36 @@
           </div>
         </div>
       </div>
-      <div class="p-30">
+      <div class="position-relative" style="padding: 15px 30px 30px">
+          <fade-transition v-if="statusMessage">
+              <md-card class="position-absolute" style="top: -170px;right:0;width: 600px">
+                  <md-card-content class="d-flex align-center position-relative p-30">
+                      <div class="message-arrow" style="left: 300px"></div>
+                      <div class="">
+                          <img :src="`${$iconURL}Onboarding/tip-gray.svg`" width="30" style="width: 30px"/>
+                      </div>
+                      <div class="ml-10">
+                          <span class="color-won font-bold-extra">Message was sent!</span>
+                          <p class="my-0">We will make sure she will get back to you as soon as possible</p>
+                      </div>
+                      <div class="position-absolute" style="right: 20px; top: 20px">
+                          <md-button class="md-icon-button md-simple" @click="statusMessage = ''">
+                              <img :src="`${$iconURL}Campaign/Group+3602.svg`">
+                          </md-button>
+                      </div>
+                  </md-card-content>
+
+              </md-card>
+        </fade-transition>
         <md-button class="md-outlined md-vendor md-simple maryoku-btn width-100" @click="showQuestionModal = true">
           <img :src="`${$iconURL}Submit Proposal/group-19162.svg`" class="page-icon mr-10" />
           Questions? Send a question to planner
         </md-button>
-        <question-modal v-if="showQuestionModal" @cancel="showQuestionModal = false"></question-modal>
+        <question-modal
+            v-if="showQuestionModal"
+            @cancel="showQuestionModal = false"
+            @send="sendMail"
+        ></question-modal>
       </div>
     </template>
   </collapse-panel>
@@ -171,16 +195,48 @@ import CollapsePanel from "../../Campaign/CollapsePanel.vue";
 import CalendarEvent from "@/models/CalendarEvent";
 import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
 import QuestionModal from "./Modals/QuestionModal.vue";
+import { FadeTransition } from "vue2-transitions";
 export default {
-  components: { CollapsePanel, QuestionModal },
+  components: {
+      CollapsePanel,
+      QuestionModal,
+      FadeTransition
+  },
   data() {
     return {
       additionalServiceRequirements: [],
       showQuestionModal: false,
       isLoading: true,
+      statusMessage: '',
     };
   },
   methods: {
+    sendMail(message){
+        if(!message) return
+        this.showQuestionModal = false
+
+        if(this.vendor.vendorMainEmail && this.proposalRequest.eventData && this.proposalRequest.eventData.owner
+            && this.proposalRequest.eventData.owner.emailAddress)
+          this.$http
+          .post(
+            // `${process.env.SERVER_URL}/1/sendMail`,
+              'http://localhost:8080/1/sendMail',
+            {
+              from: this.vendor.vendorMainEmail,
+              to: this.proposalRequest.eventData.owner.emailAddress,
+              subject: 'Questions',
+              message,
+            },
+            { headers: this.$auth.getAuthHeader() },
+          )
+          .then((res) => {
+            if (res.data.status) {
+              this.statusMessage = "We have sent an email to the invited users.";
+            } else {
+              this.statusMessage = "Something is wrong. Please try again later.";
+            }
+          });
+    },
     selectedOptions(specialRequirements) {
       if (!specialRequirements) return [];
       return specialRequirements.filter(
@@ -256,7 +312,6 @@ export default {
   .addtional-requests {
     padding: 25px;
     background-color: #eaeaea;
-    margin-bottom: 20px;
   }
   .type-tag {
     display: inline-block;
@@ -304,5 +359,15 @@ export default {
       }
     }
   }
+.message-arrow{
+    position: absolute;
+    bottom: -30px;
+    width: 0;
+    height: 0;
+    border-left: 16px solid transparent;
+    border-right: 16px solid transparent;
+    border-top: 30px solid white;
+    /*box-shadow: 0 1px 4px 0 rgba(0,0,0,,.3);*/
+ }
 }
 </style>
