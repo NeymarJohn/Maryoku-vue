@@ -117,7 +117,7 @@
         >
       </md-card-actions>
     </md-card>
-    <md-card class="block-form" :class="size === 'large' ? 'p-20 m-20' : 'my-10 ml-30 p-10 w-min-500'" :style="getBorderStyle(editingContent.color)" v-else>
+    <md-card class="block-form" :class="size === 'large' ? 'p-20 m-20' : 'my-0 ml-15'" :style="getBorderStyle(editingContent.color)" v-else>
       <vue-element-loading :active.sync="editingContent.isItemLoading" spinner="ring" color="#FF547C" />
       <md-card-content>
         <div class="timeline-actions" v-if="editMode">
@@ -134,7 +134,7 @@
           >
 
           <p :class="size === 'large' ? 'my-15' : 'ml-20 my-0'">
-            <span class="font-bold-extra font-size-20 mr-20 color-black-heavy" v-if="editingContent.title">{{
+            <span class="font-bold-extra mr-20" :class="size === 'large' ? 'font-size-20' : 'font-size-16'" v-if="editingContent.title">{{
               editingContent.title
             }}</span>
             <md-button
@@ -368,12 +368,12 @@ export default {
     }
   }
   .time-line-icon-medium {
-    min-width: 60px;
-    height: 60px;
+    min-width: 45px;
+    height: 45px;
     border-radius: 50%;
       img {
-          width: 60px;
-          height: 60px;
+          width: 45px;
+          height: 45px;
       }
   }
   .divider {
@@ -403,7 +403,7 @@ export default {
     }
   }
   .border-right{
-     border-right: 2px solid #818080;
+     border-right: 1px solid rgba(0, 0, 0, 0.5);
   }
 }
 </style>

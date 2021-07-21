@@ -759,7 +759,7 @@
                 left: 0;
                 top: 0;
                 bottom: 0;
-                width: var(--width);
+                width: 0;
             }
             &.current {
                 border-left-color: $green;
@@ -774,6 +774,36 @@
                 letter-spacing: normal;
                 text-align: left;
                 color: #050505;
+            }
+
+            &.progress_30 {
+                &:before {
+                    width: 30%;
+                }
+            }
+            &.progress_25 {
+                &:before {
+                    width: 25%;
+                }
+            }
+            &.progress_50 {
+                &:before {
+                    width: 50%;
+                }
+            }
+            &.progress_75 {
+                &:before {
+                    width: 75%;
+                }
+            }
+            &.progress_100 {
+                &:before {
+                    width: 100%;
+                }
+
+                .item-title{
+                    //text-decoration-line: line-through;
+                }
             }
         }
         .refresh{

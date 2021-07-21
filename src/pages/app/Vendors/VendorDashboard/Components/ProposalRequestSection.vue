@@ -98,7 +98,7 @@ export default {
         });
       } else if (this.field === 'negotiation') {
         proposalRequests = this.$store.state.vendorDashboard.proposalRequests.filter(p => {
-          return p.remainingTime > 0 && p.proposal && p.proposal.negotiations && p.proposal.negotiations.length
+          return p.proposal && p.proposal.negotiations && p.proposal.negotiations.length
         });
       }
       return proposalRequests;

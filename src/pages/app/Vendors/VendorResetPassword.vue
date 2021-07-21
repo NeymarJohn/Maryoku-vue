@@ -14,37 +14,33 @@
                             <br/>
                             You can sign in with new password
                         </div>
-                        <div class="d-flex justify-content-center">
-                            <md-button class="md-simple normal-btn md-vendor mt-20" @click="toSignin">Go to Signin</md-button>
+                        <div>
+                            <md-button class="md-simple normal-btn md-vendor" @click="toSignin">Go to Signin</md-button>
                         </div>
                     </template>
                     <template v-else>
-                        <div class="maryoku_input">
-                            <input
-                                class="form-input my-15"
-                                type="password"
-                                v-validate="'required|min:8'"
-                                name="password"
-                                placeholder="New password"
-                                v-model="password"
-                                ref="password"
-                                @input="change"
-                            />
-                            <span class="md-error color-red" v-if="errors.has('password')">{{ errors.first('password') }}</span>
-                        </div>
-                        <div class="maryoku_input">
-                            <input
-                                class="form-input my-15"
-                                type="password"
-                                v-validate="'required|min:8|confirmed:password'"
-                                name="pw_confirm"
-                                v-model="confirm_password"
-                                data-vv-as="password"
-                                placeholder="Confirm password"
-                                @input="change"
-                            />
-                            <span class="md-error color-red" v-if="errors.has('pw_confirm')">{{ errors.first('pw_confirm') }}</span>
-                        </div>
+                        <maryoku-input
+                            class="form-input"
+                            type="password"
+                            v-validate="'required|min:8'"
+                            name="password"
+                            inputStyle="password"
+                            v-model="password"
+                            placeholder="New password"
+                            refName="password"
+                        ></maryoku-input>
+                        <maryoku-input
+                            class="form-input"
+                            name="confirm_password"
+                            type="password"
+                            v-validate="'required|min:8|confirmed:password'"
+                            inputStyle="password"
+                            v-model="confirm_password"
+                            placeholder="Confirm password"
+                        ></maryoku-input>
+                        <div class="md-error">{{error}}</div>
+                        <span class="md-error color-red" v-if="errors.has('password')">{{ errors.first('password') }}</span>
+                        <span class="md-error color-red" v-if="errors.has('confirm_password')">{{ errors.first('confirm_password') }}</span>
                         <div class="form-buttons">
                             <md-button @click="updatePassword" class="md-default md-vendor md-maryoku mt-4" slot="footer">Update Password</md-button>
                         </div>
@@ -79,57 +75,37 @@
             VueElementLoading,
             MaryokuInput
         },
-        data () {
-            return {
-                inValidToken: false,
-                error: '',
-                loading: false,
-                firstname: null,
-                terms: false,
-                password: null,
-                confirm_password: null,
-                succeded: false,
-                isForgot: false,
-                serverURL: process.env.SERVER_URL,
-                // auth: auth,
-                touched: {
-                    password: false,
-                },
-                submitted:false
-            }
-        },
         methods: {
             updatePassword () {
                 console.log(this.$validator)
                 const email = this.$route.query.email
                 const token = this.$route.query.resetToken
-                if (this.password !== this.confirm_password) return
-                this.$validator.validateAll().then(isValid => {
-                    console.log(this.$validator)
-                    if (isValid) {
-                        this.$http.post(`${process.env.SERVER_URL}/1/reset-password`, { username : email, token : token, password: this.password}, { 'ContentType': 'application/json' })
-                            .then((resp) => {
-                                console.log(resp)
-                                this.loading = false
-                                if (resp.status) {
-                                    this.succeded = true
-                                } else {
-                                    this.error = resp.message
-                                }
-                            })
-                            .catch((error) => {
-                                console.error(error)
-                                this.loading = false
-                                if (error.response.status === 401) {
-                                    this.error = 'Sorry, No such user name or password address.'
-                                } else {
-                                    this.error = 'Temporary failure, try again later'
-                                }
-                            })
-                    } else  {
-                        this.error = 'Invalid password. Minimum length is 8 letters.'
-                    }
-                })
+                // this.$validator.validateAll().then(isValid => {
+                //     console.log(this.$validator)
+                //     if (isValid) {
+                //         this.$http.post(`${process.env.SERVER_URL}/1/reset-password`, { username : email, token : token, password: this.password}, { 'ContentType': 'application/json' })
+                //             .then((resp) => {
+                //                 console.log(resp)
+                //                 this.loading = false
+                //                 if (resp.status) {
+                //                     this.succeded = true
+                //                 } else {
+                //                     this.error = resp.message
+                //                 }
+                //             })
+                //             .catch((error) => {
+                //                 console.error(error)
+                //                 this.loading = false
+                //                 if (error.response.status === 401) {
+                //                     this.error = 'Sorry, No such user name or password address.'
+                //                 } else {
+                //                     this.error = 'Temporary failure, try again later'
+                //                 }
+                //             })
+                //     } else  {
+                //         this.error = 'Invalid password. Minimum length is 8 letters.'
+                //     }
+                // })
 
             },
             toSingUp() {
@@ -137,9 +113,6 @@
             },
             toSignin() {
                 this.$router.push({ path: '/vendor/signin' })
-            },
-            change(){
-                this.error = '';
             }
         },
         watch: {
@@ -169,6 +142,36 @@
                     }
                 });
         },
+        data () {
+            return {
+                inValidToken: false,
+                error: '',
+                loading: false,
+                firstname: null,
+                terms: false,
+                password: null,
+                confirm_password: null,
+                succeded: false,
+                isForgot: false,
+                serverURL: process.env.SERVER_URL,
+                // auth: auth,
+                touched: {
+                    password: false,
+                },
+                modelValidations: {
+                    password: {
+                        required: true,
+                        min: 8
+                    },
+                    confirm_password: {
+                        required: true,
+                        min: 8,
+                        confirmed: 'password',
+                    },
+                },
+                submitted:false
+            }
+        }
     }
 </script>
 <style lang="scss" scoped>

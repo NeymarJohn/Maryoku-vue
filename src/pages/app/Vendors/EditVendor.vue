@@ -531,7 +531,6 @@ export default {
     };
   },
   created() {
-    alert();
     this.routeName = this.$route.name;
     Vendors.find("categories").then(
       (categories) => {

@@ -103,10 +103,10 @@
               ></proposal-list-item>
             </div>
           </div>
-          <div v-if="this.proposals.length < 4" class="my-auto d-flex flex-column align-center">
+          <div v-if="pagination.total < 4" class="my-auto d-flex flex-column align-center">
             <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" />
             <p class="text-transform-uppercase font-size-14">No More Proposal To Show</p>
-            <md-button class="md-vendor" @click="createNewProposal">Create New Proposal</md-button>
+            <md-button class="md-vendor">Create New Proposal</md-button>
           </div>
         </div>
         <div class="md-layout-item md-size-25 mt-50">
@@ -280,6 +280,7 @@ export default {
       const data = res[0];
 
       this.proposals = data.items;
+      this.proposals.map((it) => console.log("proposal", it));
       this.pagination.total = data.total;
       this.proposalTabs.map((t) => {
         if (data.hasOwnProperty(t.key)) this.pagination[t.key] = data[t.key];
