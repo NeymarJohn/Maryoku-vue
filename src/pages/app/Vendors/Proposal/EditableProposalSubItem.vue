@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="editable-proposal-sub-item-wrapper" :class="[{ 'step-3': step == 3 }]" v-if="!item.plannerOptions.length">
+    <div class="editable-proposal-sub-item-wrapper" :class="[{ 'step-3': step == 3 }]">
       <div class="item-cont">
         {{ item.requirementTitle }}
         <span class="madatory-badge" v-if="item.isMandatory">Mandatory</span>

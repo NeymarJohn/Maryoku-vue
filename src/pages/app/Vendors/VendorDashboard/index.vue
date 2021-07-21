@@ -147,7 +147,6 @@ export default {
       },
       markedDates: [],
       upcomingEvents: [],
-      eventLimit: 3,
       defaultEventData: {},
     };
   },
@@ -221,7 +220,6 @@ export default {
     getComingEvents() {
       UserEvent.params({
         startTime: new Date(),
-        limit: this.eventLimit,
       })
         .get()
         .then((events) => {

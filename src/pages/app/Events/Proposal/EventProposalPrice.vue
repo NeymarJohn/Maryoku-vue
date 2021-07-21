@@ -3,6 +3,7 @@
     <div class="d-flex justify-content-between align-center">
       <div class="item-info d-flex justify-content-start align-center">
         <div class="element-title">
+          <md-checkbox v-model="proposalData.bookedServices" :value="serviceCategory" @change="changeBookService"></md-checkbox>
           <img :src="`${$iconURL}Budget+Elements/${vendorCategory.icon}`" />
           {{ vendorCategory.fullTitle }}
           <span class="element-duration">For Whole Event</span>
@@ -244,7 +245,9 @@ export default {
     };
   },
   created() {
-    this.extraServices = this.proposalData.extraServices[this.serviceCategory].filter((item) => !item.hideOnProposal);
+    console.log('eventProposal.created', this.serviceCategory);
+    this.extraServices = this.proposalData.extraServices[this.serviceCategory] ?
+        this.proposalData.extraServices[this.serviceCategory].filter((item) => !item.hideOnProposal) : [];
   },
   methods: {
     addExtraService(extraService) {
@@ -278,6 +281,10 @@ export default {
       });
       this.$forceUpdate();
     },
+    changeBookService(){
+      console.log('changeBookService');
+      this.$emit('changeBookedServices');
+    }
   },
   computed: {
     ...mapState("event", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode"]),
@@ -473,6 +480,8 @@ export default {
   }
 
   .element-title {
+    display: flex;
+    align-items: center;
     font-size: 28px;
 
     img {
