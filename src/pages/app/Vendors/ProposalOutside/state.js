@@ -308,7 +308,8 @@ const actions = {
         tenantId: state.tenantId,
         suggestionDate: state.suggestionDate,
         expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
-        nonMaryoku: true
+        nonMaryoku: true,
+        bookedServices: []
       });
       proposal
         .save()

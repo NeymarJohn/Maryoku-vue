@@ -161,7 +161,7 @@
                   <md-card-content class="d-flex align-center position-relative p-30">
                       <div class="message-arrow" style="left: 300px"></div>
                       <div class="">
-                          <img :src="`${$iconURL}VendorsProposalPage/group-16292.svg`" style="width: 45px"/>
+                          <img :src="`${$iconURL}Onboarding/tip-gray.svg`" width="30" style="width: 30px"/>
                       </div>
                       <div class="ml-10">
                           <span class="color-won font-bold-extra">Message was sent!</span>

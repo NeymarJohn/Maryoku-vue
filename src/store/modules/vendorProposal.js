@@ -45,6 +45,7 @@ const state = {
   timelineDates: [],
   personalMessage: "",
   suggestedNewSeatings: null,
+  bookedServices: [],
   tenantId: authService.resolveTenantId()
 };
 const getters = {
@@ -187,6 +188,8 @@ const mutations = {
     state.suggestedNewSeatings = proposal.suggestedNewSeatings;
     state.initialized = true;
     state.wizardStep = proposal.step
+    state.bookedServices = []
+    // state.bookedServices = proposal.bookedServices
   },
   setPropsalRequest: (state, propsoalRequest) => {
     state.proposalRequest = propsoalRequest;
@@ -244,6 +247,7 @@ const mutations = {
     Vue.set(state, "proposalCostServices", {});
     Vue.set(state, "proposalIncludedServices", {});
     Vue.set(state, "proposalExtraServices", {});
+    Vue.set(state, "bookedServices", {});
     Vue.set(state, "discounts", {});
     Vue.set(state, "taxes", {});
     Vue.set(state, "totalTax", { percentage: 0, price: 0 });

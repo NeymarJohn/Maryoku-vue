@@ -20,7 +20,7 @@
     </div>
     <v-tour name="invite" :steps="steps.invite" :callbacks="tourCallback">
       <template slot-scope="tour">
-        <transition name="fade">
+        <fade-transition>
           <v-step
             v-if="tour.steps[tour.currentStep]"
             :key="tour.currentStep"
@@ -61,12 +61,12 @@
               >
             </div>
           </v-step>
-        </transition>
+        </fade-transition>
       </template>
     </v-tour>
     <v-tour name="comment" :steps="steps.comment" :callbacks="tourCallback">
       <template slot-scope="tour">
-        <transition name="fade">
+        <fade-transition>
           <v-step
             v-if="tour.steps[tour.currentStep]"
             :key="tour.currentStep"
@@ -107,12 +107,12 @@
               >
             </div>
           </v-step>
-        </transition>
+        </fade-transition>
       </template>
     </v-tour>
     <v-tour name="download" :steps="steps.download" :callbacks="tourCallback">
       <template slot-scope="tour">
-        <transition name="fade">
+        <fade-transition>
           <v-step
             v-if="tour.steps[tour.currentStep]"
             :key="tour.currentStep"
@@ -154,12 +154,12 @@
               >
             </div>
           </v-step>
-        </transition>
+        </fade-transition>
       </template>
     </v-tour>
     <v-tour name="controlPanel" :steps="steps.controlPanel" :callbacks="tourCallback">
       <template slot-scope="tour">
-        <transition name="fade">
+        <fade-transition>
           <v-step
             v-if="tour.steps[tour.currentStep]"
             :key="tour.currentStep"
@@ -189,12 +189,12 @@
               <md-button v-else @click="tour.nextStep" class="md-red maryoku-btn">Keep going</md-button>
             </div>
           </v-step>
-        </transition>
+        </fade-transition>
       </template>
     </v-tour>
     <v-tour name="footerPanel" :steps="steps.footerPanel" :callbacks="tourCallback">
       <template slot-scope="tour">
-        <transition name="fade">
+        <fade-transition>
           <v-step
             v-if="tour.steps[tour.currentStep]"
             :key="tour.currentStep"
@@ -224,7 +224,7 @@
               <md-button v-else @click="tour.nextStep" class="md-red maryoku-btn">Keep going</md-button>
             </div>
           </v-step>
-        </transition>
+        </fade-transition>
       </template>
     </v-tour>
   </div>
@@ -234,14 +234,12 @@ import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import Calendar from "@/models/Calendar";
-import CalendarEvent from "@/models/CalendarEvent";
-import EventModal from "../../app/Events/EventModal/";
 import EventPlannerVuexModule from "../../app/Events/EventPlanner.vuex";
 import TopNavbar from "./TopNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
 import MobileMenu from "./Extra/MobileMenu.vue";
 import UserMenu from "./Extra/UserMenu.vue";
-import { ZoomCenterTransition } from "vue2-transitions";
+import { ZoomCenterTransition, FadeTransition } from "vue2-transitions";
 import SideBar from "@/components/SidebarPlugin/NewSideBar";
 // import auth from "src/auth";
 import EventSidePanel from "@/pages/app/Events/EventSidePanel";
@@ -268,6 +266,7 @@ export default {
     MobileMenu,
     UserMenu,
     ZoomCenterTransition,
+    FadeTransition,
     SideBar,
   },
   data() {
