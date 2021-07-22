@@ -43,7 +43,7 @@
           <div class="service-item" :class="{ 'with-check': isBundleDiscount }">
             <md-checkbox
               v-if="isBundleDiscount"
-              class="no-margin"
+              class="no-margin md-vendor"
               :value="vendor.eventCategory.key"
               v-model="bundleDiscountServices"
             />
@@ -120,7 +120,10 @@
             :key="aIndex"
           >
             <h3 class="width-100" v-if="aIndex === 0">Additional Services</h3>
-            <md-checkbox v-if="isBundleDiscount" class="no-margin" v-model="bundleDiscountServices" :value="a" />
+            <md-checkbox v-if="isBundleDiscount"
+                         class="no-margin md-vendor"
+                         v-model="bundleDiscountServices"
+                         :value="a" />
             <ul>
               <li>
                 <img :src="getIconUrlByCategory(a)" />

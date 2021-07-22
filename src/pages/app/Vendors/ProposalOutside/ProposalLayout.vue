@@ -210,20 +210,25 @@ export default {
 
         if (!this.isLoading) {
           this.isLoading = true;
-          this.saveProposal(type).then((proposal) => {
-            this.isUpdating = false;
-            this.isLoading = false;
-            if (type === "submit") this.submittedModal = true;
-            else {
-              Swal.fire({
-                title: `You saved the current proposal. You can edit anytime later!`,
-                buttonsStyling: false,
-                type: "success",
-                confirmButtonClass: "md-button md-success",
-              });
-            }
-            resolve(proposal);
-          });
+          this.saveProposal(type)
+            .then((proposal) => {
+              this.isUpdating = false;
+              this.isLoading = false;
+              if (type === "submit") this.submittedModal = true;
+              else {
+                Swal.fire({
+                  title: `You saved the current proposal. You can edit anytime later!`,
+                  buttonsStyling: false,
+                  type: "success",
+                  confirmButtonClass: "md-button md-success",
+                });
+              }
+              resolve(proposal);
+              this.isLoading = false;
+            })
+            .catch(() => {
+              this.isLoading = false;
+            });
         }
       });
     },

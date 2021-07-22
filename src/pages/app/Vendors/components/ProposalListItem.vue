@@ -5,8 +5,8 @@
       <img v-else src="https://maryoku.s3.amazonaws.com/company/logos/5e0ae1d2cfefec4b68f5d8a1.png" width="40"/>
     </div>
     <div>
-      <div class="font-bold font-size-16" v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer">
-        {{ proposal.eventData.customer.company }}
+      <div class="font-bold font-size-16" v-if="proposal.nonMaryoku">
+        {{ proposal.vendor.companyName }}
       </div>
       <div class="font-bold font-size-16" v-else-if="proposal.proposalRequest && proposal.proposalRequest.eventData.title">
         {{ proposal.proposalRequest.eventData.title }}

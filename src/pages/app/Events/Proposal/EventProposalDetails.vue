@@ -185,7 +185,7 @@
           <div>
             <span class="font-size-30 font-bold">Bundle offer</span>
             <span>{{ vendorProposal.bundleDiscount.percentage }}%</span>
-            <span>{{ getBundleServices(vendorProposal.bundleDiscount.services) }}</span>
+            <span>{{ getBundleServices(vendorProposal.bookedServices) }}</span>
           </div>
           <div class="font-size-30 font-bold">-${{ bundledDiscountPrice | withComma }}</div>
         </div>
@@ -380,16 +380,6 @@ import TimerPanel from "./TimerPanel.vue";
 import Swal from "sweetalert2";
 
 export default {
-  props: {
-    vendorProposal: {
-      type: Object,
-      default: () => {},
-    },
-    landingPage: {
-      type: Boolean,
-      default: false,
-    },
-  },
   components: {
     Tabs,
     EventBudgetVendors,
@@ -410,7 +400,19 @@ export default {
     Loader,
     TimerPanel,
   },
-
+  props: {
+    vendorProposal: {
+      type: Object,
+      default: () => {},
+    },
+    category: {
+      type: Object,
+    },
+    landingPage: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       // auth: auth,
@@ -443,7 +445,7 @@ export default {
     };
   },
   created() {
-    console.log('eventProposalDetail.created', this.vendorProposal);
+    console.log('eventProposalDetail.created', this.vendorProposal, this.category);
     // const proposalId = this.$route.params.proposalId;
     // console.log(proposalId);
     // Proposal.find(proposalId).then((proposal) => {
@@ -463,6 +465,7 @@ export default {
       "setNumberOfParticipants",
       "setEventData",
     ]),
+    ...mapActions("event", ["updateProposal"]),
     getBundleServices(bundleServices) {
       const serviceNames = bundleServices.map((service) => {
         return this.getCategory(service).title;
@@ -479,14 +482,14 @@ export default {
     askQuestion() {},
     bookVendor() {
       new Proposal({ ...this.vendorProposal }).save().then((proposal) => {
-          let routeData = this.$router.resolve({
-              name: "Checkout",
-              params: {
-                  vendorId: this.vendorProposal.vendor.id,
-                  proposalId: this.vendorProposal.id
-              },
-          });
-          window.open(routeData.href, '_blank')
+        let routeData = this.$router.resolve({
+          name: "Checkout",
+          params: {
+            vendorId: this.vendorProposal.vendor.id,
+            proposalId: this.vendorProposal.id,
+          },
+        });
+        window.open(routeData.href, "_blank");
       });
     },
     getEvent() {},
@@ -611,10 +614,7 @@ export default {
     },
     changeBookedServices() {
       console.log('changeBookedServices', this.vendorProposal);
-      this.$store.commit("vendorProposal/setValue", {
-        key: "bookedServices",
-        value: this.vendorProposal.bookedServices,
-      });
+      this.updateProposal({category: this.category.componentId, proposal: this.vendorProposal});
     },
   },
   computed: {
@@ -680,7 +680,7 @@ export default {
     },
     bundledDiscountPrice() {
       let bundledServicePrice = 0;
-      this.vendorProposal.bundleDiscount.services.forEach((serviceCategory) => {
+      this.vendorProposal.bookedServices.forEach((serviceCategory) => {
         const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
           if (service.isComplimentary) {
             return 0;
@@ -698,7 +698,7 @@ export default {
           bundledServicePrice += sumOfService;
         }
       });
-      return (bundledServicePrice * this.vendorProposal.bundleDiscount.percentage) / 100;
+      return (bundledServicePrice * this.vendorProposal.bundleDiscount.percentage) / 100 || 0;
     },
 
     totalPriceOfProposal() {
@@ -730,6 +730,7 @@ export default {
         this.totalPriceOfProposal -
         (this.totalPriceOfProposal * this.discount.percentage) / 100 -
         this.bundledDiscountPrice;
+
       return discounted + (discounted * this.tax.percentage) / 100;
     },
   },

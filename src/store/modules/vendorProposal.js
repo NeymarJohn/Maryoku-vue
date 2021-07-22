@@ -348,7 +348,8 @@ const actions = {
         progress: state.progress,
         tenantId: state.tenantId,
         suggestionDate: state.suggestionDate,
-        expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate()
+        expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
+        bookedServices: state.bookedServices || []
       });
       proposal
         .save()

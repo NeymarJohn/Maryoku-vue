@@ -30,25 +30,25 @@
       <selectable-card
         label="Corporation Event"
         value="corporation"
-        :selected="eventOption"
+        :selected="eventType"
         :icon="`${$iconURL}VendorsProposalPage/Group 17122.svg`"
         theme="purple"
-        @change="eventOption = 'corporation'"
+        @change="eventType = 'corporation'"
       ></selectable-card>
       <selectable-card
         label="Social Event"
         value="social"
         :icon="`${$iconURL}VendorsProposalPage/Group 17394.svg`"
-        :selected="eventOption"
-        @change="eventOption = 'social'"
+        :selected="eventType"
+        @change="eventType = 'social'"
         theme="purple"
       ></selectable-card>
     </div>
-    <div v-if="eventOption === 'corporation'" class="text-left mt-30">
+    <div v-if="eventType === 'corporation'" class="text-left mt-30">
       <label class="font-bold">Type Of Event:</label>
       <multiselect
         class="width-50 mt-5 form-input md-purple"
-        v-model="eventType"
+        v-model="selectedEventType"
         :options="eventTypes"
         :close-on-select="true"
         :clear-on-select="true"
@@ -63,7 +63,7 @@
       <label class="font-bold">Number of Guests</label>
       <maryoku-input
         class="width-50 mt-5 form-input"
-        v-model="numberOfParticipants"
+        v-model="guests"
         inputStyle="users"
         placeholer="Type the amount of guests here..."
       ></maryoku-input>
@@ -78,11 +78,11 @@
     <div class="row">
       <p class="mb-5 text-left text-bold">Date Of The Event</p>
       <maryoku-input
-        :value="eventDate"
+        :value="date"
         class="form-input width-50"
         placeholder="Choose date…"
         inputStyle="date"
-        v-model="eventDate"
+        v-model="date"
         theme="purple"
       ></maryoku-input>
     </div>
@@ -183,6 +183,7 @@ export default {
       isLoading: false,
       isRegisteredCustomer: true,
       guests: null,
+      location: null,
       link_proposal: null,
       attachment: null,
       customers: [],
@@ -194,7 +195,7 @@ export default {
         maxFilesize: 5,
         headers: { "My-Awesome-Header": "header value" },
       },
-      eventOption: "corporation",
+      eventType: "corporation",
       showNewCustomerModal: false,
       selectedEventType: null,
     };
@@ -290,39 +291,6 @@ export default {
         this.$store.commit("proposalForNonMaryoku/setEventProperty", { key: "customer", value });
       },
     },
-    eventType: {
-      get() {
-          return this.$store.state.proposalForNonMaryoku.event.eventType;
-      },
-      set() {
-          this.$store.commit("proposalForNonMaryoku/setEventProperty", { key: "eventType", value });
-      }
-    },
-    location: {
-      get() {
-          return this.$store.state.proposalForNonMaryoku.event.location;
-      },
-      set() {
-          this.$store.commit("proposalForNonMaryoku/setEventProperty", { key: "location", value });
-      }
-    },
-    eventDate: {
-      get() {
-        return this.$store.state.proposalForNonMaryoku.event.eventDate;
-      },
-      set() {
-        this.$store.commit("proposalForNonMaryoku/setEventProperty", { key: "eventDate", value });
-      }
-    },
-    numberOfParticipants: {
-      get() {
-          return this.$store.state.proposalForNonMaryoku.event.numberOfParticipants;
-      },
-      set() {
-          this.$store.commit("proposalForNonMaryoku/setEventProperty", { key: "numberOfParticipants", value });
-      }
-    }
-
   },
   watch: {
     isRegisteredCustomer(newValue, oldValue) {

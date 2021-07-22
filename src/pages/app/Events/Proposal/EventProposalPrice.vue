@@ -3,7 +3,10 @@
     <div class="d-flex justify-content-between align-center">
       <div class="item-info d-flex justify-content-start align-center">
         <div class="element-title">
-          <md-checkbox v-model="proposalData.bookedServices" :value="serviceCategory" @change="changeBookService"></md-checkbox>
+          <md-checkbox v-if="proposalData.bundleDiscount && proposalData.bundleDiscount.isApplied"
+                       v-model="proposalData.bookedServices"
+                       :value="serviceCategory"
+                       @change="changeBookService"></md-checkbox>
           <img :src="`${$iconURL}Budget+Elements/${vendorCategory.icon}`" />
           {{ vendorCategory.fullTitle }}
           <span class="element-duration">For Whole Event</span>
@@ -282,7 +285,6 @@ export default {
       this.$forceUpdate();
     },
     changeBookService(){
-      console.log('changeBookService');
       this.$emit('changeBookedServices');
     }
   },
@@ -309,7 +311,7 @@ export default {
       if (!discount) {
         discount = { price: 0, percentage: 0 };
       }
-      discount.price = (this.priceOfCostservices * discount.percentage) / 100;
+      discount.price = (this.priceOfCostservices * discount.percentage || 0) / 100;
       return discount;
     },
     tax() {
@@ -320,7 +322,7 @@ export default {
       }
       console.log(this.serviceCategory, this.priceOfCostservices);
       console.log(this.serviceCategory, this.discount.price);
-      tax.price = Math.round(((this.priceOfCostservices - this.discount.price) * tax.percentage) / 100);
+      tax.price = Math.round(((this.priceOfCostservices - this.discount.price) * (tax.percentage || 0)) / 100);
       console.log(this.serviceCategory, tax);
       return tax;
     },
