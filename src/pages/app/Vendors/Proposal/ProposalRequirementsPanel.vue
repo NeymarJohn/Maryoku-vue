@@ -219,8 +219,7 @@ export default {
             && this.proposalRequest.eventData.owner.emailAddress)
           this.$http
           .post(
-            // `${process.env.SERVER_URL}/1/sendMail`,
-              'http://localhost:8080/1/sendMail',
+            `${process.env.SERVER_URL}/1/sendMail`,
             {
               from: this.vendor.vendorMainEmail,
               to: this.proposalRequest.eventData.owner.emailAddress,
