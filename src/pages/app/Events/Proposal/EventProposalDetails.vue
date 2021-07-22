@@ -479,14 +479,14 @@ export default {
     askQuestion() {},
     bookVendor() {
       new Proposal({ ...this.vendorProposal }).save().then((proposal) => {
-        let routeData = this.$router.resolve({
-          name: "Checkout",
-          params: {
-            vendorId: this.vendorProposal.vendor.id,
-            proposalId: this.vendorProposal.id,
-          },
-        });
-        window.open(routeData.href, "_blank");
+          let routeData = this.$router.resolve({
+              name: "Checkout",
+              params: {
+                  vendorId: this.vendorProposal.vendor.id,
+                  proposalId: this.vendorProposal.id
+              },
+          });
+          window.open(routeData.href, '_blank')
       });
     },
     getEvent() {},
@@ -698,7 +698,7 @@ export default {
           bundledServicePrice += sumOfService;
         }
       });
-      return (bundledServicePrice * this.vendorProposal.bundleDiscount.percentage) / 100 || 0;
+      return (bundledServicePrice * this.vendorProposal.bundleDiscount.percentage) / 100;
     },
 
     totalPriceOfProposal() {
@@ -730,7 +730,6 @@ export default {
         this.totalPriceOfProposal -
         (this.totalPriceOfProposal * this.discount.percentage) / 100 -
         this.bundledDiscountPrice;
-
       return discounted + (discounted * this.tax.percentage) / 100;
     },
   },

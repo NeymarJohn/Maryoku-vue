@@ -351,6 +351,15 @@ export default {
     getServiceCategory(category) {
       return this.serviceCategories.find((item) => item.key === category);
     },
+    averageBudget(category){
+      let service = this.getServiceCategory(category);
+      if (service.minCost) {
+
+      }
+      if (service.maxCost) {
+
+      }
+    },
     getAllocatedBudget(category) {
       // const allocatedBudgetItem = this.proposalRequest.eventData.components.find(
       //   (item) => item.componentId === category,

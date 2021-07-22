@@ -15,7 +15,7 @@
       <div>
         <md-button class="md-simple md-black maryoku-btn">Remind Me Later</md-button>
         <md-button class="md-simple md-red md-outlined maryoku-btn">Change Requirements</md-button>
-        <md-button class="md-red maryoku-btn" @click="bookProposal">Book Now</md-button>
+        <md-button class="md-red maryoku-btn">Book Now</md-button>
       </div>
     </div>
   </div>
@@ -41,11 +41,6 @@ export default {
       if (!proposal.bundleDiscount.services) proposal.bundleDiscount.services = [];
       this.proposal = proposal;
     });
-  },
-  methods: {
-    bookProposal() {
-      window.open(`/#/checkout/${this.proposal.vendor.id}/${this.proposal.id}`, "_blank");
-    },
   },
 };
 </script>

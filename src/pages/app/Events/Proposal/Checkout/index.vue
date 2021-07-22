@@ -3,10 +3,10 @@
     <vue-element-loading :active="loading" spinner="ring" color="#FF547C" />
     <div class="checkout-content md-layout" v-if="!loading">
       <div class="md-layout-item md-size-45 left-panel">
-        <div
-          class="background-section"
-          :style="`background-image: url(https://static-maryoku.s3.amazonaws.com/storage/shutterstock_1801541476.jpg) `"
-        ></div>
+<!--        <div class="background-section" :style="`background: url(${vendor.images[0]}) `"></div>-->
+        <div class="background-section"
+             :style="`background: url('https://static-maryoku.s3.amazonaws.com/storage/shutterstock_1801541476.jpg') center center no-repeat;
+              background-size: cover;`"></div>
         <div class="content p-50">
           <div class="font-size-30">
             <span class="font-bold">
@@ -44,9 +44,9 @@
           ></checkout-price-table>
           <div class="p-30">
             <div>Would you like to upgrade & add one of those?</div>
-            <div class="mb-30" v-if="proposal.serviceCategory">
-              You have $ {{ (proposal.serviceCategory.allocatedBudget - proposal.cost) | withComma }} left over from
-              your original defined budget.
+            <div class="mb-30">
+              You have $ {{ (proposal.serviceCategory.allocatedBudget - proposal.cost) | withComma }} left over from your original
+                defined budget.
             </div>
             <collapse-panel
               :defaultStatus="false"
@@ -64,8 +64,7 @@
               </template>
               <template slot="content">
                 <div class="price-table-content mt-20">
-                  Simply select anything that you would like to add. Please note that any item or service you choose
-                  here will be added to the overall vendor cost.
+                    Simply select anything that you would like to add. Please note that any item or service you choose here will be added to the overall vendor cost.
                 </div>
               </template>
             </collapse-panel>
@@ -80,8 +79,7 @@
           </template>
           <template slot="content">
             <div class="price-table-content mt-1">
-              Make sure everything goes smoothly on the day with a professional Maryoku event coordinator, who will be
-              fully briefed to ensure your event is a success. Fixed price service.
+                Make sure everything goes smoothly on the day with a professional Maryoku event coordinator, who will be fully briefed to ensure your event is a success. Fixed price service.
             </div>
           </template>
         </collapse-panel>
@@ -93,7 +91,8 @@
             </div>
           </template>
           <template slot="content">
-            <div class="price-table-content"></div>
+            <div class="price-table-content">
+            </div>
           </template>
         </collapse-panel>
         <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
@@ -107,8 +106,7 @@
           <template slot="content">
             <div class="price-table-content give-back-seciont">
               <div class="mb-20 mt-20">
-                Support sustainability and eco-friendly initiatives with a donation to an organization committed to
-                environmental responsibility. Every donation will be matched by Maryoku.
+                  Support sustainability and eco-friendly initiatives with a donation to an organization committed to environmental responsibility. Every donation will be matched by Maryoku.
               </div>
               <md-button class="md-simple edit-btn md-red color-red mt-20">
                 Read More <md-icon>keyboard_arrow_right</md-icon>
@@ -122,20 +120,18 @@
               <div class="mb-20 d-flex">
                 <img :src="`${$iconURL}PaymentPage/Image 211.png`" />
                 <div class="ml-10">
-                  Don’t let your leftover food go to waste! Maryoku collaborates with food rescue organizations that
-                  would really appreciate your contribution, helping the community and the environment.
+                    Don’t let your leftover food go to waste! Maryoku collaborates with food rescue organizations that would really appreciate your contribution, helping the community and the environment.
                 </div>
               </div>
               <hr class="mt-20 mb-20" />
               <div>
                 <md-checkbox class="md-red md-simple" v-model="isCheckedFoodDonate">
-                  Cash in Your Maryoku Points
+                    Cash in Your Maryoku Points
                 </md-checkbox>
               </div>
               <div class="mb-20 d-flex">
                 <div class="ml-10">
-                  If you’ve collected enough Maryoku reward points, why not exchange them for exclusive vendor perks?
-                  Simply print out the voucher and enjoy the results!
+                    If you’ve collected enough Maryoku reward points, why not exchange them for exclusive vendor perks? Simply print out the voucher and enjoy the results!
                 </div>
               </div>
               <md-button class="md-simple md-red edit-btn mt-20">
@@ -255,6 +251,7 @@ export default {
       if (!tax) {
         tax = { price: 0, percentage: 0 };
       }
+      console.log("tax", tax);
       return tax;
     },
     discount() {
@@ -263,11 +260,11 @@ export default {
       if (!discount) {
         discount = { price: 0, percentage: 0 };
       }
+      console.log("discount", discount);
       return discount;
     },
     bundledDiscountPrice() {
       let bundledServicePrice = 0;
-      if (!this.proposal.bundleDiscount.services) return 0;
       this.proposal.bundleDiscount.services.forEach((serviceCategory) => {
         const sumOfService = this.proposal.costServices[serviceCategory].reduce((s, service) => {
           if (service.isComplimentary) {
@@ -341,9 +338,6 @@ export default {
         width: 100%;
         height: 100%;
         position: absolute;
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: 50%;
         &::before {
           content: "";
           position: absolute;
