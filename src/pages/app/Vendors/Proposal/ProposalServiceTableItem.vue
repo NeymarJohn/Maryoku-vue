@@ -126,7 +126,7 @@
         :src="`${$iconURL}Onboarding/enter-gray.svg`"
         style="margin-right: 10px; position: absolute; margin-top: 30px"
       />
-      <div v-for="(plannerOption, index) in item.plannerOptions" :key="`planner-${index}`" class="planner-options-item">
+      <div v-for="(plannerOption, index) in item.plannerOptions.filter(it => it.description != item.requirementTitle)" :key="`planner-${index}`" class="planner-options-item">
         <div class="font-size-14 font-regular color-gray pl-50">Option {{ ("0" + (index + 1)).slice(-2) }}</div>
         <div class="planner-options-item-row" v-if="plannerOption.isEdit">
           <div class="ml-50">
@@ -194,7 +194,7 @@
         <div class="ml-50">
           <md-button class="md-simple edit-btn md-vendor" @click="addAlternative">
             <md-icon>add_circle_outline</md-icon>
-            Add option {{ ("0" + (item.plannerOptions.length + 1)).slice(-2) }}
+            Add option {{ ("0" + (!item.plannerOptions.length ? 1 : item.plannerOptions.length)).slice(-2) }}
           </md-button>
         </div>
       </div>
@@ -465,11 +465,16 @@ export default {
     },
     addAlternative() {
       this.item.plannerOptions.push({ description: "", price: this.item.price, isEdit: true });
+
+      // add item to alternatives
+      if (this.item.plannerOptions.length === 1)
+        this.item.plannerOptions.push({description: this.item.requirementTitle, price: this.item.price, qty: this.item.requirementValue, isEdit: false})
     },
     removeAlternative(index) {
       this.item.plannerOptions.splice(index, 1);
-      this.$root.$emit("save-proposal-requirement", { index: this.index, item });
-      this.$emit("save", { index: this.index, item });
+      if(this.item.plannerOptions.length === 1) this.item.plannerOptions = [];
+      this.$root.$emit("save-proposal-requirement", { index: this.index, item: this.item });
+      this.$emit("save", { index: this.index, item: this.item });
     },
     editAlternative(index) {
       this.$set(this.item.plannerOptions[index], "isEdit", true);

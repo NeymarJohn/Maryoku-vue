@@ -124,12 +124,21 @@
               ></pie-chart>
             </div>
             <div class="px-30">
-              <div class="color-won d-flex align-center">
-                <span class="mr-20 font-size-50">30%</span>
-                <span class="font-size-18">Winning rate</span>
+              <div v-if="pagination.total > 0 && pagination.won > 0">
+                  <div class="color-won d-flex align-center">
+                      <span class="mr-20 font-size-50">{{`${Math.floor(pagination.won / pagination.total)} %`}}</span>
+                      <span class="font-size-18">Winning rate</span>
+                  </div>
+                  <div class="font-size-16 mt-50">
+                      You won <span class="font-bold">{{pagination.won}} of {{pagination.total}}</span> Proposals you applied to
+                  </div>
               </div>
-              <div class="font-size-16 mt-50">
-                You won <span class="font-bold">40 of 120</span> Proposals you applied to
+              <div v-else class="d-flex align-center">
+                  <img :src="`${$iconURL}VendorsProposalPage/group-18762.svg`" width="50">
+                  <div class="ml-10">
+                      <div class="color-vendor font-size-14 m-0">There is not yet enough</div>
+                      <div class="color-vendor font-size-14 mt-10">information to present insights</div>
+                  </div>
               </div>
               <hr class="mt-50 mb-50" />
               <div class="tips">
@@ -220,8 +229,8 @@ export default {
       ],
       proposals: [],
       chartData: [
-        { title: "Application", value: 12, color: "#b7b5b5" },
-        { title: "Winning", value: 3, color: "#2cde6b" },
+        { title: "Application", value: 6, color: "#b7b5b5" },
+        { title: "Winning", value: 6, color: "#9a9898" },
       ],
       tab: "all",
       showProposalDetail: false,
@@ -285,6 +294,10 @@ export default {
         if (data.hasOwnProperty(t.key)) this.pagination[t.key] = data[t.key];
       });
       this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
+
+      this.chartData[0].value = data.total;
+      this.chartData[1].color = data.won;
+      if (data.won > 0) this.chartData[1].color = '#2cde6b';
     },
     gotoPage(selectedPage) {
       console.log(selectedPage);
@@ -391,9 +404,6 @@ export default {
         return this.selectedProposal.vendor.vendorImages[0];
 
       return "";
-    },
-    onPDFDownload($event) {
-      this.loading = false;
     },
     async init() {
       await this.getProposal();

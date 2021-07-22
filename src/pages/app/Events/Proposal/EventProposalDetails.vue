@@ -169,14 +169,12 @@
           :serviceCategory="vendorProposal.vendor.vendorCategory"
           :key="`${vendorProposal.vendor.vendorCategory}-section`"
           @changeAddedServices="updateAddedServices"
-          @changeBookedServices="changeBookedServices"
         ></event-proposal-price>
         <event-proposal-price
           v-for="service in this.vendorProposal.additionalServices"
           :proposalData="vendorProposal"
           :serviceCategory="service"
           :key="`secondary-${service}-section`"
-          @changeBookedServices="changeBookedServices"
         ></event-proposal-price>
         <div
           class="bundle-section d-flex justify-content-between align-center"
@@ -443,7 +441,6 @@ export default {
     };
   },
   created() {
-    console.log('eventProposalDetail.created', this.vendorProposal);
     // const proposalId = this.$route.params.proposalId;
     // console.log(proposalId);
     // Proposal.find(proposalId).then((proposal) => {
@@ -463,6 +460,7 @@ export default {
       "setNumberOfParticipants",
       "setEventData",
     ]),
+
     getBundleServices(bundleServices) {
       const serviceNames = bundleServices.map((service) => {
         return this.getCategory(service).title;
@@ -479,14 +477,7 @@ export default {
     askQuestion() {},
     bookVendor() {
       new Proposal({ ...this.vendorProposal }).save().then((proposal) => {
-          let routeData = this.$router.resolve({
-              name: "Checkout",
-              params: {
-                  vendorId: this.vendorProposal.vendor.id,
-                  proposalId: this.vendorProposal.id
-              },
-          });
-          window.open(routeData.href, '_blank')
+        this.$router.push(`/checkout/${this.vendorProposal.vendor.id}/${this.vendorProposal.id}`);
       });
     },
     getEvent() {},
@@ -608,13 +599,6 @@ export default {
             buttonsStyling: false,
           }).then((result) => {});
         });
-    },
-    changeBookedServices() {
-      console.log('changeBookedServices', this.vendorProposal);
-      this.$store.commit("vendorProposal/setValue", {
-        key: "bookedServices",
-        value: this.vendorProposal.bookedServices,
-      });
     },
   },
   computed: {
