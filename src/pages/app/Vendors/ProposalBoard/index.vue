@@ -337,12 +337,11 @@ export default {
       if (action === "show") {
         this.showProposalDetail = true;
       } else if (action === "edit") {
-        // this.$router.push(`/vendors/${this.selectedProposal.vendor.id}/proposal-request/${this.selectedProposal.proposalRequest.id}/form/edit`);
         let routeData = this.$router.resolve({
-          name: "proposalEdit",
+          name: this.selectedProposal.nonMaryoku ? 'outsideProposalEdit' : 'proposalEdit',
           params: {
             vendorId: this.selectedProposal.vendor.id,
-            id: this.selectedProposal.proposalRequest.id,
+            id: this.selectedProposal.nonMaryoku ? this.selectedProposal.id : this.selectedProposal.proposalRequest.id,
             type: "edit",
           },
         });
@@ -357,12 +356,11 @@ export default {
         this.loading = false;
       } else if (action === "download") {
         this.openNewTab(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
-        // this.downloadProposal(`http://preprod.dev.maryoku.com:8080/1/proposal/${this.selectedProposal.id}/download`);
       }
     },
     createNewProposal() {
       let routeData = this.$router.resolve({
-        name: "outsideProposalEdit",
+        name: "outsideProposalCreate",
         params: {
           vendorId: this.vendorData.id,
         },
