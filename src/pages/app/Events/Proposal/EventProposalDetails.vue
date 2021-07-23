@@ -572,8 +572,6 @@ export default {
       return !isBlank;
     },
     updateAddedServices({ category, costServices, extraServices }) {
-      // this.addedServices[category] = services;
-      // this.addedServices = { ...this.addedServices };
       this.vendorProposal.costServices[category] = costServices;
       this.vendorProposal.extraServices[category] = extraServices;
     },
@@ -587,9 +585,6 @@ export default {
       } else {
         newExpiredDate = new Date(this.vendorProposal.dateCreated).getTime() + 9 * 3600 * 24 * 1000;
       }
-      // new EventComponentProposal({ id: this.vendorProposal.id, expiredDate: newExpiredDate }).save().then((res) => {
-      //   this.vendorProposal = res;
-      // });
 
       new ProposalNegotiationRequest({
         eventId: this.eventData.id,
@@ -680,7 +675,9 @@ export default {
     },
     bundledDiscountPrice() {
       let bundledServicePrice = 0;
-      this.vendorProposal.bookedServices.forEach((serviceCategory) => {
+      let services = this.vendorProposal.bundleDiscount && this.vendorProposal.bundleDiscount.isApplied ?
+          this.vendorProposal.bookedServices : this.vendorProposal.bundleDiscount.services;
+      services.forEach((serviceCategory) => {
         const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
           if (service.isComplimentary) {
             return 0;

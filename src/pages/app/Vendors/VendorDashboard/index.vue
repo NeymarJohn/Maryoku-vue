@@ -163,13 +163,7 @@ export default {
   },
   methods: {
     gotoProposalWizard() {
-      let routeData = this.$router.resolve({
-            name: "outsideProposalCreate",
-            params: {
-                vendorId: this.vendorData.id,
-            },
-      });
-      window.open(routeData.href, '_blank');
+      this.$router.push(`/vendor/${this.vendorData.id}/proposal/non-registered`);
     },
     handleSaveEvent(savedEvent) {
       this.upcomingEvents.push(savedEvent);

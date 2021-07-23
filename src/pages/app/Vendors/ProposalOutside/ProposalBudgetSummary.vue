@@ -60,24 +60,26 @@
                 <span>${{ originalPriceOfMainCategory | withComma }}</span>
               </li>
               <li>
-                <span>Average Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
-                 <span>
-                  ${{averageBudget(vendor.eventCategory.key) | withComma
+                <span>Budget for {{ getServiceCategory(vendor.eventCategory.key).title }} &nbsp;</span>
+                <!-- <span>
+                  ${{
+                    event.components.find((item) => item.componentId == vendor.eventCategory.key).allocatedBudget
+                      | withComma
                   }}</span
-                >
+                > -->
               </li>
-              <li
-                v-if="finalPriceOfMainCategory - averageBudget(vendor.eventCategory.key) > 0"
-                class="color-black"
-              >
-                <span>
-                  <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />
-                  Your proposal is ${{
-                    (finalPriceOfMainCategory - averageBudget(vendor.eventCategory.key)) | withComma
-                  }}
-                  more than budget
-                </span>
-              </li>
+<!--              <li-->
+<!--                v-if="finalPriceOfMainCategory - getAllocatedBudget(vendor.eventCategory.key) > 0"-->
+<!--                class="color-black"-->
+<!--              >-->
+<!--                <span>-->
+<!--                  <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" class="mr-10" />-->
+<!--                  Your proposal is ${{-->
+<!--                    (finalPriceOfMainCategory - getAllocatedBudget(vendor.eventCategory.key)) | withComma-->
+<!--                  }}-->
+<!--                  more than budget-->
+<!--                </span>-->
+<!--              </li>-->
               <li :style="`margin: ${discountBlock[vendor.eventCategory.key] ? '' : '0'}`">
                 <template v-if="discountBlock[vendor.eventCategory.key]">
                   <div class="left">
@@ -155,7 +157,6 @@
           :totalPrice="totalPriceBeforeDiscount"
           :defaultTax="defaultTax"
           :defaultDiscount="defaultDiscount"
-          :non-maryoku="true"
           @saveDiscount="saveDiscount(vendor.eventCategory.key, ...arguments)"
           @saveTax="saveTax(vendor.eventCategory.key, ...arguments)"
         ></discount-form>
@@ -352,14 +353,11 @@ export default {
     },
     averageBudget(category){
       let service = this.getServiceCategory(category);
-      console.log('averageBudget', service);
-      let budget = this.event.numberOfParticipants * service.basicCostPerGuest;
-      if (service.minCost && budget < service.minCost) {
-        return service.minCost;
-      } else if (service.maxCost && budget > service.maxCost) {
-        return service.maxCost;
-      } else {
-        return budget;
+      if (service.minCost) {
+
+      }
+      if (service.maxCost) {
+
       }
     },
     getAllocatedBudget(category) {

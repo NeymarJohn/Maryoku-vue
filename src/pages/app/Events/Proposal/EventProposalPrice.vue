@@ -264,8 +264,8 @@ export default {
       this.extraServices = [...this.extraServices];
       this.$emit("changeAddedServices", {
         category: this.serviceCategory,
-        costServices,
-        extraSerivces: this.extraServices,
+        costServices: this.costServices,
+        extraServices: this.extraServices,
       });
       this.$forceUpdate();
     },
@@ -279,8 +279,8 @@ export default {
       this.extraServices = [...this.extraServices];
       this.$emit("changeAddedServices", {
         category: this.serviceCategory,
-        costServices,
-        extraSerivces: this.extraServices,
+        costServices: this.costServices,
+        extraServices: this.extraServices,
       });
       this.$forceUpdate();
     },

@@ -89,7 +89,11 @@
         </md-button>
       </div>
       <div>
-        <md-button class="md-simple md-outlined md-red maryoku-btn" :disabled="proposals.length === 0">
+        <md-button
+            class="md-simple md-outlined md-red maryoku-btn"
+            :disabled="proposals.length === 0 "
+            @click="bookVendor"
+        >
           Book Now
         </md-button>
         <md-button class="md-red maryoku-btn" :disabled="proposals.length === 0">Add To Cart</md-button>
@@ -302,6 +306,18 @@ export default {
       if (notViewedProposals.length === 0) return false;
       console.log(notViewedProposals);
       return true;
+    },
+    async bookVendor() {
+      if(!this.selectedProposal) return;
+      await new Proposal({ ...this.selectedProposal }).save();
+      let routeData = this.$router.resolve({
+        name: "Checkout",
+        params: {
+            vendorId: this.selectedProposal.vendor.id,
+            proposalId: this.selectedProposal.id,
+        },
+      });
+      window.open(routeData.href, "_blank");
     },
   },
   async created() {

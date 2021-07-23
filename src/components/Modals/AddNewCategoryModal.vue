@@ -163,7 +163,9 @@ export default {
           console.log("Error while saving ", error);
         });
     },
-    addMoreMoney() {},
+    addMoreMoney() {
+
+    },
   },
   computed: {
     availableBudget() {
