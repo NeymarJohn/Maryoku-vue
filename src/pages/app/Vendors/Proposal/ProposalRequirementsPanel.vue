@@ -157,15 +157,15 @@
       </div>
       <div class="position-relative" style="padding: 15px 30px 30px">
           <fade-transition v-if="statusMessage">
-              <md-card class="position-absolute" style="top: -170px;right:0;width: 600px">
+              <md-card class="position-absolute notification-card">
                   <md-card-content class="d-flex align-center position-relative p-30">
-                      <div class="message-arrow" style="left: 300px"></div>
+                      <div class="message-arrow" style="right: 200px"></div>
                       <div class="">
                           <img :src="`${$iconURL}VendorsProposalPage/group-16292.svg`" style="width: 45px"/>
                       </div>
                       <div class="ml-10">
-                          <span class="color-won font-bold-extra">Message was sent!</span>
-                          <p class="my-0">We will make sure she will get back to you as soon as possible</p>
+                          <span class="color-won font-size-16 font-bold-extra">Message was sent!</span>
+                          <p class="my-0">We will make sure the planner will get back to you as soon as possible</p>
                       </div>
                       <div class="position-absolute" style="right: 20px; top: 20px">
                           <md-button class="md-icon-button md-simple" @click="statusMessage = ''">
@@ -368,5 +368,11 @@ export default {
     border-top: 30px solid white;
     /*box-shadow: 0 1px 4px 0 rgba(0,0,0,,.3);*/
  }
+}
+.notification-card{
+  top: -170px;
+  right:60px;
+  width: 600px;
+  box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.26)
 }
 </style>
