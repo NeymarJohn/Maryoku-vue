@@ -102,7 +102,7 @@
           </div>
         </div>
         <div
-          v-for="specialSection in specialTags.filter((item) => item.isSelected)"
+          v-for="specialSection in specialTags"
           :key="specialSection.subCategory"
           class="text-left sub-category"
           :id="specialSection.subCategory"
@@ -265,7 +265,6 @@ export default {
     },
   },
   created() {
-    console.log('additionalRequests.created', this.timeslots, this.defaultData);
     this.subCategorySections = Object.keys(this.subCategory);
     this.subCategorySections = this.subCategorySections.filter(
       (item) => item !== "multi-selection" && item !== "special",
@@ -277,6 +276,7 @@ export default {
     } else {
       this.specialTags = [];
     }
+    console.log('additionalRequests.created', this.specialTags);
     this.specialTags = this.specialTags.filter(
       (item) => item.subCategory !== "Inclusion" && item.subCategory !== "Sustainability",
     );

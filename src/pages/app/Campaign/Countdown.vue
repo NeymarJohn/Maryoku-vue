@@ -81,12 +81,7 @@ export default {
   data() {
     return {
       isLaunched: false,
-      placeholder: `It's now time to get super exited! The event of the year is almost here( and it even rhymes). What to expect?
-        out of this world live shows
-        amazing food
-        refreshing cocktail bar
-        best employee award
-        see u soon`,
+      placeholder: `It's now time to get super exited! The event of the year is almost here( and it even rhymes). What to expect? out of this world live shows amazing food refreshing cocktail bar best employee award see u soon`,
       originContent: {},
       editingContent: {
         coverImage: "",

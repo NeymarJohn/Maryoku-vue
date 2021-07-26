@@ -1,5 +1,5 @@
 <template>
-  <div class="white-card vendor-dashboard-requests" :class="proposalRequests.length ? 'negotiation' : ''">
+  <div class="white-card vendor-dashboard-requests">
     <div style="border-bottom: 2px solid #c8c8c8">
       <div class="pt-10 d-flex align-center justify-content-center font-bold">
         <md-button class="md-button md-theme-default md-simple md-just-icon md-black" @click="prev"
@@ -39,7 +39,6 @@
             :proposalRequest="p"
             :size="2"
             type="dashboard"
-            :hasNegotiation="true"
             class="pl-30 pr-30 vendor-dashboard"
           ></proposal-request-card>
         </div>
@@ -65,9 +64,6 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-  }
-  &.negotiation{
-    background-color: #ffefff !important;
   }
 }
 </style>
