@@ -1,21 +1,17 @@
 <template>
-  <div class="proposal-time-counter" v-if="!isExpired">
-    <div class="font-bold">This offer will expire in</div>
+  <div class="proposal-time-counter">
+    <div class="font-bold" v-if="isExpired">This offer has expired</div>
+    <div class="font-bold" v-else>This offer will expire in</div>
     <hr />
     <timer size="big" :target="target"></timer>
     <div class="button-wrapper">
       <md-button class="maryoku-btn md-simple md-red" @click="updateExpireTime">Ask for more time</md-button>
     </div>
   </div>
-  <div class="proposal-time-counter" v-else>
-    <div class="font-bold">
-      This proposal is expired on <br />{{ $dateUtil.formatScheduleDay(target, "MMMM DD, YYYY") }}
-    </div>
-  </div>
 </template>
 <script>
 import Timer from "../../../../components/Timer.vue";
-import TimeCounter from "../components/TimeCounter.vue";
+import TimeCounter from "./TimeCounter.vue";
 import Swal from "sweetalert2";
 
 export default {

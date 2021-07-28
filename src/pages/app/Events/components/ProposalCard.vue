@@ -1,7 +1,18 @@
 <template>
-  <div class="booking-item">
+  <div class="booking-item" style="position: relative">
+    <template v-if="remainingTime < 0">
+          <div class="d-flex flex-column justify-content-start align-center"
+               style="position: absolute;left: 0;right:0;top:0;bottom:0;width:100%;height: 100%;background:rgba(0,0,0,.7);z-index: 1">
+              <timer-panel
+                  class="time-counter mt-100"
+                  :target="targetTime"
+                  @updateExpireDate="updateExpireDate"
+              ></timer-panel>
+              <p class="color-white mt-20">Show me an alternative offer</p>
+          </div>
+    </template>
     <div
-      class="event-image"
+      class="event-image p-relative"
       :style="`background: url(${backgroundImage}) center center no-repeat`"
       :class="{ isCollapsed, isSelected }"
     >
@@ -66,8 +77,9 @@
 <script>
 import moment from "moment";
 import Timer from "@/components/Timer.vue";
+import TimerPanel from "./TimerPanel";
 export default {
-  components: { Timer },
+  components: { Timer, TimerPanel },
   props: {
     proposal: {
       type: Object,
@@ -114,6 +126,9 @@ export default {
       }
       return 0;
     },
+    updateExpireDate(){
+      console.log('updateExiredDate');
+    }
   },
   computed: {
     backgroundImage() {
@@ -166,6 +181,17 @@ export default {
         return "";
       }
     },
+    targetTime() {
+      if (this.proposal.expiredDate) {
+          return new Date(this.proposal.expiredDate);
+      }
+      return new Date(this.proposal.dateCreated);
+    },
+    remainingTime(){
+      let today = new Date()
+      let expiredDate = new Date(this.proposal.expiredDate ? this.proposal.expiredDate : this.proposal.dateCreated);
+      return expiredDate - today
+    }
   },
 };
 </script>

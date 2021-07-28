@@ -64,7 +64,7 @@
 import { Modal, MaryokuInput } from "@/components";
 import { convertTimezoneName } from "@/utils/helperFunction";
 import moment from "moment-timezone";
-import { addOutlookCalendarEvent, loginWithMsal } from "@/auth/msAuth.js";
+import { addOutlookCalendarEvent } from "@/auth/msAuth.js";
 
 // Client ID and API key from the Developer Console
 const CLIENT_ID = "1016422269325-8bhm78m73gebu9k38nj61nr2246r1a1h.apps.googleusercontent.com";
@@ -171,26 +171,25 @@ export default {
       });
     },
     handleMsAuthClick() {
-      loginWithMsal()
-        .then(() => {
-          this.events.forEach((e) => {
-            let newEvent = {
-              subject: e.customer.name,
-              start: {
-                dateTime: moment(e.startTime).toDate(),
-                timeZone: "GMT",
-              },
-              end: {
-                dateTime: moment(e.startTime).toDate(),
-                timeZone: "GMT",
-              },
-            };
-            addOutlookCalendarEvent(newEvent);
-            const vm = this;
-          });
-          this.close();
-        })
-        .catch((error) => {});
+      this.events.forEach((e) => {
+        let newEvent = {
+          subject: e.customer.name,
+          start: {
+            dateTime: moment(e.startTime).toDate(),
+            timeZone: "GMT",
+          },
+          end: {
+            dateTime: moment(e.startTime).toDate(),
+            timeZone: "GMT",
+          },
+        };
+        const vm = this;
+        addOutlookCalendarEvent(newEvent)
+          .then(() => {
+            this.close();
+          })
+          .catch((error) => {});
+      });
     },
     syncCalendar() {
       if (this.emailAccount === "google") {
