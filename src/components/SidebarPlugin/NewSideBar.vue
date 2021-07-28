@@ -77,7 +77,7 @@
       </md-list>
     </div>
     <div class="logo">
-      <a href="/" class="simple-text logo-mini visible-on-sidebar-mini">
+      <a href="https://maryoku.com/" target="_blank" class="simple-text logo-mini visible-on-sidebar-mini">
         <div class="logo-img">
           <img :src="logo" />
           <!--<md-icon>calendar_today</md-icon>-->

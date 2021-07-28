@@ -1,5 +1,5 @@
 <template>
-  <div class="proposal-request-card white-card p-20" :class="hasNegotiation ? 'negotiation' : ''">
+  <div class="proposal-request-card white-card p-20" :class="field !== 'new' && hasNegotiation ? 'negotiation' : ''">
     <div class="d-flex align-center">
       <div class="font-bold py-10" :class="getFontSize('title')" style="min-height: 44px">
         <template v-if="proposalRequest.eventData.concept">{{ proposalRequest.eventData.concept.name }}</template>
@@ -21,7 +21,7 @@
       $ {{ (proposalRequest.proposal ? proposalRequest.proposal.cost : proposalRequest.componentInstance.allocatedBudget) | withComma }}
     </div>
     <div v-if="expanded" :class="getFontSize('subTitle')">
-      <div class="d-flex align-center mt-1">Group 5479 (2).svg
+      <div class="d-flex align-center mt-1">
         <div class="width-50 d-flex align-center">
           <img class="mr-10" :src="`${iconUrl}Onboarding/Group%204458.svg`" style="width: 18px" />
           {{ proposalRequest.eventData.dateCreated | date("MM/DD/YY") }}
@@ -51,7 +51,7 @@
       >
         Dismiss
       </md-button>
-      <div :class="type == 'proposal' ? 'ml-auto' : 'd-flex align-center width-100'">
+      <div :class="type == 'proposal' ? 'ml-auto d-flex flex-column align-center' : 'd-flex align-center width-100'">
         <div v-if="proposalRequest.proposal">
           <div v-if="proposalRequest.proposal.status === 'draft'">
             <span class="font-bold color-vendor">{{ proposalRequest.proposal.progress }} %</span> completed
@@ -62,7 +62,7 @@
             class="d-flex align-center justify-content-center font-size-12 color-red"
           >
             <img :src="`${iconUrl}VendorsProposalPage/Group%2014277_2.svg`" class="mr-5" style="width: 15px" />
-            Negotiation Request
+            {{proposalRequest.proposal.negotiations[0].type === requestType.ADD_MORE_TIME ? 'Additional time request' : 'Negotiation Request'}}
           </div>
         </div>
         <div v-else class="new color-vendor font-size-14" :class="type === 'proposal' ? 'ml-auto': 'medium'">New</div>
@@ -90,6 +90,10 @@ export default {
       type: String,
       default: "proposal",
     },
+    field: {
+      type: String,
+      default: "new",
+    },
     hasNegotiation:{
       type: Boolean,
       default: false,
@@ -99,6 +103,10 @@ export default {
     return {
       iconUrl: `${this.$iconURL}`,
       expanded: false,
+      requestType: {
+          ADD_MORE_TIME: 0,
+          NEGOTIATION: 1,
+      }
     };
   },
   computed: {
@@ -107,7 +115,7 @@ export default {
       if (this.proposalRequest.proposal.status === "draft") {
         return "Complete";
       } else if (this.hasNegotiation) {
-        return this.type === 'proposal' ? "Review Request" : 'Negotiation Request';
+        return this.type === 'proposal' ? "Respond" : 'Approve Request';
       } else {
         return "Make Changes"
       }
@@ -117,16 +125,6 @@ export default {
     gotoProposalRequest() {
       const tenantId = this.$authService.resolveTenantId();
       this.$emit('handle');
-      // let link = "";
-      // if (tenantId === "DEFAULT") {
-      //   link = `${this.proposalRequest.tenant}.${document.location.host}/#/vendors/${this.proposalRequest.vendorId}/proposal-request/${this.proposalRequest.id}`;
-      // } else {
-      //   link = `${this.proposalRequest.tenant}.${document.location.host.replace(`${tenantId}.`, "")}/#/vendors/${
-      //     this.proposalRequest.vendorId
-      //   }/proposal-request/${this.proposalRequest.id}`;
-      // }
-      // var win = window.open(`${document.location.protocol}//${link}`, "_blank");
-      // win.focus();
     },
     getLeftDays() {
       let diffSeconds = (this.proposalRequest.expiredTime - new Date().getTime()) / 1000;
@@ -148,7 +146,9 @@ export default {
 
     },
   },
-  mounted() {},
+  mounted() {
+    console.log('mounted', this.proposalRequest);
+  },
 };
 </script>
 <style lang="scss" scoped>

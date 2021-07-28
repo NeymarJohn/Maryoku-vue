@@ -1,15 +1,16 @@
 <template>
     <div class="negotiation-modal">
         <h3 class="color-vendor">Planner needs extra time</h3>
-        <p>You can extend the offer expiration by 2 days</p>
+        <p v-if="!approved">You can extend the offer expiration by 2 days</p>
+        <p v-else>You successfully extended the offer expiration by 2 days</p>
         <VendorBidTimeCounter
             :key="`${days}-${hours}-${mins}`"
-            customClass="vendor bg-purple w-max-400 mx-auto mb-30 mt-30 py-20 px-20"
+            customClass="vendor bg-purple w-max-400 mx-auto mb-30 mt-30 py-10 px-10"
             :days="days"
             :hours="hours"
             :minutes="mins"
             :seconds="seconds"
-            :content="'Until you receive your proposals'"
+            :content="!approved ? 'Until offer expires' : ''"
         />
     </div>
 </template>
@@ -23,7 +24,11 @@
           VendorBidTimeCounter
         },
         props: {
-          expiredTime: Number
+          expiredTime: Number,
+          approved: {
+            type: Boolean,
+            default: false,
+          },
         },
         data() {
           return {

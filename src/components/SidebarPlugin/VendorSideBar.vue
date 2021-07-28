@@ -7,27 +7,27 @@
       </md-button>
       <div class="sidebar-menu__list" v-show="toggleMenu">
         <div class="sidebar-menu__item">
-          <div class="item-route" @click="goTo('/profile/settings')">
+          <div class="item-route" @click="goTo('/vendor/profile/settings')">
             <img :src="`${menuIconsURL}Asset 117.svg`" /> Profile
           </div>
           <div class="item-action" @click="goTo('/vendor/signout')">
             Sign Out
             <img :src="`${menuIconsURL}Asset 118.svg`" />
           </div>
-        </div>
-        <div class="sidebar-menu__item">
-          <div class="item-route" @click="goTo('/events')"><img :src="`${menuIconsURL}Asset 114.svg`" /> My Events</div>
-        </div>
-        <div class="sidebar-menu__item" @click="goTo(`/events/${event.id}/booking/overview?walkWithMe=true`)">
-          <div class="item-route"><img :src="`${menuIconsURL}Asset 116.svg`" /> Product tour</div>
-        </div>
-        <div class="sidebar-menu__item" @click="goToHelp">
-          <div class="item-route"><img :src="`${menuIconsURL}Asset 117.svg`" /> About the product</div>
-        </div>
-        <div class="sidebar-menu__item">
-          <div class="item-route" @click="goTo('/vendors-pool')">
-            <img :src="`${menuIconsURL}Asset 117.svg`" /> Vendors Pool
-          </div>
+<!--        </div>-->
+<!--        <div class="sidebar-menu__item">-->
+<!--          <div class="item-route" @click="goTo('/events')"><img :src="`${menuIconsURL}Asset 114.svg`" /> My Events</div>-->
+<!--        </div>-->
+<!--        <div class="sidebar-menu__item" @click="goTo(`/events/${event.id}/booking/overview?walkWithMe=true`)">-->
+<!--          <div class="item-route"><img :src="`${menuIconsURL}Asset 116.svg`" /> Product tour</div>-->
+<!--        </div>-->
+<!--        <div class="sidebar-menu__item" @click="goToHelp">-->
+<!--          <div class="item-route"><img :src="`${menuIconsURL}Asset 117.svg`" /> About the product</div>-->
+<!--        </div>-->
+<!--        <div class="sidebar-menu__item">-->
+<!--          <div class="item-route" @click="goTo('/vendors-pool')">-->
+<!--            <img :src="`${menuIconsURL}Asset 117.svg`" /> Vendors Pool-->
+<!--          </div>-->
         </div>
       </div>
     </div>
@@ -93,7 +93,7 @@
       </md-list>
     </div>
     <div class="logo">
-      <a href="/" class="simple-text logo-mini visible-on-sidebar-mini">
+      <a href="https://maryoku.com/" target="_blank" class="simple-text logo-mini visible-on-sidebar-mini">
         <div class="logo-img">
           <img :src="`${$iconURL}VendorDashboard/maryoku-logo-dark.png`" />
           <!--<md-icon>calendar_today</md-icon>-->
