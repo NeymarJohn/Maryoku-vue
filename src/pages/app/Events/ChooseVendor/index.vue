@@ -1,6 +1,7 @@
 <template>
   <div class="md-layout booking-section position-relative booking-proposals">
     <div class="choose-vendor-board">
+      <loader :active="isLoadingProposal" />
       <div class="d-flex justify-content-between align-center">
         <div>
           <resizable-toggle-button
@@ -24,8 +25,7 @@
           icon="common/checked-calendar-red.svg"
         ></progress-radial-bar>
       </div>
-      <div class="booking-proposals" v-if="selectedCategory">
-        <loader :active="isLoadingProposal" />
+      <div class="booking-proposals">
         <template v-if="proposals.length > 0">
           <div class="font-size-30 font-bold-extra category-title mt-30 mb-30">
             <img :src="`${$iconURL}Budget+Elements/${selectedCategory.eventCategory.icon}`" />
@@ -65,6 +65,7 @@
                 <event-proposal-details
                   class="mt-20"
                   :vendorProposal="selectedProposal"
+                  :category="selectedCategory"
                   :key="selectedProposal.id"
                   @close="closeProposal"
                 ></event-proposal-details>
@@ -88,10 +89,15 @@
         </md-button>
       </div>
       <div>
-        <md-button class="md-simple md-outlined md-red maryoku-btn" :disabled="proposals.length === 0">
+        <md-button
+            class="md-simple md-outlined md-red maryoku-btn"
+            :disabled="proposals.length === 0 || !selectedProposal"
+            @click="bookVendor"
+        >
           Book Now
         </md-button>
-        <md-button class="md-red maryoku-btn" :disabled="proposals.length === 0">Add To Cart</md-button>
+        <md-button class="md-red maryoku-btn"
+                   :disabled="proposals.length === 0 || !selectedProposal">Add To Cart</md-button>
       </div>
     </div>
     <additional-request-modal
@@ -183,14 +189,15 @@ export default {
   }),
   methods: {
     ...mapMutations("event", ["setEventData", "setBookingRequirements", "setInitBookingRequirements"]),
+    ...mapActions("event", ["getProposals"]),
     ...mapActions("comment", ["getCommentComponents"]),
     ...mapActions("planningBoard", ["saveMainRequirements", "getRequirements", "saveTypes", "updateRequirements"]),
     selectCategory(category, clicked) {
       this.currentRequirement = this.eventRequirements[category.componentId];
       this.selectedCategory = category;
-      const proposals = this.proposalsByCategory[category.componentId];
-      if (this.proposalsByCategory[category.componentId]) {
-        this.proposalsByCategory[category.componentId].forEach((proposal, index) => {
+      let proposals = this.$store.state.event.proposals;
+      if (proposals[category.componentId]) {
+        proposals[category.componentId].forEach((proposal, index) => {
           new Proposal({ id: proposal.id, viewed: true }).save().then((res) => {
             this.$set(proposal, "viewed", true);
           });
@@ -260,7 +267,6 @@ export default {
         });
     },
     goDetailPage(proposal) {
-      // this.$router.push(`/events/${this.event.id}/booking/${this.selectedCategory.id}/proposals/${proposal.id}`);
       this.showDetails = true;
       this.selectedProposal = proposal;
     },
@@ -301,31 +307,35 @@ export default {
       console.log(notViewedProposals);
       return true;
     },
+    async bookVendor() {
+      if(!this.selectedProposal) return;
+      await new Proposal({ ...this.selectedProposal }).save();
+      let routeData = this.$router.push({
+        name: "Checkout",
+        params: {
+            vendorId: this.selectedProposal.vendor.id,
+            proposalId: this.selectedProposal.id,
+        },
+      });
+    },
   },
-  created() {
-    this.isLoading = true;
-    this.$root.$on("clearVendorRequirement", (event) => {
-      let requirements = this.storedRequirements;
-      if (requirements[event.id]) requirements[event.id] = null;
-      this.setBookingRequirements(requirements);
-    });
+  async created() {
+    this.isLoadingProposal = true;
 
-    this.getRequirements(this.event.id);
-    this.categories.forEach((category, index) => {
-      new Proposal()
-        .for(new EventComponent({ id: category.id }))
-        .get()
-        .then((result) => {
-          if (!this.selectedCategory && result.length > 0) {
-            this.selectCategory(category);
-          }
-          this.$set(this.proposalsByCategory, category.componentId, result);
-          this.isLoadingProposal = false;
-        });
+    const tenantId = this.$authService.resolveTenantId()
+    await this.getRequirements(this.event.id);
+    await this.getProposals({eventId: this.event.id, tenantId});
+    console.log('chooseVendor.created');
+    this.isLoadingProposal = false;
+
+    this.selectCategory(this.categories[0]);
+
+    let self = this;
+    this.$root.$on("clearVendorRequirement", (event) => {
+      let requirements = self.storedRequirements;
+      if (requirements[event.id]) requirements[event.id] = null;
+      self.setBookingRequirements(requirements);
     });
-    setTimeout(() => {
-      this.selectCategory(this.categories[0]);
-    }, 500);
   },
   watch: {
     event(newVal, oldVal) {
@@ -371,8 +381,9 @@ export default {
       return categories;
     },
     proposals() {
-      if (!this.selectedCategory || !this.proposalsByCategory.hasOwnProperty(this.selectedCategory.componentId)) return [];
-      return this.proposalsByCategory[this.selectedCategory.componentId];
+      let proposals = this.$store.state.event.proposals;
+      if (!this.selectedCategory || !proposals.hasOwnProperty(this.selectedCategory.componentId)) return [];
+      return proposals[this.selectedCategory.componentId];
     },
   },
 };

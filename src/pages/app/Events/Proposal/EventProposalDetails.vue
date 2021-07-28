@@ -185,7 +185,7 @@
           <div>
             <span class="font-size-30 font-bold">Bundle offer</span>
             <span>{{ vendorProposal.bundleDiscount.percentage }}%</span>
-            <span>{{ getBundleServices(vendorProposal.bundleDiscount.services) }}</span>
+            <span>{{ getBundleServices(vendorProposal.bookedServices) }}</span>
           </div>
           <div class="font-size-30 font-bold">-${{ bundledDiscountPrice | withComma }}</div>
         </div>
@@ -380,16 +380,6 @@ import TimerPanel from "./TimerPanel.vue";
 import Swal from "sweetalert2";
 
 export default {
-  props: {
-    vendorProposal: {
-      type: Object,
-      default: () => {},
-    },
-    landingPage: {
-      type: Boolean,
-      default: false,
-    },
-  },
   components: {
     Tabs,
     EventBudgetVendors,
@@ -410,7 +400,19 @@ export default {
     Loader,
     TimerPanel,
   },
-
+  props: {
+    vendorProposal: {
+      type: Object,
+      default: () => {},
+    },
+    category: {
+      type: Object,
+    },
+    landingPage: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       // auth: auth,
@@ -443,14 +445,7 @@ export default {
     };
   },
   created() {
-    console.log('eventProposalDetail.created', this.vendorProposal);
-    // const proposalId = this.$route.params.proposalId;
-    // console.log(proposalId);
-    // Proposal.find(proposalId).then((proposal) => {
-    //   this.isLoading = false;
-    //   this.vendorProposal = proposal;
-    //   this.extraServices = this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
-    // });
+    console.log('eventProposalDetail.created', this.vendorProposal, this.category);
     this.extraServices = this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
   },
 
@@ -463,6 +458,7 @@ export default {
       "setNumberOfParticipants",
       "setEventData",
     ]),
+    ...mapActions("event", ["updateProposal"]),
     getBundleServices(bundleServices) {
       const serviceNames = bundleServices.map((service) => {
         return this.getCategory(service).title;
@@ -479,14 +475,13 @@ export default {
     askQuestion() {},
     bookVendor() {
       new Proposal({ ...this.vendorProposal }).save().then((proposal) => {
-        let routeData = this.$router.resolve({
+        let routeData = this.$router.push({
           name: "Checkout",
           params: {
             vendorId: this.vendorProposal.vendor.id,
             proposalId: this.vendorProposal.id,
           },
         });
-        window.open(routeData.href, "_blank");
       });
     },
     getEvent() {},
@@ -569,8 +564,6 @@ export default {
       return !isBlank;
     },
     updateAddedServices({ category, costServices, extraServices }) {
-      // this.addedServices[category] = services;
-      // this.addedServices = { ...this.addedServices };
       this.vendorProposal.costServices[category] = costServices;
       this.vendorProposal.extraServices[category] = extraServices;
     },
@@ -584,9 +577,6 @@ export default {
       } else {
         newExpiredDate = new Date(this.vendorProposal.dateCreated).getTime() + 9 * 3600 * 24 * 1000;
       }
-      // new EventComponentProposal({ id: this.vendorProposal.id, expiredDate: newExpiredDate }).save().then((res) => {
-      //   this.vendorProposal = res;
-      // });
 
       new ProposalNegotiationRequest({
         eventId: this.eventData.id,
@@ -611,10 +601,7 @@ export default {
     },
     changeBookedServices() {
       console.log('changeBookedServices', this.vendorProposal);
-      this.$store.commit("vendorProposal/setValue", {
-        key: "bookedServices",
-        value: this.vendorProposal.bookedServices,
-      });
+      this.updateProposal({category: this.category.componentId, proposal: this.vendorProposal});
     },
   },
   computed: {
@@ -680,7 +667,9 @@ export default {
     },
     bundledDiscountPrice() {
       let bundledServicePrice = 0;
-      this.vendorProposal.bundleDiscount.services.forEach((serviceCategory) => {
+      let services = this.vendorProposal.bundleDiscount && this.vendorProposal.bundleDiscount.isApplied ?
+          this.vendorProposal.bookedServices : this.vendorProposal.bundleDiscount.services;
+      services.forEach((serviceCategory) => {
         const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
           if (service.isComplimentary) {
             return 0;

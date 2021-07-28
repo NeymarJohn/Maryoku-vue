@@ -81,12 +81,7 @@ export default {
   data() {
     return {
       isLaunched: false,
-      placeholder: `It's now time to get super exited! The event of the year is almost here( and it even rhymes). What to expect?
-        out of this world live shows
-        amazing food
-        refreshing cocktail bar
-        best employee award
-        see u soon`,
+      placeholder: `It's now time to get super exited! The event of the year is almost here( and it even rhymes). What to expect? out of this world live shows amazing food refreshing cocktail bar best employee award see u soon`,
       originContent: {},
       editingContent: {
         coverImage: "",
@@ -94,6 +89,7 @@ export default {
     };
   },
   created() {
+    console.log('countDown.created');
     const defaultCoverImage = `https://static-maryoku.s3.amazonaws.com/storage/Campaign+Headers/coming-soon${
       (new Date().getDate() % 4) + 1
     }.png`;
@@ -121,6 +117,14 @@ export default {
     },
     coverImage() {
       return this.$store.state.campaign.COMING_SOON.coverImage;
+    },
+    campaignDescription: {
+      get() {
+          return this.$store.state.campaign.COMING_SOON ? this.$store.state.campaign.COMING_SOON.description : "";
+      },
+      set(newValue) {
+          this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "description", value: newValue });
+      },
     },
   },
   methods: {
@@ -159,14 +163,6 @@ export default {
       //     }),
       //   )
       //   .then((result) => {});
-    },
-    campaignDescription: {
-      get() {
-        return this.$store.state.campaign.COMING_SOON ? this.$store.state.campaign.COMING_SOON.description : "";
-      },
-      set(newValue) {
-        this.$store.commit("campaign/setAttribute", { name: "COMING_SOON", key: "description", value: newValue });
-      },
     },
     chooseFiles() {
       document.getElementById("countdown-coverImage").click();

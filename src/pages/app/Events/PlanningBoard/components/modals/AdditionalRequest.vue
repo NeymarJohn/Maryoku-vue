@@ -34,33 +34,35 @@
             <span class="color-black font-bold font-size-16">Entire Event</span>
           </md-switch>
         </div>
-        <div class="checks-cont my-20 ml-50" :class="!timeslots.length ? 'disabled' : ''">
-          <div class="check-item" @click="checkTimeline(true)">
-            <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" v-if="assignTimeline" />
-            <span class="unchecked" v-else></span>
-            <span>Assign to one of those timeline events</span>
-          </div>
-          <div class="check-item" @click="checkTimeline(false)">
-            <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" v-if="!assignTimeline" />
-            <span class="unchecked" v-else></span>
-            <span>Specific Time Slot</span>
-          </div>
-        </div>
-        <template v-if="assignTimeline">
-
-            <div class="d-flex align-center ml-50" v-for="(timelineItem, index) in timeslots" :key="`timelineItem-${index}`">
-              <md-checkbox v-model="timeSlotIdx" class="mr-40" :value="index"></md-checkbox>
-              <timeline-item
-                :item="timelineItem"
-                :index="index"
-                class="my-10 timeline-group-wrapper"
-                :editMode="false"
-                size="medium"
-              ></timeline-item>
+        <template v-if="!isEntire">
+            <div class="checks-cont my-20 ml-50" :class="!timeslots.length ? 'disabled' : ''">
+                <div class="check-item" @click="checkTimeline(true)">
+                    <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" v-if="assignTimeline" />
+                    <span class="unchecked" v-else></span>
+                    <span>Assign to one of those timeline events</span>
+                </div>
+                <div class="check-item" @click="checkTimeline(false)">
+                    <img :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" v-if="!assignTimeline" />
+                    <span class="unchecked" v-else></span>
+                    <span>Specific Time Slot</span>
+                </div>
             </div>
+            <template v-if="assignTimeline">
 
+                <div class="d-flex align-center ml-50" v-for="(timelineItem, index) in timeslots" :key="`timelineItem-${index}`">
+                    <md-checkbox v-model="timeSlotIdx" class="mr-40" :value="index"></md-checkbox>
+                    <timeline-item
+                        :item="timelineItem"
+                        :index="index"
+                        class="my-10 timeline-group-wrapper"
+                        :editMode="false"
+                        size="medium"
+                    ></timeline-item>
+                </div>
+
+            </template>
+            <time-slot v-else class="ml-50 mt-40 time-slot-wrapper" @change="setTime"></time-slot>
         </template>
-        <time-slot v-else class="ml-50 mt-40 time-slot-wrapper" @change="setTime"></time-slot>
       </div>
       <div>
         <div
@@ -100,7 +102,7 @@
           </div>
         </div>
         <div
-          v-for="specialSection in specialTags.filter((item) => item.isSelected)"
+          v-for="specialSection in specialTags"
           :key="specialSection.subCategory"
           class="text-left sub-category"
           :id="specialSection.subCategory"
@@ -263,7 +265,6 @@ export default {
     },
   },
   created() {
-    console.log('additionalRequests.created', this.timeslots, this.defaultData);
     this.subCategorySections = Object.keys(this.subCategory);
     this.subCategorySections = this.subCategorySections.filter(
       (item) => item !== "multi-selection" && item !== "special",
@@ -275,6 +276,7 @@ export default {
     } else {
       this.specialTags = [];
     }
+    console.log('additionalRequests.created', this.specialTags);
     this.specialTags = this.specialTags.filter(
       (item) => item.subCategory !== "Inclusion" && item.subCategory !== "Sustainability",
     );

@@ -21,5 +21,4 @@ module.exports = {
     // RESOURCE_URL: '"https://static-maryoku.s3.amazonaws.com/"'
     // RESOURCE_URL: '"https://static-maryoku.s3.amazonaws.com/"'
     RESOURCE_URL: '"https://static-maryoku.s3.amazonaws.com/"',
-    MSAL_CLIENT_ID: '"f223fa12-662c-4b0c-b866-9eef6549e763"'
 };
