@@ -37,7 +37,7 @@ export default {
 <style lang="scss" scoped>
 .planner-header {
   padding: 20px 30px;
-  background-color: #404040;
+  background-color: #f5f5f5;
   color: white;
   .off-price {
     color: #ffbf48;

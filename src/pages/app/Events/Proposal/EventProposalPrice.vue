@@ -3,10 +3,7 @@
     <div class="d-flex justify-content-between align-center">
       <div class="item-info d-flex justify-content-start align-center">
         <div class="element-title">
-          <md-checkbox v-if="proposalData.bundleDiscount && proposalData.bundleDiscount.isApplied"
-                       v-model="proposalData.bookedServices"
-                       :value="serviceCategory"
-                       @change="changeBookService"></md-checkbox>
+          <md-checkbox v-model="proposalData.bookedServices" :value="serviceCategory" @change="changeBookService"></md-checkbox>
           <img :src="`${$iconURL}Budget+Elements/${vendorCategory.icon}`" />
           {{ vendorCategory.fullTitle }}
           <span class="element-duration">For Whole Event</span>
@@ -264,8 +261,8 @@ export default {
       this.extraServices = [...this.extraServices];
       this.$emit("changeAddedServices", {
         category: this.serviceCategory,
-        costServices: this.costServices,
-        extraServices: this.extraServices,
+        costServices,
+        extraSerivces: this.extraServices,
       });
       this.$forceUpdate();
     },
@@ -279,12 +276,13 @@ export default {
       this.extraServices = [...this.extraServices];
       this.$emit("changeAddedServices", {
         category: this.serviceCategory,
-        costServices: this.costServices,
-        extraServices: this.extraServices,
+        costServices,
+        extraSerivces: this.extraServices,
       });
       this.$forceUpdate();
     },
     changeBookService(){
+      console.log('changeBookService');
       this.$emit('changeBookedServices');
     }
   },

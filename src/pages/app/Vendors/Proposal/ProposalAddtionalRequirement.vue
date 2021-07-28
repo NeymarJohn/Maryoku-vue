@@ -8,39 +8,34 @@
         </span>
       </div>
       <div
-        class="mt-40"
+        class="d-flex align-stretch mt-40"
         v-if="sittingArrangement.item == 'Sitting arrangement'"
+        style="flex-flow: wrap"
       >
-        <div class="d-flex align-stretch" >
-            <div class="d-flex mb-30">
-                <template v-for="(sit, index) in sittingArrangement.options">
-                    <div
-                        v-if="sit.selected"
-                        :key="`sitarrangement-${index}`"
-                        class="d-flex flex-column justify-content-between seat-type"
-                    >
-                        <div class="font-bold">'{{ sit.item }}'</div>
-                        <div><img :src="`${$iconURL}Requirements/${sit.icon}`" /></div>
-                    </div>
-                </template>
-                <div v-if="sittingArrangement.hasOtherOption" class="d-flex flex-column seat-type">
-                    <div class="font-bold">'Other'</div>
-                    <div class="mt-20">{{ sittingArrangement.otherOptionContent }}</div>
-                </div>
+        <div class="d-flex mb-30">
+          <template v-for="(sit, index) in sittingArrangement.options">
+            <div
+              v-if="sit.selected"
+              :key="`sitarrangement-${index}`"
+              class="d-flex flex-column justify-content-between seat-type"
+            >
+              <div class="font-bold">'{{ sit.item }}'</div>
+              <div><img :src="`${$iconURL}Requirements/${sit.icon}`" /></div>
             </div>
-            <div v-if="!editingNewSeating" class="d-flex align-center">
-                <md-button class="md-simple md-outlined md-red maryoku-btn" @click="editingNewSeating = true">
-                    Suggest new seating arrangement
-                </md-button>
-            </div>
-            <div v-else class="p-10" style="min-width: 350px">
-                <div class="font-bold mb-10">Suggest new seating arrangement</div>
-                <textarea v-model="suggestedNewSeatings" rows="4" placeholder="Type your idea here"></textarea>
-            </div>
+          </template>
+          <div v-if="sittingArrangement.hasOtherOption" class="d-flex flex-column seat-type">
+            <div class="font-bold">'Other'</div>
+            <div class="mt-20">{{ sittingArrangement.otherOptionContent }}</div>
+          </div>
         </div>
-
-        <div class="p-40" style="background-color: #ffd9e4">
-          <md-checkbox class="md-vendor" v-model="agreeTerms">I read this section & I agree</md-checkbox>
+        <div v-if="!editingNewSeating" class="d-flex align-center">
+          <md-button class="md-simple md-outlined md-red maryoku-btn" @click="editingNewSeating = true">
+            Suggest new seating arrangement
+          </md-button>
+        </div>
+        <div v-else class="p-10" style="min-width: 350px">
+          <div class="font-bold mb-10">Suggest new seating arrangement</div>
+          <textarea v-model="suggestedNewSeatings" rows="4" placeholder="Type your idea here"></textarea>
         </div>
       </div>
       <div
@@ -52,6 +47,9 @@
           {{ option.name }}
         </div>
       </div>
+    </div>
+    <div class="p-40" style="background-color: #ffd9e4">
+      <md-checkbox class="md-vendor" v-model="agreeTerms">I read this section & I agree</md-checkbox>
     </div>
   </div>
   <div v-else></div>

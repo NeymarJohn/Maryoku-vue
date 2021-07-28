@@ -22,11 +22,9 @@
       </template>
       <proposal-request-card
         class="carousel-item"
-        v-for="(proposalRequest, idx) in proposalRequests"
+        v-for="proposalRequest in proposalRequests"
         :key="proposalRequest.id"
         :proposalRequest="proposalRequest"
-        :hasNegotiation="!!(proposalRequest.proposal && proposalRequest.proposal.negotiations && proposalRequest.proposal.negotiations.filter(it => it.status == 0).length)"
-        @handle="handleRequestCard(idx)"
         @dismiss="dismiss"
       >
       </proposal-request-card>
@@ -99,7 +97,6 @@
               <proposal-list-item
                 v-for="proposal in proposals"
                 :proposal="proposal"
-                :hasNegotiation="!!(proposal.negotiations && proposal.negotiations.filter(it => it.status == 0).length)"
                 :key="proposal.id"
                 class="row"
                 @action="handleProposal"
@@ -181,38 +178,6 @@
         <proposal-content :vendorProposal="selectedProposal" @close="showProposalDetail = false" />
       </template>
     </modal>
-    <modal v-if="showRequestNegotiationModal" container-class="modal-container negotiation bg-white">
-      <template slot="header" class="bg-pale-grey">
-        <div class="border-right font-bold-extra text-center pr-10 mr-10">
-          <template v-if="selectedProposalRequest.eventData.concept">{{selectedProposalRequest.eventData.concept.name}}</template>
-          <template v-else-if="selectedProposalRequest.eventData.title">{{selectedProposalRequest.eventData.title}}</template>
-          <template v-else >New Event</template>
-        </div>
-
-        <div class="border-right font-bold-extra text-center pr-10 mr-10">{{ $dateUtil.formatScheduleDay(selectedProposalRequest.eventData.eventStartMillis, "MM/DD/YY") }}</div>
-        <div class="text-center font-bold-extra">
-            $ {{ (selectedProposalRequest.proposal ? selectedProposalRequest.proposal.cost :
-            selectedProposalRequest.componentInstance.allocatedBudget) | withComma }}
-        </div>
-        <a class="font-bold-extra font-size-18 ml-auto" @click="showRequestNegotiationModal=false"><md-icon>close</md-icon></a>
-      </template>
-      <template slot="body">
-          <negotiation-request
-              :expiredTime="selectedProposalRequest.expiredTime"
-              :approved="negotiationApproved"
-              @close="showRequestNegotiationModal = false" />
-      </template>
-      <template slot="footer">
-          <md-button v-if="!negotiationApproved" class="md-simple md-vendor-text md-black p-0"
-                     @click="handleNegotiation(negotiationRequestStatus.decline)">Decline</md-button>
-          <md-button class="md-simple md-outlined md-vendor ml-auto"
-                     @click="handleNegotiation(negotiationRequestStatus.review)">Review proposal</md-button>
-          <md-button v-if="!negotiationApproved" class="md-vendor ml-10"
-                     @click="handleNegotiation(negotiationRequestStatus.approve)">Approve</md-button>
-          <md-button v-else class="md-vendor ml-10"
-                     @click="handleNegotiation(negotiationRequestStatus.done)">Done</md-button>
-      </template>
-    </modal>
   </div>
 </template>
 <script>
@@ -221,13 +186,11 @@ import ProposalRequestCard from "../components/ProposalRequestCard";
 import ProposalRequest from "@/models/ProposalRequest";
 import Proposal from "@/models/Proposal";
 import Vendor from "@/models/Vendors";
-import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import { socialMediaBlocks } from "@/constants/vendor";
 import carousel from "vue-owl-carousel";
 import { Loader, TablePagination, PieChart, Modal } from "@/components";
 import _ from "underscore";
 const ProposalContent = () => import("./detail");
-const NegotiationRequest = () => import("../components/NegotiationRequest");
 
 export default {
   components: {
@@ -235,7 +198,6 @@ export default {
     ProposalListItem,
     TablePagination,
     ProposalContent,
-    NegotiationRequest,
     carousel,
     PieChart,
     Loader,
@@ -274,23 +236,7 @@ export default {
       showProposalDetail: false,
       selectedProposal: null,
       selectedEventData: null,
-      selectedProposalRequest: null,
       flagDownloadPdf: false,
-      showRequestNegotiationModal: false,
-      negotiationRequestStatus:{
-        review: 0,
-        approve: 1,
-        decline: 2,
-        done: 3
-      },
-      proposalStatus:{
-        show: 0,
-        edit: 1,
-        download: 2,
-        delete: 3,
-        negotiation: 4,
-      },
-      negotiationApproved: false,
       socialMediaBlocks,
       pagination: {
         total: 0,
@@ -318,12 +264,11 @@ export default {
     async getData() {
       this.renderRender = false;
       let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
-      console.log('getData', proposalRequests);
       this.proposalRequests = proposalRequests.filter((p) => {
         return p.proposal
           ? p.remainingTime > 0 &&
               ((p.declineMessage !== "decline" && p.proposal.status !== "submit") ||
-                (p.proposal.negotiations && p.proposal.negotiations.filter(it => it.status == 0).length))
+                (p.proposal.negotiations && p.proposal.negotiations.length))
           : p.remainingTime > 0 && p.declineMessage !== "decline";
       });
 
@@ -389,23 +334,20 @@ export default {
     },
     async handleProposal(action, id) {
       this.selectedProposal = this.proposals.find((it) => it.id == id);
-
-      if (action === this.proposalStatus.show) {
+      if (action === "show") {
         this.showProposalDetail = true;
-
-      } else if (action === this.proposalStatus.edit) {
-
+      } else if (action === "edit") {
+        // this.$router.push(`/vendors/${this.selectedProposal.vendor.id}/proposal-request/${this.selectedProposal.proposalRequest.id}/form/edit`);
         let routeData = this.$router.resolve({
-          name: this.selectedProposal.nonMaryoku ? 'outsideProposalEdit' : 'proposalEdit',
+          name: "proposalEdit",
           params: {
             vendorId: this.selectedProposal.vendor.id,
-            id: this.selectedProposal.nonMaryoku ? this.selectedProposal.id : this.selectedProposal.proposalRequest.id,
+            id: this.selectedProposal.proposalRequest.id,
             type: "edit",
           },
         });
         this.openNewTab(routeData.href);
-      } else if (action === this.proposalStatus.delete) {
-
+      } else if (action === "remove") {
         this.loading = true;
         const proposal = await Proposal.find(id);
         await proposal.delete();
@@ -413,62 +355,14 @@ export default {
         await this.getProposal();
 
         this.loading = false;
-      } else if (action === this.proposalStatus.download) {
-
+      } else if (action === "download") {
         this.openNewTab(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
-      } else if(action === this.proposalStatus.negotiation) {
-        this.selectedProposalRequest = this.proposalRequests.find(it => it.proposal.id === id);
-        this.showRequestNegotiationModal = true;
-      }
-    },
-    handleRequestCard(idx){
-      console.log('handleRequestCard', idx);
-      let proposalRequest = this.proposalRequests[idx];
-      if(proposalRequest.proposal && proposalRequest.proposal.negotiations && proposalRequest.proposal.negotiations.length){
-          this.selectedProposalRequest = proposalRequest;
-          this.showRequestNegotiationModal = true;
-      } else {
-          let params = proposalRequest.proposal ? {id: proposalRequest.id, type: 'edit'} : {rfpId: proposalRequest.id}
-          let routeData = this.$router.resolve({
-              name: proposalRequest.proposal ? 'proposalEdit' : 'VendorProposal',
-              params: {...params, vendorId: this.vendorData.id},
-          });
-          this.openNewTab(routeData.href);
-      }
-    },
-    async handleNegotiation(status){
-      if(status === this.negotiationRequestStatus.review) {
-        this.showRequestNegotiationModal = false;
-        this.selectedProposal = this.proposals.find(p => p.id === this.selectedProposalRequest.proposal.id);
-        this.showProposalDetail = true;
-
-      } else if(status === this.negotiationRequestStatus.approve || status === this.negotiationRequestStatus.decline){
-        new ProposalNegotiationRequest({
-          id: this.selectedProposalRequest.proposal.negotiations[0].id,
-          expiredTime: this.selectedProposalRequest.expiredTime,
-          status
-        })
-        .for(new Proposal({id: this.selectedProposalRequest.proposal.id}))
-        .save()
-        .then(async res => {
-            if(status === this.negotiationRequestStatus.decline){
-                this.showRequestNegotiationModal = false
-                await this.init();
-            } else {
-                this.negotiationApproved = true;
-            }
-        })
-      } else if(status === this.negotiationRequestStatus.done) {
-        this.showRequestNegotiationModal = false;
-        this.negotiationApproved = false;
-        if (status === this.negotiationRequestStatus.approve) {
-            await this.init();
-        }
+        // this.downloadProposal(`http://preprod.dev.maryoku.com:8080/1/proposal/${this.selectedProposal.id}/download`);
       }
     },
     createNewProposal() {
       let routeData = this.$router.resolve({
-        name: "outsideProposalCreate",
+        name: "outsideProposalEdit",
         params: {
           vendorId: this.vendorData.id,
         },
@@ -479,7 +373,7 @@ export default {
       window.open(link, "_blank");
     },
     eventDate() {
-      let suggestionDate = this.selectedProposal.suggestionDate || [];
+      const suggestionDate = this.selectedProposal.suggestionDate;
       if (!this.selectedEventData) return "-";
 
       let startDate = new Date(this.selectedEventData.eventStartMillis);
@@ -596,8 +490,10 @@ export default {
       height: 20px;
     }
   }
-  .border-right{
-   border-right: 1px solid #050505;
-  }
+}
+
+.pdf-content {
+  width: 100%;
+  background: #fff;
 }
 </style>

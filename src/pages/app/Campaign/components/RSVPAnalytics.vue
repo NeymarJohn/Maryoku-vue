@@ -31,7 +31,7 @@
               </div>
               <div class="slash"></div>
               <div class="text-center" style="margin-top: 25px">
-                <div v-if="rsvpStatisData.rsvpRequests" class="ml-20 mr-20 font-size-50 font-regular font-regular color-gray line-height-1">
+                <div class="ml-20 mr-20 font-size-50 font-regular font-regular color-gray line-height-1">
                   {{ rsvpStatisData.rsvpRequests.length * (isPlusOne ? 2 : 1) }}
                 </div>
                 <div class="font-size-16">Invited Guests (Including +1)</div>
@@ -202,6 +202,15 @@ export default {
     this.timer = setInterval(() => {
       this.getAnalyzingData();
     }, 5000);
+    // this.$http.get(`${process.env.SERVER_URL}/1/rsvp-requests/statistics/${this.campaignData.id}`).then((res) => {
+    //   this.rsvpStatisData = res.data;
+    //   this.analyticsData[0].list = this.rsvpStatisData.guests;
+    //   this.analyticsData[1].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "REJECTED");
+    //   this.analyticsData[2].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "CONSIDERED");
+    //   this.analyticsData[3].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "VIRTUAL");
+    //   this.analyticsData[4].list = this.rsvpStatisData.rsvpRequests.filter((item) => item.status == "REQUESTED");
+    //   this.foodLimitations = res.data.limitations;
+    // });
   },
   methods: {
     sendEmailsAgain() {

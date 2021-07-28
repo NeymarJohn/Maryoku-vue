@@ -2,6 +2,7 @@
   <div class="event-vendor-checkout">
     <vue-element-loading :active="loading" spinner="ring" color="#FF547C" />
     <div class="checkout-content md-layout" v-if="!loading">
+      <vue-element-loading :active="loadingPayment" spinner="ring" color="#FF547C" />
       <div class="md-layout-item md-size-45 left-panel">
         <div
           class="background-section"
@@ -208,15 +209,18 @@
               <img :src="`${$iconURL}PaymentPage/Stripe.png`" />
             </md-button>
           </div>
-
+          <stripe-checkout v-if="showStripeCheckout" :price="stripePriceData"></stripe-checkout>
           <div>You will be transferred to a secured {{ paymentMethod }} payment</div>
         </div>
       </div>
     </div>
     <div class="checkout-footer white-card p-30 mt-30 d-flex justify-content-between">
       <md-button class="maryoku-btn md-simple md-black">Back</md-button>
-      <md-button class="maryoku-btn md-red" :disabled="!agreedCancellationPolicy">Submit Payment </md-button>
+      <md-button class="maryoku-btn md-red" :disabled="!agreedCancellationPolicy || !paymentMethod" @click="pay"
+        >Submit Payment
+      </md-button>
     </div>
+    <success-modal v-if="showSuccessModal"></success-modal>
   </div>
 </template>
 <script>
@@ -224,8 +228,10 @@ import Vendor from "@/models/Vendors";
 import Proposal from "@/models/Proposal";
 import CheckoutPriceTable from "./CheckoutPriceTable.vue";
 import CollapsePanel from "@/components/CollapsePanel.vue";
+import StripeCheckout from "./StripeCheckout.vue";
+import SuccessModal from "./SuccessModal.vue";
 export default {
-  components: { CheckoutPriceTable, CollapsePanel },
+  components: { CheckoutPriceTable, CollapsePanel, StripeCheckout, SuccessModal },
   data() {
     return {
       vendor: null,
@@ -235,6 +241,11 @@ export default {
       paymentMethod: "",
       checkedGiveBack: false,
       isCheckedFoodDonate: false,
+      stripePriceData: null,
+      showStripeCheckout: false,
+      loadingPayment: false,
+      showSuccessModal: false,
+      showCancelModal: false,
     };
   },
   created() {
@@ -247,6 +258,10 @@ export default {
     Proposal.find(proposalId).then((proposal) => {
       this.proposal = proposal;
     });
+    console.log("this.$route", this.$route);
+    if (this.$route.query.checkout === "success") {
+      this.showSuccessModal = true;
+    }
   },
   computed: {
     tax() {
@@ -302,15 +317,6 @@ export default {
         totalPrice += sumOfService;
       });
 
-      // console.log(this.addedServices);
-      // // added service item price
-      // Object.keys(this.addedServices).forEach((serviceCategory) => {
-      //   const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
-      //     return s + service.requirementValue * service.price;
-      //   }, 0);
-      //   console.log("sumOFserive", sumOfService);
-      //   totalPrice += sumOfService;
-      // });
       return totalPrice;
     },
     discounedAndTaxedPrice() {
@@ -319,6 +325,26 @@ export default {
         (this.totalPriceOfProposal * this.discount.percentage) / 100 -
         this.bundledDiscountPrice;
       return discounted + (discounted * this.tax.percentage) / 100;
+    },
+  },
+  methods: {
+    pay() {
+      if (this.paymentMethod === "stripe") {
+        this.loadingPayment = true;
+        this.$http
+          .post(
+            `${process.env.SERVER_URL}/stripe/v1/customer/products`,
+            { name: this.vendor.companyName, price: this.discounedAndTaxedPrice * 1000 },
+            { headers: this.$auth.getAuthHeader() },
+          )
+          .then((res) => {
+            console.log("res.data", res.data);
+            const priceData = res.data;
+            this.showStripeCheckout = true;
+            // this.loadingPayment = false;
+            this.stripePriceData = priceData;
+          });
+      }
     },
   },
 };

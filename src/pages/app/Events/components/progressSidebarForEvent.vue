@@ -125,10 +125,6 @@ export default {
   created() {
     this.fetchUrl();
     this.event = this.$store.state.event.eventData;
-
-    setTimeout(_ => {
-      this.renderProgress();
-    }, 50)
   },
   computed: {
     // ...mapState("event", {
@@ -141,6 +137,12 @@ export default {
   },
   methods: {
     ...mapActions("event", ["getEventAction"]),
+    isActiveRoute(item) {
+      if (this.currentUrl.indexOf(item.route) > -1) {
+        return "current";
+      }
+      return "";
+    },
     goToRoute(item, index) {
       let vm = this;
       this.$router.push(`/events/${this.event.id}/${item.route}`);
@@ -148,33 +150,23 @@ export default {
     fetchUrl() {
       this.currentUrl = this.$router.history.current.path;
     },
-    isActiveRoute(item) {
-      if (this.currentUrl.indexOf(item.route) > -1) {
-          return "current";
-      }
-      return "";
-    },
     changeItem(option = null) {
       let params = option == "refresh" ? null : this.elements;
       this.$emit("change", params);
     },
-    renderProgress(){
+  },
+  updated(){
       let self = this;
       $('.event-elements__item').each(function (idx, el) {
         let progress = self.elements.find(it => it.id === $(el).attr('id')).progress
         $(el).css("--width", `${progress}%`)
       })
-    }
-  },
-  updated(){
-    this.renderProgress();
   },
   mounted() {
     console.log('progressbar.mounted', this.elements);
   },
   watch: {
     $route: "fetchUrl",
-    currentUrl(newVal){},
     elements(newValue) {},
   },
 };
