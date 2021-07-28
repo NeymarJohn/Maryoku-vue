@@ -1,17 +1,16 @@
 <template>
-  <div class="proposal-request-card white-card p-20" :class="field !== 'new' && hasNegotiation ? 'negotiation' : ''">
+  <div class="proposal-request-card white-card p-20">
     <div class="d-flex align-center">
       <div class="font-bold py-10" :class="getFontSize('title')" style="min-height: 44px">
         <template v-if="proposalRequest.eventData.concept">{{ proposalRequest.eventData.concept.name }}</template>
-        <template v-else-if="proposalRequest.eventData.title">{{ proposalRequest.eventData.title }}</template>
+        <template v-else-if="proposalRequest.eventData">{{ proposalRequest.eventData.title }}</template>
         <template v-else>New Event</template>
       </div>
       <md-button class="md-icon-button md-simple" @click="expanded = !expanded">
         <md-icon class="color-black ml-5">keyboard_arrow_right</md-icon></md-button
       >
-      <span class="d-flex align-center ml-auto whitspace-nowrap font-bold-extra" :class="hasNegotiation ? 'color-vendor' : 'color-yellow-dark'" >
-        <img :src="`${iconUrl}VendorsProposalPage/Group 6370.svg`" class="mr-10" style="width: 20px" />
-        <span :class="getFontSize('expiredDate')">{{`${getLeftDays()} Days Left`}}</span>
+      <span class="color-yellow-dark d-flex align-center ml-auto whitspace-nowrap" :class="getFontSize('expiredDate')">
+        <img :src="`${iconUrl}VendorsProposalPage/Group 6370.svg`" class="mr-10" style="width: 20px" />{{`${getLeftDays()} Days Left`}}
       </span>
     </div>
     <div class="d-flex align-center justify-content-start" :class="getFontSize('title')">
@@ -21,7 +20,7 @@
       $ {{ (proposalRequest.proposal ? proposalRequest.proposal.cost : proposalRequest.componentInstance.allocatedBudget) | withComma }}
     </div>
     <div v-if="expanded" :class="getFontSize('subTitle')">
-      <div class="d-flex align-center mt-1">
+      <div class="d-flex align-center mt-1">Group 5479 (2).svg
         <div class="width-50 d-flex align-center">
           <img class="mr-10" :src="`${iconUrl}Onboarding/Group%204458.svg`" style="width: 18px" />
           {{ proposalRequest.eventData.dateCreated | date("MM/DD/YY") }}
@@ -44,25 +43,25 @@
     </div>
     <div class="d-flex align-end">
       <md-button
-        v-if="type == 'proposal' && !hasNegotiation"
+        v-if="type == 'proposal'"
         class="md-simple md-vendor md-vendor-text"
         style="margin-left: -15px; width: 20px; height: 30px"
         @click="dismiss(proposalRequest.id)"
       >
         Dismiss
       </md-button>
-      <div :class="type == 'proposal' ? 'ml-auto d-flex flex-column align-center' : 'd-flex align-center width-100'">
+      <div :class="type == 'proposal' ? 'ml-auto' : 'd-flex align-center width-100'">
         <div v-if="proposalRequest.proposal">
           <div v-if="proposalRequest.proposal.status === 'draft'">
             <span class="font-bold color-vendor">{{ proposalRequest.proposal.progress }} %</span> completed
             <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="proposalRequest.proposal.progress"></md-progress-bar>
           </div>
           <div
-            v-else-if="type === 'proposal' && hasNegotiation"
+            v-else-if="type === 'proposal' && proposalRequest.proposal.negotiations && proposalRequest.proposal.negotiations.length"
             class="d-flex align-center justify-content-center font-size-12 color-red"
           >
             <img :src="`${iconUrl}VendorsProposalPage/Group%2014277_2.svg`" class="mr-5" style="width: 15px" />
-            {{proposalRequest.proposal.negotiations[0].type === requestType.ADD_MORE_TIME ? 'Additional time request' : 'Negotiation Request'}}
+            Negotiation Request
           </div>
         </div>
         <div v-else class="new color-vendor font-size-14" :class="type === 'proposal' ? 'ml-auto': 'medium'">New</div>
@@ -90,23 +89,11 @@ export default {
       type: String,
       default: "proposal",
     },
-    field: {
-      type: String,
-      default: "new",
-    },
-    hasNegotiation:{
-      type: Boolean,
-      default: false,
-    }
   },
   data() {
     return {
       iconUrl: `${this.$iconURL}`,
       expanded: false,
-      requestType: {
-          ADD_MORE_TIME: 0,
-          NEGOTIATION: 1,
-      }
     };
   },
   computed: {
@@ -114,8 +101,8 @@ export default {
       if (!this.proposalRequest.proposal) return "Apply";
       if (this.proposalRequest.proposal.status === "draft") {
         return "Complete";
-      } else if (this.hasNegotiation) {
-        return this.type === 'proposal' ? "Respond" : 'Approve Request';
+      } else if (this.proposalRequest.proposal.negotiations && this.proposalRequest.proposal.negotiations.length) {
+        return this.type === 'proposal' ? "Approve Request" : 'Negotiation Request';
       } else {
         return "Make Changes"
       }
@@ -124,7 +111,16 @@ export default {
   methods: {
     gotoProposalRequest() {
       const tenantId = this.$authService.resolveTenantId();
-      this.$emit('handle');
+      let link = "";
+      if (tenantId === "DEFAULT") {
+        link = `${this.proposalRequest.tenant}.${document.location.host}/#/vendors/${this.proposalRequest.vendorId}/proposal-request/${this.proposalRequest.id}`;
+      } else {
+        link = `${this.proposalRequest.tenant}.${document.location.host.replace(`${tenantId}.`, "")}/#/vendors/${
+          this.proposalRequest.vendorId
+        }/proposal-request/${this.proposalRequest.id}`;
+      }
+      var win = window.open(`${document.location.protocol}//${link}`, "_blank");
+      win.focus();
     },
     getLeftDays() {
       let diffSeconds = (this.proposalRequest.expiredTime - new Date().getTime()) / 1000;
@@ -146,9 +142,7 @@ export default {
 
     },
   },
-  mounted() {
-    console.log('mounted', this.proposalRequest);
-  },
+  mounted() {},
 };
 </script>
 <style lang="scss" scoped>
@@ -157,9 +151,6 @@ export default {
   width: 100%;
   &.vendor-dashboard {
     min-height: 200px;
-  }
-  &.negotiation{
-      background-color: #ffefff!important;
   }
 }
 .new {

@@ -292,9 +292,6 @@ $paddings: 0, 5, 10, 15, 20, 30, 40, 50, 60, 70, 100, 400;
 .w-max-350 {
     max-width: 350px;
 }
-.w-max-400 {
-    max-width: 400px;
-}
 .w-max-450 {
   max-width: 450px;
 }
@@ -587,19 +584,6 @@ hr {
 }
 .invisible {
   visibility: hidden;
-}
-
-.bg-white{
-  background-color: white;
-}
-.bg-pale-grey{
-  background-color: #f3f7fd;
-}
-.bg-yellow{
-  background-color: #ffc001;
-}
-.bg-purple{
-    background-color: $vendorColor;
 }
 
 @media only screen and (max-width: 959px) {
