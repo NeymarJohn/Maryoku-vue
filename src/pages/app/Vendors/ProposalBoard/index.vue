@@ -25,7 +25,7 @@
         v-for="(proposalRequest, idx) in proposalRequests"
         :key="proposalRequest.id"
         :proposalRequest="proposalRequest"
-        :hasNegotiation="!!(proposalRequest.proposal.negotiations && proposalRequest.proposal.negotiations.filter(it => it.status == 0).length)"
+        :hasNegotiation="!!(proposalRequest.proposal.negotiations && proposalRequest.proposal.negotiations.length)"
         @handle="handleRequestCard(idx)"
         @dismiss="dismiss"
       >
@@ -99,7 +99,6 @@
               <proposal-list-item
                 v-for="proposal in proposals"
                 :proposal="proposal"
-                :hasNegotiation="!!(proposal.negotiations && proposal.negotiations.filter(it => it.status == 0).length)"
                 :key="proposal.id"
                 class="row"
                 @action="handleProposal"
@@ -197,20 +196,15 @@
         <a class="font-bold-extra font-size-18 ml-auto" @click="showRequestNegotiationModal=false"><md-icon>close</md-icon></a>
       </template>
       <template slot="body">
-          <request-negotiation
-              :expiredTime="selectedProposalRequest.expiredTime"
-              :approved="negotiationApproved"
-              @close="showRequestNegotiationModal = false" />
+          <request-negotiation :expiredTime="selectedProposalRequest.expiredTime" @close="showRequestNegotiationModal = false" />
       </template>
       <template slot="footer">
-          <md-button v-if="!negotiationApproved" class="md-simple md-vendor-text color-black-middle p-0"
+          <md-button class="md-simple md-vendor-text color-black-middle p-0"
                      @click="handleNegotiation(negotiationRequestStatus.decline)">Decline</md-button>
           <md-button class="md-simple md-outlined md-vendor ml-auto"
                      @click="handleNegotiation(negotiationRequestStatus.review)">Review proposal</md-button>
-          <md-button v-if="!negotiationApproved" class="md-vendor ml-10"
+          <md-button class="md-vendor ml-10"
                      @click="handleNegotiation(negotiationRequestStatus.approve)">Approve</md-button>
-          <md-button v-else class="md-vendor ml-10"
-                     @click="handleNegotiation(negotiationRequestStatus.done)">Done</md-button>
       </template>
     </modal>
   </div>
@@ -227,7 +221,7 @@ import carousel from "vue-owl-carousel";
 import { Loader, TablePagination, PieChart, Modal } from "@/components";
 import _ from "underscore";
 const ProposalContent = () => import("./detail");
-const RequestNegotiation = () => import("../components/requestNegotiation");
+const RequestNegotiation = () => import("./requestNegotiation");
 
 export default {
   components: {
@@ -280,10 +274,8 @@ export default {
       negotiationRequestStatus:{
         review: 0,
         approve: 1,
-        decline: 2,
-        done: 3
+        decline: 2
       },
-      negotiationApproved: false,
       socialMediaBlocks,
       pagination: {
         total: 0,
@@ -311,11 +303,12 @@ export default {
     async getData() {
       this.renderRender = false;
       let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
+      console.log('getData', proposalRequests);
       this.proposalRequests = proposalRequests.filter((p) => {
         return p.proposal
           ? p.remainingTime > 0 &&
               ((p.declineMessage !== "decline" && p.proposal.status !== "submit") ||
-                (p.proposal.negotiations && p.proposal.negotiations.filter(it => it.status == 0).length))
+                (p.proposal.negotiations && p.proposal.negotiations.length))
           : p.remainingTime > 0 && p.declineMessage !== "decline";
       });
 
@@ -435,20 +428,9 @@ export default {
         })
         .for(new Proposal({id: this.selectedProposalRequest.proposal.id}))
         .save()
-        .then(async res => {
-            if(status === this.negotiationRequestStatus.decline){
-                this.showRequestNegotiationModal = false
-                await this.init();
-            } else {
-                this.negotiationApproved = true;
-            }
+        .then(_ => {
+            this.showRequestNegotiationModal = false;
         })
-      } else if(status === this.negotiationRequestStatus.done) {
-        this.showRequestNegotiationModal = false;
-        this.negotiationApproved = false;
-        if (status === this.negotiationRequestStatus.approve) {
-            await this.init();
-        }
       }
     },
     createNewProposal() {

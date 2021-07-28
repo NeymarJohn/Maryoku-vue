@@ -51,7 +51,7 @@
       >
         Dismiss
       </md-button>
-      <div :class="type == 'proposal' ? 'ml-auto d-flex flex-column align-center' : 'd-flex align-center width-100'">
+      <div :class="type == 'proposal' ? 'ml-auto' : 'd-flex align-center width-100'">
         <div v-if="proposalRequest.proposal">
           <div v-if="proposalRequest.proposal.status === 'draft'">
             <span class="font-bold color-vendor">{{ proposalRequest.proposal.progress }} %</span> completed
@@ -62,7 +62,7 @@
             class="d-flex align-center justify-content-center font-size-12 color-red"
           >
             <img :src="`${iconUrl}VendorsProposalPage/Group%2014277_2.svg`" class="mr-5" style="width: 15px" />
-            {{proposalRequest.proposal.negotiations[0].type === requestType.ADD_MORE_TIME ? 'Additional time request' : 'Negotiation Request'}}
+            Negotiation Request
           </div>
         </div>
         <div v-else class="new color-vendor font-size-14" :class="type === 'proposal' ? 'ml-auto': 'medium'">New</div>
@@ -99,10 +99,6 @@ export default {
     return {
       iconUrl: `${this.$iconURL}`,
       expanded: false,
-      requestType: {
-          ADD_MORE_TIME: 0,
-          NEGOTIATION: 1,
-      }
     };
   },
   computed: {
@@ -111,7 +107,7 @@ export default {
       if (this.proposalRequest.proposal.status === "draft") {
         return "Complete";
       } else if (this.hasNegotiation) {
-        return this.type === 'proposal' ? "Respond" : 'Approve Request';
+        return this.type === 'proposal' ? "Review Request" : 'Negotiation Request';
       } else {
         return "Make Changes"
       }
@@ -121,6 +117,16 @@ export default {
     gotoProposalRequest() {
       const tenantId = this.$authService.resolveTenantId();
       this.$emit('handle');
+      // let link = "";
+      // if (tenantId === "DEFAULT") {
+      //   link = `${this.proposalRequest.tenant}.${document.location.host}/#/vendors/${this.proposalRequest.vendorId}/proposal-request/${this.proposalRequest.id}`;
+      // } else {
+      //   link = `${this.proposalRequest.tenant}.${document.location.host.replace(`${tenantId}.`, "")}/#/vendors/${
+      //     this.proposalRequest.vendorId
+      //   }/proposal-request/${this.proposalRequest.id}`;
+      // }
+      // var win = window.open(`${document.location.protocol}//${link}`, "_blank");
+      // win.focus();
     },
     getLeftDays() {
       let diffSeconds = (this.proposalRequest.expiredTime - new Date().getTime()) / 1000;
@@ -142,9 +148,7 @@ export default {
 
     },
   },
-  mounted() {
-    console.log('mounted', this.proposalRequest);
-  },
+  mounted() {},
 };
 </script>
 <style lang="scss" scoped>

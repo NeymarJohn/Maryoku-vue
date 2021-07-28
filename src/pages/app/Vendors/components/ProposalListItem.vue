@@ -1,5 +1,5 @@
 <template>
-  <div class="proposal-list-item" :class="hasNegotiation ? 'negotiation-item' : ''">
+  <div class="proposal-list-item">
     <div>
       <img v-if="proposal.nonMaryoku" :src="`${$storageURL}maryoku - logo square white@2x.png`" width="50">
       <img v-else src="https://maryoku.s3.amazonaws.com/company/logos/5e0ae1d2cfefec4b68f5d8a1.png" width="40"/>
@@ -26,10 +26,9 @@
       </span>
     </div>
 
-    <div class="text-center" v-if="hasNegotiation">
+    <div class="text-center" v-if="proposal.negotiations && proposal.negotiations.length">
       <md-button class="md-simple md-red md-vendor-text">
-        <img :src="`${iconUrl}Group%2014277_2.svg`" class="negotiation mr-5" style="width: 15px" />
-          {{proposal.negotiations[0].type === requestType.ADD_MORE_TIME ? 'Additional time request' : 'Negotiation Request'}}
+        <img :src="`${iconUrl}Group%2014277_2.svg`" class="negotiation mr-5" style="width: 15px" /> Negotiation Request
       </md-button>
       <md-button class="md-vendor" @click="edit('show')"> Respond </md-button>
     </div>
@@ -78,18 +77,10 @@ export default {
       type: Object,
       required: true,
     },
-    hasNegotiation: {
-      type: Boolean,
-      default: false,
-    }
   },
   data() {
     return {
       iconUrl: `${this.$iconURL}VendorsProposalPage/`,
-      requestType: {
-        ADD_MORE_TIME: 0,
-        NEGOTIATION: 1,
-      }
     };
   },
   methods: {
@@ -132,10 +123,6 @@ export default {
   display: grid;
   align-items: center;
   grid-template-columns: 5% 20% 10% 15% 10% 10% 10% 15% 5%;
-
-  &.negotiation-item{
-    background-color: #ffefff!important;
-  }
 }
 img.negotiation {
   position: relative;

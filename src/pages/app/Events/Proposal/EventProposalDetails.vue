@@ -446,13 +446,6 @@ export default {
   },
   created() {
     console.log('eventProposalDetail.created', this.vendorProposal, this.category);
-    // const proposalId = this.$route.params.proposalId;
-    // console.log(proposalId);
-    // Proposal.find(proposalId).then((proposal) => {
-    //   this.isLoading = false;
-    //   this.vendorProposal = proposal;
-    //   this.extraServices = this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
-    // });
     this.extraServices = this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
   },
 
@@ -482,14 +475,13 @@ export default {
     askQuestion() {},
     bookVendor() {
       new Proposal({ ...this.vendorProposal }).save().then((proposal) => {
-        let routeData = this.$router.resolve({
+        let routeData = this.$router.push({
           name: "Checkout",
           params: {
             vendorId: this.vendorProposal.vendor.id,
             proposalId: this.vendorProposal.id,
           },
         });
-        window.open(routeData.href, "_blank");
       });
     },
     getEvent() {},

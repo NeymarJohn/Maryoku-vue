@@ -11,7 +11,8 @@
         <li class="fix-digit">{{ s | attachZero }}<br /><span>Sec</span></li>
       </ul>
     </div>
-    <div v-if="content" class="action-cont">{{ content }}</div>
+    <div class="action-cont">{{ content }}</div>
+    <!--<div class="action-cont">To send your bid</div>-->
   </div>
 </template>
 <script>

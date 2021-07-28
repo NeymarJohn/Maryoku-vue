@@ -36,12 +36,11 @@
         </template>
         <div v-for="(p, index) in proposalRequests" :key="p.id" class="carousel-item">
           <proposal-request-card
-            type="dashboard"
             :proposalRequest="p"
             :size="2"
+            type="dashboard"
             :hasNegotiation="true"
             class="pl-30 pr-30 vendor-dashboard"
-            @handle="approveBudget(index)"
           ></proposal-request-card>
         </div>
         <template slot="next">
@@ -51,38 +50,6 @@
         </template>
       </carousel>
     </div>
-    <modal v-if="showRequestNegotiationModal" container-class="modal-container negotiation bg-white">
-      <template slot="header" class="bg-pale-grey">
-          <div class="border-right font-bold-extra text-center pr-10 mr-10">
-              <template v-if="selectedProposalRequest.eventData.concept">{{selectedProposalRequest.eventData.concept.name}}</template>
-              <template v-else-if="selectedProposalRequest.eventData.title">{{selectedProposalRequest.eventData.title}}</template>
-              <template v-else >New Event</template>
-          </div>
-
-          <div class="border-right font-bold-extra text-center pr-10 mr-10">{{ $dateUtil.formatScheduleDay(selectedProposalRequest.eventData.eventStartMillis, "MM/DD/YY") }}</div>
-          <div class="text-center font-bold-extra">
-              $ {{ (selectedProposalRequest.proposal ? selectedProposalRequest.proposal.cost :
-              selectedProposalRequest.componentInstance.allocatedBudget) | withComma }}
-          </div>
-          <a class="font-bold-extra font-size-18 ml-auto" @click="showRequestNegotiationModal=false"><md-icon>close</md-icon></a>
-      </template>
-      <template slot="body">
-          <request-negotiation
-              :expiredTime="selectedProposalRequest.expiredTime"
-              :approved="negotiationApproved"
-              @close="showRequestNegotiationModal = false" />
-      </template>
-      <template slot="footer">
-          <md-button v-if="!negotiationApproved" class="md-simple md-vendor-text color-black-middle p-0"
-                     @click="handleNegotiation(negotiationRequestStatus.decline)">Decline</md-button>
-          <md-button class="md-simple md-outlined md-vendor ml-auto"
-                     @click="handleNegotiation(negotiationRequestStatus.review)">Review proposal</md-button>
-          <md-button v-if="!negotiationApproved" class="md-vendor ml-10"
-                     @click="handleNegotiation(negotiationRequestStatus.approve)">Approve</md-button>
-          <md-button v-else class="md-vendor ml-10"
-                     @click="handleNegotiation(negotiationRequestStatus.done)">Done</md-button>
-      </template>
-    </modal>
   </div>
 </template>
 <style lang="scss" scoped>
@@ -107,17 +74,11 @@
 <script>
 import carousel from "vue-owl-carousel";
 import ProposalRequestCard from "../../components/ProposalRequestCard.vue";
-const RequestNegotiation = () => import("../../components/requestNegotiation");
-import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
-import Proposal from "@/models/Proposal";
-import { Modal } from "@/components";
 
 export default {
   components: {
     carousel,
     ProposalRequestCard,
-    RequestNegotiation,
-    Modal
   },
   props:{
     field: {
@@ -128,15 +89,6 @@ export default {
   data() {
     return {
         currentIndex: 0,
-        selectedProposalRequest: null,
-        negotiationApproved: false,
-        showRequestNegotiationModal: false,
-        negotiationRequestStatus:{
-            review: 0,
-            approve: 1,
-            decline: 2,
-            done: 3
-        },
     };
   },
   computed: {
@@ -150,14 +102,10 @@ export default {
         });
       } else if (this.field === 'negotiation') {
         proposalRequests = this.$store.state.vendorDashboard.proposalRequests.filter(p => {
-          return p.remainingTime > 0 && p.proposal && p.proposal.negotiations &&
-              p.proposal.negotiations.filter(it => it.status === 0).length
+          return p.remainingTime > 0 && p.proposal && p.proposal.negotiations && p.proposal.negotiations.length
         });
       }
       return proposalRequests;
-    },
-    vendorData() {
-      return this.$store.state.vendor.profile;
     },
   },
   methods: {
@@ -169,45 +117,6 @@ export default {
     },
     changeSlide(event) {
       this.currentIndex = event.page.index;
-    },
-    openNewTab(link) {
-      window.open(link, "_blank");
-    },
-    approveBudget(index) {
-      console.log('approveBudget');
-      this.showRequestNegotiationModal = true;
-      this.selectedProposalRequest = this.proposalRequests[index];
-    },
-    async handleNegotiation(status){
-      if(status === this.negotiationRequestStatus.review) {
-          let routeData = this.$router.resolve({
-              name: 'proposalEdit',
-              params: {id: this.selectedProposalRequest.id, type: 'edit', vendorId: this.vendorData.id},
-          });
-          this.openNewTab(routeData.href);
-      } else if(status === this.negotiationRequestStatus.approve || status === this.negotiationRequestStatus.decline){
-          new ProposalNegotiationRequest({
-              id: this.selectedProposalRequest.proposal.negotiations[0].id,
-              expiredTime: this.selectedProposalRequest.expiredTime,
-              status
-          })
-              .for(new Proposal({id: this.selectedProposalRequest.proposal.id}))
-              .save()
-              .then(async res => {
-                  if(status === this.negotiationRequestStatus.decline){
-                      this.showRequestNegotiationModal = false
-
-                  } else {
-                      this.negotiationApproved = true;
-                  }
-              })
-      } else if(status === this.negotiationRequestStatus.done) {
-          this.showRequestNegotiationModal = false;
-          this.negotiationApproved = false;
-          if (status === this.negotiationRequestStatus.approve) {
-
-          }
-      }
     },
   },
 };

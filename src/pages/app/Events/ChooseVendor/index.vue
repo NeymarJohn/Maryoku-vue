@@ -91,12 +91,13 @@
       <div>
         <md-button
             class="md-simple md-outlined md-red maryoku-btn"
-            :disabled="proposals.length === 0 "
+            :disabled="proposals.length === 0 || !selectedProposal"
             @click="bookVendor"
         >
           Book Now
         </md-button>
-        <md-button class="md-red maryoku-btn" :disabled="proposals.length === 0">Add To Cart</md-button>
+        <md-button class="md-red maryoku-btn"
+                   :disabled="proposals.length === 0 || !selectedProposal">Add To Cart</md-button>
       </div>
     </div>
     <additional-request-modal
@@ -266,7 +267,6 @@ export default {
         });
     },
     goDetailPage(proposal) {
-      // this.$router.push(`/events/${this.event.id}/booking/${this.selectedCategory.id}/proposals/${proposal.id}`);
       this.showDetails = true;
       this.selectedProposal = proposal;
     },
@@ -310,45 +310,32 @@ export default {
     async bookVendor() {
       if(!this.selectedProposal) return;
       await new Proposal({ ...this.selectedProposal }).save();
-      let routeData = this.$router.resolve({
+      let routeData = this.$router.push({
         name: "Checkout",
         params: {
             vendorId: this.selectedProposal.vendor.id,
             proposalId: this.selectedProposal.id,
         },
       });
-      window.open(routeData.href, "_blank");
     },
   },
   async created() {
     this.isLoadingProposal = true;
-    this.$root.$on("clearVendorRequirement", (event) => {
-      let requirements = this.storedRequirements;
-      if (requirements[event.id]) requirements[event.id] = null;
-      this.setBookingRequirements(requirements);
-    });
 
     const tenantId = this.$authService.resolveTenantId()
     await this.getRequirements(this.event.id);
     await this.getProposals({eventId: this.event.id, tenantId});
     console.log('chooseVendor.created');
     this.isLoadingProposal = false;
-    // this.categories.forEach((category, index) => {
-    //   new Proposal()
-    //     .for(new EventComponent({ id: category.id }))
-    //     .get()
-    //     .then((result) => {
-    //       if (!this.selectedCategory && result.length > 0) {
-    //         this.selectCategory(category);
-    //       }
-    //       this.setProposalsByCategory({category: category.componentId, result});
-    //       this.$set(this.proposalsByCategory, category.componentId, result);
-    //       this.isLoadingProposal = false;
-    //     });
-    // });
 
     this.selectCategory(this.categories[0]);
 
+    let self = this;
+    this.$root.$on("clearVendorRequirement", (event) => {
+      let requirements = self.storedRequirements;
+      if (requirements[event.id]) requirements[event.id] = null;
+      self.setBookingRequirements(requirements);
+    });
   },
   watch: {
     event(newVal, oldVal) {
