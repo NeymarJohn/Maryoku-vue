@@ -338,13 +338,13 @@ export default {
     }
   },
   async created() {
+    await this.$store.dispatch('planningBoard/resetCartItems');
     this.isLoadingProposal = true;
-
     const tenantId = this.$authService.resolveTenantId()
     await this.getRequirements(this.event.id);
     await this.getProposals({eventId: this.event.id, tenantId});
-    // await this.getCartItems(this.event.id);
-    console.log('chooseVendor.created');
+    await this.getCartItems(this.event.id);
+
     this.isLoadingProposal = false;
 
     this.selectCategory(this.categories[0]);

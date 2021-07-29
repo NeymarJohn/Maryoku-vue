@@ -151,6 +151,11 @@ export default {
       defaultEventData: {},
     };
   },
+  beforeCreate() {
+    if (!this.$store.state.vendorDashboard) {
+      this.$store.registerModule("vendorDashboard", state);
+    }
+  },
   mounted() {
     this.getMarkedDates();
     this.getComingEvents();
@@ -271,6 +276,10 @@ export default {
   watch: {
     backOutDays(newVal) {
       // this.getMarkedDates();
+    },
+    vendorData(newVal) {
+      console.log('vendorData', newVal);
+      this.$store.dispatch("vendorDashboard/getProposalRequests", newVal.id);
     },
   },
 };

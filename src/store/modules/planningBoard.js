@@ -19,6 +19,9 @@ const actions = {
   resetRequirements({commit}){
     commit('resetRequirements')
   },
+  resetCartItems({commit}){
+        commit('resetCartItems')
+  },
   getRequirements({ commit, state }, eventId) {
     return new Promise((resolve, reject) => {
       new ProposalRequestRequirement()
@@ -140,6 +143,9 @@ const actions = {
 const mutations = {
   resetRequirements(state){
     Vue.set(state, 'requirements', {})
+  },
+  resetCartItems(state){
+    Vue.set(state, 'cart', {})
   },
   setStep(state, step) {
     state.step = step;

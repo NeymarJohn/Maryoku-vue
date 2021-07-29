@@ -1,51 +1,62 @@
 <template>
   <div class="requirements-cart">
     <div class="requirements-cart-header">
-      <div>
-        <span class="text-transform-uppercase font-bold font-size-20">Your Choices</span>
-        <div>
-            Our vendors will create proposals based on your choices below, so be sure to select everything you really want. If you leave a category blank, it means you’re happy leaving it up to the vendor’s discretion (which can lead to more back-and-forth later on).
-        </div>
+      <div class="font-size-18 font-bold-extra">
+          {{`MY CART (${cartItems.length} ITEM${cartItems.length > 1 ? 'S' : ''})`}}
       </div>
-      <progress-radial-bar :value="percentOfBudgetCategories" :total="event.components.length"></progress-radial-bar>
 
       <md-button class="md-simple close-btn" @click="close">
         <md-icon>close</md-icon>
       </md-button>
     </div>
     <div>
+      <table width="100%">
+          <tr v-for="item in cartItems"
+              :key="`price-${item.key}`"
+              class="d-flex align-center"
+          >
+              <td width="70%" class="d-flex align-center pl-40 py-20">
+                  <img :src="`${$iconURL}Budget+Elements/${item.icon}`" style="width: 30px"/>
+                  <div class="ml-10">
+                      <p class="mb-5 font-size-14 font-bold-extra">{{ item.fullTitle }}</p>
+                      <p class="m-0 font-size-14 color-black-middle">{{ cart[item.key].proposal.vendor.companyName }}</p>
+                  </div>
+
+              </td>
+              <td width="20%" class="py-20">
+                  ${{cart[item.key].proposal.cost | withComma}}
+              </td>
+              <td width="10%" class="pr-40 py-20">
+                  <md-button class="md-simple edit-btn p-10"><md-icon>more_vert</md-icon></md-button>
+              </td>
+          </tr>
+
+          <tr class="d-flex align-center" style="background-color: #f8f8f8">
+              <td class="py-20 font-size-16 font-bold-extra" width="70%" style="padding-left: 85px!important;">Total</td>
+              <td class="py-20 font-bold-extra" width="20%">${{totalPrice | withComma}}</td>
+              <td width="10%" class="py-20"></td>
+          </tr>
+      </table>
+      <div class="mt-20 p-20 d-flex align-center justify-content-center">
+          <md-button class="md-simple md-black maryoku-btn mr-10">Clear Selections</md-button>
+          <md-button class="md-red maryoku-btn">Proceed To Checkout</md-button>
+      </div>
+
       <vsa-list>
-        <vsa-item v-for="item in cartItems" :key="item.key">
+        <vsa-item>
           <vsa-heading>
-            <img :src="`${$iconURL}Budget+Elements/${item.icon}`" class="category-icon" />
-            {{ item.fullTitle }}
+              MY FAVORITE
           </vsa-heading>
           <vsa-content>
-            <table width="100%">
-                <tr v-for="(price, subCategory) in cart[item.key].proposal.pricesByCategory"
-                    :key="`price-${subCategory}`"
-                    class="d-flex align-center mb-30"
-                >
-                    <td width="30%">
-                        <img :src="`${$iconURL}Budget+Elements/${serviceCategories.find(it => it.key == subCategory).icon}`" style="width: 20px"/>
-                        <span class="ml-10 font-size-14 font-bold-extra">{{serviceCategories.find(it => it.key == subCategory).fullTitle }}</span>
-                    </td>
-                    <td width="40%">
-                        <span class="color-black-middle font-size-14 font-bold-extra">For Whole Event</span>
-                    </td>
-                    <td width="20%">
-                        ${{price | withComma}}
-                    </td>
-                    <td width="10%">
-                        <md-button class="md-simple edit-btn p-10"><md-icon>more_vert</md-icon></md-button>
-                    </td>
-                </tr>
-
-                <tr class="d-flex align-center">
-                    <td class="ml-30 font-size-14 font-bold-extra" width="70%">Total</td>
-                    <td class="ml-auto mr-20" width="30%">${{cart[item.key].proposal.cost | withComma}}</td>
-                </tr>
-            </table>
+              favorite contents
+          </vsa-content>
+        </vsa-item>
+        <vsa-item>
+          <vsa-heading>
+              VENDORS YOU ALREADY BOOKED
+          </vsa-heading>
+          <vsa-content>
+              vendors
           </vsa-content>
         </vsa-item>
       </vsa-list>
@@ -80,10 +91,6 @@ export default {
     };
   },
   created() {
-    // this.subCategorySections = Object.keys(this.subCategory);
-    // this.subCategorySections = this.subCategorySections.filter(
-    //   (item) => item !== "multi-selection" && item !== "special",
-    // );
   },
   methods: {
     close() {
@@ -118,6 +125,12 @@ export default {
     },
     cart() {
       return this.$store.state.planningBoard.cart;
+    },
+    totalPrice(){
+      if(!this.cartItems.length) return 0;
+      return this.cartItems.reduce((s, item) => {
+          return s + this.cart[item.key].proposal.cost;
+      }, 0);
     },
     percentOfBudgetCategories() {
       return Object.keys(this.cart).length;

@@ -54,11 +54,6 @@
         </template>
       </carousel>
     </div>
-    <modal v-if="selectedProposal" container-class="modal-container-wizard lg">
-          <template slot="body">
-              <proposal-content :vendorProposal="selectedProposal" @close="selectedProposal = null" />
-          </template>
-    </modal>
     <modal v-if="showRequestNegotiationModal" container-class="modal-container negotiation bg-white">
       <template slot="header" class="bg-pale-grey">
           <div class="border-right font-bold-extra text-center pr-10 mr-10">
@@ -77,15 +72,15 @@
       <template slot="body">
           <negotiation-request
               :expiredTime="selectedProposalRequest.expiredTime"
-              :processed="negotiationProcessed"
+              :approved="negotiationApproved"
               @close="showRequestNegotiationModal = false" />
       </template>
       <template slot="footer">
-          <md-button v-if="negotiationProcessed === 0" class="md-simple md-vendor-text color-black-middle p-0"
+          <md-button v-if="!negotiationApproved" class="md-simple md-vendor-text color-black-middle p-0"
                      @click="handleNegotiation(negotiationRequestStatus.decline)">Decline</md-button>
           <md-button class="md-simple md-outlined md-vendor ml-auto"
                      @click="handleNegotiation(negotiationRequestStatus.review)">Review proposal</md-button>
-          <md-button v-if="negotiationProcessed === 0" class="md-vendor ml-10"
+          <md-button v-if="!negotiationApproved" class="md-vendor ml-10"
                      @click="handleNegotiation(negotiationRequestStatus.approve)">Approve</md-button>
           <md-button v-else class="md-vendor ml-10"
                      @click="handleNegotiation(negotiationRequestStatus.done)">Done</md-button>
@@ -115,23 +110,17 @@
 <script>
 import carousel from "vue-owl-carousel";
 import ProposalRequestCard from "../../components/ProposalRequestCard.vue";
+
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import Proposal from "@/models/Proposal";
 import { Modal } from "@/components";
 const NegotiationRequest = () => import("../../components/NegotiationRequest");
-const ProposalContent = () => import("../../components/ProposalDetail");
-
-// result of processed on negotiation request
-const NONE = 0;
-const APPROVED = 1;
-const DECLINED = 2;
 
 export default {
   components: {
     carousel,
     ProposalRequestCard,
     NegotiationRequest,
-    ProposalContent,
     Modal
   },
   props:{
@@ -144,9 +133,8 @@ export default {
     return {
         currentIndex: 0,
         selectedProposalRequest: null,
-        negotiationProcessed: DECLINED,
+        negotiationApproved: false,
         showRequestNegotiationModal: false,
-        selectedProposal: null,
         negotiationRequestStatus:{
             review: 0,
             approve: 1,
@@ -198,8 +186,11 @@ export default {
     },
     async handleNegotiation(status){
       if(status === this.negotiationRequestStatus.review) {
-          this.selectedProposal = {...this.selectedProposalRequest.proposal, proposalRequest: this.selectedProposalRequest};
-          this.showRequestNegotiationModal = false;
+          let routeData = this.$router.resolve({
+              name: 'proposalEdit',
+              params: {id: this.selectedProposalRequest.id, type: 'edit', vendorId: this.vendorData.id},
+          });
+          this.openNewTab(routeData.href);
       } else if(status === this.negotiationRequestStatus.approve || status === this.negotiationRequestStatus.decline){
           new ProposalNegotiationRequest({
               id: this.selectedProposalRequest.proposal.negotiations[0].id,
@@ -209,17 +200,19 @@ export default {
               .for(new Proposal({id: this.selectedProposalRequest.proposal.id}))
               .save()
               .then(async res => {
-                  this.selectedProposalRequest.proposal.negotiations[0] = res;
-                  this.$store.commit("vendorDashboard/setProposalRequest", this.selectedProposalRequest);
                   if(status === this.negotiationRequestStatus.decline){
-                      this.negotiationProcessed = DECLINED
+                      this.showRequestNegotiationModal = false
+
                   } else {
-                      this.negotiationProcessed = APPROVED;
+                      this.negotiationApproved = true;
                   }
               })
       } else if(status === this.negotiationRequestStatus.done) {
           this.showRequestNegotiationModal = false;
-          this.negotiationProcessed = NONE;
+          this.negotiationApproved = false;
+          if (status === this.negotiationRequestStatus.approve) {
+
+          }
       }
     },
   },

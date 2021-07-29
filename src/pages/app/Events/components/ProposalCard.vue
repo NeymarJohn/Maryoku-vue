@@ -77,7 +77,10 @@
 <script>
 import moment from "moment";
 import Timer from "@/components/Timer.vue";
+import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest"
+import Proposal from "@/models/Proposal"
 import TimerPanel from "./TimerPanel";
+import Swal from "sweetalert2";
 export default {
   components: { Timer, TimerPanel },
   props: {
@@ -127,7 +130,34 @@ export default {
       return 0;
     },
     updateExpireDate(){
-      console.log('updateExiredDate');
+        let newExpiredDate = 0;
+        if (this.proposal.expiredDate) {
+            newExpiredDate = new Date(this.proposal.expiredDate).getTime() + 2 * 3600 * 24 * 1000;
+        } else {
+            newExpiredDate = new Date(this.proposal.dateCreated).getTime() + 9 * 3600 * 24 * 1000;
+        }
+
+        new ProposalNegotiationRequest({
+            eventId: this.eventData.id,
+            proposalId: this.proposal.id,
+            proposalRequestId: this.proposal.proposalRequestId,
+            expiredDate: newExpiredDate,
+            tenantId: this.$authService.resolveTenantId(),
+        })
+            .for(new Proposal({ id: this.proposal.id }))
+            .save()
+            .then((res) => {
+                Swal.fire({
+                    title: "We received your request!",
+                    text: `Vendor will contact you!`,
+                    showCancelButton: false,
+                    confirmButtonClass: "md-button md-success btn-fill",
+                    cancelButtonClass: "md-button md-danger btn-fill",
+                    confirmButtonText: "OK",
+                    buttonsStyling: false,
+                }).then((result) => {});
+            });
+
     }
   },
   computed: {
