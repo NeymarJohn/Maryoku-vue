@@ -4,7 +4,8 @@
       <notifications></notifications>
       <div :class="{ content: !$route.meta.hideContent }" @click="toggleSidebar" style="padding-right: 0">
         <side-bar :event="eventData"></side-bar>
-        <zoom-center-transition :duration="200" mode="out-in">
+        <loader :active="loading"></loader>
+        <zoom-center-transition v-if="!loading" :duration="200" mode="out-in">
           <router-view></router-view>
         </zoom-center-transition>
       </div>
@@ -15,15 +16,20 @@
 <script>
 import { ZoomCenterTransition } from "vue2-transitions";
 import SideBar from "@/components/SidebarPlugin/VendorSideBar";
+import Loader from "@/components/loader";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import state from "./VendorDashboard/state";
 
 export default {
   components: {
     ZoomCenterTransition,
     SideBar,
+    Loader,
   },
   data() {
-    return {};
+    return {
+      loading : true
+    };
   },
   methods: {
     toggleSidebar() {
@@ -35,8 +41,16 @@ export default {
   computed: {
     ...mapState("event", ["eventData"]),
   },
-  mounted() {
-    this.$store.dispatch("vendor/getProfile");
+  beforeCreate() {
+    if (!this.$store.state.vendorDashboard) {
+      this.$store.registerModule("vendorDashboard", state);
+    }
+  },
+  async mounted() {
+    this.loading = true;
+    let vendor = await this.$store.dispatch("vendor/getProfile");
+    await this.$store.dispatch("vendorDashboard/getProposalRequests", vendor.id);
+    this.loading = false;
   },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="proposal-request-card white-card p-20" :class="field !== 'new' && hasNegotiation ? 'negotiation' : ''">
+  <div class="proposal-request-card white-card p-20" :class="hasNegotiation ? 'negotiation' : ''">
     <div class="d-flex align-center">
       <div class="font-bold py-10" :class="getFontSize('title')" style="min-height: 44px">
         <template v-if="proposalRequest.eventData.concept">{{ proposalRequest.eventData.concept.name }}</template>
@@ -89,10 +89,6 @@ export default {
     type: {
       type: String,
       default: "proposal",
-    },
-    field: {
-      type: String,
-      default: "new",
     },
     hasNegotiation:{
       type: Boolean,

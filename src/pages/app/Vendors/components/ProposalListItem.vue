@@ -31,9 +31,9 @@
         <img :src="`${iconUrl}Group%2014277_2.svg`" class="negotiation mr-5" style="width: 15px" />
           {{proposal.negotiations[0].type === requestType.ADD_MORE_TIME ? 'Additional time request' : 'Negotiation Request'}}
       </md-button>
-      <md-button class="md-vendor" @click="edit('show')"> Respond </md-button>
+      <md-button class="md-vendor" @click="edit(proposalStatus.negotiation)"> Respond </md-button>
     </div>
-    <md-button v-else class="md-simple md-vendor" @click="edit('show')">
+    <md-button v-else class="md-simple md-vendor" @click="edit(proposalStatus.show)">
       <img src="/static/icons/vendor/proposalBoard/see-proposal.svg" class="mr-5" style="width: 20px" />
       View Proposal
     </md-button>
@@ -44,23 +44,22 @@
           <md-icon style="font-size: 30px !important">more_vert</md-icon>
         </md-button>
         <md-menu-content>
-          <md-menu-item @click="edit('edit')" class="md-purple">
+          <md-menu-item @click="edit(proposalStatus.edit)" class="md-purple">
             <span>
               <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />
               Edit</span
             >
           </md-menu-item>
-          <md-menu-item @click="edit('download')" class="md-purple">
+          <md-menu-item @click="edit(proposalStatus.download)" class="md-purple">
             <span>
               <img :src="`${$iconURL}common/download.svg`" class="label-icon mr-10" />
               Download
             </span>
           </md-menu-item>
-          <md-menu-item @click="edit('remove')" class="md-purple">
+          <md-menu-item @click="edit(proposalStatus.delete)" class="md-purple">
             <span>
               <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon mr-10" /> Delete Proposal
             </span>
-            >
           </md-menu-item>
         </md-menu-content>
       </md-menu>
@@ -86,6 +85,13 @@ export default {
   data() {
     return {
       iconUrl: `${this.$iconURL}VendorsProposalPage/`,
+      proposalStatus:{
+        show: 0,
+        edit: 1,
+        download: 2,
+        delete: 3,
+        negotiation: 4,
+      },
       requestType: {
         ADD_MORE_TIME: 0,
         NEGOTIATION: 1,
