@@ -43,7 +43,7 @@
             :serviceCategory="service"
             :key="`secondary-${service}-section`"
           ></checkout-price-table>
-          <div class="p-30" v-if="this.proposal.extraServices[this.vendor.eventCategory.key]">
+          <div class="p-30">
             <div>Would you like to upgrade & add one of those?</div>
             <div class="mb-30" v-if="proposal.serviceCategory">
               You have $ {{ (proposal.serviceCategory.allocatedBudget - proposal.cost) | withComma }} left over from
@@ -75,10 +75,9 @@
         </div>
         <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
-            <div class="price-header d-flex align-center">
-              <md-checkbox class="m-0 mr-10" v-model="onDayCordinator"></md-checkbox>
+            <div class="price-header">
               <img :src="`${$iconURL}PaymentPage/Group 9556.svg`" class="mr-10 ml-10" />
-              On Day Cordinator($1,000 Per Day)
+              On Day Cordinator
             </div>
           </template>
           <template slot="content">
@@ -177,10 +176,10 @@
               <span>TOTAL TO PAY</span>
               <span>${{ discounedAndTaxedPrice | withComma }}</span>
             </div>
-            <!-- <div class="font-size-14 d-flex justify-content-between">
+            <div class="font-size-14 d-flex justify-content-between">
               <span>TOTAL TO PAY</span>
               <span>${{ discounedAndTaxedPrice | withComma }}</span>
-            </div> -->
+            </div>
           </div>
         </div>
         <div class="mt-40">
@@ -249,7 +248,6 @@ export default {
       loadingPayment: false,
       showSuccessModal: false,
       showCancelModal: false,
-      onDayCordinator: false,
     };
   },
   created() {
@@ -324,16 +322,11 @@ export default {
       return totalPrice;
     },
     discounedAndTaxedPrice() {
-      const eventDays = 1;
       const discounted =
         this.totalPriceOfProposal -
         (this.totalPriceOfProposal * this.discount.percentage) / 100 -
         this.bundledDiscountPrice;
-      let price = discounted + (discounted * this.tax.percentage) / 100;
-      if (this.onDayCordinator) {
-        price += eventDays * 1000;
-      }
-      return price;
+      return discounted + (discounted * this.tax.percentage) / 100;
     },
   },
   methods: {
@@ -343,7 +336,7 @@ export default {
         this.$http
           .post(
             `${process.env.SERVER_URL}/stripe/v1/customer/products`,
-            { name: this.vendor.companyName, price: Math.floor(this.discounedAndTaxedPrice * 100) },
+            { name: this.vendor.companyName, price: this.discounedAndTaxedPrice * 100 },
             { headers: this.$auth.getAuthHeader() },
           )
           .then((res) => {

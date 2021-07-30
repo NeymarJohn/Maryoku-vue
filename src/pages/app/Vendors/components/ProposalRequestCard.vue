@@ -58,7 +58,7 @@
             <md-progress-bar class="md-thin md-vendor" md-mode="determinate" :md-value="proposalRequest.proposal.progress"></md-progress-bar>
           </div>
           <div
-            v-else-if="type === 'proposal' && hasNegotiation"
+            v-else-if="hasNegotiation"
             class="d-flex align-center justify-content-center font-size-12 color-red"
           >
             <img :src="`${iconUrl}VendorsProposalPage/Group%2014277_2.svg`" class="mr-5" style="width: 15px" />
@@ -111,7 +111,7 @@ export default {
       if (this.proposalRequest.proposal.status === "draft") {
         return "Complete";
       } else if (this.hasNegotiation) {
-        return this.type === 'proposal' ? "Respond" : 'Approve Request';
+        return "Respond";
       } else {
         return "Make Changes"
       }

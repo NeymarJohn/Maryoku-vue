@@ -144,7 +144,7 @@ export default {
     return {
         currentIndex: 0,
         selectedProposalRequest: null,
-        negotiationProcessed: DECLINED,
+        negotiationProcessed: NONE,
         showRequestNegotiationModal: false,
         selectedProposal: null,
         negotiationRequestStatus:{
@@ -170,7 +170,7 @@ export default {
     proposalNegotiationRequest(){
       if (!this.$store.state.vendorDashboard.proposalRequests) return [];
       return this.$store.state.vendorDashboard.proposalRequests.filter(p => {
-            return p.remainingTime > 0 && p.proposal && p.proposal.negotiations &&
+            return p.proposal && p.proposal.status === 'submit' && p.proposal.negotiations &&
                 p.proposal.negotiations.filter(it => it.status === 0).length
         });
     },
@@ -193,23 +193,36 @@ export default {
     },
     approveBudget(index) {
       console.log('approveBudget');
-      this.showRequestNegotiationModal = true;
-      this.selectedProposalRequest = this.requests[index];
+      if (this.field !== 'new') {
+          this.showRequestNegotiationModal = true;
+          this.selectedProposalRequest = this.requests[index];
+      } else {
+          let params = this.requests[index].proposal ? {id: this.requests[index].id, type: 'edit'} : {rfpId: this.requests[index].id}
+          let routeData = this.$router.resolve({
+              name: this.requests[index].proposal ? 'proposalEdit' : 'VendorProposal',
+              params: {...params, vendorId: this.vendorData.id},
+          });
+          window.open(routeData.href, '_blank');
+      }
     },
     async handleNegotiation(status){
       if(status === this.negotiationRequestStatus.review) {
           this.selectedProposal = {...this.selectedProposalRequest.proposal, proposalRequest: this.selectedProposalRequest};
           this.showRequestNegotiationModal = false;
       } else if(status === this.negotiationRequestStatus.approve || status === this.negotiationRequestStatus.decline){
+          let expiredTime = this.selectedProposalRequest.expiredTime -
+              (status === this.negotiationRequestStatus.decline ? 2 * 3600 * 24 * 1000 : 0);
           new ProposalNegotiationRequest({
               id: this.selectedProposalRequest.proposal.negotiations[0].id,
-              expiredTime: this.selectedProposalRequest.expiredTime,
+              expiredTime,
               status
           })
               .for(new Proposal({id: this.selectedProposalRequest.proposal.id}))
               .save()
               .then(async res => {
                   this.selectedProposalRequest.proposal.negotiations[0] = res;
+                  if(status === this.negotiationRequestStatus.decline) this.selectedProposalRequest.expiredTime = expiredTime;
+
                   this.$store.commit("vendorDashboard/setProposalRequest", this.selectedProposalRequest);
                   if(status === this.negotiationRequestStatus.decline){
                       this.negotiationProcessed = DECLINED
@@ -220,8 +233,15 @@ export default {
       } else if(status === this.negotiationRequestStatus.done) {
           this.showRequestNegotiationModal = false;
           this.negotiationProcessed = NONE;
+          this.currentIndex = 0;
       }
     },
+  },
+  updated() {
+    // remove empty item in proposal-request carousel
+    $(".owl-item").each(function (el) {
+        if ($(this).text().length === 0) $(this).remove();
+    });
   },
 };
 </script>

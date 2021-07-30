@@ -23,7 +23,8 @@
           :hours="getRemainingTime.hours"
           :minutes="getRemainingTime.mins"
           :seconds="getRemainingTime.seconds"
-          :content="'To send your bid'"
+          class="bg-yellow"
+          :bottom-content="'To send your bid'"
         />
       </div>
     </section>

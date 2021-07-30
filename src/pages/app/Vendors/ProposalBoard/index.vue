@@ -425,9 +425,12 @@ export default {
         this.showProposalDetail = true;
 
       } else if(status === this.negotiationRequestStatus.approve || status === this.negotiationRequestStatus.decline){
+        let expiredTime = this.selectedProposalRequest.expiredTime -
+            (status === this.negotiationRequestStatus.decline ? 2 * 3600 * 24 * 1000 : 0);
+
         new ProposalNegotiationRequest({
           id: this.selectedProposalRequest.proposal.negotiations[0].id,
-          expiredTime: this.selectedProposalRequest.expiredTime,
+          expiredTime,
           status
         })
         .for(new Proposal({id: this.selectedProposalRequest.proposal.id}))
@@ -436,6 +439,10 @@ export default {
             let proposal = this.proposals.find(it => it.id === this.selectedProposalRequest.proposal.id);
             proposal.negotiations[0] = res;
             this.selectedProposalRequest.proposal.negotiations[0] = res;
+
+            if(status === this.negotiationRequestStatus.decline) this.selectedProposalRequest.expiredTime = expiredTime;
+            if(status === this.negotiationRequestStatus.approve) proposal.expiredDate = new Date(expiredTime);
+
             this.$store.commit("vendorDashboard/setProposalRequest", this.selectedProposalRequest);
             this.$store.commit("vendorDashboard/setProposal", proposal);
             if(status === this.negotiationRequestStatus.decline){
@@ -507,9 +514,8 @@ export default {
       let proposalRequests = this.$store.state.vendorDashboard.proposalRequests;
       return proposalRequests.filter((p) => {
           return p.proposal
-              ? p.remainingTime > 0 &&
-              ((p.declineMessage !== "decline" && p.proposal.status !== "submit") ||
-                  (p.proposal.negotiations && p.proposal.negotiations.filter(it => it.status == 0).length))
+              ? p.declineMessage !== "decline" && p.proposal.status !== 'submit' && p.remainingTime > 0 ||
+              p.proposal.status === 'submit' && p.proposal.negotiations && p.proposal.negotiations.filter(it => it.status == 0).length
               : p.remainingTime > 0 && p.declineMessage !== "decline";
       });
     },

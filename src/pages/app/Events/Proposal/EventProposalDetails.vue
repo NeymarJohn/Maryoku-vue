@@ -267,6 +267,12 @@
 
           <cancellation-policy></cancellation-policy>
 
+          <!-- <div class="additional-info">
+                      <div class="additional-info__title">Additional</div>
+                      <div class="additional-info__content">
+                        {{ vendorProposal.candellationPolicy }}
+                      </div>
+                    </div> -->
           <div class="side-label">
             <div class="label-value">Act of God</div>
           </div>
@@ -439,13 +445,7 @@ export default {
     };
   },
   created() {
-    // const proposalId = this.$route.params.proposalId;
-    // console.log(proposalId);
-    // Proposal.find(proposalId).then((proposal) => {
-    //   this.isLoading = false;
-    //   this.vendorProposal = proposal;
-    //   this.extraServices = this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
-    // });
+    console.log('eventProposalDetail.created', this.vendorProposal, this.category);
     this.extraServices = this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
   },
 
@@ -544,6 +544,8 @@ export default {
               vm.fetchingAllAttachments = true;
             }, 2000);
           }
+
+          console.log("images ", this.images);
         });
       });
     },
@@ -564,7 +566,6 @@ export default {
     updateAddedServices({ category, costServices, extraServices }) {
       this.vendorProposal.costServices[category] = costServices;
       this.vendorProposal.extraServices[category] = extraServices;
-      this.$emit("updateProposal", this.vendorProposal);
     },
     closeDetail() {
       this.$emit("close");
@@ -599,10 +600,8 @@ export default {
         });
     },
     changeBookedServices() {
-      this.$store.commit("vendorProposal/setValue", {
-        key: "bookedServices",
-        value: this.vendorProposal.bookedServices,
-      });
+      console.log('changeBookedServices', this.vendorProposal);
+      this.updateProposal({category: this.category.componentId, proposal: this.vendorProposal});
     },
   },
   computed: {
@@ -654,6 +653,7 @@ export default {
       if (!tax) {
         tax = { price: 0, percentage: 0 };
       }
+      console.log("tax", tax);
       return tax;
     },
     discount() {
@@ -662,14 +662,13 @@ export default {
       if (!discount) {
         discount = { price: 0, percentage: 0 };
       }
+      console.log("discount", discount);
       return discount;
     },
     bundledDiscountPrice() {
       let bundledServicePrice = 0;
-      let services =
-        this.vendorProposal.bundleDiscount && this.vendorProposal.bundleDiscount.isApplied
-          ? this.vendorProposal.bookedServices
-          : this.vendorProposal.bundleDiscount.services;
+      let services = this.vendorProposal.bundleDiscount && this.vendorProposal.bundleDiscount.isApplied ?
+          this.vendorProposal.bookedServices : this.vendorProposal.bundleDiscount.services;
       services.forEach((serviceCategory) => {
         const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
           if (service.isComplimentary) {
@@ -700,14 +699,17 @@ export default {
           }
           return s + service.requirementValue * service.price;
         }, 0);
+        console.log("sumOFserive", sumOfService);
         totalPrice += sumOfService;
       });
 
+      console.log(this.addedServices);
       // added service item price
       Object.keys(this.addedServices).forEach((serviceCategory) => {
         const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
           return s + service.requirementValue * service.price;
         }, 0);
+        console.log("sumOFserive", sumOfService);
         totalPrice += sumOfService;
       });
       return totalPrice;
