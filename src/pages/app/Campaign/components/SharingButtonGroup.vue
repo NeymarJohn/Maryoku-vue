@@ -7,7 +7,6 @@
       <li>
         <!--  -->
         <a
-          v-if="sharingData"
           :href="`http://www.pinterest.com/pin/create/button/?url=${encodeURI(sharingData.pageUrl)}&media=${encodeURI(
             sharingData.mediaUrl,
           )}&description=test`"

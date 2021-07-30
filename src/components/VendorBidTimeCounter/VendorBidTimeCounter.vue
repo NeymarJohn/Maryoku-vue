@@ -1,5 +1,5 @@
 <template>
-  <div class="vendor-bid-time-counter-wrapper event" :class="customClass">
+  <div class="vendor-bid-time-counter-wrapper event">
     <div class="time-cont">
       <ul>
         <li class="fix-digit">{{ d | attachZero }}<br /><span>Days</span></li>
@@ -11,7 +11,8 @@
         <li class="fix-digit">{{ s | attachZero }}<br /><span>Sec</span></li>
       </ul>
     </div>
-    <div v-if="content" class="action-cont">{{ content }}</div>
+    <div class="action-cont">{{ content }}</div>
+    <!--<div class="action-cont">To send your bid</div>-->
   </div>
 </template>
 <script>
@@ -24,7 +25,6 @@ export default {
     minutes: Number,
     seconds: Number,
     content: String,
-    customClass: String,
   },
   data() {
     return {
@@ -69,6 +69,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .vendor-bid-time-counter-wrapper {
+  background-color: #ffc001;
   font-family: "Manrope-Regular", sans-serif;
   text-align: center;
   text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
@@ -78,13 +79,11 @@ export default {
     padding: 18px 34px 9px 34px;
     font-size: 30px;
     font-weight: bold;
-
     ul {
       padding: 0;
       margin: 0;
       list-style: none;
       display: flex;
-      justify-content: center;
       li {
         margin-right: 16px;
 

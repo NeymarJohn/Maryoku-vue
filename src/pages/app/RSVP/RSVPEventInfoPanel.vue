@@ -168,10 +168,10 @@ export default {
     if (this.event.additionalData && this.event.additionalData.iconColors) {
       this.iconColors = this.event.additionalData.iconColors;
     } else {
-      this.$set(this.iconColors, "timeColor", this.event.concept ? this.event.concept.colors[0] : {});
-      this.$set(this.iconColors, "locationColor", this.event.concept ? this.event.concept.colors[0] : {});
-      this.$set(this.iconColors, "soloColor", this.event.concept ? this.event.concept.colors[0] : {});
-      this.$set(this.iconColors, "arrivalColor", this.event.concept ? this.event.concept.colors[0] : {});
+      this.$set(this.iconColors, "timeColor", this.event.concept.colors[0]);
+      this.$set(this.iconColors, "locationColor", this.event.concept.colors[0]);
+      this.$set(this.iconColors, "soloColor", this.event.concept.colors[0]);
+      this.$set(this.iconColors, "arrivalColor", this.event.concept.colors[0]);
     }
     console.log("iconColors", this.iconColors);
   },

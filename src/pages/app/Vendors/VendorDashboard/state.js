@@ -1,15 +1,18 @@
 import Vue from "vue";
+import { postReq, getReq } from "@/utils/token";
 import Vendors from "@/models/Vendors";
 import ProposalRequest from "@/models/ProposalRequest";
-import Proposal from "@/models/Proposal";
-import Vendor from "@/models/Vendors";
+import { VendorPolicy, VendorPricingPolicy } from "@/constants/vendor";
+
+import S3Service from "@/services/s3.service";
+import { makeid } from "@/utils/helperFunction";
+import { getBase64 } from "@/utils/file.util";
 import UserEvent from "@/models/UserEvent";
 import moment from "moment";
 
 const state = {
   calendarEvents: {},
-  proposalRequests: [],
-  proposals: [],
+  proposalRequests: null
 };
 
 const getters = {
@@ -31,6 +34,13 @@ const actions = {
       })
         .get()
         .then((events) => {
+
+          // events.forEach(event => {
+          //   if (!calendarEvents[month]) {
+          //     calendarEvents[month] = []
+          //   }
+          //   calendarEvents[month].push(event)
+          // })
           commit("setCalendarEvents", { month, events })
           resolve(calendarEvents)
         });
@@ -38,52 +48,10 @@ const actions = {
 
   },
   getProposalRequests({ commit, state }, vendorId) {
-      return new Promise((resolve, reject) => {
-          new ProposalRequest().for(new Vendors({ id: vendorId })).get().then(proposalRequests => {
-              commit("setProposalRequests", proposalRequests)
-              resolve(proposalRequests);
-          }).catch(err => {
-              reject(err);
-          })
-      })
-
-  },
-  getProposals({ commit, state }, payload) {
-    return new Promise((resolve, reject) => {
-        new Proposal()
-            .for(new Vendor({ id: payload.vendorId }))
-            .page(payload.pagination.page)
-            .limit(payload.pagination.limit)
-            .params(payload.params)
-            .get().then(res => {
-            console.log('getProposals', res);
-            commit('setProposals', res[0].items);
-            resolve(res[0])
-        }).catch(err => {
-            reject(err);
-        });
+    new ProposalRequest().for(new Vendors({ id: vendorId })).get().then(proposalRequests => {
+      commit("setProposalRequests", proposalRequests)
     })
-  },
-  updateProposalRequest({ commit, state }, pr) {
-    return new Promise((resolve, reject) => {
-        new ProposalRequest(pr).save().then(result => {
-            commit("setProposalRequest", result)
-            resolve(result);
-        }).catch(err => {
-            reject(err);
-        })
-    })
-  },
-  updateProposal({ commit, state }, vendorId) {
-    return new Promise((resolve, reject) => {
-        new ProposalRequest().for(new Vendors({ id: vendorId })).get().then(proposalRequests => {
-            commit("setProposalRequests", proposalRequests)
-            resolve(proposalRequests);
-        }).catch(err => {
-            reject(err);
-        })
-    })
-  },
+  }
 };
 
 const mutations = {
@@ -92,17 +60,6 @@ const mutations = {
   },
   setProposalRequests(state, proposalRequests) {
     Vue.set(state, "proposalRequests", proposalRequests)
-  },
-  setProposals(state, proposals) {
-    Vue.set(state, "proposals", proposals)
-  },
-  setProposalRequest(state, proposalRequest) {
-    let idx = state.proposalRequests.findIndex(it => it.id === proposalRequest.id);
-    Vue.set(state.proposalRequests, idx, proposalRequest)
-  },
-  setProposal(state, proposal) {
-    let idx = state.proposals.findIndex(it => it.id === proposal.id);
-    Vue.set(state.proposals, idx, proposal)
   }
 };
 

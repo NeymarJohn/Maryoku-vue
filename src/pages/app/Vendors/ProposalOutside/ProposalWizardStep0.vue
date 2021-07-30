@@ -30,25 +30,25 @@
       <selectable-card
         label="Corporation Event"
         value="corporation"
-        :selected="eventOption"
+        :selected="eventType"
         :icon="`${$iconURL}VendorsProposalPage/Group 17122.svg`"
         theme="purple"
-        @change="eventOption = 'corporation'"
+        @change="eventType = 'corporation'"
       ></selectable-card>
       <selectable-card
         label="Social Event"
         value="social"
         :icon="`${$iconURL}VendorsProposalPage/Group 17394.svg`"
-        :selected="eventOption"
-        @change="eventOption = 'social'"
+        :selected="eventType"
+        @change="eventType = 'social'"
         theme="purple"
       ></selectable-card>
     </div>
-    <div v-if="eventOption === 'corporation'" class="text-left mt-30">
+    <div v-if="eventType === 'corporation'" class="text-left mt-30">
       <label class="font-bold">Type Of Event:</label>
       <multiselect
         class="width-50 mt-5 form-input md-purple"
-        v-model="eventType"
+        v-model="selectedEventType"
         :options="eventTypes"
         :close-on-select="true"
         :clear-on-select="true"
@@ -63,7 +63,7 @@
       <label class="font-bold">Number of Guests</label>
       <maryoku-input
         class="width-50 mt-5 form-input"
-        v-model="numberOfParticipants"
+        v-model="guests"
         inputStyle="users"
         placeholer="Type the amount of guests here..."
       ></maryoku-input>
@@ -71,21 +71,18 @@
     <div class="text-left mt-30">
       <label class="font-bold">Event Location</label>
       <div class="width-50 location-input">
-        <location-input
-            v-model="location"
-            :value="location"
-        ></location-input>
+        <location-input v-model="location"></location-input>
       </div>
     </div>
 
     <div class="row">
       <p class="mb-5 text-left text-bold">Date Of The Event</p>
       <maryoku-input
-        :value="eventDate"
+        :value="date"
         class="form-input width-50"
         placeholder="Choose date…"
         inputStyle="date"
-        v-model="eventDate"
+        v-model="date"
         theme="purple"
       ></maryoku-input>
     </div>
@@ -171,9 +168,22 @@ export default {
     return {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
       date: null,
+      startTime: {
+        hh: "12",
+        mm: "00",
+      },
+      endTime: {
+        hh: "12",
+        mm: "00",
+      },
+      amPack: {
+        start: "AM",
+        end: "AM",
+      },
       isLoading: false,
       isRegisteredCustomer: true,
       guests: null,
+      location: null,
       link_proposal: null,
       attachment: null,
       customers: [],
@@ -185,7 +195,7 @@ export default {
         maxFilesize: 5,
         headers: { "My-Awesome-Header": "header value" },
       },
-      eventOption: "corporation",
+      eventType: "corporation",
       showNewCustomerModal: false,
       selectedEventType: null,
     };
@@ -200,21 +210,22 @@ export default {
       this.selectedCustomer = selectedCustomer;
     },
     updateStartA() {
-      console.log('updateStartA')
-      if (this.amPack.start == "am") {
-        this.amPack = {start: "pm", end: this.amPack.end};
+      if (this.amPack.start == "AM") {
+        this.amPack.start = "PM";
       } else {
-        this.amPack = {start: "am", end: this.amPack.end};
+        this.amPack.start = "AM";
       }
-      console.log('updateStartA', this.amPack)
     },
     updateEndA() {
-      console.log('updateEndA')
-      if (this.amPack.end == "am") {
-        this.amPack = {start: this.amPack.start, end: 'pm'};
+      if (this.amPack.end == "AM") {
+        this.amPack.end = "PM";
       } else {
-        this.amPack = {start: this.amPack.start, end: 'am'};
+        this.amPack.end = "AM";
       }
+    },
+    changeDate(date) {
+      console.log("date", date);
+      console.log("changeDate");
     },
     close() {
       this.$emit("cancel");
@@ -267,12 +278,6 @@ export default {
         this.fileUrl = fileUrl;
       });
     },
-    getTimeFromFormat(date, time, a, format){
-        return moment(
-            `${date} ${time.hh}:${time.mm} ${a}`,
-            format,
-        ).unix();
-    }
   },
   computed: {
     eventTypes() {
@@ -286,93 +291,6 @@ export default {
         this.$store.commit("proposalForNonMaryoku/setEventProperty", { key: "customer", value });
       },
     },
-    eventType: {
-      get() {
-          return this.$store.state.proposalForNonMaryoku.event.eventType;
-      },
-      set(value) {
-          this.$store.commit("proposalForNonMaryoku/setEventProperty", { key: "eventType", value });
-      }
-    },
-    location: {
-      get() {
-          return this.$store.state.proposalForNonMaryoku.event.location;
-      },
-      set(value) {
-          this.$store.commit("proposalForNonMaryoku/setEventProperty", { key: "location", value });
-      }
-    },
-    numberOfParticipants: {
-      get() {
-          return this.$store.state.proposalForNonMaryoku.event.numberOfParticipants;
-      },
-      set(value) {
-          this.$store.commit("proposalForNonMaryoku/setEventProperty", { key: "numberOfParticipants", value });
-      }
-    },
-    eventDate: {
-      get() {
-        if(this.$store.state.proposalForNonMaryoku.event.startTime)
-          return  moment(this.$store.state.proposalForNonMaryoku.event.startTime * 1000).format("DD.MM.YYYY");
-        else return null
-      },
-      set(value) {
-          console.log(value, this.getTimeFromFormat(value, this.startTime, this.amPack.start, "DD.MM.YYYY hh:mm a") )
-          this.$store.commit("proposalForNonMaryoku/setEventProperty", {
-              key: "startTime",
-              value: this.getTimeFromFormat(value, this.startTime, this.amPack.start, "DD.MM.YYYY hh:mm a") });
-          this.$store.commit("proposalForNonMaryoku/setEventProperty", {
-              key: "endTime",
-              value: this.getTimeFromFormat(value, this.endTime, this.amPack.end, "DD.MM.YYYY hh:mm a") });
-      }
-    },
-    startTime: {
-      get() {
-        if(this.$store.state.proposalForNonMaryoku.event.startTime)
-            return {
-                hh: moment(this.$store.state.proposalForNonMaryoku.event.startTime * 1000).format("hh"),
-                mm: moment(this.$store.state.proposalForNonMaryoku.event.startTime * 1000).format("mm")};
-        else return {hh: "12", mm: "00",}
-      },
-      set(value){
-          this.$store.commit("proposalForNonMaryoku/setEventProperty", {
-              key: "startTime",
-              value:  this.getTimeFromFormat(this.eventDate, value, this.amPack.start, "DD.MM.YYYY hh:mm a")});
-      }
-    },
-    endTime: {
-      get() {
-        if(this.$store.state.proposalForNonMaryoku.event.startTime)
-          return {
-            hh: moment(this.$store.state.proposalForNonMaryoku.event.endTime * 1000).format("hh"),
-            mm: moment(this.$store.state.proposalForNonMaryoku.event.endTime * 1000).format("mm")};
-        else return {hh: "12", mm: "00",}
-      },
-      set(value){
-        this.$store.commit("proposalForNonMaryoku/setEventProperty", {
-            key: "endTime",
-            value: this.getTimeFromFormat(this.eventDate, value, this.amPack.end, "DD.MM.YYYY hh:mm a")});
-      }
-    },
-    amPack:{
-      get() {
-        if(this.$store.state.proposalForNonMaryoku.event.startTime && this.$store.state.proposalForNonMaryoku.event.endTime)
-          return {
-            start: moment(this.$store.state.proposalForNonMaryoku.event.startTime * 1000).format("a"),
-            end: moment(this.$store.state.proposalForNonMaryoku.event.endTime * 1000).format("a")};
-        else return {start: 'am', end: 'am'}
-      },
-      set(value){
-        if(this.$store.state.proposalForNonMaryoku.event.startTime && this.$store.state.proposalForNonMaryoku.event.endTime) {
-            this.$store.commit("proposalForNonMaryoku/setEventProperty", {
-                key: "startTime",
-                value: this.getTimeFromFormat(this.eventDate, this.startTime, value.start, "DD.MM.YYYY hh:mm a") });
-            this.$store.commit("proposalForNonMaryoku/setEventProperty", {
-                key: "endTime",
-                value: this.getTimeFromFormat(this.eventDate, this.endTime, value.end, "DD.MM.YYYY hh:mm a")});
-        }
-      }
-    }
   },
   watch: {
     isRegisteredCustomer(newValue, oldValue) {

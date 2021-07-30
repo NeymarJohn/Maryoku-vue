@@ -1,7 +1,6 @@
 import AuthService from '../../services/auth.service';
 
 const user = JSON.parse(localStorage.getItem('user'));
-console.log(user)
 const initialState = user
   ? { status: { loggedIn: true }, user }
   : { status: { loggedIn: false }, user: null };
@@ -44,7 +43,6 @@ export default {
     },
     updateProfile({ commit }, userData) {
       AuthService.updateProfile(userData).then(userProfile => {
-        console.log(userProfile)
         commit('updateUserData', userProfile)
       })
     },

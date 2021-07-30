@@ -318,6 +318,7 @@ import RsvpVenueCarousel from "./RSVPVenueCarousel";
 import RsvpEventInfoPanel from "@/pages/app/RSVP/RSVPEventInfoPanel.vue";
 import SocialSharingModal from "@/components/Modals/SocialSharingModal";
 import { mapActions, mapGetters } from "vuex";
+import Swal from "sweetalert2";
 import Modal from "../../../components/Modal.vue";
 import MoreInfoItem from "./mobile/MoreInfoItem.vue";
 import { Model } from "vue-api-query";
@@ -449,7 +450,7 @@ export default {
     headerImage() {
       console.log(this.event.concept);
       if (this.campaign) {
-        return this.campaign.coverImage || this.campaign.defaultCoverImage;
+        return this.campaign.coverImage;
       }
       return "";
     },

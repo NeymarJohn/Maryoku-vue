@@ -185,7 +185,7 @@
           <div>
             <span class="font-size-30 font-bold">Bundle offer</span>
             <span>{{ vendorProposal.bundleDiscount.percentage }}%</span>
-            <span>{{ getBundleServices(vendorProposal.bookedServices) }}</span>
+            <span>{{ getBundleServices(vendorProposal.bundleDiscount.services) }}</span>
           </div>
           <div class="font-size-30 font-bold">-${{ bundledDiscountPrice | withComma }}</div>
         </div>
@@ -267,12 +267,6 @@
 
           <cancellation-policy></cancellation-policy>
 
-          <!-- <div class="additional-info">
-                      <div class="additional-info__title">Additional</div>
-                      <div class="additional-info__content">
-                        {{ vendorProposal.candellationPolicy }}
-                      </div>
-                    </div> -->
           <div class="side-label">
             <div class="label-value">Act of God</div>
           </div>
@@ -376,10 +370,20 @@ import ExtraServiceItem from "./ExtraServiceItem";
 import IncludedServiceItem from "./IncludedServiceItem.vue";
 import { socialMediaBlocks } from "@/constants/vendor";
 import EventProposalPrice from "./EventProposalPrice.vue";
-import TimerPanel from "../components/TimerPanel.vue";
+import TimerPanel from "./TimerPanel.vue";
 import Swal from "sweetalert2";
 
 export default {
+  props: {
+    vendorProposal: {
+      type: Object,
+      default: () => {},
+    },
+    landingPage: {
+      type: Boolean,
+      default: false,
+    },
+  },
   components: {
     Tabs,
     EventBudgetVendors,
@@ -400,19 +404,7 @@ export default {
     Loader,
     TimerPanel,
   },
-  props: {
-    vendorProposal: {
-      type: Object,
-      default: () => {},
-    },
-    category: {
-      type: Object,
-    },
-    landingPage: {
-      type: Boolean,
-      default: false,
-    },
-  },
+
   data() {
     return {
       // auth: auth,
@@ -445,7 +437,13 @@ export default {
     };
   },
   created() {
-    console.log('eventProposalDetail.created', this.vendorProposal, this.category);
+    // const proposalId = this.$route.params.proposalId;
+    // console.log(proposalId);
+    // Proposal.find(proposalId).then((proposal) => {
+    //   this.isLoading = false;
+    //   this.vendorProposal = proposal;
+    //   this.extraServices = this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
+    // });
     this.extraServices = this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
   },
 
@@ -458,7 +456,6 @@ export default {
       "setNumberOfParticipants",
       "setEventData",
     ]),
-    ...mapActions("event", ["updateProposal"]),
     getBundleServices(bundleServices) {
       const serviceNames = bundleServices.map((service) => {
         return this.getCategory(service).title;
@@ -475,13 +472,14 @@ export default {
     askQuestion() {},
     bookVendor() {
       new Proposal({ ...this.vendorProposal }).save().then((proposal) => {
-        let routeData = this.$router.push({
+        let routeData = this.$router.resolve({
           name: "Checkout",
           params: {
             vendorId: this.vendorProposal.vendor.id,
             proposalId: this.vendorProposal.id,
           },
         });
+        window.open(routeData.href, "_blank");
       });
     },
     getEvent() {},
@@ -544,8 +542,6 @@ export default {
               vm.fetchingAllAttachments = true;
             }, 2000);
           }
-
-          console.log("images ", this.images);
         });
       });
     },
@@ -564,8 +560,10 @@ export default {
       return !isBlank;
     },
     updateAddedServices({ category, costServices, extraServices }) {
+      console.log(extraServices);
       this.vendorProposal.costServices[category] = costServices;
       this.vendorProposal.extraServices[category] = extraServices;
+      this.$emit("updateProposal", this.vendorProposal);
     },
     closeDetail() {
       this.$emit("close");
@@ -577,6 +575,9 @@ export default {
       } else {
         newExpiredDate = new Date(this.vendorProposal.dateCreated).getTime() + 9 * 3600 * 24 * 1000;
       }
+      // new EventComponentProposal({ id: this.vendorProposal.id, expiredDate: newExpiredDate }).save().then((res) => {
+      //   this.vendorProposal = res;
+      // });
 
       new ProposalNegotiationRequest({
         eventId: this.eventData.id,
@@ -600,8 +601,10 @@ export default {
         });
     },
     changeBookedServices() {
-      console.log('changeBookedServices', this.vendorProposal);
-      this.updateProposal({category: this.category.componentId, proposal: this.vendorProposal});
+      this.$store.commit("vendorProposal/setValue", {
+        key: "bookedServices",
+        value: this.vendorProposal.bookedServices,
+      });
     },
   },
   computed: {
@@ -653,7 +656,6 @@ export default {
       if (!tax) {
         tax = { price: 0, percentage: 0 };
       }
-      console.log("tax", tax);
       return tax;
     },
     discount() {
@@ -662,14 +664,11 @@ export default {
       if (!discount) {
         discount = { price: 0, percentage: 0 };
       }
-      console.log("discount", discount);
       return discount;
     },
     bundledDiscountPrice() {
       let bundledServicePrice = 0;
-      let services = this.vendorProposal.bundleDiscount && this.vendorProposal.bundleDiscount.isApplied ?
-          this.vendorProposal.bookedServices : this.vendorProposal.bundleDiscount.services;
-      services.forEach((serviceCategory) => {
+      this.vendorProposal.bundleDiscount.services.forEach((serviceCategory) => {
         const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
           if (service.isComplimentary) {
             return 0;
@@ -699,17 +698,14 @@ export default {
           }
           return s + service.requirementValue * service.price;
         }, 0);
-        console.log("sumOFserive", sumOfService);
         totalPrice += sumOfService;
       });
 
-      console.log(this.addedServices);
       // added service item price
       Object.keys(this.addedServices).forEach((serviceCategory) => {
         const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
           return s + service.requirementValue * service.price;
         }, 0);
-        console.log("sumOFserive", sumOfService);
         totalPrice += sumOfService;
       });
       return totalPrice;

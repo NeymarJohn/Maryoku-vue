@@ -664,8 +664,8 @@ export default {
         serviceTimeString = "All Day";
       } else if (this.proposalRequest.plannerRequirement.period) {
         const period = this.proposalRequest.plannerRequirement.period;
-        serviceTimeString = moment(parseInt(period.startTime)).format('hh:mm:a');
-        serviceTimeString = `${serviceTimeString} - ${moment(parseInt(period.endTime)).format('hh:mm:a')}`;
+        serviceTimeString = `${period.startTime.time.hh}:${period.startTime.time.mm}:${period.startTime.ampm}`;
+        serviceTimeString = `${serviceTimeString} - ${period.endTime.time.hh}:${period.endTime.time.mm}:${period.endTime.ampm}`;
       }
       return {
         time: serviceTimeString,

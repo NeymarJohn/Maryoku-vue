@@ -17,7 +17,7 @@
           </template>
           <img
             :src="item"
-            v-for="(item, index) in vendor.images.filter(it => it !== null)"
+            v-for="(item, index) in vendor.images"
             :key="`carousel-item-${index}`"
             class="carousel-image"
           />

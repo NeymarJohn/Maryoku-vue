@@ -76,13 +76,8 @@ const actions = {
         }
     },
     getProfile: ({ commit, state }) => {
-        return new Promise((resolve, reject) => {
-            Vendors.find("me").then(res => {
-                commit('setProfile', res);
-                resolve(res);
-            }).catch(err => {
-                reject(err);
-            })
+        Vendors.find("me").then(res => {
+            commit('setProfile', res);
         })
     },
     updateProfile: ({ commit, state }, profileData) => {

@@ -291,7 +291,7 @@ export default {
       this.$router.push({ path: `/completed-bidding` });
     },
     goToVendorProfile() {
-        this.$router.push({path: "/vendor/dashboard"});
+      this.$router.push({ path: `/vendor/signin` });
     },
     discard() {
       Swal.fire({

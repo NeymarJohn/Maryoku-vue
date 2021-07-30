@@ -320,7 +320,7 @@ export default {
     };
   },
   mounted() {
-    console.log("detail.mounted", this.vendorProposal);
+    console.log("detail.mounted");
     if (this.vendorProposal) {
       this.eventData = this.vendorProposal.proposalRequest
         ? this.vendorProposal.proposalRequest.eventData

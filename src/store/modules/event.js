@@ -7,8 +7,6 @@ import EventTheme from "@/models/EventTheme";
 import EventComponent from "@/models/EventComponent";
 import { postReq, getReq } from "@/utils/token";
 import EventTimelineDate from "@/models/EventTimelineDate";
-import Proposal from "@/models/Proposal";
-
 const state = {
     currentUser: {},
     param1: "test param",
@@ -47,7 +45,6 @@ const state = {
     requirements: null,
     requirementsForVendor: {},
     budgetNotification: [],
-    proposals: {},
 };
 
 const getters = {
@@ -268,36 +265,7 @@ const actions = {
                 });
             }
         })
-    },
 
-    getProposals({commit, state}, payload) {
-        return new Promise((resolve, reject) => {
-            new Proposal()
-                .params(payload)
-                .get()
-                .then((result) => {
-                    state.eventData.components.map(c => {
-                        let proposals = result.filter(it => it.eventComponentId == c.id) || [];
-                        commit("setProposalsByCategory", {category: c.componentId, proposals});
-                    })
-                    resolve(result)
-                })
-        })
-    },
-    updateProposal({commit, state}, payload) {
-        console.log('updateProposal', payload);
-        return new Promise((resolve, reject) => {
-            new Proposal({...payload.proposal})
-                .save()
-                .then((result) => {
-                    let proposals = state.proposals[payload.category];
-                    let index = proposals.findIndex(p => p.id == payload.proposal.id);
-                    console.log(payload.category, index, payload.proposal);
-                    Vue.set(proposals, index, payload.proposal)
-                    commit("setProposalsByCategory", {category: payload.category, proposals});
-                    resolve(result)
-                })
-        })
     }
 };
 
@@ -381,9 +349,6 @@ const mutations = {
     setBudgetNotification(state, event_id) {
         state.budgetNotification.push(event_id);
     },
-    setProposalsByCategory(state, {category, proposals}){
-        Vue.set(state.proposals, category, proposals);
-    }
 };
 
 export default {

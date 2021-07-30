@@ -43,11 +43,15 @@
             :serviceCategory="service"
             :key="`secondary-${service}-section`"
           ></checkout-price-table>
-          <div class="p-30">
+          <div class="p-30" v-if="this.proposal.extraServices[this.vendor.eventCategory.key]">
             <div>Would you like to upgrade & add one of those?</div>
             <div class="mb-30" v-if="proposal.serviceCategory">
               You have $ {{ (proposal.serviceCategory.allocatedBudget - proposal.cost) | withComma }} left over from
               your original defined budget.
+            </div>
+            <div class="mt-10">
+              Simply select anything that you would like to add. Please note that any item or service you choose here
+              will be added to the overall vendor cost.
             </div>
             <collapse-panel
               :defaultStatus="false"
@@ -64,19 +68,17 @@
                 </div>
               </template>
               <template slot="content">
-                <div class="price-table-content mt-20">
-                  Simply select anything that you would like to add. Please note that any item or service you choose
-                  here will be added to the overall vendor cost.
-                </div>
+                <div class="price-table-content mt-20"></div>
               </template>
             </collapse-panel>
           </div>
         </div>
         <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
-            <div class="price-header">
+            <div class="price-header d-flex align-center">
+              <md-checkbox class="m-0 mr-10" v-model="onDayCordinator"></md-checkbox>
               <img :src="`${$iconURL}PaymentPage/Group 9556.svg`" class="mr-10 ml-10" />
-              On Day Cordinator
+              On Day Cordinator($1,000 Per Day)
             </div>
           </template>
           <template slot="content">
@@ -129,7 +131,7 @@
               </div>
               <hr class="mt-20 mb-20" />
               <div>
-                <md-checkbox class="md-red md-simple" v-model="cachMaryokuPoints">
+                <md-checkbox class="md-red md-simple" v-model="isCheckedFoodDonate">
                   Cash in Your Maryoku Points
                 </md-checkbox>
               </div>
@@ -175,10 +177,10 @@
               <span>TOTAL TO PAY</span>
               <span>${{ discounedAndTaxedPrice | withComma }}</span>
             </div>
-            <div class="font-size-14 d-flex justify-content-between">
+            <!-- <div class="font-size-14 d-flex justify-content-between">
               <span>TOTAL TO PAY</span>
               <span>${{ discounedAndTaxedPrice | withComma }}</span>
-            </div>
+            </div> -->
           </div>
         </div>
         <div class="mt-40">
@@ -241,12 +243,12 @@ export default {
       paymentMethod: "",
       checkedGiveBack: false,
       isCheckedFoodDonate: false,
-      cachMaryokuPoints: false,
       stripePriceData: null,
       showStripeCheckout: false,
       loadingPayment: false,
       showSuccessModal: false,
       showCancelModal: false,
+      onDayCordinator: false,
     };
   },
   created() {
@@ -321,11 +323,16 @@ export default {
       return totalPrice;
     },
     discounedAndTaxedPrice() {
+      const eventDays = 1;
       const discounted =
         this.totalPriceOfProposal -
         (this.totalPriceOfProposal * this.discount.percentage) / 100 -
         this.bundledDiscountPrice;
-      return discounted + (discounted * this.tax.percentage) / 100;
+      let price = discounted + (discounted * this.tax.percentage) / 100;
+      if (this.onDayCordinator) {
+        price += eventDays * 1000;
+      }
+      return price;
     },
   },
   methods: {
@@ -335,7 +342,7 @@ export default {
         this.$http
           .post(
             `${process.env.SERVER_URL}/stripe/v1/customer/products`,
-            { name: this.vendor.companyName, price: this.discounedAndTaxedPrice * 1000 },
+            { name: this.vendor.companyName, price: Math.floor(this.discounedAndTaxedPrice * 100) },
             { headers: this.$auth.getAuthHeader() },
           )
           .then((res) => {
