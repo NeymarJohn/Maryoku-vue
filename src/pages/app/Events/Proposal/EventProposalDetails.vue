@@ -56,6 +56,13 @@
         </div>
 
         <div class="proposal-body">
+          <md-button
+              class="md-simple md-icon-button md-raised save-btn"
+              @click="isFavorite = !isFavorite"
+          >
+            <img :src="`${$iconURL}${isFavorite ? 'Requirements/Group+16153.svg' : 'comments/SVG/heart-dark.svg'}`"/>
+          </md-button>
+
           <h1 class="font-size-30">Dear {{ $store.state.auth.user.name }},</h1>
           <p>
             {{ vendorProposal.personalMessage }}
@@ -267,12 +274,6 @@
 
           <cancellation-policy></cancellation-policy>
 
-          <!-- <div class="additional-info">
-                      <div class="additional-info__title">Additional</div>
-                      <div class="additional-info__content">
-                        {{ vendorProposal.candellationPolicy }}
-                      </div>
-                    </div> -->
           <div class="side-label">
             <div class="label-value">Act of God</div>
           </div>
@@ -442,10 +443,17 @@ export default {
       showAboutUs: false,
       addedServices: {},
       socialMediaBlocks,
+      isFavorite: false,
     };
   },
   created() {
-    console.log('eventProposalDetail.created', this.vendorProposal, this.category);
+    // const proposalId = this.$route.params.proposalId;
+    // console.log(proposalId);
+    // Proposal.find(proposalId).then((proposal) => {
+    //   this.isLoading = false;
+    //   this.vendorProposal = proposal;
+    //   this.extraServices = this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
+    // });
     this.extraServices = this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
   },
 
@@ -544,8 +552,6 @@ export default {
               vm.fetchingAllAttachments = true;
             }, 2000);
           }
-
-          console.log("images ", this.images);
         });
       });
     },
@@ -566,6 +572,7 @@ export default {
     updateAddedServices({ category, costServices, extraServices }) {
       this.vendorProposal.costServices[category] = costServices;
       this.vendorProposal.extraServices[category] = extraServices;
+      this.$emit("updateProposal", this.vendorProposal);
     },
     closeDetail() {
       this.$emit("close");
@@ -600,8 +607,10 @@ export default {
         });
     },
     changeBookedServices() {
-      console.log('changeBookedServices', this.vendorProposal);
-      this.updateProposal({category: this.category.componentId, proposal: this.vendorProposal});
+      this.$store.commit("vendorProposal/setValue", {
+        key: "bookedServices",
+        value: this.vendorProposal.bookedServices,
+      });
     },
   },
   computed: {
@@ -653,7 +662,6 @@ export default {
       if (!tax) {
         tax = { price: 0, percentage: 0 };
       }
-      console.log("tax", tax);
       return tax;
     },
     discount() {
@@ -662,13 +670,14 @@ export default {
       if (!discount) {
         discount = { price: 0, percentage: 0 };
       }
-      console.log("discount", discount);
       return discount;
     },
     bundledDiscountPrice() {
       let bundledServicePrice = 0;
-      let services = this.vendorProposal.bundleDiscount && this.vendorProposal.bundleDiscount.isApplied ?
-          this.vendorProposal.bookedServices : this.vendorProposal.bundleDiscount.services;
+      let services =
+        this.vendorProposal.bundleDiscount && this.vendorProposal.bundleDiscount.isApplied
+          ? this.vendorProposal.bookedServices
+          : this.vendorProposal.bundleDiscount.services;
       services.forEach((serviceCategory) => {
         const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
           if (service.isComplimentary) {
@@ -699,17 +708,14 @@ export default {
           }
           return s + service.requirementValue * service.price;
         }, 0);
-        console.log("sumOFserive", sumOfService);
         totalPrice += sumOfService;
       });
 
-      console.log(this.addedServices);
       // added service item price
       Object.keys(this.addedServices).forEach((serviceCategory) => {
         const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
           return s + service.requirementValue * service.price;
         }, 0);
-        console.log("sumOFserive", sumOfService);
         totalPrice += sumOfService;
       });
       return totalPrice;
@@ -767,6 +773,28 @@ export default {
     .proposal-content {
       // margin: 0 2em;
       position: relative;
+        .save-btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            width: 50px;
+            height: 50px;
+            z-index: 2;
+            background: white !important;
+            border-radius: 50%;
+            box-shadow: none;
+
+            /deep/ .md-ripple {
+                padding: 0px;
+            }
+            img.non-selected {
+                padding: 3px;
+            }
+            img {
+                width: 50px;
+                height: 50px;
+            }
+       }
       .close-btn {
         position: absolute;
         right: 20px;
@@ -847,6 +875,7 @@ export default {
 
       .proposal-body {
         padding: 1em 2.5em;
+        position: relative;
 
         h1 {
           margin: 1em 0 0;

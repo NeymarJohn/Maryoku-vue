@@ -16,12 +16,13 @@
       :style="`background: url(${backgroundImage}) center center no-repeat`"
       :class="{ isCollapsed, isSelected }"
     >
-      <div class="bundle-offer" v-if="proposal.bundleDiscount && proposal.bundleDiscount.isApplied">
+      <div class="bundle-offer" v-if="proposal.additionalServices.length">
         <img :src="`${$iconURL}common/bell-white.svg`" />
         Bundle Offer
         <md-tooltip md-direction="top" class="p-30 color-black">
-          <div class="font-size-20 font-bold mb-10">{{ getBundleToolTipText(proposal.bundleDiscount.services) }}</div>
-          <div class="font-size-16">{{ proposal.bundleDiscount.percentage }}% Off for the whole package</div>
+          <div class="font-size-20 font-bold mb-10">{{ getBundleToolTipText(Object.keys(proposal.pricesByCategory)) }}</div>
+          <div class="font-size-16" v-if="proposal.bundleDiscount && proposal.bundleDiscount.isApplied">
+              {{ proposal.bundleDiscount.percentage }}% Off for the whole package</div>
         </md-tooltip>
       </div>
       <div v-if="isCollapsed" class="proposal-summary" @click="proposalDetails">

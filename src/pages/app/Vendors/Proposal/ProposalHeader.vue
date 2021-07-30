@@ -99,8 +99,7 @@
         :hours="getRemainingTime.hours"
         :minutes="getRemainingTime.mins"
         :seconds="getRemainingTime.seconds"
-        class="bg-yellow"
-        :bottom-content="'To send your bid'"
+        :content="'To send your bid'"
       />
     </div>
     <modal v-if="showModal" class="full-details-modal" container-class="modal-container lg">

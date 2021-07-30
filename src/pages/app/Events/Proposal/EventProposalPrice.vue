@@ -3,10 +3,11 @@
     <div class="d-flex justify-content-between align-center">
       <div class="item-info d-flex justify-content-start align-center">
         <div class="element-title">
-          <md-checkbox v-if="proposalData.bundleDiscount && proposalData.bundleDiscount.isApplied"
-                       v-model="proposalData.bookedServices"
-                       :value="serviceCategory"
-                       @change="changeBookService"></md-checkbox>
+          <md-checkbox
+            v-model="proposalData.bookedServices"
+            :value="serviceCategory"
+            @change="changeBookService"
+          ></md-checkbox>
           <img :src="`${$iconURL}Budget+Elements/${vendorCategory.icon}`" />
           {{ vendorCategory.fullTitle }}
           <span class="element-duration">For Whole Event</span>
@@ -248,20 +249,21 @@ export default {
     };
   },
   created() {
-    console.log('eventProposal.created', this.serviceCategory);
-    this.extraServices = this.proposalData.extraServices[this.serviceCategory] ?
-        this.proposalData.extraServices[this.serviceCategory].filter((item) => !item.hideOnProposal) : [];
+    this.extraServices = this.proposalData.extraServices[this.serviceCategory]
+      ? this.proposalData.extraServices[this.serviceCategory].filter((item) => !item.hideOnProposal)
+      : [];
   },
   methods: {
     addExtraService(extraService) {
       const itemIndex = this.extraServices.findIndex((item) => item.requirementTitle === extraService.requirementTitle);
-      console.log(itemIndex);
       if (itemIndex >= 0) {
         this.$set(this.extraServices[itemIndex], "added", true);
         extraService.isExtra = true;
         this.costServices.push(extraService);
       }
       this.extraServices = [...this.extraServices];
+
+      console.log("this.extraServices", this.extraServices);
       this.$emit("changeAddedServices", {
         category: this.serviceCategory,
         costServices: this.costServices,
@@ -284,9 +286,9 @@ export default {
       });
       this.$forceUpdate();
     },
-    changeBookService(){
-      this.$emit('changeBookedServices');
-    }
+    changeBookService() {
+      this.$emit("changeBookedServices");
+    },
   },
   computed: {
     ...mapState("event", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode"]),
@@ -320,10 +322,7 @@ export default {
       if (!tax) {
         tax = { price: 0, percentage: 0 };
       }
-      console.log(this.serviceCategory, this.priceOfCostservices);
-      console.log(this.serviceCategory, this.discount.price);
       tax.price = Math.round(((this.priceOfCostservices - this.discount.price) * (tax.percentage || 0)) / 100);
-      console.log(this.serviceCategory, tax);
       return tax;
     },
     costServices() {

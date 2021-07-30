@@ -4,14 +4,14 @@
         <h3 class="color-vendor font-bold-extra">{{title}}</h3>
         <p>{{subTitle}}</p>
         <VendorBidTimeCounter
+            v-if="processed === 0"
             :key="`${days}-${hours}-${mins}`"
-            customClass="vendor bg-purple w-max-400 mx-auto mb-30 mt-30 px-10"
+            customClass="vendor bg-purple w-max-400 mx-auto mb-30 mt-30 py-10 px-10"
             :days="days"
             :hours="hours"
             :minutes="mins"
             :seconds="seconds"
-            :bottom-content="processed === 0 ? 'Until offer expires' : null"
-            :top-content="processed !== 0 ? 'This offer will expire in' : null"
+            :content="'Until offer expires'"
         />
     </div>
 </template>
@@ -45,21 +45,18 @@
           }
         },
         mounted() {
-          this.init()
+            console.log('negotiationModal.mounted');
+            let diff = (this.expiredTime - new Date().getTime()) / 1000;
+            if (diff < 0) return;
+            this.days = Math.floor(diff / (24 * 3600));
+            diff = diff - this.days * 24 * 3600;
+            this.hours = Math.floor(diff / 3600);
+            diff = diff - this.hours * 3600;
+            this.mins = Math.floor(diff / 60);
+            diff -= this.mins * 60;
+            this.seconds = Math.floor(diff);
         },
         methods: {
-           init(){
-               console.log('init', this.expiredTime);
-               let diff = (this.expiredTime - new Date().getTime()) / 1000;
-               if (diff < 0) return;
-               this.days = Math.floor(diff / (24 * 3600));
-               diff = diff - this.days * 24 * 3600;
-               this.hours = Math.floor(diff / 3600);
-               diff = diff - this.hours * 3600;
-               this.mins = Math.floor(diff / 60);
-               diff -= this.mins * 60;
-               this.seconds = Math.floor(diff);
-           }
         },
         computed: {
           title(){
@@ -73,13 +70,9 @@
             else return 'You can extend the offer expiration by 2 days';
           },
           icon(){
-            if(this.processed === DECLINED) return 'VendorsProposalPage/group-20091.svg';
+            if (this.processed === APPROVED) return '';
+            else if(this.processed === DECLINED) return '';
             else return 'VendorsProposalPage/group-18823.svg';
-          }
-        },
-        watch:{
-          processed(newVal){
-              this.init()
           }
         }
     }

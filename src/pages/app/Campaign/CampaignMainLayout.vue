@@ -215,7 +215,7 @@
           </div>
           <template v-else>
             <span class="seperator"></span>
-            <img class="mr-20 label-icon-1 ml-30" :src="`${$iconURL}Campaign/clock-gray.svg`" />
+            <img class="mr-20 label-icon-25 ml-30" :src="`${$iconURL}Campaign/clock-gray.svg`" />
             Scheduled Send:
             {{ $dateUtil.formatScheduleDay(currentCampaign.scheduleSettings.scheduleTime, "DD.MM.YY  |  hh:mm A") }}
             <md-button class="maryoku-btn md-simple md-red" @click="cancelSchedule">Cancel</md-button>
