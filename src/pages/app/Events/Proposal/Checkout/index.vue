@@ -131,7 +131,7 @@
               </div>
               <hr class="mt-20 mb-20" />
               <div>
-                <md-checkbox class="md-red md-simple" v-model="isCheckedFoodDonate">
+                <md-checkbox class="md-red md-simple" v-model="cachMaryokuPoints">
                   Cash in Your Maryoku Points
                 </md-checkbox>
               </div>
@@ -243,6 +243,7 @@ export default {
       paymentMethod: "",
       checkedGiveBack: false,
       isCheckedFoodDonate: false,
+      cachMaryokuPoints: false,
       stripePriceData: null,
       showStripeCheckout: false,
       loadingPayment: false,

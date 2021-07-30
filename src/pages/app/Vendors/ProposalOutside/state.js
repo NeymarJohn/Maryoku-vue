@@ -6,7 +6,6 @@ import Proposal from "@/models/Proposal";
 import { reject, resolve } from "promise-polyfill";
 import EventTimelineDate from "@/models/EventTimelineDate";
 import CalendarEvent from "@/models/CalendarEvent";
-import authService from "@/services/auth.service";
 import moment from "moment";
 
 const state = {
@@ -163,8 +162,10 @@ const mutations = {
     state.personalMessage = proposal.personalMessage;
     state.tax = proposal.tax;
     state.suggestedNewSeatings = proposal.suggestedNewSeatings;
+    state.event = proposal.eventData;
+    // state.inspirationalPhotos = proposal.inspirationalPhotos
     state.initialized = true;
-    state.wizardStep = proposal.step
+    // state.wizardStep = proposal.step
   },
   setWizardStep: (state, step) => {
     console.log('setWizardStep', step);
@@ -273,6 +274,18 @@ const actions = {
         });
     });
   },
+  getProposal:({commit, state}, proposalId) => {
+      return new Promise((resolve, reject) => {
+          Proposal.find(proposalId)
+              .then(resp => {
+                  commit("setProposal", resp);
+                  resolve(resp);
+              })
+              .catch(e => {
+                  reject(e);
+              });
+      });
+  },
   getTimelineDates({ commit, state }, eventId) {
     return new Promise((resolve, reject) => {
       new EventTimelineDate()
@@ -296,6 +309,7 @@ const actions = {
         vendorId: state.vendor.id,
         costServices: state.costServices,
         includedServices: state.includedServices,
+        inspirationalPhotos: state.inspirationalPhotos,
         extraServices: state.extraServices,
         discounts: state.discounts,
         taxes: state.taxes,

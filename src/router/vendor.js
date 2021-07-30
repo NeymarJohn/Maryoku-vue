@@ -262,6 +262,17 @@ export default [
         children: [
             {
                 path: "/vendor/:vendorId/proposal/non-registered",
+                name: "outsideProposalCreate",
+                component: ProposalForOutsideClientContent,
+                meta: {
+                    requiresAuth: false,
+                    title: "For Proposals",
+                    gtm: "ForProposals",
+                    isVendor: true
+                },
+            },
+            {
+                path: "/vendor/:vendorId/proposal/:id/non-registered/:type",
                 name: "outsideProposalEdit",
                 component: ProposalForOutsideClientContent,
                 meta: {
@@ -271,7 +282,6 @@ export default [
                     isVendor: true
                 },
             },
-
         ],
     },
 ];

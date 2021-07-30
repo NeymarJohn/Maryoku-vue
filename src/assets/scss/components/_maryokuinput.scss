@@ -275,6 +275,9 @@
     span.vfc-span-day.vfc-today {
       color: #641856 !important;
     }
+    span.vfc-span-day.vfc-today.vfc-marked {
+      color: #ffffff !important;
+    }
     .vfc-main-container {
       .vfc-week .vfc-day span.vfc-span-day.vfc-today{
         background-color: #ae84bb !important;
@@ -304,7 +307,6 @@
 
       &:not(.vfc-start-marked):not(.vfc-end-marked):before{
         background-color: #f51355 !important;
-        border-radius: 50%;
       }
     }
 

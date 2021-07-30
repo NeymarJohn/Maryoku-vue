@@ -21,10 +21,44 @@
     </div>
     <div class="text-center logo-area">Provided By <img :src="`${$iconURL}RSVP/maryoku - logo dark@2x.png`" /></div>
     <div class="proposal-footer d-flex justify-content-between align-center">
-      <md-button class="md-simple md-black maryoku-btn">Decline Proposal</md-button>
+      <md-menu md-size="medium" md-align-trigger md-direction="top-end" class="schedule-menu">
+        <md-button md-menu-trigger class="md-simple md-black maryoku-btn">
+          More Actions
+          <md-icon>expand_less</md-icon>
+        </md-button>
+        <md-menu-content>
+          <md-menu-item class="text-center" @click="negotiateRate">
+            <span class="font-size-16 font-bold-extra pl-20">
+              <img
+                :src="`${$iconURL}budget+screen/SVG/Asset%2010.svg`"
+                class="mr-10"
+                style="width: 20px; height: 28px"
+              />
+              Negotiate Rate
+            </span>
+          </md-menu-item>
+          <md-menu-item class="text-center" @click="remindMeLater">
+            <span class="font-size-16 font-bold-extra pl-20">
+              <img :src="`${$iconURL}Vendor Signup/Asset 522.svg`" class="mr-10" style="width: 20px; height: 20px" />
+              Remind me later
+            </span>
+          </md-menu-item>
+          <md-menu-item class="text-center" @click="askQuestion">
+            <span class="font-size-16 font-bold-extra pl-20">
+              <img :src="`${$iconURL}common/email-dark.svg`" class="mr-10" style="width: 20px; height: 20px" />
+              Ask question
+            </span>
+          </md-menu-item>
+          <md-menu-item class="text-center" @click="changeEvent">
+            <span class="font-size-16 font-bold-extra pl-20">
+              <img :src="`${$iconURL}common/calendar-dark.svg`" class="mr-10" style="width: 20px; height: 20px" />
+              Change event details
+            </span>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
       <div>
-        <md-button class="md-simple md-black maryoku-btn">Remind Me Later</md-button>
-        <md-button class="md-simple md-red md-outlined maryoku-btn">Change Requirements</md-button>
+        <md-button class="md-simple md-red md-outlined maryoku-btn">Decline Proposal</md-button>
         <md-button class="md-red maryoku-btn" @click="bookProposal">Book Now</md-button>
       </div>
     </div>
@@ -73,6 +107,10 @@ export default {
     saveProposal(proposal) {
       new Proposal();
     },
+    remindMeLater() {},
+    negotiateRate() {},
+    askQuestion() {},
+    changeEvent() {},
   },
 };
 </script>
