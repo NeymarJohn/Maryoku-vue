@@ -1,12 +1,12 @@
 <template>
-  <div class="proposal-list-item">
+  <div class="proposal-list-item" :class="hasNegotiation ? 'negotiation-item' : ''">
     <div>
       <img v-if="proposal.nonMaryoku" :src="`${$storageURL}maryoku - logo square white@2x.png`" width="50">
       <img v-else src="https://maryoku.s3.amazonaws.com/company/logos/5e0ae1d2cfefec4b68f5d8a1.png" width="40"/>
     </div>
     <div>
-      <div class="font-bold font-size-16" v-if="proposal.nonMaryoku">
-        {{ proposal.vendor.companyName }}
+      <div class="font-bold font-size-16" v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer">
+        {{ proposal.eventData.customer.company }}
       </div>
       <div class="font-bold font-size-16" v-else-if="proposal.proposalRequest && proposal.proposalRequest.eventData.title">
         {{ proposal.proposalRequest.eventData.title }}
@@ -26,13 +26,14 @@
       </span>
     </div>
 
-    <div class="text-center" v-if="proposal.negotiations && proposal.negotiations.length">
+    <div class="text-center" v-if="hasNegotiation">
       <md-button class="md-simple md-red md-vendor-text">
-        <img :src="`${iconUrl}Group%2014277_2.svg`" class="negotiation mr-5" style="width: 15px" /> Negotiation Request
+        <img :src="`${iconUrl}Group%2014277_2.svg`" class="negotiation mr-5" style="width: 15px" />
+          {{proposal.negotiations[0].type === requestType.ADD_MORE_TIME ? 'Additional time request' : 'Negotiation Request'}}
       </md-button>
-      <md-button class="md-vendor" @click="edit('show')"> Respond </md-button>
+      <md-button class="md-vendor" @click="edit(proposalStatus.negotiation)"> Respond </md-button>
     </div>
-    <md-button v-else class="md-simple md-vendor" @click="edit('show')">
+    <md-button v-else class="md-simple md-vendor" @click="edit(proposalStatus.show)">
       <img src="/static/icons/vendor/proposalBoard/see-proposal.svg" class="mr-5" style="width: 20px" />
       View Proposal
     </md-button>
@@ -43,23 +44,22 @@
           <md-icon style="font-size: 30px !important">more_vert</md-icon>
         </md-button>
         <md-menu-content>
-          <md-menu-item @click="edit('edit')" class="md-purple">
+          <md-menu-item @click="edit(proposalStatus.edit)" class="md-purple">
             <span>
               <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />
               Edit</span
             >
           </md-menu-item>
-          <md-menu-item @click="edit('download')" class="md-purple">
+          <md-menu-item @click="edit(proposalStatus.download)" class="md-purple">
             <span>
               <img :src="`${$iconURL}common/download.svg`" class="label-icon mr-10" />
               Download
             </span>
           </md-menu-item>
-          <md-menu-item @click="edit('remove')" class="md-purple">
+          <md-menu-item @click="edit(proposalStatus.delete)" class="md-purple">
             <span>
               <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon mr-10" /> Delete Proposal
             </span>
-            >
           </md-menu-item>
         </md-menu-content>
       </md-menu>
@@ -77,10 +77,25 @@ export default {
       type: Object,
       required: true,
     },
+    hasNegotiation: {
+      type: Boolean,
+      default: false,
+    }
   },
   data() {
     return {
       iconUrl: `${this.$iconURL}VendorsProposalPage/`,
+      proposalStatus:{
+        show: 0,
+        edit: 1,
+        download: 2,
+        delete: 3,
+        negotiation: 4,
+      },
+      requestType: {
+        ADD_MORE_TIME: 0,
+        NEGOTIATION: 1,
+      }
     };
   },
   methods: {
@@ -123,6 +138,10 @@ export default {
   display: grid;
   align-items: center;
   grid-template-columns: 5% 20% 10% 15% 10% 10% 10% 15% 5%;
+
+  &.negotiation-item{
+    background-color: #ffefff!important;
+  }
 }
 img.negotiation {
   position: relative;

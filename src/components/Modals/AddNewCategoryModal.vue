@@ -46,7 +46,7 @@
           </div>
           <maryoku-input inputStyle="budget" v-model="newBuildingBlock.budget" />
         </div>
-        <div class="md-error d-flex align-center" v-if="availableBudget < newBuildingBlock.budget">
+        <div class="md-error d-flex align-center" v-if="availableBudget < newBuildingBlock.budget && !addMoreBudget">
           <img :src="`${$iconURL}Event Page/warning-circle-gray.svg`" style="width: 20px" />
           <span style="padding: 0 15px">Oops! Seems like you don’t have enough cash in your “Unexpected” category</span>
           <md-button
@@ -54,6 +54,15 @@
             @click="addMoreMoney"
             >Add More Money</md-button
           >
+        </div>
+      </div>
+      <div v-if="addMoreBudget" class="md-layout mt-10">
+        <div v-if="addMoreMoney" class="md-layout-item md-size-50 form-group maryoku-field">
+          <label class="font-size-16 font-bold-extra color-black">
+              Additional Budget
+              <br />
+          </label>
+          <maryoku-input inputStyle="budget" v-model="additionalBudget" />
         </div>
       </div>
     </template>
@@ -104,6 +113,8 @@ export default {
   data() {
     return {
       filteredEventBlocks: null,
+      addMoreBudget: false,
+      additionalBudget: 0,
       newBuildingBlock: {
         category: "",
         name: "",
@@ -154,7 +165,8 @@ export default {
             "event/saveEventAction",
             new CalendarEvent({
               id: this.event.id,
-              unexpectedBudget: this.event.unexpectedBudget - Number(this.newBuildingBlock.budget),
+              totalBudget: this.event.totalBudget + this.additionalBudget,
+              unexpectedBudget: this.event.unexpectedBudget + this.additionalBudget - Number(this.newBuildingBlock.budget),
             }),
           );
           this.$emit("save", res.item);
@@ -163,7 +175,10 @@ export default {
           console.log("Error while saving ", error);
         });
     },
-    addMoreMoney() {},
+    addMoreMoney() {
+      this.addMoreBudget = true;
+      this.additionalBudget = this.newBuildingBlock.budget - this.availableBudget
+    },
   },
   computed: {
     availableBudget() {
@@ -171,7 +186,7 @@ export default {
     },
     isAvailable() {
       const budget = this.newBuildingBlock.budget;
-      return budget > 0 && this.availableBudget >= budget;
+      return budget > 0 && this.availableBudget + this.additionalBudget >= budget;
     },
   },
 };

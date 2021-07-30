@@ -1,6 +1,5 @@
 import Vue from "vue";
-import { postReq, getReq } from "@/utils/token";
-import { VendorPolicy, VendorPricingPolicy } from "@/constants/vendor";
+import Cart from "@/models/Cart";
 import CalendarEvent from "@/models/CalendarEvent";
 import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
 
@@ -8,7 +7,8 @@ const getDefaultState = () => {
     return {
         step: 1,
         requirements: {},
-        specialRequirements: {}
+        specialRequirements: {},
+        cart:{}
     }
 }
 const state = getDefaultState();
@@ -18,6 +18,9 @@ const getters = {
 const actions = {
   resetRequirements({commit}){
     commit('resetRequirements')
+  },
+  resetCartItems({commit}){
+        commit('resetCartItems')
   },
   getRequirements({ commit, state }, eventId) {
     return new Promise((resolve, reject) => {
@@ -35,6 +38,24 @@ const actions = {
         .catch(err => {
           reject(err)
         });
+    });
+  },
+  getCartItems({ commit, state }, eventId) {
+    return new Promise((resolve, reject) => {
+        new Cart()
+            .for(new CalendarEvent({ id: eventId }))
+            .get()
+            .then((res) => {
+                if(res && res.length) {
+                    res.forEach(item => {
+                        commit("setCategoryCartItem", { category: item.category, item })
+                    })
+                }
+                resolve(res)
+            })
+            .catch(err => {
+                reject(err)
+            });
     });
   },
   saveTypes({ commit, state }, { event, category, types }) {
@@ -102,12 +123,29 @@ const actions = {
           reject(err)
         });
     });
+  },
+  updateCartItem({commit, state}, item) {
+    return new Promise((resolve, reject) => {
+      new Cart(item)
+          .for(new CalendarEvent({ id: item.event.id }))
+          .save()
+          .then((res) => {
+              commit("setCategoryCartItem", { category: res.category, item: res })
+              resolve(res)
+          })
+          .catch(err => {
+              reject(err)
+      });
+    });
   }
 
 }
 const mutations = {
   resetRequirements(state){
     Vue.set(state, 'requirements', {})
+  },
+  resetCartItems(state){
+    Vue.set(state, 'cart', {})
   },
   setStep(state, step) {
     state.step = step;
@@ -131,7 +169,10 @@ const mutations = {
   },
   setSpecialRequirements(state, data) {
     Vue.set(state, 'specialRequirements', data)
-  }
+  },
+  setCategoryCartItem(state, { category, item }) {
+    Vue.set(state.cart, category, item)
+  },
 }
 export default {
   namespaced: true,

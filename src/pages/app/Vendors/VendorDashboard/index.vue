@@ -151,11 +151,6 @@ export default {
       defaultEventData: {},
     };
   },
-  beforeCreate() {
-    if (!this.$store.state.vendorDashboard) {
-      this.$store.registerModule("vendorDashboard", state);
-    }
-  },
   mounted() {
     this.getMarkedDates();
     this.getComingEvents();
@@ -163,7 +158,13 @@ export default {
   },
   methods: {
     gotoProposalWizard() {
-      this.$router.push(`/vendor/${this.vendorData.id}/proposal/non-registered`);
+      let routeData = this.$router.resolve({
+            name: "outsideProposalCreate",
+            params: {
+                vendorId: this.vendorData.id,
+            },
+      });
+      window.open(routeData.href, '_blank');
     },
     handleSaveEvent(savedEvent) {
       this.upcomingEvents.push(savedEvent);
@@ -270,10 +271,6 @@ export default {
   watch: {
     backOutDays(newVal) {
       // this.getMarkedDates();
-    },
-    vendorData(newVal) {
-      console.log('vendorData', newVal);
-      this.$store.dispatch("vendorDashboard/getProposalRequests", newVal.id);
     },
   },
 };

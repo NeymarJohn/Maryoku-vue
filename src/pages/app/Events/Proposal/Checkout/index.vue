@@ -49,10 +49,6 @@
               You have $ {{ (proposal.serviceCategory.allocatedBudget - proposal.cost) | withComma }} left over from
               your original defined budget.
             </div>
-            <div class="mt-10">
-              Simply select anything that you would like to add. Please note that any item or service you choose here
-              will be added to the overall vendor cost.
-            </div>
             <collapse-panel
               :defaultStatus="false"
               class="pt-10 pb-10"
@@ -68,7 +64,10 @@
                 </div>
               </template>
               <template slot="content">
-                <div class="price-table-content mt-20"></div>
+                <div class="price-table-content mt-20">
+                  Simply select anything that you would like to add. Please note that any item or service you choose
+                  here will be added to the overall vendor cost.
+                </div>
               </template>
             </collapse-panel>
           </div>
@@ -130,7 +129,7 @@
               </div>
               <hr class="mt-20 mb-20" />
               <div>
-                <md-checkbox class="md-red md-simple" v-model="isCheckedFoodDonate">
+                <md-checkbox class="md-red md-simple" v-model="cachMaryokuPoints">
                   Cash in Your Maryoku Points
                 </md-checkbox>
               </div>
@@ -242,6 +241,7 @@ export default {
       paymentMethod: "",
       checkedGiveBack: false,
       isCheckedFoodDonate: false,
+      cachMaryokuPoints: false,
       stripePriceData: null,
       showStripeCheckout: false,
       loadingPayment: false,
@@ -335,7 +335,7 @@ export default {
         this.$http
           .post(
             `${process.env.SERVER_URL}/stripe/v1/customer/products`,
-            { name: this.vendor.companyName, price: this.discounedAndTaxedPrice * 100 },
+            { name: this.vendor.companyName, price: this.discounedAndTaxedPrice * 1000 },
             { headers: this.$auth.getAuthHeader() },
           )
           .then((res) => {
