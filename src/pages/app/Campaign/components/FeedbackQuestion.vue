@@ -22,7 +22,7 @@
       <star-rating :border-width="0" :star-size="30" :show-rating="false" read-only v-else></star-rating>
       <div class="font-size-12 mt-10 text-transform-capitalize">{{ rankLabel }}</div>
     </div>
-    <md-switch v-if="showSwitch" class="below-label large-switch md-switch-rose" v-model="data.showQuestion" :value="true">
+    <md-switch v-if="showSwitch" class="below-label large-switch" v-model="data.showQuestion" :value="true">
       <span v-if="data.showQuestion">Hide this question</span>
       <span v-if="!data.showQuestion">Show this question</span>
     </md-switch>

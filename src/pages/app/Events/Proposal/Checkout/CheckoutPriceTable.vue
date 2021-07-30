@@ -10,7 +10,7 @@
           <div class="element-price">${{ totalPrice | withComma }}</div>
           <div class="discount-details font-size-16 font-regular" v-if="discount.percentage">
             ({{ discount.percentage }}% off)
-            <span class="crosslinedText">${{ priceBeforeDiscount | withComma }}</span>
+            <span class="crosslinedText">${{ priceOfCostservices | withComma }}</span>
           </div>
         </div>
       </div>
@@ -109,7 +109,7 @@ export default {
     img {
       width: 30px;
     }
-    .element-price{
+    .element-price {
       text-align: left;
       width: 120px;
     }

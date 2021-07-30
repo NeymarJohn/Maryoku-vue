@@ -1,18 +1,7 @@
 <template>
-  <div class="booking-item" style="position: relative">
-    <template v-if="remainingTime < 0">
-          <div class="d-flex flex-column justify-content-start align-center"
-               style="position: absolute;left: 0;right:0;top:0;bottom:0;width:100%;height: 100%;background:rgba(0,0,0,.7);z-index: 1">
-              <timer-panel
-                  class="time-counter mt-100"
-                  :target="targetTime"
-                  @updateExpireDate="updateExpireDate"
-              ></timer-panel>
-              <p class="color-white mt-20">Show me an alternative offer</p>
-          </div>
-    </template>
+  <div class="booking-item">
     <div
-      class="event-image p-relative"
+      class="event-image"
       :style="`background: url(${backgroundImage}) center center no-repeat`"
       :class="{ isCollapsed, isSelected }"
     >
@@ -77,12 +66,8 @@
 <script>
 import moment from "moment";
 import Timer from "@/components/Timer.vue";
-import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest"
-import Proposal from "@/models/Proposal"
-import TimerPanel from "./TimerPanel";
-import Swal from "sweetalert2";
 export default {
-  components: { Timer, TimerPanel },
+  components: { Timer },
   props: {
     proposal: {
       type: Object,
@@ -129,36 +114,6 @@ export default {
       }
       return 0;
     },
-    updateExpireDate(){
-        let newExpiredDate = 0;
-        if (this.proposal.expiredDate) {
-            newExpiredDate = new Date(this.proposal.expiredDate).getTime() + 2 * 3600 * 24 * 1000;
-        } else {
-            newExpiredDate = new Date(this.proposal.dateCreated).getTime() + 9 * 3600 * 24 * 1000;
-        }
-
-        new ProposalNegotiationRequest({
-            eventId: this.eventData.id,
-            proposalId: this.proposal.id,
-            proposalRequestId: this.proposal.proposalRequestId,
-            expiredDate: newExpiredDate,
-            tenantId: this.$authService.resolveTenantId(),
-        })
-            .for(new Proposal({ id: this.proposal.id }))
-            .save()
-            .then((res) => {
-                Swal.fire({
-                    title: "We received your request!",
-                    text: `Vendor will contact you!`,
-                    showCancelButton: false,
-                    confirmButtonClass: "md-button md-success btn-fill",
-                    cancelButtonClass: "md-button md-danger btn-fill",
-                    confirmButtonText: "OK",
-                    buttonsStyling: false,
-                }).then((result) => {});
-            });
-
-    }
   },
   computed: {
     backgroundImage() {
@@ -211,17 +166,6 @@ export default {
         return "";
       }
     },
-    targetTime() {
-      if (this.proposal.expiredDate) {
-          return new Date(this.proposal.expiredDate);
-      }
-      return new Date(this.proposal.dateCreated);
-    },
-    remainingTime(){
-      let today = new Date()
-      let expiredDate = new Date(this.proposal.expiredDate ? this.proposal.expiredDate : this.proposal.dateCreated);
-      return expiredDate - today
-    }
   },
 };
 </script>

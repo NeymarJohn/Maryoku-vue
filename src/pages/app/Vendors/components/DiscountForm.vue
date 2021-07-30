@@ -115,10 +115,6 @@ export default {
       type: Object,
       default: () => {},
     },
-    nonMaryoku:{
-      type: Boolean,
-      default: false,
-    }
   },
   data() {
     return {
@@ -232,7 +228,7 @@ export default {
     },
   },
   computed: {
-    // ...mapGetters("vendorProposal", ["sumOfPrices"]),
+    ...mapGetters("vendorProposal", ["sumOfPrices"]),
     calcedTax() {
       this.tax.price = Math.round(((this.sumOfPrices - this.calcedDiscont) * this.tax.percentage) / 100);
       return this.tax.price;
@@ -241,10 +237,6 @@ export default {
       this.discount.price = Math.round((this.sumOfPrices * this.discount.percentage) / 100);
       return this.discount.price;
     },
-    sumOfPrices(){
-      return this.nonMaryoku ? this.$store.getters["proposalForNonMaryoku/sumOfPrices"]:
-        this.$store.getters["vendorProposal/sumOfPrices"]
-    }
   },
 };
 </script>

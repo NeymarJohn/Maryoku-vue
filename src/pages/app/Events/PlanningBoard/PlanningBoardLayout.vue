@@ -177,6 +177,15 @@ export default {
     // }
   },
   computed: {
+    // ...mapState("planningBoard", {
+    //   requirements: (state) => {
+    //     console.log('')
+    //
+    //   },
+    //   types: (state) => state.types,
+    //   mainRequirements: (state) => state.mainRequirements,
+    //   specialRequirements: (state) => state.specialRequirements,
+    // }),
     requirements(){
       return this.$store.state.planningBoard.requirements
     },

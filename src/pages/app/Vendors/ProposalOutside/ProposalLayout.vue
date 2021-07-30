@@ -1,6 +1,6 @@
 <template>
   <div class="for-proposals-layout-wrapper">
-     <vue-element-loading :active="isLoading" color="#FF547C"></vue-element-loading>
+    <!-- <vue-element-loading :active="isLoading" color="#FF547C"></vue-element-loading> -->
 
     <proposal-header v-if="vendor" :vendor="vendor"></proposal-header>
     <div class="main-cont">
@@ -129,6 +129,7 @@ export default {
       proposalRequestRequirements: [],
       proposals: [],
       proposalRequest: null,
+      vendorCategory: null,
       openedModal: "",
       showCloseProposalModal: false,
       isUpdating: false,
@@ -138,12 +139,11 @@ export default {
       proposalLink: "",
     };
   },
-  async created() {
+  created() {
     this.$root.$on("send-event-data", (evtData) => {
       this.evtData = evtData;
     });
-    console.log('created');
-    this.loading = true;
+
     if (this.$route.params.type && this.$route.params.type == "duplicate") {
       this.option = "duplicate";
     }
@@ -152,10 +152,9 @@ export default {
     this.submittedModal = false;
     this.isTimeUp = false;
 
-    this.vendor = await this.getVendor(this.$route.params.vendorId)
-    if(this.$route.params.id) await this.getProposal(this.$route.params.id);
-    this.loading = false;
-
+    this.getVendor(this.$route.params.vendorId).then((vendor) => {
+      this.vendor = vendor;
+    });
   },
 
   beforeCreate() {
@@ -166,10 +165,21 @@ export default {
     }
   },
   methods: {
-    ...mapActions("proposalForNonMaryoku", ["getVendor", "getProposal", "saveProposal"]),
+    ...mapActions("proposalForNonMaryoku", ["getVendor", "saveProposal"]),
     gotoNext() {
       this.step = this.step + 1;
       this.scrollToTop();
+    },
+    getVendorCategory() {
+      this.$auth.currentUser(
+        this,
+        true,
+        function () {
+          Vendors.find(this.$route.params.vendorId).then((vendor) => {
+            this.vendorCategory = vendor.vendorCategory;
+          });
+        }.bind(this),
+      );
     },
     hideModal() {
       this.fullDetailsModal = false;
@@ -210,7 +220,7 @@ export default {
                   title: `You saved the current proposal. You can edit anytime later!`,
                   buttonsStyling: false,
                   type: "success",
-                  confirmButtonClass: "md-button md-vendor",
+                  confirmButtonClass: "md-button md-success",
                 });
               }
               resolve(proposal);
@@ -283,6 +293,13 @@ export default {
     },
   },
   computed: {
+    getServiceCategory() {
+      if (this.proposalRequest.requirementsCategory) {
+        return this.proposalRequest.requirementsCategory;
+      } else {
+        return this.vendorCategory;
+      }
+    },
     getHeaderImage() {
       if (this.event && this.event.concept) {
         return this.event.concept.images[new Date().getTime() % 4].url;
