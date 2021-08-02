@@ -7,6 +7,7 @@
             v-model="proposalData.bookedServices"
             :value="serviceCategory"
             @change="changeBookService"
+            v-if="!mandatory"
           ></md-checkbox>
           <img :src="`${$iconURL}Budget+Elements/${vendorCategory.icon}`" />
           {{ vendorCategory.fullTitle }}
@@ -238,6 +239,10 @@ export default {
     serviceCategory: {
       type: String,
       default: "",
+    },
+    mandatory: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

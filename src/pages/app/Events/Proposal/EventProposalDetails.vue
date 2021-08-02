@@ -172,6 +172,7 @@
           :key="`${vendorProposal.vendor.vendorCategory}-section`"
           @changeAddedServices="updateAddedServices"
           @changeBookedServices="changeBookedServices"
+          :mandatory="true"
         ></event-proposal-price>
         <event-proposal-price
           v-for="service in this.vendorProposal.additionalServices"

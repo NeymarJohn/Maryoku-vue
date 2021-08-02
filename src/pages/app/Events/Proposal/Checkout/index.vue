@@ -163,8 +163,8 @@
         <div class="total-price-panel mt-20 white-card">
           <div class="discount-row">
             <span class="font-bold">Discount </span>
-            <span class="font-bold">{{ discount.percentage }}%</span>
-            <span class="text-right">${{ discount.price | withComma }}</span>
+            <span class="font-bold">-{{ discount.percentage }}%</span>
+            <span class="text-right">-${{ discount.price | withComma }}</span>
           </div>
           <hr />
           <div class="discount-row">
@@ -172,10 +172,16 @@
             <span class="font-bold">{{ tax.percentage }}%</span>
             <span class="text-right">${{ tax.price | withComma }}</span>
           </div>
+          <hr />
+          <div class="discount-row">
+            <span class="font-bold">Fee </span>
+            <span class="font-bold">{{ feePercentail }}%</span>
+            <span class="text-right">${{ feePrice | withComma }}</span>
+          </div>
           <div class="total-price-row">
             <div class="font-size-22 font-bold d-flex justify-content-between">
               <span>TOTAL TO PAY</span>
-              <span>${{ discounedAndTaxedPrice | withComma }}</span>
+              <span>${{ finalPrice | withComma }}</span>
             </div>
             <!-- <div class="font-size-14 d-flex justify-content-between">
               <span>TOTAL TO PAY</span>
@@ -250,6 +256,7 @@ export default {
       showSuccessModal: false,
       showCancelModal: false,
       onDayCordinator: false,
+      feePercentail: 3.2,
     };
   },
   created() {
@@ -335,6 +342,14 @@ export default {
       }
       return price;
     },
+
+    feePrice() {
+      return (this.discounedAndTaxedPrice * this.feePercentail) / 100;
+    },
+
+    finalPrice() {
+      return this.discounedAndTaxedPrice + this.feePrice;
+    },
   },
   methods: {
     pay() {
@@ -342,7 +357,7 @@ export default {
       this.$http
         .post(
           `${process.env.SERVER_URL}/stripe/v1/customer/products`,
-          { name: this.vendor.companyName, price: Math.floor(this.discounedAndTaxedPrice * 100) },
+          { name: this.vendor.companyName, price: Math.floor(this.finalPrice * 100) },
           { headers: this.$auth.getAuthHeader() },
         )
         .then((res) => {
