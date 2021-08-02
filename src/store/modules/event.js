@@ -293,7 +293,7 @@ const actions = {
                     let proposals = state.proposals[payload.category];
                     let index = proposals.findIndex(p => p.id == payload.proposal.id);
                     console.log(payload.category, index, payload.proposal);
-                    Vue.set(proposals, index, payload.proposal)
+                    Vue.set(proposals, index, result)
                     commit("setProposalsByCategory", {category: payload.category, proposals});
                     resolve(result)
                 })

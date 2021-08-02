@@ -186,14 +186,8 @@ export default {
         }
         if (!period) return "";
 
-        var startTime = moment(
-          `${period.startTime.time.hh}:${period.startTime.time.mm} ${period.startTime.ampm}`,
-          "HH:mm:ss a",
-        );
-        var endTime = moment(
-          `${period.endTime.time.hh}:${period.endTime.time.mm} ${period.endTime.ampm}`,
-          "HH:mm:ss a",
-        );
+        var startTime = moment(parseInt(period.startTime));
+        var endTime = moment(parseInt(period.endTime));
 
         // calculate total duration
         var duration = moment.duration(endTime.diff(startTime));

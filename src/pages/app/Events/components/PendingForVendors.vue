@@ -57,7 +57,7 @@
           :minutes="mins"
           :seconds="seconds"
           customClass="event"
-          :content="'Until you receive your proposals'"
+          :bottom-content="'Until you receive your proposals'"
         />
       </div>
     </div>
