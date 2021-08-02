@@ -114,7 +114,6 @@ export default {
     return {
       newTimeLineIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/Timeline-New/",
       menuIconsURL: "https://static-maryoku.s3.amazonaws.com/storage/icons/menu _ checklist/SVG/",
-      proposalRequests: [],
       toggleMenu: false,
       currentUrl: "",
     };
@@ -188,13 +187,6 @@ export default {
       location.reload();
       this.toggleMenu = false;
     },
-    async getProposalRequests(){
-      let proposalRequests = await new ProposalRequest().for(new Vendor({ id: this.vendorData.id })).get();
-      this.proposalRequests = proposalRequests.filter((p) => {
-        return p.remainingTime > 0 && !p.viewed
-      });
-      console.log('vendorSideBar.proposalRequests', this.proposalRequests);
-    }
   },
   computed: {
     sidebarStyle() {
@@ -211,6 +203,11 @@ export default {
     vendorData() {
       return this.$store.state.vendor.profile;
     },
+    proposalRequests(){
+      return this.$store.state.vendorDashboard.proposalRequests.filter(p => {
+          p.remainingTime > 0 && !p.viewed
+      })
+    }
   },
   beforeDestroy() {
     if (this.$sidebar.showSidebar) {
@@ -225,11 +222,11 @@ export default {
     this.taskUrl = eventService.getFirstTaskLink(this.event);
 
     this.$root.$on('proposalTab', _ => {
-      console.log('proposalTab', this.proposalRequests);
       this.proposalRequests.map(it => {
-          new ProposalRequest({ id:it.id, viewed: true }).save();
+          this.$store.dispatch('vendorDashboard/updateProposalRequest', {
+              ...it, viewd: true,
+          })
       })
-      this.proposalRequests = [];
     })
   },
   watch: {
@@ -240,9 +237,6 @@ export default {
       },
       deep: true,
     },
-    vendorData(newVal){
-        if(newVal) this.getProposalRequests()
-    }
   },
 };
 </script>
