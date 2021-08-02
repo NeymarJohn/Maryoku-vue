@@ -48,10 +48,10 @@
             </ul>
           </div>
           <timer-panel
-            v-if="!landingPage"
             class="time-counter"
             :target="targetTime"
             @updateExpireDate="updateExpireDate"
+            :theme="theme"
           ></timer-panel>
         </div>
 
@@ -411,6 +411,10 @@ export default {
     nonMaryoku: {
       type: Boolean,
       default: false,
+    },
+    theme: {
+      type: String,
+      default: "red",
     },
   },
   data() {

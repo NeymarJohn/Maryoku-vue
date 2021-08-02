@@ -1,11 +1,16 @@
 <template>
-  <div class="proposal-time-counter">
+  <div class="proposal-time-counter" :class="theme">
     <div class="font-bold" v-if="isExpired">This offer has expired</div>
     <div class="font-bold" v-else>This offer will expire in</div>
     <hr />
     <timer size="big" :target="target"></timer>
     <div class="button-wrapper">
-      <md-button class="maryoku-btn md-simple md-red" @click="updateExpireTime">Ask for more time</md-button>
+      <md-button
+        class="maryoku-btn md-simple"
+        :class="`md-${theme === 'red' ? 'red' : 'vendor'}`"
+        @click="updateExpireTime"
+        >Ask for more time</md-button
+      >
     </div>
   </div>
 </template>
@@ -21,6 +26,10 @@ export default {
       type: [Date, Number],
       default: new Date(),
     },
+    theme: {
+      type: String,
+      default: "red",
+    },
   },
   methods: {
     updateExpireTime() {
@@ -28,7 +37,7 @@ export default {
         title: "Are you sure?",
         text: `You'll get more 2 days.`,
         showCancelButton: true,
-        confirmButtonClass: "md-button md-success btn-fill",
+        confirmButtonClass: `md-button md-success btn-fill md-${this.theme}`,
         cancelButtonClass: "md-button md-danger btn-fill",
         confirmButtonText: "Yes, I'm sure",
         buttonsStyling: false,
@@ -49,11 +58,16 @@ export default {
 <style lang="scss" scoped>
 .proposal-time-counter {
   width: 300px;
-  background-color: #f51355;
   color: white;
   text-align: center;
   padding: 20px;
   border-radius: 3px;
+  &.red {
+    background-color: #f51355;
+  }
+  &.purple {
+    background-color: #641865;
+  }
   .button-wrapper {
     background-color: white !important;
     margin: auto;
