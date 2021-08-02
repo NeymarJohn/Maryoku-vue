@@ -5,7 +5,7 @@
       <div class="font-size-30">
         <img :src="`${$iconURL}Budget+Elements/${proposal.vendor.eventCategory.icon}`" />
         <b>{{ proposal.vendor.eventCategory.fullTitle }}</b>
-        PROPOSAL
+        {{ proposal.vendor.companyName }}
       </div>
       <div>
         <header-actions></header-actions>
@@ -15,6 +15,7 @@
       <event-proposal-details
         :vendorProposal="proposal"
         :landingPage="true"
+        :nonMaryoku="true"
         v-if="proposal"
         @updateProposal="updateProposal"
       ></event-proposal-details>

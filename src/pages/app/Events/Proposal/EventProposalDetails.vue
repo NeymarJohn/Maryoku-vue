@@ -56,7 +56,9 @@
         </div>
 
         <div class="proposal-body">
-          <h1 class="font-size-30">Dear {{ $store.state.auth.user.name }},</h1>
+          <h1 class="font-size-30">
+            Dear {{ nonMaryoku ? vendorProposal.eventData.customer.name : $store.state.auth.user.name }},
+          </h1>
           <p>
             {{ vendorProposal.personalMessage }}
           </p>
@@ -403,6 +405,10 @@ export default {
       type: Object,
     },
     landingPage: {
+      type: Boolean,
+      default: false,
+    },
+    nonMaryoku: {
       type: Boolean,
       default: false,
     },
