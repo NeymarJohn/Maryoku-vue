@@ -49,7 +49,7 @@
               You have $ {{ (proposal.serviceCategory.allocatedBudget - proposal.cost) | withComma }} left over from
               your original defined budget.
             </div>
-            <div class="mt-10 mb-10">
+            <div class="mt-10">
               Simply select anything that you would like to add. Please note that any item or service you choose here
               will be added to the overall vendor cost.
             </div>
@@ -62,14 +62,9 @@
               :key="service.subCategory"
             >
               <template slot="header">
-                <div class="d-flex align-center">
-                  <div class="d-flex align-center">
-                    <md-checkbox class="m-0 mr-10" v-model="service.addedOnProposal"></md-checkbox>
-                    <span>{{ service.requirementTitle }}</span>
-                  </div>
-                  <div class="ml-auto pr-100">
-                      <div class="element-price">${{service.price | withComma}}</div>
-                  </div>
+                <div class="price-header d-flex align-center">
+                  <md-checkbox class="m-0 mr-10" v-model="service.addedOnProposal"></md-checkbox>
+                  <span>{{ service.requirementTitle }}</span>
                 </div>
               </template>
               <template slot="content">
@@ -80,7 +75,7 @@
         </div>
         <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
-            <div class="d-flex align-center">
+            <div class="price-header d-flex align-center">
               <md-checkbox class="m-0 mr-10" v-model="onDayCordinator"></md-checkbox>
               <img :src="`${$iconURL}PaymentPage/Group 9556.svg`" class="mr-10 ml-10" />
               On Day Cordinator($1,000 Per Day)
@@ -95,7 +90,7 @@
         </collapse-panel>
         <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
-            <div class="d-flex align-center disabled">
+            <div class="price-header d-flex align-center disabled">
               <md-checkbox class="m-0 mr-10" :disabeld="true"></md-checkbox>
               Event Insurance (Coming Soon)
             </div>
@@ -106,7 +101,7 @@
         </collapse-panel>
         <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
-            <div class="d-flex align-center">
+            <div class="price-header d-flex align-center">
               <md-checkbox class="m-0 mr-10" v-model="checkedGiveBack"></md-checkbox>
               <img :src="`${$iconURL}PaymentPage/Group 9791.svg`" class="mr-10 ml-10" />
               Give Back
@@ -155,7 +150,7 @@
         </collapse-panel>
         <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
-            <div class="d-flex align-center disabled">
+            <div class="price-header d-flex align-center disabled">
               <md-checkbox class="m-0 mr-10"></md-checkbox>
               <img :src="`${$iconURL}common/reward.svg`" class="mr-10 ml-10" />
               Use your rewards with this event (Coming Soon)
@@ -193,7 +188,7 @@
             <span class="font-regular">I agree to the</span>
             <a href="#" class="font-bold color-black text-underline">Cancellation policy</a>
           </md-checkbox>
-          <div class="d-flex align-center payment-methods">
+          <!-- <div class="d-flex align-center payment-methods">
             <md-button
               class="md-simple payment-method"
               @click="paymentMethod = 'payoneer'"
@@ -215,15 +210,15 @@
             >
               <img :src="`${$iconURL}PaymentPage/Stripe.png`" />
             </md-button>
-          </div>
+          </div> -->
           <stripe-checkout v-if="showStripeCheckout" :price="stripePriceData"></stripe-checkout>
-          <div>You will be transferred to a secured {{ paymentMethod }} payment</div>
+          <!-- <div>You will be transferred to a secured {{ paymentMethod }} payment</div> -->
         </div>
       </div>
     </div>
     <div class="checkout-footer white-card p-30 mt-30 d-flex justify-content-between">
       <md-button class="maryoku-btn md-simple md-black">Back</md-button>
-      <md-button class="maryoku-btn md-red" :disabled="!agreedCancellationPolicy || !paymentMethod" @click="pay"
+      <md-button class="maryoku-btn md-red" :disabled="!agreedCancellationPolicy" @click="pay"
         >Submit Payment
       </md-button>
     </div>
@@ -343,22 +338,23 @@ export default {
   },
   methods: {
     pay() {
-      if (this.paymentMethod === "stripe") {
-        this.loadingPayment = true;
-        this.$http
-          .post(
-            `${process.env.SERVER_URL}/stripe/v1/customer/products`,
-            { name: this.vendor.companyName, price: Math.floor(this.discounedAndTaxedPrice * 100) },
-            { headers: this.$auth.getAuthHeader() },
-          )
-          .then((res) => {
-            console.log("res.data", res.data);
-            const priceData = res.data;
-            this.showStripeCheckout = true;
-            // this.loadingPayment = false;
-            this.stripePriceData = priceData;
-          });
-      }
+      this.loadingPayment = true;
+      this.$http
+        .post(
+          `${process.env.SERVER_URL}/stripe/v1/customer/products`,
+          { name: this.vendor.companyName, price: Math.floor(this.discounedAndTaxedPrice * 100) },
+          { headers: this.$auth.getAuthHeader() },
+        )
+        .then((res) => {
+          console.log("res.data", res.data);
+          const priceData = res.data;
+          this.showStripeCheckout = true;
+          // this.loadingPayment = false;
+          this.stripePriceData = priceData;
+        });
+      // if (this.paymentMethod === "stripe") {
+
+      // }
     },
   },
 };
@@ -434,12 +430,5 @@ export default {
       }
     }
   }
-}
-.element-price {
-  font-weight: 900;
-  font-size: 18px;
-  text-align: left;
-  color: #999999;
-  width: 80px;
 }
 </style>

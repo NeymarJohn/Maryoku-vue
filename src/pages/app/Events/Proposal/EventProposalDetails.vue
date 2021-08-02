@@ -56,13 +56,6 @@
         </div>
 
         <div class="proposal-body">
-          <md-button
-              class="md-simple md-icon-button md-raised save-btn"
-              @click="isFavorite = !isFavorite"
-          >
-            <img :src="`${$iconURL}${isFavorite ? 'Requirements/Group+16153.svg' : 'comments/SVG/heart-dark.svg'}`"/>
-          </md-button>
-
           <h1 class="font-size-30">Dear {{ $store.state.auth.user.name }},</h1>
           <p>
             {{ vendorProposal.personalMessage }}
@@ -443,7 +436,6 @@ export default {
       showAboutUs: false,
       addedServices: {},
       socialMediaBlocks,
-      isFavorite: false,
     };
   },
   created() {
@@ -773,28 +765,6 @@ export default {
     .proposal-content {
       // margin: 0 2em;
       position: relative;
-        .save-btn {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            width: 50px;
-            height: 50px;
-            z-index: 2;
-            background: white !important;
-            border-radius: 50%;
-            box-shadow: none;
-
-            /deep/ .md-ripple {
-                padding: 0px;
-            }
-            img.non-selected {
-                padding: 3px;
-            }
-            img {
-                width: 50px;
-                height: 50px;
-            }
-       }
       .close-btn {
         position: absolute;
         right: 20px;
@@ -875,7 +845,6 @@ export default {
 
       .proposal-body {
         padding: 1em 2.5em;
-        position: relative;
 
         h1 {
           margin: 1em 0 0;

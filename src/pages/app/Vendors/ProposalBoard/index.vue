@@ -113,10 +113,53 @@
           </div>
         </div>
         <div class="md-layout-item md-size-25 mt-50">
-          <insight
-            :total="pagination.total"
-            :won="pagination.won"
-          ></insight>
+          <div class="white-card p-30">
+            <div style="margin: 0 -15px">
+              <pie-chart
+                :chartData="chartData"
+                :columns="1"
+                :options="{
+                  width: 130,
+                  height: 180,
+                  strokWidth: 30,
+                  direction: 'row',
+                }"
+              ></pie-chart>
+            </div>
+            <div class="px-30">
+              <div v-if="pagination.total > 0 && pagination.won > 0">
+                  <div class="color-won d-flex align-center">
+                      <span class="mr-20 font-size-50">{{`${Math.floor(pagination.won / pagination.total)} %`}}</span>
+                      <span class="font-size-18">Winning rate</span>
+                  </div>
+                  <div class="font-size-16 mt-50">
+                      You won <span class="font-bold">{{pagination.won}} of {{pagination.total}}</span> Proposals you applied to
+                  </div>
+              </div>
+              <div v-else class="d-flex align-center">
+                  <img :src="`${$iconURL}VendorsProposalPage/group-18762.svg`" width="50">
+                  <div class="ml-10">
+                      <div class="color-vendor font-size-14 m-0">There is not yet enough</div>
+                      <div class="color-vendor font-size-14 mt-10">information to present insights</div>
+                  </div>
+              </div>
+              <hr class="mt-50 mb-50" />
+              <div class="tips">
+                <div class="d-flex mb-30 align-center">
+                  <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
+                  <div class="ml-10">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</div>
+                </div>
+                <div class="d-flex align-center">
+                  <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
+                  <div class="ml-10">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam</div>
+                </div>
+              </div>
+              <md-button class="mt-10 md-simple md-vendor-text md-vendor px-0">
+                More Insights
+                <md-icon class="color-vendor">keyboard_arrow_down</md-icon>
+              </md-button>
+            </div>
+          </div>
         </div>
       </div>
       <div class="md-layout">
@@ -151,12 +194,12 @@
             $ {{ (selectedProposalRequest.proposal ? selectedProposalRequest.proposal.cost :
             selectedProposalRequest.componentInstance.allocatedBudget) | withComma }}
         </div>
-        <md-button class="position-absolute md-simple ml-auto text-decoration-none cursor-pointer"
-           @click="showRequestNegotiationModal=false"><md-icon>close</md-icon></md-button>
+        <a class="md-simple ml-auto text-decoration-none cursor-pointer"
+           @click="showRequestNegotiationModal=false"><md-icon>close</md-icon></a>
       </template>
       <template slot="body">
           <negotiation-request
-              :expiredTime="expiredTime"
+              :expiredTime="selectedProposalRequest.expiredTime"
               :processed="negotiationProcessed"
               @close="showRequestNegotiationModal = false" />
       </template>
@@ -181,11 +224,10 @@ import Proposal from "@/models/Proposal";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import { socialMediaBlocks } from "@/constants/vendor";
 import carousel from "vue-owl-carousel";
-import { Loader, TablePagination, Modal } from "@/components";
+import { Loader, TablePagination, PieChart, Modal } from "@/components";
 import _ from "underscore";
 const ProposalContent = () => import("../components/ProposalDetail");
 const NegotiationRequest = () => import("../components/NegotiationRequest");
-const Insight = () => import("./insight");
 
 // result of processed on negotiation request
 const NONE = 0;
@@ -200,9 +242,9 @@ export default {
     ProposalContent,
     NegotiationRequest,
     carousel,
+    PieChart,
     Loader,
     Modal,
-    Insight,
   },
   data() {
     return {
@@ -226,6 +268,10 @@ export default {
         { key: "owner", title: "Owner" },
         { key: "update", title: "Update", class: "text-center" },
         { key: "", title: "" },
+      ],
+      chartData: [
+        { title: "Application", value: 6, color: "#b7b5b5" },
+        { title: "Winning", value: 6, color: "#9a9898" },
       ],
       tab: "all",
       showProposalDetail: false,
@@ -285,6 +331,10 @@ export default {
         if (data.hasOwnProperty(t.key)) this.pagination[t.key] = data[t.key];
       });
       this.pagination.pageCount = Math.ceil(data.total / this.pagination.limit);
+
+      this.chartData[0].value = data.total;
+      this.chartData[1].color = data.won;
+      if (data.won > 0) this.chartData[1].color = '#2cde6b';
     },
     gotoPage(selectedPage) {
       console.log(selectedPage);
@@ -349,9 +399,8 @@ export default {
 
         this.openNewTab(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
       } else if(action === this.proposalStatus.negotiation) {
-        this.selectedProposalRequest = this.proposalRequests.find(it => it.proposal && it.proposal.id === id);
+        this.selectedProposalRequest = this.proposalRequests.find(it => it.proposal.id === id);
         this.showRequestNegotiationModal = true;
-        this.negotiationProcessed = NONE;
       }
     },
     handleRequestCard(idx){
@@ -360,7 +409,6 @@ export default {
       if(proposalRequest.proposal && proposalRequest.proposal.negotiations && proposalRequest.proposal.negotiations.length){
           this.selectedProposalRequest = proposalRequest;
           this.showRequestNegotiationModal = true;
-          this.negotiationProcessed = NONE;
       } else {
           let params = proposalRequest.proposal ? {id: proposalRequest.id, type: 'edit'} : {rfpId: proposalRequest.id}
           let routeData = this.$router.resolve({
@@ -377,12 +425,9 @@ export default {
         this.showProposalDetail = true;
 
       } else if(status === this.negotiationRequestStatus.approve || status === this.negotiationRequestStatus.decline){
-        let expiredTime = this.selectedProposalRequest.expiredTime -
-            (status === this.negotiationRequestStatus.decline ? 2 * 3600 * 24 * 1000 : 0);
-
         new ProposalNegotiationRequest({
           id: this.selectedProposalRequest.proposal.negotiations[0].id,
-          expiredTime,
+          expiredTime: this.selectedProposalRequest.expiredTime,
           status
         })
         .for(new Proposal({id: this.selectedProposalRequest.proposal.id}))
@@ -391,10 +436,6 @@ export default {
             let proposal = this.proposals.find(it => it.id === this.selectedProposalRequest.proposal.id);
             proposal.negotiations[0] = res;
             this.selectedProposalRequest.proposal.negotiations[0] = res;
-
-            if(status === this.negotiationRequestStatus.decline) this.selectedProposalRequest.expiredTime = expiredTime;
-            if(status === this.negotiationRequestStatus.approve) proposal.expiredDate = new Date(expiredTime);
-
             this.$store.commit("vendorDashboard/setProposalRequest", this.selectedProposalRequest);
             this.$store.commit("vendorDashboard/setProposal", proposal);
             if(status === this.negotiationRequestStatus.decline){
@@ -466,22 +507,15 @@ export default {
       let proposalRequests = this.$store.state.vendorDashboard.proposalRequests;
       return proposalRequests.filter((p) => {
           return p.proposal
-              ? p.declineMessage !== "decline" && p.proposal.status !== 'submit' && p.remainingTime > 0 ||
-              p.proposal.status === 'submit' && p.proposal.negotiations && p.proposal.negotiations.filter(it => it.status == 0).length
+              ? p.remainingTime > 0 &&
+              ((p.declineMessage !== "decline" && p.proposal.status !== "submit") ||
+                  (p.proposal.negotiations && p.proposal.negotiations.filter(it => it.status == 0).length))
               : p.remainingTime > 0 && p.declineMessage !== "decline";
       });
     },
     proposals(){
       return this.$store.state.vendorDashboard.proposals;
-    },
-    expiredTime(){
-      if(!this.selectedProposalRequest) return null;
-      if(this.negotiationProcessed === NONE || this.negotiationProcessed === DECLINED){
-          return new Date(this.selectedProposalRequest.proposal.expiredDate).getTime()
-      } else if(this.negotiationProcessed === APPROVED) {
-          return this.selectedProposalRequest.expiredTime;
-      }
-    },
+    }
   },
   watch: {
     proposalRequests(newVal){

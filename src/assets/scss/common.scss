@@ -298,12 +298,6 @@ $paddings: 0, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 100, 400;
 .w-max-450 {
   max-width: 450px;
 }
-.w-max-600 {
-    max-width: 600px;
-}
-.w-max-700 {
-    max-width: 700px;
-}
 .w-min-120 {
   min-width: 120px;
 }
@@ -545,11 +539,8 @@ hr {
   width: 20px !important;
   min-width: 20px;
 }
-.label-icon-25 {
+.label-icon-1 {
   width: 25px !important;
-}
-.label-icon-40 {
-    width: 40px !important;
 }
 
 .label-capitalize {
@@ -610,9 +601,7 @@ hr {
 .bg-purple{
     background-color: $vendorColor;
 }
-.bg-red{
-    background-color: $rose;
-}
+
 @media only screen and (max-width: 959px) {
   .font-size-14 {
       font-size: 14px !important;

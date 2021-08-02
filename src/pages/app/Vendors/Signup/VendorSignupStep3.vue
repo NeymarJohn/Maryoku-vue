@@ -55,6 +55,25 @@
                 @update="setPricePolicy($event, pIndex)"
               ></vendor-pricing-policy-item>
             </div>
+            <!-- <div class="field mb-50">
+              <v-signup-add-rules
+                :comType="'rule'"
+                :title="policyDesc"
+              />
+            </div>
+            <div class="field mb-50">
+              <div class="label">
+                <div class="title-cont">
+                  <div class="left m-0">
+                    <h5>additional disclaimer</h5>
+                  </div>
+                  <div class="right">
+                    <p>*suggested</p>
+                  </div>
+                </div>
+              </div>
+              <textarea placeholder="For example : A 50% deposite will be due on or befor eThe remaining balance will be collected a week prior to the event" rows="5"/>
+            </div>-->
           </div>
         </div>
         <div class="3rd-party-vendor-wrapper mb-50" v-if="vendor.vendorCategories[0] == 'venuerental'">
@@ -303,14 +322,6 @@
             <div class="main-cont">
               <textarea v-model="vendor.healthPolicy"></textarea>
             </div>
-            <div class="my-20">
-              Guaranteed with every staff member:
-            </div>
-            <div class="md-layout my-10">
-              <div v-for="option in guaranteedOptions" class="md-layout-item md-size-33" :key="option.key">
-                <md-checkbox v-model="vendor.guaranteed" :value="option.value">{{option.label}}</md-checkbox>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -326,14 +337,26 @@ import Multiselect from "vue-multiselect";
 import _ from "underscore";
 
 //COMPONENTS
+import Icon from "@/components/Icon/Icon.vue";
 import VendorServiceItem from "../components/VendorServiceItem.vue";
 import VSignupAddRules from "@/components/Inputs/VSignupAddRules.vue";
+import TimePicker from "@/components/Inputs/TimePicker";
+// import VSignupTimeSelect from '@/components/Inputs/VSignupTimeSelect.vue'
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import { FunctionalCalendar } from "vue-functional-calendar";
 import { VendorPolicy, VendorPricingPolicy } from "@/constants/vendor";
 import { capitalize } from "@/utils/string.util";
+import VueGoogleAutocomplete from "vue-google-autocomplete";
 import VendorPolicyItem from "../components/vendor-policy-item";
 import VendorPricingPolicyItem from "../components/vendor-pricing-policy-item";
+const christanHolidaysAPI =
+  "https://www.googleapis.com/calendar/v3/calendars/en.christian%23holiday%40group.v.calendar.google.com/events?key=AIzaSyCuHr_Quojoaxqw9dWHgbPHItxfsZAYKsY";
+const jewishHolidaysAPI =
+  "https://www.googleapis.com/calendar/v3/calendars/en.jewish%23holiday%40group.v.calendar.google.com/events?key=AIzaSyCuHr_Quojoaxqw9dWHgbPHItxfsZAYKsY";
+const muslimHolidaysAPI =
+  "https://www.googleapis.com/calendar/v3/calendars/en.islamic%23holiday%40group.v.calendar.google.com/events?key=AIzaSyCuHr_Quojoaxqw9dWHgbPHItxfsZAYKsY";
+const hinduHolidaysAPI =
+  "https://www.googleapis.com/calendar/v3/calendars/en.islamic%23holiday%40group.v.calendar.google.com/events?key=AIzaSyCuHr_Quojoaxqw9dWHgbPHItxfsZAYKsY";
 
 export default {
   name: "vendor-signup-step3",
@@ -455,13 +478,6 @@ export default {
       pricingPolicies: VendorPricingPolicy,
       vendorPolicies: {},
       vendorPricingPolicies: {},
-      guaranteedOptions: [
-          {value: 'mask_wearing', label:'Mask wearing'},
-          {value: 'enhanced_cleaning', label: 'Enhanced cleaning'},
-          {value: 'cancellation', label: 'Cancellation in mitigating circumstances'},
-          {value: 'social_distancing', label: 'Social distancing'},
-          {value: 'vaccination_certificate', label: 'Vaccination Certificate'},
-      ]
     };
   },
   methods: {

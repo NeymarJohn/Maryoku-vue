@@ -27,24 +27,7 @@
                   ${{cart[item.key].proposal.cost | withComma}}
               </td>
               <td width="10%" class="pr-40 py-20">
-                  <md-menu md-size="auto" class="action-menu" :md-offset-x="-300" :md-offset-y="-36" @md-opened="isOpened">
-                      <md-button md-menu-trigger class="edit-btn md-simple" style="height: 30px">
-                          <md-icon style="font-size: 30px !important">more_vert</md-icon>
-                      </md-button>
-                      <md-menu-content>
-                          <md-menu-item @click="edit(proposalStatus.edit)" class="md-red">
-                            <span>
-                              <img :src="`${$iconURL}comments/SVG/heart-dark.svg`" class="label-icon-40 mr-10" />
-                              Move to Favorite</span>
-                          </md-menu-item>
-                          <md-menu-item @click="edit(proposalStatus.download)" class="md-red">
-                            <span>
-                              <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon ml-10 mr-20" />
-                              Remove from Cart
-                            </span>
-                          </md-menu-item>
-                      </md-menu-content>
-                  </md-menu>
+                  <md-button class="md-simple edit-btn p-10"><md-icon>more_vert</md-icon></md-button>
               </td>
           </tr>
 
@@ -118,18 +101,6 @@ export default {
     },
     hasBudget(categoryKey) {
       return !!this.event.components.find((item) => item.componentId == categoryKey);
-    },
-    isOpened() {
-      setTimeout((_) => {
-          $("li.md-list-item").hover(
-              function (el) {
-                  $(this).find("img").attr("style", "filter:brightness(0) invert(1)");
-              },
-              function () {
-                  $(this).find("img").attr("style", "filter:brightness(0) invert(0)");
-              },
-          );
-      }, 0);
     },
   },
 

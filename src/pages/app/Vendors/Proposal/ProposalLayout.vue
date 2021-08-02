@@ -69,7 +69,7 @@
         <template slot="body">
           <div class="saved-it-modal__body">
             <div class="time-cont">
-              <vendor-bid-time-counter :days="0" :hours="0" :minutes="0" :seconds="0" class="bg-purple"/>
+              <vendor-bid-time-counter :days="0" :hours="0" :minutes="0" :seconds="0" />
             </div>
           </div>
         </template>

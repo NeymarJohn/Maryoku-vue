@@ -16,13 +16,12 @@
       :style="`background: url(${backgroundImage}) center center no-repeat`"
       :class="{ isCollapsed, isSelected }"
     >
-      <div class="bundle-offer" v-if="proposal.additionalServices.length">
+      <div class="bundle-offer" v-if="proposal.bundleDiscount && proposal.bundleDiscount.isApplied">
         <img :src="`${$iconURL}common/bell-white.svg`" />
         Bundle Offer
         <md-tooltip md-direction="top" class="p-30 color-black">
-          <div class="font-size-20 font-bold mb-10">{{ getBundleToolTipText(Object.keys(proposal.pricesByCategory)) }}</div>
-          <div class="font-size-16" v-if="proposal.bundleDiscount && proposal.bundleDiscount.isApplied">
-              {{ proposal.bundleDiscount.percentage }}% Off for the whole package</div>
+          <div class="font-size-20 font-bold mb-10">{{ getBundleToolTipText(proposal.bundleDiscount.services) }}</div>
+          <div class="font-size-16">{{ proposal.bundleDiscount.percentage }}% Off for the whole package</div>
         </md-tooltip>
       </div>
       <div v-if="isCollapsed" class="proposal-summary" @click="proposalDetails">
@@ -186,8 +185,14 @@ export default {
         }
         if (!period) return "";
 
-        var startTime = moment(parseInt(period.startTime));
-        var endTime = moment(parseInt(period.endTime));
+        var startTime = moment(
+          `${period.startTime.time.hh}:${period.startTime.time.mm} ${period.startTime.ampm}`,
+          "HH:mm:ss a",
+        );
+        var endTime = moment(
+          `${period.endTime.time.hh}:${period.endTime.time.mm} ${period.endTime.ampm}`,
+          "HH:mm:ss a",
+        );
 
         // calculate total duration
         var duration = moment.duration(endTime.diff(startTime));

@@ -121,21 +121,6 @@
       @close="showDifferentProposals = false"
       :proposals="proposals.slice(0, 3)"
     ></event-change-proposal-modal>
-    <Modal v-if="negotiationProposal" container-class="modal-container negotiation-notification w-max-700">
-        <div slot="header">
-            <div class="font-size-28 font-bold-extra text-left">Timing is everything</div>
-            <md-button class="position-absolute md-simple ml-auto text-decoration-none cursor-pointer"
-                       @click="processNotification"><md-icon>close</md-icon></md-button>
-        </div>
-
-        <template slot="body">
-            <negotiation-notification
-                :proposal="negotiationProposal"
-                :serviceCategories="serviceCategories"
-                @close="negotiationProposal = null"
-            />
-        </template>
-    </Modal>
   </div>
 </template>
 <script>
@@ -147,9 +132,9 @@ import InputMask from "vue-input-mask";
 import { postReq, getReq } from "@/utils/token";
 
 import Proposal from "@/models/Proposal";
+import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
 import EventCategoryRequirement from "@/models/EventCategoryRequirement";
-import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 
 import { Modal, MaryokuInput, Loader } from "@/components";
 import ResizableToggleButton from "@/components/Button/ResizableToggleButton.vue";
@@ -162,7 +147,6 @@ import AdditionalRequestModal from "../PlanningBoard/components/modals/Additiona
 
 import ProgressRadialBar from "../PlanningBoard/components/ProgressRadialBar.vue";
 import ServicesCart from "./ServicesCart";
-import NegotiationNotification from "./components/NegotiationNotification";
 
 export default {
   name: "event-booking",
@@ -171,7 +155,6 @@ export default {
     InputMask,
     Modal,
     EventChangeProposalModal,
-    NegotiationNotification,
     ProposalCard,
     MaryokuInput,
     ResizableToggleButton,
@@ -212,7 +195,7 @@ export default {
     showCart: false,
   }),
   methods: {
-    ...mapMutations("event", ["setEventData", "setBookingRequirements", "setInitBookingRequirements", "setProposalsByCategory"]),
+    ...mapMutations("event", ["setEventData", "setBookingRequirements", "setInitBookingRequirements"]),
     ...mapActions("event", ["getProposals"]),
     ...mapActions("comment", ["getCommentComponents"]),
     ...mapActions("planningBoard", ["saveMainRequirements", "getRequirements", "getCartItems", "saveTypes", "updateRequirements", "updateCartItem"]),
@@ -352,16 +335,6 @@ export default {
     },
     openCart(){
       this.showCart = true;
-    },
-    async processNotification(){
-      let proposal = this.negotiationProposal;
-      let { negotiations } = proposal;
-      negotiations.map(it => it.status = 3);
-      this.$store.dispatch('event/updateProposal', {
-          category: proposal.vendor.vendorCategory,
-          proposal: {...proposal, negotiations}
-      })
-
     }
   },
   async created() {
@@ -387,9 +360,6 @@ export default {
     event(newVal, oldVal) {
       this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
     },
-    negotiationProposal(newVal){
-      console.log('negotiationProposal', newVal);
-    },
     $route: "fetchData",
   },
   filters: {
@@ -413,9 +383,6 @@ export default {
     ...mapState({
       eventRequirements: (state) => state.planningBoard.requirements || {},
     }),
-    serviceCategories(){
-      return this.$store.state.common.serviceCategories;
-    },
     categoryList() {
       return this.$store.state.event.eventData.components;
     },
@@ -437,21 +404,6 @@ export default {
       if (!this.selectedCategory || !proposals.hasOwnProperty(this.selectedCategory.componentId)) return [];
       return proposals[this.selectedCategory.componentId];
     },
-    negotiationProposal(){
-      let proposals = this.$store.state.event.proposals;
-      if(!Object.keys(proposals).length) return null
-      let proposal = null;
-      Object.keys(proposals).map(key => {
-          console.log('negotiationProposal', key, proposals[key]);
-          return proposals[key].map(p => {
-              let negotiaotins = p.negotiations.filter(n => n.status === 1 || n.status === 2);
-              if(negotiaotins.length) {
-                  proposal = p;
-              }
-          })
-      })
-      return proposal;
-    }
   },
 };
 </script>
