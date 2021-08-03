@@ -154,7 +154,6 @@
             rows="3"
             v-model="item.desc"
             :placeholder="item.placeholder ? item.placeholder : `Except from the parking area`"
-            @input="setPolicy"
           />
         </div>
       </div>
@@ -184,6 +183,7 @@ export default {
   },
   methods: {
     setPolicy(e, type, name, value) {
+      console.log("type", type);
       if ((type === "option" || type === "Including") && name) {
         this.item.value = value;
       } else {

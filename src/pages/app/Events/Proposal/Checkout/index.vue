@@ -46,49 +46,44 @@
             ></checkout-price-table>
 
             <div class="p-30" v-if="this.proposal.extraServices[this.vendor.eventCategory.key]">
-                  <div>Would you like to upgrade & add one of those?</div>
-                  <div class="mb-30" v-if="proposal.serviceCategory">
-                      You have $ {{ (proposal.serviceCategory.allocatedBudget - proposal.cost) | withComma }} left over from
-                      your original defined budget.
-                  </div>
-                  <div class="mt-10 mb-10">
-                      Simply select anything that you would like to add. Please note that any item or service you choose here
-                      will be added to the overall vendor cost.
-                  </div>
-                  <collapse-panel
-                      :defaultStatus="false"
-                      class="pt-10 pb-10"
-                      v-for="service in this.proposal.extraServices[this.vendor.eventCategory.key].filter(
-                (item) => !item.added && item.price,
-              )"
-                      :key="service.subCategory"
-                  >
-                      <template slot="header">
-                          <div class="d-flex align-center">
-                              <div class="d-flex align-center">
-                                  <md-checkbox class="m-0 mr-10" v-model="service.addedOnProposal"></md-checkbox>
-                                  <span>{{ service.requirementTitle }}</span>
-                              </div>
-                              <div class="ml-auto pr-100">
-                                  <div class="element-price">${{service.price | withComma}}</div>
-                              </div>
-                          </div>
-                      </template>
-                      <template slot="content">
-                          <div class="price-table-content mt-20"></div>
-                      </template>
-                  </collapse-panel>
+              <div>Would you like to upgrade & add one of those?</div>
+              <div class="mb-30" v-if="proposal.serviceCategory">
+                You have $ {{ (proposal.serviceCategory.allocatedBudget - proposal.cost) | withComma }} left over from
+                your original defined budget.
               </div>
+              <div class="mt-10 mb-10">
+                Simply select anything that you would like to add. Please note that any item or service you choose here
+                will be added to the overall vendor cost.
+              </div>
+              <div
+                class="pt-10 pb-10"
+                v-for="service in this.proposal.extraServices[this.vendor.eventCategory.key].filter(
+                  (item) => !item.added && item.price,
+                )"
+                :key="service.subCategory"
+              >
+                <div class="d-flex align-center">
+                  <div class="d-flex align-center">
+                    <md-checkbox class="m-0 mr-10" v-model="service.addedOnProposal"></md-checkbox>
+                    <span>{{ service.requirementTitle }}</span>
+                  </div>
+                  <div class="ml-auto pr-100">
+                    <div class="element-price">${{ service.price | withComma }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </template>
           <template v-else>
+
             <checkout-proposal-table
                 v-for="(item, key) in cart"
                 :proposal="item.proposal"
                 :category="key"
                 :key="key">
             </checkout-proposal-table>
-          </template>
 
+          </template>
         </div>
         <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
@@ -280,7 +275,7 @@ export default {
     };
   },
   async created() {
-    if(this.$route.params.hasOwnProperty('proposalId')) {
+    if (this.$route.params.hasOwnProperty("proposalId")) {
       const proposalId = this.$route.params.proposalId;
       this.proposal = await Proposal.find(proposalId);
       this.vendor = this.proposal.vendor;
@@ -298,7 +293,7 @@ export default {
   },
   computed: {
     categories() {
-       return this.$store.state.common.serviceCategories;
+      return this.$store.state.common.serviceCategories;
     },
     tax() {
       if (!this.proposal.taxes) return { percentage: 0, price: 0 };
@@ -340,11 +335,15 @@ export default {
           }
           return s + service.requirementValue * service.price;
         }, 0);
-        console.log("sumOFserive", sumOfService);
         totalPrice += sumOfService;
       });
 
-      return totalPrice;
+      const addedPrice = this.proposal.extraServices[this.vendor.eventCategory.key].reduce((s, service) => {
+        if (!service.addedOnProposal) return s;
+        return s + service.requirementValue * service.price;
+      }, 0);
+
+      return totalPrice + (addedPrice || 0);
     },
     discounedAndTaxedPrice() {
       const eventDays = 1;
@@ -377,7 +376,6 @@ export default {
           { headers: this.$auth.getAuthHeader() },
         )
         .then((res) => {
-          console.log("res.data", res.data);
           const priceData = res.data;
           this.showStripeCheckout = true;
           // this.loadingPayment = false;
