@@ -16,7 +16,6 @@
         :vendorProposal="proposal"
         :landingPage="true"
         :nonMaryoku="true"
-        theme="purple"
         v-if="proposal"
         @updateProposal="updateProposal"
       ></event-proposal-details>
