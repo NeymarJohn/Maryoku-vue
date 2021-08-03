@@ -56,7 +56,7 @@
         </div>
 
         <div class="proposal-body">
-          <md-button class="md-simple md-icon-button md-raised save-btn" @click="isFavorite = !isFavorite">
+          <md-button class="md-simple md-icon-button md-raised save-btn" @click="favorite">
             <img :src="`${$iconURL}${isFavorite ? 'Requirements/Group+16153.svg' : 'comments/SVG/heart-dark.svg'}`" />
           </md-button>
 
@@ -417,6 +417,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isFavorite:{
+      type: Boolean,
+      default: false,
+    },
     theme: {
       type: String,
       default: "red",
@@ -451,7 +455,6 @@ export default {
       showAboutUs: false,
       addedServices: {},
       socialMediaBlocks,
-      isFavorite: false,
     };
   },
   created() {
@@ -462,6 +465,7 @@ export default {
     //   this.vendorProposal = proposal;
     //   this.extraServices = this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
     // });
+    console.log('eventProposalDetail', this.category, this.cartItem);
     this.extraServices = this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
   },
 
@@ -619,6 +623,9 @@ export default {
         value: this.vendorProposal.bookedServices,
       });
     },
+    favorite(){
+      this.$emit('favorite', !this.isFavorite);
+    }
   },
   computed: {
     ...mapState("event", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode"]),

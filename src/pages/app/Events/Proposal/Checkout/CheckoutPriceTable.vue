@@ -68,7 +68,10 @@ export default {
       if (!tax) {
         tax = { price: 0, percentage: 0 };
       }
+      console.log(this.serviceCategory, this.priceOfCostservices);
+      console.log(this.serviceCategory, this.discount.price);
       tax.price = Math.round(((this.priceOfCostservices - this.discount.price) * tax.percentage) / 100) || 0;
+      console.log(this.serviceCategory, tax);
       return tax;
     },
     costServices() {
