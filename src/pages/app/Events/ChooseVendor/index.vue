@@ -121,6 +121,20 @@
       @close="showDifferentProposals = false"
       :proposals="proposals.slice(0, 3)"
     ></event-change-proposal-modal>
+    <Modal v-if="showNegotiationNotification" container-class="modal-container negotiation-notification w-max-700">
+        <div slot="header">
+            <div class="font-size-28 font-bold-extra text-left">Timing is everything</div>
+            <md-button class="position-absolute md-simple ml-auto text-decoration-none cursor-pointer"
+                       @click="processNotification"><md-icon>close</md-icon></md-button>
+        </div>
+
+        <template slot="body">
+            <negotiation-notification
+                :proposals="negotiationProposals"
+                :serviceCategories="serviceCategories"
+            />
+        </template>
+    </Modal>
   </div>
 </template>
 <script>
@@ -132,7 +146,6 @@ import InputMask from "vue-input-mask";
 import { postReq, getReq } from "@/utils/token";
 
 import Proposal from "@/models/Proposal";
-import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
 import EventCategoryRequirement from "@/models/EventCategoryRequirement";
 
@@ -147,6 +160,7 @@ import AdditionalRequestModal from "../PlanningBoard/components/modals/Additiona
 
 import ProgressRadialBar from "../PlanningBoard/components/ProgressRadialBar.vue";
 import ServicesCart from "./ServicesCart";
+import NegotiationNotification from "./components/NegotiationNotification";
 
 export default {
   name: "event-booking",
@@ -155,6 +169,7 @@ export default {
     InputMask,
     Modal,
     EventChangeProposalModal,
+    NegotiationNotification,
     ProposalCard,
     MaryokuInput,
     ResizableToggleButton,
@@ -192,10 +207,11 @@ export default {
     showDetails: false,
     selectedProposal: null,
     showDifferentProposals: false,
+    showNegotiationNotification: false,
     showCart: false,
   }),
   methods: {
-    ...mapMutations("event", ["setEventData", "setBookingRequirements", "setInitBookingRequirements"]),
+    ...mapMutations("event", ["setEventData", "setBookingRequirements", "setInitBookingRequirements", "setProposalsByCategory"]),
     ...mapActions("event", ["getProposals"]),
     ...mapActions("comment", ["getCommentComponents"]),
     ...mapActions("planningBoard", ["saveMainRequirements", "getRequirements", "getCartItems", "saveTypes", "updateRequirements", "updateCartItem"]),
@@ -317,10 +333,9 @@ export default {
     async bookVendor() {
       if(!this.selectedProposal) return;
       await new Proposal({ ...this.selectedProposal }).save();
-      let routeData = this.$router.push({
-        name: "Checkout",
+      this.$router.push({
+        name: "CheckoutWithVendor",
         params: {
-            vendorId: this.selectedProposal.vendor.id,
             proposalId: this.selectedProposal.id,
         },
       });
@@ -335,6 +350,20 @@ export default {
     },
     openCart(){
       this.showCart = true;
+    },
+    async processNotification(){
+      let proposals = this.negotiationProposals;
+      this.showNegotiationNotification = false;
+      Object.keys(proposals).map(key => {
+          this.negotiationProposals[key].map(proposal => {
+              let { negotiations } = proposal;
+              negotiations.map(it => it.status = 3);
+              this.$store.dispatch('event/updateProposal', {
+                  category: key,
+                  proposal: {...proposal, negotiations}
+              })
+          })
+      })
     }
   },
   async created() {
@@ -360,6 +389,10 @@ export default {
     event(newVal, oldVal) {
       this.$root.$emit("set-title", this.event, this.routeName === "EditBuildingBlocks", true);
     },
+    negotiationProposals(newVal){
+      console.log('negotiationProposals', newVal);
+      if(Object.keys(newVal).length) this.showNegotiationNotification = true;
+    },
     $route: "fetchData",
   },
   filters: {
@@ -383,6 +416,9 @@ export default {
     ...mapState({
       eventRequirements: (state) => state.planningBoard.requirements || {},
     }),
+    serviceCategories(){
+      return this.$store.state.common.serviceCategories;
+    },
     categoryList() {
       return this.$store.state.event.eventData.components;
     },
@@ -404,6 +440,23 @@ export default {
       if (!this.selectedCategory || !proposals.hasOwnProperty(this.selectedCategory.componentId)) return [];
       return proposals[this.selectedCategory.componentId];
     },
+    negotiationProposals(){
+      let proposals = this.$store.state.event.proposals;
+      if(!Object.keys(proposals).length) return {}
+      let negotiationProposals = {};
+      Object.keys(proposals).map(key => {
+          let subProposals = [];
+          proposals[key].map(p => {
+              let negotiaotins = p.negotiations.filter(n => n.status === 1 || n.status === 2);
+              if(negotiaotins.length) {
+                  subProposals.push(p);
+              }
+          })
+          if(subProposals.length) negotiationProposals[key] = subProposals;
+      })
+      console.log('negotiationProposals', negotiationProposals);
+      return negotiationProposals;
+    }
   },
 };
 </script>

@@ -10,72 +10,97 @@
         ></div>
         <div class="content p-50">
           <div class="font-size-30">
-            <span class="font-bold">
+            <span class="font-bold" v-if="pageType === 0">
               <img
                 :src="`${$iconURL}Budget+Elements/${vendor.eventCategory.icon}`"
                 style="width: 30px; margin-right: 0.5em"
               />
               Book {{ vendor.eventCategory.fullTitle }}
             </span>
+            <span v-else class="font-bold">Book VENDORS</span>
             CHECKOUT
           </div>
-          <div class="mt-20">
-            {{ vendor.companyName }}
-          </div>
+          <div class="mt-20" v-if="pageType === 0">{{ vendor.companyName }}</div>
           <div class="white-card p-40 font-size-22 font-bold mt-50 d-flex justify-content-between">
-            <span>What does this proposal include?</span>
+            <span v-if="pageType === 0">What does this proposal include?</span>
+            <span v-else>What Do We Include In This Proposals?</span>
             <md-icon>keyboard_arrow_right</md-icon>
           </div>
         </div>
       </div>
       <div class="md-layout-item md-size-55 right-panel">
         <div class="white-card">
-          <checkout-price-table
-            class="price-table"
-            :proposal="proposal"
-            :serviceCategory="proposal.vendor.vendorCategory"
-            :key="`${proposal.vendor.vendorCategory}-section`"
-          ></checkout-price-table>
-          <checkout-price-table
-            class="price-table"
-            v-for="service in proposal.additionalServices"
-            :proposal="proposal"
-            :serviceCategory="service"
-            :key="`secondary-${service}-section`"
-          ></checkout-price-table>
-          <div class="p-30" v-if="this.proposal.extraServices[this.vendor.eventCategory.key]">
-            <div>Would you like to upgrade & add one of those?</div>
-            <div class="mb-30" v-if="proposal.serviceCategory">
-              You have $ {{ (proposal.serviceCategory.allocatedBudget - proposal.cost) | withComma }} left over from
-              your original defined budget.
-            </div>
-            <div class="mt-10">
-              Simply select anything that you would like to add. Please note that any item or service you choose here
-              will be added to the overall vendor cost.
-            </div>
-            <collapse-panel
-              :defaultStatus="false"
-              class="pt-10 pb-10"
-              v-for="service in this.proposal.extraServices[this.vendor.eventCategory.key].filter(
+          <template v-if="pageType === 0">
+            <checkout-price-table
+              class="price-table"
+              :proposal="proposal"
+              :serviceCategory="proposal.vendor.vendorCategory"
+              :key="`${proposal.vendor.vendorCategory}-section`"
+            ></checkout-price-table>
+            <checkout-price-table
+              class="price-table"
+              v-for="service in proposal.additionalServices"
+              :proposal="proposal"
+              :serviceCategory="service"
+              :key="`secondary-${service}-section`"
+            ></checkout-price-table>
+
+            <div class="p-30" v-if="this.proposal.extraServices[this.vendor.eventCategory.key]">
+                  <div>Would you like to upgrade & add one of those?</div>
+                  <div class="mb-30" v-if="proposal.serviceCategory">
+                      You have $ {{ (proposal.serviceCategory.allocatedBudget - proposal.cost) | withComma }} left over from
+                      your original defined budget.
+                  </div>
+                  <div class="mt-10 mb-10">
+                      Simply select anything that you would like to add. Please note that any item or service you choose here
+                      will be added to the overall vendor cost.
+                  </div>
+                  <collapse-panel
+                      :defaultStatus="false"
+                      class="pt-10 pb-10"
+                      v-for="service in this.proposal.extraServices[this.vendor.eventCategory.key].filter(
                 (item) => !item.added && item.price,
               )"
-              :key="service.subCategory"
-            >
+                      :key="service.subCategory"
+                  >
+                      <template slot="header">
+                          <div class="d-flex align-center">
+                              <div class="d-flex align-center">
+                                  <md-checkbox class="m-0 mr-10" v-model="service.addedOnProposal"></md-checkbox>
+                                  <span>{{ service.requirementTitle }}</span>
+                              </div>
+                              <div class="ml-auto pr-100">
+                                  <div class="element-price">${{service.price | withComma}}</div>
+                              </div>
+                          </div>
+                      </template>
+                      <template slot="content">
+                          <div class="price-table-content mt-20"></div>
+                      </template>
+                  </collapse-panel>
+              </div>
+          </template>
+          <template v-else>
+            <collapse-panel v-for="(item, key) in cart" :defaultStatus="false" class="white-card" :key="key">
               <template slot="header">
-                <div class="price-header d-flex align-center">
-                  <md-checkbox class="m-0 mr-10" v-model="service.addedOnProposal"></md-checkbox>
-                  <span>{{ service.requirementTitle }}</span>
+                <div class="d-flex align-center p-30">
+                    <img class="mr-10" :src="`${$iconURL}Budget+Elements/${serviceCategory(item.category).icon}`" width="35px"/>
+                    {{serviceCategory(item.category).fullTitle}}
+                    <div class="ml-auto">
+                        <div class="element-price pr-100">${{ item.proposal.cost | withComma }}</div>
+                    </div>
                 </div>
               </template>
               <template slot="content">
-                <div class="price-table-content mt-20"></div>
+                {{item.proposal.cost}}
               </template>
             </collapse-panel>
-          </div>
+          </template>
+
         </div>
         <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
-            <div class="price-header d-flex align-center">
+            <div class="d-flex align-center">
               <md-checkbox class="m-0 mr-10" v-model="onDayCordinator"></md-checkbox>
               <img :src="`${$iconURL}PaymentPage/Group 9556.svg`" class="mr-10 ml-10" />
               On Day Cordinator($1,000 Per Day)
@@ -90,7 +115,7 @@
         </collapse-panel>
         <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
-            <div class="price-header d-flex align-center disabled">
+            <div class="d-flex align-center disabled">
               <md-checkbox class="m-0 mr-10" :disabeld="true"></md-checkbox>
               Event Insurance (Coming Soon)
             </div>
@@ -101,7 +126,7 @@
         </collapse-panel>
         <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
-            <div class="price-header d-flex align-center">
+            <div class="d-flex align-center">
               <md-checkbox class="m-0 mr-10" v-model="checkedGiveBack"></md-checkbox>
               <img :src="`${$iconURL}PaymentPage/Group 9791.svg`" class="mr-10 ml-10" />
               Give Back
@@ -150,7 +175,7 @@
         </collapse-panel>
         <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
           <template slot="header">
-            <div class="price-header d-flex align-center disabled">
+            <div class="d-flex align-center disabled">
               <md-checkbox class="m-0 mr-10"></md-checkbox>
               <img :src="`${$iconURL}common/reward.svg`" class="mr-10 ml-10" />
               Use your rewards with this event (Coming Soon)
@@ -160,11 +185,11 @@
             <div class="price-table-content">123123</div>
           </template>
         </collapse-panel>
-        <div class="total-price-panel mt-20 white-card">
+        <div class="total-price-panel mt-20 white-card" v-if="pageType === 0">
           <div class="discount-row">
             <span class="font-bold">Discount </span>
-            <span class="font-bold">-{{ discount.percentage }}%</span>
-            <span class="text-right">-${{ discount.price | withComma }}</span>
+            <span class="font-bold">{{ discount.percentage }}%</span>
+            <span class="text-right">${{ discount.price | withComma }}</span>
           </div>
           <hr />
           <div class="discount-row">
@@ -172,21 +197,11 @@
             <span class="font-bold">{{ tax.percentage }}%</span>
             <span class="text-right">${{ tax.price | withComma }}</span>
           </div>
-          <hr />
-          <div class="discount-row">
-            <span class="font-bold">Fee </span>
-            <span class="font-bold">{{ feePercentail }}%</span>
-            <span class="text-right">${{ feePrice | withComma }}</span>
-          </div>
           <div class="total-price-row">
             <div class="font-size-22 font-bold d-flex justify-content-between">
               <span>TOTAL TO PAY</span>
-              <span>${{ finalPrice | withComma }}</span>
-            </div>
-            <!-- <div class="font-size-14 d-flex justify-content-between">
-              <span>TOTAL TO PAY</span>
               <span>${{ discounedAndTaxedPrice | withComma }}</span>
-            </div> -->
+            </div>
           </div>
         </div>
         <div class="mt-40">
@@ -194,7 +209,7 @@
             <span class="font-regular">I agree to the</span>
             <a href="#" class="font-bold color-black text-underline">Cancellation policy</a>
           </md-checkbox>
-          <!-- <div class="d-flex align-center payment-methods">
+          <div class="d-flex align-center payment-methods">
             <md-button
               class="md-simple payment-method"
               @click="paymentMethod = 'payoneer'"
@@ -216,15 +231,15 @@
             >
               <img :src="`${$iconURL}PaymentPage/Stripe.png`" />
             </md-button>
-          </div> -->
+          </div>
           <stripe-checkout v-if="showStripeCheckout" :price="stripePriceData"></stripe-checkout>
-          <!-- <div>You will be transferred to a secured {{ paymentMethod }} payment</div> -->
+          <div>You will be transferred to a secured {{ paymentMethod }} payment</div>
         </div>
       </div>
     </div>
     <div class="checkout-footer white-card p-30 mt-30 d-flex justify-content-between">
       <md-button class="maryoku-btn md-simple md-black">Back</md-button>
-      <md-button class="maryoku-btn md-red" :disabled="!agreedCancellationPolicy" @click="pay"
+      <md-button class="maryoku-btn md-red" :disabled="!agreedCancellationPolicy || !paymentMethod" @click="pay"
         >Submit Payment
       </md-button>
     </div>
@@ -232,18 +247,23 @@
   </div>
 </template>
 <script>
-import Vendor from "@/models/Vendors";
 import Proposal from "@/models/Proposal";
 import CheckoutPriceTable from "./CheckoutPriceTable.vue";
 import CollapsePanel from "@/components/CollapsePanel.vue";
 import StripeCheckout from "./StripeCheckout.vue";
 import SuccessModal from "./SuccessModal.vue";
+
+// checkout page type
+const VENDOR = 0;
+const CART = 1;
+
 export default {
   components: { CheckoutPriceTable, CollapsePanel, StripeCheckout, SuccessModal },
   data() {
     return {
       vendor: null,
       proposal: null,
+      cart: {},
       loading: true,
       agreedCancellationPolicy: false,
       paymentMethod: "",
@@ -256,25 +276,30 @@ export default {
       showSuccessModal: false,
       showCancelModal: false,
       onDayCordinator: false,
-      feePercentail: 3.2,
+      pageType: VENDOR,
     };
   },
-  created() {
-    const proposalId = this.$route.params.proposalId;
-    const vendorId = this.$route.params.vendorId;
-    Vendor.find(vendorId).then((vendor) => {
-      this.loading = false;
-      this.vendor = vendor;
-    });
-    Proposal.find(proposalId).then((proposal) => {
-      this.proposal = proposal;
-    });
-    console.log("this.$route", this.$route);
+  async created() {
+    if(this.$route.params.hasOwnProperty('proposalId')) {
+      const proposalId = this.$route.params.proposalId;
+      this.proposal = await Proposal.find(proposalId);
+      this.vendor = this.proposal.vendor;
+      this.pageType = VENDOR;
+    } else {
+      this.cart = this.$store.state.planningBoard.cart;
+      this.pageType = CART;
+    }
+
+    this.loading = false;
+
     if (this.$route.query.checkout === "success") {
       this.showSuccessModal = true;
     }
   },
   computed: {
+    categories() {
+       return this.$store.state.common.serviceCategories;
+    },
     tax() {
       if (!this.proposal.taxes) return { percentage: 0, price: 0 };
       let tax = this.proposal.taxes["total"];
@@ -302,15 +327,6 @@ export default {
           return s + service.requirementValue * service.price;
         }, 0);
         bundledServicePrice += sumOfService;
-        // if (this.addedServices[serviceCategory]) {
-        //   const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
-        //     if (service.isComplimentary) {
-        //       return 0;
-        //     }
-        //     return s + service.requirementValue * service.price;
-        //   }, 0);
-        //   bundledServicePrice += sumOfService;
-        // }
       });
       return (bundledServicePrice * this.proposal.bundleDiscount.percentage) / 100;
     },
@@ -342,35 +358,29 @@ export default {
       }
       return price;
     },
-
-    feePrice() {
-      return (this.discounedAndTaxedPrice * this.feePercentail) / 100;
-    },
-
-    finalPrice() {
-      return this.discounedAndTaxedPrice + this.feePrice;
-    },
   },
   methods: {
     pay() {
-      this.loadingPayment = true;
-      this.$http
-        .post(
-          `${process.env.SERVER_URL}/stripe/v1/customer/products`,
-          { name: this.vendor.companyName, price: Math.floor(this.finalPrice * 100) },
-          { headers: this.$auth.getAuthHeader() },
-        )
-        .then((res) => {
-          console.log("res.data", res.data);
-          const priceData = res.data;
-          this.showStripeCheckout = true;
-          // this.loadingPayment = false;
-          this.stripePriceData = priceData;
-        });
-      // if (this.paymentMethod === "stripe") {
-
-      // }
+      if (this.paymentMethod === "stripe") {
+        this.loadingPayment = true;
+        this.$http
+          .post(
+            `${process.env.SERVER_URL}/stripe/v1/customer/products`,
+            { name: this.vendor.companyName, price: Math.floor(this.discounedAndTaxedPrice * 100) },
+            { headers: this.$auth.getAuthHeader() },
+          )
+          .then((res) => {
+            console.log("res.data", res.data);
+            const priceData = res.data;
+            this.showStripeCheckout = true;
+            // this.loadingPayment = false;
+            this.stripePriceData = priceData;
+          });
+      }
     },
+    serviceCategory(category){
+      return this.categories.find(it => it.key === category);
+    }
   },
 };
 </script>
@@ -445,5 +455,12 @@ export default {
       }
     }
   }
+}
+.element-price {
+  font-weight: 900;
+  font-size: 18px;
+  text-align: left;
+  color: #999999;
+  width: 80px;
 }
 </style>

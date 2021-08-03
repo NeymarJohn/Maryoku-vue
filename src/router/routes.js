@@ -629,9 +629,21 @@ let vendorListPage = {
         gtm: "Vendors",
     },
 };
-let checkoutPage = {
-    path: "/checkout/:vendorId/:proposalId",
-    name: "Checkout",
+let checkoutPageWithVendor = {
+    path: "/checkout/:proposalId",
+    name: "CheckoutWithVendor",
+    component: Checkout,
+    meta: {
+        title: "Plan Event",
+        gtm: "Plan Event",
+        opaque: false,
+        requiresAuth: true,
+    },
+}
+
+let checkoutPageWithCart = {
+    path: "/checkout",
+    name: "CheckoutWithCart",
     component: Checkout,
     meta: {
         title: "Plan Event",
@@ -704,7 +716,8 @@ const routes = [
     welcomeEventPage,
     others,
     calendarSyncPage,
-    checkoutPage,
+    checkoutPageWithVendor,
+    checkoutPageWithCart,
     proposalForUnregisterPlanner,
     ...vendorRoutes,
     {

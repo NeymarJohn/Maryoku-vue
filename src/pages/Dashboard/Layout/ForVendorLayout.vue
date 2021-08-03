@@ -23,7 +23,8 @@
           :hours="getRemainingTime.hours"
           :minutes="getRemainingTime.mins"
           :seconds="getRemainingTime.seconds"
-          :content="'To send your bid'"
+          class="bg-yellow"
+          :bottom-content="'To send your bid'"
         />
       </div>
     </section>
@@ -99,7 +100,7 @@
       <template slot="body">
         <div class="saved-it-modal__body">
           <div class="time-cont">
-            <vendor-bid-time-counter :days="0" :hours="0" :minutes="0" :seconds="0" />
+            <vendor-bid-time-counter class="bg-purple p-10" :days="0" :hours="0" :minutes="0" :seconds="0" />
           </div>
         </div>
       </template>

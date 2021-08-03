@@ -137,8 +137,21 @@ const actions = {
               reject(err)
       });
     });
+  },
+  removeCartItem({commit, state}, item) {
+    return new Promise((resolve, reject) => {
+        new Cart(item)
+            .for(new CalendarEvent({id: item.event.id}))
+            .delete()
+            .then((res) => {
+                commit("removeCategoryCartItem", { category: item.category })
+                resolve(res)
+            })
+            .catch(err => {
+                reject(err)
+            });
+    });
   }
-
 }
 const mutations = {
   resetRequirements(state){
@@ -173,6 +186,9 @@ const mutations = {
   setCategoryCartItem(state, { category, item }) {
     Vue.set(state.cart, category, item)
   },
+  removeCategoryCartItem(state, {category}){
+    Vue.delete(state.cart, category);
+  }
 }
 export default {
   namespaced: true,

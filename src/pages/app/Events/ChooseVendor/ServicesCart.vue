@@ -27,7 +27,24 @@
                   ${{cart[item.key].proposal.cost | withComma}}
               </td>
               <td width="10%" class="pr-40 py-20">
-                  <md-button class="md-simple edit-btn p-10"><md-icon>more_vert</md-icon></md-button>
+                  <md-menu md-size="auto" class="action-menu" :md-offset-x="-300" :md-offset-y="-36" @md-opened="isOpened">
+                      <md-button md-menu-trigger class="edit-btn md-simple" style="height: 30px">
+                          <md-icon style="font-size: 30px !important">more_vert</md-icon>
+                      </md-button>
+                      <md-menu-content>
+                          <md-menu-item @click="favorite(cart[item.key])" class="md-red">
+                            <span>
+                              <img :src="`${$iconURL}comments/SVG/heart-dark.svg`" class="label-icon-40 mr-10" />
+                              Move to Favorite</span>
+                          </md-menu-item>
+                          <md-menu-item @click="remove(cart[item.key])" class="md-red">
+                            <span>
+                              <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon ml-10 mr-20" />
+                              Remove from Cart
+                            </span>
+                          </md-menu-item>
+                      </md-menu-content>
+                  </md-menu>
               </td>
           </tr>
 
@@ -39,7 +56,7 @@
       </table>
       <div class="mt-20 p-20 d-flex align-center justify-content-center">
           <md-button class="md-simple md-black maryoku-btn mr-10">Clear Selections</md-button>
-          <md-button class="md-red maryoku-btn">Proceed To Checkout</md-button>
+          <md-button class="md-red maryoku-btn" @click="bookCart">Proceed To Checkout</md-button>
       </div>
 
       <vsa-list>
@@ -102,6 +119,27 @@ export default {
     hasBudget(categoryKey) {
       return !!this.event.components.find((item) => item.componentId == categoryKey);
     },
+    isOpened() {
+      setTimeout((_) => {
+          $("li.md-list-item").hover(
+              function (el) {
+                  $(this).find("img").attr("style", "filter:brightness(0) invert(1)");
+              },
+              function () {
+                  $(this).find("img").attr("style", "filter:brightness(0) invert(0)");
+              },
+          );
+      }, 0);
+    },
+    favorite(item){
+        this.$store.dispatch('planningBoard/updateCartItem', {id: item.id, isFavorite: true, event: this.event});
+    },
+    remove(item){
+      this.$store.dispatch('planningBoard/removeCartItem', {id: item.id, event: this.event});
+    },
+    bookCart(){
+      this.$router.push({name: 'CheckoutWithCart'});
+    }
   },
 
   computed: {
