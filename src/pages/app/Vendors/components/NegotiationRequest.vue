@@ -49,6 +49,7 @@
         },
         methods: {
            init(){
+               console.log('negotiationReqeust.init', this.expiredTime);
                let diff = (this.expiredTime - new Date().getTime()) / 1000;
                if (diff < 0) return;
                this.days = Math.floor(diff / (24 * 3600));

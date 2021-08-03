@@ -283,6 +283,7 @@ export default {
       showCancelModal: false,
       onDayCordinator: false,
       feePercentail: 3.2,
+      pageType: VENDOR,
     };
   },
   async created() {

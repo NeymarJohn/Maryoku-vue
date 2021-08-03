@@ -76,7 +76,7 @@
       </template>
       <template slot="body">
           <negotiation-request
-              :expiredTime="selectedProposalRequest.expiredTime"
+              :expiredTime="expiredTime"
               :processed="negotiationProcessed"
               @close="showRequestNegotiationModal = false" />
       </template>
@@ -177,6 +177,14 @@ export default {
     vendorData() {
       return this.$store.state.vendor.profile;
     },
+    expiredTime(){
+      if(!this.selectedProposalRequest) return null;
+      if(this.negotiationProcessed === NONE || this.negotiationProcessed === DECLINED){
+          return new Date(this.selectedProposalRequest.proposal.expiredDate).getTime() ;
+      } else if(this.negotiationProcessed === APPROVED) {
+          return this.selectedProposalRequest.expiredTime;
+      }
+    }
   },
   methods: {
     prev() {
