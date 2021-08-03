@@ -188,8 +188,8 @@
         <div class="total-price-panel mt-20 white-card" v-if="pageType === 0">
           <div class="discount-row">
             <span class="font-bold">Discount </span>
-            <span class="font-bold">{{ discount.percentage }}%</span>
-            <span class="text-right">${{ discount.price | withComma }}</span>
+            <span class="font-bold">-{{ discount.percentage }}%</span>
+            <span class="text-right">-${{ discount.price | withComma }}</span>
           </div>
           <hr />
           <div class="discount-row">
@@ -197,10 +197,16 @@
             <span class="font-bold">{{ tax.percentage }}%</span>
             <span class="text-right">${{ tax.price | withComma }}</span>
           </div>
+          <hr />
+          <div class="discount-row">
+            <span class="font-bold">Fee </span>
+            <span class="font-bold">{{ feePercentail }}%</span>
+            <span class="text-right">${{ feePrice | withComma }}</span>
+          </div>
           <div class="total-price-row">
             <div class="font-size-22 font-bold d-flex justify-content-between">
               <span>TOTAL TO PAY</span>
-              <span>${{ discounedAndTaxedPrice | withComma }}</span>
+              <span>${{ finalPrice | withComma }}</span>
             </div>
           </div>
         </div>
@@ -209,7 +215,7 @@
             <span class="font-regular">I agree to the</span>
             <a href="#" class="font-bold color-black text-underline">Cancellation policy</a>
           </md-checkbox>
-          <div class="d-flex align-center payment-methods">
+          <!-- <div class="d-flex align-center payment-methods">
             <md-button
               class="md-simple payment-method"
               @click="paymentMethod = 'payoneer'"
@@ -231,15 +237,15 @@
             >
               <img :src="`${$iconURL}PaymentPage/Stripe.png`" />
             </md-button>
-          </div>
+          </div> -->
           <stripe-checkout v-if="showStripeCheckout" :price="stripePriceData"></stripe-checkout>
-          <div>You will be transferred to a secured {{ paymentMethod }} payment</div>
+          <!-- <div>You will be transferred to a secured {{ paymentMethod }} payment</div> -->
         </div>
       </div>
     </div>
     <div class="checkout-footer white-card p-30 mt-30 d-flex justify-content-between">
       <md-button class="maryoku-btn md-simple md-black">Back</md-button>
-      <md-button class="maryoku-btn md-red" :disabled="!agreedCancellationPolicy || !paymentMethod" @click="pay"
+      <md-button class="maryoku-btn md-red" :disabled="!agreedCancellationPolicy" @click="pay"
         >Submit Payment
       </md-button>
     </div>
@@ -276,7 +282,6 @@ export default {
       showSuccessModal: false,
       showCancelModal: false,
       onDayCordinator: false,
-      pageType: VENDOR,
       feePercentail: 3.2,
     };
   },
@@ -359,25 +364,34 @@ export default {
       }
       return price;
     },
+
+    feePrice() {
+      return (this.discounedAndTaxedPrice * this.feePercentail) / 100;
+    },
+
+    finalPrice() {
+      return this.discounedAndTaxedPrice + this.feePrice;
+    },
   },
   methods: {
     pay() {
-      if (this.paymentMethod === "stripe") {
-        this.loadingPayment = true;
-        this.$http
-          .post(
-            `${process.env.SERVER_URL}/stripe/v1/customer/products`,
-            { name: this.vendor.companyName, price: Math.floor(this.discounedAndTaxedPrice * 100) },
-            { headers: this.$auth.getAuthHeader() },
-          )
-          .then((res) => {
-            console.log("res.data", res.data);
-            const priceData = res.data;
-            this.showStripeCheckout = true;
-            // this.loadingPayment = false;
-            this.stripePriceData = priceData;
-          });
-      }
+      this.loadingPayment = true;
+      this.$http
+        .post(
+          `${process.env.SERVER_URL}/stripe/v1/customer/products`,
+          { name: this.vendor.companyName, price: Math.floor(this.finalPrice * 100) },
+          { headers: this.$auth.getAuthHeader() },
+        )
+        .then((res) => {
+          console.log("res.data", res.data);
+          const priceData = res.data;
+          this.showStripeCheckout = true;
+          // this.loadingPayment = false;
+          this.stripePriceData = priceData;
+        });
+      // if (this.paymentMethod === "stripe") {
+
+      // }
     },
     serviceCategory(category){
       return this.categories.find(it => it.key === category);

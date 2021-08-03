@@ -48,22 +48,21 @@
             </ul>
           </div>
           <timer-panel
-            v-if="!landingPage"
             class="time-counter"
             :target="targetTime"
             @updateExpireDate="updateExpireDate"
+            :theme="theme"
           ></timer-panel>
         </div>
 
         <div class="proposal-body">
-          <md-button
-              class="md-simple md-icon-button md-raised save-btn"
-              @click="isFavorite = !isFavorite"
-          >
-            <img :src="`${$iconURL}${isFavorite ? 'Requirements/Group+16153.svg' : 'comments/SVG/heart-dark.svg'}`"/>
+          <md-button class="md-simple md-icon-button md-raised save-btn" @click="isFavorite = !isFavorite">
+            <img :src="`${$iconURL}${isFavorite ? 'Requirements/Group+16153.svg' : 'comments/SVG/heart-dark.svg'}`" />
           </md-button>
 
-          <h1 class="font-size-30">Dear {{ $store.state.auth.user.name }},</h1>
+          <h1 class="font-size-30">
+            Dear {{ nonMaryoku ? vendorProposal.eventData.customer.name : $store.state.auth.user.name }},
+          </h1>
           <p>
             {{ vendorProposal.personalMessage }}
           </p>
@@ -177,6 +176,7 @@
           :key="`${vendorProposal.vendor.vendorCategory}-section`"
           @changeAddedServices="updateAddedServices"
           @changeBookedServices="changeBookedServices"
+          :mandatory="true"
         ></event-proposal-price>
         <event-proposal-price
           v-for="service in this.vendorProposal.additionalServices"
@@ -412,6 +412,14 @@ export default {
     landingPage: {
       type: Boolean,
       default: false,
+    },
+    nonMaryoku: {
+      type: Boolean,
+      default: false,
+    },
+    theme: {
+      type: String,
+      default: "red",
     },
   },
   data() {
@@ -772,28 +780,28 @@ export default {
     .proposal-content {
       // margin: 0 2em;
       position: relative;
-        .save-btn {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            width: 50px;
-            height: 50px;
-            z-index: 2;
-            background: white !important;
-            border-radius: 50%;
-            box-shadow: none;
+      .save-btn {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        width: 50px;
+        height: 50px;
+        z-index: 2;
+        background: white !important;
+        border-radius: 50%;
+        box-shadow: none;
 
-            /deep/ .md-ripple {
-                padding: 0px;
-            }
-            img.non-selected {
-                padding: 3px;
-            }
-            img {
-                width: 50px;
-                height: 50px;
-            }
-       }
+        /deep/ .md-ripple {
+          padding: 0px;
+        }
+        img.non-selected {
+          padding: 3px;
+        }
+        img {
+          width: 50px;
+          height: 50px;
+        }
+      }
       .close-btn {
         position: absolute;
         right: 20px;
