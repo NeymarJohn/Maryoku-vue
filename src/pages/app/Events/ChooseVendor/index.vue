@@ -454,6 +454,7 @@ export default {
           })
           if(subProposals.length) negotiationProposals[key] = subProposals;
       })
+      console.log('negotiationProposals', negotiationProposals);
       return negotiationProposals;
     }
   },

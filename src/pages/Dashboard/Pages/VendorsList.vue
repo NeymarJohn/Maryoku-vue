@@ -6,7 +6,6 @@
     <md-table v-if="vendors && vendors.length > 0" md-sort="companyName" md-sort-order="asc">
       <md-table-row>
         <md-table-head md-numeric>No</md-table-head>
-        <md-table-head md-numeric>Id</md-table-head>
         <md-table-head>Company Name</md-table-head>
         <md-table-head>Editing Url</md-table-head>
         <md-table-head>User Name</md-table-head>
@@ -16,7 +15,6 @@
       </md-table-row>
       <md-table-row v-for="(item, index) in vendors" :key="item.id">
         <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ index + 1 }}</md-table-cell>
-          <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
         <md-table-cell md-label="Company Name" md-sort-by="companyName">{{ item.companyName }} </md-table-cell>
         <md-table-cell md-label="User Name" md-sort-by="vendorDisplayName">
           <a :href="`${currentPath}/#/vendor/edit/${item.id}`" target="_blank">{{

@@ -17,7 +17,7 @@
           </template>
           <img
             :src="item"
-            v-for="(item, index) in vendor.images.filter(it => !!it)"
+            v-for="(item, index) in vendor.images.filter((it) => !!it)"
             :key="`carousel-item-${index}`"
             class="carousel-image"
           />
@@ -156,33 +156,41 @@
         </div>
       </div>
     </div>
-    <div v-if="vendor.healthPolicy || vendor.guaranteed && vendor.guaranteed.length"
-           class="policy-cont" >
-      <div class="title">
-          <img class="mr-10" :src="`${$iconURL}union-12.svg`" width="26px">
-          Health policy</div>
-      <div class="policy-wrapper">
-          <template v-if="vendor.healthPolicy">
-              <div class="rule font-bold-extra my-20">
-                  <span class="color-vendor">COVID 19</span>
-                  - Exceptional Policy
+    <div class="white-card mt-20 additional-requirements">
+      <div class="p-40">
+        <div>
+          <img :src="`${$iconURL}common/seating-purple.png`" />
+          <span class="font-size-30 font-bold"> Seating Arrangement </span>
+        </div>
+        <div class="mt-40">
+          <div class="d-flex align-stretch seats-list">
+            <div class="d-flex mb-30">
+              <template v-for="(sit, index) in sittingArrangement.options">
+                <div
+                  v-if="sit.selected"
+                  :key="`sitarrangement-${index}`"
+                  class="d-flex flex-column justify-content-between seat-type"
+                >
+                  <div class="font-bold">'{{ sit.item }}'</div>
+                  <div><img :src="`${$iconURL}Requirements/${sit.icon}`" /></div>
+                </div>
+              </template>
+              <div v-if="sittingArrangement.hasOtherOption" class="d-flex flex-column seat-type">
+                <div class="font-bold">'Other'</div>
+                <div class="mt-20">{{ sittingArrangement.otherOptionContent }}</div>
               </div>
-              <p class="width-66">
-                  {{vendor.healthPolicy}}
-              </p>
-          </template>
-          <template v-if="vendor.guaranteed && vendor.guaranteed.length">
-              <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
-              <div class="md-layout mt-20">
-                  <div v-for="option in guaranteedOptions" class="md-layout-item md-size-30 py-10" :key="option.value"
-                       :style="{display: vendor.guaranteed.includes(option.value)? '': 'none'}">
-                      <div v-if="vendor.guaranteed.includes(option.value)" class="d-flex align-center">
-                          <img class="mr-10" :src="`${$storageURL}ok%20check%20V.svg`" width="30px">
-                          {{option.label}}
-                      </div>
-                  </div>
-              </div>
-          </template>
+            </div>
+            <div v-if="!editingNewSeating" class="d-flex align-center">
+              <md-button class="md-simple md-outlined md-red maryoku-btn" @click="editingNewSeating = true">
+                Suggest new seating arrangement
+              </md-button>
+            </div>
+            <div v-else class="p-10" style="min-width: 350px">
+              <div class="font-bold mb-10">Suggest new seating arrangement</div>
+              <textarea v-model="suggestedNewSeatings" rows="4" placeholder="Type your idea here"></textarea>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="policy-cont">
@@ -391,7 +399,6 @@ import AttachmentTagList from "../components/AttachmentTagList.vue";
 import { PROPOSAL_DIRECTORY } from "@/constants/s3Directories";
 import S3Service from "@/services/s3.service";
 import carousel from "vue-owl-carousel";
-import { GuaranteedOptions } from "@/constants/options";
 
 export default {
   name: "proposal-event-summary",
@@ -447,7 +454,7 @@ export default {
         penColor: "rgb(0, 0, 0)",
         backgroundColor: "rgb(255,255,255)",
       },
-      guaranteedOptions: GuaranteedOptions,
+      editingNewSeating: false,
     };
   },
   methods: {
@@ -582,6 +589,9 @@ export default {
       set(value) {
         this.$store.commit("proposalForNonMaryoku/setValue", { key: "attachments", value });
       },
+    },
+    sittingArrangement() {
+      return this.$store.state.proposalForNonMaryoku.seatingData;
     },
     eventVision() {
       return this.$store.state.proposalForNonMaryoku.eventVision;
@@ -970,7 +980,7 @@ export default {
 
           img {
             width: 30px;
-            &.purple{
+            &.purple {
               filter: invert(16%) sepia(49%) saturate(2942%) hue-rotate(286deg) brightness(82%) contrast(97%);
             }
           }
@@ -1211,6 +1221,29 @@ export default {
     padding: 46px 50px 48px 60px;
     // box-shadow: 0 3px 41px 0 rgb(0 0 0 / 8%);
     border-radius: 3px;
+  }
+  .seats-list {
+    flex-wrap: wrap;
+    .seat-type {
+      margin-right: 30px;
+      position: relative;
+      padding: 10px;
+      &.suggested-seat {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+      }
+      &::after {
+        content: "Or";
+        position: absolute;
+        left: 100%;
+        top: 50%;
+      }
+      &:last-child::after {
+        content: "";
+        display: none !important;
+      }
+    }
   }
 }
 </style>
