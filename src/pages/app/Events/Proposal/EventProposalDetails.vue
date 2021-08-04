@@ -57,7 +57,7 @@
 
         <div class="proposal-body">
           <md-button class="md-simple md-icon-button md-raised save-btn" @click="favorite">
-            <img :src="`${$iconURL}${isFavorite ? 'Requirements/Group+16153.svg' : 'comments/SVG/heart-dark.svg'}`" />
+            <img :src="`${$iconURL}${vendorProposal.isFavorite ? 'Requirements/Group+16153.svg' : 'comments/SVG/heart-dark.svg'}`" />
           </md-button>
 
           <h1 class="font-size-30">
@@ -402,7 +402,6 @@ import Proposal from "@/models/Proposal";
 
 import SideBar from "@/components/SidebarPlugin/NewSideBar";
 import SidebarItem from "@/components/SidebarPlugin/NewSidebarItem.vue";
-import { GuaranteedOptions } from "@/constants/options";
 import ProgressSidebar from "../components/progressSidebar";
 
 import HeaderActions from "@/components/HeaderActions";
@@ -451,10 +450,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    isFavorite:{
-      type: Boolean,
-      default: false,
-    },
     theme: {
       type: String,
       default: "red",
@@ -489,10 +484,19 @@ export default {
       showAboutUs: false,
       addedServices: {},
       socialMediaBlocks,
-      guaranteedOptions: GuaranteedOptions,
+      isFavorite: false,
+      guaranteedOptions: [
+        {value: 'mask_wearing', label:'Mask wearing'},
+        {value: 'enhanced_cleaning', label: 'Enhanced cleaning'},
+        {value: 'cancellation', label: 'Cancellation in mitigating circumstances'},
+        {value: 'social_distancing', label: 'Social distancing'},
+        {value: 'vaccination_certificate', label: 'Vaccination Certificate'},
+      ]
     };
   },
   created() {
+    this.$set(this.vendorProposal.vendor, 'healthPolicy', 'covid policy');
+    this.$set(this.vendorProposal.vendor, 'guaranteed', ['mask_wearing', 'social_distancing']);
 
     this.extraServices = this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
   },
@@ -652,7 +656,7 @@ export default {
       });
     },
     favorite(){
-      this.$emit('favorite', !this.isFavorite);
+      this.$emit('favorite', !this.vendorProposal.isFavorite);
     }
   },
   computed: {
@@ -722,13 +726,18 @@ export default {
           : this.vendorProposal.bundleDiscount.services;
       services.forEach((serviceCategory) => {
         const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
-          return service.isComplimentary ? s : s + service.requirementValue * service.price;
+          if (service.isComplimentary) {
+            return 0;
+          }
+          return s + service.requirementValue * service.price;
         }, 0);
-          console.log('bundledDiscountPrice', serviceCategory, sumOfService);
         bundledServicePrice += sumOfService;
         if (this.addedServices[serviceCategory]) {
           const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
-          return service.isComplimentary ? s : s + service.requirementValue * service.price;
+            if (service.isComplimentary) {
+              return 0;
+            }
+            return s + service.requirementValue * service.price;
           }, 0);
           bundledServicePrice += sumOfService;
         }
@@ -740,7 +749,10 @@ export default {
       let totalPrice = 0;
       Object.keys(this.vendorProposal.costServices).forEach((serviceCategory) => {
         const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
-          return service.isComplimentary ? s : s + service.requirementValue * service.price;
+          if (service.isComplimentary) {
+            return 0;
+          }
+          return s + service.requirementValue * service.price;
         }, 0);
         totalPrice += sumOfService;
       });
@@ -774,7 +786,10 @@ export default {
       return moment(endDate).diff(startDate, "hours");
     },
   },
-  watch: {},
+  watch: {
+    proposal(newVal){
+    }
+  },
 };
 </script>
 

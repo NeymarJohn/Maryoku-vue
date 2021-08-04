@@ -76,17 +76,24 @@
             },
             bundledDiscountPrice() {
                 let bundledServicePrice = 0;
-                let services = this.proposal.bundleDiscount && this.proposal.bundleDiscount.isApplied
-                    ? this.proposal.bookedServices
-                    : this.proposal.bundleDiscount.services;
+                let services =
+                    this.proposal.bundleDiscount && this.proposal.bundleDiscount.isApplied
+                        ? this.proposal.bookedServices
+                        : this.proposal.bundleDiscount.services;
                 services.forEach((serviceCategory) => {
                     const sumOfService = this.proposal.costServices[serviceCategory].reduce((s, service) => {
-                        return service.isComplimentary ? s : s + service.requirementValue * service.price;
+                        if (service.isComplimentary) {
+                            return 0;
+                        }
+                        return s + service.requirementValue * service.price;
                     }, 0);
                     bundledServicePrice += sumOfService;
                     if (this.addedServices[serviceCategory]) {
                         const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
-                            return service.isComplimentary ? s : s + service.requirementValue * service.price;
+                            if (service.isComplimentary) {
+                                return 0;
+                            }
+                            return s + service.requirementValue * service.price;
                         }, 0);
                         bundledServicePrice += sumOfService;
                     }
@@ -98,7 +105,10 @@
                 let totalPrice = 0;
                 Object.keys(this.proposal.costServices).forEach((serviceCategory) => {
                     const sumOfService = this.proposal.costServices[serviceCategory].reduce((s, service) => {
-                        return service.isComplimentary ? s : s + service.requirementValue * service.price;
+                        if (service.isComplimentary) {
+                            return 0;
+                        }
+                        return s + service.requirementValue * service.price;
                     }, 0);
                     totalPrice += sumOfService;
                 });
@@ -125,6 +135,8 @@
 </script>
 <style lang="scss" scoped>
     .checkout-proposal-table {
+        border-bottom: solid 2px #d4d4d4;
+
         .price-header {
             padding: 30px;
             font-weight: 900;

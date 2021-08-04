@@ -156,36 +156,6 @@
         </div>
       </div>
     </div>
-
-    <div v-if="vendor.healthPolicy || vendor.guaranteed && vendor.guaranteed.length"
-           class="policy-cont" >
-      <div class="title">
-          <img class="mr-10" :src="`${$iconURL}union-12.svg`" width="26px">
-          Health policy</div>
-      <div class="policy-wrapper">
-          <template v-if="vendor.healthPolicy">
-              <div class="rule font-bold-extra my-20">
-                  <span class="color-vendor">COVID 19</span>
-                  - Exceptional Policy
-              </div>
-              <p class="width-66">
-                  {{vendor.healthPolicy}}
-              </p>
-          </template>
-          <template v-if="vendor.guaranteed && vendor.guaranteed.length">
-              <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
-              <div class="md-layout mt-20">
-                  <div v-for="option in guaranteedOptions" class="md-layout-item md-size-30 py-10" :key="option.value"
-                       :style="{display: vendor.guaranteed.includes(option.value)? '': 'none'}">
-                      <div v-if="vendor.guaranteed.includes(option.value)" class="d-flex align-center">
-                          <img class="mr-10" :src="`${$storageURL}ok%20check%20V.svg`" width="30px">
-                          {{option.label}}
-                      </div>
-                  </div>
-              </div>
-          </template>
-      </div>
-    </div>
     <div class="white-card mt-20 additional-requirements">
       <div class="p-40">
         <div>
@@ -404,7 +374,6 @@
                 </template>
               </div>
             </div>
-
             <div class="half-side">
               <h6>Client</h6>
               <div class="signature-client signature-bidder"></div>
@@ -430,7 +399,6 @@ import AttachmentTagList from "../components/AttachmentTagList.vue";
 import { PROPOSAL_DIRECTORY } from "@/constants/s3Directories";
 import S3Service from "@/services/s3.service";
 import carousel from "vue-owl-carousel";
-import { GuaranteedOptions } from "@/constants/options";
 
 export default {
   name: "proposal-event-summary",
@@ -486,9 +454,7 @@ export default {
         penColor: "rgb(0, 0, 0)",
         backgroundColor: "rgb(255,255,255)",
       },
-      guaranteedOptions: GuaranteedOptions,
       editingNewSeating: false,
-
     };
   },
   methods: {

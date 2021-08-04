@@ -247,32 +247,23 @@
                 {{ dontWorkTime() }}
               </div>
             </div>
-            <div v-if="vendor.healthPolicy || vendor.guaranteed && vendor.guaranteed.length"
-                 class="healthy-policy" >
+            <div class="healthy-policy">
               <h5 class="d-flex align-center">
                 <img class="mr-10" :src="`${$iconURL}union-12.svg`" width="26px">
                 Health policy</h5>
-              <template v-if="vendor.healthPolicy">
-                  <div class="rule font-bold-extra my-20">
-                      <span class="color-red">COVID 19</span>
-                      - Exceptional Policy
-                  </div>
-                  <p class="width-66">
-                    {{vendor.healthPolicy}}
-                  </p>
-              </template>
-              <template v-if="vendor.guaranteed && vendor.guaranteed.length">
-                <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
-                <div class="md-layout mt-20">
-                    <div v-for="option in guaranteedOptions" class="md-layout-item md-size-30 py-10" :key="option.value"
-                         :style="{display: vendor.guaranteed.includes(option.value)? '': 'none'}">
-                        <div v-if="vendor.guaranteed.includes(option.value)" class="d-flex align-center">
-                            <img class="mr-10" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" width="30px">
-                            {{option.label}}
-                        </div>
-                    </div>
-                </div>
-              </template>
+              <div class="rule font-bold-extra my-20">
+                <span class="color-red">COVID 19</span>
+                - Exceptional Policy
+              </div>
+              <p class="width-66">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+                dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
+                amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
+                dolor sit amet.
+              </p>
             </div>
           </div>
           <div class="pricing-policy-cont" id="Rules">
@@ -356,7 +347,6 @@ import VendorExtraPayItem from "../components/VendorExtraPayItem.vue";
 import _ from "underscore";
 import VendorImagesList from "../components/VendorImagesList.vue";
 import HeaderImageCarousel from "@/components/HeaderImageCarousel.vue";
-import { GuaranteedOptions } from "@/constants/options";
 import { capitalize } from "@/utils/string.util";
 import AttachmentTagList from "../components/AttachmentTagList.vue";
 import S3Service from "@/services/s3.service";
@@ -532,7 +522,6 @@ export default {
           icon: "equipmentrentals.svg",
         },
       ],
-      guaranteedOptions: GuaranteedOptions,
       medias: [],
     };
   },

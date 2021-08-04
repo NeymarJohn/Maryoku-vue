@@ -75,13 +75,41 @@
             </div>
           </template>
           <template v-else>
-
-            <checkout-proposal-table
-                v-for="(item, key) in cart"
-                :proposal="item.proposal"
-                :category="key"
-                :key="key">
-            </checkout-proposal-table>
+            <div v-for="(item, key) in cart">
+                <checkout-proposal-table
+                    :proposal="item.proposal"
+                    :category="key"
+                    :key="key">
+                </checkout-proposal-table>
+                <div class="p-30" v-if="item.proposal.extraServices[key].length">
+                    <div>Would you like to upgrade & add one of those?</div>
+                    <div class="mb-30" v-if="item.proposal.serviceCategory">
+                        You have $ {{ (item.proposal.serviceCategory.allocatedBudget - item.proposal.cost) | withComma }} left over from
+                        your original defined budget.
+                    </div>
+                    <div class="mt-10 mb-10">
+                        Simply select anything that you would like to add. Please note that any item or service you choose here
+                        will be added to the overall vendor cost.
+                    </div>
+                    <div
+                        class="pt-10 pb-10"
+                        v-for="service in item.proposal.extraServices[key].filter(
+              (item) => !item.added && item.price,
+            )"
+                        :key="service.subCategory"
+                    >
+                        <div class="d-flex align-center">
+                            <div class="d-flex align-center">
+                                <md-checkbox class="m-0 mr-10" v-model="service.addedOnProposal"></md-checkbox>
+                                <span>{{ service.requirementTitle }}</span>
+                            </div>
+                            <div class="ml-auto pr-100">
+                                <div class="element-price">${{ service.price | withComma }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
           </template>
         </div>
@@ -323,7 +351,7 @@ export default {
         }, 0);
         bundledServicePrice += sumOfService;
       });
-      return (bundledServicePrice * this.proposal.bundleDiscount.percentage) / 100;
+      return (bundledServicePrice * this.proposal.bundleDiscount.percentage) / 100 || 0;
     },
 
     totalPriceOfProposal() {
@@ -343,15 +371,16 @@ export default {
         return s + service.requirementValue * service.price;
       }, 0);
 
+      console.log("totalPrice", totalPrice);
       return totalPrice + (addedPrice || 0);
     },
     discounedAndTaxedPrice() {
       const eventDays = 1;
       const discounted =
         this.totalPriceOfProposal -
-        (this.totalPriceOfProposal * this.discount.percentage) / 100 -
+        (this.totalPriceOfProposal * (this.discount.percentage || 0)) / 100 -
         this.bundledDiscountPrice;
-      let price = discounted + (discounted * this.tax.percentage) / 100;
+      let price = discounted + (discounted * (this.tax.percentage || 0)) / 100;
       if (this.onDayCordinator) {
         price += eventDays * 1000;
       }

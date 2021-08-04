@@ -71,7 +71,6 @@ const actions = {
             if (!vendor.hasOwnProperty("notAllowed")) Vue.set(vendor, "notAllowed", []);
             if (!vendor.hasOwnProperty("exDonts")) Vue.set(vendor, "exDonts", []);
             if (!vendor.pricingPolicies) Vue.set(vendor, "pricingPolicies", []);
-            if (!vendor.guaranteed) Vue.set(vendor, "guaranteed", []);
             else {
                 // check default policies and saved data on profile
                 const vendorPricingPolicies = vendor.pricingPolicies;
@@ -104,6 +103,8 @@ const actions = {
             if (!vendor.hasOwnProperty("dontWorkDays")) Vue.set(vendor, "dontWorkDays", []);
             if (!vendor.hasOwnProperty("dontWorkTime")) Vue.set(vendor, "dontWorkTime", null);
             if (!vendor.hasOwnProperty("services")) Vue.set(vendor, "services", {});
+            if (!vendor.hasOwnProperty("healthPolicy")) Vue.set(vendor, "healthPolicy", null);
+            if (!vendor.hasOwnProperty("guaranteed")) Vue.set(vendor, "guaranteed", []);
             commit("setVendor", vendor)
             commit("setEditing", true)
             // check if image is uploaded to S3

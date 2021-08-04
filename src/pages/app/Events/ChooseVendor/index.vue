@@ -68,7 +68,6 @@
                   :vendorProposal="selectedProposal"
                   :category="selectedCategory"
                   :key="selectedProposal.id"
-                  :is-favorite="isFavorite"
                   @favorite="favoriteProposal"
                   @close="closeProposal"
                 ></event-proposal-details>
@@ -342,11 +341,11 @@ export default {
         },
       });
     },
-    favoriteProposal(e){
-      this.$store.dispatch('planningBoard/updateCartItem', {
-          id: this.cart[this.selectedCategory.componentCategoryId].id,
-          isFavorite: e,
-          event: this.event});
+    async favoriteProposal(isFavorite){
+      this.selectedProposal = await this.$store.dispatch('event/updateProposal', {
+          proposal: {...this.selectedProposal, isFavorite},
+          category: this.selectedCategory.componentId
+      });
     },
     async addToCart() {
       if(!this.selectedProposal) return;
@@ -401,6 +400,7 @@ export default {
       console.log('negotiationProposals', newVal);
       if(Object.keys(newVal).length) this.showNegotiationNotification = true;
     },
+    proposals(newVal){},
     $route: "fetchData",
   },
   filters: {
@@ -467,11 +467,6 @@ export default {
       })
       return negotiationProposals;
     },
-    isFavorite(){
-      if(!this.selectedProposal || !this.selectedCategory) return false;
-      return this.cart[this.selectedCategory.componentCategoryId].proposal.id === this.selectedProposal.id &&
-          this.cart[this.selectedCategory.componentCategoryId].isFavorite;
-    }
   },
 };
 </script>

@@ -66,21 +66,20 @@
           </vsa-heading>
           <vsa-content>
               <table width="100%">
-                  <tr v-for="item in cartItems"
-                      :key="`price-${item.key}`"
+                  <tr v-for="proposal in proposals"
+                      :key="`${proposal.id}`"
                       class="d-flex align-center"
-                      :style="{display: !cart[item.key].isFavorite ? 'none' : ''}"
                   >
                       <td width="75%" class="d-flex align-center py-20">
-                          <img :src="`${$iconURL}Budget+Elements/${item.icon}`" style="width: 30px"/>
+                          <img :src="`${$iconURL}Budget+Elements/${serviceCategory(proposal.vendor.vendorCategory).icon}`" style="width: 30px"/>
                           <div class="ml-10">
-                              <p class="mb-5 font-size-14 font-bold-extra">{{ item.fullTitle }}</p>
-                              <p class="m-0 font-size-14 color-black-middle">{{ cart[item.key].proposal.vendor.companyName }}</p>
+                              <p class="mb-5 font-size-14 font-bold-extra">{{ proposal.vendor.companyName }}</p>
+                              <p class="m-0 font-size-14 color-black-middle">{{ serviceCategory(proposal.vendor.vendorCategory).fullTitle }}</p>
                           </div>
 
                       </td>
                       <td width="25%" class="py-20">
-                          ${{cart[item.key].proposal.cost | withComma}}
+                          ${{proposal.cost | withComma}}
                       </td>
 <!--                      <td width="10%" class="py-20">-->
 <!--                          <md-menu md-size="auto" class="action-menu" :md-offset-x="-300" :md-offset-y="-36" @md-opened="isOpened">-->
@@ -172,34 +171,44 @@ export default {
       }, 0);
     },
     favorite(item){
-      this.$store.dispatch('planningBoard/updateCartItem', {id: item.id, isFavorite: true, event: this.event});
+      this.$store.dispatch('event/updateProposal', {
+          proposal: {...item.proposal, isFavorite: true},
+          category: item.category,
+      });
     },
     remove(item){
       this.$store.dispatch('planningBoard/removeCartItem', {id: item.id, event: this.event});
     },
     bookCart(){
       this.$router.push({name: 'CheckoutWithCart'});
-    }
+    },
+    serviceCategory(category) {
+      return this.$store.state.common.serviceCategories.find(it => it.key === category);
+    },
   },
 
   computed: {
     event() {
       return this.$store.state.event.eventData;
     },
+    proposals(){
+      let proposals = [];
+      Object.keys(this.$store.state.event.proposals).map(key => {
+          proposals = proposals.concat(this.$store.state.event.proposals[key]);
+      })
+      return proposals.filter(p => !!p.isFavorite);
+    },
     cartItems() {
       const categoryKeys = Object.keys(this.$store.state.planningBoard.cart);
       const cartItems = [];
       categoryKeys.forEach((categoryKey) => {
-        const category = this.$store.state.common.serviceCategories.find((item) => item.key === categoryKey);
+        const category = this.serviceCategory(categoryKey);
         if (category) {
             cartItems.push(category);
         }
       });
       cartItems.sort((a, b) => a.order - b.order);
       return cartItems;
-    },
-    serviceCategories() {
-      return this.$store.state.common.serviceCategories;
     },
     cart() {
       return this.$store.state.planningBoard.cart;
