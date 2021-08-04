@@ -402,6 +402,7 @@ import Proposal from "@/models/Proposal";
 
 import SideBar from "@/components/SidebarPlugin/NewSideBar";
 import SidebarItem from "@/components/SidebarPlugin/NewSidebarItem.vue";
+import { GuaranteedOptions } from "@/constants/options";
 import ProgressSidebar from "../components/progressSidebar";
 
 import HeaderActions from "@/components/HeaderActions";
@@ -485,18 +486,11 @@ export default {
       addedServices: {},
       socialMediaBlocks,
       isFavorite: false,
-      guaranteedOptions: [
-        {value: 'mask_wearing', label:'Mask wearing'},
-        {value: 'enhanced_cleaning', label: 'Enhanced cleaning'},
-        {value: 'cancellation', label: 'Cancellation in mitigating circumstances'},
-        {value: 'social_distancing', label: 'Social distancing'},
-        {value: 'vaccination_certificate', label: 'Vaccination Certificate'},
-      ]
+      guaranteedOptions: GuaranteedOptions,
     };
   },
   created() {
-    this.$set(this.vendorProposal.vendor, 'healthPolicy', 'covid policy');
-    this.$set(this.vendorProposal.vendor, 'guaranteed', ['mask_wearing', 'social_distancing']);
+
     this.extraServices = this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
   },
 

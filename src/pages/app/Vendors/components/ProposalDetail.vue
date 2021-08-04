@@ -184,6 +184,38 @@
         </div>
       </div>
     </section>
+    <section v-if="vendorProposal.vendor.healthPolicy || vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length"
+           class="proposal-section policy-section"
+      >
+          <div class="proposal-section__title px-40">
+              <img :src="`${$iconURL}union-12.svg`" width="20" /> Health policy
+          </div>
+
+          <div class="policy-content">
+              <template v-if="vendorProposal.vendor.healthPolicy">
+                  <div class="mt-20 font-bold-extra">
+                      <span class="color-red">COVID 19</span>
+                      - Exceptional Policy
+                  </div>
+                  <p class="my-10">
+                      {{vendorProposal.vendor.healthPolicy}}
+                  </p>
+              </template>
+              <template v-if="vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length">
+                  <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
+                  <div class="md-layout mt-20">
+                      <div v-for="option in guaranteedOptions" class="md-layout-item md-size-30 py-10" :key="option.value"
+                           :style="{display: vendorProposal.vendor.guaranteed.includes(option.value)? '': 'none'}">
+                          <div v-if="vendorProposal.vendor.guaranteed.includes(option.value)" class="d-flex align-center">
+                              <img class="mr-10" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" width="30px">
+                              {{option.label}}
+                          </div>
+                      </div>
+                  </div>
+              </template>
+
+          </div>
+    </section>
     <section class="proposal-section policy-section">
       <div class="proposal-section__title px-40">
         <img :src="`${submitProposalIcon}Asset 287.svg`" width="20" /> Our Policy
@@ -286,6 +318,7 @@
 <script>
 import moment from "moment";
 import { socialMediaBlocks } from "@/constants/vendor";
+import { GuaranteedOptions } from "@/constants/options";
 import _ from "underscore";
 import EventProposalPrice from "../../Events/Proposal/EventProposalPrice.vue";
 import carousel from "vue-owl-carousel";
@@ -317,6 +350,7 @@ export default {
       showAboutUs: false,
       socialMediaBlocks,
       addedServices: {},
+      guaranteedOptions: GuaranteedOptions,
     };
   },
   mounted() {
