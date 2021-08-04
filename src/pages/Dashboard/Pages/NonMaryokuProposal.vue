@@ -16,6 +16,7 @@
         :vendorProposal="proposal"
         :landingPage="true"
         :nonMaryoku="true"
+        theme="purple"
         v-if="proposal"
         @updateProposal="updateProposal"
       ></event-proposal-details>
@@ -98,7 +99,7 @@ export default {
       })
         .save()
         .then((res) => {
-          window.open(`/#/checkout/${this.proposal.id}`, "_blank");
+          window.open(`/#/checkout/${this.proposal.vendor.id}/${this.proposal.id}`, "_blank");
         });
     },
     updateProposal(proposal) {

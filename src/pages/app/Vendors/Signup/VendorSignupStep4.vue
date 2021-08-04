@@ -247,6 +247,24 @@
                 {{ dontWorkTime() }}
               </div>
             </div>
+            <div class="healthy-policy">
+              <h5 class="d-flex align-center">
+                <img class="mr-10" :src="`${$iconURL}union-12.svg`" width="26px">
+                Health policy</h5>
+              <div class="rule font-bold-extra my-20">
+                <span class="color-red">COVID 19</span>
+                - Exceptional Policy
+              </div>
+              <p class="width-66">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+                dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
+                amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
+                dolor sit amet.
+              </p>
+            </div>
           </div>
           <div class="pricing-policy-cont" id="Rules">
             <div class="title"><img :src="`${iconUrl}Asset 560.svg`" /> OUR PRICING POLICY</div>
@@ -1051,6 +1069,14 @@ export default {
                 width: 21px;
                 margin-right: 1rem;
               }
+            }
+          }
+          .healthy-policy{
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #dddddd;
+            h5 {
+              font: 800 20px Manrope-Regular, sans-serif;
             }
           }
         }

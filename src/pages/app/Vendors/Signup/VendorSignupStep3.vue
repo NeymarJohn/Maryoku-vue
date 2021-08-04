@@ -307,7 +307,7 @@
               Guaranteed with every staff member:
             </div>
             <div class="md-layout my-10">
-              <div v-for="option in guaranteedOptions" class="md-layout-item md-size-33" :key="option.key">
+              <div v-for="option in guaranteedOptions" class="md-layout-item md-size-33" :key="option.value">
                 <md-checkbox v-model="vendor.guaranteed" :value="option.value">{{option.label}}</md-checkbox>
               </div>
             </div>

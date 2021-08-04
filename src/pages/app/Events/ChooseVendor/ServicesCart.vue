@@ -65,47 +65,7 @@
               MY FAVORITE
           </vsa-heading>
           <vsa-content>
-              <table width="100%">
-                  <tr v-for="item in cartItems"
-                      :key="`price-${item.key}`"
-                      class="d-flex align-center"
-                      :style="{display: !cart[item.key].isFavorite ? 'none' : ''}"
-                  >
-                      <td width="75%" class="d-flex align-center py-20">
-                          <img :src="`${$iconURL}Budget+Elements/${item.icon}`" style="width: 30px"/>
-                          <div class="ml-10">
-                              <p class="mb-5 font-size-14 font-bold-extra">{{ item.fullTitle }}</p>
-                              <p class="m-0 font-size-14 color-black-middle">{{ cart[item.key].proposal.vendor.companyName }}</p>
-                          </div>
-
-                      </td>
-                      <td width="25%" class="py-20">
-                          ${{cart[item.key].proposal.cost | withComma}}
-                      </td>
-<!--                      <td width="10%" class="py-20">-->
-<!--                          <md-menu md-size="auto" class="action-menu" :md-offset-x="-300" :md-offset-y="-36" @md-opened="isOpened">-->
-<!--                              <md-button md-menu-trigger class="edit-btn md-simple" style="height: 30px">-->
-<!--                                  <md-icon style="font-size: 30px !important">more_vert</md-icon>-->
-<!--                              </md-button>-->
-<!--                              <md-menu-content>-->
-<!--                                  <md-menu-item @click="favorite(cart[item.key])" class="md-red">-->
-<!--                            <span>-->
-<!--                              <img :src="`${$iconURL}comments/SVG/heart-dark.svg`" class="label-icon-40 mr-10" />-->
-<!--                              Move to Favorite</span>-->
-<!--                                  </md-menu-item>-->
-<!--                                  <md-menu-item @click="remove(cart[item.key])" class="md-red">-->
-<!--                            <span>-->
-<!--                              <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon ml-10 mr-20" />-->
-<!--                              Remove from Cart-->
-<!--                            </span>-->
-<!--                                  </md-menu-item>-->
-<!--                              </md-menu-content>-->
-<!--                          </md-menu>-->
-<!--                      </td>-->
-                  </tr>
-
-
-              </table>
+              favorite contents
           </vsa-content>
         </vsa-item>
         <vsa-item>
@@ -172,7 +132,7 @@ export default {
       }, 0);
     },
     favorite(item){
-      this.$store.dispatch('planningBoard/updateCartItem', {id: item.id, isFavorite: true, event: this.event});
+        this.$store.dispatch('planningBoard/updateCartItem', {id: item.id, isFavorite: true, event: this.event});
     },
     remove(item){
       this.$store.dispatch('planningBoard/removeCartItem', {id: item.id, event: this.event});
