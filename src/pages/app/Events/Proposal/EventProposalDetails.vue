@@ -56,7 +56,7 @@
         </div>
 
         <div class="proposal-body">
-          <md-button class="md-simple md-icon-button md-raised save-btn" @click="isFavorite = !isFavorite">
+          <md-button class="md-simple md-icon-button md-raised save-btn" @click="favorite">
             <img :src="`${$iconURL}${isFavorite ? 'Requirements/Group+16153.svg' : 'comments/SVG/heart-dark.svg'}`" />
           </md-button>
 
@@ -203,6 +203,39 @@
           <div>
             <span class="font-bold-extra font-size-30">${{ discounedAndTaxedPrice | withComma }}</span>
           </div>
+        </div>
+      </div>
+
+      <div v-if="vendorProposal.vendor.healthPolicy || vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length"
+        class="proposal-section policy-section"
+      >
+        <div class="proposal-section__title">
+            <img :src="`${$iconURL}union-12.svg`" width="20" /> Health policy
+        </div>
+
+        <div class="policy-content">
+          <template v-if="vendorProposal.vendor.healthPolicy">
+              <div class="mt-20 font-bold-extra">
+                  <span class="color-red">COVID 19</span>
+                  - Exceptional Policy
+              </div>
+              <p class="my-10">
+                  {{vendorProposal.vendor.healthPolicy}}
+              </p>
+          </template>
+          <template v-if="vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length">
+            <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
+            <div class="md-layout mt-20">
+              <div v-for="option in guaranteedOptions" class="md-layout-item md-size-30 py-10" :key="option.value"
+                   :style="{display: vendorProposal.vendor.guaranteed.includes(option.value)? '': 'none'}">
+                <div v-if="vendorProposal.vendor.guaranteed.includes(option.value)" class="d-flex align-center">
+                  <img class="mr-10" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" width="30px">
+                  {{option.label}}
+                </div>
+              </div>
+            </div>
+          </template>
+
         </div>
       </div>
 
@@ -369,6 +402,7 @@ import Proposal from "@/models/Proposal";
 
 import SideBar from "@/components/SidebarPlugin/NewSideBar";
 import SidebarItem from "@/components/SidebarPlugin/NewSidebarItem.vue";
+import { GuaranteedOptions } from "@/constants/options";
 import ProgressSidebar from "../components/progressSidebar";
 
 import HeaderActions from "@/components/HeaderActions";
@@ -417,6 +451,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isFavorite:{
+      type: Boolean,
+      default: false,
+    },
     theme: {
       type: String,
       default: "red",
@@ -451,17 +489,11 @@ export default {
       showAboutUs: false,
       addedServices: {},
       socialMediaBlocks,
-      isFavorite: false,
+      guaranteedOptions: GuaranteedOptions,
     };
   },
   created() {
-    // const proposalId = this.$route.params.proposalId;
-    // console.log(proposalId);
-    // Proposal.find(proposalId).then((proposal) => {
-    //   this.isLoading = false;
-    //   this.vendorProposal = proposal;
-    //   this.extraServices = this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
-    // });
+
     this.extraServices = this.vendorProposal.extraServices[this.vendorProposal.vendor.eventCategory.key];
   },
 
@@ -619,6 +651,9 @@ export default {
         value: this.vendorProposal.bookedServices,
       });
     },
+    favorite(){
+      this.$emit('favorite', !this.isFavorite);
+    }
   },
   computed: {
     ...mapState("event", ["eventData", "eventModalOpen", "modalTitle", "modalSubmitTitle", "editMode"]),
@@ -687,18 +722,13 @@ export default {
           : this.vendorProposal.bundleDiscount.services;
       services.forEach((serviceCategory) => {
         const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
-          if (service.isComplimentary) {
-            return 0;
-          }
-          return s + service.requirementValue * service.price;
+          return service.isComplimentary ? s : s + service.requirementValue * service.price;
         }, 0);
+          console.log('bundledDiscountPrice', serviceCategory, sumOfService);
         bundledServicePrice += sumOfService;
         if (this.addedServices[serviceCategory]) {
           const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
-            if (service.isComplimentary) {
-              return 0;
-            }
-            return s + service.requirementValue * service.price;
+          return service.isComplimentary ? s : s + service.requirementValue * service.price;
           }, 0);
           bundledServicePrice += sumOfService;
         }
@@ -710,10 +740,7 @@ export default {
       let totalPrice = 0;
       Object.keys(this.vendorProposal.costServices).forEach((serviceCategory) => {
         const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
-          if (service.isComplimentary) {
-            return 0;
-          }
-          return s + service.requirementValue * service.price;
+          return service.isComplimentary ? s : s + service.requirementValue * service.price;
         }, 0);
         totalPrice += sumOfService;
       });

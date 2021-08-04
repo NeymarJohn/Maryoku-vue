@@ -75,24 +75,14 @@
             </div>
           </template>
           <template v-else>
-            <collapse-panel v-for="(item, key) in cart" :defaultStatus="false" class="white-card" :key="key">
-              <template slot="header">
-                <div class="d-flex align-center p-30">
-                  <img
-                    class="mr-10"
-                    :src="`${$iconURL}Budget+Elements/${serviceCategory(item.category).icon}`"
-                    width="35px"
-                  />
-                  {{ serviceCategory(item.category).fullTitle }}
-                  <div class="ml-auto">
-                    <div class="element-price pr-100">${{ item.proposal.cost | withComma }}</div>
-                  </div>
-                </div>
-              </template>
-              <template slot="content">
-                {{ item.proposal.cost }}
-              </template>
-            </collapse-panel>
+
+            <checkout-proposal-table
+                v-for="(item, key) in cart"
+                :proposal="item.proposal"
+                :category="key"
+                :key="key">
+            </checkout-proposal-table>
+
           </template>
         </div>
         <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
@@ -255,13 +245,14 @@ import CheckoutPriceTable from "./CheckoutPriceTable.vue";
 import CollapsePanel from "@/components/CollapsePanel.vue";
 import StripeCheckout from "./StripeCheckout.vue";
 import SuccessModal from "./SuccessModal.vue";
+import CheckoutProposalTable from "./CheckoutProposalTable";
 
 // checkout page type
 const VENDOR = 0;
 const CART = 1;
 
 export default {
-  components: { CheckoutPriceTable, CollapsePanel, StripeCheckout, SuccessModal },
+  components: { CheckoutPriceTable, CollapsePanel, StripeCheckout, SuccessModal, CheckoutProposalTable },
   data() {
     return {
       vendor: null,
@@ -280,6 +271,7 @@ export default {
       showCancelModal: false,
       onDayCordinator: false,
       feePercentail: 3.2,
+      pageType: VENDOR,
     };
   },
   async created() {
@@ -331,7 +323,7 @@ export default {
         }, 0);
         bundledServicePrice += sumOfService;
       });
-      return (bundledServicePrice * this.proposal.bundleDiscount.percentage) / 100 || 0;
+      return (bundledServicePrice * this.proposal.bundleDiscount.percentage) / 100;
     },
 
     totalPriceOfProposal() {
@@ -351,16 +343,15 @@ export default {
         return s + service.requirementValue * service.price;
       }, 0);
 
-      console.log("totalPrice", totalPrice);
       return totalPrice + (addedPrice || 0);
     },
     discounedAndTaxedPrice() {
       const eventDays = 1;
       const discounted =
         this.totalPriceOfProposal -
-        (this.totalPriceOfProposal * (this.discount.percentage || 0)) / 100 -
+        (this.totalPriceOfProposal * this.discount.percentage) / 100 -
         this.bundledDiscountPrice;
-      let price = discounted + (discounted * (this.tax.percentage || 0)) / 100;
+      let price = discounted + (discounted * this.tax.percentage) / 100;
       if (this.onDayCordinator) {
         price += eventDays * 1000;
       }
@@ -393,9 +384,6 @@ export default {
       // if (this.paymentMethod === "stripe") {
 
       // }
-    },
-    serviceCategory(category) {
-      return this.categories.find((it) => it.key === category);
     },
   },
 };

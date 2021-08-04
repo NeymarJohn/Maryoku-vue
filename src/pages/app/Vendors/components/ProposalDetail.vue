@@ -42,8 +42,9 @@
       </section>
 
       <section class="proposal-body">
-        <h1 class="font-size-30">Dear {{ vendorProposal.vendor.vendorDisplayName }},</h1>
-        <p>
+        <h1 class="font-size-30 text-capitalize" v-if="eventData.hasOwnProperty('owner')">Dear {{ eventData.owner.displayName }},</h1>
+        <h1 class="font-size-30 text-capitalize" v-else-if="eventData.hasOwnProperty('customer')">Dear {{ eventData.customer.name }},</h1>
+        <p class="mt-10">
           {{ vendorProposal.personalMessage }}
 
           <!-- <br />Sincerely,
@@ -157,12 +158,14 @@
         :serviceCategory="vendorProposal.vendor.vendorCategory"
         :key="`${vendorProposal.vendor.vendorCategory}-section`"
         @changeAddedServices="updateAddedServices"
+        :mandatory="true"
       ></event-proposal-price>
       <event-proposal-price
         v-for="service in this.vendorProposal.additionalServices"
         :proposalData="vendorProposal"
         :serviceCategory="service"
         :key="`secondary-${service}-section`"
+        :mandatory="true"
       ></event-proposal-price>
       <div
         class="bundle-section d-flex justify-content-between align-center"
@@ -183,6 +186,38 @@
           <span class="font-bold-extra font-size-30">${{ discounedAndTaxedPrice | withComma }}</span>
         </div>
       </div>
+    </section>
+    <section v-if="vendorProposal.vendor.healthPolicy || vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length"
+           class="proposal-section policy-section"
+      >
+          <div class="proposal-section__title px-40">
+              <img :src="`${$iconURL}union-12.svg`" width="20" /> Health policy
+          </div>
+
+          <div class="policy-content">
+              <template v-if="vendorProposal.vendor.healthPolicy">
+                  <div class="mt-20 font-bold-extra">
+                      <span class="color-red">COVID 19</span>
+                      - Exceptional Policy
+                  </div>
+                  <p class="my-10">
+                      {{vendorProposal.vendor.healthPolicy}}
+                  </p>
+              </template>
+              <template v-if="vendorProposal.vendor.guaranteed && vendorProposal.vendor.guaranteed.length">
+                  <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
+                  <div class="md-layout mt-20">
+                      <div v-for="option in guaranteedOptions" class="md-layout-item md-size-30 py-10" :key="option.value"
+                           :style="{display: vendorProposal.vendor.guaranteed.includes(option.value)? '': 'none'}">
+                          <div v-if="vendorProposal.vendor.guaranteed.includes(option.value)" class="d-flex align-center">
+                              <img class="mr-10" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" width="30px">
+                              {{option.label}}
+                          </div>
+                      </div>
+                  </div>
+              </template>
+
+          </div>
     </section>
     <section class="proposal-section policy-section">
       <div class="proposal-section__title px-40">
@@ -278,14 +313,15 @@
         </div>
       </div>
     </section>
-    <md-button class="md-simple md-just-icon md-round modal-default-button p-absolute" @click="$emit('close')">
-      <md-icon>clear</md-icon>
+    <md-button class="md-simple md-just-icon md-round modal-default-button" @click="$emit('close')">
+      <md-icon>close</md-icon>
     </md-button>
   </section>
 </template>
 <script>
 import moment from "moment";
 import { socialMediaBlocks } from "@/constants/vendor";
+import { GuaranteedOptions } from "@/constants/options";
 import _ from "underscore";
 import EventProposalPrice from "../../Events/Proposal/EventProposalPrice.vue";
 import carousel from "vue-owl-carousel";
@@ -302,11 +338,6 @@ export default {
       type: Object,
       required: true,
     },
-    download: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
   },
   data() {
     return {
@@ -317,17 +348,19 @@ export default {
       showAboutUs: false,
       socialMediaBlocks,
       addedServices: {},
+      guaranteedOptions: GuaranteedOptions,
     };
   },
   mounted() {
     console.log("detail.mounted", this.vendorProposal);
-    if (this.vendorProposal) {
+    if (this.vendorProposal.proposalRequest) {
       this.eventData = this.vendorProposal.proposalRequest
         ? this.vendorProposal.proposalRequest.eventData
         : this.vendorProposal.eventDate;
     } else {
-      this.eventData = {};
+      this.eventData = this.vendorProposal.eventData;
     }
+      console.log("detail.mounted", this.eventData);
   },
   computed: {
     extraMissingRequirements() {
@@ -383,21 +416,19 @@ export default {
     },
     bundledDiscountPrice() {
       let bundledServicePrice = 0;
-      if (!this.vendorProposal.bundleDiscount.services) return 0;
-      this.vendorProposal.bundleDiscount.services.forEach((serviceCategory) => {
+        let services =
+            this.vendorProposal.bundleDiscount && this.vendorProposal.bundleDiscount.isApplied
+                ? this.vendorProposal.bookedServices
+                : this.vendorProposal.bundleDiscount.services;
+      if (!services) return 0;
+      services.forEach((serviceCategory) => {
         const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
-          if (service.isComplimentary) {
-            return 0;
-          }
-          return s + service.requirementValue * service.price;
+          return service.isComplimentary ? s : s + service.requirementValue * service.price;
         }, 0);
         bundledServicePrice += sumOfService;
         if (this.addedServices[serviceCategory]) {
           const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
-            if (service.isComplimentary) {
-              return 0;
-            }
-            return s + service.requirementValue * service.price;
+            return service.isComplimentary ? s : s + service.requirementValue * service.price;
           }, 0);
           bundledServicePrice += sumOfService;
         }
@@ -409,10 +440,7 @@ export default {
       let totalPrice = 0;
       Object.keys(this.vendorProposal.costServices).forEach((serviceCategory) => {
         const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
-          if (service.isComplimentary) {
-            return 0;
-          }
-          return s + service.requirementValue * service.price;
+          return service.isComplimentary ? s : s + service.requirementValue * service.price;
         }, 0);
         console.log("sumOFserive", sumOfService);
         totalPrice += sumOfService;
@@ -424,7 +452,6 @@ export default {
         const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
           return s + service.requirementValue * service.price;
         }, 0);
-        console.log("sumOFserive", sumOfService);
         totalPrice += sumOfService;
       });
       return totalPrice;

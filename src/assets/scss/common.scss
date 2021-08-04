@@ -497,7 +497,10 @@ hr {
   text-decoration: underline !important;
 }
 .text-decoration-none{
-    text-decoration: none !important;
+  text-decoration: none !important;
+}
+.text-capitalize{
+  text-transform: capitalize;
 }
 
 .d-flex {

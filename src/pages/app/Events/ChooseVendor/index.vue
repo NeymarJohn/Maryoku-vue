@@ -68,6 +68,8 @@
                   :vendorProposal="selectedProposal"
                   :category="selectedCategory"
                   :key="selectedProposal.id"
+                  :is-favorite="isFavorite"
+                  @favorite="favoriteProposal"
                   @close="closeProposal"
                 ></event-proposal-details>
               </transition>
@@ -340,6 +342,12 @@ export default {
         },
       });
     },
+    favoriteProposal(e){
+      this.$store.dispatch('planningBoard/updateCartItem', {
+          id: this.cart[this.selectedCategory.componentCategoryId].id,
+          isFavorite: e,
+          event: this.event});
+    },
     async addToCart() {
       if(!this.selectedProposal) return;
       this.updateCartItem({
@@ -430,6 +438,9 @@ export default {
     event() {
       return this.$store.state.event.eventData;
     },
+    cart(){
+      return this.$store.state.planningBoard.cart;
+    },
     categories() {
       const categories = this.event.components;
       categories.sort((a, b) => a.order - b.order);
@@ -454,8 +465,12 @@ export default {
           })
           if(subProposals.length) negotiationProposals[key] = subProposals;
       })
-      console.log('negotiationProposals', negotiationProposals);
       return negotiationProposals;
+    },
+    isFavorite(){
+      if(!this.selectedProposal || !this.selectedCategory) return false;
+      return this.cart[this.selectedCategory.componentCategoryId].proposal.id === this.selectedProposal.id &&
+          this.cart[this.selectedCategory.componentCategoryId].isFavorite;
     }
   },
 };
