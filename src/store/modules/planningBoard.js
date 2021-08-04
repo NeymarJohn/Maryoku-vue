@@ -8,8 +8,7 @@ const getDefaultState = () => {
         step: 1,
         requirements: {},
         specialRequirements: {},
-        cart:{},
-        favorite:{},
+        cart:{}
     }
 }
 const state = getDefaultState();

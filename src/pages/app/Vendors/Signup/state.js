@@ -103,7 +103,6 @@ const actions = {
             if (!vendor.hasOwnProperty("dontWorkDays")) Vue.set(vendor, "dontWorkDays", []);
             if (!vendor.hasOwnProperty("dontWorkTime")) Vue.set(vendor, "dontWorkTime", null);
             if (!vendor.hasOwnProperty("services")) Vue.set(vendor, "services", {});
-            if (!vendor.hasOwnProperty("healthPolicy")) Vue.set(vendor, "healthPolicy", null);
             if (!vendor.hasOwnProperty("guaranteed")) Vue.set(vendor, "guaranteed", []);
             commit("setVendor", vendor)
             commit("setEditing", true)
