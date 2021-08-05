@@ -68,6 +68,7 @@
                   :vendorProposal="selectedProposal"
                   :category="selectedCategory"
                   :key="selectedProposal.id"
+                  @favorite="favoriteProposal"
                   @close="closeProposal"
                 ></event-proposal-details>
               </transition>
@@ -212,6 +213,7 @@ export default {
   }),
   methods: {
     ...mapMutations("event", ["setEventData", "setBookingRequirements", "setInitBookingRequirements", "setProposalsByCategory"]),
+    ...mapMutations("planningBoard", ["setCategoryCartItem"]),
     ...mapActions("event", ["getProposals"]),
     ...mapActions("comment", ["getCommentComponents"]),
     ...mapActions("planningBoard", ["saveMainRequirements", "getRequirements", "getCartItems", "saveTypes", "updateRequirements", "updateCartItem"]),
@@ -340,6 +342,16 @@ export default {
         },
       });
     },
+    async favoriteProposal(isFavorite){
+      this.selectedProposal = await this.$store.dispatch('event/updateProposal', {
+          proposal: {...this.selectedProposal, isFavorite},
+          category: this.selectedCategory.componentId
+      });
+      this.setCategoryCartItem({
+          category: this.selectedCategory.componentId,
+          item: {...this.cart[this.selectedCategory.componentId], proposal: {...this.selectedProposal, isFavorite}}
+      });
+    },
     async addToCart() {
       if(!this.selectedProposal) return;
       this.updateCartItem({
@@ -393,6 +405,7 @@ export default {
       console.log('negotiationProposals', newVal);
       if(Object.keys(newVal).length) this.showNegotiationNotification = true;
     },
+    proposals(newVal){},
     $route: "fetchData",
   },
   filters: {
@@ -430,6 +443,9 @@ export default {
     event() {
       return this.$store.state.event.eventData;
     },
+    cart(){
+      return this.$store.state.planningBoard.cart;
+    },
     categories() {
       const categories = this.event.components;
       categories.sort((a, b) => a.order - b.order);
@@ -454,9 +470,8 @@ export default {
           })
           if(subProposals.length) negotiationProposals[key] = subProposals;
       })
-      console.log('negotiationProposals', negotiationProposals);
       return negotiationProposals;
-    }
+    },
   },
 };
 </script>
