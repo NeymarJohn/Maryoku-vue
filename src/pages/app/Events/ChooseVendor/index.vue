@@ -213,7 +213,6 @@ export default {
   }),
   methods: {
     ...mapMutations("event", ["setEventData", "setBookingRequirements", "setInitBookingRequirements", "setProposalsByCategory"]),
-    ...mapMutations("planningBoard", ["setCategoryCartItem"]),
     ...mapActions("event", ["getProposals"]),
     ...mapActions("comment", ["getCommentComponents"]),
     ...mapActions("planningBoard", ["saveMainRequirements", "getRequirements", "getCartItems", "saveTypes", "updateRequirements", "updateCartItem"]),
@@ -346,10 +345,6 @@ export default {
       this.selectedProposal = await this.$store.dispatch('event/updateProposal', {
           proposal: {...this.selectedProposal, isFavorite},
           category: this.selectedCategory.componentId
-      });
-      this.setCategoryCartItem({
-          category: this.selectedCategory.componentId,
-          item: {...this.cart[this.selectedCategory.componentId], proposal: {...this.selectedProposal, isFavorite}}
       });
     },
     async addToCart() {

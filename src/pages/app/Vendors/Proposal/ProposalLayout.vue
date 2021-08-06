@@ -168,13 +168,15 @@ export default {
     this.isTimeUp = false;
 
     this.vendor = await this.getVendor(this.$route.params.vendorId);
-    console.log('vendor', this.vendor);
+
     this.proposalRequest = await this.getProposalRequest(this.$route.params.id)
     if (this.proposalRequest.componentInstance.proposalAccepted) {
       this.showCloseProposalModal = true;
     }
-    // this.$set(this, "proposalRequest", proposalRequest);
+
     this.event = this.proposalRequest.eventData;
+    // await this.$store.dispatch('vendorProposal/getCustomers', this.proposalRequest.vendorId)
+    await this.$store.dispatch('vendorProposal/getCustomer', this.event.owner.emailAddress)
     this.$store.commit("vendorProposal/setWizardStep", 0);
     this.$store.commit("vendorProposal/setInitStep", 0);
     if (this.proposalRequest.proposal) {
@@ -207,7 +209,7 @@ export default {
       this.submittedModal = false;
       this.openedModal = "";
     },
-    uploadProposal(type) {
+    async uploadProposal(type) {
       this.$root.$emit("clear-slide-pos");
       this.scrollToTop();
       const vendorProposal = this.$store.state.vendorProposal;
@@ -245,25 +247,37 @@ export default {
 
       if (!this.isLoading) {
         this.isLoading = true;
-        console.log("upload.proposal");
-        this.saveProposal(type).then((proposal) => {
-          this.isUpdating = false;
-          this.isLoading = false;
-          if (type === "submit") this.submittedModal = true;
-          else {
-            Swal.fire({
+
+        if(!this.customer){
+          let newCustomer =  await this.$store.dispatch("vendorProposal/saveCustomer", {
+            name: this.event.owner.displayName,
+            companyName: this.event.owner.company,
+            email: this.event.owner.emailAddress,
+            vendorId: this.proposalRequest.vendorId,
+            phone: null,
+            ein: null,
+            country: null,
+          });
+          console.log('saveCustomer', newCustomer);
+        }
+
+        let proposal = await this.saveProposal(type);
+        this.isUpdating = false;
+        this.isLoading = false;
+        if (type === "submit") this.submittedModal = true;
+        else {
+          Swal.fire({
               title: `You’ve saved this current proposal. Come back and edit it at any time!`,
               buttonsStyling: false,
               type: "success",
               confirmButtonClass: "md-button md-vendor",
               confirmButtonText: "Back to Dashboard",
-            }).then(res => {
-                if(res.isConfirmed) {
-                    this.$router.push({path: "/vendor/dashboard"});
-                }
-            });
-          }
-        });
+          }).then(res => {
+              if(res.isConfirmed) {
+                  this.$router.push({path: "/vendor/dashboard"});
+              }
+          });
+        }
       }
     },
 
@@ -330,7 +344,9 @@ export default {
       }
       return "";
     },
-
+    customer(){
+      return this.$store.state.vendorProposal.customer;
+    },
     step: {
       get: function () {
         return this.$store.state.vendorProposal.wizardStep;

@@ -202,11 +202,9 @@ export default {
       const categoryKeys = Object.keys(this.$store.state.planningBoard.cart);
       const cartItems = [];
       categoryKeys.forEach((categoryKey) => {
-        if(!this.$store.state.planningBoard.cart[categoryKey].proposal.isFavorite){
-          const category = this.serviceCategory(categoryKey);
-          if (category) {
+        const category = this.serviceCategory(categoryKey);
+        if (category) {
             cartItems.push(category);
-          }
         }
       });
       cartItems.sort((a, b) => a.order - b.order);

@@ -8,6 +8,8 @@ import EventTimelineDate from "@/models/EventTimelineDate";
 import CalendarEvent from "@/models/CalendarEvent";
 import authService from "@/services/auth.service";
 import moment from "moment";
+import Customer from "@/models/Customer";
+import Vendor from "@/models/Vendors";
 
 const state = {
   vendor: null,
@@ -46,6 +48,7 @@ const state = {
   personalMessage: "",
   suggestedNewSeatings: null,
   bookedServices: [],
+  customer: null,
   tenantId: authService.resolveTenantId()
 };
 const getters = {
@@ -240,6 +243,9 @@ const mutations = {
   setValue: (state, { key, value }) => {
     Vue.set(state, key, value);
   },
+  setCustomer: (state, customer) => {
+    state.customer = customer;
+  },
   setInspirationalPhoto: (state, { index, photo }) => {
     Vue.set(state.inspirationalPhotos, index, photo);
   },
@@ -288,6 +294,28 @@ const actions = {
         });
     });
   },
+  getCustomers: ({commit, state}, vendorId) => {
+    return new Promise(async (resolve, reject) => {
+        new Customer().for(new Vendor({id: vendorId})).get().then(customers => {
+            console.log('customer', customers);
+            // commit("setCustomer", customer);
+            resolve(customers);
+        });
+
+    });
+  },
+  getCustomer: ({commit, state}, email) => {
+      return new Promise(async (resolve, reject) => {
+          new Customer().params({email}).get().then(customer => {
+              console.log('customer', customer);
+              if(customer) {
+                  commit("setCustomer", customer[0]);
+                  resolve(customer[0]);
+              }
+          });
+
+      });
+  },
   getVendor: ({ commit, state }, vendorId) => {
     return new Promise((resolve, reject) => {
       Vendors.find(vendorId)
@@ -322,6 +350,15 @@ const actions = {
         });
     });
   },
+  saveCustomer:({commit, state, dispatch}, customer) => {
+    return new Promise(async (resolve, reject) => {
+        new Customer(customer).save().then(customer => {
+
+            commit('setCustomer', customer);
+            resolve(customer);
+        });
+    });
+  },
   saveProposal: ({ commit, state, getters }, status) => {
     return new Promise((resolve, reject) => {
 
@@ -349,7 +386,8 @@ const actions = {
         tenantId: state.tenantId,
         suggestionDate: state.suggestionDate,
         expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
-        bookedServices: state.bookedServices || []
+        bookedServices: state.bookedServices || [],
+        customerId: state.customer.id,
       });
       proposal
         .save()
