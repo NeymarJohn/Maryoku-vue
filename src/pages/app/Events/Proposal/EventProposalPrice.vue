@@ -341,8 +341,7 @@ export default {
       if (!this.costServices || this.costServices.length === 0) return 0;
       return (
         this.costServices.reduce((s, item) => {
-          if (!item.isComplimentary) return s + item.requirementValue * item.price;
-          else return 0;
+          return item.isComplimentary ? s : s + item.requirementValue * item.price;
         }, 0) +
         this.addedServices.reduce((s, item) => {
           return s + item.requirementValue * item.price;

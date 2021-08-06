@@ -2,56 +2,11 @@
   <div class="vendor-proposal-board p-40">
     <loader :active="loading" :isFullScreen="true" />
     <div class="font-size-22 font-bold d-flex align-center">
-      <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> Proposals Board
-      <md-button class="ml-auto md-vendor md-maryoku mr-15" @click="createNewProposal">Create New Proposal</md-button>
+      <img src="/static/icons/vendor/proposal-active.svg" class="mr-10" /> CUSTOMERS
+      <md-button class="ml-auto md-simple md-black md-maryoku mr-15">Import Customers List</md-button>
+      <md-button class="md-vendor md-maryoku mr-15" @click="createNewProposal">Add New Customers</md-button>
     </div>
-    <div class="font-bold text-uppercase mt-30 mb-15">Opportunities</div>
-    <carousel
-      :items="4"
-      :margin="25"
-      :dots="false"
-      :number="2"
-      :nav="false"
-      class="proposal-requests"
-      v-if="renderRender"
-    >
-      <template slot="prev">
-        <button class="nav-left nav-btn">
-          <span><md-icon class="color-vendor">arrow_back</md-icon></span>
-        </button>
-      </template>
-      <proposal-request-card
-        class="carousel-item"
-        v-for="(proposalRequest, idx) in proposalRequests"
-        :key="proposalRequest.id"
-        :proposalRequest="proposalRequest"
-        :hasNegotiation="!!(proposalRequest.proposal && proposalRequest.proposal.negotiations && proposalRequest.proposal.negotiations.filter(it => it.status == 0).length)"
-        @handle="handleRequestCard(idx)"
-        @dismiss="dismiss"
-      >
-      </proposal-request-card>
-      <div v-if="proposalRequests.length < 1" class="white-card p-20 d-flex">
-        <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" style="width: 55px; height: 55px" />
-        <div class="ml-15">
-          <div class="font-size-18 font-bold text-uppercase color-vendor">No Open opportunities</div>
-          <p class="my-10 font-size-14">
-            We couldn't find any more opportunities for you at this point. Increase your exposure by improving your
-            profile
-          </p>
-          <div class="d-flex">
-            <md-button class="md-simple ml-auto md-vendor md-outlined" style="height: 30px">Optimize Profile</md-button>
-          </div>
-        </div>
-      </div>
-      <template slot="next">
-        <button class="nav-right nav-btn">
-          <md-icon class="color-vendor">arrow_forward</md-icon>
-        </button>
-      </template>
-    </carousel>
-    <hr class="my-40 color-vendor" />
     <div class="proposals-table">
-      <div class="font-bold">All proposals:</div>
       <div class="filter-bar mt-30">
         <md-button
           v-for="tab in proposalTabs"
@@ -77,7 +32,7 @@
         >
       </div>
       <div class="md-layout mt-10">
-        <div class="md-layout-item md-size-75 p-0 d-flex flex-column" style="background: rgba(255, 255, 255, 0.46)">
+        <div class="md-layout-item md-size-70 p-0 d-flex flex-column" style="background: rgba(255, 255, 255, 0.46)">
           <div class="sort-bar px-40" style="background: #f3f7fd">
             <span
               v-for="it in proposalHeaders"
@@ -94,25 +49,25 @@
               </md-icon>
             </span>
           </div>
-          <div v-if="!loading" class="propsoals-list">
-            <div class="white-card md-20 proposal-list">
-              <proposal-list-item
-                v-for="proposal in proposals"
-                :proposal="proposal"
-                :hasNegotiation="!!(proposal.negotiations && proposal.negotiations.filter(it => it.status == 0).length)"
-                :key="proposal.id"
-                class="row"
-                @action="handleProposal"
-              ></proposal-list-item>
-            </div>
-          </div>
-          <div v-if="this.proposals.length < 4" class="my-auto d-flex flex-column align-center">
-            <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" />
-            <p class="text-transform-uppercase font-size-14">No More Proposal To Show</p>
-            <md-button class="md-vendor" @click="createNewProposal">Create New Proposal</md-button>
-          </div>
+<!--          <div v-if="!loading" class="propsoals-list">-->
+<!--            <div class="white-card md-20 proposal-list">-->
+<!--              <proposal-list-item-->
+<!--                v-for="proposal in proposals"-->
+<!--                :proposal="proposal"-->
+<!--                :hasNegotiation="!!(proposal.negotiations && proposal.negotiations.filter(it => it.status == 0).length)"-->
+<!--                :key="proposal.id"-->
+<!--                class="row"-->
+<!--                @action="handleProposal"-->
+<!--              ></proposal-list-item>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div v-if="this.proposals.length < 4" class="my-auto d-flex flex-column align-center">-->
+<!--            <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" />-->
+<!--            <p class="text-transform-uppercase font-size-14">No More Proposal To Show</p>-->
+<!--            <md-button class="md-vendor" @click="createNewProposal">Create New Proposal</md-button>-->
+<!--          </div>-->
         </div>
-        <div class="md-layout-item md-size-25 mt-50">
+        <div class="md-layout-item md-size-30 mt-50">
           <insight
             :total="pagination.total"
             :won="pagination.won"

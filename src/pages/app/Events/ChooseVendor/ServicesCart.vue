@@ -32,12 +32,12 @@
                           <md-icon style="font-size: 30px !important">more_vert</md-icon>
                       </md-button>
                       <md-menu-content>
-                          <md-menu-item @click="favorite(cart[item.key])" class="md-red">
+                          <md-menu-item @click="toFavorite(cart[item.key])" class="md-red">
                             <span>
                               <img :src="`${$iconURL}comments/SVG/heart-dark.svg`" class="label-icon-40 mr-10" />
                               Move to Favorite</span>
                           </md-menu-item>
-                          <md-menu-item @click="remove(cart[item.key])" class="md-red">
+                          <md-menu-item @click="removeCart(cart[item.key])" class="md-red">
                             <span>
                               <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon ml-10 mr-20" />
                               Remove from Cart
@@ -65,7 +65,46 @@
               MY FAVORITE
           </vsa-heading>
           <vsa-content>
-              favorite contents
+              <table width="100%">
+                  <tr v-for="proposal in proposals"
+                      :key="`${proposal.id}`"
+                      class="d-flex align-center"
+                  >
+                      <td width="75%" class="d-flex align-center py-20">
+                          <img :src="`${$iconURL}Budget+Elements/${serviceCategory(proposal.vendor.vendorCategory).icon}`" style="width: 30px"/>
+                          <div class="ml-10">
+                              <p class="mb-5 font-size-14 font-bold-extra">{{ proposal.vendor.companyName }}</p>
+                              <p class="m-0 font-size-14 color-black-middle">{{ serviceCategory(proposal.vendor.vendorCategory).fullTitle }}</p>
+                          </div>
+
+                      </td>
+                      <td width="25%" class="py-20">
+                          ${{proposal.cost | withComma}}
+                      </td>
+                      <td width="10%" class="py-20">
+                          <md-menu md-size="auto" class="action-menu" :md-offset-x="-300" :md-offset-y="-36" @md-opened="isOpened">
+                              <md-button md-menu-trigger class="edit-btn md-simple" style="height: 30px">
+                                  <md-icon style="font-size: 30px !important">more_vert</md-icon>
+                              </md-button>
+                              <md-menu-content>
+                                  <md-menu-item @click="toCart(proposal)" class="md-red">
+                            <span>
+                              <img :src="`${$iconURL}comments/SVG/heart-dark.svg`" class="label-icon-40 mr-10" />
+                              Move to Cart</span>
+                                  </md-menu-item>
+                                  <md-menu-item @click="removeFavorite(proposal)" class="md-red">
+                            <span>
+                              <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon ml-10 mr-20" />
+                              Remove from Favorite
+                            </span>
+                                  </md-menu-item>
+                              </md-menu-content>
+                          </md-menu>
+                      </td>
+                  </tr>
+
+
+              </table>
           </vsa-content>
         </vsa-item>
         <vsa-item>
@@ -131,35 +170,64 @@ export default {
           );
       }, 0);
     },
-    favorite(item){
-        this.$store.dispatch('planningBoard/updateCartItem', {id: item.id, isFavorite: true, event: this.event});
+    toFavorite(item){
+      this.$store.dispatch('event/updateProposal', {
+          proposal: {...item.proposal, isFavorite: true},
+          category: item.category,
+      });
     },
-    remove(item){
+    toCart(proposal){
+      this.$store.dispatch('planningBoard/updateCartItem',{
+        category: proposal.vendor.vendorCategory,
+        event: {id: this.event.id},
+        proposalId: proposal.id,
+      })
+      this.$store.dispatch('event/updateProposal', {
+        proposal: {...proposal, isFavorite: false},
+        category: proposal.vendor.vendorCategory,
+      });
+    },
+    removeCart(item){
       this.$store.dispatch('planningBoard/removeCartItem', {id: item.id, event: this.event});
+    },
+    removeFavorite(proposal){
+      this.$store.dispatch('event/updateProposal', {
+          proposal: {...proposal, isFavorite: false},
+          category: proposal.vendor.vendorCategory,
+      });
     },
     bookCart(){
       this.$router.push({name: 'CheckoutWithCart'});
-    }
+    },
+    serviceCategory(category) {
+      return this.$store.state.common.serviceCategories.find(it => it.key === category);
+    },
   },
 
   computed: {
     event() {
       return this.$store.state.event.eventData;
     },
+    proposals(){
+      let proposals = [];
+      Object.keys(this.$store.state.event.proposals).map(key => {
+          proposals = proposals.concat(this.$store.state.event.proposals[key]);
+      })
+      return proposals.filter(p => !!p.isFavorite);
+    },
     cartItems() {
       const categoryKeys = Object.keys(this.$store.state.planningBoard.cart);
       const cartItems = [];
       categoryKeys.forEach((categoryKey) => {
-        const category = this.$store.state.common.serviceCategories.find((item) => item.key === categoryKey);
-        if (category) {
+        if(!this.$store.state.planningBoard.cart[categoryKey].proposal.isFavorite){
+          const category = this.serviceCategory(categoryKey);
+          if (category) {
             cartItems.push(category);
+          }
         }
       });
       cartItems.sort((a, b) => a.order - b.order);
       return cartItems;
-    },
-    serviceCategories() {
-      return this.$store.state.common.serviceCategories;
     },
     cart() {
       return this.$store.state.planningBoard.cart;
@@ -174,6 +242,9 @@ export default {
       return Object.keys(this.cart).length;
     },
   },
+  watch:{
+    proposal(newVal){}
+  }
 };
 </script>
 <style lang="scss" scoped>

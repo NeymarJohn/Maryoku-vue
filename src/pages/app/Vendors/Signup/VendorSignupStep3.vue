@@ -307,7 +307,7 @@
               Guaranteed with every staff member:
             </div>
             <div class="md-layout my-10">
-              <div v-for="option in guaranteedOptions" class="md-layout-item md-size-33" :key="option.key">
+              <div v-for="option in guaranteedOptions" class="md-layout-item md-size-33" :key="option.value">
                 <md-checkbox v-model="vendor.guaranteed" :value="option.value">{{option.label}}</md-checkbox>
               </div>
             </div>
@@ -331,6 +331,7 @@ import VSignupAddRules from "@/components/Inputs/VSignupAddRules.vue";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 import { FunctionalCalendar } from "vue-functional-calendar";
 import { VendorPolicy, VendorPricingPolicy } from "@/constants/vendor";
+import { GuaranteedOptions } from "@/constants/options";
 import { capitalize } from "@/utils/string.util";
 import VendorPolicyItem from "../components/vendor-policy-item";
 import VendorPricingPolicyItem from "../components/vendor-pricing-policy-item";
@@ -455,13 +456,7 @@ export default {
       pricingPolicies: VendorPricingPolicy,
       vendorPolicies: {},
       vendorPricingPolicies: {},
-      guaranteedOptions: [
-          {value: 'mask_wearing', label:'Mask wearing'},
-          {value: 'enhanced_cleaning', label: 'Enhanced cleaning'},
-          {value: 'cancellation', label: 'Cancellation in mitigating circumstances'},
-          {value: 'social_distancing', label: 'Social distancing'},
-          {value: 'vaccination_certificate', label: 'Vaccination Certificate'},
-      ]
+      guaranteedOptions: GuaranteedOptions
     };
   },
   methods: {
