@@ -75,42 +75,24 @@
             </div>
           </template>
           <template v-else>
-            <div v-for="(item, key) in cart">
-                <checkout-proposal-table
-                    :proposal="item.proposal"
-                    :category="key"
-                    :key="key">
-                </checkout-proposal-table>
-                <div class="p-30" v-if="item.proposal.extraServices[key].length">
-                    <div>Would you like to upgrade & add one of those?</div>
-                    <div class="mb-30" v-if="item.proposal.serviceCategory">
-                        You have $ {{ (item.proposal.serviceCategory.allocatedBudget - item.proposal.cost) | withComma }} left over from
-                        your original defined budget.
-                    </div>
-                    <div class="mt-10 mb-10">
-                        Simply select anything that you would like to add. Please note that any item or service you choose here
-                        will be added to the overall vendor cost.
-                    </div>
-                    <div
-                        class="pt-10 pb-10"
-                        v-for="service in item.proposal.extraServices[key].filter(
-              (item) => !item.added && item.price,
-            )"
-                        :key="service.subCategory"
-                    >
-                        <div class="d-flex align-center">
-                            <div class="d-flex align-center">
-                                <md-checkbox class="m-0 mr-10" v-model="service.addedOnProposal"></md-checkbox>
-                                <span>{{ service.requirementTitle }}</span>
-                            </div>
-                            <div class="ml-auto pr-100">
-                                <div class="element-price">${{ service.price | withComma }}</div>
-                            </div>
-                        </div>
-                    </div>
+            <collapse-panel v-for="(item, key) in cart" :defaultStatus="false" class="white-card" :key="key">
+              <template slot="header">
+                <div class="d-flex align-center p-30">
+                  <img
+                    class="mr-10"
+                    :src="`${$iconURL}Budget+Elements/${serviceCategory(item.category).icon}`"
+                    width="35px"
+                  />
+                  {{ serviceCategory(item.category).fullTitle }}
+                  <div class="ml-auto">
+                    <div class="element-price pr-100">${{ item.proposal.cost | withComma }}</div>
+                  </div>
                 </div>
-            </div>
-
+              </template>
+              <template slot="content">
+                {{ item.proposal.cost }}
+              </template>
+            </collapse-panel>
           </template>
         </div>
         <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
@@ -273,14 +255,13 @@ import CheckoutPriceTable from "./CheckoutPriceTable.vue";
 import CollapsePanel from "@/components/CollapsePanel.vue";
 import StripeCheckout from "./StripeCheckout.vue";
 import SuccessModal from "./SuccessModal.vue";
-import CheckoutProposalTable from "./CheckoutProposalTable";
 
 // checkout page type
 const VENDOR = 0;
 const CART = 1;
 
 export default {
-  components: { CheckoutPriceTable, CollapsePanel, StripeCheckout, SuccessModal, CheckoutProposalTable },
+  components: { CheckoutPriceTable, CollapsePanel, StripeCheckout, SuccessModal },
   data() {
     return {
       vendor: null,
@@ -299,7 +280,6 @@ export default {
       showCancelModal: false,
       onDayCordinator: false,
       feePercentail: 3.2,
-      pageType: VENDOR,
     };
   },
   async created() {
@@ -413,6 +393,9 @@ export default {
       // if (this.paymentMethod === "stripe") {
 
       // }
+    },
+    serviceCategory(category) {
+      return this.categories.find((it) => it.key === category);
     },
   },
 };

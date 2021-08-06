@@ -247,33 +247,6 @@
                 {{ dontWorkTime() }}
               </div>
             </div>
-            <div v-if="vendor.healthPolicy || vendor.guaranteed && vendor.guaranteed.length"
-                 class="healthy-policy" >
-              <h5 class="d-flex align-center">
-                <img class="mr-10" :src="`${$iconURL}union-12.svg`" width="26px">
-                Health policy</h5>
-              <template v-if="vendor.healthPolicy">
-                  <div class="rule font-bold-extra my-20">
-                      <span class="color-red">COVID 19</span>
-                      - Exceptional Policy
-                  </div>
-                  <p class="width-66">
-                    {{vendor.healthPolicy}}
-                  </p>
-              </template>
-              <template v-if="vendor.guaranteed && vendor.guaranteed.length">
-                <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
-                <div class="md-layout mt-20">
-                    <div v-for="option in guaranteedOptions" class="md-layout-item md-size-30 py-10" :key="option.value"
-                         :style="{display: vendor.guaranteed.includes(option.value)? '': 'none'}">
-                        <div v-if="vendor.guaranteed.includes(option.value)" class="d-flex align-center">
-                            <img class="mr-10" :src="`${$iconURL}Vendor Signup/Group 5479 (2).svg`" width="30px">
-                            {{option.label}}
-                        </div>
-                    </div>
-                </div>
-              </template>
-            </div>
           </div>
           <div class="pricing-policy-cont" id="Rules">
             <div class="title"><img :src="`${iconUrl}Asset 560.svg`" /> OUR PRICING POLICY</div>
@@ -356,7 +329,6 @@ import VendorExtraPayItem from "../components/VendorExtraPayItem.vue";
 import _ from "underscore";
 import VendorImagesList from "../components/VendorImagesList.vue";
 import HeaderImageCarousel from "@/components/HeaderImageCarousel.vue";
-import { GuaranteedOptions } from "@/constants/options";
 import { capitalize } from "@/utils/string.util";
 import AttachmentTagList from "../components/AttachmentTagList.vue";
 import S3Service from "@/services/s3.service";
@@ -532,7 +504,6 @@ export default {
           icon: "equipmentrentals.svg",
         },
       ],
-      guaranteedOptions: GuaranteedOptions,
       medias: [],
     };
   },
@@ -1080,14 +1051,6 @@ export default {
                 width: 21px;
                 margin-right: 1rem;
               }
-            }
-          }
-          .healthy-policy{
-            margin-top: 50px;
-            padding-top: 20px;
-            border-top: 1px solid #dddddd;
-            h5 {
-              font: 800 20px Manrope-Regular, sans-serif;
             }
           }
         }

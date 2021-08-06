@@ -52,33 +52,6 @@
         {{ dontWorkTime() }}
       </div>
     </div>
-    <div v-if="vendor.healthPolicy || vendor.guaranteed && vendor.guaranteed.length"
-       class="healthy-policy my-20">
-      <h5 class="d-flex align-center">
-          <img class="mr-10" :src="`${$iconURL}union-12.svg`" width="26px">
-          Health policy</h5>
-      <template v-if="vendor.healthPolicy">
-          <div class="rule font-bold-extra my-20">
-              <span class="color-vendor">COVID 19</span>
-              - Exceptional Policy
-          </div>
-          <p class="width-66">
-              {{vendor.healthPolicy}}
-          </p>
-      </template>
-      <template v-if="vendor.guaranteed && vendor.guaranteed.length">
-          <div class="mt-30 font-bold-extra">Guaranteed with every staff member:</div>
-          <div class="md-layout mt-20">
-              <div v-for="option in guaranteedOptions" class="md-layout-item md-size-30 py-10" :key="option.value"
-                   :style="{display: vendor.guaranteed.includes(option.value)? '': 'none'}">
-                  <div v-if="vendor.guaranteed.includes(option.value)" class="d-flex align-center">
-                      <img class="mr-10" :src="`${$iconURL}common/checked-circle-purple.svg`" width="20px">
-                      {{option.label}}
-                  </div>
-              </div>
-          </div>
-      </template>
-    </div>
     <div class="section">
       <h5 class="subtitle">Our cancellation approach</h5>
       <div id="Policy">
@@ -98,7 +71,6 @@
 <script>
 import _ from "underscore";
 import { capitalize } from "@/utils/string.util";
-import { GuaranteedOptions, CancellationData } from "@/constants/options";
 export default {
   props: {
     vendor: {
@@ -112,8 +84,28 @@ export default {
   },
   data() {
     return {
-      cancellationData: CancellationData,
-      guaranteedOptions: GuaranteedOptions,
+      cancellationData: [
+        {
+          notice: "the client cancel on the day of the Event",
+          vendorPayout: "the client will pay in full",
+          cancellationFee: "full Payment-no refund will be given",
+        },
+        {
+          notice: "the client cancel less than a week prior of the Event but not on the day of the Event",
+          vendorPayout: "the client will pay 80% ",
+          cancellationFee: "full Payment-no refund will be given",
+        },
+        {
+          notice: "the client cancel less than two weeks prior of the Event bu more than one week prior to the Event",
+          vendorPayout: "the client willl pay 60%",
+          cancellationFee: "80% Payment(20% refunded to Planner)",
+        },
+        {
+          notice: "the client cancel more than two weeks prior to the Event",
+          vendorPayout: "the client will pay 15% equivalent to down payment",
+          cancellationFee: "Down payment will not be refunded",
+        },
+      ],
     };
   },
   methods: {
@@ -194,20 +186,6 @@ export default {
       img {
         width: 21px;
         margin-right: 1rem;
-      }
-    }
-  }
-  .healthy-policy{
-    border-top: 1px solid #dddddd;
-    h5 {
-      font: 800 20px Manrope-Regular, sans-serif;
-    }
-    .item {
-      margin-bottom: 1rem;
-      display: flex;
-      img {
-          width: 21px;
-          margin-right: 1rem;
       }
     }
   }

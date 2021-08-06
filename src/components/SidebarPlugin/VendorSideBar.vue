@@ -14,6 +14,20 @@
             Sign Out
             <img :src="`${menuIconsURL}Asset 118.svg`" />
           </div>
+<!--        </div>-->
+<!--        <div class="sidebar-menu__item">-->
+<!--          <div class="item-route" @click="goTo('/events')"><img :src="`${menuIconsURL}Asset 114.svg`" /> My Events</div>-->
+<!--        </div>-->
+<!--        <div class="sidebar-menu__item" @click="goTo(`/events/${event.id}/booking/overview?walkWithMe=true`)">-->
+<!--          <div class="item-route"><img :src="`${menuIconsURL}Asset 116.svg`" /> Product tour</div>-->
+<!--        </div>-->
+<!--        <div class="sidebar-menu__item" @click="goToHelp">-->
+<!--          <div class="item-route"><img :src="`${menuIconsURL}Asset 117.svg`" /> About the product</div>-->
+<!--        </div>-->
+<!--        <div class="sidebar-menu__item">-->
+<!--          <div class="item-route" @click="goTo('/vendors-pool')">-->
+<!--            <img :src="`${menuIconsURL}Asset 117.svg`" /> Vendors Pool-->
+<!--          </div>-->
         </div>
       </div>
     </div>
@@ -51,17 +65,6 @@
             iconActiveUrl: '/static/icons/vendor/profile-active.svg',
             path: `/vendor/profile/settings`,
             startLink: `/vendor/profile/`,
-          }"
-        ></sidebar-item>
-        <sidebar-item
-          name="left-menu-yearly-plan"
-          class="left-menu-events-list"
-          :link="{
-            name: 'Customers',
-            iconUrl: '/static/icons/vendor/customers.svg',
-            iconActiveUrl: '/static/icons/vendor/customers-active.svg',
-            path: `/vendor/customers`,
-            startLink: `/vendor/customers/`,
           }"
         ></sidebar-item>
         <sidebar-item

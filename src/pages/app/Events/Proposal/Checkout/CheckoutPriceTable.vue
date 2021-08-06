@@ -81,7 +81,8 @@ export default {
     priceOfCostservices() {
       if (!this.costServices || this.costServices.length === 0) return 0;
       return this.costServices.reduce((s, item) => {
-        return item.isComplimentary ? s : s + item.requirementValue * item.price;
+        if (!item.isComplimentary) return s + item.requirementValue * item.price;
+        else return 0;
       }, 0);
     },
     priceBeforeDiscount() {
