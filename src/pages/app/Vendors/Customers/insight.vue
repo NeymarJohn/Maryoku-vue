@@ -1,62 +1,65 @@
 <template>
-    <div class="white-card p-30">
-        <div class="font-size-20">
-          Add more details to generate unique insights
+    <div class="bg-purple">
+        <div class="pl-40 pr-40 pt-40 pb-20">
+            <div class="font-size-16 color-white">
+                Total Incomes - Frog Design
+            </div>
+            <div class="d-flex">
+                <div>
+                    <h2 class="font-size-56 color-white my-10">$22,000</h2>
+                    <p class="font-size-14 color-white">4/5 Successful proposals</p>
+                </div>
+            </div>
         </div>
-        <div style="margin: 0 -15px">
-            <pie-chart
-                :chartData="chartData"
-                :columns="1"
-                :options="{
-                  width: 130,
-                  height: 180,
-                  strokWidth: 30,
-                  direction: 'row',
-                }"
-            ></pie-chart>
-        </div>
-        <div class="px-30">
+        <hr/>
+        <div class="px-30 position-relative">
+            <div class="position-absolute" style="left: 0;top: 0">
+<!--                <md-button class="md-button md-theme-default md-simple md-just-icon" @click="prev">-->
+                    <img :src="`${$iconURL}Group 19406.svg`" class="cursor-pointer" width="80px" @click="prev">
+<!--                </md-button>-->
+            </div>
+            <div class="position-absolute" style="right: 0;top: 0">
+<!--                <md-button class="md-icon-button md-simple">-->
+                    <img :src="`${$iconURL}Group 19405.svg`" class="cursor-pointer" width="80px" @click="next">
+<!--                </md-button>-->
+            </div>
+            <carousel :items="1" :margin="0" :nav="false" :loop="true" class="d-flex">
+                <template slot="prev">
+                    <span class="prev d-none" ref="prevButton">
+                        Prev
+                    </span>
 
-            <div v-if="total > 0 && won > 0">
-                <div class="color-won d-flex align-center">
-                    <span class="mr-20 font-size-50">{{`${Math.floor(won / total)} %`}}</span>
-                    <span class="font-size-18">Winning rate</span>
+                </template>
+                <div v-for="(p, index) in incomeList" :key="p.id" class="carousel-item">
+
+                    <h5 class="color-white text-center">Income From Past And Future Events</h5>
+                    <income-bar-chart :chartData="incomeChartData"></income-bar-chart>
+                    <div class="d-flex justify-content-center my-40">
+                        <div class="flex-1 font-size-14 color-white text-center">2021</div>
+                        <div class="flex-1 font-size-14 color-white text-center">Past events</div>
+                        <div class="flex-1 font-size-14 color-white text-center">Future events</div>
+                    </div>
+                    <hr/>
                 </div>
-                <div class="font-size-16 mt-50">
-                    You won <span class="font-bold">{{won}} of {{total}}</span> Proposals you applied to
-                </div>
-            </div>
-            <div v-else class="d-flex align-center">
-                <img :src="`${$iconURL}VendorsProposalPage/group-18762.svg`" width="50">
-                <div class="ml-10">
-                    <div class="color-vendor font-size-14 m-0">There is not yet enough</div>
-                    <div class="color-vendor font-size-14 mt-10">information to present insights</div>
-                </div>
-            </div>
-            <hr class="mt-50 mb-50" />
-            <div class="tips">
-                <div class="d-flex mb-30 align-center">
-                    <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
-                    <div class="ml-10">Boost your chances of winning by improving your profile</div>
-                </div>
-                <div class="d-flex align-center">
-                    <div class="flex-1"><img :src="`${$iconURL}common/light.svg`" class="label-icon" /></div>
-                    <div class="ml-10">Stay sharp and respond to proposals promptly - you've got to be in it to win it!</div>
-                </div>
-            </div>
-            <md-button class="mt-10 md-simple md-vendor-text md-vendor px-0">
-                More Insights
-                <md-icon class="color-vendor">keyboard_arrow_down</md-icon>
-            </md-button>
+                <template slot="next">
+                    <span class="next d-none" ref="nextButton">
+                        Next
+                    </span>
+                </template>
+            </carousel>
         </div>
     </div>
 </template>
 <script>
 import { PieChart } from "@/components";
+import IncomeBarChart from "./IncomeBarChart.vue";
+import carousel from "vue-owl-carousel";
 
 export default {
   components:{
-    PieChart
+    PieChart,
+    IncomeBarChart,
+    carousel,
   },
   props:{
     total: {
@@ -70,10 +73,23 @@ export default {
   },
   data(){
     return {
-      chartData: [
-        { title: "Application", value: 6, color: "#b7b5b5" },
-        { title: "Winning", value: 6, color: "#9a9898" },
-      ],
+        incomeChartData: [
+            { label: "Jan", value: 200, future: false },
+            { label: "Feb", value: 120, future: false },
+            { label: "Mar", value: 70, future: false },
+            { label: "Apr", value: 90, future: true },
+            { label: "May", value: 120, future: true },
+            { label: "Jun", value: 200, future: true },
+            { label: "Jul", value: 120, future: true },
+            { label: "Aug", value: 30, future: true },
+            { label: "Sep", value: 120, future: true },
+            { label: "Oct", value: 50, future: true },
+            { label: "Nov", value: 100, future: true },
+            { label: "Dec", value: 70, future: true },
+        ],
+        incomeList: [
+            '', '', '', '', ''
+        ]
     }
   },
   mounted() {
@@ -81,10 +97,13 @@ export default {
   },
   methods:{
     init(){
-        this.chartData[0].value = this.total;
-        this.chartData[1].value = this.win;
-        if (this.won > 0) this.chartData[1].color = '#2cde6b';
-    }
+    },
+    next() {
+      this.$refs.nextButton.click();
+    },
+    prev() {
+      this.$refs.prevButton.click();
+    },
   },
   watch:{
     total(newVal){},

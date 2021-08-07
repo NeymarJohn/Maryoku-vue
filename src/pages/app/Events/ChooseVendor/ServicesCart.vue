@@ -32,12 +32,12 @@
                           <md-icon style="font-size: 30px !important">more_vert</md-icon>
                       </md-button>
                       <md-menu-content>
-                          <md-menu-item @click="toFavorite(cart[item.key])" class="md-red">
+                          <md-menu-item @click="favorite(cart[item.key])" class="md-red">
                             <span>
                               <img :src="`${$iconURL}comments/SVG/heart-dark.svg`" class="label-icon-40 mr-10" />
                               Move to Favorite</span>
                           </md-menu-item>
-                          <md-menu-item @click="removeCart(cart[item.key])" class="md-red">
+                          <md-menu-item @click="remove(cart[item.key])" class="md-red">
                             <span>
                               <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon ml-10 mr-20" />
                               Remove from Cart
@@ -81,26 +81,26 @@
                       <td width="25%" class="py-20">
                           ${{proposal.cost | withComma}}
                       </td>
-                      <td width="10%" class="py-20">
-                          <md-menu md-size="auto" class="action-menu" :md-offset-x="-300" :md-offset-y="-36" @md-opened="isOpened">
-                              <md-button md-menu-trigger class="edit-btn md-simple" style="height: 30px">
-                                  <md-icon style="font-size: 30px !important">more_vert</md-icon>
-                              </md-button>
-                              <md-menu-content>
-                                  <md-menu-item @click="toCart(proposal)" class="md-red">
-                            <span>
-                              <img :src="`${$iconURL}comments/SVG/heart-dark.svg`" class="label-icon-40 mr-10" />
-                              Move to Cart</span>
-                                  </md-menu-item>
-                                  <md-menu-item @click="removeFavorite(proposal)" class="md-red">
-                            <span>
-                              <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon ml-10 mr-20" />
-                              Remove from Favorite
-                            </span>
-                                  </md-menu-item>
-                              </md-menu-content>
-                          </md-menu>
-                      </td>
+<!--                      <td width="10%" class="py-20">-->
+<!--                          <md-menu md-size="auto" class="action-menu" :md-offset-x="-300" :md-offset-y="-36" @md-opened="isOpened">-->
+<!--                              <md-button md-menu-trigger class="edit-btn md-simple" style="height: 30px">-->
+<!--                                  <md-icon style="font-size: 30px !important">more_vert</md-icon>-->
+<!--                              </md-button>-->
+<!--                              <md-menu-content>-->
+<!--                                  <md-menu-item @click="favorite(cart[item.key])" class="md-red">-->
+<!--                            <span>-->
+<!--                              <img :src="`${$iconURL}comments/SVG/heart-dark.svg`" class="label-icon-40 mr-10" />-->
+<!--                              Move to Favorite</span>-->
+<!--                                  </md-menu-item>-->
+<!--                                  <md-menu-item @click="remove(cart[item.key])" class="md-red">-->
+<!--                            <span>-->
+<!--                              <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon ml-10 mr-20" />-->
+<!--                              Remove from Cart-->
+<!--                            </span>-->
+<!--                                  </md-menu-item>-->
+<!--                              </md-menu-content>-->
+<!--                          </md-menu>-->
+<!--                      </td>-->
                   </tr>
 
 
@@ -170,31 +170,14 @@ export default {
           );
       }, 0);
     },
-    toFavorite(item){
+    favorite(item){
       this.$store.dispatch('event/updateProposal', {
           proposal: {...item.proposal, isFavorite: true},
           category: item.category,
       });
     },
-    toCart(proposal){
-      this.$store.dispatch('planningBoard/updateCartItem',{
-        category: proposal.vendor.vendorCategory,
-        event: {id: this.event.id},
-        proposalId: proposal.id,
-      })
-      this.$store.dispatch('event/updateProposal', {
-        proposal: {...proposal, isFavorite: false},
-        category: proposal.vendor.vendorCategory,
-      });
-    },
-    removeCart(item){
+    remove(item){
       this.$store.dispatch('planningBoard/removeCartItem', {id: item.id, event: this.event});
-    },
-    removeFavorite(proposal){
-      this.$store.dispatch('event/updateProposal', {
-          proposal: {...proposal, isFavorite: false},
-          category: proposal.vendor.vendorCategory,
-      });
     },
     bookCart(){
       this.$router.push({name: 'CheckoutWithCart'});
@@ -242,9 +225,6 @@ export default {
       return Object.keys(this.cart).length;
     },
   },
-  watch:{
-    proposal(newVal){}
-  }
 };
 </script>
 <style lang="scss" scoped>

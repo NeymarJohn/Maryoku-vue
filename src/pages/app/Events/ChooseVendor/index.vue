@@ -359,10 +359,6 @@ export default {
           event: {id: this.event.id},
           proposalId: this.selectedProposal.id,
       })
-      this.$store.dispatch('event/updateProposal', {
-         proposal: {...this.selectedProposal, isFavorite: false},
-         category: this.selectedProposal.vendor.vendorCategory,
-      });
     },
     openCart(){
       this.showCart = true;

@@ -6,18 +6,12 @@
     <timer size="big" :target="target"></timer>
     <div class="button-wrapper">
       <md-button
-        v-if="!approved"
         class="maryoku-btn md-simple"
         :class="`md-${theme === 'red' ? 'red' : 'vendor'}`"
         @click="updateExpireTime"
         >Ask for more time</md-button
       >
     </div>
-    <template v-if="approved">
-      <hr />
-      <div class="font-bold font-size-14">Your Request has been Approved</div>
-    </template>
-
   </div>
 </template>
 <script>
@@ -31,10 +25,6 @@ export default {
     target: {
       type: [Date, Number],
       default: new Date(),
-    },
-    approved:{
-      type: Boolean,
-      default: false,
     },
     theme: {
       type: String,

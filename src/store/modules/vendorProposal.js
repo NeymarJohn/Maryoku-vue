@@ -294,16 +294,6 @@ const actions = {
         });
     });
   },
-  getCustomers: ({commit, state}, vendorId) => {
-    return new Promise(async (resolve, reject) => {
-        new Customer().for(new Vendor({id: vendorId})).get().then(customers => {
-            console.log('customer', customers);
-            // commit("setCustomer", customer);
-            resolve(customers);
-        });
-
-    });
-  },
   getCustomer: ({commit, state}, email) => {
       return new Promise(async (resolve, reject) => {
           new Customer().params({email}).get().then(customer => {

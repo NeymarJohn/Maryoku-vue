@@ -50,7 +50,6 @@
           <timer-panel
             class="time-counter"
             :target="targetTime"
-            :approved="negotiationProcessed"
             @updateExpireDate="updateExpireDate"
             :theme="theme"
           ></timer-panel>
@@ -662,9 +661,6 @@ export default {
         return new Date(this.vendorProposal.expiredDate);
       }
       return new Date(this.vendorProposal.dateCreated + 7 * 3600 * 24 * 1000);
-    },
-    negotiationProcessed(){
-      return !!this.vendorProposal.negotiations.length && this.vendorProposal.negotiations.every(it => it.status === 3)
     },
     extraMissingRequirements() {
       return _.union(this.vendorProposal.extras, this.vendorProposal.missing);
