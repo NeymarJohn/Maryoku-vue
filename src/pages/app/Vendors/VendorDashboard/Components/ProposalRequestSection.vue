@@ -32,7 +32,7 @@
     <div class="d-flex flex-column align-center" v-else>
       <carousel :items="1" :margin="0" :nav="false" :loop="true" class="header-carousel" @changed="changeSlide">
         <template slot="prev">
-          <span class="prev handle-btn " ref="prevButton">
+          <span class="prev handle-btn d-none" ref="prevButton">
             <md-icon>keyboard_arrow_left</md-icon>
           </span>
         </template>

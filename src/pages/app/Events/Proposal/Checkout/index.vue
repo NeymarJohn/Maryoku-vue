@@ -75,14 +75,24 @@
             </div>
           </template>
           <template v-else>
-
-                <checkout-proposal-table
-                    v-for="(item, key) in cart"
-                    :proposal="item.proposal"
-                    :category="key"
-                    :key="key">
-                </checkout-proposal-table>
-
+            <collapse-panel v-for="(item, key) in cart" :defaultStatus="false" class="white-card" :key="key">
+              <template slot="header">
+                <div class="d-flex align-center p-30">
+                  <img
+                    class="mr-10"
+                    :src="`${$iconURL}Budget+Elements/${serviceCategory(item.category).icon}`"
+                    width="35px"
+                  />
+                  {{ serviceCategory(item.category).fullTitle }}
+                  <div class="ml-auto">
+                    <div class="element-price pr-100">${{ item.proposal.cost | withComma }}</div>
+                  </div>
+                </div>
+              </template>
+              <template slot="content">
+                {{ item.proposal.cost }}
+              </template>
+            </collapse-panel>
           </template>
         </div>
         <collapse-panel :defaultStatus="false" class="checkout-additional white-card mt-20">
@@ -175,29 +185,21 @@
         <div class="total-price-panel mt-20 white-card" v-if="pageType === 0">
           <div class="discount-row">
             <span class="font-bold">Discount </span>
-            <span class="font-bold">-{{ discount(this.proposal).percentage }}%</span>
-            <span class="text-right">-${{ discount(this.proposal).price | withComma }}</span>
+            <span class="font-bold">-{{ discount.percentage }}%</span>
+            <span class="text-right">-${{ discount.price | withComma }}</span>
           </div>
           <hr />
           <div class="discount-row">
             <span class="font-bold">Tax </span>
-            <span class="font-bold">{{ tax(this.proposal).percentage }}%</span>
-            <span class="text-right">${{ tax(this.proposal).price | withComma }}</span>
+            <span class="font-bold">{{ tax.percentage }}%</span>
+            <span class="text-right">${{ tax.price | withComma }}</span>
           </div>
           <hr />
           <div class="discount-row">
             <span class="font-bold">Fee </span>
             <span class="font-bold">{{ feePercentail }}%</span>
-            <span class="text-right">${{ feePrice(this.proposal) | withComma }}</span>
+            <span class="text-right">${{ feePrice | withComma }}</span>
           </div>
-          <div class="total-price-row">
-            <div class="font-size-22 font-bold d-flex justify-content-between">
-              <span>TOTAL TO PAY</span>
-              <span>${{ finalPrice | withComma }}</span>
-            </div>
-          </div>
-        </div>
-        <div class="total-price-panel mt-20 white-card" v-else>
           <div class="total-price-row">
             <div class="font-size-22 font-bold d-flex justify-content-between">
               <span>TOTAL TO PAY</span>
@@ -253,14 +255,13 @@ import CheckoutPriceTable from "./CheckoutPriceTable.vue";
 import CollapsePanel from "@/components/CollapsePanel.vue";
 import StripeCheckout from "./StripeCheckout.vue";
 import SuccessModal from "./SuccessModal.vue";
-import CheckoutProposalTable from "./CheckoutProposalTable";
 
 // checkout page type
 const VENDOR = 0;
 const CART = 1;
 
 export default {
-  components: { CheckoutPriceTable, CollapsePanel, StripeCheckout, SuccessModal, CheckoutProposalTable },
+  components: { CheckoutPriceTable, CollapsePanel, StripeCheckout, SuccessModal },
   data() {
     return {
       vendor: null,
@@ -279,7 +280,6 @@ export default {
       showCancelModal: false,
       onDayCordinator: false,
       feePercentail: 3.2,
-      pageType: VENDOR,
     };
   },
   async created() {
@@ -303,163 +303,79 @@ export default {
     categories() {
       return this.$store.state.common.serviceCategories;
     },
-    // tax() {
-    //   if (!this.proposal.taxes) return { percentage: 0, price: 0 };
-    //   let tax = this.proposal.taxes["total"];
-    //   if (!tax) {
-    //     tax = { price: 0, percentage: 0 };
-    //   }
-    //   return tax;
-    // },
-    // discount() {
-    //   if (!this.proposal.discounts) return { percentage: 0, price: 0 };
-    //   let discount = this.proposal.discounts["total"];
-    //   if (!discount) {
-    //     discount = { price: 0, percentage: 0 };
-    //   }
-    //   return discount;
-    // },
-    // bundledDiscountPrice() {
-    //   let bundledServicePrice = 0;
-    //   if (!this.proposal.bundleDiscount.services) return 0;
-    //   this.proposal.bundleDiscount.services.forEach((serviceCategory) => {
-    //     const sumOfService = this.proposal.costServices[serviceCategory].reduce((s, service) => {
-    //       if (service.isComplimentary) {
-    //         return 0;
-    //       }
-    //       return s + service.requirementValue * service.price;
-    //     }, 0);
-    //     bundledServicePrice += sumOfService;
-    //   });
-    //   return (bundledServicePrice * this.proposal.bundleDiscount.percentage) / 100 || 0;
-    // },
-    //
-    // totalPriceOfProposal() {
-    //   let totalPrice = 0;
-    //   Object.keys(this.proposal.costServices).forEach((serviceCategory) => {
-    //     const sumOfService = this.proposal.costServices[serviceCategory].reduce((s, service) => {
-    //       if (service.isComplimentary) {
-    //         return 0;
-    //       }
-    //       return s + service.requirementValue * service.price;
-    //     }, 0);
-    //     totalPrice += sumOfService;
-    //   });
-    //
-    //   const addedPrice = this.proposal.extraServices[this.vendor.eventCategory.key].reduce((s, service) => {
-    //     if (!service.addedOnProposal) return s;
-    //     return s + service.requirementValue * service.price;
-    //   }, 0);
-    //
-    //   console.log("totalPrice", totalPrice);
-    //   return totalPrice + (addedPrice || 0);
-    // },
-    // discounedAndTaxedPrice() {
-    //   const eventDays = 1;
-    //   const discounted =
-    //     this.totalPriceOfProposal -
-    //     (this.totalPriceOfProposal * (this.discount.percentage || 0)) / 100 -
-    //     this.bundledDiscountPrice;
-    //   let price = discounted + (discounted * (this.tax.percentage || 0)) / 100;
-    //   if (this.onDayCordinator) {
-    //     price += eventDays * 1000;
-    //   }
-    //   return price;
-    // },
-    //
-    // feePrice() {
-    //   return (this.discounedAndTaxedPrice * this.feePercentail) / 100;
-    // },
-    //
-    // finalPrice() {
-    //   return this.discounedAndTaxedPrice + this.feePrice;
-    // },
-    finalPrice() {
-      console.log('finalPrice');
-      if(this.pageType === VENDOR){
-          console.log('finalPrice', this.discounedAndTaxedPrice(this.proposal));
-          return this.discounedAndTaxedPrice(this.proposal) + this.feePrice(this.proposal);
-      } else if(this.pageType === CART){
-          let sum = 0;
-          Object.keys(this.cart).map(key => {
-              sum += this.discounedAndTaxedPrice(this.cart[key].proposal) + this.feePrice(this.cart[key].proposal);
-          })
-          return sum;
+    tax() {
+      if (!this.proposal.taxes) return { percentage: 0, price: 0 };
+      let tax = this.proposal.taxes["total"];
+      if (!tax) {
+        tax = { price: 0, percentage: 0 };
       }
+      return tax;
+    },
+    discount() {
+      if (!this.proposal.discounts) return { percentage: 0, price: 0 };
+      let discount = this.proposal.discounts["total"];
+      if (!discount) {
+        discount = { price: 0, percentage: 0 };
+      }
+      return discount;
+    },
+    bundledDiscountPrice() {
+      let bundledServicePrice = 0;
+      if (!this.proposal.bundleDiscount.services) return 0;
+      this.proposal.bundleDiscount.services.forEach((serviceCategory) => {
+        const sumOfService = this.proposal.costServices[serviceCategory].reduce((s, service) => {
+          if (service.isComplimentary) {
+            return 0;
+          }
+          return s + service.requirementValue * service.price;
+        }, 0);
+        bundledServicePrice += sumOfService;
+      });
+      return (bundledServicePrice * this.proposal.bundleDiscount.percentage) / 100 || 0;
+    },
 
+    totalPriceOfProposal() {
+      let totalPrice = 0;
+      Object.keys(this.proposal.costServices).forEach((serviceCategory) => {
+        const sumOfService = this.proposal.costServices[serviceCategory].reduce((s, service) => {
+          if (service.isComplimentary) {
+            return 0;
+          }
+          return s + service.requirementValue * service.price;
+        }, 0);
+        totalPrice += sumOfService;
+      });
+
+      const addedPrice = this.proposal.extraServices[this.vendor.eventCategory.key].reduce((s, service) => {
+        if (!service.addedOnProposal) return s;
+        return s + service.requirementValue * service.price;
+      }, 0);
+
+      console.log("totalPrice", totalPrice);
+      return totalPrice + (addedPrice || 0);
+    },
+    discounedAndTaxedPrice() {
+      const eventDays = 1;
+      const discounted =
+        this.totalPriceOfProposal -
+        (this.totalPriceOfProposal * (this.discount.percentage || 0)) / 100 -
+        this.bundledDiscountPrice;
+      let price = discounted + (discounted * (this.tax.percentage || 0)) / 100;
+      if (this.onDayCordinator) {
+        price += eventDays * 1000;
+      }
+      return price;
+    },
+
+    feePrice() {
+      return (this.discounedAndTaxedPrice * this.feePercentail) / 100;
+    },
+
+    finalPrice() {
+      return this.discounedAndTaxedPrice + this.feePrice;
     },
   },
   methods: {
-      tax(proposal) {
-          if (!proposal.taxes) return { percentage: 0, price: 0 };
-          let tax = proposal.taxes["total"];
-          if (!tax) {
-              tax = { price: 0, percentage: 0 };
-          }
-          return tax;
-      },
-      discount(proposal) {
-          if (!proposal.discounts) return { percentage: 0, price: 0 };
-          let discount = proposal.discounts["total"];
-          if (!discount) {
-              discount = { price: 0, percentage: 0 };
-          }
-          return discount;
-      },
-      bundledDiscountPrice(proposal) {
-          let bundledServicePrice = 0;
-          if (!proposal.bundleDiscount.services) return 0;
-          proposal.bundleDiscount.services.forEach((serviceCategory) => {
-              const sumOfService = proposal.costServices[serviceCategory].reduce((s, service) => {
-                  if (service.isComplimentary) {
-                      return 0;
-                  }
-                  return s + service.requirementValue * service.price;
-              }, 0);
-              bundledServicePrice += sumOfService;
-          });
-          return (bundledServicePrice * proposal.bundleDiscount.percentage) / 100 || 0;
-      },
-
-      totalPriceOfProposal(proposal) {
-          let totalPrice = 0;
-          Object.keys(proposal.costServices).forEach((serviceCategory) => {
-              const sumOfService = proposal.costServices[serviceCategory].reduce((s, service) => {
-                  if (service.isComplimentary) {
-                      return 0;
-                  }
-                  return s + service.requirementValue * service.price;
-              }, 0);
-              totalPrice += sumOfService;
-          });
-
-          const addedPrice = proposal.extraServices[proposal.vendor.eventCategory.key].reduce((s, service) => {
-              if (!service.addedOnProposal) return s;
-              return s + service.requirementValue * service.price;
-          }, 0);
-
-          console.log("totalPrice", totalPrice);
-          return totalPrice + (addedPrice || 0);
-      },
-      discounedAndTaxedPrice(proposal) {
-          const eventDays = 1;
-          let totalPriceOfProposal = this.totalPriceOfProposal(proposal);
-          const discounted =
-              totalPriceOfProposal -
-              (totalPriceOfProposal * (this.discount(proposal).percentage || 0)) / 100 -
-              this.bundledDiscountPrice(proposal);
-          let price = discounted + (discounted * (this.tax(proposal).percentage || 0)) / 100;
-          if (this.onDayCordinator) {
-              price += eventDays * 1000;
-          }
-          return price;
-      },
-
-      feePrice(proposal) {
-          return this.discounedAndTaxedPrice(proposal) * this.feePercentail / 100;
-      },
-
-
     pay() {
       this.loadingPayment = true;
       this.$http
@@ -477,6 +393,9 @@ export default {
       // if (this.paymentMethod === "stripe") {
 
       // }
+    },
+    serviceCategory(category) {
+      return this.categories.find((it) => it.key === category);
     },
   },
 };
