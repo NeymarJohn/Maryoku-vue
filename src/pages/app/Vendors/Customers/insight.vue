@@ -13,12 +13,12 @@
         </div>
         <hr/>
         <div class="px-30 position-relative">
-            <div v-if="incomeList.length > 1" class="position-absolute" style="left: 0;top: 0">
+            <div class="position-absolute" style="left: 0;top: 0">
 <!--                <md-button class="md-button md-theme-default md-simple md-just-icon" @click="prev">-->
                     <img :src="`${$iconURL}Group 19406.svg`" class="cursor-pointer" width="80px" @click="prev">
 <!--                </md-button>-->
             </div>
-            <div v-if="incomeList.length > 1" class="position-absolute" style="right: 0;top: 0">
+            <div class="position-absolute" style="right: 0;top: 0">
 <!--                <md-button class="md-icon-button md-simple">-->
                     <img :src="`${$iconURL}Group 19405.svg`" class="cursor-pointer" width="80px" @click="next">
 <!--                </md-button>-->
@@ -31,34 +31,15 @@
 
                 </template>
                 <div v-for="(p, index) in incomeList" :key="p.id" class="carousel-item">
-                    <template v-if="incomeList.length > 1">
-                        <h5 class="color-white text-center">Income From Past And Future Events</h5>
-                        <income-bar-chart :chartData="incomeChartData"></income-bar-chart>
-                        <div class="d-flex justify-content-center my-40">
-                            <div class="flex-1 font-size-14 color-white text-center">2021</div>
-                            <div class="flex-1 font-size-14 color-white text-center">Past events</div>
-                            <div class="flex-1 font-size-14 color-white text-center">Future events</div>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <h5 class="color-white text-center">How to increase Success And Profit</h5>
-                        <div class="d-flex align-center w-max-350 mx-auto">
-                          <img class="mr-20" :src="`${$iconURL}Group 19780.svg`" style="width: 24px">
-                          <p class="color-white font-size-14">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam </p>
-                        </div>
-                        <div class="d-flex align-center w-max-350 mx-auto">
-                            <img class="mr-20" :src="`${$iconURL}Group 19780.svg`" style="width: 24px">
-                            <p class="color-white font-size-14">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam </p>
-                        </div>
-                        <div class="d-flex align-center w-max-350 mx-auto">
-                            <img class="mr-20" :src="`${$iconURL}Group 19780.svg`" style="width: 24px">
-                            <p class="color-white font-size-14">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam </p>
-                        </div>
-                        <div class="d-flex my-40">
-                            <md-button class="md-simple ml-auto md-outlined md-white maryoku-btn mx-auto">Update Your Prices</md-button>
-                        </div>
-                    </template>
-                    <hr :class="incomeList.length < 2 ? 'mb-40' : ''"/>
+
+                    <h5 class="color-white text-center">Income From Past And Future Events</h5>
+                    <income-bar-chart :chartData="incomeChartData"></income-bar-chart>
+                    <div class="d-flex justify-content-center my-40">
+                        <div class="flex-1 font-size-14 color-white text-center">2021</div>
+                        <div class="flex-1 font-size-14 color-white text-center">Past events</div>
+                        <div class="flex-1 font-size-14 color-white text-center">Future events</div>
+                    </div>
+                    <hr/>
                 </div>
                 <template slot="next">
                     <span class="next d-none" ref="nextButton">
@@ -107,7 +88,7 @@ export default {
             { label: "Dec", value: 70, future: true },
         ],
         incomeList: [
-            ''
+            '', '', '', '', ''
         ]
     }
   },
@@ -131,6 +112,5 @@ export default {
 }
 </script>
 <style type="scss">
-.carousel-item{
-}
+
 </style>

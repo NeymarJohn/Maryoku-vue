@@ -1,130 +1,74 @@
 <template>
-  <vsa-item class="customer-list-item mb-30">
+  <div class="customer-list-item">
+    <div class="customer-mark font-size-24 font-bold-extra mb-1">F</div>
 
-    <vsa-heading>
-        <div class="customer-group-item white-card cursor-pointer" @click="select">
-            <div class="avatar bg-white color-blue mr-40">
-                Mt
-            </div>
+    <div v-for="proposal in customer.proposals" class="proposal-list-item white-card">
+        <div class="avatar bg-white color-blue mr-40">
+            Mt
+        </div>
 
-            <div>
-                <div class="font-bold font-size-16 text-capitalize">{{customer.companyName}}</div>
-            </div>
-            <div class="font-size-14 color-black-middle">{{'12-3456789'}}</div>
-            <div class="font-size-14 color-black-middle">${{0}}</div>
-            <div class="font-size-14 color-black-middle text-capitalize">{{customer.name}}</div>
-            <div class="font-size-14 color-black-middle">{{customer.proposals.length}}</div>
-            <div>
-                <img :src="`${$iconURL}Group 19780.svg`"/>
-            </div>
+        <div>
+            <div class="font-bold font-size-16">{{'Frog Design'}}</div>
+        </div>
+        <div class="font-size-14 color-black-middle">{{'12-3456789'}}</div>
+        <div class="font-size-14 color-black-middle">${{0}}</div>
+        <div class="font-size-14 color-black-middle text-capitalize">{{customer.name}}</div>
+        <div class="font-size-14 color-black-middle">0</div>
+        <div>
+            <img :src="`${$iconURL}Group 19780.svg`"/>
+        </div>
 
-            <div class="d-flex align-center">
-                <img :src="`${$iconURL}Group 19190.svg`" class="mr-20">
-                <md-menu md-size="medium" class="action-menu" :md-offset-x="-300" :md-offset-y="-36" @md-opened="isOpened">
-                    <md-button md-menu-trigger class="edit-btn md-simple" style="height: 30px; width: 40px;z-index: 200">
-                        <img :src="`${$iconURL}Group 19186.svg`"/>
-                    </md-button>
-                    <md-menu-content>
-                        <md-menu-item @click="edit(proposalStatus.edit)" class="md-purple">
+        <div class="d-flex align-center text-right">
+            <img :src="`${$iconURL}Group 19190.svg`" class="mr-10">
+            <md-menu md-size="medium" class="action-menu" :md-offset-x="-300" :md-offset-y="-36" @md-opened="isOpened">
+                <md-button md-menu-trigger class="edit-btn md-simple" style="height: 30px">
+                    <img :src="`${$iconURL}Group 19186.svg`"/>
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item @click="edit(proposalStatus.edit)" class="md-purple">
             <span>
               <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />
               Edit</span
             >
-                        </md-menu-item>
-                        <md-menu-item @click="edit(proposalStatus.download)" class="md-purple">
+                    </md-menu-item>
+                    <md-menu-item @click="edit(proposalStatus.download)" class="md-purple">
             <span>
               <img :src="`${$iconURL}common/download.svg`" class="label-icon mr-10" />
               Download
             </span>
-                        </md-menu-item>
-                        <md-menu-item @click="edit(proposalStatus.delete)" class="md-purple">
+                    </md-menu-item>
+                    <md-menu-item @click="edit(proposalStatus.delete)" class="md-purple">
             <span>
               <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon mr-10" /> Delete Proposal
             </span>
-                        </md-menu-item>
-                    </md-menu-content>
-                </md-menu>
-            </div>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
         </div>
-    </vsa-heading>
-      <vsa-content>
-          <div class="sort-bar px-20 mt-30 ml-40" v-if="customer.proposals.length">
-            <span
-                v-for="it in proposalHeaders"
-                class="sort-item"
-                :class="{ selected: it.key && sortFields['sort'] == it.key}"
-                @click="selectSort(it.key)"
-            >
-              {{ it.title }}
-              <md-icon v-if="it.key && it.key != 'update' && sortFields['sort'] == it.key" class="color-black">
-                {{ sortFields["order"] == "asc" ? "keyboard_arrow_up" : "keyboard_arrow_down" }}</md-icon
-              >
-              <md-icon v-if="it.key && it.key != 'update' && sortFields['sort'] != it.key" class="color-black-middle">
-                keyboard_arrow_down
-              </md-icon>
-            </span>
-          </div>
-          <proposal-list-item
-              v-for="proposal in customer.proposals"
-              :proposal="proposal"
-              @action="handleProposal"
-              page="custom"
-          ></proposal-list-item>
-      </vsa-content>
-  </vsa-item>
+    </div>
+  </div>
 </template>
 <script>
 import moment from "moment";
 import Button from "../../../../components/Button/ButtonDiv";
-import ProposalListItem from "./ProposalListItem";
-import { VsaItem, VsaHeading, VsaContent, VsaIcon } from "vue-simple-accordion";
 
 export default {
-  components: {
-      Button,
-      ProposalListItem,
-      VsaItem,
-      VsaHeading,
-      VsaContent,
-      VsaIcon
-  },
+  components: { Button },
   props: {
     customer: {
       type: Object,
       required: true,
     },
-    sortFields:{
-      type: Object,
-      required: true,
-    }
   },
   data() {
     return {
       iconUrl: `${this.$iconURL}VendorsProposalPage/`,
-      proposalHeaders: [
-        { key: "number", title: "Number" },
-        { key: "date", title: "Date" },
-        { key: "event", title: "Event" },
-        { key: "status", title: "Status" },
-        { key: "cost", title: "Value"},
-        { key: "owner", title: "Owner" },
-        { key: "", title: "" },
-      ],
       customerStatus:{
-            show: 0,
-            edit: 1,
-            download: 2,
-            delete: 3,
-            negotiation: 4,
-      },
-      proposalStatus:{
-          show: 0,
-          edit: 1,
-          download: 2,
-          delete: 3,
-          negotiation: 4,
-          duplicate: 5,
-          sort: 6,
+        show: 0,
+        edit: 1,
+        download: 2,
+        delete: 3,
+        negotiation: 4,
       },
     };
   },
@@ -142,7 +86,7 @@ export default {
       }
     },
     edit(action) {
-      this.$emit("action", action);
+      this.$emit("action", action, this.proposal.id);
     },
     leave(item) {
       console.log("leave", item);
@@ -159,32 +103,6 @@ export default {
         );
       }, 0);
     },
-    async selectSort(sortField) {
-
-      if (!sortField) return;
-
-      if (this.sortFields.sort !== sortField) {
-        this.$set(this.sortFields, "sort", sortField);
-        this.$set(this.sortFields, "order", "asc");
-      } else {
-        this.sortFields["order"] = this.sortFields["order"] === "desc" ? "asc" : "desc";
-      }
-      this.$emit('proposalAction', {
-        action: this.proposalStatus.sort,
-        sortFields: this.sortFields,
-      });
-    },
-    handleCustomer(data){
-    },
-    handleProposal(action, proposalId){
-        this.$emit('proposalAction', {
-            action,
-            proposalId,
-        });
-    },
-    select(){
-      this.$emit('click');
-    }
   },
 };
 </script>
@@ -192,8 +110,8 @@ export default {
 .customer-list-item{
 
 }
-.customer-group-item {
-  padding: 20px 24px;
+.proposal-list-item {
+  padding: 32px 40px;
   display: grid;
   align-items: center;
   grid-template-columns: 7% 15% 15% 15% 15% 15% 10% 8%;
@@ -233,23 +151,7 @@ export default {
     margin-left: 10px;
     border-top: 1px solid #707070;
 }
-.sort-bar {
-    height: 50px;
-    display: grid;
-    align-items: center;
-    grid-template-columns: 20% 10% 20% 10% 15% 15% 10%;
-    .sort-item {
-        cursor: pointer;
-        color: #707070;
-        font-size: 14px;
-        &.selected {
-            color: #050505;
-            font-weight: bold;
-        }
-    }
-}
 /deep/ .md-menu-content .md-list {
   padding: 0 !important;
 }
-
 </style>

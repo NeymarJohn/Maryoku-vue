@@ -77,14 +77,14 @@
           }"
         ></sidebar-item>
           <sidebar-item
-            name="left-menu-yearly-plan"
-            class="left-menu-events-list"
-            :link="{
-              name: 'Customers',
-              iconUrl: '/static/icons/vendor/customer.svg',
-              iconActiveUrl: '/static/icons/vendor/customer-active.svg',
-              path: `/vendor/customers`,
-              startLink: `/vendor/customers`,
+              name="left-menu-yearly-plan"
+              class="left-menu-events-list"
+              :link="{
+            name: 'Customers',
+            iconUrl: '/static/icons/vendor/customer.svg',
+            iconActiveUrl: '/static/icons/vendor/customer-active.svg',
+            path: `/vendor/customers`,
+            startLink: `/vendor/customers/`,
           }"
           ></sidebar-item>
       </md-list>

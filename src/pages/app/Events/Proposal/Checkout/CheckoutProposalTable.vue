@@ -103,7 +103,8 @@
             },
             bundledDiscountPrice() {
                 let bundledServicePrice = 0;
-                if (!this.proposal.bundleDiscount.services) return 0;
+                if (!this.proposal.bundleDiscount.services || !this.proposal.bundleDiscount.services.length || !this.proposal.bookedServices.length ||
+                    !this.proposal.bundleDiscount.services.every(it => this.proposal.bookedServices.includes(it))) return 0;
                 this.proposal.bundleDiscount.services.forEach((serviceCategory) => {
                     const sumOfService = this.proposal.costServices[serviceCategory].reduce((s, service) => {
                         if (service.isComplimentary) {
@@ -118,15 +119,14 @@
 
             totalPriceOfProposal() {
                 let totalPrice = 0;
-                Object.keys(this.proposal.costServices).forEach((serviceCategory) => {
+                let services = this.proposal.additionalServices.length ? this.proposal.bookedServices :
+                    Object.keys(this.proposal.costServices);
+                services.map(serviceCategory => {
                     const sumOfService = this.proposal.costServices[serviceCategory].reduce((s, service) => {
-                        if (service.isComplimentary) {
-                            return 0;
-                        }
-                        return s + service.requirementValue * service.price;
+                        return service.isComplimentary ? s : s + service.requirementValue * service.price;
                     }, 0);
                     totalPrice += sumOfService;
-                });
+                })
 
                 const addedPrice = this.proposal.extraServices[this.category].reduce((s, service) => {
                     if (!service.addedOnProposal) return s;

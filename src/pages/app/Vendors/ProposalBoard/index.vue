@@ -233,7 +233,7 @@ export default {
       selectedProposal: null,
       selectedEventData: null,
       selectedProposalRequest: null,
-
+      flagDownloadPdf: false,
       showRequestNegotiationModal: false,
       negotiationRequestStatus:{
         review: 0,

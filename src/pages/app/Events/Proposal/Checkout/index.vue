@@ -31,18 +31,21 @@
       <div class="md-layout-item md-size-55 right-panel">
         <div class="white-card">
           <template v-if="pageType === 0">
+            <div v-if="proposal.additionalServices.length">
+              <checkout-price-table
+                  class="price-table"
+                  v-for="service in proposal.bookedServices"
+                  :proposal="proposal"
+                  :serviceCategory="service"
+                  :key="`secondary-${service}-section`"
+              ></checkout-price-table>
+            </div>
             <checkout-price-table
+              v-else
               class="price-table"
               :proposal="proposal"
               :serviceCategory="proposal.vendor.vendorCategory"
               :key="`${proposal.vendor.vendorCategory}-section`"
-            ></checkout-price-table>
-            <checkout-price-table
-              class="price-table"
-              v-for="service in proposal.additionalServices"
-              :proposal="proposal"
-              :serviceCategory="service"
-              :key="`secondary-${service}-section`"
             ></checkout-price-table>
 
             <div class="p-30" v-if="this.proposal.extraServices[this.vendor.eventCategory.key]">
@@ -79,7 +82,7 @@
                 <checkout-proposal-table
                     v-for="(item, key) in cart"
                     :proposal="item.proposal"
-                    :category="key"
+                    :category="item.category"
                     :key="key">
                 </checkout-proposal-table>
 
@@ -239,7 +242,7 @@
       </div>
     </div>
     <div class="checkout-footer white-card p-30 mt-30 d-flex justify-content-between">
-      <md-button class="maryoku-btn md-simple md-black">Back</md-button>
+      <md-button class="maryoku-btn md-simple md-black" @click="back">Back</md-button>
       <md-button class="maryoku-btn md-red" :disabled="!agreedCancellationPolicy" @click="pay"
         >Submit Payment
       </md-button>
@@ -254,6 +257,7 @@ import CollapsePanel from "@/components/CollapsePanel.vue";
 import StripeCheckout from "./StripeCheckout.vue";
 import SuccessModal from "./SuccessModal.vue";
 import CheckoutProposalTable from "./CheckoutProposalTable";
+import {mapActions} from "vuex";
 
 // checkout page type
 const VENDOR = 0;
@@ -288,11 +292,12 @@ export default {
       this.proposal = await Proposal.find(proposalId);
       this.vendor = this.proposal.vendor;
       this.pageType = VENDOR;
-    } else {
-      this.cart = this.$store.state.planningBoard.cart;
+    } else if(this.$route.params.hasOwnProperty("eventId")){
+      const eventId = this.$route.params.eventId;
+      this.cart = await this.getCartItems(eventId);
       this.pageType = CART;
     }
-
+    console.log('checkout.proposal', this.proposal);
     this.loading = false;
 
     if (this.$route.query.checkout === "success") {
@@ -300,80 +305,12 @@ export default {
     }
   },
   computed: {
+    event(){
+      return this.$store.state.event.eventData;
+    },
     categories() {
       return this.$store.state.common.serviceCategories;
     },
-    // tax() {
-    //   if (!this.proposal.taxes) return { percentage: 0, price: 0 };
-    //   let tax = this.proposal.taxes["total"];
-    //   if (!tax) {
-    //     tax = { price: 0, percentage: 0 };
-    //   }
-    //   return tax;
-    // },
-    // discount() {
-    //   if (!this.proposal.discounts) return { percentage: 0, price: 0 };
-    //   let discount = this.proposal.discounts["total"];
-    //   if (!discount) {
-    //     discount = { price: 0, percentage: 0 };
-    //   }
-    //   return discount;
-    // },
-    // bundledDiscountPrice() {
-    //   let bundledServicePrice = 0;
-    //   if (!this.proposal.bundleDiscount.services) return 0;
-    //   this.proposal.bundleDiscount.services.forEach((serviceCategory) => {
-    //     const sumOfService = this.proposal.costServices[serviceCategory].reduce((s, service) => {
-    //       if (service.isComplimentary) {
-    //         return 0;
-    //       }
-    //       return s + service.requirementValue * service.price;
-    //     }, 0);
-    //     bundledServicePrice += sumOfService;
-    //   });
-    //   return (bundledServicePrice * this.proposal.bundleDiscount.percentage) / 100 || 0;
-    // },
-    //
-    // totalPriceOfProposal() {
-    //   let totalPrice = 0;
-    //   Object.keys(this.proposal.costServices).forEach((serviceCategory) => {
-    //     const sumOfService = this.proposal.costServices[serviceCategory].reduce((s, service) => {
-    //       if (service.isComplimentary) {
-    //         return 0;
-    //       }
-    //       return s + service.requirementValue * service.price;
-    //     }, 0);
-    //     totalPrice += sumOfService;
-    //   });
-    //
-    //   const addedPrice = this.proposal.extraServices[this.vendor.eventCategory.key].reduce((s, service) => {
-    //     if (!service.addedOnProposal) return s;
-    //     return s + service.requirementValue * service.price;
-    //   }, 0);
-    //
-    //   console.log("totalPrice", totalPrice);
-    //   return totalPrice + (addedPrice || 0);
-    // },
-    // discounedAndTaxedPrice() {
-    //   const eventDays = 1;
-    //   const discounted =
-    //     this.totalPriceOfProposal -
-    //     (this.totalPriceOfProposal * (this.discount.percentage || 0)) / 100 -
-    //     this.bundledDiscountPrice;
-    //   let price = discounted + (discounted * (this.tax.percentage || 0)) / 100;
-    //   if (this.onDayCordinator) {
-    //     price += eventDays * 1000;
-    //   }
-    //   return price;
-    // },
-    //
-    // feePrice() {
-    //   return (this.discounedAndTaxedPrice * this.feePercentail) / 100;
-    // },
-    //
-    // finalPrice() {
-    //   return this.discounedAndTaxedPrice + this.feePrice;
-    // },
     finalPrice() {
       console.log('finalPrice');
       if(this.pageType === VENDOR){
@@ -386,10 +323,10 @@ export default {
           })
           return sum;
       }
-
     },
   },
   methods: {
+      ...mapActions("planningBoard", ["getCartItems"]),
       tax(proposal) {
           if (!proposal.taxes) return { percentage: 0, price: 0 };
           let tax = proposal.taxes["total"];
@@ -408,13 +345,11 @@ export default {
       },
       bundledDiscountPrice(proposal) {
           let bundledServicePrice = 0;
-          if (!proposal.bundleDiscount.services) return 0;
+          if (!proposal.bundleDiscount.services || !proposal.bundleDiscount.services.length || !proposal.bookedServices.length ||
+              !proposal.bundleDiscount.services.every(it => proposal.bookedServices.includes(it))) return 0;
           proposal.bundleDiscount.services.forEach((serviceCategory) => {
               const sumOfService = proposal.costServices[serviceCategory].reduce((s, service) => {
-                  if (service.isComplimentary) {
-                      return 0;
-                  }
-                  return s + service.requirementValue * service.price;
+                  return service.isComplimentary ? s : s + service.requirementValue * service.price;
               }, 0);
               bundledServicePrice += sumOfService;
           });
@@ -423,15 +358,14 @@ export default {
 
       totalPriceOfProposal(proposal) {
           let totalPrice = 0;
-          Object.keys(proposal.costServices).forEach((serviceCategory) => {
+          let services = proposal.additionalServices.length ? proposal.bookedServices :
+              Object.keys(proposal.costServices);
+          services.map(serviceCategory => {
               const sumOfService = proposal.costServices[serviceCategory].reduce((s, service) => {
-                  if (service.isComplimentary) {
-                      return 0;
-                  }
-                  return s + service.requirementValue * service.price;
+                  return service.isComplimentary ? s : s + service.requirementValue * service.price;
               }, 0);
               totalPrice += sumOfService;
-          });
+          })
 
           const addedPrice = proposal.extraServices[proposal.vendor.eventCategory.key].reduce((s, service) => {
               if (!service.addedOnProposal) return s;
@@ -442,6 +376,7 @@ export default {
           return totalPrice + (addedPrice || 0);
       },
       discounedAndTaxedPrice(proposal) {
+          console.log('bundledDiscount', this.bundledDiscountPrice(proposal));
           const eventDays = 1;
           let totalPriceOfProposal = this.totalPriceOfProposal(proposal);
           const discounted =
@@ -477,6 +412,9 @@ export default {
       // if (this.paymentMethod === "stripe") {
 
       // }
+    },
+    back(){
+      this.$router.push(`/events/${this.event.id}/booking/choose-vendor`);
     },
   },
 };
