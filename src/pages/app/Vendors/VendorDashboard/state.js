@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vendors from "@/models/Vendors";
 import ProposalRequest from "@/models/ProposalRequest";
 import Proposal from "@/models/Proposal";
+import Customer from "@/models/Customer";
 import Vendor from "@/models/Vendors";
 import UserEvent from "@/models/UserEvent";
 import moment from "moment";
@@ -10,6 +11,7 @@ const state = {
   calendarEvents: {},
   proposalRequests: [],
   proposals: [],
+  customers: [],
 };
 
 const getters = {
@@ -84,6 +86,18 @@ const actions = {
         })
     })
   },
+  getCustomers: ({commit, state}, payload) => {
+    return new Promise(async (resolve, reject) => {
+        new Customer().for(new Vendor({id: payload.vendorId}))
+            .params(payload.params)
+            .get()
+            .then(customers => {
+            commit("setCustomers", customers);
+            resolve(customers);
+        });
+
+    });
+  },
 };
 
 const mutations = {
@@ -103,7 +117,10 @@ const mutations = {
   setProposal(state, proposal) {
     let idx = state.proposals.findIndex(it => it.id === proposal.id);
     Vue.set(state.proposals, idx, proposal)
-  }
+  },
+  setCustomers(state, customers) {
+    Vue.set(state, "customers", customers)
+  },
 };
 
 export default {

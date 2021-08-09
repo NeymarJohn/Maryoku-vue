@@ -135,7 +135,8 @@
     </div>
     <modal v-if="showProposalDetail" container-class="modal-container-wizard lg">
       <template slot="body">
-        <proposal-content :vendorProposal="selectedProposal" @close="showProposalDetail = false" />
+        <proposal-content
+            :vendorProposal="selectedProposal" @close="showProposalDetail = false" />
       </template>
     </modal>
     <modal v-if="showRequestNegotiationModal" container-class="modal-container negotiation bg-white">
@@ -232,7 +233,7 @@ export default {
       selectedProposal: null,
       selectedEventData: null,
       selectedProposalRequest: null,
-      flagDownloadPdf: false,
+
       showRequestNegotiationModal: false,
       negotiationRequestStatus:{
         review: 0,
