@@ -86,10 +86,12 @@ const actions = {
         })
     })
   },
-  getCustomers: ({commit, state}, vendorId) => {
+  getCustomers: ({commit, state}, payload) => {
     return new Promise(async (resolve, reject) => {
-        new Customer().for(new Vendor({id: vendorId})).get().then(customers => {
-            console.log('customer', customers);
+        new Customer().for(new Vendor({id: payload.vendorId}))
+            .params(payload.params)
+            .get()
+            .then(customers => {
             commit("setCustomers", customers);
             resolve(customers);
         });

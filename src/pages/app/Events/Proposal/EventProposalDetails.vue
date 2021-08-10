@@ -177,7 +177,7 @@
           :key="`${vendorProposal.vendor.vendorCategory}-section`"
           @changeAddedServices="updateAddedServices"
           @changeBookedServices="changeBookedServices"
-          :mandatory="!this.vendorProposal.additionalServices.length"
+          :mandatory="true"
         ></event-proposal-price>
         <event-proposal-price
           v-for="service in this.vendorProposal.additionalServices"
@@ -188,7 +188,7 @@
         ></event-proposal-price>
         <div
           class="bundle-section d-flex justify-content-between align-center"
-          v-if="vendorProposal.bundleDiscount && vendorProposal.bundleDiscount.isApplied && checkedAllBundledOffers"
+          v-if="vendorProposal.bundleDiscount && vendorProposal.bundleDiscount.isApplied"
         >
           <div>
             <span class="font-size-30 font-bold">Bundle offer</span>
@@ -642,11 +642,10 @@ export default {
           }).then((result) => {});
         });
     },
-    async changeBookedServices() {
-
-      await this.$store.dispatch("event/updateProposal", {
-        category: this.category.componentId,
-        proposal: this.vendorProposal
+    changeBookedServices() {
+      this.$store.commit("vendorProposal/setValue", {
+        key: "bookedServices",
+        value: this.vendorProposal.bookedServices,
       });
     },
     favorite(){
@@ -699,11 +698,6 @@ export default {
     categories() {
       return this.$store.state.common.serviceCategories;
     },
-    checkedAllBundledOffers(){
-        return this.vendorProposal.bundleDiscount.services && this.vendorProposal.bundleDiscount.services.length &&
-            this.vendorProposal.bookedServices.length &&
-            this.vendorProposal.bundleDiscount.services.every(it => this.vendorProposal.bookedServices.includes(it))
-    },
     tax() {
       if (!this.vendorProposal.taxes) return { percentage: 0, price: 0 };
       let tax = this.vendorProposal.taxes["total"];
@@ -722,14 +716,15 @@ export default {
     },
     bundledDiscountPrice() {
       let bundledServicePrice = 0;
-
-      if (!this.checkedAllBundledOffers) return 0;
-        this.vendorProposal.bundleDiscount.services.forEach((serviceCategory) => {
-
+      let services =
+        this.vendorProposal.bundleDiscount && this.vendorProposal.bundleDiscount.isApplied
+          ? this.vendorProposal.bookedServices
+          : this.vendorProposal.bundleDiscount.services;
+      services.forEach((serviceCategory) => {
         const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
           return service.isComplimentary ? s : s + service.requirementValue * service.price;
         }, 0);
-
+          console.log('bundledDiscountPrice', serviceCategory, sumOfService);
         bundledServicePrice += sumOfService;
         if (this.addedServices[serviceCategory]) {
           const sumOfService = this.addedServices[serviceCategory].reduce((s, service) => {
@@ -743,14 +738,12 @@ export default {
 
     totalPriceOfProposal() {
       let totalPrice = 0;
-      let services = this.vendorProposal.additionalServices.length ? this.vendorProposal.bookedServices :
-          Object.keys(this.vendorProposal.costServices);
-        services.map(serviceCategory => {
-            const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
-                return service.isComplimentary ? s : s + service.requirementValue * service.price;
-            }, 0);
-            totalPrice += sumOfService;
-        })
+      Object.keys(this.vendorProposal.costServices).forEach((serviceCategory) => {
+        const sumOfService = this.vendorProposal.costServices[serviceCategory].reduce((s, service) => {
+          return service.isComplimentary ? s : s + service.requirementValue * service.price;
+        }, 0);
+        totalPrice += sumOfService;
+      });
 
       // added service item price
       Object.keys(this.addedServices).forEach((serviceCategory) => {

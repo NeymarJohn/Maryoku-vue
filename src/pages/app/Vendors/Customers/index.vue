@@ -8,7 +8,7 @@
     </div>
     <div class="customer-table pl-50">
       <div class="md-layout mt-10">
-        <div class="md-layout-item md-size-70 p-0 d-flex flex-column">
+        <div class="md-layout-item md-size-70 pr-30 d-flex flex-column">
           <div class="filter-bar mt-30 mb-20">
             <md-button
               v-for="tab in customerTabs"
@@ -32,8 +32,6 @@
             <span
               v-for="it in customerHeaders"
               class="sort-item font-size-16"
-              :class="{ selected: it.key && sortFields['sort'] == it.key, 'text-center': it.key == 'update' }"
-              @click="selectSort(it.key)"
             >
               {{ it.title }}
 <!--              <md-icon v-if="it.key && it.key != 'update' && sortFields['sort'] == it.key" class="color-black">-->
@@ -45,21 +43,30 @@
             </span>
           </div>
           <div v-if="!loading">
-            <div class="md-20 customer-list pr-30">
-              <customer-list-item
-                v-for="customer in customers"
-                :customer="customer"
-                :key="customer.id"
-                class="row"
-                @action="handleCustomer"
-              ></customer-list-item>
+            <div class="md-20 customer-list">
+              <template v-for="(object, key) in customerObject">
+                  <div class="customer-mark font-size-20 font-bold-extra mb-1">{{object.group.toUpperCase()}}</div>
+                  <vsa-list>
+                      <customer-list-item
+                          v-for="customer in object.children"
+                          :customer="customer"
+                          :sort-fields="sortFields"
+                          :key="customer.id"
+                          class="row"
+                          @customerAction="handleCustomer"
+                          @proposalAction="handleProposal"
+                          @click="selectCustomer(customer)"
+                      ></customer-list-item>
+                  </vsa-list>
+
+              </template>
             </div>
           </div>
-<!--          <div v-if="this.customers.length < 4" class="my-auto d-flex flex-column align-center">-->
-<!--            <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" />-->
-<!--            <p class="text-transform-uppercase font-size-14">No More To Show</p>-->
-<!--            <md-button class="md-vendor" @click="createNewProposal">Create New Proposal</md-button>-->
-<!--          </div>-->
+          <div v-if="this.customers.length < 2" class="my-auto d-flex flex-column align-center">
+            <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" />
+            <p class="text-transform-uppercase font-size-14">No More CUSTOMERS To Show</p>
+            <md-button class="md-vendor" @click="createNewProposal">Add New CUSTOMERS</md-button>
+          </div>
         </div>
         <div class="md-layout-item md-size-30 mt-30">
           <insight
@@ -82,7 +89,12 @@
         <div class="md-layout-item md-size-25"></div>
       </div>
     </div>
-
+      <modal v-if="showProposalDetail" container-class="modal-container-wizard lg">
+          <template slot="body">
+              <proposal-content
+                  :vendorProposal="selectedProposal" @close="showProposalDetail = false" />
+          </template>
+      </modal>
   </div>
 </template>
 <script>
@@ -91,6 +103,8 @@ import carousel from "vue-owl-carousel";
 import { Loader, TablePagination, Modal } from "@/components";
 import _ from "underscore";
 const CustomerListItem = () => import("../components/CustomerListItem");
+const ProposalContent = () => import("../components/ProposalDetail");
+import { VsaList } from "vue-simple-accordion";
 const Insight = () => import("./insight");
 
 export default {
@@ -98,6 +112,8 @@ export default {
     ProposalListItem,
     TablePagination,
     CustomerListItem,
+    ProposalContent,
+    VsaList,
     carousel,
     Loader,
     Modal,
@@ -124,13 +140,24 @@ export default {
         { key: "", title: "" },
       ],
       tab: "all",
-
+      showProposalDetail: false,
+      selectedProposal: null,
+      selectedCustomer: null,
       customerStatus:{
         show: 0,
         edit: 1,
         download: 2,
         delete: 3,
         negotiation: 4,
+      },
+      proposalStatus:{
+          show: 0,
+          edit: 1,
+          download: 2,
+          delete: 3,
+          negotiation: 4,
+          duplicate: 5,
+          sort: 6,
       },
       pagination: {
         total: 0,
@@ -152,7 +179,10 @@ export default {
     async getCustomer() {
       const { pagination } = this;
       const params = { status: this.tab, ...this.sortFields };
-      const data = await this.$store.dispatch("vendorDashboard/getCustomers", this.vendorData.id);
+      const data = await this.$store.dispatch("vendorDashboard/getCustomers", {
+        vendorId: this.vendorData.id,
+        params
+      });
 
       this.pagination.total = data.length;
       this.customerTabs.map((t) => {
@@ -171,20 +201,40 @@ export default {
       await this.getCustomer();
       this.loading = false;
     },
-    async selectSort(sortField) {
 
-      // if (!sortField || sortField == "update") return;
-      // this.loading = true;
-      // if (this.sortFields.sort !== sortField) {
-      //   this.$set(this.sortFields, "sort", sortField);
-      //   this.$set(this.sortFields, "order", "asc");
-      // } else {
-      //   this.sortFields["order"] = this.sortFields["order"] === "desc" ? "asc" : "desc";
-      // }
-      // await this.getCustomer();
-      // this.loading = false;
+    selectCustomer(customer){
+      console.log('selectCustomer', customer);
+      this.selectedCustomer = customer;
     },
-    async handleCustomer(action, id) {
+
+    async handleCustomer(data) {
+    },
+
+    async handleProposal(data){
+      console.log('handleProposal', data);
+
+      if(data.action === this.proposalStatus.show){
+        for(let i = 0; i < this.customers.length; i ++) {
+            this.selectedProposal = this.customers[i].proposals.find(p => p.id === data.proposalId);
+
+            if(this.selectedProposal){
+                this.selectedProposal.proposalRequest = this.proposalRequests.find(it =>
+                    it.id === this.selectedProposal.proposalRequestId);
+                this.showProposalDetail = true;
+                break;
+            }
+        }
+
+      } else if (data.action === this.proposalStatus.download) {
+        this.openNewTab(`https://api-dev.maryoku.com/1/proposal/${data.proposalId}/download`);
+      } else if (data.action === this.proposalStatus.duplicate) {
+
+      } else if (data.action === this.proposalStatus.sort) {
+          this.loading = true;
+          this.sortField = data.sortField;
+          await this.getCustomer();
+          this.loading = false;
+      }
 
     },
 
@@ -220,6 +270,17 @@ export default {
     customers(){
       return this.$store.state.vendorDashboard.customers;
     },
+    proposalRequests(){
+      return this.$store.state.vendorDashboard.proposalRequests;
+    },
+    customerObject(){
+      return this.customers.reduce((r, e) => {
+          let group = e.companyName[0];
+          if(!r[group]) r[group] = {group, children: [e]}
+          else r[group].children.push(e);
+          return r;
+      }, {})
+    },
     expiredTime(){
     },
   },
@@ -232,11 +293,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .vendor-customer-board {
-  .customer-list {
-    .customer-list-item:not(:last-child) {
-      border-bottom: solid 1px #dbdbdb;
-    }
-  }
   .sort-bar {
     height: 50px;
     display: grid;
@@ -252,6 +308,16 @@ export default {
       }
     }
   }
+  .customer-mark:after{
+    content:"";
+    display: inline-block;
+    height: 0.5em;
+    vertical-align: bottom;
+    width: 97%;
+    margin-right: -95%;
+    margin-left: 10px;
+    border-top: 1px solid #707070;
+  }
   .tips {
     img {
       height: 20px;
@@ -260,5 +326,47 @@ export default {
   .border-right{
    border-right: 1px solid #050505;
   }
+}
+.vsa-list {
+    --vsa-heading-padding: 1rem 2.5rem;
+    --vsa-content-padding: 1rem 2.5rem;
+    border: none;
+    .vsa-item {
+        border: none;
+        box-shadow: none;
+    }
+    /deep/ .vsa-item__heading {
+        border: none;
+        cursor: pointer;
+        .vsa-item__trigger {
+            background-color: white;
+            border: none;
+            color: black;
+            box-shadow: none;
+            padding: 0;
+            width: 100%;
+        }
+    }
+    /deep/ .vsa-item__trigger__icon--is-default:after,
+    /deep/ .vsa-item__trigger__icon--is-default:before {
+        content: "";
+        height: 2px;
+        position: absolute;
+        top: 0px;
+        transition: all 0.13333s ease-in-out;
+        width: 16px;
+        background-color: #818080;
+    }
+    /deep/ .vsa-item__trigger__icon--is-default:after {
+        transform: rotate(-50deg) translate3d(-24px, 14px, 0);
+    }
+    /deep/ .vsa-item__trigger__icon--is-default:before {
+        transform: rotate(50deg) translate3d(24px, 14px, 0);
+    }
+    /deep/ .vsa-item--is-active {
+        .vsa-item__trigger__icon--is-default {
+            transform: rotate(-180deg);
+        }
+    }
 }
 </style>

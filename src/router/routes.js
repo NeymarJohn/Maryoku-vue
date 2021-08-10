@@ -630,7 +630,7 @@ let vendorListPage = {
     },
 };
 let checkoutPageWithVendor = {
-    path: "/checkout/proposal/:proposalId",
+    path: "/checkout/:proposalId",
     name: "CheckoutWithVendor",
     component: Checkout,
     meta: {
@@ -642,7 +642,7 @@ let checkoutPageWithVendor = {
 }
 
 let checkoutPageWithCart = {
-    path: "/checkout/event/:eventId",
+    path: "/checkout",
     name: "CheckoutWithCart",
     component: Checkout,
     meta: {
