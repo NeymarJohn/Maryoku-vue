@@ -1,5 +1,5 @@
 <template>
-  <vsa-item class="customer-list-item mb-20">
+  <vsa-item class="customer-list-item mb-30">
 
     <vsa-heading>
         <div class="customer-group-item white-card cursor-pointer" @click="select">
@@ -66,7 +66,6 @@
           </div>
           <proposal-list-item
               v-for="proposal in customer.proposals"
-              :key="proposal.id"
               :proposal="proposal"
               @action="handleProposal"
               page="custom"
@@ -194,10 +193,9 @@ export default {
 
 }
 .customer-group-item {
-  padding: 20px 40px;
+  padding: 20px 24px;
   display: grid;
   align-items: center;
-  text-align: left;
   grid-template-columns: 7% 15% 15% 15% 15% 15% 10% 8%;
 
 }

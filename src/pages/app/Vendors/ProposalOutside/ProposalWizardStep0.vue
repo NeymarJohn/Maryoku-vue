@@ -20,7 +20,7 @@
         class="width-50 mt-5 md-purple medium-selector"
         placeholder="Type name of customer here..."
         :options="customers"
-        :label="['companyName', 'name']"
+        :label="['company', 'name']"
         :selectedValue="selectedCustomer"
         @change="selectCustomer"
       ></autocomplete>
@@ -162,7 +162,7 @@ export default {
   },
   created() {
     const vendorId = this.$route.params.vendorId;
-    this.$http.get(`${process.env.SERVER_URL}/1/vendors/${vendorId}/customers?customerType=1`).then((res) => {
+    this.$http.get(`${process.env.SERVER_URL}/1/userEventCustomers/${vendorId}`).then((res) => {
       this.customers = res.data;
     });
     this.$store.dispatch("common/getEventTypes");

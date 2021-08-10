@@ -14,7 +14,7 @@
               v-for="tab in customerTabs"
               :key="tab.key"
               class="md-round md-white-shadow md-white maryoku-btn filter-button mr-20"
-              @click="selectTab(tab.value)"
+              @click="selectTab(tab.key)"
             >
               <div class="d-flex align-center px-30 py-10 font-size-16" :class="tab.class">
                 <img
@@ -62,8 +62,8 @@
               </template>
             </div>
           </div>
-          <div v-if="customers.length < 2" class="my-auto d-flex flex-column align-center">
-            <img class="mb-0" :src="`${iconUrl}CustomerList/group-19735.svg`" width="30px"/>
+          <div v-if="this.customers.length < 2" class="my-auto d-flex flex-column align-center">
+            <img class="mb-0" :src="`${iconUrl}vendordashboard/group-17116.png`" />
             <p class="text-transform-uppercase font-size-14">No More CUSTOMERS To Show</p>
             <md-button class="md-vendor" @click="createNewProposal">Add New CUSTOMERS</md-button>
           </div>
@@ -75,19 +75,19 @@
           ></insight>
         </div>
       </div>
-<!--      <div class="md-layout">-->
-<!--        <div class="md-layout-item md-size-75">-->
-<!--          <div class="text-center">-->
-<!--            <table-pagination-->
-<!--              v-if="pagination.pageCount"-->
-<!--              class="mt-30"-->
-<!--              :pageCount="pagination.pageCount"-->
-<!--              :clickHandler="gotoPage"-->
-<!--            ></table-pagination>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="md-layout-item md-size-25"></div>-->
-<!--      </div>-->
+      <div class="md-layout">
+        <div class="md-layout-item md-size-75">
+          <div class="text-center">
+            <table-pagination
+              v-if="pagination.pageCount"
+              class="mt-30"
+              :pageCount="pagination.pageCount"
+              :clickHandler="gotoPage"
+            ></table-pagination>
+          </div>
+        </div>
+        <div class="md-layout-item md-size-25"></div>
+      </div>
     </div>
       <modal v-if="showProposalDetail" container-class="modal-container-wizard lg">
           <template slot="body">
@@ -124,10 +124,10 @@ export default {
       loading: true,
       iconUrl: `${this.$iconURL}`,
       customerTabs: [
-        { key: "all", value: 0, title: "All customers", icon: "Group 19735.svg", class: "color-purple" },
-        { key: "returning", value: 1, title: "Returning", icon: "Path 3984.svg", class: "color-black-middle" },
-        { key: "new", value: 2, title: "New", icon: "Group 19776.svg", class:"color-black-middle" },
-        { key: "potential", value: 3, title: "Potential", icon: "Group 19780.svg", class: "color-blue" },
+        { key: "all", title: "All customers", icon: "Group 19735.svg", class: "color-black-middle" },
+        { key: "returning", title: "Returning", icon: "Path 3984.svg", class: "color-black-middle" },
+        { key: "new", title: "New", icon: "Group 19776.svg", class:"color-black-middle" },
+        { key: "potential", title: "Potential", icon: "Group 19780.svg", class: "color-blue" },
       ],
       customerHeaders: [
         { key: "", title: "" },
@@ -139,7 +139,7 @@ export default {
         { key: "status", title: "Status" },
         { key: "", title: "" },
       ],
-      tab: 0,
+      tab: "all",
       showProposalDetail: false,
       selectedProposal: null,
       selectedCustomer: null,
@@ -178,13 +178,13 @@ export default {
   methods: {
     async getCustomer() {
       const { pagination } = this;
-      const params = { status: this.tab, ...this.sortFields, customerType: 0 };
+      const params = { status: this.tab, ...this.sortFields };
       const data = await this.$store.dispatch("vendorDashboard/getCustomers", {
         vendorId: this.vendorData.id,
         params
       });
 
-      this.pagination.total = data.total;
+      this.pagination.total = data.length;
       this.customerTabs.map((t) => {
         if (data.hasOwnProperty(t.key)) this.pagination[t.key] = data[t.key];
       });
@@ -274,7 +274,6 @@ export default {
       return this.$store.state.vendorDashboard.proposalRequests;
     },
     customerObject(){
-      if(!this.customers) return {}
       return this.customers.reduce((r, e) => {
           let group = e.companyName[0];
           if(!r[group]) r[group] = {group, children: [e]}
@@ -346,6 +345,27 @@ export default {
             box-shadow: none;
             padding: 0;
             width: 100%;
+        }
+    }
+    /deep/ .vsa-item__trigger__icon--is-default:after,
+    /deep/ .vsa-item__trigger__icon--is-default:before {
+        content: "";
+        height: 2px;
+        position: absolute;
+        top: 0px;
+        transition: all 0.13333s ease-in-out;
+        width: 16px;
+        background-color: #818080;
+    }
+    /deep/ .vsa-item__trigger__icon--is-default:after {
+        transform: rotate(-50deg) translate3d(-24px, 14px, 0);
+    }
+    /deep/ .vsa-item__trigger__icon--is-default:before {
+        transform: rotate(50deg) translate3d(24px, 14px, 0);
+    }
+    /deep/ .vsa-item--is-active {
+        .vsa-item__trigger__icon--is-default {
+            transform: rotate(-180deg);
         }
     }
 }

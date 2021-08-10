@@ -320,7 +320,6 @@ const actions = {
         status,
         step: state.wizardStep,
         tenantId: state.tenantId,
-        customerId: state.event.customer.id,
         suggestionDate: state.suggestionDate,
         expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
         nonMaryoku: true,

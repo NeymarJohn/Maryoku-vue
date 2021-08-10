@@ -34,7 +34,6 @@
 <script>
 import { Modal, MaryokuInput } from "@/components";
 import UserEventCustomer from "@/models/UserEventCustomer";
-import Customer from "@/models/Customer";
 export default {
   name: "sharing-modal",
   components: {
@@ -57,13 +56,12 @@ export default {
   methods: {
     saveCustomer() {
       const customer = {
-        companyName: this.company,
+        company: this.company,
         name: this.customer,
         email: this.email,
-        vendorId: this.vendor.id,
-        type: 1,
+        vendor: { id: this.vendor.id },
       };
-      new Customer(customer).save().then((res) => {});
+      new UserEventCustomer(customer).save().then((res) => {});
       this.$emit("save", customer);
     },
 

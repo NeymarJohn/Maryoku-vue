@@ -306,20 +306,6 @@ const actions = {
 
       });
   },
-  getCustomers: ({commit}, vendorId) => {
-      return new Promise(async (resolve, reject) => {
-          new Customer().for(new Vendors({id: vendorId}))
-              .params({customerType: 1})
-              .get().then(customer => {
-
-              if(customer) {
-                  commit("setCustomer", customer[0]);
-                  resolve(customer[0]);
-              }
-          });
-
-      });
-  },
   getVendor: ({ commit, state }, vendorId) => {
     return new Promise((resolve, reject) => {
       Vendors.find(vendorId)
