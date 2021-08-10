@@ -1,5 +1,5 @@
 <template>
-  <vsa-item class="customer-list-item mb-30">
+  <vsa-item class="customer-list-item mb-20">
 
     <vsa-heading>
         <div class="customer-group-item white-card cursor-pointer" @click="select">
@@ -194,9 +194,10 @@ export default {
 
 }
 .customer-group-item {
-  padding: 20px 24px;
+  padding: 20px 40px;
   display: grid;
   align-items: center;
+  text-align: left;
   grid-template-columns: 7% 15% 15% 15% 15% 15% 10% 8%;
 
 }

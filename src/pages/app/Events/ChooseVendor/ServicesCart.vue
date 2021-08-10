@@ -197,7 +197,7 @@ export default {
       });
     },
     bookCart(){
-      this.$router.push({name: 'CheckoutWithCart'});
+      this.$router.push({name: 'CheckoutWithCart', params:{eventId: this.event.id}});
     },
     serviceCategory(category) {
       return this.$store.state.common.serviceCategories.find(it => it.key === category);
