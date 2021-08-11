@@ -1,14 +1,26 @@
 <template>
-  <div class="card-section align-center">
-    <div class="left">
+  <div class="event-overview-item card-section" :class="{ 'align-center': !isEdit }">
+    <div class="left" :class="{ 'align-center': !isEdit }">
       <img class="mr-30" :src="section.img_src" />
-      <div class="mr-30" style="width: 30%">
-        <h3 class="title">{{ section.title }}</h3>
+      <div class="mr-30 flex-1">
+        <div class="text-left">
+          <span class="title font-size-26 mr-30">{{ section.title }}</span>
+          <span class="content" v-if="!isEdit && section.location">{{ section.location }}</span>
+          <span v-if="!isEdit && section.numberOfParticipants" class="content">
+            {{ section.numberOfParticipants | formatQty }} Guests
+          </span>
+          <span v-if="!isEdit && section.eventType" class="content">{{ section.eventType }}</span>
+        </div>
 
-        <p class="content" v-if="!isEdit && section.location">{{ section.location }}</p>
-        <p v-if="!isEdit && section.numberOfParticipants" class="content">{{ section.numberOfParticipants }} Guests</p>
-        <p v-if="!isEdit && section.eventType" class="content">{{ section.eventType }}</p>
-
+        <div class="row">
+          <maryoku-input
+            :value="section.datetime"
+            v-if="isEdit && section.hasOwnProperty('datetime')"
+            class="form-input"
+            placeholder="Choose date…"
+            inputStyle="date"
+          ></maryoku-input>
+        </div>
         <location-input
           v-if="isEdit && section.hasOwnProperty('location')"
           v-model="section.location"
@@ -36,37 +48,37 @@
           @change="eventTypeChange"
         ></category-selector>
 
-        <div v-if="isEdit && section.warning" class="warning">
+        <div v-if="isEdit && section.warning" class="warning d-flex">
           <img class="mr-10" :src="`${iconsUrl}Group 1175 (9).svg`" width="20" />
-          {{ section.warning }}
+          <div>{{ section.warning }}</div>
         </div>
       </div>
 
-      <div v-if="!isEdit && section.inOutDoor && section.inOutDoor.length" class="value align-self-center d-flex">
-        <div class="mr-50" v-for="item in section.inOutDoor">
-          <img :src="getIconUrl(item.toLowerCase())" />
+      <div v-if="!isEdit && section.inOutDoor && section.inOutDoor.length" class="value sub-info">
+        <div class="mr-20 d-inline-block" v-for="item in section.inOutDoor">
+          <img :src="getIconUrl(item.toLowerCase())" style="width: 1.5rem" />
           {{ item.toLowerCase() }}
         </div>
       </div>
-      <div v-if="!isEdit && section.hasOwnProperty('guestType')" class="value align-self-center d-flex">
+      <div v-if="!isEdit && section.hasOwnProperty('guestType')" class="value sub-info align-self-center d-flex">
         <img v-if="this.section.guestType" :src="getIconUrl('guestType')" />
         {{ section.guestType }}
       </div>
-      <div v-if="!isEdit && section.hasOwnProperty('occasion')" class="value align-self-center d-flex">
+      <div v-if="!isEdit && section.hasOwnProperty('occasion')" class="value sub-info align-self-center d-flex">
         <img v-if="this.section.occasion" :src="getIconUrl('occasion')" />
         {{ section.occasion }}
       </div>
       <div v-if="isEdit && section.hasOwnProperty('inOutDoor')" class="value align-self-center">
         <md-checkbox
-          v-for="(item, index) in inOutDoorTypes"
           v-model="section.inOutDoor"
           class="md-checkbox-circle md-red"
           @change="inOutDoorChange"
-          :key="index"
           :value="item.value"
+          v-for="(item, index) in inOutDoorTypes"
+          :key="index"
         >
           <div class="checkbox-label-wrapper">
-            <img :src="getIconUrl(item.value)" />
+            <img :src="getIconUrl(item.value)" style="width: 1.5rem" />
             {{ item.label }}
           </div>
         </md-checkbox>
@@ -76,7 +88,7 @@
         <h3>Who's invited</h3>
         <category-selector
           :value="section.guestType"
-          column="2"
+          column="1"
           :categories="guestsTypes"
           :additional="additional"
           trackBy="name"
@@ -102,6 +114,23 @@
         >
         </HolidayInput>
       </div>
+
+      <div v-if="isEdit && section.hasOwnProperty('datetime')" class="value">
+        <div class="md-layout">
+          <div class="md-layout-item md-size-50 p-0">
+            <span class="title font-size-26 mr-30">From</span>
+            <div class="event-time d-flex align-center">
+              <time-picker v-model="section.datetime"></time-picker>
+            </div>
+          </div>
+          <div class="md-layout-item md-size-50 p-0">
+            <span class="title font-size-26 mr-30">To</span>
+            <div class="event-time d-flex align-center">
+              <time-picker v-model="section.datetime"></time-picker>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="right">
       <md-button class="md-simple" @click="isEdit = !isEdit">
@@ -115,22 +144,20 @@
 <style lang="scss" scoped>
 </style>
 <script>
-import RequirementItemComment from "./RequirementItemComment";
 import Multiselect from "vue-multiselect";
 import HeaderActions from "@/components/HeaderActions";
 import { MaryokuInput, LocationInput, HolidayInput } from "@/components";
 import { FunctionalCalendar } from "vue-functional-calendar";
 import moment from "moment";
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { mapState } from "vuex";
 import CategorySelector from "@/components/Inputs/CategorySelector";
-import Swal from "sweetalert2";
-import { extendMoment } from "moment-range";
-import { timelineTempates } from "@/constants/event.js";
+import EventOverviewDate from "./EventOverviewDate";
+import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
+import TimePicker from "../../../../components/Inputs/TimePicker.vue";
 
 export default {
   name: "event-overview-section",
   components: {
-    RequirementItemComment,
     Multiselect,
     HeaderActions,
     FunctionalCalendar,
@@ -138,6 +165,9 @@ export default {
     LocationInput,
     HolidayInput,
     CategorySelector,
+    EventOverviewDate,
+    VueTimepicker,
+    TimePicker,
   },
   props: {
     section: {
@@ -323,9 +353,9 @@ export default {
     },
   },
   computed: {
-    ...mapGetters({
-      eventTypesList: "event/getEventTypesList",
-    }),
+    eventTypesList() {
+      return this.$store.state.common.eventTypes;
+    },
     inOutDoorValue() {
       let inOutDoor = this.inOutDoorTypes.find((it) => it.value === this.section.inOutDoor);
       return inOutDoor ? inOutDoor["label"] : "";
@@ -344,3 +374,81 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.event-overview-item {
+  position: relative;
+  border-radius: 0px;
+  background-color: #ffffff;
+  padding: 40px 0;
+  display: flex;
+  box-shadow: none;
+  border-bottom: solid 1px #818080;
+  text-align: left;
+  .left {
+    width: 100%;
+    img {
+      max-width: 70px;
+      max-height: 70px;
+    }
+
+    display: flex;
+
+    .title {
+      margin: 0;
+      font: 800 24px Manrope-Regular, sans-serif;
+      text-align: left;
+    }
+
+    .content {
+      font-size: 20px;
+      margin: 10px 0;
+    }
+
+    .warning {
+      text-align: left;
+    }
+
+    .value {
+      font-size: 18px;
+      min-width: 40%;
+      max-width: 50%;
+      text-align: left;
+      h3 {
+        font: 800 24px Manrope-Regular, sans-serif;
+        margin: 0 0 12px;
+      }
+
+      img {
+        margin-right: 10px;
+        max-width: 25px;
+        max-height: 25px;
+      }
+
+      .picker-panel {
+        padding: 10px 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .md-checkbox {
+        display: flex !important;
+      }
+      &.sub-info {
+      }
+    }
+
+    .checkbox-label-wrapper {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      img {
+        margin-right: 5px;
+        max-width: 25px;
+        max-height: 25px;
+      }
+      margin-left: 10px;
+      margin-right: 50px;
+    }
+  }
+}
+</style>

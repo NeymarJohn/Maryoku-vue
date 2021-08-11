@@ -257,6 +257,7 @@ export default {
             phone: null,
             ein: null,
             country: null,
+            type: 0
           });
           console.log('saveCustomer', newCustomer);
         }

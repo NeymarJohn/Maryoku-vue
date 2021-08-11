@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout events-list">
-    <loader :active="isLoading"/>
+    <loader :active="isLoading" />
     <div class="md-layout-item md-size-100">
       <md-card v-if="upcomingEvents.length">
         <md-card-header class="md-card-header-icon md-card-header-rose">
@@ -148,7 +148,7 @@ const quote = quotes[quoteIndex];
 
 export default {
   components: {
-      Loader,
+    Loader,
     Tabs,
     ProductCard,
     VueElementLoading,
@@ -159,11 +159,7 @@ export default {
     if (!currentUser) {
       this.$store.dispatch("auth/logout");
       this.$router.push("/signin");
-    }
-    if (currentUser.currentTenant && currentUser.profile.defaultCalendarId) {
-      let _calendar = new Calendar({
-        id: currentUser.profile.defaultCalendarId,
-      });
+    } else {
       axios.defaults.headers.common.Authorization = `Bearer ${currentUser.access_token}`;
       let m = new CalendarEvent().get();
       m.then((allEvents) => {
@@ -172,9 +168,11 @@ export default {
       }).catch((e) => {
         console.log(e);
       });
-    } else {
-      this.$router.push({ path: "/choose-workspace" });
     }
+    // if (currentUser.currentTenant) {
+    // } else {
+    //   this.$router.push({ path: "/choose-workspace" });
+    // }
   },
   data() {
     return {
@@ -208,32 +206,7 @@ export default {
         props: {},
       });
     },
-    // getCalendarEvents() {
-    //   console.log(this.$store.state.user.defaultCalendarId)
-    //   let _calendar = new Calendar({id: this.$store.state.user.defaultCalendarId});
 
-    //   _calendar.calendarEvents().get().then(events => {
-    //     console.log(events,'eto event')
-    //     this.upcomingEvents = events.reduce(function (result, element) {
-    //       if (element.status.toLowerCase() !== 'done') {
-    //         result.push(element);
-    //       }
-    //       return result;
-    //     }, []);
-    //     this.recentEvents = events.reduce(function (result, element) {
-    //       if (element.status.toLowerCase() === 'done') {
-    //         result.push(element);
-    //       }
-    //       return result;
-    //     }, []);
-
-    //     this.isLoading = false;
-    //   })
-    //     .catch((error) => {
-    //       console.log(error);
-    //       this.isLoading = false;
-    //     });
-    // },
     showDeleteAlert(e, ev) {
       const _this = this;
       e.stopPropagation();

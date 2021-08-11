@@ -91,9 +91,9 @@ const actions = {
         new Customer().for(new Vendor({id: payload.vendorId}))
             .params(payload.params)
             .get()
-            .then(customers => {
-            commit("setCustomers", customers);
-            resolve(customers);
+            .then(res => {
+            commit("setCustomers", res[0].customers);
+            resolve(res[0]);
         });
 
     });

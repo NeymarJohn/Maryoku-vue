@@ -73,7 +73,6 @@ const ProposalFinalStep = () => import("@/pages/app/Vendors/ProposalFinalStep.vu
 const CalendarSync = () => import("@/pages/app/CalendarSync.vue");
 
 const Checkout = () => import("@/pages/app/Events/Proposal/Checkout")
-const OfferVendors = () => import("@/pages/app/OfferVendors")
 
 let authPages = {
     path: "/",
@@ -621,18 +620,6 @@ let others = {
     ],
 };
 
-let offerVendorsPage = {
-    path: "/offervendors",
-    name: "OfferVendors",
-    component: OfferVendors,
-    meta: {
-        requiredAuth: false,
-        title: "Offer Vendors",
-        gtm:"OfferVendors"
-    }
-
-}
-
 let vendorListPage = {
     path: "/admin/vendorlist",
     name: "VendorList",
@@ -732,7 +719,6 @@ const routes = [
     checkoutPageWithVendor,
     checkoutPageWithCart,
     proposalForUnregisterPlanner,
-    offerVendorsPage,
     ...vendorRoutes,
     {
         path: '*',
