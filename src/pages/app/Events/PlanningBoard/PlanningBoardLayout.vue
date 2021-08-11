@@ -215,16 +215,6 @@ export default {
       return this.$store.state.event.eventData;
     },
     percentOfBudgetCategories() {
-      // let hasBudgetItems = 0;
-      // this.serviceCards.forEach((stepPanel) => {
-      //   stepPanel.forEach((group) => {
-      //     group.forEach((serviceCard) => {
-      //       if (this.hasBudget(serviceCard.serviceCategory)) {
-      //         hasBudgetItems++;
-      //       }
-      //     });
-      //   });
-      // });
       console.log('percentOfBudgetCategories', Object.keys(this.requirements).length, this.event.components.length);
       return Object.keys(this.requirements).length;
     },

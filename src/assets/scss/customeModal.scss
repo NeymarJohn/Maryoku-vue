@@ -257,6 +257,16 @@
     }
 }
 
+.customer-form{
+    max-width: 700px;
+    .modal-header{
+        padding: 0;
+    }
+    .modal-footer{
+        padding: 0;
+    }
+}
+
 .negotiation{
     max-width: 700px;
     .modal-header{
@@ -271,5 +281,18 @@
 .negotiation-notification{
     .modal-body{
         padding: 0 40px
+    }
+}
+
+.offer-vendors{
+    max-width: 860px;
+    .modal-header{
+        padding: 0;
+    }
+    .modal-body{
+        padding: 0;
+    }
+    .modal-footer{
+        padding: 0;
     }
 }

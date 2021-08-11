@@ -44,12 +44,6 @@
               Remind me later
             </span>
           </md-menu-item>
-          <md-menu-item class="text-center" @click="askQuestion">
-            <span class="font-size-16 font-bold-extra pl-20">
-              <img :src="`${$iconURL}common/email-dark.svg`" class="mr-10" style="width: 20px; height: 20px" />
-              Ask question
-            </span>
-          </md-menu-item>
           <md-menu-item class="text-center" @click="changeEvent">
             <span class="font-size-16 font-bold-extra pl-20">
               <img :src="`${$iconURL}common/calendar-dark.svg`" class="mr-10" style="width: 20px; height: 20px" />
@@ -63,6 +57,37 @@
         <md-button class="md-red maryoku-btn" @click="bookProposal">Book Now</md-button>
       </div>
     </div>
+    <modal :containerClass="`modal-container xl`" v-if="showDetailModal">
+      <template slot="header">
+        <div class="add-category-model__header">
+          <h2 class="font-size-30 font-bold-extra">Change event details</h2>
+          <div>
+            You can change or add event details and information. <br />
+            Vendor will send you a updated proposal in a short time
+          </div>
+        </div>
+        <md-button class="md-simple md-just-icon md-round modal-default-button" @click="showDetailModal = false">
+          <md-icon>clear</md-icon>
+        </md-button>
+      </template>
+      <template slot="body">
+        <!-- <div>{{ proposal.eventData }}</div> -->
+        <event-detail :event="proposal.eventData"></event-detail>
+      </template>
+      <template slot="footer">
+        <md-button class="md-simple md-black">Cancel</md-button>
+        <md-button class="md-red" @click="updateEvent">Update Vendor</md-button>
+      </template>
+    </modal>
+    <modal :containerClass="`modal-container xs`" v-if="showUpdateSuccessModal">
+      <template slot="body">
+        <h2>Changes set successfully</h2>
+        <div>Changes have been sent to the vendor and he will send you an updated offer as soon as possible</div>
+        <div class="text-center">
+          <md-button class="md-red" @click="showUpdateSuccessModal = false">Done</md-button>
+        </div>
+      </template>
+    </modal>
   </div>
 </template>
 <script>
@@ -70,15 +95,22 @@ import Proposal from "@/models/Proposal";
 import EventProposalDetails from "../../app/Events/Proposal/EventProposalDetails.vue";
 import PlannerHeader from "@/pages/Dashboard/Layout/PlannerHeader";
 import HeaderActions from "../../../components/HeaderActions.vue";
+import Modal from "../../../components/Modal.vue";
+import EventDetail from "./components/EventDetail.vue";
+
 export default {
   components: {
     EventProposalDetails,
     PlannerHeader,
     HeaderActions,
+    Modal,
+    EventDetail,
   },
   data() {
     return {
       proposal: null,
+      showDetailModal: false,
+      showUpdateSuccessModal: false,
     };
   },
   created() {
@@ -88,6 +120,7 @@ export default {
       if (!proposal.bundleDiscount.services) proposal.bundleDiscount.services = [];
       this.proposal = proposal;
     });
+    this.$store.dispatch("common/getEventTypes");
   },
   methods: {
     bookProposal() {
@@ -111,7 +144,13 @@ export default {
     remindMeLater() {},
     negotiateRate() {},
     askQuestion() {},
-    changeEvent() {},
+    changeEvent() {
+      this.showDetailModal = true;
+    },
+    updateEvent() {
+      this.showDetailModal = false;
+      this.showUpdateSuccessModal = true;
+    },
   },
 };
 </script>

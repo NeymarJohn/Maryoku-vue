@@ -4,7 +4,7 @@
     <vsa-heading>
         <div class="customer-group-item white-card cursor-pointer" @click="select">
             <div class="avatar bg-white color-blue mr-40">
-                Mt
+                {{customer.name.charAt(0).toUpperCase()}}{{customer.companyName.charAt(0).toUpperCase()}}
             </div>
 
             <div>
