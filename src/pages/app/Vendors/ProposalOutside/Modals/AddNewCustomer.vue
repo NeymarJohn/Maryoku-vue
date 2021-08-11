@@ -63,8 +63,10 @@ export default {
         vendorId: this.vendor.id,
         type: 1,
       };
-      new Customer(customer).save().then((res) => {});
-      this.$emit("save", customer);
+      new Customer(customer).save().then((res) => {
+          console.log('saveCustomer', res);
+          this.$emit("save", res);
+      });
     },
 
     onCancel: function (e) {

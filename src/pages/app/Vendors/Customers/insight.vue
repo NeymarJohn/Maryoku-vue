@@ -72,12 +72,14 @@
 <script>
 import { PieChart } from "@/components";
 import IncomeBarChart from "./IncomeBarChart.vue";
+import ServiceBarChart from "./ServiceBarChart";
 import carousel from "vue-owl-carousel";
 
 export default {
   components:{
     PieChart,
     IncomeBarChart,
+    ServiceBarChart,
     carousel,
   },
   props:{

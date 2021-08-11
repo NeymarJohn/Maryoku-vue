@@ -7,7 +7,7 @@
     </div>
     <div>
       <div class="font-bold font-size-16" v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer">
-        {{ proposal.eventData.customer.company }}
+        {{ proposal.eventData.customer.companyName }}
       </div>
       <div class="font-bold font-size-16" v-else-if="proposal.proposalRequest && proposal.proposalRequest.eventData.title">
         {{ proposal.proposalRequest.eventData.title }}
@@ -70,8 +70,8 @@
       <div class="font-size-14" >{{proposal.id}}</div>
       <div class="font-size-14 color-black-middle">{{ proposal.dateCreated | date("DD/MM/YYYY") }}</div>
       <div>
-          <div class="font-bold font-size-16" v-if="proposal.nonMaryoku && proposal.eventData && proposal.eventData.customer">
-              {{ proposal.eventData.customer.company }}
+          <div class="font-bold font-size-16" v-if="proposal.nonMaryoku && proposal.eventData">
+              {{ 'New Event' }}
           </div>
           <div class="font-bold font-size-16" v-else-if="proposal.proposalRequest && proposal.proposalRequest.eventData.title">
               {{ proposal.proposalRequest.eventData.title }}

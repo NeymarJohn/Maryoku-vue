@@ -160,13 +160,6 @@ export default {
       default: () => {},
     },
   },
-  created() {
-    const vendorId = this.$route.params.vendorId;
-    this.$http.get(`${process.env.SERVER_URL}/1/vendors/${vendorId}/customers?customerType=1`).then((res) => {
-      this.customers = res.data;
-    });
-    this.$store.dispatch("common/getEventTypes");
-  },
   data() {
     return {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
@@ -190,10 +183,31 @@ export default {
       selectedEventType: null,
     };
   },
+  created() {
+    const vendorId = this.$route.params.vendorId;
+    this.$http.get(`${process.env.SERVER_URL}/1/vendors/${vendorId}/customers?customerType=1`).then((res) => {
+        this.customers = res.data;
+        if( this.$route.params.type === 'edit' ) {
+            console.log('customer', this.customers, this.$store.state.proposalForNonMaryoku.event.customer.email);
+            let customer = this.customers.find(it => it.email === this.$store.state.proposalForNonMaryoku.event.customer.email)
+            console.log('customer', customer);
+            this.$store.commit('proposalForNonMaryoku/setValue', {
+                key: 'customer',
+                value: customer
+            })
+        }
+    });
+
+    this.$store.dispatch("common/getEventTypes");
+  },
   methods: {
     handleSaveCustomer(customer) {
       this.customers.push(customer);
       this.selectCustomer(customer);
+        this.$store.commit('proposalForNonMaryoku/setValue', {
+            key: 'customer',
+            value: customer
+        })
       this.showNewCustomerModal = false;
     },
     selectCustomer(selectedCustomer) {

@@ -304,13 +304,13 @@ export default {
         religions = res.data;
       }
 
-      religions.map((rel) => {
-        let holidays = [];
-        rel.holidays.map((h) => {
-          holidays.push(h.holiday);
+        religions.map((rel) => {
+            let holidays = [];
+            rel.holidays.map((h) => {
+                holidays.push(h.holiday);
+            });
+            this.holidays.push({ name: rel.name, holidays });
         });
-        this.holidays.push({ name: rel.name, holidays });
-      });
 
       this.eventTypes = this.eventTypesList.map((it) => {
         return { name: it.name, value: it.name, icon: `${this.$iconURL}Onboarding/${it.key}.svg` };
