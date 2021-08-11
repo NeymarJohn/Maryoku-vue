@@ -46,7 +46,7 @@
             <div class="md-20 customer-list">
               <template v-for="(object, key) in customerObject">
                   <div class="customer-mark font-size-20 font-bold-extra mb-1">{{object.group.toUpperCase()}}</div>
-                  <vsa-list>
+<!--                  <vsa-list>-->
                       <customer-list-item
                           v-for="customer in object.children"
                           :customer="customer"
@@ -57,7 +57,7 @@
                           @proposalAction="handleProposal"
                           @click="selectCustomer(customer)"
                       ></customer-list-item>
-                  </vsa-list>
+<!--                  </vsa-list>-->
 
               </template>
             </div>
