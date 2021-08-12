@@ -46,18 +46,17 @@
             <div class="md-20 customer-list">
               <template v-for="(object, key) in customerObject">
                   <div class="customer-mark font-size-20 font-bold-extra mb-1">{{object.group.toUpperCase()}}</div>
-                  <vsa-list>
+
                       <customer-list-item
                           v-for="customer in object.children"
                           :customer="customer"
                           :sort-fields="sortFields"
                           :key="customer.id"
                           class="row"
-                          @customerAction="handleCustomer"
+                          @customerAction="handleCustomer(customer, $event)"
                           @proposalAction="handleProposal"
                           @click="selectCustomer(customer)"
                       ></customer-list-item>
-                  </vsa-list>
 
               </template>
             </div>
@@ -75,19 +74,7 @@
           ></insight>
         </div>
       </div>
-<!--      <div class="md-layout">-->
-<!--        <div class="md-layout-item md-size-75">-->
-<!--          <div class="text-center">-->
-<!--            <table-pagination-->
-<!--              v-if="pagination.pageCount"-->
-<!--              class="mt-30"-->
-<!--              :pageCount="pagination.pageCount"-->
-<!--              :clickHandler="gotoPage"-->
-<!--            ></table-pagination>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="md-layout-item md-size-25"></div>-->
-<!--      </div>-->
+
     </div>
       <modal v-if="showProposalDetail" container-class="modal-container-wizard lg">
           <template slot="body">
@@ -218,7 +205,15 @@ export default {
       this.selectedCustomer = customer;
     },
 
-    async handleCustomer(data) {
+    handleCustomer(customer, action) {
+        if(action === this.customerStatus.edit){
+            this.selectedCustomer = customer;
+            this.showNewCustomerModal = true;
+        } else if(action === this.customerStatus.download) {
+
+        } else if(action === this.customerStatus.delete) {
+
+        }
     },
 
     async handleProposal(data){
@@ -254,7 +249,7 @@ export default {
     async saveCustomer(customer){
       console.log('saveCustomer', customer);
         if(customer.email && customer.companyName && customer.name){
-            let customerInstance  = new Customer({...customer, vendorId: this.vendorData.id})
+            let customerInstance  = new Customer({...customer, vendorId: this.vendorData.id, type: 1})
             await customerInstance.save();
             this.showNewCustomerModal = false;
 

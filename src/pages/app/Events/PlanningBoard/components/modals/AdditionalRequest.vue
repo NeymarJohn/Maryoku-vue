@@ -473,23 +473,23 @@ export default {
     timeslots(){
       let slots = [];
       // classify and get timeslots by service type
-      // this.$store.state.event.eventData.timelineDates.map(date => {
-      //   date.timelineItems.map(item => {
-      //     if ((this.selectedCategory.key === 'venuerental' || this.selectedCategory.key === 'decor' ||
-      //       this.selectedCategory.key === 'equipmentrentals') && this.timeSlotsByServiceType.venuerental.includes(item.buildingBlockType)) {
-      //       slots.push(item);
-      //     } else if (this.selectedCategory.key === 'transportation' && this.timeSlotsByServiceType.transportation.includes(item.buildingBlockType)) {
-      //       slots.push(item);
-      //     } else if ((this.selectedCategory.key === 'entertainment' || this.selectedCategory.key === 'videographyandphotography' ||
-      //       this.selectedCategory.key === 'audiovisualstagingservices') && this.timeSlotsByServiceType.entertainment.includes(item.buildingBlockType)) {
-      //       slots.push(item)
-      //     } else if (this.selectedCategory.key === 'administration' && this.timeSlotsByServiceType.entertainment.includes(item.buildingBlockType)) {
-      //       slots.push(item);
-      //     } else if (this.selectedCategory.key === 'foodandbeverage'&& this.timeSlotsByServiceType.foodandbeverage.includes(item.buildingBlockType)) {
-      //       slots.push(item);
-      //     }
-      //   })
-      // })
+      this.$store.state.event.eventData.timelineDates.map(date => {
+        date.timelineItems.map(item => {
+          if ((this.selectedCategory.key === 'venuerental' || this.selectedCategory.key === 'decor' ||
+            this.selectedCategory.key === 'equipmentrentals') && this.timeSlotsByServiceType.venuerental.includes(item.buildingBlockType)) {
+            slots.push(item);
+          } else if (this.selectedCategory.key === 'transportation' && this.timeSlotsByServiceType.transportation.includes(item.buildingBlockType)) {
+            slots.push(item);
+          } else if ((this.selectedCategory.key === 'entertainment' || this.selectedCategory.key === 'videographyandphotography' ||
+            this.selectedCategory.key === 'audiovisualstagingservices') && this.timeSlotsByServiceType.entertainment.includes(item.buildingBlockType)) {
+            slots.push(item)
+          } else if (this.selectedCategory.key === 'administration' && this.timeSlotsByServiceType.entertainment.includes(item.buildingBlockType)) {
+            slots.push(item);
+          } else if (this.selectedCategory.key === 'foodandbeverage'&& this.timeSlotsByServiceType.foodandbeverage.includes(item.buildingBlockType)) {
+            slots.push(item);
+          }
+        })
+      })
       return slots;
     }
   }

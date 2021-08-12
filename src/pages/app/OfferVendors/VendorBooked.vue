@@ -8,10 +8,10 @@
             <md-icon>close</md-icon>
         </md-button>
         <div class="pt-40" style="background-color: #f3f7fd">
-            <div class="d-flex flex-column w-max-600 mx-auto">
+            <div class="d-flex flex-column align-center w-max-600 mx-auto pb-30">
+                <img :src="`${$iconURL}messages/group-21013.svg`">
                 <h3 class="font-size-30 font-bold-extra color-won">Vendor is booked!</h3>
                 <p class="font-size-14">You will be charged after the event. Invoice will be sent to test@gmail.com</p>
-                <md-button class="md-simple md-black ml-auto">Change email address</md-button>
             </div>
         </div>
         <div class="d-flex flex-column align-center">
