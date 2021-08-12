@@ -260,7 +260,7 @@ const actions = {
             if (state.requirements) {
                 resolve(state.requirements)
             } else {
-                getReq(`/1/vendor/property/${eventId}`).then((res) => {
+                getReq(`/1/vendor/property?eventId=${eventId}`).then((res) => {
                     commit("setRequirements", res.data)
                     resolve(res.data)
                 }).catch(e => {

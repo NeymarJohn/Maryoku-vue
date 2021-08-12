@@ -1,7 +1,7 @@
 <template>
-  <div class="customer-list-item mb-20">
+  <vsa-item class="customer-list-item mb-20">
 
-<!--    <div>-->
+    <vsa-heading>
         <div class="customer-group-item white-card cursor-pointer" @click="select">
             <div class="avatar bg-white color-blue mr-40">
                 {{customer.name.charAt(0).toUpperCase()}}{{customer.companyName.charAt(0).toUpperCase()}}
@@ -46,10 +46,9 @@
                 </md-menu>
             </div>
         </div>
-<!--    </div>-->
-      <fade-transition v-if="isToggle">
-          <div>
-              <div class="sort-bar px-20 mt-30 ml-40" v-if="customer.proposals.length">
+    </vsa-heading>
+      <vsa-content>
+          <div class="sort-bar px-20 mt-30 ml-40" v-if="customer.proposals.length">
             <span
                 v-for="it in proposalHeaders"
                 class="sort-item"
@@ -64,28 +63,25 @@
                 keyboard_arrow_down
               </md-icon>
             </span>
-              </div>
-              <proposal-list-item
-                  v-for="proposal in customer.proposals"
-                  :key="proposal.id"
-                  :proposal="proposal"
-                  @action="handleProposal"
-                  page="custom"
-              ></proposal-list-item>
           </div>
-      </fade-transition>
-  </div>
+          <proposal-list-item
+              v-for="proposal in customer.proposals"
+              :key="proposal.id"
+              :proposal="proposal"
+              @action="handleProposal"
+              page="custom"
+          ></proposal-list-item>
+      </vsa-content>
+  </vsa-item>
 </template>
 <script>
 import moment from "moment";
 import Button from "../../../../components/Button/ButtonDiv";
 import ProposalListItem from "./ProposalListItem";
 import { VsaItem, VsaHeading, VsaContent, VsaIcon } from "vue-simple-accordion";
-import { FadeTransition } from "vue2-transitions";
 
 export default {
   components: {
-      FadeTransition,
       Button,
       ProposalListItem,
       VsaItem,
@@ -131,7 +127,6 @@ export default {
           duplicate: 5,
           sort: 6,
       },
-      isToggle: false,
     };
   },
   methods: {
@@ -190,7 +185,6 @@ export default {
     },
     select(){
       this.$emit('click');
-      this.isToggle = !this.isToggle
     }
   },
 };

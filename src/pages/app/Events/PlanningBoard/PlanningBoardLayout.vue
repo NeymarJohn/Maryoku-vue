@@ -101,7 +101,12 @@
     >
     </special-requirement-modal>
     <transition name="slide-fade">
-      <requirements-cart v-if="showCart" @close="showCart = false"></requirements-cart>
+      <requirements-cart
+          v-if="showCart"
+          :requirements="requirements"
+          :service-categories="serviceCategories"
+          :total="event.components.length"
+          @close="showCart = false"></requirements-cart>
     </transition>
   </div>
 </template>
