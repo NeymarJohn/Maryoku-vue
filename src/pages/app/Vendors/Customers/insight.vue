@@ -6,7 +6,7 @@
             </div>
             <div class="d-flex">
                 <div>
-                    <h2 class="font-size-56 color-white my-10">$0</h2>
+                    <h2 class="font-size-56 color-white my-10">$22,000</h2>
                     <p class="font-size-14 color-white">4/5 Successful proposals</p>
                 </div>
             </div>

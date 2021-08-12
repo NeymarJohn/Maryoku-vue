@@ -62,7 +62,7 @@
             </div>
             <div class="block">
               <div class="title">
-                <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategories[0])}`" width="30px"/>
+                <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategories[0])}`" />
                 About Our {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
               </div>
               <div class="desc">{{ vendor.about.category }}</div>
@@ -104,7 +104,7 @@
 
             <div class="personal-message mt-40" v-if="vendor.personalMessage">
               <div class="font-bold mb-20">
-                <img class="mr-10" :src="`${$iconURL}common/message-dark.svg`" />
+                <img :src="`${$iconURL}common/message-dark.svg`" />
                 Personal message to your clients
               </div>
               <div class="content">{{ vendor.personalMessage }}</div>
@@ -155,7 +155,7 @@
             </div>
             <div class="cblock">
               <div class="cheader">
-                <div class="d-flex align-center">
+                <div>
                   <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategories[0])}`" />
                   {{ getCategoryNameByValue(vendor.vendorCategories[0]) }}
                 </div>
@@ -850,18 +850,16 @@ export default {
               &.number {
                 font: normal 16px Manrope-Regular, sans-serif;
                 img {
-                  width: 35px;
+                  width: 40px;
                   margin: 0 1rem;
                 }
               }
             }
             .title {
               margin: 2rem 0 1rem 0;
-              display: flex;
-              align-items: center;
               img {
-                width: 35px;
-                margin-right: 10px;
+                width: 20px;
+                margin-right: 1rem;
               }
               font: 800 16px Manrope-Regular, sans-serif;
               &.lg {
@@ -975,8 +973,8 @@ export default {
               }
 
               img {
-                width: 35px;
-                margin-right: 10px;
+                width: 24px;
+                margin-right: 1rem;
               }
               span {
                 text-align: right;
@@ -1017,8 +1015,8 @@ export default {
               font: bold 16px Manrope-Regular, sans-serif;
               margin-left: -50px;
               img {
-                width: 35px;
-                margin-right: 10px;
+                width: 24px;
+                margin-right: 1rem;
               }
             }
             .citems {

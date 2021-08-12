@@ -1,6 +1,6 @@
 <template>
   <div class="notifications">
-    <transition-group name="list" mode="in-out">
+    <transition-group name="list" mode="in-out" v-if="field === 'budget'">
       <budget-notification v-for="(notification) in notifications"
                     :key="notification.timestamp.getTime()"
                     :message="notification.message"
@@ -13,14 +13,34 @@
                     @on-close="removeNotification">
       </budget-notification>
     </transition-group>
-
+      <transition-group name="list" mode="in-out" v-if="field === 'negotiation'">
+          <negotiation-notification v-for="(notification) in notifications"
+                               :key="notification.timestamp.getTime()"
+                               :message="notification.message"
+                               :icon="notification.icon"
+                               :type="notification.type"
+                               :timestamp="notification.timestamp"
+                               :vertical-align="notification.verticalAlign"
+                               :horizontal-align="notification.horizontalAlign"
+                               @on-send="action"
+                               @on-close="removeNotification">
+          </negotiation-notification>
+      </transition-group>
   </div>
 </template>
 <script>
 import BudgetNotification from "./BudgetNotification";
+import NegotiationNotification from "./NegotiationNotification";
 export default {
   components: {
+      NegotiationNotification,
       BudgetNotification
+  },
+  props:{
+    field:{
+        type: String,
+        default: 'budget'
+    }
   },
   data () {
     return {

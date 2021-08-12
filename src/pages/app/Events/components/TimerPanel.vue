@@ -43,19 +43,7 @@ export default {
   },
   methods: {
     updateExpireTime() {
-      Swal.fire({
-        title: "Are you sure?",
-        text: `You'll get more 2 days.`,
-        showCancelButton: true,
-        confirmButtonClass: `md-button md-success btn-fill md-${this.theme}`,
-        cancelButtonClass: "md-button md-danger btn-fill",
-        confirmButtonText: "Yes, I'm sure",
-        buttonsStyling: false,
-      }).then((result) => {
-        if (result.value) {
-          this.$emit("updateExpireDate");
-        }
-      });
+      this.$emit("updateExpireDate");
     },
   },
   computed: {

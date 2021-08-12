@@ -11,49 +11,49 @@
             <h3 class="font-size-24 font-bold-extra m-0">Customer Details</h3>
             <p class="font-size-14">You can input the information by clicking on it</p>
             <div class="md-layout">
-                <md-field class="md-layout-item pl-0 md-size-45 mt-20">
+                <md-field class="md-layout-item md-size-45 mt-20">
                     <label>Company Name</label>
                     <md-input
                         class="form-input"
                         v-model="customerModel.companyName"
                     ></md-input>
                 </md-field>
-                <md-field class="md-layout-item pl-0 md-size-45 mt-20 ml-auto">
+                <md-field class="md-layout-item md-size-45 mt-20 ml-auto">
                     <label>EIN:</label>
                     <md-input
                         class="form-input"
                         v-model="customerModel.ein"
                     ></md-input>
                 </md-field>
-                <md-field class="md-layout-item pl-0 md-size-45 mt-20">
+                <md-field class="md-layout-item md-size-45 mt-20">
                     <label>Address</label>
                     <md-input
                         class="form-input"
                         v-model="customerModel.address"
                     ></md-input>
                 </md-field>
-                <md-field class="md-layout-item pl-0 md-size-45 mt-20 ml-auto">
+                <md-field class="md-layout-item md-size-45 mt-20 ml-auto">
                     <label>Country</label>
                     <md-input
                         class="form-input"
                         v-model="customerModel.country"
                     ></md-input>
                 </md-field>
-                <md-field class="md-layout-item pl-0 md-size-100 mt-20">
+                <md-field class="md-layout-item md-size-100 mt-20">
                     <label>Contact Name</label>
                     <md-input
                         class="form-input"
                         v-model="customerModel.name"
                     ></md-input>
                 </md-field>
-                <md-field class="md-layout-item pl-0 md-size-100 mt-20">
+                <md-field class="md-layout-item md-size-100 mt-20">
                     <label>Phone</label>
                     <md-input
                         class="form-input"
                         v-model="customerModel.phone"
                     ></md-input>
                 </md-field>
-                <md-field class="md-layout-item pl-0 md-size-100 mt-20">
+                <md-field class="md-layout-item md-size-100 mt-20">
                     <label>Email:</label>
                     <md-input
                         class="form-input"

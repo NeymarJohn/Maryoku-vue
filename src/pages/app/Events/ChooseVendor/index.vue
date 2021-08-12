@@ -1,5 +1,6 @@
 <template>
   <div class="md-layout booking-section position-relative booking-proposals">
+    <budget-notifications field="negotiation"></budget-notifications>
     <div class="choose-vendor-board">
       <loader :active="isLoadingProposal" />
       <div class="d-flex justify-content-between align-center">
@@ -122,20 +123,20 @@
       @close="showDifferentProposals = false"
       :proposals="proposals.slice(0, 3)"
     ></event-change-proposal-modal>
-    <Modal v-if="showNegotiationNotification" container-class="modal-container negotiation-notification w-max-700">
-        <div slot="header">
-            <div class="font-size-28 font-bold-extra text-left">Timing is everything</div>
-            <md-button class="position-absolute md-simple ml-auto text-decoration-none cursor-pointer"
-                       @click="processNotification"><md-icon>close</md-icon></md-button>
-        </div>
+<!--    <Modal v-if="showNegotiationNotification" container-class="modal-container negotiation-notification w-max-700">-->
+<!--        <div slot="header">-->
+<!--            <div class="font-size-28 font-bold-extra text-left">Timing is everything</div>-->
+<!--            <md-button class="position-absolute md-simple ml-auto text-decoration-none cursor-pointer"-->
+<!--                       @click="processNotification"><md-icon>close</md-icon></md-button>-->
+<!--        </div>-->
 
-        <template slot="body">
-            <negotiation-notification
-                :proposals="negotiationProposals"
-                :serviceCategories="serviceCategories"
-            />
-        </template>
-    </Modal>
+<!--        <template slot="body">-->
+<!--            <negotiation-notification-->
+<!--                :proposals="negotiationProposals"-->
+<!--                :serviceCategories="serviceCategories"-->
+<!--            />-->
+<!--        </template>-->
+<!--    </Modal>-->
   </div>
 </template>
 <script>
@@ -368,6 +369,7 @@ export default {
       this.showCart = true;
     },
     async processNotification(){
+        console.log('processNotification');
       let proposals = this.negotiationProposals;
       this.showNegotiationNotification = false;
       Object.keys(proposals).map(key => {
@@ -407,7 +409,19 @@ export default {
     },
     negotiationProposals(newVal){
       console.log('negotiationProposals', newVal);
-      if(Object.keys(newVal).length) this.showNegotiationNotification = true;
+      if(Object.keys(newVal).length) {
+          this.$notify({
+              message: {
+                  title: 'Great News!',
+                  content: 'The vendor has accepted your request to extend the validity of the offer. You have an extra 4 days to decide',
+                  close: this.processNotification
+              },
+              icon: `${this.$iconURL}messages/group-21013.svg`,
+              horizontalAlign: "right",
+              verticalAlign: "top",
+              timeout: 5000,
+          });
+      }
     },
     proposals(newVal){},
     $route: "fetchData",
