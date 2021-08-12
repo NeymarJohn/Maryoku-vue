@@ -12,7 +12,6 @@ const state = {
   includedServices: {},
   costServices: {},
   extraServices: {},
-  custom:{},
   event: {},
   vision: "",
   images: [],
@@ -299,6 +298,7 @@ const actions = {
   },
   saveProposal: ({ commit, state, getters }, status) => {
     return new Promise((resolve, reject) => {
+      console.log('saveProposal', state);
       const proposal = new Proposal({
         id: status == 'duplicate' ? undefined : state.id,
         eventData: state.event,
@@ -320,7 +320,7 @@ const actions = {
         status,
         step: state.wizardStep,
         tenantId: state.tenantId,
-        customerId: state.customer.id,
+        customerId: state.event.customer.id,
         suggestionDate: state.suggestionDate,
         expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
         nonMaryoku: true,

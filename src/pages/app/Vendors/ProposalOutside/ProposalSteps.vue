@@ -19,7 +19,7 @@
           <span v-if="step >= 2"><md-icon>check</md-icon></span>
           <span v-else><i>&#8226;</i></span>
           <br />
-          What's your vision
+          Describe Your <br />Vision
         </li>
         <li :class="[{ active: step >= 3 }, { current: step == 2 }, { inactive: step < 2 }]" @click="goToStep(2)">
           <span v-if="step >= 3"><md-icon>check</md-icon></span>

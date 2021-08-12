@@ -1,16 +1,16 @@
 <template>
   <div class="white-card p-40">
-    <div class="font-size-30 font-bold">Tell us a little bit about the event</div>
+    <div class="font-size-30 font-bold">Give us a few details of the event for this proposal</div>
 
     <div class="md-layout mt-30 selection-wrapper">
       <div class="md-layout-item md-size-50 p-0 text-left">
         <md-checkbox class="md-simple md-checkbox-circle md-vendor" v-model="isRegisteredCustomer" :value="true">
-          Select from customer list
+          Selection from the customer list
         </md-checkbox>
       </div>
       <div class="md-layout-item md-size-50 p-0 text-left">
         <md-checkbox class="md-simple md-checkbox-circle md-vendor" v-model="isRegisteredCustomer" :value="false">
-          New customer
+          Unregistered customer
         </md-checkbox>
       </div>
     </div>
@@ -28,7 +28,7 @@
 
     <div class="d-flex mt-40">
       <selectable-card
-        label="Corporate Event"
+        label="Corporation Event"
         value="corporation"
         :selected="eventOption"
         :icon="`${$iconURL}VendorsProposalPage/Group 17122.svg`"
@@ -45,7 +45,7 @@
       ></selectable-card>
     </div>
     <div v-if="eventOption === 'corporation'" class="text-left mt-30">
-      <label class="font-bold">Type of event:</label>
+      <label class="font-bold">Type Of Event:</label>
       <multiselect
         class="width-50 mt-5 form-input md-purple"
         v-model="eventType"
@@ -60,7 +60,7 @@
       ></multiselect>
     </div>
     <div class="text-left mt-30">
-      <label class="font-bold">Number of guests</label>
+      <label class="font-bold">Number of Guests</label>
       <maryoku-input
         class="width-50 mt-5 form-input"
         v-model="numberOfParticipants"
@@ -69,7 +69,7 @@
       ></maryoku-input>
     </div>
     <div class="text-left mt-30">
-      <label class="font-bold">Event location</label>
+      <label class="font-bold">Event Location</label>
       <div class="width-50 location-input">
         <location-input
             v-model="location"
@@ -79,7 +79,7 @@
     </div>
 
     <div class="row">
-      <p class="mb-5 text-left text-bold">Date Of the event</p>
+      <p class="mb-5 text-left text-bold">Date Of The Event</p>
       <maryoku-input
         :value="eventDate"
         class="form-input width-50"
@@ -160,6 +160,13 @@ export default {
       default: () => {},
     },
   },
+  created() {
+    const vendorId = this.$route.params.vendorId;
+    this.$http.get(`${process.env.SERVER_URL}/1/vendors/${vendorId}/customers?customerType=1`).then((res) => {
+      this.customers = res.data;
+    });
+    this.$store.dispatch("common/getEventTypes");
+  },
   data() {
     return {
       iconUrl: "https://static-maryoku.s3.amazonaws.com/storage/icons/Vendor Signup/",
@@ -183,31 +190,10 @@ export default {
       selectedEventType: null,
     };
   },
-  created() {
-    const vendorId = this.$route.params.vendorId;
-    this.$http.get(`${process.env.SERVER_URL}/1/vendors/${vendorId}/customers?customerType=1`).then((res) => {
-        this.customers = res.data;
-        if( this.$route.params.type === 'edit' ) {
-            console.log('customer', this.customers, this.$store.state.proposalForNonMaryoku.event.customer.email);
-            let customer = this.customers.find(it => it.email === this.$store.state.proposalForNonMaryoku.event.customer.email)
-            console.log('customer', customer);
-            this.$store.commit('proposalForNonMaryoku/setValue', {
-                key: 'customer',
-                value: customer
-            })
-        }
-    });
-
-    this.$store.dispatch("common/getEventTypes");
-  },
   methods: {
     handleSaveCustomer(customer) {
       this.customers.push(customer);
       this.selectCustomer(customer);
-        this.$store.commit('proposalForNonMaryoku/setValue', {
-            key: 'customer',
-            value: customer
-        })
       this.showNewCustomerModal = false;
     },
     selectCustomer(selectedCustomer) {

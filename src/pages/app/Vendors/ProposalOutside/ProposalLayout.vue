@@ -142,6 +142,7 @@ export default {
     this.$root.$on("send-event-data", (evtData) => {
       this.evtData = evtData;
     });
+    console.log('created');
     this.loading = true;
     if (this.$route.params.type && this.$route.params.type == "duplicate") {
       this.option = "duplicate";

@@ -131,7 +131,7 @@ export default {
       })
         .save()
         .then((res) => {
-          window.open(`/#/checkout/${this.proposal.id}`, "_blank");
+          window.open(`/#/checkout/proposal/${this.proposal.id}`, "_blank");
         });
     },
     updateProposal(proposal) {

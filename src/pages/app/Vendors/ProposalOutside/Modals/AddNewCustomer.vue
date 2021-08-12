@@ -1,18 +1,9 @@
 <template>
   <modal class="add-new-customer" containerClass="modal-container sm">
     <template slot="header">
-      <div class="position-relative width-100">
-        <div class="maryoku-modal-header pl-0">
-            <h2>Customer information</h2>
-        </div>
-        <md-button
-            class="position-absolute md-simple"
-            style="right: 0;top: 0"
-            @click="onCancel"
-        >
-            <md-icon>close</md-icon></md-button>
+      <div class="maryoku-modal-header">
+        <h2>Customer information</h2>
       </div>
-
     </template>
     <template slot="body">
       <div class="text-left">
@@ -21,19 +12,15 @@
           <maryoku-input inputStyle="company" class="width-80 mt-5 form-input" v-model="company"></maryoku-input>
         </div>
         <div class="mt-30 text-left">
-          <label class="font-bold">Who to contact</label>
+          <label class="font-bold">Customer Name</label>
           <maryoku-input inputStyle="username" class="width-80 mt-5 form-input" v-model="customer"></maryoku-input>
         </div>
         <div class="mt-30 text-left">
           <label class="font-bold">Email</label>
           <maryoku-input inputStyle="email" class="width-80 mt-5 form-input" v-model="email"></maryoku-input>
         </div>
-        <div class="mt-30 text-left">
-          <label class="font-bold">Phone</label>
-          <maryoku-input inputStyle="email" class="width-80 mt-5 form-input" v-model="phone"></maryoku-input>
-        </div>
         <md-checkbox v-model="addToCustomerList" class="md-vendor">
-          Add to customer list
+          Add this customer to your regular customer list
         </md-checkbox>
       </div>
     </template>
@@ -64,7 +51,6 @@ export default {
       customer: null,
       addToCustomerList: false,
       email: null,
-      phone: null,
     };
   },
   created() {},
@@ -74,14 +60,11 @@ export default {
         companyName: this.company,
         name: this.customer,
         email: this.email,
-        phone: this.phone,
         vendorId: this.vendor.id,
         type: 1,
       };
-      new Customer(customer).save().then((res) => {
-          console.log('saveCustomer', res);
-          this.$emit("save", res);
-      });
+      new Customer(customer).save().then((res) => {});
+      this.$emit("save", customer);
     },
 
     onCancel: function (e) {

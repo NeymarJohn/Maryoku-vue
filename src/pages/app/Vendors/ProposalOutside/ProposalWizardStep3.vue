@@ -603,7 +603,7 @@ export default {
       },
     },
     sittingArrangement() {
-      return this.$store.state.proposalForNonMaryoku.seatingData || {};
+      return this.$store.state.proposalForNonMaryoku.seatingData;
     },
     eventVision() {
       return this.$store.state.proposalForNonMaryoku.eventVision;
