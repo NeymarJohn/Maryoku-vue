@@ -4,7 +4,7 @@
     <div class="font-size-22 font-bold d-flex align-center">
       <img :src="`${$iconURL}CustomerList/group-19735.svg`" class="mr-10" /> CUSTOMERS
       <md-button class="ml-auto md-simple md-black md-maryoku mr-15">Import Customers List</md-button>
-      <md-button class="md-vendor md-maryoku mr-15" @click="createNewProposal">Add New Customers</md-button>
+      <md-button class="md-vendor md-maryoku mr-15" @click="createNewCustomer">Add New Customers</md-button>
     </div>
     <div class="customer-table pl-50">
       <div class="md-layout mt-10">
@@ -46,18 +46,17 @@
             <div class="md-20 customer-list">
               <template v-for="(object, key) in customerObject">
                   <div class="customer-mark font-size-20 font-bold-extra mb-1">{{object.group.toUpperCase()}}</div>
-                  <vsa-list>
+
                       <customer-list-item
                           v-for="customer in object.children"
                           :customer="customer"
                           :sort-fields="sortFields"
                           :key="customer.id"
                           class="row"
-                          @customerAction="handleCustomer"
+                          @customerAction="handleCustomer(customer, $event)"
                           @proposalAction="handleProposal"
                           @click="selectCustomer(customer)"
                       ></customer-list-item>
-                  </vsa-list>
 
               </template>
             </div>
@@ -65,7 +64,7 @@
           <div v-if="customers.length < 2" class="my-auto d-flex flex-column align-center">
             <img class="mb-0" :src="`${iconUrl}CustomerList/group-19735.svg`" width="30px"/>
             <p class="text-transform-uppercase font-size-14">No More CUSTOMERS To Show</p>
-            <md-button class="md-vendor" @click="createNewProposal">Add New CUSTOMERS</md-button>
+            <md-button class="md-vendor" @click="createNewCustomer">Add New CUSTOMERS</md-button>
           </div>
         </div>
         <div class="md-layout-item md-size-30 mt-30">
@@ -75,19 +74,7 @@
           ></insight>
         </div>
       </div>
-<!--      <div class="md-layout">-->
-<!--        <div class="md-layout-item md-size-75">-->
-<!--          <div class="text-center">-->
-<!--            <table-pagination-->
-<!--              v-if="pagination.pageCount"-->
-<!--              class="mt-30"-->
-<!--              :pageCount="pagination.pageCount"-->
-<!--              :clickHandler="gotoPage"-->
-<!--            ></table-pagination>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="md-layout-item md-size-25"></div>-->
-<!--      </div>-->
+
     </div>
       <modal v-if="showProposalDetail" container-class="modal-container-wizard lg">
           <template slot="body">
@@ -95,15 +82,24 @@
                   :vendorProposal="selectedProposal" @close="showProposalDetail = false" />
           </template>
       </modal>
+      <modal v-if="showNewCustomerModal" container-class="modal-container customer-form bg-white">
+          <template slot="body">
+              <customer-form
+                  :customer="selectedCustomer"
+                  @save="saveCustomer" @close="showNewCustomerModal = false" />
+          </template>
+      </modal>
   </div>
 </template>
 <script>
+import Customer from "@/models/Customer"
 import ProposalListItem from "../components/ProposalListItem.vue";
 import carousel from "vue-owl-carousel";
 import { Loader, TablePagination, Modal } from "@/components";
 import _ from "underscore";
 const CustomerListItem = () => import("../components/CustomerListItem");
 const ProposalContent = () => import("../components/ProposalDetail");
+const CustomerForm = () => import("./CustomerForm");
 import { VsaList } from "vue-simple-accordion";
 const Insight = () => import("./insight");
 
@@ -113,6 +109,7 @@ export default {
     TablePagination,
     CustomerListItem,
     ProposalContent,
+    CustomerForm,
     VsaList,
     carousel,
     Loader,
@@ -143,6 +140,7 @@ export default {
       showProposalDetail: false,
       selectedProposal: null,
       selectedCustomer: null,
+      showNewCustomerModal: null,
       customerStatus:{
         show: 0,
         edit: 1,
@@ -207,7 +205,15 @@ export default {
       this.selectedCustomer = customer;
     },
 
-    async handleCustomer(data) {
+    handleCustomer(customer, action) {
+        if(action === this.customerStatus.edit){
+            this.selectedCustomer = customer;
+            this.showNewCustomerModal = true;
+        } else if(action === this.customerStatus.download) {
+
+        } else if(action === this.customerStatus.delete) {
+
+        }
     },
 
     async handleProposal(data){
@@ -237,15 +243,21 @@ export default {
       }
 
     },
+    createNewCustomer() {
+      this.showNewCustomerModal = true;
+    },
+    async saveCustomer(customer){
+      console.log('saveCustomer', customer);
+        if(customer.email && customer.companyName && customer.name){
+            let customerInstance  = new Customer({...customer, vendorId: this.vendorData.id, type: 1})
+            await customerInstance.save();
+            this.showNewCustomerModal = false;
 
-    createNewProposal() {
-      let routeData = this.$router.resolve({
-        name: "outsideProposalCreate",
-        params: {
-          vendorId: this.vendorData.id,
-        },
-      });
-      this.openNewTab(routeData.href);
+            this.loading = true;
+            await this.getCustomer()
+            this.loading = false;
+        }
+
     },
     openNewTab(link) {
       window.open(link, "_blank");

@@ -1,16 +1,16 @@
 <template>
-  <vsa-item class="customer-list-item mb-20">
+  <div class="customer-list-item mb-20">
 
-    <vsa-heading>
+<!--    <div>-->
         <div class="customer-group-item white-card cursor-pointer" @click="select">
             <div class="avatar bg-white color-blue mr-40">
-                Mt
+                {{customer.name.charAt(0).toUpperCase()}}{{customer.companyName.charAt(0).toUpperCase()}}
             </div>
 
             <div>
                 <div class="font-bold font-size-16 text-capitalize">{{customer.companyName}}</div>
             </div>
-            <div class="font-size-14 color-black-middle">{{'12-3456789'}}</div>
+            <div class="font-size-14 color-black-middle">{{customer.ein}}</div>
             <div class="font-size-14 color-black-middle">${{0}}</div>
             <div class="font-size-14 color-black-middle text-capitalize">{{customer.name}}</div>
             <div class="font-size-14 color-black-middle">{{customer.proposals.length}}</div>
@@ -25,30 +25,31 @@
                         <img :src="`${$iconURL}Group 19186.svg`"/>
                     </md-button>
                     <md-menu-content>
-                        <md-menu-item @click="edit(proposalStatus.edit)" class="md-purple">
+                        <md-menu-item @click="edit(customerStatus.edit)" class="md-purple">
             <span>
               <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />
               Edit</span
             >
                         </md-menu-item>
-                        <md-menu-item @click="edit(proposalStatus.download)" class="md-purple">
+                        <md-menu-item @click="edit(customerStatus.download)" class="md-purple">
             <span>
               <img :src="`${$iconURL}common/download.svg`" class="label-icon mr-10" />
               Download
             </span>
                         </md-menu-item>
-                        <md-menu-item @click="edit(proposalStatus.delete)" class="md-purple">
+                        <md-menu-item @click="edit(customerStatus.delete)" class="md-purple">
             <span>
-              <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon mr-10" /> Delete Proposal
+              <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon mr-10" /> Delete
             </span>
                         </md-menu-item>
                     </md-menu-content>
                 </md-menu>
             </div>
         </div>
-    </vsa-heading>
-      <vsa-content>
-          <div class="sort-bar px-20 mt-30 ml-40" v-if="customer.proposals.length">
+<!--    </div>-->
+      <fade-transition v-if="isToggle">
+          <div>
+              <div class="sort-bar px-20 mt-30 ml-40" v-if="customer.proposals.length">
             <span
                 v-for="it in proposalHeaders"
                 class="sort-item"
@@ -63,25 +64,28 @@
                 keyboard_arrow_down
               </md-icon>
             </span>
+              </div>
+              <proposal-list-item
+                  v-for="proposal in customer.proposals"
+                  :key="proposal.id"
+                  :proposal="proposal"
+                  @action="handleProposal"
+                  page="custom"
+              ></proposal-list-item>
           </div>
-          <proposal-list-item
-              v-for="proposal in customer.proposals"
-              :key="proposal.id"
-              :proposal="proposal"
-              @action="handleProposal"
-              page="custom"
-          ></proposal-list-item>
-      </vsa-content>
-  </vsa-item>
+      </fade-transition>
+  </div>
 </template>
 <script>
 import moment from "moment";
 import Button from "../../../../components/Button/ButtonDiv";
 import ProposalListItem from "./ProposalListItem";
 import { VsaItem, VsaHeading, VsaContent, VsaIcon } from "vue-simple-accordion";
+import { FadeTransition } from "vue2-transitions";
 
 export default {
   components: {
+      FadeTransition,
       Button,
       ProposalListItem,
       VsaItem,
@@ -127,6 +131,7 @@ export default {
           duplicate: 5,
           sort: 6,
       },
+      isToggle: false,
     };
   },
   methods: {
@@ -143,7 +148,7 @@ export default {
       }
     },
     edit(action) {
-      this.$emit("action", action);
+      this.$emit("customerAction", action);
     },
     leave(item) {
       console.log("leave", item);
@@ -185,6 +190,7 @@ export default {
     },
     select(){
       this.$emit('click');
+      this.isToggle = !this.isToggle
     }
   },
 };

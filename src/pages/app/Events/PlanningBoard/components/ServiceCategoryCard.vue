@@ -177,7 +177,6 @@ export default {
   },
   created() {
     this.selectedServices = [...this.defaultData];
-    console.log('selectedServices', this.selectedServices);
   },
   methods: {
     selectSave() {},

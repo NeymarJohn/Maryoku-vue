@@ -7,7 +7,7 @@
             Our vendors will create proposals based on your choices below, so be sure to select everything you really want. If you leave a category blank, it means you’re happy leaving it up to the vendor’s discretion (which can lead to more back-and-forth later on).
         </div>
       </div>
-      <progress-radial-bar :value="percentOfBudgetCategories" :total="event.components.length"></progress-radial-bar>
+      <progress-radial-bar :value="percentOfBudgetCategories" :total="total"></progress-radial-bar>
 
       <md-button class="md-simple close-btn" @click="close">
         <md-icon>close</md-icon>
@@ -78,6 +78,20 @@ export default {
     ProgressRadialBar,
     RequirementTagItem,
   },
+  props:{
+    requirements:{
+        type: Object,
+        required: true,
+    },
+    serviceCategories:{
+        type: Array,
+        required: true,
+    },
+    total:{
+        type: Number,
+        required: true,
+    }
+  },
   data() {
     return {
       listOfItems: [
@@ -90,10 +104,6 @@ export default {
     };
   },
   created() {
-    // this.subCategorySections = Object.keys(this.subCategory);
-    // this.subCategorySections = this.subCategorySections.filter(
-    //   (item) => item !== "multi-selection" && item !== "special",
-    // );
   },
   methods: {
     close() {
@@ -102,34 +112,20 @@ export default {
     removeSelectedType(type) {
       console.log(type);
     },
-    hasBudget(categoryKey) {
-      return !!this.event.components.find((item) => item.componentId == categoryKey);
-    },
   },
 
   computed: {
-    event() {
-      return this.$store.state.event.eventData;
-    },
     selectedCategories() {
-      const categoryKeys = Object.keys(this.$store.state.planningBoard.requirements);
-      console.log('requirementCart.categoryKeys', categoryKeys);
+      const categoryKeys = Object.keys(this.requirements);
       const selectedData = [];
       categoryKeys.forEach((categoryKey) => {
-        console.log("his.$store.state.common.serviceCategories", this.$store.state.common.serviceCategories);
-        const category = this.$store.state.common.serviceCategories.find((item) => item.key === categoryKey);
+        const category = this.serviceCategories.find((item) => item.key === categoryKey);
         if (category) {
           selectedData.push(category);
         }
       });
       selectedData.sort((a, b) => a.order - b.order);
       return selectedData;
-    },
-    serviceCategories() {
-      return this.$store.state.common.serviceCategories;
-    },
-    requirements() {
-      return this.$store.state.planningBoard.requirements;
     },
     percentOfBudgetCategories() {
       return Object.keys(this.requirements).length;
