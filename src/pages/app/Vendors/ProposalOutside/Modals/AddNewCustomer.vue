@@ -30,7 +30,7 @@
         </div>
         <div class="mt-30 text-left">
           <label class="font-bold">Phone</label>
-          <maryoku-input inputStyle="email" class="width-80 mt-5 form-input" v-model="phone"></maryoku-input>
+          <maryoku-input inputStyle="phone" class="width-80 mt-5 form-input" v-model="phone"></maryoku-input>
         </div>
         <md-checkbox v-model="addToCustomerList" class="md-vendor">
           Add to customer list

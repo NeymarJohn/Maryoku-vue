@@ -171,7 +171,7 @@ export default {
       if (!this.$store.state.vendorDashboard.proposalRequests) return [];
       return this.$store.state.vendorDashboard.proposalRequests.filter(p => {
             return p.proposal && p.proposal.status === 'submit' && p.proposal.negotiations &&
-                p.proposal.negotiations.filter(it => it.status === 0).length
+                p.proposal.negotiations.filter(it => it.status === 0 && it.remainingTime > 0).length
         });
     },
     vendorData() {

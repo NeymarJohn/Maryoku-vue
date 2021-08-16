@@ -468,7 +468,7 @@ export default {
       return proposalRequests.filter((p) => {
           return p.proposal
               ? p.declineMessage !== "decline" && p.proposal.status !== 'submit' && p.remainingTime > 0 ||
-              p.proposal.status === 'submit' && p.proposal.negotiations && p.proposal.negotiations.filter(it => it.status == 0).length
+              p.proposal.status === 'submit' && p.proposal.negotiations && p.proposal.negotiations.filter(it => it.status == 0 && it.remainingTime > 0).length
               : p.remainingTime > 0 && p.declineMessage !== "decline";
       });
     },

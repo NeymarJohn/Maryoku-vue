@@ -45,7 +45,7 @@ export default {
     const savedEvent = localStorage.getItem("event");
     if (savedEvent) {
       eventService
-        .saveEvent(savedEvent)
+        .saveEventFromStorage(this.$store.state.auth.user.profile.defaultCalendarId)
         .then((newEvent) => {
           localStorage.setItem("currentEventId", newEvent.id);
           localStorage.removeItem("event");
@@ -138,7 +138,7 @@ export default {
       } else {
         const eventData = this.getEventData();
         eventService
-          .saveEvent(eventData)
+          .saveEventFromStorage(this.$store.state.auth.user.profile.defaultCalendarId)
           .then((newEvent) => {
             localStorage.setItem("currentEventId", newEvent.id);
             if (newEvent.isFirstEvent) {
