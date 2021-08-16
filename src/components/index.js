@@ -13,6 +13,7 @@ import DropDown from "./Dropdown.vue";
 import Modal from "./Modal.vue";
 
 import VueSlideoutPanel from "./SlidePanel";
+import SignInContent from "./SignInContent";
 
 // Tables
 import GlobalSalesTable from "./Tables/GlobalSalesTable.vue";
@@ -91,4 +92,5 @@ export {
     TimeInput,
     TablePagination,
     PieChart,
+    SignInContent,
 };

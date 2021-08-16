@@ -1,6 +1,6 @@
 <template>
     <div>
-        <loader :active="isLoading" />
+        <loader :active="isLoading" :isFullScreen="true"/>
         <template v-if="showOffers">
             <div class="d-flex justify-content-between pt-50 pl-100 pr-80">
                 <div>
@@ -89,6 +89,14 @@
             @cancel="isOpenedAdditionalModal = false"
             @close="isOpenedAdditionalModal = false"
         ></additional-request-modal>
+        <md-dialog :md-active.sync="showSignupModal" class="singin-form">
+            <sign-in-content
+              @signIn="signIn"
+              @signUp="signUp"
+              page="signup"
+            >
+            </sign-in-content>
+        </md-dialog>
         <transition name="slide-fade">
             <requirements-cart
                 v-if="showRequirementCart"
@@ -102,6 +110,7 @@
 <script>
 import { Loader, Modal } from "@/components";
 import VendorBooked from "./VendorBooked";
+import { SignInContent } from "@/components";
 import ServiceCategoryCard from "../Events/PlanningBoard/components/ServiceCategoryCard";
 import ProgressRadialBar from "../Events/PlanningBoard/components/ProgressRadialBar.vue";
 import AdditionalRequestModal from "../Events/PlanningBoard/components/modals/AdditionalRequest.vue";
@@ -109,13 +118,16 @@ import RequirementsCart from "../Events/PlanningBoard/RequirementsCart.vue";
 import { serviceCategoryImages, serviceCards } from "@/constants/event.js";
 import { postReq, getReq } from "@/utils/token";
 import { camelize } from "@/utils/string.util";
+import eventService from "@/services/event.service";
 import _ from "underscore";
+import moment from "moment";
 
 export default {
     components: {
         Modal,
         Loader,
         VendorBooked,
+        SignInContent,
         RequirementsCart,
         ProgressRadialBar,
         ServiceCategoryCard,
@@ -125,6 +137,7 @@ export default {
         return {
             isLoading: false,
             step: 1,
+            showSignupModal: false,
             showBookedVendorModal: true,
             isOpenedAdditionalModal: false,
             showRequirementCart: false,
@@ -133,18 +146,20 @@ export default {
             allRequirements: [],
             subCategory: null,
             selectedCategory: null,
+            vendorEvent : null,
             requirements: {},
         }
     },
     methods: {
         async showVendors(){
             this.showBookedVendorModal = false;
-            this.showOffers = true;
-            this.isLoading = true;
+            // this.showOffers = true;
+            // this.isLoading = true;
 
-            await this.getAllRequirements();
+            this.showSignupModal = true;
+            // await this.getAllRequirements();
 
-            this.isLoading = false;
+            // this.isLoading = false;
         },
         async getAllRequirements(){
           let res = await getReq(`/1/vendor/property`);
@@ -208,8 +223,49 @@ export default {
             this.$set(this.requirements, category, {...this.requirements[category], ...requirements})
             console.log('save', this.requirements);
         },
+        async signIn({email, password}){
+            console.log('signin', email, password)
+            await this.$store.dispatch("auth/login", {
+                    email,
+                    password,
+                })
+            await this.getVendorEvent();
+            await this.createEvent();
+            this.showSignupModal =  false;
+        },
+        signUp(){
+
+        },
+        async getVendorEvent(){
+            let res = await getReq(`/1/userEvent?email=${this.user.email}`);
+            this.vendorEvent = res.data;
+        },
+        async createEvent(){
+            console.log('createEvent', moment(new Date(this.vendorEvent.startTime)).unix() * 1000)
+            await this.$store.dispatch("event/saveEventAction", {
+                eventStartMillis: moment(new Date(this.vendorEvent.startTime)).unix() * 1000,
+                eventEndMillis: moment(new Date(this.vendorEvent.endTime)).unix() * 1000,
+                status: 'draft',
+                numberOfParticipants: this.vendorEvent.guests,
+                flexibleWithDates: 0,
+                guestType: {
+                    name: "Employees",
+                    selected: false,
+                    value: "employees",
+                },
+                location: this.vendorEvent.location,
+                eventType: this.vendorEvent.eventType,
+                places: ['OUTDOORS'],
+            });
+        }
     },
     computed:{
+        user(){
+            return this.$store.state.auth.user;
+        },
+        event() {
+            return this.$store.state.event.eventData;
+        },
         serviceCategories(){
             return this.$store.state.common.serviceCategories;
         }
@@ -221,6 +277,12 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.md-dialog.singin-form {
+    border-radius: 10px;
+    padding: 2em 40px;
+    z-index: 9999999;
+    height: auto;
+}
 .arrow-right{
     border-radius: 100%;
     width: 25px;

@@ -123,8 +123,7 @@ export default {
       this.$emit('handle');
     },
     getLeftDays() {
-      let expiredTime = !this.hasNegotiation ? this.proposalRequest.expiredTime : this.proposalRequest.proposal.negotiations[0].expiredTime;
-      let diffSeconds = (expiredTime - new Date().getTime()) / 1000;
+      let diffSeconds = (this.proposalRequest.expiredTime - new Date().getTime()) / 1000;
       const hours = diffSeconds / 3600;
       const days = Math.round(hours / 24);
       return days;

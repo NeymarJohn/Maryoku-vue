@@ -10,6 +10,9 @@ import MainLayoutWithBottomLogo from "@/pages/Dashboard/Layout/MainLayoutWithBot
 
 import authService from "@/services/auth.service";
 
+// testUI
+const TestUI = () => import("@/TestUI");
+
 const NotFound = () => import("@/pages/NotFound");
 const Events = () => import("@/pages/app/Events/Events.vue");
 const EventProposal = () => import("@/pages/app/Events/EventProposal.vue");
@@ -74,6 +77,12 @@ const CalendarSync = () => import("@/pages/app/CalendarSync.vue");
 
 const Checkout = () => import("@/pages/app/Events/Proposal/Checkout")
 const OfferVendors = () => import("@/pages/app/OfferVendors")
+
+let testUI = {
+    path: '/testui',
+    component: TestUI,
+    name: 'TestUI'
+}
 
 let authPages = {
     path: "/",
@@ -716,6 +725,7 @@ const routes = [
             gtm: "concept detail",
         },
     },
+    testUI,
     authPages,
     workspacePages,
     appPages,
@@ -738,7 +748,7 @@ const routes = [
         path: '*',
         name: 'Not Found',
         component: NotFound
-    }
+    },
 ];
 
 export default routes;

@@ -4,24 +4,29 @@
             <div class="font-size-16 color-white">
                 Total Incomes - Frog Design
             </div>
-            <div class="d-flex">
+            <div class="d-flex align-center">
                 <div>
                     <h2 class="font-size-56 color-white my-10">$0</h2>
                     <p class="font-size-14 color-white">4/5 Successful proposals</p>
+                </div>
+                <ServiceBarChart class="ml-auto pt-10" :chart-data="serviceChartData">
+                </ServiceBarChart>
+                <div class="ml-10">
+                    <div v-for="it in serviceChartData" class="d-flex align-center mt-5">
+                        <img :src="`${$iconURL}${it.icon}`" width="15px">
+                        <span class="ml-5 font-size-12" :style="{color: it.color}">{{it.value}}%</span>
+                        <span class="ml-5 font-size-12 color-white">${{it.price | withComma}}</span>
+                    </div>
                 </div>
             </div>
         </div>
         <hr/>
         <div class="px-30 position-relative">
             <div v-if="incomeList.length > 1" class="position-absolute" style="left: 0;top: 0">
-<!--                <md-button class="md-button md-theme-default md-simple md-just-icon" @click="prev">-->
-                    <img :src="`${$iconURL}Group 19406.svg`" class="cursor-pointer" width="80px" @click="prev">
-<!--                </md-button>-->
+                <img :src="`${$iconURL}Group 19406.svg`" class="cursor-pointer" width="80px" @click="prev">
             </div>
             <div v-if="incomeList.length > 1" class="position-absolute" style="right: 0;top: 0">
-<!--                <md-button class="md-icon-button md-simple">-->
-                    <img :src="`${$iconURL}Group 19405.svg`" class="cursor-pointer" width="80px" @click="next">
-<!--                </md-button>-->
+                <img :src="`${$iconURL}Group 19405.svg`" class="cursor-pointer" width="80px" @click="next">
             </div>
             <carousel :items="1" :margin="0" :nav="false" :loop="true" class="d-flex">
                 <template slot="prev">
@@ -94,6 +99,11 @@ export default {
   },
   data(){
     return {
+        serviceChartData:[
+            {label: '', value: 60, color: '#ffffff', icon: 'Budget+Elements/venuerental-white.svg', price: '15000'},
+            {label: '', value: 25, color: '#22cfe0', icon: 'Budget+Elements/foodandbeverage-white.svg', price: '4800'},
+            {label: '', value: 15, color: '#fec02d', icon: 'Budget+Elements/entertainment-white.svg', price: '2200'},
+        ],
         incomeChartData: [
             { label: "Jan", value: 200, future: false },
             { label: "Feb", value: 120, future: false },

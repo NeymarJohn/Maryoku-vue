@@ -44,8 +44,8 @@ class EventService {
       return `/events/${event.id}/booking/timeline`;
     }
   }
-  saveEventFromStorage(calendarId) {
-    const editingEvent = JSON.parse(localStorage.getItem("event"));
+  saveEvent(editingEvent) {
+    // const editingEvent = JSON.parse(localStorage.getItem("event"));
     delete editingEvent["id"];
     return new Promise((resolve, reject) => {
       axios.defaults.headers.common.Authorization = authHeader().Authorization;

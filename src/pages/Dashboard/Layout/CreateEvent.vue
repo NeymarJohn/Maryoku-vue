@@ -60,39 +60,10 @@
         </button>
       </md-dialog-title>
       <md-dialog-content>
-        <div class="social-line text-center">
-          <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
-            <img :src="`${$iconURL}Signup/google-icon.jpg`" />
-            <span>Sign in with Google</span>
-          </md-button>
-          <div>Or</div>
-        </div>
-        <maryoku-input
-          class="form-input"
-          data-vv-name="email"
-          v-validate="modelValidations.email"
-          inputStyle="email"
-          v-model="email"
-          placeholder="Type email address here..."
-        ></maryoku-input>
-        <maryoku-input
-          class="form-input"
-          data-vv-name="password"
-          v-validate="modelValidations.password"
-          type="password"
-          inputStyle="password"
-          v-model="password"
-          placeholder="Type password here..."
-        ></maryoku-input>
-        <div class="terms-and-conditions">
-          <md-checkbox v-model="keepMe">Keep me signed in</md-checkbox>
-        </div>
-        <div class="md-error">{{ error }}</div>
-        <md-button class="md-default md-red md-maryoku md-sm md-square custom-btn" @click="singup">Sign In</md-button>
-        <div class="text-center">
-          <!-- <a href class="forget-password">Forgot your password ?</a> -->
-          <md-button class="md-black md-maryoku mt-4 md-simple mt-4">Forgot my password?</md-button>
-        </div>
+        <sign-in-content
+            @signIn="singup"
+            @authenticate="authenticate"
+        ></sign-in-content>
       </md-dialog-content>
     </md-dialog>
   </div>
@@ -100,9 +71,15 @@
 <script>
 import { FadeTransition } from "vue2-transitions";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import { MaryokuInput } from "@/components";
+import { MaryokuInput, SignInContent } from "@/components";
 import AuthService from "@/services/auth.service";
+
 export default {
+  components: {
+    FadeTransition,
+    MaryokuInput,
+    SignInContent,
+  },
   data() {
     return {
       signUpLoading: false,
@@ -133,10 +110,6 @@ export default {
       error: "",
     };
   },
-  components: {
-    FadeTransition,
-    MaryokuInput,
-  },
   methods: {
     ...mapMutations("PublicEventPlanner", ["setEventProperty", "setSingupModal"]),
     closeSingupModal() {
@@ -148,34 +121,28 @@ export default {
     goToSignin() {
       this.$router.push("/signin");
     },
-    singup() {
+    singup({email, password}) {
       this.loading = true;
-      let that = this;
-      this.$validator.validateAll().then((isValid) => {
-        if (isValid) {
-          if (this.email && this.password) {
-            this.$store
-              .dispatch("auth/login", {
-                email: this.email,
-                password: this.password,
-              })
-              .then(
-                () => {
-                  this.setSingupModal({ showModal: false });
-                  // this.redirectPage();
-                },
-                (error) => {
-                  this.loading = false;
-                  this.error = "Invalid email or wrong password, try again.";
-                  this.setSingupModal({ showModal: false });
-                },
-              );
-          }
-        } else {
-          this.error = "Sorry, invalid email or wrong password, try again.";
-          this.loading = false;
-        }
-      });
+
+      if (email && password) {
+        this.$store
+          .dispatch("auth/login", {
+            email,
+            password,
+          })
+          .then(
+            () => {
+              this.setSingupModal({ showModal: false });
+              // this.redirectPage();
+            },
+            (error) => {
+              this.loading = false;
+              this.error = "Invalid email or wrong password, try again.";
+              this.setSingupModal({ showModal: false });
+            },
+          );
+      }
+
     },
     authenticate(provider) {
       this.loading = true;

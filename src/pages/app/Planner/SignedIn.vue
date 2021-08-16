@@ -67,6 +67,7 @@ export default {
         });
 
         const action = this.$route.query.action;
+        const eventData = localStorage.getItem('event');
         const noTenant = !tenantUser.tenants || tenantUser.tenants.length === 0;
         const isDefaultTenant = tenantId.toLowerCase() === "default";
         if (noTenant && !action) {
@@ -79,7 +80,7 @@ export default {
           this.$router.push({ path: `/choose-workspace?action=${action}` });
         } else if (!noTenant && !isDefaultTenant && action) {
           eventService
-            .saveEventFromStorage(res.defaultCalendar)
+            .saveEvent(eventData)
             .then((event) => {
               callback = btoa(`events/${event.id}/booking/concept`);
               document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;

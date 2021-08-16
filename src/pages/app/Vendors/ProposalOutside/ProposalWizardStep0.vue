@@ -79,7 +79,7 @@
     </div>
 
     <div class="row">
-      <p class="mb-5 text-left text-bold">Date of the event</p>
+      <p class="mb-5 text-left text-bold">Date Of the event</p>
       <maryoku-input
         :value="eventDate"
         class="form-input width-50"
@@ -185,8 +185,8 @@ export default {
   },
   created() {
     const vendorId = this.$route.params.vendorId;
-    this.$http.get(`${process.env.SERVER_URL}/1/vendors/${vendorId}/customers?status=0&sort=&order=`).then((res) => {
-        this.customers = res.data.customers;
+    this.$http.get(`${process.env.SERVER_URL}/1/vendors/${vendorId}/customers?customerType=1`).then((res) => {
+        this.customers = res.data;
         if( this.$route.params.type === 'edit' ) {
             console.log('customer', this.customers, this.$store.state.proposalForNonMaryoku.event.customer.email);
             let customer = this.customers.find(it => it.email === this.$store.state.proposalForNonMaryoku.event.customer.email)
@@ -254,6 +254,7 @@ export default {
         email: this.email,
         guests: this.guests,
         location: this.location,
+        eventType: this.eventType,
         timezone: tz,
         isRegisteredCustomer: this.isRegisteredCustomer,
         fileName: this.fileName,

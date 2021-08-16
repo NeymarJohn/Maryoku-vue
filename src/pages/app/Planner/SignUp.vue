@@ -213,7 +213,6 @@ export default {
   },
   data() {
     return {
-      error: "",
       user: new TenantUser(),
       loading: false,
       firstname: null,

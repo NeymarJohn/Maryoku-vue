@@ -394,6 +394,8 @@ import { Tabs, Modal, Loader } from "@/components";
 
 import EventBudgetVendors from "../components/EventBudgetVendors";
 import EditEventBlocksBudget from "../components/EditEventBlocksBudget";
+import EventComponentVendor from "@/models/EventComponentVendor";
+import EventComponentProposal from "@/models/EventComponentProposal";
 import ProposalNegotiationRequest from "@/models/ProposalNegotiationRequest";
 import Proposal from "@/models/Proposal";
 
@@ -612,13 +614,18 @@ export default {
       this.$emit("close");
     },
     updateExpireDate() {
-      let expiredTime = moment().add(2, 'days').unix() * 1000;
+      let newExpiredDate = 0;
+      if (this.vendorProposal.expiredDate) {
+        newExpiredDate = new Date(this.vendorProposal.expiredDate).getTime() + 2 * 3600 * 24 * 1000;
+      } else {
+        newExpiredDate = new Date(this.vendorProposal.dateCreated).getTime() + 9 * 3600 * 24 * 1000;
+      }
 
       new ProposalNegotiationRequest({
         eventId: this.eventData.id,
         proposalId: this.vendorProposal.id,
-        proposal: new Proposal({id: this.vendorProposal.id}),
-        expiredTime,
+        proposalRequestId: this.vendorProposal.proposalRequestId,
+        expiredDate: newExpiredDate,
         tenantId: this.$authService.resolveTenantId(),
       })
         .for(new Proposal({ id: this.vendorProposal.id }))
