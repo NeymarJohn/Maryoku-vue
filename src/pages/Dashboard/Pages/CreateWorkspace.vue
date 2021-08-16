@@ -110,9 +110,10 @@ export default {
                 AuthService.setTenant(this.workspace);
                 let callback = this.$route.query.callback;
                 const action = this.$route.query.action;
+                let eventData = localStorage.getItem('event')
                 if (action === this.$queryEventActions.create) {
                   eventService
-                    .saveEventFromStorage(res.defaultCalendar)
+                    .saveEvent(eventData)
                     .then((event) => {
                       callback = btoa(`events/${event.id}/booking/concept`);
                       document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
@@ -124,7 +125,7 @@ export default {
                   document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;
                 } else {
                   eventService
-                    .saveEventFromStorage(res.defaultCalendar)
+                    .saveEvent(eventData)
                     .then((event) => {
                       callback = btoa(`events/${event.id}/booking/concept`);
                       document.location.href = `${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}&redirectURL=${callback}`;

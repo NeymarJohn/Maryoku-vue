@@ -10,7 +10,7 @@
             <div>
                 <div class="font-bold font-size-16 text-capitalize">{{customer.companyName}}</div>
             </div>
-            <div class="font-size-14 color-black-middle">{{'12-3456789'}}</div>
+            <div class="font-size-14 color-black-middle">{{customer.ein}}</div>
             <div class="font-size-14 color-black-middle">${{0}}</div>
             <div class="font-size-14 color-black-middle text-capitalize">{{customer.name}}</div>
             <div class="font-size-14 color-black-middle">{{customer.proposals.length}}</div>
@@ -25,21 +25,21 @@
                         <img :src="`${$iconURL}Group 19186.svg`"/>
                     </md-button>
                     <md-menu-content>
-                        <md-menu-item @click="edit(proposalStatus.edit)" class="md-purple">
+                        <md-menu-item @click="edit(customerStatus.edit)" class="md-purple">
             <span>
               <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />
               Edit</span
             >
                         </md-menu-item>
-                        <md-menu-item @click="edit(proposalStatus.download)" class="md-purple">
+                        <md-menu-item @click="edit(customerStatus.download)" class="md-purple">
             <span>
               <img :src="`${$iconURL}common/download.svg`" class="label-icon mr-10" />
               Download
             </span>
                         </md-menu-item>
-                        <md-menu-item @click="edit(proposalStatus.delete)" class="md-purple">
+                        <md-menu-item @click="edit(customerStatus.delete)" class="md-purple">
             <span>
-              <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon mr-10" /> Delete Proposal
+              <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon mr-10" /> Delete
             </span>
                         </md-menu-item>
                     </md-menu-content>
@@ -148,7 +148,7 @@ export default {
       }
     },
     edit(action) {
-      this.$emit("action", action);
+      this.$emit("customerAction", action);
     },
     leave(item) {
       console.log("leave", item);

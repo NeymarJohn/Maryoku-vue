@@ -1,16 +1,16 @@
 <template>
   <div class="white-card p-40">
-    <div class="font-size-30 font-bold">Give us a few details of the event for this proposal</div>
+    <div class="font-size-30 font-bold">Tell us a little bit about the event</div>
 
     <div class="md-layout mt-30 selection-wrapper">
       <div class="md-layout-item md-size-50 p-0 text-left">
         <md-checkbox class="md-simple md-checkbox-circle md-vendor" v-model="isRegisteredCustomer" :value="true">
-          Selection from the customer list
+          Select from customer list
         </md-checkbox>
       </div>
       <div class="md-layout-item md-size-50 p-0 text-left">
         <md-checkbox class="md-simple md-checkbox-circle md-vendor" v-model="isRegisteredCustomer" :value="false">
-          Unregistered customer
+          New customer
         </md-checkbox>
       </div>
     </div>
@@ -28,7 +28,7 @@
 
     <div class="d-flex mt-40">
       <selectable-card
-        label="Corporation Event"
+        label="Corporate Event"
         value="corporation"
         :selected="eventOption"
         :icon="`${$iconURL}VendorsProposalPage/Group 17122.svg`"
@@ -45,7 +45,7 @@
       ></selectable-card>
     </div>
     <div v-if="eventOption === 'corporation'" class="text-left mt-30">
-      <label class="font-bold">Type Of Event:</label>
+      <label class="font-bold">Type of event:</label>
       <multiselect
         class="width-50 mt-5 form-input md-purple"
         v-model="eventType"
@@ -60,7 +60,7 @@
       ></multiselect>
     </div>
     <div class="text-left mt-30">
-      <label class="font-bold">Number of Guests</label>
+      <label class="font-bold">Number of guests</label>
       <maryoku-input
         class="width-50 mt-5 form-input"
         v-model="numberOfParticipants"
@@ -69,7 +69,7 @@
       ></maryoku-input>
     </div>
     <div class="text-left mt-30">
-      <label class="font-bold">Event Location</label>
+      <label class="font-bold">Event location</label>
       <div class="width-50 location-input">
         <location-input
             v-model="location"
@@ -79,7 +79,7 @@
     </div>
 
     <div class="row">
-      <p class="mb-5 text-left text-bold">Date Of The Event</p>
+      <p class="mb-5 text-left text-bold">Date Of the event</p>
       <maryoku-input
         :value="eventDate"
         class="form-input width-50"
