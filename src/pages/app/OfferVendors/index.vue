@@ -118,6 +118,7 @@ import RequirementsCart from "../Events/PlanningBoard/RequirementsCart.vue";
 import { serviceCategoryImages, serviceCards } from "@/constants/event.js";
 import { postReq, getReq } from "@/utils/token";
 import { camelize } from "@/utils/string.util";
+import eventService from "@/services/event.service";
 import _ from "underscore";
 import moment from "moment";
 
@@ -223,7 +224,7 @@ export default {
             console.log('save', this.requirements);
         },
         async signIn({email, password}){
-            console.log('signIn', email, password)
+            console.log('signin', email, password)
             await this.$store.dispatch("auth/login", {
                     email,
                     password,
@@ -232,26 +233,11 @@ export default {
             await this.createEvent();
             this.showSignupModal =  false;
         },
-        async signUp({email, password, name, company}){
-            console.log('signUp', email, password, name, company)
-            await this.$store.dispatch("auth/register", {
-                email,
-                password,
-                name,
-                company,
-                role: 'administrator',
-            });
-            await this.$store.dispatch('auth/login', {email, password});
-            await this.getVendorEvent();
-            if (this.vendorEvent && this.vendorEvent.length) {
-                await this.createEvent();
-            }
+        signUp(){
 
-            this.showSignupModal =  false;
         },
         async getVendorEvent(){
             let res = await getReq(`/1/userEvent?email=${this.user.email}`);
-            console.log('getVendorEvent', res);
             this.vendorEvent = res.data;
         },
         async createEvent(){

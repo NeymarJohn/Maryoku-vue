@@ -75,7 +75,7 @@
             class="width-50 mt-5 md-purple medium-selector"
             placeholder="Type name of customer here..."
             :options="customers"
-            :label="['company', 'name']"
+            :label="['companyName', 'name']"
             @change="selectCustomer"
           ></autocomplete>
         </div>
@@ -172,9 +172,9 @@ export default {
     },
   },
   created() {
-    const vendorId = this.$route.params.vendorId;
-    this.$http.get(`${process.env.SERVER_URL}/1/userEventCustomers/${vendorId}`).then((res) => {
-      this.customers = res.data;
+    console.log('vendorCreateEvent.created');
+    this.$http.get(`${process.env.SERVER_URL}/1/vendors/${this.vendor.id}/customers?status=0&sort=&order=`).then((res) => {
+      this.customers = res.data.customers;
     });
     this.companyName = this.defaultData.company;
     this.company = this.defaultData.companyName;
@@ -302,6 +302,7 @@ export default {
         isRegisteredCustomer: this.isRegisteredCustomer,
         fileName: this.fileName,
         fileUrl: this.fileUrl,
+        vendorId: this.vendor.id,
       };
       if (this.selectedCustomer) {
         userEvent.customer = { id: this.selectedCustomer.id };
@@ -326,7 +327,11 @@ export default {
       });
     },
   },
-  computed: {},
+  computed: {
+    vendor(){
+      return this.$store.state.vendor.profile;
+    }
+  },
 };
 </script>
 <style lang="scss" scoped>
