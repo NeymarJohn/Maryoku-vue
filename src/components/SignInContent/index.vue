@@ -49,7 +49,9 @@
             <maryoku-input
                 class="form-input mt-30"
                 inputStyle="username"
+                data-vv-name="name"
                 v-model="name"
+                v-validate="signUpValidations.name"
                 placeholder="Type your name here..."
             ></maryoku-input>
             <maryoku-input
@@ -64,7 +66,7 @@
                 class="form-input mt-20"
                 inputStyle="company"
                 v-model="company"
-                v-if="!$route.query.invite"
+                v-validate="signUpValidations.company"
                 placeholder="Type name of company here..."
             ></maryoku-input>
             <maryoku-input
@@ -91,7 +93,7 @@
                 <div v-if="error === 'email'" class="font-size-16">
                     This email is already existed.
                     <br />
-                    Please signin <span class="signInLink" @click="toSignin">here</span>.
+                    Please signin <span class="signInLink" @click="type === 'signin'">here</span>.
                 </div>
                 <div v-if="error === 'company'" class="font-size-16">
                     This workspace already exists, and you need to be invited to it. Either create new workspace or ask admin
@@ -168,6 +170,7 @@
         },
         methods: {
             signup() {
+                console.log('signup', this.$validator);
                 this.$validator.validateAll().then((isValid) => {
                     if (isValid) {
                         if (this.type === 'signin') {
