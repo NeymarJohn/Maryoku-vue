@@ -1,6 +1,6 @@
 <template>
-    <div class="content" :class="type">
-        <template v-if="type === 'signin'">
+    <div class="content" :class="page">
+        <template v-if="page === 'signin'">
             <div class="text-center">
                 <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
                     <img :src="`${$iconURL}Signup/google-icon.jpg`" class="mr-10"/>
@@ -11,7 +11,7 @@
             <maryoku-input
                 class="form-input mt-30"
                 data-vv-name="email"
-                v-validate="signInValidations.email"
+                v-validate="validations.email"
                 inputStyle="email"
                 v-model="email"
                 placeholder="Type email address here..."
@@ -19,7 +19,7 @@
             <maryoku-input
                 class="form-input mt-30"
                 data-vv-name="password"
-                v-validate="signInValidations.password"
+                v-validate="validations.password"
                 type="password"
                 inputStyle="password"
                 v-model="password"
@@ -31,7 +31,7 @@
             <div class="md-error">{{ error }}</div>
             <div class="text-center">
                 <md-button class="md-default md-red md-maryoku custom-btn mt-4" @click="signup">Sign In</md-button>
-                <md-button class="md-black md-red md-maryoku md-simple mt-4 ml-4" @click="type = 'signup'">Sign Up</md-button>
+                <md-button class="md-black md-red md-maryoku md-simple mt-4 ml-4" @click="changePage">Sign Up</md-button>
             </div>
 
             <div class="text-center">
@@ -56,7 +56,7 @@
                 class="form-input mt-20"
                 data-vv-name="email"
                 v-model="email"
-                v-validate="signUpValidations.email"
+                v-validate="validations.email"
                 inputStyle="email"
                 placeholder="Type email address here..."
             ></maryoku-input>
@@ -64,14 +64,13 @@
                 class="form-input mt-20"
                 inputStyle="company"
                 v-model="company"
-                v-if="!$route.query.invite"
                 placeholder="Type name of company here..."
             ></maryoku-input>
             <maryoku-input
                 class="form-input mt-20"
                 data-vv-name="password"
                 v-model="password"
-                v-validate="signUpValidations.password"
+                v-validate="validations.password"
                 type="password"
                 inputStyle="password"
                 placeholder="Type password here..."
@@ -91,7 +90,7 @@
                 <div v-if="error === 'email'" class="font-size-16">
                     This email is already existed.
                     <br />
-                    Please signin <span class="signInLink" @click="toSignin">here</span>.
+                    Please signin <span class="signInLink" @click="changePage">here</span>.
                 </div>
                 <div v-if="error === 'company'" class="font-size-16">
                     This workspace already exists, and you need to be invited to it. Either create new workspace or ask admin
@@ -103,7 +102,7 @@
             <div class="text-center">
                 <div><md-button @click="signup" class="md-default md-red md-maryoku mt-4">Sign Up</md-button></div>
                 <div>
-                    <md-button @click="type = 'signin'" class="md-black md-maryoku mt-4 md-simple mt-4">
+                    <md-button @click="changePage" class="md-black md-maryoku mt-4 md-simple mt-4">
                         Already a User?
                     </md-button>
                 </div>
@@ -128,14 +127,13 @@
         },
         data() {
             return {
-                type: this.page,
                 name: null,
                 company: null,
                 email: null,
                 password: null,
                 department: null,
                 terms: false,
-                signInValidations: {
+                validations: {
                     email: {
                         required: true,
                         email: true,
@@ -143,22 +141,6 @@
                     password: {
                         required: true,
                         min: 8,
-                    },
-                },
-                signUpValidations: {
-                    email: {
-                        required: true,
-                        email: true,
-                    },
-                    password: {
-                        required: true,
-                        min: 8,
-                    },
-                    name: {
-                        required: true,
-                    },
-                    company: {
-                        required: true,
                     },
                 },
                 keepMe: false,
@@ -168,9 +150,10 @@
         },
         methods: {
             signup() {
+                console.log('signup', this.$validator);
                 this.$validator.validateAll().then((isValid) => {
                     if (isValid) {
-                        if (this.type === 'signin') {
+                        if (this.page === 'signin') {
                             this.$emit('signIn', {email: this.email, password: this.password})
                         } else {
                             this.$emit('signUp', {name: this.name, company: this.company, email: this.email, password: this.password})
@@ -184,7 +167,11 @@
             authenticate(provider) {
                 this.$emit('authenticate', provider)
             },
+            changePage(){
+                this.$emit('changePage');
+            }
         },
+
     };
 </script>
 <style lang="scss" scoped>
