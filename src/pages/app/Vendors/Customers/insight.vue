@@ -28,7 +28,7 @@
             <div v-if="incomeList.length > 1" class="position-absolute" style="right: 0;top: 0">
                 <img :src="`${$iconURL}Group 19405.svg`" class="cursor-pointer" width="80px" @click="next">
             </div>
-            <carousel :items="1" :margin="0" :nav="false" :loop="true" class="d-flex">
+            <carousel :items="1" :margin="0" :nav="false" class="d-flex">
                 <template slot="prev">
                     <span class="prev d-none" ref="prevButton">
                         Prev
@@ -46,18 +46,19 @@
                         </div>
                     </template>
                     <template v-else>
-                        <h5 class="color-white text-center">How to increase Success And Profit</h5>
+                        <h5 class="color-white text-center">Increasing Your Success Rate</h5>
                         <div class="d-flex align-center w-max-350 mx-auto">
-                          <img class="mr-20" :src="`${$iconURL}Group 19780.svg`" style="width: 24px">
-                          <p class="color-white font-size-14">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam </p>
+                          <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px">
+                          <p class="color-white font-size-14">You have won [x] out of [y] opportunities with his customer(X% win rate)</p>
                         </div>
                         <div class="d-flex align-center w-max-350 mx-auto">
-                            <img class="mr-20" :src="`${$iconURL}Group 19780.svg`" style="width: 24px">
-                            <p class="color-white font-size-14">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam </p>
+                            <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px">
+                            <p class="color-white font-size-14">When customer has transaction with the vendor: You most recent transaction with
+                            his customer was on dd/mm/yyyy OR if customer don't have any transaction "This will be your first transaction with his customer"</p>
                         </div>
                         <div class="d-flex align-center w-max-350 mx-auto">
-                            <img class="mr-20" :src="`${$iconURL}Group 19780.svg`" style="width: 24px">
-                            <p class="color-white font-size-14">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam </p>
+                            <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px">
+                            <p class="color-white font-size-14">Overall average deal size for this customer is $##,### (X% lower/higher than your average)</p>
                         </div>
                         <div class="d-flex my-40">
                             <md-button class="md-simple ml-auto md-outlined md-white maryoku-btn mx-auto">Update Your Prices</md-button>
