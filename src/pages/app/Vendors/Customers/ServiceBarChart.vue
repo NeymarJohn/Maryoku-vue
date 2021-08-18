@@ -14,7 +14,7 @@
                 :y="chartData.reduce((sum, it, index) => {
                       return index < idx ? sum + it.value - (idx > 0 ? 9 : 0) : sum
                       }, 0)"
-                width="12"
+                width="15"
                 :rx="8"
                 :ry="8"
                 :height="item.value"
