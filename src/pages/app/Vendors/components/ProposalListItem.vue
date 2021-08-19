@@ -57,6 +57,12 @@
               Download
             </span>
           </md-menu-item>
+            <md-menu-item @click="edit(proposalStatus.share)" class="md-purple">
+            <span>
+              <img :src="`${$iconURL}Share/link-dark.svg`" class="label-icon mr-10" />
+              Copy Link
+            </span>
+            </md-menu-item>
           <md-menu-item @click="edit(proposalStatus.delete)" class="md-purple">
             <span>
               <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon mr-10" /> Delete Proposal
@@ -144,8 +150,9 @@ export default {
         edit: 1,
         download: 2,
         delete: 3,
-        negotiation: 4,
-        duplicate: 5,
+        share: 4,
+        negotiation: 5,
+        duplicate: 6,
       },
       requestType: {
         ADD_MORE_TIME: 0,

@@ -12,7 +12,7 @@ const state = {
   includedServices: {},
   costServices: {},
   extraServices: {},
-  custom: {},
+  custom:{},
   event: {},
   vision: "",
   images: [],
@@ -275,17 +275,17 @@ const actions = {
         });
     });
   },
-  getProposal: ({ commit, state }, proposalId) => {
-    return new Promise((resolve, reject) => {
-      Proposal.find(proposalId)
-        .then(resp => {
-          commit("setProposal", resp);
-          resolve(resp);
-        })
-        .catch(e => {
-          reject(e);
-        });
-    });
+  getProposal:({commit, state}, proposalId) => {
+      return new Promise((resolve, reject) => {
+          Proposal.find(proposalId)
+              .then(resp => {
+                  commit("setProposal", resp);
+                  resolve(resp);
+              })
+              .catch(e => {
+                  reject(e);
+              });
+      });
   },
   getTimelineDates({ commit, state }, eventId) {
     return new Promise((resolve, reject) => {
@@ -320,7 +320,7 @@ const actions = {
         status,
         step: state.wizardStep,
         tenantId: state.tenantId,
-        customerId: state.event.customer.id,
+        customerId: state.customer.id,
         suggestionDate: state.suggestionDate,
         expiredDate: moment(new Date(), "YYYY-MM-DD").add(7, 'days').toDate(),
         nonMaryoku: true,
@@ -333,7 +333,6 @@ const actions = {
           resolve(res);
         })
         .catch(e => {
-          console.error(e)
           reject(e);
         });
     });

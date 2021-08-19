@@ -1,6 +1,6 @@
 <template>
   <div class="for-proposals-layout-wrapper">
-    <vue-element-loading :active="isLoading" color="#FF547C"></vue-element-loading>
+     <vue-element-loading :active="isLoading" color="#FF547C"></vue-element-loading>
 
     <proposal-header v-if="vendor" :vendor="vendor"></proposal-header>
     <div class="main-cont">
@@ -151,9 +151,10 @@ export default {
     this.submittedModal = false;
     this.isTimeUp = false;
 
-    this.vendor = await this.getVendor(this.$route.params.vendorId);
-    if (this.$route.params.id) await this.getProposal(this.$route.params.id);
+    this.vendor = await this.getVendor(this.$route.params.vendorId)
+    if(this.$route.params.id) await this.getProposal(this.$route.params.id);
     this.loading = false;
+
   },
 
   beforeCreate() {
@@ -195,6 +196,7 @@ export default {
           );
           coverImageUrl = `https://maryoku.s3.amazonaws.com/campaigns/cover-images/${this.event.id}-${proposalForNonMaryoku.vendor.id}.${extenstion}`;
         }
+
         if (!this.isLoading) {
           this.isLoading = true;
           this.saveProposal(type)
@@ -213,8 +215,7 @@ export default {
               resolve(proposal);
               this.isLoading = false;
             })
-            .catch((e) => {
-              console.error(e);
+            .catch(() => {
               this.isLoading = false;
             });
         }
@@ -254,6 +255,7 @@ export default {
     },
     setProposalLink() {
       this.uploadProposal("submit").then((proposal) => {
+        console.log(proposal);
         this.proposalLink = `${location.protocol}//${location.host}/#/unregistered/proposals/${proposal.id}`;
         this.showSendProposalModal = true;
       });
