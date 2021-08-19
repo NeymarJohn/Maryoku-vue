@@ -60,6 +60,54 @@
             </div>
           </template>
           <hr :class="incomeList.length < 2 ? 'mb-40' : ''" />
+          <carousel :items="1" :margin="0" :nav="false" class="d-flex">
+            <template slot="prev">
+              <span class="prev d-none" ref="prevButton"> Prev </span>
+            </template>
+            <div v-for="(p, index) in incomeList" :key="p.id" class="carousel-item">
+              <template v-if="incomeList.length > 1">
+                <h5 class="color-white text-center">Income From Past And Future Events</h5>
+                <income-bar-chart :chartData="incomeChartData"></income-bar-chart>
+                <div class="d-flex justify-content-center my-40">
+                  <div class="flex-1 font-size-14 color-white text-center">2021</div>
+                  <div class="flex-1 font-size-14 color-white text-center">Past events</div>
+                  <div class="flex-1 font-size-14 color-white text-center">Future events</div>
+                </div>
+              </template>
+              <template v-else>
+                <h5 class="color-white text-center">Increasing Your Success Rate</h5>
+                <div class="d-flex align-center w-max-350 mx-auto">
+                  <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
+                  <p class="color-white font-size-14">
+                    You have won [x] out of [y] opportunities with his customer(X% win rate)
+                  </p>
+                </div>
+                <div class="d-flex align-center w-max-350 mx-auto">
+                  <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
+                  <p class="color-white font-size-14">
+                    When customer has transaction with the vendor: You most recent transaction with his customer was on
+                    dd/mm/yyyy OR if customer don't have any transaction "This will be your first transaction with his
+                    customer"
+                  </p>
+                </div>
+                <div class="d-flex align-center w-max-350 mx-auto">
+                  <img class="mr-20" :src="`${$iconURL}VendorsProposalPage/group-5280.svg`" style="width: 24px" />
+                  <p class="color-white font-size-14">
+                    Overall average deal size for this customer is $##,### (X% lower/higher than your average)
+                  </p>
+                </div>
+                <div class="d-flex my-40">
+                  <md-button class="md-simple ml-auto md-outlined md-white maryoku-btn mx-auto"
+                    >Update Your Prices</md-button
+                  >
+                </div>
+              </template>
+              <hr :class="incomeList.length < 2 ? 'mb-40' : ''" />
+            </div>
+            <template slot="next">
+              <span class="next d-none" ref="nextButton"> Next </span>
+            </template>
+          </carousel>
         </div>
         <template slot="next">
           <span class="next d-none" ref="nextButton"> Next </span>

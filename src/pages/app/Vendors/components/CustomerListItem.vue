@@ -26,21 +26,21 @@
                     </md-button>
                     <md-menu-content>
                         <md-menu-item @click="edit(customerStatus.edit)" class="md-purple">
-            <span>
-              <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />
-              Edit</span
-            >
+                            <span>
+                              <img :src="`${$iconURL}common/edit-dark.svg`" class="label-icon mr-10" />
+                              Edit</span
+                            >
                         </md-menu-item>
-                        <md-menu-item @click="edit(customerStatus.download)" class="md-purple">
-            <span>
-              <img :src="`${$iconURL}common/download.svg`" class="label-icon mr-10" />
-              Download
-            </span>
+                        <md-menu-item v-if="customer.proposals.length" @click="edit(customerStatus.download)" class="md-purple">
+                            <span>
+                              <img :src="`${$iconURL}common/download.svg`" class="label-icon mr-10" />
+                              Download
+                            </span>
                         </md-menu-item>
                         <md-menu-item @click="edit(customerStatus.delete)" class="md-purple">
-            <span>
-              <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon mr-10" /> Delete
-            </span>
+                            <span>
+                              <img :src="`${$iconURL}VendorsProposalPage/group-11314.svg`" class="label-icon mr-10" /> Delete
+                            </span>
                         </md-menu-item>
                     </md-menu-content>
                 </md-menu>

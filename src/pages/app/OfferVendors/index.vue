@@ -91,9 +91,10 @@
         ></additional-request-modal>
         <md-dialog :md-active.sync="showSignupModal" class="singin-form">
             <sign-in-content
+              :page="page"
               @signIn="signIn"
               @signUp="signUp"
-              page="signup"
+              @changePage="changePage"
             >
             </sign-in-content>
         </md-dialog>
@@ -115,10 +116,10 @@ import ServiceCategoryCard from "../Events/PlanningBoard/components/ServiceCateg
 import ProgressRadialBar from "../Events/PlanningBoard/components/ProgressRadialBar.vue";
 import AdditionalRequestModal from "../Events/PlanningBoard/components/modals/AdditionalRequest.vue";
 import RequirementsCart from "../Events/PlanningBoard/RequirementsCart.vue";
+import CalendarEvent from "@/models/CalendarEvent";
 import { serviceCategoryImages, serviceCards } from "@/constants/event.js";
 import { postReq, getReq } from "@/utils/token";
 import { camelize } from "@/utils/string.util";
-import eventService from "@/services/event.service";
 import _ from "underscore";
 import moment from "moment";
 
@@ -137,6 +138,7 @@ export default {
         return {
             isLoading: false,
             step: 1,
+            page: 'signup',
             showSignupModal: false,
             showBookedVendorModal: true,
             isOpenedAdditionalModal: false,
@@ -153,13 +155,8 @@ export default {
     methods: {
         async showVendors(){
             this.showBookedVendorModal = false;
-            // this.showOffers = true;
-            // this.isLoading = true;
-
             this.showSignupModal = true;
-            // await this.getAllRequirements();
 
-            // this.isLoading = false;
         },
         async getAllRequirements(){
           let res = await getReq(`/1/vendor/property`);
@@ -224,25 +221,50 @@ export default {
             console.log('save', this.requirements);
         },
         async signIn({email, password}){
-            console.log('signin', email, password)
+            console.log('signIn', email, password)
             await this.$store.dispatch("auth/login", {
                     email,
                     password,
                 })
-            await this.getVendorEvent();
-            await this.createEvent();
             this.showSignupModal =  false;
+            this.showOffers = true;
+            this.isLoading = true;
+            await this.loadData();
+            this.isLoading = false;
         },
-        signUp(){
+        async signUp({email, password, name, company}){
+            console.log('signUp', email, password, name, company)
+            await this.$store.dispatch("auth/register", {
+                email,
+                password,
+                name,
+                company,
+                role: 'administrator',
+            });
+            await this.$store.dispatch('auth/login', {email, password});
 
+            this.showSignupModal =  false;
+            this.showOffers = true;
+
+            this.isLoading = true;
+            await this.loadData()
+            this.isLoading = false;
+        },
+        async loadData(){
+            await this.getVendorEvent();
+            if (typeof this.vendorEvent === 'object'  && Object.keys(this.vendorEvent).length) {
+                await this.createEvent();
+            }
+            await this.getAllRequirements();
         },
         async getVendorEvent(){
             let res = await getReq(`/1/userEvent?email=${this.user.email}`);
+            console.log('getVendorEvent', res);
             this.vendorEvent = res.data;
         },
         async createEvent(){
             console.log('createEvent', moment(new Date(this.vendorEvent.startTime)).unix() * 1000)
-            await this.$store.dispatch("event/saveEventAction", {
+            await this.$store.dispatch("event/saveEventAction", new CalendarEvent({
                 eventStartMillis: moment(new Date(this.vendorEvent.startTime)).unix() * 1000,
                 eventEndMillis: moment(new Date(this.vendorEvent.endTime)).unix() * 1000,
                 status: 'draft',
@@ -256,7 +278,10 @@ export default {
                 location: this.vendorEvent.location,
                 eventType: this.vendorEvent.eventType,
                 places: ['OUTDOORS'],
-            });
+            }));
+        },
+        changePage(){
+            this.page = this.page === 'signin' ? 'signup' : 'signin';
         }
     },
     computed:{
