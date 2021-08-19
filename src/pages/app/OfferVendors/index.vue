@@ -13,7 +13,7 @@
                 <progress-radial-bar
                     :value="Object.keys(requirements).length"
                     :total="Object.keys(allRequirements).length"
-                    @click="showRequirementCart === true"></progress-radial-bar>
+                    @click="openCart"></progress-radial-bar>
             </div>
             <div class="md-layout md-gutter mt-60 width-70 mx-auto">
                 <div
@@ -68,7 +68,7 @@
                 </p>
             </div>
             <div class="d-flex flex-column align-center bg-white p-20">
-                <md-button class="md-red ml-auto mr-40" @click="findVendors">Find me vendors</md-button>
+                <md-button class="md-red ml-auto mr-40">Find me vendors</md-button>
             </div>
         </template>
 
@@ -85,17 +85,15 @@
             :selectedCategory="selectedCategory"
             :defaultData="getRequirements(selectedCategory.key) || {}"
             :selectedTypes="getSelectedTypes(selectedCategory.key)"
-            page="customer"
             @save="saveAdditionalRequest"
             @cancel="isOpenedAdditionalModal = false"
             @close="isOpenedAdditionalModal = false"
         ></additional-request-modal>
         <md-dialog :md-active.sync="showSignupModal" class="singin-form">
             <sign-in-content
-              :page="page"
               @signIn="signIn"
               @signUp="signUp"
-              @changePage="changePage"
+              page="signup"
             >
             </sign-in-content>
         </md-dialog>
@@ -117,11 +115,10 @@ import ServiceCategoryCard from "../Events/PlanningBoard/components/ServiceCateg
 import ProgressRadialBar from "../Events/PlanningBoard/components/ProgressRadialBar.vue";
 import AdditionalRequestModal from "../Events/PlanningBoard/components/modals/AdditionalRequest.vue";
 import RequirementsCart from "../Events/PlanningBoard/RequirementsCart.vue";
-import CalendarEvent from "@/models/CalendarEvent";
-import ProposalRequestRequirement from "@/models/ProposalRequestRequirement";
 import { serviceCategoryImages, serviceCards } from "@/constants/event.js";
 import { postReq, getReq } from "@/utils/token";
 import { camelize } from "@/utils/string.util";
+import eventService from "@/services/event.service";
 import _ from "underscore";
 import moment from "moment";
 
@@ -140,7 +137,6 @@ export default {
         return {
             isLoading: false,
             step: 1,
-            page: 'signup',
             showSignupModal: false,
             showBookedVendorModal: true,
             isOpenedAdditionalModal: false,
@@ -157,36 +153,21 @@ export default {
     methods: {
         async showVendors(){
             this.showBookedVendorModal = false;
-            this.showSignupModal = true;
+            // this.showOffers = true;
+            // this.isLoading = true;
 
+            this.showSignupModal = true;
+            // await this.getAllRequirements();
+
+            // this.isLoading = false;
         },
         async getAllRequirements(){
           let res = await getReq(`/1/vendor/property`);
           this.allRequirements = res.data;
           console.log('requirements', this.allRequirements, this.requirements);
         },
-        async getVendorEvent(){
-            let res = await getReq(`/1/userEvent?email=${this.user.email}`);
-            console.log('getVendorEvent', res);
-            this.vendorEvent = res.data;
-        },
-        async createEvent(){
-            console.log('createEvent', moment(new Date(this.vendorEvent.startTime)).unix() * 1000)
-            await this.$store.dispatch("event/saveEventAction", new CalendarEvent({
-                eventStartMillis: moment(new Date(this.vendorEvent.startTime)).unix() * 1000,
-                eventEndMillis: moment(new Date(this.vendorEvent.endTime)).unix() * 1000,
-                status: 'draft',
-                numberOfParticipants: this.vendorEvent.guests,
-                flexibleWithDates: 0,
-                guestType: {
-                    name: "Employees",
-                    selected: false,
-                    value: "employees",
-                },
-                location: this.vendorEvent.location,
-                eventType: this.vendorEvent.eventType,
-                places: ['OUTDOORS'],
-            }));
+        openCart() {
+            this.showRequirementCart = true;
         },
         getSelectedTypes(category) {
             let typesList = [];
@@ -229,95 +210,53 @@ export default {
         },
         setServiceStyles({category, services, type}){
             console.log('setServiceStyles', services, this.requirements.hasOwnProperty(category.serviceCategory), this.requirements[category.serviceCategory]);
-            let requirement = this.requirements[category.serviceCategory];
-            if(!requirement) {
-                // requirement = {event: {id: this.event.id}, category: category.serviceCategory, types: { [type]: services }}
-                requirement = {event: {id: '611bce005e64fb28b8ef6886'}, category: category.serviceCategory, types: { [type]: services }}
+            if(!this.requirements.hasOwnProperty(category.serviceCategory) || !this.requirements[category.serviceCategory]) {
+                this.$set(this.requirements, category.serviceCategory, {types: {[type]: services}});
             } else {
-                requirement = {...requirement, types: { [type]: services }, event: {id: '611bce005e64fb28b8ef6886'}};
+                this.$set(this.requirements, category.serviceCategory, {types: {[type]: services}});
             }
-            this.saveRequirements(requirement)
+            console.log('requirements', this.requirements);
         },
         saveAdditionalRequest({ category, requirements }) {
-            console.log('save', requirements, category, this.requirements);
+            console.log('save', requirements);
             this.isOpenedAdditionalModal = false;
-
-            this.saveRequirements({...this.requirements[category], ...requirements, event: {id: '611bce005e64fb28b8ef6886'}})
-        },
-        async saveRequirements(requirement){
-            console.log('saveRequirements', requirement);
-            new ProposalRequestRequirement(requirement)
-                .for(new CalendarEvent({ id: requirement.event.id }))
-                .save()
-                .then(res => {
-                    this.$set(this.requirements, requirement.category, res)
-                    console.log('result', this.requirements);
-                })
+            this.$set(this.requirements, category, {...this.requirements[category], ...requirements})
+            console.log('save', this.requirements);
         },
         async signIn({email, password}){
-            console.log('signIn', email, password)
+            console.log('signin', email, password)
             await this.$store.dispatch("auth/login", {
                     email,
                     password,
                 })
-            this.showSignupModal =  false;
-            this.showOffers = true;
-            this.isLoading = true;
-            await this.loadData();
-            this.isLoading = false;
-        },
-        async signUp({email, password, name, company}){
-            console.log('signUp', email, password, name, company)
-            await this.$store.dispatch("auth/register", {
-                email,
-                password,
-                name,
-                company,
-                role: 'administrator',
-            });
-            await this.$store.dispatch('auth/login', {email, password});
-
-            this.showSignupModal =  false;
-            this.showOffers = true;
-
-            this.isLoading = true;
-            await this.loadData()
-            this.isLoading = false;
-        },
-        async loadData(){
             await this.getVendorEvent();
-            if (typeof this.vendorEvent === 'object'  && Object.keys(this.vendorEvent).length) {
-                // await this.createEvent();
-            }
-            await this.getAllRequirements();
-            await this.getSavedRequirements();
-            console.log('requirements', this.requirements);
+            await this.createEvent();
+            this.showSignupModal =  false;
         },
-        async getSavedRequirements(){
-            let req =  new ProposalRequestRequirement()
-            let res = await req.for(new CalendarEvent({ id: '611bce005e64fb28b8ef6886' })).get();
-            console.log('getSavedRequirements', res)
-            if (res && res.length){
-                res.map(it => {
-                    this.$set(this.requirements, it.category, it);
-                })
-            }
+        signUp(){
+
         },
-        findVendors(){
-            this.expiredTime = moment(new Date()).add(3, "days").valueOf();
-            postReq(`/1/events/611bce005e64fb28b8ef6886/find-vendors`, {
-                issuedTime: new Date().getTime(),
-                expiredBusinessTime: this.expiredTime,
-            }).then((res) => {
-                console.log('findVendors', res);
-                // this.$store.dispatch(
-                //     "event/saveEventAction",
-                //     new CalendarEvent({ id: this.event.id, processingStatus: "accept-proposal" }),
-                // );
+        async getVendorEvent(){
+            let res = await getReq(`/1/userEvent?email=${this.user.email}`);
+            this.vendorEvent = res.data;
+        },
+        async createEvent(){
+            console.log('createEvent', moment(new Date(this.vendorEvent.startTime)).unix() * 1000)
+            await this.$store.dispatch("event/saveEventAction", {
+                eventStartMillis: moment(new Date(this.vendorEvent.startTime)).unix() * 1000,
+                eventEndMillis: moment(new Date(this.vendorEvent.endTime)).unix() * 1000,
+                status: 'draft',
+                numberOfParticipants: this.vendorEvent.guests,
+                flexibleWithDates: 0,
+                guestType: {
+                    name: "Employees",
+                    selected: false,
+                    value: "employees",
+                },
+                location: this.vendorEvent.location,
+                eventType: this.vendorEvent.eventType,
+                places: ['OUTDOORS'],
             });
-        },
-        changePage(){
-            this.page = this.page === 'signin' ? 'signup' : 'signin';
         }
     },
     computed:{

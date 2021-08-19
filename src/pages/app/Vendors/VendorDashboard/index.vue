@@ -126,18 +126,18 @@ export default {
       showVendorCreateModal: false,
       backOutDays: false,
       incomeChartData: [
-        { label: "Jan", value: 200, future: true },
-        { label: "Feb", value: 120, future: true },
-        { label: "Mar", value: 70, future: true },
-        { label: "Apr", value: 90, future: true },
-        { label: "May", value: 120, future: true },
-        { label: "Jun", value: 200, future: true },
-        { label: "Jul", value: 120, future: true },
-        { label: "Aug", value: 30, future: true },
-        { label: "Sep", value: 120, future: true },
-        { label: "Oct", value: 50, future: true },
-        { label: "Nov", value: 100, future: true },
-        { label: "Dec", value: 70, future: true },
+        { label: "Jan", value: 0, future: true },
+        { label: "Feb", value: 0, future: true },
+        { label: "Mar", value: 0, future: true },
+        { label: "Apr", value: 0, future: true },
+        { label: "May", value: 0, future: true },
+        { label: "Jun", value: 0, future: true },
+        { label: "Jul", value: 0, future: true },
+        { label: "Aug", value: 0, future: true },
+        { label: "Sep", value: 0, future: true },
+        { label: "Oct", value: 0, future: true },
+        { label: "Nov", value: 0, future: true },
+        { label: "Dec", value: 0, future: true },
       ],
       categoryColors: ["rgb(159 107 144)", "#4e0841", "#641856"],
       month: null,
@@ -151,6 +151,21 @@ export default {
     };
   },
   mounted() {
+    //get data
+    this.$http
+      .get(
+        `${process.env.SERVER_URL}/1/transaction/report/monthly/${this.vendorData.id}?start=${new Date(
+          new Date().getFullYear() + "-01-01",
+        ).toISOString()}&end=${new Date(new Date().getFullYear() + "-12-31").toISOString()}`,
+      )
+      .then((res) => {
+        if (res.data.length) {
+          res.data.forEach((item) => {
+            this.incomeChartData[Number(item._id) - 1].value = item.amount;
+          });
+          this.incomeChartData = [...this.incomeChartData];
+        }
+      });
     this.getMarkedDates();
     this.getComingEvents();
     this.$store.dispatch("common/fetchAllCategories");
@@ -158,12 +173,12 @@ export default {
   methods: {
     gotoProposalWizard() {
       let routeData = this.$router.resolve({
-            name: "outsideProposalCreate",
-            params: {
-                vendorId: this.vendorData.id,
-            },
+        name: "outsideProposalCreate",
+        params: {
+          vendorId: this.vendorData.id,
+        },
       });
-      window.open(routeData.href, '_blank');
+      window.open(routeData.href, "_blank");
     },
     handleSaveEvent(savedEvent) {
       this.upcomingEvents.push(savedEvent);
