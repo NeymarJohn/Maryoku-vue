@@ -210,12 +210,6 @@ export default {
       this.showAddNewCategory = false;
     },
   },
-  watch:{
-    defaultData(newVal){
-        console.log('defaultData.watch', newVal);
-        this.selectedServices = [...this.defaultData];
-    }
-  }
 };
 </script>
 <style lang="scss" scoped>
