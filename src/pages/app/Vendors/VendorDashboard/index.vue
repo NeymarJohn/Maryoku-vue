@@ -12,7 +12,7 @@
           <label>Yearly Revenue By Segment</label>
           <div class="md-layout my-20">
             <div class="md-layout-item md-size-40 pl-0">
-              <div class="font-size-50 total-revenue">$0</div>
+              <div class="font-size-50 total-revenue">${{ yearlyRevenue | withComma }}</div>
             </div>
             <div class="md-layout-item md-size-60">
               <div>
@@ -125,6 +125,7 @@ export default {
       iconUrl: `${this.$resourceURL}storage/icons/`,
       showVendorCreateModal: false,
       backOutDays: false,
+      monthlyReport: [],
       incomeChartData: [
         { label: "Jan", value: 0, future: true },
         { label: "Feb", value: 0, future: true },
@@ -160,6 +161,7 @@ export default {
       )
       .then((res) => {
         if (res.data.length) {
+          this.monthlyReport = res.data;
           res.data.forEach((item) => {
             this.incomeChartData[Number(item._id) - 1].value = item.amount;
           });
@@ -280,6 +282,11 @@ export default {
     },
     proposalRequests() {
       return this.$store.state.vendorDashboard.proposalRequests;
+    },
+    yearlyRevenue() {
+      return this.monthlyReport.reduce((s, item) => {
+        return s + item.amount;
+      }, 0);
     },
   },
   watch: {
