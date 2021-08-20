@@ -65,7 +65,7 @@ class EventService {
         .save()
         .then(response => {
           localStorage.removeItem("event");
-          resolve(response.item);
+          resolve(response);
         })
         .catch(error => {
           reject(error);

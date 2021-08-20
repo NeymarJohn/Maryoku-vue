@@ -153,9 +153,10 @@ export default {
           edit: 1,
           download: 2,
           delete: 3,
-          negotiation: 4,
-          duplicate: 5,
-          sort: 6,
+          share: 4,
+          negotiation: 5,
+          duplicate: 6,
+          sort: 7,
       },
       pagination: {
         total: 0,

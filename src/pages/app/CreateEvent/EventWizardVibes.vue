@@ -140,6 +140,7 @@ export default {
         eventService
           .saveEvent(eventData)
           .then((newEvent) => {
+            console.log('saveEvent', newEvent);
             localStorage.setItem("currentEventId", newEvent.id);
             if (newEvent.isFirstEvent) {
               this.$router.push({ path: `/welcome/event` });

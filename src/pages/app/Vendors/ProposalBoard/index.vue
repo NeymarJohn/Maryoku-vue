@@ -172,6 +172,13 @@
                      @click="handleNegotiation(negotiationRequestStatus.done)">Done</md-button>
       </template>
     </modal>
+    <ShareProposal
+      v-if="showShareProposalModal"
+      @close="showShareProposalModal = false"
+      @submit="shareProposal"
+      :email="customerEmail"
+      :link="proposalLink"
+    ></ShareProposal>
   </div>
 </template>
 <script>
@@ -187,6 +194,7 @@ import _ from "underscore";
 const ProposalContent = () => import("../components/ProposalDetail");
 const NegotiationRequest = () => import("../components/NegotiationRequest");
 const Insight = () => import("./insight");
+const ShareProposal = () => import("./ShareProposal");
 
 // result of processed on negotiation request
 const NONE = 0;
@@ -200,6 +208,7 @@ export default {
     TablePagination,
     ProposalContent,
     NegotiationRequest,
+    ShareProposal,
     carousel,
     Loader,
     Modal,
@@ -230,6 +239,7 @@ export default {
       ],
       tab: "all",
       showProposalDetail: false,
+      showShareProposalModal: false,
       selectedProposal: null,
       selectedEventData: null,
       selectedProposalRequest: null,
@@ -246,7 +256,8 @@ export default {
         edit: 1,
         download: 2,
         delete: 3,
-        negotiation: 4,
+        share: 4,
+        negotiation: 5,
       },
       negotiationProcessed: NONE,
       socialMediaBlocks,
@@ -349,6 +360,9 @@ export default {
       } else if (action === this.proposalStatus.download) {
 
         this.openNewTab(`https://api-dev.maryoku.com/1/proposal/${this.selectedProposal.id}/download`);
+      } else if (action === this.proposalStatus.share) {
+        console.log('shareProposal', this.selectedProposal);
+        this.showShareProposalModal = true;
       } else if(action === this.proposalStatus.negotiation) {
         this.selectedProposalRequest = this.proposalRequests.find(it => it.proposal && it.proposal.id === id);
         this.showRequestNegotiationModal = true;
@@ -454,6 +468,18 @@ export default {
 
       return "";
     },
+    shareProposal() {
+      this.showShareProposalModal = false;
+      this.$http
+          .post(
+              `${process.env.SERVER_URL}/1/proposals/${this.selectedProposal.id}/sendEmail`,
+              {},
+              { headers: this.$auth.getAuthHeader() },
+          )
+          .then((res) => {
+            console.log('shareProposal', res);
+          });
+    },
     async init() {
       await this.getProposal();
       this.loading = false;
@@ -462,6 +488,17 @@ export default {
   computed: {
     vendorData() {
       return this.$store.state.vendor.profile;
+    },
+    customerEmail(){
+      if(!this.selectedProposal) return null;
+      return this.selectedProposal.nonMaryoku ? this.selectedProposal.eventData.customer.email :
+          this.selectedProposal.proposalRequest.eventData.owner.emailAddress
+    },
+    proposalLink(){
+      if(!this.selectedProposal) return null;
+      return this.selectedProposal.nonMaryoku ?
+          `${location.protocol}//${location.host}/#/unregistered/proposals/${this.selectedProposal.id}` :
+          `${location.protocol}//${location.host}/#/vendors/${this.selectedProposal.vendor.id}/proposal-request/${this.selectedProposal.proposalRequestId}/form/edit`;
     },
     proposalRequests(){
       let proposalRequests = this.$store.state.vendorDashboard.proposalRequests;

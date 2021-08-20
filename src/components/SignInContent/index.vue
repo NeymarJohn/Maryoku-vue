@@ -1,5 +1,5 @@
 <template>
-    <div class="content" :class="page">
+    <div class="content mx-40" :class="page === 'signin' ? 'py-40' : 'py-20'">
         <template v-if="page === 'signin'">
             <div class="text-center">
                 <md-button class="md-black md-maryoku md-simple md-google" @click="authenticate('google')">
@@ -25,7 +25,7 @@
                 v-model="password"
                 placeholder="Type password here..."
             ></maryoku-input>
-            <div class="terms-and-conditions mt-30">
+            <div class="terms-and-conditions text-left mt-30">
                 <md-checkbox v-model="keepMe">Keep me signed in</md-checkbox>
             </div>
             <div class="md-error">{{ error }}</div>
